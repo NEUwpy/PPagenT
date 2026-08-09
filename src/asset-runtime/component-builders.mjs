@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { Presentation, PresentationFile } from "@oai/artifact-tool";
+import { protectChineseLineBreaks, wrapChineseText } from "../render/chinese-typography.mjs";
 
 export const THEME = {
   background: "#F7FAFC",
@@ -23,28 +24,43 @@ function embeddedContext(slide) {
   return EMBEDDED_SLIDES.get(slide) ?? null;
 }
 
+export function computeContainedFrame(sourceFrame, targetFrame) {
+  const scale = Math.min(
+    targetFrame.width / sourceFrame.width,
+    targetFrame.height / sourceFrame.height,
+  );
+  const width = sourceFrame.width * scale;
+  const height = sourceFrame.height * scale;
+  return {
+    left: targetFrame.left + (targetFrame.width - width) / 2,
+    top: targetFrame.top + (targetFrame.height - height) / 2,
+    width,
+    height,
+    scale,
+  };
+}
+
+export function transformPositionInContainedFrame(position, sourceFrame, targetFrame) {
+  const fittedFrame = computeContainedFrame(sourceFrame, targetFrame);
+  return {
+    ...position,
+    left: fittedFrame.left + (position.left - sourceFrame.left) * fittedFrame.scale,
+    top: fittedFrame.top + (position.top - sourceFrame.top) * fittedFrame.scale,
+    width: position.width * fittedFrame.scale,
+    height: position.height * fittedFrame.scale,
+  };
+}
+
 function transformPosition(slide, position) {
   const context = embeddedContext(slide);
   if (!context) return position;
-  const { sourceFrame, targetFrame } = context;
-  const scaleX = targetFrame.width / sourceFrame.width;
-  const scaleY = targetFrame.height / sourceFrame.height;
-  return {
-    ...position,
-    left: targetFrame.left + (position.left - sourceFrame.left) * scaleX,
-    top: targetFrame.top + (position.top - sourceFrame.top) * scaleY,
-    width: position.width * scaleX,
-    height: position.height * scaleY,
-  };
+  return transformPositionInContainedFrame(position, context.sourceFrame, context.targetFrame);
 }
 
 function transformFontSize(slide, fontSize) {
   const context = embeddedContext(slide);
   if (!context) return fontSize;
-  const scale = Math.min(
-    context.targetFrame.width / context.sourceFrame.width,
-    context.targetFrame.height / context.sourceFrame.height,
-  );
+  const scale = context.fittedFrame.scale;
   return Math.max(16, Math.round(fontSize * scale));
 }
 
@@ -53,11 +69,13 @@ function transformFontSize(slide, fontSize) {
  * builder 仍按 1280×720 的原始坐标工作，运行时只负责确定性缩放和主题替换。
  */
 export function renderComponentIntoSlide(builder, slide, params, options) {
+  const sourceFrame = options.sourceFrame ?? { left: 40, top: 135, width: 1200, height: 520 };
   const context = {
-    sourceFrame: options.sourceFrame ?? { left: 40, top: 135, width: 1200, height: 520 },
+    sourceFrame,
     targetFrame: options.targetFrame,
   };
   if (!context.targetFrame) throw new Error("嵌入结构资产时必须提供 targetFrame");
+  context.fittedFrame = computeContainedFrame(sourceFrame, context.targetFrame);
 
   const previousTheme = { ...THEME };
   Object.assign(THEME, options.theme ?? {});
@@ -78,7 +96,7 @@ export function addText(slide, value, position, style = {}) {
     fill: "none",
     line: { style: "solid", fill: "none", width: 0 },
   });
-  shape.text = String(value ?? "");
+  shape.text = style.protectLineBreaks ? protectChineseLineBreaks(value) : String(value ?? "");
   shape.text.style = {
     fontSize: transformFontSize(slide, style.fontSize ?? 16),
     typeface: style.typeface ?? THEME.font,
@@ -107,7 +125,7 @@ export function addBox(slide, position, options = {}) {
   }
   const shape = slide.shapes.add(config);
   if (options.text !== undefined) {
-    shape.text = String(options.text);
+    shape.text = options.protectLineBreaks ? protectChineseLineBreaks(options.text) : String(options.text);
     shape.text.style = {
       fontSize: transformFontSize(slide, options.fontSize ?? 18),
       typeface: options.typeface ?? THEME.font,
@@ -181,15 +199,36 @@ function prepareSlide(presentation, title, subtitle) {
   return slide;
 }
 
+function isEmphasisStep(step) {
+  return step?.emphasis === true || ["conclusion", "result", "重点"].includes(step?.emphasis);
+}
+
+export function normalizeSequentialSteps(steps) {
+  const emphasisSteps = steps.filter(isEmphasisStep);
+  const emphasisStep = emphasisSteps.at(-1) ?? null;
+  const regularSteps = steps.filter((step) => !isEmphasisStep(step));
+  return {
+    regularSteps,
+    emphasisStep,
+    displaySteps: emphasisStep ? [...regularSteps, emphasisStep] : [...regularSteps],
+  };
+}
+
 export function buildSequentialProcess(presentation, params) {
   const slide = prepareSlide(presentation, params.title, "顺序流程");
-  const steps = params.steps;
+  const { displaySteps: steps } = normalizeSequentialSteps(params.steps);
   const left = 78;
   const gap = 28;
   const width = (1124 - gap * (steps.length - 1)) / steps.length;
   const nodes = steps.map((step, index) => addBox(slide, {
     left: left + index * (width + gap), top: 230, width, height: 270,
-  }, { fill: index % 2 ? THEME.accentAlt : THEME.accent, line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-md" }));
+  }, {
+    fill: isEmphasisStep(step) ? "#17406D" : index % 2 ? THEME.accentAlt : THEME.accent,
+    line: isEmphasisStep(step)
+      ? { style: "solid", fill: THEME.cyan, width: 4 }
+      : { style: "solid", fill: "none", width: 0 },
+    shadow: isEmphasisStep(step) ? "shadow-lg" : "shadow-md",
+  }));
   for (let index = 0; index < nodes.length - 1; index += 1) {
     slide.shapes.connect(nodes[index], nodes[index + 1], {
       kind: "straight", fromSide: "right", toSide: "left",
@@ -199,16 +238,270 @@ export function buildSequentialProcess(presentation, params) {
   }
   steps.forEach((step, index) => {
     const x = left + index * (width + gap);
-    addCircle(slide, { left: x + 18, top: 250, width: 52, height: 52 }, {
-      fill: "#FFFFFF", line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-none",
-      text: String(index + 1).padStart(2, "0"), fontSize: 18, bold: true, color: index % 2 ? THEME.accentAlt : THEME.accent,
-      insets: { top: 0, right: 0, bottom: 0, left: 0 },
-    });
+    if (isEmphasisStep(step)) {
+      addBox(slide, { left: x + 18, top: 250, width: Math.min(112, width - 36), height: 38 }, {
+        fill: THEME.cyan, line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-none",
+        text: step.emphasisLabel ?? "结论 / 结果", fontSize: 15, bold: true, color: "#FFFFFF",
+      });
+    } else {
+      addCircle(slide, { left: x + 18, top: 250, width: 52, height: 52 }, {
+        fill: "#FFFFFF", line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-none",
+        text: String(index + 1).padStart(2, "0"), fontSize: 18, bold: true, color: index % 2 ? THEME.accentAlt : THEME.accent,
+        insets: { top: 0, right: 0, bottom: 0, left: 0 },
+      });
+    }
     addText(slide, step.title, { left: x + 22, top: 326, width: width - 44, height: 52 }, {
       fontSize: 24, bold: true, color: "#FFFFFF", alignment: "center",
     });
     addText(slide, step.body, { left: x + 22, top: 394, width: width - 44, height: 76 }, {
       fontSize: 16, color: "#EAF6FF", alignment: "center", verticalAlignment: "top",
+    });
+  });
+  return slide;
+}
+
+export function buildSequentialProcessRibbon(presentation, params) {
+  const slide = prepareSlide(presentation, params.title, "顺序流程 · 带状推进");
+  const { displaySteps: steps } = normalizeSequentialSteps(params.steps);
+  const left = 72;
+  const top = 270;
+  const gap = 10;
+  const width = (1136 - gap * (steps.length - 1)) / steps.length;
+
+  steps.forEach((step, index) => {
+    const x = left + index * (width + gap);
+    const emphasized = isEmphasisStep(step);
+    const fill = emphasized ? "#17406D" : index % 2 ? THEME.accentAlt : THEME.accent;
+    addBox(slide, { left: x, top, width, height: 118 }, {
+      geometry: emphasized || index === steps.length - 1 ? "roundRect" : "chevron",
+      fill,
+      line: emphasized ? { style: "solid", fill: THEME.cyan, width: 4 } : { style: "solid", fill: "none", width: 0 },
+      shadow: emphasized ? "shadow-lg" : "shadow-sm",
+    });
+    addText(slide, emphasized ? (step.emphasisLabel ?? "结论 / 结果") : String(index + 1).padStart(2, "0"), {
+      left: x + 18, top: top + 15, width: 46, height: 30,
+    }, { fontSize: emphasized ? 14 : 17, bold: true, color: emphasized ? THEME.cyan : "#DFF6FF", alignment: "center" });
+    addText(slide, step.title, {
+      left: x + 18, top: top + 46, width: width - 42, height: 48,
+    }, { fontSize: 22, bold: true, color: "#FFFFFF", alignment: "center" });
+    addText(slide, step.body, {
+      left: x + 10, top: index % 2 ? top + 145 : top - 105, width: width - 20, height: 82,
+    }, {
+      fontSize: 16,
+      color: THEME.body,
+      alignment: "center",
+      verticalAlignment: index % 2 ? "top" : "bottom",
+    });
+  });
+  return slide;
+}
+
+export function buildSequentialProcessStaircase(presentation, params) {
+  const slide = prepareSlide(presentation, params.title, "顺序流程 · 阶梯推进");
+  const { displaySteps: steps } = normalizeSequentialSteps(params.steps);
+  const cardWidth = Math.min(190, 930 / steps.length);
+  const cardHeight = 132;
+  const left = 72;
+  const right = 1208 - cardWidth;
+  const bottom = 480;
+  const top = 190;
+  const positions = steps.map((_, index) => ({
+    left: steps.length === 1 ? (left + right) / 2 : left + index * ((right - left) / (steps.length - 1)),
+    top: steps.length === 1 ? (top + bottom) / 2 : bottom - index * ((bottom - top) / (steps.length - 1)),
+    width: cardWidth,
+    height: cardHeight,
+  }));
+
+  for (let index = 0; index < positions.length - 1; index += 1) {
+    const from = positions[index];
+    const to = positions[index + 1];
+    slide.shapes.add({
+      geometry: "line",
+      position: {
+        left: from.left + from.width * 0.82,
+        top: to.top + to.height / 2,
+        width: to.left - (from.left + from.width * 0.82),
+        height: from.top - to.top,
+        verticalFlip: true,
+      },
+      fill: "none",
+      line: { style: "solid", fill: THEME.line, width: 4 },
+      tail: { type: "triangle", width: "med", length: "med" },
+    });
+  }
+
+  positions.forEach((position, index) => {
+    const emphasized = isEmphasisStep(steps[index]);
+    const fill = emphasized ? "#17406D" : index % 2 ? THEME.accentAlt : THEME.accent;
+    addBox(slide, position, {
+      fill,
+      line: { style: "solid", fill: emphasized ? THEME.cyan : "#FFFFFF", width: emphasized ? 4 : 2 },
+      shadow: emphasized ? "shadow-lg" : "shadow-md",
+    });
+    if (emphasized) {
+      addText(slide, steps[index].emphasisLabel ?? "结论 / 结果", {
+        left: position.left + 12, top: position.top + 8, width: position.width - 24, height: 22,
+      }, { fontSize: 14, bold: true, color: THEME.cyan, alignment: "center" });
+    } else {
+      addCircle(slide, {
+        left: position.left + 14,
+        top: position.top + 14,
+        width: 38,
+        height: 38,
+      }, {
+        fill: "#FFFFFF",
+        line: { style: "solid", fill: "none", width: 0 },
+        shadow: "shadow-none",
+        text: String(index + 1),
+        fontSize: 16,
+        bold: true,
+        color: fill,
+        insets: { top: 0, right: 0, bottom: 0, left: 0 },
+      });
+    }
+    addText(slide, steps[index].title, {
+      left: position.left + (emphasized ? 18 : 58),
+      top: position.top + (emphasized ? 34 : 12),
+      width: position.width - (emphasized ? 36 : 70),
+      height: emphasized ? 34 : 42,
+    }, { fontSize: 20, bold: true, color: "#FFFFFF", alignment: "center" });
+    addText(slide, wrapChineseText(steps[index].body, 10), {
+      left: position.left + 16,
+      top: position.top + (emphasized ? 72 : 58),
+      width: position.width - 32,
+      height: emphasized ? 50 : 58,
+    }, {
+      fontSize: 15,
+      color: "#EAF6FF",
+      alignment: "center",
+      verticalAlignment: "top",
+    });
+  });
+  return slide;
+}
+
+export function buildRoleHandoff(presentation, params) {
+  const slide = prepareSlide(presentation, params.title, "角色接力 · 职责交接");
+  const steps = params.steps.filter((step) => !isEmphasisStep(step));
+  const conclusion = params.steps.find((step) => isEmphasisStep(step));
+  const nodeWidth = Math.min(164, 900 / steps.length);
+  const left = 82;
+  const right = 1198 - nodeWidth;
+  const positions = steps.map((_, index) => ({
+    left: left + index * ((right - left) / Math.max(1, steps.length - 1)),
+    top: index % 2 ? 366 : 214,
+    width: nodeWidth,
+    height: 92,
+  }));
+
+  for (let index = 0; index < positions.length - 1; index += 1) {
+    const from = positions[index];
+    const to = positions[index + 1];
+    slide.shapes.add({
+      geometry: "line",
+      position: {
+        left: from.left + from.width,
+        top: Math.min(from.top, to.top) + 46,
+        width: to.left - (from.left + from.width),
+        height: Math.abs(to.top - from.top),
+        verticalFlip: to.top < from.top,
+      },
+      fill: "none",
+      line: { style: "solid", fill: THEME.cyan, width: 4 },
+      tail: { type: "triangle", width: "med", length: "med" },
+    });
+  }
+
+  positions.forEach((position, index) => {
+    const step = steps[index];
+    const role = step.role ?? step.owner ?? step.title;
+    const responsibility = step.role || step.owner ? step.title : step.body;
+    addCircle(slide, position, {
+      fill: index % 2 ? THEME.accentAlt : THEME.accent,
+      line: { style: "solid", fill: "#FFFFFF", width: 3 },
+      shadow: "shadow-md",
+      text: role,
+      fontSize: 20,
+      bold: true,
+      color: "#FFFFFF",
+    });
+    addBox(slide, {
+      left: position.left - 12,
+      top: index % 2 ? position.top - 94 : position.top + 112,
+      width: position.width + 24,
+      height: 68,
+    }, {
+      fill: "#FFFFFF",
+      line: { style: "solid", fill: index % 2 ? THEME.accentAlt : THEME.accent, width: 2 },
+      shadow: "shadow-sm",
+      text: responsibility,
+      fontSize: 16,
+      bold: true,
+      color: THEME.body,
+    });
+  });
+  if (conclusion) {
+    addBox(slide, { left: 300, top: 540, width: 680, height: 86 }, {
+      fill: "#17406D",
+      line: { style: "solid", fill: THEME.cyan, width: 3 },
+      shadow: "shadow-lg",
+      text: conclusion.body || conclusion.title,
+      fontSize: 20,
+      bold: true,
+      color: "#FFFFFF",
+    });
+    addText(slide, conclusion.emphasisLabel ?? "协同结论", {
+      left: 570, top: 514, width: 140, height: 28,
+    }, { fontSize: 14, bold: true, color: THEME.accent, alignment: "center" });
+  }
+  return slide;
+}
+
+function causalStageLabels(count) {
+  if (count === 3) return ["条件", "介入", "结果"];
+  if (count === 4) return ["条件", "缺口", "介入", "结果"];
+  return ["条件", "缺口", ...Array.from({ length: count - 4 }, () => "机制"), "介入", "结果"];
+}
+
+export function buildCausalChain(presentation, params) {
+  const slide = prepareSlide(presentation, params.title, "因果链 · 从条件到结果");
+  const steps = params.steps;
+  const labels = causalStageLabels(steps.length);
+  const gap = 24;
+  const left = 72;
+  const width = (1136 - gap * (steps.length - 1)) / steps.length;
+  const top = 245;
+  const nodes = steps.map((step, index) => addBox(slide, {
+    left: left + index * (width + gap), top, width, height: index === steps.length - 1 ? 194 : 180,
+  }, {
+    geometry: index === 0 || index === steps.length - 1 ? "ellipse" : "roundRect",
+    fill: index === steps.length - 1 ? "#17406D" : index === 1 ? "#E9F1F8" : index % 2 ? THEME.accentAlt : THEME.accent,
+    line: index === steps.length - 1
+      ? { style: "solid", fill: THEME.cyan, width: 4 }
+      : { style: "solid", fill: index === 1 ? THEME.line : "#FFFFFF", width: 2 },
+    shadow: index === steps.length - 1 ? "shadow-lg" : "shadow-sm",
+  }));
+  for (let index = 0; index < nodes.length - 1; index += 1) {
+    slide.shapes.connect(nodes[index], nodes[index + 1], {
+      kind: "straight", fromSide: "right", toSide: "left",
+      line: { style: "solid", fill: THEME.cyan, width: 4 },
+      tail: { type: "triangle", width: "med", length: "med" },
+    });
+  }
+  steps.forEach((step, index) => {
+    const x = left + index * (width + gap);
+    const darkText = index === 1;
+    addText(slide, labels[index], { left: x + 14, top: top + 16, width: width - 28, height: 28 }, {
+      fontSize: 16,
+      bold: true,
+      color: index === steps.length - 1 ? THEME.cyan : darkText ? THEME.accent : "#DFF6FF",
+      alignment: "center",
+    });
+    addText(slide, step.title, { left: x + 14, top: top + 52, width: width - 28, height: 46 }, {
+      fontSize: 21, bold: true, color: darkText ? THEME.dark : "#FFFFFF", alignment: "center",
+    });
+    addText(slide, step.body, { left: x + 16, top: top + 102, width: width - 32, height: 70 }, {
+      fontSize: 14, color: darkText ? THEME.body : "#EAF6FF", alignment: "center", verticalAlignment: "top",
     });
   });
   return slide;
@@ -245,15 +538,38 @@ export function buildFlowMap(presentation, params) {
   return slide;
 }
 
+export function resolveComparisonEmphasis(left, right) {
+  if (left?.emphasis && !right?.emphasis) return "left";
+  if (right?.emphasis && !left?.emphasis) return "right";
+  return null;
+}
+
 export function buildComparison(presentation, params) {
   const slide = prepareSlide(presentation, params.title, "双向对比");
-  const leftNode = addCircle(slide, { left: 330, top: 225, width: 250, height: 250 }, {
-    fill: THEME.accent, line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-lg",
-    text: params.left.title, fontSize: 28, bold: true, color: "#FFFFFF",
+  const emphasis = resolveComparisonEmphasis(params.left, params.right);
+  const leftFocused = emphasis === "left";
+  const rightFocused = emphasis === "right";
+  const leftNode = addCircle(slide, {
+    left: leftFocused ? 310 : 340,
+    top: leftFocused ? 205 : 240,
+    width: leftFocused ? 290 : emphasis ? 210 : 250,
+    height: leftFocused ? 290 : emphasis ? 210 : 250,
+  }, {
+    fill: emphasis && !leftFocused ? "#E9F1F8" : THEME.accent,
+    line: leftFocused ? { style: "solid", fill: THEME.cyan, width: 5 } : { style: "solid", fill: "none", width: 0 },
+    shadow: leftFocused ? "shadow-lg" : emphasis ? "shadow-sm" : "shadow-lg",
+    text: params.left.title, fontSize: leftFocused ? 30 : 26, bold: true, color: emphasis && !leftFocused ? THEME.body : "#FFFFFF",
   });
-  const rightNode = addCircle(slide, { left: 700, top: 225, width: 250, height: 250 }, {
-    fill: THEME.accentAlt, line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-lg",
-    text: params.right.title, fontSize: 28, bold: true, color: "#FFFFFF",
+  const rightNode = addCircle(slide, {
+    left: rightFocused ? 680 : 730,
+    top: rightFocused ? 205 : 240,
+    width: rightFocused ? 290 : emphasis ? 210 : 250,
+    height: rightFocused ? 290 : emphasis ? 210 : 250,
+  }, {
+    fill: emphasis && !rightFocused ? "#E9F1F8" : THEME.accentAlt,
+    line: rightFocused ? { style: "solid", fill: THEME.cyan, width: 5 } : { style: "solid", fill: "none", width: 0 },
+    shadow: rightFocused ? "shadow-lg" : emphasis ? "shadow-sm" : "shadow-lg",
+    text: params.right.title, fontSize: rightFocused ? 30 : 26, bold: true, color: emphasis && !rightFocused ? THEME.body : "#FFFFFF",
   });
   slide.shapes.connect(leftNode, rightNode, {
     kind: "straight", fromSide: "right", toSide: "left",
@@ -261,11 +577,27 @@ export function buildComparison(presentation, params) {
     head: { type: "triangle", width: "med", length: "med" },
     tail: { type: "triangle", width: "med", length: "med" },
   });
-  const renderBullets = (items, left, color, align) => items.forEach((item, index) => addBox(slide, {
-    left, top: 238 + index * 66, width: 230, height: 44,
-  }, { fill: color, line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-sm", text: item, fontSize: 16, bold: true, color: "#FFFFFF", alignment: align }));
-  renderBullets(params.left.items, 70, THEME.accent, "center");
-  renderBullets(params.right.items, 980, THEME.accentAlt, "center");
+  const renderBullets = (items, left, color, focused) => items.forEach((item, index) => addBox(slide, {
+    left, top: 220 + index * 88, width: 275, height: 78,
+  }, {
+    fill: emphasis && !focused ? "#F4F7FA" : color,
+    line: emphasis && !focused ? { style: "solid", fill: THEME.line, width: 1 } : { style: "solid", fill: "none", width: 0 },
+    shadow: focused ? "shadow-md" : "shadow-sm",
+    text: wrapChineseText(item, 17),
+    fontSize: focused ? 17 : 15,
+    bold: true,
+    color: emphasis && !focused ? THEME.body : "#FFFFFF",
+    alignment: "center",
+  }));
+  renderBullets(params.left.items, 55, THEME.accent, leftFocused);
+  renderBullets(params.right.items, 950, THEME.accentAlt, rightFocused);
+  if (emphasis) {
+    addBox(slide, { left: emphasis === "left" ? 392 : 762, top: 186, width: 126, height: 34 }, {
+      fill: THEME.cyan, line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-sm",
+      text: (emphasis === "left" ? params.left : params.right).emphasisLabel ?? "重点路线",
+      fontSize: 15, bold: true, color: "#FFFFFF",
+    });
+  }
   addBox(slide, { left: 585, top: 325, width: 110, height: 50 }, {
     fill: "#FFFFFF", line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-none",
     text: params.centerLabel, fontSize: 18, bold: true, color: THEME.dark,
@@ -304,6 +636,53 @@ export function buildRadialHub(presentation, params) {
       fontSize: 16, bold: true, color: "#FFFFFF", alignment: "center",
     });
   });
+  return slide;
+}
+
+export function buildRadialHubSplitWing(presentation, params) {
+  const slide = prepareSlide(presentation, params.title, "中心主题 · 双翼展开");
+  const items = params.items;
+  const midpoint = Math.ceil(items.length / 2);
+  const columns = [items.slice(0, midpoint), items.slice(midpoint)];
+  const center = addCircle(slide, { left: 520, top: 270, width: 240, height: 240 }, {
+    fill: THEME.accent,
+    line: { style: "solid", fill: "#FFFFFF", width: 3 },
+    shadow: "shadow-lg",
+    text: params.center,
+    fontSize: 28,
+    bold: true,
+    color: "#FFFFFF",
+  });
+  const nodes = [];
+
+  columns.forEach((column, sideIndex) => {
+    const x = sideIndex === 0 ? 96 : 964;
+    const side = sideIndex === 0 ? "left" : "right";
+    const count = column.length;
+    const gap = Math.min(112, 370 / Math.max(1, count - 1));
+    const startTop = 335 - ((count - 1) * gap) / 2;
+    column.forEach((item, index) => {
+      const node = addBox(slide, { left: x, top: startTop + index * gap, width: 220, height: 74 }, {
+        fill: sideIndex ? THEME.accentAlt : THEME.cyan,
+        line: { style: "solid", fill: "#FFFFFF", width: 2 },
+        shadow: "shadow-sm",
+        text: item,
+        fontSize: 17,
+        bold: true,
+        color: "#FFFFFF",
+      });
+      nodes.push({ node, side });
+    });
+  });
+
+  nodes.forEach(({ node, side }) => slide.shapes.connect(center, node, {
+    kind: "straight",
+    fromSide: side,
+    toSide: side === "left" ? "right" : "left",
+    line: { style: "solid", fill: THEME.line, width: 2 },
+  }));
+  center.bringToFront();
+  nodes.forEach(({ node }) => node.bringToFront());
   return slide;
 }
 

@@ -7,6 +7,7 @@ import {
   prepareTemplateMappedStarter,
 } from "../../asset-runtime/template-utils.mjs";
 import { isSkinOnlyAsset, renderStructureAsset } from "../assets.mjs";
+import { wrapChineseText } from "../../render/chinese-typography.mjs";
 
 export const northeasternUniversitySkin = {
   id: "northeastern-university-001",
@@ -45,7 +46,16 @@ function pageRecipe(page, index, manuscriptSource) {
       sourceSlideNumber: 1,
       textEdits: [
         { sourceText: "MDM方法偏移量自适应选取", replacementText: page.payload.parameters.title },
-        { sourceText: "汇报人：魏鹏宇", replacementText: `汇报人：${page.payload.parameters.presenter}` },
+        {
+          sourceText: "汇报人：魏鹏宇",
+          replacementText: wrapChineseText(
+            page.payload.parameters.subtitle
+              || (page.payload.parameters.presenter ? `汇报人：${page.payload.parameters.presenter}` : ""),
+            14,
+          ),
+          position: { left: 390, top: 448, width: 500, height: 150 },
+          textStyle: { fontSize: 26, autoFit: "shrinkText", alignment: "center", verticalAlignment: "middle" },
+        },
         { sourceText: "2026.07.20", replacementText: page.payload.parameters.date },
       ],
       notes,

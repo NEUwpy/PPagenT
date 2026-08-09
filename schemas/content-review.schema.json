@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/NEUwpy/PPagenT/schemas/content-review.schema.json",
+  "title": "PPagenT ContentReview v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "reviewId", "deckId", "attempt", "verdict", "issues", "summary"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "reviewId": { "type": "string", "minLength": 1 },
+    "deckId": { "type": "string", "minLength": 1 },
+    "attempt": { "type": "integer", "minimum": 1 },
+    "verdict": { "enum": ["pass", "revise"] },
+    "issues": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/reviewIssue" }
+    },
+    "summary": { "type": "string", "minLength": 1 }
+  },
+  "$defs": {
+    "reviewIssue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["issueId", "severity", "category", "evidence", "targets", "status"],
+      "properties": {
+        "issueId": { "type": "string", "minLength": 1 },
+        "severity": { "enum": ["error", "warning"] },
+        "category": {
+          "enum": [
+            "source-omission", "unsupported-addition", "narrative-break", "page-balance",
+            "duplicate-role", "priority-error", "over-compression", "layout-contamination", "other"
+          ]
+        },
+        "evidence": { "type": "string", "minLength": 1 },
+        "targets": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "status": { "enum": ["open", "closed"] },
+        "resolution": { "type": "string", "minLength": 1 },
+        "recheckConclusion": { "type": "string", "minLength": 1 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "closed" } }, "required": ["status"] },
+          "then": {
+            "properties": {
+              "resolution": { "type": "string", "minLength": 1 },
+              "recheckConclusion": { "type": "string", "minLength": 1 }
+            },
+            "required": ["resolution", "recheckConclusion"]
+          }
+        }
+      ]
+    }
+  }
+}

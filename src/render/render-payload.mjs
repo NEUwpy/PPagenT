@@ -9,12 +9,6 @@ function mapping(sourceItemId, parameterPath) {
   return { sourceItemId, parameterPath };
 }
 
-function requireItem(content, id) {
-  const item = content.items.find((candidate) => candidate.id === id);
-  if (!item) throw new Error(`${content.pageId} 缺少内容项：${id}`);
-  return item;
-}
-
 function renderPayload(intent, assetId, parameters, mappings, omissions = []) {
   return {
     schemaVersion: "1.0",
@@ -31,22 +25,33 @@ export function mapRenderPayload(content, intent, decision) {
   if (!assetId) throw new Error(`${content.pageId} 没有可渲染的 selectedAssetId`);
 
   if (assetId === "northeastern-university-cover-001") {
-    const presenter = requireItem(content, "presenter");
-    const date = requireItem(content, "date");
+    const presenter = content.items.find((item) => item.id === "presenter");
+    const date = content.items.find((item) => item.id === "date");
+    const subtitle = content.items.find((item) => !["presenter", "date"].includes(item.id));
     return renderPayload(intent, assetId, {
       title: content.title,
-      presenter: presenter.body || presenter.title,
-      date: date.body || date.title,
+      presenter: presenter ? presenter.body || presenter.title : "",
+      date: date ? date.body || date.title : "",
+      subtitle: subtitle ? subtitle.body || subtitle.title : "",
     }, [
-      mapping(presenter.id, "presenter"),
-      mapping(date.id, "date"),
+      ...(presenter ? [mapping(presenter.id, "presenter")] : []),
+      ...(date ? [mapping(date.id, "date")] : []),
+      ...(subtitle ? [mapping(subtitle.id, "subtitle")] : []),
     ]);
   }
 
   if (assetId === "northeastern-university-closing-001") {
+    const conclusion = content.items.find((item) => item.emphasis) ?? content.items.at(-1);
+    const mission = content.items.find((item) => item !== conclusion);
     return renderPayload(intent, assetId, {
-      text: content.notes || content.title,
-    }, []);
+      text: [
+        mission ? [mission.title, mission.body].filter(Boolean).join("，") : "",
+        conclusion?.body || conclusion?.title,
+      ].filter(Boolean).join("\n"),
+    }, [
+      ...(mission ? [mapping(mission.id, "text")] : []),
+      ...(conclusion ? [mapping(conclusion.id, "text")] : []),
+    ]);
   }
 
   if (assetId === "radial-hub-001") {
@@ -62,19 +67,23 @@ export function mapRenderPayload(content, intent, decision) {
     if (!left || !right) throw new Error(`${content.pageId} 的双向对比需要两个内容组`);
     return renderPayload(intent, assetId, {
       title: content.title,
-      left: { title: left.title, items: splitPoints(left.body) },
-      right: { title: right.title, items: splitPoints(right.body) },
+      left: { title: left.title, items: splitPoints(left.body), emphasis: Boolean(left.emphasis) },
+      right: { title: right.title, items: splitPoints(right.body), emphasis: Boolean(right.emphasis) },
       centerLabel: content.notes || "对比",
-    }, [
-      mapping(left.id, "left"),
-      mapping(right.id, "right"),
-    ]);
+    }, [mapping(left.id, "left"), mapping(right.id, "right")]);
   }
 
   if (assetId === "sequential-process-001") {
     return renderPayload(intent, assetId, {
       title: content.title,
-      steps: content.items.map((item) => ({ title: item.title, body: item.body })),
+      steps: content.items.map((item) => ({
+        title: item.title,
+        body: item.body,
+        emphasis: Boolean(item.emphasis),
+        ...(item.emphasis
+          ? { emphasisLabel: item.title.includes("？") ? "关键追问" : item.id.includes("outcome") ? "能力结果" : "结论 / 结果" }
+          : {}),
+      })),
     }, content.items.map((item, index) => mapping(item.id, `steps[${index}]`)));
   }
 
@@ -87,9 +96,16 @@ export function mapRenderPayload(content, intent, decision) {
   }
 
   if (assetId === "layered-architecture-001") {
-    const sources = content.items.filter((item) => item.id.startsWith("source-"));
-    const apps = content.items.filter((item) => item.id.startsWith("app-"));
-    const platform = requireItem(content, "platform");
+    const sourceCount = intent.structure.dimensions?.sourceCount;
+    const applicationCount = intent.structure.dimensions?.applicationCount;
+    if (!Number.isInteger(sourceCount) || sourceCount < 1
+      || !Number.isInteger(applicationCount) || applicationCount < 1
+      || sourceCount + applicationCount + 1 !== content.items.length) {
+      throw new Error(`${content.pageId} 的分层架构需要在 PageIntent 中声明 sourceCount 和 applicationCount`);
+    }
+    const sources = content.items.slice(0, sourceCount);
+    const platform = content.items[sourceCount];
+    const apps = content.items.slice(sourceCount + 1);
     return renderPayload(intent, assetId, {
       title: content.title,
       sources: sources.map((item) => item.title || item.body),

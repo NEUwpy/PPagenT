@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "1.0",
+  "reviewId": "why-ppagent-v0.3.0-content-review-attempt-05",
+  "deckId": "why-ppagent-v0.3.0",
+  "attempt": 5,
+  "verdict": "revise",
+  "issues": [
+    {
+      "issueId": "CR-A05-001",
+      "severity": "warning",
+      "category": "over-compression",
+      "evidence": "p09 将“让 AI 帮我们读稿子，让规则帮我们做判断，让代码完成重复劳动”压缩为“让 AI 读稿，让规则判断，让代码执行”，存在使命含义被削弱的风险。",
+      "targets": [
+        "page-contents[p09].items[mission-01]"
+      ],
+      "status": "closed",
+      "resolution": "压缩句仍保留 AI、规则、代码三个主体及其对应职责；“读稿、判断、执行”与原稿的“读稿子、做判断、完成重复劳动”方向一致，也与整套稿件已建立的职责分工一致。",
+      "recheckConclusion": "使命句虽更简短，但没有改变主体、职责或方法路线，不构成实质内容损失。"
+    },
+    {
+      "issueId": "CR-A05-002",
+      "severity": "error",
+      "category": "unsupported-addition",
+      "evidence": "原稿结论是“如果能做到这一点，这个项目就值得做”，明确把项目价值建立在目标能够实现这一条件上；候选改为“这个项目，值得做”，删除条件后变成无条件价值断言。该改写强化了原稿立场，不能由 sourceText 中的条件句直接支持。",
+      "targets": [
+        "deck-plan.pages[p09].narrativeJob",
+        "page-contents[p09].items[conclusion-01]"
+      ],
+      "status": "open"
+    }
+  ],
+  "summary": "第五轮未通过内容门禁。逐字段比对确认只有 p09 发生变化，p01 至 p08 与第四轮完全一致，DeckPlan 也完全未变。使命句“让 AI 读稿，让规则判断，让代码执行”是忠实且可接受的压缩；但“这个项目，值得做”把原稿带条件的价值判断改成了无条件断言，属于实质语义加强。应保留“做到目标才值得做”的条件关系后再复核。"
+}

@@ -1,0 +1,106 @@
+{
+  "schemaVersion": "1.0",
+  "variants": [
+    {
+      "familyId": "comparison-structure",
+      "assetId": "comparison-structure-001",
+      "variantId": "default",
+      "builderKey": "comparison-structure-001:default",
+      "silhouette": "weighted-dual-focus",
+      "supportedBaseRelations": ["comparison"],
+      "itemCount": { "min": 2, "preferred": [2], "max": 2 },
+      "status": "experimental"
+    },
+    {
+      "familyId": "cycle-loop",
+      "assetId": "cycle-loop-001",
+      "variantId": "default",
+      "builderKey": "cycle-loop-001:default",
+      "silhouette": "four-node-loop",
+      "supportedBaseRelations": ["sequence"],
+      "itemCount": { "min": 4, "preferred": [4], "max": 4 },
+      "status": "experimental"
+    },
+    {
+      "familyId": "layered-architecture",
+      "assetId": "layered-architecture-001",
+      "variantId": "default",
+      "builderKey": "layered-architecture-001:default",
+      "silhouette": "top-center-bottom-layers",
+      "supportedBaseRelations": ["layered"],
+      "itemCount": { "min": 6, "preferred": [8, 9, 10], "max": 12 },
+      "status": "experimental"
+    },
+    {
+      "familyId": "radial-hub",
+      "assetId": "radial-hub-001",
+      "variantId": "orbit",
+      "builderKey": "radial-hub-001:orbit",
+      "silhouette": "center-orbit",
+      "supportedBaseRelations": ["hub"],
+      "itemCount": { "min": 3, "preferred": [4, 5, 6], "max": 8 },
+      "status": "experimental"
+    },
+    {
+      "familyId": "radial-hub",
+      "assetId": "radial-hub-001",
+      "variantId": "split-wing",
+      "builderKey": "radial-hub-001:split-wing",
+      "silhouette": "center-split-wing",
+      "supportedBaseRelations": ["hub"],
+      "itemCount": { "min": 3, "preferred": [4, 6], "max": 8 },
+      "status": "experimental"
+    },
+    {
+      "familyId": "sequential-process",
+      "assetId": "sequential-process-001",
+      "variantId": "horizontal-cards",
+      "builderKey": "sequential-process-001:horizontal-cards",
+      "silhouette": "horizontal-card-chain",
+      "supportedBaseRelations": ["sequence"],
+      "itemCount": { "min": 3, "preferred": [3, 4], "max": 6 },
+      "status": "experimental"
+    },
+    {
+      "familyId": "sequential-process",
+      "assetId": "sequential-process-001",
+      "variantId": "ribbon",
+      "builderKey": "sequential-process-001:ribbon",
+      "silhouette": "alternating-ribbon",
+      "supportedBaseRelations": ["sequence"],
+      "itemCount": { "min": 3, "preferred": [4, 5, 6], "max": 6 },
+      "status": "experimental"
+    },
+    {
+      "familyId": "sequential-process",
+      "assetId": "sequential-process-001",
+      "variantId": "staircase",
+      "builderKey": "sequential-process-001:staircase",
+      "silhouette": "ascending-step-path",
+      "supportedBaseRelations": ["sequence"],
+      "itemCount": { "min": 3, "preferred": [3, 4, 5, 6], "max": 6 },
+      "status": "experimental"
+    },
+    {
+      "familyId": "role-handoff",
+      "assetId": "sequential-process-001",
+      "variantId": "role-handoff",
+      "builderKey": "sequential-process-001:role-handoff",
+      "silhouette": "alternating-role-relay",
+      "supportedBaseRelations": ["sequence"],
+      "supportedPurposeKeys": ["explain_cross_role_process"],
+      "itemCount": { "min": 3, "preferred": [3, 4, 5], "max": 6 },
+      "status": "experimental"
+    },
+    {
+      "familyId": "causal-chain",
+      "assetId": "sequential-process-001",
+      "variantId": "causal-chain",
+      "builderKey": "sequential-process-001:causal-chain",
+      "silhouette": "condition-gap-intervention-result",
+      "supportedBaseRelations": ["causal"],
+      "itemCount": { "min": 4, "preferred": [4], "max": 6 },
+      "status": "experimental"
+    }
+  ]
+}

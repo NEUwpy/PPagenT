@@ -1,6 +1,6 @@
 {
   "name": "ppagent",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -11,7 +11,9 @@
     "audit:local": "node src/tools/audit-asset-library.mjs . --mode local",
     "validate:contracts": "node src/tools/validate-rule-layer.mjs .",
     "match": "node src/tools/match-page-intent.mjs --root .",
-    "agent:run": "node src/agent/run-manuscript.mjs --root .",
+    "agent:run": "node src/agent/run-workflow.mjs --root .",
+    "agent:run:openai": "node src/agent/run-workflow.mjs --root . --provider src/agent/openai-provider-from-env.mjs",
+    "agent:legacy": "node src/agent/run-manuscript.mjs --root .",
     "intent:stats": "node src/tools/compute-page-intent.mjs",
     "test:selection": "node --test tests/*.test.mjs",
     "test": "npm run validate:contracts && npm run test:selection && npm run audit"

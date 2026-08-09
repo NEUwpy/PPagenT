@@ -4,12 +4,21 @@
   "title": "PPagenT LayoutDecision v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "intentId", "decision", "selectedAssetId", "candidates", "rejections", "resolutionPlan"],
+  "required": [
+    "schemaVersion", "intentId", "decision", "selectedFamilyId", "selectedAssetId",
+    "selectedVariantId", "selectedSilhouette", "selectionState", "selectionOwner",
+    "candidates", "rejections", "resolutionPlan"
+  ],
   "properties": {
     "schemaVersion": { "const": "1.0" },
     "intentId": { "type": "string", "minLength": 1 },
     "decision": { "enum": ["single-match", "ranked-match", "needs-ranking", "fallback", "no-match"] },
     "selectedAssetId": { "type": ["string", "null"] },
+    "selectedFamilyId": { "type": ["string", "null"] },
+    "selectedVariantId": { "type": ["string", "null"] },
+    "selectedSilhouette": { "type": ["string", "null"] },
+    "selectionState": { "enum": ["selected", "unresolved", "fallback", "legacy-asset-only"] },
+    "selectionOwner": { "enum": ["visual-director", "legacy-matcher", "program"] },
     "candidates": {
       "type": "array",
       "items": {

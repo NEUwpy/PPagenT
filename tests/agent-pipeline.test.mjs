@@ -1,50 +1,106 @@
-import fs from "node:fs/promises";
+import assert from "node:assert/strict";
 import path from "node:path";
 import test from "node:test";
-import assert from "node:assert/strict";
+import { buildVisualCandidateSets, resolveVisualPlan } from "../src/agent/visual-resolution.mjs";
 import { enrichPageIntent } from "../src/content/page-content.mjs";
 import { mapRenderPayload } from "../src/render/render-payload.mjs";
-import { loadContractCatalog, matchPageIntent } from "../src/selection/contracts.mjs";
-import { createRuleValidators } from "../src/selection/validation.mjs";
 
-const root = process.cwd();
-const manuscriptPath = path.join(
-  root,
-  "experiments",
-  "真实稿件",
-  "为什么做PPagenT-v0.2.0",
-  "manuscript.json",
-);
+const root = path.resolve(import.meta.dirname, "..");
 
-test("第一份真实稿件逐页通过四层对象并形成唯一资产调用", async () => {
-  const manuscript = JSON.parse(await fs.readFile(manuscriptPath, "utf8"));
-  const contracts = await loadContractCatalog(root);
-  const validators = await createRuleValidators(root);
-  const selectedAssets = [];
+function content(pageId, items) {
+  return { schemaVersion: "1.0", pageId, title: pageId, items, sourceText: pageId };
+}
 
-  for (const page of manuscript.pages) {
-    assert.equal(validators.validatePageContent(page.content), true);
-    const intent = enrichPageIntent(page.intentDraft, page.content);
-    assert.equal(validators.validatePageIntent(intent), true);
-    const decision = matchPageIntent(intent, contracts);
-    assert.notEqual(decision.selectedAssetId, null, page.content.pageId);
-    assert.notEqual(decision.decision, "needs-ranking", page.content.pageId);
-    assert.equal(validators.validateLayoutDecision(decision), true);
-    const payload = mapRenderPayload(page.content, intent, decision);
-    assert.equal(validators.validateRenderPayload(payload), true);
-    selectedAssets.push(decision.selectedAssetId);
-  }
+function intentDraft(intentId, purposeKey, baseRelation, structure = {}) {
+  return {
+    intentId,
+    purposeKey,
+    purposeText: purposeKey,
+    baseRelation,
+    relationTraits: {
+      temporal: false,
+      cyclic: false,
+      converging: false,
+      branched: false,
+      dimensions: 1,
+      secondaryDimension: "none",
+    },
+    structure: { ordered: false, sameLevel: true, ...structure },
+    density: "low",
+    evidenceTypes: ["text"],
+    confidence: 0.9,
+    assumptions: [],
+  };
+}
 
-  assert.deepEqual(selectedAssets, [
-    "northeastern-university-cover-001",
-    "radial-hub-001",
-    "radial-hub-001",
-    "comparison-structure-001",
-    "sequential-process-001",
-    "radial-hub-001",
-    "sequential-process-001",
-    "layered-architecture-001",
-    "cycle-loop-001",
-    "northeastern-university-closing-001",
+test("程序先按 PageIntent 语义和运行能力给视觉导演候选", async () => {
+  const page = content("topics", [
+    { id: "a", title: "A", body: "A" },
+    { id: "b", title: "B", body: "B" },
+    { id: "c", title: "C", body: "C" },
+    { id: "d", title: "D", body: "D" },
   ]);
+  const intent = enrichPageIntent(intentDraft("topics-intent", "explain_topics", "hub"), page);
+  const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
+  assert.ok(set.candidates.length >= 2);
+  assert.ok(set.candidates.every((candidate) => candidate.familyId === "radial-hub"));
+  assert.deepEqual(new Set(set.candidates.map((candidate) => candidate.variantId)), new Set(["orbit", "split-wing"]));
+});
+
+test("resolver 不允许把视觉导演的家族或变体换成另一资产", async () => {
+  const page = content("topics", [
+    { id: "a", title: "A", body: "A" },
+    { id: "b", title: "B", body: "B" },
+    { id: "c", title: "C", body: "C" },
+  ]);
+  const intent = enrichPageIntent(intentDraft("topics-intent", "explain_topics", "hub"), page);
+  const result = await resolveVisualPlan({
+    root,
+    pageContents: [page],
+    pageIntents: [intent],
+    candidateSets: [{
+      pageId: "topics",
+      intentId: "topics-intent",
+      candidates: [{
+        familyId: "radial-hub",
+        assetId: "radial-hub-001",
+        variantId: "orbit",
+        silhouette: "center-orbit",
+        adaptationStatus: "adaptive",
+      }],
+    }],
+    visualPlan: {
+      pages: [{
+        pageId: "topics",
+        intentId: "topics-intent",
+        familyId: "sequential-process",
+        variantId: "ribbon",
+        silhouette: "alternating-ribbon",
+      }],
+    },
+  });
+  assert.equal(result.status, "needs-director-revision");
+  assert.equal(result.feedback[0].code, "choice-not-in-semantic-candidates");
+});
+
+test("分层架构使用 PageIntent 分组，不要求内容写组件专属 ID", () => {
+  const page = content("system", [
+    { id: "input-a", title: "材料", body: "原稿" },
+    { id: "input-b", title: "规范", body: "Skin" },
+    { id: "core", title: "PPagenT", body: "生成系统" },
+    { id: "output-a", title: "演示", body: "可编辑 PPT" },
+    { id: "output-b", title: "证据", body: "逐页 QA" },
+  ]);
+  const intent = enrichPageIntent(intentDraft("system-intent", "explain_architecture", "layered", {
+    dimensions: { sourceCount: 2, applicationCount: 2 },
+  }), page);
+  const decision = {
+    selectedAssetId: "layered-architecture-001",
+    selectedVariantId: "default",
+  };
+  const payload = mapRenderPayload(page, intent, decision);
+  assert.deepEqual(payload.parameters.sources, ["材料", "规范"]);
+  assert.equal(payload.parameters.platform, "PPagenT");
+  assert.deepEqual(payload.parameters.apps, ["演示", "证据"]);
+  assert.ok(page.items.every((item) => !/^(source-|app-)|^platform$/i.test(item.id)));
 });

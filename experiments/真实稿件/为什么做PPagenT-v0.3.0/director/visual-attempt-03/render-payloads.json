@@ -1,0 +1,339 @@
+[
+  {
+    "schemaVersion": "1.0",
+    "intentId": "why-ppagent-v0.3.0-p01",
+    "assetId": "northeastern-university-cover-001",
+    "parameters": {
+      "title": "为什么做 PPagenT",
+      "presenter": "",
+      "date": "",
+      "subtitle": "做 PPT 真正昂贵的，是这些反复发生的判断。"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "statement-01",
+        "parameterPath": "subtitle"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "why-ppagent-v0.3.0-p02",
+    "assetId": "sequential-process-001",
+    "parameters": {
+      "title": "真正费时间的不是“画”",
+      "steps": [
+        {
+          "title": "讲法与拆页",
+          "body": "怎么讲、拆成多少页、每页只讲什么。",
+          "emphasis": false
+        },
+        {
+          "title": "关系与突出",
+          "body": "判断并列、递进、因果或流程；决定哪里突出、何时用图或一句话。",
+          "emphasis": false
+        },
+        {
+          "title": "复用旧页并统一规范",
+          "body": "找相近页面，替换内容、调整结构；统一字体、字号、颜色和间距。",
+          "emphasis": false
+        },
+        {
+          "title": "高手为什么还要重做？",
+          "body": "既然已经知道怎样做是好的，为什么每次还要重新做一遍？",
+          "emphasis": true
+        }
+      ],
+      "visualVariantId": "horizontal-cards"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "judgment-01",
+        "parameterPath": "steps[0]"
+      },
+      {
+        "sourceItemId": "judgment-02",
+        "parameterPath": "steps[1]"
+      },
+      {
+        "sourceItemId": "judgment-03",
+        "parameterPath": "steps[2]"
+      },
+      {
+        "sourceItemId": "question-01",
+        "parameterPath": "steps[3]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "why-ppagent-v0.3.0-p03",
+    "assetId": "comparison-structure-001",
+    "parameters": {
+      "title": "工作里的 PPT，不需要每次重新发明",
+      "left": {
+        "title": "AI 的自由生成能力",
+        "items": [
+          "根据材料生成整套 PPT",
+          "直接画出自由、炫目的页面。"
+        ],
+        "emphasis": false
+      },
+      "right": {
+        "title": "工作型 PPT 的受控选择",
+        "items": [
+          "不必每次重新设计，也不必让 AI 重新猜",
+          "主动牺牲一部分自由，换取可靠、稳定和效率。"
+        ],
+        "emphasis": true
+      },
+      "centerLabel": "对比",
+      "visualVariantId": "default"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "concept-01",
+        "parameterPath": "left"
+      },
+      {
+        "sourceItemId": "concept-02",
+        "parameterPath": "right"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "why-ppagent-v0.3.0-p04",
+    "assetId": "sequential-process-001",
+    "parameters": {
+      "title": "AI 负责理解，规则负责决定，代码负责执行",
+      "steps": [
+        {
+          "title": "AI 负责理解",
+          "body": "读取稿件，判断重点、关系、拆页和表达目的。",
+          "emphasis": false
+        },
+        {
+          "title": "规则负责决定",
+          "body": "判断哪些版式可以使用、内容是否装得下、什么时候应该换版式或拆页。",
+          "emphasis": false
+        },
+        {
+          "title": "代码负责执行",
+          "body": "稳定生成原生可编辑的 PowerPoint。",
+          "emphasis": false
+        },
+        {
+          "title": "",
+          "body": "AI 读懂稿子，然后调用人已经提前做好的好东西。",
+          "emphasis": true
+        }
+      ],
+      "visualVariantId": "role-handoff"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "role-01",
+        "parameterPath": "steps[0]"
+      },
+      {
+        "sourceItemId": "role-02",
+        "parameterPath": "steps[1]"
+      },
+      {
+        "sourceItemId": "role-03",
+        "parameterPath": "steps[2]"
+      },
+      {
+        "sourceItemId": "summary-01",
+        "parameterPath": "steps[3]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "why-ppagent-v0.3.0-p05",
+    "assetId": "sequential-process-001",
+    "parameters": {
+      "title": "稳定的 80 分，比随机的 95 分更值钱",
+      "steps": [
+        {
+          "title": "真实场景很普通",
+          "body": "明天上午要汇报，晚上把稿件交给系统。",
+          "emphasis": false
+        },
+        {
+          "title": "需要的是能用于工作",
+          "body": "结构清楚、视觉规范、符合组织风格，而且第二天仍然可以继续修改的 PPT。",
+          "emphasis": false
+        },
+        {
+          "title": "稳定交付 80 分初稿",
+          "body": "如果系统能够稳定交付一个真正能用于工作的 80 分初稿，它就已经节省了大量时间。",
+          "emphasis": true
+        }
+      ],
+      "visualVariantId": "ribbon"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "scenario-01",
+        "parameterPath": "steps[0]"
+      },
+      {
+        "sourceItemId": "expectation-01",
+        "parameterPath": "steps[1]"
+      },
+      {
+        "sourceItemId": "standard-01",
+        "parameterPath": "steps[2]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "why-ppagent-v0.3.0-p06",
+    "assetId": "sequential-process-001",
+    "parameters": {
+      "title": "不只服务最会做 PPT 的那 1%",
+      "steps": [
+        {
+          "title": "更多人并不缺内容",
+          "body": "他们有内容、有专业知识，也有真实的汇报任务。",
+          "emphasis": false
+        },
+        {
+          "title": "缺的是制作能力",
+          "body": "只是不擅长拆页、选择表达方式和完成视觉排版。",
+          "emphasis": false
+        },
+        {
+          "title": "把方法做成系统",
+          "body": "让更多人用较低的成本和较少的时间获得接近专业标准的结果。",
+          "emphasis": false
+        },
+        {
+          "title": "",
+          "body": "把原来只存在于个人大脑和个人电脑里的能力，变成更多人可以使用的生产能力。",
+          "emphasis": true
+        }
+      ],
+      "visualVariantId": "causal-chain"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "audience-01",
+        "parameterPath": "steps[0]"
+      },
+      {
+        "sourceItemId": "barrier-01",
+        "parameterPath": "steps[1]"
+      },
+      {
+        "sourceItemId": "value-01",
+        "parameterPath": "steps[2]"
+      },
+      {
+        "sourceItemId": "outcome-01",
+        "parameterPath": "steps[3]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "why-ppagent-v0.3.0-p07",
+    "assetId": "sequential-process-001",
+    "parameters": {
+      "title": "真正积累的不是一万个模板",
+      "steps": [
+        {
+          "title": "内容不可能被模板穷尽",
+          "body": "条目会从三个变四个，文字会从十字变六十字。",
+          "emphasis": false
+        },
+        {
+          "title": "要积累页面背后的经验",
+          "body": "提炼表达方式、版式容量、超限变化和不应使用的边界。",
+          "emphasis": false
+        },
+        {
+          "title": "从作品变成能力",
+          "body": "规律被提炼后，漂亮页面才能从一件作品变成一种能力。",
+          "emphasis": true
+        }
+      ],
+      "visualVariantId": "staircase"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "limit-01",
+        "parameterPath": "steps[0]"
+      },
+      {
+        "sourceItemId": "experience-01",
+        "parameterPath": "steps[1]"
+      },
+      {
+        "sourceItemId": "capability-01",
+        "parameterPath": "steps[2]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "why-ppagent-v0.3.0-p08",
+    "assetId": "comparison-structure-001",
+    "parameters": {
+      "title": "东北大学可以是第一个落地场景，但不会是最终边界",
+      "left": {
+        "title": "视觉规范可以替换",
+        "items": [
+          "学校视觉规范只是可替换的一套组织视觉系统。"
+        ],
+        "emphasis": false
+      },
+      "right": {
+        "title": "经验能力可以复用",
+        "items": [
+          "内容理解、拆页、表达规则和失败经验可以继续服务其他学校、企业、实验室和个人。"
+        ],
+        "emphasis": true
+      },
+      "centerLabel": "对比",
+      "visualVariantId": "default"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "boundary-01",
+        "parameterPath": "left"
+      },
+      {
+        "sourceItemId": "reuse-01",
+        "parameterPath": "right"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "why-ppagent-v0.3.0-p09",
+    "assetId": "northeastern-university-closing-001",
+    "parameters": {
+      "text": "把一个很会做 PPT 的人的经验留下来\n如果能做到这一点，这个项目就值得做。"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "conclusion-01",
+        "parameterPath": "text"
+      }
+    ],
+    "omissions": []
+  }
+]

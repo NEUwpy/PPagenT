@@ -1,0 +1,120 @@
+{
+  "schemaVersion": "1.0",
+  "reviewId": "why-ppagent-v0.3.0-post-render-replay-01",
+  "deckId": "why-ppagent-v0.3.0",
+  "stage": "post-render",
+  "attempt": 1,
+  "verdict": "pass",
+  "issues": [
+    {
+      "issueId": "VR-POST-A08-001",
+      "severity": "warning",
+      "category": "text-fit",
+      "evidence": "slide-01 的开场判断在调整后的封面字幕框内形成两行完整可见文字：“做 PPT 真正昂贵的，是 / 这些反复发生的判断。”。“这些”没有被拆开，句号不孤立，文字与蓝色标题带、背景图及画布边界均无碰撞。",
+      "targets": [
+        "slide-01.png",
+        "render-payloads[p01].parameters.subtitle",
+        "cover-frame-adjustment"
+      ],
+      "status": "closed",
+      "resolution": "封面使用独立 frame adjustment，并由 balanced word-aware visible wrapping 按该框容量生成两行可见文本。",
+      "recheckConclusion": "p01 的实际 PNG 断行、字号、留白和边界均通过。"
+    },
+    {
+      "issueId": "VR-POST-A08-002",
+      "severity": "warning",
+      "category": "text-fit",
+      "evidence": "slide-03 的右侧两组说明均完整显示，底部文字分为“主动牺牲一部分自由， / 换取可靠、稳定和效率。”，没有行首顿号、孤立标点或文字越过圆形与说明框；右侧重点权重仍明显高于左侧。",
+      "targets": [
+        "slide-03.png",
+        "render-payloads[p03]"
+      ],
+      "status": "closed",
+      "resolution": "按 comparison 说明框容量执行词语感知、均衡的可见换行。",
+      "recheckConclusion": "p03 可读性与 weighted-dual-focus 关系均通过最终 PNG 验证。"
+    },
+    {
+      "issueId": "VR-POST-A08-003",
+      "severity": "warning",
+      "category": "text-fit",
+      "evidence": "slide-07 第一项正文把“十字变六十字。”完整保留在同一可见行内，数量短语和句号均未拆分；三个阶梯节点的标题、正文和结论标签完整位于卡片内部，没有截断或互相遮挡。",
+      "targets": [
+        "slide-07.png",
+        "render-payloads[p07]"
+      ],
+      "status": "closed",
+      "resolution": "按 staircase 卡片容量执行词语感知、均衡的可见换行。",
+      "recheckConclusion": "p07 数量短语、三项容量和能力终点均通过最终 PNG 验证。"
+    },
+    {
+      "issueId": "VR-POST-A08-004",
+      "severity": "warning",
+      "category": "text-fit",
+      "evidence": "slide-08 的右侧列举完整排成三行，末行包含“学校、企业、实验室和个人。”，没有拆开“个人”、出现“人。”孤行或行首标点；左右说明与加权圆形边界均清楚。",
+      "targets": [
+        "slide-08.png",
+        "render-payloads[p08]"
+      ],
+      "status": "closed",
+      "resolution": "按 comparison 说明框容量执行词语感知、均衡的可见换行。",
+      "recheckConclusion": "p08 应用对象列举、右侧重点和组件边界均通过最终 PNG 验证。"
+    },
+    {
+      "issueId": "VR-POST-A08-005",
+      "severity": "warning",
+      "category": "text-fit",
+      "evidence": "slide-02、slide-04、slide-05、slide-06、slide-09 均已重新按原始尺寸查看：p02 四卡与关键追问完整，p04 三角色接力和独立结论不重叠，p05 三段推进内容完整，p06 四节点因果链及结果正文可读，p09 两句 closing 文本完整分行。新的可见换行算法没有引入回归。",
+      "targets": [
+        "slide-02.png",
+        "slide-04.png",
+        "slide-05.png",
+        "slide-06.png",
+        "slide-09.png"
+      ],
+      "status": "closed",
+      "resolution": "逐页复核非问题页的文字容量、层级与组件边界。",
+      "recheckConclusion": "其余五页没有新增拥挤、截断、孤行或语义层级错误。"
+    },
+    {
+      "issueId": "VR-POST-A08-006",
+      "severity": "warning",
+      "category": "geometry-distortion",
+      "evidence": "slide-01 至 slide-09 全部按原始尺寸逐张检查，没有发现元素越过画布或正文安全区、形状被非等比压缩、节点变形、连接线穿过文字、组件相互遮挡、标题带覆盖内容或 Skin 标识变形。",
+      "targets": [
+        "slide-01.png",
+        "slide-02.png",
+        "slide-03.png",
+        "slide-04.png",
+        "slide-05.png",
+        "slide-06.png",
+        "slide-07.png",
+        "slide-08.png",
+        "slide-09.png"
+      ],
+      "status": "closed",
+      "resolution": "逐页核对画布边界、正文安全区、形状比例、连接线和碰撞。",
+      "recheckConclusion": "九页无畸变、碰撞、越界或连接错误。"
+    },
+    {
+      "issueId": "VR-POST-A08-007",
+      "severity": "warning",
+      "category": "skin-inconsistency",
+      "evidence": "封面和尾页继续形成东北大学 Skin 边界，七个正文页统一保留页码、栏目、蓝色主旨带、右上校标与底部蓝线。正文轮廓依次为横向卡片、加权对比、角色接力、带状推进、因果链、阶梯和加权对比；视觉语言统一且相邻轮廓不机械重复。",
+      "targets": [
+        "slide-01.png",
+        "slide-02.png",
+        "slide-03.png",
+        "slide-04.png",
+        "slide-05.png",
+        "slide-06.png",
+        "slide-07.png",
+        "slide-08.png",
+        "slide-09.png"
+      ],
+      "status": "closed",
+      "resolution": "按整套顺序比较 Skin 固定元素、配色、字体层级和页面轮廓。",
+      "recheckConclusion": "Skin 一致、节奏成立，没有视觉跳脱或连续同构。"
+    }
+  ],
+  "summary": "第八轮渲染后最终独立审查通过。slide-01 至 slide-09 均已按原始尺寸逐张查看。真实实现为 balanced word-aware visible line wrapping：按组件容量生成可见换行，不依赖隐藏字符；封面另有独立 frame adjustment。p01 的“这些”和句号完整，p03 无行首顿号，p07 的“十字变六十字。”保持同一行，p08 的“个人。”不再孤立；p02、p04、p05、p06、p09 也未出现回归。九页无碰撞、越界、连接错误或几何畸变，东北大学 Skin 一致，整套节奏清楚且不机械。所有 issue 均已关闭，verdict=pass，可以进入最终 QA 与用户复核。"
+}

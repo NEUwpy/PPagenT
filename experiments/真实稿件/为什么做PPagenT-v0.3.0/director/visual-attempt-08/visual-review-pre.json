@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "1.0",
+  "reviewId": "why-ppagent-v0.3.0-visual-review-pre-attempt-08",
+  "deckId": "why-ppagent-v0.3.0",
+  "stage": "pre-render",
+  "attempt": 8,
+  "verdict": "pass",
+  "issues": [
+    {
+      "issueId": "VR-PRE-A08-001",
+      "severity": "warning",
+      "category": "other",
+      "evidence": "attempt 8 的 page-intents、candidate-sets、layout-decisions、render-payloads 与 visual-resolution 和 attempt 7 逐文件完全一致；只有 VisualPlan 的 visualLanguage、rhythmStrategy 及 p01、p03、p07、p08 reason 更新为 balanced word-aware visible line wrapping 的准确说明。",
+      "targets": [
+        "page-intents",
+        "candidate-sets",
+        "visual-plan",
+        "layout-decisions",
+        "render-payloads",
+        "visual-resolution"
+      ],
+      "status": "closed",
+      "resolution": "完整继承 attempt 7 已通过的内容意图、候选、家族、变体、silhouette、参数和选择归属，仅更新渲染排版说明。",
+      "recheckConclusion": "没有为排版适配改写语义、PageContent、family、variant、silhouette、asset 或整套节奏。"
+    },
+    {
+      "issueId": "VR-PRE-A08-002",
+      "severity": "warning",
+      "category": "text-fit",
+      "evidence": "当前问题路径使用 wrapChineseText 按组件 maxUnits 做词语感知的均衡分行，输出真实换行符；对应单元测试验证去除换行后与输入原文逐字一致、不产生行首标点，并保持“这些”“可靠、稳定”“六十字。”“个人。”等语义单元完整。封面另外使用扩展字幕框、26pt、shrinkText 和居中对齐。",
+      "targets": [
+        "renderer-balanced-word-aware-wrapping",
+        "cover-frame-adjustment",
+        "visual-plan.pages[p01]",
+        "visual-plan.pages[p03]",
+        "visual-plan.pages[p07]",
+        "visual-plan.pages[p08]"
+      ],
+      "status": "closed",
+      "resolution": "以可见换行代替隐藏字符断行，并按封面和各组件的真实容量分别计算均衡分行。",
+      "recheckConclusion": "排版适配的实现和 VisualPlan 描述一致；当前启用路径不插入隐藏字符，中文排版单元测试通过。"
+    },
+    {
+      "issueId": "VR-PRE-A08-003",
+      "severity": "warning",
+      "category": "text-fit",
+      "evidence": "p01、p03、p07、p08 的可见换行计算和封面 frame adjustment 已具备实现与单元测试证据，但 attempt 8 尚未形成最终 PNG 页面，无法在 pre-render 阶段证明 PowerPoint 实际导出后的行数、字号、留白和组件边界完全符合预期。",
+      "targets": [
+        "visual-plan.pages[p01]",
+        "visual-plan.pages[p03]",
+        "visual-plan.pages[p07]",
+        "visual-plan.pages[p08]"
+      ],
+      "status": "open"
+    },
+    {
+      "issueId": "VR-PRE-A08-004",
+      "severity": "warning",
+      "category": "variant-error",
+      "evidence": "九页 VisualPlan 仍全部选择对应 candidate-set 中的合法项；每页 LayoutDecision 的 selectedFamilyId、selectedVariantId、selectedSilhouette 与 VisualPlan 一致，selectedAssetId 与 RenderPayload.assetId 一致，非 Skin 页 visualVariantId 与选中 variant 一致。selectionOwner 全为 visual-director、selectionState 全为 selected，visual-resolution 为 accepted 且无 feedback。",
+      "targets": [
+        "candidate-sets",
+        "visual-plan",
+        "layout-decisions",
+        "render-payloads",
+        "visual-resolution"
+      ],
+      "status": "closed",
+      "resolution": "在不变的合法选择链上替换渲染排版算法。",
+      "recheckConclusion": "全链一致，没有非法候选、选择权回退或字段改写。"
+    },
+    {
+      "issueId": "VR-PRE-A08-005",
+      "severity": "warning",
+      "category": "relation-error",
+      "evidence": "p02 的不编号关键追问、p03/p08 的右侧 weighted-dual-focus、p04 的三角色接力与独立结论、p06 的四节点因果链、p07 的不编号能力终点以及 p09 的两句 closing 映射均与 attempt 7 相同。",
+      "targets": [
+        "visual-plan.pages[p02]",
+        "visual-plan.pages[p03]",
+        "visual-plan.pages[p04]",
+        "visual-plan.pages[p06]",
+        "visual-plan.pages[p07]",
+        "visual-plan.pages[p08]",
+        "visual-plan.pages[p09]"
+      ],
+      "status": "closed",
+      "resolution": "保持已经通过 attempt 7 最终视觉审查的语义家族、重点方向、终点层级和尾页映射。",
+      "recheckConclusion": "既有内容与视觉关系没有因换行算法替换而回归。"
+    }
+  ],
+  "summary": "第八轮渲染前独立审查通过。选择链与 attempt 7 完全一致，所有 family、variant、silhouette、asset、visualVariantId 与 selectionOwner 合法且未改写；p02 至 p09 已通过的语义关系和层级也保持不变。renderer adaptation 现在准确实现为 balanced word-aware visible line wrapping：按组件容量生成真实换行符，去除换行后可恢复原文，不以隐藏字符参与当前渲染；封面另有文本框尺寸、字号、居中和 shrinkText 调整。中文排版单元测试通过。当前无 open error，可以渲染；p01、p03、p07、p08 仍有一个 open warning，必须用 attempt 8 的最终 PNG 检查实际行数、字号、留白和边界后才能关闭。"
+}

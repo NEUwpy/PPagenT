@@ -6,7 +6,7 @@ PPagenT 是一个按照学校视觉规范生成原生可编辑 PowerPoint 的项
 
 ## 当前阶段
 
-第一份真实稿件 v0.2.0 已跑通后半段生产线，但因缺少内容导演、整套视觉导演并存在畸变和重复问题而未通过。当前阶段见[当前阶段](docs/当前阶段.md)。
+第一份真实稿件 v0.3.0 已由双导演和独立审查者完成迭代，并将最终导演产物以原稿、产物和逐页画面哈希锁定后，从“原稿 + 东北大学 Skin”正式回放。逐页检查和溢出检测均已通过，当前等待用户复核。当前状态见[当前阶段](docs/当前阶段.md)。
 
 ## 核心工程取舍
 
@@ -57,6 +57,8 @@ npm test
 
 `npm test` 会校验规则层契约、版式合法性筛选和公开仓库资产结构。包含原始模板和样本文件的本地工作区可额外执行 `npm run audit:local`。
 
-生成带文字统计的 `PageIntent` 可使用 `npm run intent:stats -- --content <page-content.json> --intent-draft <intent-draft.json>`；匹配版式可使用 `npm run match -- --intent <page-intent.json>`。
+正式入口为 `npm run agent:run`，只接受原稿、Skin、输出位置、运行记录目录和 DirectorProvider；不接受人工准备的逐页 `pages`。生成带文字统计的 `PageIntent` 可使用 `npm run intent:stats -- --content <page-content.json> --intent-draft <intent-draft.json>`。
+
+实时模型运行可使用 `npm run agent:run:openai`，需设置 `OPENAI_API_KEY` 和 `PPAGENT_OPENAI_MODEL`。该 Provider 为四类调用显式传入 JSON Schema，并在渲染后把逐页 PNG 交给视觉审查模型。
 
 当前页面生成器依赖 Codex 工作区内置、尚未公开发布的 `@oai/artifact-tool`，因此不把它写入公共 npm 依赖；规则层、元数据审计和选择测试可以通过公开依赖独立运行。

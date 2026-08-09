@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "why-ppagent-v0.3.0",
+  "skinId": "northeastern-university-001",
+  "visualLanguage": "继承东北大学模板的蓝白视觉系统、正文安全区和固定页型，在统一字体与色彩下，用加权对照、顺序、职责接力和因果链语法完成可编辑表达；renderer 统一保护中文词语、数量短语与标点的完整断行。",
+  "rhythmStrategy": "封面提出问题，正文在顺序、加权对比、角色接力、顺序、因果、转化阶梯和加权对比之间切换，尾页回扣使命。三个普通顺序页分别使用横向卡片、带状推进和阶梯推进；职责页与因果页使用专用语义家族。排版适配只修正断行，不改变页面语义、家族选择或整套节奏。",
+  "pages": [
+    {
+      "pageId": "p01",
+      "intentId": "why-ppagent-v0.3.0-p01",
+      "familyId": "skin-cover",
+      "variantId": "default",
+      "silhouette": "cover",
+      "adaptationStatus": "fixed",
+      "reason": "使用唯一的东北大学封面候选；Skin 映射保留标题与开场判断，renderer typography adaptation 调整字幕框并保护中文短语和标点断行，不改变封面层级。"
+    },
+    {
+      "pageId": "p02",
+      "intentId": "why-ppagent-v0.3.0-p02",
+      "familyId": "sequential-process",
+      "variantId": "horizontal-cards",
+      "silhouette": "horizontal-card-chain",
+      "adaptationStatus": "adaptive",
+      "reason": "三类工作判断按顺序通向末尾反问；横向卡片属于四项内容的优选容量，并避开四列 ribbon 的文字适配风险。末尾强调项作为未编号结论呈现，不再伪装成第四个普通步骤。"
+    },
+    {
+      "pageId": "p03",
+      "intentId": "why-ppagent-v0.3.0-p03",
+      "familyId": "comparison-structure",
+      "variantId": "default",
+      "silhouette": "weighted-dual-focus",
+      "adaptationStatus": "adaptive",
+      "reason": "右侧受控选择继续以更大尺度和重点标记获得主权重；renderer typography adaptation 保护两侧中文词组及标点的完整断行，只修正可读性，不改变加权对比关系。"
+    },
+    {
+      "pageId": "p04",
+      "intentId": "why-ppagent-v0.3.0-p04",
+      "familyId": "role-handoff",
+      "variantId": "role-handoff",
+      "silhouette": "alternating-role-relay",
+      "adaptationStatus": "adaptive",
+      "reason": "专用接力家族分别承载 AI、规则与代码三个真实角色；强调总结位于角色节点之外的独立协同结论条，不会被误读为第四个角色或步骤。"
+    },
+    {
+      "pageId": "p05",
+      "intentId": "why-ppagent-v0.3.0-p05",
+      "familyId": "sequential-process",
+      "variantId": "ribbon",
+      "silhouette": "alternating-ribbon",
+      "adaptationStatus": "adaptive",
+      "reason": "真实场景、工作要求和稳定交付标准构成三段推进；三列 ribbon 提供较宽的正文区域，优先承载三个普通顺序页中最长的单项文字，并与相邻职责接力及因果链错开。"
+    },
+    {
+      "pageId": "p06",
+      "intentId": "why-ppagent-v0.3.0-p06",
+      "familyId": "causal-chain",
+      "variantId": "causal-chain",
+      "silhouette": "condition-gap-intervention-result",
+      "adaptationStatus": "adaptive",
+      "reason": "已有内容、制作缺口、系统化方法和生产能力正好对应条件—缺口—介入—结果四段因果语法；结果项获得独立层级，不再作为第四个编号步骤。"
+    },
+    {
+      "pageId": "p07",
+      "intentId": "why-ppagent-v0.3.0-p07",
+      "familyId": "sequential-process",
+      "variantId": "staircase",
+      "silhouette": "ascending-step-path",
+      "adaptationStatus": "adaptive",
+      "reason": "三项内容长度均衡且具有明确上升转化方向；renderer typography adaptation 保护“十字变六十字”等数量短语及中文词组的完整断行，不改变阶梯顺序和最终能力终点。"
+    },
+    {
+      "pageId": "p08",
+      "intentId": "why-ppagent-v0.3.0-p08",
+      "familyId": "comparison-structure",
+      "variantId": "default",
+      "silhouette": "weighted-dual-focus",
+      "adaptationStatus": "adaptive",
+      "reason": "右侧可复用经验能力继续获得主权重，左侧可替换视觉规范作为边界条件；renderer typography adaptation 保护应用对象列举和中文标点断行，不改变两组关系或论证重点。"
+    },
+    {
+      "pageId": "p09",
+      "intentId": "why-ppagent-v0.3.0-p09",
+      "familyId": "skin-closing",
+      "variantId": "default",
+      "silhouette": "closing",
+      "adaptationStatus": "fixed",
+      "reason": "使用唯一的东北大学尾页候选；两句短文分别保留“AI、规则、代码”的使命分工和“能做到，就值得做”的最终判断，不改变尾页职责或整套节奏。"
+    }
+  ]
+}

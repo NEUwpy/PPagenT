@@ -134,6 +134,7 @@ export async function applyTemplateMappedRecipes(presentation, slideRecipes) {
         target.text.replace(edit.sourceText, edit.replacementText);
       }
       if (edit.position) target.position = { ...edit.position };
+      if (edit.textStyle) target.text.style = { ...target.text.style, ...edit.textStyle };
     }
 
     for (const deletion of recipe.deletions || []) {

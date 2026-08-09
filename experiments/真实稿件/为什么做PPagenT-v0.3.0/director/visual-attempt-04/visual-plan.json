@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "why-ppagent-v0.3.0",
+  "skinId": "northeastern-university-001",
+  "visualLanguage": "继承东北大学模板的蓝白视觉系统、正文安全区和固定页型，在统一字体与色彩下，用加权对照、顺序、职责接力和因果链语法完成可编辑表达。",
+  "rhythmStrategy": "封面提出问题，正文在顺序、加权对比、角色接力、顺序、因果、转化阶梯和加权对比之间切换，尾页回扣使命。三个普通顺序页分别使用横向卡片、带状推进和阶梯推进；职责页与因果页使用专用语义家族，不再依靠普通步骤变体制造表面变化。",
+  "pages": [
+    {
+      "pageId": "p01",
+      "intentId": "why-ppagent-v0.3.0-p01",
+      "familyId": "skin-cover",
+      "variantId": "default",
+      "silhouette": "cover",
+      "adaptationStatus": "fixed",
+      "reason": "使用唯一的东北大学封面候选；Skin 映射同时保留演示标题与“昂贵的是反复判断”这一开场核心判断。"
+    },
+    {
+      "pageId": "p02",
+      "intentId": "why-ppagent-v0.3.0-p02",
+      "familyId": "sequential-process",
+      "variantId": "horizontal-cards",
+      "silhouette": "horizontal-card-chain",
+      "adaptationStatus": "adaptive",
+      "reason": "三类工作判断按顺序通向末尾反问；横向卡片属于四项内容的优选容量，并避开上一轮四列 ribbon 的文字适配警告。末尾强调项作为未编号结论呈现，不再伪装成第四个普通步骤。"
+    },
+    {
+      "pageId": "p03",
+      "intentId": "why-ppagent-v0.3.0-p03",
+      "familyId": "comparison-structure",
+      "variantId": "default",
+      "silhouette": "weighted-dual-focus",
+      "adaptationStatus": "adaptive",
+      "reason": "使用唯一合法的加权对比候选；右侧受控选择已经通过更大尺度、重点标记和更强视觉权重得到强调，自由生成一侧退为论证前提。"
+    },
+    {
+      "pageId": "p04",
+      "intentId": "why-ppagent-v0.3.0-p04",
+      "familyId": "role-handoff",
+      "variantId": "role-handoff",
+      "silhouette": "alternating-role-relay",
+      "adaptationStatus": "adaptive",
+      "reason": "专用接力家族分别承载 AI、规则与代码三个真实角色；强调总结已移出角色节点，作为独立协同结论条呈现，因此不会被误读为第四个角色或步骤。"
+    },
+    {
+      "pageId": "p05",
+      "intentId": "why-ppagent-v0.3.0-p05",
+      "familyId": "sequential-process",
+      "variantId": "ribbon",
+      "silhouette": "alternating-ribbon",
+      "adaptationStatus": "adaptive",
+      "reason": "真实场景、工作要求和稳定交付标准构成三段推进；三列 ribbon 提供较宽的正文区域，优先承载三个普通顺序页中最长的单项文字，并与相邻职责接力及因果链错开。"
+    },
+    {
+      "pageId": "p06",
+      "intentId": "why-ppagent-v0.3.0-p06",
+      "familyId": "causal-chain",
+      "variantId": "causal-chain",
+      "silhouette": "condition-gap-intervention-result",
+      "adaptationStatus": "adaptive",
+      "reason": "已有内容、制作缺口、系统化方法和生产能力正好对应条件—缺口—介入—结果四段因果语法；结果项获得独立层级，不再作为第四个编号步骤。"
+    },
+    {
+      "pageId": "p07",
+      "intentId": "why-ppagent-v0.3.0-p07",
+      "familyId": "sequential-process",
+      "variantId": "staircase",
+      "silhouette": "ascending-step-path",
+      "adaptationStatus": "adaptive",
+      "reason": "内容已经压缩为三项且长度均衡，模板局限、经验提炼、能力形成又具有明确上升转化方向；因此用阶梯完成第三种普通顺序轮廓，并将最终能力作为未编号重点终点。"
+    },
+    {
+      "pageId": "p08",
+      "intentId": "why-ppagent-v0.3.0-p08",
+      "familyId": "comparison-structure",
+      "variantId": "default",
+      "silhouette": "weighted-dual-focus",
+      "adaptationStatus": "adaptive",
+      "reason": "使用唯一合法的加权对比候选；右侧可复用经验能力已经获得更强视觉权重，左侧可替换视觉规范作为边界条件，从而落实“首个 Skin 不等于最终边界”。"
+    },
+    {
+      "pageId": "p09",
+      "intentId": "why-ppagent-v0.3.0-p09",
+      "familyId": "skin-closing",
+      "variantId": "default",
+      "silhouette": "closing",
+      "adaptationStatus": "fixed",
+      "reason": "使用唯一的东北大学尾页候选；完整 payload 已同时包含 mission-01 与 conclusion-01，使命和“项目值得做”的结论都进入收束层级。"
+    }
+  ]
+}

@@ -59,7 +59,7 @@
       "constraints": {
         "metrics": [
           { "field": "groups", "min": 2, "preferred": [2], "max": 2 },
-          { "field": "itemsPerGroup", "min": 2, "preferred": [3, 4], "max": 5 }
+          { "field": "itemsPerGroup", "min": 1, "preferred": [2, 3, 4], "max": 5 }
         ],
         "semantic": { "ordered": false },
         "density": ["low", "medium"]
@@ -136,10 +136,10 @@
       "assetId": "sequential-process-001",
       "abstractionLevel": "foundation",
       "adaptationStatus": "adaptive",
-      "supportedIntents": { "baseRelations": ["sequence"], "purposeKeys": [] },
+      "supportedIntents": { "baseRelations": ["sequence", "causal"], "purposeKeys": [] },
       "constraints": {
         "metrics": [{ "field": "itemCount", "min": 3, "preferred": [3, 4, 5], "max": 6 }],
-        "semantic": { "ordered": true, "sameLevel": true },
+        "semantic": { "ordered": true },
         "relationTraits": { "branched": false, "cyclic": false },
         "density": ["low", "medium"]
       },

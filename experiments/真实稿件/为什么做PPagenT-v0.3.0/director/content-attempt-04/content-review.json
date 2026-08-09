@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0",
+  "reviewId": "why-ppagent-v0.3.0-content-review-attempt-04",
+  "deckId": "why-ppagent-v0.3.0",
+  "attempt": 4,
+  "verdict": "pass",
+  "issues": [
+    {
+      "issueId": "CR-A04-001",
+      "severity": "warning",
+      "category": "over-compression",
+      "evidence": "p07 为适应视觉容量缩短了三个内容项，存在把“模板无法穷尽真实变化”及“经验如何成为能力”的论证压成口号的风险。",
+      "targets": [
+        "page-contents[p07]"
+      ],
+      "status": "closed",
+      "resolution": "压缩后的第一项仍用条目数量和文字长度的变化说明静态模板无法覆盖现实；第二项仍列出表达方式、版式容量、超限变化和禁用边界四类应积累经验；第三项仍说明只有提炼规律，漂亮页面才能从作品转化为能力。",
+      "recheckConclusion": "p07 的问题、应积累对象和能力转化结论三层论证均被保留，每项均可由 sourceText 直接支持，压缩没有造成实质内容损失。"
+    }
+  ],
+  "summary": "第四轮内容门禁通过。p07 压缩后仍忠实、完整地表达“真实内容变化无法被模板穷尽—应积累表达规律、容量和边界—规律使页面从作品变为能力”的连续论证，没有无依据补充或过度压缩。逐字段比对确认 DeckPlan 完全未变，p01、p02、p03、p04、p05、p06、p08、p09 也与第三轮完全一致，没有发生意外内容漂移。"
+}

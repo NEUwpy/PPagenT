@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0",
+  "reviewId": "why-ppagent-v0.3.0-content-review-attempt-01",
+  "deckId": "why-ppagent-v0.3.0",
+  "attempt": 1,
+  "verdict": "revise",
+  "issues": [
+    {
+      "issueId": "CR-A01-001",
+      "severity": "error",
+      "category": "source-omission",
+      "evidence": "原稿在“工作里的 PPT，不需要每次重新发明”一节先明确承认：今天的 AI 已经能够根据材料生成 PPT，也能画出自由、炫目的页面，随后才转折到工作型 PPT 不应每次重新设计。p03 仅保留了组织风格、无需重新猜和牺牲自由，完全省略这层“能力已经存在，但产品主动选择受控路线”的关键对照，使产品定位容易被读成对生成能力不足的被动妥协，而不是有意识的工程选择。",
+      "targets": [
+        "deck-plan.pages[p03]",
+        "page-contents[p03]"
+      ],
+      "status": "open"
+    },
+    {
+      "issueId": "CR-A01-002",
+      "severity": "error",
+      "category": "other",
+      "evidence": "候选中多处实际保留内容没有被该页证据包完整覆盖：p04 保留“代码负责执行”和总结句，但 sourceText 在“规则负责决定”后即结束；p06 的标题“不只服务最会做 PPT 的那 1%”依赖原稿关于最会做 PPT 的少数人的段落，但 sourceText 从“但更多的人”开始；p01 的 PageContent 使用“做 PPT 真正昂贵的，是这些反复发生的判断”，而 DeckPlan 的 sourceAnchors 只有文档标题。内容本身均可在原稿找到，但当前逐页来源锚点不足以完成独立复核。",
+      "targets": [
+        "deck-plan.pages[p01].sourceAnchors",
+        "page-contents[p04].sourceText",
+        "page-contents[p06].sourceText"
+      ],
+      "status": "open"
+    },
+    {
+      "issueId": "CR-A01-003",
+      "severity": "warning",
+      "category": "duplicate-role",
+      "evidence": "p05 已用“结构清楚、视觉规范、符合组织风格、第二天仍可继续修改”和“稳定交付 80 分初稿”完成可靠交付承诺；p09 又以“靠谱、好用、第二天还可以继续修改”重复同一承诺。结尾作为回扣是合理的，但下一轮应确保 p09 主要承担使命收束与价值判断，而不是再次展开 p05 的交付标准。",
+      "targets": [
+        "deck-plan.pages[p05]",
+        "deck-plan.pages[p09]",
+        "page-contents[p05]",
+        "page-contents[p09]"
+      ],
+      "status": "open"
+    }
+  ],
+  "summary": "主叙事从真实成本、受控路线、三方职责、现实价值、资产经验到最终目标，整体连续；九页拆分没有明显职责冲突，PageContent 的字段与条目命名保持版式中立，也未发现原稿之外的实质性观点补充。但 p03 省略了支撑产品路线主动性的关键对照，且 p01、p04、p06 的逐页来源证据包不完整，当前不能通过内容门禁。建议内容导演只修正遗漏与来源锚点，并保留已经成立的九页主线；同时控制 p09 对 p05 的回扣不要变成重复展开。"
+}

@@ -9,8 +9,12 @@ async function readJson(target) {
 export async function createRuleValidators(root = process.cwd()) {
   const schemaRoot = path.join(root, "schemas");
   const names = [
+    "deck-plan.schema.json",
     "page-content.schema.json",
+    "content-review.schema.json",
     "page-intent.schema.json",
+    "visual-plan.schema.json",
+    "visual-review.schema.json",
     "asset-contract.schema.json",
     "resolution-plan.schema.json",
     "layout-decision.schema.json",
@@ -27,8 +31,12 @@ export async function createRuleValidators(root = process.cwd()) {
   return {
     ajv,
     purposeKeys,
+    validateDeckPlan: ajv.getSchema(schemas["deck-plan.schema.json"].$id),
     validatePageContent: ajv.getSchema(schemas["page-content.schema.json"].$id),
+    validateContentReview: ajv.getSchema(schemas["content-review.schema.json"].$id),
     validatePageIntent: ajv.getSchema(schemas["page-intent.schema.json"].$id),
+    validateVisualPlan: ajv.getSchema(schemas["visual-plan.schema.json"].$id),
+    validateVisualReview: ajv.getSchema(schemas["visual-review.schema.json"].$id),
     validateAssetContract: ajv.getSchema(schemas["asset-contract.schema.json"].$id),
     validateResolutionPlan: ajv.getSchema(schemas["resolution-plan.schema.json"].$id),
     validateLayoutDecision: ajv.getSchema(schemas["layout-decision.schema.json"].$id),

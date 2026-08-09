@@ -1,0 +1,459 @@
+[
+  {
+    "pageId": "p01",
+    "intentId": "why-ppagent-v0.3.0-p01",
+    "candidates": [
+      {
+        "familyId": "skin-cover",
+        "assetId": "northeastern-university-cover-001",
+        "variantId": "default",
+        "silhouette": "cover",
+        "adaptationStatus": "fixed"
+      }
+    ]
+  },
+  {
+    "pageId": "p02",
+    "intentId": "why-ppagent-v0.3.0-p02",
+    "candidates": [],
+    "semanticRejections": [
+      {
+        "assetId": "comparison-structure-001",
+        "reasons": [
+          "base-relation:sequence",
+          "missing-metric:groups",
+          "missing-metric:itemsPerGroup",
+          "semantic:ordered",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "cycle-loop-001",
+        "reasons": [
+          "trait:cyclic",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "layered-architecture-001",
+        "reasons": [
+          "base-relation:sequence",
+          "missing-metric:sources",
+          "missing-metric:apps",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "radial-hub-001",
+        "reasons": [
+          "base-relation:sequence",
+          "semantic:ordered",
+          "semantic:sameLevel",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "sequential-process-001",
+        "reasons": [
+          "density:high"
+        ]
+      }
+    ]
+  },
+  {
+    "pageId": "p03",
+    "intentId": "why-ppagent-v0.3.0-p03",
+    "candidates": [],
+    "semanticRejections": [
+      {
+        "assetId": "comparison-structure-001",
+        "reasons": [
+          "missing-metric:groups",
+          "missing-metric:itemsPerGroup",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "cycle-loop-001",
+        "reasons": [
+          "base-relation:comparison",
+          "below-min:itemCount",
+          "semantic:ordered",
+          "trait:cyclic",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "layered-architecture-001",
+        "reasons": [
+          "base-relation:comparison",
+          "missing-metric:sources",
+          "missing-metric:apps",
+          "semantic:ordered",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "radial-hub-001",
+        "reasons": [
+          "base-relation:comparison",
+          "below-min:itemCount",
+          "semantic:sameLevel",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "sequential-process-001",
+        "reasons": [
+          "base-relation:comparison",
+          "below-min:itemCount",
+          "semantic:ordered",
+          "density:high"
+        ]
+      }
+    ]
+  },
+  {
+    "pageId": "p04",
+    "intentId": "why-ppagent-v0.3.0-p04",
+    "candidates": [
+      {
+        "familyId": "sequential-process",
+        "assetId": "sequential-process-001",
+        "variantId": "horizontal-cards",
+        "silhouette": "horizontal-card-chain",
+        "adaptationStatus": "adaptive",
+        "itemCount": {
+          "min": 3,
+          "preferred": [
+            3,
+            4
+          ],
+          "max": 6
+        }
+      },
+      {
+        "familyId": "sequential-process",
+        "assetId": "sequential-process-001",
+        "variantId": "ribbon",
+        "silhouette": "alternating-ribbon",
+        "adaptationStatus": "adaptive",
+        "itemCount": {
+          "min": 3,
+          "preferred": [
+            4,
+            5,
+            6
+          ],
+          "max": 6
+        }
+      }
+    ],
+    "semanticRejections": [
+      {
+        "assetId": "comparison-structure-001",
+        "reasons": [
+          "base-relation:sequence",
+          "missing-metric:groups",
+          "missing-metric:itemsPerGroup",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "cycle-loop-001",
+        "reasons": [
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "layered-architecture-001",
+        "reasons": [
+          "base-relation:sequence",
+          "missing-metric:sources",
+          "missing-metric:apps"
+        ]
+      },
+      {
+        "assetId": "radial-hub-001",
+        "reasons": [
+          "base-relation:sequence",
+          "semantic:ordered",
+          "semantic:sameLevel"
+        ]
+      }
+    ]
+  },
+  {
+    "pageId": "p05",
+    "intentId": "why-ppagent-v0.3.0-p05",
+    "candidates": [
+      {
+        "familyId": "sequential-process",
+        "assetId": "sequential-process-001",
+        "variantId": "horizontal-cards",
+        "silhouette": "horizontal-card-chain",
+        "adaptationStatus": "adaptive",
+        "itemCount": {
+          "min": 3,
+          "preferred": [
+            3,
+            4
+          ],
+          "max": 6
+        }
+      },
+      {
+        "familyId": "sequential-process",
+        "assetId": "sequential-process-001",
+        "variantId": "ribbon",
+        "silhouette": "alternating-ribbon",
+        "adaptationStatus": "adaptive",
+        "itemCount": {
+          "min": 3,
+          "preferred": [
+            4,
+            5,
+            6
+          ],
+          "max": 6
+        }
+      }
+    ],
+    "semanticRejections": [
+      {
+        "assetId": "comparison-structure-001",
+        "reasons": [
+          "base-relation:sequence",
+          "missing-metric:groups",
+          "missing-metric:itemsPerGroup",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "cycle-loop-001",
+        "reasons": [
+          "below-min:itemCount",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "layered-architecture-001",
+        "reasons": [
+          "base-relation:sequence",
+          "missing-metric:sources",
+          "missing-metric:apps"
+        ]
+      },
+      {
+        "assetId": "radial-hub-001",
+        "reasons": [
+          "base-relation:sequence",
+          "semantic:ordered",
+          "semantic:sameLevel"
+        ]
+      }
+    ]
+  },
+  {
+    "pageId": "p06",
+    "intentId": "why-ppagent-v0.3.0-p06",
+    "candidates": [
+      {
+        "familyId": "sequential-process",
+        "assetId": "sequential-process-001",
+        "variantId": "horizontal-cards",
+        "silhouette": "horizontal-card-chain",
+        "adaptationStatus": "adaptive",
+        "itemCount": {
+          "min": 3,
+          "preferred": [
+            3,
+            4
+          ],
+          "max": 6
+        }
+      },
+      {
+        "familyId": "sequential-process",
+        "assetId": "sequential-process-001",
+        "variantId": "ribbon",
+        "silhouette": "alternating-ribbon",
+        "adaptationStatus": "adaptive",
+        "itemCount": {
+          "min": 3,
+          "preferred": [
+            4,
+            5,
+            6
+          ],
+          "max": 6
+        }
+      }
+    ],
+    "semanticRejections": [
+      {
+        "assetId": "comparison-structure-001",
+        "reasons": [
+          "base-relation:causal",
+          "missing-metric:groups",
+          "missing-metric:itemsPerGroup",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "cycle-loop-001",
+        "reasons": [
+          "base-relation:causal",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "layered-architecture-001",
+        "reasons": [
+          "base-relation:causal",
+          "missing-metric:sources",
+          "missing-metric:apps"
+        ]
+      },
+      {
+        "assetId": "radial-hub-001",
+        "reasons": [
+          "base-relation:causal",
+          "semantic:ordered",
+          "semantic:sameLevel"
+        ]
+      }
+    ]
+  },
+  {
+    "pageId": "p07",
+    "intentId": "why-ppagent-v0.3.0-p07",
+    "candidates": [
+      {
+        "familyId": "sequential-process",
+        "assetId": "sequential-process-001",
+        "variantId": "horizontal-cards",
+        "silhouette": "horizontal-card-chain",
+        "adaptationStatus": "adaptive",
+        "itemCount": {
+          "min": 3,
+          "preferred": [
+            3,
+            4
+          ],
+          "max": 6
+        }
+      },
+      {
+        "familyId": "sequential-process",
+        "assetId": "sequential-process-001",
+        "variantId": "ribbon",
+        "silhouette": "alternating-ribbon",
+        "adaptationStatus": "adaptive",
+        "itemCount": {
+          "min": 3,
+          "preferred": [
+            4,
+            5,
+            6
+          ],
+          "max": 6
+        }
+      }
+    ],
+    "semanticRejections": [
+      {
+        "assetId": "comparison-structure-001",
+        "reasons": [
+          "base-relation:sequence",
+          "missing-metric:groups",
+          "missing-metric:itemsPerGroup",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "cycle-loop-001",
+        "reasons": [
+          "below-min:itemCount",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "layered-architecture-001",
+        "reasons": [
+          "base-relation:sequence",
+          "missing-metric:sources",
+          "missing-metric:apps"
+        ]
+      },
+      {
+        "assetId": "radial-hub-001",
+        "reasons": [
+          "base-relation:sequence",
+          "semantic:ordered",
+          "semantic:sameLevel"
+        ]
+      }
+    ]
+  },
+  {
+    "pageId": "p08",
+    "intentId": "why-ppagent-v0.3.0-p08",
+    "candidates": [],
+    "semanticRejections": [
+      {
+        "assetId": "comparison-structure-001",
+        "reasons": [
+          "base-relation:layered",
+          "missing-metric:groups",
+          "missing-metric:itemsPerGroup",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "cycle-loop-001",
+        "reasons": [
+          "base-relation:layered",
+          "below-min:itemCount",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "layered-architecture-001",
+        "reasons": [
+          "missing-metric:sources",
+          "missing-metric:apps"
+        ]
+      },
+      {
+        "assetId": "radial-hub-001",
+        "reasons": [
+          "base-relation:layered",
+          "below-min:itemCount",
+          "semantic:ordered",
+          "semantic:sameLevel"
+        ]
+      },
+      {
+        "assetId": "sequential-process-001",
+        "reasons": [
+          "base-relation:layered",
+          "below-min:itemCount"
+        ]
+      }
+    ]
+  },
+  {
+    "pageId": "p09",
+    "intentId": "why-ppagent-v0.3.0-p09",
+    "candidates": [
+      {
+        "familyId": "skin-closing",
+        "assetId": "northeastern-university-closing-001",
+        "variantId": "default",
+        "silhouette": "closing",
+        "adaptationStatus": "fixed"
+      }
+    ]
+  }
+]
