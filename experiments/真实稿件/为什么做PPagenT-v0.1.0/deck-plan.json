@@ -5,12 +5,13 @@
   "source": "docs/为什么做PPagenT.md",
   "generatorVersion": "0.1.0",
   "output": "outputs/真实稿件/为什么做PPagenT/为什么做PPagenT-v0.1.0.pptx",
-  "status": "experimental-awaiting-user-review",
+  "status": "invalid-bypassed-core-agent",
   "visualSource": "PPT模板-封面正文尾页.pptx",
-  "generationContract": "先按映射复制源模板页面形成 starter，再编辑继承对象；禁止在已有视觉源时新建空白演示或套用通用主题。",
+  "generationContract": "本轮仅验证了模板继承，未经过 PPagenT 的 PageContent、PageIntent、LayoutDecision 和 RenderPayload 完整链路，不能作为 Agent 通过证据。",
   "validation": {
     "templateFidelity": "passed",
     "overflow": "passed",
+    "coreAgent": "failed-bypassed",
     "reviewedSlides": 10
   },
   "slides": [
