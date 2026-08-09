@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/NEUwpy/PPagenT/schemas/page-intent.schema.json",
+  "title": "PPagenT PageIntent v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "intentId", "purpose", "relation", "structure", "density"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "intentId": { "type": "string", "minLength": 1 },
+    "purpose": { "type": "string", "minLength": 1 },
+    "relation": {
+      "enum": [
+        "parallel", "sequence", "hierarchy", "timeline", "comparison",
+        "cycle", "matrix", "hub", "layered", "flow", "funnel",
+        "causal", "role-process", "network", "composite", "none", "other"
+      ]
+    },
+    "structure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["itemCount", "ordered", "hasBranches"],
+      "properties": {
+        "itemCount": { "type": "integer", "minimum": 0 },
+        "hierarchyDepth": { "type": "integer", "minimum": 0 },
+        "ordered": { "type": "boolean" },
+        "sameLevel": { "type": "boolean" },
+        "hasBranches": { "type": "boolean" },
+        "dimensions": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "density": { "enum": ["low", "medium", "high", "unknown"] },
+    "emphasis": {
+      "type": "array",
+      "items": { "type": "integer", "minimum": 0 },
+      "uniqueItems": true
+    },
+    "evidenceTypes": {
+      "type": "array",
+      "items": { "enum": ["text", "image", "data", "quotation", "diagram", "mixed"] },
+      "uniqueItems": true
+    },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "assumptions": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

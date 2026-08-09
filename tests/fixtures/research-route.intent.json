@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0",
+  "intentId": "fixture-research-route",
+  "purpose": "explain_research_process",
+  "relation": "flow",
+  "structure": {
+    "itemCount": 7,
+    "hierarchyDepth": 2,
+    "ordered": true,
+    "sameLevel": false,
+    "hasBranches": true,
+    "dimensions": {
+      "branches": 3,
+      "inputs": 2
+    }
+  },
+  "density": "medium",
+  "emphasis": [],
+  "evidenceTypes": ["text", "diagram"],
+  "confidence": 0.85,
+  "assumptions": ["分支之间相互独立，最终汇聚到共同结果。"]
+}

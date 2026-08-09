@@ -1,5 +1,20 @@
 {
   "name": "ppagent",
+  "version": "0.1.0",
   "private": true,
-  "type": "module"
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "audit": "node src/tools/audit-asset-library.mjs . --mode public",
+    "audit:local": "node src/tools/audit-asset-library.mjs . --mode local",
+    "validate:contracts": "node src/tools/validate-rule-layer.mjs .",
+    "test:selection": "node --test tests/selection.test.mjs",
+    "test": "npm run validate:contracts && npm run test:selection && npm run audit"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "jszip": "^3.10.1"
+  }
 }
