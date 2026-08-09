@@ -147,6 +147,7 @@ export function buildSequentialProcess(presentation, params) {
     addCircle(slide, { left: x + 18, top: 250, width: 52, height: 52 }, {
       fill: "#FFFFFF", line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-none",
       text: String(index + 1).padStart(2, "0"), fontSize: 18, bold: true, color: index % 2 ? THEME.accentAlt : THEME.accent,
+      insets: { top: 0, right: 0, bottom: 0, left: 0 },
     });
     addText(slide, step.title, { left: x + 22, top: 326, width: width - 44, height: 52 }, {
       fontSize: 24, bold: true, color: "#FFFFFF", alignment: "center",
@@ -225,7 +226,7 @@ export function buildRadialHub(presentation, params) {
   });
   const cx = 640;
   const cy = 385;
-  const radius = 240;
+  const radius = 220;
   const nodes = params.items.map((item, index) => {
     const angle = -Math.PI / 2 + index * (2 * Math.PI / params.items.length);
     return addCircle(slide, {

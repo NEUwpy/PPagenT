@@ -1,4 +1,109 @@
 {
   "schemaVersion": "1.0",
-  "cases": []
+  "cases": [
+    {
+      "caseId": "why-ppagent-v0.1.0-sequence-number-wrap",
+      "pageIntent": {
+        "schemaVersion": "1.1",
+        "intentId": "why-ppagent-slide-02",
+        "purposeKey": "explain_process",
+        "purposeText": "说明制作 PPT 时连续发生的四类判断",
+        "baseRelation": "sequence",
+        "relationTraits": {
+          "temporal": false,
+          "cyclic": false,
+          "converging": false,
+          "branched": false,
+          "dimensions": 1,
+          "secondaryDimension": "none"
+        },
+        "structure": {
+          "itemCount": 4,
+          "ordered": true,
+          "sameLevel": true
+        },
+        "contentStats": {
+          "titleChars": 17,
+          "itemCount": 4,
+          "maxItemChars": 16,
+          "avgItemChars": 15,
+          "minItemChars": 14,
+          "maxItemTitleChars": 4,
+          "maxItemBodyChars": 12,
+          "imbalanceRatio": 1.14
+        },
+        "density": "low"
+      },
+      "candidateAssetId": "sequential-process-001",
+      "outcome": "accepted-but-poor",
+      "failureReasons": [
+        "两位步骤编号在小圆节点中受到默认文本内边距挤压，渲染后换成两行。"
+      ],
+      "resolution": {
+        "schemaVersion": "1.0",
+        "reason": "版式语义和容量均合法，但编号组件的内部排版失败。",
+        "action": "defer-to-review",
+        "sourceAssetId": "sequential-process-001",
+        "requiresReview": false,
+        "notes": "将编号圆的文本内边距设为 0 后重新生成，页面语义和布局不变。"
+      },
+      "evidence": {
+        "source": "为什么做PPagenT-v0.1.0，第 2 页",
+        "reviewed": true,
+        "notes": "第一次真实稿件生成时发现并在 v0.1.0 交付前修复。"
+      }
+    },
+    {
+      "caseId": "why-ppagent-v0.1.0-radial-footer-crowding",
+      "pageIntent": {
+        "schemaVersion": "1.1",
+        "intentId": "why-ppagent-slide-07",
+        "purposeKey": "explain_topics",
+        "purposeText": "说明可复用 PPT 经验包含的六个同级方面",
+        "baseRelation": "hub",
+        "relationTraits": {
+          "temporal": false,
+          "cyclic": false,
+          "converging": false,
+          "branched": false,
+          "dimensions": 1,
+          "secondaryDimension": "none"
+        },
+        "structure": {
+          "itemCount": 6,
+          "ordered": false,
+          "sameLevel": true
+        },
+        "contentStats": {
+          "titleChars": 16,
+          "itemCount": 6,
+          "maxItemChars": 4,
+          "avgItemChars": 4,
+          "minItemChars": 4,
+          "maxItemTitleChars": 4,
+          "maxItemBodyChars": 0,
+          "imbalanceRatio": 1
+        },
+        "density": "low"
+      },
+      "candidateAssetId": "radial-hub-001",
+      "outcome": "accepted-but-poor",
+      "failureReasons": [
+        "六节点布局合法，但底部节点与统一页脚线之间只剩极小间距，视觉边界过紧。"
+      ],
+      "resolution": {
+        "schemaVersion": "1.0",
+        "reason": "内容没有超出节点容量，问题来自组件半径未给页脚保留安全区。",
+        "action": "defer-to-review",
+        "sourceAssetId": "radial-hub-001",
+        "requiresReview": false,
+        "notes": "将外围节点半径从 240 px 调整为 220 px 后重新生成。"
+      },
+      "evidence": {
+        "source": "为什么做PPagenT-v0.1.0，第 7 页",
+        "reviewed": true,
+        "notes": "第一次真实稿件生成时发现并在 v0.1.0 交付前修复。"
+      }
+    }
+  ]
 }
