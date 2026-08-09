@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "1.0",
+  "intentId": "why-ppagent-division",
+  "assetId": "sequential-process-001",
+  "parameters": {
+    "title": "AI、规则与代码各自负责确定的一段",
+    "steps": [
+      {
+        "title": "AI 理解",
+        "body": "读取稿件，判断重点、关系与拆页"
+      },
+      {
+        "title": "规则决定",
+        "body": "选择合法版式并检查容量边界"
+      },
+      {
+        "title": "代码执行",
+        "body": "按已确认参数稳定绘制可编辑页面"
+      },
+      {
+        "title": "QA 回归",
+        "body": "检查结果，并把失败反馈给通用能力"
+      }
+    ]
+  },
+  "mappings": [
+    {
+      "sourceItemId": "step-1",
+      "parameterPath": "steps[0]"
+    },
+    {
+      "sourceItemId": "step-2",
+      "parameterPath": "steps[1]"
+    },
+    {
+      "sourceItemId": "step-3",
+      "parameterPath": "steps[2]"
+    },
+    {
+      "sourceItemId": "step-4",
+      "parameterPath": "steps[3]"
+    }
+  ],
+  "omissions": []
+}

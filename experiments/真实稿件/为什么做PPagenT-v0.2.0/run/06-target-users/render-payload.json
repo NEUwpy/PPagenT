@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "1.0",
+  "intentId": "why-ppagent-users",
+  "assetId": "radial-hub-001",
+  "parameters": {
+    "title": "PPagenT 服务有内容、但不擅长做 PPT 的多数人",
+    "center": "目标用户",
+    "items": [
+      "有专业知识",
+      "有汇报任务",
+      "缺少拆页经验",
+      "缺少排版经验"
+    ]
+  },
+  "mappings": [
+    {
+      "sourceItemId": "need-1",
+      "parameterPath": "items[0]"
+    },
+    {
+      "sourceItemId": "need-2",
+      "parameterPath": "items[1]"
+    },
+    {
+      "sourceItemId": "need-3",
+      "parameterPath": "items[2]"
+    },
+    {
+      "sourceItemId": "need-4",
+      "parameterPath": "items[3]"
+    }
+  ],
+  "omissions": []
+}

@@ -26,9 +26,12 @@ for (const contract of contracts) {
 
 const structureRegistry = await readJson(path.join(root, "备选资产", "registry.json"));
 const structureIds = structureRegistry.assets.filter((entry) => entry.category === "结构图").map((entry) => entry.id);
+const selectableAssetIds = structureRegistry.assets
+  .filter((entry) => ["结构图", "封面", "尾页"].includes(entry.category))
+  .map((entry) => entry.id);
 const contractIds = contracts.map((contract) => contract.assetId);
 for (const id of structureIds) if (!contractIds.includes(id)) issues.push(`结构候选缺少契约: ${id}`);
-for (const id of contractIds) if (!structureIds.includes(id)) issues.push(`契约引用未知结构候选: ${id}`);
+for (const id of contractIds) if (!selectableAssetIds.includes(id)) issues.push(`契约引用未知候选资产: ${id}`);
 if (new Set(contractIds).size !== contractIds.length) issues.push("契约 ID 存在重复");
 
 const failureCatalog = await readJson(path.join(root, "catalog", "failure-cases.json"));

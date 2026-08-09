@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.1",
+  "intentId": "why-ppagent-judgments",
+  "purposeKey": "explain_topics",
+  "purposeText": "说明做 PPT 时围绕同一任务发生的四类判断。",
+  "baseRelation": "hub",
+  "relationTraits": {
+    "temporal": false,
+    "cyclic": false,
+    "converging": false,
+    "branched": false,
+    "dimensions": 1,
+    "secondaryDimension": "none"
+  },
+  "structure": {
+    "itemCount": 4,
+    "ordered": false,
+    "sameLevel": true
+  },
+  "density": "low",
+  "evidenceTypes": [
+    "text",
+    "diagram"
+  ],
+  "confidence": 0.99,
+  "assumptions": [],
+  "contentStats": {
+    "titleChars": 17,
+    "itemCount": 4,
+    "maxItemChars": 17,
+    "avgItemChars": 13.5,
+    "minItemChars": 12,
+    "maxItemTitleChars": 4,
+    "maxItemBodyChars": 13,
+    "imbalanceRatio": 1.42
+  }
+}

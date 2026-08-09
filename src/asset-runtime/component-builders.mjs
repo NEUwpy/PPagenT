@@ -17,16 +17,70 @@ export const THEME = {
   font: "Microsoft YaHei",
 };
 
+const EMBEDDED_SLIDES = new WeakMap();
+
+function embeddedContext(slide) {
+  return EMBEDDED_SLIDES.get(slide) ?? null;
+}
+
+function transformPosition(slide, position) {
+  const context = embeddedContext(slide);
+  if (!context) return position;
+  const { sourceFrame, targetFrame } = context;
+  const scaleX = targetFrame.width / sourceFrame.width;
+  const scaleY = targetFrame.height / sourceFrame.height;
+  return {
+    ...position,
+    left: targetFrame.left + (position.left - sourceFrame.left) * scaleX,
+    top: targetFrame.top + (position.top - sourceFrame.top) * scaleY,
+    width: position.width * scaleX,
+    height: position.height * scaleY,
+  };
+}
+
+function transformFontSize(slide, fontSize) {
+  const context = embeddedContext(slide);
+  if (!context) return fontSize;
+  const scale = Math.min(
+    context.targetFrame.width / context.sourceFrame.width,
+    context.targetFrame.height / context.sourceFrame.height,
+  );
+  return Math.max(16, Math.round(fontSize * scale));
+}
+
+/**
+ * 把既有结构资产绘制到 Skin 已经准备好的正文安全区。
+ * builder 仍按 1280×720 的原始坐标工作，运行时只负责确定性缩放和主题替换。
+ */
+export function renderComponentIntoSlide(builder, slide, params, options) {
+  const context = {
+    sourceFrame: options.sourceFrame ?? { left: 40, top: 135, width: 1200, height: 520 },
+    targetFrame: options.targetFrame,
+  };
+  if (!context.targetFrame) throw new Error("嵌入结构资产时必须提供 targetFrame");
+
+  const previousTheme = { ...THEME };
+  Object.assign(THEME, options.theme ?? {});
+  EMBEDDED_SLIDES.set(slide, context);
+  const adapter = { slides: { add: () => slide } };
+  try {
+    return builder(adapter, params);
+  } finally {
+    EMBEDDED_SLIDES.delete(slide);
+    Object.assign(THEME, previousTheme);
+  }
+}
+
 export function addText(slide, value, position, style = {}) {
   const shape = slide.shapes.add({
     geometry: "textbox",
-    position,
+    position: transformPosition(slide, position),
     fill: "none",
     line: { style: "solid", fill: "none", width: 0 },
   });
   shape.text = String(value ?? "");
   shape.text.style = {
-    fontSize: style.fontSize ?? 16,
+    fontSize: transformFontSize(slide, style.fontSize ?? 16),
     typeface: style.typeface ?? THEME.font,
     color: style.color ?? THEME.dark,
     bold: style.bold ?? false,
@@ -43,7 +97,7 @@ export function addBox(slide, position, options = {}) {
   const config = {
     geometry,
     name: options.name,
-    position,
+    position: transformPosition(slide, position),
     fill: options.fill ?? THEME.surface,
     line: options.line ?? { style: "solid", fill: THEME.line, width: 1 },
     shadow: options.shadow ?? "shadow-sm",
@@ -55,7 +109,7 @@ export function addBox(slide, position, options = {}) {
   if (options.text !== undefined) {
     shape.text = String(options.text);
     shape.text.style = {
-      fontSize: options.fontSize ?? 18,
+      fontSize: transformFontSize(slide, options.fontSize ?? 18),
       typeface: options.typeface ?? THEME.font,
       color: options.color ?? THEME.dark,
       bold: options.bold ?? false,
@@ -121,6 +175,7 @@ export async function saveSingleExample(builder, config, output) {
 
 function prepareSlide(presentation, title, subtitle) {
   const slide = presentation.slides.add();
+  if (embeddedContext(slide)) return slide;
   slide.background.fill = THEME.background;
   addTitle(slide, title, subtitle);
   return slide;
@@ -239,8 +294,13 @@ export function buildRadialHub(presentation, params) {
     kind: "straight", line: { style: "solid", fill: THEME.line, width: 2 },
   }));
   params.items.forEach((item, index) => {
-    const node = nodes[index];
-    addText(slide, item, { ...node.position, left: node.position.left + 8, top: node.position.top + 8, width: 88, height: 88 }, {
+    const angle = -Math.PI / 2 + index * (2 * Math.PI / params.items.length);
+    addText(slide, item, {
+      left: cx + Math.cos(angle) * radius - 44,
+      top: cy + Math.sin(angle) * radius - 44,
+      width: 88,
+      height: 88,
+    }, {
       fontSize: 16, bold: true, color: "#FFFFFF", alignment: "center",
     });
   });

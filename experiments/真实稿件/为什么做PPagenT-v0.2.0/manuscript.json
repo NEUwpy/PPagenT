@@ -1,0 +1,295 @@
+{
+  "schemaVersion": "1.0",
+  "name": "为什么做PPagenT",
+  "version": "v0.2.0",
+  "source": "docs/为什么做PPagenT.md",
+  "skin": {
+    "id": "northeastern-university-001",
+    "sourcePptx": "PPT模板-封面正文尾页.pptx"
+  },
+  "pages": [
+    {
+      "meta": { "sectionName": "封面" },
+      "content": {
+        "schemaVersion": "1.0",
+        "pageId": "cover",
+        "title": "为什么做 PPagenT",
+        "items": [
+          { "id": "presenter", "title": "汇报人", "body": "魏鹏宇" },
+          { "id": "date", "title": "日期", "body": "2026.08.09" }
+        ],
+        "sourceText": "为什么做 PPagenT"
+      },
+      "intentDraft": {
+        "schemaVersion": "1.1",
+        "intentId": "why-ppagent-cover",
+        "purposeKey": "present_cover",
+        "purposeText": "用组织模板呈现演示标题、汇报人和日期。",
+        "baseRelation": "none",
+        "relationTraits": { "temporal": false, "cyclic": false, "converging": false, "branched": false, "dimensions": 1, "secondaryDimension": "none" },
+        "structure": { "itemCount": 2, "ordered": false, "sameLevel": true },
+        "density": "low",
+        "evidenceTypes": ["text"],
+        "confidence": 1,
+        "assumptions": []
+      }
+    },
+    {
+      "meta": { "sectionName": "内容结构" },
+      "content": {
+        "schemaVersion": "1.0",
+        "pageId": "agenda",
+        "title": "从一个耗时问题，到一套可复用系统",
+        "notes": "为什么做 PPagenT",
+        "items": [
+          { "id": "topic-1", "title": "昂贵的是判断", "body": "做 PPT 的主要成本" },
+          { "id": "topic-2", "title": "工作需要稳定", "body": "组织风格不应每次重做" },
+          { "id": "topic-3", "title": "AI、规则、代码分工", "body": "理解、决策与执行分离" },
+          { "id": "topic-4", "title": "稳定 80 分", "body": "优先可靠交付" },
+          { "id": "topic-5", "title": "服务多数人", "body": "让专业内容更容易表达" },
+          { "id": "topic-6", "title": "积累的是能力", "body": "提炼版式背后的经验" }
+        ],
+        "sourceText": "做 PPT 真正昂贵的是判断；工作里的 PPT 不需要每次重新发明；AI 负责理解，规则负责决定，代码负责执行；稳定的 80 分比随机的 95 分更值钱；不只服务最会做 PPT 的那 1%；真正积累的不是一万个模板。"
+      },
+      "intentDraft": {
+        "schemaVersion": "1.1",
+        "intentId": "why-ppagent-agenda",
+        "purposeKey": "explain_topics",
+        "purposeText": "概览全文的六个同级论点。",
+        "baseRelation": "hub",
+        "relationTraits": { "temporal": false, "cyclic": false, "converging": false, "branched": false, "dimensions": 1, "secondaryDimension": "none" },
+        "structure": { "itemCount": 6, "ordered": false, "sameLevel": true },
+        "density": "low",
+        "evidenceTypes": ["text", "diagram"],
+        "confidence": 0.98,
+        "assumptions": ["将文档六个一级论点作为同级目录项。"]
+      }
+    },
+    {
+      "meta": { "sectionName": "问题" },
+      "content": {
+        "schemaVersion": "1.0",
+        "pageId": "cost-of-judgment",
+        "title": "做 PPT 真正昂贵的是一连串判断",
+        "notes": "做 PPT",
+        "items": [
+          { "id": "judgment-1", "title": "怎么讲", "body": "确定整场汇报的叙事" },
+          { "id": "judgment-2", "title": "怎么拆", "body": "把长稿拆成合适页数" },
+          { "id": "judgment-3", "title": "什么关系", "body": "识别并列、递进、因果或流程" },
+          { "id": "judgment-4", "title": "突出什么", "body": "决定重点和表达力度" }
+        ],
+        "sourceText": "真正费时间的不是把文本框拖到左边还是右边，而是一连串判断：这场汇报到底怎么讲，一篇长稿应该拆成多少页，每一页只讲什么，这几个观点是并列、递进、因果还是流程，哪里应该突出。"
+      },
+      "intentDraft": {
+        "schemaVersion": "1.1",
+        "intentId": "why-ppagent-judgments",
+        "purposeKey": "explain_topics",
+        "purposeText": "说明做 PPT 时围绕同一任务发生的四类判断。",
+        "baseRelation": "hub",
+        "relationTraits": { "temporal": false, "cyclic": false, "converging": false, "branched": false, "dimensions": 1, "secondaryDimension": "none" },
+        "structure": { "itemCount": 4, "ordered": false, "sameLevel": true },
+        "density": "low",
+        "evidenceTypes": ["text", "diagram"],
+        "confidence": 0.99,
+        "assumptions": []
+      }
+    },
+    {
+      "meta": { "sectionName": "取舍" },
+      "content": {
+        "schemaVersion": "1.0",
+        "pageId": "stable-versus-random",
+        "title": "工作需要稳定复用，而不是每次重新发明",
+        "notes": "交付价值",
+        "items": [
+          { "id": "random", "title": "随机的 95 分", "body": "每次重新设计；结果偶尔惊艳；组织风格不稳定" },
+          { "id": "stable", "title": "稳定的 80 分", "body": "结构清楚；视觉规范；原生可编辑" }
+        ],
+        "sourceText": "PPagenT 不追求每次都生成一个让人惊叹的 95 分作品。如果系统能够稳定交付一个真正能用于工作的 80 分初稿，它就已经节省了大量时间。"
+      },
+      "intentDraft": {
+        "schemaVersion": "1.1",
+        "intentId": "why-ppagent-stability",
+        "purposeKey": "compare_options",
+        "purposeText": "对比随机追求惊艳与稳定工作交付两种取舍。",
+        "baseRelation": "comparison",
+        "relationTraits": { "temporal": false, "cyclic": false, "converging": false, "branched": false, "dimensions": 1, "secondaryDimension": "none" },
+        "structure": { "itemCount": 2, "ordered": false, "sameLevel": true, "dimensions": { "groups": 2, "itemsPerGroup": 3 } },
+        "density": "medium",
+        "emphasis": [1],
+        "evidenceTypes": ["text", "diagram"],
+        "confidence": 0.99,
+        "assumptions": []
+      }
+    },
+    {
+      "meta": { "sectionName": "分工" },
+      "content": {
+        "schemaVersion": "1.0",
+        "pageId": "division-of-labor",
+        "title": "AI、规则与代码各自负责确定的一段",
+        "items": [
+          { "id": "step-1", "title": "AI 理解", "body": "读取稿件，判断重点、关系与拆页" },
+          { "id": "step-2", "title": "规则决定", "body": "选择合法版式并检查容量边界" },
+          { "id": "step-3", "title": "代码执行", "body": "按已确认参数稳定绘制可编辑页面" },
+          { "id": "step-4", "title": "QA 回归", "body": "检查结果，并把失败反馈给通用能力" }
+        ],
+        "sourceText": "AI 负责理解：读取稿件，判断重点、关系、拆页和表达目的。规则负责决定：判断哪些版式可以使用、内容是否装得下、什么时候应该换版式或拆页。代码负责执行：按照已经确认的坐标、字号、颜色和间距，稳定生成原生可编辑的 PowerPoint。"
+      },
+      "intentDraft": {
+        "schemaVersion": "1.1",
+        "intentId": "why-ppagent-division",
+        "purposeKey": "explain_process",
+        "purposeText": "按运行顺序说明理解、决策、执行和回归。",
+        "baseRelation": "sequence",
+        "relationTraits": { "temporal": false, "cyclic": false, "converging": false, "branched": false, "dimensions": 1, "secondaryDimension": "none" },
+        "structure": { "itemCount": 4, "ordered": true, "sameLevel": true },
+        "density": "medium",
+        "evidenceTypes": ["text", "diagram"],
+        "confidence": 0.94,
+        "assumptions": ["QA 回归来自项目既定运行流程，用于闭合文档中的三段分工。"]
+      }
+    },
+    {
+      "meta": { "sectionName": "用户" },
+      "content": {
+        "schemaVersion": "1.0",
+        "pageId": "target-users",
+        "title": "PPagenT 服务有内容、但不擅长做 PPT 的多数人",
+        "notes": "目标用户",
+        "items": [
+          { "id": "need-1", "title": "有专业知识", "body": "能够提供真实内容" },
+          { "id": "need-2", "title": "有汇报任务", "body": "需要按时交付" },
+          { "id": "need-3", "title": "缺少拆页经验", "body": "不熟悉叙事与页面职责" },
+          { "id": "need-4", "title": "缺少排版经验", "body": "不擅长视觉表达" }
+        ],
+        "sourceText": "更多的人有内容、有专业知识，也有真实的汇报任务，只是不擅长拆页、选择表达方式和完成视觉排版。"
+      },
+      "intentDraft": {
+        "schemaVersion": "1.1",
+        "intentId": "why-ppagent-users",
+        "purposeKey": "explain_topics",
+        "purposeText": "围绕目标用户呈现其已有条件和能力缺口。",
+        "baseRelation": "hub",
+        "relationTraits": { "temporal": false, "cyclic": false, "converging": false, "branched": false, "dimensions": 1, "secondaryDimension": "none" },
+        "structure": { "itemCount": 4, "ordered": false, "sameLevel": true },
+        "density": "low",
+        "evidenceTypes": ["text", "diagram"],
+        "confidence": 0.98,
+        "assumptions": []
+      }
+    },
+    {
+      "meta": { "sectionName": "资产" },
+      "content": {
+        "schemaVersion": "1.0",
+        "pageId": "page-to-capability",
+        "title": "漂亮页面只有提炼出规律，才会从作品变成能力",
+        "items": [
+          { "id": "step-1", "title": "保留样本", "body": "保存优秀页面的结构依据" },
+          { "id": "step-2", "title": "提炼规律", "body": "明确适用语义、容量和边界" },
+          { "id": "step-3", "title": "参数化实现", "body": "把变化交给参数，把稳定交给代码" },
+          { "id": "step-4", "title": "真实验证", "body": "在真实稿件中检验选择与退化" }
+        ],
+        "sourceText": "PPagenT 真正要积累的不是页面数量，而是页面背后的经验：什么内容适合怎样表达，一个版式能够处理多少内容，超过边界以后怎样变化。一张漂亮页面只有在这些规律被提炼出来以后，才能从一份作品变成一种能力。"
+      },
+      "intentDraft": {
+        "schemaVersion": "1.1",
+        "intentId": "why-ppagent-capability",
+        "purposeKey": "explain_process",
+        "purposeText": "说明页面样本成为可复用系统能力的过程。",
+        "baseRelation": "sequence",
+        "relationTraits": { "temporal": false, "cyclic": false, "converging": false, "branched": false, "dimensions": 1, "secondaryDimension": "none" },
+        "structure": { "itemCount": 4, "ordered": true, "sameLevel": true },
+        "density": "medium",
+        "evidenceTypes": ["text", "diagram"],
+        "confidence": 0.95,
+        "assumptions": ["将文档中的经验提炼过程整理为四个连续步骤。"]
+      }
+    },
+    {
+      "meta": { "sectionName": "系统" },
+      "content": {
+        "schemaVersion": "1.0",
+        "pageId": "system-layers",
+        "title": "可替换的 Skin 之下，是可以继续复用的系统能力",
+        "items": [
+          { "id": "source-1", "title": "真实稿件", "body": "内容输入" },
+          { "id": "source-2", "title": "组织规范", "body": "Skin 输入" },
+          { "id": "source-3", "title": "资产经验", "body": "结构与边界" },
+          { "id": "platform", "title": "PPagenT 规则与选择", "body": "把理解转换成确定性调用" },
+          { "id": "app-1", "title": "结构清楚", "body": "内容职责明确" },
+          { "id": "app-2", "title": "视觉规范", "body": "符合组织风格" },
+          { "id": "app-3", "title": "原生可编辑", "body": "第二天仍可继续修改" }
+        ],
+        "sourceText": "学校视觉规范只是一套可替换的组织视觉系统；内容理解、拆页、表达规则和失败经验可以继续服务其他学校、企业、实验室和个人。"
+      },
+      "intentDraft": {
+        "schemaVersion": "1.1",
+        "intentId": "why-ppagent-system",
+        "purposeKey": "explain_layers",
+        "purposeText": "说明稿件、组织规范和资产经验如何经由 PPagenT 形成工作结果。",
+        "baseRelation": "layered",
+        "relationTraits": { "temporal": false, "cyclic": false, "converging": false, "branched": false, "dimensions": 1, "secondaryDimension": "layer" },
+        "structure": { "itemCount": 7, "ordered": true, "sameLevel": false, "hierarchyDepth": 3, "dimensions": { "sources": 3, "apps": 3 } },
+        "density": "medium",
+        "evidenceTypes": ["text", "diagram"],
+        "confidence": 0.92,
+        "assumptions": ["将可替换视觉系统与可复用能力整理为输入、规则平台和结果三层。"]
+      }
+    },
+    {
+      "meta": { "sectionName": "验证" },
+      "content": {
+        "schemaVersion": "1.0",
+        "pageId": "validation-loop",
+        "title": "每加入一份真实稿件，就扩大一次系统边界",
+        "notes": "可处理范围不断扩大",
+        "items": [
+          { "id": "loop-1", "title": "加入真实稿件", "body": "让新内容进入同一流程" },
+          { "id": "loop-2", "title": "发现系统边界", "body": "记录选择、容量或渲染问题" },
+          { "id": "loop-3", "title": "修改通用能力", "body": "修正规则、映射器或资产" },
+          { "id": "loop-4", "title": "回归旧稿件", "body": "确认改动没有破坏已通过案例" }
+        ],
+        "sourceText": "每加入一份真实稿件，就验证一次系统边界；发现问题、修改规则、重新生成，直到可处理的稿件范围不断扩大。"
+      },
+      "intentDraft": {
+        "schemaVersion": "1.1",
+        "intentId": "why-ppagent-loop",
+        "purposeKey": "explain_cycle",
+        "purposeText": "说明真实稿件驱动系统持续收敛的闭环。",
+        "baseRelation": "sequence",
+        "relationTraits": { "temporal": false, "cyclic": true, "converging": false, "branched": false, "dimensions": 1, "secondaryDimension": "none" },
+        "structure": { "itemCount": 4, "ordered": true, "sameLevel": true },
+        "density": "low",
+        "evidenceTypes": ["text", "diagram"],
+        "confidence": 0.99,
+        "assumptions": ["把重新生成进一步明确为修改通用能力并回归旧稿件。"]
+      }
+    },
+    {
+      "meta": { "sectionName": "尾页" },
+      "content": {
+        "schemaVersion": "1.0",
+        "pageId": "closing",
+        "title": "不一定惊艳，但靠谱；不一定独一无二，但真的好用",
+        "notes": "不一定惊艳，但靠谱；\n不一定独一无二，但真的好用",
+        "items": [],
+        "sourceText": "不一定惊艳，但靠谱；不一定独一无二，但真的好用；而且第二天还可以继续修改的 PPT。"
+      },
+      "intentDraft": {
+        "schemaVersion": "1.1",
+        "intentId": "why-ppagent-closing",
+        "purposeKey": "present_closing",
+        "purposeText": "用原文核心承诺结束演示。",
+        "baseRelation": "none",
+        "relationTraits": { "temporal": false, "cyclic": false, "converging": false, "branched": false, "dimensions": 1, "secondaryDimension": "none" },
+        "structure": { "itemCount": 0, "ordered": false, "sameLevel": true },
+        "density": "low",
+        "evidenceTypes": ["text", "quotation"],
+        "confidence": 1,
+        "assumptions": []
+      }
+    }
+  ]
+}

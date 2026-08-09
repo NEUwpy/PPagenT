@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "1.0",
+  "intentId": "why-ppagent-capability",
+  "assetId": "sequential-process-001",
+  "parameters": {
+    "title": "漂亮页面只有提炼出规律，才会从作品变成能力",
+    "steps": [
+      {
+        "title": "保留样本",
+        "body": "保存优秀页面的结构依据"
+      },
+      {
+        "title": "提炼规律",
+        "body": "明确适用语义、容量和边界"
+      },
+      {
+        "title": "参数化实现",
+        "body": "把变化交给参数，把稳定交给代码"
+      },
+      {
+        "title": "真实验证",
+        "body": "在真实稿件中检验选择与退化"
+      }
+    ]
+  },
+  "mappings": [
+    {
+      "sourceItemId": "step-1",
+      "parameterPath": "steps[0]"
+    },
+    {
+      "sourceItemId": "step-2",
+      "parameterPath": "steps[1]"
+    },
+    {
+      "sourceItemId": "step-3",
+      "parameterPath": "steps[2]"
+    },
+    {
+      "sourceItemId": "step-4",
+      "parameterPath": "steps[3]"
+    }
+  ],
+  "omissions": []
+}

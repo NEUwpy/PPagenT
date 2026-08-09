@@ -1,0 +1,266 @@
+{
+  "schemaVersion": "1.0",
+  "intentId": "why-ppagent-loop",
+  "decision": "single-match",
+  "selectedAssetId": "cycle-loop-001",
+  "candidates": [
+    {
+      "assetId": "cycle-loop-001",
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "fixed",
+      "fitSignals": {
+        "purposeSpecific": false,
+        "preferredMetrics": 1,
+        "totalPreferredMetrics": 1,
+        "validated": false,
+        "realManuscriptValidated": false
+      }
+    }
+  ],
+  "rejections": [
+    {
+      "assetId": "northeastern-university-cover-001",
+      "reasons": [
+        "base-relation:sequence",
+        "purpose-key:explain_cycle",
+        "above-max:itemCount",
+        "semantic:ordered"
+      ]
+    },
+    {
+      "assetId": "northeastern-university-closing-001",
+      "reasons": [
+        "base-relation:sequence",
+        "purpose-key:explain_cycle",
+        "above-max:itemCount",
+        "semantic:ordered"
+      ]
+    },
+    {
+      "assetId": "comparison-structure-001",
+      "reasons": [
+        "base-relation:sequence",
+        "missing-metric:groups",
+        "missing-metric:itemsPerGroup",
+        "semantic:ordered"
+      ]
+    },
+    {
+      "assetId": "framework-matrix-001",
+      "reasons": [
+        "base-relation:sequence"
+      ]
+    },
+    {
+      "assetId": "hierarchy-pyramid-001",
+      "reasons": [
+        "base-relation:sequence",
+        "semantic:sameLevel"
+      ]
+    },
+    {
+      "assetId": "layered-architecture-001",
+      "reasons": [
+        "base-relation:sequence",
+        "missing-metric:sources",
+        "missing-metric:apps",
+        "semantic:sameLevel"
+      ]
+    },
+    {
+      "assetId": "radial-hub-001",
+      "reasons": [
+        "base-relation:sequence",
+        "semantic:ordered"
+      ]
+    },
+    {
+      "assetId": "sequential-process-001",
+      "reasons": [
+        "trait:cyclic"
+      ]
+    },
+    {
+      "assetId": "timeline-roadmap-001",
+      "reasons": [
+        "trait:temporal"
+      ]
+    },
+    {
+      "assetId": "flow-map-001",
+      "reasons": [
+        "purpose-key:explain_cycle",
+        "missing-metric:stages",
+        "trait:branched"
+      ]
+    },
+    {
+      "assetId": "funnel-conversion-001",
+      "reasons": [
+        "purpose-key:explain_cycle",
+        "trait:converging"
+      ]
+    },
+    {
+      "assetId": "goal-kpi-map-001",
+      "reasons": [
+        "base-relation:sequence",
+        "purpose-key:explain_cycle",
+        "missing-metric:rows",
+        "semantic:sameLevel",
+        "density:low"
+      ]
+    },
+    {
+      "assetId": "swimlane-process-001",
+      "reasons": [
+        "purpose-key:explain_cycle",
+        "missing-metric:roles",
+        "missing-metric:stages",
+        "trait:dimensions",
+        "trait:secondaryDimension",
+        "density:low"
+      ]
+    },
+    {
+      "assetId": "fishbone-analysis-001",
+      "reasons": [
+        "base-relation:sequence",
+        "purpose-key:explain_cycle",
+        "trait:converging"
+      ]
+    },
+    {
+      "assetId": "business-model-canvas-001",
+      "reasons": [
+        "base-relation:sequence",
+        "purpose-key:explain_cycle"
+      ]
+    },
+    {
+      "assetId": "customer-journey-map-001",
+      "reasons": [
+        "purpose-key:explain_cycle"
+      ]
+    },
+    {
+      "assetId": "audience-segmentation-funnel-001",
+      "reasons": [
+        "purpose-key:explain_cycle",
+        "trait:converging"
+      ]
+    },
+    {
+      "assetId": "customer-lifecycle-curve-001",
+      "reasons": [
+        "purpose-key:explain_cycle",
+        "trait:temporal"
+      ]
+    },
+    {
+      "assetId": "problem-solution-bowtie-001",
+      "reasons": [
+        "base-relation:sequence",
+        "purpose-key:explain_cycle"
+      ]
+    },
+    {
+      "assetId": "organization-tree-001",
+      "reasons": [
+        "base-relation:sequence",
+        "purpose-key:explain_cycle"
+      ]
+    },
+    {
+      "assetId": "evolution-staircase-001",
+      "reasons": [
+        "purpose-key:explain_cycle"
+      ]
+    },
+    {
+      "assetId": "dual-track-roadmap-001",
+      "reasons": [
+        "purpose-key:explain_cycle",
+        "trait:temporal",
+        "trait:dimensions",
+        "trait:secondaryDimension"
+      ]
+    },
+    {
+      "assetId": "research-method-summary-001",
+      "reasons": [
+        "base-relation:sequence",
+        "purpose-key:explain_cycle"
+      ]
+    },
+    {
+      "assetId": "technical-route-flow-001",
+      "reasons": [
+        "purpose-key:explain_cycle",
+        "missing-metric:branches",
+        "missing-metric:inputs",
+        "trait:branched",
+        "trait:converging",
+        "density:low"
+      ]
+    },
+    {
+      "assetId": "concentric-capability-system-001",
+      "reasons": [
+        "base-relation:sequence",
+        "purpose-key:explain_cycle"
+      ]
+    },
+    {
+      "assetId": "theory-integration-framework-001",
+      "reasons": [
+        "base-relation:sequence",
+        "purpose-key:explain_cycle"
+      ]
+    },
+    {
+      "assetId": "geographic-network-001",
+      "reasons": [
+        "base-relation:sequence",
+        "purpose-key:explain_cycle"
+      ]
+    },
+    {
+      "assetId": "end-to-end-operations-001",
+      "reasons": [
+        "status:draft"
+      ]
+    },
+    {
+      "assetId": "internal-external-ecosystem-001",
+      "reasons": [
+        "status:draft"
+      ]
+    },
+    {
+      "assetId": "omnichannel-domain-model-001",
+      "reasons": [
+        "status:draft"
+      ]
+    },
+    {
+      "assetId": "experience-layer-model-001",
+      "reasons": [
+        "status:draft"
+      ]
+    },
+    {
+      "assetId": "conclusion-bands-001",
+      "reasons": [
+        "status:draft"
+      ]
+    },
+    {
+      "assetId": "phase-strategy-timeline-001",
+      "reasons": [
+        "status:draft"
+      ]
+    }
+  ],
+  "resolutionPlan": null
+}

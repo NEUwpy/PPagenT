@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.1",
+  "intentId": "why-ppagent-agenda",
+  "purposeKey": "explain_topics",
+  "purposeText": "概览全文的六个同级论点。",
+  "baseRelation": "hub",
+  "relationTraits": {
+    "temporal": false,
+    "cyclic": false,
+    "converging": false,
+    "branched": false,
+    "dimensions": 1,
+    "secondaryDimension": "none"
+  },
+  "structure": {
+    "itemCount": 6,
+    "ordered": false,
+    "sameLevel": true
+  },
+  "density": "low",
+  "evidenceTypes": [
+    "text",
+    "diagram"
+  ],
+  "confidence": 0.98,
+  "assumptions": [
+    "将文档六个一级论点作为同级目录项。"
+  ],
+  "contentStats": {
+    "titleChars": 16,
+    "itemCount": 6,
+    "maxItemChars": 20,
+    "avgItemChars": 16,
+    "minItemChars": 13,
+    "maxItemTitleChars": 10,
+    "maxItemBodyChars": 11,
+    "imbalanceRatio": 1.54
+  }
+}

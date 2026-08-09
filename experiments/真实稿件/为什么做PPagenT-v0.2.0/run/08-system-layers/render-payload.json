@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "1.0",
+  "intentId": "why-ppagent-system",
+  "assetId": "layered-architecture-001",
+  "parameters": {
+    "title": "可替换的 Skin 之下，是可以继续复用的系统能力",
+    "sources": [
+      "真实稿件",
+      "组织规范",
+      "资产经验"
+    ],
+    "platform": "PPagenT 规则与选择",
+    "apps": [
+      "结构清楚",
+      "视觉规范",
+      "原生可编辑"
+    ]
+  },
+  "mappings": [
+    {
+      "sourceItemId": "source-1",
+      "parameterPath": "sources[0]"
+    },
+    {
+      "sourceItemId": "source-2",
+      "parameterPath": "sources[1]"
+    },
+    {
+      "sourceItemId": "source-3",
+      "parameterPath": "sources[2]"
+    },
+    {
+      "sourceItemId": "platform",
+      "parameterPath": "platform"
+    },
+    {
+      "sourceItemId": "app-1",
+      "parameterPath": "apps[0]"
+    },
+    {
+      "sourceItemId": "app-2",
+      "parameterPath": "apps[1]"
+    },
+    {
+      "sourceItemId": "app-3",
+      "parameterPath": "apps[2]"
+    }
+  ],
+  "omissions": []
+}

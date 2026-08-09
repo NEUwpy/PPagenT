@@ -28,6 +28,30 @@
   },
   "contracts": [
     {
+      "assetId": "northeastern-university-cover-001",
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "partial",
+      "supportedIntents": { "baseRelations": ["none"], "purposeKeys": ["present_cover"] },
+      "constraints": {
+        "metrics": [{ "field": "itemCount", "min": 2, "preferred": [2], "max": 2 }],
+        "semantic": { "ordered": false },
+        "density": ["low"]
+      },
+      "reviewReason": "东北大学 Skin 的封面槽位，当前验证标题、汇报人和日期三个字段。"
+    },
+    {
+      "assetId": "northeastern-university-closing-001",
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "partial",
+      "supportedIntents": { "baseRelations": ["none"], "purposeKeys": ["present_closing"] },
+      "constraints": {
+        "metrics": [{ "field": "itemCount", "min": 0, "preferred": [0], "max": 0 }],
+        "semantic": { "ordered": false },
+        "density": ["low"]
+      },
+      "reviewReason": "东北大学 Skin 的尾页槽位，当前只验证一段结束语。"
+    },
+    {
       "assetId": "comparison-structure-001",
       "abstractionLevel": "foundation",
       "adaptationStatus": "adaptive",

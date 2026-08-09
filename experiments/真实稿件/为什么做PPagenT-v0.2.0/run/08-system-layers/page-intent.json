@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "1.1",
+  "intentId": "why-ppagent-system",
+  "purposeKey": "explain_layers",
+  "purposeText": "说明稿件、组织规范和资产经验如何经由 PPagenT 形成工作结果。",
+  "baseRelation": "layered",
+  "relationTraits": {
+    "temporal": false,
+    "cyclic": false,
+    "converging": false,
+    "branched": false,
+    "dimensions": 1,
+    "secondaryDimension": "layer"
+  },
+  "structure": {
+    "itemCount": 7,
+    "ordered": true,
+    "sameLevel": false,
+    "hierarchyDepth": 3,
+    "dimensions": {
+      "sources": 3,
+      "apps": 3
+    }
+  },
+  "density": "medium",
+  "evidenceTypes": [
+    "text",
+    "diagram"
+  ],
+  "confidence": 0.92,
+  "assumptions": [
+    "将可替换视觉系统与可复用能力整理为输入、规则平台和结果三层。"
+  ],
+  "contentStats": {
+    "titleChars": 25,
+    "itemCount": 7,
+    "maxItemChars": 24,
+    "avgItemChars": 12.29,
+    "minItemChars": 8,
+    "maxItemTitleChars": 13,
+    "maxItemBodyChars": 11,
+    "imbalanceRatio": 3
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.1",
+  "intentId": "why-ppagent-division",
+  "purposeKey": "explain_process",
+  "purposeText": "按运行顺序说明理解、决策、执行和回归。",
+  "baseRelation": "sequence",
+  "relationTraits": {
+    "temporal": false,
+    "cyclic": false,
+    "converging": false,
+    "branched": false,
+    "dimensions": 1,
+    "secondaryDimension": "none"
+  },
+  "structure": {
+    "itemCount": 4,
+    "ordered": true,
+    "sameLevel": true
+  },
+  "density": "medium",
+  "evidenceTypes": [
+    "text",
+    "diagram"
+  ],
+  "confidence": 0.94,
+  "assumptions": [
+    "QA 回归来自项目既定运行流程，用于闭合文档中的三段分工。"
+  ],
+  "contentStats": {
+    "titleChars": 17,
+    "itemCount": 4,
+    "maxItemChars": 21,
+    "avgItemChars": 19.25,
+    "minItemChars": 17,
+    "maxItemTitleChars": 5,
+    "maxItemBodyChars": 16,
+    "imbalanceRatio": 1.24
+  }
+}
