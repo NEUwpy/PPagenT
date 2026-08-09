@@ -1,7 +1,10 @@
-export const DIRECTOR_METHODS = Object.freeze([
+export const PRODUCTION_DIRECTOR_METHODS = Object.freeze([
   "contentDirector",
-  "contentReview",
   "visualDirector",
+]);
+
+export const DEVELOPMENT_REVIEW_METHODS = Object.freeze([
+  "contentReview",
   "visualReview",
 ]);
 
@@ -13,23 +16,28 @@ export class DirectorProviderError extends Error {
   }
 }
 
-export function assertDirectorProvider(provider) {
+export function assertDirectorProvider(provider, options = {}) {
   if (!provider || typeof provider !== "object") {
     throw new DirectorProviderError("缺少 DirectorProvider；工作流禁止回退到人工中间 JSON");
   }
-  const missing = DIRECTOR_METHODS.filter((name) => typeof provider[name] !== "function");
+  const required = options.requireReview
+    ? [...PRODUCTION_DIRECTOR_METHODS, ...DEVELOPMENT_REVIEW_METHODS]
+    : PRODUCTION_DIRECTOR_METHODS;
+  const missing = required.filter((name) => typeof provider[name] !== "function");
   if (missing.length) {
     throw new DirectorProviderError(`DirectorProvider 缺少必要调用：${missing.join(", ")}`);
   }
   return provider;
 }
 
-export function defineDirectorProvider(provider) {
-  assertDirectorProvider(provider);
-  return Object.freeze({
+export function defineDirectorProvider(provider, options = {}) {
+  assertDirectorProvider(provider, options);
+  const defined = {
     contentDirector: provider.contentDirector.bind(provider),
-    contentReview: provider.contentReview.bind(provider),
     visualDirector: provider.visualDirector.bind(provider),
-    visualReview: provider.visualReview.bind(provider),
-  });
+  };
+  for (const name of DEVELOPMENT_REVIEW_METHODS) {
+    if (typeof provider[name] === "function") defined[name] = provider[name].bind(provider);
+  }
+  return Object.freeze(defined);
 }

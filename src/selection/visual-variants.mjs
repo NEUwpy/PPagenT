@@ -10,6 +10,15 @@ export async function loadVisualVariantCatalog(root = process.cwd()) {
   return catalog.variants.map((variant) => ({ ...variant, itemCount: { ...variant.itemCount } }));
 }
 
+export async function loadCoreAssetIds(root = process.cwd()) {
+  const target = path.join(root, "assets", "registry.json");
+  const registry = JSON.parse(await fs.readFile(target, "utf8"));
+  if (registry.scope !== "core" || !Array.isArray(registry.assets)) {
+    throw new Error("assets/registry.json 必须是核心资产登记表");
+  }
+  return new Set(registry.assets.filter((asset) => asset.status === "core").map((asset) => asset.id));
+}
+
 async function discoverRenderMapperAssetIds(root) {
   const target = path.join(root, "src", "render", "render-payload.mjs");
   const source = await fs.readFile(target, "utf8");
@@ -21,6 +30,10 @@ export async function listRenderableVisualVariants(options = {}) {
   const variants = options.variants ?? await loadVisualVariantCatalog(root);
   const contracts = options.contracts ?? await loadContractCatalog(root);
   const allowedStatuses = new Set(options.allowedStatuses ?? ["experimental", "validated"]);
+  const allowedVariantStatuses = new Set(options.allowedVariantStatuses ?? ["core"]);
+  const coreAssetIds = options.coreAssetIds
+    ? new Set(options.coreAssetIds)
+    : await loadCoreAssetIds(root);
   const contractIds = new Set(
     contracts
       .filter((contract) => allowedStatuses.has(contract.status))
@@ -34,10 +47,18 @@ export async function listRenderableVisualVariants(options = {}) {
     .map((variant) => ({
       ...variant,
       contractAvailable: contractIds.has(variant.assetId),
+      coreAssetAvailable: coreAssetIds.has(variant.assetId),
+      callableStatus: allowedVariantStatuses.has(variant.status),
       mapperAvailable: mapperIds.has(variant.assetId),
       builderAvailable: hasStructureAssetBuilder(variant.assetId, variant.variantId),
     }))
-    .filter((variant) => variant.contractAvailable && variant.mapperAvailable && variant.builderAvailable);
+    .filter((variant) => (
+      variant.contractAvailable
+      && variant.coreAssetAvailable
+      && variant.callableStatus
+      && variant.mapperAvailable
+      && variant.builderAvailable
+    ));
 }
 
 export function queryVisualVariants(variants, query = {}) {

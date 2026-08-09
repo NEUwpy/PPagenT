@@ -2,6 +2,7 @@ import { mapRenderPayload } from "../render/render-payload.mjs";
 import { loadContractCatalog, matchPageIntent } from "../selection/contracts.mjs";
 import {
   listRenderableVisualVariants,
+  loadCoreAssetIds,
   planVisualVariants,
   queryVisualVariants,
 } from "../selection/visual-variants.mjs";
@@ -42,9 +43,10 @@ export function computeCapacityDensity(stats) {
 }
 
 export async function buildVisualCandidateSets({ root = process.cwd(), pageContents, pageIntents }) {
-  const [contracts, variants] = await Promise.all([
+  const [contracts, variants, coreAssetIds] = await Promise.all([
     loadContractCatalog(root),
     listRenderableVisualVariants({ root }),
+    loadCoreAssetIds(root),
   ]);
   const variantsByAsset = new Map();
   for (const variant of variants) {
@@ -57,7 +59,13 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
   return pageIntents.map((intent, index) => {
     const pageId = pageContents[index].pageId;
     const skinCandidate = SKIN_CANDIDATES[intent.purposeKey];
-    if (skinCandidate) return { pageId, intentId: intent.intentId, candidates: [skinCandidate] };
+    if (skinCandidate) {
+      return {
+        pageId,
+        intentId: intent.intentId,
+        candidates: coreAssetIds.has(skinCandidate.assetId) ? [skinCandidate] : [],
+      };
+    }
 
     const capacityDensity = computeCapacityDensity(intent.contentStats);
     const semantic = matchPageIntent({ ...intent, density: capacityDensity }, renderableContracts, {

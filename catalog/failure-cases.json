@@ -104,6 +104,70 @@
         "reviewed": true,
         "notes": "第一次真实稿件生成时发现并在 v0.1.0 交付前修复。"
       }
+    },
+    {
+      "caseId": "why-ppagent-v0.3.0-temporary-role-handoff",
+      "pageIntent": {
+        "schemaVersion": "1.1",
+        "intentId": "why-ppagent-v0.3.0-p04",
+        "purposeKey": "explain_cross_role_process",
+        "purposeText": "说明 AI、规则与代码三个角色如何依次完成理解、决定和执行，并共同形成确定性产出。",
+        "baseRelation": "sequence",
+        "relationTraits": {
+          "temporal": false,
+          "cyclic": false,
+          "converging": false,
+          "branched": false,
+          "dimensions": 2,
+          "secondaryDimension": "role"
+        },
+        "structure": {
+          "itemCount": 4,
+          "hierarchyDepth": 1,
+          "ordered": true,
+          "sameLevel": false,
+          "dimensions": {
+            "roleCount": 3,
+            "stageCount": 3
+          }
+        },
+        "density": "medium",
+        "emphasis": [3],
+        "evidenceTypes": ["text"],
+        "confidence": 0.99,
+        "assumptions": ["末尾总结句是三段分工的归纳，不是新增角色或新增阶段。"],
+        "contentStats": {
+          "titleChars": 21,
+          "itemCount": 4,
+          "maxItemChars": 38,
+          "avgItemChars": 29.5,
+          "minItemChars": 24,
+          "maxItemTitleChars": 7,
+          "maxItemBodyChars": 32,
+          "imbalanceRatio": 1.58
+        }
+      },
+      "candidateAssetId": "sequential-process-001",
+      "outcome": "accepted-but-poor",
+      "failureReasons": [
+        "role-handoff 不是从来源模板蒸馏的视觉变体，而是在稿件运行中临时编写并借用了顺序流程资产 ID。",
+        "角色节点以 164×92 的椭圆绘制，却被当作圆形使用，形成明显的压扁形态。",
+        "研发视觉审查只检查了关系、越界和文字，没有阻止无来源结构进入正式链路。"
+      ],
+      "resolution": {
+        "schemaVersion": "1.0",
+        "reason": "正式流程不得调用没有复现或蒸馏来源的临时结构。",
+        "action": "reject",
+        "sourceAssetId": "sequential-process-001",
+        "targetAssetIds": [],
+        "requiresReview": false,
+        "notes": "将 role-handoff 保留为失败证据并从正式候选中排除；需要该表达时，必须先从结构样本池选择来源并完成蒸馏、参数化和核心登记。"
+      },
+      "evidence": {
+        "source": "为什么做PPagenT-v0.3.0，第 4 页",
+        "reviewed": true,
+        "notes": "用户复核指出压扁圆形，并追问结构来源后确认该变体为本轮临时创造。"
+      }
     }
   ]
 }

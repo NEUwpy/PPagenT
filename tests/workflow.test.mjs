@@ -235,6 +235,40 @@ test("正式 CLI 对尚未实现的 Skin 失败关闭", async () => {
   );
 });
 
+test("产品工作流只调用内容导演和视觉导演，不调用研发审查者", async (t) => {
+  const outputDir = await makeTempDir(t);
+  let contentCalls = 0;
+  let visualCalls = 0;
+  const provider = {
+    async contentDirector() {
+      contentCalls += 1;
+      return contentOutput();
+    },
+    async visualDirector({ phase, skinId }) {
+      visualCalls += 1;
+      return phase === "intent" ? visualIntentOutput() : visualPlanOutput(skinId);
+    },
+  };
+
+  const result = await runDirectorWorkflow({
+    input: { rawMarkdown },
+    provider,
+    outputDir,
+    reviewMode: "production",
+    visualCandidateProvider: candidateProvider,
+    visualResolver: resolver,
+    renderer,
+  });
+
+  assert.equal(result.status, "delivered");
+  assert.equal(result.workflowMode, "production");
+  assert.equal(contentCalls, 1);
+  assert.equal(visualCalls, 2);
+  await assert.rejects(fs.access(path.join(outputDir, "content", "attempt-01", "content-review.json")));
+  await assert.rejects(fs.access(path.join(outputDir, "visual", "attempt-01", "visual-review-pre.json")));
+  await assert.rejects(fs.access(path.join(outputDir, "visual", "attempt-01", "visual-review-post.json")));
+});
+
 test("内容 error 未关闭时不调用视觉导演", async (t) => {
   const outputDir = await makeTempDir(t);
   let visualCalls = 0;

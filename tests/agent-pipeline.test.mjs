@@ -33,7 +33,7 @@ function intentDraft(intentId, purposeKey, baseRelation, structure = {}) {
   };
 }
 
-test("程序先按 PageIntent 语义和运行能力给视觉导演候选", async () => {
+test("正式流程不会把未晋升核心库的实验结构交给视觉导演", async () => {
   const page = content("topics", [
     { id: "a", title: "A", body: "A" },
     { id: "b", title: "B", body: "B" },
@@ -42,9 +42,25 @@ test("程序先按 PageIntent 语义和运行能力给视觉导演候选", async
   ]);
   const intent = enrichPageIntent(intentDraft("topics-intent", "explain_topics", "hub"), page);
   const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.ok(set.candidates.length >= 2);
-  assert.ok(set.candidates.every((candidate) => candidate.familyId === "radial-hub"));
-  assert.deepEqual(new Set(set.candidates.map((candidate) => candidate.variantId)), new Set(["orbit", "split-wing"]));
+  assert.deepEqual(set.candidates, []);
+  assert.equal(set.capacityDensity, "low");
+});
+
+test("正式流程只把核心库中的蒸馏变体交给视觉导演", async () => {
+  const page = content("process", [
+    { id: "a", title: "A", body: "A" },
+    { id: "b", title: "B", body: "B" },
+    { id: "c", title: "C", body: "C" },
+  ]);
+  const intent = enrichPageIntent(intentDraft("process-intent", "explain_process", "sequence", {
+    ordered: true,
+    sameLevel: false,
+  }), page);
+  const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
+  assert.deepEqual(set.candidates.map((candidate) => ({
+    assetId: candidate.assetId,
+    variantId: candidate.variantId,
+  })), [{ assetId: "sequential-process-001", variantId: "horizontal-cards" }]);
 });
 
 test("resolver 不允许把视觉导演的家族或变体换成另一资产", async () => {

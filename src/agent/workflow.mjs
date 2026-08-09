@@ -310,7 +310,8 @@ async function persistVisualAttempt(outputDir, attempt, visual, resolved, name, 
 
 export async function runDirectorWorkflow(options) {
   const input = validateBusinessInput(options?.input);
-  const provider = assertDirectorProvider(options?.provider);
+  const developmentReview = !new Set(["production", "none"]).has(options?.reviewMode);
+  const provider = assertDirectorProvider(options?.provider, { requireReview: developmentReview });
   assertOperationalDependency(options?.visualCandidateProvider, "visualCandidateProvider");
   assertOperationalDependency(options?.visualResolver, "visualResolver");
   assertOperationalDependency(options?.renderer, "renderer");
@@ -323,7 +324,7 @@ export async function runDirectorWorkflow(options) {
   const maxVisualAttempts = options.maxVisualAttempts ?? 12;
   if (!Number.isInteger(maxContentAttempts) || maxContentAttempts < 1
     || !Number.isInteger(maxVisualAttempts) || maxVisualAttempts < 1) {
-    throw new WorkflowError("INVALID_ATTEMPT_LIMIT", "bootstrap", "审查循环次数必须是正整数");
+    throw new WorkflowError("INVALID_ATTEMPT_LIMIT", "bootstrap", "工作流循环次数必须是正整数");
   }
   const validators = await createRuleValidators(root);
   await fs.mkdir(outputDir, { recursive: true });
@@ -343,6 +344,7 @@ export async function runDirectorWorkflow(options) {
     assertContentOutput(validators, contentOutput, input.rawMarkdown);
     await persistContentAttempt(outputDir, contentAttempt, contentOutput, null);
 
+    if (!developmentReview) return true;
     contentReview = await provider.contentReview({
       ...input,
       attempt: contentAttempt,
@@ -467,7 +469,7 @@ export async function runDirectorWorkflow(options) {
       feedback: resolved.feedback ?? [],
     });
 
-    visualReview = await provider.visualReview({
+    if (developmentReview) visualReview = await provider.visualReview({
       ...input,
       stage: "pre-render",
       attempt,
@@ -478,10 +480,12 @@ export async function runDirectorWorkflow(options) {
       layoutDecisions: resolved.layoutDecisions,
       renderPayloads: resolved.renderPayloads,
     });
-    assertSchema(validators, validators.validateVisualReview, visualReview, "VisualReview(pre-render)", "visual-review-pre");
-    assertReviewIdentity(visualReview, { deckId: contentOutput.deckPlan.deckId, attempt, stage: "pre-render" });
-    await persistVisualAttempt(outputDir, attempt, visual, resolved, "visual-review-pre.json", visualReview);
-    if (!reviewPasses(visualReview)) {
+    if (developmentReview) {
+      assertSchema(validators, validators.validateVisualReview, visualReview, "VisualReview(pre-render)", "visual-review-pre");
+      assertReviewIdentity(visualReview, { deckId: contentOutput.deckPlan.deckId, attempt, stage: "pre-render" });
+      await persistVisualAttempt(outputDir, attempt, visual, resolved, "visual-review-pre.json", visualReview);
+    }
+    if (developmentReview && !reviewPasses(visualReview)) {
       if (attempt === maxVisualAttempts) {
         throw new WorkflowError(
           "VISUAL_REVIEW_NOT_CLOSED",
@@ -516,6 +520,20 @@ export async function runDirectorWorkflow(options) {
     };
     await persistVisualAttempt(outputDir, attempt, visual, resolved, "render-result.json", persistedRenderResult);
 
+    if (!developmentReview) {
+      const delivery = {
+        schemaVersion: "1.0",
+        status: "delivered",
+        workflowMode: "production",
+        deckId: contentOutput.deckPlan.deckId,
+        skinId: input.skinId,
+        pageCount: contentOutput.pageContents.length,
+        outputPptx: renderResult.outputPptx,
+      };
+      await writeJson(path.join(outputDir, "workflow-result.json"), delivery);
+      return { ...delivery, deckPlan: contentOutput.deckPlan, pageContents: contentOutput.pageContents, renderResult };
+    }
+
     visualReview = await provider.visualReview({
       ...input,
       stage: "post-render",
@@ -536,6 +554,7 @@ export async function runDirectorWorkflow(options) {
       const audit = {
         schemaVersion: "1.0",
         status: "internally-approved-awaiting-user-review",
+        workflowMode: "development",
         deckId: contentOutput.deckPlan.deckId,
         skinId: input.skinId,
         pageCount: contentOutput.pageContents.length,

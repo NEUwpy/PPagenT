@@ -25,6 +25,8 @@ for (const contract of contracts) {
 }
 
 const structureRegistry = await readJson(path.join(root, "备选资产", "registry.json"));
+const coreRegistry = await readJson(path.join(root, "assets", "registry.json"));
+const visualVariantCatalog = await readJson(path.join(root, "catalog", "visual-variants.json"));
 const structureIds = structureRegistry.assets.filter((entry) => entry.category === "结构图").map((entry) => entry.id);
 const selectableAssetIds = structureRegistry.assets
   .filter((entry) => ["结构图", "封面", "尾页"].includes(entry.category))
@@ -33,6 +35,13 @@ const contractIds = contracts.map((contract) => contract.assetId);
 for (const id of structureIds) if (!contractIds.includes(id)) issues.push(`结构候选缺少契约: ${id}`);
 for (const id of contractIds) if (!selectableAssetIds.includes(id)) issues.push(`契约引用未知候选资产: ${id}`);
 if (new Set(contractIds).size !== contractIds.length) issues.push("契约 ID 存在重复");
+
+const coreIds = new Set(coreRegistry.assets.filter((entry) => entry.status === "core").map((entry) => entry.id));
+for (const variant of visualVariantCatalog.variants) {
+  if (variant.status !== "core") continue;
+  if (!coreIds.has(variant.assetId)) issues.push(`正式变体引用非核心资产: ${variant.builderKey}`);
+  if (variant.origin !== "distilled-asset") issues.push(`正式变体缺少蒸馏来源标记: ${variant.builderKey}`);
+}
 
 const failureCatalog = await readJson(path.join(root, "catalog", "failure-cases.json"));
 for (const failureCase of failureCatalog.cases) {

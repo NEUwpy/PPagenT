@@ -37,9 +37,11 @@ async function walkFiles(directory) {
 }
 
 const issues = [];
+const coreRoot = path.join(root, "assets");
 const candidateRoot = path.join(root, "备选资产");
 const sampleRoot = path.join(root, "结构样本池");
 const candidateRegistry = await readJson(path.join(candidateRoot, "registry.json"));
+const coreRegistry = await readJson(path.join(coreRoot, "registry.json"));
 const sampleRegistry = await readJson(path.join(sampleRoot, "registry.json"));
 const coverage = await readJson(path.join(root, "catalog", "family-candidate-coverage.json"));
 
@@ -64,6 +66,30 @@ for (const entry of candidateRegistry.assets) {
   if (await exists(path.join(directory, "example.pptx"))) {
     const count = await slideCount(path.join(directory, "example.pptx"));
     if (count !== 1) issues.push(`备选示例不是单页: ${entry.id}=${count}`);
+  }
+}
+
+const coreIds = new Set();
+for (const entry of coreRegistry.assets) {
+  if (coreIds.has(entry.id)) issues.push(`重复核心资产 ID: ${entry.id}`);
+  coreIds.add(entry.id);
+  if (entry.status !== "core") issues.push(`核心资产状态错误: ${entry.id}`);
+  if (!candidateIds.has(entry.id)) issues.push(`核心资产没有备选区来源记录: ${entry.id}`);
+  const directory = path.join(coreRoot, entry.path);
+  for (const name of ["asset.json", "generate.mjs", "example.pptx"]) {
+    if (!(await exists(path.join(directory, name)))) issues.push(`核心资产缺少 ${name}: ${entry.id}`);
+  }
+  if (await exists(path.join(directory, "asset.json"))) {
+    const metadata = await readJson(path.join(directory, "asset.json"));
+    if (metadata.id !== entry.id) issues.push(`核心资产 ID 不一致: ${entry.id}`);
+    if (metadata.status !== "core") issues.push(`核心资产元数据状态错误: ${entry.id}`);
+    const sourceFile = typeof metadata.source === "string" ? metadata.source : metadata.source?.file;
+    if (!sourceFile) issues.push(`核心资产缺少可追溯来源: ${entry.id}`);
+    else if (mode === "local" && !(await exists(path.join(root, sourceFile)))) issues.push(`核心资产来源不存在: ${entry.id}`);
+  }
+  if (await exists(path.join(directory, "example.pptx"))) {
+    const count = await slideCount(path.join(directory, "example.pptx"));
+    if (count !== 1) issues.push(`核心资产示例不是单页: ${entry.id}=${count}`);
   }
 }
 
@@ -112,6 +138,7 @@ const report = {
   status: issues.length ? "failed" : "passed",
   mode,
   candidateCount: candidateRegistry.assets.length,
+  coreAssetCount: coreRegistry.assets.length,
   structureCandidateCount: structureCandidates,
   sampleCount: sampleRegistry.samples.length,
   familyCount: sampleFamilies.size,

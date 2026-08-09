@@ -11,6 +11,7 @@ import { DEFAULT_SKIN_ID, runDirectorWorkflow } from "./workflow.mjs";
 function parseArgs(argv) {
   const options = {
     root: process.cwd(), input: "", skin: DEFAULT_SKIN_ID, output: "", "run-dir": "", provider: "",
+    mode: "production",
     python: process.env.PPAGENT_PYTHON ?? "", "overflow-tool": process.env.PPAGENT_OVERFLOW_TOOL ?? "",
   };
   for (let index = 0; index < argv.length; index += 2) {
@@ -73,6 +74,9 @@ async function runOverflowCheck(options, outputPptx) {
 
 export async function runWorkflowCli(options) {
   const root = path.resolve(options.root ?? process.cwd());
+  if (!new Set(["production", "development"]).has(options.mode ?? "production")) {
+    throw new Error("--mode 只允许 production 或 development");
+  }
   if ((options.skin ?? DEFAULT_SKIN_ID) !== DEFAULT_SKIN_ID) {
     throw new Error(`当前 renderer 只支持 Skin：${DEFAULT_SKIN_ID}；拒绝把其他 Skin 记录为东北大学页面`);
   }
@@ -95,6 +99,7 @@ export async function runWorkflowCli(options) {
     visualCandidateProvider: buildVisualCandidateSets,
     visualResolver: resolveVisualPlan,
     renderer,
+    reviewMode: options.mode === "development" ? "development" : "none",
   });
   const overflow = await runOverflowCheck(options, result.outputPptx);
   const workflowResultPath = path.join(runDir, "workflow-result.json");
@@ -102,7 +107,10 @@ export async function runWorkflowCli(options) {
   const finalWorkflowResult = {
     ...workflowResult,
     outputPptx: path.relative(root, result.outputPptx).replaceAll("\\", "/"),
-    finalQa: { postRenderReview: "passed", overflow },
+    finalQa: {
+      postRenderReview: result.workflowMode === "development" ? "passed" : "not-part-of-production-workflow",
+      overflow,
+    },
     runManifest: path.relative(root, path.join(runDir, "run-manifest.json")).replaceAll("\\", "/"),
   };
   await fs.writeFile(workflowResultPath, `${JSON.stringify(finalWorkflowResult, null, 2)}\n`, "utf8");
@@ -131,7 +139,10 @@ export async function runWorkflowCli(options) {
     artifacts,
     output: { path: path.relative(root, result.outputPptx).replaceAll("\\", "/"), sha256: await sha256File(result.outputPptx) },
     pageEvidence,
-    qa: { postRenderReview: "passed", overflow },
+    qa: {
+      postRenderReview: result.workflowMode === "development" ? "passed" : "not-part-of-production-workflow",
+      overflow,
+    },
   };
   await fs.writeFile(path.join(runDir, "run-manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
   return { ...result, overflow, manifest };

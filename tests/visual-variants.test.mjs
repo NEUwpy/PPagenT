@@ -12,12 +12,22 @@ import {
   renderStructureAsset,
 } from "../src/runtime/assets.mjs";
 import {
+  loadVisualVariantCatalog,
   listRenderableVisualVariants,
   planVisualVariants,
   queryVisualVariants,
 } from "../src/selection/visual-variants.mjs";
 
 const root = process.cwd();
+
+async function listDevelopmentVariants() {
+  const catalog = await loadVisualVariantCatalog(root);
+  return listRenderableVisualVariants({
+    root,
+    allowedVariantStatuses: ["core", "experimental"],
+    coreAssetIds: [...new Set(catalog.map((variant) => variant.assetId))],
+  });
+}
 
 test("结构组件嵌入 Skin 时使用等比例 contain 并在安全区居中", () => {
   const source = { left: 40, top: 135, width: 1200, height: 520 };
@@ -38,24 +48,27 @@ test("结构组件嵌入 Skin 时使用等比例 contain 并在安全区居中",
   assert.ok(circle.top + circle.height <= target.top + target.height);
 });
 
-test("radial-hub 与 sequential-process 都有多个可渲染变体", async () => {
+test("正式候选只暴露已进入核心资产库的蒸馏变体", async () => {
   const variants = await listRenderableVisualVariants({ root });
   const radial = queryVisualVariants(variants, { familyId: "radial-hub", itemCount: 4 });
   const sequential = queryVisualVariants(variants, { familyId: "sequential-process", baseRelation: "sequence", itemCount: 4 });
-  assert.ok(radial.length >= 2);
-  assert.ok(sequential.length >= 3);
-  for (const variant of [...radial, ...sequential]) {
+  assert.equal(radial.length, 0);
+  assert.deepEqual(sequential.map((variant) => variant.variantId), ["horizontal-cards"]);
+  assert.deepEqual(
+    queryVisualVariants(variants, { familyId: "comparison-structure" }).map((variant) => variant.variantId),
+    ["default"],
+  );
+  assert.equal(queryVisualVariants(variants, { familyId: "role-handoff" }).length, 0);
+  assert.equal(queryVisualVariants(variants, { familyId: "causal-chain" }).length, 0);
+  for (const variant of variants) {
     assert.equal(variant.contractAvailable, true);
+    assert.equal(variant.coreAssetAvailable, true);
+    assert.equal(variant.callableStatus, true);
     assert.equal(variant.mapperAvailable, true);
     assert.equal(variant.builderAvailable, true);
+    assert.equal(variant.status, "core");
     assert.ok(variant.silhouette);
   }
-  assert.deepEqual(
-    ["comparison-structure", "cycle-loop", "layered-architecture"].map((familyId) => (
-      queryVisualVariants(variants, { familyId }).length
-    )),
-    [1, 1, 1],
-  );
 });
 
 test("自动候选会排除缺少 mapper 或 builder 的变体", async () => {
@@ -78,7 +91,7 @@ test("自动候选会排除缺少 mapper 或 builder 的变体", async () => {
 });
 
 test("整套节奏解析尊重视觉导演决策，并拒绝存在替代项时的相邻同轮廓", async () => {
-  const variants = await listRenderableVisualVariants({ root });
+  const variants = await listDevelopmentVariants();
   const accepted = planVisualVariants([
     { pageId: "p1", familyId: "radial-hub", itemCount: 4, visualVariantId: "orbit" },
     { pageId: "p2", familyId: "radial-hub", itemCount: 4, visualVariantId: "split-wing" },
@@ -98,7 +111,7 @@ test("整套节奏解析尊重视觉导演决策，并拒绝存在替代项时�
 });
 
 test("节奏解析器不会在视觉导演缺失决策时自行选一个变体", async () => {
-  const variants = await listRenderableVisualVariants({ root });
+  const variants = await listDevelopmentVariants();
   const plan = planVisualVariants([
     { pageId: "p1", familyId: "sequential-process", baseRelation: "sequence", itemCount: 4 },
   ], { variants });
@@ -109,7 +122,7 @@ test("节奏解析器不会在视觉导演缺失决策时自行选一个变体",
 });
 
 test("连续五页顺序流程可由视觉导演用三种轮廓形成合法节奏", async () => {
-  const variants = await listRenderableVisualVariants({ root });
+  const variants = await listDevelopmentVariants();
   const plan = planVisualVariants([
     { pageId: "p02", familyId: "sequential-process", baseRelation: "sequence", itemCount: 4, visualVariantId: "horizontal-cards" },
     { pageId: "p04", familyId: "sequential-process", baseRelation: "sequence", itemCount: 4, visualVariantId: "ribbon" },
@@ -128,7 +141,7 @@ test("连续五页顺序流程可由视觉导演用三种轮廓形成合法节�
 });
 
 test("变体语义过滤会把角色接力、因果链和普通顺序流程分开", async () => {
-  const variants = await listRenderableVisualVariants({ root });
+  const variants = await listDevelopmentVariants();
   assert.deepEqual(
     queryVisualVariants(variants, { familyId: "sequential-process", baseRelation: "sequence", itemCount: 4 })
       .map((item) => item.variantId),

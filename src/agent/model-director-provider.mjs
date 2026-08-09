@@ -74,7 +74,7 @@ export function createModelDirectorProvider({ contentModel, visualModel, reviewe
       }
       return visual.generateJson({
         role: "PPagenT 视觉导演",
-        task: "只从每页 candidateSets 中选择 familyId/variantId，并在整套尺度控制轮廓重复与节奏；输出 VisualPlan。",
+        task: "只从每页 candidateSets 中选择 familyId/variantId，并在整套尺度控制轮廓重复与节奏；candidateSets 为空时不得自创结构、借用实验变体或伪造资产 ID，必须等待程序失败关闭并回到资产蒸馏；输出 VisualPlan。",
         context: {
           attempt: input.attempt,
           skinId: input.skinId,
