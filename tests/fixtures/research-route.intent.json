@@ -1,18 +1,36 @@
 {
-  "schemaVersion": "1.0",
+  "schemaVersion": "1.1",
   "intentId": "fixture-research-route",
-  "purpose": "explain_research_process",
-  "relation": "flow",
+  "purposeKey": "explain_research_process",
+  "purposeText": "说明三个研究分支如何在分析环节汇聚为共同结果",
+  "baseRelation": "sequence",
+  "relationTraits": {
+    "temporal": false,
+    "cyclic": false,
+    "converging": true,
+    "branched": true,
+    "dimensions": 1,
+    "secondaryDimension": "none"
+  },
   "structure": {
-    "itemCount": 7,
+    "itemCount": 6,
     "hierarchyDepth": 2,
     "ordered": true,
     "sameLevel": false,
-    "hasBranches": true,
     "dimensions": {
       "branches": 3,
       "inputs": 2
     }
+  },
+  "contentStats": {
+    "titleChars": 6,
+    "itemCount": 6,
+    "maxItemChars": 10,
+    "avgItemChars": 8.33,
+    "minItemChars": 8,
+    "maxItemTitleChars": 2,
+    "maxItemBodyChars": 8,
+    "imbalanceRatio": 1.25
   },
   "density": "medium",
   "emphasis": [],

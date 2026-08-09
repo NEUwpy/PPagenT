@@ -53,4 +53,6 @@ npm test
 
 `npm test` 会校验规则层契约、版式合法性筛选和公开仓库资产结构。包含原始模板和样本文件的本地工作区可额外执行 `npm run audit:local`。
 
+生成带文字统计的 `PageIntent` 可使用 `npm run intent:stats -- --content <page-content.json> --intent-draft <intent-draft.json>`；匹配版式可使用 `npm run match -- --intent <page-intent.json>`。
+
 当前页面生成器依赖 Codex 工作区内置、尚未公开发布的 `@oai/artifact-tool`，因此不把它写入公共 npm 依赖；规则层、元数据审计和选择测试可以通过公开依赖独立运行。

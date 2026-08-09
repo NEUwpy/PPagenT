@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/NEUwpy/PPagenT/schemas/resolution-plan.schema.json",
+  "title": "PPagenT ResolutionPlan v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "reason", "action", "requiresReview"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "reason": { "type": "string", "minLength": 1 },
+    "action": { "enum": ["reject", "split", "switch-layout", "simple-layout", "defer-to-review"] },
+    "sourceAssetId": { "type": "string", "minLength": 1 },
+    "targetAssetIds": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+    "pages": { "type": "integer", "minimum": 1 },
+    "requiresReview": { "type": "boolean" },
+    "notes": { "type": "string" }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/NEUwpy/PPagenT/schemas/failure-case.schema.json",
+  "title": "PPagenT FailureCase v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["caseId", "pageIntent", "candidateAssetId", "outcome", "failureReasons", "resolution", "evidence"],
+  "properties": {
+    "caseId": { "type": "string", "minLength": 1 },
+    "pageIntent": { "$ref": "page-intent.schema.json" },
+    "candidateAssetId": { "type": "string", "minLength": 1 },
+    "outcome": { "enum": ["rejected-correctly", "accepted-but-poor", "render-failed", "mapping-failed"] },
+    "failureReasons": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "resolution": { "$ref": "resolution-plan.schema.json" },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "reviewed"],
+      "properties": {
+        "source": { "type": "string", "minLength": 1 },
+        "reviewed": { "type": "boolean" },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}

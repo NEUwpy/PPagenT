@@ -1,48 +1,63 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import Ajv2020 from "ajv/dist/2020.js";
-import { loadContractCatalog } from "../selection/contracts.mjs";
+import { loadContractCatalog, matchPageIntent } from "../selection/contracts.mjs";
+import { createRuleValidators, validationMessage } from "../selection/validation.mjs";
 
 const root = path.resolve(process.argv[2] ?? process.cwd());
 const readJson = async (target) => JSON.parse(await fs.readFile(target, "utf8"));
-const ajv = new Ajv2020({ allErrors: true, strict: true });
-
-const pageIntentSchema = await readJson(path.join(root, "schemas", "page-intent.schema.json"));
-const assetContractSchema = await readJson(path.join(root, "schemas", "asset-contract.schema.json"));
-const validateIntent = ajv.compile(pageIntentSchema);
-const validateContract = ajv.compile(assetContractSchema);
+const validators = await createRuleValidators(root);
 const contracts = await loadContractCatalog(root);
 const issues = [];
 
+const purposeVocabulary = await readJson(path.join(root, "catalog", "purpose-vocabulary.json"));
+const purposeList = purposeVocabulary.purposes.map((item) => item.key);
+if (new Set(purposeList).size !== purposeList.length) issues.push("purposeKey 存在重复");
+
+function validate(label, validator, value) {
+  if (!validator(value)) issues.push(`${label}: ${validationMessage(validators.ajv, validator)}`);
+}
+
 for (const contract of contracts) {
-  if (!validateContract(contract)) {
-    issues.push(`${contract.assetId}: ${ajv.errorsText(validateContract.errors)}`);
+  validate(contract.assetId, validators.validateAssetContract, contract);
+  for (const purposeKey of contract.supportedIntents.purposeKeys) {
+    if (!validators.purposeKeys.has(purposeKey)) issues.push(`${contract.assetId}: 未登记 purposeKey=${purposeKey}`);
   }
 }
 
 const structureRegistry = await readJson(path.join(root, "备选资产", "registry.json"));
-const structureIds = structureRegistry.assets
-  .filter((entry) => entry.category === "结构图")
-  .map((entry) => entry.id);
+const structureIds = structureRegistry.assets.filter((entry) => entry.category === "结构图").map((entry) => entry.id);
 const contractIds = contracts.map((contract) => contract.assetId);
 for (const id of structureIds) if (!contractIds.includes(id)) issues.push(`结构候选缺少契约: ${id}`);
 for (const id of contractIds) if (!structureIds.includes(id)) issues.push(`契约引用未知结构候选: ${id}`);
 if (new Set(contractIds).size !== contractIds.length) issues.push("契约 ID 存在重复");
 
-const fixtureDirectory = path.join(root, "tests", "fixtures");
-for (const name of await fs.readdir(fixtureDirectory)) {
-  if (!name.endsWith(".intent.json")) continue;
-  const intent = await readJson(path.join(fixtureDirectory, name));
-  if (!validateIntent(intent)) issues.push(`${name}: ${ajv.errorsText(validateIntent.errors)}`);
+const failureCatalog = await readJson(path.join(root, "catalog", "failure-cases.json"));
+for (const failureCase of failureCatalog.cases) {
+  validate(`failure:${failureCase.caseId}`, validators.validateFailureCase, failureCase);
 }
 
-const counts = Object.groupBy
-  ? Object.fromEntries(Object.entries(Object.groupBy(contracts, (item) => item.abstractionLevel)).map(([key, value]) => [key, value.length]))
-  : contracts.reduce((result, item) => ({ ...result, [item.abstractionLevel]: (result[item.abstractionLevel] ?? 0) + 1 }), {});
+const fixtureDirectory = path.join(root, "tests", "fixtures");
+for (const name of await fs.readdir(fixtureDirectory)) {
+  const value = await readJson(path.join(fixtureDirectory, name));
+  if (name.endsWith(".content.json")) validate(name, validators.validatePageContent, value);
+  if (name.endsWith(".intent.json")) {
+    validate(name, validators.validatePageIntent, value);
+    if (!validators.purposeKeys.has(value.purposeKey)) issues.push(`${name}: 未知 purposeKey=${value.purposeKey}`);
+    const decision = matchPageIntent(value, contracts);
+    validate(`${name}:layout-decision`, validators.validateLayoutDecision, decision);
+  }
+}
+
+const counts = contracts.reduce((result, item) => {
+  result[item.abstractionLevel] = (result[item.abstractionLevel] ?? 0) + 1;
+  return result;
+}, {});
 
 console.log(JSON.stringify({
   status: issues.length ? "failed" : "passed",
   contractCount: contracts.length,
+  purposeCount: validators.purposeKeys.size,
+  failureCaseCount: failureCatalog.cases.length,
   counts,
   issues,
 }, null, 2));

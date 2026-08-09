@@ -1,35 +1,68 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/NEUwpy/PPagenT/schemas/page-intent.schema.json",
-  "title": "PPagenT PageIntent v1",
+  "title": "PPagenT PageIntent v1.1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "intentId", "purpose", "relation", "structure", "density"],
+  "required": [
+    "schemaVersion", "intentId", "purposeKey", "purposeText", "baseRelation",
+    "relationTraits", "structure", "contentStats", "density"
+  ],
   "properties": {
-    "schemaVersion": { "const": "1.0" },
+    "schemaVersion": { "const": "1.1" },
     "intentId": { "type": "string", "minLength": 1 },
-    "purpose": { "type": "string", "minLength": 1 },
-    "relation": {
+    "purposeKey": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+    "purposeText": { "type": "string", "minLength": 1 },
+    "baseRelation": {
       "enum": [
-        "parallel", "sequence", "hierarchy", "timeline", "comparison",
-        "cycle", "matrix", "hub", "layered", "flow", "funnel",
-        "causal", "role-process", "network", "composite", "none", "other"
+        "parallel", "sequence", "hierarchy", "comparison", "matrix",
+        "hub", "layered", "causal", "network", "composite", "none", "other"
       ]
+    },
+    "relationTraits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["temporal", "cyclic", "converging", "branched", "dimensions", "secondaryDimension"],
+      "properties": {
+        "temporal": { "type": "boolean" },
+        "cyclic": { "type": "boolean" },
+        "converging": { "type": "boolean" },
+        "branched": { "type": "boolean" },
+        "dimensions": { "type": "integer", "minimum": 1, "maximum": 3 },
+        "secondaryDimension": { "enum": ["none", "role", "time", "layer", "category", "domain", "other"] }
+      }
     },
     "structure": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["itemCount", "ordered", "hasBranches"],
+      "required": ["itemCount", "ordered"],
       "properties": {
         "itemCount": { "type": "integer", "minimum": 0 },
         "hierarchyDepth": { "type": "integer", "minimum": 0 },
         "ordered": { "type": "boolean" },
         "sameLevel": { "type": "boolean" },
-        "hasBranches": { "type": "boolean" },
         "dimensions": {
           "type": "object",
           "additionalProperties": { "type": "integer", "minimum": 0 }
         }
+      }
+    },
+    "contentStats": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "titleChars", "itemCount", "maxItemChars", "avgItemChars", "minItemChars",
+        "maxItemTitleChars", "maxItemBodyChars", "imbalanceRatio"
+      ],
+      "properties": {
+        "titleChars": { "type": "integer", "minimum": 0 },
+        "itemCount": { "type": "integer", "minimum": 0 },
+        "maxItemChars": { "type": "integer", "minimum": 0 },
+        "avgItemChars": { "type": "number", "minimum": 0 },
+        "minItemChars": { "type": "integer", "minimum": 0 },
+        "maxItemTitleChars": { "type": "integer", "minimum": 0 },
+        "maxItemBodyChars": { "type": "integer", "minimum": 0 },
+        "imbalanceRatio": { "type": "number", "minimum": 0 }
       }
     },
     "density": { "enum": ["low", "medium", "high", "unknown"] },

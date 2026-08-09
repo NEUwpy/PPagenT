@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/NEUwpy/PPagenT/schemas/layout-decision.schema.json",
+  "title": "PPagenT LayoutDecision v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "intentId", "decision", "selectedAssetId", "candidates", "rejections", "resolutionPlan"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "intentId": { "type": "string", "minLength": 1 },
+    "decision": { "enum": ["single-match", "ranked-match", "needs-ranking", "fallback", "no-match"] },
+    "selectedAssetId": { "type": ["string", "null"] },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["assetId", "abstractionLevel", "adaptationStatus", "fitSignals"],
+        "properties": {
+          "assetId": { "type": "string", "minLength": 1 },
+          "abstractionLevel": { "enum": ["foundation", "composite", "deferred"] },
+          "adaptationStatus": { "enum": ["adaptive", "partial", "fixed", "unknown"] },
+          "fitSignals": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["purposeSpecific", "preferredMetrics", "totalPreferredMetrics", "validated", "realManuscriptValidated"],
+            "properties": {
+              "purposeSpecific": { "type": "boolean" },
+              "preferredMetrics": { "type": "integer", "minimum": 0 },
+              "totalPreferredMetrics": { "type": "integer", "minimum": 0 },
+              "validated": { "type": "boolean" },
+              "realManuscriptValidated": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    },
+    "rejections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["assetId", "reasons"],
+        "properties": {
+          "assetId": { "type": "string", "minLength": 1 },
+          "reasons": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+        }
+      }
+    },
+    "resolutionPlan": { "anyOf": [{ "$ref": "resolution-plan.schema.json" }, { "type": "null" }] }
+  }
+}

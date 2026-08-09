@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/NEUwpy/PPagenT/schemas/render-payload.schema.json",
+  "title": "PPagenT RenderPayload v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "intentId", "assetId", "parameters", "mappings", "omissions"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "intentId": { "type": "string", "minLength": 1 },
+    "assetId": { "type": "string", "minLength": 1 },
+    "parameters": { "type": "object" },
+    "mappings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sourceItemId", "parameterPath"],
+        "properties": {
+          "sourceItemId": { "type": "string", "minLength": 1 },
+          "parameterPath": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "omissions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sourceItemId", "reason"],
+        "properties": {
+          "sourceItemId": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

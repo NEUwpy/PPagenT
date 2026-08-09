@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/NEUwpy/PPagenT/schemas/asset-contract.schema.json",
-  "title": "PPagenT AssetContract v1",
+  "title": "PPagenT AssetContract v1.1",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -10,7 +10,7 @@
     "fallback", "evidence"
   ],
   "properties": {
-    "schemaVersion": { "const": "1.0" },
+    "schemaVersion": { "const": "1.1" },
     "assetId": { "type": "string", "minLength": 1 },
     "abstractionLevel": { "enum": ["foundation", "composite", "deferred"] },
     "status": { "enum": ["draft", "experimental", "validated"] },
@@ -18,17 +18,17 @@
     "supportedIntents": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["relations", "purposes"],
+      "required": ["baseRelations", "purposeKeys"],
       "properties": {
-        "relations": {
+        "baseRelations": {
           "type": "array",
           "minItems": 1,
           "items": { "type": "string", "minLength": 1 },
           "uniqueItems": true
         },
-        "purposes": {
+        "purposeKeys": {
           "type": "array",
-          "items": { "type": "string", "minLength": 1 },
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
           "uniqueItems": true
         }
       }
@@ -36,7 +36,7 @@
     "constraints": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["metrics", "semantic", "density"],
+      "required": ["metrics", "semantic", "relationTraits", "density"],
       "properties": {
         "metrics": {
           "type": "array",
@@ -47,11 +47,7 @@
             "properties": {
               "field": { "type": "string", "minLength": 1 },
               "min": { "type": "integer", "minimum": 0 },
-              "preferred": {
-                "type": "array",
-                "items": { "type": "integer", "minimum": 0 },
-                "uniqueItems": true
-              },
+              "preferred": { "type": "array", "items": { "type": "integer", "minimum": 0 }, "uniqueItems": true },
               "max": { "type": "integer", "minimum": 0 }
             }
           }
@@ -61,8 +57,19 @@
           "additionalProperties": false,
           "properties": {
             "ordered": { "type": "boolean" },
-            "sameLevel": { "type": "boolean" },
-            "hasBranches": { "type": "boolean" }
+            "sameLevel": { "type": "boolean" }
+          }
+        },
+        "relationTraits": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "temporal": { "type": "boolean" },
+            "cyclic": { "type": "boolean" },
+            "converging": { "type": "boolean" },
+            "branched": { "type": "boolean" },
+            "dimensions": { "type": "integer", "minimum": 1, "maximum": 3 },
+            "secondaryDimension": { "enum": ["none", "role", "time", "layer", "category", "domain", "other"] }
           }
         },
         "density": {
@@ -80,6 +87,7 @@
         "status": { "enum": ["unverified", "partially-verified", "verified"] },
         "itemTitleMax": { "type": "integer", "minimum": 1 },
         "itemBodyMax": { "type": "integer", "minimum": 1 },
+        "imbalanceRatioMax": { "type": "number", "minimum": 1 },
         "notes": { "type": "string" }
       }
     },
@@ -112,8 +120,6 @@
     "reviewReason": { "type": "string" }
   },
   "$defs": {
-    "fallbackAction": {
-      "enum": ["reject", "split", "switch-layout", "simple-layout", "defer-to-review"]
-    }
+    "fallbackAction": { "enum": ["reject", "split", "switch-layout", "simple-layout", "defer-to-review"] }
   }
 }
