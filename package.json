@@ -12,7 +12,7 @@
     "validate:contracts": "node src/tools/validate-rule-layer.mjs .",
     "match": "node src/tools/match-page-intent.mjs --root .",
     "intent:stats": "node src/tools/compute-page-intent.mjs",
-    "test:selection": "node --test tests/selection.test.mjs",
+    "test:selection": "node --test tests/*.test.mjs",
     "test": "npm run validate:contracts && npm run test:selection && npm run audit"
   },
   "dependencies": {
