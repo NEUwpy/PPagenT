@@ -80,6 +80,7 @@ test("自动候选会排除缺少 mapper 或 builder 的变体", async () => {
     "comparison-structure-001:default",
     "cycle-loop-001:default",
     "layered-architecture-001:default",
+    "problem-improvement-001:default",
     "radial-hub-001:orbit",
     "radial-hub-001:split-wing",
     "sequential-process-001:causal-chain",
@@ -87,6 +88,7 @@ test("自动候选会排除缺少 mapper 或 builder 的变体", async () => {
     "sequential-process-001:ribbon",
     "sequential-process-001:role-handoff",
     "sequential-process-001:staircase",
+    "swimlane-process-001:default",
   ]);
 });
 
@@ -266,11 +268,37 @@ test("所有登记变体都能经过统一运行时真实创建幻灯片对象",
         steps: ["一", "二", "三", "四", "五", "六"].map((title) => ({ title, body: `${title}的说明` })),
       },
     },
+    {
+      assetId: "swimlane-process-001",
+      parameters: {
+        visualVariantId: "default",
+        title: "角色协同",
+        lanes: ["AI", "规则", "代码"],
+        stages: ["理解", "决定", "执行"],
+        tasks: [
+          { lane: 0, stage: 0, label: "读取稿件" },
+          { lane: 1, stage: 1, label: "判断边界" },
+          { lane: 2, stage: 2, label: "稳定生成" },
+        ],
+        conclusion: "调用已确认的核心资产。",
+      },
+    },
+    {
+      assetId: "problem-improvement-001",
+      parameters: {
+        visualVariantId: "default",
+        title: "问题与改进",
+        problemTitle: "现状与缺口",
+        improvementTitle: "介入与结果",
+        problems: [{ title: "已有内容", body: "缺少制作能力" }, { title: "真实任务", body: "时间有限" }],
+        improvements: [{ title: "方法系统化", body: "降低制作成本" }, { title: "生产能力", body: "更多人可用", emphasis: true }],
+      },
+    },
   ];
 
   for (const payload of payloads) {
     const slide = presentation.slides.add();
     renderStructureAsset(slide, payload, skin);
   }
-  assert.equal(presentation.slides.items.length, 10);
+  assert.equal(presentation.slides.items.length, 12);
 });

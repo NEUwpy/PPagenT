@@ -200,19 +200,45 @@
     },
     {
       "assetId": "swimlane-process-001",
+      "status": "validated",
       "abstractionLevel": "composite",
       "adaptationStatus": "partial",
       "supportedIntents": { "baseRelations": ["sequence"], "purposeKeys": ["explain_cross_role_process"] },
       "constraints": {
         "metrics": [
-          { "field": "roles", "min": 2, "preferred": [2, 3], "max": 3 },
-          { "field": "stages", "min": 2, "preferred": [3, 4], "max": 4 }
+          { "field": "roleCount", "min": 2, "preferred": [2, 3], "max": 3 },
+          { "field": "stageCount", "min": 2, "preferred": [3], "max": 3 },
+          { "field": "itemCount", "min": 4, "preferred": [4], "max": 4 }
         ],
         "semantic": { "ordered": true },
         "relationTraits": { "dimensions": 2, "secondaryDimension": "role" },
         "density": ["medium"]
       },
-      "reviewReason": "需要同时存在角色和阶段两个维度。"
+      "evidence": {
+        "basis": ["metadata", "code", "render", "real-manuscript"],
+        "realManuscriptValidated": true,
+        "notes": "已用于为什么做 PPagenT 的 AI—规则—代码三角色协作页；总结作为独立结论区保留。"
+      },
+      "reviewReason": "需要同时存在角色和阶段两个维度；当前核心变体验证 3 角色、3 阶段和 1 条总结。"
+    },
+    {
+      "assetId": "problem-improvement-001",
+      "status": "validated",
+      "abstractionLevel": "composite",
+      "adaptationStatus": "partial",
+      "supportedIntents": { "baseRelations": ["causal"], "purposeKeys": ["connect_problems_and_solutions"] },
+      "constraints": {
+        "metrics": [{ "field": "itemCount", "min": 4, "preferred": [4], "max": 4 }],
+        "semantic": { "ordered": true },
+        "relationTraits": { "cyclic": false, "branched": false },
+        "density": ["medium"]
+      },
+      "evidence": {
+        "basis": ["metadata", "code", "render", "real-manuscript"],
+        "realManuscriptValidated": true,
+        "notes": "已用于为什么做 PPagenT 的现状与缺口—系统介入与结果页，支持左右各 2 项。"
+      },
+      "reviewReason": "仅用于可诚实拆分为两项现状/缺口和两项介入/结果的因果表达。"
     },
     {
       "assetId": "fishbone-analysis-001",

@@ -64,6 +64,30 @@
       "origin": "distilled-asset"
     },
     {
+      "familyId": "swimlane-process",
+      "assetId": "swimlane-process-001",
+      "variantId": "default",
+      "builderKey": "swimlane-process-001:default",
+      "silhouette": "role-stage-swimlanes",
+      "supportedBaseRelations": ["sequence"],
+      "supportedPurposeKeys": ["explain_cross_role_process"],
+      "itemCount": { "min": 4, "preferred": [4], "max": 4 },
+      "status": "core",
+      "origin": "distilled-asset"
+    },
+    {
+      "familyId": "problem-improvement",
+      "assetId": "problem-improvement-001",
+      "variantId": "default",
+      "builderKey": "problem-improvement-001:default",
+      "silhouette": "problem-to-improvement-panels",
+      "supportedBaseRelations": ["causal"],
+      "supportedPurposeKeys": ["connect_problems_and_solutions"],
+      "itemCount": { "min": 4, "preferred": [4], "max": 4 },
+      "status": "core",
+      "origin": "distilled-asset"
+    },
+    {
       "familyId": "sequential-process",
       "assetId": "sequential-process-001",
       "variantId": "ribbon",

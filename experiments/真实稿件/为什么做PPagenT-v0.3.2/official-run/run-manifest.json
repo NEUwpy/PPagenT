@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "1.0",
+  "status": "delivered",
+  "input": {
+    "sourcePath": "docs/为什么做PPagenT.md",
+    "sourceSha256": "5edce4884a35438010f309d7639a7ddcdb0f96c961b12a3c36a328a3b1cf63ee",
+    "skinId": "northeastern-university-001"
+  },
+  "provider": {
+    "module": "experiments/真实稿件/为什么做PPagenT-v0.3.2/replay-provider.mjs",
+    "identity": {
+      "providerKind": "frozen-director-replay",
+      "providerId": "ppagent-core-assets-v0.3.2",
+      "modelIdentity": "Codex development calibration; frozen structured director output",
+      "roles": [
+        "content-director",
+        "visual-director"
+      ],
+      "productionReviews": false
+    }
+  },
+  "artifacts": {
+    "content/attempt-01/deck-plan.json": "54c2b32559d77ef1a4b315c7b7468009d85ec7f27966dc4cbc16e4246a8b4894",
+    "content/attempt-01/page-contents.json": "eff003ec36eb1abab713bddaf9819041dffd88494b04eb932225bcfec2c6cc63",
+    "visual/attempt-01/candidate-sets.json": "a1d1cdd496a97a1c344f8bc1904494fe477bd7d55c2698295d4d41a11941d44f",
+    "visual/attempt-01/layout-decisions.json": "3b88b28ad08ef6701a8ec547959c4798cdb6c3d3aeb2f0d23b267ad1b8defe9c",
+    "visual/attempt-01/page-intents.json": "5415fa874e8a37a3c1e4122b8f94f3786d89da01359c139565d516a28024fd17",
+    "visual/attempt-01/render-payloads.json": "32d13c1f53108cf0648a0edb778b90007e56084d0c4a12e7ea08f4124a5958c2",
+    "visual/attempt-01/render-result.json": "5d862979f67a6bb374475379ed4a320e1b3425db38e4fcf0efe11871737ae930",
+    "visual/attempt-01/render/qa/slide-01.layout.json": "0e99868dae1217b3b1b5b233759329301480af4f17450a17aacb6ef9fb4e7076",
+    "visual/attempt-01/render/qa/slide-02.layout.json": "faed1d22303a1f6c360d81ad30608a410aad29e7e2de1e2889c758b96cbacede",
+    "visual/attempt-01/render/qa/slide-03.layout.json": "99ae61527fed29992e5cfa3511e888dd57595fc7a3145d0f216c8e863db459ac",
+    "visual/attempt-01/render/qa/slide-04.layout.json": "57308f532575e66e3c9c93e04c44623de05bc38784cd49d77b9a8e2f99de8143",
+    "visual/attempt-01/render/qa/slide-05.layout.json": "994eb6eae5be2aa01ff4014ecd42da47ed434c965bf838748348e3948e8da16f",
+    "visual/attempt-01/render/qa/slide-06.layout.json": "bb23cb92f54412038db862620dffca5040370f7a9bbb8cecc820922fb4f5e89d",
+    "visual/attempt-01/render/qa/slide-07.layout.json": "f24d44f079ebc08bc1934c0b65d49ae7373a5d9d07de547f5b76cbdbec84825b",
+    "visual/attempt-01/render/qa/slide-08.layout.json": "4dfd7fb909146294ecf37d1ac9be59a5e81f225e6c48ed06a521afddde39a33e",
+    "visual/attempt-01/render/qa/slide-09.layout.json": "e609b6e26c8c4c62728219b9bbfd741c191a112997c62d767749a1525407aae8",
+    "visual/attempt-01/visual-plan.json": "c616b5322592387418727392cffb22315ae60ccd1b78a0d3d608044395fe696c",
+    "visual/attempt-01/visual-resolution.json": "560d226658f606dca1dc427de0ebe429d6f7ff1235e04de5aeff9dada3490d53",
+    "workflow-result.json": "03ae4e7b45daedd13e3a8d716cfddfca807eb3ea87c9971f19943d4943bd7b4e"
+  },
+  "output": {
+    "path": "outputs/真实稿件/为什么做PPagenT/为什么做PPagenT-v0.3.2.pptx",
+    "sha256": "985ef0352729d911def36739c3f4dacc50120197034354a0276e1cc927ba07a9"
+  },
+  "pageEvidence": {
+    "slide-01": "60b7ec4a94d3705eea3a8a909d1b724efbf217fc7111004dffb13efacbca6714",
+    "slide-02": "5e8729e90c93680e0b4ccab81a6108411628d5c84754f53e4471d28f966f42de",
+    "slide-03": "d242a4a00268c6ce9d647b20f906611046daba297ba6a19c2a0f7fa95a84c316",
+    "slide-04": "95e20212e08c8026cfaca437f5d04797d35667cd1db8486fa15c76d543120724",
+    "slide-05": "a7dca3ba2a4bfe3aec4df05e861298e55fcb6f37aaa3b74723b7cf72d9794c5d",
+    "slide-06": "6214554f27c68f373d295eacc3a05a7fc49d364b73e0aaf6387f139ba0fc5256",
+    "slide-07": "6e44632de18ac7e399026a6a926af43cb4403a9e0adc8234a2ae247cd575a4a5",
+    "slide-08": "233839d4d6863e3f5d609c277cf6af1b4254fcc3dbc04a58a68ee40bbae112ef",
+    "slide-09": "c42e4e1faf6087f8f1c6ba35ef9f8f46db16aba7220a6e9635ee7bbeaeedd57a"
+  },
+  "qa": {
+    "postRenderReview": "not-part-of-production-workflow",
+    "overflow": {
+      "status": "not-run"
+    }
+  }
+}

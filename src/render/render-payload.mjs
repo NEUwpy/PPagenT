@@ -9,6 +9,15 @@ function mapping(sourceItemId, parameterPath) {
   return { sourceItemId, parameterPath };
 }
 
+function roleAndStage(title, index) {
+  const value = String(title ?? "").trim();
+  const responsible = value.match(/^(.+?)负责(.+)$/);
+  if (responsible) return { role: responsible[1].trim(), stage: responsible[2].trim() };
+  const separated = value.match(/^(.+?)[：:\-—](.+)$/);
+  if (separated) return { role: separated[1].trim(), stage: separated[2].trim() };
+  return { role: `角色 ${index + 1}`, stage: value || `阶段 ${index + 1}` };
+}
+
 function renderPayload(intent, assetId, parameters, mappings, omissions = []) {
   return {
     schemaVersion: "1.0",
@@ -85,6 +94,39 @@ export function mapRenderPayload(content, intent, decision) {
           : {}),
       })),
     }, content.items.map((item, index) => mapping(item.id, `steps[${index}]`)));
+  }
+
+  if (assetId === "swimlane-process-001") {
+    const conclusion = content.items.find((item) => item.emphasis);
+    const roles = content.items.filter((item) => item !== conclusion);
+    if (roles.length < 2 || roles.length > 3) throw new Error(`${content.pageId} 的泳道流程需要 2–3 个角色`);
+    const parsed = roles.map((item, index) => roleAndStage(item.title, index));
+    return renderPayload(intent, assetId, {
+      title: content.title,
+      lanes: parsed.map((item) => item.role),
+      stages: parsed.map((item) => item.stage),
+      tasks: roles.map((item, index) => ({ lane: index, stage: index, label: item.body || item.title })),
+      conclusion: conclusion ? conclusion.body || conclusion.title : "",
+    }, [
+      ...roles.map((item, index) => mapping(item.id, `tasks[${index}]`)),
+      ...(conclusion ? [mapping(conclusion.id, "conclusion")] : []),
+    ]);
+  }
+
+  if (assetId === "problem-improvement-001") {
+    if (content.items.length !== 4) throw new Error(`${content.pageId} 的问题—改进资产需要四个内容项`);
+    const problems = content.items.slice(0, 2);
+    const improvements = content.items.slice(2);
+    return renderPayload(intent, assetId, {
+      title: content.title,
+      problemTitle: "现状与缺口",
+      improvementTitle: "系统介入与结果",
+      problems: problems.map((item) => ({ title: item.title, body: item.body })),
+      improvements: improvements.map((item) => ({ title: item.title, body: item.body, emphasis: Boolean(item.emphasis) })),
+    }, [
+      ...problems.map((item, index) => mapping(item.id, `problems[${index}]`)),
+      ...improvements.map((item, index) => mapping(item.id, `improvements[${index}]`)),
+    ]);
   }
 
   if (assetId === "cycle-loop-001") {

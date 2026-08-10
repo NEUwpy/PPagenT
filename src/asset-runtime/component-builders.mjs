@@ -796,8 +796,9 @@ export function buildSwimlaneProcess(presentation, params) {
   const slide = prepareSlide(presentation, params.title, "多角色泳道流程");
   const left = 120;
   const top = 150;
-  const laneHeight = 150;
-  const stageWidth = 260;
+  const hasConclusion = Boolean(params.conclusion);
+  const laneHeight = Math.min(hasConclusion ? 118 : 150, (hasConclusion ? 360 : 450) / params.lanes.length);
+  const stageWidth = 1040 / params.stages.length;
   params.stages.forEach((stage, index) => addText(slide, stage, {
     left: left + index * stageWidth, top: 120, width: stageWidth, height: 30,
   }, { fontSize: 18, bold: true, color: THEME.body, alignment: "center" }));
@@ -811,9 +812,22 @@ export function buildSwimlaneProcess(presentation, params) {
       fill: laneIndex % 2 ? "#F1F7FB" : "#FFFFFF", line: { style: "dashed", fill: THEME.line, width: 1 },
     });
   });
+  const taskWidth = Math.min(220, stageWidth - 36);
+  const taskHeight = Math.min(86, laneHeight - 28);
   const taskShapes = params.tasks.map((task) => addBox(slide, {
-    left: left + task.stage * stageWidth + 46, top: top + task.lane * laneHeight + 36, width: 168, height: 72,
-  }, { fill: task.lane % 2 ? THEME.accentAlt : THEME.accent, line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-sm", text: task.label, fontSize: 17, bold: true, color: "#FFFFFF" }));
+    left: left + task.stage * stageWidth + (stageWidth - taskWidth) / 2,
+    top: top + task.lane * laneHeight + (laneHeight - taskHeight) / 2,
+    width: taskWidth,
+    height: taskHeight,
+  }, {
+    fill: task.lane % 2 ? THEME.accentAlt : THEME.accent,
+    line: { style: "solid", fill: "none", width: 0 },
+    shadow: "shadow-sm",
+    text: task.label,
+    fontSize: 16,
+    bold: true,
+    color: "#FFFFFF",
+  }));
   for (let index = 0; index < taskShapes.length - 1; index += 1) {
     slide.shapes.connect(taskShapes[index], taskShapes[index + 1], {
       kind: "elbow", line: { style: "dashed", fill: THEME.muted, width: 1.5 },
@@ -821,6 +835,17 @@ export function buildSwimlaneProcess(presentation, params) {
     });
   }
   taskShapes.forEach((shape) => shape.bringToFront());
+  if (hasConclusion) {
+    addBox(slide, { left, top: 532, width: 1040, height: 96 }, {
+      fill: "#EAF2FD",
+      line: { style: "solid", fill: THEME.accent, width: 1.5 },
+      shadow: "shadow-none",
+      text: `协同结论\n${params.conclusion}`,
+      fontSize: 17,
+      bold: true,
+      color: THEME.accent,
+    });
+  }
   return slide;
 }
 
@@ -904,11 +929,37 @@ export function buildProblemImprovement(presentation, params) {
   });
   addText(slide, params.problemTitle, { left: 102, top: 178, width: 410, height: 44 }, { fontSize: 26, bold: true, color: THEME.accent, alignment: "center" });
   addText(slide, params.improvementTitle, { left: 768, top: 178, width: 410, height: 44 }, { fontSize: 26, bold: true, color: THEME.accentAlt, alignment: "center" });
-  params.problems.forEach((item, index) => addBox(slide, { left: 112, top: 250 + index * 106, width: 390, height: 78 }, {
-    fill: "#F1F7FB", line: { style: "solid", fill: THEME.line, width: 1 }, shadow: "shadow-none", text: item, fontSize: 17, color: THEME.body, alignment: "left",
-  }));
-  params.improvements.forEach((item, index) => addBox(slide, { left: 778, top: 250 + index * 106, width: 390, height: 78 }, {
-    fill: "#ECFBFC", line: { style: "solid", fill: "#A8E7EA", width: 1 }, shadow: "shadow-none", text: item, fontSize: 17, color: THEME.body, alignment: "left",
+  const itemText = (item) => typeof item === "string"
+    ? item
+    : [item.title, item.body].filter(Boolean).join("\n");
+  const itemTop = (count, index) => (count === 2 ? 278 + index * 142 : 246 + index * 112);
+  const itemHeight = (count) => (count === 2 ? 104 : 86);
+  const addPanelItem = (item, position, palette) => {
+    const objectItem = typeof item === "string" ? null : item;
+    addBox(slide, position, {
+      fill: palette.fill,
+      line: { style: "solid", fill: palette.line, width: 1 },
+      shadow: palette.shadow,
+      ...(objectItem ? {} : { text: itemText(item), fontSize: 15, color: palette.text, alignment: "left" }),
+    });
+    if (!objectItem) return;
+    addText(slide, objectItem.title, {
+      left: position.left + 16, top: position.top + 12, width: position.width - 32, height: 26,
+    }, { fontSize: 17, bold: true, color: palette.text, alignment: "left" });
+    addText(slide, wrapChineseText(objectItem.body, 18), {
+      left: position.left + 16, top: position.top + 42, width: position.width - 32, height: position.height - 50,
+    }, { fontSize: 14, color: palette.text, alignment: "left", verticalAlignment: "top" });
+  };
+  params.problems.slice(0, 3).forEach((item, index, items) => addPanelItem(item, {
+    left: 112, top: itemTop(items.length, index), width: 390, height: itemHeight(items.length),
+  }, { fill: "#F1F7FB", line: THEME.line, shadow: "shadow-none", text: THEME.body }));
+  params.improvements.slice(0, 3).forEach((item, index, items) => addPanelItem(item, {
+    left: 778, top: itemTop(items.length, index), width: 390, height: itemHeight(items.length),
+  }, {
+    fill: item.emphasis ? THEME.accentAlt : "#ECFBFC",
+    line: item.emphasis ? THEME.accentAlt : "#A8E7EA",
+    shadow: item.emphasis ? "shadow-sm" : "shadow-none",
+    text: item.emphasis ? "#FFFFFF" : THEME.body,
   }));
   addBox(slide, { left: 582, top: 328, width: 116, height: 116 }, {
     geometry: "rightArrow", fill: THEME.cyan, line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-md",

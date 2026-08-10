@@ -5,10 +5,12 @@ import {
   buildLayeredArchitecture,
   buildRadialHub,
   buildRadialHubSplitWing,
+  buildProblemImprovement,
   buildRoleHandoff,
   buildSequentialProcess,
   buildSequentialProcessRibbon,
   buildSequentialProcessStaircase,
+  buildSwimlaneProcess,
   renderComponentIntoSlide,
 } from "../asset-runtime/component-builders.mjs";
 
@@ -18,6 +20,8 @@ const DEFAULT_BUILDERS = new Map([
   ["layered-architecture-001", buildLayeredArchitecture],
   ["radial-hub-001", buildRadialHub],
   ["sequential-process-001", buildSequentialProcess],
+  ["swimlane-process-001", buildSwimlaneProcess],
+  ["problem-improvement-001", buildProblemImprovement],
 ]);
 
 const VARIANT_BUILDERS = new Map([
@@ -31,6 +35,8 @@ const VARIANT_BUILDERS = new Map([
   ["sequential-process-001:staircase", buildSequentialProcessStaircase],
   ["sequential-process-001:role-handoff", buildRoleHandoff],
   ["sequential-process-001:causal-chain", buildCausalChain],
+  ["swimlane-process-001:default", buildSwimlaneProcess],
+  ["problem-improvement-001:default", buildProblemImprovement],
 ]);
 
 export function listStructureAssetBuilders() {
