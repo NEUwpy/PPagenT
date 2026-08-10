@@ -51,7 +51,7 @@ export function hasStructureAssetBuilder(assetId, variantId = null) {
   return DEFAULT_BUILDERS.has(assetId);
 }
 
-export function renderStructureAsset(slide, renderPayload, skin) {
+export function renderStructureAsset(slide, renderPayload, skin, targetFrame = skin.bodyFrame) {
   const variantId = renderPayload.parameters?.visualVariantId ?? null;
   const builder = variantId
     ? VARIANT_BUILDERS.get(`${renderPayload.assetId}:${variantId}`)
@@ -59,7 +59,7 @@ export function renderStructureAsset(slide, renderPayload, skin) {
   if (!builder) throw new Error(`运行时没有结构资产生成器：${renderPayload.assetId}`);
   return renderComponentIntoSlide(builder, slide, renderPayload.parameters, {
     sourceFrame: skin.componentSourceFrame,
-    targetFrame: skin.bodyFrame,
+    targetFrame,
     theme: skin.componentTheme,
   });
 }
@@ -68,5 +68,6 @@ export function isSkinOnlyAsset(assetId) {
   return new Set([
     "northeastern-university-cover-001",
     "northeastern-university-closing-001",
+    "northeastern-university-body-001",
   ]).has(assetId);
 }

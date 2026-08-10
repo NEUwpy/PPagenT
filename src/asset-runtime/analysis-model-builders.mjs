@@ -1,9 +1,13 @@
 import {
   THEME,
+  addAnchoredLine,
   addBox,
   addCircle,
+  addLine,
   addText,
   createPresentation,
+  isEmbeddedSlide,
+  qaElementName,
   runGenerator,
   saveSingleExample,
 } from "./component-builders.mjs";
@@ -12,6 +16,7 @@ export { createPresentation, runGenerator, saveSingleExample };
 
 function prepareSlide(presentation, title, subtitle) {
   const slide = presentation.slides.add();
+  if (isEmbeddedSlide(slide)) return slide;
   slide.background.fill = THEME.background;
   addText(slide, title, { left: 72, top: 42, width: 880, height: 48 }, {
     fontSize: 36,
@@ -29,83 +34,89 @@ function bulletText(items) {
   return items.map((item) => `• ${item}`).join("\n");
 }
 
-export function buildFishboneAnalysis(presentation, params) {
-  const slide = prepareSlide(presentation, params.title, "鱼骨原因分析");
-  const branches = params.branches.slice(0, 6);
-  if (branches.length < 4) throw new Error("鱼骨原因分析至少需要 4 类原因");
+export function computeFishboneBranchStack({ baseX, itemCount, isUpper, axisY = 374 }) {
+  const itemHeight = 28;
+  const itemPitch = 32;
+  const axisGap = 52;
+  const nearestTop = isUpper ? axisY - axisGap - itemHeight : axisY + axisGap;
+  const firstTop = isUpper ? nearestTop - (itemCount - 1) * itemPitch : nearestTop;
+  const itemFrames = Array.from({ length: itemCount }, (_, itemIndex) => {
+    const lateralOffset = (isUpper ? itemCount - 1 - itemIndex : itemIndex) * 6;
+    return {
+      left: baseX - 184 + lateralOffset,
+      top: firstTop + itemIndex * itemPitch,
+      width: 212,
+      height: itemHeight,
+    };
+  });
+  const categoryFrame = isUpper
+    ? { left: baseX - 178, top: firstTop - 40, width: 220, height: 30 }
+    : {
+        left: baseX - 178,
+        top: itemFrames.at(-1).top + itemHeight + 10,
+        width: 220,
+        height: 30,
+      };
+  return { itemFrames, categoryFrame };
+}
 
-  slide.shapes.add({
-    geometry: "line",
-    position: { left: 126, top: 365, width: 866, height: 0 },
-    fill: "none",
-    line: { style: "solid", fill: THEME.accent, width: 5 },
-  });
-  addCircle(slide, { left: 104, top: 348, width: 34, height: 34 }, {
-    fill: THEME.accent,
-    line: { style: "solid", fill: "#FFFFFF", width: 3 },
-    shadow: "shadow-none",
-  });
-  addBox(slide, { left: 970, top: 309, width: 248, height: 112 }, {
-    geometry: "rightArrow",
-    fill: THEME.accent,
-    line: { style: "solid", fill: "none", width: 0 },
-    shadow: "shadow-md",
-    text: params.effect,
-    fontSize: 22,
-    bold: true,
-    color: "#FFFFFF",
+export function buildFishboneAnalysis(presentation, params) {
+  const slide = prepareSlide(presentation, params.title, "结果问题 · 分类原因拆解");
+  const branches = params.branches;
+  if (branches.length < 4 || branches.length > 6) throw new Error("鱼骨原因分析支持 4–6 类原因");
+  for (const branch of branches) {
+    if (branch.items.length < 1 || branch.items.length > 4) throw new Error("每类原因支持 1–4 条因素");
+  }
+
+  const effectFrame = { left: 986, top: 318, width: 250, height: 112 };
+  addLine(slide, { x: 72, y: 374 }, { x: effectFrame.left, y: 374 }, THEME.accent, 6);
+  addBox(slide, effectFrame, {
+    name: qaElementName({ parent: "fishbone-effect" }),
+    geometry: "rightArrow", fill: THEME.accent, line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-md",
+    text: params.effect, fontSize: 22, bold: true, color: "#FFFFFF",
   });
 
   const upper = branches.filter((_, index) => index % 2 === 0);
   const lower = branches.filter((_, index) => index % 2 === 1);
-  const branchPositions = (count) => {
-    if (count === 1) return [615];
-    if (count === 2) return [410, 820];
-    return [330, 615, 900];
-  };
-  const renderBranch = (branch, displayIndex, isUpper, count) => {
+  const branchPositions = (count) => count === 2 ? [410, 800] : [310, 590, 870];
+  const renderBranch = (branch, displayIndex, isUpper, count, branchIndex) => {
     const baseX = branchPositions(count)[displayIndex];
-    slide.shapes.add({
-      geometry: "line",
-      position: {
-        left: baseX - 92,
-        top: isUpper ? 286 : 365,
-        width: 92,
-        height: 79,
-        verticalFlip: !isUpper,
+    const { itemFrames, categoryFrame } = computeFishboneBranchStack({
+      baseX,
+      itemCount: branch.items.length,
+      isUpper,
+    });
+    const nearestItemIndex = isUpper ? itemFrames.length - 1 : 0;
+    const nearestItemFrame = itemFrames[nearestItemIndex];
+    const jointFrame = { left: baseX - 8, top: 366, width: 16, height: 16 };
+    addAnchoredLine(slide,
+      {
+        frame: nearestItemFrame,
+        side: isUpper ? "bottom" : "top",
+        parent: `fishbone-item-${branchIndex}-${nearestItemIndex}`,
       },
-      fill: "none",
-      line: { style: "solid", fill: THEME.accentAlt, width: 3 },
+      { frame: jointFrame, side: "center", parent: `fishbone-joint-${branchIndex}` },
+      THEME.accentAlt, 3);
+    addCircle(slide, jointFrame, {
+      name: qaElementName({ parent: `fishbone-joint-${branchIndex}` }),
+      fill: "#FFFFFF", line: { style: "solid", fill: THEME.accentAlt, width: 2 }, shadow: "shadow-none",
     });
-    const cardTop = isUpper ? 140 : 442;
-    addBox(slide, { left: baseX - 190, top: cardTop, width: 246, height: 150 }, {
-      fill: "#FFFFFF",
-      line: { style: "solid", fill: THEME.accentAlt, width: 1.5 },
-      shadow: "shadow-sm",
+    addText(slide, branch.category, categoryFrame, {
+      fontSize: 18, bold: true, color: isUpper ? THEME.accent : THEME.accentAlt, alignment: "center",
     });
-    addBox(slide, { left: baseX - 190, top: cardTop, width: 246, height: 44 }, {
-      fill: isUpper ? THEME.accent : THEME.accentAlt,
-      line: { style: "solid", fill: "none", width: 0 },
-      shadow: "shadow-none",
-      text: branch.category,
-      fontSize: 18,
-      bold: true,
-      color: "#FFFFFF",
-      alignment: "left",
-    });
-    addText(slide, bulletText(branch.items.slice(0, 4)), {
-      left: baseX - 172,
-      top: cardTop + 56,
-      width: 210,
-      height: 78,
-    }, {
-      fontSize: 15,
-      color: THEME.body,
-      verticalAlignment: "top",
+    branch.items.forEach((item, itemIndex) => {
+      addBox(slide, itemFrames[itemIndex], {
+        name: qaElementName({ parent: `fishbone-item-${branchIndex}-${itemIndex}`, domains: ["fishbone-items"] }),
+        geometry: "parallelogram",
+        fill: isUpper ? "#F0F5FA" : "#F4F8FB",
+        line: { style: "solid", fill: isUpper ? "#B8CCE0" : "#B9DCE8", width: 1 }, shadow: "shadow-none",
+        text: item, fontSize: 16, color: THEME.body, alignment: "center",
+        insets: { top: 1, right: 12, bottom: 1, left: 12 },
+      });
     });
   };
-  upper.forEach((branch, index) => renderBranch(branch, index, true, upper.length));
-  lower.forEach((branch, index) => renderBranch(branch, index, false, lower.length));
+  upper.forEach((branch, index) => renderBranch(branch, index, true, upper.length, index * 2));
+  lower.forEach((branch, index) => renderBranch(branch, index, false, lower.length, index * 2 + 1));
   return slide;
 }
 
@@ -237,27 +248,14 @@ export function buildCustomerJourneyMap(presentation, params) {
     x: left + columnWidth * (index + 0.5),
     y: emotionTop + emotionHeight / 2 - Math.max(-1, Math.min(1, params.emotion[index] ?? 0)) * 38,
   }));
-  slide.shapes.add({
-    geometry: "line",
-    position: { left, top: emotionTop + emotionHeight / 2, width: tableWidth, height: 0 },
-    fill: "none",
-    line: { style: "dashed", fill: THEME.line, width: 1 },
-  });
+  addLine(slide,
+    { x: left, y: emotionTop + emotionHeight / 2 },
+    { x: left + tableWidth, y: emotionTop + emotionHeight / 2 },
+    THEME.line, 1, undefined, "dashed");
   for (let index = 0; index < points.length - 1; index += 1) {
     const from = points[index];
     const to = points[index + 1];
-    slide.shapes.add({
-      geometry: "line",
-      position: {
-        left: from.x,
-        top: Math.min(from.y, to.y),
-        width: to.x - from.x,
-        height: Math.abs(to.y - from.y),
-        verticalFlip: to.y < from.y,
-      },
-      fill: "none",
-      line: { style: "solid", fill: THEME.accentAlt, width: 4 },
-    });
+    addLine(slide, from, to, THEME.accentAlt, 4);
   }
   points.forEach((point, index) => addCircle(slide, {
     left: point.x - 10,

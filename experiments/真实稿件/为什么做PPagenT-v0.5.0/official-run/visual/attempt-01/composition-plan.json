@@ -1,0 +1,149 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "why-ppagent-v0.3.3",
+  "skinId": "northeastern-university-001",
+  "pages": [
+    {
+      "pageId": "p01",
+      "intentId": "why-ppagent-v0.3.3-p01",
+      "compositionId": "fixed-cover",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "封面由 Skin 固定页型承载，不在正文安全区另行编排。"
+    },
+    {
+      "pageId": "p02",
+      "intentId": "why-ppagent-v0.3.3-p02",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "question-01"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "judgment-01",
+            "judgment-02",
+            "judgment-03"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "本页重点是三类反复判断与一个关键追问，采用编辑式主张加清单，不把抽象判断伪装成流程图。"
+    },
+    {
+      "pageId": "p03",
+      "intentId": "why-ppagent-v0.3.3-p03",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "concept-01",
+        "concept-02"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "两个完整选项形成非对称对比，使用核心双向对比资产占据正文主区。"
+    },
+    {
+      "pageId": "p04",
+      "intentId": "why-ppagent-v0.3.3-p04",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "role-01",
+        "role-02",
+        "role-03",
+        "summary-01"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "三角色依次交接并形成协同结论，使用已蒸馏且通过核心门禁的泳道资产。"
+    },
+    {
+      "pageId": "p05",
+      "intentId": "why-ppagent-v0.3.3-p05",
+      "compositionId": "component-aside-right",
+      "componentItemIds": [
+        "scenario-01",
+        "expectation-01",
+        "standard-01"
+      ],
+      "componentContentMode": "titles-only",
+      "textSlots": [
+        {
+          "slotId": "aside",
+          "sourceItemIds": [
+            "standard-01"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "左侧用简洁三步结构说明场景到标准的推进，右侧展开稳定 80 分这一核心判断，避免整页只剩结构图。"
+    },
+    {
+      "pageId": "p06",
+      "intentId": "why-ppagent-v0.3.3-p06",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "audience-01",
+        "barrier-01",
+        "value-01",
+        "outcome-01"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "现状与缺口通向系统介入和能力结果，使用核心问题与改进措施资产。"
+    },
+    {
+      "pageId": "p07",
+      "intentId": "why-ppagent-v0.3.3-p07",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "capability-01"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "limit-01",
+            "experience-01"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "本页的落点是作品变能力，采用大主张加两条论据的编辑式页面，不重复调用顺序图。"
+    },
+    {
+      "pageId": "p08",
+      "intentId": "why-ppagent-v0.3.3-p08",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "boundary-01",
+        "reuse-01"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "可替换的视觉规范与可复用的经验能力构成加权对比，继续使用核心双向对比资产。"
+    },
+    {
+      "pageId": "p09",
+      "intentId": "why-ppagent-v0.3.3-p09",
+      "compositionId": "fixed-closing",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "尾页由 Skin 固定页型完成使命回扣与条件性结论。"
+    }
+  ]
+}

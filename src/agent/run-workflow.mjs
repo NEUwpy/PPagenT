@@ -108,6 +108,7 @@ export async function runWorkflowCli(options) {
     ...workflowResult,
     outputPptx: path.relative(root, result.outputPptx).replaceAll("\\", "/"),
     finalQa: {
+      deterministicQualityAudit: result.renderResult.qualityAudit,
       postRenderReview: result.workflowMode === "development" ? "passed" : "not-part-of-production-workflow",
       overflow,
     },
@@ -140,6 +141,7 @@ export async function runWorkflowCli(options) {
     output: { path: path.relative(root, result.outputPptx).replaceAll("\\", "/"), sha256: await sha256File(result.outputPptx) },
     pageEvidence,
     qa: {
+      deterministicQualityAudit: result.renderResult.qualityAudit,
       postRenderReview: result.workflowMode === "development" ? "passed" : "not-part-of-production-workflow",
       overflow,
     },

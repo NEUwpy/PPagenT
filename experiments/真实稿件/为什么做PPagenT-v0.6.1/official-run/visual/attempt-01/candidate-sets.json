@@ -1,0 +1,494 @@
+[
+  {
+    "pageId": "p01",
+    "intentId": "why-ppagent-v0.3.3-p01",
+    "candidates": [
+      {
+        "familyId": "skin-cover",
+        "assetId": "northeastern-university-cover-001",
+        "variantId": "default",
+        "silhouette": "cover",
+        "adaptationStatus": "fixed",
+        "compositionIds": [
+          "fixed-cover"
+        ]
+      }
+    ]
+  },
+  {
+    "pageId": "p02",
+    "intentId": "why-ppagent-v0.3.3-p02",
+    "candidates": [
+      {
+        "familyId": "sequential-process",
+        "assetId": "sequential-process-001",
+        "variantId": "horizontal-cards",
+        "silhouette": "horizontal-card-chain",
+        "adaptationStatus": "adaptive",
+        "itemCount": {
+          "min": 3,
+          "preferred": [
+            3,
+            4
+          ],
+          "max": 6
+        },
+        "compositionIds": [
+          "component-full",
+          "component-aside-right"
+        ]
+      },
+      {
+        "familyId": "skin-body-editorial",
+        "assetId": "northeastern-university-body-001",
+        "variantId": "editorial",
+        "silhouette": "editorial-page",
+        "adaptationStatus": "adaptive",
+        "compositionIds": [
+          "editorial-list",
+          "editorial-focus",
+          "editorial-focus-reverse"
+        ]
+      }
+    ],
+    "capacityDensity": "medium",
+    "semanticRejections": [
+      {
+        "assetId": "comparison-structure-001",
+        "reasons": [
+          "base-relation:sequence",
+          "missing-metric:groups",
+          "missing-metric:itemsPerGroup",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "swimlane-process-001",
+        "reasons": [
+          "purpose-key:explain_process",
+          "missing-metric:roleCount",
+          "missing-metric:stageCount",
+          "trait:dimensions",
+          "trait:secondaryDimension"
+        ]
+      },
+      {
+        "assetId": "problem-improvement-001",
+        "reasons": [
+          "base-relation:sequence",
+          "purpose-key:explain_process"
+        ]
+      }
+    ]
+  },
+  {
+    "pageId": "p03",
+    "intentId": "why-ppagent-v0.3.3-p03",
+    "candidates": [
+      {
+        "familyId": "comparison-structure",
+        "assetId": "comparison-structure-001",
+        "variantId": "default",
+        "silhouette": "symmetric-column-contrast",
+        "adaptationStatus": "adaptive",
+        "itemCount": {
+          "min": 2,
+          "preferred": [
+            2
+          ],
+          "max": 2
+        },
+        "compositionIds": [
+          "component-full"
+        ]
+      },
+      {
+        "familyId": "skin-body-editorial",
+        "assetId": "northeastern-university-body-001",
+        "variantId": "editorial",
+        "silhouette": "editorial-page",
+        "adaptationStatus": "adaptive",
+        "compositionIds": [
+          "editorial-list",
+          "editorial-focus",
+          "editorial-focus-reverse"
+        ]
+      }
+    ],
+    "capacityDensity": "medium",
+    "semanticRejections": [
+      {
+        "assetId": "sequential-process-001",
+        "reasons": [
+          "base-relation:comparison",
+          "below-min:itemCount",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "swimlane-process-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "missing-metric:roleCount",
+          "missing-metric:stageCount",
+          "below-min:itemCount",
+          "semantic:ordered",
+          "trait:dimensions",
+          "trait:secondaryDimension"
+        ]
+      },
+      {
+        "assetId": "problem-improvement-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "below-min:itemCount",
+          "semantic:ordered"
+        ]
+      }
+    ]
+  },
+  {
+    "pageId": "p04",
+    "intentId": "why-ppagent-v0.3.3-p04",
+    "candidates": [
+      {
+        "familyId": "swimlane-process",
+        "assetId": "swimlane-process-001",
+        "variantId": "default",
+        "silhouette": "role-stage-swimlanes",
+        "adaptationStatus": "partial",
+        "itemCount": {
+          "min": 4,
+          "preferred": [
+            4
+          ],
+          "max": 4
+        },
+        "compositionIds": [
+          "component-full"
+        ]
+      },
+      {
+        "familyId": "sequential-process",
+        "assetId": "sequential-process-001",
+        "variantId": "horizontal-cards",
+        "silhouette": "horizontal-card-chain",
+        "adaptationStatus": "adaptive",
+        "itemCount": {
+          "min": 3,
+          "preferred": [
+            3,
+            4
+          ],
+          "max": 6
+        },
+        "compositionIds": [
+          "component-full",
+          "component-aside-right"
+        ]
+      },
+      {
+        "familyId": "skin-body-editorial",
+        "assetId": "northeastern-university-body-001",
+        "variantId": "editorial",
+        "silhouette": "editorial-page",
+        "adaptationStatus": "adaptive",
+        "compositionIds": [
+          "editorial-list",
+          "editorial-focus",
+          "editorial-focus-reverse"
+        ]
+      }
+    ],
+    "capacityDensity": "medium",
+    "semanticRejections": [
+      {
+        "assetId": "comparison-structure-001",
+        "reasons": [
+          "base-relation:sequence",
+          "missing-metric:groups",
+          "missing-metric:itemsPerGroup",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "problem-improvement-001",
+        "reasons": [
+          "base-relation:sequence",
+          "purpose-key:explain_cross_role_process"
+        ]
+      }
+    ]
+  },
+  {
+    "pageId": "p05",
+    "intentId": "why-ppagent-v0.3.3-p05",
+    "candidates": [
+      {
+        "familyId": "sequential-process",
+        "assetId": "sequential-process-001",
+        "variantId": "horizontal-cards",
+        "silhouette": "horizontal-card-chain",
+        "adaptationStatus": "adaptive",
+        "itemCount": {
+          "min": 3,
+          "preferred": [
+            3,
+            4
+          ],
+          "max": 6
+        },
+        "compositionIds": [
+          "component-full",
+          "component-aside-right"
+        ]
+      },
+      {
+        "familyId": "skin-body-editorial",
+        "assetId": "northeastern-university-body-001",
+        "variantId": "editorial",
+        "silhouette": "editorial-page",
+        "adaptationStatus": "adaptive",
+        "compositionIds": [
+          "editorial-list",
+          "editorial-focus",
+          "editorial-focus-reverse"
+        ]
+      }
+    ],
+    "capacityDensity": "medium",
+    "semanticRejections": [
+      {
+        "assetId": "comparison-structure-001",
+        "reasons": [
+          "base-relation:sequence",
+          "missing-metric:groups",
+          "missing-metric:itemsPerGroup",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "swimlane-process-001",
+        "reasons": [
+          "purpose-key:explain_process",
+          "missing-metric:roleCount",
+          "missing-metric:stageCount",
+          "below-min:itemCount",
+          "trait:dimensions",
+          "trait:secondaryDimension"
+        ]
+      },
+      {
+        "assetId": "problem-improvement-001",
+        "reasons": [
+          "base-relation:sequence",
+          "purpose-key:explain_process",
+          "below-min:itemCount"
+        ]
+      }
+    ]
+  },
+  {
+    "pageId": "p06",
+    "intentId": "why-ppagent-v0.3.3-p06",
+    "candidates": [
+      {
+        "familyId": "problem-improvement",
+        "assetId": "problem-improvement-001",
+        "variantId": "default",
+        "silhouette": "problem-to-improvement-panels",
+        "adaptationStatus": "partial",
+        "itemCount": {
+          "min": 4,
+          "preferred": [
+            4
+          ],
+          "max": 4
+        },
+        "compositionIds": [
+          "component-full"
+        ]
+      },
+      {
+        "familyId": "skin-body-editorial",
+        "assetId": "northeastern-university-body-001",
+        "variantId": "editorial",
+        "silhouette": "editorial-page",
+        "adaptationStatus": "adaptive",
+        "compositionIds": [
+          "editorial-list",
+          "editorial-focus",
+          "editorial-focus-reverse"
+        ]
+      }
+    ],
+    "capacityDensity": "medium",
+    "semanticRejections": [
+      {
+        "assetId": "comparison-structure-001",
+        "reasons": [
+          "base-relation:causal",
+          "missing-metric:groups",
+          "missing-metric:itemsPerGroup",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "swimlane-process-001",
+        "reasons": [
+          "base-relation:causal",
+          "purpose-key:connect_problems_and_solutions",
+          "missing-metric:roleCount",
+          "missing-metric:stageCount",
+          "trait:dimensions",
+          "trait:secondaryDimension"
+        ]
+      }
+    ]
+  },
+  {
+    "pageId": "p07",
+    "intentId": "why-ppagent-v0.3.3-p07",
+    "candidates": [
+      {
+        "familyId": "sequential-process",
+        "assetId": "sequential-process-001",
+        "variantId": "horizontal-cards",
+        "silhouette": "horizontal-card-chain",
+        "adaptationStatus": "adaptive",
+        "itemCount": {
+          "min": 3,
+          "preferred": [
+            3,
+            4
+          ],
+          "max": 6
+        },
+        "compositionIds": [
+          "component-full",
+          "component-aside-right"
+        ]
+      },
+      {
+        "familyId": "skin-body-editorial",
+        "assetId": "northeastern-university-body-001",
+        "variantId": "editorial",
+        "silhouette": "editorial-page",
+        "adaptationStatus": "adaptive",
+        "compositionIds": [
+          "editorial-list",
+          "editorial-focus",
+          "editorial-focus-reverse"
+        ]
+      }
+    ],
+    "capacityDensity": "medium",
+    "semanticRejections": [
+      {
+        "assetId": "comparison-structure-001",
+        "reasons": [
+          "base-relation:sequence",
+          "missing-metric:groups",
+          "missing-metric:itemsPerGroup",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "swimlane-process-001",
+        "reasons": [
+          "purpose-key:explain_conversion",
+          "missing-metric:roleCount",
+          "missing-metric:stageCount",
+          "below-min:itemCount",
+          "trait:dimensions",
+          "trait:secondaryDimension"
+        ]
+      },
+      {
+        "assetId": "problem-improvement-001",
+        "reasons": [
+          "base-relation:sequence",
+          "purpose-key:explain_conversion",
+          "below-min:itemCount"
+        ]
+      }
+    ]
+  },
+  {
+    "pageId": "p08",
+    "intentId": "why-ppagent-v0.3.3-p08",
+    "candidates": [
+      {
+        "familyId": "skin-body-editorial",
+        "assetId": "northeastern-university-body-001",
+        "variantId": "editorial",
+        "silhouette": "editorial-page",
+        "adaptationStatus": "adaptive",
+        "compositionIds": [
+          "editorial-list",
+          "editorial-focus",
+          "editorial-focus-reverse"
+        ]
+      }
+    ],
+    "capacityDensity": "medium",
+    "semanticRejections": [
+      {
+        "assetId": "comparison-structure-001",
+        "reasons": [
+          "base-relation:parallel",
+          "missing-metric:groups",
+          "missing-metric:itemsPerGroup"
+        ]
+      },
+      {
+        "assetId": "sequential-process-001",
+        "reasons": [
+          "base-relation:parallel",
+          "below-min:itemCount",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "swimlane-process-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "missing-metric:roleCount",
+          "missing-metric:stageCount",
+          "below-min:itemCount",
+          "semantic:ordered",
+          "trait:dimensions",
+          "trait:secondaryDimension"
+        ]
+      },
+      {
+        "assetId": "problem-improvement-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "below-min:itemCount",
+          "semantic:ordered"
+        ]
+      }
+    ]
+  },
+  {
+    "pageId": "p09",
+    "intentId": "why-ppagent-v0.3.3-p09",
+    "candidates": [
+      {
+        "familyId": "skin-closing",
+        "assetId": "northeastern-university-closing-001",
+        "variantId": "default",
+        "silhouette": "closing",
+        "adaptationStatus": "fixed",
+        "compositionIds": [
+          "fixed-closing"
+        ]
+      }
+    ]
+  }
+]

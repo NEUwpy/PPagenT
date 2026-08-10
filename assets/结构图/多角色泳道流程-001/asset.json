@@ -12,6 +12,17 @@
   "generator": "generate.mjs",
   "showcase": "example.pptx",
   "parameters": ["title", "lanes", "stages", "tasks", "conclusion"],
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 40, "top": 135, "width": 1200, "height": 520 },
+    "aspectRatio": 2.3077,
+    "minimumFrame": { "width": 1050, "height": 430 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "resizeMode": "contain",
+    "minFontSize": 16,
+    "safePadding": 12,
+    "supportedCompositionIds": ["component-full"]
+  },
   "capacity": "2–3 条泳道；2–3 个阶段；任务按泳道与阶段定位；可选独立总结",
-  "review": "已通过为什么做 PPagenT 真实稿件验证"
+  "review": "v0.3.3 已验证标签与底板分离、三角色交接线、18 磅任务文字和独立总结区"
 }

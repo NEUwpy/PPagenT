@@ -173,8 +173,8 @@ function normalizeVisualIntents(validators, output, pageContents) {
 }
 
 function normalizeVisualPlan(validators, output, deckPlan, pageContents, pageIntents, skinId) {
-  if (!output || typeof output !== "object" || !output.visualPlan) {
-    throw new WorkflowError("DIRECTOR_OUTPUT_INVALID", "visual-composition", "视觉导演的整套编排阶段必须输出 visualPlan");
+  if (!output || typeof output !== "object" || !output.visualPlan || !output.compositionPlan) {
+    throw new WorkflowError("DIRECTOR_OUTPUT_INVALID", "visual-composition", "视觉导演的整套编排阶段必须输出 visualPlan 和 compositionPlan");
   }
   assertSchema(validators, validators.validateVisualPlan, output.visualPlan, "VisualPlan", "visual-director");
   if (output.visualPlan.deckId !== deckPlan.deckId || output.visualPlan.skinId !== skinId) {
@@ -186,10 +186,16 @@ function normalizeVisualPlan(validators, output, deckPlan, pageContents, pageInt
   const intentIds = pageIntents.map((intent) => intent.intentId);
   const visualIntentIds = output.visualPlan.pages.map((page) => page.intentId);
   assertSameOrder(visualIntentIds, intentIds, "VisualPlan.intentId", "visual-director");
-  return output.visualPlan;
+  assertSchema(validators, validators.validateCompositionPlan, output.compositionPlan, "CompositionPlan", "visual-director");
+  if (output.compositionPlan.deckId !== deckPlan.deckId || output.compositionPlan.skinId !== skinId) {
+    throw new WorkflowError("CROSS_OBJECT_INVARIANT_FAILED", "visual-director", "CompositionPlan 的 deckId 或 skinId 不一致");
+  }
+  assertSameOrder(output.compositionPlan.pages.map((page) => page.pageId), expectedPageIds, "CompositionPlan", "visual-director");
+  assertSameOrder(output.compositionPlan.pages.map((page) => page.intentId), intentIds, "CompositionPlan.intentId", "visual-director");
+  return { visualPlan: output.visualPlan, compositionPlan: output.compositionPlan };
 }
 
-function assertResolvedVisual(validators, resolved, pageIntents, visualPlan) {
+function assertResolvedVisual(validators, resolved, pageIntents, visualPlan, compositionPlan) {
   if (!resolved || resolved.status !== "accepted"
     || !Array.isArray(resolved.layoutDecisions) || !Array.isArray(resolved.renderPayloads)) {
     throw new WorkflowError(
@@ -200,6 +206,13 @@ function assertResolvedVisual(validators, resolved, pageIntents, visualPlan) {
   }
   if (resolved.layoutDecisions.length !== pageIntents.length || resolved.renderPayloads.length !== pageIntents.length) {
     throw new WorkflowError("CROSS_OBJECT_INVARIANT_FAILED", "visual-resolution", "视觉解析结果的页数不一致");
+  }
+  if (resolved.compositionPlan !== compositionPlan) {
+    throw new WorkflowError(
+      "COMPOSITION_PLAN_DECISION_MISMATCH",
+      "visual-resolution",
+      "visualResolver changed or dropped the visual director CompositionPlan",
+    );
   }
   resolved.layoutDecisions.forEach((decision, index) => {
     assertSchema(validators, validators.validateLayoutDecision, decision, `LayoutDecision[${index}]`, "visual-resolution");
@@ -284,6 +297,14 @@ async function assertRenderResult(result, pageCount) {
       { missing },
     );
   }
+  if (!result.qualityAudit || result.qualityAudit.status !== "passed") {
+    throw new WorkflowError(
+      "RENDER_QUALITY_GATE_MISSING",
+      "render",
+      "renderer 必须返回通过的确定性质量审计；工作流不能把未检查的 PPT 标记为交付",
+      { qualityAudit: result.qualityAudit ?? null },
+    );
+  }
 }
 
 async function persistContentAttempt(outputDir, attempt, output, review) {
@@ -297,6 +318,7 @@ async function persistVisualAttempt(outputDir, attempt, visual, resolved, name, 
   const attemptDir = path.join(outputDir, "visual", `attempt-${String(attempt).padStart(2, "0")}`);
   if (visual) {
     await writeJson(path.join(attemptDir, "visual-plan.json"), visual.visualPlan);
+    if (visual.compositionPlan) await writeJson(path.join(attemptDir, "composition-plan.json"), visual.compositionPlan);
     await writeJson(path.join(attemptDir, "page-intents.json"), visual.pageIntents);
     if (visual.candidateSets) await writeJson(path.join(attemptDir, "candidate-sets.json"), visual.candidateSets);
   }
@@ -429,7 +451,7 @@ export async function runDirectorWorkflow(options) {
       previousResolution: visualResolution,
       previousRenderResult: renderResult,
     });
-    const visualPlan = normalizeVisualPlan(
+    const normalizedPlans = normalizeVisualPlan(
       validators,
       compositionOutput,
       contentOutput.deckPlan,
@@ -437,7 +459,7 @@ export async function runDirectorWorkflow(options) {
       pageIntents,
       input.skinId,
     );
-    visual = { visualPlan, pageIntents, candidateSets };
+    visual = { ...normalizedPlans, pageIntents, candidateSets };
     await persistVisualAttempt(outputDir, attempt, visual, null);
 
     const resolved = await options.visualResolver({
@@ -446,6 +468,7 @@ export async function runDirectorWorkflow(options) {
       deckPlan: contentOutput.deckPlan,
       pageContents: contentOutput.pageContents,
       visualPlan: visual.visualPlan,
+      compositionPlan: visual.compositionPlan,
       pageIntents: visual.pageIntents,
       candidateSets: visual.candidateSets,
     });
@@ -462,7 +485,7 @@ export async function runDirectorWorkflow(options) {
       }
       continue;
     }
-    assertResolvedVisual(validators, resolved, visual.pageIntents, visual.visualPlan);
+    assertResolvedVisual(validators, resolved, visual.pageIntents, visual.visualPlan, visual.compositionPlan);
     await persistVisualAttempt(outputDir, attempt, visual, resolved, "visual-resolution.json", {
       status: resolved.status ?? "accepted",
       results: resolved.results ?? [],
@@ -476,6 +499,7 @@ export async function runDirectorWorkflow(options) {
       deckPlan: contentOutput.deckPlan,
       pageContents: contentOutput.pageContents,
       visualPlan: visual.visualPlan,
+      compositionPlan: visual.compositionPlan,
       pageIntents: visual.pageIntents,
       layoutDecisions: resolved.layoutDecisions,
       renderPayloads: resolved.renderPayloads,
@@ -505,6 +529,7 @@ export async function runDirectorWorkflow(options) {
       deckPlan: contentOutput.deckPlan,
       pageContents: contentOutput.pageContents,
       visualPlan: visual.visualPlan,
+      compositionPlan: visual.compositionPlan,
       pageIntents: visual.pageIntents,
       layoutDecisions: resolved.layoutDecisions,
       renderPayloads: resolved.renderPayloads,
@@ -529,6 +554,7 @@ export async function runDirectorWorkflow(options) {
         skinId: input.skinId,
         pageCount: contentOutput.pageContents.length,
         outputPptx: renderResult.outputPptx,
+        deterministicQualityAudit: renderResult.qualityAudit,
       };
       await writeJson(path.join(outputDir, "workflow-result.json"), delivery);
       return { ...delivery, deckPlan: contentOutput.deckPlan, pageContents: contentOutput.pageContents, renderResult };
@@ -541,6 +567,7 @@ export async function runDirectorWorkflow(options) {
       deckPlan: contentOutput.deckPlan,
       pageContents: contentOutput.pageContents,
       visualPlan: visual.visualPlan,
+      compositionPlan: visual.compositionPlan,
       pageIntents: visual.pageIntents,
       layoutDecisions: resolved.layoutDecisions,
       renderPayloads: resolved.renderPayloads,

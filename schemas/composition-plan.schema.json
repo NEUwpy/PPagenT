@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/NEUwpy/PPagenT/schemas/composition-plan.schema.json",
+  "title": "PPagenT CompositionPlan v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "deckId", "skinId", "pages"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "deckId": { "type": "string", "minLength": 1 },
+    "skinId": { "type": "string", "minLength": 1 },
+    "pages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "pageId", "intentId", "compositionId", "componentItemIds",
+          "componentContentMode", "textSlots", "reason"
+        ],
+        "properties": {
+          "pageId": { "type": "string", "minLength": 1 },
+          "intentId": { "type": "string", "minLength": 1 },
+          "compositionId": { "type": "string", "minLength": 1 },
+          "componentItemIds": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "uniqueItems": true
+          },
+          "componentContentMode": { "enum": ["full", "titles-only", "none"] },
+          "textSlots": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["slotId", "sourceItemIds", "contentMode"],
+              "properties": {
+                "slotId": { "type": "string", "minLength": 1 },
+                "sourceItemIds": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": { "type": "string", "minLength": 1 },
+                  "uniqueItems": true
+                },
+                "contentMode": { "enum": ["full", "title", "body"] }
+              }
+            }
+          },
+          "reason": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

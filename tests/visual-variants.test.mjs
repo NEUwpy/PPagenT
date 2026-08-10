@@ -2,11 +2,15 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   computeContainedFrame,
+  computeComparisonColumnRows,
+  computeSwimlaneLayout,
+  comparisonPalette,
   createPresentation,
   normalizeSequentialSteps,
   resolveComparisonEmphasis,
   transformPositionInContainedFrame,
 } from "../src/asset-runtime/component-builders.mjs";
+import { northeasternUniversitySkin } from "../src/runtime/skins/northeastern-university.mjs";
 import {
   listStructureAssetBuilders,
   renderStructureAsset,
@@ -46,6 +50,50 @@ test("结构组件嵌入 Skin 时使用等比例 contain 并在安全区居中",
   assert.ok(circle.left >= target.left && circle.top >= target.top);
   assert.ok(circle.left + circle.width <= target.left + target.width);
   assert.ok(circle.top + circle.height <= target.top + target.height);
+});
+
+test("东北大学 Skin 明确正文组件字号层级，核心正文不低于 18 磅", () => {
+  const typography = northeasternUniversitySkin.componentTheme.typography;
+  const scale = computeContainedFrame(
+    northeasternUniversitySkin.componentSourceFrame,
+    northeasternUniversitySkin.bodyFrame,
+  ).scale;
+  assert.equal(typography.componentHeading, 29);
+  assert.equal(typography.componentTitle, 26);
+  assert.equal(typography.componentItemTitle, 21);
+  assert.equal(typography.componentBody, 19);
+  assert.equal(typography.componentLabel, 18);
+  assert.equal(typography.componentMeta, 17);
+  assert.ok(Math.round(typography.componentBody * scale) >= 18);
+});
+
+test("泳道标签与泳道底板保留明确间隔，三角色任务卡落在各自单元内", () => {
+  const layout = computeSwimlaneLayout({ laneCount: 3, stageCount: 3, hasConclusion: true });
+  assert.ok(layout.laneLabelLeft + layout.laneLabelWidth + 12 <= layout.left);
+  assert.equal(layout.laneHeight, 112);
+  assert.ok(layout.top + layout.laneHeight * 3 < layout.conclusionTop);
+  assert.ok(layout.conclusionTop + layout.conclusionHeight <= 628);
+});
+
+test("双栏对比的非重点表面使用可见蓝灰底与边线，不会白底叠白框", () => {
+  const palette = comparisonPalette({ deEmphasized: true, side: "left" });
+  assert.notEqual(palette.nodeFill, "#FFFFFF");
+  assert.notEqual(palette.cardFill, "#FFFFFF");
+  assert.notEqual(palette.cardFill, "#F4F7FA");
+  assert.notEqual(palette.lineFill, "none");
+  assert.equal(palette.textColor, "#FFFFFF");
+});
+
+test("双栏对比 1–5 行都保持在面板内且互不重叠", () => {
+  for (let count = 1; count <= 5; count += 1) {
+    const rows = computeComparisonColumnRows(count);
+    assert.equal(rows.length, count);
+    rows.forEach((row, index) => {
+      assert.ok(row.top >= 242);
+      assert.ok(row.top + row.height <= 618);
+      if (index > 0) assert.ok(rows[index - 1].top + rows[index - 1].height < row.top);
+    });
+  }
 });
 
 test("正式候选只暴露已进入核心资产库的蒸馏变体", async () => {

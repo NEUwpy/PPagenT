@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { FileBlob, PresentationFile } from "@oai/artifact-tool";
 import {
   applyTemplateMappedRecipes,
@@ -8,6 +9,10 @@ import {
 } from "../../asset-runtime/template-utils.mjs";
 import { isSkinOnlyAsset, renderStructureAsset } from "../assets.mjs";
 import { wrapChineseText } from "../../render/chinese-typography.mjs";
+import { loadCompositionLayouts } from "../../composition/layouts.mjs";
+import { renderPageComposition } from "../../render/page-composition.mjs";
+
+const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 
 export const northeasternUniversitySkin = {
   id: "northeastern-university-001",
@@ -25,6 +30,14 @@ export const northeasternUniversitySkin = {
     muted: "#6F7D91",
     line: "#AFC6E8",
     font: "Microsoft YaHei",
+    typography: {
+      componentHeading: 29,
+      componentTitle: 26,
+      componentItemTitle: 21,
+      componentBody: 19,
+      componentLabel: 18,
+      componentMeta: 17,
+    },
   },
 };
 
@@ -34,6 +47,7 @@ function sourceNotes(page, manuscriptSource) {
     `- 内容：${manuscriptSource}`,
     "- 视觉：PPT模板-封面正文尾页.pptx（用户提供的东北大学模板）",
     `- PPagenT：${page.intent.intentId} → ${page.decision.selectedAssetId}`,
+    ...(page.composition ? [`- 整页编排：${page.composition.compositionId}`] : []),
     "[/Sources]",
   ].join("\n");
 }
@@ -104,10 +118,25 @@ export async function renderNortheasternUniversityDeck({
   });
   const presentation = await PresentationFile.importPptx(await FileBlob.load(starterPptx));
   const slides = await applyTemplateMappedRecipes(presentation, recipes);
+  const layouts = await loadCompositionLayouts(projectRoot);
 
   pages.forEach((page, index) => {
+    if (!page.composition) {
+      if (!isSkinOnlyAsset(page.payload.assetId)) renderStructureAsset(slides[index], page.payload, northeasternUniversitySkin);
+      return;
+    }
+    const layout = layouts.get(page.composition.compositionId);
+    if (!layout) throw new Error(`Unknown composition layout: ${page.composition.compositionId}`);
+    const { componentFrame } = renderPageComposition(
+      slides[index],
+      page.content,
+      layout,
+      page.composition,
+      northeasternUniversitySkin.bodyFrame,
+    );
     if (!isSkinOnlyAsset(page.payload.assetId)) {
-      renderStructureAsset(slides[index], page.payload, northeasternUniversitySkin);
+      if (!componentFrame) throw new Error(`${page.composition.compositionId} is missing a component slot`);
+      renderStructureAsset(slides[index], page.payload, northeasternUniversitySkin, componentFrame);
     }
   });
 

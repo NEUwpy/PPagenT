@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { createModelDirectorProvider } from "./model-director-provider.mjs";
+import { loadDirectorGuidelines } from "./director-guidelines.mjs";
 
 function withoutMeta(schema) {
   const copy = structuredClone(schema);
@@ -11,12 +12,13 @@ function withoutMeta(schema) {
 
 async function loadSchemas(root) {
   const read = async (name) => withoutMeta(JSON.parse(await fs.readFile(path.join(root, "schemas", name), "utf8")));
-  const [deckPlan, pageContent, pageIntent, contentReview, visualPlan, visualReview] = await Promise.all([
+  const [deckPlan, pageContent, pageIntent, contentReview, visualPlan, compositionPlan, visualReview] = await Promise.all([
     read("deck-plan.schema.json"),
     read("page-content.schema.json"),
     read("page-intent.schema.json"),
     read("content-review.schema.json"),
     read("visual-plan.schema.json"),
+    read("composition-plan.schema.json"),
     read("visual-review.schema.json"),
   ]);
   return {
@@ -38,8 +40,8 @@ async function loadSchemas(root) {
     visualComposition: {
       name: "ppagent_visual_composition",
       schema: {
-        type: "object", additionalProperties: false, required: ["visualPlan"],
-        properties: { visualPlan },
+        type: "object", additionalProperties: false, required: ["visualPlan", "compositionPlan"],
+        properties: { visualPlan, compositionPlan },
       },
     },
     visualReview: { name: "ppagent_visual_review", schema: visualReview },
@@ -113,9 +115,13 @@ export class OpenAIJsonModel {
 }
 
 export async function createOpenAIDirectorProvider({ root, apiKey, model, endpoint, fetchImpl }) {
-  const schemas = await loadSchemas(path.resolve(root));
+  const resolvedRoot = path.resolve(root);
+  const [schemas, guidelines] = await Promise.all([
+    loadSchemas(resolvedRoot),
+    loadDirectorGuidelines(resolvedRoot),
+  ]);
   const contentModel = new OpenAIJsonModel({ apiKey, model, endpoint, fetchImpl });
   const visualModel = new OpenAIJsonModel({ apiKey, model, endpoint, fetchImpl });
   const reviewerModel = new OpenAIJsonModel({ apiKey, model, endpoint, fetchImpl });
-  return createModelDirectorProvider({ contentModel, visualModel, reviewerModel, schemas });
+  return createModelDirectorProvider({ contentModel, visualModel, reviewerModel, schemas, guidelines });
 }

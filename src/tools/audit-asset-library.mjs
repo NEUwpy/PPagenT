@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { createRequire } from "node:module";
+import crypto from "node:crypto";
 
 const require = createRequire(import.meta.url);
 const JSZip = require("jszip");
@@ -15,6 +16,10 @@ async function exists(target) {
 
 async function readJson(target) {
   return JSON.parse(await fs.readFile(target, "utf8"));
+}
+
+async function sha256(target) {
+  return crypto.createHash("sha256").update(await fs.readFile(target)).digest("hex");
 }
 
 async function slideCount(target) {
@@ -42,6 +47,8 @@ const candidateRoot = path.join(root, "备选资产");
 const sampleRoot = path.join(root, "结构样本池");
 const candidateRegistry = await readJson(path.join(candidateRoot, "registry.json"));
 const coreRegistry = await readJson(path.join(coreRoot, "registry.json"));
+const qualityReportPath = path.join(coreRoot, "quality-report.json");
+const qualityReport = await exists(qualityReportPath) ? await readJson(qualityReportPath) : null;
 const sampleRegistry = await readJson(path.join(sampleRoot, "registry.json"));
 const coverage = await readJson(path.join(root, "catalog", "family-candidate-coverage.json"));
 
@@ -70,6 +77,20 @@ for (const entry of candidateRegistry.assets) {
 }
 
 const coreIds = new Set();
+const qualityEntries = new Map((qualityReport?.assets ?? []).map((entry) => [entry.id, entry]));
+const runtimePath = path.join(root, qualityReport?.runtimePath ?? "src/asset-runtime/component-builders.mjs");
+const currentRuntimeSha256 = await exists(runtimePath) ? await sha256(runtimePath) : null;
+const auditorPath = path.join(root, qualityReport?.auditorPath ?? "src/tools/audit-rendered-typography.mjs");
+const currentAuditorSha256 = await exists(auditorPath) ? await sha256(auditorPath) : null;
+const compositionCatalogPath = path.join(root, qualityReport?.compositionCatalogPath ?? "catalog/composition-layouts.json");
+const currentCompositionCatalogSha256 = await exists(compositionCatalogPath) ? await sha256(compositionCatalogPath) : null;
+const compositionRuntimePath = path.join(root, qualityReport?.compositionRuntimePath ?? "src/render/page-composition.mjs");
+const currentCompositionRuntimeSha256 = await exists(compositionRuntimePath) ? await sha256(compositionRuntimePath) : null;
+if (!qualityReport) issues.push("核心资产缺少 assets/quality-report.json，必须先完成确定性入库审查");
+else if (qualityReport.status !== "passed") issues.push("核心资产质量报告未通过");
+else if (qualityReport.auditorSha256 !== currentAuditorSha256) issues.push("核心资产审计器已变化，质量报告过期");
+else if (qualityReport.compositionCatalogSha256 !== currentCompositionCatalogSha256) issues.push("核心资产整页编排目录已变化，质量报告过期");
+else if (qualityReport.compositionRuntimeSha256 !== currentCompositionRuntimeSha256) issues.push("核心资产整页编排运行时已变化，质量报告过期");
 for (const entry of coreRegistry.assets) {
   if (coreIds.has(entry.id)) issues.push(`重复核心资产 ID: ${entry.id}`);
   coreIds.add(entry.id);
@@ -83,6 +104,7 @@ for (const entry of coreRegistry.assets) {
     const metadata = await readJson(path.join(directory, "asset.json"));
     if (metadata.id !== entry.id) issues.push(`核心资产 ID 不一致: ${entry.id}`);
     if (metadata.status !== "core") issues.push(`核心资产元数据状态错误: ${entry.id}`);
+    if (metadata.kind === "component" && !metadata.spatialContract) issues.push(`核心结构资产缺少空间契约: ${entry.id}`);
     const sourceFile = typeof metadata.source === "string" ? metadata.source : metadata.source?.file;
     if (!sourceFile) issues.push(`核心资产缺少可追溯来源: ${entry.id}`);
     else if (mode === "local" && !(await exists(path.join(root, sourceFile)))) issues.push(`核心资产来源不存在: ${entry.id}`);
@@ -91,6 +113,29 @@ for (const entry of coreRegistry.assets) {
     const count = await slideCount(path.join(directory, "example.pptx"));
     if (count !== 1) issues.push(`核心资产示例不是单页: ${entry.id}=${count}`);
   }
+  const quality = qualityEntries.get(entry.id);
+  if (!quality || quality.status !== "passed") {
+    issues.push(`核心资产没有通过的确定性质量记录: ${entry.id}`);
+  } else {
+    const examplePath = path.join(directory, "example.pptx");
+    const generatorPath = path.join(directory, "generate.mjs");
+    if (await exists(examplePath) && quality.exampleSha256 !== await sha256(examplePath)) {
+      issues.push(`核心资产示例已变化，质量记录过期: ${entry.id}`);
+    }
+    if (await exists(generatorPath) && quality.generatorSha256 !== await sha256(generatorPath)) {
+      issues.push(`核心资产生成器已变化，质量记录过期: ${entry.id}`);
+    }
+    const metadataPath = path.join(directory, "asset.json");
+    if (await exists(metadataPath) && quality.metadataSha256 !== await sha256(metadataPath)) {
+      issues.push(`核心资产空间或来源元数据已变化，质量记录过期: ${entry.id}`);
+    }
+    if (quality.runtimeSha256 !== currentRuntimeSha256) {
+      issues.push(`核心资产共享运行时代码已变化，质量记录过期: ${entry.id}`);
+    }
+  }
+}
+for (const id of qualityEntries.keys()) {
+  if (!coreIds.has(id)) issues.push(`质量报告包含未知核心资产: ${id}`);
 }
 
 const sampleIds = new Set();

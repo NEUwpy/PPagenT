@@ -64,7 +64,7 @@
         "semantic": { "ordered": false },
         "density": ["low", "medium"]
       },
-      "reviewReason": "语义纯粹，但仍需验证左右内容长度极不均匀时的退化。"
+      "reviewReason": "第 55 页蒸馏的镜像双栏已支持每侧 1–5 项与单侧重点；左右内容长度极不均匀时仍需真实稿件验证。"
     },
     {
       "assetId": "cycle-loop-001",
@@ -352,6 +352,21 @@
       "reviewReason": "要求地点和路径具有真实地域含义。"
     },
 
+    {
+      "assetId": "dual-core-enablement-001",
+      "abstractionLevel": "deferred",
+      "status": "draft",
+      "adaptationStatus": "partial",
+      "supportedIntents": { "baseRelations": ["composite"], "purposeKeys": [] },
+      "constraints": {
+        "metrics": [
+          { "field": "groups", "min": 2, "preferred": [2], "max": 2 },
+          { "field": "itemsPerGroup", "min": 1, "preferred": [4, 6], "max": 6 }
+        ],
+        "semantic": { "sameLevel": true }
+      },
+      "reviewReason": "第 31 页来源明确且已完成参数化，但共同输入、双核心和共同目标的真实稿件适用边界尚未验证，暂不参与选择。"
+    },
     {
       "assetId": "end-to-end-operations-001",
       "abstractionLevel": "deferred",

@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "1.0",
+  "coordinateSystem": "skin-body-normalized",
+  "layouts": [
+    {
+      "id": "fixed-cover",
+      "silhouette": "cover",
+      "requiresComponent": false,
+      "allowedAssetKinds": ["cover"],
+      "slots": []
+    },
+    {
+      "id": "fixed-closing",
+      "silhouette": "closing",
+      "requiresComponent": false,
+      "allowedAssetKinds": ["closing"],
+      "slots": []
+    },
+    {
+      "id": "component-full",
+      "silhouette": "full-width-visual",
+      "requiresComponent": true,
+      "allowedAssetKinds": ["component"],
+      "slots": [
+        { "id": "component", "role": "component", "frame": { "left": 0, "top": 0, "width": 1, "height": 1 } }
+      ]
+    },
+    {
+      "id": "component-aside-right",
+      "silhouette": "visual-left-editorial-right",
+      "requiresComponent": true,
+      "allowedAssetKinds": ["component"],
+      "slots": [
+        { "id": "component", "role": "component", "frame": { "left": 0, "top": 0.04, "width": 0.68, "height": 0.92 } },
+        { "id": "aside", "role": "text", "frame": { "left": 0.73, "top": 0.08, "width": 0.27, "height": 0.84 } }
+      ]
+    },
+    {
+      "id": "editorial-list",
+      "silhouette": "editorial-lead-and-list",
+      "requiresComponent": false,
+      "allowedAssetKinds": ["body"],
+      "slots": [
+        { "id": "lead", "role": "text", "frame": { "left": 0.03, "top": 0.08, "width": 0.28, "height": 0.82 } },
+        { "id": "body", "role": "text", "frame": { "left": 0.36, "top": 0.04, "width": 0.61, "height": 0.9 } }
+      ]
+    },
+    {
+      "id": "editorial-focus",
+      "silhouette": "large-thesis-with-support",
+      "requiresComponent": false,
+      "allowedAssetKinds": ["body"],
+      "slots": [
+        { "id": "primary", "role": "text", "frame": { "left": 0.04, "top": 0.1, "width": 0.5, "height": 0.76 } },
+        { "id": "support", "role": "text", "frame": { "left": 0.62, "top": 0.08, "width": 0.34, "height": 0.8 } }
+      ]
+    },
+    {
+      "id": "editorial-focus-reverse",
+      "silhouette": "support-with-large-thesis-right",
+      "requiresComponent": false,
+      "allowedAssetKinds": ["body"],
+      "slots": [
+        { "id": "support", "role": "text", "frame": { "left": 0.04, "top": 0.08, "width": 0.34, "height": 0.8 } },
+        { "id": "primary", "role": "text", "frame": { "left": 0.46, "top": 0.1, "width": 0.5, "height": 0.76 } }
+      ]
+    },
+    {
+      "id": "image-left-text-right",
+      "silhouette": "image-left-editorial-right",
+      "requiresComponent": false,
+      "requiresMedia": true,
+      "allowedAssetKinds": ["body"],
+      "slots": [
+        { "id": "image", "role": "image", "frame": { "left": 0, "top": 0, "width": 0.56, "height": 1 } },
+        { "id": "body", "role": "text", "frame": { "left": 0.63, "top": 0.08, "width": 0.33, "height": 0.84 } }
+      ]
+    },
+    {
+      "id": "image-right-text-left",
+      "silhouette": "editorial-left-image-right",
+      "requiresComponent": false,
+      "requiresMedia": true,
+      "allowedAssetKinds": ["body"],
+      "slots": [
+        { "id": "body", "role": "text", "frame": { "left": 0.04, "top": 0.08, "width": 0.33, "height": 0.84 } },
+        { "id": "image", "role": "image", "frame": { "left": 0.44, "top": 0, "width": 0.56, "height": 1 } }
+      ]
+    }
+  ]
+}

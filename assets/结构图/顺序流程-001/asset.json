@@ -12,6 +12,17 @@
   "generator": "generate.mjs",
   "showcase": "example.pptx",
   "parameters": ["title", "steps"],
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 40, "top": 135, "width": 1200, "height": 520 },
+    "aspectRatio": 2.3077,
+    "minimumFrame": { "width": 760, "height": 360 },
+    "preferredFrame": { "width": 1050, "height": 440 },
+    "resizeMode": "contain",
+    "minFontSize": 16,
+    "safePadding": 12,
+    "supportedCompositionIds": ["component-full", "component-aside-right"]
+  },
   "capacity": "3–6 个顺序步骤",
   "validation": "仅基础横向卡片变体进入正式调用；其他实验变体不得借用本资产身份"
 }

@@ -2,7 +2,9 @@ import {
   THEME,
   addBox,
   addCircle,
+  addLine,
   addText,
+  isEmbeddedSlide,
   runGenerator,
 } from "./component-builders.mjs";
 
@@ -10,6 +12,7 @@ export { runGenerator };
 
 function prepareSlide(presentation, title, subtitle) {
   const slide = presentation.slides.add();
+  if (isEmbeddedSlide(slide)) return slide;
   slide.background.fill = THEME.background;
   addText(slide, title, { left: 72, top: 42, width: 1040, height: 48 }, {
     fontSize: 36,
@@ -192,17 +195,7 @@ export function buildLifecycleCurve(presentation, params) {
   for (let index = 0; index < points.length - 1; index += 1) {
     const from = points[index];
     const to = points[index + 1];
-    slide.shapes.add({
-      geometry: "line",
-      position: {
-        left: from.x,
-        top: Math.min(from.y, to.y),
-        width: to.x - from.x,
-        height: Math.abs(to.y - from.y),
-        verticalFlip: to.y < from.y,
-      },
-      fill: "none", line: { style: "solid", fill: THEME.accent, width: 4 },
-    });
+    addLine(slide, from, to, THEME.accent, 4);
   }
   phases.forEach((phase, index) => {
     const point = points[index];

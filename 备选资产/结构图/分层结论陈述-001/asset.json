@@ -10,5 +10,12 @@
   "showcase": "example.pptx",
   "parameters": ["title", "sections"],
   "capacity": "2–4 组结论，每组 1–4 个要点",
+  "adaptation": {
+    "sectionCount": "2–4",
+    "pointsPerSection": "1–4",
+    "fallback": "超过 4 组时拆页；只有一组结论时使用正文要点页"
+  },
+  "semanticContract": "多组并列但层级清楚的结论，每组由一个类别标题和若干同类证据或发现组成",
+  "doNotUseWhen": "各组之间存在先后流程、因果链或必须比较的共同评价维度",
   "review": "待用户确认"
 }

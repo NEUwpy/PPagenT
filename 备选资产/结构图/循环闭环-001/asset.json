@@ -6,13 +6,9 @@
   "creationMethod": "distillation",
   "status": "candidate",
   "source": {
-    "file": "workbench/source-archive/狗哥蓝色-精美逻辑图PPT模板.pptx",
+    "file": "workbench/source-archive/【蓝色版】年终日常汇报PPT模板-狗哥PPT出品.pptx",
     "slides": [
-      72,
-      122,
-      126,
-      150,
-      154
+      50
     ]
   },
   "generator": "generate.mjs",
@@ -22,6 +18,13 @@
     "center",
     "steps"
   ],
-  "capacity": "固定 4 个循环步骤和 1 个中心主题",
+  "capacity": "3–6 个循环步骤和 1 个中心主题；步骤标题建议不超过 8 字，说明不超过 20 字",
+  "adaptation": {
+    "stepCount": "3–6",
+    "layout": "步骤沿顺时针顺序分配到左右两列，中心环保持稳定",
+    "fallback": "超过 6 步时改用顺序流程；没有反馈回到起点时不得使用循环"
+  },
+  "semanticContract": "多个步骤反复运行，最后一步会反馈或回到第一步",
+  "doNotUseWhen": "只是一次性线性过程，或多个要点之间没有循环关系",
   "review": "待用户确认"
 }

@@ -63,6 +63,13 @@ export function mapRenderPayload(content, intent, decision) {
     ]);
   }
 
+  if (assetId === "northeastern-university-body-001") {
+    return renderPayload(intent, assetId, {
+      title: content.title,
+      compositionOnly: true,
+    }, content.items.map((item) => mapping(item.id, "composition")));
+  }
+
   if (assetId === "radial-hub-001") {
     return renderPayload(intent, assetId, {
       title: content.title,

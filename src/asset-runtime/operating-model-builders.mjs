@@ -2,7 +2,10 @@ import {
   THEME,
   addBox,
   addCircle,
+  addLine,
   addText,
+  isEmbeddedSlide,
+  qaElementName,
   runGenerator,
 } from "./component-builders.mjs";
 
@@ -10,6 +13,7 @@ export { runGenerator };
 
 function prepareSlide(presentation, title, subtitle) {
   const slide = presentation.slides.add();
+  if (isEmbeddedSlide(slide)) return slide;
   slide.background.fill = THEME.background;
   addText(slide, title, { left: 72, top: 42, width: 1030, height: 48 }, {
     fontSize: 36,
@@ -37,27 +41,28 @@ function ring(slide, position, color, width = 22) {
 
 export function buildEndToEndOperations(presentation, params) {
   const slide = prepareSlide(presentation, params.title, "全链路运营框架");
-  const stages = params.stages.slice(0, 4);
-  const nodes = params.nodes.slice(0, 7);
-  const pillars = params.pillars.slice(0, 5);
-  if (stages.length < 3 || pillars.length < 3) throw new Error("全链路运营框架至少需要 3 个阶段和 3 个支柱");
+  const stages = params.stages;
+  const nodes = params.nodes;
+  const pillars = params.pillars;
+  if (stages.length < 3 || stages.length > 4) throw new Error("全链路运营框架支持 3–4 个链路阶段");
+  if (nodes.length < 4 || nodes.length > 7) throw new Error("全链路运营框架支持 4–7 个平台节点");
+  if (pillars.length < 3 || pillars.length > 5) throw new Error("全链路运营框架支持 3–5 个能力支柱");
+  for (const pillar of pillars) {
+    if (pillar.items.length < 2 || pillar.items.length > 4) throw new Error("每个能力支柱支持 2–4 个标签");
+  }
 
-  addBox(slide, { left: 60, top: 142, width: 1160, height: 286 }, {
+  addBox(slide, { left: 70, top: 140, width: 1140, height: 286 }, {
+    name: qaElementName({ parent: "operations-platform", domains: ["operations-platform"] }),
+    geometry: "roundRect",
     fill: "#FFFFFF",
-    line: { style: "solid", fill: THEME.line, width: 1.5 },
-    shadow: "shadow-sm",
+    line: { style: "solid", fill: "#C9D8E6", width: 1.5 },
+    shadow: "shadow-md",
   });
-  slide.shapes.add({
-    geometry: "line",
-    position: { left: 145, top: 318, width: 990, height: 0 },
-    fill: "none",
-    line: { style: "solid", fill: THEME.accentSoft, width: 8 },
-  });
-  const stageWidth = 1030 / stages.length;
+  const stageWidth = 1040 / stages.length;
   stages.forEach((stage, index) => {
-    addBox(slide, { left: 125 + index * stageWidth, top: 156, width: stageWidth - 8, height: 52 }, {
-      geometry: index < stages.length - 1 ? "chevron" : "rect",
-      fill: index % 2 ? "#315172" : THEME.accent,
+    addBox(slide, { left: 120 + index * stageWidth, top: 154, width: stageWidth + (index < stages.length - 1 ? 6 : 0), height: 50 }, {
+      geometry: index < stages.length - 1 ? "chevron" : "roundRect",
+      fill: ["#33488C", "#3E3E3E", "#5D9BD3", "#10A8CE"][index],
       line: { style: "solid", fill: "#FFFFFF", width: 1 },
       shadow: "shadow-none",
       text: stage,
@@ -66,29 +71,34 @@ export function buildEndToEndOperations(presentation, params) {
       color: "#FFFFFF",
     });
   });
-  addText(slide, params.centerLabel, { left: 340, top: 224, width: 600, height: 48 }, {
-    fontSize: 28,
+  addText(slide, params.centerLabel, { left: 300, top: 220, width: 680, height: 48 }, {
+    fontSize: 26,
     bold: true,
     color: THEME.accent,
     alignment: "center",
   });
-  const nodeWidth = 850 / nodes.length;
+  const nodeStart = 220;
+  const nodeEnd = 1060;
+  const nodeXs = nodes.map((_, index) => nodes.length === 1 ? 640 : nodeStart + index * ((nodeEnd - nodeStart) / (nodes.length - 1)));
+  addLine(slide, { x: nodeStart, y: 330 }, { x: nodeEnd, y: 330 }, "#C8D7E5", 3);
   nodes.forEach((node, index) => addCircle(slide, {
-    left: 205 + index * nodeWidth,
-    top: 286,
-    width: 76,
-    height: 76,
+    left: nodeXs[index] - 40,
+    top: 290,
+    width: 80,
+    height: 80,
   }, {
-    fill: index % 2 ? THEME.accentAlt : THEME.accent,
-    line: { style: "solid", fill: "#FFFFFF", width: 2 },
+    name: qaElementName({ parent: `operations-node-${index}`, domains: ["operations-nodes"] }),
+    fill: "linear(180deg, #FFFFFF 0%, #EEF2F6 100%)",
+    line: { style: "solid", fill: "#D1DBE5", width: 1.5 },
     shadow: "shadow-sm",
     text: node,
     fontSize: 16,
     bold: true,
-    color: "#FFFFFF",
+    color: index % 2 ? THEME.accentAlt : THEME.accent,
+    insets: { top: 4, right: 5, bottom: 4, left: 5 },
   }));
-  addBox(slide, { left: 76, top: 226, width: 80, height: 148 }, {
-    fill: THEME.accent,
+  addBox(slide, { left: 72, top: 218, width: 78, height: 172 }, {
+    geometry: "downArrow", fill: THEME.accent,
     line: { style: "solid", fill: "none", width: 0 },
     shadow: "shadow-none",
     text: params.leftFlow,
@@ -96,8 +106,8 @@ export function buildEndToEndOperations(presentation, params) {
     bold: true,
     color: "#FFFFFF",
   });
-  addBox(slide, { left: 1124, top: 226, width: 80, height: 148 }, {
-    fill: THEME.accentAlt,
+  addBox(slide, { left: 1130, top: 218, width: 78, height: 172 }, {
+    geometry: "upArrow", fill: THEME.accentAlt,
     line: { style: "solid", fill: "none", width: 0 },
     shadow: "shadow-none",
     text: params.rightFlow,
@@ -106,17 +116,19 @@ export function buildEndToEndOperations(presentation, params) {
     color: "#FFFFFF",
   });
 
-  const gap = 14;
-  const pillarWidth = (1160 - gap * (pillars.length - 1)) / pillars.length;
+  const gap = 12;
+  const pillarWidth = (1140 - gap * (pillars.length - 1)) / pillars.length;
   pillars.forEach((pillar, index) => {
-    const left = 60 + index * (pillarWidth + gap);
-    addBox(slide, { left, top: 452, width: pillarWidth, height: 210 }, {
-      fill: "#FFFFFF",
-      line: { style: "solid", fill: index % 2 ? THEME.accentAlt : THEME.accent, width: 1.5 },
-      shadow: "shadow-sm",
+    const left = 70 + index * (pillarWidth + gap);
+    const color = ["#315AA7", "#4C79B7", "#2F73B5", "#5D91CD", "#10A8CE"][index];
+    addBox(slide, { left, top: 448, width: pillarWidth, height: 214 }, {
+      name: qaElementName({ parent: `operations-pillar-${index}`, domains: ["operations-pillars"] }),
+      fill: index % 2 ? "#F3F6F9" : "#F7F9FB",
+      line: { style: "solid", fill: "#D6E0E8", width: 1 },
+      shadow: "shadow-md",
     });
     addBox(slide, { left, top: 452, width: pillarWidth, height: 48 }, {
-      fill: index % 2 ? THEME.accentAlt : THEME.accent,
+      fill: color,
       line: { style: "solid", fill: "none", width: 0 },
       shadow: "shadow-none",
       text: pillar.title,
@@ -124,11 +136,23 @@ export function buildEndToEndOperations(presentation, params) {
       bold: true,
       color: "#FFFFFF",
     });
-    addText(slide, bulletText(pillar.items.slice(0, 4)), { left: left + 18, top: 516, width: pillarWidth - 36, height: 124 }, {
-      fontSize: 16,
-      color: THEME.body,
-      verticalAlignment: "top",
+    if (pillar.body) addText(slide, pillar.body, { left: left + 14, top: 510, width: pillarWidth - 28, height: 50 }, {
+      fontSize: 16, color: THEME.body, alignment: "center", verticalAlignment: "top",
     });
+    const tagTop = pillar.body ? 570 : 520;
+    const tagGap = 6;
+    const tagHeight = 30;
+    const tagColumns = pillar.items.length > 2 ? 2 : 1;
+    const tagWidth = (pillarWidth - 28 - tagGap * (tagColumns - 1)) / tagColumns;
+    pillar.items.forEach((item, itemIndex) => addBox(slide, {
+      left: left + 14 + (itemIndex % tagColumns) * (tagWidth + tagGap),
+      top: tagTop + Math.floor(itemIndex / tagColumns) * (tagHeight + tagGap),
+      width: tagWidth,
+      height: tagHeight,
+    }, {
+      geometry: "roundRect", fill: "#FFFFFF", line: { style: "solid", fill: color, width: 1 }, shadow: "shadow-none",
+      text: item, fontSize: 16, color, insets: { top: 1, right: 5, bottom: 1, left: 5 },
+    }));
   });
   return slide;
 }
@@ -141,12 +165,7 @@ export function buildInternalExternalEcosystem(presentation, params) {
   centers.forEach((center, index) => {
     ring(slide, { left: center.x - 190, top: center.y - 190, width: 380, height: 380 }, index ? THEME.accentAlt : THEME.accent, 30);
   });
-  slide.shapes.add({
-    geometry: "line",
-    position: { left: 550, top: 350, width: 180, height: 0 },
-    fill: "none",
-    line: { style: "dashed", fill: THEME.muted, width: 2 },
-  });
+  addLine(slide, { x: 550, y: 350 }, { x: 730, y: 350 }, THEME.muted, 2, undefined, "dashed");
   addText(slide, params.bridge, { left: 548, top: 316, width: 184, height: 32 }, {
     fontSize: 16,
     bold: true,
@@ -159,18 +178,10 @@ export function buildInternalExternalEcosystem(presentation, params) {
     const items = system.items.slice(0, 6);
     items.forEach((_, itemIndex) => {
       const angle = -Math.PI / 2 + itemIndex * (2 * Math.PI / items.length);
-      slide.shapes.add({
-        geometry: "line",
-        position: {
-          left: Math.min(center.x, center.x + Math.cos(angle) * 122),
-          top: Math.min(center.y, center.y + Math.sin(angle) * 122),
-          width: Math.abs(Math.cos(angle) * 122),
-          height: Math.abs(Math.sin(angle) * 122),
-          verticalFlip: Math.sin(angle) < 0 !== Math.cos(angle) < 0,
-        },
-        fill: "none",
-        line: { style: "solid", fill: THEME.line, width: 1.5 },
-      });
+      addLine(slide, center, {
+        x: center.x + Math.cos(angle) * 122,
+        y: center.y + Math.sin(angle) * 122,
+      }, THEME.line, 1.5);
     });
     addCircle(slide, { left: center.x - 82, top: center.y - 82, width: 164, height: 164 }, {
       fill: "#315172",
@@ -227,12 +238,7 @@ export function buildOmnichannelDomainModel(presentation, params) {
   const leftNodes = params.publicChannels.slice(0, 4);
   const rightNodes = params.privateChannels.slice(0, 4);
 
-  slide.shapes.add({
-    geometry: "line",
-    position: { left: 290, top: 350, width: 700, height: 0 },
-    fill: "none",
-    line: { style: "dashed", fill: THEME.line, width: 3 },
-  });
+  addLine(slide, { x: 290, y: 350 }, { x: 990, y: 350 }, THEME.line, 3, undefined, "dashed");
   ring(slide, { left: 455, top: 170, width: 370, height: 370 }, THEME.accentSoft, 16);
   addBox(slide, { left: 270, top: 168, width: 116, height: 374 }, {
     fill: THEME.accent,
@@ -318,20 +324,7 @@ export function buildExperienceLayerModel(presentation, params) {
     { x: 212, y: 432 },
     { x: 452, y: 432 },
   ];
-  positions.forEach((position) => {
-    slide.shapes.add({
-      geometry: "line",
-      position: {
-        left: Math.min(332, position.x),
-        top: Math.min(355, position.y),
-        width: Math.abs(332 - position.x),
-        height: Math.abs(355 - position.y),
-        verticalFlip: position.y < 355 !== position.x < 332,
-      },
-      fill: "none",
-      line: { style: "solid", fill: THEME.line, width: 2 },
-    });
-  });
+  positions.forEach((position) => addLine(slide, { x: 332, y: 355 }, position, THEME.line, 2));
   ring(slide, { left: 110, top: 138, width: 444, height: 444 }, THEME.accentSoft, 18);
   addCircle(slide, { left: 258, top: 281, width: 148, height: 148 }, {
     fill: "#315172",

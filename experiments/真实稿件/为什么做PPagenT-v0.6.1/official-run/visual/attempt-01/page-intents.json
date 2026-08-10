@@ -1,0 +1,389 @@
+[
+  {
+    "schemaVersion": "1.1",
+    "intentId": "why-ppagent-v0.3.3-p01",
+    "purposeKey": "present_cover",
+    "purposeText": "以主题和核心判断开启演示，明确本次说明聚焦 PPagenT 为什么值得做。",
+    "baseRelation": "none",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 1,
+      "hierarchyDepth": 0,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {}
+    },
+    "density": "low",
+    "emphasis": [
+      0
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "contentStats": {
+      "titleChars": 12,
+      "itemCount": 1,
+      "maxItemChars": 23,
+      "avgItemChars": 23,
+      "minItemChars": 23,
+      "maxItemTitleChars": 0,
+      "maxItemBodyChars": 23,
+      "imbalanceRatio": 1
+    }
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "why-ppagent-v0.3.3-p02",
+    "purposeKey": "explain_process",
+    "purposeText": "按实际发生的先后说明制作 PPT 所需的三类判断，并以反问揭示重复劳动的问题。",
+    "baseRelation": "sequence",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "hierarchyDepth": 1,
+      "ordered": true,
+      "sameLevel": false,
+      "dimensions": {}
+    },
+    "density": "medium",
+    "emphasis": [
+      3
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.94,
+    "assumptions": [
+      "讲法与拆页、关系与突出、复用旧页并统一规范构成工作顺序；末尾反问是该顺序的结论，不是第四个同级步骤。"
+    ],
+    "contentStats": {
+      "titleChars": 11,
+      "itemCount": 4,
+      "maxItemChars": 28,
+      "avgItemChars": 24.5,
+      "minItemChars": 20,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 21,
+      "imbalanceRatio": 1.4
+    }
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "why-ppagent-v0.3.3-p03",
+    "purposeKey": "compare_options",
+    "purposeText": "对照 AI 的自由生成能力与工作型 PPT 的受控选择，说明后者更看重可靠、稳定和效率。",
+    "baseRelation": "comparison",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "category"
+    },
+    "structure": {
+      "itemCount": 2,
+      "hierarchyDepth": 1,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "groups": 2,
+        "itemsPerGroup": 3
+      }
+    },
+    "density": "medium",
+    "emphasis": [
+      1
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.99,
+    "assumptions": [
+      "两组各由一个 PageContent 内容块承载；自由生成块含两个要点，受控选择块含三个要点，因此 itemsPerGroup 取最大值 3。"
+    ],
+    "contentStats": {
+      "titleChars": 18,
+      "itemCount": 2,
+      "maxItemChars": 44,
+      "avgItemChars": 38.5,
+      "minItemChars": 33,
+      "maxItemTitleChars": 13,
+      "maxItemBodyChars": 31,
+      "imbalanceRatio": 1.33
+    }
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "why-ppagent-v0.3.3-p04",
+    "purposeKey": "explain_cross_role_process",
+    "purposeText": "说明 AI、规则与代码三个角色如何依次完成理解、决定和执行，并共同形成确定性产出。",
+    "baseRelation": "sequence",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 2,
+      "secondaryDimension": "role"
+    },
+    "structure": {
+      "itemCount": 4,
+      "hierarchyDepth": 1,
+      "ordered": true,
+      "sameLevel": false,
+      "dimensions": {
+        "roleCount": 3,
+        "stageCount": 3
+      }
+    },
+    "density": "medium",
+    "emphasis": [
+      3
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.99,
+    "assumptions": [
+      "末尾总结句是三段分工的归纳，不是新增角色或新增阶段。"
+    ],
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 4,
+      "maxItemChars": 32,
+      "avgItemChars": 26.5,
+      "minItemChars": 24,
+      "maxItemTitleChars": 7,
+      "maxItemBodyChars": 26,
+      "imbalanceRatio": 1.33
+    }
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "why-ppagent-v0.3.3-p05",
+    "purposeKey": "explain_process",
+    "purposeText": "从紧迫但普通的使用场景，依次推导工作交付要求和稳定 80 分的产品标准。",
+    "baseRelation": "sequence",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 3,
+      "hierarchyDepth": 1,
+      "ordered": true,
+      "sameLevel": false,
+      "dimensions": {}
+    },
+    "density": "medium",
+    "emphasis": [
+      2
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.86,
+    "assumptions": [
+      "标题含有 80 分与 95 分的对照，但正文没有形成两个完整选项，因此以“场景—要求—标准”的逻辑顺序为主关系。"
+    ],
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 3,
+      "maxItemChars": 38,
+      "avgItemChars": 31,
+      "minItemChars": 22,
+      "maxItemTitleChars": 11,
+      "maxItemBodyChars": 27,
+      "imbalanceRatio": 1.73
+    }
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "why-ppagent-v0.3.3-p06",
+    "purposeKey": "connect_problems_and_solutions",
+    "purposeText": "连接多数使用者已有的内容、缺失的制作能力、系统化方法和最终可获得的生产能力。",
+    "baseRelation": "causal",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "hierarchyDepth": 1,
+      "ordered": true,
+      "sameLevel": false,
+      "dimensions": {}
+    },
+    "density": "medium",
+    "emphasis": [
+      3
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.96,
+    "assumptions": [
+      "四项不是同级受众特征，而是“已有条件—能力缺口—系统介入—价值结果”的因果链。"
+    ],
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 4,
+      "maxItemChars": 33,
+      "avgItemChars": 26,
+      "minItemChars": 19,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 26,
+      "imbalanceRatio": 1.74
+    }
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "why-ppagent-v0.3.3-p07",
+    "purposeKey": "explain_conversion",
+    "purposeText": "说明静态模板因内容不可穷尽而受限，以及提炼适用规律后如何把单件作品转化为可复用能力。",
+    "baseRelation": "sequence",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 3,
+      "hierarchyDepth": 1,
+      "ordered": true,
+      "sameLevel": false,
+      "dimensions": {}
+    },
+    "density": "medium",
+    "emphasis": [
+      2
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.98,
+    "assumptions": [],
+    "contentStats": {
+      "titleChars": 12,
+      "itemCount": 3,
+      "maxItemChars": 35,
+      "avgItemChars": 32.67,
+      "minItemChars": 31,
+      "maxItemTitleChars": 10,
+      "maxItemBodyChars": 25,
+      "imbalanceRatio": 1.13
+    }
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "why-ppagent-v0.3.3-p08",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列说明组织视觉系统可以替换、底层经验能力可以复用，两项共同证明首个 Skin 不是产品最终边界。",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "category"
+    },
+    "structure": {
+      "itemCount": 2,
+      "hierarchyDepth": 1,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {}
+    },
+    "density": "low",
+    "emphasis": [
+      1
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.99,
+    "assumptions": [
+      "两项共同支撑扩展边界，不存在共同评价维度、优劣或二选一关系，因此不是比较。"
+    ],
+    "contentStats": {
+      "titleChars": 23,
+      "itemCount": 2,
+      "maxItemChars": 43,
+      "avgItemChars": 35,
+      "minItemChars": 27,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 35,
+      "imbalanceRatio": 1.59
+    }
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "why-ppagent-v0.3.3-p09",
+    "purposeKey": "present_closing",
+    "purposeText": "以留下高手经验的使命和“项目值得做”的结论收束演示。",
+    "baseRelation": "none",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "hierarchyDepth": 0,
+      "ordered": false,
+      "sameLevel": false,
+      "dimensions": {}
+    },
+    "density": "low",
+    "emphasis": [
+      1
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "contentStats": {
+      "titleChars": 19,
+      "itemCount": 2,
+      "maxItemChars": 20,
+      "avgItemChars": 14.5,
+      "minItemChars": 9,
+      "maxItemTitleChars": 0,
+      "maxItemBodyChars": 20,
+      "imbalanceRatio": 2.22
+    }
+  }
+]

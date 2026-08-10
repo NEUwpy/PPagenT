@@ -6,12 +6,11 @@
   "creationMethod": "distillation",
   "status": "candidate",
   "source": {
-    "file": "workbench/source-archive/狗哥蓝色-精美逻辑图PPT模板.pptx",
+    "file": "workbench/source-archive/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
     "slides": [
-      51,
-      61,
-      76,
-      102
+      77,
+      80,
+      96
     ]
   },
   "generator": "generate.mjs",
@@ -20,6 +19,13 @@
     "title",
     "stages"
   ],
-  "capacity": "固定 4 层漏斗",
+  "capacity": "3–6 个递减阶段；阶段标题建议不超过 8 字，说明不超过 34 字",
+  "adaptation": {
+    "stageCount": "3–6",
+    "layout": "漏斗宽度、段高和右侧说明行自动同步分配",
+    "fallback": "没有递减、筛选或转化含义时改用顺序流程；超过 6 阶段拆页"
+  },
+  "semanticContract": "数量、范围或人群随阶段逐步减少，并需要解释每一步转化",
+  "doNotUseWhen": "各阶段数量不递减，或只是一般流程",
   "review": "待用户确认"
 }

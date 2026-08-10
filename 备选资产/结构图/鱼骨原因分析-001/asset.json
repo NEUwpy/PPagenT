@@ -13,5 +13,12 @@
   "showcase": "example.pptx",
   "parameters": ["title", "effect", "branches"],
   "capacity": "4–6 类原因；每类建议 1–4 条因素",
+  "adaptation": {
+    "branchCount": "4–6",
+    "factorCount": "每类 1–4",
+    "fallback": "原因类别超过 6 类时先合并同类项或拆页；需要呈现因果路径时改用因果链"
+  },
+  "semanticContract": "围绕一个明确结果问题，从多个互相并列的原因类别继续拆解具体因素",
+  "doNotUseWhen": "原因之间存在严格先后链条，或页面要表达解决方案而非原因诊断",
   "review": "待用户确认"
 }

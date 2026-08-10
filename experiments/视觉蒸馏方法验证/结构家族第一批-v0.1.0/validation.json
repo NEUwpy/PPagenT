@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "methodVersion": "source-faithful-adaptive-v1",
+  "batchId": "structure-family-batch-1-v0.1.0",
+  "status": "passed",
+  "assetIds": [
+    "radial-hub-001",
+    "cycle-loop-001",
+    "timeline-roadmap-001",
+    "hierarchy-pyramid-001",
+    "funnel-conversion-001"
+  ],
+  "stressDeck": "experiments/视觉蒸馏方法验证/结构家族第一批-v0.1.0/结构家族第一批-v0.1.0.pptx",
+  "evidence": {
+    "pngCount": 10,
+    "layoutCount": 10,
+    "expectedSlides": 10
+  },
+  "typography": {
+    "status": "passed",
+    "minimumFontSize": 16,
+    "violations": []
+  },
+  "geometry": {
+    "status": "passed",
+    "tolerance": 0.5,
+    "qaParentCount": 43,
+    "connectorCount": 0,
+    "qaParentCountBySlide": {
+      "slide-01": 0,
+      "slide-02": 0,
+      "slide-03": 3,
+      "slide-04": 6,
+      "slide-05": 0,
+      "slide-06": 0,
+      "slide-07": 6,
+      "slide-08": 10,
+      "slide-09": 6,
+      "slide-10": 12
+    },
+    "violations": []
+  },
+  "issues": []
+}

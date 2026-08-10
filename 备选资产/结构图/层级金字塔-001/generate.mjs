@@ -3,9 +3,9 @@ export { buildHierarchyPyramid };
 await runGenerator(import.meta.url, buildHierarchyPyramid, {
   title: "层级金字塔",
   levels: [
-    { title: "核心层", share: "10%", body: "负责定义方向与核心策略" },
-    { title: "关键层", share: "20%", body: "负责关键任务与资源配置" },
-    { title: "支撑层", share: "30%", body: "负责协作、保障和能力建设" },
-    { title: "基础层", share: "40%", body: "负责日常执行与广泛覆盖" }
+    { title: "方向层", share: "WHY", body: "明确要解决的问题、价值判断和长期边界" },
+    { title: "规则层", share: "HOW", body: "把经验变成可选择、可验证的工作规则" },
+    { title: "能力层", share: "WHAT", body: "提供可复用组件、版式和稳定的渲染能力" },
+    { title: "执行层", share: "DO", body: "根据真实稿件完成生成、检查与最终交付" }
   ]
 });

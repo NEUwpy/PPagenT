@@ -6,18 +6,9 @@
   "creationMethod": "distillation",
   "status": "candidate",
   "source": {
-    "file": "workbench/source-archive/狗哥蓝色-精美逻辑图PPT模板.pptx",
+    "file": "workbench/source-archive/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
     "slides": [
-      96,
-      103,
-      112,
-      120,
-      139,
-      148,
-      149,
-      150,
-      155,
-      156
+      25
     ]
   },
   "generator": "generate.mjs",
@@ -28,6 +19,13 @@
     "rows",
     "summary"
   ],
-  "capacity": "2–3 个目标行，每行 1–3 项指标",
+  "capacity": "3–5 个责任单元；每个单元 1–3 项 KPI",
+  "adaptation": {
+    "unitCount": "3–5",
+    "metricCount": "每单元 1–3",
+    "fallback": "责任单元超过 5 个时拆页；单元内部指标过多时改用 KPI 明细表"
+  },
+  "semanticContract": "一个总目标向多个责任单元分解，每个单元同时承担明确指标和结果贡献",
+  "doNotUseWhen": "只有指标展示而没有总目标—责任单元—贡献的映射关系",
   "review": "待用户确认"
 }

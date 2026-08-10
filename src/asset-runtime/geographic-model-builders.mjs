@@ -2,7 +2,9 @@ import {
   THEME,
   addBox,
   addCircle,
+  addLine,
   addText,
+  isEmbeddedSlide,
   runGenerator,
 } from "./component-builders.mjs";
 
@@ -10,6 +12,7 @@ export { runGenerator };
 
 function prepareSlide(presentation, title, subtitle) {
   const slide = presentation.slides.add();
+  if (isEmbeddedSlide(slide)) return slide;
   slide.background.fill = THEME.background;
   addText(slide, title, { left: 72, top: 42, width: 1040, height: 48 }, {
     fontSize: 36, bold: true, color: THEME.accent,
@@ -18,17 +21,6 @@ function prepareSlide(presentation, title, subtitle) {
     fontSize: 16, color: THEME.muted,
   });
   return slide;
-}
-
-function addLine(slide, from, to, color = THEME.line, width = 2) {
-  slide.shapes.add({
-    geometry: "line",
-    position: {
-      left: Math.min(from.x, to.x), top: Math.min(from.y, to.y), width: Math.abs(to.x - from.x),
-      height: Math.abs(to.y - from.y), horizontalFlip: to.x < from.x, verticalFlip: to.y < from.y,
-    },
-    fill: "none", line: { style: "solid", fill: color, width },
-  });
 }
 
 export function buildGeographicNetwork(presentation, params) {

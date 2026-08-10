@@ -23,7 +23,7 @@ function assertSchemas(schemas) {
   return schemas;
 }
 
-export function createModelDirectorProvider({ contentModel, visualModel, reviewerModel, schemas }) {
+export function createModelDirectorProvider({ contentModel, visualModel, reviewerModel, schemas, guidelines = {} }) {
   const content = assertModel(contentModel, "contentModel");
   const visual = assertModel(visualModel, "visualModel");
   const reviewer = assertModel(reviewerModel, "reviewerModel");
@@ -40,6 +40,7 @@ export function createModelDirectorProvider({ contentModel, visualModel, reviewe
         role: "PPagenT 内容导演",
         task: "在整套尺度决定叙事弧、页数、页序、每页职责、拆分和轻重；输出 deckPlan 与 pageContents。",
         context: {
+          executionGuidelines: guidelines.content ?? "",
           ...sourceRule(input.rawMarkdown),
           attempt: input.attempt,
           previous: input.previous,
@@ -68,14 +69,18 @@ export function createModelDirectorProvider({ contentModel, visualModel, reviewe
         return visual.generateJson({
           role: "PPagenT 视觉导演",
           task: "只判断每页表达目的和语义关系，输出 pageIntents；此阶段不得选择资产。",
-          context: { attempt: input.attempt, skinId: input.skinId, deckPlan: input.deckPlan, pageContents: input.pageContents },
+          context: {
+            executionGuidelines: guidelines.visual ?? "",
+            attempt: input.attempt, skinId: input.skinId, deckPlan: input.deckPlan, pageContents: input.pageContents,
+          },
           outputSchema: outputs.visualIntent,
         });
       }
       return visual.generateJson({
         role: "PPagenT 视觉导演",
-        task: "只从每页 candidateSets 中选择 familyId/variantId，并在整套尺度控制轮廓重复与节奏；candidateSets 为空时不得自创结构、借用实验变体或伪造资产 ID，必须等待程序失败关闭并回到资产蒸馏；输出 VisualPlan。",
+        task: "先为每页从 candidateSets 中选择合法的整页 composition，再选择 familyId/variantId；明确内容进入组件还是文字槽位，并在整套尺度控制轮廓、图文比例与节奏。不得自创结构、版式或伪造 ID；输出 VisualPlan 与 CompositionPlan。",
         context: {
+          executionGuidelines: guidelines.visual ?? "",
           attempt: input.attempt,
           skinId: input.skinId,
           deckPlan: input.deckPlan,

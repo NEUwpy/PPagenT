@@ -5,10 +5,17 @@
   "category": "结构图",
   "creationMethod": "distillation",
   "status": "candidate",
-  "source": { "file": "workbench/source-archive/【动画版】500页创意图文排版PPT模板-深蓝版.pptx", "slides": [443] },
+  "source": { "file": "workbench/source-archive/【蓝色版】150页逻辑框架汇报PPT模板.pptx", "slides": [129] },
   "generator": "generate.mjs",
   "showcase": "example.pptx",
-  "parameters": ["title", "trackA", "trackB", "stages"],
-  "capacity": "3–5 个阶段、两条并行演进主线",
+  "parameters": ["title", "start", "trackA", "trackB", "stages"],
+  "capacity": "3–5 个共同阶段、两条同时推进的演进主线",
+  "adaptation": {
+    "stageCount": "3–5",
+    "trackCount": "固定 2 条",
+    "fallback": "只有一条主线时改用普通时间轴；两条主线阶段不共享时点时拆成两个独立路线图"
+  },
+  "semanticContract": "两条主线从共同起点出发，在同一组阶段或时点上并行演进",
+  "doNotUseWhen": "两条线只是装饰曲线，或内容实际只有一组交替出现的时间节点",
   "review": "待用户确认"
 }

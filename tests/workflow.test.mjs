@@ -88,6 +88,20 @@ function visualPlanOutput(skinId = DEFAULT_SKIN_ID) {
         reason: "单页只承担一个矛盾陈述",
       }],
     },
+    compositionPlan: {
+      schemaVersion: "1.0",
+      deckId: "why-ppagent",
+      skinId,
+      pages: [{
+        pageId: "problem",
+        intentId: "problem-intent",
+        compositionId: "component-full",
+        componentItemIds: ["point-1"],
+        componentContentMode: "full",
+        textSlots: [],
+        reason: "Use the validated component in the full body frame.",
+      }],
+    },
   };
 }
 
@@ -101,6 +115,7 @@ async function candidateProvider() {
       variantId: "orbit",
       silhouette: "center-orbit",
       adaptationStatus: "adaptive",
+      compositionIds: ["component-full"],
     }],
   }];
 }
@@ -118,7 +133,7 @@ function review({ type, stage, attempt = 1, verdict = "pass", issues = [] }) {
   };
 }
 
-function resolver() {
+function resolver({ compositionPlan } = {}) {
   return {
     status: "accepted",
     results: [],
@@ -145,6 +160,7 @@ function resolver() {
       mappings: [],
       omissions: [],
     }],
+    compositionPlan,
   };
 }
 
@@ -172,14 +188,15 @@ async function renderer({ outputDir }) {
   const evidence = path.join(outputDir, "slide-1.png");
   await fs.writeFile(outputPptx, "test");
   await fs.writeFile(evidence, "test");
-  return { outputPptx, pageEvidence: [evidence] };
+  return { outputPptx, pageEvidence: [evidence], qualityAudit: { status: "passed" } };
 }
 
-test("四类 workflow schema 已注册", async () => {
+test("workflow schemas including CompositionPlan are registered", async () => {
   const validators = await createRuleValidators(root);
   assert.equal(typeof validators.validateDeckPlan, "function");
   assert.equal(typeof validators.validateContentReview, "function");
   assert.equal(typeof validators.validateVisualPlan, "function");
+  assert.equal(typeof validators.validateCompositionPlan, "function");
   assert.equal(typeof validators.validateVisualReview, "function");
 });
 
@@ -267,6 +284,32 @@ test("产品工作流只调用内容导演和视觉导演，不调用研发审�
   await assert.rejects(fs.access(path.join(outputDir, "content", "attempt-01", "content-review.json")));
   await assert.rejects(fs.access(path.join(outputDir, "visual", "attempt-01", "visual-review-pre.json")));
   await assert.rejects(fs.access(path.join(outputDir, "visual", "attempt-01", "visual-review-post.json")));
+});
+
+test("每次正式生成都必须带通过的确定性质量审计，否则不得交付", async (t) => {
+  const outputDir = await makeTempDir(t);
+  await assert.rejects(
+    runDirectorWorkflow({
+      input: { rawMarkdown },
+      provider: {
+        async contentDirector() { return contentOutput(); },
+        async visualDirector({ phase, skinId }) {
+          return phase === "intent" ? visualIntentOutput() : visualPlanOutput(skinId);
+        },
+      },
+      outputDir,
+      reviewMode: "production",
+      visualCandidateProvider: candidateProvider,
+      visualResolver: resolver,
+      renderer: async (args) => {
+        const result = await renderer(args);
+        delete result.qualityAudit;
+        return result;
+      },
+    }),
+    (error) => error instanceof WorkflowError && error.code === "RENDER_QUALITY_GATE_MISSING",
+  );
+  await assert.rejects(fs.access(path.join(outputDir, "workflow-result.json")));
 });
 
 test("内容 error 未关闭时不调用视觉导演", async (t) => {
@@ -441,7 +484,7 @@ test("变体确定性复核未接受时把反馈送回视觉导演且不进入�
     },
   });
   let resolverCalls = 0;
-  const visualResolver = async () => {
+  const visualResolver = async (args) => {
     resolverCalls += 1;
     if (resolverCalls === 1) {
       return {
@@ -450,7 +493,7 @@ test("变体确定性复核未接受时把反馈送回视觉导演且不进入�
         feedback: [{ pageId: "problem", message: "选择另一种轮廓" }],
       };
     }
-    return resolver();
+    return resolver(args);
   };
 
   await runDirectorWorkflow({
@@ -504,6 +547,7 @@ test("完整链路保存中间 JSON，并把逐页证据交给渲染后审查", 
     "content/attempt-01/page-contents.json",
     "content/attempt-01/content-review.json",
     "visual/attempt-01/visual-plan.json",
+    "visual/attempt-01/composition-plan.json",
     "visual/attempt-01/page-intents.json",
     "visual/attempt-01/layout-decisions.json",
     "visual/attempt-01/render-payloads.json",

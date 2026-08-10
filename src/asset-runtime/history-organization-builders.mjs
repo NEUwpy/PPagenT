@@ -1,15 +1,21 @@
 import {
   THEME,
+  addAnchoredLine,
   addBox,
   addCircle,
+  addLine,
   addText,
+  isEmbeddedSlide,
+  qaElementName,
   runGenerator,
 } from "./component-builders.mjs";
+import { wrapChineseText } from "../render/chinese-typography.mjs";
 
 export { runGenerator };
 
 function prepareSlide(presentation, title, subtitle) {
   const slide = presentation.slides.add();
+  if (isEmbeddedSlide(slide)) return slide;
   slide.background.fill = THEME.background;
   addText(slide, title, { left: 72, top: 42, width: 1040, height: 48 }, {
     fontSize: 36,
@@ -23,83 +29,79 @@ function prepareSlide(presentation, title, subtitle) {
   return slide;
 }
 
-function addLine(slide, from, to, color = THEME.line, width = 2) {
-  slide.shapes.add({
-    geometry: "line",
-    position: {
-      left: from.x,
-      top: Math.min(from.y, to.y),
-      width: to.x - from.x,
-      height: Math.abs(to.y - from.y),
-      verticalFlip: to.y < from.y,
-    },
-    fill: "none",
-    line: { style: "solid", fill: color, width },
-  });
-}
-
 function initials(name) {
   return String(name ?? "").trim().slice(0, 2) || "成员";
 }
 
 export function buildOrganizationTree(presentation, params) {
-  const slide = prepareSlide(presentation, params.title, "三层组织树");
-  const departments = params.departments.slice(0, 4);
-  if (departments.length < 2) throw new Error("三层组织树至少需要 2 个部门");
-  const leaderCenter = { x: 640, y: 180 };
-  const departmentY = 348;
-  const memberY = 548;
-  const departmentXs = departments.map((_, index) => 150 + index * (980 / (departments.length - 1)));
+  const slide = prepareSlide(presentation, params.title, "组织层级 · 角色分工");
+  const departments = params.departments;
+  if (departments.length < 2 || departments.length > 4) throw new Error("三层组织树支持 2–4 个部门");
+  for (const department of departments) {
+    if (department.members.length < 1 || department.members.length > 3) {
+      throw new Error("三层组织树每个部门支持 1–3 名成员");
+    }
+  }
 
-  addLine(slide, { x: leaderCenter.x, y: 230 }, { x: leaderCenter.x, y: 272 }, THEME.accent, 2.5);
-  addLine(slide, { x: departmentXs[0], y: 272 }, { x: departmentXs.at(-1), y: 272 }, THEME.accent, 2.5);
-  departmentXs.forEach((x) => addLine(slide, { x, y: 272 }, { x, y: departmentY - 48 }, THEME.accent, 2.5));
+  const departmentY = 350;
+  const memberY = 535;
+  const departmentXs = departments.map((_, index) => 150 + index * (980 / (departments.length - 1)));
+  addLine(slide, { x: 640, y: 228 }, { x: 640, y: 276 }, THEME.accent, 2.5);
+  addLine(slide, { x: departmentXs[0], y: 276 }, { x: departmentXs.at(-1), y: 276 }, THEME.accent, 2.5);
+  departmentXs.forEach((x) => addLine(slide, { x, y: 276 }, { x, y: departmentY - 44 }, THEME.accent, 2.5));
+
+  addCircle(slide, { left: 584, top: 126, width: 112, height: 112 }, {
+    fill: "#DCE8F4", line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-none",
+  });
+  addCircle(slide, { left: 596, top: 138, width: 88, height: 88 }, {
+    fill: "#FFFFFF", line: { style: "solid", fill: THEME.accent, width: 3 }, shadow: "shadow-md",
+    text: initials(params.leader.name), fontSize: 24, bold: true, color: THEME.accent,
+    insets: { top: 0, right: 0, bottom: 0, left: 0 },
+  });
+  addBox(slide, { left: 526, top: 228, width: 228, height: 40 }, {
+    name: qaElementName({ parent: "org-leader", domains: ["organization-leaders"] }),
+    fill: THEME.accent, line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-sm",
+    text: `${params.leader.name}｜${params.leader.role}`, fontSize: 16, bold: true, color: "#FFFFFF",
+    insets: { top: 2, right: 8, bottom: 2, left: 8 },
+  });
 
   departments.forEach((department, index) => {
-    const members = department.members.slice(0, 3);
     const centerX = departmentXs[index];
-    const span = Math.min(210, 76 * Math.max(1, members.length - 1));
+    const members = department.members;
+    const span = members.length === 1 ? 0 : Math.min(204, 82 * (members.length - 1));
     const memberXs = members.map((_, memberIndex) => members.length === 1
       ? centerX
       : centerX - span / 2 + memberIndex * (span / (members.length - 1)));
-    addLine(slide, { x: centerX, y: departmentY + 48 }, { x: centerX, y: 462 }, THEME.accentAlt, 2);
-    if (members.length > 1) addLine(slide, { x: memberXs[0], y: 462 }, { x: memberXs.at(-1), y: 462 }, THEME.accentAlt, 2);
-    memberXs.forEach((x) => addLine(slide, { x, y: 462 }, { x, y: memberY - 34 }, THEME.accentAlt, 2));
-  });
+    addLine(slide, { x: centerX, y: departmentY + 46 }, { x: centerX, y: 470 }, "#E3AF45", 2);
+    if (members.length > 1) addLine(slide, { x: memberXs[0], y: 470 }, { x: memberXs.at(-1), y: 470 }, "#E3AF45", 2);
+    memberXs.forEach((x) => addLine(slide, { x, y: 470 }, { x, y: memberY - 30 }, "#E3AF45", 2));
 
-  addCircle(slide, { left: 588, top: 128, width: 104, height: 104 }, {
-    fill: "#DCE6F2", line: { style: "solid", fill: THEME.accent, width: 3 }, shadow: "shadow-md",
-    text: initials(params.leader.name), fontSize: 27, bold: true, color: THEME.accent,
-  });
-  addBox(slide, { left: 530, top: 238, width: 220, height: 38 }, {
-    fill: THEME.accent, line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-none",
-    text: `${params.leader.name}｜${params.leader.role}`, fontSize: 16, bold: true, color: "#FFFFFF",
-    insets: { top: 3, right: 8, bottom: 3, left: 8 },
-  });
-
-  departments.forEach((department, index) => {
-    const centerX = departmentXs[index];
-    addCircle(slide, { left: centerX - 46, top: departmentY - 46, width: 92, height: 92 }, {
-      fill: "#EAF2FA", line: { style: "solid", fill: THEME.accent, width: 2.5 }, shadow: "shadow-sm",
-      text: initials(department.head), fontSize: 24, bold: true, color: THEME.accent,
+    addCircle(slide, { left: centerX - 50, top: departmentY - 50, width: 100, height: 100 }, {
+      fill: "#E4EDF6", line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-none",
     });
-    addBox(slide, { left: centerX - 100, top: departmentY + 52, width: 200, height: 36 }, {
-      fill: THEME.accent, line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-none",
-      text: `${department.head}｜${department.name}`, fontSize: 14, bold: true, color: "#FFFFFF",
-      insets: { top: 2, right: 5, bottom: 2, left: 5 },
+    addCircle(slide, { left: centerX - 40, top: departmentY - 40, width: 80, height: 80 }, {
+      fill: "#FFFFFF", line: { style: "solid", fill: THEME.accent, width: 2.5 }, shadow: "shadow-md",
+      text: initials(department.head), fontSize: 21, bold: true, color: THEME.accent,
+      insets: { top: 0, right: 0, bottom: 0, left: 0 },
     });
-    const members = department.members.slice(0, 3);
-    const span = Math.min(210, 76 * Math.max(1, members.length - 1));
-    const labelWidth = members.length === 3 ? 70 : 108;
+    addBox(slide, { left: centerX - 108, top: departmentY + 50, width: 216, height: 38 }, {
+      name: qaElementName({ parent: `org-department-${index}`, domains: ["organization-departments"] }),
+      fill: THEME.accent, line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-sm",
+      text: `${department.head}｜${department.name}`, fontSize: 16, bold: true, color: "#FFFFFF",
+      insets: { top: 2, right: 6, bottom: 2, left: 6 },
+    });
     members.forEach((member, memberIndex) => {
-      const x = members.length === 1 ? centerX : centerX - span / 2 + memberIndex * (span / (members.length - 1));
-      addCircle(slide, { left: x - 33, top: memberY - 33, width: 66, height: 66 }, {
-        fill: "#FFFFFF", line: { style: "solid", fill: THEME.accentAlt, width: 2 }, shadow: "shadow-sm",
-        text: initials(member.name), fontSize: 18, bold: true, color: THEME.accentAlt,
+      const x = memberXs[memberIndex];
+      addCircle(slide, { left: x - 30, top: memberY - 30, width: 60, height: 60 }, {
+        fill: "#FFFFFF", line: { style: "solid", fill: "#E3AF45", width: 2.5 }, shadow: "shadow-sm",
+        text: initials(member.name), fontSize: 17, bold: true, color: THEME.accent,
+        insets: { top: 0, right: 0, bottom: 0, left: 0 },
       });
-      addBox(slide, { left: x - labelWidth / 2, top: memberY + 40, width: labelWidth, height: 34 }, {
-        fill: "#EEF4FA", line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-none",
-        text: `${member.name}\n${member.role}`, fontSize: 10, color: THEME.body,
+      addBox(slide, { left: x - 39, top: memberY + 36, width: 78, height: 48 }, {
+        name: qaElementName({ parent: `org-member-${index}-${memberIndex}`, domains: ["organization-members"] }),
+        fill: "#F1F5F9", line: { style: "solid", fill: "#E1E8EF", width: 1 }, shadow: "shadow-none",
+        text: member.role, fontSize: 16, color: THEME.body,
+        autoFit: "none",
         insets: { top: 2, right: 3, bottom: 2, left: 3 },
       });
     });
@@ -149,47 +151,93 @@ export function buildEvolutionStaircase(presentation, params) {
 }
 
 export function buildDualTrackRoadmap(presentation, params) {
-  const slide = prepareSlide(presentation, params.title, "双轨演进路线图");
-  const stages = params.stages.slice(0, 5);
-  if (stages.length < 3) throw new Error("双轨演进路线图至少需要 3 个阶段");
-  const xs = stages.map((_, index) => 120 + index * (1040 / (stages.length - 1)));
-  const waveA = xs.map((x, index) => ({ x, y: index % 2 ? 390 : 300 }));
-  const waveB = xs.map((x, index) => ({ x, y: index % 2 ? 300 : 390 }));
-  for (let index = 0; index < stages.length - 1; index += 1) {
-    addLine(slide, waveA[index], waveA[index + 1], THEME.accent, 18);
-    addLine(slide, waveB[index], waveB[index + 1], THEME.accentAlt, 18);
+  const slide = prepareSlide(presentation, params.title, "共同起点 · 双轨并行演进");
+  const stages = params.stages;
+  if (stages.length < 3 || stages.length > 5) throw new Error("双轨演进路线图支持 3–5 个阶段");
+  for (const stage of stages) {
+    if (!stage.trackA?.title || !stage.trackB?.title) throw new Error("双轨路线的每个阶段必须同时提供两条主线内容");
   }
-  addBox(slide, { left: 72, top: 274, width: 110, height: 34 }, {
-    fill: THEME.accent, line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-none",
-    text: params.trackA, fontSize: 15, bold: true, color: "#FFFFFF",
-    insets: { top: 2, right: 6, bottom: 2, left: 6 },
+
+  const laneLeft = 260;
+  const laneWidth = 950;
+  const topLane = 276;
+  const bottomLane = 466;
+  const startFrame = { left: 92, top: 356, width: 110, height: 110 };
+  const topLaneFrame = { left: laneLeft, top: topLane, width: laneWidth, height: 80 };
+  const bottomLaneFrame = { left: laneLeft, top: bottomLane, width: laneWidth, height: 80 };
+  addCircle(slide, { left: 72, top: 336, width: 150, height: 150 }, {
+    fill: "#E2EAF4", line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-none",
   });
-  addBox(slide, { left: 72, top: 407, width: 110, height: 34 }, {
-    fill: THEME.accentAlt, line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-none",
-    text: params.trackB, fontSize: 15, bold: true, color: "#FFFFFF",
-    insets: { top: 2, right: 6, bottom: 2, left: 6 },
+  addCircle(slide, startFrame, {
+    name: qaElementName({ parent: "dual-track-start" }),
+    fill: THEME.surface, line: { style: "solid", fill: THEME.accent, width: 5 }, shadow: "shadow-md",
+    text: params.start ?? "共同起点", fontSize: 19, bold: true, color: THEME.accent,
+  });
+  addAnchoredLine(slide,
+    { frame: startFrame, side: "right", parent: "dual-track-start" },
+    { frame: topLaneFrame, side: "left", parent: "dual-track-lane-a" },
+    THEME.accent, 3);
+  addAnchoredLine(slide,
+    { frame: startFrame, side: "right", parent: "dual-track-start" },
+    { frame: bottomLaneFrame, side: "left", parent: "dual-track-lane-b" },
+    THEME.accentAlt, 3);
+  addBox(slide, topLaneFrame, {
+    name: qaElementName({ parent: "dual-track-lane-a" }),
+    geometry: "rightArrow", fill: THEME.accent, line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-none",
+  });
+  addBox(slide, bottomLaneFrame, {
+    name: qaElementName({ parent: "dual-track-lane-b" }),
+    geometry: "rightArrow", fill: "#5D91CD", line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-none",
+  });
+  addText(slide, params.trackA, { left: 278, top: topLane + 20, width: 120, height: 40 }, {
+    fontSize: 18, bold: true, color: "#FFFFFF", alignment: "center",
+  });
+  addText(slide, params.trackB, { left: 278, top: bottomLane + 20, width: 120, height: 40 }, {
+    fontSize: 18, bold: true, color: "#FFFFFF", alignment: "center",
   });
 
+  const stageStart = 448;
+  const stageEnd = 1110;
+  const xs = stages.map((_, index) => stageStart + index * ((stageEnd - stageStart) / (stages.length - 1)));
+  const cardWidth = stages.length === 5 ? 150 : 180;
   stages.forEach((stage, index) => {
-    const cardWidth = stages.length === 5 ? 196 : 224;
-    const cardLeft = Math.max(48, Math.min(1232 - cardWidth, xs[index] - cardWidth / 2));
-    const cardTop = index % 2 ? 450 : 136;
-    const anchor = index % 2 ? waveA[index] : waveB[index];
-    addLine(slide, anchor, { x: xs[index], y: index % 2 ? cardTop : cardTop + 126 }, THEME.line, 1.5);
-    addBox(slide, { left: cardLeft, top: cardTop, width: cardWidth, height: 126 }, {
-      fill: "#FFFFFF", line: { style: "solid", fill: index % 2 ? THEME.accentAlt : THEME.accent, width: 1.5 }, shadow: "shadow-sm",
+    const x = xs[index];
+    const cardLeft = x - cardWidth / 2;
+    addLine(slide, { x, y: topLane - 8 }, { x, y: bottomLane + 88 }, "#C2CEDB", 1);
+    addCircle(slide, { left: x - 22, top: topLane + 18, width: 44, height: 44 }, {
+      fill: "#FFFFFF", line: { style: "solid", fill: THEME.accent, width: 3 }, shadow: "shadow-sm",
+      text: String(index + 1).padStart(2, "0"), fontSize: 16, bold: true, color: THEME.accent,
+      insets: { top: 0, right: 0, bottom: 0, left: 0 },
     });
-    addText(slide, stage.period, { left: cardLeft + 14, top: cardTop + 12, width: cardWidth - 28, height: 24 }, {
-      fontSize: 15, bold: true, color: "#E9A62E",
+    addCircle(slide, { left: x - 22, top: bottomLane + 18, width: 44, height: 44 }, {
+      fill: "#FFFFFF", line: { style: "solid", fill: THEME.accentAlt, width: 3 }, shadow: "shadow-sm",
+      text: String(index + 1).padStart(2, "0"), fontSize: 16, bold: true, color: THEME.accentAlt,
+      insets: { top: 0, right: 0, bottom: 0, left: 0 },
     });
-    addText(slide, stage.name, { left: cardLeft + 14, top: cardTop + 38, width: cardWidth - 28, height: 32 }, {
-      fontSize: 19, bold: true, color: THEME.accent,
+    addBox(slide, { left: x - 46, top: 374, width: 92, height: 36 }, {
+      fill: "#FFFFFF", line: { style: "solid", fill: "#D6E1EC", width: 1 }, shadow: "shadow-sm",
+      text: stage.period, fontSize: 16, bold: true, color: "#D99923",
+      insets: { top: 1, right: 4, bottom: 1, left: 4 },
     });
-    addText(slide, stage.body, { left: cardLeft + 14, top: cardTop + 72, width: cardWidth - 28, height: 42 }, {
-      fontSize: 13, color: THEME.body, verticalAlignment: "top",
+    addBox(slide, { left: cardLeft, top: 146, width: cardWidth, height: 112 }, {
+      name: qaElementName({ parent: `dual-track-a-${index}`, domains: ["dual-track-a-cards"] }),
+      fill: "#FFFFFF", line: { style: "solid", fill: "#BFD4E7", width: 1 }, shadow: "shadow-sm",
     });
-    addCircle(slide, { left: anchor.x - 8, top: anchor.y - 8, width: 16, height: 16 }, {
-      fill: "#FFFFFF", line: { style: "solid", fill: index % 2 ? THEME.accent : THEME.accentAlt, width: 3 }, shadow: "shadow-none",
+    addText(slide, stage.trackA.title, { left: cardLeft + 12, top: 158, width: cardWidth - 24, height: 34 }, {
+      fontSize: 18, bold: true, color: THEME.accent, alignment: "center",
+    });
+    addText(slide, wrapChineseText(stage.trackA.body ?? "", stages.length === 5 ? 6 : 9), { left: cardLeft + 12, top: 198, width: cardWidth - 24, height: 48 }, {
+      fontSize: 16, color: THEME.body, alignment: "center", verticalAlignment: "top", autoFit: "none",
+    });
+    addBox(slide, { left: cardLeft, top: 562, width: cardWidth, height: 96 }, {
+      name: qaElementName({ parent: `dual-track-b-${index}`, domains: ["dual-track-b-cards"] }),
+      fill: "#FFFFFF", line: { style: "solid", fill: "#BFD4E7", width: 1 }, shadow: "shadow-sm",
+    });
+    addText(slide, stage.trackB.title, { left: cardLeft + 12, top: 572, width: cardWidth - 24, height: 32 }, {
+      fontSize: 18, bold: true, color: THEME.accentAlt, alignment: "center",
+    });
+    addText(slide, wrapChineseText(stage.trackB.body ?? "", stages.length === 5 ? 6 : 9), { left: cardLeft + 12, top: 608, width: cardWidth - 24, height: 40 }, {
+      fontSize: 16, color: THEME.body, alignment: "center", verticalAlignment: "top", autoFit: "none",
     });
   });
   return slide;

@@ -1,0 +1,233 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "minimumFontSize": 16,
+  "geometryTolerance": 0.5,
+  "runtimePath": "src/asset-runtime/component-builders.mjs",
+  "runtimeSha256": "39dcb5571f67dda1caf520aa604e7ef260445d6313f60c594b31a9e64286fd0f",
+  "auditorPath": "src/tools/audit-rendered-typography.mjs",
+  "auditorSha256": "aa6fdd0e540d86a9c47c891c184d67c4bdb76612c39b71dac621a6e23f45d8f6",
+  "compositionCatalogPath": "catalog/composition-layouts.json",
+  "compositionCatalogSha256": "3555e0541f3c8b8905e379fa53a1fe7afa4e5487e8986052c6499aa051f93ab9",
+  "compositionRuntimePath": "src/render/page-composition.mjs",
+  "compositionRuntimeSha256": "59d1ad9fc34ce940a99e1170b2473cf5a8a28b889b43fae655852fbba01fdb13",
+  "assets": [
+    {
+      "id": "northeastern-university-cover-001",
+      "status": "passed",
+      "kind": "page-template",
+      "metadataSha256": "baf28af9431443bf6de90d6ca0e80be8cc23d2e65460a783e9ee02624c4d6869",
+      "exampleSha256": "1c2f18212d4726c69c64f670287853950f94a05a35436c9269c0b78a7c6e08dc",
+      "generatorSha256": "0b0e711fdc1ae36902c0f99dc931709e1bc800bb21a80781e338f60c12cd301b",
+      "runtimeSha256": "39dcb5571f67dda1caf520aa604e7ef260445d6313f60c594b31a9e64286fd0f",
+      "spatialContractAudit": {
+        "status": "not-applicable",
+        "issues": []
+      },
+      "audit": {
+        "status": "passed",
+        "typography": {
+          "status": "passed",
+          "minimumFontSize": 16,
+          "violations": []
+        },
+        "geometry": {
+          "status": "passed",
+          "tolerance": 0.5,
+          "qaParentCount": 0,
+          "connectorCount": 0,
+          "qaParentCountBySlide": {
+            "slide-01": 0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "id": "northeastern-university-body-001",
+      "status": "passed",
+      "kind": "page-template",
+      "metadataSha256": "d912ab1dfe6ee7b887344655f6b0ad83b751a33e6e4a92ec6564c669403ffee6",
+      "exampleSha256": "cd3ae17f48dbd4a0fce9f3d8ca2f09b5c497ddd034b184a63ecfb8743214fb58",
+      "generatorSha256": "e6f0bc0ff1f1ec3f756918c21a77d3ad46e0471b38c460db2e9e439be95b00a7",
+      "runtimeSha256": "39dcb5571f67dda1caf520aa604e7ef260445d6313f60c594b31a9e64286fd0f",
+      "spatialContractAudit": {
+        "status": "not-applicable",
+        "issues": []
+      },
+      "audit": {
+        "status": "passed",
+        "typography": {
+          "status": "passed",
+          "minimumFontSize": 16,
+          "violations": []
+        },
+        "geometry": {
+          "status": "passed",
+          "tolerance": 0.5,
+          "qaParentCount": 0,
+          "connectorCount": 0,
+          "qaParentCountBySlide": {
+            "slide-01": 0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "id": "northeastern-university-closing-001",
+      "status": "passed",
+      "kind": "page-template",
+      "metadataSha256": "76247e1da647509752b3f928f3a73957bda69de4350c021cc040fc1eba3412ea",
+      "exampleSha256": "dbdb18944d0bb138cc89594351aee97012cdd85d099afca0405af00b66dc755d",
+      "generatorSha256": "a2d7cf0de18239ad10f749f4415c96853a7b9522ff716e38483388aba74fa7f8",
+      "runtimeSha256": "39dcb5571f67dda1caf520aa604e7ef260445d6313f60c594b31a9e64286fd0f",
+      "spatialContractAudit": {
+        "status": "not-applicable",
+        "issues": []
+      },
+      "audit": {
+        "status": "passed",
+        "typography": {
+          "status": "passed",
+          "minimumFontSize": 16,
+          "violations": []
+        },
+        "geometry": {
+          "status": "passed",
+          "tolerance": 0.5,
+          "qaParentCount": 0,
+          "connectorCount": 0,
+          "qaParentCountBySlide": {
+            "slide-01": 0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "id": "comparison-structure-001",
+      "status": "passed",
+      "kind": "component",
+      "metadataSha256": "7c919c9585e305e8275050908a74ea47619a04bf3ddbf478eee946d2b6d45947",
+      "exampleSha256": "a000984cccad9f306f3db93a708fdcd5d011427563e5de5264d9b1eabc1e38a8",
+      "generatorSha256": "d07479b488b4f42403121503f9147f97c4f9152de4fa6c74aa9a31b3a83d252b",
+      "runtimeSha256": "39dcb5571f67dda1caf520aa604e7ef260445d6313f60c594b31a9e64286fd0f",
+      "spatialContractAudit": {
+        "status": "passed",
+        "issues": []
+      },
+      "audit": {
+        "status": "passed",
+        "typography": {
+          "status": "passed",
+          "minimumFontSize": 16,
+          "violations": []
+        },
+        "geometry": {
+          "status": "passed",
+          "tolerance": 0.5,
+          "qaParentCount": 11,
+          "connectorCount": 0,
+          "qaParentCountBySlide": {
+            "slide-01": 11
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "id": "sequential-process-001",
+      "status": "passed",
+      "kind": "component",
+      "metadataSha256": "a1ca0ba249529f29906aa1c584804c6402c8d41c37c6df90c8a4072caa8ecd2d",
+      "exampleSha256": "5545bec82f853d7df70eb83422c1f069580318a6dc22f6a37582f48c42073890",
+      "generatorSha256": "aa3e05ef15f8b48e9f96a3de040b378eb43a86fc6660292cc1c18f4d929d4dbd",
+      "runtimeSha256": "39dcb5571f67dda1caf520aa604e7ef260445d6313f60c594b31a9e64286fd0f",
+      "spatialContractAudit": {
+        "status": "passed",
+        "issues": []
+      },
+      "audit": {
+        "status": "passed",
+        "typography": {
+          "status": "passed",
+          "minimumFontSize": 16,
+          "violations": []
+        },
+        "geometry": {
+          "status": "passed",
+          "tolerance": 0.5,
+          "qaParentCount": 4,
+          "connectorCount": 0,
+          "qaParentCountBySlide": {
+            "slide-01": 4
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "id": "swimlane-process-001",
+      "status": "passed",
+      "kind": "component",
+      "metadataSha256": "90f62f0ee411fcb27accb574cb6c6192bd1fc88b07f4cd7c8a482cde94b0a034",
+      "exampleSha256": "d251f34b0e69b6eda556a44e884ad32cbcb1a2d480acec4545d57206c9e2286b",
+      "generatorSha256": "d2bbb1081ed8943445e374dbcbb830a99bab3cf35847b8f30e54c27e6069bd11",
+      "runtimeSha256": "39dcb5571f67dda1caf520aa604e7ef260445d6313f60c594b31a9e64286fd0f",
+      "spatialContractAudit": {
+        "status": "passed",
+        "issues": []
+      },
+      "audit": {
+        "status": "passed",
+        "typography": {
+          "status": "passed",
+          "minimumFontSize": 16,
+          "violations": []
+        },
+        "geometry": {
+          "status": "passed",
+          "tolerance": 0.5,
+          "qaParentCount": 10,
+          "connectorCount": 0,
+          "qaParentCountBySlide": {
+            "slide-01": 10
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "id": "problem-improvement-001",
+      "status": "passed",
+      "kind": "component",
+      "metadataSha256": "83f52c481e322596427268c314a4e2064998b6dac9b659748afae0078116c400",
+      "exampleSha256": "48c27cc5b9f3c0e25d6e3062556ea6ba67efcdc134e798c4fcd1c9f1f11ae189",
+      "generatorSha256": "155f0369b7044c2827f821e227df963245966fc3c909b96b2537ab10f6f5b08a",
+      "runtimeSha256": "39dcb5571f67dda1caf520aa604e7ef260445d6313f60c594b31a9e64286fd0f",
+      "spatialContractAudit": {
+        "status": "passed",
+        "issues": []
+      },
+      "audit": {
+        "status": "passed",
+        "typography": {
+          "status": "passed",
+          "minimumFontSize": 16,
+          "violations": []
+        },
+        "geometry": {
+          "status": "passed",
+          "tolerance": 0.5,
+          "qaParentCount": 4,
+          "connectorCount": 0,
+          "qaParentCountBySlide": {
+            "slide-01": 4
+          },
+          "violations": []
+        }
+      }
+    }
+  ]
+}

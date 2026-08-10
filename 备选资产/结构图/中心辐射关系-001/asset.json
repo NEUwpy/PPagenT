@@ -6,24 +6,11 @@
   "creationMethod": "distillation",
   "status": "candidate",
   "source": {
-    "file": "workbench/source-archive/狗哥蓝色-精美逻辑图PPT模板.pptx",
+    "file": "workbench/source-archive/【动画版】500页创意图文排版PPT模板-深蓝版.pptx",
     "slides": [
-      18,
-      21,
-      22,
-      24,
-      26,
-      38,
-      40,
-      48,
-      67,
-      88,
-      92,
-      101,
-      112,
-      120,
-      127,
-      157
+      365,
+      366,
+      367
     ]
   },
   "generator": "generate.mjs",
@@ -33,6 +20,13 @@
     "center",
     "items"
   ],
-  "capacity": "3–8 个外围节点和 1 个中心主题",
+  "capacity": "3–8 个外围节点；标题建议不超过 10 字，说明建议不超过 34 字",
+  "adaptation": {
+    "itemCount": "3–8",
+    "layout": "节点自动分配到左右两侧，单侧最多 4 项",
+    "fallback": "超过 8 项时必须拆页或改用分组/分层结构"
+  },
+  "semanticContract": "一个中心主题同时影响或支撑多个并列方向；外围方向之间没有先后顺序",
+  "doNotUseWhen": "外围项存在明显顺序、因果或上下级关系",
   "review": "待用户确认"
 }
