@@ -15,6 +15,7 @@
     "distill:audit": "node src/tools/audit-distillation-batch.mjs --root . --write",
     "distill:governance": "node src/tools/audit-distillation-governance.mjs .",
     "distill:review": "node src/tools/build-intake-user-review.mjs",
+    "intake:batch": "node src/tools/build-intake-user-review.mjs --batch-config",
     "validate:contracts": "node src/tools/validate-rule-layer.mjs .",
     "match": "node src/tools/match-page-intent.mjs --root .",
     "agent:run": "node src/agent/run-workflow.mjs --root .",

@@ -2,7 +2,6 @@ import fs from "node:fs/promises";
 import { constants as fsConstants } from "node:fs";
 import path from "node:path";
 import process from "node:process";
-import { Presentation, PresentationFile } from "@oai/artifact-tool";
 
 function fail(code, message) {
   const error = new Error(message);
@@ -11,8 +10,10 @@ function fail(code, message) {
 }
 
 function parseArgs(argv) {
-  if (argv.length !== 2 || argv[0] !== "--config") fail("REVIEW_ARGS", "usage: node src/tools/build-intake-user-review.mjs --config <review-batch.json>");
-  return path.resolve(argv[1]);
+  if (argv.length !== 2 || !["--config", "--batch-config"].includes(argv[0])) {
+    fail("REVIEW_ARGS", "usage: node src/tools/build-intake-user-review.mjs --config <review-batch.json> | --batch-config <intake-batch.json>");
+  }
+  return { mode: argv[0] === "--batch-config" ? "batch" : "review", configPath: path.resolve(argv[1]) };
 }
 
 function inside(root, target) {
@@ -30,6 +31,14 @@ async function writeJsonExclusive(filePath, value) {
 
 async function writeTextExclusive(filePath, value) {
   await fs.writeFile(filePath, value, { encoding: "utf8", flag: "wx" });
+}
+
+async function writeJson(filePath, value) {
+  await fs.writeFile(filePath, `${JSON.stringify(value, null, 2)}\n`, "utf8");
+}
+
+async function writeText(filePath, value) {
+  await fs.writeFile(filePath, value, "utf8");
 }
 
 async function imageBytes(filePath) {
@@ -53,6 +62,240 @@ function assertConfig(config) {
       if (new Set(asset.caseIds).size !== asset.caseIds.length) fail("REVIEW_CASE_IDS_DUPLICATE", `assets[${index}].caseIds must be unique`);
     }
   }
+}
+
+function requireBatchString(value, field) {
+  if (typeof value !== "string" || !value.trim()) fail("INTAKE_FIELD", `${field} is required`);
+  return value.trim();
+}
+
+function normalizeBatchPath(value, field, configPath) {
+  const raw = typeof value === "string" ? value : value?.path;
+  requireBatchString(raw, `${field}.path`);
+  return {
+    label: typeof value === "object" && value.label ? String(value.label).trim() : path.basename(raw),
+    path: path.resolve(path.dirname(configPath), raw),
+  };
+}
+
+async function assertReadableBatchPath(entry, field) {
+  try {
+    const stat = await fs.stat(entry.path);
+    if (!stat.isFile() && !stat.isDirectory()) fail("INTAKE_PATH", `${field} must be a file or directory`);
+    if (stat.isFile() && path.extname(entry.path).toLowerCase() === ".json") await readJson(entry.path);
+  } catch (error) {
+    if (error.code?.startsWith("INTAKE_")) throw error;
+    fail("INTAKE_PATH", `${field} is not readable: ${entry.path}`);
+  }
+}
+
+function assertPercent(value, field) {
+  if (typeof value !== "number" || !Number.isFinite(value) || value < 0 || value > 100) {
+    fail("INTAKE_PERCENT", `${field} must be a number from 0 to 100`);
+  }
+  return value;
+}
+
+function assertOptionalIsoDate(value, field) {
+  if (value === undefined) return undefined;
+  requireBatchString(value, field);
+  if (!Number.isFinite(Date.parse(value))) fail("INTAKE_TASK", `${field} must be an ISO date-time`);
+  return value;
+}
+
+async function normalizeBatchConfig(config, configPath, existing) {
+  if (!config || config.schemaVersion !== "1.0") fail("INTAKE_CONFIG_SCHEMA", "batch config schemaVersion must be 1.0");
+  const batchId = requireBatchString(config.batchId ?? existing?.batchId, "batchId");
+  const outputDir = path.resolve(path.dirname(configPath), requireBatchString(config.outputDir ?? existing?.outputDir, "outputDir"));
+  if (config.sources !== undefined && !Array.isArray(config.sources)) fail("INTAKE_SOURCES", "sources must be an array");
+  if (config.resultPaths !== undefined && !Array.isArray(config.resultPaths)) fail("INTAKE_RESULT_PATHS", "resultPaths must be an array");
+  const sources = config.sources === undefined
+    ? existing?.sources ?? []
+    : config.sources.map((source, index) => normalizeBatchPath(source, `sources[${index}]`, configPath));
+  const resultPaths = config.resultPaths === undefined
+    ? existing?.resultPaths ?? []
+    : config.resultPaths.map((result, index) => normalizeBatchPath(result, `resultPaths[${index}]`, configPath));
+  const inputAssets = config.assets;
+  if (inputAssets !== undefined && (!Array.isArray(inputAssets) || inputAssets.length === 0)) {
+    fail("INTAKE_ASSETS", "assets must be a non-empty array when provided");
+  }
+  if (inputAssets === undefined && !existing) fail("INTAKE_ASSETS", "assets are required when creating a batch");
+  const existingAssetsById = new Map((existing?.assets ?? []).map((asset) => [asset.assetId, asset]));
+  const assets = inputAssets === undefined
+    ? existing?.assets ?? []
+    : inputAssets.map(async (asset, index) => {
+      const assetId = requireBatchString(asset?.assetId, `assets[${index}].assetId`);
+      const previous = existingAssetsById.get(assetId);
+      const label = requireBatchString(asset?.label ?? previous?.label, `assets[${index}].label`);
+      if (asset.resultPaths !== undefined && !Array.isArray(asset.resultPaths)) fail("INTAKE_RESULT_PATHS", `assets[${index}].resultPaths must be an array`);
+      if (asset.reviewPages !== undefined && !Array.isArray(asset.reviewPages)) fail("INTAKE_REVIEW_PAGES", `assets[${index}].reviewPages must be an array`);
+      const normalizedResults = asset.resultPaths === undefined
+        ? previous?.resultPaths ?? []
+        : asset.resultPaths.map((result, resultIndex) => normalizeBatchPath(result, `assets[${index}].resultPaths[${resultIndex}]`, configPath));
+      const reviewPages = asset.reviewPages === undefined
+        ? previous?.reviewPages ?? []
+        : asset.reviewPages.map((page, pageIndex) => ({
+        pageId: requireBatchString(page?.pageId ?? `page-${pageIndex + 1}`, `assets[${index}].reviewPages[${pageIndex}].pageId`),
+        label: requireBatchString(page?.label ?? page?.pageId ?? `page-${pageIndex + 1}`, `assets[${index}].reviewPages[${pageIndex}].label`),
+        ...normalizeBatchPath(page, `assets[${index}].reviewPages[${pageIndex}]`, configPath),
+        }));
+      if (asset.resultPaths !== undefined) {
+        for (const [resultIndex, result] of normalizedResults.entries()) await assertReadableBatchPath(result, `assets[${index}].resultPaths[${resultIndex}]`);
+      }
+      if (asset.reviewPages !== undefined) {
+        for (const [pageIndex, page] of reviewPages.entries()) await assertReadableBatchPath(page, `assets[${index}].reviewPages[${pageIndex}]`);
+      }
+      return { assetId, label, resultPaths: normalizedResults, reviewPages };
+    });
+  const resolvedAssets = inputAssets === undefined ? assets : await Promise.all(assets);
+  if (resolvedAssets.length === 0) fail("INTAKE_ASSETS", "at least one asset is required");
+  if (new Set(resolvedAssets.map((asset) => asset.assetId)).size !== resolvedAssets.length) fail("INTAKE_ASSET_DUPLICATE", "assetId must be unique");
+  for (const [index, source] of sources.entries()) await assertReadableBatchPath(source, `sources[${index}]`);
+  for (const [index, result] of resultPaths.entries()) await assertReadableBatchPath(result, `resultPaths[${index}]`);
+  if (sources.length === 0) fail("INTAKE_SOURCES", "at least one source is required");
+
+  const weeklyInput = config.weeklyLimit;
+  if (weeklyInput !== undefined && (!weeklyInput || typeof weeklyInput !== "object" || Array.isArray(weeklyInput))) {
+    fail("INTAKE_WEEKLY_LIMIT", "weeklyLimit must be an object");
+  }
+  const existingWeekly = existing?.weeklyLimit;
+  const startValue = existingWeekly?.startPercent ?? weeklyInput?.startPercent;
+  if (startValue === undefined) fail("INTAKE_WEEKLY_LIMIT", "weeklyLimit.startPercent is required for a new batch");
+  const startPercent = assertPercent(startValue, "weeklyLimit.startPercent");
+  if (existingWeekly?.startPercent !== undefined && weeklyInput?.startPercent !== undefined
+    && weeklyInput.startPercent !== existingWeekly.startPercent) {
+    fail("INTAKE_WEEKLY_START_MISMATCH", "weeklyLimit.startPercent cannot change after batch creation");
+  }
+  const endValue = weeklyInput?.endPercent ?? existingWeekly?.endPercent ?? undefined;
+  const endPercent = endValue === undefined ? null : assertPercent(endValue, "weeklyLimit.endPercent");
+  const taskInput = config.task ?? {};
+  const taskExisting = existing?.task ?? {};
+  if (taskExisting.startedAt !== undefined && taskInput.startedAt !== undefined && taskInput.startedAt !== taskExisting.startedAt) {
+    fail("INTAKE_TASK_START_MISMATCH", "task.startedAt cannot change after batch creation");
+  }
+  const task = {
+    startedAt: assertOptionalIsoDate(taskInput.startedAt ?? taskExisting.startedAt, "task.startedAt"),
+    endedAt: assertOptionalIsoDate(taskInput.endedAt ?? taskExisting.endedAt, "task.endedAt"),
+    model: taskInput.model ?? taskExisting.model,
+    assetCount: resolvedAssets.length,
+  };
+  if (!task.startedAt) fail("INTAKE_TASK", "task.startedAt is required when creating a batch");
+  if (!task.model) fail("INTAKE_TASK", "task.model is required when creating a batch");
+  if (task.model !== undefined) task.model = requireBatchString(task.model, "task.model");
+  if (config.allReleased !== undefined && typeof config.allReleased !== "boolean") fail("INTAKE_APPROVAL", "allReleased must be boolean when provided");
+  const allReleased = config.allReleased === true;
+  const mergedAssets = new Map((existing?.assets ?? []).map((asset) => [asset.assetId, asset]));
+  for (const asset of resolvedAssets) mergedAssets.set(asset.assetId, asset);
+  const finalAssets = [...mergedAssets.values()];
+  task.assetCount = finalAssets.length;
+  if (allReleased) {
+    if (endPercent === null) fail("INTAKE_RELEASE_INCOMPLETE", "allReleased requires weeklyLimit.endPercent");
+    const incompleteAssets = finalAssets.filter((asset) => asset.resultPaths.length === 0 || asset.reviewPages.length === 0);
+    if (incompleteAssets.length > 0) fail("INTAKE_RELEASE_INCOMPLETE", `allReleased requires resultPaths and reviewPages for every asset: ${incompleteAssets.map((asset) => asset.assetId).join(", ")}`);
+  }
+  return {
+    schemaVersion: "1.0",
+    batchId,
+    title: config.title ?? existing?.title ?? batchId,
+    outputDir,
+    status: allReleased ? "user-approved" : "awaiting-complete-user-review",
+    promotionEligible: allReleased,
+    sources,
+    resultPaths,
+    assets: finalAssets,
+    reviewPages: finalAssets.flatMap((asset) => asset.reviewPages.map((page) => ({ assetId: asset.assetId, assetLabel: asset.label, ...page }))),
+    weeklyLimit: {
+      startPercent,
+      endPercent,
+      consumedPercentagePoints: endPercent === null ? null : startPercent - endPercent,
+      inputSource: "user-or-maintainer-provided",
+    },
+    task,
+    updatedAt: new Date().toISOString(),
+  };
+}
+
+function linkPath(entry) {
+  return `[${entry.label}](<${entry.path.replaceAll("\\", "/")}>)`;
+}
+
+function renderBatchMarkdown(record) {
+  const statusText = record.status === "user-approved" ? "已获整批用户确认" : "等待整批用户验收";
+  const lines = [
+    `# ${record.title}：入库批次 ${record.batchId}`,
+    "",
+    `- 批次状态：**${statusText}**`,
+    `- 核心库晋升：${record.promotionEligible ? "后续操作仍需完成；本工具不修改核心 registry" : "未获得整批用户确认"}`,
+    `- 资产数量：${record.assets.length}`,
+    `- 待看页面数量：${record.reviewPages.length}`,
+    "",
+    "## 来源",
+    "",
+    ...(record.sources.length === 0 ? ["- 待补录"] : record.sources.map((source) => `- ${linkPath(source)}`)),
+    "",
+    "## 主要结果路径",
+    "",
+    ...(record.resultPaths.length === 0 ? ["- 待生成"] : record.resultPaths.map((result) => `- ${linkPath(result)}`)),
+    "",
+    "## 资产与全部待看页面",
+    "",
+  ];
+  for (const asset of record.assets) {
+    lines.push(
+      `### ${asset.assetId}：${asset.label}`,
+      "",
+      "结果路径：",
+      ...(asset.resultPaths.length === 0 ? ["- 待生成"] : asset.resultPaths.map((result) => `- ${linkPath(result)}`)),
+      "",
+      `待看页面（${asset.reviewPages.length}）：`,
+    );
+    if (asset.reviewPages.length === 0) lines.push("- 待生成");
+    else for (const page of asset.reviewPages) lines.push(`- [ ] ${page.pageId}：${linkPath(page)}`);
+    lines.push("");
+  }
+  lines.push(
+    "## 周限剩余（用户提供）",
+    "",
+    `- 开始时剩余：${record.weeklyLimit.startPercent}%`,
+    `- 当前结束时剩余：${record.weeklyLimit.endPercent === null ? "未提供" : `${record.weeklyLimit.endPercent}%`}`,
+    ...(record.weeklyLimit.consumedPercentagePoints === null
+      ? []
+      : [`- 本批百分点消耗：${record.weeklyLimit.consumedPercentagePoints} 个百分点（开始值－结束值）`]),
+    "- 数据来源：用户或维护者手工提供；工具不会读取或声称读取 Codex 账户周限。",
+    "",
+    "## 任务信息",
+    "",
+    `- 执行模型：${record.task.model ?? "未提供"}`,
+    `- 开始时间：${record.task.startedAt ?? "未提供"}`,
+    `- 结束时间：${record.task.endedAt ?? "未提供（待补录）"}`,
+    `- 资产数量：${record.task.assetCount}`,
+    "",
+    record.promotionEligible
+      ? "用户已明确确认本批全部资产可放行；核心库晋升仍由后续操作完成。"
+      : "在用户明确确认本批全部资产前，本批不得视为已确认或已晋升。",
+    "",
+  );
+  return lines.join("\n");
+}
+
+async function runBatch(config, configPath) {
+  const outputDir = path.resolve(path.dirname(configPath), requireBatchString(config.outputDir, "outputDir"));
+  const batchPath = path.join(outputDir, "batch.json");
+  let existing;
+  try {
+    existing = await readJson(batchPath);
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
+  if (existing && config.batchId !== existing.batchId) {
+    fail("INTAKE_BATCH_ID_MISMATCH", `existing batchId is ${existing.batchId}; refusing update for ${config.batchId ?? "missing batchId"}`);
+  }
+  const record = await normalizeBatchConfig(config, configPath, existing);
+  await fs.mkdir(outputDir, { recursive: true });
+  await writeJson(batchPath, record);
+  const markdownPath = path.join(outputDir, "用户验收.md");
+  await writeText(markdownPath, renderBatchMarkdown(record));
+  process.stdout.write(`${JSON.stringify({ status: record.status, batchId: record.batchId, assetCount: record.assets.length, reviewPageCount: record.reviewPages.length, consumedPercentagePoints: record.weeklyLimit.consumedPercentagePoints, batchPath, markdownPath }, null, 2)}\n`);
 }
 
 async function resolveEvidence(sourceRoot, artifact) {
@@ -97,6 +340,7 @@ async function loadCases(config) {
 }
 
 async function buildDeck(pages, context, outputPath) {
+  const { Presentation, PresentationFile } = await import("@oai/artifact-tool");
   const deck = Presentation.create({ slideSize: { width: 1280, height: 720 } });
   for (const page of pages) {
     const slide = deck.slides.add();
@@ -113,8 +357,12 @@ async function buildDeck(pages, context, outputPath) {
 }
 
 async function main() {
-  const configPath = parseArgs(process.argv.slice(2));
+  const { mode, configPath } = parseArgs(process.argv.slice(2));
   const config = await readJson(configPath);
+  if (mode === "batch") {
+    await runBatch(config, configPath);
+    return;
+  }
   assertConfig(config);
   const { pages } = await loadCases(config);
   if (pages.length === 0) fail("REVIEW_NO_PAGES", "no render pages found");
