@@ -283,6 +283,62 @@ function prepareSlide(presentation, title, subtitle) {
   return slide;
 }
 
+const LAYERED_TEXT_LIMITS = Object.freeze({ title: 12, source: 8, platform: 14, app: 8 });
+
+function layeredValidationError(code, message, field) {
+  const error = new Error(message);
+  error.code = code;
+  if (field) error.field = field;
+  return error;
+}
+
+function validateLayeredText(value, field, maximum) {
+  if (typeof value !== "string" || value.trim().length === 0) throw layeredValidationError("LAYERED_TEXT_REQUIRED", `${field} is required`, field);
+  if (value !== value.trim()) throw layeredValidationError("LAYERED_TEXT_SURROUNDING_WHITESPACE", `${field} must not have surrounding whitespace`, field);
+  if (/\r|\n|\t/u.test(value)) throw layeredValidationError("LAYERED_TEXT_CONTROL_CHARACTER", `${field} must not contain control characters`, field);
+  if ([...value].length > maximum) throw layeredValidationError("LAYERED_TEXT_TOO_LONG", `${field} exceeds ${maximum} characters`, field);
+  return value;
+}
+
+export function validateLayeredArchitectureParams(params) {
+  if (!params || typeof params !== "object") throw layeredValidationError("LAYERED_PARAMS_REQUIRED", "layered architecture params are required");
+  validateLayeredText(params.title, "title", LAYERED_TEXT_LIMITS.title);
+  validateLayeredText(params.platform, "platform", LAYERED_TEXT_LIMITS.platform);
+  if (!Array.isArray(params.sources)) throw layeredValidationError("LAYERED_SOURCES_REQUIRED", "sources must be an array", "sources");
+  if (!Array.isArray(params.apps)) throw layeredValidationError("LAYERED_APPS_REQUIRED", "apps must be an array", "apps");
+  if (params.sources.length < 3 || params.sources.length > 6) throw layeredValidationError("LAYERED_SOURCE_COUNT", "layered architecture supports 3 to 6 source nodes", "sources");
+  if (params.apps.length < 3 || params.apps.length > 6) throw layeredValidationError("LAYERED_APP_COUNT", "layered architecture supports 3 to 6 application nodes", "apps");
+  params.sources.forEach((item, index) => validateLayeredText(item, `sources[${index}]`, LAYERED_TEXT_LIMITS.source));
+  params.apps.forEach((item, index) => validateLayeredText(item, `apps[${index}]`, LAYERED_TEXT_LIMITS.app));
+  return { ...params, sources: [...params.sources], apps: [...params.apps] };
+}
+
+function centeredLayerPositions(count, width, gap, center = 640) {
+  const total = count * width + (count - 1) * gap;
+  const left = center - total / 2;
+  return Array.from({ length: count }, (_, index) => ({ left: left + index * (width + gap), width }));
+}
+
+export function buildLayeredArchitectureAdaptive(presentation, params) {
+  params = validateLayeredArchitectureParams(params);
+  const slide = prepareSlide(presentation, params.title, "分层架构 / 生态关系");
+  const sourcePositions = centeredLayerPositions(params.sources.length, 132, 18);
+  // All three layers share the platform's vertical axis at x=640.
+  const appPositions = centeredLayerPositions(params.apps.length, 132, 34);
+  const platformFrame = { left: 230, top: 320, width: 820, height: 120 };
+  const sourceFrames = sourcePositions.map(({ left }) => ({ left, top: 520, width: 132, height: 80 }));
+  const appFrames = appPositions.map(({ left }) => ({ left, top: 160, width: 132, height: 92 }));
+  addText(slide, "应用层", { left: 72, top: 184, width: 120, height: 34 }, { name: qaElementName({ parent: "layer-label-app", domains: ["layer-label"] }), fontSize: 20, bold: true, color: THEME.accent, alignment: "center" });
+  addText(slide, "中台层", { left: 72, top: 354, width: 120, height: 34 }, { name: qaElementName({ parent: "layer-label-platform", domains: ["layer-label"] }), fontSize: 20, bold: true, color: THEME.accentAlt, alignment: "center" });
+  addText(slide, "云平台", { left: 72, top: 544, width: 120, height: 34 }, { name: qaElementName({ parent: "layer-label-source", domains: ["layer-label"] }), fontSize: 20, bold: true, color: THEME.accent, alignment: "center" });
+  params.sources.forEach((item, index) => addCircle(slide, sourceFrames[index], { name: qaElementName({ parent: `layer-source-${index}`, domains: ["layer-node", "layer-source"] }), fill: THEME.accent, line: { style: "solid", fill: "#FFFFFF", width: 2 }, shadow: "shadow-sm", text: item, fontSize: 20, bold: true, color: "#FFFFFF", autoFit: "none", insets: { top: 0, right: 4, bottom: 0, left: 4 } }));
+  addBox(slide, platformFrame, { name: qaElementName({ parent: "layer-platform", domains: ["layer-node", "layer-platform"] }), fill: THEME.accentAlt, line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-lg", text: params.platform, fontSize: 30, bold: true, color: "#FFFFFF" });
+  params.apps.forEach((item, index) => addCircle(slide, appFrames[index], { name: qaElementName({ parent: `layer-app-${index}`, domains: ["layer-node", "layer-app"] }), fill: THEME.cyan, line: { style: "solid", fill: "#FFFFFF", width: 2 }, shadow: "shadow-sm", text: item, fontSize: 18, bold: true, color: "#FFFFFF" }));
+  sourceFrames.forEach((frame, index) => addAnchoredLine(slide, { frame, side: "top", parent: `layer-source-${index}` }, { frame: platformFrame, side: "bottom", parent: "layer-platform" }, THEME.line, 2));
+  appFrames.forEach((frame, index) => addAnchoredLine(slide, { frame: platformFrame, side: "top", parent: "layer-platform" }, { frame, side: "bottom", parent: `layer-app-${index}` }, THEME.line, 2));
+  return slide;
+}
+
 function isEmphasisStep(step) {
   return step?.emphasis === true || ["conclusion", "result", "重点"].includes(step?.emphasis);
 }
@@ -930,12 +986,45 @@ export function buildDualCoreEnablement(presentation, params) {
   return slide;
 }
 
+const RADIAL_TEXT_LIMITS = Object.freeze({ title: 10, center: 8, itemTitle: 10, itemBody: 34 });
+
+function radialValidationError(code, message, field) {
+  const error = new Error(message);
+  error.code = code;
+  if (field) error.field = field;
+  return error;
+}
+
+function validateRadialText(value, field, maximum, { allowEmpty = false } = {}) {
+  if (typeof value !== "string" || (!allowEmpty && value.trim().length === 0)) {
+    throw radialValidationError("RADIAL_TEXT_REQUIRED", `${field} 必须是非空文本`, field);
+  }
+  if (value !== value.trim()) throw radialValidationError("RADIAL_TEXT_SURROUNDING_WHITESPACE", `${field} 不得包含首尾空白`, field);
+  if (/\r|\n|\t/u.test(value)) throw radialValidationError("RADIAL_TEXT_CONTROL_CHARACTER", `${field} 不得包含控制字符`, field);
+  if ([...value].length > maximum) throw radialValidationError("RADIAL_TEXT_TOO_LONG", `${field} 超过 ${maximum} 字符上限`, field);
+  return value;
+}
+
+export function validateRadialHubParams(params) {
+  if (!params || typeof params !== "object") throw radialValidationError("RADIAL_PARAMS_REQUIRED", "中心辐射关系参数不能为空");
+  validateRadialText(params.title, "title", RADIAL_TEXT_LIMITS.title);
+  validateRadialText(params.center, "center", RADIAL_TEXT_LIMITS.center);
+  if (!Array.isArray(params.items)) throw radialValidationError("RADIAL_ITEMS_REQUIRED", "items 必须是数组", "items");
+  if (params.items.length < 3 || params.items.length > 8) throw radialValidationError("RADIAL_ITEM_COUNT", "中心辐射关系支持 3–8 个外围节点", "items");
+  const items = params.items.map((item, index) => {
+    const normalized = typeof item === "string" ? { title: item, body: "" } : item;
+    if (!normalized || typeof normalized !== "object") throw radialValidationError("RADIAL_ITEM_REQUIRED", `items[${index}] 必须是对象或文本`, `items[${index}]`);
+    validateRadialText(normalized.title, `items[${index}].title`, RADIAL_TEXT_LIMITS.itemTitle);
+    validateRadialText(normalized.body ?? "", `items[${index}].body`, RADIAL_TEXT_LIMITS.itemBody, { allowEmpty: true });
+    return { title: normalized.title, body: normalized.body ?? "" };
+  });
+  return { ...params, items };
+}
+
 export function buildRadialHub(presentation, params) {
-  const slide = prepareSlide(presentation, params.title, "中心主题 · 多向展开");
-  const items = params.items.map((item) => (
-    typeof item === "string" ? { title: item, body: "" } : { title: item.title, body: item.body ?? "" }
-  ));
-  if (items.length < 3 || items.length > 8) throw new Error("中心辐射关系支持 3–8 个外围节点");
+  const normalized = validateRadialHubParams(params);
+  const slide = prepareSlide(presentation, normalized.title, "中心主题 · 多向展开");
+  const items = normalized.items;
 
   const halo = addCircle(slide, { left: 462, top: 207, width: 356, height: 356 }, {
     fill: THEME.accentSoft,
@@ -947,33 +1036,49 @@ export function buildRadialHub(presentation, params) {
     line: { style: "solid", fill: "#B7D8F3", width: 2 },
     shadow: "shadow-md",
   });
-  const center = addCircle(slide, { left: 510, top: 255, width: 260, height: 260 }, {
+  const centerFrame = { left: 510, top: 255, width: 260, height: 260 };
+  const center = addCircle(slide, centerFrame, {
+    name: qaElementName({ parent: "radial-center", domains: ["radial-shape", "radial-content"] }),
     fill: THEME.accent,
     line: { style: "solid", fill: "#FFFFFF", width: 4 },
     shadow: "shadow-lg",
-    text: wrapChineseText(params.center, 6),
+    text: wrapChineseText(normalized.center, 6),
     fontSize: 29,
     bold: true,
     color: "#FFFFFF",
   });
   halo.sendToBack();
 
-  const leftItems = items.slice(0, Math.ceil(items.length / 2));
-  const rightItems = items.slice(leftItems.length);
-  const renderSide = (sideItems, side, startIndex) => {
-    const count = sideItems.length;
-    const gap = count === 1 ? 0 : Math.min(118, 350 / (count - 1));
-    const startTop = 350 - ((count - 1) * gap) / 2;
-    sideItems.forEach((item, localIndex) => {
-      const index = startIndex + localIndex;
-      const top = startTop + localIndex * gap;
+  // Build explicit mirror pairs. Consecutive items now form a left/right pair
+  // instead of being packed into the same column. Odd counts get one node on
+  // the vertical axis, while every remaining node has a mirrored counterpart.
+  const pairCount = Math.floor(items.length / 2);
+  const pairGap = pairCount <= 1 ? 0 : 440 / pairCount;
+  const pairStartY = 385 - ((pairCount - 1) * pairGap) / 2;
+  const placements = [];
+  let pairedItemOffset = 0;
+  if (items.length % 2 === 1) {
+    placements.push({ index: 0, side: "top", centerX: 640, centerY: 190 });
+    pairedItemOffset = 1;
+  }
+  for (let pairIndex = 0; pairIndex < pairCount; pairIndex += 1) {
+    const centerY = pairStartY + pairIndex * pairGap;
+    placements.push({ index: pairedItemOffset + pairIndex * 2, side: "left", centerX: 405, centerY });
+    placements.push({ index: pairedItemOffset + pairIndex * 2 + 1, side: "right", centerX: 875, centerY });
+  }
+
+  placements.forEach(({ index, side, centerX, centerY }) => {
+      const item = items[index];
       const isLeft = side === "left";
-      const node = addCircle(slide, {
-        left: isLeft ? 382 : 846,
-        top: top - 23,
+      const isTop = side === "top";
+      const nodeFrame = {
+        left: centerX - 23,
+        top: centerY - 23,
         width: 46,
         height: 46,
-      }, {
+      };
+      const node = addCircle(slide, nodeFrame, {
+        name: qaElementName({ parent: `radial-node-${index}`, domains: ["radial-shape"] }),
         fill: index % 2 ? THEME.accentAlt : THEME.cyan,
         line: { style: "solid", fill: "#FFFFFF", width: 3 },
         shadow: "shadow-sm",
@@ -983,31 +1088,40 @@ export function buildRadialHub(presentation, params) {
         color: "#FFFFFF",
         insets: { top: 0, right: 0, bottom: 0, left: 0 },
       });
-      const cardLeft = isLeft ? 68 : 912;
-      const alignment = isLeft ? "right" : "left";
-      addText(slide, item.title, { left: cardLeft, top: top - 31, width: 300, height: 30 }, {
+      const cardLeft = isTop ? 500 : isLeft ? 68 : 912;
+      const alignment = isTop ? "center" : isLeft ? "right" : "left";
+      const cardFrame = isTop
+        ? { left: cardLeft, top: 135, width: 280, height: 48 }
+        : { left: cardLeft, top: centerY - 40, width: 300, height: 80 };
+      addBox(slide, cardFrame, {
+        name: qaElementName({ parent: `radial-card-${index}`, domains: ["radial-content"] }),
+        fill: "none", line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-none",
+      });
+      addText(slide, item.title, {
+        left: cardLeft,
+        top: isTop ? 135 : centerY - 40,
+        width: isTop ? 280 : 300,
+        height: 30,
+      }, {
+        name: qaElementName({ within: `radial-card-${index}`, role: "title" }),
         fontSize: typographySize("componentItemTitle", 19),
         bold: true,
         color: THEME.accent,
         alignment,
       });
-      if (item.body) addText(slide, wrapChineseText(item.body, 17), { left: cardLeft, top: top + 2, width: 300, height: 47 }, {
+      if (item.body && !isTop) addText(slide, wrapChineseText(item.body, 17), { left: cardLeft, top: centerY - 7, width: 300, height: 47 }, {
+        name: qaElementName({ within: `radial-card-${index}`, role: "body" }),
         fontSize: typographySize("componentMeta", 16),
         color: THEME.body,
         alignment,
         verticalAlignment: "top",
       });
-      slide.shapes.connect(center, node, {
-        kind: "straight",
-        fromSide: side,
-        toSide: isLeft ? "right" : "left",
-        line: { style: "solid", fill: "#B7CCE0", width: 1.5 },
-      });
+      addAnchoredLine(slide,
+        { frame: centerFrame, side: isTop ? "top" : side, parent: "radial-center" },
+        { frame: nodeFrame, side: isTop ? "bottom" : isLeft ? "right" : "left", parent: `radial-node-${index}` },
+        "#B7CCE0", 1.5);
       node.bringToFront();
-    });
-  };
-  renderSide(leftItems, "left", 0);
-  renderSide(rightItems, "right", leftItems.length);
+  });
   center.bringToFront();
   return slide;
 }
@@ -1059,100 +1173,227 @@ export function buildRadialHubSplitWing(presentation, params) {
   return slide;
 }
 
+const CYCLE_TEXT_LIMITS = Object.freeze({ title: 10, center: 8, stepTitle: 10, stepBody: 34 });
+
+function cycleValidationError(code, message, field) {
+  const error = new Error(message);
+  error.code = code;
+  if (field) error.field = field;
+  return error;
+}
+
+function validateCycleText(value, field, maximum, { allowEmpty = false } = {}) {
+  if (typeof value !== "string" || (!allowEmpty && value.trim().length === 0)) {
+    throw cycleValidationError("CYCLE_TEXT_REQUIRED", `${field} 必须是非空文本`, field);
+  }
+  if (value !== value.trim()) throw cycleValidationError("CYCLE_TEXT_SURROUNDING_WHITESPACE", `${field} 不得包含首尾空白`, field);
+  if (/\r|\n|\t/u.test(value)) throw cycleValidationError("CYCLE_TEXT_CONTROL_CHARACTER", `${field} 不得包含控制字符`, field);
+  if ([...value].length > maximum) throw cycleValidationError("CYCLE_TEXT_TOO_LONG", `${field} 超过 ${maximum} 字符上限`, field);
+  return value;
+}
+
+export function validateCycleLoopParams(params) {
+  if (!params || typeof params !== "object") throw cycleValidationError("CYCLE_PARAMS_REQUIRED", "循环闭环参数不能为空");
+  validateCycleText(params.title, "title", CYCLE_TEXT_LIMITS.title);
+  validateCycleText(params.center, "center", CYCLE_TEXT_LIMITS.center);
+  if (!Array.isArray(params.steps)) throw cycleValidationError("CYCLE_STEPS_REQUIRED", "steps 必须是数组", "steps");
+  if (params.steps.length < 3 || params.steps.length > 6) throw cycleValidationError("CYCLE_STEP_COUNT", "循环闭环支持 3–6 个步骤", "steps");
+  const steps = params.steps.map((step, index) => {
+    const normalized = typeof step === "string" ? { title: step, body: "" } : step;
+    if (!normalized || typeof normalized !== "object") throw cycleValidationError("CYCLE_STEP_REQUIRED", `steps[${index}] 必须是对象或文本`, `steps[${index}]`);
+    validateCycleText(normalized.title, `steps[${index}].title`, CYCLE_TEXT_LIMITS.stepTitle);
+    validateCycleText(normalized.body ?? "", `steps[${index}].body`, CYCLE_TEXT_LIMITS.stepBody, { allowEmpty: true });
+    return { title: normalized.title, body: normalized.body ?? "" };
+  });
+  return { ...params, steps };
+}
+
+function cycleArcArrowPath(width, height, sweep) {
+  const cx = width / 2;
+  const cy = height / 2;
+  const outer = width / 2 - 6;
+  const inner = outer - 5;
+  const point = (radius, degree) => ({
+    x: cx + radius * Math.cos(degree * Math.PI / 180),
+    y: cy + radius * Math.sin(degree * Math.PI / 180),
+  });
+  // Keep a small intentional gap after each node.  It exposes the integrated
+  // arrowhead instead of letting the numbered node obscure it, while retaining
+  // equal angular steps and one arrow path per transition.
+  const leadAngle = Math.min(18, sweep * 0.22);
+  const startAngle = -90 + leadAngle;
+  const arcSweep = sweep - leadAngle;
+  const segmentCount = Math.max(12, Math.ceil(arcSweep / 6));
+  const outerPoints = Array.from({ length: segmentCount + 1 }, (_, index) => point(outer, startAngle + index * arcSweep / segmentCount));
+  const innerPoints = Array.from({ length: segmentCount + 1 }, (_, index) => point(inner, startAngle + arcSweep - index * arcSweep / segmentCount));
+  const start = point((outer + inner) / 2, startAngle);
+  return [{
+    width,
+    height,
+    commands: [
+      { moveTo: { x: start.x - 24, y: start.y } },
+      { lineTo: { x: start.x + 4, y: start.y - 10 } },
+      ...outerPoints.map((point) => ({ lineTo: point })),
+      ...innerPoints.map((point) => ({ lineTo: point })),
+      { lineTo: { x: start.x + 4, y: start.y + 10 } },
+      { close: {} },
+    ],
+  }];
+}
+
 export function buildCycleLoop(presentation, params) {
+  params = validateCycleLoopParams(params);
   const slide = prepareSlide(presentation, params.title, "循环主题 · 反馈闭环");
   const steps = params.steps.map((step) => (
     typeof step === "string" ? { title: step, body: "" } : { title: step.title, body: step.body ?? "" }
   ));
   if (steps.length < 3 || steps.length > 6) throw new Error("循环闭环支持 3–6 个步骤");
 
-  addCircle(slide, { left: 438, top: 183, width: 404, height: 404 }, {
+  addCircle(slide, { left: 490, top: 257, width: 300, height: 300 }, {
     fill: "none",
     line: { style: "solid", fill: "#D9EAF8", width: 14 },
     shadow: "shadow-none",
   });
-  addCircle(slide, { left: 478, top: 223, width: 324, height: 324 }, {
+  addCircle(slide, { left: 505, top: 272, width: 270, height: 270 }, {
     fill: THEME.surface,
     line: { style: "solid", fill: "#B8DAF4", width: 2 },
     shadow: "shadow-sm",
   });
-  [
-    { geometry: "rightArrow", left: 585, top: 181, width: 110, height: 28 },
-    { geometry: "downArrow", left: 812, top: 330, width: 28, height: 110 },
-    { geometry: "leftArrow", left: 585, top: 561, width: 110, height: 28 },
-    { geometry: "upArrow", left: 440, top: 330, width: 28, height: 110 },
-  ].forEach(({ geometry, ...position }) => addBox(slide, position, {
-    geometry,
-    fill: THEME.accent,
+  const cycleCenter = { x: 640, y: 407 };
+  const orbitDiameter = 270;
+  const orbitLeft = cycleCenter.x - orbitDiameter / 2;
+  const orbitTop = cycleCenter.y - orbitDiameter / 2;
+  const sweep = 360 / steps.length;
+  // The source uses an arrowhead attached to each arc. Artifact Tool
+  // does not preserve an arrowhead on `arc`, so each arc-plus-head is emitted
+  // as one filled native custom path rather than as an arc with a detached
+  // cardinal triangle.
+  steps.forEach((_, index) => slide.shapes.add({
+    geometry: "custom",
+    // The custom path bounding boxes deliberately share one circle; their
+    // own source-contract audit checks the angular segments, so they must not be
+    // sent to the generic bbox-overlap detector as if they were four panels.
+    name: qaElementName({ parent: `cycle-arrow-${index}` }),
+    position: transformPosition(slide, { left: orbitLeft, top: orbitTop, width: orbitDiameter, height: orbitDiameter, rotation: index * sweep }),
+    fill: "#2F7EEA",
     line: { style: "solid", fill: "none", width: 0 },
+    customPaths: cycleArcArrowPath(orbitDiameter, orbitDiameter, sweep),
     shadow: "shadow-none",
   }));
-  const center = addCircle(slide, { left: 525, top: 270, width: 230, height: 230 }, {
+  const center = addCircle(slide, { left: 550, top: 317, width: 180, height: 180 }, {
+    name: qaElementName({ parent: "cycle-center", domains: ["cycle-shape", "cycle-content"] }),
     fill: THEME.accent,
     line: { style: "solid", fill: "#FFFFFF", width: 4 },
     shadow: "shadow-lg",
     text: wrapChineseText(params.center, 6),
-    fontSize: 28,
+    fontSize: 25,
     bold: true,
     color: "#FFFFFF",
   });
 
-  const orbitAnchors = [
-    addCircle(slide, { left: 615, top: 164, width: 50, height: 50 }, { fill: THEME.cyan, line: { style: "solid", fill: "#FFFFFF", width: 3 }, shadow: "shadow-sm" }),
-    addCircle(slide, { left: 816, top: 360, width: 50, height: 50 }, { fill: THEME.accentAlt, line: { style: "solid", fill: "#FFFFFF", width: 3 }, shadow: "shadow-sm" }),
-    addCircle(slide, { left: 615, top: 556, width: 50, height: 50 }, { fill: THEME.cyan, line: { style: "solid", fill: "#FFFFFF", width: 3 }, shadow: "shadow-sm" }),
-    addCircle(slide, { left: 414, top: 360, width: 50, height: 50 }, { fill: THEME.accentAlt, line: { style: "solid", fill: "#FFFFFF", width: 3 }, shadow: "shadow-sm" }),
-  ];
+  const orbitAnchors = steps.map((_, index) => {
+    const angle = -90 + index * sweep;
+    const radians = angle * Math.PI / 180;
+    const radius = 120;
+    return addCircle(slide, { left: cycleCenter.x + radius * Math.cos(radians) - 24, top: cycleCenter.y + radius * Math.sin(radians) - 24, width: 48, height: 48 }, {
+      // Circular nodes sit close to the central circle by design.  Their
+      // source-specific radial-distance audit is more accurate than the
+      // generic rectangle-bbox overlap detector for diagonal circles.
+      name: qaElementName({ parent: `cycle-anchor-${index}` }),
+      fill: index % 2 ? THEME.accentAlt : THEME.cyan,
+      line: { style: "solid", fill: "#FFFFFF", width: 3 }, shadow: "shadow-sm",
+    });
+  });
 
-  const rightSteps = steps.slice(0, Math.ceil(steps.length / 2));
-  const leftSteps = steps.slice(rightSteps.length).reverse();
-  const renderColumn = (column, side, startIndex) => {
-    const gap = column.length === 1 ? 0 : 300 / (column.length - 1);
-    const startTop = 206;
-    column.forEach((step, localIndex) => {
-      const index = side === "right" ? startIndex + localIndex : steps.length - localIndex - 1;
-      const top = startTop + localIndex * gap;
-      const left = side === "right" ? 914 : 66;
-      const numberLeft = side === "right" ? left : left + 228;
-      addBox(slide, { left, top, width: 274, height: 84 }, {
+  const cardPosition = (index) => {
+    const angle = -90 + index * sweep;
+    const radians = angle * Math.PI / 180;
+    const cosine = Math.cos(radians);
+    const sine = Math.sin(radians);
+    if (sine < -0.55) return { region: "top", left: 440, top: 135, width: 400, height: 100 };
+    if (sine > 0.55 && cosine > 0.25) return { region: "right", left: 930, top: 410, width: 270, height: 130 };
+    if (sine > 0.55 && cosine < -0.25) return { region: "left", left: 80, top: 410, width: 270, height: 130 };
+    if (sine > 0.55) return { region: "bottom", left: 440, top: 555, width: 400, height: 95 };
+    if (cosine >= 0) return { region: "right", left: 930, top: Math.abs(sine) < 0.15 ? 330 : sine < 0 ? 210 : 410, width: 270, height: 130 };
+    return { region: "left", left: 80, top: Math.abs(sine) < 0.15 ? 330 : sine < 0 ? 210 : 410, width: 270, height: 130 };
+  };
+  steps.forEach((step, index) => {
+      const card = cardPosition(index);
+      const { left, top, width, height, region } = card;
+      const numberLeft = region === "left" ? left + width - 54 : left + 8;
+      addBox(slide, { left, top, width, height }, {
         name: qaElementName({ parent: `cycle-step-${index}`, domains: ["cycle-card", "cycle-content"] }),
         fill: THEME.surface,
         line: { style: "solid", fill: "#D7E4EF", width: 1 },
         shadow: "shadow-sm",
       });
-      addCircle(slide, { left: numberLeft, top: top + 17, width: 50, height: 50 }, {
+      addCircle(slide, { left: numberLeft, top: top + Math.max(7, (height - 42) / 2), width: 42, height: 42 }, {
+        name: qaElementName({ within: `cycle-step-${index}`, role: "number" }),
         fill: index % 2 ? THEME.accentAlt : THEME.accent,
         line: { style: "solid", fill: "#FFFFFF", width: 2 },
         shadow: "shadow-none",
         text: String(index + 1).padStart(2, "0"),
-        fontSize: 16,
+        fontSize: 17,
         bold: true,
         color: "#FFFFFF",
         insets: { top: 0, right: 0, bottom: 0, left: 0 },
       });
-      const textLeft = side === "right" ? left + 66 : left + 18;
-      const textWidth = 188;
-      addText(slide, step.title, { left: textLeft, top: top + 12, width: textWidth, height: 28 }, {
-        fontSize: typographySize("componentItemTitle", 19),
+      const textLeft = region === "left" ? left + 16 : left + 62;
+      const textWidth = width - 78;
+      const compact = region === "top" || region === "bottom";
+      addText(slide, step.title, { left: textLeft, top: top + (compact ? 5 : 12), width: textWidth, height: 24 }, {
+        name: qaElementName({ within: `cycle-step-${index}`, role: "title" }),
+        fontSize: typographySize("componentItemTitle", compact ? 17 : 18),
         bold: true,
         color: THEME.accent,
-        alignment: side === "right" ? "left" : "right",
+        alignment: region === "left" ? "right" : "left",
       });
-      if (step.body) addText(slide, wrapChineseText(step.body, 11), { left: textLeft, top: top + 42, width: textWidth, height: 34 }, {
-        fontSize: typographySize("componentMeta", 16),
+      if (step.body) addText(slide, wrapChineseText(step.body, compact ? 18 : 14), { left: textLeft, top: top + (compact ? 29 : 41), width: textWidth, height: height - (compact ? 31 : 44) }, {
+        name: qaElementName({ within: `cycle-step-${index}`, role: "body" }),
+        fontSize: 17,
         color: THEME.body,
-        alignment: side === "right" ? "left" : "right",
+        alignment: region === "left" ? "right" : "left",
       });
     });
-  };
-  renderColumn(rightSteps, "right", 0);
-  renderColumn(leftSteps, "left", rightSteps.length);
   orbitAnchors.forEach((anchor) => anchor.bringToFront());
   center.bringToFront();
   return slide;
 }
 
+const TIMELINE_TEXT_LIMITS = Object.freeze({ title: 10, period: 10, milestoneTitle: 10, milestoneBody: 36 });
+
+function timelineValidationError(code, message, field) {
+  const error = new Error(message);
+  error.code = code;
+  if (field) error.field = field;
+  return error;
+}
+
+function validateTimelineText(value, field, maximum, { allowEmpty = false } = {}) {
+  if (typeof value !== "string" || (!allowEmpty && value.trim().length === 0)) throw timelineValidationError("TIMELINE_TEXT_REQUIRED", `${field} 必须是非空文本`, field);
+  if (value !== value.trim()) throw timelineValidationError("TIMELINE_TEXT_SURROUNDING_WHITESPACE", `${field} 不得包含首尾空白`, field);
+  if (/\r|\n|\t/u.test(value)) throw timelineValidationError("TIMELINE_TEXT_CONTROL_CHARACTER", `${field} 不得包含控制字符`, field);
+  if ([...value].length > maximum) throw timelineValidationError("TIMELINE_TEXT_TOO_LONG", `${field} 超过 ${maximum} 字符上限`, field);
+  return value;
+}
+
+export function validateTimelineRoadmapParams(params) {
+  if (!params || typeof params !== "object") throw timelineValidationError("TIMELINE_PARAMS_REQUIRED", "时间轴参数不能为空");
+  validateTimelineText(params.title, "title", TIMELINE_TEXT_LIMITS.title);
+  if (!Array.isArray(params.milestones)) throw timelineValidationError("TIMELINE_MILESTONES_REQUIRED", "milestones 必须是数组", "milestones");
+  if (params.milestones.length < 3 || params.milestones.length > 6) throw timelineValidationError("TIMELINE_MILESTONE_COUNT", "时间轴支持 3–6 个里程碑", "milestones");
+  const milestones = params.milestones.map((milestone, index) => {
+    if (!milestone || typeof milestone !== "object") throw timelineValidationError("TIMELINE_MILESTONE_REQUIRED", `milestones[${index}] 必须是对象`, `milestones[${index}]`);
+    validateTimelineText(milestone.period, `milestones[${index}].period`, TIMELINE_TEXT_LIMITS.period);
+    validateTimelineText(milestone.title, `milestones[${index}].title`, TIMELINE_TEXT_LIMITS.milestoneTitle);
+    validateTimelineText(milestone.body ?? "", `milestones[${index}].body`, TIMELINE_TEXT_LIMITS.milestoneBody, { allowEmpty: true });
+    return { period: milestone.period, title: milestone.title, body: milestone.body ?? "" };
+  });
+  return { ...params, milestones };
+}
+
 export function buildTimelineRoadmap(presentation, params) {
+  params = validateTimelineRoadmapParams(params);
   const slide = prepareSlide(presentation, params.title, "阶段节点 · 发展历程");
   const milestones = params.milestones;
   if (milestones.length < 3 || milestones.length > 6) throw new Error("时间轴支持 3–6 个里程碑");
@@ -1160,7 +1401,19 @@ export function buildTimelineRoadmap(presentation, params) {
   const width = 1152;
   const columnWidth = width / milestones.length;
   const lineTop = 337;
+  // Background bands belong behind the continuous axis. Drawing them after
+  // the axis erased the line on every tinted column.
+  milestones.forEach((_, index) => {
+    const columnLeft = left + index * columnWidth;
+    if (index % 2 === 0) addBox(slide, { left: columnLeft + 3, top: 155, width: columnWidth - 6, height: 472 }, {
+      fill: "#F0F7FC",
+      line: { style: "solid", fill: "none", width: 0 },
+      shadow: "shadow-none",
+      borderRadius: "rounded-sm",
+    });
+  });
   slide.shapes.add({
+    name: qaElementName({ parent: "timeline-axis", domains: ["timeline-connection"] }),
     geometry: "line",
     position: transformPosition(slide, { left, top: lineTop, width, height: 0 }),
     fill: "none",
@@ -1171,13 +1424,8 @@ export function buildTimelineRoadmap(presentation, params) {
     const columnLeft = left + index * columnWidth;
     const innerLeft = columnLeft + 12;
     const innerWidth = columnWidth - 24;
-    if (index % 2 === 0) addBox(slide, { left: columnLeft + 3, top: 155, width: columnWidth - 6, height: 472 }, {
-      fill: "#F0F7FC",
-      line: { style: "solid", fill: "none", width: 0 },
-      shadow: "shadow-none",
-      borderRadius: "rounded-sm",
-    });
     addText(slide, milestone.period, { left: innerLeft, top: 170, width: innerWidth, height: 105 }, {
+      name: qaElementName({ parent: `timeline-period-${index}`, domains: ["timeline-content"] }),
       fontSize: milestones.length <= 4 ? 58 : 44,
       bold: true,
       color: index === milestones.length - 1 ? THEME.accent : "#AFC4D8",
@@ -1185,29 +1433,33 @@ export function buildTimelineRoadmap(presentation, params) {
       autoFit: "shrinkText",
     });
     addText(slide, `阶段 ${String(index + 1).padStart(2, "0")}`, { left: innerLeft, top: 286, width: innerWidth, height: 26 }, {
-      fontSize: 16,
+      fontSize: 18,
       bold: true,
       color: index === milestones.length - 1 ? THEME.accentAlt : THEME.muted,
       alignment: "center",
     });
     addCircle(slide, { left: columnLeft + columnWidth / 2 - 13, top: lineTop - 13, width: 26, height: 26 }, {
+      name: qaElementName({ parent: `timeline-node-${index}`, domains: ["timeline-connection"] }),
       fill: index === milestones.length - 1 ? THEME.cyan : THEME.accent,
       line: { style: "solid", fill: "#FFFFFF", width: 3 },
       shadow: "shadow-sm",
     });
     addText(slide, milestone.title, { left: innerLeft, top: 376, width: innerWidth, height: 58 }, {
+      name: qaElementName({ parent: `timeline-title-${index}`, domains: ["timeline-content"] }),
       fontSize: milestones.length <= 4 ? 22 : 19,
       bold: true,
       color: THEME.accent,
       alignment: "center",
     });
     addText(slide, wrapChineseText(milestone.body ?? "", milestones.length <= 4 ? 13 : 10), { left: innerLeft + 4, top: 442, width: innerWidth - 8, height: 104 }, {
-      fontSize: typographySize("componentMeta", 16),
+      name: qaElementName({ parent: `timeline-body-${index}`, domains: ["timeline-content"] }),
+      fontSize: 20,
       color: THEME.body,
       alignment: "center",
       verticalAlignment: "top",
     });
     addBox(slide, { left: columnLeft + columnWidth / 2 - 24, top: 566, width: 48, height: 5 }, {
+      name: qaElementName({ parent: `timeline-bar-${index}`, domains: ["timeline-shape"] }),
       fill: index === milestones.length - 1 ? THEME.cyan : THEME.accentSoft,
       line: { style: "solid", fill: "none", width: 0 },
       shadow: "shadow-none",
@@ -1217,7 +1469,40 @@ export function buildTimelineRoadmap(presentation, params) {
   return slide;
 }
 
+const FUNNEL_TEXT_LIMITS = Object.freeze({ title: 10, rate: 10, label: 8, note: 34 });
+
+function funnelValidationError(code, message, field) {
+  const error = new Error(message);
+  error.code = code;
+  if (field) error.field = field;
+  return error;
+}
+
+function validateFunnelText(value, field, maximum, { allowEmpty = false } = {}) {
+  if (typeof value !== "string" || (!allowEmpty && value.trim().length === 0)) throw funnelValidationError("FUNNEL_TEXT_REQUIRED", `${field} 必须是非空文本`, field);
+  if (value !== value.trim()) throw funnelValidationError("FUNNEL_TEXT_SURROUNDING_WHITESPACE", `${field} 不得包含首尾空白`, field);
+  if (/\r|\n|\t/u.test(value)) throw funnelValidationError("FUNNEL_TEXT_CONTROL_CHARACTER", `${field} 不得包含控制字符`, field);
+  if ([...value].length > maximum) throw funnelValidationError("FUNNEL_TEXT_TOO_LONG", `${field} 超过 ${maximum} 字符上限`, field);
+  return value;
+}
+
+export function validateFunnelConversionParams(params) {
+  if (!params || typeof params !== "object") throw funnelValidationError("FUNNEL_PARAMS_REQUIRED", "转化漏斗参数不能为空");
+  validateFunnelText(params.title, "title", FUNNEL_TEXT_LIMITS.title);
+  if (!Array.isArray(params.stages)) throw funnelValidationError("FUNNEL_STAGES_REQUIRED", "stages 必须是数组", "stages");
+  if (params.stages.length < 3 || params.stages.length > 6) throw funnelValidationError("FUNNEL_STAGE_COUNT", "转化漏斗支持 3–6 个阶段", "stages");
+  const stages = params.stages.map((stage, index) => {
+    if (!stage || typeof stage !== "object") throw funnelValidationError("FUNNEL_STAGE_REQUIRED", `stages[${index}] 必须是对象`, `stages[${index}]`);
+    validateFunnelText(stage.rate ?? "", `stages[${index}].rate`, FUNNEL_TEXT_LIMITS.rate, { allowEmpty: true });
+    validateFunnelText(stage.label, `stages[${index}].label`, FUNNEL_TEXT_LIMITS.label);
+    validateFunnelText(stage.note ?? "", `stages[${index}].note`, FUNNEL_TEXT_LIMITS.note, { allowEmpty: true });
+    return { rate: stage.rate ?? "", label: stage.label, note: stage.note ?? "" };
+  });
+  return { ...params, stages };
+}
+
 export function buildFunnelConversion(presentation, params) {
+  params = validateFunnelConversionParams(params);
   const slide = prepareSlide(presentation, params.title, "递减转化 · 阶段拆解");
   const stages = params.stages;
   if (stages.length < 3 || stages.length > 6) throw new Error("转化漏斗支持 3–6 个阶段");
@@ -1234,25 +1519,32 @@ export function buildFunnelConversion(presentation, params) {
     const segmentLeft = 72 + (maxWidth - segmentWidth) / 2;
     const segmentTop = top + index * segmentHeight;
     const color = palette[index];
-    addBox(slide, { left: segmentLeft, top: segmentTop, width: segmentWidth, height: segmentHeight - 8 }, {
+    addBox(slide, { left: segmentLeft, top: segmentTop, width: segmentWidth, height: segmentHeight - 8, verticalFlip: true }, {
       name: qaElementName({ parent: `funnel-stage-${index}`, domains: ["funnel-shape", "funnel-content"] }),
       geometry: "trapezoid",
       fill: color,
       line: { style: "solid", fill: "#FFFFFF", width: 2 },
       shadow: "shadow-sm",
     });
-    addCircle(slide, { left: segmentLeft + 4, top: segmentTop - 5, width: segmentWidth - 8, height: 22 }, {
+    // A conversion funnel is wide at the entry and narrow at the exit. With
+    // the vertically flipped trapezoid, its upper edge is the full bounding
+    // width; the ellipse endpoints must meet those actual top-edge endpoints.
+    const topEdgeWidth = segmentWidth;
+    addCircle(slide, { left: segmentLeft, top: segmentTop - 7, width: topEdgeWidth, height: 24 }, {
+      name: qaElementName({ parent: `funnel-face-${index}`, domains: ["funnel-face"] }),
       fill: color,
-      line: { style: "solid", fill: "#FFFFFF", width: 1 },
+      line: { style: "solid", fill: "#D9F1FA", width: 1.2 },
       shadow: "shadow-none",
     });
     addText(slide, stage.rate ?? "", { left: segmentLeft + 16, top: segmentTop + 10, width: segmentWidth - 32, height: 29 }, {
+      name: qaElementName({ within: `funnel-stage-${index}`, role: "rate" }),
       fontSize: stages.length <= 4 ? 24 : 20,
       bold: true,
       color: "#F6C96A",
       alignment: "center",
     });
     addText(slide, stage.label, { left: segmentLeft + 16, top: segmentTop + 38, width: segmentWidth - 32, height: 31 }, {
+      name: qaElementName({ parent: `funnel-label-${index}`, domains: ["funnel-label"] }),
       fontSize: stages.length <= 4 ? 20 : 17,
       bold: true,
       color: "#FFFFFF",
@@ -1272,72 +1564,190 @@ export function buildFunnelConversion(presentation, params) {
       borderRadius: "rounded-sm",
     });
     addText(slide, `${String(index + 1).padStart(2, "0")}  ${stage.label}`, { left: 752, top: cardTop + (compact ? 6 : 10), width: 420, height: compact ? 23 : 27 }, {
-      fontSize: stages.length <= 4 ? 18 : 16,
+      name: qaElementName({ within: `funnel-note-${index}`, role: "title" }),
+      fontSize: 18,
       bold: true,
       color: THEME.accent,
     });
-    addText(slide, wrapChineseText(stage.note ?? "", compact ? 16 : 22), { left: 752, top: cardTop + (compact ? 30 : 38), width: 420, height: compact ? segmentHeight - 36 : segmentHeight - 52 }, {
-      fontSize: typographySize("componentMeta", 16),
+    addText(slide, wrapChineseText(stage.note ?? "", compact ? 18 : 22), { left: 752, top: cardTop + (compact ? 22 : 38), width: 420, height: compact ? segmentHeight - 32 : segmentHeight - 52 }, {
+      name: qaElementName({ within: `funnel-note-${index}`, role: "body" }),
+      fontSize: 20,
       color: THEME.body,
       verticalAlignment: "top",
     });
-    slide.shapes.add({
-      geometry: "line",
-      position: transformPosition(slide, { left: segmentLeft + segmentWidth + 10, top: segmentTop + (segmentHeight - 8) / 2, width: 82, height: 0 }),
-      fill: "none",
-      line: { style: "dashed", fill: "#91B8D7", width: 1.3 },
-    });
+    addAnchoredLine(slide,
+      { frame: { left: segmentLeft, top: segmentTop, width: segmentWidth, height: segmentHeight - 8 }, side: "right", parent: `funnel-stage-${index}` },
+      { frame: { left: 726, top: cardTop, width: 478, height: segmentHeight - 10 }, side: "left", parent: `funnel-note-${index}` },
+      "#91B8D7", 1.3);
   });
   return slide;
 }
 
+const PYRAMID_TEXT_LIMITS = Object.freeze({ title: 10, levelTitle: 10, share: 10, body: 34 });
+
+function pyramidValidationError(code, message, field) {
+  const error = new Error(message);
+  error.code = code;
+  if (field) error.field = field;
+  return error;
+}
+
+function validatePyramidText(value, field, maximum, { allowEmpty = false } = {}) {
+  if (typeof value !== "string" || (!allowEmpty && value.trim().length === 0)) throw pyramidValidationError("PYRAMID_TEXT_REQUIRED", `${field} 必须是非空文本`, field);
+  if (value !== value.trim()) throw pyramidValidationError("PYRAMID_TEXT_SURROUNDING_WHITESPACE", `${field} 不得包含首尾空白`, field);
+  if (/\r|\n|\t/u.test(value)) throw pyramidValidationError("PYRAMID_TEXT_CONTROL_CHARACTER", `${field} 不得包含控制字符`, field);
+  if ([...value].length > maximum) throw pyramidValidationError("PYRAMID_TEXT_TOO_LONG", `${field} 超过 ${maximum} 字符上限`, field);
+  return value;
+}
+
+export function validateHierarchyPyramidParams(params) {
+  if (!params || typeof params !== "object") throw pyramidValidationError("PYRAMID_PARAMS_REQUIRED", "层级金字塔参数不能为空");
+  validatePyramidText(params.title, "title", PYRAMID_TEXT_LIMITS.title);
+  if (!Array.isArray(params.levels)) throw pyramidValidationError("PYRAMID_LEVELS_REQUIRED", "levels 必须是数组", "levels");
+  if (params.levels.length < 3 || params.levels.length > 5) throw pyramidValidationError("PYRAMID_LEVEL_COUNT", "层级金字塔支持 3–5 层", "levels");
+  const levels = params.levels.map((level, index) => {
+    if (!level || typeof level !== "object") throw pyramidValidationError("PYRAMID_LEVEL_REQUIRED", `levels[${index}] 必须是对象`, `levels[${index}]`);
+    validatePyramidText(level.title, `levels[${index}].title`, PYRAMID_TEXT_LIMITS.levelTitle);
+    validatePyramidText(level.share ?? "", `levels[${index}].share`, PYRAMID_TEXT_LIMITS.share, { allowEmpty: true });
+    validatePyramidText(level.body ?? "", `levels[${index}].body`, PYRAMID_TEXT_LIMITS.body, { allowEmpty: true });
+    return { title: level.title, share: level.share ?? "", body: level.body ?? "" };
+  });
+  return { ...params, levels };
+}
+
+function pyramidFrustumPath(width, height, topEdgeWidth, bottomCurveDepth = 16) {
+  const leftTop = (width - topEdgeWidth) / 2;
+  const rightTop = leftTop + topEdgeWidth;
+  const samples = 18;
+  const bottom = Array.from({ length: samples + 1 }, (_, index) => {
+    const ratio = index / samples;
+    return { x: width - ratio * width, y: height - bottomCurveDepth + Math.sin(ratio * Math.PI) * bottomCurveDepth };
+  });
+  return [{ width, height, commands: [
+    { moveTo: { x: leftTop, y: 0 } },
+    { lineTo: { x: rightTop, y: 0 } },
+    { lineTo: { x: width, y: height - bottomCurveDepth } },
+    ...bottom.map((point) => ({ lineTo: point })),
+    { lineTo: { x: 0, y: height - bottomCurveDepth } },
+    { close: {} },
+  ] }];
+}
+
+function pyramidConePath(width, height) {
+  // Source slide 128 uses a true triangular cone body with a flat base.  Its
+  // separate thin oval overlays that base; reusing the curved frustum path
+  // here creates two competing curves and makes the apex underside look wrong.
+  return [{ width, height, commands: [
+    { moveTo: { x: width / 2, y: 0 } },
+    { lineTo: { x: width, y: height } },
+    { lineTo: { x: 0, y: height } },
+    { close: {} },
+  ] }];
+}
+
+function pyramidRailPath(width, height, side) {
+  const mirror = (x) => side === "left" ? x : width - x;
+  return [{ width, height, commands: [
+    { moveTo: { x: mirror(0), y: height - 18 } },
+    { lineTo: { x: mirror(18), y: height } },
+    { lineTo: { x: mirror(width - 65), y: 66 } },
+    { lineTo: { x: mirror(width - 97), y: 84 } },
+    { lineTo: { x: mirror(width - 24), y: 0 } },
+    { lineTo: { x: mirror(width - 39), y: 111 } },
+    { lineTo: { x: mirror(width - 51), y: 76 } },
+    { lineTo: { x: mirror(30), y: height - 4 } },
+    { close: {} },
+  ] }];
+}
+
 export function buildHierarchyPyramid(presentation, params) {
+  params = validateHierarchyPyramidParams(params);
   const slide = prepareSlide(presentation, params.title, "战略层级 · 能力递进");
   const levels = params.levels;
   if (levels.length < 3 || levels.length > 5) throw new Error("层级金字塔支持 3–5 层");
-  const maxWidth = 552;
-  const minWidth = 180;
-  const top = 158;
-  const totalHeight = 458;
-  const levelHeight = totalHeight / levels.length;
-  const palette = ["#2AC7CE", "#1BA7CE", "#187FC3", "#185F9C", "#153F6B"];
+  const pyramidCenter = 370;
+  const top = 150;
+  const totalHeight = 500;
+  const gap = 25;
+  const levelHeight = (totalHeight - gap * (levels.length - 1)) / levels.length;
+  // Source slide 128 uses a narrow cone at roughly one quarter of the base
+  // width. A wider first tier creates a squat apex and lets the two rail heads
+  // visually merge into the cone.
+  const minBottomWidth = 142;
+  const maxBottomWidth = 570;
+  const levelWidths = levels.map((_, index) => {
+    const ratio = index / Math.max(1, levels.length - 1);
+    return minBottomWidth + ratio * (maxBottomWidth - minBottomWidth);
+  });
+  const palette = ["#338CF6", "#2E87F3", "#2A82EC", "#267AE2", "#206ED4"];
+  // Source slide 128 has heavy mirrored rising rails with integral heads, not
+  // thin connector lines.  They are filled paths so the visual weight is
+  // stable in both the standalone asset and a Skin body frame.
+  ["left", "right"].forEach((side) => {
+    slide.shapes.add({
+      geometry: "custom",
+      name: qaElementName({ parent: `hierarchy-rail-${side}`, domains: ["hierarchy-rail"] }),
+      position: transformPosition(slide, { left: side === "left" ? 40 : 408, top: 142, width: 292, height: 485 }),
+      fill: "#167AF1", line: { style: "solid", fill: "none", width: 0 },
+      customPaths: pyramidRailPath(292, 485, side), shadow: "shadow-none",
+    });
+  });
   levels.forEach((level, index) => {
-    const ratio = levels.length === 1 ? 0 : index / (levels.length - 1);
-    const levelWidth = minWidth + ratio * (maxWidth - minWidth);
-    const levelLeft = 74 + (maxWidth - levelWidth) / 2;
-    const levelTop = top + index * levelHeight;
-    addBox(slide, { left: levelLeft, top: levelTop, width: levelWidth, height: levelHeight - 5 }, {
+    const levelWidth = levelWidths[index];
+    // A lower tier's dark ellipse inherits the width of the tier above it,
+    // matching the source's cone/frustum construction.
+    const topEdgeWidth = index === 0 ? 0 : levelWidths[index - 1];
+    const levelLeft = pyramidCenter - levelWidth / 2;
+    const levelTop = top + index * (levelHeight + gap);
+    const faceHeight = levelHeight;
+    slide.shapes.add({
+      geometry: "custom",
       name: qaElementName({ parent: `hierarchy-level-${index}`, domains: ["hierarchy-shape", "hierarchy-content"] }),
-      geometry: "trapezoid",
       fill: palette[index],
-      line: { style: "solid", fill: "#FFFFFF", width: 2 },
+      line: { style: "solid", fill: "#FFFFFF", width: 1.1 },
+      position: transformPosition(slide, { left: levelLeft, top: levelTop, width: levelWidth, height: faceHeight }),
+      customPaths: index === 0
+        ? pyramidConePath(levelWidth, faceHeight)
+        : pyramidFrustumPath(levelWidth, faceHeight, topEdgeWidth, Math.min(18, faceHeight * 0.18)),
       shadow: "shadow-sm",
     });
-    addText(slide, level.title, { left: levelLeft + 16, top: levelTop + 13, width: levelWidth - 32, height: 30 }, {
+    addText(slide, level.title, { left: levelLeft + 16, top: levelTop + Math.max(18, faceHeight * 0.33), width: levelWidth - 32, height: 30 }, {
+      name: qaElementName({ within: `hierarchy-level-${index}`, role: "title" }),
       fontSize: levels.length <= 4 ? 20 : 17,
       bold: true,
       color: "#FFFFFF",
       alignment: "center",
     });
-    if (level.share) addText(slide, level.share, { left: levelLeft + 16, top: levelTop + 43, width: levelWidth - 32, height: 25 }, {
-      fontSize: levels.length <= 4 ? 18 : 15,
+    if (level.share) addText(slide, level.share, { left: levelLeft + 16, top: levelTop + Math.max(46, faceHeight * 0.55), width: levelWidth - 32, height: 25 }, {
+      name: qaElementName({ within: `hierarchy-level-${index}`, role: "share" }),
+      fontSize: 18,
       bold: true,
       color: "#DFF9FB",
       alignment: "center",
     });
-    if (index < levels.length - 1) addCircle(slide, { left: levelLeft - 18, top: levelTop + levelHeight - 15, width: levelWidth + 36, height: 28 }, {
-      fill: "none",
-      line: { style: "solid", fill: "#A9D5F3", width: 1.5 },
-      shadow: "shadow-none",
-    });
+    if (index === 0) {
+      // The source uses only a very thin dark crescent at the cone base.  A
+      // tall ellipse reads as a visible underside, which breaks the downward
+      // viewing perspective established by the lower frustum top faces.
+      addCircle(slide, { left: levelLeft, top: levelTop + faceHeight - 5, width: levelWidth, height: 10 }, {
+        name: qaElementName({ parent: "hierarchy-bottom-0", domains: ["hierarchy-face"] }),
+        fill: "#0756B9", line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-none",
+      });
+    } else {
+      addCircle(slide, { left: levelLeft + (levelWidth - topEdgeWidth) / 2, top: levelTop - 12, width: topEdgeWidth, height: 28 }, {
+        name: qaElementName({ parent: `hierarchy-face-${index}`, domains: ["hierarchy-face"] }),
+        fill: "#0758C4", line: { style: "solid", fill: "#126BE5", width: 0.8 }, shadow: "shadow-none",
+      });
+    }
 
-    addBox(slide, { left: 718, top: levelTop + 2, width: 486, height: levelHeight - 10 }, {
+    addBox(slide, { left: 760, top: levelTop + 2, width: 444, height: faceHeight - 4 }, {
       name: qaElementName({ parent: `hierarchy-note-${index}`, domains: ["hierarchy-note", "hierarchy-content"] }),
       fill: index % 2 ? "#F2F7FB" : THEME.surface,
       line: { style: "solid", fill: "#D8E5EF", width: 1 },
       shadow: "shadow-none",
     });
-    addCircle(slide, { left: 740, top: levelTop + levelHeight / 2 - 20, width: 40, height: 40 }, {
+    addCircle(slide, { left: 780, top: levelTop + faceHeight / 2 - 20, width: 40, height: 40 }, {
+      name: qaElementName({ within: `hierarchy-note-${index}`, role: "number" }),
       fill: palette[index],
       line: { style: "solid", fill: "#FFFFFF", width: 2 },
       shadow: "shadow-sm",
@@ -1347,17 +1757,16 @@ export function buildHierarchyPyramid(presentation, params) {
       color: "#FFFFFF",
       insets: { top: 0, right: 0, bottom: 0, left: 0 },
     });
-    addText(slide, wrapChineseText(level.body ?? "", levels.length <= 4 ? 25 : 20), { left: 800, top: levelTop + 13, width: 374, height: levelHeight - 32 }, {
-      fontSize: typographySize("componentMeta", 16),
+    addText(slide, wrapChineseText(level.body ?? "", levels.length <= 4 ? 25 : 20), { left: 840, top: levelTop + 13, width: 334, height: faceHeight - 32 }, {
+      name: qaElementName({ within: `hierarchy-note-${index}`, role: "body" }),
+      fontSize: 20,
       color: THEME.body,
       verticalAlignment: "middle",
     });
-    slide.shapes.add({
-      geometry: "line",
-      position: transformPosition(slide, { left: levelLeft + levelWidth + 12, top: levelTop + (levelHeight - 5) / 2, width: 78, height: 0 }),
-      fill: "none",
-      line: { style: "dashed", fill: "#9DBBD3", width: 1.2 },
-    });
+    addAnchoredLine(slide,
+      { frame: { left: levelLeft, top: levelTop, width: levelWidth, height: faceHeight }, side: "right", parent: `hierarchy-level-${index}` },
+      { frame: { left: 760, top: levelTop + 2, width: 444, height: faceHeight - 4 }, side: "left", parent: `hierarchy-note-${index}` },
+      "#9DBBD3", 1.2);
   });
   return slide;
 }
@@ -1458,22 +1867,106 @@ export function buildSwimlaneProcess(presentation, params) {
   return slide;
 }
 
+const MATRIX_TEXT_LIMITS = Object.freeze({ title: 12, quadrantTitle: 10, quadrantBody: 34 });
+
+function matrixValidationError(code, message, field) {
+  const error = new Error(message);
+  error.code = code;
+  if (field) error.field = field;
+  return error;
+}
+
+function validateMatrixText(value, field, maximum) {
+  if (typeof value !== "string" || value.trim().length === 0) throw matrixValidationError("MATRIX_TEXT_REQUIRED", `${field} is required`, field);
+  if (value !== value.trim()) throw matrixValidationError("MATRIX_TEXT_SURROUNDING_WHITESPACE", `${field} must not have surrounding whitespace`, field);
+  if (/\r|\n|\t/u.test(value)) throw matrixValidationError("MATRIX_TEXT_CONTROL_CHARACTER", `${field} must not contain control characters`, field);
+  if ([...value].length > maximum) throw matrixValidationError("MATRIX_TEXT_TOO_LONG", `${field} exceeds ${maximum} characters`, field);
+  return value;
+}
+
+export function validateFrameworkMatrixParams(params) {
+  if (!params || typeof params !== "object") throw matrixValidationError("MATRIX_PARAMS_REQUIRED", "matrix params are required");
+  validateMatrixText(params.title, "title", MATRIX_TEXT_LIMITS.title);
+  if (!Array.isArray(params.quadrants)) throw matrixValidationError("MATRIX_QUADRANTS_REQUIRED", "quadrants must be an array", "quadrants");
+  if (params.quadrants.length !== 4) throw matrixValidationError("MATRIX_QUADRANT_COUNT", "matrix requires exactly 4 quadrants", "quadrants");
+  const quadrants = params.quadrants.map((quadrant, index) => {
+    if (!quadrant || typeof quadrant !== "object") throw matrixValidationError("MATRIX_QUADRANT_REQUIRED", `quadrants[${index}] must be an object`, `quadrants[${index}]`);
+    validateMatrixText(quadrant.title, `quadrants[${index}].title`, MATRIX_TEXT_LIMITS.quadrantTitle);
+    validateMatrixText(quadrant.body, `quadrants[${index}].body`, MATRIX_TEXT_LIMITS.quadrantBody);
+    return { title: quadrant.title, body: quadrant.body };
+  });
+  return { ...params, quadrants };
+}
+
 export function buildFrameworkMatrix(presentation, params) {
+  params = validateFrameworkMatrixParams(params);
   const slide = prepareSlide(presentation, params.title, "四象限分析框架");
-  const positions = [
-    { left: 120, top: 150 }, { left: 650, top: 150 }, { left: 120, top: 405 }, { left: 650, top: 405 },
+  const petalFrames = [
+    { left: 460, top: 175, width: 180, height: 180, rotation: 90 },
+    { left: 640, top: 175, width: 180, height: 180, rotation: 180 },
+    { left: 460, top: 355, width: 180, height: 180, rotation: 0 },
+    { left: 640, top: 355, width: 180, height: 180, rotation: 270 },
   ];
+  const calloutFrames = [
+    { left: 58, top: 170, width: 330, height: 164 },
+    { left: 892, top: 170, width: 330, height: 164 },
+    { left: 58, top: 410, width: 330, height: 164 },
+    { left: 892, top: 410, width: 330, height: 164 },
+  ];
+  const palette = [THEME.accent, THEME.cyan, THEME.cyan, THEME.accent];
   params.quadrants.forEach((quadrant, index) => {
-    addBox(slide, { ...positions[index], width: 510, height: 220 }, {
-      fill: "#FFFFFF", line: { style: "solid", fill: index % 2 ? THEME.accentAlt : THEME.accent, width: 2 }, shadow: "shadow-sm",
+    const petalFrame = petalFrames[index];
+    const calloutFrame = calloutFrames[index];
+    addBox(slide, petalFrame, {
+      name: qaElementName({ parent: `matrix-petal-${index}`, domains: ["matrix-petal", "matrix-content"] }),
+      geometry: "teardrop",
+      fill: palette[index],
+      line: { style: "solid", fill: "#FFFFFF", width: 2 },
+      shadow: "shadow-md",
     });
-    addBox(slide, { left: positions[index].left, top: positions[index].top, width: 510, height: 58 }, {
-      fill: index % 2 ? THEME.accentAlt : THEME.accent, line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-none",
-      text: quadrant.title, fontSize: 21, bold: true, color: "#FFFFFF", alignment: "left",
+    addText(slide, [...quadrant.title][0], { left: petalFrame.left + 38, top: petalFrame.top + 40, width: 104, height: 70 }, {
+      name: qaElementName({ within: `matrix-petal-${index}`, role: "initial" }),
+      fontSize: 54,
+      bold: true,
+      color: "#FFFFFF",
+      alignment: "center",
     });
-    addText(slide, quadrant.body, { left: positions[index].left + 24, top: positions[index].top + 80, width: 462, height: 108 }, {
-      fontSize: 17, color: THEME.body, verticalAlignment: "top",
+    addText(slide, quadrant.title, { left: petalFrame.left + 18, top: petalFrame.top + 111, width: 144, height: 38 }, {
+      name: qaElementName({ within: `matrix-petal-${index}`, role: "title" }),
+      fontSize: 19,
+      bold: true,
+      color: "#FFFFFF",
+      alignment: "center",
     });
+    addBox(slide, calloutFrame, {
+      name: qaElementName({ parent: `matrix-quadrant-${index}`, domains: ["matrix-callout", "matrix-content"] }),
+      geometry: "roundRect",
+      fill: THEME.surface,
+      line: { style: "dashed", fill: "#B9C7D4", width: 1.3 },
+      shadow: "shadow-sm",
+    });
+    addText(slide, quadrant.title, { left: calloutFrame.left + 24, top: calloutFrame.top + 14, width: 282, height: 32 }, {
+      name: qaElementName({ within: `matrix-quadrant-${index}`, role: "title" }),
+      fontSize: 21,
+      bold: true,
+      color: palette[index],
+    });
+    addBox(slide, { left: calloutFrame.left + 24, top: calloutFrame.top + 50, width: 282, height: 3 }, {
+      fill: palette[index],
+      line: { style: "solid", fill: "none", width: 0 },
+      shadow: "shadow-none",
+    });
+    addText(slide, wrapChineseText(quadrant.body, 17), { left: calloutFrame.left + 24, top: calloutFrame.top + 65, width: 282, height: 80 }, {
+      name: qaElementName({ within: `matrix-quadrant-${index}`, role: "body" }),
+      fontSize: 18,
+      color: THEME.body,
+      verticalAlignment: "top",
+    });
+    const onLeft = index % 2 === 0;
+    addAnchoredLine(slide,
+      { frame: calloutFrame, side: onLeft ? "right" : "left", parent: `matrix-quadrant-${index}` },
+      { frame: petalFrame, side: onLeft ? "left" : "right", parent: `matrix-petal-${index}` },
+      palette[index], 1.4);
   });
   return slide;
 }
@@ -1693,3 +2186,4 @@ export function buildLayeredArchitecture(presentation, params) {
   appNodes.forEach((node) => node.bringToFront());
   return slide;
 }
+

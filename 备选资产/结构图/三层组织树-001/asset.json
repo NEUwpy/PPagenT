@@ -15,6 +15,20 @@
     "memberCount": "每部门 1–3",
     "fallback": "超过 4 个部门或单部门超过 3 人时拆页，或改用人员矩阵"
   },
+  "textLimits": {
+    "title": 24,
+    "leader.name": 4,
+    "leader.role": 5,
+    "departments[].name": 4,
+    "departments[].head": 4,
+    "departments[].members[].name": 4,
+    "departments[].members[].role": 6
+  },
+  "geometryContract": {
+    "sourceFrame": { "left": 40, "top": 135, "width": 1200, "height": 520 },
+    "connections": "所有父子关系线均连接已声明节点或总线锚点",
+    "alignment": "部门等距并围绕页面中轴居中；同部门成员等距并围绕部门中心居中"
+  },
   "semanticContract": "一个总负责人统筹多个部门负责人，每个部门负责人再管理若干成员",
   "doNotUseWhen": "角色之间没有明确上下级汇报关系，或需要表达跨部门泳道协作",
   "review": "待用户确认"

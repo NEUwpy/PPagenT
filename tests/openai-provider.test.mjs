@@ -40,7 +40,7 @@ test("模型 DirectorProvider 为两位导演和研发审查调用传入明确�
   assert.equal(provider.metadata.providerKind, "live-schema-aware-model-provider");
 });
 
-test("API 运行时直接读取两份导演执行准则，避免文档与提示词分叉", async () => {
+test("API 运行时直接读取正式生成工作流中的两份导演提示词", async () => {
   const root = path.resolve(new URL("..", import.meta.url).pathname.replace(/^\/(.:)/, "$1"));
   const guidelines = await loadDirectorGuidelines(root);
   assert.match(guidelines.content, /内容导演读取完整原稿/);

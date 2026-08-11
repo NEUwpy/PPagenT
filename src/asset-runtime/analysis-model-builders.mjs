@@ -45,7 +45,7 @@ export function computeFishboneBranchStack({ baseX, itemCount, isUpper, axisY = 
     return {
       left: baseX - 184 + lateralOffset,
       top: firstTop + itemIndex * itemPitch,
-      width: 212,
+      width: 230,
       height: itemHeight,
     };
   });
@@ -60,7 +60,50 @@ export function computeFishboneBranchStack({ baseX, itemCount, isUpper, axisY = 
   return { itemFrames, categoryFrame };
 }
 
+const FISHBONE_TEXT_LIMITS = Object.freeze({ title: 12, effect: 12, category: 8, item: 12 });
+
+function fishboneValidationError(code, message, field) {
+  const error = new Error(message);
+  error.code = code;
+  if (field) error.field = field;
+  return error;
+}
+
+function validateFishboneText(value, field, maximum) {
+  if (typeof value !== "string" || value.trim().length === 0) {
+    throw fishboneValidationError("FISHBONE_TEXT_REQUIRED", `${field} is required`, field);
+  }
+  if (value !== value.trim()) {
+    throw fishboneValidationError("FISHBONE_TEXT_SURROUNDING_WHITESPACE", `${field} must not have surrounding whitespace`, field);
+  }
+  if (/\r|\n|\t/u.test(value)) {
+    throw fishboneValidationError("FISHBONE_TEXT_CONTROL_CHARACTER", `${field} must not contain control characters`, field);
+  }
+  if ([...value].length > maximum) {
+    throw fishboneValidationError("FISHBONE_TEXT_TOO_LONG", `${field} exceeds ${maximum} characters`, field);
+  }
+  return value;
+}
+
+export function validateFishboneAnalysisParams(params) {
+  if (!params || typeof params !== "object") throw fishboneValidationError("FISHBONE_PARAMS_REQUIRED", "fishbone params are required");
+  validateFishboneText(params.title, "title", FISHBONE_TEXT_LIMITS.title);
+  validateFishboneText(params.effect, "effect", FISHBONE_TEXT_LIMITS.effect);
+  if (!Array.isArray(params.branches)) throw fishboneValidationError("FISHBONE_BRANCHES_REQUIRED", "branches must be an array", "branches");
+  if (params.branches.length < 4 || params.branches.length > 6) throw fishboneValidationError("FISHBONE_BRANCH_COUNT", "鱼骨原因分析支持 4–6 类原因", "branches");
+  const branches = params.branches.map((branch, branchIndex) => {
+    if (!branch || typeof branch !== "object") throw fishboneValidationError("FISHBONE_BRANCH_REQUIRED", `branches[${branchIndex}] must be an object`, `branches[${branchIndex}]`);
+    validateFishboneText(branch.category, `branches[${branchIndex}].category`, FISHBONE_TEXT_LIMITS.category);
+    if (!Array.isArray(branch.items)) throw fishboneValidationError("FISHBONE_ITEMS_REQUIRED", `branches[${branchIndex}].items must be an array`, `branches[${branchIndex}].items`);
+    if (branch.items.length < 1 || branch.items.length > 4) throw fishboneValidationError("FISHBONE_ITEM_COUNT", "each branch supports 1 to 4 items", `branches[${branchIndex}].items`);
+    branch.items.forEach((item, itemIndex) => validateFishboneText(item, `branches[${branchIndex}].items[${itemIndex}]`, FISHBONE_TEXT_LIMITS.item));
+    return { category: branch.category, items: [...branch.items] };
+  });
+  return { ...params, branches };
+}
+
 export function buildFishboneAnalysis(presentation, params) {
+  params = validateFishboneAnalysisParams(params);
   const slide = prepareSlide(presentation, params.title, "结果问题 · 分类原因拆解");
   const branches = params.branches;
   if (branches.length < 4 || branches.length > 6) throw new Error("鱼骨原因分析支持 4–6 类原因");
@@ -69,7 +112,8 @@ export function buildFishboneAnalysis(presentation, params) {
   }
 
   const effectFrame = { left: 986, top: 318, width: 250, height: 112 };
-  addLine(slide, { x: 72, y: 374 }, { x: effectFrame.left, y: 374 }, THEME.accent, 6);
+  addLine(slide, { x: 72, y: 374 }, { x: effectFrame.left, y: 374 }, THEME.accent, 6,
+    qaElementName({ parent: "fishbone-backbone", domains: ["fishbone-backbone"] }));
   addBox(slide, effectFrame, {
     name: qaElementName({ parent: "fishbone-effect" }),
     geometry: "rightArrow", fill: THEME.accent, line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-md",
@@ -102,6 +146,7 @@ export function buildFishboneAnalysis(presentation, params) {
       fill: "#FFFFFF", line: { style: "solid", fill: THEME.accentAlt, width: 2 }, shadow: "shadow-none",
     });
     addText(slide, branch.category, categoryFrame, {
+      name: qaElementName({ parent: `fishbone-category-${branchIndex}`, domains: ["fishbone-category"] }),
       fontSize: 18, bold: true, color: isUpper ? THEME.accent : THEME.accentAlt, alignment: "center",
     });
     branch.items.forEach((item, itemIndex) => {

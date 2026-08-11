@@ -2,7 +2,10 @@ import {
   buildComparison,
   buildCausalChain,
   buildCycleLoop,
-  buildLayeredArchitecture,
+  buildFrameworkMatrix,
+  buildFunnelConversion,
+  buildHierarchyPyramid,
+  buildLayeredArchitectureAdaptive,
   buildRadialHub,
   buildRadialHubSplitWing,
   buildProblemImprovement,
@@ -11,23 +14,36 @@ import {
   buildSequentialProcessRibbon,
   buildSequentialProcessStaircase,
   buildSwimlaneProcess,
+  buildTimelineRoadmap,
   renderComponentIntoSlide,
 } from "../asset-runtime/component-builders.mjs";
+import { buildFishboneAnalysis } from "../asset-runtime/analysis-model-builders.mjs";
+import { buildOrganizationTree } from "../asset-runtime/history-organization-builders.mjs";
 
 const DEFAULT_BUILDERS = new Map([
   ["comparison-structure-001", buildComparison],
   ["cycle-loop-001", buildCycleLoop],
-  ["layered-architecture-001", buildLayeredArchitecture],
+  ["fishbone-analysis-001", buildFishboneAnalysis],
+  ["framework-matrix-001", buildFrameworkMatrix],
+  ["funnel-conversion-001", buildFunnelConversion],
+  ["hierarchy-pyramid-001", buildHierarchyPyramid],
+  ["layered-architecture-001", buildLayeredArchitectureAdaptive],
   ["radial-hub-001", buildRadialHub],
   ["sequential-process-001", buildSequentialProcess],
   ["swimlane-process-001", buildSwimlaneProcess],
+  ["timeline-roadmap-001", buildTimelineRoadmap],
   ["problem-improvement-001", buildProblemImprovement],
+  ["organization-tree-001", buildOrganizationTree],
 ]);
 
 const VARIANT_BUILDERS = new Map([
   ["comparison-structure-001:default", buildComparison],
   ["cycle-loop-001:default", buildCycleLoop],
-  ["layered-architecture-001:default", buildLayeredArchitecture],
+  ["fishbone-analysis-001:default", buildFishboneAnalysis],
+  ["framework-matrix-001:default", buildFrameworkMatrix],
+  ["funnel-conversion-001:default", buildFunnelConversion],
+  ["hierarchy-pyramid-001:default", buildHierarchyPyramid],
+  ["layered-architecture-001:default", buildLayeredArchitectureAdaptive],
   ["radial-hub-001:orbit", buildRadialHub],
   ["radial-hub-001:split-wing", buildRadialHubSplitWing],
   ["sequential-process-001:horizontal-cards", buildSequentialProcess],
@@ -36,7 +52,9 @@ const VARIANT_BUILDERS = new Map([
   ["sequential-process-001:role-handoff", buildRoleHandoff],
   ["sequential-process-001:causal-chain", buildCausalChain],
   ["swimlane-process-001:default", buildSwimlaneProcess],
+  ["timeline-roadmap-001:default", buildTimelineRoadmap],
   ["problem-improvement-001:default", buildProblemImprovement],
+  ["organization-tree-001:default", buildOrganizationTree],
 ]);
 
 export function listStructureAssetBuilders() {

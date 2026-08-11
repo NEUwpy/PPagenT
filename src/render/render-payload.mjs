@@ -136,6 +136,31 @@ export function mapRenderPayload(content, intent, decision) {
     ]);
   }
 
+  if (assetId === "organization-tree-001") {
+    const hierarchy = content.structuredData;
+    if (hierarchy?.type !== "hierarchy" || !hierarchy.root) {
+      throw new Error(`${content.pageId} 的三层组织树需要版式中立的 hierarchy structuredData`);
+    }
+    const departments = hierarchy.root.children ?? [];
+    if (departments.length < 2 || departments.length > 4) {
+      throw new Error(`${content.pageId} 的三层组织树需要 2–4 个二级节点`);
+    }
+    return renderPayload(intent, assetId, {
+      title: content.title,
+      leader: { name: hierarchy.root.label, role: hierarchy.root.role ?? "" },
+      departments: departments.map((department) => ({
+        name: department.label,
+        head: department.role ?? "",
+        members: (department.children ?? []).map((member) => ({
+          name: member.label,
+          role: member.role ?? "",
+        })),
+      })),
+    }, [mapping(hierarchy.root.id, "leader"), ...departments.map((department, index) => (
+      mapping(department.id, `departments[${index}]`)
+    ))]);
+  }
+
   if (assetId === "cycle-loop-001") {
     return renderPayload(intent, assetId, {
       title: content.title,

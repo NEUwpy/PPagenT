@@ -116,7 +116,8 @@ function preferredRatio(signals) {
 function compareCandidates(left, right) {
   const leftSignals = left.fitSignals;
   const rightSignals = right.fitSignals;
-  return Number(rightSignals.purposeSpecific) - Number(leftSignals.purposeSpecific)
+  return left.reasons.length - right.reasons.length
+    || Number(rightSignals.purposeSpecific) - Number(leftSignals.purposeSpecific)
     || preferredRatio(rightSignals) - preferredRatio(leftSignals)
     || Number(rightSignals.validated) - Number(leftSignals.validated)
     || Number(rightSignals.realManuscriptValidated) - Number(leftSignals.realManuscriptValidated)

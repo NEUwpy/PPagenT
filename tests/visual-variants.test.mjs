@@ -100,10 +100,30 @@ test("正式候选只暴露已进入核心资产库的蒸馏变体", async () =>
   const variants = await listRenderableVisualVariants({ root });
   const radial = queryVisualVariants(variants, { familyId: "radial-hub", itemCount: 4 });
   const sequential = queryVisualVariants(variants, { familyId: "sequential-process", baseRelation: "sequence", itemCount: 4 });
-  assert.equal(radial.length, 0);
+  assert.deepEqual(radial.map((variant) => variant.variantId), ["orbit"]);
   assert.deepEqual(sequential.map((variant) => variant.variantId), ["horizontal-cards"]);
   assert.deepEqual(
+    queryVisualVariants(variants, { familyId: "cycle-loop", baseRelation: "sequence", itemCount: 4 })
+      .map((variant) => variant.variantId),
+    ["default"],
+  );
+  assert.deepEqual(
+    queryVisualVariants(variants, { familyId: "layered-architecture", baseRelation: "layered", itemCount: 9 })
+      .map((variant) => variant.variantId),
+    ["default"],
+  );
+  assert.deepEqual(
     queryVisualVariants(variants, { familyId: "comparison-structure" }).map((variant) => variant.variantId),
+    ["default"],
+  );
+  assert.deepEqual(
+    queryVisualVariants(variants, {
+      familyId: "organization-tree",
+      baseRelation: "hierarchy",
+      purposeKey: "explain_organization",
+      itemCount: 3,
+    })
+      .map((variant) => variant.variantId),
     ["default"],
   );
   assert.equal(queryVisualVariants(variants, { familyId: "role-handoff" }).length, 0);
@@ -127,7 +147,12 @@ test("自动候选会排除缺少 mapper 或 builder 的变体", async () => {
   assert.deepEqual(builders.variantBuilderKeys, [
     "comparison-structure-001:default",
     "cycle-loop-001:default",
+    "fishbone-analysis-001:default",
+    "framework-matrix-001:default",
+    "funnel-conversion-001:default",
+    "hierarchy-pyramid-001:default",
     "layered-architecture-001:default",
+    "organization-tree-001:default",
     "problem-improvement-001:default",
     "radial-hub-001:orbit",
     "radial-hub-001:split-wing",
@@ -137,6 +162,7 @@ test("自动候选会排除缺少 mapper 或 builder 的变体", async () => {
     "sequential-process-001:role-handoff",
     "sequential-process-001:staircase",
     "swimlane-process-001:default",
+    "timeline-roadmap-001:default",
   ]);
 });
 
@@ -256,7 +282,60 @@ test("所有登记变体都能经过统一运行时真实创建幻灯片对象",
         title: "架构",
         sources: ["数据一", "数据二", "数据三"],
         platform: "平台",
-        apps: ["应用一", "应用二"],
+        apps: ["应用一", "应用二", "应用三"],
+      },
+    },
+    {
+      assetId: "fishbone-analysis-001",
+      parameters: {
+        visualVariantId: "default",
+        title: "原因分析",
+        effect: "结果问题",
+        branches: ["人员", "流程", "技术", "资源"].map((category) => ({ category, items: ["因素一", "因素二"] })),
+      },
+    },
+    {
+      assetId: "framework-matrix-001",
+      parameters: {
+        visualVariantId: "default",
+        title: "四象限",
+        quadrants: ["一", "二", "三", "四"].map((title) => ({ title: `象限${title}`, body: "判断依据与行动建议" })),
+      },
+    },
+    {
+      assetId: "funnel-conversion-001",
+      parameters: {
+        visualVariantId: "default",
+        title: "转化漏斗",
+        stages: [
+          { rate: "100%", label: "触达", note: "进入范围" },
+          { rate: "70%", label: "理解", note: "形成认知" },
+          { rate: "40%", label: "行动", note: "完成转化" },
+        ],
+      },
+    },
+    {
+      assetId: "hierarchy-pyramid-001",
+      parameters: {
+        visualVariantId: "default",
+        title: "层级金字塔",
+        levels: [
+          { title: "方向层", share: "WHY", body: "明确方向" },
+          { title: "能力层", share: "WHAT", body: "沉淀能力" },
+          { title: "执行层", share: "DO", body: "稳定执行" },
+        ],
+      },
+    },
+    {
+      assetId: "timeline-roadmap-001",
+      parameters: {
+        visualVariantId: "default",
+        title: "发展历程",
+        milestones: [
+          { period: "2025", title: "验证", body: "确认方向" },
+          { period: "2026", title: "沉淀", body: "形成能力" },
+          { period: "2027", title: "扩展", body: "复制场景" },
+        ],
       },
     },
     {
@@ -342,11 +421,23 @@ test("所有登记变体都能经过统一运行时真实创建幻灯片对象",
         improvements: [{ title: "方法系统化", body: "降低制作成本" }, { title: "生产能力", body: "更多人可用", emphasis: true }],
       },
     },
+    {
+      assetId: "organization-tree-001",
+      parameters: {
+        visualVariantId: "default",
+        title: "项目组织",
+        leader: { name: "李明", role: "总负责人" },
+        departments: [
+          { name: "产品组", head: "吴飞", members: [{ name: "苏芳", role: "需求" }] },
+          { name: "技术组", head: "徐阳", members: [{ name: "周楠", role: "前端" }, { name: "叶琳", role: "后端" }] },
+        ],
+      },
+    },
   ];
 
   for (const payload of payloads) {
     const slide = presentation.slides.add();
     renderStructureAsset(slide, payload, skin);
   }
-  assert.equal(presentation.slides.items.length, 12);
+  assert.equal(presentation.slides.items.length, 18);
 });

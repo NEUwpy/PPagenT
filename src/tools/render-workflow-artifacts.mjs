@@ -25,7 +25,7 @@ export async function renderWorkflowArtifacts(options) {
   const renderer = createNortheasternUniversityRenderer({
     sourcePptx: path.resolve(options.source),
     outputPptx: path.resolve(options.output),
-    manuscriptSource: "docs/为什么做PPagenT.md",
+    manuscriptSource: "workbench/manuscripts/为什么做PPagenT-v1.md",
   });
   const result = await renderer({
     outputDir: path.resolve(options["qa-dir"]),

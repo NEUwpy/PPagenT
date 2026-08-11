@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/NEUwpy/PPagenT/schemas/distillation-case-manifest.schema.json",
+  "title": "PPagenT Distillation Case Manifest v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "methodVersion", "batchId", "assets", "contexts", "cases"],
+  "properties": {
+    "schemaVersion": { "const": "2.0" },
+    "methodVersion": { "type": "string", "minLength": 1 },
+    "batchId": { "$ref": "#/$defs/id" },
+    "revision": { "type": "integer", "minimum": 1 },
+    "assets": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/asset" }
+    },
+    "contexts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["standalone", "skin"],
+      "properties": {
+        "standalone": { "$ref": "#/$defs/context" },
+        "skin": {
+          "allOf": [
+            { "$ref": "#/$defs/context" },
+            {
+              "type": "object",
+              "required": ["skinId"],
+              "properties": { "skinId": { "$ref": "#/$defs/id" } }
+            }
+          ]
+        }
+      }
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/case" }
+    },
+    "reviewPackage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["index", "montage"],
+      "properties": {
+        "index": { "$ref": "#/$defs/path" },
+        "montage": { "$ref": "#/$defs/path" }
+      }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+    "path": { "type": "string", "minLength": 1 },
+    "scalar": {
+      "anyOf": [
+        { "type": "string" },
+        { "type": "number" },
+        { "type": "boolean" }
+      ]
+    },
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assetId", "source", "coverageRequirements", "rejectionRequirements"],
+      "properties": {
+        "assetId": { "$ref": "#/$defs/id" },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["pptx", "slides"],
+          "properties": {
+            "pptx": { "$ref": "#/$defs/path" },
+            "slides": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": { "type": "integer", "minimum": 1 }
+            }
+          }
+        },
+        "coverageRequirements": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": { "pattern": "^[A-Za-z][A-Za-z0-9_]*$" },
+          "additionalProperties": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "$ref": "#/$defs/scalar" }
+          }
+        },
+        "rejectionRequirements": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/errorCode" }
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["deck", "qaDir"],
+      "properties": {
+        "deck": { "$ref": "#/$defs/path" },
+        "qaDir": { "$ref": "#/$defs/path" },
+        "skinId": { "$ref": "#/$defs/id" }
+      }
+    },
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["caseId", "assetId", "dimensions", "params", "expected"],
+      "properties": {
+        "caseId": { "$ref": "#/$defs/id" },
+        "assetId": { "$ref": "#/$defs/id" },
+        "tags": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "dimensions": {
+          "type": "object",
+          "propertyNames": { "pattern": "^[A-Za-z][A-Za-z0-9_]*$" },
+          "additionalProperties": { "$ref": "#/$defs/scalar" }
+        },
+        "params": { "type": "object" },
+        "expected": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["outcome"],
+          "properties": {
+            "outcome": { "enum": ["render", "rejection"] },
+            "errorCode": { "$ref": "#/$defs/errorCode" }
+          },
+          "allOf": [
+            {
+              "if": { "type": "object", "properties": { "outcome": { "const": "rejection" } }, "required": ["outcome"] },
+              "then": {
+                "properties": { "errorCode": { "$ref": "#/$defs/errorCode" } },
+                "required": ["errorCode"]
+              }
+            }
+          ]
+        },
+        "slides": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["standalone", "skin"],
+          "properties": {
+            "standalone": { "type": "integer", "minimum": 1 },
+            "skin": { "type": "integer", "minimum": 1 }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "expected": {
+                "type": "object",
+                "properties": { "outcome": { "const": "render" } }
+              }
+            },
+            "required": ["expected"]
+          },
+          "then": {
+            "properties": { "slides": {} },
+            "required": ["slides"]
+          }
+        }
+      ]
+    },
+    "errorCode": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9._-]*$" }
+  }
+}

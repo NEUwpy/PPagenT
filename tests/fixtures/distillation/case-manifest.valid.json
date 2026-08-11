@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "2.0",
+  "methodVersion": "source-faithful-adaptive-v2",
+  "batchId": "organization-tree-001-v2.0.0",
+  "revision": 1,
+  "assets": [
+    {
+      "assetId": "organization-tree-001",
+      "source": {
+        "pptx": "workbench/source-archive/reference.pptx",
+        "slides": [406]
+      },
+      "coverageRequirements": {
+        "departmentCount": [2, 3],
+        "textLoad": ["short", "normal"]
+      },
+      "rejectionRequirements": ["ORG_TREE_DEPARTMENT_COUNT"]
+    }
+  ],
+  "contexts": {
+    "standalone": {
+      "deck": "workbench/distillation/runs/organization-tree-001-v2.0.0/standalone.pptx",
+      "qaDir": "workbench/distillation/runs/organization-tree-001-v2.0.0/standalone-qa"
+    },
+    "skin": {
+      "skinId": "northeastern-university-001",
+      "deck": "workbench/distillation/runs/organization-tree-001-v2.0.0/skin.pptx",
+      "qaDir": "workbench/distillation/runs/organization-tree-001-v2.0.0/skin-qa"
+    }
+  },
+  "cases": [
+    {
+      "caseId": "org-d2-short",
+      "assetId": "organization-tree-001",
+      "tags": ["minimum", "valid"],
+      "dimensions": {
+        "departmentCount": 2,
+        "textLoad": "short"
+      },
+      "params": {
+        "title": "Project Org",
+        "leader": { "name": "A", "role": "Lead" },
+        "departments": [
+          { "name": "D1", "head": "H1", "members": [{ "name": "M1", "role": "R1" }] },
+          { "name": "D2", "head": "H2", "members": [{ "name": "M2", "role": "R2" }] }
+        ]
+      },
+      "expected": { "outcome": "render" },
+      "slides": { "standalone": 1, "skin": 1 }
+    },
+    {
+      "caseId": "org-d3-normal",
+      "assetId": "organization-tree-001",
+      "tags": ["middle", "valid"],
+      "dimensions": {
+        "departmentCount": 3,
+        "textLoad": "normal"
+      },
+      "params": {
+        "title": "Project Org",
+        "leader": { "name": "A", "role": "Lead" },
+        "departments": [
+          { "name": "D1", "head": "H1", "members": [{ "name": "M1", "role": "R1" }] },
+          { "name": "D2", "head": "H2", "members": [{ "name": "M2", "role": "R2" }] },
+          { "name": "D3", "head": "H3", "members": [{ "name": "M3", "role": "R3" }] }
+        ]
+      },
+      "expected": { "outcome": "render" },
+      "slides": { "standalone": 2, "skin": 2 }
+    },
+    {
+      "caseId": "org-d5-rejected",
+      "assetId": "organization-tree-001",
+      "tags": ["boundary"],
+      "dimensions": {
+        "departmentCount": 5,
+        "textLoad": "normal"
+      },
+      "params": {
+        "title": "Project Org",
+        "leader": { "name": "A", "role": "Lead" },
+        "departments": [
+          { "name": "D1", "head": "H1", "members": [{ "name": "M1", "role": "R1" }] },
+          { "name": "D2", "head": "H2", "members": [{ "name": "M2", "role": "R2" }] },
+          { "name": "D3", "head": "H3", "members": [{ "name": "M3", "role": "R3" }] },
+          { "name": "D4", "head": "H4", "members": [{ "name": "M4", "role": "R4" }] },
+          { "name": "D5", "head": "H5", "members": [{ "name": "M5", "role": "R5" }] }
+        ]
+      },
+      "expected": {
+        "outcome": "rejection",
+        "errorCode": "ORG_TREE_DEPARTMENT_COUNT"
+      }
+    }
+  ],
+  "reviewPackage": {
+    "index": "workbench/distillation/runs/organization-tree-001-v2.0.0/review-index.json",
+    "montage": "workbench/distillation/runs/organization-tree-001-v2.0.0/review-montage.png"
+  }
+}

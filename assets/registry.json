@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "scope": "core",
   "assets": [
     {
@@ -7,49 +7,192 @@
       "name": "东北大学封面 001",
       "category": "封面",
       "path": "封面/东北大学封面-001",
-      "status": "core"
+      "status": "core",
+      "layoutExpansion": {
+        "mode": "fixed",
+        "range": "单一封面版式；仅标题、汇报人和日期变化",
+        "rule": "保持来源封面的版心、比例和视觉层级，不做数量扩散"
+      }
     },
     {
       "id": "northeastern-university-body-001",
       "name": "东北大学正文 001",
       "category": "正文",
       "path": "正文/东北大学正文-001",
-      "status": "core"
+      "status": "core",
+      "layoutExpansion": {
+        "mode": "fixed",
+        "range": "单一正文 Skin；正文内部排版由 CompositionPlan 决定",
+        "rule": "只提供页眉、页脚、标题区和正文安全区，不自行扩散结构"
+      }
     },
     {
       "id": "northeastern-university-closing-001",
       "name": "东北大学尾页 001",
       "category": "尾页",
       "path": "尾页/东北大学尾页-001",
-      "status": "core"
+      "status": "core",
+      "layoutExpansion": {
+        "mode": "fixed",
+        "range": "单一尾页版式；仅收束文字变化",
+        "rule": "保持来源尾页构图，不做数量扩散"
+      }
     },
     {
       "id": "comparison-structure-001",
       "name": "双向对比",
       "category": "结构图",
       "path": "结构图/双向对比-001",
-      "status": "core"
+      "status": "core",
+      "layoutExpansion": {
+        "mode": "responsive",
+        "range": "左右各 1–5 个要点",
+        "rule": "双栏始终镜像等宽；同侧要点按当前数量重新等距分布，不能从最大数量版式删项"
+      }
     },
     {
       "id": "sequential-process-001",
       "name": "顺序流程",
       "category": "结构图",
       "path": "结构图/顺序流程-001",
-      "status": "core"
+      "status": "core",
+      "layoutExpansion": {
+        "mode": "responsive",
+        "range": "3–6 个顺序步骤",
+        "rule": "按当前步骤数重新计算卡片宽度和等距间隔；不同视觉变体保持同一顺序语义"
+      }
     },
     {
       "id": "swimlane-process-001",
       "name": "多角色泳道流程",
       "category": "结构图",
       "path": "结构图/多角色泳道流程-001",
-      "status": "core"
+      "status": "core",
+      "layoutExpansion": {
+        "mode": "responsive",
+        "range": "2–3 条泳道 × 2–3 个阶段；可选独立总结",
+        "rule": "泳道与阶段分别等分可用区域；任务按二维位置放入，不能通过压缩单格容纳超限内容"
+      }
+    },
+    {
+      "id": "organization-tree-001",
+      "name": "三层组织树",
+      "category": "结构图",
+      "path": "结构图/三层组织树-001",
+      "status": "core",
+      "layoutExpansion": {
+        "mode": "responsive",
+        "range": "固定三层；2–4 个部门，每部门 1–3 名成员",
+        "rule": "部门围绕页面中轴等距居中；各部门成员围绕所属部门中心重新等距分布"
+      }
+    },
+    {
+      "id": "radial-hub-001",
+      "name": "中心辐射关系",
+      "category": "结构图",
+      "path": "结构图/中心辐射关系-001",
+      "status": "core",
+      "layoutExpansion": {
+        "mode": "responsive",
+        "range": "3–8 个外围节点",
+        "rule": "保持单一强中心；外围节点按当前数量在两侧均衡分配，单侧最多 4 项"
+      }
+    },
+    {
+      "id": "cycle-loop-001",
+      "name": "循环闭环",
+      "category": "结构图",
+      "path": "结构图/循环闭环-001",
+      "status": "core",
+      "layoutExpansion": {
+        "mode": "responsive",
+        "range": "3–6 个循环步骤",
+        "rule": "按当前步骤数重新计算等角位置和弧段；顺时针序号连续，不能从六项布局直接删项"
+      }
+    },
+    {
+      "id": "timeline-roadmap-001",
+      "name": "时间轴与发展历程",
+      "category": "结构图",
+      "path": "结构图/时间轴与发展历程-001",
+      "status": "core",
+      "layoutExpansion": {
+        "mode": "responsive",
+        "range": "3–6 个里程碑",
+        "rule": "里程碑沿共同时间轴等分；浅色与白色承载面及连接线随数量同步重算"
+      }
+    },
+    {
+      "id": "hierarchy-pyramid-001",
+      "name": "层级金字塔",
+      "category": "结构图",
+      "path": "结构图/层级金字塔-001",
+      "status": "core",
+      "layoutExpansion": {
+        "mode": "responsive",
+        "range": "3–5 个层级",
+        "rule": "按当前层数重新分配圆台高度并保持共同中轴、连续轮廓和由上到下逐级扩大的关系"
+      }
+    },
+    {
+      "id": "funnel-conversion-001",
+      "name": "转化漏斗",
+      "category": "结构图",
+      "path": "结构图/转化漏斗-001",
+      "status": "core",
+      "layoutExpansion": {
+        "mode": "responsive",
+        "range": "3–6 个转化阶段",
+        "rule": "按当前阶段数重新分配段高；保持共同中轴、上宽下窄及说明行与漏斗段对齐"
+      }
+    },
+    {
+      "id": "fishbone-analysis-001",
+      "name": "鱼骨原因分析",
+      "category": "结构图",
+      "path": "结构图/鱼骨原因分析-001",
+      "status": "core",
+      "layoutExpansion": {
+        "mode": "responsive",
+        "range": "4–6 类原因；每类 1–4 条因素",
+        "rule": "上下原因枝围绕主骨镜像均衡分布；分支和文字位置按当前类别及因素数量重新计算"
+      }
+    },
+    {
+      "id": "framework-matrix-001",
+      "name": "四象限分析框架",
+      "category": "结构图",
+      "path": "结构图/四象限分析框架-001",
+      "status": "core",
+      "layoutExpansion": {
+        "mode": "fixed",
+        "range": "固定 4 个象限",
+        "rule": "仅适配象限内文字；象限数量不是可扩散维度"
+      }
+    },
+    {
+      "id": "layered-architecture-001",
+      "name": "分层架构与生态关系",
+      "category": "结构图",
+      "path": "结构图/分层架构与生态关系-001",
+      "status": "core",
+      "layoutExpansion": {
+        "mode": "responsive",
+        "range": "3–6 个来源节点、1 个平台层、3–6 个应用节点",
+        "rule": "上下两组节点分别围绕平台中轴等距居中；两组数量独立重算"
+      }
     },
     {
       "id": "problem-improvement-001",
       "name": "问题与改进措施",
       "category": "正文",
       "path": "正文/问题与改进措施-001",
-      "status": "core"
+      "status": "core",
+      "layoutExpansion": {
+        "mode": "responsive",
+        "range": "左右各 2–3 项",
+        "rule": "左右承载面保持等宽等高；两侧分别按当前数量重新等距排列"
+      }
     }
   ]
 }

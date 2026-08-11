@@ -23,7 +23,36 @@
         }
       }
     },
+    "structuredData": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "root"],
+          "properties": {
+            "type": { "const": "hierarchy" },
+            "root": { "$ref": "#/$defs/hierarchyNode" }
+          }
+        }
+      ]
+    },
     "notes": { "type": "string" },
     "sourceText": { "type": "string" }
+  },
+  "$defs": {
+    "hierarchyNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1 },
+        "role": { "type": "string" },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/hierarchyNode" }
+        }
+      }
+    }
   }
 }

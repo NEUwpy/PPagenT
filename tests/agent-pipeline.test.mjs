@@ -33,7 +33,7 @@ function intentDraft(intentId, purposeKey, baseRelation, structure = {}) {
   };
 }
 
-test("正式流程不会把未晋升核心库的实验结构交给视觉导演", async () => {
+test("正式流程只暴露已晋升核心库的结构变体", async () => {
   const page = content("topics", [
     { id: "a", title: "A", body: "A" },
     { id: "b", title: "B", body: "B" },
@@ -42,8 +42,8 @@ test("正式流程不会把未晋升核心库的实验结构交给视觉导演",
   ]);
   const intent = enrichPageIntent(intentDraft("topics-intent", "explain_topics", "hub"), page);
   const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), ["northeastern-university-body-001"]);
-  assert.ok(set.candidates.every((candidate) => candidate.familyId !== "radial-hub"));
+  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), ["radial-hub-001", "northeastern-university-body-001"]);
+  assert.equal(set.candidates.find((candidate) => candidate.assetId === "radial-hub-001")?.variantId, "orbit");
   assert.equal(set.capacityDensity, "low");
 });
 
@@ -128,6 +128,55 @@ test("四段因果内容使用核心问题改进资产而不是临时因果链",
   assert.equal(payload.parameters.problems.length, 2);
   assert.equal(payload.parameters.improvements.length, 2);
   assert.equal(payload.parameters.improvements[1].emphasis, true);
+});
+
+test("层级语义可以确定性映射到核心三层组织树", async () => {
+  const page = {
+    ...content("organization", [
+      { id: "product", title: "产品组", body: "需求与研究" },
+      { id: "technology", title: "技术组", body: "开发与测试" },
+    ]),
+    structuredData: {
+      type: "hierarchy",
+      root: {
+        id: "leader",
+        label: "李明",
+        role: "总负责人",
+        children: [
+          {
+            id: "product",
+            label: "产品组",
+            role: "吴飞",
+            children: [{ id: "researcher", label: "苏芳", role: "需求研究" }],
+          },
+          {
+            id: "technology",
+            label: "技术组",
+            role: "徐阳",
+            children: [
+              { id: "frontend", label: "周楠", role: "前端开发" },
+              { id: "backend", label: "叶琳", role: "后端开发" },
+            ],
+          },
+        ],
+      },
+    },
+  };
+  const intent = enrichPageIntent(intentDraft(
+    "organization-intent",
+    "explain_organization",
+    "hierarchy",
+    { ordered: false, sameLevel: false },
+  ), page);
+  const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
+  assert.equal(set.candidates[0].assetId, "organization-tree-001");
+  const payload = mapRenderPayload(page, intent, { selectedAssetId: "organization-tree-001" });
+  assert.deepEqual(payload.parameters.leader, { name: "李明", role: "总负责人" });
+  assert.equal(payload.parameters.departments.length, 2);
+  assert.deepEqual(payload.parameters.departments[1].members, [
+    { name: "周楠", role: "前端开发" },
+    { name: "叶琳", role: "后端开发" },
+  ]);
 });
 
 test("resolver 不允许把视觉导演的家族或变体换成另一资产", async () => {

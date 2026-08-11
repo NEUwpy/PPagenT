@@ -14,7 +14,7 @@ test("东北大学 Skin 经过统一 renderer 真实生成 PPTX 与逐页证据"
   const renderer = createNortheasternUniversityRenderer({
     sourcePptx: path.join(root, "PPT模板-封面正文尾页.pptx"),
     outputPptx,
-    manuscriptSource: "docs/为什么做PPagenT.md",
+    manuscriptSource: "workbench/manuscripts/为什么做PPagenT-v1.md",
   });
   const pageContents = [
     { schemaVersion: "1.0", pageId: "cover", title: "为什么做 PPagenT", items: [] },

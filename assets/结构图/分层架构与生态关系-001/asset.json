@@ -1,0 +1,28 @@
+{
+  "id": "layered-architecture-001",
+  "name": "分层架构与生态关系",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "source": {
+    "file": "workbench/source-archive/狗哥蓝色-精美逻辑图PPT模板.pptx",
+    "slides": [20, 21, 30, 36, 37, 54, 88, 111, 119, 128, 144]
+  },
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "parameters": ["title", "sources", "platform", "apps"],
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 40, "top": 135, "width": 1200, "height": 520 },
+    "aspectRatio": 2.3077,
+    "minimumFrame": { "width": 780, "height": 360 },
+    "preferredFrame": { "width": 1100, "height": 460 },
+    "resizeMode": "contain",
+    "minFontSize": 16,
+    "safePadding": 12,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "3–6 个来源节点、1 个平台层、3–6 个应用节点",
+  "review": "用户于 2026-08-11 确认；验收运行 layered-architecture-001-v2.0.0-r6"
+}

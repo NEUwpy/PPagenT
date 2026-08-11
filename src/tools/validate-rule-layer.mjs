@@ -47,7 +47,9 @@ for (const failureCase of failureCatalog.cases) {
 }
 
 const fixtureDirectory = path.join(root, "tests", "fixtures");
-for (const name of await fs.readdir(fixtureDirectory)) {
+for (const entry of await fs.readdir(fixtureDirectory, { withFileTypes: true })) {
+  if (!entry.isFile() || !entry.name.endsWith(".json")) continue;
+  const name = entry.name;
   const value = await readJson(path.join(fixtureDirectory, name));
   if (name.endsWith(".content.json")) validate(name, validators.validatePageContent, value);
   if (name.endsWith(".intent.json")) {

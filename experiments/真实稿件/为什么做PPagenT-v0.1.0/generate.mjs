@@ -24,7 +24,7 @@ const args = parseNamedArgs({
 
 const sourceNotes = [
   "[Sources]",
-  "- 内容：docs/为什么做PPagenT.md（项目内部稿件）",
+  "- 内容：workbench/manuscripts/为什么做PPagenT-v1.md（冻结回归稿件）",
   "- 视觉：PPT模板-封面正文尾页.pptx（用户提供的东北大学模板）",
   "[/Sources]",
 ].join("\n");

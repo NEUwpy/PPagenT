@@ -69,15 +69,15 @@
     {
       "assetId": "cycle-loop-001",
       "abstractionLevel": "foundation",
-      "adaptationStatus": "fixed",
+      "adaptationStatus": "adaptive",
       "supportedIntents": { "baseRelations": ["sequence"], "purposeKeys": [] },
       "constraints": {
-        "metrics": [{ "field": "itemCount", "min": 4, "preferred": [4], "max": 4 }],
+        "metrics": [{ "field": "itemCount", "min": 3, "preferred": [3, 4, 5, 6], "max": 6 }],
         "semantic": { "ordered": true },
         "relationTraits": { "cyclic": true },
         "density": ["low", "medium"]
       },
-      "reviewReason": "属于基础关系，但当前实现只定义了四步闭环。"
+      "reviewReason": "已通过 3–6 步独立版与东北大学 Skin 全状态验收。"
     },
     {
       "assetId": "framework-matrix-001",
@@ -94,29 +94,29 @@
     {
       "assetId": "hierarchy-pyramid-001",
       "abstractionLevel": "foundation",
-      "adaptationStatus": "fixed",
+      "adaptationStatus": "adaptive",
       "supportedIntents": { "baseRelations": ["hierarchy"], "purposeKeys": [] },
       "constraints": {
-        "metrics": [{ "field": "itemCount", "min": 4, "preferred": [4], "max": 4 }],
+        "metrics": [{ "field": "itemCount", "min": 3, "preferred": [3, 4, 5], "max": 5 }],
         "semantic": { "ordered": true, "sameLevel": false },
         "density": ["low"]
       },
-      "reviewReason": "抽象层正确，但四层宽度和颜色写死，尚不是自适应实现。"
+      "reviewReason": "已通过 3–5 层独立版与东北大学 Skin 全状态验收。"
     },
     {
       "assetId": "layered-architecture-001",
       "abstractionLevel": "foundation",
-      "adaptationStatus": "partial",
+      "adaptationStatus": "adaptive",
       "supportedIntents": { "baseRelations": ["layered"], "purposeKeys": [] },
       "constraints": {
         "metrics": [
           { "field": "sources", "min": 3, "preferred": [4, 5], "max": 6 },
-          { "field": "apps", "min": 2, "preferred": [3, 4], "max": 5 }
+          { "field": "apps", "min": 3, "preferred": [3, 4, 5, 6], "max": 6 }
         ],
         "semantic": { "ordered": true, "sameLevel": false },
         "density": ["low", "medium"]
       },
-      "reviewReason": "可作为分层语法原型，但层级数量仍需真实内容验证。"
+      "reviewReason": "来源层与应用层均已通过 3–6 节点独立版与东北大学 Skin 验收。"
     },
     {
       "assetId": "radial-hub-001",
@@ -149,15 +149,15 @@
     {
       "assetId": "timeline-roadmap-001",
       "abstractionLevel": "foundation",
-      "adaptationStatus": "partial",
+      "adaptationStatus": "adaptive",
       "supportedIntents": { "baseRelations": ["sequence"], "purposeKeys": [] },
       "constraints": {
-        "metrics": [{ "field": "itemCount", "min": 3, "preferred": [3, 4], "max": 4 }],
+        "metrics": [{ "field": "itemCount", "min": 3, "preferred": [3, 4, 5, 6], "max": 6 }],
         "semantic": { "ordered": true, "sameLevel": true },
         "relationTraits": { "temporal": true, "branched": false },
         "density": ["low", "medium"]
       },
-      "reviewReason": "时间节点可变，但单节点、双节点和更多节点尚未定义。"
+      "reviewReason": "已通过 3–6 个时间节点的独立版与东北大学 Skin 全状态验收。"
     },
 
     {
@@ -176,15 +176,15 @@
     {
       "assetId": "funnel-conversion-001",
       "abstractionLevel": "composite",
-      "adaptationStatus": "fixed",
+      "adaptationStatus": "adaptive",
       "supportedIntents": { "baseRelations": ["sequence"], "purposeKeys": ["explain_conversion"] },
       "constraints": {
-        "metrics": [{ "field": "itemCount", "min": 4, "preferred": [4], "max": 4 }],
+        "metrics": [{ "field": "itemCount", "min": 3, "preferred": [3, 4, 5, 6], "max": 6 }],
         "semantic": { "ordered": true },
         "relationTraits": { "converging": true },
         "density": ["low"]
       },
-      "reviewReason": "表达收窄或转化过程，不能替代普通层级或顺序关系。"
+      "reviewReason": "已通过 3–6 个递减阶段验收；只用于真实存在筛选或转化的内容。"
     },
     {
       "assetId": "goal-kpi-map-001",

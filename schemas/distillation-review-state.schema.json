@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/NEUwpy/PPagenT/schemas/distillation-review-state.schema.json",
+  "title": "PPagenT Distillation Review State v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "batchId", "reportDigest", "packContentDigest", "assetReviews"],
+  "properties": {
+    "schemaVersion": { "const": "2.0" },
+    "batchId": { "$ref": "#/$defs/id" },
+    "reportDigest": { "$ref": "#/$defs/digest" },
+    "packContentDigest": { "$ref": "#/$defs/digest" },
+    "assetReviews": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/assetReview" }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+    "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "reviewFields": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reviewedCaseIds"],
+      "properties": {
+        "status": { "type": "string" },
+        "reviewedCaseIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "comment": { "type": "string" }
+      }
+    },
+    "maintainerReview": {
+      "allOf": [
+        { "$ref": "#/$defs/reviewFields" },
+        {
+          "type": "object",
+          "properties": {
+            "status": { "enum": ["pending", "passed", "changes-requested"] }
+          },
+          "required": ["status"]
+        }
+      ]
+    },
+    "userReview": {
+      "allOf": [
+        { "$ref": "#/$defs/reviewFields" },
+        {
+          "type": "object",
+          "properties": {
+            "status": { "enum": ["pending", "accepted", "changes-requested", "keep-candidate", "rejected"] }
+          },
+          "required": ["status"]
+        }
+      ]
+    },
+    "assetReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assetId", "maintainer", "user"],
+      "properties": {
+        "assetId": { "$ref": "#/$defs/id" },
+        "maintainer": { "$ref": "#/$defs/maintainerReview" },
+        "user": { "$ref": "#/$defs/userReview" }
+      }
+    }
+  }
+}
