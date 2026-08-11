@@ -2,12 +2,30 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { loadContractCatalog } from "./contracts.mjs";
 import { hasStructureAssetBuilder } from "../runtime/assets.mjs";
+import { discoverCoreAssetPackages } from "../runtime/core-asset-packages.mjs";
 
 export async function loadVisualVariantCatalog(root = process.cwd()) {
   const target = path.join(root, "catalog", "visual-variants.json");
   const catalog = JSON.parse(await fs.readFile(target, "utf8"));
   if (!Array.isArray(catalog.variants)) throw new Error("visual-variants.json 缺少 variants 数组");
-  return catalog.variants.map((variant) => ({ ...variant, itemCount: { ...variant.itemCount } }));
+  const packages = await discoverCoreAssetPackages(root);
+  const packagedIds = new Set(packages.map((item) => item.assetId));
+  const packagedVariants = packages.map((item) => ({
+    familyId: item.runtime.familyId,
+    assetId: item.assetId,
+    variantId: item.runtime.variantId,
+    builderKey: `${item.assetId}:${item.runtime.variantId}`,
+    silhouette: item.runtime.silhouette,
+    supportedBaseRelations: item.runtime.supportedBaseRelations,
+    supportedPurposeKeys: item.runtime.supportedPurposeKeys ?? [],
+    itemCount: { ...item.runtime.itemCount },
+    status: "core",
+    origin: "self-describing-asset",
+  }));
+  return [
+    ...catalog.variants.filter((variant) => !packagedIds.has(variant.assetId)),
+    ...packagedVariants,
+  ].map((variant) => ({ ...variant, itemCount: { ...variant.itemCount } }));
 }
 
 export async function loadCoreAssetIds(root = process.cwd()) {
@@ -16,13 +34,20 @@ export async function loadCoreAssetIds(root = process.cwd()) {
   if (registry.scope !== "core" || !Array.isArray(registry.assets)) {
     throw new Error("assets/registry.json 必须是核心资产登记表");
   }
-  return new Set(registry.assets.filter((asset) => asset.status === "core").map((asset) => asset.id));
+  const packageIds = (await discoverCoreAssetPackages(root)).map((item) => item.assetId);
+  return new Set([
+    ...registry.assets.filter((asset) => asset.status === "core").map((asset) => asset.id),
+    ...packageIds,
+  ]);
 }
 
 async function discoverRenderMapperAssetIds(root) {
   const target = path.join(root, "src", "render", "render-payload.mjs");
   const source = await fs.readFile(target, "utf8");
-  return new Set([...source.matchAll(/assetId\s*===\s*["']([^"']+)["']/g)].map((match) => match[1]));
+  return new Set([
+    ...[...source.matchAll(/assetId\s*===\s*["']([^"']+)["']/g)].map((match) => match[1]),
+    ...(await discoverCoreAssetPackages(root)).map((item) => item.assetId),
+  ]);
 }
 
 export async function listRenderableVisualVariants(options = {}) {

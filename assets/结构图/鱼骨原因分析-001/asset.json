@@ -12,6 +12,30 @@
   "generator": "generate.mjs",
   "showcase": "example.pptx",
   "parameters": ["title", "effect", "branches"],
+  "runtime": {
+    "entry": "generate.mjs",
+    "builderExport": "buildFishboneAnalysis",
+    "mapperExport": "mapPageContent",
+    "familyId": "fishbone-analysis",
+    "variantId": "default",
+    "silhouette": "converging-fishbone",
+    "supportedBaseRelations": ["causal"],
+    "supportedPurposeKeys": ["analyze_causes"],
+    "itemCount": { "min": 4, "preferred": [4, 5, 6], "max": 6 },
+    "contract": {
+      "abstractionLevel": "composite",
+      "adaptationStatus": "partial",
+      "constraints": {
+        "relationTraits": { "converging": true },
+        "density": ["low", "medium"]
+      }
+    }
+  },
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "4–6 类原因；每类 1–4 条因素",
+    "rule": "上下原因枝围绕主骨镜像均衡分布；分支和文字位置按当前类别及因素数量重新计算"
+  },
   "spatialContract": {
     "coordinateSystem": { "width": 1280, "height": 720 },
     "contentFrame": { "left": 40, "top": 135, "width": 1200, "height": 520 },

@@ -1,5 +1,14 @@
 import { buildHierarchyPyramid, runGenerator } from "../../../src/asset-runtime/component-builders.mjs";
+import { mapping, renderPayload } from "../../../src/render/payload-helpers.mjs";
 export { buildHierarchyPyramid };
+
+export function mapPageContent(content, intent) {
+  return renderPayload(intent, "hierarchy-pyramid-001", {
+    title: content.title,
+    levels: content.items.map((item) => ({ title: item.title, body: item.body })),
+  }, content.items.map((item, index) => mapping(item.id, `levels[${index}]`)));
+}
+
 await runGenerator(import.meta.url, buildHierarchyPyramid, {
   title: "层级金字塔",
   levels: [

@@ -1,5 +1,14 @@
 import { buildFrameworkMatrix, runGenerator } from "../../../src/asset-runtime/component-builders.mjs";
+import { mapping, renderPayload } from "../../../src/render/payload-helpers.mjs";
 export { buildFrameworkMatrix };
+
+export function mapPageContent(content, intent) {
+  return renderPayload(intent, "framework-matrix-001", {
+    title: content.title,
+    quadrants: content.items.map((item) => ({ title: item.title, body: item.body })),
+  }, content.items.map((item, index) => mapping(item.id, `quadrants[${index}]`)));
+}
+
 await runGenerator(import.meta.url, buildFrameworkMatrix, {
   title: "四象限分析框架",
   quadrants: [

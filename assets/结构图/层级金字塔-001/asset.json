@@ -12,6 +12,30 @@
   "generator": "generate.mjs",
   "showcase": "example.pptx",
   "parameters": ["title", "levels"],
+  "runtime": {
+    "entry": "generate.mjs",
+    "builderExport": "buildHierarchyPyramid",
+    "mapperExport": "mapPageContent",
+    "familyId": "hierarchy-pyramid",
+    "variantId": "default",
+    "silhouette": "tiered-pyramid",
+    "supportedBaseRelations": ["hierarchy"],
+    "supportedPurposeKeys": [],
+    "itemCount": { "min": 3, "preferred": [3, 4, 5], "max": 5 },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "semantic": { "ordered": true, "sameLevel": false },
+        "density": ["low"]
+      }
+    }
+  },
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "3–5 个层级",
+    "rule": "按当前层数重新分配圆台高度并保持共同中轴、连续轮廓和由上到下逐级扩大的关系"
+  },
   "spatialContract": {
     "coordinateSystem": { "width": 1280, "height": 720 },
     "contentFrame": { "left": 40, "top": 135, "width": 1200, "height": 520 },

@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { discoverCoreAssetPackages } from "../runtime/core-asset-packages.mjs";
 
 function mergeObject(base, override) {
   return { ...(base ?? {}), ...(override ?? {}) };
@@ -29,7 +30,33 @@ export function normalizeContract(defaults, contract) {
 export async function loadContractCatalog(root = process.cwd()) {
   const target = path.join(root, "catalog", "asset-contracts.json");
   const catalog = JSON.parse(await fs.readFile(target, "utf8"));
-  return catalog.contracts.map((contract) => normalizeContract(catalog.defaults, contract));
+  const packages = await discoverCoreAssetPackages(root);
+  const packagedIds = new Set(packages.map((item) => item.assetId));
+  const packagedContracts = packages.map((item) => normalizeContract(catalog.defaults, {
+    assetId: item.assetId,
+    status: "validated",
+    abstractionLevel: item.runtime.contract.abstractionLevel,
+    adaptationStatus: item.runtime.contract.adaptationStatus,
+    supportedIntents: {
+      baseRelations: item.runtime.supportedBaseRelations,
+      purposeKeys: item.runtime.supportedPurposeKeys ?? [],
+    },
+    constraints: {
+      ...item.runtime.contract.constraints,
+      metrics: [{ field: "itemCount", ...item.runtime.itemCount }],
+    },
+    evidence: {
+      basis: ["asset-package", "user-review"],
+      realManuscriptValidated: true,
+      notes: item.asset.review ?? "用户确认后进入核心资产包。",
+    },
+  }));
+  return [
+    ...catalog.contracts
+      .filter((contract) => !packagedIds.has(contract.assetId))
+      .map((contract) => normalizeContract(catalog.defaults, contract)),
+    ...packagedContracts,
+  ];
 }
 
 function metricValue(intent, field) {

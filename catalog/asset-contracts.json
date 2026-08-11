@@ -80,30 +80,6 @@
       "reviewReason": "已通过 3–6 步独立版与东北大学 Skin 全状态验收。"
     },
     {
-      "assetId": "framework-matrix-001",
-      "abstractionLevel": "foundation",
-      "adaptationStatus": "fixed",
-      "supportedIntents": { "baseRelations": ["matrix"], "purposeKeys": [] },
-      "constraints": {
-        "metrics": [{ "field": "itemCount", "min": 4, "preferred": [4], "max": 4 }],
-        "semantic": { "sameLevel": true },
-        "density": ["low", "medium"]
-      },
-      "reviewReason": "基础矩阵关系成立，但当前实现是固定四象限。"
-    },
-    {
-      "assetId": "hierarchy-pyramid-001",
-      "abstractionLevel": "foundation",
-      "adaptationStatus": "adaptive",
-      "supportedIntents": { "baseRelations": ["hierarchy"], "purposeKeys": [] },
-      "constraints": {
-        "metrics": [{ "field": "itemCount", "min": 3, "preferred": [3, 4, 5], "max": 5 }],
-        "semantic": { "ordered": true, "sameLevel": false },
-        "density": ["low"]
-      },
-      "reviewReason": "已通过 3–5 层独立版与东北大学 Skin 全状态验收。"
-    },
-    {
       "assetId": "layered-architecture-001",
       "abstractionLevel": "foundation",
       "adaptationStatus": "adaptive",
@@ -147,20 +123,6 @@
       "reviewReason": "步骤宽度随数量变化，但仍需测试最少数量、长短不均和超限退化。"
     },
     {
-      "assetId": "timeline-roadmap-001",
-      "abstractionLevel": "foundation",
-      "adaptationStatus": "adaptive",
-      "supportedIntents": { "baseRelations": ["sequence"], "purposeKeys": [] },
-      "constraints": {
-        "metrics": [{ "field": "itemCount", "min": 3, "preferred": [3, 4, 5, 6], "max": 6 }],
-        "semantic": { "ordered": true, "sameLevel": true },
-        "relationTraits": { "temporal": true, "branched": false },
-        "density": ["low", "medium"]
-      },
-      "reviewReason": "已通过 3–6 个时间节点的独立版与东北大学 Skin 全状态验收。"
-    },
-
-    {
       "assetId": "flow-map-001",
       "abstractionLevel": "composite",
       "adaptationStatus": "partial",
@@ -172,19 +134,6 @@
         "density": ["low", "medium"]
       },
       "reviewReason": "固定三列的多节点流向，不是普通顺序流程。"
-    },
-    {
-      "assetId": "funnel-conversion-001",
-      "abstractionLevel": "composite",
-      "adaptationStatus": "adaptive",
-      "supportedIntents": { "baseRelations": ["sequence"], "purposeKeys": ["explain_conversion"] },
-      "constraints": {
-        "metrics": [{ "field": "itemCount", "min": 3, "preferred": [3, 4, 5, 6], "max": 6 }],
-        "semantic": { "ordered": true },
-        "relationTraits": { "converging": true },
-        "density": ["low"]
-      },
-      "reviewReason": "已通过 3–6 个递减阶段验收；只用于真实存在筛选或转化的内容。"
     },
     {
       "assetId": "goal-kpi-map-001",
@@ -239,14 +188,6 @@
         "notes": "已用于为什么做 PPagenT 的现状与缺口—系统介入与结果页，支持左右各 2 项。"
       },
       "reviewReason": "仅用于可诚实拆分为两项现状/缺口和两项介入/结果的因果表达。"
-    },
-    {
-      "assetId": "fishbone-analysis-001",
-      "abstractionLevel": "composite",
-      "adaptationStatus": "partial",
-      "supportedIntents": { "baseRelations": ["causal"], "purposeKeys": ["analyze_causes"] },
-      "constraints": { "relationTraits": { "converging": true } },
-      "reviewReason": "适用于多类原因汇聚到一个结果，不适用于普通并列。"
     },
     {
       "assetId": "business-model-canvas-001",

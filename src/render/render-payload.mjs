@@ -1,12 +1,13 @@
+import { mapping, renderPayload } from "./payload-helpers.mjs";
+import { coreAssetPackageMap } from "../runtime/core-asset-packages.mjs";
+
+const packagedAssets = await coreAssetPackageMap();
+
 function splitPoints(value) {
   return String(value ?? "")
     .split(/\r?\n|；|;/)
     .map((item) => item.trim())
     .filter(Boolean);
-}
-
-function mapping(sourceItemId, parameterPath) {
-  return { sourceItemId, parameterPath };
 }
 
 function roleAndStage(title, index) {
@@ -18,20 +19,12 @@ function roleAndStage(title, index) {
   return { role: `角色 ${index + 1}`, stage: value || `阶段 ${index + 1}` };
 }
 
-function renderPayload(intent, assetId, parameters, mappings, omissions = []) {
-  return {
-    schemaVersion: "1.0",
-    intentId: intent.intentId,
-    assetId,
-    parameters,
-    mappings,
-    omissions,
-  };
-}
-
 export function mapRenderPayload(content, intent, decision) {
   const assetId = decision.selectedAssetId;
   if (!assetId) throw new Error(`${content.pageId} 没有可渲染的 selectedAssetId`);
+
+  const packagedAsset = packagedAssets.get(assetId);
+  if (packagedAsset) return packagedAsset.mapper(content, intent, decision);
 
   if (assetId === "northeastern-university-cover-001") {
     const presenter = content.items.find((item) => item.id === "presenter");

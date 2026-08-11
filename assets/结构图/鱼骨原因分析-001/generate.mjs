@@ -1,6 +1,21 @@
 import { buildFishboneAnalysis, runGenerator } from "../../../src/asset-runtime/analysis-model-builders.mjs";
+import { mapping, renderPayload } from "../../../src/render/payload-helpers.mjs";
 
 export { buildFishboneAnalysis };
+
+export function mapPageContent(content, intent) {
+  return renderPayload(intent, "fishbone-analysis-001", {
+    title: content.title,
+    effect: content.notes || content.title,
+    branches: content.items.map((item) => ({
+      category: item.title,
+      items: String(item.body ?? "")
+        .split(/\r?\n|[;；]/)
+        .map((point) => point.trim())
+        .filter(Boolean),
+    })),
+  }, content.items.map((item, index) => mapping(item.id, `branches[${index}]`)));
+}
 
 await runGenerator(import.meta.url, buildFishboneAnalysis, {
   title: "项目延期原因拆解",

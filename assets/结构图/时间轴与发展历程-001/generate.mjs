@@ -1,5 +1,18 @@
 import { buildTimelineRoadmap, runGenerator } from "../../../src/asset-runtime/component-builders.mjs";
+import { mapping, renderPayload } from "../../../src/render/payload-helpers.mjs";
 export { buildTimelineRoadmap };
+
+export function mapPageContent(content, intent) {
+  return renderPayload(intent, "timeline-roadmap-001", {
+    title: content.title,
+    milestones: content.items.map((item, index) => ({
+      period: String(index + 1).padStart(2, "0"),
+      title: item.title,
+      body: item.body,
+    })),
+  }, content.items.map((item, index) => mapping(item.id, `milestones[${index}]`)));
+}
+
 await runGenerator(import.meta.url, buildTimelineRoadmap, {
   title: "时间轴与发展历程",
   milestones: [

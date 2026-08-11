@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { discoverCoreAssetPackages } from "../runtime/core-asset-packages.mjs";
 
 async function readJson(target) {
   return JSON.parse(await fs.readFile(target, "utf8"));
@@ -12,11 +13,13 @@ export async function loadCompositionLayouts(root = process.cwd()) {
 
 export async function loadCoreAssetMetadata(root = process.cwd()) {
   const registry = await readJson(path.join(root, "assets", "registry.json"));
-  const records = await Promise.all(registry.assets.map(async (entry) => {
+  const legacyRecords = await Promise.all(registry.assets.map(async (entry) => {
     const metadata = await readJson(path.join(root, "assets", entry.path, "asset.json"));
     return [entry.id, metadata];
   }));
-  return new Map(records);
+  const packageRecords = (await discoverCoreAssetPackages(root))
+    .map((item) => [item.assetId, item.asset]);
+  return new Map([...legacyRecords, ...packageRecords]);
 }
 
 export function assetKind(assetId, metadata) {

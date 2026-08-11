@@ -1,5 +1,14 @@
 import { buildFunnelConversion, runGenerator } from "../../../src/asset-runtime/component-builders.mjs";
+import { mapping, renderPayload } from "../../../src/render/payload-helpers.mjs";
 export { buildFunnelConversion };
+
+export function mapPageContent(content, intent) {
+  return renderPayload(intent, "funnel-conversion-001", {
+    title: content.title,
+    stages: content.items.map((item) => ({ rate: "", label: item.title, note: item.body })),
+  }, content.items.map((item, index) => mapping(item.id, `stages[${index}]`)));
+}
+
 await runGenerator(import.meta.url, buildFunnelConversion, {
   title: "转化漏斗",
   stages: [

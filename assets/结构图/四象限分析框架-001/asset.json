@@ -12,6 +12,30 @@
   "generator": "generate.mjs",
   "showcase": "example.pptx",
   "parameters": ["title", "quadrants"],
+  "runtime": {
+    "entry": "generate.mjs",
+    "builderExport": "buildFrameworkMatrix",
+    "mapperExport": "mapPageContent",
+    "familyId": "framework-matrix",
+    "variantId": "default",
+    "silhouette": "four-quadrant-petals",
+    "supportedBaseRelations": ["matrix"],
+    "supportedPurposeKeys": [],
+    "itemCount": { "min": 4, "preferred": [4], "max": 4 },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "fixed",
+      "constraints": {
+        "semantic": { "sameLevel": true },
+        "density": ["low", "medium"]
+      }
+    }
+  },
+  "layoutExpansion": {
+    "mode": "fixed",
+    "range": "固定 4 个象限",
+    "rule": "仅适配象限内文字；象限数量不是可扩散维度"
+  },
   "spatialContract": {
     "coordinateSystem": { "width": 1280, "height": 720 },
     "contentFrame": { "left": 40, "top": 135, "width": 1200, "height": 520 },
