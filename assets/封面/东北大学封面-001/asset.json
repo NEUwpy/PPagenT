@@ -10,5 +10,27 @@
   "generator": "generate.mjs",
   "showcase": "example.pptx",
   "parameters": ["title", "presenter", "date"],
+  "runtime": {
+    "renderer": "skin",
+    "entry": "runtime.mjs",
+    "mapperExport": "mapPageContent",
+    "familyId": "skin-cover",
+    "variantId": "default",
+    "silhouette": "cover",
+    "supportedBaseRelations": ["none"],
+    "supportedPurposeKeys": ["present_cover"],
+    "itemCount": { "min": 0, "preferred": [2], "max": 4 },
+    "compositionIds": ["fixed-cover"],
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "fixed",
+      "constraints": { "semantic": { "ordered": false }, "density": ["low"] }
+    }
+  },
+  "layoutExpansion": {
+    "mode": "fixed",
+    "range": "单一封面版式；标题、汇报人和日期变化",
+    "rule": "保持来源封面的版心、比例和视觉层级"
+  },
   "validation": "已进入真实稿件迭代，继续按用户反馈优化"
 }

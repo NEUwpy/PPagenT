@@ -9,7 +9,7 @@ export async function loadVisualVariantCatalog(root = process.cwd()) {
   const catalog = JSON.parse(await fs.readFile(target, "utf8"));
   if (!Array.isArray(catalog.variants)) throw new Error("visual-variants.json 缺少 variants 数组");
   const packages = await discoverCoreAssetPackages(root);
-  const packagedIds = new Set(packages.map((item) => item.assetId));
+  const packagedKeys = new Set(packages.map((item) => `${item.assetId}:${item.runtime.variantId}`));
   const packagedVariants = packages.map((item) => ({
     familyId: item.runtime.familyId,
     assetId: item.assetId,
@@ -19,26 +19,20 @@ export async function loadVisualVariantCatalog(root = process.cwd()) {
     supportedBaseRelations: item.runtime.supportedBaseRelations,
     supportedPurposeKeys: item.runtime.supportedPurposeKeys ?? [],
     itemCount: { ...item.runtime.itemCount },
+    renderer: item.runtime.renderer ?? "component",
+    compositionIds: item.runtime.compositionIds ?? [],
+    fallbackBody: Boolean(item.runtime.fallbackBody),
     status: "core",
     origin: "self-describing-asset",
   }));
   return [
-    ...catalog.variants.filter((variant) => !packagedIds.has(variant.assetId)),
+    ...catalog.variants.filter((variant) => !packagedKeys.has(`${variant.assetId}:${variant.variantId}`)),
     ...packagedVariants,
   ].map((variant) => ({ ...variant, itemCount: { ...variant.itemCount } }));
 }
 
 export async function loadCoreAssetIds(root = process.cwd()) {
-  const target = path.join(root, "assets", "registry.json");
-  const registry = JSON.parse(await fs.readFile(target, "utf8"));
-  if (registry.scope !== "core" || !Array.isArray(registry.assets)) {
-    throw new Error("assets/registry.json 必须是核心资产登记表");
-  }
-  const packageIds = (await discoverCoreAssetPackages(root)).map((item) => item.assetId);
-  return new Set([
-    ...registry.assets.filter((asset) => asset.status === "core").map((asset) => asset.id),
-    ...packageIds,
-  ]);
+  return new Set((await discoverCoreAssetPackages(root)).map((item) => item.assetId));
 }
 
 async function discoverRenderMapperAssetIds(root) {
@@ -75,7 +69,8 @@ export async function listRenderableVisualVariants(options = {}) {
       coreAssetAvailable: coreAssetIds.has(variant.assetId),
       callableStatus: allowedVariantStatuses.has(variant.status),
       mapperAvailable: mapperIds.has(variant.assetId),
-      builderAvailable: hasStructureAssetBuilder(variant.assetId, variant.variantId),
+      builderAvailable: variant.renderer === "skin"
+        || hasStructureAssetBuilder(variant.assetId, variant.variantId),
     }))
     .filter((variant) => (
       variant.contractAvailable

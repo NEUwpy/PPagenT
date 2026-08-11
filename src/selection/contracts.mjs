@@ -43,7 +43,10 @@ export async function loadContractCatalog(root = process.cwd()) {
     },
     constraints: {
       ...item.runtime.contract.constraints,
-      metrics: [{ field: "itemCount", ...item.runtime.itemCount }],
+      metrics: [
+        ...(item.runtime.contract.constraints?.metrics ?? []),
+        { field: "itemCount", ...item.runtime.itemCount },
+      ],
     },
     evidence: {
       basis: ["asset-package", "user-review"],

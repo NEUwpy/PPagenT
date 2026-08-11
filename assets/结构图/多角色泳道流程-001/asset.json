@@ -12,6 +12,35 @@
   "generator": "generate.mjs",
   "showcase": "example.pptx",
   "parameters": ["title", "lanes", "stages", "tasks", "conclusion"],
+  "runtime": {
+    "entry": "generate.mjs",
+    "builderExport": "buildSwimlaneProcess",
+    "mapperExport": "mapPageContent",
+    "familyId": "swimlane-process",
+    "variantId": "default",
+    "silhouette": "role-stage-swimlanes",
+    "supportedBaseRelations": ["sequence"],
+    "supportedPurposeKeys": ["explain_cross_role_process"],
+    "itemCount": { "min": 4, "preferred": [4], "max": 4 },
+    "contract": {
+      "abstractionLevel": "composite",
+      "adaptationStatus": "partial",
+      "constraints": {
+        "metrics": [
+          { "field": "roleCount", "min": 2, "preferred": [2, 3], "max": 3 },
+          { "field": "stageCount", "min": 2, "preferred": [3], "max": 3 }
+        ],
+        "semantic": { "ordered": true },
+        "relationTraits": { "dimensions": 2, "secondaryDimension": "role" },
+        "density": ["medium"]
+      }
+    }
+  },
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "2–3 条泳道 × 2–3 个阶段；可选独立总结",
+    "rule": "泳道与阶段分别等分可用区域；任务按二维位置放入，不能通过压缩单格容纳超限内容"
+  },
   "spatialContract": {
     "coordinateSystem": { "width": 1280, "height": 720 },
     "contentFrame": { "left": 40, "top": 135, "width": 1200, "height": 520 },

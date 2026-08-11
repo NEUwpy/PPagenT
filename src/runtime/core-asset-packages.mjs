@@ -39,9 +39,9 @@ async function loadPackage(manifestPath) {
   if (asset.status !== "core" || !asset.runtime) return null;
 
   const runtime = asset.runtime;
+  const renderer = runtime.renderer ?? "component";
   requireValue(typeof asset.id === "string" && asset.id, `${manifestPath} 缺少资产 id`);
   requireValue(typeof runtime.entry === "string" && runtime.entry, `${asset.id} 缺少 runtime.entry`);
-  requireValue(typeof runtime.builderExport === "string" && runtime.builderExport, `${asset.id} 缺少 builderExport`);
   requireValue(typeof runtime.mapperExport === "string" && runtime.mapperExport, `${asset.id} 缺少 mapperExport`);
   requireValue(typeof runtime.familyId === "string" && runtime.familyId, `${asset.id} 缺少 familyId`);
   requireValue(typeof runtime.variantId === "string" && runtime.variantId, `${asset.id} 缺少 variantId`);
@@ -53,9 +53,12 @@ async function loadPackage(manifestPath) {
   const entryPath = path.resolve(assetDir, runtime.entry);
   requireValue(inside(assetDir, entryPath), `${asset.id} 的运行入口必须位于资产目录内`);
   const module = await import(pathToFileURL(entryPath).href);
-  const builder = module[runtime.builderExport];
+  const builder = runtime.builderExport ? module[runtime.builderExport] : null;
   const mapper = module[runtime.mapperExport];
-  requireValue(typeof builder === "function", `${asset.id} 没有导出 ${runtime.builderExport}`);
+  if (renderer === "component") {
+    requireValue(typeof runtime.builderExport === "string" && runtime.builderExport, `${asset.id} 缺少 builderExport`);
+    requireValue(typeof builder === "function", `${asset.id} 没有导出 ${runtime.builderExport}`);
+  }
   requireValue(typeof mapper === "function", `${asset.id} 没有导出 ${runtime.mapperExport}`);
 
   return { assetId: asset.id, asset, assetDir, manifestPath, runtime, builder, mapper };

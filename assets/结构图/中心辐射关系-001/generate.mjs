@@ -1,5 +1,15 @@
 import { buildRadialHub, runGenerator } from "../../../src/asset-runtime/component-builders.mjs";
+import { mapping, renderPayload } from "../../../src/render/payload-helpers.mjs";
 export { buildRadialHub };
+
+export function mapPageContent(content, intent) {
+  return renderPayload(intent, "radial-hub-001", {
+    title: content.title,
+    center: content.notes || content.title,
+    items: content.items.map((item) => item.title || item.body),
+  }, content.items.map((item, index) => mapping(item.id, `items[${index}]`)));
+}
+
 await runGenerator(import.meta.url, buildRadialHub, {
   title: "中心辐射关系",
   center: "协同能力",

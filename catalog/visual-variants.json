@@ -2,50 +2,6 @@
   "schemaVersion": "1.0",
   "variants": [
     {
-      "familyId": "comparison-structure",
-      "assetId": "comparison-structure-001",
-      "variantId": "default",
-      "builderKey": "comparison-structure-001:default",
-      "silhouette": "symmetric-column-contrast",
-      "supportedBaseRelations": ["comparison"],
-      "itemCount": { "min": 2, "preferred": [2], "max": 2 },
-      "status": "core",
-      "origin": "distilled-asset"
-    },
-    {
-      "familyId": "cycle-loop",
-      "assetId": "cycle-loop-001",
-      "variantId": "default",
-      "builderKey": "cycle-loop-001:default",
-      "silhouette": "four-node-loop",
-      "supportedBaseRelations": ["sequence"],
-      "itemCount": { "min": 3, "preferred": [3, 4, 5, 6], "max": 6 },
-      "status": "core",
-      "origin": "distilled-asset"
-    },
-    {
-      "familyId": "layered-architecture",
-      "assetId": "layered-architecture-001",
-      "variantId": "default",
-      "builderKey": "layered-architecture-001:default",
-      "silhouette": "top-center-bottom-layers",
-      "supportedBaseRelations": ["layered"],
-      "itemCount": { "min": 7, "preferred": [7, 9, 11, 13], "max": 13 },
-      "status": "core",
-      "origin": "distilled-asset"
-    },
-    {
-      "familyId": "radial-hub",
-      "assetId": "radial-hub-001",
-      "variantId": "orbit",
-      "builderKey": "radial-hub-001:orbit",
-      "silhouette": "center-orbit",
-      "supportedBaseRelations": ["hub"],
-      "itemCount": { "min": 3, "preferred": [4, 5, 6], "max": 8 },
-      "status": "core",
-      "origin": "distilled-asset"
-    },
-    {
       "familyId": "radial-hub",
       "assetId": "radial-hub-001",
       "variantId": "split-wing",
@@ -54,53 +10,6 @@
       "supportedBaseRelations": ["hub"],
       "itemCount": { "min": 3, "preferred": [4, 6], "max": 8 },
       "status": "experimental"
-    },
-    {
-      "familyId": "sequential-process",
-      "assetId": "sequential-process-001",
-      "variantId": "horizontal-cards",
-      "builderKey": "sequential-process-001:horizontal-cards",
-      "silhouette": "horizontal-card-chain",
-      "supportedBaseRelations": ["sequence"],
-      "itemCount": { "min": 3, "preferred": [3, 4], "max": 6 },
-      "status": "core",
-      "origin": "distilled-asset"
-    },
-    {
-      "familyId": "swimlane-process",
-      "assetId": "swimlane-process-001",
-      "variantId": "default",
-      "builderKey": "swimlane-process-001:default",
-      "silhouette": "role-stage-swimlanes",
-      "supportedBaseRelations": ["sequence"],
-      "supportedPurposeKeys": ["explain_cross_role_process"],
-      "itemCount": { "min": 4, "preferred": [4], "max": 4 },
-      "status": "core",
-      "origin": "distilled-asset"
-    },
-    {
-      "familyId": "problem-improvement",
-      "assetId": "problem-improvement-001",
-      "variantId": "default",
-      "builderKey": "problem-improvement-001:default",
-      "silhouette": "problem-to-improvement-panels",
-      "supportedBaseRelations": ["causal"],
-      "supportedPurposeKeys": ["connect_problems_and_solutions"],
-      "itemCount": { "min": 4, "preferred": [4], "max": 4 },
-      "status": "core",
-      "origin": "distilled-asset"
-    },
-    {
-      "familyId": "organization-tree",
-      "assetId": "organization-tree-001",
-      "variantId": "default",
-      "builderKey": "organization-tree-001:default",
-      "silhouette": "three-level-org-tree",
-      "supportedBaseRelations": ["hierarchy"],
-      "supportedPurposeKeys": ["explain_organization"],
-      "itemCount": { "min": 2, "preferred": [3, 4], "max": 4 },
-      "status": "core",
-      "origin": "distilled-asset"
     },
     {
       "familyId": "sequential-process",

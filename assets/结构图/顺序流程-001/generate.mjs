@@ -1,6 +1,20 @@
 import { buildSequentialProcess, runGenerator } from "../../../src/asset-runtime/component-builders.mjs";
+import { mapping, renderPayload } from "../../../src/render/payload-helpers.mjs";
 
 export { buildSequentialProcess };
+
+export function mapPageContent(content, intent) {
+  return renderPayload(intent, "sequential-process-001", {
+    title: content.title,
+    steps: content.items.map((item) => ({
+      title: item.title,
+      body: item.body,
+      emphasis: Boolean(item.emphasis),
+      ...(item.emphasis ? { emphasisLabel: "结论 / 结果" } : {}),
+    })),
+  }, content.items.map((item, index) => mapping(item.id, `steps[${index}]`)));
+}
+
 await runGenerator(import.meta.url, buildSequentialProcess, {
   title: "顺序流程",
   steps: [

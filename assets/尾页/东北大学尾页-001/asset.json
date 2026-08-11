@@ -10,5 +10,27 @@
   "generator": "generate.mjs",
   "showcase": "example.pptx",
   "parameters": ["text"],
+  "runtime": {
+    "renderer": "skin",
+    "entry": "runtime.mjs",
+    "mapperExport": "mapPageContent",
+    "familyId": "skin-closing",
+    "variantId": "default",
+    "silhouette": "closing",
+    "supportedBaseRelations": ["none"],
+    "supportedPurposeKeys": ["present_closing"],
+    "itemCount": { "min": 0, "preferred": [1, 2], "max": 3 },
+    "compositionIds": ["fixed-closing"],
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "fixed",
+      "constraints": { "semantic": { "ordered": false }, "density": ["low"] }
+    }
+  },
+  "layoutExpansion": {
+    "mode": "fixed",
+    "range": "单一尾页版式；收束文字变化",
+    "rule": "保持来源尾页构图"
+  },
   "validation": "已进入真实稿件迭代，继续按用户反馈优化"
 }

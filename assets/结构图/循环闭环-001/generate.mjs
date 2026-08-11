@@ -1,5 +1,15 @@
 import { buildCycleLoop, runGenerator } from "../../../src/asset-runtime/component-builders.mjs";
+import { mapping, renderPayload } from "../../../src/render/payload-helpers.mjs";
 export { buildCycleLoop };
+
+export function mapPageContent(content, intent) {
+  return renderPayload(intent, "cycle-loop-001", {
+    title: content.title,
+    center: content.notes || content.title,
+    steps: content.items.map((item) => item.title || item.body),
+  }, content.items.map((item, index) => mapping(item.id, `steps[${index}]`)));
+}
+
 await runGenerator(import.meta.url, buildCycleLoop, {
   title: "循环闭环",
   center: "持续改进",

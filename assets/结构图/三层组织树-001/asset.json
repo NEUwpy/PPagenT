@@ -9,6 +9,27 @@
   "generator": "generate.mjs",
   "showcase": "example.pptx",
   "parameters": ["title", "leader", "departments"],
+  "runtime": {
+    "entry": "generate.mjs",
+    "builderExport": "buildOrganizationTree",
+    "mapperExport": "mapPageContent",
+    "familyId": "organization-tree",
+    "variantId": "default",
+    "silhouette": "three-level-org-tree",
+    "supportedBaseRelations": ["hierarchy"],
+    "supportedPurposeKeys": ["explain_organization"],
+    "itemCount": { "min": 2, "preferred": [3, 4], "max": 4 },
+    "contract": {
+      "abstractionLevel": "composite",
+      "adaptationStatus": "partial",
+      "constraints": { "density": ["low", "medium"] }
+    }
+  },
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "固定三层；2–4 个部门，每部门 1–3 名成员",
+    "rule": "部门围绕页面中轴等距居中；各部门成员围绕所属部门中心重新等距分布"
+  },
   "contentMappingContract": "PageContent 使用版式中立的 hierarchy structuredData：根节点为总负责人，二级节点为部门负责人，三级节点为成员。",
   "capacity": "固定三层；2–4 个部门，每部门 1–3 名成员",
   "adaptation": {

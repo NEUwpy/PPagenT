@@ -12,6 +12,31 @@
   "generator": "generate.mjs",
   "showcase": "example.pptx",
   "parameters": ["title", "center", "items"],
+  "runtime": {
+    "entry": "generate.mjs",
+    "builderExport": "buildRadialHub",
+    "mapperExport": "mapPageContent",
+    "familyId": "radial-hub",
+    "variantId": "orbit",
+    "silhouette": "center-orbit",
+    "supportedBaseRelations": ["hub"],
+    "supportedPurposeKeys": [],
+    "itemCount": { "min": 3, "preferred": [4, 5, 6], "max": 8 },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "semantic": { "ordered": false, "sameLevel": true },
+        "relationTraits": { "branched": false },
+        "density": ["low", "medium"]
+      }
+    }
+  },
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "3–8 个外围节点",
+    "rule": "保持单一强中心；外围节点按当前数量在两侧均衡分配，单侧最多 4 项"
+  },
   "spatialContract": {
     "coordinateSystem": { "width": 1280, "height": 720 },
     "contentFrame": { "left": 40, "top": 135, "width": 1200, "height": 520 },

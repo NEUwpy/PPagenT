@@ -10,6 +10,28 @@
   "generator": "generate.mjs",
   "showcase": "example.pptx",
   "parameters": ["section-number", "section-name", "title", "body"],
+  "runtime": {
+    "renderer": "skin",
+    "entry": "runtime.mjs",
+    "mapperExport": "mapPageContent",
+    "familyId": "skin-body-editorial",
+    "variantId": "editorial",
+    "silhouette": "editorial-page",
+    "supportedBaseRelations": [],
+    "supportedPurposeKeys": [],
+    "itemCount": { "min": 0, "preferred": [2, 3, 4], "max": 20 },
+    "fallbackBody": true,
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": { "density": ["low", "medium", "high"] }
+    }
+  },
+  "layoutExpansion": {
+    "mode": "fixed",
+    "range": "正文 Skin；内部排版由 CompositionPlan 决定",
+    "rule": "只提供标题区、正文安全区、页眉和页脚"
+  },
   "spatialContract": {
     "coordinateSystem": { "width": 1280, "height": 720 },
     "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },

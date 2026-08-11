@@ -28,101 +28,6 @@
   },
   "contracts": [
     {
-      "assetId": "northeastern-university-cover-001",
-      "abstractionLevel": "foundation",
-      "adaptationStatus": "partial",
-      "supportedIntents": { "baseRelations": ["none"], "purposeKeys": ["present_cover"] },
-      "constraints": {
-        "metrics": [{ "field": "itemCount", "min": 2, "preferred": [2], "max": 2 }],
-        "semantic": { "ordered": false },
-        "density": ["low"]
-      },
-      "reviewReason": "东北大学 Skin 的封面槽位，当前验证标题、汇报人和日期三个字段。"
-    },
-    {
-      "assetId": "northeastern-university-closing-001",
-      "abstractionLevel": "foundation",
-      "adaptationStatus": "partial",
-      "supportedIntents": { "baseRelations": ["none"], "purposeKeys": ["present_closing"] },
-      "constraints": {
-        "metrics": [{ "field": "itemCount", "min": 0, "preferred": [0], "max": 0 }],
-        "semantic": { "ordered": false },
-        "density": ["low"]
-      },
-      "reviewReason": "东北大学 Skin 的尾页槽位，当前只验证一段结束语。"
-    },
-    {
-      "assetId": "comparison-structure-001",
-      "abstractionLevel": "foundation",
-      "adaptationStatus": "adaptive",
-      "supportedIntents": { "baseRelations": ["comparison"], "purposeKeys": [] },
-      "constraints": {
-        "metrics": [
-          { "field": "groups", "min": 2, "preferred": [2], "max": 2 },
-          { "field": "itemsPerGroup", "min": 1, "preferred": [2, 3, 4], "max": 5 }
-        ],
-        "semantic": { "ordered": false },
-        "density": ["low", "medium"]
-      },
-      "reviewReason": "第 55 页蒸馏的镜像双栏已支持每侧 1–5 项与单侧重点；左右内容长度极不均匀时仍需真实稿件验证。"
-    },
-    {
-      "assetId": "cycle-loop-001",
-      "abstractionLevel": "foundation",
-      "adaptationStatus": "adaptive",
-      "supportedIntents": { "baseRelations": ["sequence"], "purposeKeys": [] },
-      "constraints": {
-        "metrics": [{ "field": "itemCount", "min": 3, "preferred": [3, 4, 5, 6], "max": 6 }],
-        "semantic": { "ordered": true },
-        "relationTraits": { "cyclic": true },
-        "density": ["low", "medium"]
-      },
-      "reviewReason": "已通过 3–6 步独立版与东北大学 Skin 全状态验收。"
-    },
-    {
-      "assetId": "layered-architecture-001",
-      "abstractionLevel": "foundation",
-      "adaptationStatus": "adaptive",
-      "supportedIntents": { "baseRelations": ["layered"], "purposeKeys": [] },
-      "constraints": {
-        "metrics": [
-          { "field": "sources", "min": 3, "preferred": [4, 5], "max": 6 },
-          { "field": "apps", "min": 3, "preferred": [3, 4, 5, 6], "max": 6 }
-        ],
-        "semantic": { "ordered": true, "sameLevel": false },
-        "density": ["low", "medium"]
-      },
-      "reviewReason": "来源层与应用层均已通过 3–6 节点独立版与东北大学 Skin 验收。"
-    },
-    {
-      "assetId": "radial-hub-001",
-      "abstractionLevel": "foundation",
-      "adaptationStatus": "adaptive",
-      "supportedIntents": { "baseRelations": ["hub"], "purposeKeys": [] },
-      "constraints": {
-        "metrics": [{ "field": "itemCount", "min": 3, "preferred": [4, 5, 6], "max": 8 }],
-        "semantic": { "ordered": false, "sameLevel": true },
-        "relationTraits": { "branched": false },
-        "density": ["low", "medium"]
-      },
-      "fallback": { "tooFew": "simple-layout", "tooMany": "simple-layout", "tooLong": "switch-layout" },
-      "reviewReason": "节点会随数量重新计算位置，是当前最接近基础表达语法的实现之一。"
-    },
-    {
-      "assetId": "sequential-process-001",
-      "abstractionLevel": "foundation",
-      "adaptationStatus": "adaptive",
-      "supportedIntents": { "baseRelations": ["sequence", "causal"], "purposeKeys": [] },
-      "constraints": {
-        "metrics": [{ "field": "itemCount", "min": 3, "preferred": [3, 4, 5], "max": 6 }],
-        "semantic": { "ordered": true },
-        "relationTraits": { "branched": false, "cyclic": false },
-        "density": ["low", "medium"]
-      },
-      "fallback": { "tooFew": "simple-layout", "tooMany": "split", "tooLong": "switch-layout" },
-      "reviewReason": "步骤宽度随数量变化，但仍需测试最少数量、长短不均和超限退化。"
-    },
-    {
       "assetId": "flow-map-001",
       "abstractionLevel": "composite",
       "adaptationStatus": "partial",
@@ -146,48 +51,6 @@
         "density": ["medium"]
       },
       "reviewReason": "只适用于目标到策略或指标的映射。"
-    },
-    {
-      "assetId": "swimlane-process-001",
-      "status": "validated",
-      "abstractionLevel": "composite",
-      "adaptationStatus": "partial",
-      "supportedIntents": { "baseRelations": ["sequence"], "purposeKeys": ["explain_cross_role_process"] },
-      "constraints": {
-        "metrics": [
-          { "field": "roleCount", "min": 2, "preferred": [2, 3], "max": 3 },
-          { "field": "stageCount", "min": 2, "preferred": [3], "max": 3 },
-          { "field": "itemCount", "min": 4, "preferred": [4], "max": 4 }
-        ],
-        "semantic": { "ordered": true },
-        "relationTraits": { "dimensions": 2, "secondaryDimension": "role" },
-        "density": ["medium"]
-      },
-      "evidence": {
-        "basis": ["metadata", "code", "render", "real-manuscript"],
-        "realManuscriptValidated": true,
-        "notes": "已用于为什么做 PPagenT 的 AI—规则—代码三角色协作页；总结作为独立结论区保留。"
-      },
-      "reviewReason": "需要同时存在角色和阶段两个维度；当前核心变体验证 3 角色、3 阶段和 1 条总结。"
-    },
-    {
-      "assetId": "problem-improvement-001",
-      "status": "validated",
-      "abstractionLevel": "composite",
-      "adaptationStatus": "partial",
-      "supportedIntents": { "baseRelations": ["causal"], "purposeKeys": ["connect_problems_and_solutions"] },
-      "constraints": {
-        "metrics": [{ "field": "itemCount", "min": 4, "preferred": [4], "max": 4 }],
-        "semantic": { "ordered": true },
-        "relationTraits": { "cyclic": false, "branched": false },
-        "density": ["medium"]
-      },
-      "evidence": {
-        "basis": ["metadata", "code", "render", "real-manuscript"],
-        "realManuscriptValidated": true,
-        "notes": "已用于为什么做 PPagenT 的现状与缺口—系统介入与结果页，支持左右各 2 项。"
-      },
-      "reviewReason": "仅用于可诚实拆分为两项现状/缺口和两项介入/结果的因果表达。"
     },
     {
       "assetId": "business-model-canvas-001",
@@ -225,13 +88,6 @@
       "adaptationStatus": "partial",
       "supportedIntents": { "baseRelations": ["causal"], "purposeKeys": ["connect_problems_and_solutions"] },
       "reviewReason": "要求左右问题与方案以及底部持续行动共同存在。"
-    },
-    {
-      "assetId": "organization-tree-001",
-      "abstractionLevel": "composite",
-      "adaptationStatus": "partial",
-      "supportedIntents": { "baseRelations": ["hierarchy"], "purposeKeys": ["explain_organization"] },
-      "reviewReason": "组织角色语义明确，但不是通用层级语法。"
     },
     {
       "assetId": "evolution-staircase-001",

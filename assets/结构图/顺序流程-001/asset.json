@@ -12,6 +12,31 @@
   "generator": "generate.mjs",
   "showcase": "example.pptx",
   "parameters": ["title", "steps"],
+  "runtime": {
+    "entry": "generate.mjs",
+    "builderExport": "buildSequentialProcess",
+    "mapperExport": "mapPageContent",
+    "familyId": "sequential-process",
+    "variantId": "horizontal-cards",
+    "silhouette": "horizontal-card-chain",
+    "supportedBaseRelations": ["sequence"],
+    "supportedPurposeKeys": [],
+    "itemCount": { "min": 3, "preferred": [3, 4], "max": 6 },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "semantic": { "ordered": true },
+        "relationTraits": { "branched": false, "cyclic": false },
+        "density": ["low", "medium"]
+      }
+    }
+  },
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "3–6 个顺序步骤",
+    "rule": "按当前步骤数重新计算卡片宽度和等距间隔；不同视觉变体保持同一顺序语义"
+  },
   "spatialContract": {
     "coordinateSystem": { "width": 1280, "height": 720 },
     "contentFrame": { "left": 40, "top": 135, "width": 1200, "height": 520 },

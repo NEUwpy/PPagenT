@@ -15,33 +15,6 @@ import {
 } from "../selection/visual-variants.mjs";
 import { northeasternUniversitySkin } from "../runtime/skins/northeastern-university.mjs";
 
-const SKIN_CANDIDATES = {
-  present_cover: {
-    familyId: "skin-cover",
-    assetId: "northeastern-university-cover-001",
-    variantId: "default",
-    silhouette: "cover",
-    adaptationStatus: "fixed",
-    compositionIds: ["fixed-cover"],
-  },
-  present_closing: {
-    familyId: "skin-closing",
-    assetId: "northeastern-university-closing-001",
-    variantId: "default",
-    silhouette: "closing",
-    adaptationStatus: "fixed",
-    compositionIds: ["fixed-closing"],
-  },
-};
-
-const BODY_CANDIDATE = {
-  familyId: "skin-body-editorial",
-  assetId: "northeastern-university-body-001",
-  variantId: "editorial",
-  silhouette: "editorial-page",
-  adaptationStatus: "adaptive",
-};
-
 function publicVariant(variant, contract, compositionIds) {
   return {
     familyId: variant.familyId,
@@ -50,6 +23,8 @@ function publicVariant(variant, contract, compositionIds) {
     silhouette: variant.silhouette,
     adaptationStatus: contract.adaptationStatus,
     itemCount: variant.itemCount,
+    renderer: variant.renderer,
+    fallbackBody: variant.fallbackBody,
     compositionIds,
   };
 }
@@ -79,12 +54,19 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
 
   return pageIntents.map((intent, index) => {
     const pageId = pageContents[index].pageId;
-    const skinCandidate = SKIN_CANDIDATES[intent.purposeKey];
-    if (skinCandidate) {
+    const contractsById = new Map(renderableContracts.map((contract) => [contract.assetId, contract]));
+    const skinVariant = variants.find((variant) => (
+      variant.renderer === "skin"
+      && !variant.fallbackBody
+      && variant.supportedPurposeKeys?.includes(intent.purposeKey)
+    ));
+    if (skinVariant) {
       return {
         pageId,
         intentId: intent.intentId,
-        candidates: coreAssetIds.has(skinCandidate.assetId) ? [skinCandidate] : [],
+        candidates: coreAssetIds.has(skinVariant.assetId)
+          ? [publicVariant(skinVariant, contractsById.get(skinVariant.assetId), skinVariant.compositionIds)]
+          : [],
       };
     }
 
@@ -94,7 +76,6 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
       includeDeferred: false,
       enableFallback: false,
     });
-    const contractsById = new Map(renderableContracts.map((contract) => [contract.assetId, contract]));
     const structuralCandidates = semantic.candidates.flatMap((candidate) => {
       const compatible = queryVisualVariants(variantsByAsset.get(candidate.assetId) ?? [], {
         itemCount: intent.structure.itemCount,
@@ -110,12 +91,15 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
         compositionIds,
       ));
     });
-    const bodyMetadata = metadataById.get(BODY_CANDIDATE.assetId);
-    const bodyCandidate = {
-      ...BODY_CANDIDATE,
-      compositionIds: compositionCandidatesForAsset(layouts, BODY_CANDIDATE.assetId, bodyMetadata)
+    const bodyVariant = variants.find((variant) => variant.renderer === "skin" && variant.fallbackBody);
+    if (!bodyVariant) throw new Error("核心资产包缺少正文兜底页");
+    const bodyMetadata = metadataById.get(bodyVariant.assetId);
+    const bodyCandidate = publicVariant(
+      bodyVariant,
+      contractsById.get(bodyVariant.assetId),
+      compositionCandidatesForAsset(layouts, bodyVariant.assetId, bodyMetadata)
         .map((layout) => layout.id),
-    };
+    );
     return {
       pageId,
       intentId: intent.intentId,

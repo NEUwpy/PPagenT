@@ -1,49 +1,32 @@
 import {
-  buildComparison,
   buildCausalChain,
-  buildCycleLoop,
-  buildLayeredArchitectureAdaptive,
-  buildRadialHub,
   buildRadialHubSplitWing,
-  buildProblemImprovement,
   buildRoleHandoff,
-  buildSequentialProcess,
   buildSequentialProcessRibbon,
   buildSequentialProcessStaircase,
-  buildSwimlaneProcess,
   renderComponentIntoSlide,
 } from "../asset-runtime/component-builders.mjs";
-import { buildOrganizationTree } from "../asset-runtime/history-organization-builders.mjs";
 import { discoverCoreAssetPackages } from "./core-asset-packages.mjs";
 
-const DEFAULT_BUILDERS = new Map([
-  ["comparison-structure-001", buildComparison],
-  ["cycle-loop-001", buildCycleLoop],
-  ["layered-architecture-001", buildLayeredArchitectureAdaptive],
-  ["radial-hub-001", buildRadialHub],
-  ["sequential-process-001", buildSequentialProcess],
-  ["swimlane-process-001", buildSwimlaneProcess],
-  ["problem-improvement-001", buildProblemImprovement],
-  ["organization-tree-001", buildOrganizationTree],
-]);
+const DEFAULT_BUILDERS = new Map();
 
 const VARIANT_BUILDERS = new Map([
-  ["comparison-structure-001:default", buildComparison],
-  ["cycle-loop-001:default", buildCycleLoop],
-  ["layered-architecture-001:default", buildLayeredArchitectureAdaptive],
-  ["radial-hub-001:orbit", buildRadialHub],
   ["radial-hub-001:split-wing", buildRadialHubSplitWing],
-  ["sequential-process-001:horizontal-cards", buildSequentialProcess],
   ["sequential-process-001:ribbon", buildSequentialProcessRibbon],
   ["sequential-process-001:staircase", buildSequentialProcessStaircase],
   ["sequential-process-001:role-handoff", buildRoleHandoff],
   ["sequential-process-001:causal-chain", buildCausalChain],
-  ["swimlane-process-001:default", buildSwimlaneProcess],
-  ["problem-improvement-001:default", buildProblemImprovement],
-  ["organization-tree-001:default", buildOrganizationTree],
 ]);
 
-for (const assetPackage of await discoverCoreAssetPackages()) {
+const CORE_ASSET_PACKAGES = await discoverCoreAssetPackages();
+const CORE_SKIN_ASSET_IDS = new Set(
+  CORE_ASSET_PACKAGES
+    .filter((item) => item.runtime.renderer === "skin")
+    .map((item) => item.assetId),
+);
+
+for (const assetPackage of CORE_ASSET_PACKAGES) {
+  if (!assetPackage.builder) continue;
   DEFAULT_BUILDERS.set(assetPackage.assetId, assetPackage.builder);
   VARIANT_BUILDERS.set(
     `${assetPackage.assetId}:${assetPackage.runtime.variantId}`,
@@ -77,9 +60,5 @@ export function renderStructureAsset(slide, renderPayload, skin, targetFrame = s
 }
 
 export function isSkinOnlyAsset(assetId) {
-  return new Set([
-    "northeastern-university-cover-001",
-    "northeastern-university-closing-001",
-    "northeastern-university-body-001",
-  ]).has(assetId);
+  return CORE_SKIN_ASSET_IDS.has(assetId);
 }

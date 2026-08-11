@@ -12,14 +12,9 @@ export async function loadCompositionLayouts(root = process.cwd()) {
 }
 
 export async function loadCoreAssetMetadata(root = process.cwd()) {
-  const registry = await readJson(path.join(root, "assets", "registry.json"));
-  const legacyRecords = await Promise.all(registry.assets.map(async (entry) => {
-    const metadata = await readJson(path.join(root, "assets", entry.path, "asset.json"));
-    return [entry.id, metadata];
-  }));
   const packageRecords = (await discoverCoreAssetPackages(root))
     .map((item) => [item.assetId, item.asset]);
-  return new Map([...legacyRecords, ...packageRecords]);
+  return new Map(packageRecords);
 }
 
 export function assetKind(assetId, metadata) {

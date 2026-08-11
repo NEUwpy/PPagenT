@@ -12,6 +12,31 @@
   "generator": "generate.mjs",
   "showcase": "example.pptx",
   "parameters": ["title", "problemTitle", "improvementTitle", "problems", "improvements"],
+  "runtime": {
+    "entry": "generate.mjs",
+    "builderExport": "buildProblemImprovement",
+    "mapperExport": "mapPageContent",
+    "familyId": "problem-improvement",
+    "variantId": "default",
+    "silhouette": "problem-to-improvement-panels",
+    "supportedBaseRelations": ["causal"],
+    "supportedPurposeKeys": ["connect_problems_and_solutions"],
+    "itemCount": { "min": 4, "preferred": [4], "max": 4 },
+    "contract": {
+      "abstractionLevel": "composite",
+      "adaptationStatus": "partial",
+      "constraints": {
+        "semantic": { "ordered": true },
+        "relationTraits": { "cyclic": false, "branched": false },
+        "density": ["medium"]
+      }
+    }
+  },
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "左右各 2–3 项",
+    "rule": "左右承载面保持等宽等高；两侧分别按当前数量重新等距排列"
+  },
   "spatialContract": {
     "coordinateSystem": { "width": 1280, "height": 720 },
     "contentFrame": { "left": 40, "top": 135, "width": 1200, "height": 520 },

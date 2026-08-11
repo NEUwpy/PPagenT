@@ -12,6 +12,34 @@
   "generator": "generate.mjs",
   "showcase": "example.pptx",
   "parameters": ["title", "left", "right", "centerLabel"],
+  "runtime": {
+    "entry": "generate.mjs",
+    "builderExport": "buildComparison",
+    "mapperExport": "mapPageContent",
+    "familyId": "comparison-structure",
+    "variantId": "default",
+    "silhouette": "symmetric-column-contrast",
+    "supportedBaseRelations": ["comparison"],
+    "supportedPurposeKeys": [],
+    "itemCount": { "min": 2, "preferred": [2], "max": 2 },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "metrics": [
+          { "field": "groups", "min": 2, "preferred": [2], "max": 2 },
+          { "field": "itemsPerGroup", "min": 1, "preferred": [2, 3, 4], "max": 5 }
+        ],
+        "semantic": { "ordered": false },
+        "density": ["low", "medium"]
+      }
+    }
+  },
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "左右各 1–5 个要点",
+    "rule": "双栏始终镜像等宽；同侧要点按当前数量重新等距分布，不能从最大数量版式删项"
+  },
   "spatialContract": {
     "coordinateSystem": { "width": 1280, "height": 720 },
     "contentFrame": { "left": 40, "top": 135, "width": 1200, "height": 520 },
