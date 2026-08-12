@@ -19,7 +19,8 @@
           "id": { "type": "string", "minLength": 1 },
           "title": { "type": "string" },
           "body": { "type": "string" },
-          "emphasis": { "type": "boolean" }
+          "emphasis": { "type": "boolean" },
+          "polarity": { "enum": ["positive", "negative", "neutral"] }
         }
       }
     },

@@ -9,7 +9,7 @@ const CYAN = "#009DD9";
 const AQUA = "#0BD0D9";
 const DARK = "#404040";
 const MUTED = "#7F7F7F";
-const SOURCE = "workbench/source-archive/狗哥蓝色-精美逻辑图PPT模板.pptx";
+const SOURCE = "PPT源/狗哥蓝色-精美逻辑图PPT模板.pptx";
 
 function parseArgs(argv) {
   const values = {};

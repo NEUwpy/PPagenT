@@ -12,8 +12,18 @@ export function mapPageContent(content, intent) {
   if (!left || !right) throw new Error(`${content.pageId} 的双向对比需要两个内容组`);
   return renderPayload(intent, "comparison-structure-001", {
     title: content.title,
-    left: { title: left.title, items: splitPoints(left.body), emphasis: Boolean(left.emphasis) },
-    right: { title: right.title, items: splitPoints(right.body), emphasis: Boolean(right.emphasis) },
+    left: {
+      title: left.title,
+      items: splitPoints(left.body),
+      emphasis: Boolean(left.emphasis),
+      polarity: left.polarity ?? "neutral",
+    },
+    right: {
+      title: right.title,
+      items: splitPoints(right.body),
+      emphasis: Boolean(right.emphasis),
+      polarity: right.polarity ?? "neutral",
+    },
     centerLabel: content.notes || "对比",
   }, [mapping(left.id, "left"), mapping(right.id, "right")]);
 }

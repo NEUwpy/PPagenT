@@ -8,7 +8,7 @@ import {
   prepareTemplateMappedStarter,
 } from "../../asset-runtime/template-utils.mjs";
 import { isSkinOnlyAsset, renderStructureAsset } from "../assets.mjs";
-import { wrapChineseText } from "../../render/chinese-typography.mjs";
+import { fitChineseTextToFrame } from "../../render/chinese-typography.mjs";
 import { loadCompositionLayouts } from "../../composition/layouts.mjs";
 import { renderPageComposition } from "../../render/page-composition.mjs";
 
@@ -39,7 +39,44 @@ export const northeasternUniversitySkin = {
       componentMeta: 17,
     },
   },
+  typographyRoles: {
+    displayTypeface: "汉仪文润宋韵 U",
+    bodyTypeface: "Microsoft YaHei",
+    coverTitle: { fontSizes: [64, 58, 52], maxLines: 2, lineHeight: 1.15 },
+    coverSubtitle: { fontSizes: [30, 28, 26], maxLines: 2, lineHeight: 1.2 },
+    coverMeta: { fontSizes: [24, 22, 20], maxLines: 2, lineHeight: 1.2 },
+    pageTitle: { fontSizes: [32], maxLines: 1, lineHeight: 1.1 },
+    closingTitle: { fontSizes: [52, 48, 44], maxLines: 3, lineHeight: 1.1 },
+    composition: {
+      leadTitle: { fontSizes: [30, 27, 24], maxLines: 4 },
+      leadBody: { fontSizes: [19, 18, 17], maxLines: 6 },
+      rowTitle: { fontSizes: [23, 21, 19], maxLines: 1 },
+      rowBody: { fontSizes: [18, 17, 16], maxLines: 4 },
+      asideTitle: { fontSizes: [27, 24, 22], maxLines: 4 },
+      asideBody: { fontSizes: [18, 17, 16], maxLines: 8 },
+      singleTitle: { fontSizes: [36, 32, 28], maxLines: 2 },
+      singleBody: { fontSizes: [24, 22, 20], maxLines: 5 },
+      singleSupport: { fontSizes: [19, 18, 17], maxLines: 3 },
+    },
+  },
 };
+
+function fitSkinText(value, frame, roleName, { preferSemanticBreaks = false } = {}) {
+  const role = northeasternUniversitySkin.typographyRoles[roleName];
+  const result = fitChineseTextToFrame(value, {
+    ...frame,
+    ...role,
+    preferSemanticBreaks,
+  });
+  if (!result?.fits) {
+    const error = new Error(`${roleName} 文本无法在 Skin 允许的字号档位内排下`);
+    error.code = "SKIN_TEXT_FIT_FAILED";
+    error.role = roleName;
+    error.text = value;
+    throw error;
+  }
+  return result;
+}
 
 function sourceNotes(page, manuscriptSource) {
   return [
@@ -56,42 +93,113 @@ function pageRecipe(page, index, manuscriptSource) {
   const assetId = page.payload.assetId;
   const notes = sourceNotes(page, manuscriptSource);
   if (assetId === "northeastern-university-cover-001") {
+    const titleFrame = { left: 16.98, top: 198.16, width: 1252.71, height: 169.4 };
+    const subtitleFrame = { left: 240, top: 400, width: 800, height: 76 };
+    const metaFrame = { left: 390, top: 548, width: 500, height: 72 };
+    const title = fitSkinText(page.payload.parameters.title || "", titleFrame, "coverTitle", {
+      preferSemanticBreaks: true,
+    });
+    const subtitleSource = page.payload.parameters.subtitle || "";
+    const subtitle = subtitleSource
+      ? fitSkinText(`— ${subtitleSource}`, subtitleFrame, "coverSubtitle", { preferSemanticBreaks: true })
+      : { text: "", fontSize: northeasternUniversitySkin.typographyRoles.coverSubtitle.fontSizes[0] };
+    const metaSource = [
+      page.payload.parameters.presenter ? `汇报人：${page.payload.parameters.presenter}` : "",
+      page.payload.parameters.organization || "",
+      page.payload.parameters.date || "",
+    ].filter(Boolean).join("｜");
+    const meta = metaSource
+      ? fitSkinText(metaSource, metaFrame, "coverMeta")
+      : { text: "", fontSize: northeasternUniversitySkin.typographyRoles.coverMeta.fontSizes[0] };
     return {
       sourceSlideNumber: 1,
       textEdits: [
-        { sourceText: "MDM方法偏移量自适应选取", replacementText: page.payload.parameters.title },
+        {
+          sourceText: "MDM方法偏移量自适应选取",
+          replacementText: title.text,
+          position: titleFrame,
+          textStyle: {
+            typeface: northeasternUniversitySkin.typographyRoles.displayTypeface,
+            fontSize: title.fontSize,
+            autoFit: "none",
+            alignment: "center",
+            verticalAlignment: "middle",
+          },
+        },
         {
           sourceText: "汇报人：魏鹏宇",
-          replacementText: wrapChineseText(
-            page.payload.parameters.subtitle
-              || (page.payload.parameters.presenter ? `汇报人：${page.payload.parameters.presenter}` : ""),
-            14,
-          ),
-          position: { left: 390, top: 448, width: 500, height: 150 },
-          textStyle: { fontSize: 26, autoFit: "shrinkText", alignment: "center", verticalAlignment: "middle" },
+          replacementText: subtitle.text,
+          position: subtitleFrame,
+          textStyle: {
+            typeface: northeasternUniversitySkin.typographyRoles.displayTypeface,
+            fontSize: subtitle.fontSize,
+            autoFit: "none",
+            alignment: "center",
+            verticalAlignment: "middle",
+          },
         },
-        { sourceText: "2026.07.20", replacementText: page.payload.parameters.date },
+        {
+          sourceText: "2026.07.20",
+          replacementText: meta.text,
+          position: metaFrame,
+          textStyle: {
+            typeface: northeasternUniversitySkin.typographyRoles.bodyTypeface,
+            fontSize: meta.fontSize,
+            autoFit: "none",
+            alignment: "center",
+            verticalAlignment: "middle",
+          },
+        },
       ],
       notes,
     };
   }
 
   if (assetId === "northeastern-university-closing-001") {
+    const closingFrame = { left: 16.98, top: 198.16, width: 1252.71, height: 169.4 };
+    const closing = fitSkinText(
+      page.payload.parameters.text || "",
+      closingFrame,
+      "closingTitle",
+      { preferSemanticBreaks: true },
+    );
     return {
       sourceSlideNumber: 4,
       textEdits: [
-        { sourceText: "敬请老师批评指正", replacementText: page.payload.parameters.text },
+        {
+          sourceText: "敬请老师批评指正",
+          replacementText: closing.text,
+          position: closingFrame,
+          textStyle: {
+            typeface: northeasternUniversitySkin.typographyRoles.displayTypeface,
+            fontSize: closing.fontSize,
+            autoFit: "none",
+            alignment: "center",
+            verticalAlignment: "middle",
+          },
+        },
       ],
       notes,
     };
   }
 
+  const bodyTitleFrame = { left: 9.04, top: 88.85, width: 1250.55, height: 48.47 };
+  const bodyTitle = fitSkinText(page.content.title, bodyTitleFrame, "pageTitle");
   return {
     sourceSlideNumber: 3,
     textEdits: [
       { sourceText: "01", replacementText: String(index).padStart(2, "0") },
       { sourceText: "正文页", replacementText: page.meta.sectionName || "核心观点" },
-      { sourceText: "主旨句", replacementText: page.content.title },
+      {
+        sourceText: "主旨句",
+        replacementText: bodyTitle.text,
+        position: bodyTitleFrame,
+        textStyle: {
+          typeface: northeasternUniversitySkin.typographyRoles.displayTypeface,
+          fontSize: bodyTitle.fontSize,
+          autoFit: "none",
+        },
+      },
       { sourceText: "正文", replacementText: "", writeMode: "replace-all" },
     ],
     deletions: [
@@ -133,6 +241,7 @@ export async function renderNortheasternUniversityDeck({
       layout,
       page.composition,
       northeasternUniversitySkin.bodyFrame,
+      northeasternUniversitySkin.typographyRoles,
     );
     if (!isSkinOnlyAsset(page.payload.assetId)) {
       if (!componentFrame) throw new Error(`${page.composition.compositionId} is missing a component slot`);

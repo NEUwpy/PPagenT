@@ -34,6 +34,79 @@ function textUnits(value) {
   }, 0);
 }
 
+function semanticTwoLineWrap(value, maxUnits) {
+  const source = String(value ?? "").trim();
+  if (!source || textUnits(source) <= maxUnits) return source;
+  const chars = [...source];
+  const candidates = [];
+  chars.forEach((char, index) => {
+    if (!/[，。：；！？]/u.test(char) || index >= chars.length - 1) return;
+    const left = chars.slice(0, index + 1).join("");
+    const right = chars.slice(index + 1).join("");
+    const leftUnits = textUnits(left);
+    const rightUnits = textUnits(right);
+    const shorterRatio = Math.min(leftUnits, rightUnits) / Math.max(1, leftUnits + rightUnits);
+    if (leftUnits <= maxUnits && rightUnits <= maxUnits && shorterRatio >= 0.2) {
+      candidates.push({ left, right, score: Math.abs(leftUnits - rightUnits) });
+    }
+  });
+  if (candidates.length) {
+    candidates.sort((a, b) => a.score - b.score);
+    return `${candidates[0].left}\n${candidates[0].right}`;
+  }
+  return wrapChineseText(source, maxUnits);
+}
+
+/**
+ * 用 Skin 声明的离散字号档位，把中文文本放进已知容器。
+ * 这不是无限缩字：只尝试角色允许的字号，仍放不下时返回 fits=false，
+ * 由上层换版式、拆页或失败关闭。
+ */
+export function fitChineseTextToFrame(value, {
+  width,
+  height,
+  fontSizes,
+  maxLines,
+  lineHeight = 1.15,
+  glyphWidthFactor = 0.95,
+  preferSemanticBreaks = false,
+} = {}) {
+  const source = String(value ?? "");
+  if (!Number.isFinite(width) || width <= 0 || !Number.isFinite(height) || height <= 0) {
+    throw new Error("文字适配需要有效的容器宽高");
+  }
+  if (!Array.isArray(fontSizes) || !fontSizes.length || fontSizes.some((size) => !Number.isFinite(size) || size <= 0)) {
+    throw new Error("文字适配需要至少一个有效字号档位");
+  }
+  if (!Number.isInteger(maxLines) || maxLines < 1) throw new Error("文字适配需要正整数 maxLines");
+
+  const sizes = [...new Set(fontSizes)].sort((a, b) => b - a);
+  let fallback = null;
+  for (const fontSize of sizes) {
+    const maxUnits = width / (fontSize * glyphWidthFactor);
+    const paragraphs = source.split(/\r?\n/);
+    const text = paragraphs.map((paragraph) => (
+      preferSemanticBreaks
+        ? semanticTwoLineWrap(paragraph, maxUnits)
+        : wrapChineseText(paragraph, maxUnits)
+    )).join("\n");
+    const lines = text.split("\n");
+    const widest = Math.max(0, ...lines.map((line) => textUnits(line)));
+    const result = {
+      text,
+      fontSize,
+      lineCount: lines.length,
+      maxUnits,
+      fits: lines.length <= maxLines
+        && widest <= maxUnits + 0.5
+        && lines.length * fontSize * lineHeight <= height,
+    };
+    fallback = result;
+    if (result.fits) return result;
+  }
+  return fallback;
+}
+
 function lineTokens(value) {
   const tokens = [];
   for (const { segment } of ZH_WORD_SEGMENTER.segment(String(value ?? ""))) {

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { wrapChineseText } from "../src/render/chinese-typography.mjs";
+import { fitChineseTextToFrame, wrapChineseText } from "../src/render/chinese-typography.mjs";
 
 test("中文容量适配保持词语、数量短语和标点完整", () => {
   const cases = [
@@ -15,4 +15,40 @@ test("中文容量适配保持词语、数量短语和标点完整", () => {
     assert.doesNotMatch(wrapped, /\n[、，。：；！？,.!?)]/u);
     for (const phrase of protectedPhrases) assert.match(wrapped, new RegExp(phrase.replace(".", "\\."), "u"));
   }
+});
+
+test("Skin 标题使用离散字号并优先在语义标点处换行", () => {
+  const cover = fitChineseTextToFrame("让“六地”红，成为理工青年最鲜亮的青春底色", {
+    width: 1252.71,
+    height: 169.4,
+    fontSizes: [64, 58, 52],
+    maxLines: 2,
+    lineHeight: 1.15,
+    preferSemanticBreaks: true,
+  });
+  assert.equal(cover.fits, true);
+  assert.equal(cover.fontSize, 64);
+  assert.equal(cover.text, "让“六地”红，\n成为理工青年最鲜亮的青春底色");
+
+  const closing = fitChineseTextToFrame("“六地”红：成为理工青年最鲜亮的青春底色\n我的汇报完毕，谢谢大家！", {
+    width: 1252.71,
+    height: 169.4,
+    fontSizes: [52, 48, 44],
+    maxLines: 3,
+    lineHeight: 1.1,
+    preferSemanticBreaks: true,
+  });
+  assert.equal(closing.fits, true);
+  assert.ok(closing.fontSize <= 52);
+  assert.ok(closing.lineCount <= 3);
+});
+
+test("文字低于 Skin 最小字号仍放不下时失败关闭", () => {
+  const result = fitChineseTextToFrame("这是一段明显超过单行标题容量而且不能继续缩小字号的文字", {
+    width: 240,
+    height: 34,
+    fontSizes: [32],
+    maxLines: 1,
+  });
+  assert.equal(result.fits, false);
 });

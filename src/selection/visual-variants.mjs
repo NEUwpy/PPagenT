@@ -28,7 +28,14 @@ export async function loadVisualVariantCatalog(root = process.cwd()) {
   return [
     ...catalog.variants.filter((variant) => !packagedKeys.has(`${variant.assetId}:${variant.variantId}`)),
     ...packagedVariants,
-  ].map((variant) => ({ ...variant, itemCount: { ...variant.itemCount } }));
+  ]
+    .map((variant) => ({ ...variant, itemCount: { ...variant.itemCount } }))
+    .sort((left, right) => (
+      Number(right.origin === "self-describing-asset") - Number(left.origin === "self-describing-asset")
+      || left.familyId.localeCompare(right.familyId)
+      || left.assetId.localeCompare(right.assetId)
+      || left.variantId.localeCompare(right.variantId)
+    ));
 }
 
 export async function loadCoreAssetIds(root = process.cwd()) {

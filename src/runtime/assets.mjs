@@ -52,7 +52,13 @@ export function renderStructureAsset(slide, renderPayload, skin, targetFrame = s
     ? VARIANT_BUILDERS.get(`${renderPayload.assetId}:${variantId}`)
     : DEFAULT_BUILDERS.get(renderPayload.assetId);
   if (!builder) throw new Error(`运行时没有结构资产生成器：${renderPayload.assetId}`);
-  return renderComponentIntoSlide(builder, slide, renderPayload.parameters, {
+  const embeddedParameters = {
+    ...renderPayload.parameters,
+    // The Skin owns the visible page title. Component title limits only apply
+    // to standalone showcases, where the builder draws that title itself.
+    title: "核心结构",
+  };
+  return renderComponentIntoSlide(builder, slide, embeddedParameters, {
     sourceFrame: skin.componentSourceFrame,
     targetFrame,
     theme: skin.componentTheme,

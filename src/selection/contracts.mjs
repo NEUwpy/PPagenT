@@ -49,7 +49,7 @@ export async function loadContractCatalog(root = process.cwd()) {
       ],
     },
     evidence: {
-      basis: ["asset-package", "user-review"],
+      basis: ["metadata", "user-confirmation"],
       realManuscriptValidated: true,
       notes: item.asset.review ?? "用户确认后进入核心资产包。",
     },

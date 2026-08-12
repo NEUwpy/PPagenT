@@ -5,6 +5,7 @@ import {
   computeComparisonColumnRows,
   computeSwimlaneLayout,
   comparisonPalette,
+  comparisonStatusMarker,
   createPresentation,
   normalizeSequentialSteps,
   resolveComparisonEmphasis,
@@ -75,13 +76,20 @@ test("泳道标签与泳道底板保留明确间隔，三角色任务卡落在�
   assert.ok(layout.conclusionTop + layout.conclusionHeight <= 628);
 });
 
-test("双栏对比的非重点表面使用可见蓝灰底与边线，不会白底叠白框", () => {
-  const palette = comparisonPalette({ deEmphasized: true, side: "left" });
-  assert.notEqual(palette.nodeFill, "#FFFFFF");
-  assert.notEqual(palette.cardFill, "#FFFFFF");
-  assert.notEqual(palette.cardFill, "#F4F7FA");
-  assert.notEqual(palette.lineFill, "none");
-  assert.equal(palette.textColor, "#FFFFFF");
+test("双栏对比由 polarity 决定背景语义，emphasis 不会把正向内容变灰", () => {
+  const positive = comparisonPalette({ polarity: "positive", focused: false, side: "left" });
+  const negative = comparisonPalette({ polarity: "negative", focused: true, side: "right" });
+  assert.match(positive.cardFill, /#2F5EA8|#379BEF/u);
+  assert.doesNotMatch(positive.cardFill, /#6E7987|#98A3B1/u);
+  assert.match(negative.cardFill, /#6E7987|#98A3B1/u);
+  assert.equal(negative.markerFill, "#5E6977");
+  assert.equal(positive.textColor, "#FFFFFF");
+});
+
+test("双栏对比把褒贬方向与视觉重点分开", () => {
+  assert.equal(comparisonStatusMarker({ polarity: "positive", emphasis: false }), "✓");
+  assert.equal(comparisonStatusMarker({ polarity: "negative", emphasis: true }), "×");
+  assert.equal(comparisonStatusMarker({ polarity: "neutral", emphasis: true }), "•");
 });
 
 test("双栏对比 1–5 行都保持在面板内且互不重叠", () => {

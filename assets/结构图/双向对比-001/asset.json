@@ -6,12 +6,12 @@
   "creationMethod": "distillation",
   "status": "core",
   "source": {
-    "file": "workbench/source-archive/狗哥蓝色-精美逻辑图PPT模板.pptx",
+    "file": "PPT源/狗哥蓝色-精美逻辑图PPT模板.pptx",
     "slides": [55]
   },
   "generator": "generate.mjs",
   "showcase": "example.pptx",
-  "parameters": ["title", "left", "right", "centerLabel"],
+  "parameters": ["title", "left", "right", "centerLabel", "left.polarity", "right.polarity"],
   "runtime": {
     "entry": "generate.mjs",
     "builderExport": "buildComparison",
@@ -51,10 +51,10 @@
     "safePadding": 12,
     "supportedCompositionIds": ["component-full"]
   },
-  "capacity": "左右各 1–5 个要点；两侧等宽等高，重点只用颜色与状态标记表达",
+  "capacity": "左右各 1–5 个要点；两侧等宽等高；positive 使用亮色与对号，negative 使用灰色与叉号，neutral 使用中性色义；emphasis 只改变视觉权重",
   "visualContract": {
     "canonicalSource": "狗哥蓝色模板第 55 页",
-    "required": ["镜像双栏", "中央关系标记", "独立有色承载面", "行列对齐"],
+    "required": ["镜像双栏", "中央关系标记", "独立有色承载面", "行列对齐", "颜色与 polarity 语义一致"],
     "forbidden": ["白底叠白框", "靠缩放破坏两侧对称", "按单页临时改造轮廓"]
   },
   "validation": "已按第 55 页完成忠实复现与换文案验证；需继续通过东北大学 Skin 真实稿件回归"

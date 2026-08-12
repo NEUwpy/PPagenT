@@ -1,12 +1,13 @@
 {
   "name": "ppagent",
-  "version": "0.6.1",
+  "version": "0.6.3",
   "private": true,
   "type": "module",
   "engines": {
     "node": ">=20"
   },
   "scripts": {
+    "setup:workspace": "node src/tools/setup-workspace-dependencies.mjs",
     "audit": "node src/tools/audit-asset-library.mjs . --mode public && node src/tools/audit-asset-coverage-checklist.mjs .",
     "audit:local": "node src/tools/audit-asset-library.mjs . --mode local && node src/tools/audit-asset-coverage-checklist.mjs .",
     "audit:coverage": "node src/tools/audit-asset-coverage-checklist.mjs .",

@@ -32,7 +32,7 @@ function publicVariant(variant, contract, compositionIds) {
 export function computeCapacityDensity(stats) {
   const estimatedTotal = stats.avgItemChars * stats.itemCount;
   if (stats.itemCount <= 4 && estimatedTotal <= 70 && stats.maxItemChars <= 32) return "low";
-  if (stats.itemCount <= 6 && estimatedTotal <= 180 && stats.maxItemChars <= 72) return "medium";
+  if (stats.itemCount <= 13 && estimatedTotal <= 180 && stats.maxItemChars <= 72) return "medium";
   return "high";
 }
 
@@ -247,6 +247,28 @@ export async function resolveVisualPlan({
         visualVariantId: candidate.variantId,
       });
     }
+  });
+  if (feedback.length) return { status: "needs-director-revision", feedback };
+
+  const recentBodyCompositions = [];
+  selections.forEach((candidate, index) => {
+    const metadata = metadataById.get(candidate.assetId);
+    if (assetKind(candidate.assetId, metadata) !== "body") return;
+    const compositionId = compositionPlan.pages[index].compositionId;
+    const recentRepeat = recentBodyCompositions.find((entry) => (
+      index - entry.index <= 2 && entry.compositionId === compositionId
+    ));
+    const alternatives = (candidate.compositionIds ?? []).filter((id) => id !== compositionId);
+    if (recentRepeat && alternatives.length) {
+      feedback.push({
+        pageId: pageContents[index].pageId,
+        code: "composition-rhythm-repeat",
+        compositionId,
+        previousPageId: pageContents[recentRepeat.index].pageId,
+        legalAlternatives: alternatives,
+      });
+    }
+    recentBodyCompositions.push({ index, compositionId });
   });
   if (feedback.length) return { status: "needs-director-revision", feedback };
 

@@ -688,21 +688,27 @@ export function resolveComparisonEmphasis(left, right) {
   return null;
 }
 
-export function comparisonPalette({ focused = false, deEmphasized = false, side = "left" } = {}) {
-  if (deEmphasized) {
+export function comparisonPalette({ focused = false, polarity = "neutral", side = "left" } = {}) {
+  if (polarity === "negative") {
     return {
-      nodeFill: "#8C98A8",
-      cardFill: "linear(0deg, #7E8A9A 0%, #9BA6B4 100%)",
-      lineFill: "#6B7684",
+      nodeFill: "#768290",
+      cardFill: "linear(0deg, #6E7987 0%, #98A3B1 100%)",
+      lineFill: focused ? THEME.cyan : "#B7C0CB",
+      markerFill: "#5E6977",
       textColor: "#FFFFFF",
     };
   }
+  const positive = polarity === "positive";
+  const primary = side === "left" ? THEME.accent : THEME.accentAlt;
   return {
-    nodeFill: side === "left" ? THEME.accent : THEME.accentAlt,
-    cardFill: side === "left"
-      ? `linear(0deg, ${THEME.accent} 0%, #3F7FD6 100%)`
-      : `linear(0deg, ${THEME.accentAlt} 0%, #379BEF 100%)`,
+    nodeFill: primary,
+    cardFill: positive
+      ? `linear(0deg, ${primary} 0%, #379BEF 100%)`
+      : side === "left"
+        ? `linear(0deg, ${THEME.accent} 0%, #3F7FD6 100%)`
+        : `linear(0deg, ${THEME.accentAlt} 0%, #379BEF 100%)`,
     lineFill: focused ? THEME.cyan : "#FFFFFF/18",
+    markerFill: primary,
     textColor: "#FFFFFF",
   };
 }
@@ -726,9 +732,16 @@ export function computeComparisonColumnRows(itemCount) {
   }));
 }
 
-function renderComparisonColumn(slide, side, group, palette, hasEmphasis) {
+export function comparisonStatusMarker(group = {}) {
+  if (group.polarity === "positive") return "✓";
+  if (group.polarity === "negative") return "×";
+  return "•";
+}
+
+function renderComparisonColumn(slide, side, group, palette) {
   const isLeft = side === "left";
   const panelId = `comparison-${side}-panel`;
+  const statusMarker = comparisonStatusMarker(group);
   const panelLeft = isLeft ? 90 : 750;
   addBox(slide, { left: panelLeft, top: 156, width: 440, height: 462 }, {
     name: qaElementName({ parent: panelId, domains: ["comparison-panels"] }),
@@ -771,10 +784,10 @@ function renderComparisonColumn(slide, side, group, palette, hasEmphasis) {
       height: 30,
     }, {
       name: qaElementName({ within: rowId, role: "status-marker" }),
-      fill: hasEmphasis && group.emphasis !== true ? "#5E6977" : isLeft ? THEME.accent : THEME.accentAlt,
+      fill: palette.markerFill,
       line: { style: "solid", fill: "none", width: 0 },
       shadow: "shadow-none",
-      text: hasEmphasis ? group.emphasis === true ? "✓" : "×" : "•",
+      text: statusMarker,
       fontSize: typographySize("componentMeta", 16),
       bold: true,
       color: "#FFFFFF",
@@ -800,8 +813,8 @@ export function buildComparison(presentation, params) {
   const emphasis = resolveComparisonEmphasis(params.left, params.right);
   const leftFocused = emphasis === "left";
   const rightFocused = emphasis === "right";
-  const leftPalette = comparisonPalette({ focused: leftFocused, deEmphasized: Boolean(emphasis && !leftFocused), side: "left" });
-  const rightPalette = comparisonPalette({ focused: rightFocused, deEmphasized: Boolean(emphasis && !rightFocused), side: "right" });
+  const leftPalette = comparisonPalette({ focused: leftFocused, polarity: params.left.polarity, side: "left" });
+  const rightPalette = comparisonPalette({ focused: rightFocused, polarity: params.right.polarity, side: "right" });
 
   addBox(slide, { left: 40, top: 135, width: 1200, height: 520 }, {
     fill: "linear(90deg, #FFFFFF 0%, #EEF6FC 52%, #FFFFFF 100%)",
@@ -809,8 +822,8 @@ export function buildComparison(presentation, params) {
     shadow: "shadow-none",
     borderRadius: 0,
   });
-  renderComparisonColumn(slide, "left", params.left, leftPalette, Boolean(emphasis));
-  renderComparisonColumn(slide, "right", params.right, rightPalette, Boolean(emphasis));
+  renderComparisonColumn(slide, "left", params.left, leftPalette);
+  renderComparisonColumn(slide, "right", params.right, rightPalette);
 
   const centerId = "comparison-center";
   addCircle(slide, { left: 570, top: 300, width: 140, height: 140 }, {
@@ -2186,4 +2199,3 @@ export function buildLayeredArchitecture(presentation, params) {
   appNodes.forEach((node) => node.bringToFront());
   return slide;
 }
-

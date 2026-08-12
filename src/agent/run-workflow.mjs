@@ -86,7 +86,7 @@ export async function runWorkflowCli(options) {
   const provider = providerModule.default ?? providerModule.provider;
   if (!provider) throw new Error("DirectorProvider 模块必须导出 default 或 provider");
   const renderer = createNortheasternUniversityRenderer({
-    sourcePptx: path.join(root, "PPT模板-封面正文尾页.pptx"),
+    sourcePptx: path.join(root, "PPT源", "PPT模板-封面正文尾页.pptx"),
     outputPptx: path.resolve(options.output),
     manuscriptSource: path.relative(root, inputPath).replaceAll("\\", "/"),
   });
