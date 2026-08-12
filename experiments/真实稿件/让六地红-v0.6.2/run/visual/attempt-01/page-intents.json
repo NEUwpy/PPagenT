@@ -1,0 +1,438 @@
+[
+  {
+    "schemaVersion": "1.1",
+    "intentId": "i01",
+    "purposeKey": "present_cover",
+    "purposeText": "呈现案例标题与副标题",
+    "baseRelation": "none",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 1,
+      "ordered": false,
+      "sameLevel": false
+    },
+    "density": "unknown",
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95,
+    "assumptions": [],
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 1,
+      "maxItemChars": 23,
+      "avgItemChars": 23,
+      "minItemChars": 23,
+      "maxItemTitleChars": 0,
+      "maxItemBodyChars": 23,
+      "imbalanceRatio": 1
+    }
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "i02",
+    "purposeKey": "compare_options",
+    "purposeText": "对照理工学生党员同时存在的三高与三低",
+    "baseRelation": "comparison",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 2,
+      "secondaryDimension": "domain"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "sameLevel": false,
+      "dimensions": {
+        "groups": 2,
+        "itemsPerGroup": 3
+      }
+    },
+    "density": "unknown",
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95,
+    "assumptions": [],
+    "contentStats": {
+      "titleChars": 12,
+      "itemCount": 2,
+      "maxItemChars": 25,
+      "avgItemChars": 19,
+      "minItemChars": 13,
+      "maxItemTitleChars": 2,
+      "maxItemBodyChars": 23,
+      "imbalanceRatio": 1.92
+    }
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "i03",
+    "purposeKey": "explain_topics",
+    "purposeText": "围绕深耕辽宁呈现六块同级红色标识",
+    "baseRelation": "hub",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 2,
+      "secondaryDimension": "category"
+    },
+    "structure": {
+      "itemCount": 6,
+      "ordered": false,
+      "sameLevel": true
+    },
+    "density": "unknown",
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95,
+    "assumptions": [],
+    "contentStats": {
+      "titleChars": 15,
+      "itemCount": 6,
+      "maxItemChars": 8,
+      "avgItemChars": 7.33,
+      "minItemChars": 7,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 0,
+      "imbalanceRatio": 1.14
+    }
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "i04",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列说明研学链、青春课堂、教育场景和育人生态",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 2,
+      "secondaryDimension": "category"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "sameLevel": true
+    },
+    "density": "unknown",
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95,
+    "assumptions": [],
+    "contentStats": {
+      "titleChars": 18,
+      "itemCount": 4,
+      "maxItemChars": 29,
+      "avgItemChars": 22.25,
+      "minItemChars": 18,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 21,
+      "imbalanceRatio": 1.61
+    }
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "i05",
+    "purposeKey": "explain_process",
+    "purposeText": "说明任务单从记录到解决问题再到形成课题的推进",
+    "baseRelation": "sequence",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": true,
+      "sameLevel": false
+    },
+    "density": "medium",
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95,
+    "assumptions": [],
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 4,
+      "maxItemChars": 35,
+      "avgItemChars": 18.25,
+      "minItemChars": 11,
+      "maxItemTitleChars": 4,
+      "maxItemBodyChars": 31,
+      "imbalanceRatio": 3.18
+    }
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "i06",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列呈现VR基地的数据、课程、覆盖与认可",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 2,
+      "secondaryDimension": "category"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "sameLevel": true
+    },
+    "density": "unknown",
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95,
+    "assumptions": [],
+    "contentStats": {
+      "titleChars": 24,
+      "itemCount": 4,
+      "maxItemChars": 23,
+      "avgItemChars": 20.25,
+      "minItemChars": 16,
+      "maxItemTitleChars": 4,
+      "maxItemBodyChars": 19,
+      "imbalanceRatio": 1.44
+    }
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "i07",
+    "purposeKey": "explain_process",
+    "purposeText": "按组织、内容、行动和覆盖呈现青年宣讲路径",
+    "baseRelation": "sequence",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": true,
+      "sameLevel": false
+    },
+    "density": "unknown",
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95,
+    "assumptions": [],
+    "contentStats": {
+      "titleChars": 11,
+      "itemCount": 4,
+      "maxItemChars": 16,
+      "avgItemChars": 14.5,
+      "minItemChars": 12,
+      "maxItemTitleChars": 6,
+      "maxItemBodyChars": 11,
+      "imbalanceRatio": 1.33
+    }
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "i08",
+    "purposeKey": "explain_topics",
+    "purposeText": "围绕红色朋友圈呈现六类共享联建动作",
+    "baseRelation": "hub",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 2,
+      "secondaryDimension": "category"
+    },
+    "structure": {
+      "itemCount": 6,
+      "ordered": false,
+      "sameLevel": true
+    },
+    "density": "unknown",
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95,
+    "assumptions": [],
+    "contentStats": {
+      "titleChars": 20,
+      "itemCount": 6,
+      "maxItemChars": 9,
+      "avgItemChars": 6.83,
+      "minItemChars": 6,
+      "maxItemTitleChars": 9,
+      "maxItemBodyChars": 0,
+      "imbalanceRatio": 1.5
+    }
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "i09",
+    "purposeKey": "explain_lifecycle",
+    "purposeText": "说明四阶培养链及其制度和导师支撑",
+    "baseRelation": "sequence",
+    "relationTraits": {
+      "temporal": true,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 2,
+      "secondaryDimension": "time"
+    },
+    "structure": {
+      "itemCount": 3,
+      "ordered": true,
+      "sameLevel": false
+    },
+    "density": "unknown",
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95,
+    "assumptions": [],
+    "contentStats": {
+      "titleChars": 16,
+      "itemCount": 3,
+      "maxItemChars": 28,
+      "avgItemChars": 23,
+      "minItemChars": 16,
+      "maxItemTitleChars": 5,
+      "maxItemBodyChars": 24,
+      "imbalanceRatio": 1.75
+    }
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "i10",
+    "purposeKey": "organize_matrix",
+    "purposeText": "按信仰、本领、声音和脚步四个维度呈现成效",
+    "baseRelation": "matrix",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 2,
+      "secondaryDimension": "category"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "sameLevel": true
+    },
+    "density": "unknown",
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95,
+    "assumptions": [],
+    "contentStats": {
+      "titleChars": 20,
+      "itemCount": 4,
+      "maxItemChars": 21,
+      "avgItemChars": 19.25,
+      "minItemChars": 18,
+      "maxItemTitleChars": 4,
+      "maxItemBodyChars": 17,
+      "imbalanceRatio": 1.17
+    }
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "i11",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "用总书记嘱托和五类抓手共同收束案例价值",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 2,
+      "secondaryDimension": "domain"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "sameLevel": false
+    },
+    "density": "unknown",
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95,
+    "assumptions": [],
+    "contentStats": {
+      "titleChars": 22,
+      "itemCount": 2,
+      "maxItemChars": 44,
+      "avgItemChars": 39,
+      "minItemChars": 34,
+      "maxItemTitleChars": 5,
+      "maxItemBodyChars": 40,
+      "imbalanceRatio": 1.29
+    }
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "i12",
+    "purposeKey": "present_closing",
+    "purposeText": "回扣主题并结束汇报",
+    "baseRelation": "none",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "sameLevel": false
+    },
+    "density": "unknown",
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95,
+    "assumptions": [],
+    "contentStats": {
+      "titleChars": 0,
+      "itemCount": 2,
+      "maxItemChars": 19,
+      "avgItemChars": 15.5,
+      "minItemChars": 12,
+      "maxItemTitleChars": 5,
+      "maxItemBodyChars": 14,
+      "imbalanceRatio": 1.58
+    }
+  }
+]

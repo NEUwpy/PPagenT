@@ -1,0 +1,409 @@
+[
+  {
+    "schemaVersion": "1.0",
+    "intentId": "i01",
+    "assetId": "northeastern-university-cover-001",
+    "parameters": {
+      "title": "让“六地”红，成为理工青年最鲜亮的青春底色",
+      "presenter": "",
+      "organization": "",
+      "date": "",
+      "subtitle": "辽宁“六地”红色文化标识融入党员教育的创新实践"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "subtitle",
+        "parameterPath": "subtitle"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "i02",
+    "assetId": "comparison-structure-001",
+    "parameters": {
+      "title": "“三高三低”困境同时存在",
+      "left": {
+        "title": "三高",
+        "items": [
+          "高学分",
+          "高竞赛",
+          "高科研"
+        ],
+        "emphasis": false,
+        "polarity": "positive"
+      },
+      "right": {
+        "title": "三低",
+        "items": [
+          "理论情感浓度低",
+          "身份认同声量低",
+          "知行合一燃值低"
+        ],
+        "emphasis": true,
+        "polarity": "negative"
+      },
+      "centerLabel": "对比",
+      "visualVariantId": "default"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "high",
+        "parameterPath": "left"
+      },
+      {
+        "sourceItemId": "low",
+        "parameterPath": "right"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "i03",
+    "assetId": "radial-hub-001",
+    "parameters": {
+      "title": "从“走遍全国”转向“深耕辽宁”",
+      "center": "深耕辽宁",
+      "items": [
+        "抗日战争起始地",
+        "解放战争转折地",
+        "新中国国歌素材地",
+        "抗美援朝出征地",
+        "共和国工业奠基地",
+        "雷锋精神发祥地"
+      ],
+      "visualVariantId": "orbit"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "land-01",
+        "parameterPath": "items[0]"
+      },
+      {
+        "sourceItemId": "land-02",
+        "parameterPath": "items[1]"
+      },
+      {
+        "sourceItemId": "land-03",
+        "parameterPath": "items[2]"
+      },
+      {
+        "sourceItemId": "land-04",
+        "parameterPath": "items[3]"
+      },
+      {
+        "sourceItemId": "land-05",
+        "parameterPath": "items[4]"
+      },
+      {
+        "sourceItemId": "land-06",
+        "parameterPath": "items[5]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "i04",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "“1+3+N”新矩阵连接全时全域育人",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "route",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "classroom",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "scenes",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "ecosystem",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "i05",
+    "assetId": "sequential-process-001",
+    "parameters": {
+      "title": "一张任务单，把参观变成解决真实问题",
+      "steps": [
+        {
+          "title": "拍一段",
+          "body": "“青声说史”短视频",
+          "emphasis": false
+        },
+        {
+          "title": "解决一个",
+          "body": "场馆或教学点“微难题”",
+          "emphasis": false
+        },
+        {
+          "title": "带回一个",
+          "body": "“振兴微课题”",
+          "emphasis": false
+        }
+      ],
+      "visualVariantId": "horizontal-cards"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "task-01",
+        "parameterPath": "steps[0]"
+      },
+      {
+        "sourceItemId": "task-02",
+        "parameterPath": "steps[1]"
+      },
+      {
+        "sourceItemId": "task-03",
+        "parameterPath": "steps[2]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "i06",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "22处旧址进入全景数据，7门党课实现“一键穿越”",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "vr-data",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "vr-course",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "vr-reach",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "vr-recognition",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "i07",
+    "assetId": "sequential-process-001",
+    "parameters": {
+      "title": "青年讲、青年听、青年信",
+      "steps": [
+        {
+          "title": "32人混编",
+          "body": "博士、硕士、本科梯队",
+          "emphasis": false
+        },
+        {
+          "title": "10类课件",
+          "body": "故事、短剧、红色闯关",
+          "emphasis": false
+        },
+        {
+          "title": "36场宣讲",
+          "body": "进校园、进社区、进企业",
+          "emphasis": false
+        },
+        {
+          "title": "3800多人",
+          "body": "覆盖师生群众",
+          "emphasis": true,
+          "emphasisLabel": "结论 / 结果"
+        }
+      ],
+      "visualVariantId": "horizontal-cards"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "voice-01",
+        "parameterPath": "steps[0]"
+      },
+      {
+        "sourceItemId": "voice-02",
+        "parameterPath": "steps[1]"
+      },
+      {
+        "sourceItemId": "voice-03",
+        "parameterPath": "steps[2]"
+      },
+      {
+        "sourceItemId": "voice-04",
+        "parameterPath": "steps[3]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "i08",
+    "assetId": "radial-hub-001",
+    "parameters": {
+      "title": "“红色朋友圈”把校园小盆景变成区域大风景",
+      "center": "红色朋友圈",
+      "items": [
+        "VR党课共享",
+        "主题党日联办",
+        "红色资源联用",
+        "志愿服务联动",
+        "组织资源经验互鉴",
+        "“六地精神西部行”"
+      ],
+      "visualVariantId": "orbit"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "circle-01",
+        "parameterPath": "items[0]"
+      },
+      {
+        "sourceItemId": "circle-02",
+        "parameterPath": "items[1]"
+      },
+      {
+        "sourceItemId": "circle-03",
+        "parameterPath": "items[2]"
+      },
+      {
+        "sourceItemId": "circle-04",
+        "parameterPath": "items[3]"
+      },
+      {
+        "sourceItemId": "circle-05",
+        "parameterPath": "items[4]"
+      },
+      {
+        "sourceItemId": "circle-06",
+        "parameterPath": "items[5]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "i09",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "把“六地”教育嵌入党员成长全周期",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "lifecycle",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "mechanism",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "mentor",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "i10",
+    "assetId": "framework-matrix-001",
+    "parameters": {
+      "title": "五年深耕，让“学霸”有了新标签：红色先锋",
+      "quadrants": [
+        {
+          "title": "信仰更强",
+          "body": "毕业后留辽意愿：58%→87%"
+        },
+        {
+          "title": "本领更硬",
+          "body": "26份微课题，8家企业当场“收货”"
+        },
+        {
+          "title": "声音更响",
+          "body": "理论飞入社区、课堂和生产一线"
+        },
+        {
+          "title": "脚步更稳",
+          "body": "选调生/重大装备研发：+40%"
+        }
+      ],
+      "visualVariantId": "default"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "result-01",
+        "parameterPath": "quadrants[0]"
+      },
+      {
+        "sourceItemId": "result-02",
+        "parameterPath": "quadrants[1]"
+      },
+      {
+        "sourceItemId": "result-03",
+        "parameterPath": "quadrants[2]"
+      },
+      {
+        "sourceItemId": "result-04",
+        "parameterPath": "quadrants[3]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "i11",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "十年探路、五年深耕，把红色基因熔铸进青春年轮",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "synthesis",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "instruction",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "i12",
+    "assetId": "northeastern-university-closing-001",
+    "parameters": {
+      "text": "“六地”红：成为理工青年最鲜亮的青春底色\n我的汇报完毕，谢谢大家！"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "mission",
+        "parameterPath": "text"
+      },
+      {
+        "sourceItemId": "conclusion",
+        "parameterPath": "text"
+      }
+    ],
+    "omissions": []
+  }
+]
