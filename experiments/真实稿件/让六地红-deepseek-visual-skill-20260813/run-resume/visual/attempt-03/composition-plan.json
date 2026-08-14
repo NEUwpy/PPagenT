@@ -1,0 +1,162 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "six-red-education",
+  "skinId": "northeastern-university-001",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "compositionId": "fixed-cover",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "compositionId": "fixed-agenda",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "opening",
+      "intentId": "opening",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "greeting"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "topic"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Two items fit editorial-list; all fields covered."
+    },
+    {
+      "pageId": "transformation",
+      "intentId": "transformation",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "transformation-structure-1",
+        "transformation-structure-2",
+        "transformation-structure-3"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Sequential structure component fully carries all item titles and bodies."
+    },
+    {
+      "pageId": "matrix",
+      "intentId": "matrix",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "dual-drive"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "one-chain",
+            "three-classrooms",
+            "n-scenes"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "No component candidates for hub; editorial-list places hub as lead and rest as body."
+    },
+    {
+      "pageId": "five-actions-1",
+      "intentId": "five-actions-1",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "five-actions-1-structure-1",
+        "five-actions-1-structure-2",
+        "five-actions-1-structure-3"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Sequential process component with points handled by component's contract."
+    },
+    {
+      "pageId": "five-actions-2",
+      "intentId": "five-actions-2",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "lecture-team",
+        "friend-circle",
+        "mechanism"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Parallel cards component carries all titles, bodies, and points."
+    },
+    {
+      "pageId": "results",
+      "intentId": "results",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "faith",
+        "skill",
+        "voice",
+        "footstep"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Parallel cards carry four result items."
+    },
+    {
+      "pageId": "conclusion",
+      "intentId": "conclusion",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "quote"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "summary",
+            "closing"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Layered conclusions: quote as primary, summary and closing as support."
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "compositionId": "fixed-closing",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

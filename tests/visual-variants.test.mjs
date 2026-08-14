@@ -8,6 +8,7 @@ import {
   comparisonStatusMarker,
   createPresentation,
   normalizeSequentialSteps,
+  sequentialStepBody,
   resolveComparisonEmphasis,
   transformPositionInContainedFrame,
 } from "../src/asset-runtime/component-builders.mjs";
@@ -22,6 +23,7 @@ import {
   planVisualVariants,
   queryVisualVariants,
 } from "../src/selection/visual-variants.mjs";
+import { mapPageContent as mapComparisonPageContent } from "../assets/结构图/双向对比-001/generate.mjs";
 
 const root = process.cwd();
 
@@ -108,8 +110,35 @@ test("正式候选只暴露已进入核心资产库的蒸馏变体", async () =>
   const variants = await listRenderableVisualVariants({ root });
   const radial = queryVisualVariants(variants, { familyId: "radial-hub", itemCount: 4 });
   const sequential = queryVisualVariants(variants, { familyId: "sequential-process", baseRelation: "sequence", itemCount: 4 });
+  const parallel = queryVisualVariants(variants, { skillId: "parallel", itemCount: 4 });
   assert.deepEqual(radial.map((variant) => variant.variantId), ["orbit"]);
   assert.deepEqual(sequential.map((variant) => variant.variantId), ["horizontal-cards"]);
+  assert.equal(sequential[0].contentContract.itemRole, "semantic-node");
+  assert.deepEqual(
+    queryVisualVariants(variants, {
+      familyId: "sequential-process",
+      baseRelation: "sequence",
+      itemCount: 3,
+      requiredItemRole: "semantic-node",
+      maxPointsPerItem: 4,
+      maxPointChars: 8,
+    }).map((variant) => variant.variantId),
+    ["horizontal-cards"],
+  );
+  assert.deepEqual(
+    queryVisualVariants(variants, {
+      familyId: "sequential-process",
+      baseRelation: "sequence",
+      itemCount: 3,
+      requiredItemRole: "semantic-node",
+      maxPointsPerItem: 5,
+      maxPointChars: 8,
+    }),
+    [],
+  );
+  assert.deepEqual(parallel.map((variant) => variant.styleGroupId), ["parallel-cards-p135"]);
+  assert.deepEqual(parallel[0].stateContract.states, [3, 4, 5, 6, 7]);
+  assert.equal(parallel[0].mediaContract.mode, "no-image");
   assert.deepEqual(
     queryVisualVariants(variants, { familyId: "cycle-loop", baseRelation: "sequence", itemCount: 4 })
       .map((variant) => variant.variantId),
@@ -124,6 +153,9 @@ test("正式候选只暴露已进入核心资产库的蒸馏变体", async () =>
     queryVisualVariants(variants, { familyId: "comparison-structure" }).map((variant) => variant.variantId),
     ["default"],
   );
+  const comparison = queryVisualVariants(variants, { familyId: "comparison-structure" })[0];
+  assert.equal(comparison.contentContract.adaptationOwner, "visual-director");
+  assert.deepEqual(comparison.contentContract.bindings[0].preferredItems, [3]);
   assert.deepEqual(
     queryVisualVariants(variants, {
       familyId: "organization-tree",
@@ -161,6 +193,7 @@ test("自动候选会排除缺少 mapper 或 builder 的变体", async () => {
     "hierarchy-pyramid-001:default",
     "layered-architecture-001:default",
     "organization-tree-001:default",
+    "parallel-cards-001:parallel-cards-p135",
     "problem-improvement-001:default",
     "radial-hub-001:orbit",
     "radial-hub-001:split-wing",
@@ -261,6 +294,17 @@ test("强调终点从普通编号步骤中分离，比较页只允许单侧成�
   assert.equal(resolveComparisonEmphasis({ emphasis: true }, { emphasis: true }), null);
 });
 
+test("顺序流程的中间强调只改变视觉权重，不得把节点重排到终点", () => {
+  const steps = [
+    { title: "作品" },
+    { title: "规律", emphasis: true },
+    { title: "能力" },
+  ];
+  const normalized = normalizeSequentialSteps(steps);
+  assert.deepEqual(normalized.displaySteps.map((step) => step.title), ["作品", "规律", "能力"]);
+  assert.equal(normalized.emphasisStep.title, "规律");
+});
+
 test("所有登记变体都能经过统一运行时真实创建幻灯片对象", () => {
   const presentation = createPresentation();
   const skin = {
@@ -355,6 +399,14 @@ test("所有登记变体都能经过统一运行时真实创建幻灯片对象",
       parameters: { visualVariantId: "split-wing", title: "主题", center: "中心", items: ["一", "二", "三", "四"] },
     },
     {
+      assetId: "parallel-cards-001",
+      parameters: {
+        visualVariantId: "parallel-cards-p135",
+        title: "同级能力",
+        items: ["数据", "模型", "验证", "交付"].map((title) => ({ title, body: `${title}能力说明` })),
+      },
+    },
+    {
       assetId: "sequential-process-001",
       parameters: {
         visualVariantId: "horizontal-cards",
@@ -447,5 +499,39 @@ test("所有登记变体都能经过统一运行时真实创建幻灯片对象",
     const slide = presentation.slides.add();
     renderStructureAsset(slide, payload, skin);
   }
-  assert.equal(presentation.slides.items.length, 18);
+  assert.equal(presentation.slides.items.length, payloads.length);
+});
+
+test("顺序流程把节点内分点渲染为两行而不是新步骤", () => {
+  assert.equal(
+    sequentialStepBody({ body: "提炼规律", points: ["表达", "容量", "变化", "禁忌"] }),
+    "• 表达   • 容量\n• 变化   • 禁忌",
+  );
+});
+
+test("双向对比 Mapper 使用视觉导演按 Skill 契约生成的组件绑定", () => {
+  const content = {
+    pageId: "p1",
+    title: "稳定与随机",
+    notes: "对比",
+    items: [
+      { id: "random", title: "随机 95 分", body: "未拆分正文" },
+      { id: "stable", title: "稳定 80 分", body: "未拆分正文" },
+    ],
+  };
+  const composition = { componentBindings: [
+    { bindingId: "group-items", sourceItemId: "random", entries: [
+      { text: "偶尔惊艳", sourceFragment: "偶尔惊艳" },
+      { text: "质量波动", sourceFragment: "质量波动" },
+      { text: "难以复现", sourceFragment: "难以复现" },
+    ] },
+    { bindingId: "group-items", sourceItemId: "stable", entries: [
+      { text: "结构清楚", sourceFragment: "结构清楚" },
+      { text: "符合组织风格", sourceFragment: "符合组织风格" },
+      { text: "第二天仍可修改", sourceFragment: "第二天仍可修改" },
+    ] },
+  ] };
+  const payload = mapComparisonPageContent(content, { intentId: "p1-intent" }, null, composition);
+  assert.deepEqual(payload.parameters.left.items, ["偶尔惊艳", "质量波动", "难以复现"]);
+  assert.deepEqual(payload.parameters.right.items, ["结构清楚", "符合组织风格", "第二天仍可修改"]);
 });

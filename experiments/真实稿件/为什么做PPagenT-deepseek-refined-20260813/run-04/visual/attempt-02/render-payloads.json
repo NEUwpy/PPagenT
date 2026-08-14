@@ -1,0 +1,243 @@
+[
+  {
+    "schemaVersion": "1.0",
+    "intentId": "shell-cover-intent",
+    "assetId": "northeastern-university-cover-001",
+    "parameters": {
+      "title": "为什么做 PPagenT",
+      "presenter": "",
+      "organization": "",
+      "date": "",
+      "subtitle": ""
+    },
+    "mappings": [],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "shell-agenda-intent",
+    "assetId": "northeastern-university-agenda-001",
+    "parameters": {
+      "title": "目录",
+      "items": [
+        "痛点",
+        "思路",
+        "分工",
+        "稳定",
+        "扩展"
+      ]
+    },
+    "mappings": [
+      {
+        "sourceItemId": "agenda-1",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-2",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-3",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-4",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-5",
+        "parameterPath": "items"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p1",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "真正费时间的不是“画”",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "item1",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "item2",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p2",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "工作里的 PPT，不需要每次重新发明",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "item1",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "item2",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "item3",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p3",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "AI 负责理解，规则负责决定，代码负责执行",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "item1",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "item2",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "item3",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p4",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "稳定的 80 分，比随机的 95 分更值钱",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "item1",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "item2",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p5",
+    "assetId": "parallel-cards-001",
+    "parameters": {
+      "title": "不只服务最会做 PPT 的那 1%",
+      "items": [
+        {
+          "title": "目标人群",
+          "body": "多数人有内容、有专业知识、有真实汇报任务，但不擅长拆页、选择表达方式和视觉排版。"
+        },
+        {
+          "title": "产品价值",
+          "body": "把少数熟练制作者的经验做成系统，让更多人低成本获得接近专业标准的结果。"
+        },
+        {
+          "title": "不做的事",
+          "body": "不需要让所有人成为设计师，而是把个人能力变成更多人可用的生产能力。"
+        }
+      ],
+      "visualVariantId": "parallel-cards-p135"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "item1",
+        "parameterPath": "items[0]"
+      },
+      {
+        "sourceItemId": "item2",
+        "parameterPath": "items[1]"
+      },
+      {
+        "sourceItemId": "item3",
+        "parameterPath": "items[2]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p6",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "真正积累的不是一万个模板",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "item1",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "item2",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "item3",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p7",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "最后，它想解决的是一件很普通的事",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "item1",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "item2",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "item3",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "shell-closing-intent",
+    "assetId": "northeastern-university-closing-001",
+    "parameters": {
+      "text": "PPagenT 通过将高手经验系统化，提供稳定可靠、可编辑的 PPT 解决方案，价值高于随机的高分设计。"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "closing-takeaway",
+        "parameterPath": "text"
+      }
+    ],
+    "omissions": []
+  }
+]

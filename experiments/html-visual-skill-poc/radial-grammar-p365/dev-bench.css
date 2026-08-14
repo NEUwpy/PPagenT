@@ -1,0 +1,32 @@
+:root {
+  color: #173b66;
+  background: #eef4fa;
+  font-family: "Microsoft YaHei", "Noto Sans SC", Arial, sans-serif;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+button { font: inherit; }
+.bench { width: min(1180px, calc(100% - 36px)); margin: 0 auto; padding: 28px 0 44px; }
+.bench-toolbar { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-bottom: 18px; }
+.bench-kicker { margin: 0 0 7px; color: #3f85b6; font-size: 11px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
+h1 { margin: 0; color: #0a2c5e; font-size: clamp(26px, 4vw, 48px); letter-spacing: -.05em; }
+.bench-subtitle { margin: 8px 0 0; color: #70859c; font-size: 13px; }
+.control-groups { display: flex; flex-wrap: wrap; justify-content: end; gap: 10px; }
+.control-group { display: flex; gap: 4px; padding: 4px; border: 1px solid #cfdeeb; border-radius: 11px; background: rgba(255,255,255,.82); }
+.control-group button { min-width: 34px; height: 30px; border: 0; border-radius: 8px; background: transparent; color: #5e7891; font-size: 12px; font-weight: 900; cursor: pointer; }
+.control-group button.active { color: #fff; background: #197db7; box-shadow: 0 5px 12px rgba(25,125,183,.22); }
+.content-frame { width: 100%; height: 430px; min-width: 300px; min-height: 170px; overflow: hidden; resize: both; border: 1px solid #cadbea; border-radius: 16px; background: #f7fbff; box-shadow: 0 18px 42px rgba(25,68,108,.1); }
+.content-frame[data-preset="wide"] { width: min(100%, 900px); height: 430px; }
+.content-frame[data-preset="square"] { width: min(100%, 560px); height: 500px; }
+.content-frame[data-preset="narrow"] { width: min(100%, 760px); height: 250px; }
+#radial-component { width: 100%; height: 100%; }
+.bench-meta { display: flex; justify-content: space-between; gap: 16px; padding-top: 10px; color: #71869a; font-size: 11px; }
+.bench-meta span:first-child { color: #1e5f91; font-weight: 800; }
+@media (max-width: 760px) {
+  .bench-toolbar { align-items: start; flex-direction: column; }
+  .control-groups { justify-content: start; }
+  .content-frame[data-preset="wide"], .content-frame[data-preset="square"], .content-frame[data-preset="narrow"] { width: 100%; }
+  .bench-meta { flex-direction: column; }
+}

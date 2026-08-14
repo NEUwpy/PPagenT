@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "deck-001",
+  "skinId": "northeastern-university",
+  "pages": [
+    {
+      "pageId": "page-1",
+      "intentId": "page-1-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "page-1-structure-1",
+        "page-1-structure-2"
+      ],
+      "componentContentMode": "titles-only",
+      "textSlots": [
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "page-1-structure-1",
+            "page-1-structure-2"
+          ],
+          "contentMode": "body"
+        }
+      ],
+      "componentBindings": [
+        {
+          "bindingId": "group-items",
+          "sourceItemId": "page-1-structure-1",
+          "entries": [
+            {
+              "text": "稳定交付初稿",
+              "sourceFragment": "稳定交付一个真正能用于工作的 80 分初稿"
+            },
+            {
+              "text": "节省大量时间",
+              "sourceFragment": "它就已经节省了大量时间"
+            },
+            {
+              "text": "可靠且可修改",
+              "sourceFragment": "第二天仍然可以继续修改"
+            }
+          ]
+        },
+        {
+          "bindingId": "group-items",
+          "sourceItemId": "page-1-structure-2",
+          "entries": [
+            {
+              "text": "偶尔惊艳",
+              "sourceFragment": "偶尔惊艳但不可靠"
+            },
+            {
+              "text": "难以稳定使用",
+              "sourceFragment": "难以稳定用于实际工作场景"
+            },
+            {
+              "text": "不可靠",
+              "sourceFragment": "不可靠"
+            }
+          ]
+        }
+      ],
+      "reason": "Structure component with fallbackBody=false clearly contrasts the two options; component carries titles and points, while full bodies are placed in the text slot to satisfy the feedback requiring full body content."
+    }
+  ]
+}

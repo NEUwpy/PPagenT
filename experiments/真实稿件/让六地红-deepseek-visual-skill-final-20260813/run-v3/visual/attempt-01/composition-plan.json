@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "liaoning-six-red-education",
+  "skinId": "northeastern-university-001",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "compositionId": "fixed-cover",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "compositionId": "fixed-agenda",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "opening",
+      "intentId": "opening-intent",
+      "compositionId": "editorial-dual-statement",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "left",
+          "sourceItemIds": [
+            "greeting"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "right",
+          "sourceItemIds": [
+            "topic"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Two parallel statements; balanced dual-statement fits."
+    },
+    {
+      "pageId": "from-challenge-to-focus",
+      "intentId": "from-challenge-to-focus-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "challenge",
+        "response",
+        "shift"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Timeline component carries three sequential steps with titles and bodies."
+    },
+    {
+      "pageId": "new-matrix",
+      "intentId": "new-matrix-intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "one-chain",
+            "three-classrooms",
+            "n-scenarios"
+          ],
+          "contentMode": "title"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "one-chain",
+            "three-classrooms",
+            "n-scenarios"
+          ],
+          "contentMode": "body"
+        }
+      ],
+      "reason": "Hierarchy of three items with points; editorial list conveys structure."
+    },
+    {
+      "pageId": "practice-levers-1",
+      "intentId": "practice-levers-1-intent",
+      "compositionId": "editorial-dual-statement",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "left",
+          "sourceItemIds": [
+            "task-list"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "right",
+          "sourceItemIds": [
+            "vr-base"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Two parallel practice levers; dual-statement balances."
+    },
+    {
+      "pageId": "practice-levers-2",
+      "intentId": "practice-levers-2-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "lecture-group",
+        "friend-circle",
+        "mechanism"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Three parallel cards with points; parallel-cards component fits."
+    },
+    {
+      "pageId": "five-year-outcomes",
+      "intentId": "five-year-outcomes-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "faith",
+        "skill",
+        "voice",
+        "step"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Four parallel outcome cards; parallel-cards component fits."
+    },
+    {
+      "pageId": "conclusion",
+      "intentId": "conclusion-intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "quote"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "summary",
+            "closing"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Quote as primary thesis, summary and closing as support; editorial-focus fits."
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "compositionId": "fixed-closing",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

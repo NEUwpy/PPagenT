@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "liaoning-six-red-education",
+  "skinId": "northeastern-university-001",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "compositionId": "fixed-cover",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "compositionId": "fixed-agenda",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "page-1",
+      "intentId": "page-1-intent",
+      "compositionId": "editorial-single-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "item-1"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Single greeting item fits editorial single focus; no component needed."
+    },
+    {
+      "pageId": "page-2",
+      "intentId": "page-2-intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "item-2"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "item-1",
+            "item-3"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Sequential story; lead highlights action, body covers struggle and turn."
+    },
+    {
+      "pageId": "page-3",
+      "intentId": "page-3-intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "item-2"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "item-1",
+            "item-3"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Core matrix as primary, drivers and ecology as support."
+    },
+    {
+      "pageId": "page-4",
+      "intentId": "page-4-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "page-4-structure-1",
+        "page-4-structure-2",
+        "page-4-structure-3"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Three parallel items placed in component; no text slots in composition."
+    },
+    {
+      "pageId": "page-5",
+      "intentId": "page-5-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "item-1",
+        "item-2",
+        "item-3",
+        "item-4"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Four parallel achievements; component handles all items."
+    },
+    {
+      "pageId": "page-6",
+      "intentId": "page-6-intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "item-1"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "item-2",
+            "item-3"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Quotation as primary, practice and theme as support."
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "compositionId": "fixed-closing",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

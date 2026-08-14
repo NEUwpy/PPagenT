@@ -51,6 +51,30 @@
       }
     },
     {
+      "id": "northeastern-university-agenda-001",
+      "name": "东北大学目录 001",
+      "category": "目录",
+      "path": "目录/东北大学目录-001",
+      "status": "core",
+      "layoutExpansion": {
+        "mode": "fixed",
+        "range": "单一目录版式；支持 1–5 个目录项",
+        "rule": "保持来源模板第 2 页的目录结构，由 Shell 固定调用"
+      }
+    },
+    {
+      "id": "parallel-cards-001",
+      "name": "并列能力卡片",
+      "category": "结构图",
+      "path": "结构图/并列能力卡片-001",
+      "status": "core",
+      "layoutExpansion": {
+        "mode": "responsive",
+        "range": "3–7 个同级能力项",
+        "rule": "按当前数量重新计算等宽卡片与间隙；序号、标题和说明保持同一垂直节奏"
+      }
+    },
+    {
       "id": "sequential-process-001",
       "name": "顺序流程",
       "category": "结构图",

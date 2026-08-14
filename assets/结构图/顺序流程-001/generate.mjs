@@ -6,11 +6,14 @@ export { buildSequentialProcess };
 export function mapPageContent(content, intent) {
   return renderPayload(intent, "sequential-process-001", {
     title: content.title,
-    steps: content.items.map((item) => ({
+    steps: content.items.map((item, index) => ({
       title: item.title,
       body: item.body,
+      points: item.points ?? [],
       emphasis: Boolean(item.emphasis),
-      ...(item.emphasis ? { emphasisLabel: "结论 / 结果" } : {}),
+      ...(item.emphasis ? {
+        emphasisLabel: index === content.items.length - 1 ? "结论 / 结果" : "关键节点",
+      } : {}),
     })),
   }, content.items.map((item, index) => mapping(item.id, `steps[${index}]`)));
 }

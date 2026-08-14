@@ -17,9 +17,14 @@ function itemMap(content) {
   return new Map(content.items.map((item) => [item.id, item]));
 }
 
+function editorialItem(item) {
+  const pointText = (item.points ?? []).map((point) => `• ${point}`).join("\n");
+  return { ...item, body: [item.body, pointText].filter(Boolean).join("\n") };
+}
+
 function slotItems(content, slotPlan) {
   const byId = itemMap(content);
-  return slotPlan.sourceItemIds.map((id) => byId.get(id)).filter(Boolean).map((item) => {
+  return slotPlan.sourceItemIds.map((id) => byId.get(id)).filter(Boolean).map(editorialItem).map((item) => {
     if (slotPlan.contentMode === "title") return { ...item, body: "" };
     if (slotPlan.contentMode === "body") return { ...item, title: "" };
     return item;
@@ -81,15 +86,22 @@ function renderLead(slide, frame, item, within, eyebrow, typographyRoles) {
     name: qaElementName({ within, role: "eyebrow" }),
     fontSize: 17, bold: true, color: COLORS.blue2, autoFit: "none",
   });
-  const titleFrame = { left: frame.left + 28, top: frame.top + 42, width: frame.width - 34, height: 150 };
-  const title = fittedCompositionText(item?.title || item?.body || "", titleFrame, "leadTitle", typographyRoles);
-  addText(slide, title.text, titleFrame, {
-    name: qaElementName({ within, role: "title" }),
-    typeface: typographyRoles.bodyTypeface,
-    fontSize: title.fontSize, bold: true, color: COLORS.dark, verticalAlignment: "top", autoFit: "none",
-  });
-  if (item?.title && item?.body) {
+  if (item?.title) {
+    const titleFrame = { left: frame.left + 28, top: frame.top + 42, width: frame.width - 34, height: 150 };
+    const title = fittedCompositionText(item.title, titleFrame, "leadTitle", typographyRoles);
+    addText(slide, title.text, titleFrame, {
+      name: qaElementName({ within, role: "title" }),
+      typeface: typographyRoles.bodyTypeface,
+      fontSize: title.fontSize, bold: true, color: COLORS.dark, verticalAlignment: "top", autoFit: "none",
+    });
+  }
+  if (item?.body) {
+    const bodyOnly = !item.title;
     const bodyFrame = { left: frame.left + 28, top: frame.top + 190, width: frame.width - 34, height: frame.height - 198 };
+    if (bodyOnly) {
+      bodyFrame.top = frame.top + 42;
+      bodyFrame.height = frame.height - 50;
+    }
     const body = fittedCompositionText(item.body, bodyFrame, "leadBody", typographyRoles);
     addText(slide, body.text, bodyFrame, {
       name: qaElementName({ within, role: "body" }),
@@ -110,15 +122,22 @@ function renderEditorialRows(slide, frame, items, within, typographyRoles) {
       name: qaElementName({ within, role: `index-${index}` }),
       fontSize: 18, bold: true, color: COLORS.blue2, alignment: "center", autoFit: "none",
     });
-    const titleFrame = { left: frame.left + 68, top, width: frame.width - 68, height: 38 };
-    const title = fittedCompositionText(item.title || item.body, titleFrame, "rowTitle", typographyRoles);
-    addText(slide, title.text, titleFrame, {
-      name: qaElementName({ within, role: `title-${index}` }),
-      typeface: typographyRoles.bodyTypeface,
-      fontSize: title.fontSize, bold: true, color: COLORS.dark, verticalAlignment: "top", autoFit: "none",
-    });
-    if (item.title && item.body) {
-      const bodyFrame = { left: frame.left + 68, top: top + 44, width: frame.width - 68, height: Math.max(48, rowHeight - 48) };
+    if (item.title) {
+      const titleFrame = { left: frame.left + 68, top, width: frame.width - 68, height: 38 };
+      const title = fittedCompositionText(item.title, titleFrame, "rowTitle", typographyRoles);
+      addText(slide, title.text, titleFrame, {
+        name: qaElementName({ within, role: `title-${index}` }),
+        typeface: typographyRoles.bodyTypeface,
+        fontSize: title.fontSize, bold: true, color: COLORS.dark, verticalAlignment: "top", autoFit: "none",
+      });
+    }
+    if (item.body) {
+      const bodyFrame = {
+        left: frame.left + 68,
+        top: item.title ? top + 44 : top,
+        width: frame.width - 68,
+        height: item.title ? Math.max(48, rowHeight - 48) : rowHeight,
+      };
       const body = fittedCompositionText(item.body, bodyFrame, "rowBody", typographyRoles);
       addText(slide, body.text, bodyFrame, {
         name: qaElementName({ within, role: `body-${index}` }),
@@ -146,20 +165,29 @@ function renderAside(slide, frame, items, within, typographyRoles) {
     name: qaElementName({ within, role: "eyebrow" }),
     fontSize: 17, bold: true, color: COLORS.blue2, autoFit: "none",
   });
-  const titleFrame = { left: frame.left + 24, top: frame.top + 48, width: frame.width - 28, height: 130 };
-  const title = fittedCompositionText(item?.title || "", titleFrame, "asideTitle", typographyRoles);
-  addText(slide, title.text, titleFrame, {
-    name: qaElementName({ within, role: "title" }),
-    typeface: typographyRoles.bodyTypeface,
-    fontSize: title.fontSize, bold: true, color: COLORS.dark, verticalAlignment: "top", autoFit: "none",
-  });
-  const bodyFrame = { left: frame.left + 24, top: frame.top + 192, width: frame.width - 28, height: frame.height - 198 };
-  const body = fittedCompositionText(item?.body || "", bodyFrame, "asideBody", typographyRoles);
-  addText(slide, body.text, bodyFrame, {
-    name: qaElementName({ within, role: "body" }),
-    typeface: typographyRoles.bodyTypeface,
-    fontSize: body.fontSize, color: COLORS.body, verticalAlignment: "top", autoFit: "none",
-  });
+  if (item?.title) {
+    const titleFrame = { left: frame.left + 24, top: frame.top + 48, width: frame.width - 28, height: 130 };
+    const title = fittedCompositionText(item.title, titleFrame, "asideTitle", typographyRoles);
+    addText(slide, title.text, titleFrame, {
+      name: qaElementName({ within, role: "title" }),
+      typeface: typographyRoles.bodyTypeface,
+      fontSize: title.fontSize, bold: true, color: COLORS.dark, verticalAlignment: "top", autoFit: "none",
+    });
+  }
+  if (item?.body) {
+    const bodyFrame = {
+      left: frame.left + 24,
+      top: item.title ? frame.top + 192 : frame.top + 48,
+      width: frame.width - 28,
+      height: item.title ? frame.height - 198 : frame.height - 54,
+    };
+    const body = fittedCompositionText(item.body, bodyFrame, "asideBody", typographyRoles);
+    addText(slide, body.text, bodyFrame, {
+      name: qaElementName({ within, role: "body" }),
+      typeface: typographyRoles.bodyTypeface,
+      fontSize: body.fontSize, color: COLORS.body, verticalAlignment: "top", autoFit: "none",
+    });
+  }
 }
 
 function renderEditorialList(slide, content, layout, planPage, bodyFrame, typographyRoles) {
@@ -255,8 +283,169 @@ function renderSingleFocus(slide, content, layout, planPage, bodyFrame, typograp
   }
 }
 
+function renderDualStatement(slide, content, layout, planPage, bodyFrame, typographyRoles) {
+  const plans = ["left", "right"].map((slotId) => planPage.textSlots.find((slot) => slot.slotId === slotId));
+  const frames = ["left", "right"].map((slotId) => slotFrame(layout, slotId, bodyFrame));
+  const items = plans.map((plan) => slotItems(content, plan)[0]);
+  addBox(slide, {
+    left: bodyFrame.left + bodyFrame.width / 2,
+    top: bodyFrame.top + 42,
+    width: 2,
+    height: bodyFrame.height - 84,
+  }, {
+    name: "composition-dual-divider",
+    geometry: "rect",
+    fill: COLORS.line,
+    line: { style: "solid", fill: "none", width: 0 },
+    shadow: "shadow-none",
+    borderRadius: 0,
+  });
+  frames.forEach((frame, index) => {
+    const item = items[index];
+    const within = `composition-dual-${index}`;
+    zone(slide, within, frame);
+    addText(slide, String(index + 1).padStart(2, "0"), {
+      left: frame.left, top: frame.top, width: 52, height: 30,
+    }, {
+      name: qaElementName({ within, role: "index" }),
+      fontSize: 17,
+      bold: true,
+      color: item?.emphasis ? COLORS.blue2 : COLORS.muted,
+      autoFit: "none",
+    });
+    const titleFrame = { left: frame.left, top: frame.top + 52, width: frame.width, height: 92 };
+    const title = fittedCompositionText(item?.title || "", titleFrame, "dualTitle", typographyRoles);
+    addText(slide, title.text, titleFrame, {
+      name: qaElementName({ within, role: "title" }),
+      typeface: typographyRoles.bodyTypeface,
+      fontSize: title.fontSize,
+      bold: true,
+      color: COLORS.dark,
+      verticalAlignment: "middle",
+      autoFit: "none",
+    });
+    addBox(slide, {
+      left: frame.left,
+      top: frame.top + 160,
+      width: item?.emphasis ? frame.width * 0.62 : frame.width * 0.38,
+      height: 4,
+    }, {
+      name: qaElementName({ within, role: "accent" }),
+      geometry: "rect",
+      fill: item?.emphasis ? COLORS.blue2 : COLORS.line,
+      line: { style: "solid", fill: "none", width: 0 },
+      shadow: "shadow-none",
+      borderRadius: 0,
+    });
+    const bodyFrameForItem = { left: frame.left, top: frame.top + 190, width: frame.width, height: frame.height - 200 };
+    const body = fittedCompositionText(item?.body || "", bodyFrameForItem, "dualBody", typographyRoles);
+    addText(slide, body.text, bodyFrameForItem, {
+      name: qaElementName({ within, role: "body" }),
+      typeface: typographyRoles.bodyTypeface,
+      fontSize: body.fontSize,
+      color: COLORS.body,
+      verticalAlignment: "top",
+      autoFit: "none",
+    });
+  });
+}
+
+export function validatePageCompositionTextFit(content, layout, planPage, bodyFrame, typographyRoles) {
+  if (["fixed-cover", "fixed-agenda", "fixed-closing"].includes(layout.id)) return [];
+  const issues = [];
+  const check = (value, frame, role, slotId) => {
+    if (!value) return;
+    try {
+      fittedCompositionText(value, frame, role, typographyRoles);
+    } catch (error) {
+      issues.push({
+        code: "composition-text-fit-failed",
+        role,
+        slotId,
+        message: error.message,
+      });
+    }
+  };
+  const checkLead = (slotId) => {
+    const plan = planPage.textSlots.find((slot) => slot.slotId === slotId);
+    if (!plan) return;
+    const frame = slotFrame(layout, slotId, bodyFrame);
+    const item = slotItems(content, plan)[0];
+    if (!item) return;
+    if (item.title) check(item.title, { left: frame.left + 28, top: frame.top + 42, width: frame.width - 34, height: 150 }, "leadTitle", slotId);
+    if (item.body) {
+      const bodyOnly = !item.title;
+      check(item.body, {
+        left: frame.left + 28,
+        top: bodyOnly ? frame.top + 42 : frame.top + 190,
+        width: frame.width - 34,
+        height: bodyOnly ? frame.height - 50 : frame.height - 198,
+      }, "leadBody", slotId);
+    }
+  };
+  const checkRows = (slotId) => {
+    const plan = planPage.textSlots.find((slot) => slot.slotId === slotId);
+    if (!plan) return;
+    const frame = slotFrame(layout, slotId, bodyFrame);
+    const items = slotItems(content, plan);
+    const gap = 16;
+    const rowHeight = (frame.height - gap * Math.max(0, items.length - 1)) / Math.max(1, items.length);
+    items.forEach((item) => {
+      if (item.title) check(item.title, { left: frame.left + 68, top: frame.top, width: frame.width - 68, height: 38 }, "rowTitle", slotId);
+      if (item.body) check(item.body, {
+        left: frame.left + 68,
+        top: item.title ? frame.top + 44 : frame.top,
+        width: frame.width - 68,
+        height: item.title ? Math.max(48, rowHeight - 48) : rowHeight,
+      }, "rowBody", slotId);
+    });
+  };
+
+  if (layout.id === "editorial-list") {
+    checkLead("lead");
+    checkRows("body");
+  } else if (["editorial-focus", "editorial-focus-reverse"].includes(layout.id)) {
+    checkLead("primary");
+    checkRows("support");
+  } else if (layout.id === "editorial-single-focus") {
+    const plan = planPage.textSlots.find((slot) => slot.slotId === "primary");
+    const frame = slotFrame(layout, "primary", bodyFrame);
+    const items = plan ? slotItems(content, plan) : [];
+    const primary = items.find((item) => item.emphasis) ?? items[0];
+    const support = items.filter((item) => item !== primary);
+    check(primary?.title, { left: frame.left + 48, top: frame.top + 58, width: frame.width - 96, height: 74 }, "singleTitle", "primary");
+    check(primary?.body, { left: frame.left + 76, top: frame.top + 145, width: frame.width - 152, height: support.length ? 132 : 190 }, "singleBody", "primary");
+    if (support.length) {
+      const supportText = support.map((item) => [item.title, item.body].filter(Boolean).join("：")).join("\n");
+      check(supportText, { left: frame.left + 58, top: frame.top + frame.height - 92, width: frame.width - 116, height: 78 }, "singleSupport", "primary");
+    }
+  } else if (layout.id === "editorial-dual-statement") {
+    ["left", "right"].forEach((slotId) => {
+      const plan = planPage.textSlots.find((slot) => slot.slotId === slotId);
+      const frame = slotFrame(layout, slotId, bodyFrame);
+      const item = plan ? slotItems(content, plan)[0] : null;
+      check(item?.title, { left: frame.left, top: frame.top + 52, width: frame.width, height: 92 }, "dualTitle", slotId);
+      check(item?.body, { left: frame.left, top: frame.top + 190, width: frame.width, height: frame.height - 200 }, "dualBody", slotId);
+    });
+  } else {
+    const asidePlan = planPage.textSlots.find((slot) => slot.slotId === "aside");
+    if (asidePlan) {
+      const frame = slotFrame(layout, "aside", bodyFrame);
+      const item = slotItems(content, asidePlan)[0];
+      check(item?.title, { left: frame.left + 24, top: frame.top + 48, width: frame.width - 28, height: 130 }, "asideTitle", "aside");
+      check(item?.body, {
+        left: frame.left + 24,
+        top: item?.title ? frame.top + 192 : frame.top + 48,
+        width: frame.width - 28,
+        height: item?.title ? frame.height - 198 : frame.height - 54,
+      }, "asideBody", "aside");
+    }
+  }
+  return issues;
+}
+
 export function renderPageComposition(slide, content, layout, planPage, bodyFrame, typographyRoles) {
-  if (layout.id === "fixed-cover" || layout.id === "fixed-closing") return { componentFrame: null };
+  if (["fixed-cover", "fixed-agenda", "fixed-closing"].includes(layout.id)) return { componentFrame: null };
   if (layout.id === "editorial-list") {
     renderEditorialList(slide, content, layout, planPage, bodyFrame, typographyRoles);
     return { componentFrame: null };
@@ -267,6 +456,10 @@ export function renderPageComposition(slide, content, layout, planPage, bodyFram
   }
   if (layout.id === "editorial-single-focus") {
     renderSingleFocus(slide, content, layout, planPage, bodyFrame, typographyRoles);
+    return { componentFrame: null };
+  }
+  if (layout.id === "editorial-dual-statement") {
+    renderDualStatement(slide, content, layout, planPage, bodyFrame, typographyRoles);
     return { componentFrame: null };
   }
   const componentSlot = layout.slots.find((slot) => slot.role === "component");

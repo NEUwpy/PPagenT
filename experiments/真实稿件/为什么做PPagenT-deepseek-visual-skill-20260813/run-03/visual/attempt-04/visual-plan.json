@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "why-ppagent",
+  "skinId": "northeastern-university-001",
+  "visualLanguage": "NEU editorial restraint with structured cards, a process chain, and focus-driven editorial pages; red accents reserved for emphasized claims.",
+  "rhythmStrategy": "Alternate structured components and editorial focus pages: cards open, focus pages carry key insights, a process chain breaks the editorial run, then focus/reverse/list close the argument, ending with the fixed closing pattern.",
+  "pages": [
+    {
+      "pageId": "p1",
+      "intentId": "p1",
+      "familyId": "parallel",
+      "variantId": "parallel-cards-p135",
+      "silhouette": "equal-width-capability-cards",
+      "adaptationStatus": "adaptive",
+      "reason": "Four parallel drivers of cost are best shown as equal capability cards; emphasis remains inside the card content."
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "The emphasized insight anchors an editorial focus page while supporting context becomes a short list, varying rhythm after the card opener."
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3",
+      "familyId": "sequential-process",
+      "variantId": "horizontal-cards",
+      "silhouette": "horizontal-card-chain",
+      "adaptationStatus": "adaptive",
+      "reason": "AI, rules, and code form an ordered chain; the direct-summary quote is carried by the aside slot so it is not forced into the sequence."
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Value judgment is presented as an editorial focus with supporting points; no structural comparison is required for this content."
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "The audience contrast is handled by editorial-focus-reverse, keeping attention on the final capability goal while expert and mainstream needs support it."
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Uses an editorial list instead of another focus layout: emphasis as lead, scalability as body, and template-vs-experience points as the list."
+    },
+    {
+      "pageId": "p7",
+      "intentId": "p7",
+      "familyId": "skin-closing",
+      "variantId": "default",
+      "silhouette": "closing",
+      "adaptationStatus": "fixed",
+      "reason": "Fixed closing recap-focus-primary pattern gives the deck a definitive endpoint and reinforces the final promise."
+    }
+  ]
+}

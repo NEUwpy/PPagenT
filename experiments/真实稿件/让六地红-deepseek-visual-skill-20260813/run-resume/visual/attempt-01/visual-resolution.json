@@ -1,0 +1,66 @@
+{
+  "status": "needs-director-revision",
+  "feedback": [
+    {
+      "pageId": "opening",
+      "code": "composition-invalid",
+      "issues": [
+        {
+          "code": "composition-item-field-unplaced",
+          "omissions": [
+            {
+              "itemId": "greeting",
+              "field": "body"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "pageId": "matrix",
+      "code": "composition-invalid",
+      "issues": [
+        {
+          "code": "composition-content-unplaced",
+          "sourceItemIds": [
+            "three-classrooms",
+            "n-scenes"
+          ]
+        },
+        {
+          "code": "composition-item-field-unplaced",
+          "omissions": [
+            {
+              "itemId": "three-classrooms",
+              "field": "title"
+            },
+            {
+              "itemId": "three-classrooms",
+              "field": "body"
+            },
+            {
+              "itemId": "n-scenes",
+              "field": "title"
+            },
+            {
+              "itemId": "n-scenes",
+              "field": "body"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "pageId": "five-actions-1",
+      "code": "composition-invalid",
+      "issues": [
+        {
+          "code": "composition-content-duplicated",
+          "sourceItemIds": [
+            "five-actions-1-structure-2"
+          ]
+        }
+      ]
+    }
+  ]
+}

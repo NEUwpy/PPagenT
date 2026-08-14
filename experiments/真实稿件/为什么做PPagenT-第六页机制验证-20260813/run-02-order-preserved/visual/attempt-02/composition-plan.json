@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "ppagent-mechanism-validation",
+  "skinId": "northeastern-university",
+  "pages": [
+    {
+      "pageId": "p1",
+      "intentId": "p1-intent",
+      "compositionId": "component-aside-right",
+      "componentItemIds": [
+        "p1-structure-1",
+        "p1-structure-2",
+        "p1-structure-3"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [
+        {
+          "slotId": "aside",
+          "sourceItemIds": [
+            "p1-structure-2"
+          ],
+          "contentMode": "body"
+        }
+      ],
+      "reason": "Component holds all three items with full content; aside slot holds body of item2 to avoid duplication"
+    }
+  ]
+}

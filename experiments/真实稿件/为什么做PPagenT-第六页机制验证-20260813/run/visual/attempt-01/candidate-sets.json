@@ -1,0 +1,311 @@
+[
+  {
+    "pageId": "page-1",
+    "intentId": "page-1-sequence",
+    "candidates": [
+      {
+        "familyId": "sequential-process",
+        "assetId": "sequential-process-001",
+        "variantId": "horizontal-cards",
+        "silhouette": "horizontal-card-chain",
+        "adaptationStatus": "adaptive",
+        "itemCount": {
+          "min": 3,
+          "preferred": [
+            3,
+            4
+          ],
+          "max": 6
+        },
+        "textCapacity": {
+          "maxItemTitleChars": 10,
+          "maxItemBodyChars": 18,
+          "maxPointsPerItem": 4,
+          "maxPointChars": 8
+        },
+        "contentContract": {
+          "itemRole": "semantic-node",
+          "points": "optional",
+          "rule": "items 只能承载顺序主节点；节点内部的表达、容量、变化、禁忌等支撑维度进入 points，不得提升为同级步骤"
+        },
+        "renderer": "component",
+        "fallbackBody": false,
+        "compositionIds": [
+          "component-full",
+          "component-aside-right"
+        ],
+        "compositions": [
+          {
+            "id": "component-full",
+            "silhouette": "full-width-visual",
+            "requiresComponent": true,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "component",
+                "role": "component"
+              }
+            ]
+          },
+          {
+            "id": "component-aside-right",
+            "silhouette": "visual-left-editorial-right",
+            "requiresComponent": true,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "component",
+                "role": "component"
+              },
+              {
+                "id": "aside",
+                "role": "text"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "familyId": "skin-body-editorial",
+        "assetId": "northeastern-university-body-001",
+        "variantId": "editorial",
+        "silhouette": "editorial-page",
+        "adaptationStatus": "adaptive",
+        "itemCount": {
+          "min": 0,
+          "preferred": [
+            2,
+            3,
+            4
+          ],
+          "max": 20
+        },
+        "textCapacity": null,
+        "contentContract": null,
+        "renderer": "skin",
+        "fallbackBody": true,
+        "compositionIds": [
+          "editorial-list",
+          "editorial-focus",
+          "editorial-focus-reverse",
+          "editorial-single-focus",
+          "editorial-dual-statement"
+        ],
+        "compositions": [
+          {
+            "id": "editorial-list",
+            "silhouette": "editorial-lead-and-list",
+            "requiresComponent": false,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "lead",
+                "role": "text"
+              },
+              {
+                "id": "body",
+                "role": "text"
+              }
+            ]
+          },
+          {
+            "id": "editorial-focus",
+            "silhouette": "large-thesis-with-support",
+            "requiresComponent": false,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "primary",
+                "role": "text"
+              },
+              {
+                "id": "support",
+                "role": "text"
+              }
+            ]
+          },
+          {
+            "id": "editorial-focus-reverse",
+            "silhouette": "support-with-large-thesis-right",
+            "requiresComponent": false,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "support",
+                "role": "text"
+              },
+              {
+                "id": "primary",
+                "role": "text"
+              }
+            ]
+          },
+          {
+            "id": "editorial-single-focus",
+            "silhouette": "centered-single-thesis",
+            "requiresComponent": false,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "primary",
+                "role": "text"
+              }
+            ]
+          },
+          {
+            "id": "editorial-dual-statement",
+            "silhouette": "balanced-dual-statement",
+            "requiresComponent": false,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "left",
+                "role": "text"
+              },
+              {
+                "id": "right",
+                "role": "text"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "capacityDensity": "low",
+    "semanticRejections": [
+      {
+        "assetId": "comparison-structure-001",
+        "reasons": [
+          "base-relation:sequence",
+          "missing-metric:groups",
+          "missing-metric:itemsPerGroup",
+          "above-max:itemCount",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "cycle-loop-001",
+        "reasons": [
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "fishbone-analysis-001",
+        "reasons": [
+          "base-relation:sequence",
+          "purpose-key:explain_process",
+          "below-min:itemCount",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "framework-matrix-001",
+        "reasons": [
+          "base-relation:sequence",
+          "below-min:itemCount"
+        ]
+      },
+      {
+        "assetId": "funnel-conversion-001",
+        "reasons": [
+          "purpose-key:explain_process",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "hierarchy-pyramid-001",
+        "reasons": [
+          "base-relation:sequence",
+          "semantic:sameLevel"
+        ]
+      },
+      {
+        "assetId": "layered-architecture-001",
+        "reasons": [
+          "base-relation:sequence",
+          "missing-metric:sourceCount",
+          "missing-metric:applicationCount",
+          "below-min:itemCount",
+          "semantic:sameLevel"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-agenda-001",
+        "reasons": [
+          "base-relation:sequence",
+          "purpose-key:explain_process"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-body-001",
+        "reasons": [
+          "base-relation:sequence"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-closing-001",
+        "reasons": [
+          "base-relation:sequence",
+          "purpose-key:explain_process",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-cover-001",
+        "reasons": [
+          "base-relation:sequence",
+          "purpose-key:explain_process",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "organization-tree-001",
+        "reasons": [
+          "base-relation:sequence",
+          "purpose-key:explain_process"
+        ]
+      },
+      {
+        "assetId": "parallel-cards-001",
+        "reasons": [
+          "base-relation:sequence",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "problem-improvement-001",
+        "reasons": [
+          "base-relation:sequence",
+          "purpose-key:explain_process",
+          "below-min:itemCount",
+          "density:low"
+        ]
+      },
+      {
+        "assetId": "radial-hub-001",
+        "reasons": [
+          "base-relation:sequence",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "swimlane-process-001",
+        "reasons": [
+          "purpose-key:explain_process",
+          "missing-metric:roleCount",
+          "missing-metric:stageCount",
+          "below-min:itemCount",
+          "trait:dimensions",
+          "trait:secondaryDimension",
+          "density:low"
+        ]
+      },
+      {
+        "assetId": "timeline-roadmap-001",
+        "reasons": [
+          "trait:temporal"
+        ]
+      }
+    ]
+  }
+]

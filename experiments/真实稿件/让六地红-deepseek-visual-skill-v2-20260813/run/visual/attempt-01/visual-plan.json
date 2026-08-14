@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "liaoning-six-red-education",
+  "skinId": "northeastern-university-001",
+  "visualLanguage": "editorial-lead-and-list",
+  "rhythmStrategy": "alternating editorial abstract and component parallel",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "familyId": "skin-cover",
+      "variantId": "default",
+      "silhouette": "cover",
+      "adaptationStatus": "fixed",
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "familyId": "skin-agenda",
+      "variantId": "default",
+      "silhouette": "agenda",
+      "adaptationStatus": "fixed",
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "page-1",
+      "intentId": "page-1-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-single-focus",
+      "adaptationStatus": "adaptive",
+      "reason": "Single item, low density, no structure, use centered single thesis"
+    },
+    {
+      "pageId": "page-2",
+      "intentId": "page-2-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-list",
+      "adaptationStatus": "adaptive",
+      "reason": "Three temporal items, use lead and list for sequence"
+    },
+    {
+      "pageId": "page-3",
+      "intentId": "page-3-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-list",
+      "adaptationStatus": "adaptive",
+      "reason": "Three items with points, hierarchy not available, use list with lead and body"
+    },
+    {
+      "pageId": "page-4",
+      "intentId": "page-4-intent",
+      "familyId": "parallel",
+      "variantId": "parallel-cards-p135",
+      "silhouette": "equal-width-capability-cards",
+      "adaptationStatus": "native",
+      "reason": "Three parallel items, use component parallel cards"
+    },
+    {
+      "pageId": "page-5",
+      "intentId": "page-5-intent",
+      "familyId": "parallel",
+      "variantId": "parallel-cards-p135",
+      "silhouette": "equal-width-capability-cards",
+      "adaptationStatus": "native",
+      "reason": "Four parallel items, use component parallel cards"
+    },
+    {
+      "pageId": "page-6",
+      "intentId": "page-6-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-list",
+      "adaptationStatus": "adaptive",
+      "reason": "Three layered items, use list for layered points"
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "familyId": "skin-closing",
+      "variantId": "default",
+      "silhouette": "closing",
+      "adaptationStatus": "fixed",
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

@@ -1,0 +1,325 @@
+[
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p1-intent",
+    "purposeKey": "compare_options",
+    "purposeText": "对比画图与判断两种活动，指出真正耗时的是判断而非画图。",
+    "baseRelation": "comparison",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "category"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "hierarchyDepth": 0,
+      "sameLevel": true,
+      "dimensions": {
+        "rows": 2,
+        "columns": 1
+      }
+    },
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 2,
+      "maxItemChars": 52,
+      "avgItemChars": 45,
+      "minItemChars": 38,
+      "maxItemTitleChars": 9,
+      "maxItemBodyChars": 43,
+      "imbalanceRatio": 1.37
+    },
+    "density": "low",
+    "emphasis": [
+      0
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.85,
+    "assumptions": [
+      "两项目分别对应'画'和'判断'两个对比维度"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p2-intent",
+    "purposeKey": "compare_options",
+    "purposeText": "比较工作PPT需要稳定一致与每次重新发明的两种取向。",
+    "baseRelation": "comparison",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "category"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "hierarchyDepth": 0,
+      "sameLevel": true,
+      "dimensions": {
+        "rows": 2,
+        "columns": 1
+      }
+    },
+    "contentStats": {
+      "titleChars": 18,
+      "itemCount": 2,
+      "maxItemChars": 48,
+      "avgItemChars": 36.5,
+      "minItemChars": 25,
+      "maxItemTitleChars": 16,
+      "maxItemBodyChars": 32,
+      "imbalanceRatio": 1.92
+    },
+    "density": "low",
+    "emphasis": [
+      1
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.9,
+    "assumptions": [
+      "'固定是优点'是主张的核心，故强调此项"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p3-intent",
+    "purposeKey": "explain_process",
+    "purposeText": "说明AI理解、规则决定、代码执行三个核心机制。",
+    "baseRelation": "sequence",
+    "relationTraits": {
+      "temporal": true,
+      "cyclic": false,
+      "converging": true,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "role"
+    },
+    "structure": {
+      "itemCount": 3,
+      "ordered": true,
+      "hierarchyDepth": 1,
+      "sameLevel": true,
+      "dimensions": {
+        "rows": 3,
+        "columns": 1
+      }
+    },
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 3,
+      "maxItemChars": 47,
+      "avgItemChars": 37.67,
+      "minItemChars": 28,
+      "maxItemTitleChars": 7,
+      "maxItemBodyChars": 41,
+      "imbalanceRatio": 1.68
+    },
+    "density": "medium",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text",
+      "quotation"
+    ],
+    "confidence": 0.95,
+    "assumptions": [
+      "三项机制按从前到后的顺序执行，最终汇聚成稳定产出"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p4-intent",
+    "purposeKey": "compare_options",
+    "purposeText": "比较随机的95分与稳定的80分对工作的价值。",
+    "baseRelation": "comparison",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "hierarchyDepth": 0,
+      "sameLevel": true,
+      "dimensions": {
+        "rows": 2,
+        "columns": 1
+      }
+    },
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 2,
+      "maxItemChars": 29,
+      "avgItemChars": 27,
+      "minItemChars": 25,
+      "maxItemTitleChars": 10,
+      "maxItemBodyChars": 19,
+      "imbalanceRatio": 1.16
+    },
+    "density": "low",
+    "emphasis": [
+      1
+    ],
+    "evidenceTypes": [
+      "text",
+      "quotation"
+    ],
+    "confidence": 0.9,
+    "assumptions": [
+      "稳定的80分是主张的正向，故强调"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p5-intent",
+    "purposeKey": "explain_topics",
+    "purposeText": "说明目标用户是更广泛人群而非仅1%高手。",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "category"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "hierarchyDepth": 0,
+      "sameLevel": true,
+      "dimensions": {
+        "rows": 2,
+        "columns": 1
+      }
+    },
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 2,
+      "maxItemChars": 29,
+      "avgItemChars": 25.5,
+      "minItemChars": 22,
+      "maxItemTitleChars": 9,
+      "maxItemBodyChars": 20,
+      "imbalanceRatio": 1.32
+    },
+    "density": "low",
+    "emphasis": [
+      0
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.8,
+    "assumptions": [
+      "两个项目共同支持'不止服务1%'的观点"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p6-intent",
+    "purposeKey": "explain_topics",
+    "purposeText": "说明积累的是经验而非模板，以及可扩展性。",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "category"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "hierarchyDepth": 0,
+      "sameLevel": true,
+      "dimensions": {
+        "rows": 2,
+        "columns": 1
+      }
+    },
+    "contentStats": {
+      "titleChars": 12,
+      "itemCount": 2,
+      "maxItemChars": 31,
+      "avgItemChars": 30,
+      "minItemChars": 29,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 27,
+      "imbalanceRatio": 1.07
+    },
+    "density": "low",
+    "emphasis": [
+      0
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.85,
+    "assumptions": [
+      "两个项目共同论证积累的本质"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p7-intent",
+    "purposeKey": "present_closing",
+    "purposeText": "总结愿景，让普通人也能得到靠谱PPT。",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "hierarchyDepth": 0,
+      "sameLevel": true,
+      "dimensions": {
+        "rows": 2,
+        "columns": 1
+      }
+    },
+    "contentStats": {
+      "titleChars": 16,
+      "itemCount": 2,
+      "maxItemChars": 32,
+      "avgItemChars": 29,
+      "minItemChars": 26,
+      "maxItemTitleChars": 6,
+      "maxItemBodyChars": 28,
+      "imbalanceRatio": 1.23
+    },
+    "density": "low",
+    "emphasis": [
+      1
+    ],
+    "evidenceTypes": [
+      "text",
+      "quotation"
+    ],
+    "confidence": 0.85,
+    "assumptions": [
+      "末页收束愿景，强调结果"
+    ]
+  }
+]

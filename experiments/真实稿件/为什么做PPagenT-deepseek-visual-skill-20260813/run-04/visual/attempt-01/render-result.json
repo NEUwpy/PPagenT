@@ -1,0 +1,37 @@
+{
+  "outputPptx": "../为什么做PPagenT-deepseek-visual-skill-20260813.pptx",
+  "pageEvidence": [
+    "visual/attempt-01/render/qa/slide-01.png",
+    "visual/attempt-01/render/qa/slide-02.png",
+    "visual/attempt-01/render/qa/slide-03.png",
+    "visual/attempt-01/render/qa/slide-04.png",
+    "visual/attempt-01/render/qa/slide-05.png",
+    "visual/attempt-01/render/qa/slide-06.png",
+    "visual/attempt-01/render/qa/slide-07.png"
+  ],
+  "montage": "visual/attempt-01/render/qa/montage.webp",
+  "qualityAudit": {
+    "status": "passed",
+    "typography": {
+      "status": "passed",
+      "minimumFontSize": 16,
+      "violations": []
+    },
+    "geometry": {
+      "status": "passed",
+      "tolerance": 0.5,
+      "qaParentCount": 23,
+      "connectorCount": 0,
+      "qaParentCountBySlide": {
+        "slide-01": 5,
+        "slide-02": 2,
+        "slide-03": 2,
+        "slide-04": 5,
+        "slide-05": 2,
+        "slide-06": 2,
+        "slide-07": 5
+      },
+      "violations": []
+    }
+  }
+}

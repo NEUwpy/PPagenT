@@ -6,11 +6,11 @@ PPagenT 是一个面向固定使用场景、以可靠生成原生可编辑 Power
 
 ## 当前阶段
 
-两份真实稿件已经用于校准正式生成线，项目重心由继续扩建架构和批量积累资产，转向真实稿件压力测试、能力覆盖率和低成本运行验证。当前先冻结抽象层，用一个最小实验判断 `Shell + Content Frame + Visual Skill` 以及前端式布局是否值得进入正式实现；HTML/CSS 仍是候选内部技术，不改变原生 PPTX 交付目标。当前状态见[当前阶段](docs/当前阶段.md)，长任务边界见[方向校正](docs/方向校正.md)。
+两份真实稿件已经用于校准正式生成线。当前先冻结 Shell 与 Content Frame，并用最小实验验证 `Visual Skill → Style Group → State` 和前端式响应布局；HTML/CSS 是内部实现技术，不改变原生 PPTX 交付目标。当前状态见[当前阶段](docs/当前阶段.md)，几何和颗粒度见[Shell 与 Visual Skill 契约](docs/Shell与Visual Skill契约.md)，长任务边界见[方向校正](docs/方向校正.md)。
 
 ## 核心工程取舍
 
-PPagenT 采用“AI 理解与选择、参数化代码确定性绘制”的生成方式，以减少重复生成消耗并提高结果可靠性。核心库按表达家族组织，每个家族可保留多个经过验证的视觉变体，并继续适应内容数量和状态变化。具体规则见[产品定义](docs/产品定义.md)。
+PPagenT 采用“AI 理解与选择、参数化代码确定性绘制”的生成方式，以减少重复生成消耗并提高结果可靠性。核心库按 Visual Skill 组织语义能力；每个 Skill 可包含多个经验证的 Style Group，每组再确定性适应数量和容量 State。具体规则见[产品定义](docs/产品定义.md)。
 
 ## 已确定的基本原则
 
@@ -28,6 +28,8 @@ PPagenT 采用“AI 理解与选择、参数化代码确定性绘制”的生成
 - [当前阶段](docs/当前阶段.md)
 - [方向校正](docs/方向校正.md)
 - [产品定义](docs/产品定义.md)
+- [Shell 与 Visual Skill 契约](docs/Shell与Visual Skill契约.md)
+- [运行配置信息](docs/运行配置信息.md)
 - [产品叙事：为什么做 PPagenT](docs/产品叙事.md)
 - [外部项目学习](docs/外部项目学习/README.md)
 - [资产积累与入库工作流](docs/工作流/资产积累与入库/工作流.md)
@@ -41,12 +43,13 @@ PPagenT 采用“AI 理解与选择、参数化代码确定性绘制”的生成
 ## 主要目录
 
 - `assets/`：核心资产库，只放已进入正式调用并接受持续优化的版式家族。
+- `稿件/`：正式生成线的统一原始稿件目录；当前优先保存 UTF-8 Markdown，不放导演中间产物或生成结果。
 - `PPT源/`：全部原始 PPT 的唯一目录；整目录不进入 Git，换电脑时单独复制到仓库根目录。
 - `结构样本池/`：保存所有值得继续观察的单页来源样本，允许重复和暂未归类。
 - `备选资产/`：新蒸馏、重复版式和待比较方案的审核区。
 - `src/asset-runtime/`：核心资产与备选资产共用的绘制代码。
 - `experiments/真实稿件/`：按稿件名和版本保存页面规划与可重复生成入口。
-- `workbench/`：测试稿件、历史蒸馏批次和临时处理区，不保存原始 PPT，也不作为正式输入入口。
+- `workbench/`：历史回放快照、蒸馏批次和临时处理区，不保存原始 PPT，也不作为新任务的正式稿件入口。
 
 ## 公开仓库范围
 
@@ -73,6 +76,8 @@ npm test
 
 正式入口为 `npm run agent:run`，只接受原稿、Skin、输出位置、运行记录目录和 DirectorProvider；不接受人工准备的逐页 `pages`。生成带文字统计的 `PageIntent` 可使用 `npm run intent:stats -- --content <page-content.json> --intent-draft <intent-draft.json>`。
 
-实时模型运行可使用 `npm run agent:run:openai`，需设置 `OPENAI_API_KEY` 和 `PPAGENT_OPENAI_MODEL`。正式入口默认只调用内容导演和视觉导演；研发阶段需要独立审查时显式使用 `--mode development`。
+项目内稿件统一使用仓库相对路径 `稿件/<文件名>`。当前两份回归稿件为 `稿件/为什么做PPagenT-v1.md` 和 `稿件/让六地红-v1.md`；具体放置和命名规则见[放入稿件说明](稿件/放入稿件说明.md)。
+
+默认实时模型入口为 `npm run agent:run:deepseek`，使用 `deepseek-v4-flash`；它读取环境变量或 Git 忽略的 `config/deepseek.local.json`。OpenAI Provider 仍可通过 `npm run agent:run:openai` 使用。正式入口默认只调用内容导演和视觉导演；具体配置与密钥边界见[运行配置信息](docs/运行配置信息.md)。
 
 当前页面生成器依赖 Codex 工作区内置、尚未公开发布的 `@oai/artifact-tool`，因此不把它写入公共 npm 依赖；规则层、元数据审计和选择测试可以通过公开依赖独立运行。

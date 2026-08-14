@@ -1,0 +1,36 @@
+{
+  "id": "northeastern-university-agenda-001",
+  "name": "东北大学目录页 001",
+  "kind": "page-template",
+  "category": "目录",
+  "creationMethod": "reproduction",
+  "status": "core",
+  "source": "PPT源/PPT模板-封面正文尾页.pptx",
+  "sourceSlide": 2,
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "parameters": ["title", "items"],
+  "runtime": {
+    "renderer": "skin",
+    "entry": "runtime.mjs",
+    "mapperExport": "mapPageContent",
+    "familyId": "skin-agenda",
+    "variantId": "default",
+    "silhouette": "agenda",
+    "supportedBaseRelations": ["none"],
+    "supportedPurposeKeys": ["present_agenda"],
+    "itemCount": { "min": 1, "preferred": [3, 4, 5], "max": 5 },
+    "compositionIds": ["fixed-agenda"],
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "fixed",
+      "constraints": { "semantic": { "ordered": true }, "density": ["low"] }
+    }
+  },
+  "layoutExpansion": {
+    "mode": "fixed",
+    "range": "单一目录版式；支持 1–5 个目录项",
+    "rule": "保持来源模板第 2 页的目录结构，由 Shell 固定调用"
+  },
+  "validation": "东北大学 Shell 固定目录页，不参与正文结构资产竞争"
+}

@@ -5,6 +5,7 @@ import { execFile } from "node:child_process";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { promisify } from "node:util";
 import { createNortheasternUniversityRenderer } from "./neu-renderer.mjs";
+import { applyAcademicReportShellScaffold } from "./shell-scaffold.mjs";
 import { buildVisualCandidateSets, resolveVisualPlan } from "./visual-resolution.mjs";
 import { DEFAULT_SKIN_ID, runDirectorWorkflow } from "./workflow.mjs";
 
@@ -98,6 +99,7 @@ export async function runWorkflowCli(options) {
     outputDir: runDir,
     visualCandidateProvider: buildVisualCandidateSets,
     visualResolver: resolveVisualPlan,
+    shellScaffolder: applyAcademicReportShellScaffold,
     renderer,
     reviewMode: options.mode === "development" ? "development" : "none",
   });

@@ -1,0 +1,99 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "ppagent-intro-deck",
+  "skinId": "northeastern-university-001",
+  "visualLanguage": "editorial-documentary",
+  "rhythmStrategy": "alternating-text-and-component-pages-starting-with-text",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "familyId": "skin-cover",
+      "variantId": "default",
+      "silhouette": "cover",
+      "adaptationStatus": "fixed",
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "familyId": "skin-agenda",
+      "variantId": "default",
+      "silhouette": "agenda",
+      "adaptationStatus": "fixed",
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "page1",
+      "intentId": "page1-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "parallel low density three items fit editorial-list"
+    },
+    {
+      "pageId": "page2",
+      "intentId": "page2-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "comparison no valid comparison asset use editorial-dual-statement"
+    },
+    {
+      "pageId": "page3",
+      "intentId": "page3-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "layered ordered three items use editorial-list"
+    },
+    {
+      "pageId": "page4",
+      "intentId": "page4-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "comparison no valid alternative use editorial-focus"
+    },
+    {
+      "pageId": "page5",
+      "intentId": "page5-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "parallel two items use editorial-dual-statement"
+    },
+    {
+      "pageId": "page6",
+      "intentId": "page6-intent",
+      "familyId": "parallel",
+      "variantId": "parallel-cards-p135",
+      "silhouette": "equal-width-capability-cards",
+      "adaptationStatus": "adaptive",
+      "reason": "parallel three items fit card component"
+    },
+    {
+      "pageId": "page7",
+      "intentId": "page7-intent",
+      "familyId": "sequential-process",
+      "variantId": "horizontal-cards",
+      "silhouette": "horizontal-card-chain",
+      "adaptationStatus": "adaptive",
+      "reason": "sequence three items fit horizontal process"
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "familyId": "skin-closing",
+      "variantId": "default",
+      "silhouette": "closing",
+      "adaptationStatus": "fixed",
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

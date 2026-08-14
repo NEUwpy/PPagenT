@@ -7,21 +7,36 @@
   "status": "core",
   "source": {
     "file": "PPT源/狗哥蓝色-精美逻辑图PPT模板.pptx",
-    "slides": [17, 23, 27, 41, 45, 70, 95, 100, 105, 115, 131, 134, 135, 138, 145, 160]
+    "slides": [27]
   },
   "generator": "generate.mjs",
   "showcase": "example.pptx",
-  "parameters": ["title", "steps"],
+  "parameters": ["title", "steps", "steps[].points"],
   "runtime": {
     "entry": "generate.mjs",
     "builderExport": "buildSequentialProcess",
     "mapperExport": "mapPageContent",
+    "skillId": "sequence",
+    "styleGroupId": "sequence-arrow-cards-p27",
     "familyId": "sequential-process",
     "variantId": "horizontal-cards",
     "silhouette": "horizontal-card-chain",
     "supportedBaseRelations": ["sequence"],
     "supportedPurposeKeys": [],
     "itemCount": { "min": 3, "preferred": [3, 4], "max": 6 },
+    "textCapacity": {
+      "maxItemTitleChars": 10,
+      "maxItemBodyChars": 18,
+      "maxPointsPerItem": 4,
+      "maxPointChars": 8
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "optional",
+      "rule": "items 只能承载顺序主节点；节点内部的表达、容量、变化、禁忌等支撑维度进入 points，不得提升为同级步骤"
+    },
+    "stateContract": { "resolver": "itemCount", "states": [3, 4, 5, 6] },
+    "mediaContract": { "mode": "no-image", "required": [] },
     "contract": {
       "abstractionLevel": "foundation",
       "adaptationStatus": "adaptive",
@@ -29,7 +44,8 @@
         "semantic": { "ordered": true },
         "relationTraits": { "branched": false, "cyclic": false },
         "density": ["low", "medium"]
-      }
+      },
+      "fallback": { "tooMany": "split" }
     }
   },
   "layoutExpansion": {
@@ -49,5 +65,6 @@
     "supportedCompositionIds": ["component-full", "component-aside-right"]
   },
   "capacity": "3–6 个顺序步骤",
-  "validation": "仅基础横向卡片变体进入正式调用；其他实验变体不得借用本资产身份"
+  "validation": "仅第 27 页箭头卡片 Style Group 进入正式调用；其他实验变体不得借用本资产身份",
+  "review": "用户于 2026-08-13 审核通过；扩容状态 3–6 项已确认"
 }

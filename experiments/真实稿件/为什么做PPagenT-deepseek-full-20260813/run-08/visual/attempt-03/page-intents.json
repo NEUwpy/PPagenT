@@ -1,0 +1,315 @@
+[
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p1-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "呈现两个并列的痛点要点，说明做PPT真正费时间的是判断",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 2
+      }
+    },
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 2,
+      "maxItemChars": 52,
+      "avgItemChars": 45,
+      "minItemChars": 38,
+      "maxItemTitleChars": 9,
+      "maxItemBodyChars": 43,
+      "imbalanceRatio": 1.37
+    },
+    "density": "low",
+    "emphasis": [
+      0
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.9,
+    "assumptions": [
+      "两个要点共同支撑主题，没有主次之分"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p2-intent",
+    "purposeKey": "compare_options",
+    "purposeText": "比较两种观点：重新发明与固定模板的优劣，强调固定是优点",
+    "baseRelation": "comparison",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 2
+      }
+    },
+    "contentStats": {
+      "titleChars": 18,
+      "itemCount": 2,
+      "maxItemChars": 48,
+      "avgItemChars": 36.5,
+      "minItemChars": 25,
+      "maxItemTitleChars": 16,
+      "maxItemBodyChars": 32,
+      "imbalanceRatio": 1.92
+    },
+    "density": "low",
+    "emphasis": [
+      1
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.85,
+    "assumptions": [
+      "两个选项在同一维度上对比：是否需要每次都重新设计，且第二个代表推荐选项"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p3-intent",
+    "purposeKey": "explain_layers",
+    "purposeText": "说明三个核心机制的分工与协作关系",
+    "baseRelation": "layered",
+    "relationTraits": {
+      "temporal": true,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "other"
+    },
+    "structure": {
+      "itemCount": 3,
+      "ordered": true,
+      "hierarchyDepth": 1,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 3
+      }
+    },
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 3,
+      "maxItemChars": 47,
+      "avgItemChars": 37.67,
+      "minItemChars": 28,
+      "maxItemTitleChars": 7,
+      "maxItemBodyChars": 41,
+      "imbalanceRatio": 1.68
+    },
+    "density": "medium",
+    "emphasis": [
+      0,
+      1,
+      2
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.8,
+    "assumptions": [
+      "三个机制按顺序工作，后一个依赖前一个，但非严格层级，而是分层协作"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p4-intent",
+    "purposeKey": "compare_options",
+    "purposeText": "比较稳定80分与随机95分的价值，强调稳定性的优势",
+    "baseRelation": "comparison",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 2
+      }
+    },
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 2,
+      "maxItemChars": 29,
+      "avgItemChars": 27,
+      "minItemChars": 25,
+      "maxItemTitleChars": 10,
+      "maxItemBodyChars": 19,
+      "imbalanceRatio": 1.16
+    },
+    "density": "low",
+    "emphasis": [
+      1
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.9,
+    "assumptions": [
+      "两个选项在同一维度上比较：可靠性与惊艳程度，第二个代表推荐"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p5-intent",
+    "purposeKey": "compare_audience_segments",
+    "purposeText": "比较目标用户与大众的需求，强调产品服务于更广泛人群",
+    "baseRelation": "comparison",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "category"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 2
+      }
+    },
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 2,
+      "maxItemChars": 29,
+      "avgItemChars": 25.5,
+      "minItemChars": 22,
+      "maxItemTitleChars": 9,
+      "maxItemBodyChars": 20,
+      "imbalanceRatio": 1.32
+    },
+    "density": "low",
+    "emphasis": [
+      1
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.85,
+    "assumptions": [
+      "两个受众群体形成对比，后一个代表产品的主要价值"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p6-intent",
+    "purposeKey": "explain_hierarchy",
+    "purposeText": "说明经验积累的层次：从模板到规律再到可扩展能力",
+    "baseRelation": "hierarchy",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "layer"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": true,
+      "hierarchyDepth": 2,
+      "sameLevel": false,
+      "dimensions": {
+        "items": 2
+      }
+    },
+    "contentStats": {
+      "titleChars": 12,
+      "itemCount": 2,
+      "maxItemChars": 31,
+      "avgItemChars": 30,
+      "minItemChars": 29,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 27,
+      "imbalanceRatio": 1.07
+    },
+    "density": "low",
+    "emphasis": [
+      0
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.7,
+    "assumptions": [
+      "两个要点存在递进关系，从个人经验到平台能力，但更侧重说明经验的价值"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p7-intent",
+    "purposeKey": "present_closing",
+    "purposeText": "收束全篇，总结项目要解决的普通问题与最终价值",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 2
+      }
+    },
+    "contentStats": {
+      "titleChars": 16,
+      "itemCount": 2,
+      "maxItemChars": 32,
+      "avgItemChars": 29,
+      "minItemChars": 26,
+      "maxItemTitleChars": 6,
+      "maxItemBodyChars": 28,
+      "imbalanceRatio": 1.23
+    },
+    "density": "low",
+    "emphasis": [
+      0,
+      1
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.85,
+    "assumptions": [
+      "两个要点共同完成总结，没有比较或层级，适合作为结尾页"
+    ]
+  }
+]

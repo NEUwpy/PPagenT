@@ -1,0 +1,31 @@
+{
+  "outputName": "parallel-radial-p365-shell-review",
+  "slideTitle": "科研平台的协同能力",
+  "sectionName": "结构能力",
+  "stateCounts": [3, 4, 5, 6, 7],
+  "centerVisual": {
+    "placeholderLabel": "中心图片槽",
+    "required": true
+  },
+  "mediaContract": {
+    "centerVisual": {
+      "required": true,
+      "allowedSources": ["manuscript", "registered-media"],
+      "generatedFallback": false,
+      "missingPolicy": "style-group-ineligible"
+    },
+    "peripheralMarker": {
+      "preferred": "logo",
+      "fallback": "registered-icon"
+    }
+  },
+  "items": [
+    { "id": "governance", "title": "数据治理", "body": "统一口径与可信数据底座", "slotLabel": "标识" },
+    { "id": "modeling", "title": "模型研发", "body": "面向问题构建可复用模型", "slotLabel": "标识" },
+    { "id": "validation", "title": "实验验证", "body": "用可重复证据检验方法", "slotLabel": "标识" },
+    { "id": "translation", "title": "成果转化", "body": "让研究结果进入真实场景", "slotLabel": "标识" },
+    { "id": "collaboration", "title": "开放协作", "body": "连接团队与跨域知识网络", "slotLabel": "标识" },
+    { "id": "engineering", "title": "工程支撑", "body": "稳定交付可维护技术能力", "slotLabel": "标识" },
+    { "id": "evaluation", "title": "持续评估", "body": "用真实反馈推动持续改进", "slotLabel": "标识" }
+  ]
+}

@@ -1,0 +1,184 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "ppagent-intro-deck",
+  "skinId": "northeastern-university-001",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "compositionId": "fixed-cover",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "compositionId": "fixed-agenda",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "page1",
+      "intentId": "page1-intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "p1i1"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "p1i2",
+            "p1i3"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "lead carries first item full, body carries remaining two full"
+    },
+    {
+      "pageId": "page2",
+      "intentId": "page2-intent",
+      "compositionId": "editorial-dual-statement",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "left",
+          "sourceItemIds": [
+            "p2i1",
+            "p2i2"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "right",
+          "sourceItemIds": [
+            "p2i3"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "left compares AI现状 and fixed value, right states trade-off"
+    },
+    {
+      "pageId": "page3",
+      "intentId": "page3-intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "p3i1"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "p3i2",
+            "p3i3"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "lead introduces first layer, body lists following layers in order"
+    },
+    {
+      "pageId": "page4",
+      "intentId": "page4-intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "p4i1"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "p4i2",
+            "p4i3"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "primary states 不追求95分 stance, support gives scenarios and value"
+    },
+    {
+      "pageId": "page5",
+      "intentId": "page5-intent",
+      "compositionId": "editorial-dual-statement",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "left",
+          "sourceItemIds": [
+            "p5i1"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "right",
+          "sourceItemIds": [
+            "p5i2"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "two parallel points balanced on left and right"
+    },
+    {
+      "pageId": "page6",
+      "intentId": "page6-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p6i1",
+        "p6i2",
+        "p6i3"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "three items carried by card component with full title and body"
+    },
+    {
+      "pageId": "page7",
+      "intentId": "page7-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p7i1",
+        "p7i2",
+        "p7i3"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "three steps carried by horizontal process component with full text"
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "compositionId": "fixed-closing",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

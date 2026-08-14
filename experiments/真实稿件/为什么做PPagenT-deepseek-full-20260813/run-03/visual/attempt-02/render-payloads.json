@@ -1,0 +1,163 @@
+[
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p1-intent",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "做 PPT，真正费时间的不是“画”",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "judgment",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "rework",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p2-intent",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "工作里的 PPT，不需要每次重新发明",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "not-reinvent",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "fixed-is-good",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p3-intent",
+    "assetId": "timeline-roadmap-001",
+    "parameters": {
+      "title": "AI 负责理解，规则负责决定，代码负责执行",
+      "milestones": [
+        {
+          "period": "01",
+          "title": "AI 负责理解",
+          "body": "读取稿件，判断重点、关系、拆页和表达目的。"
+        },
+        {
+          "period": "02",
+          "title": "规则负责决定",
+          "body": "判断哪些版式可以使用、内容是否装得下、什么时候应该换版式或拆页。"
+        },
+        {
+          "period": "03",
+          "title": "代码负责执行",
+          "body": "按照已经确认的坐标、字号、颜色和间距，稳定生成原生可编辑的 PowerPoint。"
+        }
+      ],
+      "visualVariantId": "default"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "understand",
+        "parameterPath": "milestones[0]"
+      },
+      {
+        "sourceItemId": "decide",
+        "parameterPath": "milestones[1]"
+      },
+      {
+        "sourceItemId": "execute",
+        "parameterPath": "milestones[2]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p4-intent",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "稳定的 80 分，比随机的 95 分更值钱",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "not-95",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "80-value",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p5-intent",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "不只服务最会做 PPT 的那 1%",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "target",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "product-value",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p6-intent",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "真正积累的不是一万个模板",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "experience",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "expand",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p7-intent",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "最后，它想解决的是一件很普通的事",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "goal",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "result",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  }
+]

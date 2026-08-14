@@ -286,6 +286,108 @@ test("产品工作流只调用内容导演和视觉导演，不调用研发审�
   await assert.rejects(fs.access(path.join(outputDir, "visual", "attempt-01", "visual-review-post.json")));
 });
 
+test("视觉意图枚举错误会在受控次数内反馈重试", async (t) => {
+  const outputDir = await makeTempDir(t);
+  let intentCalls = 0;
+  let receivedFeedback = null;
+  const provider = {
+    async contentDirector() { return contentOutput(); },
+    async visualDirector({ phase, skinId, previousResolution }) {
+      if (phase === "composition") return visualPlanOutput(skinId);
+      intentCalls += 1;
+      if (intentCalls === 2) receivedFeedback = previousResolution;
+      if (intentCalls === 1) {
+        const invalid = visualIntentOutput();
+        invalid.pageIntents[0].relationTraits.secondaryDimension = "invented";
+        return invalid;
+      }
+      return visualIntentOutput();
+    },
+  };
+  const result = await runDirectorWorkflow({
+    input: { rawMarkdown },
+    provider,
+    outputDir,
+    reviewMode: "production",
+    visualCandidateProvider: candidateProvider,
+    visualResolver: resolver,
+    renderer,
+    maxVisualAttempts: 2,
+  });
+  assert.equal(result.status, "delivered");
+  assert.equal(intentCalls, 2);
+  assert.equal(receivedFeedback.feedback[0].code, "visual-intent-invalid");
+  assert.equal(receivedFeedback.feedback[0].errorCode, "SCHEMA_VALIDATION_FAILED");
+});
+
+test("内容来源溯源错误会在受控次数内反馈重试", async (t) => {
+  const outputDir = await makeTempDir(t);
+  let contentCalls = 0;
+  let receivedReview = null;
+  const provider = {
+    async contentDirector({ previousReview }) {
+      contentCalls += 1;
+      if (contentCalls === 2) receivedReview = previousReview;
+      const output = contentOutput();
+      if (contentCalls === 1) output.pageContents[0].sourceText = "改写后的非原文";
+      return output;
+    },
+    async visualDirector({ phase, skinId }) {
+      return phase === "intent" ? visualIntentOutput() : visualPlanOutput(skinId);
+    },
+  };
+  const result = await runDirectorWorkflow({
+    input: { rawMarkdown },
+    provider,
+    outputDir,
+    reviewMode: "production",
+    visualCandidateProvider: candidateProvider,
+    visualResolver: resolver,
+    renderer,
+    maxContentAttempts: 2,
+  });
+  assert.equal(result.status, "delivered");
+  assert.equal(contentCalls, 2);
+  assert.equal(receivedReview.issues[0].errorCode, "SOURCE_GROUNDING_FAILED");
+});
+
+test("多项内容超过正式容量时退回内容导演压缩而不是进入渲染", async (t) => {
+  const outputDir = await makeTempDir(t);
+  let contentCalls = 0;
+  let receivedReview = null;
+  const provider = {
+    async contentDirector({ previousReview }) {
+      contentCalls += 1;
+      if (contentCalls === 2) receivedReview = previousReview;
+      const output = contentOutput();
+      if (contentCalls === 1) {
+        output.pageContents[0].items = [1, 2, 3].map((index) => ({
+          id: `point-${index}`,
+          title: `要点${index}`,
+          body: "长".repeat(90),
+        }));
+      }
+      return output;
+    },
+    async visualDirector({ phase, skinId }) {
+      return phase === "intent" ? visualIntentOutput() : visualPlanOutput(skinId);
+    },
+  };
+  const result = await runDirectorWorkflow({
+    input: { rawMarkdown },
+    provider,
+    outputDir,
+    reviewMode: "production",
+    visualCandidateProvider: candidateProvider,
+    visualResolver: resolver,
+    renderer,
+    maxContentAttempts: 2,
+  });
+  assert.equal(result.status, "delivered");
+  assert.equal(contentCalls, 2);
+  assert.equal(receivedReview.issues[0].errorCode, "CONTENT_CAPACITY_EXCEEDED");
+});
+
 test("每次正式生成都必须带通过的确定性质量审计，否则不得交付", async (t) => {
   const outputDir = await makeTempDir(t);
   await assert.rejects(
@@ -473,9 +575,11 @@ test("变体确定性复核未接受时把反馈送回视觉导演且不进入�
   let reviewCalls = 0;
   let renderCalls = 0;
   let receivedResolution = null;
+  let intentCalls = 0;
   const provider = completeProvider({
     async visualDirector({ attempt, phase, skinId, previousResolution }) {
       if (attempt === 2) receivedResolution = previousResolution;
+      if (phase === "intent") intentCalls += 1;
       return phase === "intent" ? visualIntentOutput() : visualPlanOutput(skinId);
     },
     async visualReview({ stage, attempt }) {
@@ -508,6 +612,7 @@ test("变体确定性复核未接受时把反馈送回视觉导演且不进入�
     },
   });
   assert.equal(receivedResolution.status, "needs-director-revision");
+  assert.equal(intentCalls, 1);
   assert.equal(reviewCalls, 2);
   assert.equal(renderCalls, 1);
   const saved = JSON.parse(await fs.readFile(path.join(outputDir, "visual", "attempt-01", "visual-resolution.json"), "utf8"));

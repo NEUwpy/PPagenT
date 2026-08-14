@@ -1,0 +1,62 @@
+{
+  "status": "needs-director-revision",
+  "feedback": [
+    {
+      "pageId": "p2",
+      "code": "composition-invalid",
+      "issues": [
+        {
+          "code": "composition-text-slot-missing",
+          "slotIds": [
+            "body-list"
+          ]
+        }
+      ]
+    },
+    {
+      "pageId": "p3",
+      "code": "composition-invalid",
+      "issues": [
+        {
+          "code": "composition-text-slot-missing",
+          "slotIds": [
+            "focus",
+            "supporting-list"
+          ]
+        }
+      ]
+    },
+    {
+      "pageId": "p5",
+      "code": "composition-invalid",
+      "issues": [
+        {
+          "code": "composition-text-slot-missing",
+          "slotIds": [
+            "body-list"
+          ]
+        }
+      ]
+    },
+    {
+      "pageId": "p6",
+      "code": "composition-invalid",
+      "issues": [
+        {
+          "code": "composition-text-slot-missing",
+          "slotIds": [
+            "body-summary",
+            "closing-quote",
+            "end-note"
+          ]
+        },
+        {
+          "code": "composition-required-text-slot-unfilled",
+          "slotIds": [
+            "primary"
+          ]
+        }
+      ]
+    }
+  ]
+}

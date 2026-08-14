@@ -11,6 +11,8 @@ export async function loadVisualVariantCatalog(root = process.cwd()) {
   const packages = await discoverCoreAssetPackages(root);
   const packagedKeys = new Set(packages.map((item) => `${item.assetId}:${item.runtime.variantId}`));
   const packagedVariants = packages.map((item) => ({
+    skillId: item.runtime.skillId ?? item.runtime.familyId,
+    styleGroupId: item.runtime.styleGroupId ?? item.runtime.variantId,
     familyId: item.runtime.familyId,
     assetId: item.assetId,
     variantId: item.runtime.variantId,
@@ -19,9 +21,13 @@ export async function loadVisualVariantCatalog(root = process.cwd()) {
     supportedBaseRelations: item.runtime.supportedBaseRelations,
     supportedPurposeKeys: item.runtime.supportedPurposeKeys ?? [],
     itemCount: { ...item.runtime.itemCount },
+    textCapacity: item.runtime.textCapacity ? { ...item.runtime.textCapacity } : null,
+    contentContract: item.runtime.contentContract ? structuredClone(item.runtime.contentContract) : null,
     renderer: item.runtime.renderer ?? "component",
     compositionIds: item.runtime.compositionIds ?? [],
     fallbackBody: Boolean(item.runtime.fallbackBody),
+    stateContract: item.runtime.stateContract ?? null,
+    mediaContract: item.runtime.mediaContract ?? { mode: "no-image", required: [] },
     status: "core",
     origin: "self-describing-asset",
   }));
@@ -90,11 +96,25 @@ export async function listRenderableVisualVariants(options = {}) {
 
 export function queryVisualVariants(variants, query = {}) {
   let filtered = variants.filter((variant) => {
+    if (query.skillId && variant.skillId !== query.skillId) return false;
+    if (query.styleGroupId && variant.styleGroupId !== query.styleGroupId) return false;
     if (query.familyId && variant.familyId !== query.familyId) return false;
     if (query.assetId && variant.assetId !== query.assetId) return false;
     if (query.baseRelation && !variant.supportedBaseRelations?.includes(query.baseRelation)) return false;
+    if (query.requiredItemRole && variant.contentContract?.itemRole !== query.requiredItemRole) return false;
+    if ((query.maxPointsPerItem ?? 0) > 0 && variant.contentContract?.points === "forbidden") return false;
     if (query.itemCount !== undefined) {
       if (query.itemCount < variant.itemCount.min || query.itemCount > variant.itemCount.max) return false;
+    }
+    if (variant.textCapacity) {
+      if (query.maxItemTitleChars !== undefined
+        && query.maxItemTitleChars > variant.textCapacity.maxItemTitleChars) return false;
+      if (query.maxItemBodyChars !== undefined
+        && query.maxItemBodyChars > variant.textCapacity.maxItemBodyChars) return false;
+      if (variant.textCapacity.maxPointsPerItem !== undefined
+        && (query.maxPointsPerItem ?? 0) > variant.textCapacity.maxPointsPerItem) return false;
+      if (variant.textCapacity.maxPointChars !== undefined
+        && (query.maxPointChars ?? 0) > variant.textCapacity.maxPointChars) return false;
     }
     return true;
   });
@@ -115,11 +135,13 @@ function preferredDistance(variant, itemCount) {
 function selectionScore(variant, itemCount, history) {
   const previous = history.at(-1);
   const silhouetteFrequency = history.filter((entry) => entry.silhouette === variant.silhouette).length;
-  const variantFrequency = history.filter((entry) => entry.variantId === variant.variantId).length;
+  const styleGroupFrequency = history.filter((entry) => (
+    (entry.styleGroupId ?? entry.variantId) === variant.styleGroupId
+  )).length;
   return [
     Number(previous?.silhouette === variant.silhouette),
     silhouetteFrequency,
-    variantFrequency,
+    styleGroupFrequency,
     preferredDistance(variant, itemCount),
     variant.variantId,
   ];
@@ -132,8 +154,8 @@ function compareScore(left, right) {
   return left.at(-1).localeCompare(right.at(-1));
 }
 
-function rankVisualVariantCandidates({ familyId, assetId, itemCount, baseRelation, purposeKey, history = [], variants }) {
-  const candidates = queryVisualVariants(variants, { familyId, assetId, itemCount, baseRelation, purposeKey });
+function rankVisualVariantCandidates({ skillId, styleGroupId, familyId, assetId, itemCount, baseRelation, purposeKey, history = [], variants }) {
+  const candidates = queryVisualVariants(variants, { skillId, styleGroupId, familyId, assetId, itemCount, baseRelation, purposeKey });
   return candidates
     .map((variant) => ({ variant, score: selectionScore(variant, itemCount, history) }))
     .sort((left, right) => compareScore(left.score, right.score))
@@ -142,6 +164,8 @@ function rankVisualVariantCandidates({ familyId, assetId, itemCount, baseRelatio
 
 function candidateSummary(variant) {
   return {
+    skillId: variant.skillId,
+    styleGroupId: variant.styleGroupId,
     variantId: variant.variantId,
     silhouette: variant.silhouette,
     builderKey: variant.builderKey,
@@ -153,6 +177,7 @@ function resultWithIssue(request, status, candidates, code, message) {
     pageId: request.pageId,
     status,
     familyId: request.familyId,
+    skillId: request.skillId ?? request.familyId,
     assetId: request.assetId ?? candidates[0]?.assetId ?? null,
     itemCount: request.itemCount,
     candidates: candidates.map(candidateSummary),
@@ -180,7 +205,7 @@ export function planVisualVariants(requests, options) {
         "no-renderable-variant",
         `${request.familyId ?? request.assetId} 没有支持 ${request.itemCount} 个内容项的可渲染视觉变体`,
       );
-    } else if (!request.visualVariantId) {
+    } else if (!request.visualStyleGroupId && !request.visualVariantId) {
       result = resultWithIssue(
         request,
         "needs-director-decision",
@@ -189,14 +214,17 @@ export function planVisualVariants(requests, options) {
         "视觉导演尚未为该页指定 visualVariantId",
       );
     } else {
-      const selected = candidates.find((variant) => variant.variantId === request.visualVariantId);
+      const requestedStyleGroup = request.visualStyleGroupId ?? request.visualVariantId;
+      const selected = candidates.find((variant) => (
+        variant.styleGroupId === requestedStyleGroup || variant.variantId === requestedStyleGroup
+      ));
       if (!selected) {
         result = resultWithIssue(
           request,
           "invalid-director-decision",
           candidates,
           "unsupported-visual-variant",
-          `${request.visualVariantId} 不满足当前表达家族、运行能力或内容数量约束`,
+          `${requestedStyleGroup} 不满足当前表达能力、运行能力或内容数量约束`,
         );
       } else {
         const previous = history.at(-1);
@@ -226,6 +254,8 @@ export function planVisualVariants(requests, options) {
             pageId: request.pageId,
             status: "accepted",
             familyId: selected.familyId,
+            skillId: selected.skillId,
+            styleGroupId: selected.styleGroupId,
             assetId: selected.assetId,
             itemCount: request.itemCount,
             variantId: selected.variantId,

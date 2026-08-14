@@ -7,7 +7,7 @@
   "status": "core",
   "source": {
     "file": "PPT源/狗哥蓝色-精美逻辑图PPT模板.pptx",
-    "slides": [20, 21, 30, 36, 37, 54, 88, 111, 119, 128, 144]
+    "slides": [20]
   },
   "generator": "generate.mjs",
   "showcase": "example.pptx",
@@ -16,12 +16,16 @@
     "entry": "generate.mjs",
     "builderExport": "buildLayeredArchitectureAdaptive",
     "mapperExport": "mapPageContent",
+    "skillId": "layered",
+    "styleGroupId": "layered-platform-p20",
     "familyId": "layered-architecture",
     "variantId": "default",
     "silhouette": "top-center-bottom-layers",
     "supportedBaseRelations": ["layered"],
     "supportedPurposeKeys": [],
     "itemCount": { "min": 7, "preferred": [7, 9, 11, 13], "max": 13 },
+    "stateContract": { "resolver": "sourceCount+applicationCount", "sourceStates": [3, 4, 5, 6], "applicationStates": [3, 4, 5, 6] },
+    "mediaContract": { "mode": "no-image", "required": [] },
     "contract": {
       "abstractionLevel": "foundation",
       "adaptationStatus": "adaptive",
@@ -52,5 +56,5 @@
     "supportedCompositionIds": ["component-full"]
   },
   "capacity": "3–6 个来源节点、1 个平台层、3–6 个应用节点",
-  "review": "用户于 2026-08-11 确认；验收运行 layered-architecture-001-v2.0.0-r6"
+  "review": "用户于 2026-08-13 审核通过；来源与应用各 3–6 项扩容已确认"
 }

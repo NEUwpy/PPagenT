@@ -1,0 +1,430 @@
+[
+  {
+    "intentId": "shell-cover-intent",
+    "purposeKey": "present_cover",
+    "purposeText": "呈现演示标题",
+    "baseRelation": "none",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 0,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 0,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "low",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [
+      "该页由 Shell 固定提供，不进入正文视觉导演选择"
+    ],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 0,
+      "maxItemChars": 0,
+      "avgItemChars": 0,
+      "minItemChars": 0,
+      "maxItemTitleChars": 0,
+      "maxItemBodyChars": 0,
+      "imbalanceRatio": 0
+    }
+  },
+  {
+    "intentId": "shell-agenda-intent",
+    "purposeKey": "present_agenda",
+    "purposeText": "呈现演示目录",
+    "baseRelation": "none",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 5,
+      "ordered": true,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 5,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "low",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [
+      "该页由 Shell 固定提供，不进入正文视觉导演选择"
+    ],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 2,
+      "itemCount": 5,
+      "maxItemChars": 5,
+      "avgItemChars": 4,
+      "minItemChars": 2,
+      "maxItemTitleChars": 5,
+      "maxItemBodyChars": 0,
+      "imbalanceRatio": 2.5
+    }
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p1-intent",
+    "purposeKey": "explain_topics",
+    "purposeText": "开场致意并引入主题",
+    "baseRelation": "none",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 1,
+      "hierarchyDepth": 0,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "contentStats": {
+      "titleChars": 2,
+      "itemCount": 1,
+      "maxItemChars": 18,
+      "avgItemChars": 18,
+      "minItemChars": 18,
+      "maxItemTitleChars": 2,
+      "maxItemBodyChars": 16,
+      "imbalanceRatio": 1
+    },
+    "density": "low",
+    "emphasis": [
+      0
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95,
+    "assumptions": [
+      "开场只有问候语，作为引入主题的单页"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p2-intent",
+    "purposeKey": "explain_temporal_change",
+    "purposeText": "说明从困境到转向的过程",
+    "baseRelation": "sequence",
+    "relationTraits": {
+      "temporal": true,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 3,
+      "hierarchyDepth": 0,
+      "ordered": true,
+      "sameLevel": true,
+      "dimensions": {
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "contentStats": {
+      "titleChars": 12,
+      "itemCount": 3,
+      "maxItemChars": 54,
+      "avgItemChars": 50,
+      "minItemChars": 47,
+      "maxItemTitleChars": 7,
+      "maxItemBodyChars": 48,
+      "imbalanceRatio": 1.15
+    },
+    "density": "medium",
+    "emphasis": [
+      1,
+      2
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.9,
+    "assumptions": [
+      "三高三低到实践团再到深耕辽宁，呈现时间顺序的转变"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p3-intent",
+    "purposeKey": "explain_hierarchy",
+    "purposeText": "说明1+3+N新矩阵的层级结构",
+    "baseRelation": "hierarchy",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "category"
+    },
+    "structure": {
+      "itemCount": 3,
+      "hierarchyDepth": 1,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "root": 1,
+        "children": 3,
+        "maxPointsPerItem": 3,
+        "maxPointChars": 7,
+        "totalPoints": 3
+      }
+    },
+    "contentStats": {
+      "titleChars": 10,
+      "itemCount": 3,
+      "maxItemChars": 42,
+      "avgItemChars": 37.67,
+      "minItemChars": 32,
+      "maxItemTitleChars": 7,
+      "maxItemBodyChars": 35,
+      "imbalanceRatio": 1.31
+    },
+    "density": "medium",
+    "emphasis": [
+      0
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.92,
+    "assumptions": [
+      "矩阵呈现根节点与三个子节点的层级关系"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p4-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列呈现五类实践抓手",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 5,
+      "hierarchyDepth": 0,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "maxPointsPerItem": 3,
+        "maxPointChars": 28,
+        "totalPoints": 12
+      }
+    },
+    "contentStats": {
+      "titleChars": 6,
+      "itemCount": 5,
+      "maxItemChars": 57,
+      "avgItemChars": 49,
+      "minItemChars": 39,
+      "maxItemTitleChars": 10,
+      "maxItemBodyChars": 50,
+      "imbalanceRatio": 1.46
+    },
+    "density": "high",
+    "emphasis": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95,
+    "assumptions": [
+      "五个抓手为同级并列关系"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p5-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列呈现五年成效的四个方面",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "hierarchyDepth": 0,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "contentStats": {
+      "titleChars": 4,
+      "itemCount": 4,
+      "maxItemChars": 50,
+      "avgItemChars": 42.5,
+      "minItemChars": 38,
+      "maxItemTitleChars": 4,
+      "maxItemBodyChars": 46,
+      "imbalanceRatio": 1.32
+    },
+    "density": "medium",
+    "emphasis": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.93,
+    "assumptions": [
+      "四个成效为并列关系，均正向"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p6-intent",
+    "purposeKey": "present_layered_conclusions",
+    "purposeText": "分层呈现总结性结论",
+    "baseRelation": "layered",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": true,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "other"
+    },
+    "structure": {
+      "itemCount": 3,
+      "hierarchyDepth": 0,
+      "ordered": true,
+      "sameLevel": true,
+      "dimensions": {
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "contentStats": {
+      "titleChars": 2,
+      "itemCount": 3,
+      "maxItemChars": 71,
+      "avgItemChars": 57.67,
+      "minItemChars": 48,
+      "maxItemTitleChars": 5,
+      "maxItemBodyChars": 66,
+      "imbalanceRatio": 1.48
+    },
+    "density": "medium",
+    "emphasis": [
+      2
+    ],
+    "evidenceTypes": [
+      "quotation",
+      "text"
+    ],
+    "confidence": 0.9,
+    "assumptions": [
+      "从嘱托到总结再到主题升华，形成分层递进"
+    ]
+  },
+  {
+    "intentId": "shell-closing-intent",
+    "purposeKey": "present_closing",
+    "purposeText": "收束整套演示",
+    "baseRelation": "none",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 1,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 1,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "low",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [
+      "该页由 Shell 固定提供，不进入正文视觉导演选择"
+    ],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 0,
+      "itemCount": 1,
+      "maxItemChars": 46,
+      "avgItemChars": 46,
+      "minItemChars": 46,
+      "maxItemTitleChars": 0,
+      "maxItemBodyChars": 46,
+      "imbalanceRatio": 1
+    }
+  }
+]

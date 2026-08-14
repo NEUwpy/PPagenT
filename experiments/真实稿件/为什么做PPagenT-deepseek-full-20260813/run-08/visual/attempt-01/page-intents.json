@@ -1,0 +1,304 @@
+[
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p1",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列呈现做PPT真正费时间的两个观点：判断和重复",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "sameLevel": true,
+      "hierarchyDepth": 0
+    },
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 2,
+      "maxItemChars": 52,
+      "avgItemChars": 45,
+      "minItemChars": 38,
+      "maxItemTitleChars": 9,
+      "maxItemBodyChars": 43,
+      "imbalanceRatio": 1.37
+    },
+    "density": "medium",
+    "emphasis": [
+      1,
+      2
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.85,
+    "assumptions": [
+      "两个项目互相支持共同说明论点，并非对比"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p2",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列呈现工作PPT不需要重新设计和固定是优点两个观点",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "sameLevel": true,
+      "hierarchyDepth": 0
+    },
+    "contentStats": {
+      "titleChars": 18,
+      "itemCount": 2,
+      "maxItemChars": 48,
+      "avgItemChars": 36.5,
+      "minItemChars": 25,
+      "maxItemTitleChars": 16,
+      "maxItemBodyChars": 32,
+      "imbalanceRatio": 1.92
+    },
+    "density": "low",
+    "emphasis": [
+      2,
+      1
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.85,
+    "assumptions": [
+      "两个项目是互补的，非对比"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p3",
+    "purposeKey": "explain_process",
+    "purposeText": "说明AI理解、规则决定、代码执行三个阶段依次进行的过程",
+    "baseRelation": "sequence",
+    "relationTraits": {
+      "temporal": true,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 3,
+      "ordered": true,
+      "sameLevel": true,
+      "hierarchyDepth": 0
+    },
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 3,
+      "maxItemChars": 47,
+      "avgItemChars": 37.67,
+      "minItemChars": 28,
+      "maxItemTitleChars": 7,
+      "maxItemBodyChars": 41,
+      "imbalanceRatio": 1.68
+    },
+    "density": "medium",
+    "emphasis": [
+      1,
+      2,
+      3
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95,
+    "assumptions": [
+      "三个步骤有先后顺序，构成整个机制"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p4",
+    "purposeKey": "compare_options",
+    "purposeText": "比较随机95分和稳定80分的价值，体现稳定更优",
+    "baseRelation": "comparison",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "sameLevel": true,
+      "hierarchyDepth": 0
+    },
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 2,
+      "maxItemChars": 29,
+      "avgItemChars": 27,
+      "minItemChars": 25,
+      "maxItemTitleChars": 10,
+      "maxItemBodyChars": 19,
+      "imbalanceRatio": 1.16
+    },
+    "density": "low",
+    "emphasis": [
+      1,
+      2
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.9,
+    "assumptions": [
+      "两个选项在同一维度上比较，稳定80分更值得"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p5",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列呈现目标用户不是1% 和产品价值两个观点",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "sameLevel": true,
+      "hierarchyDepth": 0
+    },
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 2,
+      "maxItemChars": 29,
+      "avgItemChars": 25.5,
+      "minItemChars": 22,
+      "maxItemTitleChars": 9,
+      "maxItemBodyChars": 20,
+      "imbalanceRatio": 1.32
+    },
+    "density": "low",
+    "emphasis": [
+      1,
+      2
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.8,
+    "assumptions": [
+      "两者共同支持拓宽用户群的主张"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p6",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列呈现积累经验而非模板和可扩展性两个观点",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "sameLevel": true,
+      "hierarchyDepth": 0
+    },
+    "contentStats": {
+      "titleChars": 12,
+      "itemCount": 2,
+      "maxItemChars": 31,
+      "avgItemChars": 30,
+      "minItemChars": 29,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 27,
+      "imbalanceRatio": 1.07
+    },
+    "density": "medium",
+    "emphasis": [
+      1,
+      2
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.8,
+    "assumptions": [
+      "两点共同说明积累的本质"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p7",
+    "purposeKey": "present_closing",
+    "purposeText": "总结愿景：解决普通问题并呈现最终结果",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "sameLevel": true,
+      "hierarchyDepth": 0
+    },
+    "contentStats": {
+      "titleChars": 16,
+      "itemCount": 2,
+      "maxItemChars": 32,
+      "avgItemChars": 29,
+      "minItemChars": 26,
+      "maxItemTitleChars": 6,
+      "maxItemBodyChars": 28,
+      "imbalanceRatio": 1.23
+    },
+    "density": "low",
+    "emphasis": [
+      1,
+      2
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.9,
+    "assumptions": [
+      "作为结束页，两个项目共同总结愿景"
+    ]
+  }
+]

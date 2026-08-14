@@ -7,7 +7,7 @@
   "status": "core",
   "source": {
     "file": "PPT源/【蓝色版】年终日常汇报PPT模板-狗哥PPT出品.pptx",
-    "slides": [35, 128]
+    "slides": [35]
   },
   "generator": "generate.mjs",
   "showcase": "example.pptx",
@@ -16,12 +16,17 @@
     "entry": "generate.mjs",
     "builderExport": "buildHierarchyPyramid",
     "mapperExport": "mapPageContent",
+    "skillId": "hierarchy",
+    "styleGroupId": "hierarchy-pyramid-p35",
     "familyId": "hierarchy-pyramid",
     "variantId": "default",
     "silhouette": "tiered-pyramid",
     "supportedBaseRelations": ["hierarchy"],
     "supportedPurposeKeys": [],
     "itemCount": { "min": 3, "preferred": [3, 4, 5], "max": 5 },
+    "textCapacity": { "maxItemTitleChars": 10, "maxItemBodyChars": 34 },
+    "stateContract": { "resolver": "itemCount", "states": [3, 4, 5] },
+    "mediaContract": { "mode": "no-image", "required": [] },
     "contract": {
       "abstractionLevel": "foundation",
       "adaptationStatus": "adaptive",
@@ -55,5 +60,5 @@
   },
   "semanticContract": "表达由核心到基础、由高阶到广泛执行的稳定层级关系",
   "doNotUseWhen": "项目只是顺序推进，或各项地位并列",
-  "review": "用户于 2026-08-11 确认；验收运行 hierarchy-pyramid-001-v2.0.0-r12"
+  "review": "用户于 2026-08-13 审核通过；扩容状态 3–5 层已确认"
 }

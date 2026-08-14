@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "1.0",
+  "status": "delivered",
+  "input": {
+    "sourcePath": "稿件/为什么做PPagenT-v1.md",
+    "sourceSha256": "5edce4884a35438010f309d7639a7ddcdb0f96c961b12a3c36a328a3b1cf63ee",
+    "skinId": "northeastern-university-001"
+  },
+  "provider": {
+    "module": "src/agent/deepseek-provider-from-env.mjs",
+    "identity": {
+      "providerKind": "live-schema-aware-model-provider",
+      "contentModel": "deepseek-chat-completions:deepseek-v4-flash:enabled",
+      "visualIntentModel": "deepseek-chat-completions:deepseek-v4-flash:disabled",
+      "visualCompositionModel": "deepseek-chat-completions:deepseek-v4-flash:disabled",
+      "reviewerModel": "deepseek-chat-completions:deepseek-v4-flash:enabled"
+    }
+  },
+  "artifacts": {
+    "content/attempt-01/deck-plan.json": "5a33aa4a01c29d32386dc70468ff5eadc094d957d700759ca9b5cfb6fbcac00b",
+    "content/attempt-01/page-contents.json": "566cc33e026cd861affc61f42cf83b521d866ff9d3f53198f070b1e0629edfd5",
+    "visual/attempt-01/candidate-sets.json": "515110d20d00693886d94db78963dcd9277ecc14a83a6fd7458228534777131c",
+    "visual/attempt-01/composition-plan.json": "4b68dea585091d27051ec3850775de930407e9e366be8d658eab0a522af26d9d",
+    "visual/attempt-01/layout-decisions.json": "ef5adc02d6846b32ec4beabee801656f41c768d0ce6039583d7d051a9fbb5a0b",
+    "visual/attempt-01/page-intents.json": "bfa3fa54d9a77d8de3ceaf1c100b4e1357b59a6f37f6b73034fd2dfdf74c708c",
+    "visual/attempt-01/render-payloads.json": "717635897567e29c6df7c783cb91c397a86fc0d991caa2e68a9b4025e48d7410",
+    "visual/attempt-01/render-result.json": "8aa4fa8d45b2609ae9a600d6180c77a038602cd1f628e0d2281ac9b77f1356c9",
+    "visual/attempt-01/render/qa/slide-01.layout.json": "db1465b976e55dd49fd985968a3524d77379e17996376d18915978cb878453bb",
+    "visual/attempt-01/render/qa/slide-02.layout.json": "39fc3f3c93332670099249bab95a46b86482718e33813be19f36ce3fcf29ca79",
+    "visual/attempt-01/render/qa/slide-03.layout.json": "dce4079af2430a024910df5f526c971180c72423fce43bfdab447f3e0d01d9ef",
+    "visual/attempt-01/render/qa/slide-04.layout.json": "0c93fb39d4ae4d6fb76088e0029bfc461f2a80b87ad03721bf84c5af57797000",
+    "visual/attempt-01/render/qa/slide-05.layout.json": "1fd6d14d9dc82e87cf7e49e851b305a6f4fa49539ba63c372ee5efb3a756076e",
+    "visual/attempt-01/render/qa/slide-06.layout.json": "3178f40b664ba268a9edf6cca565a0435e2ec05a96fed56b0d49e43e2660ff05",
+    "visual/attempt-01/render/qa/slide-07.layout.json": "94e233bcb5a720a3d8be900838213140ce2245c0f77f8405ed6d027fdbb6a618",
+    "visual/attempt-01/render/qa/slide-08.layout.json": "f7d3f30abb739d89c92cfa489f0a107682fb8f39908cbf30c6ed873965ba5549",
+    "visual/attempt-01/render/qa/slide-09.layout.json": "830bf9664a191913972094915312f608b5f27f3c27d340afb93a50231e8e220d",
+    "visual/attempt-01/render/qa/slide-10.layout.json": "52a24ca35fccbc0bf82fa688005bb42219283513fe45bd05c6e53ad3c0518022",
+    "visual/attempt-01/visual-plan.json": "cb426fee238d27c995709bf0024aae762ebe11a0d49fb785c87d384d315ed8e9",
+    "visual/attempt-01/visual-resolution.json": "c70eaabc6142fb7670fb1a4b0394b7a0cea2b87fffca303faca66b5c3224d403",
+    "workflow-result.json": "3a149c6c3f1c86d937e01286c61f5306103024fb7c6ffe24a533df7b390e5f2f"
+  },
+  "output": {
+    "path": "experiments/真实稿件/为什么做PPagenT-deepseek-refined-20260813/为什么做PPagenT-deepseek-baseline-20260813.pptx",
+    "sha256": "727958af4d7853a4ad47f8a36440de5238f991e3e766920599ed89e5f57254bb"
+  },
+  "pageEvidence": {
+    "slide-01": "4f1fd641e8ea2d22c01d0cb5be21373321adbfdde5e3d9579c2b1066517b920b",
+    "slide-02": "8eeb2a489a28c855f02627b59105fbb5870dc6b54908e6022cff0053c22e344d",
+    "slide-03": "ef09a1adf8ed115605747e661661c75b28acf0897be009f055e95e89427e61e2",
+    "slide-04": "29eb51c6a92a7523110541f0eac65ae155a2cae26eb903acadd2287aeb9fb35a",
+    "slide-05": "81eb380c99fbac81cea92ae3e871564675acbcc52ea8feb1e93e49cdcdb98419",
+    "slide-06": "1ea6b2cff92eeb5d8a0155022ee84bd522a7e5b2d21bc55617f1b13ae9a3a2fb",
+    "slide-07": "bc71234e2ceddbf1d922d714af11dcc6125dc4c925cbabdc1d83c4670e72464e",
+    "slide-08": "5498ab1bdb29321ba0311707da651a7462d71f315f75ad83c5574d92bbba23fb",
+    "slide-09": "b3692fcdcf586b8f8d205178561fa871d7b42b15435f71501c6197e520b8a5a4",
+    "slide-10": "df0841ffc69999411c9b94e51ab09f1b03e20d8f1fe2f713158bc913e14d97e5"
+  },
+  "qa": {
+    "deterministicQualityAudit": {
+      "status": "passed",
+      "typography": {
+        "status": "passed",
+        "minimumFontSize": 16,
+        "violations": []
+      },
+      "geometry": {
+        "status": "passed",
+        "tolerance": 0.5,
+        "qaParentCount": 18,
+        "connectorCount": 0,
+        "qaParentCountBySlide": {
+          "slide-01": 0,
+          "slide-02": 0,
+          "slide-03": 2,
+          "slide-04": 2,
+          "slide-05": 2,
+          "slide-06": 2,
+          "slide-07": 2,
+          "slide-08": 4,
+          "slide-09": 4,
+          "slide-10": 0
+        },
+        "violations": []
+      }
+    },
+    "postRenderReview": "not-part-of-production-workflow",
+    "overflow": {
+      "status": "not-run"
+    }
+  }
+}

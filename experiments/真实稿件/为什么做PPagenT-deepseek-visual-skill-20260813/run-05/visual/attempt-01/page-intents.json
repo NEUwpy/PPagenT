@@ -1,0 +1,303 @@
+[
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p1-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列呈现制作PPT真正耗时的多个方面，并引出核心追问",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "hierarchyDepth": 1,
+      "sameLevel": true,
+      "dimensions": {}
+    },
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 4,
+      "maxItemChars": 46,
+      "avgItemChars": 41.75,
+      "minItemChars": 34,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 41,
+      "imbalanceRatio": 1.35
+    },
+    "density": "medium",
+    "emphasis": [
+      4
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95,
+    "assumptions": [
+      "四个要点为同级并列，强调核心追问"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p2-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列呈现现状、洞察、组织风格和PPagenT的选择，强调洞察",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "hierarchyDepth": 1,
+      "sameLevel": true,
+      "dimensions": {}
+    },
+    "contentStats": {
+      "titleChars": 18,
+      "itemCount": 4,
+      "maxItemChars": 55,
+      "avgItemChars": 45,
+      "minItemChars": 39,
+      "maxItemTitleChars": 11,
+      "maxItemBodyChars": 51,
+      "imbalanceRatio": 1.41
+    },
+    "density": "medium",
+    "emphasis": [
+      2
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.93,
+    "assumptions": [
+      "四个要点并列，但洞察为关键信息"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p3-intent",
+    "purposeKey": "explain_hierarchy",
+    "purposeText": "说明PPagenT系统的三层分工：AI理解、规则决定、代码执行",
+    "baseRelation": "hierarchy",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "role"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": true,
+      "hierarchyDepth": 2,
+      "sameLevel": false,
+      "dimensions": {}
+    },
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 4,
+      "maxItemChars": 46,
+      "avgItemChars": 35,
+      "minItemChars": 28,
+      "maxItemTitleChars": 7,
+      "maxItemBodyChars": 40,
+      "imbalanceRatio": 1.64
+    },
+    "density": "medium",
+    "emphasis": [
+      4
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.97,
+    "assumptions": [
+      "结构化数据表明三层系统层级，直接说法作为总结"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p4-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列呈现价值主张的多个方面，强调稳定80分优于随机95分",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "hierarchyDepth": 1,
+      "sameLevel": true,
+      "dimensions": {}
+    },
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 4,
+      "maxItemChars": 54,
+      "avgItemChars": 41.25,
+      "minItemChars": 36,
+      "maxItemTitleChars": 7,
+      "maxItemBodyChars": 50,
+      "imbalanceRatio": 1.5
+    },
+    "density": "medium",
+    "emphasis": [
+      4
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.96,
+    "assumptions": [
+      "四个要点并列，核心观点重点强调且为正向"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p5-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列呈现目标用户相关的要点，强调最终目标",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "hierarchyDepth": 1,
+      "sameLevel": true,
+      "dimensions": {}
+    },
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 4,
+      "maxItemChars": 50,
+      "avgItemChars": 47.75,
+      "minItemChars": 43,
+      "maxItemTitleChars": 5,
+      "maxItemBodyChars": 46,
+      "imbalanceRatio": 1.16
+    },
+    "density": "medium",
+    "emphasis": [
+      4
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.94,
+    "assumptions": [
+      "四个要点并列，最终目标为强调项"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p6-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列呈现关于积累经验的多个要点，强调从作品到能力",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "hierarchyDepth": 1,
+      "sameLevel": true,
+      "dimensions": {}
+    },
+    "contentStats": {
+      "titleChars": 12,
+      "itemCount": 4,
+      "maxItemChars": 66,
+      "avgItemChars": 54.5,
+      "minItemChars": 37,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 62,
+      "imbalanceRatio": 1.78
+    },
+    "density": "medium",
+    "emphasis": [
+      3
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95,
+    "assumptions": [
+      "四个要点并列，从作品到能力为强调项"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p7-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列呈现问题、方案、承诺和意义，强调承诺",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "hierarchyDepth": 1,
+      "sameLevel": true,
+      "dimensions": {}
+    },
+    "contentStats": {
+      "titleChars": 16,
+      "itemCount": 4,
+      "maxItemChars": 65,
+      "avgItemChars": 40.75,
+      "minItemChars": 20,
+      "maxItemTitleChars": 4,
+      "maxItemBodyChars": 63,
+      "imbalanceRatio": 3.25
+    },
+    "density": "medium",
+    "emphasis": [
+      3
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95,
+    "assumptions": [
+      "四个要点并列，承诺为核心强调项"
+    ]
+  }
+]

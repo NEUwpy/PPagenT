@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "deck-001",
+  "skinId": "northeastern-university",
+  "pages": [
+    {
+      "pageId": "page-1",
+      "intentId": "page-1-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "page-1-structure-1",
+        "page-1-structure-2"
+      ],
+      "componentContentMode": "titles-only",
+      "textSlots": [
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "page-1-structure-1",
+            "page-1-structure-2"
+          ],
+          "contentMode": "body"
+        }
+      ],
+      "componentBindings": [
+        {
+          "bindingId": "group-items",
+          "sourceItemId": "page-1-structure-1",
+          "entries": [
+            {
+              "text": "可直接用于工作",
+              "sourceFragment": "可直接用于工作的初稿"
+            },
+            {
+              "text": "节省大量时间",
+              "sourceFragment": "节省时间"
+            },
+            {
+              "text": "可靠且可修改",
+              "sourceFragment": "可靠可修改"
+            }
+          ]
+        },
+        {
+          "bindingId": "group-items",
+          "sourceItemId": "page-1-structure-2",
+          "entries": [
+            {
+              "text": "偶尔惊艳",
+              "sourceFragment": "偶尔惊艳"
+            },
+            {
+              "text": "但不可靠",
+              "sourceFragment": "不可靠"
+            },
+            {
+              "text": "难以稳定用于工作",
+              "sourceFragment": "难以稳定用于实际工作场景"
+            }
+          ]
+        }
+      ],
+      "reason": "Structure component selected for clear side-by-side comparison; titles retained in component (titles-only), bodies moved to body text slot to satisfy non-empty body coverage while maintaining visual clarity; binding entries per item aligned and grounded in source fragments."
+    }
+  ]
+}

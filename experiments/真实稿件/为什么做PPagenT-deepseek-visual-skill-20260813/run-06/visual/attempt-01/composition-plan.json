@@ -1,0 +1,196 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "why-ppagent",
+  "skinId": "northeastern-university-001",
+  "pages": [
+    {
+      "pageId": "p1",
+      "intentId": "p1-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p1-1",
+        "p1-2",
+        "p1-3",
+        "p1-4"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [
+        {
+          "slotId": "component",
+          "sourceItemIds": [
+            "p1-1",
+            "p1-2",
+            "p1-3",
+            "p1-4"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "All four parallel items rendered as capable cards with full content"
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2-intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "p2-2"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "p2-1",
+            "p2-3",
+            "p2-4"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Emphasized insight as primary, supporting points in support slot"
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3-intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "p3-4"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "p3-1",
+            "p3-2",
+            "p3-3"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Direct statement as primary, hierarchical roles as support"
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4-intent",
+      "compositionId": "editorial-focus-reverse",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "p4-1",
+            "p4-2",
+            "p4-3"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "p4-4"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Supporting context first, core value proposition as right-side thesis"
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5-intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "p5-4"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "p5-1",
+            "p5-2",
+            "p5-3"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Final goal as primary, expert/majority contrast as support"
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6-intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "p6-1",
+            "p6-2",
+            "p6-3",
+            "p6-4"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "p6-1",
+            "p6-2",
+            "p6-3",
+            "p6-4"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "All four parallel points listed in lead, full content in body"
+    },
+    {
+      "pageId": "p7",
+      "intentId": "p7-intent",
+      "compositionId": "component-aside-right",
+      "componentItemIds": [
+        "p7-1",
+        "p7-2",
+        "p7-3"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [
+        {
+          "slotId": "component",
+          "sourceItemIds": [
+            "p7-1",
+            "p7-2",
+            "p7-3"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "aside",
+          "sourceItemIds": [
+            "p7-4"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Three steps in horizontal cards, significance in aside"
+    }
+  ]
+}

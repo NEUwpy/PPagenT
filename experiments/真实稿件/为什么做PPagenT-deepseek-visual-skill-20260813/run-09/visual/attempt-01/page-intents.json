@@ -1,0 +1,311 @@
+[
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p1-intent",
+    "purposeKey": "explain_topics",
+    "purposeText": "说明制作PPT真正耗时的是判断和重复劳动，并抛出核心追问",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 4
+      }
+    },
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 4,
+      "maxItemChars": 46,
+      "avgItemChars": 41.75,
+      "minItemChars": 34,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 41,
+      "imbalanceRatio": 1.35
+    },
+    "density": "medium",
+    "emphasis": [
+      4
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.92,
+    "assumptions": [
+      "核心追问是强调点，但与其他项并列"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p2-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "说明工作PPT不需要每次重新发明，并强调一致性是优势",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 4
+      }
+    },
+    "contentStats": {
+      "titleChars": 18,
+      "itemCount": 4,
+      "maxItemChars": 55,
+      "avgItemChars": 45,
+      "minItemChars": 39,
+      "maxItemTitleChars": 11,
+      "maxItemBodyChars": 51,
+      "imbalanceRatio": 1.41
+    },
+    "density": "medium",
+    "emphasis": [
+      2
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.9,
+    "assumptions": [
+      "洞察项是强调点，但整体仍是并列观点"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p3-intent",
+    "purposeKey": "explain_hierarchy",
+    "purposeText": "说明PPagenT三层系统：AI理解、规则决定、代码执行",
+    "baseRelation": "hierarchy",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 4
+      }
+    },
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 4,
+      "maxItemChars": 46,
+      "avgItemChars": 35,
+      "minItemChars": 28,
+      "maxItemTitleChars": 7,
+      "maxItemBodyChars": 40,
+      "imbalanceRatio": 1.64
+    },
+    "density": "medium",
+    "emphasis": [
+      4
+    ],
+    "evidenceTypes": [
+      "text",
+      "diagram"
+    ],
+    "confidence": 0.95,
+    "assumptions": [
+      "structuredData提供层级结构，但items是并列的三个角色加总结"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p4-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "说明稳定80分优于随机95分的价值主张",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 4
+      }
+    },
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 4,
+      "maxItemChars": 54,
+      "avgItemChars": 41.25,
+      "minItemChars": 36,
+      "maxItemTitleChars": 7,
+      "maxItemBodyChars": 50,
+      "imbalanceRatio": 1.5
+    },
+    "density": "medium",
+    "emphasis": [
+      4
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.9,
+    "assumptions": [
+      "核心观点是强调点，但其余是支撑性并列内容"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p5-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "说明PPagenT服务多数人而非专家",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 4
+      }
+    },
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 4,
+      "maxItemChars": 50,
+      "avgItemChars": 47.75,
+      "minItemChars": 43,
+      "maxItemTitleChars": 5,
+      "maxItemBodyChars": 46,
+      "imbalanceRatio": 1.16
+    },
+    "density": "medium",
+    "emphasis": [
+      4
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.91,
+    "assumptions": [
+      "最终目标项是强调，但所有项并列支撑中心"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p6-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "说明真正积累的是通用规则和可扩展能力",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 4
+      }
+    },
+    "contentStats": {
+      "titleChars": 12,
+      "itemCount": 4,
+      "maxItemChars": 66,
+      "avgItemChars": 54.5,
+      "minItemChars": 37,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 62,
+      "imbalanceRatio": 1.78
+    },
+    "density": "medium",
+    "emphasis": [
+      3
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.89,
+    "assumptions": [
+      "从作品到能力项强调，但仍是并列观点"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p7-intent",
+    "purposeKey": "present_closing",
+    "purposeText": "总结愿景：让普通人快速获得靠谱可修改的PPT",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 4
+      }
+    },
+    "contentStats": {
+      "titleChars": 16,
+      "itemCount": 4,
+      "maxItemChars": 65,
+      "avgItemChars": 40.75,
+      "minItemChars": 20,
+      "maxItemTitleChars": 4,
+      "maxItemBodyChars": 63,
+      "imbalanceRatio": 3.25
+    },
+    "density": "medium",
+    "emphasis": [
+      3
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.93,
+    "assumptions": [
+      "承诺项强调，整体为收尾总结"
+    ]
+  }
+]

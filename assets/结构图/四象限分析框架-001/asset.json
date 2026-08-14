@@ -7,7 +7,7 @@
   "status": "core",
   "source": {
     "file": "PPT源/狗哥蓝色-精美逻辑图PPT模板.pptx",
-    "slides": [64, 66, 69, 73, 74, 80, 85, 100, 111, 113, 136]
+    "slides": [69]
   },
   "generator": "generate.mjs",
   "showcase": "example.pptx",
@@ -16,12 +16,17 @@
     "entry": "generate.mjs",
     "builderExport": "buildFrameworkMatrix",
     "mapperExport": "mapPageContent",
+    "skillId": "matrix",
+    "styleGroupId": "matrix-pest-p69",
     "familyId": "framework-matrix",
     "variantId": "default",
     "silhouette": "four-quadrant-petals",
     "supportedBaseRelations": ["matrix"],
     "supportedPurposeKeys": [],
     "itemCount": { "min": 4, "preferred": [4], "max": 4 },
+    "textCapacity": { "maxItemTitleChars": 10, "maxItemBodyChars": 34 },
+    "stateContract": { "resolver": "textDensity", "states": ["short", "long"] },
+    "mediaContract": { "mode": "no-image", "required": [] },
     "contract": {
       "abstractionLevel": "foundation",
       "adaptationStatus": "fixed",
@@ -48,5 +53,5 @@
     "supportedCompositionIds": ["component-full"]
   },
   "capacity": "固定 4 个象限",
-  "review": "用户于 2026-08-11 确认；验收运行 framework-matrix-001-v2.0.0-r6"
+  "review": "用户于 2026-08-13 审核通过；固定四象限短/长文案状态已确认"
 }

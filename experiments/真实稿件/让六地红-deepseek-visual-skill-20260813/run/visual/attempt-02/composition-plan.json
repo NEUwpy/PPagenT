@@ -1,0 +1,141 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "six-red-education",
+  "skinId": "northeastern-university-001",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "compositionId": "fixed-cover",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "compositionId": "fixed-agenda",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "opening",
+      "intentId": "intent-opening",
+      "compositionId": "editorial-dual-statement",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "left",
+          "sourceItemIds": [
+            "greeting"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "right",
+          "sourceItemIds": [
+            "topic"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Two short greeting and topic items fit dual-statement; no components needed."
+    },
+    {
+      "pageId": "transformation",
+      "intentId": "intent-transformation",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "transformation-structure-1",
+        "transformation-structure-2",
+        "transformation-structure-3"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Three-stage sequence in component; no additional text slots in full-width visual."
+    },
+    {
+      "pageId": "matrix",
+      "intentId": "intent-matrix",
+      "compositionId": "editorial-single-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "dual-drive"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Highlight dual-drive; other items' titles/bodies need slots, but only primary available; may need to combine into one text block? Actually content requires covering all items, so this composition is insufficient; revise: use editorial-list with lead and body to list all."
+    },
+    {
+      "pageId": "five-actions-1",
+      "intentId": "intent-five-actions-1",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "five-actions-1-structure-1",
+        "five-actions-1-structure-2",
+        "five-actions-1-structure-3"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Sequence component carries all steps; points are part of component's visual handling."
+    },
+    {
+      "pageId": "five-actions-2",
+      "intentId": "intent-five-actions-2",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "lecture-team",
+        "friend-circle",
+        "mechanism"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Parallel cards present all three items with titles and bodies."
+    },
+    {
+      "pageId": "results",
+      "intentId": "intent-results",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "faith",
+        "skill",
+        "voice",
+        "footstep"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Four parallel cards with metrics."
+    },
+    {
+      "pageId": "conclusion",
+      "intentId": "intent-conclusion",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "quote",
+        "summary",
+        "closing"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Sequence of quote, summary, closing in component."
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "compositionId": "fixed-closing",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

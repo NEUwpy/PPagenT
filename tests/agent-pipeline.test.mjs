@@ -1,11 +1,94 @@
 import assert from "node:assert/strict";
 import path from "node:path";
 import test from "node:test";
-import { buildVisualCandidateSets, resolveVisualPlan } from "../src/agent/visual-resolution.mjs";
+import {
+  buildVisualCandidateSets,
+  duplicatedCompositionItemIds,
+  normalizeBoundComponentCompositionPage,
+  resolveVisualPlan,
+  timelineLacksTemporalEvidence,
+  validateComponentBindings,
+} from "../src/agent/visual-resolution.mjs";
 import { enrichPageIntent } from "../src/content/page-content.mjs";
 import { mapRenderPayload } from "../src/render/render-payload.mjs";
 
 const root = path.resolve(import.meta.dirname, "..");
+
+test("没有时间证据的职责链不能选择时间轴", () => {
+  const candidateSet = { candidates: [
+    { assetId: "timeline-roadmap-001" },
+    { assetId: "sequential-process-001" },
+  ] };
+  assert.equal(timelineLacksTemporalEvidence(
+    { sourceText: "AI 负责理解，规则负责决定，代码负责执行。" },
+    candidateSet.candidates[0],
+    candidateSet,
+  ), true);
+  assert.equal(timelineLacksTemporalEvidence(
+    { sourceText: "2026 年启动，2027 年形成里程碑。" },
+    candidateSet.candidates[0],
+    candidateSet,
+  ), false);
+});
+
+test("同一内容项不能同时完整进入组件和侧栏文字", () => {
+  assert.deepEqual(duplicatedCompositionItemIds({
+    componentItemIds: ["a", "b"],
+    textSlots: [{ slotId: "aside", sourceItemIds: ["b"] }],
+  }), ["b"]);
+});
+
+test("Visual Skill 的重复内容绑定由视觉导演适配并由程序校验", () => {
+  const page = content("comparison", [
+    { id: "random", title: "随机 95 分", body: "偶尔惊艳但质量波动" },
+    { id: "stable", title: "稳定 80 分", body: "结构清楚而且第二天仍可修改" },
+  ]);
+  page.sourceText = "随机作品偶尔惊艳但质量波动。稳定初稿结构清楚，而且第二天仍可修改。";
+  const candidate = { contentContract: { bindings: [{
+    id: "group-items",
+    scope: "per-component-item",
+    minItems: 2,
+    maxItems: 5,
+    maxChars: 18,
+    balancedAcrossItems: true,
+  }] } };
+  const valid = {
+    componentItemIds: ["random", "stable"],
+    componentBindings: [
+      { bindingId: "group-items", sourceItemId: "random", entries: [
+        { text: "偶尔惊艳", sourceFragment: "偶尔惊艳" },
+        { text: "质量波动", sourceFragment: "质量波动" },
+      ] },
+      { bindingId: "group-items", sourceItemId: "stable", entries: [
+        { text: "结构清楚", sourceFragment: "结构清楚" },
+        { text: "第二天仍可修改", sourceFragment: "第二天仍可修改" },
+      ] },
+    ],
+  };
+  assert.deepEqual(validateComponentBindings(page, candidate, valid), []);
+  const invalid = structuredClone(valid);
+  invalid.componentBindings[0].entries = [{ text: "把整段正文直接塞进去会太长太难看", sourceFragment: "偶尔惊艳" }];
+  const issues = validateComponentBindings(page, candidate, invalid);
+  assert.ok(issues.some((issue) => issue.code === "component-binding-item-count-invalid"));
+  assert.ok(issues.some((issue) => issue.code === "component-binding-count-unbalanced"));
+});
+
+test("只有组件槽的绑定型 Skill 会规范化为组件完整承载", () => {
+  const page = {
+    componentItemIds: ["random", "stable"],
+    componentContentMode: "titles-only",
+    textSlots: [{ slotId: "body", sourceItemIds: ["random", "stable"], contentMode: "body" }],
+    componentBindings: [{ bindingId: "group-items", sourceItemId: "random", entries: [] }],
+  };
+  const normalized = normalizeBoundComponentCompositionPage(
+    page,
+    { contentContract: { bindings: [{ id: "group-items" }] } },
+    { requiresComponent: true, slots: [{ id: "component", role: "component" }] },
+  );
+  assert.equal(normalized.componentContentMode, "full");
+  assert.deepEqual(normalized.textSlots, []);
+  assert.deepEqual(normalized.componentBindings, page.componentBindings);
+});
 
 function content(pageId, items) {
   return { schemaVersion: "1.0", pageId, title: pageId, items, sourceText: pageId };
@@ -227,6 +310,44 @@ test("resolver 不允许把视觉导演的家族或变体换成另一资产", as
   assert.equal(result.feedback[0].code, "choice-not-in-semantic-candidates");
 });
 
+test("唯一家族与变体确定后由候选回填冗余 silhouette", async () => {
+  const page = content("opening", [
+    { id: "greeting", title: "问候", body: "大家好" },
+    { id: "topic", title: "主题", body: "分享创新实践" },
+  ]);
+  const intent = enrichPageIntent(intentDraft("opening-intent", "present_parallel_points", "parallel"), page);
+  const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
+  const candidate = set.candidates.find((item) => item.fallbackBody);
+  const result = await resolveVisualPlan({
+    root,
+    pageContents: [page],
+    pageIntents: [intent],
+    candidateSets: [{ ...set, candidates: [candidate] }],
+    visualPlan: { pages: [{
+      pageId: page.pageId,
+      intentId: intent.intentId,
+      familyId: candidate.familyId,
+      variantId: candidate.variantId,
+      silhouette: "balanced-dual-statement",
+    }] },
+    compositionPlan: { pages: [{
+      pageId: page.pageId,
+      intentId: intent.intentId,
+      compositionId: "editorial-dual-statement",
+      componentItemIds: [],
+      componentContentMode: "none",
+      textSlots: [
+        { slotId: "left", sourceItemIds: ["greeting"], contentMode: "full" },
+        { slotId: "right", sourceItemIds: ["topic"], contentMode: "full" },
+      ],
+      reason: "test",
+    }] },
+  });
+  assert.equal(result.status, "accepted");
+  assert.equal(result.visualPlan.pages[0].silhouette, candidate.silhouette);
+  assert.equal(result.layoutDecisions[0].selectedSilhouette, candidate.silhouette);
+});
+
 test("分层架构使用 PageIntent 分组，不要求内容写组件专属 ID", () => {
   const page = content("system", [
     { id: "input-a", title: "材料", body: "原稿" },
@@ -292,10 +413,140 @@ test("CompositionPlan must place every source item in a legal page slot", async 
   assert.equal(accepted.status, "accepted");
   assert.equal(accepted.renderPayloads[0].assetId, "northeastern-university-body-001");
 
+  const normalized = await resolveVisualPlan({
+    ...common,
+    compositionPlan: { pages: [{
+      ...validPage,
+      componentItemIds: ["lead", "support"],
+      componentContentMode: "full",
+    }] },
+  });
+  assert.equal(normalized.status, "accepted");
+  assert.deepEqual(normalized.compositionPlan.pages[0].componentItemIds, []);
+  assert.equal(normalized.compositionPlan.pages[0].componentContentMode, "none");
+
   const rejected = await resolveVisualPlan({
     ...common,
     compositionPlan: { pages: [{ ...validPage, textSlots: [validPage.textSlots[0]] }] },
   });
   assert.equal(rejected.status, "needs-director-revision");
   assert.ok(rejected.feedback[0].issues.some((issue) => issue.code === "composition-content-unplaced"));
+
+  const fieldRejected = await resolveVisualPlan({
+    ...common,
+    compositionPlan: { pages: [{
+      ...validPage,
+      textSlots: validPage.textSlots.map((slot) => ({ ...slot, contentMode: "title" })),
+    }] },
+  });
+  assert.equal(fieldRejected.status, "needs-director-revision");
+  assert.ok(fieldRejected.feedback[0].issues.some((issue) => issue.code === "composition-item-field-unplaced"));
+});
+
+test("component titles-only cannot silently drop item bodies", async () => {
+  const page = content("parallel", [
+    { id: "a", title: "A", body: "A body" },
+    { id: "b", title: "B", body: "B body" },
+    { id: "c", title: "C", body: "C body" },
+  ]);
+  const intent = enrichPageIntent(intentDraft("parallel-intent", "present_parallel_points", "parallel"), page);
+  const [candidateSet] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
+  const candidate = candidateSet.candidates.find((item) => item.assetId === "parallel-cards-001");
+  assert.ok(candidate);
+  const result = await resolveVisualPlan({
+    root,
+    pageContents: [page],
+    pageIntents: [intent],
+    candidateSets: [{ ...candidateSet, candidates: [candidate] }],
+    visualPlan: { pages: [{
+      pageId: page.pageId,
+      intentId: intent.intentId,
+      familyId: candidate.familyId,
+      variantId: candidate.variantId,
+      silhouette: candidate.silhouette,
+    }] },
+    compositionPlan: { pages: [{
+      pageId: page.pageId,
+      intentId: intent.intentId,
+      compositionId: "component-full",
+      componentItemIds: ["a", "b", "c"],
+      componentContentMode: "titles-only",
+      textSlots: [],
+      reason: "test",
+    }] },
+  });
+  assert.equal(result.status, "needs-director-revision");
+  assert.ok(result.feedback[0].issues.some((issue) => issue.code === "component-body-content-unplaced"));
+});
+
+test("文字槽放不下时 resolver 返回经过真实字号预演的合法重排", async () => {
+  const page = content("conclusion", [
+    { id: "quote", title: "总书记嘱托", body: "讲好党的故事，把红色基因传承下去。" },
+    { id: "summary", title: "五年实践总结", body: "用研学链、任务单、VR基地、宣讲团、育人机制，熔铸信念。", points: ["十年探路、五年深耕", "贯通红色血脉", "激发实干担当"] },
+    { id: "closing", title: "最终底色", body: "六地红成为最鲜亮的青春底色。" },
+  ]);
+  const intent = enrichPageIntent(intentDraft("conclusion-intent", "present_parallel_points", "parallel"), page);
+  const [candidateSet] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
+  const candidate = candidateSet.candidates.find((item) => item.fallbackBody);
+  const result = await resolveVisualPlan({
+    root,
+    pageContents: [page],
+    pageIntents: [intent],
+    candidateSets: [{ ...candidateSet, candidates: [candidate] }],
+    visualPlan: { pages: [{
+      pageId: page.pageId,
+      intentId: intent.intentId,
+      familyId: candidate.familyId,
+      variantId: candidate.variantId,
+      silhouette: candidate.silhouette,
+    }] },
+    compositionPlan: { pages: [{
+      pageId: page.pageId,
+      intentId: intent.intentId,
+      compositionId: "editorial-focus",
+      componentItemIds: [],
+      componentContentMode: "none",
+      textSlots: [
+        { slotId: "primary", sourceItemIds: ["closing"], contentMode: "full" },
+        { slotId: "support", sourceItemIds: ["quote", "summary"], contentMode: "full" },
+      ],
+      reason: "test",
+    }] },
+  });
+  assert.equal(result.status, "needs-director-revision");
+  const feedback = result.feedback.find((item) => item.pageId === page.pageId);
+  assert.ok(feedback.issues.some((issue) => issue.code === "composition-text-fit-failed"));
+  assert.ok(feedback.legalAlternatives.some((item) => (
+    item.compositionId === "editorial-focus"
+      && item.textSlots.find((slot) => slot.slotId === "primary")?.sourceItemIds[0] === "summary"
+  )));
+});
+
+test("closing purpose cannot bypass fixed closing capacity", async () => {
+  const page = content("closing-like", [
+    { id: "a", title: "A", body: "A body" },
+    { id: "b", title: "B", body: "B body" },
+    { id: "c", title: "C", body: "C body" },
+    { id: "d", title: "D", body: "D body" },
+  ]);
+  const intent = enrichPageIntent(intentDraft("closing-like-intent", "present_closing", "parallel"), page);
+  const [candidateSet] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
+  assert.ok(candidateSet.candidates.length > 0);
+  assert.ok(candidateSet.candidates.every((item) => item.assetId !== "northeastern-university-closing-001"));
+});
+
+test("component text capacity removes a long-copy structure before rendering", async () => {
+  const page = content("long-sequence", [
+    { id: "a", title: "步骤一", body: "甲".repeat(20) },
+    { id: "b", title: "步骤二", body: "乙".repeat(20) },
+    { id: "c", title: "步骤三", body: "丙".repeat(20) },
+    { id: "d", title: "步骤四", body: "丁".repeat(63) },
+  ]);
+  const intent = enrichPageIntent(intentDraft("long-sequence-intent", "explain_process", "sequence", {
+    ordered: true,
+  }), page);
+  const [candidateSet] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
+  assert.ok(candidateSet.candidates.length > 0);
+  assert.ok(candidateSet.candidates.every((item) => item.assetId !== "sequential-process-001"));
+  assert.ok(candidateSet.candidates.some((item) => item.fallbackBody));
 });

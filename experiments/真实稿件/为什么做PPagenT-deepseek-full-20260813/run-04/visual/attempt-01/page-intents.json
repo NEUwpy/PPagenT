@@ -1,0 +1,311 @@
+[
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p1_intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列呈现做PPT真正费时间的是判断这一观点及其相关要点",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "hierarchyDepth": 0,
+      "sameLevel": true,
+      "dimensions": {}
+    },
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 2,
+      "maxItemChars": 52,
+      "avgItemChars": 45,
+      "minItemChars": 38,
+      "maxItemTitleChars": 9,
+      "maxItemBodyChars": 43,
+      "imbalanceRatio": 1.37
+    },
+    "density": "low",
+    "emphasis": [
+      0,
+      1
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.8,
+    "assumptions": [
+      "两个要点共同支撑中心主题，无主次之分"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p2_intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列说明工作PPT不需要每次重新设计，固定是优点",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "hierarchyDepth": 0,
+      "sameLevel": true,
+      "dimensions": {}
+    },
+    "contentStats": {
+      "titleChars": 18,
+      "itemCount": 2,
+      "maxItemChars": 48,
+      "avgItemChars": 36.5,
+      "minItemChars": 25,
+      "maxItemTitleChars": 16,
+      "maxItemBodyChars": 32,
+      "imbalanceRatio": 1.92
+    },
+    "density": "low",
+    "emphasis": [
+      0,
+      1
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.8,
+    "assumptions": [
+      "两个要点平行，无比较或层级关系"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p3_intent",
+    "purposeKey": "explain_capability_system",
+    "purposeText": "说明PPagenT的核心机制：AI理解、规则决定、代码执行三个部分共同构成系统",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 3,
+      "ordered": false,
+      "hierarchyDepth": 0,
+      "sameLevel": true,
+      "dimensions": {}
+    },
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 3,
+      "maxItemChars": 47,
+      "avgItemChars": 37.67,
+      "minItemChars": 28,
+      "maxItemTitleChars": 7,
+      "maxItemBodyChars": 41,
+      "imbalanceRatio": 1.68
+    },
+    "density": "low",
+    "emphasis": [
+      0,
+      1,
+      2
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.85,
+    "assumptions": [
+      "三个机制是并列关系，共同说明系统构成"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p4_intent",
+    "purposeKey": "compare_options",
+    "purposeText": "比较随机95分与稳定80分的价值，强调稳定80分更值钱",
+    "baseRelation": "comparison",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "hierarchyDepth": 0,
+      "sameLevel": true,
+      "dimensions": {}
+    },
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 2,
+      "maxItemChars": 29,
+      "avgItemChars": 27,
+      "minItemChars": 25,
+      "maxItemTitleChars": 10,
+      "maxItemBodyChars": 19,
+      "imbalanceRatio": 1.16
+    },
+    "density": "low",
+    "emphasis": [
+      0,
+      1
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.85,
+    "assumptions": [
+      "两个选项在同一评价维度（价值）上比较"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p5_intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列说明目标用户不是1%高手，产品价值是把能力系统化",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "hierarchyDepth": 0,
+      "sameLevel": true,
+      "dimensions": {}
+    },
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 2,
+      "maxItemChars": 29,
+      "avgItemChars": 25.5,
+      "minItemChars": 22,
+      "maxItemTitleChars": 9,
+      "maxItemBodyChars": 20,
+      "imbalanceRatio": 1.32
+    },
+    "density": "low",
+    "emphasis": [
+      0,
+      1
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.8,
+    "assumptions": [
+      "两个要点平行，共同支撑中心论点"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p6_intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列说明积累的是经验而非模板，具有可扩展性",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "hierarchyDepth": 0,
+      "sameLevel": true,
+      "dimensions": {}
+    },
+    "contentStats": {
+      "titleChars": 12,
+      "itemCount": 2,
+      "maxItemChars": 31,
+      "avgItemChars": 30,
+      "minItemChars": 29,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 27,
+      "imbalanceRatio": 1.07
+    },
+    "density": "low",
+    "emphasis": [
+      0,
+      1
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.8,
+    "assumptions": [
+      "两个要点平行，无主次或先后关系"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p7_intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列说明解决普通问题和最终结果",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "hierarchyDepth": 0,
+      "sameLevel": true,
+      "dimensions": {}
+    },
+    "contentStats": {
+      "titleChars": 16,
+      "itemCount": 2,
+      "maxItemChars": 32,
+      "avgItemChars": 29,
+      "minItemChars": 26,
+      "maxItemTitleChars": 6,
+      "maxItemBodyChars": 28,
+      "imbalanceRatio": 1.23
+    },
+    "density": "low",
+    "emphasis": [
+      0,
+      1
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.8,
+    "assumptions": [
+      "两个要点平行，共同构成总结"
+    ]
+  }
+]

@@ -16,12 +16,36 @@
     "entry": "generate.mjs",
     "builderExport": "buildComparison",
     "mapperExport": "mapPageContent",
+    "skillId": "comparison",
+    "styleGroupId": "comparison-dual-column-p55",
     "familyId": "comparison-structure",
     "variantId": "default",
     "silhouette": "symmetric-column-contrast",
     "supportedBaseRelations": ["comparison"],
     "supportedPurposeKeys": [],
     "itemCount": { "min": 2, "preferred": [2], "max": 2 },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "optional",
+      "adaptationOwner": "visual-director",
+      "bindings": [
+        {
+          "id": "group-items",
+          "scope": "per-component-item",
+          "targetField": "items",
+          "valueType": "text-list",
+          "minItems": 2,
+          "preferredItems": [3],
+          "maxItems": 5,
+          "maxChars": 18,
+          "balancedAcrossItems": true,
+          "grounding": "source-fragment"
+        }
+      ],
+      "rule": "视觉导演根据来源内容把每个对比对象适配为 2–5 个短条目，优先 3 个；两侧条目数量对齐，每条保留原稿依据，禁止把整段正文直接作为一个长条目"
+    },
+    "stateContract": { "resolver": "itemsPerGroup", "states": [1, 2, 3, 4, 5] },
+    "mediaContract": { "mode": "no-image", "required": [] },
     "contract": {
       "abstractionLevel": "foundation",
       "adaptationStatus": "adaptive",
@@ -57,5 +81,6 @@
     "required": ["镜像双栏", "中央关系标记", "独立有色承载面", "行列对齐", "颜色与 polarity 语义一致"],
     "forbidden": ["白底叠白框", "靠缩放破坏两侧对称", "按单页临时改造轮廓"]
   },
-  "validation": "已按第 55 页完成忠实复现与换文案验证；需继续通过东北大学 Skin 真实稿件回归"
+  "validation": "已按第 55 页完成忠实复现、透视层级修正与扩容验证",
+  "review": "用户于 2026-08-13 审核通过；左右各 1–5 项已确认"
 }

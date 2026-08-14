@@ -32,6 +32,32 @@ test("PageIntent 的数量和文字统计由程序补齐", async () => {
   assert.deepEqual(enrichPageIntent(draft, content), expected);
 });
 
+test("双组对比的组数和每组条目数由 PageContent 确定性补齐", () => {
+  const content = {
+    schemaVersion: "1.0",
+    pageId: "comparison",
+    title: "两种路线",
+    items: [
+      { id: "left", title: "自由生成", body: "结果波动\n难以复现" },
+      { id: "right", title: "受控生成", body: "结构稳定\n边界明确\n持续积累" },
+    ],
+  };
+  const intent = enrichPageIntent({
+    intentId: "comparison-intent",
+    purposeKey: "compare_options",
+    purposeText: "比较两种路线",
+    baseRelation: "comparison",
+    relationTraits: {
+      temporal: false, cyclic: false, converging: false, branched: false,
+      dimensions: 1, secondaryDimension: "none",
+    },
+    structure: { itemCount: 0, ordered: false, sameLevel: true, dimensions: { items: 2 } },
+    density: "low",
+  }, content);
+  assert.equal(intent.structure.dimensions.groups, 2);
+  assert.equal(intent.structure.dimensions.itemsPerGroup, 3);
+});
+
 test("普通顺序过程只匹配基础顺序语法", async () => {
   const intent = await readFixture("sequence.intent.json");
   const result = matchPageIntent(intent, contracts);

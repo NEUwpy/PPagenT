@@ -1,0 +1,1104 @@
+[
+  {
+    "pageId": "p1",
+    "intentId": "p1",
+    "candidates": [
+      {
+        "familyId": "parallel",
+        "assetId": "parallel-cards-001",
+        "variantId": "parallel-cards-p135",
+        "silhouette": "equal-width-capability-cards",
+        "adaptationStatus": "adaptive",
+        "itemCount": {
+          "min": 3,
+          "preferred": [
+            3,
+            4,
+            5
+          ],
+          "max": 7
+        },
+        "renderer": "component",
+        "fallbackBody": false,
+        "compositionIds": [
+          "component-full"
+        ]
+      },
+      {
+        "familyId": "skin-body-editorial",
+        "assetId": "northeastern-university-body-001",
+        "variantId": "editorial",
+        "silhouette": "editorial-page",
+        "adaptationStatus": "adaptive",
+        "itemCount": {
+          "min": 0,
+          "preferred": [
+            2,
+            3,
+            4
+          ],
+          "max": 20
+        },
+        "renderer": "skin",
+        "fallbackBody": true,
+        "compositionIds": [
+          "editorial-list",
+          "editorial-focus",
+          "editorial-focus-reverse",
+          "editorial-single-focus"
+        ]
+      }
+    ],
+    "capacityDensity": "medium",
+    "semanticRejections": [
+      {
+        "assetId": "comparison-structure-001",
+        "reasons": [
+          "base-relation:parallel",
+          "missing-metric:groups",
+          "missing-metric:itemsPerGroup",
+          "above-max:itemCount"
+        ]
+      },
+      {
+        "assetId": "cycle-loop-001",
+        "reasons": [
+          "base-relation:parallel",
+          "semantic:ordered",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "fishbone-analysis-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:explain_topics",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "framework-matrix-001",
+        "reasons": [
+          "base-relation:parallel"
+        ]
+      },
+      {
+        "assetId": "funnel-conversion-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:explain_topics",
+          "semantic:ordered",
+          "trait:converging",
+          "density:medium"
+        ]
+      },
+      {
+        "assetId": "hierarchy-pyramid-001",
+        "reasons": [
+          "base-relation:parallel",
+          "semantic:ordered",
+          "semantic:sameLevel",
+          "density:medium"
+        ]
+      },
+      {
+        "assetId": "layered-architecture-001",
+        "reasons": [
+          "base-relation:parallel",
+          "missing-metric:sourceCount",
+          "missing-metric:applicationCount",
+          "below-min:itemCount",
+          "semantic:ordered",
+          "semantic:sameLevel"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-body-001",
+        "reasons": [
+          "base-relation:parallel"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-closing-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:explain_topics",
+          "above-max:itemCount",
+          "density:medium"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-cover-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:explain_topics",
+          "density:medium"
+        ]
+      },
+      {
+        "assetId": "organization-tree-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:explain_topics"
+        ]
+      },
+      {
+        "assetId": "problem-improvement-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:explain_topics",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "radial-hub-001",
+        "reasons": [
+          "base-relation:parallel"
+        ]
+      },
+      {
+        "assetId": "sequential-process-001",
+        "reasons": [
+          "base-relation:parallel",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "swimlane-process-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:explain_topics",
+          "missing-metric:roleCount",
+          "missing-metric:stageCount",
+          "semantic:ordered",
+          "trait:dimensions",
+          "trait:secondaryDimension"
+        ]
+      },
+      {
+        "assetId": "timeline-roadmap-001",
+        "reasons": [
+          "base-relation:parallel",
+          "semantic:ordered",
+          "trait:temporal"
+        ]
+      }
+    ]
+  },
+  {
+    "pageId": "p2",
+    "intentId": "p2",
+    "candidates": [
+      {
+        "familyId": "parallel",
+        "assetId": "parallel-cards-001",
+        "variantId": "parallel-cards-p135",
+        "silhouette": "equal-width-capability-cards",
+        "adaptationStatus": "adaptive",
+        "itemCount": {
+          "min": 3,
+          "preferred": [
+            3,
+            4,
+            5
+          ],
+          "max": 7
+        },
+        "renderer": "component",
+        "fallbackBody": false,
+        "compositionIds": [
+          "component-full"
+        ]
+      },
+      {
+        "familyId": "skin-body-editorial",
+        "assetId": "northeastern-university-body-001",
+        "variantId": "editorial",
+        "silhouette": "editorial-page",
+        "adaptationStatus": "adaptive",
+        "itemCount": {
+          "min": 0,
+          "preferred": [
+            2,
+            3,
+            4
+          ],
+          "max": 20
+        },
+        "renderer": "skin",
+        "fallbackBody": true,
+        "compositionIds": [
+          "editorial-list",
+          "editorial-focus",
+          "editorial-focus-reverse",
+          "editorial-single-focus"
+        ]
+      }
+    ],
+    "capacityDensity": "medium",
+    "semanticRejections": [
+      {
+        "assetId": "comparison-structure-001",
+        "reasons": [
+          "base-relation:parallel",
+          "missing-metric:groups",
+          "missing-metric:itemsPerGroup",
+          "above-max:itemCount"
+        ]
+      },
+      {
+        "assetId": "cycle-loop-001",
+        "reasons": [
+          "base-relation:parallel",
+          "semantic:ordered",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "fishbone-analysis-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:explain_topics",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "framework-matrix-001",
+        "reasons": [
+          "base-relation:parallel"
+        ]
+      },
+      {
+        "assetId": "funnel-conversion-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:explain_topics",
+          "semantic:ordered",
+          "trait:converging",
+          "density:medium"
+        ]
+      },
+      {
+        "assetId": "hierarchy-pyramid-001",
+        "reasons": [
+          "base-relation:parallel",
+          "semantic:ordered",
+          "semantic:sameLevel",
+          "density:medium"
+        ]
+      },
+      {
+        "assetId": "layered-architecture-001",
+        "reasons": [
+          "base-relation:parallel",
+          "missing-metric:sourceCount",
+          "missing-metric:applicationCount",
+          "below-min:itemCount",
+          "semantic:ordered",
+          "semantic:sameLevel"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-body-001",
+        "reasons": [
+          "base-relation:parallel"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-closing-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:explain_topics",
+          "above-max:itemCount",
+          "density:medium"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-cover-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:explain_topics",
+          "density:medium"
+        ]
+      },
+      {
+        "assetId": "organization-tree-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:explain_topics"
+        ]
+      },
+      {
+        "assetId": "problem-improvement-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:explain_topics",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "radial-hub-001",
+        "reasons": [
+          "base-relation:parallel"
+        ]
+      },
+      {
+        "assetId": "sequential-process-001",
+        "reasons": [
+          "base-relation:parallel",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "swimlane-process-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:explain_topics",
+          "missing-metric:roleCount",
+          "missing-metric:stageCount",
+          "semantic:ordered",
+          "trait:dimensions",
+          "trait:secondaryDimension"
+        ]
+      },
+      {
+        "assetId": "timeline-roadmap-001",
+        "reasons": [
+          "base-relation:parallel",
+          "semantic:ordered",
+          "trait:temporal"
+        ]
+      }
+    ]
+  },
+  {
+    "pageId": "p3",
+    "intentId": "p3",
+    "candidates": [
+      {
+        "familyId": "skin-body-editorial",
+        "assetId": "northeastern-university-body-001",
+        "variantId": "editorial",
+        "silhouette": "editorial-page",
+        "adaptationStatus": "adaptive",
+        "itemCount": {
+          "min": 0,
+          "preferred": [
+            2,
+            3,
+            4
+          ],
+          "max": 20
+        },
+        "renderer": "skin",
+        "fallbackBody": true,
+        "compositionIds": [
+          "editorial-list",
+          "editorial-focus",
+          "editorial-focus-reverse",
+          "editorial-single-focus"
+        ]
+      }
+    ],
+    "capacityDensity": "medium",
+    "semanticRejections": [
+      {
+        "assetId": "comparison-structure-001",
+        "reasons": [
+          "base-relation:hierarchy",
+          "missing-metric:groups",
+          "missing-metric:itemsPerGroup",
+          "above-max:itemCount"
+        ]
+      },
+      {
+        "assetId": "cycle-loop-001",
+        "reasons": [
+          "base-relation:hierarchy",
+          "semantic:ordered",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "fishbone-analysis-001",
+        "reasons": [
+          "base-relation:hierarchy",
+          "purpose-key:explain_hierarchy",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "framework-matrix-001",
+        "reasons": [
+          "base-relation:hierarchy",
+          "semantic:sameLevel"
+        ]
+      },
+      {
+        "assetId": "funnel-conversion-001",
+        "reasons": [
+          "base-relation:hierarchy",
+          "purpose-key:explain_hierarchy",
+          "semantic:ordered",
+          "trait:converging",
+          "density:medium"
+        ]
+      },
+      {
+        "assetId": "hierarchy-pyramid-001",
+        "reasons": [
+          "semantic:ordered",
+          "density:medium"
+        ]
+      },
+      {
+        "assetId": "layered-architecture-001",
+        "reasons": [
+          "base-relation:hierarchy",
+          "missing-metric:sourceCount",
+          "missing-metric:applicationCount",
+          "below-min:itemCount",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-body-001",
+        "reasons": [
+          "base-relation:hierarchy"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-closing-001",
+        "reasons": [
+          "base-relation:hierarchy",
+          "purpose-key:explain_hierarchy",
+          "above-max:itemCount",
+          "density:medium"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-cover-001",
+        "reasons": [
+          "base-relation:hierarchy",
+          "purpose-key:explain_hierarchy",
+          "density:medium"
+        ]
+      },
+      {
+        "assetId": "organization-tree-001",
+        "reasons": [
+          "purpose-key:explain_hierarchy"
+        ]
+      },
+      {
+        "assetId": "parallel-cards-001",
+        "reasons": [
+          "base-relation:hierarchy",
+          "semantic:sameLevel"
+        ]
+      },
+      {
+        "assetId": "problem-improvement-001",
+        "reasons": [
+          "base-relation:hierarchy",
+          "purpose-key:explain_hierarchy",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "radial-hub-001",
+        "reasons": [
+          "base-relation:hierarchy",
+          "semantic:sameLevel"
+        ]
+      },
+      {
+        "assetId": "sequential-process-001",
+        "reasons": [
+          "base-relation:hierarchy",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "swimlane-process-001",
+        "reasons": [
+          "base-relation:hierarchy",
+          "purpose-key:explain_hierarchy",
+          "missing-metric:roleCount",
+          "missing-metric:stageCount",
+          "semantic:ordered",
+          "trait:dimensions"
+        ]
+      },
+      {
+        "assetId": "timeline-roadmap-001",
+        "reasons": [
+          "base-relation:hierarchy",
+          "semantic:ordered",
+          "semantic:sameLevel",
+          "trait:temporal"
+        ]
+      }
+    ]
+  },
+  {
+    "pageId": "p4",
+    "intentId": "p4",
+    "candidates": [
+      {
+        "familyId": "skin-body-editorial",
+        "assetId": "northeastern-university-body-001",
+        "variantId": "editorial",
+        "silhouette": "editorial-page",
+        "adaptationStatus": "adaptive",
+        "itemCount": {
+          "min": 0,
+          "preferred": [
+            2,
+            3,
+            4
+          ],
+          "max": 20
+        },
+        "renderer": "skin",
+        "fallbackBody": true,
+        "compositionIds": [
+          "editorial-list",
+          "editorial-focus",
+          "editorial-focus-reverse",
+          "editorial-single-focus"
+        ]
+      }
+    ],
+    "capacityDensity": "medium",
+    "semanticRejections": [
+      {
+        "assetId": "comparison-structure-001",
+        "reasons": [
+          "missing-metric:groups",
+          "missing-metric:itemsPerGroup",
+          "above-max:itemCount"
+        ]
+      },
+      {
+        "assetId": "cycle-loop-001",
+        "reasons": [
+          "base-relation:comparison",
+          "semantic:ordered",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "fishbone-analysis-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "framework-matrix-001",
+        "reasons": [
+          "base-relation:comparison"
+        ]
+      },
+      {
+        "assetId": "funnel-conversion-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "semantic:ordered",
+          "trait:converging",
+          "density:medium"
+        ]
+      },
+      {
+        "assetId": "hierarchy-pyramid-001",
+        "reasons": [
+          "base-relation:comparison",
+          "semantic:ordered",
+          "semantic:sameLevel",
+          "density:medium"
+        ]
+      },
+      {
+        "assetId": "layered-architecture-001",
+        "reasons": [
+          "base-relation:comparison",
+          "missing-metric:sourceCount",
+          "missing-metric:applicationCount",
+          "below-min:itemCount",
+          "semantic:ordered",
+          "semantic:sameLevel"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-body-001",
+        "reasons": [
+          "base-relation:comparison"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-closing-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "above-max:itemCount",
+          "density:medium"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-cover-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "density:medium"
+        ]
+      },
+      {
+        "assetId": "organization-tree-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options"
+        ]
+      },
+      {
+        "assetId": "parallel-cards-001",
+        "reasons": [
+          "base-relation:comparison"
+        ]
+      },
+      {
+        "assetId": "problem-improvement-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "radial-hub-001",
+        "reasons": [
+          "base-relation:comparison"
+        ]
+      },
+      {
+        "assetId": "sequential-process-001",
+        "reasons": [
+          "base-relation:comparison",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "swimlane-process-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "missing-metric:roleCount",
+          "missing-metric:stageCount",
+          "semantic:ordered",
+          "trait:dimensions",
+          "trait:secondaryDimension"
+        ]
+      },
+      {
+        "assetId": "timeline-roadmap-001",
+        "reasons": [
+          "base-relation:comparison",
+          "semantic:ordered",
+          "trait:temporal"
+        ]
+      }
+    ]
+  },
+  {
+    "pageId": "p5",
+    "intentId": "p5",
+    "candidates": [
+      {
+        "familyId": "skin-body-editorial",
+        "assetId": "northeastern-university-body-001",
+        "variantId": "editorial",
+        "silhouette": "editorial-page",
+        "adaptationStatus": "adaptive",
+        "itemCount": {
+          "min": 0,
+          "preferred": [
+            2,
+            3,
+            4
+          ],
+          "max": 20
+        },
+        "renderer": "skin",
+        "fallbackBody": true,
+        "compositionIds": [
+          "editorial-list",
+          "editorial-focus",
+          "editorial-focus-reverse",
+          "editorial-single-focus"
+        ]
+      }
+    ],
+    "capacityDensity": "high",
+    "semanticRejections": [
+      {
+        "assetId": "comparison-structure-001",
+        "reasons": [
+          "missing-metric:groups",
+          "missing-metric:itemsPerGroup",
+          "above-max:itemCount",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "cycle-loop-001",
+        "reasons": [
+          "base-relation:comparison",
+          "semantic:ordered",
+          "trait:cyclic",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "fishbone-analysis-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_audience_segments",
+          "trait:converging",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "framework-matrix-001",
+        "reasons": [
+          "base-relation:comparison",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "funnel-conversion-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_audience_segments",
+          "semantic:ordered",
+          "trait:converging",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "hierarchy-pyramid-001",
+        "reasons": [
+          "base-relation:comparison",
+          "semantic:ordered",
+          "semantic:sameLevel",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "layered-architecture-001",
+        "reasons": [
+          "base-relation:comparison",
+          "missing-metric:sourceCount",
+          "missing-metric:applicationCount",
+          "below-min:itemCount",
+          "semantic:ordered",
+          "semantic:sameLevel",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-body-001",
+        "reasons": [
+          "base-relation:comparison"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-closing-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_audience_segments",
+          "above-max:itemCount",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-cover-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_audience_segments",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "organization-tree-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_audience_segments",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "parallel-cards-001",
+        "reasons": [
+          "base-relation:comparison",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "problem-improvement-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_audience_segments",
+          "semantic:ordered",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "radial-hub-001",
+        "reasons": [
+          "base-relation:comparison",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "sequential-process-001",
+        "reasons": [
+          "base-relation:comparison",
+          "semantic:ordered",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "swimlane-process-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_audience_segments",
+          "missing-metric:roleCount",
+          "missing-metric:stageCount",
+          "semantic:ordered",
+          "trait:dimensions",
+          "trait:secondaryDimension",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "timeline-roadmap-001",
+        "reasons": [
+          "base-relation:comparison",
+          "semantic:ordered",
+          "trait:temporal",
+          "density:high"
+        ]
+      }
+    ]
+  },
+  {
+    "pageId": "p6",
+    "intentId": "p6",
+    "candidates": [
+      {
+        "familyId": "skin-body-editorial",
+        "assetId": "northeastern-university-body-001",
+        "variantId": "editorial",
+        "silhouette": "editorial-page",
+        "adaptationStatus": "adaptive",
+        "itemCount": {
+          "min": 0,
+          "preferred": [
+            2,
+            3,
+            4
+          ],
+          "max": 20
+        },
+        "renderer": "skin",
+        "fallbackBody": true,
+        "compositionIds": [
+          "editorial-list",
+          "editorial-focus",
+          "editorial-focus-reverse",
+          "editorial-single-focus"
+        ]
+      }
+    ],
+    "capacityDensity": "high",
+    "semanticRejections": [
+      {
+        "assetId": "comparison-structure-001",
+        "reasons": [
+          "base-relation:parallel",
+          "missing-metric:groups",
+          "missing-metric:itemsPerGroup",
+          "above-max:itemCount",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "cycle-loop-001",
+        "reasons": [
+          "base-relation:parallel",
+          "semantic:ordered",
+          "trait:cyclic",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "fishbone-analysis-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:explain_topics",
+          "trait:converging",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "framework-matrix-001",
+        "reasons": [
+          "base-relation:parallel",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "funnel-conversion-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:explain_topics",
+          "semantic:ordered",
+          "trait:converging",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "hierarchy-pyramid-001",
+        "reasons": [
+          "base-relation:parallel",
+          "semantic:ordered",
+          "semantic:sameLevel",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "layered-architecture-001",
+        "reasons": [
+          "base-relation:parallel",
+          "missing-metric:sourceCount",
+          "missing-metric:applicationCount",
+          "below-min:itemCount",
+          "semantic:ordered",
+          "semantic:sameLevel",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-body-001",
+        "reasons": [
+          "base-relation:parallel"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-closing-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:explain_topics",
+          "above-max:itemCount",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-cover-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:explain_topics",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "organization-tree-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:explain_topics",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "parallel-cards-001",
+        "reasons": [
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "problem-improvement-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:explain_topics",
+          "semantic:ordered",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "radial-hub-001",
+        "reasons": [
+          "base-relation:parallel",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "sequential-process-001",
+        "reasons": [
+          "base-relation:parallel",
+          "semantic:ordered",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "swimlane-process-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:explain_topics",
+          "missing-metric:roleCount",
+          "missing-metric:stageCount",
+          "semantic:ordered",
+          "trait:dimensions",
+          "trait:secondaryDimension",
+          "density:high"
+        ]
+      },
+      {
+        "assetId": "timeline-roadmap-001",
+        "reasons": [
+          "base-relation:parallel",
+          "semantic:ordered",
+          "trait:temporal",
+          "density:high"
+        ]
+      }
+    ]
+  },
+  {
+    "pageId": "p7",
+    "intentId": "p7",
+    "candidates": [
+      {
+        "familyId": "skin-closing",
+        "assetId": "northeastern-university-closing-001",
+        "variantId": "default",
+        "silhouette": "closing",
+        "adaptationStatus": "fixed",
+        "itemCount": {
+          "min": 0,
+          "preferred": [
+            1,
+            2
+          ],
+          "max": 3
+        },
+        "renderer": "skin",
+        "fallbackBody": false,
+        "compositionIds": [
+          "fixed-closing"
+        ]
+      }
+    ]
+  }
+]

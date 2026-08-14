@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "why-ppagent",
+  "skinId": "northeastern-university-001",
+  "visualLanguage": "Editorial, minimal, with emphasis on typography and whitespace to support clarity and authority.",
+  "rhythmStrategy": "Vary silhouettes to avoid repetition: p1 and p2 use contrasting editorial layouts; p3 uses a structured sequence; p4 and p5 use focus variants to emphasize key point; p6 uses a different focus variant; p7 uses reverse focus to conclude clearly.",
+  "pages": [
+    {
+      "pageId": "p1",
+      "intentId": "p1-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Two parallel points about judgment being time-consuming; editorial-list with lead and body slots naturally presents the main thesis with supporting details."
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Two parallel points contrasting reinvention and fixed advantage; editorial-focus with primary and support slots emphasizes the core message '固定是优点'."
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Three sequential process steps; editorial-focus with primary and support slots can present the first step as primary and the remaining two as support, maintaining sequence."
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Comparison of two options with emphasis on stability; editorial-focus-reverse places emphasis on the right side (stable 80) as primary, contrasting with the left support."
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Comparison of audience segments; editorial-focus with primary and support slots highlights the broader target audience as the main point, with the support contrasting the 1%."
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Sequential evolution from template to capability; editorial-focus-reverse places the key insight (experience) on the right as primary, with expansion as support, avoiding repetition with p4."
+    },
+    {
+      "pageId": "p7",
+      "intentId": "p7-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Layered conclusion with goal and result; editorial-single-focus with a single primary slot focuses on the ultimate outcome, but to include both layers, use editorial-list or focus-reverse per feedback. Here choose editorial-focus-reverse to vary rhythm, placing '最终结果' as primary and '解决普通问题' as support."
+    }
+  ]
+}

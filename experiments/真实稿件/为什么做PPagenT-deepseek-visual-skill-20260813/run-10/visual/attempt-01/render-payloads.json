@@ -1,0 +1,239 @@
+[
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p1",
+    "assetId": "parallel-cards-001",
+    "parameters": {
+      "title": "做 PPT，真正费时间的不是“画”",
+      "items": [
+        {
+          "title": "一连串判断",
+          "body": "怎么讲、拆多少页、每页讲什么、观点间的关系、哪里突出、何时用图，这些判断最花时间。"
+        },
+        {
+          "title": "重复劳动",
+          "body": "翻以前的 PPT、找相似页面、替换内容、调整结构，再统一字体、字号、颜色和间距。"
+        },
+        {
+          "title": "真正昂贵的是什么",
+          "body": "是反复发生的判断；一个 PPT 做得好的人，脑子里已经积累了大量答案。"
+        },
+        {
+          "title": "核心追问",
+          "body": "既然一个高手已经知道怎样做是好的，为什么每次还要重新做一遍？"
+        }
+      ],
+      "visualVariantId": "parallel-cards-p135"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p1-1",
+        "parameterPath": "items[0]"
+      },
+      {
+        "sourceItemId": "p1-2",
+        "parameterPath": "items[1]"
+      },
+      {
+        "sourceItemId": "p1-3",
+        "parameterPath": "items[2]"
+      },
+      {
+        "sourceItemId": "p1-4",
+        "parameterPath": "items[3]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p2",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "工作里的 PPT，不需要每次重新发明",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p2-1",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p2-2",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p2-3",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p2-4",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p3",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "AI 负责理解，规则负责决定，代码负责执行",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p3-1",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p3-2",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p3-3",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p3-4",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p4",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "稳定的 80 分，比随机的 95 分更值钱",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p4-1",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p4-2",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p4-3",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p4-4",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p5",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "不只服务最会做 PPT 的那 1%",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p5-1",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p5-2",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p5-3",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p5-4",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p6",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "真正积累的不是一万个模板",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p6-1",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p6-2",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p6-3",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p6-4",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p7",
+    "assetId": "sequential-process-001",
+    "parameters": {
+      "title": "最后，它想解决的是一件很普通的事",
+      "steps": [
+        {
+          "title": "问题回顾",
+          "body": "做一套好 PPT 太费时间了，而其中很多时间花在以前已经有人解决过的问题上。",
+          "emphasis": false
+        },
+        {
+          "title": "方案总结",
+          "body": "让 AI 帮我们读稿子，让规则帮我们做判断，让代码完成重复劳动。",
+          "emphasis": false
+        },
+        {
+          "title": "承诺",
+          "body": "让一个原本不太会做 PPT 的人，也能很快得到一套不一定惊艳但靠谱、不一定独一无二但真的好用、第二天还可以继续修改的 PPT。",
+          "emphasis": true,
+          "emphasisLabel": "结论 / 结果"
+        },
+        {
+          "title": "意义",
+          "body": "如果能做到这一点，这个项目就值得做。",
+          "emphasis": false
+        }
+      ],
+      "visualVariantId": "horizontal-cards"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p7-1",
+        "parameterPath": "steps[0]"
+      },
+      {
+        "sourceItemId": "p7-2",
+        "parameterPath": "steps[1]"
+      },
+      {
+        "sourceItemId": "p7-3",
+        "parameterPath": "steps[2]"
+      },
+      {
+        "sourceItemId": "p7-4",
+        "parameterPath": "steps[3]"
+      }
+    ],
+    "omissions": []
+  }
+]

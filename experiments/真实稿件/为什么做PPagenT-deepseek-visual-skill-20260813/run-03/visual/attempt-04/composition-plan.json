@@ -1,0 +1,196 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "why-ppagent",
+  "skinId": "northeastern-university-001",
+  "pages": [
+    {
+      "pageId": "p1",
+      "intentId": "p1",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p1-1",
+        "p1-2",
+        "p1-3",
+        "p1-4"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "All four items are equal cards; no separate text slot is needed."
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "focus",
+          "sourceItemIds": [
+            "p2-2"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "supporting-list",
+          "sourceItemIds": [
+            "p2-1",
+            "p2-3",
+            "p2-4"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "The emphasized insight occupies the focus slot; the remaining items form the supporting list."
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3",
+      "compositionId": "component-aside-right",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "p3-4"
+          ],
+          "contentMode": "title"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "p3-4"
+          ],
+          "contentMode": "body"
+        },
+        {
+          "slotId": "list",
+          "sourceItemIds": [
+            "p3-1",
+            "p3-2",
+            "p3-3"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "The three process roles feed the list; the direct-summary quote is split into the aside lead and body."
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "focus",
+          "sourceItemIds": [
+            "p4-4"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "supporting-list",
+          "sourceItemIds": [
+            "p4-1",
+            "p4-2",
+            "p4-3"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "The core value statement becomes the focus; the realistic scenario and trade-offs become the supporting list."
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5",
+      "compositionId": "editorial-focus-reverse",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "focus",
+          "sourceItemIds": [
+            "p5-4"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "supporting-list",
+          "sourceItemIds": [
+            "p5-1",
+            "p5-2",
+            "p5-3"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Reverse focus layout spotlights the capability goal while the expert/need context supports it."
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "p6-3"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "p6-4"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "list",
+          "sourceItemIds": [
+            "p6-1",
+            "p6-2"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Emphasis as lead, scalability as body, and template-vs-experience items as list avoid repeating the focus skeleton."
+    },
+    {
+      "pageId": "p7",
+      "intentId": "p7",
+      "compositionId": "fixed-closing",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "recap",
+          "sourceItemIds": [
+            "p7-1",
+            "p7-2"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "focus",
+          "sourceItemIds": [
+            "p7-3"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "p7-4"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Closing slots recap the problem/solution, focus the core promise, and finish with the significance."
+    }
+  ]
+}

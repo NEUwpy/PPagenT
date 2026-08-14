@@ -48,6 +48,23 @@ async function loadPackage(manifestPath) {
   requireValue(typeof runtime.silhouette === "string" && runtime.silhouette, `${asset.id} 缺少 silhouette`);
   requireValue(Array.isArray(runtime.supportedBaseRelations), `${asset.id} 缺少 supportedBaseRelations`);
   requireValue(Number.isInteger(runtime.itemCount?.min) && Number.isInteger(runtime.itemCount?.max), `${asset.id} 缺少 itemCount 范围`);
+  if (runtime.contentContract) {
+    requireValue(runtime.contentContract.itemRole === "semantic-node", `${asset.id} 的 contentContract.itemRole 必须是 semantic-node`);
+    requireValue(new Set(["forbidden", "optional", "required"]).has(runtime.contentContract.points), `${asset.id} 的 contentContract.points 非法`);
+    if (runtime.contentContract.bindings) {
+      requireValue(Array.isArray(runtime.contentContract.bindings), `${asset.id} 的 contentContract.bindings 必须是数组`);
+      for (const binding of runtime.contentContract.bindings) {
+        requireValue(typeof binding.id === "string" && binding.id, `${asset.id} 的 binding 缺少 id`);
+        requireValue(binding.scope === "per-component-item", `${asset.id}:${binding.id} 的 binding.scope 暂只支持 per-component-item`);
+        requireValue(binding.valueType === "text-list", `${asset.id}:${binding.id} 的 binding.valueType 暂只支持 text-list`);
+        requireValue(Number.isInteger(binding.minItems) && Number.isInteger(binding.maxItems)
+          && binding.minItems >= 1 && binding.maxItems >= binding.minItems,
+        `${asset.id}:${binding.id} 的条目范围非法`);
+        requireValue(Number.isInteger(binding.maxChars) && binding.maxChars > 0, `${asset.id}:${binding.id} 缺少 maxChars`);
+        requireValue(new Set(["source-fragment"]).has(binding.grounding), `${asset.id}:${binding.id} 的 grounding 非法`);
+      }
+    }
+  }
 
   const assetDir = path.dirname(manifestPath);
   const entryPath = path.resolve(assetDir, runtime.entry);

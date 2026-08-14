@@ -1,0 +1,170 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "ppagent-why",
+  "skinId": "northeastern-university-001",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "compositionId": "fixed-cover",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "compositionId": "fixed-agenda",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "p1",
+      "intentId": "p1",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p1-item1",
+        "p1-item2",
+        "p1-item3"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Parallel cards component carries all three items with title and body."
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "p2-item1"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "p2-item2",
+            "p2-item3"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Focus on negative point as primary, supporting points in support slot."
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "p3-item1"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "p3-item2",
+            "p3-item3"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Editorial list lists the three roles in sequence."
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p4-item1",
+        "p4-item2"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Comparison structure component natively compares two options."
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5",
+      "compositionId": "editorial-dual-statement",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "left",
+          "sourceItemIds": [
+            "p5-item1"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "right",
+          "sourceItemIds": [
+            "p5-item2"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Dual statement presents two supporting points side by side."
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "p6-item1"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "p6-item2"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Focus on key accumulation insight, support with extensibility."
+    },
+    {
+      "pageId": "p7",
+      "intentId": "p7",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p7-item1",
+        "p7-item2",
+        "p7-item3"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Three parallel promises, cards component fits perfectly."
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "compositionId": "fixed-closing",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

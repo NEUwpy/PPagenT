@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "why-ppagent",
+  "skinId": "northeastern-university-001",
+  "visualLanguage": "editorial-clean",
+  "rhythmStrategy": "alternate-list-and-focus",
+  "pages": [
+    {
+      "pageId": "p1",
+      "intentId": "p1-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Parallel explanation of two pain points; use editorial-list with lead and body."
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Comparison but only one conclusion; use editorial-focus-reverse to avoid repeat with p1."
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3-intent",
+      "familyId": "timeline-roadmap",
+      "variantId": "default",
+      "silhouette": "horizontal-timeline",
+      "adaptationStatus": "adaptive",
+      "reason": "Sequential process of three steps; timeline component fits ordered items."
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Comparison with emphasis on stable 80; editorial-focus for thesis and support."
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Parallel explanation of target and value; editorial-list for two supporting points."
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Parallel explanation of experience and expansion; editorial-focus-reverse to avoid list repeat with p5."
+    },
+    {
+      "pageId": "p7",
+      "intentId": "p7-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Closing summary; editorial-single-focus for central thesis."
+    }
+  ]
+}

@@ -1,0 +1,217 @@
+[
+  {
+    "schemaVersion": "1.0",
+    "intentId": "shell-cover-intent",
+    "assetId": "northeastern-university-cover-001",
+    "parameters": {
+      "title": "让“六地”红，成为理工青年最鲜亮的青春底色",
+      "presenter": "",
+      "organization": "",
+      "date": "",
+      "subtitle": ""
+    },
+    "mappings": [],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "shell-agenda-intent",
+    "assetId": "northeastern-university-agenda-001",
+    "parameters": {
+      "title": "目录",
+      "items": [
+        "困境与转向",
+        "新矩阵构建",
+        "实践抓手",
+        "育人成效",
+        "收束"
+      ]
+    },
+    "mappings": [
+      {
+        "sourceItemId": "agenda-1",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-2",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-3",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-4",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-5",
+        "parameterPath": "items"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p1-intent",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "开场",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p1-item1",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p2-intent",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "从“三高三低”到深耕辽宁",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p2-item1",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p2-item2",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p2-item3",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p3-intent",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "“1+3+N”新矩阵",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p3-item1",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p3-item2",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p3-item3",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p4-intent",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "五类实践抓手",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p4-item1",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p4-item2",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p4-item3",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p4-item4",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p4-item5",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p5-intent",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "五年成效",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p5-item1",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p5-item2",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p5-item3",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p5-item4",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p6-intent",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "收束",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p6-item1",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p6-item2",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p6-item3",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "shell-closing-intent",
+    "assetId": "northeastern-university-closing-001",
+    "parameters": {
+      "text": "通过“1+3+N”矩阵和五类实践抓手，将“六地”红色文化融入党员教育，培养扎根辽宁的理工青年"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "closing-takeaway",
+        "parameterPath": "text"
+      }
+    ],
+    "omissions": []
+  }
+]

@@ -1,0 +1,270 @@
+[
+  {
+    "schemaVersion": "1.0",
+    "intentId": "shell-cover-intent",
+    "assetId": "northeastern-university-cover-001",
+    "parameters": {
+      "title": "为什么做 PPagenT",
+      "presenter": "",
+      "organization": "",
+      "date": "",
+      "subtitle": ""
+    },
+    "mappings": [],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "shell-agenda-intent",
+    "assetId": "northeastern-university-agenda-001",
+    "parameters": {
+      "title": "目录",
+      "items": [
+        "问题的提出",
+        "解决方案的理念",
+        "价值的定位",
+        "长期的积累",
+        "最终的承诺"
+      ]
+    },
+    "mappings": [
+      {
+        "sourceItemId": "agenda-1",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-2",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-3",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-4",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-5",
+        "parameterPath": "items"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p1",
+    "assetId": "parallel-cards-001",
+    "parameters": {
+      "title": "做 PPT，真正费时间的不是“画”",
+      "items": [
+        {
+          "title": "一连串判断",
+          "body": "真正费时间的是如何讲、拆多少页、每页只讲什么、观点关系、哪里突出、用图还是用一句话。"
+        },
+        {
+          "title": "反复调整",
+          "body": "翻旧模板、替换内容、调整结构、统一字体、字号、颜色和间距。"
+        },
+        {
+          "title": "高手的积累",
+          "body": "做得好的人脑子里已经积累了大量答案。"
+        }
+      ],
+      "visualVariantId": "parallel-cards-p135"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p1-item1",
+        "parameterPath": "items[0]"
+      },
+      {
+        "sourceItemId": "p1-item2",
+        "parameterPath": "items[1]"
+      },
+      {
+        "sourceItemId": "p1-item3",
+        "parameterPath": "items[2]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p2",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "工作里的 PPT，不需要每次重新发明",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p2-item1",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p2-item2",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p2-item3",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p3",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "AI 负责理解，规则负责决定，代码负责执行",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p3-item1",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p3-item2",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p3-item3",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p4",
+    "assetId": "comparison-structure-001",
+    "parameters": {
+      "title": "稳定的 80 分，比随机的 95 分更值钱",
+      "left": {
+        "title": "稳定的 80 分",
+        "items": [
+          "符合组织风格、结构清楚、视觉规范，且可继续修改，真正能用于工作。"
+        ],
+        "emphasis": true,
+        "polarity": "positive"
+      },
+      "right": {
+        "title": "随机的 95 分",
+        "items": [
+          "可能惊艳，但不稳定，且即使能够画出，也不一定适合日常工作。"
+        ],
+        "emphasis": false,
+        "polarity": "negative"
+      },
+      "centerLabel": "强调可靠性优先于偶发的高分。",
+      "visualVariantId": "default"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p4-item1",
+        "parameterPath": "left"
+      },
+      {
+        "sourceItemId": "p4-item2",
+        "parameterPath": "right"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p5",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "不只服务最会做 PPT 的那 1%",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p5-item1",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p5-item2",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p6",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "真正积累的不是一万个模板",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p6-item1",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p6-item2",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p7",
+    "assetId": "parallel-cards-001",
+    "parameters": {
+      "title": "最后，它想解决的是一件很普通的事",
+      "items": [
+        {
+          "title": "靠谱实用",
+          "body": "不一定惊艳，但靠谱。"
+        },
+        {
+          "title": "真的好用",
+          "body": "不一定独一无二，但真的好用。"
+        },
+        {
+          "title": "可继续修改",
+          "body": "第二天还可以继续修改的 PPT。"
+        }
+      ],
+      "visualVariantId": "parallel-cards-p135"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p7-item1",
+        "parameterPath": "items[0]"
+      },
+      {
+        "sourceItemId": "p7-item2",
+        "parameterPath": "items[1]"
+      },
+      {
+        "sourceItemId": "p7-item3",
+        "parameterPath": "items[2]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "shell-closing-intent",
+    "assetId": "northeastern-university-closing-001",
+    "parameters": {
+      "text": "PPagenT 通过 AI 理解、规则决策和代码执行，将熟练制作者的经验系统化，稳定交付靠谱实用的 PPT，比随机的 95 分更值钱。"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "closing-takeaway",
+        "parameterPath": "text"
+      }
+    ],
+    "omissions": []
+  }
+]

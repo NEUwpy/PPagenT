@@ -1,0 +1,323 @@
+[
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p1-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列呈现制作 PPT 耗时的主要来源与核心追问",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "hierarchyDepth": 1,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 4
+      }
+    },
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 4,
+      "maxItemChars": 46,
+      "avgItemChars": 41.75,
+      "minItemChars": 34,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 41,
+      "imbalanceRatio": 1.35
+    },
+    "density": "medium",
+    "emphasis": [
+      4
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.9,
+    "assumptions": [
+      "四个要点属于同级并列关系，共同说明耗时来源"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p2-intent",
+    "purposeKey": "explain_topics",
+    "purposeText": "说明工作场景 PPT 不需要每次重新设计这一中心主题及若干要点",
+    "baseRelation": "sequence",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": true,
+      "hierarchyDepth": 1,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 4
+      }
+    },
+    "contentStats": {
+      "titleChars": 18,
+      "itemCount": 4,
+      "maxItemChars": 55,
+      "avgItemChars": 45,
+      "minItemChars": 39,
+      "maxItemTitleChars": 11,
+      "maxItemBodyChars": 51,
+      "imbalanceRatio": 1.41
+    },
+    "density": "medium",
+    "emphasis": [
+      2
+    ],
+    "evidenceTypes": [
+      "text",
+      "quotation"
+    ],
+    "confidence": 0.85,
+    "assumptions": [
+      "四段以现状到选择的逻辑推进，但非严格时间流程"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p3-intent",
+    "purposeKey": "explain_hierarchy",
+    "purposeText": "说明 AI、规则、代码三个层次的分工体系",
+    "baseRelation": "hierarchy",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "hierarchyDepth": 2,
+      "sameLevel": true,
+      "dimensions": {
+        "root": 1,
+        "children": 3
+      }
+    },
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 4,
+      "maxItemChars": 46,
+      "avgItemChars": 35,
+      "minItemChars": 28,
+      "maxItemTitleChars": 7,
+      "maxItemBodyChars": 40,
+      "imbalanceRatio": 1.64
+    },
+    "density": "medium",
+    "emphasis": [
+      4
+    ],
+    "evidenceTypes": [
+      "text",
+      "diagram"
+    ],
+    "confidence": 0.95,
+    "assumptions": [
+      "结构数据明确指示层级关系，故按 hierarchy 处理"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p4-intent",
+    "purposeKey": "compare_options",
+    "purposeText": "比较稳定 80 分初稿与随机惊艳作品在工作场景中的价值",
+    "baseRelation": "comparison",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "hierarchyDepth": 1,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 4
+      }
+    },
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 4,
+      "maxItemChars": 54,
+      "avgItemChars": 41.25,
+      "minItemChars": 36,
+      "maxItemTitleChars": 7,
+      "maxItemBodyChars": 50,
+      "imbalanceRatio": 1.5
+    },
+    "density": "medium",
+    "emphasis": [
+      4
+    ],
+    "evidenceTypes": [
+      "text",
+      "quotation"
+    ],
+    "confidence": 0.9,
+    "assumptions": [
+      "核心观点将两种取向置于同一维度上比较优劣"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p5-intent",
+    "purposeKey": "compare_audience_segments",
+    "purposeText": "比较专家与多数人两个用户群体的需求差异及对应价值",
+    "baseRelation": "comparison",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "hierarchyDepth": 1,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 4
+      }
+    },
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 4,
+      "maxItemChars": 50,
+      "avgItemChars": 47.75,
+      "minItemChars": 43,
+      "maxItemTitleChars": 5,
+      "maxItemBodyChars": 46,
+      "imbalanceRatio": 1.16
+    },
+    "density": "medium",
+    "emphasis": [
+      4
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.85,
+    "assumptions": [
+      "两个群体被对比，说明不同需求与产品定位"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p6-intent",
+    "purposeKey": "explain_capability_system",
+    "purposeText": "说明核心积累的是可复用的表达经验而非模板数量",
+    "baseRelation": "hierarchy",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "hierarchyDepth": 1,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 4
+      }
+    },
+    "contentStats": {
+      "titleChars": 12,
+      "itemCount": 4,
+      "maxItemChars": 66,
+      "avgItemChars": 54.5,
+      "minItemChars": 37,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 62,
+      "imbalanceRatio": 1.78
+    },
+    "density": "medium",
+    "emphasis": [
+      3
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.8,
+    "assumptions": [
+      "要点围绕核心能力阐发，结构为并列支撑"
+    ]
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p7-intent",
+    "purposeKey": "present_closing",
+    "purposeText": "总结问题、方案与承诺，收束全篇并强调意义",
+    "baseRelation": "sequence",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": true,
+      "hierarchyDepth": 1,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 4
+      }
+    },
+    "contentStats": {
+      "titleChars": 16,
+      "itemCount": 4,
+      "maxItemChars": 65,
+      "avgItemChars": 40.75,
+      "minItemChars": 20,
+      "maxItemTitleChars": 4,
+      "maxItemBodyChars": 63,
+      "imbalanceRatio": 3.25
+    },
+    "density": "medium",
+    "emphasis": [
+      3,
+      4
+    ],
+    "evidenceTypes": [
+      "text",
+      "quotation"
+    ],
+    "confidence": 0.88,
+    "assumptions": [
+      "结尾按回顾、方案、承诺、意义递进，属收束页"
+    ]
+  }
+]

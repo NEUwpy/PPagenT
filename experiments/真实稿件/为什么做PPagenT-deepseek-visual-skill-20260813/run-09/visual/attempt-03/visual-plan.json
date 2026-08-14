@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "why-ppagent",
+  "skinId": "northeastern-university-001",
+  "visualLanguage": "editorial-hybrid",
+  "rhythmStrategy": "alternate between component-driven and editorial-driven pages, using focus variants to maintain rhythm",
+  "pages": [
+    {
+      "pageId": "p1",
+      "intentId": "p1",
+      "familyId": "parallel",
+      "variantId": "parallel-cards-p135",
+      "silhouette": "equal-width-capability-cards",
+      "adaptationStatus": "adaptive",
+      "reason": "Parallel structure with 4 items fits preferred count 3-5"
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Parallel editorial content with 4 items, use editorial-focus to break from p1"
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Hierarchy of 4 items, use editorial-focus-reverse to vary from p2"
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Comparison of 4 items, use editorial-focus to emphasize the core value"
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Comparison of 4 items, use editorial-focus-reverse to avoid repeat with p4"
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Parallel explanation of 4 items, use editorial-focus to emphasize the key insight"
+    },
+    {
+      "pageId": "p7",
+      "intentId": "p7",
+      "familyId": "sequential-process",
+      "variantId": "horizontal-cards",
+      "silhouette": "horizontal-card-chain",
+      "adaptationStatus": "adaptive",
+      "reason": "Sequential closing with 4 items, use component-full for visual consistency"
+    }
+  ]
+}

@@ -19,6 +19,7 @@ export async function loadCoreAssetMetadata(root = process.cwd()) {
 
 export function assetKind(assetId, metadata) {
   if (assetId.includes("cover")) return "cover";
+  if (assetId.includes("agenda")) return "agenda";
   if (assetId.includes("closing")) return "closing";
   if (metadata?.kind === "component") return "component";
   return "body";

@@ -1,0 +1,226 @@
+[
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p1",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列呈现两个关于做PPT费时间的痛点",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "sameLevel": true,
+      "hierarchyDepth": 1
+    },
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 2,
+      "maxItemChars": 52,
+      "avgItemChars": 45,
+      "minItemChars": 38,
+      "maxItemTitleChars": 9,
+      "maxItemBodyChars": 43,
+      "imbalanceRatio": 1.37
+    },
+    "density": "low"
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p2",
+    "purposeKey": "compare_options",
+    "purposeText": "对比每次重新发明和固定可靠两种选择",
+    "baseRelation": "comparison",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "sameLevel": true,
+      "hierarchyDepth": 1
+    },
+    "contentStats": {
+      "titleChars": 18,
+      "itemCount": 2,
+      "maxItemChars": 48,
+      "avgItemChars": 36.5,
+      "minItemChars": 25,
+      "maxItemTitleChars": 16,
+      "maxItemBodyChars": 32,
+      "imbalanceRatio": 1.92
+    },
+    "density": "low"
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p3",
+    "purposeKey": "explain_cross_role_process",
+    "purposeText": "说明AI理解、规则决定、代码执行三个角色跨阶段协作的过程",
+    "baseRelation": "sequence",
+    "relationTraits": {
+      "temporal": true,
+      "cyclic": false,
+      "converging": true,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "role"
+    },
+    "structure": {
+      "itemCount": 3,
+      "ordered": true,
+      "sameLevel": true,
+      "hierarchyDepth": 1
+    },
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 3,
+      "maxItemChars": 47,
+      "avgItemChars": 37.67,
+      "minItemChars": 28,
+      "maxItemTitleChars": 7,
+      "maxItemBodyChars": 41,
+      "imbalanceRatio": 1.68
+    },
+    "density": "medium"
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p4",
+    "purposeKey": "compare_options",
+    "purposeText": "比较稳定的80分和随机的95分",
+    "baseRelation": "comparison",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "sameLevel": true,
+      "hierarchyDepth": 1
+    },
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 2,
+      "maxItemChars": 29,
+      "avgItemChars": 27,
+      "minItemChars": 25,
+      "maxItemTitleChars": 10,
+      "maxItemBodyChars": 19,
+      "imbalanceRatio": 1.16
+    },
+    "density": "low"
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p5",
+    "purposeKey": "explain_topics",
+    "purposeText": "说明目标用户不只是1%的高手",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "sameLevel": true,
+      "hierarchyDepth": 1
+    },
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 2,
+      "maxItemChars": 29,
+      "avgItemChars": 25.5,
+      "minItemChars": 22,
+      "maxItemTitleChars": 9,
+      "maxItemBodyChars": 20,
+      "imbalanceRatio": 1.32
+    },
+    "density": "low"
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p6",
+    "purposeKey": "explain_topics",
+    "purposeText": "说明积累的是经验而非模板",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "sameLevel": true,
+      "hierarchyDepth": 1
+    },
+    "contentStats": {
+      "titleChars": 12,
+      "itemCount": 2,
+      "maxItemChars": 31,
+      "avgItemChars": 30,
+      "minItemChars": 29,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 27,
+      "imbalanceRatio": 1.07
+    },
+    "density": "low"
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p7",
+    "purposeKey": "present_closing",
+    "purposeText": "总结愿景：让普通人得到靠谱的PPT",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "sameLevel": true,
+      "hierarchyDepth": 1
+    },
+    "contentStats": {
+      "titleChars": 16,
+      "itemCount": 2,
+      "maxItemChars": 32,
+      "avgItemChars": 29,
+      "minItemChars": 26,
+      "maxItemTitleChars": 6,
+      "maxItemBodyChars": 28,
+      "imbalanceRatio": 1.23
+    },
+    "density": "low"
+  }
+]

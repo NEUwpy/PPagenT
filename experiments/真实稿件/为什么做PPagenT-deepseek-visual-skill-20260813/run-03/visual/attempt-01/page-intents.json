@@ -1,0 +1,275 @@
+[
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p1",
+    "purposeKey": "explain_topics",
+    "purposeText": "说明制作 PPT 真正耗时的是判断和重复劳动，而非绘画本身。",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "hierarchyDepth": 0,
+      "sameLevel": true
+    },
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 4,
+      "maxItemChars": 46,
+      "avgItemChars": 41.75,
+      "minItemChars": 34,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 41,
+      "imbalanceRatio": 1.35
+    },
+    "density": "low",
+    "emphasis": [
+      3
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p2",
+    "purposeKey": "explain_topics",
+    "purposeText": "说明工作场景中的 PPT 不需要每次重新设计，固定与一致是优势。",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "hierarchyDepth": 0,
+      "sameLevel": true
+    },
+    "contentStats": {
+      "titleChars": 18,
+      "itemCount": 4,
+      "maxItemChars": 55,
+      "avgItemChars": 45,
+      "minItemChars": 39,
+      "maxItemTitleChars": 11,
+      "maxItemBodyChars": 51,
+      "imbalanceRatio": 1.41
+    },
+    "density": "low",
+    "emphasis": [
+      1
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p3",
+    "purposeKey": "explain_hierarchy",
+    "purposeText": "说明 PPagenT 系统中 AI、规则、代码三层的分工与层级关系。",
+    "baseRelation": "hierarchy",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": true,
+      "dimensions": 1,
+      "secondaryDimension": "role"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "hierarchyDepth": 1,
+      "sameLevel": false
+    },
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 4,
+      "maxItemChars": 46,
+      "avgItemChars": 35,
+      "minItemChars": 28,
+      "maxItemTitleChars": 7,
+      "maxItemBodyChars": 40,
+      "imbalanceRatio": 1.64
+    },
+    "density": "low",
+    "emphasis": [
+      3
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p4",
+    "purposeKey": "explain_topics",
+    "purposeText": "说明对工作而言，稳定交付 80 分初稿优于随机出现 95 分作品的价值判断。",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "hierarchyDepth": 0,
+      "sameLevel": true
+    },
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 4,
+      "maxItemChars": 54,
+      "avgItemChars": 41.25,
+      "minItemChars": 36,
+      "maxItemTitleChars": 7,
+      "maxItemBodyChars": 50,
+      "imbalanceRatio": 1.5
+    },
+    "density": "low",
+    "emphasis": [
+      3
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p5",
+    "purposeKey": "explain_topics",
+    "purposeText": "说明 PPagenT 服务的是大多数有内容但不懂设计的普通用户，而非顶级专家。",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "hierarchyDepth": 0,
+      "sameLevel": true
+    },
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 4,
+      "maxItemChars": 50,
+      "avgItemChars": 47.75,
+      "minItemChars": 43,
+      "maxItemTitleChars": 5,
+      "maxItemBodyChars": 46,
+      "imbalanceRatio": 1.16
+    },
+    "density": "low",
+    "emphasis": [
+      3
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p6",
+    "purposeKey": "explain_topics",
+    "purposeText": "说明 PPagenT 真正积累的是页面背后的表达经验与规则，而非模板数量。",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "hierarchyDepth": 0,
+      "sameLevel": true
+    },
+    "contentStats": {
+      "titleChars": 12,
+      "itemCount": 4,
+      "maxItemChars": 66,
+      "avgItemChars": 54.5,
+      "minItemChars": 37,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 62,
+      "imbalanceRatio": 1.78
+    },
+    "density": "medium",
+    "emphasis": [
+      2
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p7",
+    "purposeKey": "present_closing",
+    "purposeText": "总结 PPagenT 要解决的普通问题、方案承诺与项目意义，收束演示。",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "hierarchyDepth": 0,
+      "sameLevel": true
+    },
+    "contentStats": {
+      "titleChars": 16,
+      "itemCount": 4,
+      "maxItemChars": 65,
+      "avgItemChars": 40.75,
+      "minItemChars": 20,
+      "maxItemTitleChars": 4,
+      "maxItemBodyChars": 63,
+      "imbalanceRatio": 3.25
+    },
+    "density": "medium",
+    "emphasis": [
+      2
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95
+  }
+]

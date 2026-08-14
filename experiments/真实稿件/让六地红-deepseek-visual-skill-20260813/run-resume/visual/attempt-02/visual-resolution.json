@@ -1,0 +1,54 @@
+{
+  "status": "needs-director-revision",
+  "feedback": [
+    {
+      "pageId": "opening",
+      "code": "composition-invalid",
+      "issues": [
+        {
+          "code": "composition-item-field-unplaced",
+          "omissions": [
+            {
+              "itemId": "greeting",
+              "field": "title"
+            },
+            {
+              "itemId": "topic",
+              "field": "body"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "pageId": "matrix",
+      "code": "composition-invalid",
+      "issues": [
+        {
+          "code": "composition-item-field-unplaced",
+          "omissions": [
+            {
+              "itemId": "dual-drive",
+              "field": "body"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "pageId": "conclusion",
+      "code": "composition-invalid",
+      "issues": [
+        {
+          "code": "composition-item-field-unplaced",
+          "omissions": [
+            {
+              "itemId": "quote",
+              "field": "body"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

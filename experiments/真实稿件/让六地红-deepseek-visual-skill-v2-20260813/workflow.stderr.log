@@ -1,0 +1,21 @@
+file:///C:/PPagenT/src/render/page-composition.mjs:72
+    const error = new Error(`${roleName} 无法在正文槽位允许的字号档位内排下`);
+                  ^
+
+Error: rowBody 无法在正文槽位允许的字号档位内排下
+    at fittedCompositionText (file:///C:/PPagenT/src/render/page-composition.mjs:72:19)
+    at file:///C:/PPagenT/src/render/page-composition.mjs:141:20
+    at Array.forEach (<anonymous>)
+    at renderEditorialRows (file:///C:/PPagenT/src/render/page-composition.mjs:117:9)
+    at renderEditorialFocus (file:///C:/PPagenT/src/render/page-composition.mjs:212:3)
+    at renderPageComposition (file:///C:/PPagenT/src/render/page-composition.mjs:360:5)
+    at file:///C:/PPagenT/src/runtime/skins/northeastern-university.mjs:280:32
+    at Array.forEach (<anonymous>)
+    at renderNortheasternUniversityDeck (file:///C:/PPagenT/src/runtime/skins/northeastern-university.mjs:273:9)
+    at async Object.renderWorkflowDeck [as renderer] (file:///C:/PPagenT/src/agent/neu-renderer.mjs:54:5) {
+  code: 'COMPOSITION_TEXT_FIT_FAILED',
+  role: 'rowBody',
+  text: '十年探路、五年深耕，五大载体贯通红色血脉\n• 一条研学链\n• 一张任务单\n• 一座VR基地\n• 一支宣讲团\n• 一个育人机制'
+}
+
+Node.js v24.19.0

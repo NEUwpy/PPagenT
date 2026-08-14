@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "1.0",
+  "status": "delivered",
+  "workflowMode": "production",
+  "deckId": "why-ppagent",
+  "skinId": "northeastern-university-001",
+  "pageCount": 10,
+  "outputPptx": "experiments/真实稿件/为什么做PPagenT-deepseek-refined-20260813/为什么做PPagenT-deepseek-default-final-20260813.pptx",
+  "deterministicQualityAudit": {
+    "status": "passed",
+    "typography": {
+      "status": "passed",
+      "minimumFontSize": 16,
+      "violations": []
+    },
+    "geometry": {
+      "status": "passed",
+      "tolerance": 0.5,
+      "qaParentCount": 20,
+      "connectorCount": 0,
+      "qaParentCountBySlide": {
+        "slide-01": 0,
+        "slide-02": 0,
+        "slide-03": 4,
+        "slide-04": 2,
+        "slide-05": 2,
+        "slide-06": 6,
+        "slide-07": 2,
+        "slide-08": 2,
+        "slide-09": 2,
+        "slide-10": 0
+      },
+      "violations": []
+    }
+  },
+  "finalQa": {
+    "deterministicQualityAudit": {
+      "status": "passed",
+      "typography": {
+        "status": "passed",
+        "minimumFontSize": 16,
+        "violations": []
+      },
+      "geometry": {
+        "status": "passed",
+        "tolerance": 0.5,
+        "qaParentCount": 20,
+        "connectorCount": 0,
+        "qaParentCountBySlide": {
+          "slide-01": 0,
+          "slide-02": 0,
+          "slide-03": 4,
+          "slide-04": 2,
+          "slide-05": 2,
+          "slide-06": 6,
+          "slide-07": 2,
+          "slide-08": 2,
+          "slide-09": 2,
+          "slide-10": 0
+        },
+        "violations": []
+      }
+    },
+    "postRenderReview": "not-part-of-production-workflow",
+    "overflow": {
+      "status": "not-run"
+    }
+  },
+  "runManifest": "experiments/真实稿件/为什么做PPagenT-deepseek-refined-20260813/run-07/run-manifest.json"
+}

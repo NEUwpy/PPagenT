@@ -1,0 +1,186 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "liaoning-six-red-education",
+  "skinId": "northeastern-university-001",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "compositionId": "fixed-cover",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "compositionId": "fixed-agenda",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "opening",
+      "intentId": "opening-intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "topic"
+          ],
+          "contentMode": "title"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "greeting"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "问候作为支撑，主题作为核心焦点，均进入文字槽。"
+    },
+    {
+      "pageId": "from-challenge-to-focus",
+      "intentId": "from-challenge-to-focus-intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "challenge",
+            "response"
+          ],
+          "contentMode": "title"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "challenge",
+            "response",
+            "shift"
+          ],
+          "contentMode": "body"
+        }
+      ],
+      "reason": "时间顺序列表，标题与正文分别承载。"
+    },
+    {
+      "pageId": "new-matrix",
+      "intentId": "new-matrix-intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "one-chain"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "three-classrooms",
+            "n-scenarios"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "主从结构表达层级，研学链为主，课堂与场景为支撑。"
+    },
+    {
+      "pageId": "practice-levers-1",
+      "intentId": "practice-levers-1-intent",
+      "compositionId": "editorial-dual-statement",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "left",
+          "sourceItemIds": [
+            "task-list"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "right",
+          "sourceItemIds": [
+            "vr-base"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "两个抓手并列，左右平衡。"
+    },
+    {
+      "pageId": "practice-levers-2",
+      "intentId": "practice-levers-2-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "lecture-group",
+        "friend-circle",
+        "mechanism"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "三个并行卡片，组件完全承载内容。"
+    },
+    {
+      "pageId": "five-year-outcomes",
+      "intentId": "five-year-outcomes-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "faith",
+        "skill",
+        "voice",
+        "step"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "四个成效卡片，组件承载。"
+    },
+    {
+      "pageId": "conclusion",
+      "intentId": "conclusion-intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "closing"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "quote",
+            "summary"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "最终底色为核心，嘱托与总结为支撑，避免长正文拥挤。"
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "compositionId": "fixed-closing",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

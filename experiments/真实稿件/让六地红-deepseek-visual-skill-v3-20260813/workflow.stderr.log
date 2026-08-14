@@ -1,0 +1,26 @@
+file:///C:/PPagenT/src/agent/workflow.mjs:114
+      throw new WorkflowError(
+            ^
+
+WorkflowError: five-practice-levers 的多项内容密度超过正式字号与已登记版式的通用容量
+    at file:///C:/PPagenT/src/agent/workflow.mjs:114:13
+    at Array.forEach (<anonymous>)
+    at assertContentOutput (file:///C:/PPagenT/src/agent/workflow.mjs:88:23)
+    at executeContentAttempt (file:///C:/PPagenT/src/agent/workflow.mjs:386:5)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async runDirectorWorkflow (file:///C:/PPagenT/src/agent/workflow.mjs:404:11)
+    at async runWorkflowCli (file:///C:/PPagenT/src/agent/run-workflow.mjs:95:18)
+    at async file:///C:/PPagenT/src/agent/run-workflow.mjs:156:18 {
+  code: 'CONTENT_CAPACITY_EXCEEDED',
+  stage: 'content-director',
+  details: {
+    pageId: 'five-practice-levers',
+    itemCount: 5,
+    estimatedTotalChars: 194,
+    maxItemChars: 43,
+    required: { maxItems: 13, maxTotalChars: 180, maxItemChars: 72 },
+    guidance: '压缩每项正文与分点、删除重复表达，或按叙事职责拆成两页；不得缩小字号硬塞'
+  }
+}
+
+Node.js v24.19.0

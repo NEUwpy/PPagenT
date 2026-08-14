@@ -1,0 +1,642 @@
+{
+  "generatedAt": "2026-08-14T04:09:25.686Z",
+  "model": "deepseek-v4-flash",
+  "input": "input.md",
+  "direct": {
+    "runName": "direct-content-director",
+    "enableStructure": false,
+    "wallTimeMs": 7485,
+    "requestCount": 1,
+    "requests": [
+      {
+        "run": "direct-content-director",
+        "role": "content",
+        "status": 200,
+        "elapsedMs": 7483,
+        "usage": {
+          "prompt_tokens": 2124,
+          "completion_tokens": 1182,
+          "total_tokens": 3306,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 2124
+        },
+        "finishReason": "stop"
+      }
+    ],
+    "evaluation": {
+      "pageCount": 2,
+      "comparison": {
+        "mainItemCount": 3,
+        "has80": true,
+        "has95": true,
+        "pointCounts": [
+          2,
+          2,
+          0
+        ],
+        "items": [
+          {
+            "title": "核心观点",
+            "body": "稳定的 80 分比随机的 95 分更值钱。",
+            "points": [
+              "PPagenT 不追求每次生成惊叹的 95 分作品。",
+              "真实使用场景是普通汇报，需要稳定可靠。"
+            ]
+          },
+          {
+            "title": "使用场景",
+            "body": "明天上午汇报，晚上交给系统，得到可继续修改的初稿。",
+            "points": [
+              "结构清楚、视觉规范、符合组织风格。",
+              "节省大量时间。"
+            ]
+          },
+          {
+            "title": "结论",
+            "body": "稳定的 80 分，很多时候比随机的 95 分更值钱。",
+            "points": []
+          }
+        ]
+      },
+      "transformation": {
+        "mainItemCount": 2,
+        "hasWork": true,
+        "hasRule": true,
+        "hasAbility": true,
+        "middlePointCount": 1,
+        "middlePoints": [
+          "表达、容量、变化、禁忌。"
+        ],
+        "items": [
+          {
+            "title": "积累经验",
+            "body": "真正要积累的是页面背后的经验。",
+            "points": [
+              "表达、容量、变化、禁忌。"
+            ]
+          },
+          {
+            "title": "从作品到能力",
+            "body": "规律提炼后，漂亮页面从作品变成能力。",
+            "points": []
+          }
+        ]
+      }
+    },
+    "output": {
+      "deckPlan": {
+        "schemaVersion": "1.0",
+        "deckId": "ppagent-minimal-test",
+        "title": "PPagenT 结构颗粒度最小测试",
+        "communicationJob": "说明 PPagenT 的价值主张与核心资产积累理念",
+        "audience": "潜在用户或评估者",
+        "audienceOutcome": "理解稳定的 80 分比随机的 95 分更值钱，以及真正积累的是页面背后的经验规律",
+        "centralTakeaway": "稳定的 80 分初稿对工作更有价值，而真正的积累是从作品到能力的规律提炼",
+        "narrativeArc": [
+          "价值主张",
+          "核心资产"
+        ],
+        "pages": [
+          {
+            "pageId": "stable-80",
+            "sequence": 1,
+            "narrativeJob": "提出核心价值：稳定优于随机高分",
+            "sourceAnchors": [
+              "## 稳定的 80 分，比随机的 95 分更值钱"
+            ]
+          },
+          {
+            "pageId": "accumulate-experience",
+            "sequence": 2,
+            "narrativeJob": "说明真正积累的是经验规律，从作品到能力",
+            "sourceAnchors": [
+              "## 真正积累的不是一万个模板"
+            ]
+          }
+        ]
+      },
+      "pageContents": [
+        {
+          "schemaVersion": "1.0",
+          "pageId": "stable-80",
+          "title": "稳定的 80 分，比随机的 95 分更值钱",
+          "items": [
+            {
+              "id": "concept",
+              "title": "核心观点",
+              "body": "稳定的 80 分比随机的 95 分更值钱。",
+              "points": [
+                "PPagenT 不追求每次生成惊叹的 95 分作品。",
+                "真实使用场景是普通汇报，需要稳定可靠。"
+              ],
+              "polarity": "positive",
+              "emphasis": true
+            },
+            {
+              "id": "scenario",
+              "title": "使用场景",
+              "body": "明天上午汇报，晚上交给系统，得到可继续修改的初稿。",
+              "points": [
+                "结构清楚、视觉规范、符合组织风格。",
+                "节省大量时间。"
+              ]
+            },
+            {
+              "id": "conclusion",
+              "title": "结论",
+              "body": "稳定的 80 分，很多时候比随机的 95 分更值钱。",
+              "polarity": "positive",
+              "emphasis": true
+            }
+          ],
+          "structuredData": {
+            "type": "hierarchy",
+            "root": {
+              "id": "stable-80",
+              "label": "稳定的 80 分更值钱",
+              "role": "观点",
+              "children": [
+                {
+                  "id": "concept",
+                  "label": "核心观点",
+                  "role": "理由"
+                },
+                {
+                  "id": "scenario",
+                  "label": "使用场景",
+                  "role": "举例"
+                },
+                {
+                  "id": "conclusion",
+                  "label": "结论",
+                  "role": "总结"
+                }
+              ]
+            }
+          },
+          "notes": "强调稳定对实际工作的价值",
+          "sourceText": "## 稳定的 80 分，比随机的 95 分更值钱\n\nPPagenT 不追求每次都生成一个让人惊叹的 95 分作品。\n\n真正的使用场景往往很普通：明天上午要汇报，晚上把稿件交给系统，希望得到一套结构清楚、视觉规范、符合组织风格，而且第二天仍然可以继续修改的 PPT。\n\n如果系统能够稳定交付一个真正能用于工作的 80 分初稿，它就已经节省了大量时间。\n\n> **对工作来说，稳定的 80 分，很多时候比随机的 95 分更值钱。**"
+        },
+        {
+          "schemaVersion": "1.0",
+          "pageId": "accumulate-experience",
+          "title": "真正积累的不是一万个模板",
+          "items": [
+            {
+              "id": "accumulate",
+              "title": "积累经验",
+              "body": "真正要积累的是页面背后的经验。",
+              "points": [
+                "表达、容量、变化、禁忌。"
+              ]
+            },
+            {
+              "id": "transform",
+              "title": "从作品到能力",
+              "body": "规律提炼后，漂亮页面从作品变成能力。",
+              "points": []
+            }
+          ],
+          "structuredData": {
+            "type": "hierarchy",
+            "root": {
+              "id": "accumulate-experience",
+              "label": "真正积累的不是一万个模板",
+              "role": "观点",
+              "children": [
+                {
+                  "id": "accumulate",
+                  "label": "积累经验",
+                  "role": "内容"
+                },
+                {
+                  "id": "transform",
+                  "label": "从作品到能力",
+                  "role": "结果"
+                }
+              ]
+            }
+          },
+          "notes": "强调规律提炼的价值",
+          "sourceText": "## 真正积累的不是一万个模板\n\n真正要积累的是页面背后的经验：表达，容量，变化，禁忌。\n\n这些规律被提炼以后，一个漂亮页面才能从作品变成能力。"
+        }
+      ]
+    }
+  },
+  "assisted": {
+    "runName": "local-structure-hints",
+    "enableStructure": true,
+    "wallTimeMs": 14627,
+    "requestCount": 4,
+    "requests": [
+      {
+        "run": "local-structure-hints",
+        "role": "structure",
+        "status": 200,
+        "elapsedMs": 1489,
+        "usage": {
+          "prompt_tokens": 491,
+          "completion_tokens": 164,
+          "total_tokens": 655,
+          "prompt_tokens_details": {
+            "cached_tokens": 384
+          },
+          "prompt_cache_hit_tokens": 384,
+          "prompt_cache_miss_tokens": 107
+        },
+        "finishReason": "stop"
+      },
+      {
+        "run": "local-structure-hints",
+        "role": "structure",
+        "status": 200,
+        "elapsedMs": 1842,
+        "usage": {
+          "prompt_tokens": 440,
+          "completion_tokens": 177,
+          "total_tokens": 617,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 440
+        },
+        "finishReason": "stop"
+      },
+      {
+        "run": "local-structure-hints",
+        "role": "structure",
+        "status": 200,
+        "elapsedMs": 1894,
+        "usage": {
+          "prompt_tokens": 479,
+          "completion_tokens": 197,
+          "total_tokens": 676,
+          "prompt_tokens_details": {
+            "cached_tokens": 384
+          },
+          "prompt_cache_hit_tokens": 384,
+          "prompt_cache_miss_tokens": 95
+        },
+        "finishReason": "stop"
+      },
+      {
+        "run": "local-structure-hints",
+        "role": "content",
+        "status": 200,
+        "elapsedMs": 7570,
+        "usage": {
+          "prompt_tokens": 2700,
+          "completion_tokens": 1227,
+          "total_tokens": 3927,
+          "prompt_tokens_details": {
+            "cached_tokens": 640
+          },
+          "prompt_cache_hit_tokens": 640,
+          "prompt_cache_miss_tokens": 2060
+        },
+        "finishReason": "stop"
+      }
+    ],
+    "evaluation": {
+      "pageCount": 2,
+      "comparison": {
+        "mainItemCount": 2,
+        "has80": true,
+        "has95": true,
+        "pointCounts": [
+          0,
+          0
+        ],
+        "items": [
+          {
+            "title": "稳定80分",
+            "body": "每次交付规范可用的初稿，工作流可预期",
+            "points": []
+          },
+          {
+            "title": "随机95分",
+            "body": "偶尔惊艳但不可靠，难以继续修改",
+            "points": []
+          }
+        ]
+      },
+      "transformation": {
+        "mainItemCount": 3,
+        "hasWork": true,
+        "hasRule": true,
+        "hasAbility": true,
+        "middlePointCount": 4,
+        "middlePoints": [
+          "表达",
+          "容量",
+          "变化",
+          "禁忌"
+        ],
+        "items": [
+          {
+            "title": "作品",
+            "body": "漂亮页面从作品出发，积累经验",
+            "points": []
+          },
+          {
+            "title": "规律",
+            "body": "提炼表达容量变化禁忌四条规律",
+            "points": [
+              "表达",
+              "容量",
+              "变化",
+              "禁忌"
+            ]
+          },
+          {
+            "title": "能力",
+            "body": "页面从作品经规律提炼成能力",
+            "points": []
+          }
+        ]
+      }
+    },
+    "output": {
+      "deckPlan": {
+        "schemaVersion": "1.0",
+        "deckId": "structural-minimal-test",
+        "title": "PPagenT 结构颗粒度最小测试",
+        "communicationJob": "说明稳定的 80 分比随机的 95 分更值钱，并阐述真正要积累的是页面背后的经验，使其从作品变成能力。",
+        "audience": "关注工作效率与内容积累的团队",
+        "audienceOutcome": "理解稳定交付的价值，并明白积累规律而非模板的重要性",
+        "centralTakeaway": "稳定的 80 分比随机的 95 分更值钱，真正要积累的是页面背后的规律，让经验从作品变成能力。",
+        "narrativeArc": [
+          "稳定胜随机",
+          "从作品到能力"
+        ],
+        "pages": [
+          {
+            "pageId": "page-1",
+            "sequence": 1,
+            "narrativeJob": "对比稳定80分与随机95分的价值",
+            "sourceAnchors": [
+              "## 稳定的 80 分，比随机的 95 分更值钱"
+            ]
+          },
+          {
+            "pageId": "page-2",
+            "sequence": 2,
+            "narrativeJob": "阐述积累规律从作品到能力",
+            "sourceAnchors": [
+              "## 真正积累的不是一万个模板"
+            ]
+          }
+        ]
+      },
+      "pageContents": [
+        {
+          "schemaVersion": "1.0",
+          "pageId": "page-1",
+          "title": "稳定的 80 分，比随机的 95 分更值钱",
+          "items": [
+            {
+              "id": "page-1-structure-1",
+              "title": "稳定80分",
+              "body": "每次交付规范可用的初稿，工作流可预期",
+              "polarity": "positive",
+              "emphasis": true
+            },
+            {
+              "id": "page-1-structure-2",
+              "title": "随机95分",
+              "body": "偶尔惊艳但不可靠，难以继续修改",
+              "polarity": "negative"
+            }
+          ],
+          "notes": "引用原稿核心判断句。；PPagenT主关系=comparison",
+          "sourceText": "## 稳定的 80 分，比随机的 95 分更值钱\n\nPPagenT 不追求每次都生成一个让人惊叹的 95 分作品。\n\n真正的使用场景往往很普通：明天上午要汇报，晚上把稿件交给系统，希望得到一套结构清楚、视觉规范、符合组织风格，而且第二天仍然可以继续修改的 PPT。\n\n如果系统能够稳定交付一个真正能用于工作的 80 分初稿，它就已经节省了大量时间。\n\n> **对工作来说，稳定的 80 分，很多时候比随机的 95 分更值钱。**"
+        },
+        {
+          "schemaVersion": "1.0",
+          "pageId": "page-2",
+          "title": "真正积累的不是一万个模板",
+          "items": [
+            {
+              "id": "page-2-structure-1",
+              "title": "作品",
+              "body": "漂亮页面从作品出发，积累经验",
+              "polarity": "neutral"
+            },
+            {
+              "id": "page-2-structure-2",
+              "title": "规律",
+              "body": "提炼表达容量变化禁忌四条规律",
+              "points": [
+                "表达",
+                "容量",
+                "变化",
+                "禁忌"
+              ],
+              "polarity": "positive",
+              "emphasis": true
+            },
+            {
+              "id": "page-2-structure-3",
+              "title": "能力",
+              "body": "页面从作品经规律提炼成能力",
+              "polarity": "positive"
+            }
+          ],
+          "notes": "遵循从作品到规律的转化。；PPagenT主关系=sequence；PPagenT节点接口=semantic-node+points",
+          "sourceText": "## 真正积累的不是一万个模板\n\n真正要积累的是页面背后的经验：表达，容量，变化，禁忌。\n\n这些规律被提炼以后，一个漂亮页面才能从作品变成能力。"
+        }
+      ]
+    }
+  },
+  "batched": {
+    "runName": "batched-structure-hints",
+    "structureMode": "batch",
+    "wallTimeMs": 9394,
+    "requestCount": 2,
+    "requests": [
+      {
+        "run": "batched-structure-hints",
+        "role": "structure-batch",
+        "status": 200,
+        "elapsedMs": 2641,
+        "usage": {
+          "prompt_tokens": 647,
+          "completion_tokens": 335,
+          "total_tokens": 982,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 647
+        },
+        "finishReason": "stop"
+      },
+      {
+        "run": "batched-structure-hints",
+        "role": "content",
+        "status": 200,
+        "elapsedMs": 6748,
+        "usage": {
+          "prompt_tokens": 2591,
+          "completion_tokens": 1089,
+          "total_tokens": 3680,
+          "prompt_tokens_details": {
+            "cached_tokens": 1920
+          },
+          "prompt_cache_hit_tokens": 1920,
+          "prompt_cache_miss_tokens": 671
+        },
+        "finishReason": "stop"
+      }
+    ],
+    "evaluation": {
+      "pageCount": 2,
+      "comparison": {
+        "mainItemCount": 2,
+        "has80": true,
+        "has95": true,
+        "pointCounts": [
+          0,
+          0
+        ],
+        "items": [
+          {
+            "title": "稳定80分",
+            "body": "稳定交付可用初稿，节省时间",
+            "points": []
+          },
+          {
+            "title": "随机95分",
+            "body": "追求惊喜但不可靠",
+            "points": []
+          }
+        ]
+      },
+      "transformation": {
+        "mainItemCount": 3,
+        "hasWork": true,
+        "hasRule": true,
+        "hasAbility": true,
+        "middlePointCount": 4,
+        "middlePoints": [
+          "表达",
+          "容量",
+          "变化",
+          "禁忌"
+        ],
+        "items": [
+          {
+            "title": "作品",
+            "body": "漂亮页面本身",
+            "points": []
+          },
+          {
+            "title": "规律",
+            "body": "表达、容量、变化、禁忌",
+            "points": [
+              "表达",
+              "容量",
+              "变化",
+              "禁忌"
+            ]
+          },
+          {
+            "title": "能力",
+            "body": "从作品变成能力",
+            "points": []
+          }
+        ]
+      }
+    },
+    "output": {
+      "deckPlan": {
+        "schemaVersion": "1.0",
+        "deckId": "ppagent-structural-granularity-min-test",
+        "title": "结构颗粒度最小测试",
+        "communicationJob": "说明稳定交付可靠初稿的价值，以及积累页面背后经验的重要性。",
+        "audience": "潜在用户或内部团队",
+        "audienceOutcome": "理解PPagenT的核心价值：稳定比惊喜更重要；经验沉淀比模板更重要。",
+        "centralTakeaway": "稳定的80分比随机的95分更值钱；真正要积累的是页面背后的经验。",
+        "narrativeArc": [
+          "价值主张",
+          "经验积累"
+        ],
+        "pages": [
+          {
+            "pageId": "page-1",
+            "sequence": 1,
+            "narrativeJob": "引入核心价值主张：稳定可靠优于偶然惊喜。",
+            "sourceAnchors": [
+              "## 稳定的 80 分，比随机的 95 分更值钱"
+            ]
+          },
+          {
+            "pageId": "page-2",
+            "sequence": 2,
+            "narrativeJob": "阐述从作品到能力的关键：提炼规律而非堆砌模板。",
+            "sourceAnchors": [
+              "## 真正积累的不是一万个模板"
+            ]
+          }
+        ]
+      },
+      "pageContents": [
+        {
+          "schemaVersion": "1.0",
+          "pageId": "page-1",
+          "title": "稳定的 80 分，比随机的 95 分更值钱",
+          "items": [
+            {
+              "id": "page-1-structure-1",
+              "title": "稳定80分",
+              "body": "稳定交付可用初稿，节省时间"
+            },
+            {
+              "id": "page-1-structure-2",
+              "title": "随机95分",
+              "body": "追求惊喜但不可靠",
+              "polarity": "negative",
+              "emphasis": true
+            }
+          ],
+          "notes": "对比稳定与随机，强调稳定价值。；PPagenT主关系=comparison",
+          "sourceText": "## 稳定的 80 分，比随机的 95 分更值钱\n\nPPagenT 不追求每次都生成一个让人惊叹的 95 分作品。\n\n真正的使用场景往往很普通：明天上午要汇报，晚上把稿件交给系统，希望得到一套结构清楚、视觉规范、符合组织风格，而且第二天仍然可以继续修改的 PPT。\n\n如果系统能够稳定交付一个真正能用于工作的 80 分初稿，它就已经节省了大量时间。\n\n> **对工作来说，稳定的 80 分，很多时候比随机的 95 分更值钱。**"
+        },
+        {
+          "schemaVersion": "1.0",
+          "pageId": "page-2",
+          "title": "真正积累的不是一万个模板",
+          "items": [
+            {
+              "id": "page-2-structure-1",
+              "title": "作品",
+              "body": "漂亮页面本身"
+            },
+            {
+              "id": "page-2-structure-2",
+              "title": "规律",
+              "body": "表达、容量、变化、禁忌",
+              "points": [
+                "表达",
+                "容量",
+                "变化",
+                "禁忌"
+              ]
+            },
+            {
+              "id": "page-2-structure-3",
+              "title": "能力",
+              "body": "从作品变成能力"
+            }
+          ],
+          "notes": "从作品经规律到能力的转化。；PPagenT主关系=sequence；PPagenT节点接口=semantic-node+points",
+          "sourceText": "## 真正积累的不是一万个模板\n\n真正要积累的是页面背后的经验：表达，容量，变化，禁忌。\n\n这些规律被提炼以后，一个漂亮页面才能从作品变成能力。"
+        }
+      ]
+    }
+  }
+}

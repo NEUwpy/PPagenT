@@ -1,0 +1,150 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "why-ppagent",
+  "skinId": "northeastern-university-001",
+  "pages": [
+    {
+      "pageId": "p1",
+      "intentId": "p1_intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "judgment"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "rework"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Lead presents judgment as the costly activity; body lists the rework consequence."
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2_intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "fixed-is-good"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "not-reinvent"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Primary highlights fixed as advantage; support explains why no reinvention needed."
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3_intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "understand",
+        "decide",
+        "execute"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Cards carry titles and bodies for the three mechanisms."
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4_intent",
+      "compositionId": "editorial-single-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "80-value"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Only one key thesis; not-95 is secondary and omitted as it is not essential."
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5_intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "target"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "product-value"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Lead states the target; body explains the product value."
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6_intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "experience"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "expand"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Primary focuses on experience; support adds expandability."
+    },
+    {
+      "pageId": "p7",
+      "intentId": "p7_intent",
+      "compositionId": "editorial-single-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "result"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Closing thesis presented as single focus; goal is implicit and not needed as separate slot."
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "slideSize": { "width": 1280, "height": 720 },
+  "contentFrame": { "left": 72, "top": 48, "width": 1136, "height": 624 },
+  "centerVisual": {
+    "src": "../assets/center-mountain.jpg",
+    "alt": "中心山景"
+  },
+  "items": [
+    { "id": "city", "title": "建设美丽城市", "body": "协同空间与生态更新", "icon": "../assets/icon-left-top.png" },
+    { "id": "traffic", "title": "畅享智慧交通", "body": "连接城市运行脉络", "icon": "../assets/icon-right-top.png" },
+    { "id": "service", "title": "提升公共服务", "body": "让生活更便捷温暖", "icon": "../assets/icon-left-bottom.png" },
+    { "id": "talent", "title": "培育创新人才", "body": "汇聚持续生长的力量", "icon": "../assets/icon-right-bottom.png" },
+    { "id": "energy", "title": "激活发展动能", "body": "以新质动能驱动转型", "icon": "../assets/icon-left-top.png" },
+    { "id": "education", "title": "教育交流中心", "body": "共享开放学习网络", "icon": "../assets/icon-right-top.png" },
+    { "id": "circulation", "title": "促进要素流动", "body": "打通创新协作链路", "icon": "../assets/icon-left-bottom.png" }
+  ],
+  "states": {
+    "golden4": ["city", "traffic", "service", "talent"],
+    "dense7": ["city", "traffic", "service", "talent", "energy", "education", "circulation"]
+  }
+}

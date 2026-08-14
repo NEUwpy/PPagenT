@@ -1,0 +1,269 @@
+[
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p1-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列呈现制作PPT真正耗时的多个方面，并抛出核心追问",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "sameLevel": true
+    },
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 4,
+      "maxItemChars": 46,
+      "avgItemChars": 41.75,
+      "minItemChars": 34,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 41,
+      "imbalanceRatio": 1.35
+    },
+    "density": "medium",
+    "emphasis": [
+      3
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.9
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p2-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列呈现工作场景中PPT不需要每次重新发明的多个论据",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "sameLevel": true
+    },
+    "contentStats": {
+      "titleChars": 18,
+      "itemCount": 4,
+      "maxItemChars": 55,
+      "avgItemChars": 45,
+      "minItemChars": 39,
+      "maxItemTitleChars": 11,
+      "maxItemBodyChars": 51,
+      "imbalanceRatio": 1.41
+    },
+    "density": "medium",
+    "emphasis": [
+      1
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.9
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p3-intent",
+    "purposeKey": "explain_hierarchy",
+    "purposeText": "说明PPagenT系统中AI、规则、代码三层的分工与层级关系",
+    "baseRelation": "hierarchy",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "role"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": true,
+      "sameLevel": false,
+      "hierarchyDepth": 2
+    },
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 4,
+      "maxItemChars": 46,
+      "avgItemChars": 35,
+      "minItemChars": 28,
+      "maxItemTitleChars": 7,
+      "maxItemBodyChars": 40,
+      "imbalanceRatio": 1.64
+    },
+    "density": "medium",
+    "emphasis": [
+      3
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.95
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p4-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列呈现稳定80分优于随机95分的多个理由",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "sameLevel": true
+    },
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 4,
+      "maxItemChars": 54,
+      "avgItemChars": 41.25,
+      "minItemChars": 36,
+      "maxItemTitleChars": 7,
+      "maxItemBodyChars": 50,
+      "imbalanceRatio": 1.5
+    },
+    "density": "medium",
+    "emphasis": [
+      3
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.9
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p5-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列呈现产品服务大多数用户而非顶尖专家的多个论点",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "sameLevel": true
+    },
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 4,
+      "maxItemChars": 50,
+      "avgItemChars": 47.75,
+      "minItemChars": 43,
+      "maxItemTitleChars": 5,
+      "maxItemBodyChars": 46,
+      "imbalanceRatio": 1.16
+    },
+    "density": "medium",
+    "emphasis": [
+      3
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.9
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p6-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列呈现真正积累的是经验而非模板的多个论证",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "sameLevel": true
+    },
+    "contentStats": {
+      "titleChars": 12,
+      "itemCount": 4,
+      "maxItemChars": 66,
+      "avgItemChars": 54.5,
+      "minItemChars": 37,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 62,
+      "imbalanceRatio": 1.78
+    },
+    "density": "medium",
+    "emphasis": [
+      2
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.9
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p7-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列总结项目解决的问题、方案、承诺与意义",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "sameLevel": true
+    },
+    "contentStats": {
+      "titleChars": 16,
+      "itemCount": 4,
+      "maxItemChars": 65,
+      "avgItemChars": 40.75,
+      "minItemChars": 20,
+      "maxItemTitleChars": 4,
+      "maxItemBodyChars": 63,
+      "imbalanceRatio": 3.25
+    },
+    "density": "medium",
+    "emphasis": [
+      2
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.9
+  }
+]

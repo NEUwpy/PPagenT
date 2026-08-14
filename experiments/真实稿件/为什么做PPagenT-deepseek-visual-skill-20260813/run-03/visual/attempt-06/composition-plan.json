@@ -1,0 +1,159 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "why-ppagent",
+  "skinId": "northeastern-university-001",
+  "pages": [
+    {
+      "pageId": "p1",
+      "intentId": "p1-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p1-1",
+        "p1-2",
+        "p1-3",
+        "p1-4"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "四张卡片直接承载全部内容，标题和正文完整显示，适合并列举证。"
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p2-1",
+        "p2-2",
+        "p2-3",
+        "p2-4"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "四张卡片完整呈现现状、洞察、组织风格与选择，并列对比清晰。"
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3-intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "list",
+          "sourceItemIds": [
+            "p3-1",
+            "p3-2",
+            "p3-3",
+            "p3-4"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "编辑器式列表按顺序排列 AI、规则、代码和直接说法，内容完整且条理清晰。"
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4-intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "focus",
+          "sourceItemIds": [
+            "p4-4"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "supporting-list",
+          "sourceItemIds": [
+            "p4-1",
+            "p4-2",
+            "p4-3"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "焦点槽突出核心观点，支持列表收纳三个论证项，形成主次分明的论证结构。"
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5-intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "list",
+          "sourceItemIds": [
+            "p5-1",
+            "p5-2",
+            "p5-3",
+            "p5-4"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "四项原因用列表依次展开，避免过度强化某一项，契合受众对比的语境。"
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6-intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "focus",
+          "sourceItemIds": [
+            "p6-3"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "supporting-list",
+          "sourceItemIds": [
+            "p6-1",
+            "p6-2",
+            "p6-4"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "焦点呈现“从作品到能力”的关键句，其余三项作为支撑列表，突出经验积累的价值。"
+    },
+    {
+      "pageId": "p7",
+      "intentId": "p7-intent",
+      "compositionId": "fixed-closing",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "recap",
+          "sourceItemIds": [
+            "p7-1"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "focus",
+          "sourceItemIds": [
+            "p7-3"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "p7-2",
+            "p7-4"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "关闭槽完成问题回顾，焦点槽突出承诺，主槽归纳方案与意义，满足收束页的信息结构。"
+    }
+  ]
+}

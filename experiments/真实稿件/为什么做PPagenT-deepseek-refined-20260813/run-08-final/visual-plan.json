@@ -1,0 +1,99 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "why-ppagent-001",
+  "skinId": "northeastern-university-001",
+  "visualLanguage": "Editorial stability with structured component accents; consistent use of NU colors and typography.",
+  "rhythmStrategy": "Alternate between full-width editorial text pages and component-driven structured pages, avoiding repetition of identical skeletons; p1 uses parallel cards, p2 editorial single focus, p3 sequential process, p4 comparison, p5 editorial dual statement, p6 sequential process, p7 parallel cards.",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "familyId": "skin-cover",
+      "variantId": "default",
+      "silhouette": "cover",
+      "adaptationStatus": "fixed",
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "familyId": "skin-agenda",
+      "variantId": "default",
+      "silhouette": "agenda",
+      "adaptationStatus": "fixed",
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "p1",
+      "intentId": "p1-intent",
+      "familyId": "parallel",
+      "variantId": "parallel-cards-p135",
+      "silhouette": "equal-width-capability-cards",
+      "adaptationStatus": "adaptive",
+      "reason": "Five parallel items with balanced titles and bodies fit the parallel cards preferred count 3-5 and text capacity."
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Single thesis with no structured items; editorial single focus composition best expresses the core point."
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3-intent",
+      "familyId": "sequential-process",
+      "variantId": "horizontal-cards",
+      "silhouette": "horizontal-card-chain",
+      "adaptationStatus": "adaptive",
+      "reason": "No temporal evidence; deterministic resolver selects ordinary sequential process."
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4-intent",
+      "familyId": "comparison-structure",
+      "variantId": "default",
+      "silhouette": "symmetric-column-contrast",
+      "adaptationStatus": "native",
+      "reason": "Exactly two options compared on same dimension (value); comparison structure natively supports this."
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Two parallel groups but no component supports exactly two items; editorial dual statement conveys the contrast without forcing a structure."
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6-intent",
+      "familyId": "sequential-process",
+      "variantId": "horizontal-cards",
+      "silhouette": "horizontal-card-chain",
+      "adaptationStatus": "adaptive",
+      "reason": "Four sequential steps; horizontal-card-chain fits itemCount 4 and text capacity; uses component-aside for contextual note."
+    },
+    {
+      "pageId": "p7",
+      "intentId": "p7-intent",
+      "familyId": "parallel",
+      "variantId": "parallel-cards-p135",
+      "silhouette": "equal-width-capability-cards",
+      "adaptationStatus": "adaptive",
+      "reason": "Three parallel attributes; parallel cards preferred for 3 items with equal weight."
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "familyId": "skin-closing",
+      "variantId": "default",
+      "silhouette": "closing",
+      "adaptationStatus": "fixed",
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

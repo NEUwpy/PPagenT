@@ -1,0 +1,316 @@
+{
+  "status": "needs-director-revision",
+  "feedback": [
+    {
+      "pageId": "new-matrix",
+      "code": "composition-invalid",
+      "issues": [
+        {
+          "code": "composition-text-slot-item-count-exceeded",
+          "slots": [
+            {
+              "slotId": "lead",
+              "actual": 3,
+              "max": 1
+            }
+          ]
+        }
+      ],
+      "legalAlternatives": [
+        {
+          "compositionId": "editorial-list",
+          "componentItemIds": [],
+          "componentContentMode": "none",
+          "textSlots": [
+            {
+              "slotId": "lead",
+              "sourceItemIds": [
+                "one-chain"
+              ],
+              "contentMode": "full"
+            },
+            {
+              "slotId": "body",
+              "sourceItemIds": [
+                "three-classrooms",
+                "n-scenarios"
+              ],
+              "contentMode": "full"
+            }
+          ]
+        },
+        {
+          "compositionId": "editorial-list",
+          "componentItemIds": [],
+          "componentContentMode": "none",
+          "textSlots": [
+            {
+              "slotId": "lead",
+              "sourceItemIds": [
+                "three-classrooms"
+              ],
+              "contentMode": "full"
+            },
+            {
+              "slotId": "body",
+              "sourceItemIds": [
+                "one-chain",
+                "n-scenarios"
+              ],
+              "contentMode": "full"
+            }
+          ]
+        },
+        {
+          "compositionId": "editorial-list",
+          "componentItemIds": [],
+          "componentContentMode": "none",
+          "textSlots": [
+            {
+              "slotId": "lead",
+              "sourceItemIds": [
+                "n-scenarios"
+              ],
+              "contentMode": "full"
+            },
+            {
+              "slotId": "body",
+              "sourceItemIds": [
+                "one-chain",
+                "three-classrooms"
+              ],
+              "contentMode": "full"
+            }
+          ]
+        },
+        {
+          "compositionId": "editorial-focus",
+          "componentItemIds": [],
+          "componentContentMode": "none",
+          "textSlots": [
+            {
+              "slotId": "primary",
+              "sourceItemIds": [
+                "one-chain"
+              ],
+              "contentMode": "full"
+            },
+            {
+              "slotId": "support",
+              "sourceItemIds": [
+                "three-classrooms",
+                "n-scenarios"
+              ],
+              "contentMode": "full"
+            }
+          ]
+        },
+        {
+          "compositionId": "editorial-focus-reverse",
+          "componentItemIds": [],
+          "componentContentMode": "none",
+          "textSlots": [
+            {
+              "slotId": "primary",
+              "sourceItemIds": [
+                "one-chain"
+              ],
+              "contentMode": "full"
+            },
+            {
+              "slotId": "support",
+              "sourceItemIds": [
+                "three-classrooms",
+                "n-scenarios"
+              ],
+              "contentMode": "full"
+            }
+          ]
+        },
+        {
+          "compositionId": "editorial-dual-statement",
+          "componentItemIds": [],
+          "componentContentMode": "none",
+          "textSlots": [
+            {
+              "slotId": "left",
+              "sourceItemIds": [
+                "one-chain"
+              ],
+              "contentMode": "full"
+            },
+            {
+              "slotId": "right",
+              "sourceItemIds": [
+                "three-classrooms",
+                "n-scenarios"
+              ],
+              "contentMode": "full"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "pageId": "conclusion",
+      "code": "structural-candidate-skipped",
+      "message": "已有通过语义与容量过滤的结构候选，不得无理由退回正文兜底",
+      "legalAlternatives": [
+        {
+          "familyId": "parallel",
+          "variantId": "parallel-cards-p135",
+          "silhouette": "equal-width-capability-cards",
+          "compositionIds": [
+            "component-full"
+          ]
+        }
+      ]
+    },
+    {
+      "pageId": "conclusion",
+      "code": "composition-invalid",
+      "issues": [
+        {
+          "code": "composition-text-fit-failed",
+          "role": "rowBody",
+          "slotId": "support",
+          "message": "rowBody 无法在正文槽位允许的字号档位内排下"
+        }
+      ],
+      "legalAlternatives": [
+        {
+          "compositionId": "editorial-list",
+          "componentItemIds": [],
+          "componentContentMode": "none",
+          "textSlots": [
+            {
+              "slotId": "lead",
+              "sourceItemIds": [
+                "quote"
+              ],
+              "contentMode": "full"
+            },
+            {
+              "slotId": "body",
+              "sourceItemIds": [
+                "summary",
+                "closing"
+              ],
+              "contentMode": "full"
+            }
+          ]
+        },
+        {
+          "compositionId": "editorial-list",
+          "componentItemIds": [],
+          "componentContentMode": "none",
+          "textSlots": [
+            {
+              "slotId": "lead",
+              "sourceItemIds": [
+                "summary"
+              ],
+              "contentMode": "full"
+            },
+            {
+              "slotId": "body",
+              "sourceItemIds": [
+                "quote",
+                "closing"
+              ],
+              "contentMode": "full"
+            }
+          ]
+        },
+        {
+          "compositionId": "editorial-list",
+          "componentItemIds": [],
+          "componentContentMode": "none",
+          "textSlots": [
+            {
+              "slotId": "lead",
+              "sourceItemIds": [
+                "closing"
+              ],
+              "contentMode": "full"
+            },
+            {
+              "slotId": "body",
+              "sourceItemIds": [
+                "quote",
+                "summary"
+              ],
+              "contentMode": "full"
+            }
+          ]
+        },
+        {
+          "compositionId": "editorial-focus",
+          "componentItemIds": [],
+          "componentContentMode": "none",
+          "textSlots": [
+            {
+              "slotId": "primary",
+              "sourceItemIds": [
+                "summary"
+              ],
+              "contentMode": "full"
+            },
+            {
+              "slotId": "support",
+              "sourceItemIds": [
+                "quote",
+                "closing"
+              ],
+              "contentMode": "full"
+            }
+          ]
+        },
+        {
+          "compositionId": "editorial-focus-reverse",
+          "componentItemIds": [],
+          "componentContentMode": "none",
+          "textSlots": [
+            {
+              "slotId": "primary",
+              "sourceItemIds": [
+                "summary"
+              ],
+              "contentMode": "full"
+            },
+            {
+              "slotId": "support",
+              "sourceItemIds": [
+                "quote",
+                "closing"
+              ],
+              "contentMode": "full"
+            }
+          ]
+        },
+        {
+          "compositionId": "editorial-dual-statement",
+          "componentItemIds": [],
+          "componentContentMode": "none",
+          "textSlots": [
+            {
+              "slotId": "left",
+              "sourceItemIds": [
+                "quote"
+              ],
+              "contentMode": "full"
+            },
+            {
+              "slotId": "right",
+              "sourceItemIds": [
+                "summary",
+                "closing"
+              ],
+              "contentMode": "full"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

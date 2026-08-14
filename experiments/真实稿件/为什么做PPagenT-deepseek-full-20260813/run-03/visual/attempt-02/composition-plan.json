@@ -1,0 +1,158 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "why-ppagent",
+  "skinId": "northeastern-university-001",
+  "pages": [
+    {
+      "pageId": "p1",
+      "intentId": "p1-intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "judgment"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "rework"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Two parallel pain points; lead for main judgment, body for rework."
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2-intent",
+      "compositionId": "editorial-focus-reverse",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "not-reinvent"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "fixed-is-good"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Emphasize 'fixed is good' as primary conclusion; support as premise."
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "understand",
+        "decide",
+        "execute"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Three sequential steps in timeline component display titles and bodies."
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4-intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "80-value"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "not-95"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Emphasize stable 80 value as primary; contrast with random 95 as support."
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5-intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "target"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "product-value"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Two parallel points about target and value; lead for target, body for product value."
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6-intent",
+      "compositionId": "editorial-focus-reverse",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "expand"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "experience"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Emphasize experience accumulation as primary; expansion as supporting."
+    },
+    {
+      "pageId": "p7",
+      "intentId": "p7-intent",
+      "compositionId": "editorial-single-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "goal",
+            "result"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Closing summary combining goal and result into one central thesis."
+    }
+  ]
+}

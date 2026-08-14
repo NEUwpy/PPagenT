@@ -1,0 +1,141 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "why-ppagent-codex-control",
+  "skinId": "northeastern-university-001",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "compositionId": "fixed-cover",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "compositionId": "fixed-agenda",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "p1",
+      "intentId": "p1-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "story",
+        "split",
+        "focus",
+        "relation",
+        "emphasis"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "组件完整承载五项内容"
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2-intent",
+      "compositionId": "editorial-single-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "validated"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "单点判断使用单焦点文字版式"
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "understand",
+        "decide",
+        "execute"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "组件完整承载三步"
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "random",
+        "stable"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "双栏组件完整承载两组对比"
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5-intent",
+      "compositionId": "editorial-dual-statement",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "left",
+          "sourceItemIds": [
+            "expert"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "right",
+          "sourceItemIds": [
+            "majority"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "两类用户用平衡双陈述构图表达，避免卡片化"
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "work",
+        "rules",
+        "capability"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "组件完整承载三级递进"
+    },
+    {
+      "pageId": "p7",
+      "intentId": "p7-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "skin",
+        "logic",
+        "learning"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "组件完整承载三个扩展方向"
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "compositionId": "fixed-closing",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

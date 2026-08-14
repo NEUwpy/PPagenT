@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "why-ppagent",
+  "skinId": "northeastern-university-001",
+  "visualLanguage": "editorial with structured component pages for parallel points",
+  "rhythmStrategy": "alternate between editorial focus pages and component card pages, avoid repeating same family consecutively",
+  "pages": [
+    {
+      "pageId": "p1",
+      "intentId": "p1-intent",
+      "familyId": "parallel",
+      "variantId": "parallel-cards-p135",
+      "silhouette": "equal-width-capability-cards",
+      "adaptationStatus": "adaptive",
+      "reason": "Four parallel points with medium density fit the capability cards component; editorial alternative also available but component used for first parallel page."
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Four parallel points, but to vary rhythm, use editorial focus layout; the emphasized item (p2-2) as primary thesis, others as support."
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Hierarchy with root and three children; editorial focus-reverse can present the system as the large thesis, children as support, but better use editorial-focus to highlight the 'AI understand' or use editorial-list. Choose editorial-focus with primary as 'AI understands' and support as rest, but also need to show hierarchy. Editorial-list with lead and body can list the three roles. Given hierarchy, choose editorial-list to lead with 'AI负责理解' and body lists all three roles."
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4-intent",
+      "familyId": "parallel",
+      "variantId": "parallel-cards-p135",
+      "silhouette": "equal-width-capability-cards",
+      "adaptationStatus": "adaptive",
+      "reason": "Four parallel points again, but after using editorial for p2 and p3, use component cards for p4 to alternate rhythm. Component cards are same family as p1, but it's the only suitable parallel component; acceptable given no other parallel component available."
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Four parallel points, but high density per rejections; parallel-cards rejected for density high, so only editorial available. Use editorial-focus with primary as the emphasized point (p5-4) and support as others."
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Four parallel points, high density, only editorial available. Use editorial-list to list the four points, lead with the emphasized one (p6-3) or just list all."
+    },
+    {
+      "pageId": "p7",
+      "intentId": "p7-intent",
+      "familyId": "parallel",
+      "variantId": "parallel-cards-p135",
+      "silhouette": "equal-width-capability-cards",
+      "adaptationStatus": "adaptive",
+      "reason": "Four parallel points, medium density, use component cards to create a bookend with p1. Since last page is a summary, component cards give a clean closing."
+    }
+  ]
+}

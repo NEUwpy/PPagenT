@@ -10,6 +10,13 @@
       "slots": []
     },
     {
+      "id": "fixed-agenda",
+      "silhouette": "agenda",
+      "requiresComponent": false,
+      "allowedAssetKinds": ["agenda"],
+      "slots": []
+    },
+    {
       "id": "fixed-closing",
       "silhouette": "closing",
       "requiresComponent": false,
@@ -72,6 +79,16 @@
       "allowedAssetKinds": ["body"],
       "slots": [
         { "id": "primary", "role": "text", "frame": { "left": 0.1, "top": 0.1, "width": 0.8, "height": 0.78 } }
+      ]
+    },
+    {
+      "id": "editorial-dual-statement",
+      "silhouette": "balanced-dual-statement",
+      "requiresComponent": false,
+      "allowedAssetKinds": ["body"],
+      "slots": [
+        { "id": "left", "role": "text", "frame": { "left": 0.04, "top": 0.08, "width": 0.4, "height": 0.82 } },
+        { "id": "right", "role": "text", "frame": { "left": 0.56, "top": 0.08, "width": 0.4, "height": 0.82 } }
       ]
     },
     {

@@ -1,0 +1,53 @@
+[
+  {
+    "schemaVersion": "1.1",
+    "intentId": "page-1-intent",
+    "purposeKey": "compare_options",
+    "purposeText": "直接呈现核心对比：稳定的 80 分 vs 随机的 95 分，并说明选择。",
+    "baseRelation": "comparison",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "hierarchyDepth": 1,
+      "sameLevel": true,
+      "dimensions": {
+        "groups": 2,
+        "perGroup": 1,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0,
+        "itemsPerGroup": 1
+      }
+    },
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 2,
+      "maxItemChars": 33,
+      "avgItemChars": 31,
+      "minItemChars": 29,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 25,
+      "imbalanceRatio": 1.14
+    },
+    "density": "low",
+    "emphasis": [
+      0,
+      1
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [
+      "两个选项在同一评价维度上形成明确取舍"
+    ]
+  }
+]

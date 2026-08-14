@@ -1,0 +1,273 @@
+[
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p1",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列出制作 PPT 中多个耗时点，并强调核心追问",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false
+    },
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 4,
+      "maxItemChars": 46,
+      "avgItemChars": 41.75,
+      "minItemChars": 34,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 41,
+      "imbalanceRatio": 1.35
+    },
+    "density": "medium",
+    "emphasis": [
+      4
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.85,
+    "assumptions": []
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p2",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列出对工作场景 PPT 的观察与结论，强调一致性洞察",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false
+    },
+    "contentStats": {
+      "titleChars": 18,
+      "itemCount": 4,
+      "maxItemChars": 55,
+      "avgItemChars": 45,
+      "minItemChars": 39,
+      "maxItemTitleChars": 11,
+      "maxItemBodyChars": 51,
+      "imbalanceRatio": 1.41
+    },
+    "density": "medium",
+    "emphasis": [
+      2
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.8,
+    "assumptions": []
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p3",
+    "purposeKey": "explain_hierarchy",
+    "purposeText": "说明 PPagenT 系统的三层分工体系",
+    "baseRelation": "hierarchy",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": true,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "hierarchyDepth": 2,
+      "ordered": false,
+      "sameLevel": false
+    },
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 4,
+      "maxItemChars": 46,
+      "avgItemChars": 35,
+      "minItemChars": 28,
+      "maxItemTitleChars": 7,
+      "maxItemBodyChars": 40,
+      "imbalanceRatio": 1.64
+    },
+    "density": "medium",
+    "emphasis": [
+      4
+    ],
+    "evidenceTypes": [
+      "text",
+      "diagram"
+    ],
+    "confidence": 0.9,
+    "assumptions": []
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p4",
+    "purposeKey": "compare_options",
+    "purposeText": "比较两种价值取向：稳定80分与随机95分",
+    "baseRelation": "comparison",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false
+    },
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 4,
+      "maxItemChars": 54,
+      "avgItemChars": 41.25,
+      "minItemChars": 36,
+      "maxItemTitleChars": 7,
+      "maxItemBodyChars": 50,
+      "imbalanceRatio": 1.5
+    },
+    "density": "medium",
+    "emphasis": [
+      4
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.85,
+    "assumptions": []
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p5",
+    "purposeKey": "compare_audience_segments",
+    "purposeText": "比较专家与多数人的需求差异，说明产品价值",
+    "baseRelation": "comparison",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false
+    },
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 4,
+      "maxItemChars": 50,
+      "avgItemChars": 47.75,
+      "minItemChars": 43,
+      "maxItemTitleChars": 5,
+      "maxItemBodyChars": 46,
+      "imbalanceRatio": 1.16
+    },
+    "density": "medium",
+    "emphasis": [
+      4
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.8,
+    "assumptions": []
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p6",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列表述真正积累的是经验而非模板，支持可扩展性",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false
+    },
+    "contentStats": {
+      "titleChars": 12,
+      "itemCount": 4,
+      "maxItemChars": 66,
+      "avgItemChars": 54.5,
+      "minItemChars": 37,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 62,
+      "imbalanceRatio": 1.78
+    },
+    "density": "high",
+    "emphasis": [
+      3
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 0.85,
+    "assumptions": []
+  },
+  {
+    "schemaVersion": "1.1",
+    "intentId": "p7",
+    "purposeKey": "present_closing",
+    "purposeText": "总结问题与方案，给出最终承诺和价值判断",
+    "baseRelation": "sequence",
+    "relationTraits": {
+      "temporal": true,
+      "cyclic": false,
+      "converging": true,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": true
+    },
+    "contentStats": {
+      "titleChars": 16,
+      "itemCount": 4,
+      "maxItemChars": 65,
+      "avgItemChars": 40.75,
+      "minItemChars": 20,
+      "maxItemTitleChars": 4,
+      "maxItemBodyChars": 63,
+      "imbalanceRatio": 3.25
+    },
+    "density": "medium",
+    "emphasis": [
+      3,
+      4
+    ],
+    "evidenceTypes": [
+      "text",
+      "quotation"
+    ],
+    "confidence": 0.9,
+    "assumptions": []
+  }
+]

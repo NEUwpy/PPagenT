@@ -11,12 +11,14 @@ import { isSkinOnlyAsset, renderStructureAsset } from "../assets.mjs";
 import { fitChineseTextToFrame } from "../../render/chinese-typography.mjs";
 import { loadCompositionLayouts } from "../../composition/layouts.mjs";
 import { renderPageComposition } from "../../render/page-composition.mjs";
+import { academicReportShell } from "../shells/academic-report.mjs";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 
 export const northeasternUniversitySkin = {
   id: "northeastern-university-001",
-  bodyFrame: { left: 55, top: 166, width: 1170, height: 492 },
+  shell: academicReportShell,
+  bodyFrame: academicReportShell.slots.contentFrame,
   componentSourceFrame: { left: 40, top: 135, width: 1200, height: 520 },
   componentTheme: {
     background: "#FFFFFF",
@@ -40,11 +42,13 @@ export const northeasternUniversitySkin = {
     },
   },
   typographyRoles: {
-    displayTypeface: "汉仪文润宋韵 U",
+    // Windows exposes the installed 汉仪文润宋韵 U family under this canonical name.
+    displayTypeface: "HYWenRunSongYun U",
     bodyTypeface: "Microsoft YaHei",
     coverTitle: { fontSizes: [64, 58, 52], maxLines: 2, lineHeight: 1.15 },
     coverSubtitle: { fontSizes: [30, 28, 26], maxLines: 2, lineHeight: 1.2 },
     coverMeta: { fontSizes: [24, 22, 20], maxLines: 2, lineHeight: 1.2 },
+    agendaItems: { fontSizes: [24, 22, 20], maxLines: 5, lineHeight: 1.35 },
     pageTitle: { fontSizes: [32], maxLines: 1, lineHeight: 1.1 },
     closingTitle: { fontSizes: [52, 48, 44], maxLines: 3, lineHeight: 1.1 },
     composition: {
@@ -57,6 +61,8 @@ export const northeasternUniversitySkin = {
       singleTitle: { fontSizes: [36, 32, 28], maxLines: 2 },
       singleBody: { fontSizes: [24, 22, 20], maxLines: 5 },
       singleSupport: { fontSizes: [19, 18, 17], maxLines: 3 },
+      dualTitle: { fontSizes: [32, 29, 26], maxLines: 2 },
+      dualBody: { fontSizes: [21, 19, 17], maxLines: 7 },
     },
   },
 };
@@ -155,6 +161,33 @@ function pageRecipe(page, index, manuscriptSource) {
     };
   }
 
+  if (assetId === "northeastern-university-agenda-001") {
+    const agendaFrame = { left: 135, top: 205, width: 1010, height: 350 };
+    const agendaText = (page.payload.parameters.items ?? [])
+      .map((item, itemIndex) => `${itemIndex + 1}. ${item}`)
+      .join("\n");
+    const agenda = fitSkinText(agendaText, agendaFrame, "agendaItems");
+    return {
+      sourceSlideNumber: 2,
+      textEdits: [
+        { sourceText: "目录", replacementText: page.payload.parameters.title || "目录" },
+        {
+          sourceText: "1. 定义问题\n2. 真参数未知如何实现“样本-最优偏移量”的选择\n3. 一些关于神经网络的验证\n4. 论文准备\n5. 下一个研究课题",
+          replacementText: agenda.text,
+          position: agendaFrame,
+          textStyle: {
+            typeface: northeasternUniversitySkin.typographyRoles.bodyTypeface,
+            fontSize: agenda.fontSize,
+            autoFit: "none",
+            verticalAlignment: "middle",
+          },
+          writeMode: "replace-all",
+        },
+      ],
+      notes,
+    };
+  }
+
   if (assetId === "northeastern-university-closing-001") {
     const closingFrame = { left: 16.98, top: 198.16, width: 1252.71, height: 169.4 };
     const closing = fitSkinText(
@@ -218,7 +251,16 @@ export async function renderNortheasternUniversityDeck({
   manuscriptSource,
 }) {
   const starterPptx = path.join(path.dirname(outputPptx), ".runtime", "template-starter.pptx");
-  const recipes = pages.map((page, index) => pageRecipe(page, index, manuscriptSource));
+  let bodyPageNumber = 0;
+  const recipes = pages.map((page) => {
+    const isBody = ![
+      "northeastern-university-cover-001",
+      "northeastern-university-agenda-001",
+      "northeastern-university-closing-001",
+    ].includes(page.payload.assetId);
+    if (isBody) bodyPageNumber += 1;
+    return pageRecipe(page, isBody ? bodyPageNumber : 0, manuscriptSource);
+  });
   await prepareTemplateMappedStarter({
     sourcePptx,
     sourceSlideNumbers: recipes.map((recipe) => recipe.sourceSlideNumber),

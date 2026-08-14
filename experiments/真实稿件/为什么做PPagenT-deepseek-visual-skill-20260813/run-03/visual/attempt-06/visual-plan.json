@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "why-ppagent",
+  "skinId": "northeastern-university-001",
+  "visualLanguage": "东北大学视觉规范下的简洁编辑风格，以等宽卡片和编辑器式文本布局为主，强调稳定、清晰与可读性。",
+  "rhythmStrategy": "以并列卡片开场建立节奏，中段交替使用列表与焦点编辑版式形成呼吸感，结尾用固定收束页完成总结，整体避免重复单调。",
+  "pages": [
+    {
+      "pageId": "p1",
+      "intentId": "p1-intent",
+      "familyId": "parallel",
+      "variantId": "parallel-cards-p135",
+      "silhouette": "equal-width-capability-cards",
+      "adaptationStatus": "adaptive",
+      "reason": "四个并列的事实点共同说明费时间的来源，等宽卡片能清晰呈现并列关系并承载每项的标题与正文。"
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2-intent",
+      "familyId": "parallel",
+      "variantId": "parallel-cards-p135",
+      "silhouette": "equal-width-capability-cards",
+      "adaptationStatus": "adaptive",
+      "reason": "四组内容均为平行论据，卡片布局强化并列感，符合工作场景不需要每次重新发明的主题。"
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "系统三层分工适合用编辑器式列表逐项说明，强调层级顺序，editorial-list 提供清晰的条目流。"
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "核心观点需要突出，editorial-focus 将强调句置于焦点，其余作为支持列表，符合论证结构。"
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "目标用户对比通过列表展开，editorial-list 能容纳四段内容并保持条理，避免过度强调任一项。"
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "重点项“从作品到能力”需要突出，editorial-focus 以焦点呈现该句，其余内容作为支撑列表。"
+    },
+    {
+      "pageId": "p7",
+      "intentId": "p7-intent",
+      "familyId": "skin-closing",
+      "variantId": "default",
+      "silhouette": "closing",
+      "adaptationStatus": "fixed",
+      "reason": "结束页使用固定收束版式，通过 recap、focus 和 primary 三个槽位完成回顾、承诺与意义总结。"
+    }
+  ]
+}

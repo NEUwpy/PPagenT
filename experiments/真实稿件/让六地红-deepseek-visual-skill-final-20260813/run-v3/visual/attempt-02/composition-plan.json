@@ -1,0 +1,160 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "liaoning-six-red-education",
+  "skinId": "northeastern-university-001",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "compositionId": "fixed-cover",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "compositionId": "fixed-agenda",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "opening",
+      "intentId": "opening-intent",
+      "compositionId": "editorial-dual-statement",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "left",
+          "sourceItemIds": [
+            "greeting"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "right",
+          "sourceItemIds": [
+            "topic"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Two parallel items presented as balanced statements."
+    },
+    {
+      "pageId": "from-challenge-to-focus",
+      "intentId": "from-challenge-to-focus-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "challenge",
+        "response",
+        "shift"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Timeline shows temporal progression of three stages."
+    },
+    {
+      "pageId": "new-matrix",
+      "intentId": "new-matrix-intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "one-chain"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "three-classrooms",
+            "n-scenarios"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Hierarchy: one-chain as lead, others as support per feedback alternative."
+    },
+    {
+      "pageId": "practice-levers-1",
+      "intentId": "practice-levers-1-intent",
+      "compositionId": "editorial-dual-statement",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "left",
+          "sourceItemIds": [
+            "task-list"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "right",
+          "sourceItemIds": [
+            "vr-base"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Two parallel levers with points presented side by side."
+    },
+    {
+      "pageId": "practice-levers-2",
+      "intentId": "practice-levers-2-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "lecture-group",
+        "friend-circle",
+        "mechanism"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Three parallel levers with points; parallel cards component fits."
+    },
+    {
+      "pageId": "five-year-outcomes",
+      "intentId": "five-year-outcomes-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "faith",
+        "skill",
+        "voice",
+        "step"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Four parallel outcomes with data; parallel cards component fits."
+    },
+    {
+      "pageId": "conclusion",
+      "intentId": "conclusion-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "quote",
+        "summary",
+        "closing"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Three parallel items; parallel cards fits and corrects feedback."
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "compositionId": "fixed-closing",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

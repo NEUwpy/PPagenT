@@ -1,0 +1,176 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "why-ppagent",
+  "skinId": "northeastern-university-001",
+  "pages": [
+    {
+      "pageId": "p1",
+      "intentId": "p1-intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "judgment"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "rework"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Two parallel points in editorial list: first as lead, second as body to keep both full content."
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2-intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "fixed-is-good"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "not-reinvent"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Comparison: recommended option (fixed-is-good) as primary, contrasting point as support."
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3-intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "understand"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "decide",
+            "execute"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Layered process: AI understand as primary, rules and code as supporting details."
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4-intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "80-value"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "not-95"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Comparison: stable 80 as primary, random 95 as supporting counterpoint."
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5-intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "target"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "product-value"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Comparison of audience segments: first as lead, second as body to show product value."
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6-intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "experience"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "expand"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Hierarchical: experience as primary, expansion as supporting."
+    },
+    {
+      "pageId": "p7",
+      "intentId": "p7-intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "goal"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "result"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Closing summary: goal as lead, result as body to wrap up."
+    }
+  ]
+}

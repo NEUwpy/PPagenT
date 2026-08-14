@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Radial Structure · Content Frame Bench</title>
+    <link rel="stylesheet" href="./dev-bench.css" />
+    <link rel="stylesheet" href="./radial-structure.css" />
+  </head>
+  <body>
+    <main class="bench">
+      <div class="bench-toolbar">
+        <div>
+          <p class="bench-kicker">PPagenT / Content Frame component</p>
+          <h1>Radial Structure</h1>
+          <p class="bench-subtitle">中心锚点 · 两侧信息轴 · 点阵关系 · 容器响应</p>
+        </div>
+        <div class="control-groups">
+          <div class="control-group" aria-label="数量状态">
+            <button type="button" data-count="3">3</button>
+            <button type="button" data-count="4" class="active">4</button>
+            <button type="button" data-count="5">5</button>
+            <button type="button" data-count="6">6</button>
+            <button type="button" data-count="7">7</button>
+          </div>
+          <div class="control-group" aria-label="Content Frame 尺寸">
+            <button type="button" data-preset="wide" class="active">宽横</button>
+            <button type="button" data-preset="square">近方</button>
+            <button type="button" data-preset="narrow">窄横</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="content-frame" class="content-frame" data-preset="wide">
+        <div id="radial-component"></div>
+      </div>
+      <div class="bench-meta"><span id="bench-metrics">加载中</span><span>拖动右下角可直接改变 Content Frame 尺寸</span></div>
+    </main>
+    <script src="./radial-structure.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

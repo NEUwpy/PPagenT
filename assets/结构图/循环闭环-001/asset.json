@@ -6,8 +6,8 @@
   "creationMethod": "distillation",
   "status": "core",
   "source": {
-    "file": "PPT源/【蓝色版】年终日常汇报PPT模板-狗哥PPT出品.pptx",
-    "slides": [50]
+    "file": "PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
+    "slides": [57]
   },
   "generator": "generate.mjs",
   "showcase": "example.pptx",
@@ -16,12 +16,18 @@
     "entry": "generate.mjs",
     "builderExport": "buildCycleLoop",
     "mapperExport": "mapPageContent",
+    "skillId": "cycle",
+    "styleGroupId": "cycle-pdca-ring-p57",
     "familyId": "cycle-loop",
     "variantId": "default",
-    "silhouette": "four-node-loop",
+    "silhouette": "pdca-ring-with-side-notes",
     "supportedBaseRelations": ["sequence"],
     "supportedPurposeKeys": [],
     "itemCount": { "min": 3, "preferred": [3, 4, 5, 6], "max": 6 },
+    "textCapacity": { "maxItemTitleChars": 10, "maxItemBodyChars": 34 },
+    "sourceFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "stateContract": { "resolver": "itemCount", "states": [3, 4, 5, 6] },
+    "mediaContract": { "mode": "no-image", "required": [] },
     "contract": {
       "abstractionLevel": "foundation",
       "adaptationStatus": "adaptive",
@@ -56,5 +62,5 @@
   },
   "semanticContract": "多个步骤反复运行，最后一步会反馈或回到第一步",
   "doNotUseWhen": "只是一次性线性过程，或多个要点之间没有循环关系",
-  "review": "用户于 2026-08-11 确认；验收运行 cycle-loop-001-v2.0.0-r17"
+  "review": "用户于 2026-08-13 审核通过；第 57 页 PDCA 环形语法及 3–6 步扩容已确认"
 }

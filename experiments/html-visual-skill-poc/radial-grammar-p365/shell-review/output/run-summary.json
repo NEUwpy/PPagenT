@@ -1,0 +1,35 @@
+{
+  "skillId": "parallel",
+  "styleGroupId": "radial-p365",
+  "source": "PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx#365",
+  "shell": "academic-report-shell-001",
+  "contentFrame": {
+    "left": 55,
+    "top": 166,
+    "width": 1170,
+    "height": 492
+  },
+  "states": [
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "mediaContract": {
+    "centerVisual": {
+      "required": true,
+      "allowedSources": [
+        "manuscript",
+        "registered-media"
+      ],
+      "generatedFallback": false,
+      "missingPolicy": "style-group-ineligible"
+    },
+    "peripheralMarker": {
+      "preferred": "logo",
+      "fallback": "registered-icon"
+    }
+  },
+  "outputPptx": "parallel-radial-p365-shell-review.pptx"
+}

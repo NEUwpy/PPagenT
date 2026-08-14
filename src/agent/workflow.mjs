@@ -1,8 +1,9 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { enrichPageIntent } from "../content/page-content.mjs";
+import { computeContentStats, enrichPageIntent } from "../content/page-content.mjs";
 import { createRuleValidators, validationMessage } from "../selection/validation.mjs";
 import { assertDirectorProvider } from "./director-provider.mjs";
+import { buildShellIntent, isShellPage, shellVisualSelection } from "./shell-scaffold.mjs";
 
 export const DEFAULT_SKIN_ID = "northeastern-university-001";
 
@@ -103,6 +104,25 @@ function assertContentOutput(validators, output, rawMarkdown) {
         "content-director",
         `${page.pageId} 使用了组件专属内容 ID：${componentSpecificIds.join(", ")}`,
         { pageId: page.pageId, componentSpecificIds },
+      );
+    }
+    const stats = computeContentStats(page);
+    const estimatedTotal = stats.avgItemChars * stats.itemCount;
+    if (stats.itemCount > 1 && (
+      stats.itemCount > 13 || estimatedTotal > 240 || stats.maxItemChars > 80
+    )) {
+      throw new WorkflowError(
+        "CONTENT_CAPACITY_EXCEEDED",
+        "content-director",
+        `${page.pageId} 的多项内容密度超过正式字号与已登记版式的通用容量`,
+        {
+          pageId: page.pageId,
+          itemCount: stats.itemCount,
+          estimatedTotalChars: estimatedTotal,
+          maxItemChars: stats.maxItemChars,
+          required: { maxItems: 13, maxTotalChars: 240, maxItemChars: 80 },
+          guidance: "压缩每项正文与分点、删除重复表达，或按叙事职责拆成两页；不得缩小字号硬塞",
+        },
       );
     }
   });
@@ -342,8 +362,8 @@ export async function runDirectorWorkflow(options) {
     throw new WorkflowError("OUTPUT_DIR_REQUIRED", "bootstrap", "缺少工作流输出目录");
   }
   const root = path.resolve(options.root ?? process.cwd());
-  const maxContentAttempts = options.maxContentAttempts ?? 12;
-  const maxVisualAttempts = options.maxVisualAttempts ?? 12;
+  const maxContentAttempts = options.maxContentAttempts ?? 3;
+  const maxVisualAttempts = options.maxVisualAttempts ?? 3;
   if (!Number.isInteger(maxContentAttempts) || maxContentAttempts < 1
     || !Number.isInteger(maxVisualAttempts) || maxVisualAttempts < 1) {
     throw new WorkflowError("INVALID_ATTEMPT_LIMIT", "bootstrap", "工作流循环次数必须是正整数");
@@ -380,7 +400,28 @@ export async function runDirectorWorkflow(options) {
     return reviewPasses(contentReview);
   }
   while (contentAttempt < maxContentAttempts) {
-    if (await executeContentAttempt()) break;
+    try {
+      if (await executeContentAttempt()) break;
+    } catch (error) {
+      const recoverableContentError = (error instanceof WorkflowError
+        && new Set(["SOURCE_GROUNDING_FAILED", "SCHEMA_VALIDATION_FAILED", "CONTENT_CAPACITY_EXCEEDED"]).has(error.code))
+        || error?.code === "SECTION_COVERAGE_FAILED";
+      if (!recoverableContentError || contentAttempt === maxContentAttempts) throw error;
+      contentReview = {
+        verdict: "revise",
+        summary: error.message,
+        issues: [{
+          severity: "error",
+          category: "content-output-invalid",
+          status: "open",
+          evidence: error.message,
+          targets: error.details?.pageId ? [error.details.pageId] : [],
+          errorCode: error.code,
+          details: error.details ?? {},
+        }],
+      };
+      continue;
+    }
     if (contentAttempt === maxContentAttempts) {
       throw new WorkflowError(
         "CONTENT_REVIEW_NOT_CLOSED",
@@ -395,24 +436,60 @@ export async function runDirectorWorkflow(options) {
   let visualReview = null;
   let visualResolution = null;
   let renderResult = null;
+  let acceptedBodyIntents = null;
   for (let attempt = 1; attempt <= maxVisualAttempts; attempt += 1) {
-    const intentOutput = await provider.visualDirector({
-      ...input,
-      phase: "intent",
-      attempt,
-      deckPlan: contentOutput.deckPlan,
-      pageContents: contentOutput.pageContents,
-      previous: visual,
-      previousReview: visualReview,
-      previousResolution: visualResolution,
-      previousRenderResult: renderResult,
-    });
-    const pageIntents = normalizeVisualIntents(validators, intentOutput, contentOutput.pageContents);
+    const presentationOutput = options.shellScaffolder
+      ? await options.shellScaffolder(contentOutput)
+      : contentOutput;
+    const bodyPageContents = presentationOutput.pageContents.filter((page) => !isShellPage(page));
+    const bodyPageIds = new Set(bodyPageContents.map((page) => page.pageId));
+    const bodyDeckPlan = {
+      ...presentationOutput.deckPlan,
+      pages: presentationOutput.deckPlan.pages.filter((page) => bodyPageIds.has(page.pageId)),
+    };
+    let pageIntents;
+    try {
+      const bodyIntents = acceptedBodyIntents ?? normalizeVisualIntents(
+        validators,
+        await provider.visualDirector({
+          ...input,
+          phase: "intent",
+          attempt,
+          deckPlan: bodyDeckPlan,
+          pageContents: bodyPageContents,
+          previous: visual,
+          previousReview: visualReview,
+          previousResolution: visualResolution,
+          previousRenderResult: renderResult,
+        }),
+        bodyPageContents,
+      );
+      acceptedBodyIntents = bodyIntents;
+      const bodyIntentByPageId = new Map(bodyPageContents.map((page, index) => [page.pageId, bodyIntents[index]]));
+      pageIntents = presentationOutput.pageContents.map((page) => (
+        isShellPage(page) ? buildShellIntent(page) : bodyIntentByPageId.get(page.pageId)
+      ));
+    } catch (error) {
+      const recoverableIntentError = (error instanceof WorkflowError
+        && new Set(["SCHEMA_VALIDATION_FAILED", "UNKNOWN_PURPOSE_KEY"]).has(error.code))
+        || new Set(["MODEL_JSON_INVALID", "MODEL_REQUEST_TIMEOUT"]).has(error?.code);
+      if (!recoverableIntentError || attempt === maxVisualAttempts) throw error;
+      visualResolution = {
+        status: "needs-director-revision",
+        feedback: [{
+          code: "visual-intent-invalid",
+          errorCode: error.code,
+          message: error.message,
+          details: error.details ?? {},
+        }],
+      };
+      continue;
+    }
     const candidateSets = await options.visualCandidateProvider({
       root,
       skinId: input.skinId,
-      deckPlan: contentOutput.deckPlan,
-      pageContents: contentOutput.pageContents,
+      deckPlan: presentationOutput.deckPlan,
+      pageContents: presentationOutput.pageContents,
       pageIntents,
     });
     const invalidCandidateSets = !Array.isArray(candidateSets) || candidateSets.length !== pageIntents.length;
@@ -428,6 +505,7 @@ export async function runDirectorWorkflow(options) {
           visualReview = null;
           visualResolution = visualFeedback;
           renderResult = null;
+          acceptedBodyIntents = null;
           continue;
         }
       }
@@ -438,35 +516,84 @@ export async function runDirectorWorkflow(options) {
         { candidateSets, contentAttempt },
       );
     }
-    const compositionOutput = await provider.visualDirector({
-      ...input,
-      phase: "composition",
-      attempt,
-      deckPlan: contentOutput.deckPlan,
-      pageContents: contentOutput.pageContents,
-      pageIntents,
-      candidateSets,
-      previous: visual,
-      previousReview: visualReview,
-      previousResolution: visualResolution,
-      previousRenderResult: renderResult,
-    });
-    const normalizedPlans = normalizeVisualPlan(
-      validators,
-      compositionOutput,
-      contentOutput.deckPlan,
-      contentOutput.pageContents,
-      pageIntents,
-      input.skinId,
-    );
+    let normalizedPlans;
+    try {
+      const compositionOutput = await provider.visualDirector({
+        ...input,
+        phase: "composition",
+        attempt,
+        deckPlan: bodyDeckPlan,
+        pageContents: bodyPageContents,
+        pageIntents: pageIntents.filter((_, index) => !isShellPage(presentationOutput.pageContents[index])),
+        candidateSets: candidateSets.filter((_, index) => !isShellPage(presentationOutput.pageContents[index])),
+        previous: visual,
+        previousReview: visualReview,
+        previousResolution: visualResolution,
+        previousRenderResult: renderResult,
+      });
+      const normalizedBodyPlans = normalizeVisualPlan(
+        validators,
+        compositionOutput,
+        bodyDeckPlan,
+        bodyPageContents,
+        pageIntents.filter((_, index) => !isShellPage(presentationOutput.pageContents[index])),
+        input.skinId,
+      );
+      const bodyVisualByPageId = new Map(normalizedBodyPlans.visualPlan.pages.map((page) => [page.pageId, page]));
+      const bodyCompositionByPageId = new Map(normalizedBodyPlans.compositionPlan.pages.map((page) => [page.pageId, page]));
+      const shellSelections = new Map();
+      presentationOutput.pageContents.forEach((page, index) => {
+        if (!isShellPage(page)) return;
+        shellSelections.set(page.pageId, shellVisualSelection({
+          deckId: presentationOutput.deckPlan.deckId,
+          skinId: input.skinId,
+          page,
+          intent: pageIntents[index],
+          candidateSet: candidateSets[index],
+        }));
+      });
+      normalizedPlans = {
+        visualPlan: {
+          ...normalizedBodyPlans.visualPlan,
+          pages: presentationOutput.pageContents.map((page) => (
+            isShellPage(page)
+              ? shellSelections.get(page.pageId).visualPage
+              : bodyVisualByPageId.get(page.pageId)
+          )),
+        },
+        compositionPlan: {
+          ...normalizedBodyPlans.compositionPlan,
+          pages: presentationOutput.pageContents.map((page) => (
+            isShellPage(page)
+              ? shellSelections.get(page.pageId).compositionPage
+              : bodyCompositionByPageId.get(page.pageId)
+          )),
+        },
+      };
+    } catch (error) {
+      const recoverableCompositionError = (error instanceof WorkflowError
+        && error.code === "SCHEMA_VALIDATION_FAILED")
+        || new Set(["MODEL_JSON_INVALID", "MODEL_REQUEST_TIMEOUT"]).has(error?.code);
+      if (!recoverableCompositionError || attempt === maxVisualAttempts) throw error;
+      visualResolution = {
+        status: "needs-director-revision",
+        feedback: [{
+          code: "visual-composition-invalid",
+          errorCode: error.code,
+          message: error.message,
+          details: error.details ?? {},
+        }],
+      };
+      continue;
+    }
     visual = { ...normalizedPlans, pageIntents, candidateSets };
     await persistVisualAttempt(outputDir, attempt, visual, null);
 
     const resolved = await options.visualResolver({
       root,
       skinId: input.skinId,
-      deckPlan: contentOutput.deckPlan,
-      pageContents: contentOutput.pageContents,
+      deckPlan: presentationOutput.deckPlan,
+      pageContents: presentationOutput.pageContents,
       visualPlan: visual.visualPlan,
       compositionPlan: visual.compositionPlan,
       pageIntents: visual.pageIntents,
@@ -485,19 +612,22 @@ export async function runDirectorWorkflow(options) {
       }
       continue;
     }
+    if (resolved.visualPlan) visual.visualPlan = resolved.visualPlan;
+    if (resolved.compositionPlan) visual.compositionPlan = resolved.compositionPlan;
     assertResolvedVisual(validators, resolved, visual.pageIntents, visual.visualPlan, visual.compositionPlan);
     await persistVisualAttempt(outputDir, attempt, visual, resolved, "visual-resolution.json", {
       status: resolved.status ?? "accepted",
       results: resolved.results ?? [],
       feedback: resolved.feedback ?? [],
+      warnings: resolved.warnings ?? [],
     });
 
     if (developmentReview) visualReview = await provider.visualReview({
       ...input,
       stage: "pre-render",
       attempt,
-      deckPlan: contentOutput.deckPlan,
-      pageContents: contentOutput.pageContents,
+      deckPlan: presentationOutput.deckPlan,
+      pageContents: presentationOutput.pageContents,
       visualPlan: visual.visualPlan,
       compositionPlan: visual.compositionPlan,
       pageIntents: visual.pageIntents,
@@ -506,7 +636,7 @@ export async function runDirectorWorkflow(options) {
     });
     if (developmentReview) {
       assertSchema(validators, validators.validateVisualReview, visualReview, "VisualReview(pre-render)", "visual-review-pre");
-      assertReviewIdentity(visualReview, { deckId: contentOutput.deckPlan.deckId, attempt, stage: "pre-render" });
+      assertReviewIdentity(visualReview, { deckId: presentationOutput.deckPlan.deckId, attempt, stage: "pre-render" });
       await persistVisualAttempt(outputDir, attempt, visual, resolved, "visual-review-pre.json", visualReview);
     }
     if (developmentReview && !reviewPasses(visualReview)) {
@@ -526,15 +656,15 @@ export async function runDirectorWorkflow(options) {
       root,
       skinId: input.skinId,
       outputDir: path.join(attemptDir, "render"),
-      deckPlan: contentOutput.deckPlan,
-      pageContents: contentOutput.pageContents,
+      deckPlan: presentationOutput.deckPlan,
+      pageContents: presentationOutput.pageContents,
       visualPlan: visual.visualPlan,
       compositionPlan: visual.compositionPlan,
       pageIntents: visual.pageIntents,
       layoutDecisions: resolved.layoutDecisions,
       renderPayloads: resolved.renderPayloads,
     });
-    await assertRenderResult(renderResult, contentOutput.pageContents.length);
+    await assertRenderResult(renderResult, presentationOutput.pageContents.length);
     const persistedRenderResult = {
       ...renderResult,
       outputPptx: path.relative(outputDir, path.resolve(renderResult.outputPptx)).replaceAll("\\", "/"),
@@ -550,22 +680,22 @@ export async function runDirectorWorkflow(options) {
         schemaVersion: "1.0",
         status: "delivered",
         workflowMode: "production",
-        deckId: contentOutput.deckPlan.deckId,
+        deckId: presentationOutput.deckPlan.deckId,
         skinId: input.skinId,
-        pageCount: contentOutput.pageContents.length,
+        pageCount: presentationOutput.pageContents.length,
         outputPptx: renderResult.outputPptx,
         deterministicQualityAudit: renderResult.qualityAudit,
       };
       await writeJson(path.join(outputDir, "workflow-result.json"), delivery);
-      return { ...delivery, deckPlan: contentOutput.deckPlan, pageContents: contentOutput.pageContents, renderResult };
+      return { ...delivery, deckPlan: presentationOutput.deckPlan, pageContents: presentationOutput.pageContents, renderResult };
     }
 
     visualReview = await provider.visualReview({
       ...input,
       stage: "post-render",
       attempt,
-      deckPlan: contentOutput.deckPlan,
-      pageContents: contentOutput.pageContents,
+      deckPlan: presentationOutput.deckPlan,
+      pageContents: presentationOutput.pageContents,
       visualPlan: visual.visualPlan,
       compositionPlan: visual.compositionPlan,
       pageIntents: visual.pageIntents,
@@ -575,22 +705,22 @@ export async function runDirectorWorkflow(options) {
       pageEvidence: renderResult.pageEvidence,
     });
     assertSchema(validators, validators.validateVisualReview, visualReview, "VisualReview(post-render)", "visual-review-post");
-    assertReviewIdentity(visualReview, { deckId: contentOutput.deckPlan.deckId, attempt, stage: "post-render" });
+    assertReviewIdentity(visualReview, { deckId: presentationOutput.deckPlan.deckId, attempt, stage: "post-render" });
     await persistVisualAttempt(outputDir, attempt, visual, resolved, "visual-review-post.json", visualReview);
     if (reviewPasses(visualReview)) {
       const audit = {
         schemaVersion: "1.0",
         status: "internally-approved-awaiting-user-review",
         workflowMode: "development",
-        deckId: contentOutput.deckPlan.deckId,
+        deckId: presentationOutput.deckPlan.deckId,
         skinId: input.skinId,
-        pageCount: contentOutput.pageContents.length,
+        pageCount: presentationOutput.pageContents.length,
         outputPptx: renderResult.outputPptx,
         contentReviewId: contentReview.reviewId,
         visualReviewId: visualReview.reviewId,
       };
       await writeJson(path.join(outputDir, "workflow-result.json"), audit);
-      return { ...audit, deckPlan: contentOutput.deckPlan, pageContents: contentOutput.pageContents, renderResult };
+      return { ...audit, deckPlan: presentationOutput.deckPlan, pageContents: presentationOutput.pageContents, renderResult };
     }
     if (attempt === maxVisualAttempts) {
       throw new WorkflowError(

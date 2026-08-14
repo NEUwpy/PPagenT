@@ -1,0 +1,183 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "liu-di-red-education",
+  "skinId": "northeastern-university-001",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "compositionId": "fixed-cover",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "compositionId": "fixed-agenda",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "p1",
+      "intentId": "p1-intent",
+      "compositionId": "editorial-single-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "p1-item1"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "单观点开场，使用single-focus"
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2-intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "p2-item1"
+          ],
+          "contentMode": "title"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "p2-item1",
+            "p2-item2",
+            "p2-item3"
+          ],
+          "contentMode": "body"
+        }
+      ],
+      "reason": "时间顺序三节点，用lead承载首个困境，body承载后续转向"
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3-intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "p3-item1"
+          ],
+          "contentMode": "title"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "p3-item1",
+            "p3-item2",
+            "p3-item3"
+          ],
+          "contentMode": "body"
+        }
+      ],
+      "reason": "层级结构无适配组件，使用list承载三个子项"
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4-intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "p4-item1"
+          ],
+          "contentMode": "title"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "p4-item1",
+            "p4-item2",
+            "p4-item3",
+            "p4-item4",
+            "p4-item5"
+          ],
+          "contentMode": "body"
+        }
+      ],
+      "reason": "高密度并列五点，使用list"
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5-intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "p5-item1"
+          ],
+          "contentMode": "title"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "p5-item1",
+            "p5-item2",
+            "p5-item3",
+            "p5-item4"
+          ],
+          "contentMode": "body"
+        }
+      ],
+      "reason": "并列四点成效，使用list"
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6-intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "p6-item3"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "p6-item1",
+            "p6-item2"
+          ],
+          "contentMode": "body"
+        }
+      ],
+      "reason": "分层结论，primary放最终升华，support承载嘱托与总结"
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "compositionId": "fixed-closing",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

@@ -22,6 +22,7 @@
     "match": "node src/tools/match-page-intent.mjs --root .",
     "agent:run": "node src/agent/run-workflow.mjs --root .",
     "agent:run:openai": "node src/agent/run-workflow.mjs --root . --provider src/agent/openai-provider-from-env.mjs",
+    "agent:run:deepseek": "node src/agent/run-workflow.mjs --root . --provider src/agent/deepseek-provider-from-env.mjs",
     "agent:legacy": "node src/agent/run-manuscript.mjs --root .",
     "intent:stats": "node src/tools/compute-page-intent.mjs",
     "test:selection": "node --test --test-concurrency=1 tests/*.test.mjs",

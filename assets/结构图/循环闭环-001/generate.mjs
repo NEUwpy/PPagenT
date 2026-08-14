@@ -6,7 +6,10 @@ export function mapPageContent(content, intent) {
   return renderPayload(intent, "cycle-loop-001", {
     title: content.title,
     center: content.notes || content.title,
-    steps: content.items.map((item) => item.title || item.body),
+    steps: content.items.map((item) => ({
+      title: item.title,
+      body: item.body ?? "",
+    })),
   }, content.items.map((item, index) => mapping(item.id, `steps[${index}]`)));
 }
 

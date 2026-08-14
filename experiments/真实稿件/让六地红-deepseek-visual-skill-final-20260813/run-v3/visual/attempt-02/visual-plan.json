@@ -1,0 +1,99 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "liaoning-six-red-education",
+  "skinId": "northeastern-university-001",
+  "visualLanguage": "editorial-with-structural-pages",
+  "rhythmStrategy": "alternate-between-editorial-and-parallel-cards",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "familyId": "skin-cover",
+      "variantId": "default",
+      "silhouette": "cover",
+      "adaptationStatus": "fixed",
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "familyId": "skin-agenda",
+      "variantId": "default",
+      "silhouette": "agenda",
+      "adaptationStatus": "fixed",
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "opening",
+      "intentId": "opening-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Two parallel points; editorial dual-statement suits low density without structure."
+    },
+    {
+      "pageId": "from-challenge-to-focus",
+      "intentId": "from-challenge-to-focus-intent",
+      "familyId": "timeline-roadmap",
+      "variantId": "default",
+      "silhouette": "horizontal-timeline",
+      "adaptationStatus": "adaptive",
+      "reason": "Temporal sequence from challenge to focus; timeline shows progression."
+    },
+    {
+      "pageId": "new-matrix",
+      "intentId": "new-matrix-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Hierarchy with 3 items; editorial-focus supports lead and support, honoring feedback alternatives."
+    },
+    {
+      "pageId": "practice-levers-1",
+      "intentId": "practice-levers-1-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Two parallel items with points; editorial-dual-statement fits low count and medium density."
+    },
+    {
+      "pageId": "practice-levers-2",
+      "intentId": "practice-levers-2-intent",
+      "familyId": "parallel",
+      "variantId": "parallel-cards-p135",
+      "silhouette": "equal-width-capability-cards",
+      "adaptationStatus": "adaptive",
+      "reason": "Three parallel levers; parallel-cards fits item count and capacity."
+    },
+    {
+      "pageId": "five-year-outcomes",
+      "intentId": "five-year-outcomes-intent",
+      "familyId": "parallel",
+      "variantId": "parallel-cards-p135",
+      "silhouette": "equal-width-capability-cards",
+      "adaptationStatus": "adaptive",
+      "reason": "Four parallel outcomes; parallel-cards preferred for structural grouping."
+    },
+    {
+      "pageId": "conclusion",
+      "intentId": "conclusion-intent",
+      "familyId": "parallel",
+      "variantId": "parallel-cards-p135",
+      "silhouette": "equal-width-capability-cards",
+      "adaptationStatus": "adaptive",
+      "reason": "Three parallel items; parallel-cards fits after feedback correction."
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "familyId": "skin-closing",
+      "variantId": "default",
+      "silhouette": "closing",
+      "adaptationStatus": "fixed",
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

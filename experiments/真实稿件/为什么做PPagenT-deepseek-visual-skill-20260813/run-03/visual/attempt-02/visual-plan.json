@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "why-ppagent",
+  "skinId": "northeastern-university-001",
+  "visualLanguage": "以东北大学视觉规范为基础的编辑式视觉语言：克制的红色点缀、清晰的层级、白底网格，文字优先，组件仅用于并列枚举与收束。",
+  "rhythmStrategy": "组件卡片(component-full)承载并列论据，编辑式皮肤(editorial-list/focus/single-focus)承载说明与层级，相邻页之间避免重复骨架；p1/p4/p7 用卡片或面板形成清晰的起始、中段价值、收束节奏。",
+  "pages": [
+    {
+      "pageId": "p1",
+      "intentId": "p1-intent",
+      "familyId": "parallel",
+      "variantId": "parallel-cards-p135",
+      "silhouette": "equal-width-capability-cards",
+      "adaptationStatus": "adaptive",
+      "reason": "四项并列原因共同支撑“真正费时间的是判断”，且核心追问可自然落在末张卡片上，用等宽卡片保持同级并列，避免过度解释。"
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "四个并列观点中“洞察”是页面的强调点，选用编辑式列表，以引导句突出洞察，其余内容进入列表，形成总-分阅读。"
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "三层分工是明确层级，且最后一句“直接说法”是总结性焦点；编辑焦点版式能把直接说法作为视觉焦点，三个角色分布在 primary/support/支持列表，表达自上而下的系统关系。"
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4-intent",
+      "familyId": "parallel",
+      "variantId": "parallel-cards-p135",
+      "silhouette": "equal-width-capability-cards",
+      "adaptationStatus": "adaptive",
+      "reason": "四项论据并列支持价值主张，等宽卡片适合罗列论据并让强调的核心观点以卡片结尾呈现，整体保持中段价值页的节奏感。"
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "专家与多数人形成受众对比，但候选仅允许编辑式正文；用编辑列表把产品价值作为正文段、最终目标作为引导句、专家/多数人作为对比列表，满足对比语义且不伪造分组。"
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "四个论点共同说明“积累经验而非模板”，且“从作品到能力”是强焦点；使用单焦点编辑版式把前两项并为总结、强调项作引语、可扩展性作结尾注释，形成论据-引语-边界的三段节奏。"
+    },
+    {
+      "pageId": "p7",
+      "intentId": "p7-intent",
+      "familyId": "problem-improvement",
+      "variantId": "default",
+      "silhouette": "problem-to-improvement-panels",
+      "adaptationStatus": "partial",
+      "reason": "收束页按问题-方案-承诺-意义推进，问题-改进面板结构与四项因果内容匹配；partial 适应允许四项完整放入面板，作为整套演示的落点。"
+    }
+  ]
+}

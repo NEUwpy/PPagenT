@@ -1,0 +1,86 @@
+{
+  "schemaVersion": "1.0",
+  "status": "delivered",
+  "input": {
+    "sourcePath": "稿件/为什么做PPagenT-v1.md",
+    "sourceSha256": "5edce4884a35438010f309d7639a7ddcdb0f96c961b12a3c36a328a3b1cf63ee",
+    "skinId": "northeastern-university-001"
+  },
+  "provider": {
+    "module": "experiments/真实稿件/为什么做PPagenT-deepseek-full-20260813/resume-run04-provider.mjs",
+    "identity": {
+      "providerKind": "live-schema-aware-model-provider",
+      "contentModel": "deepseek-chat-completions:deepseek-v4-flash:enabled",
+      "visualIntentModel": "deepseek-chat-completions:deepseek-v4-flash:disabled",
+      "visualCompositionModel": "deepseek-chat-completions:deepseek-v4-flash:disabled",
+      "reviewerModel": "deepseek-chat-completions:deepseek-v4-flash:enabled",
+      "contentMode": "resume-current-live-deepseek-output",
+      "contentSource": "run-02/content/attempt-02",
+      "visualMode": "resume-current-live-deepseek-output",
+      "visualSource": "run-04/visual/attempt-03"
+    }
+  },
+  "artifacts": {
+    "content/attempt-01/deck-plan.json": "71a5f9541bd14b04d45d218bcb1b7d53007607eb7868caaa7cd1420278909e2c",
+    "content/attempt-01/page-contents.json": "df50650e40ef147c37678e8d9a10146254a49b0b27a0b982b09daef7710a4b9d",
+    "visual/attempt-01/candidate-sets.json": "7a2439f62336a6a0f328f5198fdf82ed8daa65db732b61084190dabf2bf6416e",
+    "visual/attempt-01/composition-plan.json": "24840e2771a4cf0a63076c4eacb2cd40fb6fd8f2b39cd755e39f095e13ac3ab9",
+    "visual/attempt-01/layout-decisions.json": "46b58ca954d5e1f92e964a184741791735901d8c045a6f75432a4aa2b7146e4e",
+    "visual/attempt-01/page-intents.json": "b5e6d98e40e02e692aa1abd9970e54c1cc7027d62cb9ac3d1ddda9b9f53c68b3",
+    "visual/attempt-01/render-payloads.json": "d5f74b2d8780c3f2bf0e0c100b9a833ddc196f0d4e8179765e4110716710641f",
+    "visual/attempt-01/render-result.json": "2003440d8f7b18f9370d5a76542924c83ea57bc0d4e74e94026ff9f111cc75a3",
+    "visual/attempt-01/render/qa/slide-01.layout.json": "4f66c74555fff3b24c1e559613a3a3a5998a1f3e6b2424f63dfcdae7d778051f",
+    "visual/attempt-01/render/qa/slide-02.layout.json": "8e2cf081c1c09f338bc86b42b09f4025232e4a48945a98b47c3a73c47b798954",
+    "visual/attempt-01/render/qa/slide-03.layout.json": "78835e4db31fbbede614a085b88515ffa99e61117deebf6939d917af556acf8d",
+    "visual/attempt-01/render/qa/slide-04.layout.json": "994943b09292888f768b37b9b0319386aa9eb7e21d4638cb59f042eefa0369db",
+    "visual/attempt-01/render/qa/slide-05.layout.json": "11623042bbf31d347ad7b6ffe28a9ee06d597fed629ea333511c1c3a4562c77a",
+    "visual/attempt-01/render/qa/slide-06.layout.json": "4e511cb81a517f72eba63af9a1f55a39fbf78306a3701d3c44beeafd386ccacf",
+    "visual/attempt-01/render/qa/slide-07.layout.json": "1446f7cdcffa7a32114d4785185a12b6b1a18cc660b7ba4e39994ff5c2327a75",
+    "visual/attempt-01/visual-plan.json": "a4314366eb93dd8fbb5b058fd6d6bf1c79084e769c7077219e58e1a872bcf8d1",
+    "visual/attempt-01/visual-resolution.json": "560d226658f606dca1dc427de0ebe429d6f7ff1235e04de5aeff9dada3490d53",
+    "workflow-result.json": "92c9c4dc77d30fa9ccf1b6a232fe1dc33a3c1f8b4320c0f65304fc04e1e47119"
+  },
+  "output": {
+    "path": "experiments/真实稿件/为什么做PPagenT-deepseek-full-20260813/为什么做PPagenT-deepseek-full-20260813.pptx",
+    "sha256": "3c51bbaba9df5a1164e4b59c054dddd788d83161abc603857b0385012ef176ea"
+  },
+  "pageEvidence": {
+    "slide-01": "e1b6f86f66cc30a13c2b339227db5d1125ff8ade91d8d231e22066ece7b57b08",
+    "slide-02": "f24ca347b2afbf1af0a9d2e0a2967c22d0c93a66d330fa754bf1534f5ee684cf",
+    "slide-03": "5b56083aaafbc090d5b0753c7cf5c67acb65b2da1f6d377eeecc1e8bcd6b0729",
+    "slide-04": "c4d665fc2b23ac35836869c85ddfff3a779a6e6e77578a91c3240087352ed592",
+    "slide-05": "68a03b0cb2a7e457987c4153c82a0574eaa4ab9e1b09eac98573b6c9e29991a9",
+    "slide-06": "a0790f892e291db1a91856b9f013afa9b701613cf6186ab58dcec04f9bdc6f95",
+    "slide-07": "3bdd5e7f849ed8dfd1c5fc1686b0deeadce15c0afa3c3c3e41d5642bed61579c"
+  },
+  "qa": {
+    "deterministicQualityAudit": {
+      "status": "passed",
+      "typography": {
+        "status": "passed",
+        "minimumFontSize": 16,
+        "violations": []
+      },
+      "geometry": {
+        "status": "passed",
+        "tolerance": 0.5,
+        "qaParentCount": 14,
+        "connectorCount": 0,
+        "qaParentCountBySlide": {
+          "slide-01": 2,
+          "slide-02": 2,
+          "slide-03": 2,
+          "slide-04": 2,
+          "slide-05": 2,
+          "slide-06": 2,
+          "slide-07": 2
+        },
+        "violations": []
+      }
+    },
+    "postRenderReview": "not-part-of-production-workflow",
+    "overflow": {
+      "status": "not-run"
+    }
+  }
+}

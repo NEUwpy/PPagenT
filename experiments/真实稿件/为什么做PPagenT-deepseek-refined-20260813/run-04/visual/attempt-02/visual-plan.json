@@ -1,0 +1,99 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "ppagent-deck",
+  "skinId": "northeastern-university-001",
+  "visualLanguage": "clean, editorial, professional with a restrained accent color palette; consistent typography and generous white space to convey stability and reliability",
+  "rhythmStrategy": "alternate between simple editorial text layouts and a single structured component (p5) to control pace; group similar editorial pages with slight silhouette variations to avoid monotony while maintaining calm rhythm",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "familyId": "skin-cover",
+      "variantId": "default",
+      "silhouette": "cover",
+      "adaptationStatus": "fixed",
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "familyId": "skin-agenda",
+      "variantId": "default",
+      "silhouette": "agenda",
+      "adaptationStatus": "fixed",
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "p1",
+      "intentId": "p1",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Two parallel points about time-consuming judgments; a simple lead-and-list layout cleanly contrasts the two items and supports the negative framing without over-structuring."
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Comparison of two design philosophies; a dual-statement layout places the problem and the favored approach in balanced opposition, highlighting PPagenT's positive choice."
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Sequential three-role division; a lead-and-list layout conveys the ordered process clearly, with the emphasized 'AI' role as the lead and the other two as supporting list items."
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Two parallel points supporting the value of stability; a dual-statement layout juxtaposes 'not chasing excellence' with the realistic scenario, reinforcing the main thesis."
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5",
+      "familyId": "parallel",
+      "variantId": "parallel-cards-p135",
+      "silhouette": "equal-width-capability-cards",
+      "adaptationStatus": "adaptive",
+      "reason": "Three equal-level parallel points about audience and product; three equal-width cards distinctly mirror the parallel structure and fit the short titles and bodies perfectly."
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Three-stage evolution from templates to experience; a lead-and-list layout orders the points as a clear progression, with the emphasized 'accumulate experience' as the lead."
+    },
+    {
+      "pageId": "p7",
+      "intentId": "p7",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "Three-phase alignment (problem, solution, result) leading to a desired outcome; a lead-and-list layout presents the aligned phases as a sequence and supports the concluding message."
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "familyId": "skin-closing",
+      "variantId": "default",
+      "silhouette": "closing",
+      "adaptationStatus": "fixed",
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

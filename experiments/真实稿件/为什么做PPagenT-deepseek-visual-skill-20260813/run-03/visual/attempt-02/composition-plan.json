@@ -1,0 +1,184 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "why-ppagent",
+  "skinId": "northeastern-university-001",
+  "pages": [
+    {
+      "pageId": "p1",
+      "intentId": "p1-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p1-1",
+        "p1-2",
+        "p1-3",
+        "p1-4"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "四项并列原因全部由等宽组件卡片完整承载，无独立文字槽，避免组件与文字重复。"
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2-intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "p2-2"
+          ],
+          "contentMode": "title"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "p2-2"
+          ],
+          "contentMode": "body"
+        },
+        {
+          "slotId": "body-list",
+          "sourceItemIds": [
+            "p2-1",
+            "p2-3",
+            "p2-4"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "编辑列表的引导句采用洞察项的标题，正文采用同一项的正文字以支撑引导，其余三项作为支持列表完整呈现，避免遗漏任何内容。"
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3-intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "p3-1"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "p3-2"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "focus",
+          "sourceItemIds": [
+            "p3-4"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "supporting-list",
+          "sourceItemIds": [
+            "p3-3"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "层级关系通过 primary/support 承接两个角色，supporting-list 支撑剩余角色，焦点槽放置总结性直接说法，使三层分工与直接说法都进入明确文字槽。"
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p4-1",
+        "p4-2",
+        "p4-3",
+        "p4-4"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "四项论据全部进入等宽组件卡片，完整保留标题与正文，用组件的强调样式体现核心观点。"
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5-intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "p5-4"
+          ],
+          "contentMode": "title"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "p5-3"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "body-list",
+          "sourceItemIds": [
+            "p5-1",
+            "p5-2"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "引导句取最终目标标题以定调，正文段放产品价值完整论述，对比列表放专家与多数人两项，四项内容均被明确分配到槽位。"
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6-intent",
+      "compositionId": "editorial-single-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "body-summary",
+          "sourceItemIds": [
+            "p6-1",
+            "p6-2"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "closing-quote",
+          "sourceItemIds": [
+            "p6-3"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "end-note",
+          "sourceItemIds": [
+            "p6-4"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "前两项（模板无法穷尽、经验积累）并为正文总结，强调项“从作品到能力”作为引语，可扩展性作为结尾注释，所有项目完整进入对应文字槽。"
+    },
+    {
+      "pageId": "p7",
+      "intentId": "p7-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p7-1",
+        "p7-2",
+        "p7-3",
+        "p7-4"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "问题-改进面板组件完整承载问题回顾、方案总结、承诺与意义四项，避免编辑式收束页的额外槽位需求。"
+    }
+  ]
+}

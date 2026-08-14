@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "why-ppagent",
+  "skinId": "northeastern-university-001",
+  "pages": [
+    {
+      "pageId": "p1",
+      "intentId": "p1-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p1-1",
+        "p1-2",
+        "p1-3",
+        "p1-4"
+      ],
+      "componentContentMode": "titles-only",
+      "textSlots": [],
+      "reason": "All four items go to the component; titles shown on cards, bodies likely as tooltips or secondary but since component handles all content, no text slots."
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2-intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "p2-2"
+          ],
+          "contentMode": "title"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "p2-1",
+            "p2-3",
+            "p2-4"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Emphasized insight p2-2 as the primary thesis, other three points as supporting content."
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3-intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "p3-1"
+          ],
+          "contentMode": "title"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "p3-2",
+            "p3-3",
+            "p3-4"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Lead with the first role (AI understands) and list the other roles in the body, aligning with the hierarchy presentation."
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p4-1",
+        "p4-2",
+        "p4-3",
+        "p4-4"
+      ],
+      "componentContentMode": "titles-only",
+      "textSlots": [],
+      "reason": "All four points go to the component; titles shown, bodies as part of component."
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5-intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "p5-4"
+          ],
+          "contentMode": "title"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "p5-1",
+            "p5-2",
+            "p5-3"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Emphasized point p5-4 as primary thesis, others as supporting arguments."
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6-intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "p6-2"
+          ],
+          "contentMode": "title"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "p6-1",
+            "p6-3",
+            "p6-4"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "Lead with the core point (p6-2) about accumulating experience, then list the other points in the body."
+    },
+    {
+      "pageId": "p7",
+      "intentId": "p7-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p7-1",
+        "p7-2",
+        "p7-3",
+        "p7-4"
+      ],
+      "componentContentMode": "titles-only",
+      "textSlots": [],
+      "reason": "All four summary points go to the component for a clean closing."
+    }
+  ]
+}

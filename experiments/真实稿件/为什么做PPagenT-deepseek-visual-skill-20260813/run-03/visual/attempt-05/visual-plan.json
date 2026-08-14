@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "why-ppagent",
+  "skinId": "northeastern-university-001",
+  "visualLanguage": "以东北大学校色为基础的编辑式视觉语言：版面克制、层级分明、组件与文字槽分离，强调稳定与一致。",
+  "rhythmStrategy": "开场用并列卡片建立问题密度；第二页转为编辑焦点；第三页以横向流程呈现顺序；第四页用卡片回扣价值主张；第五、六页分别以编辑列表与编辑焦点收束论证；末页用固定收尾。",
+  "pages": [
+    {
+      "pageId": "p1",
+      "intentId": "page-1",
+      "familyId": "parallel",
+      "variantId": "parallel-cards-p135",
+      "silhouette": "equal-width-capability-cards",
+      "adaptationStatus": "adaptive",
+      "reason": "四个并列要点适合均分卡片，以 4 张卡片建立开场的信息密度。"
+    },
+    {
+      "pageId": "p2",
+      "intentId": "page-2",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "将块引用式洞察作为页面焦点，其余支撑点放入支持列表。"
+    },
+    {
+      "pageId": "p3",
+      "intentId": "page-3",
+      "familyId": "sequential-process",
+      "variantId": "horizontal-cards",
+      "silhouette": "horizontal-card-chain",
+      "adaptationStatus": "adaptive",
+      "reason": "AI→规则→代码是明确的有序协作，用横向卡片链表达流程关系。"
+    },
+    {
+      "pageId": "p4",
+      "intentId": "page-4",
+      "familyId": "parallel",
+      "variantId": "parallel-cards-p135",
+      "silhouette": "equal-width-capability-cards",
+      "adaptationStatus": "adaptive",
+      "reason": "价值主张的四个支撑点以并列卡片呈现，延续开场的轻量节奏。"
+    },
+    {
+      "pageId": "p5",
+      "intentId": "page-5",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "高密度并列说明用编辑列表承载，降低视觉复杂度。"
+    },
+    {
+      "pageId": "p6",
+      "intentId": "page-6",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "突出“从作品到能力”的核心句，其余要点作为支撑列表。"
+    },
+    {
+      "pageId": "p7",
+      "intentId": "page-7",
+      "familyId": "skin-closing",
+      "variantId": "default",
+      "silhouette": "closing",
+      "adaptationStatus": "fixed",
+      "reason": "收束全篇：回顾问题、复述方案、给出承诺与意义。"
+    }
+  ]
+}

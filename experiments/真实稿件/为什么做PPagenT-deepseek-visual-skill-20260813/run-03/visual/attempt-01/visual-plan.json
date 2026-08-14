@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "why-ppagent",
+  "skinId": "northeastern-university-001",
+  "visualLanguage": "Northeastern editorial system: clean grid, generous white space, red accent reserved for emphasis, stable typographic scale; parallel pages use equal-width capability cards, narrative pages use editorial focus and list variants, closing uses the fixed brand silhouette.",
+  "rhythmStrategy": "Alternate structured card pages with editorial text pages; move emphasis between top- and bottom-focus by page; keep dense pages linear; close with a fixed brand closing.",
+  "pages": [
+    {
+      "pageId": "p1",
+      "intentId": "p1",
+      "familyId": "parallel",
+      "variantId": "parallel-cards-p135",
+      "silhouette": "equal-width-capability-cards",
+      "adaptationStatus": "adaptive",
+      "reason": "四个并列问题抓手且密度低，用等宽能力卡真实呈现 itemCount=4 的同级枚举，凸显核心追问。"
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "四个并列观点中含一个核心洞察；editorial-focus 将其升为焦点，避免连续使用卡片骨架。"
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "没有合法层级结构候选；editorial-focus-reverse 先列 AI/规则/代码三层分工，再以直接说法收束。"
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4",
+      "familyId": "parallel",
+      "variantId": "parallel-cards-p135",
+      "silhouette": "equal-width-capability-cards",
+      "adaptationStatus": "adaptive",
+      "reason": "四个并列价值判断且密度低，用卡片骨架与 p1 形成节奏呼应，稳定的 80 分作为强调卡片。"
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "高密度并列论证，editorial-list 按顺序承载四个完整条目，容量适合且节奏与前页不同。"
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "中等偏高密度；将“从作品到能力”作为焦点，其余三项进入支撑列表，避免与 p5 同骨架。"
+    },
+    {
+      "pageId": "p7",
+      "intentId": "p7",
+      "familyId": "skin-closing",
+      "variantId": "default",
+      "silhouette": "closing",
+      "adaptationStatus": "fixed",
+      "reason": "收束页使用固定 closing 轮廓，以承诺句为核心，回顾、方案与意义由固定文本槽承载。"
+    }
+  ]
+}

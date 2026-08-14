@@ -1,248 +1,149 @@
-import fs from "node:fs/promises";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import { Presentation, PresentationFile } from "@oai/artifact-tool";
+import {
+  addBox,
+  addText,
+  createPresentation,
+  qaElementName,
+  runGenerator,
+} from "../../../src/asset-runtime/component-builders.mjs";
+import {
+  CATALOG_COMPONENT_FRAME,
+  resolveCatalogLayout,
+  toSlideFrame,
+} from "./layout-contract.mjs";
 
-const moduleDir = path.dirname(fileURLToPath(import.meta.url));
-
-export const DEFAULT_THEME = {
-  background: "#F7FAFC",
-  cardFill: "#FFFFFF",
-  cardLine: "#C9D5E3",
-  accent: "#1677C8",
-  accentAlt: "#00A8D8",
-  title: "#0F172A",
-  body: "#475569",
-  muted: "#7C8A9A",
+export const CATALOG_THEME = Object.freeze({
+  cardFill: "#F8FBFE",
+  cardLine: "#C9D9E8",
+  active: "#1486E3",
+  activeDeep: "#0F6FC6",
+  pill: "#08A8D8",
+  title: "#0F5DA5",
+  body: "#5F7389",
+  muted: "#74859A",
   fontFamily: "Microsoft YaHei",
-};
+});
 
-const SAMPLE_ITEMS = [
-  { title: "章节标题", subtitle: "Section title", body: "用一句话说明本章节内容" },
-  { title: "章节标题", subtitle: "Section title", body: "用一句话说明本章节内容" },
-  { title: "章节标题", subtitle: "Section title", body: "用一句话说明本章节内容" },
-  { title: "章节标题", subtitle: "Section title", body: "用一句话说明本章节内容" },
-  { title: "章节标题", subtitle: "Section title", body: "用一句话说明本章节内容" },
-  { title: "章节标题", subtitle: "Section title", body: "用一句话说明本章节内容" },
-  { title: "章节标题", subtitle: "Section title", body: "用一句话说明本章节内容" },
-  { title: "章节标题", subtitle: "Section title", body: "用一句话说明本章节内容" },
-];
+export const SAMPLE_CATALOG_ITEMS = Object.freeze([
+  { title: "困境与转型", body: "理解现状、约束与转向动因" },
+  { title: "核心框架", body: "明确整套方案的组织方式" },
+  { title: "实践路径", body: "说明方案如何逐步落地" },
+  { title: "关键机制", body: "解释稳定运行所需条件" },
+  { title: "阶段成效", body: "呈现已经形成的核心结果" },
+  { title: "风险边界", body: "交代适用范围与限制" },
+  { title: "下一步行动", body: "给出后续推进与验证重点" },
+]);
 
-function addText(slide, text, position, style = {}) {
-  const box = slide.shapes.add({
-    geometry: "textbox",
-    position,
-    fill: "none",
-    line: { style: "solid", fill: "none", width: 0 },
-  });
-  box.text = String(text ?? "");
-  box.text.style = {
-    fontSize: style.fontSize ?? 16,
-    typeface: style.typeface ?? "Microsoft YaHei",
-    color: style.color ?? "#0F172A",
-    bold: style.bold ?? false,
-    alignment: style.alignment ?? "left",
-    verticalAlignment: style.verticalAlignment ?? "middle",
-    autoFit: style.autoFit ?? "shrinkText",
-    insets: style.insets ?? { top: 0, right: 0, bottom: 0, left: 0 },
-  };
-  return box;
+function visibleText(value) {
+  return String(value ?? "").trim();
 }
 
-function addCard(slide, item, index, frame, active, theme) {
-  slide.shapes.add({
-    geometry: "roundRect",
-    name: `catalog-card-${index + 1}`,
-    position: frame,
-    fill: active ? theme.accent : theme.cardFill,
-    line: {
-      style: "solid",
-      fill: active ? theme.accent : theme.cardLine,
-      width: 1.2,
-    },
+export function validateCatalogItems(items) {
+  if (!Array.isArray(items) || items.length < 3 || items.length > 7) {
+    throw new Error("目录标签卡片需要 3–7 个目录项");
+  }
+  return items.map((item, index) => {
+    const title = visibleText(item?.title ?? item);
+    const body = visibleText(item?.body);
+    if (!title) throw new Error(`items[${index}].title 不能为空`);
+    if ([...title].length > 10) throw new Error(`items[${index}].title 不得超过 10 个汉字`);
+    if ([...body].length > 28) throw new Error(`items[${index}].body 不得超过 28 个汉字`);
+    return { title, body };
+  });
+}
+
+function renderCard(slide, item, index, frame, active) {
+  const cardId = `agenda-card-${index}`;
+  const compact = frame.height < 300;
+  const palette = active
+    ? { fill: CATALOG_THEME.active, line: CATALOG_THEME.active, title: "#FFFFFF", body: "#EAF5FF" }
+    : { fill: CATALOG_THEME.cardFill, line: CATALOG_THEME.cardLine, title: CATALOG_THEME.title, body: CATALOG_THEME.body };
+  const slideFrame = toSlideFrame(frame);
+
+  addBox(slide, slideFrame, {
+    name: qaElementName({ parent: cardId, domains: ["agenda-card", "agenda-content"] }),
+    fill: palette.fill,
+    line: { style: active ? "solid" : "dashed", fill: palette.line, width: active ? 1.4 : 1.1 },
+    shadow: active ? "shadow-md" : "shadow-none",
     borderRadius: "rounded-xl",
-    shadow: active ? "shadow-md" : "shadow-sm",
   });
 
-  const x = frame.left + 22;
-  const numberColor = active ? "#FFFFFF" : theme.title;
-  const bodyColor = active ? "#FFFFFF" : theme.body;
-  const mutedColor = active ? "#DCEEFF" : theme.muted;
   addText(slide, String(index + 1).padStart(2, "0"), {
-    left: x,
-    top: frame.top + 16,
-    width: frame.width - 44,
-    height: 34,
-  }, { fontSize: 24, color: numberColor });
-
-  const pillWidth = Math.min(frame.width - 44, Math.max(126, 32 + String(item.title).length * 17));
-  const pill = slide.shapes.add({
-    geometry: "roundRect",
-    name: `catalog-pill-${index + 1}`,
-    position: {
-      left: x,
-      top: frame.top + 66,
-      width: pillWidth,
-      height: 38,
-    },
-    fill: active ? "#FFFFFF" : (index % 2 === 0 ? theme.accent : theme.accentAlt),
-    line: { style: "solid", fill: "none", width: 0 },
-    borderRadius: "rounded-full",
-  });
-  pill.text = item.title;
-  pill.text.style = {
-    fontSize: 16,
-    typeface: theme.fontFamily,
-    color: active ? theme.accent : "#FFFFFF",
+    left: slideFrame.left + 18,
+    top: slideFrame.top + 14,
+    width: slideFrame.width - 36,
+    height: compact ? 25 : 32,
+  }, {
+    name: qaElementName({ within: cardId, role: "number" }),
+    fontSize: compact ? 17 : 20,
     bold: true,
-    alignment: "center",
-    verticalAlignment: "middle",
-    autoFit: "shrinkText",
-    insets: { top: 2, right: 12, bottom: 2, left: 12 },
-  };
-
-  addText(slide, item.subtitle, {
-    left: x,
-    top: frame.top + 116,
-    width: frame.width - 44,
-    height: 24,
-  }, { fontSize: 12, color: mutedColor });
-  addText(slide, item.body, {
-    left: x,
-    top: frame.top + 151,
-    width: frame.width - 44,
-    height: Math.max(42, frame.height - 168),
-  }, { fontSize: 14, color: bodyColor, verticalAlignment: "top" });
-}
-
-function addTitle(slide, frame, theme, compact = false) {
-  addText(slide, "CONTENT", {
-    left: frame.left,
-    top: frame.top,
-    width: compact ? frame.width : 260,
-    height: 34,
-  }, { fontSize: 22, color: theme.title, bold: true });
-  addText(slide, "目录", {
-    left: frame.left,
-    top: frame.top + 35,
-    width: compact ? frame.width : 260,
-    height: 66,
-  }, { fontSize: 42, color: theme.accent, bold: true, verticalAlignment: "top" });
-}
-
-function getLayout(itemCount) {
-  if ([3, 4].includes(itemCount)) {
-    const left = 94;
-    const right = 94;
-    const gap = itemCount === 3 ? 70 : 12;
-    const width = (1280 - left - right - gap * (itemCount - 1)) / itemCount;
-    return {
-      title: { left: 94, top: 68, width: 1092, height: 102 },
-      cards: Array.from({ length: itemCount }, (_, index) => ({
-        left: left + index * (width + gap),
-        top: 286,
-        width,
-        height: 354,
-      })),
-      titleCompact: true,
-    };
-  }
-
-  if ([5, 6].includes(itemCount)) {
-    const leftRail = 94;
-    const gridLeft = 374;
-    const gapX = 14;
-    const gapY = 18;
-    const cardWidth = (816 - gapX * 2) / 3;
-    const cardHeight = 240;
-    return {
-      title: { left: leftRail, top: 135, width: 240, height: 120 },
-      cards: Array.from({ length: itemCount }, (_, index) => ({
-        left: gridLeft + (index % 3) * (cardWidth + gapX),
-        top: 138 + Math.floor(index / 3) * (cardHeight + gapY),
-        width: cardWidth,
-        height: cardHeight,
-      })),
-      titleCompact: false,
-    };
-  }
-
-  if (itemCount === 8) {
-    const left = 94;
-    const gapX = 12;
-    const gapY = 18;
-    const cardWidth = (1092 - gapX * 3) / 4;
-    const cardHeight = 240;
-    return {
-      title: { left, top: 54, width: 1092, height: 90 },
-      cards: Array.from({ length: itemCount }, (_, index) => ({
-        left: left + (index % 4) * (cardWidth + gapX),
-        top: 162 + Math.floor(index / 4) * (cardHeight + gapY),
-        width: cardWidth,
-        height: cardHeight,
-      })),
-      titleCompact: true,
-    };
-  }
-
-  throw new Error("当前候选仅验证 3、4、5、6、8 项目录；7 项尚未由源样本验证。");
-}
-
-export function buildCatalogSlide(presentation, parameters = {}) {
-  const items = (parameters.items ?? SAMPLE_ITEMS).map((item) => ({ ...item }));
-  const itemCount = parameters.itemCount ?? items.length;
-  if (items.length < itemCount) throw new Error(`items 只有 ${items.length} 项，少于 itemCount=${itemCount}`);
-  const theme = { ...DEFAULT_THEME, ...(parameters.theme ?? {}) };
-  const layout = getLayout(itemCount);
-  const activeIndex = parameters.activeIndex ?? null;
-
-  const slide = presentation.slides.add();
-  slide.background.fill = theme.background;
-  addTitle(slide, layout.title, theme, layout.titleCompact);
-  layout.cards.forEach((frame, index) => {
-    addCard(slide, items[index], index, frame, activeIndex === index, theme);
+    color: active ? "#FFFFFF" : CATALOG_THEME.muted,
+    typeface: CATALOG_THEME.fontFamily,
   });
+
+  const pillTop = slideFrame.top + (compact ? 50 : 62);
+  const pillHeight = compact ? 36 : 40;
+  const pillWidth = Math.min(slideFrame.width - 36, Math.max(126, 34 + [...item.title].length * 18));
+  addBox(slide, {
+    left: slideFrame.left + 18,
+    top: pillTop,
+    width: pillWidth,
+    height: pillHeight,
+  }, {
+    name: qaElementName({ within: cardId, role: "label" }),
+    fill: active ? "#FFFFFF" : (index % 2 === 0 ? CATALOG_THEME.active : CATALOG_THEME.pill),
+    line: { style: "solid", fill: "none", width: 0 },
+    shadow: active ? "shadow-sm" : "shadow-none",
+    borderRadius: "rounded-full",
+    text: item.title,
+    fontSize: compact ? 17 : 18,
+    bold: true,
+    color: active ? CATALOG_THEME.activeDeep : "#FFFFFF",
+    autoFit: "none",
+    insets: { top: 0, right: 10, bottom: 0, left: 10 },
+  });
+
+  if (item.body) {
+    addText(slide, item.body, {
+      left: slideFrame.left + 18,
+      top: pillTop + pillHeight + (compact ? 16 : 24),
+      width: slideFrame.width - 36,
+      height: slideFrame.height - (pillTop - slideFrame.top) - pillHeight - (compact ? 28 : 44),
+    }, {
+      name: qaElementName({ within: cardId, role: "body" }),
+      fontSize: compact ? 16 : 18,
+      color: palette.body,
+      typeface: CATALOG_THEME.fontFamily,
+      verticalAlignment: "top",
+      autoFit: "none",
+    });
+  }
+}
+
+export function renderCatalogAgendaOnSlide(slide, parameters = {}) {
+  const items = validateCatalogItems(parameters.items ?? SAMPLE_CATALOG_ITEMS.slice(0, 5));
+  const activeIndex = parameters.activeIndex ?? null;
+  if (activeIndex !== null && (!Number.isInteger(activeIndex) || activeIndex < 0 || activeIndex >= items.length)) {
+    throw new Error("activeIndex 必须是目录项下标或 null");
+  }
+  const layout = resolveCatalogLayout(items.length);
+  layout.frames.forEach((frame, index) => renderCard(slide, items[index], index, frame, activeIndex === index));
+  return { frame: CATALOG_COMPONENT_FRAME, layout, items };
+}
+
+export function buildCatalogAgenda(presentation, parameters = {}) {
+  const slide = presentation.slides.add();
+  slide.background.fill = "#FFFFFF";
+  renderCatalogAgendaOnSlide(slide, parameters);
   return slide;
 }
 
-async function loadConfiguration(configPath) {
-  if (!configPath) return null;
-  return JSON.parse(await fs.readFile(path.resolve(configPath), "utf8"));
+export function createCatalogAgendaPresentation(configs) {
+  const presentation = createPresentation();
+  for (const config of configs) buildCatalogAgenda(presentation, config);
+  return presentation;
 }
 
-function parseArgs() {
-  const args = process.argv.slice(2);
-  const values = { output: path.join(moduleDir, "example.pptx"), config: null };
-  for (let index = 0; index < args.length; index += 2) {
-    const name = args[index];
-    const value = args[index + 1];
-    if (!name?.startsWith("--") || value === undefined) throw new Error(`参数格式错误：${name || "<empty>"}`);
-    const key = name.slice(2);
-    if (!(key in values)) throw new Error(`不支持的参数：--${key}`);
-    values[key] = value;
-  }
-  return values;
-}
-
-async function main() {
-  const args = parseArgs();
-  const config = await loadConfiguration(args.config);
-  const presentation = Presentation.create({ slideSize: { width: 1280, height: 720 } });
-  if (config) {
-    const slides = Array.isArray(config.slides) ? config.slides : [config];
-    for (const slideConfig of slides) buildCatalogSlide(presentation, slideConfig);
-  } else {
-    buildCatalogSlide(presentation, { itemCount: 6, activeIndex: 3, items: SAMPLE_ITEMS });
-  }
-  await fs.mkdir(path.dirname(path.resolve(args.output)), { recursive: true });
-  const pptx = await PresentationFile.exportPptx(presentation);
-  await pptx.save(path.resolve(args.output));
-  console.log(path.resolve(args.output));
-}
-
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  main().catch((error) => {
-    console.error(error.stack || error.message || String(error));
-    process.exitCode = 1;
-  });
-}
+await runGenerator(import.meta.url, buildCatalogAgenda, {
+  items: SAMPLE_CATALOG_ITEMS.slice(0, 5),
+  activeIndex: null,
+});

@@ -28,7 +28,10 @@ const structureRegistry = await readJson(path.join(root, "备选资产", "regist
 const coreRegistry = await readJson(path.join(root, "assets", "registry.json"));
 const visualVariantCatalog = await readJson(path.join(root, "catalog", "visual-variants.json"));
 const structureIds = structureRegistry.assets.filter((entry) => entry.category === "结构图").map((entry) => entry.id);
-const selectableAssetIds = structureRegistry.assets.map((entry) => entry.id);
+const selectableAssetIds = [
+  ...structureRegistry.assets.map((entry) => entry.id),
+  ...coreRegistry.assets.map((entry) => entry.id),
+];
 const contractIds = contracts.map((contract) => contract.assetId);
 for (const id of structureIds) if (!contractIds.includes(id)) issues.push(`结构候选缺少契约: ${id}`);
 for (const id of contractIds) if (!selectableAssetIds.includes(id)) issues.push(`契约引用未知候选资产: ${id}`);

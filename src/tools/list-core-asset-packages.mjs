@@ -15,10 +15,14 @@ console.log(JSON.stringify({
   formalCandidates: packages.length,
   assets: packages.map((item) => ({
     assetId: item.assetId,
+    skillId: item.runtime.skillId ?? item.runtime.familyId,
+    styleGroupId: item.runtime.styleGroupId ?? item.runtime.variantId,
     familyId: item.runtime.familyId,
     variantId: item.runtime.variantId,
     relations: item.runtime.supportedBaseRelations,
     purposes: item.runtime.supportedPurposeKeys ?? [],
     itemCount: item.runtime.itemCount,
+    stateContract: item.runtime.stateContract ?? null,
+    mediaContract: item.runtime.mediaContract ?? null,
   })),
 }, null, 2));

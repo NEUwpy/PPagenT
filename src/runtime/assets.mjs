@@ -9,6 +9,8 @@ import {
 import { discoverCoreAssetPackages } from "./core-asset-packages.mjs";
 
 const DEFAULT_BUILDERS = new Map();
+const DEFAULT_SOURCE_FRAMES = new Map();
+const VARIANT_SOURCE_FRAMES = new Map();
 
 const VARIANT_BUILDERS = new Map([
   ["radial-hub-001:split-wing", buildRadialHubSplitWing],
@@ -28,6 +30,13 @@ const CORE_SKIN_ASSET_IDS = new Set(
 for (const assetPackage of CORE_ASSET_PACKAGES) {
   if (!assetPackage.builder) continue;
   DEFAULT_BUILDERS.set(assetPackage.assetId, assetPackage.builder);
+  if (assetPackage.runtime.sourceFrame) {
+    DEFAULT_SOURCE_FRAMES.set(assetPackage.assetId, assetPackage.runtime.sourceFrame);
+    VARIANT_SOURCE_FRAMES.set(
+      `${assetPackage.assetId}:${assetPackage.runtime.variantId}`,
+      assetPackage.runtime.sourceFrame,
+    );
+  }
   VARIANT_BUILDERS.set(
     `${assetPackage.assetId}:${assetPackage.runtime.variantId}`,
     assetPackage.builder,
@@ -58,8 +67,11 @@ export function renderStructureAsset(slide, renderPayload, skin, targetFrame = s
     // to standalone showcases, where the builder draws that title itself.
     title: "核心结构",
   };
+  const sourceFrame = variantId
+    ? VARIANT_SOURCE_FRAMES.get(`${renderPayload.assetId}:${variantId}`)
+    : DEFAULT_SOURCE_FRAMES.get(renderPayload.assetId);
   return renderComponentIntoSlide(builder, slide, embeddedParameters, {
-    sourceFrame: skin.componentSourceFrame,
+    sourceFrame: sourceFrame ?? skin.componentSourceFrame,
     targetFrame,
     theme: skin.componentTheme,
   });

@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "why-ppagent",
+  "skinId": "northeastern-university-001",
+  "pages": [
+    {
+      "pageId": "p1",
+      "intentId": "page-1",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p1-1",
+        "p1-2",
+        "p1-3",
+        "p1-4"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "四个同层要点分别进入四张卡片，完整呈现标题与正文。"
+    },
+    {
+      "pageId": "p2",
+      "intentId": "page-2",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "focus",
+          "sourceItemIds": [
+            "p2-2"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "supporting-list",
+          "sourceItemIds": [
+            "p2-1",
+            "p2-3",
+            "p2-4"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "强调洞察句作为焦点，其余三项按支持列表组织。"
+    },
+    {
+      "pageId": "p3",
+      "intentId": "page-3",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p3-1",
+        "p3-2",
+        "p3-3",
+        "p3-4"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "三步流程与直接说法放入横向卡片链，按顺序完整呈现。"
+    },
+    {
+      "pageId": "p4",
+      "intentId": "page-4",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p4-1",
+        "p4-2",
+        "p4-3",
+        "p4-4"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "四个价值支撑点进入四张并列卡片，完整保留标题与正文。"
+    },
+    {
+      "pageId": "p5",
+      "intentId": "page-5",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "list",
+          "sourceItemIds": [
+            "p5-1",
+            "p5-2",
+            "p5-3",
+            "p5-4"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "高密度要点以列表槽位承接，避免额外结构干扰语义。"
+    },
+    {
+      "pageId": "p6",
+      "intentId": "page-6",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "focus",
+          "sourceItemIds": [
+            "p6-3"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "supporting-list",
+          "sourceItemIds": [
+            "p6-1",
+            "p6-2",
+            "p6-4"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "将核心经验句置为焦点，其他三页要点作为支撑列表。"
+    },
+    {
+      "pageId": "p7",
+      "intentId": "page-7",
+      "compositionId": "fixed-closing",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "recap",
+          "sourceItemIds": [
+            "p7-1"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "focus",
+          "sourceItemIds": [
+            "p7-2"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "p7-3",
+            "p7-4"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "按收尾固定槽位组织：问题回顾、方案复述与核心承诺/意义。"
+    }
+  ]
+}

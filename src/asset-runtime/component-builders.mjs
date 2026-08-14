@@ -343,6 +343,61 @@ function isEmphasisStep(step) {
   return step?.emphasis === true || ["conclusion", "result", "重点"].includes(step?.emphasis);
 }
 
+export function buildParallelCards(presentation, params) {
+  const slide = prepareSlide(presentation, params.title, "并列关系 · 同级能力");
+  const items = params.items ?? [];
+  if (items.length < 3 || items.length > 7) throw new Error("并列能力卡片支持 3–7 项");
+
+  const gap = 20;
+  const left = 78;
+  const width = (1124 - gap * (items.length - 1)) / items.length;
+  items.forEach((item, index) => {
+    const x = left + index * (width + gap);
+    const primary = index % 2 ? THEME.accentAlt : THEME.accent;
+    const panelId = `parallel-card-${index}`;
+    addBox(slide, { left: x, top: 190, width, height: 390 }, {
+      name: qaElementName({ parent: panelId, domains: ["parallel-card", "parallel-content"] }),
+      fill: index % 2 ? "#F1F8FF" : "#F7FBFF",
+      line: { style: "solid", fill: index % 2 ? "#7EB7ED" : "#A8CBEA", width: 1.4 },
+      shadow: "shadow-sm",
+    });
+    addBox(slide, { left: x, top: 190, width, height: 8 }, {
+      name: qaElementName({ within: panelId, role: "accent-rail" }),
+      geometry: "rect",
+      fill: primary,
+      line: { style: "solid", fill: "none", width: 0 },
+      shadow: "shadow-none",
+      borderRadius: 0,
+    });
+    addCircle(slide, { left: x + 20, top: 222, width: 54, height: 54 }, {
+      name: qaElementName({ within: panelId, role: "index" }),
+      fill: primary,
+      line: { style: "solid", fill: "#FFFFFF", width: 2 },
+      shadow: "shadow-none",
+      text: String(index + 1).padStart(2, "0"),
+      fontSize: 17,
+      bold: true,
+      color: "#FFFFFF",
+      insets: { top: 0, right: 0, bottom: 0, left: 0 },
+    });
+    addText(slide, item.title, { left: x + 20, top: 310, width: width - 40, height: 55 }, {
+      name: qaElementName({ within: panelId, role: "title" }),
+      fontSize: 22,
+      bold: true,
+      color: "#174D87",
+      alignment: "center",
+    });
+    addText(slide, item.body ?? "", { left: x + 22, top: 382, width: width - 44, height: 100 }, {
+      name: qaElementName({ within: panelId, role: "body" }),
+      fontSize: 17,
+      color: "#607895",
+      alignment: "center",
+      verticalAlignment: "top",
+    });
+  });
+  return slide;
+}
+
 export function normalizeSequentialSteps(steps) {
   const emphasisSteps = steps.filter(isEmphasisStep);
   const emphasisStep = emphasisSteps.at(-1) ?? null;
@@ -350,8 +405,19 @@ export function normalizeSequentialSteps(steps) {
   return {
     regularSteps,
     emphasisStep,
-    displaySteps: emphasisStep ? [...regularSteps, emphasisStep] : [...regularSteps],
+    // 顺序关系的数组位置就是语义位置。强调只改变视觉权重，不能把中间节点搬到终点。
+    displaySteps: [...steps],
   };
+}
+
+export function sequentialStepBody(step) {
+  const points = (step.points ?? []).map((point) => String(point).trim()).filter(Boolean);
+  if (!points.length) return step.body ?? "";
+  const rows = [];
+  for (let index = 0; index < points.length; index += 2) {
+    rows.push(points.slice(index, index + 2).map((point) => `• ${point}`).join("   "));
+  }
+  return rows.join("\n");
 }
 
 export function buildSequentialProcess(presentation, params) {
@@ -396,7 +462,7 @@ export function buildSequentialProcess(presentation, params) {
       name: qaElementName({ within: `sequential-step-${index}`, role: "title" }),
       fontSize: typographySize("componentTitle", 22), bold: true, color: "#FFFFFF", alignment: "center",
     });
-    addText(slide, step.body, { left: x + 22, top: 394, width: width - 44, height: 76 }, {
+    addText(slide, sequentialStepBody(step), { left: x + 22, top: 394, width: width - 44, height: 76 }, {
       name: qaElementName({ within: `sequential-step-${index}`, role: "body" }),
       fontSize: typographySize("componentBody", 18), color: "#EAF6FF", alignment: "center", verticalAlignment: "top",
     });
@@ -822,6 +888,19 @@ export function buildComparison(presentation, params) {
     shadow: "shadow-none",
     borderRadius: 0,
   });
+  // The source's paired perspective ellipses are a floor plane behind the
+  // cards. Their upper arcs must be occluded by the two panels; drawing them
+  // after the panels incorrectly places the floor in front of the cards.
+  addCircle(slide, { left: 62, top: 605, width: 1156, height: 42 }, {
+    fill: "none",
+    line: { style: "dashed", fill: THEME.cyan, width: 1.5 },
+    shadow: "shadow-none",
+  });
+  addCircle(slide, { left: 92, top: 611, width: 1096, height: 32 }, {
+    fill: "none",
+    line: { style: "solid", fill: THEME.accent, width: 3 },
+    shadow: "shadow-none",
+  });
   renderComparisonColumn(slide, "left", params.left, leftPalette);
   renderComparisonColumn(slide, "right", params.right, rightPalette);
 
@@ -842,16 +921,6 @@ export function buildComparison(presentation, params) {
     bold: true,
     color: "#FFFFFF",
     insets: { top: 4, right: 4, bottom: 4, left: 4 },
-  });
-  addCircle(slide, { left: 62, top: 605, width: 1156, height: 42 }, {
-    fill: "none",
-    line: { style: "dashed", fill: THEME.cyan, width: 1.5 },
-    shadow: "shadow-none",
-  });
-  addCircle(slide, { left: 92, top: 611, width: 1096, height: 32 }, {
-    fill: "none",
-    line: { style: "solid", fill: THEME.accent, width: 3 },
-    shadow: "shadow-none",
   });
   return slide;
 }
@@ -1254,7 +1323,142 @@ function cycleArcArrowPath(width, height, sweep) {
   }];
 }
 
+function cycleSegmentPath(size, startDeg, sweepDeg, outerRadius = 150, innerRadius = 92) {
+  const center = size / 2;
+  const point = (radius, degree) => ({
+    x: center + radius * Math.cos(degree * Math.PI / 180),
+    y: center + radius * Math.sin(degree * Math.PI / 180),
+  });
+  const gap = Math.min(8, sweepDeg * 0.14);
+  const start = startDeg + gap / 2;
+  const sweep = sweepDeg - gap;
+  const segmentCount = Math.max(10, Math.ceil(sweep / 5));
+  const outer = Array.from({ length: segmentCount + 1 }, (_, index) => point(outerRadius, start + index * sweep / segmentCount));
+  const inner = Array.from({ length: segmentCount + 1 }, (_, index) => point(innerRadius, start + sweep - index * sweep / segmentCount));
+  const tip = point((outerRadius + innerRadius) / 2, start + sweep + 5);
+  return [{
+    width: size,
+    height: size,
+    commands: [
+      { moveTo: outer[0] },
+      ...outer.slice(1).map((lineTo) => ({ lineTo })),
+      { lineTo: tip },
+      ...inner.map((lineTo) => ({ lineTo })),
+      { close: {} },
+    ],
+  }];
+}
+
 export function buildCycleLoop(presentation, params) {
+  params = validateCycleLoopParams(params);
+  const slide = prepareSlide(presentation, params.title, "PDCA 环形闭环");
+  const steps = params.steps;
+  const size = 330;
+  const centerX = 640;
+  const centerY = 407;
+  const left = centerX - size / 2;
+  const top = centerY - size / 2;
+  const sweep = 360 / steps.length;
+  const palette = ["#315FC3", "#2D80D9", "#1AA7D8", "#18BFD0", "#4672D1", "#3459B6"];
+
+  // Source slide 57 uses filled freeform arrow segments: pointed at the
+  // leading edge and flat at the tail. Each segment remains editable.
+  steps.forEach((_, index) => {
+    slide.shapes.add({
+      geometry: "custom",
+      name: qaElementName({ parent: `cycle-arrow-${index}` }),
+      position: transformPosition(slide, { left, top, width: size, height: size }),
+      fill: palette[index],
+      line: { style: "solid", fill: "#FFFFFF", width: 2 },
+      customPaths: cycleSegmentPath(size, -90 + index * sweep, sweep),
+      shadow: "shadow-none",
+    });
+    const angle = (-90 + (index + 0.5) * sweep) * Math.PI / 180;
+    const radius = 121;
+    addCircle(slide, {
+      left: centerX + radius * Math.cos(angle) - 24,
+      top: centerY + radius * Math.sin(angle) - 24,
+      width: 48,
+      height: 48,
+    }, {
+      name: qaElementName({ parent: `cycle-badge-${index}`, domains: ["cycle-shape"] }),
+      fill: "#FFFFFF",
+      line: { style: "solid", fill: palette[index], width: 2 },
+      shadow: "shadow-none",
+      text: String(index + 1).padStart(2, "0"),
+      fontSize: 16,
+      bold: true,
+      color: palette[index],
+      insets: { top: 0, right: 0, bottom: 0, left: 0 },
+    });
+  });
+
+  addCircle(slide, { left: centerX - 76, top: centerY - 76, width: 152, height: 152 }, {
+    name: qaElementName({ parent: "cycle-center", domains: ["cycle-shape", "cycle-content"] }),
+    fill: "#2459AE",
+    line: { style: "solid", fill: "#FFFFFF", width: 3 },
+    shadow: "shadow-md",
+    text: wrapChineseText(params.center, 6),
+    fontSize: 22,
+    bold: true,
+    color: "#FFFFFF",
+  });
+
+  const indexedSteps = steps.map((step, index) => ({ step, index }));
+  const columns = [
+    indexedSteps.filter(({ index }) => index % 2 === 0),
+    indexedSteps.filter(({ index }) => index % 2 === 1),
+  ];
+  columns.forEach((column, sideIndex) => {
+    const isLeft = sideIndex === 0;
+    const cardHeight = 86;
+    const gap = 18;
+    const total = column.length * cardHeight + (column.length - 1) * gap;
+    const startTop = centerY - total / 2;
+    column.forEach(({ step, index }, row) => {
+      const cardLeft = isLeft ? 72 : 938;
+      const cardTop = startTop + row * (cardHeight + gap);
+      const stepId = `cycle-step-${index}`;
+      addBox(slide, { left: cardLeft, top: cardTop, width: 270, height: cardHeight }, {
+        name: qaElementName({ parent: stepId, domains: ["cycle-content"] }),
+        fill: "#FFFFFF",
+        line: { style: "solid", fill: "#D4E3F1", width: 1.2 },
+        shadow: "shadow-sm",
+      });
+      addCircle(slide, {
+        left: isLeft ? cardLeft + 210 : cardLeft + 14,
+        top: cardTop + 19,
+        width: 48,
+        height: 48,
+      }, {
+        name: qaElementName({ within: stepId, role: "index" }),
+        fill: palette[index],
+        line: { style: "solid", fill: "#FFFFFF", width: 2 },
+        shadow: "shadow-none",
+        text: String(index + 1).padStart(2, "0"),
+        fontSize: 16,
+        bold: true,
+        color: "#FFFFFF",
+        insets: { top: 0, right: 0, bottom: 0, left: 0 },
+      });
+      const textLeft = isLeft ? cardLeft + 16 : cardLeft + 72;
+      addText(slide, step.title, { left: textLeft, top: cardTop + 10, width: 182, height: 28 }, {
+        name: qaElementName({ within: stepId, role: "title" }),
+        fontSize: 19,
+        bold: true,
+        color: palette[index],
+      });
+      addText(slide, step.body, { left: textLeft, top: cardTop + 40, width: 182, height: 34 }, {
+        name: qaElementName({ within: stepId, role: "body" }),
+        fontSize: 16,
+        color: "#607895",
+      });
+    });
+  });
+  return slide;
+}
+
+export function buildCycleLoopLegacy(presentation, params) {
   params = validateCycleLoopParams(params);
   const slide = prepareSlide(presentation, params.title, "循环主题 · 反馈闭环");
   const steps = params.steps.map((step) => (

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>目录标签卡片组件</title>
+  <link rel="stylesheet" href="catalog-agenda.css">
+</head>
+<body>
+  <main id="catalog"></main>
+  <script type="module">
+    import { renderCatalogAgenda } from "./catalog-agenda.js";
+    const source = [
+      { title: "困境与转型", body: "理解现状、约束与转向动因" },
+      { title: "核心框架", body: "明确整套方案的组织方式" },
+      { title: "实践路径", body: "说明方案如何逐步落地" },
+      { title: "关键机制", body: "解释稳定运行所需条件" },
+      { title: "阶段成效", body: "呈现已经形成的核心结果" },
+      { title: "风险边界", body: "交代适用范围与限制" },
+      { title: "下一步行动", body: "给出后续推进与验证重点" }
+    ];
+    const query = new URLSearchParams(location.search);
+    const count = Math.min(7, Math.max(3, Number(query.get("count") || 5)));
+    const active = query.has("active") ? Number(query.get("active")) : null;
+    renderCatalogAgenda(document.querySelector("#catalog"), { items: source.slice(0, count), activeIndex: active });
+  </script>
+</body>
+</html>

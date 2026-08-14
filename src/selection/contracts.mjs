@@ -48,6 +48,7 @@ export async function loadContractCatalog(root = process.cwd()) {
         { field: "itemCount", ...item.runtime.itemCount },
       ],
     },
+    fallback: item.runtime.contract.fallback ?? {},
     evidence: {
       basis: ["metadata", "user-confirmation"],
       realManuscriptValidated: true,

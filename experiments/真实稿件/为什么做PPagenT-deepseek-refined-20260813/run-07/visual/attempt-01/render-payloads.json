@@ -1,0 +1,260 @@
+[
+  {
+    "schemaVersion": "1.0",
+    "intentId": "shell-cover-intent",
+    "assetId": "northeastern-university-cover-001",
+    "parameters": {
+      "title": "为什么做 PPagenT",
+      "presenter": "",
+      "organization": "",
+      "date": "",
+      "subtitle": ""
+    },
+    "mappings": [],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "shell-agenda-intent",
+    "assetId": "northeastern-university-agenda-001",
+    "parameters": {
+      "title": "目录",
+      "items": [
+        "做 PPT 真正费时间的是什么？",
+        "每次都不一样不一定是好事。",
+        "AI、规则与代码如何分工。",
+        "稳定 80 分比随机 95 分更值钱。",
+        "让更多人获得好用的 PPT。"
+      ]
+    },
+    "mappings": [
+      {
+        "sourceItemId": "agenda-1",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-2",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-3",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-4",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-5",
+        "parameterPath": "items"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p1",
+    "assetId": "parallel-cards-001",
+    "parameters": {
+      "title": "做 PPT 真正费时间的不是“画”",
+      "items": [
+        {
+          "title": "一连串判断",
+          "body": "怎么讲、拆几页、每页讲什么、观点关系、哪里突出、何时用图、何时一句话。"
+        },
+        {
+          "title": "翻找旧稿",
+          "body": "找相似页面、替换内容、调结构、统一字体字号颜色间距。"
+        },
+        {
+          "title": "高手的答案",
+          "body": "既然已知怎样好，为何每次重做？"
+        }
+      ],
+      "visualVariantId": "parallel-cards-p135"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p1-judgments",
+        "parameterPath": "items[0]"
+      },
+      {
+        "sourceItemId": "p1-search",
+        "parameterPath": "items[1]"
+      },
+      {
+        "sourceItemId": "p1-question",
+        "parameterPath": "items[2]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p2",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "工作里的 PPT，不需要每次重新发明",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p2-difference",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p2-fixed",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p2-tradeoff",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p3",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "AI 负责理解，规则负责决定，代码负责执行",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p3-ai",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p3-rule",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p3-code",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p3-summary",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p4",
+    "assetId": "comparison-structure-001",
+    "parameters": {
+      "title": "稳定的 80 分，比随机的 95 分更值钱",
+      "left": {
+        "title": "随机的 95 分",
+        "items": [
+          "追求惊艳，但不可靠，第二天不一定能改。"
+        ],
+        "emphasis": false,
+        "polarity": "negative"
+      },
+      "right": {
+        "title": "稳定的 80 分",
+        "items": [
+          "结构清楚、视觉规范、符合风格，第二天可继续修改，节省大量时间。"
+        ],
+        "emphasis": true,
+        "polarity": "positive"
+      },
+      "centerLabel": "对比",
+      "visualVariantId": "default"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p4-random95",
+        "parameterPath": "left"
+      },
+      {
+        "sourceItemId": "p4-stable80",
+        "parameterPath": "right"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p5",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "不只服务最会做 PPT 的那 1%",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p5-experts",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p5-majority",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p5-value",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p6",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "真正积累的不是一万个模板",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p6-accumulation",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p6-expandable",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p7",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "最后，它想解决的是一件很普通的事",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p7-solution",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p7-outcome",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "shell-closing-intent",
+    "assetId": "northeastern-university-closing-001",
+    "parameters": {
+      "text": "做 PPT 真正费时间的是反复发生的判断；PPagenT 用 AI 理解、规则决定、代码执行，稳定交付工作中真正可用的 80 分初稿。"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "closing-takeaway",
+        "parameterPath": "text"
+      }
+    ],
+    "omissions": []
+  }
+]
