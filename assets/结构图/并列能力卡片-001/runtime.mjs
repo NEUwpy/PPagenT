@@ -1,5 +1,7 @@
 import { mapping, renderPayload } from "../../../src/render/payload-helpers.mjs";
 
+export { buildParallelCards } from "./builder.mjs";
+
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>"']/g, (character) => ({
     "&": "&amp;",

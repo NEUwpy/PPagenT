@@ -62,7 +62,7 @@ flowchart LR
 
 - 一个来源可追溯的黄金状态；
 - 一个接收内容和父容器宽高、返回方框/锚点/层级/样式令牌的轻量布局求解器；
-- 一个作为唯一样式与响应布局来源的 HTML Component，以及通用的可编辑 PPTX 编译路径；
+- 一个用于设计、审美和响应布局验证的 HTML Component，以及审核后固化的 Native PPT Builder；
 - 3–7 项或其声明范围内的响应规则与断点；
 - 图标、中心图像、标题、正文和媒体的替换接口；
 - 原生可编辑 PPTX 的确定性回编译入口；
@@ -70,9 +70,9 @@ flowchart LR
 - 内容接口：`items` 承载什么语义角色，是否允许节点内 `points`，每个节点允许多少分点以及单个分点的字数上限；
 - 用户看过的代表性状态与来源记录。
 
-Style Group 的设计、数量响应、间距、字体和层级只写在 HTML Component 中。固定浏览器在 Content Frame 尺寸下完成排版，再把带编译标记的 DOM 节点、计算样式和绘制顺序解析为版本化 `ResolvedVisualTree`。它是一次具体页面的唯一布局结果；通用 PPTX 编译器只负责将其中的文字、形状、图片和连线映射为原生对象，不得包含 Style Group 专属坐标或断点算法。浏览器截图只用于预览，不能进入正式 PPTX。
+Style Group 先在 HTML Component 中完成设计、数量响应、间距、字体和层级验证。用户审美确认后，将通过的状态与参数规则固化为资产专属 Native Builder。正式生成只调用 Builder，不启动浏览器、不重新解析 DOM。HTML 截图只用于建设期预览，不能进入正式 PPTX。
 
-新建 Style Group 必须采用这一模式。`assets/结构图/并列能力卡片-001` 已完成首个正式迁移；其 HTML Component 同时驱动浏览器预览和原生可编辑 PPTX。其余旧核心资产显式标记为 `legacy-builder`，只作为逐项迁移队列保留，不代表允许新资产继续复制双实现。
+`assets/结构图/并列能力卡片-001` 是首个完整样例：HTML Component 负责 3–7 项实时审美审查，`builder.mjs` 负责正式原生 PPT 生成。Builder 是审核后的固定产物，不是正式运行时由 AI 临时写出的代码。
 
 ### 媒体契约
 
@@ -118,4 +118,4 @@ Visual Skill 的调用接口采用两级版式中立内容：
 
 当前先固定 Shell 和 Content Frame，再蒸馏更多 Style Group。其他学校版本可以替换 Logo、颜色、字体、栏目和页注文案；除非真实模板证明版式骨架必须改变，否则继续复用本 Shell 几何。候选 Style Group 仍需用户明确确认后才能进入核心库，Luna 只承担来源 PPT 的蒸馏与入库，不参与正式生成线。
 
-当前实现状态必须分开理解：Shell 几何、核心资产发现、正文兜底、字段级内容覆盖和 `componentBindings` 校验已经进入运行时代码；`parallel-cards-p135` 已迁移为正式 `html-component`。尚未迁移的已确认资产显式标记为 `legacy-builder`，只维持现有能力，不接收新的样式逻辑，并在对应 HTML Component 通过代表性状态与 Shell 目视检查后逐项删除。
+当前实现状态必须分开理解：Shell 几何、核心资产发现、正文兜底、字段级内容覆盖和 `componentBindings` 校验已经进入运行时代码；正式结构资产均以 Native Builder 运行。`parallel-cards-p135` 额外提供 HTML 审查组件，用来验证新的资产建设流程，不改变正式运行边界。

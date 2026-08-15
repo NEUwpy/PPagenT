@@ -7,16 +7,10 @@ import {
   renderComponentIntoSlide,
 } from "../asset-runtime/component-builders.mjs";
 import { discoverCoreAssetPackages } from "./core-asset-packages.mjs";
-import {
-  closeHtmlComponentRuntime,
-  compileResolvedVisualTree,
-  resolveHtmlComponent,
-} from "../visual-runtime/html-component-runtime.mjs";
 
 const DEFAULT_BUILDERS = new Map();
 const DEFAULT_SOURCE_FRAMES = new Map();
 const VARIANT_SOURCE_FRAMES = new Map();
-const HTML_COMPONENTS = new Map();
 
 const VARIANT_BUILDERS = new Map([
   ["radial-hub-001:split-wing", buildRadialHubSplitWing],
@@ -34,12 +28,6 @@ const CORE_SKIN_ASSET_IDS = new Set(
 );
 
 for (const assetPackage of CORE_ASSET_PACKAGES) {
-  if (assetPackage.component) {
-    HTML_COMPONENTS.set(assetPackage.assetId, {
-      component: assetPackage.component,
-      assetDir: assetPackage.assetDir,
-    });
-  }
   if (!assetPackage.builder) continue;
   DEFAULT_BUILDERS.set(assetPackage.assetId, assetPackage.builder);
   if (assetPackage.runtime.sourceFrame) {
@@ -57,29 +45,17 @@ for (const assetPackage of CORE_ASSET_PACKAGES) {
 
 export function listStructureAssetBuilders() {
   return {
-    defaultAssetIds: [...new Set([...DEFAULT_BUILDERS.keys(), ...HTML_COMPONENTS.keys()])].sort(),
-    variantBuilderKeys: [...new Set([
-      ...VARIANT_BUILDERS.keys(),
-      ...[...HTML_COMPONENTS.entries()].map(([assetId, entry]) => `${assetId}:${entry.component.id}`),
-    ])].sort(),
+    defaultAssetIds: [...DEFAULT_BUILDERS.keys()].sort(),
+    variantBuilderKeys: [...VARIANT_BUILDERS.keys()].sort(),
   };
 }
 
 export function hasStructureAssetBuilder(assetId, variantId = null) {
-  if (variantId) return HTML_COMPONENTS.has(assetId) || VARIANT_BUILDERS.has(`${assetId}:${variantId}`);
-  return DEFAULT_BUILDERS.has(assetId) || HTML_COMPONENTS.has(assetId);
+  if (variantId) return VARIANT_BUILDERS.has(`${assetId}:${variantId}`);
+  return DEFAULT_BUILDERS.has(assetId);
 }
 
 export async function renderStructureAsset(slide, renderPayload, skin, targetFrame = skin.bodyFrame) {
-  const htmlComponent = HTML_COMPONENTS.get(renderPayload.assetId);
-  if (htmlComponent) {
-    const tree = await resolveHtmlComponent({
-      ...htmlComponent,
-      parameters: renderPayload.parameters,
-      targetFrame: { left: 0, top: 0, width: targetFrame.width, height: targetFrame.height },
-    });
-    return compileResolvedVisualTree(slide, tree, targetFrame);
-  }
   const variantId = renderPayload.parameters?.visualVariantId ?? null;
   const builder = variantId
     ? VARIANT_BUILDERS.get(`${renderPayload.assetId}:${variantId}`)
@@ -101,7 +77,8 @@ export async function renderStructureAsset(slide, renderPayload, skin, targetFra
   });
 }
 
-export { closeHtmlComponentRuntime };
+// Kept as a no-op while callers shed the former browser-backed formal runtime.
+export async function closeHtmlComponentRuntime() {}
 
 export function isSkinOnlyAsset(assetId) {
   return CORE_SKIN_ASSET_IDS.has(assetId);

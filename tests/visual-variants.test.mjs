@@ -507,7 +507,7 @@ test("所有登记变体都能经过统一运行时真实创建幻灯片对象",
   assert.equal(presentation.slides.items.length, payloads.length);
 });
 
-test("并列 HTML Component 用同一组件解析 3、5、7 项", async () => {
+test("并列 Native Builder 用同一函数生成 3、5、7 项", async () => {
   const presentation = createPresentation();
   const skin = {
     componentSourceFrame: { left: 55, top: 166, width: 1170, height: 492 },
@@ -532,7 +532,7 @@ test("并列 HTML Component 用同一组件解析 3、5、7 项", async () => {
     const rows = inspection.ndjson.split(/\r?\n/).filter(Boolean).map(JSON.parse);
     const slideRows = rows.filter((row) => row.kind === "slide");
     assert.deepEqual(slideRows.map((row) => row.textShapes), [9, 15, 21]);
-    assert.equal(rows.filter((row) => row.name?.endsWith("-title")).length, 15);
+    assert.equal(rows.filter((row) => row.name?.includes("role=title")).length, 15);
   } finally {
     await closeHtmlComponentRuntime();
   }

@@ -13,8 +13,9 @@
   "showcase": "example.pptx",
   "parameters": ["title", "items"],
   "runtime": {
-    "renderer": "html-component",
+    "renderer": "legacy-builder",
     "entry": "runtime.mjs",
+    "builderExport": "buildParallelCards",
     "componentExport": "visualComponent",
     "previewParametersExport": "previewParameters",
     "mapperExport": "mapPageContent",

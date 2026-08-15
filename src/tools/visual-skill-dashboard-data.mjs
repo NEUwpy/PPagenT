@@ -81,7 +81,8 @@ async function normalizeRecord(entry, coverageTags, purposeMap, coreIds, root) {
   const sourcePath = sourceFile ? path.resolve(root, sourceFile) : null;
   const sourceRoot = path.join(root, "PPT源");
   const sourcePreviewAvailable = Boolean(sourcePath && sourceSlides.length && isInside(sourceRoot, sourcePath) && await exists(sourcePath));
-  const componentStates = renderer === "html-component"
+  const hasDesignComponent = Boolean(runtime.componentExport && runtime.previewParametersExport);
+  const componentStates = hasDesignComponent
     ? (runtime.stateContract?.states ?? runtime.itemCount?.preferred ?? [])
     : [];
   return {
@@ -127,8 +128,8 @@ async function normalizeRecord(entry, coverageTags, purposeMap, coreIds, root) {
     sourcePreviewUrl: sourcePreviewAvailable
       ? `/api/source-preview?library=${encodeURIComponent(library)}&id=${encodeURIComponent(manifest.id)}&slide=${sourceSlides[0]}`
       : null,
-    componentPreviewAvailable: renderer === "html-component" && Boolean(runtime.previewParametersExport),
-    componentPreviewUrl: renderer === "html-component" && runtime.previewParametersExport
+    componentPreviewAvailable: hasDesignComponent,
+    componentPreviewUrl: hasDesignComponent
       ? `/api/component-preview?library=${encodeURIComponent(library)}&id=${encodeURIComponent(manifest.id)}`
       : null,
     componentStates,
@@ -204,7 +205,7 @@ export async function collectVisualSkillDashboardData(root = defaultProjectRoot)
       formalSkills: formalSkills.length,
       candidateRecords: candidateAssets.length,
       candidateOnly: candidateOnly.length,
-      htmlComponents: formalSkills.filter((record) => record.renderer === "html-component").length,
+      htmlDesignComponents: formalSkills.filter((record) => record.componentPreviewAvailable).length,
       legacyBuilders: formalSkills.filter((record) => record.renderer === "legacy-builder").length,
       skins: coreAssets.filter((record) => record.renderer === "skin").length,
       autoCallable: coreAssets.filter((record) => record.autoCallable).length,

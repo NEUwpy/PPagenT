@@ -17,9 +17,9 @@ PPA 看板是 PPagenT 的本地资产建设与审查入口。它不保存第二�
 
 1. `PPT源/` 中由文件和页码定位的来源页；
 2. Style Group 的实时 HTML Component；
-3. HTML 编译后的 PPT 示例图像。
+3. 审核后 Native Builder 生成的 PPT 示例图像。
 
-已经迁移为 `html-component` 且提供审查参数的资产可以直接切换登记的数量 State。旧 `legacy-builder` 只显示来源和 PPT 结果，并明确标记为待迁移，不伪装成实时 HTML 组件。
+提供 HTML 审查组件和示例参数的资产可以直接切换登记的数量 State。正式运行方式与是否提供 HTML 审查相互独立：核心结构统一由 Native Builder 生成；没有 HTML 审查组件的旧资产仍可查看来源和 PPT 结果。
 
 ## 数据与预览来源
 

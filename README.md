@@ -6,7 +6,7 @@ PPagenT 是一个面向固定使用场景、以可靠生成原生可编辑 Power
 
 ## 当前阶段
 
-两份真实稿件已经用于校准正式生成线。当前先冻结 Shell 与 Content Frame，并用最小实验验证 `Visual Skill → Style Group → State` 和前端式响应布局；HTML/CSS 是内部实现技术，不改变原生 PPTX 交付目标。当前状态见[当前阶段](docs/当前阶段.md)，几何和颗粒度见[Shell 与 Visual Skill 契约](docs/Shell与Visual Skill契约.md)，长任务边界见[方向校正](docs/方向校正.md)。
+两份真实稿件已经用于校准正式生成线。当前先冻结 Shell 与 Content Frame，并用最小实验验证 `Visual Skill → Style Group → State` 和前端式响应布局；HTML/CSS 是资产建设期的设计与审美工作台，审核后固化为 Native PPT Builder，正式生成不运行 HTML。当前状态见[当前阶段](docs/当前阶段.md)，几何和颗粒度见[Shell 与 Visual Skill 契约](docs/Shell与Visual Skill契约.md)，长任务边界见[方向校正](docs/方向校正.md)。
 
 ## 核心工程取舍
 
@@ -47,8 +47,8 @@ PPagenT 采用“AI 理解与选择、参数化代码确定性绘制”的生成
 - `PPT源/`：全部原始 PPT 的唯一目录；整目录不进入 Git，换电脑时单独复制到仓库根目录。
 - `结构样本池/`：保存所有值得继续观察的单页来源样本，允许重复和暂未归类。
 - `备选资产/`：新蒸馏、重复版式和待比较方案的审核区。
-- `src/visual-runtime/`：把 HTML Component 解析为唯一的 `ResolvedVisualTree`，再编译成原生可编辑 PPTX 对象。
-- `src/asset-runtime/`：尚未迁移的已确认核心资产 Builder；只作为 `legacy-builder` 兼容区，不再接收新 Style Group。
+- `src/asset-runtime/`：Native PPT Builder 的共享原语、Content Frame 缩放和已登记结构 Builder。
+- `assets/<分类>/<资产>/builder.mjs`：Style Group 审核后固化的资产专属 Native Builder；HTML/CSS 可同包保留作为设计与 State 审查证据。
 - `experiments/`：只保留仍在使用的最小架构实验和 Shell 标注，不再提交整套稿件运行输出或批量渲染物。
 
 ## 公开仓库范围
@@ -80,4 +80,4 @@ npm test
 
 默认实时模型入口为 `npm run agent:run:deepseek`，使用 `deepseek-v4-flash`；它读取环境变量或 Git 忽略的 `config/deepseek.local.json`。OpenAI Provider 仍可通过 `npm run agent:run:openai` 使用。正式入口默认只调用内容导演和视觉导演；具体配置与密钥边界见[运行配置信息](docs/运行配置信息.md)。
 
-HTML Component 解析使用公开依赖 `playwright-core`，运行电脑需安装 Edge/Chrome，或通过 `BROWSER_EXECUTABLE_PATH` 指定浏览器。PPTX 对象生成仍依赖 Codex 工作区内置、尚未公开发布的 `@oai/artifact-tool`，因此不把后者写入公共 npm 依赖。
+正式生成线直接调用 Native Builder，不依赖浏览器。PPA 看板仍可在资产建设期实时展示 HTML 设计组件。PPTX 对象生成依赖 Codex 工作区内置、尚未公开发布的 `@oai/artifact-tool`，因此不把后者写入公共 npm 依赖。

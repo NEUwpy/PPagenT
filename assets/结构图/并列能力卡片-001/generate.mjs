@@ -1,9 +1,9 @@
-import { runHtmlComponentGenerator } from "../../../src/visual-runtime/html-component-runtime.mjs";
-import { mapPageContent, previewParameters, visualComponent } from "./runtime.mjs";
+import { runGenerator } from "../../../src/asset-runtime/component-builders.mjs";
+import { buildParallelCards, mapPageContent, previewParameters, visualComponent } from "./runtime.mjs";
 
-export { mapPageContent, previewParameters, visualComponent };
+export { buildParallelCards, mapPageContent, previewParameters, visualComponent };
 
-await runHtmlComponentGenerator(import.meta.url, visualComponent, {
+await runGenerator(import.meta.url, buildParallelCards, {
   ...previewParameters,
   items: previewParameters.items.slice(0, 4),
 });

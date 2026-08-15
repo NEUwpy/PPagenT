@@ -68,7 +68,7 @@
         <mxCell id="generation-label" value="正式生成 / 出库线｜在线运行" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=22;fontStyle=1;fontColor=#25704A;" vertex="1" parent="1">
           <mxGeometry x="50" y="520" width="400" height="35" as="geometry"/>
         </mxCell>
-        <mxCell id="generation-subtitle" value="内容导演负责叙事与拆页；视觉导演只从合法能力中选择和编排；程序完成确定性映射、编译与质量检查" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#3F8060;" vertex="1" parent="1">
+        <mxCell id="generation-subtitle" value="内容导演负责叙事与拆页；视觉导演只从合法能力中选择和编排；程序完成确定性映射、Native Builder 生成与质量检查" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#3F8060;" vertex="1" parent="1">
           <mxGeometry x="450" y="522" width="1450" height="30" as="geometry"/>
         </mxCell>
 
@@ -90,10 +90,10 @@
         <mxCell id="g-decision" value="&lt;b&gt;确定性决策对象&lt;/b&gt;&lt;br&gt;LayoutDecision&lt;br&gt;RenderPayload" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#54A675;strokeWidth=2;fontSize=15;fontColor=#235C3E;spacing=8;" vertex="1" parent="1">
           <mxGeometry x="1320" y="635" width="200" height="110" as="geometry"/>
         </mxCell>
-        <mxCell id="g-resolve" value="&lt;b&gt;HTML Component 求布局&lt;/b&gt;&lt;br&gt;按最终 Content Frame&lt;br&gt;生成 ResolvedVisualTree" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#EAF8EF;strokeColor=#3D9363;strokeWidth=2;fontSize=15;fontStyle=1;fontColor=#205B3C;spacing=8;" vertex="1" parent="1">
+        <mxCell id="g-resolve" value="&lt;b&gt;Mapper + State 求解&lt;/b&gt;&lt;br&gt;把 PageContent 绑定到资产参数&lt;br&gt;不生成绘图代码" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#EAF8EF;strokeColor=#3D9363;strokeWidth=2;fontSize=15;fontStyle=1;fontColor=#205B3C;spacing=8;" vertex="1" parent="1">
           <mxGeometry x="1560" y="625" width="230" height="130" as="geometry"/>
         </mxCell>
-        <mxCell id="g-compile" value="&lt;b&gt;Shell 装配 + 通用编译器&lt;/b&gt;&lt;br&gt;原生文字 / 形状 / 图片 / 连线&lt;br&gt;不重算 Style Group 布局" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#54A675;strokeWidth=2;fontSize=15;fontColor=#235C3E;spacing=8;" vertex="1" parent="1">
+        <mxCell id="g-compile" value="&lt;b&gt;Shell 装配 + Native Builder&lt;/b&gt;&lt;br&gt;原生文字 / 形状 / 图片 / 连线&lt;br&gt;正式生成不运行 HTML" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#54A675;strokeWidth=2;fontSize=15;fontColor=#235C3E;spacing=8;" vertex="1" parent="1">
           <mxGeometry x="1830" y="625" width="205" height="130" as="geometry"/>
         </mxCell>
         <mxCell id="g-output" value="&lt;b&gt;正式交付&lt;/b&gt;&lt;br&gt;可靠、原生可编辑 PPTX&lt;br&gt;Shell 完整 + 内容可修改" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#DFF3E7;strokeColor=#2F855A;strokeWidth=3;fontSize=16;fontStyle=1;fontColor=#1D5A3B;spacing=8;" vertex="1" parent="1">
