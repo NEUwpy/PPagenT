@@ -13,6 +13,7 @@
   "showcase": "example.pptx",
   "parameters": ["title", "levels"],
   "runtime": {
+    "renderer": "legacy-builder",
     "entry": "generate.mjs",
     "builderExport": "buildHierarchyPyramid",
     "mapperExport": "mapPageContent",

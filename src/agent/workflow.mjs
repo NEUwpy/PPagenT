@@ -3,6 +3,10 @@ import path from "node:path";
 import { computeContentStats, enrichPageIntent } from "../content/page-content.mjs";
 import { createRuleValidators, validationMessage } from "../selection/validation.mjs";
 import { assertDirectorProvider } from "./director-provider.mjs";
+import {
+  applySemanticRefinements,
+  normalizeSemanticRefinementRequests,
+} from "./semantic-refinement.mjs";
 import { buildShellIntent, isShellPage, shellVisualSelection } from "./shell-scaffold.mjs";
 
 export const DEFAULT_SKIN_ID = "northeastern-university-001";
@@ -437,11 +441,12 @@ export async function runDirectorWorkflow(options) {
   let visualResolution = null;
   let renderResult = null;
   let acceptedBodyIntents = null;
+  let semanticRefinementUsed = false;
   for (let attempt = 1; attempt <= maxVisualAttempts; attempt += 1) {
-    const presentationOutput = options.shellScaffolder
+    let presentationOutput = options.shellScaffolder
       ? await options.shellScaffolder(contentOutput)
       : contentOutput;
-    const bodyPageContents = presentationOutput.pageContents.filter((page) => !isShellPage(page));
+    let bodyPageContents = presentationOutput.pageContents.filter((page) => !isShellPage(page));
     const bodyPageIds = new Set(bodyPageContents.map((page) => page.pageId));
     const bodyDeckPlan = {
       ...presentationOutput.deckPlan,
@@ -485,7 +490,7 @@ export async function runDirectorWorkflow(options) {
       };
       continue;
     }
-    const candidateSets = await options.visualCandidateProvider({
+    let candidateSets = await options.visualCandidateProvider({
       root,
       skinId: input.skinId,
       deckPlan: presentationOutput.deckPlan,
@@ -530,7 +535,74 @@ export async function runDirectorWorkflow(options) {
         previousReview: visualReview,
         previousResolution: visualResolution,
         previousRenderResult: renderResult,
+        semanticRefinementAllowed: !semanticRefinementUsed && typeof provider.refineContent === "function",
       });
+      const refinementRequests = semanticRefinementUsed ? [] : normalizeSemanticRefinementRequests(
+        compositionOutput.semanticRefinementRequests,
+        bodyPageContents,
+        candidateSets.filter((_, index) => !isShellPage(presentationOutput.pageContents[index])),
+      );
+      if (refinementRequests.length) {
+        semanticRefinementUsed = true;
+        const requestedPageIds = new Set(refinementRequests.map((request) => request.pageId));
+        let refinementError = null;
+        let refinementOutput = { refinements: [] };
+        try {
+          refinementOutput = await provider.refineContent({
+            attempt: 1,
+            requests: refinementRequests,
+            pages: bodyPageContents.filter((page) => requestedPageIds.has(page.pageId)),
+          });
+        } catch (error) {
+          if (!new Set(["MODEL_JSON_INVALID", "MODEL_REQUEST_TIMEOUT"]).has(error?.code)) throw error;
+          refinementError = { code: error.code, message: error.message };
+        }
+        const refined = applySemanticRefinements(bodyPageContents, refinementRequests, refinementOutput);
+        await writeJson(path.join(outputDir, "content", "semantic-refinement.json"), {
+          schemaVersion: "1.0",
+          requests: refinementRequests,
+          report: refined.report,
+          ...(refinementError ? { error: refinementError } : {}),
+        });
+        if (refined.changed) {
+          const refinedById = new Map(refined.pageContents.map((page) => [page.pageId, page]));
+          contentOutput = {
+            ...contentOutput,
+            pageContents: contentOutput.pageContents.map((page) => refinedById.get(page.pageId) ?? page),
+          };
+          presentationOutput = {
+            ...presentationOutput,
+            pageContents: presentationOutput.pageContents.map((page) => refinedById.get(page.pageId) ?? page),
+          };
+          bodyPageContents = presentationOutput.pageContents.filter((page) => !isShellPage(page));
+          acceptedBodyIntents = acceptedBodyIntents.map((intent, index) => (
+            enrichPageIntent(intent, bodyPageContents[index])
+          ));
+          const bodyIntentByPageId = new Map(
+            bodyPageContents.map((page, index) => [page.pageId, acceptedBodyIntents[index]]),
+          );
+          pageIntents = presentationOutput.pageContents.map((page) => (
+            isShellPage(page) ? buildShellIntent(page) : bodyIntentByPageId.get(page.pageId)
+          ));
+          assertContentOutput(validators, contentOutput, input.rawMarkdown);
+          candidateSets = await options.visualCandidateProvider({
+            root,
+            skinId: input.skinId,
+            deckPlan: presentationOutput.deckPlan,
+            pageContents: presentationOutput.pageContents,
+            pageIntents,
+          });
+          if (!Array.isArray(candidateSets) || candidateSets.length !== pageIntents.length
+            || candidateSets.some((set) => !Array.isArray(set.candidates) || set.candidates.length === 0)) {
+            throw new WorkflowError(
+              "NO_RENDERABLE_VISUAL_CANDIDATES",
+              "semantic-refinement",
+              "局部语义细化后没有形成可渲染候选",
+              { candidateSets },
+            );
+          }
+        }
+      }
       const normalizedBodyPlans = normalizeVisualPlan(
         validators,
         compositionOutput,

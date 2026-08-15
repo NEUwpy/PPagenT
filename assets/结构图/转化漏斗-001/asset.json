@@ -13,6 +13,7 @@
   "showcase": "example.pptx",
   "parameters": ["title", "stages"],
   "runtime": {
+    "renderer": "legacy-builder",
     "entry": "generate.mjs",
     "builderExport": "buildFunnelConversion",
     "mapperExport": "mapPageContent",

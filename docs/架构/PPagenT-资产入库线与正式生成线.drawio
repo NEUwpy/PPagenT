@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-08-15T00:00:00.000Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="ppagent-dual-route" name="资产入库线与正式生成线">
+    <mxGraphModel dx="2100" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2100" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="title" value="PPagenT 双路线架构：资产入库与正式生成分离" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=28;fontStyle=1;fontColor=#1F2937;" vertex="1" parent="1">
+          <mxGeometry x="30" y="20" width="1500" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend" value="蓝色：离线资产建设　　绿色：正式生成　　紫色：两条路线唯一交汇点　　虚线：缺口反馈，不在本次任务临时造图" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=14;fontColor=#52606D;" vertex="1" parent="1">
+          <mxGeometry x="760" y="25" width="1300" height="35" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="intake-lane" value="" style="rounded=1;whiteSpace=wrap;html=1;arcSize=2;fillColor=#F4F8FF;strokeColor=#5B8DEF;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="25" y="85" width="2035" height="385" as="geometry"/>
+        </mxCell>
+        <mxCell id="intake-label" value="资产入库线｜离线建设" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=22;fontStyle=1;fontColor=#2457A7;" vertex="1" parent="1">
+          <mxGeometry x="50" y="100" width="300" height="35" as="geometry"/>
+        </mxCell>
+        <mxCell id="intake-subtitle" value="Luna 只负责来源 PPT 的蒸馏与入库；允许复现、扩散和返工，但候选资产不得自动晋升" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#5271A3;" vertex="1" parent="1">
+          <mxGeometry x="350" y="102" width="1250" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="i-source" value="&lt;b&gt;唯一原始 PPT 来源&lt;/b&gt;&lt;br&gt;PPT源/&amp;lt;文件名&amp;gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#5B8DEF;strokeWidth=2;fontSize=15;fontColor=#1F3F73;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="55" y="205" width="200" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="i-select" value="&lt;b&gt;选择典型来源页&lt;/b&gt;&lt;br&gt;保留完整视觉语法&lt;br&gt;确认 Visual Skill 语义" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#5B8DEF;strokeWidth=2;fontSize=15;fontColor=#1F3F73;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="300" y="195" width="200" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="i-distill" value="&lt;b&gt;Luna 蒸馏&lt;/b&gt;&lt;br&gt;理解原版美学&lt;br&gt;复现结构而非自由重绘" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#5B8DEF;strokeWidth=2;fontSize=15;fontColor=#1F3F73;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="545" y="195" width="200" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="i-component" value="&lt;b&gt;HTML Component&lt;/b&gt;&lt;br&gt;Style Group 唯一布局来源&lt;br&gt;CSS / 响应规则 / 替换接口" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#E8F1FF;strokeColor=#3575D3;strokeWidth=2;fontSize=15;fontStyle=1;fontColor=#174D87;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="790" y="190" width="220" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="i-expand" value="&lt;b&gt;版式扩散&lt;/b&gt;&lt;br&gt;声明数量/字数 State&lt;br&gt;按 Content Frame 响应布局" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#5B8DEF;strokeWidth=2;fontSize=15;fontColor=#1F3F73;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1055" y="195" width="210" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="i-validate" value="&lt;b&gt;轻量验证&lt;/b&gt;&lt;br&gt;代表性 State&lt;br&gt;Shell 页面 + 可编辑 PPTX" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#5B8DEF;strokeWidth=2;fontSize=15;fontColor=#1F3F73;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1310" y="195" width="210" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="i-review" value="用户明确&lt;br&gt;审核通过？" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF7E6;strokeColor=#D79B00;strokeWidth=2;fontSize=15;fontStyle=1;fontColor=#7A4B00;" vertex="1" parent="1">
+          <mxGeometry x="1570" y="190" width="140" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="core-library" value="&lt;b&gt;核心资产库&lt;/b&gt;&lt;br&gt;status = core&lt;br&gt;自描述能力包&lt;br&gt;正式生成线自动发现" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#F0E9FF;strokeColor=#7E57C2;strokeWidth=3;fontSize=16;fontStyle=1;fontColor=#4A2C82;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1780" y="180" width="240" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="intake-boundary" value="候选库 → 用户确认 → 核心库；代码生成成功不等于自动晋升" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#EAF2FF;strokeColor=#A8C4EF;dashed=1;fontSize=14;fontColor=#315C99;" vertex="1" parent="1">
+          <mxGeometry x="790" y="360" width="730" height="55" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e-i1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5B8DEF;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="i-source" target="i-select"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-i2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5B8DEF;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="i-select" target="i-distill"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-i3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5B8DEF;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="i-distill" target="i-component"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-i4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5B8DEF;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="i-component" target="i-expand"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-i5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5B8DEF;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="i-expand" target="i-validate"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-i6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5B8DEF;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="i-validate" target="i-review"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-i7" value="通过" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7E57C2;strokeWidth=3;endArrow=block;endFill=1;fontSize=14;fontStyle=1;fontColor=#4A2C82;" edge="1" parent="1" source="i-review" target="core-library"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-i-back" value="修改后重验" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;strokeColor=#D79B00;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;fontColor=#7A4B00;" edge="1" parent="1" source="i-review" target="i-component">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1640" y="345"/><mxPoint x="900" y="345"/></Array></mxGeometry>
+        </mxCell>
+
+        <mxCell id="generation-lane" value="" style="rounded=1;whiteSpace=wrap;html=1;arcSize=2;fillColor=#F3FBF6;strokeColor=#54A675;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="25" y="505" width="2035" height="535" as="geometry"/>
+        </mxCell>
+        <mxCell id="generation-label" value="正式生成 / 出库线｜在线运行" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=22;fontStyle=1;fontColor=#25704A;" vertex="1" parent="1">
+          <mxGeometry x="50" y="520" width="400" height="35" as="geometry"/>
+        </mxCell>
+        <mxCell id="generation-subtitle" value="内容导演负责叙事与拆页；视觉导演只从合法能力中选择和编排；程序完成确定性映射、编译与质量检查" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#3F8060;" vertex="1" parent="1">
+          <mxGeometry x="450" y="522" width="1450" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="g-input" value="&lt;b&gt;业务输入&lt;/b&gt;&lt;br&gt;稿件/&amp;lt;文件名&amp;gt;&lt;br&gt;Skin + DeepSeek API" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#54A675;strokeWidth=2;fontSize=15;fontColor=#235C3E;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="55" y="635" width="195" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="g-content" value="&lt;b&gt;内容导演&lt;/b&gt;&lt;br&gt;叙事 / 拆页 / 页面内容&lt;br&gt;DeckPlan + PageContent" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#54A675;strokeWidth=2;fontSize=15;fontColor=#235C3E;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="290" y="635" width="210" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="g-intent" value="&lt;b&gt;视觉导演：意图&lt;/b&gt;&lt;br&gt;关系 / 目的 / 数量&lt;br&gt;不直接画结构" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#54A675;strokeWidth=2;fontSize=15;fontColor=#235C3E;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="540" y="635" width="200" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="g-candidates" value="&lt;b&gt;程序生成合法候选&lt;/b&gt;&lt;br&gt;只读取核心资产能力卡&lt;br&gt;语义 / 容量 / 媒体过滤" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#EAF8EF;strokeColor=#3D9363;strokeWidth=2;fontSize=15;fontStyle=1;fontColor=#205B3C;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="780" y="625" width="230" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="g-compose" value="&lt;b&gt;视觉导演：编排&lt;/b&gt;&lt;br&gt;选择 Skill / Style Group&lt;br&gt;填写组件绑定与整套节奏" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#54A675;strokeWidth=2;fontSize=15;fontColor=#235C3E;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="625" width="230" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="g-decision" value="&lt;b&gt;确定性决策对象&lt;/b&gt;&lt;br&gt;LayoutDecision&lt;br&gt;RenderPayload" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#54A675;strokeWidth=2;fontSize=15;fontColor=#235C3E;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="635" width="200" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="g-resolve" value="&lt;b&gt;HTML Component 求布局&lt;/b&gt;&lt;br&gt;按最终 Content Frame&lt;br&gt;生成 ResolvedVisualTree" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#EAF8EF;strokeColor=#3D9363;strokeWidth=2;fontSize=15;fontStyle=1;fontColor=#205B3C;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1560" y="625" width="230" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="g-compile" value="&lt;b&gt;Shell 装配 + 通用编译器&lt;/b&gt;&lt;br&gt;原生文字 / 形状 / 图片 / 连线&lt;br&gt;不重算 Style Group 布局" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#54A675;strokeWidth=2;fontSize=15;fontColor=#235C3E;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1830" y="625" width="205" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="g-output" value="&lt;b&gt;正式交付&lt;/b&gt;&lt;br&gt;可靠、原生可编辑 PPTX&lt;br&gt;Shell 完整 + 内容可修改" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#DFF3E7;strokeColor=#2F855A;strokeWidth=3;fontSize=16;fontStyle=1;fontColor=#1D5A3B;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1775" y="855" width="260" height="115" as="geometry"/>
+        </mxCell>
+        <mxCell id="g-fallback" value="&lt;b&gt;无合法结构资产&lt;/b&gt;&lt;br&gt;已登记简单排版 → 必要时拆页&lt;br&gt;仍不允许临时自创结构图" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFF5F2;strokeColor=#D96C4A;strokeWidth=2;fontSize=15;fontColor=#8A3D27;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="785" y="840" width="300" height="105" as="geometry"/>
+        </mxCell>
+        <mxCell id="g-gap" value="&lt;b&gt;能力缺口只进入下一次独立入库任务&lt;/b&gt;&lt;br&gt;本次正式生成不会回写或自动晋升核心资产" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#F7F7F8;strokeColor=#8A94A3;dashed=1;fontSize=14;fontColor=#4B5563;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="850" width="480" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e-g1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#54A675;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="g-input" target="g-content"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-g2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#54A675;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="g-content" target="g-intent"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-g3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#54A675;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="g-intent" target="g-candidates"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-g4" value="有合法候选" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#54A675;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;fontColor=#25704A;" edge="1" parent="1" source="g-candidates" target="g-compose"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-g5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#54A675;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="g-compose" target="g-decision"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-g6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#54A675;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="g-decision" target="g-resolve"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-g7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#54A675;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="g-resolve" target="g-compile"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-g8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2F855A;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="g-compile" target="g-output"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-fallback1" value="无合法候选" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D96C4A;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;fontColor=#8A3D27;" edge="1" parent="1" source="g-candidates" target="g-fallback"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-fallback2" value="正文 Composition" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D96C4A;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;fontColor=#8A3D27;" edge="1" parent="1" source="g-fallback" target="g-compile"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1120" y="1000"/><mxPoint x="1930" y="1000"/></Array></mxGeometry></mxCell>
+        <mxCell id="e-core-read" value="只读：能力卡 + 已登记组件" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;strokeColor=#7E57C2;strokeWidth=3;endArrow=block;endFill=1;fontSize=14;fontStyle=1;fontColor=#4A2C82;" edge="1" parent="1" source="core-library" target="g-candidates"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1900" y="485"/><mxPoint x="895" y="485"/></Array></mxGeometry></mxCell>
+        <mxCell id="e-gap-feedback" value="另起入库任务" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;strokeColor=#8A94A3;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;fontColor=#4B5563;" edge="1" parent="1" source="g-fallback" target="g-gap"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

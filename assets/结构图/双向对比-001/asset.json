@@ -13,6 +13,7 @@
   "showcase": "example.pptx",
   "parameters": ["title", "left", "right", "centerLabel", "left.polarity", "right.polarity"],
   "runtime": {
+    "renderer": "legacy-builder",
     "entry": "generate.mjs",
     "builderExport": "buildComparison",
     "mapperExport": "mapPageContent",

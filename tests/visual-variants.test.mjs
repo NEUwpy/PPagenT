@@ -14,6 +14,7 @@ import {
 } from "../src/asset-runtime/component-builders.mjs";
 import { northeasternUniversitySkin } from "../src/runtime/skins/northeastern-university.mjs";
 import {
+  closeHtmlComponentRuntime,
   listStructureAssetBuilders,
   renderStructureAsset,
 } from "../src/runtime/assets.mjs";
@@ -179,7 +180,7 @@ test("正式候选只暴露已进入核心资产库的蒸馏变体", async () =>
   }
 });
 
-test("自动候选会排除缺少 mapper 或 builder 的变体", async () => {
+test("自动候选会排除缺少 mapper 或可调用 renderer 的变体", async () => {
   const noMapper = await listRenderableVisualVariants({ root, mapperAssetIds: [] });
   assert.deepEqual(noMapper, []);
 
@@ -305,11 +306,11 @@ test("顺序流程的中间强调只改变视觉权重，不得把节点重排�
   assert.equal(normalized.emphasisStep.title, "规律");
 });
 
-test("所有登记变体都能经过统一运行时真实创建幻灯片对象", () => {
+test("所有登记变体都能经过统一运行时真实创建幻灯片对象", async () => {
   const presentation = createPresentation();
   const skin = {
     componentSourceFrame: { left: 40, top: 135, width: 1200, height: 520 },
-    bodyFrame: { left: 92, top: 150, width: 1096, height: 430 },
+    bodyFrame: { left: 55, top: 166, width: 1170, height: 492 },
     componentTheme: {},
   };
   const payloads = [
@@ -495,11 +496,46 @@ test("所有登记变体都能经过统一运行时真实创建幻灯片对象",
     },
   ];
 
-  for (const payload of payloads) {
-    const slide = presentation.slides.add();
-    renderStructureAsset(slide, payload, skin);
+  try {
+    for (const payload of payloads) {
+      const slide = presentation.slides.add();
+      await renderStructureAsset(slide, payload, skin);
+    }
+  } finally {
+    await closeHtmlComponentRuntime();
   }
   assert.equal(presentation.slides.items.length, payloads.length);
+});
+
+test("并列 HTML Component 用同一组件解析 3、5、7 项", async () => {
+  const presentation = createPresentation();
+  const skin = {
+    componentSourceFrame: { left: 55, top: 166, width: 1170, height: 492 },
+    bodyFrame: { left: 55, top: 166, width: 1170, height: 492 },
+    componentTheme: {},
+  };
+  try {
+    for (const count of [3, 5, 7]) {
+      const slide = presentation.slides.add();
+      await renderStructureAsset(slide, {
+        assetId: "parallel-cards-001",
+        parameters: {
+          visualVariantId: "parallel-cards-p135",
+          items: Array.from({ length: count }, (_, index) => ({
+            title: `能力${index + 1}`,
+            body: `第${index + 1}项说明`,
+          })),
+        },
+      }, skin);
+    }
+    const inspection = await presentation.inspect({ kind: "slide,textbox,shape", maxChars: 100000 });
+    const rows = inspection.ndjson.split(/\r?\n/).filter(Boolean).map(JSON.parse);
+    const slideRows = rows.filter((row) => row.kind === "slide");
+    assert.deepEqual(slideRows.map((row) => row.textShapes), [9, 15, 21]);
+    assert.equal(rows.filter((row) => row.name?.endsWith("-title")).length, 15);
+  } finally {
+    await closeHtmlComponentRuntime();
+  }
 });
 
 test("顺序流程把节点内分点渲染为两行而不是新步骤", () => {

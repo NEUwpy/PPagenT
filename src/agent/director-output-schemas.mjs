@@ -52,7 +52,32 @@ export async function loadDirectorOutputSchemas(root) {
         type: "object",
         additionalProperties: false,
         required: ["visualPlan", "compositionPlan"],
-        properties: { visualPlan, compositionPlan },
+        properties: {
+          visualPlan,
+          compositionPlan,
+          semanticRefinementRequests: {
+            type: "array",
+            maxItems: 8,
+            items: {
+              type: "object",
+              additionalProperties: false,
+              required: ["pageId", "familyId", "variantId", "itemIds", "reason"],
+              properties: {
+                pageId: { type: "string", minLength: 1 },
+                familyId: { type: "string", minLength: 1 },
+                variantId: { type: "string", minLength: 1 },
+                itemIds: {
+                  type: "array",
+                  minItems: 1,
+                  maxItems: 6,
+                  uniqueItems: true,
+                  items: { type: "string", minLength: 1 },
+                },
+                reason: { type: "string", minLength: 1 },
+              },
+            },
+          },
+        },
       },
     },
     visualReview: { name: "ppagent_visual_review", schema: visualReview },

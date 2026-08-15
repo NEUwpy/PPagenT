@@ -13,6 +13,7 @@
   "showcase": "example.pptx",
   "parameters": ["title", "problemTitle", "improvementTitle", "problems", "improvements"],
   "runtime": {
+    "renderer": "legacy-builder",
     "entry": "generate.mjs",
     "builderExport": "buildProblemImprovement",
     "mapperExport": "mapPageContent",

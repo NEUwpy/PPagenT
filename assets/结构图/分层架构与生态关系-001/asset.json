@@ -13,6 +13,7 @@
   "showcase": "example.pptx",
   "parameters": ["title", "sources", "platform", "apps"],
   "runtime": {
+    "renderer": "legacy-builder",
     "entry": "generate.mjs",
     "builderExport": "buildLayeredArchitectureAdaptive",
     "mapperExport": "mapPageContent",

@@ -13,6 +13,7 @@ test("模型 DirectorProvider 为两位导演和研发审查调用传入明确�
     identity: "fake:model",
     async generateJson(input) {
       calls.push(input);
+      if (input.outputSchema.name === "visualIntent") return { pageIntents: [] };
       return {};
     },
   };
@@ -36,22 +37,27 @@ test("模型 DirectorProvider 为两位导演和研发审查调用传入明确�
   });
   await provider.contentDirector({ rawMarkdown: "原稿", attempt: 1 });
   await provider.contentReview({ rawMarkdown: "原稿", attempt: 1, deckPlan: {}, pageContents: [] });
+  await provider.refineContent({
+    requests: [{ pageId: "p1", itemIds: ["i1"], maxPointsPerItem: 3, maxPointChars: 8 }],
+    pages: [{ pageId: "p1", sourceText: "原稿", items: [] }],
+  });
   await provider.visualDirector({ phase: "intent", attempt: 1, deckPlan: {}, pageContents: [] });
   await provider.visualDirector({ phase: "composition", attempt: 1, deckPlan: {}, pageContents: [], candidateSets: [] });
   await provider.visualReview({ stage: "post-render", pageEvidence: ["a.png"], attempt: 1 });
   assert.deepEqual(calls.map((call) => call.outputSchema.name), [
-    "contentDirector", "contentReview", "visualIntent", "visualComposition", "visualReview",
+    "contentDirector", "contentReview", "ppagent_content_refinement", "visualIntent", "visualComposition", "visualReview",
   ]);
   assert.deepEqual(calls.at(-1).imagePaths, ["a.png"]);
   assert.equal(calls[0].context.executionGuidelines, "内容准则");
-  assert.equal(calls[2].context.executionGuidelines, "视觉准则");
-  assert.equal(calls[2].context.allowedPurposeVocabulary[0].key, "explain_topics");
+  assert.deepEqual(Object.keys(calls[2].context).sort(), ["pages", "requests"]);
+  assert.equal(calls[3].context.executionGuidelines, "视觉准则");
+  assert.equal(calls[3].context.allowedPurposeVocabulary[0].key, "explain_topics");
   assert.deepEqual(
-    calls[2].outputSchema.schema.properties.pageIntents.items.properties.purposeKey.enum,
+    calls[3].outputSchema.schema.properties.pageIntents.items.properties.purposeKey.enum,
     ["explain_topics"],
   );
-  assert.equal(calls[3].context.executionGuidelines, "视觉准则");
-  assert.match(calls[3].task, /CompositionPlan/);
+  assert.equal(calls[4].context.executionGuidelines, "视觉准则");
+  assert.match(calls[4].task, /CompositionPlan/);
   assert.equal(provider.metadata.providerKind, "live-schema-aware-model-provider");
 });
 

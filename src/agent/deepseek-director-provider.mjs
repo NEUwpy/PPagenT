@@ -54,7 +54,15 @@ export class DeepSeekJsonModel {
     this.identity = `deepseek-chat-completions:${model}:${this.thinking}`;
   }
 
-  async generateJson({ role, task, context, outputSchema, imagePaths = [] }) {
+  async generateJson({
+    role,
+    task,
+    context,
+    outputSchema,
+    imagePaths = [],
+    maxJsonAttempts = this.maxJsonAttempts,
+    requestTimeoutMs = this.requestTimeoutMs,
+  }) {
     if (!outputSchema?.name || !outputSchema?.schema) throw new Error("模型调用缺少输出 JSON schema");
     if (imagePaths.length) {
       throw new Error("DeepSeek V4 Flash Provider 当前不支持 PPagenT 的逐页图片审查；请使用 production 模式，或为 development 模式配置视觉模型 Provider");
@@ -80,7 +88,7 @@ export class DeepSeekJsonModel {
     if (this.thinking === "enabled") body.reasoning_effort = this.reasoningEffort;
 
     let lastError;
-    for (let attempt = 1; attempt <= this.maxJsonAttempts; attempt += 1) {
+    for (let attempt = 1; attempt <= maxJsonAttempts; attempt += 1) {
       const requestBody = structuredClone(body);
       if (attempt > 1) {
         requestBody.messages[0].content += " 上一响应为空或不是可解析 JSON；本次必须正确转义 JSON 字符串中的双引号。";
@@ -99,12 +107,12 @@ export class DeepSeekJsonModel {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(requestBody),
-          signal: AbortSignal.timeout(this.requestTimeoutMs),
+          signal: AbortSignal.timeout(requestTimeoutMs),
         });
       } catch (error) {
         lastError = error;
-        if (attempt < this.maxJsonAttempts) continue;
-        const requestError = new Error(`DeepSeek 请求在 ${this.requestTimeoutMs}ms 内没有完成：${error.message}`);
+        if (attempt < maxJsonAttempts) continue;
+        const requestError = new Error(`DeepSeek 请求在 ${requestTimeoutMs}ms 内没有完成：${error.message}`);
         requestError.code = "MODEL_REQUEST_TIMEOUT";
         throw requestError;
       }
@@ -117,7 +125,7 @@ export class DeepSeekJsonModel {
         lastError = error;
       }
     }
-    const error = new Error(`DeepSeek 连续 ${this.maxJsonAttempts} 次没有返回可解析 JSON：${lastError?.message ?? "unknown error"}`);
+    const error = new Error(`DeepSeek 连续 ${maxJsonAttempts} 次没有返回可解析 JSON：${lastError?.message ?? "unknown error"}`);
     error.code = "MODEL_JSON_INVALID";
     throw error;
   }

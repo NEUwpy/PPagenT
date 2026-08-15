@@ -111,6 +111,28 @@ test("DeepSeek Provider 对非法 JSON 只进行一次受控重答", async () =>
   assert.equal(calls, 2);
 });
 
+test("局部调用可以覆盖为单次尝试", async () => {
+  let calls = 0;
+  const model = new DeepSeekJsonModel({
+    apiKey: "test-key",
+    fetchImpl: async () => {
+      calls += 1;
+      return {
+        ok: true,
+        async json() { return { choices: [{ message: { content: "not-json" } }] }; },
+      };
+    },
+  });
+  await assert.rejects(model.generateJson({
+    role: "局部调用",
+    task: "测试",
+    context: {},
+    outputSchema: { name: "test", schema: { type: "object" } },
+    maxJsonAttempts: 1,
+  }), (error) => error.code === "MODEL_JSON_INVALID");
+  assert.equal(calls, 1);
+});
+
 test("DeepSeek Provider 的思考响应为空时第二次关闭思考直接返回 JSON", async () => {
   const requests = [];
   const model = new DeepSeekJsonModel({

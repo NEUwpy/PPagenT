@@ -28,6 +28,8 @@ function publicComposition(layout) {
 
 function publicVariant(variant, contract, compositions) {
   return {
+    skillId: variant.skillId,
+    styleGroupId: variant.styleGroupId,
     familyId: variant.familyId,
     assetId: variant.assetId,
     variantId: variant.variantId,

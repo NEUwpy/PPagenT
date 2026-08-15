@@ -13,6 +13,7 @@
   "showcase": "example.pptx",
   "parameters": ["title", "effect", "branches"],
   "runtime": {
+    "renderer": "legacy-builder",
     "entry": "generate.mjs",
     "builderExport": "buildFishboneAnalysis",
     "mapperExport": "mapPageContent",

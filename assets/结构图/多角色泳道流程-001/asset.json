@@ -13,6 +13,7 @@
   "showcase": "example.pptx",
   "parameters": ["title", "lanes", "stages", "tasks", "conclusion"],
   "runtime": {
+    "renderer": "legacy-builder",
     "entry": "generate.mjs",
     "builderExport": "buildSwimlaneProcess",
     "mapperExport": "mapPageContent",

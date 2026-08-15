@@ -1,6 +1,6 @@
 {
   "name": "ppagent",
-  "version": "0.6.3",
+  "version": "0.7.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -13,23 +13,22 @@
     "audit:coverage": "node src/tools/audit-asset-coverage-checklist.mjs .",
     "audit:core:refresh": "node src/tools/audit-core-asset-quality.mjs . --write-report",
     "distill:render": "node src/tools/render-pptx-evidence.mjs",
-    "distill:audit": "node src/tools/audit-distillation-batch.mjs --root . --write",
-    "distill:governance": "node src/tools/audit-distillation-governance.mjs .",
-    "distill:review": "node src/tools/build-intake-user-review.mjs",
-    "intake:batch": "node src/tools/build-intake-user-review.mjs --batch-config",
     "assets:discover": "node src/tools/list-core-asset-packages.mjs .",
+    "assets:dashboard": "node src/tools/serve-visual-skill-dashboard.mjs",
+    "assets:dashboard:build": "node src/tools/build-visual-skill-dashboard.mjs",
+    "assets:dashboard:exe": "node src/tools/build-dashboard-exe.mjs",
     "validate:contracts": "node src/tools/validate-rule-layer.mjs .",
     "match": "node src/tools/match-page-intent.mjs --root .",
     "agent:run": "node src/agent/run-workflow.mjs --root .",
     "agent:run:openai": "node src/agent/run-workflow.mjs --root . --provider src/agent/openai-provider-from-env.mjs",
     "agent:run:deepseek": "node src/agent/run-workflow.mjs --root . --provider src/agent/deepseek-provider-from-env.mjs",
-    "agent:legacy": "node src/agent/run-manuscript.mjs --root .",
     "intent:stats": "node src/tools/compute-page-intent.mjs",
     "test:selection": "node --test --test-concurrency=1 tests/*.test.mjs",
     "test": "npm run validate:contracts && npm run test:selection && npm run audit"
   },
   "dependencies": {
     "ajv": "^8.17.1",
-    "jszip": "^3.10.1"
+    "jszip": "^3.10.1",
+    "playwright-core": "^1.62.1"
   }
 }

@@ -39,7 +39,8 @@ async function loadPackage(manifestPath) {
   if (asset.status !== "core" || !asset.runtime) return null;
 
   const runtime = asset.runtime;
-  const renderer = runtime.renderer ?? "component";
+  const renderer = runtime.renderer;
+  requireValue(new Set(["skin", "html-component", "legacy-builder"]).has(renderer), `${asset.id} 的 runtime.renderer 非法或缺失`);
   requireValue(typeof asset.id === "string" && asset.id, `${manifestPath} 缺少资产 id`);
   requireValue(typeof runtime.entry === "string" && runtime.entry, `${asset.id} 缺少 runtime.entry`);
   requireValue(typeof runtime.mapperExport === "string" && runtime.mapperExport, `${asset.id} 缺少 mapperExport`);
@@ -71,14 +72,18 @@ async function loadPackage(manifestPath) {
   requireValue(inside(assetDir, entryPath), `${asset.id} 的运行入口必须位于资产目录内`);
   const module = await import(pathToFileURL(entryPath).href);
   const builder = runtime.builderExport ? module[runtime.builderExport] : null;
+  const component = runtime.componentExport ? module[runtime.componentExport] : null;
   const mapper = module[runtime.mapperExport];
-  if (renderer === "component") {
+  if (renderer === "legacy-builder") {
     requireValue(typeof runtime.builderExport === "string" && runtime.builderExport, `${asset.id} 缺少 builderExport`);
     requireValue(typeof builder === "function", `${asset.id} 没有导出 ${runtime.builderExport}`);
+  } else if (renderer === "html-component") {
+    requireValue(typeof runtime.componentExport === "string" && runtime.componentExport, `${asset.id} 缺少 componentExport`);
+    requireValue(component && typeof component.renderMarkup === "function", `${asset.id} 没有导出可用的 ${runtime.componentExport}`);
   }
   requireValue(typeof mapper === "function", `${asset.id} 没有导出 ${runtime.mapperExport}`);
 
-  return { assetId: asset.id, asset, assetDir, manifestPath, runtime, builder, mapper };
+  return { assetId: asset.id, asset, assetDir, manifestPath, runtime, builder, component, mapper };
 }
 
 export async function discoverCoreAssetPackages(root = defaultRoot) {

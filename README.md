@@ -47,9 +47,9 @@ PPagenT 采用“AI 理解与选择、参数化代码确定性绘制”的生成
 - `PPT源/`：全部原始 PPT 的唯一目录；整目录不进入 Git，换电脑时单独复制到仓库根目录。
 - `结构样本池/`：保存所有值得继续观察的单页来源样本，允许重复和暂未归类。
 - `备选资产/`：新蒸馏、重复版式和待比较方案的审核区。
-- `src/asset-runtime/`：核心资产与备选资产共用的绘制代码。
-- `experiments/真实稿件/`：按稿件名和版本保存页面规划与可重复生成入口。
-- `workbench/`：历史回放快照、蒸馏批次和临时处理区，不保存原始 PPT，也不作为新任务的正式稿件入口。
+- `src/visual-runtime/`：把 HTML Component 解析为唯一的 `ResolvedVisualTree`，再编译成原生可编辑 PPTX 对象。
+- `src/asset-runtime/`：尚未迁移的已确认核心资产 Builder；只作为 `legacy-builder` 兼容区，不再接收新 Style Group。
+- `experiments/`：只保留仍在使用的最小架构实验和 Shell 标注，不再提交整套稿件运行输出或批量渲染物。
 
 ## 公开仓库范围
 
@@ -80,4 +80,4 @@ npm test
 
 默认实时模型入口为 `npm run agent:run:deepseek`，使用 `deepseek-v4-flash`；它读取环境变量或 Git 忽略的 `config/deepseek.local.json`。OpenAI Provider 仍可通过 `npm run agent:run:openai` 使用。正式入口默认只调用内容导演和视觉导演；具体配置与密钥边界见[运行配置信息](docs/运行配置信息.md)。
 
-当前页面生成器依赖 Codex 工作区内置、尚未公开发布的 `@oai/artifact-tool`，因此不把它写入公共 npm 依赖；规则层、元数据审计和选择测试可以通过公开依赖独立运行。
+HTML Component 解析使用公开依赖 `playwright-core`，运行电脑需安装 Edge/Chrome，或通过 `BROWSER_EXECUTABLE_PATH` 指定浏览器。PPTX 对象生成仍依赖 Codex 工作区内置、尚未公开发布的 `@oai/artifact-tool`，因此不把后者写入公共 npm 依赖。

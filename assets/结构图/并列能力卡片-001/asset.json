@@ -13,8 +13,10 @@
   "showcase": "example.pptx",
   "parameters": ["title", "items"],
   "runtime": {
-    "entry": "generate.mjs",
-    "builderExport": "buildParallelCards",
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
     "mapperExport": "mapPageContent",
     "skillId": "parallel",
     "styleGroupId": "parallel-cards-p135",
@@ -28,7 +30,8 @@
     "sourceFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
     "stateContract": {
       "resolver": "itemCount",
-      "states": [3, 4, 5, 6, 7]
+      "states": [3, 4, 5, 6, 7],
+      "previewDefault": 4
     },
     "mediaContract": { "mode": "no-image", "required": [] },
     "contract": {

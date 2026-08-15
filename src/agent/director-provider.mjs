@@ -39,5 +39,8 @@ export function defineDirectorProvider(provider, options = {}) {
   for (const name of DEVELOPMENT_REVIEW_METHODS) {
     if (typeof provider[name] === "function") defined[name] = provider[name].bind(provider);
   }
+  if (typeof provider.refineContent === "function") {
+    defined.refineContent = provider.refineContent.bind(provider);
+  }
   return Object.freeze(defined);
 }

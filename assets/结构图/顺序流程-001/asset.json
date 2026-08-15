@@ -13,6 +13,7 @@
   "showcase": "example.pptx",
   "parameters": ["title", "steps", "steps[].points"],
   "runtime": {
+    "renderer": "legacy-builder",
     "entry": "generate.mjs",
     "builderExport": "buildSequentialProcess",
     "mapperExport": "mapPageContent",

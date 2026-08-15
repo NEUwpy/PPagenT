@@ -13,6 +13,7 @@
   "showcase": "example.pptx",
   "parameters": ["title", "quadrants"],
   "runtime": {
+    "renderer": "legacy-builder",
     "entry": "generate.mjs",
     "builderExport": "buildFrameworkMatrix",
     "mapperExport": "mapPageContent",

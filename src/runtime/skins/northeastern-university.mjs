@@ -7,7 +7,7 @@ import {
   exportTemplateMappedQa,
   prepareTemplateMappedStarter,
 } from "../../asset-runtime/template-utils.mjs";
-import { isSkinOnlyAsset, renderStructureAsset } from "../assets.mjs";
+import { closeHtmlComponentRuntime, isSkinOnlyAsset, renderStructureAsset } from "../assets.mjs";
 import { fitChineseTextToFrame } from "../../render/chinese-typography.mjs";
 import { loadCompositionLayouts } from "../../composition/layouts.mjs";
 import { renderPageComposition } from "../../render/page-composition.mjs";
@@ -270,30 +270,34 @@ export async function renderNortheasternUniversityDeck({
   const slides = await applyTemplateMappedRecipes(presentation, recipes);
   const layouts = await loadCompositionLayouts(projectRoot);
 
-  pages.forEach((page, index) => {
-    if (!page.composition) {
-      if (!isSkinOnlyAsset(page.payload.assetId)) renderStructureAsset(slides[index], page.payload, northeasternUniversitySkin);
-      return;
+  try {
+    for (const [index, page] of pages.entries()) {
+      if (!page.composition) {
+        if (!isSkinOnlyAsset(page.payload.assetId)) await renderStructureAsset(slides[index], page.payload, northeasternUniversitySkin);
+        continue;
+      }
+      const layout = layouts.get(page.composition.compositionId);
+      if (!layout) throw new Error(`Unknown composition layout: ${page.composition.compositionId}`);
+      const { componentFrame } = renderPageComposition(
+        slides[index],
+        page.content,
+        layout,
+        page.composition,
+        northeasternUniversitySkin.bodyFrame,
+        northeasternUniversitySkin.typographyRoles,
+      );
+      if (!isSkinOnlyAsset(page.payload.assetId)) {
+        if (!componentFrame) throw new Error(`${page.composition.compositionId} is missing a component slot`);
+        await renderStructureAsset(slides[index], page.payload, northeasternUniversitySkin, componentFrame);
+      }
     }
-    const layout = layouts.get(page.composition.compositionId);
-    if (!layout) throw new Error(`Unknown composition layout: ${page.composition.compositionId}`);
-    const { componentFrame } = renderPageComposition(
-      slides[index],
-      page.content,
-      layout,
-      page.composition,
-      northeasternUniversitySkin.bodyFrame,
-      northeasternUniversitySkin.typographyRoles,
-    );
-    if (!isSkinOnlyAsset(page.payload.assetId)) {
-      if (!componentFrame) throw new Error(`${page.composition.compositionId} is missing a component slot`);
-      renderStructureAsset(slides[index], page.payload, northeasternUniversitySkin, componentFrame);
-    }
-  });
 
-  await fs.mkdir(path.dirname(outputPptx), { recursive: true });
-  const pptx = await PresentationFile.exportPptx(presentation);
-  await pptx.save(outputPptx);
-  if (qaDir) await exportTemplateMappedQa(presentation, qaDir);
-  return outputPptx;
+    await fs.mkdir(path.dirname(outputPptx), { recursive: true });
+    const pptx = await PresentationFile.exportPptx(presentation);
+    await pptx.save(outputPptx);
+    if (qaDir) await exportTemplateMappedQa(presentation, qaDir);
+    return outputPptx;
+  } finally {
+    await closeHtmlComponentRuntime();
+  }
 }

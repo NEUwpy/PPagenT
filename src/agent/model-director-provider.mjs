@@ -1,4 +1,5 @@
 import { applyStructuralHints, readStructuralCues } from "./structural-cue-reader.mjs";
+import { refinementOutputSchema } from "./semantic-refinement.mjs";
 
 function assertModel(model, label) {
   if (!model || typeof model.generateJson !== "function") {
@@ -182,6 +183,7 @@ export function createModelDirectorProvider({
   guidelines = {},
 }) {
   const content = assertModel(contentModel, "contentModel");
+  const refinement = structureModel ? assertModel(structureModel, "structureModel") : content;
   const visualIntent = assertModel(visualIntentModel, "visualIntentModel");
   const visualComposition = assertModel(visualCompositionModel, "visualCompositionModel");
   const reviewer = assertModel(reviewerModel, "reviewerModel");
@@ -191,6 +193,7 @@ export function createModelDirectorProvider({
       providerKind: "live-schema-aware-model-provider",
       contentModel: content.identity ?? "unknown",
       structureModel: structureModel?.identity ?? "disabled",
+      contentRefinementModel: refinement.identity ?? "unknown",
       visualIntentModel: visualIntent.identity ?? "unknown",
       visualCompositionModel: visualComposition.identity ?? "unknown",
       reviewerModel: reviewer.identity ?? "unknown",
@@ -215,6 +218,16 @@ export function createModelDirectorProvider({
         enforceSectionPageContract(contentOutput, input.rawMarkdown, structuralHints),
         structuralHints,
       );
+    },
+    refineContent(input) {
+      return refinement.generateJson({
+        role: "PPagenT 内容局部细化器",
+        task: "只处理 requests 指定的页面和 item。检查对应 page.sourceText 是否明确包含属于该主节点的二级支撑点；冒号后的并列短项，以及‘包括、分为、分别、有’等词引出的明确枚举，若语义上说明目标 item，必须逐项提取。有则返回短 points，只有确实没有明确枚举时才返回空 items。不得改变页面、主节点、标题、正文或顺序，不得补充常识和推断。每个 point.sourceFragment 必须逐字复制 sourceText 中能够支持该 point 的最短连续片段；point.text 是忠实短写，并满足请求中的数量与字数上限。不同页面的请求在这一次响应中一并完成。",
+        context: { requests: input.requests, pages: input.pages },
+        outputSchema: refinementOutputSchema(),
+        maxJsonAttempts: 1,
+        requestTimeoutMs: 30000,
+      });
     },
     contentReview(input) {
       return reviewer.generateJson({
@@ -255,6 +268,8 @@ export function createModelDirectorProvider({
         task: "先为每页从 candidateSets 中选择合法的整页 composition，再选择 familyId/variantId；compositionId、familyId、variantId、silhouette 都必须逐字复制同一个候选。候选的 contentContract 是 Visual Skill 自己声明的内容接口：items 是主节点，points 是内容导演提供的节点内分点；视觉导演不得把 points 提升为同级节点。若 contentContract.bindings 非空，视觉导演必须在该页 componentBindings 中按声明完成视觉内容适配：bindingId 必须来自候选，per-component-item 表示每个 componentItemId 各输出一组；entries 数量、单条字数和跨组平衡必须满足契约，preferredItems 是来源内容允许时的优先数量。每条 entry.text 是观众可见的精炼短句，entry.sourceFragment 必须逐字摘自该页 sourceText 或对应内容项，作为不可见依据；禁止增加来源没有的事实，也禁止把整段正文作为一个长条目。没有 bindings 声明时不得自行输出 componentBindings。如果候选中存在 fallbackBody=false、且语义关系、主节点数量和文字容量均适配的结构组件，默认选择该结构组件；只有结构不能真实澄清关系、需要原稿没有的媒体、或容量不成立时才选择 fallbackBody=true 的简单排版，reason 必须具体写出不适配原因，不能仅以低密度、文字较少或编辑页也能容纳为由放弃结构。sequence 若表达任务、职责交接或操作步骤且没有日期、阶段年份或里程碑证据，优先选择 sequential-process；timeline-roadmap 只用于明确的时间进程、历史演进或里程碑。textSlots 只能使用该候选 compositions 中所选 composition 声明的 role=text 槽位 id，并且每个文字槽位恰好填写一次；role=component 或 role=image 的槽位不得写入 textSlots。每个内容项的非空 title 和 body 都必须分别被承载：full 同时承载两者，title 或 body 只承载对应字段，必要时同一内容项可分别进入两个槽位。componentContentMode=full 表示组件负责该内容项以及契约化适配结果；titles-only 只有在每个被省略的正文与 points 同时进入合法文字槽时才允许，不能把‘组件能够显示正文’臆测成 tooltip。若 previousResolution.feedback 非空，必须逐项修正其中指出的非法选择、内容遗漏或节奏重复，并优先使用反馈给出的 legalAlternatives。明确内容进入组件还是文字槽位，并在整套尺度控制轮廓、图文比例与节奏。不得自创结构、版式、bindingId、槽位或伪造 ID；输出 VisualPlan 与 CompositionPlan。",
         context: {
           executionGuidelines: guidelines.visual ?? "",
+          semanticRefinementAllowed: input.semanticRefinementAllowed === true,
+          semanticRefinementGuidance: "仅当所选候选允许 points，且 sourceText 明确含有属于某个主节点、但 PageContent 尚未提取的二级枚举时，才输出 semanticRefinementRequests。请求必须引用所选候选的 familyId/variantId 和缺失 points 的 itemIds；不得为丰富画面请求细节，不得请求 adaptationOwner=visual-director 的绑定型候选。即使发出请求，也必须照常输出完整 VisualPlan 与 CompositionPlan。",
           attempt: input.attempt,
           skinId: input.skinId,
           deckPlan: input.deckPlan,

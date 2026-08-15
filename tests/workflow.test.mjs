@@ -286,6 +286,79 @@ test("产品工作流只调用内容导演和视觉导演，不调用研发审�
   await assert.rejects(fs.access(path.join(outputDir, "visual", "attempt-01", "visual-review-post.json")));
 });
 
+test("视觉导演可用一次小请求补齐节点内分点且不重跑整篇内容或视觉编排", async (t) => {
+  const outputDir = await makeTempDir(t);
+  let contentCalls = 0;
+  let visualCalls = 0;
+  let refinementCalls = 0;
+  let candidateCalls = 0;
+  let resolvedPage = null;
+  const provider = {
+    async contentDirector() {
+      contentCalls += 1;
+      return contentOutput();
+    },
+    async refineContent({ requests, pages }) {
+      refinementCalls += 1;
+      assert.equal(requests.length, 1);
+      assert.deepEqual(requests[0].itemIds, ["point-1"]);
+      assert.equal(pages.length, 1);
+      return {
+        refinements: [{
+          pageId: "problem",
+          items: [{
+            itemId: "point-1",
+            points: [{ text: "模板有限", sourceFragment: "模板有时尽" }],
+          }],
+        }],
+      };
+    },
+    async visualDirector({ phase, skinId }) {
+      visualCalls += 1;
+      if (phase === "intent") return visualIntentOutput();
+      return {
+        ...visualPlanOutput(skinId),
+        semanticRefinementRequests: [{
+          pageId: "problem",
+          familyId: "radial-hub",
+          variantId: "orbit",
+          itemIds: ["point-1"],
+          reason: "原文含有尚未进入节点的支撑信息",
+        }],
+      };
+    },
+  };
+  const visualCandidateProvider = async () => {
+    candidateCalls += 1;
+    const sets = await candidateProvider();
+    sets[0].candidates[0].contentContract = { itemRole: "semantic-node", points: "optional" };
+    sets[0].candidates[0].textCapacity = { maxPointsPerItem: 3, maxPointChars: 8 };
+    return sets;
+  };
+
+  const result = await runDirectorWorkflow({
+    input: { rawMarkdown },
+    provider,
+    outputDir,
+    reviewMode: "production",
+    visualCandidateProvider,
+    visualResolver: (args) => {
+      resolvedPage = args.pageContents[0];
+      return resolver(args);
+    },
+    renderer,
+  });
+
+  assert.equal(result.status, "delivered");
+  assert.equal(contentCalls, 1);
+  assert.equal(visualCalls, 2);
+  assert.equal(refinementCalls, 1);
+  assert.equal(candidateCalls, 2);
+  assert.deepEqual(resolvedPage.items[0].points, ["模板有限"]);
+  const saved = JSON.parse(await fs.readFile(path.join(outputDir, "content", "semantic-refinement.json"), "utf8"));
+  assert.equal(saved.report[0].status, "refined");
+});
+
 test("视觉意图枚举错误会在受控次数内反馈重试", async (t) => {
   const outputDir = await makeTempDir(t);
   let intentCalls = 0;

@@ -10,6 +10,7 @@
   "showcase": "example.pptx",
   "parameters": ["title", "leader", "departments"],
   "runtime": {
+    "renderer": "legacy-builder",
     "entry": "generate.mjs",
     "builderExport": "buildOrganizationTree",
     "mapperExport": "mapPageContent",
