@@ -299,13 +299,13 @@
       let stateButtons = '';
       if (asset.componentPreviewAvailable && asset.componentPreviewUrl && asset.componentStates?.length) {
         const initialState = asset.componentInitialState ?? asset.componentStates[0];
-        stateButtons = '<div class="state-switcher">' + asset.componentStates.map((value) => '<button type="button" class="state-button' + (value === initialState ? ' active' : '') + '" data-component-state="' + value + '" data-component-base="' + esc(asset.componentPreviewUrl) + '">' + value + '项</button>').join('') + '</div>';
-        componentMedia = '<div class="review-media component"><iframe src="' + esc(asset.componentPreviewUrl) + '&state=' + initialState + '" title="' + esc(asset.name) + ' 的实时 HTML 组件"></iframe></div>';
+        stateButtons = '<div class="state-switcher" role="tablist" aria-label="数量状态">' + asset.componentStates.map((value) => '<button type="button" role="tab" aria-selected="' + (value === initialState) + '" class="state-button' + (value === initialState ? ' active' : '') + '" data-component-state="' + value + '" data-component-base="' + esc(asset.componentPreviewUrl) + '">' + value + '项</button>').join('') + '</div>';
+        componentMedia = '<div class="review-media component"><iframe src="' + esc(asset.componentPreviewUrl) + '&state=' + encodeURIComponent(initialState) + '" title="' + esc(asset.name) + ' 的实时 HTML 组件"></iframe></div>';
       }
       return '<div class="review-flow"><h3>来源 → HTML 审美工作台 → Native Builder → PPT</h3><p>正式运行时 Agent 只选择并填参数；HTML 只用于建设审查，PPT 由资产包内已固化的 Native Builder 生成。</p>'
         + '<div class="review-stage"><div class="review-stage-head"><b>1 · 来源 PPT</b><span>文件与页码自动追溯</span></div>' + sourceMedia + '</div>'
-        + '<div class="review-stage"><div class="review-stage-head"><b>2 · 实时 HTML</b><span>审美和数量响应在这里确认</span></div>' + stateButtons + componentMedia + '</div>'
-        + '<div class="review-stage"><div class="review-stage-head"><b>3 · PPT 编译结果</b><span>检查转换损失与最终可编辑页面</span></div>' + previewMarkup(asset, true) + '</div></div>';
+        + '<div class="review-stage"><div class="review-stage-head"><b>2 · 实时 HTML</b><span>点击标签查看同一 Style Group 的各数量状态</span></div>' + stateButtons + componentMedia + '</div>'
+        + '<div class="review-stage"><div class="review-stage-head"><b>3 · Native Builder 结果</b><span>检查最终原生可编辑页面</span></div>' + previewMarkup(asset, true) + '</div></div>';
     }
 
     function activatePreviewImages() {
@@ -438,8 +438,12 @@
       if (stateTarget) {
         const stage = stateTarget.closest(".review-stage");
         const frame = stage?.querySelector("iframe");
-        if (frame) frame.src = stateTarget.dataset.componentBase + "&state=" + stateTarget.dataset.componentState;
-        stage?.querySelectorAll(".state-button").forEach((button) => button.classList.toggle("active", button === stateTarget));
+        if (frame) frame.src = stateTarget.dataset.componentBase + "&state=" + encodeURIComponent(stateTarget.dataset.componentState);
+        stage?.querySelectorAll(".state-button").forEach((button) => {
+          const active = button === stateTarget;
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-selected", String(active));
+        });
         return;
       }
       const assetTarget = event.target.closest("[data-asset-key]");
