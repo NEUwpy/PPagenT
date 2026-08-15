@@ -7,11 +7,20 @@
   "status": "core",
   "source": {
     "file": "PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx",
-    "slides": [446, 447, 448, 449, 450]
+    "slides": [
+      446,
+      447,
+      448,
+      449,
+      450
+    ]
   },
   "generator": "generate.mjs",
   "showcase": "example.pptx",
-  "parameters": ["title", "milestones"],
+  "parameters": [
+    "title",
+    "milestones"
+  ],
   "runtime": {
     "renderer": "legacy-builder",
     "entry": "generate.mjs",
@@ -20,18 +29,72 @@
     "familyId": "timeline-roadmap",
     "variantId": "default",
     "silhouette": "horizontal-timeline",
-    "supportedBaseRelations": ["sequence"],
+    "supportedBaseRelations": [
+      "sequence"
+    ],
     "supportedPurposeKeys": [],
-    "itemCount": { "min": 3, "preferred": [3, 4, 5, 6], "max": 6 },
-    "textCapacity": { "maxItemTitleChars": 10, "maxItemBodyChars": 36 },
+    "itemCount": {
+      "min": 3,
+      "preferred": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "max": 6
+    },
+    "textCapacity": {
+      "maxItemTitleChars": 10,
+      "maxItemBodyChars": 36
+    },
     "contract": {
       "abstractionLevel": "foundation",
       "adaptationStatus": "adaptive",
       "constraints": {
-        "semantic": { "ordered": true, "sameLevel": true },
-        "relationTraits": { "temporal": true, "branched": false },
-        "density": ["low", "medium"]
+        "semantic": {
+          "ordered": true,
+          "sameLevel": true
+        },
+        "relationTraits": {
+          "temporal": true,
+          "branched": false
+        },
+        "density": [
+          "low",
+          "medium"
+        ]
       }
+    },
+    "skillId": "timeline-roadmap",
+    "styleGroupId": "timeline-roadmap-p446",
+    "stateContract": {
+      "resolver": "milestoneCount",
+      "states": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "previewDefault": 4
+    },
+    "review": {
+      "entry": "review.mjs",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "controls": [
+        {
+          "key": "milestoneCount",
+          "label": "里程碑数",
+          "values": [
+            3,
+            4,
+            5,
+            6
+          ],
+          "default": 4
+        }
+      ]
     }
   },
   "layoutExpansion": {
@@ -40,15 +103,31 @@
     "rule": "里程碑沿共同时间轴等分；浅色与白色承载面及连接线随数量同步重算"
   },
   "spatialContract": {
-    "coordinateSystem": { "width": 1280, "height": 720 },
-    "contentFrame": { "left": 40, "top": 135, "width": 1200, "height": 520 },
+    "coordinateSystem": {
+      "width": 1280,
+      "height": 720
+    },
+    "contentFrame": {
+      "left": 40,
+      "top": 135,
+      "width": 1200,
+      "height": 520
+    },
     "aspectRatio": 2.3077,
-    "minimumFrame": { "width": 780, "height": 360 },
-    "preferredFrame": { "width": 1100, "height": 460 },
+    "minimumFrame": {
+      "width": 780,
+      "height": 360
+    },
+    "preferredFrame": {
+      "width": 1100,
+      "height": 460
+    },
     "resizeMode": "contain",
     "minFontSize": 16,
     "safePadding": 12,
-    "supportedCompositionIds": ["component-full"]
+    "supportedCompositionIds": [
+      "component-full"
+    ]
   },
   "capacity": "3–6 个里程碑；阶段标题建议不超过 10 字，说明不超过 36 字",
   "adaptation": {

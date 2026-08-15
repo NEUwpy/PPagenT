@@ -7,11 +7,16 @@
   "status": "core",
   "source": {
     "file": "PPT源/狗哥蓝色-精美逻辑图PPT模板.pptx",
-    "slides": [135]
+    "slides": [
+      135
+    ]
   },
   "generator": "generate.mjs",
   "showcase": "example.pptx",
-  "parameters": ["title", "items"],
+  "parameters": [
+    "title",
+    "items"
+  ],
   "runtime": {
     "renderer": "legacy-builder",
     "entry": "runtime.mjs",
@@ -24,24 +29,77 @@
     "familyId": "parallel",
     "variantId": "parallel-cards-p135",
     "silhouette": "equal-width-capability-cards",
-    "supportedBaseRelations": ["parallel"],
+    "supportedBaseRelations": [
+      "parallel"
+    ],
     "supportedPurposeKeys": [],
-    "itemCount": { "min": 3, "preferred": [3, 4, 5], "max": 7 },
-    "textCapacity": { "maxItemTitleChars": 10, "maxItemBodyChars": 44 },
-    "sourceFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "itemCount": {
+      "min": 3,
+      "preferred": [
+        3,
+        4,
+        5
+      ],
+      "max": 7
+    },
+    "textCapacity": {
+      "maxItemTitleChars": 10,
+      "maxItemBodyChars": 44
+    },
+    "sourceFrame": {
+      "left": 55,
+      "top": 166,
+      "width": 1170,
+      "height": 492
+    },
     "stateContract": {
       "resolver": "itemCount",
-      "states": [3, 4, 5, 6, 7],
+      "states": [
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
       "previewDefault": 4
     },
-    "mediaContract": { "mode": "no-image", "required": [] },
+    "mediaContract": {
+      "mode": "no-image",
+      "required": []
+    },
     "contract": {
       "abstractionLevel": "foundation",
       "adaptationStatus": "adaptive",
       "constraints": {
-        "semantic": { "sameLevel": true, "ordered": false },
-        "density": ["low", "medium"]
+        "semantic": {
+          "sameLevel": true,
+          "ordered": false
+        },
+        "density": [
+          "low",
+          "medium"
+        ]
       }
+    },
+    "review": {
+      "entry": "runtime.mjs",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "controls": [
+        {
+          "key": "itemCount",
+          "label": "项目数",
+          "values": [
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "default": 4
+        }
+      ]
     }
   },
   "layoutExpansion": {
@@ -50,15 +108,31 @@
     "rule": "按当前数量重新计算等宽卡片与间隙；序号、标题和说明保持同一垂直节奏"
   },
   "spatialContract": {
-    "coordinateSystem": { "width": 1280, "height": 720 },
-    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "coordinateSystem": {
+      "width": 1280,
+      "height": 720
+    },
+    "contentFrame": {
+      "left": 55,
+      "top": 166,
+      "width": 1170,
+      "height": 492
+    },
     "aspectRatio": 2.378,
-    "minimumFrame": { "width": 820, "height": 360 },
-    "preferredFrame": { "width": 1170, "height": 492 },
+    "minimumFrame": {
+      "width": 820,
+      "height": 360
+    },
+    "preferredFrame": {
+      "width": 1170,
+      "height": 492
+    },
     "resizeMode": "contain",
     "minFontSize": 16,
     "safePadding": 12,
-    "supportedCompositionIds": ["component-full"]
+    "supportedCompositionIds": [
+      "component-full"
+    ]
   },
   "capacity": "3–7 个同级能力项；标题建议不超过 8 字，说明建议不超过 20 字",
   "semanticContract": "表达地位相同、没有先后和高低关系的多个能力、模块或观点",

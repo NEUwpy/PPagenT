@@ -7,11 +7,16 @@
   "status": "core",
   "source": {
     "file": "PPT源/【蓝色版】年终日常汇报PPT模板-狗哥PPT出品.pptx",
-    "slides": [35]
+    "slides": [
+      35
+    ]
   },
   "generator": "generate.mjs",
   "showcase": "example.pptx",
-  "parameters": ["title", "levels"],
+  "parameters": [
+    "title",
+    "levels"
+  ],
   "runtime": {
     "renderer": "legacy-builder",
     "entry": "generate.mjs",
@@ -22,19 +27,65 @@
     "familyId": "hierarchy-pyramid",
     "variantId": "default",
     "silhouette": "tiered-pyramid",
-    "supportedBaseRelations": ["hierarchy"],
+    "supportedBaseRelations": [
+      "hierarchy"
+    ],
     "supportedPurposeKeys": [],
-    "itemCount": { "min": 3, "preferred": [3, 4, 5], "max": 5 },
-    "textCapacity": { "maxItemTitleChars": 10, "maxItemBodyChars": 34 },
-    "stateContract": { "resolver": "itemCount", "states": [3, 4, 5] },
-    "mediaContract": { "mode": "no-image", "required": [] },
+    "itemCount": {
+      "min": 3,
+      "preferred": [
+        3,
+        4,
+        5
+      ],
+      "max": 5
+    },
+    "textCapacity": {
+      "maxItemTitleChars": 10,
+      "maxItemBodyChars": 34
+    },
+    "stateContract": {
+      "resolver": "itemCount",
+      "states": [
+        3,
+        4,
+        5
+      ]
+    },
+    "mediaContract": {
+      "mode": "no-image",
+      "required": []
+    },
     "contract": {
       "abstractionLevel": "foundation",
       "adaptationStatus": "adaptive",
       "constraints": {
-        "semantic": { "ordered": true, "sameLevel": false },
-        "density": ["low"]
+        "semantic": {
+          "ordered": true,
+          "sameLevel": false
+        },
+        "density": [
+          "low"
+        ]
       }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "controls": [
+        {
+          "key": "levelCount",
+          "label": "层级数",
+          "values": [
+            3,
+            4,
+            5
+          ],
+          "default": 4
+        }
+      ]
     }
   },
   "layoutExpansion": {
@@ -43,15 +94,31 @@
     "rule": "按当前层数重新分配圆台高度并保持共同中轴、连续轮廓和由上到下逐级扩大的关系"
   },
   "spatialContract": {
-    "coordinateSystem": { "width": 1280, "height": 720 },
-    "contentFrame": { "left": 40, "top": 135, "width": 1200, "height": 520 },
+    "coordinateSystem": {
+      "width": 1280,
+      "height": 720
+    },
+    "contentFrame": {
+      "left": 40,
+      "top": 135,
+      "width": 1200,
+      "height": 520
+    },
     "aspectRatio": 2.3077,
-    "minimumFrame": { "width": 780, "height": 360 },
-    "preferredFrame": { "width": 1100, "height": 460 },
+    "minimumFrame": {
+      "width": 780,
+      "height": 360
+    },
+    "preferredFrame": {
+      "width": 1100,
+      "height": 460
+    },
     "resizeMode": "contain",
     "minFontSize": 16,
     "safePadding": 12,
-    "supportedCompositionIds": ["component-full"]
+    "supportedCompositionIds": [
+      "component-full"
+    ]
   },
   "capacity": "3–5 个由上到下逐步扩大的层级；每层说明建议不超过 34 字",
   "adaptation": {

@@ -7,11 +7,16 @@
   "status": "core",
   "source": {
     "file": "PPT源/狗哥蓝色-精美逻辑图PPT模板.pptx",
-    "slides": [69]
+    "slides": [
+      69
+    ]
   },
   "generator": "generate.mjs",
   "showcase": "example.pptx",
-  "parameters": ["title", "quadrants"],
+  "parameters": [
+    "title",
+    "quadrants"
+  ],
   "runtime": {
     "renderer": "legacy-builder",
     "entry": "generate.mjs",
@@ -22,19 +27,65 @@
     "familyId": "framework-matrix",
     "variantId": "default",
     "silhouette": "four-quadrant-petals",
-    "supportedBaseRelations": ["matrix"],
+    "supportedBaseRelations": [
+      "matrix"
+    ],
     "supportedPurposeKeys": [],
-    "itemCount": { "min": 4, "preferred": [4], "max": 4 },
-    "textCapacity": { "maxItemTitleChars": 10, "maxItemBodyChars": 34 },
-    "stateContract": { "resolver": "textDensity", "states": ["short", "long"] },
-    "mediaContract": { "mode": "no-image", "required": [] },
+    "itemCount": {
+      "min": 4,
+      "preferred": [
+        4
+      ],
+      "max": 4
+    },
+    "textCapacity": {
+      "maxItemTitleChars": 10,
+      "maxItemBodyChars": 34
+    },
+    "stateContract": {
+      "resolver": "textDensity",
+      "states": [
+        "short",
+        "long"
+      ]
+    },
+    "mediaContract": {
+      "mode": "no-image",
+      "required": []
+    },
     "contract": {
       "abstractionLevel": "foundation",
       "adaptationStatus": "fixed",
       "constraints": {
-        "semantic": { "sameLevel": true },
-        "density": ["low", "medium"]
+        "semantic": {
+          "sameLevel": true
+        },
+        "density": [
+          "low",
+          "medium"
+        ]
       }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "controls": [
+        {
+          "key": "textDensity",
+          "label": "文字密度",
+          "values": [
+            "short",
+            "long"
+          ],
+          "valueLabels": {
+            "short": "短文案",
+            "long": "长文案"
+          },
+          "default": "short"
+        }
+      ]
     }
   },
   "layoutExpansion": {
@@ -43,15 +94,31 @@
     "rule": "仅适配象限内文字；象限数量不是可扩散维度"
   },
   "spatialContract": {
-    "coordinateSystem": { "width": 1280, "height": 720 },
-    "contentFrame": { "left": 40, "top": 135, "width": 1200, "height": 520 },
+    "coordinateSystem": {
+      "width": 1280,
+      "height": 720
+    },
+    "contentFrame": {
+      "left": 40,
+      "top": 135,
+      "width": 1200,
+      "height": 520
+    },
     "aspectRatio": 2.3077,
-    "minimumFrame": { "width": 780, "height": 360 },
-    "preferredFrame": { "width": 1100, "height": 460 },
+    "minimumFrame": {
+      "width": 780,
+      "height": 360
+    },
+    "preferredFrame": {
+      "width": 1100,
+      "height": 460
+    },
     "resizeMode": "contain",
     "minFontSize": 16,
     "safePadding": 12,
-    "supportedCompositionIds": ["component-full"]
+    "supportedCompositionIds": [
+      "component-full"
+    ]
   },
   "capacity": "固定 4 个象限",
   "review": "用户于 2026-08-13 审核通过；固定四象限短/长文案状态已确认"

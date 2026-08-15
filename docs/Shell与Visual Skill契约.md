@@ -58,21 +58,21 @@ flowchart LR
 
 ## 四、Style Group 的完整对象
 
-一个 Style Group 不是一张图，也不是一个数量状态。它至少包括：
+一个 Style Group 不是一张图，也不是一个数量状态。核心包固定由五类信息构成：
 
-- 一个来源可追溯的黄金状态；
-- 一个接收内容和父容器宽高、返回方框/锚点/层级/样式令牌的轻量布局求解器；
-- 一个用于设计、审美和响应布局验证的 HTML Component，以及审核后固化的 Native PPT Builder；
-- 3–7 项或其声明范围内的响应规则与断点；
-- 图标、中心图像、标题、正文和媒体的替换接口；
-- 原生可编辑 PPTX 的确定性回编译入口；
-- 容量契约：适用关系、数量范围、标题/正文字数、媒体要求、最小尺寸、轮廓和密度；
-- 内容接口：`items` 承载什么语义角色，是否允许节点内 `points`，每个节点允许多少分点以及单个分点的字数上限；
-- 用户看过的代表性状态与来源记录。
+1. `asset.json`：保存来源文件与页码、Visual Skill / Style Group 身份、语义与容量契约、State 控件、HTML 审查入口和 Native Builder 入口。
+2. `review.mjs`（或等价 HTML 组件入口）：保存建设期审美组件、可替换内容和 State 参数解析；一组只有一份组件代码，不按二项、三项、四项分别维护。
+3. `generate.mjs` / `runtime.mjs` 中导出的 Native Builder：把同一组参数确定性写成原生 PowerPoint 对象，是正式生成唯一绘制入口。
+4. 一份共享预览输入：由 `previewParametersExport` 和 `previewResolverExport` 暴露，使 HTML 与 Builder 接收同一组内容和 State 选择。
+5. `example.pptx`：按 `asset.json` 声明的 State 控件生成整个样式家族，供脱离代码审查原生可编辑结果。
+
+其中的契约必须覆盖适用关系、数量范围、标题/正文字数、媒体要求、最小尺寸、轮廓、密度，以及 `items`、节点内 `points` 和重复视觉条目的语义接口。图标、中心图像、标题和正文等可变槽也必须进入参数，不得固化来源模板中的第三方内容。
+
+预览 PNG、布局检查文件和看板 JSON 都是从上述对象即时生成的缓存，不属于资产真源，也不得人工维护第二份数据库。
 
 Style Group 先在 HTML Component 中完成设计、数量响应、间距、字体和层级验证。用户审美确认后，将通过的状态与参数规则固化为资产专属 Native Builder。正式生成只调用 Builder，不启动浏览器、不重新解析 DOM。HTML 截图只用于建设期预览，不能进入正式 PPTX。
 
-`assets/结构图/并列能力卡片-001` 是首个完整样例：HTML Component 负责 3–7 项实时审美审查，`builder.mjs` 负责正式原生 PPT 生成。Builder 是审核后的固定产物，不是正式运行时由 AI 临时写出的代码。
+当前 14 个正式结构 Style Group 均已迁移到这一形态。Builder 是审核后的固定产物，不是正式运行时由 AI 临时写出的代码。
 
 ### 媒体契约
 

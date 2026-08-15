@@ -19,7 +19,7 @@ PPA 看板是 PPagenT 的本地资产建设与审查入口。它不保存第二�
 2. Style Group 的实时 HTML Component；
 3. 审核后 Native Builder 生成的 PPT 示例图像。
 
-提供 HTML 审查组件和示例参数的资产，在点开一个 Style Group 后会列出它登记的全部 State 标签，例如 3、4、5、6、7 项；点击标签会强制刷新同一审查画布，并明确标出当前项数，不必把多个画面同时铺开。来源页和 Native Builder PPT 预览均可点击查看大图。正式运行方式与是否提供 HTML 审查相互独立：核心结构统一由 Native Builder 生成；没有 HTML 审查组件的旧资产仍可查看来源和 PPT 结果。
+提供 HTML 审查组件和示例参数的资产，在点开一个 Style Group 后会按维度列出 State 标签。例如组织树分别选择“部门数”和“每部门成员数”，鱼骨图分别选择“原因类别数”和“每类因素数”；任一选择都会同时刷新 HTML 和 Native Builder 结果，不必把所有组合并排铺开。来源页和 Native Builder PPT 预览均可点击查看大图。正式运行方式与是否提供 HTML 审查相互独立：核心结构统一由 Native Builder 生成。
 
 ## 数据与预览来源
 
@@ -29,7 +29,9 @@ PPA 看板是 PPagenT 的本地资产建设与审查入口。它不保存第二�
 - `PPT源/`：唯一原始 PPT 来源目录；
 - 每个资产目录的 `example.pptx`：看板中对应的真实 PPT 外观。
 
-PPT 预览在首次进入可视区域或打开详情时生成，缓存在 `.tmp/asset-dashboard-previews/`。源 `example.pptx` 修改后，缓存会自动失效并重新生成。
+PPT 预览在首次进入可视区域或打开详情时生成，缓存在 `.tmp/asset-dashboard-previews/`；State 对应的 Native 预览缓存在 `.tmp/asset-dashboard-native-state-previews/`。来源页在 Windows 下优先调用本机 PowerPoint 只导出声明页，没有 Office 时回退到 Artifact Tool；首次读取大模板会显示加载提示，生成后缓存在 `.tmp/asset-dashboard-source-previews/`。源文件修改后缓存自动失效。
+
+`example.pptx` 不是手工拼出的另一份状态库。运行 `npm run assets:examples` 时，工具读取每个 `asset.json` 的 State 控件，并用同一 `review.mjs` 参数解析器和 Native Builder 生成整个家族。
 
 ## 重新构建应用
 

@@ -8,6 +8,7 @@ import {
   collectVisualSkillDashboardData,
   defaultProjectRoot,
   resolveComponentPreview,
+  resolveNativeStatePreview,
   resolvePreviewDeck,
   resolveSourceSlide,
 } from "./visual-skill-dashboard-data.mjs";
@@ -23,8 +24,10 @@ const host = "127.0.0.1";
 const templatePath = path.join(import.meta.dirname, "templates", "visual-skill-dashboard.html");
 const renderToolPath = path.join(import.meta.dirname, "render-pptx-evidence.mjs");
 const renderSourceToolPath = path.join(import.meta.dirname, "render-pptx-slide-evidence.mjs");
+const renderSourcePowerPointPath = path.join(import.meta.dirname, "render-pptx-slide-powerpoint.ps1");
 const cacheRoot = path.join(projectRoot, ".tmp", "asset-dashboard-previews");
 const sourceCacheRoot = path.join(projectRoot, ".tmp", "asset-dashboard-source-previews");
+const nativeStateCacheRoot = path.join(projectRoot, ".tmp", "asset-dashboard-native-state-previews");
 const renderJobs = new Map();
 const renderQueue = [];
 let activeRenderCount = 0;
@@ -79,13 +82,8 @@ function runRenderer(deckPath, outputDir) {
   });
 }
 
-function runSourceRenderer(deckPath, slideNumber, outputPath) {
+function runSourceRendererProcess(executable, args) {
   return new Promise((resolve, reject) => {
-    const dashboardExecutable = process.env.PPAGENT_DASHBOARD_EXE;
-    const executable = dashboardExecutable || process.execPath;
-    const args = dashboardExecutable
-      ? ["--render-source-slide", deckPath, String(slideNumber), outputPath, "--root", projectRoot]
-      : [renderSourceToolPath, deckPath, String(slideNumber), outputPath];
     const child = spawn(executable, args, {
       cwd: projectRoot,
       windowsHide: true,
@@ -101,6 +99,30 @@ function runSourceRenderer(deckPath, slideNumber, outputPath) {
       else reject(new Error(`source preview renderer exited with ${code}: ${stderr || stdout}`));
     });
   });
+}
+
+async function runSourceRenderer(deckPath, slideNumber, outputPath) {
+  if (process.platform === "win32") {
+    try {
+      await runSourceRendererProcess("powershell.exe", [
+        "-NoProfile", "-NonInteractive", "-WindowStyle", "Hidden",
+        "-ExecutionPolicy", "Bypass", "-File", renderSourcePowerPointPath,
+        "-InputPath", deckPath,
+        "-SlideNumber", String(slideNumber),
+        "-OutputPath", outputPath,
+      ]);
+      return;
+    } catch {
+      // PowerPoint is an optional fast path. Keep the portable Artifact Tool
+      // renderer as the fallback for machines without desktop Office.
+    }
+  }
+  const dashboardExecutable = process.env.PPAGENT_DASHBOARD_EXE;
+  const executable = dashboardExecutable || process.execPath;
+  const args = dashboardExecutable
+    ? ["--render-source-slide", deckPath, String(slideNumber), outputPath, "--root", projectRoot]
+    : [renderSourceToolPath, deckPath, String(slideNumber), outputPath];
+  await runSourceRendererProcess(executable, args);
 }
 
 function withRenderSlot(task) {
@@ -178,32 +200,83 @@ async function sourcePreviewPathFor(library, assetId, requestedSlide) {
   return previewPath;
 }
 
-async function componentPreviewHtml(library, assetId, requestedState) {
+function selectedControls(record, searchParams) {
+  return Object.fromEntries((record.componentControls ?? []).map((control) => {
+    const requested = searchParams.get(control.key);
+    const value = control.values.find((candidate) => String(candidate) === requested);
+    return [control.key, value ?? record.componentInitialSelection?.[control.key] ?? control.values[0]];
+  }));
+}
+
+async function loadReviewModule(resolved) {
+  const entryStat = await fs.stat(resolved.entryPath);
+  return import(`${pathToFileURL(resolved.entryPath).href}?dashboard=${entryStat.mtimeMs}`);
+}
+
+function resolveReviewParameters(resolved, module, selection) {
+  const previewParameters = structuredClone(module[resolved.record.previewParametersExport]);
+  if (!previewParameters) return null;
+  const resolver = resolved.record.previewResolverExport
+    ? module[resolved.record.previewResolverExport]
+    : null;
+  if (resolver) return resolver(previewParameters, selection);
+  const singleControl = resolved.record.componentControls?.[0];
+  if (singleControl?.key === "itemCount" && Array.isArray(previewParameters.items)) {
+    previewParameters.items = previewParameters.items.slice(0, selection.itemCount);
+  }
+  return previewParameters;
+}
+
+async function componentPreviewHtml(library, assetId, searchParams) {
   const resolved = await resolveComponentPreview(projectRoot, library, assetId);
   if (!resolved) return null;
-  const entryStat = await fs.stat(resolved.entryPath);
-  const moduleUrl = `${pathToFileURL(resolved.entryPath).href}?dashboard=${entryStat.mtimeMs}`;
-  const module = await import(moduleUrl);
+  const module = await loadReviewModule(resolved);
   const component = module[resolved.record.componentExport];
-  const previewParameters = structuredClone(module[resolved.record.previewParametersExport]);
+  const selection = selectedControls(resolved.record, searchParams);
+  const previewParameters = resolveReviewParameters(resolved, module, selection);
   if (!component?.renderMarkup || !previewParameters) return null;
-
-  const states = resolved.record.componentStates ?? [];
-  const state = requestedState === null || requestedState === ""
-    ? resolved.record.componentInitialState
-    : Number(requestedState);
-  if (!Number.isInteger(state) || !states.includes(state)) return null;
-  if (Array.isArray(previewParameters.items)) {
-    if (previewParameters.items.length < state) return null;
-    previewParameters.items = previewParameters.items.slice(0, state);
+  let css = component.cssText ?? "";
+  if (!css) {
+    const cssPath = path.resolve(resolved.assetDir, component.cssFile ?? "component.css");
+    const relativeCssPath = path.relative(resolved.assetDir, cssPath);
+    if (relativeCssPath.startsWith("..") || path.isAbsolute(relativeCssPath)) return null;
+    css = await fs.readFile(cssPath, "utf8");
   }
-
-  const cssPath = path.resolve(resolved.assetDir, component.cssFile ?? "component.css");
-  const relativeCssPath = path.relative(resolved.assetDir, cssPath);
-  if (relativeCssPath.startsWith("..") || path.isAbsolute(relativeCssPath)) return null;
-  const css = await fs.readFile(cssPath, "utf8");
   const markup = component.renderMarkup(previewParameters);
-  return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(resolved.record.name)} · ${state}项</title><style>${css}</style></head><body>${markup}</body></html>`;
+  const stateLabel = (resolved.record.componentControls ?? []).map((control) => `${control.label} ${selection[control.key]}`).join(" · ");
+  return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(resolved.record.name)} · ${escapeHtml(stateLabel)}</title><style>${css}</style></head><body>${markup}</body></html>`;
+}
+
+async function nativeStatePreviewPathFor(library, assetId, searchParams) {
+  const resolved = await resolveNativeStatePreview(projectRoot, library, assetId);
+  if (!resolved) return null;
+  const selection = selectedControls(resolved.record, searchParams);
+  const selectionKey = JSON.stringify(selection);
+  const cacheKey = crypto.createHash("sha256").update(`${library}\0${assetId}\0${selectionKey}`).digest("hex").slice(0, 20);
+  const outputPath = path.join(nativeStateCacheRoot, `${cacheKey}.png`);
+  const [reviewStat, runtimeStat] = await Promise.all([fs.stat(resolved.entryPath), fs.stat(resolved.runtimeEntryPath)]);
+  let outputStat = null;
+  try { outputStat = await fs.stat(outputPath); } catch (error) { if (error.code !== "ENOENT") throw error; }
+  if (!outputStat || outputStat.mtimeMs < Math.max(reviewStat.mtimeMs, runtimeStat.mtimeMs)) {
+    const jobKey = `native:${cacheKey}`;
+    if (!renderJobs.has(jobKey)) {
+      renderJobs.set(jobKey, withRenderSlot(async () => {
+        const reviewModule = await loadReviewModule(resolved);
+        const parameters = resolveReviewParameters(resolved, reviewModule, selection);
+        const runtimeModule = await import(`${pathToFileURL(resolved.runtimeEntryPath).href}?dashboard=${runtimeStat.mtimeMs}`);
+        const builder = runtimeModule[resolved.record.builderExport];
+        if (!parameters || typeof builder !== "function") throw new Error("Native Builder 审查入口不完整");
+        const { createPresentation } = await import("../asset-runtime/component-builders.mjs");
+        const presentation = createPresentation();
+        const slide = builder(presentation, parameters);
+        const image = await presentation.export({ slide, format: "png", scale: 1 });
+        await fs.mkdir(nativeStateCacheRoot, { recursive: true });
+        await fs.writeFile(outputPath, Buffer.from(await image.arrayBuffer()));
+      }).finally(() => renderJobs.delete(jobKey)));
+    }
+    await renderJobs.get(jobKey);
+  }
+  return outputPath;
 }
 
 async function serveDashboard(response) {
@@ -261,7 +334,7 @@ const server = http.createServer(async (request, response) => {
     if (url.pathname === "/api/component-preview") {
       const library = url.searchParams.get("library") ?? "";
       const assetId = url.searchParams.get("id") ?? "";
-      const html = await componentPreviewHtml(library, assetId, url.searchParams.get("state"));
+      const html = await componentPreviewHtml(library, assetId, url.searchParams);
       if (!html) {
         sendJson(response, 404, { error: "component_preview_not_found" });
         return;
@@ -270,6 +343,17 @@ const server = http.createServer(async (request, response) => {
         "cache-control": "no-store",
         "content-security-policy": "default-src 'none'; style-src 'unsafe-inline'",
       });
+      return;
+    }
+    if (url.pathname === "/api/native-state-preview") {
+      const library = url.searchParams.get("library") ?? "";
+      const assetId = url.searchParams.get("id") ?? "";
+      const previewPath = await nativeStatePreviewPathFor(library, assetId, url.searchParams);
+      if (!previewPath) {
+        sendJson(response, 404, { error: "native_state_preview_not_found" });
+        return;
+      }
+      send(response, 200, await fs.readFile(previewPath), "image/png", { "cache-control": "no-cache" });
       return;
     }
 

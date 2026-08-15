@@ -59,6 +59,12 @@ export const previewParameters = Object.freeze({
   ],
 });
 
+export function resolvePreviewParameters(base, selection) {
+  const result = structuredClone(base);
+  result.items = result.items.slice(0, selection.itemCount);
+  return result;
+}
+
 export function mapPageContent(content, intent) {
   return renderPayload(intent, "parallel-cards-001", {
     title: content.title,

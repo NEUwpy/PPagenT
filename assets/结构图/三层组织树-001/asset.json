@@ -5,10 +5,19 @@
   "category": "结构图",
   "creationMethod": "distillation",
   "status": "core",
-  "source": { "file": "PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx", "slides": [406] },
+  "source": {
+    "file": "PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx",
+    "slides": [
+      406
+    ]
+  },
   "generator": "generate.mjs",
   "showcase": "example.pptx",
-  "parameters": ["title", "leader", "departments"],
+  "parameters": [
+    "title",
+    "leader",
+    "departments"
+  ],
   "runtime": {
     "renderer": "legacy-builder",
     "entry": "generate.mjs",
@@ -17,13 +26,72 @@
     "familyId": "organization-tree",
     "variantId": "default",
     "silhouette": "three-level-org-tree",
-    "supportedBaseRelations": ["hierarchy"],
-    "supportedPurposeKeys": ["explain_organization"],
-    "itemCount": { "min": 2, "preferred": [3, 4], "max": 4 },
+    "supportedBaseRelations": [
+      "hierarchy"
+    ],
+    "supportedPurposeKeys": [
+      "explain_organization"
+    ],
+    "itemCount": {
+      "min": 2,
+      "preferred": [
+        3,
+        4
+      ],
+      "max": 4
+    },
     "contract": {
       "abstractionLevel": "composite",
       "adaptationStatus": "partial",
-      "constraints": { "density": ["low", "medium"] }
+      "constraints": {
+        "density": [
+          "low",
+          "medium"
+        ]
+      }
+    },
+    "skillId": "organization",
+    "styleGroupId": "organization-tree-p406",
+    "stateContract": {
+      "resolver": "departmentCount+membersPerDepartment",
+      "departmentStates": [
+        2,
+        3,
+        4
+      ],
+      "memberStates": [
+        1,
+        2,
+        3
+      ]
+    },
+    "review": {
+      "entry": "review.mjs",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "controls": [
+        {
+          "key": "departmentCount",
+          "label": "部门数",
+          "values": [
+            2,
+            3,
+            4
+          ],
+          "default": 3
+        },
+        {
+          "key": "membersPerDepartment",
+          "label": "每部门成员数",
+          "values": [
+            1,
+            2,
+            3
+          ],
+          "default": 2
+        }
+      ]
     }
   },
   "layoutExpansion": {
@@ -48,20 +116,41 @@
     "departments[].members[].role": 6
   },
   "geometryContract": {
-    "sourceFrame": { "left": 40, "top": 135, "width": 1200, "height": 520 },
+    "sourceFrame": {
+      "left": 40,
+      "top": 135,
+      "width": 1200,
+      "height": 520
+    },
     "connections": "所有父子关系线均连接已声明节点或总线锚点",
     "alignment": "部门等距并围绕页面中轴居中；同部门成员等距并围绕部门中心居中"
   },
   "spatialContract": {
-    "coordinateSystem": { "width": 1280, "height": 720 },
-    "contentFrame": { "left": 40, "top": 135, "width": 1200, "height": 520 },
+    "coordinateSystem": {
+      "width": 1280,
+      "height": 720
+    },
+    "contentFrame": {
+      "left": 40,
+      "top": 135,
+      "width": 1200,
+      "height": 520
+    },
     "aspectRatio": 2.3077,
-    "minimumFrame": { "width": 760, "height": 360 },
-    "preferredFrame": { "width": 1050, "height": 440 },
+    "minimumFrame": {
+      "width": 760,
+      "height": 360
+    },
+    "preferredFrame": {
+      "width": 1050,
+      "height": 440
+    },
     "resizeMode": "contain",
     "minFontSize": 16,
     "safePadding": 12,
-    "supportedCompositionIds": ["component-full"]
+    "supportedCompositionIds": [
+      "component-full"
+    ]
   },
   "semanticContract": "一个总负责人统筹多个部门负责人，每个部门负责人再管理若干成员",
   "doNotUseWhen": "角色之间没有明确上下级汇报关系，或需要表达跨部门泳道协作",

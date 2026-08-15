@@ -7,11 +7,22 @@
   "status": "core",
   "source": {
     "file": "PPT源/狗哥蓝色-精美逻辑图PPT模板.pptx",
-    "slides": [59, 70, 79, 115]
+    "slides": [
+      59,
+      70,
+      79,
+      115
+    ]
   },
   "generator": "generate.mjs",
   "showcase": "example.pptx",
-  "parameters": ["title", "lanes", "stages", "tasks", "conclusion"],
+  "parameters": [
+    "title",
+    "lanes",
+    "stages",
+    "tasks",
+    "conclusion"
+  ],
   "runtime": {
     "renderer": "legacy-builder",
     "entry": "generate.mjs",
@@ -20,21 +31,92 @@
     "familyId": "swimlane-process",
     "variantId": "default",
     "silhouette": "role-stage-swimlanes",
-    "supportedBaseRelations": ["sequence"],
-    "supportedPurposeKeys": ["explain_cross_role_process"],
-    "itemCount": { "min": 4, "preferred": [4], "max": 4 },
+    "supportedBaseRelations": [
+      "sequence"
+    ],
+    "supportedPurposeKeys": [
+      "explain_cross_role_process"
+    ],
+    "itemCount": {
+      "min": 4,
+      "preferred": [
+        4
+      ],
+      "max": 4
+    },
     "contract": {
       "abstractionLevel": "composite",
       "adaptationStatus": "partial",
       "constraints": {
         "metrics": [
-          { "field": "roleCount", "min": 2, "preferred": [2, 3], "max": 3 },
-          { "field": "stageCount", "min": 2, "preferred": [3], "max": 3 }
+          {
+            "field": "roleCount",
+            "min": 2,
+            "preferred": [
+              2,
+              3
+            ],
+            "max": 3
+          },
+          {
+            "field": "stageCount",
+            "min": 2,
+            "preferred": [
+              3
+            ],
+            "max": 3
+          }
         ],
-        "semantic": { "ordered": true },
-        "relationTraits": { "dimensions": 2, "secondaryDimension": "role" },
-        "density": ["medium"]
+        "semantic": {
+          "ordered": true
+        },
+        "relationTraits": {
+          "dimensions": 2,
+          "secondaryDimension": "role"
+        },
+        "density": [
+          "medium"
+        ]
       }
+    },
+    "skillId": "swimlane-process",
+    "styleGroupId": "swimlane-process-p59",
+    "stateContract": {
+      "resolver": "laneCount+stageCount",
+      "laneStates": [
+        2,
+        3
+      ],
+      "stageStates": [
+        2,
+        3
+      ]
+    },
+    "review": {
+      "entry": "review.mjs",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "controls": [
+        {
+          "key": "laneCount",
+          "label": "泳道数",
+          "values": [
+            2,
+            3
+          ],
+          "default": 3
+        },
+        {
+          "key": "stageCount",
+          "label": "阶段数",
+          "values": [
+            2,
+            3
+          ],
+          "default": 3
+        }
+      ]
     }
   },
   "layoutExpansion": {
@@ -43,15 +125,31 @@
     "rule": "泳道与阶段分别等分可用区域；任务按二维位置放入，不能通过压缩单格容纳超限内容"
   },
   "spatialContract": {
-    "coordinateSystem": { "width": 1280, "height": 720 },
-    "contentFrame": { "left": 40, "top": 135, "width": 1200, "height": 520 },
+    "coordinateSystem": {
+      "width": 1280,
+      "height": 720
+    },
+    "contentFrame": {
+      "left": 40,
+      "top": 135,
+      "width": 1200,
+      "height": 520
+    },
     "aspectRatio": 2.3077,
-    "minimumFrame": { "width": 1050, "height": 430 },
-    "preferredFrame": { "width": 1170, "height": 492 },
+    "minimumFrame": {
+      "width": 1050,
+      "height": 430
+    },
+    "preferredFrame": {
+      "width": 1170,
+      "height": 492
+    },
     "resizeMode": "contain",
     "minFontSize": 16,
     "safePadding": 12,
-    "supportedCompositionIds": ["component-full"]
+    "supportedCompositionIds": [
+      "component-full"
+    ]
   },
   "capacity": "2–3 条泳道；2–3 个阶段；任务按泳道与阶段定位；可选独立总结",
   "review": "v0.3.3 已验证标签与底板分离、三角色交接线、18 磅任务文字和独立总结区"

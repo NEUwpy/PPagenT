@@ -7,11 +7,19 @@
   "status": "core",
   "source": {
     "file": "PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx",
-    "slides": [365, 366, 367]
+    "slides": [
+      365,
+      366,
+      367
+    ]
   },
   "generator": "generate.mjs",
   "showcase": "example.pptx",
-  "parameters": ["title", "center", "items"],
+  "parameters": [
+    "title",
+    "center",
+    "items"
+  ],
   "runtime": {
     "renderer": "legacy-builder",
     "entry": "generate.mjs",
@@ -20,19 +28,77 @@
     "familyId": "radial-hub",
     "variantId": "orbit",
     "silhouette": "center-orbit",
-    "supportedBaseRelations": ["hub"],
+    "supportedBaseRelations": [
+      "hub"
+    ],
     "supportedPurposeKeys": [],
-    "itemCount": { "min": 3, "preferred": [4, 5, 6], "max": 8 },
-    "textCapacity": { "maxItemTitleChars": 10, "maxItemBodyChars": 34 },
+    "itemCount": {
+      "min": 3,
+      "preferred": [
+        4,
+        5,
+        6
+      ],
+      "max": 8
+    },
+    "textCapacity": {
+      "maxItemTitleChars": 10,
+      "maxItemBodyChars": 34
+    },
     "contract": {
       "abstractionLevel": "foundation",
       "adaptationStatus": "adaptive",
       "constraints": {
-        "semantic": { "ordered": false, "sameLevel": true },
-        "relationTraits": { "branched": false },
-        "density": ["low", "medium"]
+        "semantic": {
+          "ordered": false,
+          "sameLevel": true
+        },
+        "relationTraits": {
+          "branched": false
+        },
+        "density": [
+          "low",
+          "medium"
+        ]
       },
-      "fallback": { "tooMany": "simple-layout" }
+      "fallback": {
+        "tooMany": "simple-layout"
+      }
+    },
+    "skillId": "radial-hub",
+    "styleGroupId": "radial-orbit-p365",
+    "stateContract": {
+      "resolver": "itemCount",
+      "states": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "previewDefault": 5
+    },
+    "review": {
+      "entry": "review.mjs",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "controls": [
+        {
+          "key": "itemCount",
+          "label": "外围节点数",
+          "values": [
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "default": 5
+        }
+      ]
     }
   },
   "layoutExpansion": {
@@ -41,15 +107,31 @@
     "rule": "保持单一强中心；外围节点按当前数量在两侧均衡分配，单侧最多 4 项"
   },
   "spatialContract": {
-    "coordinateSystem": { "width": 1280, "height": 720 },
-    "contentFrame": { "left": 40, "top": 135, "width": 1200, "height": 520 },
+    "coordinateSystem": {
+      "width": 1280,
+      "height": 720
+    },
+    "contentFrame": {
+      "left": 40,
+      "top": 135,
+      "width": 1200,
+      "height": 520
+    },
     "aspectRatio": 2.3077,
-    "minimumFrame": { "width": 780, "height": 360 },
-    "preferredFrame": { "width": 1100, "height": 460 },
+    "minimumFrame": {
+      "width": 780,
+      "height": 360
+    },
+    "preferredFrame": {
+      "width": 1100,
+      "height": 460
+    },
     "resizeMode": "contain",
     "minFontSize": 16,
     "safePadding": 12,
-    "supportedCompositionIds": ["component-full"]
+    "supportedCompositionIds": [
+      "component-full"
+    ]
   },
   "capacity": "3–8 个外围节点；标题建议不超过 10 字，说明建议不超过 34 字",
   "adaptation": {

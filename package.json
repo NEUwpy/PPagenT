@@ -1,6 +1,6 @@
 {
   "name": "ppagent",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -17,6 +17,7 @@
     "assets:dashboard": "node src/tools/serve-visual-skill-dashboard.mjs",
     "assets:dashboard:build": "node src/tools/build-visual-skill-dashboard.mjs",
     "assets:dashboard:exe": "node src/tools/build-dashboard-exe.mjs",
+    "assets:examples": "node src/tools/build-style-group-examples.mjs .",
     "validate:contracts": "node src/tools/validate-rule-layer.mjs .",
     "match": "node src/tools/match-page-intent.mjs --root .",
     "agent:run": "node src/agent/run-workflow.mjs --root .",

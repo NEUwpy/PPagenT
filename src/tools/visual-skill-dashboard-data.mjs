@@ -64,6 +64,18 @@ function itemRange(runtime) {
 async function normalizeRecord(entry, coverageTags, purposeMap, coreIds, root) {
   const { manifest, manifestPath, assetDir, library } = entry;
   const runtime = manifest.runtime ?? {};
+  const reviewRuntime = runtime.review ?? (runtime.componentExport && runtime.previewParametersExport ? {
+    entry: runtime.entry,
+    componentExport: runtime.componentExport,
+    previewParametersExport: runtime.previewParametersExport,
+    previewResolverExport: runtime.previewResolverExport,
+    controls: (runtime.stateContract?.states ?? []).length ? [{
+      key: "itemCount",
+      label: "项目数",
+      values: runtime.stateContract.states,
+      default: runtime.stateContract.previewDefault ?? runtime.stateContract.states[0],
+    }] : [],
+  } : null);
   const renderer = rendererOf(manifest);
   const purposes = (runtime.supportedPurposeKeys ?? []).map((key) => ({
     key,
@@ -81,10 +93,23 @@ async function normalizeRecord(entry, coverageTags, purposeMap, coreIds, root) {
   const sourcePath = sourceFile ? path.resolve(root, sourceFile) : null;
   const sourceRoot = path.join(root, "PPT源");
   const sourcePreviewAvailable = Boolean(sourcePath && sourceSlides.length && isInside(sourceRoot, sourcePath) && await exists(sourcePath));
-  const hasDesignComponent = Boolean(runtime.componentExport && runtime.previewParametersExport);
-  const componentStates = hasDesignComponent
-    ? (runtime.stateContract?.states ?? runtime.itemCount?.preferred ?? [])
-    : [];
+  const componentControls = (reviewRuntime?.controls ?? []).filter((control) => (
+    typeof control?.key === "string"
+    && typeof control?.label === "string"
+    && Array.isArray(control?.values)
+    && control.values.length
+  ));
+  const hasDesignComponent = Boolean(
+    reviewRuntime?.entry
+    && reviewRuntime?.componentExport
+    && reviewRuntime?.previewParametersExport
+    && componentControls.length
+  );
+  const componentInitialSelection = Object.fromEntries(componentControls.map((control) => [
+    control.key,
+    control.values.includes(control.default) ? control.default : control.values[0],
+  ]));
+  const componentStates = componentControls.length === 1 ? componentControls[0].values : [];
   return {
     id: manifest.id,
     name: manifest.name,
@@ -128,18 +153,26 @@ async function normalizeRecord(entry, coverageTags, purposeMap, coreIds, root) {
     sourcePreviewUrl: sourcePreviewAvailable
       ? `/api/source-preview?library=${encodeURIComponent(library)}&id=${encodeURIComponent(manifest.id)}&slide=${sourceSlides[0]}`
       : null,
+    sourcePreviewUrls: sourcePreviewAvailable
+      ? sourceSlides.map((slide) => ({ slide, url: `/api/source-preview?library=${encodeURIComponent(library)}&id=${encodeURIComponent(manifest.id)}&slide=${slide}` }))
+      : [],
     componentPreviewAvailable: hasDesignComponent,
     componentPreviewUrl: hasDesignComponent
       ? `/api/component-preview?library=${encodeURIComponent(library)}&id=${encodeURIComponent(manifest.id)}`
       : null,
     componentStates,
-    componentInitialState: componentStates.includes(runtime.stateContract?.previewDefault)
-      ? runtime.stateContract.previewDefault
-      : componentStates[0] ?? null,
+    componentInitialState: componentStates.length ? componentInitialSelection[componentControls[0].key] : null,
+    componentControls,
+    componentInitialSelection,
+    nativeStatePreviewUrl: hasDesignComponent && runtime.entry && runtime.builderExport
+      ? `/api/native-state-preview?library=${encodeURIComponent(library)}&id=${encodeURIComponent(manifest.id)}`
+      : null,
     runtimeEntry: runtime.entry ?? "",
     mapperExport: runtime.mapperExport ?? "",
-    componentExport: runtime.componentExport ?? "",
-    previewParametersExport: runtime.previewParametersExport ?? "",
+    reviewEntry: reviewRuntime?.entry ?? "",
+    componentExport: reviewRuntime?.componentExport ?? "",
+    previewParametersExport: reviewRuntime?.previewParametersExport ?? "",
+    previewResolverExport: reviewRuntime?.previewResolverExport ?? "",
     builderExport: runtime.builderExport ?? "",
     manifestPath: relative(manifestPath, root),
     assetDir: relative(assetDir, root),
@@ -267,9 +300,17 @@ export async function resolveComponentPreview(root, library, assetId) {
   if (!new Set(["core", "candidate"]).has(library)) return null;
   const data = await collectVisualSkillDashboardData(root);
   const record = data.records.find((item) => item.library === library && item.id === assetId);
-  if (!record?.componentPreviewAvailable || !record.runtimeEntry || !record.componentExport || !record.previewParametersExport) return null;
+  if (!record?.componentPreviewAvailable || !record.reviewEntry || !record.componentExport || !record.previewParametersExport) return null;
   const assetDir = path.resolve(root, record.assetDir);
-  const entryPath = path.resolve(assetDir, record.runtimeEntry);
+  const entryPath = path.resolve(assetDir, record.reviewEntry);
   if (!isInside(assetDir, entryPath) || !await exists(entryPath)) return null;
   return { record, assetDir, entryPath };
+}
+
+export async function resolveNativeStatePreview(root, library, assetId) {
+  const component = await resolveComponentPreview(root, library, assetId);
+  if (!component?.record.runtimeEntry || !component.record.builderExport) return null;
+  const runtimeEntryPath = path.resolve(component.assetDir, component.record.runtimeEntry);
+  if (!isInside(component.assetDir, runtimeEntryPath) || !await exists(runtimeEntryPath)) return null;
+  return { ...component, runtimeEntryPath };
 }

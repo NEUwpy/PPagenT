@@ -1993,10 +1993,11 @@ export function buildSwimlaneProcess(presentation, params) {
     slide.shapes.add({
       geometry: "line",
       position: transformPosition(slide, {
-        left: x1,
+        left: Math.min(x1, x2),
         top: Math.min(y1, y2),
-        width: x2 - x1,
+        width: Math.abs(x2 - x1),
         height: Math.abs(y2 - y1),
+        horizontalFlip: x2 < x1,
         verticalFlip: y2 < y1,
       }),
       fill: "none",
