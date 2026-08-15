@@ -19,7 +19,7 @@ PPA 看板是 PPagenT 的本地资产建设与审查入口。它不保存第二�
 2. Style Group 的实时 HTML Component；
 3. 审核后 Native Builder 生成的 PPT 示例图像。
 
-提供 HTML 审查组件和示例参数的资产，在点开一个 Style Group 后会列出它登记的全部 State 标签，例如 3、4、5、6、7 项；点击标签即可查看对应结构，不必把多个画面同时铺开。正式运行方式与是否提供 HTML 审查相互独立：核心结构统一由 Native Builder 生成；没有 HTML 审查组件的旧资产仍可查看来源和 PPT 结果。
+提供 HTML 审查组件和示例参数的资产，在点开一个 Style Group 后会列出它登记的全部 State 标签，例如 3、4、5、6、7 项；点击标签会强制刷新同一审查画布，并明确标出当前项数，不必把多个画面同时铺开。来源页和 Native Builder PPT 预览均可点击查看大图。正式运行方式与是否提供 HTML 审查相互独立：核心结构统一由 Native Builder 生成；没有 HTML 审查组件的旧资产仍可查看来源和 PPT 结果。
 
 ## 数据与预览来源
 

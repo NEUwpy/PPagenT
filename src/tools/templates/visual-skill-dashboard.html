@@ -121,6 +121,9 @@
     .drawer-preview { display: grid; place-items: center; aspect-ratio: 16 / 9; overflow: hidden; margin-top: 18px; border: 1px solid var(--line); border-radius: 12px; color: #7b899d; background: #f2f5f9; font-size: 13px; }
     .drawer-preview img { display: block; width: 100%; height: 100%; object-fit: contain; }
     .drawer-preview span { padding: 18px; text-align: center; line-height: 1.65; }
+    button.preview-open { position: relative; width: 100%; padding: 0; cursor: zoom-in; font: inherit; }
+    button.preview-open::after { content: "点击查看大图"; position: absolute; right: 10px; bottom: 10px; padding: 5px 9px; border-radius: 7px; color: #fff; background: rgba(13, 30, 56, .72); font-size: 11px; opacity: 0; transition: opacity .16s ease; }
+    button.preview-open:hover::after, button.preview-open:focus-visible::after { opacity: 1; }
     .review-flow { margin-top: 22px; padding: 18px; border: 1px solid #cfe0f7; border-radius: 15px; background: #f7faff; }
     .review-flow > h3 { margin: 0; font-size: 16px; }
     .review-flow > p { margin: 7px 0 0; color: var(--muted); font-size: 12px; line-height: 1.65; }
@@ -136,6 +139,12 @@
     .state-switcher { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 10px; }
     .state-button { min-width: 42px; min-height: 32px; padding: 5px 10px; border: 1px solid #cbd8ea; border-radius: 8px; color: #4f6078; background: #fff; font-size: 12px; }
     .state-button:hover, .state-button.active { color: #fff; border-color: var(--blue); background: var(--blue); }
+    .preview-lightbox { position: fixed; inset: 0; z-index: 80; display: none; place-items: center; padding: 34px; background: rgba(8, 17, 32, .88); }
+    .preview-lightbox.open { display: grid; }
+    .preview-lightbox figure { display: grid; gap: 12px; width: min(1280px, 94vw); max-height: 92vh; margin: 0; }
+    .preview-lightbox img { width: 100%; max-height: calc(92vh - 42px); object-fit: contain; border-radius: 8px; background: #fff; box-shadow: 0 22px 70px rgba(0,0,0,.38); }
+    .preview-lightbox figcaption { color: #eef4ff; text-align: center; font-size: 13px; }
+    .preview-lightbox-close { position: fixed; top: 18px; right: 22px; width: 42px; height: 42px; border: 1px solid rgba(255,255,255,.3); border-radius: 50%; color: #fff; background: rgba(255,255,255,.12); font-size: 24px; }
     .detail-group { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
     .detail-group h3 { margin: 0 0 12px; font-size: 14px; color: #34445d; }
     .detail-grid { display: grid; grid-template-columns: 145px 1fr; gap: 9px 14px; font-size: 13px; line-height: 1.65; }
@@ -264,6 +273,11 @@
     </aside>
   </div>
 
+  <div class="preview-lightbox" id="preview-lightbox" role="dialog" aria-modal="true" aria-label="PPT 页面大图">
+    <button class="preview-lightbox-close" id="preview-lightbox-close" type="button" aria-label="关闭大图">×</button>
+    <figure><img id="preview-lightbox-image" alt=""><figcaption id="preview-lightbox-caption"></figcaption></figure>
+  </div>
+
   <script type="module">
     /*__PPAGENT_DATA__*/
 
@@ -287,13 +301,14 @@
       if (!liveMode) return '<div class="' + className + '"><span>静态快照不加载 PPT 图像<br>双击 PPA看板.exe 查看真实示例</span></div>';
       if (!asset.previewAvailable || !asset.previewUrl) return '<div class="' + className + '"><span>此资产没有可用的 example.pptx</span></div>';
       const sourceAttribute = drawer ? 'src' : 'data-preview-src';
+      if (drawer) return '<button type="button" class="' + className + ' preview-open" data-preview-open="' + esc(asset.previewUrl) + '" data-preview-caption="' + esc(asset.name) + ' · Native Builder PPT"><img src="' + esc(asset.previewUrl) + '" alt="' + esc(asset.name) + ' 的 PPT 示例外观"><span hidden>真实 PPT 示例预览生成失败</span></button>';
       return '<div class="' + className + '"><img ' + sourceAttribute + '="' + esc(asset.previewUrl) + '" alt="' + esc(asset.name) + ' 的 PPT 示例外观"><span hidden>真实 PPT 示例预览生成失败</span></div>';
     }
 
     function reviewWorkflowMarkup(asset) {
       if (!liveMode) return '<div class="review-flow"><h3>建设链证据</h3><p>静态快照不加载来源页和实时 HTML。请双击 PPA看板.exe。</p></div>';
       const sourceMedia = asset.sourcePreviewAvailable && asset.sourcePreviewUrl
-        ? '<div class="review-media source"><img src="' + esc(asset.sourcePreviewUrl) + '" alt="' + esc(asset.name) + ' 的来源 PPT 页面"><span hidden>来源页预览生成失败</span></div>'
+        ? '<button type="button" class="review-media source preview-open" data-preview-open="' + esc(asset.sourcePreviewUrl) + '" data-preview-caption="' + esc(asset.name) + ' · 来源 PPT 页面"><img src="' + esc(asset.sourcePreviewUrl) + '" alt="' + esc(asset.name) + ' 的来源 PPT 页面"><span hidden>来源页预览生成失败</span></button>'
         : '<div class="review-media source"><span>没有可读取的 PPT源/ 文件与页码</span></div>';
       let componentMedia = '<div class="review-media component"><span>此资产尚未配置实时 HTML 审查组件</span></div>';
       let stateButtons = '';
@@ -428,17 +443,40 @@
       document.body.style.overflow = "";
     }
 
+    function openPreview(trigger) {
+      document.getElementById("preview-lightbox-image").src = trigger.dataset.previewOpen;
+      document.getElementById("preview-lightbox-image").alt = trigger.dataset.previewCaption || "PPT 页面大图";
+      document.getElementById("preview-lightbox-caption").textContent = trigger.dataset.previewCaption || "PPT 页面大图";
+      document.getElementById("preview-lightbox").classList.add("open");
+    }
+
+    function closePreview() {
+      document.getElementById("preview-lightbox").classList.remove("open");
+      document.getElementById("preview-lightbox-image").removeAttribute("src");
+    }
+
     function populateFilters() {
       const categories = [...new Set(DATA.records.map((asset) => asset.category))].sort((left, right) => left.localeCompare(right, "zh-CN"));
       document.getElementById("category-filter").innerHTML += categories.map((category) => '<option value="' + esc(category) + '">' + esc(category) + '</option>').join("");
     }
 
     document.addEventListener("click", (event) => {
+      const previewTarget = event.target.closest("[data-preview-open]");
+      if (previewTarget) {
+        openPreview(previewTarget);
+        return;
+      }
       const stateTarget = event.target.closest("[data-component-state]");
       if (stateTarget) {
         const stage = stateTarget.closest(".review-stage");
         const frame = stage?.querySelector("iframe");
-        if (frame) frame.src = stateTarget.dataset.componentBase + "&state=" + encodeURIComponent(stateTarget.dataset.componentState);
+        const selectedState = stateTarget.dataset.componentState;
+        const status = stage?.querySelector(".review-stage-head span");
+        if (status) status.textContent = "正在显示 " + selectedState + "项…";
+        if (frame) {
+          frame.addEventListener("load", () => { if (status) status.textContent = "当前显示 " + selectedState + "项"; }, { once: true });
+          frame.src = stateTarget.dataset.componentBase + "&state=" + encodeURIComponent(selectedState) + "&refresh=" + Date.now();
+        }
         stage?.querySelectorAll(".state-button").forEach((button) => {
           const active = button === stateTarget;
           button.classList.toggle("active", active);
@@ -463,6 +501,7 @@
         document.getElementById("assets").scrollIntoView({ behavior: "smooth" });
       }
       if (event.target.id === "drawer-backdrop" || event.target.id === "drawer-close") closeDrawer();
+      if (event.target.id === "preview-lightbox" || event.target.id === "preview-lightbox-close") closePreview();
     });
     document.addEventListener("error", (event) => {
       if (event.target.matches(".skill-preview img, .drawer-preview img, .review-media img")) {
@@ -470,7 +509,11 @@
         if (event.target.nextElementSibling) event.target.nextElementSibling.hidden = false;
       }
     }, true);
-    document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeDrawer(); });
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") return;
+      if (document.getElementById("preview-lightbox").classList.contains("open")) closePreview();
+      else closeDrawer();
+    });
     document.getElementById("refresh-dashboard").addEventListener("click", () => {
       if (!liveMode) return;
       document.getElementById("refresh-dashboard").textContent = "正在刷新…";
