@@ -23,6 +23,7 @@ export async function loadVisualVariantCatalog(root = process.cwd()) {
     itemCount: { ...item.runtime.itemCount },
     textCapacity: item.runtime.textCapacity ? { ...item.runtime.textCapacity } : null,
     contentContract: item.runtime.contentContract ? structuredClone(item.runtime.contentContract) : null,
+    slotContract: item.runtime.slotContract ? structuredClone(item.runtime.slotContract) : null,
     renderer: item.runtime.renderer,
     compositionIds: item.runtime.compositionIds ?? [],
     fallbackBody: Boolean(item.runtime.fallbackBody),

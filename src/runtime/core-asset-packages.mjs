@@ -66,6 +66,15 @@ async function loadPackage(manifestPath) {
       }
     }
   }
+  if (runtime.slotContract) {
+    requireValue(runtime.slotContract.schemaVersion === "1.0", `${asset.id} 的 slotContract.schemaVersion 非法`);
+    requireValue(runtime.slotContract.coordinateSpace === "design-frame", `${asset.id} 的 slotContract.coordinateSpace 必须是 design-frame`);
+    requireValue(typeof runtime.slotContract.resolverExport === "string" && runtime.slotContract.resolverExport, `${asset.id} 的 slotContract 缺少 resolverExport`);
+    requireValue(typeof runtime.slotContract.binding === "string" && runtime.slotContract.binding, `${asset.id} 的 slotContract 缺少 binding`);
+    requireValue(runtime.slotContract.maxDepth === 1, `${asset.id} 的 slotContract.maxDepth 当前只允许 1`);
+    requireValue(runtime.slotContract.childPolicy === "registered-core-only", `${asset.id} 的 slotContract.childPolicy 必须是 registered-core-only`);
+    requireValue(runtime.slotContract.fallback === "plain-text", `${asset.id} 的 slotContract.fallback 必须是 plain-text`);
+  }
 
   const assetDir = path.dirname(manifestPath);
   const entryPath = path.resolve(assetDir, runtime.entry);
@@ -74,6 +83,7 @@ async function loadPackage(manifestPath) {
   const builder = runtime.builderExport ? module[runtime.builderExport] : null;
   const component = runtime.componentExport ? module[runtime.componentExport] : null;
   const mapper = module[runtime.mapperExport];
+  const slotResolver = runtime.slotContract?.resolverExport ? module[runtime.slotContract.resolverExport] : null;
   if (renderer === "legacy-builder") {
     requireValue(typeof runtime.builderExport === "string" && runtime.builderExport, `${asset.id} 缺少 builderExport`);
     requireValue(typeof builder === "function", `${asset.id} 没有导出 ${runtime.builderExport}`);
@@ -82,8 +92,9 @@ async function loadPackage(manifestPath) {
     requireValue(component && typeof component.renderMarkup === "function", `${asset.id} 没有导出可用的 ${runtime.componentExport}`);
   }
   requireValue(typeof mapper === "function", `${asset.id} 没有导出 ${runtime.mapperExport}`);
+  if (runtime.slotContract) requireValue(typeof slotResolver === "function", `${asset.id} 没有导出 ${runtime.slotContract.resolverExport}`);
 
-  return { assetId: asset.id, asset, assetDir, manifestPath, runtime, builder, component, mapper };
+  return { assetId: asset.id, asset, assetDir, manifestPath, runtime, builder, component, mapper, slotResolver };
 }
 
 export async function discoverCoreAssetPackages(root = defaultRoot) {

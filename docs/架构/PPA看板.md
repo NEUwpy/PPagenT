@@ -17,11 +17,13 @@ PPA 看板是 PPagenT 的本地资产建设与审查入口。它不保存第二�
 
 1. `PPT源/` 中由文件和页码定位的来源页；
 2. Style Group 资产包中的专属实时 HTML Component；
-3. 审核后 Native Builder 生成的 PPT 示例图像。
+3. 同一 HTML 布局经通用 Native 编译，或旧兼容 Builder 生成的 PPT 示例图像。
 
-提供资产专属 HTML 审查组件和示例参数的资产，在点开一个 Style Group 后会按维度列出 State 标签。例如组织树分别选择“部门数”和“每部门成员数”，鱼骨图分别选择“原因类别数”和“每类因素数”；任一选择都会同时刷新 HTML 和 Native Builder 结果，不必把所有组合并排铺开。HTML 由看板直接调用资产包代码实时渲染，修改组件后刷新页面即可看到结果，不再额外生成 HTML 审阅截图。来源页和 Native Builder PPT 预览均可点击查看大图。
+提供资产专属 HTML 审查组件和示例参数的资产，在点开一个 Style Group 后会按维度列出 State 标签。例如组织树分别选择“部门数”和“每部门成员数”，鱼骨图分别选择“原因类别数”和“每类因素数”；任一选择都会刷新当前资产声明的 HTML 与 Native 结果，不必把所有组合并排铺开。HTML 由看板直接调用资产包代码实时渲染，修改组件后刷新页面即可看到结果，不再额外生成 HTML 审阅截图。来源页和 Native PPT 预览均可点击查看大图。
 
-`runtime.review.implementation` 只有明确声明为 `asset-specific-html` 时，才计入 HTML 迁移完成度。共享通用组件只能用于早期试验或占位，不得作为黄金状态复现完成的证据。`goldenState` 记录来源页对应的默认参数；用户先在看板核对黄金状态，再审核数量扩展，最后才进入 Native Builder 视觉等价检查。
+资产声明 `slotContract` 时，详情页还显示 Content Slots 契约。它表示父 State 将从同一布局中解析真实可填区域、容量和兜底方式；不是看板另存的坐标，也不表示子 Skill 已经接入正式生成。当前循环闭环已能展示该声明，子 Skill 选择与嵌套预览仍属于下一步最小实验。
+
+`runtime.review.implementation` 只有明确声明为 `asset-specific-html` 时，才计入 HTML 迁移完成度。共享通用组件只能用于早期试验或占位，不得作为黄金状态复现完成的证据。`goldenState` 记录来源页对应的默认参数；用户先在看板核对黄金状态，再审核数量扩展与 Content Slot 边界，最后检查 Native 编译结果。
 
 ## 数据与预览来源
 
@@ -33,7 +35,7 @@ PPA 看板是 PPagenT 的本地资产建设与审查入口。它不保存第二�
 
 PPT 预览在首次进入可视区域或打开详情时生成，缓存在 `.tmp/asset-dashboard-previews/`；State 对应的 Native 预览缓存在 `.tmp/asset-dashboard-native-state-previews/`。来源页在 Windows 下优先调用本机 PowerPoint 只导出声明页，没有 Office 时回退到 Artifact Tool；首次读取大模板会显示加载提示，生成后缓存在 `.tmp/asset-dashboard-source-previews/`。源文件修改后缓存自动失效。
 
-`example.pptx` 不是手工拼出的另一份状态库。运行 `npm run assets:examples` 时，工具读取每个 `asset.json` 的 State 控件，并用同一 `review.mjs` 参数解析器和 Native Builder 生成整个家族。
+`example.pptx` 不是手工拼出的另一份状态库。运行 `npm run assets:examples` 时，工具读取每个 `asset.json` 的 State 控件，并用同一 `review.mjs` 参数解析器和资产声明的 Native 出口生成整个家族。
 
 ## 重新构建应用
 

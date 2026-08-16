@@ -23,6 +23,7 @@ console.log(JSON.stringify({
     purposes: item.runtime.supportedPurposeKeys ?? [],
     itemCount: item.runtime.itemCount,
     stateContract: item.runtime.stateContract ?? null,
+    slotContract: item.runtime.slotContract ?? null,
     mediaContract: item.runtime.mediaContract ?? null,
   })),
 }, null, 2));

@@ -38,6 +38,7 @@ function publicVariant(variant, contract, compositions) {
     itemCount: variant.itemCount,
     textCapacity: variant.textCapacity ?? null,
     contentContract: variant.contentContract ?? null,
+    slotContract: variant.slotContract ?? null,
     renderer: variant.renderer,
     fallbackBody: variant.fallbackBody,
     compositionIds: compositions.map((layout) => layout.id),

@@ -150,6 +150,27 @@ test("正式流程只把核心库中的蒸馏变体交给视觉导演", async ()
   ]);
 });
 
+test("循环父候选向视觉导演暴露 Slot 契约但不开放子结构绑定", async () => {
+  const page = content("cycle", [
+    { id: "plan", title: "计划", body: "明确目标" },
+    { id: "do", title: "执行", body: "推进任务" },
+    { id: "check", title: "检查", body: "核对结果" },
+    { id: "act", title: "改进", body: "进入下一轮" },
+  ]);
+  const draft = intentDraft("cycle-intent", "explain_cycle", "sequence", {
+    ordered: true,
+    sameLevel: true,
+  });
+  draft.relationTraits.cyclic = true;
+  const intent = enrichPageIntent(draft, page);
+  const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
+  const cycle = set.candidates.find((candidate) => candidate.assetId === "cycle-loop-001");
+  assert.equal(cycle?.slotContract?.resolverExport, "resolveContentSlots");
+  assert.equal(cycle?.slotContract?.maxDepth, 1);
+  assert.equal(cycle?.slotContract?.fallback, "plain-text");
+  assert.equal("slotBindings" in cycle, false);
+});
+
 test("两个互补事实不会因为恰好有两项就获得比较资产", async () => {
   const page = content("scope", [
     { id: "skin", title: "视觉规范可以替换", body: "学校视觉规范是可替换的组织视觉系统。" },

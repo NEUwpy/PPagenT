@@ -150,6 +150,7 @@ async function normalizeRecord(entry, coverageTags, purposeMap, coreIds, root) {
     stateContract: runtime.stateContract ?? null,
     mediaContract: runtime.mediaContract ?? null,
     contentContract: runtime.contentContract ?? null,
+    slotContract: runtime.slotContract ?? null,
     contract: runtime.contract ?? null,
     compositionIds: runtime.compositionIds ?? manifest.spatialContract?.supportedCompositionIds ?? [],
     source: manifest.source ?? null,

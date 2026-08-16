@@ -11,6 +11,9 @@ flowchart LR
     D["Visual Skill\n并列、顺序、对比等语义能力"] --> E["Style Group\n一种具体视觉语法"]
     E --> F["State\n数量、密度与断点状态"]
     F --> C
+    F --> G["Content Slots\nState 求解后的真实可填区域"]
+    G --> H["普通文字"]
+    G --> I["已登记一级子 Skill"]
 ```
 
 - **Skin** 决定学校或组织身份，包括颜色、字体、Logo 和页注文案。
@@ -18,10 +21,11 @@ flowchart LR
 - **Visual Skill** 是视觉导演按语义调用的能力，例如 `parallel`、`sequence`、`comparison`。
 - **Style Group** 是某个 Visual Skill 下的一种具体视觉语法，例如“中心辐射”“横向卡片”“交错双列”。一个 Skill 可以登记多个 Style Group。
 - **State** 是同一 Style Group 面对不同数量、密度或断点时的确定性排布结果。State 不是新的自由设计，也不应被保存成互不相关的页面。每组只声明其视觉语法真正支持的范围；矩阵可以固定四项，金字塔可以只支持 3–5 层，不要求所有 Style Group 统一扩成 3–8 项。
+- **Content Slot** 是父 Style Group 在某个 State 下最终求解出的真实可见填充区域。它不是整个灰色承载面，也不是整页 Composition 槽位；遮罩、圆环或装饰占去的区域不能算进可填空间。
 
 目标颗粒度是：
 
-> `Visual Skill → Style Group → State`
+> `Visual Skill → Style Group → State → Content Slots → 普通内容或一级子 Skill`
 
 核心资产包现在开始正式登记 `skillId / styleGroupId / stateContract`，候选发现结果也会暴露这些字段；`familyId / variantId` 暂时保留为兼容接口。State 仍由程序根据内容与父容器确定性求解，不由导演逐页重画。
 
@@ -58,13 +62,14 @@ flowchart LR
 
 ## 四、Style Group 的完整对象
 
-一个 Style Group 不是一张图，也不是一个数量状态。核心包固定由五类信息构成：
+一个 Style Group 不是一张图，也不是一个数量状态。核心包固定由六类信息构成：
 
-1. `asset.json`：保存来源文件与页码、Visual Skill / Style Group 身份、语义与容量契约、State 控件，以及 HTML Component 或旧 Native Builder 入口。
+1. `asset.json`：保存来源文件与页码、Visual Skill / Style Group 身份、语义与容量契约、State 控件、可选 `slotContract`，以及 HTML Component 或旧 Native Builder 入口。
 2. `review.mjs`（或等价 HTML 组件入口）：保存建设期审美组件、可替换内容和 State 参数解析；一组只有一份组件代码，不按二项、三项、四项分别维护。
 3. 通用 HTML → ResolvedVisualTree → Native 编译器：读取浏览器已经求解的 DOM/CSS、SVG 几何和文字样式，机械转换为原生 PowerPoint 对象；尚未迁移的旧资产暂由原 Native Builder 运行。
 4. 一份共享预览输入：由 `previewParametersExport` 和 `previewResolverExport` 暴露，使 HTML 与 Builder 接收同一组内容和 State 选择。
 5. `example.pptx`：按 `asset.json` 声明的 State 控件生成整个样式家族，供脱离代码审查原生可编辑结果。
+6. 可选 Content Slot 解析器：从与 HTML 相同的布局计算中导出每个 State 的实际槽位位置、尺寸、容量和允许内容模式，不能再维护一份手写坐标表。
 
 其中的契约必须覆盖适用关系、数量范围、标题/正文字数、媒体要求、最小尺寸、轮廓、密度，以及 `items`、节点内 `points` 和重复视觉条目的语义接口。图标、中心图像、标题和正文等可变槽也必须进入参数，不得固化来源模板中的第三方内容。
 
@@ -72,7 +77,27 @@ flowchart LR
 
 Style Group 在 HTML Component 中完成设计、数量响应、间距、字体和层级验证。确认后不再为同一版式手写第二套布局：通用编译器读取最终 DOM/CSS/SVG 并生成 Native 形状。HTML 截图不能进入正式 PPTX；进入 PPTX 的仍是文字、形状和自由曲线等可编辑对象。旧 Native Builder 仅作为尚未迁移资产的兼容路径。
 
-当前 14 个正式结构 Style Group 均已迁移到这一形态。Builder 是审核后的固定产物，不是正式运行时由 AI 临时写出的代码。
+当前 14 个正式结构 Style Group 都已整理为自描述资产包，但并非都完成 HTML 单源编译迁移。`cycle-pdca-ring-p57` 是首个以 HTML 为唯一布局真源并由通用编译器生成 Native PPT 的正式试点；其他资产仍按各自声明走兼容路径。Builder 或编译器都不是正式运行时由 AI 临时写出的代码。
+
+### Content Slot 与一级子 Skill 契约
+
+Content Slot 用来解决“图中还有结构”的页面，但它只是一层受控空间接口，不建立递归布局系统。
+
+父 Style Group 必须先确定 State 和一级拓扑，再从同一布局求解器导出槽位。`asset.json.runtime.slotContract` 至少声明：
+
+- `schemaVersion`：槽位契约版本；
+- `coordinateSpace=design-frame`：坐标基于组件自己的 `1170 × 492` 设计框，不是整页坐标；
+- `resolverExport`：返回动态槽位的导出函数；
+- `binding`：槽位与父内容项的绑定关系；
+- `maxDepth=1`：当前只允许一级子结构；
+- `childPolicy=registered-core-only`：只能调用已经登记、用户确认的核心子 Skill；
+- `fallback=plain-text`：没有合法子 Skill 时必须退化为普通文字。
+
+解析后的每个槽位至少包含 `id / bindingPath / role / frame / side / alignment / capacity / allowedContentModes / fallback`。其中 `frame` 是排除圆环遮挡、装饰和内边距之后真正可用的矩形；容量声明至少覆盖最大深度、条目数和单条字数。
+
+选择顺序固定为：父 Style Group → 父 State → Content Slots → 槽内内容。子 Skill 只能在精确槽位内布局，不得改变父环、父卡片或 Shell；候选必须同时满足槽位尺寸、文字容量、媒体契约和语义关系。没有合法候选时使用槽内普通文字，不得现场创造结构。父与子最终仍在同一 HTML 树中求解，再由同一通用编译器生成 Native 对象。
+
+`items[].points[]`、`componentBindings` 和 Content Slots 的职责不同：`points` 是来源已有的二级语义，`componentBindings` 是视觉导演对重复视觉单元的内容适配，Content Slots 是组件提供的空间容器。声明槽位不会自动创造内容，也不会自动把任意 `points` 升级成子结构。
 
 ### 媒体契约
 
@@ -90,10 +115,11 @@ Style Group 在 HTML Component 中完成设计、数量响应、间距、字体�
 
 ## 五、正式选择
 
-正式运行按两段完成：
+正式运行按两段完成；当资产声明 Content Slots 时，在父选择之后再增加一个受控槽内步骤：
 
 1. 程序根据页面关系、item 数、文字容量、媒体契约、Skin 和 Content Frame，对核心 Style Group 做硬过滤。任何必填媒体缺失都使该组不合法。
 2. 视觉导演在整套 PPT 尺度选择合法 Style Group，综合轮廓、密度、前后页节奏和已用次数。已经使用过某组是重复惩罚，不是绝对禁用；没有更合适的替代时允许复用。
+3. 程序根据已选父 State 求解 Content Slots。只有 Composition Schema 明确提供合法子候选和绑定字段时，视觉导演才可在槽内选择一级子 Skill；否则使用父资产声明的普通文字兜底。
 
 State 由内容数量、容量和父容器确定性求解，视觉导演不为每个数量重新绘图。正式生成只能调用已经登记并经用户确认的核心 Style Group。
 
@@ -118,4 +144,4 @@ Visual Skill 的调用接口采用两级版式中立内容：
 
 当前先固定 Shell 和 Content Frame，再蒸馏更多 Style Group。其他学校版本可以替换 Logo、颜色、字体、栏目和页注文案；除非真实模板证明版式骨架必须改变，否则继续复用本 Shell 几何。候选 Style Group 仍需用户明确确认后才能进入核心库，Luna 只承担来源 PPT 的蒸馏与入库，不参与正式生成线。
 
-当前实现状态必须分开理解：Shell 几何、核心资产发现、正文兜底、字段级内容覆盖和 `componentBindings` 校验已经进入运行时代码。`cycle-pdca-ring-p57` 是首个以 HTML 为唯一布局真源、由通用编译器正式生成 Native PPT 的试点；其他结构资产仍走旧 Native Builder，待逐项审核后迁移。共享通用预览不算资产专属 HTML，也不计入迁移完成度。
+当前实现状态必须分开理解：Shell 几何、核心资产发现、正文兜底、字段级内容覆盖和 `componentBindings` 校验已经进入运行时代码。`cycle-pdca-ring-p57` 是首个以 HTML 为唯一布局真源、由通用编译器正式生成 Native PPT 的试点；它也已声明并可动态解析 3–6 步 State 的 Content Slots。正式生成尚未开放子 Skill 候选、Slot 绑定 Schema 和嵌套渲染，因此当前这些槽位仍使用普通文字。下一步只需用一个已登记的小型子 Skill 做最小闭环，不扩成递归 Agent 或通用嵌套框架。其他结构资产仍走兼容路径，待逐项审核后迁移。

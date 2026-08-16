@@ -3,6 +3,12 @@ export const SOURCE_FRAME = Object.freeze({ left: 55, top: 166, width: 1170, hei
 export const RING_FRAME = Object.freeze({ left: 345, top: 6, width: 480, height: 480 });
 export const RING = Object.freeze({ center: 240, outer: 226, inner: 148, breath: 12, arrowReach: 78, arrowHalf: 39, core: 76 });
 export const COLORS = Object.freeze(["#344e9a", "#4168b2", "#5b91cb", "#63a1d7", "#527fbd", "#385fa4"]);
+export const SUPPORT_PANEL = Object.freeze({
+  width: 520,
+  outerPadding: 28,
+  dense: Object.freeze({ height: 220, gap: 52, innerPadding: 205, verticalPadding: 16 }),
+  compact: Object.freeze({ height: 156, gap: 12, innerPadding: 190, verticalPadding: 10 }),
+});
 
 function text(value) {
   return String(value ?? "").trim();
@@ -144,18 +150,26 @@ export function panelItems(steps) {
   for (const side of ["left", "right"]) {
     const items = bySide[side].sort((left, right) => left.vertical - right.vertical);
     const compact = items.length >= 3;
-    const gap = compact ? 12 : 52;
-    const height = compact ? 156 : 220;
-    items.forEach((item, row) => result.push({
-      ...item,
-      frame: {
-        left: side === "left" ? 0 : DESIGN_FRAME.width - 520,
-        top: row * (height + gap),
-        width: 520,
-        height,
-      },
-      compact,
-    }));
+    const profile = compact ? SUPPORT_PANEL.compact : SUPPORT_PANEL.dense;
+    items.forEach((item, row) => {
+      const frame = {
+        left: side === "left" ? 0 : DESIGN_FRAME.width - SUPPORT_PANEL.width,
+        top: row * (profile.height + profile.gap),
+        width: SUPPORT_PANEL.width,
+        height: profile.height,
+      };
+      result.push({
+        ...item,
+        frame,
+        slotFrame: {
+          left: frame.left + (side === "left" ? SUPPORT_PANEL.outerPadding : profile.innerPadding),
+          top: frame.top + profile.verticalPadding,
+          width: frame.width - profile.innerPadding - SUPPORT_PANEL.outerPadding,
+          height: frame.height - profile.verticalPadding * 2,
+        },
+        compact,
+      });
+    });
   }
   return result;
 }

@@ -1,7 +1,7 @@
 import { runHtmlComponentGenerator } from "../../../src/visual-runtime/html-component-runtime.mjs";
 import { mapping, renderPayload } from "../../../src/render/payload-helpers.mjs";
-import { previewParameters, resolvePreviewParameters, visualComponent } from "./review.mjs";
-export { previewParameters, resolvePreviewParameters, visualComponent };
+import { previewParameters, resolveContentSlots, resolvePreviewParameters, visualComponent } from "./review.mjs";
+export { previewParameters, resolveContentSlots, resolvePreviewParameters, visualComponent };
 
 export function mapPageContent(content, intent) {
   return renderPayload(intent, "cycle-loop-001", {

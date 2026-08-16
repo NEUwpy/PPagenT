@@ -17,8 +17,9 @@ function escapeHtml(value) {
 function panelMarkup(item, density) {
   const { frame } = item;
   const lines = item.step.copyLines.map((line, index) => `<p class="cycle-copy-line" data-ppt-kind="text" data-ppt-name="cycle-${item.index}-copy-line-${index}">${escapeHtml(line)}</p>`).join("");
+  const slotId = `step-${item.step.key}-support`;
   return `<article class="cycle-note" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="cycle-panel-${item.index}" data-side="${item.side}" data-key="${escapeHtml(item.step.key)}" data-density="${density}" style="--left:${frame.left}px;--top:${frame.top}px;--width:${frame.width}px;--height:${frame.height}px">
-    <div class="cycle-copy">${lines}</div>
+    <div class="cycle-copy" data-content-slot-id="${escapeHtml(slotId)}" data-content-slot-role="stage-support">${lines}</div>
   </article>`;
 }
 
@@ -51,6 +52,25 @@ export const visualComponent = Object.freeze({
     </section>`;
   },
 });
+
+export function resolveContentSlots(parameters) {
+  const model = normalizeCycleParameters(parameters);
+  return panelItems(model.steps).map((item) => ({
+    id: `step-${item.step.key}-support`,
+    bindingPath: `steps[${item.index}]`,
+    role: "stage-support",
+    frame: item.slotFrame,
+    side: item.side,
+    alignment: item.side === "left" ? "left" : "right",
+    capacity: {
+      maxDepth: 1,
+      maxItems: 4,
+      maxCharsPerItem: 22,
+    },
+    allowedContentModes: ["plain-text", "registered-child-skill"],
+    fallback: "plain-text",
+  }));
+}
 
 export const previewParameters = Object.freeze({
   title: "PDCA工作复盘分析框架",

@@ -53,6 +53,15 @@
       "itemRole": "semantic-node",
       "points": "optional"
     },
+    "slotContract": {
+      "schemaVersion": "1.0",
+      "coordinateSpace": "design-frame",
+      "resolverExport": "resolveContentSlots",
+      "binding": "steps[].support",
+      "maxDepth": 1,
+      "childPolicy": "registered-core-only",
+      "fallback": "plain-text"
+    },
     "sourceFrame": {
       "left": 55,
       "top": 166,
@@ -158,5 +167,5 @@
   },
   "semanticContract": "多个步骤反复运行，最后一步会反馈或回到第一步",
   "doNotUseWhen": "只是一次性线性过程，或多个要点之间没有循环关系",
-  "review": "2026-08-16 已完成第57页 HTML 黄金状态，并把基础版收紧为一层循环关系：外围只接收普通正文与分点；Native 结果由统一 HTML → ResolvedVisualTree → PPT 编译器生成"
+  "review": "2026-08-16 已完成第57页 HTML 黄金状态；基础版表达一层循环关系，并把外围灰区解析为 design-frame 坐标下的 Content Slots；Native 结果由统一 HTML → ResolvedVisualTree → PPT 编译器生成"
 }

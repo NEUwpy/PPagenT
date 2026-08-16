@@ -6,7 +6,7 @@ PPagenT 是一个面向固定使用场景、以可靠生成原生可编辑 Power
 
 ## 当前阶段
 
-两份真实稿件已经用于校准正式生成线。当前先冻结 Shell 与 Content Frame，并用最小实验验证 `Visual Skill → Style Group → State` 和前端式响应布局；HTML/CSS 是资产建设期的设计与审美工作台，审核后固化为 Native PPT Builder，正式生成不运行 HTML。当前状态见[当前阶段](docs/当前阶段.md)，几何和颗粒度见[Shell 与 Visual Skill 契约](docs/Shell与Visual Skill契约.md)，长任务边界见[方向校正](docs/方向校正.md)。
+两份真实稿件已经用于校准正式生成线。当前冻结 Shell 与 Content Frame，并用最小实验验证 `Visual Skill → Style Group → State → Content Slots`：同一份 HTML/CSS 组件既负责响应布局，也向通用编译器提供最终几何，编译结果仍是原生可编辑 PPT 对象。循环闭环已成为首个声明动态 Content Slot 的试点；子 Skill 的自动选择与嵌套渲染尚未接入正式流程。当前状态见[当前阶段](docs/当前阶段.md)，几何和颗粒度见[Shell 与 Visual Skill 契约](docs/Shell与Visual Skill契约.md)，长任务边界见[方向校正](docs/方向校正.md)。
 
 ## 核心工程取舍
 
@@ -47,8 +47,8 @@ PPagenT 采用“AI 理解与选择、参数化代码确定性绘制”的生成
 - `PPT源/`：全部原始 PPT 的唯一目录；整目录不进入 Git，换电脑时单独复制到仓库根目录。
 - `结构样本池/`：保存所有值得继续观察的单页来源样本，允许重复和暂未归类。
 - `备选资产/`：新蒸馏、重复版式和待比较方案的审核区。
-- `src/asset-runtime/`：Native PPT Builder 的共享原语、Content Frame 缩放和已登记结构 Builder。
-- `assets/<分类>/<资产>/asset.json + review.mjs + generate.mjs/runtime.mjs + example.pptx`：Style Group 的来源与契约、HTML 审查组件、正式 Native Builder 和全家族示例；每组只维护一份组件与一份 Builder。
+- `src/asset-runtime/`：原生 PPT 共享原语、旧资产兼容 Builder，以及 HTML 组件到 Native 对象的编译支撑。
+- `assets/<分类>/<资产>/asset.json + review.mjs + generate.mjs/runtime.mjs + example.pptx`：Style Group 的来源与契约、HTML 布局组件、参数映射和全家族示例；迁移后的资产只维护一份 HTML 布局真源，旧资产暂保留 Native Builder 兼容入口。
 - `experiments/`：只保留仍在使用的最小架构实验和 Shell 标注，不再提交整套稿件运行输出或批量渲染物。
 
 ## 公开仓库范围
@@ -80,4 +80,4 @@ npm test
 
 默认实时模型入口为 `npm run agent:run:deepseek`，使用 `deepseek-v4-flash`；它读取环境变量或 Git 忽略的 `config/deepseek.local.json`。OpenAI Provider 仍可通过 `npm run agent:run:openai` 使用。正式入口默认只调用内容导演和视觉导演；具体配置与密钥边界见[运行配置信息](docs/运行配置信息.md)。
 
-正式生成线直接调用 Native Builder，不依赖浏览器。PPA 看板仍可在资产建设期实时展示 HTML 设计组件。PPTX 对象生成依赖 Codex 工作区内置、尚未公开发布的 `@oai/artifact-tool`，因此不把后者写入公共 npm 依赖。
+正式生成线对 `html-component` 资产使用本地浏览器求解受控 DOM/CSS/SVG，再由通用编译器生成 Native 对象；这不是截图转 PPT，也不是面向任意网页的转换器。未迁移资产继续调用旧 Native Builder。PPA 看板读取同一资产声明和 HTML 组件进行审查。PPTX 对象生成依赖 Codex 工作区内置、尚未公开发布的 `@oai/artifact-tool`，因此不把后者写入公共 npm 依赖。
