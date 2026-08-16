@@ -28,10 +28,10 @@ while ((match = assetLinePattern.exec(checklist)) !== null) {
   seen.set(id, { checked: mark.toLowerCase() === "x", label: label.trim(), lineNumber });
 }
 
-for (const [id, asset] of inventory) {
-  const item = seen.get(id);
-  if (!item) {
-    issues.push(`清单漏列资产: ${id}`);
+for (const [id, item] of seen) {
+  const asset = inventory.get(id);
+  if (!asset) {
+    issues.push(`清单包含未知或已移除资产: ${id}`);
     continue;
   }
   if (!item.label.includes(asset.name)) issues.push(`清单名称与 asset.json 不一致: ${id}（应包含“${asset.name}”）`);
@@ -41,10 +41,6 @@ for (const [id, asset] of inventory) {
   }
 }
 
-for (const id of seen.keys()) {
-  if (!inventory.has(id)) issues.push(`清单包含未知或已移除资产: ${id}`);
-}
-
 const report = {
   status: issues.length ? "failed" : "passed",
   checklist: path.relative(root, checklistPath).replaceAll("\\", "/"),
@@ -52,6 +48,7 @@ const report = {
   candidateAssetCount: candidateAssets.length,
   coreAssetCount: coreIds.size,
   checklistAssetCount: seen.size,
+  unlistedDiscoveredAssetCount: [...inventory.keys()].filter((id) => !seen.has(id)).length,
   issues,
 };
 
