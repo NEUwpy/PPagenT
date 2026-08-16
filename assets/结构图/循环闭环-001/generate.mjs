@@ -1,25 +1,25 @@
-import { buildCycleLoop, runGenerator } from "../../../src/asset-runtime/component-builders.mjs";
+import { runHtmlComponentGenerator } from "../../../src/visual-runtime/html-component-runtime.mjs";
 import { mapping, renderPayload } from "../../../src/render/payload-helpers.mjs";
-export { buildCycleLoop };
+import { previewParameters, resolvePreviewParameters, visualComponent } from "./review.mjs";
+export { previewParameters, resolvePreviewParameters, visualComponent };
 
 export function mapPageContent(content, intent) {
   return renderPayload(intent, "cycle-loop-001", {
     title: content.title,
     center: content.notes || content.title,
+    centerLabel: content.centerLabel,
     steps: content.items.map((item) => ({
+      key: item.id,
       title: item.title,
+      english: item.english ?? "",
       body: item.body ?? "",
+      points: item.points ?? [],
     })),
   }, content.items.map((item, index) => mapping(item.id, `steps[${index}]`)));
 }
 
-await runGenerator(import.meta.url, buildCycleLoop, {
-  title: "循环闭环",
-  center: "持续改进",
-  steps: [
-    { title: "观察", body: "收集真实使用中的问题" },
-    { title: "判断", body: "确认问题属于内容还是视觉" },
-    { title: "修正", body: "更新规则、资产或渲染代码" },
-    { title: "验证", body: "使用新稿件重新检查" }
-  ]
-});
+await runHtmlComponentGenerator(
+  import.meta.url,
+  visualComponent,
+  resolvePreviewParameters(previewParameters, { stepCount: 4 }),
+);

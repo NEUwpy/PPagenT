@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PPagenT 视觉意图四路盲评</title>
+  <style>
+    *{box-sizing:border-box}
+    :root{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;color:#172033;background:#eef2f7}
+    body{margin:0;padding:26px 30px 34px;background:linear-gradient(145deg,#f7f9fc,#edf2f8)}
+    header{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin:0 auto 20px;max-width:1460px}
+    h1{margin:0;font-size:29px;letter-spacing:.02em}
+    header p{margin:7px 0 0;color:#64748b;font-size:15px}
+    .badge{padding:8px 13px;border-radius:999px;background:#18284c;color:#fff;font-size:13px;white-space:nowrap}
+    .reference{display:grid;grid-template-columns:400px 1fr;gap:24px;align-items:center;max-width:1460px;margin:0 auto 22px;padding:16px;border:1px solid #d9e2ef;border-radius:18px;background:#fff;box-shadow:0 9px 24px rgba(38,59,92,.08)}
+    .reference img{display:block;width:400px;height:225px;object-fit:cover;border-radius:12px;border:1px solid #dfe5ee}
+    .reference h2{margin:0 0 9px;font-size:19px}
+    .reference p{margin:0;max-width:760px;color:#5a687c;font-size:15px;line-height:1.75}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:1460px;margin:auto}
+    .candidate{overflow:hidden;border:1px solid #d9e2ef;border-radius:18px;background:#fff;box-shadow:0 10px 26px rgba(38,59,92,.09)}
+    .candidate-head{display:flex;align-items:center;justify-content:space-between;padding:12px 15px;border-bottom:1px solid #e4eaf2;background:#fbfcfe}
+    .candidate-head b{display:grid;place-items:center;width:31px;height:31px;border-radius:10px;background:#31589b;color:#fff;font-size:16px}
+    .candidate-head span{color:#7b8798;font-size:12px}
+    .frame{position:relative;width:100%;aspect-ratio:1170/492;overflow:hidden;background:#fff}
+    iframe{position:absolute;left:0;top:0;width:1170px;height:492px;border:0;transform-origin:0 0;transform:scale(var(--scale,0.6));background:#fff}
+    @media(max-width:1100px){.reference{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.reference img{width:100%;height:auto}}
+  </style>
+</head>
+<body>
+  <header>
+    <div><h1>PDCA 视觉意图四路盲评</h1><p>同一来源、同一模型、同一内容与画布；只改变中间视觉描述方式。</p></div>
+    <div class="badge">先看结果，再看方法</div>
+  </header>
+  <section class="reference">
+    <img src="../../.tmp/asset-dashboard-source-previews/955f609c59bdbad06570.png" alt="来源 PPT 第57页">
+    <div><h2>来源参考</h2><p>审查时建议依次看：中央环形箭头的咬合与动势、中英文与圆环的关系、两侧信息如何为圆形让位，以及整体是否既忠于来源精髓又像一个可继续扩展的组件。</p></div>
+  </section>
+  <main class="grid">
+    <section class="candidate"><div class="candidate-head"><b>A</b><span>默认4步</span></div><div class="frame"><iframe src="outputs/A/index.html" title="方案A"></iframe></div></section>
+    <section class="candidate"><div class="candidate-head"><b>B</b><span>默认4步</span></div><div class="frame"><iframe src="outputs/B/index.html" title="方案B"></iframe></div></section>
+    <section class="candidate"><div class="candidate-head"><b>C</b><span>默认4步</span></div><div class="frame"><iframe src="outputs/C/index.html" title="方案C"></iframe></div></section>
+    <section class="candidate"><div class="candidate-head"><b>D</b><span>默认4步</span></div><div class="frame"><iframe src="outputs/D/index.html" title="方案D"></iframe></div></section>
+  </main>
+  <script>
+    function resizeFrames(){
+      document.querySelectorAll('.frame').forEach((frame)=>{
+        const scale=frame.clientWidth/1170;
+        frame.style.setProperty('--scale',String(scale));
+      });
+    }
+    addEventListener('resize',resizeFrames);
+    resizeFrames();
+  </script>
+</body>
+</html>

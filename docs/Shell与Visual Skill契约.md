@@ -60,9 +60,9 @@ flowchart LR
 
 一个 Style Group 不是一张图，也不是一个数量状态。核心包固定由五类信息构成：
 
-1. `asset.json`：保存来源文件与页码、Visual Skill / Style Group 身份、语义与容量契约、State 控件、HTML 审查入口和 Native Builder 入口。
+1. `asset.json`：保存来源文件与页码、Visual Skill / Style Group 身份、语义与容量契约、State 控件，以及 HTML Component 或旧 Native Builder 入口。
 2. `review.mjs`（或等价 HTML 组件入口）：保存建设期审美组件、可替换内容和 State 参数解析；一组只有一份组件代码，不按二项、三项、四项分别维护。
-3. `generate.mjs` / `runtime.mjs` 中导出的 Native Builder：把同一组参数确定性写成原生 PowerPoint 对象，是正式生成唯一绘制入口。
+3. 通用 HTML → ResolvedVisualTree → Native 编译器：读取浏览器已经求解的 DOM/CSS、SVG 几何和文字样式，机械转换为原生 PowerPoint 对象；尚未迁移的旧资产暂由原 Native Builder 运行。
 4. 一份共享预览输入：由 `previewParametersExport` 和 `previewResolverExport` 暴露，使 HTML 与 Builder 接收同一组内容和 State 选择。
 5. `example.pptx`：按 `asset.json` 声明的 State 控件生成整个样式家族，供脱离代码审查原生可编辑结果。
 
@@ -70,7 +70,7 @@ flowchart LR
 
 预览 PNG、布局检查文件和看板 JSON 都是从上述对象即时生成的缓存，不属于资产真源，也不得人工维护第二份数据库。
 
-Style Group 先在 HTML Component 中完成设计、数量响应、间距、字体和层级验证。用户审美确认后，将通过的状态与参数规则固化为资产专属 Native Builder。正式生成只调用 Builder，不启动浏览器、不重新解析 DOM。HTML 截图只用于建设期预览，不能进入正式 PPTX。
+Style Group 在 HTML Component 中完成设计、数量响应、间距、字体和层级验证。确认后不再为同一版式手写第二套布局：通用编译器读取最终 DOM/CSS/SVG 并生成 Native 形状。HTML 截图不能进入正式 PPTX；进入 PPTX 的仍是文字、形状和自由曲线等可编辑对象。旧 Native Builder 仅作为尚未迁移资产的兼容路径。
 
 当前 14 个正式结构 Style Group 均已迁移到这一形态。Builder 是审核后的固定产物，不是正式运行时由 AI 临时写出的代码。
 
@@ -118,4 +118,4 @@ Visual Skill 的调用接口采用两级版式中立内容：
 
 当前先固定 Shell 和 Content Frame，再蒸馏更多 Style Group。其他学校版本可以替换 Logo、颜色、字体、栏目和页注文案；除非真实模板证明版式骨架必须改变，否则继续复用本 Shell 几何。候选 Style Group 仍需用户明确确认后才能进入核心库，Luna 只承担来源 PPT 的蒸馏与入库，不参与正式生成线。
 
-当前实现状态必须分开理解：Shell 几何、核心资产发现、正文兜底、字段级内容覆盖和 `componentBindings` 校验已经进入运行时代码；正式结构资产均以 Native Builder 运行。`parallel-cards-p135` 额外提供 HTML 审查组件，用来验证新的资产建设流程，不改变正式运行边界。
+当前实现状态必须分开理解：Shell 几何、核心资产发现、正文兜底、字段级内容覆盖和 `componentBindings` 校验已经进入运行时代码。`cycle-pdca-ring-p57` 是首个以 HTML 为唯一布局真源、由通用编译器正式生成 Native PPT 的试点；其他结构资产仍走旧 Native Builder，待逐项审核后迁移。共享通用预览不算资产专属 HTML，也不计入迁移完成度。

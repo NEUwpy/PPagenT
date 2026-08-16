@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>数量扩散轻量审查</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;padding:18px;background:#eef2f7;font-family:"Microsoft YaHei",sans-serif;color:#172033}.bar{width:1170px;margin:0 auto 12px;display:flex;align-items:center;gap:8px}.bar strong{margin-right:auto}.bar button{border:1px solid #cbd7e8;background:#fff;padding:7px 14px;border-radius:8px;cursor:pointer}.bar button.active{background:#315fa8;color:#fff;border-color:#315fa8}.status{width:1170px;margin:0 auto 10px;font-size:13px;color:#526078}.status.reject{color:#a34242}iframe{display:block;width:1170px;height:492px;margin:auto;border:0;background:#fff;box-shadow:0 8px 22px #233a5d18}
+  </style>
+</head>
+<body>
+  <div class="bar"><strong>同一 render(data) 数量扩散</strong><button data-count="3">3 项</button><button class="active" data-count="4">4 项</button><button data-count="6">6 项</button></div>
+  <div class="status">当前合法状态：4 项</div>
+  <iframe id="preview" src="outputs/current/index.html?v=14"></iframe>
+  <script>
+    const frame=document.querySelector('#preview');
+    let source,lastLegal=4;
+    async function build(count){
+      source ||= await fetch('inputs/p57-content.json').then(r=>r.json());
+      const items=structuredClone(source.items);
+      items.forEach((item,index)=>item.key ||= `base-${index}`);
+      while(items.length<count){
+        const copy=structuredClone(items[items.length%4]);
+        copy.key=`extra-${items.length}`;
+        copy.title=`${copy.title}${items.length+1}`;
+        items.push(copy);
+      }
+      const result=frame.contentWindow.render({centerLabel:source.centerLabel,items:items.slice(0,count)});
+      const status=document.querySelector('.status');
+      if(result?.ok===false){status.className='status reject';status.textContent=`${count} 项被拒绝：${result.reason}。画面保持上一个合法的 ${lastLegal} 项状态。`;return}
+      lastLegal=count;status.className='status';status.textContent=`当前合法状态：${count} 项`;
+    }
+    frame.addEventListener('load',()=>build(4));
+    document.querySelectorAll('button').forEach(button=>button.addEventListener('click',()=>{
+      document.querySelector('.active')?.classList.remove('active');
+      button.classList.add('active');
+      build(Number(button.dataset.count));
+    }));
+  </script>
+</body>
+</html>

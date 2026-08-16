@@ -244,7 +244,15 @@ async function componentPreviewHtml(library, assetId, searchParams) {
   }
   const markup = component.renderMarkup(previewParameters);
   const stateLabel = (resolved.record.componentControls ?? []).map((control) => `${control.label} ${selection[control.key]}`).join(" · ");
-  return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(resolved.record.name)} · ${escapeHtml(stateLabel)}</title><style>${css}</style></head><body>${markup}</body></html>`;
+  const designWidth = Number(component.designFrame?.width);
+  const designHeight = Number(component.designFrame?.height);
+  if (!Number.isFinite(designWidth) || !Number.isFinite(designHeight) || designWidth <= 0 || designHeight <= 0) return null;
+  return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(resolved.record.name)} · ${escapeHtml(stateLabel)}</title><style>${css}
+html,body{margin:0!important;width:100%!important;height:100%!important;overflow:hidden!important}
+body{position:relative!important;background:#fff!important}
+.ppagent-component-viewport{position:absolute;inset:0;overflow:hidden;background:#fff}
+.ppagent-component-scale{--ppagent-preview-scale:min(calc((100vw - 4px) / ${designWidth}px),calc((100vh - 4px) / ${designHeight}px));position:absolute;left:50%;top:50%;width:${designWidth}px;height:${designHeight}px;margin-left:${-designWidth / 2}px;margin-top:${-designHeight / 2}px;transform:scale(var(--ppagent-preview-scale));transform-origin:center center}
+</style></head><body><div class="ppagent-component-viewport"><div class="ppagent-component-scale">${markup}</div></div></body></html>`;
 }
 
 async function nativeStatePreviewPathFor(library, assetId, searchParams) {
@@ -264,11 +272,24 @@ async function nativeStatePreviewPathFor(library, assetId, searchParams) {
         const reviewModule = await loadReviewModule(resolved);
         const parameters = resolveReviewParameters(resolved, reviewModule, selection);
         const runtimeModule = await import(`${pathToFileURL(resolved.runtimeEntryPath).href}?dashboard=${runtimeStat.mtimeMs}`);
-        const builder = runtimeModule[resolved.record.builderExport];
-        if (!parameters || typeof builder !== "function") throw new Error("Native Builder 审查入口不完整");
+        if (!parameters) throw new Error("Native 审查参数不完整");
         const { createPresentation } = await import("../asset-runtime/component-builders.mjs");
         const presentation = createPresentation();
-        const slide = builder(presentation, parameters);
+        let slide;
+        if (resolved.record.renderer === "html-component") {
+          const component = runtimeModule[resolved.record.componentExport] ?? reviewModule[resolved.record.componentExport];
+          if (!component?.renderMarkup) throw new Error("HTML Component 审查入口不完整");
+          slide = presentation.slides.add();
+          slide.background.fill = "#FFFFFF";
+          const targetFrame = { left: 55, top: 166, width: component.designFrame.width, height: component.designFrame.height };
+          const { compileResolvedVisualTree, resolveHtmlComponent } = await import("../visual-runtime/html-component-runtime.mjs");
+          const tree = await resolveHtmlComponent({ component, parameters, assetDir: resolved.assetDir, targetFrame });
+          compileResolvedVisualTree(slide, tree, targetFrame);
+        } else {
+          const builder = runtimeModule[resolved.record.builderExport];
+          if (typeof builder !== "function") throw new Error("Native Builder 审查入口不完整");
+          slide = builder(presentation, parameters);
+        }
         const image = await presentation.export({ slide, format: "png", scale: 1 });
         await fs.mkdir(nativeStateCacheRoot, { recursive: true });
         await fs.writeFile(outputPath, Buffer.from(await image.arrayBuffer()));

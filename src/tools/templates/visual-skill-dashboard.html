@@ -65,7 +65,7 @@
     .pill { display: inline-flex; align-items: center; gap: 6px; min-height: 26px; padding: 4px 9px; border-radius: 999px; background: #eef2f7; color: #536176; font-size: 11px; white-space: nowrap; }
     .pill.core, .pill.html-component { background: var(--green-soft); color: var(--green); }
     .pill.candidate, .pill.not-wired { background: var(--amber-soft); color: var(--amber); }
-    .pill.legacy-builder { background: var(--blue-soft); color: var(--blue); }
+    .pill.legacy-builder, .pill.native-builder, .pill.native-compiled-output { background: var(--blue-soft); color: var(--blue); }
     .pill.skin { background: var(--violet-soft); color: var(--violet); }
     .pipeline { display: grid; grid-template-columns: repeat(7, minmax(120px, 1fr)); gap: 22px; align-items: stretch; }
     .pipe-step { position: relative; min-height: 110px; padding: 16px; border: 1px solid #cfe0f7; border-radius: 14px; background: #f8fbff; }
@@ -207,13 +207,13 @@
     <section class="metrics" id="metric-grid" aria-label="建设指标"></section>
 
     <section class="section" id="intake-review">
-      <div class="section-head"><div><h2>Style Group 怎样建设和审查</h2><p>来源 PPT 提供关系与审美起点；HTML 是设计与 State 审查工作台；审美确认后固化 Native Builder，再生成原生可编辑 PPT。点击任意资产，在详情中查看这三段证据。</p></div><span class="pill html-component">HTML 审美工作台</span></div>
+      <div class="section-head"><div><h2>Style Group 怎样建设和审查</h2><p>来源 PPT 提供关系与审美起点；HTML 是唯一布局真源；通用编译器把最终 DOM/CSS/SVG 转成原生可编辑 PPT。点击任意资产，在详情中查看这三段证据。</p></div><span class="pill html-component">HTML 单源组件</span></div>
       <div class="pipeline" style="grid-template-columns:repeat(5,minmax(140px,1fr))">
         <div class="pipe-step"><strong>1 · 来源页</strong><span>从 PPT源/ 读取真实文件与页码，理解关系、拓扑和视觉中心。</span></div>
         <div class="pipe-step"><strong>2 · HTML 组件</strong><span>内容、图标、媒体和数量参数化，组件只占 Content Frame。</span></div>
         <div class="pipe-step"><strong>3 · 审美优化</strong><span>直接在 HTML 中调颜色、比例、间距、层级和响应布局。</span></div>
         <div class="pipe-step"><strong>4 · State 检查</strong><span>用同一份代码切换该 Style Group 声明支持的数量状态。</span></div>
-        <div class="pipe-step"><strong>5 · Builder 固化</strong><span>HTML 审美通过后，生成或整理资产专属 Native Builder，并检查原生 PPTX。</span></div>
+        <div class="pipe-step"><strong>5 · 统一编译</strong><span>读取 HTML 最终布局，机械转换为 Native 文字、形状和自由曲线。</span></div>
       </div>
     </section>
 
@@ -225,7 +225,7 @@
         <div class="pipe-step"><strong>3 · Style Group</strong><span>在同一 Skill 下选择适合整套节奏和容量的样式组。</span></div>
         <div class="pipe-step"><strong>4 · 参数绑定</strong><span>Mapper 把 PageContent 确定性映射到组件字段。</span></div>
         <div class="pipe-step"><strong>5 · State 求解</strong><span>数量和内容触发已经登记的响应状态与边界。</span></div>
-        <div class="pipe-step"><strong>6 · 页面生成</strong><span>调用入库时已定稿的 Native Builder；正式生成不运行 HTML。</span></div>
+        <div class="pipe-step"><strong>6 · 页面生成</strong><span>已迁移资产调用通用 HTML → Native 编译器；旧资产暂走兼容 Builder。</span></div>
         <div class="pipe-step"><strong>7 · 受控兜底</strong><span>没有合法结构资产时用已登记简单排版，不现场造图。</span></div>
       </div>
     </section>
@@ -252,7 +252,7 @@
           <input id="search" type="search" placeholder="搜索名称、ID、Skill、Style Group 或触发关系" aria-label="搜索资产">
           <select id="library-filter" aria-label="按资产库筛选"><option value="all">全部资产库</option><option value="core">核心库</option><option value="candidate">候选库</option></select>
           <select id="category-filter" aria-label="按分类筛选"><option value="all">全部分类</option></select>
-          <select id="renderer-filter" aria-label="按运行方式筛选"><option value="all">全部运行方式</option><option value="legacy-builder">Native Builder</option><option value="skin">Skin</option><option value="not-wired">未接入</option></select>
+          <select id="renderer-filter" aria-label="按布局入口筛选"><option value="all">全部布局入口</option><option value="html-component">HTML Component</option><option value="legacy-builder">Legacy Builder</option><option value="skin">Skin</option><option value="not-wired">未接入</option></select>
         </div>
       </div>
       <div class="table-wrap"><table><thead><tr><th>资产</th><th>库 / 状态</th><th>Visual Skill</th><th>Style Group</th><th>触发关系</th><th>数量或容量</th><th>运行方式</th><th>自动调用</th></tr></thead><tbody id="asset-table"></tbody></table></div>
@@ -287,7 +287,8 @@
 
     const LABELS = {
       core: "核心库", candidate: "候选库", "html-component": "HTML Component",
-      "legacy-builder": "Native Builder", skin: "Skin", "not-wired": "未接入运行时",
+      "legacy-builder": "Legacy Builder", "native-builder": "Native Builder",
+      "native-compiled-output": "Native 可编辑输出", skin: "Skin", "not-wired": "未接入运行时",
     };
     const state = { search: "", library: "all", category: "all", renderer: "all", coverage: null };
     const byKey = new Map(DATA.records.map((record) => [record.library + ":" + record.id, record]));
@@ -300,12 +301,17 @@
     const purposeText = (asset) => asset.purposes?.length ? asset.purposes.map((item) => item.key).join("、") : "—";
     const liveMode = DATA.mode === "live-repository-api" && location.protocol.startsWith("http");
 
+    function runtimeCapabilityPills(asset) {
+      const capabilities = asset.runtimeCapabilities?.length ? asset.runtimeCapabilities : [asset.renderer];
+      return capabilities.map((capability) => pill(LABELS[capability] || capability, capability)).join("");
+    }
+
     function previewMarkup(asset, drawer = false) {
       const className = drawer ? "drawer-preview" : "skill-preview";
       if (!liveMode) return '<div class="' + className + '"><span>静态快照不加载 PPT 图像<br>双击 PPA看板.exe 查看真实示例</span></div>';
       if (!asset.previewAvailable || !asset.previewUrl) return '<div class="' + className + '"><span>此资产没有可用的 example.pptx</span></div>';
       const sourceAttribute = drawer ? 'src' : 'data-preview-src';
-      if (drawer) return '<button type="button" class="' + className + ' preview-open" data-preview-open="' + esc(asset.previewUrl) + '" data-preview-caption="' + esc(asset.name) + ' · Native Builder PPT"><img src="' + esc(asset.previewUrl) + '" alt="' + esc(asset.name) + ' 的 PPT 示例外观"><span hidden>真实 PPT 示例预览生成失败</span></button>';
+      if (drawer) return '<button type="button" class="' + className + ' preview-open" data-preview-open="' + esc(asset.previewUrl) + '" data-preview-caption="' + esc(asset.name) + ' · 原生可编辑 PPT"><img src="' + esc(asset.previewUrl) + '" alt="' + esc(asset.name) + ' 的 PPT 示例外观"><span hidden>真实 PPT 示例预览生成失败</span></button>';
       return '<div class="' + className + '"><img ' + sourceAttribute + '="' + esc(asset.previewUrl) + '" alt="' + esc(asset.name) + ' 的 PPT 示例外观"><span hidden>真实 PPT 示例预览生成失败</span></div>';
     }
 
@@ -320,7 +326,7 @@
       const sourceMedia = asset.sourcePreviewAvailable && asset.sourcePreviewUrl
         ? '<button type="button" class="review-media source preview-open" data-source-image data-preview-open="' + esc(asset.sourcePreviewUrl) + '" data-preview-caption="' + esc(asset.name) + ' · 来源 PPT 第 ' + esc(sourcePreviews[0]?.slide ?? '') + ' 页"><img src="' + esc(asset.sourcePreviewUrl) + '" alt="' + esc(asset.name) + ' 的来源 PPT 页面"><span data-source-status>首次读取来源页，正在生成预览…</span></button>'
         : '<div class="review-media source"><span>没有可读取的 PPT源/ 文件与页码</span></div>';
-      let componentMedia = '<div class="review-media component"><span>此资产尚未配置实时 HTML 审查组件</span></div>';
+      let componentMedia = '<div class="review-media component"><span>此资产尚未迁移为专属 HTML 组件；通用占位预览不计入完成度</span></div>';
       let stateButtons = '';
       let nativeMedia = previewMarkup(asset, true);
       if (asset.componentPreviewAvailable && asset.componentPreviewUrl && asset.componentControls?.length) {
@@ -334,13 +340,13 @@
         componentMedia = '<div class="review-media component"><iframe src="' + esc(asset.componentPreviewUrl) + '&' + initialQuery + '" title="' + esc(asset.name) + ' 的实时 HTML 组件"></iframe></div>';
         if (asset.nativeStatePreviewUrl) {
           const nativeUrl = asset.nativeStatePreviewUrl + '&' + initialQuery;
-          nativeMedia = '<button type="button" class="drawer-preview preview-open" data-native-preview data-native-base="' + esc(asset.nativeStatePreviewUrl) + '" data-preview-open="' + esc(nativeUrl) + '" data-preview-caption="' + esc(asset.name) + ' · Native Builder 当前状态"><img src="' + esc(nativeUrl) + '" alt="' + esc(asset.name) + ' 的 Native Builder 当前状态"><span hidden>Native Builder 状态预览生成失败</span></button>';
+          nativeMedia = '<button type="button" class="drawer-preview preview-open" data-native-preview data-native-base="' + esc(asset.nativeStatePreviewUrl) + '" data-preview-open="' + esc(nativeUrl) + '" data-preview-caption="' + esc(asset.name) + ' · Native 当前状态"><img src="' + esc(nativeUrl) + '" alt="' + esc(asset.name) + ' 的 Native 当前状态"><span hidden>Native 状态预览生成失败</span></button>';
         }
       }
-      return '<div class="review-flow"><h3>来源 → HTML 审美工作台 → Native Builder → PPT</h3><p>正式运行时 Agent 只选择并填参数；HTML 只用于建设审查，PPT 由资产包内已固化的 Native Builder 生成。</p>'
+      return '<div class="review-flow"><h3>来源 → HTML 唯一布局 → 通用 Native 编译 → PPT</h3><p>HTML 与 Native 使用同一次布局结果；Native 端不再重新理解模板或手写语义排版。</p>'
         + '<div class="review-stage"><div class="review-stage-head"><b>1 · 来源 PPT</b><span>文件与页码自动追溯</span></div>' + sourceButtons + sourceMedia + '</div>'
         + '<div class="review-stage" data-component-stage data-component-base="' + esc(asset.componentPreviewUrl ?? '') + '"><div class="review-stage-head"><b>2 · 实时 HTML</b><span>选择参数查看同一 Style Group 的响应状态</span></div>' + stateButtons + componentMedia + '</div>'
-        + '<div class="review-stage"><div class="review-stage-head"><b>3 · Native Builder 结果</b><span>与当前参数同步，检查原生可编辑页面</span></div>' + nativeMedia + '</div></div>';
+        + '<div class="review-stage"><div class="review-stage-head"><b>3 · Native 编译结果</b><span>与当前 HTML State 同源，检查原生可编辑页面</span></div>' + nativeMedia + '</div></div>';
     }
 
     function activatePreviewImages() {
@@ -382,7 +388,7 @@
       const percent = total ? Math.round(migrated / total * 100) : 0;
       document.getElementById("migration-value").textContent = migrated + " / " + total;
       document.getElementById("migration-progress").style.width = percent + "%";
-      document.getElementById("migration-caption").textContent = percent + "% 已有可实时审查的 HTML 设计组件；" + DATA.summary.legacyBuilders + " 个核心结构均以 Native Builder 正式生成。";
+      document.getElementById("migration-caption").textContent = percent + "% 已有资产专属的实时 HTML 设计组件；通用占位组件不计入迁移完成度。";
       const metrics = [
         [DATA.summary.coreAssets, "核心资产"], [DATA.summary.formalSkills, "正式结构 Skill"],
         [DATA.summary.candidateOnly, "仅候选资产"], [DATA.summary.coverageTopics, "候选能力主题"],
@@ -401,7 +407,7 @@
     function renderFormalSkills() {
       document.getElementById("formal-grid").innerHTML = DATA.formalSkills.map((asset) => {
         const tags = [asset.category, ...asset.baseRelations].filter(Boolean).slice(0, 4);
-        return '<button class="skill-card" data-asset-key="' + esc(asset.library + ":" + asset.id) + '">' + previewMarkup(asset) + '<div>' + pill(LABELS[asset.renderer] || asset.renderer, asset.renderer) + '</div><h3>' + esc(asset.name) + '</h3><div class="skill-id">' + esc(asset.skillId) + ' → ' + esc(asset.styleGroupId) + '</div><div class="range">' + esc(range(asset)) + '</div><div class="tags">' + tags.map((tag) => pill(tag)).join("") + '</div></button>';
+        return '<button class="skill-card" data-asset-key="' + esc(asset.library + ":" + asset.id) + '">' + previewMarkup(asset) + '<div>' + runtimeCapabilityPills(asset) + '</div><h3>' + esc(asset.name) + '</h3><div class="skill-id">' + esc(asset.skillId) + ' → ' + esc(asset.styleGroupId) + '</div><div class="range">' + esc(range(asset)) + '</div><div class="tags">' + tags.map((tag) => pill(tag)).join("") + '</div></button>';
       }).join("");
     }
 
@@ -428,7 +434,7 @@
     function renderTable() {
       const records = currentRecords();
       document.getElementById("result-caption").textContent = "当前显示 " + records.length + " 条记录" + (state.coverage ? "；能力主题：" + state.coverage : "") + "。核心库与候选库中同 ID 的历史副本会分别显示。";
-      document.getElementById("asset-table").innerHTML = records.length ? records.map((asset) => '<tr data-asset-key="' + esc(asset.library + ":" + asset.id) + '"><td><strong>' + esc(asset.name) + '</strong><small>' + esc(asset.id) + '</small></td><td>' + pill(LABELS[asset.library], asset.library) + (asset.candidateCopyOfCore ? '<small>核心库已有同 ID</small>' : '') + '</td><td><strong>' + esc(asset.skillId) + '</strong><small>' + esc(list(asset.coverageTags)) + '</small></td><td>' + esc(asset.styleGroupId) + '</td><td>' + esc(relationText(asset)) + '<small>' + esc(purposeText(asset)) + '</small></td><td>' + esc(range(asset)) + '</td><td>' + pill(LABELS[asset.renderer] || asset.renderer, asset.renderer) + '</td><td>' + (asset.autoCallable ? pill("是", "core") : pill("否", "candidate")) + '</td></tr>').join("") : '<tr><td colspan="8" class="empty">没有符合当前筛选条件的资产</td></tr>';
+      document.getElementById("asset-table").innerHTML = records.length ? records.map((asset) => '<tr data-asset-key="' + esc(asset.library + ":" + asset.id) + '"><td><strong>' + esc(asset.name) + '</strong><small>' + esc(asset.id) + '</small></td><td>' + pill(LABELS[asset.library], asset.library) + (asset.candidateCopyOfCore ? '<small>核心库已有同 ID</small>' : '') + '</td><td><strong>' + esc(asset.skillId) + '</strong><small>' + esc(list(asset.coverageTags)) + '</small></td><td>' + esc(asset.styleGroupId) + '</td><td>' + esc(relationText(asset)) + '<small>' + esc(purposeText(asset)) + '</small></td><td>' + esc(range(asset)) + '</td><td>' + runtimeCapabilityPills(asset) + '</td><td>' + (asset.autoCallable ? pill("是", "core") : pill("否", "candidate")) + '</td></tr>').join("") : '<tr><td colspan="8" class="empty">没有符合当前筛选条件的资产</td></tr>';
     }
 
     function renderCatalog() {
@@ -448,11 +454,11 @@
       const stateDetails = asset.stateContract ? '<code>' + esc(JSON.stringify(asset.stateContract)) + '</code>' : "—";
       const mediaDetails = asset.mediaContract ? '<code>' + esc(JSON.stringify(asset.mediaContract)) + '</code>' : "—";
       const textCapacity = asset.textCapacity ? '<code>' + esc(JSON.stringify(asset.textCapacity)) + '</code>' : "—";
-      document.getElementById("drawer-content").innerHTML = '<div class="drawer-id">' + esc(asset.id) + '</div><h2 id="drawer-title">' + esc(asset.name) + '</h2><div class="drawer-badges">' + pill(LABELS[asset.library], asset.library) + pill(LABELS[asset.renderer] || asset.renderer, asset.renderer) + pill(asset.autoCallable ? "正式自动发现" : "不进入正式候选", asset.autoCallable ? "core" : "candidate") + '</div>' + reviewWorkflowMarkup(asset)
+      document.getElementById("drawer-content").innerHTML = '<div class="drawer-id">' + esc(asset.id) + '</div><h2 id="drawer-title">' + esc(asset.name) + '</h2><div class="drawer-badges">' + pill(LABELS[asset.library], asset.library) + runtimeCapabilityPills(asset) + pill(asset.autoCallable ? "正式自动发现" : "不进入正式候选", asset.autoCallable ? "core" : "candidate") + '</div>' + reviewWorkflowMarkup(asset)
         + '<div class="detail-group"><h3>Visual Skill 颗粒度</h3>' + detailRows([["Visual Skill", esc(asset.skillId)], ["Style Group", esc(asset.styleGroupId)], ["Family / Variant", esc(text(asset.familyId)) + " / " + esc(text(asset.variantId))], ["轮廓", esc(text(asset.silhouette))], ["候选覆盖主题", esc(list(asset.coverageTags))]]) + '</div>'
         + '<div class="detail-group"><h3>触发条件</h3>' + detailRows([["基础关系", esc(relationText(asset))], ["页面目的", purposeDetails], ["数量范围", esc(range(asset))], ["文字容量", textCapacity], ["State 规则", stateDetails], ["媒体约束", mediaDetails], ["允许 Composition", esc(list(asset.compositionIds))]]) + '</div>'
         + '<div class="detail-group"><h3>语义与边界</h3>' + (asset.semanticContract ? '<div class="detail-note">' + esc(asset.semanticContract) + '</div>' : '<div class="detail-note">当前声明未写语义说明。</div>') + (asset.doNotUseWhen ? '<div class="detail-note" style="margin-top:9px;border-color:#d96c4a;background:#fff6f3"><strong>不要使用：</strong>' + esc(asset.doNotUseWhen) + '</div>' : '') + '</div>'
-        + '<div class="detail-group"><h3>来源与自动化入口</h3>' + detailRows([["来源", source], ["生成入口", esc(text(asset.runtimeEntry || asset.generator))], ["Mapper", esc(text(asset.mapperExport))], ["Component / Builder", esc(text(asset.componentExport || asset.builderExport))], ["示例", esc(text(asset.showcase))], ["Manifest", '<code>' + esc(asset.manifestPath) + '</code>'], ["资产目录", '<code>' + esc(asset.assetDir) + '</code>'], ["审核记录", esc(text(asset.review))]]) + '</div>';
+        + '<div class="detail-group"><h3>来源与自动化入口</h3>' + detailRows([["来源", source], ["HTML 审查实现", esc(asset.componentPreviewAvailable ? "资产专属 · " + text(asset.componentFidelityStatus) : "尚未迁移")], ["生成入口", esc(text(asset.runtimeEntry || asset.generator))], ["Mapper", esc(text(asset.mapperExport))], ["Component / Builder", esc(text(asset.componentExport || asset.builderExport))], ["示例", esc(text(asset.showcase))], ["Manifest", '<code>' + esc(asset.manifestPath) + '</code>'], ["资产目录", '<code>' + esc(asset.assetDir) + '</code>'], ["审核记录", esc(text(asset.review))]]) + '</div>';
       document.getElementById("drawer-backdrop").classList.add("open");
       document.body.style.overflow = "hidden";
       document.getElementById("drawer-close").focus();

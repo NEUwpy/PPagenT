@@ -16,10 +16,12 @@ PPA 看板是 PPagenT 的本地资产建设与审查入口。它不保存第二�
 点击资产后，建设链区域依次显示：
 
 1. `PPT源/` 中由文件和页码定位的来源页；
-2. Style Group 的实时 HTML Component；
+2. Style Group 资产包中的专属实时 HTML Component；
 3. 审核后 Native Builder 生成的 PPT 示例图像。
 
-提供 HTML 审查组件和示例参数的资产，在点开一个 Style Group 后会按维度列出 State 标签。例如组织树分别选择“部门数”和“每部门成员数”，鱼骨图分别选择“原因类别数”和“每类因素数”；任一选择都会同时刷新 HTML 和 Native Builder 结果，不必把所有组合并排铺开。来源页和 Native Builder PPT 预览均可点击查看大图。正式运行方式与是否提供 HTML 审查相互独立：核心结构统一由 Native Builder 生成。
+提供资产专属 HTML 审查组件和示例参数的资产，在点开一个 Style Group 后会按维度列出 State 标签。例如组织树分别选择“部门数”和“每部门成员数”，鱼骨图分别选择“原因类别数”和“每类因素数”；任一选择都会同时刷新 HTML 和 Native Builder 结果，不必把所有组合并排铺开。HTML 由看板直接调用资产包代码实时渲染，修改组件后刷新页面即可看到结果，不再额外生成 HTML 审阅截图。来源页和 Native Builder PPT 预览均可点击查看大图。
+
+`runtime.review.implementation` 只有明确声明为 `asset-specific-html` 时，才计入 HTML 迁移完成度。共享通用组件只能用于早期试验或占位，不得作为黄金状态复现完成的证据。`goldenState` 记录来源页对应的默认参数；用户先在看板核对黄金状态，再审核数量扩展，最后才进入 Native Builder 视觉等价检查。
 
 ## 数据与预览来源
 

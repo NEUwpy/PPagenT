@@ -99,7 +99,11 @@ async function normalizeRecord(entry, coverageTags, purposeMap, coreIds, root) {
     && Array.isArray(control?.values)
     && control.values.length
   ));
+  const componentImplementation = reviewRuntime?.implementation ?? "unclassified";
+  const isAssetSpecificHtml = componentImplementation === "asset-specific-html";
   const hasDesignComponent = Boolean(
+    isAssetSpecificHtml
+    &&
     reviewRuntime?.entry
     && reviewRuntime?.componentExport
     && reviewRuntime?.previewParametersExport
@@ -110,6 +114,19 @@ async function normalizeRecord(entry, coverageTags, purposeMap, coreIds, root) {
     control.values.includes(control.default) ? control.default : control.values[0],
   ]));
   const componentStates = componentControls.length === 1 ? componentControls[0].values : [];
+  const nativeBuilderAvailable = Boolean(runtime.entry && runtime.builderExport);
+  const nativeCompiledOutputAvailable = Boolean(
+    renderer === "html-component"
+    && runtime.entry
+    && runtime.componentExport
+    && hasDesignComponent
+  );
+  const runtimeCapabilities = [
+    hasDesignComponent ? "html-component" : null,
+    nativeBuilderAvailable ? "native-builder" : null,
+    nativeCompiledOutputAvailable ? "native-compiled-output" : null,
+    renderer === "skin" ? "skin" : null,
+  ].filter(Boolean);
   return {
     id: manifest.id,
     name: manifest.name,
@@ -157,6 +174,9 @@ async function normalizeRecord(entry, coverageTags, purposeMap, coreIds, root) {
       ? sourceSlides.map((slide) => ({ slide, url: `/api/source-preview?library=${encodeURIComponent(library)}&id=${encodeURIComponent(manifest.id)}&slide=${slide}` }))
       : [],
     componentPreviewAvailable: hasDesignComponent,
+    componentImplementation,
+    componentFidelityStatus: reviewRuntime?.fidelityStatus ?? "unreviewed",
+    componentGoldenState: reviewRuntime?.goldenState ?? null,
     componentPreviewUrl: hasDesignComponent
       ? `/api/component-preview?library=${encodeURIComponent(library)}&id=${encodeURIComponent(manifest.id)}`
       : null,
@@ -164,7 +184,11 @@ async function normalizeRecord(entry, coverageTags, purposeMap, coreIds, root) {
     componentInitialState: componentStates.length ? componentInitialSelection[componentControls[0].key] : null,
     componentControls,
     componentInitialSelection,
-    nativeStatePreviewUrl: hasDesignComponent && runtime.entry && runtime.builderExport
+    runtimeCapabilities,
+    nativeBuilderAvailable,
+    nativeCompiledOutputAvailable,
+    nativeOutputAvailable: nativeBuilderAvailable || nativeCompiledOutputAvailable,
+    nativeStatePreviewUrl: hasDesignComponent && (nativeBuilderAvailable || nativeCompiledOutputAvailable)
       ? `/api/native-state-preview?library=${encodeURIComponent(library)}&id=${encodeURIComponent(manifest.id)}`
       : null,
     runtimeEntry: runtime.entry ?? "",
@@ -309,7 +333,7 @@ export async function resolveComponentPreview(root, library, assetId) {
 
 export async function resolveNativeStatePreview(root, library, assetId) {
   const component = await resolveComponentPreview(root, library, assetId);
-  if (!component?.record.runtimeEntry || !component.record.builderExport) return null;
+  if (!component?.record.runtimeEntry || (!component.record.builderExport && component.record.renderer !== "html-component")) return null;
   const runtimeEntryPath = path.resolve(component.assetDir, component.record.runtimeEntry);
   if (!isInside(component.assetDir, runtimeEntryPath) || !await exists(runtimeEntryPath)) return null;
   return { ...component, runtimeEntryPath };

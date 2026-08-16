@@ -19,9 +19,10 @@
     "steps"
   ],
   "runtime": {
-    "renderer": "legacy-builder",
+    "renderer": "html-component",
     "entry": "generate.mjs",
-    "builderExport": "buildCycleLoop",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
     "mapperExport": "mapPageContent",
     "skillId": "cycle",
     "styleGroupId": "cycle-pdca-ring-p57",
@@ -44,7 +45,13 @@
     },
     "textCapacity": {
       "maxItemTitleChars": 10,
-      "maxItemBodyChars": 34
+      "maxItemBodyChars": 22,
+      "maxPointsPerItem": 4,
+      "maxPointChars": 22
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "optional"
     },
     "sourceFrame": {
       "left": 55,
@@ -83,9 +90,19 @@
     },
     "review": {
       "entry": "review.mjs",
+      "layoutEntry": "layout.mjs",
+      "visualIntent": "visual-intent.md",
       "componentExport": "visualComponent",
       "previewParametersExport": "previewParameters",
       "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "fidelityStatus": "html-golden-unified-native-review",
+      "goldenState": {
+        "sourceSlide": 57,
+        "selection": {
+          "stepCount": 4
+        }
+      },
       "controls": [
         {
           "key": "stepCount",
@@ -133,13 +150,13 @@
       "component-full"
     ]
   },
-  "capacity": "3–6 个循环步骤和 1 个中心主题；步骤标题建议不超过 8 字，说明不超过 20 字",
+  "capacity": "3–6 个循环步骤；每项接受可选正文和0–4条普通文本分点，正文与单条分点均不超过22字；不要求数字、指标或标签",
   "adaptation": {
-    "stepCount": "3–6",
-    "layout": "步骤围绕中心按顺时针顺序等角分布",
+    "stepCount": "3–6；外围文本按左右位置镜像对齐，分点少于4条也可正常使用",
+    "layout": "步骤围绕中心按顺时针顺序等角分布；HTML 负责唯一布局，通用编译器读取最终 DOM/CSS 后生成 Native 形状",
     "fallback": "超过 6 步时改用顺序流程；没有反馈回到起点时不得使用循环"
   },
   "semanticContract": "多个步骤反复运行，最后一步会反馈或回到第一步",
   "doNotUseWhen": "只是一次性线性过程，或多个要点之间没有循环关系",
-  "review": "用户于 2026-08-13 审核通过；第 57 页 PDCA 环形语法及 3–6 步扩容已确认"
+  "review": "2026-08-16 已完成第57页 HTML 黄金状态，并把基础版收紧为一层循环关系：外围只接收普通正文与分点；Native 结果由统一 HTML → ResolvedVisualTree → PPT 编译器生成"
 }
