@@ -20,9 +20,10 @@
     "apps"
   ],
   "runtime": {
-    "renderer": "legacy-builder",
+    "renderer": "html-component",
     "entry": "generate.mjs",
-    "builderExport": "buildLayeredArchitectureAdaptive",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
     "mapperExport": "mapPageContent",
     "skillId": "layered",
     "styleGroupId": "layered-platform-p20",
@@ -103,6 +104,9 @@
       "componentExport": "visualComponent",
       "previewParametersExport": "previewParameters",
       "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "fidelityStatus": "html-golden-unified-native-review",
+      "goldenState": { "sourceSlide": 20, "selection": { "sourceCount": 4, "applicationCount": 4 } },
       "controls": [
         {
           "key": "sourceCount",

@@ -326,7 +326,7 @@ test("所有登记变体都能经过统一运行时真实创建幻灯片对象",
     },
     {
       assetId: "cycle-loop-001",
-      parameters: { visualVariantId: "default", title: "闭环", center: "持续改进", steps: ["计划", "执行", "检查", "改进"] },
+      parameters: { visualVariantId: "default", title: "闭环", center: "持续改进", steps: ["计划", "执行", "检查", "改进"].map((title) => ({ title, body: `${title}本轮动作` })) },
     },
     {
       assetId: "layered-architecture-001",

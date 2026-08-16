@@ -22,9 +22,10 @@
     "right.polarity"
   ],
   "runtime": {
-    "renderer": "legacy-builder",
+    "renderer": "html-component",
     "entry": "generate.mjs",
-    "builderExport": "buildComparison",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
     "mapperExport": "mapPageContent",
     "skillId": "comparison",
     "styleGroupId": "comparison-dual-column-p55",
@@ -116,6 +117,9 @@
       "componentExport": "visualComponent",
       "previewParametersExport": "previewParameters",
       "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "fidelityStatus": "html-golden-unified-native-review",
+      "goldenState": { "sourceSlide": 55, "selection": { "itemsPerSide": 3 } },
       "controls": [
         {
           "key": "itemsPerSide",

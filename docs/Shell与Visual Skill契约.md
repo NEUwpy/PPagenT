@@ -77,7 +77,7 @@ flowchart LR
 
 Style Group 在 HTML Component 中完成设计、数量响应、间距、字体和层级验证。确认后不再为同一版式手写第二套布局：通用编译器读取最终 DOM/CSS/SVG 并生成 Native 形状。HTML 截图不能进入正式 PPTX；进入 PPTX 的仍是文字、形状和自由曲线等可编辑对象。旧 Native Builder 仅作为尚未迁移资产的兼容路径。
 
-当前 14 个正式结构 Style Group 都已整理为自描述资产包，但并非都完成 HTML 单源编译迁移。`cycle-pdca-ring-p57` 是首个以 HTML 为唯一布局真源并由通用编译器生成 Native PPT 的正式试点；其他资产仍按各自声明走兼容路径。Builder 或编译器都不是正式运行时由 AI 临时写出的代码。
+当前 14 个正式结构 Style Group 都已整理为自描述资产包，但并非都完成 HTML 单源编译迁移。`cycle-pdca-ring-p57` 是首个正式试点；双向对比、四象限、泳道、金字塔、分层架构、组织树、问题—改进和中心辐射也已迁移为以 HTML 为唯一布局真源、由通用编译器生成 Native PPT。其余资产仍按各自声明走兼容路径。Builder 或编译器都不是正式运行时由 AI 临时写出的代码。
 
 ### Content Slot 与一级子 Skill 契约
 
@@ -144,4 +144,4 @@ Visual Skill 的调用接口采用两级版式中立内容：
 
 当前先固定 Shell 和 Content Frame，再蒸馏更多 Style Group。其他学校版本可以替换 Logo、颜色、字体、栏目和页注文案；除非真实模板证明版式骨架必须改变，否则继续复用本 Shell 几何。候选 Style Group 仍需用户明确确认后才能进入核心库，Luna 只承担来源 PPT 的蒸馏与入库，不参与正式生成线。
 
-当前实现状态必须分开理解：Shell 几何、核心资产发现、正文兜底、字段级内容覆盖和 `componentBindings` 校验已经进入运行时代码。`cycle-pdca-ring-p57` 是首个以 HTML 为唯一布局真源、由通用编译器正式生成 Native PPT 的试点；它也已声明并可动态解析 3–6 步 State 的 Content Slots。正式生成尚未开放子 Skill 候选、Slot 绑定 Schema 和嵌套渲染，因此当前这些槽位仍使用普通文字。下一步只需用一个已登记的小型子 Skill 做最小闭环，不扩成递归 Agent 或通用嵌套框架。其他结构资产仍走兼容路径，待逐项审核后迁移。
+当前实现状态必须分开理解：Shell 几何、核心资产发现、正文兜底、字段级内容覆盖和 `componentBindings` 校验已经进入运行时代码。九个结构资产已经由 HTML 单源正式生成 Native PPT；其中只有 `cycle-pdca-ring-p57` 已声明并可动态解析 3–6 步 State 的 Content Slots。正式生成尚未开放子 Skill 候选、Slot 绑定 Schema 和嵌套渲染，因此当前这些槽位仍使用普通文字。下一步只需用一个已登记的小型子 Skill 做最小闭环，不扩成递归 Agent 或通用嵌套框架。其余五个结构资产仍走兼容路径，待逐项审核后迁移。

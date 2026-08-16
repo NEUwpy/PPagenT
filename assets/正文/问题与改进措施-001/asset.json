@@ -26,9 +26,10 @@
     "improvements"
   ],
   "runtime": {
-    "renderer": "legacy-builder",
+    "renderer": "html-component",
     "entry": "generate.mjs",
-    "builderExport": "buildProblemImprovement",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
     "mapperExport": "mapPageContent",
     "familyId": "problem-improvement",
     "variantId": "default",
@@ -80,6 +81,9 @@
       "componentExport": "visualComponent",
       "previewParametersExport": "previewParameters",
       "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "fidelityStatus": "html-golden-unified-native-review",
+      "goldenState": { "sourceSlide": 135, "selection": { "problemCount": 2, "improvementCount": 2 } },
       "controls": [
         {
           "key": "problemCount",

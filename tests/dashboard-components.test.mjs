@@ -29,7 +29,24 @@ test("看板只把资产专属 HTML 计入迁移完成度", async () => {
   assert.equal(cycle?.componentInitialSelection.stepCount, 4);
   assert.equal(sequence?.componentPreviewAvailable, false);
   assert.deepEqual(sequence?.runtimeCapabilities, ["native-builder"]);
-  assert.equal(data.summary.htmlDesignComponents, 2);
+  assert.equal(data.summary.htmlDesignComponents, 10);
+});
+
+test("首批八个既有资产已经改用 HTML 单源正式链路", async () => {
+  const data = await collectVisualSkillDashboardData(root);
+  const migratedIds = new Set([
+    "comparison-structure-001", "framework-matrix-001", "swimlane-process-001",
+    "hierarchy-pyramid-001", "layered-architecture-001", "organization-tree-001",
+    "problem-improvement-001", "radial-hub-001",
+  ]);
+  const migrated = data.records.filter((record) => record.library === "core" && migratedIds.has(record.id));
+  assert.equal(migrated.length, migratedIds.size);
+  for (const record of migrated) {
+    assert.equal(record.renderer, "html-component");
+    assert.equal(record.componentImplementation, "asset-specific-html");
+    assert.equal(record.builderExport, "");
+    assert.ok(record.nativeStatePreviewUrl);
+  }
 });
 
 test("循环 Style Group 暴露与 State 同步的可填充 Content Slots", () => {

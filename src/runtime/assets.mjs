@@ -34,10 +34,11 @@ const CORE_SKIN_ASSET_IDS = new Set(
 );
 
 for (const assetPackage of CORE_ASSET_PACKAGES) {
-  if (assetPackage.component) {
+  if (assetPackage.runtime.renderer === "html-component" && assetPackage.component) {
     HTML_COMPONENTS.set(assetPackage.assetId, {
       component: assetPackage.component,
       assetDir: assetPackage.assetDir,
+      variantId: assetPackage.runtime.variantId,
     });
   }
   if (!assetPackage.builder) continue;
@@ -60,13 +61,13 @@ export function listStructureAssetBuilders() {
     defaultAssetIds: [...new Set([...DEFAULT_BUILDERS.keys(), ...HTML_COMPONENTS.keys()])].sort(),
     variantBuilderKeys: [...new Set([
       ...VARIANT_BUILDERS.keys(),
-      ...[...HTML_COMPONENTS.entries()].map(([assetId, entry]) => `${assetId}:${entry.component.id}`),
+      ...[...HTML_COMPONENTS.entries()].map(([assetId, entry]) => `${assetId}:${entry.variantId}`),
     ])].sort(),
   };
 }
 
 export function hasStructureAssetBuilder(assetId, variantId = null) {
-  if (variantId) return HTML_COMPONENTS.has(assetId) || VARIANT_BUILDERS.has(`${assetId}:${variantId}`);
+  if (variantId) return HTML_COMPONENTS.get(assetId)?.variantId === variantId || VARIANT_BUILDERS.has(`${assetId}:${variantId}`);
   return HTML_COMPONENTS.has(assetId) || DEFAULT_BUILDERS.has(assetId);
 }
 

@@ -24,9 +24,10 @@
     "conclusion"
   ],
   "runtime": {
-    "renderer": "legacy-builder",
+    "renderer": "html-component",
     "entry": "generate.mjs",
-    "builderExport": "buildSwimlaneProcess",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
     "mapperExport": "mapPageContent",
     "familyId": "swimlane-process",
     "variantId": "default",
@@ -97,6 +98,9 @@
       "componentExport": "visualComponent",
       "previewParametersExport": "previewParameters",
       "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "fidelityStatus": "html-golden-unified-native-review",
+      "goldenState": { "sourceSlide": 59, "selection": { "laneCount": 3, "stageCount": 3 } },
       "controls": [
         {
           "key": "laneCount",

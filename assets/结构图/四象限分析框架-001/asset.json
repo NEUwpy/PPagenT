@@ -18,9 +18,10 @@
     "quadrants"
   ],
   "runtime": {
-    "renderer": "legacy-builder",
+    "renderer": "html-component",
     "entry": "generate.mjs",
-    "builderExport": "buildFrameworkMatrix",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
     "mapperExport": "mapPageContent",
     "skillId": "matrix",
     "styleGroupId": "matrix-pest-p69",
@@ -71,6 +72,9 @@
       "componentExport": "visualComponent",
       "previewParametersExport": "previewParameters",
       "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "fidelityStatus": "html-golden-unified-native-review",
+      "goldenState": { "sourceSlide": 69, "selection": { "textDensity": "short" } },
       "controls": [
         {
           "key": "textDensity",

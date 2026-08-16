@@ -18,9 +18,10 @@
     "levels"
   ],
   "runtime": {
-    "renderer": "legacy-builder",
+    "renderer": "html-component",
     "entry": "generate.mjs",
-    "builderExport": "buildHierarchyPyramid",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
     "mapperExport": "mapPageContent",
     "skillId": "hierarchy",
     "styleGroupId": "hierarchy-pyramid-p35",
@@ -74,6 +75,9 @@
       "componentExport": "visualComponent",
       "previewParametersExport": "previewParameters",
       "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "fidelityStatus": "html-golden-unified-native-review",
+      "goldenState": { "sourceSlide": 35, "selection": { "levelCount": 4 } },
       "controls": [
         {
           "key": "levelCount",

@@ -3,8 +3,15 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { PresentationFile } from "@oai/artifact-tool";
 import { createPresentation } from "../asset-runtime/component-builders.mjs";
+import {
+  closeHtmlComponentRuntime,
+  compileResolvedVisualTree,
+  resolveHtmlComponent,
+} from "../visual-runtime/html-component-runtime.mjs";
 
 const projectRoot = path.resolve(process.argv[2] ?? path.resolve(import.meta.dirname, "../.."));
+const assetFilter = new Set((process.argv.find((value) => value.startsWith("--assets="))?.slice("--assets=".length) ?? "")
+  .split(",").map((value) => value.trim()).filter(Boolean));
 
 async function readJson(filePath) {
   return JSON.parse(await fs.readFile(filePath, "utf8"));
@@ -59,8 +66,10 @@ for (const { assetDir, manifest } of await assetManifests()) {
   const review = runtime.review;
   if (
     manifest.status !== "core"
+    || (assetFilter.size && !assetFilter.has(manifest.id))
     || !runtime.entry
-    || !runtime.builderExport
+    || (runtime.renderer === "legacy-builder" && !runtime.builderExport)
+    || (runtime.renderer === "html-component" && !runtime.componentExport)
     || !review?.entry
     || !review.previewParametersExport
     || !Array.isArray(review.controls)
@@ -71,14 +80,26 @@ for (const { assetDir, manifest } of await assetManifests()) {
     importFresh(path.resolve(assetDir, runtime.entry)),
     importFresh(path.resolve(assetDir, review.entry)),
   ]);
-  const builder = runtimeModule[runtime.builderExport];
-  if (typeof builder !== "function") throw new Error(`${manifest.id} 缺少 ${runtime.builderExport}`);
+  const builder = runtime.builderExport ? runtimeModule[runtime.builderExport] : null;
+  const component = runtime.componentExport
+    ? runtimeModule[runtime.componentExport] ?? reviewModule[runtime.componentExport]
+    : null;
+  if (runtime.renderer === "legacy-builder" && typeof builder !== "function") throw new Error(`${manifest.id} 缺少 ${runtime.builderExport}`);
+  if (runtime.renderer === "html-component" && typeof component?.renderMarkup !== "function") throw new Error(`${manifest.id} 缺少 ${runtime.componentExport}`);
 
   const presentation = createPresentation();
   const selections = cartesianControls(review.controls);
   for (const selection of selections) {
     const parameters = resolvedParameters(reviewModule, review, selection);
-    await builder(presentation, parameters);
+    if (runtime.renderer === "html-component") {
+      const slide = presentation.slides.add();
+      slide.background.fill = "#FFFFFF";
+      const targetFrame = runtime.sourceFrame ?? { left: 55, top: 166, width: 1170, height: 492 };
+      const tree = await resolveHtmlComponent({ component, parameters, assetDir, targetFrame });
+      compileResolvedVisualTree(slide, tree, targetFrame);
+    } else {
+      await builder(presentation, parameters);
+    }
   }
 
   const outputPath = path.resolve(assetDir, manifest.showcase ?? "example.pptx");
@@ -89,3 +110,4 @@ for (const { assetDir, manifest } of await assetManifests()) {
 
 for (const item of built) console.log(`${item.id}\t${item.slides}\t${item.output}`);
 console.log(`built=${built.length}`);
+await closeHtmlComponentRuntime();

@@ -19,9 +19,10 @@
     "departments"
   ],
   "runtime": {
-    "renderer": "legacy-builder",
+    "renderer": "html-component",
     "entry": "generate.mjs",
-    "builderExport": "buildOrganizationTree",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
     "mapperExport": "mapPageContent",
     "familyId": "organization-tree",
     "variantId": "default",
@@ -70,6 +71,9 @@
       "componentExport": "visualComponent",
       "previewParametersExport": "previewParameters",
       "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "fidelityStatus": "html-golden-unified-native-review",
+      "goldenState": { "sourceSlide": 406, "selection": { "departmentCount": 3, "membersPerDepartment": 2 } },
       "controls": [
         {
           "key": "departmentCount",

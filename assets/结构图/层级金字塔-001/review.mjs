@@ -1,9 +1,7 @@
-import { clonePreviewParameters, createVisualComponent } from "../../../src/visual-review/style-group-html.mjs";
+import { cloneParameters, escapeHtml, requireCount, text } from "../../../src/visual-runtime/component-authoring.mjs";
 
-export const visualComponent = createVisualComponent("hierarchy", "hierarchy-pyramid-p35");
-export const previewParameters = Object.freeze({ title: "能力体系", levels: [
-  { title: "愿景层", body: "确定长期价值和目标方向" }, { title: "方向层", body: "明确问题范围与判断边界" },
-  { title: "规则层", body: "把经验沉淀为稳定规则" }, { title: "能力层", body: "提供可复用组件和工具" },
-  { title: "执行层", body: "面向真实稿件稳定交付" },
-] });
-export function resolvePreviewParameters(base, selection) { const result = clonePreviewParameters(base); result.levels = result.levels.slice(-selection.levelCount); return result; }
+function normalize(parameters){return{levels:requireCount(parameters?.levels,3,5,"层级金字塔").map((item,index)=>({title:text(item?.title)||`第${index+1}层`,body:text(item?.body),share:text(item?.share)}))};}
+function tierPath(index,count){const width=480;const gap=8;const height=(420-gap*(count-1))/count;const top=index*(height+gap);const topWidth=120+(360*index/count);const bottomWidth=120+(360*(index+1)/count);const x1=(width-topWidth)/2,x2=(width+topWidth)/2,x3=(width+bottomWidth)/2,x4=(width-bottomWidth)/2;return{d:`M ${x1} ${top} L ${x2} ${top} L ${x3} ${top+height} L ${x4} ${top+height} Z`,centerY:top+height/2};}
+export const visualComponent=Object.freeze({id:"hierarchy-pyramid-p35",schemaVersion:4,designFrame:{width:1170,height:492},cssFile:"component.css",renderMarkup(parameters){const model=normalize(parameters);const tiers=model.levels.map((item,index)=>{const path=tierPath(index,model.levels.length);return `<path class="pyramid-tier tone-${index}" data-ppt-kind="path" data-ppt-name="pyramid-tier-${index}" d="${path.d}"/><text class="pyramid-tier-title" data-ppt-kind="text" data-ppt-name="pyramid-tier-title-${index}" x="240" y="${path.centerY}">${escapeHtml(item.title)}</text>`;}).join("");const notes=model.levels.map((item,index)=>`<article class="pyramid-note" style="--index:${index};--count:${model.levels.length}"><div class="pyramid-note-bg" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="pyramid-note-${index}"></div><h3 data-ppt-kind="text" data-ppt-name="pyramid-note-title-${index}">${escapeHtml(item.title)}</h3><p data-ppt-kind="text" data-ppt-name="pyramid-note-body-${index}" data-ppt-valign="top">${escapeHtml(item.body)}</p></article>`).join("");return `<section class="pyramid-root" data-ppt-root data-level-count="${model.levels.length}"><svg class="pyramid-diagram" viewBox="0 0 480 420">${tiers}</svg><div class="pyramid-notes">${notes}</div></section>`;}});
+export const previewParameters=Object.freeze({title:"能力体系",levels:[{title:"愿景层",body:"确定长期价值和目标方向"},{title:"方向层",body:"明确问题范围与判断边界"},{title:"规则层",body:"把经验沉淀为稳定规则"},{title:"能力层",body:"提供可复用组件和工具"},{title:"执行层",body:"面向真实稿件稳定交付"}]});
+export function resolvePreviewParameters(base,selection){const result=cloneParameters(base);result.levels=result.levels.slice(-selection.levelCount);return result;}
