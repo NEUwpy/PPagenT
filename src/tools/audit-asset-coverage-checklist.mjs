@@ -1,28 +1,20 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { discoverAssetManifestEntries } from "./asset-manifest-inventory.mjs";
 
 const root = path.resolve(process.argv[2] ?? process.cwd());
 const checklistPath = path.join(root, "docs", "工作流", "资产积累与入库", "资产覆盖清单.md");
-const coreRegistryPath = path.join(root, "assets", "registry.json");
-const candidateRegistryPath = path.join(root, "备选资产", "registry.json");
 
-async function readJson(target) {
-  return JSON.parse(await fs.readFile(target, "utf8"));
-}
-
-const [checklist, coreRegistry, candidateRegistry] = await Promise.all([
+const [checklist, coreAssets, candidateAssets] = await Promise.all([
   fs.readFile(checklistPath, "utf8"),
-  readJson(coreRegistryPath),
-  readJson(candidateRegistryPath),
+  discoverAssetManifestEntries(root, "assets"),
+  discoverAssetManifestEntries(root, "备选资产"),
 ]);
 
 const issues = [];
-const inventory = new Map(candidateRegistry.assets.map((asset) => [asset.id, asset]));
-for (const asset of coreRegistry.assets) {
-  if (!inventory.has(asset.id)) issues.push(`核心资产不在备选注册表中: ${asset.id}`);
-}
-
-const coreIds = new Set(coreRegistry.assets.map((asset) => asset.id));
+const inventory = new Map(candidateAssets.map((asset) => [asset.id, asset]));
+for (const asset of coreAssets) inventory.set(asset.id, asset);
+const coreIds = new Set(coreAssets.map((asset) => asset.id));
 const seen = new Map();
 const assetLinePattern = /^\s*-\s*\[([ xX])\]\s+(.+?)\s+<!--\s*asset:([a-z0-9-]+)\s*-->\s*$/gm;
 let match;
@@ -42,10 +34,10 @@ for (const [id, asset] of inventory) {
     issues.push(`清单漏列资产: ${id}`);
     continue;
   }
-  if (!item.label.includes(asset.name)) issues.push(`清单名称与注册表不一致: ${id}（应包含“${asset.name}”）`);
+  if (!item.label.includes(asset.name)) issues.push(`清单名称与 asset.json 不一致: ${id}（应包含“${asset.name}”）`);
   const shouldBeChecked = coreIds.has(id);
   if (item.checked !== shouldBeChecked) {
-    issues.push(`清单勾选状态与核心注册表不一致: ${id}（应为 ${shouldBeChecked ? "[x]" : "[ ]"}）`);
+    issues.push(`清单勾选状态与核心资产目录不一致: ${id}（应为 ${shouldBeChecked ? "[x]" : "[ ]"}）`);
   }
 }
 
@@ -57,6 +49,7 @@ const report = {
   status: issues.length ? "failed" : "passed",
   checklist: path.relative(root, checklistPath).replaceAll("\\", "/"),
   registeredAssetCount: inventory.size,
+  candidateAssetCount: candidateAssets.length,
   coreAssetCount: coreIds.size,
   checklistAssetCount: seen.size,
   issues,

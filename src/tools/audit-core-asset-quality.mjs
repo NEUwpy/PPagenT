@@ -8,6 +8,7 @@ import { exportTemplateMappedQa } from "../asset-runtime/template-utils.mjs";
 import { auditRenderedDeck } from "./audit-rendered-typography.mjs";
 import { assertSpatialFit, loadCompositionLayouts } from "../composition/layouts.mjs";
 import { northeasternUniversitySkin } from "../runtime/skins/northeastern-university.mjs";
+import { discoverAssetManifestEntries } from "./asset-manifest-inventory.mjs";
 
 async function readJson(target) {
   return JSON.parse(await fs.readFile(target, "utf8"));
@@ -47,7 +48,7 @@ function inspectSpatialContract(metadata, layouts) {
 }
 
 async function inspectAsset(root, entry, tempRoot, runtimeSha256, layouts) {
-  const directory = path.join(root, "assets", entry.path);
+  const directory = entry.directory;
   const metadataPath = path.join(directory, "asset.json");
   const examplePath = path.join(directory, "example.pptx");
   const generatorPath = path.join(directory, "generate.mjs");
@@ -76,7 +77,7 @@ async function inspectAsset(root, entry, tempRoot, runtimeSha256, layouts) {
 
 export async function auditCoreAssetQuality(root, { writeReport = false } = {}) {
   const resolvedRoot = path.resolve(root);
-  const registry = await readJson(path.join(resolvedRoot, "assets", "registry.json"));
+  const coreAssets = await discoverAssetManifestEntries(resolvedRoot, "assets");
   const runtimePath = path.join(resolvedRoot, "src", "asset-runtime", "component-builders.mjs");
   const auditorPath = path.join(resolvedRoot, "src", "tools", "audit-rendered-typography.mjs");
   const compositionCatalogPath = path.join(resolvedRoot, "catalog", "composition-layouts.json");
@@ -89,7 +90,7 @@ export async function auditCoreAssetQuality(root, { writeReport = false } = {}) 
   const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "ppagent-core-qa-"));
   try {
     const assets = [];
-    for (const entry of registry.assets) {
+    for (const entry of coreAssets) {
       assets.push(await inspectAsset(resolvedRoot, entry, tempRoot, runtimeSha256, layouts));
     }
     const report = {

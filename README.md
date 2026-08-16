@@ -42,11 +42,11 @@ PPagenT 采用“AI 理解与选择、参数化代码确定性绘制”的生成
 
 ## 主要目录
 
-- `assets/`：核心资产库，只放已进入正式调用并接受持续优化的版式家族。
+- `assets/`：核心资产库，只放已进入正式调用并接受持续优化的版式家族；各资产目录的 `asset.json` 是唯一登记真源，不维护中央注册表。
 - `稿件/`：正式生成线的统一原始稿件目录；当前优先保存 UTF-8 Markdown，不放导演中间产物或生成结果。
 - `PPT源/`：全部原始 PPT 的唯一目录；整目录不进入 Git，换电脑时单独复制到仓库根目录。
 - `结构样本池/`：保存所有值得继续观察的单页来源样本，允许重复和暂未归类。
-- `备选资产/`：新蒸馏、重复版式和待比较方案的审核区。
+- `备选资产/`：新蒸馏、重复版式和待比较方案的审核区，同样由各目录的 `asset.json` 自动发现。
 - `src/asset-runtime/`：原生 PPT 共享原语、旧资产兼容 Builder，以及 HTML 组件到 Native 对象的编译支撑。
 - `assets/<分类>/<资产>/asset.json + review.mjs + generate.mjs/runtime.mjs + example.pptx`：Style Group 的来源与契约、HTML 布局组件、参数映射和全家族示例；迁移后的资产只维护一份 HTML 布局真源，旧资产暂保留 Native Builder 兼容入口。
 - `experiments/`：只保留仍在使用的最小架构实验和 Shell 标注，不再提交整套稿件运行输出或批量渲染物。
@@ -72,7 +72,7 @@ npm install
 npm test
 ```
 
-`npm test` 会校验规则层契约、版式合法性筛选、公开仓库资产结构，以及资产覆盖清单与注册表是否同步。包含原始模板和样本文件的本地工作区可额外执行 `npm run audit:local`。
+`npm test` 会校验规则层契约、版式合法性筛选、公开仓库资产结构，以及资产覆盖清单与实际 `asset.json` 目录是否同步。包含原始模板和样本文件的本地工作区可额外执行 `npm run audit:local`。
 
 正式入口为 `npm run agent:run`，只接受原稿、Skin、输出位置、运行记录目录和 DirectorProvider；不接受人工准备的逐页 `pages`。生成带文字统计的 `PageIntent` 可使用 `npm run intent:stats -- --content <page-content.json> --intent-draft <intent-draft.json>`。
 
