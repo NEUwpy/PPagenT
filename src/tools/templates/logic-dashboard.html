@@ -68,10 +68,24 @@
     .pill.legacy-builder, .pill.native-builder, .pill.native-compiled-output { background: var(--blue-soft); color: var(--blue); }
     .pill.skin { background: var(--violet-soft); color: var(--violet); }
     .pipeline { display: grid; grid-template-columns: repeat(7, minmax(120px, 1fr)); gap: 22px; align-items: stretch; }
+    .pipeline.intake-line { grid-template-columns: repeat(8, minmax(112px, 1fr)); }
+    .pipeline.generation-line { grid-template-columns: repeat(9, minmax(106px, 1fr)); }
     .pipe-step { position: relative; min-height: 110px; padding: 16px; border: 1px solid #cfe0f7; border-radius: 14px; background: #f8fbff; }
     .pipe-step:not(:last-child)::after { content: "→"; position: absolute; right: -19px; top: 38px; color: #7d92af; font-size: 20px; font-weight: 700; }
     .pipe-step strong { display: block; margin-bottom: 8px; color: #234f8c; font-size: 14px; }
     .pipe-step span { color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .intake-line .pipe-step { border-color: #ead8a7; background: #fffcf4; }
+    .intake-line .pipe-step strong { color: #8b650d; }
+    .workflow-summary { display: grid; grid-template-columns: 1fr 1.25fr; gap: 14px; margin-top: 18px; }
+    .role-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .role-card, .hierarchy-card { padding: 16px; border: 1px solid var(--line); border-radius: 13px; background: #fafbfd; }
+    .role-card strong, .hierarchy-card strong { display: block; margin-bottom: 7px; font-size: 13px; }
+    .role-card span, .hierarchy-card p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.65; }
+    .capability-chain { display: flex; align-items: stretch; gap: 7px; margin-top: 11px; }
+    .chain-node { flex: 1; min-width: 0; padding: 10px 8px; border: 1px solid #d8e2f0; border-radius: 9px; background: #fff; text-align: center; }
+    .chain-node b { display: block; color: #31537f; font-size: 12px; }
+    .chain-node small { display: block; margin-top: 4px; color: #7b899e; font-size: 10px; line-height: 1.4; }
+    .chain-arrow { align-self: center; color: #91a0b4; font-weight: 800; }
     .store-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
     .store { padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: #fafbfd; }
     .store .count { float: right; font-size: 25px; font-weight: 800; color: var(--blue); }
@@ -186,8 +200,9 @@
       .metrics { grid-template-columns: repeat(3, 1fr); }
       .logic-grid { grid-template-columns: repeat(2, 1fr); }
       .store-grid { grid-template-columns: repeat(3, 1fr); }
-      .pipeline { grid-template-columns: repeat(4, 1fr); }
+      .pipeline, .pipeline.intake-line, .pipeline.generation-line { grid-template-columns: repeat(4, 1fr); }
       .pipe-step::after { display: none; }
+      .workflow-summary { grid-template-columns: 1fr; }
     }
     @media (max-width: 760px) {
       .topbar { align-items: flex-start; padding: 12px 18px; }
@@ -198,7 +213,9 @@
       .metrics { grid-template-columns: repeat(2, 1fr); }
       .section { padding: 20px 16px; }
       .section-head { align-items: flex-start; flex-direction: column; }
-      .pipeline, .logic-grid, .coverage-grid, .store-grid, .catalog-grid, .shell-map-wrap { grid-template-columns: 1fr; }
+      .pipeline, .pipeline.intake-line, .pipeline.generation-line, .logic-grid, .coverage-grid, .store-grid, .catalog-grid, .shell-map-wrap, .role-grid { grid-template-columns: 1fr; }
+      .capability-chain { flex-direction: column; }
+      .chain-arrow { transform: rotate(90deg); }
       .filters { grid-template-columns: 1fr 1fr; }
       .filters input { grid-column: 1 / -1; }
       .detail-grid { grid-template-columns: 1fr; gap: 2px; }
@@ -209,7 +226,7 @@
   <header class="topbar">
     <div class="brand"><strong>PPA 看板</strong><span>PPagenT · Logic / Structure Group / State / 自动化入口</span></div>
     <nav class="nav" aria-label="页面导航">
-      <a href="#overview">总览</a><a href="#intake-review">入库审查</a><a href="#automation">自动化</a><a href="#approval">待审批</a><a href="#formal">正式 Logic</a><a href="#candidates">能力地图</a><a href="#assets">全部资产</a><a href="#skin">Skin 容器</a><a href="#catalog">数据目录</a>
+      <a href="#overview">总览</a><a href="#intake-review">入库线</a><a href="#automation">生成线</a><a href="#approval">待审批</a><a href="#formal">正式 Logic</a><a href="#candidates">能力地图</a><a href="#assets">全部资产</a><a href="#skin">Skin 容器</a><a href="#catalog">数据目录</a>
     </nav>
     <div class="top-status"><span id="generated-at"></span><br><span id="data-mode"></span></div>
     <button class="refresh-button" id="refresh-dashboard" type="button">刷新仓库</button>
@@ -220,7 +237,7 @@
       <div class="hero-copy">
         <span class="eyebrow" id="hero-mode">点击任意 Logic 查看触发与运行详情</span>
         <h1>现在已经建设了什么，哪些能自动调用？</h1>
-        <p>本页把核心资产、候选资产、Logic、Structure Group、数量 State、触发关系和编译方式放进同一个视图。它不是另一套数据库，而是当前仓库真实声明的可视化索引。</p>
+        <p>本页同时展示资产怎样进入核心库，以及一份稿件怎样调用这些能力生成 PPT。它还把 Logic、Structure Group、State、内容槽和 Icon 的包含与选择关系放在同一视图中。</p>
       </div>
       <aside class="migration">
         <div><h2>HTML 审美工作台覆盖</h2><div class="big" id="migration-value"></div></div>
@@ -233,27 +250,50 @@
     <section class="metrics" id="metric-grid" aria-label="建设指标"></section>
 
     <section class="section" id="intake-review">
-      <div class="section-head"><div><h2>Structure Group 怎样建设和审查</h2><p>参考组先分别贡献逻辑、审美、层级或细节，再综合成一份视觉意图；HTML 模型只读取综合意图，负责重新设计、组件化和数量扩散；Native PPT 只做机械编译。</p></div><span class="pill html-component">HTML 单源组件</span></div>
-      <div class="pipeline" style="grid-template-columns:repeat(6,minmax(130px,1fr))">
-        <div class="pipe-step"><strong>1 · 组建参考组</strong><span>按逻辑需求选择多张参考，并标注各自贡献。</span></div>
-        <div class="pipe-step"><strong>2 · 综合意图</strong><span>先提炼各自优点，再形成一套自洽的逻辑与审美语言。</span></div>
-        <div class="pipe-step"><strong>3 · HTML 设计</strong><span>HTML 不看原图，只根据意图完成黄金状态。</span></div>
-        <div class="pipe-step"><strong>4 · 组件与 State</strong><span>提取固定与可变部分，按数量重新排布并登记占用尺寸。</span></div>
-        <div class="pipe-step"><strong>5 · Native 编译</strong><span>读取最终 DOM/CSS/SVG，机械转换为可编辑 PPT 对象。</span></div>
-        <div class="pipe-step"><strong>6 · Skin 与看板</strong><span>放入统一 Content Frame，集中展示并由用户确认。</span></div>
+      <div class="section-head"><div><h2>入库线 · 把优秀参考变成可调用能力</h2><p>入库线由维护者和用户协作完成。目标不是收藏页面，而是在某个 Logic 下建立经确认、可扩散、可机械编译的 Structure Group。</p></div><span class="pill html-component">建设流程</span></div>
+      <div class="pipeline intake-line">
+        <div class="pipe-step"><strong>1 · 确认 Logic 缺口</strong><span>先说明要补哪类关系表达，不从“有一张好看页面”倒推分类。</span></div>
+        <div class="pipe-step"><strong>2 · 组建参考组</strong><span>选择多张参考，分别标注逻辑、审美、层级或细节贡献。</span></div>
+        <div class="pipe-step"><strong>3 · 提炼视觉意图</strong><span>总结关系怎样被表达、画面语言怎样成立，形成 visual-intent。</span></div>
+        <div class="pipe-step"><strong>4 · HTML 黄金状态</strong><span>HTML 只读取综合意图，重新设计一个最能代表本组的状态。</span></div>
+        <div class="pipe-step"><strong>5 · 扩散 State</strong><span>同一组件按数量和容量重新排布，并从真实 DOM 暴露 Slot Map。</span></div>
+        <div class="pipe-step"><strong>6 · Native 编译</strong><span>读取 DOM/CSS/SVG，机械转换为原生可编辑 PowerPoint 对象。</span></div>
+        <div class="pipe-step"><strong>7 · Skin 中人审</strong><span>在统一 Content Frame 中查看全部 State；有问题只返修该资产。</span></div>
+        <div class="pipe-step"><strong>8 · 进入核心库</strong><span>用户明确通过后改为 core，正式生成线才可以发现和调用。</span></div>
       </div>
     </section>
 
     <section class="section" id="automation">
-      <div class="section-head"><div><h2>正式生成时，Logic 怎样被自动触发</h2><p>模型负责理解与选择；程序只把已登记能力变成合法候选。任何候选资产都不会因为“有文件”就自动进入正式生成。</p></div><span class="pill core" id="auto-callable-pill"></span></div>
-      <div class="pipeline">
-        <div class="pipe-step"><strong>1 · PageIntent</strong><span>视觉导演给出关系、目的、数量、文字密度与媒体需求。</span></div>
-        <div class="pipe-step"><strong>2 · Logic 过滤</strong><span>匹配 baseRelation、purpose、itemCount 和媒体契约。</span></div>
-        <div class="pipe-step"><strong>3 · Structure Group</strong><span>在同一 Logic 下选择适合整套节奏和容量的结构组。</span></div>
-        <div class="pipe-step"><strong>4 · 参数绑定</strong><span>Mapper 把 PageContent 确定性映射到组件字段。</span></div>
-        <div class="pipe-step"><strong>5 · State 与空间</strong><span>根据数量、容量和登记尺寸选择 State 与整页位置。</span></div>
-        <div class="pipe-step"><strong>6 · Native 编译</strong><span>统一 HTML → Native 编译器无发挥地生成可编辑对象。</span></div>
-        <div class="pipe-step"><strong>7 · Skin 组装</strong><span>装入统一 Shell；没有合法 Logic 时使用已登记简单排版。</span></div>
+      <div class="section-head"><div><h2>正式生成线 · 从稿件到可编辑 PPTX</h2><p>两个导演只负责理解、组织和选择；程序负责合法过滤、确定性求解和绘制。生成线不会临时发明 Structure Group。</p></div><span class="pill core" id="auto-callable-pill"></span></div>
+      <div class="pipeline generation-line">
+        <div class="pipe-step"><strong>1 · 稿件 + Skin</strong><span>用户提供原稿并选择主题；Skin 固定字体、字号、颜色、Shell 和 Content Frame。</span></div>
+        <div class="pipe-step"><strong>2 · 内容导演</strong><span>忠实读稿，规划叙事、页序与拆页，输出版式中立的 PageContent。</span></div>
+        <div class="pipe-step"><strong>3 · 判断页面 Logic</strong><span>视觉导演先判断这一页需要并列、循环、对比、层级等哪种关系能力。</span></div>
+        <div class="pipe-step"><strong>4 · 生成合法候选</strong><span>程序进入该 Logic，按数量、容量、媒体和 Content Frame 筛 Structure Group。</span></div>
+        <div class="pipe-step"><strong>5 · 视觉导演选组</strong><span>在合法组中选择最合适的 Structure Group，并兼顾整套节奏和重复。</span></div>
+        <div class="pipe-step"><strong>6 · State 与内容绑定</strong><span>程序按数量求解 State；Mapper 把标题、正文和分点填入真实 Slot。</span></div>
+        <div class="pipe-step"><strong>7 · Icon 本地匹配</strong><span>若组内有图标槽，导演给语义词，程序从 Tabler 元数据模糊匹配唯一 Top 1。</span></div>
+        <div class="pipe-step"><strong>8 · Native 编译</strong><span>统一编译器把已确认 HTML 结构机械转换为原生可编辑对象。</span></div>
+        <div class="pipe-step"><strong>9 · Shell 组装交付</strong><span>把内容装入 Skin/Shell，完成整套页面并输出可编辑 PPTX。</span></div>
+      </div>
+      <div class="workflow-summary">
+        <div class="role-grid" aria-label="生成线角色边界">
+          <div class="role-card"><strong>内容导演 · 讲什么</strong><span>负责忠实、叙事、节奏和拆页；不提前迎合某个 Structure Group。</span></div>
+          <div class="role-card"><strong>视觉导演 · 怎么组织</strong><span>判断页面 Logic，在合法候选中选 Structure Group 和 Composition；不现场画图。</span></div>
+          <div class="role-card"><strong>程序 · 确定性执行</strong><span>过滤候选、求解 State、绑定字段、匹配 Icon、编译 Native 并套入 Skin。</span></div>
+        </div>
+        <div class="hierarchy-card">
+          <strong>一页内容怎样落到资产上</strong>
+          <p>先确定语义关系，再逐层缩小选择范围。Icon 是 Structure Group 槽位中的内容，不是与 Logic 并列的新层。</p>
+          <div class="capability-chain" aria-label="Logic 与 Structure Group 包含关系">
+            <div class="chain-node"><b>PageContent</b><small>本页要讲什么</small></div><span class="chain-arrow">→</span>
+            <div class="chain-node"><b>Logic</b><small>需要哪类关系</small></div><span class="chain-arrow">→</span>
+            <div class="chain-node"><b>Structure Group</b><small>该 Logic 下的具体视觉语法</small></div><span class="chain-arrow">→</span>
+            <div class="chain-node"><b>State</b><small>按数量与容量确定</small></div><span class="chain-arrow">→</span>
+            <div class="chain-node"><b>Slot / Icon</b><small>填文字、媒体或图标</small></div><span class="chain-arrow">→</span>
+            <div class="chain-node"><b>Shell + Skin</b><small>整页骨架与主题</small></div>
+          </div>
+        </div>
       </div>
     </section>
 

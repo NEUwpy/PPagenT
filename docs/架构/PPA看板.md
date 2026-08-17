@@ -15,6 +15,13 @@ PPA 看板是 PPagenT 的本地资产建设与审查入口。它不保存第二�
 
 页面右上角的“刷新仓库”会重新读取仓库声明。
 
+看板顶部固定展示两条完整流程：
+
+- **入库线**：Logic 缺口 → 参考组 → 视觉意图 → HTML 黄金状态 → State 扩散与 Slot Map → Native 编译 → Skin 人审 → 用户确认进入核心库；
+- **正式生成线**：稿件与 Skin → 内容导演 → 页面 Logic → 合法 Structure Group 候选 → 视觉导演选组 → State 与内容绑定 → Icon 本地匹配 → Native 编译 → Shell 组装并交付 PPTX。
+
+生成线同时显示三类所有权：内容导演决定“讲什么”，视觉导演决定“用什么 Logic 和 Structure Group 组织”，程序负责合法过滤、State 求解、字段绑定、Icon Top 1 检索和确定性绘制。层级关系固定为 `PageContent → Logic → Structure Group → State → Slot / Icon → Shell + Skin`；Icon 只是资产槽位里的可替换内容，不是独立的 Logic 层。
+
 点击资产后，建设链区域依次显示：
 
 1. `PPT源/` 中由文件和页码定位的主要来源与辅助参考组；
