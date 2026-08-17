@@ -1,0 +1,179 @@
+{
+  "id": "parallel-equal-cards-001",
+  "name": "等权并列卡片",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "candidate",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx",
+    "slides": [421, 422, 423]
+  },
+  "references": [
+    {
+      "file": "PPT源/06-【柏林蓝】定制级学术型灵感手册-宽屏.pptx",
+      "slides": [88],
+      "role": "审美气质",
+      "adopted": "轻盈承载面、圆形视觉锚点和清楚的信息层级"
+    },
+    {
+      "file": "PPT源/狗哥蓝色-精美逻辑图PPT模板.pptx",
+      "slides": [135],
+      "role": "文字层级",
+      "adopted": "标题与正文的字号、净距和纵向节奏"
+    },
+    {
+      "file": "PPT源/【蓝色版】年终日常汇报PPT模板-狗哥PPT出品.pptx",
+      "slides": [121],
+      "role": "容量边界",
+      "adopted": "六项单排会损害字号与留白，因此本组不宣称支持六项"
+    }
+  ],
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "generate.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "parallel",
+    "structureGroupId": "parallel-equal-cards",
+    "familyId": "parallel-cards",
+    "variantId": "equal-floating-cards",
+    "silhouette": "equal-cards-with-round-anchors",
+    "supportedBaseRelations": ["parallel"],
+    "supportedPurposeKeys": ["present_parallel_points", "explain_topics"],
+    "itemCount": {
+      "min": 3,
+      "preferred": [3, 4, 5],
+      "max": 5
+    },
+    "textCapacity": {
+      "maxItemTitleChars": 8,
+      "maxItemBodyCharsByState": {
+        "3": 34,
+        "4": 30,
+        "5": 24
+      }
+    },
+    "stateContract": {
+      "resolver": "itemCount",
+      "states": [3, 4, 5],
+      "previewDefault": 4
+    },
+    "mediaContract": {
+      "mode": "semantic-icon",
+      "provider": "tabler-icons",
+      "selection": "local-top-1",
+      "queryOwner": "visual-director",
+      "requiredPerComponentItem": true
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "forbidden",
+      "ordered": false
+    },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "semantic": { "ordered": false },
+        "relationTraits": { "parallel": true },
+        "density": ["low", "medium"]
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": {
+        "selection": { "itemCount": 4 }
+      },
+      "controls": [
+        {
+          "key": "itemCount",
+          "label": "并列项目数",
+          "values": [3, 4, 5],
+          "default": 4
+        }
+      ]
+    }
+  },
+  "layoutExpansion": {
+    "mode": "responsive-state-group",
+    "range": "同一 Structure Group 支持 3–5 项；每个状态重新计算卡片宽度、间距与整体居中位置",
+    "rule": "所有项目等宽、等高、等距并围绕共同中轴居中；不得把顺序、中心或层级关系混入本组"
+  },
+  "componentModel": {
+    "fixed": [
+      "单行等权卡片骨架及共同中轴",
+      "圆形视觉锚点—标题—正文的统一层级",
+      "完整浅蓝灰承载面、轻阴影与稳定内部留白"
+    ],
+    "variable": [
+      "3–5 个同级要点的标题和正文",
+      "由视觉导演提供语义短语、本地 Top 1 检索后填入的线性图标",
+      "项目数变化时由同一 HTML 组件重新计算栅格，不隐藏预设槽位"
+    ]
+  },
+  "fieldContract": {
+    "editable": [
+      {
+        "field": "items.length",
+        "source": "PageContent.items.length",
+        "meaning": "选择 3、4 或 5 项 State，并触发整组重新排布"
+      },
+      {
+        "field": "items[].title",
+        "source": "PageContent.items[].title",
+        "meaning": "每张卡片的同级要点标题"
+      },
+      {
+        "field": "items[].body",
+        "source": "PageContent.items[].body",
+        "meaning": "每张卡片的简短说明"
+      },
+      {
+        "field": "items[].iconQuery",
+        "source": "VisualPlan.pages[].iconQueries[]",
+        "meaning": "视觉导演只提供语义检索短语，不接触候选图标或文件名"
+      }
+    ],
+    "generated": [
+      {
+        "field": "items[].iconKey",
+        "meaning": "程序从本地 Tabler 元数据模糊检索得到的唯一 Top 1 图标"
+      }
+    ],
+    "fixed": [
+      "所有卡片在每个 State 中等权、共线、等宽和等高",
+      "字号角色由 Skin 提供，组件不得自行缩字"
+    ],
+    "unavailable": []
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "stateFootprints": {
+      "3": { "width": 1006, "height": 410, "basis": "component-root-visible-bounds" },
+      "4": { "width": 1110, "height": 410, "basis": "component-root-visible-bounds" },
+      "5": { "width": 1140, "height": 410, "basis": "component-root-visible-bounds" }
+    },
+    "resizeMode": "natural",
+    "minFontSize": 19,
+    "safePadding": 12,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "承载 3–5 个同级要点；标题不超过 8 字；正文上限随 State 为 34/30/24 字",
+  "semanticContract": "3–5 个对象处于同一层级，彼此没有先后、因果、中心支撑或上下级关系",
+  "doNotUseWhen": "内容存在正反比较、步骤顺序、中心辐射、问题—措施或层级关系",
+  "review": "四项 HTML 黄金状态已获用户认可；已扩散到 3–5 项并接入 Native/东北大学主题，等待整组最终审批"
+}

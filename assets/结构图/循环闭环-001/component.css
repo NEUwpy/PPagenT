@@ -1,29 +1,25 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
-body { background: #fff; color: #707070; font-family: "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; }
+body { background: #fff; color: #707070; font-family: var(--ppagent-font-body, "Microsoft YaHei"), "Noto Sans CJK SC", sans-serif; }
 .cycle-review { position: relative; width: 1170px; height: 492px; overflow: hidden; background: #fff; }
 .cycle-support-layer { position: absolute; inset: 0; z-index: 1; }
 .cycle-note { position: absolute; left: var(--left); top: var(--top); width: var(--width); height: var(--height); padding: 16px 28px; overflow: hidden; background: #f1f1f1; }
 .cycle-note[data-side="left"] { padding-right: 205px; }
 .cycle-note[data-side="right"] { padding-left: 205px; }
-.cycle-copy { display: flex; height: 100%; flex-direction: column; justify-content: center; gap: 8px; }
-.cycle-copy-line { margin: 0; overflow: hidden; color: #666; font-size: 13px; line-height: 1.45; text-overflow: ellipsis; white-space: nowrap; }
+.cycle-copy { display: flex; height: 100%; flex-direction: column; justify-content: center; gap: 3px; }
+.cycle-copy-line { margin: 0; overflow: hidden; color: #666; font-size: var(--ppagent-component-body-size, 19px); line-height: 1.2; text-overflow: ellipsis; white-space: nowrap; }
 .cycle-note[data-side="right"] .cycle-copy-line { text-align: right; }
 .cycle-review[data-density="compact"] .cycle-note { padding-top: 10px; padding-bottom: 10px; }
 .cycle-review[data-density="compact"] .cycle-note[data-side="left"] { padding-right: 190px; }
 .cycle-review[data-density="compact"] .cycle-note[data-side="right"] { padding-left: 190px; }
-.cycle-review[data-density="compact"] .cycle-copy { gap: 4px; }
-.cycle-review[data-density="compact"] .cycle-copy-line { font-size: 12px; line-height: 1.35; }
+.cycle-review[data-density="compact"] .cycle-copy { gap: 3px; }
 .cycle-mask { position: absolute; left: 345px; top: 6px; z-index: 2; width: 480px; height: 480px; border-radius: 50%; background: #fff; }
 .cycle-diagram { position: absolute; left: 345px; top: 6px; z-index: 3; width: 480px; height: 480px; overflow: visible; }
 .cycle-breath { fill: none; stroke: #fff; stroke-width: 24px; }
 .cycle-arc, .cycle-arrow { stroke: none; }
 .cycle-number, .cycle-title, .cycle-english, .cycle-core-text { dominant-baseline: middle; text-anchor: middle; }
-.cycle-number { fill: #aec1e6; font-size: 29px; font-weight: 300; opacity: .48; }
-.cycle-title { fill: #ffd176; font-size: 20px; font-weight: 500; }
-.cycle-english { fill: #777; font-size: 16px; letter-spacing: 2px; }
+.cycle-number { fill: #aec1e6; font-size: var(--ppagent-component-heading-size, 29px); font-weight: 300; opacity: .48; }
+.cycle-title { fill: #ffd176; font-size: var(--ppagent-component-item-title-size, 21px); font-weight: 500; }
+.cycle-english { fill: #777; font-size: var(--ppagent-component-label-size, 18px); letter-spacing: 2px; }
 .cycle-core { fill: #fff; stroke: #d5d5d5; stroke-width: 1px; }
-.cycle-core-text { fill: #444; font-size: 23px; font-weight: 500; }
-.cycle-review[data-step-count="5"] .cycle-title, .cycle-review[data-step-count="6"] .cycle-title { font-size: 17px; }
-.cycle-review[data-step-count="5"] .cycle-english, .cycle-review[data-step-count="6"] .cycle-english { font-size: 13px; letter-spacing: 1px; }
-.cycle-review[data-step-count="5"] .cycle-number, .cycle-review[data-step-count="6"] .cycle-number { font-size: 24px; }
+.cycle-core-text { fill: #444; font-size: var(--ppagent-component-title-size, 26px); font-weight: 500; }

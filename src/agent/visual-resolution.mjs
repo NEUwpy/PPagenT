@@ -28,8 +28,8 @@ function publicComposition(layout) {
 
 function publicVariant(variant, contract, compositions) {
   return {
-    skillId: variant.skillId,
-    styleGroupId: variant.styleGroupId,
+    logicId: variant.logicId,
+    structureGroupId: variant.structureGroupId,
     familyId: variant.familyId,
     assetId: variant.assetId,
     variantId: variant.variantId,
@@ -38,6 +38,7 @@ function publicVariant(variant, contract, compositions) {
     itemCount: variant.itemCount,
     textCapacity: variant.textCapacity ?? null,
     contentContract: variant.contentContract ?? null,
+    mediaContract: variant.mediaContract ?? null,
     slotContract: variant.slotContract ?? null,
     renderer: variant.renderer,
     fallbackBody: variant.fallbackBody,
@@ -148,6 +149,29 @@ function selectedCandidate(planPage, candidateSet) {
     && candidate.variantId === planPage.variantId
     && candidate.silhouette === planPage.silhouette
   ));
+}
+
+function validateIconQueries(planPage, candidate, compositionPage) {
+  const queries = planPage.iconQueries ?? [];
+  const contract = candidate.mediaContract;
+  if (contract?.mode !== "semantic-icon") {
+    return queries.length ? [{ code: "icon-queries-not-supported" }] : [];
+  }
+  const selectedIds = new Set(compositionPage.componentItemIds ?? []);
+  const seen = new Set();
+  const issues = [];
+  for (const item of queries) {
+    if (!selectedIds.has(item.sourceItemId)) {
+      issues.push({ code: "icon-query-source-item-invalid", sourceItemId: item.sourceItemId });
+    }
+    if (seen.has(item.sourceItemId)) {
+      issues.push({ code: "icon-query-duplicated", sourceItemId: item.sourceItemId });
+    }
+    seen.add(item.sourceItemId);
+  }
+  const missing = [...selectedIds].filter((id) => !seen.has(id));
+  if (missing.length) issues.push({ code: "icon-query-required", sourceItemIds: missing });
+  return issues;
 }
 
 export function timelineLacksTemporalEvidence(content, candidate, candidateSet) {
@@ -595,6 +619,7 @@ export async function resolveVisualPlan({
       layouts,
       metadataById,
     });
+    compositionIssues.push(...validateIconQueries(planPage, candidate, normalizedCompositionPage));
     if (compositionIssues.length) {
       feedback.push({
         pageId: planPage.pageId,
@@ -607,12 +632,14 @@ export async function resolveVisualPlan({
     if (metadataById.get(candidate.assetId)?.kind === "component") {
       structuralRequests.push({
         pageId: planPage.pageId,
+        logicId: candidate.logicId,
+        structureGroupId: candidate.structureGroupId,
         familyId: candidate.familyId,
         assetId: candidate.assetId,
         itemCount: normalizedCompositionPage.componentItemIds.length,
         baseRelation: pageIntents[index].baseRelation,
         purposeKey: pageIntents[index].purposeKey,
-        visualVariantId: candidate.variantId,
+        visualStructureGroupId: candidate.structureGroupId,
       });
     }
   });
@@ -662,7 +689,13 @@ export async function resolveVisualPlan({
     const componentContent = metadata?.kind === "component"
       ? filterComponentContent(pageContents[index], compositionPage)
       : pageContents[index];
-    const payload = mapRenderPayload(componentContent, pageIntents[index], decision, compositionPage);
+    const payload = mapRenderPayload(
+      componentContent,
+      pageIntents[index],
+      decision,
+      compositionPage,
+      normalizedVisualPlan.pages[index],
+    );
     if (metadata?.kind === "component") payload.parameters.visualVariantId = decision.selectedVariantId;
     return payload;
   });

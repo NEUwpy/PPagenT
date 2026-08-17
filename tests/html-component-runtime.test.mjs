@@ -14,8 +14,14 @@ import {
   visualComponent,
 } from "../assets/结构图/循环闭环-001/review.mjs";
 import { normalizeCycleParameters } from "../assets/结构图/循环闭环-001/layout.mjs";
+import {
+  previewParameters as parallelPreviewParameters,
+  resolvePreviewParameters as resolveParallelPreviewParameters,
+  visualComponent as parallelVisualComponent,
+} from "../备选资产/结构图/等权并列卡片-001/review.mjs";
 
 const assetDir = path.resolve(import.meta.dirname, "../assets/结构图/循环闭环-001");
+const parallelAssetDir = path.resolve(import.meta.dirname, "../备选资产/结构图/等权并列卡片-001");
 
 test("循环 HTML 由通用 DOM 编译器直接生成可编辑 Native 形状", async () => {
   const targetFrame = { left: 55, top: 166, width: 1170, height: 492 };
@@ -27,6 +33,10 @@ test("循环 HTML 由通用 DOM 编译器直接生成可编辑 Native 形状", a
         parameters: resolvePreviewParameters(previewParameters, { stepCount }),
         assetDir,
         targetFrame,
+        theme: {
+          font: "Microsoft YaHei",
+          typography: { componentHeading: 29, componentTitle: 26, componentItemTitle: 21, componentBody: 19, componentLabel: 18, componentMeta: 17 },
+        },
       });
       assert.equal(tree.nodes.filter((node) => node.kind === "path").length, stepCount * 2);
       assert.equal(tree.nodes.filter((node) => node.name.startsWith("cycle-panel-")).length, stepCount);
@@ -37,8 +47,16 @@ test("循环 HTML 由通用 DOM 编译器直接生成可编辑 Native 形状", a
       parameters: resolvePreviewParameters(previewParameters, { stepCount: 4 }),
       assetDir,
       targetFrame,
+      theme: {
+        font: "Microsoft YaHei",
+        typography: { componentHeading: 29, componentTitle: 26, componentItemTitle: 21, componentBody: 19, componentLabel: 18, componentMeta: 17 },
+      },
     });
     assert.equal(tree.nodes.find((node) => node.name === "cycle-title-0")?.style.color, "#FFD176");
+    assert.equal(tree.nodes.find((node) => node.name === "cycle-number-0")?.style.fontSize, 29);
+    assert.equal(tree.nodes.find((node) => node.name === "cycle-title-0")?.style.fontSize, 21);
+    assert.equal(tree.nodes.find((node) => node.name === "cycle-core-text-0")?.style.fontSize, 26);
+    assert.equal(tree.nodes.find((node) => node.name === "cycle-0-copy-line-0")?.style.fontSize, 19);
 
     const presentation = createPresentation();
     const slide = presentation.slides.add();
@@ -69,5 +87,49 @@ test("循环基础版接受正文和0–4条普通分点，不绑定指标结构
       { title: "处理", body: "正文", metrics: [{ label: "进度", value: "80%" }] },
       { title: "输出", body: "正文" },
     ],
-  }), /独立的嵌套 Style Group/);
+  }), /独立的嵌套 Structure Group/);
+  assert.throws(() => normalizeCycleParameters({
+    steps: [
+      { title: "输入", body: "这段正文故意超过固定字号对应容量" },
+      { title: "处理", body: "正文" },
+      { title: "输出", body: "正文" },
+    ],
+  }), /超过 14 字/);
+});
+
+test("HTML 组件拒绝通过缩放目标框偷偷改变字号", async () => {
+  try {
+    await assert.rejects(() => resolveHtmlComponent({
+      component: visualComponent,
+      parameters: resolvePreviewParameters(previewParameters, { stepCount: 4 }),
+      assetDir,
+      targetFrame: { left: 0, top: 0, width: 585, height: 246 },
+    }), /不能缩放组件/);
+  } finally {
+    await closeHtmlComponentRuntime();
+  }
+});
+
+test("并列组件的文字与图标槽由最终 DOM 派生，并编译为原生图像对象", async () => {
+  const targetFrame = { left: 55, top: 166, width: 1170, height: 492 };
+  try {
+    const tree = await resolveHtmlComponent({
+      component: parallelVisualComponent,
+      parameters: resolveParallelPreviewParameters(parallelPreviewParameters, { itemCount: 4 }),
+      assetDir: parallelAssetDir,
+      targetFrame,
+    });
+    assert.equal(tree.slots.length, 12);
+    assert.equal(tree.slots.filter((slot) => slot.role === "icon").length, 4);
+    assert.equal(tree.nodes.filter((node) => node.kind === "image").length, 4);
+
+    const presentation = createPresentation();
+    const slide = presentation.slides.add();
+    compileResolvedVisualTree(slide, tree, targetFrame);
+    const inspection = await presentation.inspect({ kind: "slide,textbox,shape,image", maxChars: 100000 });
+    const rows = inspection.ndjson.split(/\r?\n/).filter(Boolean).map(JSON.parse);
+    assert.equal(rows.filter((row) => row.kind === "image").length, 4);
+  } finally {
+    await closeHtmlComponentRuntime();
+  }
 });

@@ -6,11 +6,11 @@ PPagenT 是一个面向固定使用场景、以可靠生成原生可编辑 Power
 
 ## 当前阶段
 
-两份真实稿件已经用于校准正式生成线。当前冻结 Shell 与 Content Frame，并用最小实验验证 `Visual Skill → Style Group → State → Content Slots`：同一份 HTML/CSS 组件既负责响应布局，也向通用编译器提供最终几何，编译结果仍是原生可编辑 PPT 对象。循环闭环已成为首个声明动态 Content Slot 的试点；子 Skill 的自动选择与嵌套渲染尚未接入正式流程。当前状态见[当前阶段](docs/当前阶段.md)，几何和颗粒度见[Shell 与 Visual Skill 契约](docs/Shell与Visual Skill契约.md)，长任务边界见[方向校正](docs/方向校正.md)。
+两份真实稿件已经用于校准正式生成线。当前冻结 Shell 与 Content Frame，并用最小实验验证 `Logic → Structure Group → State → Content Slots`：同一份 HTML/CSS 组件既负责响应布局，也向通用编译器提供最终几何，编译结果仍是原生可编辑 PPT 对象。循环闭环已成为首个声明动态 Content Slot 的试点；子 Logic 的自动选择与嵌套渲染尚未接入正式流程。当前状态见[当前阶段](docs/当前阶段.md)，几何和颗粒度见[Shell 与 Logic 契约](docs/Shell与Logic契约.md)，长任务边界见[方向校正](docs/方向校正.md)。
 
 ## 核心工程取舍
 
-PPagenT 采用“AI 理解与选择、参数化代码确定性绘制”的生成方式，以减少重复生成消耗并提高结果可靠性。核心库按 Visual Skill 组织语义能力；每个 Skill 可包含多个经验证的 Style Group，每组再确定性适应数量和容量 State。具体规则见[产品定义](docs/产品定义.md)。
+PPagenT 采用“AI 理解与选择、参数化代码确定性绘制”的生成方式，以减少重复生成消耗并提高结果可靠性。核心库按 Logic 组织语义能力；每个 Logic 可包含多个经验证的 Structure Group，每组再确定性适应数量和容量 State。具体规则见[产品定义](docs/产品定义.md)。
 
 ## 已确定的基本原则
 
@@ -28,7 +28,7 @@ PPagenT 采用“AI 理解与选择、参数化代码确定性绘制”的生成
 - [当前阶段](docs/当前阶段.md)
 - [方向校正](docs/方向校正.md)
 - [产品定义](docs/产品定义.md)
-- [Shell 与 Visual Skill 契约](docs/Shell与Visual Skill契约.md)
+- [Shell 与 Logic 契约](docs/Shell与Logic契约.md)
 - [运行配置信息](docs/运行配置信息.md)
 - [产品叙事：为什么做 PPagenT](docs/产品叙事.md)
 - [外部项目学习](docs/外部项目学习/README.md)
@@ -48,7 +48,7 @@ PPagenT 采用“AI 理解与选择、参数化代码确定性绘制”的生成
 - `结构样本池/`：保存所有值得继续观察的单页来源样本，允许重复和暂未归类。
 - `备选资产/`：新蒸馏、重复版式和待比较方案的审核区，同样由各目录的 `asset.json` 自动发现。
 - `src/asset-runtime/`：原生 PPT 共享原语、旧资产兼容 Builder，以及 HTML 组件到 Native 对象的编译支撑。
-- `assets/<分类>/<资产>/asset.json + review.mjs + generate.mjs/runtime.mjs + example.pptx`：Style Group 的来源与契约、HTML 布局组件、参数映射和全家族示例；迁移后的资产只维护一份 HTML 布局真源，旧资产暂保留 Native Builder 兼容入口。
+- `assets/<分类>/<资产>/asset.json + review.mjs + generate.mjs + example.pptx`：Structure Group 的来源与契约、HTML 布局组件、参数映射和全家族示例；结构资产只维护一份 HTML 布局真源。
 - `experiments/`：只保留仍在使用的最小架构实验和 Shell 标注，不再提交整套稿件运行输出或批量渲染物。
 
 ## 公开仓库范围
@@ -80,4 +80,4 @@ npm test
 
 默认实时模型入口为 `npm run agent:run:deepseek`，使用 `deepseek-v4-flash`；它读取环境变量或 Git 忽略的 `config/deepseek.local.json`。OpenAI Provider 仍可通过 `npm run agent:run:openai` 使用。正式入口默认只调用内容导演和视觉导演；具体配置与密钥边界见[运行配置信息](docs/运行配置信息.md)。
 
-正式生成线对 `html-component` 资产使用本地浏览器求解受控 DOM/CSS/SVG，再由通用编译器生成 Native 对象；这不是截图转 PPT，也不是面向任意网页的转换器。未迁移资产继续调用旧 Native Builder。PPA 看板读取同一资产声明和 HTML 组件进行审查。PPTX 对象生成依赖 Codex 工作区内置、尚未公开发布的 `@oai/artifact-tool`，因此不把后者写入公共 npm 依赖。
+正式生成线对结构资产使用本地浏览器求解受控 DOM/CSS/SVG，再由通用编译器生成 Native 对象；这不是截图转 PPT，也不是面向任意网页的转换器。PPA 看板读取同一资产声明、Shell 代码和 HTML 组件进行审查；槽位地图也从这些真源即时解析，不另维护坐标表。PPTX 对象生成依赖 Codex 工作区内置、尚未公开发布的 `@oai/artifact-tool`，因此不把后者写入公共 npm 依赖。

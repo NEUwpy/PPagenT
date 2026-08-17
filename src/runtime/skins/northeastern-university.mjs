@@ -12,6 +12,7 @@ import { fitChineseTextToFrame } from "../../render/chinese-typography.mjs";
 import { loadCompositionLayouts } from "../../composition/layouts.mjs";
 import { renderPageComposition } from "../../render/page-composition.mjs";
 import { academicReportShell } from "../shells/academic-report.mjs";
+import { northeasternUniversityTheme } from "./northeastern-university-theme.mjs";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 
@@ -19,28 +20,8 @@ export const northeasternUniversitySkin = {
   id: "northeastern-university-001",
   shell: academicReportShell,
   bodyFrame: academicReportShell.slots.contentFrame,
-  componentSourceFrame: { left: 40, top: 135, width: 1200, height: 520 },
-  componentTheme: {
-    background: "#FFFFFF",
-    surface: "#FFFFFF",
-    accent: "#2F5EA8",
-    accentAlt: "#4C88E8",
-    accentSoft: "#DCE9FA",
-    cyan: "#78AEEF",
-    dark: "#2B2B2B",
-    body: "#404040",
-    muted: "#6F7D91",
-    line: "#AFC6E8",
-    font: "Microsoft YaHei",
-    typography: {
-      componentHeading: 29,
-      componentTitle: 26,
-      componentItemTitle: 21,
-      componentBody: 19,
-      componentLabel: 18,
-      componentMeta: 17,
-    },
-  },
+  componentSourceFrame: academicReportShell.slots.contentFrame,
+  componentTheme: northeasternUniversityTheme,
   typographyRoles: {
     // Windows exposes the installed 汉仪文润宋韵 U family under this canonical name.
     displayTypeface: "HYWenRunSongYun U",
@@ -249,6 +230,7 @@ export async function renderNortheasternUniversityDeck({
   outputPptx,
   qaDir,
   manuscriptSource,
+  structureRenderer = renderStructureAsset,
 }) {
   const starterPptx = path.join(path.dirname(outputPptx), ".runtime", "template-starter.pptx");
   let bodyPageNumber = 0;
@@ -273,7 +255,7 @@ export async function renderNortheasternUniversityDeck({
   try {
     for (const [index, page] of pages.entries()) {
       if (!page.composition) {
-        if (!isSkinOnlyAsset(page.payload.assetId)) await renderStructureAsset(slides[index], page.payload, northeasternUniversitySkin);
+        if (!isSkinOnlyAsset(page.payload.assetId)) await structureRenderer(slides[index], page.payload, northeasternUniversitySkin);
         continue;
       }
       const layout = layouts.get(page.composition.compositionId);
@@ -288,7 +270,7 @@ export async function renderNortheasternUniversityDeck({
       );
       if (!isSkinOnlyAsset(page.payload.assetId)) {
         if (!componentFrame) throw new Error(`${page.composition.compositionId} is missing a component slot`);
-        await renderStructureAsset(slides[index], page.payload, northeasternUniversitySkin, componentFrame);
+        await structureRenderer(slides[index], page.payload, northeasternUniversitySkin, componentFrame);
       }
     }
 

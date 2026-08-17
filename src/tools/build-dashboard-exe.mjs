@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { spawn } from "node:child_process";
-import { defaultProjectRoot } from "./visual-skill-dashboard-data.mjs";
+import { defaultProjectRoot } from "./logic-dashboard-data.mjs";
 
 const [major, minor] = process.versions.node.split(".").map(Number);
 if (major < 25 || (major === 25 && minor < 5)) {

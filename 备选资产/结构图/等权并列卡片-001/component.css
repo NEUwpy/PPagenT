@@ -1,0 +1,27 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { color: #404040; background: transparent; font-family: var(--ppagent-font-body, "Microsoft YaHei"), sans-serif; }
+.parallel-review { position: relative; width: 1170px; height: 492px; overflow: hidden; background: transparent; }
+.parallel-grid { position: absolute; top: 40px; display: grid; height: 410px; }
+.parallel-review[data-item-count="3"] .parallel-grid { left: 82px; width: 1006px; grid-template-columns: repeat(3, 1fr); gap: 34px; }
+.parallel-review[data-item-count="4"] .parallel-grid { left: 30px; width: 1110px; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.parallel-review[data-item-count="5"] .parallel-grid { left: 15px; width: 1140px; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+.parallel-card { position: relative; height: 410px; }
+.parallel-card-underlay { position: absolute; left: 8px; right: 8px; top: 58px; bottom: 0; border: 1px solid #dce8f7; border-radius: 26px; background: #dfeafa; }
+.parallel-card-surface { position: absolute; left: 0; right: 0; top: 48px; bottom: 10px; border: 1px solid #d2e0f2; border-radius: 26px; background: #f4f8fd; box-shadow: 0 12px 26px rgba(31, 72, 126, .12); }
+.parallel-card-accent { position: absolute; left: 50%; top: 48px; width: 82px; height: 8px; margin-left: -41px; border: 0; border-radius: 0 0 9px 9px; background: #78aeef; }
+.parallel-marker { position: absolute; left: 50%; top: 0; width: 96px; height: 96px; margin-left: -48px; }
+.parallel-marker-halo { position: absolute; inset: 0; border: 1px solid #d8e7fa; border-radius: 50%; background: #edf5ff; }
+.parallel-marker-core { position: absolute; left: 14px; top: 14px; width: 68px; height: 68px; border: 0; border-radius: 50%; background: #2f5ea8; box-shadow: 0 8px 18px rgba(47, 94, 168, .24); }
+.parallel-icon-slot { position: absolute; left: 27px; top: 27px; width: 42px; height: 42px; color: #fff; }
+.parallel-icon-svg { display: block; width: 36px; height: 36px; margin: 3px; color: #fff; }
+.parallel-marker-orbit { position: absolute; inset: 0; border: 2px solid rgba(255, 255, 255, .78); border-radius: 50%; background: transparent; }
+.parallel-marker-dot { position: absolute; width: 8px; height: 8px; border: 0; border-radius: 50%; background: #fff; }
+.parallel-marker-dot-center { left: 17px; top: 17px; }
+.parallel-marker-dot-left { left: 3px; top: 18px; width: 6px; height: 6px; opacity: .86; }
+.parallel-marker-dot-right { right: 3px; top: 18px; width: 6px; height: 6px; opacity: .86; }
+.parallel-title { position: absolute; left: 22px; right: 22px; top: 128px; height: 36px; margin: 0; overflow: hidden; color: #254b7c; font-size: var(--ppagent-component-item-title-size, 21px); font-weight: 700; line-height: 36px; text-align: center; white-space: nowrap; }
+.parallel-rule { position: absolute; left: 50%; top: 178px; width: 54px; height: 4px; margin-left: -27px; border: 0; border-radius: 99px; background: #78aeef; }
+.parallel-body { position: absolute; left: 28px; right: 28px; top: 210px; height: 116px; margin: 0; overflow: hidden; color: #46566a; font-size: var(--ppagent-component-body-size, 19px); font-weight: 400; line-height: 1.55; text-align: center; }
+.parallel-review[data-item-count="5"] .parallel-title { left: 16px; right: 16px; }
+.parallel-review[data-item-count="5"] .parallel-body { left: 20px; right: 20px; top: 204px; height: 128px; }

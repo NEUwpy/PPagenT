@@ -1,3 +1,0 @@
-import{runHtmlComponentGenerator}from"../../../src/visual-runtime/html-component-runtime.mjs";import{mapping,renderPayload}from"../../../src/render/payload-helpers.mjs";import{previewParameters,resolvePreviewParameters,visualComponent}from"./review.mjs";export{previewParameters,resolvePreviewParameters,visualComponent};
-export function mapPageContent(content,intent){return renderPayload(intent,"radial-hub-001",{title:content.title,center:content.notes||content.title,items:content.items.map((item)=>({title:item.title||item.body,body:item.body&&item.title?item.body:""}))},content.items.map((item,index)=>mapping(item.id,`items[${index}]`)));}
-await runHtmlComponentGenerator(import.meta.url,visualComponent,resolvePreviewParameters(previewParameters,{itemCount:6}));

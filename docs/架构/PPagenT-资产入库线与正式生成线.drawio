@@ -26,13 +26,13 @@
         <mxCell id="i-source" value="&lt;b&gt;唯一原始 PPT 来源&lt;/b&gt;&lt;br&gt;PPT源/&amp;lt;文件名&amp;gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#5B8DEF;strokeWidth=2;fontSize=15;fontColor=#1F3F73;spacing=8;" vertex="1" parent="1">
           <mxGeometry x="55" y="205" width="200" height="90" as="geometry"/>
         </mxCell>
-        <mxCell id="i-select" value="&lt;b&gt;选择典型来源页&lt;/b&gt;&lt;br&gt;保留完整视觉语法&lt;br&gt;确认 Visual Skill 语义" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#5B8DEF;strokeWidth=2;fontSize=15;fontColor=#1F3F73;spacing=8;" vertex="1" parent="1">
+        <mxCell id="i-select" value="&lt;b&gt;选择典型来源页&lt;/b&gt;&lt;br&gt;保留完整视觉语法&lt;br&gt;确认 Logic 语义" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#5B8DEF;strokeWidth=2;fontSize=15;fontColor=#1F3F73;spacing=8;" vertex="1" parent="1">
           <mxGeometry x="300" y="195" width="200" height="110" as="geometry"/>
         </mxCell>
         <mxCell id="i-distill" value="&lt;b&gt;Luna 蒸馏&lt;/b&gt;&lt;br&gt;理解原版美学&lt;br&gt;复现结构而非自由重绘" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#5B8DEF;strokeWidth=2;fontSize=15;fontColor=#1F3F73;spacing=8;" vertex="1" parent="1">
           <mxGeometry x="545" y="195" width="200" height="110" as="geometry"/>
         </mxCell>
-        <mxCell id="i-component" value="&lt;b&gt;HTML Component&lt;/b&gt;&lt;br&gt;Style Group 唯一布局来源&lt;br&gt;CSS / 响应规则 / 替换接口" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#E8F1FF;strokeColor=#3575D3;strokeWidth=2;fontSize=15;fontStyle=1;fontColor=#174D87;spacing=8;" vertex="1" parent="1">
+        <mxCell id="i-component" value="&lt;b&gt;HTML Component&lt;/b&gt;&lt;br&gt;Structure Group 唯一布局来源&lt;br&gt;CSS / 响应规则 / 替换接口" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#E8F1FF;strokeColor=#3575D3;strokeWidth=2;fontSize=15;fontStyle=1;fontColor=#174D87;spacing=8;" vertex="1" parent="1">
           <mxGeometry x="790" y="190" width="220" height="120" as="geometry"/>
         </mxCell>
         <mxCell id="i-expand" value="&lt;b&gt;版式扩散 + Content Slots&lt;/b&gt;&lt;br&gt;声明 State 与真实可填区域&lt;br&gt;同一 HTML 响应求解" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#5B8DEF;strokeWidth=2;fontSize=15;fontColor=#1F3F73;spacing=8;" vertex="1" parent="1">
@@ -84,13 +84,13 @@
         <mxCell id="g-candidates" value="&lt;b&gt;程序生成合法候选&lt;/b&gt;&lt;br&gt;只读取核心资产能力卡&lt;br&gt;语义 / 容量 / 媒体过滤" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#EAF8EF;strokeColor=#3D9363;strokeWidth=2;fontSize=15;fontStyle=1;fontColor=#205B3C;spacing=8;" vertex="1" parent="1">
           <mxGeometry x="780" y="625" width="230" height="130" as="geometry"/>
         </mxCell>
-        <mxCell id="g-compose" value="&lt;b&gt;视觉导演：编排&lt;/b&gt;&lt;br&gt;选择 Skill / Style Group&lt;br&gt;填写组件绑定与整套节奏" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#54A675;strokeWidth=2;fontSize=15;fontColor=#235C3E;spacing=8;" vertex="1" parent="1">
+        <mxCell id="g-compose" value="&lt;b&gt;视觉导演：编排&lt;/b&gt;&lt;br&gt;选择 Logic / Structure Group&lt;br&gt;填写组件绑定与整套节奏" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#54A675;strokeWidth=2;fontSize=15;fontColor=#235C3E;spacing=8;" vertex="1" parent="1">
           <mxGeometry x="1050" y="625" width="230" height="130" as="geometry"/>
         </mxCell>
         <mxCell id="g-decision" value="&lt;b&gt;确定性决策对象&lt;/b&gt;&lt;br&gt;LayoutDecision&lt;br&gt;RenderPayload" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#54A675;strokeWidth=2;fontSize=15;fontColor=#235C3E;spacing=8;" vertex="1" parent="1">
           <mxGeometry x="1320" y="635" width="200" height="110" as="geometry"/>
         </mxCell>
-        <mxCell id="g-resolve" value="&lt;b&gt;Mapper + State + Slots&lt;/b&gt;&lt;br&gt;父结构先求解真实可填区域&lt;br&gt;文字或合法一级子 Skill" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#EAF8EF;strokeColor=#3D9363;strokeWidth=2;fontSize=15;fontStyle=1;fontColor=#205B3C;spacing=8;" vertex="1" parent="1">
+        <mxCell id="g-resolve" value="&lt;b&gt;Mapper + State + Slots&lt;/b&gt;&lt;br&gt;父结构先求解真实可填区域&lt;br&gt;文字或合法一级子 Logic" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#EAF8EF;strokeColor=#3D9363;strokeWidth=2;fontSize=15;fontStyle=1;fontColor=#205B3C;spacing=8;" vertex="1" parent="1">
           <mxGeometry x="1560" y="625" width="230" height="130" as="geometry"/>
         </mxCell>
         <mxCell id="g-compile" value="&lt;b&gt;Shell 装配 + Native 编译&lt;/b&gt;&lt;br&gt;受控 HTML 或旧 Builder&lt;br&gt;输出原生文字 / 形状 / 图片 / 连线" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#FFFFFF;strokeColor=#54A675;strokeWidth=2;fontSize=15;fontColor=#235C3E;spacing=8;" vertex="1" parent="1">

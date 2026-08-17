@@ -43,8 +43,10 @@ const candidateRoot = path.join(root, "备选资产");
 const sampleRoot = path.join(root, "结构样本池");
 const candidateAssets = await discoverAssetManifestEntries(root, "备选资产");
 const coreAssets = await discoverAssetManifestEntries(root, "assets");
-const sampleRegistry = await readJson(path.join(sampleRoot, "registry.json"));
-const coverage = await readJson(path.join(root, "catalog", "family-candidate-coverage.json"));
+const sampleRegistryPath = path.join(sampleRoot, "registry.json");
+const sampleRegistryAvailable = await exists(sampleRegistryPath);
+const sampleRegistry = sampleRegistryAvailable ? await readJson(sampleRegistryPath) : { samples: [] };
+const logicMap = await readJson(path.join(root, "catalog", "logic-map.json"));
 
 const candidateIds = new Set();
 let structureCandidates = 0;
@@ -124,13 +126,31 @@ for (const entry of sampleRegistry.samples) {
 }
 
 const sampleFamilies = new Set(Object.keys(familyCounts));
-const coverageFamilies = new Set(Object.keys(coverage.coverage));
-for (const family of sampleFamilies) {
-  const ids = coverage.coverage[family] ?? [];
-  if (!ids.length) issues.push(`功能家族无候选覆盖: ${family}`);
-  for (const id of ids) if (!candidateIds.has(id)) issues.push(`覆盖映射引用未知备选: ${family}/${id}`);
+const logics = Array.isArray(logicMap.logics) ? logicMap.logics : [];
+const logicIds = new Set();
+const logicNames = new Set();
+const knownAssetIds = new Set([...coreIds, ...candidateIds]);
+if (!logics.length) issues.push("Logic 能力地图为空");
+for (const logic of logics) {
+  if (!logic.id?.trim()) issues.push("Logic 缺少 ID");
+  else if (logicIds.has(logic.id)) issues.push(`重复 Logic ID: ${logic.id}`);
+  else logicIds.add(logic.id);
+  if (!logic.name?.trim()) issues.push(`Logic 缺少名称: ${logic.id ?? "未知"}`);
+  else if (logicNames.has(logic.name)) issues.push(`重复 Logic 名称: ${logic.name}`);
+  else logicNames.add(logic.name);
+  if (!logic.description?.trim()) issues.push(`Logic 缺少逻辑说明: ${logic.id ?? "未知"}`);
+  if (!Array.isArray(logic.assetIds)) issues.push(`Logic assetIds 必须是数组: ${logic.id ?? "未知"}`);
+  for (const assetId of logic.assetIds ?? []) {
+    if (!knownAssetIds.has(assetId)) issues.push(`Logic 引用未知资产: ${logic.id}/${assetId}`);
+  }
 }
-for (const family of coverageFamilies) if (!sampleFamilies.has(family)) issues.push(`覆盖映射存在未知家族: ${family}`);
+for (const entry of [...coreAssets, ...candidateAssets]) {
+  if (entry.metadata.kind !== "component") continue;
+  const logicId = entry.metadata.runtime?.logicId;
+  const logic = logics.find((item) => item.id === logicId);
+  if (!logic) issues.push(`结构资产未登记 Logic 槽位: ${entry.id}/${logicId ?? "未声明"}`);
+  else if (coreIds.has(entry.id) && !logic.assetIds.includes(entry.id)) issues.push(`核心结构资产未填入对应 Logic: ${entry.id}/${logicId}`);
+}
 
 const candidateFiles = await walkFiles(candidateRoot);
 const inspectFiles = candidateFiles.filter((file) => file.endsWith(".inspect.ndjson"));

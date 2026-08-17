@@ -24,8 +24,8 @@
     "componentExport": "visualComponent",
     "previewParametersExport": "previewParameters",
     "mapperExport": "mapPageContent",
-    "skillId": "cycle",
-    "styleGroupId": "cycle-pdca-ring-p57",
+    "logicId": "cycle",
+    "structureGroupId": "cycle-pdca-ring-p57",
     "familyId": "cycle-loop",
     "variantId": "default",
     "silhouette": "pdca-ring-with-side-notes",
@@ -44,10 +44,11 @@
       "max": 6
     },
     "textCapacity": {
-      "maxItemTitleChars": 10,
-      "maxItemBodyChars": 22,
+      "maxCenterChars": 12,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 14,
       "maxPointsPerItem": 4,
-      "maxPointChars": 22
+      "maxPointChars": 14
     },
     "contentContract": {
       "itemRole": "semantic-node",
@@ -132,34 +133,119 @@
     "range": "3–6 个循环步骤",
     "rule": "按当前步骤数重新计算等角位置和弧段；顺时针序号连续，不能从六项布局直接删项"
   },
+  "componentModel": {
+    "fixed": [
+      "顺时针闭合环与中心核心共同表达循环关系",
+      "外围说明区与对应步骤保持清晰归属",
+      "环形体量、中心留白、左右均衡和蓝灰层次保持一致"
+    ],
+    "variable": [
+      "中心主题",
+      "3–6 个步骤及其标题、正文和普通文本分点",
+      "步骤数量变化时重新计算等角位置、弧段和外围说明区"
+    ]
+  },
+  "fieldContract": {
+    "editable": [
+      {
+        "field": "page.title",
+        "source": "PageContent.title",
+        "meaning": "页面标题，由 Skin 放入统一标题区"
+      },
+      {
+        "field": "center",
+        "source": "PageContent.notes || PageContent.title",
+        "meaning": "环中央主题；示例中的“PDCA／循环”会被真实稿件替换"
+      },
+      {
+        "field": "steps[].title",
+        "source": "PageContent.items[].title",
+        "meaning": "步骤名称；示例中的“计划／执行／检查／行动”等会被真实稿件替换"
+      },
+      {
+        "field": "steps[].body",
+        "source": "PageContent.items[].body",
+        "meaning": "步骤说明"
+      },
+      {
+        "field": "steps[].points[]",
+        "source": "PageContent.items[].points[]",
+        "meaning": "步骤分点"
+      },
+      {
+        "field": "steps.length",
+        "source": "PageContent.items.length",
+        "meaning": "循环步骤数，支持 3–6"
+      }
+    ],
+    "generated": [
+      {
+        "field": "steps[].number",
+        "meaning": "按顺时针顺序自动生成 01–N"
+      }
+    ],
+    "fixed": [
+      "顺时针闭合环、中心圆与外围说明区的结构关系",
+      "本 Structure Group 的几何、色彩层次和连接方式",
+      "字号角色由当前 Skin 统一提供，组件不得自行缩字"
+    ],
+    "unavailable": [
+      {
+        "field": "steps[].english",
+        "meaning": "当前 PageContent 契约未开放英文标签；示例不再显示，避免误导"
+      }
+    ]
+  },
   "spatialContract": {
     "coordinateSystem": {
       "width": 1280,
       "height": 720
     },
     "contentFrame": {
-      "left": 40,
-      "top": 135,
-      "width": 1200,
-      "height": 520
+      "left": 55,
+      "top": 166,
+      "width": 1170,
+      "height": 492
     },
-    "aspectRatio": 2.3077,
+    "aspectRatio": 2.378,
     "minimumFrame": {
-      "width": 780,
-      "height": 360
+      "width": 1170,
+      "height": 492
     },
     "preferredFrame": {
-      "width": 1100,
-      "height": 460
+      "width": 1170,
+      "height": 492
     },
-    "resizeMode": "contain",
+    "stateFootprints": {
+      "3": {
+        "width": 1170,
+        "height": 492,
+        "basis": "component-root"
+      },
+      "4": {
+        "width": 1170,
+        "height": 492,
+        "basis": "component-root"
+      },
+      "5": {
+        "width": 1170,
+        "height": 492,
+        "basis": "component-root"
+      },
+      "6": {
+        "width": 1170,
+        "height": 492,
+        "basis": "component-root"
+      }
+    },
+    "resizeMode": "natural",
     "minFontSize": 16,
     "safePadding": 12,
     "supportedCompositionIds": [
       "component-full"
     ]
   },
-  "capacity": "3–6 个循环步骤；每项接受可选正文和0–4条普通文本分点，正文与单条分点均不超过22字；不要求数字、指标或标签",
+  "capacity": "3–6 个循环步骤；每项接受可选正文和0–4条普通文本分点，标题不超过8字，正文与单条分点均不超过14字；容量服从固定字号，不通过缩字扩容",
   "adaptation": {
     "stepCount": "3–6；外围文本按左右位置镜像对齐，分点少于4条也可正常使用",
     "layout": "步骤围绕中心按顺时针顺序等角分布；HTML 负责唯一布局，通用编译器读取最终 DOM/CSS 后生成 Native 形状",

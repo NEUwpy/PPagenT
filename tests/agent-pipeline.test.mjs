@@ -38,7 +38,7 @@ test("同一内容项不能同时完整进入组件和侧栏文字", () => {
   }), ["b"]);
 });
 
-test("Visual Skill 的重复内容绑定由视觉导演适配并由程序校验", () => {
+test("Logic 的重复内容绑定由视觉导演适配并由程序校验", () => {
   const page = content("comparison", [
     { id: "random", title: "随机 95 分", body: "偶尔惊艳但质量波动" },
     { id: "stable", title: "稳定 80 分", body: "结构清楚而且第二天仍可修改" },
@@ -73,7 +73,7 @@ test("Visual Skill 的重复内容绑定由视觉导演适配并由程序校验"
   assert.ok(issues.some((issue) => issue.code === "component-binding-count-unbalanced"));
 });
 
-test("只有组件槽的绑定型 Skill 会规范化为组件完整承载", () => {
+test("只有组件槽的绑定型 Logic 会规范化为组件完整承载", () => {
   const page = {
     componentItemIds: ["random", "stable"],
     componentContentMode: "titles-only",
@@ -116,7 +116,7 @@ function intentDraft(intentId, purposeKey, baseRelation, structure = {}) {
   };
 }
 
-test("正式流程只暴露已晋升核心库的结构变体", async () => {
+test("正式流程不会暴露缺少视觉意图和用户确认的 HTML 资产", async () => {
   const page = content("topics", [
     { id: "a", title: "A", body: "A" },
     { id: "b", title: "B", body: "B" },
@@ -125,12 +125,11 @@ test("正式流程只暴露已晋升核心库的结构变体", async () => {
   ]);
   const intent = enrichPageIntent(intentDraft("topics-intent", "explain_topics", "hub"), page);
   const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), ["radial-hub-001", "northeastern-university-body-001"]);
-  assert.equal(set.candidates.find((candidate) => candidate.assetId === "radial-hub-001")?.variantId, "orbit");
+  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), ["northeastern-university-body-001"]);
   assert.equal(set.capacityDensity, "low");
 });
 
-test("正式流程只把核心库中的蒸馏变体交给视觉导演", async () => {
+test("作废的顺序流程不会再进入正式候选", async () => {
   const page = content("process", [
     { id: "a", title: "A", body: "A" },
     { id: "b", title: "B", body: "B" },
@@ -145,7 +144,6 @@ test("正式流程只把核心库中的蒸馏变体交给视觉导演", async ()
     assetId: candidate.assetId,
     variantId: candidate.variantId,
   })), [
-    { assetId: "sequential-process-001", variantId: "horizontal-cards" },
     { assetId: "northeastern-university-body-001", variantId: "editorial" },
   ]);
 });
@@ -186,11 +184,10 @@ test("两个互补事实不会因为恰好有两项就获得比较资产", async
   assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), [
     "northeastern-university-body-001",
   ]);
-  const comparisonRejection = set.semanticRejections.find((entry) => entry.assetId === "comparison-structure-001");
-  assert.ok(comparisonRejection.reasons.includes("base-relation:parallel"));
+  assert.equal(set.candidates.some((candidate) => candidate.assetId === "comparison-structure-001"), false);
 });
 
-test("真实三角色内容优先获得核心泳道资产并保留独立总结", async () => {
+test("未重新蒸馏的泳道资产不会进入三角色候选", async () => {
   const page = content("roles", [
     { id: "role-01", title: "AI 负责理解", body: "读取稿件，判断重点、关系、拆页和表达目的。" },
     { id: "role-02", title: "规则负责决定", body: "判断哪些版式可以使用、内容是否装得下、什么时候应该换版式或拆页。" },
@@ -205,14 +202,10 @@ test("真实三角色内容优先获得核心泳道资产并保留独立总结",
   draft.relationTraits = { ...draft.relationTraits, dimensions: 2, secondaryDimension: "role" };
   const intent = enrichPageIntent(draft, page);
   const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.equal(set.candidates[0].assetId, "swimlane-process-001");
-  const payload = mapRenderPayload(page, intent, { selectedAssetId: "swimlane-process-001" });
-  assert.deepEqual(payload.parameters.lanes, ["AI", "规则", "代码"]);
-  assert.deepEqual(payload.parameters.stages, ["理解", "决定", "执行"]);
-  assert.equal(payload.parameters.conclusion, page.items[3].body);
+  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), ["northeastern-university-body-001"]);
 });
 
-test("四段因果内容使用核心问题改进资产而不是临时因果链", async () => {
+test("未重新蒸馏的问题改进资产不会进入因果候选", async () => {
   const page = content("value", [
     { id: "audience-01", title: "更多人并不缺内容", body: "他们有内容、有专业知识，也有真实的汇报任务。" },
     { id: "barrier-01", title: "缺的是制作能力", body: "只是不擅长拆页、选择表达方式和完成视觉排版。" },
@@ -224,17 +217,10 @@ test("四段因果内容使用核心问题改进资产而不是临时因果链",
     sameLevel: false,
   }), page);
   const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), [
-    "problem-improvement-001",
-    "northeastern-university-body-001",
-  ]);
-  const payload = mapRenderPayload(page, intent, { selectedAssetId: "problem-improvement-001" });
-  assert.equal(payload.parameters.problems.length, 2);
-  assert.equal(payload.parameters.improvements.length, 2);
-  assert.equal(payload.parameters.improvements[1].emphasis, true);
+  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), ["northeastern-university-body-001"]);
 });
 
-test("层级语义可以确定性映射到核心三层组织树", async () => {
+test("未重新蒸馏的三层组织树不会进入层级候选", async () => {
   const page = {
     ...content("organization", [
       { id: "product", title: "产品组", body: "需求与研究" },
@@ -273,14 +259,7 @@ test("层级语义可以确定性映射到核心三层组织树", async () => {
     { ordered: false, sameLevel: false },
   ), page);
   const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.equal(set.candidates[0].assetId, "organization-tree-001");
-  const payload = mapRenderPayload(page, intent, { selectedAssetId: "organization-tree-001" });
-  assert.deepEqual(payload.parameters.leader, { name: "李明", role: "总负责人" });
-  assert.equal(payload.parameters.departments.length, 2);
-  assert.deepEqual(payload.parameters.departments[1].members, [
-    { name: "周楠", role: "前端开发" },
-    { name: "叶琳", role: "后端开发" },
-  ]);
+  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), ["northeastern-university-body-001"]);
 });
 
 test("resolver 不允许把视觉导演的家族或变体换成另一资产", async () => {
@@ -369,7 +348,7 @@ test("唯一家族与变体确定后由候选回填冗余 silhouette", async () 
   assert.equal(result.layoutDecisions[0].selectedSilhouette, candidate.silhouette);
 });
 
-test("分层架构使用 PageIntent 分组，不要求内容写组件专属 ID", () => {
+test("未重新蒸馏的分层架构不能绕过正式发现直接映射", () => {
   const page = content("system", [
     { id: "input-a", title: "材料", body: "原稿" },
     { id: "input-b", title: "规范", body: "Skin" },
@@ -384,11 +363,7 @@ test("分层架构使用 PageIntent 分组，不要求内容写组件专属 ID",
     selectedAssetId: "layered-architecture-001",
     selectedVariantId: "default",
   };
-  const payload = mapRenderPayload(page, intent, decision);
-  assert.deepEqual(payload.parameters.sources, ["材料", "规范"]);
-  assert.equal(payload.parameters.platform, "PPagenT");
-  assert.deepEqual(payload.parameters.apps, ["演示", "证据"]);
-  assert.ok(page.items.every((item) => !/^(source-|app-)|^platform$/i.test(item.id)));
+  assert.throws(() => mapRenderPayload(page, intent, decision), /核心资产包不存在/);
 });
 
 test("CompositionPlan must place every source item in a legal page slot", async () => {
@@ -465,14 +440,19 @@ test("CompositionPlan must place every source item in a legal page slot", async 
 });
 
 test("component titles-only cannot silently drop item bodies", async () => {
-  const page = content("parallel", [
+  const page = content("cycle-titles-only", [
     { id: "a", title: "A", body: "A body" },
     { id: "b", title: "B", body: "B body" },
     { id: "c", title: "C", body: "C body" },
   ]);
-  const intent = enrichPageIntent(intentDraft("parallel-intent", "present_parallel_points", "parallel"), page);
+  const draft = intentDraft("cycle-titles-only-intent", "explain_cycle", "sequence", {
+    ordered: true,
+    sameLevel: true,
+  });
+  draft.relationTraits.cyclic = true;
+  const intent = enrichPageIntent(draft, page);
   const [candidateSet] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  const candidate = candidateSet.candidates.find((item) => item.assetId === "parallel-cards-001");
+  const candidate = candidateSet.candidates.find((item) => item.assetId === "cycle-loop-001");
   assert.ok(candidate);
   const result = await resolveVisualPlan({
     root,

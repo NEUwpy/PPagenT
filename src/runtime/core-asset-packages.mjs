@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { inspectHtmlComponentEligibility } from "./html-component-eligibility.mjs";
 
 const defaultRoot = path.resolve(import.meta.dirname, "../..");
 const cache = new Map();
@@ -44,6 +45,8 @@ async function loadPackage(manifestPath) {
   requireValue(typeof asset.id === "string" && asset.id, `${manifestPath} 缺少资产 id`);
   requireValue(typeof runtime.entry === "string" && runtime.entry, `${asset.id} 缺少 runtime.entry`);
   requireValue(typeof runtime.mapperExport === "string" && runtime.mapperExport, `${asset.id} 缺少 mapperExport`);
+  if (renderer !== "skin") requireValue(typeof runtime.logicId === "string" && runtime.logicId, `${asset.id} 缺少 logicId`);
+  if (renderer !== "skin") requireValue(typeof runtime.structureGroupId === "string" && runtime.structureGroupId, `${asset.id} 缺少 structureGroupId`);
   requireValue(typeof runtime.familyId === "string" && runtime.familyId, `${asset.id} 缺少 familyId`);
   requireValue(typeof runtime.variantId === "string" && runtime.variantId, `${asset.id} 缺少 variantId`);
   requireValue(typeof runtime.silhouette === "string" && runtime.silhouette, `${asset.id} 缺少 silhouette`);
@@ -77,6 +80,10 @@ async function loadPackage(manifestPath) {
   }
 
   const assetDir = path.dirname(manifestPath);
+  if (renderer === "html-component") {
+    const eligibility = await inspectHtmlComponentEligibility(assetDir, asset.id);
+    if (!eligibility.eligible) return null;
+  }
   const entryPath = path.resolve(assetDir, runtime.entry);
   requireValue(inside(assetDir, entryPath), `${asset.id} 的运行入口必须位于资产目录内`);
   const module = await import(pathToFileURL(entryPath).href);

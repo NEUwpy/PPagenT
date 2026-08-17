@@ -65,23 +65,23 @@ export function resolveContentSlots(parameters) {
     capacity: {
       maxDepth: 1,
       maxItems: 4,
-      maxCharsPerItem: 22,
+      maxCharsPerItem: 14,
     },
-    allowedContentModes: ["plain-text", "registered-child-skill"],
+    allowedContentModes: ["plain-text"],
     fallback: "plain-text",
   }));
 }
 
 export const previewParameters = Object.freeze({
   title: "PDCA工作复盘分析框架",
-  centerLabel: ["PDCA", "循环"],
+  center: "PDCA 循环",
   steps: [
-    { key: "plan", title: "计划", english: "Plan", body: "明确本轮改进目标", points: ["分析现状与约束", "确定优先问题", "形成行动计划"] },
-    { key: "do", title: "执行", english: "Do", body: "按计划推进重点行动", points: ["同步责任与分工"] },
-    { key: "check", title: "检查", english: "Check", body: "对照目标检查实际结果", points: [] },
-    { key: "act", title: "行动", english: "Act", body: "沉淀有效做法", points: ["修正未达预期环节", "进入下一轮循环"] },
-    { key: "verify", title: "验证", english: "Verify", body: "用新证据确认改进效果", points: ["复核关键偏差", "确认结果可复现"] },
-    { key: "learn", title: "沉淀", english: "Learn", body: "把经验写入标准", points: ["以新基线再次启动"] },
+    { key: "plan", title: "计划", body: "明确本轮改进目标", points: ["分析现状约束", "确定优先问题", "形成行动计划"] },
+    { key: "do", title: "执行", body: "推进重点行动", points: ["同步责任分工"] },
+    { key: "check", title: "检查", body: "对照目标检查结果", points: [] },
+    { key: "act", title: "行动", body: "沉淀有效做法", points: ["修正未达预期", "进入下一循环"] },
+    { key: "verify", title: "验证", body: "确认改进效果", points: ["复核关键偏差", "确认结果可复现"] },
+    { key: "learn", title: "沉淀", body: "把经验写入标准", points: ["以新基线启动"] },
   ],
 });
 

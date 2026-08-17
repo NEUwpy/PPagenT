@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PPA 看板 · PPagenT Logic</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172033;
+      --muted: #647087;
+      --line: #dce3ee;
+      --panel: #ffffff;
+      --bg: #f3f6fb;
+      --blue: #2868d8;
+      --blue-soft: #eaf2ff;
+      --green: #24865b;
+      --green-soft: #e8f7ef;
+      --amber: #b46b00;
+      --amber-soft: #fff4da;
+      --violet: #7650bd;
+      --violet-soft: #f1ebff;
+      --red: #b94a48;
+      --red-soft: #fff0ee;
+      --shadow: 0 12px 35px rgba(31, 52, 86, .09);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: var(--ink); background: var(--bg); font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    .topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 24px; min-height: 70px; padding: 12px 32px; color: #fff; background: rgba(17, 30, 54, .96); backdrop-filter: blur(16px); box-shadow: 0 8px 28px rgba(7, 19, 39, .18); }
+    .brand { min-width: 300px; }
+    .brand strong { display: block; font-size: 19px; letter-spacing: .02em; }
+    .brand span { display: block; margin-top: 3px; color: #aebbd0; font-size: 12px; }
+    .nav { display: flex; gap: 8px; flex-wrap: wrap; }
+    .nav a { padding: 8px 12px; color: #cbd6e7; text-decoration: none; border-radius: 8px; font-size: 13px; }
+    .nav a:hover { color: #fff; background: rgba(255,255,255,.09); }
+    .top-status { margin-left: auto; text-align: right; color: #b8c5d8; font-size: 12px; }
+    .refresh-button { min-height: 38px; padding: 8px 14px; color: #fff; border: 1px solid rgba(255,255,255,.24); border-radius: 9px; background: rgba(255,255,255,.09); font-size: 13px; white-space: nowrap; }
+    .refresh-button:hover { background: rgba(255,255,255,.16); }
+    .refresh-button:disabled { cursor: default; color: #8290a5; border-color: rgba(255,255,255,.08); background: rgba(255,255,255,.03); }
+    main { width: min(1540px, calc(100% - 40px)); margin: 0 auto; padding: 34px 0 90px; }
+    .hero { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(340px, .6fr); gap: 22px; margin-bottom: 22px; }
+    .hero-copy { position: relative; overflow: hidden; min-height: 260px; padding: 34px 38px; color: #fff; border-radius: 22px; background: linear-gradient(128deg, #18355f 0%, #245db4 56%, #5b8def 100%); box-shadow: var(--shadow); }
+    .hero-copy::after { content: ""; position: absolute; right: -90px; top: -120px; width: 360px; height: 360px; border: 1px solid rgba(255,255,255,.18); border-radius: 50%; box-shadow: 0 0 0 44px rgba(255,255,255,.05), 0 0 0 92px rgba(255,255,255,.04); }
+    .eyebrow { display: inline-flex; gap: 8px; align-items: center; padding: 6px 10px; border: 1px solid rgba(255,255,255,.3); border-radius: 999px; color: #d9e8ff; font-size: 12px; }
+    h1 { position: relative; z-index: 1; margin: 22px 0 12px; max-width: 760px; font-size: clamp(30px, 4vw, 48px); line-height: 1.12; letter-spacing: -.035em; }
+    .hero-copy p { position: relative; z-index: 1; max-width: 820px; margin: 0; color: #dce9fb; font-size: 16px; line-height: 1.8; }
+    .migration { display: flex; flex-direction: column; justify-content: space-between; padding: 26px; border: 1px solid var(--line); border-radius: 22px; background: var(--panel); box-shadow: var(--shadow); }
+    .migration h2 { margin: 0; font-size: 18px; }
+    .migration .big { margin-top: 20px; font-size: 46px; font-weight: 800; letter-spacing: -.05em; color: var(--blue); }
+    .migration .caption { color: var(--muted); font-size: 13px; line-height: 1.7; }
+    .progress { height: 10px; overflow: hidden; margin: 18px 0 10px; border-radius: 99px; background: #e8edf5; }
+    .progress > span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #2868d8, #70a0ef); }
+    .metrics { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; margin: 0 0 28px; }
+    .metric { min-height: 112px; padding: 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); box-shadow: 0 7px 20px rgba(31,52,86,.05); }
+    .metric .value { font-size: 30px; font-weight: 800; letter-spacing: -.04em; }
+    .metric .label { margin-top: 7px; color: var(--muted); font-size: 13px; }
+    .section { margin-top: 30px; padding: 26px; border: 1px solid var(--line); border-radius: 20px; background: var(--panel); box-shadow: 0 10px 28px rgba(31,52,86,.055); }
+    .section-head { display: flex; align-items: flex-end; gap: 18px; margin-bottom: 20px; }
+    .section-head > div:first-child { flex: 1; }
+    .section h2 { margin: 0; font-size: 23px; letter-spacing: -.02em; }
+    .section-head p { margin: 7px 0 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+    .pill { display: inline-flex; align-items: center; gap: 6px; min-height: 26px; padding: 4px 9px; border-radius: 999px; background: #eef2f7; color: #536176; font-size: 11px; white-space: nowrap; }
+    .pill.core, .pill.html-component { background: var(--green-soft); color: var(--green); }
+    .pill.candidate, .pill.not-wired { background: var(--amber-soft); color: var(--amber); }
+    .pill.legacy-builder, .pill.native-builder, .pill.native-compiled-output { background: var(--blue-soft); color: var(--blue); }
+    .pill.skin { background: var(--violet-soft); color: var(--violet); }
+    .pipeline { display: grid; grid-template-columns: repeat(7, minmax(120px, 1fr)); gap: 22px; align-items: stretch; }
+    .pipe-step { position: relative; min-height: 110px; padding: 16px; border: 1px solid #cfe0f7; border-radius: 14px; background: #f8fbff; }
+    .pipe-step:not(:last-child)::after { content: "→"; position: absolute; right: -19px; top: 38px; color: #7d92af; font-size: 20px; font-weight: 700; }
+    .pipe-step strong { display: block; margin-bottom: 8px; color: #234f8c; font-size: 14px; }
+    .pipe-step span { color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .store-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+    .store { padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: #fafbfd; }
+    .store .count { float: right; font-size: 25px; font-weight: 800; color: var(--blue); }
+    .store h3 { margin: 0 0 10px; font-size: 15px; }
+    .store code { color: #4c5b72; font-size: 12px; }
+    .store p { clear: both; margin: 13px 0 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .shell-map-wrap { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(260px, .75fr); gap: 20px; align-items: start; }
+    .shell-map { position: relative; overflow: hidden; aspect-ratio: 16 / 9; border: 1px solid #cfd9e8; border-radius: 14px; background: linear-gradient(#fff,#f8fafc); box-shadow: inset 0 0 0 12px #eef3f8; }
+    .shell-map::before { content: "东北大学正文 Shell"; position: absolute; left: 18px; top: 13px; color: #738197; font-size: 12px; }
+    .shell-slot { position: absolute; border: 1.5px dashed rgba(83,96,118,.62); background: rgba(93,109,136,.10); transition: background .14s ease,border-color .14s ease; }
+    .shell-slot[data-role="content-frame"] { border-color: rgba(39,151,91,.8); background: rgba(39,151,91,.12); }
+    .shell-slot[data-role="logo"] { border-color: rgba(255,255,255,.95); background: rgba(47,94,168,.3); box-shadow: 0 0 0 1px rgba(47,94,168,.5); }
+    .shell-slot:hover { z-index: 3; border-style: solid; background: rgba(40,104,216,.22); }
+    .shell-slot span { position: absolute; left: 4px; top: 4px; display: none; max-width: calc(100% - 8px); padding: 3px 6px; overflow: hidden; border-radius: 5px; color: #fff; background: rgba(23,32,51,.88); font-size: 11px; white-space: nowrap; text-overflow: ellipsis; }
+    .shell-slot:hover span { display: block; }
+    .shell-map-notes { padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: #fafbfd; color: var(--muted); font-size: 13px; line-height: 1.75; }
+    .shell-map-notes strong { color: var(--ink); }
+    .logic-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+    .mode-notice { display: none; margin: 0 0 22px; padding: 13px 16px; border: 1px solid #e9c66f; border-radius: 12px; color: #7a5400; background: #fff8e7; font-size: 13px; line-height: 1.65; }
+    .mode-notice.show { display: block; }
+    .logic-card { position: relative; min-height: 350px; overflow: hidden; padding: 0 18px 18px; text-align: left; border: 1px solid var(--line); border-radius: 15px; background: #fff; transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease; }
+    .logic-card:hover { transform: translateY(-2px); border-color: #92b5ec; box-shadow: 0 12px 24px rgba(40,104,216,.1); }
+    .logic-card h3 { margin: 13px 0 5px; font-size: 17px; }
+    .logic-id { color: #708098; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 11px; overflow-wrap: anywhere; }
+    .logic-card .range { margin: 13px 0 10px; color: #3b4d66; font-size: 13px; line-height: 1.55; }
+    .logic-preview { display: grid; place-items: center; aspect-ratio: 16 / 9; margin: 0 -18px 16px; overflow: hidden; border-bottom: 1px solid var(--line); color: #8290a4; background: linear-gradient(145deg, #edf2f8, #f8fafc); font-size: 12px; }
+    .logic-preview img, .logic-preview iframe { display: block; width: 100%; height: 100%; border: 0; object-fit: contain; background: #eef2f7; }
+    .logic-preview iframe { pointer-events: none; }
+    .logic-preview span { padding: 12px; text-align: center; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .coverage-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .coverage-card { min-height: 128px; padding: 16px 17px; text-align: left; border: 1px solid var(--line); border-radius: 14px; background: #fbfcfe; }
+    .coverage-card:hover { border-color: #d5a647; background: #fffaf0; }
+    .coverage-card strong { display: block; margin-bottom: 8px; font-size: 14px; }
+    .coverage-card span { color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .coverage-card .coverage-description { display: block; min-height: 38px; }
+    .coverage-card .coverage-status { display: block; margin-top: 10px; font-weight: 700; }
+    .coverage-card.available { border-color: #dfc681; background: #fffdf6; }
+    .coverage-card.empty { border-style: dashed; }
+    .coverage-card.empty .coverage-status { color: #8a96a8; }
+    .coverage-card.available .coverage-status { color: #916a0b; }
+    .filters { display: grid; grid-template-columns: minmax(240px, 1.4fr) repeat(3, minmax(130px, .6fr)); gap: 10px; width: min(850px, 100%); }
+    .filters input, .filters select { width: 100%; min-height: 40px; padding: 8px 11px; color: var(--ink); border: 1px solid var(--line); border-radius: 10px; background: #fff; outline: none; }
+    .filters input:focus, .filters select:focus { border-color: #77a3e7; box-shadow: 0 0 0 3px rgba(40,104,216,.1); }
+    .table-wrap { overflow: auto; border: 1px solid var(--line); border-radius: 13px; }
+    table { width: 100%; border-collapse: collapse; min-width: 1000px; }
+    th, td { padding: 13px 14px; text-align: left; border-bottom: 1px solid #edf0f5; font-size: 12px; vertical-align: middle; }
+    th { position: sticky; top: 0; z-index: 1; color: #66758b; background: #f6f8fb; font-weight: 700; }
+    tbody tr { cursor: pointer; }
+    tbody tr:hover { background: #f4f8ff; }
+    td strong { display: block; font-size: 13px; }
+    td small { display: block; margin-top: 3px; color: #8793a6; }
+    .empty { padding: 42px; text-align: center; color: var(--muted); }
+    .catalog-grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 14px; }
+    .catalog-card { padding: 20px; border: 1px solid var(--line); border-radius: 14px; background: #fafbfd; }
+    .catalog-card h3 { margin: 0 0 14px; font-size: 15px; }
+    .catalog-list { display: flex; flex-wrap: wrap; gap: 7px; }
+    .drawer-backdrop { position: fixed; inset: 0; z-index: 50; display: none; background: rgba(13,22,38,.42); }
+    .drawer-backdrop.open { display: block; }
+    .drawer { position: absolute; right: 0; top: 0; width: min(860px, 96vw); height: 100%; overflow: auto; padding: 28px; background: #fff; box-shadow: -18px 0 50px rgba(10,24,49,.2); }
+    .drawer-close { position: sticky; top: 0; float: right; width: 38px; height: 38px; border: 0; border-radius: 50%; background: #eef2f7; color: #31415a; font-size: 20px; }
+    .drawer h2 { margin: 10px 50px 6px 0; font-size: 26px; }
+    .drawer .drawer-id { color: #718097; font-family: ui-monospace, Consolas, monospace; font-size: 12px; }
+    .drawer-badges { display: flex; flex-wrap: wrap; gap: 7px; margin: 18px 0; }
+    .drawer-preview { display: grid; place-items: center; aspect-ratio: 16 / 9; overflow: hidden; margin-top: 18px; border: 1px solid var(--line); border-radius: 12px; color: #7b899d; background: #f2f5f9; font-size: 13px; }
+    .drawer-preview img { display: block; width: 100%; height: 100%; object-fit: contain; }
+    .drawer-preview span { padding: 18px; text-align: center; line-height: 1.65; }
+    button.preview-open { position: relative; width: 100%; padding: 0; cursor: zoom-in; font: inherit; }
+    button.preview-open::after { content: "点击查看大图"; position: absolute; right: 10px; bottom: 10px; padding: 5px 9px; border-radius: 7px; color: #fff; background: rgba(13, 30, 56, .72); font-size: 11px; opacity: 0; transition: opacity .16s ease; }
+    button.preview-open:hover::after, button.preview-open:focus-visible::after { opacity: 1; }
+    .review-flow { margin-top: 22px; padding: 18px; border: 1px solid #cfe0f7; border-radius: 15px; background: #f7faff; }
+    .review-flow > h3 { margin: 0; font-size: 16px; }
+    .review-flow > p { margin: 7px 0 0; color: var(--muted); font-size: 12px; line-height: 1.65; }
+    .review-stage { margin-top: 17px; padding-top: 17px; border-top: 1px solid #dce6f4; }
+    .review-stage-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .review-stage-head b { font-size: 14px; }
+    .review-stage-head span { color: var(--muted); font-size: 12px; }
+    .review-media { display: grid; place-items: center; min-height: 130px; overflow: hidden; border: 1px solid var(--line); border-radius: 11px; color: #7b899d; background: #eef3f8; }
+    .review-media.source, .review-media.ppt { aspect-ratio: 16 / 9; }
+    .review-media.source > * { grid-area: 1 / 1; }
+    .review-media.source [data-source-status] { z-index: 1; border-radius: 8px; background: rgba(238,243,248,.94); }
+    .review-media.component { aspect-ratio: 1170 / 492; background: #fff; }
+    .review-media img, .review-media iframe { display: block; width: 100%; height: 100%; border: 0; object-fit: contain; }
+    .review-media span { padding: 18px; text-align: center; line-height: 1.65; }
+    .intent-panel, .component-profile { padding: 14px 16px; border: 1px solid #d9e3f1; border-radius: 10px; background: #fff; color: #405069; font-size: 12px; line-height: 1.7; }
+    .intent-panel { max-height: 250px; overflow: auto; white-space: pre-wrap; }
+    .component-profile { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 10px; }
+    .component-profile b { display: block; margin-bottom: 5px; color: #263a58; }
+    .component-profile ul { margin: 0; padding-left: 18px; }
+    .footprint { margin: -2px 0 10px; color: #53647c; font-size: 12px; }
+    .state-switcher { display: grid; gap: 8px; margin: 0 0 10px; }
+    .state-control { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; }
+    .state-control > b { min-width: 104px; color: #53647c; font-size: 12px; }
+    .state-button { min-width: 42px; min-height: 32px; padding: 5px 10px; border: 1px solid #cbd8ea; border-radius: 8px; color: #4f6078; background: #fff; font-size: 12px; }
+    .state-button:hover, .state-button.active { color: #fff; border-color: var(--blue); background: var(--blue); }
+    .native-download { display: inline-flex; align-items: center; justify-content: center; min-height: 36px; margin-top: 10px; padding: 7px 12px; border: 1px solid #b9cce6; border-radius: 8px; color: #155aa4; background: #fff; font-size: 12px; font-weight: 700; text-decoration: none; }
+    .native-download:hover { color: #fff; border-color: var(--blue); background: var(--blue); }
+    .preview-lightbox { position: fixed; inset: 0; z-index: 80; display: none; place-items: center; padding: 34px; background: rgba(8, 17, 32, .88); }
+    .preview-lightbox.open { display: grid; }
+    .preview-lightbox figure { display: grid; gap: 12px; width: min(1280px, 94vw); max-height: 92vh; margin: 0; }
+    .preview-lightbox img { width: 100%; max-height: calc(92vh - 42px); object-fit: contain; border-radius: 8px; background: #fff; box-shadow: 0 22px 70px rgba(0,0,0,.38); }
+    .preview-lightbox figcaption { color: #eef4ff; text-align: center; font-size: 13px; }
+    .preview-lightbox-close { position: fixed; top: 18px; right: 22px; width: 42px; height: 42px; border: 1px solid rgba(255,255,255,.3); border-radius: 50%; color: #fff; background: rgba(255,255,255,.12); font-size: 24px; }
+    .detail-group { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
+    .detail-group h3 { margin: 0 0 12px; font-size: 14px; color: #34445d; }
+    .detail-grid { display: grid; grid-template-columns: 145px 1fr; gap: 9px 14px; font-size: 13px; line-height: 1.65; }
+    .detail-grid dt { color: #7c889b; }
+    .detail-grid dd { margin: 0; overflow-wrap: anywhere; }
+    .detail-note { padding: 13px 15px; border-left: 3px solid #7ea5e4; border-radius: 6px; background: #f5f8fd; color: #43536b; font-size: 13px; line-height: 1.7; }
+    .footer { margin-top: 34px; color: #7c889b; text-align: center; font-size: 12px; }
+    @media (max-width: 1180px) {
+      .metrics { grid-template-columns: repeat(3, 1fr); }
+      .logic-grid { grid-template-columns: repeat(2, 1fr); }
+      .store-grid { grid-template-columns: repeat(3, 1fr); }
+      .pipeline { grid-template-columns: repeat(4, 1fr); }
+      .pipe-step::after { display: none; }
+    }
+    @media (max-width: 760px) {
+      .topbar { align-items: flex-start; padding: 12px 18px; }
+      .nav, .top-status { display: none; }
+      main { width: min(100% - 22px, 1540px); padding-top: 18px; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-copy { padding: 28px 24px; }
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+      .section { padding: 20px 16px; }
+      .section-head { align-items: flex-start; flex-direction: column; }
+      .pipeline, .logic-grid, .coverage-grid, .store-grid, .catalog-grid, .shell-map-wrap { grid-template-columns: 1fr; }
+      .filters { grid-template-columns: 1fr 1fr; }
+      .filters input { grid-column: 1 / -1; }
+      .detail-grid { grid-template-columns: 1fr; gap: 2px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><strong>PPA 看板</strong><span>PPagenT · Logic / Structure Group / State / 自动化入口</span></div>
+    <nav class="nav" aria-label="页面导航">
+      <a href="#overview">总览</a><a href="#intake-review">入库审查</a><a href="#automation">自动化</a><a href="#approval">待审批</a><a href="#formal">正式 Logic</a><a href="#candidates">能力地图</a><a href="#assets">全部资产</a><a href="#skin">Skin 容器</a><a href="#catalog">数据目录</a>
+    </nav>
+    <div class="top-status"><span id="generated-at"></span><br><span id="data-mode"></span></div>
+    <button class="refresh-button" id="refresh-dashboard" type="button">刷新仓库</button>
+  </header>
+
+  <main>
+    <section class="hero" id="overview">
+      <div class="hero-copy">
+        <span class="eyebrow" id="hero-mode">点击任意 Logic 查看触发与运行详情</span>
+        <h1>现在已经建设了什么，哪些能自动调用？</h1>
+        <p>本页把核心资产、候选资产、Logic、Structure Group、数量 State、触发关系和编译方式放进同一个视图。它不是另一套数据库，而是当前仓库真实声明的可视化索引。</p>
+      </div>
+      <aside class="migration">
+        <div><h2>HTML 审美工作台覆盖</h2><div class="big" id="migration-value"></div></div>
+        <div><div class="progress"><span id="migration-progress"></span></div><div class="caption" id="migration-caption"></div></div>
+      </aside>
+    </section>
+
+    <div class="mode-notice" id="mode-notice"></div>
+
+    <section class="metrics" id="metric-grid" aria-label="建设指标"></section>
+
+    <section class="section" id="intake-review">
+      <div class="section-head"><div><h2>Structure Group 怎样建设和审查</h2><p>参考组先分别贡献逻辑、审美、层级或细节，再综合成一份视觉意图；HTML 模型只读取综合意图，负责重新设计、组件化和数量扩散；Native PPT 只做机械编译。</p></div><span class="pill html-component">HTML 单源组件</span></div>
+      <div class="pipeline" style="grid-template-columns:repeat(6,minmax(130px,1fr))">
+        <div class="pipe-step"><strong>1 · 组建参考组</strong><span>按逻辑需求选择多张参考，并标注各自贡献。</span></div>
+        <div class="pipe-step"><strong>2 · 综合意图</strong><span>先提炼各自优点，再形成一套自洽的逻辑与审美语言。</span></div>
+        <div class="pipe-step"><strong>3 · HTML 设计</strong><span>HTML 不看原图，只根据意图完成黄金状态。</span></div>
+        <div class="pipe-step"><strong>4 · 组件与 State</strong><span>提取固定与可变部分，按数量重新排布并登记占用尺寸。</span></div>
+        <div class="pipe-step"><strong>5 · Native 编译</strong><span>读取最终 DOM/CSS/SVG，机械转换为可编辑 PPT 对象。</span></div>
+        <div class="pipe-step"><strong>6 · Skin 与看板</strong><span>放入统一 Content Frame，集中展示并由用户确认。</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="automation">
+      <div class="section-head"><div><h2>正式生成时，Logic 怎样被自动触发</h2><p>模型负责理解与选择；程序只把已登记能力变成合法候选。任何候选资产都不会因为“有文件”就自动进入正式生成。</p></div><span class="pill core" id="auto-callable-pill"></span></div>
+      <div class="pipeline">
+        <div class="pipe-step"><strong>1 · PageIntent</strong><span>视觉导演给出关系、目的、数量、文字密度与媒体需求。</span></div>
+        <div class="pipe-step"><strong>2 · Logic 过滤</strong><span>匹配 baseRelation、purpose、itemCount 和媒体契约。</span></div>
+        <div class="pipe-step"><strong>3 · Structure Group</strong><span>在同一 Logic 下选择适合整套节奏和容量的结构组。</span></div>
+        <div class="pipe-step"><strong>4 · 参数绑定</strong><span>Mapper 把 PageContent 确定性映射到组件字段。</span></div>
+        <div class="pipe-step"><strong>5 · State 与空间</strong><span>根据数量、容量和登记尺寸选择 State 与整页位置。</span></div>
+        <div class="pipe-step"><strong>6 · Native 编译</strong><span>统一 HTML → Native 编译器无发挥地生成可编辑对象。</span></div>
+        <div class="pipe-step"><strong>7 · Skin 组装</strong><span>装入统一 Shell；没有合法 Logic 时使用已登记简单排版。</span></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><div><h2>当前数据域</h2><p>这些目录共同构成现在的“资产数据库”。只有核心资产库会被正式生成线自动发现。</p></div></div>
+      <div class="store-grid" id="store-grid"></div>
+    </section>
+
+    <section class="section" id="approval">
+      <div class="section-head"><div><h2>待审批 Structure Group</h2><p>这里直接读取候选资产中的实时 HTML。它们尚未进入核心库，也不会被正式生成线调用；点击卡片可查看来源、视觉意图和当前建设阶段。</p></div><span class="pill candidate" id="approval-count"></span></div>
+      <div class="logic-grid" id="approval-grid"></div>
+    </section>
+
+    <section class="section" id="formal">
+      <div class="section-head"><div><h2>正式可调用的 Logic</h2><p>以下结构能力均为核心资产。点击卡片可查看 Structure Group、触发关系、数量范围、媒体约束、来源和运行入口。</p></div><span class="pill core" id="formal-count"></span></div>
+      <div class="logic-grid" id="formal-grid"></div>
+    </section>
+
+    <section class="section" id="candidates">
+      <div class="section-head"><div><h2>Logic 能力地图</h2><p>这里先固定覆盖常见 PPT 场景的逻辑能力。槽位不会因资产作废而消失；有合格 Structure Group 时填入，没有时明确显示“待建设”。</p></div><span class="pill candidate" id="candidate-count"></span></div>
+      <div class="coverage-grid" id="coverage-grid"></div>
+    </section>
+
+    <section class="section" id="assets">
+      <div class="section-head">
+        <div><h2>全部资产记录</h2><p id="result-caption"></p></div>
+        <div class="filters">
+          <input id="search" type="search" placeholder="搜索名称、ID、Logic、Structure Group 或触发关系" aria-label="搜索资产">
+          <select id="library-filter" aria-label="按资产库筛选"><option value="all">全部资产库</option><option value="core">核心库</option><option value="candidate">候选库</option></select>
+          <select id="category-filter" aria-label="按分类筛选"><option value="all">全部分类</option></select>
+          <select id="renderer-filter" aria-label="按布局入口筛选"><option value="all">全部实现方式</option><option value="html-component">HTML 路线</option><option value="legacy-builder">原有代码路线</option><option value="skin">主题 Shell</option><option value="not-wired">未接入</option></select>
+        </div>
+      </div>
+      <div class="table-wrap"><table><thead><tr><th>资产</th><th>库 / 状态</th><th>Logic</th><th>Structure Group</th><th>触发关系</th><th>数量或容量</th><th>建设状态</th><th>自动调用</th></tr></thead><tbody id="asset-table"></tbody></table></div>
+    </section>
+
+    <section class="section" id="skin">
+      <div class="section-head"><div><h2>Skin / Shell 容器地图</h2><p>这里直接读取当前 Shell 的真实坐标，不另建一份手工登记表。鼠标移入色块可查看容器名称与尺寸。</p></div><span class="pill skin" id="skin-id"></span></div>
+      <div class="shell-map-wrap"><div class="shell-map" id="shell-map"></div><div class="shell-map-notes"><strong>容器来源</strong><br>Shell 源代码是唯一真源；看板按当前坐标即时绘制。绿色区域是一级 Logic 共用的 Content Frame，灰色区域由 Skin/Shell 管理。结构内部的标题、正文和图标安全区则从各 State 的真实 HTML DOM 自动解析。</div></div>
+    </section>
+
+    <section class="section" id="catalog">
+      <div class="section-head"><div><h2>规则、词表与经验库</h2><p>这些不是视觉资产本身，而是帮助导演和程序判断“该不该用、怎么用、失败后怎么修”的结构化信息。</p></div></div>
+      <div class="catalog-grid">
+        <div class="catalog-card"><h3>Composition · 页面槽位</h3><div class="catalog-list" id="composition-list"></div></div>
+        <div class="catalog-card"><h3>Purpose · 页面目的</h3><div class="catalog-list" id="purpose-list"></div></div>
+        <div class="catalog-card"><h3>质量经验</h3><div class="catalog-list" id="quality-list"></div></div>
+      </div>
+    </section>
+
+    <div class="footer" id="footer-mode"></div>
+  </main>
+
+  <div class="drawer-backdrop" id="drawer-backdrop" role="presentation">
+    <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+      <button class="drawer-close" id="drawer-close" aria-label="关闭详情">×</button>
+      <div id="drawer-content"></div>
+    </aside>
+  </div>
+
+  <div class="preview-lightbox" id="preview-lightbox" role="dialog" aria-modal="true" aria-label="PPT 页面大图">
+    <button class="preview-lightbox-close" id="preview-lightbox-close" type="button" aria-label="关闭大图">×</button>
+    <figure><img id="preview-lightbox-image" alt=""><figcaption id="preview-lightbox-caption"></figcaption></figure>
+  </div>
+
+  <script type="module">
+    const DATA = {"generatedAt":"2026-08-17T02:36:25.056Z","mode":"static-snapshot","activeSkin":{"id":"northeastern-university-001","shellId":"academic-report-shell-001","slideSize":{"width":1280,"height":720},"slots":{"pageNumber":{"left":44.45,"top":31.9,"width":71.23,"height":48.47},"sectionLabel":{"left":98.87,"top":31.9,"width":177.93,"height":45.24},"logo":{"left":984.21,"top":20.82,"width":280.94,"height":62.29},"titleBand":{"left":35.17,"top":87.55,"width":1209.67,"height":52.42},"pageTitle":{"left":9.04,"top":88.85,"width":1250.55,"height":48.47},"contentFrame":{"left":55,"top":166,"width":1170,"height":492},"bottomReserve":{"left":35.17,"top":658,"width":1209.67,"height":62}},"componentTheme":{"background":"#FFFFFF","surface":"#FFFFFF","accent":"#2F5EA8","accentAlt":"#4C88E8","accentSoft":"#DCE9FA","cyan":"#78AEEF","dark":"#2B2B2B","body":"#404040","muted":"#6F7D91","line":"#AFC6E8","font":"Microsoft YaHei","typography":{"componentHeading":29,"componentTitle":26,"componentItemTitle":21,"componentBody":19,"componentLabel":18,"componentMeta":17}},"coordinateUnit":"design-px","pptPointScale":0.75},"summary":{"coreAssets":5,"formalLogics":1,"candidateRecords":1,"candidateOnly":1,"htmlDesignComponents":1,"legacyBuilders":0,"skins":4,"autoCallable":5,"previewable":5,"sourceDecks":6,"logicSlots":20,"logicFilled":1,"compositions":12,"purposes":36,"failureCases":0,"contracts":0,"experimentalVariants":0},"records":[{"id":"northeastern-university-cover-001","name":"东北大学封面 001","category":"封面","kind":"page-template","library":"core","status":"core","candidateCopyOfCore":false,"creationMethod":"reproduction","renderer":"skin","autoCallable":true,"logicId":"skin","structureGroupId":"default","familyId":"skin-cover","variantId":"default","silhouette":"cover","baseRelations":["none"],"purposes":[{"key":"present_cover","description":"呈现演示标题、汇报人和日期"}],"itemRange":{"min":0,"max":4,"preferred":[2]},"textCapacity":null,"stateContract":null,"mediaContract":null,"contentContract":null,"slotContract":null,"contract":{"abstractionLevel":"foundation","adaptationStatus":"fixed","constraints":{"semantic":{"ordered":false},"density":["low"]}},"compositionIds":["fixed-cover"],"source":"PPT源/PPT模板-封面正文尾页.pptx","layoutExpansion":{"mode":"fixed","range":"单一封面版式；标题、汇报人和日期变化","rule":"保持来源封面的版心、比例和视觉层级"},"spatialContract":null,"stateFootprints":{},"componentModel":null,"fieldContract":null,"capacity":"","semanticContract":"","doNotUseWhen":"","review":"","generator":"generate.mjs","showcase":"example.pptx","previewAvailable":true,"previewDeckPath":"assets/封面/东北大学封面-001/example.pptx","previewUrl":"/api/asset-preview?library=core&id=northeastern-university-cover-001&v=1786168061572","sourcePreviewAvailable":false,"sourcePreviewUrl":null,"sourcePreviewUrls":[],"componentPreviewAvailable":false,"componentImplementation":"unclassified","componentFidelityStatus":"legacy-or-unreviewed","hasVisualIntent":false,"visualIntentText":"","userApprovedHtmlNative":false,"componentGoldenState":null,"componentPreviewUrl":null,"componentStates":[],"componentInitialState":null,"componentControls":[],"componentInitialSelection":{},"runtimeCapabilities":["skin"],"nativeBuilderAvailable":false,"nativeCompiledOutputAvailable":false,"nativeOutputAvailable":false,"nativeStatePreviewUrl":null,"nativeStatePptxUrl":null,"skinStatePreviewUrl":null,"runtimeEntry":"runtime.mjs","mapperExport":"mapPageContent","reviewEntry":"","componentExport":"","previewParametersExport":"","previewResolverExport":"","builderExport":"","manifestPath":"assets/封面/东北大学封面-001/asset.json","assetDir":"assets/封面/东北大学封面-001","coverageTags":[]},{"id":"northeastern-university-closing-001","name":"东北大学尾页 001","category":"尾页","kind":"page-template","library":"core","status":"core","candidateCopyOfCore":false,"creationMethod":"reproduction","renderer":"skin","autoCallable":true,"logicId":"skin","structureGroupId":"default","familyId":"skin-closing","variantId":"default","silhouette":"closing","baseRelations":["none"],"purposes":[{"key":"present_closing","description":"呈现演示结束语"}],"itemRange":{"min":0,"max":3,"preferred":[1,2]},"textCapacity":null,"stateContract":null,"mediaContract":null,"contentContract":null,"slotContract":null,"contract":{"abstractionLevel":"foundation","adaptationStatus":"fixed","constraints":{"semantic":{"ordered":false},"density":["low"]}},"compositionIds":["fixed-closing"],"source":"PPT源/PPT模板-封面正文尾页.pptx","layoutExpansion":{"mode":"fixed","range":"单一尾页版式；收束文字变化","rule":"保持来源尾页构图"},"spatialContract":null,"stateFootprints":{},"componentModel":null,"fieldContract":null,"capacity":"","semanticContract":"","doNotUseWhen":"","review":"","generator":"generate.mjs","showcase":"example.pptx","previewAvailable":true,"previewDeckPath":"assets/尾页/东北大学尾页-001/example.pptx","previewUrl":"/api/asset-preview?library=core&id=northeastern-university-closing-001&v=1786168061647","sourcePreviewAvailable":false,"sourcePreviewUrl":null,"sourcePreviewUrls":[],"componentPreviewAvailable":false,"componentImplementation":"unclassified","componentFidelityStatus":"legacy-or-unreviewed","hasVisualIntent":false,"visualIntentText":"","userApprovedHtmlNative":false,"componentGoldenState":null,"componentPreviewUrl":null,"componentStates":[],"componentInitialState":null,"componentControls":[],"componentInitialSelection":{},"runtimeCapabilities":["skin"],"nativeBuilderAvailable":false,"nativeCompiledOutputAvailable":false,"nativeOutputAvailable":false,"nativeStatePreviewUrl":null,"nativeStatePptxUrl":null,"skinStatePreviewUrl":null,"runtimeEntry":"runtime.mjs","mapperExport":"mapPageContent","reviewEntry":"","componentExport":"","previewParametersExport":"","previewResolverExport":"","builderExport":"","manifestPath":"assets/尾页/东北大学尾页-001/asset.json","assetDir":"assets/尾页/东北大学尾页-001","coverageTags":[]},{"id":"northeastern-university-body-001","name":"东北大学正文页 001","category":"正文","kind":"page-template","library":"core","status":"core","candidateCopyOfCore":false,"creationMethod":"reproduction","renderer":"skin","autoCallable":true,"logicId":"skin","structureGroupId":"editorial","familyId":"skin-body-editorial","variantId":"editorial","silhouette":"editorial-page","baseRelations":["none"],"purposes":[],"itemRange":{"min":0,"max":20,"preferred":[2,3,4]},"textCapacity":null,"stateContract":null,"mediaContract":null,"contentContract":null,"slotContract":null,"contract":{"abstractionLevel":"foundation","adaptationStatus":"adaptive","constraints":{"density":["low","medium","high"]}},"compositionIds":["editorial-list","editorial-focus","editorial-focus-reverse","editorial-single-focus","editorial-dual-statement","image-left-text-right","image-right-text-left"],"source":"PPT源/PPT模板-封面正文尾页.pptx","layoutExpansion":{"mode":"fixed","range":"正文 Skin；内部排版由 CompositionPlan 决定","rule":"只提供标题区、正文安全区、页眉和页脚"},"spatialContract":{"coordinateSystem":{"width":1280,"height":720},"contentFrame":{"left":55,"top":166,"width":1170,"height":492},"aspectRatio":2.378,"minimumFrame":{"width":1170,"height":492},"preferredFrame":{"width":1170,"height":492},"resizeMode":"fixed","minFontSize":16,"safePadding":12,"supportedCompositionIds":["editorial-list","editorial-focus","editorial-focus-reverse","editorial-single-focus","editorial-dual-statement","image-left-text-right","image-right-text-left"]},"stateFootprints":{},"componentModel":null,"fieldContract":null,"capacity":"","semanticContract":"","doNotUseWhen":"","review":"","generator":"generate.mjs","showcase":"example.pptx","previewAvailable":true,"previewDeckPath":"assets/正文/东北大学正文-001/example.pptx","previewUrl":"/api/asset-preview?library=core&id=northeastern-university-body-001&v=1786168061822","sourcePreviewAvailable":false,"sourcePreviewUrl":null,"sourcePreviewUrls":[],"componentPreviewAvailable":false,"componentImplementation":"unclassified","componentFidelityStatus":"legacy-or-unreviewed","hasVisualIntent":false,"visualIntentText":"","userApprovedHtmlNative":false,"componentGoldenState":null,"componentPreviewUrl":null,"componentStates":[],"componentInitialState":null,"componentControls":[],"componentInitialSelection":{},"runtimeCapabilities":["skin"],"nativeBuilderAvailable":false,"nativeCompiledOutputAvailable":false,"nativeOutputAvailable":false,"nativeStatePreviewUrl":null,"nativeStatePptxUrl":null,"skinStatePreviewUrl":null,"runtimeEntry":"runtime.mjs","mapperExport":"mapPageContent","reviewEntry":"","componentExport":"","previewParametersExport":"","previewResolverExport":"","builderExport":"","manifestPath":"assets/正文/东北大学正文-001/asset.json","assetDir":"assets/正文/东北大学正文-001","coverageTags":[]},{"id":"northeastern-university-agenda-001","name":"东北大学目录页 001","category":"目录","kind":"page-template","library":"core","status":"core","candidateCopyOfCore":false,"creationMethod":"reproduction","renderer":"skin","autoCallable":true,"logicId":"skin","structureGroupId":"default","familyId":"skin-agenda","variantId":"default","silhouette":"agenda","baseRelations":["none"],"purposes":[{"key":"present_agenda","description":"呈现演示目录或章节导航"}],"itemRange":{"min":1,"max":5,"preferred":[3,4,5]},"textCapacity":null,"stateContract":null,"mediaContract":null,"contentContract":null,"slotContract":null,"contract":{"abstractionLevel":"foundation","adaptationStatus":"fixed","constraints":{"semantic":{"ordered":true},"density":["low"]}},"compositionIds":["fixed-agenda"],"source":"PPT源/PPT模板-封面正文尾页.pptx","layoutExpansion":{"mode":"fixed","range":"单一目录版式；支持 1–5 个目录项","rule":"保持来源模板第 2 页的目录结构，由 Shell 固定调用"},"spatialContract":null,"stateFootprints":{},"componentModel":null,"fieldContract":null,"capacity":"","semanticContract":"","doNotUseWhen":"","review":"","generator":"generate.mjs","showcase":"","previewAvailable":false,"previewDeckPath":null,"previewUrl":null,"sourcePreviewAvailable":false,"sourcePreviewUrl":null,"sourcePreviewUrls":[],"componentPreviewAvailable":false,"componentImplementation":"unclassified","componentFidelityStatus":"legacy-or-unreviewed","hasVisualIntent":false,"visualIntentText":"","userApprovedHtmlNative":false,"componentGoldenState":null,"componentPreviewUrl":null,"componentStates":[],"componentInitialState":null,"componentControls":[],"componentInitialSelection":{},"runtimeCapabilities":["skin"],"nativeBuilderAvailable":false,"nativeCompiledOutputAvailable":false,"nativeOutputAvailable":false,"nativeStatePreviewUrl":null,"nativeStatePptxUrl":null,"skinStatePreviewUrl":null,"runtimeEntry":"runtime.mjs","mapperExport":"mapPageContent","reviewEntry":"","componentExport":"","previewParametersExport":"","previewResolverExport":"","builderExport":"","manifestPath":"assets/目录/东北大学目录-001/asset.json","assetDir":"assets/目录/东北大学目录-001","coverageTags":[]},{"id":"cycle-loop-001","name":"循环闭环","category":"结构图","kind":"component","library":"core","status":"core","candidateCopyOfCore":false,"creationMethod":"distillation","renderer":"html-component","autoCallable":true,"logicId":"cycle","structureGroupId":"cycle-pdca-ring-p57","familyId":"cycle-loop","variantId":"default","silhouette":"pdca-ring-with-side-notes","baseRelations":["sequence"],"purposes":[],"itemRange":{"min":3,"max":6,"preferred":[3,4,5,6]},"textCapacity":{"maxCenterChars":12,"maxItemTitleChars":8,"maxItemBodyChars":14,"maxPointsPerItem":4,"maxPointChars":14},"stateContract":{"resolver":"itemCount","states":[3,4,5,6]},"mediaContract":{"mode":"no-image","required":[]},"contentContract":{"itemRole":"semantic-node","points":"optional"},"slotContract":{"schemaVersion":"1.0","coordinateSpace":"design-frame","resolverExport":"resolveContentSlots","binding":"steps[].support","maxDepth":1,"childPolicy":"registered-core-only","fallback":"plain-text"},"contract":{"abstractionLevel":"foundation","adaptationStatus":"adaptive","constraints":{"semantic":{"ordered":true},"relationTraits":{"cyclic":true},"density":["low","medium"]}},"compositionIds":["component-full"],"source":{"file":"PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx","slides":[57]},"layoutExpansion":{"mode":"responsive","range":"3–6 个循环步骤","rule":"按当前步骤数重新计算等角位置和弧段；顺时针序号连续，不能从六项布局直接删项"},"spatialContract":{"coordinateSystem":{"width":1280,"height":720},"contentFrame":{"left":55,"top":166,"width":1170,"height":492},"aspectRatio":2.378,"minimumFrame":{"width":1170,"height":492},"preferredFrame":{"width":1170,"height":492},"stateFootprints":{"3":{"width":1170,"height":492,"basis":"component-root"},"4":{"width":1170,"height":492,"basis":"component-root"},"5":{"width":1170,"height":492,"basis":"component-root"},"6":{"width":1170,"height":492,"basis":"component-root"}},"resizeMode":"natural","minFontSize":16,"safePadding":12,"supportedCompositionIds":["component-full"]},"stateFootprints":{"3":{"width":1170,"height":492,"basis":"component-root"},"4":{"width":1170,"height":492,"basis":"component-root"},"5":{"width":1170,"height":492,"basis":"component-root"},"6":{"width":1170,"height":492,"basis":"component-root"}},"componentModel":{"fixed":["顺时针闭合环与中心核心共同表达循环关系","外围说明区与对应步骤保持清晰归属","环形体量、中心留白、左右均衡和蓝灰层次保持一致"],"variable":["中心主题","3–6 个步骤及其标题、正文和普通文本分点","步骤数量变化时重新计算等角位置、弧段和外围说明区"]},"fieldContract":{"editable":[{"field":"page.title","source":"PageContent.title","meaning":"页面标题，由 Skin 放入统一标题区"},{"field":"center","source":"PageContent.notes || PageContent.title","meaning":"环中央主题；示例中的“PDCA／循环”会被真实稿件替换"},{"field":"steps[].title","source":"PageContent.items[].title","meaning":"步骤名称；示例中的“计划／执行／检查／行动”等会被真实稿件替换"},{"field":"steps[].body","source":"PageContent.items[].body","meaning":"步骤说明"},{"field":"steps[].points[]","source":"PageContent.items[].points[]","meaning":"步骤分点"},{"field":"steps.length","source":"PageContent.items.length","meaning":"循环步骤数，支持 3–6"}],"generated":[{"field":"steps[].number","meaning":"按顺时针顺序自动生成 01–N"}],"fixed":["顺时针闭合环、中心圆与外围说明区的结构关系","本 Structure Group 的几何、色彩层次和连接方式","字号角色由当前 Skin 统一提供，组件不得自行缩字"],"unavailable":[{"field":"steps[].english","meaning":"当前 PageContent 契约未开放英文标签；示例不再显示，避免误导"}]},"capacity":"3–6 个循环步骤；每项接受可选正文和0–4条普通文本分点，标题不超过8字，正文与单条分点均不超过14字；容量服从固定字号，不通过缩字扩容","semanticContract":"多个步骤反复运行，最后一步会反馈或回到第一步","doNotUseWhen":"只是一次性线性过程，或多个要点之间没有循环关系","review":"2026-08-16 已完成第57页 HTML 黄金状态；基础版表达一层循环关系，并把外围灰区解析为 design-frame 坐标下的 Content Slots；Native 结果由统一 HTML → ResolvedVisualTree → PPT 编译器生成","generator":"generate.mjs","showcase":"example.pptx","previewAvailable":true,"previewDeckPath":"assets/结构图/循环闭环-001/example.pptx","previewUrl":"/api/asset-preview?library=core&id=cycle-loop-001&v=1786881820342","sourcePreviewAvailable":true,"sourcePreviewUrl":"/api/source-preview?library=core&id=cycle-loop-001&slide=57&v=1730330060062","sourcePreviewUrls":[{"slide":57,"url":"/api/source-preview?library=core&id=cycle-loop-001&slide=57&v=1730330060062"}],"componentPreviewAvailable":true,"componentImplementation":"asset-specific-html","componentFidelityStatus":"user-approved","hasVisualIntent":true,"visualIntentText":"# 循环闭环视觉意图\r\n\r\n## 视觉命题\r\n\r\n页面把反复改进转成围绕中心主题运行的顺时针厚轨道。主环承担第一视觉，视线从左上经上、右、下、左回到起点；两侧支持区解释各阶段，中心白核稳定地收束视线。\r\n\r\n## 构图、比例与净距\r\n\r\n主环外轮廓接近可用高度，内孔开阔，约三倍以上带宽。环外与支持区之间有约半个带宽的连续白色呼吸带；同侧上下灰区之间保留明确的横向分组留白。左右浅灰区向中心延伸，中央白色圆形遮罩与其真实相交切出内侧凹弧，不能合并灰背板或让支持区退化成远离主图的卡片。\r\n\r\n## 造型与覆盖\r\n\r\n蓝色环带连续相接，内外边界进入各自同色箭头根部。箭头是主体长出的末端，根部约一个带宽，尖端沿顺时针切线伸出约一个带宽并覆盖下一段。环带先画，箭头后画，实际重叠可见；箭头无描边、白缝或径向硬线。\r\n\r\n## 文字姿态策略\r\n\r\n编号是全局正立的低对比度节拍，虽然锚在段末端带体内，但不随圆周旋转。中文阶段标题贴在带体中段外侧，沿该段切线旋转，并自动翻转以保持正常阅读。英文辅助词位于对应段内侧白轨道，沿切线且保持可读方向。中心两行主题全局正立。外围普通文本始终水平正立：左侧支持区左对齐，右侧支持区右对齐。\r\n\r\n## 内容绑定与容量\r\n\r\n每段绑定末端编号、中段中文标题、内侧英文和一个浅灰支持区。基础版只表达一层循环关系，支持区接受可选正文和0–4条普通文本分点；没有数字、没有指标、分点少于4条都可以使用。3–6 步重新等分弧段，独立求解三类环上文字的锚点与旋转，支持区随数量重新分配。\r\n\r\n正文与单条分点均不超过22字，每项最多4条分点。超限时拒绝该 Structure Group，由视觉导演切换其他样式，不缩字、裁切或隐藏内容硬塞。带有“标签—说明—指标”等二层语义的内容不进入本基础版，后续应作为独立的嵌套 Structure Group。\r\n\r\n## 结构不变量与失败判据\r\n\r\n必须保持连续厚环、同色切线箭头、真实覆盖、中心圆核和遮罩凹弧、独立灰色支持区、环外呼吸带，以及编号/标题/英文三类不同文字姿态。所有文字套同一旋转、箭头成为独立径向图标、呼吸带消失、遮罩不相交、左右文本没有镜像对齐，或在基础版重新绑定蓝色标签与数字指标，均视为失败。\r\n","userApprovedHtmlNative":true,"componentGoldenState":{"sourceSlide":57,"selection":{"stepCount":4}},"componentPreviewUrl":"/api/component-preview?library=core&id=cycle-loop-001&v=1786934106974","componentStates":[3,4,5,6],"componentInitialState":4,"componentControls":[{"key":"stepCount","label":"循环步骤数","values":[3,4,5,6],"default":4}],"componentInitialSelection":{"stepCount":4},"runtimeCapabilities":["html-component","native-compiled-output"],"nativeBuilderAvailable":false,"nativeCompiledOutputAvailable":true,"nativeOutputAvailable":true,"nativeStatePreviewUrl":"/api/native-state-preview?library=core&id=cycle-loop-001&v=1786934106974","nativeStatePptxUrl":"/api/native-state-pptx?library=core&id=cycle-loop-001&v=1786934106974","skinStatePreviewUrl":"/api/skin-state-preview?library=core&id=cycle-loop-001&v=1786934106974","runtimeEntry":"generate.mjs","mapperExport":"mapPageContent","reviewEntry":"review.mjs","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","builderExport":"","manifestPath":"assets/结构图/循环闭环-001/asset.json","assetDir":"assets/结构图/循环闭环-001","coverageTags":["循环与闭环"]},{"id":"parallel-equal-cards-001","name":"等权并列卡片","category":"结构图","kind":"component","library":"candidate","status":"candidate","candidateCopyOfCore":false,"creationMethod":"distillation","renderer":"html-component","autoCallable":false,"logicId":"parallel","structureGroupId":"parallel-equal-cards","familyId":"parallel-cards","variantId":"equal-floating-cards","silhouette":"equal-cards-with-round-anchors","baseRelations":["parallel"],"purposes":[{"key":"present_parallel_points","description":"并列呈现若干同级观点"},{"key":"explain_topics","description":"说明一个中心主题及其同级要点"}],"itemRange":{"min":3,"max":5,"preferred":[3,4,5]},"textCapacity":{"maxItemTitleChars":8,"maxItemBodyCharsByState":{"3":34,"4":30,"5":24}},"stateContract":{"resolver":"itemCount","states":[3,4,5],"previewDefault":4},"mediaContract":{"mode":"semantic-icon","provider":"tabler-icons","selection":"local-top-1","queryOwner":"visual-director","requiredPerComponentItem":true},"contentContract":{"itemRole":"semantic-node","points":"forbidden","ordered":false},"slotContract":null,"contract":{"abstractionLevel":"foundation","adaptationStatus":"adaptive","constraints":{"semantic":{"ordered":false},"relationTraits":{"parallel":true},"density":["low","medium"]}},"compositionIds":["component-full"],"source":{"file":"PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx","slides":[421,422,423]},"layoutExpansion":{"mode":"responsive-state-group","range":"同一 Structure Group 支持 3–5 项；每个状态重新计算卡片宽度、间距与整体居中位置","rule":"所有项目等宽、等高、等距并围绕共同中轴居中；不得把顺序、中心或层级关系混入本组"},"spatialContract":{"coordinateSystem":{"width":1280,"height":720},"contentFrame":{"left":55,"top":166,"width":1170,"height":492},"aspectRatio":2.378,"minimumFrame":{"width":1170,"height":492},"preferredFrame":{"width":1170,"height":492},"stateFootprints":{"3":{"width":1006,"height":410,"basis":"component-root-visible-bounds"},"4":{"width":1110,"height":410,"basis":"component-root-visible-bounds"},"5":{"width":1140,"height":410,"basis":"component-root-visible-bounds"}},"resizeMode":"natural","minFontSize":19,"safePadding":12,"supportedCompositionIds":["component-full"]},"stateFootprints":{"3":{"width":1006,"height":410,"basis":"component-root-visible-bounds"},"4":{"width":1110,"height":410,"basis":"component-root-visible-bounds"},"5":{"width":1140,"height":410,"basis":"component-root-visible-bounds"}},"componentModel":{"fixed":["单行等权卡片骨架及共同中轴","圆形视觉锚点—标题—正文的统一层级","完整浅蓝灰承载面、轻阴影与稳定内部留白"],"variable":["3–5 个同级要点的标题和正文","由视觉导演提供语义短语、本地 Top 1 检索后填入的线性图标","项目数变化时由同一 HTML 组件重新计算栅格，不隐藏预设槽位"]},"fieldContract":{"editable":[{"field":"items.length","source":"PageContent.items.length","meaning":"选择 3、4 或 5 项 State，并触发整组重新排布"},{"field":"items[].title","source":"PageContent.items[].title","meaning":"每张卡片的同级要点标题"},{"field":"items[].body","source":"PageContent.items[].body","meaning":"每张卡片的简短说明"},{"field":"items[].iconQuery","source":"VisualPlan.pages[].iconQueries[]","meaning":"视觉导演只提供语义检索短语，不接触候选图标或文件名"}],"generated":[{"field":"items[].iconKey","meaning":"程序从本地 Tabler 元数据模糊检索得到的唯一 Top 1 图标"}],"fixed":["所有卡片在每个 State 中等权、共线、等宽和等高","字号角色由 Skin 提供，组件不得自行缩字"],"unavailable":[]},"capacity":"承载 3–5 个同级要点；标题不超过 8 字；正文上限随 State 为 34/30/24 字","semanticContract":"3–5 个对象处于同一层级，彼此没有先后、因果、中心支撑或上下级关系","doNotUseWhen":"内容存在正反比较、步骤顺序、中心辐射、问题—措施或层级关系","review":"四项 HTML 黄金状态已获用户认可；已扩散到 3–5 项并接入 Native/东北大学主题，等待整组最终审批","generator":"generate.mjs","showcase":"example.pptx","previewAvailable":true,"previewDeckPath":"备选资产/结构图/等权并列卡片-001/example.pptx","previewUrl":"/api/asset-preview?library=candidate&id=parallel-equal-cards-001&v=1786929945758","sourcePreviewAvailable":true,"sourcePreviewUrl":"/api/source-preview?library=candidate&id=parallel-equal-cards-001&slide=421&v=1751152495639","sourcePreviewUrls":[{"slide":421,"url":"/api/source-preview?library=candidate&id=parallel-equal-cards-001&slide=421&v=1751152495639"},{"slide":422,"url":"/api/source-preview?library=candidate&id=parallel-equal-cards-001&slide=422&v=1751152495639"},{"slide":423,"url":"/api/source-preview?library=candidate&id=parallel-equal-cards-001&slide=423&v=1751152495639"}],"componentPreviewAvailable":true,"componentImplementation":"asset-specific-html","componentFidelityStatus":"awaiting-user-review","hasVisualIntent":true,"visualIntentText":"# 等权并列卡片视觉意图\n\n## 0. 参考分工与综合方向\n\n- 主要逻辑骨架取自 `【动画版】500页创意图文排版PPT模板-深蓝版.pptx` 第 421–423 页：同一体系用等宽纵向分栏表达 3、4、5 个同级对象，并随数量重新分配列宽与间距。\n- 审美气质取自 `06-【柏林蓝】定制级学术型灵感手册-宽屏.pptx` 第 88 页：轻盈承载面、圆形视觉锚点、克制阴影和清楚的图标—标题—正文层级。\n- 文字层级参考 `狗哥蓝色-精美逻辑图PPT模板.pptx` 第 135 页：标题与正文之间有稳定的字号、净距和阅读节奏；不吸收其箭头和“问题—措施”双层关系。\n- 六项容量边界参考 `【蓝色版】年终日常汇报PPT模板-狗哥PPT出品.pptx` 第 121 页：六栏会显著压缩文字，因此不进入本 Structure Group。\n\n最终采用单行等权卡片骨架和轻量蓝灰卡片语言。舍弃来源中的产品图片、深色整页背景、卡片高低错落、序号箭头和问题解决语义，避免媒体依赖、暗示顺序或破坏同级关系。\n\n## 1. 逻辑与阅读路径\n\n页面表达 3–5 个互不隶属、没有先后和因果关系的同级要点。观众从左到右快速扫视，但左右位置不代表优先级；每张卡片拥有相同体量和层级，阅读可从任意一项开始。\n\n这个结构适合特征、能力、原则、抓手、成果或结论的枚举。若内容存在正反、阶段、上下级、中心支撑或问题—方案关系，应改用其他 Logic。\n\n## 2. 结构表达语法\n\n重复单元是沿共同水平轴排列的等权纵向卡片。每张卡片内部自上而下为：视觉锚点、节点标题、简短正文或分点。卡片之间只依靠等距与共同边界形成一组，不使用连线、箭头、中心节点或跨卡片底座。\n\n视觉锚点采用统一圆形容器，可承载可选线性图标；没有图标时使用克制的抽象标记，不引入有具体含义的替代图像。承载面必须保持完整边界，不能与页面背景融合成缺角或断裂。\n\n## 3. 审美语言\n\n整体端正、轻盈、规整，强调均匀而非炫技。所有卡片顶边、底边、视觉锚点中心、标题基线和正文起点分别共线；卡片宽度、阴影、圆角和内部留白一致。\n\n卡片使用能在白色或浅色 Shell 上被辨认的浅蓝灰承载面，辅以细边界或轻阴影；圆形视觉锚点使用深蓝主色，标题使用较强字重，正文保持低一层对比。颜色只负责建立层级，不给不同卡片附加不同语义。\n\n三项时允许卡片更宽、组间距更舒展；五项时压缩卡片宽度和间距，但不缩小 Skin 规定的字号。整组始终围绕 Content Frame 中轴居中，左右留白相等。\n\n## 4. 内容与媒体绑定\n\n- `items[].title` 绑定节点标题，是每张卡片的主要识别信息。\n- `items[].body` 或 `items[].points[]` 绑定正文区域；两者择一，不同时堆叠。\n- `items[].icon` 是可选增强，绑定圆形视觉锚点；缺失时仍可使用本组。\n- 卡片位置不绑定序号、优先级或状态。页面标题、Logo、页码和页脚由 Skin 负责，不进入组件。\n\n所有文字使用 Skin 的“节点标题、正文、标签”语义令牌，HTML 不自行发明字号或字体。\n\n## 5. Structure Group 不变量\n\n- 3–5 个单行、等宽、等高、等权的卡片单元；\n- 整组围绕共同水平中轴居中，左右留白对称；\n- 各卡片内部使用相同的视觉锚点—标题—正文层级；\n- 同级元素的尺寸、净距、视觉重量和颜色规则一致；\n- 无连线、箭头、中心节点、编号节奏或高低错落；\n- 承载面边界在浅色背景上仍完整可见。\n\n## 6. 可变量与版式扩散\n\n可替换项为卡片数量、标题、正文或分点，以及可选图标。支持 3、4、5 项，黄金状态采用 4 项。\n\n每个 State 都从当前数量重新计算卡片宽度、组间距和整组起点：三项不能由五项布局隐藏两项得到。三项使用较宽卡片，四项保持均衡，五项使用较窄卡片；卡片内部层级和固定字号不变。\n\n达到 6 项时停止使用本组，切换未来的“多项枚举网格”Structure Group；不继续压窄、不缩字，也不在本组内临时换成两行。\n\n## 7. 容量与可填区域\n\n每张卡片适合一个短标题和一段简短说明，或 2–3 条短分点。标题以一行为优先，正文以稳定的少量行数为上限；实际字符容量由 HTML 黄金状态按 Skin 固定字号反推并登记。\n\n视觉锚点只承载图标或抽象标记，不放长文字。卡片之间及整组之外的留白不是二级内容槽，不得继续塞入说明。标题过长、正文密度过高或数量超过五项时，应压缩内容、拆页或切换其他 Structure Group。\n\n## 8. 失败判据\n\n- 三项或四项看起来像五项布局删除若干卡片，导致整组偏心或留出空槽；\n- 同级卡片宽高、顶底边、视觉锚点或文字起点不齐，视觉重量明显不均；\n- 白色卡片与浅色 Shell 意外融合，出现缺边、缺角或悬空感；\n- 为容纳五项而缩小字号，或正文拥挤到破坏卡片内部留白；\n- 加入箭头、编号、中心节点或不同高度，使纯并列关系被误读成流程、辐射或递进。\n","userApprovedHtmlNative":false,"componentGoldenState":{"selection":{"itemCount":4}},"componentPreviewUrl":"/api/component-preview?library=candidate&id=parallel-equal-cards-001&v=1786934106971","componentStates":[3,4,5],"componentInitialState":4,"componentControls":[{"key":"itemCount","label":"并列项目数","values":[3,4,5],"default":4}],"componentInitialSelection":{"itemCount":4},"runtimeCapabilities":["html-component","native-compiled-output"],"nativeBuilderAvailable":false,"nativeCompiledOutputAvailable":true,"nativeOutputAvailable":true,"nativeStatePreviewUrl":"/api/native-state-preview?library=candidate&id=parallel-equal-cards-001&v=1786934106971","nativeStatePptxUrl":"/api/native-state-pptx?library=candidate&id=parallel-equal-cards-001&v=1786934106971","skinStatePreviewUrl":"/api/skin-state-preview?library=candidate&id=parallel-equal-cards-001&v=1786934106971","runtimeEntry":"generate.mjs","mapperExport":"mapPageContent","reviewEntry":"review.mjs","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","builderExport":"","manifestPath":"备选资产/结构图/等权并列卡片-001/asset.json","assetDir":"备选资产/结构图/等权并列卡片-001","coverageTags":[]}],"primaryAssets":[{"id":"northeastern-university-cover-001","name":"东北大学封面 001","category":"封面","kind":"page-template","library":"core","status":"core","candidateCopyOfCore":false,"creationMethod":"reproduction","renderer":"skin","autoCallable":true,"logicId":"skin","structureGroupId":"default","familyId":"skin-cover","variantId":"default","silhouette":"cover","baseRelations":["none"],"purposes":[{"key":"present_cover","description":"呈现演示标题、汇报人和日期"}],"itemRange":{"min":0,"max":4,"preferred":[2]},"textCapacity":null,"stateContract":null,"mediaContract":null,"contentContract":null,"slotContract":null,"contract":{"abstractionLevel":"foundation","adaptationStatus":"fixed","constraints":{"semantic":{"ordered":false},"density":["low"]}},"compositionIds":["fixed-cover"],"source":"PPT源/PPT模板-封面正文尾页.pptx","layoutExpansion":{"mode":"fixed","range":"单一封面版式；标题、汇报人和日期变化","rule":"保持来源封面的版心、比例和视觉层级"},"spatialContract":null,"stateFootprints":{},"componentModel":null,"fieldContract":null,"capacity":"","semanticContract":"","doNotUseWhen":"","review":"","generator":"generate.mjs","showcase":"example.pptx","previewAvailable":true,"previewDeckPath":"assets/封面/东北大学封面-001/example.pptx","previewUrl":"/api/asset-preview?library=core&id=northeastern-university-cover-001&v=1786168061572","sourcePreviewAvailable":false,"sourcePreviewUrl":null,"sourcePreviewUrls":[],"componentPreviewAvailable":false,"componentImplementation":"unclassified","componentFidelityStatus":"legacy-or-unreviewed","hasVisualIntent":false,"visualIntentText":"","userApprovedHtmlNative":false,"componentGoldenState":null,"componentPreviewUrl":null,"componentStates":[],"componentInitialState":null,"componentControls":[],"componentInitialSelection":{},"runtimeCapabilities":["skin"],"nativeBuilderAvailable":false,"nativeCompiledOutputAvailable":false,"nativeOutputAvailable":false,"nativeStatePreviewUrl":null,"nativeStatePptxUrl":null,"skinStatePreviewUrl":null,"runtimeEntry":"runtime.mjs","mapperExport":"mapPageContent","reviewEntry":"","componentExport":"","previewParametersExport":"","previewResolverExport":"","builderExport":"","manifestPath":"assets/封面/东北大学封面-001/asset.json","assetDir":"assets/封面/东北大学封面-001","coverageTags":[]},{"id":"northeastern-university-closing-001","name":"东北大学尾页 001","category":"尾页","kind":"page-template","library":"core","status":"core","candidateCopyOfCore":false,"creationMethod":"reproduction","renderer":"skin","autoCallable":true,"logicId":"skin","structureGroupId":"default","familyId":"skin-closing","variantId":"default","silhouette":"closing","baseRelations":["none"],"purposes":[{"key":"present_closing","description":"呈现演示结束语"}],"itemRange":{"min":0,"max":3,"preferred":[1,2]},"textCapacity":null,"stateContract":null,"mediaContract":null,"contentContract":null,"slotContract":null,"contract":{"abstractionLevel":"foundation","adaptationStatus":"fixed","constraints":{"semantic":{"ordered":false},"density":["low"]}},"compositionIds":["fixed-closing"],"source":"PPT源/PPT模板-封面正文尾页.pptx","layoutExpansion":{"mode":"fixed","range":"单一尾页版式；收束文字变化","rule":"保持来源尾页构图"},"spatialContract":null,"stateFootprints":{},"componentModel":null,"fieldContract":null,"capacity":"","semanticContract":"","doNotUseWhen":"","review":"","generator":"generate.mjs","showcase":"example.pptx","previewAvailable":true,"previewDeckPath":"assets/尾页/东北大学尾页-001/example.pptx","previewUrl":"/api/asset-preview?library=core&id=northeastern-university-closing-001&v=1786168061647","sourcePreviewAvailable":false,"sourcePreviewUrl":null,"sourcePreviewUrls":[],"componentPreviewAvailable":false,"componentImplementation":"unclassified","componentFidelityStatus":"legacy-or-unreviewed","hasVisualIntent":false,"visualIntentText":"","userApprovedHtmlNative":false,"componentGoldenState":null,"componentPreviewUrl":null,"componentStates":[],"componentInitialState":null,"componentControls":[],"componentInitialSelection":{},"runtimeCapabilities":["skin"],"nativeBuilderAvailable":false,"nativeCompiledOutputAvailable":false,"nativeOutputAvailable":false,"nativeStatePreviewUrl":null,"nativeStatePptxUrl":null,"skinStatePreviewUrl":null,"runtimeEntry":"runtime.mjs","mapperExport":"mapPageContent","reviewEntry":"","componentExport":"","previewParametersExport":"","previewResolverExport":"","builderExport":"","manifestPath":"assets/尾页/东北大学尾页-001/asset.json","assetDir":"assets/尾页/东北大学尾页-001","coverageTags":[]},{"id":"northeastern-university-body-001","name":"东北大学正文页 001","category":"正文","kind":"page-template","library":"core","status":"core","candidateCopyOfCore":false,"creationMethod":"reproduction","renderer":"skin","autoCallable":true,"logicId":"skin","structureGroupId":"editorial","familyId":"skin-body-editorial","variantId":"editorial","silhouette":"editorial-page","baseRelations":["none"],"purposes":[],"itemRange":{"min":0,"max":20,"preferred":[2,3,4]},"textCapacity":null,"stateContract":null,"mediaContract":null,"contentContract":null,"slotContract":null,"contract":{"abstractionLevel":"foundation","adaptationStatus":"adaptive","constraints":{"density":["low","medium","high"]}},"compositionIds":["editorial-list","editorial-focus","editorial-focus-reverse","editorial-single-focus","editorial-dual-statement","image-left-text-right","image-right-text-left"],"source":"PPT源/PPT模板-封面正文尾页.pptx","layoutExpansion":{"mode":"fixed","range":"正文 Skin；内部排版由 CompositionPlan 决定","rule":"只提供标题区、正文安全区、页眉和页脚"},"spatialContract":{"coordinateSystem":{"width":1280,"height":720},"contentFrame":{"left":55,"top":166,"width":1170,"height":492},"aspectRatio":2.378,"minimumFrame":{"width":1170,"height":492},"preferredFrame":{"width":1170,"height":492},"resizeMode":"fixed","minFontSize":16,"safePadding":12,"supportedCompositionIds":["editorial-list","editorial-focus","editorial-focus-reverse","editorial-single-focus","editorial-dual-statement","image-left-text-right","image-right-text-left"]},"stateFootprints":{},"componentModel":null,"fieldContract":null,"capacity":"","semanticContract":"","doNotUseWhen":"","review":"","generator":"generate.mjs","showcase":"example.pptx","previewAvailable":true,"previewDeckPath":"assets/正文/东北大学正文-001/example.pptx","previewUrl":"/api/asset-preview?library=core&id=northeastern-university-body-001&v=1786168061822","sourcePreviewAvailable":false,"sourcePreviewUrl":null,"sourcePreviewUrls":[],"componentPreviewAvailable":false,"componentImplementation":"unclassified","componentFidelityStatus":"legacy-or-unreviewed","hasVisualIntent":false,"visualIntentText":"","userApprovedHtmlNative":false,"componentGoldenState":null,"componentPreviewUrl":null,"componentStates":[],"componentInitialState":null,"componentControls":[],"componentInitialSelection":{},"runtimeCapabilities":["skin"],"nativeBuilderAvailable":false,"nativeCompiledOutputAvailable":false,"nativeOutputAvailable":false,"nativeStatePreviewUrl":null,"nativeStatePptxUrl":null,"skinStatePreviewUrl":null,"runtimeEntry":"runtime.mjs","mapperExport":"mapPageContent","reviewEntry":"","componentExport":"","previewParametersExport":"","previewResolverExport":"","builderExport":"","manifestPath":"assets/正文/东北大学正文-001/asset.json","assetDir":"assets/正文/东北大学正文-001","coverageTags":[]},{"id":"northeastern-university-agenda-001","name":"东北大学目录页 001","category":"目录","kind":"page-template","library":"core","status":"core","candidateCopyOfCore":false,"creationMethod":"reproduction","renderer":"skin","autoCallable":true,"logicId":"skin","structureGroupId":"default","familyId":"skin-agenda","variantId":"default","silhouette":"agenda","baseRelations":["none"],"purposes":[{"key":"present_agenda","description":"呈现演示目录或章节导航"}],"itemRange":{"min":1,"max":5,"preferred":[3,4,5]},"textCapacity":null,"stateContract":null,"mediaContract":null,"contentContract":null,"slotContract":null,"contract":{"abstractionLevel":"foundation","adaptationStatus":"fixed","constraints":{"semantic":{"ordered":true},"density":["low"]}},"compositionIds":["fixed-agenda"],"source":"PPT源/PPT模板-封面正文尾页.pptx","layoutExpansion":{"mode":"fixed","range":"单一目录版式；支持 1–5 个目录项","rule":"保持来源模板第 2 页的目录结构，由 Shell 固定调用"},"spatialContract":null,"stateFootprints":{},"componentModel":null,"fieldContract":null,"capacity":"","semanticContract":"","doNotUseWhen":"","review":"","generator":"generate.mjs","showcase":"","previewAvailable":false,"previewDeckPath":null,"previewUrl":null,"sourcePreviewAvailable":false,"sourcePreviewUrl":null,"sourcePreviewUrls":[],"componentPreviewAvailable":false,"componentImplementation":"unclassified","componentFidelityStatus":"legacy-or-unreviewed","hasVisualIntent":false,"visualIntentText":"","userApprovedHtmlNative":false,"componentGoldenState":null,"componentPreviewUrl":null,"componentStates":[],"componentInitialState":null,"componentControls":[],"componentInitialSelection":{},"runtimeCapabilities":["skin"],"nativeBuilderAvailable":false,"nativeCompiledOutputAvailable":false,"nativeOutputAvailable":false,"nativeStatePreviewUrl":null,"nativeStatePptxUrl":null,"skinStatePreviewUrl":null,"runtimeEntry":"runtime.mjs","mapperExport":"mapPageContent","reviewEntry":"","componentExport":"","previewParametersExport":"","previewResolverExport":"","builderExport":"","manifestPath":"assets/目录/东北大学目录-001/asset.json","assetDir":"assets/目录/东北大学目录-001","coverageTags":[]},{"id":"cycle-loop-001","name":"循环闭环","category":"结构图","kind":"component","library":"core","status":"core","candidateCopyOfCore":false,"creationMethod":"distillation","renderer":"html-component","autoCallable":true,"logicId":"cycle","structureGroupId":"cycle-pdca-ring-p57","familyId":"cycle-loop","variantId":"default","silhouette":"pdca-ring-with-side-notes","baseRelations":["sequence"],"purposes":[],"itemRange":{"min":3,"max":6,"preferred":[3,4,5,6]},"textCapacity":{"maxCenterChars":12,"maxItemTitleChars":8,"maxItemBodyChars":14,"maxPointsPerItem":4,"maxPointChars":14},"stateContract":{"resolver":"itemCount","states":[3,4,5,6]},"mediaContract":{"mode":"no-image","required":[]},"contentContract":{"itemRole":"semantic-node","points":"optional"},"slotContract":{"schemaVersion":"1.0","coordinateSpace":"design-frame","resolverExport":"resolveContentSlots","binding":"steps[].support","maxDepth":1,"childPolicy":"registered-core-only","fallback":"plain-text"},"contract":{"abstractionLevel":"foundation","adaptationStatus":"adaptive","constraints":{"semantic":{"ordered":true},"relationTraits":{"cyclic":true},"density":["low","medium"]}},"compositionIds":["component-full"],"source":{"file":"PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx","slides":[57]},"layoutExpansion":{"mode":"responsive","range":"3–6 个循环步骤","rule":"按当前步骤数重新计算等角位置和弧段；顺时针序号连续，不能从六项布局直接删项"},"spatialContract":{"coordinateSystem":{"width":1280,"height":720},"contentFrame":{"left":55,"top":166,"width":1170,"height":492},"aspectRatio":2.378,"minimumFrame":{"width":1170,"height":492},"preferredFrame":{"width":1170,"height":492},"stateFootprints":{"3":{"width":1170,"height":492,"basis":"component-root"},"4":{"width":1170,"height":492,"basis":"component-root"},"5":{"width":1170,"height":492,"basis":"component-root"},"6":{"width":1170,"height":492,"basis":"component-root"}},"resizeMode":"natural","minFontSize":16,"safePadding":12,"supportedCompositionIds":["component-full"]},"stateFootprints":{"3":{"width":1170,"height":492,"basis":"component-root"},"4":{"width":1170,"height":492,"basis":"component-root"},"5":{"width":1170,"height":492,"basis":"component-root"},"6":{"width":1170,"height":492,"basis":"component-root"}},"componentModel":{"fixed":["顺时针闭合环与中心核心共同表达循环关系","外围说明区与对应步骤保持清晰归属","环形体量、中心留白、左右均衡和蓝灰层次保持一致"],"variable":["中心主题","3–6 个步骤及其标题、正文和普通文本分点","步骤数量变化时重新计算等角位置、弧段和外围说明区"]},"fieldContract":{"editable":[{"field":"page.title","source":"PageContent.title","meaning":"页面标题，由 Skin 放入统一标题区"},{"field":"center","source":"PageContent.notes || PageContent.title","meaning":"环中央主题；示例中的“PDCA／循环”会被真实稿件替换"},{"field":"steps[].title","source":"PageContent.items[].title","meaning":"步骤名称；示例中的“计划／执行／检查／行动”等会被真实稿件替换"},{"field":"steps[].body","source":"PageContent.items[].body","meaning":"步骤说明"},{"field":"steps[].points[]","source":"PageContent.items[].points[]","meaning":"步骤分点"},{"field":"steps.length","source":"PageContent.items.length","meaning":"循环步骤数，支持 3–6"}],"generated":[{"field":"steps[].number","meaning":"按顺时针顺序自动生成 01–N"}],"fixed":["顺时针闭合环、中心圆与外围说明区的结构关系","本 Structure Group 的几何、色彩层次和连接方式","字号角色由当前 Skin 统一提供，组件不得自行缩字"],"unavailable":[{"field":"steps[].english","meaning":"当前 PageContent 契约未开放英文标签；示例不再显示，避免误导"}]},"capacity":"3–6 个循环步骤；每项接受可选正文和0–4条普通文本分点，标题不超过8字，正文与单条分点均不超过14字；容量服从固定字号，不通过缩字扩容","semanticContract":"多个步骤反复运行，最后一步会反馈或回到第一步","doNotUseWhen":"只是一次性线性过程，或多个要点之间没有循环关系","review":"2026-08-16 已完成第57页 HTML 黄金状态；基础版表达一层循环关系，并把外围灰区解析为 design-frame 坐标下的 Content Slots；Native 结果由统一 HTML → ResolvedVisualTree → PPT 编译器生成","generator":"generate.mjs","showcase":"example.pptx","previewAvailable":true,"previewDeckPath":"assets/结构图/循环闭环-001/example.pptx","previewUrl":"/api/asset-preview?library=core&id=cycle-loop-001&v=1786881820342","sourcePreviewAvailable":true,"sourcePreviewUrl":"/api/source-preview?library=core&id=cycle-loop-001&slide=57&v=1730330060062","sourcePreviewUrls":[{"slide":57,"url":"/api/source-preview?library=core&id=cycle-loop-001&slide=57&v=1730330060062"}],"componentPreviewAvailable":true,"componentImplementation":"asset-specific-html","componentFidelityStatus":"user-approved","hasVisualIntent":true,"visualIntentText":"# 循环闭环视觉意图\r\n\r\n## 视觉命题\r\n\r\n页面把反复改进转成围绕中心主题运行的顺时针厚轨道。主环承担第一视觉，视线从左上经上、右、下、左回到起点；两侧支持区解释各阶段，中心白核稳定地收束视线。\r\n\r\n## 构图、比例与净距\r\n\r\n主环外轮廓接近可用高度，内孔开阔，约三倍以上带宽。环外与支持区之间有约半个带宽的连续白色呼吸带；同侧上下灰区之间保留明确的横向分组留白。左右浅灰区向中心延伸，中央白色圆形遮罩与其真实相交切出内侧凹弧，不能合并灰背板或让支持区退化成远离主图的卡片。\r\n\r\n## 造型与覆盖\r\n\r\n蓝色环带连续相接，内外边界进入各自同色箭头根部。箭头是主体长出的末端，根部约一个带宽，尖端沿顺时针切线伸出约一个带宽并覆盖下一段。环带先画，箭头后画，实际重叠可见；箭头无描边、白缝或径向硬线。\r\n\r\n## 文字姿态策略\r\n\r\n编号是全局正立的低对比度节拍，虽然锚在段末端带体内，但不随圆周旋转。中文阶段标题贴在带体中段外侧，沿该段切线旋转，并自动翻转以保持正常阅读。英文辅助词位于对应段内侧白轨道，沿切线且保持可读方向。中心两行主题全局正立。外围普通文本始终水平正立：左侧支持区左对齐，右侧支持区右对齐。\r\n\r\n## 内容绑定与容量\r\n\r\n每段绑定末端编号、中段中文标题、内侧英文和一个浅灰支持区。基础版只表达一层循环关系，支持区接受可选正文和0–4条普通文本分点；没有数字、没有指标、分点少于4条都可以使用。3–6 步重新等分弧段，独立求解三类环上文字的锚点与旋转，支持区随数量重新分配。\r\n\r\n正文与单条分点均不超过22字，每项最多4条分点。超限时拒绝该 Structure Group，由视觉导演切换其他样式，不缩字、裁切或隐藏内容硬塞。带有“标签—说明—指标”等二层语义的内容不进入本基础版，后续应作为独立的嵌套 Structure Group。\r\n\r\n## 结构不变量与失败判据\r\n\r\n必须保持连续厚环、同色切线箭头、真实覆盖、中心圆核和遮罩凹弧、独立灰色支持区、环外呼吸带，以及编号/标题/英文三类不同文字姿态。所有文字套同一旋转、箭头成为独立径向图标、呼吸带消失、遮罩不相交、左右文本没有镜像对齐，或在基础版重新绑定蓝色标签与数字指标，均视为失败。\r\n","userApprovedHtmlNative":true,"componentGoldenState":{"sourceSlide":57,"selection":{"stepCount":4}},"componentPreviewUrl":"/api/component-preview?library=core&id=cycle-loop-001&v=1786934106974","componentStates":[3,4,5,6],"componentInitialState":4,"componentControls":[{"key":"stepCount","label":"循环步骤数","values":[3,4,5,6],"default":4}],"componentInitialSelection":{"stepCount":4},"runtimeCapabilities":["html-component","native-compiled-output"],"nativeBuilderAvailable":false,"nativeCompiledOutputAvailable":true,"nativeOutputAvailable":true,"nativeStatePreviewUrl":"/api/native-state-preview?library=core&id=cycle-loop-001&v=1786934106974","nativeStatePptxUrl":"/api/native-state-pptx?library=core&id=cycle-loop-001&v=1786934106974","skinStatePreviewUrl":"/api/skin-state-preview?library=core&id=cycle-loop-001&v=1786934106974","runtimeEntry":"generate.mjs","mapperExport":"mapPageContent","reviewEntry":"review.mjs","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","builderExport":"","manifestPath":"assets/结构图/循环闭环-001/asset.json","assetDir":"assets/结构图/循环闭环-001","coverageTags":["循环与闭环"]},{"id":"parallel-equal-cards-001","name":"等权并列卡片","category":"结构图","kind":"component","library":"candidate","status":"candidate","candidateCopyOfCore":false,"creationMethod":"distillation","renderer":"html-component","autoCallable":false,"logicId":"parallel","structureGroupId":"parallel-equal-cards","familyId":"parallel-cards","variantId":"equal-floating-cards","silhouette":"equal-cards-with-round-anchors","baseRelations":["parallel"],"purposes":[{"key":"present_parallel_points","description":"并列呈现若干同级观点"},{"key":"explain_topics","description":"说明一个中心主题及其同级要点"}],"itemRange":{"min":3,"max":5,"preferred":[3,4,5]},"textCapacity":{"maxItemTitleChars":8,"maxItemBodyCharsByState":{"3":34,"4":30,"5":24}},"stateContract":{"resolver":"itemCount","states":[3,4,5],"previewDefault":4},"mediaContract":{"mode":"semantic-icon","provider":"tabler-icons","selection":"local-top-1","queryOwner":"visual-director","requiredPerComponentItem":true},"contentContract":{"itemRole":"semantic-node","points":"forbidden","ordered":false},"slotContract":null,"contract":{"abstractionLevel":"foundation","adaptationStatus":"adaptive","constraints":{"semantic":{"ordered":false},"relationTraits":{"parallel":true},"density":["low","medium"]}},"compositionIds":["component-full"],"source":{"file":"PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx","slides":[421,422,423]},"layoutExpansion":{"mode":"responsive-state-group","range":"同一 Structure Group 支持 3–5 项；每个状态重新计算卡片宽度、间距与整体居中位置","rule":"所有项目等宽、等高、等距并围绕共同中轴居中；不得把顺序、中心或层级关系混入本组"},"spatialContract":{"coordinateSystem":{"width":1280,"height":720},"contentFrame":{"left":55,"top":166,"width":1170,"height":492},"aspectRatio":2.378,"minimumFrame":{"width":1170,"height":492},"preferredFrame":{"width":1170,"height":492},"stateFootprints":{"3":{"width":1006,"height":410,"basis":"component-root-visible-bounds"},"4":{"width":1110,"height":410,"basis":"component-root-visible-bounds"},"5":{"width":1140,"height":410,"basis":"component-root-visible-bounds"}},"resizeMode":"natural","minFontSize":19,"safePadding":12,"supportedCompositionIds":["component-full"]},"stateFootprints":{"3":{"width":1006,"height":410,"basis":"component-root-visible-bounds"},"4":{"width":1110,"height":410,"basis":"component-root-visible-bounds"},"5":{"width":1140,"height":410,"basis":"component-root-visible-bounds"}},"componentModel":{"fixed":["单行等权卡片骨架及共同中轴","圆形视觉锚点—标题—正文的统一层级","完整浅蓝灰承载面、轻阴影与稳定内部留白"],"variable":["3–5 个同级要点的标题和正文","由视觉导演提供语义短语、本地 Top 1 检索后填入的线性图标","项目数变化时由同一 HTML 组件重新计算栅格，不隐藏预设槽位"]},"fieldContract":{"editable":[{"field":"items.length","source":"PageContent.items.length","meaning":"选择 3、4 或 5 项 State，并触发整组重新排布"},{"field":"items[].title","source":"PageContent.items[].title","meaning":"每张卡片的同级要点标题"},{"field":"items[].body","source":"PageContent.items[].body","meaning":"每张卡片的简短说明"},{"field":"items[].iconQuery","source":"VisualPlan.pages[].iconQueries[]","meaning":"视觉导演只提供语义检索短语，不接触候选图标或文件名"}],"generated":[{"field":"items[].iconKey","meaning":"程序从本地 Tabler 元数据模糊检索得到的唯一 Top 1 图标"}],"fixed":["所有卡片在每个 State 中等权、共线、等宽和等高","字号角色由 Skin 提供，组件不得自行缩字"],"unavailable":[]},"capacity":"承载 3–5 个同级要点；标题不超过 8 字；正文上限随 State 为 34/30/24 字","semanticContract":"3–5 个对象处于同一层级，彼此没有先后、因果、中心支撑或上下级关系","doNotUseWhen":"内容存在正反比较、步骤顺序、中心辐射、问题—措施或层级关系","review":"四项 HTML 黄金状态已获用户认可；已扩散到 3–5 项并接入 Native/东北大学主题，等待整组最终审批","generator":"generate.mjs","showcase":"example.pptx","previewAvailable":true,"previewDeckPath":"备选资产/结构图/等权并列卡片-001/example.pptx","previewUrl":"/api/asset-preview?library=candidate&id=parallel-equal-cards-001&v=1786929945758","sourcePreviewAvailable":true,"sourcePreviewUrl":"/api/source-preview?library=candidate&id=parallel-equal-cards-001&slide=421&v=1751152495639","sourcePreviewUrls":[{"slide":421,"url":"/api/source-preview?library=candidate&id=parallel-equal-cards-001&slide=421&v=1751152495639"},{"slide":422,"url":"/api/source-preview?library=candidate&id=parallel-equal-cards-001&slide=422&v=1751152495639"},{"slide":423,"url":"/api/source-preview?library=candidate&id=parallel-equal-cards-001&slide=423&v=1751152495639"}],"componentPreviewAvailable":true,"componentImplementation":"asset-specific-html","componentFidelityStatus":"awaiting-user-review","hasVisualIntent":true,"visualIntentText":"# 等权并列卡片视觉意图\n\n## 0. 参考分工与综合方向\n\n- 主要逻辑骨架取自 `【动画版】500页创意图文排版PPT模板-深蓝版.pptx` 第 421–423 页：同一体系用等宽纵向分栏表达 3、4、5 个同级对象，并随数量重新分配列宽与间距。\n- 审美气质取自 `06-【柏林蓝】定制级学术型灵感手册-宽屏.pptx` 第 88 页：轻盈承载面、圆形视觉锚点、克制阴影和清楚的图标—标题—正文层级。\n- 文字层级参考 `狗哥蓝色-精美逻辑图PPT模板.pptx` 第 135 页：标题与正文之间有稳定的字号、净距和阅读节奏；不吸收其箭头和“问题—措施”双层关系。\n- 六项容量边界参考 `【蓝色版】年终日常汇报PPT模板-狗哥PPT出品.pptx` 第 121 页：六栏会显著压缩文字，因此不进入本 Structure Group。\n\n最终采用单行等权卡片骨架和轻量蓝灰卡片语言。舍弃来源中的产品图片、深色整页背景、卡片高低错落、序号箭头和问题解决语义，避免媒体依赖、暗示顺序或破坏同级关系。\n\n## 1. 逻辑与阅读路径\n\n页面表达 3–5 个互不隶属、没有先后和因果关系的同级要点。观众从左到右快速扫视，但左右位置不代表优先级；每张卡片拥有相同体量和层级，阅读可从任意一项开始。\n\n这个结构适合特征、能力、原则、抓手、成果或结论的枚举。若内容存在正反、阶段、上下级、中心支撑或问题—方案关系，应改用其他 Logic。\n\n## 2. 结构表达语法\n\n重复单元是沿共同水平轴排列的等权纵向卡片。每张卡片内部自上而下为：视觉锚点、节点标题、简短正文或分点。卡片之间只依靠等距与共同边界形成一组，不使用连线、箭头、中心节点或跨卡片底座。\n\n视觉锚点采用统一圆形容器，可承载可选线性图标；没有图标时使用克制的抽象标记，不引入有具体含义的替代图像。承载面必须保持完整边界，不能与页面背景融合成缺角或断裂。\n\n## 3. 审美语言\n\n整体端正、轻盈、规整，强调均匀而非炫技。所有卡片顶边、底边、视觉锚点中心、标题基线和正文起点分别共线；卡片宽度、阴影、圆角和内部留白一致。\n\n卡片使用能在白色或浅色 Shell 上被辨认的浅蓝灰承载面，辅以细边界或轻阴影；圆形视觉锚点使用深蓝主色，标题使用较强字重，正文保持低一层对比。颜色只负责建立层级，不给不同卡片附加不同语义。\n\n三项时允许卡片更宽、组间距更舒展；五项时压缩卡片宽度和间距，但不缩小 Skin 规定的字号。整组始终围绕 Content Frame 中轴居中，左右留白相等。\n\n## 4. 内容与媒体绑定\n\n- `items[].title` 绑定节点标题，是每张卡片的主要识别信息。\n- `items[].body` 或 `items[].points[]` 绑定正文区域；两者择一，不同时堆叠。\n- `items[].icon` 是可选增强，绑定圆形视觉锚点；缺失时仍可使用本组。\n- 卡片位置不绑定序号、优先级或状态。页面标题、Logo、页码和页脚由 Skin 负责，不进入组件。\n\n所有文字使用 Skin 的“节点标题、正文、标签”语义令牌，HTML 不自行发明字号或字体。\n\n## 5. Structure Group 不变量\n\n- 3–5 个单行、等宽、等高、等权的卡片单元；\n- 整组围绕共同水平中轴居中，左右留白对称；\n- 各卡片内部使用相同的视觉锚点—标题—正文层级；\n- 同级元素的尺寸、净距、视觉重量和颜色规则一致；\n- 无连线、箭头、中心节点、编号节奏或高低错落；\n- 承载面边界在浅色背景上仍完整可见。\n\n## 6. 可变量与版式扩散\n\n可替换项为卡片数量、标题、正文或分点，以及可选图标。支持 3、4、5 项，黄金状态采用 4 项。\n\n每个 State 都从当前数量重新计算卡片宽度、组间距和整组起点：三项不能由五项布局隐藏两项得到。三项使用较宽卡片，四项保持均衡，五项使用较窄卡片；卡片内部层级和固定字号不变。\n\n达到 6 项时停止使用本组，切换未来的“多项枚举网格”Structure Group；不继续压窄、不缩字，也不在本组内临时换成两行。\n\n## 7. 容量与可填区域\n\n每张卡片适合一个短标题和一段简短说明，或 2–3 条短分点。标题以一行为优先，正文以稳定的少量行数为上限；实际字符容量由 HTML 黄金状态按 Skin 固定字号反推并登记。\n\n视觉锚点只承载图标或抽象标记，不放长文字。卡片之间及整组之外的留白不是二级内容槽，不得继续塞入说明。标题过长、正文密度过高或数量超过五项时，应压缩内容、拆页或切换其他 Structure Group。\n\n## 8. 失败判据\n\n- 三项或四项看起来像五项布局删除若干卡片，导致整组偏心或留出空槽；\n- 同级卡片宽高、顶底边、视觉锚点或文字起点不齐，视觉重量明显不均；\n- 白色卡片与浅色 Shell 意外融合，出现缺边、缺角或悬空感；\n- 为容纳五项而缩小字号，或正文拥挤到破坏卡片内部留白；\n- 加入箭头、编号、中心节点或不同高度，使纯并列关系被误读成流程、辐射或递进。\n","userApprovedHtmlNative":false,"componentGoldenState":{"selection":{"itemCount":4}},"componentPreviewUrl":"/api/component-preview?library=candidate&id=parallel-equal-cards-001&v=1786934106971","componentStates":[3,4,5],"componentInitialState":4,"componentControls":[{"key":"itemCount","label":"并列项目数","values":[3,4,5],"default":4}],"componentInitialSelection":{"itemCount":4},"runtimeCapabilities":["html-component","native-compiled-output"],"nativeBuilderAvailable":false,"nativeCompiledOutputAvailable":true,"nativeOutputAvailable":true,"nativeStatePreviewUrl":"/api/native-state-preview?library=candidate&id=parallel-equal-cards-001&v=1786934106971","nativeStatePptxUrl":"/api/native-state-pptx?library=candidate&id=parallel-equal-cards-001&v=1786934106971","skinStatePreviewUrl":"/api/skin-state-preview?library=candidate&id=parallel-equal-cards-001&v=1786934106971","runtimeEntry":"generate.mjs","mapperExport":"mapPageContent","reviewEntry":"review.mjs","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","builderExport":"","manifestPath":"备选资产/结构图/等权并列卡片-001/asset.json","assetDir":"备选资产/结构图/等权并列卡片-001","coverageTags":[]}],"formalLogics":[{"id":"cycle-loop-001","name":"循环闭环","category":"结构图","kind":"component","library":"core","status":"core","candidateCopyOfCore":false,"creationMethod":"distillation","renderer":"html-component","autoCallable":true,"logicId":"cycle","structureGroupId":"cycle-pdca-ring-p57","familyId":"cycle-loop","variantId":"default","silhouette":"pdca-ring-with-side-notes","baseRelations":["sequence"],"purposes":[],"itemRange":{"min":3,"max":6,"preferred":[3,4,5,6]},"textCapacity":{"maxCenterChars":12,"maxItemTitleChars":8,"maxItemBodyChars":14,"maxPointsPerItem":4,"maxPointChars":14},"stateContract":{"resolver":"itemCount","states":[3,4,5,6]},"mediaContract":{"mode":"no-image","required":[]},"contentContract":{"itemRole":"semantic-node","points":"optional"},"slotContract":{"schemaVersion":"1.0","coordinateSpace":"design-frame","resolverExport":"resolveContentSlots","binding":"steps[].support","maxDepth":1,"childPolicy":"registered-core-only","fallback":"plain-text"},"contract":{"abstractionLevel":"foundation","adaptationStatus":"adaptive","constraints":{"semantic":{"ordered":true},"relationTraits":{"cyclic":true},"density":["low","medium"]}},"compositionIds":["component-full"],"source":{"file":"PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx","slides":[57]},"layoutExpansion":{"mode":"responsive","range":"3–6 个循环步骤","rule":"按当前步骤数重新计算等角位置和弧段；顺时针序号连续，不能从六项布局直接删项"},"spatialContract":{"coordinateSystem":{"width":1280,"height":720},"contentFrame":{"left":55,"top":166,"width":1170,"height":492},"aspectRatio":2.378,"minimumFrame":{"width":1170,"height":492},"preferredFrame":{"width":1170,"height":492},"stateFootprints":{"3":{"width":1170,"height":492,"basis":"component-root"},"4":{"width":1170,"height":492,"basis":"component-root"},"5":{"width":1170,"height":492,"basis":"component-root"},"6":{"width":1170,"height":492,"basis":"component-root"}},"resizeMode":"natural","minFontSize":16,"safePadding":12,"supportedCompositionIds":["component-full"]},"stateFootprints":{"3":{"width":1170,"height":492,"basis":"component-root"},"4":{"width":1170,"height":492,"basis":"component-root"},"5":{"width":1170,"height":492,"basis":"component-root"},"6":{"width":1170,"height":492,"basis":"component-root"}},"componentModel":{"fixed":["顺时针闭合环与中心核心共同表达循环关系","外围说明区与对应步骤保持清晰归属","环形体量、中心留白、左右均衡和蓝灰层次保持一致"],"variable":["中心主题","3–6 个步骤及其标题、正文和普通文本分点","步骤数量变化时重新计算等角位置、弧段和外围说明区"]},"fieldContract":{"editable":[{"field":"page.title","source":"PageContent.title","meaning":"页面标题，由 Skin 放入统一标题区"},{"field":"center","source":"PageContent.notes || PageContent.title","meaning":"环中央主题；示例中的“PDCA／循环”会被真实稿件替换"},{"field":"steps[].title","source":"PageContent.items[].title","meaning":"步骤名称；示例中的“计划／执行／检查／行动”等会被真实稿件替换"},{"field":"steps[].body","source":"PageContent.items[].body","meaning":"步骤说明"},{"field":"steps[].points[]","source":"PageContent.items[].points[]","meaning":"步骤分点"},{"field":"steps.length","source":"PageContent.items.length","meaning":"循环步骤数，支持 3–6"}],"generated":[{"field":"steps[].number","meaning":"按顺时针顺序自动生成 01–N"}],"fixed":["顺时针闭合环、中心圆与外围说明区的结构关系","本 Structure Group 的几何、色彩层次和连接方式","字号角色由当前 Skin 统一提供，组件不得自行缩字"],"unavailable":[{"field":"steps[].english","meaning":"当前 PageContent 契约未开放英文标签；示例不再显示，避免误导"}]},"capacity":"3–6 个循环步骤；每项接受可选正文和0–4条普通文本分点，标题不超过8字，正文与单条分点均不超过14字；容量服从固定字号，不通过缩字扩容","semanticContract":"多个步骤反复运行，最后一步会反馈或回到第一步","doNotUseWhen":"只是一次性线性过程，或多个要点之间没有循环关系","review":"2026-08-16 已完成第57页 HTML 黄金状态；基础版表达一层循环关系，并把外围灰区解析为 design-frame 坐标下的 Content Slots；Native 结果由统一 HTML → ResolvedVisualTree → PPT 编译器生成","generator":"generate.mjs","showcase":"example.pptx","previewAvailable":true,"previewDeckPath":"assets/结构图/循环闭环-001/example.pptx","previewUrl":"/api/asset-preview?library=core&id=cycle-loop-001&v=1786881820342","sourcePreviewAvailable":true,"sourcePreviewUrl":"/api/source-preview?library=core&id=cycle-loop-001&slide=57&v=1730330060062","sourcePreviewUrls":[{"slide":57,"url":"/api/source-preview?library=core&id=cycle-loop-001&slide=57&v=1730330060062"}],"componentPreviewAvailable":true,"componentImplementation":"asset-specific-html","componentFidelityStatus":"user-approved","hasVisualIntent":true,"visualIntentText":"# 循环闭环视觉意图\r\n\r\n## 视觉命题\r\n\r\n页面把反复改进转成围绕中心主题运行的顺时针厚轨道。主环承担第一视觉，视线从左上经上、右、下、左回到起点；两侧支持区解释各阶段，中心白核稳定地收束视线。\r\n\r\n## 构图、比例与净距\r\n\r\n主环外轮廓接近可用高度，内孔开阔，约三倍以上带宽。环外与支持区之间有约半个带宽的连续白色呼吸带；同侧上下灰区之间保留明确的横向分组留白。左右浅灰区向中心延伸，中央白色圆形遮罩与其真实相交切出内侧凹弧，不能合并灰背板或让支持区退化成远离主图的卡片。\r\n\r\n## 造型与覆盖\r\n\r\n蓝色环带连续相接，内外边界进入各自同色箭头根部。箭头是主体长出的末端，根部约一个带宽，尖端沿顺时针切线伸出约一个带宽并覆盖下一段。环带先画，箭头后画，实际重叠可见；箭头无描边、白缝或径向硬线。\r\n\r\n## 文字姿态策略\r\n\r\n编号是全局正立的低对比度节拍，虽然锚在段末端带体内，但不随圆周旋转。中文阶段标题贴在带体中段外侧，沿该段切线旋转，并自动翻转以保持正常阅读。英文辅助词位于对应段内侧白轨道，沿切线且保持可读方向。中心两行主题全局正立。外围普通文本始终水平正立：左侧支持区左对齐，右侧支持区右对齐。\r\n\r\n## 内容绑定与容量\r\n\r\n每段绑定末端编号、中段中文标题、内侧英文和一个浅灰支持区。基础版只表达一层循环关系，支持区接受可选正文和0–4条普通文本分点；没有数字、没有指标、分点少于4条都可以使用。3–6 步重新等分弧段，独立求解三类环上文字的锚点与旋转，支持区随数量重新分配。\r\n\r\n正文与单条分点均不超过22字，每项最多4条分点。超限时拒绝该 Structure Group，由视觉导演切换其他样式，不缩字、裁切或隐藏内容硬塞。带有“标签—说明—指标”等二层语义的内容不进入本基础版，后续应作为独立的嵌套 Structure Group。\r\n\r\n## 结构不变量与失败判据\r\n\r\n必须保持连续厚环、同色切线箭头、真实覆盖、中心圆核和遮罩凹弧、独立灰色支持区、环外呼吸带，以及编号/标题/英文三类不同文字姿态。所有文字套同一旋转、箭头成为独立径向图标、呼吸带消失、遮罩不相交、左右文本没有镜像对齐，或在基础版重新绑定蓝色标签与数字指标，均视为失败。\r\n","userApprovedHtmlNative":true,"componentGoldenState":{"sourceSlide":57,"selection":{"stepCount":4}},"componentPreviewUrl":"/api/component-preview?library=core&id=cycle-loop-001&v=1786934106974","componentStates":[3,4,5,6],"componentInitialState":4,"componentControls":[{"key":"stepCount","label":"循环步骤数","values":[3,4,5,6],"default":4}],"componentInitialSelection":{"stepCount":4},"runtimeCapabilities":["html-component","native-compiled-output"],"nativeBuilderAvailable":false,"nativeCompiledOutputAvailable":true,"nativeOutputAvailable":true,"nativeStatePreviewUrl":"/api/native-state-preview?library=core&id=cycle-loop-001&v=1786934106974","nativeStatePptxUrl":"/api/native-state-pptx?library=core&id=cycle-loop-001&v=1786934106974","skinStatePreviewUrl":"/api/skin-state-preview?library=core&id=cycle-loop-001&v=1786934106974","runtimeEntry":"generate.mjs","mapperExport":"mapPageContent","reviewEntry":"review.mjs","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","builderExport":"","manifestPath":"assets/结构图/循环闭环-001/asset.json","assetDir":"assets/结构图/循环闭环-001","coverageTags":["循环与闭环"]}],"candidateOnly":[{"id":"parallel-equal-cards-001","name":"等权并列卡片","category":"结构图","kind":"component","library":"candidate","status":"candidate","candidateCopyOfCore":false,"creationMethod":"distillation","renderer":"html-component","autoCallable":false,"logicId":"parallel","structureGroupId":"parallel-equal-cards","familyId":"parallel-cards","variantId":"equal-floating-cards","silhouette":"equal-cards-with-round-anchors","baseRelations":["parallel"],"purposes":[{"key":"present_parallel_points","description":"并列呈现若干同级观点"},{"key":"explain_topics","description":"说明一个中心主题及其同级要点"}],"itemRange":{"min":3,"max":5,"preferred":[3,4,5]},"textCapacity":{"maxItemTitleChars":8,"maxItemBodyCharsByState":{"3":34,"4":30,"5":24}},"stateContract":{"resolver":"itemCount","states":[3,4,5],"previewDefault":4},"mediaContract":{"mode":"semantic-icon","provider":"tabler-icons","selection":"local-top-1","queryOwner":"visual-director","requiredPerComponentItem":true},"contentContract":{"itemRole":"semantic-node","points":"forbidden","ordered":false},"slotContract":null,"contract":{"abstractionLevel":"foundation","adaptationStatus":"adaptive","constraints":{"semantic":{"ordered":false},"relationTraits":{"parallel":true},"density":["low","medium"]}},"compositionIds":["component-full"],"source":{"file":"PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx","slides":[421,422,423]},"layoutExpansion":{"mode":"responsive-state-group","range":"同一 Structure Group 支持 3–5 项；每个状态重新计算卡片宽度、间距与整体居中位置","rule":"所有项目等宽、等高、等距并围绕共同中轴居中；不得把顺序、中心或层级关系混入本组"},"spatialContract":{"coordinateSystem":{"width":1280,"height":720},"contentFrame":{"left":55,"top":166,"width":1170,"height":492},"aspectRatio":2.378,"minimumFrame":{"width":1170,"height":492},"preferredFrame":{"width":1170,"height":492},"stateFootprints":{"3":{"width":1006,"height":410,"basis":"component-root-visible-bounds"},"4":{"width":1110,"height":410,"basis":"component-root-visible-bounds"},"5":{"width":1140,"height":410,"basis":"component-root-visible-bounds"}},"resizeMode":"natural","minFontSize":19,"safePadding":12,"supportedCompositionIds":["component-full"]},"stateFootprints":{"3":{"width":1006,"height":410,"basis":"component-root-visible-bounds"},"4":{"width":1110,"height":410,"basis":"component-root-visible-bounds"},"5":{"width":1140,"height":410,"basis":"component-root-visible-bounds"}},"componentModel":{"fixed":["单行等权卡片骨架及共同中轴","圆形视觉锚点—标题—正文的统一层级","完整浅蓝灰承载面、轻阴影与稳定内部留白"],"variable":["3–5 个同级要点的标题和正文","由视觉导演提供语义短语、本地 Top 1 检索后填入的线性图标","项目数变化时由同一 HTML 组件重新计算栅格，不隐藏预设槽位"]},"fieldContract":{"editable":[{"field":"items.length","source":"PageContent.items.length","meaning":"选择 3、4 或 5 项 State，并触发整组重新排布"},{"field":"items[].title","source":"PageContent.items[].title","meaning":"每张卡片的同级要点标题"},{"field":"items[].body","source":"PageContent.items[].body","meaning":"每张卡片的简短说明"},{"field":"items[].iconQuery","source":"VisualPlan.pages[].iconQueries[]","meaning":"视觉导演只提供语义检索短语，不接触候选图标或文件名"}],"generated":[{"field":"items[].iconKey","meaning":"程序从本地 Tabler 元数据模糊检索得到的唯一 Top 1 图标"}],"fixed":["所有卡片在每个 State 中等权、共线、等宽和等高","字号角色由 Skin 提供，组件不得自行缩字"],"unavailable":[]},"capacity":"承载 3–5 个同级要点；标题不超过 8 字；正文上限随 State 为 34/30/24 字","semanticContract":"3–5 个对象处于同一层级，彼此没有先后、因果、中心支撑或上下级关系","doNotUseWhen":"内容存在正反比较、步骤顺序、中心辐射、问题—措施或层级关系","review":"四项 HTML 黄金状态已获用户认可；已扩散到 3–5 项并接入 Native/东北大学主题，等待整组最终审批","generator":"generate.mjs","showcase":"example.pptx","previewAvailable":true,"previewDeckPath":"备选资产/结构图/等权并列卡片-001/example.pptx","previewUrl":"/api/asset-preview?library=candidate&id=parallel-equal-cards-001&v=1786929945758","sourcePreviewAvailable":true,"sourcePreviewUrl":"/api/source-preview?library=candidate&id=parallel-equal-cards-001&slide=421&v=1751152495639","sourcePreviewUrls":[{"slide":421,"url":"/api/source-preview?library=candidate&id=parallel-equal-cards-001&slide=421&v=1751152495639"},{"slide":422,"url":"/api/source-preview?library=candidate&id=parallel-equal-cards-001&slide=422&v=1751152495639"},{"slide":423,"url":"/api/source-preview?library=candidate&id=parallel-equal-cards-001&slide=423&v=1751152495639"}],"componentPreviewAvailable":true,"componentImplementation":"asset-specific-html","componentFidelityStatus":"awaiting-user-review","hasVisualIntent":true,"visualIntentText":"# 等权并列卡片视觉意图\n\n## 0. 参考分工与综合方向\n\n- 主要逻辑骨架取自 `【动画版】500页创意图文排版PPT模板-深蓝版.pptx` 第 421–423 页：同一体系用等宽纵向分栏表达 3、4、5 个同级对象，并随数量重新分配列宽与间距。\n- 审美气质取自 `06-【柏林蓝】定制级学术型灵感手册-宽屏.pptx` 第 88 页：轻盈承载面、圆形视觉锚点、克制阴影和清楚的图标—标题—正文层级。\n- 文字层级参考 `狗哥蓝色-精美逻辑图PPT模板.pptx` 第 135 页：标题与正文之间有稳定的字号、净距和阅读节奏；不吸收其箭头和“问题—措施”双层关系。\n- 六项容量边界参考 `【蓝色版】年终日常汇报PPT模板-狗哥PPT出品.pptx` 第 121 页：六栏会显著压缩文字，因此不进入本 Structure Group。\n\n最终采用单行等权卡片骨架和轻量蓝灰卡片语言。舍弃来源中的产品图片、深色整页背景、卡片高低错落、序号箭头和问题解决语义，避免媒体依赖、暗示顺序或破坏同级关系。\n\n## 1. 逻辑与阅读路径\n\n页面表达 3–5 个互不隶属、没有先后和因果关系的同级要点。观众从左到右快速扫视，但左右位置不代表优先级；每张卡片拥有相同体量和层级，阅读可从任意一项开始。\n\n这个结构适合特征、能力、原则、抓手、成果或结论的枚举。若内容存在正反、阶段、上下级、中心支撑或问题—方案关系，应改用其他 Logic。\n\n## 2. 结构表达语法\n\n重复单元是沿共同水平轴排列的等权纵向卡片。每张卡片内部自上而下为：视觉锚点、节点标题、简短正文或分点。卡片之间只依靠等距与共同边界形成一组，不使用连线、箭头、中心节点或跨卡片底座。\n\n视觉锚点采用统一圆形容器，可承载可选线性图标；没有图标时使用克制的抽象标记，不引入有具体含义的替代图像。承载面必须保持完整边界，不能与页面背景融合成缺角或断裂。\n\n## 3. 审美语言\n\n整体端正、轻盈、规整，强调均匀而非炫技。所有卡片顶边、底边、视觉锚点中心、标题基线和正文起点分别共线；卡片宽度、阴影、圆角和内部留白一致。\n\n卡片使用能在白色或浅色 Shell 上被辨认的浅蓝灰承载面，辅以细边界或轻阴影；圆形视觉锚点使用深蓝主色，标题使用较强字重，正文保持低一层对比。颜色只负责建立层级，不给不同卡片附加不同语义。\n\n三项时允许卡片更宽、组间距更舒展；五项时压缩卡片宽度和间距，但不缩小 Skin 规定的字号。整组始终围绕 Content Frame 中轴居中，左右留白相等。\n\n## 4. 内容与媒体绑定\n\n- `items[].title` 绑定节点标题，是每张卡片的主要识别信息。\n- `items[].body` 或 `items[].points[]` 绑定正文区域；两者择一，不同时堆叠。\n- `items[].icon` 是可选增强，绑定圆形视觉锚点；缺失时仍可使用本组。\n- 卡片位置不绑定序号、优先级或状态。页面标题、Logo、页码和页脚由 Skin 负责，不进入组件。\n\n所有文字使用 Skin 的“节点标题、正文、标签”语义令牌，HTML 不自行发明字号或字体。\n\n## 5. Structure Group 不变量\n\n- 3–5 个单行、等宽、等高、等权的卡片单元；\n- 整组围绕共同水平中轴居中，左右留白对称；\n- 各卡片内部使用相同的视觉锚点—标题—正文层级；\n- 同级元素的尺寸、净距、视觉重量和颜色规则一致；\n- 无连线、箭头、中心节点、编号节奏或高低错落；\n- 承载面边界在浅色背景上仍完整可见。\n\n## 6. 可变量与版式扩散\n\n可替换项为卡片数量、标题、正文或分点，以及可选图标。支持 3、4、5 项，黄金状态采用 4 项。\n\n每个 State 都从当前数量重新计算卡片宽度、组间距和整组起点：三项不能由五项布局隐藏两项得到。三项使用较宽卡片，四项保持均衡，五项使用较窄卡片；卡片内部层级和固定字号不变。\n\n达到 6 项时停止使用本组，切换未来的“多项枚举网格”Structure Group；不继续压窄、不缩字，也不在本组内临时换成两行。\n\n## 7. 容量与可填区域\n\n每张卡片适合一个短标题和一段简短说明，或 2–3 条短分点。标题以一行为优先，正文以稳定的少量行数为上限；实际字符容量由 HTML 黄金状态按 Skin 固定字号反推并登记。\n\n视觉锚点只承载图标或抽象标记，不放长文字。卡片之间及整组之外的留白不是二级内容槽，不得继续塞入说明。标题过长、正文密度过高或数量超过五项时，应压缩内容、拆页或切换其他 Structure Group。\n\n## 8. 失败判据\n\n- 三项或四项看起来像五项布局删除若干卡片，导致整组偏心或留出空槽；\n- 同级卡片宽高、顶底边、视觉锚点或文字起点不齐，视觉重量明显不均；\n- 白色卡片与浅色 Shell 意外融合，出现缺边、缺角或悬空感；\n- 为容纳五项而缩小字号，或正文拥挤到破坏卡片内部留白；\n- 加入箭头、编号、中心节点或不同高度，使纯并列关系被误读成流程、辐射或递进。\n","userApprovedHtmlNative":false,"componentGoldenState":{"selection":{"itemCount":4}},"componentPreviewUrl":"/api/component-preview?library=candidate&id=parallel-equal-cards-001&v=1786934106971","componentStates":[3,4,5],"componentInitialState":4,"componentControls":[{"key":"itemCount","label":"并列项目数","values":[3,4,5],"default":4}],"componentInitialSelection":{"itemCount":4},"runtimeCapabilities":["html-component","native-compiled-output"],"nativeBuilderAvailable":false,"nativeCompiledOutputAvailable":true,"nativeOutputAvailable":true,"nativeStatePreviewUrl":"/api/native-state-preview?library=candidate&id=parallel-equal-cards-001&v=1786934106971","nativeStatePptxUrl":"/api/native-state-pptx?library=candidate&id=parallel-equal-cards-001&v=1786934106971","skinStatePreviewUrl":"/api/skin-state-preview?library=candidate&id=parallel-equal-cards-001&v=1786934106971","runtimeEntry":"generate.mjs","mapperExport":"mapPageContent","reviewEntry":"review.mjs","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","builderExport":"","manifestPath":"备选资产/结构图/等权并列卡片-001/asset.json","assetDir":"备选资产/结构图/等权并列卡片-001","coverageTags":[]}],"logics":[{"id":"parallel","name":"并列与枚举","tier":"基础","description":"呈现若干同级要点、抓手、特征或结论，彼此没有先后、因果或上下级关系。","assetIds":[],"status":"empty"},{"id":"sequence","name":"顺序与流程","tier":"基础","description":"表达有明确先后顺序的步骤、阶段或操作链路。","assetIds":[],"status":"empty"},{"id":"cycle","name":"循环与闭环","tier":"基础","description":"表达末端回到起点、持续迭代或反馈闭环。","assetIds":["cycle-loop-001"],"status":"available"},{"id":"comparison","name":"对比与选择","tier":"基础","description":"按相同维度比较对象、方案、状态、正反面或前后变化。","assetIds":[],"status":"empty"},{"id":"hierarchy","name":"层级与组织","tier":"基础","description":"表达上下级、归属、管理或树形父子关系。","assetIds":[],"status":"empty"},{"id":"layered","name":"分层与架构","tier":"基础","description":"表达系统由多个层次构成，以及各层的职责和上下关系。","assetIds":[],"status":"empty"},{"id":"timeline","name":"时间与演进","tier":"基础","description":"表达历史、阶段、里程碑、路线图或随时间发生的变化。","assetIds":[],"status":"empty"},{"id":"hub","name":"中心与辐射","tier":"基础","description":"表达一个中心主题与多个同级方向之间的支撑、影响或组成关系。","assetIds":[],"status":"empty"},{"id":"matrix","name":"矩阵与象限","tier":"基础","description":"用两个维度交叉定位、分类或评估对象。","assetIds":[],"status":"empty"},{"id":"convergence","name":"汇聚、分流与转化","tier":"基础","description":"表达多到一、一到多、逐步筛选、漏斗收窄或阶段转化。","assetIds":[],"status":"empty"},{"id":"causal","name":"因果与归因","tier":"常用","description":"从结果追溯多类原因，或说明多个条件如何共同导致结果。","assetIds":[],"status":"empty"},{"id":"problem-solution","name":"问题、方案与结果","tier":"常用","description":"把现状、问题或缺口与措施、方案和预期结果连接起来。","assetIds":[],"status":"empty"},{"id":"branching","name":"分支与决策","tier":"常用","description":"表达条件判断、路径分叉、方案选择或决策树。","assetIds":[],"status":"empty"},{"id":"progression","name":"递进、等级与成熟度","tier":"常用","description":"表达由低到高、由基础到高级的等级、能力或成熟度递进。","assetIds":[],"status":"empty"},{"id":"goal-alignment","name":"目标、策略与指标","tier":"常用","description":"表达目标向策略、行动、任务或指标的分解与对齐。","assetIds":[],"status":"empty"},{"id":"role-stage","name":"阶段与角色协同","tier":"常用","description":"同时表达阶段推进与不同角色、部门或泳道的职责协作。","assetIds":[],"status":"empty"},{"id":"containment","name":"包含、交集与范围","tier":"补充","description":"表达集合包含、交集、内外圈、边界或范围关系。","assetIds":[],"status":"empty"},{"id":"network","name":"关系网络与生态","tier":"补充","description":"表达多个主体之间的互联、协作、生态或复杂关系。","assetIds":[],"status":"empty"},{"id":"journey","name":"旅程与生命周期","tier":"补充","description":"表达对象在多个阶段中的行为、体验、触点或生命周期变化。","assetIds":[],"status":"empty"},{"id":"spatial","name":"地域与分布","tier":"补充","description":"表达地点、区域、空间分布及地域之间的联系。","assetIds":[],"status":"empty"}],"purposes":[{"key":"present_cover","description":"呈现演示标题、汇报人和日期"},{"key":"present_agenda","description":"呈现演示目录或章节导航"},{"key":"present_closing","description":"呈现演示结束语"},{"key":"explain_process","description":"说明一般性的有序过程或步骤"},{"key":"explain_topics","description":"说明一个中心主题及其同级要点"},{"key":"present_parallel_points","description":"并列呈现若干同级观点"},{"key":"compare_options","description":"比较两个方案、对象或状态"},{"key":"explain_hierarchy","description":"说明上下级或层级结构"},{"key":"explain_temporal_change","description":"说明随时间发生的变化"},{"key":"explain_cycle","description":"说明循环或闭环关系"},{"key":"organize_matrix","description":"按两个维度组织对象"},{"key":"explain_layers","description":"说明分层体系及层间关系"},{"key":"align_goal_and_metrics","description":"说明目标、策略和指标的对应关系"},{"key":"align_phases_and_actions","description":"对齐阶段、时期和行动安排"},{"key":"analyze_causes","description":"分析导致某个结果的多类原因"},{"key":"compare_audience_segments","description":"比较不同人群层级及对应策略"},{"key":"compare_parallel_tracks","description":"比较两条同步演进的主线"},{"key":"connect_problems_and_solutions","description":"把问题、解决方案和持续行动连接起来"},{"key":"explain_business_model","description":"按商业模式画布字段说明业务模式"},{"key":"explain_capability_system","description":"说明中心能力及外围能力体系"},{"key":"explain_conversion","description":"说明阶段性收窄或转化过程"},{"key":"explain_cross_role_process","description":"说明多个角色跨阶段协作的过程"},{"key":"explain_end_to_end_operations","description":"说明端到端运营链路"},{"key":"explain_evolution","description":"说明阶段递进或能力升级"},{"key":"explain_experience_layers","description":"说明体验体系的多个层次"},{"key":"explain_geographic_distribution","description":"说明地点分布及地点之间的连接"},{"key":"explain_internal_external_ecosystem","description":"说明内部与外部生态的连接"},{"key":"explain_lifecycle","description":"说明对象的生命周期阶段"},{"key":"explain_multistage_flow","description":"说明多阶段、多节点的流向"},{"key":"explain_omnichannel_domains","description":"说明不同渠道和业务域的关系"},{"key":"explain_organization","description":"说明组织、部门和角色层级"},{"key":"explain_research_process","description":"说明包含分支与汇聚的研究技术路线"},{"key":"explain_user_journey","description":"说明用户在多个阶段中的行为和体验"},{"key":"integrate_theories","description":"整合多个理论或文献领域"},{"key":"present_layered_conclusions","description":"分层呈现多个结论"},{"key":"summarize_research_method","description":"摘要呈现研究对象、方法和维度"}],"compositions":[{"id":"fixed-cover","silhouette":"cover","requiresComponent":false,"allowedAssetKinds":["cover"],"slots":[]},{"id":"fixed-agenda","silhouette":"agenda","requiresComponent":false,"allowedAssetKinds":["agenda"],"slots":[]},{"id":"fixed-closing","silhouette":"closing","requiresComponent":false,"allowedAssetKinds":["closing"],"slots":[]},{"id":"component-full","silhouette":"full-width-visual","requiresComponent":true,"allowedAssetKinds":["component"],"slots":[{"id":"component","role":"component","frame":{"left":0,"top":0,"width":1,"height":1}}]},{"id":"component-aside-right","silhouette":"visual-left-editorial-right","requiresComponent":true,"allowedAssetKinds":["component"],"slots":[{"id":"component","role":"component","frame":{"left":0,"top":0.04,"width":0.68,"height":0.92}},{"id":"aside","role":"text","frame":{"left":0.73,"top":0.08,"width":0.27,"height":0.84}}]},{"id":"editorial-list","silhouette":"editorial-lead-and-list","requiresComponent":false,"allowedAssetKinds":["body"],"slots":[{"id":"lead","role":"text","frame":{"left":0.03,"top":0.08,"width":0.28,"height":0.82}},{"id":"body","role":"text","frame":{"left":0.36,"top":0.04,"width":0.61,"height":0.9}}]},{"id":"editorial-focus","silhouette":"large-thesis-with-support","requiresComponent":false,"allowedAssetKinds":["body"],"slots":[{"id":"primary","role":"text","frame":{"left":0.04,"top":0.1,"width":0.5,"height":0.76}},{"id":"support","role":"text","frame":{"left":0.62,"top":0.08,"width":0.34,"height":0.8}}]},{"id":"editorial-focus-reverse","silhouette":"support-with-large-thesis-right","requiresComponent":false,"allowedAssetKinds":["body"],"slots":[{"id":"support","role":"text","frame":{"left":0.04,"top":0.08,"width":0.34,"height":0.8}},{"id":"primary","role":"text","frame":{"left":0.46,"top":0.1,"width":0.5,"height":0.76}}]},{"id":"editorial-single-focus","silhouette":"centered-single-thesis","requiresComponent":false,"allowedAssetKinds":["body"],"slots":[{"id":"primary","role":"text","frame":{"left":0.1,"top":0.1,"width":0.8,"height":0.78}}]},{"id":"editorial-dual-statement","silhouette":"balanced-dual-statement","requiresComponent":false,"allowedAssetKinds":["body"],"slots":[{"id":"left","role":"text","frame":{"left":0.04,"top":0.08,"width":0.4,"height":0.82}},{"id":"right","role":"text","frame":{"left":0.56,"top":0.08,"width":0.4,"height":0.82}}]},{"id":"image-left-text-right","silhouette":"image-left-editorial-right","requiresComponent":false,"requiresMedia":true,"allowedAssetKinds":["body"],"slots":[{"id":"image","role":"image","frame":{"left":0,"top":0,"width":0.56,"height":1}},{"id":"body","role":"text","frame":{"left":0.63,"top":0.08,"width":0.33,"height":0.84}}]},{"id":"image-right-text-left","silhouette":"editorial-left-image-right","requiresComponent":false,"requiresMedia":true,"allowedAssetKinds":["body"],"slots":[{"id":"body","role":"text","frame":{"left":0.04,"top":0.08,"width":0.33,"height":0.84}},{"id":"image","role":"image","frame":{"left":0.44,"top":0,"width":0.56,"height":1}}]}],"failureCases":[],"sourceFiles":["【动画版】500页创意图文排版PPT模板-深蓝版.pptx","【蓝色版】150页逻辑框架汇报PPT模板.pptx","【蓝色版】年终日常汇报PPT模板-狗哥PPT出品.pptx","06-【柏林蓝】定制级学术型灵感手册-宽屏.pptx","狗哥蓝色-精美逻辑图PPT模板.pptx","PPT模板-封面正文尾页.pptx"],"categoryCounts":[{"name":"结构图","count":2},{"name":"封面","count":1},{"name":"尾页","count":1},{"name":"正文","count":1},{"name":"目录","count":1}],"stores":[{"name":"原始 PPT 来源","path":"PPT源/","count":6,"role":"只提供入库线的原始视觉来源","tone":"source"},{"name":"核心资产库","path":"assets/","count":5,"role":"正式生成线自动发现并只读调用","tone":"core"},{"name":"候选资产库","path":"备选资产/","count":1,"role":"等待补齐、验证或用户明确确认","tone":"candidate"},{"name":"规则与能力目录","path":"catalog/","count":48,"role":"保存 Composition、Purpose、契约与失败经验","tone":"catalog"},{"name":"Logic 运行声明","path":"*/asset.json","count":1,"role":"声明 Logic、Structure Group、触发条件和运行入口","tone":"runtime"}]};
+
+    const LABELS = {
+      core: "核心目录", candidate: "候选库", "html-component": "HTML 路线",
+      "legacy-builder": "原有代码路线", "native-builder": "代码生成 PPT",
+      "native-compiled-output": "HTML 编译 PPT", skin: "主题 Shell", "not-wired": "未接入运行时",
+      "user-approved": "用户已确认", "awaiting-user-review": "等待用户确认",
+      "requires-redistillation": "需要重新蒸馏", "legacy-or-unreviewed": "旧流程资产",
+    };
+    const state = { search: "", library: "all", category: "all", renderer: "all", coverage: null };
+    const byKey = new Map(DATA.records.map((record) => [record.library + ":" + record.id, record]));
+    const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[char]));
+    const text = (value, fallback = "—") => value === null || value === undefined || value === "" ? fallback : String(value);
+    const list = (values) => Array.isArray(values) && values.length ? values.join("、") : "—";
+    const range = (asset) => asset.layoutExpansion?.range || asset.capacity || (asset.itemRange ? asset.itemRange.min + "–" + asset.itemRange.max + " 项" : "—");
+    const pill = (label, tone = "") => '<span class="pill ' + esc(tone) + '">' + esc(label) + '</span>';
+    const relationText = (asset) => list(asset.baseRelations);
+    const purposeText = (asset) => asset.purposes?.length ? asset.purposes.map((item) => item.key).join("、") : "—";
+    const liveMode = DATA.mode === "live-repository-api" && location.protocol.startsWith("http");
+
+    function runtimeCapabilityPills(asset) {
+      const capabilities = asset.runtimeCapabilities?.length ? asset.runtimeCapabilities : [asset.renderer];
+      return capabilities.map((capability) => pill(LABELS[capability] || capability, capability)).join("");
+    }
+
+    function intakeStatusPill(asset) {
+      if (asset.renderer === "skin") return pill("主题 Shell", "skin");
+      if (asset.renderer !== "html-component") return pill("旧流程可用", "legacy-builder");
+      const status = asset.componentFidelityStatus;
+      return pill(LABELS[status] || status, status === "user-approved" ? "core" : "candidate");
+    }
+
+    function previewMarkup(asset, drawer = false) {
+      const className = drawer ? "drawer-preview" : "logic-preview";
+      if (!liveMode) return '<div class="' + className + '"><span>静态快照不加载 PPT 图像<br>双击 PPA看板.exe 查看真实示例</span></div>';
+      if (!asset.previewAvailable || !asset.previewUrl) return '<div class="' + className + '"><span>此资产没有可用的 example.pptx</span></div>';
+      const sourceAttribute = drawer ? 'src' : 'data-preview-src';
+      if (drawer) return '<button type="button" class="' + className + ' preview-open" data-preview-open="' + esc(asset.previewUrl) + '" data-preview-caption="' + esc(asset.name) + ' · 原生可编辑 PPT"><img src="' + esc(asset.previewUrl) + '" alt="' + esc(asset.name) + ' 的 PPT 示例外观"><span hidden>真实 PPT 示例预览生成失败</span></button>';
+      return '<div class="' + className + '"><img ' + sourceAttribute + '="' + esc(asset.previewUrl) + '" alt="' + esc(asset.name) + ' 的 PPT 示例外观"><span hidden>真实 PPT 示例预览生成失败</span></div>';
+    }
+
+    function candidatePreviewMarkup(asset) {
+      if (!liveMode) return '<div class="logic-preview"><span>静态快照不加载实时 HTML<br>双击 PPA看板.exe 查看候选设计</span></div>';
+      if (!asset.componentPreviewAvailable || !asset.componentPreviewUrl) return '<div class="logic-preview"><span>候选资产尚未形成可查看的 HTML 黄金状态</span></div>';
+      const query = selectionQuery(asset.componentInitialSelection ?? {});
+      return '<div class="logic-preview"><iframe loading="lazy" tabindex="-1" src="' + esc(asset.componentPreviewUrl + '&' + query) + '" title="' + esc(asset.name) + ' 的实时 HTML 黄金状态"></iframe></div>';
+    }
+
+    function selectionQuery(selection) {
+      return Object.entries(selection ?? {}).map(([key, value]) => encodeURIComponent(key) + '=' + encodeURIComponent(value)).join('&');
+    }
+
+    function reviewWorkflowMarkup(asset) {
+      if (!liveMode) return '<div class="review-flow"><h3>建设链证据</h3><p>静态快照不加载来源页和实时 HTML。请双击 PPA看板.exe。</p></div>';
+      const htmlRoute = asset.renderer === 'html-component';
+      const sourcePreviews = asset.sourcePreviewUrls ?? [];
+      const sourceButtons = sourcePreviews.length > 1 ? '<div class="state-switcher"><div class="state-control"><b>来源参考</b>' + sourcePreviews.map((item, index) => '<button type="button" class="state-button' + (index === 0 ? ' active' : '') + '" data-source-preview="' + esc(item.url) + '" data-source-slide="' + item.slide + '">来源 ' + (index + 1) + '</button>').join('') + '</div></div>' : '';
+      const sourceMedia = asset.sourcePreviewAvailable && asset.sourcePreviewUrl
+        ? '<button type="button" class="review-media source preview-open" data-source-image data-preview-open="' + esc(asset.sourcePreviewUrl) + '" data-preview-caption="' + esc(asset.name) + ' · 来源参考"><img src="' + esc(asset.sourcePreviewUrl) + '" alt="' + esc(asset.name) + ' 的来源 PPT 页面"></button>'
+        : '<div class="review-media source"><span>没有可读取的 PPT源/ 文件与页码</span></div>';
+      const intentMedia = asset.visualIntentText ? '<div class="intent-panel">' + esc(asset.visualIntentText) + '</div>' : '<div class="intent-panel">尚未形成 visual-intent.md。</div>';
+      const fixedItems = asset.componentModel?.fixed ?? [];
+      const variableItems = asset.componentModel?.variable ?? [];
+      const componentProfile = fixedItems.length || variableItems.length
+        ? '<div class="component-profile"><div><b>固定结构与视觉语言</b><ul>' + fixedItems.map((item) => '<li>' + esc(item) + '</li>').join('') + '</ul></div><div><b>可变内容与扩散范围</b><ul>' + variableItems.map((item) => '<li>' + esc(item) + '</li>').join('') + '</ul></div></div>'
+        : '';
+      const fields = asset.fieldContract ?? {};
+      const fieldItems = (items, includeSource = false) => (items ?? []).map((item) => {
+        if (typeof item === 'string') return '<li>' + esc(item) + '</li>';
+        const binding = includeSource && item.source ? ' ← <code>' + esc(item.source) + '</code>' : '';
+        return '<li><code>' + esc(item.field) + '</code>' + binding + '：' + esc(item.meaning) + '</li>';
+      }).join('');
+      const fieldContract = fields.editable?.length
+        ? '<div class="component-profile"><div><b>真实应用时可改</b><ul>' + fieldItems(fields.editable, true) + '</ul></div><div><b>程序生成／保持固定</b><ul>' + fieldItems(fields.generated) + fieldItems(fields.fixed) + '</ul></div>' + (fields.unavailable?.length ? '<div><b>当前未开放</b><ul>' + fieldItems(fields.unavailable) + '</ul></div>' : '') + '</div>'
+        : '';
+      const skinTypography = DATA.activeSkin?.componentTheme?.typography ?? {};
+      const typeNames = { componentHeading: '编号／强调', componentTitle: '中心主题', componentItemTitle: '节点标题', componentBody: '正文', componentLabel: '标签', componentMeta: '辅助信息' };
+      const typographyContract = '<div class="component-profile"><div><b>当前 Skin 的统一字号</b><ul>' + Object.entries(typeNames).map(([key, label]) => {
+        const designSize = Number(skinTypography[key]);
+        const pointScale = Number(DATA.activeSkin?.pptPointScale);
+        if (!Number.isFinite(designSize) || !Number.isFinite(pointScale)) return '<li>' + esc(label) + '：<code>未读取</code></li>';
+        const pointSize = Math.round(designSize * pointScale * 100) / 100;
+        return '<li>' + esc(label) + '：<code>' + esc(designSize) + ' px / ' + esc(pointSize) + ' pt</code></li>';
+      }).join('') + '</ul></div><div><b>执行规则</b><ul><li>组件只能引用字号角色，不能按 State 自行缩小</li><li>文字超量时压缩、拆页、换组或拒绝</li><li>Native 文本框使用 noAutofit，不自动缩字</li></ul></div></div>';
+      let componentMedia = htmlRoute
+        ? '<div class="review-media component"><span>此资产尚未迁移为专属 HTML 组件</span></div>'
+        : '<div class="review-media component"><span>当前使用原有组件代码</span></div>';
+      let stateButtons = '';
+      let footprint = '';
+      let nativeMedia = previewMarkup(asset, true);
+      let nativeDownload = '';
+      let skinMedia = '<div class="drawer-preview"><span>当前资产没有 Skin State 预览</span></div>';
+      if (asset.componentControls?.length) {
+        const initialSelection = asset.componentInitialSelection ?? {};
+        stateButtons = '<div class="state-switcher" aria-label="审查参数">' + asset.componentControls.map((control) => '<div class="state-control" data-control-key="' + esc(control.key) + '"><b>' + esc(control.label) + '</b>' + control.values.map((value) => {
+          const active = value === initialSelection[control.key];
+          const label = control.valueLabels?.[value] ?? value;
+          return '<button type="button" class="state-button' + (active ? ' active' : '') + '" aria-pressed="' + active + '" data-component-control="' + esc(control.key) + '" data-component-value="' + esc(value) + '">' + esc(label) + '</button>';
+        }).join('') + '</div>').join('') + '</div>';
+        const initialQuery = selectionQuery(initialSelection);
+        const initialStateKey = String(Object.values(initialSelection)[0] ?? '');
+        const initialFootprint = asset.stateFootprints?.[initialStateKey];
+        footprint = '<div class="footprint" data-state-footprint data-footprints="' + esc(JSON.stringify(asset.stateFootprints ?? {})) + '">' + (initialFootprint ? '自然占用：' + esc(initialFootprint.width) + ' × ' + esc(initialFootprint.height) + '（统一 Content Frame 坐标）' : '当前 State 尚未登记自然占用尺寸') + '</div>';
+        if (asset.componentPreviewAvailable && asset.componentPreviewUrl) componentMedia = '<div class="review-media component"><iframe src="' + esc(asset.componentPreviewUrl) + '&' + initialQuery + '" title="' + esc(asset.name) + ' 的实时 HTML 组件"></iframe></div>';
+        if (asset.nativeStatePreviewUrl) {
+          const nativeUrl = asset.nativeStatePreviewUrl + '&' + initialQuery;
+          nativeMedia = '<button type="button" class="drawer-preview preview-open" data-native-preview data-native-base="' + esc(asset.nativeStatePreviewUrl) + '" data-preview-open="' + esc(nativeUrl) + '" data-preview-caption="' + esc(asset.name) + ' · Native 编译结果"><img src="' + esc(nativeUrl) + '" alt="' + esc(asset.name) + ' 的 Native 编译结果"><span hidden>组件 PPT 预览生成失败</span></button>';
+          if (asset.nativeStatePptxUrl) nativeDownload = '<a class="native-download" data-native-download data-native-base="' + esc(asset.nativeStatePptxUrl) + '" href="' + esc(asset.nativeStatePptxUrl + '&' + initialQuery) + '">下载当前 State 的组件 PPTX</a>';
+        }
+        if (asset.skinStatePreviewUrl) {
+          const skinUrl = asset.skinStatePreviewUrl + '&' + initialQuery;
+          skinMedia = '<button type="button" class="drawer-preview preview-open" data-skin-preview data-skin-base="' + esc(asset.skinStatePreviewUrl) + '" data-preview-open="' + esc(skinUrl) + '" data-preview-caption="' + esc(asset.name) + ' · 东北大学 Skin"><img src="' + esc(skinUrl) + '" alt="' + esc(asset.name) + ' 放入东北大学 Skin 后的结果"><span hidden>Skin 预览生成失败</span></button>';
+        }
+      }
+      return '<div class="review-flow"><h3>' + (htmlRoute ? '参考 → 视觉意图 → HTML → Native → Skin' : '来源 → 组件代码 → 可编辑 PPT') + '</h3><p>' + (htmlRoute ? 'HTML 只看提炼后的逻辑与审美意图；Native PPT 只做机械编译。' : '这是旧流程资产；State 直接由现有组件代码生成。') + '</p>'
+        + '<div class="review-stage"><div class="review-stage-head"><b>1 · 来源参考</b><span>用于提炼，不作为 HTML 的直接输入</span></div>' + sourceButtons + sourceMedia + '</div>'
+        + '<div class="review-stage"><div class="review-stage-head"><b>2 · 视觉意图</b><span>逻辑表达方式与审美语言</span></div>' + intentMedia + '</div>'
+        + '<div class="review-stage" data-component-stage data-component-base="' + esc(asset.componentPreviewUrl ?? '') + '"><div class="review-stage-head"><b>3 · ' + (htmlRoute ? 'HTML Structure Group' : '可选 State') + '</b><span>同一组件按数量重新编排</span></div>' + componentProfile + fieldContract + stateButtons + footprint + componentMedia + '</div>'
+        + '<div class="review-stage"><div class="review-stage-head"><b>4 · Native 编译结果</b><span>与 HTML 使用同一 State 参数</span></div>' + nativeMedia + nativeDownload + '</div>'
+        + '<div class="review-stage"><div class="review-stage-head"><b>5 · 东北大学 Skin</b><span>仅用于核对组件进入统一 Shell 后的效果，不作为下载交付物</span></div>' + typographyContract + skinMedia + '</div></div>';
+    }
+
+    function stateSelections(asset) {
+      const controls = asset.componentControls ?? [];
+      let selections = [{}];
+      for (const control of controls) selections = selections.flatMap((selection) => control.values.map((value) => ({ ...selection, [control.key]: value })));
+      return selections.slice(0, 12);
+    }
+
+    function preloadAssetEvidence(asset) {
+      for (const source of asset.sourcePreviewUrls ?? []) { const image = new Image(); image.src = source.url; }
+      for (const selection of stateSelections(asset)) {
+        if (asset.nativeStatePreviewUrl) { const image = new Image(); image.src = asset.nativeStatePreviewUrl + '&' + selectionQuery(selection); }
+        if (asset.skinStatePreviewUrl) { const image = new Image(); image.src = asset.skinStatePreviewUrl + '&' + selectionQuery(selection); }
+      }
+    }
+
+    function activatePreviewImages() {
+      const images = [...document.querySelectorAll(".logic-preview img[data-preview-src]")];
+      const load = (image) => {
+        if (!image.src) image.src = image.dataset.previewSrc;
+        image.removeAttribute("data-preview-src");
+      };
+      if (!("IntersectionObserver" in window)) {
+        images.slice(0, 4).forEach(load);
+        return;
+      }
+      const observer = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          load(entry.target);
+          observer.unobserve(entry.target);
+        }
+      }, { rootMargin: "220px 0px" });
+      images.forEach((image) => observer.observe(image));
+    }
+
+    function renderSummary() {
+      document.getElementById("generated-at").textContent = (liveMode ? "读取于 " : "生成于 ") + new Date(DATA.generatedAt).toLocaleString("zh-CN", { hour12: false });
+      document.getElementById("data-mode").textContent = liveMode ? "实时仓库接口 · 每次刷新重读" : "静态仓库快照 · 不会自动刷新";
+      document.getElementById("hero-mode").textContent = (liveMode ? "实时读取当前仓库" : "当前仓库静态快照") + " · 点击任意 Logic 查看触发与运行详情";
+      document.getElementById("footer-mode").innerHTML = liveMode
+        ? 'PPagenT Logic Dashboard · 数据实时来自仓库；PPT 预览按需生成并按源文件时间缓存'
+        : '当前文件是便携静态快照。双击项目根目录的 <code>PPA看板.exe</code>，才能实时读取仓库并查看 PPT 外观。';
+      if (!liveMode) {
+        const notice = document.getElementById("mode-notice");
+        notice.classList.add("show");
+        notice.innerHTML = '你现在打开的是静态 HTML，因此仓库变化不会自动出现，真实 PPT 预览也不会加载。请双击项目根目录的 <code>PPA看板.exe</code> 打开实时审查看板。开发时仍可使用 <code>npm run assets:dashboard</code>。';
+        document.getElementById("refresh-dashboard").disabled = true;
+        document.getElementById("refresh-dashboard").textContent = "静态快照";
+      }
+      const migrated = DATA.summary.htmlDesignComponents;
+      const total = DATA.summary.formalLogics;
+      const percent = total ? Math.round(migrated / total * 100) : 0;
+      document.getElementById("migration-value").textContent = migrated + " / " + total;
+      document.getElementById("migration-progress").style.width = percent + "%";
+      document.getElementById("migration-caption").textContent = percent + "% 已有资产专属的实时 HTML 设计组件；通用占位组件不计入迁移完成度。";
+      const metrics = [
+        [DATA.summary.coreAssets, "核心资产"], [DATA.summary.formalLogics, "正式结构 Logic"],
+        [DATA.summary.candidateOnly, "仅候选资产"], [DATA.summary.logicSlots, "逻辑能力槽位"],
+        [DATA.summary.compositions, "页面 Composition"], [DATA.summary.sourceDecks, "原始 PPT 文件"],
+      ];
+      document.getElementById("metric-grid").innerHTML = metrics.map(([value, label]) => '<article class="metric"><div class="value">' + value + '</div><div class="label">' + esc(label) + '</div></article>').join("");
+      document.getElementById("auto-callable-pill").textContent = DATA.summary.autoCallable + " 个核心包可自动发现";
+      document.getElementById("approval-count").textContent = DATA.summary.candidateOnly + " 个候选等待审批";
+      document.getElementById("formal-count").textContent = DATA.summary.formalLogics + " 个正式结构能力";
+      document.getElementById("candidate-count").textContent = DATA.summary.logicFilled + " / " + DATA.summary.logicSlots + " 已有合格资产";
+    }
+
+    function renderStores() {
+      document.getElementById("store-grid").innerHTML = DATA.stores.map((store) => '<article class="store"><span class="count">' + store.count + '</span><h3>' + esc(store.name) + '</h3><code>' + esc(store.path) + '</code><p>' + esc(store.role) + '</p></article>').join("");
+    }
+
+    function renderFormalLogics() {
+      document.getElementById("formal-grid").innerHTML = DATA.formalLogics.map((asset) => {
+        const tags = [asset.category, ...asset.baseRelations].filter(Boolean).slice(0, 4);
+        return '<button class="logic-card" data-asset-key="' + esc(asset.library + ":" + asset.id) + '">' + previewMarkup(asset) + '<div>' + intakeStatusPill(asset) + '</div><h3>' + esc(asset.name) + '</h3><div class="logic-id">' + esc(asset.logicId) + ' → ' + esc(asset.structureGroupId) + '</div><div class="range">' + esc(range(asset)) + '</div><div class="tags">' + tags.map((tag) => pill(tag)).join("") + '</div></button>';
+      }).join("");
+    }
+
+    function renderShellMap() {
+      const skin = DATA.activeSkin ?? {};
+      const size = skin.slideSize ?? { width: 1280, height: 720 };
+      const slots = skin.slots ?? {};
+      document.getElementById("skin-id").textContent = skin.id || "未读取 Skin";
+      document.getElementById("shell-map").innerHTML = Object.entries(slots).map(([id, frame]) => {
+        const role = id === "contentFrame" ? "content-frame" : id === "logo" ? "logo" : "shell";
+        const style = "left:" + frame.left / size.width * 100 + "%;top:" + frame.top / size.height * 100 + "%;width:" + frame.width / size.width * 100 + "%;height:" + frame.height / size.height * 100 + "%";
+        return '<div class="shell-slot" data-role="' + role + '" style="' + style + '"><span>' + esc(id) + ' · ' + Math.round(frame.width) + ' × ' + Math.round(frame.height) + '</span></div>';
+      }).join("");
+    }
+
+    function renderPendingApproval() {
+      const grid = document.getElementById("approval-grid");
+      if (!DATA.candidateOnly.length) {
+        grid.innerHTML = '<div class="empty">当前没有等待审批的候选资产。</div>';
+        return;
+      }
+      grid.innerHTML = DATA.candidateOnly.map((asset) => {
+        const tags = [asset.category, ...asset.baseRelations].filter(Boolean).slice(0, 4);
+        return '<button class="logic-card" data-asset-key="' + esc(asset.library + ":" + asset.id) + '">' + candidatePreviewMarkup(asset) + '<div>' + intakeStatusPill(asset) + '</div><h3>' + esc(asset.name) + '</h3><div class="logic-id">' + esc(asset.logicId) + ' → ' + esc(asset.structureGroupId) + '</div><div class="range">' + esc(range(asset)) + '</div><div class="tags">' + tags.map((tag) => pill(tag)).join("") + '</div></button>';
+      }).join("");
+    }
+
+    function renderCoverage() {
+      document.getElementById("coverage-grid").innerHTML = DATA.logics.map((topic) => {
+        const names = topic.assetIds.map((id) => DATA.primaryAssets.find((asset) => asset.id === id)?.name || id);
+        const available = names.length > 0;
+        const status = available ? "已有 " + names.length + " 个合格 Structure Group：" + names.join("、") : "待建设 · 当前没有合格资产";
+        return '<button class="coverage-card ' + (available ? "available" : "empty") + '" data-coverage="' + esc(topic.name) + '"><strong>' + esc(topic.name) + ' · ' + esc(topic.tier) + '</strong><span class="coverage-description">' + esc(topic.description) + '</span><span class="coverage-status">' + esc(status) + '</span></button>';
+      }).join("");
+    }
+
+    function currentRecords() {
+      const needle = state.search.trim().toLowerCase();
+      return DATA.records.filter((asset) => {
+        if (state.library !== "all" && asset.library !== state.library) return false;
+        if (state.category !== "all" && asset.category !== state.category) return false;
+        if (state.renderer !== "all" && asset.renderer !== state.renderer) return false;
+        if (state.coverage && !asset.coverageTags.includes(state.coverage)) return false;
+        if (!needle) return true;
+        const haystack = [asset.name, asset.id, asset.logicId, asset.structureGroupId, ...asset.baseRelations, ...asset.coverageTags].join(" ").toLowerCase();
+        return haystack.includes(needle);
+      });
+    }
+
+    function renderTable() {
+      const records = currentRecords();
+      document.getElementById("result-caption").textContent = "当前显示 " + records.length + " 条记录" + (state.coverage ? "；逻辑能力：" + state.coverage : "") + "。核心库与候选库中同 ID 的历史副本会分别显示。";
+      const emptyMessage = state.coverage ? "该逻辑能力槽位暂时没有合格资产" : "没有符合当前筛选条件的资产";
+      document.getElementById("asset-table").innerHTML = records.length ? records.map((asset) => '<tr data-asset-key="' + esc(asset.library + ":" + asset.id) + '"><td><strong>' + esc(asset.name) + '</strong><small>' + esc(asset.id) + '</small></td><td>' + pill(LABELS[asset.library], asset.library) + (asset.candidateCopyOfCore ? '<small>核心库已有同 ID</small>' : '') + '</td><td><strong>' + esc(asset.logicId) + '</strong><small>' + esc(list(asset.coverageTags)) + '</small></td><td>' + esc(asset.structureGroupId) + '</td><td>' + esc(relationText(asset)) + '<small>' + esc(purposeText(asset)) + '</small></td><td>' + esc(range(asset)) + '</td><td>' + intakeStatusPill(asset) + '</td><td>' + (asset.autoCallable ? pill("是", "core") : pill("否", "candidate")) + '</td></tr>').join("") : '<tr><td colspan="8" class="empty">' + esc(emptyMessage) + '</td></tr>';
+    }
+
+    function renderCatalog() {
+      document.getElementById("composition-list").innerHTML = DATA.compositions.map((item) => pill(item.id)).join("");
+      document.getElementById("purpose-list").innerHTML = DATA.purposes.map((item) => pill(item.key)).join("");
+      document.getElementById("quality-list").innerHTML = pill(DATA.summary.failureCases + " 个失败案例", "candidate") + pill(DATA.summary.contracts + " 份资产契约") + pill(DATA.summary.experimentalVariants + " 个实验变体", "candidate");
+    }
+
+    function detailRows(rows) {
+      return '<dl class="detail-grid">' + rows.map(([label, value]) => '<dt>' + esc(label) + '</dt><dd>' + value + '</dd>').join("") + '</dl>';
+    }
+
+    function openAsset(asset) {
+      if (!asset) return;
+      const source = asset.source ? esc(asset.source.file || "—") + (asset.source.slides?.length ? " · 第 " + esc(asset.source.slides.join("、")) + " 页" : "") : "—";
+      const purposeDetails = asset.purposes?.length ? asset.purposes.map((item) => '<div><code>' + esc(item.key) + '</code> · ' + esc(item.description) + '</div>').join("") : "—";
+      const stateDetails = asset.stateContract ? '<code>' + esc(JSON.stringify(asset.stateContract)) + '</code>' : "—";
+      const mediaDetails = asset.mediaContract ? '<code>' + esc(JSON.stringify(asset.mediaContract)) + '</code>' : "—";
+      const textCapacity = asset.textCapacity ? '<code>' + esc(JSON.stringify(asset.textCapacity)) + '</code>' : "—";
+      const slotContract = asset.slotContract ? '<code>' + esc(JSON.stringify(asset.slotContract)) + '</code>' : "—";
+      document.getElementById("drawer-content").innerHTML = '<div class="drawer-id">' + esc(asset.id) + '</div><h2 id="drawer-title">' + esc(asset.name) + '</h2><div class="drawer-badges">' + pill(LABELS[asset.library], asset.library) + intakeStatusPill(asset) + pill(asset.autoCallable ? "正式生成可调用" : "不进入正式候选", asset.autoCallable ? "core" : "candidate") + '</div>' + reviewWorkflowMarkup(asset)
+        + '<div class="detail-group"><h3>Logic 颗粒度</h3>' + detailRows([["Logic", esc(asset.logicId)], ["Structure Group", esc(asset.structureGroupId)], ["Family / Variant", esc(text(asset.familyId)) + " / " + esc(text(asset.variantId))], ["轮廓", esc(text(asset.silhouette))], ["逻辑能力槽位", esc(list(asset.coverageTags))]]) + '</div>'
+        + '<div class="detail-group"><h3>触发条件</h3>' + detailRows([["基础关系", esc(relationText(asset))], ["页面目的", purposeDetails], ["数量范围", esc(range(asset))], ["文字容量", textCapacity], ["State 规则", stateDetails], ["Content Slots", slotContract], ["媒体约束", mediaDetails], ["允许 Composition", esc(list(asset.compositionIds))]]) + '</div>'
+        + '<div class="detail-group"><h3>语义与边界</h3>' + (asset.semanticContract ? '<div class="detail-note">' + esc(asset.semanticContract) + '</div>' : '<div class="detail-note">当前声明未写语义说明。</div>') + (asset.doNotUseWhen ? '<div class="detail-note" style="margin-top:9px;border-color:#d96c4a;background:#fff6f3"><strong>不要使用：</strong>' + esc(asset.doNotUseWhen) + '</div>' : '') + '</div>'
+        + '<div class="detail-group"><h3>来源与自动化入口</h3>' + detailRows([["来源", source], ["HTML 审查实现", esc(asset.componentPreviewAvailable ? "资产专属 · " + text(asset.componentFidelityStatus) : "尚未迁移")], ["生成入口", esc(text(asset.runtimeEntry || asset.generator))], ["Mapper", esc(text(asset.mapperExport))], ["Component / Builder", esc(text(asset.componentExport || asset.builderExport))], ["示例", esc(text(asset.showcase))], ["Manifest", '<code>' + esc(asset.manifestPath) + '</code>'], ["资产目录", '<code>' + esc(asset.assetDir) + '</code>'], ["审核记录", esc(text(asset.review))]]) + '</div>';
+      document.getElementById("drawer-backdrop").classList.add("open");
+      document.body.style.overflow = "hidden";
+      document.getElementById("drawer-close").focus();
+      preloadAssetEvidence(asset);
+    }
+
+    function closeDrawer() {
+      document.getElementById("drawer-backdrop").classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    function openPreview(trigger) {
+      document.getElementById("preview-lightbox-image").src = trigger.dataset.previewOpen;
+      document.getElementById("preview-lightbox-image").alt = trigger.dataset.previewCaption || "PPT 页面大图";
+      document.getElementById("preview-lightbox-caption").textContent = trigger.dataset.previewCaption || "PPT 页面大图";
+      document.getElementById("preview-lightbox").classList.add("open");
+    }
+
+    function closePreview() {
+      document.getElementById("preview-lightbox").classList.remove("open");
+      document.getElementById("preview-lightbox-image").removeAttribute("src");
+    }
+
+    function populateFilters() {
+      const categories = [...new Set(DATA.records.map((asset) => asset.category))].sort((left, right) => left.localeCompare(right, "zh-CN"));
+      document.getElementById("category-filter").innerHTML += categories.map((category) => '<option value="' + esc(category) + '">' + esc(category) + '</option>').join("");
+    }
+
+    document.addEventListener("click", (event) => {
+      const sourceTarget = event.target.closest("[data-source-preview]");
+      if (sourceTarget) {
+        const stage = sourceTarget.closest(".review-stage");
+        const imageButton = stage?.querySelector("[data-source-image]");
+        const image = imageButton?.querySelector("img");
+        if (image && imageButton) {
+          const sourceStatus = imageButton.querySelector("[data-source-status]");
+          if (sourceStatus) {
+            sourceStatus.hidden = false;
+            sourceStatus.textContent = "正在读取来源 PPT 第 " + sourceTarget.dataset.sourceSlide + " 页…";
+          }
+          image.src = sourceTarget.dataset.sourcePreview;
+          image.hidden = false;
+          imageButton.dataset.previewOpen = sourceTarget.dataset.sourcePreview;
+          imageButton.dataset.previewCaption = image.alt.replace(/第\s*\d+\s*页.*$/, "") + "第 " + sourceTarget.dataset.sourceSlide + " 页";
+        }
+        stage?.querySelectorAll("[data-source-preview]").forEach((button) => button.classList.toggle("active", button === sourceTarget));
+        return;
+      }
+      const previewTarget = event.target.closest("[data-preview-open]");
+      if (previewTarget) {
+        openPreview(previewTarget);
+        return;
+      }
+      const stateTarget = event.target.closest("[data-component-control]");
+      if (stateTarget) {
+        const stage = stateTarget.closest("[data-component-stage]");
+        const flow = stateTarget.closest(".review-flow");
+        const frame = stage?.querySelector("iframe");
+        const status = stage?.querySelector(".review-stage-head span");
+        const controlRow = stateTarget.closest(".state-control");
+        controlRow?.querySelectorAll(".state-button").forEach((button) => {
+          const active = button === stateTarget;
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-pressed", String(active));
+        });
+        const selection = Object.fromEntries([...stage.querySelectorAll(".state-control")].map((row) => {
+          const active = row.querySelector(".state-button.active");
+          return [row.dataset.controlKey, active?.dataset.componentValue ?? ""];
+        }));
+        const summary = [...stage.querySelectorAll(".state-control")].map((row) => row.querySelector(".state-button.active")?.textContent).filter(Boolean).join(" / ");
+        const query = selectionQuery(selection);
+        if (status) status.textContent = "正在显示 " + summary + "…";
+        if (frame) {
+          frame.addEventListener("load", () => { if (status) status.textContent = "当前显示 " + summary; }, { once: true });
+          frame.src = stage.dataset.componentBase + "&" + query + "&refresh=" + Date.now();
+        }
+        const nativeButton = flow?.querySelector("[data-native-preview]");
+        const nativeImage = nativeButton?.querySelector("img");
+        if (nativeButton && nativeImage) {
+          const nativeUrl = nativeButton.dataset.nativeBase + "&" + query + "&refresh=" + Date.now();
+          nativeImage.hidden = false;
+          nativeImage.src = nativeUrl;
+          nativeButton.dataset.previewOpen = nativeUrl;
+        }
+        const nativeDownload = flow?.querySelector("[data-native-download]");
+        if (nativeDownload) nativeDownload.href = nativeDownload.dataset.nativeBase + "&" + query;
+        const skinButton = flow?.querySelector("[data-skin-preview]");
+        const skinImage = skinButton?.querySelector("img");
+        if (skinButton && skinImage) {
+          const skinUrl = skinButton.dataset.skinBase + "&" + query + "&refresh=" + Date.now();
+          skinImage.hidden = false;
+          skinImage.src = skinUrl;
+          skinButton.dataset.previewOpen = skinUrl;
+        }
+        const footprint = stage?.querySelector("[data-state-footprint]");
+        if (footprint) {
+          const footprints = JSON.parse(footprint.dataset.footprints || "{}");
+          const stateKey = String(Object.values(selection)[0] ?? "");
+          const current = footprints[stateKey];
+          footprint.textContent = current
+            ? "自然占用：" + current.width + " × " + current.height + "（统一 Content Frame 坐标）"
+            : "当前 State 尚未登记自然占用尺寸";
+        }
+        return;
+      }
+      const assetTarget = event.target.closest("[data-asset-key]");
+      if (assetTarget) openAsset(byKey.get(assetTarget.dataset.assetKey));
+      const coverageTarget = event.target.closest("[data-coverage]");
+      if (coverageTarget) {
+        state.coverage = coverageTarget.dataset.coverage;
+        state.search = "";
+        state.library = "all";
+        state.category = "all";
+        state.renderer = "all";
+        document.getElementById("search").value = "";
+        document.getElementById("library-filter").value = "all";
+        document.getElementById("category-filter").value = "all";
+        document.getElementById("renderer-filter").value = "all";
+        renderTable();
+        document.getElementById("assets").scrollIntoView({ behavior: "smooth" });
+      }
+      if (event.target.id === "drawer-backdrop" || event.target.id === "drawer-close") closeDrawer();
+      if (event.target.id === "preview-lightbox" || event.target.id === "preview-lightbox-close") closePreview();
+    });
+    document.addEventListener("error", (event) => {
+      if (event.target.matches(".logic-preview img, .drawer-preview img, .review-media img")) {
+        event.target.hidden = true;
+        if (event.target.nextElementSibling) {
+          event.target.nextElementSibling.textContent = event.target.closest("[data-source-image]") ? "来源页预览生成失败" : event.target.nextElementSibling.textContent;
+          event.target.nextElementSibling.hidden = false;
+        }
+      }
+    }, true);
+    document.addEventListener("load", (event) => {
+      if (!event.target.matches("[data-source-image] img")) return;
+      const status = event.target.nextElementSibling;
+      if (status) status.hidden = true;
+    }, true);
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") return;
+      if (document.getElementById("preview-lightbox").classList.contains("open")) closePreview();
+      else closeDrawer();
+    });
+    document.getElementById("refresh-dashboard").addEventListener("click", () => {
+      if (!liveMode) return;
+      document.getElementById("refresh-dashboard").textContent = "正在刷新…";
+      location.reload();
+    });
+    document.getElementById("search").addEventListener("input", (event) => { state.search = event.target.value; state.coverage = null; renderTable(); });
+    document.getElementById("library-filter").addEventListener("change", (event) => { state.library = event.target.value; renderTable(); });
+    document.getElementById("category-filter").addEventListener("change", (event) => { state.category = event.target.value; renderTable(); });
+    document.getElementById("renderer-filter").addEventListener("change", (event) => { state.renderer = event.target.value; renderTable(); });
+
+    renderSummary();
+    renderStores();
+    renderShellMap();
+    renderPendingApproval();
+    renderFormalLogics();
+    activatePreviewImages();
+    renderCoverage();
+    populateFilters();
+    renderTable();
+    renderCatalog();
+  </script>
+</body>
+</html>

@@ -168,7 +168,7 @@ function cueTask(cue) {
     return "提取转化主骨架：初始产物、中间规律或机制、最终能力或结果，必须恰好三个 atoms。atoms 只能是主节点；前文冒号后的表达、容量、变化、禁忌等枚举不是阶段，必须作为中间 atom 的 points，绝不能提升为同级 atom。";
   }
   if (cue.type === "direct-comparison") {
-    return "从标题或核心结论中提取被直接比较的 A、B 双方，必须恰好两个 atoms。使用场景、结论和价值不能取代双方；双方 body 分别保留来源支持的区别，并按原稿明确倾向填写 polarity 与 emphasis。这里只确定对比双方，不输出 points；组内分几条由后续视觉导演依据 Visual Skill 契约决定。";
+    return "从标题或核心结论中提取被直接比较的 A、B 双方，必须恰好两个 atoms。使用场景、结论和价值不能取代双方；双方 body 分别保留来源支持的区别，并按原稿明确倾向填写 polarity 与 emphasis。这里只确定对比双方，不输出 points；组内分几条由后续视觉导演依据 Logic 契约决定。";
   }
   if (cue.type === "category-contrast") return "提取来源中两个不同处境或角色类别，必须恰好两个 atoms。它们是并列类别，不是优劣方案；背景和产品结论不得成为第三项。";
   if (cue.type === "single-thesis") return "提取加粗引文表达的唯一核心判断，必须恰好一个 atom；其余段落只用于压缩说明该判断，不得拆成同级项。";

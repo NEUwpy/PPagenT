@@ -20,7 +20,7 @@ export const academicReportShell = {
   rules: {
     titleDividerY: 147.22,
     bottomRuleY: 689.24,
-    visualSkillFrame: "contentFrame",
+    logicFrame: "contentFrame",
     componentSizing: "responsive-within-frame",
     shellOwned: ["pageNumber", "sectionLabel", "logo", "titleBand", "pageTitle", "bottomReserve"],
     componentOwned: ["contentFrame"],

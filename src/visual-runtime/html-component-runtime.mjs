@@ -47,14 +47,32 @@ function normalizeFrame(frame, label) {
   return { left: frame.left, top: frame.top, width: frame.width, height: frame.height };
 }
 
-function componentDocument(markup, css, frame) {
+function cssString(value, fallback) {
+  return `"${String(value ?? fallback).replaceAll("\\", "\\\\").replaceAll('"', '\\"')}"`;
+}
+
+export function htmlComponentThemeCss(theme = {}) {
+  const typography = theme.typography ?? {};
+  return `:root{
+    --ppagent-font-body:${cssString(theme.font, "Microsoft YaHei")};
+    --ppagent-component-heading-size:${Number(typography.componentHeading ?? 29)}px;
+    --ppagent-component-title-size:${Number(typography.componentTitle ?? 26)}px;
+    --ppagent-component-item-title-size:${Number(typography.componentItemTitle ?? 21)}px;
+    --ppagent-component-body-size:${Number(typography.componentBody ?? 19)}px;
+    --ppagent-component-label-size:${Number(typography.componentLabel ?? 18)}px;
+    --ppagent-component-meta-size:${Number(typography.componentMeta ?? 17)}px;
+  }`;
+}
+
+function componentDocument(markup, css, frame, theme) {
   return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><style>
     html,body{margin:0;width:${frame.width}px;height:${frame.height}px;overflow:hidden;background:transparent}
+    ${htmlComponentThemeCss(theme)}
     ${css}
   </style></head><body>${markup}</body></html>`;
 }
 
-export async function resolveHtmlComponent({ component, parameters, assetDir, targetFrame = null }) {
+export async function resolveHtmlComponent({ component, parameters, assetDir, targetFrame = null, theme = {} }) {
   requireValue(component && typeof component.renderMarkup === "function", "HTML Component 缺少 renderMarkup");
   requireValue(typeof component.cssFile === "string" && component.cssFile, "HTML Component 缺少 cssFile");
   const designFrame = normalizeFrame({
@@ -63,6 +81,11 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
     width: component.designFrame?.width,
     height: component.designFrame?.height,
   }, "component.designFrame");
+  const normalizedTargetFrame = targetFrame ? normalizeFrame(targetFrame, "targetFrame") : null;
+  if (normalizedTargetFrame) {
+    const scale = Math.min(normalizedTargetFrame.width / designFrame.width, normalizedTargetFrame.height / designFrame.height);
+    requireValue(Math.abs(scale - 1) < 0.001, `${component.id ?? "HTML Component"} 必须按自然字号渲染；目标区域不能缩放组件`);
+  }
   const cssPath = path.resolve(assetDir, component.cssFile);
   const relativeCssPath = path.relative(path.resolve(assetDir), cssPath);
   requireValue(relativeCssPath && !relativeCssPath.startsWith("..") && !path.isAbsolute(relativeCssPath), "cssFile 必须位于资产目录内");
@@ -71,7 +94,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
   const browser = await getBrowser();
   const page = await browser.newPage({ viewport: { width: Math.ceil(designFrame.width), height: Math.ceil(designFrame.height) } });
   try {
-    await page.setContent(componentDocument(markup, css, designFrame), { waitUntil: "load" });
+    await page.setContent(componentDocument(markup, css, designFrame, theme), { waitUntil: "load" });
     const tree = await page.evaluate(async () => {
       await document.fonts.ready;
       const root = document.querySelector("[data-ppt-root]");
@@ -156,7 +179,19 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         const style = getComputedStyle(element);
         const base = { kind, name: element.dataset.pptName || `${kind}-${order}`, order };
         if (kind === "path") return pathNode(element, base, style);
-        const frame = element instanceof SVGGraphicsElement ? svgFrame(element) : htmlFrame(element);
+        const frame = kind === "image"
+          ? htmlFrame(element)
+          : element instanceof SVGGraphicsElement ? svgFrame(element) : htmlFrame(element);
+        if (kind === "image") {
+          if (!(element instanceof SVGSVGElement)) throw new Error("data-ppt-kind=image 当前只支持内联 SVG");
+          const clone = element.cloneNode(true);
+          clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+          clone.setAttribute("width", String(Math.max(1, frame.width)));
+          clone.setAttribute("height", String(Math.max(1, frame.height)));
+          clone.style.color = style.color;
+          const encoded = btoa(unescape(encodeURIComponent(clone.outerHTML)));
+          return { ...base, frame, dataUrl: `data:image/svg+xml;base64,${encoded}`, alt: element.dataset.iconKey || base.name };
+        }
         if (kind === "text") {
           return { ...base, frame, text: element.textContent.replace(/\s+/g, " ").trim(), style: textStyle(element, style) };
         }
@@ -177,11 +212,19 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         }
         throw new Error(`不支持的 data-ppt-kind: ${kind}`);
       });
+      const slots = [...root.querySelectorAll("[data-slot-id]")].map((element) => ({
+        id: element.dataset.slotId,
+        role: element.dataset.slotRole || "content",
+        field: element.dataset.slotField || "",
+        itemId: element.dataset.slotItemId || "",
+        frame: htmlFrame(element),
+      }));
       return {
         schemaVersion: 2,
         frame: { width: rounded(rootBox.width), height: rounded(rootBox.height) },
         overflow: root.scrollWidth > root.clientWidth + 1 || root.scrollHeight > root.clientHeight + 1,
         nodes,
+        slots,
       };
     });
     requireValue(!tree.overflow, `${component.id ?? "HTML Component"} 超出设计区域`);
@@ -189,7 +232,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
     return {
       ...tree,
       componentId: component.id,
-      targetFrame: targetFrame ? normalizeFrame(targetFrame, "targetFrame") : null,
+      targetFrame: normalizedTargetFrame,
     };
   } finally {
     await page.close();
@@ -225,7 +268,7 @@ function applyText(shape, node, scale) {
     color: node.style.color,
     alignment: node.style.alignment,
     verticalAlignment: node.style.verticalAlignment,
-    autoFit: "shrinkText",
+    autoFit: "none",
     insets: { top: 0, right: 0, bottom: 0, left: 0 },
   };
 }
@@ -253,6 +296,16 @@ export function compileResolvedVisualTree(slide, tree, targetFrame = tree.target
             { close: {} },
           ],
         }],
+      });
+      continue;
+    }
+    if (node.kind === "image") {
+      slide.images.add({
+        name: node.name,
+        dataUrl: node.dataUrl,
+        alt: node.alt,
+        position,
+        fit: "contain",
       });
       continue;
     }

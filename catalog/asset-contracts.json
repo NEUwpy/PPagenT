@@ -8,7 +8,12 @@
       "metrics": [],
       "semantic": {},
       "relationTraits": {},
-      "density": ["low", "medium", "high", "unknown"]
+      "density": [
+        "low",
+        "medium",
+        "high",
+        "unknown"
+      ]
     },
     "textBudget": {
       "status": "unverified",
@@ -21,197 +26,14 @@
       "tooLong": "defer-to-review"
     },
     "evidence": {
-      "basis": ["metadata", "code", "render"],
+      "basis": [
+        "metadata",
+        "code",
+        "render"
+      ],
       "realManuscriptValidated": false,
       "notes": "当前分类仅基于资产元数据、生成代码和既有渲染，不代表真实稿件验证通过。"
     }
   },
-  "contracts": [
-    {
-      "assetId": "flow-map-001",
-      "abstractionLevel": "composite",
-      "adaptationStatus": "partial",
-      "supportedIntents": { "baseRelations": ["sequence"], "purposeKeys": ["explain_multistage_flow"] },
-      "constraints": {
-        "metrics": [{ "field": "stages", "min": 3, "preferred": [3], "max": 3 }],
-        "semantic": { "ordered": true },
-        "relationTraits": { "branched": true },
-        "density": ["low", "medium"]
-      },
-      "reviewReason": "固定三列的多节点流向，不是普通顺序流程。"
-    },
-    {
-      "assetId": "goal-kpi-map-001",
-      "abstractionLevel": "composite",
-      "adaptationStatus": "partial",
-      "supportedIntents": { "baseRelations": ["hierarchy"], "purposeKeys": ["align_goal_and_metrics"] },
-      "constraints": {
-        "metrics": [{ "field": "rows", "min": 2, "preferred": [2, 3], "max": 3 }],
-        "semantic": { "ordered": true, "sameLevel": false },
-        "density": ["medium"]
-      },
-      "reviewReason": "只适用于目标到策略或指标的映射。"
-    },
-    {
-      "assetId": "business-model-canvas-001",
-      "abstractionLevel": "composite",
-      "adaptationStatus": "fixed",
-      "supportedIntents": { "baseRelations": ["composite"], "purposeKeys": ["explain_business_model"] },
-      "reviewReason": "固定商业模式叙事字段，属于领域复合模板。"
-    },
-    {
-      "assetId": "customer-journey-map-001",
-      "abstractionLevel": "composite",
-      "adaptationStatus": "partial",
-      "supportedIntents": { "baseRelations": ["sequence"], "purposeKeys": ["explain_user_journey"] },
-      "reviewReason": "同时要求阶段、行为、触点、情绪和机会等字段。"
-    },
-    {
-      "assetId": "audience-segmentation-funnel-001",
-      "abstractionLevel": "composite",
-      "adaptationStatus": "fixed",
-      "supportedIntents": { "baseRelations": ["sequence"], "purposeKeys": ["compare_audience_segments"] },
-      "constraints": { "relationTraits": { "converging": true } },
-      "reviewReason": "只适用于上下层人群及对应策略。"
-    },
-    {
-      "assetId": "customer-lifecycle-curve-001",
-      "abstractionLevel": "composite",
-      "adaptationStatus": "partial",
-      "supportedIntents": { "baseRelations": ["sequence"], "purposeKeys": ["explain_lifecycle"] },
-      "constraints": { "relationTraits": { "temporal": true } },
-      "reviewReason": "强调阶段随时间变化的生命周期语义。"
-    },
-    {
-      "assetId": "problem-solution-bowtie-001",
-      "abstractionLevel": "composite",
-      "adaptationStatus": "partial",
-      "supportedIntents": { "baseRelations": ["causal"], "purposeKeys": ["connect_problems_and_solutions"] },
-      "reviewReason": "要求左右问题与方案以及底部持续行动共同存在。"
-    },
-    {
-      "assetId": "evolution-staircase-001",
-      "abstractionLevel": "composite",
-      "adaptationStatus": "partial",
-      "supportedIntents": { "baseRelations": ["sequence"], "purposeKeys": ["explain_evolution"] },
-      "reviewReason": "要求阶段具有递进或升级含义。"
-    },
-    {
-      "assetId": "dual-track-roadmap-001",
-      "abstractionLevel": "composite",
-      "adaptationStatus": "partial",
-      "supportedIntents": { "baseRelations": ["sequence"], "purposeKeys": ["compare_parallel_tracks"] },
-      "constraints": { "relationTraits": { "temporal": true, "dimensions": 2, "secondaryDimension": "other" } },
-      "reviewReason": "需要两条同步演进主线，不能用于单线时间轴。"
-    },
-    {
-      "assetId": "research-method-summary-001",
-      "abstractionLevel": "composite",
-      "adaptationStatus": "fixed",
-      "supportedIntents": { "baseRelations": ["composite"], "purposeKeys": ["summarize_research_method"] },
-      "reviewReason": "参数对应特定研究方法摘要字段。"
-    },
-    {
-      "assetId": "technical-route-flow-001",
-      "abstractionLevel": "composite",
-      "adaptationStatus": "fixed",
-      "supportedIntents": { "baseRelations": ["sequence"], "purposeKeys": ["explain_research_process"] },
-      "constraints": {
-        "metrics": [
-          { "field": "branches", "min": 2, "preferred": [3, 4], "max": 4 },
-          { "field": "inputs", "min": 1, "preferred": [2, 3], "max": 3 }
-        ],
-        "semantic": { "ordered": true },
-        "relationTraits": { "branched": true, "converging": true },
-        "density": ["medium"]
-      },
-      "reviewReason": "属于特定科研叙事模式，不应当作为普通流程语法。"
-    },
-    {
-      "assetId": "concentric-capability-system-001",
-      "abstractionLevel": "composite",
-      "adaptationStatus": "partial",
-      "supportedIntents": { "baseRelations": ["hub", "layered"], "purposeKeys": ["explain_capability_system"] },
-      "reviewReason": "同时表达中心能力与外层能力环。"
-    },
-    {
-      "assetId": "theory-integration-framework-001",
-      "abstractionLevel": "composite",
-      "adaptationStatus": "fixed",
-      "supportedIntents": { "baseRelations": ["composite"], "purposeKeys": ["integrate_theories"] },
-      "reviewReason": "只适用于多理论或多文献域的整合。"
-    },
-    {
-      "assetId": "geographic-network-001",
-      "abstractionLevel": "composite",
-      "adaptationStatus": "partial",
-      "supportedIntents": { "baseRelations": ["network"], "purposeKeys": ["explain_geographic_distribution"] },
-      "reviewReason": "要求地点和路径具有真实地域含义。"
-    },
-
-    {
-      "assetId": "dual-core-enablement-001",
-      "abstractionLevel": "deferred",
-      "status": "draft",
-      "adaptationStatus": "partial",
-      "supportedIntents": { "baseRelations": ["composite"], "purposeKeys": [] },
-      "constraints": {
-        "metrics": [
-          { "field": "groups", "min": 2, "preferred": [2], "max": 2 },
-          { "field": "itemsPerGroup", "min": 1, "preferred": [4, 6], "max": 6 }
-        ],
-        "semantic": { "sameLevel": true }
-      },
-      "reviewReason": "第 31 页来源明确且已完成参数化，但共同输入、双核心和共同目标的真实稿件适用边界尚未验证，暂不参与选择。"
-    },
-    {
-      "assetId": "end-to-end-operations-001",
-      "abstractionLevel": "deferred",
-      "status": "draft",
-      "adaptationStatus": "fixed",
-      "supportedIntents": { "baseRelations": ["composite"], "purposeKeys": ["explain_end_to_end_operations"] },
-      "reviewReason": "业务字段多且适用边界未通过真实稿件确认，暂不参与选择。"
-    },
-    {
-      "assetId": "internal-external-ecosystem-001",
-      "abstractionLevel": "deferred",
-      "status": "draft",
-      "adaptationStatus": "fixed",
-      "supportedIntents": { "baseRelations": ["composite"], "purposeKeys": ["explain_internal_external_ecosystem"] },
-      "reviewReason": "表达逻辑与视觉骨架尚未抽成稳定契约，暂不参与选择。"
-    },
-    {
-      "assetId": "omnichannel-domain-model-001",
-      "abstractionLevel": "deferred",
-      "status": "draft",
-      "adaptationStatus": "fixed",
-      "supportedIntents": { "baseRelations": ["composite"], "purposeKeys": ["explain_omnichannel_domains"] },
-      "reviewReason": "领域专用字段过多，尚未证明可迁移性。"
-    },
-    {
-      "assetId": "experience-layer-model-001",
-      "abstractionLevel": "deferred",
-      "status": "draft",
-      "adaptationStatus": "fixed",
-      "supportedIntents": { "baseRelations": ["layered"], "purposeKeys": ["explain_experience_layers"] },
-      "reviewReason": "与通用分层语法的边界尚未厘清。"
-    },
-    {
-      "assetId": "conclusion-bands-001",
-      "abstractionLevel": "deferred",
-      "status": "draft",
-      "adaptationStatus": "partial",
-      "supportedIntents": { "baseRelations": ["parallel"], "purposeKeys": ["present_layered_conclusions"] },
-      "reviewReason": "当前更像视觉排布，尚未证明独立表达语法价值。"
-    },
-    {
-      "assetId": "phase-strategy-timeline-001",
-      "abstractionLevel": "deferred",
-      "status": "draft",
-      "adaptationStatus": "fixed",
-      "supportedIntents": { "baseRelations": ["sequence"], "purposeKeys": ["align_phases_and_actions"] },
-      "constraints": { "relationTraits": { "temporal": true, "dimensions": 2, "secondaryDimension": "other" } },
-      "reviewReason": "阶段、时期和行动泳道的组合边界尚未验证。"
-    }
-  ]
+  "contracts": []
 }

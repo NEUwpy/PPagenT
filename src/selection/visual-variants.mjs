@@ -11,8 +11,8 @@ export async function loadVisualVariantCatalog(root = process.cwd()) {
   const packages = await discoverCoreAssetPackages(root);
   const packagedKeys = new Set(packages.map((item) => `${item.assetId}:${item.runtime.variantId}`));
   const packagedVariants = packages.map((item) => ({
-    skillId: item.runtime.skillId ?? item.runtime.familyId,
-    styleGroupId: item.runtime.styleGroupId ?? item.runtime.variantId,
+    logicId: item.runtime.logicId ?? "skin",
+    structureGroupId: item.runtime.structureGroupId ?? item.runtime.variantId,
     familyId: item.runtime.familyId,
     assetId: item.assetId,
     variantId: item.runtime.variantId,
@@ -97,8 +97,8 @@ export async function listRenderableVisualVariants(options = {}) {
 
 export function queryVisualVariants(variants, query = {}) {
   let filtered = variants.filter((variant) => {
-    if (query.skillId && variant.skillId !== query.skillId) return false;
-    if (query.styleGroupId && variant.styleGroupId !== query.styleGroupId) return false;
+    if (query.logicId && variant.logicId !== query.logicId) return false;
+    if (query.structureGroupId && variant.structureGroupId !== query.structureGroupId) return false;
     if (query.familyId && variant.familyId !== query.familyId) return false;
     if (query.assetId && variant.assetId !== query.assetId) return false;
     if (query.baseRelation && !variant.supportedBaseRelations?.includes(query.baseRelation)) return false;
@@ -136,13 +136,13 @@ function preferredDistance(variant, itemCount) {
 function selectionScore(variant, itemCount, history) {
   const previous = history.at(-1);
   const silhouetteFrequency = history.filter((entry) => entry.silhouette === variant.silhouette).length;
-  const styleGroupFrequency = history.filter((entry) => (
-    (entry.styleGroupId ?? entry.variantId) === variant.styleGroupId
+  const structureGroupFrequency = history.filter((entry) => (
+    entry.structureGroupId === variant.structureGroupId
   )).length;
   return [
     Number(previous?.silhouette === variant.silhouette),
     silhouetteFrequency,
-    styleGroupFrequency,
+    structureGroupFrequency,
     preferredDistance(variant, itemCount),
     variant.variantId,
   ];
@@ -155,8 +155,8 @@ function compareScore(left, right) {
   return left.at(-1).localeCompare(right.at(-1));
 }
 
-function rankVisualVariantCandidates({ skillId, styleGroupId, familyId, assetId, itemCount, baseRelation, purposeKey, history = [], variants }) {
-  const candidates = queryVisualVariants(variants, { skillId, styleGroupId, familyId, assetId, itemCount, baseRelation, purposeKey });
+function rankVisualVariantCandidates({ logicId, structureGroupId, familyId, assetId, itemCount, baseRelation, purposeKey, history = [], variants }) {
+  const candidates = queryVisualVariants(variants, { logicId, structureGroupId, familyId, assetId, itemCount, baseRelation, purposeKey });
   return candidates
     .map((variant) => ({ variant, score: selectionScore(variant, itemCount, history) }))
     .sort((left, right) => compareScore(left.score, right.score))
@@ -165,8 +165,8 @@ function rankVisualVariantCandidates({ skillId, styleGroupId, familyId, assetId,
 
 function candidateSummary(variant) {
   return {
-    skillId: variant.skillId,
-    styleGroupId: variant.styleGroupId,
+    logicId: variant.logicId,
+    structureGroupId: variant.structureGroupId,
     variantId: variant.variantId,
     silhouette: variant.silhouette,
     builderKey: variant.builderKey,
@@ -178,7 +178,7 @@ function resultWithIssue(request, status, candidates, code, message) {
     pageId: request.pageId,
     status,
     familyId: request.familyId,
-    skillId: request.skillId ?? request.familyId,
+    logicId: request.logicId,
     assetId: request.assetId ?? candidates[0]?.assetId ?? null,
     itemCount: request.itemCount,
     candidates: candidates.map(candidateSummary),
@@ -206,18 +206,18 @@ export function planVisualVariants(requests, options) {
         "no-renderable-variant",
         `${request.familyId ?? request.assetId} 没有支持 ${request.itemCount} 个内容项的可渲染视觉变体`,
       );
-    } else if (!request.visualStyleGroupId && !request.visualVariantId) {
+    } else if (!request.visualStructureGroupId) {
       result = resultWithIssue(
         request,
         "needs-director-decision",
         candidates,
         "missing-visual-variant",
-        "视觉导演尚未为该页指定 visualVariantId",
+        "视觉导演尚未为该页指定 visualStructureGroupId",
       );
     } else {
-      const requestedStyleGroup = request.visualStyleGroupId ?? request.visualVariantId;
+      const requestedStructureGroup = request.visualStructureGroupId;
       const selected = candidates.find((variant) => (
-        variant.styleGroupId === requestedStyleGroup || variant.variantId === requestedStyleGroup
+        variant.structureGroupId === requestedStructureGroup
       ));
       if (!selected) {
         result = resultWithIssue(
@@ -225,7 +225,7 @@ export function planVisualVariants(requests, options) {
           "invalid-director-decision",
           candidates,
           "unsupported-visual-variant",
-          `${requestedStyleGroup} 不满足当前表达能力、运行能力或内容数量约束`,
+          `${requestedStructureGroup} 不满足当前表达能力、运行能力或内容数量约束`,
         );
       } else {
         const previous = history.at(-1);
@@ -255,8 +255,8 @@ export function planVisualVariants(requests, options) {
             pageId: request.pageId,
             status: "accepted",
             familyId: selected.familyId,
-            skillId: selected.skillId,
-            styleGroupId: selected.styleGroupId,
+            logicId: selected.logicId,
+            structureGroupId: selected.structureGroupId,
             assetId: selected.assetId,
             itemCount: request.itemCount,
             variantId: selected.variantId,

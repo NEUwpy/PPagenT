@@ -1,11 +1,4 @@
-import {
-  buildCausalChain,
-  buildRadialHubSplitWing,
-  buildRoleHandoff,
-  buildSequentialProcessRibbon,
-  buildSequentialProcessStaircase,
-  renderComponentIntoSlide,
-} from "../asset-runtime/component-builders.mjs";
+import { renderComponentIntoSlide } from "../asset-runtime/component-builders.mjs";
 import { discoverCoreAssetPackages } from "./core-asset-packages.mjs";
 import {
   closeHtmlComponentRuntime,
@@ -18,13 +11,7 @@ const DEFAULT_SOURCE_FRAMES = new Map();
 const VARIANT_SOURCE_FRAMES = new Map();
 const HTML_COMPONENTS = new Map();
 
-const VARIANT_BUILDERS = new Map([
-  ["radial-hub-001:split-wing", buildRadialHubSplitWing],
-  ["sequential-process-001:ribbon", buildSequentialProcessRibbon],
-  ["sequential-process-001:staircase", buildSequentialProcessStaircase],
-  ["sequential-process-001:role-handoff", buildRoleHandoff],
-  ["sequential-process-001:causal-chain", buildCausalChain],
-]);
+const VARIANT_BUILDERS = new Map();
 
 const CORE_ASSET_PACKAGES = await discoverCoreAssetPackages();
 const CORE_SKIN_ASSET_IDS = new Set(
@@ -78,6 +65,7 @@ export async function renderStructureAsset(slide, renderPayload, skin, targetFra
       ...htmlComponent,
       parameters: renderPayload.parameters,
       targetFrame,
+      theme: skin.componentTheme,
     });
     return compileResolvedVisualTree(slide, tree, targetFrame);
   }

@@ -30,13 +30,13 @@ export function normalizeCycleParameters(parameters) {
     const body = text(step?.body);
     const points = pointRows(step);
     if (!title) throw new Error(`steps[${index}].title 不能为空`);
-    if (title.length > 10) throw new Error(`steps[${index}].title 超过 10 字`);
-    if (body.length > 22) throw new Error(`steps[${index}].body 超过 22 字`);
+    if (title.length > 8) throw new Error(`steps[${index}].title 超过 8 字`);
+    if (body.length > 14) throw new Error(`steps[${index}].body 超过 14 字`);
     if (points.length > 4) throw new Error(`steps[${index}].points 最多 4 条`);
-    if (points.some((point) => point.length > 22)) throw new Error(`steps[${index}].points 单条超过 22 字`);
+    if (points.some((point) => point.length > 14)) throw new Error(`steps[${index}].points 单条超过 14 字`);
     if (!body && !points.length) throw new Error(`steps[${index}] 至少需要 body 或一条 points`);
     if ((Array.isArray(step?.details) && step.details.length) || (Array.isArray(step?.metrics) && step.metrics.length)) {
-      throw new Error(`steps[${index}] 基础循环只接受 body/points；标签、说明和指标属于独立的嵌套 Style Group`);
+      throw new Error(`steps[${index}] 基础循环只接受 body/points；标签、说明和指标属于独立的嵌套 Structure Group`);
     }
     return {
       key: text(step?.key) || `step-${index + 1}`,
@@ -47,9 +47,13 @@ export function normalizeCycleParameters(parameters) {
       copyLines: [body, ...points].filter(Boolean),
     };
   });
-  const center = Array.isArray(parameters.centerLabel)
-    ? parameters.centerLabel.map(text).filter(Boolean).slice(0, 2)
-    : text(parameters.center ?? parameters.title).split(/\s+/u).filter(Boolean).slice(0, 2);
+  const centerText = text(parameters.center ?? parameters.title);
+  if (centerText.length > 12) throw new Error("center 超过 12 字");
+  const centerTokens = centerText.split(/\s+/u).filter(Boolean);
+  if (centerTokens.length > 2 || centerTokens.some((line) => line.length > 6)) throw new Error("center 最多两行且每行不超过 6 字");
+  const center = centerTokens.length === 1 && centerTokens[0].length > 6
+    ? [centerTokens[0].slice(0, Math.ceil(centerTokens[0].length / 2)), centerTokens[0].slice(Math.ceil(centerTokens[0].length / 2))]
+    : centerTokens;
   return {
     title: text(parameters.title) || "循环闭环",
     centerLabel: center.length ? center : ["持续改进", "循环"],

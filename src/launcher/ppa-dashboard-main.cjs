@@ -15,7 +15,7 @@ function option(name, fallback = "") {
 
 function isProjectRoot(candidate) {
   return fs.existsSync(path.join(candidate, "package.json"))
-    && fs.existsSync(path.join(candidate, "src", "tools", "serve-visual-skill-dashboard.mjs"));
+    && fs.existsSync(path.join(candidate, "src", "tools", "serve-logic-dashboard.mjs"));
 }
 
 function findProjectRoot(explicitRoot = "") {
@@ -45,7 +45,7 @@ const modeRoot = findProjectRoot(option("--root"));
 if (args[0] === "--serve") {
   if (!modeRoot) throw new Error("找不到 PPagenT 项目根目录。");
   const port = option("--port", "4192");
-  const serverPath = path.join(modeRoot, "src", "tools", "serve-visual-skill-dashboard.mjs");
+  const serverPath = path.join(modeRoot, "src", "tools", "serve-logic-dashboard.mjs");
   loadProjectModule(modeRoot, serverPath, ["--root", modeRoot, "--port", port]);
 } else if (args[0] === "--render-preview") {
   if (!modeRoot) throw new Error("找不到 PPagenT 项目根目录。");
@@ -101,12 +101,41 @@ function isPortFree(port) {
 }
 
 function openDashboard(url) {
-  const child = spawn("explorer.exe", [url], {
+  const child = spawn("rundll32.exe", ["url.dll,FileProtocolHandler", url], {
     detached: true,
     stdio: "ignore",
-    windowsHide: true,
+    windowsHide: false,
   });
   child.unref();
+}
+
+async function stopExistingDashboards(root) {
+  const stoppedPorts = [];
+  for (let port = 4192; port <= 4202; port += 1) {
+    const health = await getHealth(port);
+    if (health?.status !== "ok" || normalize(health.root) !== normalize(root)) continue;
+    if (!Number.isInteger(health.pid) || health.pid <= 0 || health.pid === process.pid) {
+      throw new Error(`端口 ${port} 上的旧看板没有可用进程号，无法安全重启。`);
+    }
+    try {
+      process.kill(health.pid);
+    } catch (error) {
+      if (error.code !== "ESRCH") throw error;
+    }
+    stoppedPorts.push(port);
+  }
+
+  for (const port of stoppedPorts) {
+    for (let attempt = 0; attempt < 40; attempt += 1) {
+      if (await isPortFree(port)) break;
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      if (attempt === 39) throw new Error(`旧看板端口 ${port} 未能及时释放。`);
+    }
+  }
+}
+
+function dashboardUrl(port) {
+  return `http://${host}:${port}/?launch=${Date.now()}#approval`;
 }
 
 async function waitForDashboard(port, root) {
@@ -122,15 +151,11 @@ async function launch() {
   const root = modeRoot;
   if (!root) throw new Error("请把 PPA看板.exe 保留在 PPagenT 项目根目录内。");
 
+  await stopExistingDashboards(root);
+
   let selectedPort = null;
   for (let port = 4192; port <= 4202; port += 1) {
     const health = await getHealth(port);
-    if (health?.status === "ok" && normalize(health.root) === normalize(root)) {
-      const url = `http://${host}:${port}/#formal`;
-      if (!args.includes("--no-open")) openDashboard(url);
-      else console.log(url);
-      return;
-    }
     if (!health && await isPortFree(port)) {
       selectedPort = port;
       break;
@@ -148,7 +173,7 @@ async function launch() {
   child.unref();
   await waitForDashboard(selectedPort, root);
 
-  const url = `http://${host}:${selectedPort}/#formal`;
+  const url = dashboardUrl(selectedPort);
   if (!args.includes("--no-open")) openDashboard(url);
   else console.log(url);
 }

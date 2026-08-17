@@ -1,0 +1,21 @@
+export const northeasternUniversityTheme = Object.freeze({
+  background: "#FFFFFF",
+  surface: "#FFFFFF",
+  accent: "#2F5EA8",
+  accentAlt: "#4C88E8",
+  accentSoft: "#DCE9FA",
+  cyan: "#78AEEF",
+  dark: "#2B2B2B",
+  body: "#404040",
+  muted: "#6F7D91",
+  line: "#AFC6E8",
+  font: "Microsoft YaHei",
+  typography: Object.freeze({
+    componentHeading: 29,
+    componentTitle: 26,
+    componentItemTitle: 21,
+    componentBody: 19,
+    componentLabel: 18,
+    componentMeta: 17,
+  }),
+});

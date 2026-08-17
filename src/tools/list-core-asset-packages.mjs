@@ -15,8 +15,8 @@ console.log(JSON.stringify({
   formalCandidates: packages.length,
   assets: packages.map((item) => ({
     assetId: item.assetId,
-    skillId: item.runtime.skillId ?? item.runtime.familyId,
-    styleGroupId: item.runtime.styleGroupId ?? item.runtime.variantId,
+    logicId: item.runtime.logicId ?? "skin",
+    structureGroupId: item.runtime.structureGroupId ?? item.runtime.variantId,
     familyId: item.runtime.familyId,
     variantId: item.runtime.variantId,
     relations: item.runtime.supportedBaseRelations,
