@@ -20,7 +20,7 @@
 5. **数量变化必须重新求解。** 从 content 中识别重复单元和层级，使用一个 `render(data)` 或等价入口按数量重新计算角度、网格、间距、连接和文字姿态。不得为每个数量维护独立页面，也不得只做等比缩放。
 6. **只复现来源精髓，不复制 Shell。** 只生成指定 Content Frame；不生成页标题、Logo、页脚、页码、方案名、审查控件或实验说明。
 7. **可填区域与父拓扑同源。** 若 visual-intent 声明了可填区域，必须从当前 State 的同一布局参数计算其实际 frame，并在对应 DOM 容器上写稳定的 `data-content-slot-id` 与语义角色。不得把整个装饰面、被父主体遮住的部分或视觉内边距算进可填空间，也不得为 Native 端另写一份坐标。
-8. **所有可替换字段必须可被看板自动发现。** 中心主题、节点标题、正文、分点、图标和媒体等真实可编辑区域，必须直接在最终可见 DOM/SVG 元素上声明稳定的 `data-slot-id`、`data-slot-role` 和 `data-slot-field`；重复项同时声明 `data-slot-item-id`。看板从最终 DOM 自动读取容器位置和尺寸，并复用到 Native/Skin 预览，不接受为看板另写容器坐标表。
+8. **所有可替换字段必须暴露完整 Slot Contract。** 中心主题、节点标题、正文、分点、图标和媒体等真实可编辑区域，必须直接在最终可见 DOM/SVG 元素上声明稳定的 `data-slot-id / data-slot-role / data-slot-field`；重复项同时声明 `data-slot-item-id`。文字槽还声明 `data-slot-content-type=text / data-slot-max-chars / data-slot-max-lines`；图标槽声明 `data-slot-content-type=icon / data-slot-provider / data-slot-required`。这些值必须与组件实际拒绝超量输入的规则一致。看板、视觉导演和 Native 编译从同一 DOM 自动读取，不接受另写一张容器坐标或容量表。
 
 在写代码前，先在内部建立一份精简的“场景层级清单”：把 visual-intent 中每个产生可见轮廓的主体、支持区、遮罩/裁切、连接、覆盖层、文字轨道和负空间，对应到一个真实 DOM/SVG 实体或一条明确的几何规则。只声明 CSS 类、只保留数据、或只在注释里提到，都不算实现。若视觉意图说明某个凹口由遮罩切出，就必须真的存在遮罩、clipPath 或等价布尔几何；不能让两个较短的矩形碰巧留下空白来冒充。
 
@@ -78,4 +78,4 @@
 
 ## 输入与产物约定
 
-调用时提供 `visual-intent.md`、结构化内容和 Content Frame 尺寸。输出保存为候选资产目录的 HTML 组件。先以黄金状态确定设计语言，再由同一组件扩展主要 State；每个 State 同时输出自然占用宽高、最小可用宽高和文字容量。看板最终统一呈现 HTML State、Native 结果和 Skin 结果，用户确认后才能入库。
+调用时提供 `visual-intent.md`、结构化内容和 Content Frame 尺寸。输出保存为候选资产目录的 HTML 组件。先以黄金状态确定设计语言，再由同一组件扩展主要 State；每个 State 同时输出自然占用宽高、最小可用宽高和 Slot Contract。看板统一呈现 HTML、Native、Skin 及其字段、尺寸、容量和媒体要求；用户确认这份运行能力后才能入库。

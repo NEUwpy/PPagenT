@@ -270,6 +270,7 @@ export function createModelDirectorProvider({
           executionGuidelines: guidelines.visual ?? "",
           semanticRefinementAllowed: input.semanticRefinementAllowed === true,
           semanticRefinementGuidance: "仅当所选候选允许 points，且 sourceText 明确含有属于某个主节点、但 PageContent 尚未提取的二级枚举时，才输出 semanticRefinementRequests。请求必须引用所选候选的 familyId/variantId 和缺失 points 的 itemIds；不得为丰富画面请求细节，不得请求 adaptationOwner=visual-director 的绑定型候选。即使发出请求，也必须照常输出完整 VisualPlan 与 CompositionPlan。",
+          slotPlanningGuidance: "候选的 slotCapabilities 是正式排版合同。选择 HTML Structure Group 后，必须按其中 textSlots 的 role、maxChars、maxLines，为每个被组件承载的来源字段输出 CompositionPlan.componentText；sourceFragment 逐字引用对应来源字段，text 是实际进入 PPT 的精炼文字。不得超过容量，不能靠缩字。存在必填 mediaSlots.icon 时还必须输出对应 iconQueries；若无法忠实压缩到容量内，应改选其他 Structure Group、正文 Composition 或拆页，不能硬塞。",
           attempt: input.attempt,
           skinId: input.skinId,
           deckPlan: input.deckPlan,

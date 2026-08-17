@@ -57,6 +57,8 @@ test("循环 HTML 由通用 DOM 编译器直接生成可编辑 Native 形状", a
     assert.equal(tree.nodes.find((node) => node.name === "cycle-title-0")?.style.fontSize, 21);
     assert.equal(tree.nodes.find((node) => node.name === "cycle-core-text-0")?.style.fontSize, 26);
     assert.equal(tree.nodes.find((node) => node.name === "cycle-0-copy-line-0")?.style.fontSize, 19);
+    assert.deepEqual(tree.slots.find((slot) => slot.role === "center-title")?.capacity, { maxChars: 12, maxLines: 2 });
+    assert.deepEqual(tree.slots.find((slot) => slot.role === "item-title")?.capacity, { maxChars: 8, maxLines: 1 });
 
     const presentation = createPresentation();
     const slide = presentation.slides.add();
@@ -121,6 +123,10 @@ test("并列组件的文字与图标槽由最终 DOM 派生，并编译为原生
     });
     assert.equal(tree.slots.length, 12);
     assert.equal(tree.slots.filter((slot) => slot.role === "icon").length, 4);
+    assert.ok(tree.slots.filter((slot) => slot.role === "icon").every((slot) => (
+      slot.media?.provider === "tabler-icons" && slot.media.required === true
+    )));
+    assert.deepEqual(tree.slots.find((slot) => slot.role === "item-body")?.capacity, { maxChars: 30, maxLines: 4 });
     assert.equal(tree.nodes.filter((node) => node.kind === "image").length, 4);
 
     const presentation = createPresentation();

@@ -28,7 +28,9 @@ flowchart LR
 
 核心资产包正式登记 `logicId / structureGroupId / stateContract`，候选发现结果也暴露这些字段。State 仍由程序根据内容与父容器确定性求解，不由导演逐页重画。
 
-Slot Map 不是第二份手工登记表。Shell 槽位直接读取 Shell 代码；Structure Group 的文字、图标等槽位直接读取最终 HTML DOM 中的 `data-slot-id / data-slot-role / data-slot-field` 属性及浏览器求解后的真实矩形。看板自动生成容器清单，并把同一组矩形叠加到 HTML、Native 和 Skin 预览；资产代码只声明一次，不为看板另写坐标或逐资产编译容器图。
+Slot Map 不是第二份手工登记表。Structure Group 的文字、图标等槽位直接读取最终 HTML DOM 中的 `data-slot-*`：身份、字段、内容类型、字数／行数、媒体要求及浏览器求解后的真实矩形。看板、视觉导演能力卡和 Native 编译共用这份声明；资产代码只声明一次。
+
+这里的可编辑 Slot Contract 与后文二层 Content Slot 不同：前者描述当前组件已有文字和图标怎样填充；后者描述父结构中未来可继续放置子内容的区域。正式生成已经使用前者规划 `componentText` 与 `iconQueries`，后者当前仍固定使用普通文字兜底。
 
 ## 二、当前固定 Shell
 
@@ -65,7 +67,7 @@ Slot Map 不是第二份手工登记表。Shell 槽位直接读取 Shell 代码�
 
 一个 Structure Group 不是一张图，也不是一个数量状态。核心包固定由六类信息构成：
 
-1. `asset.json`：保存来源文件与页码、Logic / Structure Group 身份、语义与容量契约、State 控件、空间占用、可选 `slotContract` 和 HTML Component 入口。
+1. `asset.json`：保存来源文件与页码、Logic / Structure Group 身份、语义边界、State 控件、空间占用、可选二层 `slotContract` 和 HTML Component 入口；HTML 组件的具体文字容量由组件自身导出，不在这里再抄一份。
 2. `review.mjs`（或等价 HTML 组件入口）：保存建设期审美组件、可替换内容和 State 参数解析；一组只有一份组件代码，不按二项、三项、四项分别维护。
 3. 通用 HTML → ResolvedVisualTree → Native 编译器：读取浏览器已经求解的 DOM/CSS、SVG 几何和文字样式，机械转换为原生 PowerPoint 对象。
 4. 一份共享预览输入：由 `previewParametersExport` 和 `previewResolverExport` 暴露，使 HTML 与 Builder 接收同一组内容和 State 选择。

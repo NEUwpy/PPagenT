@@ -166,7 +166,91 @@ test("循环父候选向视觉导演暴露 Slot 契约但不开放子结构绑�
   assert.equal(cycle?.slotContract?.resolverExport, "resolveContentSlots");
   assert.equal(cycle?.slotContract?.maxDepth, 1);
   assert.equal(cycle?.slotContract?.fallback, "plain-text");
+  assert.deepEqual(cycle?.slotCapabilities?.textSlots.map((slot) => ({ role: slot.role, maxChars: slot.maxChars, maxLines: slot.maxLines })), [
+    { role: "center-title", maxChars: 12, maxLines: 2 },
+    { role: "item-title", maxChars: 8, maxLines: 1 },
+    { role: "item-body", maxChars: 14, maxLines: 1 },
+    { role: "item-point", maxChars: 14, maxLines: 1 },
+  ]);
+  assert.deepEqual(cycle?.slotCapabilities?.mediaSlots, []);
   assert.equal("slotBindings" in cycle, false);
+});
+
+test("视觉导演按 Slot Contract 精炼组件文字后才允许进入渲染", async () => {
+  const page = content("cycle-adaptation", [
+    { id: "plan", title: "计划阶段目标设定说明", body: "先识别当前约束条件并明确本轮改进目标" },
+    { id: "do", title: "执行阶段任务推进说明", body: "围绕重点任务同步责任分工并推进实施" },
+    { id: "check", title: "检查阶段结果核对说明", body: "对照既定目标核对执行结果和关键偏差" },
+  ]);
+  page.title = "面向复杂任务的持续改进循环机制";
+  const draft = intentDraft("cycle-adaptation-intent", "explain_cycle", "sequence", {
+    ordered: true,
+    sameLevel: true,
+  });
+  draft.relationTraits.cyclic = true;
+  const intent = enrichPageIntent(draft, page);
+  const [candidateSet] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
+  const candidate = candidateSet.candidates.find((item) => item.assetId === "cycle-loop-001");
+  assert.ok(candidate, "原文超过组件容量时仍应把容量合同交给视觉导演，而不是提前隐藏候选");
+  const componentText = [
+    { sourceField: "page-title", targetRole: "center-title", text: "持续改进", sourceFragment: "持续改进" },
+    { sourceItemId: "plan", sourceField: "title", targetRole: "item-title", text: "设定目标", sourceFragment: "目标设定" },
+    { sourceItemId: "plan", sourceField: "body", targetRole: "item-body", text: "识别约束并明确目标", sourceFragment: "识别当前约束条件" },
+    { sourceItemId: "do", sourceField: "title", targetRole: "item-title", text: "推进执行", sourceFragment: "执行阶段" },
+    { sourceItemId: "do", sourceField: "body", targetRole: "item-body", text: "同步分工推进实施", sourceFragment: "同步责任分工" },
+    { sourceItemId: "check", sourceField: "title", targetRole: "item-title", text: "检查结果", sourceFragment: "检查阶段" },
+    { sourceItemId: "check", sourceField: "body", targetRole: "item-body", text: "核对结果与关键偏差", sourceFragment: "核对执行结果和关键偏差" },
+  ];
+  const common = {
+    root,
+    pageContents: [page],
+    pageIntents: [intent],
+    candidateSets: [{ ...candidateSet, candidates: [candidate] }],
+    visualPlan: { pages: [{
+      pageId: page.pageId,
+      intentId: intent.intentId,
+      familyId: candidate.familyId,
+      variantId: candidate.variantId,
+      silhouette: candidate.silhouette,
+    }] },
+  };
+  const compositionPage = {
+    pageId: page.pageId,
+    intentId: intent.intentId,
+    compositionId: "component-full",
+    componentItemIds: page.items.map((item) => item.id),
+    componentContentMode: "full",
+    textSlots: [],
+    componentText,
+    reason: "按当前三项 State 的 Slot Contract 精炼",
+  };
+  const accepted = await resolveVisualPlan({ ...common, compositionPlan: { pages: [compositionPage] } });
+  assert.equal(accepted.status, "accepted");
+  assert.equal(accepted.renderPayloads[0].parameters.center, "持续改进");
+  assert.deepEqual(accepted.renderPayloads[0].parameters.steps.map((item) => [item.title, item.body]), [
+    ["设定目标", "识别约束并明确目标"],
+    ["推进执行", "同步分工推进实施"],
+    ["检查结果", "核对结果与关键偏差"],
+  ]);
+
+  const missing = await resolveVisualPlan({
+    ...common,
+    compositionPlan: { pages: [{ ...compositionPage, componentText: [] }] },
+  });
+  assert.equal(missing.status, "needs-director-revision");
+  assert.ok(missing.feedback[0].issues.some((issue) => issue.code === "component-text-required"));
+
+  const overflow = await resolveVisualPlan({
+    ...common,
+    compositionPlan: { pages: [{
+      ...compositionPage,
+      componentText: componentText.map((item) => item.sourceItemId === "plan" && item.sourceField === "title"
+        ? { ...item, text: "超过八个汉字的计划阶段标题" }
+        : item),
+    }] },
+  });
+  assert.equal(overflow.status, "needs-director-revision");
+  assert.ok(overflow.feedback[0].issues.some((issue) => issue.code === "component-text-too-long"));
 });
 
 test("两个互补事实不会因为恰好有两项就获得比较资产", async () => {

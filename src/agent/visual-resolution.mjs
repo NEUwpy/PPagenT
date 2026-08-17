@@ -26,7 +26,46 @@ function publicComposition(layout) {
   };
 }
 
-function publicVariant(variant, contract, compositions) {
+function stateValue(value, itemCount) {
+  if (Number.isFinite(value)) return Number(value);
+  if (value && typeof value === "object" && Number.isFinite(value[String(itemCount)])) {
+    return Number(value[String(itemCount)]);
+  }
+  return null;
+}
+
+export function slotCapabilitiesForVariant(variant, itemCount) {
+  const capacity = variant.textCapacity ?? {};
+  const textSlots = [];
+  const addText = (role, scope, maxChars, maxLines, extra = {}) => {
+    if (!Number.isFinite(maxChars) || maxChars <= 0) return;
+    textSlots.push({ role, scope, maxChars, ...(Number.isFinite(maxLines) && maxLines > 0 ? { maxLines } : {}), ...extra });
+  };
+  addText("center-title", "page", stateValue(capacity.maxCenterChars, itemCount), stateValue(capacity.maxCenterLines, itemCount), { count: 1, sourceField: "page-title" });
+  addText("item-title", "per-item", stateValue(capacity.maxItemTitleChars, itemCount), stateValue(capacity.maxItemTitleLines, itemCount), { count: itemCount, sourceField: "title" });
+  addText("item-body", "per-item", stateValue(capacity.maxItemBodyChars ?? capacity.maxItemBodyCharsByState, itemCount), stateValue(capacity.maxItemBodyLines, itemCount), { count: itemCount, sourceField: "body" });
+  addText("item-point", "per-point", stateValue(capacity.maxPointChars, itemCount), stateValue(capacity.maxPointLines, itemCount), {
+    countPerItem: { min: 0, max: stateValue(capacity.maxPointsPerItem, itemCount) ?? 0 },
+    sourceField: "point",
+  });
+  const mediaSlots = variant.mediaContract?.mode === "semantic-icon" ? [{
+    role: "icon",
+    scope: "per-item",
+    count: itemCount,
+    type: "icon",
+    provider: variant.mediaContract.provider ?? "",
+    required: Boolean(variant.mediaContract.requiredPerComponentItem),
+    selection: variant.mediaContract.selection ?? "",
+  }] : [];
+  return {
+    state: { itemCount },
+    contentFrame: variant.sourceFrame ? { ...variant.sourceFrame } : null,
+    textSlots,
+    mediaSlots,
+  };
+}
+
+function publicVariant(variant, contract, compositions, itemCount) {
   return {
     logicId: variant.logicId,
     structureGroupId: variant.structureGroupId,
@@ -40,6 +79,7 @@ function publicVariant(variant, contract, compositions) {
     contentContract: variant.contentContract ?? null,
     mediaContract: variant.mediaContract ?? null,
     slotContract: variant.slotContract ?? null,
+    slotCapabilities: slotCapabilitiesForVariant(variant, itemCount),
     renderer: variant.renderer,
     fallbackBody: variant.fallbackBody,
     compositionIds: compositions.map((layout) => layout.id),
@@ -92,6 +132,7 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
             compatibleSkinVariant,
             contractsById.get(compatibleSkinVariant.assetId),
             compatibleSkinVariant.compositionIds.map((id) => layouts.get(id)).filter(Boolean),
+            intent.structure.itemCount,
           )]
           : [],
       };
@@ -112,8 +153,6 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
         baseRelation: intent.baseRelation,
         purposeKey: intent.purposeKey,
         requiredItemRole,
-        maxItemTitleChars: intent.contentStats.maxItemTitleChars,
-        maxItemBodyChars: intent.contentStats.maxItemBodyChars,
         maxPointsPerItem: intent.structure.dimensions?.maxPointsPerItem ?? 0,
         maxPointChars: intent.structure.dimensions?.maxPointChars ?? 0,
       });
@@ -123,6 +162,7 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
         variant,
         contractsById.get(candidate.assetId),
         compositions,
+        intent.structure.itemCount,
       ));
     });
     const bodyVariant = variants.find((variant) => variant.renderer === "skin" && variant.fallbackBody);
@@ -132,6 +172,7 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
       bodyVariant,
       contractsById.get(bodyVariant.assetId),
       compositionCandidatesForAsset(layouts, bodyVariant.assetId, bodyMetadata),
+      intent.structure.itemCount,
     );
     return {
       pageId,
@@ -270,6 +311,129 @@ export function validateComponentBindings(content, candidate, compositionPage) {
     }
   }
   return issues;
+}
+
+function componentTextSource(content, binding) {
+  if (binding.sourceField === "page-title") return content.title ?? "";
+  const item = content.items.find((entry) => entry.id === binding.sourceItemId);
+  if (!item) return null;
+  if (binding.sourceField === "title") return item.title ?? "";
+  if (binding.sourceField === "body") return item.body ?? "";
+  if (binding.sourceField === "point") {
+    const point = item.points?.[binding.sourceIndex];
+    return point?.text ?? point ?? "";
+  }
+  return null;
+}
+
+function componentTextKey(binding) {
+  return [binding.sourceField, binding.sourceItemId ?? "page", binding.sourceIndex ?? ""].join(":");
+}
+
+function slotCapabilityByRole(candidate) {
+  return new Map((candidate.slotCapabilities?.textSlots ?? []).map((slot) => [slot.role, slot]));
+}
+
+function expectedComponentText(content, candidate, compositionPage) {
+  const roles = slotCapabilityByRole(candidate);
+  const selected = new Set(compositionPage.componentItemIds ?? []);
+  const expected = [];
+  if (roles.has("center-title")) {
+    expected.push({ sourceField: "page-title", targetRole: "center-title" });
+  }
+  for (const item of content.items.filter((entry) => selected.has(entry.id))) {
+    if (roles.has("item-title") && item.title?.trim()) {
+      expected.push({ sourceItemId: item.id, sourceField: "title", targetRole: "item-title" });
+    }
+    if (roles.has("item-body") && item.body?.trim()) {
+      expected.push({ sourceItemId: item.id, sourceField: "body", targetRole: "item-body" });
+    }
+    if (roles.has("item-point")) {
+      (item.points ?? []).forEach((point, sourceIndex) => {
+        if (String(point?.text ?? point ?? "").trim()) {
+          expected.push({ sourceItemId: item.id, sourceField: "point", sourceIndex, targetRole: "item-point" });
+        }
+      });
+    }
+  }
+  return expected;
+}
+
+export function validateComponentText(content, candidate, compositionPage) {
+  const supplied = compositionPage.componentText ?? [];
+  const capabilities = candidate.slotCapabilities?.textSlots ?? [];
+  if (!capabilities.length) return supplied.length ? [{ code: "component-text-not-supported" }] : [];
+  if (compositionPage.componentContentMode !== "full") {
+    return supplied.length ? [{ code: "component-text-requires-full-mode" }] : [];
+  }
+  const roleMap = slotCapabilityByRole(candidate);
+  const selected = new Set(compositionPage.componentItemIds ?? []);
+  const expected = expectedComponentText(content, candidate, compositionPage);
+  const expectedByKey = new Map(expected.map((item) => [componentTextKey(item), item]));
+  const seen = new Set();
+  const issues = [];
+  for (const binding of supplied) {
+    const key = componentTextKey(binding);
+    const expectedBinding = expectedByKey.get(key);
+    if (!expectedBinding) {
+      issues.push({ code: "component-text-source-invalid", sourceField: binding.sourceField, sourceItemId: binding.sourceItemId, sourceIndex: binding.sourceIndex });
+      continue;
+    }
+    if (seen.has(key)) issues.push({ code: "component-text-duplicated", key });
+    seen.add(key);
+    if (binding.targetRole !== expectedBinding.targetRole || !roleMap.has(binding.targetRole)) {
+      issues.push({ code: "component-text-role-invalid", key, targetRole: binding.targetRole, expectedRole: expectedBinding.targetRole });
+      continue;
+    }
+    if (binding.sourceField !== "page-title" && !selected.has(binding.sourceItemId)) {
+      issues.push({ code: "component-text-item-not-selected", sourceItemId: binding.sourceItemId });
+    }
+    const source = componentTextSource(content, binding);
+    const normalizedSource = normalizedGroundingText(source);
+    const fragment = normalizedGroundingText(binding.sourceFragment);
+    if (!fragment || !normalizedSource.includes(fragment)) {
+      issues.push({ code: "component-text-source-fragment-missing", key });
+    }
+    const capability = roleMap.get(binding.targetRole);
+    const actualChars = Array.from(binding.text ?? "").length;
+    if (actualChars > capability.maxChars) {
+      issues.push({ code: "component-text-too-long", key, actualChars, maxChars: capability.maxChars });
+    }
+    const actualLines = String(binding.text ?? "").split(/\r?\n/).length;
+    if (capability.maxLines && actualLines > capability.maxLines) {
+      issues.push({ code: "component-text-too-many-lines", key, actualLines, maxLines: capability.maxLines });
+    }
+  }
+  const missing = expected.filter((item) => !seen.has(componentTextKey(item)));
+  if (missing.length) issues.push({ code: "component-text-required", fields: missing });
+  const pointCapability = roleMap.get("item-point");
+  if (pointCapability?.countPerItem?.max !== undefined) {
+    for (const sourceItemId of selected) {
+      const actual = supplied.filter((binding) => binding.sourceItemId === sourceItemId && binding.sourceField === "point").length;
+      if (actual > pointCapability.countPerItem.max) {
+        issues.push({ code: "component-text-point-count-exceeded", sourceItemId, actual, max: pointCapability.countPerItem.max });
+      }
+    }
+  }
+  return issues;
+}
+
+function applyComponentText(content, compositionPage) {
+  const bindings = compositionPage.componentText ?? [];
+  const byKey = new Map(bindings.map((binding) => [componentTextKey(binding), binding.text]));
+  const center = byKey.get("page-title:page:");
+  return {
+    ...content,
+    ...(center ? { notes: center } : {}),
+    items: content.items.map((item) => ({
+      ...item,
+      title: byKey.get(`title:${item.id}:`) ?? item.title,
+      body: byKey.get(`body:${item.id}:`) ?? item.body,
+      points: (item.points ?? []).map((point, sourceIndex) => (
+        byKey.get(`point:${item.id}:${sourceIndex}`) ?? point
+      )),
+    })),
+  };
 }
 
 function filterComponentContent(content, compositionPage) {
@@ -411,6 +575,7 @@ function validateCompositionPage({ content, candidate, compositionPage, layouts,
   }
   if (!fixedPage) {
     issues.push(...validateComponentBindings(content, candidate, compositionPage));
+    issues.push(...validateComponentText(content, candidate, compositionPage));
     const coveredFields = new Map(content.items.map((item) => [item.id, new Set()]));
     for (const itemId of compositionPage.componentItemIds) {
       const fields = coveredFields.get(itemId);
@@ -489,7 +654,8 @@ function validateCompositionPage({ content, candidate, compositionPage, layouts,
         issues.push({ code: "component-body-content-unplaced", itemIds: omittedBodies });
       }
     }
-    if (compositionPage.componentContentMode === "full" && candidate.textCapacity) {
+    if (compositionPage.componentContentMode === "full" && candidate.textCapacity
+      && !(candidate.slotCapabilities?.textSlots?.length)) {
       const selectedItems = content.items.filter((item) => compositionPage.componentItemIds.includes(item.id));
       const titleOverflow = selectedItems
         .filter((item) => Array.from(item.title ?? "").length > candidate.textCapacity.maxItemTitleChars)
@@ -687,7 +853,7 @@ export async function resolveVisualPlan({
     const compositionPage = normalizedCompositionPlan.pages[index];
     const metadata = metadataById.get(decision.selectedAssetId);
     const componentContent = metadata?.kind === "component"
-      ? filterComponentContent(pageContents[index], compositionPage)
+      ? filterComponentContent(applyComponentText(pageContents[index], compositionPage), compositionPage)
       : pageContents[index];
     const payload = mapRenderPayload(
       componentContent,

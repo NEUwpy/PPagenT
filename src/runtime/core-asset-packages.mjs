@@ -101,7 +101,8 @@ async function loadPackage(manifestPath) {
   requireValue(typeof mapper === "function", `${asset.id} 没有导出 ${runtime.mapperExport}`);
   if (runtime.slotContract) requireValue(typeof slotResolver === "function", `${asset.id} 没有导出 ${runtime.slotContract.resolverExport}`);
 
-  return { assetId: asset.id, asset, assetDir, manifestPath, runtime, builder, component, mapper, slotResolver };
+  const textCapacity = component?.textCapacity ?? runtime.textCapacity ?? null;
+  return { assetId: asset.id, asset, assetDir, manifestPath, runtime, textCapacity, builder, component, mapper, slotResolver };
 }
 
 export async function discoverCoreAssetPackages(root = defaultRoot) {

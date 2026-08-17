@@ -32,7 +32,7 @@ PPA 看板是 PPagenT 的本地资产建设与审查入口。它不保存第二�
 
 资产声明 `slotContract` 时，详情页还显示 Content Slots 契约。它表示父 State 将从同一布局中解析真实可填区域、容量和兜底方式；不是看板另存的坐标，也不表示子 Logic 已经接入正式生成。当前循环闭环已能展示该声明，子 Logic 选择与嵌套预览仍属于下一步最小实验。
 
-每个 HTML Structure Group 的最终 DOM 通过 `data-slot-id / data-slot-role / data-slot-field` 暴露真实可编辑容器。看板在当前 State 加载后自动生成容器清单，列出字段、位置和尺寸；同一份读取结果会叠加到 Native 与 Skin 预览，鼠标悬停即可查看。资产只在自身 DOM 中声明一次，不为看板维护第二份坐标，也不需要逐资产编译容器标注图。
+每个 HTML Structure Group 的最终 DOM 通过 `data-slot-*` 暴露完整 Slot Contract。看板在当前 State 加载后自动列出字段、位置、尺寸、最大字数／行数以及图标来源与必填状态；同一结果叠加到 Native 与 Skin 预览。视觉导演收到的 `slotCapabilities` 也由这些容量与媒体声明展开，不为看板或导演维护第二份表。
 
 `runtime.review.implementation` 只有明确声明为 `asset-specific-html` 时，才计入 HTML 迁移完成度。共享通用组件只能用于早期试验或占位，不得作为黄金状态复现完成的证据。`goldenState` 记录来源页对应的默认参数；用户先在看板核对黄金状态，再审核数量扩展与 Content Slot 边界，最后检查 Native 编译结果。
 

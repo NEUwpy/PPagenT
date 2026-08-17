@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import { inspectHtmlComponentEligibility } from "../runtime/html-component-eligibility.mjs";
 import { academicReportShell } from "../runtime/shells/academic-report.mjs";
 import { northeasternUniversityTheme } from "../runtime/skins/northeastern-university-theme.mjs";
@@ -175,6 +176,14 @@ async function normalizeRecord(entry, coverageTags, purposeMap, coreIds, root) {
     nativeCompiledOutputAvailable ? "native-compiled-output" : null,
     renderer === "skin" ? "skin" : null,
   ].filter(Boolean);
+  let componentTextCapacity = null;
+  if (hasDesignComponent) {
+    const reviewEntryPath = path.resolve(assetDir, reviewRuntime.entry);
+    if (isInside(assetDir, reviewEntryPath)) {
+      const reviewModule = await import(pathToFileURL(reviewEntryPath).href);
+      componentTextCapacity = reviewModule[reviewRuntime.componentExport]?.textCapacity ?? null;
+    }
+  }
   return {
     id: manifest.id,
     name: manifest.name,
@@ -194,7 +203,7 @@ async function normalizeRecord(entry, coverageTags, purposeMap, coreIds, root) {
     baseRelations: runtime.supportedBaseRelations ?? [],
     purposes,
     itemRange: itemRange(runtime),
-    textCapacity: runtime.textCapacity ?? null,
+    textCapacity: componentTextCapacity ?? runtime.textCapacity ?? null,
     stateContract: runtime.stateContract ?? null,
     mediaContract: runtime.mediaContract ?? null,
     contentContract: runtime.contentContract ?? null,

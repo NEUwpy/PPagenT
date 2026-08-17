@@ -129,6 +129,7 @@ test("循环闭环由同一 HTML 组件解析 3–6 步状态", () => {
     assert.equal((markup.match(/data-slot-role="item-title"/g) ?? []).length, stepCount);
     assert.equal((markup.match(/data-slot-role="item-body"/g) ?? []).length, stepCount);
     assert.ok((markup.match(/data-slot-role="item-point"/g) ?? []).length >= stepCount);
+    assert.equal((markup.match(/data-slot-max-chars=/g) ?? []).length, 1 + stepCount * 2 + (markup.match(/data-slot-role="item-point"/g) ?? []).length);
   }
 });
 
@@ -137,6 +138,8 @@ test("看板从当前 HTML State 自动生成容器表并复用到 Native 和 Sk
   assert.match(template, /readComponentSlotMap/);
   assert.match(template, /data-slot-map-list/);
   assert.match(template, /data-slot-overlay/);
+  assert.match(template, /slotMaxChars/);
+  assert.match(template, /slotProvider/);
   assert.match(template, /悬停查看可编辑容器/);
 });
 
@@ -149,6 +152,8 @@ test("等权并列卡片由同一 HTML 组件重新排布 3–5 项状态", () =
     assert.equal((markup.match(/data-slot-role="icon"/g) ?? []).length, itemCount);
     assert.equal((markup.match(/data-slot-role="item-title"/g) ?? []).length, itemCount);
     assert.equal((markup.match(/data-slot-role="item-body"/g) ?? []).length, itemCount);
+    assert.equal((markup.match(/data-slot-required="true"/g) ?? []).length, itemCount);
+    assert.equal((markup.match(/data-slot-max-lines="4"/g) ?? []).length, itemCount);
     assert.equal((markup.match(/data-icon-key=/g) ?? []).length, itemCount);
   }
 });

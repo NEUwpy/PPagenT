@@ -3,6 +3,12 @@ export const SOURCE_FRAME = Object.freeze({ left: 55, top: 166, width: 1170, hei
 export const RING_FRAME = Object.freeze({ left: 345, top: 6, width: 480, height: 480 });
 export const RING = Object.freeze({ center: 240, outer: 226, inner: 148, breath: 12, arrowReach: 78, arrowHalf: 39, core: 76 });
 export const COLORS = Object.freeze(["#344e9a", "#4168b2", "#5b91cb", "#63a1d7", "#527fbd", "#385fa4"]);
+export const CYCLE_TEXT_LIMITS = Object.freeze({
+  center: Object.freeze({ maxChars: 12, maxLines: 2 }),
+  title: Object.freeze({ maxChars: 8, maxLines: 1 }),
+  body: Object.freeze({ maxChars: 14, maxLines: 1 }),
+  point: Object.freeze({ maxChars: 14, maxLines: 1 }),
+});
 export const SUPPORT_PANEL = Object.freeze({
   width: 520,
   outerPadding: 28,
@@ -30,10 +36,10 @@ export function normalizeCycleParameters(parameters) {
     const body = text(step?.body);
     const points = pointRows(step);
     if (!title) throw new Error(`steps[${index}].title 不能为空`);
-    if (title.length > 8) throw new Error(`steps[${index}].title 超过 8 字`);
-    if (body.length > 14) throw new Error(`steps[${index}].body 超过 14 字`);
+    if (title.length > CYCLE_TEXT_LIMITS.title.maxChars) throw new Error(`steps[${index}].title 超过 ${CYCLE_TEXT_LIMITS.title.maxChars} 字`);
+    if (body.length > CYCLE_TEXT_LIMITS.body.maxChars) throw new Error(`steps[${index}].body 超过 ${CYCLE_TEXT_LIMITS.body.maxChars} 字`);
     if (points.length > 4) throw new Error(`steps[${index}].points 最多 4 条`);
-    if (points.some((point) => point.length > 14)) throw new Error(`steps[${index}].points 单条超过 14 字`);
+    if (points.some((point) => point.length > CYCLE_TEXT_LIMITS.point.maxChars)) throw new Error(`steps[${index}].points 单条超过 ${CYCLE_TEXT_LIMITS.point.maxChars} 字`);
     if (!body && !points.length) throw new Error(`steps[${index}] 至少需要 body 或一条 points`);
     if ((Array.isArray(step?.details) && step.details.length) || (Array.isArray(step?.metrics) && step.metrics.length)) {
       throw new Error(`steps[${index}] 基础循环只接受 body/points；标签、说明和指标属于独立的嵌套 Structure Group`);
@@ -48,7 +54,7 @@ export function normalizeCycleParameters(parameters) {
     };
   });
   const centerText = text(parameters.center ?? parameters.title);
-  if (centerText.length > 12) throw new Error("center 超过 12 字");
+  if (centerText.length > CYCLE_TEXT_LIMITS.center.maxChars) throw new Error(`center 超过 ${CYCLE_TEXT_LIMITS.center.maxChars} 字`);
   const centerTokens = centerText.split(/\s+/u).filter(Boolean);
   if (centerTokens.length > 2 || centerTokens.some((line) => line.length > 6)) throw new Error("center 最多两行且每行不超过 6 字");
   const center = centerTokens.length === 1 && centerTokens[0].length > 6

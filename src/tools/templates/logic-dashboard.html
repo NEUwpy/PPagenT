@@ -174,7 +174,7 @@
     .slot-map-panel > b { display: block; color: #34465f; font-size: 12px; }
     .slot-map-panel > p { margin: 5px 0 9px; color: var(--muted); font-size: 11px; line-height: 1.55; }
     .slot-map-list { max-height: 220px; overflow: auto; border: 1px solid #e3e9f2; border-radius: 8px; background: #fff; }
-    .slot-map-row { display: grid; grid-template-columns: 112px minmax(150px, 1fr) 90px 92px; gap: 8px; padding: 8px 10px; border-bottom: 1px solid #edf1f6; color: #506077; font-size: 11px; }
+    .slot-map-row { display: grid; grid-template-columns: 88px minmax(130px, 1fr) 112px 82px 82px; gap: 8px; padding: 8px 10px; border-bottom: 1px solid #edf1f6; color: #506077; font-size: 11px; }
     .slot-map-row:last-child { border-bottom: 0; }
     .slot-map-row code { overflow-wrap: anywhere; color: #2f5e9f; }
     .slot-map-empty { padding: 13px; color: #8592a5; font-size: 11px; }
@@ -445,6 +445,11 @@
             id: element.dataset.slotId,
             role: element.dataset.slotRole || 'content',
             field: element.dataset.slotField || '',
+            contentType: element.dataset.slotContentType || (element.dataset.slotRole === 'icon' ? 'icon' : 'text'),
+            maxChars: Number(element.dataset.slotMaxChars) || null,
+            maxLines: Number(element.dataset.slotMaxLines) || null,
+            provider: element.dataset.slotProvider || '',
+            required: element.dataset.slotRequired === 'true',
             left: Math.round((box.left - rootBox.left) / rootBox.width * width * 10) / 10,
             top: Math.round((box.top - rootBox.top) / rootBox.height * height * 10) / 10,
             width: Math.round(box.width / rootBox.width * width * 10) / 10,
@@ -464,7 +469,10 @@
       const list = flow.querySelector('[data-slot-map-list]');
       if (list) list.innerHTML = map.slots.length ? map.slots.map((slot) => {
         const role = slotRoleLabels[slot.role] || slot.role;
-        return '<div class="slot-map-row"><b>' + esc(role) + '</b><code>' + esc(slot.field || slot.id) + '</code><span>x ' + slot.left + ' · y ' + slot.top + '</span><span>' + slot.width + ' × ' + slot.height + '</span></div>';
+        const ability = slot.contentType === 'icon'
+          ? '图标 · ' + esc(slot.provider || '未指定') + (slot.required ? ' · 必填' : ' · 可选')
+          : (slot.maxChars ? '≤ ' + slot.maxChars + ' 字' : '字数待声明') + (slot.maxLines ? ' · ' + slot.maxLines + ' 行' : '');
+        return '<div class="slot-map-row"><b>' + esc(role) + '</b><code>' + esc(slot.field || slot.id) + '</code><span>' + ability + '</span><span>x ' + slot.left + ' · y ' + slot.top + '</span><span>' + slot.width + ' × ' + slot.height + '</span></div>';
       }).join('') : '<div class="slot-map-empty">当前组件没有暴露可编辑容器；不能仅凭 fieldContract 推测位置。</div>';
 
       const slide = DATA.activeSkin?.slideSize ?? { width: 1280, height: 720 };
@@ -472,11 +480,14 @@
       for (const layer of flow.querySelectorAll('[data-slot-overlay]')) {
         layer.innerHTML = map.slots.map((slot) => {
           const role = slotRoleLabels[slot.role] || slot.role;
+          const ability = slot.contentType === 'icon'
+            ? (slot.required ? '必填图标' : '可选图标')
+            : (slot.maxChars ? '≤' + slot.maxChars + '字' : '文字');
           const left = (content.left + slot.left / map.width * content.width) / slide.width * 100;
           const top = (content.top + slot.top / map.height * content.height) / slide.height * 100;
           const width = slot.width / map.width * content.width / slide.width * 100;
           const height = slot.height / map.height * content.height / slide.height * 100;
-          return '<i class="native-slot-box' + (slot.role === 'icon' ? ' icon' : '') + '" data-slot-label="' + esc(role) + '" style="left:' + left + '%;top:' + top + '%;width:' + width + '%;height:' + height + '%"></i>';
+          return '<i class="native-slot-box' + (slot.role === 'icon' ? ' icon' : '') + '" data-slot-label="' + esc(role + ' · ' + ability) + '" style="left:' + left + '%;top:' + top + '%;width:' + width + '%;height:' + height + '%"></i>';
         }).join('');
       }
     }
@@ -528,7 +539,7 @@
       let footprint = '';
       let nativeMedia = previewMarkup(asset, true);
       let nativeDownload = '';
-      const slotMapPanel = htmlRoute ? '<div class="slot-map-panel"><b>自动读取的可编辑容器</b><p>坐标与尺寸直接来自当前 State 的最终 DOM；不是另一张手工维护表。悬停 Native／Skin 预览可查看同一组容器。</p><div class="slot-map-list" data-slot-map-list><div class="slot-map-empty">正在读取当前 HTML State…</div></div></div>' : '';
+      const slotMapPanel = htmlRoute ? '<div class="slot-map-panel"><b>自动读取的 Slot Contract</b><p>字段、坐标、尺寸、字数／行数和图标要求直接来自当前 State 的最终 DOM；同一份能力供看板、视觉导演和最终编译使用。</p><div class="slot-map-list" data-slot-map-list><div class="slot-map-empty">正在读取当前 HTML State…</div></div></div>' : '';
       let skinMedia = '<div class="drawer-preview"><span>当前资产没有 Skin State 预览</span></div>';
       if (asset.componentControls?.length) {
         const initialSelection = asset.componentInitialSelection ?? {};

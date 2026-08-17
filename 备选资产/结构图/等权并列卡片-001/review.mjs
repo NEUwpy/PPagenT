@@ -2,6 +2,7 @@ import { resolveTablerIcon, tablerIconSvgMarkup } from "../../../src/icons/table
 
 const DESIGN_FRAME = Object.freeze({ width: 1170, height: 492 });
 const BODY_LIMITS = Object.freeze({ 3: 34, 4: 30, 5: 24 });
+const TITLE_LIMIT = 8;
 
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>"']/g, (character) => ({
@@ -30,7 +31,7 @@ function normalizeParameters(parameters) {
       const body = text(item?.body);
       if (!title) throw new Error(`items[${index}].title 不能为空`);
       if (!body) throw new Error(`items[${index}].body 不能为空`);
-      if (charCount(title) > 8) throw new Error(`items[${index}].title 超过 8 字`);
+      if (charCount(title) > TITLE_LIMIT) throw new Error(`items[${index}].title 超过 ${TITLE_LIMIT} 字`);
       if (charCount(body) > maxBodyChars) throw new Error(`items[${index}].body 超过 ${maxBodyChars} 字`);
       const key = text(item?.key) || `item-${index + 1}`;
       const iconQuery = text(item?.iconQuery);
@@ -49,18 +50,18 @@ function markerMarkup(item, index) {
       <div class="parallel-marker-dot parallel-marker-dot-right" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="parallel-marker-dot-right-${index}"></div>`;
   return `<div class="parallel-marker-halo" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="parallel-marker-halo-${index}"></div>
     <div class="parallel-marker-core" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="parallel-marker-core-${index}"></div>
-    <div class="parallel-icon-slot" data-slot-id="${escapeHtml(item.key)}-icon" data-slot-role="icon" data-slot-field="items[${index}].iconKey" data-slot-item-id="${escapeHtml(item.key)}">${iconMarkup}</div>`;
+    <div class="parallel-icon-slot" data-slot-id="${escapeHtml(item.key)}-icon" data-slot-role="icon" data-slot-field="items[${index}].iconKey" data-slot-item-id="${escapeHtml(item.key)}" data-slot-content-type="icon" data-slot-provider="tabler-icons" data-slot-required="true">${iconMarkup}</div>`;
 }
 
-function cardMarkup(item, index) {
+function cardMarkup(item, index, itemCount) {
   return `<article class="parallel-card" data-key="${escapeHtml(item.key)}">
     <div class="parallel-card-underlay" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="parallel-card-underlay-${index}"></div>
     <div class="parallel-card-surface" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="parallel-card-surface-${index}"></div>
     <div class="parallel-card-accent" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="parallel-card-accent-${index}"></div>
     <div class="parallel-marker">${markerMarkup(item, index)}</div>
-    <h3 class="parallel-title" data-slot-id="${escapeHtml(item.key)}-title" data-slot-role="item-title" data-slot-field="items[${index}].title" data-slot-item-id="${escapeHtml(item.key)}" data-ppt-kind="text" data-ppt-name="parallel-title-${index}">${escapeHtml(item.title)}</h3>
+    <h3 class="parallel-title" data-slot-id="${escapeHtml(item.key)}-title" data-slot-role="item-title" data-slot-field="items[${index}].title" data-slot-item-id="${escapeHtml(item.key)}" data-slot-content-type="text" data-slot-max-chars="${TITLE_LIMIT}" data-slot-max-lines="1" data-ppt-kind="text" data-ppt-name="parallel-title-${index}">${escapeHtml(item.title)}</h3>
     <div class="parallel-rule" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="parallel-rule-${index}"></div>
-    <p class="parallel-body" data-slot-id="${escapeHtml(item.key)}-body" data-slot-role="item-body" data-slot-field="items[${index}].body" data-slot-item-id="${escapeHtml(item.key)}" data-ppt-kind="text" data-ppt-name="parallel-body-${index}">${escapeHtml(item.body)}</p>
+    <p class="parallel-body" data-slot-id="${escapeHtml(item.key)}-body" data-slot-role="item-body" data-slot-field="items[${index}].body" data-slot-item-id="${escapeHtml(item.key)}" data-slot-content-type="text" data-slot-max-chars="${BODY_LIMITS[itemCount]}" data-slot-max-lines="4" data-ppt-kind="text" data-ppt-name="parallel-body-${index}">${escapeHtml(item.body)}</p>
   </article>`;
 }
 
@@ -69,10 +70,16 @@ export const visualComponent = Object.freeze({
   schemaVersion: 4,
   designFrame: DESIGN_FRAME,
   cssFile: "component.css",
+  textCapacity: Object.freeze({
+    maxItemTitleChars: TITLE_LIMIT,
+    maxItemTitleLines: 1,
+    maxItemBodyCharsByState: BODY_LIMITS,
+    maxItemBodyLines: 4,
+  }),
   renderMarkup(parameters) {
     const model = normalizeParameters(parameters);
     return `<section class="parallel-review" data-ppt-root data-item-count="${model.items.length}">
-      <div class="parallel-grid">${model.items.map(cardMarkup).join("")}</div>
+      <div class="parallel-grid">${model.items.map((item, index) => cardMarkup(item, index, model.items.length)).join("")}</div>
     </section>`;
   },
 });

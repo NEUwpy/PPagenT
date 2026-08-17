@@ -72,6 +72,22 @@
               }
             }
           },
+          "componentText": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["sourceField", "targetRole", "text", "sourceFragment"],
+              "properties": {
+                "sourceItemId": { "type": "string", "minLength": 1 },
+                "sourceField": { "enum": ["page-title", "title", "body", "point"] },
+                "sourceIndex": { "type": "integer", "minimum": 0 },
+                "targetRole": { "enum": ["center-title", "item-title", "item-body", "item-point"] },
+                "text": { "type": "string", "minLength": 1 },
+                "sourceFragment": { "type": "string", "minLength": 1 }
+              }
+            }
+          },
           "reason": { "type": "string", "minLength": 1 }
         }
       }

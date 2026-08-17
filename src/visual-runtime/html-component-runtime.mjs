@@ -212,13 +212,27 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         }
         throw new Error(`不支持的 data-ppt-kind: ${kind}`);
       });
-      const slots = [...root.querySelectorAll("[data-slot-id]")].map((element) => ({
-        id: element.dataset.slotId,
-        role: element.dataset.slotRole || "content",
-        field: element.dataset.slotField || "",
-        itemId: element.dataset.slotItemId || "",
-        frame: htmlFrame(element),
-      }));
+      const slots = [...root.querySelectorAll("[data-slot-id]")].map((element) => {
+        const maxChars = Number(element.dataset.slotMaxChars);
+        const maxLines = Number(element.dataset.slotMaxLines);
+        return {
+          id: element.dataset.slotId,
+          role: element.dataset.slotRole || "content",
+          field: element.dataset.slotField || "",
+          itemId: element.dataset.slotItemId || "",
+          contentType: element.dataset.slotContentType || (element.dataset.slotRole === "icon" ? "icon" : "text"),
+          frame: htmlFrame(element),
+          capacity: {
+            ...(Number.isFinite(maxChars) && maxChars > 0 ? { maxChars } : {}),
+            ...(Number.isFinite(maxLines) && maxLines > 0 ? { maxLines } : {}),
+          },
+          media: element.dataset.slotContentType === "icon" || element.dataset.slotRole === "icon" ? {
+            type: "icon",
+            provider: element.dataset.slotProvider || "",
+            required: element.dataset.slotRequired === "true",
+          } : null,
+        };
+      });
       return {
         schemaVersion: 2,
         frame: { width: rounded(rootBox.width), height: rounded(rootBox.height) },
