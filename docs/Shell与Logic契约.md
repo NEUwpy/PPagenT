@@ -28,7 +28,7 @@ flowchart LR
 
 核心资产包正式登记 `logicId / structureGroupId / stateContract`，候选发现结果也暴露这些字段。State 仍由程序根据内容与父容器确定性求解，不由导演逐页重画。
 
-Slot Map 不是第二份手工登记表。Shell 槽位直接读取 Shell 代码；Structure Group 的文字、图标等槽位直接读取最终 HTML DOM 中的 `data-slot-*` 属性及浏览器求解后的真实矩形。看板只展示这些真源的即时解析结果，不能另存一份坐标副本。
+Slot Map 不是第二份手工登记表。Shell 槽位直接读取 Shell 代码；Structure Group 的文字、图标等槽位直接读取最终 HTML DOM 中的 `data-slot-id / data-slot-role / data-slot-field` 属性及浏览器求解后的真实矩形。看板自动生成容器清单，并把同一组矩形叠加到 HTML、Native 和 Skin 预览；资产代码只声明一次，不为看板另写坐标或逐资产编译容器图。
 
 ## 二、当前固定 Shell
 

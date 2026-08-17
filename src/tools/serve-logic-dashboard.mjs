@@ -262,7 +262,15 @@ body{position:relative!important;background:#fff!important}
 [data-slot-role="icon"]:hover{outline-color:rgba(255,255,255,.98);background-color:rgba(255,255,255,.22)!important}
 [data-slot-id]::after{content:attr(data-slot-role) " · " attr(data-slot-field);position:absolute;left:3px;bottom:3px;z-index:100;display:none;max-width:calc(100% - 6px);padding:3px 6px;overflow:hidden;border-radius:4px;color:#fff;background:rgba(23,32,51,.86);font:12px/1.25 "Microsoft YaHei",sans-serif;white-space:nowrap;text-overflow:ellipsis;pointer-events:none}
 [data-slot-id]:hover::after{display:block}
-</style></head><body><div class="ppagent-component-viewport"><div class="ppagent-component-scale">${markup}</div></div></body></html>`;
+.ppagent-slot-visual-layer{position:absolute;inset:0;z-index:999;pointer-events:none}
+.ppagent-slot-visual-box{position:absolute;pointer-events:auto;border:1px dashed rgba(35,117,220,.22);background:rgba(61,145,238,.025);transition:border-color .12s ease,background-color .12s ease}
+.ppagent-slot-visual-box.icon{border-color:rgba(118,80,189,.28)}
+.ppagent-slot-visual-box:hover{border:2px dashed rgba(35,117,220,.92);background:rgba(61,145,238,.16)}
+.ppagent-slot-visual-box::after{content:attr(data-slot-label);position:absolute;left:3px;bottom:3px;display:none;max-width:calc(100% - 6px);padding:3px 6px;overflow:hidden;border-radius:4px;color:#fff;background:rgba(23,32,51,.86);font:12px/1.25 "Microsoft YaHei",sans-serif;white-space:nowrap;text-overflow:ellipsis}
+.ppagent-slot-visual-box:hover::after{display:block}
+</style></head><body><div class="ppagent-component-viewport"><div class="ppagent-component-scale">${markup}</div></div><script>
+addEventListener("load",async()=>{await document.fonts.ready;const scale=document.querySelector(".ppagent-component-scale");const root=document.querySelector("[data-ppt-root]");if(!scale||!root)return;const rootBox=root.getBoundingClientRect();if(!rootBox.width||!rootBox.height)return;const layer=document.createElement("div");layer.className="ppagent-slot-visual-layer";for(const element of root.querySelectorAll("[data-slot-id]")){const box=element.getBoundingClientRect();if(!box.width||!box.height)continue;const marker=document.createElement("i");marker.className="ppagent-slot-visual-box"+(element.dataset.slotRole==="icon"?" icon":"");marker.dataset.slotLabel=(element.dataset.slotRole||"content")+" · "+(element.dataset.slotField||element.dataset.slotId);marker.style.left=(box.left-rootBox.left)/rootBox.width*100+"%";marker.style.top=(box.top-rootBox.top)/rootBox.height*100+"%";marker.style.width=box.width/rootBox.width*100+"%";marker.style.height=box.height/rootBox.height*100+"%";layer.append(marker)}scale.append(layer)});
+</script></body></html>`;
 }
 
 async function nativeStateArtifactsFor(library, assetId, searchParams) {
@@ -489,7 +497,7 @@ const server = http.createServer(async (request, response) => {
       }
       send(response, 200, html, "text/html; charset=utf-8", {
         ...immutablePreviewHeaders,
-        "content-security-policy": "default-src 'none'; style-src 'unsafe-inline'",
+        "content-security-policy": "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'",
       });
       return;
     }

@@ -16,7 +16,15 @@ function escapeHtml(value) {
 
 function panelMarkup(item, density) {
   const { frame } = item;
-  const lines = item.step.copyLines.map((line, index) => `<p class="cycle-copy-line" data-ppt-kind="text" data-ppt-name="cycle-${item.index}-copy-line-${index}">${escapeHtml(line)}</p>`).join("");
+  const key = escapeHtml(item.step.key);
+  const lines = [
+    item.step.body ? {
+      id: `step-${item.step.key}-body`, role: "item-body", field: `steps[${item.index}].body`, text: item.step.body,
+    } : null,
+    ...item.step.points.map((point, index) => ({
+      id: `step-${item.step.key}-point-${index}`, role: "item-point", field: `steps[${item.index}].points[${index}]`, text: point,
+    })),
+  ].filter(Boolean).map((line, index) => `<p class="cycle-copy-line" data-slot-id="${escapeHtml(line.id)}" data-slot-role="${line.role}" data-slot-field="${escapeHtml(line.field)}" data-slot-item-id="${key}" data-ppt-kind="text" data-ppt-name="cycle-${item.index}-copy-line-${index}">${escapeHtml(line.text)}</p>`).join("");
   const slotId = `step-${item.step.key}-support`;
   return `<article class="cycle-note" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="cycle-panel-${item.index}" data-side="${item.side}" data-key="${escapeHtml(item.step.key)}" data-density="${density}" style="--left:${frame.left}px;--top:${frame.top}px;--width:${frame.width}px;--height:${frame.height}px">
     <div class="cycle-copy" data-content-slot-id="${escapeHtml(slotId)}" data-content-slot-role="stage-support">${lines}</div>
@@ -28,13 +36,15 @@ function ringMarkup(model) {
   const bands = items.map((item) => `<path class="cycle-arc" data-ppt-kind="path" data-ppt-name="cycle-band-${item.index}" fill="${item.color}" d="${svgBandPath(item)}"/>`).join("");
   const arrows = items.map((item) => `<path class="cycle-arrow" data-ppt-kind="path" data-ppt-name="cycle-arrow-${item.index}" fill="${item.color}" d="M ${item.arrow.outer.x.toFixed(2)} ${item.arrow.outer.y.toFixed(2)} L ${item.arrow.tip.x.toFixed(2)} ${item.arrow.tip.y.toFixed(2)} L ${item.arrow.inner.x.toFixed(2)} ${item.arrow.inner.y.toFixed(2)} Z"/>`).join("");
   const labels = items.map((item) => `<text class="cycle-number" data-ppt-kind="text" data-ppt-name="cycle-number-${item.index}" x="${item.number.x.toFixed(2)}" y="${item.number.y.toFixed(2)}">${String(item.index + 1).padStart(2, "0")}</text>
-    <text class="cycle-title" data-ppt-kind="text" data-ppt-name="cycle-title-${item.index}" x="${item.title.x.toFixed(2)}" y="${item.title.y.toFixed(2)}" transform="rotate(${item.title.rotation} ${item.title.x.toFixed(2)} ${item.title.y.toFixed(2)})">${escapeHtml(item.step.title)}</text>
+    <text class="cycle-title" data-slot-id="step-${escapeHtml(item.step.key)}-title" data-slot-role="item-title" data-slot-field="steps[${item.index}].title" data-slot-item-id="${escapeHtml(item.step.key)}" data-ppt-kind="text" data-ppt-name="cycle-title-${item.index}" x="${item.title.x.toFixed(2)}" y="${item.title.y.toFixed(2)}" transform="rotate(${item.title.rotation} ${item.title.x.toFixed(2)} ${item.title.y.toFixed(2)})">${escapeHtml(item.step.title)}</text>
     ${item.step.english ? `<text class="cycle-english" data-ppt-kind="text" data-ppt-name="cycle-english-${item.index}" x="${item.english.x.toFixed(2)}" y="${item.english.y.toFixed(2)}" transform="rotate(${item.english.rotation} ${item.english.x.toFixed(2)} ${item.english.y.toFixed(2)})">${escapeHtml(item.step.english)}</text>` : ""}`).join("");
   return `<svg class="cycle-diagram" viewBox="0 0 ${RING_FRAME.width} ${RING_FRAME.height}" role="img" aria-label="${model.steps.length} 步循环闭环">
     <circle class="cycle-breath" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="cycle-breath" cx="${RING.center}" cy="${RING.center}" r="${RING.outer + RING.breath}"/>
     ${bands}${arrows}${labels}
     <circle class="cycle-core" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="cycle-core" cx="${RING.center}" cy="${RING.center}" r="${RING.core}"/>
-    ${model.centerLabel.map((line, index) => `<text class="cycle-core-text" data-ppt-kind="text" data-ppt-name="cycle-core-text-${index}" x="${RING.center}" y="${229 + index * 35}">${escapeHtml(line)}</text>`).join("")}
+    <g data-slot-id="cycle-center" data-slot-role="center-title" data-slot-field="center">
+      ${model.centerLabel.map((line, index) => `<text class="cycle-core-text" data-ppt-kind="text" data-ppt-name="cycle-core-text-${index}" x="${RING.center}" y="${229 + index * 35}">${escapeHtml(line)}</text>`).join("")}
+    </g>
   </svg>`;
 }
 

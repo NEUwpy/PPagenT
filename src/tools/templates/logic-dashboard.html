@@ -170,6 +170,19 @@
     .review-media.component { aspect-ratio: 1170 / 492; background: #fff; }
     .review-media img, .review-media iframe { display: block; width: 100%; height: 100%; border: 0; object-fit: contain; }
     .review-media span { padding: 18px; text-align: center; line-height: 1.65; }
+    .slot-map-panel { margin-top: 10px; padding: 13px 14px; border: 1px solid #d9e3f1; border-radius: 10px; background: #f9fbfe; }
+    .slot-map-panel > b { display: block; color: #34465f; font-size: 12px; }
+    .slot-map-panel > p { margin: 5px 0 9px; color: var(--muted); font-size: 11px; line-height: 1.55; }
+    .slot-map-list { max-height: 220px; overflow: auto; border: 1px solid #e3e9f2; border-radius: 8px; background: #fff; }
+    .slot-map-row { display: grid; grid-template-columns: 112px minmax(150px, 1fr) 90px 92px; gap: 8px; padding: 8px 10px; border-bottom: 1px solid #edf1f6; color: #506077; font-size: 11px; }
+    .slot-map-row:last-child { border-bottom: 0; }
+    .slot-map-row code { overflow-wrap: anywhere; color: #2f5e9f; }
+    .slot-map-empty { padding: 13px; color: #8592a5; font-size: 11px; }
+    .native-slot-layer { position: absolute; inset: 0; z-index: 3; opacity: 0; pointer-events: none; transition: opacity .15s ease; }
+    .preview-open:hover .native-slot-layer, .preview-open:focus-visible .native-slot-layer { opacity: 1; }
+    .native-slot-box { position: absolute; border: 1.5px dashed rgba(35,117,220,.9); background: rgba(61,145,238,.16); }
+    .native-slot-box.icon { border-color: rgba(118,80,189,.92); background: rgba(118,80,189,.18); }
+    .native-slot-box::after { content: attr(data-slot-label); position: absolute; left: 2px; top: 2px; max-width: calc(100% - 4px); padding: 2px 4px; overflow: hidden; border-radius: 4px; color: #fff; background: rgba(23,32,51,.82); font-size: 9px; line-height: 1.2; white-space: nowrap; text-overflow: ellipsis; }
     .intent-panel, .component-profile { padding: 14px 16px; border: 1px solid #d9e3f1; border-radius: 10px; background: #fff; color: #405069; font-size: 12px; line-height: 1.7; }
     .intent-panel { max-height: 250px; overflow: auto; white-space: pre-wrap; }
     .component-profile { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 10px; }
@@ -412,6 +425,70 @@
       return Object.entries(selection ?? {}).map(([key, value]) => encodeURIComponent(key) + '=' + encodeURIComponent(value)).join('&');
     }
 
+    const slotRoleLabels = {
+      icon: '图标', 'center-title': '中心主题', 'item-title': '节点标题',
+      'item-body': '正文', 'item-point': '分点', content: '内容',
+    };
+
+    function readComponentSlotMap(frame) {
+      try {
+        const doc = frame.contentDocument;
+        const root = doc?.querySelector('[data-ppt-root]');
+        if (!root) return null;
+        const rootBox = root.getBoundingClientRect();
+        if (!rootBox.width || !rootBox.height) return null;
+        const width = Number(frame.dataset.slotWidth) || Number(DATA.activeSkin?.slots?.contentFrame?.width) || 1170;
+        const height = Number(frame.dataset.slotHeight) || Number(DATA.activeSkin?.slots?.contentFrame?.height) || 492;
+        const slots = [...root.querySelectorAll('[data-slot-id]')].map((element) => {
+          const box = element.getBoundingClientRect();
+          return {
+            id: element.dataset.slotId,
+            role: element.dataset.slotRole || 'content',
+            field: element.dataset.slotField || '',
+            left: Math.round((box.left - rootBox.left) / rootBox.width * width * 10) / 10,
+            top: Math.round((box.top - rootBox.top) / rootBox.height * height * 10) / 10,
+            width: Math.round(box.width / rootBox.width * width * 10) / 10,
+            height: Math.round(box.height / rootBox.height * height * 10) / 10,
+          };
+        }).filter((slot) => slot.id && slot.width > 0 && slot.height > 0);
+        return { width, height, slots };
+      } catch {
+        return null;
+      }
+    }
+
+    function renderComponentSlotMap(flow) {
+      const frame = flow?.querySelector('[data-component-slot-source]');
+      const map = frame ? readComponentSlotMap(frame) : null;
+      if (!map) return;
+      const list = flow.querySelector('[data-slot-map-list]');
+      if (list) list.innerHTML = map.slots.length ? map.slots.map((slot) => {
+        const role = slotRoleLabels[slot.role] || slot.role;
+        return '<div class="slot-map-row"><b>' + esc(role) + '</b><code>' + esc(slot.field || slot.id) + '</code><span>x ' + slot.left + ' · y ' + slot.top + '</span><span>' + slot.width + ' × ' + slot.height + '</span></div>';
+      }).join('') : '<div class="slot-map-empty">当前组件没有暴露可编辑容器；不能仅凭 fieldContract 推测位置。</div>';
+
+      const slide = DATA.activeSkin?.slideSize ?? { width: 1280, height: 720 };
+      const content = DATA.activeSkin?.slots?.contentFrame ?? { left: 55, top: 166, width: 1170, height: 492 };
+      for (const layer of flow.querySelectorAll('[data-slot-overlay]')) {
+        layer.innerHTML = map.slots.map((slot) => {
+          const role = slotRoleLabels[slot.role] || slot.role;
+          const left = (content.left + slot.left / map.width * content.width) / slide.width * 100;
+          const top = (content.top + slot.top / map.height * content.height) / slide.height * 100;
+          const width = slot.width / map.width * content.width / slide.width * 100;
+          const height = slot.height / map.height * content.height / slide.height * 100;
+          return '<i class="native-slot-box' + (slot.role === 'icon' ? ' icon' : '') + '" data-slot-label="' + esc(role) + '" style="left:' + left + '%;top:' + top + '%;width:' + width + '%;height:' + height + '%"></i>';
+        }).join('');
+      }
+    }
+
+    function connectComponentSlotMap(scope) {
+      const frame = scope?.querySelector('[data-component-slot-source]');
+      if (!frame) return;
+      const flow = frame.closest('.review-flow');
+      frame.addEventListener('load', () => renderComponentSlotMap(flow));
+      if (frame.contentDocument?.readyState === 'complete') renderComponentSlotMap(flow);
+    }
+
     function reviewWorkflowMarkup(asset) {
       if (!liveMode) return '<div class="review-flow"><h3>建设链证据</h3><p>静态快照不加载来源页和实时 HTML。请双击 PPA看板.exe。</p></div>';
       const htmlRoute = asset.renderer === 'html-component';
@@ -451,6 +528,7 @@
       let footprint = '';
       let nativeMedia = previewMarkup(asset, true);
       let nativeDownload = '';
+      const slotMapPanel = htmlRoute ? '<div class="slot-map-panel"><b>自动读取的可编辑容器</b><p>坐标与尺寸直接来自当前 State 的最终 DOM；不是另一张手工维护表。悬停 Native／Skin 预览可查看同一组容器。</p><div class="slot-map-list" data-slot-map-list><div class="slot-map-empty">正在读取当前 HTML State…</div></div></div>' : '';
       let skinMedia = '<div class="drawer-preview"><span>当前资产没有 Skin State 预览</span></div>';
       if (asset.componentControls?.length) {
         const initialSelection = asset.componentInitialSelection ?? {};
@@ -463,22 +541,22 @@
         const initialStateKey = String(Object.values(initialSelection)[0] ?? '');
         const initialFootprint = asset.stateFootprints?.[initialStateKey];
         footprint = '<div class="footprint" data-state-footprint data-footprints="' + esc(JSON.stringify(asset.stateFootprints ?? {})) + '">' + (initialFootprint ? '自然占用：' + esc(initialFootprint.width) + ' × ' + esc(initialFootprint.height) + '（统一 Content Frame 坐标）' : '当前 State 尚未登记自然占用尺寸') + '</div>';
-        if (asset.componentPreviewAvailable && asset.componentPreviewUrl) componentMedia = '<div class="review-media component"><iframe src="' + esc(asset.componentPreviewUrl) + '&' + initialQuery + '" title="' + esc(asset.name) + ' 的实时 HTML 组件"></iframe></div>';
+        if (asset.componentPreviewAvailable && asset.componentPreviewUrl) componentMedia = '<div class="review-media component"><iframe data-component-slot-source data-slot-width="' + esc(asset.spatialContract?.contentFrame?.width ?? 1170) + '" data-slot-height="' + esc(asset.spatialContract?.contentFrame?.height ?? 492) + '" src="' + esc(asset.componentPreviewUrl) + '&' + initialQuery + '" title="' + esc(asset.name) + ' 的实时 HTML 组件"></iframe></div>';
         if (asset.nativeStatePreviewUrl) {
           const nativeUrl = asset.nativeStatePreviewUrl + '&' + initialQuery;
-          nativeMedia = '<button type="button" class="drawer-preview preview-open" data-native-preview data-native-base="' + esc(asset.nativeStatePreviewUrl) + '" data-preview-open="' + esc(nativeUrl) + '" data-preview-caption="' + esc(asset.name) + ' · Native 编译结果"><img src="' + esc(nativeUrl) + '" alt="' + esc(asset.name) + ' 的 Native 编译结果"><span hidden>组件 PPT 预览生成失败</span></button>';
+          nativeMedia = '<button type="button" class="drawer-preview preview-open" data-native-preview data-native-base="' + esc(asset.nativeStatePreviewUrl) + '" data-preview-open="' + esc(nativeUrl) + '" data-preview-caption="' + esc(asset.name) + ' · Native 编译结果"><img src="' + esc(nativeUrl) + '" alt="' + esc(asset.name) + ' 的 Native 编译结果"><div class="native-slot-layer" data-slot-overlay></div><span hidden>组件 PPT 预览生成失败</span></button>';
           if (asset.nativeStatePptxUrl) nativeDownload = '<a class="native-download" data-native-download data-native-base="' + esc(asset.nativeStatePptxUrl) + '" href="' + esc(asset.nativeStatePptxUrl + '&' + initialQuery) + '">下载当前 State 的组件 PPTX</a>';
         }
         if (asset.skinStatePreviewUrl) {
           const skinUrl = asset.skinStatePreviewUrl + '&' + initialQuery;
-          skinMedia = '<button type="button" class="drawer-preview preview-open" data-skin-preview data-skin-base="' + esc(asset.skinStatePreviewUrl) + '" data-preview-open="' + esc(skinUrl) + '" data-preview-caption="' + esc(asset.name) + ' · 东北大学 Skin"><img src="' + esc(skinUrl) + '" alt="' + esc(asset.name) + ' 放入东北大学 Skin 后的结果"><span hidden>Skin 预览生成失败</span></button>';
+          skinMedia = '<button type="button" class="drawer-preview preview-open" data-skin-preview data-skin-base="' + esc(asset.skinStatePreviewUrl) + '" data-preview-open="' + esc(skinUrl) + '" data-preview-caption="' + esc(asset.name) + ' · 东北大学 Skin"><img src="' + esc(skinUrl) + '" alt="' + esc(asset.name) + ' 放入东北大学 Skin 后的结果"><div class="native-slot-layer" data-slot-overlay></div><span hidden>Skin 预览生成失败</span></button>';
         }
       }
       return '<div class="review-flow"><h3>' + (htmlRoute ? '参考 → 视觉意图 → HTML → Native → Skin' : '来源 → 组件代码 → 可编辑 PPT') + '</h3><p>' + (htmlRoute ? 'HTML 只看提炼后的逻辑与审美意图；Native PPT 只做机械编译。' : '这是旧流程资产；State 直接由现有组件代码生成。') + '</p>'
         + '<div class="review-stage"><div class="review-stage-head"><b>1 · 来源参考</b><span>用于提炼，不作为 HTML 的直接输入</span></div>' + sourceButtons + sourceMedia + '</div>'
         + '<div class="review-stage"><div class="review-stage-head"><b>2 · 视觉意图</b><span>逻辑表达方式与审美语言</span></div>' + intentMedia + '</div>'
-        + '<div class="review-stage" data-component-stage data-component-base="' + esc(asset.componentPreviewUrl ?? '') + '"><div class="review-stage-head"><b>3 · ' + (htmlRoute ? 'HTML Structure Group' : '可选 State') + '</b><span>同一组件按数量重新编排</span></div>' + componentProfile + fieldContract + stateButtons + footprint + componentMedia + '</div>'
-        + '<div class="review-stage"><div class="review-stage-head"><b>4 · Native 编译结果</b><span>与 HTML 使用同一 State 参数</span></div>' + nativeMedia + nativeDownload + '</div>'
+        + '<div class="review-stage" data-component-stage data-component-base="' + esc(asset.componentPreviewUrl ?? '') + '"><div class="review-stage-head"><b>3 · ' + (htmlRoute ? 'HTML Structure Group' : '可选 State') + '</b><span>同一组件按数量重新编排</span></div>' + componentProfile + fieldContract + stateButtons + footprint + componentMedia + slotMapPanel + '</div>'
+        + '<div class="review-stage"><div class="review-stage-head"><b>4 · Native 编译结果</b><span>与 HTML 使用同一 State；悬停查看可编辑容器</span></div>' + nativeMedia + nativeDownload + '</div>'
         + '<div class="review-stage"><div class="review-stage-head"><b>5 · 东北大学 Skin</b><span>仅用于核对组件进入统一 Shell 后的效果，不作为下载交付物</span></div>' + typographyContract + skinMedia + '</div></div>';
     }
 
@@ -637,6 +715,7 @@
         + '<div class="detail-group"><h3>语义与边界</h3>' + (asset.semanticContract ? '<div class="detail-note">' + esc(asset.semanticContract) + '</div>' : '<div class="detail-note">当前声明未写语义说明。</div>') + (asset.doNotUseWhen ? '<div class="detail-note" style="margin-top:9px;border-color:#d96c4a;background:#fff6f3"><strong>不要使用：</strong>' + esc(asset.doNotUseWhen) + '</div>' : '') + '</div>'
         + '<div class="detail-group"><h3>来源与自动化入口</h3>' + detailRows([["来源", source], ["HTML 审查实现", esc(asset.componentPreviewAvailable ? "资产专属 · " + text(asset.componentFidelityStatus) : "尚未迁移")], ["生成入口", esc(text(asset.runtimeEntry || asset.generator))], ["Mapper", esc(text(asset.mapperExport))], ["Component / Builder", esc(text(asset.componentExport || asset.builderExport))], ["示例", esc(text(asset.showcase))], ["Manifest", '<code>' + esc(asset.manifestPath) + '</code>'], ["资产目录", '<code>' + esc(asset.assetDir) + '</code>'], ["审核记录", esc(text(asset.review))]]) + '</div>';
       document.getElementById("drawer-backdrop").classList.add("open");
+      connectComponentSlotMap(document.getElementById("drawer-content"));
       document.body.style.overflow = "hidden";
       document.getElementById("drawer-close").focus();
       preloadAssetEvidence(asset);
