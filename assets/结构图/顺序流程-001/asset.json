@@ -61,7 +61,8 @@
         "semantic": { "ordered": true },
         "relationTraits": { "sequence": true },
         "density": ["low", "medium"]
-      }
+      },
+      "fallback": { "tooMany": "split" }
     },
     "review": {
       "entry": "review.mjs",

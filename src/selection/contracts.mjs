@@ -109,9 +109,8 @@ function evaluateContract(intent, contract) {
   }
 
   for (const [field, expected] of Object.entries(contract.constraints.relationTraits)) {
-    const actual = intent.relationTraits[field];
-    if (actual === undefined) reasons.push(`missing-trait:${field}`);
-    else if (actual !== expected) reasons.push(`trait:${field}`);
+    if (!Object.hasOwn(intent.relationTraits, field)) continue;
+    if (intent.relationTraits[field] !== expected) reasons.push(`trait:${field}`);
   }
 
   if (contract.constraints.density.length && !contract.constraints.density.includes(intent.density)) {

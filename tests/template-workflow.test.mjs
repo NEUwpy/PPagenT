@@ -38,21 +38,20 @@ test("东北大学 Skin 经过统一 renderer 真实生成 PPTX 与逐页证据"
   ];
   const layoutDecisions = [
     { selectedAssetId: "northeastern-university-cover-001" },
-    { selectedAssetId: "sequential-process-001" },
+    { selectedAssetId: "sequence-flow-001" },
     { selectedAssetId: "northeastern-university-closing-001" },
   ];
   const renderPayloads = [
     { assetId: "northeastern-university-cover-001", parameters: { title: "为什么做 PPagenT", presenter: "", date: "" } },
     {
-      assetId: "sequential-process-001",
+      assetId: "sequence-flow-001",
       parameters: {
         title: "真正费时间的是判断",
-        steps: [
-          { title: "拆页", body: "判断每页职责" },
-          { title: "关系", body: "识别内容关系" },
-          { title: "重点", body: "决定信息主次", emphasis: "result" },
+        items: [
+          { key: "a", title: "拆页", body: "判断每页职责" },
+          { key: "b", title: "关系", body: "识别内容关系" },
+          { key: "c", title: "重点", body: "决定信息主次" },
         ],
-        visualVariantId: "horizontal-cards",
       },
     },
     { assetId: "northeastern-university-closing-001", parameters: { text: "可靠、好用、可继续修改" } },

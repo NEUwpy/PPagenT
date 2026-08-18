@@ -62,7 +62,7 @@ test("普通顺序过程只匹配基础顺序语法", async () => {
   const intent = await readFixture("sequence.intent.json");
   const result = matchPageIntent(intent, contracts);
   assert.equal(result.decision, "single-match");
-  assert.equal(result.selectedAssetId, "sequential-process-001");
+  assert.equal(result.selectedAssetId, "sequence-flow-001");
 });
 
 test("purposeText 可自由变化，执行只依赖受控 purposeKey", async () => {
@@ -72,11 +72,14 @@ test("purposeText 可自由变化，执行只依赖受控 purposeKey", async () 
   assert.equal(first.selectedAssetId, second.selectedAssetId);
 });
 
-test("科研分支流程匹配高级复合模板，而不是普通顺序流程", async () => {
+test("科研分支流程未登记复合模板时回退，不误匹配通用顺序流程", async () => {
   const intent = await readFixture("research-route.intent.json");
   const result = matchPageIntent(intent, contracts);
-  assert.equal(result.decision, "single-match");
-  assert.equal(result.selectedAssetId, "technical-route-flow-001");
+  assert.equal(result.decision, "fallback");
+  assert.equal(result.selectedAssetId, null);
+  const rejection = result.rejections.find((item) => item.assetId === "sequence-flow-001");
+  assert.ok(rejection, "通用顺序流程应当被明确拒绝而非抢占");
+  assert.ok(rejection.reasons.includes("purpose-key:explain_research_process"));
 });
 
 test("受控 purposeKey 拒绝未登记同义词", async () => {
@@ -99,9 +102,10 @@ test("中心辐射超过容量时生成可执行退化计划", async () => {
   };
   const result = matchPageIntent(intent, contracts);
   assert.equal(result.decision, "fallback");
-  assert.equal(result.resolutionPlan.sourceAssetId, "radial-hub-001");
+  assert.equal(result.resolutionPlan.sourceAssetId, "hub-radial-001");
   assert.equal(result.resolutionPlan.reason, "above-max:itemCount");
-  assert.equal(result.resolutionPlan.action, "simple-layout");
+  assert.equal(result.resolutionPlan.action, "defer-to-review");
+  assert.equal(result.resolutionPlan.requiresReview, true);
 });
 
 test("顺序步骤超过上限时给出拆页数量", async () => {
@@ -118,7 +122,7 @@ test("顺序步骤超过上限时给出拆页数量", async () => {
   assert.equal(result.resolutionPlan.pages, 2);
 });
 
-test("特定用途的复合模板通过确定性适配信号优先于通用语法", async () => {
+test("受控 purposeKey 在复合模板缺失时阻止通用语法抢占", async () => {
   const base = await readFixture("sequence.intent.json");
   const intent = {
     ...base,
@@ -127,9 +131,11 @@ test("特定用途的复合模板通过确定性适配信号优先于通用语�
     purposeText: "说明用户在四个连续阶段中的行为和体验",
   };
   const result = matchPageIntent(intent, contracts);
-  assert.equal(result.decision, "ranked-match");
-  assert.equal(result.selectedAssetId, "customer-journey-map-001");
-  assert.equal(result.candidates[0].fitSignals.purposeSpecific, true);
+  assert.equal(result.decision, "fallback");
+  assert.equal(result.selectedAssetId, null);
+  const rejection = result.rejections.find((item) => item.assetId === "sequence-flow-001");
+  assert.ok(rejection, "通用顺序流程应当被明确拒绝而非抢占");
+  assert.ok(rejection.reasons.includes("purpose-key:explain_user_journey"));
 });
 
 test("暂缓资产默认不参与选择", async () => {

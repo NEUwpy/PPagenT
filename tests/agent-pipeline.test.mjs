@@ -125,11 +125,11 @@ test("正式流程不会暴露缺少视觉意图和用户确认的 HTML 资产",
   ]);
   const intent = enrichPageIntent(intentDraft("topics-intent", "explain_topics", "hub"), page);
   const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), ["northeastern-university-body-001"]);
+  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), ["hub-radial-001", "northeastern-university-body-001"]);
   assert.equal(set.capacityDensity, "low");
 });
 
-test("作废的顺序流程不会再进入正式候选", async () => {
+test("正式候选包含重新蒸馏的顺序流程与正文兜底", async () => {
   const page = content("process", [
     { id: "a", title: "A", body: "A" },
     { id: "b", title: "B", body: "B" },
@@ -144,6 +144,7 @@ test("作废的顺序流程不会再进入正式候选", async () => {
     assetId: candidate.assetId,
     variantId: candidate.variantId,
   })), [
+    { assetId: "sequence-flow-001", variantId: "continuous-numbered-rail" },
     { assetId: "northeastern-university-body-001", variantId: "editorial" },
   ]);
 });
@@ -314,7 +315,7 @@ test("未重新蒸馏的问题改进资产不会进入因果候选", async () =>
   assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), ["northeastern-university-body-001"]);
 });
 
-test("未重新蒸馏的三层组织树不会进入层级候选", async () => {
+test("三层组织树命中已登记的组织层级资产", async () => {
   const page = {
     ...content("organization", [
       { id: "product", title: "产品组", body: "需求与研究" },
@@ -353,7 +354,10 @@ test("未重新蒸馏的三层组织树不会进入层级候选", async () => {
     { ordered: false, sameLevel: false },
   ), page);
   const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), ["northeastern-university-body-001"]);
+  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), [
+    "hierarchy-people-tree-001",
+    "northeastern-university-body-001",
+  ]);
 });
 
 test("resolver 不允许把视觉导演的家族或变体换成另一资产", async () => {
