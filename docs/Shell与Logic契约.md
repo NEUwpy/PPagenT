@@ -158,6 +158,6 @@ Logic 的调用接口采用两级版式中立内容：
 
 ## 六、后续工作边界
 
-当前先固定 Shell 和 Content Frame，再蒸馏更多 Structure Group。其他学校版本可以替换 Logo、颜色、字体、栏目和页注文案；除非真实模板证明版式骨架必须改变，否则继续复用本 Shell 几何。候选 Structure Group 仍需用户明确确认后才能进入核心库，Luna 只承担来源 PPT 的蒸馏与入库，不参与正式生成线。
+当前先固定 Shell 和 Content Frame，再蒸馏更多 Structure Group。其他学校版本可以替换 Logo、颜色、字体、栏目和页注文案；除非真实模板证明版式骨架必须改变，否则继续复用本 Shell 几何。未确认的 Structure Group 仍需用户明确确认后才能标记为正式可调用，Luna 只承担来源 PPT 的蒸馏与入库，不参与正式生成线。
 
 当前实现状态必须分开理解：Shell 几何、核心资产发现和正文兜底已经进入运行时代码。HTML 路线目前只有 `cycle-pdca-ring-p57` 同时具有专属视觉意图和用户确认记录，因此它是唯一正式结构 Logic。循环闭环可动态解析 3–6 步 State 的 Content Slots；二级 Logic 的候选、绑定和嵌套渲染尚未进入正式流程，当前只使用普通文字兜底。

@@ -5,15 +5,13 @@ import { discoverAssetManifestEntries } from "./asset-manifest-inventory.mjs";
 const root = path.resolve(process.argv[2] ?? process.cwd());
 const checklistPath = path.join(root, "docs", "工作流", "资产积累与入库", "资产覆盖清单.md");
 
-const [checklist, coreAssets, candidateAssets] = await Promise.all([
+const [checklist, coreAssets] = await Promise.all([
   fs.readFile(checklistPath, "utf8"),
   discoverAssetManifestEntries(root, "assets"),
-  discoverAssetManifestEntries(root, "备选资产"),
 ]);
 
 const issues = [];
-const inventory = new Map(candidateAssets.map((asset) => [asset.id, asset]));
-for (const asset of coreAssets) inventory.set(asset.id, asset);
+const inventory = new Map(coreAssets.map((asset) => [asset.id, asset]));
 const coreIds = new Set(coreAssets.map((asset) => asset.id));
 const seen = new Map();
 const assetLinePattern = /^\s*-\s*\[([ xX])\]\s+(.+?)\s+<!--\s*asset:([a-z0-9-]+)\s*-->\s*$/gm;
@@ -45,7 +43,6 @@ const report = {
   status: issues.length ? "failed" : "passed",
   checklist: path.relative(root, checklistPath).replaceAll("\\", "/"),
   registeredAssetCount: inventory.size,
-  candidateAssetCount: candidateAssets.length,
   coreAssetCount: coreIds.size,
   checklistAssetCount: seen.size,
   unlistedDiscoveredAssetCount: [...inventory.keys()].filter((id) => !seen.has(id)).length,

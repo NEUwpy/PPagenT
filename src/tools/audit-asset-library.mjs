@@ -39,42 +39,12 @@ async function walkFiles(directory) {
 
 const issues = [];
 const coreRoot = path.join(root, "assets");
-const candidateRoot = path.join(root, "备选资产");
 const sampleRoot = path.join(root, "结构样本池");
-const candidateAssets = await discoverAssetManifestEntries(root, "备选资产");
 const coreAssets = await discoverAssetManifestEntries(root, "assets");
 const sampleRegistryPath = path.join(sampleRoot, "registry.json");
 const sampleRegistryAvailable = await exists(sampleRegistryPath);
 const sampleRegistry = sampleRegistryAvailable ? await readJson(sampleRegistryPath) : { samples: [] };
 const logicMap = await readJson(path.join(root, "catalog", "logic-map.json"));
-
-const candidateIds = new Set();
-let structureCandidates = 0;
-for (const entry of candidateAssets) {
-  if (candidateIds.has(entry.id)) issues.push(`重复备选 ID: ${entry.id}`);
-  candidateIds.add(entry.id);
-  if (entry.category === "结构图") structureCandidates += 1;
-  const directory = entry.directory;
-  const metadata = entry.metadata;
-  const htmlReviewEntry = metadata.runtime?.renderer === "html-component"
-    ? metadata.runtime?.review?.entry
-    : null;
-  if (htmlReviewEntry) {
-    if (!(await exists(path.join(directory, htmlReviewEntry)))) issues.push(`HTML 待审批备选缺少 review 入口: ${entry.id}/${htmlReviewEntry}`);
-  } else if (!(await exists(path.join(directory, "generate.mjs")))) {
-    issues.push(`备选缺少 generate.mjs: ${entry.id}`);
-  }
-  if (entry.category === "结构图" && !metadata.capacity && !metadata.boundary) issues.push(`结构图缺少容量边界: ${entry.id}`);
-  const sourceFile = typeof metadata.source === "string" ? metadata.source : metadata.source?.file;
-  if (!sourceFile) issues.push(`备选缺少来源: ${entry.id}`);
-  else if (mode === "local" && !(await exists(path.join(root, sourceFile)))) issues.push(`备选来源不存在: ${entry.id}`);
-  const showcase = metadata.showcase ? path.join(directory, metadata.showcase) : null;
-  if (showcase && !(await exists(showcase))) issues.push(`备选声明的示例不存在: ${entry.id}/${metadata.showcase}`);
-  if (showcase && await exists(showcase)) {
-    const count = await slideCount(showcase);
-    if (count < 1) issues.push(`备选示例没有页面: ${entry.id}`);
-  }
-}
 
 const coreIds = new Set();
 for (const entry of coreAssets) {
@@ -134,7 +104,7 @@ const sampleFamilies = new Set(Object.keys(familyCounts));
 const logics = Array.isArray(logicMap.logics) ? logicMap.logics : [];
 const logicIds = new Set();
 const logicNames = new Set();
-const knownAssetIds = new Set([...coreIds, ...candidateIds]);
+const knownAssetIds = new Set(coreIds);
 if (!logics.length) issues.push("Logic 能力地图为空");
 for (const logic of logics) {
   if (!logic.id?.trim()) issues.push("Logic 缺少 ID");
@@ -149,7 +119,7 @@ for (const logic of logics) {
     if (!knownAssetIds.has(assetId)) issues.push(`Logic 引用未知资产: ${logic.id}/${assetId}`);
   }
 }
-for (const entry of [...coreAssets, ...candidateAssets]) {
+for (const entry of coreAssets) {
   if (entry.metadata.kind !== "component") continue;
   const logicId = entry.metadata.runtime?.logicId;
   const logic = logics.find((item) => item.id === logicId);
@@ -157,18 +127,13 @@ for (const entry of [...coreAssets, ...candidateAssets]) {
   else if (coreIds.has(entry.id) && !logic.assetIds.includes(entry.id)) issues.push(`核心结构资产未填入对应 Logic: ${entry.id}/${logicId}`);
 }
 
-const candidateFiles = await walkFiles(candidateRoot);
-const inspectFiles = candidateFiles.filter((file) => file.endsWith(".inspect.ndjson"));
-if (inspectFiles.length) issues.push(`备选资产残留调试文件: ${inspectFiles.length}`);
 const pendingFiles = await walkFiles(path.join(sampleRoot, "待归类"));
 if (pendingFiles.length) issues.push(`待归类目录仍有文件: ${pendingFiles.length}`);
 
 const report = {
   status: issues.length ? "failed" : "passed",
   mode,
-  candidateCount: candidateAssets.length,
   coreAssetCount: coreAssets.length,
-  structureCandidateCount: structureCandidates,
   sampleCount: sampleRegistry.samples.length,
   familyCount: sampleFamilies.size,
   familyCounts,

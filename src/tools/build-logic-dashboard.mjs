@@ -22,5 +22,5 @@ console.log(JSON.stringify({
   output: outputPath,
   coreAssets: data.summary.coreAssets,
   formalLogics: data.summary.formalLogics,
-  candidateOnly: data.summary.candidateOnly,
+  pendingApproval: data.summary.pendingApproval,
 }, null, 2));

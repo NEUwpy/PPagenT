@@ -191,7 +191,6 @@ async function normalizeRecord(entry, coverageTags, purposeMap, coreIds, root) {
     kind: manifest.kind ?? "",
     library,
     status: manifest.status ?? library,
-    candidateCopyOfCore: library === "candidate" && coreIds.has(manifest.id),
     creationMethod: manifest.creationMethod ?? "",
     renderer,
     autoCallable,
@@ -287,7 +286,6 @@ function uniqueById(records) {
 
 export async function collectLogicDashboardData(root = defaultProjectRoot) {
   const coreEntries = await findManifests(path.join(root, "assets"), "core");
-  const candidateEntries = await findManifests(path.join(root, "备选资产"), "candidate");
   const logicMap = await readJson(path.join(root, "catalog", "logic-map.json"));
   const purposes = await readJson(path.join(root, "catalog", "purpose-vocabulary.json"));
   const compositions = await readJson(path.join(root, "catalog", "composition-layouts.json"));
@@ -306,7 +304,7 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
   }
   const purposeMap = new Map((purposes.purposes ?? []).map((item) => [item.key, item.description]));
   const coreIds = new Set(coreEntries.map((entry) => entry.manifest.id));
-  const records = await Promise.all([...coreEntries, ...candidateEntries].map((entry) => normalizeRecord(
+  const records = await Promise.all(coreEntries.map((entry) => normalizeRecord(
     entry,
     coverageByAsset.get(entry.manifest.id) ?? [],
     purposeMap,
@@ -320,9 +318,12 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
     .sort((left, right) => left.localeCompare(right, "zh-CN"));
 
   const coreAssets = records.filter((record) => record.library === "core");
-  const candidateAssets = records.filter((record) => record.library === "candidate");
   const formalLogics = coreAssets.filter((record) => record.renderer !== "skin" && record.autoCallable);
-  const candidateOnly = candidateAssets.filter((record) => !record.candidateCopyOfCore);
+  const pendingApproval = records.filter((record) => (
+    record.renderer === "html-component"
+    && record.componentFidelityStatus
+    && record.componentFidelityStatus !== "user-approved"
+  ));
   const categoryCounts = Object.entries(primaryAssets.reduce((accumulator, record) => {
     accumulator[record.category] = (accumulator[record.category] ?? 0) + 1;
     return accumulator;
@@ -343,8 +344,7 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
     summary: {
       coreAssets: coreAssets.length,
       formalLogics: formalLogics.length,
-      candidateRecords: candidateAssets.length,
-      candidateOnly: candidateOnly.length,
+      pendingApproval: pendingApproval.length,
       htmlDesignComponents: formalLogics.filter((record) => record.renderer === "html-component" && record.componentPreviewAvailable).length,
       legacyBuilders: formalLogics.filter((record) => record.renderer === "legacy-builder").length,
       skins: coreAssets.filter((record) => record.renderer === "skin").length,
@@ -362,7 +362,7 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
     records,
     primaryAssets,
     formalLogics,
-    candidateOnly,
+    pendingApproval,
     logics: logics.map((logic) => ({
       id: logic.id,
       name: logic.name,
@@ -379,7 +379,6 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
     stores: [
       { name: "原始 PPT 来源", path: "PPT源/", count: sourceFiles.length, role: "只提供入库线的原始视觉来源", tone: "source" },
       { name: "核心资产库", path: "assets/", count: coreAssets.length, role: "正式生成线自动发现并只读调用", tone: "core" },
-      { name: "候选资产库", path: "备选资产/", count: candidateAssets.length, role: "等待补齐、验证或用户明确确认", tone: "candidate" },
       { name: "规则与能力目录", path: "catalog/", count: (compositions.layouts?.length ?? 0) + (purposes.purposes?.length ?? 0), role: "保存 Composition、Purpose、契约与失败经验", tone: "catalog" },
       { name: "Logic 运行声明", path: "*/asset.json", count: formalLogics.length, role: "声明 Logic、Structure Group、触发条件和运行入口", tone: "runtime" },
     ],
@@ -387,7 +386,7 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
 }
 
 export async function resolvePreviewDeck(root, library, assetId) {
-  if (!new Set(["core", "candidate"]).has(library)) return null;
+  if (library !== "core") return null;
   const data = await collectLogicDashboardData(root);
   const record = data.records.find((item) => item.library === library && item.id === assetId);
   if (!record?.previewDeckPath) return null;
@@ -398,7 +397,7 @@ export async function resolvePreviewDeck(root, library, assetId) {
 }
 
 export async function resolveSourceSlide(root, library, assetId, requestedSlide) {
-  if (!new Set(["core", "candidate"]).has(library)) return null;
+  if (library !== "core") return null;
   const data = await collectLogicDashboardData(root);
   const record = data.records.find((item) => item.library === library && item.id === assetId);
   const sourceFile = record?.source?.file;
@@ -412,7 +411,7 @@ export async function resolveSourceSlide(root, library, assetId, requestedSlide)
 }
 
 async function resolveReviewState(root, library, assetId) {
-  if (!new Set(["core", "candidate"]).has(library)) return null;
+  if (library !== "core") return null;
   const data = await collectLogicDashboardData(root);
   const record = data.records.find((item) => item.library === library && item.id === assetId);
   if (!record?.reviewEntry || !record.previewParametersExport || !record.componentControls?.length) return null;

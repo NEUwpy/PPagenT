@@ -39,7 +39,6 @@ PPA 看板是 PPagenT 的本地资产建设与审查入口。它不保存第二�
 ## 数据与预览来源
 
 - `assets/`：核心资产与正式可调用 Logic；
-- `备选资产/`：候选资产，只展示，不自动晋升；
 - `catalog/`：Composition、Purpose、覆盖主题、契约和失败经验；
 - `PPT源/`：唯一原始 PPT 来源目录；
 - 每个资产目录的 `example.pptx`：看板中对应的真实 PPT 外观。

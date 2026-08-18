@@ -82,4 +82,4 @@
 
 ## 输入与产物约定
 
-调用时提供 `visual-intent.md`、结构化内容和 Content Frame 尺寸。输出保存为候选资产目录的 HTML 组件。先以黄金状态确定设计语言，再由同一组件扩展主要 State；每个 State 同时输出自然占用宽高、最小可用宽高和 Slot Contract。看板统一呈现 HTML、Native、Skin 及其字段、尺寸、容量和媒体要求；用户确认这份运行能力后才能入库。
+调用时提供 `visual-intent.md`、结构化内容和 Content Frame 尺寸。输出保存为该资产在核心库 `assets/<分类>/<资产>/` 目录的 HTML 组件。先以黄金状态确定设计语言，再由同一组件扩展主要 State；每个 State 同时输出自然占用宽高、最小可用宽高和 Slot Contract。看板统一呈现 HTML、Native、Skin 及其字段、尺寸、容量和媒体要求；用户确认这份运行能力后才能入库。

@@ -19,7 +19,7 @@
         <mxCell id="intake-label" value="资产入库线｜离线建设" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=22;fontStyle=1;fontColor=#2457A7;" vertex="1" parent="1">
           <mxGeometry x="50" y="100" width="300" height="35" as="geometry"/>
         </mxCell>
-        <mxCell id="intake-subtitle" value="Luna 只负责来源 PPT 的蒸馏与入库；允许复现、扩散和返工，但候选资产不得自动晋升" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#5271A3;" vertex="1" parent="1">
+        <mxCell id="intake-subtitle" value="Luna 只负责来源 PPT 的蒸馏与入库；允许复现、扩散和返工，但未确认资产不得进入正式生成线" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#5271A3;" vertex="1" parent="1">
           <mxGeometry x="350" y="102" width="1250" height="30" as="geometry"/>
         </mxCell>
 
@@ -47,7 +47,7 @@
         <mxCell id="core-library" value="&lt;b&gt;核心资产库&lt;/b&gt;&lt;br&gt;status = core&lt;br&gt;自描述能力包&lt;br&gt;正式生成线自动发现" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#F0E9FF;strokeColor=#7E57C2;strokeWidth=3;fontSize=16;fontStyle=1;fontColor=#4A2C82;spacing=8;" vertex="1" parent="1">
           <mxGeometry x="1780" y="180" width="240" height="140" as="geometry"/>
         </mxCell>
-        <mxCell id="intake-boundary" value="候选库 → 用户确认 → 核心库；代码生成成功不等于自动晋升" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#EAF2FF;strokeColor=#A8C4EF;dashed=1;fontSize=14;fontColor=#315C99;" vertex="1" parent="1">
+        <mxCell id="intake-boundary" value="资产目录 → 用户确认 → 正式生成线；代码生成成功不等于自动入库" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#EAF2FF;strokeColor=#A8C4EF;dashed=1;fontSize=14;fontColor=#315C99;" vertex="1" parent="1">
           <mxGeometry x="790" y="360" width="730" height="55" as="geometry"/>
         </mxCell>
 
