@@ -1,0 +1,133 @@
+{
+  "id": "convergence-simple-funnel-001",
+  "name": "简明输入转化漏斗",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
+    "slides": [77]
+  },
+  "references": [
+    {
+      "file": "PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
+      "slides": [77],
+      "role": "漏斗视觉语言参考",
+      "adopted": "保留入口图标、窄漏斗、曲面层级和渐变随形箭头，只表达输入对象进入漏斗后的逐级转化"
+    }
+  ],
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "convergence",
+    "structureGroupId": "convergence-simple-funnel",
+    "familyId": "convergence-funnel",
+    "variantId": "input-steps-only",
+    "silhouette": "inputs-centered-funnel",
+    "supportedBaseRelations": ["convergence"],
+    "supportedPurposeKeys": ["explain_conversion"],
+    "itemCount": { "min": 3, "preferred": [3, 4, 5], "max": 6 },
+    "stateContract": {
+      "resolver": "stepCount+inputCount",
+      "axes": {
+        "stepCount": [3, 4, 5, 6],
+        "inputCount": [0, 1, 2, 3, 4, 5, 6, 7]
+      },
+      "previewDefault": { "stepCount": 4, "inputCount": 4 }
+    },
+    "mediaContract": {
+      "mode": "semantic-icon",
+      "provider": "tabler-icons",
+      "selection": "local-top-1",
+      "queryOwner": "visual-director",
+      "source": "structuredData.inputs",
+      "requiredPerInput": false,
+      "inputCount": { "min": 0, "max": 7 }
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "optional",
+      "ordered": true,
+      "orderDirection": "top-to-bottom",
+      "relationTraits": { "converging": true },
+      "inputs": { "min": 0, "max": 7, "optional": true },
+      "structuredDataType": "convergence-optional"
+    },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "semantic": { "ordered": true },
+        "relationTraits": { "converging": true },
+        "density": ["low", "medium"]
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": { "selection": { "stepCount": 4, "inputCount": 4 } },
+      "controls": [
+        { "key": "stepCount", "label": "漏斗层级数", "values": [3, 4, 5, 6], "default": 4 },
+        { "key": "inputCount", "label": "输入图标数", "values": [0, 1, 2, 3, 4, 5, 6, 7], "default": 4 }
+      ]
+    }
+  },
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "同一 Structure Group 独立支持 3–6 个漏斗层级和 0–7 个输入对象",
+    "rule": "输入图标数与漏斗层级数互不绑定；少量输入收紧跨度并形成轻微错落，漏斗层级独立按共同中轴和宽度函数求解"
+  },
+  "componentModel": {
+    "fixed": [
+      "存在输入时，对象在漏斗入口上方收紧排布并形成轻微高低节奏",
+      "漏斗窄而挺拔，曲面层级由宽到窄且边界清楚",
+      "渐变导流箭头随漏斗收窄并由上到下逐渐显现"
+    ],
+    "variable": ["0–7 个输入对象", "3–6 个转化层级名称；两者数量独立"]
+  },
+  "fieldContract": {
+    "editable": [
+      { "field": "inputs[].label", "source": "PageContent 输入对象", "meaning": "可选入口对象短标签；无图标时在圆内显示" },
+      { "field": "inputs[].iconQuery", "source": "VisualPlan 输入语义", "meaning": "可选入口图标；存在时在同一圆内替代文字" },
+      { "field": "steps[].title", "source": "PageContent 转化节点", "meaning": "漏斗层级名称" }
+    ],
+    "generated": [
+      { "field": "steps[].geometry", "meaning": "由层级数计算的漏斗曲面几何" },
+      { "field": "flowArrow.geometry", "meaning": "由同一漏斗宽度函数生成的随形箭头" }
+    ],
+    "fixed": ["没有宏观阶段和阶段行动字段", "字号角色由 Skin 提供，组件不得按数量缩字"],
+    "unavailable": ["宏观阶段说明", "阶段行动清单", "结果说明", "分支路径"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "stateFootprints": {
+      "3": { "width": 1120, "height": 470, "basis": "component-root-visible-bounds" },
+      "4": { "width": 1120, "height": 470, "basis": "component-root-visible-bounds" },
+      "5": { "width": 1120, "height": 470, "basis": "component-root-visible-bounds" },
+      "6": { "width": 1120, "height": 470, "basis": "component-root-visible-bounds" }
+    },
+    "resizeMode": "natural",
+    "minFontSize": 17,
+    "safePadding": 10,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "承载 0–7 个输入对象和 3–6 个逐级收窄节点，两项数量独立",
+  "semanticContract": "用轻量漏斗表达连续筛选或转化；存在明确输入时显示入口对象，没有输入时直接展示转化层级；漏斗之外的结果或解释由视觉导演在页面编排层补充",
+  "doNotUseWhen": "没有逐级收窄、必须表达宏观阶段及其行动，或过程存在多条分支",
+  "review": "用户已确认 HTML 黄金状态、输入数 0–7 与漏斗层级数 3–6 的独立扩散、少量输入的收紧错落排布，以及圆内图标优先、圆内短文字回退；Native/PPT 由同一 HTML 组件编译，可进入核心资产库"
+}

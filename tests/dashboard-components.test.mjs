@@ -16,8 +16,13 @@ import {
   previewParameters as parallelPreviewParameters,
   resolvePreviewParameters as resolveParallelPreviewParameters,
   visualComponent as parallelVisualComponent,
-} from "../备选资产/结构图/等权并列卡片-001/review.mjs";
-import { mapPageContent as mapParallelPageContent } from "../备选资产/结构图/等权并列卡片-001/generate.mjs";
+} from "../assets/结构图/等权并列卡片-001/review.mjs";
+import { mapPageContent as mapParallelPageContent } from "../assets/结构图/等权并列卡片-001/runtime.mjs";
+import {
+  previewParameters as sequencePreviewParameters,
+  resolvePreviewParameters as resolveSequencePreviewParameters,
+  visualComponent as sequenceVisualComponent,
+} from "../assets/结构图/顺序流程-001/review.mjs";
 
 const root = path.resolve(import.meta.dirname, "..");
 
@@ -47,7 +52,7 @@ test("看板只把资产专属 HTML 计入迁移完成度", async () => {
   assert.equal(data.activeSkin?.pptPointScale, 0.75);
   assert.equal(cycle?.builderExport, "");
   assert.equal(cycle?.componentInitialSelection.stepCount, 4);
-  assert.equal(data.summary.htmlDesignComponents, 1);
+  assert.equal(data.summary.htmlDesignComponents, 9);
   assert.match(cycle?.previewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.componentPreviewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.nativeStatePreviewUrl ?? "", /[?&]v=\d+/);
@@ -77,29 +82,52 @@ test("作废的旧 Logic 不再出现在核心库或正式生成候选中", asyn
   const data = await collectLogicDashboardData(root);
   const removedIds = new Set([
     "comparison-structure-001", "framework-matrix-001", "swimlane-process-001",
-    "hierarchy-pyramid-001", "layered-architecture-001", "organization-tree-001",
+    "hierarchy-pyramid-001", "organization-tree-001",
     "problem-improvement-001", "radial-hub-001", "timeline-roadmap-001",
     "funnel-conversion-001", "sequential-process-001", "fishbone-analysis-001",
   ]);
   assert.equal(data.records.some((record) => removedIds.has(record.id)), false);
   const formalIds = new Set(data.formalLogics.map((record) => record.id));
-  assert.deepEqual([...formalIds], ["cycle-loop-001"]);
+  assert.deepEqual(formalIds, new Set([
+    "comparison-dual-verdict-001", "cycle-loop-001", "hierarchy-people-tree-001",
+    "hub-radial-001", "layered-architecture-001", "parallel-equal-cards-001",
+    "convergence-simple-funnel-001", "convergence-funnel-001", "sequence-flow-001",
+  ]));
 });
 
 test("Logic 能力地图保留空槽位，只把合格资产填入对应位置", async () => {
   const data = await collectLogicDashboardData(root);
-  assert.equal(data.logics.length, 20);
-  assert.equal(data.summary.logicSlots, 20);
-  assert.equal(data.summary.logicFilled, 1);
+  assert.equal(data.logics.length, 19);
+  assert.equal(data.summary.logicSlots, 19);
+  assert.equal(data.summary.logicFilled, 8);
 
   const cycle = data.logics.find((logic) => logic.id === "cycle");
   assert.deepEqual(cycle?.assetIds, ["cycle-loop-001"]);
   assert.equal(cycle?.status, "available");
 
+  const parallel = data.logics.find((logic) => logic.id === "parallel");
+  assert.deepEqual(parallel?.assetIds, ["parallel-equal-cards-001"]);
+  assert.equal(parallel?.status, "available");
+
+  const sequence = data.logics.find((logic) => logic.id === "sequence");
+  assert.deepEqual(sequence?.assetIds, ["sequence-flow-001"]);
+  assert.equal(sequence?.status, "available");
+
+  const layered = data.logics.find((logic) => logic.id === "layered");
+  assert.deepEqual(layered?.assetIds, ["layered-architecture-001"]);
+  assert.equal(layered?.status, "available");
+
   const hierarchy = data.logics.find((logic) => logic.id === "hierarchy");
-  assert.deepEqual(hierarchy?.assetIds, []);
-  assert.equal(hierarchy?.status, "empty");
+  assert.deepEqual(hierarchy?.assetIds, ["hierarchy-people-tree-001"]);
+  assert.equal(hierarchy?.status, "available");
   assert.match(hierarchy?.description ?? "", /上下级|归属/);
+
+  const convergence = data.logics.find((logic) => logic.id === "convergence");
+  assert.deepEqual(convergence?.assetIds, [
+    "convergence-simple-funnel-001",
+    "convergence-funnel-001",
+  ]);
+  assert.equal(convergence?.status, "available");
 });
 
 test("循环 Structure Group 暴露与 State 同步的可填充 Content Slots", () => {
@@ -128,8 +156,10 @@ test("循环闭环由同一 HTML 组件解析 3–6 步状态", () => {
     assert.equal((markup.match(/data-slot-role="center-title"/g) ?? []).length, 1);
     assert.equal((markup.match(/data-slot-role="item-title"/g) ?? []).length, stepCount);
     assert.equal((markup.match(/data-slot-role="item-body"/g) ?? []).length, stepCount);
-    assert.ok((markup.match(/data-slot-role="item-point"/g) ?? []).length >= stepCount);
-    assert.equal((markup.match(/data-slot-max-chars=/g) ?? []).length, 1 + stepCount * 2 + (markup.match(/data-slot-role="item-point"/g) ?? []).length);
+    assert.equal((markup.match(/data-slot-role="item-point"/g) ?? []).length, 0);
+    assert.equal((markup.match(/data-slot-text-mode="flow"/g) ?? []).length, 1 + stepCount);
+    assert.equal((markup.match(/data-slot-list-policy="inline"/g) ?? []).length, stepCount);
+    assert.equal((markup.match(/data-slot-max-chars=/g) ?? []).length, 1 + stepCount * 2);
   }
 });
 
@@ -152,24 +182,45 @@ test("等权并列卡片由同一 HTML 组件重新排布 3–5 项状态", () =
     assert.equal((markup.match(/data-slot-role="icon"/g) ?? []).length, itemCount);
     assert.equal((markup.match(/data-slot-role="item-title"/g) ?? []).length, itemCount);
     assert.equal((markup.match(/data-slot-role="item-body"/g) ?? []).length, itemCount);
+    assert.equal((markup.match(/data-slot-text-mode="flow"/g) ?? []).length, itemCount);
+    assert.equal((markup.match(/data-slot-list-policy="inline"/g) ?? []).length, itemCount);
     assert.equal((markup.match(/data-slot-required="true"/g) ?? []).length, itemCount);
     assert.equal((markup.match(/data-slot-max-lines="4"/g) ?? []).length, itemCount);
     assert.equal((markup.match(/data-icon-key=/g) ?? []).length, itemCount);
   }
 });
 
-test("待审批并列组件已接通 Native 与东北大学主题预览，但不进入正式能力地图", async () => {
+test("已审批并列组件进入核心库并可被正式生成线发现", async () => {
   const data = await collectLogicDashboardData(root);
-  const candidate = data.records.find((record) => record.library === "candidate" && record.id === "parallel-equal-cards-001");
-  assert.equal(candidate?.status, "candidate");
-  assert.deepEqual(candidate?.componentStates, [3, 4, 5]);
-  assert.ok(candidate?.nativeStatePreviewUrl);
-  assert.ok(candidate?.nativeStatePptxUrl);
-  assert.ok(candidate?.skinStatePreviewUrl);
-  assert.equal(candidate?.logicId, "parallel");
-  assert.equal(candidate?.mediaContract?.mode, "semantic-icon");
+  const core = data.records.find((record) => record.library === "core" && record.id === "parallel-equal-cards-001");
+  assert.equal(core?.status, "core");
+  assert.equal(core?.autoCallable, true);
+  assert.deepEqual(core?.componentStates, [3, 4, 5]);
+  assert.ok(core?.nativeStatePreviewUrl);
+  assert.ok(core?.nativeStatePptxUrl);
+  assert.ok(core?.skinStatePreviewUrl);
+  assert.equal(core?.logicId, "parallel");
+  assert.equal(core?.mediaContract?.mode, "semantic-icon");
   assert.equal(data.activeSkin?.slots?.contentFrame?.width, 1170);
-  assert.equal(data.formalLogics.some((record) => record.id === "parallel-equal-cards-001"), false);
+  assert.equal(data.formalLogics.some((record) => record.id === "parallel-equal-cards-001"), true);
+});
+
+test("已审批顺序流程由同一组件扩散 3–6 步并进入核心库", async () => {
+  for (const itemCount of [3, 4, 5, 6]) {
+    const parameters = resolveSequencePreviewParameters(sequencePreviewParameters, { itemCount });
+    const markup = sequenceVisualComponent.renderMarkup(parameters);
+    assert.match(markup, new RegExp(`data-item-count="${itemCount}"`));
+    assert.equal((markup.match(/class="sequence-step"/g) ?? []).length, itemCount);
+    assert.equal((markup.match(/data-slot-role="item-title"/g) ?? []).length, itemCount);
+    assert.equal((markup.match(/data-slot-role="item-body"/g) ?? []).length, itemCount);
+    assert.equal((markup.match(/data-slot-text-mode="flow"/g) ?? []).length, itemCount);
+  }
+  const data = await collectLogicDashboardData(root);
+  const core = data.records.find((record) => record.library === "core" && record.id === "sequence-flow-001");
+  assert.equal(core?.status, "core");
+  assert.equal(core?.componentPreviewAvailable, true);
+  assert.equal(core?.nativeOutputAvailable, true);
+  assert.equal(core?.autoCallable, true);
 });
 
 test("并列 Mapper 接收视觉导演语义查询，但不让导演指定图标文件", () => {

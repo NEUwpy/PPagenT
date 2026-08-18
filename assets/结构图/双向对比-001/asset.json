@@ -1,0 +1,134 @@
+{
+  "id": "comparison-dual-verdict-001",
+  "name": "双向结论对比",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "PPT源/狗哥蓝色-精美逻辑图PPT模板.pptx",
+    "slides": [55]
+  },
+  "references": [
+    {
+      "file": "PPT源/06-【柏林蓝】定制级学术型灵感手册-宽屏.pptx",
+      "slides": [97],
+      "role": "信息分区",
+      "adopted": "醒目的对象身份区和按共同维度横向比较的内容分区"
+    },
+    {
+      "file": "PPT源/【蓝色版】年终日常汇报PPT模板-狗哥PPT出品.pptx",
+      "slides": [111],
+      "role": "语义一致性",
+      "adopted": "状态含义由颜色、标记和承载面共同表达，不能只依赖单一符号"
+    }
+  ],
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "comparison",
+    "structureGroupId": "comparison-dual-verdict",
+    "familyId": "comparison-columns",
+    "variantId": "dual-verdict-mirror",
+    "silhouette": "mirrored-verdict-columns",
+    "supportedBaseRelations": ["comparison"],
+    "supportedPurposeKeys": ["compare_options"],
+    "itemCount": {
+      "min": 2,
+      "preferred": [2],
+      "max": 2
+    },
+    "stateContract": {
+      "resolver": "pairedItemCount",
+      "states": [3, 4, 5],
+      "previewDefault": 4
+    },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "relationTraits": { "comparison": true, "directionalPreference": true },
+        "density": ["low", "medium"]
+      }
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "required",
+      "polarity": "one-positive-one-negative"
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": {
+        "selection": { "itemCount": 4, "positiveSide": "右侧" }
+      },
+      "controls": [
+        {
+          "key": "itemCount",
+          "label": "每侧对应要点数",
+          "values": [3, 4, 5],
+          "default": 4
+        },
+        {
+          "key": "positiveSide",
+          "label": "推荐项位置",
+          "values": ["右侧", "左侧"],
+          "default": "右侧"
+        }
+      ]
+    }
+  },
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "固定两个对象；每侧支持 3–5 条一一对应的比较要点",
+    "rule": "两侧共同按当前要点数重新计算行高、间距和纵向起点，始终保持逐行共线；不得隐藏预设槽位"
+  },
+  "componentModel": {
+    "fixed": [
+      "两个镜像比较舱、中央比较节点和连续中缝",
+      "底部低矮椭圆平台共同收束两侧",
+      "两侧对应要点严格共线",
+      "颜色、符号、标题帽和要点承载面共同表达正负语义"
+    ],
+    "variable": [
+      "两侧标题、3–5 条对应要点和中央比较标签",
+      "推荐侧可以位于左侧或右侧，布局不把语义写死到位置"
+    ]
+  },
+  "fieldContract": {
+    "editable": [
+      { "field": "sides[].title", "meaning": "两侧对象名称" },
+      { "field": "sides[].items[]", "meaning": "两侧按相同顺序一一对应的短要点" },
+      { "field": "sides[].tone", "meaning": "决定正面／负面整套视觉语义，必须一正一负" },
+      { "field": "comparisonLabel", "meaning": "中央比较标签，默认 VS" }
+    ],
+    "generated": [],
+    "fixed": ["左右镜像、逐行共线、完整中缝和底部共同椭圆平台"],
+    "unavailable": ["图片", "长段正文", "非对称要点数量", "三项以上对象"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "resizeMode": "natural",
+    "minFontSize": 19,
+    "safePadding": 12,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "固定比较两个对象；每侧 3–5 条一一对应的短要点；标题不超过 10 字、单条要点不超过 16 字",
+  "semanticContract": "两个对象围绕同一问题形成明确取舍方向，且两侧要点可以逐行对应",
+  "doNotUseWhen": "两个对象完全等权、两侧要点无法对应、对象超过两个或需要长段解释",
+  "review": "用户已确认 HTML 视觉结果；Native 与东北大学 Skin 保留居中文字、中央 VS、底部椭圆平台和同族阴影，已同意继续正式入库"
+}

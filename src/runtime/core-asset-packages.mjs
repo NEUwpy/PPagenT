@@ -4,7 +4,8 @@ import { pathToFileURL } from "node:url";
 import { inspectHtmlComponentEligibility } from "./html-component-eligibility.mjs";
 
 const defaultRoot = path.resolve(import.meta.dirname, "../..");
-const cache = new Map();
+const indexCache = new Map();
+const packageCache = new Map();
 
 function requireValue(condition, message) {
   if (!condition) throw new Error(message);
@@ -29,16 +30,7 @@ async function discoverManifestPaths(root) {
   return paths.sort((left, right) => left.localeCompare(right, "zh-CN"));
 }
 
-async function loadPackage(manifestPath) {
-  let asset;
-  try {
-    asset = JSON.parse(await fs.readFile(manifestPath, "utf8"));
-  } catch (error) {
-    if (error.code === "ENOENT") return null;
-    throw error;
-  }
-  if (asset.status !== "core" || !asset.runtime) return null;
-
+function validateManifest(asset, manifestPath) {
   const runtime = asset.runtime;
   const renderer = runtime.renderer;
   requireValue(new Set(["skin", "html-component", "legacy-builder"]).has(renderer), `${asset.id} 的 runtime.renderer 非法或缺失`);
@@ -65,7 +57,7 @@ async function loadPackage(manifestPath) {
           && binding.minItems >= 1 && binding.maxItems >= binding.minItems,
         `${asset.id}:${binding.id} 的条目范围非法`);
         requireValue(Number.isInteger(binding.maxChars) && binding.maxChars > 0, `${asset.id}:${binding.id} 缺少 maxChars`);
-        requireValue(new Set(["source-fragment"]).has(binding.grounding), `${asset.id}:${binding.id} 的 grounding 非法`);
+        requireValue(binding.grounding === "source-fragment", `${asset.id}:${binding.id} 的 grounding 非法`);
       }
     }
   }
@@ -78,38 +70,45 @@ async function loadPackage(manifestPath) {
     requireValue(runtime.slotContract.childPolicy === "registered-core-only", `${asset.id} 的 slotContract.childPolicy 必须是 registered-core-only`);
     requireValue(runtime.slotContract.fallback === "plain-text", `${asset.id} 的 slotContract.fallback 必须是 plain-text`);
   }
+}
 
+async function loadDescriptor(manifestPath) {
+  let asset;
+  try {
+    asset = JSON.parse(await fs.readFile(manifestPath, "utf8"));
+  } catch (error) {
+    if (error.code === "ENOENT") return null;
+    throw error;
+  }
+  if (asset.status !== "core" || !asset.runtime) return null;
+  validateManifest(asset, manifestPath);
   const assetDir = path.dirname(manifestPath);
-  if (renderer === "html-component") {
+  if (asset.runtime.renderer === "html-component") {
     const eligibility = await inspectHtmlComponentEligibility(assetDir, asset.id);
     if (!eligibility.eligible) return null;
   }
-  const entryPath = path.resolve(assetDir, runtime.entry);
+  const entryPath = path.resolve(assetDir, asset.runtime.entry);
   requireValue(inside(assetDir, entryPath), `${asset.id} 的运行入口必须位于资产目录内`);
-  const module = await import(pathToFileURL(entryPath).href);
-  const builder = runtime.builderExport ? module[runtime.builderExport] : null;
-  const component = runtime.componentExport ? module[runtime.componentExport] : null;
-  const mapper = module[runtime.mapperExport];
-  const slotResolver = runtime.slotContract?.resolverExport ? module[runtime.slotContract.resolverExport] : null;
-  if (renderer === "legacy-builder") {
-    requireValue(typeof runtime.builderExport === "string" && runtime.builderExport, `${asset.id} 缺少 builderExport`);
-    requireValue(typeof builder === "function", `${asset.id} 没有导出 ${runtime.builderExport}`);
-  } else if (renderer === "html-component") {
-    requireValue(typeof runtime.componentExport === "string" && runtime.componentExport, `${asset.id} 缺少 componentExport`);
-    requireValue(component && typeof component.renderMarkup === "function", `${asset.id} 没有导出可用的 ${runtime.componentExport}`);
-  }
-  requireValue(typeof mapper === "function", `${asset.id} 没有导出 ${runtime.mapperExport}`);
-  if (runtime.slotContract) requireValue(typeof slotResolver === "function", `${asset.id} 没有导出 ${runtime.slotContract.resolverExport}`);
-
-  const textCapacity = component?.textCapacity ?? runtime.textCapacity ?? null;
-  return { assetId: asset.id, asset, assetDir, manifestPath, runtime, textCapacity, builder, component, mapper, slotResolver };
+  return {
+    assetId: asset.id,
+    asset,
+    assetDir,
+    manifestPath,
+    entryPath,
+    runtime: asset.runtime,
+    textCapacity: asset.runtime.textCapacity ?? null,
+  };
 }
 
+/**
+ * Lightweight discovery: reads asset.json and approval metadata only.
+ * It never imports an asset module or the PowerPoint rendering runtime.
+ */
 export async function discoverCoreAssetPackages(root = defaultRoot) {
   const resolvedRoot = path.resolve(root);
-  if (!cache.has(resolvedRoot)) {
-    cache.set(resolvedRoot, (async () => {
-      const packages = (await Promise.all((await discoverManifestPaths(resolvedRoot)).map(loadPackage)))
+  if (!indexCache.has(resolvedRoot)) {
+    indexCache.set(resolvedRoot, (async () => {
+      const packages = (await Promise.all((await discoverManifestPaths(resolvedRoot)).map(loadDescriptor)))
         .filter(Boolean);
       const ids = new Set();
       for (const item of packages) {
@@ -119,9 +118,55 @@ export async function discoverCoreAssetPackages(root = defaultRoot) {
       return packages.sort((left, right) => left.assetId.localeCompare(right.assetId));
     })());
   }
-  return cache.get(resolvedRoot);
+  return indexCache.get(resolvedRoot);
 }
 
 export async function coreAssetPackageMap(root = defaultRoot) {
   return new Map((await discoverCoreAssetPackages(root)).map((item) => [item.assetId, item]));
+}
+
+export async function loadCoreAssetPackage(assetId, root = defaultRoot) {
+  const resolvedRoot = path.resolve(root);
+  const key = `${resolvedRoot}\0${assetId}`;
+  if (!packageCache.has(key)) {
+    packageCache.set(key, (async () => {
+      const descriptor = (await discoverCoreAssetPackages(resolvedRoot))
+        .find((item) => item.assetId === assetId);
+      if (!descriptor) throw new Error(`核心资产包不存在：${assetId}`);
+      const { runtime } = descriptor;
+      const module = await import(pathToFileURL(descriptor.entryPath).href);
+      const builder = runtime.builderExport ? module[runtime.builderExport] : null;
+      const component = runtime.componentExport ? module[runtime.componentExport] : null;
+      const mapper = module[runtime.mapperExport];
+      const slotResolver = runtime.slotContract?.resolverExport ? module[runtime.slotContract.resolverExport] : null;
+      if (runtime.renderer === "legacy-builder") {
+        requireValue(typeof runtime.builderExport === "string" && runtime.builderExport, `${assetId} 缺少 builderExport`);
+        requireValue(typeof builder === "function", `${assetId} 没有导出 ${runtime.builderExport}`);
+      } else if (runtime.renderer === "html-component") {
+        requireValue(typeof runtime.componentExport === "string" && runtime.componentExport, `${assetId} 缺少 componentExport`);
+        requireValue(component && typeof component.renderMarkup === "function", `${assetId} 没有导出可用的 ${runtime.componentExport}`);
+      }
+      requireValue(typeof mapper === "function", `${assetId} 没有导出 ${runtime.mapperExport}`);
+      if (runtime.slotContract) requireValue(typeof slotResolver === "function", `${assetId} 没有导出 ${runtime.slotContract.resolverExport}`);
+      return {
+        ...descriptor,
+        textCapacity: component?.textCapacity ?? runtime.textCapacity ?? null,
+        builder,
+        component,
+        mapper,
+        slotResolver,
+      };
+    })());
+  }
+  return packageCache.get(key);
+}
+
+/** Load detailed container/capacity data for a shortlisted asset only. */
+export async function loadCoreAssetCapabilities(assetId, root = defaultRoot) {
+  const assetPackage = await loadCoreAssetPackage(assetId, root);
+  return {
+    textCapacity: assetPackage.textCapacity ? structuredClone(assetPackage.textCapacity) : null,
+    slotResolver: assetPackage.slotResolver,
+    component: assetPackage.component,
+  };
 }

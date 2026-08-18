@@ -1,0 +1,159 @@
+{
+  "id": "sequence-flow-001",
+  "name": "顺序流程",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "PPT源/狗哥蓝色-精美逻辑图PPT模板.pptx",
+    "slides": [27]
+  },
+  "references": [
+    {
+      "file": "PPT源/【蓝色版】年终日常汇报PPT模板-狗哥PPT出品.pptx",
+      "slides": [44],
+      "role": "逻辑层级",
+      "adopted": "连续基线、等距阶段节点，以及步骤标题与内容的一一绑定"
+    },
+    {
+      "file": "PPT源/06-【柏林蓝】定制级学术型灵感手册-宽屏.pptx",
+      "slides": [110],
+      "role": "审美气质",
+      "adopted": "克制留白、大编号视觉锚点和稳定的纵向阅读层级"
+    }
+  ],
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "sequence",
+    "structureGroupId": "sequence-flow",
+    "familyId": "sequence-process",
+    "variantId": "continuous-numbered-rail",
+    "silhouette": "continuous-arrow-rail",
+    "supportedBaseRelations": ["sequence"],
+    "supportedPurposeKeys": ["explain_process", "present_steps"],
+    "itemCount": {
+      "min": 3,
+      "preferred": [3, 4, 5],
+      "max": 6
+    },
+    "stateContract": {
+      "resolver": "itemCount",
+      "states": [3, 4, 5, 6],
+      "previewDefault": 4
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "optional",
+      "ordered": true
+    },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "semantic": { "ordered": true },
+        "relationTraits": { "sequence": true },
+        "density": ["low", "medium"]
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": {
+        "selection": { "itemCount": 4 }
+      },
+      "controls": [
+        {
+          "key": "itemCount",
+          "label": "流程步骤数",
+          "values": [3, 4, 5, 6],
+          "default": 4
+        }
+      ]
+    }
+  },
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "同一 Structure Group 支持 3–6 步；按步骤数重新计算整体宽度、节点间距和文字容量",
+    "rule": "步骤节点始终等距并沿同一条由左向右的连续轨道排列；三步状态收窄并居中，禁止通过删除四步版中的一个位置形成空洞"
+  },
+  "componentModel": {
+    "fixed": [
+      "由左向右的连续方向轨道",
+      "编号圆节点—可选标题—完整正文容器的统一层级",
+      "所有节点共线、等距且顺序编号"
+    ],
+    "variable": [
+      "3–6 个有明确先后的步骤",
+      "步骤标题和正文",
+      "项目数变化时由同一 HTML 组件重新计算布局"
+    ]
+  },
+  "fieldContract": {
+    "editable": [
+      {
+        "field": "items.length",
+        "source": "PageContent.items.length",
+        "meaning": "选择 3、4、5 或 6 步 State，并触发整组重新排布"
+      },
+      {
+        "field": "items[].title",
+        "source": "PageContent.items[].title",
+        "meaning": "步骤标题，可省略"
+      },
+      {
+        "field": "items[].body",
+        "source": "PageContent.items[].body",
+        "meaning": "每步的一整块正文容器"
+      },
+      {
+        "field": "items[].points[]",
+        "source": "PageContent.items[].points[]",
+        "meaning": "原稿确有分点时合并进同一正文容器，不预设固定子槽"
+      }
+    ],
+    "generated": [
+      {
+        "field": "items[].order",
+        "meaning": "程序根据数组顺序生成 01–06，不由内容导演手填"
+      }
+    ],
+    "fixed": [
+      "阅读方向始终从左到右",
+      "字号角色由 Skin 提供，组件不得自行缩字"
+    ],
+    "unavailable": ["图标"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "stateFootprints": {
+      "3": { "width": 930, "height": 382, "basis": "component-root-visible-bounds" },
+      "4": { "width": 1060, "height": 382, "basis": "component-root-visible-bounds" },
+      "5": { "width": 1130, "height": 382, "basis": "component-root-visible-bounds" },
+      "6": { "width": 1150, "height": 382, "basis": "component-root-visible-bounds" }
+    },
+    "resizeMode": "natural",
+    "minFontSize": 19,
+    "safePadding": 10,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "承载 3–6 个有明确先后的步骤；标题可选且不超过 8 字；每步只有一个完整正文容器，正文上限随 State 为 56/44/34/26 字",
+  "semanticContract": "3–6 个对象存在明确先后顺序，适合步骤、阶段或操作链路，但不表达真实日期和循环回流",
+  "doNotUseWhen": "内容只是同级枚举、存在闭环回流、需要时间刻度，或包含明显分支判断",
+  "review": "用户已确认 HTML 黄金状态与 3–6 步扩散；Native/PPT 与东北大学 Skin 编译一致，可进入核心资产库"
+}

@@ -1,0 +1,137 @@
+{
+  "id": "layered-architecture-001",
+  "name": "曲面分层架构",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "PPT源/狗哥蓝色-精美逻辑图PPT模板.pptx",
+    "slides": [36, 46]
+  },
+  "references": [
+    {
+      "file": "PPT源/狗哥蓝色-精美逻辑图PPT模板.pptx",
+      "slides": [36],
+      "role": "主要视觉语法",
+      "adopted": "用彩色椭圆层带与浅色曲面层体表达分层，整体由底向上收拢并保持共同中轴"
+    },
+    {
+      "file": "PPT源/狗哥蓝色-精美逻辑图PPT模板.pptx",
+      "slides": [46],
+      "role": "语义清晰性",
+      "adopted": "层名与层内能力清楚分离；仅吸收信息组织，不采用其扁平矩形外观"
+    }
+  ],
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "layered",
+    "structureGroupId": "layered-curved-frustums",
+    "familyId": "layered-architecture",
+    "variantId": "curved-frustum-stack",
+    "silhouette": "centered-curved-frustum-stack",
+    "supportedBaseRelations": ["layered"],
+    "supportedPurposeKeys": ["explain_layers", "explain_experience_layers", "present_layered_conclusions"],
+    "itemCount": {
+      "min": 3,
+      "preferred": [3, 4, 5],
+      "max": 5
+    },
+    "stateContract": {
+      "resolver": "layerCount",
+      "states": [3, 4, 5],
+      "previewDefault": 4
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "required",
+      "ordered": true,
+      "orderDirection": "top-to-bottom",
+      "itemsPerLayer": { "min": 2, "max": 4 }
+    },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "semantic": { "ordered": true },
+        "relationTraits": { "layered": true },
+        "density": ["low", "medium"]
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": { "selection": { "layerCount": 4 } },
+      "controls": [
+        {
+          "key": "layerCount",
+          "label": "架构层数",
+          "values": [3, 4, 5],
+          "default": 4
+        }
+      ]
+    }
+  },
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "同一 Structure Group 支持 3–5 层；每层支持 2–4 个短能力项",
+    "rule": "按当前层数重新计算层高、层间距与逐层收拢幅度；所有层围绕共同中轴居中，不从五层版删除空层"
+  },
+  "componentModel": {
+    "fixed": [
+      "由底向上逐层收拢的居中曲面层体",
+      "彩色椭圆层带承载层名、浅色层体承载同级能力项",
+      "统一蓝青色系、轻柔阴影和稳定的层间呼吸"
+    ],
+    "variable": [
+      "3–5 个系统层级及其层名",
+      "每层 2–4 个同级能力项",
+      "层数变化时由同一 HTML 组件重新求解整体布局"
+    ]
+  },
+  "fieldContract": {
+    "editable": [
+      { "field": "layers.length", "source": "PageContent.layers.length", "meaning": "选择 3、4 或 5 层 State" },
+      { "field": "layers[].title", "source": "PageContent.layers[].title", "meaning": "每个系统层的层名" },
+      { "field": "layers[].items[]", "source": "PageContent.layers[].items[]", "meaning": "该层内部 2–4 个同级能力或职责" }
+    ],
+    "generated": [],
+    "fixed": [
+      "层级顺序按数组从上到下呈现",
+      "最下层视觉体量最大、最上层最收拢",
+      "字号角色由 Skin 提供，组件不得自行缩字"
+    ],
+    "unavailable": ["图片", "图标", "跨层连线", "层内正文段落"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "stateFootprints": {
+      "3": { "width": 1090, "height": 468, "basis": "component-root-visible-bounds" },
+      "4": { "width": 1090, "height": 468, "basis": "component-root-visible-bounds" },
+      "5": { "width": 1090, "height": 468, "basis": "component-root-visible-bounds" }
+    },
+    "resizeMode": "natural",
+    "minFontSize": 18,
+    "safePadding": 16,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "承载 3–5 个有明确上下支撑关系的系统层；每层 2–4 个短能力项；层名与能力项均不超过 8 字",
+  "semanticContract": "多个系统层按上下顺序构成整体架构；层内项目同级，层与层之间表达支撑、调用或抽象递进，不表达人员管理关系",
+  "doNotUseWhen": "内容是人员组织树、纯并列枚举、时间过程，或需要跨层多对多连线",
+  "review": "用户已确认 HTML 黄金状态、3–5 层版式扩散及淡化配色；Native/PPT 与东北大学主题编译保持一致，可进入核心资产库"
+}

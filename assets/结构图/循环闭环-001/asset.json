@@ -20,7 +20,7 @@
   ],
   "runtime": {
     "renderer": "html-component",
-    "entry": "generate.mjs",
+    "entry": "runtime.mjs",
     "componentExport": "visualComponent",
     "previewParametersExport": "previewParameters",
     "mapperExport": "mapPageContent",
@@ -153,17 +153,17 @@
       {
         "field": "steps[].title",
         "source": "PageContent.items[].title",
-        "meaning": "步骤名称；示例中的“计划／执行／检查／行动”等会被真实稿件替换"
+        "meaning": "可选步骤名称；有来源时替换示例文字，没有时保持为空，不自动编造占位标题"
       },
       {
         "field": "steps[].body",
         "source": "PageContent.items[].body",
-        "meaning": "步骤说明"
+        "meaning": "步骤支持正文；与来源分点共同进入一整块正文容器"
       },
       {
         "field": "steps[].points[]",
         "source": "PageContent.items[].points[]",
-        "meaning": "步骤分点"
+        "meaning": "只有原稿确有分点时才在同一正文容器内换行显示，不创建固定几何小槽"
       },
       {
         "field": "steps.length",
@@ -238,7 +238,7 @@
       "component-full"
     ]
   },
-  "capacity": "3–6 个循环步骤；每项接受可选正文和0–4条普通文本分点，标题不超过8字，正文与单条分点均不超过14字；容量服从固定字号，不通过缩字扩容",
+  "capacity": "3–6 个循环步骤；每项有一个完整支持正文容器，最多5行、合计不超过64字；可直接放普通段落，原稿确有分点时允许0–4条并在同一容器内排版；容量服从固定字号，不通过缩字扩容",
   "adaptation": {
     "stepCount": "3–6；外围文本按左右位置镜像对齐，分点少于4条也可正常使用",
     "layout": "步骤围绕中心按顺时针顺序等角分布；HTML 负责唯一布局，通用编译器读取最终 DOM/CSS 后生成 Native 形状",

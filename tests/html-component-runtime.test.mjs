@@ -18,10 +18,10 @@ import {
   previewParameters as parallelPreviewParameters,
   resolvePreviewParameters as resolveParallelPreviewParameters,
   visualComponent as parallelVisualComponent,
-} from "../备选资产/结构图/等权并列卡片-001/review.mjs";
+} from "../assets/结构图/等权并列卡片-001/review.mjs";
 
 const assetDir = path.resolve(import.meta.dirname, "../assets/结构图/循环闭环-001");
-const parallelAssetDir = path.resolve(import.meta.dirname, "../备选资产/结构图/等权并列卡片-001");
+const parallelAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/等权并列卡片-001");
 
 test("循环 HTML 由通用 DOM 编译器直接生成可编辑 Native 形状", async () => {
   const targetFrame = { left: 55, top: 166, width: 1170, height: 492 };
@@ -56,9 +56,14 @@ test("循环 HTML 由通用 DOM 编译器直接生成可编辑 Native 形状", a
     assert.equal(tree.nodes.find((node) => node.name === "cycle-number-0")?.style.fontSize, 29);
     assert.equal(tree.nodes.find((node) => node.name === "cycle-title-0")?.style.fontSize, 21);
     assert.equal(tree.nodes.find((node) => node.name === "cycle-core-text-0")?.style.fontSize, 26);
-    assert.equal(tree.nodes.find((node) => node.name === "cycle-0-copy-line-0")?.style.fontSize, 19);
+    assert.equal(tree.nodes.find((node) => node.name === "cycle-0-support")?.style.fontSize, 19);
     assert.deepEqual(tree.slots.find((slot) => slot.role === "center-title")?.capacity, { maxChars: 12, maxLines: 2 });
     assert.deepEqual(tree.slots.find((slot) => slot.role === "item-title")?.capacity, { maxChars: 8, maxLines: 1 });
+    assert.deepEqual(tree.slots.find((slot) => slot.role === "item-body")?.capacity, { maxChars: 64, maxLines: 5 });
+    assert.equal(tree.slots.find((slot) => slot.role === "item-body")?.textMode, "flow");
+    assert.equal(tree.slots.find((slot) => slot.role === "item-body")?.listPolicy, "inline");
+    assert.equal(tree.slots.find((slot) => slot.role === "item-title")?.required, false);
+    assert.match(tree.nodes.find((node) => node.name === "cycle-0-support")?.text ?? "", /明确本轮改进目标\n• 分析现状约束/);
 
     const presentation = createPresentation();
     const slide = presentation.slides.add();
@@ -77,12 +82,13 @@ test("循环基础版接受正文和0–4条普通分点，不绑定指标结构
   const model = normalizeCycleParameters({
     center: "循环",
     steps: [
-      { title: "输入", body: "只有正文", points: [] },
+      { body: "只有正文", points: [] },
       { title: "处理", points: ["只有一个分点"] },
       { title: "输出", body: "正文", points: ["分点一", "分点二", "分点三", "分点四"] },
     ],
   });
-  assert.deepEqual(model.steps.map((step) => step.copyLines.length), [1, 1, 5]);
+  assert.equal(model.steps[0].title, "");
+  assert.deepEqual(model.steps.map((step) => step.supportText.split("\n").length), [1, 1, 5]);
   assert.throws(() => normalizeCycleParameters({
     steps: [
       { title: "输入", body: "正文" },
@@ -92,11 +98,11 @@ test("循环基础版接受正文和0–4条普通分点，不绑定指标结构
   }), /独立的嵌套 Structure Group/);
   assert.throws(() => normalizeCycleParameters({
     steps: [
-      { title: "输入", body: "这段正文故意超过固定字号对应容量" },
+      { title: "输入", body: "超".repeat(65) },
       { title: "处理", body: "正文" },
       { title: "输出", body: "正文" },
     ],
-  }), /超过 14 字/);
+  }), /支持正文超过 64 字/);
 });
 
 test("HTML 组件拒绝通过缩放目标框偷偷改变字号", async () => {

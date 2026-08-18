@@ -13,6 +13,7 @@ import {
   resolveSourceSlide,
 } from "./logic-dashboard-data.mjs";
 import { northeasternUniversityTheme } from "../runtime/skins/northeastern-university-theme.mjs";
+import { htmlComponentThemeCss } from "../visual-runtime/html-component-theme.mjs";
 
 function option(name, fallback) {
   const index = process.argv.indexOf(name);
@@ -251,7 +252,6 @@ async function componentPreviewHtml(library, assetId, searchParams) {
   const designWidth = Number(component.designFrame?.width);
   const designHeight = Number(component.designFrame?.height);
   if (!Number.isFinite(designWidth) || !Number.isFinite(designHeight) || designWidth <= 0 || designHeight <= 0) return null;
-  const { htmlComponentThemeCss } = await import("../visual-runtime/html-component-runtime.mjs");
   return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(resolved.record.name)} · ${escapeHtml(stateLabel)}</title><style>${htmlComponentThemeCss(northeasternUniversityTheme)}${css}
 html,body{margin:0!important;width:100%!important;height:100%!important;overflow:hidden!important}
 body{position:relative!important;background:#fff!important}
@@ -269,7 +269,7 @@ body{position:relative!important;background:#fff!important}
 .ppagent-slot-visual-box::after{content:attr(data-slot-label);position:absolute;left:3px;bottom:3px;display:none;max-width:calc(100% - 6px);padding:3px 6px;overflow:hidden;border-radius:4px;color:#fff;background:rgba(23,32,51,.86);font:12px/1.25 "Microsoft YaHei",sans-serif;white-space:nowrap;text-overflow:ellipsis}
 .ppagent-slot-visual-box:hover::after{display:block}
 </style></head><body><div class="ppagent-component-viewport"><div class="ppagent-component-scale">${markup}</div></div><script>
-addEventListener("load",async()=>{await document.fonts.ready;const scale=document.querySelector(".ppagent-component-scale");const root=document.querySelector("[data-ppt-root]");if(!scale||!root)return;const rootBox=root.getBoundingClientRect();if(!rootBox.width||!rootBox.height)return;const layer=document.createElement("div");layer.className="ppagent-slot-visual-layer";for(const element of root.querySelectorAll("[data-slot-id]")){const box=element.getBoundingClientRect();if(!box.width||!box.height)continue;const marker=document.createElement("i");const icon=element.dataset.slotContentType==="icon"||element.dataset.slotRole==="icon";const ability=icon?(element.dataset.slotRequired==="true"?"必填图标":"可选图标"):(element.dataset.slotMaxChars?"≤"+element.dataset.slotMaxChars+"字":"文字");marker.className="ppagent-slot-visual-box"+(icon?" icon":"");marker.dataset.slotLabel=(element.dataset.slotRole||"content")+" · "+ability+" · "+(element.dataset.slotField||element.dataset.slotId);marker.style.left=(box.left-rootBox.left)/rootBox.width*100+"%";marker.style.top=(box.top-rootBox.top)/rootBox.height*100+"%";marker.style.width=box.width/rootBox.width*100+"%";marker.style.height=box.height/rootBox.height*100+"%";layer.append(marker)}scale.append(layer)});
+addEventListener("load",async()=>{await document.fonts.ready;const scale=document.querySelector(".ppagent-component-scale");const root=document.querySelector("[data-ppt-root]");if(!scale||!root)return;const rootBox=root.getBoundingClientRect();if(!rootBox.width||!rootBox.height)return;const layer=document.createElement("div");layer.className="ppagent-slot-visual-layer";for(const element of root.querySelectorAll("[data-slot-id]")){const box=element.getBoundingClientRect();if(!box.width||!box.height)continue;const marker=document.createElement("i");const icon=element.dataset.slotContentType==="icon"||element.dataset.slotRole==="icon";const flow=element.dataset.slotTextMode==="flow"||(!element.dataset.slotTextMode&&element.dataset.slotRole==="item-body");const ability=icon?(element.dataset.slotRequired==="true"?"必填图标":"可选图标"):(flow?"整块正文":(element.dataset.slotMaxChars?"≤"+element.dataset.slotMaxChars+"字":"文字"));marker.className="ppagent-slot-visual-box"+(icon?" icon":"");marker.dataset.slotLabel=(element.dataset.slotRole||"content")+" · "+ability+" · "+(element.dataset.slotField||element.dataset.slotId);marker.style.left=(box.left-rootBox.left)/rootBox.width*100+"%";marker.style.top=(box.top-rootBox.top)/rootBox.height*100+"%";marker.style.width=box.width/rootBox.width*100+"%";marker.style.height=box.height/rootBox.height*100+"%";layer.append(marker)}scale.append(layer)});
 </script></body></html>`;
 }
 
@@ -497,7 +497,7 @@ const server = http.createServer(async (request, response) => {
       }
       send(response, 200, html, "text/html; charset=utf-8", {
         ...immutablePreviewHeaders,
-        "content-security-policy": "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'",
+        "content-security-policy": "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:",
       });
       return;
     }

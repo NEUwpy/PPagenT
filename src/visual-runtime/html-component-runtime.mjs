@@ -4,6 +4,10 @@ import { fileURLToPath } from "node:url";
 
 import { chromium } from "playwright-core";
 import { Presentation, PresentationFile } from "@oai/artifact-tool";
+import { assertResolvedTextContainerSlots } from "./text-container-contract.mjs";
+import { htmlComponentThemeCss } from "./html-component-theme.mjs";
+
+export { htmlComponentThemeCss } from "./html-component-theme.mjs";
 
 const TREE_SCHEMA_VERSION = 2;
 let browserPromise = null;
@@ -45,23 +49,6 @@ function normalizeFrame(frame, label) {
   requireValue(frame && ["left", "top", "width", "height"].every((key) => Number.isFinite(frame[key])), `${label} 非法`);
   requireValue(frame.width > 0 && frame.height > 0, `${label} 的宽高必须大于 0`);
   return { left: frame.left, top: frame.top, width: frame.width, height: frame.height };
-}
-
-function cssString(value, fallback) {
-  return `"${String(value ?? fallback).replaceAll("\\", "\\\\").replaceAll('"', '\\"')}"`;
-}
-
-export function htmlComponentThemeCss(theme = {}) {
-  const typography = theme.typography ?? {};
-  return `:root{
-    --ppagent-font-body:${cssString(theme.font, "Microsoft YaHei")};
-    --ppagent-component-heading-size:${Number(typography.componentHeading ?? 29)}px;
-    --ppagent-component-title-size:${Number(typography.componentTitle ?? 26)}px;
-    --ppagent-component-item-title-size:${Number(typography.componentItemTitle ?? 21)}px;
-    --ppagent-component-body-size:${Number(typography.componentBody ?? 19)}px;
-    --ppagent-component-label-size:${Number(typography.componentLabel ?? 18)}px;
-    --ppagent-component-meta-size:${Number(typography.componentMeta ?? 17)}px;
-  }`;
 }
 
 function componentDocument(markup, css, frame, theme) {
@@ -142,6 +129,17 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         alignment: style.textAnchor === "middle" || style.textAlign === "center" ? "center" : style.textAnchor === "end" || style.textAlign === "right" ? "right" : "left",
         verticalAlignment: element.dataset.pptValign || "middle",
       });
+      const textValue = (element) => {
+        const source = element.textContent.replace(/\r/g, "");
+        if (element.dataset.pptPreserveLines === "true") {
+          return source
+            .split("\n")
+            .map((line) => line.replace(/[\t ]+/g, " ").trim())
+            .filter(Boolean)
+            .join("\n");
+        }
+        return source.replace(/\s+/g, " ").trim();
+      };
       const lineStyle = (element, style) => {
         const svg = element instanceof SVGElement;
         const width = rounded(parseFloat(svg ? style.strokeWidth : style.borderTopWidth) || 0);
@@ -183,17 +181,24 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
           ? htmlFrame(element)
           : element instanceof SVGGraphicsElement ? svgFrame(element) : htmlFrame(element);
         if (kind === "image") {
-          if (!(element instanceof SVGSVGElement)) throw new Error("data-ppt-kind=image 当前只支持内联 SVG");
-          const clone = element.cloneNode(true);
-          clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-          clone.setAttribute("width", String(Math.max(1, frame.width)));
-          clone.setAttribute("height", String(Math.max(1, frame.height)));
-          clone.style.color = style.color;
-          const encoded = btoa(unescape(encodeURIComponent(clone.outerHTML)));
-          return { ...base, frame, dataUrl: `data:image/svg+xml;base64,${encoded}`, alt: element.dataset.iconKey || base.name };
+          if (element instanceof SVGSVGElement) {
+            const clone = element.cloneNode(true);
+            clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+            clone.setAttribute("width", String(Math.max(1, frame.width)));
+            clone.setAttribute("height", String(Math.max(1, frame.height)));
+            clone.style.color = style.color;
+            const encoded = btoa(unescape(encodeURIComponent(clone.outerHTML)));
+            return { ...base, frame, dataUrl: `data:image/svg+xml;base64,${encoded}`, alt: element.dataset.iconKey || base.name, geometry: element.dataset.pptShape || null };
+          }
+          if (element instanceof HTMLImageElement) {
+            const dataUrl = element.currentSrc || element.src;
+            if (!dataUrl.startsWith("data:image/")) throw new Error("HTML 图片进入 Native 前必须转换为 data:image/* URL");
+            return { ...base, frame, dataUrl, alt: element.alt || base.name, geometry: element.dataset.pptShape || null };
+          }
+          throw new Error("data-ppt-kind=image 仅支持内联 SVG 或 data:image/* 图片");
         }
         if (kind === "text") {
-          return { ...base, frame, text: element.textContent.replace(/\s+/g, " ").trim(), style: textStyle(element, style) };
+          return { ...base, frame, text: textValue(element), style: textStyle(element, style) };
         }
         if (kind === "shape" || kind === "shape-text") {
           const node = {
@@ -205,7 +210,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
             shadow: element.dataset.pptShadow || "shadow-none",
           };
           if (kind === "shape-text") {
-            node.text = element.textContent.replace(/\s+/g, " ").trim();
+            node.text = textValue(element);
             node.style = textStyle(element, style);
           }
           return node;
@@ -215,12 +220,16 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
       const slots = [...root.querySelectorAll("[data-slot-id]")].map((element) => {
         const maxChars = Number(element.dataset.slotMaxChars);
         const maxLines = Number(element.dataset.slotMaxLines);
+        const role = element.dataset.slotRole || "content";
         return {
           id: element.dataset.slotId,
-          role: element.dataset.slotRole || "content",
+          role,
           field: element.dataset.slotField || "",
           itemId: element.dataset.slotItemId || "",
-          contentType: element.dataset.slotContentType || (element.dataset.slotRole === "icon" ? "icon" : "text"),
+          contentType: element.dataset.slotContentType || (role === "icon" ? "icon" : "text"),
+          required: element.dataset.slotRequired === "true",
+          textMode: element.dataset.slotTextMode || (role === "item-body" ? "flow" : "single-line"),
+          listPolicy: element.dataset.slotListPolicy || (role === "item-body" ? "inline" : "none"),
           frame: htmlFrame(element),
           capacity: {
             ...(Number.isFinite(maxChars) && maxChars > 0 ? { maxChars } : {}),
@@ -243,6 +252,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
     });
     requireValue(!tree.overflow, `${component.id ?? "HTML Component"} 超出设计区域`);
     requireValue(tree.nodes.length > 0, `${component.id ?? "HTML Component"} 没有 data-ppt-kind 可编译对象`);
+    assertResolvedTextContainerSlots(tree.slots, component.textCapacity ?? {}, component.id);
     return {
       ...tree,
       componentId: component.id,
@@ -320,6 +330,7 @@ export function compileResolvedVisualTree(slide, tree, targetFrame = tree.target
         alt: node.alt,
         position,
         fit: "contain",
+        ...(node.geometry ? { geometry: node.geometry } : {}),
       });
       continue;
     }

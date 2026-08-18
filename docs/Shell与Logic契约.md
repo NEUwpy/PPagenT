@@ -22,6 +22,8 @@ flowchart LR
 - **State** 是同一 Structure Group 面对不同数量、密度或断点时的确定性排布结果。State 不是新的自由设计，也不应被保存成互不相关的页面。每组只声明其视觉语法真正支持的范围；矩阵可以固定四项，金字塔可以只支持 3–5 层，不要求所有 Structure Group 统一扩成 3–8 项。
 - **Content Slot** 是父 Structure Group 在某个 State 下最终求解出的真实可见填充区域。它不是整个灰色承载面，也不是整页 Composition 槽位；遮罩、圆环或装饰占去的区域不能算进可填空间。
 
+Logic 只有在“现有 Logic 无法在不损失关键关系的前提下表达该内容”时才进入能力地图。时间轴属于 `sequence + temporal`，成熟度属于 `sequence + monotonic`，泳道属于 `sequence + roles`；这些应作为关系属性或既有 Logic 下的 Structure Group，而不是为了名称齐全另建 Logic。每次新增 Logic 前必须先回答：它与已有 Logic 的选择条件是否互斥、视觉结构是否承载了不可替代的语义；若答案是否定的，就合并或降为属性。
+
 目标颗粒度是：
 
 > `Logic → Structure Group → State → Slot Map → 可替换内容`
@@ -29,6 +31,8 @@ flowchart LR
 核心资产包正式登记 `logicId / structureGroupId / stateContract`，候选发现结果也暴露这些字段。State 仍由程序根据内容与父容器确定性求解，不由导演逐页重画。
 
 Slot Map 不是第二份手工登记表。Structure Group 的文字、图标等槽位直接读取最终 HTML DOM 中的 `data-slot-*`：身份、字段、内容类型、字数／行数、媒体要求及浏览器求解后的真实矩形。看板、视觉导演能力卡和 Native 编译共用这份声明；资产代码只声明一次。
+
+文字容器遵循统一默认制度：每个语义节点最多一个 `item-body`，它是一整块流式正文容器；`points` 只是正文内部的换行／项目符号格式，不是固定数量的几何槽。标题槽默认可选，来源为空就保持为空。只有视觉上确有多个独立承载形状的 Structure Group，才允许同时显式声明 `bodyContainerMode=fixed-regions` 与 `pointRendering=separate-slots`；否则运行时拒绝独立 `item-point` 或重复正文槽。这个默认值由公共运行时执行，新资产无需重复编写事故规则。
 
 这里的可编辑 Slot Contract 与后文二层 Content Slot 不同：前者描述当前组件已有文字和图标怎样填充；后者描述父结构中未来可继续放置子内容的区域。正式生成已经使用前者规划 `componentText` 与 `iconQueries`，后者当前仍固定使用普通文字兜底。
 
@@ -67,12 +71,12 @@ Slot Map 不是第二份手工登记表。Structure Group 的文字、图标等�
 
 一个 Structure Group 不是一张图，也不是一个数量状态。核心包固定由六类信息构成：
 
-1. `asset.json`：保存来源文件与页码、Logic / Structure Group 身份、语义边界、State 控件、空间占用、可选二层 `slotContract` 和 HTML Component 入口；HTML 组件的具体文字容量由组件自身导出，不在这里再抄一份。
-2. `review.mjs`（或等价 HTML 组件入口）：保存建设期审美组件、可替换内容和 State 参数解析；一组只有一份组件代码，不按二项、三项、四项分别维护。
-3. 通用 HTML → ResolvedVisualTree → Native 编译器：读取浏览器已经求解的 DOM/CSS、SVG 几何和文字样式，机械转换为原生 PowerPoint 对象。
-4. 一份共享预览输入：由 `previewParametersExport` 和 `previewResolverExport` 暴露，使 HTML 与 Builder 接收同一组内容和 State 选择。
-5. `example.pptx`：按 `asset.json` 声明的 State 控件生成整个样式家族，供脱离代码审查原生可编辑结果。
-6. 可选 Content Slot 解析器：从与 HTML 相同的布局计算中导出每个 State 的实际槽位位置、尺寸、容量和允许内容模式，不能再维护一份手写坐标表。
+1. `asset.json`：保存来源、Logic / Structure Group 身份、语义边界、State、空间范围和轻量入口；全库启动时只读取这一层。
+2. `runtime.mjs`：只在资产粗筛入围后加载，暴露 HTML 组件容量、Content Slot resolver 和 PageContent Mapper；不得导入浏览器或 PPT 重型运行库。
+3. `review.mjs`：保存 HTML 审美组件、可替换内容和 State 参数解析；`runtime.mjs` 与看板复用它，不另抄容量。
+4. `generate.mjs` 与通用编译器：只在实际预览或渲染时加载，读取浏览器求解的 DOM/CSS、SVG 几何和文字样式并生成原生 PowerPoint 对象。
+5. 一份共享预览输入：由 `previewParametersExport` 和 `previewResolverExport` 暴露，使 HTML 与正式运行接收同一组内容和 State 选择。
+6. `example.pptx`：按 `asset.json` 声明的 State 控件生成整个样式家族，供脱离代码审查原生可编辑结果。
 
 其中的契约必须覆盖适用关系、数量范围、标题/正文字数、媒体要求、最小尺寸、轮廓、密度，以及 `items`、节点内 `points` 和重复视觉条目的语义接口。图标、中心图像、标题和正文等可变槽也必须进入参数，不得固化来源模板中的第三方内容。图标槽必须声明独立于外部装饰形状的安全内框；正式生成只往安全内框填图标，不把整个圆形、卡片或承载面误当成图标容器。
 
@@ -128,9 +132,10 @@ Content Slot 先用于声明父结构中真正可填的区域。当前只在槽�
 
 正式运行按两段完成；当资产声明 Content Slots 时，在父选择之后再增加一个受控槽内步骤：
 
-1. 程序根据页面关系、item 数、文字容量、媒体契约、Skin 和 Content Frame，对核心 Structure Group 做硬过滤。任何必填媒体缺失都使该组不合法。
-2. 视觉导演在整套 PPT 尺度选择合法 Structure Group，综合轮廓、密度、前后页节奏和已用次数。已经使用过某组是重复惩罚，不是绝对禁用；没有更合适的替代时允许复用。
-3. 程序根据已选父 State 求解 Content Slots，并在槽内使用普通文字；当前不选择二级 Logic。
+1. 程序只读全部核心资产的 `asset.json`，按 Logic、关系、item 数、媒体和 State 范围做轻量粗筛；此时不导入组件或渲染代码。
+2. 程序只加载粗筛入围资产的轻量运行契约，取得精确文字容量与容器信息并完成硬过滤。任何必填媒体缺失都使该组不合法。
+3. 视觉导演只接收合法候选的结构化能力卡，在整套 PPT 尺度选择 Structure Group，综合轮廓、密度、前后页节奏和已用次数。
+4. 程序根据已选父 State 求解 Content Slots；最终选定后才加载该资产 Mapper，渲染时才加载 HTML/PPT 编译运行库。
 
 State 由内容数量、容量和父容器确定性求解，视觉导演不为每个数量重新绘图。正式生成只能调用已经登记并经用户确认的核心 Structure Group。
 

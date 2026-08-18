@@ -3,6 +3,12 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { Presentation, PresentationFile } from "@oai/artifact-tool";
 import { protectChineseLineBreaks, wrapChineseText } from "../render/chinese-typography.mjs";
+import {
+  computeContainedFrame,
+  transformPositionInContainedFrame,
+} from "./contained-frame.mjs";
+
+export { computeContainedFrame, transformPositionInContainedFrame } from "./contained-frame.mjs";
 
 export const THEME = {
   background: "#F7FAFC",
@@ -34,33 +40,6 @@ function embeddedContext(slide) {
 
 export function isEmbeddedSlide(slide) {
   return EMBEDDED_SLIDES.has(slide);
-}
-
-export function computeContainedFrame(sourceFrame, targetFrame) {
-  const scale = Math.min(
-    targetFrame.width / sourceFrame.width,
-    targetFrame.height / sourceFrame.height,
-  );
-  const width = sourceFrame.width * scale;
-  const height = sourceFrame.height * scale;
-  return {
-    left: targetFrame.left + (targetFrame.width - width) / 2,
-    top: targetFrame.top + (targetFrame.height - height) / 2,
-    width,
-    height,
-    scale,
-  };
-}
-
-export function transformPositionInContainedFrame(position, sourceFrame, targetFrame) {
-  const fittedFrame = computeContainedFrame(sourceFrame, targetFrame);
-  return {
-    ...position,
-    left: fittedFrame.left + (position.left - sourceFrame.left) * fittedFrame.scale,
-    top: fittedFrame.top + (position.top - sourceFrame.top) * fittedFrame.scale,
-    width: position.width * fittedFrame.scale,
-    height: position.height * fittedFrame.scale,
-  };
 }
 
 function transformPosition(slide, position) {

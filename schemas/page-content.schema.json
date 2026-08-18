@@ -40,6 +40,25 @@
             "type": { "const": "hierarchy" },
             "root": { "$ref": "#/$defs/hierarchyNode" }
           }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "inputs", "phases"],
+          "properties": {
+            "type": { "const": "convergence" },
+            "inputs": {
+              "type": "array",
+              "maxItems": 7,
+              "items": { "$ref": "#/$defs/convergenceInput" }
+            },
+            "phases": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 3,
+              "items": { "$ref": "#/$defs/convergencePhase" }
+            }
+          }
         }
       ]
     },
@@ -47,6 +66,33 @@
     "sourceText": { "type": "string" }
   },
   "$defs": {
+    "convergenceInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1, "maxLength": 4 }
+      }
+    },
+    "convergencePhase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "title", "body", "stepIds"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1, "maxLength": 6 },
+        "title": { "type": "string", "minLength": 1, "maxLength": 10 },
+        "body": { "type": "string", "maxLength": 18 },
+        "stepIds": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      }
+    },
     "hierarchyNode": {
       "type": "object",
       "additionalProperties": false,
@@ -55,6 +101,8 @@
         "id": { "type": "string", "minLength": 1 },
         "label": { "type": "string", "minLength": 1 },
         "role": { "type": "string" },
+        "groupLabel": { "type": "string", "minLength": 1 },
+        "portrait": { "type": "string", "minLength": 1 },
         "children": {
           "type": "array",
           "items": { "$ref": "#/$defs/hierarchyNode" }

@@ -169,10 +169,20 @@ test("循环父候选向视觉导演暴露 Slot 契约但不开放子结构绑�
   assert.deepEqual(cycle?.slotCapabilities?.textSlots.map((slot) => ({ role: slot.role, maxChars: slot.maxChars, maxLines: slot.maxLines })), [
     { role: "center-title", maxChars: 12, maxLines: 2 },
     { role: "item-title", maxChars: 8, maxLines: 1 },
-    { role: "item-body", maxChars: 14, maxLines: 1 },
-    { role: "item-point", maxChars: 14, maxLines: 1 },
+    { role: "item-body", maxChars: 64, maxLines: 5 },
   ]);
   assert.deepEqual(cycle?.slotCapabilities?.mediaSlots, []);
+  assert.deepEqual(cycle?.slotCapabilities?.container, {
+    pointRendering: "merged-body",
+    bodyContainerMode: "single-flow",
+    itemTitleRequired: false,
+    itemBodyRequired: false,
+    itemBodySourceField: "support",
+    itemBodyTextMode: "flow",
+    itemBodyListPolicy: "inline",
+  });
+  assert.equal(cycle?.slotCapabilities?.textSlots.some((slot) => slot.role === "item-point"), false);
+  assert.equal(cycle?.slotCapabilities?.textSlots.find((slot) => slot.role === "item-body")?.sourceField, "support");
   assert.equal("slotBindings" in cycle, false);
 });
 
@@ -195,11 +205,11 @@ test("视觉导演按 Slot Contract 精炼组件文字后才允许进入渲染",
   const componentText = [
     { sourceField: "page-title", targetRole: "center-title", text: "持续改进", sourceFragment: "持续改进" },
     { sourceItemId: "plan", sourceField: "title", targetRole: "item-title", text: "设定目标", sourceFragment: "目标设定" },
-    { sourceItemId: "plan", sourceField: "body", targetRole: "item-body", text: "识别约束并明确目标", sourceFragment: "识别当前约束条件" },
+    { sourceItemId: "plan", sourceField: "support", targetRole: "item-body", text: "识别约束并明确目标", sourceFragment: "识别当前约束条件" },
     { sourceItemId: "do", sourceField: "title", targetRole: "item-title", text: "推进执行", sourceFragment: "执行阶段" },
-    { sourceItemId: "do", sourceField: "body", targetRole: "item-body", text: "同步分工推进实施", sourceFragment: "同步责任分工" },
+    { sourceItemId: "do", sourceField: "support", targetRole: "item-body", text: "同步分工推进实施", sourceFragment: "同步责任分工" },
     { sourceItemId: "check", sourceField: "title", targetRole: "item-title", text: "检查结果", sourceFragment: "检查阶段" },
-    { sourceItemId: "check", sourceField: "body", targetRole: "item-body", text: "核对结果与关键偏差", sourceFragment: "核对执行结果和关键偏差" },
+    { sourceItemId: "check", sourceField: "support", targetRole: "item-body", text: "核对结果与关键偏差", sourceFragment: "核对执行结果和关键偏差" },
   ];
   const common = {
     root,
@@ -432,22 +442,25 @@ test("唯一家族与变体确定后由候选回填冗余 silhouette", async () 
   assert.equal(result.layoutDecisions[0].selectedSilhouette, candidate.silhouette);
 });
 
-test("未重新蒸馏的分层架构不能绕过正式发现直接映射", () => {
+test("已审批的分层架构由正式发现按层与层内能力映射", async () => {
   const page = content("system", [
-    { id: "input-a", title: "材料", body: "原稿" },
-    { id: "input-b", title: "规范", body: "Skin" },
-    { id: "core", title: "PPagenT", body: "生成系统" },
-    { id: "output-a", title: "演示", body: "可编辑 PPT" },
-    { id: "output-b", title: "证据", body: "逐页 QA" },
+    { id: "experience", title: "体验层", body: "", points: ["用户门户", "运营工作台"] },
+    { id: "capability", title: "能力层", body: "", points: ["数据服务", "规则引擎"] },
+    { id: "foundation", title: "基础层", body: "", points: ["计算资源", "安全体系"] },
   ]);
-  const intent = enrichPageIntent(intentDraft("system-intent", "explain_architecture", "layered", {
-    dimensions: { sourceCount: 2, applicationCount: 2 },
+  const intent = enrichPageIntent(intentDraft("system-intent", "explain_layers", "layered", {
+    itemCount: 3,
+    ordered: true,
+    sameLevel: false,
   }), page);
   const decision = {
     selectedAssetId: "layered-architecture-001",
-    selectedVariantId: "default",
+    selectedVariantId: "curved-frustum-stack",
   };
-  assert.throws(() => mapRenderPayload(page, intent, decision), /核心资产包不存在/);
+  const payload = await mapRenderPayload(page, intent, decision);
+  assert.equal(payload.assetId, "layered-architecture-001");
+  assert.equal(payload.parameters.layers.length, 3);
+  assert.deepEqual(payload.parameters.layers[1].items.map((item) => item.title), ["数据服务", "规则引擎"]);
 });
 
 test("CompositionPlan must place every source item in a legal page slot", async () => {

@@ -56,8 +56,13 @@ for (const entry of candidateAssets) {
   if (entry.category === "结构图") structureCandidates += 1;
   const directory = entry.directory;
   const metadata = entry.metadata;
-  for (const name of ["generate.mjs"]) {
-    if (!(await exists(path.join(directory, name)))) issues.push(`备选缺少 ${name}: ${entry.id}`);
+  const htmlReviewEntry = metadata.runtime?.renderer === "html-component"
+    ? metadata.runtime?.review?.entry
+    : null;
+  if (htmlReviewEntry) {
+    if (!(await exists(path.join(directory, htmlReviewEntry)))) issues.push(`HTML 待审批备选缺少 review 入口: ${entry.id}/${htmlReviewEntry}`);
+  } else if (!(await exists(path.join(directory, "generate.mjs")))) {
+    issues.push(`备选缺少 generate.mjs: ${entry.id}`);
   }
   if (entry.category === "结构图" && !metadata.capacity && !metadata.boundary) issues.push(`结构图缺少容量边界: ${entry.id}`);
   const sourceFile = typeof metadata.source === "string" ? metadata.source : metadata.source?.file;

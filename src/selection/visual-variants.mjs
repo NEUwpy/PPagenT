@@ -1,8 +1,10 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { loadContractCatalog } from "./contracts.mjs";
-import { hasStructureAssetBuilder } from "../runtime/assets.mjs";
-import { discoverCoreAssetPackages } from "../runtime/core-asset-packages.mjs";
+import {
+  discoverCoreAssetPackages,
+  loadCoreAssetCapabilities,
+} from "../runtime/core-asset-packages.mjs";
 
 export async function loadVisualVariantCatalog(root = process.cwd()) {
   const target = path.join(root, "catalog", "visual-variants.json");
@@ -32,6 +34,7 @@ export async function loadVisualVariantCatalog(root = process.cwd()) {
     mediaContract: item.runtime.mediaContract ?? { mode: "no-image", required: [] },
     status: "core",
     origin: "self-describing-asset",
+    runtimeDeclared: true,
   }));
   return [
     ...catalog.variants.filter((variant) => !packagedKeys.has(`${variant.assetId}:${variant.variantId}`)),
@@ -84,8 +87,7 @@ export async function listRenderableVisualVariants(options = {}) {
       coreAssetAvailable: coreAssetIds.has(variant.assetId),
       callableStatus: allowedVariantStatuses.has(variant.status),
       mapperAvailable: mapperIds.has(variant.assetId),
-      builderAvailable: variant.renderer === "skin"
-        || hasStructureAssetBuilder(variant.assetId, variant.variantId),
+      builderAvailable: variant.renderer === "skin" || variant.runtimeDeclared === true,
     }))
     .filter((variant) => (
       variant.contractAvailable
@@ -96,6 +98,19 @@ export async function listRenderableVisualVariants(options = {}) {
     ));
 }
 
+/**
+ * Second disclosure stage: imports only a shortlisted asset's lightweight
+ * runtime contract to expose exact text/container capacity.
+ */
+export async function loadVisualVariantCapabilities(variant, root = process.cwd()) {
+  if (variant.renderer === "skin" || variant.textCapacity) return variant;
+  const capability = await loadCoreAssetCapabilities(variant.assetId, root);
+  return {
+    ...variant,
+    textCapacity: capability.textCapacity,
+  };
+}
+
 export function queryVisualVariants(variants, query = {}) {
   let filtered = variants.filter((variant) => {
     if (query.logicId && variant.logicId !== query.logicId) return false;
@@ -104,6 +119,8 @@ export function queryVisualVariants(variants, query = {}) {
     if (query.assetId && variant.assetId !== query.assetId) return false;
     if (query.baseRelation && !variant.supportedBaseRelations?.includes(query.baseRelation)) return false;
     if (query.requiredItemRole && variant.contentContract?.itemRole !== query.requiredItemRole) return false;
+    if (variant.contentContract?.requiresStructuredDataType
+      && variant.contentContract.requiresStructuredDataType !== query.structuredDataType) return false;
     if ((query.maxPointsPerItem ?? 0) > 0 && variant.contentContract?.points === "forbidden") return false;
     if (query.itemCount !== undefined) {
       if (query.itemCount < variant.itemCount.min || query.itemCount > variant.itemCount.max) return false;

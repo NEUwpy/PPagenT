@@ -1,97 +1,70 @@
-import { renderComponentIntoSlide } from "../asset-runtime/component-builders.mjs";
-import { discoverCoreAssetPackages } from "./core-asset-packages.mjs";
 import {
-  closeHtmlComponentRuntime,
-  compileResolvedVisualTree,
-  resolveHtmlComponent,
-} from "../visual-runtime/html-component-runtime.mjs";
+  discoverCoreAssetPackages,
+  loadCoreAssetPackage,
+} from "./core-asset-packages.mjs";
 
-const DEFAULT_BUILDERS = new Map();
-const DEFAULT_SOURCE_FRAMES = new Map();
-const VARIANT_SOURCE_FRAMES = new Map();
-const HTML_COMPONENTS = new Map();
+let htmlRuntimePromise = null;
 
-const VARIANT_BUILDERS = new Map();
-
-const CORE_ASSET_PACKAGES = await discoverCoreAssetPackages();
-const CORE_SKIN_ASSET_IDS = new Set(
-  CORE_ASSET_PACKAGES
-    .filter((item) => item.runtime.renderer === "skin")
-    .map((item) => item.assetId),
-);
-
-for (const assetPackage of CORE_ASSET_PACKAGES) {
-  if (assetPackage.runtime.renderer === "html-component" && assetPackage.component) {
-    HTML_COMPONENTS.set(assetPackage.assetId, {
-      component: assetPackage.component,
-      assetDir: assetPackage.assetDir,
-      variantId: assetPackage.runtime.variantId,
-    });
-  }
-  if (!assetPackage.builder) continue;
-  DEFAULT_BUILDERS.set(assetPackage.assetId, assetPackage.builder);
-  if (assetPackage.runtime.sourceFrame) {
-    DEFAULT_SOURCE_FRAMES.set(assetPackage.assetId, assetPackage.runtime.sourceFrame);
-    VARIANT_SOURCE_FRAMES.set(
-      `${assetPackage.assetId}:${assetPackage.runtime.variantId}`,
-      assetPackage.runtime.sourceFrame,
-    );
-  }
-  VARIANT_BUILDERS.set(
-    `${assetPackage.assetId}:${assetPackage.runtime.variantId}`,
-    assetPackage.builder,
-  );
+function loadHtmlRuntime() {
+  htmlRuntimePromise ??= import("../visual-runtime/html-component-runtime.mjs");
+  return htmlRuntimePromise;
 }
 
-export function listStructureAssetBuilders() {
+/** Metadata-only registry view. No asset implementation is imported here. */
+export async function listStructureAssetBuilders(root = process.cwd()) {
+  const packages = (await discoverCoreAssetPackages(root))
+    .filter((item) => item.runtime.renderer !== "skin");
   return {
-    defaultAssetIds: [...new Set([...DEFAULT_BUILDERS.keys(), ...HTML_COMPONENTS.keys()])].sort(),
-    variantBuilderKeys: [...new Set([
-      ...VARIANT_BUILDERS.keys(),
-      ...[...HTML_COMPONENTS.entries()].map(([assetId, entry]) => `${assetId}:${entry.variantId}`),
-    ])].sort(),
+    defaultAssetIds: packages.map((item) => item.assetId).sort(),
+    variantBuilderKeys: packages
+      .map((item) => `${item.assetId}:${item.runtime.variantId}`)
+      .sort(),
   };
 }
 
-export function hasStructureAssetBuilder(assetId, variantId = null) {
-  if (variantId) return HTML_COMPONENTS.get(assetId)?.variantId === variantId || VARIANT_BUILDERS.has(`${assetId}:${variantId}`);
-  return HTML_COMPONENTS.has(assetId) || DEFAULT_BUILDERS.has(assetId);
+export async function hasStructureAssetBuilder(assetId, variantId = null, root = process.cwd()) {
+  const descriptor = (await discoverCoreAssetPackages(root))
+    .find((item) => item.assetId === assetId && item.runtime.renderer !== "skin");
+  return Boolean(descriptor && (!variantId || descriptor.runtime.variantId === variantId));
 }
 
 export async function renderStructureAsset(slide, renderPayload, skin, targetFrame = skin.bodyFrame) {
-  const htmlComponent = HTML_COMPONENTS.get(renderPayload.assetId);
-  if (htmlComponent) {
+  const assetPackage = await loadCoreAssetPackage(renderPayload.assetId);
+  if (assetPackage.runtime.renderer === "html-component") {
+    const { compileResolvedVisualTree, resolveHtmlComponent } = await loadHtmlRuntime();
     const tree = await resolveHtmlComponent({
-      ...htmlComponent,
+      component: assetPackage.component,
+      assetDir: assetPackage.assetDir,
+      variantId: assetPackage.runtime.variantId,
       parameters: renderPayload.parameters,
       targetFrame,
       theme: skin.componentTheme,
     });
     return compileResolvedVisualTree(slide, tree, targetFrame);
   }
-  const variantId = renderPayload.parameters?.visualVariantId ?? null;
-  const builder = variantId
-    ? VARIANT_BUILDERS.get(`${renderPayload.assetId}:${variantId}`)
-    : DEFAULT_BUILDERS.get(renderPayload.assetId);
-  if (!builder) throw new Error(`运行时没有结构资产生成器：${renderPayload.assetId}`);
-  const embeddedParameters = {
-    ...renderPayload.parameters,
-    // The Skin owns the visible page title. Component title limits only apply
-    // to standalone showcases, where the builder draws that title itself.
-    title: "核心结构",
-  };
-  const sourceFrame = variantId
-    ? VARIANT_SOURCE_FRAMES.get(`${renderPayload.assetId}:${variantId}`)
-    : DEFAULT_SOURCE_FRAMES.get(renderPayload.assetId);
-  return renderComponentIntoSlide(builder, slide, embeddedParameters, {
-    sourceFrame: sourceFrame ?? skin.componentSourceFrame,
-    targetFrame,
-    theme: skin.componentTheme,
-  });
+  if (assetPackage.runtime.renderer === "legacy-builder") {
+    const { renderComponentIntoSlide } = await import("../asset-runtime/component-builders.mjs");
+    const embeddedParameters = {
+      ...renderPayload.parameters,
+      title: "核心结构",
+    };
+    return renderComponentIntoSlide(assetPackage.builder, slide, embeddedParameters, {
+      sourceFrame: assetPackage.runtime.sourceFrame ?? skin.componentSourceFrame,
+      targetFrame,
+      theme: skin.componentTheme,
+    });
+  }
+  throw new Error(`结构渲染器不能渲染 Skin 资产：${renderPayload.assetId}`);
 }
 
-export { closeHtmlComponentRuntime };
+export async function closeHtmlComponentRuntime() {
+  if (!htmlRuntimePromise) return;
+  const runtime = await htmlRuntimePromise;
+  await runtime.closeHtmlComponentRuntime();
+  htmlRuntimePromise = null;
+}
 
-export function isSkinOnlyAsset(assetId) {
-  return CORE_SKIN_ASSET_IDS.has(assetId);
+export async function isSkinOnlyAsset(assetId, root = process.cwd()) {
+  const descriptor = (await discoverCoreAssetPackages(root)).find((item) => item.assetId === assetId);
+  return descriptor?.runtime.renderer === "skin";
 }

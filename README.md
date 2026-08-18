@@ -48,7 +48,7 @@ PPagenT 采用“AI 理解与选择、参数化代码确定性绘制”的生成
 - `结构样本池/`：保存所有值得继续观察的单页来源样本，允许重复和暂未归类。
 - `备选资产/`：新蒸馏、重复版式和待比较方案的审核区，同样由各目录的 `asset.json` 自动发现。
 - `src/asset-runtime/`：原生 PPT 共享原语、旧资产兼容 Builder，以及 HTML 组件到 Native 对象的编译支撑。
-- `assets/<分类>/<资产>/asset.json + review.mjs + generate.mjs + example.pptx`：Structure Group 的来源与契约、HTML 布局组件、参数映射和全家族示例；结构资产只维护一份 HTML 布局真源。
+- `assets/<分类>/<资产>/asset.json + runtime.mjs + review.mjs + generate.mjs + example.pptx`：`asset.json` 用于轻量发现，`runtime.mjs` 暴露入围后才读取的组件容量与 Mapper，`generate.mjs` 只在实际编译时加载重型运行库；结构资产仍只维护一份 HTML 布局真源。
 - `experiments/`：只保留仍在使用的最小架构实验和 Shell 标注，不再提交整套稿件运行输出或批量渲染物。
 
 ## 公开仓库范围

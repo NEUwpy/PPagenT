@@ -9,12 +9,14 @@ import {
 } from "../composition/layouts.mjs";
 import {
   listRenderableVisualVariants,
+  loadVisualVariantCapabilities,
   loadCoreAssetIds,
   planVisualVariants,
   queryVisualVariants,
 } from "../selection/visual-variants.mjs";
-import { northeasternUniversitySkin } from "../runtime/skins/northeastern-university.mjs";
-import { validatePageCompositionTextFit } from "../render/page-composition.mjs";
+import { northeasternUniversitySkin } from "../runtime/skins/northeastern-university-contract.mjs";
+import { validatePageCompositionTextFit } from "../render/page-composition-fit.mjs";
+import { resolveTextContainerContract } from "../visual-runtime/text-container-contract.mjs";
 
 function publicComposition(layout) {
   return {
@@ -36,30 +38,61 @@ function stateValue(value, itemCount) {
 
 export function slotCapabilitiesForVariant(variant, itemCount) {
   const capacity = variant.textCapacity ?? {};
+  const container = resolveTextContainerContract(capacity, variant.contentContract ?? {});
   const textSlots = [];
   const addText = (role, scope, maxChars, maxLines, extra = {}) => {
     if (!Number.isFinite(maxChars) || maxChars <= 0) return;
     textSlots.push({ role, scope, maxChars, ...(Number.isFinite(maxLines) && maxLines > 0 ? { maxLines } : {}), ...extra });
   };
-  addText("center-title", "page", stateValue(capacity.maxCenterChars, itemCount), stateValue(capacity.maxCenterLines, itemCount), { count: 1, sourceField: "page-title" });
-  addText("item-title", "per-item", stateValue(capacity.maxItemTitleChars, itemCount), stateValue(capacity.maxItemTitleLines, itemCount), { count: itemCount, sourceField: "title" });
-  addText("item-body", "per-item", stateValue(capacity.maxItemBodyChars ?? capacity.maxItemBodyCharsByState, itemCount), stateValue(capacity.maxItemBodyLines, itemCount), { count: itemCount, sourceField: "body" });
-  addText("item-point", "per-point", stateValue(capacity.maxPointChars, itemCount), stateValue(capacity.maxPointLines, itemCount), {
-    countPerItem: { min: 0, max: stateValue(capacity.maxPointsPerItem, itemCount) ?? 0 },
-    sourceField: "point",
+  addText("center-title", "page", stateValue(capacity.maxCenterChars, itemCount), stateValue(capacity.maxCenterLines, itemCount), {
+    count: 1,
+    sourceField: "page-title",
+    required: true,
+    textMode: "flow",
+    listPolicy: "none",
   });
+  addText("item-title", "per-item", stateValue(capacity.maxItemTitleChars, itemCount), stateValue(capacity.maxItemTitleLines, itemCount), {
+    count: itemCount,
+    sourceField: "title",
+    required: container.itemTitleRequired,
+    textMode: "single-line",
+    listPolicy: "none",
+  });
+  addText("item-body", "per-item", stateValue(capacity.maxItemBodyChars ?? capacity.maxItemBodyCharsByState, itemCount), stateValue(capacity.maxItemBodyLines, itemCount), {
+    count: itemCount,
+    sourceField: container.itemBodySourceField,
+    required: container.itemBodyRequired,
+    textMode: container.itemBodyTextMode,
+    listPolicy: container.itemBodyListPolicy,
+    containerMode: container.bodyContainerMode,
+  });
+  if (container.pointRendering === "separate-slots") {
+    addText("item-point", "per-point", stateValue(capacity.maxPointChars, itemCount), stateValue(capacity.maxPointLines, itemCount), {
+      countPerItem: { min: 0, max: stateValue(capacity.maxPointsPerItem, itemCount) ?? 0 },
+      sourceField: "point",
+      required: false,
+      textMode: "single-line",
+      listPolicy: "none",
+    });
+  }
+  const structuredInputMedia = variant.mediaContract?.source === "structuredData.inputs";
   const mediaSlots = variant.mediaContract?.mode === "semantic-icon" ? [{
     role: "icon",
-    scope: "per-item",
-    count: itemCount,
+    scope: structuredInputMedia ? "structured-input" : "per-item",
+    ...(structuredInputMedia
+      ? { count: { ...(variant.mediaContract.inputCount ?? { min: 0, max: 0 }) } }
+      : { count: itemCount }),
     type: "icon",
     provider: variant.mediaContract.provider ?? "",
-    required: Boolean(variant.mediaContract.requiredPerComponentItem),
+    required: structuredInputMedia
+      ? Boolean(variant.mediaContract.requiredPerInput)
+      : Boolean(variant.mediaContract.requiredPerComponentItem),
     selection: variant.mediaContract.selection ?? "",
   }] : [];
   return {
     state: { itemCount },
     contentFrame: variant.sourceFrame ? { ...variant.sourceFrame } : null,
+    container: { ...container },
     textSlots,
     mediaSlots,
   };
@@ -110,7 +143,7 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
   }
   const renderableContracts = contracts.filter((contract) => variantsByAsset.has(contract.assetId));
 
-  return pageIntents.map((intent, index) => {
+  return Promise.all(pageIntents.map(async (intent, index) => {
     const pageId = pageContents[index].pageId;
     const contractsById = new Map(renderableContracts.map((contract) => [contract.assetId, contract]));
     const skinVariant = variants.find((variant) => (
@@ -147,24 +180,30 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
       includeDeferred: false,
       enableFallback: false,
     });
-    const structuralCandidates = semantic.candidates.flatMap((candidate) => {
-      const compatible = queryVisualVariants(variantsByAsset.get(candidate.assetId) ?? [], {
+    const structuralCandidates = [];
+    for (const candidate of semantic.candidates) {
+      const detailedVariants = await Promise.all(
+        (variantsByAsset.get(candidate.assetId) ?? [])
+          .map((variant) => loadVisualVariantCapabilities(variant, root)),
+      );
+      const compatible = queryVisualVariants(detailedVariants, {
         itemCount: intent.structure.itemCount,
         baseRelation: intent.baseRelation,
         purposeKey: intent.purposeKey,
         requiredItemRole,
         maxPointsPerItem: intent.structure.dimensions?.maxPointsPerItem ?? 0,
         maxPointChars: intent.structure.dimensions?.maxPointChars ?? 0,
+        structuredDataType: pageContents[index].structuredData?.type,
       });
       const metadata = metadataById.get(candidate.assetId);
       const compositions = compositionCandidatesForAsset(layouts, candidate.assetId, metadata);
-      return compatible.map((variant) => publicVariant(
+      structuralCandidates.push(...compatible.map((variant) => publicVariant(
         variant,
         contractsById.get(candidate.assetId),
         compositions,
         intent.structure.itemCount,
-      ));
-    });
+      )));
+    }
     const bodyVariant = variants.find((variant) => variant.renderer === "skin" && variant.fallbackBody);
     if (!bodyVariant) throw new Error("核心资产包缺少正文兜底页");
     const bodyMetadata = metadataById.get(bodyVariant.assetId);
@@ -181,7 +220,7 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
       capacityDensity,
       semanticRejections: semantic.rejections,
     };
-  });
+  }));
 }
 
 function selectedCandidate(planPage, candidateSet) {
@@ -192,13 +231,16 @@ function selectedCandidate(planPage, candidateSet) {
   ));
 }
 
-function validateIconQueries(planPage, candidate, compositionPage) {
+function validateIconQueries(planPage, candidate, compositionPage, content) {
   const queries = planPage.iconQueries ?? [];
   const contract = candidate.mediaContract;
   if (contract?.mode !== "semantic-icon") {
     return queries.length ? [{ code: "icon-queries-not-supported" }] : [];
   }
-  const selectedIds = new Set(compositionPage.componentItemIds ?? []);
+  const structuredInputMedia = contract.source === "structuredData.inputs";
+  const selectedIds = new Set(structuredInputMedia
+    ? (content.structuredData?.inputs ?? []).map((item) => item.id)
+    : (compositionPage.componentItemIds ?? []));
   const seen = new Set();
   const issues = [];
   for (const item of queries) {
@@ -210,7 +252,10 @@ function validateIconQueries(planPage, candidate, compositionPage) {
     }
     seen.add(item.sourceItemId);
   }
-  const missing = [...selectedIds].filter((id) => !seen.has(id));
+  const required = structuredInputMedia
+    ? Boolean(contract.requiredPerInput)
+    : Boolean(contract.requiredPerComponentItem);
+  const missing = required ? [...selectedIds].filter((id) => !seen.has(id)) : [];
   if (missing.length) issues.push({ code: "icon-query-required", sourceItemIds: missing });
   return issues;
 }
@@ -319,6 +364,11 @@ function componentTextSource(content, binding) {
   if (!item) return null;
   if (binding.sourceField === "title") return item.title ?? "";
   if (binding.sourceField === "body") return item.body ?? "";
+  if (binding.sourceField === "support") {
+    return [item.body, ...(item.points ?? []).map((point) => point?.text ?? point)]
+      .filter((value) => String(value ?? "").trim())
+      .join("\n");
+  }
   if (binding.sourceField === "point") {
     const point = item.points?.[binding.sourceIndex];
     return point?.text ?? point ?? "";
@@ -345,8 +395,10 @@ function expectedComponentText(content, candidate, compositionPage) {
     if (roles.has("item-title") && item.title?.trim()) {
       expected.push({ sourceItemId: item.id, sourceField: "title", targetRole: "item-title" });
     }
-    if (roles.has("item-body") && item.body?.trim()) {
-      expected.push({ sourceItemId: item.id, sourceField: "body", targetRole: "item-body" });
+    const bodyRole = roles.get("item-body");
+    const bodySourceField = bodyRole?.sourceField ?? "body";
+    if (bodyRole && (item.body?.trim() || (bodySourceField === "support" && item.points?.length))) {
+      expected.push({ sourceItemId: item.id, sourceField: bodySourceField, targetRole: "item-body" });
     }
     if (roles.has("item-point")) {
       (item.points ?? []).forEach((point, sourceIndex) => {
@@ -425,14 +477,19 @@ function applyComponentText(content, compositionPage) {
   return {
     ...content,
     ...(center ? { notes: center } : {}),
-    items: content.items.map((item) => ({
-      ...item,
-      title: byKey.get(`title:${item.id}:`) ?? item.title,
-      body: byKey.get(`body:${item.id}:`) ?? item.body,
-      points: (item.points ?? []).map((point, sourceIndex) => (
-        byKey.get(`point:${item.id}:${sourceIndex}`) ?? point
-      )),
-    })),
+    items: content.items.map((item) => {
+      const support = byKey.get(`support:${item.id}:`);
+      return {
+        ...item,
+        title: byKey.get(`title:${item.id}:`) ?? item.title,
+        body: support ?? byKey.get(`body:${item.id}:`) ?? item.body,
+        points: support === undefined
+          ? (item.points ?? []).map((point, sourceIndex) => (
+            byKey.get(`point:${item.id}:${sourceIndex}`) ?? point
+          ))
+          : [],
+      };
+    }),
   };
 }
 
@@ -785,7 +842,7 @@ export async function resolveVisualPlan({
       layouts,
       metadataById,
     });
-    compositionIssues.push(...validateIconQueries(planPage, candidate, normalizedCompositionPage));
+    compositionIssues.push(...validateIconQueries(planPage, candidate, normalizedCompositionPage, pageContents[index]));
     if (compositionIssues.length) {
       feedback.push({
         pageId: planPage.pageId,
@@ -849,13 +906,13 @@ export async function resolveVisualPlan({
     rejections: [],
     resolutionPlan: null,
   }));
-  const renderPayloads = layoutDecisions.map((decision, index) => {
+  const renderPayloads = await Promise.all(layoutDecisions.map(async (decision, index) => {
     const compositionPage = normalizedCompositionPlan.pages[index];
     const metadata = metadataById.get(decision.selectedAssetId);
     const componentContent = metadata?.kind === "component"
       ? filterComponentContent(applyComponentText(pageContents[index], compositionPage), compositionPage)
       : pageContents[index];
-    const payload = mapRenderPayload(
+    const payload = await mapRenderPayload(
       componentContent,
       pageIntents[index],
       decision,
@@ -864,7 +921,7 @@ export async function resolveVisualPlan({
     );
     if (metadata?.kind === "component") payload.parameters.visualVariantId = decision.selectedVariantId;
     return payload;
-  });
+  }));
   return {
     status: "accepted",
     feedback: [],

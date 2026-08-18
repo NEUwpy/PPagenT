@@ -1,0 +1,157 @@
+{
+  "id": "hub-radial-001",
+  "name": "中心锚点辐射",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx",
+    "slides": [365, 366, 367]
+  },
+  "references": [
+    {
+      "file": "PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx",
+      "slides": [365],
+      "role": "中心视觉主次",
+      "adopted": "中心大圆承担唯一视觉焦点，外围四项只作为解释和支撑"
+    },
+    {
+      "file": "PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx",
+      "slides": [366],
+      "role": "六项对称布局",
+      "adopted": "三行左右成对排布，在不画辐射线的情况下仍围绕共同中心组织"
+    },
+    {
+      "file": "PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx",
+      "slides": [367],
+      "role": "高密度容量边界",
+      "adopted": "八项状态使用四行侧栏，图标锚点、标题和短正文维持稳定层级"
+    }
+  ],
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "hub",
+    "structureGroupId": "hub-radial-anchor",
+    "familyId": "hub-radial",
+    "variantId": "balanced-orbit-anchor",
+    "silhouette": "dominant-center-with-balanced-satellites",
+    "supportedBaseRelations": ["hub"],
+    "supportedPurposeKeys": ["explain_topics", "explain_capability_system"],
+    "itemCount": {
+      "min": 3,
+      "preferred": [4, 6, 8],
+      "max": 8
+    },
+    "stateContract": {
+      "resolver": "itemCount",
+      "states": [3, 4, 5, 6, 7, 8],
+      "previewDefault": 6
+    },
+    "mediaContract": {
+      "mode": "semantic-icon",
+      "provider": "tabler-icons",
+      "selection": "local-top-1",
+      "queryOwner": "visual-director",
+      "requiredPerComponentItem": true
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "optional",
+      "ordered": false
+    },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "semantic": { "ordered": false },
+        "relationTraits": {},
+        "density": ["low", "medium"]
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": { "selection": { "itemCount": 6 } },
+      "controls": [
+        {
+          "key": "itemCount",
+          "label": "外围项目数",
+          "values": [3, 4, 5, 6, 7, 8],
+          "default": 6
+        }
+      ]
+    }
+  },
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "同一 Structure Group 支持 3–8 个外围项目；偶数状态左右等量，奇数状态使用一个顶部节点和左右等量节点",
+    "rule": "外围节点数量变化时重新计算行数、纵向间距和中心位置；不得从八项版删除空位形成单侧缺口"
+  },
+  "componentModel": {
+    "fixed": [
+      "唯一且明显占主导的中心圆形锚点",
+      "外围圆形图标锚点—标题—短正文的统一层级",
+      "左右镜像、共同中轴、无显式辐射线的空间归属关系",
+      "统一深靛蓝锚点、明亮浅蓝辅助色、淡蓝承载面和柔和阴影"
+    ],
+    "variable": [
+      "中心主题及一句短说明",
+      "3–8 个同级外围方向的标题、短正文和语义图标",
+      "项目数变化时由同一 HTML 组件重新计算对称布局"
+    ]
+  },
+  "fieldContract": {
+    "editable": [
+      { "field": "center.title", "source": "PageContent.title", "meaning": "中心主题" },
+      { "field": "center.body", "source": "PageContent.notes 或中心摘要", "meaning": "中心的一句短说明，可省略" },
+      { "field": "items.length", "source": "PageContent.items.length", "meaning": "选择 3–8 项 State" },
+      { "field": "items[].title", "source": "PageContent.items[].title", "meaning": "外围方向标题" },
+      { "field": "items[].body", "source": "PageContent.items[].body", "meaning": "外围方向短正文" },
+      { "field": "items[].iconQuery", "source": "VisualPlan.pages[].iconQueries[]", "meaning": "视觉导演提供语义检索短语" }
+    ],
+    "generated": [
+      { "field": "items[].iconKey", "meaning": "程序从本地图标库模糊匹配得到的 Top 1 图标" },
+      { "field": "items[].position", "meaning": "程序按 State 生成顶部或左右镜像位置" }
+    ],
+    "fixed": [
+      "中心必须明显强于外围，外围节点彼此等权",
+      "字号角色由 Skin 提供，组件不得按项目数缩字"
+    ],
+    "unavailable": ["照片", "外围分组", "方向箭头", "外围之间的连线"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "stateFootprints": {
+      "3": { "width": 1140, "height": 470, "basis": "component-root-visible-bounds" },
+      "4": { "width": 1140, "height": 470, "basis": "component-root-visible-bounds" },
+      "5": { "width": 1140, "height": 470, "basis": "component-root-visible-bounds" },
+      "6": { "width": 1140, "height": 470, "basis": "component-root-visible-bounds" },
+      "7": { "width": 1140, "height": 470, "basis": "component-root-visible-bounds" },
+      "8": { "width": 1140, "height": 470, "basis": "component-root-visible-bounds" }
+    },
+    "resizeMode": "natural",
+    "minFontSize": 19,
+    "safePadding": 12,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "承载一个中心主题和 3–8 个同级外围方向；外围标题不超过 8 字，正文最多 2 行，字数上限随 State 为 30/28/26/24/22/20 字",
+  "semanticContract": "多个同级方向共同解释、支撑、构成或服务一个中心主题；外围之间没有先后、层级或因果关系",
+  "doNotUseWhen": "外围存在明确顺序、层级、正反对比或相互连接，或者页面没有唯一中心主题",
+  "review": "用户已确认 HTML 黄金状态、3–8 项版式扩散及统一蓝色视觉语言；Native/PPT 由同一 HTML 组件编译，可进入核心资产库"
+}

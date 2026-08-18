@@ -1,0 +1,118 @@
+{
+  "id": "hierarchy-people-tree-001",
+  "name": "三层人物组织树",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx",
+    "slides": [406]
+  },
+  "references": [
+    {
+      "file": "PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
+      "slides": [25],
+      "role": "分支秩序",
+      "adopted": "根节点位于共同中轴，部门中心等距展开，分支线范围由实际子节点决定"
+    }
+  ],
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "hierarchy",
+    "structureGroupId": "hierarchy-people-tree",
+    "familyId": "hierarchy-tree",
+    "variantId": "three-level-portraits",
+    "silhouette": "root-departments-members",
+    "supportedBaseRelations": ["hierarchy"],
+    "supportedPurposeKeys": ["explain_hierarchy", "explain_organization"],
+    "itemCount": { "min": 2, "preferred": [3], "max": 3 },
+    "stateContract": {
+      "resolver": "departmentAndMemberCount",
+      "states": [2, 3],
+      "previewDefault": 3
+    },
+    "mediaContract": {
+      "mode": "portrait-or-semantic-icon",
+      "provider": "page-content-media+tabler-icons",
+      "portraitPreferred": true,
+      "fallback": "local-semantic-icon",
+      "requiredPerPerson": false
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "optional",
+      "structuredData": "three-level-organization"
+    },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "relationTraits": { "hierarchy": true, "peopleIdentity": true },
+        "density": ["low", "medium"]
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": { "selection": { "departmentCount": 3, "memberCount": 2 } },
+      "controls": [
+        { "key": "departmentCount", "label": "部门数", "values": [2, 3], "default": 3 },
+        { "key": "memberCount", "label": "每部门成员数", "values": [1, 2, 3], "default": 2 }
+      ]
+    }
+  },
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "2–3 个部门；每部门 1–3 名成员",
+    "rule": "部门按当前数量等距居中；成员围绕所属部门中心独立重算，一人居中、两人镜像、三人等距"
+  },
+  "componentModel": {
+    "fixed": [
+      "负责人—部门负责人—成员三层人物拓扑",
+      "三种肖像体量、光晕、身份标签和蓝金层级",
+      "端点贴合圆形节点边界的主总线与成员总线"
+    ],
+    "variable": [
+      "负责人、部门负责人和成员的姓名、角色及肖像",
+      "2–3 个部门和每部门 1–3 名成员"
+    ]
+  },
+  "fieldContract": {
+    "editable": [
+      { "field": "leader", "meaning": "根节点负责人姓名、角色，以及可选肖像" },
+      { "field": "departments[].name", "meaning": "部门名称" },
+      { "field": "departments[].head", "meaning": "部门负责人姓名、角色，以及可选肖像" },
+      { "field": "departments[].members[]", "meaning": "普通成员姓名、角色，以及可选肖像" }
+    ],
+    "generated": ["连接线、部门中心和成员中心由当前拓扑计算", "缺少肖像时按角色语义从本地图标库选择兜底图标"],
+    "fixed": ["三层身份体量与蓝金层级"],
+    "unavailable": ["职责长文", "KPI", "四层以上层级"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "resizeMode": "natural",
+    "minFontSize": 17,
+    "safePadding": 10,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "2–3 个部门，每部门 1–3 名成员；姓名不超过 6 字，部门不超过 8 字，角色不超过 6 字；肖像可选，缺少时自动使用语义图标",
+  "semanticContract": "一个负责人统领多个部门，每个部门负责人再管理若干普通成员的三层归属关系",
+  "doNotUseWhen": "只有部门没有成员、层级超过三层、需要承载职责长文，或表达的是系统技术分层而非人物／组织归属",
+  "review": "用户确认三层人物组织树可以继续正式落地；人物媒体采用肖像优先、语义图标兜底，完成一次 Native/PPT 与东北大学 Skin 轻量编译后进入核心库"
+}

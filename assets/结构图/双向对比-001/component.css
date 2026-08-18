@@ -1,0 +1,39 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { color: #3f4b59; background: transparent; font-family: var(--ppagent-font-body, "Microsoft YaHei"), sans-serif; }
+.comparison-review { position: relative; width: 1170px; height: 492px; overflow: hidden; background: transparent; }
+/* 两个实体椭圆叠成可编辑平台环，避免透明描边在 Native 预览中丢失。 */
+.comparison-stage-outer { position: absolute; left: 12px; top: 409px; width: 1146px; height: 70px; border: 0; border-radius: 50%; background: #9fc8f2; }
+.comparison-stage-inner { position: absolute; left: 45px; top: 418px; width: 1080px; height: 48px; border: 0; border-radius: 50%; background: #fff; }
+.comparison-side { position: absolute; top: 24px; width: 480px; height: 412px; z-index: 1; }
+.comparison-side-0 { left: 20px; }
+.comparison-side-1 { right: 20px; }
+.comparison-side-shadow { position: absolute; left: 10px; right: 10px; top: 14px; bottom: 0; border: 0; border-radius: 28px; background: #dbe5f1; opacity: .78; }
+.comparison-side-surface { position: absolute; inset: 0 0 12px; border: 1px solid #d6e0ec; border-radius: 28px; background: #f8fafc; box-shadow: 0 14px 30px rgba(35, 66, 105, .12); }
+.comparison-side-cap { position: absolute; left: 0; right: 0; top: 0; height: 78px; border: 0; border-radius: 28px 28px 16px 16px; }
+.comparison-side[data-tone="negative"] .comparison-side-cap { background: #778493; }
+.comparison-side[data-tone="positive"] .comparison-side-cap { background: #2867aa; }
+.comparison-side-title { position: absolute; left: 42px; right: 42px; top: 13px; height: 52px; margin: 0; overflow: hidden; color: #fff; font-size: var(--ppagent-component-title-size, 26px); font-weight: 700; line-height: 52px; text-align: center; white-space: nowrap; }
+.comparison-list { position: absolute; left: 34px; right: 34px; top: 95px; bottom: 29px; display: grid; align-content: center; }
+.comparison-review[data-item-count="3"] .comparison-list { grid-template-rows: repeat(3, 62px); gap: 24px; }
+.comparison-review[data-item-count="4"] .comparison-list { grid-template-rows: repeat(4, 56px); gap: 17px; }
+.comparison-review[data-item-count="5"] .comparison-list { grid-template-rows: repeat(5, 49px); gap: 11px; }
+.comparison-row { position: relative; width: 100%; height: 100%; border-radius: 99px; }
+.comparison-side[data-tone="negative"] .comparison-row { border: 1px solid #d4dae1; background: #e9edf1; }
+.comparison-side[data-tone="positive"] .comparison-row { border: 1px solid #c7dff7; background: #eaf4ff; }
+.comparison-row-marker { position: absolute; top: 50%; width: 38px; height: 38px; margin-top: -19px; border: 0; border-radius: 50%; }
+.comparison-side-0 .comparison-row-marker { right: 10px; }
+.comparison-side-1 .comparison-row-marker { left: 10px; }
+.comparison-side[data-tone="negative"] .comparison-row-marker { background: #677380; }
+.comparison-side[data-tone="positive"] .comparison-row-marker { background: #2f78bf; }
+.comparison-row-symbol { display: block; width: 38px; height: 38px; color: #fff; font-size: var(--ppagent-component-label-size, 18px); font-weight: 700; line-height: 36px; text-align: center; }
+.comparison-row-text { position: absolute; top: 0; bottom: 0; overflow: hidden; color: #465462; font-size: var(--ppagent-component-body-size, 19px); font-weight: 500; line-height: 1; white-space: nowrap; }
+.comparison-side-0 .comparison-row-text,
+.comparison-side-1 .comparison-row-text { left: 62px; right: 62px; text-align: center; }
+.comparison-review[data-item-count="3"] .comparison-row-text { line-height: 60px; }
+.comparison-review[data-item-count="4"] .comparison-row-text { line-height: 54px; }
+.comparison-review[data-item-count="5"] .comparison-row-text { line-height: 47px; }
+.comparison-knot-ring { position: absolute; left: 520px; top: 188px; width: 130px; height: 130px; z-index: 2; border: 1px dashed #9ebfe1; border-radius: 50%; background: #fff; }
+.comparison-knot-halo { position: absolute; left: 531px; top: 199px; width: 108px; height: 108px; z-index: 2; border: 1px solid #d4e5f6; border-radius: 50%; background: #edf6ff; }
+.comparison-knot-core { position: absolute; left: 542px; top: 210px; width: 86px; height: 86px; z-index: 2; border: 0; border-radius: 50%; background: #2185cc; box-shadow: 0 10px 22px rgba(33, 133, 204, .24); }
+.comparison-knot-label { position: absolute; left: 542px; top: 210px; width: 86px; height: 86px; z-index: 3; overflow: hidden; color: #fff; font-size: var(--ppagent-component-title-size, 26px); font-weight: 700; line-height: 86px; text-align: center; white-space: nowrap; }

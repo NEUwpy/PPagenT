@@ -4,7 +4,7 @@
   "kind": "component",
   "category": "结构图",
   "creationMethod": "distillation",
-  "status": "candidate",
+  "status": "core",
   "generator": "generate.mjs",
   "showcase": "example.pptx",
   "source": {
@@ -33,7 +33,7 @@
   ],
   "runtime": {
     "renderer": "html-component",
-    "entry": "generate.mjs",
+    "entry": "runtime.mjs",
     "componentExport": "visualComponent",
     "previewParametersExport": "previewParameters",
     "previewResolverExport": "resolvePreviewParameters",
@@ -64,7 +64,7 @@
     },
     "contentContract": {
       "itemRole": "semantic-node",
-      "points": "forbidden",
+      "points": "optional",
       "ordered": false
     },
     "contract": {
@@ -97,7 +97,7 @@
     }
   },
   "layoutExpansion": {
-    "mode": "responsive-state-group",
+    "mode": "responsive",
     "range": "同一 Structure Group 支持 3–5 项；每个状态重新计算卡片宽度、间距与整体居中位置",
     "rule": "所有项目等宽、等高、等距并围绕共同中轴居中；不得把顺序、中心或层级关系混入本组"
   },
@@ -128,7 +128,12 @@
       {
         "field": "items[].body",
         "source": "PageContent.items[].body",
-        "meaning": "每张卡片的简短说明"
+        "meaning": "每张卡片的一整块正文容器，可直接承载段落"
+      },
+      {
+        "field": "items[].points[]",
+        "source": "PageContent.items[].points[]",
+        "meaning": "原稿确有分点时，在同一正文容器内换行显示，不生成固定子槽"
       },
       {
         "field": "items[].iconQuery",
@@ -164,8 +169,8 @@
     "safePadding": 12,
     "supportedCompositionIds": ["component-full"]
   },
-  "capacity": "承载 3–5 个同级要点；标题不超过 8 字；正文上限随 State 为 34/30/24 字",
+  "capacity": "承载 3–5 个同级要点；标题可选且不超过 8 字；每项只有一个完整正文容器，段落或分点共用，正文上限随 State 为 34/30/24 字",
   "semanticContract": "3–5 个对象处于同一层级，彼此没有先后、因果、中心支撑或上下级关系",
   "doNotUseWhen": "内容存在正反比较、步骤顺序、中心辐射、问题—措施或层级关系",
-  "review": "四项 HTML 黄金状态已获用户认可；已扩散到 3–5 项并接入 Native/东北大学主题，等待整组画面与 Slot Contract 最终审批"
+  "review": "用户已确认 HTML 黄金状态、3–5 项扩散状态及 Native/东北大学主题结果，同意进入核心资产库"
 }

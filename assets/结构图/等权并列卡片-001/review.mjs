@@ -3,6 +3,8 @@ import { resolveTablerIcon, tablerIconSvgMarkup } from "../../../src/icons/table
 const DESIGN_FRAME = Object.freeze({ width: 1170, height: 492 });
 const BODY_LIMITS = Object.freeze({ 3: 34, 4: 30, 5: 24 });
 const TITLE_LIMIT = 8;
+const POINT_LIMIT = 14;
+const MAX_POINTS = 4;
 
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>"']/g, (character) => ({
@@ -18,6 +20,12 @@ function charCount(value) {
   return Array.from(value).length;
 }
 
+function pointRows(item) {
+  return Array.isArray(item?.points)
+    ? item.points.map((point) => text(point?.text ?? point)).filter(Boolean)
+    : [];
+}
+
 function normalizeParameters(parameters) {
   if (!parameters || !Array.isArray(parameters.items)) throw new Error("等权并列卡片需要 items 数组");
   const itemCount = parameters.items.length;
@@ -29,14 +37,18 @@ function normalizeParameters(parameters) {
     items: parameters.items.map((item, index) => {
       const title = text(item?.title);
       const body = text(item?.body);
-      if (!title) throw new Error(`items[${index}].title 不能为空`);
-      if (!body) throw new Error(`items[${index}].body 不能为空`);
+      const points = pointRows(item);
+      if (points.length > MAX_POINTS) throw new Error(`items[${index}].points 最多 ${MAX_POINTS} 条`);
+      if (points.some((point) => charCount(point) > POINT_LIMIT)) throw new Error(`items[${index}].points 单条超过 ${POINT_LIMIT} 字`);
+      const supportText = [body, ...points.map((point) => `• ${point}`)].filter(Boolean).join("\n");
+      if (!title && !supportText) throw new Error(`items[${index}] 至少需要 title 或正文内容`);
       if (charCount(title) > TITLE_LIMIT) throw new Error(`items[${index}].title 超过 ${TITLE_LIMIT} 字`);
-      if (charCount(body) > maxBodyChars) throw new Error(`items[${index}].body 超过 ${maxBodyChars} 字`);
+      if (charCount(supportText.replaceAll("\n", "")) > maxBodyChars) throw new Error(`items[${index}] 的完整正文超过 ${maxBodyChars} 字`);
+      if (supportText.split(/\r?\n/).length > 4) throw new Error(`items[${index}] 的完整正文超过 4 行`);
       const key = text(item?.key) || `item-${index + 1}`;
       const iconQuery = text(item?.iconQuery);
       const icon = resolveTablerIcon(text(item?.iconKey) || iconQuery);
-      return { key, title, body, iconQuery, icon };
+      return { key, title, body: supportText, points, iconQuery, icon };
     }),
   };
 }
@@ -59,15 +71,15 @@ function cardMarkup(item, index, itemCount) {
     <div class="parallel-card-surface" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="parallel-card-surface-${index}"></div>
     <div class="parallel-card-accent" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="parallel-card-accent-${index}"></div>
     <div class="parallel-marker">${markerMarkup(item, index)}</div>
-    <h3 class="parallel-title" data-slot-id="${escapeHtml(item.key)}-title" data-slot-role="item-title" data-slot-field="items[${index}].title" data-slot-item-id="${escapeHtml(item.key)}" data-slot-content-type="text" data-slot-max-chars="${TITLE_LIMIT}" data-slot-max-lines="1" data-ppt-kind="text" data-ppt-name="parallel-title-${index}">${escapeHtml(item.title)}</h3>
+    <h3 class="parallel-title" data-slot-id="${escapeHtml(item.key)}-title" data-slot-role="item-title" data-slot-field="items[${index}].title" data-slot-item-id="${escapeHtml(item.key)}" data-slot-content-type="text" data-slot-required="false" data-slot-text-mode="single-line" data-slot-list-policy="none" data-slot-max-chars="${TITLE_LIMIT}" data-slot-max-lines="1" data-ppt-kind="text" data-ppt-name="parallel-title-${index}">${escapeHtml(item.title)}</h3>
     <div class="parallel-rule" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="parallel-rule-${index}"></div>
-    <p class="parallel-body" data-slot-id="${escapeHtml(item.key)}-body" data-slot-role="item-body" data-slot-field="items[${index}].body" data-slot-item-id="${escapeHtml(item.key)}" data-slot-content-type="text" data-slot-max-chars="${BODY_LIMITS[itemCount]}" data-slot-max-lines="4" data-ppt-kind="text" data-ppt-name="parallel-body-${index}">${escapeHtml(item.body)}</p>
+    <p class="parallel-body" data-slot-id="${escapeHtml(item.key)}-body" data-slot-role="item-body" data-slot-field="items[${index}].support" data-slot-item-id="${escapeHtml(item.key)}" data-slot-content-type="text" data-slot-required="false" data-slot-text-mode="flow" data-slot-list-policy="inline" data-slot-max-chars="${BODY_LIMITS[itemCount]}" data-slot-max-lines="4" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="parallel-body-${index}">${escapeHtml(item.body)}</p>
   </article>`;
 }
 
 export const visualComponent = Object.freeze({
   id: "parallel-equal-cards",
-  schemaVersion: 4,
+  schemaVersion: 5,
   designFrame: DESIGN_FRAME,
   cssFile: "component.css",
   textCapacity: Object.freeze({
@@ -75,6 +87,9 @@ export const visualComponent = Object.freeze({
     maxItemTitleLines: 1,
     maxItemBodyCharsByState: BODY_LIMITS,
     maxItemBodyLines: 4,
+    maxPointsPerItem: MAX_POINTS,
+    maxPointChars: POINT_LIMIT,
+    maxPointLines: 1,
   }),
   renderMarkup(parameters) {
     const model = normalizeParameters(parameters);
