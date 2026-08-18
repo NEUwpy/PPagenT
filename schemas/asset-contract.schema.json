@@ -69,7 +69,14 @@
             "converging": { "type": "boolean" },
             "branched": { "type": "boolean" },
             "dimensions": { "type": "integer", "minimum": 1, "maximum": 3 },
-            "secondaryDimension": { "enum": ["none", "role", "time", "layer", "category", "domain", "other"] }
+            "secondaryDimension": { "enum": ["none", "role", "time", "layer", "category", "domain", "other"] },
+            "parallel": { "type": "boolean" },
+            "sequence": { "type": "boolean" },
+            "layered": { "type": "boolean" },
+            "comparison": { "type": "boolean" },
+            "hierarchy": { "type": "boolean" },
+            "peopleIdentity": { "type": "boolean" },
+            "directionalPreference": { "type": "boolean" }
           }
         },
         "density": {
