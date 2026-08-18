@@ -244,7 +244,11 @@ export function matchPageIntent(intent, contracts, options = {}) {
     if (result.eligible) eligible.push(candidate);
     else {
       rejected.push({ assetId: contract.assetId, reasons: result.reasons });
-      const hasIntentMismatch = result.reasons.some((reason) => reason.startsWith("base-relation:") || reason.startsWith("purpose-key:"));
+      const hasIntentMismatch = result.reasons.some((reason) => (
+        reason.startsWith("base-relation:")
+        || reason.startsWith("purpose-key:")
+        || reason.startsWith("trait:")
+      ));
       if (!hasIntentMismatch) nearMatches.push(candidate);
     }
   }

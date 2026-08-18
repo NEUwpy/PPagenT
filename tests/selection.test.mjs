@@ -138,6 +138,24 @@ test("受控 purposeKey 在复合模板缺失时阻止通用语法抢占", async
   assert.ok(rejection.reasons.includes("purpose-key:explain_user_journey"));
 });
 
+test("显式非循环的顺序意图不会被循环资产抢占，退化为简单排版", async () => {
+  const base = await readFixture("sequence.intent.json");
+  const intent = {
+    ...base,
+    intentId: "user-journey",
+    purposeKey: "explain_user_journey",
+    purposeText: "说明用户在四个连续阶段中的行为和体验",
+  };
+  const result = matchPageIntent(intent, contracts);
+  assert.equal(result.decision, "fallback");
+  assert.equal(result.resolutionPlan.action, "simple-layout");
+  assert.equal(result.resolutionPlan.requiresReview, false);
+  assert.equal("sourceAssetId" in result.resolutionPlan, false);
+  const cycleRejection = result.rejections.find((item) => item.assetId === "cycle-loop-001");
+  assert.ok(cycleRejection, "循环资产应当被显式拒绝而非作为回退来源");
+  assert.ok(cycleRejection.reasons.includes("trait:cyclic"));
+});
+
 test("暂缓资产默认不参与选择", async () => {
   const base = await readFixture("sequence.intent.json");
   const intent = {
