@@ -10,9 +10,12 @@ body { color: #3f4b59; background: transparent; font-family: var(--ppagent-font-
 .comparison-side-1 { right: 20px; }
 .comparison-side-shadow { position: absolute; left: 10px; right: 10px; top: 14px; bottom: 0; border: 0; border-radius: 28px; background: #dbe5f1; opacity: .78; }
 .comparison-side-surface { position: absolute; inset: 0 0 12px; border: 1px solid #d6e0ec; border-radius: 28px; background: #f8fafc; box-shadow: 0 14px 30px rgba(35, 66, 105, .12); }
-.comparison-side-cap { position: absolute; left: 0; right: 0; top: 0; height: 78px; border: 0; border-radius: 28px 28px 16px 16px; }
-.comparison-side[data-tone="negative"] .comparison-side-cap { background: #778493; }
-.comparison-side[data-tone="positive"] .comparison-side-cap { background: #2867aa; }
+.comparison-side-cap-top { position: absolute; left: 0; right: 0; top: 0; height: 56px; border: 0; border-radius: 28px; }
+.comparison-side-cap-bottom { position: absolute; left: 0; right: 0; top: 28px; height: 50px; border: 0; border-radius: 16px; }
+.comparison-side[data-tone="negative"] .comparison-side-cap-top,
+.comparison-side[data-tone="negative"] .comparison-side-cap-bottom { background: #778493; }
+.comparison-side[data-tone="positive"] .comparison-side-cap-top,
+.comparison-side[data-tone="positive"] .comparison-side-cap-bottom { background: #2867aa; }
 .comparison-side-title { position: absolute; left: 42px; right: 42px; top: 13px; height: 52px; margin: 0; overflow: hidden; color: #fff; font-size: var(--ppagent-component-title-size, 26px); font-weight: 700; line-height: 52px; text-align: center; white-space: nowrap; }
 .comparison-list { position: absolute; left: 34px; right: 34px; top: 95px; bottom: 29px; display: grid; align-content: center; }
 .comparison-review[data-item-count="3"] .comparison-list { grid-template-rows: repeat(3, 62px); gap: 24px; }

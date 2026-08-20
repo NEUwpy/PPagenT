@@ -3,7 +3,7 @@ html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
 body { color: #3e4d62; background: transparent; font-family: var(--ppagent-font-body, "Microsoft YaHei"), sans-serif; }
 .architecture-review { position: relative; width: 1170px; height: 492px; overflow: hidden; background: transparent; }
 .architecture-layer { position: absolute; left: var(--left); top: var(--top); z-index: 2; width: var(--width); height: var(--height); }
-.architecture-layer-shell { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 7px 8px rgba(43, 83, 133, .12)); }
+.architecture-layer-shell { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .architecture-layer-shadow { fill: #d7e1ec; opacity: .36; }
 .architecture-layer-body { fill: #f5f8fb; stroke: #d7e2ed; stroke-width: 1.1; }
 .architecture-layer-front { fill: #eaf1f7; opacity: .88; }
@@ -16,7 +16,7 @@ body { color: #3e4d62; background: transparent; font-family: var(--ppagent-font-
 .architecture-layer-items[data-item-count="3"] { grid-template-columns: repeat(3, 1fr); }
 .architecture-layer-items[data-item-count="4"] { grid-template-columns: repeat(4, 1fr); }
 .architecture-item { position: relative; display: flex; align-items: center; justify-content: center; min-width: 0; height: 100%; padding: 0 14px; color: #405269; font-size: var(--ppagent-component-body-size, 19px); font-weight: 600; line-height: 1.2; text-align: center; white-space: nowrap; }
-.architecture-item + .architecture-item::before { position: absolute; left: 0; top: 27%; bottom: 27%; width: 1px; content: ""; background: #c7d8ea; }
+.architecture-item-separator { position: absolute; left: 0; top: 27%; bottom: 27%; width: 1px; background: #c7d8ea; }
 .architecture-item span { display: block; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .architecture-review[data-layer-count="5"] .architecture-layer-title { font-size: var(--ppagent-component-body-size, 19px); }
 .architecture-review[data-layer-count="5"] .architecture-item { padding: 0 10px; font-size: 18px; }

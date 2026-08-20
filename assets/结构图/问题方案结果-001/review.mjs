@@ -100,6 +100,7 @@ function pairMarkup(pair, index, geometry) {
       </div>
       <p ${slotAttributes({ id: `${pair.key}-problem-body`, role: "item-body", field: `pairs[${index}].problem.body`, itemId: pair.key, maxChars: LIMITS.body, maxLines: 2, required: false })} data-ppt-kind="text" data-ppt-name="problem-body-${index}">${escapeHtml(pair.problem.body)}</p>
     </section>
+    <div class="solution-card-underlay" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="solution-card-underlay-${index}"></div>
     <section class="solution-card" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="solution-card-${index}">
       <span class="solution-stripe" aria-hidden="true"></span>
       <div class="card-heading">

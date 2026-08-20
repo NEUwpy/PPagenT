@@ -200,7 +200,7 @@ function phaseRailPath(frame, index) {
 
 function actionMarkup(action, phaseIndex, actionIndex) {
   return `<div class="funnel-action" data-action-index="${actionIndex}">
-    <div class="funnel-action-icon">
+    <div class="funnel-action-icon" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="action-icon-shell-${phaseIndex}-${actionIndex}">
       ${iconSvg(action, `action-icon-${phaseIndex}-${actionIndex}`)}
     </div>
     <div class="funnel-action-copy">

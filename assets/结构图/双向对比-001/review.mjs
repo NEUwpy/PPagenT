@@ -61,7 +61,8 @@ function sideMarkup(side, sideIndex) {
   return `<article class="comparison-side comparison-side-${sideIndex}" data-tone="${side.tone}">
     <div class="comparison-side-shadow" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="comparison-shadow-${sideIndex}"></div>
     <div class="comparison-side-surface" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="comparison-surface-${sideIndex}"></div>
-    <div class="comparison-side-cap" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="comparison-cap-${sideIndex}"></div>
+    <div class="comparison-side-cap-top" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="comparison-cap-top-${sideIndex}"></div>
+    <div class="comparison-side-cap-bottom" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="comparison-cap-bottom-${sideIndex}"></div>
     <h3 class="comparison-side-title" data-slot-id="side-${sideIndex}-title" data-slot-role="item-title" data-slot-field="sides[${sideIndex}].title" data-slot-item-id="side-${sideIndex}" data-slot-content-type="text" data-slot-required="true" data-slot-text-mode="single-line" data-slot-list-policy="none" data-slot-max-chars="${TITLE_LIMIT}" data-slot-max-lines="1" data-ppt-kind="text" data-ppt-name="comparison-title-${sideIndex}">${escapeHtml(side.title)}</h3>
     <div class="comparison-list">${side.items.map((item, rowIndex) => rowMarkup(item, side.tone, sideIndex, rowIndex)).join("")}</div>
   </article>`;

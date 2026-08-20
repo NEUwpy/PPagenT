@@ -73,6 +73,7 @@ function layerMarkup(layer, layerIndex, frame, layerCount) {
   const color = colorFor(layerIndex, layerCount);
   const style = `--left:${frame.left.toFixed(2)}px;--top:${frame.top.toFixed(2)}px;--width:${frame.width.toFixed(2)}px;--height:${frame.height.toFixed(2)}px;--layer-color:${color}`;
   const items = layer.items.map((item, itemIndex) => `<div class="architecture-item" data-item-count="${layer.items.length}">
+      ${itemIndex > 0 ? `<span class="architecture-item-separator" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="layer-${layerIndex}-item-${itemIndex}-separator"></span>` : ""}
       <span data-slot-id="${escapeHtml(item.key)}-title" data-slot-role="item-title" data-slot-field="layers[${layerIndex}].items[${itemIndex}].title" data-slot-item-id="${escapeHtml(item.key)}" data-slot-content-type="text" data-slot-required="true" data-slot-text-mode="single-line" data-slot-list-policy="none" data-slot-max-chars="${ITEM_TITLE_LIMIT}" data-slot-max-lines="1" data-ppt-kind="text" data-ppt-name="layer-${layerIndex}-item-${itemIndex}-title">${escapeHtml(item.title)}</span>
     </div>`).join("");
   return `<article class="architecture-layer" data-layer-index="${layerIndex}" style="${style}">

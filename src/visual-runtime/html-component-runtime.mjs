@@ -165,6 +165,29 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
       const backgroundFill = (element, style, opacity) => style.backgroundImage === "none"
         ? color(style.backgroundColor, opacity, element, "background-color")
         : gradientFill(element, style, opacity);
+      const svgFill = (element, style, opacity) => {
+        const reference = style.fill.match(/^url\(["']?#([^"')]+)["']?\)$/i);
+        if (!reference) return color(style.fill, opacity, element, "fill");
+        const gradient = document.getElementById(reference[1]);
+        if (!(gradient instanceof SVGLinearGradientElement)) fidelityError("UNSUPPORTED_SVG_PAINT", element, "fill", style.fill);
+        const coordinate = (name, fallback) => {
+          const raw = gradient.getAttribute(name) ?? fallback;
+          return raw.endsWith("%") ? Number.parseFloat(raw) / 100 : Number.parseFloat(raw);
+        };
+        const x1 = coordinate("x1", "0"), y1 = coordinate("y1", "0"), x2 = coordinate("x2", "1"), y2 = coordinate("y2", "0");
+        const angleDeg = rounded((Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI + 90 + 360) % 360);
+        const stops = [...gradient.querySelectorAll("stop")].map((stop) => {
+          const stopStyle = getComputedStyle(stop);
+          const rawOffset = stop.getAttribute("offset") ?? "0";
+          const offset = rawOffset.endsWith("%") ? Number.parseFloat(rawOffset) : Number.parseFloat(rawOffset) * 100;
+          return {
+            offset: rounded(offset),
+            color: color(stopStyle.stopColor, opacity * Number.parseFloat(stopStyle.stopOpacity || "1"), stop, "stop-color"),
+          };
+        });
+        if (stops.length < 2) fidelityError("INVALID_SVG_GRADIENT", element, "fill", style.fill);
+        return { type: "gradient", gradientKind: "linear", angleDeg, stops };
+      };
       const shadowStyle = (element, style, opacity) => {
         if (style.boxShadow === "none") return element.dataset.pptShadow || "shadow-none";
         const shadows = splitCssArgs(style.boxShadow);
@@ -179,9 +202,21 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         if (Math.abs(spread) > 0.001) fidelityError("UNSUPPORTED_SHADOW_SPREAD", element, "box-shadow", shadow);
         return `${rounded(x)}px ${rounded(y)}px ${rounded(blur)}px ${color(colorMatch[0], opacity, element, "box-shadow")}`;
       };
+      const textShadowStyle = (element, style, opacity) => {
+        if (style.textShadow === "none") return "shadow-none";
+        const shadows = splitCssArgs(style.textShadow);
+        if (shadows.length !== 1) fidelityError("MULTIPLE_TEXT_SHADOWS", element, "text-shadow", style.textShadow);
+        const shadow = shadows[0];
+        const colorMatch = shadow.match(/rgba?\([^)]*\)|#[0-9a-f]{3,8}/i);
+        if (!colorMatch) fidelityError("INVALID_TEXT_SHADOW", element, "text-shadow", shadow);
+        const dimensions = shadow.replace(colorMatch[0], "").trim().match(/-?[\d.]+px/g)?.map(Number.parseFloat) ?? [];
+        if (dimensions.length < 2 || dimensions.length > 3) fidelityError("INVALID_TEXT_SHADOW", element, "text-shadow", shadow);
+        const [x, y, blur = 0] = dimensions;
+        return `${rounded(x)}px ${rounded(y)}px ${rounded(blur)}px ${color(colorMatch[0], opacity, element, "text-shadow")}`;
+      };
       const assertSupportedEffects = (element, style) => {
         if (style.filter !== "none") fidelityError("UNSUPPORTED_FILTER", element, "filter", style.filter);
-        if (style.textShadow !== "none") fidelityError("UNSUPPORTED_TEXT_SHADOW", element, "text-shadow", style.textShadow);
+        if (style.textShadow !== "none" && element.dataset.pptKind !== "text") fidelityError("UNSUPPORTED_TEXT_SHADOW", element, "text-shadow", style.textShadow);
         if (style.mixBlendMode !== "normal") fidelityError("UNSUPPORTED_BLEND_MODE", element, "mix-blend-mode", style.mixBlendMode);
         if (style.backgroundBlendMode !== "normal") fidelityError("UNSUPPORTED_BLEND_MODE", element, "background-blend-mode", style.backgroundBlendMode);
       };
@@ -262,8 +297,9 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         return {
           ...base,
           frame: { left: rounded(left), top: rounded(top), width: rounded(width), height: rounded(height), rotation: 0 },
-          fill: color(style.fill, opacity, element, "fill"),
+          fill: svgFill(element, style, opacity),
           line: lineStyle(element, style, opacity),
+          shadow: shadowStyle(element, style, opacity),
           points: absolute.map((point) => ({ x: rounded(point.x - left), y: rounded(point.y - top) })),
         };
       };
@@ -273,7 +309,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         return style.display !== "none" && style.visibility !== "hidden" && Number(style.opacity) > 0 && box.width > 0 && box.height > 0;
       };
       for (const element of root.querySelectorAll("*")) {
-        if (!visible(element) || element.closest('[data-ppt-kind="image"]')) continue;
+        if (!visible(element) || element.closest('[data-ppt-kind="image"]') || element.parentElement?.closest('[data-ppt-kind="text"],[data-ppt-kind="shape-text"]')) continue;
         const style = getComputedStyle(element);
         assertSupportedEffects(element, style);
         for (const [pseudo, pseudoStyle] of [["::before", getComputedStyle(element, "::before")], ["::after", getComputedStyle(element, "::after")]]) {
@@ -325,7 +361,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
           throw new Error("data-ppt-kind=image 仅支持内联 SVG 或 data:image/* 图片");
         }
         if (kind === "text") {
-          return { ...base, frame, text: textValue(element), style: textStyle(element, style, opacity) };
+          return { ...base, frame, text: textValue(element), style: textStyle(element, style, opacity), shadow: textShadowStyle(element, style, opacity) };
         }
         if (kind === "shape" || kind === "shape-text") {
           const geometry = element.dataset.pptShape || (parseFloat(style.borderRadius) > 0 ? "roundRect" : "rect");
@@ -337,7 +373,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
             ...base,
             frame,
             geometry,
-            fill: element instanceof SVGElement ? color(style.fill, opacity, element, "fill") : backgroundFill(element, style, opacity),
+            fill: element instanceof SVGElement ? svgFill(element, style, opacity) : backgroundFill(element, style, opacity),
             line: lineStyle(element, style, opacity),
             shadow: shadowStyle(element, style, opacity),
             borderRadius: geometry === "roundRect" ? rounded(radii[0]) : 0,
@@ -444,7 +480,7 @@ export function compileResolvedVisualTree(slide, tree, targetFrame = tree.target
         position,
         fill: node.fill,
         line: node.line.width > 0 ? { ...node.line, width: node.line.width * transform.scale } : { style: "solid", fill: "none", width: 0 },
-        shadow: "shadow-none",
+        shadow: node.shadow,
         customPaths: [{
           width: node.frame.width,
           height: node.frame.height,
@@ -469,7 +505,7 @@ export function compileResolvedVisualTree(slide, tree, targetFrame = tree.target
       continue;
     }
     if (node.kind === "text") {
-      const shape = slide.shapes.add({ geometry: "textbox", name: node.name, position, fill: "none", line: { style: "solid", fill: "none", width: 0 } });
+      const shape = slide.shapes.add({ geometry: "textbox", name: node.name, position, fill: "none", line: { style: "solid", fill: "none", width: 0 }, shadow: node.shadow });
       applyText(shape, node, transform.scale);
       continue;
     }

@@ -128,6 +128,7 @@ export const visualComponent = Object.freeze({
     const model = normalizeParameters(parameters);
     const geometry = funnelGeometry(model.steps.length);
     return `<section class="simple-funnel" data-ppt-root data-step-count="${model.steps.length}">
+      <svg class="simple-funnel-orbit" viewBox="0 0 1170 492" aria-hidden="true"><ellipse cx="585" cy="244.5" rx="285" ry="202.5" transform="rotate(-7 585 244.5)" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="simple-funnel-orbit"></ellipse></svg>
       <div class="simple-input-layer">${model.inputs.map((input, index) => inputMarkup(input, index, model.inputs.length)).join("")}</div>
       <svg class="simple-funnel-diagram" viewBox="0 0 ${DESIGN_FRAME.width} ${DESIGN_FRAME.height}" preserveAspectRatio="none" aria-hidden="true">
         ${geometry.steps.map((step) => `<g><path class="simple-funnel-step-body" fill="${COLORS[step.index]}" d="${step.path}" data-ppt-kind="path" data-ppt-name="simple-step-body-${step.index}"/><ellipse class="simple-funnel-step-cap" fill="${COLORS[step.index]}" cx="${step.cap.cx}" cy="${step.cap.cy}" rx="${step.cap.rx}" ry="${step.cap.ry}" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="simple-step-cap-${step.index}"/></g>`).join("")}
