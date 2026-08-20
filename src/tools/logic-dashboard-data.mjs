@@ -317,7 +317,7 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
     .map((entry) => entry.name)
     .sort((left, right) => left.localeCompare(right, "zh-CN"));
 
-  const coreAssets = records.filter((record) => record.library === "core");
+  const coreAssets = records.filter((record) => record.library === "core" && record.status === "core");
   const formalLogics = coreAssets.filter((record) => record.renderer !== "skin" && record.autoCallable);
   const pendingApproval = records.filter((record) => (
     record.renderer === "html-component"

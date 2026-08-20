@@ -88,7 +88,9 @@ for (const { assetDir, manifest } of await assetManifests()) {
   if (runtime.renderer === "html-component" && typeof component?.renderMarkup !== "function") throw new Error(`${manifest.id} 缺少 ${runtime.componentExport}`);
 
   const presentation = createPresentation();
-  const selections = cartesianControls(review.controls);
+  const selections = Array.isArray(review.exampleSelections) && review.exampleSelections.length
+    ? review.exampleSelections.map((selection) => ({ ...selection }))
+    : cartesianControls(review.controls);
   for (const selection of selections) {
     const parameters = resolvedParameters(reviewModule, review, selection);
     if (runtime.renderer === "html-component") {

@@ -59,6 +59,38 @@
               "items": { "$ref": "#/$defs/convergencePhase" }
             }
           }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "pairs", "outcome"],
+          "properties": {
+            "type": { "const": "problem-solution" },
+            "pairs": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 4,
+              "items": { "$ref": "#/$defs/problemSolutionPair" }
+            },
+            "outcome": { "$ref": "#/$defs/problemSolutionOutcome" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "axes", "quadrants"],
+          "properties": {
+            "type": { "const": "matrix" },
+            "axes": { "$ref": "#/$defs/matrixAxes" },
+            "quadrants": {
+              "type": "array",
+              "minItems": 4,
+              "maxItems": 4,
+              "items": { "$ref": "#/$defs/matrixQuadrant" }
+            },
+            "focusQuadrant": { "type": "integer", "minimum": -1, "maximum": 3 },
+            "showDefinitionRail": { "type": "boolean" }
+          }
         }
       ]
     },
@@ -66,6 +98,87 @@
     "sourceText": { "type": "string" }
   },
   "$defs": {
+    "matrixAxes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["xLow", "xHigh", "yLow", "yHigh"],
+      "properties": {
+        "xLow": { "type": "string", "minLength": 1, "maxLength": 8 },
+        "xHigh": { "type": "string", "minLength": 1, "maxLength": 8 },
+        "yLow": { "type": "string", "minLength": 1, "maxLength": 8 },
+        "yHigh": { "type": "string", "minLength": 1, "maxLength": 8 }
+      }
+    },
+    "matrixMetric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "value"],
+      "properties": {
+        "label": { "type": "string", "minLength": 1, "maxLength": 8 },
+        "value": { "type": "string", "minLength": 1, "maxLength": 8 }
+      }
+    },
+    "matrixDetail": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "body", "metrics"],
+      "properties": {
+        "title": { "type": "string", "minLength": 1, "maxLength": 10 },
+        "body": { "type": "string", "minLength": 1, "maxLength": 30 },
+        "metrics": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": { "$ref": "#/$defs/matrixMetric" }
+        }
+      }
+    },
+    "matrixQuadrant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "detail", "itemIds"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1, "maxLength": 8 },
+        "detail": { "$ref": "#/$defs/matrixDetail" },
+        "itemIds": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      }
+    },
+    "problemSolutionText": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "body"],
+      "properties": {
+        "title": { "type": "string", "minLength": 1, "maxLength": 10 },
+        "body": { "type": "string", "maxLength": 22 }
+      }
+    },
+    "problemSolutionPair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "problem", "solution"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "problem": { "$ref": "#/$defs/problemSolutionText" },
+        "solution": { "$ref": "#/$defs/problemSolutionText" }
+      }
+    },
+    "problemSolutionOutcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "highlight", "body"],
+      "properties": {
+        "title": { "type": "string", "minLength": 1, "maxLength": 12 },
+        "highlight": { "type": "string", "maxLength": 12 },
+        "body": { "type": "string", "maxLength": 22 }
+      }
+    },
     "convergenceInput": {
       "type": "object",
       "additionalProperties": false,

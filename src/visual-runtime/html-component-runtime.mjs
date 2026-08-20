@@ -9,7 +9,8 @@ import { htmlComponentThemeCss } from "./html-component-theme.mjs";
 
 export { htmlComponentThemeCss } from "./html-component-theme.mjs";
 
-const TREE_SCHEMA_VERSION = 2;
+// v3 carries visual fidelity data (alpha, gradients, exact shadows/radii) instead of flattened CSS colors.
+const TREE_SCHEMA_VERSION = 3;
 let browserPromise = null;
 
 function requireValue(condition, message) {
@@ -88,11 +89,101 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
       if (!root) throw new Error("HTML Component 缺少 data-ppt-root");
       const rootBox = root.getBoundingClientRect();
       const rounded = (value) => Math.round(value * 1000) / 1000;
-      const color = (value) => {
+      const nodeLabel = (element) => element.dataset.pptName || element.dataset.slotId || element.id || element.className?.baseVal || element.className || element.tagName.toLowerCase();
+      const fidelityError = (code, element, property, value) => {
+        throw new Error(`[HTML_PPT_FIDELITY:${code}] node=${nodeLabel(element)} property=${property} value=${String(value)}`);
+      };
+      const splitCssArgs = (value) => {
+        const result = [];
+        let depth = 0;
+        let start = 0;
+        for (let index = 0; index < value.length; index += 1) {
+          if (value[index] === "(") depth += 1;
+          if (value[index] === ")") depth -= 1;
+          if (value[index] === "," && depth === 0) {
+            result.push(value.slice(start, index).trim());
+            start = index + 1;
+          }
+        }
+        result.push(value.slice(start).trim());
+        return result.filter(Boolean);
+      };
+      const effectiveOpacity = (element) => {
+        let opacity = 1;
+        for (let current = element; current && current !== root.parentElement; current = current.parentElement) {
+          opacity *= Number.parseFloat(getComputedStyle(current).opacity) || 0;
+          if (current === root) break;
+        }
+        return Math.max(0, Math.min(1, opacity));
+      };
+      const color = (value, opacity = 1, element = root, property = "color") => {
         if (!value || value === "transparent" || value === "none") return "none";
-        const match = value.match(/^rgba?\(\s*(\d+)\D+(\d+)\D+(\d+)(?:\D+([\d.]+))?\s*\)$/i);
-        if (!match || Number(match[4] ?? 1) === 0) return "none";
-        return `#${[match[1], match[2], match[3]].map((part) => Number(part).toString(16).padStart(2, "0")).join("").toUpperCase()}`;
+        const match = value.match(/^rgba?\(\s*(\d+(?:\.\d+)?)\s*[, ]\s*(\d+(?:\.\d+)?)\s*[, ]\s*(\d+(?:\.\d+)?)(?:\s*[,/]\s*([\d.]+)%?)?\s*\)$/i);
+        if (!match) fidelityError("UNSUPPORTED_COLOR", element, property, value);
+        const sourceAlpha = match[4] === undefined ? 1 : Number(match[4]) / (value.includes("%") ? 100 : 1);
+        const alpha = Math.max(0, Math.min(1, sourceAlpha * opacity));
+        if (alpha <= 0.0005) return "none";
+        const hex = `#${[match[1], match[2], match[3]].map((part) => Math.round(Number(part)).toString(16).padStart(2, "0")).join("").toUpperCase()}`;
+        if (alpha >= 0.9995) return hex;
+        return `${hex}/${rounded(alpha * 100)}`;
+      };
+      const gradientFill = (element, style, opacity) => {
+        const value = style.backgroundImage;
+        const functionMatch = value.match(/^(linear-gradient|radial-gradient)\((.*)\)$/i);
+        if (!functionMatch) fidelityError("UNSUPPORTED_BACKGROUND_IMAGE", element, "background-image", value);
+        if (color(style.backgroundColor, opacity, element, "background-color") !== "none") {
+          fidelityError("LAYERED_BACKGROUND", element, "background", `${style.backgroundColor}; ${value}`);
+        }
+        const args = splitCssArgs(functionMatch[2]);
+        const linear = functionMatch[1].toLowerCase() === "linear-gradient";
+        let angleDeg = 180;
+        if (linear && args.length && !/^(?:rgba?|hsla?)\(|^#/i.test(args[0])) {
+          const direction = args.shift().toLowerCase();
+          const directionAngles = { "to top": 0, "to top right": 45, "to right": 90, "to bottom right": 135, "to bottom": 180, "to bottom left": 225, "to left": 270, "to top left": 315 };
+          if (/^-?[\d.]+deg$/.test(direction)) angleDeg = Number.parseFloat(direction);
+          else if (direction in directionAngles) angleDeg = directionAngles[direction];
+          else fidelityError("UNSUPPORTED_GRADIENT_DIRECTION", element, "background-image", direction);
+        } else if (!linear && args.length && !/^(?:rgba?|hsla?)\(|^#/i.test(args[0])) {
+          fidelityError("UNSUPPORTED_RADIAL_GEOMETRY", element, "background-image", args[0]);
+        }
+        if (args.length < 2) fidelityError("INVALID_GRADIENT", element, "background-image", value);
+        const stops = args.map((stop, index) => {
+          const match = stop.match(/^((?:rgba?|hsla?)\([^)]*\)|#[0-9a-f]{3,8})(?:\s+(-?[\d.]+)%?)?$/i);
+          if (!match) fidelityError("UNSUPPORTED_GRADIENT_STOP", element, "background-image", stop);
+          const distributed = args.length === 1 ? 0 : index / (args.length - 1);
+          const offset = match[2] === undefined ? distributed * 100000 : Number(match[2]) * 1000;
+          if (offset < 0 || offset > 100000) fidelityError("INVALID_GRADIENT_OFFSET", element, "background-image", stop);
+          return { offset: rounded(offset), color: color(match[1], opacity, element, "background-image") };
+        });
+        return {
+          type: "gradient",
+          gradientKind: linear ? "linear" : "path",
+          ...(linear ? { angleDeg } : {}),
+          stops,
+        };
+      };
+      const backgroundFill = (element, style, opacity) => style.backgroundImage === "none"
+        ? color(style.backgroundColor, opacity, element, "background-color")
+        : gradientFill(element, style, opacity);
+      const shadowStyle = (element, style, opacity) => {
+        if (style.boxShadow === "none") return element.dataset.pptShadow || "shadow-none";
+        const shadows = splitCssArgs(style.boxShadow);
+        if (shadows.length !== 1) fidelityError("MULTIPLE_BOX_SHADOWS", element, "box-shadow", style.boxShadow);
+        const shadow = shadows[0];
+        if (/\binset\b/i.test(shadow)) fidelityError("INSET_BOX_SHADOW", element, "box-shadow", shadow);
+        const colorMatch = shadow.match(/rgba?\([^)]*\)|#[0-9a-f]{3,8}/i);
+        if (!colorMatch) fidelityError("INVALID_BOX_SHADOW", element, "box-shadow", shadow);
+        const dimensions = shadow.replace(colorMatch[0], "").trim().match(/-?[\d.]+px/g)?.map(Number.parseFloat) ?? [];
+        if (dimensions.length < 2 || dimensions.length > 4) fidelityError("INVALID_BOX_SHADOW", element, "box-shadow", shadow);
+        const [x, y, blur = 0, spread = 0] = dimensions;
+        if (Math.abs(spread) > 0.001) fidelityError("UNSUPPORTED_SHADOW_SPREAD", element, "box-shadow", shadow);
+        return `${rounded(x)}px ${rounded(y)}px ${rounded(blur)}px ${color(colorMatch[0], opacity, element, "box-shadow")}`;
+      };
+      const assertSupportedEffects = (element, style) => {
+        if (style.filter !== "none") fidelityError("UNSUPPORTED_FILTER", element, "filter", style.filter);
+        if (style.textShadow !== "none") fidelityError("UNSUPPORTED_TEXT_SHADOW", element, "text-shadow", style.textShadow);
+        if (style.mixBlendMode !== "normal") fidelityError("UNSUPPORTED_BLEND_MODE", element, "mix-blend-mode", style.mixBlendMode);
+        if (style.backgroundBlendMode !== "normal") fidelityError("UNSUPPORTED_BLEND_MODE", element, "background-blend-mode", style.backgroundBlendMode);
       };
       const htmlFrame = (element) => {
         const box = element.getBoundingClientRect();
@@ -120,14 +211,15 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
           rotation: rounded(Math.atan2(matrix.b, matrix.a) * 180 / Math.PI),
         };
       };
-      const textStyle = (element, style) => ({
+      const textStyle = (element, style, opacity) => ({
         typeface: style.fontFamily.split(",")[0].replace(/["']/g, "").trim(),
         fontSize: rounded(parseFloat(style.fontSize)),
         bold: Number(style.fontWeight) >= 600 || style.fontWeight === "bold",
         italic: style.fontStyle === "italic",
-        color: color(element instanceof SVGElement ? style.fill : style.color),
+        color: color(element instanceof SVGElement ? style.fill : style.color, opacity, element, "color"),
         alignment: style.textAnchor === "middle" || style.textAlign === "center" ? "center" : style.textAnchor === "end" || style.textAlign === "right" ? "right" : "left",
         verticalAlignment: element.dataset.pptValign || "middle",
+        lineSpacing: rounded((Number.parseFloat(style.lineHeight) || Number.parseFloat(style.fontSize)) / Number.parseFloat(style.fontSize)),
       });
       const textValue = (element) => {
         const source = element.textContent.replace(/\r/g, "");
@@ -140,16 +232,19 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         }
         return source.replace(/\s+/g, " ").trim();
       };
-      const lineStyle = (element, style) => {
+      const lineStyle = (element, style, opacity) => {
         const svg = element instanceof SVGElement;
         const width = rounded(parseFloat(svg ? style.strokeWidth : style.borderTopWidth) || 0);
+        const sourceStyle = svg ? (style.strokeDasharray === "none" ? "solid" : "dashed") : style.borderTopStyle;
+        const supportedStyles = { none: "solid", solid: "solid", dashed: "dashed", dotted: "dotted" };
+        if (!(sourceStyle in supportedStyles)) fidelityError("UNSUPPORTED_LINE_STYLE", element, svg ? "stroke-dasharray" : "border-top-style", sourceStyle);
         return {
-          fill: color(svg ? style.stroke : style.borderTopColor),
+          fill: color(svg ? style.stroke : style.borderTopColor, opacity, element, svg ? "stroke" : "border-color"),
           width,
-          style: (svg ? style.strokeDasharray !== "none" : style.borderTopStyle === "dashed") ? "dashed" : "solid",
+          style: supportedStyles[sourceStyle],
         };
       };
-      const pathNode = (element, base, style) => {
+      const pathNode = (element, base, style, opacity) => {
         const length = element.getTotalLength();
         const sampleCount = Math.max(32, Math.min(240, Math.ceil(length / 2)));
         const matrix = element.getScreenCTM();
@@ -167,16 +262,46 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         return {
           ...base,
           frame: { left: rounded(left), top: rounded(top), width: rounded(width), height: rounded(height), rotation: 0 },
-          fill: color(style.fill),
-          line: lineStyle(element, style),
+          fill: color(style.fill, opacity, element, "fill"),
+          line: lineStyle(element, style, opacity),
           points: absolute.map((point) => ({ x: rounded(point.x - left), y: rounded(point.y - top) })),
         };
       };
+      const visible = (element) => {
+        const style = getComputedStyle(element);
+        const box = element.getBoundingClientRect();
+        return style.display !== "none" && style.visibility !== "hidden" && Number(style.opacity) > 0 && box.width > 0 && box.height > 0;
+      };
+      for (const element of root.querySelectorAll("*")) {
+        if (!visible(element) || element.closest('[data-ppt-kind="image"]')) continue;
+        const style = getComputedStyle(element);
+        assertSupportedEffects(element, style);
+        for (const [pseudo, pseudoStyle] of [["::before", getComputedStyle(element, "::before")], ["::after", getComputedStyle(element, "::after")]]) {
+          const hasContent = pseudoStyle.content !== "none" && pseudoStyle.content !== "normal" && pseudoStyle.content !== '\"\"';
+          const hasSurface = pseudoStyle.backgroundImage !== "none" || color(pseudoStyle.backgroundColor, 1, element, `${pseudo} background-color`) !== "none";
+          if (hasContent || hasSurface) fidelityError("UNCOMPILED_PSEUDO_ELEMENT", element, pseudo, pseudoStyle.content);
+        }
+        if (!element.hasAttribute("data-ppt-kind") && !(element instanceof SVGElement)) {
+          const hasSurface = style.backgroundImage !== "none"
+            || color(style.backgroundColor, 1, element, "background-color") !== "none"
+            || style.boxShadow !== "none"
+            || [style.borderTopWidth, style.borderRightWidth, style.borderBottomWidth, style.borderLeftWidth].some((width) => Number.parseFloat(width) > 0);
+          if (hasSurface) fidelityError("UNCOMPILED_VISUAL_NODE", element, "surface", style.backgroundImage !== "none" ? style.backgroundImage : style.backgroundColor);
+          const directText = [...element.childNodes].some((node) => node.nodeType === Node.TEXT_NODE && node.textContent.trim());
+          if (directText) fidelityError("UNCOMPILED_TEXT_NODE", element, "text", element.textContent.trim().slice(0, 80));
+        }
+      }
+      for (const element of root.querySelectorAll("svg path,svg line,svg rect,svg circle,svg ellipse,svg polygon,svg polyline,svg text,svg image,svg use")) {
+        if (!visible(element) || element.closest("defs") || element.closest('[data-ppt-kind="image"]') || element.hasAttribute("data-ppt-kind")) continue;
+        fidelityError("UNCOMPILED_SVG_NODE", element, "data-ppt-kind", "missing");
+      }
       const nodes = [...root.querySelectorAll("[data-ppt-kind]")].map((element, order) => {
         const kind = element.dataset.pptKind;
         const style = getComputedStyle(element);
+        const opacity = effectiveOpacity(element);
+        assertSupportedEffects(element, style);
         const base = { kind, name: element.dataset.pptName || `${kind}-${order}`, order };
-        if (kind === "path") return pathNode(element, base, style);
+        if (kind === "path") return pathNode(element, base, style, opacity);
         const frame = kind === "image"
           ? htmlFrame(element)
           : element instanceof SVGGraphicsElement ? svgFrame(element) : htmlFrame(element);
@@ -187,10 +312,12 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
             clone.setAttribute("width", String(Math.max(1, frame.width)));
             clone.setAttribute("height", String(Math.max(1, frame.height)));
             clone.style.color = style.color;
+            clone.style.opacity = String(opacity);
             const encoded = btoa(unescape(encodeURIComponent(clone.outerHTML)));
             return { ...base, frame, dataUrl: `data:image/svg+xml;base64,${encoded}`, alt: element.dataset.iconKey || base.name, geometry: element.dataset.pptShape || null };
           }
           if (element instanceof HTMLImageElement) {
+            if (opacity < 0.9995) fidelityError("UNSUPPORTED_RASTER_OPACITY", element, "opacity", opacity);
             const dataUrl = element.currentSrc || element.src;
             if (!dataUrl.startsWith("data:image/")) throw new Error("HTML 图片进入 Native 前必须转换为 data:image/* URL");
             return { ...base, frame, dataUrl, alt: element.alt || base.name, geometry: element.dataset.pptShape || null };
@@ -198,20 +325,26 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
           throw new Error("data-ppt-kind=image 仅支持内联 SVG 或 data:image/* 图片");
         }
         if (kind === "text") {
-          return { ...base, frame, text: textValue(element), style: textStyle(element, style) };
+          return { ...base, frame, text: textValue(element), style: textStyle(element, style, opacity) };
         }
         if (kind === "shape" || kind === "shape-text") {
+          const geometry = element.dataset.pptShape || (parseFloat(style.borderRadius) > 0 ? "roundRect" : "rect");
+          const radii = [style.borderTopLeftRadius, style.borderTopRightRadius, style.borderBottomRightRadius, style.borderBottomLeftRadius].map(Number.parseFloat);
+          if (geometry === "roundRect" && radii.some((radius) => Math.abs(radius - radii[0]) > 0.01)) {
+            fidelityError("ASYMMETRIC_BORDER_RADIUS", element, "border-radius", radii.join(" "));
+          }
           const node = {
             ...base,
             frame,
-            geometry: element.dataset.pptShape || (parseFloat(style.borderRadius) > 0 ? "roundRect" : "rect"),
-            fill: color(element instanceof SVGElement ? style.fill : style.backgroundColor),
-            line: lineStyle(element, style),
-            shadow: element.dataset.pptShadow || "shadow-none",
+            geometry,
+            fill: element instanceof SVGElement ? color(style.fill, opacity, element, "fill") : backgroundFill(element, style, opacity),
+            line: lineStyle(element, style, opacity),
+            shadow: shadowStyle(element, style, opacity),
+            borderRadius: geometry === "roundRect" ? rounded(radii[0]) : 0,
           };
           if (kind === "shape-text") {
             node.text = textValue(element);
-            node.style = textStyle(element, style);
+            node.style = textStyle(element, style, opacity);
           }
           return node;
         }
@@ -243,7 +376,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         };
       });
       return {
-        schemaVersion: 2,
+        schemaVersion: 3,
         frame: { width: rounded(rootBox.width), height: rounded(rootBox.height) },
         overflow: root.scrollWidth > root.clientWidth + 1 || root.scrollHeight > root.clientHeight + 1,
         nodes,
@@ -292,6 +425,7 @@ function applyText(shape, node, scale) {
     color: node.style.color,
     alignment: node.style.alignment,
     verticalAlignment: node.style.verticalAlignment,
+    lineSpacing: node.style.lineSpacing,
     autoFit: "none",
     insets: { top: 0, right: 0, bottom: 0, left: 0 },
   };
@@ -346,7 +480,7 @@ export function compileResolvedVisualTree(slide, tree, targetFrame = tree.target
       fill: node.fill,
       line: node.line.width > 0 ? { ...node.line, width: node.line.width * transform.scale } : { style: "solid", fill: "none", width: 0 },
       shadow: node.shadow,
-      ...(node.geometry === "roundRect" ? { borderRadius: "rounded-xl" } : {}),
+      ...(node.geometry === "roundRect" ? { borderRadius: node.borderRadius } : {}),
     });
     if (node.kind === "shape-text") applyText(shape, node, transform.scale);
   }

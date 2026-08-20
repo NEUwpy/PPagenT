@@ -250,3 +250,20 @@ test("没有时间证据的程序顺序关系不会被视觉模型升级为时�
   }, [{ notes: "PPagenT主关系=sequence", sourceText: "AI负责理解，规则负责决定，代码负责执行。" }]);
   assert.equal(output.pageIntents[0].relationTraits.temporal, false);
 });
+
+test("矩阵结构数据确定双维关系与矩阵用途", () => {
+  const output = enforceStructuralIntentRelations({
+    pageIntents: [{
+      intentId: "matrix-intent",
+      baseRelation: "parallel",
+      purposeKey: "present_parallel_points",
+      relationTraits: { dimensions: 1 },
+      structure: { ordered: true, sameLevel: false },
+    }],
+  }, [{ structuredData: { type: "matrix" } }]);
+  assert.equal(output.pageIntents[0].baseRelation, "matrix");
+  assert.equal(output.pageIntents[0].purposeKey, "organize_matrix");
+  assert.equal(output.pageIntents[0].relationTraits.dimensions, 2);
+  assert.equal(output.pageIntents[0].structure.ordered, false);
+  assert.equal(output.pageIntents[0].structure.sameLevel, true);
+});

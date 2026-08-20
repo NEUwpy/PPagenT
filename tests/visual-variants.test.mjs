@@ -33,6 +33,7 @@ test("正式结构候选来自当前核心 HTML 资产包", async () => {
   const variants = await listRenderableVisualVariants({ root });
   const structural = variants.filter((variant) => variant.renderer !== "skin");
   assert.deepEqual(structural.map((variant) => variant.assetId), [
+    "causal-fishbone-attribution-001",
     "comparison-dual-verdict-001",
     "convergence-funnel-001",
     "convergence-simple-funnel-001",
@@ -40,7 +41,9 @@ test("正式结构候选来自当前核心 HTML 资产包", async () => {
     "hierarchy-people-tree-001",
     "hub-radial-001",
     "layered-architecture-001",
+    "matrix-quadrant-priority-001",
     "parallel-equal-cards-001",
+    "problem-solution-outcome-001",
     "sequence-flow-001",
   ]);
   assert.deepEqual(
@@ -76,11 +79,32 @@ test("正式结构候选来自当前核心 HTML 资产包", async () => {
     }).map((variant) => variant.structureGroupId),
     ["convergence-simple-funnel"],
   );
+  assert.deepEqual(
+    queryVisualVariants(structural, {
+      logicId: "problem-solution",
+      baseRelation: "composite",
+      purposeKey: "connect_problems_and_solutions",
+      itemCount: 3,
+      structuredDataType: "problem-solution",
+    }).map((variant) => variant.structureGroupId),
+    ["problem-solution-outcome"],
+  );
+  assert.deepEqual(
+    queryVisualVariants(structural, {
+      logicId: "matrix",
+      baseRelation: "matrix",
+      purposeKey: "organize_matrix",
+      itemCount: 7,
+      structuredDataType: "matrix",
+    }).map((variant) => variant.structureGroupId),
+    ["matrix-quadrant-priority"],
+  );
 });
 
 test("运行时登记当前核心结构资产", async () => {
   const builders = await listStructureAssetBuilders();
   assert.deepEqual(builders.defaultAssetIds, [
+    "causal-fishbone-attribution-001",
     "comparison-dual-verdict-001",
     "convergence-funnel-001",
     "convergence-simple-funnel-001",
@@ -88,10 +112,13 @@ test("运行时登记当前核心结构资产", async () => {
     "hierarchy-people-tree-001",
     "hub-radial-001",
     "layered-architecture-001",
+    "matrix-quadrant-priority-001",
     "parallel-equal-cards-001",
+    "problem-solution-outcome-001",
     "sequence-flow-001",
   ]);
   assert.deepEqual(builders.variantBuilderKeys, [
+    "causal-fishbone-attribution-001:fishbone-attribution",
     "comparison-dual-verdict-001:dual-verdict-mirror",
     "convergence-funnel-001:staged-input-content-funnel",
     "convergence-simple-funnel-001:input-steps-only",
@@ -99,7 +126,9 @@ test("运行时登记当前核心结构资产", async () => {
     "hierarchy-people-tree-001:three-level-portraits",
     "hub-radial-001:balanced-orbit-anchor",
     "layered-architecture-001:curved-frustum-stack",
+    "matrix-quadrant-priority-001:axis-bubble-quadrant",
     "parallel-equal-cards-001:equal-floating-cards",
+    "problem-solution-outcome-001:paired-convergence",
     "sequence-flow-001:continuous-numbered-rail",
   ]);
 });

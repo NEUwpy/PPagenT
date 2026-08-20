@@ -1,0 +1,65 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { color: #223b59; background: transparent; font-family: var(--ppagent-font-body, "Microsoft YaHei"), sans-serif; }
+.matrix-review { position: relative; width: 1170px; height: 492px; overflow: hidden; background: transparent; }
+.matrix-quadrant { position: absolute; width: 515px; height: 214px; overflow: hidden; }
+.matrix-quadrant.q0 { left: 14px; top: 18px; width: 553px; }
+.matrix-quadrant.q1 { left: 603px; top: 18px; }
+.matrix-quadrant.q2 { left: 14px; top: 260px; width: 553px; }
+.matrix-quadrant.q3 { left: 603px; top: 260px; }
+.quadrant-field { position: absolute; inset: 0; border: 0; background: rgba(226,238,252,.14); }
+.q1 .quadrant-field, .q2 .quadrant-field { background: rgba(238,244,251,.08); }
+.matrix-quadrant.is-focus .quadrant-field { background: rgba(202,225,252,.25); }
+.matrix-quadrant h3 { position: absolute; z-index: 4; margin: 0; color: #46688f; font-size: var(--ppagent-component-item-title-size, 21px); font-weight: 750; line-height: 1.22; letter-spacing: .02em; }
+.q0 h3, .q1 h3 { bottom: 12px; }
+.q2 h3, .q3 h3 { top: 12px; }
+.q0 h3, .q2 h3 { right: 24px; text-align: right; }
+.q1 h3, .q3 h3 { left: 24px; }
+.matrix-quadrant.is-focus h3 { color: var(--ppagent-color-accent, #2f5ea8); }
+.bubble-layer { position: absolute; inset: 0; z-index: 3; }
+.q0 .bubble-layer, .q2 .bubble-layer { transform: translateX(38px); }
+.matrix-item { position: absolute; left: var(--bubble-x); top: var(--bubble-y); width: var(--bubble-size); height: var(--bubble-size); transform: translate(-50%,-50%); display: grid; align-content: center; justify-items: center; padding: 12px; overflow: hidden; border: 1.5px solid rgba(255,255,255,.68); border-radius: 50%; color: #fff; text-align: center; background: rgba(76,122,184,.74); box-shadow: 0 8px 18px rgba(38,78,128,.10); }
+.matrix-item.item-1 { background: rgba(100,155,206,.68); }
+.matrix-item.item-2 { background: rgba(53,96,166,.69); }
+.q1 .matrix-item, .q2 .matrix-item { background: rgba(82,132,196,.68); }
+.q1 .matrix-item.item-1, .q2 .matrix-item.item-1 { background: rgba(111,164,211,.64); }
+.q1 .matrix-item.item-2, .q2 .matrix-item.item-2 { background: rgba(61,105,174,.66); }
+.matrix-quadrant.is-focus .matrix-item { border-color: rgba(255,255,255,.88); background: rgba(47,94,168,.79); box-shadow: 0 9px 21px rgba(47,94,168,.14); }
+.matrix-item h4 { width: 100%; margin: 0; overflow: hidden; color: #fff; font-size: var(--ppagent-component-body-size, 18px); font-weight: 650; line-height: 1.25; }
+.q1 .item-0 { margin-top: 8px; }
+.q1 .item-1 { margin-top: -5px; }
+.q1 .item-2 { margin-top: 4px; }
+.q3 .item-0 { margin-top: -6px; }
+.q3 .item-1 { margin-top: 6px; }
+.q3 .item-2 { margin-top: -3px; }
+.q2 .matrix-item, .q3 .matrix-item { top: calc(214px - var(--bubble-y)); }
+.band-definitions { position: absolute; inset: 0; z-index: 6; pointer-events: none; }
+.band-definition { position: absolute; left: 14px; width: 126px; height: 214px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 34px 6px 25px; overflow: hidden; border: 1px solid rgba(255,255,255,.52); border-radius: 8px; color: #fff; text-align: center; box-shadow: 0 8px 18px rgba(31,73,126,.08); }
+.band-definition.band-high { top: 18px; background: linear-gradient(180deg, rgba(79,137,195,.80), rgba(96,154,207,.61)); }
+.band-definition.band-low { top: 260px; background: linear-gradient(180deg, rgba(58,101,174,.82), rgba(47,82,151,.69)); }
+.band-definition strong { display: block; width: 100%; font-size: var(--ppagent-component-body-size, 18px); font-weight: 750; line-height: 1.18; }
+.band-icon { display: block; width: 66px; height: 66px; opacity: .72; }
+.quadrant-detail { position: absolute; z-index: 5; height: 170px; overflow: hidden; color: #50667e; }
+.quadrant-detail.detail-0, .quadrant-detail.detail-2 { left: 158px; width: 190px; }
+.quadrant-detail.detail-1, .quadrant-detail.detail-3 { right: 18px; width: 270px; }
+.quadrant-detail.detail-0, .quadrant-detail.detail-1 { top: 28px; }
+.quadrant-detail.detail-2, .quadrant-detail.detail-3 { bottom: 28px; }
+.matrix-review[data-definition-rail="off"] .quadrant-detail.detail-0,
+.matrix-review[data-definition-rail="off"] .quadrant-detail.detail-2 { left: 28px; width: 310px; }
+.quadrant-detail h5 { width: 100%; margin: 0 0 10px; overflow: hidden; color: #3e71b5; font-size: 17px; font-weight: 700; line-height: 1.1; white-space: nowrap; }
+.quadrant-detail p { width: 100%; height: 42px; margin: 0; overflow: hidden; color: #748495; font-size: 15px; font-weight: 450; line-height: 1.4; }
+.detail-divider { width: 100%; height: 1px; margin: 10px 0 9px; border-top: 1px dashed rgba(91,112,137,.55); }
+.detail-metric-caption { margin-bottom: 7px; color: #4e6278; font-size: 15px; font-weight: 600; line-height: 1; }
+.detail-metrics { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+.detail-metric { min-width: 0; overflow: hidden; }
+.detail-metric span { display: block; overflow: hidden; color: #586b80; font-size: 13px; font-weight: 500; line-height: 1.25; white-space: nowrap; }
+.detail-metric strong { display: block; margin-top: 3px; overflow: hidden; color: #3b68ab; font-size: 23px; font-weight: 500; line-height: 1.28; white-space: nowrap; }
+.matrix-axes { position: absolute; inset: 0; z-index: 8; width: 1170px; height: 492px; overflow: visible; pointer-events: none; }
+.axis-line { fill: none; stroke: #6f91ba; stroke-width: 2; stroke-linecap: round; }
+.axis-arrow { fill: #6f91ba; }
+.axis-origin { position: absolute; left: 578px; top: 239px; z-index: 9; width: 14px; height: 14px; border: 3px solid #6f91ba; border-radius: 50%; background: #fff; }
+.axis-label { position: absolute; z-index: 10; display: block; color: #637b96; font-size: var(--ppagent-component-label-size, 18px); font-weight: 650; line-height: 1; white-space: nowrap; }
+.axis-label.x-low { left: 166px; top: 254px; }
+.axis-label.x-high { right: 166px; top: 254px; }
+.axis-label.y-high { left: 585px; top: 10px; transform: translateX(-50%); }
+.axis-label.y-low { left: 585px; bottom: 8px; transform: translateX(-50%); }

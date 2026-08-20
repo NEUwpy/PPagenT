@@ -12,7 +12,7 @@ const [checklist, coreAssets] = await Promise.all([
 
 const issues = [];
 const inventory = new Map(coreAssets.map((asset) => [asset.id, asset]));
-const coreIds = new Set(coreAssets.map((asset) => asset.id));
+const coreIds = new Set(coreAssets.filter((asset) => asset.status === "core").map((asset) => asset.id));
 const seen = new Map();
 const assetLinePattern = /^\s*-\s*\[([ xX])\]\s+(.+?)\s+<!--\s*asset:([a-z0-9-]+)\s*-->\s*$/gm;
 let match;

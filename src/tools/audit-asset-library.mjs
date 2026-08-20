@@ -46,11 +46,17 @@ const sampleRegistryAvailable = await exists(sampleRegistryPath);
 const sampleRegistry = sampleRegistryAvailable ? await readJson(sampleRegistryPath) : { samples: [] };
 const logicMap = await readJson(path.join(root, "catalog", "logic-map.json"));
 
+const assetIds = new Set();
 const coreIds = new Set();
+const pendingReviewIds = new Set();
 for (const entry of coreAssets) {
-  if (coreIds.has(entry.id)) issues.push(`重复核心资产 ID: ${entry.id}`);
-  coreIds.add(entry.id);
-  if (entry.status !== "core") issues.push(`核心资产状态错误: ${entry.id}`);
+  if (assetIds.has(entry.id)) issues.push(`重复资产 ID: ${entry.id}`);
+  assetIds.add(entry.id);
+  const isCore = entry.status === "core";
+  const isPendingReview = entry.status === "pending-review";
+  if (isCore) coreIds.add(entry.id);
+  else if (isPendingReview) pendingReviewIds.add(entry.id);
+  else issues.push(`资产状态错误: ${entry.id}/${entry.status ?? "未声明"}`);
   if (!entry.layoutExpansion || !new Set(["fixed", "responsive"]).has(entry.layoutExpansion.mode)) {
     issues.push(`核心资产缺少版式扩散模式: ${entry.id}`);
   }
@@ -58,10 +64,12 @@ for (const entry of coreAssets) {
   if (!entry.layoutExpansion?.rule?.trim()) issues.push(`核心资产缺少版式扩散规则: ${entry.id}`);
   const directory = entry.directory;
   const metadata = entry.metadata;
-  for (const name of ["generate.mjs"]) {
-    if (!(await exists(path.join(directory, name)))) issues.push(`核心资产缺少 ${name}: ${entry.id}`);
+  for (const name of isCore ? ["generate.mjs"] : ["review.mjs", "component.css", "visual-intent.md"]) {
+    if (!(await exists(path.join(directory, name)))) issues.push(`${isCore ? "核心资产" : "待确认资产"}缺少 ${name}: ${entry.id}`);
   }
-  if (metadata.status !== "core") issues.push(`核心资产元数据状态错误: ${entry.id}`);
+  if (metadata.status !== entry.status) issues.push(`资产元数据状态错误: ${entry.id}`);
+  if (isPendingReview && metadata.runtime?.renderer !== "html-component") issues.push(`待确认资产必须使用 HTML 路线: ${entry.id}`);
+  if (isPendingReview && await exists(path.join(directory, "user-approval.json"))) issues.push(`待确认资产不应已有用户确认记录: ${entry.id}`);
   if (metadata.kind === "component" && !metadata.spatialContract) issues.push(`核心结构资产缺少空间契约: ${entry.id}`);
   const sourceFile = typeof metadata.source === "string" ? metadata.source : metadata.source?.file;
   if (!sourceFile) issues.push(`核心资产缺少可追溯来源: ${entry.id}`);
@@ -125,6 +133,7 @@ for (const entry of coreAssets) {
   const logic = logics.find((item) => item.id === logicId);
   if (!logic) issues.push(`结构资产未登记 Logic 槽位: ${entry.id}/${logicId ?? "未声明"}`);
   else if (coreIds.has(entry.id) && !logic.assetIds.includes(entry.id)) issues.push(`核心结构资产未填入对应 Logic: ${entry.id}/${logicId}`);
+  else if (pendingReviewIds.has(entry.id) && logic.assetIds.includes(entry.id)) issues.push(`待确认结构资产不应提前填入 Logic: ${entry.id}/${logicId}`);
 }
 
 const pendingFiles = await walkFiles(path.join(sampleRoot, "待归类"));
@@ -133,7 +142,9 @@ if (pendingFiles.length) issues.push(`待归类目录仍有文件: ${pendingFile
 const report = {
   status: issues.length ? "failed" : "passed",
   mode,
-  coreAssetCount: coreAssets.length,
+  assetCount: coreAssets.length,
+  coreAssetCount: coreIds.size,
+  pendingReviewAssetCount: pendingReviewIds.size,
   sampleCount: sampleRegistry.samples.length,
   familyCount: sampleFamilies.size,
   familyCounts,

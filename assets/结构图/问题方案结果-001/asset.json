@@ -1,0 +1,142 @@
+{
+  "id": "problem-solution-outcome-001",
+  "name": "问题方案结果",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
+    "slides": [94]
+  },
+  "references": [
+    {
+      "file": "PPT源/狗哥蓝色-精美逻辑图PPT模板.pptx",
+      "slides": [134],
+      "role": "问题方案配对",
+      "adopted": "问题与改进措施逐项对应，并通过共同方向线体现改善"
+    },
+    {
+      "file": "PPT源/狗哥蓝色-精美逻辑图PPT模板.pptx",
+      "slides": [155],
+      "role": "结果汇聚",
+      "adopted": "多项措施共同汇入一个醒目且可量化的结果节点"
+    }
+  ],
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "problemSolutionVisualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "problem-solution",
+    "structureGroupId": "problem-solution-outcome",
+    "familyId": "problem-solution",
+    "variantId": "paired-convergence",
+    "silhouette": "paired-rows-to-outcome",
+    "supportedBaseRelations": ["composite"],
+    "supportedPurposeKeys": ["connect_problems_and_solutions"],
+    "itemCount": {
+      "min": 2,
+      "preferred": [2, 3, 4],
+      "max": 4
+    },
+    "stateContract": {
+      "resolver": "pairCount+resultMode",
+      "pairStates": [2, 3, 4],
+      "resultModes": ["标题型", "结论型", "重点型", "指标型"],
+      "previewDefault": { "pairCount": 3, "resultMode": "结论型" }
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "forbidden",
+      "ordered": false,
+      "requiresStructuredDataType": "problem-solution"
+    },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "relationTraits": { "converging": true },
+        "density": ["low", "medium"]
+      },
+      "fallback": { "tooMany": "split" }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "problemSolutionVisualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": {
+        "selection": { "pairCount": 3, "resultMode": "结论型" }
+      },
+      "controls": [
+        {
+          "key": "pairCount",
+          "label": "问题方案组数",
+          "values": [2, 3, 4],
+          "default": 3
+        },
+        {
+          "key": "resultMode",
+          "label": "结果表达",
+          "values": ["结论型", "标题型", "重点型", "指标型"],
+          "default": "结论型"
+        }
+      ]
+    }
+  },
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "2–4 组问题与方案，共同汇入 1 个结果",
+    "rule": "各组问题与方案逐行共线，按组数重新计算卡片高度和纵向位置；右侧结果节点始终是唯一汇聚终点"
+  },
+  "componentModel": {
+    "fixed": [
+      "左侧问题、中部方案、右侧结果的阅读方向",
+      "问题与方案严格逐组对应",
+      "所有方案共同汇入唯一结果节点"
+    ],
+    "variable": [
+      "2–4 组问题方案",
+      "各组标题与简短说明",
+      "结果可以只含标题、标题加说明，或标题加重点短语与说明"
+    ]
+  },
+  "fieldContract": {
+    "editable": [
+      { "field": "pairs[].problem.title", "meaning": "需要解决的具体问题" },
+      { "field": "pairs[].problem.body", "meaning": "问题事实或缺口说明" },
+      { "field": "pairs[].solution.title", "meaning": "与问题对应的方案名称" },
+      { "field": "pairs[].solution.body", "meaning": "方案动作或机制说明" },
+      { "field": "outcome.title", "meaning": "共同结果名称" },
+      { "field": "outcome.highlight", "meaning": "可选的重点短语或量化结果，不限定为数字" },
+      { "field": "outcome.body", "meaning": "结果适用范围或补充说明" }
+    ],
+    "generated": [
+      { "field": "pairs[].order", "meaning": "程序按当前 State 生成逐组编号" }
+    ],
+    "fixed": ["问题与方案逐项对应", "所有方案汇入同一个结果"],
+    "unavailable": ["时间阶段", "无对应关系的并列要点", "多个互不相关的结果"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "resizeMode": "natural",
+    "minFontSize": 18,
+    "safePadding": 10,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "2–4 组问题方案；标题最多 10 字、说明最多 22 字；结果支持标题型、结论型、文字重点型或指标型表达",
+  "semanticContract": "若干明确问题分别对应具体方案，全部方案共同产生一个可陈述或可量化的结果",
+  "doNotUseWhen": "问题与方案无法逐项对应、存在多个独立结果、内容强调严格时间先后，或只需要陈列方案而不说明问题",
+  "review": "用户已确认问题方案结果 HTML、2–4 组自适应、结果表达弹性与整体视觉平衡；同意正式落地并继续建设矩阵与象限"
+}

@@ -39,6 +39,24 @@ function visualIntentSchemaWithPurposeVocabulary(outputSchema, vocabulary = []) 
 export function enforceStructuralIntentRelations(intentOutput, pageContents) {
   const output = structuredClone(intentOutput);
   output.pageIntents = output.pageIntents.map((intent, index) => {
+    if (pageContents[index]?.structuredData?.type === "matrix") {
+      return {
+        ...intent,
+        baseRelation: "matrix",
+        purposeKey: "organize_matrix",
+        relationTraits: { ...(intent.relationTraits ?? {}), dimensions: 2 },
+        structure: { ...intent.structure, ordered: false, sameLevel: true },
+      };
+    }
+    if (pageContents[index]?.structuredData?.type === "problem-solution") {
+      return {
+        ...intent,
+        baseRelation: "composite",
+        purposeKey: "connect_problems_and_solutions",
+        relationTraits: { ...(intent.relationTraits ?? {}), temporal: false, converging: true },
+        structure: { ...intent.structure, ordered: false },
+      };
+    }
     const match = String(pageContents[index]?.notes ?? "").match(/PPagenT主关系=(none|parallel|sequence|comparison|hierarchy|cycle|causal|convergence)/);
     if (!match) return intent;
     const relation = match[1];
@@ -202,7 +220,7 @@ export function createModelDirectorProvider({
       const structuralHints = await readStructuralCues(input.rawMarkdown, structureModel);
       const contentOutput = await content.generateJson({
         role: "PPagenT 内容导演",
-        task: "在整套尺度决定叙事弧、页数、页序、每页职责、拆分和轻重；输出 deckPlan 与 pageContents。narrativeArc 是供目录页使用的 3 到 5 个简短章节名，不是逐页摘要。原稿的 Markdown 二级标题默认是一页内容单元；同一节中的反问、引文或总结通常留在该页，不单独拆成过渡页，除非该节容量确实必须拆分。structuralHints 是程序检测高置信结构线索后由独立解析器形成的覆盖结果：对应页面必须逐项使用其 atoms 作为主 items，保持 relation，不得用段落总括、背景、换一种说法或结论替换，也不得额外添加辅助信息为同级 item；允许忠实压缩措辞。items 只表示页面主关系中的同级节点；某一节点内部的说明维度、例子、判断项或枚举必须进入该 item.points，不得提升为新的同级 item。没有 structuralHints 的页面再按原稿关系自行判断。原稿存在人物或组织层级时，用 structuredData.type=hierarchy 保存真实父子关系；部门负责人节点可用 groupLabel 保存部门名，只有原稿明确提供图片路径时才填写 portrait，没有图片保持为空。原稿明确同时给出输入对象、逐级收窄节点和 2–3 个宏观阶段时，用 structuredData.type=convergence 保存 inputs 与 phases，phases.stepIds 只能引用 items 中的真实转化节点；只有输入和逐级转化、没有明确阶段时不要编造 phases。页面标题或核心结论明确表达 A 与 B、A 比 B、两种标准或二选一时，items 必须恰好是 A 和 B 双方，背景、使用场景和结论不能取代双方。除此以外不要按段落机械拆项，允许只有一个主要观点。结构性枚举、步骤或对比双方的每项标题不超过 10 个汉字、body 尽量压缩到 15 至 30 个汉字；正文与 points 不得重复同一事实。多项页面的标题、正文和 points 合计必须控制在正式字号可承载范围；previousReview 若含 CONTENT_CAPACITY_EXCEEDED，必须删去重复细节、压缩每项或按叙事职责拆页，不能原样返回，也不能靠缩小字号解决；若含 SECTION_COVERAGE_FAILED，必须补回指定 Markdown 二级章节。不得为了套资产改变语义。",
+        task: "在整套尺度决定叙事弧、页数、页序、每页职责、拆分和轻重；输出 deckPlan 与 pageContents。narrativeArc 是供目录页使用的 3 到 5 个简短章节名，不是逐页摘要。原稿的 Markdown 二级标题默认是一页内容单元；同一节中的反问、引文或总结通常留在该页，不单独拆成过渡页，除非该节容量确实必须拆分。structuralHints 是程序检测高置信结构线索后由独立解析器形成的覆盖结果：对应页面必须逐项使用其 atoms 作为主 items，保持 relation，不得用段落总括、背景、换一种说法或结论替换，也不得额外添加辅助信息为同级 item；允许忠实压缩措辞。items 只表示页面主关系中的同级节点；某一节点内部的说明维度、例子、判断项或枚举必须进入该 item.points，不得提升为新的同级 item。没有 structuralHints 的页面再按原稿关系自行判断。原稿存在人物或组织层级时，用 structuredData.type=hierarchy 保存真实父子关系；部门负责人节点可用 groupLabel 保存部门名，只有原稿明确提供图片路径时才填写 portrait，没有图片保持为空。原稿明确同时给出输入对象、逐级收窄节点和 2–3 个宏观阶段时，用 structuredData.type=convergence 保存 inputs 与 phases，phases.stepIds 只能引用 items 中的真实转化节点；只有输入和逐级转化、没有明确阶段时不要编造 phases。原稿明确给出 2–4 组一一对应的问题与方案，并给出一个共同结果时，用 structuredData.type=problem-solution 保存 pairs 与 outcome；items 使用相同 pair id 镜像 problem.title/body 供页面覆盖校验，不得把方案或结果伪装成同级 item。原稿明确给出两个判断维度、四类象限含义和每个对象的象限归属时，用 structuredData.type=matrix 保存 axes 与固定四个 quadrants；每个象限 itemIds 只能引用 1–3 个 items，对象必须且只能归入一个象限；items 镜像对象标题且 body 留空，四块说明与指标进入 quadrants[].detail，不得凭空补轴名、象限或指标。页面标题或核心结论明确表达 A 与 B、A 比 B、两种标准或二选一时，items 必须恰好是 A 和 B 双方，背景、使用场景和结论不能取代双方。除此以外不要按段落机械拆项，允许只有一个主要观点。结构性枚举、步骤或对比双方的每项标题不超过 10 个汉字、body 尽量压缩到 15 至 30 个汉字；正文与 points 不得重复同一事实。多项页面的标题、正文和 points 合计必须控制在正式字号可承载范围；previousReview 若含 CONTENT_CAPACITY_EXCEEDED，必须删去重复细节、压缩每项或按叙事职责拆页，不能原样返回，也不能靠缩小字号解决；若含 SECTION_COVERAGE_FAILED，必须补回指定 Markdown 二级章节。不得为了套资产改变语义。",
         context: {
           executionGuidelines: guidelines.content ?? "",
           structuralHints,
@@ -247,7 +265,7 @@ export function createModelDirectorProvider({
       if (input.phase === "intent") {
         const intentOutput = await visualIntent.generateJson({
           role: "PPagenT 视觉导演",
-          task: "只判断每页表达目的和语义关系，输出 pageIntents；此阶段不得选择资产。purposeKey 必须逐字选自 allowedPurposeVocabulary 中的 key，不得自创新值。PageContent.notes 含 PPagenT主关系=parallel|sequence 等程序高置信标记时，baseRelation 必须使用该值。多个动作构成先理解、再决定、后执行之类的先后链路时使用 sequence，不能仅因它们属于不同职责就写成 layered；同级判断类别即使会在工作中依次发生也仍是 parallel。只有内容明确表达输入对象经过连续筛选、收窄或转化时使用 convergence；普通步骤仍使用 sequence。目标用户与非目标用户的角色差异不是优劣比较，除非双方在同一评价维度形成明确取舍，否则不得写 comparison。comparison 的组数和组内条目数由程序补齐，不要猜资产私有字段。",
+          task: "只判断每页表达目的和语义关系，输出 pageIntents；此阶段不得选择资产。purposeKey 必须逐字选自 allowedPurposeVocabulary 中的 key，不得自创新值。PageContent.notes 含 PPagenT主关系=parallel|sequence 等程序高置信标记时，baseRelation 必须使用该值；structuredData.type=problem-solution 时使用 composite 和 connect_problems_and_solutions；structuredData.type=matrix 时使用 matrix 和 organize_matrix。多个动作构成先理解、再决定、后执行之类的先后链路时使用 sequence，不能仅因它们属于不同职责就写成 layered；同级判断类别即使会在工作中依次发生也仍是 parallel。只有内容明确表达输入对象经过连续筛选、收窄或转化时使用 convergence；普通步骤仍使用 sequence。目标用户与非目标用户的角色差异不是优劣比较，除非双方在同一评价维度形成明确取舍，否则不得写 comparison。comparison 的组数和组内条目数由程序补齐，不要猜资产私有字段。",
           context: {
             executionGuidelines: guidelines.visual ?? "",
             allowedPurposeVocabulary: (guidelines.purposeVocabulary ?? []).filter(

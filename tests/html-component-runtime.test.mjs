@@ -19,9 +19,14 @@ import {
   resolvePreviewParameters as resolveParallelPreviewParameters,
   visualComponent as parallelVisualComponent,
 } from "../assets/结构图/等权并列卡片-001/review.mjs";
+import {
+  previewParameters as matrixPreviewParameters,
+  visualComponent as matrixVisualComponent,
+} from "../assets/结构图/矩阵象限-001/review.mjs";
 
 const assetDir = path.resolve(import.meta.dirname, "../assets/结构图/循环闭环-001");
 const parallelAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/等权并列卡片-001");
+const matrixAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/矩阵象限-001");
 
 test("循环 HTML 由通用 DOM 编译器直接生成可编辑 Native 形状", async () => {
   const targetFrame = { left: 55, top: 166, width: 1170, height: 492 };
@@ -141,6 +146,72 @@ test("并列组件的文字与图标槽由最终 DOM 派生，并编译为原生
     const inspection = await presentation.inspect({ kind: "slide,textbox,shape,image", maxChars: 100000 });
     const rows = inspection.ndjson.split(/\r?\n/).filter(Boolean).map(JSON.parse);
     assert.equal(rows.filter((row) => row.kind === "image").length, 4);
+  } finally {
+    await closeHtmlComponentRuntime();
+  }
+});
+
+test("矩阵 HTML 的透明度、渐变、自定义阴影、圆角和 SVG 图标无降级进入 ResolvedVisualTree", async () => {
+  const targetFrame = { left: 55, top: 166, width: 1170, height: 492 };
+  try {
+    const tree = await resolveHtmlComponent({
+      component: matrixVisualComponent,
+      parameters: structuredClone(matrixPreviewParameters),
+      assetDir: matrixAssetDir,
+      targetFrame,
+    });
+    assert.equal(tree.schemaVersion, 3);
+    assert.equal(tree.nodes.find((node) => node.name === "quadrant-field-0")?.fill, "#CAE1FC/25");
+    assert.equal(tree.nodes.find((node) => node.name === "matrix-item-0-0")?.fill, "#2F5EA8/79");
+    assert.equal(tree.nodes.find((node) => node.name === "matrix-item-0-0")?.shadow, "0px 9px 21px #2F5EA8/14");
+    assert.deepEqual(tree.nodes.find((node) => node.name === "matrix-high-band")?.fill, {
+      type: "gradient",
+      gradientKind: "linear",
+      angleDeg: 180,
+      stops: [
+        { offset: 0, color: "#4F89C3/80" },
+        { offset: 100000, color: "#609ACF/61" },
+      ],
+    });
+    assert.equal(tree.nodes.find((node) => node.name === "matrix-high-band")?.borderRadius, 8);
+    assert.deepEqual(tree.nodes.filter((node) => node.kind === "image").map((node) => node.name), [
+      "matrix-high-band-icon",
+      "matrix-low-band-icon",
+    ]);
+    assert.match(Buffer.from(tree.nodes.find((node) => node.name === "matrix-high-band-icon").dataUrl.split(",")[1], "base64").toString("utf8"), /opacity: 0\.72/);
+
+    const presentation = createPresentation();
+    const slide = presentation.slides.add();
+    compileResolvedVisualTree(slide, tree, targetFrame);
+    const inspection = await presentation.inspect({ kind: "slide,textbox,shape,image", maxChars: 100000 });
+    const rows = inspection.ndjson.split(/\r?\n/).filter(Boolean).map(JSON.parse);
+    assert.equal(rows.filter((row) => row.kind === "image").length, 2);
+  } finally {
+    await closeHtmlComponentRuntime();
+  }
+});
+
+test("HTML → PPT 对不能可靠映射的效果和遗漏 SVG 采用 fail-close", async () => {
+  const targetFrame = { left: 0, top: 0, width: 100, height: 100 };
+  const component = (markup) => ({
+    id: "fidelity-gate-fixture",
+    designFrame: { width: 100, height: 100 },
+    cssFile: "component.css",
+    renderMarkup: () => markup,
+  });
+  try {
+    await assert.rejects(() => resolveHtmlComponent({
+      component: component('<section data-ppt-root style="width:100px;height:100px"><div data-ppt-kind="shape" style="width:50px;height:50px;background:#fff;filter:blur(2px)"></div></section>'),
+      parameters: {},
+      assetDir: matrixAssetDir,
+      targetFrame,
+    }), /HTML_PPT_FIDELITY:UNSUPPORTED_FILTER.*filter/);
+    await assert.rejects(() => resolveHtmlComponent({
+      component: component('<section data-ppt-root style="width:100px;height:100px"><svg width="50" height="50"><circle cx="25" cy="25" r="20" fill="#2f5ea8"\/><\/svg><div data-ppt-kind="shape" style="width:1px;height:1px;background:#fff"><\/div><\/section>'),
+      parameters: {},
+      assetDir: matrixAssetDir,
+      targetFrame,
+    }), /HTML_PPT_FIDELITY:UNCOMPILED_SVG_NODE/);
   } finally {
     await closeHtmlComponentRuntime();
   }

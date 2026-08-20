@@ -305,9 +305,9 @@ async function nativeStateArtifactsFor(library, assetId, searchParams) {
         slide.background.fill = "#FFFFFF";
         const previewFrame = resolved.record.spatialContract?.contentFrame ?? { left: 55, top: 166, width: 1170, height: 492 };
         if (resolved.record.renderer === "html-component") {
-          const component = runtimeModule[resolved.record.componentExport] ?? reviewModule[resolved.record.componentExport];
+          const component = reviewModule[resolved.record.componentExport] ?? runtimeModule[resolved.record.componentExport];
           if (!component?.renderMarkup) throw new Error("HTML Component 审查入口不完整");
-          const { compileResolvedVisualTree, resolveHtmlComponent } = await import("../visual-runtime/html-component-runtime.mjs");
+          const { compileResolvedVisualTree, resolveHtmlComponent } = await import(`${pathToFileURL(htmlRuntimePath).href}?dashboard=${htmlRuntimeStat.mtimeMs}`);
           const tree = await resolveHtmlComponent({ component, parameters, assetDir: resolved.assetDir, targetFrame: previewFrame, theme: northeasternUniversityTheme });
           compileResolvedVisualTree(slide, tree, previewFrame);
         } else {
@@ -398,9 +398,9 @@ async function skinStateArtifactsFor(library, assetId, searchParams) {
           const runtimeModule = await import(`${pathToFileURL(resolved.runtimeEntryPath).href}?dashboard=${inputMtime}`);
           const structureRenderer = resolved.record.renderer === "html-component"
             ? async (slide, payload, skin, targetFrame = skin.bodyFrame) => {
-                const component = runtimeModule[resolved.record.componentExport] ?? reviewModule[resolved.record.componentExport];
+                const component = reviewModule[resolved.record.componentExport] ?? runtimeModule[resolved.record.componentExport];
                 if (!component?.renderMarkup) throw new Error("HTML Component Skin 审查入口不完整");
-                const { compileResolvedVisualTree, resolveHtmlComponent } = await import("../visual-runtime/html-component-runtime.mjs");
+                const { compileResolvedVisualTree, resolveHtmlComponent } = await import(`${pathToFileURL(htmlRuntimePath).href}?dashboard=${inputMtime}`);
                 const tree = await resolveHtmlComponent({
                   component,
                   parameters: payload.parameters,

@@ -246,6 +246,7 @@ export function applyStructuralHints(contentOutput, hints) {
   for (const hint of hints) {
     const page = pageForHint(output.pageContents, hint);
     if (!page) continue;
+    if (["problem-solution", "matrix"].includes(page.structuredData?.type)) continue;
     page.items = hint.atoms.map((atom, index) => ({
       id: `${page.pageId}-structure-${index + 1}`,
       title: atom.title,

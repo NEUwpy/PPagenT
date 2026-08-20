@@ -8,6 +8,30 @@ function round(value, digits = 2) {
 }
 
 export function computeContentStats(pageContent) {
+  if (pageContent.structuredData?.type === "problem-solution") {
+    const pairs = pageContent.structuredData.pairs ?? [];
+    const pairLengths = pairs.map((pair) => [
+      pair.problem?.title,
+      pair.problem?.body,
+      pair.solution?.title,
+      pair.solution?.body,
+    ].reduce((sum, value) => sum + countChars(value), 0));
+    const titles = pairs.flatMap((pair) => [pair.problem?.title, pair.solution?.title]).map(countChars);
+    const bodies = pairs.flatMap((pair) => [pair.problem?.body, pair.solution?.body]).map(countChars);
+    const maxItemChars = pairLengths.length ? Math.max(...pairLengths) : 0;
+    const minItemChars = pairLengths.length ? Math.min(...pairLengths) : 0;
+    const average = pairLengths.length ? pairLengths.reduce((sum, value) => sum + value, 0) / pairLengths.length : 0;
+    return {
+      titleChars: countChars(pageContent.title),
+      itemCount: pairs.length,
+      maxItemChars,
+      avgItemChars: round(average),
+      minItemChars,
+      maxItemTitleChars: titles.length ? Math.max(...titles) : 0,
+      maxItemBodyChars: bodies.length ? Math.max(...bodies) : 0,
+      imbalanceRatio: minItemChars > 0 ? round(maxItemChars / minItemChars) : maxItemChars > 0 ? maxItemChars : 0,
+    };
+  }
   const items = pageContent.items ?? [];
   const itemTitleLengths = items.map((item) => countChars(item.title));
   const itemBodyLengths = items.map((item) => countChars(item.body));

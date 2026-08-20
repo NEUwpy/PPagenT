@@ -129,6 +129,37 @@ test("正式流程不会暴露缺少视觉意图和用户确认的 HTML 资产",
   assert.equal(set.capacityDensity, "low");
 });
 
+test("双轴与四象限归属齐全时二维定位象限进入正式候选", async () => {
+  const page = content("priority-matrix", [
+    { id: "a", title: "对象甲", body: "" },
+    { id: "b", title: "对象乙", body: "" },
+    { id: "c", title: "对象丙", body: "" },
+    { id: "d", title: "对象丁", body: "" },
+  ]);
+  page.structuredData = {
+    type: "matrix",
+    axes: { xLow: "难度低", xHigh: "难度高", yLow: "价值低", yHigh: "价值高" },
+    quadrants: [
+      { id: "q0", title: "优先", detail: { title: "快速落地", body: "优先行动", metrics: [{ label: "周期", value: "2周" }, { label: "投入", value: "低" }] }, itemIds: ["a"] },
+      { id: "q1", title: "投入", detail: { title: "重点建设", body: "集中投入", metrics: [{ label: "周期", value: "3月" }, { label: "投入", value: "高" }] }, itemIds: ["b"] },
+      { id: "q2", title: "优化", detail: { title: "择机改善", body: "常规优化", metrics: [{ label: "频率", value: "季度" }, { label: "投入", value: "低" }] }, itemIds: ["c"] },
+      { id: "q3", title: "评估", detail: { title: "审慎验证", body: "先评估边界", metrics: [{ label: "周期", value: "1月" }, { label: "风险", value: "高" }] }, itemIds: ["d"] },
+    ],
+  };
+  const draft = intentDraft("priority-matrix-intent", "organize_matrix", "matrix", {
+    ordered: false,
+    sameLevel: true,
+  });
+  draft.relationTraits.dimensions = 2;
+  draft.relationTraits.secondaryDimension = "axis";
+  const intent = enrichPageIntent(draft, page);
+  const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
+  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), [
+    "matrix-quadrant-priority-001",
+    "northeastern-university-body-001",
+  ]);
+});
+
 test("正式候选包含重新蒸馏的顺序流程与正文兜底", async () => {
   const page = content("process", [
     { id: "a", title: "A", body: "A" },

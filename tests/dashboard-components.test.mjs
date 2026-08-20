@@ -23,6 +23,24 @@ import {
   resolvePreviewParameters as resolveSequencePreviewParameters,
   visualComponent as sequenceVisualComponent,
 } from "../assets/结构图/顺序流程-001/review.mjs";
+import {
+  previewParameters as fishbonePreviewParameters,
+  resolvePreviewParameters as resolveFishbonePreviewParameters,
+  visualComponent as fishboneVisualComponent,
+} from "../assets/结构图/鱼骨归因-001/review.mjs";
+import { mapPageContent as mapFishbonePageContent } from "../assets/结构图/鱼骨归因-001/runtime.mjs";
+import {
+  previewParameters as problemSolutionPreviewParameters,
+  resolvePreviewParameters as resolveProblemSolutionPreviewParameters,
+  visualComponent as problemSolutionVisualComponent,
+} from "../assets/结构图/问题方案结果-001/review.mjs";
+import { mapPageContent as mapProblemSolutionPageContent } from "../assets/结构图/问题方案结果-001/runtime.mjs";
+import {
+  previewParameters as matrixPreviewParameters,
+  resolvePreviewParameters as resolveMatrixPreviewParameters,
+  visualComponent as matrixVisualComponent,
+} from "../assets/结构图/矩阵象限-001/review.mjs";
+import { mapPageContent as mapMatrixPageContent } from "../assets/结构图/矩阵象限-001/runtime.mjs";
 
 const root = path.resolve(import.meta.dirname, "..");
 
@@ -52,17 +70,53 @@ test("看板只把资产专属 HTML 计入迁移完成度", async () => {
   assert.equal(data.activeSkin?.pptPointScale, 0.75);
   assert.equal(cycle?.builderExport, "");
   assert.equal(cycle?.componentInitialSelection.stepCount, 4);
-  assert.equal(data.summary.htmlDesignComponents, 9);
+  assert.equal(data.summary.htmlDesignComponents, 12);
   assert.match(cycle?.previewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.componentPreviewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.nativeStatePreviewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.skinStatePreviewUrl ?? "", /[?&]v=\d+/);
 });
 
+test("鱼骨、问题方案结果与矩阵象限均进入正式生成线", async () => {
+  const data = await collectLogicDashboardData(root);
+  const fishbone = data.records.find((item) => item.id === "causal-fishbone-attribution-001");
+  assert.equal(fishbone?.status, "core");
+  assert.equal(fishbone?.logicId, "causal");
+  assert.equal(fishbone?.componentPreviewAvailable, true);
+  assert.equal(fishbone?.componentFidelityStatus, "user-approved");
+  assert.equal(fishbone?.componentExport, "fishboneVisualComponent");
+  assert.equal(fishbone?.autoCallable, true);
+  assert.ok(fishbone?.nativeStatePreviewUrl);
+  assert.ok(fishbone?.skinStatePreviewUrl);
+
+  const problemSolution = data.records.find((item) => item.id === "problem-solution-outcome-001");
+  assert.equal(problemSolution?.status, "core");
+  assert.equal(problemSolution?.logicId, "problem-solution");
+  assert.equal(problemSolution?.componentFidelityStatus, "user-approved");
+  assert.equal(problemSolution?.componentExport, "problemSolutionVisualComponent");
+  assert.equal(problemSolution?.autoCallable, true);
+  assert.ok(problemSolution?.nativeStatePreviewUrl);
+  assert.ok(problemSolution?.skinStatePreviewUrl);
+
+  const matrix = data.records.find((item) => item.id === "matrix-quadrant-priority-001");
+  assert.equal(matrix?.status, "core");
+  assert.equal(matrix?.logicId, "matrix");
+  assert.equal(matrix?.componentPreviewAvailable, true);
+  assert.equal(matrix?.componentFidelityStatus, "user-approved");
+  assert.equal(matrix?.componentExport, "matrixQuadrantVisualComponent");
+  assert.equal(matrix?.autoCallable, true);
+  assert.ok(matrix?.nativeStatePreviewUrl);
+  assert.ok(matrix?.skinStatePreviewUrl);
+  assert.equal(data.pendingApproval.some((item) => item.id === "matrix-quadrant-priority-001"), false);
+});
+
 test("预览使用版本化长期缓存，主数据仍保持实时", async () => {
   const server = await fs.readFile(path.join(root, "src/tools/serve-logic-dashboard.mjs"), "utf8");
   assert.match(server, /max-age=31536000, immutable/);
   assert.match(server, /fetch\("\/api\/dashboard-data", \{ cache: "no-store" \}\)/);
+  assert.match(server, /reviewModule\[resolved\.record\.componentExport\] \?\? runtimeModule\[resolved\.record\.componentExport\]/);
+  assert.match(server, /pathToFileURL\(htmlRuntimePath\)\.href\}\?dashboard=\$\{htmlRuntimeStat\.mtimeMs\}/);
+  assert.match(server, /pathToFileURL\(htmlRuntimePath\)\.href\}\?dashboard=\$\{inputMtime\}/);
 });
 
 test("看板字号缺失时显示未读取而不是 NaN", async () => {
@@ -92,14 +146,16 @@ test("作废的旧 Logic 不再出现在核心库或正式生成候选中", asyn
     "comparison-dual-verdict-001", "cycle-loop-001", "hierarchy-people-tree-001",
     "hub-radial-001", "layered-architecture-001", "parallel-equal-cards-001",
     "convergence-simple-funnel-001", "convergence-funnel-001", "sequence-flow-001",
+    "causal-fishbone-attribution-001", "problem-solution-outcome-001",
+    "matrix-quadrant-priority-001",
   ]));
 });
 
 test("Logic 能力地图保留空槽位，只把合格资产填入对应位置", async () => {
   const data = await collectLogicDashboardData(root);
-  assert.equal(data.logics.length, 19);
-  assert.equal(data.summary.logicSlots, 19);
-  assert.equal(data.summary.logicFilled, 8);
+  assert.equal(data.logics.length, 20);
+  assert.equal(data.summary.logicSlots, 20);
+  assert.equal(data.summary.logicFilled, 11);
 
   const cycle = data.logics.find((logic) => logic.id === "cycle");
   assert.deepEqual(cycle?.assetIds, ["cycle-loop-001"]);
@@ -128,6 +184,185 @@ test("Logic 能力地图保留空槽位，只把合格资产填入对应位置",
     "convergence-funnel-001",
   ]);
   assert.equal(convergence?.status, "available");
+
+  const causal = data.logics.find((logic) => logic.id === "causal");
+  assert.deepEqual(causal?.assetIds, ["causal-fishbone-attribution-001"]);
+  assert.equal(causal?.status, "available");
+
+  const problemSolution = data.logics.find((logic) => logic.id === "problem-solution");
+  assert.deepEqual(problemSolution?.assetIds, ["problem-solution-outcome-001"]);
+  assert.equal(problemSolution?.status, "available");
+
+  const matrix = data.logics.find((logic) => logic.id === "matrix");
+  assert.deepEqual(matrix?.assetIds, ["matrix-quadrant-priority-001"]);
+  assert.equal(matrix?.status, "available");
+
+  const argumentEvidence = data.logics.find((logic) => logic.id === "argument-evidence");
+  assert.deepEqual(argumentEvidence?.assetIds, []);
+  assert.equal(argumentEvidence?.status, "empty");
+});
+
+test("鱼骨归因由同一组件扩散类别与因素状态，并由 Mapper 绑定结果和原因", () => {
+  for (const categoryCount of [4, 5, 6]) {
+    for (const factorCount of [1, 2, 3]) {
+      const parameters = resolveFishbonePreviewParameters(fishbonePreviewParameters, { categoryCount, factorCount });
+      const markup = fishboneVisualComponent.renderMarkup(parameters);
+      assert.match(markup, new RegExp(`data-category-count="${categoryCount}"`));
+      assert.match(markup, new RegExp(`data-factor-count="${factorCount}"`));
+      assert.equal((markup.match(/class="cause-group"/g) ?? []).length, categoryCount);
+      assert.equal((markup.match(/class="factor-guide-line"/g) ?? []).length, categoryCount * factorCount);
+      assert.equal((markup.match(/data-slot-role="item-title"/g) ?? []).length, categoryCount);
+      assert.equal((markup.match(/data-slot-role="item-body"/g) ?? []).length, categoryCount);
+      assert.equal((markup.match(/data-slot-role="center-title"/g) ?? []).length, 1);
+    }
+  }
+
+  const content = {
+    title: "交付延期",
+    items: [
+      { id: "requirements", title: "需求定义", body: "目标变化", points: [{ text: "口径不清" }] },
+      { id: "planning", title: "计划协同", body: "资源不稳", points: [{ text: "依赖遗漏" }] },
+      { id: "technology", title: "技术实现", body: "接口复杂", points: [{ text: "覆盖不足" }] },
+      { id: "testing", title: "测试验证", body: "环境不稳", points: [{ text: "回归滞后" }] },
+    ],
+  };
+  const payload = mapFishbonePageContent(content, { intentId: "causal-intent" }, null, {
+    componentText: [{ sourceField: "page-title", targetRole: "center-title", text: "最终延期" }],
+    componentBindings: [{
+      bindingId: "cause-factors",
+      sourceItemId: "requirements",
+      entries: [{ text: "目标调整" }, { text: "验收不清" }],
+    }],
+  });
+  assert.equal(payload.parameters.effect.title, "最终延期");
+  assert.deepEqual(payload.parameters.causes[0].factors, ["目标调整", "验收不清"]);
+  assert.deepEqual(payload.parameters.causes[1].factors, ["依赖遗漏"]);
+});
+
+test("待确认问题方案结果由同一 HTML 组件重排 2–4 组且保持逐组对应", () => {
+  for (const pairCount of [2, 3, 4]) {
+    const parameters = resolveProblemSolutionPreviewParameters(problemSolutionPreviewParameters, { pairCount });
+    const markup = problemSolutionVisualComponent.renderMarkup(parameters);
+    assert.match(markup, new RegExp(`data-pair-count="${pairCount}"`));
+    assert.equal((markup.match(/class="pair-row"/g) ?? []).length, pairCount);
+    assert.equal((markup.match(/class="problem-card"/g) ?? []).length, pairCount);
+    assert.equal((markup.match(/class="solution-card"/g) ?? []).length, pairCount);
+    assert.equal((markup.match(/data-slot-role="item-title"/g) ?? []).length, pairCount);
+    assert.equal((markup.match(/data-slot-role="solution-title"/g) ?? []).length, pairCount);
+    assert.equal((markup.match(/data-slot-role="item-body"/g) ?? []).length, pairCount);
+    assert.equal((markup.match(/data-slot-role="solution-body"/g) ?? []).length, pairCount);
+    assert.equal((markup.match(/class="outcome-card"/g) ?? []).length, 1);
+    assert.equal((markup.match(/data-slot-role="center-title"/g) ?? []).length, 1);
+  }
+
+  const resultModes = new Map([
+    ["标题型", "title-only"],
+    ["结论型", "conclusion"],
+    ["重点型", "full"],
+    ["指标型", "full"],
+  ]);
+  for (const [resultMode, expectedMode] of resultModes) {
+    const parameters = resolveProblemSolutionPreviewParameters(problemSolutionPreviewParameters, { pairCount: 3, resultMode });
+    const markup = problemSolutionVisualComponent.renderMarkup(parameters);
+    assert.match(markup, new RegExp(`data-outcome-mode="${expectedMode}"`));
+    assert.equal((markup.match(/data-slot-role="center-highlight"/g) ?? []).length, ["重点型", "指标型"].includes(resultMode) ? 1 : 0);
+  }
+
+  const content = {
+    pageId: "p1",
+    title: "协同过程更清晰",
+    items: [
+      { id: "handoff", title: "交接依赖人工", body: "信息同步慢" },
+      { id: "exception", title: "异常发现滞后", body: "定位耗时" },
+    ],
+    structuredData: {
+      type: "problem-solution",
+      pairs: [
+        { id: "handoff", problem: { title: "交接依赖人工", body: "信息同步慢" }, solution: { title: "统一协同入口", body: "节点同步可见" } },
+        { id: "exception", problem: { title: "异常发现滞后", body: "定位耗时" }, solution: { title: "实时监测预警", body: "自动分级提醒" } },
+      ],
+      outcome: { title: "协同过程更清晰", highlight: "", body: "异常提前暴露" },
+    },
+  };
+  const payload = mapProblemSolutionPageContent(content, { intentId: "problem-solution-intent" }, null, {
+    componentItemIds: ["handoff", "exception"],
+    componentText: [{ sourceField: "page-title", targetRole: "center-title", text: "交付节奏更稳定" }],
+  });
+  assert.equal(payload.parameters.pairs[0].solution.title, "统一协同入口");
+  assert.equal(payload.parameters.outcome.title, "交付节奏更稳定");
+  assert.equal(payload.parameters.outcome.body, "异常提前暴露");
+});
+
+test("矩阵象限保持真实双轴、独立扩散每象限 1–3 个对象并完成内容映射", () => {
+  for (const itemsPerQuadrant of [1, 2, 3]) {
+    const parameters = resolveMatrixPreviewParameters(matrixPreviewParameters, { itemsPerQuadrant, focusQuadrant: "左上", definitionRail: "有" });
+    const markup = matrixVisualComponent.renderMarkup(parameters);
+    assert.match(markup, new RegExp(`data-items-per-quadrant="${itemsPerQuadrant}"`));
+    assert.equal((markup.match(/class="matrix-quadrant/g) ?? []).length, 4);
+    assert.equal((markup.match(/class="matrix-item/g) ?? []).length, itemsPerQuadrant * 4);
+    assert.equal((markup.match(/class="axis-line"/g) ?? []).length, 2);
+    assert.equal((markup.match(/data-slot-role="item-title"/g) ?? []).length, itemsPerQuadrant * 4);
+    assert.equal((markup.match(/class="quadrant-detail detail-/g) ?? []).length, 4);
+    assert.equal((markup.match(/data-slot-role="detail-title"/g) ?? []).length, 4);
+    assert.equal((markup.match(/data-slot-role="detail-body"/g) ?? []).length, 4);
+    assert.equal((markup.match(/data-slot-role="metric-value"/g) ?? []).length, 8);
+    assert.equal((markup.match(/class="band-definition band-/g) ?? []).length, 2);
+    assert.doesNotMatch(markup, /data-slot-role="item-body"/);
+  }
+  const withoutDefinitionRail = resolveMatrixPreviewParameters(matrixPreviewParameters, { itemsPerQuadrant: 2, focusQuadrant: "无", definitionRail: "无" });
+  const markupWithoutDefinitionRail = matrixVisualComponent.renderMarkup(withoutDefinitionRail);
+  assert.match(markupWithoutDefinitionRail, /data-definition-rail="off"/);
+  assert.doesNotMatch(markupWithoutDefinitionRail, /class="band-definition/);
+
+  const mixedParameters = resolveMatrixPreviewParameters(matrixPreviewParameters, {
+    q0Count: 1,
+    q1Count: 2,
+    q2Count: 3,
+    q3Count: 1,
+    focusQuadrant: "右上",
+    definitionRail: "有",
+  });
+  const mixedMarkup = matrixVisualComponent.renderMarkup(mixedParameters);
+  assert.match(mixedMarkup, /data-items-per-quadrant="mixed"/);
+  assert.match(mixedMarkup, /data-quadrant-counts="1,2,3,1"/);
+  assert.match(mixedMarkup, /data-items-q0="1"/);
+  assert.match(mixedMarkup, /data-items-q1="2"/);
+  assert.match(mixedMarkup, /data-items-q2="3"/);
+  assert.match(mixedMarkup, /data-items-q3="1"/);
+  assert.equal((mixedMarkup.match(/class="matrix-item/g) ?? []).length, 7);
+
+  const content = {
+    pageId: "matrix-page",
+    title: "项目优先级",
+    items: [
+      { id: "alert", title: "异常预警", body: "" },
+      { id: "portal", title: "统一入口", body: "" },
+      { id: "platform", title: "数据平台", body: "" },
+      { id: "report", title: "报表美化", body: "" },
+    ],
+    structuredData: {
+      type: "matrix",
+      axes: { xLow: "难度低", xHigh: "难度高", yLow: "价值低", yHigh: "价值高" },
+      focusQuadrant: 1,
+      showDefinitionRail: false,
+      quadrants: [
+        { id: "q0", title: "优先推进", detail: { title: "快速落地", body: "低难度高价值项目", metrics: [{ label: "周期", value: "2周" }, { label: "团队", value: "2组" }] }, itemIds: ["alert"] },
+        { id: "q1", title: "战略投入", detail: { title: "重点投入", body: "集中资源持续建设", metrics: [{ label: "周期", value: "3月" }, { label: "投入", value: "重点" }] }, itemIds: ["platform"] },
+        { id: "q2", title: "择机优化", detail: { title: "常规优化", body: "低成本择机改善", metrics: [{ label: "频率", value: "季度" }, { label: "投入", value: "常规" }] }, itemIds: ["report"] },
+        { id: "q3", title: "谨慎评估", detail: { title: "审慎评估", body: "投入前验证边界", metrics: [{ label: "周期", value: "1月" }, { label: "风险", value: "较高" }] }, itemIds: ["portal"] },
+      ],
+    },
+  };
+  const payload = mapMatrixPageContent(content, { intentId: "matrix-intent" }, null, {
+    componentItemIds: content.items.map((item) => item.id),
+  });
+  assert.deepEqual(payload.parameters.axes, content.structuredData.axes);
+  assert.deepEqual(payload.parameters.quadrants.map((quadrant) => quadrant.items.map((item) => item.key)), [
+    ["alert"], ["platform"], ["report"], ["portal"],
+  ]);
+  assert.equal(payload.parameters.focusQuadrant, 1);
+  assert.equal(payload.parameters.showDefinitionRail, false);
+  assert.equal(payload.mappings.length, 4);
 });
 
 test("循环 Structure Group 暴露与 State 同步的可填充 Content Slots", () => {
