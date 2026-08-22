@@ -38,6 +38,51 @@ const index = Object.values(metadata)
     };
   });
 
+const iconByNormalizedKey = new Map(index.map((icon) => [normalize(icon.key), icon]));
+
+// The model supplies semantic search phrases, not Tabler file names. A small
+// concept map prevents literal matches such as "visual" -> Visual Studio or
+// "capacity" -> cubic metre from outranking the intended pictogram.
+const semanticAliases = Object.freeze([
+  { key: "presentation", phrases: ["presentation approach", "presentation method"] },
+  { key: "list-numbers", phrases: ["page count", "number of pages"] },
+  { key: "checklist", words: ["responsibility", "duty", "responsibilities"] },
+  { key: "hierarchy", words: ["relationship", "relation", "dependency"] },
+  { key: "layout", phrases: ["image and text", "picture and text", "text and image"] },
+  { key: "hourglass-low", phrases: ["low requirement", "low demand"] },
+  { key: "adjustments-horizontal", phrases: ["mid requirement", "medium requirement"] },
+  { key: "wand", phrases: ["high customization", "customization"] },
+  { key: "palette", phrases: ["visual specification", "visual style", "design specification"] },
+  { key: "typography", phrases: ["expression capability", "expression ability"], words: ["expression"] },
+  { key: "stack-2", phrases: ["quantity capacity", "content capacity"], words: ["capacity"] },
+  { key: "arrows-down", phrases: ["degradation method", "fallback method"], words: ["degradation", "fallback"] },
+  { key: "refresh", words: ["rearrangement", "reorder", "redistribution"] },
+  { key: "border-all", words: ["boundary", "border", "limits"] },
+  { key: "ban", words: ["disabled", "forbidden", "prohibited"] },
+  { key: "file-text", phrases: ["draft reading", "read draft"] },
+  { key: "scale", phrases: ["rule judgment", "rule decision"] },
+  { key: "code", phrases: ["code labor", "code execution"] },
+]);
+
+function semanticAlias(normalizedQuery, queryTokens) {
+  for (const alias of semanticAliases) {
+    if (alias.phrases?.some((phrase) => normalizedQuery.includes(phrase))) return iconByNormalizedKey.get(normalize(alias.key));
+    if (alias.words?.some((word) => queryTokens.includes(word))) return iconByNormalizedKey.get(normalize(alias.key));
+  }
+  return null;
+}
+
+function resultFor(icon, score) {
+  if (!icon) return null;
+  return {
+    key: icon.key,
+    category: icon.category,
+    tags: icon.tags,
+    score,
+    svgPath: path.join(iconRoot, `${icon.key}.svg`),
+  };
+}
+
 function tokenScore(query, icon) {
   if (icon.key === query) return 240;
   if (icon.nameTokens.includes(query)) return 90;
@@ -50,24 +95,24 @@ function tokenScore(query, icon) {
 }
 
 export function resolveTablerIcon(query) {
+  const normalizedQuery = normalize(query);
   const queryTokens = tokens(query);
   if (!queryTokens.length) return null;
+  const aliasIcon = semanticAlias(normalizedQuery, queryTokens);
+  if (aliasIcon) return resultFor(aliasIcon, 900);
+  const exactIcon = iconByNormalizedKey.get(normalizedQuery);
+  if (exactIcon) return resultFor(exactIcon, 1000);
   const ranked = index
     .map((icon) => ({
       icon,
-      score: queryTokens.reduce((sum, token) => sum + tokenScore(token, icon), 0),
+      score: queryTokens.reduce((sum, token) => sum + tokenScore(token, icon), 0)
+        - (icon.key.startsWith("brand-") && !queryTokens.includes("brand") ? 180 : 0),
     }))
     .filter((entry) => entry.score > 0)
     .sort((left, right) => right.score - left.score || left.icon.key.localeCompare(right.icon.key));
   if (!ranked.length) return null;
   const match = ranked[0];
-  return {
-    key: match.icon.key,
-    category: match.icon.category,
-    tags: match.icon.tags,
-    score: match.score,
-    svgPath: path.join(iconRoot, `${match.icon.key}.svg`),
-  };
+  return resultFor(match.icon, match.score);
 }
 
 export function tablerIconSvgMarkup(icon, { name = "tabler-icon", className = "tabler-icon" } = {}) {

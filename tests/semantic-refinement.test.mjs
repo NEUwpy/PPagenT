@@ -53,3 +53,33 @@ test("局部细化丢弃没有原文依据或超过候选字数的分点", () =>
   assert.equal(result.changed, true);
   assert.deepEqual(result.pageContents[0].items[0].points, ["表达"]);
 });
+
+test("需要 points 的结构组可从内容合同读取数量和字数上限", () => {
+  const requiredCandidate = {
+    familyId: "comparison",
+    variantId: "weighted-dual-focus",
+    contentContract: {
+      points: "required",
+      pointCount: { min: 3, max: 5, balancedAcrossItems: true },
+    },
+    textCapacity: { maxItemChars: 16 },
+  };
+  const comparisonPage = {
+    pageId: "p2",
+    sourceText: "稳定方案与随机方案有三项明确差别。",
+    items: [
+      { id: "stable", title: "稳定方案", body: "稳定" },
+      { id: "random", title: "随机方案", body: "随机", points: ["已有一点"] },
+    ],
+  };
+  const [request] = normalizeSemanticRefinementRequests([{
+    pageId: "p2",
+    familyId: requiredCandidate.familyId,
+    variantId: requiredCandidate.variantId,
+    itemIds: ["stable", "random"],
+    reason: "补齐对应维度",
+  }], [comparisonPage], [{ pageId: "p2", candidates: [requiredCandidate] }]);
+  assert.deepEqual(request.itemIds, ["stable", "random"]);
+  assert.equal(request.maxPointsPerItem, 5);
+  assert.equal(request.maxPointChars, 16);
+});

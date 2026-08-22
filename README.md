@@ -6,7 +6,7 @@ PPagenT 是一个面向固定使用场景、以可靠生成原生可编辑 Power
 
 ## 当前阶段
 
-两份真实稿件已经用于校准正式生成线。当前冻结 Shell 与 Content Frame，并用最小实验验证 `Logic → Structure Group → State → Content Slots`：同一份 HTML/CSS 组件既负责响应布局，也向通用编译器提供最终几何，编译结果仍是原生可编辑 PPT 对象。循环闭环已成为首个声明动态 Content Slot 的试点；子 Logic 的自动选择与嵌套渲染尚未接入正式流程。当前状态见[当前阶段](docs/当前阶段.md)，几何和颗粒度见[Shell 与 Logic 契约](docs/Shell与Logic契约.md)，长任务边界见[方向校正](docs/方向校正.md)。
+两份真实稿件已经用于校准正式生成线。当前冻结 Shell 与 Content Frame，并已验证 `Logic → Structure Group → State → Native PPT`：HTML/CSS 组件负责响应布局并向通用编译器提供最终几何，编译结果仍是原生可编辑对象。当前状态见[当前阶段](docs/当前阶段.md)，几何和颗粒度见[Shell 与 Logic 契约](docs/Shell与Logic契约.md)，长任务边界见[方向校正](docs/方向校正.md)。
 
 ## 核心工程取舍
 
@@ -37,14 +37,12 @@ PPagenT 采用“AI 理解与选择、参数化代码确定性绘制”的生成
 - [正式生成工作流](docs/工作流/正式生成/工作流.md)
 - [更新日志](docs/更新日志.md)
 - [资产索引](assets/资产索引.md)
-- [结构样本池](结构样本池/样本池说明.md)
 
 ## 主要目录
 
 - `assets/`：核心资产库，只放已进入正式调用并接受持续优化的版式家族；各资产目录的 `asset.json` 是唯一登记真源，不维护中央注册表。
 - `稿件/`：正式生成线的统一原始稿件目录；当前优先保存 UTF-8 Markdown，不放导演中间产物或生成结果。
 - `PPT源/`：全部原始 PPT 的唯一目录；整目录不进入 Git，换电脑时单独复制到仓库根目录。
-- `结构样本池/`：保存所有值得继续观察的单页来源样本，允许重复和暂未归类。
 - `src/asset-runtime/`：原生 PPT 共享原语、旧资产兼容 Builder，以及 HTML 组件到 Native 对象的编译支撑。
 - `assets/<分类>/<资产>/asset.json + runtime.mjs + review.mjs + generate.mjs + example.pptx`：`asset.json` 用于轻量发现，`runtime.mjs` 暴露入围后才读取的组件容量与 Mapper，`generate.mjs` 只在实际编译时加载重型运行库；结构资产仍只维护一份 HTML 布局真源。
 - `experiments/`：只保留仍在使用的最小架构实验和 Shell 标注，不再提交整套稿件运行输出或批量渲染物。

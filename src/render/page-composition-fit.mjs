@@ -66,13 +66,19 @@ export function validatePageCompositionTextFit(content, layout, planPage, bodyFr
     const items = slotItems(content, plan);
     const gap = 16;
     const rowHeight = (frame.height - gap * Math.max(0, items.length - 1)) / Math.max(1, items.length);
-    items.forEach((item) => {
-      if (item.title) check(item.title, { left: frame.left + 68, top: frame.top, width: frame.width - 68, height: 38 }, "rowTitle", slotId);
+    items.forEach((item, index) => {
+      const top = frame.top + index * (rowHeight + gap);
+      const compact = rowHeight < 92 && item.title && item.body;
+      const contentLeft = frame.left + 68;
+      const titleWidth = compact ? Math.min(150, Math.max(100, (frame.width - 68) * 0.24)) : frame.width - 68;
+      if (item.title) check(item.title, {
+        left: contentLeft, top, width: titleWidth, height: compact ? rowHeight : 38,
+      }, "rowTitle", slotId);
       if (item.body) check(item.body, {
-        left: frame.left + 68,
-        top: item.title ? frame.top + 44 : frame.top,
-        width: frame.width - 68,
-        height: item.title ? Math.max(48, rowHeight - 48) : rowHeight,
+        left: compact ? contentLeft + titleWidth + 18 : contentLeft,
+        top: compact ? top : (item.title ? top + 44 : top),
+        width: compact ? frame.width - 68 - titleWidth - 18 : frame.width - 68,
+        height: compact ? rowHeight : (item.title ? Math.max(0, rowHeight - 44) : rowHeight),
       }, "rowBody", slotId);
     });
   };

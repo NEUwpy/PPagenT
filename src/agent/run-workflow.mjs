@@ -75,23 +75,26 @@ async function runOverflowCheck(options, outputPptx) {
 
 export async function runWorkflowCli(options) {
   const root = path.resolve(options.root ?? process.cwd());
+  const resolveFromRoot = (value) => path.isAbsolute(value) ? path.normalize(value) : path.resolve(root, value);
   if (!new Set(["production", "development"]).has(options.mode ?? "production")) {
     throw new Error("--mode 只允许 production 或 development");
   }
   if ((options.skin ?? DEFAULT_SKIN_ID) !== DEFAULT_SKIN_ID) {
     throw new Error(`当前 renderer 只支持 Skin：${DEFAULT_SKIN_ID}；拒绝把其他 Skin 记录为东北大学页面`);
   }
-  const inputPath = path.resolve(options.input);
+  const inputPath = resolveFromRoot(options.input);
   const rawMarkdown = await fs.readFile(inputPath, "utf8");
-  const providerModule = await import(pathToFileURL(path.resolve(options.provider)).href);
+  const providerPath = resolveFromRoot(options.provider);
+  const providerModule = await import(pathToFileURL(providerPath).href);
   const provider = providerModule.default ?? providerModule.provider;
   if (!provider) throw new Error("DirectorProvider 模块必须导出 default 或 provider");
   const renderer = createNortheasternUniversityRenderer({
+    root,
     sourcePptx: path.join(root, "PPT源", "PPT模板-封面正文尾页.pptx"),
-    outputPptx: path.resolve(options.output),
+    outputPptx: resolveFromRoot(options.output),
     manuscriptSource: path.relative(root, inputPath).replaceAll("\\", "/"),
   });
-  const runDir = path.resolve(options["run-dir"] ?? options.runDir);
+  const runDir = resolveFromRoot(options["run-dir"] ?? options.runDir);
   const result = await runDirectorWorkflow({
     root,
     input: { rawMarkdown, skinId: options.skin ?? DEFAULT_SKIN_ID },
@@ -136,7 +139,7 @@ export async function runWorkflowCli(options) {
       skinId: options.skin ?? DEFAULT_SKIN_ID,
     },
     provider: {
-      module: path.relative(root, path.resolve(options.provider)).replaceAll("\\", "/"),
+      module: path.relative(root, providerPath).replaceAll("\\", "/"),
       identity: provider.metadata ?? { providerKind: "module-without-metadata" },
     },
     artifacts,

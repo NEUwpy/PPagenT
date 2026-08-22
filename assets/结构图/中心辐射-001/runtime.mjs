@@ -14,15 +14,18 @@ function bodyOf(item) {
   ].filter(Boolean).join("；");
 }
 
-export function mapPageContent(content, intent, _decision, _compositionPage, visualPage) {
+export function mapPageContent(content, intent, _decision, compositionPage, visualPage) {
   const iconQueryByItemId = new Map(
     (visualPage?.iconQueries ?? []).map((item) => [item.sourceItemId, item.query]),
   );
+  const centerTitleBinding = (compositionPage?.componentText ?? []).find((item) => (
+    item.sourceField === "page-title" && item.targetRole === "center-title"
+  ));
   return renderPayload(intent, "hub-radial-001", {
     title: content.title,
     center: {
-      title: content.title,
-      body: content.notes ?? "",
+      title: centerTitleBinding?.text ?? content.title,
+      body: centerTitleBinding ? "" : (content.notes ?? ""),
     },
     items: content.items.map((item) => ({
       key: item.id,

@@ -21,3 +21,13 @@ test("空查询不伪造图标", () => {
   assert.equal(resolveTablerIcon(""), null);
   assert.equal(resolveTablerIcon("中文无英文索引"), null);
 });
+
+test("语义短语优先返回通用图标而不是字面相似品牌或单位", () => {
+  assert.equal(resolveTablerIcon("visual specification")?.key, "palette");
+  assert.equal(resolveTablerIcon("quantity capacity")?.key, "stack-2");
+  assert.equal(resolveTablerIcon("degradation method")?.key, "arrows-down");
+  assert.equal(resolveTablerIcon("relationship")?.key, "hierarchy");
+  assert.equal(resolveTablerIcon("disabled")?.key, "ban");
+  assert.equal(resolveTablerIcon("mid requirement")?.key, "adjustments-horizontal");
+  assert.equal(resolveTablerIcon("high customization")?.key, "wand");
+});

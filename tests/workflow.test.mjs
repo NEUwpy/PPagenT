@@ -280,7 +280,7 @@ test("产品工作流只调用内容导演和视觉导演，不调用研发审�
   assert.equal(result.status, "delivered");
   assert.equal(result.workflowMode, "production");
   assert.equal(contentCalls, 1);
-  assert.equal(visualCalls, 2);
+  assert.equal(visualCalls, 1);
   await assert.rejects(fs.access(path.join(outputDir, "content", "attempt-01", "content-review.json")));
   await assert.rejects(fs.access(path.join(outputDir, "visual", "attempt-01", "visual-review-pre.json")));
   await assert.rejects(fs.access(path.join(outputDir, "visual", "attempt-01", "visual-review-post.json")));
@@ -351,7 +351,7 @@ test("视觉导演可用一次小请求补齐节点内分点且不重跑整篇�
 
   assert.equal(result.status, "delivered");
   assert.equal(contentCalls, 1);
-  assert.equal(visualCalls, 2);
+  assert.equal(visualCalls, 1);
   assert.equal(refinementCalls, 1);
   assert.equal(candidateCalls, 2);
   assert.deepEqual(resolvedPage.items[0].points, ["模板有限"]);
@@ -359,22 +359,21 @@ test("视觉导演可用一次小请求补齐节点内分点且不重跑整篇�
   assert.equal(saved.report[0].status, "refined");
 });
 
-test("视觉意图枚举错误会在受控次数内反馈重试", async (t) => {
+test("正式流程不再调用视觉意图阶段，内部 PageIntent 由 PageContent 的 Logic 确定生成", async (t) => {
   const outputDir = await makeTempDir(t);
-  let intentCalls = 0;
-  let receivedFeedback = null;
+  let compositionCalls = 0;
   const provider = {
-    async contentDirector() { return contentOutput(); },
-    async visualDirector({ phase, skinId, previousResolution }) {
-      if (phase === "composition") return visualPlanOutput(skinId);
-      intentCalls += 1;
-      if (intentCalls === 2) receivedFeedback = previousResolution;
-      if (intentCalls === 1) {
-        const invalid = visualIntentOutput();
-        invalid.pageIntents[0].relationTraits.secondaryDimension = "invented";
-        return invalid;
-      }
-      return visualIntentOutput();
+    async contentDirector() {
+      const output = contentOutput();
+      output.pageContents[0].logicIntent = { logicId: "hub", reason: "一个中心支撑多个同级方向" };
+      return output;
+    },
+    async visualDirector({ phase, skinId, pageIntents }) {
+      assert.equal(phase, "composition");
+      compositionCalls += 1;
+      assert.equal(pageIntents[0].baseRelation, "hub");
+      assert.equal(pageIntents[0].purposeKey, "explain_topics");
+      return visualPlanOutput(skinId);
     },
   };
   const result = await runDirectorWorkflow({
@@ -385,12 +384,9 @@ test("视觉意图枚举错误会在受控次数内反馈重试", async (t) => {
     visualCandidateProvider: candidateProvider,
     visualResolver: resolver,
     renderer,
-    maxVisualAttempts: 2,
   });
   assert.equal(result.status, "delivered");
-  assert.equal(intentCalls, 2);
-  assert.equal(receivedFeedback.feedback[0].code, "visual-intent-invalid");
-  assert.equal(receivedFeedback.feedback[0].errorCode, "SCHEMA_VALIDATION_FAILED");
+  assert.equal(compositionCalls, 1);
 });
 
 test("内容来源溯源错误会在受控次数内反馈重试", async (t) => {
@@ -685,7 +681,7 @@ test("变体确定性复核未接受时把反馈送回视觉导演且不进入�
     },
   });
   assert.equal(receivedResolution.status, "needs-director-revision");
-  assert.equal(intentCalls, 1);
+  assert.equal(intentCalls, 0);
   assert.equal(reviewCalls, 2);
   assert.equal(renderCalls, 1);
   const saved = JSON.parse(await fs.readFile(path.join(outputDir, "visual", "attempt-01", "visual-resolution.json"), "utf8"));

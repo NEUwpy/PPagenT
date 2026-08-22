@@ -35,6 +35,7 @@ function roleSettings(name, defaults = {}) {
     10,
   );
   return {
+    enabled: role.enabled ?? defaults.enabled ?? true,
     thinking: process.env[`${prefix}_THINKING`] || role.thinking || defaults.thinking
       || process.env.PPAGENT_DEEPSEEK_THINKING || local.thinking || "enabled",
     reasoningEffort: process.env[`${prefix}_REASONING_EFFORT`] || role.reasoningEffort
@@ -54,7 +55,7 @@ export default await createDeepSeekDirectorProvider({
   maxTokens,
   requestTimeoutMs,
   content: roleSettings("content", { thinking: "enabled", reasoningEffort: "low", maxTokens: 16384 }),
-  structure: roleSettings("structure", { thinking: "disabled", maxTokens: 4096 }),
+  structure: roleSettings("structure", { enabled: false, thinking: "disabled", maxTokens: 4096 }),
   visualIntent: roleSettings("visualIntent", { thinking: "disabled", maxTokens: 8192 }),
   visualComposition: roleSettings("visualComposition", { thinking: "disabled", maxTokens: 8192 }),
   reviewer: roleSettings("reviewer", { thinking: "enabled", reasoningEffort: "low", maxTokens: 8192 }),

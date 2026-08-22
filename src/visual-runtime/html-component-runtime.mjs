@@ -87,6 +87,26 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
       await document.fonts.ready;
       const root = document.querySelector("[data-ppt-root]");
       if (!root) throw new Error("HTML Component 缺少 data-ppt-root");
+      // Fixed-height, centered, single-line labels are a shared presentation primitive.
+      // CSS line-height is not a reliable optical-centering mechanism and maps poorly to
+      // PowerPoint paragraph spacing, so normalize it once for every HTML asset.
+      for (const element of root.querySelectorAll('[data-ppt-kind="text"]')) {
+        if (element instanceof SVGTextElement) continue;
+        const style = getComputedStyle(element);
+        const fontSize = Number.parseFloat(style.fontSize);
+        const height = element.getBoundingClientRect().height;
+        const lineHeight = Number.parseFloat(style.lineHeight);
+        const legacyCenteredLineBox = Number.isFinite(lineHeight) && lineHeight >= height * 0.85;
+        const singleLine = !element.textContent.replace(/\r/g, "").includes("\n");
+        const wantsMiddle = !element.dataset.pptValign || element.dataset.pptValign === "middle";
+        if (singleLine && legacyCenteredLineBox && wantsMiddle && style.textAlign === "center" && height >= fontSize * 1.35) {
+          element.dataset.pptTextLayout = "single-line-center";
+          element.style.display = "flex";
+          element.style.alignItems = "center";
+          element.style.justifyContent = "center";
+          element.style.lineHeight = "1.2";
+        }
+      }
       const rootBox = root.getBoundingClientRect();
       const rounded = (value) => Math.round(value * 1000) / 1000;
       const nodeLabel = (element) => element.dataset.pptName || element.dataset.slotId || element.id || element.className?.baseVal || element.className || element.tagName.toLowerCase();
@@ -246,16 +266,21 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
           rotation: rounded(Math.atan2(matrix.b, matrix.a) * 180 / Math.PI),
         };
       };
-      const textStyle = (element, style, opacity) => ({
-        typeface: style.fontFamily.split(",")[0].replace(/["']/g, "").trim(),
-        fontSize: rounded(parseFloat(style.fontSize)),
-        bold: Number(style.fontWeight) >= 600 || style.fontWeight === "bold",
-        italic: style.fontStyle === "italic",
-        color: color(element instanceof SVGElement ? style.fill : style.color, opacity, element, "color"),
-        alignment: style.textAnchor === "middle" || style.textAlign === "center" ? "center" : style.textAnchor === "end" || style.textAlign === "right" ? "right" : "left",
-        verticalAlignment: element.dataset.pptValign || "middle",
-        lineSpacing: rounded((Number.parseFloat(style.lineHeight) || Number.parseFloat(style.fontSize)) / Number.parseFloat(style.fontSize)),
-      });
+      const textStyle = (element, style, opacity) => {
+        const singleLineCenter = element.dataset.pptTextLayout === "single-line-center";
+        return {
+          typeface: style.fontFamily.split(",")[0].replace(/["']/g, "").trim(),
+          fontSize: rounded(parseFloat(style.fontSize)),
+          bold: Number(style.fontWeight) >= 600 || style.fontWeight === "bold",
+          italic: style.fontStyle === "italic",
+          color: color(element instanceof SVGElement ? style.fill : style.color, opacity, element, "color"),
+          alignment: style.textAnchor === "middle" || style.textAlign === "center" ? "center" : style.textAnchor === "end" || style.textAlign === "right" ? "right" : "left",
+          verticalAlignment: element.dataset.pptValign || "middle",
+          lineSpacing: singleLineCenter
+            ? 1
+            : rounded((Number.parseFloat(style.lineHeight) || Number.parseFloat(style.fontSize)) / Number.parseFloat(style.fontSize)),
+        };
+      };
       const textValue = (element) => {
         const source = element.textContent.replace(/\r/g, "");
         if (element.dataset.pptPreserveLines === "true") {
@@ -280,6 +305,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         };
       };
       const pathNode = (element, base, style, opacity) => {
+        const sourcePath = element.getAttribute("d")?.trim() ?? "";
         const length = element.getTotalLength();
         const sampleCount = Math.max(32, Math.min(240, Math.ceil(length / 2)));
         const matrix = element.getScreenCTM();
@@ -300,6 +326,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
           fill: svgFill(element, style, opacity),
           line: lineStyle(element, style, opacity),
           shadow: shadowStyle(element, style, opacity),
+          closed: /[zZ]\s*$/.test(sourcePath),
           points: absolute.map((point) => ({ x: rounded(point.x - left), y: rounded(point.y - top) })),
         };
       };
@@ -487,7 +514,7 @@ export function compileResolvedVisualTree(slide, tree, targetFrame = tree.target
           commands: [
             { moveTo: node.points[0] },
             ...node.points.slice(1).map((lineTo) => ({ lineTo })),
-            { close: {} },
+            ...(node.closed ? [{ close: {} }] : []),
           ],
         }],
       });

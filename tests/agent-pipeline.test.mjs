@@ -391,6 +391,21 @@ test("三层组织树命中已登记的组织层级资产", async () => {
   ]);
 });
 
+test("人物组织树不会因普通两项层级意图而泄漏到候选集", async () => {
+  const page = content("architecture", [
+    { id: "intake", title: "资产入库线", body: "形成稳定资产" },
+    { id: "generation", title: "正式生成线", body: "调用稳定资产" },
+  ]);
+  const intent = enrichPageIntent(intentDraft(
+    "architecture-intent",
+    "explain_hierarchy",
+    "hierarchy",
+    { ordered: false, sameLevel: false },
+  ), page);
+  const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
+  assert.equal(set.candidates.some((candidate) => candidate.assetId === "hierarchy-people-tree-001"), false);
+});
+
 test("resolver 不允许把视觉导演的家族或变体换成另一资产", async () => {
   const page = content("topics", [
     { id: "a", title: "A", body: "A" },

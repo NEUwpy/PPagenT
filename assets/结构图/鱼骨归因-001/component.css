@@ -17,7 +17,7 @@ body { color: #18314f; background: transparent; font-family: var(--ppagent-font-
 .cause-heading { position: absolute; left: 0; right: 0; z-index: 2; display: grid; grid-template-columns: 42px minmax(0,1fr); align-items: center; height: 46px; margin: 0; padding: 0 18px 0 6px; color: #fff; background: transparent; font-size: var(--ppagent-component-item-title-size, 20px); font-weight: 700; line-height: 1; }
 .cause-group[data-side="top"] .cause-heading { top: 0; }
 .cause-group[data-side="bottom"] .cause-heading { bottom: 0; }
-.cause-index { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; color: #405f9f; background: #fff; font-size: 14px; font-weight: 800; }
+.cause-index { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; color: #405f9f; background: #fff; font-size: var(--ppagent-component-meta-size, 17px); font-weight: 800; }
 .cause-title { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .cause-factors { position: absolute; left: 8px; right: 14px; z-index: 2; height: 128px; margin: 0; padding: 0; color: #4e5d73; list-style: none; font-size: var(--ppagent-component-body-size, 18px); font-weight: 400; line-height: 1.2; }
 .cause-group[data-side="top"] .cause-factors { top: 61px; }

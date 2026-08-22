@@ -16,7 +16,12 @@ export const northeasternUniversitySkin = {
     coverMeta: { fontSizes: [24, 22, 20], maxLines: 2, lineHeight: 1.2 },
     agendaItems: { fontSizes: [24, 22, 20], maxLines: 5, lineHeight: 1.35 },
     pageTitle: { fontSizes: [32], maxLines: 1, lineHeight: 1.1 },
-    closingTitle: { fontSizes: [52, 48, 44], maxLines: 3, lineHeight: 1.1 },
+    closingTitle: {
+      fontSizes: [40, 36, 32],
+      maxLines: 3,
+      lineHeight: 1.15,
+      glyphWidthFactor: 1.25,
+    },
     composition: {
       leadTitle: { fontSizes: [30, 27, 24], maxLines: 4 },
       leadBody: { fontSizes: [19, 18, 17], maxLines: 6 },

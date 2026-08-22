@@ -15,7 +15,7 @@
     "purposeText": { "type": "string", "minLength": 1 },
     "baseRelation": {
       "enum": [
-        "parallel", "sequence", "hierarchy", "comparison", "matrix",
+        "parallel", "sequence", "cycle", "hierarchy", "comparison", "matrix",
         "hub", "layered", "causal", "convergence", "network", "composite", "none", "other"
       ]
     },

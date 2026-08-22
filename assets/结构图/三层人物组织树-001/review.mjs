@@ -131,7 +131,7 @@ function portraitMarkup(person, frame, kind, slotPrefix, fieldPrefix, seed) {
     ? `<div class="hierarchy-portrait hierarchy-${kind}-portrait hierarchy-sample-avatar" style="${imageStyle}" ${slot}>${sampleAvatarMarkup(Number(image.split(":")[1]) || 0).replace("<svg ", `<svg data-ppt-kind="image" data-ppt-name="${slotPrefix}-sample-avatar" `)}</div>`
     : image
     ? `<img class="hierarchy-portrait hierarchy-${kind}-portrait" style="${imageStyle}" src="${escapeHtml(image)}" alt="${escapeHtml(person.name)}" ${slot} data-ppt-kind="image" data-ppt-shape="ellipse" data-ppt-name="${slotPrefix}-portrait"/>`
-    : `<div class="hierarchy-portrait hierarchy-${kind}-portrait hierarchy-icon" style="${imageStyle}" ${slot}>${tablerIconSvgMarkup(person.icon, { name: `${slotPrefix}-icon`, className: "hierarchy-icon-svg" })}</div>`;
+    : `<div class="hierarchy-portrait hierarchy-${kind}-portrait hierarchy-icon" style="${imageStyle}" ${slot} data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="${slotPrefix}-media">${tablerIconSvgMarkup(person.icon, { name: `${slotPrefix}-icon`, className: "hierarchy-icon-svg" })}</div>`;
   return `<div class="hierarchy-portrait-halo hierarchy-${kind}-halo" style="left:${haloLeft}px;top:${haloTop}px;width:${halo}px;height:${halo}px" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="${slotPrefix}-halo"></div>
     <div class="hierarchy-portrait-shell hierarchy-${kind}-shell" style="left:${imageLeft}px;top:${imageTop}px;width:${imageSize}px;height:${imageSize}px" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="${slotPrefix}-shell"></div>
     ${media}`;

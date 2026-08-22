@@ -23,10 +23,15 @@ import {
   previewParameters as matrixPreviewParameters,
   visualComponent as matrixVisualComponent,
 } from "../assets/结构图/矩阵象限-001/review.mjs";
+import {
+  previewParameters as sequencePreviewParameters,
+  visualComponent as sequenceVisualComponent,
+} from "../assets/结构图/顺序流程-001/review.mjs";
 
 const assetDir = path.resolve(import.meta.dirname, "../assets/结构图/循环闭环-001");
 const parallelAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/等权并列卡片-001");
 const matrixAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/矩阵象限-001");
+const sequenceAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/顺序流程-001");
 
 test("循环 HTML 由通用 DOM 编译器直接生成可编辑 Native 形状", async () => {
   const targetFrame = { left: 55, top: 166, width: 1170, height: 492 };
@@ -212,6 +217,55 @@ test("HTML → PPT 对不能可靠映射的效果和遗漏 SVG 采用 fail-close
       assetDir: matrixAssetDir,
       targetFrame,
     }), /HTML_PPT_FIDELITY:UNCOMPILED_SVG_NODE/);
+  } finally {
+    await closeHtmlComponentRuntime();
+  }
+});
+
+test("固定高度的单行居中文本使用公共视觉居中语义，不把容器行高编译为 PPT 行距", async () => {
+  const targetFrame = { left: 55, top: 166, width: 1170, height: 492 };
+  try {
+    const tree = await resolveHtmlComponent({
+      component: sequenceVisualComponent,
+      parameters: structuredClone(sequencePreviewParameters),
+      assetDir: sequenceAssetDir,
+      targetFrame,
+      theme: { font: "Microsoft YaHei" },
+    });
+    const order = tree.nodes.find((node) => node.name === "sequence-order-0");
+    assert.equal(order?.style.alignment, "center");
+    assert.equal(order?.style.verticalAlignment, "middle");
+    assert.equal(order?.style.lineSpacing, 1);
+    assert.equal(order?.frame.width, 64);
+    assert.equal(order?.frame.height, 64);
+  } finally {
+    await closeHtmlComponentRuntime();
+  }
+});
+
+test("开放 SVG 路径不会在 Native 编译时被强制闭合", async () => {
+  const component = {
+    id: "open-path-fixture",
+    designFrame: { width: 100, height: 100 },
+    cssFile: "component.css",
+    renderMarkup: () => `<section data-ppt-root style="width:100px;height:100px;overflow:hidden">
+      <svg width="100" height="100" style="display:block">
+        <path data-ppt-kind="path" data-ppt-name="open" d="M10 10 L80 20 L60 70" fill="none" stroke="#2f5ea8" stroke-width="2"/>
+        <path data-ppt-kind="path" data-ppt-name="closed" d="M20 20 L40 20 L30 40 Z" fill="#2f5ea8" stroke="#2f5ea8" stroke-width="1"/>
+      </svg>
+    </section>`,
+  };
+  try {
+    const tree = await resolveHtmlComponent({
+      component,
+      parameters: {},
+      assetDir: matrixAssetDir,
+      targetFrame: { left: 0, top: 0, width: 100, height: 100 },
+    });
+    assert.equal(tree.nodes.find((node) => node.name === "open")?.closed, false);
+    assert.equal(tree.nodes.find((node) => node.name === "closed")?.closed, true);
+    const presentation = createPresentation();
+    compileResolvedVisualTree(presentation.slides.add(), tree);
   } finally {
     await closeHtmlComponentRuntime();
   }

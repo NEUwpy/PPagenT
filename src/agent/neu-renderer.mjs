@@ -29,7 +29,7 @@ function compactSectionName(intent, job) {
   }[intent?.baseRelation] ?? "观点";
 }
 
-export function createNortheasternUniversityRenderer({ sourcePptx, outputPptx, manuscriptSource }) {
+export function createNortheasternUniversityRenderer({ root = process.cwd(), sourcePptx, outputPptx, manuscriptSource }) {
   if (!sourcePptx || !outputPptx) throw new Error("NEU renderer 需要 sourcePptx 和 outputPptx");
   return async function renderWorkflowDeck({
     outputDir,
@@ -52,6 +52,7 @@ export function createNortheasternUniversityRenderer({ sourcePptx, outputPptx, m
       composition: compositionPlan.pages[index],
     }));
     await renderNortheasternUniversityDeck({
+      root,
       pages,
       sourcePptx: path.resolve(sourcePptx),
       outputPptx: path.resolve(outputPptx),

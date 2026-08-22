@@ -9,6 +9,15 @@
     "schemaVersion": { "const": "1.0" },
     "pageId": { "type": "string", "minLength": 1 },
     "title": { "type": "string" },
+    "logicIntent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["logicId", "reason"],
+      "properties": {
+        "logicId": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+        "reason": { "type": "string", "minLength": 1, "maxLength": 160 }
+      }
+    },
     "items": {
       "type": "array",
       "items": {

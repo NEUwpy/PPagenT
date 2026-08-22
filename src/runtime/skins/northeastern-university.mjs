@@ -139,7 +139,7 @@ function pageRecipe(page, index, manuscriptSource) {
   }
 
   if (assetId === "northeastern-university-closing-001") {
-    const closingFrame = { left: 16.98, top: 198.16, width: 1252.71, height: 169.4 };
+    const closingFrame = { left: 42, top: 174, width: 1196, height: 210 };
     const closing = fitSkinText(
       page.payload.parameters.text || "",
       closingFrame,
@@ -194,6 +194,7 @@ function pageRecipe(page, index, manuscriptSource) {
 }
 
 export async function renderNortheasternUniversityDeck({
+  root = projectRoot,
   pages,
   sourcePptx,
   outputPptx,
@@ -219,12 +220,12 @@ export async function renderNortheasternUniversityDeck({
   });
   const presentation = await PresentationFile.importPptx(await FileBlob.load(starterPptx));
   const slides = await applyTemplateMappedRecipes(presentation, recipes);
-  const layouts = await loadCompositionLayouts(projectRoot);
+  const layouts = await loadCompositionLayouts(root);
 
   try {
     for (const [index, page] of pages.entries()) {
       if (!page.composition) {
-        if (!await isSkinOnlyAsset(page.payload.assetId)) await structureRenderer(slides[index], page.payload, northeasternUniversitySkin);
+        if (!await isSkinOnlyAsset(page.payload.assetId, root)) await structureRenderer(slides[index], page.payload, northeasternUniversitySkin, undefined, root);
         continue;
       }
       const layout = layouts.get(page.composition.compositionId);
@@ -237,9 +238,9 @@ export async function renderNortheasternUniversityDeck({
         northeasternUniversitySkin.bodyFrame,
         northeasternUniversitySkin.typographyRoles,
       );
-      if (!await isSkinOnlyAsset(page.payload.assetId)) {
+      if (!await isSkinOnlyAsset(page.payload.assetId, root)) {
         if (!componentFrame) throw new Error(`${page.composition.compositionId} is missing a component slot`);
-        await structureRenderer(slides[index], page.payload, northeasternUniversitySkin, componentFrame);
+        await structureRenderer(slides[index], page.payload, northeasternUniversitySkin, componentFrame, root);
       }
     }
 

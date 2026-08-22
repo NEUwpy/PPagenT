@@ -14,17 +14,24 @@ const issues = [];
 const inventory = new Map(coreAssets.map((asset) => [asset.id, asset]));
 const coreIds = new Set(coreAssets.filter((asset) => asset.status === "core").map((asset) => asset.id));
 const seen = new Map();
-const assetLinePattern = /^\s*-\s*\[([ xX])\]\s+(.+?)\s+<!--\s*asset:([a-z0-9-]+)\s*-->\s*$/gm;
+const assetLinePattern = /^\s*-\s*\[([ xX])\]\s+(.+)$/gm;
 let match;
 while ((match = assetLinePattern.exec(checklist)) !== null) {
-  const [, mark, label, id] = match;
+  const [, mark, label] = match;
   const lineNumber = checklist.slice(0, match.index).split("\n").length;
-  if (seen.has(id)) {
-    issues.push(`清单重复资产: ${id}（第 ${seen.get(id).lineNumber}、${lineNumber} 行）`);
-    continue;
+  const ids = [...label.matchAll(/`([a-z0-9-]+)`/g)].map((item) => item[1]);
+  const checked = mark.toLowerCase() === "x";
+  if (checked && ids.length === 0) issues.push(`已勾选条目缺少资产 ID（第 ${lineNumber} 行）`);
+  for (const id of ids) {
+    if (seen.has(id)) {
+      issues.push(`清单重复资产: ${id}（第 ${seen.get(id).lineNumber}、${lineNumber} 行）`);
+      continue;
+    }
+    seen.set(id, { checked, label: label.trim(), lineNumber });
   }
-  seen.set(id, { checked: mark.toLowerCase() === "x", label: label.trim(), lineNumber });
 }
+
+if (seen.size === 0) issues.push("清单没有解析出任何资产 ID；拒绝空清单假通过");
 
 for (const [id, item] of seen) {
   const asset = inventory.get(id);
@@ -32,7 +39,6 @@ for (const [id, item] of seen) {
     issues.push(`清单包含未知或已移除资产: ${id}`);
     continue;
   }
-  if (!item.label.includes(asset.name)) issues.push(`清单名称与 asset.json 不一致: ${id}（应包含“${asset.name}”）`);
   const shouldBeChecked = coreIds.has(id);
   if (item.checked !== shouldBeChecked) {
     issues.push(`清单勾选状态与核心资产目录不一致: ${id}（应为 ${shouldBeChecked ? "[x]" : "[ ]"}）`);

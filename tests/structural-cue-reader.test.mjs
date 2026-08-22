@@ -4,7 +4,13 @@ import {
   enforceSectionPageContract,
   enforceStructuralIntentRelations,
 } from "../src/agent/model-director-provider.mjs";
-import { applyStructuralHints, detectStructuralCues, readStructuralCues } from "../src/agent/structural-cue-reader.mjs";
+import {
+  applyStructuralHints,
+  assertStructuralCueCompliance,
+  buildStructuralCueGuides,
+  detectStructuralCues,
+  readStructuralCues,
+} from "../src/agent/structural-cue-reader.mjs";
 
 const source = `# 示例
 
@@ -44,12 +50,12 @@ const source = `# 示例
 先做出页面。提炼其中规律，才能从作品变成能力。
 `;
 
-test("高置信结构线索只路由枚举、重复职责和转化链", () => {
+test("高置信结构线索保留判断簇、枚举、重复职责和转化链", () => {
   const cues = detectStructuralCues(source);
   assert.deepEqual(cues.map((cue) => [cue.type, cue.relation]), [
-    ["parallel-enumeration", "parallel"],
+    ["decision-cluster", "hub"],
     ["role-sequence", "sequence"],
-    ["single-thesis", "none"],
+    ["parallel-enumeration", "parallel"],
     ["category-contrast", "parallel"],
     ["direct-comparison", "comparison"],
     ["sequence-transformation", "sequence"],
@@ -62,32 +68,73 @@ test("结构线索并行独立调用且保留程序确定的关系", async () =>
   const model = {
     identity: "fake-structure-reader",
     async generateJson(input) {
-      calls.push(input.context.cueId);
-      const count = input.outputSchema.schema.properties.atoms.minItems;
-      return { atoms: Array.from({ length: count }, (_, index) => ({
-        title: `节点${index + 1}`,
-        body: `第${index + 1}项内容`,
-        sourceFragments: [`片段${index + 1}`],
+      calls.push(input.context.cues.map((cue) => cue.cueId));
+      return { hints: input.context.cues.map((cue) => ({
+        cueId: cue.cueId,
+        atoms: Array.from({ length: cue.itemRange.minItems }, (_, index) => ({
+          title: `节点${index + 1}`,
+          body: `第${index + 1}项内容`,
+          sourceFragments: [`片段${index + 1}`],
+          ...(cue.cueId.endsWith("comparison")
+            ? { points: ["依据一", "依据二", "依据三"] }
+            : {}),
+        })),
       })) };
     },
   };
   const hints = await readStructuralCues(source, model);
-  assert.equal(calls.length, 6);
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].length, 5);
   assert.deepEqual(hints.map((hint) => hint.relation), [
-    "parallel", "sequence", "none", "parallel", "comparison", "sequence",
+    "hub", "sequence", "parallel", "parallel", "comparison", "sequence",
   ]);
-  assert.deepEqual(hints.map((hint) => hint.atoms.length), [5, 3, 1, 2, 2, 3]);
+  assert.deepEqual(hints.map((hint) => hint.atoms.length), [4, 3, 4, 2, 2, 3]);
+});
+
+test("产品叙事的十节正文均能提取结构技能线索且不把结论误当单节点页", async () => {
+  const fs = await import("node:fs/promises");
+  const markdown = await fs.readFile(new URL("../docs/产品叙事.md", import.meta.url), "utf8");
+  const cues = detectStructuralCues(markdown);
+  assert.equal(cues.length, 10);
+  assert.deepEqual(cues.map((cue) => cue.relation), [
+    "hub", "hub", "comparison", "parallel", "sequence", "layered", "sequence", "hub", "sequence", "parallel",
+  ]);
+  assert.deepEqual(cues[5].fixedAtoms.map((atom) => atom.points.length), [4, 2, 4]);
+  assert.ok(cues.every((cue) => cue.type !== "single-thesis"));
+});
+
+test("关闭辅助结构模型时，本地结构指南仍阻止明确 Logic 退化为纯文字", () => {
+  const markdown = "## 三项能力\n\n核心能力包括：理解稿件，选择结构，稳定生成。";
+  const guides = buildStructuralCueGuides(markdown);
+  assert.equal(guides[0].relation, "parallel");
+  assert.throws(() => assertStructuralCueCompliance({ pageContents: [{
+    pageId: "p1",
+    title: "三项能力",
+    logicIntent: { logicId: "editorial", reason: "概括" },
+    items: [{ id: "i1", title: "能力", body: "总括" }],
+    sourceText: markdown,
+  }] }, guides), (error) => error.code === "CONTENT_LOGIC_MISMATCH");
+});
+
+test("同一句中的三个职责按三个节点计数而不是按一行计数", () => {
+  const [guide] = buildStructuralCueGuides("## 分工\n\nAI 负责理解，规则负责选择，代码负责生成。");
+  assert.equal(guide.type, "role-sequence");
+  assert.deepEqual(guide.itemRange, { minItems: 3, maxItems: 3 });
+  assert.equal(guide.fixedAtoms.length, 3);
 });
 
 test("辅助结构线索连续超出容量时退回内容导演而不阻断整稿", async () => {
   let calls = 0;
   const model = {
-    async generateJson() {
+    async generateJson(input) {
       calls += 1;
-      return { atoms: [1, 2, 3].map((index) => ({
-        title: `节点${index}`,
-        body: "这是一段明显超过结构读取器容量上限但语义仍可能正确的说明文字",
-        sourceFragments: ["来源片段"],
+      return { hints: input.context.cues.map((cue) => ({
+        cueId: cue.cueId,
+        atoms: [1, 2, 3].map((index) => ({
+          title: `节点${index}`,
+          body: "这是一段明显超过结构读取器容量上限但语义仍可能正确的说明文字",
+          sourceFragments: ["来源片段"],
+        })),
       })) };
     },
   };
@@ -143,14 +190,13 @@ test("转化主节点和节点内分点保持两级结构", () => {
   assert.match(output.pageContents[0].notes, /PPagenT节点接口=semantic-node\+points/);
 });
 
-test("转化前的四项枚举必须全部进入中间节点分点", () => {
+test("明确冒号枚举优先保留为同级对象而不被后文结论压缩", () => {
   const [cue] = detectStructuralCues(`## 积累能力
 
 真正积累的是经验：表达，容量，变化，禁忌。
 
 规律被提炼后，才能从作品变成能力。`);
-  assert.equal(cue.type, "sequence-transformation");
-  assert.equal(cue.supportingPointCount, 4);
+  assert.equal(cue.type, "parallel-enumeration");
 });
 
 test("长案例段中的从小盆景变成大风景不会覆盖整节为转化骨架", () => {

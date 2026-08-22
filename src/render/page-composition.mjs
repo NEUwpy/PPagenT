@@ -116,6 +116,21 @@ function renderEditorialRows(slide, frame, items, within, typographyRoles) {
   const rowHeight = (frame.height - gap * Math.max(0, items.length - 1)) / Math.max(1, items.length);
   items.forEach((item, index) => {
     const top = frame.top + index * (rowHeight + gap);
+    const compact = rowHeight < 92 && item.title && item.body;
+    const contentLeft = frame.left + 68;
+    const titleWidth = compact ? Math.min(150, Math.max(100, (frame.width - 68) * 0.24)) : frame.width - 68;
+    const titleFrame = {
+      left: contentLeft,
+      top,
+      width: titleWidth,
+      height: compact ? rowHeight : 38,
+    };
+    const bodyFrame = {
+      left: compact ? contentLeft + titleWidth + 18 : contentLeft,
+      top: compact ? top : (item.title ? top + 44 : top),
+      width: compact ? frame.width - 68 - titleWidth - 18 : frame.width - 68,
+      height: compact ? rowHeight : (item.title ? Math.max(0, rowHeight - 44) : rowHeight),
+    };
     addText(slide, String(index + 1).padStart(2, "0"), {
       left: frame.left, top: top + 1, width: 48, height: 32,
     }, {
@@ -123,26 +138,19 @@ function renderEditorialRows(slide, frame, items, within, typographyRoles) {
       fontSize: 18, bold: true, color: COLORS.blue2, alignment: "center", autoFit: "none",
     });
     if (item.title) {
-      const titleFrame = { left: frame.left + 68, top, width: frame.width - 68, height: 38 };
       const title = fittedCompositionText(item.title, titleFrame, "rowTitle", typographyRoles);
       addText(slide, title.text, titleFrame, {
         name: qaElementName({ within, role: `title-${index}` }),
-        typeface: typographyRoles.bodyTypeface,
-        fontSize: title.fontSize, bold: true, color: COLORS.dark, verticalAlignment: "top", autoFit: "none",
+        typeface: typographyRoles.bodyTypeface, fontSize: title.fontSize, bold: true, color: COLORS.dark,
+        verticalAlignment: compact ? "middle" : "top", autoFit: "none",
       });
     }
     if (item.body) {
-      const bodyFrame = {
-        left: frame.left + 68,
-        top: item.title ? top + 44 : top,
-        width: frame.width - 68,
-        height: item.title ? Math.max(48, rowHeight - 48) : rowHeight,
-      };
       const body = fittedCompositionText(item.body, bodyFrame, "rowBody", typographyRoles);
       addText(slide, body.text, bodyFrame, {
         name: qaElementName({ within, role: `body-${index}` }),
-        typeface: typographyRoles.bodyTypeface,
-        fontSize: body.fontSize, color: COLORS.body, verticalAlignment: "top", autoFit: "none",
+        typeface: typographyRoles.bodyTypeface, fontSize: body.fontSize, color: COLORS.body,
+        verticalAlignment: compact ? "middle" : "top", autoFit: "none",
       });
     }
     if (index < items.length - 1) {
@@ -390,13 +398,19 @@ export function validatePageCompositionTextFit(content, layout, planPage, bodyFr
     const items = slotItems(content, plan);
     const gap = 16;
     const rowHeight = (frame.height - gap * Math.max(0, items.length - 1)) / Math.max(1, items.length);
-    items.forEach((item) => {
-      if (item.title) check(item.title, { left: frame.left + 68, top: frame.top, width: frame.width - 68, height: 38 }, "rowTitle", slotId);
+    items.forEach((item, index) => {
+      const top = frame.top + index * (rowHeight + gap);
+      const compact = rowHeight < 92 && item.title && item.body;
+      const contentLeft = frame.left + 68;
+      const titleWidth = compact ? Math.min(150, Math.max(100, (frame.width - 68) * 0.24)) : frame.width - 68;
+      if (item.title) check(item.title, {
+        left: contentLeft, top, width: titleWidth, height: compact ? rowHeight : 38,
+      }, "rowTitle", slotId);
       if (item.body) check(item.body, {
-        left: frame.left + 68,
-        top: item.title ? frame.top + 44 : frame.top,
-        width: frame.width - 68,
-        height: item.title ? Math.max(48, rowHeight - 48) : rowHeight,
+        left: compact ? contentLeft + titleWidth + 18 : contentLeft,
+        top: compact ? top : (item.title ? top + 44 : top),
+        width: compact ? frame.width - 68 - titleWidth - 18 : frame.width - 68,
+        height: compact ? rowHeight : (item.title ? Math.max(0, rowHeight - 44) : rowHeight),
       }, "rowBody", slotId);
     });
   };

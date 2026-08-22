@@ -17,13 +17,20 @@ export function normalizeSemanticRefinementRequests(requests, pageContents, cand
     ));
     if (!page || !candidate || candidate.contentContract?.adaptationOwner === "visual-director") continue;
     if (!new Set(["optional", "required"]).has(candidate.contentContract?.points)) continue;
-    const maxPointsPerItem = Math.min(candidate.textCapacity?.maxPointsPerItem ?? 0, 6);
-    const maxPointChars = candidate.textCapacity?.maxPointChars ?? 0;
+    const pointContract = candidate.contentContract?.pointCount;
+    const minPointsPerItem = pointContract?.min ?? 1;
+    const maxPointsPerItem = Math.min(
+      candidate.textCapacity?.maxPointsPerItem ?? pointContract?.max ?? 0,
+      6,
+    );
+    const maxPointChars = candidate.textCapacity?.maxPointChars
+      ?? candidate.textCapacity?.maxItemChars
+      ?? 0;
     if (maxPointsPerItem < 1 || maxPointChars < 1) continue;
 
     const items = new Map(page.items.map((item) => [item.id, item]));
     const itemIds = [...new Set(request.itemIds ?? [])].filter((id) => (
-      items.has(id) && !(items.get(id).points?.length)
+      items.has(id) && (items.get(id).points?.length ?? 0) < minPointsPerItem
     ));
     if (!itemIds.length) continue;
     normalized.push({

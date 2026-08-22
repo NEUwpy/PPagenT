@@ -51,18 +51,21 @@ export function applyAcademicReportShellScaffold(contentOutput) {
     schemaVersion: "1.0",
     pageId: "shell-cover",
     title: contentOutput.deckPlan.title,
+    logicIntent: { logicId: "editorial", reason: "封面由 Skin 固定提供" },
     items: [],
   };
   const agendaPage = {
     schemaVersion: "1.0",
     pageId: "shell-agenda",
     title: "目录",
+    logicIntent: { logicId: "editorial", reason: "目录由 Skin 固定提供" },
     items: agenda,
   };
   const closing = {
     schemaVersion: "1.0",
     pageId: "shell-closing",
     title: "",
+    logicIntent: { logicId: "editorial", reason: "尾页由 Skin 固定提供" },
     items: [{
       id: "closing-takeaway",
       title: "",

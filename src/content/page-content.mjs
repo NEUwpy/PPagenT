@@ -7,6 +7,71 @@ function round(value, digits = 2) {
   return Math.round(value * factor) / factor;
 }
 
+function duplicateValues(values) {
+  const seen = new Set();
+  return [...new Set(values.filter((value) => seen.has(value) || !seen.add(value)))];
+}
+
+function compareIdSets(actual, expected, label, issues) {
+  const actualSet = new Set(actual);
+  const expectedSet = new Set(expected);
+  const unknown = [...actualSet].filter((id) => !expectedSet.has(id));
+  const missing = [...expectedSet].filter((id) => !actualSet.has(id));
+  if (unknown.length) issues.push({ field: label, code: "UNKNOWN_ITEM_REFERENCE", ids: unknown });
+  if (missing.length) issues.push({ field: label, code: "UNASSIGNED_ITEM", ids: missing });
+}
+
+/** Validate relationships that JSON Schema cannot express across arrays. */
+export function validateStructuredDataReferences(pageContent) {
+  const issues = [];
+  const items = pageContent.items ?? [];
+  const itemIds = items.map((item) => item.id);
+  const duplicateItemIds = duplicateValues(itemIds);
+  if (duplicateItemIds.length) issues.push({ field: "items", code: "DUPLICATE_ITEM_ID", ids: duplicateItemIds });
+
+  const structured = pageContent.structuredData;
+  if (!structured) return issues;
+
+  if (structured.type === "problem-solution") {
+    const pairIds = structured.pairs.map((pair) => pair.id);
+    const duplicates = duplicateValues(pairIds);
+    if (duplicates.length) issues.push({ field: "structuredData.pairs", code: "DUPLICATE_REFERENCE", ids: duplicates });
+    compareIdSets(pairIds, itemIds, "structuredData.pairs", issues);
+    const itemById = new Map(items.map((item) => [item.id, item]));
+    structured.pairs.forEach((pair, index) => {
+      const item = itemById.get(pair.id);
+      if (item && (item.title !== pair.problem.title || item.body !== pair.problem.body)) {
+        issues.push({ field: `structuredData.pairs[${index}]`, code: "PAIR_ITEM_MIRROR_MISMATCH", ids: [pair.id] });
+      }
+    });
+  }
+
+  if (structured.type === "matrix") {
+    const quadrantIds = structured.quadrants.map((quadrant) => quadrant.id);
+    const duplicateQuadrants = duplicateValues(quadrantIds);
+    if (duplicateQuadrants.length) issues.push({ field: "structuredData.quadrants", code: "DUPLICATE_QUADRANT_ID", ids: duplicateQuadrants });
+    const assigned = structured.quadrants.flatMap((quadrant) => quadrant.itemIds);
+    const duplicates = duplicateValues(assigned);
+    if (duplicates.length) issues.push({ field: "structuredData.quadrants[].itemIds", code: "DUPLICATE_REFERENCE", ids: duplicates });
+    compareIdSets(assigned, itemIds, "structuredData.quadrants[].itemIds", issues);
+  }
+
+  if (structured.type === "convergence") {
+    const inputIds = structured.inputs.map((input) => input.id);
+    const phaseIds = structured.phases.map((phase) => phase.id);
+    const duplicateInputs = duplicateValues(inputIds);
+    const duplicatePhases = duplicateValues(phaseIds);
+    if (duplicateInputs.length) issues.push({ field: "structuredData.inputs", code: "DUPLICATE_INPUT_ID", ids: duplicateInputs });
+    if (duplicatePhases.length) issues.push({ field: "structuredData.phases", code: "DUPLICATE_PHASE_ID", ids: duplicatePhases });
+    const assigned = structured.phases.flatMap((phase) => phase.stepIds);
+    const duplicates = duplicateValues(assigned);
+    if (duplicates.length) issues.push({ field: "structuredData.phases[].stepIds", code: "DUPLICATE_REFERENCE", ids: duplicates });
+    compareIdSets(assigned, itemIds, "structuredData.phases[].stepIds", issues);
+  }
+
+  return issues;
+}
+
 export function computeContentStats(pageContent) {
   if (pageContent.structuredData?.type === "problem-solution") {
     const pairs = pageContent.structuredData.pairs ?? [];
@@ -85,4 +150,88 @@ export function enrichPageIntent(intentDraft, pageContent) {
     },
     contentStats,
   };
+}
+
+const LOGIC_INTENT_DEFAULTS = Object.freeze({
+  parallel: { purposeKey: "present_parallel_points", baseRelation: "parallel", sameLevel: true },
+  sequence: { purposeKey: "explain_process", baseRelation: "sequence", ordered: true },
+  cycle: { purposeKey: "explain_cycle", baseRelation: "cycle", ordered: true, cyclic: true },
+  comparison: { purposeKey: "compare_options", baseRelation: "comparison", sameLevel: true },
+  hierarchy: { purposeKey: "explain_hierarchy", baseRelation: "hierarchy", branched: true },
+  layered: {
+    purposeKey: "explain_layers",
+    baseRelation: "layered",
+    ordered: true,
+    secondaryDimension: "layer",
+  },
+  hub: { purposeKey: "explain_topics", baseRelation: "hub", sameLevel: true },
+  matrix: { purposeKey: "organize_matrix", baseRelation: "matrix", dimensions: 2, sameLevel: true },
+  convergence: { purposeKey: "explain_conversion", baseRelation: "convergence", ordered: true, converging: true },
+  causal: { purposeKey: "analyze_causes", baseRelation: "causal", converging: true },
+  "problem-solution": {
+    purposeKey: "connect_problems_and_solutions",
+    baseRelation: "composite",
+    converging: true,
+  },
+  editorial: { purposeKey: "summarize_research_method", baseRelation: "none" },
+});
+
+function hierarchyDepth(node) {
+  if (!node) return 0;
+  const childDepths = (node.children ?? []).map(hierarchyDepth);
+  return 1 + (childDepths.length ? Math.max(...childDepths) : 0);
+}
+
+function inferredLogicId(pageContent) {
+  if (pageContent.logicIntent?.logicId) return pageContent.logicIntent.logicId;
+  if (pageContent.structuredData?.type === "problem-solution") return "problem-solution";
+  if (pageContent.structuredData?.type === "matrix") return "matrix";
+  if (pageContent.structuredData?.type === "convergence") return "convergence";
+  if (pageContent.structuredData?.type === "hierarchy") return "hierarchy";
+  const noteMatch = String(pageContent.notes ?? "").match(/PPagenT主关系=([a-z-]+)/);
+  return noteMatch?.[1] ?? "editorial";
+}
+
+/**
+ * Convert the content director's coarse Logic choice into the internal PageIntent contract.
+ * This is deterministic: the visual director selects a Structure Group, but never reclassifies Logic.
+ */
+export function buildPageIntentFromContent(pageContent) {
+  const logicId = inferredLogicId(pageContent);
+  const defaults = LOGIC_INTENT_DEFAULTS[logicId] ?? {
+    purposeKey: "summarize_research_method",
+    baseRelation: "other",
+  };
+  const source = String(pageContent.sourceText ?? "");
+  const temporal = logicId === "sequence"
+    && /(?:\d{4}\s*年|第[一二三四五六七八九十\d]+阶段|时间轴|里程碑|路线图|历史|演进|年度|季度|月份|未来\s*\d+)/.test(source);
+  const structure = {
+    itemCount: pageContent.items?.length ?? 0,
+    ordered: Boolean(defaults.ordered),
+    sameLevel: Boolean(defaults.sameLevel),
+    dimensions: { items: pageContent.items?.length ?? 0 },
+  };
+  if (logicId === "hierarchy") {
+    structure.hierarchyDepth = hierarchyDepth(pageContent.structuredData?.root);
+  }
+  return enrichPageIntent({
+    intentId: `${pageContent.pageId}-intent`,
+    purposeKey: defaults.purposeKey,
+    purposeText: pageContent.logicIntent?.reason ?? `按 ${logicId} 组织本页内容`,
+    baseRelation: defaults.baseRelation,
+    relationTraits: {
+      temporal,
+      cyclic: Boolean(defaults.cyclic),
+      converging: Boolean(defaults.converging),
+      branched: Boolean(defaults.branched),
+      dimensions: defaults.dimensions ?? 1,
+      secondaryDimension: defaults.secondaryDimension ?? "none",
+    },
+    structure,
+    density: "unknown",
+    emphasis: (pageContent.items ?? []).flatMap((item, index) => item.emphasis ? [index] : []),
+    evidenceTypes: ["text"],
+    confidence: 1,
+    assumptions: pageContent.logicIntent ? [] : ["兼容旧 PageContent：程序根据结构字段或备注推断 Logic"],
+  }, pageContent);
 }

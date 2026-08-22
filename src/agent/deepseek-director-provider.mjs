@@ -154,7 +154,9 @@ export async function createDeepSeekDirectorProvider({
   ]);
   const shared = { apiKey, model, endpoint, thinking, reasoningEffort, maxTokens, requestTimeoutMs, fetchImpl };
   const contentModel = new DeepSeekJsonModel({ ...shared, ...content });
-  const structureModel = new DeepSeekJsonModel({ ...shared, ...structure });
+  const structureModel = structure?.enabled === true
+    ? new DeepSeekJsonModel({ ...shared, ...structure })
+    : null;
   const visualIntentModel = new DeepSeekJsonModel({ ...shared, ...visualIntent });
   const visualCompositionModel = new DeepSeekJsonModel({ ...shared, ...visualComposition });
   const reviewerModel = new DeepSeekJsonModel({ ...shared, ...reviewer });

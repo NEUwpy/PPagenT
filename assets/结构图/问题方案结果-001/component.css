@@ -17,7 +17,7 @@ body { color: #1f344f; background: transparent; font-family: var(--ppagent-font-
 .solution-card { left: 360px; width: 390px; padding: 10px 18px 9px; border: 1px solid #d2e0f2; background: #f4f8fd; box-shadow: 0 7px 16px rgba(47,94,168,.07); }
 .solution-stripe { display: none; }
 .card-heading { display: flex; align-items: center; min-width: 0; height: 25px; gap: 10px; }
-.problem-tag, .solution-tag { flex: 0 0 auto; display: grid; place-items: center; height: 23px; padding: 0; font-size: 16px; font-weight: 700; line-height: 1; }
+.problem-tag, .solution-tag { flex: 0 0 auto; display: grid; place-items: center; height: 23px; padding: 0; font-size: var(--ppagent-component-label-size, 18px); font-weight: 700; line-height: 1; }
 .problem-tag { color: #718197; }
 .solution-tag { color: var(--ppagent-color-accent-alt, #4f7fc5); }
 .card-heading h3 { min-width: 0; margin: 0; overflow: hidden; color: #203956; font-size: var(--ppagent-component-item-title-size, 21px); font-weight: 700; line-height: 1.1; white-space: nowrap; text-overflow: ellipsis; }

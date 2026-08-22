@@ -12,6 +12,7 @@ import {
   mapPageContent as mapStagedFunnelPageContent,
   visualComponent as stagedFunnelComponent,
 } from "../assets/结构图/转化漏斗-001/runtime.mjs";
+import { mapPageContent as mapComparisonPageContent } from "../assets/结构图/双向对比-001/runtime.mjs";
 import {
   listRenderableVisualVariants,
   planVisualVariants,
@@ -98,6 +99,20 @@ test("正式结构候选来自当前核心 HTML 资产包", async () => {
       structuredDataType: "matrix",
     }).map((variant) => variant.structureGroupId),
     ["matrix-quadrant-priority"],
+  );
+  assert.deepEqual(
+    queryVisualVariants(structural, {
+      logicId: "comparison", baseRelation: "comparison", purposeKey: "compare_options",
+      itemCount: 2, pointCounts: [0, 0],
+    }),
+    [],
+  );
+  assert.deepEqual(
+    queryVisualVariants(structural, {
+      logicId: "comparison", baseRelation: "comparison", purposeKey: "compare_options",
+      itemCount: 2, pointCounts: [3, 3],
+    }).map((variant) => variant.assetId),
+    ["comparison-dual-verdict-001"],
   );
 });
 
@@ -186,4 +201,41 @@ test("视觉导演仍需明确选择循环闭环 Structure Group", async () => {
   ], { variants });
   assert.equal(accepted.status, "accepted");
   assert.equal(accepted.results[0].assetId, "cycle-loop-001");
+
+  const pointBased = planVisualVariants([
+    {
+      pageId: "comparison",
+      logicId: "comparison",
+      baseRelation: "comparison",
+      purposeKey: "compare_options",
+      itemCount: 2,
+      pointCounts: [3, 3],
+      visualStructureGroupId: "comparison-dual-verdict",
+    },
+    {
+      pageId: "layered",
+      logicId: "layered",
+      baseRelation: "layered",
+      purposeKey: "explain_layers",
+      itemCount: 3,
+      pointCounts: [4, 2, 4],
+      visualStructureGroupId: "layered-curved-frustums",
+    },
+  ], { variants });
+  assert.equal(pointBased.status, "accepted");
+  assert.deepEqual(pointBased.results.map((result) => result.assetId), [
+    "comparison-dual-verdict-001",
+    "layered-architecture-001",
+  ]);
+});
+
+test("双向对比的一侧标为重点时另一侧自动成为负向", () => {
+  const payload = mapComparisonPageContent({
+    title: "稳定与偶然",
+    items: [
+      { id: "stable", title: "稳定可用", emphasis: true, points: ["可靠", "可改", "可复用"] },
+      { id: "random", title: "偶然惊艳", points: ["随机", "昂贵", "难复用"] },
+    ],
+  }, { intentId: "comparison-intent" });
+  assert.deepEqual(payload.parameters.sides.map((side) => side.tone), ["positive", "negative"]);
 });

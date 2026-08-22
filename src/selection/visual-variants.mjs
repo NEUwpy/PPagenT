@@ -122,6 +122,16 @@ export function queryVisualVariants(variants, query = {}) {
     if (variant.contentContract?.requiresStructuredDataType
       && variant.contentContract.requiresStructuredDataType !== query.structuredDataType) return false;
     if ((query.maxPointsPerItem ?? 0) > 0 && variant.contentContract?.points === "forbidden") return false;
+    const pointCounts = query.pointCounts ?? [];
+    if (variant.contentContract?.points === "required"
+      && (!pointCounts.length || pointCounts.some((count) => count <= 0))
+      && !query.allowMissingRequiredPoints) return false;
+    const pointCountContract = variant.contentContract?.pointCount;
+    if (pointCountContract && !query.allowMissingRequiredPoints && (
+      pointCounts.length !== query.itemCount
+      || pointCounts.some((count) => count < pointCountContract.min || count > pointCountContract.max)
+      || (pointCountContract.balancedAcrossItems && new Set(pointCounts).size > 1)
+    )) return false;
     if (query.itemCount !== undefined) {
       if (query.itemCount < variant.itemCount.min || query.itemCount > variant.itemCount.max) return false;
     }
@@ -173,8 +183,25 @@ function compareScore(left, right) {
   return left.at(-1).localeCompare(right.at(-1));
 }
 
-function rankVisualVariantCandidates({ logicId, structureGroupId, familyId, assetId, itemCount, baseRelation, purposeKey, history = [], variants }) {
-  const candidates = queryVisualVariants(variants, { logicId, structureGroupId, familyId, assetId, itemCount, baseRelation, purposeKey });
+function rankVisualVariantCandidates({
+  logicId, structureGroupId, familyId, assetId, itemCount, baseRelation, purposeKey,
+  pointCounts, maxPointsPerItem, maxPointChars, requiredItemRole, structuredDataType,
+  history = [], variants,
+}) {
+  const candidates = queryVisualVariants(variants, {
+    logicId,
+    structureGroupId,
+    familyId,
+    assetId,
+    itemCount,
+    baseRelation,
+    purposeKey,
+    pointCounts,
+    maxPointsPerItem,
+    maxPointChars,
+    requiredItemRole,
+    structuredDataType,
+  });
   return candidates
     .map((variant) => ({ variant, score: selectionScore(variant, itemCount, history) }))
     .sort((left, right) => compareScore(left.score, right.score))

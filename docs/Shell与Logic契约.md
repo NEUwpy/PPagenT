@@ -86,11 +86,13 @@ Slot Map 不是第二份手工登记表。Structure Group 的文字、图标等�
 
 字号由 Skin 的语义字号角色统一提供，HTML Structure Group 只能引用这些角色，不能自行设置一套随 State 变化的字号。文字超过容量时应压缩、拆页、换组或拒绝；不得通过自动缩字制造“能放下”的假象。组件按登记的自然占用尺寸进入 Composition，不能靠任意缩放改变字号层级。
 
+固定高度的单行短标签必须使用真实的 Flex/Grid 视觉居中，不能用“行高等于容器高度”模拟居中。通用编译器会把历史资产中的这种旧写法规范化为视觉居中，并以正常单行行距生成 Native PPT，避免浏览器行盒、字体基线与 PowerPoint 段落行距叠加造成偏移。
+
 预览 PNG、布局检查文件和看板 JSON 都是从上述对象即时生成的缓存，不属于资产真源，也不得人工维护第二份数据库。
 
 Structure Group 在 HTML Component 中完成设计、数量响应、间距、字体和层级。确认后不再为同一版式手写第二套布局：通用编译器读取最终 DOM/CSS/SVG 并生成 Native 形状。HTML 截图不能进入正式 PPTX；进入 PPTX 的仍是文字、形状和自由曲线等可编辑对象。
 
-当前只保留 `cycle-pdca-ring-p57` 这一项正式结构 Structure Group。其他旧结构资产已经作废并移除；后续资产统一以 HTML 为布局真源，由通用编译器生成 Native PPT，不再保留旧 Builder 兼容路线。
+当前已有 12 组正式结构 Structure Group；准确清单以 `assets/资产索引.md` 和各资产 `asset.json` 为准。新资产统一以 HTML 为布局真源，由通用编译器生成 Native PPT，不再为同一版式维护第二套布局代码。
 
 ### Content Slot 契约
 
@@ -160,4 +162,4 @@ Logic 的调用接口采用两级版式中立内容：
 
 当前先固定 Shell 和 Content Frame，再蒸馏更多 Structure Group。其他学校版本可以替换 Logo、颜色、字体、栏目和页注文案；除非真实模板证明版式骨架必须改变，否则继续复用本 Shell 几何。未确认的 Structure Group 仍需用户明确确认后才能标记为正式可调用，Luna 只承担来源 PPT 的蒸馏与入库，不参与正式生成线。
 
-当前实现状态必须分开理解：Shell 几何、核心资产发现和正文兜底已经进入运行时代码。HTML 路线目前只有 `cycle-pdca-ring-p57` 同时具有专属视觉意图和用户确认记录，因此它是唯一正式结构 Logic。循环闭环可动态解析 3–6 步 State 的 Content Slots；二级 Logic 的候选、绑定和嵌套渲染尚未进入正式流程，当前只使用普通文字兜底。
+当前实现状态必须分开理解：Shell 几何、核心资产发现、12 组 HTML 单源结构和正文兜底已经进入运行时代码。循环闭环可动态解析 3–6 步 State 的 Content Slots；二级 Logic 的候选、绑定和嵌套渲染尚未进入正式流程，当前只使用普通文字兜底。

@@ -1,6 +1,11 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { computeContentStats, enrichPageIntent } from "../content/page-content.mjs";
+import {
+  buildPageIntentFromContent,
+  computeContentStats,
+  enrichPageIntent,
+  validateStructuredDataReferences,
+} from "../content/page-content.mjs";
 import { createRuleValidators, validationMessage } from "../selection/validation.mjs";
 import { assertDirectorProvider } from "./director-provider.mjs";
 import {
@@ -91,6 +96,15 @@ function assertContentOutput(validators, output, rawMarkdown) {
   assertSchema(validators, validators.validateDeckPlan, output.deckPlan, "DeckPlan", "content-director");
   output.pageContents.forEach((page, index) => {
     assertSchema(validators, validators.validatePageContent, page, `PageContent[${index}]`, "content-director");
+    const structuredReferenceIssues = validateStructuredDataReferences(page);
+    if (structuredReferenceIssues.length) {
+      throw new WorkflowError(
+        "STRUCTURED_DATA_REFERENCE_FAILED",
+        "content-director",
+        `${page.pageId} 的结构化数据引用不完整或不一致`,
+        { pageId: page.pageId, issues: structuredReferenceIssues },
+      );
+    }
     if (typeof page.sourceText !== "string" || !page.sourceText.trim() || !rawMarkdown.includes(page.sourceText)) {
       throw new WorkflowError(
         "SOURCE_GROUNDING_FAILED",
@@ -409,7 +423,7 @@ export async function runDirectorWorkflow(options) {
     } catch (error) {
       const recoverableContentError = (error instanceof WorkflowError
         && new Set(["SOURCE_GROUNDING_FAILED", "SCHEMA_VALIDATION_FAILED", "CONTENT_CAPACITY_EXCEEDED"]).has(error.code))
-        || error?.code === "SECTION_COVERAGE_FAILED";
+        || new Set(["SECTION_COVERAGE_FAILED", "CONTENT_LOGIC_MISMATCH"]).has(error?.code);
       if (!recoverableContentError || contentAttempt === maxContentAttempts) throw error;
       contentReview = {
         verdict: "revise",
@@ -440,7 +454,6 @@ export async function runDirectorWorkflow(options) {
   let visualReview = null;
   let visualResolution = null;
   let renderResult = null;
-  let acceptedBodyIntents = null;
   let semanticRefinementUsed = false;
   for (let attempt = 1; attempt <= maxVisualAttempts; attempt += 1) {
     let presentationOutput = options.shellScaffolder
@@ -452,44 +465,9 @@ export async function runDirectorWorkflow(options) {
       ...presentationOutput.deckPlan,
       pages: presentationOutput.deckPlan.pages.filter((page) => bodyPageIds.has(page.pageId)),
     };
-    let pageIntents;
-    try {
-      const bodyIntents = acceptedBodyIntents ?? normalizeVisualIntents(
-        validators,
-        await provider.visualDirector({
-          ...input,
-          phase: "intent",
-          attempt,
-          deckPlan: bodyDeckPlan,
-          pageContents: bodyPageContents,
-          previous: visual,
-          previousReview: visualReview,
-          previousResolution: visualResolution,
-          previousRenderResult: renderResult,
-        }),
-        bodyPageContents,
-      );
-      acceptedBodyIntents = bodyIntents;
-      const bodyIntentByPageId = new Map(bodyPageContents.map((page, index) => [page.pageId, bodyIntents[index]]));
-      pageIntents = presentationOutput.pageContents.map((page) => (
-        isShellPage(page) ? buildShellIntent(page) : bodyIntentByPageId.get(page.pageId)
-      ));
-    } catch (error) {
-      const recoverableIntentError = (error instanceof WorkflowError
-        && new Set(["SCHEMA_VALIDATION_FAILED", "UNKNOWN_PURPOSE_KEY"]).has(error.code))
-        || new Set(["MODEL_JSON_INVALID", "MODEL_REQUEST_TIMEOUT"]).has(error?.code);
-      if (!recoverableIntentError || attempt === maxVisualAttempts) throw error;
-      visualResolution = {
-        status: "needs-director-revision",
-        feedback: [{
-          code: "visual-intent-invalid",
-          errorCode: error.code,
-          message: error.message,
-          details: error.details ?? {},
-        }],
-      };
-      continue;
-    }
+    let pageIntents = presentationOutput.pageContents.map((page) => (
+      isShellPage(page) ? buildShellIntent(page) : buildPageIntentFromContent(page)
+    ));
     let candidateSets = await options.visualCandidateProvider({
       root,
       skinId: input.skinId,
@@ -510,7 +488,6 @@ export async function runDirectorWorkflow(options) {
           visualReview = null;
           visualResolution = visualFeedback;
           renderResult = null;
-          acceptedBodyIntents = null;
           continue;
         }
       }
@@ -575,14 +552,8 @@ export async function runDirectorWorkflow(options) {
             pageContents: presentationOutput.pageContents.map((page) => refinedById.get(page.pageId) ?? page),
           };
           bodyPageContents = presentationOutput.pageContents.filter((page) => !isShellPage(page));
-          acceptedBodyIntents = acceptedBodyIntents.map((intent, index) => (
-            enrichPageIntent(intent, bodyPageContents[index])
-          ));
-          const bodyIntentByPageId = new Map(
-            bodyPageContents.map((page, index) => [page.pageId, acceptedBodyIntents[index]]),
-          );
           pageIntents = presentationOutput.pageContents.map((page) => (
-            isShellPage(page) ? buildShellIntent(page) : bodyIntentByPageId.get(page.pageId)
+            isShellPage(page) ? buildShellIntent(page) : buildPageIntentFromContent(page)
           ));
           assertContentOutput(validators, contentOutput, input.rawMarkdown);
           candidateSets = await options.visualCandidateProvider({

@@ -28,8 +28,8 @@ export async function hasStructureAssetBuilder(assetId, variantId = null, root =
   return Boolean(descriptor && (!variantId || descriptor.runtime.variantId === variantId));
 }
 
-export async function renderStructureAsset(slide, renderPayload, skin, targetFrame = skin.bodyFrame) {
-  const assetPackage = await loadCoreAssetPackage(renderPayload.assetId);
+export async function renderStructureAsset(slide, renderPayload, skin, targetFrame = skin.bodyFrame, root = process.cwd()) {
+  const assetPackage = await loadCoreAssetPackage(renderPayload.assetId, root);
   if (assetPackage.runtime.renderer === "html-component") {
     const { compileResolvedVisualTree, resolveHtmlComponent } = await loadHtmlRuntime();
     const tree = await resolveHtmlComponent({

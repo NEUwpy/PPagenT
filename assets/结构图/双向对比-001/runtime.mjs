@@ -7,9 +7,9 @@ import {
 
 export { previewParameters, resolvePreviewParameters, visualComponent };
 
-function sideTone(item, index) {
+function sideTone(item, index, emphasizedIndex) {
   if (item?.polarity === "positive" || item?.polarity === "negative") return item.polarity;
-  if (item?.emphasis === true) return "positive";
+  if (emphasizedIndex >= 0) return index === emphasizedIndex ? "positive" : "negative";
   return index === 0 ? "negative" : "positive";
 }
 
@@ -25,9 +25,10 @@ export function mapPageContent(content, intent) {
   if (!Array.isArray(content?.items) || content.items.length !== 2) {
     throw new Error("双向结论对比要求 PageContent.items 恰好包含两个比较对象");
   }
+  const emphasizedIndex = content.items.findIndex((item) => item.emphasis === true);
   const sides = content.items.map((item, index) => ({
     title: item.title,
-    tone: sideTone(item, index),
+    tone: sideTone(item, index, emphasizedIndex),
     items: sideItems(item, index),
   }));
   if (sides[0].tone === sides[1].tone) {

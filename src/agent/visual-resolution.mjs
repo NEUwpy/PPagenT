@@ -98,7 +98,7 @@ export function slotCapabilitiesForVariant(variant, itemCount) {
   };
 }
 
-function publicVariant(variant, contract, compositions, itemCount) {
+function publicVariant(variant, contract, compositions, itemCount, contentReadiness = "ready") {
   return {
     logicId: variant.logicId,
     structureGroupId: variant.structureGroupId,
@@ -107,6 +107,7 @@ function publicVariant(variant, contract, compositions, itemCount) {
     variantId: variant.variantId,
     silhouette: variant.silhouette,
     adaptationStatus: contract.adaptationStatus,
+    contentReadiness,
     itemCount: variant.itemCount,
     textCapacity: variant.textCapacity ?? null,
     contentContract: variant.contentContract ?? null,
@@ -193,8 +194,20 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
         requiredItemRole,
         maxPointsPerItem: intent.structure.dimensions?.maxPointsPerItem ?? 0,
         maxPointChars: intent.structure.dimensions?.maxPointChars ?? 0,
+        pointCounts: pageContents[index].items.map((item) => item.points?.length ?? 0),
         structuredDataType: pageContents[index].structuredData?.type,
       });
+      const provisional = compatible.length ? [] : queryVisualVariants(detailedVariants, {
+        itemCount: intent.structure.itemCount,
+        baseRelation: intent.baseRelation,
+        purposeKey: intent.purposeKey,
+        requiredItemRole,
+        maxPointsPerItem: intent.structure.dimensions?.maxPointsPerItem ?? 0,
+        maxPointChars: intent.structure.dimensions?.maxPointChars ?? 0,
+        pointCounts: pageContents[index].items.map((item) => item.points?.length ?? 0),
+        structuredDataType: pageContents[index].structuredData?.type,
+        allowMissingRequiredPoints: true,
+      }).filter((variant) => variant.contentContract?.points === "required");
       const metadata = metadataById.get(candidate.assetId);
       const compositions = compositionCandidatesForAsset(layouts, candidate.assetId, metadata);
       structuralCandidates.push(...compatible.map((variant) => publicVariant(
@@ -202,6 +215,13 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
         contractsById.get(candidate.assetId),
         compositions,
         intent.structure.itemCount,
+      )));
+      structuralCandidates.push(...provisional.map((variant) => publicVariant(
+        variant,
+        contractsById.get(candidate.assetId),
+        compositions,
+        intent.structure.itemCount,
+        "needs-semantic-refinement",
       )));
     }
     const bodyVariant = variants.find((variant) => variant.renderer === "skin" && variant.fallbackBody);
@@ -539,7 +559,9 @@ function legalTextCompositionAlternatives(content, candidate, layouts) {
       );
     } else if (textSlots.length === 2 && itemIds.length >= 2) {
       const lead = textSlots.find((slot) => textSlotItemLimit(layout, slot.id) === 1);
-      const rest = textSlots.find((slot) => slot.id !== lead?.id);
+      const rest = textSlots.find((slot) => (
+        slot.id !== lead?.id && textSlotItemLimit(layout, slot.id) === Infinity
+      ));
       if (lead && rest) {
         for (const leadId of itemIds) {
           plans.push([
@@ -625,6 +647,22 @@ function validateCompositionPage({ content, candidate, compositionPage, layouts,
   if (unknownIds.length) issues.push({ code: "composition-source-item-missing", sourceItemIds: unknownIds });
   const omittedIds = [...sourceIds].filter((id) => !referencedIds.includes(id));
   const fixedPage = ["cover", "agenda", "closing"].includes(assetKind(candidate.assetId, metadata));
+  if (!fixedPage && candidate.contentContract?.points === "required") {
+    const selected = content.items.filter((item) => compositionPage.componentItemIds.includes(item.id));
+    const pointCounts = selected.map((item) => item.points?.length ?? 0);
+    const range = candidate.contentContract.pointCount;
+    if (!selected.length
+      || pointCounts.some((count) => count <= 0)
+      || (range && pointCounts.some((count) => count < range.min || count > range.max))
+      || (range?.balancedAcrossItems && new Set(pointCounts).size > 1)) {
+      issues.push({
+        code: "component-required-points-missing",
+        sourceItemIds: selected.map((item) => item.id),
+        pointCounts,
+        required: range ?? { min: 1 },
+      });
+    }
+  }
   if (!fixedPage && omittedIds.length) issues.push({ code: "composition-content-unplaced", sourceItemIds: omittedIds });
   const duplicatedIds = duplicatedCompositionItemIds(compositionPage);
   if (!fixedPage && duplicatedIds.length) {
@@ -863,6 +901,13 @@ export async function resolveVisualPlan({
         baseRelation: pageIntents[index].baseRelation,
         purposeKey: pageIntents[index].purposeKey,
         visualStructureGroupId: candidate.structureGroupId,
+        pointCounts: pageContents[index].items.map((item) => item.points?.length ?? 0),
+        maxPointsPerItem: pageIntents[index].structure?.dimensions?.maxPointsPerItem ?? 0,
+        maxPointChars: pageIntents[index].structure?.dimensions?.maxPointChars ?? 0,
+        requiredItemRole: /PPagenT节点接口=semantic-node\+points/.test(pageContents[index].notes ?? "")
+          ? "semantic-node"
+          : undefined,
+        structuredDataType: pageContents[index].structuredData?.type,
       });
     }
   });

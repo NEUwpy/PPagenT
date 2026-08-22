@@ -1,5 +1,15 @@
-import { applyStructuralHints, readStructuralCues } from "./structural-cue-reader.mjs";
+import {
+  applyStructuralHints,
+  assertStructuralCueCompliance,
+  buildStructuralCueGuides,
+  readStructuralCues,
+} from "./structural-cue-reader.mjs";
 import { refinementOutputSchema } from "./semantic-refinement.mjs";
+import {
+  compactVisualSkillContext,
+  expandVisualSkillRouting,
+  visualSkillRoutingSchema,
+} from "./visual-skill-router.mjs";
 
 function assertModel(model, label) {
   if (!model || typeof model.generateJson !== "function") {
@@ -57,13 +67,15 @@ export function enforceStructuralIntentRelations(intentOutput, pageContents) {
         structure: { ...intent.structure, ordered: false },
       };
     }
-    const match = String(pageContents[index]?.notes ?? "").match(/PPagenT主关系=(none|parallel|sequence|comparison|hierarchy|cycle|causal|convergence)/);
+    const match = String(pageContents[index]?.notes ?? "").match(/PPagenT主关系=(none|parallel|sequence|comparison|hierarchy|cycle|causal|convergence|hub|layered)/);
     if (!match) return intent;
     const relation = match[1];
     const purposeByRelation = {
       parallel: "present_parallel_points",
       sequence: "explain_process",
       comparison: "compare_options",
+      hub: "explain_topics",
+      layered: "explain_layers",
     };
     const relationTraits = { ...(intent.relationTraits ?? {}) };
     if (new Set(["parallel", "comparison"]).has(relation)) {
@@ -87,22 +99,191 @@ export function enforceStructuralIntentRelations(intentOutput, pageContents) {
   return output;
 }
 
-function contentSchemaWithSectionFloor(outputSchema, rawMarkdown) {
+function visualPageKey(page) {
+  return [page.familyId, page.variantId, page.silhouette].join("::");
+}
+
+function componentTextKey(binding) {
+  return [binding.sourceField, binding.sourceItemId ?? "page", binding.sourceIndex ?? ""].join(":");
+}
+
+function componentTextSource(pageContent, binding) {
+  if (binding.sourceField === "page-title") return pageContent.title ?? "";
+  const item = pageContent.items.find((entry) => entry.id === binding.sourceItemId);
+  if (!item) return "";
+  if (binding.sourceField === "title") return item.title ?? "";
+  if (binding.sourceField === "body") return item.body ?? "";
+  if (binding.sourceField === "support") {
+    return [item.body, ...(item.points ?? []).map((point) => point?.text ?? point)]
+      .filter((value) => String(value ?? "").trim())
+      .join("\n");
+  }
+  if (binding.sourceField === "point") {
+    const point = item.points?.[binding.sourceIndex];
+    return point?.text ?? point ?? "";
+  }
+  return "";
+}
+
+function expectedComponentText(pageContent, candidate, compositionPage) {
+  const roles = new Map((candidate.slotCapabilities?.textSlots ?? []).map((slot) => [slot.role, slot]));
+  const selected = new Set(compositionPage.componentItemIds ?? []);
+  const expected = [];
+  if (roles.has("center-title")) {
+    expected.push({ sourceField: "page-title", targetRole: "center-title" });
+  }
+  for (const item of pageContent.items.filter((entry) => selected.has(entry.id))) {
+    if (roles.has("item-title") && item.title?.trim()) {
+      expected.push({ sourceItemId: item.id, sourceField: "title", targetRole: "item-title" });
+    }
+    const bodyRole = roles.get("item-body");
+    const bodySourceField = bodyRole?.sourceField ?? "body";
+    if (bodyRole && (item.body?.trim() || (bodySourceField === "support" && item.points?.length))) {
+      expected.push({ sourceItemId: item.id, sourceField: bodySourceField, targetRole: "item-body" });
+    }
+    if (roles.has("item-point")) {
+      (item.points ?? []).forEach((point, sourceIndex) => {
+        if (String(point?.text ?? point ?? "").trim()) {
+          expected.push({ sourceItemId: item.id, sourceField: "point", sourceIndex, targetRole: "item-point" });
+        }
+      });
+    }
+  }
+  return expected;
+}
+
+function legalizeComponentText(pageContent, candidate, compositionPage) {
+  const capabilities = candidate.slotCapabilities?.textSlots ?? [];
+  if (!capabilities.length || compositionPage.componentContentMode !== "full") return [];
+  const capabilityByRole = new Map(capabilities.map((slot) => [slot.role, slot]));
+  const supplied = new Map((compositionPage.componentText ?? []).map((binding) => [componentTextKey(binding), binding]));
+  return expectedComponentText(pageContent, candidate, compositionPage).flatMap((expected) => {
+    const source = String(componentTextSource(pageContent, expected) ?? "").trim();
+    if (!source) return [];
+    const capability = capabilityByRole.get(expected.targetRole);
+    const existing = supplied.get(componentTextKey(expected));
+    const existingIsLegal = existing
+      && existing.targetRole === expected.targetRole
+      && String(existing.sourceFragment ?? "").trim()
+      && Array.from(existing.text ?? "").length <= capability.maxChars
+      && (!capability.maxLines || String(existing.text ?? "").split(/\r?\n/).length <= capability.maxLines)
+      && source.includes(String(existing.sourceFragment ?? "").trim());
+    if (existingIsLegal) return [existing];
+    if (Array.from(source).length > capability.maxChars
+      || (capability.maxLines && source.split(/\r?\n/).length > capability.maxLines)) {
+      return [];
+    }
+    return [{ ...expected, text: source, sourceFragment: source }];
+  });
+}
+
+export function normalizeVisualCompositionOutput(output, input) {
+  const normalized = structuredClone(output);
+  if (!normalized?.visualPlan?.pages || !normalized?.compositionPlan?.pages) return normalized;
+  const requestedPageIds = input.pageContents.map((page) => page.pageId);
+  const currentVisualById = new Map(normalized.visualPlan.pages.map((page) => [page.pageId, page]));
+  const currentCompositionById = new Map(normalized.compositionPlan.pages.map((page) => [page.pageId, page]));
+  normalized.visualPlan.pages = requestedPageIds.map((pageId) => currentVisualById.get(pageId)).filter(Boolean);
+  normalized.compositionPlan.pages = requestedPageIds.map((pageId) => currentCompositionById.get(pageId)).filter(Boolean);
+  const failedPageIds = new Set((input.previousResolution?.feedback ?? [])
+    .map((item) => item.pageId)
+    .filter(Boolean));
+  if (failedPageIds.size && input.previous?.visualPlan && input.previous?.compositionPlan) {
+    const previousVisual = new Map(input.previous.visualPlan.pages.map((page) => [page.pageId, page]));
+    const previousComposition = new Map(input.previous.compositionPlan.pages.map((page) => [page.pageId, page]));
+    normalized.visualPlan.pages = normalized.visualPlan.pages.map((page) => (
+      failedPageIds.has(page.pageId) ? page : (previousVisual.get(page.pageId) ?? page)
+    ));
+    normalized.compositionPlan.pages = normalized.compositionPlan.pages.map((page) => (
+      failedPageIds.has(page.pageId) ? page : (previousComposition.get(page.pageId) ?? page)
+    ));
+  }
+
+  const pageContentById = new Map(input.pageContents.map((page) => [page.pageId, page]));
+  const candidateSetById = new Map(input.candidateSets.map((set) => [set.pageId, set]));
+  const visualById = new Map(normalized.visualPlan.pages.map((page) => [page.pageId, page]));
+  const previousVisualById = new Map((input.previous?.visualPlan?.pages ?? []).map((page) => [page.pageId, page]));
+  const feedbackById = new Map((input.previousResolution?.feedback ?? [])
+    .filter((item) => item.pageId)
+    .map((item) => [item.pageId, item]));
+  normalized.compositionPlan.pages = normalized.compositionPlan.pages.map((compositionPage) => {
+    const visualPage = visualById.get(compositionPage.pageId);
+    const candidate = candidateSetById.get(compositionPage.pageId)?.candidates.find(
+      (item) => visualPageKey(item) === visualPageKey(visualPage),
+    );
+    const composition = candidate?.compositions?.find((item) => item.id === compositionPage.compositionId);
+    if (!candidate || !composition) return compositionPage;
+    const previousVisualPage = previousVisualById.get(compositionPage.pageId);
+    const feedback = feedbackById.get(compositionPage.pageId);
+    const legalAlternative = feedback?.legalAlternatives?.length
+      && previousVisualPage
+      && visualPageKey(previousVisualPage) === visualPageKey(visualPage)
+      ? feedback.legalAlternatives?.find((alternative) => candidate.compositionIds?.includes(alternative.compositionId))
+      : null;
+    if (legalAlternative) {
+      return {
+        pageId: compositionPage.pageId,
+        intentId: compositionPage.intentId,
+        ...legalAlternative,
+        reason: `${compositionPage.reason}；按解析器返回的同候选合法 Composition 修正`,
+      };
+    }
+    const legalTextSlotIds = new Set(composition.slots.filter((slot) => slot.role === "text").map((slot) => slot.id));
+    const seenTextSlots = new Set();
+    const textSlots = (compositionPage.textSlots ?? []).filter((slot) => {
+      if (!legalTextSlotIds.has(slot.slotId) || seenTextSlots.has(slot.slotId)) return false;
+      seenTextSlots.add(slot.slotId);
+      return true;
+    });
+    const pageContent = pageContentById.get(compositionPage.pageId);
+    const legalized = { ...compositionPage, textSlots };
+    if (!candidate.contentContract?.bindings?.length) delete legalized.componentBindings;
+    if (composition.requiresComponent && legalized.componentItemIds?.length && !legalTextSlotIds.size) {
+      legalized.componentContentMode = "full";
+      legalized.textSlots = [];
+    }
+    if (pageContent && candidate.slotCapabilities?.textSlots?.length) {
+      legalized.componentText = legalizeComponentText(pageContent, candidate, legalized);
+    } else {
+      delete legalized.componentText;
+    }
+    return legalized;
+  });
+
+  normalized.visualPlan.pages = normalized.visualPlan.pages.map((page) => {
+    const candidate = candidateSetById.get(page.pageId)?.candidates.find(
+      (item) => visualPageKey(item) === visualPageKey(page),
+    );
+    if (candidate?.mediaContract?.mode === "semantic-icon") return page;
+    const clean = { ...page };
+    delete clean.iconQueries;
+    return clean;
+  });
+  return normalized;
+}
+
+function contentSchemaWithSectionFloor(outputSchema, rawMarkdown, logicSkillIndex = []) {
   const source = String(rawMarkdown ?? "");
   const sectionMatches = [...source.matchAll(/^##\s+.+$/gm)];
   const sectionCount = sectionMatches.length;
-  if (!sectionCount) return outputSchema;
-  const splitAllowance = sectionMatches.filter((match, index) => {
-    const body = source.slice(match.index + match[0].length, sectionMatches[index + 1]?.index).trim();
-    return Array.from(body).length > 900;
-  }).length;
   const specialized = structuredClone(outputSchema);
-  const pages = specialized.schema.properties.deckPlan.properties.pages;
-  const pageContents = specialized.schema.properties.pageContents;
-  pages.minItems = sectionCount;
-  pages.maxItems = sectionCount + splitAllowance;
-  pageContents.minItems = sectionCount;
-  pageContents.maxItems = sectionCount + splitAllowance;
+  const pageContents = specialized.schema?.properties?.pageContents;
+  if (!pageContents?.items?.properties?.logicIntent) return specialized;
+  const pageContentSchema = pageContents.items;
+  if (!pageContentSchema.required.includes("logicIntent")) pageContentSchema.required.push("logicIntent");
+  const logicIds = logicSkillIndex.map((item) => item.logicId).filter(Boolean);
+  if (logicIds.length) pageContentSchema.properties.logicIntent.properties.logicId.enum = logicIds;
+  if (sectionCount) {
+    const splitAllowance = sectionMatches.filter((match, index) => {
+      const body = source.slice(match.index + match[0].length, sectionMatches[index + 1]?.index).trim();
+      return Array.from(body).length > 900;
+    }).length;
+    const pages = specialized.schema.properties.deckPlan.properties.pages;
+    pages.minItems = sectionCount;
+    pages.maxItems = sectionCount + splitAllowance;
+    pageContents.minItems = sectionCount;
+    pageContents.maxItems = sectionCount + splitAllowance;
+  }
   return specialized;
 }
 
@@ -164,6 +345,10 @@ export function enforceSectionPageContract(contentOutput, rawMarkdown, structura
       schemaVersion: "1.0",
       pageId,
       title: section.heading,
+      logicIntent: {
+        logicId: hint.relation === "none" ? "editorial" : hint.relation,
+        reason: `程序从原稿恢复出 ${hint.relation} 主关系`,
+      },
       items: hint.atoms.map((atom, itemIndex) => ({
         id: `${pageId}-structure-${itemIndex + 1}`,
         title: atom.title,
@@ -217,25 +402,40 @@ export function createModelDirectorProvider({
       reviewerModel: reviewer.identity ?? "unknown",
     },
     async contentDirector(input) {
+      const structuralGuides = buildStructuralCueGuides(input.rawMarkdown);
       const structuralHints = await readStructuralCues(input.rawMarkdown, structureModel);
+      const deterministicHints = structuralGuides
+        .filter((guide) => guide.fixedAtoms?.length)
+        .map((guide) => ({ ...guide, atoms: guide.fixedAtoms }));
+      const effectiveStructuralHints = [
+        ...deterministicHints,
+        ...structuralHints.filter((hint) => !deterministicHints.some((fixed) => fixed.cueId === hint.cueId)),
+      ];
       const contentOutput = await content.generateJson({
         role: "PPagenT 内容导演",
-        task: "在整套尺度决定叙事弧、页数、页序、每页职责、拆分和轻重；输出 deckPlan 与 pageContents。narrativeArc 是供目录页使用的 3 到 5 个简短章节名，不是逐页摘要。原稿的 Markdown 二级标题默认是一页内容单元；同一节中的反问、引文或总结通常留在该页，不单独拆成过渡页，除非该节容量确实必须拆分。structuralHints 是程序检测高置信结构线索后由独立解析器形成的覆盖结果：对应页面必须逐项使用其 atoms 作为主 items，保持 relation，不得用段落总括、背景、换一种说法或结论替换，也不得额外添加辅助信息为同级 item；允许忠实压缩措辞。items 只表示页面主关系中的同级节点；某一节点内部的说明维度、例子、判断项或枚举必须进入该 item.points，不得提升为新的同级 item。没有 structuralHints 的页面再按原稿关系自行判断。原稿存在人物或组织层级时，用 structuredData.type=hierarchy 保存真实父子关系；部门负责人节点可用 groupLabel 保存部门名，只有原稿明确提供图片路径时才填写 portrait，没有图片保持为空。原稿明确同时给出输入对象、逐级收窄节点和 2–3 个宏观阶段时，用 structuredData.type=convergence 保存 inputs 与 phases，phases.stepIds 只能引用 items 中的真实转化节点；只有输入和逐级转化、没有明确阶段时不要编造 phases。原稿明确给出 2–4 组一一对应的问题与方案，并给出一个共同结果时，用 structuredData.type=problem-solution 保存 pairs 与 outcome；items 使用相同 pair id 镜像 problem.title/body 供页面覆盖校验，不得把方案或结果伪装成同级 item。原稿明确给出两个判断维度、四类象限含义和每个对象的象限归属时，用 structuredData.type=matrix 保存 axes 与固定四个 quadrants；每个象限 itemIds 只能引用 1–3 个 items，对象必须且只能归入一个象限；items 镜像对象标题且 body 留空，四块说明与指标进入 quadrants[].detail，不得凭空补轴名、象限或指标。页面标题或核心结论明确表达 A 与 B、A 比 B、两种标准或二选一时，items 必须恰好是 A 和 B 双方，背景、使用场景和结论不能取代双方。除此以外不要按段落机械拆项，允许只有一个主要观点。结构性枚举、步骤或对比双方的每项标题不超过 10 个汉字、body 尽量压缩到 15 至 30 个汉字；正文与 points 不得重复同一事实。多项页面的标题、正文和 points 合计必须控制在正式字号可承载范围；previousReview 若含 CONTENT_CAPACITY_EXCEEDED，必须删去重复细节、压缩每项或按叙事职责拆页，不能原样返回，也不能靠缩小字号解决；若含 SECTION_COVERAGE_FAILED，必须补回指定 Markdown 二级章节。不得为了套资产改变语义。",
+        task: "在整套尺度决定叙事弧、页数、页序、每页职责、拆分、轻重，并为每个正文页选择一个 Logic；输出 deckPlan 与 pageContents。availableLogicSkills 是允许选择的 Logic 目录：PageContent.logicIntent.logicId 必须从中逐字选择，reason 简要说明原稿关系为何属于该 Logic。structuralGuides 是程序直接从原稿句法识别出的高置信结构证据，不是资产推荐：对应章节必须保持 guide.relation，并按 guide.itemRange 提取主 items；guide.task 说明节点边界，fixedAtoms 若存在则必须逐项使用。不得用一句总括、背景或结论替换 structuralGuides 已证实存在的多个对象。内容导演只选 Logic，不读取也不选择 assetId、Structure Group、容器、坐标或图标；这些属于视觉导演。没有 structuralGuides 且没有明确可视化关系，或现有 Logic 都不忠实时，才选择 editorial，绝不为套结构图篡改原稿。narrativeArc 是供目录页使用的 3 到 5 个简短章节名，不是逐页摘要。原稿的 Markdown 二级标题默认是一页内容单元；同一节中的反问、引文或总结通常留在该页，不单独拆成过渡页，除非该节容量确实必须拆分。先识别听众必须区分的全部对象，再压缩字句；醒目的引文、结论或标题通常是页面主张，不能替代支撑它的三至六个对象。structuralHints 是可选结构读取器形成的精确 atoms 覆盖结果：对应页面必须逐项使用 atoms 作为主 items 并保持 relation，允许忠实压缩，但不得用总括、背景或结论替换。items 只表示主关系中的同级节点；节点内部的说明维度、例子和枚举进入 points，不得提升为同级节点。没有 structuralGuides 的页面再按原稿关系判断。冒号、分号、项目符号或‘包括／分别／一是二是’明确列出三至六个同级机制、抓手、标准、结果或场景时，必须保留为三至六个 items；不要把它们塞进一个总括 item 的 points。只有这些条目都在解释同一个更小主节点时才放入 points。两个极端衬托中间主体时，必须保留左端、中间主体和右端；描述 A 进入或支撑 B、B 再服务 C 时，中介节点 B 不能被压掉。存在人物或组织层级时，用 structuredData.type=hierarchy 保存真实父子关系；只有原稿明确提供图片路径时才填写 portrait。明确同时给出输入对象、逐级收窄节点和 2–3 个宏观阶段时，才用 structuredData.type=convergence；没有阶段不得编造。明确给出 2–4 组问题与方案及共同结果时，用 structuredData.type=problem-solution；明确给出两个判断维度和四个象限时，用 structuredData.type=matrix，均不得凭空补字段。标题或核心结论明确比较 A 与 B 时，items 必须恰好是双方；若来源提供共同维度，应为两侧提取数量一致的 3–5 条 points。除此以外不要按段落机械拆项，允许只有一个主要观点。结构性项目标题不超过 10 个汉字，body 尽量 15–30 个汉字；正文与 points 不重复。多项页面必须控制在正式字号可承载范围；收到容量反馈时压缩或拆页，不得缩字。不得为了套资产改变语义。",
         context: {
           executionGuidelines: guidelines.content ?? "",
-          structuralHints,
+          availableLogicSkills: guidelines.logicSkillIndex ?? [],
+          structuralGuides,
+          structuralHints: effectiveStructuralHints,
           ...sourceRule(input.rawMarkdown),
           attempt: input.attempt,
           previous: input.previous,
           previousReview: input.previousReview,
           visualFeedback: input.visualFeedback,
         },
-        outputSchema: contentSchemaWithSectionFloor(outputs.contentDirector, input.rawMarkdown),
+        outputSchema: contentSchemaWithSectionFloor(
+          outputs.contentDirector,
+          input.rawMarkdown,
+          guidelines.logicSkillIndex,
+        ),
       });
-      return applyStructuralHints(
-        enforceSectionPageContract(contentOutput, input.rawMarkdown, structuralHints),
-        structuralHints,
+      const normalized = applyStructuralHints(
+        enforceSectionPageContract(contentOutput, input.rawMarkdown, effectiveStructuralHints),
+        effectiveStructuralHints,
       );
+      return assertStructuralCueCompliance(normalized, structuralGuides);
     },
     refineContent(input) {
       return refinement.generateJson({
@@ -262,44 +462,26 @@ export function createModelDirectorProvider({
       });
     },
     async visualDirector(input) {
-      if (input.phase === "intent") {
-        const intentOutput = await visualIntent.generateJson({
-          role: "PPagenT 视觉导演",
-          task: "只判断每页表达目的和语义关系，输出 pageIntents；此阶段不得选择资产。purposeKey 必须逐字选自 allowedPurposeVocabulary 中的 key，不得自创新值。PageContent.notes 含 PPagenT主关系=parallel|sequence 等程序高置信标记时，baseRelation 必须使用该值；structuredData.type=problem-solution 时使用 composite 和 connect_problems_and_solutions；structuredData.type=matrix 时使用 matrix 和 organize_matrix。多个动作构成先理解、再决定、后执行之类的先后链路时使用 sequence，不能仅因它们属于不同职责就写成 layered；同级判断类别即使会在工作中依次发生也仍是 parallel。只有内容明确表达输入对象经过连续筛选、收窄或转化时使用 convergence；普通步骤仍使用 sequence。目标用户与非目标用户的角色差异不是优劣比较，除非双方在同一评价维度形成明确取舍，否则不得写 comparison。comparison 的组数和组内条目数由程序补齐，不要猜资产私有字段。",
-          context: {
-            executionGuidelines: guidelines.visual ?? "",
-            allowedPurposeVocabulary: (guidelines.purposeVocabulary ?? []).filter(
-              (item) => !new Set(["present_cover", "present_agenda", "present_closing"]).has(item.key),
-            ),
-            attempt: input.attempt, skinId: input.skinId, deckPlan: input.deckPlan, pageContents: input.pageContents,
-            previousResolution: input.previousResolution,
-          },
-          outputSchema: visualIntentSchemaWithPurposeVocabulary(
-            outputs.visualIntent,
-            guidelines.purposeVocabulary,
-          ),
-        });
-        return enforceStructuralIntentRelations(intentOutput, input.pageContents);
-      }
-      return visualComposition.generateJson({
+      if (input.phase === "intent") throw new Error("正式流程已取消视觉意图模型调用；Logic 由内容导演负责");
+      const compactPages = compactVisualSkillContext(
+        input.pageContents,
+        input.pageIntents,
+        input.candidateSets,
+      );
+      const routingOutput = await visualComposition.generateJson({
         role: "PPagenT 视觉导演",
-        task: "先为每页从 candidateSets 中选择合法的整页 composition，再选择 familyId/variantId；compositionId、familyId、variantId、silhouette 都必须逐字复制同一个候选。候选的 contentContract 是 Logic 自己声明的内容接口：items 是主节点，points 是内容导演提供的节点内分点；视觉导演不得把 points 提升为同级节点。候选的 slotContract 只说明父 Structure Group 在 State 求解后可提供真实 Content Slots，不是当前 Composition 槽位，也不授权自创子结构；当前输出 Schema 没有受控子候选和 Slot 绑定字段，因此必须使用资产的 plain-text 兜底，不得输出子 Logic、Slot ID 或嵌套结构。若候选 mediaContract.mode=semantic-icon，通常按候选声明的媒体来源输出 iconQueries：普通 per-item 图标以 componentItemId 为 sourceItemId；source=structuredData.inputs 时以 PageContent.structuredData.inputs[].id 为 sourceItemId。required=false 时图标查询可省略，程序会在同一个圆形标记槽内使用输入短标签回退；不得同时显示圆内图标和圆外重复标签。视觉导演不看图标、不列候选、也不得输出 iconKey；本地程序会从 Tabler 元数据中模糊匹配唯一 Top 1。其他候选不得输出 iconQueries。若 contentContract.bindings 非空，视觉导演必须在该页 componentBindings 中按声明完成视觉内容适配：bindingId 必须来自候选，per-component-item 表示每个 componentItemId 各输出一组；entries 数量、单条字数和跨组平衡必须满足契约，preferredItems 是来源内容允许时的优先数量。每条 entry.text 是观众可见的精炼短句，entry.sourceFragment 必须逐字摘自该页 sourceText 或对应内容项，作为不可见依据；禁止增加来源没有的事实，也禁止把整段正文作为一个长条目。没有 bindings 声明时不得自行输出 componentBindings。如果候选中存在 fallbackBody=false、且语义关系、主节点数量和文字容量均适配的结构组件，默认选择该结构组件；只有结构不能真实澄清关系、需要原稿没有的媒体、或容量不成立时才选择 fallbackBody=true 的简单排版，reason 必须具体写出不适配原因，不能仅以低密度、文字较少或编辑页也能容纳为由放弃结构。sequence 若表达任务、职责交接或操作步骤且没有日期、阶段年份或里程碑证据，优先选择 sequential-process；timeline-roadmap 只用于明确的时间进程、历史演进或里程碑。textSlots 只能使用该候选 compositions 中所选 composition 声明的 role=text 槽位 id，并且每个文字槽位恰好填写一次；role=component 或 role=image 的槽位不得写入 textSlots。每个内容项的非空 title 和 body 都必须分别被承载：full 同时承载两者，title 或 body 只承载对应字段，必要时同一内容项可分别进入两个槽位。componentContentMode=full 表示组件负责该内容项以及契约化适配结果；titles-only 只有在每个被省略的正文与 points 同时进入合法文字槽时才允许，不能把‘组件能够显示正文’臆测成 tooltip。若 previousResolution.feedback 非空，必须逐项修正其中指出的非法选择、内容遗漏或节奏重复，并优先使用反馈给出的 legalAlternatives。明确内容进入组件还是文字槽位，并在整套尺度控制轮廓、图文比例与节奏。不得自创结构、版式、bindingId、槽位或伪造 ID；输出 VisualPlan 与 CompositionPlan。",
+        task: "内容导演已经为每页确定 Logic，你不得重新分类或跨 Logic 选择。像调用 Skills 一样，只在该页合法候选中选择具体 Structure Group，并决定核心短标签、语义图标查询和必要的局部内容细化。candidateId 必须逐字复制该页 candidates 中的值。存在 fallbackBody=false 且项数和容量适配的候选时优先使用；只有确实无法表达时才选 fallback。centerLabel 是页面核心概念的 2–8 字中文短标签，所有页面都填写；若结构没有中心标签槽，程序会忽略。若选中 mediaMode=semantic-icon 的候选，必须为每个 item 输出一个简短英文 icon query，sourceItemId 使用该 item.id；其他候选 iconQueries=[]。若 contentReadiness=needs-semantic-refinement，只在原文明确支持缺失分点时列出对应 refinementItemIds，否则改选 fallback。不要输出坐标、CompositionPlan 或重复正文；程序会在选择后读取 Structure Group 表单并完成确定性绑定。按 pages 原顺序逐页输出且不得遗漏。",
         context: {
-          executionGuidelines: guidelines.visual ?? "",
-          semanticRefinementAllowed: input.semanticRefinementAllowed === true,
-          semanticRefinementGuidance: "仅当所选候选允许 points，且 sourceText 明确含有属于某个主节点、但 PageContent 尚未提取的二级枚举时，才输出 semanticRefinementRequests。请求必须引用所选候选的 familyId/variantId 和缺失 points 的 itemIds；不得为丰富画面请求细节，不得请求 adaptationOwner=visual-director 的绑定型候选。即使发出请求，也必须照常输出完整 VisualPlan 与 CompositionPlan。",
-          slotPlanningGuidance: "候选的 slotCapabilities 是正式排版合同。选择 HTML Structure Group 后，必须按其中 textSlots 的 role、maxChars、maxLines，为每个被组件承载的来源字段输出 CompositionPlan.componentText；sourceFragment 逐字引用对应来源字段，text 是实际进入 PPT 的精炼文字。item-body 默认是一个完整的流式正文容器：普通段落直接写入，来源确有 points 时只在同一文本框内换行或使用项目符号，不得把 points 当成预设数量的几何小槽。只有候选明确声明 pointRendering=separate-slots 时才允许逐点绑定独立槽。item-title 默认可选，来源没有标题时保持为空，不得编造“步骤1”等占位文字。不得超过容量，不能靠缩字。存在必填 mediaSlots.icon 时还必须输出对应 iconQueries；若无法忠实压缩到容量内，应改选其他 Structure Group、正文 Composition 或拆页，不能硬塞。",
-          attempt: input.attempt,
-          skinId: input.skinId,
-          deckPlan: input.deckPlan,
-          pageContents: input.pageContents,
-          pageIntents: input.pageIntents,
-          candidateSets: input.candidateSets,
-          previousResolution: input.previousResolution,
-          previousReview: input.previousReview,
+          pages: compactPages,
+          previousFeedback: input.previousResolution?.feedback ?? [],
         },
-        outputSchema: outputs.visualComposition,
+        outputSchema: visualSkillRoutingSchema(input.pageContents, input.candidateSets),
       });
+      return normalizeVisualCompositionOutput(
+        expandVisualSkillRouting(routingOutput, input),
+        input,
+      );
+
     },
     visualReview(input) {
       return reviewer.generateJson({
