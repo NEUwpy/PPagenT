@@ -630,7 +630,7 @@
         if (!Number.isFinite(designSize) || !Number.isFinite(pointScale)) return '<li>' + esc(label) + '：<code>未读取</code></li>';
         const pointSize = Math.round(designSize * pointScale * 100) / 100;
         return '<li>' + esc(label) + '：<code>' + esc(pointSize) + ' pt</code></li>';
-      }).join('') + '</ul></div><div><b>执行规则</b><ul><li>组件只能引用字号角色，不能按 State 自行缩小</li><li>文字超量时压缩、拆页、换组或拒绝</li><li>Native 文本框使用 noAutofit，不自动缩字</li></ul></div></div>';
+      }).join('') + '</ul></div><div><b>执行规则</b><ul><li>组件只引用 Skin 字号角色，不按 State 发明字号</li><li>编译器按固定容器选择能完整容纳的最大规范档位</li><li>15 pt 仍放不下时调整容器、压缩、拆页、换组或拒绝</li></ul></div></div>';
       let componentMedia = htmlRoute
         ? '<div class="review-media component"><span>此资产尚未迁移为专属 HTML 组件</span></div>'
         : '<div class="review-media component"><span>当前使用原有组件代码</span></div>';

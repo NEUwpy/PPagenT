@@ -106,7 +106,7 @@
       { "field": "steps[].geometry", "meaning": "由层级数计算的漏斗曲面几何" },
       { "field": "flowArrow.geometry", "meaning": "由同一漏斗宽度函数生成的随形箭头" }
     ],
-    "fixed": ["没有宏观阶段和阶段行动字段", "字号角色由 Skin 提供，组件不得按数量缩字"],
+    "fixed": ["没有宏观阶段和阶段行动字段", "字号角色由 Skin 提供；组件不得按数量改字号，编译器只可按固定容器离散降级"],
     "unavailable": ["宏观阶段说明", "阶段行动清单", "结果说明", "分支路径"]
   },
   "spatialContract": {
@@ -122,7 +122,7 @@
       "6": { "width": 1120, "height": 470, "basis": "component-root-visible-bounds" }
     },
     "resizeMode": "natural",
-    "minFontSize": 17,
+    "minFontSize": 15,
     "safePadding": 10,
     "supportedCompositionIds": ["component-full"]
   },

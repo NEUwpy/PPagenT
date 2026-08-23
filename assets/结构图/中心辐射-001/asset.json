@@ -127,7 +127,7 @@
     ],
     "fixed": [
       "中心必须明显强于外围，外围节点彼此等权",
-      "字号角色由 Skin 提供，组件不得按项目数缩字"
+      "字号角色由 Skin 提供；组件不得按项目数改字号，编译器只可按固定容器离散降级"
     ],
     "unavailable": ["照片", "外围分组", "方向箭头", "外围之间的连线"]
   },
@@ -146,7 +146,7 @@
       "8": { "width": 1140, "height": 470, "basis": "component-root-visible-bounds" }
     },
     "resizeMode": "natural",
-    "minFontSize": 19,
+    "minFontSize": 15,
     "safePadding": 12,
     "supportedCompositionIds": ["component-full"]
   },

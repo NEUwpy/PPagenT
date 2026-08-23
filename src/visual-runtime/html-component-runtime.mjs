@@ -87,17 +87,108 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
       await document.fonts.ready;
       const root = document.querySelector("[data-ppt-root]");
       if (!root) throw new Error("HTML Component 缺少 data-ppt-root");
-      // Fixed-height, centered, single-line labels are a shared presentation primitive.
-      // CSS line-height is not a reliable optical-centering mechanism and maps poorly to
-      // PowerPoint paragraph spacing, so normalize it once for every HTML asset.
-      for (const element of root.querySelectorAll('[data-ppt-kind="text"]')) {
-        if (element instanceof SVGTextElement) continue;
+      const number = (value) => Number.parseFloat(value) || 0;
+      const standardizedFontSizesPt = [...new Set(Object.values(typographyContract)
+        .map(Number)
+        .filter((value) => Number.isFinite(value) && value >= 15))]
+        .sort((left, right) => right - left);
+      const innerSize = (element) => {
         const style = getComputedStyle(element);
+        const box = element.getBoundingClientRect();
+        return {
+          width: Math.max(0, box.width - number(style.paddingLeft) - number(style.paddingRight) - number(style.borderLeftWidth) - number(style.borderRightWidth)),
+          height: Math.max(0, box.height - number(style.paddingTop) - number(style.paddingBottom) - number(style.borderTopWidth) - number(style.borderBottomWidth)),
+        };
+      };
+      const renderedLineCount = (element) => {
+        const range = document.createRange();
+        range.selectNodeContents(element);
+        const tops = [...range.getClientRects()]
+          .filter((rect) => rect.width > 0.1 && rect.height > 0.1)
+          .map((rect) => Math.round(rect.top * 2) / 2);
+        return new Set(tops).size || 1;
+      };
+      const textFits = (element, fontSizePt, singleLine) => {
+        const source = element.textContent.replace(/\r/g, "").trim();
+        if (!source) return true;
+        const available = innerSize(element);
+        const sourceStyle = getComputedStyle(element);
+        if (singleLine) {
+          const fontSizePx = fontSizePt / 0.75;
+          const canvas = document.createElement("canvas");
+          const context = canvas.getContext("2d");
+          context.font = `${sourceStyle.fontStyle} ${sourceStyle.fontWeight} ${fontSizePx}px ${sourceStyle.fontFamily}`;
+          const letterSpacing = sourceStyle.letterSpacing === "normal" ? 0 : number(sourceStyle.letterSpacing);
+          const requiredWidth = Math.max(...source.split("\n").map((line) => (
+            context.measureText(line).width + Math.max(0, [...line].length - 1) * letterSpacing
+          )));
+          return requiredWidth <= available.width + 1 && fontSizePx <= available.height + 1;
+        }
+        const clone = element.cloneNode(true);
+        clone.removeAttribute("id");
+        clone.style.position = "fixed";
+        clone.style.left = "-10000px";
+        clone.style.top = "0";
+        clone.style.width = `${element.getBoundingClientRect().width}px`;
+        clone.style.height = "auto";
+        clone.style.minHeight = "0";
+        clone.style.maxHeight = "none";
+        clone.style.overflow = "visible";
+        clone.style.transform = "none";
+        clone.style.fontSize = `${fontSizePt}pt`;
+        clone.style.webkitLineClamp = "unset";
+        clone.style.whiteSpace = singleLine ? "nowrap" : sourceStyle.whiteSpace;
+        document.body.appendChild(clone);
+        const cloneStyle = getComputedStyle(clone);
+        const lineHeight = number(cloneStyle.lineHeight) || number(cloneStyle.fontSize) * 1.2;
+        const lines = renderedLineCount(clone);
+        const requiredHeight = Math.max(lineHeight * lines, clone.scrollHeight);
+        clone.remove();
+        const declaredMaxLines = Number(element.dataset.slotMaxLines);
+        const maxLines = Number.isFinite(declaredMaxLines) && declaredMaxLines > 0
+          ? declaredMaxLines
+          : Math.max(1, Math.floor((available.height + 0.5) / lineHeight));
+        return lines <= maxLines && requiredHeight <= available.height + 1;
+      };
+      // The HTML layout is the source of truth. Before extracting it, choose the
+      // largest approved font tier that actually fits each fixed text container.
+      // This is discrete fitting (25→23→21→19→17→15), never arbitrary shrinking.
+      for (const element of root.querySelectorAll('[data-ppt-kind="text"],[data-ppt-kind="shape-text"]')) {
+        if (element instanceof SVGTextElement) continue;
+        let style = getComputedStyle(element);
+        const source = element.textContent.replace(/\r/g, "");
+        const currentFontSizePt = number(style.fontSize) * 0.75;
+        const verticalText = style.writingMode !== "horizontal-tb";
+        const explicitSingleLine = element.dataset.slotTextMode === "single-line" || ["nowrap", "pre"].includes(style.whiteSpace);
+        const singleLine = !verticalText && !source.includes("\n") && (explicitSingleLine || renderedLineCount(element) === 1);
+        const candidates = standardizedFontSizesPt.filter((size) => size <= currentFontSizePt + 0.05);
+        const originalFontSizePt = currentFontSizePt;
+        let selectedFontSizePt = currentFontSizePt;
+        let fits = textFits(element, currentFontSizePt, singleLine);
+        if (!fits) {
+          for (const candidate of candidates) {
+            if (!textFits(element, candidate, singleLine)) continue;
+            selectedFontSizePt = candidate;
+            fits = true;
+            break;
+          }
+          if (selectedFontSizePt !== currentFontSizePt) {
+            element.style.fontSize = `${selectedFontSizePt}pt`;
+            style = getComputedStyle(element);
+          }
+        }
+        if (!fits) {
+          const domFits = element.scrollWidth <= element.clientWidth + 1 && element.scrollHeight <= element.clientHeight + 1;
+          if (domFits) fits = true;
+        }
+        element.dataset.pptResolvedWrap = singleLine ? "none" : "square";
+        element.dataset.pptFontFit = fits ? (selectedFontSizePt < originalFontSizePt - 0.05 ? "reduced" : "unchanged") : "overflow";
+        element.dataset.pptOriginalFontSizePt = String(Math.round(originalFontSizePt * 1000) / 1000);
+        element.dataset.pptResolvedFontSizePt = String(Math.round(selectedFontSizePt * 1000) / 1000);
         const fontSize = Number.parseFloat(style.fontSize);
         const height = element.getBoundingClientRect().height;
         const lineHeight = Number.parseFloat(style.lineHeight);
         const legacyCenteredLineBox = Number.isFinite(lineHeight) && lineHeight >= height * 0.85;
-        const singleLine = !element.textContent.replace(/\r/g, "").includes("\n");
         const wantsMiddle = !element.dataset.pptValign || element.dataset.pptValign === "middle";
         if (singleLine && legacyCenteredLineBox && wantsMiddle && style.textAlign === "center" && height >= fontSize * 1.35) {
           element.dataset.pptTextLayout = "single-line-center";
@@ -269,6 +360,10 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
       const textStyle = (element, style, opacity) => {
         const singleLineCenter = element.dataset.pptTextLayout === "single-line-center";
         const fontSize = rounded(parseFloat(style.fontSize));
+        const centeredByLayout = (
+          (["grid", "inline-grid"].includes(style.display) && [style.justifyItems, style.placeItems].some((value) => value?.includes("center")))
+          || (["flex", "inline-flex"].includes(style.display) && style.justifyContent === "center")
+        );
         const inferredVerticalAlignment = (() => {
           if (element.dataset.pptValign) return element.dataset.pptValign;
           if (["flex", "inline-flex", "grid", "inline-grid"].includes(style.display)) {
@@ -284,8 +379,11 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
           bold: Number(style.fontWeight) >= 600 || style.fontWeight === "bold",
           italic: style.fontStyle === "italic",
           color: color(element instanceof SVGElement ? style.fill : style.color, opacity, element, "color"),
-          alignment: style.textAnchor === "middle" || style.textAlign === "center" ? "center" : style.textAnchor === "end" || style.textAlign === "right" ? "right" : "left",
+          alignment: style.textAnchor === "middle" || style.textAlign === "center" || centeredByLayout ? "center" : style.textAnchor === "end" || style.textAlign === "right" ? "right" : "left",
           verticalAlignment: inferredVerticalAlignment,
+          wrap: element.dataset.pptResolvedWrap || (["nowrap", "pre"].includes(style.whiteSpace) ? "none" : "square"),
+          fontFit: element.dataset.pptFontFit || "unchanged",
+          originalFontSizePt: Number(element.dataset.pptOriginalFontSizePt || rounded(fontSize * 0.75)),
           lineSpacing: singleLineCenter
             ? 1
             : rounded((Number.parseFloat(style.lineHeight) || Number.parseFloat(style.fontSize)) / Number.parseFloat(style.fontSize)),
@@ -507,6 +605,38 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
           !(Number.isFinite(declaredMaxLines) && declaredMaxLines > geometricMaxLines)
           && !(Number.isFinite(declaredMaxChars) && declaredMaxChars > maxCharsWithinEffectiveLines)
         );
+        const sampleText = typographyElement?.textContent?.replace(/\s+/g, " ").trim() ?? "";
+        const sampleLayout = (() => {
+          if (!sampleText || typographyElement instanceof SVGTextElement) {
+            return { lineCount: 1, scrollWidth: innerWidth, scrollHeight: lineHeightPx };
+          }
+          const clone = typographyElement.cloneNode(true);
+          clone.removeAttribute("id");
+          clone.style.position = "fixed";
+          clone.style.left = "-10000px";
+          clone.style.top = "0";
+          clone.style.width = `${innerWidth}px`;
+          clone.style.height = "auto";
+          clone.style.maxHeight = "none";
+          clone.style.overflow = "visible";
+          clone.style.whiteSpace = style.whiteSpace;
+          clone.style.webkitLineClamp = "unset";
+          document.body.appendChild(clone);
+          const cloneStyle = getComputedStyle(clone);
+          const cloneLineHeight = number(cloneStyle.lineHeight) || lineHeightPx;
+          const result = {
+            lineCount: Math.max(1, Math.round(clone.scrollHeight / cloneLineHeight)),
+            scrollWidth: clone.scrollWidth,
+            scrollHeight: clone.scrollHeight,
+          };
+          clone.remove();
+          return result;
+        })();
+        const sampleLineCount = sampleLayout.lineCount;
+        const sampleOverflowsWidth = Boolean(sampleText) && singleLine && sampleLayout.scrollWidth > innerWidth + 1;
+        const sampleOverflowsHeight = Boolean(sampleText) && sampleLineCount > geometricMaxLines;
+        const sampleUnexpectedWrap = textMode === "single-line" && sampleLineCount > 1;
+        const sampleFits = !sampleOverflowsWidth && !sampleOverflowsHeight && !sampleUnexpectedWrap;
         const typographyRole = Object.entries(typographyContract)
           .find(([, size]) => Math.abs(Number(size) - fontSizePt) < 0.05)?.[0] ?? "custom";
         return {
@@ -532,6 +662,12 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
             geometricMaxLines,
             geometricMaxChars,
             declarationFits,
+            sampleTextChars: [...sampleText].length,
+            sampleLineCount,
+            sampleOverflowsWidth,
+            sampleOverflowsHeight,
+            sampleUnexpectedWrap,
+            sampleFits,
             ...(Number.isFinite(declaredMaxChars) && declaredMaxChars > 0 ? { declaredMaxChars } : {}),
             ...(Number.isFinite(declaredMaxLines) && declaredMaxLines > 0 ? { declaredMaxLines } : {}),
           },
@@ -623,6 +759,9 @@ function applyText(shape, node, scale) {
     autoFit: "none",
     insets: { top: 0, right: 0, bottom: 0, left: 0 },
   };
+  // HTML 明确禁止换行的标题、标签和短能力项，在 PowerPoint 中也必须禁止
+  // 自动折行；否则浏览器黄金状态是一行，最终 PPT/看板缩略图却会变成两行。
+  shape.text.wrap = node.style.wrap;
 }
 
 export function compileResolvedVisualTree(slide, tree, targetFrame = tree.targetFrame) {

@@ -150,7 +150,7 @@
       "输入、阶段摘要、漏斗和阶段内容容器始终同步存在",
       "所有漏斗层和阶段带共享纵向映射",
       "一级结构只规定阶段内容容器的边界，不规定其中必须有几条标签",
-      "字号角色由 Skin 提供，组件不得按数量缩字"
+      "字号角色由 Skin 提供；组件不得按数量改字号，编译器只可按固定容器离散降级"
     ],
     "unavailable": ["长正文", "无阶段说明的装饰漏斗", "分支路径"]
   },
@@ -167,7 +167,7 @@
       "6": { "width": 1170, "height": 482, "basis": "component-root-visible-bounds" }
     },
     "resizeMode": "natural",
-    "minFontSize": 17,
+    "minFontSize": 15,
     "safePadding": 8,
     "supportedCompositionIds": ["component-full"]
   },

@@ -31,11 +31,12 @@ body { color: #46566a; background: transparent; font-family: var(--ppagent-font-
 .funnel-action-copy h4, .funnel-action-copy p { margin: 0; overflow: hidden; }
 .funnel-action-copy h4 { height: 24px; color: #2f5ea8; font-size: var(--ppagent-component-meta-size, 17pt); font-weight: 700; line-height: 24px; white-space: nowrap; }
 .funnel-action-copy p { max-height: 42px; color: #46566a; font-size: var(--ppagent-component-meta-size, 17pt); line-height: 1.24; }
-.funnel-no-input-content { position: absolute; left: 665px; right: 42px; top: var(--top); z-index: 3; display: grid; grid-template-columns: 94px minmax(0,1fr); align-items: center; height: var(--height); overflow: hidden; }
-.funnel-no-input-content::before { content: ""; position: absolute; left: -145px; top: 50%; width: 118px; height: 1px; background: linear-gradient(90deg, rgba(120,168,213,.08), rgba(120,168,213,.75)); }
+.funnel-no-input-content { position: absolute; left: 665px; right: 42px; top: var(--top); z-index: 3; display: grid; grid-template-columns: 94px minmax(0,1fr); align-items: center; height: var(--height); overflow: visible; }
+.funnel-no-input-guide { position: absolute; left: -145px; top: 50%; width: 118px; height: 1px; background: linear-gradient(90deg, rgba(120,168,213,.08), rgba(120,168,213,.75)); }
 .funnel-no-input-index { color: rgba(47,94,168,.18); font-size: 64px; font-weight: 800; line-height: 1; letter-spacing: -.08em; }
-.funnel-no-input-copy { min-width: 0; padding-left: 12px; border-left: 3px solid var(--color); }
+.funnel-no-input-divider { position: absolute; left: 94px; top: 15%; width: 3px; height: 70%; background: var(--color); }
+.funnel-no-input-copy { min-width: 0; padding-left: 12px; }
 .funnel-no-input-copy h3, .funnel-no-input-copy p { margin: 0; overflow: hidden; }
 .funnel-no-input-copy h3 { height: 34px; color: #2f5ea8; font-size: var(--ppagent-component-title-size, 26px); font-weight: 700; line-height: 34px; white-space: nowrap; }
 .funnel-no-input-copy p { max-height: 58px; color: #46566a; font-size: var(--ppagent-component-body-size, 19px); line-height: 1.42; }
-.funnel-review[data-step-count="6"] .funnel-step-title { font-size: var(--ppagent-component-label-size, 18pt); }
+.funnel-review[data-step-count="6"] .funnel-step-title { font-size: var(--ppagent-component-meta-size, 15pt); }

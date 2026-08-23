@@ -30,7 +30,7 @@ body { color: #405269; background: transparent; font-family: var(--ppagent-font-
 .spectrum-axis { position: absolute; left: 68px; right: 72px; top: 399px; height: 3px; border-radius: 2px; background: #8fb3df; }
 .spectrum-axis-arrow { position: absolute; right: 55px; top: 392px; width: 18px; height: 17px; overflow: visible; }
 .spectrum-axis-arrow path { fill: none; stroke: #8fb3df; stroke-width: 3px; stroke-linecap: round; stroke-linejoin: round; }
-.spectrum-axis-low, .spectrum-axis-label, .spectrum-axis-high { position: absolute; top: 420px; height: 28px; color: #6f7d91; font-size: var(--ppagent-component-label-size, 18px); line-height: 28px; white-space: nowrap; }
+.spectrum-axis-low, .spectrum-axis-label, .spectrum-axis-high { position: absolute; top: 420px; height: 28px; color: #6f7d91; font-size: var(--ppagent-component-meta-size, 15pt); line-height: 28px; white-space: nowrap; }
 .spectrum-axis-low { left: 56px; width: 150px; text-align: left; }
 .spectrum-axis-label { left: 50%; width: 280px; color: #405269; font-weight: 700; text-align: center; transform: translateX(-50%); }
 .spectrum-axis-high { right: 56px; width: 150px; text-align: right; }

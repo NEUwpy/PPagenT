@@ -10,7 +10,7 @@ body { color: #405269; background: transparent; font-family: var(--ppagent-font-
 .hub-center-core { z-index: 3; width: 222px; height: 222px; border: 0; background: #2f5ea8; box-shadow: 0 12px 28px rgba(47, 94, 168, .22); }
 .hub-center-title, .hub-center-body { position: absolute; left: 50%; z-index: 4; width: 180px; margin: 0; overflow: hidden; color: #fff; text-align: center; transform: translateX(-50%); }
 .hub-center-title { top: calc(50% - 38px); height: 36px; font-size: var(--ppagent-component-item-title-size, 21px); font-weight: 700; line-height: 36px; white-space: nowrap; }
-.hub-center-body { top: calc(50% + 4px); height: 52px; font-size: var(--ppagent-component-body-size, 19px); font-weight: 400; line-height: 1.36; white-space: normal; }
+.hub-center-body { top: calc(50% + 4px); width: 198px; height: 56px; font-size: var(--ppagent-component-body-size, 17pt); font-weight: 400; line-height: 1.28; white-space: normal; text-wrap: balance; }
 .hub-review[data-odd="true"] .hub-orbit, .hub-review[data-odd="true"] .hub-center-halo, .hub-review[data-odd="true"] .hub-center-ring, .hub-review[data-odd="true"] .hub-center-core { top: 59%; }
 .hub-review[data-odd="true"] .hub-center-title { top: calc(59% - 38px); }
 .hub-review[data-odd="true"] .hub-center-body { top: calc(59% + 4px); }
@@ -35,7 +35,7 @@ body { color: #405269; background: transparent; font-family: var(--ppagent-font-
 .hub-icon-fallback { display: block; width: 12px; height: 12px; border: 2px solid #fff; border-radius: 50%; background: transparent; }
 .hub-item-title, .hub-item-body { position: absolute; z-index: 6; margin: 0; overflow: hidden; }
 .hub-item-title { top: 10px; height: 27px; color: #254b7c; font-size: var(--ppagent-component-item-title-size, 21px); font-weight: 700; line-height: 27px; white-space: nowrap; }
-.hub-item-body { top: 40px; height: 39px; color: #46566a; font-size: var(--ppagent-component-body-size, 19px); font-weight: 400; line-height: 1.08; white-space: normal; }
+.hub-item-body { top: 40px; height: 42px; color: #46566a; font-size: var(--ppagent-component-label-size, 17pt); font-weight: 400; line-height: 1.16; white-space: normal; }
 .hub-item-left .hub-item-title, .hub-item-left .hub-item-body { left: 94px; right: 18px; text-align: left; }
 .hub-item-right .hub-item-title, .hub-item-right .hub-item-body { left: 18px; right: 94px; text-align: right; }
 .hub-item-top .hub-item-title, .hub-item-top .hub-item-body { left: 100px; right: 18px; text-align: left; }

@@ -11,11 +11,12 @@ export const northeasternUniversityTheme = Object.freeze({
   line: "#AFC6E8",
   font: "Microsoft YaHei",
   typography: Object.freeze({
-    componentHeading: 29,
-    componentTitle: 26,
+    componentHeading: 25,
+    componentTitle: 23,
     componentItemTitle: 21,
-    componentBody: 19,
-    componentLabel: 18,
-    componentMeta: 17,
+    componentLead: 19,
+    componentBody: 17,
+    componentLabel: 17,
+    componentMeta: 15,
   }),
 });

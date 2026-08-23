@@ -18,6 +18,19 @@ async function exists(filePath) {
   try { await fs.access(filePath); return true; } catch { return false; }
 }
 
+async function writeJson(filePath, value) {
+  const content = `${JSON.stringify(value)}\n`;
+  for (let attempt = 1; attempt <= 4; attempt += 1) {
+    try {
+      await fs.writeFile(filePath, content, "utf8");
+      return;
+    } catch (error) {
+      if (!['UNKNOWN', 'EBUSY', 'EPERM'].includes(error.code) || attempt === 4) throw error;
+      await new Promise((resolve) => setTimeout(resolve, attempt * 100));
+    }
+  }
+}
+
 async function manifests() {
   const result = [];
   for (const category of await fs.readdir(path.join(projectRoot, "assets"), { withFileTypes: true })) {
@@ -44,19 +57,20 @@ function controlApplies(control, selection) {
   ));
 }
 
-function expandControls(controls, index = 0, selection = {}) {
-  if (index >= controls.length) return [{ ...selection }];
-  const control = controls[index];
-  const values = controlApplies(control, selection)
-    ? (control.values ?? [])
-    : [control.default ?? control.values?.[0]];
-  return values.flatMap((value) => expandControls(controls, index + 1, { ...selection, [control.key]: value }));
-}
-
 function reviewSelections(review) {
   const controls = review.controls ?? [];
   const defaults = Object.fromEntries(controls.map((control) => [control.key, control.default ?? control.values?.[0]]));
-  const selections = expandControls(controls);
+  const selections = [{ ...defaults }];
+  for (const control of controls) {
+    const activation = Object.fromEntries(Object.entries(control.when ?? {}).map(([key, values]) => [key, values?.[0]]));
+    for (const value of control.values ?? []) {
+      const selection = { ...defaults, ...activation, [control.key]: value };
+      for (const candidate of controls) {
+        if (!controlApplies(candidate, selection)) selection[candidate.key] = candidate.default ?? candidate.values?.[0];
+      }
+      selections.push(selection);
+    }
+  }
   for (const selection of review.contractSelections ?? []) selections.push({ ...defaults, ...selection });
   return [...new Map(selections.map((selection) => [selectionKey(selection), selection])).values()];
 }
@@ -67,10 +81,41 @@ function stateIssues(slots, minimumFontSize) {
     const issues = [];
     if (slot.capacity?.reliable === false) issues.push("text-slot-needs-explicit-rectangular-container");
     if (slot.capacity?.declarationFits === false) issues.push("declared-capacity-exceeds-geometry");
+    if (slot.capacity?.sampleUnexpectedWrap === true) issues.push("unexpected-single-line-wrap");
+    if (slot.capacity?.sampleOverflowsWidth === true || slot.capacity?.sampleOverflowsHeight === true) issues.push("sample-text-overflow");
     if (slot.typography?.role === "custom") issues.push("custom-font-size");
     if (Number.isFinite(minimumFontSize) && slot.typography?.fontSizePt < minimumFontSize) issues.push("font-below-minimum");
     return issues.map((code) => ({ code, slotId: slot.id }));
   });
+}
+
+function compactSlot(slot) {
+  return {
+    id: slot.id,
+    role: slot.role,
+    field: slot.field,
+    itemId: slot.itemId,
+    contentType: slot.contentType,
+    required: slot.required,
+    textMode: slot.textMode,
+    listPolicy: slot.listPolicy,
+    frame: slot.frame,
+    capacity: slot.contentType === "text" ? {
+      charsPerLine: slot.capacity?.charsPerLine,
+      maxLines: slot.capacity?.maxLines,
+      maxChars: slot.capacity?.maxChars,
+      reliable: slot.capacity?.reliable,
+      declarationFits: slot.capacity?.declarationFits,
+      sampleFits: slot.capacity?.sampleFits,
+    } : {},
+    ...(slot.typography ? { typography: {
+      role: slot.typography.role,
+      fontSizePt: slot.typography.fontSizePt,
+      alignment: slot.typography.alignment,
+      lineHeightPt: slot.typography.lineHeightPt,
+    } } : {}),
+    ...(slot.media ? { media: slot.media } : {}),
+  };
 }
 
 const built = [];
@@ -108,21 +153,30 @@ try {
       for (const selection of reviewSelections(review)) {
         const parameters = resolver ? resolver(structuredClone(preview), selection) : structuredClone(preview);
         const tree = await resolveHtmlComponent({ component, parameters, assetDir, targetFrame, theme: northeasternUniversityTheme });
+        const slots = tree.slots.map(compactSlot);
         const issues = stateIssues(tree.slots, minimumFontSize);
-        const signature = JSON.stringify({ slots: tree.slots, issues });
+        const signature = JSON.stringify({ slots, issues });
         let variantId = variantBySlots.get(signature);
         if (!variantId) {
           variantId = `v${variants.length + 1}`;
           variantBySlots.set(signature, variantId);
-          variants.push({ id: variantId, slots: tree.slots, issues });
+          variants.push({ id: variantId, slots, issues });
         }
         states.push({ key: selectionKey(selection), selection, variantId });
       }
       const issueCount = variants.reduce((sum, variant) => sum + variant.issues.length, 0);
       const contract = {
-        schemaVersion: 1,
+        schemaVersion: 2,
         assetId: manifest.id,
         themeId: "northeastern-university-001",
+        sampling: "default-plus-one-control",
+        controls: (review.controls ?? []).map(({ key, label, values, default: defaultValue, when }) => ({
+          key,
+          label,
+          values,
+          default: defaultValue ?? values?.[0],
+          ...(when ? { when } : {}),
+        })),
         coordinateUnit: "design-px",
         typographyUnit: "ppt-pt",
         minimumFontSize,
@@ -130,11 +184,11 @@ try {
         states,
         variants,
       };
-      await fs.writeFile(contractPath, `${JSON.stringify(contract, null, 2)}\n`, "utf8");
+      await writeJson(contractPath, contract);
       built.push({ assetId: manifest.id, states: states.length, issueCount, status: contract.status });
     } catch (error) {
       const contract = {
-        schemaVersion: 1,
+        schemaVersion: 2,
         assetId: manifest.id,
         themeId: "northeastern-university-001",
         coordinateUnit: "design-px",
@@ -144,7 +198,7 @@ try {
         variants: [],
         error: String(error?.message ?? error).split("\n")[0],
       };
-      await fs.writeFile(contractPath, `${JSON.stringify(contract, null, 2)}\n`, "utf8");
+      await writeJson(contractPath, contract);
       built.push({ assetId: manifest.id, states: 0, issueCount: 1, status: contract.status });
     }
   }

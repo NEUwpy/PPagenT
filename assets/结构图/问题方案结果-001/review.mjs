@@ -9,9 +9,9 @@ const LIMITS = Object.freeze({
   outcomeBody: 22,
 });
 const ROW_GEOMETRY = Object.freeze({
-  2: Object.freeze({ top: 112, height: 118, gap: 32 }),
-  3: Object.freeze({ top: 72, height: 104, gap: 18 }),
-  4: Object.freeze({ top: 52, height: 88, gap: 12 }),
+  2: Object.freeze({ top: 104, height: 128, gap: 28 }),
+  3: Object.freeze({ top: 60, height: 112, gap: 18 }),
+  4: Object.freeze({ top: 30, height: 102, gap: 12 }),
 });
 
 function escapeHtml(value) {
@@ -38,6 +38,13 @@ function optionalText(value, limit, field) {
   const result = text(value);
   if (charCount(result) > limit) throw new RangeError(`${field} 不得超过 ${limit} 字`);
   return result;
+}
+
+function balanceTwoLines(value) {
+  const characters = Array.from(value);
+  if (characters.length <= 5) return value;
+  const splitAt = Math.ceil(characters.length / 2);
+  return `${characters.slice(0, splitAt).join("")}\n${characters.slice(splitAt).join("")}`;
 }
 
 function normalizeParameters(parameters) {
@@ -122,7 +129,7 @@ function outcomeMarkup(outcome) {
     <div class="outcome-ring" aria-hidden="true" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="outcome-ring"></div>
     <section class="outcome-card" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="outcome-card">
       <span class="outcome-label" data-ppt-kind="text" data-ppt-name="outcome-label">结果</span>
-      <h2 ${slotAttributes({ id: "outcome-title", role: "center-title", field: "outcome.title", itemId: "outcome", maxChars: LIMITS.outcomeTitle, maxLines: 2 })} data-ppt-kind="text" data-ppt-name="outcome-title">${escapeHtml(outcome.title)}</h2>
+      <h2 ${slotAttributes({ id: "outcome-title", role: "center-title", field: "outcome.title", itemId: "outcome", maxChars: LIMITS.outcomeTitle, maxLines: 2 })} data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="outcome-title">${escapeHtml(balanceTwoLines(outcome.title))}</h2>
       ${outcome.highlight ? `<strong ${slotAttributes({ id: "outcome-highlight", role: "center-highlight", field: "outcome.highlight", itemId: "outcome", maxChars: LIMITS.outcomeHighlight, maxLines: 2, required: false })} data-ppt-kind="text" data-ppt-name="outcome-highlight">${escapeHtml(outcome.highlight)}</strong>` : ""}
       ${outcome.body ? `<p ${slotAttributes({ id: "outcome-body", role: "center-body", field: "outcome.body", itemId: "outcome", maxChars: LIMITS.outcomeBody, maxLines: 2, required: false })} data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="outcome-body">${escapeHtml(outcome.body)}</p>` : ""}
     </section>

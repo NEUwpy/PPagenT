@@ -19,4 +19,4 @@ body { color: #3e4d62; background: transparent; font-family: var(--ppagent-font-
 .architecture-item-separator { position: absolute; left: 0; top: 27%; bottom: 27%; width: 1px; background: #c7d8ea; }
 .architecture-item span { display: block; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .architecture-review[data-layer-count="5"] .architecture-layer-title { font-size: var(--ppagent-component-body-size, 19px); }
-.architecture-review[data-layer-count="5"] .architecture-item { padding: 0 10px; font-size: 18px; }
+.architecture-review[data-layer-count="5"] .architecture-item { padding: 0 10px; font-size: var(--ppagent-component-label-size, 17pt); }

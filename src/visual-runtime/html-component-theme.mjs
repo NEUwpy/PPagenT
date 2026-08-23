@@ -3,12 +3,13 @@ function cssString(value, fallback) {
 }
 
 export const defaultComponentTypography = Object.freeze({
-  componentHeading: 29,
-  componentTitle: 26,
+  componentHeading: 25,
+  componentTitle: 23,
   componentItemTitle: 21,
-  componentBody: 19,
-  componentLabel: 18,
-  componentMeta: 17,
+  componentLead: 19,
+  componentBody: 17,
+  componentLabel: 17,
+  componentMeta: 15,
 });
 
 export function resolveComponentTypography(theme = {}) {
@@ -25,6 +26,7 @@ export function htmlComponentThemeCss(theme = {}) {
     --ppagent-component-heading-size:${Number(typography.componentHeading)}pt;
     --ppagent-component-title-size:${Number(typography.componentTitle)}pt;
     --ppagent-component-item-title-size:${Number(typography.componentItemTitle)}pt;
+    --ppagent-component-lead-size:${Number(typography.componentLead)}pt;
     --ppagent-component-body-size:${Number(typography.componentBody)}pt;
     --ppagent-component-label-size:${Number(typography.componentLabel)}pt;
     --ppagent-component-meta-size:${Number(typography.componentMeta)}pt;
