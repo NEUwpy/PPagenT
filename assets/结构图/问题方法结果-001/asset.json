@@ -1,0 +1,148 @@
+{
+  "id": "problem-method-result-001",
+  "name": "问题方法结果",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "derivedFromAsset": "argument-evidence-conclusion-001",
+    "file": "PPT源/【蓝色版】年终日常汇报PPT模板-狗哥PPT出品.pptx",
+    "slides": [126]
+  },
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "problemMethodVisualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "problem-solution",
+    "structureGroupId": "problem-method-result-stack",
+    "familyId": "problem-solution",
+    "variantId": "research-1n1",
+    "silhouette": "single-problem-method-bridge-single-result",
+    "supportedBaseRelations": ["composite"],
+    "supportedPurposeKeys": [],
+    "itemCount": {
+      "min": 2,
+      "preferred": [2, 3, 4],
+      "max": 5
+    },
+    "stateContract": {
+      "resolver": "methodCount+problemTextMode+resultTextMode",
+      "methodStates": [2, 3, 4, 5],
+      "problemTextModes": ["标题+说明", "仅标题"],
+      "resultTextModes": ["标题+说明", "仅标题"],
+      "previewDefault": {
+        "methodCount": 3,
+        "problemTextMode": "标题+说明",
+        "resultTextMode": "标题+说明"
+      }
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "forbidden",
+      "ordered": false,
+      "requiresStructuredDataType": "problem-method-result"
+    },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "relationTraits": { "converging": true },
+        "density": ["low", "medium"]
+      },
+      "fallback": { "tooMany": "split" }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "problemMethodVisualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": {
+        "selection": {
+          "methodCount": 3,
+          "problemTextMode": "标题+说明",
+          "resultTextMode": "标题+说明"
+        }
+      },
+      "controls": [
+        {
+          "key": "methodCount",
+          "label": "方法数量",
+          "values": [2, 3, 4, 5],
+          "default": 3
+        },
+        {
+          "key": "problemTextMode",
+          "label": "问题文字",
+          "values": ["标题+说明", "仅标题"],
+          "default": "标题+说明"
+        },
+        {
+          "key": "resultTextMode",
+          "label": "结果文字",
+          "values": ["标题+说明", "仅标题"],
+          "default": "标题+说明"
+        }
+      ],
+      "exampleSelections": [
+        {
+          "methodCount": 3,
+          "problemTextMode": "标题+说明",
+          "resultTextMode": "标题+说明"
+        }
+      ]
+    }
+  },
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "1 个问题、2–5 项方法、1 个结果",
+    "rule": "问题和结果保持单一横向主轴；方法按当前数量重新计算宽度、间距和连接锚点"
+  },
+  "componentModel": {
+    "fixed": [
+      "问题—方法—结果的 1–N–1 阅读顺序",
+      "左侧 1–N–1 节奏标识和上下共同推理轴"
+    ],
+    "variable": [
+      "2–5 项研究方法",
+      "问题、方法和结果的标题与说明"
+    ]
+  },
+  "fieldContract": {
+    "editable": [
+      { "field": "problem.title", "meaning": "需要研究或解决的问题" },
+      { "field": "problem.body", "meaning": "问题边界或当前不足，可省略" },
+      { "field": "methods[].title", "meaning": "研究方法名称" },
+      { "field": "methods[].body", "meaning": "方法的核心做法" },
+      { "field": "result.title", "meaning": "研究得到的结果或结论" },
+      { "field": "result.body", "meaning": "结果的适用范围或意义，可省略" }
+    ],
+    "generated": [
+      { "field": "methods[].order", "meaning": "程序按当前 State 生成方法编号" }
+    ],
+    "fixed": ["问题与结果各一个", "方法共同服务于问题而非表达严格时间顺序"],
+    "unavailable": ["逐项问题方案配对", "严格时间流程", "多个互不相关的结果", "未经来源支持的新结论"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "resizeMode": "natural",
+    "minFontSize": 17,
+    "safePadding": 8,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "1 个问题、2–5 项方法、1 个结果；方法越多时单项正文容量递减，超限后拆页或换组",
+  "semanticContract": "围绕一个明确问题采用若干同级研究方法，最终得到一个由这些方法共同支持的结果",
+  "doNotUseWhen": "多个问题分别对应多个方案、内容强调严格时间先后、只是罗列方法而没有共同问题，或存在多个互不相关的结果",
+  "review": "用户确认 2–5 项方法扩散、上下主标题对齐及标题说明兼容；Native/PPT 与东北大学 Skin 同步落地，可进入正式生成线"
+}

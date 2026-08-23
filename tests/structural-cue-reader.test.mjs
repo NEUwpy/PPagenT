@@ -97,7 +97,7 @@ test("产品叙事的十节正文均能提取结构技能线索且不把结论�
   const cues = detectStructuralCues(markdown);
   assert.equal(cues.length, 10);
   assert.deepEqual(cues.map((cue) => cue.relation), [
-    "hub", "hub", "comparison", "parallel", "sequence", "layered", "sequence", "hub", "sequence", "parallel",
+    "hub", "progression", "comparison", "parallel", "sequence", "layered", "sequence", "hub", "sequence", "parallel",
   ]);
   assert.deepEqual(cues[5].fixedAtoms.map((atom) => atom.points.length), [4, 2, 4]);
   assert.ok(cues.every((cue) => cue.type !== "single-thesis"));

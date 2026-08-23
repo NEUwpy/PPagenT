@@ -7,6 +7,7 @@ import {
   closeHtmlComponentRuntime,
   compileResolvedVisualTree,
   resolveHtmlComponent,
+  sortResolvedVisualNodes,
 } from "../src/visual-runtime/html-component-runtime.mjs";
 import {
   previewParameters,
@@ -27,11 +28,61 @@ import {
   previewParameters as sequencePreviewParameters,
   visualComponent as sequenceVisualComponent,
 } from "../assets/结构图/顺序流程-001/review.mjs";
+import {
+  argumentEvidenceVisualComponent,
+  previewParameters as argumentPreviewParameters,
+} from "../assets/结构图/论点证据结论-001/review.mjs";
+import {
+  previewParameters as problemMethodPreviewParameters,
+  problemMethodVisualComponent,
+} from "../assets/结构图/问题方法结果-001/review.mjs";
+import { northeasternUniversityTheme } from "../src/runtime/skins/northeastern-university-theme.mjs";
 
 const assetDir = path.resolve(import.meta.dirname, "../assets/结构图/循环闭环-001");
 const parallelAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/等权并列卡片-001");
 const matrixAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/矩阵象限-001");
 const sequenceAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/顺序流程-001");
+const argumentAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/论点证据结论-001");
+const problemMethodAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/问题方法结果-001");
+
+test("Native 编译把浏览器 computed px 原样交给 Artifact Tool，避免重复 pt 换算", () => {
+  let compiledTextStyle = null;
+  const textProxy = {};
+  Object.defineProperty(textProxy, "style", {
+    set(value) { compiledTextStyle = value; },
+  });
+  const shape = {};
+  Object.defineProperty(shape, "text", {
+    get() { return textProxy; },
+    set(value) { textProxy.value = value; },
+  });
+  const slide = { shapes: { add: () => shape } };
+  compileResolvedVisualTree(slide, {
+    schemaVersion: 4,
+    frame: { width: 100, height: 100 },
+    nodes: [{
+      kind: "text",
+      name: "font-unit-fixture",
+      order: 0,
+      stackingPath: [0],
+      frame: { left: 0, top: 0, width: 100, height: 40 },
+      text: "字号换算",
+      shadow: "shadow-none",
+      style: {
+        typeface: "Microsoft YaHei",
+        fontSize: 28,
+        fontSizePt: 21,
+        bold: false,
+        italic: false,
+        color: "#000000",
+        alignment: "center",
+        verticalAlignment: "middle",
+        lineSpacing: 1,
+      },
+    }],
+  }, { left: 0, top: 0, width: 100, height: 100 });
+  assert.equal(compiledTextStyle.fontSize, 28);
+});
 
 test("循环 HTML 由通用 DOM 编译器直接生成可编辑 Native 形状", async () => {
   const targetFrame = { left: 55, top: 166, width: 1170, height: 492 };
@@ -63,13 +114,25 @@ test("循环 HTML 由通用 DOM 编译器直接生成可编辑 Native 形状", a
       },
     });
     assert.equal(tree.nodes.find((node) => node.name === "cycle-title-0")?.style.color, "#FFD176");
-    assert.equal(tree.nodes.find((node) => node.name === "cycle-number-0")?.style.fontSize, 29);
-    assert.equal(tree.nodes.find((node) => node.name === "cycle-title-0")?.style.fontSize, 21);
-    assert.equal(tree.nodes.find((node) => node.name === "cycle-core-text-0")?.style.fontSize, 26);
-    assert.equal(tree.nodes.find((node) => node.name === "cycle-0-support")?.style.fontSize, 19);
-    assert.deepEqual(tree.slots.find((slot) => slot.role === "center-title")?.capacity, { maxChars: 12, maxLines: 2 });
-    assert.deepEqual(tree.slots.find((slot) => slot.role === "item-title")?.capacity, { maxChars: 8, maxLines: 1 });
-    assert.deepEqual(tree.slots.find((slot) => slot.role === "item-body")?.capacity, { maxChars: 64, maxLines: 5 });
+    assert.equal(tree.nodes.find((node) => node.name === "cycle-number-0")?.style.fontSizePt, 29);
+    assert.equal(tree.nodes.find((node) => node.name === "cycle-title-0")?.style.fontSizePt, 21);
+    assert.equal(tree.nodes.find((node) => node.name === "cycle-core-text-0")?.style.fontSizePt, 26);
+    assert.equal(tree.nodes.find((node) => node.name === "cycle-0-support")?.style.fontSizePt, 19);
+    const centerSlot = tree.slots.find((slot) => slot.role === "center-title");
+    const titleSlot = tree.slots.find((slot) => slot.role === "item-title");
+    const bodySlot = tree.slots.find((slot) => slot.role === "item-body");
+    assert.equal(centerSlot?.typography.fontSizePt, 26);
+    assert.equal(centerSlot?.typography.role, "componentTitle");
+    assert.equal(centerSlot?.capacity.reliable, false);
+    assert.equal(titleSlot?.typography.fontSizePt, 21);
+    assert.equal(titleSlot?.capacity.reliable, false);
+    assert.equal(bodySlot?.typography.fontSizePt, 19);
+    assert.equal(bodySlot?.typography.role, "componentBody");
+    assert.equal(bodySlot?.capacity.charsPerLine, 11);
+    assert.equal(bodySlot?.capacity.maxLines, 5);
+    assert.equal(bodySlot?.capacity.maxChars, 55);
+    assert.equal(bodySlot?.capacity.declaredMaxChars, 64);
+    assert.equal(bodySlot?.capacity.declarationFits, false);
     assert.equal(tree.slots.find((slot) => slot.role === "item-body")?.textMode, "flow");
     assert.equal(tree.slots.find((slot) => slot.role === "item-body")?.listPolicy, "inline");
     assert.equal(tree.slots.find((slot) => slot.role === "item-title")?.required, false);
@@ -142,7 +205,19 @@ test("并列组件的文字与图标槽由最终 DOM 派生，并编译为原生
     assert.ok(tree.slots.filter((slot) => slot.role === "icon").every((slot) => (
       slot.media?.provider === "tabler-icons" && slot.media.required === true
     )));
-    assert.deepEqual(tree.slots.find((slot) => slot.role === "item-body")?.capacity, { maxChars: 30, maxLines: 4 });
+    const titleSlot = tree.slots.find((slot) => slot.role === "item-title");
+    const bodySlot = tree.slots.find((slot) => slot.role === "item-body");
+    assert.equal(titleSlot?.typography.fontSizePt, 21);
+    assert.equal(titleSlot?.capacity.charsPerLine, 7);
+    assert.equal(titleSlot?.capacity.maxChars, 7);
+    assert.equal(titleSlot?.capacity.declaredMaxChars, 8);
+    assert.equal(titleSlot?.capacity.declarationFits, false);
+    assert.equal(bodySlot?.typography.fontSizePt, 19);
+    assert.equal(bodySlot?.capacity.charsPerLine, 8);
+    assert.equal(bodySlot?.capacity.maxLines, 2);
+    assert.equal(bodySlot?.capacity.maxChars, 16);
+    assert.equal(bodySlot?.capacity.declaredMaxChars, 30);
+    assert.equal(bodySlot?.capacity.declarationFits, false);
     assert.equal(tree.nodes.filter((node) => node.kind === "image").length, 4);
 
     const presentation = createPresentation();
@@ -165,7 +240,7 @@ test("矩阵 HTML 的透明度、渐变、自定义阴影、圆角和 SVG 图标
       assetDir: matrixAssetDir,
       targetFrame,
     });
-    assert.equal(tree.schemaVersion, 3);
+    assert.equal(tree.schemaVersion, 4);
     assert.equal(tree.nodes.find((node) => node.name === "quadrant-field-0")?.fill, "#CAE1FC/25");
     assert.equal(tree.nodes.find((node) => node.name === "matrix-item-0-0")?.fill, "#2F5EA8/79");
     assert.equal(tree.nodes.find((node) => node.name === "matrix-item-0-0")?.shadow, "0px 9px 21px #2F5EA8/14");
@@ -217,6 +292,63 @@ test("HTML → PPT 对不能可靠映射的效果和遗漏 SVG 采用 fail-close
       assetDir: matrixAssetDir,
       targetFrame,
     }), /HTML_PPT_FIDELITY:UNCOMPILED_SVG_NODE/);
+    await assert.rejects(() => resolveHtmlComponent({
+      component: component('<section data-ppt-root style="width:100px;height:100px"><span data-ppt-kind="text" style="display:block;width:40px;height:24px;background:#2f5ea8;color:#fff">01<\/span><\/section>'),
+      parameters: {},
+      assetDir: matrixAssetDir,
+      targetFrame,
+    }), /HTML_PPT_FIDELITY:TEXT_SURFACE_REQUIRES_SHAPE_TEXT/);
+  } finally {
+    await closeHtmlComponentRuntime();
+  }
+});
+
+test("HTML → PPT 保留 CSS z-index 层叠顺序，而不是只按 DOM 顺序绘制", async () => {
+  const component = {
+    id: "stacking-order-fixture",
+    designFrame: { width: 100, height: 100 },
+    cssFile: "component.css",
+    renderMarkup: () => `<section data-ppt-root style="position:relative;width:100px;height:100px">
+      <span data-ppt-kind="shape" data-ppt-name="badge" style="position:absolute;left:0;top:20px;z-index:2;width:50px;height:50px;border-radius:50%;background:#2f5ea8"></span>
+      <section data-ppt-kind="shape" data-ppt-name="card" style="position:absolute;left:30px;top:20px;width:70px;height:50px;border-radius:8px;background:#e7f1fc"></section>
+    </section>`,
+  };
+  try {
+    const tree = await resolveHtmlComponent({
+      component,
+      parameters: {},
+      assetDir: matrixAssetDir,
+      targetFrame: { left: 0, top: 0, width: 100, height: 100 },
+    });
+    assert.deepEqual(tree.nodes.find((node) => node.name === "badge")?.stackingPath, [2]);
+    assert.deepEqual(tree.nodes.find((node) => node.name === "card")?.stackingPath, [0]);
+    assert.deepEqual(sortResolvedVisualNodes(tree.nodes).map((node) => node.name), ["card", "badge"]);
+  } finally {
+    await closeHtmlComponentRuntime();
+  }
+});
+
+test("1-N-1 组件使用 PPT 点数字号，并让上下语义标签共轴且由单一原生形状承载", async () => {
+  const targetFrame = { left: 55, top: 166, width: 1170, height: 492 };
+  try {
+    for (const [component, parameters, assetDir, topName, bottomName, itemNumberName, itemTitleName] of [
+      [argumentEvidenceVisualComponent, argumentPreviewParameters, argumentAssetDir, "claim-label", "therefore-badge", "evidence-number-0", "evidence-title-0"],
+      [problemMethodVisualComponent, problemMethodPreviewParameters, problemMethodAssetDir, "problem-label", "result-badge", "method-number-0", "method-title-0"],
+    ]) {
+      const tree = await resolveHtmlComponent({ component, parameters, assetDir, targetFrame, theme: northeasternUniversityTheme });
+      const top = tree.nodes.find((node) => node.name === topName);
+      const bottom = tree.nodes.find((node) => node.name === bottomName);
+      assert.equal(bottom?.kind, "shape-text");
+      assert.equal(bottom?.style.fontSizePt, 18);
+      assert.equal(Math.round((top.frame.left + top.frame.width / 2) * 10), Math.round((bottom.frame.left + bottom.frame.width / 2) * 10));
+      assert.ok(Math.min(...tree.nodes.filter((node) => node.text).map((node) => node.style.fontSizePt)) >= 17);
+      const itemNumber = tree.nodes.find((node) => node.name === itemNumberName);
+      const itemTitle = tree.nodes.find((node) => node.name === itemTitleName);
+      assert.ok(Math.abs((itemNumber.frame.top + itemNumber.frame.height / 2) - (itemTitle.frame.top + itemTitle.frame.height / 2)) <= 1);
+      assert.ok(itemTitle.frame.left >= itemNumber.frame.left + itemNumber.frame.width);
+      assert.equal(tree.slots.some((slot) => slot.role === "evidence-type" || slot.role === "method-type"), false);
+      assert.equal(tree.nodes.some((node) => node.name?.startsWith("evidence-type-") || node.name?.startsWith("method-type-")), false);
+    }
   } finally {
     await closeHtmlComponentRuntime();
   }

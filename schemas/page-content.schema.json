@@ -87,6 +87,56 @@
         {
           "type": "object",
           "additionalProperties": false,
+          "required": ["type", "problem", "methodIds", "result"],
+          "properties": {
+            "type": { "const": "problem-method-result" },
+            "problem": { "$ref": "#/$defs/structuredEndpoint" },
+            "methodIds": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 5,
+              "items": { "type": "string", "minLength": 1 },
+              "uniqueItems": true
+            },
+            "result": { "$ref": "#/$defs/structuredEndpoint" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "claim", "evidenceIds", "conclusion"],
+          "properties": {
+            "type": { "const": "argument-evidence" },
+            "claim": { "$ref": "#/$defs/structuredEndpoint" },
+            "evidenceIds": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 5,
+              "items": { "type": "string", "minLength": 1 },
+              "uniqueItems": true
+            },
+            "conclusion": { "$ref": "#/$defs/structuredEndpoint" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "context", "decision", "branches"],
+          "properties": {
+            "type": { "const": "branching-decision" },
+            "context": { "$ref": "#/$defs/structuredEndpoint" },
+            "decision": { "$ref": "#/$defs/branchingDecisionNode" },
+            "branches": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 4,
+              "items": { "$ref": "#/$defs/branchingDecisionBranch" }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
           "required": ["type", "axes", "quadrants"],
           "properties": {
             "type": { "const": "matrix" },
@@ -107,6 +157,33 @@
     "sourceText": { "type": "string" }
   },
   "$defs": {
+    "structuredEndpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "body"],
+      "properties": {
+        "title": { "type": "string", "minLength": 1, "maxLength": 24 },
+        "body": { "type": "string", "maxLength": 36 }
+      }
+    },
+    "branchingDecisionNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title"],
+      "properties": {
+        "title": { "type": "string", "minLength": 1, "maxLength": 18 }
+      }
+    },
+    "branchingDecisionBranch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "condition"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "condition": { "type": "string", "minLength": 1, "maxLength": 8 },
+        "outcome": { "type": "string", "maxLength": 10 }
+      }
+    },
     "matrixAxes": {
       "type": "object",
       "additionalProperties": false,

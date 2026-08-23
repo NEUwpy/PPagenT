@@ -30,7 +30,7 @@ Logic 只有在“现有 Logic 无法在不损失关键关系的前提下表达�
 
 核心资产包正式登记 `logicId / structureGroupId / stateContract`，候选发现结果也暴露这些字段。State 仍由程序根据内容与父容器确定性求解，不由导演逐页重画。
 
-Slot Map 不是第二份手工登记表。Structure Group 的文字、图标等槽位直接读取最终 HTML DOM 中的 `data-slot-*`：身份、字段、内容类型、字数／行数、媒体要求及浏览器求解后的真实矩形。看板、视觉导演能力卡和 Native 编译共用这份声明；资产代码只声明一次。
+Slot Map 不是第二份手工登记表。入库阶段从每个最终 HTML State 的 `data-slot-*` 与浏览器计算样式生成 `slot-contract.json`，固化槽位身份、真实矩形、内边距、字体、字号、对齐、行高、每行字数、最大行数和总字数。看板直接展示这份结果；后续正式生成只读取，不再现场测量。字形本身、SVG `<text>` 或非矩形承载面不能冒充稳定文字容器，遇到这类情况保持待调整。
 
 文字容器遵循统一默认制度：每个语义节点最多一个 `item-body`，它是一整块流式正文容器；`points` 只是正文内部的换行／项目符号格式，不是固定数量的几何槽。标题槽默认可选，来源为空就保持为空。只有视觉上确有多个独立承载形状的 Structure Group，才允许同时显式声明 `bodyContainerMode=fixed-regions` 与 `pointRendering=separate-slots`；否则运行时拒绝独立 `item-point` 或重复正文槽。这个默认值由公共运行时执行，新资产无需重复编写事故规则。
 
@@ -76,7 +76,7 @@ Slot Map 不是第二份手工登记表。Structure Group 的文字、图标等�
 3. `review.mjs`：保存 HTML 审美组件、可替换内容和 State 参数解析；`runtime.mjs` 与看板复用它，不另抄容量。
 4. `generate.mjs` 与通用编译器：只在实际预览或渲染时加载，读取浏览器求解的 DOM/CSS、SVG 几何和文字样式并生成原生 PowerPoint 对象。
 5. 一份共享预览输入：由 `previewParametersExport` 和 `previewResolverExport` 暴露，使 HTML 与正式运行接收同一组内容和 State 选择。
-6. `example.pptx`：按 `asset.json` 声明的 State 控件生成整个样式家族，供脱离代码审查原生可编辑结果。
+6. Native State 产物：同一 State 只编译一次最终 PPTX，并由该 PPTX 渲染 PNG；看板缩略图、详情预览和下载共用它。`example.pptx` 仅作为脱离看板或旧资产的兼容示例，不得成为第二条预览真源。
 
 其中的契约必须覆盖适用关系、数量范围、标题/正文字数、媒体要求、最小尺寸、轮廓、密度，以及 `items`、节点内 `points` 和重复视觉条目的语义接口。图标、中心图像、标题和正文等可变槽也必须进入参数，不得固化来源模板中的第三方内容。图标槽必须声明独立于外部装饰形状的安全内框；正式生成只往安全内框填图标，不把整个圆形、卡片或承载面误当成图标容器。
 

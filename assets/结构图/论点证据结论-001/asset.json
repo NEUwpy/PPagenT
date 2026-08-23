@@ -1,0 +1,163 @@
+{
+  "id": "argument-evidence-conclusion-001",
+  "name": "论点证据结论",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "PPT源/【蓝色版】年终日常汇报PPT模板-狗哥PPT出品.pptx",
+    "slides": [126]
+  },
+  "references": [
+    {
+      "file": "PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
+      "slides": [44],
+      "role": "证据与总结分区",
+      "adopted": "多组证据保持共同阅读基线，页面末端用独立结论带完成收束"
+    },
+    {
+      "file": "PPT源/06-【柏林蓝】定制级学术型灵感手册-宽屏.pptx",
+      "slides": [75],
+      "role": "证据层级与文字承载",
+      "adopted": "不同证据类别拥有清楚标签和完整正文承载面，层级稳定且留白克制"
+    }
+  ],
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "argumentEvidenceVisualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "argument-evidence",
+    "structureGroupId": "argument-evidence-proof-stack",
+    "familyId": "argument-evidence",
+    "variantId": "proof-stack-1n1",
+    "silhouette": "single-claim-evidence-bridge-single-conclusion",
+    "supportedBaseRelations": ["composite"],
+    "supportedPurposeKeys": ["support_claim_with_evidence"],
+    "itemCount": {
+      "min": 2,
+      "preferred": [2, 3, 4],
+      "max": 5
+    },
+    "stateContract": {
+      "resolver": "evidenceCount+claimTextMode+conclusionTextMode",
+      "evidenceStates": [2, 3, 4, 5],
+      "claimTextModes": ["标题+说明", "仅标题"],
+      "conclusionTextModes": ["标题+说明", "仅标题"],
+      "previewDefault": {
+        "evidenceCount": 3,
+        "claimTextMode": "标题+说明",
+        "conclusionTextMode": "标题+说明"
+      }
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "forbidden",
+      "ordered": false,
+      "requiresStructuredDataType": "argument-evidence"
+    },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+          "relationTraits": { "converging": true },
+        "density": ["low", "medium"]
+      },
+      "fallback": {
+        "tooMany": "split"
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "argumentEvidenceVisualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": {
+        "selection": {
+          "evidenceCount": 3,
+          "claimTextMode": "标题+说明",
+          "conclusionTextMode": "标题+说明"
+        }
+      },
+      "controls": [
+        {
+          "key": "evidenceCount",
+          "label": "证据数量",
+          "values": [2, 3, 4, 5],
+          "default": 3
+        },
+        {
+          "key": "claimTextMode",
+          "label": "论点文字",
+          "values": ["标题+说明", "仅标题"],
+          "default": "标题+说明"
+        },
+        {
+          "key": "conclusionTextMode",
+          "label": "结论文字",
+          "values": ["标题+说明", "仅标题"],
+          "default": "标题+说明"
+        }
+      ],
+      "exampleSelections": [
+        {
+          "evidenceCount": 3,
+          "claimTextMode": "标题+说明",
+          "conclusionTextMode": "标题+说明"
+        }
+      ]
+    }
+  },
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "1 个论点、2–5 条证据、1 个结论",
+    "rule": "论点和结论保持单一横向主轴；证据按当前数量重新计算宽度、间距和连接锚点"
+  },
+  "componentModel": {
+    "fixed": [
+      "论点—证据—结论的 1–N–1 阅读顺序",
+      "左侧 1–N–1 节奏标识和上下共同推理轴"
+    ],
+    "variable": [
+      "2–5 条证据",
+      "论点、证据和结论的标题与说明"
+    ]
+  },
+  "fieldContract": {
+    "editable": [
+      { "field": "claim.title", "meaning": "需要被论证的核心主张" },
+      { "field": "claim.body", "meaning": "主张的限定条件或适用范围，可省略" },
+      { "field": "evidences[].title", "meaning": "证据名称或核心发现" },
+      { "field": "evidences[].body", "meaning": "证据内容及其与论点的关联" },
+      { "field": "conclusion.title", "meaning": "由现有证据支持的结论" },
+      { "field": "conclusion.body", "meaning": "结论的含义或行动指向，可省略" }
+    ],
+    "generated": [
+      { "field": "evidences[].order", "meaning": "程序按当前 State 生成证据编号" }
+    ],
+    "fixed": ["论点与结论各一个", "证据共同支撑而非表达时间顺序"],
+    "unavailable": ["严格因果链", "时间流程", "互相对立的两组观点", "未经来源支持的新结论"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "resizeMode": "natural",
+    "minFontSize": 17,
+    "safePadding": 8,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "1 个论点、2–5 条证据、1 个结论；证据越多时单条正文容量递减，超限后拆页或换组",
+  "semanticContract": "若干事实、数据、案例或研究发现共同支持一个明确论点，并收束为不超出证据范围的结论",
+  "doNotUseWhen": "内容只是无方向的并列要点、强调严格时间先后、分析多类原因、比较正反方案，或中间项与收束结果之间没有可说明的支持关系",
+  "review": "用户确认 2–5 条证据扩散、上下主标题对齐及标题说明兼容；Native/PPT 与东北大学 Skin 同步落地，可进入正式生成线"
+}

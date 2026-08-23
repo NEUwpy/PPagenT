@@ -295,7 +295,7 @@ test("视觉导演按 Slot Contract 精炼组件文字后才允许进入渲染",
   assert.ok(overflow.feedback[0].issues.some((issue) => issue.code === "component-text-too-long"));
 });
 
-test("两个互补事实不会因为恰好有两项就获得比较资产", async () => {
+test("两个互补事实不会因为恰好有两项就获得比较资产或正文伪兜底", async () => {
   const page = content("scope", [
     { id: "skin", title: "视觉规范可以替换", body: "学校视觉规范是可替换的组织视觉系统。" },
     { id: "capability", title: "经验能力可以复用", body: "内容理解和表达规则可以服务多个场景。", emphasis: true },
@@ -307,9 +307,8 @@ test("两个互补事实不会因为恰好有两项就获得比较资产", async
     { ordered: false, sameLevel: true },
   ), page);
   const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), [
-    "northeastern-university-body-001",
-  ]);
+  assert.deepEqual(set.candidates, []);
+  assert.equal(set.gap.type, "asset-gap");
   assert.equal(set.candidates.some((candidate) => candidate.assetId === "comparison-structure-001"), false);
 });
 
@@ -328,7 +327,8 @@ test("未重新蒸馏的泳道资产不会进入三角色候选", async () => {
   draft.relationTraits = { ...draft.relationTraits, dimensions: 2, secondaryDimension: "role" };
   const intent = enrichPageIntent(draft, page);
   const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), ["northeastern-university-body-001"]);
+  assert.deepEqual(set.candidates, []);
+  assert.equal(set.gap.type, "asset-gap");
 });
 
 test("未重新蒸馏的问题改进资产不会进入因果候选", async () => {
@@ -343,7 +343,8 @@ test("未重新蒸馏的问题改进资产不会进入因果候选", async () =>
     sameLevel: false,
   }), page);
   const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), ["northeastern-university-body-001"]);
+  assert.deepEqual(set.candidates, []);
+  assert.equal(set.gap.type, "asset-gap");
 });
 
 test("三层组织树命中已登记的组织层级资产", async () => {
@@ -459,7 +460,8 @@ test("唯一家族与变体确定后由候选回填冗余 silhouette", async () 
     { id: "greeting", title: "问候", body: "大家好" },
     { id: "topic", title: "主题", body: "分享创新实践" },
   ]);
-  const intent = enrichPageIntent(intentDraft("opening-intent", "present_parallel_points", "parallel"), page);
+  page.logicIntent = { logicId: "editorial", reason: "原稿是普通开场陈述" };
+  const intent = enrichPageIntent(intentDraft("opening-intent", "summarize_research_method", "none"), page);
   const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
   const candidate = set.candidates.find((item) => item.fallbackBody);
   const result = await resolveVisualPlan({
@@ -679,22 +681,29 @@ test("closing purpose cannot bypass fixed closing capacity", async () => {
   ]);
   const intent = enrichPageIntent(intentDraft("closing-like-intent", "present_closing", "parallel"), page);
   const [candidateSet] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.ok(candidateSet.candidates.length > 0);
+  assert.equal(candidateSet.candidates.length, 0);
+  assert.equal(candidateSet.gap.type, "asset-gap");
   assert.ok(candidateSet.candidates.every((item) => item.assetId !== "northeastern-university-closing-001"));
 });
 
-test("component text capacity removes a long-copy structure before rendering", async () => {
-  const page = content("long-sequence", [
-    { id: "a", title: "步骤一", body: "甲".repeat(20) },
-    { id: "b", title: "步骤二", body: "乙".repeat(20) },
-    { id: "c", title: "步骤三", body: "丙".repeat(20) },
-    { id: "d", title: "步骤四", body: "丁".repeat(63) },
+test("结构性 Logic 没有兼容资产时返回 asset-gap 而不是正文兜底", async () => {
+  const page = content("ordered-spectrum", [
+    { id: "low", title: "低要求端", body: "不关注版式" },
+    { id: "middle", title: "工作型需求", body: "强调规范可靠" },
+    { id: "high", title: "高定制端", body: "强调视觉创意" },
   ]);
-  const intent = enrichPageIntent(intentDraft("long-sequence-intent", "explain_process", "sequence", {
+  page.logicIntent = { logicId: "progression", reason: "三个区域沿同一需求程度轴递进" };
+  const intent = enrichPageIntent(intentDraft("ordered-spectrum-intent", "explain_evolution", "progression", {
     ordered: true,
   }), page);
   const [candidateSet] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.ok(candidateSet.candidates.length > 0);
+  assert.equal(candidateSet.candidates.length, 0);
   assert.ok(candidateSet.candidates.every((item) => item.assetId !== "sequential-process-001"));
-  assert.ok(candidateSet.candidates.some((item) => item.fallbackBody));
+  assert.deepEqual(candidateSet.gap, {
+    type: "asset-gap",
+    logicId: "progression",
+    baseRelation: "progression",
+    itemCount: 3,
+    reason: "当前核心资产库没有语义与容量均兼容的 Structure Group",
+  });
 });

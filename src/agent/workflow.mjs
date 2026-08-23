@@ -480,22 +480,15 @@ export async function runDirectorWorkflow(options) {
       ? []
       : candidateSets.filter((set) => !Array.isArray(set.candidates) || set.candidates.length === 0);
     if (invalidCandidateSets || emptyCandidateSets.length) {
-      const visualFeedback = { reason: "no-renderable-visual-candidates", pageIntents, candidateSets, emptyCandidateSets };
-      if (contentAttempt < maxContentAttempts) {
-        const contentPassed = await executeContentAttempt({ visualFeedback });
-        if (contentPassed) {
-          visual = null;
-          visualReview = null;
-          visualResolution = visualFeedback;
-          renderResult = null;
-          continue;
-        }
-      }
+      const gaps = emptyCandidateSets.map((set) => set.gap ?? {
+        type: "asset-gap",
+        reason: "候选集为空",
+      });
       throw new WorkflowError(
-        "NO_RENDERABLE_VISUAL_CANDIDATES",
+        "ASSET_GAP",
         "visual-candidates",
-        "程序没有为每一页形成语义兼容且可渲染的候选集",
-        { candidateSets, contentAttempt },
+        "原稿需要的结构尚未被核心资产库覆盖；流程已停止，未改写语义或退回正文兜底",
+        { candidateSets, gaps, contentAttempt },
       );
     }
     let normalizedPlans;

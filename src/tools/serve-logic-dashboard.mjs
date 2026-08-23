@@ -273,24 +273,38 @@ addEventListener("load",async()=>{await document.fonts.ready;const scale=documen
 </script></body></html>`;
 }
 
+async function intakeSlotContractFor(library, assetId) {
+  const resolved = await resolveComponentPreview(projectRoot, library, assetId);
+  if (!resolved) return null;
+  const contractPath = path.join(resolved.assetDir, "slot-contract.json");
+  try {
+    return JSON.parse(await fs.readFile(contractPath, "utf8"));
+  } catch (error) {
+    if (error.code === "ENOENT") return null;
+    throw error;
+  }
+}
+
 async function nativeStateArtifactsFor(library, assetId, searchParams) {
   const resolved = await resolveNativeStatePreview(projectRoot, library, assetId);
   if (!resolved) return null;
   const selection = selectedControls(resolved.record, searchParams);
   const selectionKey = JSON.stringify(selection);
   const cacheKey = crypto.createHash("sha256").update(`${library}\0${assetId}\0${selectionKey}`).digest("hex").slice(0, 20);
-  const previewPath = path.join(nativeStateCacheRoot, `${cacheKey}.png`);
-  const pptxPath = path.join(nativeStateCacheRoot, `${cacheKey}.pptx`);
+  const outputDir = path.join(nativeStateCacheRoot, cacheKey);
+  const previewPath = path.join(outputDir, "slide-01.png");
+  const pptxPath = path.join(outputDir, `${assetId}.pptx`);
   const cssPath = path.join(resolved.assetDir, "component.css");
   const htmlRuntimePath = path.join(projectRoot, "src", "visual-runtime", "html-component-runtime.mjs");
+  const htmlThemePath = path.join(projectRoot, "src", "visual-runtime", "html-component-theme.mjs");
   const themePath = path.join(projectRoot, "src", "runtime", "skins", "northeastern-university-theme.mjs");
-  const [reviewStat, runtimeStat, cssStat, htmlRuntimeStat, themeStat] = await Promise.all([
-    fs.stat(resolved.entryPath), fs.stat(resolved.runtimeEntryPath), fs.stat(cssPath), fs.stat(htmlRuntimePath), fs.stat(themePath),
+  const [reviewStat, runtimeStat, cssStat, htmlRuntimeStat, htmlThemeStat, themeStat] = await Promise.all([
+    fs.stat(resolved.entryPath), fs.stat(resolved.runtimeEntryPath), fs.stat(cssPath), fs.stat(htmlRuntimePath), fs.stat(htmlThemePath), fs.stat(themePath),
   ]);
   const [previewStat, pptxStat] = await Promise.all([previewPath, pptxPath].map(async (target) => {
     try { return await fs.stat(target); } catch (error) { if (error.code === "ENOENT") return null; throw error; }
   }));
-  const inputMtime = Math.max(reviewStat.mtimeMs, runtimeStat.mtimeMs, cssStat.mtimeMs, htmlRuntimeStat.mtimeMs, themeStat.mtimeMs);
+  const inputMtime = Math.max(reviewStat.mtimeMs, runtimeStat.mtimeMs, cssStat.mtimeMs, htmlRuntimeStat.mtimeMs, htmlThemeStat.mtimeMs, themeStat.mtimeMs);
   if (!previewStat || !pptxStat || previewStat.mtimeMs < inputMtime || pptxStat.mtimeMs < inputMtime) {
     const jobKey = `native:${cacheKey}`;
     if (!renderJobs.has(jobKey)) {
@@ -320,12 +334,12 @@ async function nativeStateArtifactsFor(library, assetId, searchParams) {
             theme: {},
           });
         }
-        const image = await presentation.export({ slide, format: "png", scale: 1 });
-        await fs.mkdir(nativeStateCacheRoot, { recursive: true });
-        await fs.writeFile(previewPath, Buffer.from(await image.arrayBuffer()));
+        await fs.mkdir(outputDir, { recursive: true });
         const { PresentationFile } = await import("@oai/artifact-tool");
         const pptx = await PresentationFile.exportPptx(presentation);
         await pptx.save(pptxPath);
+        // 缩略图、详情预览和下载必须来自同一份最终 PPTX，避免内存渲染与落盘文件分叉。
+        await runRenderer(pptxPath, outputDir);
       }).finally(() => renderJobs.delete(jobKey)));
     }
     await renderJobs.get(jobKey);
@@ -364,6 +378,7 @@ async function skinStateArtifactsFor(library, assetId, searchParams) {
   const skinEntryPath = path.join(projectRoot, "src", "runtime", "skins", "northeastern-university.mjs");
   const cssPath = path.join(resolved.assetDir, "component.css");
   const htmlRuntimePath = path.join(projectRoot, "src", "visual-runtime", "html-component-runtime.mjs");
+  const htmlThemePath = path.join(projectRoot, "src", "visual-runtime", "html-component-theme.mjs");
   const assetRuntimePath = path.join(projectRoot, "src", "runtime", "assets.mjs");
   const themePath = path.join(projectRoot, "src", "runtime", "skins", "northeastern-university-theme.mjs");
   const inputStats = await Promise.all([
@@ -373,6 +388,7 @@ async function skinStateArtifactsFor(library, assetId, searchParams) {
     fs.stat(skinEntryPath),
     fs.stat(cssPath),
     fs.stat(htmlRuntimePath),
+    fs.stat(htmlThemePath),
     fs.stat(assetRuntimePath),
     fs.stat(themePath),
   ]);
@@ -496,8 +512,21 @@ const server = http.createServer(async (request, response) => {
         return;
       }
       send(response, 200, html, "text/html; charset=utf-8", {
-        ...immutablePreviewHeaders,
+        "cache-control": "no-store",
         "content-security-policy": "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:",
+      });
+      return;
+    }
+    if (url.pathname === "/api/intake-slot-contract") {
+      const library = url.searchParams.get("library") ?? "";
+      const assetId = url.searchParams.get("id") ?? "";
+      const contract = await intakeSlotContractFor(library, assetId);
+      if (!contract) {
+        sendJson(response, 404, { error: "intake_slot_contract_not_found" });
+        return;
+      }
+      send(response, 200, JSON.stringify(contract), "application/json; charset=utf-8", {
+        "cache-control": "private, max-age=3600",
       });
       return;
     }

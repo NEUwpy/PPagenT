@@ -8,12 +8,12 @@ body { color: #46566a; background: transparent; font-family: var(--ppagent-font-
 .simple-funnel-step-body { stroke: rgba(255,255,255,.14); stroke-width: 1; }
 .simple-funnel-step-cap { stroke: #8bbaf2; stroke-width: 2; }
 .simple-flow-arrow { pointer-events: none; }
-.simple-step-title { position: absolute; left: 585px; top: var(--top); z-index: 5; width: var(--width); height: 28px; margin: 0; overflow: hidden; color: #fff; font-size: 20px; font-weight: 700; line-height: 28px; text-align: center; white-space: nowrap; transform: translateX(-50%); }
+.simple-step-title { position: absolute; left: 585px; top: var(--top); z-index: 5; width: var(--width); height: 28px; margin: 0; overflow: hidden; color: #fff; font-size: var(--ppagent-component-item-title-size, 21pt); font-weight: 700; line-height: 28px; text-align: center; white-space: nowrap; transform: translateX(-50%); }
 .simple-input-layer { position: absolute; inset: 0; z-index: 6; pointer-events: none; }
 .simple-input { position: absolute; left: var(--x); top: var(--y); width: var(--size); height: var(--size); transform: translateX(-50%); text-align: center; }
 .simple-input-core { position: relative; display: grid; place-items: center; width: var(--size); height: var(--size); margin: 0 auto; padding: 10px; border: 3px solid #fff; border-radius: 50%; color: #fff; background: #2f5ea8; box-shadow: 0 5px 14px rgba(47,94,168,.2); }
 .simple-input-marker { display: grid; place-items: center; width: 100%; height: 100%; overflow: hidden; }
-.simple-input-marker-text { padding: 0 2px; color: #fff; font-size: 15px; font-weight: 700; line-height: 1; text-align: center; white-space: nowrap; }
+.simple-input-marker-text { padding: 0 2px; color: #fff; font-size: var(--ppagent-component-meta-size, 17pt); font-weight: 700; line-height: 1; text-align: center; white-space: nowrap; }
 .simple-icon-svg { width: 100%; height: 100%; color: currentColor; stroke: currentColor; }
 .simple-icon-fallback { display: block; width: 10px; height: 10px; border: 2px solid currentColor; border-radius: 50%; }
-.simple-funnel[data-step-count="6"] .simple-step-title { font-size: 18px; }
+.simple-funnel[data-step-count="6"] .simple-step-title { font-size: var(--ppagent-component-label-size, 18pt); }

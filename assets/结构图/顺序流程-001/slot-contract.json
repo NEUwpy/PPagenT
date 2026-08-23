@@ -1,0 +1,1913 @@
+{
+  "schemaVersion": 1,
+  "assetId": "sequence-flow-001",
+  "themeId": "northeastern-university-001",
+  "coordinateUnit": "design-px",
+  "typographyUnit": "ppt-pt",
+  "minimumFontSize": 19,
+  "status": "needs-adjustment",
+  "states": [
+    {
+      "key": "itemCount=3",
+      "selection": {
+        "itemCount": 3
+      },
+      "variantId": "v1"
+    },
+    {
+      "key": "itemCount=4",
+      "selection": {
+        "itemCount": 4
+      },
+      "variantId": "v2"
+    },
+    {
+      "key": "itemCount=5",
+      "selection": {
+        "itemCount": 5
+      },
+      "variantId": "v3"
+    },
+    {
+      "key": "itemCount=6",
+      "selection": {
+        "itemCount": 6
+      },
+      "variantId": "v4"
+    }
+  ],
+  "variants": [
+    {
+      "id": "v1",
+      "slots": [
+        {
+          "id": "discover-title",
+          "role": "item-title",
+          "field": "items[0].title",
+          "itemId": "discover",
+          "contentType": "text",
+          "required": false,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 132,
+            "top": 66,
+            "width": 286,
+            "height": 40,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 10,
+            "maxLines": 1,
+            "maxChars": 8,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 10,
+            "declarationFits": true,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 25.2
+          },
+          "innerFrame": {
+            "width": 286,
+            "height": 40,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "discover-body",
+          "role": "item-body",
+          "field": "items[0].support",
+          "itemId": "discover",
+          "contentType": "text",
+          "required": false,
+          "textMode": "flow",
+          "listPolicy": "inline",
+          "frame": {
+            "left": 150,
+            "top": 277,
+            "width": 250,
+            "height": 88,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 9,
+            "maxLines": 2,
+            "maxChars": 18,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 18,
+            "declarationFits": false,
+            "declaredMaxChars": 56,
+            "declaredMaxLines": 4
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 29.45
+          },
+          "innerFrame": {
+            "width": 250,
+            "height": 88,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "analyze-title",
+          "role": "item-title",
+          "field": "items[1].title",
+          "itemId": "analyze",
+          "contentType": "text",
+          "required": false,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 442,
+            "top": 66,
+            "width": 286,
+            "height": 40,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 10,
+            "maxLines": 1,
+            "maxChars": 8,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 10,
+            "declarationFits": true,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 25.2
+          },
+          "innerFrame": {
+            "width": 286,
+            "height": 40,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "analyze-body",
+          "role": "item-body",
+          "field": "items[1].support",
+          "itemId": "analyze",
+          "contentType": "text",
+          "required": false,
+          "textMode": "flow",
+          "listPolicy": "inline",
+          "frame": {
+            "left": 460,
+            "top": 277,
+            "width": 250,
+            "height": 88,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 9,
+            "maxLines": 2,
+            "maxChars": 18,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 18,
+            "declarationFits": false,
+            "declaredMaxChars": 56,
+            "declaredMaxLines": 4
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 29.45
+          },
+          "innerFrame": {
+            "width": 250,
+            "height": 88,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "design-title",
+          "role": "item-title",
+          "field": "items[2].title",
+          "itemId": "design",
+          "contentType": "text",
+          "required": false,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 752,
+            "top": 66,
+            "width": 286,
+            "height": 40,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 10,
+            "maxLines": 1,
+            "maxChars": 8,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 10,
+            "declarationFits": true,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 25.2
+          },
+          "innerFrame": {
+            "width": 286,
+            "height": 40,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "design-body",
+          "role": "item-body",
+          "field": "items[2].support",
+          "itemId": "design",
+          "contentType": "text",
+          "required": false,
+          "textMode": "flow",
+          "listPolicy": "inline",
+          "frame": {
+            "left": 770,
+            "top": 277,
+            "width": 250,
+            "height": 88,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 9,
+            "maxLines": 2,
+            "maxChars": 18,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 18,
+            "declarationFits": false,
+            "declaredMaxChars": 56,
+            "declaredMaxLines": 4
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 29.45
+          },
+          "innerFrame": {
+            "width": 250,
+            "height": 88,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        }
+      ],
+      "issues": [
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "discover-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "analyze-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "design-body"
+        }
+      ]
+    },
+    {
+      "id": "v2",
+      "slots": [
+        {
+          "id": "discover-title",
+          "role": "item-title",
+          "field": "items[0].title",
+          "itemId": "discover",
+          "contentType": "text",
+          "required": false,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 67,
+            "top": 66,
+            "width": 241,
+            "height": 40,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 8,
+            "maxLines": 1,
+            "maxChars": 8,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 8,
+            "declarationFits": true,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 25.2
+          },
+          "innerFrame": {
+            "width": 241,
+            "height": 40,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "discover-body",
+          "role": "item-body",
+          "field": "items[0].support",
+          "itemId": "discover",
+          "contentType": "text",
+          "required": false,
+          "textMode": "flow",
+          "listPolicy": "inline",
+          "frame": {
+            "left": 85,
+            "top": 277,
+            "width": 205,
+            "height": 88,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 8,
+            "maxLines": 2,
+            "maxChars": 16,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 16,
+            "declarationFits": false,
+            "declaredMaxChars": 44,
+            "declaredMaxLines": 4
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 29.45
+          },
+          "innerFrame": {
+            "width": 205,
+            "height": 88,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "analyze-title",
+          "role": "item-title",
+          "field": "items[1].title",
+          "itemId": "analyze",
+          "contentType": "text",
+          "required": false,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 332,
+            "top": 66,
+            "width": 241,
+            "height": 40,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 8,
+            "maxLines": 1,
+            "maxChars": 8,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 8,
+            "declarationFits": true,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 25.2
+          },
+          "innerFrame": {
+            "width": 241,
+            "height": 40,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "analyze-body",
+          "role": "item-body",
+          "field": "items[1].support",
+          "itemId": "analyze",
+          "contentType": "text",
+          "required": false,
+          "textMode": "flow",
+          "listPolicy": "inline",
+          "frame": {
+            "left": 350,
+            "top": 277,
+            "width": 205,
+            "height": 88,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 8,
+            "maxLines": 2,
+            "maxChars": 16,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 16,
+            "declarationFits": false,
+            "declaredMaxChars": 44,
+            "declaredMaxLines": 4
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 29.45
+          },
+          "innerFrame": {
+            "width": 205,
+            "height": 88,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "design-title",
+          "role": "item-title",
+          "field": "items[2].title",
+          "itemId": "design",
+          "contentType": "text",
+          "required": false,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 597,
+            "top": 66,
+            "width": 241,
+            "height": 40,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 8,
+            "maxLines": 1,
+            "maxChars": 8,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 8,
+            "declarationFits": true,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 25.2
+          },
+          "innerFrame": {
+            "width": 241,
+            "height": 40,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "design-body",
+          "role": "item-body",
+          "field": "items[2].support",
+          "itemId": "design",
+          "contentType": "text",
+          "required": false,
+          "textMode": "flow",
+          "listPolicy": "inline",
+          "frame": {
+            "left": 615,
+            "top": 277,
+            "width": 205,
+            "height": 88,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 8,
+            "maxLines": 2,
+            "maxChars": 16,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 16,
+            "declarationFits": false,
+            "declaredMaxChars": 44,
+            "declaredMaxLines": 4
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 29.45
+          },
+          "innerFrame": {
+            "width": 205,
+            "height": 88,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "implement-title",
+          "role": "item-title",
+          "field": "items[3].title",
+          "itemId": "implement",
+          "contentType": "text",
+          "required": false,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 862,
+            "top": 66,
+            "width": 241,
+            "height": 40,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 8,
+            "maxLines": 1,
+            "maxChars": 8,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 8,
+            "declarationFits": true,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 25.2
+          },
+          "innerFrame": {
+            "width": 241,
+            "height": 40,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "implement-body",
+          "role": "item-body",
+          "field": "items[3].support",
+          "itemId": "implement",
+          "contentType": "text",
+          "required": false,
+          "textMode": "flow",
+          "listPolicy": "inline",
+          "frame": {
+            "left": 880,
+            "top": 277,
+            "width": 205,
+            "height": 88,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 8,
+            "maxLines": 2,
+            "maxChars": 16,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 16,
+            "declarationFits": false,
+            "declaredMaxChars": 44,
+            "declaredMaxLines": 4
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 29.45
+          },
+          "innerFrame": {
+            "width": 205,
+            "height": 88,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        }
+      ],
+      "issues": [
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "discover-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "analyze-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "design-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "implement-body"
+        }
+      ]
+    },
+    {
+      "id": "v3",
+      "slots": [
+        {
+          "id": "discover-title",
+          "role": "item-title",
+          "field": "items[0].title",
+          "itemId": "discover",
+          "contentType": "text",
+          "required": false,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 26,
+            "top": 66,
+            "width": 214,
+            "height": 40,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 7,
+            "maxLines": 1,
+            "maxChars": 7,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 7,
+            "declarationFits": false,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 25.2
+          },
+          "innerFrame": {
+            "width": 214,
+            "height": 40,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "discover-body",
+          "role": "item-body",
+          "field": "items[0].support",
+          "itemId": "discover",
+          "contentType": "text",
+          "required": false,
+          "textMode": "flow",
+          "listPolicy": "inline",
+          "frame": {
+            "left": 40,
+            "top": 277,
+            "width": 186,
+            "height": 88,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 7,
+            "maxLines": 2,
+            "maxChars": 14,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 14,
+            "declarationFits": false,
+            "declaredMaxChars": 34,
+            "declaredMaxLines": 4
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 29.45
+          },
+          "innerFrame": {
+            "width": 186,
+            "height": 88,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "analyze-title",
+          "role": "item-title",
+          "field": "items[1].title",
+          "itemId": "analyze",
+          "contentType": "text",
+          "required": false,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 252,
+            "top": 66,
+            "width": 214,
+            "height": 40,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 7,
+            "maxLines": 1,
+            "maxChars": 7,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 7,
+            "declarationFits": false,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 25.2
+          },
+          "innerFrame": {
+            "width": 214,
+            "height": 40,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "analyze-body",
+          "role": "item-body",
+          "field": "items[1].support",
+          "itemId": "analyze",
+          "contentType": "text",
+          "required": false,
+          "textMode": "flow",
+          "listPolicy": "inline",
+          "frame": {
+            "left": 266,
+            "top": 277,
+            "width": 186,
+            "height": 88,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 7,
+            "maxLines": 2,
+            "maxChars": 14,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 14,
+            "declarationFits": false,
+            "declaredMaxChars": 34,
+            "declaredMaxLines": 4
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 29.45
+          },
+          "innerFrame": {
+            "width": 186,
+            "height": 88,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "design-title",
+          "role": "item-title",
+          "field": "items[2].title",
+          "itemId": "design",
+          "contentType": "text",
+          "required": false,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 478,
+            "top": 66,
+            "width": 214,
+            "height": 40,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 7,
+            "maxLines": 1,
+            "maxChars": 7,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 7,
+            "declarationFits": false,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 25.2
+          },
+          "innerFrame": {
+            "width": 214,
+            "height": 40,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "design-body",
+          "role": "item-body",
+          "field": "items[2].support",
+          "itemId": "design",
+          "contentType": "text",
+          "required": false,
+          "textMode": "flow",
+          "listPolicy": "inline",
+          "frame": {
+            "left": 492,
+            "top": 277,
+            "width": 186,
+            "height": 88,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 7,
+            "maxLines": 2,
+            "maxChars": 14,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 14,
+            "declarationFits": false,
+            "declaredMaxChars": 34,
+            "declaredMaxLines": 4
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 29.45
+          },
+          "innerFrame": {
+            "width": 186,
+            "height": 88,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "implement-title",
+          "role": "item-title",
+          "field": "items[3].title",
+          "itemId": "implement",
+          "contentType": "text",
+          "required": false,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 704,
+            "top": 66,
+            "width": 214,
+            "height": 40,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 7,
+            "maxLines": 1,
+            "maxChars": 7,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 7,
+            "declarationFits": false,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 25.2
+          },
+          "innerFrame": {
+            "width": 214,
+            "height": 40,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "implement-body",
+          "role": "item-body",
+          "field": "items[3].support",
+          "itemId": "implement",
+          "contentType": "text",
+          "required": false,
+          "textMode": "flow",
+          "listPolicy": "inline",
+          "frame": {
+            "left": 718,
+            "top": 277,
+            "width": 186,
+            "height": 88,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 7,
+            "maxLines": 2,
+            "maxChars": 14,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 14,
+            "declarationFits": false,
+            "declaredMaxChars": 34,
+            "declaredMaxLines": 4
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 29.45
+          },
+          "innerFrame": {
+            "width": 186,
+            "height": 88,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "evaluate-title",
+          "role": "item-title",
+          "field": "items[4].title",
+          "itemId": "evaluate",
+          "contentType": "text",
+          "required": false,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 930,
+            "top": 66,
+            "width": 214,
+            "height": 40,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 7,
+            "maxLines": 1,
+            "maxChars": 7,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 7,
+            "declarationFits": false,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 25.2
+          },
+          "innerFrame": {
+            "width": 214,
+            "height": 40,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "evaluate-body",
+          "role": "item-body",
+          "field": "items[4].support",
+          "itemId": "evaluate",
+          "contentType": "text",
+          "required": false,
+          "textMode": "flow",
+          "listPolicy": "inline",
+          "frame": {
+            "left": 944,
+            "top": 277,
+            "width": 186,
+            "height": 88,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 7,
+            "maxLines": 2,
+            "maxChars": 14,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 14,
+            "declarationFits": false,
+            "declaredMaxChars": 34,
+            "declaredMaxLines": 4
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 29.45
+          },
+          "innerFrame": {
+            "width": 186,
+            "height": 88,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        }
+      ],
+      "issues": [
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "discover-title"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "discover-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "analyze-title"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "analyze-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "design-title"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "design-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "implement-title"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "implement-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "evaluate-title"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "evaluate-body"
+        }
+      ]
+    },
+    {
+      "id": "v4",
+      "slots": [
+        {
+          "id": "discover-title",
+          "role": "item-title",
+          "field": "items[0].title",
+          "itemId": "discover",
+          "contentType": "text",
+          "required": false,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 16,
+            "top": 66,
+            "width": 179.656,
+            "height": 40,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 1,
+            "maxChars": 6,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 6,
+            "declarationFits": false,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 25.2
+          },
+          "innerFrame": {
+            "width": 179.656,
+            "height": 40,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "discover-body",
+          "role": "item-body",
+          "field": "items[0].support",
+          "itemId": "discover",
+          "contentType": "text",
+          "required": false,
+          "textMode": "flow",
+          "listPolicy": "inline",
+          "frame": {
+            "left": 26,
+            "top": 272,
+            "width": 159.656,
+            "height": 98,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 2,
+            "maxChars": 12,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 12,
+            "declarationFits": false,
+            "declaredMaxChars": 26,
+            "declaredMaxLines": 4
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 29.45
+          },
+          "innerFrame": {
+            "width": 159.656,
+            "height": 98,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "analyze-title",
+          "role": "item-title",
+          "field": "items[1].title",
+          "itemId": "analyze",
+          "contentType": "text",
+          "required": false,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 207.656,
+            "top": 66,
+            "width": 179.672,
+            "height": 40,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 1,
+            "maxChars": 6,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 6,
+            "declarationFits": false,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 25.2
+          },
+          "innerFrame": {
+            "width": 179.672,
+            "height": 40,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "analyze-body",
+          "role": "item-body",
+          "field": "items[1].support",
+          "itemId": "analyze",
+          "contentType": "text",
+          "required": false,
+          "textMode": "flow",
+          "listPolicy": "inline",
+          "frame": {
+            "left": 217.656,
+            "top": 272,
+            "width": 159.672,
+            "height": 98,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 2,
+            "maxChars": 12,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 12,
+            "declarationFits": false,
+            "declaredMaxChars": 26,
+            "declaredMaxLines": 4
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 29.45
+          },
+          "innerFrame": {
+            "width": 159.672,
+            "height": 98,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "design-title",
+          "role": "item-title",
+          "field": "items[2].title",
+          "itemId": "design",
+          "contentType": "text",
+          "required": false,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 399.328,
+            "top": 66,
+            "width": 179.672,
+            "height": 40,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 1,
+            "maxChars": 6,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 6,
+            "declarationFits": false,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 25.2
+          },
+          "innerFrame": {
+            "width": 179.672,
+            "height": 40,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "design-body",
+          "role": "item-body",
+          "field": "items[2].support",
+          "itemId": "design",
+          "contentType": "text",
+          "required": false,
+          "textMode": "flow",
+          "listPolicy": "inline",
+          "frame": {
+            "left": 409.328,
+            "top": 272,
+            "width": 159.672,
+            "height": 98,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 2,
+            "maxChars": 12,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 12,
+            "declarationFits": false,
+            "declaredMaxChars": 26,
+            "declaredMaxLines": 4
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 29.45
+          },
+          "innerFrame": {
+            "width": 159.672,
+            "height": 98,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "implement-title",
+          "role": "item-title",
+          "field": "items[3].title",
+          "itemId": "implement",
+          "contentType": "text",
+          "required": false,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 591,
+            "top": 66,
+            "width": 179.656,
+            "height": 40,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 1,
+            "maxChars": 6,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 6,
+            "declarationFits": false,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 25.2
+          },
+          "innerFrame": {
+            "width": 179.656,
+            "height": 40,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "implement-body",
+          "role": "item-body",
+          "field": "items[3].support",
+          "itemId": "implement",
+          "contentType": "text",
+          "required": false,
+          "textMode": "flow",
+          "listPolicy": "inline",
+          "frame": {
+            "left": 601,
+            "top": 272,
+            "width": 159.656,
+            "height": 98,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 2,
+            "maxChars": 12,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 12,
+            "declarationFits": false,
+            "declaredMaxChars": 26,
+            "declaredMaxLines": 4
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 29.45
+          },
+          "innerFrame": {
+            "width": 159.656,
+            "height": 98,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "evaluate-title",
+          "role": "item-title",
+          "field": "items[4].title",
+          "itemId": "evaluate",
+          "contentType": "text",
+          "required": false,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 782.656,
+            "top": 66,
+            "width": 179.672,
+            "height": 40,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 1,
+            "maxChars": 6,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 6,
+            "declarationFits": false,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 25.2
+          },
+          "innerFrame": {
+            "width": 179.672,
+            "height": 40,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "evaluate-body",
+          "role": "item-body",
+          "field": "items[4].support",
+          "itemId": "evaluate",
+          "contentType": "text",
+          "required": false,
+          "textMode": "flow",
+          "listPolicy": "inline",
+          "frame": {
+            "left": 792.656,
+            "top": 272,
+            "width": 159.672,
+            "height": 98,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 2,
+            "maxChars": 12,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 12,
+            "declarationFits": false,
+            "declaredMaxChars": 26,
+            "declaredMaxLines": 4
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 29.45
+          },
+          "innerFrame": {
+            "width": 159.672,
+            "height": 98,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "improve-title",
+          "role": "item-title",
+          "field": "items[5].title",
+          "itemId": "improve",
+          "contentType": "text",
+          "required": false,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 974.328,
+            "top": 66,
+            "width": 179.672,
+            "height": 40,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 1,
+            "maxChars": 6,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 6,
+            "declarationFits": false,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 25.2
+          },
+          "innerFrame": {
+            "width": 179.672,
+            "height": 40,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "improve-body",
+          "role": "item-body",
+          "field": "items[5].support",
+          "itemId": "improve",
+          "contentType": "text",
+          "required": false,
+          "textMode": "flow",
+          "listPolicy": "inline",
+          "frame": {
+            "left": 984.328,
+            "top": 272,
+            "width": 159.672,
+            "height": 98,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 2,
+            "maxChars": 12,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 12,
+            "declarationFits": false,
+            "declaredMaxChars": 26,
+            "declaredMaxLines": 4
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 29.45
+          },
+          "innerFrame": {
+            "width": 159.672,
+            "height": 98,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        }
+      ],
+      "issues": [
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "discover-title"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "discover-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "analyze-title"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "analyze-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "design-title"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "design-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "implement-title"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "implement-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "evaluate-title"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "evaluate-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "improve-title"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "improve-body"
+        }
+      ]
+    }
+  ]
+}

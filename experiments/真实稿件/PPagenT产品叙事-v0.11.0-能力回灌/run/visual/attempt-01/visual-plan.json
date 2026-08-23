@@ -1,0 +1,206 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "ppagent-product-narrative",
+  "skinId": "northeastern-university-001",
+  "visualLanguage": "遵循所选主题与已确认 Structure Group 的统一设计语言",
+  "rhythmStrategy": "优先使用语义适配的核心结构，避免相邻页面机械重复",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "familyId": "skin-cover",
+      "variantId": "default",
+      "silhouette": "cover",
+      "adaptationStatus": "fixed",
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "familyId": "skin-agenda",
+      "variantId": "default",
+      "silhouette": "agenda",
+      "adaptationStatus": "fixed",
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "p01",
+      "intentId": "p01-intent",
+      "familyId": "hub-radial",
+      "variantId": "balanced-orbit-anchor",
+      "silhouette": "dominant-center-with-balanced-satellites",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "p01-item1",
+          "query": "presentation path"
+        },
+        {
+          "sourceItemId": "p01-item2",
+          "query": "slide count"
+        },
+        {
+          "sourceItemId": "p01-item3",
+          "query": "page role"
+        },
+        {
+          "sourceItemId": "p01-item4",
+          "query": "idea relation"
+        },
+        {
+          "sourceItemId": "p01-item5",
+          "query": "highlight"
+        },
+        {
+          "sourceItemId": "p01-item6",
+          "query": "expression style"
+        }
+      ],
+      "reason": "Hub logic with six items fits radial anchor, semantic icons for each topic."
+    },
+    {
+      "pageId": "p02",
+      "intentId": "p02-intent",
+      "familyId": "progression-spectrum",
+      "variantId": "ordered-regions-with-focus",
+      "silhouette": "ordered-spectrum-with-raised-focus",
+      "adaptationStatus": "adaptive",
+      "reason": "Progression spectrum with three items, focused middle region."
+    },
+    {
+      "pageId": "p03",
+      "intentId": "p03-intent",
+      "familyId": "comparison-columns",
+      "variantId": "dual-verdict-mirror",
+      "silhouette": "mirrored-verdict-columns",
+      "adaptationStatus": "adaptive",
+      "reason": "Two-item comparison mirrored verdict columns."
+    },
+    {
+      "pageId": "p04",
+      "intentId": "p04-intent",
+      "familyId": "parallel-cards",
+      "variantId": "equal-floating-cards",
+      "silhouette": "equal-cards-with-round-anchors",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "p04-item1",
+          "query": "visual guidelines"
+        },
+        {
+          "sourceItemId": "p04-item2",
+          "query": "expression skills"
+        },
+        {
+          "sourceItemId": "p04-item3",
+          "query": "capacity bounds"
+        },
+        {
+          "sourceItemId": "p04-item4",
+          "query": "fallback methods"
+        }
+      ],
+      "reason": "Parallel cards with four equal items, semantic icons for each constraint."
+    },
+    {
+      "pageId": "p05",
+      "intentId": "p05-intent",
+      "familyId": "sequence-process",
+      "variantId": "continuous-numbered-rail",
+      "silhouette": "continuous-arrow-rail",
+      "adaptationStatus": "adaptive",
+      "reason": "Three-step sequence flow from AI to rules to code."
+    },
+    {
+      "pageId": "p06",
+      "intentId": "p06-intent",
+      "familyId": "layered-architecture",
+      "variantId": "curved-frustum-stack",
+      "silhouette": "centered-curved-frustum-stack",
+      "adaptationStatus": "adaptive",
+      "reason": "Three layers fit curved frustum stack."
+    },
+    {
+      "pageId": "p07",
+      "intentId": "p07-intent",
+      "familyId": "sequence-process",
+      "variantId": "continuous-numbered-rail",
+      "silhouette": "continuous-arrow-rail",
+      "adaptationStatus": "adaptive",
+      "reason": "Five-step process sequence from selection to confirmation."
+    },
+    {
+      "pageId": "p08",
+      "intentId": "p08-intent",
+      "familyId": "hub-radial",
+      "variantId": "balanced-orbit-anchor",
+      "silhouette": "dominant-center-with-balanced-satellites",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "p08-item1",
+          "query": "content expression"
+        },
+        {
+          "sourceItemId": "p08-item2",
+          "query": "capacity limit"
+        },
+        {
+          "sourceItemId": "p08-item3",
+          "query": "rearrangement"
+        },
+        {
+          "sourceItemId": "p08-item4",
+          "query": "boundary handling"
+        },
+        {
+          "sourceItemId": "p08-item5",
+          "query": "prohibited structures"
+        }
+      ],
+      "reason": "Radial hub with five assets orbiting core idea."
+    },
+    {
+      "pageId": "p09",
+      "intentId": "p09-intent",
+      "familyId": "sequence-process",
+      "variantId": "continuous-numbered-rail",
+      "silhouette": "continuous-arrow-rail",
+      "adaptationStatus": "adaptive",
+      "reason": "Five sequential contexts expanding from schools to individuals."
+    },
+    {
+      "pageId": "p10",
+      "intentId": "p10-intent",
+      "familyId": "parallel-cards",
+      "variantId": "equal-floating-cards",
+      "silhouette": "equal-cards-with-round-anchors",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "p10-item1",
+          "query": "AI reading"
+        },
+        {
+          "sourceItemId": "p10-item2",
+          "query": "rule judgment"
+        },
+        {
+          "sourceItemId": "p10-item3",
+          "query": "code labor"
+        }
+      ],
+      "reason": "Three parallel cards with semantic icons for each mechanism."
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "familyId": "skin-closing",
+      "variantId": "default",
+      "silhouette": "closing",
+      "adaptationStatus": "fixed",
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

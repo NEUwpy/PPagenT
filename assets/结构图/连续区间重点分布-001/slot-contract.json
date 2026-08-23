@@ -1,0 +1,2349 @@
+{
+  "schemaVersion": 1,
+  "assetId": "progression-spectrum-focus-001",
+  "themeId": "northeastern-university-001",
+  "coordinateUnit": "design-px",
+  "typographyUnit": "ppt-pt",
+  "minimumFontSize": 17,
+  "status": "needs-adjustment",
+  "states": [
+    {
+      "key": "itemCount=3|focusPosition=2",
+      "selection": {
+        "itemCount": 3,
+        "focusPosition": 2
+      },
+      "variantId": "v1"
+    },
+    {
+      "key": "itemCount=4|focusPosition=2",
+      "selection": {
+        "itemCount": 4,
+        "focusPosition": 2
+      },
+      "variantId": "v2"
+    },
+    {
+      "key": "itemCount=4|focusPosition=3",
+      "selection": {
+        "itemCount": 4,
+        "focusPosition": 3
+      },
+      "variantId": "v3"
+    },
+    {
+      "key": "itemCount=5|focusPosition=2",
+      "selection": {
+        "itemCount": 5,
+        "focusPosition": 2
+      },
+      "variantId": "v4"
+    }
+  ],
+  "variants": [
+    {
+      "id": "v1",
+      "slots": [
+        {
+          "id": "low-title",
+          "role": "item-title",
+          "field": "items[0].title",
+          "itemId": "low",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 112,
+            "top": 198,
+            "width": 270,
+            "height": 31,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 9,
+            "maxLines": 1,
+            "maxChars": 8,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 9,
+            "declarationFits": true,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 23.25
+          },
+          "innerFrame": {
+            "width": 270,
+            "height": 31,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "low-body",
+          "role": "item-body",
+          "field": "items[0].body",
+          "itemId": "low",
+          "contentType": "text",
+          "required": true,
+          "textMode": "flow",
+          "listPolicy": "none",
+          "frame": {
+            "left": 112,
+            "top": 245,
+            "width": 270,
+            "height": 78,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 10,
+            "maxLines": 2,
+            "maxChars": 20,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 20,
+            "declarationFits": false,
+            "declaredMaxChars": 28,
+            "declaredMaxLines": 3
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 25.84
+          },
+          "innerFrame": {
+            "width": 270,
+            "height": 78,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "work-title",
+          "role": "item-title",
+          "field": "items[1].title",
+          "itemId": "work",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 450,
+            "top": 168,
+            "width": 270,
+            "height": 31,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 9,
+            "maxLines": 1,
+            "maxChars": 8,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 9,
+            "declarationFits": true,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 23.25
+          },
+          "innerFrame": {
+            "width": 270,
+            "height": 31,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "work-body",
+          "role": "item-body",
+          "field": "items[1].body",
+          "itemId": "work",
+          "contentType": "text",
+          "required": true,
+          "textMode": "flow",
+          "listPolicy": "none",
+          "frame": {
+            "left": 450,
+            "top": 215,
+            "width": 270,
+            "height": 78,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 10,
+            "maxLines": 2,
+            "maxChars": 20,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 20,
+            "declarationFits": false,
+            "declaredMaxChars": 28,
+            "declaredMaxLines": 3
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 25.84
+          },
+          "innerFrame": {
+            "width": 270,
+            "height": 78,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "custom-title",
+          "role": "item-title",
+          "field": "items[2].title",
+          "itemId": "custom",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 788,
+            "top": 198,
+            "width": 270,
+            "height": 31,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 9,
+            "maxLines": 1,
+            "maxChars": 8,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 9,
+            "declarationFits": true,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 23.25
+          },
+          "innerFrame": {
+            "width": 270,
+            "height": 31,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "custom-body",
+          "role": "item-body",
+          "field": "items[2].body",
+          "itemId": "custom",
+          "contentType": "text",
+          "required": true,
+          "textMode": "flow",
+          "listPolicy": "none",
+          "frame": {
+            "left": 788,
+            "top": 245,
+            "width": 270,
+            "height": 78,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 10,
+            "maxLines": 2,
+            "maxChars": 20,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 20,
+            "declarationFits": false,
+            "declaredMaxChars": 28,
+            "declaredMaxLines": 3
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 25.84
+          },
+          "innerFrame": {
+            "width": 270,
+            "height": 78,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "axis-low",
+          "role": "axis-low",
+          "field": "axisLow",
+          "itemId": "",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 56,
+            "top": 420,
+            "width": 150,
+            "height": 28,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 1,
+            "maxChars": 6,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 6,
+            "declarationFits": false,
+            "declaredMaxChars": 14,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentLabel",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 18,
+            "fontWeight": "400",
+            "alignment": "left",
+            "lineHeightPt": 21
+          },
+          "innerFrame": {
+            "width": 150,
+            "height": 28,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "axis-label",
+          "role": "axis-label",
+          "field": "dimensionLabel",
+          "itemId": "",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 445,
+            "top": 420,
+            "width": 280,
+            "height": 28,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 11,
+            "maxLines": 1,
+            "maxChars": 11,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 11,
+            "declarationFits": false,
+            "declaredMaxChars": 14,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentLabel",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 18,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 21
+          },
+          "innerFrame": {
+            "width": 280,
+            "height": 28,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "axis-high",
+          "role": "axis-high",
+          "field": "axisHigh",
+          "itemId": "",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 964,
+            "top": 420,
+            "width": 150,
+            "height": 28,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 1,
+            "maxChars": 6,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 6,
+            "declarationFits": false,
+            "declaredMaxChars": 14,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentLabel",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 18,
+            "fontWeight": "400",
+            "alignment": "right",
+            "lineHeightPt": 21
+          },
+          "innerFrame": {
+            "width": 150,
+            "height": 28,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        }
+      ],
+      "issues": [
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "low-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "work-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "custom-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "axis-low"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "axis-label"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "axis-high"
+        }
+      ]
+    },
+    {
+      "id": "v2",
+      "slots": [
+        {
+          "id": "low-title",
+          "role": "item-title",
+          "field": "items[0].title",
+          "itemId": "low",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 78,
+            "top": 198,
+            "width": 208.5,
+            "height": 31,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 7,
+            "maxLines": 1,
+            "maxChars": 7,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 7,
+            "declarationFits": false,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 23.25
+          },
+          "innerFrame": {
+            "width": 208.5,
+            "height": 31,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "low-body",
+          "role": "item-body",
+          "field": "items[0].body",
+          "itemId": "low",
+          "contentType": "text",
+          "required": true,
+          "textMode": "flow",
+          "listPolicy": "none",
+          "frame": {
+            "left": 78,
+            "top": 245,
+            "width": 208.5,
+            "height": 78,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 8,
+            "maxLines": 2,
+            "maxChars": 16,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 16,
+            "declarationFits": false,
+            "declaredMaxChars": 28,
+            "declaredMaxLines": 3
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 25.84
+          },
+          "innerFrame": {
+            "width": 208.5,
+            "height": 78,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "work-title",
+          "role": "item-title",
+          "field": "items[1].title",
+          "itemId": "work",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 346.5,
+            "top": 168,
+            "width": 208.5,
+            "height": 31,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 7,
+            "maxLines": 1,
+            "maxChars": 7,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 7,
+            "declarationFits": false,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 23.25
+          },
+          "innerFrame": {
+            "width": 208.5,
+            "height": 31,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "work-body",
+          "role": "item-body",
+          "field": "items[1].body",
+          "itemId": "work",
+          "contentType": "text",
+          "required": true,
+          "textMode": "flow",
+          "listPolicy": "none",
+          "frame": {
+            "left": 346.5,
+            "top": 215,
+            "width": 208.5,
+            "height": 78,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 8,
+            "maxLines": 2,
+            "maxChars": 16,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 16,
+            "declarationFits": false,
+            "declaredMaxChars": 28,
+            "declaredMaxLines": 3
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 25.84
+          },
+          "innerFrame": {
+            "width": 208.5,
+            "height": 78,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "custom-title",
+          "role": "item-title",
+          "field": "items[2].title",
+          "itemId": "custom",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 615,
+            "top": 198,
+            "width": 208.5,
+            "height": 31,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 7,
+            "maxLines": 1,
+            "maxChars": 7,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 7,
+            "declarationFits": false,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 23.25
+          },
+          "innerFrame": {
+            "width": 208.5,
+            "height": 31,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "custom-body",
+          "role": "item-body",
+          "field": "items[2].body",
+          "itemId": "custom",
+          "contentType": "text",
+          "required": true,
+          "textMode": "flow",
+          "listPolicy": "none",
+          "frame": {
+            "left": 615,
+            "top": 245,
+            "width": 208.5,
+            "height": 78,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 8,
+            "maxLines": 2,
+            "maxChars": 16,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 16,
+            "declarationFits": false,
+            "declaredMaxChars": 28,
+            "declaredMaxLines": 3
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 25.84
+          },
+          "innerFrame": {
+            "width": 208.5,
+            "height": 78,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "advanced-title",
+          "role": "item-title",
+          "field": "items[3].title",
+          "itemId": "advanced",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 883.5,
+            "top": 198,
+            "width": 208.5,
+            "height": 31,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 7,
+            "maxLines": 1,
+            "maxChars": 7,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 7,
+            "declarationFits": false,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 23.25
+          },
+          "innerFrame": {
+            "width": 208.5,
+            "height": 31,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "advanced-body",
+          "role": "item-body",
+          "field": "items[3].body",
+          "itemId": "advanced",
+          "contentType": "text",
+          "required": true,
+          "textMode": "flow",
+          "listPolicy": "none",
+          "frame": {
+            "left": 883.5,
+            "top": 245,
+            "width": 208.5,
+            "height": 78,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 8,
+            "maxLines": 2,
+            "maxChars": 16,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 16,
+            "declarationFits": false,
+            "declaredMaxChars": 28,
+            "declaredMaxLines": 3
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 25.84
+          },
+          "innerFrame": {
+            "width": 208.5,
+            "height": 78,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "axis-low",
+          "role": "axis-low",
+          "field": "axisLow",
+          "itemId": "",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 56,
+            "top": 420,
+            "width": 150,
+            "height": 28,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 1,
+            "maxChars": 6,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 6,
+            "declarationFits": false,
+            "declaredMaxChars": 14,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentLabel",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 18,
+            "fontWeight": "400",
+            "alignment": "left",
+            "lineHeightPt": 21
+          },
+          "innerFrame": {
+            "width": 150,
+            "height": 28,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "axis-label",
+          "role": "axis-label",
+          "field": "dimensionLabel",
+          "itemId": "",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 445,
+            "top": 420,
+            "width": 280,
+            "height": 28,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 11,
+            "maxLines": 1,
+            "maxChars": 11,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 11,
+            "declarationFits": false,
+            "declaredMaxChars": 14,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentLabel",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 18,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 21
+          },
+          "innerFrame": {
+            "width": 280,
+            "height": 28,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "axis-high",
+          "role": "axis-high",
+          "field": "axisHigh",
+          "itemId": "",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 964,
+            "top": 420,
+            "width": 150,
+            "height": 28,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 1,
+            "maxChars": 6,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 6,
+            "declarationFits": false,
+            "declaredMaxChars": 14,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentLabel",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 18,
+            "fontWeight": "400",
+            "alignment": "right",
+            "lineHeightPt": 21
+          },
+          "innerFrame": {
+            "width": 150,
+            "height": 28,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        }
+      ],
+      "issues": [
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "low-title"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "low-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "work-title"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "work-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "custom-title"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "custom-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "advanced-title"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "advanced-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "axis-low"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "axis-label"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "axis-high"
+        }
+      ]
+    },
+    {
+      "id": "v3",
+      "slots": [
+        {
+          "id": "low-title",
+          "role": "item-title",
+          "field": "items[0].title",
+          "itemId": "low",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 78,
+            "top": 198,
+            "width": 208.5,
+            "height": 31,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 7,
+            "maxLines": 1,
+            "maxChars": 7,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 7,
+            "declarationFits": false,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 23.25
+          },
+          "innerFrame": {
+            "width": 208.5,
+            "height": 31,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "low-body",
+          "role": "item-body",
+          "field": "items[0].body",
+          "itemId": "low",
+          "contentType": "text",
+          "required": true,
+          "textMode": "flow",
+          "listPolicy": "none",
+          "frame": {
+            "left": 78,
+            "top": 245,
+            "width": 208.5,
+            "height": 78,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 8,
+            "maxLines": 2,
+            "maxChars": 16,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 16,
+            "declarationFits": false,
+            "declaredMaxChars": 28,
+            "declaredMaxLines": 3
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 25.84
+          },
+          "innerFrame": {
+            "width": 208.5,
+            "height": 78,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "work-title",
+          "role": "item-title",
+          "field": "items[1].title",
+          "itemId": "work",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 346.5,
+            "top": 198,
+            "width": 208.5,
+            "height": 31,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 7,
+            "maxLines": 1,
+            "maxChars": 7,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 7,
+            "declarationFits": false,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 23.25
+          },
+          "innerFrame": {
+            "width": 208.5,
+            "height": 31,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "work-body",
+          "role": "item-body",
+          "field": "items[1].body",
+          "itemId": "work",
+          "contentType": "text",
+          "required": true,
+          "textMode": "flow",
+          "listPolicy": "none",
+          "frame": {
+            "left": 346.5,
+            "top": 245,
+            "width": 208.5,
+            "height": 78,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 8,
+            "maxLines": 2,
+            "maxChars": 16,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 16,
+            "declarationFits": false,
+            "declaredMaxChars": 28,
+            "declaredMaxLines": 3
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 25.84
+          },
+          "innerFrame": {
+            "width": 208.5,
+            "height": 78,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "custom-title",
+          "role": "item-title",
+          "field": "items[2].title",
+          "itemId": "custom",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 615,
+            "top": 168,
+            "width": 208.5,
+            "height": 31,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 7,
+            "maxLines": 1,
+            "maxChars": 7,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 7,
+            "declarationFits": false,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 23.25
+          },
+          "innerFrame": {
+            "width": 208.5,
+            "height": 31,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "custom-body",
+          "role": "item-body",
+          "field": "items[2].body",
+          "itemId": "custom",
+          "contentType": "text",
+          "required": true,
+          "textMode": "flow",
+          "listPolicy": "none",
+          "frame": {
+            "left": 615,
+            "top": 215,
+            "width": 208.5,
+            "height": 78,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 8,
+            "maxLines": 2,
+            "maxChars": 16,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 16,
+            "declarationFits": false,
+            "declaredMaxChars": 28,
+            "declaredMaxLines": 3
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 25.84
+          },
+          "innerFrame": {
+            "width": 208.5,
+            "height": 78,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "advanced-title",
+          "role": "item-title",
+          "field": "items[3].title",
+          "itemId": "advanced",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 883.5,
+            "top": 198,
+            "width": 208.5,
+            "height": 31,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 7,
+            "maxLines": 1,
+            "maxChars": 7,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 7,
+            "declarationFits": false,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 23.25
+          },
+          "innerFrame": {
+            "width": 208.5,
+            "height": 31,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "advanced-body",
+          "role": "item-body",
+          "field": "items[3].body",
+          "itemId": "advanced",
+          "contentType": "text",
+          "required": true,
+          "textMode": "flow",
+          "listPolicy": "none",
+          "frame": {
+            "left": 883.5,
+            "top": 245,
+            "width": 208.5,
+            "height": 78,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 8,
+            "maxLines": 2,
+            "maxChars": 16,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 16,
+            "declarationFits": false,
+            "declaredMaxChars": 28,
+            "declaredMaxLines": 3
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 25.84
+          },
+          "innerFrame": {
+            "width": 208.5,
+            "height": 78,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "axis-low",
+          "role": "axis-low",
+          "field": "axisLow",
+          "itemId": "",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 56,
+            "top": 420,
+            "width": 150,
+            "height": 28,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 1,
+            "maxChars": 6,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 6,
+            "declarationFits": false,
+            "declaredMaxChars": 14,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentLabel",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 18,
+            "fontWeight": "400",
+            "alignment": "left",
+            "lineHeightPt": 21
+          },
+          "innerFrame": {
+            "width": 150,
+            "height": 28,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "axis-label",
+          "role": "axis-label",
+          "field": "dimensionLabel",
+          "itemId": "",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 445,
+            "top": 420,
+            "width": 280,
+            "height": 28,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 11,
+            "maxLines": 1,
+            "maxChars": 11,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 11,
+            "declarationFits": false,
+            "declaredMaxChars": 14,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentLabel",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 18,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 21
+          },
+          "innerFrame": {
+            "width": 280,
+            "height": 28,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "axis-high",
+          "role": "axis-high",
+          "field": "axisHigh",
+          "itemId": "",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 964,
+            "top": 420,
+            "width": 150,
+            "height": 28,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 1,
+            "maxChars": 6,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 6,
+            "declarationFits": false,
+            "declaredMaxChars": 14,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentLabel",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 18,
+            "fontWeight": "400",
+            "alignment": "right",
+            "lineHeightPt": 21
+          },
+          "innerFrame": {
+            "width": 150,
+            "height": 28,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        }
+      ],
+      "issues": [
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "low-title"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "low-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "work-title"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "work-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "custom-title"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "custom-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "advanced-title"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "advanced-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "axis-low"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "axis-label"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "axis-high"
+        }
+      ]
+    },
+    {
+      "id": "v4",
+      "slots": [
+        {
+          "id": "low-title",
+          "role": "item-title",
+          "field": "items[0].title",
+          "itemId": "low",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 50,
+            "top": 198,
+            "width": 169.188,
+            "height": 31,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 1,
+            "maxChars": 6,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 6,
+            "declarationFits": false,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 23.25
+          },
+          "innerFrame": {
+            "width": 169.188,
+            "height": 31,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "low-body",
+          "role": "item-body",
+          "field": "items[0].body",
+          "itemId": "low",
+          "contentType": "text",
+          "required": true,
+          "textMode": "flow",
+          "listPolicy": "none",
+          "frame": {
+            "left": 50,
+            "top": 245,
+            "width": 169.188,
+            "height": 78,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 2,
+            "maxChars": 12,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 12,
+            "declarationFits": false,
+            "declaredMaxChars": 28,
+            "declaredMaxLines": 3
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 25.84
+          },
+          "innerFrame": {
+            "width": 169.188,
+            "height": 78,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "work-title",
+          "role": "item-title",
+          "field": "items[1].title",
+          "itemId": "work",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 275.188,
+            "top": 198,
+            "width": 169.203,
+            "height": 31,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 1,
+            "maxChars": 6,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 6,
+            "declarationFits": false,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 23.25
+          },
+          "innerFrame": {
+            "width": 169.203,
+            "height": 31,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "work-body",
+          "role": "item-body",
+          "field": "items[1].body",
+          "itemId": "work",
+          "contentType": "text",
+          "required": true,
+          "textMode": "flow",
+          "listPolicy": "none",
+          "frame": {
+            "left": 275.188,
+            "top": 245,
+            "width": 169.203,
+            "height": 78,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 2,
+            "maxChars": 12,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 12,
+            "declarationFits": false,
+            "declaredMaxChars": 28,
+            "declaredMaxLines": 3
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 25.84
+          },
+          "innerFrame": {
+            "width": 169.203,
+            "height": 78,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "custom-title",
+          "role": "item-title",
+          "field": "items[2].title",
+          "itemId": "custom",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 500.391,
+            "top": 168,
+            "width": 169.203,
+            "height": 31,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 1,
+            "maxChars": 6,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 6,
+            "declarationFits": false,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 23.25
+          },
+          "innerFrame": {
+            "width": 169.203,
+            "height": 31,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "custom-body",
+          "role": "item-body",
+          "field": "items[2].body",
+          "itemId": "custom",
+          "contentType": "text",
+          "required": true,
+          "textMode": "flow",
+          "listPolicy": "none",
+          "frame": {
+            "left": 500.391,
+            "top": 215,
+            "width": 169.203,
+            "height": 78,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 2,
+            "maxChars": 12,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 12,
+            "declarationFits": false,
+            "declaredMaxChars": 28,
+            "declaredMaxLines": 3
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 25.84
+          },
+          "innerFrame": {
+            "width": 169.203,
+            "height": 78,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "advanced-title",
+          "role": "item-title",
+          "field": "items[3].title",
+          "itemId": "advanced",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 725.594,
+            "top": 198,
+            "width": 169.203,
+            "height": 31,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 1,
+            "maxChars": 6,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 6,
+            "declarationFits": false,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 23.25
+          },
+          "innerFrame": {
+            "width": 169.203,
+            "height": 31,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "advanced-body",
+          "role": "item-body",
+          "field": "items[3].body",
+          "itemId": "advanced",
+          "contentType": "text",
+          "required": true,
+          "textMode": "flow",
+          "listPolicy": "none",
+          "frame": {
+            "left": 725.594,
+            "top": 245,
+            "width": 169.203,
+            "height": 78,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 2,
+            "maxChars": 12,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 12,
+            "declarationFits": false,
+            "declaredMaxChars": 28,
+            "declaredMaxLines": 3
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 25.84
+          },
+          "innerFrame": {
+            "width": 169.203,
+            "height": 78,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "showcase-title",
+          "role": "item-title",
+          "field": "items[4].title",
+          "itemId": "showcase",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 950.797,
+            "top": 198,
+            "width": 169.188,
+            "height": 31,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 1,
+            "maxChars": 6,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 6,
+            "declarationFits": false,
+            "declaredMaxChars": 8,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentItemTitle",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 21,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 23.25
+          },
+          "innerFrame": {
+            "width": 169.188,
+            "height": 31,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "showcase-body",
+          "role": "item-body",
+          "field": "items[4].body",
+          "itemId": "showcase",
+          "contentType": "text",
+          "required": true,
+          "textMode": "flow",
+          "listPolicy": "none",
+          "frame": {
+            "left": 950.797,
+            "top": 245,
+            "width": 169.188,
+            "height": 78,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 2,
+            "maxChars": 12,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 2,
+            "geometricMaxChars": 12,
+            "declarationFits": false,
+            "declaredMaxChars": 28,
+            "declaredMaxLines": 3
+          },
+          "typography": {
+            "role": "componentBody",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 19,
+            "fontWeight": "400",
+            "alignment": "center",
+            "lineHeightPt": 25.84
+          },
+          "innerFrame": {
+            "width": 169.188,
+            "height": 78,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "axis-low",
+          "role": "axis-low",
+          "field": "axisLow",
+          "itemId": "",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 56,
+            "top": 420,
+            "width": 150,
+            "height": 28,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 1,
+            "maxChars": 6,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 6,
+            "declarationFits": false,
+            "declaredMaxChars": 14,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentLabel",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 18,
+            "fontWeight": "400",
+            "alignment": "left",
+            "lineHeightPt": 21
+          },
+          "innerFrame": {
+            "width": 150,
+            "height": 28,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "axis-label",
+          "role": "axis-label",
+          "field": "dimensionLabel",
+          "itemId": "",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 445,
+            "top": 420,
+            "width": 280,
+            "height": 28,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 11,
+            "maxLines": 1,
+            "maxChars": 11,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 11,
+            "declarationFits": false,
+            "declaredMaxChars": 14,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentLabel",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 18,
+            "fontWeight": "700",
+            "alignment": "center",
+            "lineHeightPt": 21
+          },
+          "innerFrame": {
+            "width": 280,
+            "height": 28,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        },
+        {
+          "id": "axis-high",
+          "role": "axis-high",
+          "field": "axisHigh",
+          "itemId": "",
+          "contentType": "text",
+          "required": true,
+          "textMode": "single-line",
+          "listPolicy": "none",
+          "frame": {
+            "left": 964,
+            "top": 420,
+            "width": 150,
+            "height": 28,
+            "rotation": 0
+          },
+          "capacity": {
+            "charsPerLine": 6,
+            "maxLines": 1,
+            "maxChars": 6,
+            "basis": "zh-glyph",
+            "reliable": true,
+            "geometricMaxLines": 1,
+            "geometricMaxChars": 6,
+            "declarationFits": false,
+            "declaredMaxChars": 14,
+            "declaredMaxLines": 1
+          },
+          "typography": {
+            "role": "componentLabel",
+            "typeface": "Microsoft YaHei",
+            "fontSizePt": 18,
+            "fontWeight": "400",
+            "alignment": "right",
+            "lineHeightPt": 21
+          },
+          "innerFrame": {
+            "width": 150,
+            "height": 28,
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "media": null
+        }
+      ],
+      "issues": [
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "low-title"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "low-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "work-title"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "work-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "custom-title"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "custom-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "advanced-title"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "advanced-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "showcase-title"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "showcase-body"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "axis-low"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "axis-label"
+        },
+        {
+          "code": "declared-capacity-exceeds-geometry",
+          "slotId": "axis-high"
+        }
+      ]
+    }
+  ]
+}

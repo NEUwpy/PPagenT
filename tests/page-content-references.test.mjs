@@ -45,4 +45,20 @@ test("结构化数据只接受完整且唯一的 PageContent 引用", () => {
   assert.ok(validateStructuredDataReferences(convergence).some((issue) => (
     issue.code === "UNASSIGNED_ITEM" && issue.ids.includes("s2")
   )));
+
+  const branching = {
+    items: [item("route-a"), item("route-b")],
+    structuredData: {
+      type: "branching-decision",
+      context: { title: "输入", body: "" },
+      decision: { title: "是否满足条件" },
+      branches: [
+        { id: "route-a", condition: "满足" },
+        { id: "unknown", condition: "不满足" },
+      ],
+    },
+  };
+  const branchingIssues = validateStructuredDataReferences(branching);
+  assert.ok(branchingIssues.some((issue) => issue.code === "UNKNOWN_ITEM_REFERENCE"));
+  assert.ok(branchingIssues.some((issue) => issue.code === "UNASSIGNED_ITEM"));
 });

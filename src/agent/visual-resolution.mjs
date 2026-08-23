@@ -224,6 +224,23 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
         "needs-semantic-refinement",
       )));
     }
+    const isEditorial = pageContents[index].logicIntent?.logicId === "editorial" || intent.baseRelation === "none";
+    if (!structuralCandidates.length && !isEditorial) {
+      return {
+        pageId,
+        intentId: intent.intentId,
+        candidates: [],
+        capacityDensity,
+        gap: {
+          type: "asset-gap",
+          logicId: pageContents[index].logicIntent?.logicId ?? null,
+          baseRelation: intent.baseRelation,
+          itemCount: intent.structure.itemCount,
+          reason: "当前核心资产库没有语义与容量均兼容的 Structure Group",
+        },
+        semanticRejections: semantic.rejections,
+      };
+    }
     const bodyVariant = variants.find((variant) => variant.renderer === "skin" && variant.fallbackBody);
     if (!bodyVariant) throw new Error("核心资产包缺少正文兜底页");
     const bodyMetadata = metadataById.get(bodyVariant.assetId);

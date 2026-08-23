@@ -18,6 +18,7 @@
     "assets:dashboard:build": "node src/tools/build-logic-dashboard.mjs",
     "assets:dashboard:exe": "npx -y node@25.5.0 src/tools/build-dashboard-exe.mjs",
     "assets:examples": "node src/tools/build-structure-group-examples.mjs .",
+    "assets:slot-contracts": "node src/tools/build-html-slot-contracts.mjs .",
     "validate:contracts": "node src/tools/validate-rule-layer.mjs .",
     "match": "node src/tools/match-page-intent.mjs --root .",
     "agent:run": "node src/agent/run-workflow.mjs --root .",

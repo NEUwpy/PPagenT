@@ -180,7 +180,7 @@ export function detectStructuralCues(rawMarkdown) {
         cueId: `${idPrefix}-spectrum`,
         sectionHeading: section.heading,
         type: "spectrum-focus",
-        relation: "hub",
+        relation: "progression",
         source: spectrum,
       });
       return;

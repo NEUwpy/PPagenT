@@ -67,10 +67,11 @@ test("看板只把资产专属 HTML 计入迁移完成度", async () => {
   assert.equal(cycle?.nativeOutputAvailable, true);
   assert.equal(cycle?.slotContract?.resolverExport, "resolveContentSlots");
   assert.equal(data.activeSkin?.componentTheme?.typography?.componentBody, 19);
-  assert.equal(data.activeSkin?.pptPointScale, 0.75);
+  assert.equal(data.activeSkin?.typographyUnit, "ppt-pt");
+  assert.equal(data.activeSkin?.pptPointScale, 1);
   assert.equal(cycle?.builderExport, "");
   assert.equal(cycle?.componentInitialSelection.stepCount, 4);
-  assert.equal(data.summary.htmlDesignComponents, 12);
+  assert.equal(data.summary.htmlDesignComponents, 16);
   assert.match(cycle?.previewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.componentPreviewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.nativeStatePreviewUrl ?? "", /[?&]v=\d+/);
@@ -112,11 +113,16 @@ test("鱼骨、问题方案结果与矩阵象限均进入正式生成线", async
 
 test("预览使用版本化长期缓存，主数据仍保持实时", async () => {
   const server = await fs.readFile(path.join(root, "src/tools/serve-logic-dashboard.mjs"), "utf8");
+  const template = await fs.readFile(path.join(root, "src/tools/templates/logic-dashboard.html"), "utf8");
   assert.match(server, /max-age=31536000, immutable/);
   assert.match(server, /fetch\("\/api\/dashboard-data", \{ cache: "no-store" \}\)/);
   assert.match(server, /reviewModule\[resolved\.record\.componentExport\] \?\? runtimeModule\[resolved\.record\.componentExport\]/);
   assert.match(server, /pathToFileURL\(htmlRuntimePath\)\.href\}\?dashboard=\$\{htmlRuntimeStat\.mtimeMs\}/);
   assert.match(server, /pathToFileURL\(htmlRuntimePath\)\.href\}\?dashboard=\$\{inputMtime\}/);
+  assert.match(server, /html-component-theme\.mjs/);
+  assert.match(server, /await runRenderer\(pptxPath, outputDir\)/);
+  assert.match(template, /asset\.nativeStatePreviewUrl[\s\S]*selectionQuery\(asset\.componentInitialSelection/);
+  assert.doesNotMatch(template, /preloadAssetEvidence/);
 });
 
 test("看板字号缺失时显示未读取而不是 NaN", async () => {
@@ -147,7 +153,9 @@ test("作废的旧 Logic 不再出现在核心库或正式生成候选中", asyn
     "hub-radial-001", "layered-architecture-001", "parallel-equal-cards-001",
     "convergence-simple-funnel-001", "convergence-funnel-001", "sequence-flow-001",
     "causal-fishbone-attribution-001", "problem-solution-outcome-001",
-    "matrix-quadrant-priority-001",
+    "matrix-quadrant-priority-001", "argument-evidence-conclusion-001",
+    "problem-method-result-001", "progression-spectrum-focus-001",
+    "branching-decision-routes-001",
   ]));
 });
 
@@ -155,7 +163,7 @@ test("Logic 能力地图保留空槽位，只把合格资产填入对应位置",
   const data = await collectLogicDashboardData(root);
   assert.equal(data.logics.length, 20);
   assert.equal(data.summary.logicSlots, 20);
-  assert.equal(data.summary.logicFilled, 11);
+  assert.equal(data.summary.logicFilled, 14);
 
   const cycle = data.logics.find((logic) => logic.id === "cycle");
   assert.deepEqual(cycle?.assetIds, ["cycle-loop-001"]);
@@ -190,7 +198,7 @@ test("Logic 能力地图保留空槽位，只把合格资产填入对应位置",
   assert.equal(causal?.status, "available");
 
   const problemSolution = data.logics.find((logic) => logic.id === "problem-solution");
-  assert.deepEqual(problemSolution?.assetIds, ["problem-solution-outcome-001"]);
+  assert.deepEqual(problemSolution?.assetIds, ["problem-solution-outcome-001", "problem-method-result-001"]);
   assert.equal(problemSolution?.status, "available");
 
   const matrix = data.logics.find((logic) => logic.id === "matrix");
@@ -198,8 +206,12 @@ test("Logic 能力地图保留空槽位，只把合格资产填入对应位置",
   assert.equal(matrix?.status, "available");
 
   const argumentEvidence = data.logics.find((logic) => logic.id === "argument-evidence");
-  assert.deepEqual(argumentEvidence?.assetIds, []);
-  assert.equal(argumentEvidence?.status, "empty");
+  assert.deepEqual(argumentEvidence?.assetIds, ["argument-evidence-conclusion-001"]);
+  assert.equal(argumentEvidence?.status, "available");
+
+  const branching = data.logics.find((logic) => logic.id === "branching");
+  assert.deepEqual(branching?.assetIds, ["branching-decision-routes-001"]);
+  assert.equal(branching?.status, "available");
 });
 
 test("鱼骨归因由同一组件扩散类别与因素状态，并由 Mapper 绑定结果和原因", () => {
@@ -401,9 +413,14 @@ test("循环闭环由同一 HTML 组件解析 3–6 步状态", () => {
 test("看板从当前 HTML State 自动生成容器表并复用到 Native 和 Skin", async () => {
   const template = await fs.readFile(path.join(root, "src/tools/templates/logic-dashboard.html"), "utf8");
   assert.match(template, /readComponentSlotMap/);
+  assert.match(template, /frozenComponentSlotMap/);
+  assert.match(template, /intakeSlotContract/);
+  assert.match(template, /intakeSlotContractUrl/);
+  assert.match(template, /按需读取完整契约/);
   assert.match(template, /data-slot-map-list/);
   assert.match(template, /data-slot-overlay/);
-  assert.match(template, /slotMaxChars/);
+  assert.match(template, /fontSizePt/);
+  assert.match(template, /入库时固化的字体—容器契约/);
   assert.match(template, /slotProvider/);
   assert.match(template, /悬停查看可编辑容器/);
 });

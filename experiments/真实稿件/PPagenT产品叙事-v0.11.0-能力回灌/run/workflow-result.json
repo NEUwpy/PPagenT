@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "1.0",
+  "status": "delivered",
+  "workflowMode": "production",
+  "deckId": "ppagent-product-narrative",
+  "skinId": "northeastern-university-001",
+  "pageCount": 13,
+  "outputPptx": "experiments/真实稿件/PPagenT产品叙事-v0.11.0-能力回灌/PPagenT产品叙事-v0.11.0-能力回灌.pptx",
+  "deterministicQualityAudit": {
+    "status": "passed",
+    "typography": {
+      "status": "passed",
+      "minimumFontSize": 16,
+      "violations": []
+    },
+    "geometry": {
+      "status": "passed",
+      "tolerance": 0.5,
+      "qaParentCount": 10,
+      "connectorCount": 0,
+      "qaParentCountBySlide": {
+        "slide-01": 0,
+        "slide-02": 0,
+        "slide-03": 1,
+        "slide-04": 1,
+        "slide-05": 1,
+        "slide-06": 1,
+        "slide-07": 1,
+        "slide-08": 1,
+        "slide-09": 1,
+        "slide-10": 1,
+        "slide-11": 1,
+        "slide-12": 1,
+        "slide-13": 0
+      },
+      "violations": []
+    }
+  },
+  "finalQa": {
+    "deterministicQualityAudit": {
+      "status": "passed",
+      "typography": {
+        "status": "passed",
+        "minimumFontSize": 16,
+        "violations": []
+      },
+      "geometry": {
+        "status": "passed",
+        "tolerance": 0.5,
+        "qaParentCount": 10,
+        "connectorCount": 0,
+        "qaParentCountBySlide": {
+          "slide-01": 0,
+          "slide-02": 0,
+          "slide-03": 1,
+          "slide-04": 1,
+          "slide-05": 1,
+          "slide-06": 1,
+          "slide-07": 1,
+          "slide-08": 1,
+          "slide-09": 1,
+          "slide-10": 1,
+          "slide-11": 1,
+          "slide-12": 1,
+          "slide-13": 0
+        },
+        "violations": []
+      }
+    },
+    "postRenderReview": "not-part-of-production-workflow",
+    "overflow": {
+      "status": "passed",
+      "tool": {
+        "name": "slides_test.py",
+        "sha256": "e0f660c3a03c524e54a2b0ac4cdd55646502f18bad409593d056a1ea570f5de0"
+      },
+      "output": "Test passed. No overflow detected."
+    }
+  },
+  "runManifest": "experiments/真实稿件/PPagenT产品叙事-v0.11.0-能力回灌/run/run-manifest.json"
+}

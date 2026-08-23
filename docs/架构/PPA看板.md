@@ -41,13 +41,13 @@ PPA 看板是 PPagenT 的本地资产建设与审查入口。它不保存第二�
 - `assets/`：核心资产与正式可调用 Logic；
 - `catalog/`：Composition、Purpose、覆盖主题、契约和失败经验；
 - `PPT源/`：唯一原始 PPT 来源目录；
-- 每个资产目录的 `example.pptx`：看板中对应的真实 PPT 外观。
+- HTML Structure Group 的默认 Native State：能力地图缩略图、详情预览和 PPTX 下载共用这一份编译产物；`example.pptx` 只保留为旧资产或脱离看板时的兼容示例。
 
-PPT 预览在首次进入可视区域或打开详情时生成，缓存在 `.tmp/asset-dashboard-previews/`；State 对应的 Native 预览缓存在 `.tmp/asset-dashboard-native-state-previews/`。来源页在 Windows 下优先调用本机 PowerPoint 只导出声明页，没有 Office 时回退到 Artifact Tool；首次读取大模板会显示加载提示，生成后缓存在 `.tmp/asset-dashboard-source-previews/`。
+HTML Structure Group 的 Native PPTX 在默认 State 首次进入可视区域时生成，并由该 PPTX 渲染唯一 PNG，统一缓存在 `.tmp/asset-dashboard-native-state-previews/`。缩略图与详情页直接复用同一 URL；切换其他 State 时才按需生成一次并缓存，不预编译全部组合。旧资产示例仍缓存在 `.tmp/asset-dashboard-previews/`。来源页在 Windows 下优先调用本机 PowerPoint只导出声明页，没有 Office 时回退到 Artifact Tool；首次读取大模板会显示加载提示，生成后缓存在 `.tmp/asset-dashboard-source-previews/`。
 
 预览 URL 带有由真实输入文件修改时间生成的版本号，并允许浏览器长期缓存。文件没有变化时，重新打开或刷新看板直接使用已加载预览；资产代码、源 PPT、Skin 或 HTML 运行时变化后，版本号自动改变，只让对应预览失效。仓库数据本身不缓存，因此资产增删和状态变化仍会立即出现。
 
-`example.pptx` 不是手工拼出的另一份状态库。运行 `npm run assets:examples` 时，工具读取每个 `asset.json` 的 State 控件，并用同一 `review.mjs` 参数解析器和资产声明的 Native 出口生成整个家族。
+正式 HTML 资产不再用 `example.pptx` 建立第二条看板预览线。默认 State 和按需 State 均由同一个 Native 出口生成，最终 PPTX、缩略图和详情图保持同源。
 
 ## 重新构建应用
 

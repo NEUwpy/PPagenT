@@ -196,7 +196,8 @@
     .slot-map-panel > b { display: block; color: #34465f; font-size: 12px; }
     .slot-map-panel > p { margin: 5px 0 9px; color: var(--muted); font-size: 11px; line-height: 1.55; }
     .slot-map-list { max-height: 220px; overflow: auto; border: 1px solid #e3e9f2; border-radius: 8px; background: #fff; }
-    .slot-map-row { display: grid; grid-template-columns: 88px minmax(130px, 1fr) 112px 82px 82px; gap: 8px; padding: 8px 10px; border-bottom: 1px solid #edf1f6; color: #506077; font-size: 11px; }
+    .slot-map-row { display: grid; grid-template-columns: 82px minmax(120px, 1fr) minmax(180px, 1.4fr) 96px 82px 82px; gap: 8px; padding: 8px 10px; border-bottom: 1px solid #edf1f6; color: #506077; font-size: 11px; }
+    .slot-map-row.issue { background: #fff7ed; }
     .slot-map-row:last-child { border-bottom: 0; }
     .slot-map-row code { overflow-wrap: anywhere; color: #2f5e9f; }
     .slot-map-empty { padding: 13px; color: #8592a5; font-size: 11px; }
@@ -213,6 +214,7 @@
     .footprint { margin: -2px 0 10px; color: #53647c; font-size: 12px; }
     .state-switcher { display: grid; gap: 8px; margin: 0 0 10px; }
     .state-control { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; }
+    .state-control[hidden] { display: none; }
     .state-control > b { min-width: 104px; color: #53647c; font-size: 12px; }
     .state-button { min-width: 42px; min-height: 32px; padding: 5px 10px; border: 1px solid #cbd8ea; border-radius: 8px; color: #4f6078; background: #fff; font-size: 12px; }
     .state-button:hover, .state-button.active { color: #fff; border-color: var(--blue); background: var(--blue); }
@@ -426,10 +428,15 @@
     function previewMarkup(asset, drawer = false) {
       const className = drawer ? "drawer-preview" : "logic-preview";
       if (!liveMode) return '<div class="' + className + '"><span>静态快照不加载 PPT 图像<br>双击 PPA看板.exe 查看真实示例</span></div>';
-      if (!asset.previewAvailable || !asset.previewUrl) return '<div class="' + className + '"><span>此资产没有可用的 example.pptx</span></div>';
+      const nativeUrl = asset.nativeStatePreviewUrl
+        ? asset.nativeStatePreviewUrl + '&' + selectionQuery(asset.componentInitialSelection ?? {})
+        : '';
+      const previewUrl = nativeUrl || asset.previewUrl || '';
+      if (!previewUrl) return '<div class="' + className + '"><span>此资产没有可用的 Native 或示例预览</span></div>';
+      const previewLabel = nativeUrl ? 'Native 编译结果' : '原生可编辑 PPT';
       const sourceAttribute = drawer ? 'src' : 'data-preview-src';
-      if (drawer) return '<button type="button" class="' + className + ' preview-open" data-preview-open="' + esc(asset.previewUrl) + '" data-preview-caption="' + esc(asset.name) + ' · 原生可编辑 PPT"><img src="' + esc(asset.previewUrl) + '" alt="' + esc(asset.name) + ' 的 PPT 示例外观"><span hidden>真实 PPT 示例预览生成失败</span></button>';
-      return '<div class="' + className + '"><img ' + sourceAttribute + '="' + esc(asset.previewUrl) + '" alt="' + esc(asset.name) + ' 的 PPT 示例外观"><span hidden>真实 PPT 示例预览生成失败</span></div>';
+      if (drawer) return '<button type="button" class="' + className + ' preview-open" data-preview-open="' + esc(previewUrl) + '" data-preview-caption="' + esc(asset.name) + ' · ' + previewLabel + '"><img src="' + esc(previewUrl) + '" alt="' + esc(asset.name) + ' 的 ' + previewLabel + '"><span hidden>PPT 预览生成失败</span></button>';
+      return '<div class="' + className + '"><img ' + sourceAttribute + '="' + esc(previewUrl) + '" alt="' + esc(asset.name) + ' 的 ' + previewLabel + '"><span hidden>PPT 预览生成失败</span></div>';
     }
 
     function pendingApprovalPreviewMarkup(asset) {
@@ -448,7 +455,61 @@
       'item-body': '正文', 'item-point': '分点', content: '内容',
     };
 
-    function readComponentSlotMap(frame) {
+    function currentComponentSelection(flow) {
+      return Object.fromEntries([...flow.querySelectorAll('.state-control[data-control-key]')].map((row) => [
+        row.dataset.controlKey,
+        row.querySelector('.state-button.active')?.dataset.componentValue ?? '',
+      ]));
+    }
+
+    function frozenComponentSlotMap(flow) {
+      const asset = byKey.get(flow?.dataset.assetKey || '');
+      const contract = asset?.intakeSlotContract;
+      if (!contract) return null;
+      if (contract.deferred) {
+        return {
+          width: Number(asset.spatialContract?.contentFrame?.width) || 1170,
+          height: Number(asset.spatialContract?.contentFrame?.height) || 492,
+          source: 'deferred-intake-contract',
+          status: contract.status,
+          error: '实时看板打开详情后按需读取完整契约',
+          slots: [],
+        };
+      }
+      if (!contract.states?.length || !contract.variants?.length) {
+        return {
+          width: Number(asset.spatialContract?.contentFrame?.width) || 1170,
+          height: Number(asset.spatialContract?.contentFrame?.height) || 492,
+          source: 'frozen-intake-contract',
+          status: contract.status,
+          error: contract.error || '',
+          slots: [],
+        };
+      }
+      const selection = currentComponentSelection(flow);
+      const state = contract.states.find((entry) => Object.entries(entry.selection ?? {}).every(([key, value]) => String(selection[key]) === String(value)));
+      const variant = state ? contract.variants.find((entry) => entry.id === state.variantId) : null;
+      if (!variant) return null;
+      return {
+        width: Number(asset.spatialContract?.contentFrame?.width) || 1170,
+        height: Number(asset.spatialContract?.contentFrame?.height) || 492,
+        source: 'frozen-intake-contract',
+        status: contract.status,
+        slots: variant.slots.map((slot) => ({
+          ...slot,
+          left: slot.frame.left,
+          top: slot.frame.top,
+          width: slot.frame.width,
+          height: slot.frame.height,
+          provider: slot.media?.provider || '',
+          issues: variant.issues.filter((issue) => issue.slotId === slot.id).map((issue) => issue.code),
+        })),
+      };
+    }
+
+    function readComponentSlotMap(frame, flow) {
+      const frozen = frozenComponentSlotMap(flow);
+      if (frozen) return frozen;
       try {
         const doc = frame.contentDocument;
         const root = doc?.querySelector('[data-ppt-root]');
@@ -476,7 +537,7 @@
             height: Math.round(box.height / rootBox.height * height * 10) / 10,
           };
         }).filter((slot) => slot.id && slot.width > 0 && slot.height > 0);
-        return { width, height, slots };
+        return { width, height, source: 'live-dom-unfrozen', status: 'missing', slots };
       } catch {
         return null;
       }
@@ -484,20 +545,32 @@
 
     function renderComponentSlotMap(flow) {
       const frame = flow?.querySelector('[data-component-slot-source]');
-      const map = frame ? readComponentSlotMap(frame) : null;
+      const map = frame ? readComponentSlotMap(frame, flow) : null;
       if (!map) return;
       const list = flow.querySelector('[data-slot-map-list]');
       if (list) list.innerHTML = map.slots.length ? map.slots.map((slot) => {
         const role = slotRoleLabels[slot.role] || slot.role;
+        const issueNote = slot.issues?.includes('text-slot-needs-explicit-rectangular-container')
+          ? ' · 容器待明确'
+          : slot.issues?.includes('declared-capacity-exceeds-geometry')
+            ? ' · 原登记超出实际容量'
+            : '';
         const ability = slot.contentType === 'icon'
           ? '图标 · ' + esc(slot.provider || '未指定') + (slot.required ? ' · 必填' : ' · 可选')
           : (slot.textMode === 'flow' ? '整块正文' : '单行文字')
             + (slot.listPolicy === 'inline' ? ' · 段落/分点共用' : '')
-            + (slot.maxChars ? ' · ≤ ' + slot.maxChars + ' 字' : ' · 字数待声明')
-            + (slot.maxLines ? ' · ' + slot.maxLines + ' 行' : '')
-            + (slot.required ? ' · 必填' : ' · 可选');
-        return '<div class="slot-map-row"><b>' + esc(role) + '</b><code>' + esc(slot.field || slot.id) + '</code><span>' + ability + '</span><span>x ' + slot.left + ' · y ' + slot.top + '</span><span>' + slot.width + ' × ' + slot.height + '</span></div>';
-      }).join('') : '<div class="slot-map-empty">当前组件没有暴露可编辑容器；不能仅凭 fieldContract 推测位置。</div>';
+            + (slot.capacity?.maxChars || slot.maxChars ? ' · ≤ ' + (slot.capacity?.maxChars || slot.maxChars) + ' 字' : ' · 字数待计算')
+            + (slot.capacity?.maxLines || slot.maxLines ? ' · ' + (slot.capacity?.maxLines || slot.maxLines) + ' 行' : '')
+            + (slot.required ? ' · 必填' : ' · 可选')
+            + issueNote;
+        const typography = slot.typography
+          ? slot.typography.fontSizePt + ' pt · ' + esc(slot.typography.typeface) + ' · ' + esc(slot.typography.alignment)
+          : '字号待固化';
+        const capacity = slot.contentType === 'text' && slot.capacity?.charsPerLine
+          ? slot.capacity.charsPerLine + ' 字/行 · ' + slot.capacity.maxLines + ' 行'
+          : ability;
+        return '<div class="slot-map-row' + (slot.issues?.length ? ' issue' : '') + '"><b>' + esc(role) + '</b><code>' + esc(slot.field || slot.id) + '</code><span>' + ability + '</span><span>' + typography + '</span><span>' + capacity + '</span><span>' + slot.width + ' × ' + slot.height + '</span></div>';
+      }).join('') : '<div class="slot-map-empty">' + (map.status === 'build-error' ? '契约生成失败：' + esc(map.error || '请先修复当前 HTML 编译问题') : '当前组件没有暴露可编辑容器；不能仅凭 fieldContract 推测位置。') + '</div>';
 
       const slide = DATA.activeSkin?.slideSize ?? { width: 1280, height: 720 };
       const content = DATA.activeSkin?.slots?.contentFrame ?? { left: 55, top: 166, width: 1170, height: 492 };
@@ -506,7 +579,8 @@
           const role = slotRoleLabels[slot.role] || slot.role;
           const ability = slot.contentType === 'icon'
             ? (slot.required ? '必填图标' : '可选图标')
-            : (slot.textMode === 'flow' ? '整块正文' : (slot.maxChars ? '≤' + slot.maxChars + '字' : '文字'));
+            : (slot.typography?.fontSizePt ? slot.typography.fontSizePt + 'pt · ' : '')
+              + (slot.textMode === 'flow' ? '整块正文' : (slot.capacity?.maxChars || slot.maxChars ? '≤' + (slot.capacity?.maxChars || slot.maxChars) + '字' : '文字'));
           const left = (content.left + slot.left / map.width * content.width) / slide.width * 100;
           const top = (content.top + slot.top / map.height * content.height) / slide.height * 100;
           const width = slot.width / map.width * content.width / slide.width * 100;
@@ -527,6 +601,7 @@
     function reviewWorkflowMarkup(asset) {
       if (!liveMode) return '<div class="review-flow"><h3>建设链证据</h3><p>静态快照不加载来源页和实时 HTML。请双击 PPA看板.exe。</p></div>';
       const htmlRoute = asset.renderer === 'html-component';
+      const awaitingHtmlApproval = htmlRoute && asset.componentFidelityStatus !== 'user-approved';
       const sourcePreviews = asset.sourcePreviewUrls ?? [];
       const sourceButtons = sourcePreviews.length > 1 ? '<div class="state-switcher"><div class="state-control"><b>来源参考</b>' + sourcePreviews.map((item, index) => '<button type="button" class="state-button' + (index === 0 ? ' active' : '') + '" data-source-preview="' + esc(item.url) + '" data-source-slide="' + item.slide + '">来源 ' + (index + 1) + '</button>').join('') + '</div></div>' : '';
       const sourceMedia = asset.sourcePreviewAvailable && asset.sourcePreviewUrl
@@ -554,24 +629,32 @@
         const pointScale = Number(DATA.activeSkin?.pptPointScale);
         if (!Number.isFinite(designSize) || !Number.isFinite(pointScale)) return '<li>' + esc(label) + '：<code>未读取</code></li>';
         const pointSize = Math.round(designSize * pointScale * 100) / 100;
-        return '<li>' + esc(label) + '：<code>' + esc(designSize) + ' px / ' + esc(pointSize) + ' pt</code></li>';
+        return '<li>' + esc(label) + '：<code>' + esc(pointSize) + ' pt</code></li>';
       }).join('') + '</ul></div><div><b>执行规则</b><ul><li>组件只能引用字号角色，不能按 State 自行缩小</li><li>文字超量时压缩、拆页、换组或拒绝</li><li>Native 文本框使用 noAutofit，不自动缩字</li></ul></div></div>';
       let componentMedia = htmlRoute
         ? '<div class="review-media component"><span>此资产尚未迁移为专属 HTML 组件</span></div>'
         : '<div class="review-media component"><span>当前使用原有组件代码</span></div>';
       let stateButtons = '';
       let footprint = '';
-      let nativeMedia = previewMarkup(asset, true);
+      let nativeMedia = awaitingHtmlApproval
+        ? '<div class="drawer-preview"><span>HTML 确认后再生成 Native/PPT</span></div>'
+        : previewMarkup(asset, true);
       let nativeDownload = '';
-      const slotMapPanel = htmlRoute ? '<div class="slot-map-panel"><b>自动读取的 Slot Contract</b><p>字段、坐标、尺寸、字数／行数和图标要求直接来自当前 State 的最终 DOM；同一份能力供看板、视觉导演和最终编译使用。</p><div class="slot-map-list" data-slot-map-list><div class="slot-map-empty">正在读取当前 HTML State…</div></div></div>' : '';
-      let skinMedia = '<div class="drawer-preview"><span>当前资产没有 Skin State 预览</span></div>';
+      const slotMapPanel = htmlRoute ? '<div class="slot-map-panel"><b>入库时固化的字体—容器契约</b><p>坐标、内框、字体、字号、对齐、每行字数和最大行数均由当前 State 的最终 HTML 预先计算；正式使用只读取结果，不再现场测量。</p><div class="slot-map-list" data-slot-map-list><div class="slot-map-empty">正在读取当前 State 的固化契约…</div></div></div>' : '';
+      let skinMedia = awaitingHtmlApproval
+        ? '<div class="drawer-preview"><span>HTML 确认后再进入 Skin 核对</span></div>'
+        : '<div class="drawer-preview"><span>当前资产没有 Skin State 预览</span></div>';
       if (asset.componentControls?.length) {
         const initialSelection = asset.componentInitialSelection ?? {};
-        stateButtons = '<div class="state-switcher" aria-label="审查参数">' + asset.componentControls.map((control) => '<div class="state-control" data-control-key="' + esc(control.key) + '"><b>' + esc(control.label) + '</b>' + control.values.map((value) => {
+        stateButtons = '<div class="state-switcher" aria-label="审查参数">' + asset.componentControls.map((control) => {
+          const when = control.when ?? {};
+          const visible = Object.entries(when).every(([key, values]) => (values ?? []).map(String).includes(String(initialSelection[key])));
+          return '<div class="state-control" data-control-key="' + esc(control.key) + '" data-control-when="' + esc(JSON.stringify(when)) + '"' + (visible ? '' : ' hidden') + '><b>' + esc(control.label) + '</b>' + control.values.map((value) => {
           const active = value === initialSelection[control.key];
           const label = control.valueLabels?.[value] ?? value;
           return '<button type="button" class="state-button' + (active ? ' active' : '') + '" aria-pressed="' + active + '" data-component-control="' + esc(control.key) + '" data-component-value="' + esc(value) + '">' + esc(label) + '</button>';
-        }).join('') + '</div>').join('') + '</div>';
+          }).join('') + '</div>';
+        }).join('') + '</div>';
         const initialQuery = selectionQuery(initialSelection);
         const initialStateKey = String(Object.values(initialSelection)[0] ?? '');
         const initialFootprint = asset.stateFootprints?.[initialStateKey];
@@ -587,27 +670,12 @@
           skinMedia = '<button type="button" class="drawer-preview preview-open" data-skin-preview data-skin-base="' + esc(asset.skinStatePreviewUrl) + '" data-preview-open="' + esc(skinUrl) + '" data-preview-caption="' + esc(asset.name) + ' · 东北大学 Skin"><img src="' + esc(skinUrl) + '" alt="' + esc(asset.name) + ' 放入东北大学 Skin 后的结果"><div class="native-slot-layer" data-slot-overlay></div><span hidden>Skin 预览生成失败</span></button>';
         }
       }
-      return '<div class="review-flow"><h3>' + (htmlRoute ? '参考 → 视觉意图 → HTML → Native → Skin' : '来源 → 组件代码 → 可编辑 PPT') + '</h3><p>' + (htmlRoute ? 'HTML 只看提炼后的逻辑与审美意图；Native PPT 只做机械编译。' : '这是旧流程资产；State 直接由现有组件代码生成。') + '</p>'
+      return '<div class="review-flow" data-asset-key="' + esc(asset.library + ':' + asset.id) + '"><h3>' + (htmlRoute ? '参考 → 视觉意图 → HTML → Native → Skin' : '来源 → 组件代码 → 可编辑 PPT') + '</h3><p>' + (htmlRoute ? 'HTML 只看提炼后的逻辑与审美意图；Native PPT 只做机械编译。' : '这是旧流程资产；State 直接由现有组件代码生成。') + '</p>'
         + '<div class="review-stage"><div class="review-stage-head"><b>1 · 来源参考</b><span>用于提炼，不作为 HTML 的直接输入</span></div>' + sourceButtons + sourceMedia + '</div>'
         + '<div class="review-stage"><div class="review-stage-head"><b>2 · 视觉意图</b><span>逻辑表达方式与审美语言</span></div>' + intentMedia + '</div>'
         + '<div class="review-stage" data-component-stage data-component-base="' + esc(asset.componentPreviewUrl ?? '') + '"><div class="review-stage-head"><b>3 · ' + (htmlRoute ? 'HTML Structure Group' : '可选 State') + '</b><span>同一组件按数量重新编排</span></div>' + componentProfile + fieldContract + stateButtons + footprint + componentMedia + slotMapPanel + '</div>'
         + '<div class="review-stage"><div class="review-stage-head"><b>4 · Native 编译结果</b><span>与 HTML 使用同一 State；悬停查看可编辑容器</span></div>' + nativeMedia + nativeDownload + '</div>'
         + '<div class="review-stage"><div class="review-stage-head"><b>5 · 东北大学 Skin</b><span>仅用于核对组件进入统一 Shell 后的效果，不作为下载交付物</span></div>' + typographyContract + skinMedia + '</div></div>';
-    }
-
-    function stateSelections(asset) {
-      const controls = asset.componentControls ?? [];
-      let selections = [{}];
-      for (const control of controls) selections = selections.flatMap((selection) => control.values.map((value) => ({ ...selection, [control.key]: value })));
-      return selections.slice(0, 12);
-    }
-
-    function preloadAssetEvidence(asset) {
-      for (const source of asset.sourcePreviewUrls ?? []) { const image = new Image(); image.src = source.url; }
-      for (const selection of stateSelections(asset)) {
-        if (asset.nativeStatePreviewUrl) { const image = new Image(); image.src = asset.nativeStatePreviewUrl + '&' + selectionQuery(selection); }
-        if (asset.skinStatePreviewUrl) { const image = new Image(); image.src = asset.skinStatePreviewUrl + '&' + selectionQuery(selection); }
-      }
     }
 
     function activatePreviewImages() {
@@ -762,8 +830,14 @@
       return '<dl class="detail-grid">' + rows.map(([label, value]) => '<dt>' + esc(label) + '</dt><dd>' + value + '</dd>').join("") + '</dl>';
     }
 
-    function openAsset(asset) {
+    async function openAsset(asset) {
       if (!asset) return;
+      if (liveMode && asset.intakeSlotContract?.deferred && asset.intakeSlotContractUrl) {
+        asset.intakeSlotContract = await fetch(asset.intakeSlotContractUrl).then((response) => {
+          if (!response.ok) throw new Error('字体—容器契约读取失败：' + response.status);
+          return response.json();
+        });
+      }
       const source = asset.source ? esc(asset.source.file || "—") + (asset.source.slides?.length ? " · 第 " + esc(asset.source.slides.join("、")) + " 页" : "") : "—";
       const purposeDetails = asset.purposes?.length ? asset.purposes.map((item) => '<div><code>' + esc(item.key) + '</code> · ' + esc(item.description) + '</div>').join("") : "—";
       const stateDetails = asset.stateContract ? '<code>' + esc(JSON.stringify(asset.stateContract)) + '</code>' : "—";
@@ -779,7 +853,6 @@
       connectComponentSlotMap(document.getElementById("drawer-content"));
       document.body.style.overflow = "hidden";
       document.getElementById("drawer-close").focus();
-      preloadAssetEvidence(asset);
     }
 
     function closeDrawer() {
@@ -850,7 +923,11 @@
           const active = row.querySelector(".state-button.active");
           return [row.dataset.controlKey, active?.dataset.componentValue ?? ""];
         }));
-        const summary = [...stage.querySelectorAll(".state-control")].map((row) => row.querySelector(".state-button.active")?.textContent).filter(Boolean).join(" / ");
+        for (const row of stage.querySelectorAll(".state-control")) {
+          const when = JSON.parse(row.dataset.controlWhen || "{}");
+          row.hidden = !Object.entries(when).every(([key, values]) => (values ?? []).map(String).includes(String(selection[key])));
+        }
+        const summary = [...stage.querySelectorAll(".state-control:not([hidden])")].map((row) => row.querySelector(".state-button.active")?.textContent).filter(Boolean).join(" / ");
         const query = selectionQuery(selection);
         if (status) status.textContent = "正在显示 " + summary + "…";
         if (frame) {
@@ -887,7 +964,7 @@
         return;
       }
       const assetTarget = event.target.closest("[data-asset-key]");
-      if (assetTarget) openAsset(byKey.get(assetTarget.dataset.assetKey));
+      if (assetTarget) void openAsset(byKey.get(assetTarget.dataset.assetKey));
       const coverageTarget = event.target.closest("[data-coverage]");
       if (coverageTarget) {
         state.coverage = coverageTarget.dataset.coverage;

@@ -20,7 +20,7 @@
 5. **数量变化必须重新求解。** 从 content 中识别重复单元和层级，使用一个 `render(data)` 或等价入口按数量重新计算角度、网格、间距、连接和文字姿态。不得为每个数量维护独立页面，也不得只做等比缩放。
 6. **只复现来源精髓，不复制 Shell。** 只生成指定 Content Frame；不生成页标题、Logo、页脚、页码、方案名、审查控件或实验说明。
 7. **可填区域与父拓扑同源。** 若 visual-intent 声明了可填区域，必须从当前 State 的同一布局参数计算其实际 frame，并在对应 DOM 容器上写稳定的 `data-content-slot-id` 与语义角色。不得把整个装饰面、被父主体遮住的部分或视觉内边距算进可填空间，也不得为 Native 端另写一份坐标。
-8. **所有可替换字段必须暴露完整 Slot Contract。** 中心主题、节点标题、正文、分点、图标和媒体等真实可编辑区域，必须直接在最终可见 DOM/SVG 元素上声明稳定的 `data-slot-id / data-slot-role / data-slot-field`；重复项同时声明 `data-slot-item-id`。文字槽还声明 `data-slot-content-type=text / data-slot-max-chars / data-slot-max-lines`；图标槽声明 `data-slot-content-type=icon / data-slot-provider / data-slot-required`。这些值必须与组件实际拒绝超量输入的规则一致。看板、视觉导演和 Native 编译从同一 DOM 自动读取，不接受另写一张容器坐标或容量表。
+8. **所有可替换字段必须暴露可计算的 Slot Contract。** 中心主题、节点标题、正文、分点、图标和媒体等真实可编辑区域，必须直接在最终可见、具有稳定边界的 DOM/SVG 承载元素上声明 `data-slot-id / data-slot-role / data-slot-field / data-slot-content-type`；重复项同时声明 `data-slot-item-id`，图标槽声明 `data-slot-provider / data-slot-required`。文字槽不得只标在字形或 SVG `<text>` 上。字数与行数由入库程序依据最终容器、固定字号和字体度量计算并写入 `slot-contract.json`，不得凭样例文本手填一份容量表；若保留 `data-slot-max-chars / data-slot-max-lines`，它们只作为待核对的设计上限，不能覆盖计算结果。
 
 在写代码前，先在内部建立一份精简的“场景层级清单”：把 visual-intent 中每个产生可见轮廓的主体、支持区、遮罩/裁切、连接、覆盖层、文字轨道和负空间，对应到一个真实 DOM/SVG 实体或一条明确的几何规则。只声明 CSS 类、只保留数据、或只在注释里提到，都不算实现。若视觉意图说明某个凹口由遮罩切出，就必须真的存在遮罩、clipPath 或等价布尔几何；不能让两个较短的矩形碰巧留下空白来冒充。
 
@@ -57,6 +57,9 @@
 - 使用语义化 HTML、CSS 和可编辑 SVG/DOM 几何；不得把主结构做成位图。
 - 不使用外部库、外部字体或网络资源。
 - 画布尺寸服从 content.json。
+- 字号只能引用 Skin 的语义令牌；令牌单位是 PowerPoint `pt`，HTML 使用同值 CSS `pt`，不得改写成同数字的 `px`。
+- 最小字号是可读性下限，不是所有文字都应采用的基准；同一组件应按主节点、子节点、正文和辅助标签选择恰当层级，避免为了通过下限检查而整体放大、破坏留白和信息密度。
+- 圆、胶囊、编号块等“形状与居中文字不可分”的单一视觉原语，必须作为一个可编辑形状文字节点编译；不得拆成独立形状和悬浮文字框后依赖二者碰巧同心。
 - 文本必须保持正常阅读方向；只有 visual-intent 明确要求文字依附路径或切线时才旋转。
 - 使用组件化数据映射，代码中区分内容数据、布局求解和视觉绘制。
 

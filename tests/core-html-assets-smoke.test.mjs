@@ -36,7 +36,7 @@ test("每个核心 HTML 资产的一个黄金状态可编译且字号符合自�
         targetFrame,
         theme: northeasternUniversitySkin.componentTheme,
       });
-      const fontSizes = tree.nodes.filter((node) => node.text).map((node) => node.style?.fontSize).filter(Number.isFinite);
+      const fontSizes = tree.nodes.filter((node) => node.text).map((node) => node.style?.fontSizePt).filter(Number.isFinite);
       assert.ok(fontSizes.length > 0, `${descriptor.assetId} 没有可检查文字`);
       const actualMinimum = Math.min(...fontSizes);
       const declaredMinimum = descriptor.asset.spatialContract?.minFontSize ?? 16;

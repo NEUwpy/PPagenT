@@ -1,0 +1,150 @@
+{
+  "id": "progression-spectrum-focus-001",
+  "name": "连续区间重点分布",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "gap-driven-design",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "docs/产品叙事.md"
+  },
+  "references": [
+    {
+      "assetId": "parallel-equal-cards-001",
+      "role": "设计语言",
+      "adopted": "浅蓝承载面、轻阴影、圆角和清楚的标题正文层级"
+    },
+    {
+      "assetId": "sequence-flow-001",
+      "role": "阅读方向",
+      "adopted": "稳定的左到右阅读秩序与共同基线"
+    }
+  ],
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "progression",
+    "structureGroupId": "progression-spectrum-focus",
+    "familyId": "progression-spectrum",
+    "variantId": "ordered-regions-with-focus",
+    "silhouette": "ordered-spectrum-with-raised-focus",
+    "supportedBaseRelations": ["progression"],
+    "supportedPurposeKeys": ["explain_evolution", "compare_audience_segments"],
+    "itemCount": {
+      "min": 3,
+      "preferred": [3, 4, 5],
+      "max": 5
+    },
+    "stateContract": {
+      "resolver": "itemCount",
+      "states": [3, 4, 5],
+      "previewDefault": 3
+    },
+    "mediaContract": {
+      "mode": "no-image"
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "forbidden",
+      "ordered": true,
+      "sharedDimension": true,
+      "singleFocus": true,
+      "connection": "none"
+    },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "semantic": { "ordered": true },
+        "relationTraits": {},
+        "density": ["low", "medium"]
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": {
+        "selection": { "itemCount": 3, "focusPosition": 2 }
+      },
+      "controls": [
+        {
+          "key": "itemCount",
+          "label": "区间数量",
+          "values": [3, 4, 5],
+          "default": 3
+        },
+        {
+          "key": "focusPosition",
+          "label": "四区重点位置",
+          "values": [2, 3],
+          "default": 2,
+          "when": { "itemCount": [4] }
+        }
+      ]
+    }
+  },
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "同一 Structure Group 支持 3–5 个有序区域；指定其中一个重点区域",
+    "rule": "所有区域沿同一横轴等距重排；重点区域抬升并加重，但不改变其真实顺序；不得生成中心到外围的连线"
+  },
+  "componentModel": {
+    "fixed": [
+      "左低右高的共同语义轴",
+      "连续区域与单一重点的层级关系",
+      "浅蓝灰承载面、圆角、轻阴影和蓝色重点卡片"
+    ],
+    "variable": [
+      "3–5 个有序区域的标题和正文",
+      "共同维度名称及左右端标签",
+      "一个重点区域的位置"
+    ]
+  },
+  "fieldContract": {
+    "editable": [
+      { "field": "dimensionLabel", "meaning": "所有区域共享的比较或递进维度" },
+      { "field": "axisLow", "meaning": "共同轴左端标签" },
+      { "field": "axisHigh", "meaning": "共同轴右端标签" },
+      { "field": "items.length", "meaning": "3、4 或 5 个有序区域" },
+      { "field": "items[].title", "meaning": "区域名称" },
+      { "field": "items[].body", "meaning": "区域说明" },
+      { "field": "focusIndex", "meaning": "唯一重点区域的零基索引" }
+    ],
+    "fixed": [
+      "区域始终共享一条轴并保持原始次序",
+      "区域之间没有中心支撑、父子或因果连线",
+      "字号角色由 Skin 提供，组件不得自行缩字"
+    ],
+    "unavailable": ["无共同维度的普通并列", "两两比较", "中心辐射", "非连续分类"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "stateFootprints": {
+      "3": { "width": 1070, "height": 444, "basis": "component-root-visible-bounds" },
+      "4": { "width": 1070, "height": 444, "basis": "component-root-visible-bounds" },
+      "5": { "width": 1110, "height": 444, "basis": "component-root-visible-bounds" }
+    },
+    "resizeMode": "natural",
+    "minFontSize": 17,
+    "safePadding": 12,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "3–5 个有序区域；标题不超过 8 字，正文不超过 28 字；一个不超过 14 字的共同维度和一个重点区域",
+  "semanticContract": "多个区域沿同一个连续维度有序分布，其中一个区域是论述重点；区域之间没有中心到外围的支撑关系",
+  "doNotUseWhen": "对象只是普通并列、没有共同轴、需要两两比较、存在父子层级，或中心主题向外围发散",
+  "review": "用户确认淡蓝正态分布背景、3–5 区扩散及四区第 2／第 3 区重点选择；Native/PPT 与东北大学 Skin 同步落地，可进入正式生成线"
+}

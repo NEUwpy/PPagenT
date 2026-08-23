@@ -1,0 +1,143 @@
+{
+  "id": "branching-decision-routes-001",
+  "name": "分支决策路径",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "PPT源/狗哥蓝色-精美逻辑图PPT模板.pptx",
+    "slides": [78]
+  },
+  "references": [
+    {
+      "file": "PPT源/狗哥蓝色-精美逻辑图PPT模板.pptx",
+      "slides": [41],
+      "role": "判断节点与路径标注",
+      "adopted": "菱形决策节点位于主路径，分支从真实锚点出发，条件文字紧邻对应连接线"
+    },
+    {
+      "file": "PPT源/06-【柏林蓝】定制级学术型灵感手册-宽屏.pptx",
+      "slides": [63],
+      "role": "克制层级与均匀分叉",
+      "adopted": "稳定中轴、均匀展开、连接线弱于内容节点并保留充足留白"
+    }
+  ],
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "branchingDecisionVisualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "branching",
+    "structureGroupId": "branching-decision-routes",
+    "familyId": "branching",
+    "variantId": "single-decision-fanout",
+    "silhouette": "single-context-single-decision-multi-route",
+    "supportedBaseRelations": ["branching"],
+    "supportedPurposeKeys": ["route_by_condition"],
+    "itemCount": {
+      "min": 2,
+      "preferred": [2, 3],
+      "max": 4
+    },
+    "stateContract": {
+      "resolver": "branchCount+contextTextMode+outcomeMode",
+      "branchStates": [2, 3, 4],
+      "contextTextModes": ["标题+说明", "仅标题"],
+      "outcomeModes": ["显示结果", "不显示结果"],
+      "previewDefault": {
+        "branchCount": 3,
+        "contextTextMode": "标题+说明",
+        "outcomeMode": "显示结果"
+      }
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "forbidden",
+      "ordered": false,
+      "requiresStructuredDataType": "branching-decision"
+    },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "relationTraits": { "branched": true },
+        "density": ["low", "medium"]
+      },
+      "fallback": { "tooMany": "split" }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "branchingDecisionVisualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": {
+        "selection": {
+          "branchCount": 3,
+          "contextTextMode": "标题+说明",
+          "outcomeMode": "显示结果"
+        }
+      },
+      "controls": [
+        { "key": "branchCount", "label": "路径数量", "values": [2, 3, 4], "default": 3 },
+        { "key": "contextTextMode", "label": "输入文字", "values": ["标题+说明", "仅标题"], "default": "标题+说明" },
+        { "key": "outcomeMode", "label": "路径结果", "values": ["显示结果", "不显示结果"], "default": "显示结果" }
+      ],
+      "exampleSelections": [
+        { "branchCount": 3, "contextTextMode": "标题+说明", "outcomeMode": "显示结果" }
+      ]
+    }
+  },
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "1 个输入情境、1 个判断节点、2–4 条条件路径",
+    "rule": "入口与判断保持共同中轴；按当前路径数量重新计算组宽、卡片宽度、等距中心和连接锚点；结果为空时整段终点消失"
+  },
+  "componentModel": {
+    "fixed": [
+      "单入口—单判断—多路径的一层决策拓扑",
+      "判断节点、分支总线、条件标签和真实连接锚点"
+    ],
+    "variable": [
+      "2–4 条条件路径",
+      "输入说明、路径说明和路径结果均可省略"
+    ]
+  },
+  "fieldContract": {
+    "editable": [
+      { "field": "context.title", "meaning": "进入判断前的情境或对象" },
+      { "field": "context.body", "meaning": "判断前需要说明的边界或依据，可省略" },
+      { "field": "decision.title", "meaning": "决定后续路径的条件或问题" },
+      { "field": "branches[].condition", "meaning": "进入当前路径的条件标签" },
+      { "field": "branches[].title", "meaning": "当前路径采取的动作或方向" },
+      { "field": "branches[].body", "meaning": "当前动作的简短说明，可省略" },
+      { "field": "branches[].outcome", "meaning": "当前路径的阶段结果，可省略" }
+    ],
+    "generated": [
+      { "field": "branches[].position", "meaning": "程序按当前 State 生成路径位置与连接锚点" }
+    ],
+    "fixed": ["只有一个入口和一个判断节点", "各路径由条件触发而非表达时间顺序"],
+    "unavailable": ["多层连续判断树", "跨泳道职责流程", "同维度方案优劣比较", "无条件的普通并列枚举"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "resizeMode": "natural",
+    "minFontSize": 17,
+    "safePadding": 8,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "1 个输入情境、1 个判断节点、2–4 条条件路径；超过 4 条或需要多层连续判断时换组或拆页",
+  "semanticContract": "一个明确条件或判断把同一输入情境路由到若干互斥或不同的后续动作路径",
+  "doNotUseWhen": "内容只是普通并列、强调统一先后流程、需要按相同维度比较方案，或需要两层以上连续条件判断",
+  "review": "用户已确认 2–4 条路径的 HTML 黄金状态与版式扩散，正式落地"
+}

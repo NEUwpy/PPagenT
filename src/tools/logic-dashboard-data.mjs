@@ -128,14 +128,27 @@ async function normalizeRecord(entry, coverageTags, purposeMap, coreIds, root) {
   const sourcePreviewAvailable = Boolean(sourcePath && sourceSlides.length && isInside(sourceRoot, sourcePath) && await exists(sourcePath));
   const previewVersion = await latestVersion([showcasePath]);
   const sourcePreviewVersion = await latestVersion([sourcePath]);
+  const intakeSlotContractPath = path.join(assetDir, "slot-contract.json");
+  const intakeSlotContract = await exists(intakeSlotContractPath) ? await readJson(intakeSlotContractPath) : null;
+  const intakeSlotContractSummary = intakeSlotContract ? {
+    schemaVersion: intakeSlotContract.schemaVersion,
+    assetId: intakeSlotContract.assetId,
+    status: intakeSlotContract.status,
+    stateCount: intakeSlotContract.states?.length ?? 0,
+    variantCount: intakeSlotContract.variants?.length ?? 0,
+    error: intakeSlotContract.error ?? "",
+    deferred: true,
+  } : null;
   const componentVersion = await latestVersion([
     manifestPath,
     runtime.entry ? path.resolve(assetDir, runtime.entry) : null,
     reviewRuntime?.entry ? path.resolve(assetDir, reviewRuntime.entry) : null,
     path.resolve(assetDir, "component.css"),
     path.join(root, "src", "visual-runtime", "html-component-runtime.mjs"),
+    path.join(root, "src", "visual-runtime", "html-component-theme.mjs"),
     path.join(root, "src", "runtime", "skins", "northeastern-university-theme.mjs"),
     path.join(root, "src", "runtime", "skins", "northeastern-university.mjs"),
+    intakeSlotContractPath,
   ]);
   const componentControls = (reviewRuntime?.controls ?? []).filter((control) => (
     typeof control?.key === "string"
@@ -250,17 +263,21 @@ async function normalizeRecord(entry, coverageTags, purposeMap, coreIds, root) {
     componentInitialState: componentStates.length ? componentInitialSelection[componentControls[0].key] : null,
     componentControls,
     componentInitialSelection,
+    intakeSlotContract: intakeSlotContractSummary,
+    intakeSlotContractUrl: intakeSlotContract
+      ? versionedUrl(`/api/intake-slot-contract?library=${encodeURIComponent(library)}&id=${encodeURIComponent(manifest.id)}`, componentVersion)
+      : null,
     runtimeCapabilities,
     nativeBuilderAvailable,
     nativeCompiledOutputAvailable,
     nativeOutputAvailable: nativeBuilderAvailable || nativeCompiledOutputAvailable,
-    nativeStatePreviewUrl: componentControls.length && (nativeBuilderAvailable || nativeCompiledOutputAvailable)
+    nativeStatePreviewUrl: htmlEligibility?.userApproved && componentControls.length && (nativeBuilderAvailable || nativeCompiledOutputAvailable)
       ? versionedUrl(`/api/native-state-preview?library=${encodeURIComponent(library)}&id=${encodeURIComponent(manifest.id)}`, componentVersion)
       : null,
-    nativeStatePptxUrl: componentControls.length && (nativeBuilderAvailable || nativeCompiledOutputAvailable)
+    nativeStatePptxUrl: htmlEligibility?.userApproved && componentControls.length && (nativeBuilderAvailable || nativeCompiledOutputAvailable)
       ? versionedUrl(`/api/native-state-pptx?library=${encodeURIComponent(library)}&id=${encodeURIComponent(manifest.id)}`, componentVersion)
       : null,
-    skinStatePreviewUrl: componentControls.length && (nativeBuilderAvailable || nativeCompiledOutputAvailable) && renderer !== "skin"
+    skinStatePreviewUrl: htmlEligibility?.userApproved && componentControls.length && (nativeBuilderAvailable || nativeCompiledOutputAvailable) && renderer !== "skin"
       ? versionedUrl(`/api/skin-state-preview?library=${encodeURIComponent(library)}&id=${encodeURIComponent(manifest.id)}`, componentVersion)
       : null,
     runtimeEntry: runtime.entry ?? "",
@@ -339,7 +356,8 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
       slots: academicReportShell.slots,
       componentTheme: northeasternUniversityTheme,
       coordinateUnit: "design-px",
-      pptPointScale: 0.75,
+      typographyUnit: "ppt-pt",
+      pptPointScale: 1,
     },
     summary: {
       coreAssets: coreAssets.length,

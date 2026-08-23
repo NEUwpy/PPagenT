@@ -46,6 +46,21 @@ export function validateStructuredDataReferences(pageContent) {
     });
   }
 
+  if (structured.type === "problem-method-result") {
+    compareIdSets(structured.methodIds, itemIds, "structuredData.methodIds", issues);
+  }
+
+  if (structured.type === "argument-evidence") {
+    compareIdSets(structured.evidenceIds, itemIds, "structuredData.evidenceIds", issues);
+  }
+
+  if (structured.type === "branching-decision") {
+    const branchIds = structured.branches.map((branch) => branch.id);
+    const duplicates = duplicateValues(branchIds);
+    if (duplicates.length) issues.push({ field: "structuredData.branches", code: "DUPLICATE_REFERENCE", ids: duplicates });
+    compareIdSets(branchIds, itemIds, "structuredData.branches", issues);
+  }
+
   if (structured.type === "matrix") {
     const quadrantIds = structured.quadrants.map((quadrant) => quadrant.id);
     const duplicateQuadrants = duplicateValues(quadrantIds);
@@ -164,6 +179,7 @@ const LOGIC_INTENT_DEFAULTS = Object.freeze({
     ordered: true,
     secondaryDimension: "layer",
   },
+  progression: { purposeKey: "explain_evolution", baseRelation: "progression", ordered: true },
   hub: { purposeKey: "explain_topics", baseRelation: "hub", sameLevel: true },
   matrix: { purposeKey: "organize_matrix", baseRelation: "matrix", dimensions: 2, sameLevel: true },
   convergence: { purposeKey: "explain_conversion", baseRelation: "convergence", ordered: true, converging: true },
@@ -172,6 +188,16 @@ const LOGIC_INTENT_DEFAULTS = Object.freeze({
     purposeKey: "connect_problems_and_solutions",
     baseRelation: "composite",
     converging: true,
+  },
+  "argument-evidence": {
+    purposeKey: "support_claim_with_evidence",
+    baseRelation: "composite",
+    converging: true,
+  },
+  branching: {
+    purposeKey: "route_by_condition",
+    baseRelation: "branching",
+    branched: true,
   },
   editorial: { purposeKey: "summarize_research_method", baseRelation: "none" },
 });
@@ -185,6 +211,9 @@ function hierarchyDepth(node) {
 function inferredLogicId(pageContent) {
   if (pageContent.logicIntent?.logicId) return pageContent.logicIntent.logicId;
   if (pageContent.structuredData?.type === "problem-solution") return "problem-solution";
+  if (pageContent.structuredData?.type === "problem-method-result") return "problem-solution";
+  if (pageContent.structuredData?.type === "argument-evidence") return "argument-evidence";
+  if (pageContent.structuredData?.type === "branching-decision") return "branching";
   if (pageContent.structuredData?.type === "matrix") return "matrix";
   if (pageContent.structuredData?.type === "convergence") return "convergence";
   if (pageContent.structuredData?.type === "hierarchy") return "hierarchy";

@@ -44,7 +44,7 @@ PPagenT 采用“AI 理解与选择、参数化代码确定性绘制”的生成
 - `稿件/`：正式生成线的统一原始稿件目录；当前优先保存 UTF-8 Markdown，不放导演中间产物或生成结果。
 - `PPT源/`：全部原始 PPT 的唯一目录；整目录不进入 Git，换电脑时单独复制到仓库根目录。
 - `src/asset-runtime/`：原生 PPT 共享原语、旧资产兼容 Builder，以及 HTML 组件到 Native 对象的编译支撑。
-- `assets/<分类>/<资产>/asset.json + runtime.mjs + review.mjs + generate.mjs + example.pptx`：`asset.json` 用于轻量发现，`runtime.mjs` 暴露入围后才读取的组件容量与 Mapper，`generate.mjs` 只在实际编译时加载重型运行库；结构资产仍只维护一份 HTML 布局真源。
+- `assets/<分类>/<资产>/asset.json + runtime.mjs + review.mjs + generate.mjs`：`asset.json` 用于轻量发现，`runtime.mjs` 暴露入围后才读取的组件容量与 Mapper，`generate.mjs` 只在实际编译时加载重型运行库；结构资产只维护一份 HTML 布局真源，看板缩略图、详情预览与下载共用按 State 生成的 Native PPTX。`example.pptx` 仅作兼容示例。
 - `experiments/`：只保留仍在使用的最小架构实验和 Shell 标注，不再提交整套稿件运行输出或批量渲染物。
 
 ## 公开仓库范围

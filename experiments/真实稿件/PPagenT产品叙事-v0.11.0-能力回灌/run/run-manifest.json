@@ -1,0 +1,107 @@
+{
+  "schemaVersion": "1.0",
+  "status": "delivered",
+  "input": {
+    "sourcePath": "docs/产品叙事.md",
+    "sourceSha256": "33fb4585a648f00d954572c78c161fb760be227bf01a249c51b4c12b96ca665a",
+    "skinId": "northeastern-university-001"
+  },
+  "provider": {
+    "module": "src/agent/deepseek-provider-from-env.mjs",
+    "identity": {
+      "providerKind": "live-schema-aware-model-provider",
+      "contentModel": "deepseek-chat-completions:deepseek-v4-flash:enabled",
+      "structureModel": "disabled",
+      "contentRefinementModel": "deepseek-chat-completions:deepseek-v4-flash:enabled",
+      "visualIntentModel": "deepseek-chat-completions:deepseek-v4-flash:enabled",
+      "visualCompositionModel": "deepseek-chat-completions:deepseek-v4-flash:enabled",
+      "reviewerModel": "deepseek-chat-completions:deepseek-v4-flash:enabled"
+    }
+  },
+  "artifacts": {
+    "content/attempt-01/deck-plan.json": "6f611b2969c0bdcf5aa180a1578b7f1b5b8647d91ef5180d27f87ebd85e95259",
+    "content/attempt-01/page-contents.json": "8bd56355baf2ebe9e494eb77990c0bc59a50aeac6eea1481211ee9e28d5821e0",
+    "visual/attempt-01/candidate-sets.json": "25343094eb89ffe5722bde56a6f6c9dbcdba9be8a320e47d83e8b72fd7a91bb5",
+    "visual/attempt-01/composition-plan.json": "60608ef57a0f7aa2e4cdbc60d217fb7dbb69d90dc30fc38c41293827da619bec",
+    "visual/attempt-01/layout-decisions.json": "5399afd1d50168696f34d991cc85957d6fbf2dcb887ffb16b34bdf01f6503e18",
+    "visual/attempt-01/page-intents.json": "4c41dabb759079365d4760996c77d2ad6a42bbb35a9fe1591886f165d315a690",
+    "visual/attempt-01/render-payloads.json": "6948049e15b0ea4524ce0035f704b03b8063ce729eff3f96685186bd9a124b7c",
+    "visual/attempt-01/render-result.json": "8c347171ea1bd3b2b91f329fe81bcac322cade74c4b5c40cfc328e93fce8f0b5",
+    "visual/attempt-01/render/qa/slide-01.layout.json": "929df21711dcdf7be883d9b18399a9b3d1e4bbf1813ec41c4e95496f1016779c",
+    "visual/attempt-01/render/qa/slide-02.layout.json": "901555bd1ce0103baa11cc704929851a45a13b56c3c74dd032ea5348485ce637",
+    "visual/attempt-01/render/qa/slide-03.layout.json": "572ba5f69bb24a8dd7db5e0a23a74384ad2773806212f6012c93ba6ce010308c",
+    "visual/attempt-01/render/qa/slide-04.layout.json": "1068eeb1225f7781c1d9d17a8ae2c10b2fe3380604a0ffcc3fc21ee45ebdccff",
+    "visual/attempt-01/render/qa/slide-05.layout.json": "42c573537d9fea57c686dbde62102dbce878a5141e06e23847200ab9947197ec",
+    "visual/attempt-01/render/qa/slide-06.layout.json": "cfff21698b5cc0d67f37d2acf64c47ffa3c8104c15b047148e597a172cbc85dc",
+    "visual/attempt-01/render/qa/slide-07.layout.json": "21fb7e9e07f9d3d43ba3e3a637977231bbb5cafabd0810dff5a3359a6c08ba53",
+    "visual/attempt-01/render/qa/slide-08.layout.json": "1873228fb6fbff68b7e444935bcaaecffafd944a86bbd7db5708cd1aacd265e2",
+    "visual/attempt-01/render/qa/slide-09.layout.json": "a1564efe50f57d5b9a2e8cc5c1730ce531c64e4bdf6ae9f20a934add3df87194",
+    "visual/attempt-01/render/qa/slide-10.layout.json": "8ddbb7fc00fe574b53294a3a34f241d059423bb4c17b57022b2d85955f8e930a",
+    "visual/attempt-01/render/qa/slide-11.layout.json": "a6803ad74e9e08690fa55fe47b2923a67ee6c0d78a0ec1fa776e6d4bd0ac4091",
+    "visual/attempt-01/render/qa/slide-12.layout.json": "82ac4d709e0862b126b937b3e6e3df388c8680e28072d3eec0fa10611db40701",
+    "visual/attempt-01/render/qa/slide-13.layout.json": "82c02e44ed7a05b52e0f1447b670bf6e0422519ab06deb511a8e87b69f11acbb",
+    "visual/attempt-01/visual-plan.json": "f269a27059eb131c450072f0ab3bf033869738beec06da90f5a3f1ee32bcb021",
+    "visual/attempt-01/visual-resolution.json": "c70eaabc6142fb7670fb1a4b0394b7a0cea2b87fffca303faca66b5c3224d403",
+    "workflow-result.json": "ee74236929863bf39f60555ed2959558ebbcededa82cb432bab7e611ed790a89"
+  },
+  "output": {
+    "path": "experiments/真实稿件/PPagenT产品叙事-v0.11.0-能力回灌/PPagenT产品叙事-v0.11.0-能力回灌.pptx",
+    "sha256": "03bad26cbb75ca9c65d83173b9e341456d96879dd726481f69bb9832818ee7f9"
+  },
+  "pageEvidence": {
+    "slide-01": "641bf15a623535b1104ef4d3a9b73498f26bdcc20ac50a5ab67c7998880a914b",
+    "slide-02": "0c31e8a1464bb3f0f34ff31b4e4057ba36b3a0400e9f4d9b8d6a0d345fb941d6",
+    "slide-03": "cfbaba2e9b5a642155c15cbd87870d9d5721d50e0f919483db5f79cfcaec56c2",
+    "slide-04": "c581b443193856cfea96980da9b40ba3877aa4ab3126b329cb5124e8458a39a6",
+    "slide-05": "2912df681d09de28b3c47a9a18d4414735987c0bf64e63e7c66bd8ae3f73b8e1",
+    "slide-06": "7ffd24b8486a84abcb21627f07b4d89b376fd537ba55586852521bf28838b14b",
+    "slide-07": "0ce2f5137ddb931ec59e21dea9b337d30db7f49274e64b834f644dff5f1dd218",
+    "slide-08": "cf77f8c8dfae161dcc123093ed0531945769dcdaf3a79f39be7342fbf3072d2d",
+    "slide-09": "2b78b80b95673f518b5c1434556830436ea67fb58f2bd53342384296e3b13b44",
+    "slide-10": "a55b2c80404429240fa78272eb846cff9d9dea9a188e15b5491804cbaa985c7d",
+    "slide-11": "c96104620365d891575a021c476869d2cdb3cc22824007cb7dc9067db4e2079c",
+    "slide-12": "98c74ce0fe29e7679c290add5fe0a9f9a1cfa08509b8575982e5b5c327cb6dc3",
+    "slide-13": "ba429436f9bef02c9225c353b56772172d09241337b4e2f381c29906fe97cf25"
+  },
+  "qa": {
+    "deterministicQualityAudit": {
+      "status": "passed",
+      "typography": {
+        "status": "passed",
+        "minimumFontSize": 16,
+        "violations": []
+      },
+      "geometry": {
+        "status": "passed",
+        "tolerance": 0.5,
+        "qaParentCount": 10,
+        "connectorCount": 0,
+        "qaParentCountBySlide": {
+          "slide-01": 0,
+          "slide-02": 0,
+          "slide-03": 1,
+          "slide-04": 1,
+          "slide-05": 1,
+          "slide-06": 1,
+          "slide-07": 1,
+          "slide-08": 1,
+          "slide-09": 1,
+          "slide-10": 1,
+          "slide-11": 1,
+          "slide-12": 1,
+          "slide-13": 0
+        },
+        "violations": []
+      }
+    },
+    "postRenderReview": "not-part-of-production-workflow",
+    "overflow": {
+      "status": "passed",
+      "tool": {
+        "name": "slides_test.py",
+        "sha256": "e0f660c3a03c524e54a2b0ac4cdd55646502f18bad409593d056a1ea570f5de0"
+      },
+      "output": "Test passed. No overflow detected."
+    }
+  }
+}

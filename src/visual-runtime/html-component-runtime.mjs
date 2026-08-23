@@ -5,12 +5,12 @@ import { fileURLToPath } from "node:url";
 import { chromium } from "playwright-core";
 import { Presentation, PresentationFile } from "@oai/artifact-tool";
 import { assertResolvedTextContainerSlots } from "./text-container-contract.mjs";
-import { htmlComponentThemeCss } from "./html-component-theme.mjs";
+import { htmlComponentThemeCss, resolveComponentTypography } from "./html-component-theme.mjs";
 
 export { htmlComponentThemeCss } from "./html-component-theme.mjs";
 
-// v3 carries visual fidelity data (alpha, gradients, exact shadows/radii) instead of flattened CSS colors.
-const TREE_SCHEMA_VERSION = 3;
+// v4 also carries the CSS stacking path so Native/PPT paint order matches HTML.
+const TREE_SCHEMA_VERSION = 4;
 let browserPromise = null;
 
 function requireValue(condition, message) {
@@ -83,7 +83,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
   const page = await browser.newPage({ viewport: { width: Math.ceil(designFrame.width), height: Math.ceil(designFrame.height) } });
   try {
     await page.setContent(componentDocument(markup, css, designFrame, theme), { waitUntil: "load" });
-    const tree = await page.evaluate(async () => {
+    const tree = await page.evaluate(async (typographyContract) => {
       await document.fonts.ready;
       const root = document.querySelector("[data-ppt-root]");
       if (!root) throw new Error("HTML Component 缺少 data-ppt-root");
@@ -268,14 +268,24 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
       };
       const textStyle = (element, style, opacity) => {
         const singleLineCenter = element.dataset.pptTextLayout === "single-line-center";
+        const fontSize = rounded(parseFloat(style.fontSize));
+        const inferredVerticalAlignment = (() => {
+          if (element.dataset.pptValign) return element.dataset.pptValign;
+          if (["flex", "inline-flex", "grid", "inline-grid"].includes(style.display)) {
+            if (["flex-start", "start"].includes(style.alignItems)) return "top";
+            if (["flex-end", "end"].includes(style.alignItems)) return "bottom";
+          }
+          return "middle";
+        })();
         return {
           typeface: style.fontFamily.split(",")[0].replace(/["']/g, "").trim(),
-          fontSize: rounded(parseFloat(style.fontSize)),
+          fontSize,
+          fontSizePt: rounded(fontSize * 0.75),
           bold: Number(style.fontWeight) >= 600 || style.fontWeight === "bold",
           italic: style.fontStyle === "italic",
           color: color(element instanceof SVGElement ? style.fill : style.color, opacity, element, "color"),
           alignment: style.textAnchor === "middle" || style.textAlign === "center" ? "center" : style.textAnchor === "end" || style.textAlign === "right" ? "right" : "left",
-          verticalAlignment: element.dataset.pptValign || "middle",
+          verticalAlignment: inferredVerticalAlignment,
           lineSpacing: singleLineCenter
             ? 1
             : rounded((Number.parseFloat(style.lineHeight) || Number.parseFloat(style.fontSize)) / Number.parseFloat(style.fontSize)),
@@ -291,6 +301,23 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
             .join("\n");
         }
         return source.replace(/\s+/g, " ").trim();
+      };
+      const stackingPath = (element) => {
+        const ancestors = [];
+        for (let current = element; current && current !== root.parentElement; current = current.parentElement) {
+          ancestors.push(current);
+          if (current === root) break;
+        }
+        ancestors.reverse();
+        const path = [];
+        for (const current of ancestors) {
+          const currentStyle = getComputedStyle(current);
+          if (currentStyle.position === "static" || currentStyle.zIndex === "auto") continue;
+          const zIndex = Number.parseInt(currentStyle.zIndex, 10);
+          if (!Number.isFinite(zIndex)) fidelityError("UNSUPPORTED_Z_INDEX", current, "z-index", currentStyle.zIndex);
+          path.push(zIndex);
+        }
+        return path.length ? path : [0];
       };
       const lineStyle = (element, style, opacity) => {
         const svg = element instanceof SVGElement;
@@ -363,7 +390,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         const style = getComputedStyle(element);
         const opacity = effectiveOpacity(element);
         assertSupportedEffects(element, style);
-        const base = { kind, name: element.dataset.pptName || `${kind}-${order}`, order };
+        const base = { kind, name: element.dataset.pptName || `${kind}-${order}`, order, stackingPath: stackingPath(element) };
         if (kind === "path") return pathNode(element, base, style, opacity);
         const frame = kind === "image"
           ? htmlFrame(element)
@@ -388,6 +415,14 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
           throw new Error("data-ppt-kind=image 仅支持内联 SVG 或 data:image/* 图片");
         }
         if (kind === "text") {
+          const hasVisualSurface = style.backgroundImage !== "none"
+            || color(style.backgroundColor, opacity, element, "background-color") !== "none"
+            || style.boxShadow !== "none"
+            || [style.borderTopWidth, style.borderRightWidth, style.borderBottomWidth, style.borderLeftWidth]
+              .some((width) => Number.parseFloat(width) > 0);
+          if (hasVisualSurface) {
+            fidelityError("TEXT_SURFACE_REQUIRES_SHAPE_TEXT", element, "data-ppt-kind", "text");
+          }
           return { ...base, frame, text: textValue(element), style: textStyle(element, style, opacity), shadow: textShadowStyle(element, style, opacity) };
         }
         if (kind === "shape" || kind === "shape-text") {
@@ -413,24 +448,117 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         }
         throw new Error(`不支持的 data-ppt-kind: ${kind}`);
       });
+      const textSlotMetrics = (element, textMode) => {
+        const typographyElement = element.matches('[data-ppt-kind="text"],[data-ppt-kind="shape-text"]')
+          ? element
+          : element.querySelector('[data-ppt-kind="text"],[data-ppt-kind="shape-text"]');
+        const style = getComputedStyle(typographyElement ?? element);
+        const containerStyle = getComputedStyle(element);
+        const box = element.getBoundingClientRect();
+        const number = (value) => Number.parseFloat(value) || 0;
+        const fontSizePx = number(style.fontSize);
+        const fontSizePt = rounded(fontSizePx * 0.75);
+        const lineHeightPx = number(style.lineHeight) || fontSizePx * 1.2;
+        const padding = {
+          top: number(containerStyle.paddingTop),
+          right: number(containerStyle.paddingRight),
+          bottom: number(containerStyle.paddingBottom),
+          left: number(containerStyle.paddingLeft),
+        };
+        const border = {
+          top: number(containerStyle.borderTopWidth),
+          right: number(containerStyle.borderRightWidth),
+          bottom: number(containerStyle.borderBottomWidth),
+          left: number(containerStyle.borderLeftWidth),
+        };
+        const innerWidth = Math.max(0, box.width - padding.left - padding.right - border.left - border.right);
+        const innerHeight = Math.max(0, box.height - padding.top - padding.bottom - border.top - border.bottom);
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        context.font = `${style.fontStyle} ${style.fontWeight} ${fontSizePx}px ${style.fontFamily}`;
+        const letterSpacing = style.letterSpacing === "normal" ? 0 : number(style.letterSpacing);
+        const glyphWidth = Math.max(1, context.measureText("中").width + letterSpacing);
+        const charsPerLine = Math.max(1, Math.floor((innerWidth + letterSpacing) / glyphWidth));
+        const singleLine = textMode === "single-line" || ["nowrap", "pre"].includes(style.whiteSpace);
+        const geometricMaxLines = singleLine ? 1 : Math.max(1, Math.floor((innerHeight + 0.5) / lineHeightPx));
+        const declaredMaxChars = Number(element.dataset.slotMaxChars);
+        const declaredMaxLines = Number(element.dataset.slotMaxLines);
+        const borderRadius = Math.max(
+          number(containerStyle.borderTopLeftRadius),
+          number(containerStyle.borderTopRightRadius),
+          number(containerStyle.borderBottomRightRadius),
+          number(containerStyle.borderBottomLeftRadius),
+        );
+        const nonRectangular = containerStyle.clipPath !== "none"
+          || element.dataset.pptShape === "ellipse"
+          || (borderRadius > Math.min(box.width, box.height) * 0.35);
+        const reliable = !(element instanceof SVGTextElement)
+          && !(element instanceof SVGGElement)
+          && !nonRectangular;
+        const maxLines = Number.isFinite(declaredMaxLines) && declaredMaxLines > 0
+          ? Math.min(declaredMaxLines, geometricMaxLines)
+          : geometricMaxLines;
+        const geometricMaxChars = charsPerLine * geometricMaxLines;
+        const maxCharsWithinEffectiveLines = charsPerLine * maxLines;
+        const maxChars = Number.isFinite(declaredMaxChars) && declaredMaxChars > 0
+          ? Math.min(declaredMaxChars, maxCharsWithinEffectiveLines)
+          : maxCharsWithinEffectiveLines;
+        const declarationFits = (
+          !(Number.isFinite(declaredMaxLines) && declaredMaxLines > geometricMaxLines)
+          && !(Number.isFinite(declaredMaxChars) && declaredMaxChars > maxCharsWithinEffectiveLines)
+        );
+        const typographyRole = Object.entries(typographyContract)
+          .find(([, size]) => Math.abs(Number(size) - fontSizePt) < 0.05)?.[0] ?? "custom";
+        return {
+          typography: {
+            role: typographyRole,
+            typeface: style.fontFamily.split(",")[0].replace(/["']/g, "").trim(),
+            fontSizePt,
+            fontWeight: style.fontWeight,
+            alignment: style.textAlign,
+            lineHeightPt: rounded(lineHeightPx * 0.75),
+          },
+          innerFrame: {
+            width: rounded(innerWidth),
+            height: rounded(innerHeight),
+            padding,
+          },
+          capacity: {
+            charsPerLine,
+            maxLines,
+            maxChars,
+            basis: "zh-glyph",
+            reliable,
+            geometricMaxLines,
+            geometricMaxChars,
+            declarationFits,
+            ...(Number.isFinite(declaredMaxChars) && declaredMaxChars > 0 ? { declaredMaxChars } : {}),
+            ...(Number.isFinite(declaredMaxLines) && declaredMaxLines > 0 ? { declaredMaxLines } : {}),
+          },
+        };
+      };
       const slots = [...root.querySelectorAll("[data-slot-id]")].map((element) => {
         const maxChars = Number(element.dataset.slotMaxChars);
         const maxLines = Number(element.dataset.slotMaxLines);
         const role = element.dataset.slotRole || "content";
+        const contentType = element.dataset.slotContentType || (role === "icon" ? "icon" : "text");
+        const textMode = element.dataset.slotTextMode || (role === "item-body" ? "flow" : "single-line");
+        const metrics = contentType === "text" ? textSlotMetrics(element, textMode) : null;
         return {
           id: element.dataset.slotId,
           role,
           field: element.dataset.slotField || "",
           itemId: element.dataset.slotItemId || "",
-          contentType: element.dataset.slotContentType || (role === "icon" ? "icon" : "text"),
+          contentType,
           required: element.dataset.slotRequired === "true",
-          textMode: element.dataset.slotTextMode || (role === "item-body" ? "flow" : "single-line"),
+          textMode,
           listPolicy: element.dataset.slotListPolicy || (role === "item-body" ? "inline" : "none"),
           frame: htmlFrame(element),
-          capacity: {
+          capacity: metrics?.capacity ?? {
             ...(Number.isFinite(maxChars) && maxChars > 0 ? { maxChars } : {}),
             ...(Number.isFinite(maxLines) && maxLines > 0 ? { maxLines } : {}),
           },
+          ...(metrics ? { typography: metrics.typography, innerFrame: metrics.innerFrame } : {}),
           media: element.dataset.slotContentType === "icon" || element.dataset.slotRole === "icon" ? {
             type: "icon",
             provider: element.dataset.slotProvider || "",
@@ -439,13 +567,13 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         };
       });
       return {
-        schemaVersion: 3,
+        schemaVersion: 4,
         frame: { width: rounded(rootBox.width), height: rounded(rootBox.height) },
         overflow: root.scrollWidth > root.clientWidth + 1 || root.scrollHeight > root.clientHeight + 1,
         nodes,
         slots,
       };
-    });
+    }, resolveComponentTypography(theme));
     requireValue(!tree.overflow, `${component.id ?? "HTML Component"} 超出设计区域`);
     requireValue(tree.nodes.length > 0, `${component.id ?? "HTML Component"} 没有 data-ppt-kind 可编译对象`);
     assertResolvedTextContainerSlots(tree.slots, component.textCapacity ?? {}, component.id);
@@ -482,6 +610,9 @@ function applyText(shape, node, scale) {
   shape.text = node.text;
   shape.text.style = {
     typeface: node.style.typeface,
+    // Artifact Tool 的 authoring unit 与浏览器一致，都是 96 DPI 的 CSS px；
+    // 导出 PPTX 时它会自行换算为 PowerPoint pt。这里必须传 computed px，
+    // 否则预先乘 0.75 会在导出阶段被再次换算，导致全部字号缩小 25%。
     fontSize: node.style.fontSize * scale,
     bold: node.style.bold,
     italic: node.style.italic,
@@ -498,7 +629,7 @@ export function compileResolvedVisualTree(slide, tree, targetFrame = tree.target
   requireValue(tree?.schemaVersion === TREE_SCHEMA_VERSION, `ResolvedVisualTree schemaVersion 必须为 ${TREE_SCHEMA_VERSION}`);
   const frame = normalizeFrame(targetFrame, "targetFrame");
   const transform = fittedTransform(tree, frame);
-  for (const node of [...tree.nodes].sort((left, right) => left.order - right.order)) {
+  for (const node of sortResolvedVisualNodes(tree.nodes)) {
     const position = scaledFrame(node.frame, transform);
     if (node.kind === "path") {
       slide.shapes.add({
@@ -548,6 +679,19 @@ export function compileResolvedVisualTree(slide, tree, targetFrame = tree.target
     if (node.kind === "shape-text") applyText(shape, node, transform.scale);
   }
   return tree;
+}
+
+export function sortResolvedVisualNodes(nodes) {
+  return [...nodes].sort((left, right) => {
+    const leftPath = Array.isArray(left.stackingPath) ? left.stackingPath : [0];
+    const rightPath = Array.isArray(right.stackingPath) ? right.stackingPath : [0];
+    const length = Math.max(leftPath.length, rightPath.length);
+    for (let index = 0; index < length; index += 1) {
+      const difference = (leftPath[index] ?? 0) - (rightPath[index] ?? 0);
+      if (difference) return difference;
+    }
+    return left.order - right.order;
+  });
 }
 
 export async function closeHtmlComponentRuntime() {

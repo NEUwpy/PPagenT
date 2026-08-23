@@ -1,0 +1,700 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "ppagent-product-narrative",
+  "skinId": "northeastern-university-001",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "compositionId": "fixed-cover",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "compositionId": "fixed-agenda",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "p01",
+      "intentId": "p01-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p01-item1",
+        "p01-item2",
+        "p01-item3",
+        "p01-item4",
+        "p01-item5",
+        "p01-item6"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "componentText": [
+        {
+          "sourceField": "page-title",
+          "targetRole": "center-title",
+          "text": "高成本",
+          "sourceFragment": "做 PPT，真正昂贵的不是“画”"
+        },
+        {
+          "sourceItemId": "p01-item1",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "讲述路径",
+          "sourceFragment": "讲述路径"
+        },
+        {
+          "sourceItemId": "p01-item1",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "这场汇报到底怎么讲",
+          "sourceFragment": "这场汇报到底怎么讲"
+        },
+        {
+          "sourceItemId": "p01-item2",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "拆页数量",
+          "sourceFragment": "拆页数量"
+        },
+        {
+          "sourceItemId": "p01-item2",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "一篇长稿应该拆成多少页",
+          "sourceFragment": "一篇长稿应该拆成多少页"
+        },
+        {
+          "sourceItemId": "p01-item3",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "页面职责",
+          "sourceFragment": "页面职责"
+        },
+        {
+          "sourceItemId": "p01-item3",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "每一页只承担什么职责",
+          "sourceFragment": "每一页只承担什么职责"
+        },
+        {
+          "sourceItemId": "p01-item4",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "观点关系",
+          "sourceFragment": "观点关系"
+        },
+        {
+          "sourceItemId": "p01-item4",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "并列、递进、因果还是流程",
+          "sourceFragment": "并列、递进、因果还是流程"
+        },
+        {
+          "sourceItemId": "p01-item5",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "重点突出",
+          "sourceFragment": "重点突出"
+        },
+        {
+          "sourceItemId": "p01-item5",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "哪里应该突出",
+          "sourceFragment": "哪里应该突出"
+        },
+        {
+          "sourceItemId": "p01-item6",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "表达方式",
+          "sourceFragment": "表达方式"
+        },
+        {
+          "sourceItemId": "p01-item6",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "用图还是一句话更有力量",
+          "sourceFragment": "用图还是一句话更有力量"
+        }
+      ],
+      "reason": "Structure Group 承担完整页面内容，字段由正式 Slot Contract 确定性绑定"
+    },
+    {
+      "pageId": "p02",
+      "intentId": "p02-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p02-item1",
+        "p02-item2",
+        "p02-item3"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Structure Group 承担完整页面内容，字段由正式 Slot Contract 确定性绑定",
+      "componentText": [
+        {
+          "sourceItemId": "p02-item1",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "低要求端",
+          "sourceFragment": "低要求端"
+        },
+        {
+          "sourceItemId": "p02-item1",
+          "sourceField": "body",
+          "targetRole": "item-body",
+          "text": "只要把文字放上去",
+          "sourceFragment": "只要把文字放上去"
+        },
+        {
+          "sourceItemId": "p02-item2",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "中间主体",
+          "sourceFragment": "中间主体"
+        },
+        {
+          "sourceItemId": "p02-item2",
+          "sourceField": "body",
+          "targetRole": "item-body",
+          "text": "学校、科研院所、事业单位等需要规范工作型PPT",
+          "sourceFragment": "学校、科研院所、事业单位等需要规范工作型PPT"
+        },
+        {
+          "sourceItemId": "p02-item3",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "高度定制端",
+          "sourceFragment": "高度定制端"
+        },
+        {
+          "sourceItemId": "p02-item3",
+          "sourceField": "body",
+          "targetRole": "item-body",
+          "text": "发布会、品牌路演、高水平比赛",
+          "sourceFragment": "发布会、品牌路演、高水平比赛"
+        }
+      ]
+    },
+    {
+      "pageId": "p03",
+      "intentId": "p03-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p03-item1",
+        "p03-item2"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Structure Group 承担完整页面内容，字段由正式 Slot Contract 确定性绑定"
+    },
+    {
+      "pageId": "p04",
+      "intentId": "p04-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p04-item1",
+        "p04-item2",
+        "p04-item3",
+        "p04-item4"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Structure Group 承担完整页面内容，字段由正式 Slot Contract 确定性绑定",
+      "componentText": [
+        {
+          "sourceItemId": "p04-item1",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "组织视觉规范",
+          "sourceFragment": "组织视觉规范"
+        },
+        {
+          "sourceItemId": "p04-item1",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "颜色、字体、Logo等保持稳定",
+          "sourceFragment": "颜色、字体、Logo等保持稳定"
+        },
+        {
+          "sourceItemId": "p04-item2",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "表达能力",
+          "sourceFragment": "表达能力"
+        },
+        {
+          "sourceItemId": "p04-item2",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "经过验证的并列、顺序、对比等",
+          "sourceFragment": "经过验证的并列、顺序、对比等"
+        },
+        {
+          "sourceItemId": "p04-item3",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "数量与容量边界",
+          "sourceFragment": "数量与容量边界"
+        },
+        {
+          "sourceItemId": "p04-item3",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "明确每页内容数量和容量上限",
+          "sourceFragment": "明确每页内容数量和容量上限"
+        },
+        {
+          "sourceItemId": "p04-item4",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "退化方式",
+          "sourceFragment": "退化方式"
+        },
+        {
+          "sourceItemId": "p04-item4",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "已登记的简单排版等兜底",
+          "sourceFragment": "已登记的简单排版等兜底"
+        }
+      ]
+    },
+    {
+      "pageId": "p05",
+      "intentId": "p05-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p05-structure-1",
+        "p05-structure-2",
+        "p05-structure-3"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Structure Group 承担完整页面内容，字段由正式 Slot Contract 确定性绑定",
+      "componentText": [
+        {
+          "sourceItemId": "p05-structure-1",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "AI",
+          "sourceFragment": "AI"
+        },
+        {
+          "sourceItemId": "p05-structure-1",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "理解和路由",
+          "sourceFragment": "理解和路由"
+        },
+        {
+          "sourceItemId": "p05-structure-2",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "规则",
+          "sourceFragment": "规则"
+        },
+        {
+          "sourceItemId": "p05-structure-2",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "约束和选择",
+          "sourceFragment": "约束和选择"
+        },
+        {
+          "sourceItemId": "p05-structure-3",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "代码",
+          "sourceFragment": "代码"
+        },
+        {
+          "sourceItemId": "p05-structure-3",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "稳定生成",
+          "sourceFragment": "稳定生成"
+        }
+      ]
+    },
+    {
+      "pageId": "p06",
+      "intentId": "p06-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p06-structure-1",
+        "p06-structure-2",
+        "p06-structure-3"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Structure Group 承担完整页面内容，字段由正式 Slot Contract 确定性绑定",
+      "componentText": [
+        {
+          "sourceItemId": "p06-structure-1",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "资产入库",
+          "sourceFragment": "资产入库"
+        },
+        {
+          "sourceItemId": "p06-structure-2",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "核心资产",
+          "sourceFragment": "核心资产"
+        },
+        {
+          "sourceItemId": "p06-structure-3",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "正式生成",
+          "sourceFragment": "正式生成"
+        }
+      ]
+    },
+    {
+      "pageId": "p07",
+      "intentId": "p07-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p07-item1",
+        "p07-item2",
+        "p07-item3",
+        "p07-item4",
+        "p07-item5"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Structure Group 承担完整页面内容，字段由正式 Slot Contract 确定性绑定",
+      "componentText": [
+        {
+          "sourceItemId": "p07-item1",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "筛选优秀页面",
+          "sourceFragment": "筛选优秀页面"
+        },
+        {
+          "sourceItemId": "p07-item1",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "从优秀作品中选材",
+          "sourceFragment": "从优秀作品中选材"
+        },
+        {
+          "sourceItemId": "p07-item2",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "理解好看原因",
+          "sourceFragment": "理解好看原因"
+        },
+        {
+          "sourceItemId": "p07-item2",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "提炼设计规律",
+          "sourceFragment": "提炼设计规律"
+        },
+        {
+          "sourceItemId": "p07-item3",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "参数化内容图片",
+          "sourceFragment": "参数化内容图片"
+        },
+        {
+          "sourceItemId": "p07-item3",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "将内容、图片和数量参数化",
+          "sourceFragment": "将内容、图片和数量参数化"
+        },
+        {
+          "sourceItemId": "p07-item4",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "验证不同状态",
+          "sourceFragment": "验证不同状态"
+        },
+        {
+          "sourceItemId": "p07-item4",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "验证不同状态",
+          "sourceFragment": "验证不同状态"
+        },
+        {
+          "sourceItemId": "p07-item5",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "用户确认入库",
+          "sourceFragment": "用户确认入库"
+        },
+        {
+          "sourceItemId": "p07-item5",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "确认后进入正式资产库",
+          "sourceFragment": "确认后进入正式资产库"
+        }
+      ]
+    },
+    {
+      "pageId": "p08",
+      "intentId": "p08-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p08-item1",
+        "p08-item2",
+        "p08-item3",
+        "p08-item4",
+        "p08-item5"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "componentText": [
+        {
+          "sourceField": "page-title",
+          "targetRole": "center-title",
+          "text": "积累资产",
+          "sourceFragment": "真正积累的不是一万个模板"
+        },
+        {
+          "sourceItemId": "p08-item1",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "内容表达适合",
+          "sourceFragment": "内容表达适合"
+        },
+        {
+          "sourceItemId": "p08-item1",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "什么内容适合怎样表达",
+          "sourceFragment": "什么内容适合怎样表达"
+        },
+        {
+          "sourceItemId": "p08-item2",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "内容容量上限",
+          "sourceFragment": "内容容量上限"
+        },
+        {
+          "sourceItemId": "p08-item2",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "一个版式能够处理多少内容",
+          "sourceFragment": "一个版式能够处理多少内容"
+        },
+        {
+          "sourceItemId": "p08-item3",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "数量变化排布",
+          "sourceFragment": "数量变化排布"
+        },
+        {
+          "sourceItemId": "p08-item3",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "数量变化时怎样重新排布",
+          "sourceFragment": "数量变化时怎样重新排布"
+        },
+        {
+          "sourceItemId": "p08-item4",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "边界处理方式",
+          "sourceFragment": "边界处理方式"
+        },
+        {
+          "sourceItemId": "p08-item4",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "换样式、拆页还是退化为简单排版",
+          "sourceFragment": "换样式、拆页还是退化为简单排版"
+        },
+        {
+          "sourceItemId": "p08-item5",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "禁用结构",
+          "sourceFragment": "禁用结构"
+        },
+        {
+          "sourceItemId": "p08-item5",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "哪些结构即使能画也不该用",
+          "sourceFragment": "哪些结构即使能画也不该用"
+        }
+      ],
+      "reason": "Structure Group 承担完整页面内容，字段由正式 Slot Contract 确定性绑定"
+    },
+    {
+      "pageId": "p09",
+      "intentId": "p09-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p09-item1",
+        "p09-item2",
+        "p09-item3",
+        "p09-item4",
+        "p09-item5"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Structure Group 承担完整页面内容，字段由正式 Slot Contract 确定性绑定",
+      "componentText": [
+        {
+          "sourceItemId": "p09-item1",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "其他学校",
+          "sourceFragment": "其他学校"
+        },
+        {
+          "sourceItemId": "p09-item1",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "颜色、Logo等主题可配置",
+          "sourceFragment": "颜色、Logo等主题可配置"
+        },
+        {
+          "sourceItemId": "p09-item2",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "科研院所",
+          "sourceFragment": "科研院所"
+        },
+        {
+          "sourceItemId": "p09-item2",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "内容理解规则可复用",
+          "sourceFragment": "内容理解规则可复用"
+        },
+        {
+          "sourceItemId": "p09-item3",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "实验室",
+          "sourceFragment": "实验室"
+        },
+        {
+          "sourceItemId": "p09-item3",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "表达能力可复用",
+          "sourceFragment": "表达能力可复用"
+        },
+        {
+          "sourceItemId": "p09-item4",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "企业和团队",
+          "sourceFragment": "企业和团队"
+        },
+        {
+          "sourceItemId": "p09-item4",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "承载长期风格",
+          "sourceFragment": "承载长期风格"
+        },
+        {
+          "sourceItemId": "p09-item5",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "个人风格",
+          "sourceFragment": "个人风格"
+        },
+        {
+          "sourceItemId": "p09-item5",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "承载特别会做PPT的人的长期风格",
+          "sourceFragment": "承载特别会做PPT的人的长期风格"
+        }
+      ]
+    },
+    {
+      "pageId": "p10",
+      "intentId": "p10-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "p10-item1",
+        "p10-item2",
+        "p10-item3"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "reason": "Structure Group 承担完整页面内容，字段由正式 Slot Contract 确定性绑定",
+      "componentText": [
+        {
+          "sourceItemId": "p10-item1",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "AI读稿",
+          "sourceFragment": "AI读稿"
+        },
+        {
+          "sourceItemId": "p10-item1",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "让AI帮我们读稿子",
+          "sourceFragment": "让AI帮我们读稿子"
+        },
+        {
+          "sourceItemId": "p10-item2",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "规则判断",
+          "sourceFragment": "规则判断"
+        },
+        {
+          "sourceItemId": "p10-item2",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "让规则帮我们做判断",
+          "sourceFragment": "让规则帮我们做判断"
+        },
+        {
+          "sourceItemId": "p10-item3",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "代码劳动",
+          "sourceFragment": "代码劳动"
+        },
+        {
+          "sourceItemId": "p10-item3",
+          "sourceField": "support",
+          "targetRole": "item-body",
+          "text": "让代码完成重复劳动",
+          "sourceFragment": "让代码完成重复劳动"
+        }
+      ]
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "compositionId": "fixed-closing",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

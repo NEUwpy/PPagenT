@@ -14,7 +14,7 @@ body { color: #46566a; background: transparent; font-family: var(--ppagent-font-
 .funnel-flow-arrow { pointer-events: none; }
 .funnel-step-body { stroke: rgba(255, 255, 255, .13); stroke-width: 1; }
 .funnel-step-cap { stroke: #8bbaf2; stroke-width: 2; }
-.funnel-step-title { position: absolute; left: 430px; top: var(--top); z-index: 5; width: var(--width); height: 29px; margin: 0; overflow: hidden; color: #fff; font-size: 20px; font-weight: 700; line-height: 29px; text-align: center; white-space: nowrap; transform: translateX(-50%); }
+.funnel-step-title { position: absolute; left: 430px; top: var(--top); z-index: 5; width: var(--width); height: 29px; margin: 0; overflow: hidden; color: #fff; font-size: var(--ppagent-component-item-title-size, 21pt); font-weight: 700; line-height: 29px; text-align: center; white-space: nowrap; transform: translateX(-50%); }
 .funnel-input-layer { position: absolute; inset: 0; z-index: 6; pointer-events: none; }
 .funnel-input { position: absolute; left: var(--x); top: var(--y); width: var(--size); height: var(--size); transform: translate(-50%, -50%); }
 .funnel-input-core { position: absolute; inset: 0; border: 3px solid #fff; border-radius: 50%; background: #2f5ea8; box-shadow: 0 5px 12px rgba(47, 94, 168, .2); }
@@ -29,8 +29,8 @@ body { color: #46566a; background: transparent; font-family: var(--ppagent-font-
 .funnel-action-icon { display: grid; place-items: center; width: 36px; height: 36px; padding: 8px; border-radius: 50%; color: #2f5ea8; background: #fff; box-shadow: 0 4px 10px rgba(47, 94, 168, .08); }
 .funnel-action-copy { min-width: 0; overflow: hidden; }
 .funnel-action-copy h4, .funnel-action-copy p { margin: 0; overflow: hidden; }
-.funnel-action-copy h4 { height: 24px; color: #2f5ea8; font-size: 17px; font-weight: 700; line-height: 24px; white-space: nowrap; }
-.funnel-action-copy p { max-height: 42px; color: #46566a; font-size: 17px; line-height: 1.24; }
+.funnel-action-copy h4 { height: 24px; color: #2f5ea8; font-size: var(--ppagent-component-meta-size, 17pt); font-weight: 700; line-height: 24px; white-space: nowrap; }
+.funnel-action-copy p { max-height: 42px; color: #46566a; font-size: var(--ppagent-component-meta-size, 17pt); line-height: 1.24; }
 .funnel-no-input-content { position: absolute; left: 665px; right: 42px; top: var(--top); z-index: 3; display: grid; grid-template-columns: 94px minmax(0,1fr); align-items: center; height: var(--height); overflow: hidden; }
 .funnel-no-input-content::before { content: ""; position: absolute; left: -145px; top: 50%; width: 118px; height: 1px; background: linear-gradient(90deg, rgba(120,168,213,.08), rgba(120,168,213,.75)); }
 .funnel-no-input-index { color: rgba(47,94,168,.18); font-size: 64px; font-weight: 800; line-height: 1; letter-spacing: -.08em; }
@@ -38,4 +38,4 @@ body { color: #46566a; background: transparent; font-family: var(--ppagent-font-
 .funnel-no-input-copy h3, .funnel-no-input-copy p { margin: 0; overflow: hidden; }
 .funnel-no-input-copy h3 { height: 34px; color: #2f5ea8; font-size: var(--ppagent-component-title-size, 26px); font-weight: 700; line-height: 34px; white-space: nowrap; }
 .funnel-no-input-copy p { max-height: 58px; color: #46566a; font-size: var(--ppagent-component-body-size, 19px); line-height: 1.42; }
-.funnel-review[data-step-count="6"] .funnel-step-title { font-size: 18px; }
+.funnel-review[data-step-count="6"] .funnel-step-title { font-size: var(--ppagent-component-label-size, 18pt); }

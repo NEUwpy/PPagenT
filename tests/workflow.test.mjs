@@ -570,32 +570,30 @@ test("内容审查要求修订时把上一轮产物和审查交回内容导演",
   await fs.access(path.join(outputDir, "content", "attempt-02", "content-review.json"));
 });
 
-test("没有语义兼容候选时把容量反馈退回内容导演再审查", async (t) => {
+test("没有语义兼容候选时直接报告资产缺口，不要求内容导演改写语义", async (t) => {
   const outputDir = await makeTempDir(t);
-  let receivedFeedback = null;
   let candidateCalls = 0;
-  const provider = completeProvider({
-    async contentDirector({ attempt, visualFeedback }) {
-      if (attempt === 2) receivedFeedback = visualFeedback;
-      return contentOutput();
-    },
-  });
-  const result = await runDirectorWorkflow({
+  await assert.rejects(runDirectorWorkflow({
     input: { rawMarkdown },
-    provider,
+    provider: completeProvider(),
     outputDir,
     visualCandidateProvider: async () => {
       candidateCalls += 1;
-      if (candidateCalls === 1) return [{ pageId: "problem", intentId: "problem-intent", candidates: [] }];
-      return candidateProvider();
+      return [{
+        pageId: "problem",
+        intentId: "problem-intent",
+        candidates: [],
+        gap: { type: "asset-gap", logicId: "progression" },
+      }];
     },
     visualResolver: resolver,
     renderer,
-  });
-  assert.equal(result.status, "internally-approved-awaiting-user-review");
-  assert.equal(receivedFeedback.reason, "no-renderable-visual-candidates");
-  assert.equal(receivedFeedback.emptyCandidateSets[0].pageId, "problem");
-  await fs.access(path.join(outputDir, "content", "attempt-02", "content-review.json"));
+  }), (error) => (
+    error instanceof WorkflowError
+    && error.code === "ASSET_GAP"
+    && error.details.gaps[0].logicId === "progression"
+  ));
+  assert.equal(candidateCalls, 1);
 });
 
 test("渲染前视觉 error 未关闭时绝不调用 renderer", async (t) => {
