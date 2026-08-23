@@ -418,6 +418,10 @@ export function createModelDirectorProvider({
         context: {
           executionGuidelines: guidelines.content ?? "",
           availableLogicSkills: guidelines.logicSkillIndex ?? [],
+          structuredDataGuidance: [
+            "原稿明确包含一个总目标、2–4 项策略且每项策略各自绑定 1–2 个指标时，使用 structuredData.type=goal-strategy-metrics；items 只保存策略，strategies 用相同 id 绑定指标。",
+            "原稿明确同时包含 3–5 个阶段、2–4 个角色以及 3–8 项职责分配时，使用 structuredData.type=role-stage；items 保存职责任务，assignments 用相同 id 绑定真实 stageId 与 roleId；允许空单元格，不得为了填满矩阵虚构任务。",
+          ],
           structuralGuides,
           structuralHints: effectiveStructuralHints,
           ...sourceRule(input.rawMarkdown),

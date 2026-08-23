@@ -1,0 +1,142 @@
+{
+  "id": "goal-alignment-strategy-metrics-001",
+  "name": "目标策略指标对齐",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
+    "slides": [23, 109]
+  },
+  "references": [
+    {
+      "file": "PPT源/狗哥蓝色-精美逻辑图PPT模板.pptx",
+      "slides": [145],
+      "role": "指标绑定与文字承载",
+      "adopted": "每项策略在同一列内承接自己的量化指标，避免目标、行动与指标失去对应关系"
+    }
+  ],
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "goal-alignment",
+    "structureGroupId": "goal-alignment-strategy-metrics",
+    "familyId": "goal-alignment-field",
+    "variantId": "typographic-goal-strategy-field-with-metric-band",
+    "silhouette": "typographic-goal-strategy-field-metric-band",
+    "supportedBaseRelations": ["goal-alignment"],
+    "supportedPurposeKeys": ["align_goal_and_metrics"],
+    "itemCount": {
+      "min": 2,
+      "preferred": [3, 4],
+      "max": 4
+    },
+    "stateContract": {
+      "resolver": "strategyAndMetricCount",
+      "states": [2, 3, 4],
+      "previewDefault": 3
+    },
+    "mediaContract": {
+      "mode": "no-image"
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "forbidden",
+      "ordered": false,
+      "requiresStructuredDataType": "goal-strategy-metrics",
+      "metricCount": { "min": 1, "max": 2, "sameAcrossItems": true }
+    },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "relationTraits": { "hierarchy": true, "goalAlignment": true, "measurable": true },
+        "density": ["low", "medium"]
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": {
+        "selection": { "strategyCount": 3, "metricCount": 2 }
+      },
+      "controls": [
+        {
+          "key": "strategyCount",
+          "label": "策略数量",
+          "values": [2, 3, 4],
+          "default": 3
+        },
+        {
+          "key": "metricCount",
+          "label": "每项策略指标数",
+          "values": [1, 2],
+          "default": 2
+        }
+      ]
+    }
+  },
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "一个总目标；2–4 项同级策略；每项策略对应 1–2 个指标",
+    "rule": "总目标保持居中；策略承载面按 2–4 项整体伸缩并重新等分；指标带与策略同步分区，不从四列状态删减留空"
+  },
+  "componentModel": {
+    "fixed": [
+      "总目标使用无容器的文字标题和可选说明",
+      "策略共享同一连续承载面，不拆成独立卡片",
+      "每项策略、行动说明和指标保持同列对齐",
+      "文字目标区、浅色策略承载面和连续指标带"
+    ],
+    "variable": [
+      "总目标标题与可选说明",
+      "2–4 项策略标题与行动说明",
+      "每项策略 1–2 个指标的名称与值"
+    ]
+  },
+  "fieldContract": {
+    "editable": [
+      { "field": "goal.title", "meaning": "唯一总目标" },
+      { "field": "goal.body", "meaning": "总目标的可选补充说明" },
+      { "field": "strategies[].title", "meaning": "策略或关键方向名称" },
+      { "field": "strategies[].body", "meaning": "该策略对应的关键行动或方法说明" },
+      { "field": "strategies[].metrics[].label", "meaning": "该策略的量化指标名称" },
+      { "field": "strategies[].metrics[].value", "meaning": "指标目标值或判断标准" }
+    ],
+    "generated": [
+      { "field": "strategies[].order", "meaning": "程序按当前策略数量生成 01–04" }
+    ],
+    "fixed": [
+      "文字目标区、策略承载面、指标带三层语义及对应方向",
+      "同一策略的行动和指标始终共列",
+      "字号由 Skin 提供并按公共离散档位适配"
+    ],
+    "unavailable": ["时间计划", "责任人", "多级子策略", "指标趋势图", "图片"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "resizeMode": "natural",
+    "minFontSize": 15,
+    "safePadding": 12,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "一个总目标；2–4 项策略；每项策略 1–2 个指标；目标标题不超过 24 字，目标说明不超过 36 字；策略标题按 2／3／4 项分别不超过 10／8／6 字，行动说明分别不超过 42／33／27 字；每列两个指标时，名称最多 7／6／6 字、值最多 6／4／4 字，单指标状态容量更宽",
+  "semanticContract": "一个明确总目标向 2–4 项同级策略或行动方向分解，并为每项策略绑定 1–2 个可核验指标",
+  "doNotUseWhen": "只是普通上下级组织关系、策略之间存在严格先后、指标无法归属到具体策略、需要多级战略地图，或主要内容是时间计划和责任分工",
+  "review": "用户已确认目标、策略与指标的 HTML 黄金状态及 2–4 项策略、1–2 个指标的版式扩散，正式落地"
+}

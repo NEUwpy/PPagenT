@@ -61,6 +61,37 @@ export function validateStructuredDataReferences(pageContent) {
     compareIdSets(branchIds, itemIds, "structuredData.branches", issues);
   }
 
+  if (structured.type === "goal-strategy-metrics") {
+    const strategyIds = structured.strategies.map((strategy) => strategy.id);
+    const duplicates = duplicateValues(strategyIds);
+    if (duplicates.length) issues.push({ field: "structuredData.strategies", code: "DUPLICATE_REFERENCE", ids: duplicates });
+    compareIdSets(strategyIds, itemIds, "structuredData.strategies", issues);
+    const metricCounts = new Set(structured.strategies.map((strategy) => strategy.metrics.length));
+    if (metricCounts.size > 1) issues.push({ field: "structuredData.strategies[].metrics", code: "INCONSISTENT_METRIC_COUNT" });
+  }
+
+  if (structured.type === "role-stage") {
+    const stageIds = structured.stages.map((stage) => stage.id);
+    const roleIds = structured.roles.map((role) => role.id);
+    const assignmentIds = structured.assignments.map((assignment) => assignment.id);
+    const duplicateStages = duplicateValues(stageIds);
+    const duplicateRoles = duplicateValues(roleIds);
+    const duplicateAssignments = duplicateValues(assignmentIds);
+    if (duplicateStages.length) issues.push({ field: "structuredData.stages", code: "DUPLICATE_STAGE_ID", ids: duplicateStages });
+    if (duplicateRoles.length) issues.push({ field: "structuredData.roles", code: "DUPLICATE_ROLE_ID", ids: duplicateRoles });
+    if (duplicateAssignments.length) issues.push({ field: "structuredData.assignments", code: "DUPLICATE_REFERENCE", ids: duplicateAssignments });
+    compareIdSets(assignmentIds, itemIds, "structuredData.assignments", issues);
+    const stageSet = new Set(stageIds);
+    const roleSet = new Set(roleIds);
+    const cells = structured.assignments.map((assignment) => `${assignment.stageId}|${assignment.roleId}`);
+    const duplicateCells = duplicateValues(cells);
+    if (duplicateCells.length) issues.push({ field: "structuredData.assignments", code: "DUPLICATE_STAGE_ROLE_CELL", ids: duplicateCells });
+    structured.assignments.forEach((assignment, index) => {
+      if (!stageSet.has(assignment.stageId)) issues.push({ field: `structuredData.assignments[${index}].stageId`, code: "UNKNOWN_STAGE_REFERENCE", ids: [assignment.stageId] });
+      if (!roleSet.has(assignment.roleId)) issues.push({ field: `structuredData.assignments[${index}].roleId`, code: "UNKNOWN_ROLE_REFERENCE", ids: [assignment.roleId] });
+    });
+  }
+
   if (structured.type === "matrix") {
     const quadrantIds = structured.quadrants.map((quadrant) => quadrant.id);
     const duplicateQuadrants = duplicateValues(quadrantIds);
@@ -194,6 +225,18 @@ const LOGIC_INTENT_DEFAULTS = Object.freeze({
     baseRelation: "composite",
     converging: true,
   },
+  "goal-alignment": {
+    purposeKey: "align_goal_and_metrics",
+    baseRelation: "goal-alignment",
+    sameLevel: false,
+  },
+  "role-stage": {
+    purposeKey: "explain_cross_role_process",
+    baseRelation: "sequence",
+    ordered: true,
+    dimensions: 2,
+    secondaryDimension: "role",
+  },
   branching: {
     purposeKey: "route_by_condition",
     baseRelation: "branching",
@@ -214,6 +257,8 @@ function inferredLogicId(pageContent) {
   if (pageContent.structuredData?.type === "problem-method-result") return "problem-solution";
   if (pageContent.structuredData?.type === "argument-evidence") return "argument-evidence";
   if (pageContent.structuredData?.type === "branching-decision") return "branching";
+  if (pageContent.structuredData?.type === "goal-strategy-metrics") return "goal-alignment";
+  if (pageContent.structuredData?.type === "role-stage") return "role-stage";
   if (pageContent.structuredData?.type === "matrix") return "matrix";
   if (pageContent.structuredData?.type === "convergence") return "convergence";
   if (pageContent.structuredData?.type === "hierarchy") return "hierarchy";

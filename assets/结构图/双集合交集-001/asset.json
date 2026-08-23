@@ -1,0 +1,97 @@
+{
+  "id": "containment-two-set-intersection-001",
+  "name": "双集合交集",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "pending-review",
+  "source": {
+    "file": "PPT源/【蓝色版】年终日常汇报PPT模板-狗哥PPT出品.pptx",
+    "slides": [125]
+  },
+  "references": [
+    {
+      "file": "PPT源/【蓝色版】年终日常汇报PPT模板-狗哥PPT出品.pptx",
+      "slides": [61],
+      "role": "圆形系统的层次与平衡",
+      "adopted": "采用克制的蓝色圆形体系和稳定中轴，不照搬原页的数据看板或箭头"
+    }
+  ],
+  "runtime": {
+    "renderer": "html-component",
+    "logicId": "containment",
+    "structureGroupId": "containment-two-set-intersection",
+    "familyId": "containment-set-relations",
+    "variantId": "two-set-lens-intersection",
+    "silhouette": "two-overlapping-circles-with-shared-lens",
+    "supportedBaseRelations": ["intersection"],
+    "supportedPurposeKeys": ["explain_shared_scope"],
+    "itemCount": { "min": 3, "preferred": [3], "max": 3 },
+    "stateContract": {
+      "resolver": "textMode",
+      "states": ["title-body", "title-only"],
+      "previewDefault": "title-body"
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "forbidden",
+      "ordered": false,
+      "requiresStructuredDataType": "two-set-intersection"
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": { "selection": { "textMode": "title-body" } },
+      "controls": [
+        {
+          "key": "textMode",
+          "label": "文本模式",
+          "values": ["title-body", "title-only"],
+          "valueLabels": { "title-body": "标题与说明", "title-only": "仅标题" },
+          "default": "title-body"
+        }
+      ]
+    }
+  },
+  "layoutExpansion": {
+    "mode": "fixed",
+    "range": "两个集合与一个共同部分；各区域支持标题加说明或仅标题",
+    "rule": "集合拓扑固定为 A、A∩B、B；文本模式只改变区域内排版，不改变圆形与交集位置"
+  },
+  "componentModel": {
+    "fixed": ["两个相交集合", "共同部分位于真实交叠透镜中", "左右集合保持等权与镜像平衡"],
+    "variable": ["左侧集合标题与可选说明", "共同部分标题与可选说明", "右侧集合标题与可选说明"]
+  },
+  "fieldContract": {
+    "editable": [
+      { "field": "left.title", "meaning": "左侧集合名称" },
+      { "field": "left.body", "meaning": "左侧集合独有内容的可选说明" },
+      { "field": "shared.title", "meaning": "两个集合的共同部分" },
+      { "field": "shared.body", "meaning": "共同部分的可选说明" },
+      { "field": "right.title", "meaning": "右侧集合名称" },
+      { "field": "right.body", "meaning": "右侧集合独有内容的可选说明" }
+    ],
+    "generated": ["A、B 集合标记由程序生成"],
+    "fixed": ["共同内容只能位于交集区域", "左右独有内容不进入交集区域"],
+    "unavailable": ["三个及以上集合", "完全包含关系", "先后流程", "上下级关系"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "resizeMode": "natural",
+    "minFontSize": 17,
+    "safePadding": 12,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "固定两个集合与一个交集；各区域标题最多 10 字，说明最多 24 字；说明可省略",
+  "semanticContract": "两个同级集合各自拥有独有内容，同时存在一个需要明确表达的共同部分",
+  "doNotUseWhen": "两个对象只是普通对比、存在方向或先后关系、一个集合完全包含另一个集合，或需要表达三个及以上集合",
+  "review": "待用户在看板审批 HTML 视觉、交集语义与标题／说明两种状态"
+}

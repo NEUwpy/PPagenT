@@ -1,0 +1,112 @@
+{
+  "id": "role-stage-collaboration-001",
+  "name": "阶段角色协同泳道",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "PPT源/狗哥蓝色-精美逻辑图PPT模板.pptx",
+    "slides": [79]
+  },
+  "references": [
+    {
+      "file": "PPT源/狗哥蓝色-精美逻辑图PPT模板.pptx",
+      "slides": [41],
+      "role": "泳道与跨角色交接",
+      "adopted": "角色分泳道、任务落在真实职责行内，连接线从任务边界出发并体现跨角色交接"
+    },
+    {
+      "file": "PPT源/【蓝色版】年终日常汇报PPT模板-狗哥PPT出品.pptx",
+      "slides": [114],
+      "role": "阶段列与二维阅读秩序",
+      "adopted": "阶段横向推进、职责纵向分行，连续底板和轻量分隔保证二维信息仍可快速扫描"
+    }
+  ],
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "role-stage",
+    "structureGroupId": "role-stage-collaboration",
+    "familyId": "role-stage-swimlane",
+    "variantId": "continuous-stage-role-swimlane",
+    "silhouette": "stage-columns-by-role-lanes",
+    "supportedBaseRelations": ["sequence"],
+    "supportedPurposeKeys": ["explain_cross_role_process"],
+    "itemCount": { "min": 3, "preferred": [4, 5, 6], "max": 8 },
+    "stateContract": {
+      "resolver": "stageCount+roleCount",
+      "stageStates": [3, 4, 5],
+      "roleStates": [2, 3, 4],
+      "previewDefault": { "stageCount": 4, "roleCount": 3 }
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "forbidden",
+      "ordered": true,
+      "requiresStructuredDataType": "role-stage"
+    },
+    "contract": {
+      "abstractionLevel": "common",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "relationTraits": { "temporal": true, "dimensions": 2, "secondaryDimension": "role" },
+        "density": ["low", "medium"]
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": { "selection": { "stageCount": 4, "roleCount": 3 } },
+      "controls": [
+        { "key": "stageCount", "label": "阶段数", "values": [3, 4, 5], "default": 4 },
+        { "key": "roleCount", "label": "角色数", "values": [2, 3, 4], "default": 3 }
+      ]
+    }
+  },
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "3–5 个阶段、2–4 个角色、3–8 项职责任务；允许空单元格",
+    "rule": "阶段列与角色泳道均按当前数量重新等分；任务只落在自己的阶段和角色交叉单元；交接线按任务顺序连接真实卡片边界"
+  },
+  "componentModel": {
+    "fixed": ["横向阶段、纵向角色的二维语法", "角色泳道、阶段表头、职责任务和交接路径"],
+    "variable": ["3–5 个阶段", "2–4 个角色", "各阶段角色任务及可选说明", "空白职责单元"]
+  },
+  "fieldContract": {
+    "editable": [
+      { "field": "stages[].title", "meaning": "阶段名称" },
+      { "field": "roles[].name", "meaning": "角色或部门名称" },
+      { "field": "tasks[].title", "meaning": "该角色在该阶段承担的任务" },
+      { "field": "tasks[].body", "meaning": "任务的可选补充说明" }
+    ],
+    "generated": ["阶段编号、行列位置和交接线路由由程序计算"],
+    "fixed": ["横轴只表示阶段推进，纵轴只表示角色职责", "空单元格不自动补内容"],
+    "unavailable": ["单角色普通顺序流程", "复杂条件分支", "多人组织隶属关系", "用户情绪曲线"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "resizeMode": "natural",
+    "minFontSize": 15,
+    "safePadding": 8,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "3–5 个阶段、2–4 个角色、3–8 项任务；角色名最多 4 字；阶段名按 3／4／5 阶段最多 8／7／6 字；任务标题最多 8 字，五阶段最多 6 字；说明在 2–3 个角色时最多 18 字（五阶段最多 14 字），4 个角色时最多 7 字",
+  "semanticContract": "同一流程按阶段横向推进，并明确不同角色或部门在各阶段承担什么任务以及职责如何交接",
+  "doNotUseWhen": "只有单一执行者、内容只是普通先后步骤、角色之间是上下级关系，或不存在阶段与职责两个独立维度",
+  "review": "用户已确认阶段角色协同泳道的 HTML 黄金状态与 3–5 阶段、2–4 角色的版式扩散，正式落地"
+}

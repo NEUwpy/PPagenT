@@ -445,9 +445,14 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         const top = Math.min(...ys);
         const width = Math.max(...xs) - left;
         const height = Math.max(...ys) - top;
+        // PowerPoint custom paths reject a zero-sized bounding box. Straight
+        // horizontal/vertical SVG paths are valid, so keep their coordinates
+        // unchanged while giving the exported path a minimal positive extent.
+        const exportWidth = Math.max(1, width);
+        const exportHeight = Math.max(1, height);
         return {
           ...base,
-          frame: { left: rounded(left), top: rounded(top), width: rounded(width), height: rounded(height), rotation: 0 },
+          frame: { left: rounded(left), top: rounded(top), width: rounded(exportWidth), height: rounded(exportHeight), rotation: 0 },
           fill: svgFill(element, style, opacity),
           line: lineStyle(element, style, opacity),
           shadow: shadowStyle(element, style, opacity),

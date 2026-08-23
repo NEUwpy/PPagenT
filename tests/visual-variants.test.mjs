@@ -34,17 +34,23 @@ test("正式结构候选来自当前核心 HTML 资产包", async () => {
   const variants = await listRenderableVisualVariants({ root });
   const structural = variants.filter((variant) => variant.renderer !== "skin");
   assert.deepEqual(structural.map((variant) => variant.assetId), [
+    "argument-evidence-conclusion-001",
+    "branching-decision-routes-001",
     "causal-fishbone-attribution-001",
     "comparison-dual-verdict-001",
     "convergence-funnel-001",
     "convergence-simple-funnel-001",
     "cycle-loop-001",
+    "goal-alignment-strategy-metrics-001",
     "hierarchy-people-tree-001",
     "hub-radial-001",
     "layered-architecture-001",
     "matrix-quadrant-priority-001",
     "parallel-equal-cards-001",
+    "problem-method-result-001",
     "problem-solution-outcome-001",
+    "progression-spectrum-focus-001",
+    "role-stage-collaboration-001",
     "sequence-flow-001",
   ]);
   assert.deepEqual(
@@ -119,31 +125,43 @@ test("正式结构候选来自当前核心 HTML 资产包", async () => {
 test("运行时登记当前核心结构资产", async () => {
   const builders = await listStructureAssetBuilders();
   assert.deepEqual(builders.defaultAssetIds, [
+    "argument-evidence-conclusion-001",
+    "branching-decision-routes-001",
     "causal-fishbone-attribution-001",
     "comparison-dual-verdict-001",
     "convergence-funnel-001",
     "convergence-simple-funnel-001",
     "cycle-loop-001",
+    "goal-alignment-strategy-metrics-001",
     "hierarchy-people-tree-001",
     "hub-radial-001",
     "layered-architecture-001",
     "matrix-quadrant-priority-001",
     "parallel-equal-cards-001",
+    "problem-method-result-001",
     "problem-solution-outcome-001",
+    "progression-spectrum-focus-001",
+    "role-stage-collaboration-001",
     "sequence-flow-001",
   ]);
   assert.deepEqual(builders.variantBuilderKeys, [
+    "argument-evidence-conclusion-001:proof-stack-1n1",
+    "branching-decision-routes-001:single-decision-fanout",
     "causal-fishbone-attribution-001:fishbone-attribution",
     "comparison-dual-verdict-001:dual-verdict-mirror",
     "convergence-funnel-001:staged-input-content-funnel",
     "convergence-simple-funnel-001:input-steps-only",
     "cycle-loop-001:default",
+    "goal-alignment-strategy-metrics-001:typographic-goal-strategy-field-with-metric-band",
     "hierarchy-people-tree-001:three-level-portraits",
     "hub-radial-001:balanced-orbit-anchor",
     "layered-architecture-001:curved-frustum-stack",
     "matrix-quadrant-priority-001:axis-bubble-quadrant",
     "parallel-equal-cards-001:equal-floating-cards",
+    "problem-method-result-001:research-1n1",
     "problem-solution-outcome-001:paired-convergence",
+    "progression-spectrum-focus-001:ordered-regions-with-focus",
+    "role-stage-collaboration-001:continuous-stage-role-swimlane",
     "sequence-flow-001:continuous-numbered-rail",
   ]);
 });
