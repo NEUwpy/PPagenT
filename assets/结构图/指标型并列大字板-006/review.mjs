@@ -1,0 +1,1 @@
+import {getCandidate} from "../_round56-components/components.mjs?v=2";const c=getCandidate("parallel-metric-scoreboard-006");export const visualComponent=c.visualComponent;export const previewParameters=c.previewParameters;export const resolvePreviewParameters=c.resolvePreviewParameters;

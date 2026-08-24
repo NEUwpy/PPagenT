@@ -1,0 +1,35 @@
+{
+  "id": "sequence-zigzag-cards-002",
+  "name": "交错策略流程",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "pending-review",
+  "source": { "file": "PPT源/06-【柏林蓝】定制级学术型灵感手册-宽屏.pptx", "slides": [131] },
+  "runtime": {
+    "renderer": "html-component", "entry": "review.mjs", "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters", "previewResolverExport": "resolvePreviewParameters",
+    "logicId": "sequence", "structureGroupId": "sequence-zigzag-cards", "familyId": "sequence-process",
+    "variantId": "alternating-tag-ribbon", "silhouette": "alternating-dark-tags-with-white-ribbon-cards",
+    "supportedBaseRelations": ["sequence"], "supportedPurposeKeys": ["explain_process", "present_steps"],
+    "itemCount": { "min": 3, "preferred": [3, 4, 5], "max": 6 },
+    "stateContract": { "resolver": "itemCount", "states": [3, 4, 5, 6], "previewDefault": 4 },
+    "contentContract": { "itemRole": "semantic-node", "points": "forbidden", "ordered": true },
+    "contract": { "abstractionLevel": "foundation", "adaptationStatus": "adaptive", "constraints": { "semantic": { "ordered": true }, "relationTraits": { "sequence": true }, "density": ["low", "medium"] } },
+    "review": {
+      "entry": "review.mjs", "visualIntent": "visual-intent.md", "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters", "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html", "goldenState": { "selection": { "itemCount": 4 } },
+      "controls": [{ "key": "itemCount", "label": "流程步骤数", "values": [3, 4, 5, 6], "default": 4 }]
+    }
+  },
+  "coverageDelta": "补齐现有顺序流程只提供一条等高水平步骤带、难以承载每一步都需要独立说明卡且需要更强阶段节奏的缺口；本组用交错高低的策略卡保持明确先后。",
+  "layoutExpansion": { "mode": "responsive", "range": "3–6 个有明确先后的步骤", "rule": "步骤沿同一条左上到右下的交错轨道重新分配卡宽和落点；编号与内容同步增删" },
+  "componentModel": { "fixed": ["交错高低节奏", "深色阶段签跨压白色说明卡", "左上到右下的连续阅读方向"], "variable": ["3–6 个步骤", "步骤标题与短说明", "轨道落点与卡片宽度"] },
+  "fieldContract": { "editable": [{ "field": "items[].title", "meaning": "步骤标题" }, { "field": "items[].body", "meaning": "步骤说明" }], "generated": [{ "field": "items[].order", "meaning": "按数组顺序生成编号" }], "fixed": ["阅读顺序从左到右"], "unavailable": ["分支", "日期刻度", "图标"] },
+  "spatialContract": { "coordinateSystem": { "width": 1280, "height": 720 }, "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 }, "aspectRatio": 2.378, "minimumFrame": { "width": 1170, "height": 492 }, "preferredFrame": { "width": 1170, "height": 492 }, "resizeMode": "natural", "minFontSize": 15, "safePadding": 12, "supportedCompositionIds": ["component-full"] },
+  "capacity": "3–6 步；标题不超过 8 字，说明不超过 34/30/26/22 字",
+  "semanticContract": "若干动作或阶段必须按明确先后依次完成",
+  "doNotUseWhen": "内容是普通并列、循环、日期时间轴或存在条件分支",
+  "review": "等待用户审核 HTML 黄金状态与 3–6 步扩散；未生成 Native PPT"
+}

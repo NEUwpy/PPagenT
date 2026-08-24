@@ -82,12 +82,12 @@ async function loadDescriptor(manifestPath) {
     throw error;
   }
   if (asset.status !== "core" || !asset.runtime) return null;
-  validateManifest(asset, manifestPath);
   const assetDir = path.dirname(manifestPath);
   if (asset.runtime.renderer === "html-component") {
     const eligibility = await inspectHtmlComponentEligibility(assetDir, asset.id);
     if (!eligibility.eligible) return null;
   }
+  validateManifest(asset, manifestPath);
   const entryPath = path.resolve(assetDir, asset.runtime.entry);
   requireValue(inside(assetDir, entryPath), `${asset.id} 的运行入口必须位于资产目录内`);
   return {
