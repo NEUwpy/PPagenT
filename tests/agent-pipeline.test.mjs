@@ -8,6 +8,7 @@ import {
   resolveVisualPlan,
   timelineLacksTemporalEvidence,
   validateComponentBindings,
+  validateComponentText,
 } from "../src/agent/visual-resolution.mjs";
 import { enrichPageIntent } from "../src/content/page-content.mjs";
 import { mapRenderPayload } from "../src/render/render-payload.mjs";
@@ -392,6 +393,63 @@ test("三层组织树命中已登记的组织层级资产", async () => {
   ]);
 });
 
+test("TextFlow 资产向视觉导演披露一个动态内容区及程序派生容量", async () => {
+  const page = content("parallel-flow", [
+    { id: "a", title: "专业能力", body: "解决复杂任务" },
+    { id: "b", title: "协同能力", body: "整合人员资源" },
+    { id: "c", title: "创新能力", body: "形成新的路径" },
+  ]);
+  const intent = enrichPageIntent(intentDraft("parallel-flow-intent", "present_parallel_points", "parallel", {
+    ordered: false,
+    sameLevel: true,
+  }), page);
+  const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
+  const parallel = set.candidates.find((candidate) => candidate.assetId === "parallel-equal-cards-001");
+  assert.equal(parallel?.textFlow?.profile, "standard");
+  assert.equal(parallel?.textFlow?.scope, "per-item");
+  assert.equal(parallel?.textFlow?.planningStates?.length, 3);
+  assert.equal(parallel?.textCapacity, null);
+  const title = parallel?.slotCapabilities?.textSlots.find((slot) => slot.role === "item-title");
+  const body = parallel?.slotCapabilities?.textSlots.find((slot) => slot.role === "item-body");
+  assert.equal(title?.fitMode, "dynamic-text-flow");
+  assert.equal(body?.fitMode, "dynamic-text-flow");
+  assert.equal(title?.containerRole, "item-content");
+  assert.equal(body?.containerRole, "item-content");
+  assert.equal(title?.capacityBasis, "conservative-cjk-geometry");
+  assert.equal(body?.capacityBasis, "conservative-cjk-geometry");
+  assert.equal(title?.maxChars, 22);
+  assert.equal(body?.maxChars, 48);
+});
+
+test("TextFlow 仅正文时使用同一容器的 body-only 容量", () => {
+  const page = content("body-only-flow", [{ id: "a", title: "", body: "正".repeat(50) }]);
+  page.sourceText = page.items[0].body;
+  const candidate = { slotCapabilities: { textSlots: [{
+    role: "item-body",
+    fitMode: "dynamic-text-flow",
+    maxChars: 40,
+    maxLines: 4,
+    compositionCapacities: {
+      bodyOnly: { maxChars: 70, maxLines: 7 },
+      titleBody: { maxBodyChars: 40, maxBodyLines: 4 },
+    },
+    sourceField: "body",
+  }] } };
+  const composition = {
+    componentContentMode: "full",
+    componentItemIds: ["a"],
+    componentText: [{
+      sourceItemId: "a",
+      sourceField: "body",
+      targetRole: "item-body",
+      text: page.items[0].body,
+      sourceFragment: page.items[0].body,
+    }],
+  };
+  assert.equal(validateComponentText(page, candidate, composition)
+    .some((issue) => issue.code === "component-text-too-long"), false);
+});
+
 test("人物组织树不会因普通两项层级意图而泄漏到候选集", async () => {
   const page = content("architecture", [
     { id: "intake", title: "资产入库线", body: "形成稳定资产" },
@@ -686,7 +744,7 @@ test("closing purpose cannot bypass fixed closing capacity", async () => {
   assert.ok(candidateSet.candidates.every((item) => item.assetId !== "northeastern-university-closing-001"));
 });
 
-test("结构性 Logic 没有兼容资产时返回 asset-gap 而不是正文兜底", async () => {
+test("结构性 Logic 有兼容资产时返回对应结构与正文备选", async () => {
   const page = content("ordered-spectrum", [
     { id: "low", title: "低要求端", body: "不关注版式" },
     { id: "middle", title: "工作型需求", body: "强调规范可靠" },
@@ -697,13 +755,8 @@ test("结构性 Logic 没有兼容资产时返回 asset-gap 而不是正文兜�
     ordered: true,
   }), page);
   const [candidateSet] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.equal(candidateSet.candidates.length, 0);
+  assert.ok(candidateSet.candidates.some((item) => item.assetId === "progression-spectrum-focus-001"));
+  assert.ok(candidateSet.candidates.some((item) => item.assetId === "northeastern-university-body-001"));
   assert.ok(candidateSet.candidates.every((item) => item.assetId !== "sequential-process-001"));
-  assert.deepEqual(candidateSet.gap, {
-    type: "asset-gap",
-    logicId: "progression",
-    baseRelation: "progression",
-    itemCount: 3,
-    reason: "当前核心资产库没有语义与容量均兼容的 Structure Group",
-  });
+  assert.equal(candidateSet.gap, undefined);
 });

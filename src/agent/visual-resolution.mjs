@@ -36,13 +36,28 @@ function stateValue(value, itemCount) {
   return null;
 }
 
+function textFlowPlanningState(textFlow, itemCount) {
+  return textFlow?.planningStates?.find((state) => (
+    Object.values(state.selection ?? {}).some((value) => Number(value) === Number(itemCount))
+  )) ?? textFlow?.planningStates?.[0] ?? null;
+}
+
 export function slotCapabilitiesForVariant(variant, itemCount) {
   const capacity = variant.textCapacity ?? {};
+  const textFlow = variant.textFlow ?? null;
+  const itemTextFlow = textFlow?.scope === "per-item" ? textFlow : null;
+  const flowPlanning = textFlowPlanningState(itemTextFlow, itemCount);
   const container = resolveTextContainerContract(capacity, variant.contentContract ?? {});
   const textSlots = [];
   const addText = (role, scope, maxChars, maxLines, extra = {}) => {
-    if (!Number.isFinite(maxChars) || maxChars <= 0) return;
-    textSlots.push({ role, scope, maxChars, ...(Number.isFinite(maxLines) && maxLines > 0 ? { maxLines } : {}), ...extra });
+    if ((!Number.isFinite(maxChars) || maxChars <= 0) && extra.fitMode !== "dynamic-text-flow") return;
+    textSlots.push({
+      role,
+      scope,
+      ...(Number.isFinite(maxChars) && maxChars > 0 ? { maxChars } : {}),
+      ...(Number.isFinite(maxLines) && maxLines > 0 ? { maxLines } : {}),
+      ...extra,
+    });
   };
   addText("center-title", "page", stateValue(capacity.maxCenterChars, itemCount), stateValue(capacity.maxCenterLines, itemCount), {
     count: 1,
@@ -51,20 +66,33 @@ export function slotCapabilitiesForVariant(variant, itemCount) {
     textMode: "flow",
     listPolicy: "none",
   });
-  addText("item-title", "per-item", stateValue(capacity.maxItemTitleChars, itemCount), stateValue(capacity.maxItemTitleLines, itemCount), {
+  const flowCapability = itemTextFlow ? {
+    fitMode: "dynamic-text-flow",
+    containerRole: "item-content",
+    profile: itemTextFlow.profile ?? "standard",
+    capacityBasis: flowPlanning?.capacity?.basis ?? "runtime-text-flow",
+    ...(flowPlanning?.capacity ? { compositionCapacities: flowPlanning.capacity } : {}),
+  } : {};
+  addText("item-title", "per-item", flowPlanning?.capacity?.titleBody?.maxTitleChars
+    ?? stateValue(capacity.maxItemTitleChars, itemCount), flowPlanning?.capacity?.titleBody?.maxTitleLines
+    ?? stateValue(capacity.maxItemTitleLines, itemCount), {
     count: itemCount,
     sourceField: "title",
     required: container.itemTitleRequired,
-    textMode: "single-line",
+    textMode: itemTextFlow ? "flow" : "single-line",
     listPolicy: "none",
+    ...flowCapability,
   });
-  addText("item-body", "per-item", stateValue(capacity.maxItemBodyChars ?? capacity.maxItemBodyCharsByState, itemCount), stateValue(capacity.maxItemBodyLines, itemCount), {
+  addText("item-body", "per-item", flowPlanning?.capacity?.titleBody?.maxBodyChars
+    ?? stateValue(capacity.maxItemBodyChars ?? capacity.maxItemBodyCharsByState, itemCount), flowPlanning?.capacity?.titleBody?.maxBodyLines
+    ?? stateValue(capacity.maxItemBodyLines, itemCount), {
     count: itemCount,
     sourceField: container.itemBodySourceField,
     required: container.itemBodyRequired,
     textMode: container.itemBodyTextMode,
     listPolicy: container.itemBodyListPolicy,
     containerMode: container.bodyContainerMode,
+    ...flowCapability,
   });
   if (container.pointRendering === "separate-slots") {
     addText("item-point", "per-point", stateValue(capacity.maxPointChars, itemCount), stateValue(capacity.maxPointLines, itemCount), {
@@ -110,6 +138,7 @@ function publicVariant(variant, contract, compositions, itemCount, contentReadin
     contentReadiness,
     itemCount: variant.itemCount,
     textCapacity: variant.textCapacity ?? null,
+    textFlow: variant.textFlow ?? null,
     contentContract: variant.contentContract ?? null,
     mediaContract: variant.mediaContract ?? null,
     slotContract: variant.slotContract ?? null,
@@ -421,6 +450,22 @@ function slotCapabilityByRole(candidate) {
   return new Map((candidate.slotCapabilities?.textSlots ?? []).map((slot) => [slot.role, slot]));
 }
 
+function componentTextLimits(content, capability, binding) {
+  if (capability.fitMode !== "dynamic-text-flow") return capability;
+  const item = content.items.find((entry) => entry.id === binding.sourceItemId);
+  const capacities = capability.compositionCapacities;
+  if (!item || !capacities) return capability;
+  const hasTitle = Boolean(item.title?.trim());
+  const hasBody = Boolean(item.body?.trim() || item.points?.length);
+  if (binding.targetRole === "item-title" && hasTitle && !hasBody) {
+    return { ...capability, maxChars: capacities.titleOnly?.maxChars, maxLines: capacities.titleOnly?.maxLines };
+  }
+  if (binding.targetRole === "item-body" && !hasTitle && hasBody) {
+    return { ...capability, maxChars: capacities.bodyOnly?.maxChars, maxLines: capacities.bodyOnly?.maxLines };
+  }
+  return capability;
+}
+
 function expectedComponentText(content, candidate, compositionPage) {
   const roles = slotCapabilityByRole(candidate);
   const selected = new Set(compositionPage.componentItemIds ?? []);
@@ -483,13 +528,13 @@ export function validateComponentText(content, candidate, compositionPage) {
     if (!fragment || !normalizedSource.includes(fragment)) {
       issues.push({ code: "component-text-source-fragment-missing", key });
     }
-    const capability = roleMap.get(binding.targetRole);
+    const capability = componentTextLimits(content, roleMap.get(binding.targetRole), binding);
     const actualChars = Array.from(binding.text ?? "").length;
-    if (actualChars > capability.maxChars) {
+    if (Number.isFinite(capability.maxChars) && actualChars > capability.maxChars) {
       issues.push({ code: "component-text-too-long", key, actualChars, maxChars: capability.maxChars });
     }
     const actualLines = String(binding.text ?? "").split(/\r?\n/).length;
-    if (capability.maxLines && actualLines > capability.maxLines) {
+    if (Number.isFinite(capability.maxLines) && actualLines > capability.maxLines) {
       issues.push({ code: "component-text-too-many-lines", key, actualLines, maxLines: capability.maxLines });
     }
   }
@@ -770,10 +815,12 @@ function validateCompositionPage({ content, candidate, compositionPage, layouts,
       && !(candidate.slotCapabilities?.textSlots?.length)) {
       const selectedItems = content.items.filter((item) => compositionPage.componentItemIds.includes(item.id));
       const titleOverflow = selectedItems
-        .filter((item) => Array.from(item.title ?? "").length > candidate.textCapacity.maxItemTitleChars)
+        .filter((item) => Number.isFinite(candidate.textCapacity.maxItemTitleChars)
+          && Array.from(item.title ?? "").length > candidate.textCapacity.maxItemTitleChars)
         .map((item) => item.id);
       const bodyOverflow = selectedItems
-        .filter((item) => Array.from(item.body ?? "").length > candidate.textCapacity.maxItemBodyChars)
+        .filter((item) => Number.isFinite(candidate.textCapacity.maxItemBodyChars)
+          && Array.from(item.body ?? "").length > candidate.textCapacity.maxItemBodyChars)
         .map((item) => item.id);
       const pointCountOverflow = selectedItems
         .filter((item) => candidate.textCapacity.maxPointsPerItem !== undefined

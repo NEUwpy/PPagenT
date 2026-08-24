@@ -1,3 +1,5 @@
+import { textFlowMarkup } from "../../../src/visual-runtime/text-flow.mjs";
+
 const DESIGN_FRAME = Object.freeze({ width: 1170, height: 492 });
 const TITLE_LIMIT = 8;
 const BODY_LIMIT = 28;
@@ -73,8 +75,7 @@ function regionMarkup(item, index, focusIndex) {
     <div class="spectrum-card-underlay" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="spectrum-underlay-${index}"></div>
     <div class="spectrum-card" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="spectrum-card-${index}"></div>
     <div class="spectrum-order" data-ppt-kind="text" data-ppt-name="spectrum-order-${index}">${String(index + 1).padStart(2, "0")}</div>
-    <h3 data-slot-id="${escapeHtml(item.key)}-title" data-slot-role="item-title" data-slot-field="items[${index}].title" data-slot-item-id="${escapeHtml(item.key)}" data-slot-content-type="text" data-slot-required="true" data-slot-text-mode="single-line" data-slot-list-policy="none" data-slot-max-chars="${TITLE_LIMIT}" data-slot-max-lines="1" data-ppt-kind="text" data-ppt-name="spectrum-title-${index}">${escapeHtml(item.title)}</h3>
-    <p data-slot-id="${escapeHtml(item.key)}-body" data-slot-role="item-body" data-slot-field="items[${index}].body" data-slot-item-id="${escapeHtml(item.key)}" data-slot-content-type="text" data-slot-required="true" data-slot-text-mode="flow" data-slot-list-policy="none" data-slot-max-chars="${BODY_LIMIT}" data-slot-max-lines="3" data-ppt-kind="text" data-ppt-name="spectrum-body-${index}">${escapeHtml(item.body)}</p>
+    ${textFlowMarkup({ id: `${item.key}-content`, field: `items[${index}]`, itemId: item.key, title: item.title, body: item.body, className: "spectrum-content", align: "center", names: { title: `spectrum-title-${index}`, body: `spectrum-body-${index}` } })}
     ${focused ? '<div class="spectrum-focus-label-bg" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="spectrum-focus-label-bg"></div><div class="spectrum-focus-label" data-ppt-kind="text" data-ppt-name="spectrum-focus-label">重点区域</div>' : ""}
   </article>`;
 }
@@ -84,6 +85,7 @@ export const visualComponent = Object.freeze({
   schemaVersion: 1,
   designFrame: DESIGN_FRAME,
   cssFile: "component.css",
+  textFlow: Object.freeze({ profile: "standard", scope: "per-item" }),
   textCapacity: Object.freeze({
     maxItemTitleChars: TITLE_LIMIT,
     maxItemTitleLines: 1,

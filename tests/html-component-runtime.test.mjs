@@ -36,6 +36,10 @@ import {
   previewParameters as problemMethodPreviewParameters,
   problemMethodVisualComponent,
 } from "../assets/结构图/问题方法结果-001/review.mjs";
+import {
+  previewParameters as intersectionPreviewParameters,
+  visualComponent as intersectionVisualComponent,
+} from "../assets/结构图/双集合交集-001/review.mjs";
 import { northeasternUniversityTheme } from "../src/runtime/skins/northeastern-university-theme.mjs";
 
 const assetDir = path.resolve(import.meta.dirname, "../assets/结构图/循环闭环-001");
@@ -44,6 +48,7 @@ const matrixAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/�
 const sequenceAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/顺序流程-001");
 const argumentAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/论点证据结论-001");
 const problemMethodAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/问题方法结果-001");
+const intersectionAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/双集合交集-001");
 
 test("Native 编译把浏览器 computed px 原样交给 Artifact Tool，避免重复 pt 换算", () => {
   let compiledTextStyle = null;
@@ -197,7 +202,7 @@ test("HTML 组件拒绝通过缩放目标框偷偷改变字号", async () => {
   }
 });
 
-test("并列组件的文字与图标槽由最终 DOM 派生，并编译为原生图像对象", async () => {
+test("并列组件由最终 DOM 派生单一 TextFlow 与图标槽，并编译为原生对象", async () => {
   const targetFrame = { left: 55, top: 166, width: 1170, height: 492 };
   try {
     const tree = await resolveHtmlComponent({
@@ -206,24 +211,18 @@ test("并列组件的文字与图标槽由最终 DOM 派生，并编译为原生
       assetDir: parallelAssetDir,
       targetFrame,
     });
-    assert.equal(tree.slots.length, 12);
+    assert.equal(tree.slots.length, 8);
     assert.equal(tree.slots.filter((slot) => slot.role === "icon").length, 4);
     assert.ok(tree.slots.filter((slot) => slot.role === "icon").every((slot) => (
       slot.media?.provider === "tabler-icons" && slot.media.required === true
     )));
-    const titleSlot = tree.slots.find((slot) => slot.role === "item-title");
-    const bodySlot = tree.slots.find((slot) => slot.role === "item-body");
-    assert.equal(titleSlot?.typography.fontSizePt, 21);
-    assert.equal(titleSlot?.capacity.charsPerLine, 7);
-    assert.equal(titleSlot?.capacity.maxChars, 7);
-    assert.equal(titleSlot?.capacity.declaredMaxChars, 8);
-    assert.equal(titleSlot?.capacity.declarationFits, false);
-    assert.equal(bodySlot?.typography.fontSizePt, 17);
-    assert.equal(bodySlot?.capacity.charsPerLine, 9);
-    assert.equal(bodySlot?.capacity.maxLines, 3);
-    assert.equal(bodySlot?.capacity.maxChars, 27);
-    assert.equal(bodySlot?.capacity.declaredMaxChars, 30);
-    assert.equal(bodySlot?.capacity.declarationFits, false);
+    const flowSlots = tree.slots.filter((slot) => slot.role === "item-content");
+    assert.equal(flowSlots.length, 4);
+    assert.ok(flowSlots.every((slot) => slot.capacity.basis === "dynamic-text-flow"));
+    assert.ok(flowSlots.every((slot) => slot.textFlow.composition === "title-body"));
+    assert.ok(flowSlots.every((slot) => slot.textFlow.parts.find((part) => part.part === "title")?.typography.fontSizePt === 21));
+    assert.ok(flowSlots.every((slot) => slot.textFlow.parts.find((part) => part.part === "body")?.typography.fontSizePt === 17));
+    assert.ok(flowSlots.every((slot) => !Object.hasOwn(slot.capacity, "maxChars")));
     assert.equal(tree.nodes.filter((node) => node.kind === "image").length, 4);
 
     const presentation = createPresentation();
@@ -304,6 +303,33 @@ test("HTML → PPT 对不能可靠映射的效果和遗漏 SVG 采用 fail-close
       assetDir: matrixAssetDir,
       targetFrame,
     }), /HTML_PPT_FIDELITY:TEXT_SURFACE_REQUIRES_SHAPE_TEXT/);
+  } finally {
+    await closeHtmlComponentRuntime();
+  }
+});
+
+test("TextFlow 用同一交集结构自动适配标题正文、仅标题和仅正文", async () => {
+  const targetFrame = { left: 55, top: 166, width: 1170, height: 492 };
+  const modes = [
+    structuredClone(intersectionPreviewParameters),
+    Object.fromEntries(Object.entries(intersectionPreviewParameters).map(([key, value]) => [key, { title: value.title, body: "" }])),
+    Object.fromEntries(Object.entries(intersectionPreviewParameters).map(([key, value]) => [key, { title: "", body: value.body }])),
+  ];
+  try {
+    const compositions = [];
+    for (const parameters of modes) {
+      const tree = await resolveHtmlComponent({
+        component: intersectionVisualComponent,
+        parameters,
+        assetDir: intersectionAssetDir,
+        targetFrame,
+      });
+      assert.equal(tree.slots.filter((slot) => slot.role === "item-content").length, 3);
+      assert.ok(tree.slots.filter((slot) => slot.role === "item-content")
+        .every((slot) => slot.capacity.basis === "dynamic-text-flow"));
+      compositions.push([...new Set(tree.textFlows.map((flow) => flow.composition))]);
+    }
+    assert.deepEqual(compositions, [["title-body"], ["title-only"], ["body-only"]]);
   } finally {
     await closeHtmlComponentRuntime();
   }

@@ -1,4 +1,5 @@
 import { resolveTablerIcon, tablerIconSvgMarkup } from "../../../src/icons/tabler-icon-resolver.mjs";
+import { textFlowMarkup } from "../../../src/visual-runtime/text-flow.mjs";
 
 const DESIGN_FRAME = Object.freeze({ width: 1170, height: 492 });
 const BODY_LIMITS = Object.freeze({ 3: 30, 4: 28, 5: 26, 6: 24, 7: 22, 8: 20 });
@@ -93,7 +94,7 @@ function iconMarkup(item, index) {
     : `<i class="hub-icon-fallback" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="hub-icon-fallback-${index}"></i>`;
 }
 
-function itemMarkup(item, placement, itemCount) {
+function itemMarkup(item, placement) {
   const { index, side, left, top, width, height } = placement;
   return `<article class="hub-item hub-item-${side}" style="--left:${left}px;--top:${top}px;--width:${width}px;--height:${height}px" data-item-index="${index}">
     <div class="hub-item-underlay" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="hub-item-underlay-${index}"></div>
@@ -101,8 +102,7 @@ function itemMarkup(item, placement, itemCount) {
     <div class="hub-icon-halo" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="hub-icon-halo-${index}"></div>
     <div class="hub-icon-core" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="hub-icon-core-${index}"></div>
     <div class="hub-icon-slot" data-slot-id="${escapeHtml(item.key)}-icon" data-slot-role="icon" data-slot-field="items[${index}].iconKey" data-slot-item-id="${escapeHtml(item.key)}" data-slot-content-type="icon" data-slot-provider="tabler-icons" data-slot-required="true">${iconMarkup(item, index)}</div>
-    <h3 class="hub-item-title" data-slot-id="${escapeHtml(item.key)}-title" data-slot-role="item-title" data-slot-field="items[${index}].title" data-slot-item-id="${escapeHtml(item.key)}" data-slot-content-type="text" data-slot-required="true" data-slot-text-mode="single-line" data-slot-list-policy="none" data-slot-max-chars="${ITEM_TITLE_LIMIT}" data-slot-max-lines="1" data-ppt-kind="text" data-ppt-name="hub-item-title-${index}">${escapeHtml(item.title)}</h3>
-    <p class="hub-item-body" data-slot-id="${escapeHtml(item.key)}-body" data-slot-role="item-body" data-slot-field="items[${index}].body" data-slot-item-id="${escapeHtml(item.key)}" data-slot-content-type="text" data-slot-required="false" data-slot-text-mode="flow" data-slot-list-policy="inline" data-slot-max-chars="${BODY_LIMITS[itemCount]}" data-slot-max-lines="2" data-ppt-kind="text" data-ppt-name="hub-item-body-${index}">${escapeHtml(item.body)}</p>
+    ${textFlowMarkup({ id: `${item.key}-content`, field: `items[${index}]`, itemId: item.key, title: item.title, body: item.body, className: `hub-item-content hub-item-content-${side}`, align: side === "right" ? "right" : "left", names: { title: `hub-item-title-${index}`, body: `hub-item-body-${index}` } })}
   </article>`;
 }
 
@@ -111,6 +111,7 @@ export const visualComponent = Object.freeze({
   schemaVersion: 1,
   designFrame: DESIGN_FRAME,
   cssFile: "component.css",
+  textFlow: Object.freeze({ profile: "standard", scope: "per-contiguous-region" }),
   textCapacity: Object.freeze({
     maxCenterChars: CENTER_TITLE_LIMIT,
     maxCenterLines: 1,
@@ -131,9 +132,8 @@ export const visualComponent = Object.freeze({
       <div class="hub-center-halo" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="hub-center-halo"></div>
       <div class="hub-center-ring" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="hub-center-ring"></div>
       <div class="hub-center-core" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="hub-center-core"></div>
-      <h2 class="hub-center-title" data-slot-id="center-title" data-slot-role="center-title" data-slot-field="center.title" data-slot-item-id="center" data-slot-content-type="text" data-slot-required="true" data-slot-text-mode="single-line" data-slot-list-policy="none" data-slot-max-chars="${CENTER_TITLE_LIMIT}" data-slot-max-lines="1" data-ppt-kind="text" data-ppt-name="hub-center-title">${escapeHtml(model.center.title)}</h2>
-      <p class="hub-center-body" data-slot-id="center-body" data-slot-role="center-body" data-slot-field="center.body" data-slot-item-id="center" data-slot-content-type="text" data-slot-required="false" data-slot-text-mode="flow" data-slot-list-policy="none" data-slot-max-chars="${CENTER_BODY_LIMIT}" data-slot-max-lines="2" data-ppt-kind="text" data-ppt-name="hub-center-body">${escapeHtml(model.center.body)}</p>
-      ${positions.map((position) => itemMarkup(model.items[position.index], position, itemCount)).join("")}
+      ${textFlowMarkup({ id: "center-content", field: "center", itemId: "center", title: model.center.title, body: model.center.body, className: "hub-center-content", align: "center", names: { title: "hub-center-title", body: "hub-center-body" } })}
+      ${positions.map((position) => itemMarkup(model.items[position.index], position)).join("")}
     </section>`;
   },
 });

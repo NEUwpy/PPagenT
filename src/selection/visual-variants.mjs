@@ -24,6 +24,7 @@ export async function loadVisualVariantCatalog(root = process.cwd()) {
     supportedPurposeKeys: item.runtime.supportedPurposeKeys ?? [],
     itemCount: { ...item.runtime.itemCount },
     textCapacity: item.textCapacity ? structuredClone(item.textCapacity) : null,
+    textFlow: item.textFlow ? structuredClone(item.textFlow) : null,
     contentContract: item.runtime.contentContract ? structuredClone(item.runtime.contentContract) : null,
     slotContract: item.runtime.slotContract ? structuredClone(item.runtime.slotContract) : null,
     renderer: item.runtime.renderer,
@@ -108,6 +109,7 @@ export async function loadVisualVariantCapabilities(variant, root = process.cwd(
   return {
     ...variant,
     textCapacity: capability.textCapacity,
+    textFlow: capability.textFlow,
   };
 }
 

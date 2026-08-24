@@ -1,3 +1,5 @@
+import { textFlowMarkup, textRegionAttributes } from "../../../src/visual-runtime/text-flow.mjs";
+
 const DESIGN_FRAME = Object.freeze({ width: 1170, height: 492 });
 const LIMITS = Object.freeze({ itemMin: 1, itemMax: 3, quadrantTitle: 8, itemTitle: 8, axisLabel: 8, detailTitle: 10, detailBody: 30, metricLabel: 8, metricValue: 8 });
 const FOCUS_MAP = Object.freeze({ 左上: 0, 右上: 1, 无: -1 });
@@ -91,9 +93,8 @@ function quadrantMarkup(quadrant, quadrantIndex, model) {
 
 function detailMarkup(quadrant, quadrantIndex) {
   const itemId = `quadrant-${quadrantIndex}-detail`;
-  return `<aside class="quadrant-detail detail-${quadrantIndex}" data-quadrant-detail="${quadrantIndex}">
-    <h5 ${slotAttributes({ id: `${itemId}-title`, role: "detail-title", field: `quadrants[${quadrantIndex}].detail.title`, itemId, maxChars: LIMITS.detailTitle })} data-ppt-kind="text" data-ppt-name="matrix-detail-title-${quadrantIndex}">${escapeHtml(quadrant.detail.title)}</h5>
-    <p ${slotAttributes({ id: `${itemId}-body`, role: "detail-body", field: `quadrants[${quadrantIndex}].detail.body`, itemId, maxChars: LIMITS.detailBody, maxLines: 2 })} data-ppt-kind="text" data-ppt-name="matrix-detail-body-${quadrantIndex}">${escapeHtml(quadrant.detail.body)}</p>
+  return `<aside class="quadrant-detail detail-${quadrantIndex}" data-quadrant-detail="${quadrantIndex}" ${textRegionAttributes({ id: `${itemId}-region`, field: `quadrants[${quadrantIndex}].detail`, itemId, regionId: "detail" })}>
+    ${textFlowMarkup({ id: `${itemId}-content`, field: `quadrants[${quadrantIndex}].detail`, itemId, regionId: "summary", title: quadrant.detail.title, body: quadrant.detail.body, className: "detail-copy", align: "left", valign: "top", names: { title: `matrix-detail-title-${quadrantIndex}`, body: `matrix-detail-body-${quadrantIndex}` } })}
     <div class="detail-divider" data-ppt-kind="shape" data-ppt-shape="line" data-ppt-name="matrix-detail-divider-${quadrantIndex}"></div>
     <div class="detail-metric-caption" data-ppt-kind="text" data-ppt-name="matrix-detail-caption-${quadrantIndex}">关键指标</div>
     <div class="detail-metrics">
@@ -154,6 +155,7 @@ export const visualComponent = Object.freeze({
   schemaVersion: 1,
   designFrame: DESIGN_FRAME,
   cssFile: "component.css",
+  textFlow: Object.freeze({ profile: "standard", scope: "per-contiguous-region" }),
   textCapacity: Object.freeze({
     maxItemTitleChars: LIMITS.itemTitle,
     maxItemTitleLines: 2,

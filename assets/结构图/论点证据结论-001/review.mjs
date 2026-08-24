@@ -1,3 +1,5 @@
+import { textFlowMarkup } from "../../../src/visual-runtime/text-flow.mjs";
+
 const DESIGN_FRAME = Object.freeze({ width: 1170, height: 492 });
 const LIMITS = Object.freeze({
   evidenceMin: 2,
@@ -109,10 +111,7 @@ function claimMarkup(claim) {
     <section class="claim-card" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="claim-card">
       <span class="claim-label" data-ppt-kind="text" data-ppt-name="claim-label">论点</span>
       <span class="claim-divider" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="claim-divider"></span>
-      <div class="claim-copy${claim.body ? "" : " is-title-only"}">
-        <h2 ${slotAttributes({ id: "claim-title", role: "claim-title", field: "claim.title", itemId: "claim", maxChars: claim.body ? LIMITS.claimTitle : LIMITS.claimTitleOnly, maxLines: 2 })} data-ppt-kind="text" data-ppt-name="claim-title">${escapeHtml(claim.title)}</h2>
-        ${claim.body ? `<p ${slotAttributes({ id: "claim-body", role: "claim-body", field: "claim.body", itemId: "claim", maxChars: LIMITS.claimBody, maxLines: 2, required: false })} data-ppt-kind="text" data-ppt-name="claim-body">${escapeHtml(claim.body)}</p>` : ""}
-      </div>
+      ${textFlowMarkup({ id: "claim-content", field: "claim", itemId: "claim", title: claim.title, body: claim.body, className: "claim-copy", align: "left", names: { title: "claim-title", body: "claim-body" } })}
     </section>
   </article>`;
 }
@@ -133,10 +132,7 @@ function conclusionMarkup(conclusion) {
   return `<article class="conclusion-wrap">
     <span class="therefore-badge" data-ppt-kind="shape-text" data-ppt-shape="ellipse" data-ppt-name="therefore-badge">因此</span>
     <section class="conclusion-card" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="conclusion-card">
-      <div class="conclusion-copy${conclusion.body ? "" : " is-title-only"}">
-        <h2 ${slotAttributes({ id: "conclusion-title", role: "conclusion-title", field: "conclusion.title", itemId: "conclusion", maxChars: conclusion.body ? LIMITS.conclusionTitle : LIMITS.conclusionTitleOnly, maxLines: 2 })} data-ppt-kind="text" data-ppt-name="conclusion-title">${escapeHtml(conclusion.title)}</h2>
-        ${conclusion.body ? `<p ${slotAttributes({ id: "conclusion-body", role: "conclusion-body", field: "conclusion.body", itemId: "conclusion", maxChars: LIMITS.conclusionBody, maxLines: 2, required: false })} data-ppt-kind="text" data-ppt-name="conclusion-body">${escapeHtml(conclusion.body)}</p>` : ""}
-      </div>
+      ${textFlowMarkup({ id: "conclusion-content", field: "conclusion", itemId: "conclusion", title: conclusion.title, body: conclusion.body, className: "conclusion-copy", align: "left", names: { title: "conclusion-title", body: "conclusion-body" } })}
     </section>
   </article>`;
 }
@@ -146,6 +142,7 @@ export const argumentEvidenceVisualComponent = Object.freeze({
   schemaVersion: 1,
   designFrame: DESIGN_FRAME,
   cssFile: "component.css",
+  textFlow: Object.freeze({ profile: "standard", scope: "per-contiguous-region" }),
   textCapacity: Object.freeze({
     maxClaimTitleChars: LIMITS.claimTitleOnly,
     maxClaimTitleLines: 2,

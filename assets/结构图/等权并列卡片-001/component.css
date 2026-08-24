@@ -20,9 +20,8 @@ body { color: #404040; background: transparent; font-family: var(--ppagent-font-
 .parallel-marker-dot-center { left: 17px; top: 17px; }
 .parallel-marker-dot-left { left: 3px; top: 18px; width: 6px; height: 6px; opacity: .86; }
 .parallel-marker-dot-right { right: 3px; top: 18px; width: 6px; height: 6px; opacity: .86; }
-.parallel-title { position: absolute; left: 22px; right: 22px; top: 128px; height: 36px; margin: 0; overflow: hidden; color: #254b7c; font-size: var(--ppagent-component-item-title-size, 21px); font-weight: 700; line-height: 36px; text-align: center; white-space: nowrap; }
-.parallel-rule { position: absolute; left: 50%; top: 178px; width: 54px; height: 4px; margin-left: -27px; border: 0; border-radius: 99px; background: #78aeef; }
-.parallel-body { position: absolute; left: 28px; right: 28px; top: 210px; height: 116px; margin: 0; overflow: hidden; color: #46566a; font-size: var(--ppagent-component-body-size, 19px); font-weight: 400; line-height: 1.55; text-align: center; white-space: pre-line; }
-.parallel-review[data-item-count="4"] .parallel-body { left: 24px; right: 24px; }
-.parallel-review[data-item-count="5"] .parallel-title { left: 16px; right: 16px; }
-.parallel-review[data-item-count="5"] .parallel-body { left: 20px; right: 20px; top: 204px; height: 128px; }
+.parallel-content { position: absolute; left: 28px; right: 28px; top: 120px; height: 218px; --ppagent-text-flow-gap: 14px; }
+.parallel-content .ppagent-text-flow__title { color: #254b7c; line-height: 1.25; }
+.parallel-content .ppagent-text-flow__body { color: #46566a; line-height: 1.55; }
+.parallel-review[data-item-count="4"] .parallel-content { left: 24px; right: 24px; }
+.parallel-review[data-item-count="5"] .parallel-content { left: 20px; right: 20px; top: 116px; height: 226px; --ppagent-text-flow-gap: 12px; }

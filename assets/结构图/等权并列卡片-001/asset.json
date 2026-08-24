@@ -67,6 +67,10 @@
       "points": "optional",
       "ordered": false
     },
+    "textFlow": {
+      "profile": "standard",
+      "scope": "per-item"
+    },
     "contract": {
       "abstractionLevel": "foundation",
       "adaptationStatus": "adaptive",
@@ -123,12 +127,12 @@
       {
         "field": "items[].title",
         "source": "PageContent.items[].title",
-        "meaning": "每张卡片的同级要点标题"
+        "meaning": "每张卡片的可选标题，与正文共用同一个动态文字区域"
       },
       {
         "field": "items[].body",
         "source": "PageContent.items[].body",
-        "meaning": "每张卡片的一整块正文容器，可直接承载段落"
+        "meaning": "每张卡片的可选正文，由 TextFlow 在统一内容区域内排版"
       },
       {
         "field": "items[].points[]",
@@ -149,7 +153,7 @@
     ],
     "fixed": [
       "所有卡片在每个 State 中等权、共线、等宽和等高",
-      "字号角色由 Skin 提供，编译器只可在规范档位内按固定容器降级"
+      "每张卡片只声明一个内容区域；字号角色与标题／正文组合由统一 TextFlow 决定"
     ],
     "unavailable": []
   },
@@ -169,7 +173,7 @@
     "safePadding": 12,
     "supportedCompositionIds": ["component-full"]
   },
-  "capacity": "承载 3–5 个同级要点；标题可选且不超过 8 字；每项只有一个完整正文容器，段落或分点共用，正文上限随 State 为 34/30/24 字",
+  "capacity": "承载 3–5 个同级要点；每项只有一个动态文字区域，标题、正文和分点均可选，实际容量由容器几何和 Skin 规范字号在编译时派生",
   "semanticContract": "3–5 个对象处于同一层级，彼此没有先后、因果、中心支撑或上下级关系",
   "doNotUseWhen": "内容存在正反比较、步骤顺序、中心辐射、问题—措施或层级关系",
   "review": "用户已确认 HTML 黄金状态、3–5 项扩散状态及 Native/东北大学主题结果，同意进入核心资产库"

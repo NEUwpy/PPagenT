@@ -6,10 +6,9 @@ body { color: #46566a; background: transparent; font-family: var(--ppagent-font-
 .funnel-phase-band:first-child { border-top: 0; }
 .funnel-phase-rail { position: absolute; left: 8px; top: var(--top); z-index: 2; width: 54px; height: var(--height); overflow: visible; }
 .funnel-phase-label { position: absolute; left: 23px; top: var(--top); z-index: 3; display: grid; place-items: center; width: 24px; height: var(--height); color: #fff; font-size: var(--ppagent-component-meta-size, 17px); font-weight: 700; line-height: 1.08; text-align: center; writing-mode: vertical-rl; }
-.funnel-phase-summary { position: absolute; left: 82px; top: var(--top); z-index: 2; display: flex; flex-direction: column; justify-content: center; width: 150px; height: var(--height); overflow: hidden; }
-.funnel-phase-summary h3, .funnel-phase-summary p { margin: 0; overflow: hidden; }
-.funnel-phase-summary h3 { height: 29px; color: #2f5ea8; font-size: var(--ppagent-component-item-title-size, 21px); font-weight: 700; line-height: 29px; white-space: nowrap; }
-.funnel-phase-summary p { max-height: 54px; color: #46566a; font-size: var(--ppagent-component-body-size, 19px); line-height: 1.36; }
+.funnel-phase-summary { position: absolute; left: 82px; top: var(--top); z-index: 2; width: 150px; height: var(--height); --ppagent-text-flow-gap: 5px; }
+.funnel-phase-summary .ppagent-text-flow__title { color: #2f5ea8; font-size: var(--ppagent-component-item-title-size, 21px); font-weight: 700; line-height: 1.15; }
+.funnel-phase-summary .ppagent-text-flow__body { color: #46566a; font-size: var(--ppagent-component-body-size, 19px); line-height: 1.36; }
 .funnel-diagram { position: absolute; inset: 0; z-index: 2; width: 1170px; height: 492px; overflow: visible; }
 .funnel-flow-arrow { pointer-events: none; }
 .funnel-step-body { stroke: rgba(255, 255, 255, .13); stroke-width: 1; }

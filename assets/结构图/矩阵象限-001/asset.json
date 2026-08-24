@@ -33,6 +33,7 @@
   ],
   "runtime": {
     "renderer": "html-component",
+    "textFlow": { "profile": "standard", "scope": "per-contiguous-region" },
     "entry": "runtime.mjs",
     "componentExport": "matrixQuadrantVisualComponent",
     "previewParametersExport": "previewParameters",

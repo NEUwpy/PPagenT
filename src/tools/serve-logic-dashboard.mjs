@@ -14,6 +14,7 @@ import {
 } from "./logic-dashboard-data.mjs";
 import { northeasternUniversityTheme } from "../runtime/skins/northeastern-university-theme.mjs";
 import { htmlComponentThemeCss } from "../visual-runtime/html-component-theme.mjs";
+import { htmlTextFlowCss } from "../visual-runtime/text-flow.mjs";
 
 function option(name, fallback) {
   const index = process.argv.indexOf(name);
@@ -252,7 +253,7 @@ async function componentPreviewHtml(library, assetId, searchParams) {
   const designWidth = Number(component.designFrame?.width);
   const designHeight = Number(component.designFrame?.height);
   if (!Number.isFinite(designWidth) || !Number.isFinite(designHeight) || designWidth <= 0 || designHeight <= 0) return null;
-  return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(resolved.record.name)} · ${escapeHtml(stateLabel)}</title><style>${htmlComponentThemeCss(northeasternUniversityTheme)}${css}
+  return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(resolved.record.name)} · ${escapeHtml(stateLabel)}</title><style>${htmlComponentThemeCss(northeasternUniversityTheme)}${htmlTextFlowCss()}${css}
 html,body{margin:0!important;width:100%!important;height:100%!important;overflow:hidden!important}
 body{position:relative!important;background:#fff!important}
 .ppagent-component-viewport{position:absolute;inset:0;overflow:hidden;background:#fff}
@@ -265,11 +266,20 @@ body{position:relative!important;background:#fff!important}
 .ppagent-slot-visual-layer{position:absolute;inset:0;z-index:999;pointer-events:none}
 .ppagent-slot-visual-box{position:absolute;pointer-events:auto;border:1px dashed rgba(35,117,220,.22);background:rgba(61,145,238,.025);transition:border-color .12s ease,background-color .12s ease}
 .ppagent-slot-visual-box.icon{border-color:rgba(118,80,189,.28)}
+.ppagent-slot-visual-box.text-flow{border:3px dashed rgba(35,117,220,.96);background:rgba(61,145,238,.09);box-shadow:0 0 0 2px rgba(255,255,255,.86)}
+.ppagent-slot-visual-box.text-flow-part{z-index:2;border:2px dashed rgba(13,139,121,.92);background:rgba(34,181,155,.10)}
+.ppagent-slot-visual-box.text-flow-part.title{border-color:rgba(222,139,24,.96);background:rgba(242,174,60,.13)}
 .ppagent-slot-visual-box:hover{border:2px dashed rgba(35,117,220,.92);background:rgba(61,145,238,.16)}
 .ppagent-slot-visual-box::after{content:attr(data-slot-label);position:absolute;left:3px;bottom:3px;display:none;max-width:calc(100% - 6px);padding:3px 6px;overflow:hidden;border-radius:4px;color:#fff;background:rgba(23,32,51,.86);font:12px/1.25 "Microsoft YaHei",sans-serif;white-space:nowrap;text-overflow:ellipsis}
 .ppagent-slot-visual-box:hover::after{display:block}
+.ppagent-slot-visual-box.text-region{border-width:3px;border-color:rgba(38,91,180,.96);background:rgba(61,145,238,.07)}
+.ppagent-slot-visual-box.text-flow::after,.ppagent-slot-visual-box.text-region::after,.ppagent-slot-visual-box.text-flow-part::after{display:block;z-index:5;font-weight:700}
+.ppagent-slot-visual-box.text-region::after{left:4px;top:4px;bottom:auto;background:rgba(28,74,151,.96)}
+.ppagent-slot-visual-box.text-flow::after{left:4px;top:4px;bottom:auto;background:rgba(35,117,220,.94)}
+.ppagent-slot-visual-box.text-flow-part.title::after{background:rgba(190,111,12,.94)}
+.ppagent-slot-visual-box.text-flow-part.body::after{background:rgba(8,116,101,.94)}
 </style></head><body><div class="ppagent-component-viewport"><div class="ppagent-component-scale">${markup}</div></div><script>
-addEventListener("load",async()=>{await document.fonts.ready;const scale=document.querySelector(".ppagent-component-scale");const root=document.querySelector("[data-ppt-root]");if(!scale||!root)return;const rootBox=root.getBoundingClientRect();if(!rootBox.width||!rootBox.height)return;const layer=document.createElement("div");layer.className="ppagent-slot-visual-layer";for(const element of root.querySelectorAll("[data-slot-id]")){const box=element.getBoundingClientRect();if(!box.width||!box.height)continue;const marker=document.createElement("i");const icon=element.dataset.slotContentType==="icon"||element.dataset.slotRole==="icon";const flow=element.dataset.slotTextMode==="flow"||(!element.dataset.slotTextMode&&element.dataset.slotRole==="item-body");const ability=icon?(element.dataset.slotRequired==="true"?"必填图标":"可选图标"):(flow?"整块正文":(element.dataset.slotMaxChars?"≤"+element.dataset.slotMaxChars+"字":"文字"));marker.className="ppagent-slot-visual-box"+(icon?" icon":"");marker.dataset.slotLabel=(element.dataset.slotRole||"content")+" · "+ability+" · "+(element.dataset.slotField||element.dataset.slotId);marker.style.left=(box.left-rootBox.left)/rootBox.width*100+"%";marker.style.top=(box.top-rootBox.top)/rootBox.height*100+"%";marker.style.width=box.width/rootBox.width*100+"%";marker.style.height=box.height/rootBox.height*100+"%";layer.append(marker)}scale.append(layer)});
+addEventListener("load",async()=>{await document.fonts.ready;const scale=document.querySelector(".ppagent-component-scale");const root=document.querySelector("[data-ppt-root]");if(!scale||!root)return;const rootBox=root.getBoundingClientRect();if(!rootBox.width||!rootBox.height)return;const layer=document.createElement("div");layer.className="ppagent-slot-visual-layer";const addMarker=(box,className,label)=>{if(!box.width||!box.height)return;const marker=document.createElement("i");marker.className="ppagent-slot-visual-box"+className;marker.dataset.slotLabel=label;marker.style.left=(box.left-rootBox.left)/rootBox.width*100+"%";marker.style.top=(box.top-rootBox.top)/rootBox.height*100+"%";marker.style.width=box.width/rootBox.width*100+"%";marker.style.height=box.height/rootBox.height*100+"%";layer.append(marker)};for(const element of root.querySelectorAll("[data-slot-id]")){const box=element.getBoundingClientRect();const icon=element.dataset.slotContentType==="icon"||element.dataset.slotRole==="icon";const textFlow=element.dataset.slotContentType==="text-flow";const textRegion=element.dataset.slotContentType==="text-region";const flow=element.dataset.slotTextMode==="flow"||(!element.dataset.slotTextMode&&element.dataset.slotRole==="item-body");const ability=icon?(element.dataset.slotRequired==="true"?"必填图标":"可选图标"):(textRegion?"复合动态文字区":(textFlow?"统一动态文字区":(flow?"整块正文":(element.dataset.slotMaxChars?"≤"+element.dataset.slotMaxChars+"字":"文字"))));const label=textRegion?"动态文字大区 · "+(element.dataset.slotField||element.dataset.slotId):(textFlow?"动态文字区 · "+(element.dataset.slotField||element.dataset.slotId):(element.dataset.slotRole||"content")+" · "+ability+" · "+(element.dataset.slotField||element.dataset.slotId));addMarker(box,(icon?" icon":"")+(textRegion?" text-region":"")+(textFlow?" text-flow":""),label);if(textFlow){for(const part of element.querySelectorAll('[data-text-flow-part="title"],[data-text-flow-part="body"]')){const kind=part.dataset.textFlowPart;addMarker(part.getBoundingClientRect()," text-flow-part "+kind,kind==="title"?"标题区（本次排版）":"正文区（本次排版）")}}}scale.append(layer)});
 </script></body></html>`;
 }
 
@@ -297,14 +307,15 @@ async function nativeStateArtifactsFor(library, assetId, searchParams) {
   const cssPath = path.join(resolved.assetDir, "component.css");
   const htmlRuntimePath = path.join(projectRoot, "src", "visual-runtime", "html-component-runtime.mjs");
   const htmlThemePath = path.join(projectRoot, "src", "visual-runtime", "html-component-theme.mjs");
+  const textFlowPath = path.join(projectRoot, "src", "visual-runtime", "text-flow.mjs");
   const themePath = path.join(projectRoot, "src", "runtime", "skins", "northeastern-university-theme.mjs");
-  const [reviewStat, runtimeStat, cssStat, htmlRuntimeStat, htmlThemeStat, themeStat] = await Promise.all([
-    fs.stat(resolved.entryPath), fs.stat(resolved.runtimeEntryPath), fs.stat(cssPath), fs.stat(htmlRuntimePath), fs.stat(htmlThemePath), fs.stat(themePath),
+  const [reviewStat, runtimeStat, cssStat, htmlRuntimeStat, htmlThemeStat, textFlowStat, themeStat] = await Promise.all([
+    fs.stat(resolved.entryPath), fs.stat(resolved.runtimeEntryPath), fs.stat(cssPath), fs.stat(htmlRuntimePath), fs.stat(htmlThemePath), fs.stat(textFlowPath), fs.stat(themePath),
   ]);
   const [previewStat, pptxStat] = await Promise.all([previewPath, pptxPath].map(async (target) => {
     try { return await fs.stat(target); } catch (error) { if (error.code === "ENOENT") return null; throw error; }
   }));
-  const inputMtime = Math.max(reviewStat.mtimeMs, runtimeStat.mtimeMs, cssStat.mtimeMs, htmlRuntimeStat.mtimeMs, htmlThemeStat.mtimeMs, themeStat.mtimeMs);
+  const inputMtime = Math.max(reviewStat.mtimeMs, runtimeStat.mtimeMs, cssStat.mtimeMs, htmlRuntimeStat.mtimeMs, htmlThemeStat.mtimeMs, textFlowStat.mtimeMs, themeStat.mtimeMs);
   if (!previewStat || !pptxStat || previewStat.mtimeMs < inputMtime || pptxStat.mtimeMs < inputMtime) {
     const jobKey = `native:${cacheKey}`;
     if (!renderJobs.has(jobKey)) {
@@ -379,6 +390,7 @@ async function skinStateArtifactsFor(library, assetId, searchParams) {
   const cssPath = path.join(resolved.assetDir, "component.css");
   const htmlRuntimePath = path.join(projectRoot, "src", "visual-runtime", "html-component-runtime.mjs");
   const htmlThemePath = path.join(projectRoot, "src", "visual-runtime", "html-component-theme.mjs");
+  const textFlowPath = path.join(projectRoot, "src", "visual-runtime", "text-flow.mjs");
   const assetRuntimePath = path.join(projectRoot, "src", "runtime", "assets.mjs");
   const themePath = path.join(projectRoot, "src", "runtime", "skins", "northeastern-university-theme.mjs");
   const inputStats = await Promise.all([
@@ -389,6 +401,7 @@ async function skinStateArtifactsFor(library, assetId, searchParams) {
     fs.stat(cssPath),
     fs.stat(htmlRuntimePath),
     fs.stat(htmlThemePath),
+    fs.stat(textFlowPath),
     fs.stat(assetRuntimePath),
     fs.stat(themePath),
   ]);

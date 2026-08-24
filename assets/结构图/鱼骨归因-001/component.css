@@ -25,5 +25,6 @@ body { color: #18314f; background: transparent; font-family: var(--ppagent-font-
 .cause-factors li { position: relative; height: 39px; padding: 2px 4px 8px 25px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .effect-copy { position: absolute; right: 33px; top: 147px; z-index: 4; display: grid; align-content: center; width: 117px; height: 198px; padding: 15px 9px 15px 15px; overflow: hidden; color: #fff; text-align: center; }
 .effect-label { display: block; color: #c8d7fa; font-size: var(--ppagent-component-body-size, 19px); font-weight: 700; letter-spacing: .08em; }
-.effect-title { display: grid; align-content: center; width: 90px; min-height: 81px; margin: 6px 0 0; overflow: hidden; color: #fff; font-size: var(--ppagent-component-heading-size, 25pt); font-weight: 800; line-height: 1.08; }
-.effect-body { width: 90px; max-height: 54px; margin: 6px 0 0; overflow: hidden; color: #dce7ff; font-size: var(--ppagent-component-label-size, 17pt); line-height: 1.25; }
+.effect-content { width: 90px; height: 140px; --ppagent-text-flow-gap: 6px; }
+.effect-content .ppagent-text-flow__title { color: #fff; font-size: var(--ppagent-component-heading-size, 25pt); font-weight: 800; line-height: 1.08; }
+.effect-content .ppagent-text-flow__body { color: #dce7ff; font-size: var(--ppagent-component-label-size, 17pt); line-height: 1.25; }

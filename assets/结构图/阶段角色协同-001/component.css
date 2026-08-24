@@ -39,12 +39,10 @@ body { color: #42556d; background: transparent; font-family: var(--ppagent-font-
 .task-shadow { top: 5px; background: #dce8f6; }
 .task-surface { border: 1px solid #d3e2f2; background: #ffffff; box-shadow: 0 7px 16px rgba(47,94,168,.10); }
 .task-accent { position: absolute; left: 0; top: 0; width: 6px; height: 100%; border-radius: 6px; background: #4c88e8; }
-.task-title { position: absolute; left: 20px; right: 12px; top: 13px; height: 29px; overflow: hidden; color: #254b7c; font-size: var(--ppagent-component-body-size, 17pt); font-weight: 700; line-height: 29px; text-align: left; white-space: nowrap; }
-.task-body { position: absolute; left: 20px; right: 12px; top: 45px; height: 42px; overflow: hidden; color: #60758d; font-size: var(--ppagent-component-meta-size, 15pt); font-weight: 400; line-height: 21px; text-align: left; }
-.task-card[data-has-body="false"] .task-title { top: calc(50% - 15px); }
-.role-stage-review[data-role-count="4"] .task-title { top: 8px; }
-.role-stage-review[data-role-count="4"] .task-body { top: 37px; height: 28px; line-height: 18px; white-space: nowrap; }
+.task-content { position: absolute; left: 20px; right: 12px; top: 2px; bottom: 2px; z-index: 2; --ppagent-text-flow-gap: 0px; }
+.task-content .ppagent-text-flow__title { color: #254b7c; line-height: 1.05; }
+.task-content .ppagent-text-flow__body { color: #60758d; line-height: 1.08; }
 .role-stage-review[data-stage-count="5"] .stage-order { left: 10px; }
 .role-stage-review[data-stage-count="5"] .stage-title { left: 49px; right: 6px; font-size: var(--ppagent-component-body-size, 17pt); }
-.role-stage-review[data-stage-count="5"] .task-title, .role-stage-review[data-stage-count="5"] .task-body { left: 15px; right: 8px; }
+.role-stage-review[data-stage-count="5"] .task-content { left: 15px; right: 8px; }
 .role-stage-review[data-stage-count="5"] .task-accent { width: 5px; }

@@ -69,9 +69,11 @@ test("看板只把资产专属 HTML 计入迁移完成度", async () => {
   assert.equal(data.activeSkin?.componentTheme?.typography?.componentBody, 17);
   assert.equal(data.activeSkin?.typographyUnit, "ppt-pt");
   assert.equal(data.activeSkin?.pptPointScale, 1);
+  assert.deepEqual(data.textLayouts.map((item) => item.id), ["title-body-adaptive", "value-label-stacked"]);
+  assert.equal(data.summary.textLayouts, 2);
   assert.equal(cycle?.builderExport, "");
   assert.equal(cycle?.componentInitialSelection.stepCount, 4);
-  assert.equal(data.summary.htmlDesignComponents, 16);
+  assert.equal(data.summary.htmlDesignComponents, 18);
   assert.match(cycle?.previewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.componentPreviewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.nativeStatePreviewUrl ?? "", /[?&]v=\d+/);
@@ -155,7 +157,8 @@ test("作废的旧 Logic 不再出现在核心库或正式生成候选中", asyn
     "causal-fishbone-attribution-001", "problem-solution-outcome-001",
     "matrix-quadrant-priority-001", "argument-evidence-conclusion-001",
     "problem-method-result-001", "progression-spectrum-focus-001",
-    "branching-decision-routes-001",
+    "branching-decision-routes-001", "goal-alignment-strategy-metrics-001",
+    "role-stage-collaboration-001",
   ]));
 });
 
@@ -163,7 +166,7 @@ test("Logic 能力地图保留空槽位，只把合格资产填入对应位置",
   const data = await collectLogicDashboardData(root);
   assert.equal(data.logics.length, 20);
   assert.equal(data.summary.logicSlots, 20);
-  assert.equal(data.summary.logicFilled, 14);
+  assert.equal(data.summary.logicFilled, 16);
 
   const cycle = data.logics.find((logic) => logic.id === "cycle");
   assert.deepEqual(cycle?.assetIds, ["cycle-loop-001"]);
@@ -225,7 +228,8 @@ test("鱼骨归因由同一组件扩散类别与因素状态，并由 Mapper 绑
       assert.equal((markup.match(/class="factor-guide-line"/g) ?? []).length, categoryCount * factorCount);
       assert.equal((markup.match(/data-slot-role="item-title"/g) ?? []).length, categoryCount);
       assert.equal((markup.match(/data-slot-role="item-body"/g) ?? []).length, categoryCount);
-      assert.equal((markup.match(/data-slot-role="center-title"/g) ?? []).length, 1);
+      assert.equal((markup.match(/data-slot-role="item-content"/g) ?? []).length, 1);
+      assert.equal((markup.match(/data-slot-region-id="summary"/g) ?? []).length, 1);
     }
   }
 
@@ -315,8 +319,9 @@ test("矩阵象限保持真实双轴、独立扩散每象限 1–3 个对象并�
     assert.equal((markup.match(/class="axis-line"/g) ?? []).length, 2);
     assert.equal((markup.match(/data-slot-role="item-title"/g) ?? []).length, itemsPerQuadrant * 4);
     assert.equal((markup.match(/class="quadrant-detail detail-/g) ?? []).length, 4);
-    assert.equal((markup.match(/data-slot-role="detail-title"/g) ?? []).length, 4);
-    assert.equal((markup.match(/data-slot-role="detail-body"/g) ?? []).length, 4);
+    assert.equal((markup.match(/data-slot-content-type="text-region"/g) ?? []).length, 4);
+    assert.equal((markup.match(/data-slot-role="item-content"/g) ?? []).length, 4);
+    assert.equal((markup.match(/data-slot-region-id="summary"/g) ?? []).length, 4);
     assert.equal((markup.match(/data-slot-role="metric-value"/g) ?? []).length, 8);
     assert.equal((markup.match(/class="band-definition band-/g) ?? []).length, 2);
     assert.doesNotMatch(markup, /data-slot-role="item-body"/);
@@ -411,6 +416,7 @@ test("循环闭环由同一 HTML 组件解析 3–6 步状态", () => {
 });
 
 test("看板从当前 HTML State 自动生成容器表并复用到 Native 和 Skin", async () => {
+  const server = await fs.readFile(path.join(root, "src/tools/serve-logic-dashboard.mjs"), "utf8");
   const template = await fs.readFile(path.join(root, "src/tools/templates/logic-dashboard.html"), "utf8");
   assert.match(template, /readComponentSlotMap/);
   assert.match(template, /frozenComponentSlotMap/);
@@ -423,6 +429,14 @@ test("看板从当前 HTML State 自动生成容器表并复用到 Native 和 Sk
   assert.match(template, /入库时固化的字体—容器契约/);
   assert.match(template, /slotProvider/);
   assert.match(template, /悬停查看可编辑容器/);
+  assert.match(server, /统一动态文字区/);
+  assert.match(server, /动态文字大区/);
+  assert.match(server, /标题区（本次排版）/);
+  assert.match(server, /正文区（本次排版）/);
+  assert.match(template, /最外层深蓝框表示连续的动态文字大区/);
+  assert.match(template, /连续复合文字区域/);
+  assert.match(template, /text-flow-part/);
+  assert.match(template, /slot\.textFlow\?\.parts/);
 });
 
 test("等权并列卡片由同一 HTML 组件重新排布 3–5 项状态", () => {
@@ -432,12 +446,12 @@ test("等权并列卡片由同一 HTML 组件重新排布 3–5 项状态", () =
     assert.match(markup, new RegExp(`data-item-count="${itemCount}"`));
     assert.equal((markup.match(/class="parallel-card"/g) ?? []).length, itemCount);
     assert.equal((markup.match(/data-slot-role="icon"/g) ?? []).length, itemCount);
-    assert.equal((markup.match(/data-slot-role="item-title"/g) ?? []).length, itemCount);
-    assert.equal((markup.match(/data-slot-role="item-body"/g) ?? []).length, itemCount);
+    assert.equal((markup.match(/data-slot-role="item-content"/g) ?? []).length, itemCount);
+    assert.equal((markup.match(/data-slot-content-type="text-flow"/g) ?? []).length, itemCount);
     assert.equal((markup.match(/data-slot-text-mode="flow"/g) ?? []).length, itemCount);
     assert.equal((markup.match(/data-slot-list-policy="inline"/g) ?? []).length, itemCount);
-    assert.equal((markup.match(/data-slot-required="true"/g) ?? []).length, itemCount);
-    assert.equal((markup.match(/data-slot-max-lines="4"/g) ?? []).length, itemCount);
+    assert.equal((markup.match(/data-slot-required="true"/g) ?? []).length, itemCount * 2);
+    assert.equal((markup.match(/data-slot-max-(?:chars|lines)=/g) ?? []).length, 0);
     assert.equal((markup.match(/data-icon-key=/g) ?? []).length, itemCount);
   }
 });

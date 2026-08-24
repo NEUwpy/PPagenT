@@ -1,3 +1,5 @@
+import { textFlowMarkup } from "../../../src/visual-runtime/text-flow.mjs";
+
 const DESIGN_FRAME = Object.freeze({ width: 1170, height: 492 });
 const LIMITS = Object.freeze({ role: 4 });
 
@@ -124,12 +126,11 @@ function laneMarkup(role, index) {
 function taskMarkup(task, index, g, limits) {
   const frame = g.cardByKey.get(task.key);
   const style = `left:${frame.left}px;top:${frame.top}px;width:${frame.width}px;height:${frame.height}px;`;
-  return `<article class="task-card" data-has-body="${task.body ? "true" : "false"}" style="${style}">
+  return `<article class="task-card" style="${style}">
     <div class="task-shadow" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="task-${index + 1}-shadow"></div>
     <div class="task-surface" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="task-${index + 1}-surface"></div>
     <div class="task-accent" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="task-${index + 1}-accent"></div>
-    <div class="task-title" data-slot-id="task-${index + 1}-title" data-slot-role="item-title" data-slot-field="tasks[${index}].title" data-slot-item-id="${escapeHtml(task.key)}" data-slot-content-type="text" data-slot-required="true" data-slot-text-mode="single-line" data-slot-list-policy="none" data-slot-max-chars="${limits.taskTitle}" data-slot-max-lines="1" data-ppt-kind="text" data-ppt-name="task-${index + 1}-title">${escapeHtml(task.title)}</div>
-    ${task.body ? `<div class="task-body" data-slot-id="task-${index + 1}-body" data-slot-role="item-body" data-slot-field="tasks[${index}].body" data-slot-item-id="${escapeHtml(task.key)}" data-slot-content-type="text" data-slot-required="false" data-slot-text-mode="flow" data-slot-list-policy="none" data-slot-max-chars="${limits.taskBody}" data-slot-max-lines="${limits.taskBodyLines}" data-ppt-kind="text" data-ppt-name="task-${index + 1}-body">${escapeHtml(task.body)}</div>` : ""}
+    ${textFlowMarkup({ id: `task-${index + 1}-content`, field: `tasks[${index}]`, itemId: task.key, title: task.title, body: task.body, className: "task-content", align: "left", names: { title: `task-${index + 1}-title`, body: `task-${index + 1}-body` } })}
   </article>`;
 }
 
@@ -138,6 +139,7 @@ export const visualComponent = Object.freeze({
   schemaVersion: 1,
   designFrame: DESIGN_FRAME,
   cssFile: "component.css",
+  textFlow: Object.freeze({ profile: "standard", scope: "per-contiguous-region" }),
   textCapacity: Object.freeze({ stageCharsByCount: Object.freeze({ 3: 8, 4: 7, 5: 6 }), maxRoleChars: LIMITS.role, taskTitleCharsByCount: Object.freeze({ 3: 8, 4: 8, 5: 6 }), taskBodyCharsByState: "2–3 roles:18 (5 stages:14); 4 roles:7" }),
   renderMarkup(parameters) {
     const model = normalize(parameters);

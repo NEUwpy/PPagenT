@@ -6,6 +6,7 @@ import { chromium } from "playwright-core";
 import { Presentation, PresentationFile } from "@oai/artifact-tool";
 import { assertResolvedTextContainerSlots } from "./text-container-contract.mjs";
 import { htmlComponentThemeCss, resolveComponentTypography } from "./html-component-theme.mjs";
+import { htmlTextFlowCss } from "./text-flow.mjs";
 
 export { htmlComponentThemeCss } from "./html-component-theme.mjs";
 
@@ -56,6 +57,7 @@ function componentDocument(markup, css, frame, theme) {
   return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><style>
     html,body{margin:0;width:${frame.width}px;height:${frame.height}px;overflow:hidden;background:transparent}
     ${htmlComponentThemeCss(theme)}
+    ${htmlTextFlowCss()}
     ${css}
   </style></head><body>${markup}</body></html>`;
 }
@@ -150,11 +152,126 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
           : Math.max(1, Math.floor((available.height + 0.5) / lineHeight));
         return lines <= maxLines && requiredHeight <= available.height + 1;
       };
+
+      const renderedTextLines = (element) => {
+        const node = element.firstChild;
+        if (!node || node.nodeType !== Node.TEXT_NODE) {
+          return element.textContent.replace(/\r/g, "").split("\n");
+        }
+        const source = node.textContent.replace(/\r/g, "");
+        const lines = [];
+        let current = "";
+        let currentTop = null;
+        for (let index = 0; index < source.length; index += 1) {
+          const character = source[index];
+          if (character === "\n") {
+            lines.push(current.trim());
+            current = "";
+            currentTop = null;
+            continue;
+          }
+          const range = document.createRange();
+          range.setStart(node, index);
+          range.setEnd(node, index + 1);
+          const rect = range.getBoundingClientRect();
+          const top = Math.round(rect.top * 2) / 2;
+          if (currentTop !== null && Math.abs(top - currentTop) > 0.5) {
+            lines.push(current.trim());
+            current = "";
+          }
+          currentTop = top;
+          current += character;
+        }
+        if (current.trim() || !lines.length) lines.push(current.trim());
+        return lines.filter((line) => line.length > 0);
+      };
+
+      const flowProfiles = (composition) => {
+        const title = Number(typographyContract.componentItemTitle);
+        const lead = Number(typographyContract.componentLead);
+        const body = Number(typographyContract.componentBody);
+        const meta = Number(typographyContract.componentMeta);
+        if (composition === "title-body") {
+          return [
+            { title, body },
+            { title, body: meta },
+            { title: lead, body: meta },
+            { title: body, body: meta },
+          ];
+        }
+        if (composition === "title-only") {
+          return [title, lead, body, meta].map((fontSize) => ({ title: fontSize }));
+        }
+        return [body, meta].map((fontSize) => ({ body: fontSize }));
+      };
+
+      const textFlowFits = (flow, title, body) => {
+        const flowBox = flow.getBoundingClientRect();
+        const content = [...flow.querySelectorAll("[data-text-flow-part]")]
+          .filter((element) => getComputedStyle(element).display !== "none");
+        const boxes = content.map((element) => element.getBoundingClientRect());
+        if (!boxes.length) return false;
+        const inside = boxes.every((box) => (
+          box.left >= flowBox.left - 1
+          && box.right <= flowBox.right + 1
+          && box.top >= flowBox.top - 1
+          && box.bottom <= flowBox.bottom + 1
+        ));
+        if (!inside) return false;
+        if (title && renderedLineCount(title) > 2) return false;
+        for (const element of [title, body].filter(Boolean)) {
+          if (element.scrollWidth > element.clientWidth + 1) return false;
+        }
+        return flow.scrollWidth <= flow.clientWidth + 1 && flow.scrollHeight <= flow.clientHeight + 1;
+      };
+
+      const resolvedTextFlows = [];
+      const textFlowOverflows = [];
+      for (const flow of root.querySelectorAll("[data-ppagent-text-flow]")) {
+        const title = flow.querySelector('[data-text-flow-part="title"]');
+        const body = flow.querySelector('[data-text-flow-part="body"]');
+        const composition = flow.dataset.textFlowComposition;
+        const original = {
+          ...(title ? { title: number(getComputedStyle(title).fontSize) * 0.75 } : {}),
+          ...(body ? { body: number(getComputedStyle(body).fontSize) * 0.75 } : {}),
+        };
+        let selected = null;
+        for (const candidate of flowProfiles(composition)) {
+          if (title && Number.isFinite(candidate.title)) title.style.fontSize = `${candidate.title}pt`;
+          if (body && Number.isFinite(candidate.body)) body.style.fontSize = `${candidate.body}pt`;
+          flow.getBoundingClientRect();
+          if (!textFlowFits(flow, title, body)) continue;
+          selected = candidate;
+          break;
+        }
+        if (!selected) {
+          textFlowOverflows.push(flow.dataset.slotId || flow.dataset.slotField || "text-flow");
+          flow.dataset.pptTextFlowStatus = "overflow";
+        } else {
+          flow.dataset.pptTextFlowStatus = "resolved";
+        }
+        for (const [part, element] of [["title", title], ["body", body]]) {
+          if (!element) continue;
+          const resolvedFontSizePt = number(getComputedStyle(element).fontSize) * 0.75;
+          element.dataset.pptOriginalFontSizePt = String(Math.round(original[part] * 1000) / 1000);
+          element.dataset.pptResolvedFontSizePt = String(Math.round(resolvedFontSizePt * 1000) / 1000);
+          element.dataset.pptFontFit = resolvedFontSizePt < original[part] - 0.05 ? "reduced" : "unchanged";
+          element.dataset.pptResolvedWrap = "square";
+          element.dataset.pptResolvedText = renderedTextLines(element).join("\n");
+        }
+        resolvedTextFlows.push({
+          id: flow.dataset.slotId || flow.dataset.slotField || "text-flow",
+          composition,
+          status: flow.dataset.pptTextFlowStatus,
+          profile: flow.dataset.textFlowProfile || "standard",
+        });
+      }
       // The HTML layout is the source of truth. Before extracting it, choose the
       // largest approved font tier that actually fits each fixed text container.
       // This is discrete fitting (25→23→21→19→17→15), never arbitrary shrinking.
       for (const element of root.querySelectorAll('[data-ppt-kind="text"],[data-ppt-kind="shape-text"]')) {
         if (element instanceof SVGTextElement) continue;
+        if (element.closest("[data-ppagent-text-flow]")) continue;
         let style = getComputedStyle(element);
         const source = element.textContent.replace(/\r/g, "");
         const currentFontSizePt = number(style.fontSize) * 0.75;
@@ -390,6 +507,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         };
       };
       const textValue = (element) => {
+        if (element.dataset.pptResolvedText !== undefined) return element.dataset.pptResolvedText;
         const source = element.textContent.replace(/\r/g, "");
         if (element.dataset.pptPreserveLines === "true") {
           return source
@@ -678,18 +796,125 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
           },
         };
       };
+      const textFlowSlotMetrics = (element) => {
+        const style = getComputedStyle(element);
+        const box = element.getBoundingClientRect();
+        const padding = {
+          top: number(style.paddingTop),
+          right: number(style.paddingRight),
+          bottom: number(style.paddingBottom),
+          left: number(style.paddingLeft),
+        };
+        const parts = [...element.querySelectorAll('[data-text-flow-part="title"],[data-text-flow-part="body"]')]
+          .map((part) => {
+            const partStyle = getComputedStyle(part);
+            const fontSizePt = rounded(number(partStyle.fontSize) * 0.75);
+            return {
+              part: part.dataset.textFlowPart,
+              field: part.dataset.textFlowField || part.dataset.textFlowPart,
+              frame: htmlFrame(part),
+              text: textValue(part),
+              lineCount: renderedLineCount(part),
+              typography: {
+                role: Object.entries(typographyContract)
+                  .find(([, size]) => Math.abs(Number(size) - fontSizePt) < 0.05)?.[0] ?? "custom",
+                typeface: partStyle.fontFamily.split(",")[0].replace(/["']/g, "").trim(),
+                fontSizePt,
+                fontWeight: partStyle.fontWeight,
+                alignment: partStyle.textAlign,
+                lineHeightPt: rounded(number(partStyle.lineHeight) * 0.75),
+              },
+            };
+          });
+        return {
+          textFlow: {
+            layoutOwner: "text-flow",
+            profile: element.dataset.textFlowProfile || "standard",
+            composition: element.dataset.textFlowComposition,
+            status: element.dataset.pptTextFlowStatus,
+            align: element.dataset.textFlowAlign || "left",
+            valign: element.dataset.textFlowValign || "middle",
+            layout: {
+              gapPx: rounded(number(style.rowGap || style.gap)),
+              separatorHeightPx: rounded(element.querySelector('[data-text-flow-part="separator"]')?.getBoundingClientRect().height ?? 0),
+            },
+            parts,
+          },
+          innerFrame: {
+            width: rounded(Math.max(0, box.width - padding.left - padding.right)),
+            height: rounded(Math.max(0, box.height - padding.top - padding.bottom)),
+            padding,
+          },
+          capacity: {
+            basis: "dynamic-text-flow",
+            reliable: true,
+            derived: true,
+            sampleFits: element.dataset.pptTextFlowStatus === "resolved",
+          },
+        };
+      };
+      const textRegionSlotMetrics = (element) => {
+        const style = getComputedStyle(element);
+        const box = element.getBoundingClientRect();
+        const padding = {
+          top: number(style.paddingTop),
+          right: number(style.paddingRight),
+          bottom: number(style.paddingBottom),
+          left: number(style.paddingLeft),
+        };
+        const parts = [...element.querySelectorAll("[data-text-flow-part],[data-text-layout-part]")].map((part) => {
+          const partStyle = getComputedStyle(part);
+          const fontSizePt = rounded(number(partStyle.fontSize) * 0.75);
+          return {
+            part: part.dataset.textLayoutPart || part.dataset.textFlowPart,
+            field: part.dataset.textLayoutField || part.dataset.textFlowField || part.dataset.textLayoutPart || part.dataset.textFlowPart,
+            frame: htmlFrame(part),
+            text: textValue(part),
+            lineCount: renderedLineCount(part),
+            typography: {
+              role: Object.entries(typographyContract)
+                .find(([, size]) => Math.abs(Number(size) - fontSizePt) < 0.05)?.[0] ?? "custom",
+              typeface: partStyle.fontFamily.split(",")[0].replace(/["']/g, "").trim(),
+              fontSizePt,
+              fontWeight: partStyle.fontWeight,
+              alignment: partStyle.textAlign,
+              lineHeightPt: rounded(number(partStyle.lineHeight) * 0.75),
+            },
+          };
+        });
+        return {
+          textLayout: {
+            id: element.dataset.textLayoutId || "",
+            contentRoles: (element.dataset.textLayoutContentRoles || "").split(",").filter(Boolean),
+            parts,
+          },
+          innerFrame: {
+            width: rounded(Math.max(0, box.width - padding.left - padding.right)),
+            height: rounded(Math.max(0, box.height - padding.top - padding.bottom)),
+            padding,
+          },
+          capacity: { basis: "dynamic-text-layout", reliable: true, derived: true },
+        };
+      };
       const slots = [...root.querySelectorAll("[data-slot-id]")].map((element) => {
         const maxChars = Number(element.dataset.slotMaxChars);
         const maxLines = Number(element.dataset.slotMaxLines);
         const role = element.dataset.slotRole || "content";
         const contentType = element.dataset.slotContentType || (role === "icon" ? "icon" : "text");
         const textMode = element.dataset.slotTextMode || (role === "item-body" ? "flow" : "single-line");
-        const metrics = contentType === "text" ? textSlotMetrics(element, textMode) : null;
+        const metrics = contentType === "text"
+          ? textSlotMetrics(element, textMode)
+          : contentType === "text-flow"
+            ? textFlowSlotMetrics(element)
+            : contentType === "text-region"
+              ? textRegionSlotMetrics(element)
+            : null;
         return {
           id: element.dataset.slotId,
           role,
           field: element.dataset.slotField || "",
           itemId: element.dataset.slotItemId || "",
+          regionId: element.dataset.slotRegionId || "",
           contentType,
           required: element.dataset.slotRequired === "true",
           textMode,
@@ -700,6 +925,8 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
             ...(Number.isFinite(maxLines) && maxLines > 0 ? { maxLines } : {}),
           },
           ...(metrics ? { typography: metrics.typography, innerFrame: metrics.innerFrame } : {}),
+          ...(metrics?.textFlow ? { textFlow: metrics.textFlow } : {}),
+          ...(metrics?.textLayout ? { textLayout: metrics.textLayout } : {}),
           media: element.dataset.slotContentType === "icon" || element.dataset.slotRole === "icon" ? {
             type: "icon",
             provider: element.dataset.slotProvider || "",
@@ -711,11 +938,14 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         schemaVersion: 4,
         frame: { width: rounded(rootBox.width), height: rounded(rootBox.height) },
         overflow: root.scrollWidth > root.clientWidth + 1 || root.scrollHeight > root.clientHeight + 1,
+        textFlowOverflows,
+        textFlows: resolvedTextFlows,
         nodes,
         slots,
       };
     }, resolveComponentTypography(theme));
     requireValue(!tree.overflow, `${component.id ?? "HTML Component"} 超出设计区域`);
+    requireValue(!tree.textFlowOverflows.length, `${component.id ?? "HTML Component"} 的文字容器无法在规范字号内排版：${tree.textFlowOverflows.join(", ")}`);
     requireValue(tree.nodes.length > 0, `${component.id ?? "HTML Component"} 没有 data-ppt-kind 可编译对象`);
     assertResolvedTextContainerSlots(tree.slots, component.textCapacity ?? {}, component.id);
     return {

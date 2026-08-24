@@ -4,6 +4,7 @@ import { pathToFileURL } from "node:url";
 import { inspectHtmlComponentEligibility } from "../runtime/html-component-eligibility.mjs";
 import { academicReportShell } from "../runtime/shells/academic-report.mjs";
 import { northeasternUniversityTheme } from "../runtime/skins/northeastern-university-theme.mjs";
+import { listTextLayouts } from "../visual-runtime/text-layout-library.mjs";
 
 export const defaultProjectRoot = path.resolve(import.meta.dirname, "../..");
 
@@ -190,11 +191,13 @@ async function normalizeRecord(entry, coverageTags, purposeMap, coreIds, root) {
     renderer === "skin" ? "skin" : null,
   ].filter(Boolean);
   let componentTextCapacity = null;
+  let componentTextFlow = null;
   if (hasDesignComponent) {
     const reviewEntryPath = path.resolve(assetDir, reviewRuntime.entry);
     if (isInside(assetDir, reviewEntryPath)) {
       const reviewModule = await import(pathToFileURL(reviewEntryPath).href);
       componentTextCapacity = reviewModule[reviewRuntime.componentExport]?.textCapacity ?? null;
+      componentTextFlow = reviewModule[reviewRuntime.componentExport]?.textFlow ?? null;
     }
   }
   return {
@@ -216,6 +219,7 @@ async function normalizeRecord(entry, coverageTags, purposeMap, coreIds, root) {
     purposes,
     itemRange: itemRange(runtime),
     textCapacity: componentTextCapacity ?? runtime.textCapacity ?? null,
+    textFlow: componentTextFlow ?? runtime.textFlow ?? null,
     stateContract: runtime.stateContract ?? null,
     mediaContract: runtime.mediaContract ?? null,
     contentContract: runtime.contentContract ?? null,
@@ -309,6 +313,7 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
   const failures = await readJson(path.join(root, "catalog", "failure-cases.json"));
   const contracts = await readJson(path.join(root, "catalog", "asset-contracts.json"));
   const experimentalVariants = await readJson(path.join(root, "catalog", "visual-variants.json"));
+  const textLayouts = listTextLayouts();
 
   const coverageByAsset = new Map();
   const logics = logicMap.logics ?? [];
@@ -376,6 +381,7 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
       failureCases: failures.cases?.length ?? 0,
       contracts: contracts.contracts?.length ?? 0,
       experimentalVariants: experimentalVariants.variants?.length ?? 0,
+      textLayouts: textLayouts.length,
     },
     records,
     primaryAssets,
@@ -393,10 +399,12 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
     compositions: compositions.layouts ?? [],
     failureCases: failures.cases ?? [],
     sourceFiles,
+    textLayouts,
     categoryCounts,
     stores: [
       { name: "原始 PPT 来源", path: "PPT源/", count: sourceFiles.length, role: "只提供入库线的原始视觉来源", tone: "source" },
       { name: "核心资产库", path: "assets/", count: coreAssets.length, role: "正式生成线自动发现并只读调用", tone: "core" },
+      { name: "文字排版库", path: "src/visual-runtime/text-layout-library.mjs", count: textLayouts.length, role: "把连续文字区域绑定为可复用的标题正文、数值说明等排版", tone: "core" },
       { name: "规则与能力目录", path: "catalog/", count: (compositions.layouts?.length ?? 0) + (purposes.purposes?.length ?? 0), role: "保存 Composition、Purpose、契约与失败经验", tone: "catalog" },
       { name: "Logic 运行声明", path: "*/asset.json", count: formalLogics.length, role: "声明 Logic、Structure Group、触发条件和运行入口", tone: "runtime" },
     ],

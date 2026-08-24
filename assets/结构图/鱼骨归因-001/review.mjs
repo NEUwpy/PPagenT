@@ -1,3 +1,5 @@
+import { textFlowMarkup } from "../../../src/visual-runtime/text-flow.mjs";
+
 const DESIGN_FRAME = Object.freeze({ width: 1170, height: 492 });
 const LIMITS = Object.freeze({
   categoryMin: 4,
@@ -133,8 +135,7 @@ function causeMarkup(item, factorCount) {
 function effectMarkup(effect) {
   return `<article class="effect-copy">
     <span class="effect-label" data-ppt-kind="text" data-ppt-name="effect-label">结果</span>
-    <h2 class="effect-title" data-slot-id="effect-title" data-slot-role="center-title" data-slot-field="effect.title" data-slot-item-id="effect" data-slot-content-type="text" data-slot-required="true" data-slot-text-mode="flow" data-slot-list-policy="none" data-slot-max-chars="${LIMITS.effectTitle}" data-slot-max-lines="2" data-ppt-kind="text" data-ppt-name="effect-title">${escapeHtml(effect.title)}</h2>
-    <p class="effect-body" data-slot-id="effect-body" data-slot-role="effect-body" data-slot-field="effect.body" data-slot-item-id="effect" data-slot-content-type="text" data-slot-required="false" data-slot-text-mode="flow" data-slot-list-policy="none" data-slot-max-chars="${LIMITS.effectBody}" data-slot-max-lines="2" data-ppt-kind="text" data-ppt-name="effect-body">${escapeHtml(effect.body)}</p>
+    ${textFlowMarkup({ id: "effect-content", field: "effect", itemId: "effect", regionId: "summary", title: effect.title, body: effect.body, className: "effect-content", align: "center", valign: "middle", tone: "dark", names: { title: "effect-title", body: "effect-body" } })}
   </article>`;
 }
 
@@ -143,6 +144,7 @@ export const visualComponent = Object.freeze({
   schemaVersion: 1,
   designFrame: DESIGN_FRAME,
   cssFile: "component.css",
+  textFlow: Object.freeze({ profile: "standard", scope: "per-contiguous-region" }),
   textCapacity: Object.freeze({
     maxCenterChars: LIMITS.effectTitle,
     maxCenterLines: 2,

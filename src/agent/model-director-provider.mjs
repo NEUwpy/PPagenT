@@ -161,17 +161,26 @@ function legalizeComponentText(pageContent, candidate, compositionPage) {
   return expectedComponentText(pageContent, candidate, compositionPage).flatMap((expected) => {
     const source = String(componentTextSource(pageContent, expected) ?? "").trim();
     if (!source) return [];
-    const capability = capabilityByRole.get(expected.targetRole);
+    const baseCapability = capabilityByRole.get(expected.targetRole);
+    const item = pageContent.items.find((entry) => entry.id === expected.sourceItemId);
+    const capacities = baseCapability.compositionCapacities;
+    const capability = baseCapability.fitMode !== "dynamic-text-flow" || !item || !capacities
+      ? baseCapability
+      : expected.targetRole === "item-title" && item.title?.trim() && !item.body?.trim() && !item.points?.length
+        ? { ...baseCapability, maxChars: capacities.titleOnly?.maxChars, maxLines: capacities.titleOnly?.maxLines }
+        : expected.targetRole === "item-body" && !item.title?.trim() && (item.body?.trim() || item.points?.length)
+          ? { ...baseCapability, maxChars: capacities.bodyOnly?.maxChars, maxLines: capacities.bodyOnly?.maxLines }
+          : baseCapability;
     const existing = supplied.get(componentTextKey(expected));
     const existingIsLegal = existing
       && existing.targetRole === expected.targetRole
       && String(existing.sourceFragment ?? "").trim()
-      && Array.from(existing.text ?? "").length <= capability.maxChars
-      && (!capability.maxLines || String(existing.text ?? "").split(/\r?\n/).length <= capability.maxLines)
+      && (!Number.isFinite(capability.maxChars) || Array.from(existing.text ?? "").length <= capability.maxChars)
+      && (!Number.isFinite(capability.maxLines) || String(existing.text ?? "").split(/\r?\n/).length <= capability.maxLines)
       && source.includes(String(existing.sourceFragment ?? "").trim());
     if (existingIsLegal) return [existing];
-    if (Array.from(source).length > capability.maxChars
-      || (capability.maxLines && source.split(/\r?\n/).length > capability.maxLines)) {
+    if ((Number.isFinite(capability.maxChars) && Array.from(source).length > capability.maxChars)
+      || (Number.isFinite(capability.maxLines) && source.split(/\r?\n/).length > capability.maxLines)) {
       return [];
     }
     return [{ ...expected, text: source, sourceFragment: source }];

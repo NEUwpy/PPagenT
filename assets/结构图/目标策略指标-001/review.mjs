@@ -1,100 +1,112 @@
+import { textRegionMarkup } from "../../../src/visual-runtime/text-layout-library.mjs";
+
 const DESIGN_FRAME = Object.freeze({ width: 1170, height: 492 });
-const LIMITS = Object.freeze({
-  goalTitle: 24,
-  goalBody: 36,
-});
-
-const STATE_LIMITS = Object.freeze({
-  2: Object.freeze({ strategyTitle: 10, strategyBody: 42, metricLabel: Object.freeze({ 1: 8, 2: 7 }), metricValue: Object.freeze({ 1: 10, 2: 6 }) }),
-  3: Object.freeze({ strategyTitle: 8, strategyBody: 33, metricLabel: Object.freeze({ 1: 7, 2: 6 }), metricValue: Object.freeze({ 1: 9, 2: 4 }) }),
-  4: Object.freeze({ strategyTitle: 6, strategyBody: 27, metricLabel: Object.freeze({ 1: 6, 2: 6 }), metricValue: Object.freeze({ 1: 8, 2: 4 }) }),
-});
-
-function escapeHtml(value) {
-  return String(value ?? "").replace(/[&<>"']/g, (character) => ({
-    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;",
-  })[character]);
-}
 
 function text(value) {
   return String(value ?? "").trim();
 }
 
-function chars(value) {
-  return Array.from(value).length;
-}
-
-function requireText(value, field, limit) {
+function requireText(value, field) {
   const normalized = text(value);
   if (!normalized) throw new Error(`${field} 不能为空`);
-  if (chars(normalized) > limit) throw new Error(`${field} 超过 ${limit} 字`);
   return normalized;
 }
 
-function optionalText(value, field, limit) {
-  const normalized = text(value);
-  if (chars(normalized) > limit) throw new Error(`${field} 超过 ${limit} 字`);
-  return normalized;
+function optionalText(value) {
+  return text(value);
 }
 
 function normalize(parameters) {
   const goal = {
-    title: requireText(parameters?.goal?.title, "goal.title", LIMITS.goalTitle),
-    body: optionalText(parameters?.goal?.body, "goal.body", LIMITS.goalBody),
+    title: requireText(parameters?.goal?.title, "goal.title"),
+    body: optionalText(parameters?.goal?.body),
   };
   if (!Array.isArray(parameters?.strategies)) throw new Error("目标策略指标对齐需要 strategies 数组");
   if (parameters.strategies.length < 2 || parameters.strategies.length > 4) throw new Error("目标策略指标对齐支持 2–4 项策略");
   const metricCounts = new Set(parameters.strategies.map((strategy) => strategy?.metrics?.length));
   if (metricCounts.size !== 1 || ![1, 2].includes([...metricCounts][0])) throw new Error("每项策略必须统一包含 1 或 2 个指标");
   const metricCount = [...metricCounts][0];
-  const stateLimits = STATE_LIMITS[parameters.strategies.length];
-  const limits = {
-    strategyTitle: stateLimits.strategyTitle,
-    strategyBody: stateLimits.strategyBody,
-    metricLabel: stateLimits.metricLabel[metricCount],
-    metricValue: stateLimits.metricValue[metricCount],
-  };
   const strategies = parameters.strategies.map((strategy, strategyIndex) => ({
     key: text(strategy?.key) || `strategy-${strategyIndex + 1}`,
-    title: requireText(strategy?.title, `strategies[${strategyIndex}].title`, limits.strategyTitle),
-    body: requireText(strategy?.body, `strategies[${strategyIndex}].body`, limits.strategyBody),
+    title: optionalText(strategy?.title),
+    body: optionalText(strategy?.body),
     metrics: strategy.metrics.map((metric, metricIndex) => ({
-      label: requireText(metric?.label, `strategies[${strategyIndex}].metrics[${metricIndex}].label`, limits.metricLabel),
-      value: requireText(metric?.value, `strategies[${strategyIndex}].metrics[${metricIndex}].value`, limits.metricValue),
+      label: requireText(metric?.label, `strategies[${strategyIndex}].metrics[${metricIndex}].label`),
+      value: requireText(metric?.value, `strategies[${strategyIndex}].metrics[${metricIndex}].value`),
     })),
-  }));
-  return { goal, strategies, metricCount, limits };
+  })).map((strategy, strategyIndex) => {
+    if (!strategy.title && !strategy.body) throw new Error(`strategies[${strategyIndex}] 至少需要 title 或 body`);
+    return strategy;
+  });
+  const textLayoutBindings = parameters?.textLayoutBindings && typeof parameters.textLayoutBindings === "object"
+    ? { ...parameters.textLayoutBindings }
+    : {};
+  return { goal, strategies, metricCount, textLayoutBindings };
 }
 
-function goalMarkup(goal) {
-  return `<div class="goal-title" data-slot-id="goal-title" data-slot-role="goal-title" data-slot-field="goal.title" data-slot-content-type="text" data-slot-required="true" data-slot-text-mode="single-line" data-slot-list-policy="none" data-slot-max-chars="${LIMITS.goalTitle}" data-slot-max-lines="1" data-ppt-kind="text" data-ppt-name="goal-title">${escapeHtml(goal.title)}</div>
-    ${goal.body ? `<div class="goal-body" data-slot-id="goal-body" data-slot-role="goal-body" data-slot-field="goal.body" data-slot-content-type="text" data-slot-required="false" data-slot-text-mode="single-line" data-slot-list-policy="none" data-slot-max-chars="${LIMITS.goalBody}" data-slot-max-lines="1" data-ppt-kind="text" data-ppt-name="goal-body">${escapeHtml(goal.body)}</div>` : ""}
-    `;
+function selectedLayout(bindings, regionId, fallback) {
+  return text(bindings?.[regionId]) || fallback;
 }
 
-function metricMarkup(metric, strategyIndex, metricIndex, limits) {
+function goalMarkup(goal, textLayoutBindings) {
+  return textRegionMarkup({
+    id: "goal-content",
+    field: "goal",
+    itemId: "goal",
+    layoutId: selectedLayout(textLayoutBindings, "goal-content", "title-body-adaptive"),
+    content: goal,
+    className: "goal-content",
+    align: "center",
+    valign: "middle",
+    names: { title: "goal-title", body: "goal-body" },
+  });
+}
+
+function metricMarkup(metric, strategyIndex, metricIndex, textLayoutBindings) {
+  const regionId = `strategy-${strategyIndex + 1}-metric-${metricIndex + 1}`;
   return `<div class="metric-cell" data-metric-index="${metricIndex}">
     ${metricIndex > 0 ? `<div class="metric-divider" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="strategy-${strategyIndex + 1}-metric-divider"></div>` : ""}
-    <div class="metric-value" data-slot-id="strategy-${strategyIndex + 1}-metric-${metricIndex + 1}-value" data-slot-role="metric-value" data-slot-field="strategies[${strategyIndex}].metrics[${metricIndex}].value" data-slot-item-id="strategy-${strategyIndex + 1}" data-slot-content-type="text" data-slot-required="true" data-slot-text-mode="single-line" data-slot-list-policy="none" data-slot-max-chars="${limits.metricValue}" data-slot-max-lines="1" data-ppt-kind="text" data-ppt-name="strategy-${strategyIndex + 1}-metric-${metricIndex + 1}-value">${escapeHtml(metric.value)}</div>
-    <div class="metric-label" data-slot-id="strategy-${strategyIndex + 1}-metric-${metricIndex + 1}-label" data-slot-role="metric-label" data-slot-field="strategies[${strategyIndex}].metrics[${metricIndex}].label" data-slot-item-id="strategy-${strategyIndex + 1}" data-slot-content-type="text" data-slot-required="true" data-slot-text-mode="single-line" data-slot-list-policy="none" data-slot-max-chars="${limits.metricLabel}" data-slot-max-lines="1" data-ppt-kind="text" data-ppt-name="strategy-${strategyIndex + 1}-metric-${metricIndex + 1}-label">${escapeHtml(metric.label)}</div>
+    ${textRegionMarkup({
+      id: regionId,
+      field: `strategies[${strategyIndex}].metrics[${metricIndex}]`,
+      itemId: `strategy-${strategyIndex + 1}`,
+      regionId: `metric-${metricIndex + 1}`,
+      layoutId: selectedLayout(textLayoutBindings, regionId, "value-label-stacked"),
+      content: metric,
+      className: "metric-content",
+      names: {
+        value: `strategy-${strategyIndex + 1}-metric-${metricIndex + 1}-value`,
+        label: `strategy-${strategyIndex + 1}-metric-${metricIndex + 1}-label`,
+      },
+    })}
   </div>`;
 }
 
-function strategyMarkup(strategy, strategyIndex, _strategies, limits) {
+function strategyMarkup(strategy, strategyIndex, textLayoutBindings) {
+  const regionId = `strategy-${strategyIndex + 1}-content`;
   return `<article class="strategy-bay" data-strategy-index="${strategyIndex}">
     ${strategyIndex > 0 ? `<div class="strategy-divider" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="strategy-${strategyIndex + 1}-divider"></div>` : ""}
     <div class="strategy-order-disc" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="strategy-${strategyIndex + 1}-order-disc"></div>
     <div class="strategy-order-core" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="strategy-${strategyIndex + 1}-order-core"></div>
     <div class="strategy-order" data-ppt-kind="text" data-ppt-name="strategy-${strategyIndex + 1}-order">${String(strategyIndex + 1).padStart(2, "0")}</div>
-    <h3 data-slot-id="strategy-${strategyIndex + 1}-title" data-slot-role="item-title" data-slot-field="strategies[${strategyIndex}].title" data-slot-item-id="strategy-${strategyIndex + 1}" data-slot-content-type="text" data-slot-required="true" data-slot-text-mode="single-line" data-slot-list-policy="none" data-slot-max-chars="${limits.strategyTitle}" data-slot-max-lines="1" data-ppt-kind="text" data-ppt-name="strategy-${strategyIndex + 1}-title">${escapeHtml(strategy.title)}</h3>
-    <p data-slot-id="strategy-${strategyIndex + 1}-body" data-slot-role="item-body" data-slot-field="strategies[${strategyIndex}].body" data-slot-item-id="strategy-${strategyIndex + 1}" data-slot-content-type="text" data-slot-required="true" data-slot-text-mode="flow" data-slot-list-policy="none" data-slot-max-chars="${limits.strategyBody}" data-slot-max-lines="3" data-ppt-kind="text" data-ppt-name="strategy-${strategyIndex + 1}-body">${escapeHtml(strategy.body)}</p>
+    ${textRegionMarkup({
+      id: regionId,
+      field: `strategies[${strategyIndex}]`,
+      itemId: `strategy-${strategyIndex + 1}`,
+      layoutId: selectedLayout(textLayoutBindings, regionId, "title-body-adaptive"),
+      content: strategy,
+      className: "strategy-content",
+      align: "center",
+      valign: "middle",
+      names: { title: `strategy-${strategyIndex + 1}-title`, body: `strategy-${strategyIndex + 1}-body` },
+    })}
   </article>`;
 }
 
-function metricBayMarkup(strategy, strategyIndex, limits) {
+function metricBayMarkup(strategy, strategyIndex, textLayoutBindings) {
   return `<article class="metric-bay" data-strategy-index="${strategyIndex}">
     ${strategyIndex > 0 ? `<div class="foundation-divider" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="strategy-${strategyIndex + 1}-foundation-divider"></div>` : ""}
-    <div class="metric-grid" data-metric-count="${strategy.metrics.length}">${strategy.metrics.map((metric, metricIndex) => metricMarkup(metric, strategyIndex, metricIndex, limits)).join("")}</div>
+    <div class="metric-grid" data-metric-count="${strategy.metrics.length}">${strategy.metrics.map((metric, metricIndex) => metricMarkup(metric, strategyIndex, metricIndex, textLayoutBindings)).join("")}</div>
   </article>`;
 }
 
@@ -109,27 +121,20 @@ export const visualComponent = Object.freeze({
   schemaVersion: 1,
   designFrame: DESIGN_FRAME,
   cssFile: "component.css",
-  textCapacity: Object.freeze({
-    maxGoalTitleChars: LIMITS.goalTitle,
-    maxGoalBodyChars: LIMITS.goalBody,
-    strategyTitleCharsByCount: Object.freeze({ 2: 10, 3: 8, 4: 6 }),
-    strategyBodyCharsByCount: Object.freeze({ 2: 42, 3: 33, 4: 27 }),
-    metricLabelCharsByState: Object.freeze({ "2x1": 8, "2x2": 7, "3x1": 7, "3x2": 6, "4x1": 6, "4x2": 6 }),
-    metricValueCharsByState: Object.freeze({ "2x1": 10, "2x2": 6, "3x1": 9, "3x2": 4, "4x1": 8, "4x2": 4 }),
-  }),
+  textFlow: Object.freeze({ profile: "standard", scope: "per-contiguous-region" }),
   renderMarkup(parameters) {
     const model = normalize(parameters);
     const geometry = houseGeometry(model.strategies.length);
     return `<section class="goal-alignment-review" data-ppt-root data-strategy-count="${model.strategies.length}" data-metric-count="${model.metricCount}" data-goal-body="${model.goal.body ? "true" : "false"}" style="--strategy-count:${model.strategies.length};--house-left:${geometry.left}px;--house-width:${geometry.width}px;">
-      ${goalMarkup(model.goal)}
+      ${goalMarkup(model.goal, model.textLayoutBindings)}
       <div class="alignment-field-underlay" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="alignment-field-underlay"></div>
       <div class="alignment-field" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="alignment-field"></div>
       <div class="alignment-accent" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="alignment-accent"></div>
-      <div class="strategy-grid">${model.strategies.map((strategy, index, strategies) => strategyMarkup(strategy, index, strategies, model.limits)).join("")}</div>
+      <div class="strategy-grid">${model.strategies.map((strategy, index) => strategyMarkup(strategy, index, model.textLayoutBindings)).join("")}</div>
       <div class="metric-band-underlay" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="metric-band-underlay"></div>
       <div class="metric-band" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="metric-band"></div>
       <div class="metric-band-accent" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="metric-band-accent"></div>
-      <div class="foundation-grid">${model.strategies.map((strategy, index) => metricBayMarkup(strategy, index, model.limits)).join("")}</div>
+      <div class="foundation-grid">${model.strategies.map((strategy, index) => metricBayMarkup(strategy, index, model.textLayoutBindings)).join("")}</div>
     </section>`;
   },
 });

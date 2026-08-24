@@ -1,3 +1,5 @@
+import { textFlowMarkup } from "../../../src/visual-runtime/text-flow.mjs";
+
 const DESIGN_FRAME = Object.freeze({ width: 1170, height: 492 });
 const LIMITS = Object.freeze({ methodMin: 2, methodMax: 5, problemTitle: 24, problemTitleOnly: 40, problemBody: 36, methodTitle: 10, resultTitle: 24, resultTitleOnly: 40, resultBody: 36 });
 const STATE_LAYOUT = Object.freeze({
@@ -72,7 +74,7 @@ function phaseRailMarkup(methodCount) {
 }
 
 function problemMarkup(problem) {
-  return `<article class="problem-wrap"><div class="problem-underlay" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="problem-underlay"></div><section class="problem-card" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="problem-card"><span class="problem-label" data-ppt-kind="text" data-ppt-name="problem-label">问题</span><span class="problem-divider" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="problem-divider"></span><div class="problem-copy${problem.body ? "" : " is-title-only"}"><h2 ${slotAttributes({ id: "problem-title", role: "problem-title", field: "problem.title", itemId: "problem", maxChars: problem.body ? LIMITS.problemTitle : LIMITS.problemTitleOnly, maxLines: 2 })} data-ppt-kind="text" data-ppt-name="problem-title">${escapeHtml(problem.title)}</h2>${problem.body ? `<p ${slotAttributes({ id: "problem-body", role: "problem-body", field: "problem.body", itemId: "problem", maxChars: LIMITS.problemBody, maxLines: 2, required: false })} data-ppt-kind="text" data-ppt-name="problem-body">${escapeHtml(problem.body)}</p>` : ""}</div></section></article>`;
+  return `<article class="problem-wrap"><div class="problem-underlay" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="problem-underlay"></div><section class="problem-card" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="problem-card"><span class="problem-label" data-ppt-kind="text" data-ppt-name="problem-label">问题</span><span class="problem-divider" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="problem-divider"></span>${textFlowMarkup({ id: "problem-content", field: "problem", itemId: "problem", title: problem.title, body: problem.body, className: "problem-copy", align: "left", names: { title: "problem-title", body: "problem-body" } })}</section></article>`;
 }
 
 function methodMarkup(item, index, bodyLimit) {
@@ -81,7 +83,7 @@ function methodMarkup(item, index, bodyLimit) {
 }
 
 function resultMarkup(result) {
-  return `<article class="result-wrap"><span class="result-badge" data-ppt-kind="shape-text" data-ppt-shape="ellipse" data-ppt-name="result-badge">得到</span><section class="result-card" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="result-card"><div class="result-copy${result.body ? "" : " is-title-only"}"><h2 ${slotAttributes({ id: "result-title", role: "result-title", field: "result.title", itemId: "result", maxChars: result.body ? LIMITS.resultTitle : LIMITS.resultTitleOnly, maxLines: 2 })} data-ppt-kind="text" data-ppt-name="result-title">${escapeHtml(result.title)}</h2>${result.body ? `<p ${slotAttributes({ id: "result-body", role: "result-body", field: "result.body", itemId: "result", maxChars: LIMITS.resultBody, maxLines: 2, required: false })} data-ppt-kind="text" data-ppt-name="result-body">${escapeHtml(result.body)}</p>` : ""}</div></section></article>`;
+  return `<article class="result-wrap"><span class="result-badge" data-ppt-kind="shape-text" data-ppt-shape="ellipse" data-ppt-name="result-badge">得到</span><section class="result-card" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="result-card">${textFlowMarkup({ id: "result-content", field: "result", itemId: "result", title: result.title, body: result.body, className: "result-copy", align: "left", names: { title: "result-title", body: "result-body" } })}</section></article>`;
 }
 
 export const problemMethodVisualComponent = Object.freeze({
@@ -89,6 +91,7 @@ export const problemMethodVisualComponent = Object.freeze({
   schemaVersion: 1,
   designFrame: DESIGN_FRAME,
   cssFile: "component.css",
+  textFlow: Object.freeze({ profile: "standard", scope: "per-contiguous-region" }),
   textCapacity: Object.freeze({ maxProblemTitleChars: LIMITS.problemTitleOnly, maxProblemTitleLines: 2, maxItemTitleChars: LIMITS.methodTitle, maxItemTitleLines: 2, maxItemBodyChars: STATE_LAYOUT[5].body, maxItemBodyLines: 3, maxResultTitleChars: LIMITS.resultTitleOnly, maxResultTitleLines: 2 }),
   renderMarkup(parameters) {
     const model = normalize(parameters);

@@ -44,3 +44,17 @@ test("候选入围后才读取精确容量", async () => {
   assert.equal(capability.textCapacity.maxItemTitleChars, 8);
   assert.equal(capability.textCapacity.maxPointsPerItem, 4);
 });
+
+test("TextFlow 作为轻量能力随资产索引披露，不加载手写字数表", async () => {
+  const root = process.cwd();
+  const [descriptor] = (await discoverCoreAssetPackages(root))
+    .filter((item) => item.assetId === "parallel-equal-cards-001");
+  assert.deepEqual(descriptor.textFlow, { profile: "standard", scope: "per-item" });
+  assert.equal(descriptor.textCapacity, null);
+  const capability = await loadCoreAssetCapabilities("parallel-equal-cards-001", root);
+  assert.equal(capability.textFlow.profile, "standard");
+  assert.equal(capability.textFlow.scope, "per-item");
+  assert.equal(capability.textFlow.planningStates.length, 3);
+  assert.equal(capability.textFlow.planningStates[0].capacity.basis, "conservative-cjk-geometry");
+  assert.equal(capability.textCapacity, null);
+});

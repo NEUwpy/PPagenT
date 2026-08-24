@@ -13,9 +13,9 @@ body { color: #233a58; background: transparent; font-family: var(--ppagent-font-
 .context-underlay, .context-card { position: absolute; inset: 0; border-radius: 22px; }
 .context-underlay { top: 7px; background: #d7e5f7; }
 .context-card { display: flex; align-items: center; padding: 12px 30px; overflow: hidden; color: #fff; background: linear-gradient(90deg, #2d5ca3 0%, #3d79c5 72%, #70a7eb 100%); box-shadow: 0 8px 18px rgba(47,94,168,.16); }
-.context-copy { display: flex; min-width: 0; width: 100%; height: 100%; flex-direction: column; justify-content: center; text-align: center; }
-.context-copy h2 { margin: 0; overflow: hidden; color: #fff; font-size: var(--ppagent-component-item-title-size, 21pt); font-weight: 800; line-height: 1.14; text-align: center; }
-.context-copy p { margin: 5px 0 0; overflow: hidden; color: rgba(255,255,255,.88); font-size: var(--ppagent-component-meta-size, 17pt); font-weight: 400; line-height: 1.15; text-align: center; }
+.context-copy { width: 100%; height: 100%; --ppagent-text-flow-gap: 5px; }
+.context-copy .ppagent-text-flow__title { color: #fff; font-size: var(--ppagent-component-item-title-size, 21pt); font-weight: 800; line-height: 1.14; }
+.context-copy .ppagent-text-flow__body { color: rgba(255,255,255,.88); font-size: var(--ppagent-component-meta-size, 17pt); font-weight: 400; line-height: 1.15; }
 .decision-wrap { position: absolute; left: 475px; top: 104px; z-index: 4; width: 220px; height: 110px; }
 .decision-node { display: flex; width: 220px; height: 110px; align-items: center; justify-content: center; padding: 20px 44px; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); color: #fff; background: linear-gradient(135deg, #2d5ca3 0%, #4b86cf 72%, #79afea 100%); font-size: var(--ppagent-component-label-size, 17pt); font-weight: 800; line-height: 1.14; text-align: center; text-wrap: balance; }
 .branch-grid { position: absolute; left: var(--branch-left); top: 222px; z-index: 3; display: grid; width: var(--branch-width); height: 266px; grid-template-columns: repeat(var(--branch-count), var(--branch-card-width)); gap: var(--branch-gap); }
@@ -24,10 +24,9 @@ body { color: #233a58; background: transparent; font-family: var(--ppagent-font-
 .route-wrap { position: absolute; left: 0; top: 50px; width: 100%; height: 140px; }
 .route-card { position: absolute; inset: 0; overflow: hidden; border: 1px solid #c7daf0; border-radius: 18px; background: linear-gradient(180deg, #ffffff 0%, #f1f7fd 100%); box-shadow: 0 7px 16px rgba(47,94,168,.10); }
 .route-accent { position: absolute; left: 0; top: 0; width: 100%; height: 9px; border: 0; border-radius: 4px; background: linear-gradient(90deg, #3370ba 0%, #75afea 100%); }
-.route-copy { position: absolute; inset: 23px 18px 14px; display: flex; min-width: 0; flex-direction: column; justify-content: center; text-align: center; }
-.route-copy h3 { display: flex; min-height: 36px; align-items: center; justify-content: center; margin: 0; overflow: hidden; color: #244b7f; font-size: var(--ppagent-component-label-size, 18pt); font-weight: 800; line-height: 1.14; text-align: center; }
-.route-copy p { display: flex; min-height: 44px; align-items: flex-start; justify-content: center; margin: 7px 0 0; overflow: hidden; color: #536981; font-size: var(--ppagent-component-meta-size, 17pt); font-weight: 400; line-height: 1.22; text-align: center; }
-.route-copy.is-title-only h3 { min-height: 76px; }
+.route-copy { position: absolute; inset: 23px 18px 14px; --ppagent-text-flow-gap: 7px; }
+.route-copy .ppagent-text-flow__title { color: #244b7f; font-size: var(--ppagent-component-label-size, 18pt); font-weight: 800; line-height: 1.14; }
+.route-copy .ppagent-text-flow__body { color: #536981; font-size: var(--ppagent-component-meta-size, 17pt); font-weight: 400; line-height: 1.22; }
 .outcome-label { position: absolute; left: 50%; top: 220px; z-index: 4; display: grid; width: min(176px, calc(100% - 24px)); height: 42px; place-items: center; transform: translateX(-50%); overflow: hidden; border: 1px solid #c5dbf1; border-radius: 21px; color: #2c5d99; background: #e8f2fc; box-shadow: 0 5px 12px rgba(47,94,168,.07); font-size: var(--ppagent-component-meta-size, 17pt); font-weight: 700; line-height: 1.1; text-align: center; }
 .branching-decision-review[data-branch-count="4"] .route-copy { left: 14px; right: 14px; }
 .branching-decision-review[data-branch-count="4"] .condition-label { width: calc(100% - 28px); }

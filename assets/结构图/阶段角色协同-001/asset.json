@@ -52,8 +52,12 @@
       "ordered": true,
       "requiresStructuredDataType": "role-stage"
     },
+    "textFlow": {
+      "profile": "standard",
+      "scope": "per-contiguous-region"
+    },
     "contract": {
-      "abstractionLevel": "common",
+      "abstractionLevel": "composite",
       "adaptationStatus": "adaptive",
       "constraints": {
         "relationTraits": { "temporal": true, "dimensions": 2, "secondaryDimension": "role" },

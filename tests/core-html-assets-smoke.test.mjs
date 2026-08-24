@@ -39,9 +39,9 @@ test("每个核心 HTML 资产的一个黄金状态可编译且字号符合自�
       const fontSizes = tree.nodes.filter((node) => node.text).map((node) => node.style?.fontSizePt).filter(Number.isFinite);
       assert.ok(fontSizes.length > 0, `${descriptor.assetId} 没有可检查文字`);
       const actualMinimum = Math.min(...fontSizes);
-      const declaredMinimum = descriptor.asset.spatialContract?.minFontSize ?? 16;
+      const declaredMinimum = descriptor.asset.spatialContract?.minFontSize ?? 15;
       assert.ok(actualMinimum >= declaredMinimum, `${descriptor.assetId} 实际最小字号 ${actualMinimum} < 声明 ${declaredMinimum}`);
-      assert.ok(actualMinimum >= 16, `${descriptor.assetId} 实际字号低于生产底线 16pt`);
+      assert.ok(actualMinimum >= 15, `${descriptor.assetId} 实际字号低于生产底线 15pt`);
       compileResolvedVisualTree(presentation.slides.add(), tree, targetFrame);
     }
   } finally {

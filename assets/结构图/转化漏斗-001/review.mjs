@@ -1,4 +1,5 @@
 import { resolveTablerIcon, tablerIconSvgMarkup } from "../../../src/icons/tabler-icon-resolver.mjs";
+import { textFlowMarkup } from "../../../src/visual-runtime/text-flow.mjs";
 
 const DESIGN_FRAME = Object.freeze({ width: 1170, height: 492 });
 const LIMITS = Object.freeze({ phaseLabel: 6, phaseTitle: 10, phaseBody: 18, stepTitle: 8, exampleTitle: 10, exampleBody: 20, phaseContent: 120 });
@@ -213,10 +214,7 @@ function actionMarkup(action, phaseIndex, actionIndex) {
 function phaseMarkup(phase, frame, phaseIndex, hasInputs) {
   const color = COLORS[Math.min(phaseIndex, COLORS.length - 1)];
   const indexLabel = String(phaseIndex + 1).padStart(2, "0");
-  const summaryMarkup = hasInputs ? `<div class="funnel-phase-summary" style="--top:${frame.top}px;--height:${frame.height}px">
-      <h3 data-slot-id="${escapeHtml(phase.key)}-title" data-slot-role="phase-title" data-slot-field="phases[${phaseIndex}].title" data-slot-item-id="${escapeHtml(phase.key)}" data-slot-content-type="text" data-slot-required="true" data-slot-text-mode="single-line" data-slot-list-policy="none" data-slot-max-chars="${LIMITS.phaseTitle}" data-slot-max-lines="1" data-ppt-kind="text" data-ppt-name="phase-title-${phaseIndex}">${escapeHtml(phase.title)}</h3>
-      <p data-slot-id="${escapeHtml(phase.key)}-body" data-slot-role="phase-body" data-slot-field="phases[${phaseIndex}].body" data-slot-item-id="${escapeHtml(phase.key)}" data-slot-content-type="text" data-slot-required="false" data-slot-text-mode="flow" data-slot-list-policy="none" data-slot-max-chars="${LIMITS.phaseBody}" data-slot-max-lines="2" data-ppt-kind="text" data-ppt-name="phase-body-${phaseIndex}">${escapeHtml(phase.body)}</p>
-    </div>` : "";
+  const summaryMarkup = hasInputs ? textFlowMarkup({ id: `${phase.key}-summary`, field: `phases[${phaseIndex}]`, itemId: phase.key, regionId: "summary", title: phase.title, body: phase.body, className: "funnel-phase-summary", align: "left", valign: "middle", names: { title: `phase-title-${phaseIndex}`, body: `phase-body-${phaseIndex}` } }).replace('class="ppagent-text-flow funnel-phase-summary"', `class="ppagent-text-flow funnel-phase-summary" style="--top:${frame.top}px;--height:${frame.height}px"`) : "";
   const contentMarkup = hasInputs ? `<div class="funnel-actions" style="--top:${frame.top}px;--height:${frame.height}px" data-action-count="${phase.content.items.length}" data-slot-id="${escapeHtml(phase.key)}-content" data-slot-role="phase-content" data-slot-field="phases[${phaseIndex}].content" data-slot-item-id="${escapeHtml(phase.key)}" data-slot-content-type="text" data-slot-required="false" data-slot-text-mode="flow" data-slot-list-policy="inline" data-slot-max-chars="${LIMITS.phaseContent}" data-slot-max-lines="6">
       ${phase.content.items.map((action, actionIndex) => actionMarkup(action, phaseIndex, actionIndex)).join("")}
     </div>` : `<div class="funnel-no-input-content" style="--top:${frame.top}px;--height:${frame.height}px;--color:${color}" data-slot-id="${escapeHtml(phase.key)}-content" data-slot-role="phase-content" data-slot-field="phases[${phaseIndex}].content" data-slot-item-id="${escapeHtml(phase.key)}" data-slot-content-type="text" data-slot-required="true" data-slot-text-mode="flow" data-slot-list-policy="inline" data-slot-max-chars="${LIMITS.phaseTitle + LIMITS.phaseBody}" data-slot-max-lines="3">
@@ -239,6 +237,7 @@ export const visualComponent = Object.freeze({
   schemaVersion: 2,
   designFrame: DESIGN_FRAME,
   cssFile: "component.css",
+  textFlow: Object.freeze({ profile: "standard", scope: "per-contiguous-region" }),
   textCapacity: Object.freeze({
     maxItemTitleChars: LIMITS.stepTitle,
     maxItemTitleLines: 1,

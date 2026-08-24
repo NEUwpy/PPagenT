@@ -92,6 +92,15 @@
     .store h3 { margin: 0 0 10px; font-size: 15px; }
     .store code { color: #4c5b72; font-size: 12px; }
     .store p { clear: both; margin: 13px 0 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .text-layout-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+    .text-layout-card { padding:18px; border:1px solid var(--line); border-radius:15px; background:#fafbfd; }
+    .text-layout-card h3 { margin:0 0 6px; font-size:16px; }
+    .text-layout-card code { color:#55708f; font-size:11px; }
+    .text-layout-card p { min-height:42px; margin:11px 0; color:var(--muted); font-size:12px; line-height:1.65; }
+    .text-layout-demo { display:flex; flex-direction:column; justify-content:center; gap:8px; height:112px; margin-top:13px; padding:16px; border:2px solid #7fa6df; border-radius:10px; background:#fff; text-align:center; }
+    .text-layout-demo b { color:#254b7c; font-size:18px; }
+    .text-layout-demo span { color:#60758d; font-size:13px; }
+    .text-layout-demo.value-label b { color:#2f5ea8; font-size:25px; }
     .shell-map-wrap { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(260px, .75fr); gap: 20px; align-items: start; }
     .shell-map { position: relative; overflow: hidden; aspect-ratio: 16 / 9; border: 1px solid #cfd9e8; border-radius: 14px; background: linear-gradient(#fff,#f8fafc); box-shadow: inset 0 0 0 12px #eef3f8; }
     .shell-map::before { content: "东北大学正文 Shell"; position: absolute; left: 18px; top: 13px; color: #738197; font-size: 12px; }
@@ -201,10 +210,20 @@
     .slot-map-row:last-child { border-bottom: 0; }
     .slot-map-row code { overflow-wrap: anywhere; color: #2f5e9f; }
     .slot-map-empty { padding: 13px; color: #8592a5; font-size: 11px; }
+    .slot-map-legend { display: flex; flex-wrap: wrap; gap: 8px 14px; margin: 10px 0; color: #64738a; font-size: 11px; }
+    .slot-map-legend i { display: inline-block; width: 15px; height: 10px; margin-right: 5px; vertical-align: -1px; border: 1.5px dashed rgba(35,117,220,.9); background: rgba(61,145,238,.10); }
+    .slot-map-legend .title { border-color: rgba(222,139,24,.94); background: rgba(242,174,60,.15); }
+    .slot-map-legend .body { border-color: rgba(13,139,121,.92); background: rgba(34,181,155,.14); }
     .native-slot-layer { position: absolute; inset: 0; z-index: 3; opacity: 0; pointer-events: none; transition: opacity .15s ease; }
     .preview-open:hover .native-slot-layer, .preview-open:focus-visible .native-slot-layer { opacity: 1; }
     .native-slot-box { position: absolute; border: 1.5px dashed rgba(35,117,220,.9); background: rgba(61,145,238,.16); }
     .native-slot-box.icon { border-color: rgba(118,80,189,.92); background: rgba(118,80,189,.18); }
+    .native-slot-box.text-flow { border-width: 2px; background: rgba(61,145,238,.10); }
+    .native-slot-box.text-region { z-index: 1; border-width: 3px; border-color: rgba(38,91,180,.96); background: rgba(61,145,238,.07); }
+    .native-slot-box.text-flow-part { z-index: 2; border-width: 1px; border-color: rgba(13,139,121,.92); background: rgba(34,181,155,.14); }
+    .native-slot-box.text-flow-part.title { border-color: rgba(222,139,24,.94); background: rgba(242,174,60,.15); }
+    .native-slot-box.text-flow-part.value { border-color: rgba(51,91,166,.96); background: rgba(61,121,222,.12); }
+    .native-slot-box.text-flow-part.label { border-color: rgba(112,126,148,.96); background: rgba(112,126,148,.10); }
     .native-slot-box::after { content: attr(data-slot-label); position: absolute; left: 2px; top: 2px; max-width: calc(100% - 4px); padding: 2px 4px; overflow: hidden; border-radius: 4px; color: #fff; background: rgba(23,32,51,.82); font-size: 9px; line-height: 1.2; white-space: nowrap; text-overflow: ellipsis; }
     .intent-panel, .component-profile { padding: 14px 16px; border: 1px solid #d9e3f1; border-radius: 10px; background: #fff; color: #405069; font-size: 12px; line-height: 1.7; }
     .intent-panel { max-height: 250px; overflow: auto; white-space: pre-wrap; }
@@ -251,7 +270,7 @@
       .metrics { grid-template-columns: repeat(2, 1fr); }
       .section { padding: 20px 16px; }
       .section-head { align-items: flex-start; flex-direction: column; }
-      .pipeline, .pipeline.intake-line, .pipeline.generation-line, .logic-grid, .coverage-grid, .coverage-tier-grid, .store-grid, .catalog-grid, .shell-map-wrap, .role-grid { grid-template-columns: 1fr; }
+      .pipeline, .pipeline.intake-line, .pipeline.generation-line, .logic-grid, .coverage-grid, .coverage-tier-grid, .store-grid, .text-layout-grid, .catalog-grid, .shell-map-wrap, .role-grid { grid-template-columns: 1fr; }
       .capability-chain { flex-direction: column; }
       .chain-arrow { transform: rotate(90deg); }
       .filters { grid-template-columns: 1fr 1fr; }
@@ -264,7 +283,7 @@
   <header class="topbar">
     <div class="brand"><strong>PPA 看板</strong><span>PPagenT · Logic / Structure Group / State / 自动化入口</span></div>
     <nav class="nav" aria-label="页面导航">
-      <a href="#overview">总览</a><a href="#intake-review">入库线</a><a href="#automation">生成线</a><a href="#approval">待审批</a><a href="#capabilities">能力地图</a><a href="#assets">全部资产</a><a href="#skin">Skin 容器</a><a href="#catalog">数据目录</a>
+      <a href="#overview">总览</a><a href="#intake-review">入库线</a><a href="#automation">生成线</a><a href="#text-layouts">文字排版</a><a href="#approval">待审批</a><a href="#capabilities">能力地图</a><a href="#assets">全部资产</a><a href="#skin">Skin 容器</a><a href="#catalog">数据目录</a>
     </nav>
     <div class="top-status"><span id="generated-at"></span><br><span id="data-mode"></span></div>
     <button class="refresh-button" id="refresh-dashboard" type="button">刷新仓库</button>
@@ -309,7 +328,7 @@
         <div class="pipe-step"><strong>3 · 判断页面 Logic</strong><span>视觉导演先判断这一页需要并列、循环、对比、层级等哪种关系能力。</span></div>
         <div class="pipe-step"><strong>4 · 生成合法候选</strong><span>程序进入该 Logic，按数量、容量、媒体和 Content Frame 筛 Structure Group。</span></div>
         <div class="pipe-step"><strong>5 · 视觉导演选组</strong><span>在合法组中选择最合适的 Structure Group，并兼顾整套节奏和重复。</span></div>
-        <div class="pipe-step"><strong>6 · State 与内容绑定</strong><span>程序按数量求解 State；Mapper 把标题、正文和分点填入真实 Slot。</span></div>
+        <div class="pipe-step"><strong>6 · 区域与排版绑定</strong><span>程序按数量求解 State；再为连续文字区域选择兼容的文字排版并填入内容。</span></div>
         <div class="pipe-step"><strong>7 · Icon 本地匹配</strong><span>若组内有图标槽，导演给语义词，程序从 Tabler 元数据模糊匹配唯一 Top 1。</span></div>
         <div class="pipe-step"><strong>8 · Native 编译</strong><span>统一编译器把已确认 HTML 结构机械转换为原生可编辑对象。</span></div>
         <div class="pipe-step"><strong>9 · Shell 组装交付</strong><span>把内容装入 Skin/Shell，完成整套页面并输出可编辑 PPTX。</span></div>
@@ -328,7 +347,7 @@
             <div class="chain-node"><b>Logic</b><small>需要哪类关系</small></div><span class="chain-arrow">→</span>
             <div class="chain-node"><b>Structure Group</b><small>该 Logic 下的具体视觉语法</small></div><span class="chain-arrow">→</span>
             <div class="chain-node"><b>State</b><small>按数量与容量确定</small></div><span class="chain-arrow">→</span>
-            <div class="chain-node"><b>Slot / Icon</b><small>填文字、媒体或图标</small></div><span class="chain-arrow">→</span>
+            <div class="chain-node"><b>Region / Text Layout</b><small>文字区域选择兼容排版</small></div><span class="chain-arrow">→</span>
             <div class="chain-node"><b>Shell + Skin</b><small>整页骨架与主题</small></div>
           </div>
         </div>
@@ -338,6 +357,11 @@
     <section class="section">
       <div class="section-head"><div><h2>当前数据域</h2><p>这些目录共同构成现在的“资产数据库”。只有核心资产库会被正式生成线自动发现。</p></div></div>
       <div class="store-grid" id="store-grid"></div>
+    </section>
+
+    <section class="section" id="text-layouts">
+      <div class="section-head"><div><h2>文字排版库</h2><p>Structure Group 只提供连续文字区域；这里的排版负责决定区域内部怎样组织文字。同一大区可以采用所有尺寸和内容角色相容的排版，不再由结构图分别写死标题框、正文框或指标框。</p></div><span class="pill core" id="text-layout-count"></span></div>
+      <div class="text-layout-grid" id="text-layout-grid"></div>
     </section>
 
     <section class="section" id="approval">
@@ -452,7 +476,7 @@
 
     const slotRoleLabels = {
       icon: '图标', 'center-title': '中心主题', 'item-title': '节点标题',
-      'item-body': '正文', 'item-point': '分点', content: '内容',
+      'item-body': '正文', 'item-point': '分点', 'item-content': '动态文字区', 'text-region': '动态文字大区', content: '内容',
     };
 
     function currentComponentSelection(flow) {
@@ -531,6 +555,36 @@
             required: element.dataset.slotRequired === 'true',
             textMode: element.dataset.slotTextMode || (element.dataset.slotRole === 'item-body' ? 'flow' : 'single-line'),
             listPolicy: element.dataset.slotListPolicy || (element.dataset.slotRole === 'item-body' ? 'inline' : 'none'),
+            textFlow: element.dataset.slotContentType === 'text-flow' ? {
+              parts: [...element.querySelectorAll('[data-text-flow-part="title"],[data-text-flow-part="body"]')].map((part) => {
+                const partBox = part.getBoundingClientRect();
+                return {
+                  part: part.dataset.textFlowPart,
+                  frame: {
+                    left: Math.round((partBox.left - rootBox.left) / rootBox.width * width * 10) / 10,
+                    top: Math.round((partBox.top - rootBox.top) / rootBox.height * height * 10) / 10,
+                    width: Math.round(partBox.width / rootBox.width * width * 10) / 10,
+                    height: Math.round(partBox.height / rootBox.height * height * 10) / 10,
+                  },
+                };
+              }),
+            } : null,
+            textLayout: element.dataset.slotContentType === 'text-region' ? {
+              id: element.dataset.textLayoutId || '',
+              contentRoles: (element.dataset.textLayoutContentRoles || '').split(',').filter(Boolean),
+              parts: [...element.querySelectorAll('[data-text-flow-part],[data-text-layout-part]')].map((part) => {
+                const partBox = part.getBoundingClientRect();
+                return {
+                  part: part.dataset.textLayoutPart || part.dataset.textFlowPart,
+                  frame: {
+                    left: Math.round((partBox.left - rootBox.left) / rootBox.width * width * 10) / 10,
+                    top: Math.round((partBox.top - rootBox.top) / rootBox.height * height * 10) / 10,
+                    width: Math.round(partBox.width / rootBox.width * width * 10) / 10,
+                    height: Math.round(partBox.height / rootBox.height * height * 10) / 10,
+                  },
+                };
+              }),
+            } : null,
             left: Math.round((box.left - rootBox.left) / rootBox.width * width * 10) / 10,
             top: Math.round((box.top - rootBox.top) / rootBox.height * height * 10) / 10,
             width: Math.round(box.width / rootBox.width * width * 10) / 10,
@@ -557,13 +611,19 @@
             : '';
         const ability = slot.contentType === 'icon'
           ? '图标 · ' + esc(slot.provider || '未指定') + (slot.required ? ' · 必填' : ' · 可选')
-          : (slot.textMode === 'flow' ? '整块正文' : '单行文字')
+          : slot.contentType === 'text-region'
+            ? '文字区域 · 当前：' + esc(slot.textLayout?.id || '未绑定') + (slot.textLayout?.compatible?.length ? ' · 可换：' + esc(slot.textLayout.compatible.join('、')) : '')
+          : slot.contentType === 'text-flow'
+            ? '标题／正文动态排版 · 容量由几何与字号派生'
+            : (slot.textMode === 'flow' ? '整块正文' : '单行文字')
             + (slot.listPolicy === 'inline' ? ' · 段落/分点共用' : '')
             + (slot.capacity?.maxChars || slot.maxChars ? ' · ≤ ' + (slot.capacity?.maxChars || slot.maxChars) + ' 字' : ' · 字数待计算')
             + (slot.capacity?.maxLines || slot.maxLines ? ' · ' + (slot.capacity?.maxLines || slot.maxLines) + ' 行' : '')
             + (slot.required ? ' · 必填' : ' · 可选')
             + issueNote;
-        const typography = slot.typography
+        const typography = slot.textFlow?.parts?.length
+          ? slot.textFlow.parts.map((part) => part.part + ' ' + part.typography.fontSizePt + ' pt').join(' · ')
+          : slot.typography
           ? slot.typography.fontSizePt + ' pt · ' + esc(slot.typography.typeface) + ' · ' + esc(slot.typography.alignment)
           : '字号待固化';
         const capacity = slot.contentType === 'text' && slot.capacity?.charsPerLine
@@ -575,17 +635,30 @@
       const slide = DATA.activeSkin?.slideSize ?? { width: 1280, height: 720 };
       const content = DATA.activeSkin?.slots?.contentFrame ?? { left: 55, top: 166, width: 1170, height: 492 };
       for (const layer of flow.querySelectorAll('[data-slot-overlay]')) {
-        layer.innerHTML = map.slots.map((slot) => {
+        layer.innerHTML = map.slots.flatMap((slot) => {
           const role = slotRoleLabels[slot.role] || slot.role;
           const ability = slot.contentType === 'icon'
             ? (slot.required ? '必填图标' : '可选图标')
-            : (slot.typography?.fontSizePt ? slot.typography.fontSizePt + 'pt · ' : '')
+            : slot.contentType === 'text-region'
+              ? '动态文字大区'
+            : slot.contentType === 'text-flow'
+              ? '动态文字区'
+              : (slot.typography?.fontSizePt ? slot.typography.fontSizePt + 'pt · ' : '')
               + (slot.textMode === 'flow' ? '整块正文' : (slot.capacity?.maxChars || slot.maxChars ? '≤' + (slot.capacity?.maxChars || slot.maxChars) + '字' : '文字'));
           const left = (content.left + slot.left / map.width * content.width) / slide.width * 100;
           const top = (content.top + slot.top / map.height * content.height) / slide.height * 100;
           const width = slot.width / map.width * content.width / slide.width * 100;
           const height = slot.height / map.height * content.height / slide.height * 100;
-          return '<i class="native-slot-box' + (slot.role === 'icon' ? ' icon' : '') + '" data-slot-label="' + esc(role + ' · ' + ability) + '" style="left:' + left + '%;top:' + top + '%;width:' + width + '%;height:' + height + '%"></i>';
+          const outer = '<i class="native-slot-box' + (slot.role === 'icon' ? ' icon' : '') + (slot.contentType === 'text-region' ? ' text-region' : '') + (slot.contentType === 'text-flow' ? ' text-flow' : '') + '" data-slot-label="' + esc(role + ' · ' + (slot.contentType === 'text-region' ? '连续复合文字区域' : (slot.contentType === 'text-flow' ? '统一动态文字区' : ability))) + '" style="left:' + left + '%;top:' + top + '%;width:' + width + '%;height:' + height + '%"></i>';
+          const parts = [...(slot.textFlow?.parts ?? []), ...(slot.textLayout?.parts ?? [])].filter((part) => ['title','body','value','label'].includes(part.part)).map((part) => {
+            const partLeft = (content.left + part.frame.left / map.width * content.width) / slide.width * 100;
+            const partTop = (content.top + part.frame.top / map.height * content.height) / slide.height * 100;
+            const partWidth = part.frame.width / map.width * content.width / slide.width * 100;
+            const partHeight = part.frame.height / map.height * content.height / slide.height * 100;
+            const partLabel = ({ title:'内部标题排版区', body:'内部正文排版区', value:'内部强调值排版区', label:'内部说明排版区' }[part.part] || '内部文字排版区') + ' · 本次求解';
+            return '<i class="native-slot-box text-flow-part ' + esc(part.part) + '" data-slot-label="' + esc(partLabel) + '" style="left:' + partLeft + '%;top:' + partTop + '%;width:' + partWidth + '%;height:' + partHeight + '%"></i>';
+          });
+          return [outer, ...parts];
         }).join('');
       }
     }
@@ -640,7 +713,7 @@
         ? '<div class="drawer-preview"><span>HTML 确认后再生成 Native/PPT</span></div>'
         : previewMarkup(asset, true);
       let nativeDownload = '';
-      const slotMapPanel = htmlRoute ? '<div class="slot-map-panel"><b>入库时固化的字体—容器契约</b><p>坐标、内框、字体、字号、对齐、每行字数和最大行数均由当前 State 的最终 HTML 预先计算；正式使用只读取结果，不再现场测量。</p><div class="slot-map-list" data-slot-map-list><div class="slot-map-empty">正在读取当前 State 的固化契约…</div></div></div>' : '';
+      const slotMapPanel = htmlRoute ? '<div class="slot-map-panel"><b>入库时固化的字体—容器契约</b><p>最外层深蓝框表示连续的动态文字大区；其中可再包含简单 TextFlow 或指标等排版块。橙色标题区和绿色正文区是本次内容的内部求解结果，不是新的固定容器。</p><div class="slot-map-legend"><span><i></i>动态文字区</span><span><i class="title"></i>内部标题排版区</span><span><i class="body"></i>内部正文排版区</span></div><div class="slot-map-list" data-slot-map-list><div class="slot-map-empty">正在读取当前 State 的固化契约…</div></div></div>' : '';
       let skinMedia = awaitingHtmlApproval
         ? '<div class="drawer-preview"><span>HTML 确认后再进入 Skin 核对</span></div>'
         : '<div class="drawer-preview"><span>当前资产没有 Skin State 预览</span></div>';
@@ -843,16 +916,28 @@
       const stateDetails = asset.stateContract ? '<code>' + esc(JSON.stringify(asset.stateContract)) + '</code>' : "—";
       const mediaDetails = asset.mediaContract ? '<code>' + esc(JSON.stringify(asset.mediaContract)) + '</code>' : "—";
       const textCapacity = asset.textCapacity ? '<code>' + esc(JSON.stringify(asset.textCapacity)) + '</code>' : "—";
+      const textSystem = asset.textFlow ? '<code>TextFlow · ' + esc(JSON.stringify(asset.textFlow)) + '</code>' : textCapacity;
       const slotContract = asset.slotContract ? '<code>' + esc(JSON.stringify(asset.slotContract)) + '</code>' : "—";
       document.getElementById("drawer-content").innerHTML = '<div class="drawer-id">' + esc(asset.id) + '</div><h2 id="drawer-title">' + esc(asset.name) + '</h2><div class="drawer-badges">' + pill(LABELS[asset.library], asset.library) + intakeStatusPill(asset) + pill(asset.autoCallable ? "正式生成可调用" : "不进入正式生成线", asset.autoCallable ? "core" : "pending") + '</div>' + reviewWorkflowMarkup(asset)
         + '<div class="detail-group"><h3>Logic 颗粒度</h3>' + detailRows([["Logic", esc(asset.logicId)], ["Structure Group", esc(asset.structureGroupId)], ["Family / Variant", esc(text(asset.familyId)) + " / " + esc(text(asset.variantId))], ["轮廓", esc(text(asset.silhouette))], ["逻辑能力槽位", esc(list(asset.coverageTags))]]) + '</div>'
-        + '<div class="detail-group"><h3>触发条件</h3>' + detailRows([["基础关系", esc(relationText(asset))], ["页面目的", purposeDetails], ["数量范围", esc(range(asset))], ["文字容量", textCapacity], ["State 规则", stateDetails], ["Content Slots", slotContract], ["媒体约束", mediaDetails], ["允许 Composition", esc(list(asset.compositionIds))]]) + '</div>'
+        + '<div class="detail-group"><h3>触发条件</h3>' + detailRows([["基础关系", esc(relationText(asset))], ["页面目的", purposeDetails], ["数量范围", esc(range(asset))], ["文字系统", textSystem], ["State 规则", stateDetails], ["Content Slots", slotContract], ["媒体约束", mediaDetails], ["允许 Composition", esc(list(asset.compositionIds))]]) + '</div>'
         + '<div class="detail-group"><h3>语义与边界</h3>' + (asset.semanticContract ? '<div class="detail-note">' + esc(asset.semanticContract) + '</div>' : '<div class="detail-note">当前声明未写语义说明。</div>') + (asset.doNotUseWhen ? '<div class="detail-note" style="margin-top:9px;border-color:#d96c4a;background:#fff6f3"><strong>不要使用：</strong>' + esc(asset.doNotUseWhen) + '</div>' : '') + '</div>'
         + '<div class="detail-group"><h3>来源与自动化入口</h3>' + detailRows([["来源", source], ["HTML 审查实现", esc(asset.componentPreviewAvailable ? "资产专属 · " + text(asset.componentFidelityStatus) : "尚未迁移")], ["生成入口", esc(text(asset.runtimeEntry || asset.generator))], ["Mapper", esc(text(asset.mapperExport))], ["Component / Builder", esc(text(asset.componentExport || asset.builderExport))], ["示例", esc(text(asset.showcase))], ["Manifest", '<code>' + esc(asset.manifestPath) + '</code>'], ["资产目录", '<code>' + esc(asset.assetDir) + '</code>'], ["审核记录", esc(text(asset.review))]]) + '</div>';
       document.getElementById("drawer-backdrop").classList.add("open");
       connectComponentSlotMap(document.getElementById("drawer-content"));
       document.body.style.overflow = "hidden";
       document.getElementById("drawer-close").focus();
+    }
+
+    function renderTextLayouts() {
+      const layouts = DATA.textLayouts ?? [];
+      document.getElementById("text-layout-count").textContent = layouts.length + " 种可复用排版";
+      document.getElementById("text-layout-grid").innerHTML = layouts.map((layout) => {
+        const demo = layout.id === "value-label-stacked"
+          ? '<div class="text-layout-demo value-label"><b>≥95%</b><span>结构化通过率</span></div>'
+          : '<div class="text-layout-demo"><b>内容标准化</b><span>把原稿整理为稳定、可复用的结构化字段</span></div>';
+        return '<article class="text-layout-card"><h3>' + esc(layout.name) + '</h3><code>' + esc(layout.id) + '</code><p>' + esc(layout.description) + '</p><div class="tags">' + layout.compositions.map((item) => pill(item)).join('') + '</div>' + demo + '</article>';
+      }).join("");
     }
 
     function closeDrawer() {
@@ -1019,6 +1104,7 @@
 
     renderSummary();
     renderStores();
+    renderTextLayouts();
     renderShellMap();
     renderPendingApproval();
     activatePreviewImages();

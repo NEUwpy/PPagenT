@@ -21,6 +21,7 @@
   ],
   "runtime": {
     "renderer": "html-component",
+    "textFlow": { "profile": "text-region-layout-library", "scope": "per-contiguous-region" },
     "entry": "runtime.mjs",
     "componentExport": "visualComponent",
     "previewParametersExport": "previewParameters",
@@ -57,7 +58,7 @@
       "abstractionLevel": "foundation",
       "adaptationStatus": "adaptive",
       "constraints": {
-        "relationTraits": { "hierarchy": true, "goalAlignment": true, "measurable": true },
+        "relationTraits": { "hierarchy": true },
         "density": ["low", "medium"]
       }
     },
@@ -135,7 +136,7 @@
     "safePadding": 12,
     "supportedCompositionIds": ["component-full"]
   },
-  "capacity": "一个总目标；2–4 项策略；每项策略 1–2 个指标；目标标题不超过 24 字，目标说明不超过 36 字；策略标题按 2／3／4 项分别不超过 10／8／6 字，行动说明分别不超过 42／33／27 字；每列两个指标时，名称最多 7／6／6 字、值最多 6／4／4 字，单指标状态容量更宽",
+  "capacity": "一个总目标；2–4 项策略；每项策略 1–2 个指标。各连续 TextRegion 的实际容量由区域尺寸、Skin 字号和所选 Text Layout 自动求解，不在结构资产内手写标题、正文、指标名称和值的字数表",
   "semanticContract": "一个明确总目标向 2–4 项同级策略或行动方向分解，并为每项策略绑定 1–2 个可核验指标",
   "doNotUseWhen": "只是普通上下级组织关系、策略之间存在严格先后、指标无法归属到具体策略、需要多级战略地图，或主要内容是时间计划和责任分工",
   "review": "用户已确认目标、策略与指标的 HTML 黄金状态及 2–4 项策略、1–2 个指标的版式扩散，正式落地"

@@ -4,6 +4,8 @@ import { pathToFileURL } from "node:url";
 
 import { northeasternUniversityTheme } from "../runtime/skins/northeastern-university-theme.mjs";
 import { closeHtmlComponentRuntime, resolveHtmlComponent } from "../visual-runtime/html-component-runtime.mjs";
+import { estimateTextFlowPlanningCapacity } from "../visual-runtime/text-flow.mjs";
+import { compatibleTextLayouts } from "../visual-runtime/text-layout-library.mjs";
 
 const projectRoot = path.resolve(process.argv[2] ?? path.resolve(import.meta.dirname, "../.."));
 const assetFilter = new Set((process.argv.find((value) => value.startsWith("--assets="))?.slice("--assets=".length) ?? "")
@@ -77,6 +79,17 @@ function reviewSelections(review) {
 
 function stateIssues(slots, minimumFontSize) {
   return slots.flatMap((slot) => {
+    if (slot.contentType === "text-flow") {
+      const issues = [];
+      if (slot.textFlow?.status !== "resolved") issues.push("text-flow-unresolved");
+      for (const part of slot.textFlow?.parts ?? []) {
+        if (part.typography?.role === "custom") issues.push("custom-font-size");
+        if (Number.isFinite(minimumFontSize) && part.typography?.fontSizePt < minimumFontSize) {
+          issues.push("font-below-minimum");
+        }
+      }
+      return [...new Set(issues)].map((code) => ({ code, slotId: slot.id }));
+    }
     if (slot.contentType !== "text") return [];
     const issues = [];
     if (slot.capacity?.reliable === false) issues.push("text-slot-needs-explicit-rectangular-container");
@@ -90,22 +103,37 @@ function stateIssues(slots, minimumFontSize) {
 }
 
 function compactSlot(slot) {
+  const textLayout = slot.contentType === "text-region" && slot.textLayout ? {
+    ...slot.textLayout,
+    compatible: compatibleTextLayouts({
+      width: slot.frame?.width,
+      height: slot.frame?.height,
+      contentRoles: slot.textLayout.contentRoles,
+    }),
+  } : null;
   return {
     id: slot.id,
     role: slot.role,
     field: slot.field,
     itemId: slot.itemId,
+    regionId: slot.regionId,
     contentType: slot.contentType,
     required: slot.required,
     textMode: slot.textMode,
     listPolicy: slot.listPolicy,
     frame: slot.frame,
+    ...(slot.innerFrame ? { innerFrame: slot.innerFrame } : {}),
     capacity: slot.contentType === "text" ? {
       charsPerLine: slot.capacity?.charsPerLine,
       maxLines: slot.capacity?.maxLines,
       maxChars: slot.capacity?.maxChars,
       reliable: slot.capacity?.reliable,
       declarationFits: slot.capacity?.declarationFits,
+      sampleFits: slot.capacity?.sampleFits,
+    } : slot.contentType === "text-flow" ? {
+      basis: slot.capacity?.basis,
+      reliable: slot.capacity?.reliable,
+      derived: slot.capacity?.derived,
       sampleFits: slot.capacity?.sampleFits,
     } : {},
     ...(slot.typography ? { typography: {
@@ -114,8 +142,31 @@ function compactSlot(slot) {
       alignment: slot.typography.alignment,
       lineHeightPt: slot.typography.lineHeightPt,
     } } : {}),
+    ...(slot.textFlow ? { textFlow: slot.textFlow } : {}),
+    ...(textLayout ? { textLayout } : {}),
     ...(slot.media ? { media: slot.media } : {}),
   };
+}
+
+function textFlowPlanningStates(states, variants) {
+  const byId = new Map(variants.map((variant) => [variant.id, variant]));
+  return states.flatMap((state) => {
+    const flowSlots = (byId.get(state.variantId)?.slots ?? []).filter((slot) => slot.contentType === "text-flow");
+    if (!flowSlots.length) return [];
+    const width = Math.min(...flowSlots.map((slot) => slot.innerFrame?.width ?? slot.frame.width));
+    const height = Math.min(...flowSlots.map((slot) => slot.innerFrame?.height ?? slot.frame.height));
+    const layout = flowSlots[0].textFlow?.layout ?? {};
+    return [{
+      selection: state.selection,
+      contentFrame: { width, height },
+      capacity: estimateTextFlowPlanningCapacity({
+        width,
+        height,
+        gapPx: layout.gapPx,
+        separatorHeightPx: layout.separatorHeightPx,
+      }),
+    }];
+  });
 }
 
 const built = [];
@@ -165,6 +216,7 @@ try {
         states.push({ key: selectionKey(selection), selection, variantId });
       }
       const issueCount = variants.reduce((sum, variant) => sum + variant.issues.length, 0);
+      const planningStates = textFlowPlanningStates(states, variants);
       const contract = {
         schemaVersion: 2,
         assetId: manifest.id,
@@ -181,6 +233,7 @@ try {
         typographyUnit: "ppt-pt",
         minimumFontSize,
         status: issueCount ? "needs-adjustment" : "ready",
+        ...(planningStates.length ? { textFlow: { planningStates } } : {}),
         states,
         variants,
       };

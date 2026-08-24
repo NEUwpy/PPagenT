@@ -97,7 +97,18 @@ async function loadDescriptor(manifestPath) {
     entryPath,
     runtime: asset.runtime,
     textCapacity: asset.runtime.textCapacity ?? null,
+    textFlow: asset.runtime.textFlow ?? null,
   };
+}
+
+async function loadGeneratedTextFlow(assetDir) {
+  try {
+    const contract = JSON.parse(await fs.readFile(path.join(assetDir, "slot-contract.json"), "utf8"));
+    return contract.textFlow ?? null;
+  } catch (error) {
+    if (error.code === "ENOENT") return null;
+    throw error;
+  }
 }
 
 /**
@@ -151,6 +162,7 @@ export async function loadCoreAssetPackage(assetId, root = defaultRoot) {
       return {
         ...descriptor,
         textCapacity: component?.textCapacity ?? runtime.textCapacity ?? null,
+        textFlow: component?.textFlow ?? runtime.textFlow ?? null,
         builder,
         component,
         mapper,
@@ -164,8 +176,15 @@ export async function loadCoreAssetPackage(assetId, root = defaultRoot) {
 /** Load detailed container/capacity data for a shortlisted asset only. */
 export async function loadCoreAssetCapabilities(assetId, root = defaultRoot) {
   const assetPackage = await loadCoreAssetPackage(assetId, root);
+  const generatedTextFlow = assetPackage.textFlow
+    ? await loadGeneratedTextFlow(assetPackage.assetDir)
+    : null;
   return {
     textCapacity: assetPackage.textCapacity ? structuredClone(assetPackage.textCapacity) : null,
+    textFlow: assetPackage.textFlow ? {
+      ...structuredClone(assetPackage.textFlow),
+      ...(generatedTextFlow ? structuredClone(generatedTextFlow) : {}),
+    } : null,
     slotResolver: assetPackage.slotResolver,
     component: assetPackage.component,
   };

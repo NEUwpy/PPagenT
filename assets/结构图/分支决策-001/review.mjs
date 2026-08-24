@@ -1,3 +1,5 @@
+import { textFlowMarkup } from "../../../src/visual-runtime/text-flow.mjs";
+
 const DESIGN_FRAME = Object.freeze({ width: 1170, height: 492 });
 const LIMITS = Object.freeze({
   branchMin: 2,
@@ -99,10 +101,7 @@ function contextMarkup(context) {
   return `<article class="context-wrap">
     <div class="context-underlay" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="decision-context-underlay"></div>
     <section class="context-card" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="decision-context-card">
-      <div class="context-copy">
-        <h2 ${slotAttributes({ id: "context-title", role: "context-title", field: "context.title", itemId: "context", maxChars: context.body ? LIMITS.contextTitle : LIMITS.contextTitleOnly, maxLines: 2 })} data-ppt-kind="text" data-ppt-name="decision-context-title">${escapeHtml(context.title)}</h2>
-        ${context.body ? `<p ${slotAttributes({ id: "context-body", role: "context-body", field: "context.body", itemId: "context", maxChars: LIMITS.contextBody, maxLines: 2, required: false })} data-ppt-kind="text" data-ppt-name="decision-context-body">${escapeHtml(context.body)}</p>` : ""}
-      </div>
+      ${textFlowMarkup({ id: "context-content", field: "context", itemId: "context", title: context.title, body: context.body, className: "context-copy", align: "center", valign: "middle", tone: "dark", names: { title: "decision-context-title", body: "decision-context-body" } })}
     </section>
   </article>`;
 }
@@ -117,10 +116,7 @@ function branchMarkup(item, index, bodyLimit) {
     <div class="route-wrap">
       <section class="route-card" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="branch-route-card-${index}"></section>
       <span class="route-accent" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="branch-route-accent-${index}"></span>
-      <div class="route-copy${item.body ? "" : " is-title-only"}">
-        <h3 ${slotAttributes({ id: `${item.key}-title`, role: "branch-title", field: `branches[${index}].title`, itemId: item.key, maxChars: LIMITS.actionTitle, maxLines: 2 })} data-ppt-kind="text" data-ppt-name="branch-title-${index}">${escapeHtml(item.title)}</h3>
-        ${item.body ? `<p ${slotAttributes({ id: `${item.key}-body`, role: "branch-body", field: `branches[${index}].body`, itemId: item.key, maxChars: bodyLimit, maxLines: 3, required: false })} data-ppt-kind="text" data-ppt-name="branch-body-${index}">${escapeHtml(item.body)}</p>` : ""}
-      </div>
+      ${textFlowMarkup({ id: `${item.key}-content`, field: `branches[${index}]`, itemId: item.key, regionId: "route", title: item.title, body: item.body, className: "route-copy", align: "center", valign: "middle", names: { title: `branch-title-${index}`, body: `branch-body-${index}` } })}
     </div>
     ${item.outcome ? `<span class="outcome-label" ${slotAttributes({ id: `${item.key}-outcome`, role: "branch-outcome", field: `branches[${index}].outcome`, itemId: item.key, maxChars: LIMITS.outcome, maxLines: 1, required: false })} data-ppt-kind="shape-text" data-ppt-shape="roundRect" data-ppt-name="branch-outcome-${index}">${escapeHtml(item.outcome)}</span>` : ""}
   </article>`;
@@ -131,6 +127,7 @@ export const branchingDecisionVisualComponent = Object.freeze({
   schemaVersion: 1,
   designFrame: DESIGN_FRAME,
   cssFile: "component.css",
+  textFlow: Object.freeze({ profile: "standard", scope: "per-contiguous-region" }),
   textCapacity: Object.freeze({
     maxContextTitleChars: LIMITS.contextTitleOnly,
     maxContextTitleLines: 2,
