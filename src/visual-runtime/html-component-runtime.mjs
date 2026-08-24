@@ -10,8 +10,8 @@ import { htmlTextFlowCss } from "./text-flow.mjs";
 
 export { htmlComponentThemeCss } from "./html-component-theme.mjs";
 
-// v4 also carries the CSS stacking path so Native/PPT paint order matches HTML.
-const TREE_SCHEMA_VERSION = 4;
+// v5 adds TextRegion/TextLayout bindings and box-derived capacity envelopes.
+const TREE_SCHEMA_VERSION = 5;
 let browserPromise = null;
 
 function requireValue(condition, message) {
@@ -278,7 +278,13 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         const verticalText = style.writingMode !== "horizontal-tb";
         const explicitSingleLine = element.dataset.slotTextMode === "single-line" || ["nowrap", "pre"].includes(style.whiteSpace);
         const singleLine = !verticalText && !source.includes("\n") && (explicitSingleLine || renderedLineCount(element) === 1);
-        const candidates = standardizedFontSizesPt.filter((size) => size <= currentFontSizePt + 0.05);
+        const primitiveTiers = (element.dataset.textPrimitiveFontTiers || "")
+          .split(",")
+          .map(Number)
+          .filter((size) => Number.isFinite(size) && size >= 15)
+          .sort((left, right) => right - left);
+        const candidates = (primitiveTiers.length ? primitiveTiers : standardizedFontSizesPt)
+          .filter((size) => size <= currentFontSizePt + 0.05);
         const originalFontSizePt = currentFontSizePt;
         let selectedFontSizePt = currentFontSizePt;
         let fits = textFits(element, currentFontSizePt, singleLine);
@@ -302,6 +308,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         element.dataset.pptFontFit = fits ? (selectedFontSizePt < originalFontSizePt - 0.05 ? "reduced" : "unchanged") : "overflow";
         element.dataset.pptOriginalFontSizePt = String(Math.round(originalFontSizePt * 1000) / 1000);
         element.dataset.pptResolvedFontSizePt = String(Math.round(selectedFontSizePt * 1000) / 1000);
+        element.dataset.pptResolvedText = renderedTextLines(element).join("\n");
         const fontSize = Number.parseFloat(style.fontSize);
         const height = element.getBoundingClientRect().height;
         const lineHeight = Number.parseFloat(style.lineHeight);
@@ -314,6 +321,34 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
           element.style.justifyContent = "center";
           element.style.lineHeight = "1.2";
         }
+      }
+      const resolvedTextLayouts = [];
+      const textLayoutOverflows = [];
+      for (const layout of root.querySelectorAll("[data-ppagent-text-layout]")) {
+        const layoutBox = layout.getBoundingClientRect();
+        const parts = [...layout.querySelectorAll("[data-text-layout-part]")]
+          .filter((element) => getComputedStyle(element).display !== "none");
+        const inside = parts.every((part) => {
+          const box = part.getBoundingClientRect();
+          return box.left >= layoutBox.left - 1
+            && box.right <= layoutBox.right + 1
+            && box.top >= layoutBox.top - 1
+            && box.bottom <= layoutBox.bottom + 1;
+        });
+        const fits = inside
+          && layout.scrollWidth <= layout.clientWidth + 1
+          && layout.scrollHeight <= layout.clientHeight + 1
+          && parts.every((part) => part.dataset.pptFontFit !== "overflow");
+        layout.dataset.pptTextLayoutStatus = fits ? "resolved" : "overflow";
+        const layoutId = layout.dataset.textLayoutId || "text-layout";
+        if (!fits) textLayoutOverflows.push(layout.closest("[data-slot-id]")?.dataset.slotId || layoutId);
+        resolvedTextLayouts.push({
+          id: layoutId,
+          status: layout.dataset.pptTextLayoutStatus,
+          align: layout.dataset.textLayoutAlign || "left",
+          valign: layout.dataset.textLayoutValign || "middle",
+          density: layout.dataset.textLayoutDensity || "standard",
+        });
       }
       const rootBox = root.getBoundingClientRect();
       const rounded = (value) => Math.round(value * 1000) / 1000;
@@ -865,9 +900,19 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         const parts = [...element.querySelectorAll("[data-text-flow-part],[data-text-layout-part]")].map((part) => {
           const partStyle = getComputedStyle(part);
           const fontSizePt = rounded(number(partStyle.fontSize) * 0.75);
+          const partBox = part.getBoundingClientRect();
+          const lineHeightPx = number(partStyle.lineHeight) || number(partStyle.fontSize) * 1.2;
+          const canvas = document.createElement("canvas");
+          const context = canvas.getContext("2d");
+          context.font = `${partStyle.fontStyle} ${partStyle.fontWeight} ${partStyle.fontSize} ${partStyle.fontFamily}`;
+          const glyphWidth = Math.max(1, context.measureText("中").width);
+          const charsPerLine = Math.max(1, Math.floor(partBox.width / glyphWidth));
+          const hardMaxLines = Math.max(1, Math.floor((partBox.height + 0.5) / lineHeightPx));
+          const hardMaxChars = charsPerLine * hardMaxLines;
           return {
             part: part.dataset.textLayoutPart || part.dataset.textFlowPart,
             field: part.dataset.textLayoutField || part.dataset.textFlowField || part.dataset.textLayoutPart || part.dataset.textFlowPart,
+            primitive: part.dataset.textPrimitive || part.closest("[data-text-primitive]")?.dataset.textPrimitive || "",
             frame: htmlFrame(part),
             text: textValue(part),
             lineCount: renderedLineCount(part),
@@ -878,14 +923,26 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
               fontSizePt,
               fontWeight: partStyle.fontWeight,
               alignment: partStyle.textAlign,
-              lineHeightPt: rounded(number(partStyle.lineHeight) * 0.75),
+                lineHeightPt: rounded(number(partStyle.lineHeight) * 0.75),
+              },
+            capacity: {
+              recommendedMaxChars: Math.max(1, Math.floor(hardMaxChars * 0.8)),
+              hardMaxChars,
+              hardMaxLines,
             },
           };
         });
+        const layout = element.querySelector("[data-ppagent-text-layout]");
         return {
           textLayout: {
             id: element.dataset.textLayoutId || "",
+            defaultId: element.dataset.textLayoutDefaultId || element.dataset.textLayoutId || "",
+            compatible: (element.dataset.textLayoutCompatible || element.dataset.textLayoutId || "").split(",").filter(Boolean),
             contentRoles: (element.dataset.textLayoutContentRoles || "").split(",").filter(Boolean),
+            status: layout?.dataset.pptTextLayoutStatus || "unresolved",
+            align: layout?.dataset.textLayoutAlign || "left",
+            valign: layout?.dataset.textLayoutValign || "middle",
+            density: layout?.dataset.textLayoutDensity || "standard",
             parts,
           },
           innerFrame: {
@@ -893,7 +950,14 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
             height: rounded(Math.max(0, box.height - padding.top - padding.bottom)),
             padding,
           },
-          capacity: { basis: "dynamic-text-layout", reliable: true, derived: true },
+          capacity: {
+            basis: "dom-box-font-metrics",
+            reliable: true,
+            derived: true,
+            sampleFits: layout?.dataset.pptTextLayoutStatus === "resolved",
+            recommendedMaxChars: parts.reduce((sum, part) => sum + (part.capacity?.recommendedMaxChars ?? 0), 0),
+            hardMaxChars: parts.reduce((sum, part) => sum + (part.capacity?.hardMaxChars ?? 0), 0),
+          },
         };
       };
       const slots = [...root.querySelectorAll("[data-slot-id]")].map((element) => {
@@ -935,17 +999,20 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         };
       });
       return {
-        schemaVersion: 4,
+        schemaVersion: 5,
         frame: { width: rounded(rootBox.width), height: rounded(rootBox.height) },
         overflow: root.scrollWidth > root.clientWidth + 1 || root.scrollHeight > root.clientHeight + 1,
         textFlowOverflows,
+        textLayoutOverflows,
         textFlows: resolvedTextFlows,
+        textLayouts: resolvedTextLayouts,
         nodes,
         slots,
       };
     }, resolveComponentTypography(theme));
     requireValue(!tree.overflow, `${component.id ?? "HTML Component"} 超出设计区域`);
     requireValue(!tree.textFlowOverflows.length, `${component.id ?? "HTML Component"} 的文字容器无法在规范字号内排版：${tree.textFlowOverflows.join(", ")}`);
+    requireValue(!tree.textLayoutOverflows.length, `${component.id ?? "HTML Component"} 的组合排版无法在安全 box 内完整呈现：${tree.textLayoutOverflows.join(", ")}`);
     requireValue(tree.nodes.length > 0, `${component.id ?? "HTML Component"} 没有 data-ppt-kind 可编译对象`);
     assertResolvedTextContainerSlots(tree.slots, component.textCapacity ?? {}, component.id);
     return {

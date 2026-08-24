@@ -1,5 +1,5 @@
 import { resolveTablerIcon, tablerIconSvgMarkup } from "../../../src/icons/tabler-icon-resolver.mjs";
-import { textFlowMarkup } from "../../../src/visual-runtime/text-flow.mjs";
+import { textRegionMarkup } from "../../../src/visual-runtime/text-layout-library.mjs";
 
 const DESIGN_FRAME = Object.freeze({ width: 1170, height: 492 });
 
@@ -52,28 +52,39 @@ function markerMarkup(item, index) {
 }
 
 function cardMarkup(item, index) {
-  return `<article class="parallel-card" data-key="${escapeHtml(item.key)}">
+  return `<article class="parallel-card" data-key="${escapeHtml(item.key)}" data-has-title="${item.title ? "true" : "false"}" data-has-support="${item.body || item.points.length ? "true" : "false"}">
     <div class="parallel-card-underlay" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="parallel-card-underlay-${index}"></div>
     <div class="parallel-card-surface" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="parallel-card-surface-${index}"></div>
     <div class="parallel-card-accent" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="parallel-card-accent-${index}"></div>
     <div class="parallel-marker">${markerMarkup(item, index)}</div>
-    ${textFlowMarkup({
-      id: `${item.key}-content`,
-      field: `items[${index}]`,
+    ${textRegionMarkup({
+      id: `${item.key}-title-region`,
+      field: `items[${index}].title`,
       itemId: item.key,
-      title: item.title,
-      body: item.body,
-      points: item.points,
-      className: "parallel-content",
+      regionId: "title",
+      layoutId: "statement-flow",
+      compatibleLayoutIds: ["statement-flow", "heading-content-flow"],
+      content: { title: item.title },
+      className: "parallel-title-region",
       align: "center",
       valign: "middle",
-      separator: true,
-      bodyField: "support",
-      names: {
-        title: `parallel-title-${index}`,
-        body: `parallel-body-${index}`,
-        separator: `parallel-rule-${index}`,
-      },
+      required: false,
+      names: { heading: `parallel-title-${index}` },
+    })}
+    ${item.title && (item.body || item.points.length) ? `<div class="parallel-content-rule" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="parallel-rule-${index}"></div>` : ""}
+    ${textRegionMarkup({
+      id: `${item.key}-content-region`,
+      field: `items[${index}].support`,
+      itemId: item.key,
+      regionId: "content",
+      layoutId: "heading-content-flow",
+      compatibleLayoutIds: ["statement-flow", "heading-content-flow", "structured-list-flow", "metric-content-flow"],
+      content: { body: item.body, points: item.points },
+      className: "parallel-body-region",
+      align: "center",
+      valign: "middle",
+      required: false,
+      names: { body: `parallel-body-${index}`, list: `parallel-point-${index}` },
     })}
   </article>`;
 }
@@ -83,7 +94,7 @@ export const visualComponent = Object.freeze({
   schemaVersion: 5,
   designFrame: DESIGN_FRAME,
   cssFile: "component.css",
-  textFlow: Object.freeze({ profile: "standard", scope: "per-item" }),
+  textFlow: Object.freeze({ profile: "text-region-layout-library", scope: "per-contiguous-region" }),
   renderMarkup(parameters) {
     const model = normalizeParameters(parameters);
     return `<section class="parallel-review" data-ppt-root data-item-count="${model.items.length}">

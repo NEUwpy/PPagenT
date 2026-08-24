@@ -36,16 +36,8 @@ export function normalizeCycleParameters(parameters) {
     const body = text(step?.body);
     const points = pointRows(step);
     if (title.length > CYCLE_TEXT_LIMITS.title.maxChars) throw new Error(`steps[${index}].title 超过 ${CYCLE_TEXT_LIMITS.title.maxChars} 字`);
-    if (points.length > 4) throw new Error(`steps[${index}].points 最多 4 条`);
-    if (points.some((point) => point.length > CYCLE_TEXT_LIMITS.point.maxChars)) throw new Error(`steps[${index}].points 单条超过 ${CYCLE_TEXT_LIMITS.point.maxChars} 字`);
     if (!body && !points.length) throw new Error(`steps[${index}] 至少需要 body 或一条 points`);
     const supportText = [body, ...points.map((point) => `• ${point}`)].filter(Boolean).join("\n");
-    if (Array.from(supportText.replaceAll("\n", "")).length > CYCLE_TEXT_LIMITS.body.maxChars) {
-      throw new Error(`steps[${index}] 的支持正文超过 ${CYCLE_TEXT_LIMITS.body.maxChars} 字`);
-    }
-    if (supportText.split(/\r?\n/).length > CYCLE_TEXT_LIMITS.body.maxLines) {
-      throw new Error(`steps[${index}] 的支持正文超过 ${CYCLE_TEXT_LIMITS.body.maxLines} 行`);
-    }
     if ((Array.isArray(step?.details) && step.details.length) || (Array.isArray(step?.metrics) && step.metrics.length)) {
       throw new Error(`steps[${index}] 基础循环只接受 body/points；标签、说明和指标属于独立的嵌套 Structure Group`);
     }

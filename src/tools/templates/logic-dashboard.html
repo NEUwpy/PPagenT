@@ -92,15 +92,34 @@
     .store h3 { margin: 0 0 10px; font-size: 15px; }
     .store code { color: #4c5b72; font-size: 12px; }
     .store p { clear: both; margin: 13px 0 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
-    .text-layout-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
-    .text-layout-card { padding:18px; border:1px solid var(--line); border-radius:15px; background:#fafbfd; }
-    .text-layout-card h3 { margin:0 0 6px; font-size:16px; }
-    .text-layout-card code { color:#55708f; font-size:11px; }
-    .text-layout-card p { min-height:42px; margin:11px 0; color:var(--muted); font-size:12px; line-height:1.65; }
-    .text-layout-demo { display:flex; flex-direction:column; justify-content:center; gap:8px; height:112px; margin-top:13px; padding:16px; border:2px solid #7fa6df; border-radius:10px; background:#fff; text-align:center; }
-    .text-layout-demo b { color:#254b7c; font-size:18px; }
-    .text-layout-demo span { color:#60758d; font-size:13px; }
-    .text-layout-demo.value-label b { color:#2f5ea8; font-size:25px; }
+    .text-layout-grid { display:grid; grid-template-columns:240px minmax(0,1fr); gap:18px; align-items:start; }
+    .text-primitive-grid { display:flex; flex-wrap:wrap; gap:9px; margin-bottom:16px; }
+    .text-primitive-chip { padding:9px 12px; border:1px solid #dbe4f1; border-radius:10px; color:#405575; background:#fff; font-size:12px; }
+    .text-primitive-chip b { margin-right:6px; color:#285f9f; }
+    .text-layout-catalog, .text-layout-detail { border:1px solid var(--line); border-radius:15px; background:#fafbfd; }
+    .text-layout-catalog { position:sticky; top:64px; max-height:calc(100vh - 88px); overflow:auto; padding:10px; }
+    .text-layout-catalog h3 { margin:8px 8px 7px; color:#718096; font-size:11px; font-weight:700; letter-spacing:.08em; }
+    .text-layout-choice { display:block; width:100%; margin:0 0 5px; padding:10px 11px; border:1px solid transparent; border-radius:10px; background:transparent; color:#405575; text-align:left; cursor:pointer; }
+    .text-layout-choice:hover { background:#f0f5fb; }
+    .text-layout-choice.active { border-color:#b7cbea; background:#eaf2fc; color:#214f88; }
+    .text-layout-choice strong { display:block; margin-bottom:3px; font-size:13px; }
+    .text-layout-choice code { color:#7a899c; font-size:10px; }
+    .text-layout-detail { min-height:430px; padding:22px; }
+    .text-layout-detail__head { display:flex; justify-content:space-between; gap:18px; align-items:flex-start; }
+    .text-layout-detail__head h3 { margin:0 0 5px; font-size:20px; }
+    .text-layout-detail__head code { color:#65758c; font-size:11px; }
+    .text-layout-detail__description { max-width:700px; margin:13px 0; color:var(--muted); font-size:13px; line-height:1.65; }
+    .text-layout-contract { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; margin:14px 0 18px; }
+    .text-layout-contract > div { padding:10px 12px; border-radius:10px; background:#fff; color:#5e6f85; font-size:11px; line-height:1.55; }
+    .text-layout-contract b { display:block; margin-bottom:3px; color:#2f4f76; }
+    .text-layout-size-tabs { display:flex; gap:8px; margin:0 0 12px; }
+    .text-layout-size-button { padding:8px 11px; border:1px solid #cfdae9; border-radius:9px; background:#fff; color:#53677f; cursor:pointer; }
+    .text-layout-size-button.active { border-color:#6e99d5; background:#eaf2fc; color:#235891; font-weight:700; }
+    .text-layout-preview-stage { display:flex; min-height:278px; align-items:center; justify-content:center; overflow:auto; padding:20px; border-radius:13px; background:linear-gradient(135deg,#f3f6fa,#e9eff7); }
+    .text-layout-preview { display:flex; flex-direction:column; gap:7px; align-items:flex-start; }
+    .text-layout-preview__label { color:#64758c; font-size:11px; }
+    .text-layout-preview-frame { box-sizing:border-box; flex:0 0 auto; overflow:hidden; padding:0; border:1.5px dashed #6f9bd8; border-radius:8px; background:#fff; box-shadow:0 7px 20px rgba(46,76,112,.11); --ppagent-font-body:"Microsoft YaHei"; --ppagent-text-color:#46566a; --ppagent-heading-color:#254b7c; --ppagent-value-color:#2f5ea8; --ppagent-label-color:#60758d; --ppagent-annotation-color:#748495; }
+    .text-layout-preview-frame > .ppagent-text-region { width:100%; height:100%; }
     .shell-map-wrap { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(260px, .75fr); gap: 20px; align-items: start; }
     .shell-map { position: relative; overflow: hidden; aspect-ratio: 16 / 9; border: 1px solid #cfd9e8; border-radius: 14px; background: linear-gradient(#fff,#f8fafc); box-shadow: inset 0 0 0 12px #eef3f8; }
     .shell-map::before { content: "东北大学正文 Shell"; position: absolute; left: 18px; top: 13px; color: #738197; font-size: 12px; }
@@ -271,6 +290,8 @@
       .section { padding: 20px 16px; }
       .section-head { align-items: flex-start; flex-direction: column; }
       .pipeline, .pipeline.intake-line, .pipeline.generation-line, .logic-grid, .coverage-grid, .coverage-tier-grid, .store-grid, .text-layout-grid, .catalog-grid, .shell-map-wrap, .role-grid { grid-template-columns: 1fr; }
+      .text-layout-catalog { position:static; }
+      .text-layout-contract { grid-template-columns:1fr; }
       .capability-chain { flex-direction: column; }
       .chain-arrow { transform: rotate(90deg); }
       .filters { grid-template-columns: 1fr 1fr; }
@@ -360,7 +381,8 @@
     </section>
 
     <section class="section" id="text-layouts">
-      <div class="section-head"><div><h2>文字排版库</h2><p>Structure Group 只提供连续文字区域；这里的排版负责决定区域内部怎样组织文字。同一大区可以采用所有尺寸和内容角色相容的排版，不再由结构图分别写死标题框、正文框或指标框。</p></div><span class="pill core" id="text-layout-count"></span></div>
+      <div class="section-head"><div><h2>文字排版库</h2><p>Structure Group 只提供实际安全书写 box；基础文字组件组成已登记的组合排版，再由视觉导演从兼容集合中选择。</p></div><span class="pill core" id="text-layout-count"></span></div>
+      <div class="text-primitive-grid" id="text-primitive-grid"></div>
       <div class="text-layout-grid" id="text-layout-grid"></div>
     </section>
 
@@ -929,15 +951,61 @@
       document.getElementById("drawer-close").focus();
     }
 
+    let selectedTextLayoutId = null;
+    let selectedTextPreviewId = "minimum";
+
+    function textLayoutBindingSummary(layout) {
+      const contract = layout.bindingContract ?? {};
+      const required = (contract.required ?? []).join("、") || "无固定必填字段";
+      const optional = (contract.optional ?? []).join("、") || "无";
+      return {
+        fields: "必填：" + required + "；可选：" + optional,
+        sizing: "最小可用 " + layout.minimumFrame.width + "×" + layout.minimumFrame.height + "；小于该尺寸不得调用",
+        rule: contract.rule || "空字段自动折叠，按区域尺寸完成排版",
+      };
+    }
+
+    function renderTextLayoutDetail() {
+      const layouts = DATA.textLayouts ?? [];
+      const layout = layouts.find((item) => item.id === selectedTextLayoutId) ?? layouts[0];
+      const detail = document.getElementById("text-layout-detail");
+      if (!layout || !detail) return;
+      selectedTextLayoutId = layout.id;
+      const preview = (layout.previews ?? []).find((item) => item.id === selectedTextPreviewId) ?? layout.previews?.[0];
+      selectedTextPreviewId = preview?.id ?? "minimum";
+      const status = layout.status === "approved" ? pill("正式", "core") : pill("候选待审批", "pending");
+      const contract = textLayoutBindingSummary(layout);
+      const sizeTabs = (layout.previews ?? []).map((item) => '<button class="text-layout-size-button ' + (item.id === selectedTextPreviewId ? 'active' : '') + '" type="button" data-text-preview-select="' + esc(item.id) + '">' + esc(item.label) + '</button>').join('');
+      const previewMarkup = preview ? '<div class="text-layout-preview"><span class="text-layout-preview__label">当前预览 · ' + esc(preview.frame.width) + '×' + esc(preview.frame.height) + '</span><div class="text-layout-preview-frame" style="width:' + esc(preview.frame.width) + 'px;height:' + esc(preview.frame.height) + 'px">' + preview.markup + '</div></div>' : '<span class="muted">暂无预览</span>';
+      detail.innerHTML = '<div class="text-layout-detail__head"><div><h3>' + esc(layout.name) + '</h3><code>' + esc(layout.id) + '</code></div>' + status + '</div>'
+        + '<p class="text-layout-detail__description">' + esc(layout.description) + '</p>'
+        + '<div class="tags">' + layout.compositions.map((item) => pill(item)).join('') + '</div>'
+        + '<div class="text-layout-contract"><div><b>字段契约</b>' + esc(contract.fields) + '<br>' + esc(contract.rule) + '</div><div><b>尺寸规则</b>' + esc(contract.sizing) + '<br>对齐与密度由文字系统统一控制</div></div>'
+        + '<div class="text-layout-size-tabs" aria-label="预览尺寸">' + sizeTabs + '</div>'
+        + '<div class="text-layout-preview-stage">' + previewMarkup + '</div>';
+    }
+
     function renderTextLayouts() {
       const layouts = DATA.textLayouts ?? [];
-      document.getElementById("text-layout-count").textContent = layouts.length + " 种可复用排版";
-      document.getElementById("text-layout-grid").innerHTML = layouts.map((layout) => {
-        const demo = layout.id === "value-label-stacked"
-          ? '<div class="text-layout-demo value-label"><b>≥95%</b><span>结构化通过率</span></div>'
-          : '<div class="text-layout-demo"><b>内容标准化</b><span>把原稿整理为稳定、可复用的结构化字段</span></div>';
-        return '<article class="text-layout-card"><h3>' + esc(layout.name) + '</h3><code>' + esc(layout.id) + '</code><p>' + esc(layout.description) + '</p><div class="tags">' + layout.compositions.map((item) => pill(item)).join('') + '</div>' + demo + '</article>';
-      }).join("");
+      const primitives = DATA.textPrimitives ?? [];
+      if (!document.getElementById('ppagent-text-layout-runtime-css')) {
+        const style = document.createElement('style');
+        style.id = 'ppagent-text-layout-runtime-css';
+        style.textContent = DATA.textLayoutCss ?? '';
+        document.head.appendChild(style);
+      }
+      document.getElementById("text-layout-count").textContent = primitives.length + " 个基础组件 · " + layouts.length + " 种组合排版";
+      document.getElementById("text-primitive-grid").innerHTML = primitives.map((primitive) => '<div class="text-primitive-chip"><b>' + esc(primitive.name) + '</b><code>' + esc(primitive.id) + '</code> · ' + esc(primitive.defaultFontSizePt) + ' pt</div>').join('');
+      if (!selectedTextLayoutId || !layouts.some((layout) => layout.id === selectedTextLayoutId)) {
+        selectedTextLayoutId = layouts.find((layout) => layout.status === "approved")?.id ?? layouts[0]?.id ?? null;
+      }
+      const groups = [
+        ["正式", layouts.filter((layout) => layout.status === "approved")],
+        ["候选", layouts.filter((layout) => layout.status !== "approved")],
+      ];
+      const catalog = groups.map(([label, items]) => '<h3>' + label + '</h3>' + items.map((layout) => '<button type="button" class="text-layout-choice ' + (layout.id === selectedTextLayoutId ? 'active' : '') + '" data-text-layout-select="' + esc(layout.id) + '"><strong>' + esc(layout.name) + '</strong><code>' + esc(layout.id) + '</code></button>').join('')).join('');
+      document.getElementById("text-layout-grid").innerHTML = '<nav class="text-layout-catalog" aria-label="文字排版目录">' + catalog + '</nav><article class="text-layout-detail" id="text-layout-detail"></article>';
+      renderTextLayoutDetail();
     }
 
     function closeDrawer() {
@@ -963,6 +1031,19 @@
     }
 
     document.addEventListener("click", (event) => {
+      const textLayoutTarget = event.target.closest("[data-text-layout-select]");
+      if (textLayoutTarget) {
+        selectedTextLayoutId = textLayoutTarget.dataset.textLayoutSelect;
+        selectedTextPreviewId = "minimum";
+        renderTextLayouts();
+        return;
+      }
+      const textPreviewTarget = event.target.closest("[data-text-preview-select]");
+      if (textPreviewTarget) {
+        selectedTextPreviewId = textPreviewTarget.dataset.textPreviewSelect;
+        renderTextLayoutDetail();
+        return;
+      }
       const carouselTarget = event.target.closest("[data-carousel-move]");
       if (carouselTarget) {
         moveLogicCarousel(carouselTarget.dataset.logicId, Number(carouselTarget.dataset.carouselMove));

@@ -1,4 +1,4 @@
-import { textFlowMarkup, textRegionAttributes } from "../../../src/visual-runtime/text-flow.mjs";
+import { textRegionMarkup } from "../../../src/visual-runtime/text-layout-library.mjs";
 
 const DESIGN_FRAME = Object.freeze({ width: 1170, height: 492 });
 const LIMITS = Object.freeze({ itemMin: 1, itemMax: 3, quadrantTitle: 8, itemTitle: 8, axisLabel: 8, detailTitle: 10, detailBody: 30, metricLabel: 8, metricValue: 8 });
@@ -42,14 +42,11 @@ function normalize(parameters) {
     return {
       title: required(quadrant.title, LIMITS.quadrantTitle, `quadrants[${quadrantIndex}].title`),
       detail: {
-        title: required(quadrant?.detail?.title, LIMITS.detailTitle, `quadrants[${quadrantIndex}].detail.title`),
-        body: required(quadrant?.detail?.body, LIMITS.detailBody, `quadrants[${quadrantIndex}].detail.body`),
-        metrics: Array.isArray(quadrant?.detail?.metrics) && quadrant.detail.metrics.length === 2
-          ? quadrant.detail.metrics.map((metric, metricIndex) => ({
-              label: required(metric?.label, LIMITS.metricLabel, `quadrants[${quadrantIndex}].detail.metrics[${metricIndex}].label`),
-              value: required(metric?.value, LIMITS.metricValue, `quadrants[${quadrantIndex}].detail.metrics[${metricIndex}].value`),
-            }))
-          : (() => { throw new RangeError(`quadrants[${quadrantIndex}].detail.metrics 固定需要 2 项`); })(),
+        title: text(quadrant?.detail?.title),
+        body: text(quadrant?.detail?.body),
+        metrics: Array.isArray(quadrant?.detail?.metrics)
+          ? quadrant.detail.metrics.slice(0, 4).map((metric) => ({ label: text(metric?.label), value: text(metric?.value), annotation: text(metric?.annotation) })).filter((metric) => metric.label || metric.value)
+          : [],
       },
       items: quadrant.items.map((item, itemIndex) => ({
         key: text(item?.key) || `q${quadrantIndex}-item${itemIndex}`,
@@ -93,17 +90,21 @@ function quadrantMarkup(quadrant, quadrantIndex, model) {
 
 function detailMarkup(quadrant, quadrantIndex) {
   const itemId = `quadrant-${quadrantIndex}-detail`;
-  return `<aside class="quadrant-detail detail-${quadrantIndex}" data-quadrant-detail="${quadrantIndex}" ${textRegionAttributes({ id: `${itemId}-region`, field: `quadrants[${quadrantIndex}].detail`, itemId, regionId: "detail" })}>
-    ${textFlowMarkup({ id: `${itemId}-content`, field: `quadrants[${quadrantIndex}].detail`, itemId, regionId: "summary", title: quadrant.detail.title, body: quadrant.detail.body, className: "detail-copy", align: "left", valign: "top", names: { title: `matrix-detail-title-${quadrantIndex}`, body: `matrix-detail-body-${quadrantIndex}` } })}
-    <div class="detail-divider" data-ppt-kind="shape" data-ppt-shape="line" data-ppt-name="matrix-detail-divider-${quadrantIndex}"></div>
-    <div class="detail-metric-caption" data-ppt-kind="text" data-ppt-name="matrix-detail-caption-${quadrantIndex}">关键指标</div>
-    <div class="detail-metrics">
-      ${quadrant.detail.metrics.map((metric, metricIndex) => `<div class="detail-metric">
-        <span ${slotAttributes({ id: `${itemId}-metric-${metricIndex}-label`, role: "metric-label", field: `quadrants[${quadrantIndex}].detail.metrics[${metricIndex}].label`, itemId: `${itemId}-metric-${metricIndex}`, maxChars: LIMITS.metricLabel })} data-ppt-kind="text" data-ppt-name="matrix-detail-metric-label-${quadrantIndex}-${metricIndex}">${escapeHtml(metric.label)}</span>
-        <strong ${slotAttributes({ id: `${itemId}-metric-${metricIndex}-value`, role: "metric-value", field: `quadrants[${quadrantIndex}].detail.metrics[${metricIndex}].value`, itemId: `${itemId}-metric-${metricIndex}`, maxChars: LIMITS.metricValue })} data-ppt-kind="text" data-ppt-name="matrix-detail-metric-value-${quadrantIndex}-${metricIndex}">${escapeHtml(metric.value)}</strong>
-      </div>`).join("")}
-    </div>
-  </aside>`;
+  return textRegionMarkup({
+    id: `${itemId}-region`,
+    field: `quadrants[${quadrantIndex}].detail`,
+    itemId,
+    regionId: "detail",
+    layoutId: "heading-metric-content-flow",
+    compatibleLayoutIds: ["heading-content-flow", "metric-content-flow", "metric-set-flow", "heading-metric-content-flow", "summary-information-flow"],
+    content: quadrant.detail,
+    className: `quadrant-detail detail-${quadrantIndex}`,
+    align: "left",
+    valign: "top",
+    density: "compact",
+    required: false,
+    names: { heading: `matrix-detail-title-${quadrantIndex}`, body: `matrix-detail-body-${quadrantIndex}` },
+  });
 }
 
 function axesMarkup(axes) {
@@ -155,7 +156,7 @@ export const visualComponent = Object.freeze({
   schemaVersion: 1,
   designFrame: DESIGN_FRAME,
   cssFile: "component.css",
-  textFlow: Object.freeze({ profile: "standard", scope: "per-contiguous-region" }),
+  textFlow: Object.freeze({ profile: "text-region-layout-library", scope: "per-contiguous-region" }),
   textCapacity: Object.freeze({
     maxItemTitleChars: LIMITS.itemTitle,
     maxItemTitleLines: 2,

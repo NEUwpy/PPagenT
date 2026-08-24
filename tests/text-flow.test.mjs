@@ -10,6 +10,7 @@ import {
 import {
   compatibleTextLayouts,
   listTextLayouts,
+  listTextLayoutPrimitives,
   textRegionMarkup,
 } from "../src/visual-runtime/text-layout-library.mjs";
 
@@ -75,13 +76,32 @@ test("TextRegion 披露连续复合文字大区而不规定内部块数量", () 
   assert.match(attributes, /data-slot-role="text-region"/);
   assert.match(attributes, /data-slot-content-type="text-region"/);
   assert.match(attributes, /data-slot-region-id="detail"/);
+  assert.match(attributes, /data-slot-safe-box="true"/);
   assert.doesNotMatch(attributes, /max-chars|max-lines/);
 });
 
 test("文字排版库让一个大区绑定排法而不是暴露固定小槽", () => {
   assert.deepEqual(listTextLayouts().map((item) => item.id), [
-    "title-body-adaptive",
-    "value-label-stacked",
+    "statement-flow",
+    "heading-content-flow",
+    "label-content-flow",
+    "structured-list-flow",
+    "metric-content-flow",
+    "metric-set-flow",
+    "key-value-flow",
+    "quote-attribution-flow",
+    "heading-metric-content-flow",
+    "summary-information-flow",
+  ]);
+  assert.deepEqual(listTextLayoutPrimitives().map((item) => item.id), [
+    "heading",
+    "body",
+    "list",
+    "metric",
+    "label",
+    "annotation",
+    "quote",
+    "emphasis",
   ]);
   const markup = textRegionMarkup({
     id: "metric-1",
@@ -91,13 +111,22 @@ test("文字排版库让一个大区绑定排法而不是暴露固定小槽", ()
   });
   assert.equal((markup.match(/data-slot-id=/g) ?? []).length, 1);
   assert.match(markup, /data-slot-content-type="text-region"/);
-  assert.match(markup, /data-text-layout-id="value-label-stacked"/);
-  assert.match(markup, /data-text-layout-part="value"/);
+  assert.match(markup, /data-text-layout-id="metric-content-flow"/);
+  assert.match(markup, /data-text-layout-part="metric"/);
   assert.match(markup, /data-text-layout-part="label"/);
   assert.doesNotMatch(markup, /metric-value[^\n]*data-slot-id|metric-label[^\n]*data-slot-id/);
   assert.deepEqual(compatibleTextLayouts({
     width: 132,
     height: 71,
     contentRoles: ["value", "label"],
-  }), ["title-body-adaptive", "value-label-stacked"]);
+  }), []);
+  assert.ok(compatibleTextLayouts({
+    width: 240,
+    height: 130,
+    contentRoles: ["heading", "body"],
+  }).includes("heading-content-flow"));
+  assert.ok(listTextLayouts().every((layout) => (
+    layout.minimumFrame.width === layout.recommendedFrame.width
+    && layout.minimumFrame.height === layout.recommendedFrame.height
+  )));
 });

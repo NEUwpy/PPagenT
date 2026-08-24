@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import fs from "node:fs/promises";
 import test from "node:test";
 
 import { computeContainedFrame } from "../src/asset-runtime/contained-frame.mjs";
@@ -198,6 +199,17 @@ test("漏斗输入使用单一圆内标记槽，图标可选且文字可回退",
   assert.match(simpleHtml, /simple-input-marker-text/);
   assert.doesNotMatch(simpleHtml, /simple-input-label/);
   assert.match(stagedHtml, /funnel-input-text/);
+});
+
+test("两个漏斗的同级阶段标题使用统一字号", async () => {
+  const styles = await Promise.all([
+    fs.readFile(new URL("../assets/结构图/简明转化漏斗-001/component.css", import.meta.url), "utf8"),
+    fs.readFile(new URL("../assets/结构图/转化漏斗-001/component.css", import.meta.url), "utf8"),
+  ]);
+  for (const css of styles) {
+    assert.match(css, /font-size:\s*var\(--ppagent-funnel-step-title-size,\s*15pt\)/);
+    assert.doesNotMatch(css, /data-step-count="6"[^}]*step-title/);
+  }
 });
 
 test("视觉导演仍需明确选择循环闭环 Structure Group", async () => {

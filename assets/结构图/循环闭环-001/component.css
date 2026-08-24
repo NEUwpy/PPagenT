@@ -6,8 +6,9 @@ body { background: #fff; color: #707070; font-family: var(--ppagent-font-body, "
 .cycle-note { position: absolute; left: var(--left); top: var(--top); width: var(--width); height: var(--height); padding: 16px 28px; overflow: hidden; background: #f1f1f1; }
 .cycle-note[data-side="left"] { padding-right: 205px; }
 .cycle-note[data-side="right"] { padding-left: 205px; }
-.cycle-copy { display: block; height: 100%; margin: 0; overflow: hidden; color: #666; font-size: var(--ppagent-component-body-size, 19px); line-height: 1.2; white-space: pre-line; }
-.cycle-note[data-side="right"] .cycle-copy { text-align: right; }
+.cycle-copy-region { display: block; width: 100%; height: 100%; margin: 0; overflow: hidden; }
+.cycle-copy-region .ppagent-text-primitive--body,
+.cycle-copy-region .ppagent-text-list__item { color: #666; line-height: 1.25; }
 .cycle-review[data-density="compact"] .cycle-note { padding-top: 10px; padding-bottom: 10px; }
 .cycle-review[data-density="compact"] .cycle-note[data-side="left"] { padding-right: 190px; }
 .cycle-review[data-density="compact"] .cycle-note[data-side="right"] { padding-left: 190px; }

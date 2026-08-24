@@ -20,8 +20,18 @@ body { color: #404040; background: transparent; font-family: var(--ppagent-font-
 .parallel-marker-dot-center { left: 17px; top: 17px; }
 .parallel-marker-dot-left { left: 3px; top: 18px; width: 6px; height: 6px; opacity: .86; }
 .parallel-marker-dot-right { right: 3px; top: 18px; width: 6px; height: 6px; opacity: .86; }
-.parallel-content { position: absolute; left: 28px; right: 28px; top: 120px; height: 218px; --ppagent-text-flow-gap: 14px; }
-.parallel-content .ppagent-text-flow__title { color: #254b7c; line-height: 1.25; }
-.parallel-content .ppagent-text-flow__body { color: #46566a; line-height: 1.55; }
-.parallel-review[data-item-count="4"] .parallel-content { left: 24px; right: 24px; }
-.parallel-review[data-item-count="5"] .parallel-content { left: 20px; right: 20px; top: 116px; height: 226px; --ppagent-text-flow-gap: 12px; }
+.parallel-title-region { position: absolute; left: 28px; right: 28px; top: 120px; height: 58px; }
+.parallel-title-region .ppagent-text-primitive--heading { color: #254b7c; line-height: 1.25; }
+.parallel-content-rule { position: absolute; left: 50%; top: 190px; width: 54px; height: 4px; margin-left: -27px; border: 0; border-radius: 99px; background: #78aeef; }
+.parallel-body-region { position: absolute; left: 28px; right: 28px; top: 208px; height: 130px; }
+.parallel-body-region .ppagent-text-primitive--body,
+.parallel-body-region .ppagent-text-list__item { color: #46566a; line-height: 1.5; }
+.parallel-card[data-has-title="false"] .parallel-body-region { top: 126px; height: 212px; }
+.parallel-card[data-has-support="false"] .parallel-title-region { top: 166px; height: 92px; }
+.parallel-review[data-item-count="4"] .parallel-title-region,
+.parallel-review[data-item-count="4"] .parallel-body-region { left: 24px; right: 24px; }
+.parallel-review[data-item-count="5"] .parallel-title-region,
+.parallel-review[data-item-count="5"] .parallel-body-region { left: 20px; right: 20px; }
+.parallel-review[data-item-count="5"] .parallel-title-region { top: 116px; }
+.parallel-review[data-item-count="5"] .parallel-content-rule { top: 184px; }
+.parallel-review[data-item-count="5"] .parallel-body-region { top: 200px; height: 142px; }

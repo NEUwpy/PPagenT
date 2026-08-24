@@ -69,8 +69,29 @@ test("看板只把资产专属 HTML 计入迁移完成度", async () => {
   assert.equal(data.activeSkin?.componentTheme?.typography?.componentBody, 17);
   assert.equal(data.activeSkin?.typographyUnit, "ppt-pt");
   assert.equal(data.activeSkin?.pptPointScale, 1);
-  assert.deepEqual(data.textLayouts.map((item) => item.id), ["title-body-adaptive", "value-label-stacked"]);
-  assert.equal(data.summary.textLayouts, 2);
+  assert.deepEqual(data.textLayouts.map((item) => item.id), [
+    "statement-flow",
+    "heading-content-flow",
+    "label-content-flow",
+    "structured-list-flow",
+    "metric-content-flow",
+    "metric-set-flow",
+    "key-value-flow",
+    "quote-attribution-flow",
+    "heading-metric-content-flow",
+    "summary-information-flow",
+  ]);
+  assert.equal(data.textPrimitives.length, 8);
+  assert.equal(data.summary.textLayouts, 10);
+  assert.equal(data.summary.textPrimitives, 8);
+  assert.match(data.textLayoutCss, /\.ppagent-text-layout/);
+  assert.ok(data.textLayouts.every((layout) => (
+    layout.previews.length === 3
+    && layout.previews[0].id === "minimum"
+    && layout.previews[0].frame.width === layout.minimumFrame.width
+    && layout.previews[0].frame.height === layout.minimumFrame.height
+    && layout.previews.every((preview) => /data-ppagent-text-region/.test(preview.markup))
+  )));
   assert.equal(cycle?.builderExport, "");
   assert.equal(cycle?.componentInitialSelection.stepCount, 4);
   assert.equal(data.summary.htmlDesignComponents, 18);
@@ -318,11 +339,12 @@ test("矩阵象限保持真实双轴、独立扩散每象限 1–3 个对象并�
     assert.equal((markup.match(/class="matrix-item/g) ?? []).length, itemsPerQuadrant * 4);
     assert.equal((markup.match(/class="axis-line"/g) ?? []).length, 2);
     assert.equal((markup.match(/data-slot-role="item-title"/g) ?? []).length, itemsPerQuadrant * 4);
-    assert.equal((markup.match(/class="quadrant-detail detail-/g) ?? []).length, 4);
+    assert.equal((markup.match(/quadrant-detail detail-/g) ?? []).length, 4);
     assert.equal((markup.match(/data-slot-content-type="text-region"/g) ?? []).length, 4);
-    assert.equal((markup.match(/data-slot-role="item-content"/g) ?? []).length, 4);
-    assert.equal((markup.match(/data-slot-region-id="summary"/g) ?? []).length, 4);
-    assert.equal((markup.match(/data-slot-role="metric-value"/g) ?? []).length, 8);
+    assert.equal((markup.match(/data-slot-role="text-region"/g) ?? []).length, 4);
+    assert.equal((markup.match(/data-slot-region-id="detail"/g) ?? []).length, 4);
+    assert.equal((markup.match(/data-text-layout-id="heading-metric-content-flow"/g) ?? []).length, 8);
+    assert.equal((markup.match(/data-text-layout-part="metric"/g) ?? []).length, 8);
     assert.equal((markup.match(/class="band-definition band-/g) ?? []).length, 2);
     assert.doesNotMatch(markup, /data-slot-role="item-body"/);
   }
@@ -388,7 +410,8 @@ test("循环 Structure Group 暴露与 State 同步的可填充 Content Slots", 
     const slots = resolveContentSlots(parameters);
     assert.equal(slots.length, stepCount);
     for (const slot of slots) {
-      assert.equal(slot.capacity.maxDepth, 1);
+      assert.equal(slot.capacity.basis, "safe-box-and-text-layout");
+      assert.deepEqual(slot.capacity.box, slot.frame);
       assert.equal(slot.fallback, "plain-text");
       assert.ok(slot.frame.left >= 0 && slot.frame.top >= 0);
       assert.ok(slot.frame.left + slot.frame.width <= visualComponent.designFrame.width);
@@ -404,14 +427,14 @@ test("循环闭环由同一 HTML 组件解析 3–6 步状态", () => {
     assert.match(markup, new RegExp(`data-step-count="${stepCount}"`));
     assert.equal((markup.match(/class="cycle-note"/g) ?? []).length, stepCount);
     assert.equal((markup.match(/class="cycle-arc"/g) ?? []).length, stepCount);
-    assert.equal((markup.match(/data-content-slot-id=/g) ?? []).length, stepCount);
+    assert.equal((markup.match(/data-slot-content-type="text-region"/g) ?? []).length, stepCount);
     assert.equal((markup.match(/data-slot-role="center-title"/g) ?? []).length, 1);
     assert.equal((markup.match(/data-slot-role="item-title"/g) ?? []).length, stepCount);
-    assert.equal((markup.match(/data-slot-role="item-body"/g) ?? []).length, stepCount);
+    assert.equal((markup.match(/data-slot-role="text-region"/g) ?? []).length, stepCount);
     assert.equal((markup.match(/data-slot-role="item-point"/g) ?? []).length, 0);
-    assert.equal((markup.match(/data-slot-text-mode="flow"/g) ?? []).length, 1 + stepCount);
-    assert.equal((markup.match(/data-slot-list-policy="inline"/g) ?? []).length, stepCount);
-    assert.equal((markup.match(/data-slot-max-chars=/g) ?? []).length, 1 + stepCount * 2);
+    assert.equal((markup.match(/data-text-layout-id="heading-content-flow"/g) ?? []).length, stepCount * 2);
+    assert.equal((markup.match(/data-slot-safe-box="true"/g) ?? []).length, stepCount);
+    assert.doesNotMatch(markup, /data-slot-role="text-region"[^>]*data-slot-max-(?:chars|lines)=/);
   }
 });
 
@@ -446,11 +469,11 @@ test("等权并列卡片由同一 HTML 组件重新排布 3–5 项状态", () =
     assert.match(markup, new RegExp(`data-item-count="${itemCount}"`));
     assert.equal((markup.match(/class="parallel-card"/g) ?? []).length, itemCount);
     assert.equal((markup.match(/data-slot-role="icon"/g) ?? []).length, itemCount);
-    assert.equal((markup.match(/data-slot-role="item-content"/g) ?? []).length, itemCount);
-    assert.equal((markup.match(/data-slot-content-type="text-flow"/g) ?? []).length, itemCount);
-    assert.equal((markup.match(/data-slot-text-mode="flow"/g) ?? []).length, itemCount);
-    assert.equal((markup.match(/data-slot-list-policy="inline"/g) ?? []).length, itemCount);
-    assert.equal((markup.match(/data-slot-required="true"/g) ?? []).length, itemCount * 2);
+    assert.equal((markup.match(/data-slot-role="text-region"/g) ?? []).length, itemCount * 2);
+    assert.equal((markup.match(/data-slot-content-type="text-region"/g) ?? []).length, itemCount * 2);
+    assert.equal((markup.match(/data-text-layout-id="statement-flow"/g) ?? []).length, itemCount * 2);
+    assert.equal((markup.match(/data-text-layout-id="heading-content-flow"/g) ?? []).length, itemCount * 2);
+    assert.equal((markup.match(/data-slot-required="true"/g) ?? []).length, itemCount);
     assert.equal((markup.match(/data-slot-max-(?:chars|lines)=/g) ?? []).length, 0);
     assert.equal((markup.match(/data-icon-key=/g) ?? []).length, itemCount);
   }

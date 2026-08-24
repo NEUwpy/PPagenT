@@ -4,7 +4,12 @@ import { pathToFileURL } from "node:url";
 import { inspectHtmlComponentEligibility } from "../runtime/html-component-eligibility.mjs";
 import { academicReportShell } from "../runtime/shells/academic-report.mjs";
 import { northeasternUniversityTheme } from "../runtime/skins/northeastern-university-theme.mjs";
-import { listTextLayouts } from "../visual-runtime/text-layout-library.mjs";
+import {
+  listTextLayoutPrimitives,
+  listTextLayouts,
+  textLayoutCatalogPreviewMarkup,
+} from "../visual-runtime/text-layout-library.mjs";
+import { htmlTextFlowCss } from "../visual-runtime/text-flow.mjs";
 
 export const defaultProjectRoot = path.resolve(import.meta.dirname, "../..");
 
@@ -313,7 +318,34 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
   const failures = await readJson(path.join(root, "catalog", "failure-cases.json"));
   const contracts = await readJson(path.join(root, "catalog", "asset-contracts.json"));
   const experimentalVariants = await readJson(path.join(root, "catalog", "visual-variants.json"));
-  const textLayouts = listTextLayouts();
+  const textLayouts = listTextLayouts().map((layout) => {
+    const minimum = layout.minimumFrame;
+    const comfortable = {
+      width: Math.round(Math.min(460, minimum.width * 1.18)),
+      height: Math.round(Math.min(260, minimum.height * 1.18)),
+    };
+    const large = {
+      width: Math.round(Math.min(520, minimum.width * 1.36)),
+      height: Math.round(Math.min(300, minimum.height * 1.36)),
+    };
+    return {
+      ...layout,
+      previews: [
+        { id: "minimum", label: "最小可用框", frame: minimum, density: "standard" },
+        { id: "comfortable", label: "宽松框", frame: comfortable, density: "loose" },
+        { id: "large", label: "大框", frame: large, density: "loose" },
+      ].map((preview) => ({
+        ...preview,
+        markup: textLayoutCatalogPreviewMarkup({
+          layoutId: layout.id,
+          id: `catalog-${layout.id}-${preview.id}`,
+          profile: "representative",
+          density: preview.density,
+        }),
+      })),
+    };
+  });
+  const textPrimitives = listTextLayoutPrimitives();
 
   const coverageByAsset = new Map();
   const logics = logicMap.logics ?? [];
@@ -382,6 +414,7 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
       contracts: contracts.contracts?.length ?? 0,
       experimentalVariants: experimentalVariants.variants?.length ?? 0,
       textLayouts: textLayouts.length,
+      textPrimitives: textPrimitives.length,
     },
     records,
     primaryAssets,
@@ -400,11 +433,13 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
     failureCases: failures.cases ?? [],
     sourceFiles,
     textLayouts,
+    textPrimitives,
+    textLayoutCss: htmlTextFlowCss(),
     categoryCounts,
     stores: [
       { name: "原始 PPT 来源", path: "PPT源/", count: sourceFiles.length, role: "只提供入库线的原始视觉来源", tone: "source" },
       { name: "核心资产库", path: "assets/", count: coreAssets.length, role: "正式生成线自动发现并只读调用", tone: "core" },
-      { name: "文字排版库", path: "src/visual-runtime/text-layout-library.mjs", count: textLayouts.length, role: "把连续文字区域绑定为可复用的标题正文、数值说明等排版", tone: "core" },
+      { name: "文字排版库", path: "src/visual-runtime/text-layout-library.mjs", count: textLayouts.length, role: `用 ${textPrimitives.length} 个基础文字组件组成可复用排版`, tone: "core" },
       { name: "规则与能力目录", path: "catalog/", count: (compositions.layouts?.length ?? 0) + (purposes.purposes?.length ?? 0), role: "保存 Composition、Purpose、契约与失败经验", tone: "catalog" },
       { name: "Logic 运行声明", path: "*/asset.json", count: formalLogics.length, role: "声明 Logic、Structure Group、触发条件和运行入口", tone: "runtime" },
     ],

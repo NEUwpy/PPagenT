@@ -8,6 +8,7 @@ import {
   ringItems,
   svgBandPath,
 } from "./layout.mjs";
+import { textRegionMarkup } from "../../../src/visual-runtime/text-layout-library.mjs";
 
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>"']/g, (character) => ({
@@ -20,7 +21,20 @@ function panelMarkup(item, density) {
   const key = escapeHtml(item.step.key);
   const slotId = `step-${item.step.key}-support`;
   return `<article class="cycle-note" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="cycle-panel-${item.index}" data-side="${item.side}" data-key="${escapeHtml(item.step.key)}" data-density="${density}" style="--left:${frame.left}px;--top:${frame.top}px;--width:${frame.width}px;--height:${frame.height}px">
-    <p class="cycle-copy" data-content-slot-id="${escapeHtml(slotId)}" data-content-slot-role="stage-support" data-slot-id="${escapeHtml(slotId)}" data-slot-role="item-body" data-slot-field="steps[${item.index}].support" data-slot-item-id="${key}" data-slot-content-type="text" data-slot-required="false" data-slot-text-mode="flow" data-slot-list-policy="inline" data-slot-max-chars="${CYCLE_TEXT_LIMITS.body.maxChars}" data-slot-max-lines="${CYCLE_TEXT_LIMITS.body.maxLines}" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-valign="middle" data-ppt-name="cycle-${item.index}-support">${escapeHtml(item.step.supportText)}</p>
+    ${textRegionMarkup({
+      id: slotId,
+      field: `steps[${item.index}].support`,
+      itemId: key,
+      regionId: "support",
+      layoutId: "heading-content-flow",
+      compatibleLayoutIds: ["statement-flow", "heading-content-flow", "structured-list-flow", "metric-content-flow"],
+      content: { body: item.step.body, points: item.step.points },
+      className: "cycle-copy-region",
+      align: item.side === "left" ? "left" : "right",
+      valign: "middle",
+      density: density === "compact" ? "compact" : "standard",
+      names: { body: `cycle-${item.index}-support`, list: `cycle-${item.index}-point` },
+    })}
   </article>`;
 }
 
@@ -46,17 +60,7 @@ export const visualComponent = Object.freeze({
   schemaVersion: 6,
   designFrame: DESIGN_FRAME,
   cssFile: "component.css",
-  textCapacity: Object.freeze({
-    maxCenterChars: CYCLE_TEXT_LIMITS.center.maxChars,
-    maxCenterLines: CYCLE_TEXT_LIMITS.center.maxLines,
-    maxItemTitleChars: CYCLE_TEXT_LIMITS.title.maxChars,
-    maxItemTitleLines: CYCLE_TEXT_LIMITS.title.maxLines,
-    maxItemBodyChars: CYCLE_TEXT_LIMITS.body.maxChars,
-    maxItemBodyLines: CYCLE_TEXT_LIMITS.body.maxLines,
-    maxPointsPerItem: 4,
-    maxPointChars: CYCLE_TEXT_LIMITS.point.maxChars,
-    maxPointLines: CYCLE_TEXT_LIMITS.point.maxLines,
-  }),
+  textFlow: Object.freeze({ profile: "text-region-layout-library", scope: "per-contiguous-region" }),
   renderMarkup(parameters) {
     const model = normalizeCycleParameters(parameters);
     return `<section class="cycle-review" data-ppt-root data-step-count="${model.steps.length}" data-density="${model.density}">
@@ -77,10 +81,8 @@ export function resolveContentSlots(parameters) {
     side: item.side,
     alignment: item.side === "left" ? "left" : "right",
     capacity: {
-      maxDepth: 1,
-      maxItems: 1,
-      maxCharsPerItem: CYCLE_TEXT_LIMITS.body.maxChars,
-      maxLines: CYCLE_TEXT_LIMITS.body.maxLines,
+      basis: "safe-box-and-text-layout",
+      box: item.slotFrame,
     },
     allowedContentModes: ["plain-text"],
     fallback: "plain-text",

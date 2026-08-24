@@ -77,8 +77,19 @@ function reviewSelections(review) {
   return [...new Map(selections.map((selection) => [selectionKey(selection), selection])).values()];
 }
 
-function stateIssues(slots, minimumFontSize) {
-  return slots.flatMap((slot) => {
+function stateDiagnostics(slots, minimumFontSize) {
+  const diagnostics = slots.flatMap((slot) => {
+    if (slot.contentType === "text-region") {
+      const issues = [];
+      if (slot.textLayout?.status !== "resolved") issues.push("text-layout-unresolved");
+      for (const part of slot.textLayout?.parts ?? []) {
+        if (part.typography?.role === "custom") issues.push("custom-font-size");
+        if (Number.isFinite(minimumFontSize) && part.typography?.fontSizePt < minimumFontSize) {
+          issues.push("font-below-minimum");
+        }
+      }
+      return [...new Set(issues)].map((code) => ({ severity: "issue", code, slotId: slot.id }));
+    }
     if (slot.contentType === "text-flow") {
       const issues = [];
       if (slot.textFlow?.status !== "resolved") issues.push("text-flow-unresolved");
@@ -88,29 +99,37 @@ function stateIssues(slots, minimumFontSize) {
           issues.push("font-below-minimum");
         }
       }
-      return [...new Set(issues)].map((code) => ({ code, slotId: slot.id }));
+      return [...new Set(issues)].map((code) => ({ severity: "issue", code, slotId: slot.id }));
     }
     if (slot.contentType !== "text") return [];
     const issues = [];
-    if (slot.capacity?.reliable === false) issues.push("text-slot-needs-explicit-rectangular-container");
-    if (slot.capacity?.declarationFits === false) issues.push("declared-capacity-exceeds-geometry");
-    if (slot.capacity?.sampleUnexpectedWrap === true) issues.push("unexpected-single-line-wrap");
-    if (slot.capacity?.sampleOverflowsWidth === true || slot.capacity?.sampleOverflowsHeight === true) issues.push("sample-text-overflow");
-    if (slot.typography?.role === "custom") issues.push("custom-font-size");
-    if (Number.isFinite(minimumFontSize) && slot.typography?.fontSizePt < minimumFontSize) issues.push("font-below-minimum");
-    return issues.map((code) => ({ code, slotId: slot.id }));
+    if (slot.capacity?.reliable === false) issues.push({ severity: "warning", code: "text-slot-needs-explicit-rectangular-container" });
+    if (slot.capacity?.declarationFits === false) issues.push({ severity: "warning", code: "declared-capacity-exceeds-geometry" });
+    if (slot.capacity?.sampleUnexpectedWrap === true) issues.push({ severity: "issue", code: "unexpected-single-line-wrap" });
+    if (slot.capacity?.sampleOverflowsWidth === true || slot.capacity?.sampleOverflowsHeight === true) issues.push({ severity: "issue", code: "sample-text-overflow" });
+    if (slot.typography?.role === "custom") issues.push({ severity: "issue", code: "custom-font-size" });
+    if (Number.isFinite(minimumFontSize) && slot.typography?.fontSizePt < minimumFontSize) issues.push({ severity: "issue", code: "font-below-minimum" });
+    return issues.map((item) => ({ ...item, slotId: slot.id }));
   });
+  return {
+    issues: diagnostics.filter((item) => item.severity === "issue").map(({ severity, ...item }) => item),
+    warnings: diagnostics.filter((item) => item.severity === "warning").map(({ severity, ...item }) => item),
+  };
 }
 
 function compactSlot(slot) {
-  const textLayout = slot.contentType === "text-region" && slot.textLayout ? {
-    ...slot.textLayout,
-    compatible: compatibleTextLayouts({
+  const textLayout = slot.contentType === "text-region" && slot.textLayout ? (() => {
+    const computed = compatibleTextLayouts({
       width: slot.frame?.width,
       height: slot.frame?.height,
       contentRoles: slot.textLayout.contentRoles,
-    }),
-  } : null;
+    });
+    const declared = slot.textLayout.compatible?.length ? slot.textLayout.compatible : computed;
+    return {
+      ...slot.textLayout,
+      compatible: declared.filter((layoutId) => computed.includes(layoutId)),
+    };
+  })() : null;
   return {
     id: slot.id,
     role: slot.role,
@@ -135,6 +154,13 @@ function compactSlot(slot) {
       reliable: slot.capacity?.reliable,
       derived: slot.capacity?.derived,
       sampleFits: slot.capacity?.sampleFits,
+    } : slot.contentType === "text-region" ? {
+      basis: slot.capacity?.basis,
+      reliable: slot.capacity?.reliable,
+      derived: slot.capacity?.derived,
+      sampleFits: slot.capacity?.sampleFits,
+      recommendedMaxChars: slot.capacity?.recommendedMaxChars,
+      hardMaxChars: slot.capacity?.hardMaxChars,
     } : {},
     ...(slot.typography ? { typography: {
       role: slot.typography.role,
@@ -205,20 +231,21 @@ try {
         const parameters = resolver ? resolver(structuredClone(preview), selection) : structuredClone(preview);
         const tree = await resolveHtmlComponent({ component, parameters, assetDir, targetFrame, theme: northeasternUniversityTheme });
         const slots = tree.slots.map(compactSlot);
-        const issues = stateIssues(tree.slots, minimumFontSize);
-        const signature = JSON.stringify({ slots, issues });
+        const { issues, warnings } = stateDiagnostics(tree.slots, minimumFontSize);
+        const signature = JSON.stringify({ slots, issues, warnings });
         let variantId = variantBySlots.get(signature);
         if (!variantId) {
           variantId = `v${variants.length + 1}`;
           variantBySlots.set(signature, variantId);
-          variants.push({ id: variantId, slots, issues });
+          variants.push({ id: variantId, slots, issues, ...(warnings.length ? { warnings } : {}) });
         }
         states.push({ key: selectionKey(selection), selection, variantId });
       }
       const issueCount = variants.reduce((sum, variant) => sum + variant.issues.length, 0);
+      const warningCount = variants.reduce((sum, variant) => sum + (variant.warnings?.length ?? 0), 0);
       const planningStates = textFlowPlanningStates(states, variants);
       const contract = {
-        schemaVersion: 2,
+        schemaVersion: 3,
         assetId: manifest.id,
         themeId: "northeastern-university-001",
         sampling: "default-plus-one-control",
@@ -233,15 +260,16 @@ try {
         typographyUnit: "ppt-pt",
         minimumFontSize,
         status: issueCount ? "needs-adjustment" : "ready",
+        warningCount,
         ...(planningStates.length ? { textFlow: { planningStates } } : {}),
         states,
         variants,
       };
       await writeJson(contractPath, contract);
-      built.push({ assetId: manifest.id, states: states.length, issueCount, status: contract.status });
+      built.push({ assetId: manifest.id, states: states.length, issueCount, warningCount, status: contract.status });
     } catch (error) {
       const contract = {
-        schemaVersion: 2,
+        schemaVersion: 3,
         assetId: manifest.id,
         themeId: "northeastern-university-001",
         coordinateUnit: "design-px",
@@ -252,12 +280,12 @@ try {
         error: String(error?.message ?? error).split("\n")[0],
       };
       await writeJson(contractPath, contract);
-      built.push({ assetId: manifest.id, states: 0, issueCount: 1, status: contract.status });
+      built.push({ assetId: manifest.id, states: 0, issueCount: 1, warningCount: 0, status: contract.status });
     }
   }
 } finally {
   await closeHtmlComponentRuntime();
 }
 
-for (const item of built) console.log(`${item.assetId}\tstates=${item.states}\tissues=${item.issueCount}\t${item.status}`);
+for (const item of built) console.log(`${item.assetId}\tstates=${item.states}\tissues=${item.issueCount}\twarnings=${item.warningCount}\t${item.status}`);
 console.log(`built=${built.length}`);
