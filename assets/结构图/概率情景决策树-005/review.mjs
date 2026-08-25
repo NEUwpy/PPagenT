@@ -1,1 +1,5 @@
-import {getCandidate} from "../_round56-components/components.mjs?v=2";const c=getCandidate("branching-probability-tree-005");export const visualComponent=c.visualComponent;export const previewParameters=c.previewParameters;export const resolvePreviewParameters=c.resolvePreviewParameters;
+import { geometricBranchingProbability as component } from "../_geometric-logic/components.mjs?v=4";
+
+export const visualComponent = component.visualComponent;
+export const previewParameters = component.previewParameters;
+export const resolvePreviewParameters = component.resolvePreviewParameters;

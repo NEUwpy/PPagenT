@@ -1,1 +1,6 @@
-import {getCandidate} from "../_round56-components/components.mjs?v=2";const c=getCandidate("comparison-pros-cons-balance-005");export const visualComponent=c.visualComponent;export const previewParameters=c.previewParameters;export const resolvePreviewParameters=c.resolvePreviewParameters;
+import { getCandidate } from "../_review-refresh/components.mjs?v=2";
+
+const candidate = getCandidate("comparison-pros-cons-balance-005");
+export const visualComponent = candidate.visualComponent;
+export const previewParameters = candidate.previewParameters;
+export const resolvePreviewParameters = candidate.resolvePreviewParameters;

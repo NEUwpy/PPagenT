@@ -1,14 +1,6 @@
 import { textRegionMarkup } from "../../../src/visual-runtime/text-layout-library.mjs";
 
 const DESIGN_FRAME = Object.freeze({ width: 1170, height: 492 });
-const PANEL = Object.freeze({ left: 144, top: 202, width: 1002, height: 270 });
-const START = Object.freeze({ x: 78, y: 131, radius: 17 });
-const NODE_Y = Object.freeze({
-  3: Object.freeze([112, 82, 112]),
-  4: Object.freeze([116, 82, 82, 116]),
-  5: Object.freeze([118, 91, 74, 91, 118]),
-  6: Object.freeze([120, 98, 78, 78, 98, 120]),
-});
 
 function text(value) { return String(value ?? "").trim(); }
 
@@ -52,19 +44,39 @@ function normalize(parameters) {
 }
 
 function geometry(count) {
-  const columnWidth = PANEL.width / count;
-  const nodes = NODE_Y[count].map((y, index) => ({
-    x: PANEL.left + columnWidth * (index + 0.5),
-    y,
-  }));
-  return { columnWidth, nodes };
+  const firstX = 190;
+  const lastX = 1030;
+  const firstY = 392;
+  const lastY = 82;
+  const noteWidth = ({ 3: 252, 4: 222, 5: 190, 6: 164 })[count];
+  const noteHeight = ({ 3: 146, 4: 140, 5: 136, 6: 132 })[count];
+  const nodes = Array.from({ length: count }, (_, index) => {
+    const progress = index / (count - 1);
+    const x = firstX + (lastX - firstX) * progress;
+    const y = firstY + (lastY - firstY) * progress;
+    const side = y > 310 ? "above" : y < 110 ? "below" : y < 180 ? "above" : index % 2 ? "below" : "above";
+    const idealTop = side === "above" ? y - noteHeight - 32 : y + 32;
+    return {
+      x,
+      y,
+      side,
+      note: {
+        left: Math.max(12, Math.min(1158 - noteWidth, x - noteWidth / 2)),
+        top: Math.max(10, Math.min(482 - noteHeight, idealTop)),
+        width: noteWidth,
+        height: noteHeight,
+      },
+    };
+  });
+  return { nodes, noteWidth, noteHeight };
 }
 
 function smoothPath(nodes) {
-  const commands = [`M ${nodes[0].x.toFixed(2)} ${nodes[0].y.toFixed(2)}`];
-  for (let index = 1; index < nodes.length; index += 1) {
-    const previous = nodes[index - 1];
-    const current = nodes[index];
+  const points = [{ x: 160, y: 430 }, ...nodes, { x: 1122, y: 42 }];
+  const commands = [`M ${points[0].x} ${points[0].y}`];
+  for (let index = 1; index < points.length; index += 1) {
+    const previous = points[index - 1];
+    const current = points[index];
     const dx = current.x - previous.x;
     commands.push(`C ${(previous.x + dx * 0.44).toFixed(2)} ${previous.y.toFixed(2)}, ${(current.x - dx * 0.44).toFixed(2)} ${current.y.toFixed(2)}, ${current.x.toFixed(2)} ${current.y.toFixed(2)}`);
   }
@@ -73,29 +85,25 @@ function smoothPath(nodes) {
 
 function pathMarkup(nodes) {
   const d = smoothPath(nodes);
-  const first = nodes[0];
-  const last = nodes[nodes.length - 1];
-  const endX = Math.min(1144, last.x + 54);
-  const fullPath = `M ${START.x} ${START.y} C ${START.x + 34} ${START.y}, ${first.x - 42} ${first.y}, ${first.x.toFixed(2)} ${first.y.toFixed(2)} ${d.slice(d.indexOf("C"))} L ${(endX - 13).toFixed(2)} ${last.y.toFixed(2)}`;
   return `<svg class="journey-path-layer" viewBox="0 0 1170 492" aria-hidden="true">
     <defs>
-      <linearGradient id="journey-line-gradient" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0" stop-color="#78aeef"></stop>
-        <stop offset="0.56" stop-color="#4c88e8"></stop>
+      <linearGradient id="journey-line-gradient" x1="0" y1="1" x2="1" y2="0">
+        <stop offset="0" stop-color="#9fc3df"></stop>
+        <stop offset="0.52" stop-color="#5b91bf"></stop>
         <stop offset="1" stop-color="#2f5ea8"></stop>
       </linearGradient>
     </defs>
-    <path d="${fullPath}" class="journey-path-underlay" data-ppt-kind="path" data-ppt-name="journey-path-underlay"></path>
-    <path d="${fullPath}" class="journey-path-main" data-ppt-kind="path" data-ppt-name="journey-path-main"></path>
-    <path d="M ${endX - 14} ${last.y - 10} L ${endX} ${last.y} L ${endX - 14} ${last.y + 10} Z" class="journey-arrow-underlay" data-ppt-kind="path" data-ppt-name="journey-path-arrow-underlay"></path>
-    <path d="M ${endX - 13} ${last.y - 8} L ${endX - 1} ${last.y} L ${endX - 13} ${last.y + 8} Z" class="journey-arrow" data-ppt-kind="path" data-ppt-name="journey-path-arrow"></path>
+    <path d="${d}" class="journey-path-underlay" data-ppt-kind="path" data-ppt-name="journey-rise-underlay"></path>
+    <path d="${d}" class="journey-path-main" data-ppt-kind="path" data-ppt-name="journey-rise-main"></path>
+    <path d="M 1103 37 L 1127 42 L 1114 63 Z" class="journey-arrow-underlay" data-ppt-kind="path" data-ppt-name="journey-rise-arrow-underlay"></path>
+    <path d="M 1105 39 L 1124 42 L 1114 59 Z" class="journey-arrow" data-ppt-kind="path" data-ppt-name="journey-rise-arrow"></path>
   </svg>`;
 }
 
 function subjectMarkup(subject, textLayoutBindings) {
   const slotId = "journey-subject-region";
-  return `<aside class="journey-subject">
-    <div class="journey-subject-label" data-ppt-kind="text" data-ppt-name="journey-subject-label">旅程对象</div>
+  return `<aside class="journey-subject" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="journey-subject-card">
+    <span class="journey-subject-label" data-ppt-kind="text" data-ppt-name="journey-subject-label">旅程对象</span>
     ${textRegionMarkup({
       id: slotId,
       field: "subject",
@@ -114,14 +122,18 @@ function subjectMarkup(subject, textLayoutBindings) {
   </aside>`;
 }
 
-function stageMarkup(stage, index, g, textLayoutBindings) {
-  const node = g.nodes[index];
-  const columnLeft = PANEL.left + index * g.columnWidth;
+function connectorMarkup(node, index) {
+  const edgeY = node.side === "above" ? node.note.top + node.note.height : node.note.top;
+  const startY = Math.min(edgeY, node.y);
+  const height = Math.abs(edgeY - node.y);
+  return `<div class="journey-note-connector" style="left:${(node.x - 1).toFixed(2)}px;top:${startY.toFixed(2)}px;height:${height.toFixed(2)}px" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="journey-note-connector-${index + 1}"></div>`;
+}
+
+function stageMarkup(stage, index, node, textLayoutBindings) {
   const slotId = `${stage.key}-experience-region`;
-  const stageLabelTop = node.y < 90 ? node.y + 31 : node.y - 59;
-  return `<div class="journey-column" style="left:${columnLeft}px;width:${g.columnWidth}px" data-stage-index="${index}">
-    ${index > 0 ? `<div class="journey-divider" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="journey-divider-${index + 1}"></div>` : ""}
-    <div class="journey-column-accent" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="journey-stage-accent-${index + 1}"></div>
+  return `${connectorMarkup(node, index)}
+  <article class="journey-note" data-side="${node.side}" style="left:${node.note.left.toFixed(2)}px;top:${node.note.top.toFixed(2)}px;width:${node.note.width}px;height:${node.note.height}px" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="journey-note-${index + 1}">
+    <div class="journey-stage-tag" data-slot-id="journey-stage-${index + 1}-title" data-slot-role="label" data-slot-field="stages[${index}].title" data-slot-item-id="${escapeHtml(stage.key)}" data-slot-content-type="text" data-slot-required="true" data-slot-text-mode="single-line" data-slot-list-policy="none" data-slot-max-lines="1" data-ppt-kind="text" data-ppt-name="journey-stage-${index + 1}-title"><span>${String(index + 1).padStart(2, "0")}</span>${escapeHtml(stage.title)}</div>
     ${textRegionMarkup({
       id: slotId,
       field: `stages[${index}].content`,
@@ -137,32 +149,26 @@ function stageMarkup(stage, index, g, textLayoutBindings) {
       required: true,
       names: { heading: `journey-stage-${index + 1}-heading`, body: `journey-stage-${index + 1}-body`, list: `journey-stage-${index + 1}-point` },
     })}
-  </div>
-  <div class="journey-node-connector" style="left:${node.x - 1}px;top:${node.y + 18}px;height:${PANEL.top - node.y - 18}px" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="journey-node-connector-${index + 1}"></div>
-  <div class="journey-node-halo" style="left:${node.x - 25}px;top:${node.y - 25}px" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="journey-node-halo-${index + 1}"></div>
-  <div class="journey-node" style="left:${node.x - 17}px;top:${node.y - 17}px" data-ppt-kind="shape-text" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="journey-node-${index + 1}">${String(index + 1).padStart(2, "0")}</div>
-  <div class="journey-stage-label" style="left:${node.x - Math.min(72, g.columnWidth / 2 - 7)}px;top:${stageLabelTop}px;width:${Math.min(144, g.columnWidth - 14)}px" data-slot-id="journey-stage-${index + 1}-title" data-slot-role="label" data-slot-field="stages[${index}].title" data-slot-item-id="${escapeHtml(stage.key)}" data-slot-content-type="text" data-slot-required="true" data-slot-text-mode="single-line" data-slot-list-policy="none" data-slot-max-lines="1" data-ppt-kind="text" data-ppt-name="journey-stage-${index + 1}-title">${escapeHtml(stage.title)}</div>`;
+  </article>
+  <div class="journey-node-halo" style="left:${(node.x - 24).toFixed(2)}px;top:${(node.y - 24).toFixed(2)}px" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="journey-node-halo-${index + 1}"></div>
+  <div class="journey-node" style="left:${(node.x - 13).toFixed(2)}px;top:${(node.y - 13).toFixed(2)}px" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="journey-node-${index + 1}"></div>`;
 }
 
 export const visualComponent = Object.freeze({
   id: "journey-stage-experience",
-  schemaVersion: 1,
+  schemaVersion: 2,
   designFrame: DESIGN_FRAME,
   cssFile: "component.css",
   textFlow: Object.freeze({ profile: "text-region-layout-library", scope: "per-contiguous-region" }),
   renderMarkup(parameters) {
     const model = normalize(parameters);
     const g = geometry(model.stages.length);
-    return `<section class="journey-review" data-ppt-root data-stage-count="${model.stages.length}" style="--stage-count:${model.stages.length};--column-width:${g.columnWidth}px">
-      <div class="journey-canvas-underlay" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="journey-canvas-underlay"></div>
-      <div class="journey-canvas" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="journey-canvas"></div>
-      <div class="journey-canvas-label" data-ppt-kind="text" data-ppt-name="journey-canvas-label">阶段体验</div>
-      ${subjectMarkup(model.subject, model.textLayoutBindings)}
+    return `<section class="journey-review" data-ppt-root data-stage-count="${model.stages.length}">
+      <div class="journey-grid" aria-hidden="true"></div>
       ${pathMarkup(g.nodes)}
-      <div class="journey-start-connector" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="journey-start-connector"></div>
-      <div class="journey-start-halo" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="journey-start-halo"></div>
-      <div class="journey-start-node" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="journey-start-node"></div>
-      ${model.stages.map((stage, index) => stageMarkup(stage, index, g, model.textLayoutBindings)).join("")}
+      ${subjectMarkup(model.subject, model.textLayoutBindings)}
+      ${model.stages.map((stage, index) => stageMarkup(stage, index, g.nodes[index], model.textLayoutBindings)).join("")}
+      <div class="journey-end-label" data-ppt-kind="text" data-ppt-name="journey-end-label">持续认同</div>
     </section>`;
   },
 });

@@ -1,2 +1,5 @@
-import {getCandidate} from "../_round4-components/components.mjs";const c=getCandidate("hierarchy-tiered-authority-004");export const visualComponent=c.visualComponent;export const previewParameters=c.previewParameters;export const resolvePreviewParameters=c.resolvePreviewParameters;
+import { geometricHierarchyAuthority as component } from "../_geometric-logic/components.mjs?v=4";
 
+export const visualComponent = component.visualComponent;
+export const previewParameters = component.previewParameters;
+export const resolvePreviewParameters = component.resolvePreviewParameters;

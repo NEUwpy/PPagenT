@@ -26,8 +26,8 @@
     "logicId": "journey",
     "structureGroupId": "journey-stage-experience",
     "familyId": "journey-lifecycle",
-    "variantId": "continuous-path-with-stage-experience-band",
-    "silhouette": "subject-led-curved-path-over-continuous-stage-band",
+    "variantId": "rising-path-with-companion-experience-notes",
+    "silhouette": "subject-led-rising-path-with-alternating-companion-notes",
     "supportedBaseRelations": ["sequence"],
     "supportedPurposeKeys": ["explain_user_journey", "explain_lifecycle"],
     "itemCount": { "min": 3, "preferred": [4, 5], "max": 6 },
@@ -76,10 +76,10 @@
   "layoutExpansion": {
     "mode": "responsive",
     "range": "一个对象、3–6 个连续阶段，每阶段一块动态体验文字区",
-    "rule": "按阶段数重算路径节点、连接线、列宽和文字区；阶段内容由共享文字排版系统在一个连续区域内组织"
+    "rule": "按阶段数重算上扬路径、节点和随行注释块；注释块在路径两侧错落跟随，每块由共享文字排版系统在一个连续区域内组织"
   },
   "componentModel": {
-    "fixed": ["同一对象贯穿全程", "路径由对象节点出发并在最后阶段后以箭头结束", "上层连续旅程路径", "下层连续第二维信息带", "阶段节点与信息列严格对应"],
+    "fixed": ["同一对象贯穿全程", "路径由左下向右上持续抬升并在最后阶段后以箭头结束", "浅灰随行注释块", "注释块的白色呼吸边", "阶段节点与注释块严格对应"],
     "variable": ["旅程对象", "3–6 个阶段", "阶段名称", "各阶段的行为、触点、感受、目标、痛点或指标内容"]
   },
   "fieldContract": {
@@ -89,8 +89,8 @@
       { "field": "stages[].title", "meaning": "阶段名称" },
       { "field": "stages[].content", "meaning": "该阶段的一块动态文字内容，可为标题正文、正文、分点或指标" }
     ],
-    "generated": ["阶段编号、曲线路径、节点位置、连接线和列宽由程序按阶段数计算"],
-    "fixed": ["所有阶段属于同一对象", "每阶段只有一个连续 TextRegion", "阶段标题与对应内容共列"],
+    "generated": ["阶段编号、上扬路径、节点位置、注释块位置和连接线由程序按阶段数计算"],
+    "fixed": ["所有阶段属于同一对象", "每阶段只有一个连续 TextRegion", "阶段标题与对应注释块绑定", "注释块采用浅灰底与清楚白边"],
     "unavailable": ["多角色泳道", "条件分支", "循环", "纯时间刻度", "没有第二维信息的普通步骤"]
   },
   "spatialContract": {

@@ -1,1 +1,6 @@
-import {getCandidate} from "../_round4-components/components.mjs";const c=getCandidate("layered-crosscut-rails-004");export const visualComponent=c.visualComponent;export const previewParameters=Object.freeze({layers:[{title:"交互层",body:"稿件输入、预览审核与结果交付"},{title:"编排层",body:"内容导演与视觉导演协同决策"},{title:"运行层",body:"结构解析、布局求解与原生编译"},{title:"资产层",body:"Shell、Composition 与组件"},{title:"来源层",body:"PPT 模板、HTML 参考与媒体"}],rails:["设计规范","质量约束","版本治理"]});export const resolvePreviewParameters=c.resolvePreviewParameters;
+import { getCandidate } from "../_review-refresh/components.mjs?v=2";
+
+const candidate = getCandidate("layered-crosscut-rails-004");
+export const visualComponent = candidate.visualComponent;
+export const previewParameters = candidate.previewParameters;
+export const resolvePreviewParameters = candidate.resolvePreviewParameters;
