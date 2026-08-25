@@ -263,7 +263,8 @@ body{position:relative!important;background:#fff!important}
 [data-slot-role="icon"]:hover{outline-color:rgba(255,255,255,.98);background-color:rgba(255,255,255,.22)!important}
 [data-slot-id]::after{content:attr(data-slot-role) " · " attr(data-slot-field);position:absolute;left:3px;bottom:3px;z-index:100;display:none;max-width:calc(100% - 6px);padding:3px 6px;overflow:hidden;border-radius:4px;color:#fff;background:rgba(23,32,51,.86);font:12px/1.25 "Microsoft YaHei",sans-serif;white-space:nowrap;text-overflow:ellipsis;pointer-events:none}
 [data-slot-id]:hover::after{display:block}
-.ppagent-slot-visual-layer{position:absolute;inset:0;z-index:999;pointer-events:none}
+.ppagent-slot-visual-layer{position:absolute;inset:0;z-index:999;opacity:0;pointer-events:none;transition:opacity .15s ease}
+.ppagent-component-scale:hover .ppagent-slot-visual-layer,.ppagent-component-scale:focus-within .ppagent-slot-visual-layer{opacity:1}
 .ppagent-slot-visual-box{position:absolute;pointer-events:auto;border:1px dashed rgba(35,117,220,.22);background:rgba(61,145,238,.025);transition:border-color .12s ease,background-color .12s ease}
 .ppagent-slot-visual-box.icon{border-color:rgba(118,80,189,.28)}
 .ppagent-slot-visual-box.text-flow{border:3px dashed rgba(35,117,220,.96);background:rgba(61,145,238,.09);box-shadow:0 0 0 2px rgba(255,255,255,.86)}

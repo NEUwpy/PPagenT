@@ -430,6 +430,8 @@ export function createModelDirectorProvider({
           structuredDataGuidance: [
             "原稿明确包含一个总目标、2–4 项策略且每项策略各自绑定 1–2 个指标时，使用 structuredData.type=goal-strategy-metrics；items 只保存策略，strategies 用相同 id 绑定指标。",
             "原稿明确同时包含 3–5 个阶段、2–4 个角色以及 3–8 项职责分配时，使用 structuredData.type=role-stage；items 保存职责任务，assignments 用相同 id 绑定真实 stageId 与 roleId；允许空单元格，不得为了填满矩阵虚构任务。",
+            "原稿明确存在 2–5 个同级集合，且明确给出所有集合共同成立的部分时，使用 structuredData.type=multi-set-common-intersection；items 只保存各集合，setIds 逐项引用，shared 保存原稿中的共同部分。没有明确共同部分时不得使用，也不得自行补写交集。",
+            "原稿明确区分 2–4 个内部主体和 2–4 个外部伙伴，并明确给出至少一条内部关系、一条外部关系和一条跨域关系时，使用 structuredData.type=internal-external-ecosystem；items 只保存真实主体，internalIds 与 externalIds 分组引用，core 保存原稿中的共同价值，links 只记录原稿明确支持的主体连接。不得为了画网状图补写关系。",
           ],
           structuralGuides,
           structuralHints: effectiveStructuralHints,

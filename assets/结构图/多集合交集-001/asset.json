@@ -1,0 +1,82 @@
+{
+  "id": "containment-multi-set-intersection-001",
+  "name": "多集合共同交集",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": { "file": "PPT源/【蓝色版】年终日常汇报PPT模板-狗哥PPT出品.pptx", "slides": [125] },
+  "references": [{ "file": "PPT源/【蓝色版】年终日常汇报PPT模板-狗哥PPT出品.pptx", "slides": [61], "role": "圆形系统的层次与平衡", "adopted": "采用同色系圆形的体量差、稳定中轴与克制层次，不照搬数据看板、箭头或图表" }],
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "containment",
+    "structureGroupId": "containment-multi-set-intersection",
+    "familyId": "containment-set-relations",
+    "variantId": "multi-set-common-core",
+    "silhouette": "two-to-five-overlapping-circles-with-common-core",
+    "supportedBaseRelations": ["intersection"],
+    "supportedPurposeKeys": ["explain_shared_scope"],
+    "itemCount": { "min": 2, "preferred": [3, 4], "max": 5 },
+    "stateContract": { "resolver": "itemCount", "states": [2, 3, 4, 5], "previewDefault": 3 },
+    "contentContract": { "itemRole": "semantic-node", "points": "optional", "ordered": false, "requiresStructuredDataType": "multi-set-common-intersection" },
+    "textFlow": { "profile": "text-region-layout-library", "scope": "per-contiguous-region" },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "semantic": { "sameLevel": true },
+        "relationTraits": {},
+        "density": ["low", "medium"]
+      },
+      "fallback": { "tooMany": "split" }
+    },
+    "review": {
+      "entry": "review.mjs", "visualIntent": "visual-intent.md", "componentExport": "visualComponent", "previewParametersExport": "previewParameters", "previewResolverExport": "resolvePreviewParameters", "implementation": "asset-specific-html",
+      "goldenState": { "selection": { "itemCount": 3, "supportMode": "显示" } },
+      "controls": [
+        { "key": "itemCount", "label": "集合数量", "values": [2, 3, 4, 5], "default": 3 },
+        { "key": "supportMode", "label": "灰色说明区", "values": ["显示", "关闭"], "default": "显示" }
+      ]
+    }
+  },
+  "layoutExpansion": { "mode": "responsive", "range": "2–5 个同级集合与一个所有集合共同成立的核心；灰色支持文字区可整体关闭", "rule": "按集合数分别重排圆形、标记和标题；圆内只保留集合名称，说明与分点由外围灰色 TextRegion 承载" },
+  "componentModel": {
+    "fixed": ["所有集合等权", "共同部分位于全部集合交叠的视觉中心", "圆形构图保持中轴与镜像平衡"],
+    "variable": ["2–5 个集合", "集合名称", "各集合的可选说明与分点", "共同部分的标题与可选说明", "灰色说明区显示或关闭"]
+  },
+  "fieldContract": {
+    "editable": [
+      { "field": "items[].title", "meaning": "集合名称，显示在圆内" },
+      { "field": "items[].body", "meaning": "集合的可选说明，显示在灰色文字区" },
+      { "field": "items[].points[]", "meaning": "集合的可选分点，显示在灰色文字区" },
+      { "field": "shared.title", "meaning": "所有集合共同部分" },
+      { "field": "shared.body", "meaning": "共同部分的可选说明" },
+      { "field": "showSupport", "meaning": "是否显示外围灰色文字区" }
+    ],
+    "generated": ["A–E 集合标记由程序按集合数量生成", "圆形与说明区位置由程序按 2–5 项重新编排"],
+    "fixed": ["共同内容只能位于中心共同区域", "每个集合等权且均与中心相连", "每个灰色连续文字承载面只声明一个 TextRegion"],
+    "unavailable": ["需要逐一解释两两交集", "完全包含关系", "先后流程", "上下级关系", "六个及以上集合"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "resizeMode": "natural",
+    "minFontSize": 12,
+    "safePadding": 12,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "2–5 个集合；圆内集合标题建议 4–8 字，外围灰色区支持正文或分点，关闭灰色区时只保留集合名称与共同核心",
+  "semanticContract": "2–5 个同级集合各自拥有独立含义，同时存在一个需要明确强调的全体共同部分",
+  "doNotUseWhen": "只有普通并列而没有交集语义、任意两两交集也需要分别解释、一个集合完全包含另一个集合，或内容本质是对比、流程或层级",
+  "review": "用户确认 2–5 集合重排、三集合上下灰色承载区、统一随形白边、外围说明区开关及共同核心表达；Native/PPT 与东北大学 Skin 同步落地，可进入正式生成线"
+}

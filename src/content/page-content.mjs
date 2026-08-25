@@ -54,6 +54,38 @@ export function validateStructuredDataReferences(pageContent) {
     compareIdSets(structured.evidenceIds, itemIds, "structuredData.evidenceIds", issues);
   }
 
+  if (structured.type === "multi-set-common-intersection") {
+    compareIdSets(structured.setIds, itemIds, "structuredData.setIds", issues);
+  }
+
+  if (structured.type === "internal-external-ecosystem") {
+    const assigned = [...structured.internalIds, ...structured.externalIds];
+    const duplicates = duplicateValues(assigned);
+    if (duplicates.length) issues.push({ field: "structuredData.internalIds/externalIds", code: "DUPLICATE_REFERENCE", ids: duplicates });
+    compareIdSets(assigned, itemIds, "structuredData.internalIds/externalIds", issues);
+    const actorSet = new Set(assigned);
+    const internalSet = new Set(structured.internalIds);
+    const externalSet = new Set(structured.externalIds);
+    const signatures = structured.links.map((link) => [link.from, link.to].sort().join("::"));
+    const duplicateLinks = duplicateValues(signatures);
+    if (duplicateLinks.length) issues.push({ field: "structuredData.links", code: "DUPLICATE_NETWORK_LINK", ids: duplicateLinks });
+    structured.links.forEach((link, index) => {
+      if (!actorSet.has(link.from)) issues.push({ field: `structuredData.links[${index}].from`, code: "UNKNOWN_ITEM_REFERENCE", ids: [link.from] });
+      if (!actorSet.has(link.to)) issues.push({ field: `structuredData.links[${index}].to`, code: "UNKNOWN_ITEM_REFERENCE", ids: [link.to] });
+      if (link.from === link.to) issues.push({ field: `structuredData.links[${index}]`, code: "SELF_NETWORK_LINK", ids: [link.from] });
+    });
+    const validLinks = structured.links.filter((link) => actorSet.has(link.from) && actorSet.has(link.to) && link.from !== link.to);
+    if (!validLinks.some((link) => internalSet.has(link.from) && internalSet.has(link.to))) {
+      issues.push({ field: "structuredData.links", code: "MISSING_INTERNAL_NETWORK_LINK" });
+    }
+    if (!validLinks.some((link) => externalSet.has(link.from) && externalSet.has(link.to))) {
+      issues.push({ field: "structuredData.links", code: "MISSING_EXTERNAL_NETWORK_LINK" });
+    }
+    if (!validLinks.some((link) => (internalSet.has(link.from) && externalSet.has(link.to)) || (externalSet.has(link.from) && internalSet.has(link.to)))) {
+      issues.push({ field: "structuredData.links", code: "MISSING_CROSS_DOMAIN_NETWORK_LINK" });
+    }
+  }
+
   if (structured.type === "branching-decision") {
     const branchIds = structured.branches.map((branch) => branch.id);
     const duplicates = duplicateValues(branchIds);
@@ -225,6 +257,16 @@ const LOGIC_INTENT_DEFAULTS = Object.freeze({
     baseRelation: "composite",
     converging: true,
   },
+  containment: {
+    purposeKey: "explain_shared_scope",
+    baseRelation: "intersection",
+    sameLevel: true,
+  },
+  network: {
+    purposeKey: "explain_internal_external_ecosystem",
+    baseRelation: "network",
+    sameLevel: true,
+  },
   "goal-alignment": {
     purposeKey: "align_goal_and_metrics",
     baseRelation: "goal-alignment",
@@ -256,6 +298,8 @@ function inferredLogicId(pageContent) {
   if (pageContent.structuredData?.type === "problem-solution") return "problem-solution";
   if (pageContent.structuredData?.type === "problem-method-result") return "problem-solution";
   if (pageContent.structuredData?.type === "argument-evidence") return "argument-evidence";
+  if (pageContent.structuredData?.type === "multi-set-common-intersection") return "containment";
+  if (pageContent.structuredData?.type === "internal-external-ecosystem") return "network";
   if (pageContent.structuredData?.type === "branching-decision") return "branching";
   if (pageContent.structuredData?.type === "goal-strategy-metrics") return "goal-alignment";
   if (pageContent.structuredData?.type === "role-stage") return "role-stage";

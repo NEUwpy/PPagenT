@@ -41,6 +41,8 @@ import {
   visualComponent as matrixVisualComponent,
 } from "../assets/结构图/矩阵象限-001/review.mjs";
 import { mapPageContent as mapMatrixPageContent } from "../assets/结构图/矩阵象限-001/runtime.mjs";
+import { mapPageContent as mapIntersectionPageContent } from "../assets/结构图/多集合交集-001/runtime.mjs";
+import { mapPageContent as mapNetworkPageContent } from "../assets/结构图/关系生态网络-001/runtime.mjs";
 
 const root = path.resolve(import.meta.dirname, "..");
 
@@ -94,7 +96,7 @@ test("看板只把资产专属 HTML 计入迁移完成度", async () => {
   )));
   assert.equal(cycle?.builderExport, "");
   assert.equal(cycle?.componentInitialSelection.stepCount, 4);
-  assert.equal(data.summary.htmlDesignComponents, 18);
+  assert.equal(data.summary.htmlDesignComponents, 20);
   assert.match(cycle?.previewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.componentPreviewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.nativeStatePreviewUrl ?? "", /[?&]v=\d+/);
@@ -136,8 +138,12 @@ test("鱼骨、问题方案结果与矩阵象限均进入正式生成线", async
 
 test("预览使用版本化长期缓存，主数据仍保持实时", async () => {
   const server = await fs.readFile(path.join(root, "src/tools/serve-logic-dashboard.mjs"), "utf8");
+  const dataCollector = await fs.readFile(path.join(root, "src/tools/logic-dashboard-data.mjs"), "utf8");
   const template = await fs.readFile(path.join(root, "src/tools/templates/logic-dashboard.html"), "utf8");
   assert.match(server, /max-age=31536000, immutable/);
+  assert.match(server, /\.ppagent-slot-visual-layer\{[^}]*opacity:0/);
+  assert.match(server, /\.ppagent-component-scale:hover \.ppagent-slot-visual-layer/);
+  assert.match(dataCollector, /src", "tools", "serve-logic-dashboard\.mjs/);
   assert.match(server, /fetch\("\/api\/dashboard-data", \{ cache: "no-store" \}\)/);
   assert.match(server, /reviewModule\[resolved\.record\.componentExport\] \?\? runtimeModule\[resolved\.record\.componentExport\]/);
   assert.match(server, /pathToFileURL\(htmlRuntimePath\)\.href\}\?dashboard=\$\{htmlRuntimeStat\.mtimeMs\}/);
@@ -145,6 +151,9 @@ test("预览使用版本化长期缓存，主数据仍保持实时", async () =>
   assert.match(server, /html-component-theme\.mjs/);
   assert.match(server, /await runRenderer\(pptxPath, outputDir\)/);
   assert.match(template, /asset\.nativeStatePreviewUrl[\s\S]*selectionQuery\(asset\.componentInitialSelection/);
+  assert.doesNotMatch(template, /overlay=0/);
+  assert.match(template, /class="coverage-tier-grid" id="approval-grid"/);
+  assert.match(template, /class="coverage-card available"[\s\S]*coverage-count">待审批/);
   assert.doesNotMatch(template, /preloadAssetEvidence/);
 });
 
@@ -179,7 +188,8 @@ test("作废的旧 Logic 不再出现在核心库或正式生成候选中", asyn
     "matrix-quadrant-priority-001", "argument-evidence-conclusion-001",
     "problem-method-result-001", "progression-spectrum-focus-001",
     "branching-decision-routes-001", "goal-alignment-strategy-metrics-001",
-    "role-stage-collaboration-001",
+    "role-stage-collaboration-001", "containment-multi-set-intersection-001",
+    "network-internal-external-ecosystem-001",
   ]));
 });
 
@@ -187,7 +197,7 @@ test("Logic 能力地图保留空槽位，只把合格资产填入对应位置",
   const data = await collectLogicDashboardData(root);
   assert.equal(data.logics.length, 20);
   assert.equal(data.summary.logicSlots, 20);
-  assert.equal(data.summary.logicFilled, 16);
+  assert.equal(data.summary.logicFilled, 18);
 
   const cycle = data.logics.find((logic) => logic.id === "cycle");
   assert.deepEqual(cycle?.assetIds, ["cycle-loop-001"]);
@@ -236,6 +246,10 @@ test("Logic 能力地图保留空槽位，只把合格资产填入对应位置",
   const branching = data.logics.find((logic) => logic.id === "branching");
   assert.deepEqual(branching?.assetIds, ["branching-decision-routes-001"]);
   assert.equal(branching?.status, "available");
+
+  const network = data.logics.find((logic) => logic.id === "network");
+  assert.deepEqual(network?.assetIds, ["network-internal-external-ecosystem-001"]);
+  assert.equal(network?.status, "available");
 });
 
 test("鱼骨归因由同一组件扩散类别与因素状态，并由 Mapper 绑定结果和原因", () => {
@@ -460,6 +474,65 @@ test("看板从当前 HTML State 自动生成容器表并复用到 Native 和 Sk
   assert.match(template, /连续复合文字区域/);
   assert.match(template, /text-flow-part/);
   assert.match(template, /slot\.textFlow\?\.parts/);
+});
+
+test("多集合共同交集只在原稿明确集合与共同部分时映射正式载荷", () => {
+  const content = {
+    pageId: "intersection-page",
+    title: "可靠生成的共同基础",
+    items: [
+      { id: "need", title: "用户需要", body: "真实场景中的核心诉求", points: ["高频需求"] },
+      { id: "standard", title: "组织规范", body: "统一标准与可靠边界", points: ["格式规范"] },
+      { id: "expression", title: "表达能力", body: "清晰呈现与灵活适配", points: ["逻辑清楚"] },
+    ],
+    structuredData: {
+      type: "multi-set-common-intersection",
+      setIds: ["need", "standard", "expression"],
+      shared: { title: "可靠生成", body: "共同价值" },
+    },
+  };
+  const payload = mapIntersectionPageContent(content, { intentId: "intersection-intent" }, null, {
+    componentItemIds: content.items.map((item) => item.id),
+  });
+  assert.equal(payload.assetId, "containment-multi-set-intersection-001");
+  assert.deepEqual(payload.parameters.items.map((item) => item.key), content.structuredData.setIds);
+  assert.deepEqual(payload.parameters.shared, content.structuredData.shared);
+  assert.equal(payload.parameters.showSupport, true);
+  assert.equal(payload.mappings.length, 3);
+});
+
+test("内外协同生态网络只按显式分组与关系映射正式载荷", () => {
+  const content = {
+    pageId: "ecosystem-page",
+    title: "内外协同生态",
+    items: [
+      { id: "governance", title: "组织治理", body: "" },
+      { id: "data", title: "数据能力", body: "" },
+      { id: "university", title: "高校伙伴", body: "" },
+      { id: "industry", title: "行业企业", body: "" },
+    ],
+    structuredData: {
+      type: "internal-external-ecosystem",
+      internalTitle: "内部协同",
+      externalTitle: "外部生态",
+      internalIds: ["governance", "data"],
+      externalIds: ["university", "industry"],
+      core: { title: "共建共享", body: "资源与能力" },
+      links: [
+        { from: "governance", to: "data" },
+        { from: "university", to: "industry" },
+        { from: "data", to: "university" },
+      ],
+    },
+  };
+  const payload = mapNetworkPageContent(content, { intentId: "network-intent" }, null, {
+    componentItemIds: content.items.map((item) => item.id),
+  });
+  assert.equal(payload.assetId, "network-internal-external-ecosystem-001");
+  assert.deepEqual(payload.parameters.internal.nodes.map((item) => item.key), ["governance", "data"]);
+  assert.deepEqual(payload.parameters.external.nodes.map((item) => item.key), ["university", "industry"]);
+  assert.deepEqual(payload.parameters.links, content.structuredData.links);
+  assert.equal(payload.mappings.length, 4);
 });
 
 test("等权并列卡片由同一 HTML 组件重新排布 3–5 项状态", () => {

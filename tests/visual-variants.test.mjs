@@ -39,6 +39,7 @@ test("正式结构候选来自当前核心 HTML 资产包", async () => {
     "branching-decision-routes-001",
     "causal-fishbone-attribution-001",
     "comparison-dual-verdict-001",
+    "containment-multi-set-intersection-001",
     "convergence-funnel-001",
     "convergence-simple-funnel-001",
     "cycle-loop-001",
@@ -47,6 +48,7 @@ test("正式结构候选来自当前核心 HTML 资产包", async () => {
     "hub-radial-001",
     "layered-architecture-001",
     "matrix-quadrant-priority-001",
+    "network-internal-external-ecosystem-001",
     "parallel-equal-cards-001",
     "problem-method-result-001",
     "problem-solution-outcome-001",
@@ -109,6 +111,26 @@ test("正式结构候选来自当前核心 HTML 资产包", async () => {
   );
   assert.deepEqual(
     queryVisualVariants(structural, {
+      logicId: "containment",
+      baseRelation: "intersection",
+      purposeKey: "explain_shared_scope",
+      itemCount: 3,
+      structuredDataType: "multi-set-common-intersection",
+    }).map((variant) => variant.structureGroupId),
+    ["containment-multi-set-intersection"],
+  );
+  assert.deepEqual(
+    queryVisualVariants(structural, {
+      logicId: "network",
+      baseRelation: "network",
+      purposeKey: "explain_internal_external_ecosystem",
+      itemCount: 6,
+      structuredDataType: "internal-external-ecosystem",
+    }).map((variant) => variant.structureGroupId),
+    ["network-internal-external-ecosystem"],
+  );
+  assert.deepEqual(
+    queryVisualVariants(structural, {
       logicId: "comparison", baseRelation: "comparison", purposeKey: "compare_options",
       itemCount: 2, pointCounts: [0, 0],
     }),
@@ -130,6 +152,7 @@ test("运行时登记当前核心结构资产", async () => {
     "branching-decision-routes-001",
     "causal-fishbone-attribution-001",
     "comparison-dual-verdict-001",
+    "containment-multi-set-intersection-001",
     "convergence-funnel-001",
     "convergence-simple-funnel-001",
     "cycle-loop-001",
@@ -138,6 +161,7 @@ test("运行时登记当前核心结构资产", async () => {
     "hub-radial-001",
     "layered-architecture-001",
     "matrix-quadrant-priority-001",
+    "network-internal-external-ecosystem-001",
     "parallel-equal-cards-001",
     "problem-method-result-001",
     "problem-solution-outcome-001",
@@ -150,6 +174,7 @@ test("运行时登记当前核心结构资产", async () => {
     "branching-decision-routes-001:single-decision-fanout",
     "causal-fishbone-attribution-001:fishbone-attribution",
     "comparison-dual-verdict-001:dual-verdict-mirror",
+    "containment-multi-set-intersection-001:multi-set-common-core",
     "convergence-funnel-001:staged-input-content-funnel",
     "convergence-simple-funnel-001:input-steps-only",
     "cycle-loop-001:default",
@@ -158,6 +183,7 @@ test("运行时登记当前核心结构资产", async () => {
     "hub-radial-001:balanced-orbit-anchor",
     "layered-architecture-001:curved-frustum-stack",
     "matrix-quadrant-priority-001:axis-bubble-quadrant",
+    "network-internal-external-ecosystem-001:dual-domain-network-with-shared-core",
     "parallel-equal-cards-001:equal-floating-cards",
     "problem-method-result-001:research-1n1",
     "problem-solution-outcome-001:paired-convergence",

@@ -61,4 +61,21 @@ test("结构化数据只接受完整且唯一的 PageContent 引用", () => {
   const branchingIssues = validateStructuredDataReferences(branching);
   assert.ok(branchingIssues.some((issue) => issue.code === "UNKNOWN_ITEM_REFERENCE"));
   assert.ok(branchingIssues.some((issue) => issue.code === "UNASSIGNED_ITEM"));
+
+  const network = {
+    items: [item("internal-a"), item("internal-b"), item("external-a"), item("external-b")],
+    structuredData: {
+      type: "internal-external-ecosystem",
+      internalIds: ["internal-a", "internal-b"],
+      externalIds: ["external-a", "external-b"],
+      links: [
+        { from: "internal-a", to: "internal-b" },
+        { from: "external-a", to: "external-b" },
+        { from: "internal-b", to: "external-a" },
+      ],
+    },
+  };
+  assert.deepEqual(validateStructuredDataReferences(network), []);
+  network.structuredData.links.push({ from: "missing", to: "external-b" });
+  assert.ok(validateStructuredDataReferences(network).some((issue) => issue.code === "UNKNOWN_ITEM_REFERENCE"));
 });

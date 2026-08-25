@@ -1,0 +1,111 @@
+{
+  "id": "journey-stage-experience-001",
+  "name": "阶段体验旅程",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "pending-review",
+  "source": {
+    "file": "PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
+    "slides": [68]
+  },
+  "references": [
+    {
+      "file": "PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
+      "slides": [169, 145],
+      "role": "生命周期阶段与完整用户路径",
+      "adopted": "吸收同一对象跨阶段推进、阶段标题稳定对齐与认知到复购的完整路径，不复制表格式业务内容"
+    }
+  ],
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "review.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "logicId": "journey",
+    "structureGroupId": "journey-stage-experience",
+    "familyId": "journey-lifecycle",
+    "variantId": "continuous-path-with-stage-experience-band",
+    "silhouette": "subject-led-curved-path-over-continuous-stage-band",
+    "supportedBaseRelations": ["sequence"],
+    "supportedPurposeKeys": ["explain_user_journey", "explain_lifecycle"],
+    "itemCount": { "min": 3, "preferred": [4, 5], "max": 6 },
+    "stateContract": {
+      "resolver": "stageCount",
+      "states": [3, 4, 5, 6],
+      "previewDefault": 4
+    },
+    "mediaContract": { "mode": "no-image" },
+    "contentContract": {
+      "itemRole": "semantic-stage",
+      "points": "optional",
+      "ordered": true,
+      "requiresStructuredDataType": "journey-stage-experience"
+    },
+    "textFlow": { "profile": "text-region-layout-library", "scope": "per-contiguous-region" },
+    "contract": {
+      "abstractionLevel": "composite",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "semantic": { "ordered": true, "sameSubject": true },
+        "relationTraits": { "temporal": true, "dimensions": 2, "secondaryDimension": "experience" },
+        "density": ["low", "medium"]
+      },
+      "fallback": {
+        "semanticMismatch": "reject",
+        "tooFew": "sequence-layout",
+        "tooMany": "split",
+        "tooLong": "switch-layout"
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": { "selection": { "stageCount": 4 } },
+      "controls": [
+        { "key": "stageCount", "label": "旅程阶段数", "values": [3, 4, 5, 6], "default": 4 }
+      ]
+    }
+  },
+  "coverageDelta": "补齐现有顺序流程只能表达先后步骤、不能明确同一对象在各阶段的行为、触点、感受或目标等第二维信息的缺口。",
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "一个对象、3–6 个连续阶段，每阶段一块动态体验文字区",
+    "rule": "按阶段数重算路径节点、连接线、列宽和文字区；阶段内容由共享文字排版系统在一个连续区域内组织"
+  },
+  "componentModel": {
+    "fixed": ["同一对象贯穿全程", "路径由对象节点出发并在最后阶段后以箭头结束", "上层连续旅程路径", "下层连续第二维信息带", "阶段节点与信息列严格对应"],
+    "variable": ["旅程对象", "3–6 个阶段", "阶段名称", "各阶段的行为、触点、感受、目标、痛点或指标内容"]
+  },
+  "fieldContract": {
+    "editable": [
+      { "field": "subject.title", "meaning": "正在经历旅程的对象" },
+      { "field": "subject.body", "meaning": "对象或旅程的可选短说明" },
+      { "field": "stages[].title", "meaning": "阶段名称" },
+      { "field": "stages[].content", "meaning": "该阶段的一块动态文字内容，可为标题正文、正文、分点或指标" }
+    ],
+    "generated": ["阶段编号、曲线路径、节点位置、连接线和列宽由程序按阶段数计算"],
+    "fixed": ["所有阶段属于同一对象", "每阶段只有一个连续 TextRegion", "阶段标题与对应内容共列"],
+    "unavailable": ["多角色泳道", "条件分支", "循环", "纯时间刻度", "没有第二维信息的普通步骤"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "resizeMode": "natural",
+    "minFontSize": 14,
+    "safePadding": 12,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "3–6 个阶段；阶段名建议 2–6 字；每阶段的单一动态文字区支持标题正文、正文、2–3 个分点或单指标说明",
+  "semanticContract": "同一个对象沿 3–6 个阶段持续变化，并且每个阶段都需要呈现行为、触点、感受、目标、痛点或指标等第二维信息",
+  "doNotUseWhen": "内容只有先后步骤而没有同一对象和第二维阶段信息，或存在多角色职责、分支、循环和复杂网络关系",
+  "review": "等待用户审核 HTML 黄金状态与 3–6 阶段扩散；未生成 Native/PPT，未进入正式生成线"
+}

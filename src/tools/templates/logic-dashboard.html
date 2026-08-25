@@ -388,7 +388,7 @@
 
     <section class="section" id="approval">
       <div class="section-head"><div><h2>待确认 Structure Group</h2><p>这里直接读取核心库内尚未用户确认的资产的实时 HTML。它们不会被正式生成线调用；点击卡片可查看来源、视觉意图和当前建设阶段。</p></div><span class="pill pending" id="approval-count"></span></div>
-      <div class="logic-grid" id="approval-grid"></div>
+      <div class="coverage-tier-grid" id="approval-grid"></div>
     </section>
 
     <section class="section" id="capabilities">
@@ -489,7 +489,8 @@
       if (!liveMode) return '<div class="logic-preview"><span>静态快照不加载实时 HTML<br>双击 PPA看板.exe 查看资产设计</span></div>';
       if (!asset.componentPreviewAvailable || !asset.componentPreviewUrl) return '<div class="logic-preview"><span>该资产尚未形成可查看的 HTML 黄金状态</span></div>';
       const query = selectionQuery(asset.componentInitialSelection ?? {});
-      return '<div class="logic-preview"><iframe loading="lazy" tabindex="-1" src="' + esc(asset.componentPreviewUrl + '&' + query) + '" title="' + esc(asset.name) + ' 的实时 HTML 黄金状态"></iframe></div>';
+      const previewUrl = asset.componentPreviewUrl + (query ? '&' + query : '');
+      return '<div class="logic-preview"><iframe loading="lazy" tabindex="-1" src="' + esc(previewUrl) + '" title="' + esc(asset.name) + ' 的纯净 HTML 黄金状态"></iframe></div>';
     }
 
     function selectionQuery(selection) {
@@ -847,8 +848,10 @@
         return;
       }
       grid.innerHTML = DATA.pendingApproval.map((asset) => {
-        const tags = [asset.category, ...asset.baseRelations].filter(Boolean).slice(0, 4);
-        return '<button class="logic-card" data-asset-key="' + esc(asset.library + ":" + asset.id) + '">' + pendingApprovalPreviewMarkup(asset) + '<div>' + intakeStatusPill(asset) + '</div><h3>' + esc(asset.name) + '</h3><div class="logic-id">' + esc(asset.logicId) + ' → ' + esc(asset.structureGroupId) + '</div><div class="range">' + esc(range(asset)) + '</div><div class="tags">' + tags.map((tag) => pill(tag)).join("") + '</div></button>';
+        const topic = DATA.logics.find((item) => item.id === asset.logicId);
+        const logicName = topic?.name ?? asset.logicId;
+        const logicDescription = topic?.description ?? asset.semanticContract ?? '';
+        return '<article class="coverage-card available" role="button" tabindex="0" data-asset-key="' + esc(asset.library + ':' + asset.id) + '"><div class="coverage-card-head"><div><strong>' + esc(logicName) + '</strong><span class="coverage-description">' + esc(logicDescription) + '</span></div><span class="coverage-count">待审批</span></div>' + pendingApprovalPreviewMarkup(asset) + '<span class="coverage-asset-name">' + esc(asset.name) + '</span><span class="coverage-asset-meta">' + esc(asset.structureGroupId) + '</span><span class="coverage-status">' + esc(range(asset)) + ' · 点击查看详情</span></article>';
       }).join("");
     }
 

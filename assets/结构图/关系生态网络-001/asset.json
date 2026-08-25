@@ -1,0 +1,143 @@
+{
+  "id": "network-internal-external-ecosystem-001",
+  "name": "内外协同生态网络",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
+    "slides": [58]
+  },
+  "references": [
+    {
+      "file": "PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
+      "slides": [90],
+      "role": "共同协同核心与内外交换",
+      "adopted": "保留双侧主体围绕共同核心交换资源和价值的概念，不采用其三层供应链架构"
+    },
+    {
+      "file": "PPT源/狗哥蓝色-精美逻辑图PPT模板.pptx",
+      "slides": [38],
+      "role": "双域色彩与柔和环形",
+      "adopted": "吸收深蓝和青蓝双域、柔和环形、白色呼吸带和克制光晕，不使用重复卡片和底部流程"
+    }
+  ],
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "network",
+    "structureGroupId": "network-internal-external-ecosystem",
+    "familyId": "network-ecosystem",
+    "variantId": "dual-domain-network-with-shared-core",
+    "silhouette": "overlapping-internal-external-orbits-with-networked-nodes",
+    "supportedBaseRelations": ["network", "many-to-many"],
+    "supportedPurposeKeys": ["explain_internal_external_ecosystem"],
+    "itemCount": { "min": 4, "preferred": [6], "max": 8 },
+    "stateContract": {
+      "resolver": "internalExternalNodeCount",
+      "dimensions": {
+        "internalCount": [2, 3, 4],
+        "externalCount": [2, 3, 4]
+      },
+      "previewDefault": { "internalCount": 3, "externalCount": 3 }
+    },
+    "mediaContract": { "mode": "no-image" },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "forbidden",
+      "ordered": false,
+      "explicitRelationsRequired": true,
+      "requiresStructuredDataType": "internal-external-ecosystem"
+    },
+    "textFlow": { "profile": "text-region-layout-library", "scope": "per-contiguous-region" },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "semantic": { "ordered": false, "sameLevel": true },
+        "relationTraits": { "dimensions": 2, "secondaryDimension": "domain" },
+        "density": ["low", "medium"]
+      },
+      "fallback": {
+        "semanticMismatch": "reject",
+        "tooFew": "simple-layout",
+        "tooMany": "split",
+        "tooLong": "switch-layout"
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": { "selection": { "internalCount": 3, "externalCount": 3 } },
+      "controls": [
+        { "key": "internalCount", "label": "内部主体数", "values": [2, 3, 4], "default": 3 },
+        { "key": "externalCount", "label": "外部伙伴数", "values": [2, 3, 4], "default": 3 }
+      ]
+    }
+  },
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "内部 2–4 个主体，外部 2–4 个伙伴，两侧数量可不相等",
+    "rule": "两侧分别按当前数量重新计算半环角度、节点间距和连线边界锚点；不从 4×4 状态删除节点留空"
+  },
+  "componentModel": {
+    "fixed": [
+      "左侧内部协同域、右侧外部生态域与中央共同核心",
+      "节点之间存在同域互联和跨域连接，不退化成普通中心辐射",
+      "共同水平中轴、左深蓝右青蓝和环形白色净距"
+    ],
+    "variable": [
+      "共同核心标题与说明",
+      "内外两个生态域名称",
+      "每侧 2–4 个主体的标题和可选短说明",
+      "3–12 条显式主体关系"
+    ]
+  },
+  "fieldContract": {
+    "editable": [
+      { "field": "core.title", "meaning": "两个生态域共同达成的核心价值" },
+      { "field": "core.body", "meaning": "核心价值的可选短说明" },
+      { "field": "internal.title", "meaning": "左侧内部生态域名称" },
+      { "field": "external.title", "meaning": "右侧外部生态域名称" },
+      { "field": "internal.nodes[]", "meaning": "2–4 个内部主体" },
+      { "field": "external.nodes[]", "meaning": "2–4 个外部伙伴" },
+      { "field": "links[]", "meaning": "明确存在的同域或跨域关系，不由程序臆测" }
+    ],
+    "generated": [
+      "程序按内外主体数重算半环位置",
+      "程序从节点真实边界计算连线端点"
+    ],
+    "fixed": [
+      "共同核心居中并同时落在两个生态域内",
+      "连线先于节点绘制，不穿过节点文字",
+      "每个连续节点文字面只声明一个 TextRegion"
+    ],
+    "unavailable": ["时间顺序", "上下级", "全包含关系", "每条连线的长文标注", "九个及以上主体"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "resizeMode": "natural",
+    "minFontSize": 14,
+    "safePadding": 12,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "内部 2–4 个主体，外部 2–4 个伙伴，3–12 条明确关系；节点容量由实际 TextRegion 和统一字号派生",
+  "semanticContract": "多个内部主体和外部伙伴在一个共同价值下形成同域互联与跨域协作的多对多生态网络",
+  "doNotUseWhen": "只是一个中心主题与外围要点、具有明确层级或顺序、没有明确主体关系，或需要对每条连线作详细说明",
+  "review": "用户确认 HTML 黄金状态、内外生态语义、节点多对多连线及 2–4 项双轴扩散；完成 Native/PPT 与东北大学 Skin 落地后进入正式生成线"
+}

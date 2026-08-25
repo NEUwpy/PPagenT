@@ -38,8 +38,9 @@ import {
 } from "../assets/结构图/问题方法结果-001/review.mjs";
 import {
   previewParameters as intersectionPreviewParameters,
+  resolvePreviewParameters as resolveIntersectionPreviewParameters,
   visualComponent as intersectionVisualComponent,
-} from "../assets/结构图/双集合交集-001/review.mjs";
+} from "../assets/结构图/多集合交集-001/review.mjs";
 import { northeasternUniversityTheme } from "../src/runtime/skins/northeastern-university-theme.mjs";
 
 const assetDir = path.resolve(import.meta.dirname, "../assets/结构图/循环闭环-001");
@@ -48,7 +49,7 @@ const matrixAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/�
 const sequenceAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/顺序流程-001");
 const argumentAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/论点证据结论-001");
 const problemMethodAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/问题方法结果-001");
-const intersectionAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/双集合交集-001");
+const intersectionAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/多集合交集-001");
 
 test("Native 编译把浏览器 computed px 原样交给 Artifact Tool，避免重复 pt 换算", () => {
   let compiledTextStyle = null;
@@ -307,28 +308,80 @@ test("HTML → PPT 对不能可靠映射的效果和遗漏 SVG 采用 fail-close
   }
 });
 
-test("TextFlow 用同一交集结构自动适配标题正文、仅标题和仅正文", async () => {
+test("集合共同交集在同一 Structure Group 内重排 2–5 个集合，并可关闭外围灰色说明区", async () => {
   const targetFrame = { left: 55, top: 166, width: 1170, height: 492 };
-  const modes = [
-    structuredClone(intersectionPreviewParameters),
-    Object.fromEntries(Object.entries(intersectionPreviewParameters).map(([key, value]) => [key, { title: value.title, body: "" }])),
-    Object.fromEntries(Object.entries(intersectionPreviewParameters).map(([key, value]) => [key, { title: "", body: value.body }])),
-  ];
   try {
-    const compositions = [];
-    for (const parameters of modes) {
-      const tree = await resolveHtmlComponent({
-        component: intersectionVisualComponent,
-        parameters,
-        assetDir: intersectionAssetDir,
-        targetFrame,
-      });
-      assert.equal(tree.slots.filter((slot) => slot.role === "item-content").length, 3);
-      assert.ok(tree.slots.filter((slot) => slot.role === "item-content")
-        .every((slot) => slot.capacity.basis === "dynamic-text-flow"));
-      compositions.push([...new Set(tree.textFlows.map((flow) => flow.composition))]);
+    for (const itemCount of [2, 3, 4, 5]) {
+      for (const supportMode of ["显示", "关闭"]) {
+        const parameters = resolveIntersectionPreviewParameters(intersectionPreviewParameters, { itemCount, supportMode });
+        const tree = await resolveHtmlComponent({
+          component: intersectionVisualComponent,
+          parameters,
+          assetDir: intersectionAssetDir,
+          targetFrame,
+        });
+        assert.equal(tree.nodes.filter((node) => node.name?.startsWith("set-circle-")).length, itemCount);
+        assert.equal(tree.slots.filter((slot) => slot.role === "item-title").length, itemCount);
+        const supportSlots = tree.slots.filter((slot) => slot.role === "text-region" && String(slot.regionId).startsWith("support"));
+        const expectedSupportSlotCount = supportMode === "关闭" ? 0 : (itemCount === 3 ? 4 : itemCount);
+        assert.equal(supportSlots.length, expectedSupportSlotCount);
+        assert.equal(tree.slots.filter((slot) => slot.role === "text-region" && slot.regionId === "shared").length, 1);
+        assert.deepEqual(tree.textLayoutOverflows, []);
+        if (itemCount === 2 && supportMode === "显示") {
+          assert.ok(supportSlots.every((slot) => slot.frame.width === 326 && slot.frame.height === 192));
+        }
+        if (itemCount === 3 && supportMode === "显示") {
+          assert.deepEqual(supportSlots.map((slot) => slot.id).sort(), [
+            "set-expression-support",
+            "set-need-support-left",
+            "set-need-support-right",
+            "set-standard-support",
+          ]);
+          const topSlots = supportSlots.filter((slot) => slot.itemId === "need");
+          assert.equal(topSlots.length, 2);
+          assert.equal(topSlots[0].frame.top, topSlots[1].frame.top);
+          assert.equal(topSlots[0].frame.width, topSlots[1].frame.width);
+          assert.equal(topSlots[0].frame.height, topSlots[1].frame.height);
+          assert.equal(topSlots[0].frame.top, 14);
+          assert.equal(topSlots[0].frame.height, 188);
+          assert.ok(supportSlots.filter((slot) => slot.itemId !== "need")
+            .every((slot) => slot.frame.top === 258 && slot.frame.height === 204));
+          const panelNames = tree.nodes.filter((node) => node.name?.startsWith("intersection-panel-")).map((node) => node.name);
+          assert.equal(panelNames.length, 4);
+          assert.equal(new Set(panelNames).size, 4);
+          assert.deepEqual(tree.nodes.find((node) => node.name === "intersection-three-top-frame")?.frame, {
+            left: 0, top: 0, width: 1170, height: 216, rotation: 0,
+          });
+        }
+        if (itemCount === 4) {
+          assert.equal(tree.nodes.find((node) => node.name === "shared-title")?.style.fontSizePt, 20);
+        }
+        const circles = tree.nodes.filter((node) => node.name?.startsWith("set-circle-"));
+        assert.ok(circles.every((node) => node.frame.left >= 0 && node.frame.top >= 0));
+        assert.ok(circles.every((node) => node.frame.left + node.frame.width <= targetFrame.width && node.frame.top + node.frame.height <= targetFrame.height));
+        const masks = tree.nodes.filter((node) => node.name?.startsWith("support-arc-mask-"));
+        const expectedMaskIndexes = supportMode === "关闭"
+          ? []
+          : Array.from({ length: itemCount }, (_, index) => index);
+        assert.equal(masks.length, expectedMaskIndexes.length);
+        if (supportMode === "显示") {
+          for (const index of expectedMaskIndexes) {
+            const maskFrame = masks.find((node) => node.name === `support-arc-mask-${index}`)?.frame;
+            const circleFrame = circles.find((node) => node.name === `set-circle-${index}`)?.frame;
+            assert.ok(maskFrame && circleFrame);
+            assert.equal(maskFrame.left, circleFrame.left - 14);
+            assert.equal(maskFrame.top, circleFrame.top - 14);
+            assert.equal(maskFrame.width, circleFrame.width + 28);
+            assert.equal(maskFrame.height, circleFrame.height + 28);
+          }
+        }
+        if (supportMode === "关闭") {
+          assert.deepEqual(tree.nodes.find((node) => node.name === "intersection-native-base")?.frame, {
+            left: 0, top: 0, width: 1170, height: 492, rotation: 0,
+          });
+        }
+      }
     }
-    assert.deepEqual(compositions, [["title-body"], ["title-only"], ["body-only"]]);
   } finally {
     await closeHtmlComponentRuntime();
   }

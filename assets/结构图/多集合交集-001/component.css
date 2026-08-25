@@ -1,0 +1,35 @@
+* { box-sizing: border-box; }
+:root { font-family: var(--ppagent-font-body, "Microsoft YaHei"), "Noto Sans CJK SC", sans-serif; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { background: #fff; }
+.intersection-review { position: relative; width: 1170px; height: 492px; overflow: hidden; background: #fff; color: #666; }
+.intersection-support-layer { position: absolute; inset: 0; z-index: 1; }
+.intersection-native-base { position: absolute; inset: 0; background: #fff; }
+.intersection-three-top-frame { position: absolute; left: 0; top: 0; width: 1170px; height: 216px; background: #f1f1f1; }
+.intersection-note { position: absolute; left: var(--left); top: var(--top); width: var(--width); height: var(--height); padding: 14px 24px; overflow: hidden; background: #f1f1f1; }
+.intersection-note[data-side="left"] { padding-right: 150px; }
+.intersection-note[data-side="right"] { padding-left: 150px; }
+.intersection-copy-region { display: block; width: 100%; height: 100%; margin: 0; overflow: hidden; }
+.intersection-copy-region .ppagent-text-primitive--body,
+.intersection-copy-region .ppagent-text-list__item { color: #666; line-height: 1.25; }
+.intersection-contour-mask { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.intersection-contour-mask > i { position: absolute; border-radius: 50%; background: #fff; }
+.intersection-diagram { position: absolute; left: 305px; top: 0; z-index: 3; width: 560px; height: 492px; overflow: visible; }
+.set-shadow, .set-circle, .set-ring { position: absolute; border-radius: 50%; }
+.set-shadow { z-index: 0; background: rgba(29, 69, 126, 0.13); box-shadow: 0 10px 22px rgba(29, 69, 126, 0.10); }
+.set-circle { z-index: 1; border: 2px solid rgba(255, 255, 255, 0.82); }
+.set-ring { z-index: 2; border: 1px solid rgba(255, 255, 255, 0.40); }
+.set-marker { position: absolute; z-index: 4; display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid rgba(255, 255, 255, 0.72); border-radius: 50%; background: rgba(255, 255, 255, 0.16); color: #fff; font-size: var(--ppagent-component-meta-size, 14pt); font-weight: 700; line-height: 1; text-align: center; }
+.set-title { position: absolute; z-index: 4; display: flex; align-items: center; justify-content: center; overflow: hidden; color: #fff; font-size: var(--ppagent-component-item-title-size, 18pt); font-weight: 700; line-height: 1.24; text-align: center; }
+.intersection-review[data-item-count="4"] .set-title,
+.intersection-review[data-item-count="5"] .set-title { font-size: 14pt; }
+.shared-halo, .shared-core, .shared-ring { position: absolute; border-radius: 50%; }
+.shared-halo { z-index: 5; border: 2px solid rgba(255, 255, 255, 0.74); background: rgba(255, 255, 255, 0.34); }
+.shared-core { z-index: 6; border: 2px solid #b8d0ec; background: #fff; box-shadow: 0 8px 18px rgba(29, 73, 132, 0.16); }
+.shared-ring { z-index: 7; border: 1px solid #d4e3f3; }
+.shared-content { position: absolute; z-index: 8; display: block; overflow: hidden; --ppagent-text-layout-gap: 6px; }
+.shared-content .ppagent-text-primitive--heading { color: #29558f; font-size: var(--ppagent-component-heading-size, 16pt); white-space: nowrap; }
+.shared-content .ppagent-text-primitive--body { color: #687c96; font-size: var(--ppagent-component-body-size, 14pt); line-height: 1.25; white-space: nowrap; }
+.intersection-review[data-item-count="4"] .shared-content .ppagent-text-primitive--heading { font-size: 20pt; }
+.intersection-review[data-item-count="5"] .shared-content .ppagent-text-primitive--heading { font-size: var(--ppagent-component-body-size, 14pt); }
+.intersection-review[data-item-count="5"] .shared-content .ppagent-text-primitive--body { font-size: var(--ppagent-component-annotation-size, 12pt); }

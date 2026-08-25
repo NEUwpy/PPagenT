@@ -121,6 +121,53 @@
         {
           "type": "object",
           "additionalProperties": false,
+          "required": ["type", "setIds", "shared"],
+          "properties": {
+            "type": { "const": "multi-set-common-intersection" },
+            "setIds": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 5,
+              "items": { "type": "string", "minLength": 1 },
+              "uniqueItems": true
+            },
+            "shared": { "$ref": "#/$defs/structuredEndpoint" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "internalTitle", "externalTitle", "internalIds", "externalIds", "core", "links"],
+          "properties": {
+            "type": { "const": "internal-external-ecosystem" },
+            "internalTitle": { "type": "string", "minLength": 1, "maxLength": 10 },
+            "externalTitle": { "type": "string", "minLength": 1, "maxLength": 10 },
+            "internalIds": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 4,
+              "items": { "type": "string", "minLength": 1 },
+              "uniqueItems": true
+            },
+            "externalIds": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 4,
+              "items": { "type": "string", "minLength": 1 },
+              "uniqueItems": true
+            },
+            "core": { "$ref": "#/$defs/structuredEndpoint" },
+            "links": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 12,
+              "items": { "$ref": "#/$defs/networkLink" }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
           "required": ["type", "context", "decision", "branches"],
           "properties": {
             "type": { "const": "branching-decision" },
@@ -205,6 +252,15 @@
       "properties": {
         "title": { "type": "string", "minLength": 1, "maxLength": 24 },
         "body": { "type": "string", "maxLength": 36 }
+      }
+    },
+    "networkLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to"],
+      "properties": {
+        "from": { "type": "string", "minLength": 1 },
+        "to": { "type": "string", "minLength": 1 }
       }
     },
     "branchingDecisionNode": {

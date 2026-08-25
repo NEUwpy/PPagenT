@@ -154,6 +154,7 @@ async function normalizeRecord(entry, coverageTags, purposeMap, coreIds, root) {
     path.join(root, "src", "visual-runtime", "html-component-theme.mjs"),
     path.join(root, "src", "runtime", "skins", "northeastern-university-theme.mjs"),
     path.join(root, "src", "runtime", "skins", "northeastern-university.mjs"),
+    path.join(root, "src", "tools", "serve-logic-dashboard.mjs"),
     intakeSlotContractPath,
   ]);
   const componentControls = (reviewRuntime?.controls ?? []).filter((control) => (
