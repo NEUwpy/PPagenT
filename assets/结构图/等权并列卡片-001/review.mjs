@@ -26,6 +26,9 @@ function normalizeParameters(parameters) {
     throw new Error("等权并列卡片支持 3–5 个并列项目");
   }
   return {
+    textLayoutBindings: parameters?.textLayoutBindings && typeof parameters.textLayoutBindings === "object"
+      ? { ...parameters.textLayoutBindings }
+      : {},
     items: parameters.items.map((item, index) => {
       const title = text(item?.title);
       const body = text(item?.body);
@@ -37,6 +40,10 @@ function normalizeParameters(parameters) {
       return { key, title, body, points, iconQuery, icon };
     }),
   };
+}
+
+function selectedLayout(bindings, regionId, fallback) {
+  return text(bindings?.[regionId]) || fallback;
 }
 
 function markerMarkup(item, index) {
@@ -51,18 +58,20 @@ function markerMarkup(item, index) {
     <div class="parallel-icon-slot" data-slot-id="${escapeHtml(item.key)}-icon" data-slot-role="icon" data-slot-field="items[${index}].iconKey" data-slot-item-id="${escapeHtml(item.key)}" data-slot-content-type="icon" data-slot-provider="tabler-icons" data-slot-required="true">${iconMarkup}</div>`;
 }
 
-function cardMarkup(item, index) {
+function cardMarkup(item, index, textLayoutBindings) {
+  const titleRegionId = `${item.key}-title-region`;
+  const contentRegionId = `${item.key}-content-region`;
   return `<article class="parallel-card" data-key="${escapeHtml(item.key)}" data-has-title="${item.title ? "true" : "false"}" data-has-support="${item.body || item.points.length ? "true" : "false"}">
     <div class="parallel-card-underlay" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="parallel-card-underlay-${index}"></div>
     <div class="parallel-card-surface" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="parallel-card-surface-${index}"></div>
     <div class="parallel-card-accent" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="parallel-card-accent-${index}"></div>
     <div class="parallel-marker">${markerMarkup(item, index)}</div>
     ${textRegionMarkup({
-      id: `${item.key}-title-region`,
+      id: titleRegionId,
       field: `items[${index}].title`,
       itemId: item.key,
       regionId: "title",
-      layoutId: "statement-flow",
+      layoutId: selectedLayout(textLayoutBindings, titleRegionId, "statement-flow"),
       compatibleLayoutIds: ["statement-flow", "heading-content-flow"],
       content: { title: item.title },
       className: "parallel-title-region",
@@ -73,11 +82,11 @@ function cardMarkup(item, index) {
     })}
     ${item.title && (item.body || item.points.length) ? `<div class="parallel-content-rule" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="parallel-rule-${index}"></div>` : ""}
     ${textRegionMarkup({
-      id: `${item.key}-content-region`,
+      id: contentRegionId,
       field: `items[${index}].support`,
       itemId: item.key,
       regionId: "content",
-      layoutId: "heading-content-flow",
+      layoutId: selectedLayout(textLayoutBindings, contentRegionId, "heading-content-flow"),
       compatibleLayoutIds: ["statement-flow", "heading-content-flow", "structured-list-flow", "metric-content-flow"],
       content: { body: item.body, points: item.points },
       className: "parallel-body-region",
@@ -98,7 +107,7 @@ export const visualComponent = Object.freeze({
   renderMarkup(parameters) {
     const model = normalizeParameters(parameters);
     return `<section class="parallel-review" data-ppt-root data-item-count="${model.items.length}">
-      <div class="parallel-grid">${model.items.map((item, index) => cardMarkup(item, index)).join("")}</div>
+      <div class="parallel-grid">${model.items.map((item, index) => cardMarkup(item, index, model.textLayoutBindings)).join("")}</div>
     </section>`;
   },
 });

@@ -484,7 +484,7 @@ export function createModelDirectorProvider({
       );
       const routingOutput = await visualComposition.generateJson({
         role: "PPagenT 视觉导演",
-        task: "内容导演已经为每页确定 Logic，你不得重新分类或跨 Logic 选择。像调用 Skills 一样，只在该页合法候选中选择具体 Structure Group，并决定核心短标签、语义图标查询和必要的局部内容细化。candidateId 必须逐字复制该页 candidates 中的值。结构性 Logic 没有兼容 Structure Group 时，程序会在调用你之前返回 asset-gap，绝不会提供正文兜底；只有内容导演明确选择 editorial 的页面才正常使用正文 Composition。centerLabel 是页面核心概念的 2–8 字中文短标签，所有页面都填写；若结构没有中心标签槽，程序会忽略。若选中 mediaMode=semantic-icon 的候选，必须为每个 item 输出一个简短英文 icon query，sourceItemId 使用该 item.id；其他候选 iconQueries=[]。若 contentReadiness=needs-semantic-refinement，只在原文明确支持缺失分点时列出对应 refinementItemIds，否则改选其他合法结构；不得改变 Logic。不要输出坐标、CompositionPlan 或重复正文；程序会在选择后读取 Structure Group 表单并完成确定性绑定。按 pages 原顺序逐页输出且不得遗漏。",
+        task: "内容导演已经为每页确定 Logic，你不得重新分类或跨 Logic 选择。像调用 Skills 一样，只在该页合法候选中选择具体 Structure Group，并决定核心短标签、语义图标查询、TextRegion 的组合排版以及必要的局部内容细化。candidateId 必须逐字复制该页 candidates 中的值。选定候选若披露 textRegions，只能从各 Region 的 compatibleLayoutIds 中选择；同级重复 Region 只按 regionKey 选择一次，程序会扩展到每个实际区域。没有文字区域或默认排版已经合适时，textLayoutChoices=[]。结构性 Logic 没有兼容 Structure Group 时，程序会在调用你之前返回 asset-gap，绝不会提供正文兜底；只有内容导演明确选择 editorial 的页面才正常使用正文 Composition。centerLabel 是页面核心概念的 2–8 字中文短标签，所有页面都填写；若结构没有中心标签槽，程序会忽略。若选中 mediaMode=semantic-icon 的候选，必须为每个 item 输出一个简短英文 icon query，sourceItemId 使用该 item.id；其他候选 iconQueries=[]。若 contentReadiness=needs-semantic-refinement，只在原文明确支持缺失分点时列出对应 refinementItemIds，否则改选其他合法结构；不得改变 Logic。不要输出坐标、字号、间距、CompositionPlan、HTML/CSS 或重复正文；程序会读取 Structure Group 表单、形成 TextBinding，并用确定性排版器完成适配。按 pages 原顺序逐页输出且不得遗漏。",
         context: {
           pages: compactPages,
           previousFeedback: input.previousResolution?.feedback ?? [],

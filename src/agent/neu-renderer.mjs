@@ -67,7 +67,7 @@ export function createNortheasternUniversityRenderer({ root = process.cwd(), sou
       ].includes(decision.selectedAssetId) ? null : `slide-${String(index + 1).padStart(2, "0")}`)
       .filter(Boolean);
     const qualityAudit = await auditRenderedDeck(qaDir, {
-      minimumFontSize: 16,
+      minimumFontSize: 12,
       tolerance: 0.5,
       requiredQaSlides,
     });

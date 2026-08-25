@@ -17,6 +17,8 @@ import {
 import { northeasternUniversitySkin } from "../runtime/skins/northeastern-university-contract.mjs";
 import { validatePageCompositionTextFit } from "../render/page-composition-fit.mjs";
 import { resolveTextContainerContract } from "../visual-runtime/text-container-contract.mjs";
+import { matchTextLayoutsForPayload } from "../visual-runtime/typography-matcher.mjs";
+import { loadCoreAssetPackage } from "../runtime/core-asset-packages.mjs";
 
 function publicComposition(layout) {
   return {
@@ -45,7 +47,10 @@ function textFlowPlanningState(textFlow, itemCount) {
 export function slotCapabilitiesForVariant(variant, itemCount) {
   const capacity = variant.textCapacity ?? {};
   const textFlow = variant.textFlow ?? null;
-  const itemTextFlow = textFlow?.scope === "per-item" ? textFlow : null;
+  // Legacy TextFlow assets may declare per-contiguous-region while still
+  // exposing per-item fixed slots. Generated planning states are the measured
+  // source of truth regardless of that historical scope label.
+  const itemTextFlow = textFlow?.planningStates?.length ? textFlow : null;
   const flowPlanning = textFlowPlanningState(itemTextFlow, itemCount);
   const container = resolveTextContainerContract(capacity, variant.contentContract ?? {});
   const textSlots = [];
@@ -142,6 +147,7 @@ function publicVariant(variant, contract, compositions, itemCount, contentReadin
     contentContract: variant.contentContract ?? null,
     mediaContract: variant.mediaContract ?? null,
     slotContract: variant.slotContract ?? null,
+    textRegions: variant.textRegions ?? [],
     slotCapabilities: slotCapabilitiesForVariant(variant, itemCount),
     renderer: variant.renderer,
     fallbackBody: variant.fallbackBody,
@@ -155,6 +161,74 @@ export function computeCapacityDensity(stats) {
   if (stats.itemCount <= 4 && estimatedTotal <= 70 && stats.maxItemChars <= 32) return "low";
   if (stats.itemCount <= 13 && estimatedTotal <= 180 && stats.maxItemChars <= 72) return "medium";
   return "high";
+}
+
+function slotSourceValue(content, slot, item, pointIndex = null) {
+  if (slot.sourceField === "page-title") return content.title ?? "";
+  if (slot.sourceField === "title") return item?.title ?? "";
+  if (slot.sourceField === "body") return item?.body ?? "";
+  if (slot.sourceField === "support") {
+    return [item?.body, ...(item?.points ?? []).map((point) => point?.text ?? point)]
+      .map((value) => String(value ?? "").trim())
+      .filter(Boolean)
+      .join("\n");
+  }
+  if (slot.sourceField === "point") return item?.points?.[pointIndex]?.text ?? item?.points?.[pointIndex] ?? "";
+  return "";
+}
+
+function fixedSlotLimitsForItem(slot, item) {
+  const capacities = slot.compositionCapacities;
+  if (slot.fitMode !== "dynamic-text-flow" || !capacities || !item) return slot;
+  const hasTitle = Boolean(String(item.title ?? "").trim());
+  const hasBody = Boolean(String(item.body ?? "").trim() || item.points?.length);
+  if (slot.role === "item-title" && hasTitle && !hasBody) {
+    return { ...slot, maxChars: capacities.titleOnly?.maxChars, maxLines: capacities.titleOnly?.maxLines };
+  }
+  if (slot.role === "item-body" && !hasTitle && hasBody) {
+    return { ...slot, maxChars: capacities.bodyOnly?.maxChars, maxLines: capacities.bodyOnly?.maxLines };
+  }
+  return slot;
+}
+
+/**
+ * Reject legacy fixed-slot candidates that cannot hold the source verbatim.
+ * The visual director is a selector, not a copy editor, so an impossible
+ * fixed slot must never be offered and retried as if the model could repair it.
+ */
+export function fixedSlotSourceCapacityIssues(content, candidate) {
+  if (candidate.textRegions?.length) return [];
+  const slots = candidate.slotCapabilities?.textSlots ?? [];
+  const issues = [];
+  const check = (slot, item = null, pointIndex = null) => {
+    const value = String(slotSourceValue(content, slot, item, pointIndex)).trim();
+    if (!value) return;
+    const limits = fixedSlotLimitsForItem(slot, item);
+    const actualChars = Array.from(value).length;
+    const actualLines = value.split(/\r?\n/).length;
+    if ((Number.isFinite(limits.maxChars) && actualChars > limits.maxChars)
+      || (Number.isFinite(limits.maxLines) && actualLines > limits.maxLines)) {
+      issues.push({
+        role: slot.role,
+        sourceItemId: item?.id ?? null,
+        sourceField: slot.sourceField,
+        actualChars,
+        actualLines,
+        maxChars: limits.maxChars ?? null,
+        maxLines: limits.maxLines ?? null,
+      });
+    }
+  };
+  for (const slot of slots) {
+    // centerLabel is the one explicitly authored short label; it is not a
+    // verbatim source slot and therefore is not filtered here.
+    if (slot.scope === "page" && slot.role !== "center-title") check(slot);
+    else if (slot.scope === "per-item") content.items.forEach((item) => check(slot, item));
+    else if (slot.scope === "per-point") {
+      content.items.forEach((item) => (item.points ?? []).forEach((_point, pointIndex) => check(slot, item, pointIndex)));
+    }
+  }
+  return issues;
 }
 
 export async function buildVisualCandidateSets({ root = process.cwd(), pageContents, pageIntents }) {
@@ -211,6 +285,16 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
       enableFallback: false,
     });
     const structuralCandidates = [];
+    const capacityRejections = [];
+    const appendStructuralCandidate = (variant, contract, compositions, contentReadiness = "ready") => {
+      const exposed = publicVariant(variant, contract, compositions, intent.structure.itemCount, contentReadiness);
+      const issues = fixedSlotSourceCapacityIssues(pageContents[index], exposed);
+      if (issues.length) {
+        capacityRejections.push({ assetId: exposed.assetId, variantId: exposed.variantId, issues });
+        return;
+      }
+      structuralCandidates.push(exposed);
+    };
     for (const candidate of semantic.candidates) {
       const detailedVariants = await Promise.all(
         (variantsByAsset.get(candidate.assetId) ?? [])
@@ -239,19 +323,17 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
       }).filter((variant) => variant.contentContract?.points === "required");
       const metadata = metadataById.get(candidate.assetId);
       const compositions = compositionCandidatesForAsset(layouts, candidate.assetId, metadata);
-      structuralCandidates.push(...compatible.map((variant) => publicVariant(
+      compatible.forEach((variant) => appendStructuralCandidate(
         variant,
         contractsById.get(candidate.assetId),
         compositions,
-        intent.structure.itemCount,
-      )));
-      structuralCandidates.push(...provisional.map((variant) => publicVariant(
+      ));
+      provisional.forEach((variant) => appendStructuralCandidate(
         variant,
         contractsById.get(candidate.assetId),
         compositions,
-        intent.structure.itemCount,
         "needs-semantic-refinement",
-      )));
+      ));
     }
     const isEditorial = pageContents[index].logicIntent?.logicId === "editorial" || intent.baseRelation === "none";
     if (!structuralCandidates.length && !isEditorial) {
@@ -268,6 +350,7 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
           reason: "当前核心资产库没有语义与容量均兼容的 Structure Group",
         },
         semanticRejections: semantic.rejections,
+        capacityRejections,
       };
     }
     const bodyVariant = variants.find((variant) => variant.renderer === "skin" && variant.fallbackBody);
@@ -285,6 +368,7 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
       candidates: [...structuralCandidates, bodyCandidate],
       capacityDensity,
       semanticRejections: semantic.rejections,
+      capacityRejections,
     };
   }));
 }
@@ -1015,7 +1099,7 @@ export async function resolveVisualPlan({
     rejections: [],
     resolutionPlan: null,
   }));
-  const renderPayloads = await Promise.all(layoutDecisions.map(async (decision, index) => {
+  const payloadResults = await Promise.all(layoutDecisions.map(async (decision, index) => {
     const compositionPage = normalizedCompositionPlan.pages[index];
     const metadata = metadataById.get(decision.selectedAssetId);
     const componentContent = metadata?.kind === "component"
@@ -1029,8 +1113,25 @@ export async function resolveVisualPlan({
       normalizedVisualPlan.pages[index],
     );
     if (metadata?.kind === "component") payload.parameters.visualVariantId = decision.selectedVariantId;
-    return payload;
+    if (metadata?.kind !== "component") return { payload, typographyWarnings: [] };
+    const assetPackage = await loadCoreAssetPackage(decision.selectedAssetId, root);
+    if (!assetPackage.generatedSlotContract) return { payload, typographyWarnings: [] };
+    const typography = matchTextLayoutsForPayload({
+      slotContract: assetPackage.generatedSlotContract,
+      parameters: payload.parameters,
+      choices: compositionPage.textLayoutChoices ?? [],
+    });
+    if (Object.keys(typography.bindings).length) {
+      payload.parameters.textLayoutBindings = typography.bindings;
+    }
+    return { payload, typographyWarnings: typography.warnings };
   }));
+  const renderPayloads = payloadResults.map((result) => result.payload);
+  payloadResults.forEach((result, index) => {
+    for (const warning of result.typographyWarnings) {
+      warnings.push({ pageId: pageContents[index].pageId, ...warning });
+    }
+  });
   return {
     status: "accepted",
     feedback: [],

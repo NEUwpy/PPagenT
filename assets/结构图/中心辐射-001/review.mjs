@@ -1,11 +1,7 @@
 import { resolveTablerIcon, tablerIconSvgMarkup } from "../../../src/icons/tabler-icon-resolver.mjs";
-import { textFlowMarkup } from "../../../src/visual-runtime/text-flow.mjs";
+import { textRegionMarkup } from "../../../src/visual-runtime/text-layout-library.mjs";
 
 const DESIGN_FRAME = Object.freeze({ width: 1170, height: 492 });
-const BODY_LIMITS = Object.freeze({ 3: 30, 4: 28, 5: 26, 6: 24, 7: 22, 8: 20 });
-const CENTER_TITLE_LIMIT = 10;
-const CENTER_BODY_LIMIT = 18;
-const ITEM_TITLE_LIMIT = 8;
 
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>"']/g, (character) => ({
@@ -15,10 +11,6 @@ function escapeHtml(value) {
 
 function text(value) {
   return String(value ?? "").trim();
-}
-
-function charCount(value) {
-  return Array.from(value).length;
 }
 
 function normalizeParameters(parameters) {
@@ -34,16 +26,15 @@ function normalizeParameters(parameters) {
     body: text(parameters.center.body),
   };
   if (!center.title) throw new Error("center.title 不能为空");
-  if (charCount(center.title) > CENTER_TITLE_LIMIT) throw new Error(`center.title 超过 ${CENTER_TITLE_LIMIT} 字`);
-  if (charCount(center.body) > CENTER_BODY_LIMIT) throw new Error(`center.body 超过 ${CENTER_BODY_LIMIT} 字`);
   return {
+    textLayoutBindings: parameters?.textLayoutBindings && typeof parameters.textLayoutBindings === "object"
+      ? { ...parameters.textLayoutBindings }
+      : {},
     center,
     items: parameters.items.map((item, index) => {
       const title = text(item?.title);
       const body = text(item?.body);
-      if (!title) throw new Error(`items[${index}].title 不能为空`);
-      if (charCount(title) > ITEM_TITLE_LIMIT) throw new Error(`items[${index}].title 超过 ${ITEM_TITLE_LIMIT} 字`);
-      if (charCount(body) > BODY_LIMITS[itemCount]) throw new Error(`items[${index}].body 超过 ${BODY_LIMITS[itemCount]} 字`);
+      if (!title && !body) throw new Error(`items[${index}] 至少需要 title 或 body`);
       const key = text(item?.key) || `item-${index + 1}`;
       const iconQuery = text(item?.iconQuery);
       const icon = resolveTablerIcon(text(item?.iconKey) || iconQuery);
@@ -94,15 +85,30 @@ function iconMarkup(item, index) {
     : `<i class="hub-icon-fallback" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="hub-icon-fallback-${index}"></i>`;
 }
 
-function itemMarkup(item, placement) {
+function itemMarkup(item, placement, textLayoutBindings) {
   const { index, side, left, top, width, height } = placement;
+  const regionId = `${item.key}-content-region`;
   return `<article class="hub-item hub-item-${side}" style="--left:${left}px;--top:${top}px;--width:${width}px;--height:${height}px" data-item-index="${index}">
     <div class="hub-item-underlay" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="hub-item-underlay-${index}"></div>
     <div class="hub-item-surface" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="hub-item-surface-${index}"></div>
     <div class="hub-icon-halo" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="hub-icon-halo-${index}"></div>
     <div class="hub-icon-core" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="hub-icon-core-${index}"></div>
     <div class="hub-icon-slot" data-slot-id="${escapeHtml(item.key)}-icon" data-slot-role="icon" data-slot-field="items[${index}].iconKey" data-slot-item-id="${escapeHtml(item.key)}" data-slot-content-type="icon" data-slot-provider="tabler-icons" data-slot-required="true">${iconMarkup(item, index)}</div>
-    ${textFlowMarkup({ id: `${item.key}-content`, field: `items[${index}]`, itemId: item.key, title: item.title, body: item.body, className: `hub-item-content hub-item-content-${side}`, align: side === "right" ? "right" : "left", names: { title: `hub-item-title-${index}`, body: `hub-item-body-${index}` } })}
+    ${textRegionMarkup({
+      id: regionId,
+      field: `items[${index}]`,
+      itemId: item.key,
+      regionId: "content",
+      layoutId: text(textLayoutBindings?.[regionId]) || "heading-content-flow",
+      compatibleLayoutIds: ["heading-content-flow", "statement-flow"],
+      content: { title: item.title, body: item.body },
+      className: `hub-item-content hub-item-content-${side}`,
+      align: side === "right" ? "right" : "left",
+      valign: "middle",
+      density: "compact",
+      required: true,
+      names: { heading: `hub-item-title-${index}`, body: `hub-item-body-${index}` },
+    })}
   </article>`;
 }
 
@@ -111,17 +117,7 @@ export const visualComponent = Object.freeze({
   schemaVersion: 1,
   designFrame: DESIGN_FRAME,
   cssFile: "component.css",
-  textFlow: Object.freeze({ profile: "standard", scope: "per-contiguous-region" }),
-  textCapacity: Object.freeze({
-    maxCenterChars: CENTER_TITLE_LIMIT,
-    maxCenterLines: 1,
-    maxCenterBodyChars: CENTER_BODY_LIMIT,
-    maxCenterBodyLines: 2,
-    maxItemTitleChars: ITEM_TITLE_LIMIT,
-    maxItemTitleLines: 1,
-    maxItemBodyCharsByState: BODY_LIMITS,
-    maxItemBodyLines: 2,
-  }),
+  textFlow: Object.freeze({ profile: "text-region-layout-library", scope: "per-contiguous-region" }),
   renderMarkup(parameters) {
     const model = normalizeParameters(parameters);
     const itemCount = model.items.length;
@@ -132,8 +128,22 @@ export const visualComponent = Object.freeze({
       <div class="hub-center-halo" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="hub-center-halo"></div>
       <div class="hub-center-ring" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="hub-center-ring"></div>
       <div class="hub-center-core" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="hub-center-core"></div>
-      ${textFlowMarkup({ id: "center-content", field: "center", itemId: "center", title: model.center.title, body: model.center.body, className: "hub-center-content", align: "center", names: { title: "hub-center-title", body: "hub-center-body" } })}
-      ${positions.map((position) => itemMarkup(model.items[position.index], position)).join("")}
+      ${textRegionMarkup({
+        id: "center-content-region",
+        field: "center",
+        itemId: "center",
+        regionId: "center",
+        layoutId: text(model.textLayoutBindings?.["center-content-region"]) || "heading-content-flow",
+        compatibleLayoutIds: ["heading-content-flow", "statement-flow"],
+        content: model.center,
+        className: "hub-center-content",
+        align: "center",
+        valign: "middle",
+        density: "compact",
+        required: true,
+        names: { heading: "hub-center-title", body: "hub-center-body" },
+      })}
+      ${positions.map((position) => itemMarkup(model.items[position.index], position, model.textLayoutBindings)).join("")}
     </section>`;
   },
 });

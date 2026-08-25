@@ -5,7 +5,10 @@ import { pathToFileURL } from "node:url";
 import { northeasternUniversityTheme } from "../runtime/skins/northeastern-university-theme.mjs";
 import { closeHtmlComponentRuntime, resolveHtmlComponent } from "../visual-runtime/html-component-runtime.mjs";
 import { estimateTextFlowPlanningCapacity } from "../visual-runtime/text-flow.mjs";
-import { compatibleTextLayouts } from "../visual-runtime/text-layout-library.mjs";
+import {
+  canonicalTextLayoutId,
+  compatibleTextLayouts,
+} from "../visual-runtime/text-layout-library.mjs";
 
 const projectRoot = path.resolve(process.argv[2] ?? path.resolve(import.meta.dirname, "../.."));
 const assetFilter = new Set((process.argv.find((value) => value.startsWith("--assets="))?.slice("--assets=".length) ?? "")
@@ -119,15 +122,19 @@ function stateDiagnostics(slots, minimumFontSize) {
 
 function compactSlot(slot) {
   const textLayout = slot.contentType === "text-region" && slot.textLayout ? (() => {
+    const defaultId = canonicalTextLayoutId(slot.textLayout.defaultId || slot.textLayout.id);
     const computed = compatibleTextLayouts({
       width: slot.frame?.width,
       height: slot.frame?.height,
       contentRoles: slot.textLayout.contentRoles,
     });
-    const declared = slot.textLayout.compatible?.length ? slot.textLayout.compatible : computed;
+    const declared = (slot.textLayout.compatible?.length ? slot.textLayout.compatible : computed)
+      .map(canonicalTextLayoutId);
     return {
       ...slot.textLayout,
-      compatible: declared.filter((layoutId) => computed.includes(layoutId)),
+      id: canonicalTextLayoutId(slot.textLayout.id),
+      defaultId,
+      compatible: [...new Set(declared.filter((layoutId) => layoutId === defaultId || computed.includes(layoutId)))],
     };
   })() : null;
   return {

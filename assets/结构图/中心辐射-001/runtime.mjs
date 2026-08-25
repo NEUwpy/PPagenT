@@ -24,8 +24,8 @@ export function mapPageContent(content, intent, _decision, compositionPage, visu
   return renderPayload(intent, "hub-radial-001", {
     title: content.title,
     center: {
-      title: centerTitleBinding?.text ?? content.title,
-      body: centerTitleBinding ? "" : (content.notes ?? ""),
+      title: visualPage?.centerLabel ?? centerTitleBinding?.text ?? content.title,
+      body: "",
     },
     items: content.items.map((item) => ({
       key: item.id,

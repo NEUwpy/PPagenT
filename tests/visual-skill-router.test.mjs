@@ -28,6 +28,13 @@ const core = {
   itemCount: { min: 3, preferred: [3, 4, 5], max: 6 },
   mediaContract: { mode: "semantic-icon", requiredPerComponentItem: true },
   slotCapabilities: { textSlots: [{ role: "center-title", maxChars: 8 }] },
+  textRegions: [{
+    regionKey: "items[].support",
+    contentRoles: ["body"],
+    defaultLayoutId: "heading-content-flow",
+    compatibleLayoutIds: ["statement-flow", "heading-content-flow"],
+    frameRange: { minWidth: 240, maxWidth: 280, minHeight: 130, maxHeight: 180 },
+  }],
   compositions: [{ id: "component-full", requiresComponent: true, slots: [{ id: "component", role: "component" }] }],
 };
 const fallback = {
@@ -52,7 +59,7 @@ test("视觉路由只看紧凑 Skill 摘要并由程序展开正式表单", () =
   const compact = compactVisualSkillContext([page], [intent], sets);
   assert.deepEqual(Object.keys(compact[0].candidates[0]).sort(), [
     "candidateId", "contentReadiness", "fallbackBody", "iconsRequiredPerItem",
-    "itemRange", "logicId", "mediaMode", "structureGroupId",
+    "itemRange", "logicId", "mediaMode", "structureGroupId", "textRegions",
   ]);
   const schema = visualSkillRoutingSchema([page], sets);
   assert.equal(schema.schema.properties.selections.minItems, 1);
@@ -66,6 +73,7 @@ test("视觉路由只看紧凑 Skill 摘要并由程序展开正式表单", () =
       { sourceItemId: "b", query: "route" },
       { sourceItemId: "c", query: "result" },
     ],
+    textLayoutChoices: [{ regionKey: "items[].support", layoutId: "statement-flow" }],
     refinementItemIds: [],
     reason: "模型误选 fallback",
   }] }, {
@@ -75,4 +83,8 @@ test("视觉路由只看紧凑 Skill 摘要并由程序展开正式表单", () =
   assert.equal(expanded.visualPlan.pages[0].iconQueries.length, 3);
   assert.deepEqual(expanded.compositionPlan.pages[0].componentItemIds, ["a", "b", "c"]);
   assert.equal(expanded.compositionPlan.pages[0].componentText[0].text, "判断中心");
+  assert.deepEqual(expanded.compositionPlan.pages[0].textLayoutChoices, [{
+    regionKey: "items[].support",
+    layoutId: "statement-flow",
+  }]);
 });

@@ -53,7 +53,8 @@ function goalMarkup(goal, textLayoutBindings) {
     id: "goal-content",
     field: "goal",
     itemId: "goal",
-    layoutId: selectedLayout(textLayoutBindings, "goal-content", "title-body-adaptive"),
+    layoutId: selectedLayout(textLayoutBindings, "goal-content", "heading-content-flow"),
+    compatibleLayoutIds: ["statement-flow", "heading-content-flow"],
     content: goal,
     className: "goal-content",
     align: "center",
@@ -71,7 +72,8 @@ function metricMarkup(metric, strategyIndex, metricIndex, textLayoutBindings) {
       field: `strategies[${strategyIndex}].metrics[${metricIndex}]`,
       itemId: `strategy-${strategyIndex + 1}`,
       regionId: `metric-${metricIndex + 1}`,
-      layoutId: selectedLayout(textLayoutBindings, regionId, "value-label-stacked"),
+      layoutId: selectedLayout(textLayoutBindings, regionId, "metric-content-flow"),
+      compatibleLayoutIds: ["metric-content-flow"],
       content: metric,
       className: "metric-content",
       names: {
@@ -93,7 +95,8 @@ function strategyMarkup(strategy, strategyIndex, textLayoutBindings) {
       id: regionId,
       field: `strategies[${strategyIndex}]`,
       itemId: `strategy-${strategyIndex + 1}`,
-      layoutId: selectedLayout(textLayoutBindings, regionId, "title-body-adaptive"),
+      layoutId: selectedLayout(textLayoutBindings, regionId, "heading-content-flow"),
+      compatibleLayoutIds: ["statement-flow", "heading-content-flow"],
       content: strategy,
       className: "strategy-content",
       align: "center",
@@ -121,7 +124,7 @@ export const visualComponent = Object.freeze({
   schemaVersion: 1,
   designFrame: DESIGN_FRAME,
   cssFile: "component.css",
-  textFlow: Object.freeze({ profile: "standard", scope: "per-contiguous-region" }),
+  textFlow: Object.freeze({ profile: "text-region-layout-library", scope: "per-contiguous-region" }),
   renderMarkup(parameters) {
     const model = normalize(parameters);
     const geometry = houseGeometry(model.strategies.length);

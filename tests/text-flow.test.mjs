@@ -13,6 +13,11 @@ import {
   listTextLayoutPrimitives,
   textRegionMarkup,
 } from "../src/visual-runtime/text-layout-library.mjs";
+import {
+  matchTextLayoutsForPayload,
+  summarizeTextRegionContract,
+} from "../src/visual-runtime/typography-matcher.mjs";
+import { loadCoreAssetPackage } from "../src/runtime/core-asset-packages.mjs";
 
 test("TextFlow 从字段有无自动选择标题正文组合", () => {
   assert.deepEqual(resolveTextFlowContent({ title: "标题", body: "正文", points: ["分点"] }), {
@@ -125,8 +130,90 @@ test("文字排版库让一个大区绑定排法而不是暴露固定小槽", ()
     height: 130,
     contentRoles: ["heading", "body"],
   }).includes("heading-content-flow"));
+  assert.equal(compatibleTextLayouts({
+    width: 320,
+    height: 190,
+    contentRoles: ["heading", "body"],
+  }).includes("metric-content-flow"), false);
   assert.ok(listTextLayouts().every((layout) => (
     layout.minimumFrame.width === layout.recommendedFrame.width
     && layout.minimumFrame.height === layout.recommendedFrame.height
   )));
+});
+
+test("Typography Matcher 只在已登记候选中按内容角色展开 Region 绑定", () => {
+  const slotContract = {
+    variants: [{
+      id: "v1",
+      slots: [{
+        id: "item-1-content",
+        field: "items[0]",
+        contentType: "text-region",
+        required: true,
+        frame: { width: 280, height: 160 },
+        textLayout: {
+          id: "heading-content-flow",
+          defaultId: "heading-content-flow",
+          compatible: ["heading-content-flow", "metric-content-flow"],
+          contentRoles: ["heading", "body"],
+        },
+      }],
+    }],
+  };
+  assert.deepEqual(summarizeTextRegionContract(slotContract), [{
+    regionKey: "items[]",
+    contentRoles: ["body", "heading"],
+    defaultLayoutId: "heading-content-flow",
+    compatibleLayoutIds: ["heading-content-flow"],
+    frameRange: { minWidth: 280, maxWidth: 280, minHeight: 160, maxHeight: 160 },
+  }]);
+  const matched = matchTextLayoutsForPayload({
+    slotContract,
+    parameters: { items: [{ title: "标题", body: "正文" }] },
+    choices: [{ regionKey: "items[]", layoutId: "metric-content-flow" }],
+  });
+  assert.deepEqual(matched.bindings, { "item-1-content": "heading-content-flow" });
+  assert.equal(matched.warnings[0].code, "text-layout-choice-normalized");
+});
+
+test("正式核心资产从 RenderPayload 确定性生成 TextRegion 绑定", async () => {
+  const assetPackage = await loadCoreAssetPackage("goal-alignment-strategy-metrics-001");
+  const content = {
+    pageId: "goal-page",
+    title: "建立稳定生成体系",
+    items: [
+      { id: "content", title: "内容结构化", body: "把原稿转换为稳定字段。", points: [] },
+      { id: "visual", title: "视觉资产化", body: "选择已确认的结构与排版。", points: [] },
+      { id: "delivery", title: "交付确定化", body: "由代码生成可编辑文件。", points: [] },
+    ],
+    structuredData: {
+      type: "goal-strategy-metrics",
+      goal: { title: "建立稳定生成体系", body: "AI 做理解和选择，代码做约束和执行。" },
+      strategies: [
+        { id: "content", metrics: [{ label: "字段通过率", value: "≥95%" }] },
+        { id: "visual", metrics: [{ label: "核心资产覆盖", value: "≥80%" }] },
+        { id: "delivery", metrics: [{ label: "对象可编辑率", value: "100%" }] },
+      ],
+    },
+  };
+  const payload = assetPackage.mapper(
+    content,
+    { intentId: "goal-intent" },
+    {},
+    { componentItemIds: content.items.map((item) => item.id) },
+  );
+  const matched = matchTextLayoutsForPayload({
+    slotContract: assetPackage.generatedSlotContract,
+    parameters: payload.parameters,
+  });
+  assert.deepEqual(matched.bindings, {
+    "goal-content": "heading-content-flow",
+    "strategy-1-content": "heading-content-flow",
+    "strategy-2-content": "heading-content-flow",
+    "strategy-3-content": "heading-content-flow",
+    "strategy-1-metric-1": "metric-content-flow",
+    "strategy-2-metric-1": "metric-content-flow",
+    "strategy-3-metric-1": "metric-content-flow",
+  });
+  assert.deepEqual(matched.warnings, []);
 });

@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { inspectHtmlComponentEligibility } from "./html-component-eligibility.mjs";
+import { summarizeTextRegionContract } from "../visual-runtime/typography-matcher.mjs";
 
 const defaultRoot = path.resolve(import.meta.dirname, "../..");
 const indexCache = new Map();
@@ -111,6 +112,15 @@ async function loadGeneratedTextFlow(assetDir) {
   }
 }
 
+async function loadGeneratedSlotContract(assetDir) {
+  try {
+    return JSON.parse(await fs.readFile(path.join(assetDir, "slot-contract.json"), "utf8"));
+  } catch (error) {
+    if (error.code === "ENOENT") return null;
+    throw error;
+  }
+}
+
 /**
  * Lightweight discovery: reads asset.json and approval metadata only.
  * It never imports an asset module or the PowerPoint rendering runtime.
@@ -167,6 +177,7 @@ export async function loadCoreAssetPackage(assetId, root = defaultRoot) {
         component,
         mapper,
         slotResolver,
+        generatedSlotContract: await loadGeneratedSlotContract(descriptor.assetDir),
       };
     })());
   }
@@ -185,6 +196,12 @@ export async function loadCoreAssetCapabilities(assetId, root = defaultRoot) {
       ...structuredClone(assetPackage.textFlow),
       ...(generatedTextFlow ? structuredClone(generatedTextFlow) : {}),
     } : null,
+    textRegions: assetPackage.generatedSlotContract
+      ? summarizeTextRegionContract(assetPackage.generatedSlotContract)
+      : [],
+    generatedSlotContract: assetPackage.generatedSlotContract
+      ? structuredClone(assetPackage.generatedSlotContract)
+      : null,
     slotResolver: assetPackage.slotResolver,
     component: assetPackage.component,
   };

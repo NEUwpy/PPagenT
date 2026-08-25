@@ -268,7 +268,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
       }
       // The HTML layout is the source of truth. Before extracting it, choose the
       // largest approved font tier that actually fits each fixed text container.
-      // This is discrete fitting (25→23→21→19→17→15), never arbitrary shrinking.
+      // This is discrete fitting (22→20→18→16→14→12), never arbitrary shrinking.
       for (const element of root.querySelectorAll('[data-ppt-kind="text"],[data-ppt-kind="shape-text"]')) {
         if (element instanceof SVGTextElement) continue;
         if (element.closest("[data-ppagent-text-flow]")) continue;
@@ -281,7 +281,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         const primitiveTiers = (element.dataset.textPrimitiveFontTiers || "")
           .split(",")
           .map(Number)
-          .filter((size) => Number.isFinite(size) && size >= 15)
+          .filter((size) => Number.isFinite(size) && size >= 12)
           .sort((left, right) => right - left);
         const candidates = (primitiveTiers.length ? primitiveTiers : standardizedFontSizesPt)
           .filter((size) => size <= currentFontSizePt + 0.05);
@@ -324,10 +324,8 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
       }
       const resolvedTextLayouts = [];
       const textLayoutOverflows = [];
-      for (const layout of root.querySelectorAll("[data-ppagent-text-layout]")) {
+      const textLayoutFits = (layout, parts) => {
         const layoutBox = layout.getBoundingClientRect();
-        const parts = [...layout.querySelectorAll("[data-text-layout-part]")]
-          .filter((element) => getComputedStyle(element).display !== "none");
         const inside = parts.every((part) => {
           const box = part.getBoundingClientRect();
           return box.left >= layoutBox.left - 1
@@ -335,10 +333,43 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
             && box.top >= layoutBox.top - 1
             && box.bottom <= layoutBox.bottom + 1;
         });
-        const fits = inside
+        return inside
           && layout.scrollWidth <= layout.clientWidth + 1
           && layout.scrollHeight <= layout.clientHeight + 1
           && parts.every((part) => part.dataset.pptFontFit !== "overflow");
+      };
+      const collectiveFitOrder = ["body", "list", "annotation", "label", "heading", "quote", "emphasis", "metric"];
+      for (const layout of root.querySelectorAll("[data-ppagent-text-layout]")) {
+        const parts = [...layout.querySelectorAll("[data-text-layout-part]")]
+          .filter((element) => getComputedStyle(element).display !== "none");
+        let fits = textLayoutFits(layout, parts);
+        // Each primitive may fit on its own while the combined stack does not.
+        // Resolve that at the TextLayout level by stepping through the same
+        // approved font tiers, never by arbitrary scaling or Builder changes.
+        for (const primitiveId of collectiveFitOrder) {
+          const group = parts.filter((part) => part.dataset.textPrimitive === primitiveId);
+          while (!fits && group.length) {
+            let changed = false;
+            for (const part of group) {
+              const current = number(getComputedStyle(part).fontSize) * 0.75;
+              const tiers = (part.dataset.textPrimitiveFontTiers || "")
+                .split(",")
+                .map(Number)
+                .filter((size) => Number.isFinite(size) && size >= 12 && size < current - 0.05)
+                .sort((left, right) => right - left);
+              if (!tiers.length) continue;
+              part.style.fontSize = `${tiers[0]}pt`;
+              part.dataset.pptResolvedFontSizePt = String(tiers[0]);
+              part.dataset.pptFontFit = "reduced";
+              part.dataset.pptResolvedText = renderedTextLines(part).join("\n");
+              changed = true;
+            }
+            if (!changed) break;
+            layout.getBoundingClientRect();
+            fits = textLayoutFits(layout, parts);
+          }
+          if (fits) break;
+        }
         layout.dataset.pptTextLayoutStatus = fits ? "resolved" : "overflow";
         const layoutId = layout.dataset.textLayoutId || "text-layout";
         if (!fits) textLayoutOverflows.push(layout.closest("[data-slot-id]")?.dataset.slotId || layoutId);
@@ -1012,7 +1043,15 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
     }, resolveComponentTypography(theme));
     requireValue(!tree.overflow, `${component.id ?? "HTML Component"} 超出设计区域`);
     requireValue(!tree.textFlowOverflows.length, `${component.id ?? "HTML Component"} 的文字容器无法在规范字号内排版：${tree.textFlowOverflows.join(", ")}`);
-    requireValue(!tree.textLayoutOverflows.length, `${component.id ?? "HTML Component"} 的组合排版无法在安全 box 内完整呈现：${tree.textLayoutOverflows.join(", ")}`);
+    const textLayoutOverflowDetails = tree.slots
+      .filter((slot) => tree.textLayoutOverflows.includes(slot.id))
+      .map((slot) => ({
+        slotId: slot.id,
+        frame: slot.frame,
+        innerFrame: slot.innerFrame,
+        layout: slot.textLayout,
+      }));
+    requireValue(!tree.textLayoutOverflows.length, `${component.id ?? "HTML Component"} 的组合排版无法在安全 box 内完整呈现：${tree.textLayoutOverflows.join(", ")} ${JSON.stringify(textLayoutOverflowDetails)}`);
     requireValue(tree.nodes.length > 0, `${component.id ?? "HTML Component"} 没有 data-ppt-kind 可编译对象`);
     assertResolvedTextContainerSlots(tree.slots, component.textCapacity ?? {}, component.id);
     return {

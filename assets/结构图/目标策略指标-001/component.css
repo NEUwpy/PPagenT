@@ -35,7 +35,8 @@ body { color: #405269; background: transparent; font-family: var(--ppagent-font-
 .metric-grid[data-metric-count="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .metric-cell { position: relative; min-width: 0; height: 86px; overflow: hidden; }
 .metric-divider { position: absolute; left: 0; top: 16px; width: 1px; height: 54px; background: #c6d8eb; }
-.metric-content { position: absolute; left: 5px; right: 5px; top: 6px; bottom: 9px; --ppagent-value-label-gap: 5px; --ppagent-value-label-padding: 0; }
+.metric-content { position: absolute; left: 5px; right: 5px; top: 0; bottom: 0; --ppagent-value-label-padding: 0; }
+.metric-content > .ppagent-text-layout { gap: 4px; }
 .metric-content .ppagent-text-primitive--metric { color: #2f5ea8; font-size: var(--ppagent-component-lead-size, 19pt); font-weight: 700; line-height: 1.15; white-space: normal; }
 .metric-content .ppagent-text-primitive--label { color: #60758d; font-size: var(--ppagent-component-meta-size, 15pt); font-weight: 400; line-height: 1.2; white-space: normal; }
 

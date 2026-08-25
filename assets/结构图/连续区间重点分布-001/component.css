@@ -17,12 +17,12 @@ body { color: #405269; background: transparent; font-family: var(--ppagent-font-
 .spectrum-region.is-focus .spectrum-card-underlay { background: #9fc2ee; }
 .spectrum-region.is-focus .spectrum-card { border-color: #2f5ea8; background: #2f5ea8; box-shadow: 0 14px 28px rgba(47, 94, 168, .24); }
 .spectrum-order { position: absolute; left: 20px; top: 17px; z-index: 2; width: 34px; height: 22px; overflow: hidden; color: #9ab1ca; font-size: var(--ppagent-component-meta-size, 17px); font-weight: 700; line-height: 22px; white-space: nowrap; }
-.spectrum-content { position: absolute; left: 20px; right: 20px; top: 51px; bottom: 38px; z-index: 2; --ppagent-text-flow-gap: 12px; }
-.spectrum-content .ppagent-text-flow__title { color: #254b7c; line-height: 1.25; }
-.spectrum-content .ppagent-text-flow__body { color: #526174; line-height: 1.36; }
+.spectrum-content { position: absolute; left: 20px; right: 20px; top: 51px; bottom: 38px; z-index: 2; --ppagent-text-layout-gap: 10px; --ppagent-heading-color: #254b7c; --ppagent-text-color: #526174; }
+.spectrum-content .ppagent-text-primitive--heading { line-height: 1.25; }
+.spectrum-content .ppagent-text-primitive--body { line-height: 1.36; }
 .spectrum-region.is-focus .spectrum-order { color: #b9d5f6; }
 .spectrum-region.is-focus .spectrum-content { top: 61px; }
-.spectrum-region.is-focus .ppagent-text-flow__title, .spectrum-region.is-focus .ppagent-text-flow__body { color: #fff; }
+.spectrum-region.is-focus .spectrum-content { --ppagent-heading-color: #fff; --ppagent-text-color: #fff; }
 .spectrum-focus-label-bg, .spectrum-focus-label { position: absolute; left: 50%; top: 18px; width: 88px; height: 26px; border-radius: 13px; transform: translateX(-50%); }
 .spectrum-focus-label-bg { z-index: 3; background: #fff; }
 .spectrum-focus-label { z-index: 4; overflow: hidden; color: #2f5ea8; font-size: var(--ppagent-component-label-size, 18px); font-weight: 700; line-height: 26px; white-space: nowrap; text-align: center; }

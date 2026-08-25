@@ -1,0 +1,206 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "ppagent-product-story",
+  "skinId": "northeastern-university-001",
+  "visualLanguage": "遵循所选主题与已确认 Structure Group 的统一设计语言",
+  "rhythmStrategy": "优先使用语义适配的核心结构，避免相邻页面机械重复",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "familyId": "skin-cover",
+      "variantId": "default",
+      "silhouette": "cover",
+      "adaptationStatus": "fixed",
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "familyId": "skin-agenda",
+      "variantId": "default",
+      "silhouette": "agenda",
+      "adaptationStatus": "fixed",
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "p1",
+      "intentId": "p1-intent",
+      "familyId": "hub-radial",
+      "variantId": "balanced-orbit-anchor",
+      "silhouette": "dominant-center-with-balanced-satellites",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "d1",
+          "query": "narrative plan"
+        },
+        {
+          "sourceItemId": "d2",
+          "query": "page split"
+        },
+        {
+          "sourceItemId": "d3",
+          "query": "single role"
+        },
+        {
+          "sourceItemId": "d4",
+          "query": "relationship"
+        },
+        {
+          "sourceItemId": "d5",
+          "query": "emphasis"
+        },
+        {
+          "sourceItemId": "d6",
+          "query": "visual timing"
+        }
+      ],
+      "reason": "Hub radial with balanced satellites fits explain_topics for six items."
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2-intent",
+      "familyId": "progression-spectrum",
+      "variantId": "ordered-regions-with-focus",
+      "silhouette": "ordered-spectrum-with-raised-focus",
+      "adaptationStatus": "adaptive",
+      "reason": "Progression spectrum highlights focus on middle tier."
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3-intent",
+      "familyId": "comparison-columns",
+      "variantId": "dual-verdict-mirror",
+      "silhouette": "mirrored-verdict-columns",
+      "adaptationStatus": "adaptive",
+      "reason": "Dual verdict mirror for two-option comparison."
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4-intent",
+      "familyId": "parallel-cards",
+      "variantId": "equal-floating-cards",
+      "silhouette": "equal-cards-with-round-anchors",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "norm",
+          "query": "style guide"
+        },
+        {
+          "sourceItemId": "expr",
+          "query": "verified layout"
+        },
+        {
+          "sourceItemId": "cap",
+          "query": "content capacity"
+        },
+        {
+          "sourceItemId": "fallback",
+          "query": "degradation path"
+        }
+      ],
+      "reason": "Equal cards with icons for parallel constraints."
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5-intent",
+      "familyId": "sequence-process",
+      "variantId": "continuous-numbered-rail",
+      "silhouette": "continuous-arrow-rail",
+      "adaptationStatus": "adaptive",
+      "reason": "Arrow rail shows AI→rules→code pipeline."
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6-intent",
+      "familyId": "layered-architecture",
+      "variantId": "curved-frustum-stack",
+      "silhouette": "centered-curved-frustum-stack",
+      "adaptationStatus": "adaptive",
+      "reason": "Curved frustum stack for layered architecture."
+    },
+    {
+      "pageId": "p7",
+      "intentId": "p7-intent",
+      "familyId": "sequence-process",
+      "variantId": "continuous-numbered-rail",
+      "silhouette": "continuous-arrow-rail",
+      "adaptationStatus": "adaptive",
+      "reason": "Sequence rail for process steps."
+    },
+    {
+      "pageId": "p8",
+      "intentId": "p8-intent",
+      "familyId": "hub-radial",
+      "variantId": "balanced-orbit-anchor",
+      "silhouette": "dominant-center-with-balanced-satellites",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "e1",
+          "query": "content expression"
+        },
+        {
+          "sourceItemId": "e2",
+          "query": "layout capacity"
+        },
+        {
+          "sourceItemId": "e3",
+          "query": "quantity reflow"
+        },
+        {
+          "sourceItemId": "e4",
+          "query": "boundary handling"
+        },
+        {
+          "sourceItemId": "e5",
+          "query": "taboo avoidance"
+        }
+      ],
+      "reason": "Hub radial for five knowledge points."
+    },
+    {
+      "pageId": "p9",
+      "intentId": "p9-intent",
+      "familyId": "sequence-process",
+      "variantId": "continuous-numbered-rail",
+      "silhouette": "continuous-arrow-rail",
+      "adaptationStatus": "adaptive",
+      "reason": "Sequence rail for expansion stages."
+    },
+    {
+      "pageId": "p10",
+      "intentId": "p10-intent",
+      "familyId": "parallel-cards",
+      "variantId": "equal-floating-cards",
+      "silhouette": "equal-cards-with-round-anchors",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "read",
+          "query": "AI reading"
+        },
+        {
+          "sourceItemId": "judge",
+          "query": "rule decision"
+        },
+        {
+          "sourceItemId": "repeat",
+          "query": "code repeat"
+        }
+      ],
+      "reason": "Equal cards with icons for three parallel tasks."
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "familyId": "skin-closing",
+      "variantId": "default",
+      "silhouette": "closing",
+      "adaptationStatus": "fixed",
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

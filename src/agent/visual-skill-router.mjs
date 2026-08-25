@@ -1,3 +1,5 @@
+import { canonicalTextLayoutId } from "../visual-runtime/text-layout-library.mjs";
+
 function candidateId(candidate) {
   return [candidate.familyId, candidate.variantId, candidate.silhouette].join("::");
 }
@@ -21,6 +23,13 @@ export function compactVisualSkillContext(pageContents, pageIntents, candidateSe
       mediaMode: candidate.mediaContract?.mode ?? "no-image",
       iconsRequiredPerItem: Boolean(candidate.mediaContract?.requiredPerComponentItem),
       fallbackBody: Boolean(candidate.fallbackBody),
+      textRegions: (candidate.textRegions ?? []).map((region) => ({
+        regionKey: region.regionKey,
+        contentRoles: region.contentRoles,
+        defaultLayoutId: region.defaultLayoutId,
+        compatibleLayoutIds: region.compatibleLayoutIds,
+        frameRange: region.frameRange,
+      })),
     })),
   }));
 }
@@ -31,6 +40,12 @@ export function visualSkillRoutingSchema(pageContents, candidateSets) {
   )))];
   const pageIds = pageContents.map((page) => page.pageId);
   const itemIds = [...new Set(pageContents.flatMap((page) => page.items.map((item) => item.id)))];
+  const regionKeys = [...new Set(candidateSets.flatMap((set) => set.candidates.flatMap((candidate) => (
+    (candidate.textRegions ?? []).map((region) => region.regionKey)
+  ))))];
+  const textLayoutIds = [...new Set(candidateSets.flatMap((set) => set.candidates.flatMap((candidate) => (
+    (candidate.textRegions ?? []).flatMap((region) => region.compatibleLayoutIds ?? [])
+  ))))];
   return {
     name: "ppagent_visual_skill_routing",
     schema: {
@@ -45,7 +60,7 @@ export function visualSkillRoutingSchema(pageContents, candidateSets) {
           items: {
             type: "object",
             additionalProperties: false,
-            required: ["pageId", "candidateId", "centerLabel", "iconQueries", "refinementItemIds", "reason"],
+            required: ["pageId", "candidateId", "centerLabel", "iconQueries", "textLayoutChoices", "refinementItemIds", "reason"],
             properties: {
               pageId: { type: "string", enum: pageIds },
               candidateId: { type: "string", enum: candidateIds },
@@ -63,6 +78,23 @@ export function visualSkillRoutingSchema(pageContents, candidateSets) {
                   },
                 },
               },
+              textLayoutChoices: {
+                type: "array",
+                maxItems: 16,
+                items: {
+                  type: "object",
+                  additionalProperties: false,
+                  required: ["regionKey", "layoutId"],
+                  properties: {
+                    regionKey: regionKeys.length
+                      ? { type: "string", enum: regionKeys }
+                      : { type: "string", minLength: 1 },
+                    layoutId: textLayoutIds.length
+                      ? { type: "string", enum: textLayoutIds }
+                      : { type: "string", minLength: 1 },
+                  },
+                },
+              },
               refinementItemIds: {
                 type: "array",
                 maxItems: 6,
@@ -76,6 +108,21 @@ export function visualSkillRoutingSchema(pageContents, candidateSets) {
       },
     },
   };
+}
+
+function legalTextLayoutChoices(selection, candidate) {
+  const regions = new Map((candidate.textRegions ?? []).map((region) => [region.regionKey, region]));
+  const seen = new Set();
+  const choices = [];
+  for (const choice of selection.textLayoutChoices ?? []) {
+    const region = regions.get(choice.regionKey);
+    if (!region || seen.has(choice.regionKey)) continue;
+    const layoutId = canonicalTextLayoutId(choice.layoutId);
+    if (!(region.compatibleLayoutIds ?? []).map(canonicalTextLayoutId).includes(layoutId)) continue;
+    seen.add(choice.regionKey);
+    choices.push({ regionKey: choice.regionKey, layoutId });
+  }
+  return choices;
 }
 
 function chooseComposition(candidate, page) {
@@ -176,6 +223,7 @@ export function expandVisualSkillRouting(routing, input) {
     const bindings = requiresComponent ? buildComponentBindings(candidate, page) : undefined;
     const supportsCenterLabel = (candidate.slotCapabilities?.textSlots ?? [])
       .some((slot) => slot.role === "center-title");
+    const textLayoutChoices = requiresComponent ? legalTextLayoutChoices(selection, candidate) : [];
     compositionPages.push({
       pageId: page.pageId,
       intentId: intent.intentId,
@@ -183,6 +231,7 @@ export function expandVisualSkillRouting(routing, input) {
       componentItemIds: requiresComponent ? page.items.map((item) => item.id) : [],
       componentContentMode: requiresComponent ? "full" : "none",
       textSlots: requiresComponent ? [] : distributeTextSlots(page, composition),
+      textLayoutChoices,
       ...(bindings ? { componentBindings: bindings } : {}),
       ...(supportsCenterLabel ? {
         componentText: [{

@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   buildVisualCandidateSets,
   duplicatedCompositionItemIds,
+  fixedSlotSourceCapacityIssues,
   normalizeBoundComponentCompositionPage,
   resolveVisualPlan,
   timelineLacksTemporalEvidence,
@@ -181,7 +182,7 @@ test("正式候选包含重新蒸馏的顺序流程与正文兜底", async () =>
   ]);
 });
 
-test("循环父候选向视觉导演暴露 Slot 契约但不开放子结构绑定", async () => {
+test("循环父候选向视觉导演暴露 TextRegion 契约但不开放子结构绑定", async () => {
   const page = content("cycle", [
     { id: "plan", title: "计划", body: "明确目标" },
     { id: "do", title: "执行", body: "推进任务" },
@@ -199,27 +200,38 @@ test("循环父候选向视觉导演暴露 Slot 契约但不开放子结构绑�
   assert.equal(cycle?.slotContract?.resolverExport, "resolveContentSlots");
   assert.equal(cycle?.slotContract?.maxDepth, 1);
   assert.equal(cycle?.slotContract?.fallback, "plain-text");
-  assert.deepEqual(cycle?.slotCapabilities?.textSlots.map((slot) => ({ role: slot.role, maxChars: slot.maxChars, maxLines: slot.maxLines })), [
-    { role: "center-title", maxChars: 12, maxLines: 2 },
-    { role: "item-title", maxChars: 8, maxLines: 1 },
-    { role: "item-body", maxChars: 64, maxLines: 5 },
-  ]);
+  assert.deepEqual(cycle?.textRegions, [{
+    regionKey: "steps[].support",
+    contentRoles: ["body", "list"],
+    defaultLayoutId: "heading-content-flow",
+    compatibleLayoutIds: ["heading-content-flow"],
+    frameRange: { minWidth: 287, maxWidth: 302, minHeight: 136, maxHeight: 200 },
+  }]);
+  assert.deepEqual(cycle?.slotCapabilities?.textSlots, []);
   assert.deepEqual(cycle?.slotCapabilities?.mediaSlots, []);
-  assert.deepEqual(cycle?.slotCapabilities?.container, {
-    pointRendering: "merged-body",
-    bodyContainerMode: "single-flow",
-    itemTitleRequired: false,
-    itemBodyRequired: false,
-    itemBodySourceField: "support",
-    itemBodyTextMode: "flow",
-    itemBodyListPolicy: "inline",
-  });
-  assert.equal(cycle?.slotCapabilities?.textSlots.some((slot) => slot.role === "item-point"), false);
-  assert.equal(cycle?.slotCapabilities?.textSlots.find((slot) => slot.role === "item-body")?.sourceField, "support");
+  assert.equal(cycle?.textCapacity, null);
   assert.equal("slotBindings" in cycle, false);
 });
 
-test("视觉导演按 Slot Contract 精炼组件文字后才允许进入渲染", async () => {
+test("旧固定文字槽装不下原文时在交给视觉导演前淘汰", () => {
+  const page = {
+    title: "概率最大的需求",
+    items: [
+      { id: "mid", title: "中间主体", body: "学校和科研院所需要快速变成结构清楚、视觉体面的演示文稿", points: [] },
+    ],
+  };
+  const legacyCandidate = {
+    textRegions: [],
+    slotCapabilities: { textSlots: [
+      { role: "item-title", scope: "per-item", sourceField: "title", maxChars: 12, maxLines: 2 },
+      { role: "item-body", scope: "per-item", sourceField: "body", maxChars: 20, maxLines: 2 },
+    ] },
+  };
+  assert.deepEqual(fixedSlotSourceCapacityIssues(page, legacyCandidate).map((issue) => issue.role), ["item-body"]);
+  assert.deepEqual(fixedSlotSourceCapacityIssues(page, { ...legacyCandidate, textRegions: [{ regionKey: "items[]" }] }), []);
+});
+
+test("视觉导演选择 Text Layout 后由程序形成 RenderPayload 绑定", async () => {
   const page = content("cycle-adaptation", [
     { id: "plan", title: "计划阶段目标设定说明", body: "先识别当前约束条件并明确本轮改进目标" },
     { id: "do", title: "执行阶段任务推进说明", body: "围绕重点任务同步责任分工并推进实施" },
@@ -234,16 +246,7 @@ test("视觉导演按 Slot Contract 精炼组件文字后才允许进入渲染",
   const intent = enrichPageIntent(draft, page);
   const [candidateSet] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
   const candidate = candidateSet.candidates.find((item) => item.assetId === "cycle-loop-001");
-  assert.ok(candidate, "原文超过组件容量时仍应把容量合同交给视觉导演，而不是提前隐藏候选");
-  const componentText = [
-    { sourceField: "page-title", targetRole: "center-title", text: "持续改进", sourceFragment: "持续改进" },
-    { sourceItemId: "plan", sourceField: "title", targetRole: "item-title", text: "设定目标", sourceFragment: "目标设定" },
-    { sourceItemId: "plan", sourceField: "support", targetRole: "item-body", text: "识别约束并明确目标", sourceFragment: "识别当前约束条件" },
-    { sourceItemId: "do", sourceField: "title", targetRole: "item-title", text: "推进执行", sourceFragment: "执行阶段" },
-    { sourceItemId: "do", sourceField: "support", targetRole: "item-body", text: "同步分工推进实施", sourceFragment: "同步责任分工" },
-    { sourceItemId: "check", sourceField: "title", targetRole: "item-title", text: "检查结果", sourceFragment: "检查阶段" },
-    { sourceItemId: "check", sourceField: "support", targetRole: "item-body", text: "核对结果与关键偏差", sourceFragment: "核对执行结果和关键偏差" },
-  ];
+  assert.ok(candidate);
   const common = {
     root,
     pageContents: [page],
@@ -264,36 +267,23 @@ test("视觉导演按 Slot Contract 精炼组件文字后才允许进入渲染",
     componentItemIds: page.items.map((item) => item.id),
     componentContentMode: "full",
     textSlots: [],
-    componentText,
-    reason: "按当前三项 State 的 Slot Contract 精炼",
+    componentText: [],
+    textLayoutChoices: [{ regionKey: "steps[].support", layoutId: "heading-content-flow" }],
+    reason: "选择已登记的 Region 排版",
   };
   const accepted = await resolveVisualPlan({ ...common, compositionPlan: { pages: [compositionPage] } });
   assert.equal(accepted.status, "accepted");
-  assert.equal(accepted.renderPayloads[0].parameters.center, "持续改进");
+  assert.equal(accepted.renderPayloads[0].parameters.center, page.title);
   assert.deepEqual(accepted.renderPayloads[0].parameters.steps.map((item) => [item.title, item.body]), [
-    ["设定目标", "识别约束并明确目标"],
-    ["推进执行", "同步分工推进实施"],
-    ["检查结果", "核对结果与关键偏差"],
+    [page.items[0].title, page.items[0].body],
+    [page.items[1].title, page.items[1].body],
+    [page.items[2].title, page.items[2].body],
   ]);
-
-  const missing = await resolveVisualPlan({
-    ...common,
-    compositionPlan: { pages: [{ ...compositionPage, componentText: [] }] },
+  assert.deepEqual(accepted.renderPayloads[0].parameters.textLayoutBindings, {
+    "step-plan-support": "heading-content-flow",
+    "step-do-support": "heading-content-flow",
+    "step-check-support": "heading-content-flow",
   });
-  assert.equal(missing.status, "needs-director-revision");
-  assert.ok(missing.feedback[0].issues.some((issue) => issue.code === "component-text-required"));
-
-  const overflow = await resolveVisualPlan({
-    ...common,
-    compositionPlan: { pages: [{
-      ...compositionPage,
-      componentText: componentText.map((item) => item.sourceItemId === "plan" && item.sourceField === "title"
-        ? { ...item, text: "超过八个汉字的计划阶段标题" }
-        : item),
-    }] },
-  });
-  assert.equal(overflow.status, "needs-director-revision");
-  assert.ok(overflow.feedback[0].issues.some((issue) => issue.code === "component-text-too-long"));
 });
 
 test("两个互补事实不会因为恰好有两项就获得比较资产或正文伪兜底", async () => {
@@ -393,7 +383,7 @@ test("三层组织树命中已登记的组织层级资产", async () => {
   ]);
 });
 
-test("TextFlow 资产向视觉导演披露一个动态内容区及程序派生容量", async () => {
+test("TextRegion 资产向视觉导演披露开放文字区与排版候选", async () => {
   const page = content("parallel-flow", [
     { id: "a", title: "专业能力", body: "解决复杂任务" },
     { id: "b", title: "协同能力", body: "整合人员资源" },
@@ -405,20 +395,17 @@ test("TextFlow 资产向视觉导演披露一个动态内容区及程序派生�
   }), page);
   const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
   const parallel = set.candidates.find((candidate) => candidate.assetId === "parallel-equal-cards-001");
-  assert.equal(parallel?.textFlow?.profile, "standard");
-  assert.equal(parallel?.textFlow?.scope, "per-item");
-  assert.equal(parallel?.textFlow?.planningStates?.length, 3);
+  assert.equal(parallel?.textFlow?.profile, "text-region-layout-library");
+  assert.equal(parallel?.textFlow?.scope, "per-contiguous-region");
   assert.equal(parallel?.textCapacity, null);
-  const title = parallel?.slotCapabilities?.textSlots.find((slot) => slot.role === "item-title");
-  const body = parallel?.slotCapabilities?.textSlots.find((slot) => slot.role === "item-body");
-  assert.equal(title?.fitMode, "dynamic-text-flow");
-  assert.equal(body?.fitMode, "dynamic-text-flow");
-  assert.equal(title?.containerRole, "item-content");
-  assert.equal(body?.containerRole, "item-content");
-  assert.equal(title?.capacityBasis, "conservative-cjk-geometry");
-  assert.equal(body?.capacityBasis, "conservative-cjk-geometry");
-  assert.equal(title?.maxChars, 22);
-  assert.equal(body?.maxChars, 48);
+  assert.deepEqual(parallel?.textRegions.map((region) => ({
+    regionKey: region.regionKey,
+    defaultLayoutId: region.defaultLayoutId,
+  })), [
+    { regionKey: "items[].support", defaultLayoutId: "heading-content-flow" },
+    { regionKey: "items[].title", defaultLayoutId: "statement-flow" },
+  ]);
+  assert.deepEqual(parallel?.slotCapabilities?.textSlots, []);
 });
 
 test("TextFlow 仅正文时使用同一容器的 body-only 容量", () => {

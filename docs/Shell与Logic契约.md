@@ -12,7 +12,7 @@ flowchart LR
     E --> F["State\n数量、密度与断点状态"]
     F --> C
     F --> G["Slot Map\n由最终 DOM / Shell 代码即时解析"]
-    G --> H["TextFlow / 图标等可替换内容"]
+    G --> H["TextRegion + Text Layout / 图标"]
 ```
 
 - **Skin** 决定学校或组织身份，包括颜色、字体、Logo 和页注文案。
@@ -26,7 +26,7 @@ Logic 只有在“现有 Logic 无法在不损失关键关系的前提下表达�
 
 目标颗粒度是：
 
-> `Logic → Structure Group → State → Slot Map → 可替换内容`
+> `Logic → Structure Group → State → Slot Map → TextRegion / 媒体`
 
 核心资产包正式登记 `logicId / structureGroupId / stateContract`，候选发现结果也暴露这些字段。State 仍由程序根据内容与父容器确定性求解，不由导演逐页重画。
 
@@ -38,7 +38,7 @@ Slot Map 不是第二份手工登记表。入库阶段从 HTML 的 `data-slot-*`
 
 文字排版库是独立能力库。每种排版声明名称、可承接的内容组合和最小区域；看板直接读取该库，并在结构详情中显示每个 TextRegion 当前绑定的排版及可替换排版。排版库与结构共用同一运行时代码，不另抄人工登记表。
 
-这里的可编辑 Slot Contract 与后文二层 Content Slot 不同：前者描述当前组件已有文字和图标怎样填充；后者描述父结构中未来可继续放置子内容的区域。正式生成已经使用前者规划 `componentText` 与 `iconQueries`，后者当前仍固定使用普通文字兜底。
+这里的可编辑 Slot Contract 与后文二层 Content Slot 不同：前者描述当前组件的 TextRegion、兼容 Text Layout 和图标怎样填充；后者描述父结构中未来可继续放置子内容的区域。正式生成已经使用前者规划 `textLayoutChoices`、TextBinding 与 `iconQueries`，二层 Content Slot 当前仍不启用子结构。
 
 ## 二、当前固定 Shell
 

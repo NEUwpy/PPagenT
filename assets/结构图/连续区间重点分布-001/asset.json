@@ -58,8 +58,8 @@
       "connection": "none"
     },
     "textFlow": {
-      "profile": "standard",
-      "scope": "per-item"
+      "profile": "text-region-layout-library",
+      "scope": "per-contiguous-region"
     },
     "contract": {
       "abstractionLevel": "foundation",
@@ -143,11 +143,11 @@
       "5": { "width": 1110, "height": 444, "basis": "component-root-visible-bounds" }
     },
     "resizeMode": "natural",
-    "minFontSize": 15,
+    "minFontSize": 12,
     "safePadding": 12,
     "supportedCompositionIds": ["component-full"]
   },
-  "capacity": "3–5 个有序区域；标题不超过 8 字，正文不超过 28 字；一个不超过 14 字的共同维度和一个重点区域",
+  "capacity": "3–5 个有序区域；每个连续文字区域由文字排版系统按容器适配标题、正文或单段陈述；共同维度不超过 14 字；支持一个重点区域",
   "semanticContract": "多个区域沿同一个连续维度有序分布，其中一个区域是论述重点；区域之间没有中心到外围的支撑关系",
   "doNotUseWhen": "对象只是普通并列、没有共同轴、需要两两比较、存在父子层级，或中心主题向外围发散",
   "review": "用户确认淡蓝正态分布背景、3–5 区扩散及四区第 2／第 3 区重点选择；Native/PPT 与东北大学 Skin 同步落地，可进入正式生成线"

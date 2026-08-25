@@ -67,7 +67,7 @@ test("Native 编译把浏览器 computed px 原样交给 Artifact Tool，避免�
   });
   const slide = { shapes: { add: () => shape } };
   compileResolvedVisualTree(slide, {
-    schemaVersion: 4,
+    schemaVersion: 5,
     frame: { width: 100, height: 100 },
     nodes: [{
       kind: "text",
@@ -131,23 +131,18 @@ test("循环 HTML 由通用 DOM 编译器直接生成可编辑 Native 形状", a
     assert.equal(tree.nodes.find((node) => node.name === "cycle-0-support")?.style.fontSizePt, 17);
     const centerSlot = tree.slots.find((slot) => slot.role === "center-title");
     const titleSlot = tree.slots.find((slot) => slot.role === "item-title");
-    const bodySlot = tree.slots.find((slot) => slot.role === "item-body");
+    const supportSlots = tree.slots.filter((slot) => slot.contentType === "text-region");
     assert.equal(centerSlot?.typography.fontSizePt, 23);
     assert.equal(centerSlot?.typography.role, "componentTitle");
     assert.equal(centerSlot?.capacity.reliable, false);
     assert.equal(titleSlot?.typography.fontSizePt, 21);
     assert.equal(titleSlot?.capacity.reliable, false);
-    assert.equal(bodySlot?.typography.fontSizePt, 17);
-    assert.equal(bodySlot?.typography.role, "componentBody");
-    assert.equal(bodySlot?.capacity.charsPerLine, 12);
-    assert.equal(bodySlot?.capacity.maxLines, 5);
-    assert.equal(bodySlot?.capacity.maxChars, 60);
-    assert.equal(bodySlot?.capacity.declaredMaxChars, 64);
-    assert.equal(bodySlot?.capacity.declarationFits, false);
-    assert.equal(tree.slots.find((slot) => slot.role === "item-body")?.textMode, "flow");
-    assert.equal(tree.slots.find((slot) => slot.role === "item-body")?.listPolicy, "inline");
+    assert.equal(supportSlots.length, 4);
+    assert.ok(supportSlots.every((slot) => slot.textLayout.status === "resolved"));
+    assert.ok(supportSlots.every((slot) => slot.textLayout.parts.every((part) => part.typography.fontSizePt === 17)));
     assert.equal(tree.slots.find((slot) => slot.role === "item-title")?.required, false);
-    assert.match(tree.nodes.find((node) => node.name === "cycle-0-support")?.text ?? "", /明确本轮改进目标\n• 分析现状约束/);
+    assert.deepEqual(supportSlots[0].textLayout.contentRoles, ["body", "list"]);
+    assert.match(supportSlots[0].textLayout.parts.map((part) => part.text).join("\n"), /明确本轮改进目标\n• 分析现状约束/);
 
     const presentation = createPresentation();
     const slide = presentation.slides.add();
@@ -180,13 +175,13 @@ test("循环基础版接受正文和0–4条普通分点，不绑定指标结构
       { title: "输出", body: "正文" },
     ],
   }), /独立的嵌套 Structure Group/);
-  assert.throws(() => normalizeCycleParameters({
+  assert.doesNotThrow(() => normalizeCycleParameters({
     steps: [
       { title: "输入", body: "超".repeat(65) },
       { title: "处理", body: "正文" },
       { title: "输出", body: "正文" },
     ],
-  }), /支持正文超过 64 字/);
+  }));
 });
 
 test("HTML 组件拒绝通过缩放目标框偷偷改变字号", async () => {
@@ -211,18 +206,22 @@ test("并列组件由最终 DOM 派生单一 TextFlow 与图标槽，并编译�
       assetDir: parallelAssetDir,
       targetFrame,
     });
-    assert.equal(tree.slots.length, 8);
+    assert.equal(tree.slots.length, 12);
     assert.equal(tree.slots.filter((slot) => slot.role === "icon").length, 4);
     assert.ok(tree.slots.filter((slot) => slot.role === "icon").every((slot) => (
       slot.media?.provider === "tabler-icons" && slot.media.required === true
     )));
-    const flowSlots = tree.slots.filter((slot) => slot.role === "item-content");
-    assert.equal(flowSlots.length, 4);
-    assert.ok(flowSlots.every((slot) => slot.capacity.basis === "dynamic-text-flow"));
-    assert.ok(flowSlots.every((slot) => slot.textFlow.composition === "title-body"));
-    assert.ok(flowSlots.every((slot) => slot.textFlow.parts.find((part) => part.part === "title")?.typography.fontSizePt === 21));
-    assert.ok(flowSlots.every((slot) => slot.textFlow.parts.find((part) => part.part === "body")?.typography.fontSizePt === 17));
-    assert.ok(flowSlots.every((slot) => !Object.hasOwn(slot.capacity, "maxChars")));
+    const regionSlots = tree.slots.filter((slot) => slot.contentType === "text-region");
+    const titleRegions = regionSlots.filter((slot) => slot.field.endsWith(".title"));
+    const supportRegions = regionSlots.filter((slot) => slot.field.endsWith(".support"));
+    assert.equal(regionSlots.length, 8);
+    assert.equal(titleRegions.length, 4);
+    assert.equal(supportRegions.length, 4);
+    assert.ok(titleRegions.every((slot) => slot.textLayout.id === "statement-flow"));
+    assert.ok(supportRegions.every((slot) => slot.textLayout.id === "heading-content-flow"));
+    assert.ok(titleRegions.every((slot) => slot.textLayout.parts[0]?.typography.fontSizePt === 18));
+    assert.ok(supportRegions.every((slot) => slot.textLayout.parts[0]?.typography.fontSizePt === 14));
+    assert.ok(regionSlots.every((slot) => !Object.hasOwn(slot.capacity, "maxChars")));
     assert.equal(tree.nodes.filter((node) => node.kind === "image").length, 4);
 
     const presentation = createPresentation();
@@ -245,7 +244,7 @@ test("矩阵 HTML 的透明度、渐变、自定义阴影、圆角和 SVG 图标
       assetDir: matrixAssetDir,
       targetFrame,
     });
-    assert.equal(tree.schemaVersion, 4);
+    assert.equal(tree.schemaVersion, 5);
     assert.equal(tree.nodes.find((node) => node.name === "quadrant-field-0")?.fill, "#CAE1FC/25");
     assert.equal(tree.nodes.find((node) => node.name === "matrix-item-0-0")?.fill, "#2F5EA8/79");
     assert.equal(tree.nodes.find((node) => node.name === "matrix-item-0-0")?.shadow, "0px 9px 21px #2F5EA8/14");
@@ -371,9 +370,9 @@ test("1-N-1 组件使用 PPT 点数字号，并让上下语义标签共轴且由
       const top = tree.nodes.find((node) => node.name === topName);
       const bottom = tree.nodes.find((node) => node.name === bottomName);
       assert.equal(bottom?.kind, "shape-text");
-      assert.equal(bottom?.style.fontSizePt, 17);
+      assert.equal(bottom?.style.fontSizePt, 14);
       assert.equal(Math.round((top.frame.left + top.frame.width / 2) * 10), Math.round((bottom.frame.left + bottom.frame.width / 2) * 10));
-      assert.ok(Math.min(...tree.nodes.filter((node) => node.text).map((node) => node.style.fontSizePt)) >= 15);
+      assert.ok(Math.min(...tree.nodes.filter((node) => node.text).map((node) => node.style.fontSizePt)) >= 12);
       const itemNumber = tree.nodes.find((node) => node.name === itemNumberName);
       const itemTitle = tree.nodes.find((node) => node.name === itemTitleName);
       assert.ok(Math.abs((itemNumber.frame.top + itemNumber.frame.height / 2) - (itemTitle.frame.top + itemTitle.frame.height / 2)) <= 1);
@@ -427,11 +426,11 @@ test("固定文本容器按规范档位选择最大可容纳字号，并保持 H
     });
     const title = tree.nodes.find((node) => node.name === "narrow-title");
     const index = tree.nodes.find((node) => node.name === "compact-index");
-    assert.equal(title?.style.originalFontSizePt, 21);
-    assert.equal(title?.style.fontSizePt, 15);
+    assert.equal(title?.style.originalFontSizePt, 18);
+    assert.equal(title?.style.fontSizePt, 16);
     assert.equal(title?.style.fontFit, "reduced");
     assert.equal(title?.style.wrap, "none");
-    assert.equal(index?.style.fontSizePt, 15);
+    assert.equal(index?.style.fontSizePt, 12);
     assert.equal(index?.style.fontFit, "unchanged");
     assert.equal(index?.style.wrap, "none");
     assert.equal(index?.style.alignment, "center");

@@ -1,8 +1,6 @@
-import { textFlowMarkup } from "../../../src/visual-runtime/text-flow.mjs";
+import { textRegionMarkup } from "../../../src/visual-runtime/text-layout-library.mjs";
 
 const DESIGN_FRAME = Object.freeze({ width: 1170, height: 492 });
-const TITLE_LIMIT = 8;
-const BODY_LIMIT = 28;
 const AXIS_LIMIT = 14;
 
 function escapeHtml(value) {
@@ -61,21 +59,33 @@ function normalize(parameters) {
     items: parameters.items.map((item, index) => {
       const title = text(item?.title);
       const body = text(item?.body);
-      if (!title || !body) throw new Error(`items[${index}] 需要 title 与 body`);
-      if (chars(title) > TITLE_LIMIT) throw new Error(`items[${index}].title 超过 ${TITLE_LIMIT} 字`);
-      if (chars(body) > BODY_LIMIT) throw new Error(`items[${index}].body 超过 ${BODY_LIMIT} 字`);
+      if (!title && !body) throw new Error(`items[${index}] 至少需要 title 或 body`);
       return { key: text(item?.key) || `region-${index + 1}`, title, body };
     }),
   };
 }
 
-function regionMarkup(item, index, focusIndex) {
+function regionMarkup(item, index, focusIndex, textLayoutBindings) {
   const focused = index === focusIndex;
+  const regionId = `${item.key}-content-region`;
   return `<article class="spectrum-region${focused ? " is-focus" : ""}" data-index="${index}">
     <div class="spectrum-card-underlay" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="spectrum-underlay-${index}"></div>
     <div class="spectrum-card" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="spectrum-card-${index}"></div>
     <div class="spectrum-order" data-ppt-kind="text" data-ppt-name="spectrum-order-${index}">${String(index + 1).padStart(2, "0")}</div>
-    ${textFlowMarkup({ id: `${item.key}-content`, field: `items[${index}]`, itemId: item.key, title: item.title, body: item.body, className: "spectrum-content", align: "center", names: { title: `spectrum-title-${index}`, body: `spectrum-body-${index}` } })}
+    ${textRegionMarkup({
+      id: regionId,
+      field: `items[${index}]`,
+      itemId: item.key,
+      regionId: "content",
+      layoutId: text(textLayoutBindings?.[regionId]) || "heading-content-flow",
+      compatibleLayoutIds: ["heading-content-flow", "statement-flow"],
+      content: { title: item.title, body: item.body },
+      className: "spectrum-content",
+      align: "center",
+      valign: "middle",
+      required: true,
+      names: { heading: `spectrum-title-${index}`, body: `spectrum-body-${index}` },
+    })}
     ${focused ? '<div class="spectrum-focus-label-bg" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="spectrum-focus-label-bg"></div><div class="spectrum-focus-label" data-ppt-kind="text" data-ppt-name="spectrum-focus-label">重点区域</div>' : ""}
   </article>`;
 }
@@ -85,14 +95,7 @@ export const visualComponent = Object.freeze({
   schemaVersion: 1,
   designFrame: DESIGN_FRAME,
   cssFile: "component.css",
-  textFlow: Object.freeze({ profile: "standard", scope: "per-item" }),
-  textCapacity: Object.freeze({
-    maxItemTitleChars: TITLE_LIMIT,
-    maxItemTitleLines: 1,
-    maxItemBodyChars: BODY_LIMIT,
-    maxItemBodyLines: 3,
-    maxAxisLabelChars: AXIS_LIMIT,
-  }),
+  textFlow: Object.freeze({ profile: "text-region-layout-library", scope: "per-contiguous-region" }),
   renderMarkup(parameters) {
     const model = normalize(parameters);
     return `<section class="spectrum-review" data-ppt-root data-item-count="${model.items.length}" data-focus-index="${model.focusIndex}">
@@ -102,7 +105,7 @@ export const visualComponent = Object.freeze({
       <svg class="spectrum-density spectrum-density-curve-layer" viewBox="0 0 1070 400" aria-hidden="true">
         <path class="spectrum-density-curve" d="${normalDistributionCurvePath()}" data-ppt-kind="path" data-ppt-name="spectrum-density-curve"></path>
       </svg>
-      <div class="spectrum-grid">${model.items.map((item, index) => regionMarkup(item, index, model.focusIndex)).join("")}</div>
+      <div class="spectrum-grid">${model.items.map((item, index) => regionMarkup(item, index, model.focusIndex, parameters?.textLayoutBindings)).join("")}</div>
       <div class="spectrum-axis" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="spectrum-axis"></div>
       <svg class="spectrum-axis-arrow" viewBox="0 0 18 17" aria-hidden="true">
         <path d="M 1.5 1.5 L 16 8.5 L 1.5 15.5" data-ppt-kind="path" data-ppt-name="spectrum-axis-arrow"></path>

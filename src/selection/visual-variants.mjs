@@ -104,12 +104,15 @@ export async function listRenderableVisualVariants(options = {}) {
  * runtime contract to expose exact text/container capacity.
  */
 export async function loadVisualVariantCapabilities(variant, root = process.cwd()) {
-  if (variant.renderer === "skin" || variant.textCapacity) return variant;
+  if (variant.renderer === "skin" || variant.textRegions?.length) return variant;
   const capability = await loadCoreAssetCapabilities(variant.assetId, root);
   return {
     ...variant,
-    textCapacity: capability.textCapacity,
-    textFlow: capability.textFlow,
+    textCapacity: variant.textCapacity ?? capability.textCapacity,
+    textFlow: capability.textFlow
+      ? { ...(variant.textFlow ?? {}), ...capability.textFlow }
+      : variant.textFlow,
+    textRegions: capability.textRegions,
   };
 }
 

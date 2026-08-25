@@ -88,6 +88,19 @@
               }
             }
           },
+          "textLayoutChoices": {
+            "type": "array",
+            "maxItems": 16,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["regionKey", "layoutId"],
+              "properties": {
+                "regionKey": { "type": "string", "minLength": 1 },
+                "layoutId": { "type": "string", "minLength": 1 }
+              }
+            }
+          },
           "reason": { "type": "string", "minLength": 1 }
         }
       }

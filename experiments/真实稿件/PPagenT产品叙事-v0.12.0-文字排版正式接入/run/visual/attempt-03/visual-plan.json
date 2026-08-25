@@ -1,0 +1,206 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "ppagenT-narr-001",
+  "skinId": "northeastern-university-001",
+  "visualLanguage": "遵循所选主题与已确认 Structure Group 的统一设计语言",
+  "rhythmStrategy": "优先使用语义适配的核心结构，避免相邻页面机械重复",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "familyId": "skin-cover",
+      "variantId": "default",
+      "silhouette": "cover",
+      "adaptationStatus": "fixed",
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "familyId": "skin-agenda",
+      "variantId": "default",
+      "silhouette": "agenda",
+      "adaptationStatus": "fixed",
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "p01",
+      "intentId": "p01-intent",
+      "familyId": "hub-radial",
+      "variantId": "balanced-orbit-anchor",
+      "silhouette": "dominant-center-with-balanced-satellites",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "j1",
+          "query": "how to present"
+        },
+        {
+          "sourceItemId": "j2",
+          "query": "page splitting"
+        },
+        {
+          "sourceItemId": "j3",
+          "query": "page responsibility"
+        },
+        {
+          "sourceItemId": "j4",
+          "query": "viewpoint relationship"
+        },
+        {
+          "sourceItemId": "j5",
+          "query": "highlight where"
+        },
+        {
+          "sourceItemId": "j6",
+          "query": "when to use graphics"
+        }
+      ],
+      "reason": "Hub structure with semantic icons for each key question; center label captures the core message."
+    },
+    {
+      "pageId": "p02",
+      "intentId": "p02-intent",
+      "familyId": "progression-spectrum",
+      "variantId": "ordered-regions-with-focus",
+      "silhouette": "ordered-spectrum-with-raised-focus",
+      "adaptationStatus": "adaptive",
+      "reason": "Ordered spectrum highlights the mainstream demand segment; no icons needed."
+    },
+    {
+      "pageId": "p03",
+      "intentId": "p03-intent",
+      "familyId": "comparison-columns",
+      "variantId": "dual-verdict-mirror",
+      "silhouette": "mirrored-verdict-columns",
+      "adaptationStatus": "adaptive",
+      "reason": "Dual verdict mirror comparing stability vs. flashiness."
+    },
+    {
+      "pageId": "p04",
+      "intentId": "p04-intent",
+      "familyId": "parallel-cards",
+      "variantId": "equal-floating-cards",
+      "silhouette": "equal-cards-with-round-anchors",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "limit1",
+          "query": "organization visual rules"
+        },
+        {
+          "sourceItemId": "limit2",
+          "query": "proven expression"
+        },
+        {
+          "sourceItemId": "limit3",
+          "query": "quantity capacity"
+        },
+        {
+          "sourceItemId": "limit4",
+          "query": "degradation method"
+        }
+      ],
+      "reason": "Parallel cards with semantic icons for each constraint; text regions use defined layouts."
+    },
+    {
+      "pageId": "p05",
+      "intentId": "p05-intent",
+      "familyId": "sequence-process",
+      "variantId": "continuous-numbered-rail",
+      "silhouette": "continuous-arrow-rail",
+      "adaptationStatus": "adaptive",
+      "reason": "Sequence flow showing AI as controller, then rules, then code."
+    },
+    {
+      "pageId": "p06",
+      "intentId": "p06-intent",
+      "familyId": "layered-architecture",
+      "variantId": "curved-frustum-stack",
+      "silhouette": "centered-curved-frustum-stack",
+      "adaptationStatus": "adaptive",
+      "reason": "Layered stack representing asset building, core assets, and formal generation."
+    },
+    {
+      "pageId": "p07",
+      "intentId": "p07-intent",
+      "familyId": "sequence-process",
+      "variantId": "continuous-numbered-rail",
+      "silhouette": "continuous-arrow-rail",
+      "adaptationStatus": "adaptive",
+      "reason": "Sequence flow for the five-step process of moving computation upfront."
+    },
+    {
+      "pageId": "p08",
+      "intentId": "p08-intent",
+      "familyId": "hub-radial",
+      "variantId": "balanced-orbit-anchor",
+      "silhouette": "dominant-center-with-balanced-satellites",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "exp1",
+          "query": "content expression"
+        },
+        {
+          "sourceItemId": "exp2",
+          "query": "capacity mastery"
+        },
+        {
+          "sourceItemId": "exp3",
+          "query": "quantity rearrangement"
+        },
+        {
+          "sourceItemId": "exp4",
+          "query": "boundary handling"
+        },
+        {
+          "sourceItemId": "exp5",
+          "query": "forbidden structures"
+        }
+      ],
+      "reason": "Hub with semantic icons for the five experiential learnings beyond templates."
+    },
+    {
+      "pageId": "p09",
+      "intentId": "p09-intent",
+      "familyId": "sequence-process",
+      "variantId": "continuous-numbered-rail",
+      "silhouette": "continuous-arrow-rail",
+      "adaptationStatus": "adaptive",
+      "reason": "Sequence flow showing expansion from one university to broader organizations."
+    },
+    {
+      "pageId": "p10",
+      "intentId": "p10-intent",
+      "familyId": "parallel-cards",
+      "variantId": "equal-floating-cards",
+      "silhouette": "equal-cards-with-round-anchors",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "ai-read",
+          "query": "AI reads script"
+        },
+        {
+          "sourceItemId": "rule-judge",
+          "query": "rule judgment"
+        },
+        {
+          "sourceItemId": "code-work",
+          "query": "code automation"
+        }
+      ],
+      "reason": "Parallel cards with semantic icons for the three simple tasks."
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "familyId": "skin-closing",
+      "variantId": "default",
+      "silhouette": "closing",
+      "adaptationStatus": "fixed",
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

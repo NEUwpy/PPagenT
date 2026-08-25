@@ -63,6 +63,9 @@ export function normalizeCycleParameters(parameters) {
     centerLabel: center.length ? center : ["持续改进", "循环"],
     steps,
     density: count <= 4 ? "dense" : "compact",
+    textLayoutBindings: parameters?.textLayoutBindings && typeof parameters.textLayoutBindings === "object"
+      ? { ...parameters.textLayoutBindings }
+      : {},
   };
 }
 

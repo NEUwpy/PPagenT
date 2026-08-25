@@ -2,10 +2,11 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createNortheasternUniversityRenderer } from "../agent/neu-renderer.mjs";
+import { applyAcademicReportShellScaffold } from "../agent/shell-scaffold.mjs";
 
 function parseArgs(argv) {
   const options = {
-    plan: "", content: "", intents: "", decisions: "", payloads: "", source: "", output: "", "qa-dir": "", result: "",
+    plan: "", content: "", intents: "", composition: "", decisions: "", payloads: "", source: "", output: "", "qa-dir": "", result: "",
   };
   for (let index = 0; index < argv.length; index += 2) {
     const key = argv[index]?.replace(/^--/, "");
@@ -19,9 +20,18 @@ function parseArgs(argv) {
 
 export async function renderWorkflowArtifacts(options) {
   const read = (target) => fs.readFile(path.resolve(target), "utf8").then(JSON.parse);
-  const [deckPlan, pageContents, pageIntents, layoutDecisions, renderPayloads] = await Promise.all([
-    read(options.plan), read(options.content), read(options.intents), read(options.decisions), read(options.payloads),
+  let [deckPlan, pageContents, pageIntents, compositionPlan, layoutDecisions, renderPayloads] = await Promise.all([
+    read(options.plan), read(options.content), read(options.intents), read(options.composition), read(options.decisions), read(options.payloads),
   ]);
+  if (pageContents.length !== pageIntents.length) {
+    const scaffolded = applyAcademicReportShellScaffold({ deckPlan, pageContents });
+    if (scaffolded.pageContents.length !== pageIntents.length) {
+      throw new Error(`重渲染输入页数不一致：正文=${pageContents.length}，Shell后=${scaffolded.pageContents.length}，视觉=${pageIntents.length}`);
+    }
+    ({ deckPlan, pageContents } = scaffolded);
+  }
+  const alignedCounts = [pageContents, pageIntents, compositionPlan.pages, layoutDecisions, renderPayloads].map((value) => value.length);
+  if (new Set(alignedCounts).size !== 1) throw new Error(`重渲染输入未对齐：${alignedCounts.join("/")}`);
   const renderer = createNortheasternUniversityRenderer({
     sourcePptx: path.resolve(options.source),
     outputPptx: path.resolve(options.output),
@@ -32,6 +42,7 @@ export async function renderWorkflowArtifacts(options) {
     deckPlan,
     pageContents,
     pageIntents,
+    compositionPlan,
     layoutDecisions,
     renderPayloads,
   });

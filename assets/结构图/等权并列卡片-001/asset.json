@@ -68,8 +68,8 @@
       "ordered": false
     },
     "textFlow": {
-      "profile": "standard",
-      "scope": "per-item"
+      "profile": "text-region-layout-library",
+      "scope": "per-contiguous-region"
     },
     "contract": {
       "abstractionLevel": "foundation",
@@ -169,7 +169,7 @@
       "5": { "width": 1140, "height": 410, "basis": "component-root-visible-bounds" }
     },
     "resizeMode": "natural",
-    "minFontSize": 15,
+    "minFontSize": 12,
     "safePadding": 12,
     "supportedCompositionIds": ["component-full"]
   },

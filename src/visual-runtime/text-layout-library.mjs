@@ -96,6 +96,50 @@ function canonicalLayoutId(layoutId) {
   return ALIASES[layoutId] ?? layoutId;
 }
 
+const ROLE_ALIASES = Object.freeze({
+  title: "heading",
+  value: "metric",
+  text: "body",
+  points: "list",
+  source: "annotation",
+  attribution: "annotation",
+});
+
+function canonicalRole(role) {
+  const normalized = text(role).toLowerCase();
+  return ROLE_ALIASES[normalized] ?? normalized;
+}
+
+function normalizedRoles(contentRoles = []) {
+  return [...new Set((Array.isArray(contentRoles) ? contentRoles : [])
+    .map(canonicalRole)
+    .filter(Boolean))];
+}
+
+function rolesMatchLayout(layoutId, contentRoles = []) {
+  const roles = normalizedRoles(contentRoles);
+  if (!roles.length) return true;
+  const item = definition(layoutId);
+  const allowed = new Set(item.contentRoles);
+  if (roles.some((role) => !allowed.has(role))) return false;
+  const present = new Set(roles);
+  if (item.id === "statement-flow") return roles.length === 1;
+  if (item.id === "label-content-flow") {
+    return present.has("label") && (present.has("heading") || present.has("body"));
+  }
+  if (item.id === "metric-content-flow" || item.id === "metric-set-flow") {
+    return present.has("metric") || present.has("label");
+  }
+  if (item.id === "key-value-flow") {
+    return present.has("label") && (present.has("body") || present.has("metric"));
+  }
+  if (item.id === "quote-attribution-flow") return present.has("quote");
+  if (item.id === "heading-metric-content-flow") {
+    return present.has("heading") || present.has("metric") || present.has("body");
+  }
+  return true;
+}
+
 function definition(layoutId) {
   const canonicalId = canonicalLayoutId(layoutId);
   const found = DEFINITIONS.find((item) => item.id === canonicalId);
@@ -259,6 +303,22 @@ export function resolveTextLayoutDefinition(layoutId) {
   return structuredClone({ ...item, bindingContract: BINDING_CONTRACTS[item.id] });
 }
 
+export function canonicalTextLayoutId(layoutId) {
+  return canonicalLayoutId(layoutId);
+}
+
+export function normalizeTextContentRoles(contentRoles = []) {
+  return normalizedRoles(contentRoles);
+}
+
+export function textLayoutAcceptsContentRoles(layoutId, contentRoles = []) {
+  return rolesMatchLayout(layoutId, contentRoles);
+}
+
+export function inferTextContentRoles(content = {}) {
+  return normalizedRoles(presentRoles(content));
+}
+
 export function textLayoutCatalogPreviewMarkup({ layoutId, id = `catalog-${layoutId}`, profile = "representative", align = "left", valign = "middle", density = "standard" } = {}) {
   const canonicalId = canonicalLayoutId(layoutId);
   const previewContent = profile === "minimal" ? PREVIEW_MINIMAL_CONTENT[canonicalId] : PREVIEW_CONTENT[canonicalId];
@@ -279,6 +339,7 @@ export function compatibleTextLayouts({ width, height, contentRoles = [], status
     (status === "all" || item.status === status)
     && Number(width) >= item.minimumFrame.width
     && Number(height) >= item.minimumFrame.height
+    && rolesMatchLayout(item.id, contentRoles)
   )).map((item) => item.id);
 }
 
@@ -303,7 +364,7 @@ export function textRegionMarkup({
   if (!VERTICAL_ALIGNMENTS.has(valign)) throw new Error(`${id} 的纵向对齐非法：${valign}`);
   if (!DENSITIES.has(density)) throw new Error(`${id} 的排版密度非法：${density}`);
   const resolvedLayout = definition(layoutId);
-  const roles = presentRoles(content);
+  const roles = presentRoles(content).filter((role) => resolvedLayout.contentRoles.includes(role));
   if (required && !roles.length) throw new Error(`${id} 的文字区域不能为空`);
   const innerMarkup = RENDERERS[resolvedLayout.id](id, content, names);
   if (required && !innerMarkup.replace(/<[^>]+>/g, "").trim()) throw new Error(`${id} 的文字排版没有可见内容`);

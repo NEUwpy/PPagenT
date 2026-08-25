@@ -66,7 +66,7 @@ test("看板只把资产专属 HTML 计入迁移完成度", async () => {
   assert.deepEqual(cycle?.runtimeCapabilities, ["html-component", "native-compiled-output"]);
   assert.equal(cycle?.nativeOutputAvailable, true);
   assert.equal(cycle?.slotContract?.resolverExport, "resolveContentSlots");
-  assert.equal(data.activeSkin?.componentTheme?.typography?.componentBody, 17);
+  assert.equal(data.activeSkin?.componentTheme?.typography?.componentBody, 14);
   assert.equal(data.activeSkin?.typographyUnit, "ppt-pt");
   assert.equal(data.activeSkin?.pptPointScale, 1);
   assert.deepEqual(data.textLayouts.map((item) => item.id), [

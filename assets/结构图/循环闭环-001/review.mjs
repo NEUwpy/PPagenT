@@ -16,7 +16,7 @@ function escapeHtml(value) {
   })[character]);
 }
 
-function panelMarkup(item, density) {
+function panelMarkup(item, density, textLayoutBindings) {
   const { frame } = item;
   const key = escapeHtml(item.step.key);
   const slotId = `step-${item.step.key}-support`;
@@ -26,7 +26,7 @@ function panelMarkup(item, density) {
       field: `steps[${item.index}].support`,
       itemId: key,
       regionId: "support",
-      layoutId: "heading-content-flow",
+      layoutId: String(textLayoutBindings?.[slotId] ?? "heading-content-flow"),
       compatibleLayoutIds: ["statement-flow", "heading-content-flow", "structured-list-flow", "metric-content-flow"],
       content: { body: item.step.body, points: item.step.points },
       className: "cycle-copy-region",
@@ -64,7 +64,7 @@ export const visualComponent = Object.freeze({
   renderMarkup(parameters) {
     const model = normalizeCycleParameters(parameters);
     return `<section class="cycle-review" data-ppt-root data-step-count="${model.steps.length}" data-density="${model.density}">
-      <div class="cycle-support-layer">${panelItems(model.steps).map((item) => panelMarkup(item, model.density)).join("")}</div>
+      <div class="cycle-support-layer">${panelItems(model.steps).map((item) => panelMarkup(item, model.density, model.textLayoutBindings)).join("")}</div>
       <div class="cycle-mask" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="cycle-mask" aria-hidden="true"></div>
       ${ringMarkup(model)}
     </section>`;

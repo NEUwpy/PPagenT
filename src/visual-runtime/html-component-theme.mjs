@@ -3,13 +3,13 @@ function cssString(value, fallback) {
 }
 
 export const defaultComponentTypography = Object.freeze({
-  componentHeading: 25,
-  componentTitle: 23,
-  componentItemTitle: 21,
-  componentLead: 19,
-  componentBody: 17,
-  componentLabel: 17,
-  componentMeta: 15,
+  componentHeading: 22,
+  componentTitle: 20,
+  componentItemTitle: 18,
+  componentLead: 16,
+  componentBody: 14,
+  componentLabel: 14,
+  componentMeta: 12,
 });
 
 export function resolveComponentTypography(theme = {}) {

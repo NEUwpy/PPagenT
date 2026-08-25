@@ -1,14 +1,14 @@
-const FONT_LADDER = Object.freeze([25, 23, 21, 19, 17, 15]);
+const FONT_LADDER = Object.freeze([22, 20, 18, 16, 14, 12]);
 
 const DEFINITIONS = Object.freeze([
-  Object.freeze({ id: "heading", name: "标题", defaultFontSizePt: 21, fontSizesPt: Object.freeze([25, 23, 21, 19, 17]), weight: 700, lineHeight: 1.2 }),
-  Object.freeze({ id: "body", name: "正文", defaultFontSizePt: 17, fontSizesPt: Object.freeze([19, 17, 15]), weight: 400, lineHeight: 1.45 }),
-  Object.freeze({ id: "list", name: "列表", defaultFontSizePt: 17, fontSizesPt: Object.freeze([19, 17, 15]), weight: 400, lineHeight: 1.38 }),
-  Object.freeze({ id: "metric", name: "数值指标", defaultFontSizePt: 25, fontSizesPt: Object.freeze([25, 23, 21, 19]), weight: 700, lineHeight: 1.08 }),
-  Object.freeze({ id: "label", name: "标签", defaultFontSizePt: 17, fontSizesPt: Object.freeze([19, 17, 15]), weight: 600, lineHeight: 1.2 }),
-  Object.freeze({ id: "annotation", name: "注释与来源", defaultFontSizePt: 15, fontSizesPt: Object.freeze([17, 15]), weight: 400, lineHeight: 1.3 }),
-  Object.freeze({ id: "quote", name: "引语", defaultFontSizePt: 21, fontSizesPt: Object.freeze([23, 21, 19, 17]), weight: 500, lineHeight: 1.35 }),
-  Object.freeze({ id: "emphasis", name: "强调语", defaultFontSizePt: 23, fontSizesPt: Object.freeze([25, 23, 21, 19, 17]), weight: 700, lineHeight: 1.2 }),
+  Object.freeze({ id: "heading", name: "标题", defaultFontSizePt: 18, fontSizesPt: Object.freeze([22, 20, 18, 16, 14]), weight: 700, lineHeight: 1.2 }),
+  Object.freeze({ id: "body", name: "正文", defaultFontSizePt: 14, fontSizesPt: Object.freeze([16, 14, 12]), weight: 400, lineHeight: 1.45 }),
+  Object.freeze({ id: "list", name: "列表", defaultFontSizePt: 14, fontSizesPt: Object.freeze([16, 14, 12]), weight: 400, lineHeight: 1.38 }),
+  Object.freeze({ id: "metric", name: "数值指标", defaultFontSizePt: 22, fontSizesPt: Object.freeze([22, 20, 18, 16]), weight: 700, lineHeight: 1.08 }),
+  Object.freeze({ id: "label", name: "标签", defaultFontSizePt: 14, fontSizesPt: Object.freeze([16, 14, 12]), weight: 600, lineHeight: 1.2 }),
+  Object.freeze({ id: "annotation", name: "注释与来源", defaultFontSizePt: 12, fontSizesPt: Object.freeze([14, 12]), weight: 400, lineHeight: 1.3 }),
+  Object.freeze({ id: "quote", name: "引语", defaultFontSizePt: 18, fontSizesPt: Object.freeze([20, 18, 16, 14]), weight: 500, lineHeight: 1.35 }),
+  Object.freeze({ id: "emphasis", name: "强调语", defaultFontSizePt: 20, fontSizesPt: Object.freeze([22, 20, 18, 16, 14]), weight: 700, lineHeight: 1.2 }),
 ]);
 
 function text(value) {

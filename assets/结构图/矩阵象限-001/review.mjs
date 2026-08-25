@@ -64,7 +64,17 @@ function normalize(parameters) {
     yLow: required(parameters?.axes?.yLow, LIMITS.axisLabel, "axes.yLow"),
     yHigh: required(parameters?.axes?.yHigh, LIMITS.axisLabel, "axes.yHigh"),
   };
-  return { quadrants, axes, itemCounts, uniformItemCount, focusQuadrant, showDefinitionRail: parameters?.showDefinitionRail !== false };
+  return {
+    quadrants,
+    axes,
+    itemCounts,
+    uniformItemCount,
+    focusQuadrant,
+    showDefinitionRail: parameters?.showDefinitionRail !== false,
+    textLayoutBindings: parameters?.textLayoutBindings && typeof parameters.textLayoutBindings === "object"
+      ? { ...parameters.textLayoutBindings }
+      : {},
+  };
 }
 
 function slotAttributes({ id, role, field, itemId, maxChars, maxLines = 1, requiredSlot = true }) {
@@ -88,14 +98,15 @@ function quadrantMarkup(quadrant, quadrantIndex, model) {
   </section>`;
 }
 
-function detailMarkup(quadrant, quadrantIndex) {
+function detailMarkup(quadrant, quadrantIndex, textLayoutBindings) {
   const itemId = `quadrant-${quadrantIndex}-detail`;
+  const slotId = `${itemId}-region`;
   return textRegionMarkup({
-    id: `${itemId}-region`,
+    id: slotId,
     field: `quadrants[${quadrantIndex}].detail`,
     itemId,
     regionId: "detail",
-    layoutId: "heading-metric-content-flow",
+    layoutId: text(textLayoutBindings?.[slotId]) || "heading-metric-content-flow",
     compatibleLayoutIds: ["heading-content-flow", "metric-content-flow", "metric-set-flow", "heading-metric-content-flow", "summary-information-flow"],
     content: quadrant.detail,
     className: `quadrant-detail detail-${quadrantIndex}`,
@@ -165,7 +176,7 @@ export const visualComponent = Object.freeze({
     const model = normalize(parameters);
     return `<section class="matrix-review" data-ppt-root data-items-per-quadrant="${model.uniformItemCount ?? "mixed"}" data-quadrant-counts="${model.itemCounts.join(",")}" data-items-q0="${model.itemCounts[0]}" data-items-q1="${model.itemCounts[1]}" data-items-q2="${model.itemCounts[2]}" data-items-q3="${model.itemCounts[3]}" data-focus-quadrant="${model.focusQuadrant}" data-definition-rail="${model.showDefinitionRail ? "on" : "off"}">
       ${model.quadrants.map((quadrant, index) => quadrantMarkup(quadrant, index, model)).join("")}
-      ${model.quadrants.map((quadrant, index) => detailMarkup(quadrant, index)).join("")}
+      ${model.quadrants.map((quadrant, index) => detailMarkup(quadrant, index, model.textLayoutBindings)).join("")}
       ${model.showDefinitionRail ? bandDefinitionsMarkup(model.axes) : ""}
       ${axesMarkup(model.axes)}
       <div class="axis-origin" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="matrix-origin"></div>

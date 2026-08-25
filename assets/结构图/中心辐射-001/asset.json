@@ -68,7 +68,7 @@
       "ordered": false
     },
     "textFlow": {
-      "profile": "standard",
+      "profile": "text-region-layout-library",
       "scope": "per-contiguous-region"
     },
     "contract": {
@@ -150,11 +150,11 @@
       "8": { "width": 1140, "height": 470, "basis": "component-root-visible-bounds" }
     },
     "resizeMode": "natural",
-    "minFontSize": 15,
+    "minFontSize": 12,
     "safePadding": 12,
     "supportedCompositionIds": ["component-full"]
   },
-  "capacity": "承载一个中心主题和 3–8 个同级外围方向；外围标题不超过 8 字，正文最多 2 行，字数上限随 State 为 30/28/26/24/22/20 字",
+  "capacity": "承载一个中心文字区域和 3–8 个同级外围文字区域；每个区域由文字排版系统按实际容器适配标题、正文或单段陈述",
   "semanticContract": "多个同级方向共同解释、支撑、构成或服务一个中心主题；外围之间没有先后、层级或因果关系",
   "doNotUseWhen": "外围存在明确顺序、层级、正反对比或相互连接，或者页面没有唯一中心主题",
   "review": "用户已确认 HTML 黄金状态、3–8 项版式扩散及统一蓝色视觉语言；Native/PPT 由同一 HTML 组件编译，可进入核心资产库"

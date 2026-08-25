@@ -16,6 +16,7 @@ const root = path.resolve(import.meta.dirname, "..");
 
 test("每个核心 HTML 资产的一个黄金状态可编译且字号符合自身契约", async () => {
   const targetFrame = northeasternUniversitySkin.bodyFrame;
+  const productionMinimum = Math.min(...Object.values(northeasternUniversitySkin.componentTheme.typography));
   const packages = (await discoverCoreAssetPackages(root)).filter((item) => item.runtime.renderer === "html-component");
   assert.ok(packages.length > 0);
   const presentation = createPresentation();
@@ -39,9 +40,9 @@ test("每个核心 HTML 资产的一个黄金状态可编译且字号符合自�
       const fontSizes = tree.nodes.filter((node) => node.text).map((node) => node.style?.fontSizePt).filter(Number.isFinite);
       assert.ok(fontSizes.length > 0, `${descriptor.assetId} 没有可检查文字`);
       const actualMinimum = Math.min(...fontSizes);
-      const declaredMinimum = descriptor.asset.spatialContract?.minFontSize ?? 15;
+      const declaredMinimum = descriptor.asset.spatialContract?.minFontSize ?? productionMinimum;
       assert.ok(actualMinimum >= declaredMinimum, `${descriptor.assetId} 实际最小字号 ${actualMinimum} < 声明 ${declaredMinimum}`);
-      assert.ok(actualMinimum >= 15, `${descriptor.assetId} 实际字号低于生产底线 15pt`);
+      assert.ok(actualMinimum >= productionMinimum, `${descriptor.assetId} 实际字号低于生产底线 ${productionMinimum}pt`);
       compileResolvedVisualTree(presentation.slides.add(), tree, targetFrame);
     }
   } finally {
