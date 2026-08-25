@@ -1,0 +1,89 @@
+{
+  "id": "cycle-racetrack-loop-005",
+  "name": "回环轨道循环",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
+    "slides": [65]
+  },
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "cycle",
+    "structureGroupId": "cycle-racetrack-loop",
+    "familyId": "cycle",
+    "variantId": "racetrack-loop",
+    "silhouette": "horizontal-racetrack-loop-with-stages",
+    "supportedBaseRelations": ["cycle"],
+    "supportedPurposeKeys": ["explain_cycle"],
+    "itemCount": { "min": 3, "preferred": [4, 5], "max": 6 },
+    "stateContract": { "resolver": "itemCount", "states": [3, 4, 5, 6], "previewDefault": 4 },
+    "mediaContract": { "mode": "no-image" },
+    "textFlow": { "profile": "text-region-layout-library", "scope": "per-contiguous-region" },
+    "contentContract": { "itemRole": "cycle-stage", "points": "inline", "ordered": true },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": { "relationTraits": { "cycle": true, "ordered": true }, "density": ["low", "medium"] }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": { "selection": { "itemCount": 4 } },
+      "controls": [
+        { "key": "itemCount", "label": "循环阶段数", "values": [3, 4, 5, 6], "default": 4 }
+      ]
+    }
+  },
+  "coverageDelta": "现有正式组以厚圆环承载阶段和完整支持正文；本组用横向闭合轨道承载 3–6 个短到中等阶段，提供更轻、更舒展且不绑定 PDCA 的循环表达。",
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "3–6 个通用循环阶段",
+    "rule": "阶段按顺时针顺序分配到上轨和下轨；上轨从左向右，下轨从右向左，不维护逐数量独立实现"
+  },
+  "componentModel": {
+    "fixed": ["闭合回环轨道", "顺时针阅读路径", "上下说明带与节点一一对应"],
+    "variable": ["3–6 个阶段", "阶段标题与说明", "可选中心主题"]
+  },
+  "fieldContract": {
+    "editable": [
+      { "field": "center", "meaning": "可选循环主题或反馈原则" },
+      { "field": "items[].title", "meaning": "阶段标题" },
+      { "field": "items[].body", "meaning": "阶段说明" }
+    ],
+    "generated": [
+      { "field": "items[].number", "meaning": "按顺时针顺序自动编号" },
+      { "field": "layout", "meaning": "按阶段数重新求解上下轨位置" }
+    ],
+    "fixed": ["回环方向", "轨道轮廓"],
+    "unavailable": ["线性过程", "双主体往返", "双速循环", "螺旋提升", "固定 PDCA 语义"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "resizeMode": "natural",
+    "minFontSize": 14,
+    "safePadding": 10,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "3–6 个阶段；每项标题和一段短说明；中心主题可选",
+  "semanticContract": "若干阶段按顺序运行，末端结果会返回起点并推动下一轮",
+  "doNotUseWhen": "只是一次性线性流程、只有两个主体往返、需要双速或螺旋关系，或内容必须严格使用固定 PDCA 四角色",
+  "review": "用户确认回环轨道循环的 HTML 黄金状态、3–6 阶段扩散和通用循环语义；已完成 Native/PPT 与东北大学 Skin 落地"
+}

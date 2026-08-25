@@ -1,0 +1,93 @@
+{
+  "id": "cycle-single-chain-feedback-002",
+  "name": "单链反馈控制环",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
+    "slides": [65]
+  },
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "cycle",
+    "structureGroupId": "cycle-single-chain-feedback",
+    "familyId": "cycle",
+    "variantId": "single-chain-return-control",
+    "silhouette": "forward-chain-with-single-return-feedback-path",
+    "supportedBaseRelations": ["cycle"],
+    "supportedPurposeKeys": ["explain_cycle"],
+    "itemCount": { "min": 3, "preferred": [4, 5], "max": 6 },
+    "stateContract": { "resolver": "itemCount", "states": [3, 4, 5, 6], "previewDefault": 4 },
+    "mediaContract": { "mode": "no-image" },
+    "textFlow": { "profile": "text-region-layout-library", "scope": "per-contiguous-region" },
+    "contentContract": { "itemRole": "forward-stage", "points": "inline", "ordered": true },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "relationTraits": { "cycle": true, "ordered": true, "feedbackReturn": true },
+        "density": ["low", "medium"]
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": { "selection": { "itemCount": 4 } },
+      "controls": [
+        { "key": "itemCount", "label": "前向阶段数", "values": [3, 4, 5, 6], "default": 4 }
+      ]
+    }
+  },
+  "coverageDelta": "现有正式组都把多个阶段整体组织成完整循环；本组表达主链从左向右推进、末端结果只返回某个上游控制点进行校准的单链反馈结构。",
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "3–6 个前向阶段和 1 个反馈校准区",
+    "rule": "前向阶段等距求解；末端反馈路径返回指定上游节点，不维护逐数量独立实现"
+  },
+  "componentModel": {
+    "fixed": ["左到右前向主链", "末端向上游返回的反馈路径", "反馈校准区"],
+    "variable": ["3–6 个阶段", "阶段标题与说明", "反馈标题与说明", "反馈返回目标"]
+  },
+  "fieldContract": {
+    "editable": [
+      { "field": "items[].title", "meaning": "前向阶段标题" },
+      { "field": "items[].body", "meaning": "前向阶段说明" },
+      { "field": "feedback", "meaning": "反馈校准标题与说明" },
+      { "field": "feedbackTargetIndex", "meaning": "反馈返回的上游阶段" }
+    ],
+    "generated": [
+      { "field": "items[].number", "meaning": "按前向顺序自动编号" },
+      { "field": "layout", "meaning": "按阶段数重新求解节点和文字区域" }
+    ],
+    "fixed": ["主链方向", "末端回流语义"],
+    "unavailable": ["完整环形多阶段", "双主体等权往返", "双速内外循环", "螺旋提升"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "resizeMode": "natural",
+    "minFontSize": 14,
+    "safePadding": 10,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "3–6 个前向阶段；每项标题和一段短说明；反馈校准区 1 个",
+  "semanticContract": "主流程从左向右推进，末端结果返回某个上游控制点进行校准并影响下一轮",
+  "doNotUseWhen": "所有阶段本身构成完整圆环、两个主体等权往返、存在内外双速或螺旋提升，或内容没有反馈返回",
+  "review": "用户确认单链反馈控制环的 HTML 黄金状态、3–6 阶段扩散、圆角回流路径和居中的反馈药丸；已完成 Native/PPT 与东北大学 Skin 落地"
+}
