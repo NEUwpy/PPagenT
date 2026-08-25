@@ -1,0 +1,27 @@
+* { box-sizing: border-box; }
+:root { font-family: var(--ppagent-font-body, "Microsoft YaHei"), "Noto Sans CJK SC", sans-serif; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { background: #fff; color: #53657a; }
+.cycle-racetrack-review { position: relative; width: 1170px; height: 492px; overflow: hidden; background: #fff; }
+.cycle-copy-band { position: absolute; left: 0; z-index: 0; width: 1170px; height: 136px; border: 1px solid #e5ebf2; border-radius: 18px; background: #f5f7fa; }
+.cycle-copy-band-top { top: 0; }
+.cycle-copy-band-bottom { top: 356px; }
+.cycle-track { position: absolute; inset: 0; z-index: 1; width: 1170px; height: 492px; overflow: visible; }
+.cycle-track-halo, .cycle-track-band, .cycle-track-line { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.cycle-track-halo { stroke: #fff; stroke-width: 38; }
+.cycle-track-band { stroke: #e3ebf5; stroke-width: 25; }
+.cycle-track-line { stroke: #789bc7; stroke-width: 3; }
+.cycle-arrow { fill: #567fb8; }
+.cycle-center-halo, .cycle-center-surface { position: absolute; border-radius: 42px; }
+.cycle-center-halo { left: 425px; top: 205px; z-index: 2; width: 320px; height: 82px; border: 2px solid #fff; background: #e9f0f8; }
+.cycle-center-surface { left: 435px; top: 215px; z-index: 3; width: 300px; height: 62px; border: 1px solid #d0deee; background: #fff; box-shadow: 0 8px 18px rgba(42, 79, 127, .10); }
+.cycle-center-content { position: absolute; left: 459px; top: 220px; z-index: 4; width: 252px; height: 52px; --ppagent-text-layout-gap: 2px; --ppagent-heading-color: #2c568c; --ppagent-text-color: #74849a; }
+.cycle-center-content .ppagent-text-primitive--heading { font-size: var(--ppagent-component-title-size, 20pt); line-height: 1.08; }
+.cycle-center-content .ppagent-text-primitive--body { font-size: var(--ppagent-component-body-size, 14pt); line-height: 1.08; }
+.cycle-stage-connector { position: absolute; z-index: 2; width: 2px; border-radius: 2px; background: #b7c8dc; }
+.cycle-stage-halo { position: absolute; z-index: 3; width: 78px; height: 78px; border: 2px solid #fff; border-radius: 50%; background: #e9f0f9; }
+.cycle-stage-node { position: absolute; z-index: 4; display: grid; place-items: center; width: 62px; height: 62px; border: 1px solid rgba(255, 255, 255, .84); border-radius: 50%; box-shadow: 0 7px 15px rgba(40, 77, 126, .18); color: #fff; font-size: var(--ppagent-component-item-title-size, 18pt); font-weight: 700; line-height: 1; text-align: center; }
+.cycle-stage-content { position: absolute; z-index: 3; display: block; overflow: hidden; padding: 4px 10px; --ppagent-text-layout-gap: 5px; --ppagent-heading-color: #2b527f; --ppagent-text-color: #6a788a; }
+.cycle-stage-content .ppagent-text-primitive--heading { font-size: var(--ppagent-component-item-title-size, 18pt); line-height: 1.16; text-wrap: balance; }
+.cycle-stage-content .ppagent-text-primitive--body { font-size: var(--ppagent-component-body-size, 14pt); line-height: 1.18; text-wrap: balance; }
+.cycle-racetrack-review[data-item-count="6"] .cycle-stage-content { padding-inline: 8px; }
