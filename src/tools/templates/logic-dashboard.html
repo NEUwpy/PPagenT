@@ -168,12 +168,10 @@
     .coverage-count { flex: 0 0 auto; padding: 3px 7px; border-radius: 999px; color: #49617f !important; background: #edf3fb; font-weight: 700; }
     .coverage-asset-name { display: block; margin-top: 11px; color: #243650 !important; font-size: 14px !important; font-weight: 700; }
     .coverage-asset-meta { display: block; margin-top: 4px; color: #718097 !important; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 10px !important; overflow-wrap: anywhere; }
-    .coverage-carousel { position: absolute; right: 12px; top: 84px; z-index: 3; display: flex; align-items: center; gap: 5px; padding: 4px; border: 1px solid rgba(207,220,240,.9); border-radius: 999px; background: rgba(255,255,255,.92); box-shadow: 0 4px 12px rgba(31,52,82,.12); }
-    .coverage-carousel button { display: grid; place-items: center; width: 27px; height: 27px; padding: 0; border: 0; border-radius: 50%; color: #3e5d86; background: transparent; font-size: 17px; line-height: 1; }
-    .coverage-carousel button:hover { color: #fff; background: var(--blue); }
-    .coverage-dots { display: flex; gap: 4px; }
-    .coverage-dot { width: 5px; height: 5px; border-radius: 50%; background: #ccd6e5; }
-    .coverage-dot.active { background: var(--blue); }
+    .coverage-asset-tabs { display: grid; grid-template-columns: repeat(auto-fit, minmax(92px, 1fr)); gap: 6px; margin: 0 0 10px; }
+    .coverage-asset-tab { min-width: 0; min-height: 38px; padding: 6px 8px; border: 1px solid #d9e2ef; border-radius: 9px; color: #61718a; background: #f5f8fc; font-size: 11px; line-height: 1.25; text-align: center; }
+    .coverage-asset-tab:hover { border-color: #8eace0; color: #315d9c; background: #f0f5fd; }
+    .coverage-asset-tab.active { border-color: #6f96d2; color: #fff; background: #4777b9; box-shadow: 0 4px 10px rgba(40,104,216,.16); }
     .coverage-card.empty { border-style: dashed; }
     .coverage-card.empty .coverage-status { color: #8a96a8; }
     .coverage-card.available .coverage-status { color: #916a0b; }
@@ -882,9 +880,19 @@
       state.logicCarousel[topic.id] = index;
       const asset = assets[index];
       const carousel = assets.length > 1
-        ? '<div class="coverage-carousel" aria-label="切换 Structure Group"><button type="button" data-carousel-move="-1" data-logic-id="' + esc(topic.id) + '" aria-label="上一个 Structure Group">‹</button><span class="coverage-dots">' + assets.map((_, dotIndex) => '<i class="coverage-dot ' + (dotIndex === index ? 'active' : '') + '"></i>').join('') + '</span><button type="button" data-carousel-move="1" data-logic-id="' + esc(topic.id) + '" aria-label="下一个 Structure Group">›</button></div>'
+        ? '<div class="coverage-asset-tabs" aria-label="该 Logic 的 Structure Group">' + assets.map((candidate, tabIndex) => '<button type="button" class="coverage-asset-tab ' + (tabIndex === index ? 'active' : '') + '" data-carousel-select="' + tabIndex + '" data-logic-id="' + esc(topic.id) + '" aria-pressed="' + (tabIndex === index ? 'true' : 'false') + '">' + esc(candidate.name) + '</button>').join('') + '</div>'
         : '';
-      return '<article class="coverage-card available" role="button" tabindex="0" data-logic-card="' + esc(topic.id) + '" data-asset-key="' + esc(asset.library + ':' + asset.id) + '"><div class="coverage-card-head"><div><strong>' + esc(topic.name) + '</strong><span class="coverage-description">' + esc(topic.description) + '</span></div><span class="coverage-count">' + (index + 1) + ' / ' + assets.length + '</span></div>' + previewMarkup(asset) + carousel + '<span class="coverage-asset-name">' + esc(asset.name) + '</span><span class="coverage-asset-meta">' + esc(asset.structureGroupId) + '</span><span class="coverage-status">' + esc(range(asset)) + ' · 点击查看详情</span></article>';
+      return '<article class="coverage-card available" role="button" tabindex="0" data-logic-card="' + esc(topic.id) + '" data-asset-key="' + esc(asset.library + ':' + asset.id) + '"><div class="coverage-card-head"><div><strong>' + esc(topic.name) + '</strong><span class="coverage-description">' + esc(topic.description) + '</span></div><span class="coverage-count">' + (index + 1) + ' / ' + assets.length + '</span></div>' + previewMarkup(asset) + carousel + '<span class="coverage-asset-name">当前预览 · ' + esc(asset.name) + '</span><span class="coverage-asset-meta">' + esc(asset.structureGroupId) + '</span><span class="coverage-status">' + esc(range(asset)) + ' · 点击查看详情</span></article>';
+    }
+
+    function selectLogicCarousel(logicId, index) {
+      const topic = DATA.logics.find((item) => item.id === logicId);
+      const assets = topic ? logicAssets(topic) : [];
+      if (!assets.length || index < 0 || index >= assets.length) return;
+      state.logicCarousel[logicId] = index;
+      const currentCard = [...document.querySelectorAll('[data-logic-card]')].find((card) => card.dataset.logicCard === logicId);
+      if (currentCard) currentCard.outerHTML = coverageCardMarkup(topic);
+      activatePreviewImages();
     }
 
     function moveLogicCarousel(logicId, direction) {
@@ -892,10 +900,7 @@
       const assets = topic ? logicAssets(topic) : [];
       if (assets.length < 2) return;
       const current = state.logicCarousel[logicId] ?? 0;
-      state.logicCarousel[logicId] = (current + direction + assets.length) % assets.length;
-      const currentCard = [...document.querySelectorAll('[data-logic-card]')].find((card) => card.dataset.logicCard === logicId);
-      if (currentCard) currentCard.outerHTML = coverageCardMarkup(topic);
-      activatePreviewImages();
+      selectLogicCarousel(logicId, (current + direction + assets.length) % assets.length);
     }
 
     function currentRecords() {
@@ -1045,6 +1050,11 @@
       if (textPreviewTarget) {
         selectedTextPreviewId = textPreviewTarget.dataset.textPreviewSelect;
         renderTextLayoutDetail();
+        return;
+      }
+      const carouselSelectTarget = event.target.closest("[data-carousel-select]");
+      if (carouselSelectTarget) {
+        selectLogicCarousel(carouselSelectTarget.dataset.logicId, Number(carouselSelectTarget.dataset.carouselSelect));
         return;
       }
       const carouselTarget = event.target.closest("[data-carousel-move]");

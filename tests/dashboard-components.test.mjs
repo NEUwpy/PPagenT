@@ -96,7 +96,7 @@ test("看板只把资产专属 HTML 计入迁移完成度", async () => {
   )));
   assert.equal(cycle?.builderExport, "");
   assert.equal(cycle?.componentInitialSelection.stepCount, 4);
-  assert.equal(data.summary.htmlDesignComponents, 20);
+  assert.equal(data.summary.htmlDesignComponents, 23);
   assert.match(cycle?.previewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.componentPreviewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.nativeStatePreviewUrl ?? "", /[?&]v=\d+/);
@@ -189,7 +189,8 @@ test("作废的旧 Logic 不再出现在核心库或正式生成候选中", asyn
     "problem-method-result-001", "progression-spectrum-focus-001",
     "branching-decision-routes-001", "goal-alignment-strategy-metrics-001",
     "role-stage-collaboration-001", "containment-multi-set-intersection-001",
-    "network-internal-external-ecosystem-001",
+    "network-internal-external-ecosystem-001", "cycle-racetrack-loop-005",
+    "cycle-single-chain-feedback-002", "convergence-many-to-one-003",
   ]));
 });
 
@@ -200,7 +201,11 @@ test("Logic 能力地图保留空槽位，只把合格资产填入对应位置",
   assert.equal(data.summary.logicFilled, 18);
 
   const cycle = data.logics.find((logic) => logic.id === "cycle");
-  assert.deepEqual(cycle?.assetIds, ["cycle-loop-001"]);
+  assert.deepEqual(cycle?.assetIds, [
+    "cycle-loop-001",
+    "cycle-racetrack-loop-005",
+    "cycle-single-chain-feedback-002",
+  ]);
   assert.equal(cycle?.status, "available");
 
   const parallel = data.logics.find((logic) => logic.id === "parallel");
@@ -224,6 +229,7 @@ test("Logic 能力地图保留空槽位，只把合格资产填入对应位置",
   assert.deepEqual(convergence?.assetIds, [
     "convergence-simple-funnel-001",
     "convergence-funnel-001",
+    "convergence-many-to-one-003",
   ]);
   assert.equal(convergence?.status, "available");
 
@@ -250,6 +256,11 @@ test("Logic 能力地图保留空槽位，只把合格资产填入对应位置",
   const network = data.logics.find((logic) => logic.id === "network");
   assert.deepEqual(network?.assetIds, ["network-internal-external-ecosystem-001"]);
   assert.equal(network?.status, "available");
+
+  const template = await fs.readFile(path.join(root, "src/tools/templates/logic-dashboard.html"), "utf8");
+  assert.match(template, /data-carousel-select/);
+  assert.match(template, /coverage-asset-tab/);
+  assert.match(template, /candidate\.name/);
 });
 
 test("鱼骨归因由同一组件扩散类别与因素状态，并由 Mapper 绑定结果和原因", () => {
