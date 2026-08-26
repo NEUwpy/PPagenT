@@ -1,1 +1,54 @@
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}body{background:transparent}.venn .set:nth-child(1){padding:80px 150px 60px 25px}.venn .set:nth-child(1)>*{width:135px}.venn .set:nth-child(2){padding:80px 25px 60px 150px}.venn .set:nth-child(2)>*{width:135px;margin-left:auto}.venn .set:nth-child(3){padding:180px 75px 20px}
+* { box-sizing: border-box; }
+:root { font-family: var(--ppagent-font-body, "Microsoft YaHei"), "Noto Sans CJK SC", sans-serif; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { background: #fff; }
+.consensus-review {
+  position: relative;
+  width: 1170px;
+  height: 492px;
+  overflow: hidden;
+  background: #fff;
+  color: #315b78;
+}
+.consensus-orbit { position: absolute; inset: 0; z-index: 0; width: 1170px; height: 492px; overflow: visible; }
+.consensus-orbit path { fill: none; stroke-linecap: round; }
+.consensus-orbit-back { stroke: #d8e4f0; stroke-width: 1.4; stroke-dasharray: 7 12; }
+.consensus-orbit-front { stroke: #9fb9d6; stroke-width: 2.6; stroke-dasharray: 9 10; }
+.field-base, .field-outer, .field-inner,
+.actor-base, .actor-surface, .actor-surface-ring,
+.actor-icon-foot { position: absolute; }
+.field-base, .field-outer, .field-inner,
+.actor-base, .actor-surface, .actor-surface-ring, .actor-icon-foot { border-radius: 50%; }
+.field-base { z-index: 1; background: #b9cde4; box-shadow: 0 10px 18px rgba(47, 94, 168, .10); }
+.field-outer { z-index: 2; border: 1px solid #b8cee7; background: linear-gradient(180deg, #eef5fc 0%, #d7e5f5 68%, #c6d9ed 100%); }
+.field-inner { z-index: 3; border: 1px solid rgba(255, 255, 255, .96); background: linear-gradient(180deg, #fbfdff 0%, #edf4fb 100%); }
+.actor-base { z-index: 4; background: var(--actor-base); box-shadow: 0 10px 18px rgba(38, 73, 117, .16); }
+.actor-surface { z-index: 6; border: 2px solid rgba(255, 255, 255, .94); background: linear-gradient(180deg, var(--actor-highlight) 0%, var(--actor-surface) 56%, var(--actor-wall) 100%); }
+.actor-surface-ring { z-index: 7; border: 1px solid rgba(255, 255, 255, .38); }
+.actor-icon-depth, .actor-icon-slot { position: absolute; z-index: 8; display: grid; place-items: center; }
+.actor-icon-depth { z-index: 8; color: #b87536; }
+.actor-icon-slot { z-index: 10; color: #e9a34b; }
+.actor-icon-svg { width: 100%; height: 100%; stroke: currentColor; stroke-width: 2.15; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+.actor-icon-depth .actor-icon-svg { stroke-width: 2.15; }
+.actor-icon-foot { z-index: 9; background: rgba(133, 73, 31, .22); }
+.actor-icon-fallback { display: block; width: 30px; height: 30px; border: 4px solid currentColor; border-radius: 50%; }
+.actor-copy, .shared-copy { position: absolute; z-index: 12; display: block; overflow: hidden; margin: 0; }
+.actor-copy { --ppagent-text-layout-gap: 2px; }
+.actor-copy .ppagent-text-primitive--heading,
+.actor-copy .ppagent-text-primitive--body,
+.actor-copy .ppagent-text-list__item { text-align: center; }
+.actor-copy .ppagent-text-primitive--heading { color: #274d78; font-weight: 700; line-height: 1.18; }
+.actor-copy .ppagent-text-primitive--body,
+.actor-copy .ppagent-text-list__item { color: #66798c; line-height: 1.18; }
+.shared-copy { --ppagent-text-layout-gap: 8px; }
+.shared-copy .ppagent-text-primitive--heading,
+.shared-copy .ppagent-text-primitive--body,
+.shared-copy .ppagent-text-list__item,
+.shared-copy .ppagent-structured-list__item { text-align: center; }
+.shared-copy .ppagent-text-primitive--heading { color: #274f7c; font-size: 18pt; font-weight: 700; line-height: 1.18; }
+.shared-copy .ppagent-text-primitive--body { color: #607a91; line-height: 1.25; }
+.shared-copy .ppagent-structured-list { display: flex; flex-direction: row; justify-content: center; align-items: center; align-content: center; flex-wrap: wrap; gap: 7px; }
+.shared-copy .ppagent-structured-list__item { flex: 0 0 92px; width: 92px; padding: 5px 6px; border: 1px solid #c8d9ec; border-radius: 999px; background: #e8f1fb; white-space: nowrap; }
+.shared-copy .ppagent-structured-list__item .ppagent-text-primitive--heading,
+.shared-copy .ppagent-structured-list__item .ppagent-text-primitive--body { color: #416489; font-size: 14pt; font-weight: 500; line-height: 1.12; }
+.consensus-review[data-set-count="5"] .actor-copy { --ppagent-text-layout-gap: 1px; }

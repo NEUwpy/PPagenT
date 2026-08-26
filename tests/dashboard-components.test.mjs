@@ -96,7 +96,7 @@ test("看板只把资产专属 HTML 计入迁移完成度", async () => {
   )));
   assert.equal(cycle?.builderExport, "");
   assert.equal(cycle?.componentInitialSelection.stepCount, 4);
-  assert.equal(data.summary.htmlDesignComponents, 27);
+  assert.equal(data.summary.htmlDesignComponents, 28);
   assert.match(cycle?.previewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.componentPreviewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.nativeStatePreviewUrl ?? "", /[?&]v=\d+/);
@@ -192,6 +192,7 @@ test("作废的旧 Logic 不再出现在核心库或正式生成候选中", asyn
     "role-stage-collaboration-001", "containment-multi-set-intersection-001",
     "network-internal-external-ecosystem-001", "cycle-racetrack-loop-005",
     "cycle-single-chain-feedback-002", "convergence-many-to-one-003",
+    "convergence-consensus-field-005",
   ]));
 });
 
@@ -231,6 +232,7 @@ test("Logic 能力地图保留空槽位，只把合格资产填入对应位置",
     "convergence-simple-funnel-001",
     "convergence-funnel-001",
     "convergence-many-to-one-003",
+    "convergence-consensus-field-005",
   ]);
   assert.equal(convergence?.status, "available");
 
