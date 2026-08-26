@@ -96,4 +96,19 @@ test("结构化数据只接受完整且唯一的 PageContent 引用", () => {
   assert.deepEqual(validateStructuredDataReferences(network), []);
   network.structuredData.links.push({ from: "missing", to: "external-b" });
   assert.ok(validateStructuredDataReferences(network).some((issue) => issue.code === "UNKNOWN_ITEM_REFERENCE"));
+
+  const tieredHub = {
+    items: [item("inner-a"), item("inner-b"), item("inner-c"), item("outer-a"), item("outer-b"), item("outer-c")],
+    structuredData: {
+      type: "hub-tiered-ecosystem",
+      center: { title: "共同中心", body: "" },
+      innerIds: ["inner-a", "inner-b", "inner-c"],
+      outerIds: ["outer-a", "outer-b", "outer-c"],
+    },
+  };
+  assert.deepEqual(validateStructuredDataReferences(tieredHub), []);
+  tieredHub.structuredData.outerIds[2] = "inner-a";
+  const tieredHubIssues = validateStructuredDataReferences(tieredHub);
+  assert.ok(tieredHubIssues.some((issue) => issue.code === "DUPLICATE_REFERENCE"));
+  assert.ok(tieredHubIssues.some((issue) => issue.code === "UNASSIGNED_ITEM"));
 });

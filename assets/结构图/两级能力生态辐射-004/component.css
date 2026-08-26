@@ -1,30 +1,31 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
 body { color: #405f74; background: transparent; font-family: var(--ppagent-font-body, "Microsoft YaHei"), sans-serif; }
-
 .two-tier-review { position: relative; width: 1170px; height: 492px; overflow: hidden; background: transparent; }
 .two-tier-review > svg { position: absolute; inset: 0; z-index: 0; width: 1170px; height: 492px; overflow: visible; }
-.orbit-shell { fill: none; }
-.orbit-shell--outer { stroke: #a9bfcc; stroke-width: 1.6; }
-.orbit-shell--inner { stroke: #789bb1; stroke-width: 2.1; }
-.primary-node-disc, .secondary-node-disc { stroke: none; }
-.primary-node-back { stroke: #fff; stroke-width: 3; }
-.secondary-node-back { stroke: #fff; stroke-width: 2; }
-.core-rule { fill: none; stroke: #adc3d0; stroke-width: 2.2; }
-.core-back { fill: #1f4664; stroke: #fff; stroke-width: 3; }
-.core-disc { fill: #28577d; stroke: none; }
-.core-region { position: absolute; left: 510px; top: 213px; z-index: 4; width: 150px; height: 66px; --ppagent-heading-color: #fff; }
-.core-region .ppagent-text-primitive--heading { color: #fff; font-size: 16.5pt; font-weight: 700; line-height: 1.14; }
-
-.inner-label { position: absolute; z-index: 5; width: 92px; height: 92px; overflow: hidden; }
-.inner-region { position: absolute; inset: 7px; z-index: 1; --ppagent-heading-color: #fff; }
-.inner-region .ppagent-text-primitive--heading { color: #fff; font-size: 12.5pt; font-weight: 700; line-height: 1.1; }
-
-.outer-label { position: absolute; z-index: 4; width: 78px; height: 78px; overflow: hidden; }
-.outer-region { position: absolute; inset: 6px; z-index: 1; --ppagent-heading-color: #49687b; }
-.outer-region .ppagent-text-primitive--heading { color: #49687b; font-size: 11.5pt; font-weight: 700; line-height: 1.08; }
-
-.tier-caption { position: absolute; left: 24px; z-index: 6; width: 126px; color: #78909f; font-size: var(--ppagent-component-meta-size, 11pt); font-weight: 600; letter-spacing: .03em; text-align: left; }
-.tier-caption::before { content: ""; display: inline-block; width: 18px; height: 2px; margin: 0 7px 4px 0; background: #8eaabc; }
-.tier-caption--outer { top: 18px; }
+.orbit { fill: none; stroke-linecap: round; }
+.orbit--outer { stroke-width: 1.7; }
+.orbit--inner { stroke-width: 2.1; }
+.orbit--back { stroke: #c4d5df; stroke-dasharray: 3 8; }
+.orbit--front.orbit--outer { stroke: #90adbf; }
+.orbit--front.orbit--inner { stroke: #6f95ad; }
+.planet-depth { stroke: #fff; stroke-width: 2.4; }
+.planet-body { stroke: rgba(255,255,255,.92); stroke-width: 2; }
+.planet-highlight { fill: rgba(255,255,255,.42); stroke: none; }
+.planet--outer .planet-highlight { fill: rgba(255,255,255,.58); }
+.core-depth { fill: #244f76; stroke: #fff; stroke-width: 3; }
+.core-disc { fill: #315f89; stroke: #fff; stroke-width: 2; }
+.core-highlight { fill: rgba(255,255,255,.27); stroke: none; }
+.core-region { position: absolute; left: 510px; top: 209px; z-index: 7; display: flex; width: 150px; height: 74px; align-items: center; justify-content: center; overflow: hidden; color: #fff; font-size: var(--ppagent-component-lead-size, 16pt); font-weight: 700; line-height: 1.15; text-align: center; }
+.inner-label { position: absolute; z-index: 8; overflow: hidden; }
+.inner-region { position: absolute; inset: 5px; display: flex; align-items: center; justify-content: center; overflow: hidden; color: #fff; font-size: var(--ppagent-component-meta-size, 12pt); font-weight: 700; line-height: 1.08; text-align: center; }
+.outer-label { position: absolute; z-index: 9; overflow: hidden; }
+.outer-region { position: absolute; inset: 1px 4px; display: flex; align-items: center; justify-content: center; overflow: hidden; color: #49687b; font-size: var(--ppagent-component-meta-size, 12pt); font-weight: 650; line-height: 1.08; text-align: center; }
+.tier-caption { position: absolute; left: 52px; z-index: 10; width: 122px; color: #71899b; font-size: var(--ppagent-component-meta-size, 12pt); font-weight: 600; letter-spacing: .02em; }
+.tier-caption-line { position: absolute; left: 22px; z-index: 10; width: 22px; height: 2px; }
+.tier-caption--outer { top: 17px; }
+.tier-caption-line--outer { top: 25px; background: #9fb8c8; }
 .tier-caption--inner { top: 43px; }
+.tier-caption-line--inner { top: 51px; background: #5f86a2; }
+.two-tier-review[data-outer-count="0"] .tier-caption--inner { top: 17px; }
+.two-tier-review[data-outer-count="0"] .tier-caption-line--inner { top: 25px; }

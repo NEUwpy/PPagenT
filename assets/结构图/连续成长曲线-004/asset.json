@@ -1,1 +1,81 @@
-{"id":"progression-growth-curve-004","name":"连续成长曲线","kind":"component","category":"结构图","creationMethod":"distillation","status":"pending-review","source":{"file":"PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx","slides":[216]},"runtime":{"renderer":"html-component","entry":"review.mjs","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","logicId":"progression","structureGroupId":"progression-growth-curve","familyId":"progression","variantId":"smooth-growth-curve-with-milestones","silhouette":"smooth-growth-curve-with-milestones","supportedBaseRelations":["progression"],"supportedPurposeKeys":["cover_expression_gap"],"itemCount":{"min":3,"preferred":[5],"max":6},"stateContract":{"resolver":"pointCount","states":[3,4,5,6],"previewDefault":5},"contentContract":{"itemRole":"semantic-unit","points":"forbidden","ordered":true},"contract":{"abstractionLevel":"foundation","adaptationStatus":"adaptive","constraints":{"coverageGap":true,"density":["medium"]}},"review":{"entry":"review.mjs","visualIntent":"visual-intent.md","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","implementation":"asset-specific-html","goldenState":{"selection":{"pointCount":5}},"controls":[{"key":"pointCount","label":"节点数","values":[3,4,5,6],"default":5}]}},"coverageDelta":"补齐成熟度阶梯强调离散门槛、双轨进阶强调同步阶段、连续区间只突出某个范围，而不能表达持续加速或积累式成长轨迹的缺口。","layoutExpansion":{"mode":"responsive","range":"3–6 个节点沿连续上升曲线分布","rule":"按已声明控制项重算组件内部拓扑与空间，不维护逐项数独立代码"},"componentModel":{"fixed":["逻辑关系与阅读路径","字段角色","失败边界"],"variable":["3–6 个节点沿连续上升曲线分布","文本内容"]},"fieldContract":{"editable":[{"field":"parameters","meaning":"按组件声明填写的结构化内容"}],"generated":[{"field":"layout","meaning":"由 HTML 组件按状态统一求解"}],"fixed":["组件拓扑与语义角色"],"unavailable":["阶段有明确准入门槛、趋势不是单调成长或需要比较两条轨道"]},"spatialContract":{"coordinateSystem":{"width":1280,"height":720},"contentFrame":{"left":55,"top":166,"width":1170,"height":492},"aspectRatio":2.378,"minimumFrame":{"width":1170,"height":492},"preferredFrame":{"width":1170,"height":492},"resizeMode":"natural","minFontSize":15,"safePadding":10,"supportedCompositionIds":["component-full"]},"capacity":"3–6 个节点沿连续上升曲线分布","semanticContract":"对象沿连续趋势不断成长，若干节点只是观察点而非严格等级门槛","doNotUseWhen":"阶段有明确准入门槛、趋势不是单调成长或需要比较两条轨道","review":"等待用户统一审核 HTML；未生成 Native PPT"}
+{
+  "id": "progression-growth-curve-004",
+  "name": "山路递进",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "pending-review",
+  "source": {
+    "file": "PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx",
+    "slides": [216]
+  },
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "review.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "logicId": "progression",
+    "structureGroupId": "progression-growth-curve",
+    "familyId": "progression",
+    "variantId": "faceted-mountain-road-progression",
+    "silhouette": "large-low-poly-mountain-with-winding-ascent-route",
+    "supportedBaseRelations": ["progression"],
+    "supportedPurposeKeys": ["cover_expression_gap"],
+    "itemCount": { "min": 3, "preferred": [4, 5], "max": 6 },
+    "stateContract": { "resolver": "pointCount", "states": [3, 4, 5, 6], "previewDefault": 5 },
+    "contentContract": { "itemRole": "semantic-node", "points": "forbidden", "ordered": true },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "semantic": { "ordered": true },
+        "relationTraits": { "progression": true, "continuousAscent": true },
+        "density": ["medium"]
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": { "selection": { "pointCount": 5 } },
+      "controls": [
+        { "key": "pointCount", "label": "里程点数", "values": [3, 4, 5, 6], "default": 5 }
+      ]
+    }
+  },
+  "coverageDelta": "用持续攀升的山路覆盖无硬性等级门槛的递进表达；与离散成熟度阶梯、横向阶段旅程明确区分。",
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "3–6 个沿山路上升的里程点",
+    "rule": "按里程点数共同求解连续山脊、局部峰顶与上升路径；每个里程点落在对应的小山头上"
+  },
+  "componentModel": {
+    "fixed": ["由连续局部山峰组成的低多边形抽象山体", "由山脚通向峰顶的上升路径", "里程点与局部峰顶重合", "高度持续增加"],
+    "variable": ["3–6 个里程点", "节点标题与说明"]
+  },
+  "fieldContract": {
+    "editable": [{ "field": "points[]", "meaning": "依次上升的里程点标题与说明" }],
+    "generated": [{ "field": "layout", "meaning": "按点数共同计算山脊分面、局部峰顶、上升路径和文字区域" }],
+    "fixed": ["阅读方向从山脚到峰顶", "节点表示持续进阶而非硬性门槛"],
+    "unavailable": ["明确成熟度等级", "时间事件排期", "双轨同步进阶"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "resizeMode": "natural",
+    "minFontSize": 15,
+    "safePadding": 10,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "3–6 个里程点；标题 10 字，说明 22 字",
+  "semanticContract": "对象沿一个持续向上的路径逐步积累和突破，节点是里程点而不是严格等级门槛",
+  "doNotUseWhen": "存在明确准入等级、重点是时间事件、趋势并非单调上升或需要两条并行轨道",
+  "review": "等待用户审核山体构成、山路递进语义及 3–6 点扩散；未生成 Native PPT"
+}

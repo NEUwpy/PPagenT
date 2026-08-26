@@ -17,12 +17,12 @@ body { background: #fff; color: #53677e; }
 .gate { position: absolute; inset: 0; z-index: 4; }
 .gate-geometry { z-index: 4; }
 .gate-plane { fill: rgba(255, 255, 255, .42); stroke: none; }
-.gate-frame { fill: none; stroke: #436f9d; stroke-width: 5px; stroke-linecap: round; stroke-linejoin: round; }
-.gate-threshold { fill: none; stroke: #315f91; stroke-width: 4px; stroke-linecap: round; }
+.gate-i-beam { fill: #3f6d9a; stroke: none; }
 .gate-label-link { fill: none; stroke: #8ea8c1; stroke-width: 1.5px; stroke-dasharray: 5 6; stroke-linecap: round; }
 .gate-check { position: absolute; z-index: 6; display: grid; place-items: center; border: 3px solid #fff; border-radius: 8px; background: #315f91; color: #fff; font-size: var(--ppagent-component-body-size, 14pt); font-weight: 800; line-height: 1; text-align: center; white-space: nowrap; }
 .gate-tag { position: absolute; z-index: 6; height: 18px; overflow: hidden; color: #708aa4; font-size: var(--ppagent-component-annotation-size, 12pt); font-weight: 800; line-height: 18px; text-align: center; letter-spacing: .08em; white-space: nowrap; }
-.gate-content { position: absolute; z-index: 5; display: block; overflow: hidden; padding: 6px 9px; border-radius: 12px; background: rgba(244, 248, 251, .94); --ppagent-text-layout-gap: 4px; --ppagent-heading-color: #315b89; --ppagent-text-color: #687d93; }
+.gate-content-surface { position: absolute; z-index: 5; border-radius: 12px; background: #f4f8fb; }
+.gate-content { position: absolute; z-index: 6; display: block; overflow: hidden; padding: 6px 9px; --ppagent-text-layout-gap: 4px; --ppagent-heading-color: #315b89; --ppagent-text-color: #687d93; }
 .gate-content .ppagent-text-primitive--heading { font-size: var(--ppagent-component-body-size, 14pt); line-height: 1.1; text-wrap: balance; }
 .gate-content .ppagent-text-primitive--body { font-size: var(--ppagent-component-meta-size, 13pt); line-height: 1.14; text-wrap: balance; }
 .phase-gates-review[data-phase-count="5"] .phase-content { padding-inline: 3px; --ppagent-text-layout-gap: 4px; }

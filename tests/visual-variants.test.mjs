@@ -53,6 +53,7 @@ test("正式结构候选来自当前核心 HTML 资产包", async () => {
     "goal-alignment-strategy-metrics-001",
     "hierarchy-people-tree-001",
     "hub-directed-outcomes-002",
+    "hub-two-tier-capabilities-004",
     "hub-radial-001",
     "layered-iceberg-depth-006",
     "layered-architecture-001",
@@ -63,6 +64,7 @@ test("正式结构候选来自当前核心 HTML 资产包", async () => {
     "problem-solution-outcome-001",
     "progression-spectrum-focus-001",
     "role-stage-collaboration-001",
+    "sequence-phase-gates-004",
     "sequence-flow-001",
   ]);
   assert.deepEqual(
@@ -192,6 +194,7 @@ test("运行时登记当前核心结构资产", async () => {
     "hierarchy-people-tree-001",
     "hub-directed-outcomes-002",
     "hub-radial-001",
+    "hub-two-tier-capabilities-004",
     "layered-architecture-001",
     "layered-iceberg-depth-006",
     "matrix-quadrant-priority-001",
@@ -202,6 +205,7 @@ test("运行时登记当前核心结构资产", async () => {
     "progression-spectrum-focus-001",
     "role-stage-collaboration-001",
     "sequence-flow-001",
+    "sequence-phase-gates-004",
   ]);
   assert.deepEqual(builders.variantBuilderKeys, [
     "argument-evidence-conclusion-001:proof-stack-1n1",
@@ -222,6 +226,7 @@ test("运行时登记当前核心结构资产", async () => {
     "hierarchy-people-tree-001:three-level-portraits",
     "hub-directed-outcomes-002:center-periphery-radial-connections",
     "hub-radial-001:balanced-orbit-anchor",
+    "hub-two-tier-capabilities-004:core-orbital-capabilities-shared-outcomes",
     "layered-architecture-001:curved-frustum-stack",
     "layered-iceberg-depth-006:faceted-geometric-iceberg",
     "matrix-quadrant-priority-001:axis-bubble-quadrant",
@@ -232,6 +237,7 @@ test("运行时登记当前核心结构资产", async () => {
     "progression-spectrum-focus-001:ordered-regions-with-focus",
     "role-stage-collaboration-001:continuous-stage-role-swimlane",
     "sequence-flow-001:continuous-numbered-rail",
+    "sequence-phase-gates-004:ordered-phases-with-gates",
   ]);
 });
 

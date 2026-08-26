@@ -43,6 +43,7 @@ import {
 import { mapPageContent as mapMatrixPageContent } from "../assets/结构图/矩阵象限-001/runtime.mjs";
 import { mapPageContent as mapIntersectionPageContent } from "../assets/结构图/多集合交集-001/runtime.mjs";
 import { mapPageContent as mapNetworkPageContent } from "../assets/结构图/关系生态网络-001/runtime.mjs";
+import { mapPageContent as mapTieredHubPageContent } from "../assets/结构图/两级能力生态辐射-004/runtime.mjs";
 
 const root = path.resolve(import.meta.dirname, "..");
 
@@ -96,7 +97,7 @@ test("看板只把资产专属 HTML 计入迁移完成度", async () => {
   )));
   assert.equal(cycle?.builderExport, "");
   assert.equal(cycle?.componentInitialSelection.stepCount, 4);
-  assert.equal(data.summary.htmlDesignComponents, 28);
+  assert.equal(data.summary.htmlDesignComponents, 30);
   assert.match(cycle?.previewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.componentPreviewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.nativeStatePreviewUrl ?? "", /[?&]v=\d+/);
@@ -182,8 +183,8 @@ test("作废的旧 Logic 不再出现在核心库或正式生成候选中", asyn
   const formalIds = new Set(data.formalLogics.map((record) => record.id));
   assert.deepEqual(formalIds, new Set([
     "comparison-dual-verdict-001", "comparison-pros-cons-balance-005", "cycle-loop-001", "hierarchy-people-tree-001",
-    "hub-directed-outcomes-002", "hub-radial-001", "layered-architecture-001", "layered-iceberg-depth-006", "parallel-equal-cards-001",
-    "convergence-simple-funnel-001", "convergence-funnel-001", "sequence-flow-001",
+    "hub-directed-outcomes-002", "hub-radial-001", "hub-two-tier-capabilities-004", "layered-architecture-001", "layered-iceberg-depth-006", "parallel-equal-cards-001",
+    "convergence-simple-funnel-001", "convergence-funnel-001", "sequence-flow-001", "sequence-phase-gates-004",
     "causal-fishbone-attribution-001", "problem-solution-outcome-001",
     "matrix-quadrant-priority-001", "argument-evidence-conclusion-001",
     "problem-method-result-001", "progression-spectrum-focus-001",
@@ -215,7 +216,7 @@ test("Logic 能力地图保留空槽位，只把合格资产填入对应位置",
   assert.equal(parallel?.status, "available");
 
   const sequence = data.logics.find((logic) => logic.id === "sequence");
-  assert.deepEqual(sequence?.assetIds, ["sequence-flow-001"]);
+  assert.deepEqual(sequence?.assetIds, ["sequence-flow-001", "sequence-phase-gates-004"]);
   assert.equal(sequence?.status, "available");
 
   const layered = data.logics.find((logic) => logic.id === "layered");
@@ -547,6 +548,36 @@ test("内外协同生态网络只按显式分组与关系映射正式载荷", ()
   assert.deepEqual(payload.parameters.external.nodes.map((item) => item.key), ["university", "industry"]);
   assert.deepEqual(payload.parameters.links, content.structuredData.links);
   assert.equal(payload.mappings.length, 4);
+});
+
+test("行星环只按显式内外圈分组映射正式载荷", () => {
+  const content = {
+    pageId: "tiered-hub-page",
+    title: "可靠生成能力生态",
+    items: [
+      { id: "understand", title: "内容理解", body: "" },
+      { id: "select", title: "结构选择", body: "" },
+      { id: "layout", title: "响应布局", body: "" },
+      { id: "compile", title: "原生编译", body: "" },
+      { id: "clarity", title: "逻辑清晰", body: "" },
+      { id: "editable", title: "对象可编辑", body: "" },
+      { id: "stable", title: "稳定交付", body: "" },
+    ],
+    structuredData: {
+      type: "hub-tiered-ecosystem",
+      center: { title: "可靠 PPTX 生成", body: "" },
+      innerIds: ["understand", "select", "layout", "compile"],
+      outerIds: ["clarity", "editable", "stable"],
+    },
+  };
+  const payload = mapTieredHubPageContent(content, { intentId: "tiered-hub-intent" }, null, {
+    componentItemIds: content.items.map((item) => item.id),
+  });
+  assert.equal(payload.assetId, "hub-two-tier-capabilities-004");
+  assert.equal(payload.parameters.center, content.structuredData.center.title);
+  assert.deepEqual(payload.parameters.inner, ["内容理解", "结构选择", "响应布局", "原生编译"]);
+  assert.deepEqual(payload.parameters.outer, ["逻辑清晰", "对象可编辑", "稳定交付"]);
+  assert.equal(payload.mappings.length, 7);
 });
 
 test("等权并列卡片由同一 HTML 组件重新排布 3–5 项状态", () => {
