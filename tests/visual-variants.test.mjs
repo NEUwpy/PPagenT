@@ -14,6 +14,7 @@ import {
   visualComponent as stagedFunnelComponent,
 } from "../assets/结构图/转化漏斗-001/runtime.mjs";
 import { mapPageContent as mapComparisonPageContent } from "../assets/结构图/双向对比-001/runtime.mjs";
+import { mapPageContent as mapTradeoffPageContent } from "../assets/结构图/优劣权衡天平-005/runtime.mjs";
 import {
   listRenderableVisualVariants,
   planVisualVariants,
@@ -38,6 +39,7 @@ test("正式结构候选来自当前核心 HTML 资产包", async () => {
     "argument-evidence-conclusion-001",
     "branching-decision-routes-001",
     "causal-fishbone-attribution-001",
+    "comparison-pros-cons-balance-005",
     "comparison-dual-verdict-001",
     "containment-multi-set-intersection-001",
     "convergence-many-to-one-003",
@@ -147,6 +149,13 @@ test("正式结构候选来自当前核心 HTML 资产包", async () => {
     }).map((variant) => variant.assetId),
     ["comparison-dual-verdict-001"],
   );
+  assert.deepEqual(
+    queryVisualVariants(structural, {
+      logicId: "comparison", baseRelation: "comparison", purposeKey: "compare_options",
+      itemCount: 6, structuredDataType: "decision-tradeoff",
+    }).map((variant) => variant.assetId),
+    ["comparison-pros-cons-balance-005"],
+  );
 });
 
 test("运行时登记当前核心结构资产", async () => {
@@ -156,6 +165,7 @@ test("运行时登记当前核心结构资产", async () => {
     "branching-decision-routes-001",
     "causal-fishbone-attribution-001",
     "comparison-dual-verdict-001",
+    "comparison-pros-cons-balance-005",
     "containment-multi-set-intersection-001",
     "convergence-funnel-001",
     "convergence-many-to-one-003",
@@ -182,6 +192,7 @@ test("运行时登记当前核心结构资产", async () => {
     "branching-decision-routes-001:single-decision-fanout",
     "causal-fishbone-attribution-001:fishbone-attribution",
     "comparison-dual-verdict-001:dual-verdict-mirror",
+    "comparison-pros-cons-balance-005:geometric-balance-with-verdict",
     "containment-multi-set-intersection-001:multi-set-common-core",
     "convergence-funnel-001:staged-input-content-funnel",
     "convergence-many-to-one-003:multiple-lanes-merge-to-output",
@@ -306,4 +317,24 @@ test("双向对比的一侧标为重点时另一侧自动成为负向", () => {
     ],
   }, { intentId: "comparison-intent" });
   assert.deepEqual(payload.parameters.sides.map((side) => side.tone), ["positive", "negative"]);
+});
+
+test("优劣权衡天平只映射原稿明确分组和结论", () => {
+  const payload = mapTradeoffPageContent({
+    title: "是否采用 HTML 作为单一布局源",
+    items: [
+      { id: "b1", title: "结果可审核" }, { id: "b2", title: "布局可编译" }, { id: "b3", title: "运行期更稳定" },
+      { id: "r1", title: "样式需约束" }, { id: "r2", title: "依赖需声明" }, { id: "r3", title: "边界需完善" },
+    ],
+    structuredData: {
+      type: "decision-tradeoff",
+      benefitIds: ["b1", "b2", "b3"],
+      riskIds: ["r1", "r2", "r3"],
+      verdict: { title: "收益更具长期价值", body: "但必须保留明确失败边界" },
+      balanceState: "收益侧更重",
+    },
+  }, { intentId: "tradeoff-intent" });
+  assert.deepEqual(payload.parameters.pros, ["结果可审核", "布局可编译", "运行期更稳定"]);
+  assert.deepEqual(payload.parameters.cons, ["样式需约束", "依赖需声明", "边界需完善"]);
+  assert.equal(payload.parameters.balanceState, "收益侧更重");
 });
