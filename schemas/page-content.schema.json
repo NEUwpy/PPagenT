@@ -137,6 +137,28 @@
         {
           "type": "object",
           "additionalProperties": false,
+          "required": ["type", "visibleIds", "hiddenIds"],
+          "properties": {
+            "type": { "const": "iceberg-visible-hidden" },
+            "visibleIds": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 5,
+              "items": { "type": "string", "minLength": 1 },
+              "uniqueItems": true
+            },
+            "hiddenIds": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 5,
+              "items": { "type": "string", "minLength": 1 },
+              "uniqueItems": true
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
           "required": ["type", "internalTitle", "externalTitle", "internalIds", "externalIds", "core", "links"],
           "properties": {
             "type": { "const": "internal-external-ecosystem" },

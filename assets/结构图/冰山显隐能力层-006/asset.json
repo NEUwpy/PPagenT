@@ -1,1 +1,177 @@
-{"id":"layered-iceberg-depth-006","name":"冰山显隐能力层","kind":"component","category":"结构图","creationMethod":"distillation","status":"pending-review","source":{"file":"PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx","slides":[109]},"runtime":{"renderer":"html-component","entry":"review.mjs","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","logicId":"layered","structureGroupId":"layered-iceberg-depth","familyId":"layered","variantId":"layered-iceberg-depth","silhouette":"layered-iceberg-depth","supportedBaseRelations":["layered"],"supportedPurposeKeys":["cover_expression_gap"],"itemCount":{"min":1,"preferred":[3],"max":3},"stateContract":{"resolver":"visibleCount+hiddenCount","states":[1,2,3],"previewDefault":3},"contentContract":{"itemRole":"semantic-unit","points":"forbidden","ordered":false},"contract":{"abstractionLevel":"foundation","adaptationStatus":"adaptive","constraints":{"coverageGap":true,"density":["medium"]}},"review":{"entry":"review.mjs","visualIntent":"visual-intent.md","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","implementation":"asset-specific-html","goldenState":{"selection":{"visibleCount":3,"hiddenCount":3}},"controls":[{"key":"visibleCount","label":"可见成果数","values":[1,2,3],"default":3},{"key":"hiddenCount","label":"隐含层数","values":[2,3,4],"default":3}]}},"coverageDelta":"现有分层资产按技术层、业务域或包裹关系组织，缺少“表面结果由多层隐性能力支撑”的显隐深度表达。","layoutExpansion":{"mode":"responsive","range":"1–3 个水上结果、2–4 个水下支撑层","rule":"同一组件根据声明状态重算内容区域内的拓扑、间距和字号，不维护逐数量独立实现"},"componentModel":{"fixed":["逻辑关系","阅读路径","内容角色与失败边界"],"variable":["1–3 个水上结果、2–4 个水下支撑层","字段内容与状态"]},"fieldContract":{"editable":[{"field":"visible[]","meaning":"1–3 个表层可见结果"},{"field":"hidden[]","meaning":"2–4 层由浅入深的隐性能力或条件"}],"generated":[{"field":"layout","meaning":"表层合并在水面上，隐性层按深度扩宽"}],"fixed":["必须存在显性结果与隐性基础的语义对照"],"unavailable":["只是普通分层、各层同等可见、需要表达层间接口"]},"spatialContract":{"coordinateSystem":{"width":1280,"height":720},"contentFrame":{"left":55,"top":166,"width":1170,"height":492},"aspectRatio":2.378,"minimumFrame":{"width":1170,"height":492},"preferredFrame":{"width":1170,"height":492},"resizeMode":"natural","minFontSize":15,"safePadding":10,"supportedCompositionIds":["component-full"]},"capacity":"1–3 个水上结果、2–4 个水下支撑层","semanticContract":"少量可见成果位于表层，其下存在更深、更基础且通常不可见的能力或条件层","doNotUseWhen":"所有层都同等可见、需要表达相邻接口、只是普通上下堆叠或不存在显隐含义","review":"等待用户统一审核 HTML；未生成 Native PPT"}
+{
+  "id": "layered-iceberg-depth-006",
+  "name": "冰山显隐能力层",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
+    "slides": [
+      109
+    ]
+  },
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "layered",
+    "structureGroupId": "layered-iceberg-depth",
+    "familyId": "layered",
+    "variantId": "faceted-geometric-iceberg",
+    "silhouette": "single-faceted-iceberg-above-and-below-water",
+    "supportedBaseRelations": [
+      "layered"
+    ],
+    "supportedPurposeKeys": [
+      "explain_layers",
+      "present_layered_conclusions"
+    ],
+    "itemCount": {
+      "min": 3,
+      "preferred": [
+        6
+      ],
+      "max": 10
+    },
+    "stateContract": {
+      "resolver": "visibleCount+hiddenCount",
+      "states": [1, 2, 3, 4, 5],
+      "previewDefault": 3
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "forbidden",
+      "ordered": false,
+      "requiresStructuredDataType": "iceberg-visible-hidden"
+    },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "semantic": {
+          "ordered": false
+        },
+        "relationTraits": {
+          "layered": true
+        },
+        "density": [
+          "medium"
+        ]
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": {
+        "selection": {
+          "visibleCount": 3,
+          "hiddenCount": 3
+        }
+      },
+      "exampleSelections": [
+        {
+          "visibleCount": 3,
+          "hiddenCount": 3
+        }
+      ],
+      "controls": [
+        {
+          "key": "visibleCount",
+          "label": "可见成果数",
+          "values": [1, 2, 3, 4, 5],
+          "default": 3
+        },
+        {
+          "key": "hiddenCount",
+          "label": "隐含层数",
+          "values": [2, 3, 4, 5],
+          "default": 3
+        }
+      ]
+    }
+  },
+  "coverageDelta": "现有分层资产按技术层、业务域或包裹关系组织，缺少“表面结果由多层隐性能力支撑”的显隐深度表达。",
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "1–5 个水上结果、2–5 个水下支撑层",
+    "rule": "同一抽象冰山根据成果数重算峰脊、肩部宽度和切面内文字安全区，并根据水下层数重算连续冰体切面"
+  },
+  "componentModel": {
+    "fixed": [
+      "一个连续的抽象冰山剪影",
+      "水面分隔显性成果与隐性支撑",
+      "低饱和同色阶的 SVG 多边形切面"
+    ],
+    "variable": [
+      "1–5 个水上成果及对应峰脊轮廓",
+      "2–5 个水下支撑层",
+      "文字内容与切面分段"
+    ]
+  },
+  "fieldContract": {
+    "editable": [
+      {
+        "field": "visible[]",
+        "meaning": "1–5 个表层可见结果"
+      },
+      {
+        "field": "hidden[]",
+        "meaning": "2–5 层由浅入深的隐性能力或条件"
+      }
+    ],
+    "generated": [
+      {
+        "field": "layout",
+        "meaning": "按水上成果数与水下层数统一求解冰山轮廓、标签位置和冰体切面"
+      }
+    ],
+    "fixed": [
+      "必须存在显性结果与隐性基础的语义对照",
+      "完整冰山剪影与低饱和同色阶视觉语言"
+    ],
+    "unavailable": [
+      "只是普通分层、各层同等可见、需要表达层间接口"
+    ]
+  },
+  "spatialContract": {
+    "coordinateSystem": {
+      "width": 1280,
+      "height": 720
+    },
+    "contentFrame": {
+      "left": 55,
+      "top": 166,
+      "width": 1170,
+      "height": 492
+    },
+    "aspectRatio": 2.378,
+    "minimumFrame": {
+      "width": 1170,
+      "height": 492
+    },
+    "preferredFrame": {
+      "width": 1170,
+      "height": 492
+    },
+    "resizeMode": "natural",
+    "minFontSize": 15,
+    "safePadding": 10,
+    "supportedCompositionIds": [
+      "component-full"
+    ]
+  },
+  "capacity": "1–5 个水上结果、2–5 个水下支撑层",
+  "semanticContract": "少量可见成果位于水面之上，其下由更深、更基础且通常不可见的能力或条件层共同支撑",
+  "doNotUseWhen": "所有层都同等可见、需要表达相邻接口、只是普通上下堆叠或不存在显隐含义",
+  "review": "用户确认抽象冰山视觉、1–5 个可见成果与 2–5 个隐含层扩散、切面内文字排版及完整水下色层覆盖；Native/PPT 与东北大学 Skin 同步落地，可进入正式生成线"
+}

@@ -182,7 +182,7 @@ test("作废的旧 Logic 不再出现在核心库或正式生成候选中", asyn
   const formalIds = new Set(data.formalLogics.map((record) => record.id));
   assert.deepEqual(formalIds, new Set([
     "comparison-dual-verdict-001", "cycle-loop-001", "hierarchy-people-tree-001",
-    "hub-radial-001", "layered-architecture-001", "parallel-equal-cards-001",
+    "hub-radial-001", "layered-architecture-001", "layered-iceberg-depth-006", "parallel-equal-cards-001",
     "convergence-simple-funnel-001", "convergence-funnel-001", "sequence-flow-001",
     "causal-fishbone-attribution-001", "problem-solution-outcome-001",
     "matrix-quadrant-priority-001", "argument-evidence-conclusion-001",
@@ -218,7 +218,7 @@ test("Logic 能力地图保留空槽位，只把合格资产填入对应位置",
   assert.equal(sequence?.status, "available");
 
   const layered = data.logics.find((logic) => logic.id === "layered");
-  assert.deepEqual(layered?.assetIds, ["layered-architecture-001"]);
+  assert.deepEqual(layered?.assetIds, ["layered-architecture-001", "layered-iceberg-depth-006"]);
   assert.equal(layered?.status, "available");
 
   const hierarchy = data.logics.find((logic) => logic.id === "hierarchy");

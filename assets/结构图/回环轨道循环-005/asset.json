@@ -33,7 +33,11 @@
     "contract": {
       "abstractionLevel": "foundation",
       "adaptationStatus": "adaptive",
-      "constraints": { "relationTraits": { "cycle": true, "ordered": true }, "density": ["low", "medium"] }
+      "constraints": {
+        "semantic": { "ordered": true },
+        "relationTraits": { "cyclic": true, "sequence": true },
+        "density": ["low", "medium"]
+      }
     },
     "review": {
       "entry": "review.mjs",

@@ -98,8 +98,17 @@ ${htmlTextFlowCss()}
 .rev-balance .beam{position:absolute;left:180px;right:180px;top:182px;height:12px;border-radius:8px;background:#315f87;transform:rotate(var(--tilt,0deg));transform-origin:center}.rev-balance .pivot{position:absolute;left:520px;top:184px;width:130px;height:208px;background:linear-gradient(180deg,#5f8eac,#2d5c82);clip-path:polygon(45% 0,55% 0,100% 100%,0 100%)}
 .rev-balance .topic{position:absolute;left:425px;top:16px;width:320px;height:105px;padding:16px 24px;border-radius:22px;background:#fff;border:1px solid #d8e4ec;box-shadow:0 8px 18px rgba(35,72,103,.08);text-align:center;--title-size:17pt;--body-size:11pt}.rev-balance .pan{position:absolute;top:238px;width:420px;min-height:210px;padding:42px 26px 20px;border-radius:0 0 160px 160px;background:#e7f0f5;border-bottom:8px solid #6f9bb8}.rev-balance .pan.left{left:40px}.rev-balance .pan.right{right:40px;background:#f4ebe5;border-bottom-color:#c38662}.rev-balance .pan h3{margin:0 0 12px;text-align:center;font-size:17pt}.rev-balance .pan ul{margin:0;padding-left:24px;color:#526879;font-size:12pt;line-height:1.55}.rev-balance .verdict{position:absolute;left:410px;bottom:18px;width:350px;height:72px;padding:10px 18px;border-radius:18px;background:#315f87;display:grid;place-items:center;text-align:center;--title-size:13pt}
 
-/* recognizable iceberg */
-.rev-iceberg .water{position:absolute;left:0;right:0;top:176px;height:316px;background:linear-gradient(180deg,rgba(192,219,234,.42),rgba(90,145,178,.22))}.rev-iceberg .waterline{position:absolute;left:0;right:0;top:173px;height:5px;background:#72a1be}.rev-iceberg .berg{position:absolute;left:225px;top:20px;width:720px;height:454px;filter:drop-shadow(0 10px 18px rgba(36,74,104,.12))}.rev-iceberg .ice-layer{position:absolute;left:50%;transform:translateX(-50%);display:grid;place-items:center;text-align:center;padding:10px 32px;clip-path:polygon(12% 0,88% 0,100% 100%,0 100%);--title-size:14pt}.rev-iceberg .visible{top:58px;width:360px;height:94px;background:#f9fcfd;border:2px solid #c8dce8}.rev-iceberg .hidden-0{top:193px;width:500px;height:68px;background:#a8c7da}.rev-iceberg .hidden-1{top:267px;width:590px;height:70px;background:#76a5c1}.rev-iceberg .hidden-2{top:343px;width:680px;height:74px;background:#467c9f}.rev-iceberg .hidden-3{top:423px;width:760px;height:54px;background:#2e5f86}.rev-iceberg .hidden-2,.rev-iceberg .hidden-3{--title-color:#fff}
+/* restrained generative iceberg: one silhouette, faceted with a quiet blue scale */
+.rev-iceberg{background:linear-gradient(180deg,#fff 0 35.5%,#f3f7fa 35.5% 100%)}
+.rev-iceberg .iceberg-art{position:absolute;inset:0;width:1170px;height:492px}
+.rev-iceberg .waterline{stroke:#9ab8ca;stroke-width:2.5}
+.rev-iceberg .water-glint{stroke:#d9e7ef;stroke-width:1.5;opacity:.9}
+.rev-iceberg .berg-piece{stroke:#fff;stroke-width:4;stroke-linejoin:round}
+.rev-iceberg .visible-label,.rev-iceberg .hidden-label{position:absolute;display:grid;place-items:center;text-align:center;overflow:hidden;--title-size:15pt}
+.rev-iceberg .visible-label{padding:2px 5px;color:#315c7b;--title-color:#315c7b}
+.rev-iceberg .visible-label>.ppagent-text-flow{width:100%;height:100%}
+.rev-iceberg .hidden-label{padding:8px 30px;--title-color:#315a76}
+.rev-iceberg .hidden-label.tone-deep{--title-color:#fff}
 
 /* architecture rather than generic table */
 .rev-domain{padding:22px 30px 20px 158px}.rev-domain .domain-columns{position:absolute;left:158px;right:30px;top:20px;height:54px;display:grid;grid-template-columns:repeat(var(--domains),1fr);gap:10px}.rev-domain .domain-label{display:grid;place-items:center;border-radius:16px 16px 6px 6px;background:#315f87;color:#fff;font-weight:700}.rev-domain .layers{position:absolute;left:158px;right:30px;top:84px;bottom:20px;display:grid;gap:9px}.rev-domain .layer{position:relative;display:grid;grid-template-columns:repeat(var(--domains),1fr);gap:10px;padding:8px;border-radius:14px;background:linear-gradient(90deg,#e1edf4,#f7fafc);border-left:8px solid var(--layer-color,#5d8dab)}.rev-domain .layer-name{position:absolute;right:calc(100% + 18px);top:50%;transform:translateY(-50%);width:110px;text-align:right;font-weight:700;color:#315978}.rev-domain .capability{display:grid;place-items:center;padding:7px 10px;border-radius:10px;background:rgba(255,255,255,.86);border:1px solid #dbe6ed;text-align:center;font-size:11.5pt;color:#4c6274}
@@ -194,8 +203,83 @@ function renderBalance(p) {
 }
 
 function renderIceberg(p) {
-  const visible = list(p.visible, 1, 3, "visible"); const hidden = list(p.hidden, 2, 4, "hidden");
-  return `<section class="rev rev-iceberg" data-ppt-root><div class="water"></div><div class="waterline"></div><div class="berg"><div class="ice-layer visible">${flow("visible", { title: visible.join(" · ") }, { id: "iceberg-visible", align: "center" })}</div>${hidden.map((item, i) => `<div class="ice-layer hidden-${i} ${i >= 2 ? "tone-dark" : ""}">${flow(`hidden[${i}]`, { title: item }, { id: `iceberg-hidden-${i}`, align: "center", tone: i >= 2 ? "dark" : "light" })}</div>`).join("")}</div></section>`;
+  const visible = list(p.visible, 1, 5, "visible"); const hidden = list(p.hidden, 2, 5, "hidden");
+  const pointPath = (points) => `M ${points} Z`;
+  const shiftPoints = (points, dx, dy) => points.split(/\s+/).map((pair) => {
+    const [x, y] = pair.split(",").map(Number);
+    return `${x + dx},${y + dy}`;
+  }).join(" ");
+  const boundaries = {
+    2: [184, 326, 468],
+    3: [184, 278, 374, 468],
+    4: [184, 252, 324, 396, 468],
+    5: [184, 238, 294, 352, 410, 468],
+  }[hidden.length];
+  const palette = ["#dceaf2", "#c5dbe7", "#a9c7d8", "#82a9c1", "#5e87a5"];
+  const bands = hidden.map((_, i) => {
+    const y1 = boundaries[i], y2 = boundaries[i + 1], mid = (y1 + y2) / 2;
+    const width = mid < 245 ? 410 : mid < 335 ? 470 : mid < 405 ? 395 : 320;
+    return {
+      y1, y2,
+      frame: { left: 585 - width / 2, top: y1 + 5, width, height: y2 - y1 - 10 },
+    };
+  });
+  const upperGeometry = {
+    1: {
+      outline: "425,178 486,119 560,22 626,106 745,178",
+      facets: ["425,178 486,119 560,22 528,178", "560,22 626,106 651,178 528,178", "626,106 745,178 651,178"],
+      labelFrames: [{ left: 500, top: 108, width: 150, height: 54 }],
+    },
+    2: {
+      outline: "380,178 452,105 520,122 598,24 674,109 790,178",
+      facets: ["380,178 452,105 520,122 520,178", "520,122 598,24 618,178 520,178", "598,24 674,109 690,178 618,178", "674,109 790,178 690,178"],
+      labelFrames: [{ left: 416, top: 126, width: 112, height: 46 }, { left: 604, top: 112, width: 126, height: 56 }],
+    },
+    3: {
+      outline: "330,178 416,122 470,132 558,18 617,94 667,82 840,178",
+      facets: ["330,178 416,122 470,132 514,178", "470,132 558,18 617,94 632,178 514,178", "617,94 667,82 728,178 632,178", "667,82 840,178 728,178"],
+      labelFrames: [{ left: 391, top: 135, width: 112, height: 38 }, { left: 526, top: 112, width: 112, height: 56 }, { left: 674, top: 119, width: 118, height: 52 }],
+    },
+    4: {
+      outline: "255,178 352,128 419,70 478,132 551,18 612,104 681,65 748,130 915,178",
+      facets: ["255,178 352,128 419,70 438,178", "419,70 478,132 551,18 575,178 438,178", "551,18 612,104 655,178 575,178", "612,104 681,65 748,130 770,178 655,178", "748,130 915,178 770,178"],
+      labelFrames: [{ left: 328, top: 132, width: 104, height: 42 }, { left: 456, top: 119, width: 108, height: 52 }, { left: 584, top: 112, width: 104, height: 58 }, { left: 735, top: 134, width: 112, height: 40 }],
+    },
+    5: {
+      outline: "185,178 314,126 382,82 445,135 520,22 578,104 642,58 706,130 779,88 848,137 985,178",
+      facets: ["185,178 314,126 382,82 404,178", "382,82 445,135 520,22 548,178 404,178", "520,22 578,104 642,58 666,178 548,178", "642,58 706,130 779,88 812,178 666,178", "779,88 848,137 985,178 812,178"],
+      labelFrames: [{ left: 291, top: 127, width: 105, height: 47 }, { left: 421, top: 116, width: 108, height: 56 }, { left: 551, top: 105, width: 108, height: 66 }, { left: 684, top: 117, width: 108, height: 55 }, { left: 812, top: 132, width: 112, height: 42 }],
+    },
+  }[visible.length];
+  const visibleFrames = upperGeometry.labelFrames;
+  const baseHalf = [0,160,205,255,330,400][visible.length];
+  const leftBoundary = [[585-baseHalf,184],[585-baseHalf-34,251],[585-baseHalf-2,314],[585-baseHalf+33,354],[585-baseHalf+75,380],[447,419],[510,468]];
+  const rightBoundary = [[585+baseHalf,184],[585+baseHalf+44,251],[585+baseHalf+22,307],[585+baseHalf-8,349],[585+baseHalf-44,374],[752,427],[660,468]];
+  const boundaryX = (points, y) => {
+    const index = Math.max(0, points.findIndex((point) => point[1] >= y) - 1);
+    const [x1, y1] = points[index];
+    const [x2, y2] = points[Math.min(index + 1, points.length - 1)];
+    if (y2 === y1) return x1;
+    return x1 + (x2 - x1) * ((y - y1) / (y2 - y1));
+  };
+  const lowerSilhouette = `${leftBoundary.map(([x,y]) => `${x},${y}`).join(" ")} ${[...rightBoundary].reverse().map(([x,y]) => `${x},${y}`).join(" ")}`;
+  const bandPaths = bands.map((band) => `${boundaryX(leftBoundary, band.y1)},${band.y1} ${boundaryX(rightBoundary, band.y1)},${band.y1} ${boundaryX(rightBoundary, band.y2)},${band.y2} ${boundaryX(leftBoundary, band.y2)},${band.y2}`);
+  return `<section class="rev rev-iceberg" data-ppt-root data-visible-count="${visible.length}" data-hidden-count="${hidden.length}">
+    <svg class="iceberg-art" viewBox="0 0 1170 492" role="img" aria-label="水上成果与水下支撑构成的抽象冰山">
+      <path d="${pointPath(shiftPoints(upperGeometry.outline,0,7))}" fill="#284f70" opacity=".07" data-ppt-kind="path" data-ppt-name="iceberg-upper-shadow"/>
+      <path d="${pointPath(shiftPoints(lowerSilhouette,0,7))}" fill="#284f70" opacity=".07" data-ppt-kind="path" data-ppt-name="iceberg-lower-shadow"/>
+      <path class="water-glint" d="M0 194 C155 184 270 202 412 191 M758 191 C900 201 1018 184 1170 194" fill="none" data-ppt-kind="path" data-ppt-name="iceberg-water-glint"/>
+      <path class="berg-piece" d="${pointPath(upperGeometry.outline)}" fill="#e7f1f6" data-ppt-kind="path" data-ppt-name="iceberg-upper-base"/>
+      ${upperGeometry.facets.map((points, i) => `<path class="berg-piece" d="${pointPath(points)}" fill="${["#f3f7fa","#dce9f1","#cfe1eb","#c3d9e6","#b8d2e1"][i]}" data-ppt-kind="path" data-ppt-name="iceberg-upper-facet-${i}"/>`).join("")}
+      ${bandPaths.map((points, i) => `<path class="berg-piece" d="${pointPath(points)}" fill="${palette[i]}" data-ppt-kind="path" data-ppt-name="iceberg-hidden-band-${i}"/>`).join("")}
+      <path d="${pointPath("585,184 716,292 650,468 548,468 474,324")}" fill="#fff" opacity=".13" data-ppt-kind="path" data-ppt-name="iceberg-lower-highlight-center"/>
+      <path d="${pointPath(`${boundaryX(leftBoundary,251)},251 474,324 447,419 ${boundaryX(leftBoundary,314)},314`)}" fill="#fff" opacity=".09" data-ppt-kind="path" data-ppt-name="iceberg-lower-highlight-left"/>
+      <path d="${pointPath(lowerSilhouette)}" fill="none" stroke="#fff" stroke-width="4" stroke-linejoin="round" data-ppt-kind="path" data-ppt-name="iceberg-lower-outline"/>
+      <path class="waterline" d="M0 178 H1170" fill="none" data-ppt-kind="path" data-ppt-name="iceberg-waterline"/>
+    </svg>
+    ${visible.map((item, i) => { const frame = visibleFrames[i]; return `<div class="visible-label" style="left:${frame.left}px;top:${frame.top}px;width:${frame.width}px;height:${frame.height}px">${flow(`visible[${i}]`, { title: item }, { id: `iceberg-visible-${i}`, align: "center" })}</div>`; }).join("")}
+    ${hidden.map((item, i) => { const frame = bands[i].frame; return `<div class="hidden-label ${i >= Math.max(2, hidden.length - 1) ? "tone-deep" : ""}" style="left:${frame.left}px;top:${frame.top}px;width:${frame.width}px;height:${frame.height}px">${flow(`hidden[${i}]`, { title: item }, { id: `iceberg-hidden-${i}`, align: "center", tone: i >= Math.max(2, hidden.length - 1) ? "dark" : "light" })}</div>`; }).join("")}
+  </section>`;
 }
 
 function renderDomain(p) {
@@ -236,7 +320,7 @@ const definitions = {
   "sequence-zigzag-cards-002": { render: renderZigzag, preview: { items: [{ title: "识别情境", body: "确认目标、边界和约束" }, { title: "形成方案", body: "围绕目标组织路径" }, { title: "推进执行", body: "按节奏完成关键动作" }, { title: "复盘校正", body: "根据结果调整下一轮" }, { title: "固化能力", body: "沉淀可复用的方法" }, { title: "规模扩散", body: "推广到更多场景" }] } },
   "matrix-responsibility-grid-003": { render: renderRaci, preview: { tasks: ["内容拆页", "结构组选择", "HTML 布局", "Native 编译", "最终质检"], roles: ["内容导演", "视觉导演", "组件运行时", "质量模块"], assignments: [["R","A","C","I"],["C","R","A","I"],["I","A","R","C"],["I","A","R","C"],["C","A","I","R"]] } },
   "comparison-pros-cons-balance-005": { render: renderBalance, preview: { topic: "是否采用 HTML 单一布局源", pros: ["数量状态可响应扩散", "审美可在浏览器审核", "布局结果能够机械编译", "运行期无需重新设计"], cons: ["复杂 CSS 需要限制", "媒体依赖必须声明", "编译边界仍需完善", "候选资产需要人工审核"], verdict: "收益明确，但必须以已审核组件和失败边界为前提", itemCount: 3 } },
-  "layered-iceberg-depth-006": { render: renderIceberg, preview: { visible: ["页面美感", "叙事清晰", "原生可编辑"], hidden: ["已审核结构资产", "响应式布局规则", "字段容量与失败边界", "统一编译与质量检查"] } },
+  "layered-iceberg-depth-006": { render: renderIceberg, preview: { visible: ["页面美感", "叙事清晰", "原生可编辑", "结构可靠", "风格统一"], hidden: ["已审核结构资产", "响应式布局规则", "字段容量与失败边界", "统一编译与质量检查", "稳定运行基础"] } },
   "layered-domain-grid-003": { render: renderDomain, preview: { layers: ["体验层", "应用层", "能力层", "数据层", "基础层"], domains: ["内容生产", "资产管理", "正式生成", "质量审查"], cells: [["交互入口","资产看板","稿件输入","审核反馈"],["导演编排","状态切换","页面生成","结果预览"],["Logic 选择","契约解析","HTML 编译","边界检查"],["内容结构","资产索引","参数载荷","质量记录"],["模型服务","组件运行时","PPT 引擎","文件存储"]] } },
   "hierarchy-tiered-authority-004": { render: renderAuthority, preview: { tiers: [{ name: "决策层", roles: ["产品负责人"] }, { name: "编排层", roles: ["内容导演", "视觉导演"] }, { name: "执行层", roles: ["组件运行时", "原生编译", "质量检查"] }, { name: "资产层", roles: ["Skin", "Composition", "Visual Skill"] }, { name: "来源层", roles: ["稿件", "模板", "媒体"] }] } },
   "layered-crosscut-rails-004": { render: renderCrosscut, preview: { layers: [{ title: "交互层", body: "稿件输入、预览审核与结果交付" }, { title: "编排层", body: "内容导演与视觉导演协同决策" }, { title: "运行层", body: "结构解析、布局求解与原生编译" }, { title: "资产层", body: "Shell、Composition 与 Visual Skill" }, { title: "来源层", body: "PPT 模板、HTML 参考与媒体资产" }], rails: ["设计规范", "质量约束", "版本治理"] } },
