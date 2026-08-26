@@ -1,1 +1,80 @@
-{"id":"hub-two-tier-capabilities-004","name":"两级能力生态辐射","kind":"component","category":"结构图","creationMethod":"distillation","status":"pending-review","source":{"file":"PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx","slides":[249]},"runtime":{"renderer":"html-component","entry":"review.mjs","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","logicId":"hub","structureGroupId":"hub-two-tier-capabilities","familyId":"hub","variantId":"core-inner-capabilities-outer-outcomes","silhouette":"core-inner-capabilities-outer-outcomes","supportedBaseRelations":["hub"],"supportedPurposeKeys":["cover_expression_gap"],"itemCount":{"min":3,"preferred":[4],"max":8},"stateContract":{"resolver":"innerCount+outerCount","states":[3,4],"previewDefault":4},"contentContract":{"itemRole":"semantic-unit","points":"forbidden","ordered":false},"contract":{"abstractionLevel":"foundation","adaptationStatus":"adaptive","constraints":{"coverageGap":true,"density":["medium"]}},"review":{"entry":"review.mjs","visualIntent":"visual-intent.md","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","implementation":"asset-specific-html","goldenState":{"selection":{"innerCount":4,"outerCount":6}},"controls":[{"key":"innerCount","label":"内圈能力数","values":[3,4],"default":4},{"key":"outerCount","label":"外圈结果数","values":[4,6,8],"default":6}]}},"coverageDelta":"补齐现有中心辐射都只有中心与一圈节点、不能表达“核心由能力支撑，能力再产生外部结果”的两级关系缺口。","layoutExpansion":{"mode":"responsive","range":"1 个核心、3–4 个内圈能力、4–8 个外圈结果","rule":"按已声明控制项重算组件内部拓扑与空间，不维护逐项数独立代码"},"componentModel":{"fixed":["逻辑关系与阅读路径","字段角色","失败边界"],"variable":["1 个核心、3–4 个内圈能力、4–8 个外圈结果","文本内容"]},"fieldContract":{"editable":[{"field":"center","meaning":"唯一核心价值或平台"},{"field":"inner[]","meaning":"3–4 个直接支撑核心的内圈能力"},{"field":"outer[]","meaning":"4–8 个由内圈能力共同形成的外部结果"}],"generated":[{"field":"layout","meaning":"按内外圈数量重算轨道与节点位置"}],"fixed":["中心→内圈能力→外圈结果的两级关系"],"unavailable":["只有单层辐射、外圈分别对应某一个内圈节点、内外圈没有层级差异"]},"spatialContract":{"coordinateSystem":{"width":1280,"height":720},"contentFrame":{"left":55,"top":166,"width":1170,"height":492},"aspectRatio":2.378,"minimumFrame":{"width":1170,"height":492},"preferredFrame":{"width":1170,"height":492},"resizeMode":"natural","minFontSize":15,"safePadding":10,"supportedCompositionIds":["component-full"]},"capacity":"1 个核心、3–4 个内圈能力、4–8 个外圈结果","semanticContract":"一个核心价值由少量内圈能力支撑，这些能力共同向外形成更多结果或影响","doNotUseWhen":"所有外部节点与中心直接相连、只有单层辐射或内外圈不存在层级差异","review":"等待用户统一审核 HTML；未生成 Native PPT"}
+{
+  "id": "hub-two-tier-capabilities-004",
+  "name": "两级能力生态辐射",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "pending-review",
+  "source": { "file": "PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx", "slides": [365, 366] },
+  "references": [
+    {
+      "file": "PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx",
+      "slides": [365, 366],
+      "role": "中心锚点与外围均衡",
+      "adopted": "唯一中心、稳定共同中轴和低饱和蓝色阶"
+    }
+  ],
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "review.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "logicId": "hub",
+    "structureGroupId": "hub-two-tier-capabilities",
+    "familyId": "hub",
+    "variantId": "core-orbital-capabilities-shared-outcomes",
+    "silhouette": "atomic-nucleus-two-concentric-semantic-orbits",
+    "supportedBaseRelations": ["hub"],
+    "supportedPurposeKeys": ["explain_capability_system"],
+    "itemCount": { "min": 3, "preferred": [4], "max": 8 },
+    "stateContract": { "resolver": "innerCount+outerCount", "states": [3, 4], "previewDefault": 4 },
+    "contentContract": { "itemRole": "tiered-semantic-unit", "points": "forbidden", "ordered": false },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": { "relationTraits": { "hub": true, "twoTier": true, "branchOwnership": false }, "density": ["medium"] }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": { "selection": { "innerCount": 4, "outerCount": 6 } },
+      "controls": [
+        { "key": "innerCount", "label": "内圈能力数", "values": [3, 4], "default": 4 },
+        { "key": "outerCount", "label": "共同结果数", "values": [4, 6, 8], "default": 6 }
+      ]
+    }
+  },
+  "coverageDelta": "表达核心—直接能力层—共同结果层三种角色；外圈是能力组合形成的共同结果，不声明某一结果专属于某一能力。",
+  "layoutExpansion": { "mode": "responsive", "range": "1 个核心、3–4 个直接能力、4–8 个共同结果", "rule": "第一级能力沿较近原子轨道重排，第二级成果沿较远原子轨道重排，两层始终共用同一原子核" },
+  "componentModel": { "fixed": ["核心、直接能力层、共同结果层", "外圈无单独归属"], "variable": ["3–4 个内圈能力", "4–8 个共同结果", "字段文字"] },
+  "fieldContract": {
+    "editable": [
+      { "field": "center", "meaning": "唯一核心平台、价值或系统" },
+      { "field": "inner[]", "meaning": "3–4 个直接支撑核心的能力" },
+      { "field": "outer[]", "meaning": "4–8 个由能力组合共同形成的结果" }
+    ],
+    "generated": [{ "field": "layout", "meaning": "按两级数量分别生成近轨与远轨节点，保持统一原子核和清晰层级" }],
+    "fixed": ["两级圈层", "外圈结果不归属于单一内圈能力"],
+    "unavailable": ["单层辐射", "每个结果分别归属于某一能力", "内外圈无角色差异"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "resizeMode": "natural",
+    "minFontSize": 15,
+    "safePadding": 10,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "1 个核心、3–4 个直接能力、4–8 个共同结果；各节点为短标题",
+  "semanticContract": "一个核心由少量直接能力共同支撑，这些能力作为整体向外形成更多共同结果或影响。",
+  "doNotUseWhen": "只有单层辐射，或外圈结果需要明确归属到某一个内圈能力",
+  "review": "已按用户反馈将整个两级关系改为原子系统：中央大圆、近轨深色一级能力、远轨浅色二级成果；仅用 SVG 平面几何与同色阶同心圆盘形成浮雕层次，等待用户复审，未生成 Native PPT"
+}

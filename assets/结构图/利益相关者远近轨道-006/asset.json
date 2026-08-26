@@ -1,1 +1,69 @@
-{"id":"hub-orbit-priority-006","name":"利益相关者远近轨道","kind":"component","category":"结构图","creationMethod":"distillation","status":"pending-review","source":{"file":"PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx","slides":[249]},"runtime":{"renderer":"html-component","entry":"review.mjs","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","logicId":"hub","structureGroupId":"hub-orbit-priority","familyId":"hub","variantId":"hub-orbit-priority","silhouette":"hub-orbit-priority","supportedBaseRelations":["hub"],"supportedPurposeKeys":["cover_expression_gap"],"itemCount":{"min":6,"preferred":[8],"max":10},"stateContract":{"resolver":"nodeCount","states":[6,7,8,9,10],"previewDefault":8},"contentContract":{"itemRole":"semantic-unit","points":"forbidden","ordered":false},"contract":{"abstractionLevel":"foundation","adaptationStatus":"adaptive","constraints":{"coverageGap":true,"density":["medium"]}},"review":{"entry":"review.mjs","visualIntent":"visual-intent.md","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","implementation":"asset-specific-html","goldenState":{"selection":{"nodeCount":8}},"controls":[{"key":"nodeCount","label":"对象数","values":[6,7,8,9,10],"default":8}]}},"coverageDelta":"现有 Hub 结构只表达方向或层级，不表达外围对象与中心的关系强度、影响程度或优先距离。","layoutExpansion":{"mode":"responsive","range":"一个中心、三条远近轨道、6–10 个外围对象","rule":"同一组件根据声明状态重算内容区域内的拓扑、间距和字号，不维护逐数量独立实现"},"componentModel":{"fixed":["逻辑关系","阅读路径","内容角色与失败边界"],"variable":["一个中心、三条远近轨道、6–10 个外围对象","字段内容与状态"]},"fieldContract":{"editable":[{"field":"parameters","meaning":"按组件声明填写的语义字段"}],"generated":[{"field":"layout","meaning":"HTML 组件统一求解布局"}],"fixed":["结构语法"],"unavailable":["轨道不代表强弱、外围对象有明确步骤顺序或需要精确二维坐标"]},"spatialContract":{"coordinateSystem":{"width":1280,"height":720},"contentFrame":{"left":55,"top":166,"width":1170,"height":492},"aspectRatio":2.378,"minimumFrame":{"width":1170,"height":492},"preferredFrame":{"width":1170,"height":492},"resizeMode":"natural","minFontSize":15,"safePadding":10,"supportedCompositionIds":["component-full"]},"capacity":"一个中心、三条远近轨道、6–10 个外围对象","semanticContract":"多个对象围绕一个中心分布，所在轨道表示与中心的关系强度、影响力或优先级远近","doNotUseWhen":"轨道不代表强弱、外围对象有明确步骤顺序或需要精确二维坐标","review":"等待用户统一审核 HTML；未生成 Native PPT"}
+{
+  "id": "hub-orbit-priority-006",
+  "name": "利益相关者远近轨道",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "pending-review",
+  "source": { "file": "PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx", "slides": [249] },
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "review.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "logicId": "hub",
+    "structureGroupId": "hub-orbit-priority",
+    "familyId": "hub",
+    "variantId": "center-ordinal-distance-tiers",
+    "silhouette": "center-three-ordinal-orbits",
+    "supportedBaseRelations": ["hub"],
+    "supportedPurposeKeys": ["compare_audience_segments", "explain_internal_external_ecosystem"],
+    "itemCount": { "min": 6, "preferred": [8], "max": 10 },
+    "stateContract": { "resolver": "nodeCount", "states": [6, 7, 8, 9, 10], "previewDefault": 8 },
+    "contentContract": { "itemRole": "ordinal-distance-node", "points": "forbidden", "ordered": false },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": { "relationTraits": { "hub": true, "ordinalDistance": true }, "density": ["medium"] }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": { "selection": { "nodeCount": 8 } },
+      "controls": [{ "key": "nodeCount", "label": "对象数", "values": [6, 7, 8, 9, 10], "default": 8 }]
+    }
+  },
+  "coverageDelta": "表达外围对象与中心的序数型关系强度、协同优先级或关注远近；坐标只由层级和数量确定，不要求模型提供二维位置。",
+  "layoutExpansion": { "mode": "responsive", "range": "1 个中心、近中远三层、6–10 个外围对象", "rule": "输入只声明 near、middle、far，组件在各层内确定性均布，不接受自由坐标" },
+  "componentModel": { "fixed": ["唯一中心", "近中远三层的序数含义", "层内不排序"], "variable": ["6–10 个对象", "每个对象的近中远层级", "字段文字"] },
+  "fieldContract": {
+    "editable": [
+      { "field": "center", "meaning": "唯一中心对象" },
+      { "field": "nodes[].title", "meaning": "6–10 个外围对象" },
+      { "field": "nodes[].tier", "meaning": "稿件明确支持的 near、middle 或 far 序数层级" }
+    ],
+    "generated": [{ "field": "layout", "meaning": "按每层数量确定性分布节点，不从模型接收坐标" }],
+    "fixed": ["轨道只表示序数远近，不表示精确距离"],
+    "unavailable": ["稿件没有真实远近依据", "精确二维定位", "外围有步骤顺序"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "resizeMode": "natural",
+    "minFontSize": 15,
+    "safePadding": 10,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "1 个中心、近中远三层、6–10 个对象；外围对象均为 10 字以内短标题",
+  "semanticContract": "多个对象围绕一个中心分层分布，所在层表示有文本依据的关系强度、协同优先级或关注远近。",
+  "doNotUseWhen": "稿件没有近中远分层依据、需要精确坐标、外围对象有明确顺序或因果路径",
+  "review": "等待用户统一审核 HTML；未生成 Native PPT"
+}

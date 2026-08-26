@@ -1,1 +1,6 @@
-import {getCandidate} from "../_round56-components/components.mjs?v=4";const c=getCandidate("hub-orbit-priority-006");export const visualComponent=c.visualComponent;export const previewParameters=c.previewParameters;export const resolvePreviewParameters=c.resolvePreviewParameters;
+import { getHubCandidate } from "../_hub-review/components.mjs?v=1";
+
+const candidate = getHubCandidate("hub-orbit-priority-006");
+export const visualComponent = candidate.visualComponent;
+export const previewParameters = candidate.previewParameters;
+export const resolvePreviewParameters = candidate.resolvePreviewParameters;

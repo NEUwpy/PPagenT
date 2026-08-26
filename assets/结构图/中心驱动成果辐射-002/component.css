@@ -1,1 +1,28 @@
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}body{font-family:var(--ppagent-font-body,"Microsoft YaHei"),sans-serif;background:transparent}.hub-review{position:relative;width:1170px;height:492px;overflow:hidden}.spoke{position:absolute;inset:0;width:1170px;height:492px;pointer-events:none}.core{position:absolute;z-index:2;left:405px;top:94px;width:360px;height:304px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:68px;border:20px solid #d9e8f3;border-radius:50%;background:#285982;box-shadow:0 16px 34px rgba(38,82,119,.18);color:#fff;text-align:center}.core h2{margin:0 0 16px;font-size:22pt;line-height:1.2}.core p{margin:0;font-size:14pt;line-height:1.5}.outcome-card{position:absolute;z-index:3;left:var(--left);top:var(--top);width:284px;height:104px;padding:16px 20px;border:1px solid #dbe6ef;border-radius:16px;background:#fff;box-shadow:0 8px 18px rgba(41,77,108,.10)}.outcome-card h3{margin:0 0 6px;color:#28557d;font-size:17pt;line-height:26px}.outcome-card p{margin:0;color:#536373;font-size:13.5pt;line-height:1.35}.hub-review[data-item-count="5"] .outcome-card,.hub-review[data-item-count="6"] .outcome-card{height:92px;padding-top:10px}.hub-review[data-item-count="5"] .outcome-card h3,.hub-review[data-item-count="6"] .outcome-card h3{font-size:16pt;margin-bottom:2px}.hub-review[data-item-count="5"] .outcome-card p,.hub-review[data-item-count="6"] .outcome-card p{font-size:12.5pt}
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { color: #284b67; background: transparent; font-family: var(--ppagent-font-body, "Microsoft YaHei"), sans-serif; }
+
+.radial-review { position: relative; width: 1170px; height: 492px; overflow: hidden; background: transparent; }
+.radial-review > svg { position: absolute; inset: 0; z-index: 0; width: 1170px; height: 492px; overflow: visible; }
+.radial-guide { fill: none; stroke: #dce8ef; stroke-width: 2; stroke-dasharray: 3 11; }
+.radial-spoke { stroke-linecap: round; stroke-linejoin: round; }
+.radial-joint { stroke: #fff; stroke-width: 5; }
+
+.core-halo, .core-ring, .core-disc { position: absolute; left: 585px; top: 246px; transform: translate(-50%, -50%); border-radius: 50%; }
+.core-halo { z-index: 2; width: 222px; height: 180px; border: 1px solid #d0e0e9; background: #e5eff4; }
+.core-ring { z-index: 3; width: 202px; height: 160px; border: 2px solid #9bb6c7; background: #fff; }
+.core-disc { z-index: 4; width: 184px; height: 142px; background: #28577d; }
+.core-region { position: absolute; left: 503px; top: 195px; z-index: 5; width: 164px; height: 102px; --ppagent-heading-color: #fff; --ppagent-text-color: #dce9f0; --ppagent-text-layout-gap: 5px; }
+.core-region .ppagent-text-primitive--heading { color: #fff; font-size: var(--ppagent-component-lead-size, 19pt); line-height: 1.16; }
+.core-region .ppagent-text-primitive--body { color: #dce9f0; font-size: var(--ppagent-component-meta-size, 15pt); line-height: 1.25; }
+
+.radial-node { position: absolute; z-index: 6; width: 232px; height: 82px; padding: 7px 9px 7px 15px; }
+.radial-node[data-side="left"] { padding: 7px 15px 7px 9px; }
+.radial-node[data-side="top"], .radial-node[data-side="bottom"] { width: 242px; padding: 7px 14px; }
+.node-surface { position: absolute; inset: 0; z-index: 0; background: var(--wash); }
+.node-accent { position: absolute; left: 0; top: 0; bottom: 0; z-index: 1; width: 4px; background: var(--tone); }
+.radial-node[data-side="left"] .node-accent { right: 0; left: auto; }
+.radial-node[data-side="top"] .node-accent, .radial-node[data-side="bottom"] .node-accent { right: 0; bottom: auto; width: auto; height: 3px; }
+.node-region { position: absolute; inset: 0; z-index: 2; --ppagent-heading-color: var(--tone); --ppagent-text-color: #5a6f7e; --ppagent-text-layout-gap: 3px; }
+.node-region .ppagent-text-primitive--heading { color: var(--tone); font-size: var(--ppagent-component-label-size, 17pt); line-height: 1.14; }
+.node-region .ppagent-text-primitive--body { color: #5a6f7e; font-size: var(--ppagent-component-meta-size, 15pt); line-height: 1.22; }

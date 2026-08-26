@@ -96,7 +96,7 @@ test("看板只把资产专属 HTML 计入迁移完成度", async () => {
   )));
   assert.equal(cycle?.builderExport, "");
   assert.equal(cycle?.componentInitialSelection.stepCount, 4);
-  assert.equal(data.summary.htmlDesignComponents, 25);
+  assert.equal(data.summary.htmlDesignComponents, 27);
   assert.match(cycle?.previewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.componentPreviewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.nativeStatePreviewUrl ?? "", /[?&]v=\d+/);
@@ -182,7 +182,7 @@ test("作废的旧 Logic 不再出现在核心库或正式生成候选中", asyn
   const formalIds = new Set(data.formalLogics.map((record) => record.id));
   assert.deepEqual(formalIds, new Set([
     "comparison-dual-verdict-001", "comparison-pros-cons-balance-005", "cycle-loop-001", "hierarchy-people-tree-001",
-    "hub-radial-001", "layered-architecture-001", "layered-iceberg-depth-006", "parallel-equal-cards-001",
+    "hub-directed-outcomes-002", "hub-radial-001", "layered-architecture-001", "layered-iceberg-depth-006", "parallel-equal-cards-001",
     "convergence-simple-funnel-001", "convergence-funnel-001", "sequence-flow-001",
     "causal-fishbone-attribution-001", "problem-solution-outcome-001",
     "matrix-quadrant-priority-001", "argument-evidence-conclusion-001",

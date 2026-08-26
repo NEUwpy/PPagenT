@@ -1,10 +1,120 @@
 {
-  "id":"hub-directed-outcomes-002","name":"中心驱动成果辐射","kind":"component","category":"结构图","creationMethod":"distillation","status":"pending-review","source":{"file":"PPT源/06-【柏林蓝】定制级学术型灵感手册-宽屏.pptx","slides":[27]},
-  "runtime":{"renderer":"html-component","entry":"review.mjs","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","logicId":"hub","structureGroupId":"hub-directed-outcomes","familyId":"hub","variantId":"center-drives-outcomes","silhouette":"central-engine-with-directed-spokes-and-outcome-cards","supportedBaseRelations":["hub"],"supportedPurposeKeys":["explain_impact"],"itemCount":{"min":4,"preferred":[4,6],"max":6},"stateContract":{"resolver":"itemCount","states":[4,5,6],"previewDefault":6},"contentContract":{"itemRole":"outcome-node","points":"forbidden","ordered":false},"contract":{"abstractionLevel":"foundation","adaptationStatus":"adaptive","constraints":{"relationTraits":{"hub":true,"directed":true},"density":["low","medium"]}},"review":{"entry":"review.mjs","visualIntent":"visual-intent.md","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","implementation":"asset-specific-html","goldenState":{"selection":{"itemCount":6}},"controls":[{"key":"itemCount","label":"辐射成果数","values":[4,5,6],"default":6}]}},
-  "coverageDelta":"补齐现有中心锚点辐射只表达外围共同构成/支撑中心、没有方向性的缺口；本组表达一个核心能力向外驱动 4–6 个不同成果，连线具有中心到外围的明确方向。",
-  "layoutExpansion":{"mode":"responsive","range":"中心 1 个、成果 4–6 个","rule":"按左右两列分配成果卡，中心到每卡生成带箭头的辐射臂并重算纵向位置"},
-  "componentModel":{"fixed":["唯一中心驱动源","从中心指向外围的方向臂","外围成果卡"],"variable":["中心名称与说明","4–6 个成果名称和解释","辐射臂角度"]},
-  "fieldContract":{"editable":[{"field":"center.title","meaning":"核心驱动源"},{"field":"center.body","meaning":"核心能力说明"},{"field":"items[].title","meaning":"被驱动的成果"},{"field":"items[].body","meaning":"成果说明"}],"generated":[{"field":"items[].side","meaning":"按数量均衡分配左右"}],"fixed":["方向始终由中心指向外围"],"unavailable":["外围支撑中心","外围相互连接","顺序"]},
-  "spatialContract":{"coordinateSystem":{"width":1280,"height":720},"contentFrame":{"left":55,"top":166,"width":1170,"height":492},"aspectRatio":2.378,"minimumFrame":{"width":1170,"height":492},"preferredFrame":{"width":1170,"height":492},"resizeMode":"natural","minFontSize":15,"safePadding":10,"supportedCompositionIds":["component-full"]},
-  "capacity":"中心标题 8 字、说明 24 字；4–6 个成果，每项标题 8 字、说明 26 字","semanticContract":"一个唯一核心能力、平台或机制向外产生多个同级成果或影响，方向由中心指向外围","doNotUseWhen":"外围只是共同解释或支撑中心、关系没有方向、外围存在顺序层级或相互连接","review":"等待用户审核 HTML 黄金状态与 4–6 项扩散；未生成 Native PPT"
+  "id": "hub-directed-outcomes-002",
+  "name": "中心径向关系",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "PPT源/06-【柏林蓝】定制级学术型灵感手册-宽屏.pptx",
+    "slides": [27]
+  },
+  "references": [
+    {
+      "file": "PPT源/06-【柏林蓝】定制级学术型灵感手册-宽屏.pptx",
+      "slides": [27],
+      "role": "方向连接的连续动势",
+      "adopted": "让方向直接进入连接几何，而不是叠加孤立箭头图标"
+    },
+    {
+      "file": "PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx",
+      "slides": [365, 366],
+      "role": "中心与外围的主次关系",
+      "adopted": "稳定中心、外围均衡和同色阶蓝色语言"
+    }
+  ],
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "hub",
+    "structureGroupId": "hub-radial-relations",
+    "familyId": "hub",
+    "variantId": "center-periphery-radial-connections",
+    "silhouette": "center-with-optional-directed-radial-paths",
+    "supportedBaseRelations": ["hub"],
+    "supportedPurposeKeys": ["explain_topics"],
+    "itemCount": { "min": 3, "preferred": [4, 6], "max": 6 },
+    "stateContract": {
+      "resolver": "connectionMode+nodeCount",
+      "states": ["无箭头", "向外", "向内"],
+      "previewDefault": "无箭头"
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "forbidden",
+      "ordered": false
+    },
+    "textFlow": {
+      "profile": "text-region-layout-library",
+      "scope": "per-contiguous-region"
+    },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "semantic": { "sameLevel": true },
+        "relationTraits": {},
+        "density": ["low", "medium"]
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": { "selection": { "connectionMode": "无箭头", "nodeCount": 6 } },
+      "controls": [
+        { "key": "connectionMode", "label": "连接方式", "values": ["无箭头", "向外", "向内"], "default": "无箭头" },
+        { "key": "nodeCount", "label": "外围节点数", "values": [3, 4, 5, 6], "default": 6 }
+      ],
+      "exampleSelections": [
+        { "connectionMode": "无箭头", "nodeCount": 6 }
+      ]
+    }
+  },
+  "coverageDelta": "一个径向拓扑同时覆盖无方向、中心向外和外围向内；是否带箭头及箭头方向只是连接 State，不再维护分组式与定向式两个重复 Structure Group。",
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "中心 1 个、外围节点 3–6 个、连接为无箭头、向外或向内",
+    "rule": "同一径向拓扑按节点数重算位置，仅通过 connectionMode 控制箭头是否出现及其方向"
+  },
+  "componentModel": {
+    "fixed": ["唯一中心", "中心与外围的径向连接", "外围节点彼此同级"],
+    "variable": ["连接 State", "3–6 个外围节点", "中心与节点文字"]
+  },
+  "fieldContract": {
+    "editable": [
+      { "field": "connectionMode", "meaning": "none 表示无箭头，outward 表示中心向外，inward 表示外围向内" },
+      { "field": "center.title/body", "meaning": "唯一中心及可选说明" },
+      { "field": "nodes[].title/body", "meaning": "3–6 个同级外围来源或成果" }
+    ],
+    "generated": [
+      { "field": "layout", "meaning": "按节点数量确定径向位置、路径和同色阶" }
+    ],
+    "fixed": ["所有路径共享同一连接语义", "外围节点之间无连接"],
+    "unavailable": ["外围有独立子层级", "外围有先后或相互连接", "同一图中混用多种方向"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "resizeMode": "natural",
+    "minFontSize": 12,
+    "safePadding": 10,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "中心 1 个；外围节点 3–6 个；中心标题 10 字、说明 28 字，节点标题 9 字、说明 28 字",
+  "semanticContract": "一个中心与多个同级外围节点存在径向关系；无箭头表示组成或相关，向外表示产生、驱动或影响，向内表示汇入、综合或支撑。",
+  "doNotUseWhen": "外围节点还拥有独立子层级、节点之间存在顺序或相互连接，或同一图中需要混用多种方向",
+  "review": "用户确认中心径向关系可正式落地；无箭头、向外和向内共享同一径向拓扑，Native/PPT 与东北大学 Skin 同步进入正式生成线"
 }

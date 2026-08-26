@@ -1,1 +1,30 @@
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}body{background:transparent}
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { color: #405f74; background: transparent; font-family: var(--ppagent-font-body, "Microsoft YaHei"), sans-serif; }
+
+.two-tier-review { position: relative; width: 1170px; height: 492px; overflow: hidden; background: transparent; }
+.two-tier-review > svg { position: absolute; inset: 0; z-index: 0; width: 1170px; height: 492px; overflow: visible; }
+.orbit-shell { fill: none; }
+.orbit-shell--outer { stroke: #a9bfcc; stroke-width: 1.6; }
+.orbit-shell--inner { stroke: #789bb1; stroke-width: 2.1; }
+.primary-node-disc, .secondary-node-disc { stroke: none; }
+.primary-node-back { stroke: #fff; stroke-width: 3; }
+.secondary-node-back { stroke: #fff; stroke-width: 2; }
+.core-rule { fill: none; stroke: #adc3d0; stroke-width: 2.2; }
+.core-back { fill: #1f4664; stroke: #fff; stroke-width: 3; }
+.core-disc { fill: #28577d; stroke: none; }
+.core-region { position: absolute; left: 510px; top: 213px; z-index: 4; width: 150px; height: 66px; --ppagent-heading-color: #fff; }
+.core-region .ppagent-text-primitive--heading { color: #fff; font-size: 16.5pt; font-weight: 700; line-height: 1.14; }
+
+.inner-label { position: absolute; z-index: 5; width: 92px; height: 92px; overflow: hidden; }
+.inner-region { position: absolute; inset: 7px; z-index: 1; --ppagent-heading-color: #fff; }
+.inner-region .ppagent-text-primitive--heading { color: #fff; font-size: 12.5pt; font-weight: 700; line-height: 1.1; }
+
+.outer-label { position: absolute; z-index: 4; width: 78px; height: 78px; overflow: hidden; }
+.outer-region { position: absolute; inset: 6px; z-index: 1; --ppagent-heading-color: #49687b; }
+.outer-region .ppagent-text-primitive--heading { color: #49687b; font-size: 11.5pt; font-weight: 700; line-height: 1.08; }
+
+.tier-caption { position: absolute; left: 24px; z-index: 6; width: 126px; color: #78909f; font-size: var(--ppagent-component-meta-size, 11pt); font-weight: 600; letter-spacing: .03em; text-align: left; }
+.tier-caption::before { content: ""; display: inline-block; width: 18px; height: 2px; margin: 0 7px 4px 0; background: #8eaabc; }
+.tier-caption--outer { top: 18px; }
+.tier-caption--inner { top: 43px; }
