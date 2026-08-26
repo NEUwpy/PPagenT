@@ -1,1 +1,94 @@
-{"id":"convergence-venn-intersection-005","name":"集合交集共识区","kind":"component","category":"结构图","creationMethod":"distillation","status":"pending-review","source":{"file":"PPT源/06-【柏林蓝】定制级学术型灵感手册-宽屏.pptx","slides":[27]},"runtime":{"renderer":"html-component","entry":"review.mjs","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","logicId":"convergence","structureGroupId":"convergence-venn-intersection","familyId":"convergence","variantId":"convergence-venn-intersection","silhouette":"convergence-venn-intersection","supportedBaseRelations":["convergence"],"supportedPurposeKeys":["cover_expression_gap"],"itemCount":{"min":2,"preferred":[3],"max":3},"stateContract":{"resolver":"setCount","states":[2,3],"previewDefault":3},"contentContract":{"itemRole":"semantic-unit","points":"forbidden","ordered":false},"contract":{"abstractionLevel":"foundation","adaptationStatus":"adaptive","constraints":{"coverageGap":true,"density":["medium"]}},"review":{"entry":"review.mjs","visualIntent":"visual-intent.md","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","implementation":"asset-specific-html","goldenState":{"selection":{"setCount":3}},"controls":[{"key":"setCount","label":"集合数","values":[2,3],"default":3}]}},"coverageDelta":"现有汇聚资产都通过箭头或漏斗发生流动，缺少不表示过程、只表示若干集合共同满足部分的 Venn 交集。","layoutExpansion":{"mode":"responsive","range":"2–3 个集合及一个共同交集","rule":"同一组件根据声明状态重算内容区域内的拓扑、间距和字号，不维护逐数量独立实现"},"componentModel":{"fixed":["逻辑关系","阅读路径","内容角色与失败边界"],"variable":["2–3 个集合及一个共同交集","字段内容与状态"]},"fieldContract":{"editable":[{"field":"parameters","meaning":"按组件声明填写的语义字段"}],"generated":[{"field":"layout","meaning":"HTML 组件统一求解布局"}],"fixed":["结构语法"],"unavailable":["需要表达时间过程、集合超过三个、交集关系复杂或没有共同部分"]},"spatialContract":{"coordinateSystem":{"width":1280,"height":720},"contentFrame":{"left":55,"top":166,"width":1170,"height":492},"aspectRatio":2.378,"minimumFrame":{"width":1170,"height":492},"preferredFrame":{"width":1170,"height":492},"resizeMode":"natural","minFontSize":15,"safePadding":10,"supportedCompositionIds":["component-full"]},"capacity":"2–3 个集合及一个共同交集","semanticContract":"两个或三个集合各有独有内容，同时在交叠区域形成共同要求、能力或共识","doNotUseWhen":"需要表达时间过程、集合超过三个、交集关系复杂或没有共同部分","review":"等待用户统一审核 HTML；未生成 Native PPT"}
+{
+  "id": "convergence-consensus-field-005",
+  "name": "集合交集共识区",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": { "file": "PPT源/06-【柏林蓝】定制级学术型灵感手册-宽屏.pptx", "slides": [27] },
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "convergence",
+    "structureGroupId": "convergence-consensus-field",
+    "familyId": "convergence",
+    "variantId": "consensus-field",
+    "silhouette": "two-to-five-icon-podiums-on-elliptical-orbit-around-consensus-field",
+    "supportedBaseRelations": ["convergence"],
+    "supportedPurposeKeys": ["explain_shared_scope"],
+    "itemCount": { "min": 2, "preferred": [3, 4], "max": 5 },
+    "stateContract": { "resolver": "setCount", "states": [2, 3, 4, 5], "previewDefault": 3 },
+    "contentContract": { "itemRole": "semantic-node", "points": "optional", "ordered": false },
+    "textFlow": { "profile": "text-region-layout-library", "scope": "per-contiguous-region" },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "semantic": { "ordered": false, "sameLevel": true },
+        "relationTraits": { "converging": true },
+        "density": ["low", "medium"]
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": { "selection": { "setCount": 3 } },
+      "exampleSelections": [{ "setCount": 3 }],
+      "controls": [{ "key": "setCount", "label": "主体数", "values": [2, 3, 4, 5], "default": 3 }]
+    }
+  },
+  "coverageDelta": "已有多集合共同交集通过重叠圆表达集合论交集；本组补充多个独立主体共同满足一组要求或形成一个中央共识场的表达。",
+  "layoutExpansion": { "mode": "responsive", "range": "2–5 个独立主体及一个中央共识场", "rule": "先在同一虚拟平面上按等角度分布外围圆台，再统一调整外围节点的起始方位；镜头保持正向，中央圆台严格位于轨道几何中心，统一投影模型同时求解节点位置、远近缩放和轨道；外围名称位于圆台之外，不维护逐数量独立实现" },
+  "componentModel": {
+    "fixed": ["外围主体彼此独立", "共同内容只位于中央共识场", "椭圆轨道无方向且不表达时间过程", "图标立于圆台、名称位于圆台之外"],
+    "variable": ["2–5 个主体", "主体语义图标", "主体标题、正文或分点", "共同标题、正文或分点"]
+  },
+  "fieldContract": {
+    "editable": [
+      { "field": "sets[].title", "meaning": "外围主体标题" },
+      { "field": "sets[].body", "meaning": "外围主体可选说明" },
+      { "field": "sets[].points[]", "meaning": "外围主体可选分点" },
+      { "field": "sets[].iconQuery", "meaning": "外围主体图标的英文语义检索词" },
+      { "field": "shared.title", "meaning": "中央共同要求或共识标题" },
+      { "field": "shared.body", "meaning": "中央共同要求或共识说明" },
+      { "field": "shared.points[]", "meaning": "中央共同要求或共识分点" }
+    ],
+    "generated": ["外围主体先按等角度分布，再统一旋转起始方位并由场景投影求解位置和远近缩放", "中央圆台、外围圆台和闭合轨道共享同一正向俯视视角", "中央圆台严格位于轨道几何中心", "轨道与圆台中心使用同一投影函数", "sets[].iconKey 由本地图标库按语义检索确定"],
+    "fixed": ["每个连续文字承载面只声明一个 TextRegion", "所有共同内容只进入中央共识场"],
+    "unavailable": ["时间过程", "六个及以上主体", "两两交集", "完全包含关系", "没有共同部分"]
+  },
+  "mediaContract": {
+    "mode": "semantic-icon",
+    "provider": "tabler-icons",
+    "selection": "local-top-1",
+    "queryOwner": "visual-director",
+    "requiredPerComponentItem": true,
+    "fallback": "editable-geometric-ring",
+    "rendering": "resolved SVG icon with a two-pixel editable extrusion layer and one shared perspective projection for the center podium, outer podiums and orbit"
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "resizeMode": "natural",
+    "minFontSize": 14,
+    "safePadding": 10,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "2–5 个独立主体及一个中央共识场；主体与中央均支持标题、正文或分点的兼容排版",
+  "semanticContract": "两个至五个彼此独立的主体，各自保留独有内容，同时共同满足一组要求、共享一种能力或形成一个共识",
+  "doNotUseWhen": "需要表达时间过程、六个及以上主体、两两交集、完全包含关系或没有共同部分",
+  "review": "用户确认 2–5 个外围主体围绕中央共识场、统一正向俯视投影、中央同心及轻微方位错开；Native/PPT 由同一 HTML 组件机械编译，可进入正式生成线"
+}
