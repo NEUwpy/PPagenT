@@ -240,7 +240,16 @@ export async function renderNortheasternUniversityDeck({
       );
       if (!await isSkinOnlyAsset(page.payload.assetId, root)) {
         if (!componentFrame) throw new Error(`${page.composition.compositionId} is missing a component slot`);
-        await structureRenderer(slides[index], page.payload, northeasternUniversitySkin, componentFrame, root);
+        try {
+          await structureRenderer(slides[index], page.payload, northeasternUniversitySkin, componentFrame, root);
+        } catch (error) {
+          if (String(error?.message ?? "").includes("组合排版无法在安全 box 内完整呈现")) {
+            error.code = "COMPONENT_RUNTIME_OVERFLOW";
+            error.pageId = page.content.pageId;
+            error.assetId = page.payload.assetId;
+          }
+          throw error;
+        }
       }
     }
 

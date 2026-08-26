@@ -1,0 +1,122 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "liu-di-red-education",
+  "skinId": "northeastern-university-001",
+  "visualLanguage": "遵循所选主题与已确认 Structure Group 的统一设计语言",
+  "rhythmStrategy": "优先使用语义适配的核心结构，避免相邻页面机械重复",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "familyId": "skin-cover",
+      "variantId": "default",
+      "silhouette": "cover",
+      "adaptationStatus": "fixed",
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "familyId": "skin-agenda",
+      "variantId": "default",
+      "silhouette": "agenda",
+      "adaptationStatus": "fixed",
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "opening",
+      "intentId": "opening-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "开场页仅一个问候条目，选用正文兜底结构，无图标与文字布局要求。"
+    },
+    {
+      "pageId": "challenge-shift",
+      "intentId": "challenge-shift-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "挑战与转变两条目，采用正文兜底结构，标题与正文由默认排版器处理。"
+    },
+    {
+      "pageId": "matrix",
+      "intentId": "matrix-intent",
+      "familyId": "parallel-cards",
+      "variantId": "equal-floating-cards",
+      "silhouette": "equal-cards-with-round-anchors",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "chain",
+          "query": "path chain"
+        },
+        {
+          "sourceItemId": "classrooms",
+          "query": "classroom learning"
+        },
+        {
+          "sourceItemId": "scenes",
+          "query": "scenery education"
+        }
+      ],
+      "reason": "并行三卡片结构，需语义图标与对应布局，内容已就绪。"
+    },
+    {
+      "pageId": "practice-levers",
+      "intentId": "practice-levers-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "五条实践抓手属于并列要点，采用正文兜底结构满足容量。"
+    },
+    {
+      "pageId": "effectiveness",
+      "intentId": "effectiveness-intent",
+      "familyId": "parallel-cards",
+      "variantId": "equal-floating-cards",
+      "silhouette": "equal-cards-with-round-anchors",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "faith",
+          "query": "faith star"
+        },
+        {
+          "sourceItemId": "skill",
+          "query": "skill gear"
+        },
+        {
+          "sourceItemId": "voice",
+          "query": "voice megaphone"
+        },
+        {
+          "sourceItemId": "step",
+          "query": "footstep progress"
+        }
+      ],
+      "reason": "四成效并行，适用等宽卡片与语义图标，布局匹配。"
+    },
+    {
+      "pageId": "closing",
+      "intentId": "closing-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "结语两条目，采用正文兜底结构，收束全文。"
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "familyId": "skin-closing",
+      "variantId": "default",
+      "silhouette": "closing",
+      "adaptationStatus": "fixed",
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

@@ -127,7 +127,11 @@ test("正式流程不会暴露缺少视觉意图和用户确认的 HTML 资产",
   ]);
   const intent = enrichPageIntent(intentDraft("topics-intent", "explain_topics", "hub"), page);
   const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), ["hub-radial-001", "northeastern-university-body-001"]);
+  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), [
+    "hub-directed-outcomes-002",
+    "hub-radial-001",
+    "northeastern-university-body-001",
+  ]);
   assert.equal(set.capacityDensity, "low");
 });
 
@@ -286,7 +290,7 @@ test("视觉导演选择 Text Layout 后由程序形成 RenderPayload 绑定", a
   });
 });
 
-test("两个互补事实不会因为恰好有两项就获得比较资产或正文伪兜底", async () => {
+test("两个互补事实不会误用比较资产，并在没有二项并列结构时退化为正文排版", async () => {
   const page = content("scope", [
     { id: "skin", title: "视觉规范可以替换", body: "学校视觉规范是可替换的组织视觉系统。" },
     { id: "capability", title: "经验能力可以复用", body: "内容理解和表达规则可以服务多个场景。", emphasis: true },
@@ -298,12 +302,12 @@ test("两个互补事实不会因为恰好有两项就获得比较资产或正�
     { ordered: false, sameLevel: true },
   ), page);
   const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.deepEqual(set.candidates, []);
+  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), ["northeastern-university-body-001"]);
   assert.equal(set.gap.type, "asset-gap");
   assert.equal(set.candidates.some((candidate) => candidate.assetId === "comparison-structure-001"), false);
 });
 
-test("未重新蒸馏的泳道资产不会进入三角色候选", async () => {
+test("未重新蒸馏的泳道资产不会进入三角色候选，并退化为正文排版", async () => {
   const page = content("roles", [
     { id: "role-01", title: "AI 负责理解", body: "读取稿件，判断重点、关系、拆页和表达目的。" },
     { id: "role-02", title: "规则负责决定", body: "判断哪些版式可以使用、内容是否装得下、什么时候应该换版式或拆页。" },
@@ -318,11 +322,11 @@ test("未重新蒸馏的泳道资产不会进入三角色候选", async () => {
   draft.relationTraits = { ...draft.relationTraits, dimensions: 2, secondaryDimension: "role" };
   const intent = enrichPageIntent(draft, page);
   const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.deepEqual(set.candidates, []);
+  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), ["northeastern-university-body-001"]);
   assert.equal(set.gap.type, "asset-gap");
 });
 
-test("未重新蒸馏的问题改进资产不会进入因果候选", async () => {
+test("未重新蒸馏的问题改进资产不会进入因果候选，并退化为正文排版", async () => {
   const page = content("value", [
     { id: "audience-01", title: "更多人并不缺内容", body: "他们有内容、有专业知识，也有真实的汇报任务。" },
     { id: "barrier-01", title: "缺的是制作能力", body: "只是不擅长拆页、选择表达方式和完成视觉排版。" },
@@ -334,7 +338,7 @@ test("未重新蒸馏的问题改进资产不会进入因果候选", async () =>
     sameLevel: false,
   }), page);
   const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.deepEqual(set.candidates, []);
+  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), ["northeastern-university-body-001"]);
   assert.equal(set.gap.type, "asset-gap");
 });
 

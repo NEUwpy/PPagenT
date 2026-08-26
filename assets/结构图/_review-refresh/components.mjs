@@ -55,12 +55,6 @@ ${htmlTextFlowCss()}
 .rev-pdca .core{position:absolute;left:491px;top:178px;width:188px;height:136px;padding:20px 24px;border-radius:50%;background:radial-gradient(circle at 35% 28%,#467da4 0,#285b84 58%,#1f496c 100%);border:9px solid #e0ecf3;display:grid;place-items:center;text-align:center;--title-size:18pt}
 
 /* work breakdown with ribbon branches */
-.rev-wbs .wbs-root{position:absolute;left:18px;top:152px;width:220px;height:188px;padding:26px;border-radius:28px;background:linear-gradient(145deg,#376f98,#244f75);display:grid;place-items:center;text-align:center;--title-size:20pt}
-.rev-wbs .wbs-lanes{position:absolute;left:300px;right:18px;top:18px;bottom:18px;display:grid;gap:12px}
-.rev-wbs .wbs-lane{position:relative;display:grid;grid-template-columns:230px 1fr;gap:22px;align-items:center;min-height:0}
-.rev-wbs .package{position:relative;height:78px;padding:18px 30px 18px 26px;background:linear-gradient(90deg,#3f789f,#6e9dbb);clip-path:polygon(0 0,91% 0,100% 50%,91% 100%,0 100%,7% 50%);border-left:8px solid #fff;display:grid;place-items:center;text-align:center;--title-size:15.5pt}
-.rev-wbs .tasks{display:flex;gap:8px;align-items:center;min-width:0}
-.rev-wbs .task{flex:1;min-width:0;height:54px;padding:8px 10px;border-radius:12px;background:#eef3f6;border:1px solid #dbe5eb;display:grid;place-items:center;text-align:center;font-size:11.5pt;color:#496174}
 
 /* restrained orbit ecology */
 .rev-twohub .planet-core{position:absolute;left:470px;top:159px;width:230px;height:174px;padding:28px;border-radius:50%;background:radial-gradient(circle at 34% 27%,#5d8eae 0,#2f6288 54%,#244c70 100%);border:10px solid rgba(226,238,246,.96);display:grid;place-items:center;text-align:center;--title-size:18pt}
@@ -138,11 +132,6 @@ function renderPdca(p) {
     "M585 397 A151 151 0 0 1 434 246", "M434 246 A151 151 0 0 1 585 95",
   ];
   return `<section class="rev rev-pdca" data-ppt-root><svg viewBox="0 0 1170 492"><defs><marker id="pdca-arrow" markerWidth="4.2" markerHeight="4.2" refX="3.2" refY="2.1" orient="auto"><path d="M0 0 L4.2 2.1 L0 4.2 Z" fill="#4f84aa"/></marker></defs>${arcs.map((d, i) => `<path d="${d}" fill="none" stroke="${i % 2 ? "#c98258" : "#4f84aa"}" stroke-width="17" stroke-linecap="round" marker-end="url(#pdca-arrow)"/>`).join("")}</svg>${steps.map((step, i) => `<article class="cycle-card"><span class="phase-code">${esc(step.code)}</span>${flow(`steps[${i}]`, step, { id: `pdca-step-${i}`, itemId: `step-${i}` })}</article>`).join("")}<div class="core tone-dark">${flow("center", { title: p.center }, { id: "pdca-center", align: "center", tone: "dark" })}</div></section>`;
-}
-
-function renderWbs(p) {
-  const packages = list(p.packages, 2, 4, "packages");
-  return `<section class="rev rev-wbs" data-ppt-root><svg viewBox="0 0 1170 492">${packages.map((_, i) => { const y = 55 + i * (382 / Math.max(1, packages.length - 1)); return `<path d="M238 246 C270 246 268 ${y} 300 ${y}" fill="none" stroke="#9bb5c5" stroke-width="4"/>`; }).join("")}</svg><div class="wbs-root tone-dark">${flow("root", { title: p.root }, { id: "wbs-root", align: "center", tone: "dark" })}</div><div class="wbs-lanes" style="grid-template-rows:repeat(${packages.length},1fr)">${packages.map((pkg, i) => `<section class="wbs-lane"><div class="package tone-dark">${flow(`packages[${i}].title`, { title: pkg.title }, { id: `wbs-package-${i}`, align: "center", tone: "dark" })}</div><div class="tasks">${list(pkg.tasks, 1, 4, `packages[${i}].tasks`).map((task, j) => `<div class="task">${scalar(`packages[${i}].tasks[${j}]`, task)}</div>`).join("")}</div></section>`).join("")}</div></section>`;
 }
 
 function renderTwoHub(p) {
@@ -310,7 +299,6 @@ function renderMerge(p) {
 
 const definitions = {
   "cycle-pdca-roles-005": { render: renderPdca, preview: { center: "持续改进", detailLevel: 2, steps: [{ code: "P", title: "计划", body: "明确目标、范围与验收标准" }, { code: "D", title: "执行", body: "按约束实施并留下过程记录" }, { code: "C", title: "检查", body: "对照目标识别偏差与原因" }, { code: "A", title: "改进", body: "固化有效做法并进入下一轮" }] } },
-  "hierarchy-unbalanced-wbs-005": { render: renderWbs, preview: { root: "Visual Skill 建设", packages: [{ title: "来源蒸馏", tasks: ["选页", "结构描述", "黄金复现"] }, { title: "组件扩散", tasks: ["数量状态", "内容槽位"] }, { title: "审核入库", tasks: ["HTML 审核", "Native 检查", "用户确认"] }, { title: "运行反馈", tasks: ["失败记录"] }] } },
   "hub-two-tier-capabilities-004": { render: renderTwoHub, preview: { center: "可靠 PPTX 生成", inner: ["内容理解", "结构选择", "响应布局", "原生编译"], outer: ["稿件适配", "叙事连贯", "逻辑清晰", "数量扩散", "风格一致", "对象可编", "失败可诊断", "资产可演进"] } },
   "hub-directed-outcomes-002": { render: renderDirected, preview: { center: { title: "响应式引擎", body: "统一求解结构与内容边界" }, items: [{ title: "输出可靠", body: "减少随机排版与结构误用" }, { title: "原生可编", body: "形状和文字均能继续编辑" }, { title: "生成高效", body: "运行期只做选择与参数填写" }, { title: "数量适配", body: "按真实内容重新求解布局" }, { title: "风格一致", body: "共享同一 Shell 与视觉语言" }, { title: "过程可审", body: "来源组件结果统一查看" }] } },
   "parallel-featured-peers-005": { render: renderFeatured, preview: { lead: { title: "可靠生成", body: "这是本页唯一需要被强调的主项" }, peers: [{ title: "原生编辑", body: "所有结构保留为可修改对象" }, { title: "逻辑调用", body: "按表达关系选择审核组件" }, { title: "响应布局", body: "随项目数量自动重排" }, { title: "失败兜底", body: "缺少结构时回到简洁排版" }] } },
@@ -330,7 +318,6 @@ const definitions = {
 
 function resolve(id, base, selection = {}) {
   const value = clone(base); const n = (key, fallback) => Number(selection[key] ?? fallback);
-  if (id === "hierarchy-unbalanced-wbs-005") value.packages = value.packages.slice(0, n("packageCount", 3));
   if (id === "hub-two-tier-capabilities-004") { value.inner = value.inner.slice(0, n("innerCount", 4)); value.outer = value.outer.slice(0, n("outerCount", 6)); }
   if (id === "hub-directed-outcomes-002") value.items = value.items.slice(0, n("itemCount", 6));
   if (id === "parallel-featured-peers-005") value.peers = value.peers.slice(0, n("peerCount", 4));

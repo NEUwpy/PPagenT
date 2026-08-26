@@ -218,7 +218,7 @@ function sharedFieldMarkup(shared, frame, textLayoutBindings) {
 }
 
 export const visualComponent = Object.freeze({
-  id: "convergence-consensus-field",
+  id: "containment-consensus-field",
   schemaVersion: 8,
   designFrame: DESIGN_FRAME,
   cssFile: "component.css",

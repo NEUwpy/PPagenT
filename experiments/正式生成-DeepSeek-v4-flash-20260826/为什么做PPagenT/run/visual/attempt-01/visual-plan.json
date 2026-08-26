@@ -1,0 +1,167 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "why-ppagent",
+  "skinId": "northeastern-university-001",
+  "visualLanguage": "遵循所选主题与已确认 Structure Group 的统一设计语言",
+  "rhythmStrategy": "优先使用语义适配的核心结构，避免相邻页面机械重复",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "familyId": "skin-cover",
+      "variantId": "default",
+      "silhouette": "cover",
+      "adaptationStatus": "fixed",
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "familyId": "skin-agenda",
+      "variantId": "default",
+      "silhouette": "agenda",
+      "adaptationStatus": "fixed",
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "p1",
+      "intentId": "p1-intent",
+      "familyId": "hub-radial",
+      "variantId": "balanced-orbit-anchor",
+      "silhouette": "dominant-center-with-balanced-satellites",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "question1",
+          "query": "presentation"
+        },
+        {
+          "sourceItemId": "question2",
+          "query": "page layout"
+        },
+        {
+          "sourceItemId": "question3",
+          "query": "content focus"
+        },
+        {
+          "sourceItemId": "question4",
+          "query": "relationship diagram"
+        },
+        {
+          "sourceItemId": "question5",
+          "query": "highlight emphasis"
+        }
+      ],
+      "reason": "中心加五个卫星图标，直观呈现关键问题，符合hub逻辑且语义丰富。"
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2-intent",
+      "familyId": "parallel-cards",
+      "variantId": "equal-floating-cards",
+      "silhouette": "equal-cards-with-round-anchors",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "org-style",
+          "query": "organization"
+        },
+        {
+          "sourceItemId": "personal-style",
+          "query": "personal style"
+        },
+        {
+          "sourceItemId": "fixed-structure",
+          "query": "structure"
+        }
+      ],
+      "reason": "并列卡片带图标，清晰展示三种可复用资产，符合parallel逻辑。"
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3-intent",
+      "familyId": "sequence-process",
+      "variantId": "continuous-numbered-rail",
+      "silhouette": "continuous-arrow-rail",
+      "adaptationStatus": "adaptive",
+      "reason": "箭头流程突出AI-规则-代码的递进关系，无图标和文字区域，直接体现sequence。"
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4-intent",
+      "familyId": "comparison-columns",
+      "variantId": "dual-verdict-mirror",
+      "silhouette": "mirrored-verdict-columns",
+      "adaptationStatus": "adaptive",
+      "reason": "镜像对比两列直接呈现稳定与随机的价值差异，符合comparison逻辑。"
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "仅两个点，用正文编辑页自然叙述，避免过度结构化，符合skin逻辑兜底。"
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6-intent",
+      "familyId": "hub-radial",
+      "variantId": "balanced-orbit-anchor",
+      "silhouette": "dominant-center-with-balanced-satellites",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "expression",
+          "query": "expression"
+        },
+        {
+          "sourceItemId": "capacity",
+          "query": "capacity"
+        },
+        {
+          "sourceItemId": "variation",
+          "query": "variation"
+        },
+        {
+          "sourceItemId": "constraint",
+          "query": "constraint"
+        }
+      ],
+      "reason": "中心短标签配四个图标，概括真正积累的四个方面，符合hub逻辑。"
+    },
+    {
+      "pageId": "p7",
+      "intentId": "p7-intent",
+      "familyId": "parallel-cards",
+      "variantId": "equal-floating-cards",
+      "silhouette": "equal-cards-with-round-anchors",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "ai-read",
+          "query": "AI reading"
+        },
+        {
+          "sourceItemId": "rule-judge",
+          "query": "rule judgment"
+        },
+        {
+          "sourceItemId": "code-execute",
+          "query": "code execution"
+        }
+      ],
+      "reason": "三张并列卡片对应三个普通环节，图标强化语义，符合parallel逻辑。"
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "familyId": "skin-closing",
+      "variantId": "default",
+      "silhouette": "closing",
+      "adaptationStatus": "fixed",
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

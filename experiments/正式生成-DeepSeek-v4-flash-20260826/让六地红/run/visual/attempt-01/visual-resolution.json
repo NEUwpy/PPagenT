@@ -1,0 +1,41 @@
+{
+  "status": "needs-director-revision",
+  "feedback": [
+    {
+      "pageId": "practice-levers",
+      "code": "composition-invalid",
+      "issues": [
+        {
+          "code": "composition-text-slot-item-count-exceeded",
+          "slots": [
+            {
+              "slotId": "lead",
+              "actual": 3,
+              "max": 1
+            }
+          ]
+        }
+      ],
+      "legalAlternatives": [
+        {
+          "compositionId": "editorial-grid",
+          "componentItemIds": [],
+          "componentContentMode": "none",
+          "textSlots": [
+            {
+              "slotId": "body",
+              "sourceItemIds": [
+                "task-list",
+                "vr-base",
+                "youth-lecture",
+                "friend-circle",
+                "mechanism"
+              ],
+              "contentMode": "full"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

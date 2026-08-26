@@ -29,6 +29,34 @@ function sourceRule(rawMarkdown) {
   };
 }
 
+function contentRevisionDirective(previousReview) {
+  const issues = previousReview?.issues ?? [];
+  if (!issues.length) return "";
+  const requirements = issues.map((issue) => {
+    const details = issue.details ?? {};
+    if (issue.errorCode === "CONTENT_CAPACITY_EXCEEDED") {
+      const capacityIssues = Array.isArray(details.issues) && details.issues.length
+        ? details.issues
+        : [details];
+      return capacityIssues.map((capacityIssue) =>
+        `${capacityIssue.pageId ?? "指定页面"} 当前总量约 ${capacityIssue.estimatedTotalChars ?? "超限"} 字、最长单项约 ${capacityIssue.maxItemChars ?? "超限"} 字；必须同时把总量压到 ${capacityIssue.required?.maxTotalChars ?? "总容量上限"} 字以内、每个单项压到 ${capacityIssue.required?.maxItemChars ?? "单项容量上限"} 字以内。只压缩重复表述或按原稿章节拆页，不得缩字、删掉主关系或改动其他已合法页面`
+      ).join("；");
+    }
+    if (issue.errorCode === "SECTION_COVERAGE_FAILED") {
+      return `原稿二级标题“${details.sectionHeading ?? "指定章节"}”被遗漏；必须恢复为独立内容页，并让 title、sourceText、主张和支撑内容都来自该章节，不得用封面、目录或相邻章节代替`;
+    }
+    if (issue.errorCode === "SCHEMA_VALIDATION_FAILED") {
+      const schemaErrors = Array.isArray(details.errors) ? details.errors : [];
+      if (schemaErrors.some((error) => String(error.schemaPath).includes("/evidenceIds/minItems"))) {
+        return `${details.label ?? "指定页面"} 的 argument-evidence 只有一条证据，结构不成立；若原稿有至少两条独立证据，就补成两个以上 items 并让 evidenceIds 逐项引用，否则删除 structuredData、保留普通 editorial 内容，不得虚构证据`;
+      }
+      return `${details.label ?? "指定对象"} 未满足输出 schema；只修正报错对象的字段、枚举和必填项，若可选 structuredData 无法由原稿完整支持就删除它，不得编造数据`;
+    }
+    return `${issue.errorCode ?? "内容错误"}：${issue.evidence ?? previousReview.summary ?? "按反馈修正"}`;
+  });
+  return `这是失败后的定向修订轮。必须先完成以下要求，再输出完整合法 JSON：${requirements.join("；")}。`;
+}
+
 function assertSchemas(schemas) {
   const required = ["contentDirector", "contentReview", "visualIntent", "visualComposition", "visualReview"];
   const missing = required.filter((key) => !schemas?.[key]);
@@ -423,7 +451,7 @@ export function createModelDirectorProvider({
       ];
       const contentOutput = await content.generateJson({
         role: "PPagenT 内容导演",
-        task: "在整套尺度决定叙事弧、页数、页序、每页职责、拆分、轻重，并为每个正文页选择一个 Logic；输出 deckPlan 与 pageContents。availableLogicSkills 是完整的语义 Logic 目录，不是现有资产菜单：PageContent.logicIntent.logicId 必须从中逐字选择，availableStructureGroupCount 即使为 0 也照样可以选择，后续程序会把它报告为资产缺口；绝不能因为暂时没有 Structure Group 就改成相近 Logic 或 editorial。reason 简要说明原稿关系为何属于该 Logic。structuralGuides 是程序直接从原稿句法识别出的高置信结构证据，不是资产推荐：对应章节必须保持 guide.relation，并按 guide.itemRange 提取主 items；guide.task 说明节点边界，fixedAtoms 若存在则必须逐项使用。不得用一句总括、背景或结论替换 structuralGuides 已证实存在的多个对象。内容导演只选 Logic，不读取也不选择 assetId、Structure Group、容器、坐标或图标；这些属于视觉导演。只有原稿确实没有可视化关系时才选择 editorial，绝不为套结构图篡改原稿。narrativeArc 是供目录页使用的 3 到 5 个简短章节名，不是逐页摘要。原稿的 Markdown 二级标题默认是一页内容单元；同一节中的反问、引文或总结通常留在该页，不单独拆成过渡页，除非该节容量确实必须拆分。先识别听众必须区分的全部对象，再压缩字句；醒目的引文、结论或标题通常是页面主张，不能替代支撑它的三至六个对象。structuralHints 是可选结构读取器形成的精确 atoms 覆盖结果：对应页面必须逐项使用 atoms 作为主 items 并保持 relation，允许忠实压缩，但不得用总括、背景或结论替换。items 只表示主关系中的同级节点；节点内部的说明维度、例子和枚举进入 points，不得提升为同级节点。没有 structuralGuides 的页面再按原稿关系判断。冒号、分号、项目符号或‘包括／分别／一是二是’明确列出三至六个同级机制、抓手、标准、结果或场景时，必须保留为三至六个 items；不要把它们塞进一个总括 item 的 points。只有这些条目都在解释同一个更小主节点时才放入 points。两个极端衬托中间主体时，必须保留左端、中间主体和右端；描述 A 进入或支撑 B、B 再服务 C 时，中介节点 B 不能被压掉。存在人物或组织层级时，用 structuredData.type=hierarchy 保存真实父子关系；只有原稿明确提供图片路径时才填写 portrait。明确同时给出输入对象、逐级收窄节点和 2–3 个宏观阶段时，才用 structuredData.type=convergence；没有阶段不得编造。明确给出 2–4 组问题与方案及共同结果时，用 structuredData.type=problem-solution；一个问题由 2–5 项同级方法共同处理并得到一个结果时，用 structuredData.type=problem-method-result，items 只保存方法且 methodIds 逐项引用；一个论点由 2–5 条证据共同支撑并收束为结论时，用 structuredData.type=argument-evidence，items 只保存证据且 evidenceIds 逐项引用；一个明确判断把同一情境分流到 2–4 条后续路径时，用 structuredData.type=branching-decision，items 保存路径动作与说明，branches 以相同 id 补充进入条件和可选结果；围绕同一不确定假设并列推演 3–5 个情景，且每个情景都有明确触发和结果时，用 structuredData.type=branching-scenario，items 保存情景名称，scenarios 以相同 id 补充触发与结果。起点、终点、条件、假设和结果必须来自原稿。明确给出两个判断维度和四个象限时，用 structuredData.type=matrix，均不得凭空补字段。标题或核心结论明确比较 A 与 B 时，items 必须恰好是双方；若来源提供共同维度，应为两侧提取数量一致的 3–5 条 points。除此以外不要按段落机械拆项，允许只有一个主要观点。结构性项目标题不超过 10 个汉字，body 尽量 15–30 个汉字；正文与 points 不重复。多项页面必须控制在正式字号可承载范围；收到容量反馈时压缩或拆页，不得缩字。不得为了套资产改变语义。",
+        task: `${contentRevisionDirective(input.previousReview)}在整套尺度决定叙事弧、页数、页序、每页职责、拆分、轻重，并为每个正文页选择一个 Logic；输出 deckPlan 与 pageContents。availableLogicSkills 是完整的语义 Logic 目录，不是现有资产菜单：PageContent.logicIntent.logicId 必须从中逐字选择，availableStructureGroupCount 即使为 0 也照样可以选择，后续程序会把它报告为资产缺口；绝不能因为暂时没有 Structure Group 就改成相近 Logic 或 editorial。reason 简要说明原稿关系为何属于该 Logic。structuralGuides 是程序直接从原稿句法识别出的高置信结构证据，不是资产推荐：对应章节必须保持 guide.relation，并按 guide.itemRange 提取主 items；guide.task 说明节点边界，fixedAtoms 若存在则必须逐项使用。不得用一句总括、背景或结论替换 structuralGuides 已证实存在的多个对象。内容导演只选 Logic，不读取也不选择 assetId、Structure Group、容器、坐标或图标；这些属于视觉导演。只有原稿确实没有可视化关系时才选择 editorial，绝不为套结构图篡改原稿。narrativeArc 是供目录页使用的 3 到 5 个简短章节名，不是逐页摘要。原稿的 Markdown 二级标题默认是一页内容单元；同一节中的反问、引文或总结通常留在该页，不单独拆成过渡页，除非该节容量确实必须拆分。先识别听众必须区分的全部对象，再压缩字句；醒目的引文、结论或标题通常是页面主张，不能替代支撑它的三至六个对象。structuralHints 是可选结构读取器形成的精确 atoms 覆盖结果：对应页面必须逐项使用 atoms 作为主 items 并保持 relation，允许忠实压缩，但不得用总括、背景或结论替换。items 只表示主关系中的同级节点；节点内部的说明维度、例子和枚举进入 points，不得提升为同级节点。没有 structuralGuides 的页面再按原稿关系判断。冒号、分号、项目符号或‘包括／分别／一是二是’明确列出三至六个同级机制、抓手、标准、结果或场景时，必须保留为三至六个 items；不要把它们塞进一个总括 item 的 points。只有这些条目都在解释同一个更小主节点时才放入 points。两个极端衬托中间主体时，必须保留左端、中间主体和右端；描述 A 进入或支撑 B、B 再服务 C 时，中介节点 B 不能被压掉。存在人物或组织层级时，用 structuredData.type=hierarchy 保存真实父子关系；只有原稿明确提供图片路径时才填写 portrait。明确同时给出输入对象、逐级收窄节点和 2–3 个宏观阶段时，才用 structuredData.type=convergence；没有阶段不得编造。明确给出 2–4 组问题与方案及共同结果时，用 structuredData.type=problem-solution；一个问题由 2–5 项同级方法共同处理并得到一个结果时，用 structuredData.type=problem-method-result，items 只保存方法且 methodIds 逐项引用；一个论点由 2–5 条证据共同支撑并收束为结论时，用 structuredData.type=argument-evidence，items 只保存证据且 evidenceIds 逐项引用；一个明确判断把同一情境分流到 2–4 条后续路径时，用 structuredData.type=branching-decision，items 保存路径动作与说明，branches 以相同 id 补充进入条件和可选结果；围绕同一不确定假设并列推演 3–5 个情景，且每个情景都有明确触发和结果时，用 structuredData.type=branching-scenario，items 保存情景名称，scenarios 以相同 id 补充触发与结果。起点、终点、条件、假设和结果必须来自原稿。明确给出两个判断维度和四个象限时，用 structuredData.type=matrix，均不得凭空补字段。标题或核心结论明确比较 A 与 B 时，items 必须恰好是双方；若来源提供共同维度，应为两侧提取数量一致的 3–5 条 points。除此以外不要按段落机械拆项，允许只有一个主要观点。结构性项目标题不超过 10 个汉字，body 尽量 15–30 个汉字；正文与 points 不重复。多项页面必须控制在正式字号可承载范围；收到容量反馈时压缩或拆页，不得缩字。不得为了套资产改变语义。`,
         context: {
           executionGuidelines: guidelines.content ?? "",
           availableLogicSkills: guidelines.logicSkillIndex ?? [],
@@ -489,7 +517,7 @@ export function createModelDirectorProvider({
       );
       const routingOutput = await visualComposition.generateJson({
         role: "PPagenT 视觉导演",
-        task: "内容导演已经为每页确定 Logic，你不得重新分类或跨 Logic 选择。像调用 Skills 一样，只在该页合法候选中选择具体 Structure Group，并决定核心短标签、语义图标查询、TextRegion 的组合排版以及必要的局部内容细化。candidateId 必须逐字复制该页 candidates 中的值。选定候选若披露 textRegions，只能从各 Region 的 compatibleLayoutIds 中选择；同级重复 Region 只按 regionKey 选择一次，程序会扩展到每个实际区域。没有文字区域或默认排版已经合适时，textLayoutChoices=[]。结构性 Logic 没有兼容 Structure Group 时，程序会在调用你之前返回 asset-gap，绝不会提供正文兜底；只有内容导演明确选择 editorial 的页面才正常使用正文 Composition。centerLabel 是页面核心概念的 2–8 字中文短标签，所有页面都填写；若结构没有中心标签槽，程序会忽略。若选中 mediaMode=semantic-icon 的候选，必须为每个 item 输出一个简短英文 icon query，sourceItemId 使用该 item.id；其他候选 iconQueries=[]。若 contentReadiness=needs-semantic-refinement，只在原文明确支持缺失分点时列出对应 refinementItemIds，否则改选其他合法结构；不得改变 Logic。不要输出坐标、字号、间距、CompositionPlan、HTML/CSS 或重复正文；程序会读取 Structure Group 表单、形成 TextBinding，并用确定性排版器完成适配。按 pages 原顺序逐页输出且不得遗漏。",
+        task: "内容导演已经为每页确定 Logic，你不得重新分类或跨 Logic 选择。像调用 Skills 一样，只在该页合法候选中选择具体 Structure Group，并决定核心短标签、语义图标查询、TextRegion 的组合排版以及必要的局部内容细化。candidateId 必须逐字复制该页 candidates 中的值。选定候选若披露 textRegions，只能从各 Region 的 compatibleLayoutIds 中选择；同级重复 Region 只按 regionKey 选择一次，程序会扩展到每个实际区域。没有文字区域或默认排版已经合适时，textLayoutChoices=[]。优先使用语义与容量都合法的 Structure Group；如果该页只提供 fallbackBody 候选，或 previousFeedback 明确报告 component-runtime-overflow，则选择正文兜底，不得继续选择已证明装不下的结构。centerLabel 是页面核心概念的 2–8 字中文短标签，所有页面都填写；若结构没有中心标签槽，程序会忽略。若选中 mediaMode=semantic-icon 的候选，必须为每个 item 输出一个简短英文 icon query，sourceItemId 使用该 item.id；其他候选 iconQueries=[]。若 contentReadiness=needs-semantic-refinement，只在原文明确支持缺失分点时列出对应 refinementItemIds，否则改选其他合法结构；不得改变 Logic。不要输出坐标、字号、间距、CompositionPlan、HTML/CSS 或重复正文；程序会读取 Structure Group 表单、形成 TextBinding，并用确定性排版器完成适配。按 pages 原顺序逐页输出且不得遗漏。",
         context: {
           pages: compactPages,
           previousFeedback: input.previousResolution?.feedback ?? [],

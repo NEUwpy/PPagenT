@@ -92,6 +92,15 @@
       ]
     },
     {
+      "id": "editorial-grid",
+      "silhouette": "responsive-editorial-grid",
+      "requiresComponent": false,
+      "allowedAssetKinds": ["body"],
+      "slots": [
+        { "id": "body", "role": "text", "frame": { "left": 0.02, "top": 0.04, "width": 0.96, "height": 0.9 } }
+      ]
+    },
+    {
       "id": "image-left-text-right",
       "silhouette": "image-left-editorial-right",
       "requiresComponent": false,

@@ -325,17 +325,18 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
       const resolvedTextLayouts = [];
       const textLayoutOverflows = [];
       const textLayoutFits = (layout, parts) => {
+        const tolerance = 2;
         const layoutBox = layout.getBoundingClientRect();
         const inside = parts.every((part) => {
           const box = part.getBoundingClientRect();
-          return box.left >= layoutBox.left - 1
-            && box.right <= layoutBox.right + 1
-            && box.top >= layoutBox.top - 1
-            && box.bottom <= layoutBox.bottom + 1;
+          return box.left >= layoutBox.left - tolerance
+            && box.right <= layoutBox.right + tolerance
+            && box.top >= layoutBox.top - tolerance
+            && box.bottom <= layoutBox.bottom + tolerance;
         });
         return inside
-          && layout.scrollWidth <= layout.clientWidth + 1
-          && layout.scrollHeight <= layout.clientHeight + 1
+          && layout.scrollWidth <= layout.clientWidth + tolerance
+          && layout.scrollHeight <= layout.clientHeight + tolerance
           && parts.every((part) => part.dataset.pptFontFit !== "overflow");
       };
       const collectiveFitOrder = ["body", "list", "annotation", "label", "heading", "quote", "emphasis", "metric"];

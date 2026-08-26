@@ -1,0 +1,39 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { color: #40576a; background: transparent; font-family: var(--ppagent-font-body, "Microsoft YaHei"), sans-serif; }
+
+.grouped-review { position: relative; width: 1170px; height: 492px; overflow: hidden; background: transparent; }
+.connector-field { position: absolute; inset: 0; z-index: 0; width: 1170px; height: 492px; overflow: visible; }
+
+.root-anchor { position: absolute; left: 8px; top: 193px; z-index: 2; width: 194px; height: 106px; }
+.root-ribbon { position: absolute; inset: 0; overflow: hidden; border: 5px solid #fff; border-radius: 23px; background: #28577d; box-shadow: 0 7px 15px rgba(40, 79, 108, .11); }
+.root-content { position: absolute; left: 10px; right: 10px; top: 10px; height: 80px; --ppagent-heading-color: #fff; }
+.root-content .ppagent-text-primitive--heading { color: #fff; font-size: var(--ppagent-component-item-title-size, 21pt); font-weight: 700; line-height: 1.18; }
+
+.group-row { position: absolute; left: 306px; top: var(--top); z-index: 2; width: 847px; height: var(--row-height); }
+.point-surface { position: absolute; left: 196px; right: 0; top: 7px; bottom: 7px; overflow: hidden; border: 1px solid #dfe6ea; border-radius: 12px; background: #f1f3f4; box-shadow: 0 4px 11px rgba(43, 76, 104, .05); }
+.point-rule { position: absolute; left: 26px; top: 16px; bottom: 16px; width: 5px; border-radius: 99px; background: var(--tone); opacity: .82; }
+.point-region { position: absolute; left: 49px; right: 22px; top: 10px; bottom: 10px; --ppagent-text-color: #536878; --ppagent-text-layout-item-gap: 7px; }
+.point-region > .ppagent-text-layout { justify-content: center; }
+.point-region .ppagent-text-primitive--list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 28px; row-gap: 7px; }
+.point-region .ppagent-text-list__item { position: relative; min-width: 0; padding-left: 2px; color: #516777; font-size: var(--ppagent-component-lead-size, 19pt); line-height: 1.25; }
+
+.group-ribbon { position: absolute; left: 0; top: 50%; z-index: 3; width: 220px; height: 72px; overflow: hidden; transform: translateY(-50%); border: 5px solid #fff; border-radius: 13px; background: var(--tone); box-shadow: 0 5px 12px rgba(43, 76, 104, .09); }
+.group-title-region { position: absolute; left: 23px; right: 23px; top: 9px; height: 44px; --ppagent-heading-color: #fff; }
+.group-title-region .ppagent-text-primitive--heading { color: #fff; font-size: var(--ppagent-component-item-title-size, 21pt); font-weight: 700; line-height: 1.18; }
+
+.grouped-review[data-group-count="4"] .point-region { left: 47px; right: 18px; top: 7px; bottom: 7px; --ppagent-text-layout-item-gap: 4px; }
+.grouped-review[data-group-count="4"] .point-rule { top: 13px; bottom: 13px; }
+.grouped-review[data-group-count="4"] .point-region .ppagent-text-list__item { font-size: var(--ppagent-component-lead-size, 19pt); line-height: 1.16; }
+.grouped-review[data-group-count="4"] .group-title-region .ppagent-text-primitive--heading { font-size: var(--ppagent-component-lead-size, 19pt); }
+.grouped-review[data-group-count="2"] .point-region .ppagent-text-primitive--list { row-gap: 12px; }
+.grouped-review[data-group-count="2"] .point-region .ppagent-text-list__item { font-size: var(--ppagent-component-lead-size, 19pt); }
+
+.grouped-review[data-group-count="5"] .point-surface { top: 4px; bottom: 4px; }
+.grouped-review[data-group-count="5"] .point-rule { left: 23px; top: 12px; bottom: 12px; width: 4px; }
+.grouped-review[data-group-count="5"] .point-region { left: 43px; right: 16px; top: 5px; bottom: 5px; --ppagent-text-layout-item-gap: 3px; }
+.grouped-review[data-group-count="5"] .point-region .ppagent-text-primitive--list { column-gap: 22px; row-gap: 3px; }
+.grouped-review[data-group-count="5"] .point-region .ppagent-text-list__item { font-size: var(--ppagent-component-lead-size, 19pt); line-height: 1.1; }
+.grouped-review[data-group-count="5"] .group-ribbon { height: 60px; border-width: 4px; }
+.grouped-review[data-group-count="5"] .group-title-region { left: 19px; right: 19px; top: 6px; height: 40px; }
+.grouped-review[data-group-count="5"] .group-title-region .ppagent-text-primitive--heading { font-size: var(--ppagent-component-lead-size, 19pt); }

@@ -31,6 +31,21 @@ function fittedCompositionText(value, frame, roleName, typographyRoles) {
   return result;
 }
 
+function gridItemFrames(frame, itemCount) {
+  const columns = itemCount >= 5 ? 3 : 2;
+  const rows = Math.ceil(itemCount / columns);
+  const columnGap = 20;
+  const rowGap = 18;
+  const width = (frame.width - columnGap * (columns - 1)) / columns;
+  const height = (frame.height - rowGap * (rows - 1)) / rows;
+  return Array.from({ length: itemCount }, (_, index) => ({
+    left: frame.left + (index % columns) * (width + columnGap),
+    top: frame.top + Math.floor(index / columns) * (height + rowGap),
+    width,
+    height,
+  }));
+}
+
 export function validatePageCompositionTextFit(content, layout, planPage, bodyFrame, typographyRoles) {
   if (["fixed-cover", "fixed-agenda", "fixed-closing"].includes(layout.id)) return [];
   const issues = [];
@@ -101,6 +116,19 @@ export function validatePageCompositionTextFit(content, layout, planPage, bodyFr
       const supportText = support.map((item) => [item.title, item.body].filter(Boolean).join("：")).join("\n");
       check(supportText, { left: frame.left + 58, top: frame.top + frame.height - 92, width: frame.width - 116, height: 78 }, "singleSupport", "primary");
     }
+  } else if (layout.id === "editorial-grid") {
+    const plan = planPage.textSlots.find((slot) => slot.slotId === "body");
+    const frame = slotFrame(layout, "body", bodyFrame);
+    const items = plan ? slotItems(content, plan) : [];
+    gridItemFrames(frame, items.length).forEach((itemFrame, index) => {
+      const item = items[index];
+      check(item?.title, {
+        left: itemFrame.left + 28, top: itemFrame.top + 30, width: itemFrame.width - 48, height: 38,
+      }, "rowTitle", "body");
+      check(item?.body, {
+        left: itemFrame.left + 28, top: itemFrame.top + 78, width: itemFrame.width - 48, height: itemFrame.height - 96,
+      }, "rowBody", "body");
+    });
   } else if (layout.id === "editorial-dual-statement") {
     ["left", "right"].forEach((slotId) => {
       const plan = planPage.textSlots.find((slot) => slot.slotId === slotId);

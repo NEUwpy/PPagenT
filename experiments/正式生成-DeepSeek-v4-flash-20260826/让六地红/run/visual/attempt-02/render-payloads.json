@@ -1,0 +1,280 @@
+[
+  {
+    "schemaVersion": "1.0",
+    "intentId": "shell-cover-intent",
+    "assetId": "northeastern-university-cover-001",
+    "parameters": {
+      "title": "让“六地”红，成为理工青年最鲜亮的青春底色",
+      "presenter": "",
+      "organization": "",
+      "date": "",
+      "subtitle": ""
+    },
+    "mappings": [],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "shell-agenda-intent",
+    "assetId": "northeastern-university-agenda-001",
+    "parameters": {
+      "title": "目录",
+      "items": [
+        "开场引入",
+        "问题与转向",
+        "创新矩阵",
+        "实践抓手",
+        "成效与收束"
+      ]
+    },
+    "mappings": [
+      {
+        "sourceItemId": "agenda-1",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-2",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-3",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-4",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-5",
+        "parameterPath": "items"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "opening-intent",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "开场",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "greeting",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "challenge-shift-intent",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "从“三高三低”到深耕辽宁",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "difficulty",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "shift",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "matrix-intent",
+    "assetId": "parallel-equal-cards-001",
+    "parameters": {
+      "title": "“1+3+N”新矩阵",
+      "items": [
+        {
+          "key": "chain",
+          "title": "一条研学链",
+          "body": "对接22处示范点，按“1+6+N”设计路线",
+          "points": [],
+          "iconQuery": "path chain"
+        },
+        {
+          "key": "classrooms",
+          "title": "三类青春课堂",
+          "body": "行走课堂、沉浸课堂、互动课堂",
+          "points": [],
+          "iconQuery": "classroom learning"
+        },
+        {
+          "key": "scenes",
+          "title": "N个教育场景",
+          "body": "校地、校企、校校联建场景",
+          "points": [],
+          "iconQuery": "scenery education"
+        }
+      ],
+      "visualVariantId": "equal-floating-cards",
+      "textLayoutBindings": {
+        "professional-title-region": "statement-flow",
+        "professional-content-region": "heading-content-flow",
+        "collaboration-title-region": "statement-flow",
+        "collaboration-content-region": "heading-content-flow",
+        "innovation-title-region": "statement-flow",
+        "innovation-content-region": "heading-content-flow"
+      }
+    },
+    "mappings": [
+      {
+        "sourceItemId": "chain",
+        "parameterPath": "items[0]"
+      },
+      {
+        "sourceItemId": "classrooms",
+        "parameterPath": "items[1]"
+      },
+      {
+        "sourceItemId": "scenes",
+        "parameterPath": "items[2]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "practice-levers-intent",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "五类实践抓手",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "task-list",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "vr-base",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "youth-lecture",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "friend-circle",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "mechanism",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "effectiveness-intent",
+    "assetId": "parallel-equal-cards-001",
+    "parameters": {
+      "title": "五年成效",
+      "items": [
+        {
+          "key": "faith",
+          "title": "信仰更强",
+          "body": "留辽意愿举手率从58%飙到87%",
+          "points": [],
+          "iconQuery": "faith star"
+        },
+        {
+          "key": "skill",
+          "title": "本领更硬",
+          "body": "26份微课题，8家企业当场收货",
+          "points": [],
+          "iconQuery": "skill gear"
+        },
+        {
+          "key": "voice",
+          "title": "声音更响",
+          "body": "宣讲团让理论飞入百姓心坎",
+          "points": [],
+          "iconQuery": "voice megaphone"
+        },
+        {
+          "key": "step",
+          "title": "脚步更稳",
+          "body": "选调生、重大装备研发比例提升40%",
+          "points": [],
+          "iconQuery": "footstep progress"
+        }
+      ],
+      "visualVariantId": "equal-floating-cards",
+      "textLayoutBindings": {
+        "professional-title-region": "statement-flow",
+        "professional-content-region": "heading-content-flow",
+        "collaboration-title-region": "statement-flow",
+        "collaboration-content-region": "heading-content-flow",
+        "innovation-title-region": "statement-flow",
+        "innovation-content-region": "heading-content-flow",
+        "execution-title-region": "statement-flow",
+        "execution-content-region": "heading-content-flow"
+      }
+    },
+    "mappings": [
+      {
+        "sourceItemId": "faith",
+        "parameterPath": "items[0]"
+      },
+      {
+        "sourceItemId": "skill",
+        "parameterPath": "items[1]"
+      },
+      {
+        "sourceItemId": "voice",
+        "parameterPath": "items[2]"
+      },
+      {
+        "sourceItemId": "step",
+        "parameterPath": "items[3]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "closing-intent",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "收束",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "quote",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "summary",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "shell-closing-intent",
+    "assetId": "northeastern-university-closing-001",
+    "parameters": {
+      "text": "用“六地”红色文化锻造理工青年党员，让红色基因成为青春最鲜亮的底色"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "closing-takeaway",
+        "parameterPath": "text"
+      }
+    ],
+    "omissions": []
+  }
+]

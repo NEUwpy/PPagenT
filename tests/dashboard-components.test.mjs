@@ -42,6 +42,7 @@ import {
 } from "../assets/结构图/矩阵象限-001/review.mjs";
 import { mapPageContent as mapMatrixPageContent } from "../assets/结构图/矩阵象限-001/runtime.mjs";
 import { mapPageContent as mapIntersectionPageContent } from "../assets/结构图/多集合交集-001/runtime.mjs";
+import { mapPageContent as mapConsensusFieldPageContent } from "../assets/结构图/集合交集共识区-005/runtime.mjs";
 import { mapPageContent as mapNetworkPageContent } from "../assets/结构图/关系生态网络-001/runtime.mjs";
 
 const root = path.resolve(import.meta.dirname, "..");
@@ -96,7 +97,7 @@ test("看板只把资产专属 HTML 计入迁移完成度", async () => {
   )));
   assert.equal(cycle?.builderExport, "");
   assert.equal(cycle?.componentInitialSelection.stepCount, 4);
-  assert.equal(data.summary.htmlDesignComponents, 28);
+  assert.equal(data.summary.htmlDesignComponents, 29);
   assert.match(cycle?.previewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.componentPreviewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.nativeStatePreviewUrl ?? "", /[?&]v=\d+/);
@@ -182,6 +183,7 @@ test("作废的旧 Logic 不再出现在核心库或正式生成候选中", asyn
   const formalIds = new Set(data.formalLogics.map((record) => record.id));
   assert.deepEqual(formalIds, new Set([
     "comparison-dual-verdict-001", "comparison-pros-cons-balance-005", "cycle-loop-001", "hierarchy-people-tree-001",
+    "hierarchy-grouped-breakdown-005",
     "hub-directed-outcomes-002", "hub-radial-001", "layered-architecture-001", "layered-iceberg-depth-006", "parallel-equal-cards-001",
     "convergence-simple-funnel-001", "convergence-funnel-001", "sequence-flow-001",
     "causal-fishbone-attribution-001", "problem-solution-outcome-001",
@@ -192,7 +194,7 @@ test("作废的旧 Logic 不再出现在核心库或正式生成候选中", asyn
     "role-stage-collaboration-001", "containment-multi-set-intersection-001",
     "network-internal-external-ecosystem-001", "cycle-racetrack-loop-005",
     "cycle-single-chain-feedback-002", "convergence-many-to-one-003",
-    "convergence-consensus-field-005",
+    "containment-consensus-field-005",
   ]));
 });
 
@@ -223,7 +225,7 @@ test("Logic 能力地图保留空槽位，只把合格资产填入对应位置",
   assert.equal(layered?.status, "available");
 
   const hierarchy = data.logics.find((logic) => logic.id === "hierarchy");
-  assert.deepEqual(hierarchy?.assetIds, ["hierarchy-people-tree-001"]);
+  assert.deepEqual(hierarchy?.assetIds, ["hierarchy-people-tree-001", "hierarchy-grouped-breakdown-005"]);
   assert.equal(hierarchy?.status, "available");
   assert.match(hierarchy?.description ?? "", /上下级|归属/);
 
@@ -232,7 +234,6 @@ test("Logic 能力地图保留空槽位，只把合格资产填入对应位置",
     "convergence-simple-funnel-001",
     "convergence-funnel-001",
     "convergence-many-to-one-003",
-    "convergence-consensus-field-005",
   ]);
   assert.equal(convergence?.status, "available");
 
@@ -259,6 +260,10 @@ test("Logic 能力地图保留空槽位，只把合格资产填入对应位置",
   const network = data.logics.find((logic) => logic.id === "network");
   assert.deepEqual(network?.assetIds, ["network-internal-external-ecosystem-001"]);
   assert.equal(network?.status, "available");
+
+  const containment = data.logics.find((logic) => logic.id === "containment");
+  assert.deepEqual(containment?.assetIds, ["containment-multi-set-intersection-001", "containment-consensus-field-005"]);
+  assert.equal(containment?.status, "available");
 
   const template = await fs.readFile(path.join(root, "src/tools/templates/logic-dashboard.html"), "utf8");
   assert.match(template, /data-carousel-select/);
@@ -513,6 +518,20 @@ test("多集合共同交集只在原稿明确集合与共同部分时映射正�
   assert.deepEqual(payload.parameters.shared, content.structuredData.shared);
   assert.equal(payload.parameters.showSupport, true);
   assert.equal(payload.mappings.length, 3);
+
+  const consensusPayload = mapConsensusFieldPageContent(content, { intentId: "consensus-intent" }, null, {
+    componentItemIds: content.items.map((item) => item.id),
+  });
+  assert.equal(consensusPayload.assetId, "containment-consensus-field-005");
+  assert.deepEqual(consensusPayload.parameters.sets.map((item) => item.key), content.structuredData.setIds);
+  assert.equal(consensusPayload.parameters.sets[0].body, "真实场景中的核心诉求；高频需求");
+  assert.deepEqual(consensusPayload.parameters.shared, content.structuredData.shared);
+  assert.equal(consensusPayload.mappings.length, 3);
+
+  assert.throws(() => mapConsensusFieldPageContent(
+    { ...content, structuredData: undefined },
+    { intentId: "invalid-consensus-intent" },
+  ), /multi-set-common-intersection/);
 });
 
 test("内外协同生态网络只按显式分组与关系映射正式载荷", () => {

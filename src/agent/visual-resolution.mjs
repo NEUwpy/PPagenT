@@ -336,23 +336,6 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
       ));
     }
     const isEditorial = pageContents[index].logicIntent?.logicId === "editorial" || intent.baseRelation === "none";
-    if (!structuralCandidates.length && !isEditorial) {
-      return {
-        pageId,
-        intentId: intent.intentId,
-        candidates: [],
-        capacityDensity,
-        gap: {
-          type: "asset-gap",
-          logicId: pageContents[index].logicIntent?.logicId ?? null,
-          baseRelation: intent.baseRelation,
-          itemCount: intent.structure.itemCount,
-          reason: "当前核心资产库没有语义与容量均兼容的 Structure Group",
-        },
-        semanticRejections: semantic.rejections,
-        capacityRejections,
-      };
-    }
     const bodyVariant = variants.find((variant) => variant.renderer === "skin" && variant.fallbackBody);
     if (!bodyVariant) throw new Error("核心资产包缺少正文兜底页");
     const bodyMetadata = metadataById.get(bodyVariant.assetId);
@@ -362,6 +345,25 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
       compositionCandidatesForAsset(layouts, bodyVariant.assetId, bodyMetadata),
       intent.structure.itemCount,
     );
+    if (!structuralCandidates.length && !isEditorial) {
+      const gap = {
+        type: "asset-gap",
+        logicId: pageContents[index].logicIntent?.logicId ?? null,
+        baseRelation: intent.baseRelation,
+        itemCount: intent.structure.itemCount,
+        reason: "当前核心资产库没有语义与容量均兼容的 Structure Group",
+      };
+      const fixedShellPurpose = new Set(["present_cover", "present_agenda", "present_closing"]).has(intent.purposeKey);
+      return {
+        pageId,
+        intentId: intent.intentId,
+        candidates: fixedShellPurpose ? [] : [bodyCandidate],
+        capacityDensity,
+        gap,
+        semanticRejections: semantic.rejections,
+        capacityRejections,
+      };
+    }
     return {
       pageId,
       intentId: intent.intentId,
@@ -690,7 +692,9 @@ function legalTextCompositionAlternatives(content, candidate, layouts) {
     if (!layout || layout.requiresComponent || layout.requiresMedia) continue;
     const textSlots = layout.slots.filter((slot) => slot.role === "text");
     const plans = [];
-    if (compositionId === "editorial-single-focus" && textSlots.length === 1) {
+    if (compositionId === "editorial-grid" && textSlots.length === 1 && itemIds.length >= 3) {
+      plans.push([{ slotId: textSlots[0].id, sourceItemIds: itemIds, contentMode: "full" }]);
+    } else if (compositionId === "editorial-single-focus" && textSlots.length === 1) {
       plans.push([{ slotId: textSlots[0].id, sourceItemIds: itemIds, contentMode: "full" }]);
     } else if (compositionId === "editorial-dual-statement" && itemIds.length === 2) {
       plans.push(
@@ -939,6 +943,7 @@ export async function resolveVisualPlan({
   visualPlan,
   compositionPlan,
   candidateSets,
+  previousResolution = null,
 }) {
   if (!Array.isArray(candidateSets) || candidateSets.length !== pageIntents.length) {
     return { status: "needs-director-revision", feedback: [{ code: "candidate-set-mismatch" }] };
@@ -994,7 +999,10 @@ export async function resolveVisualPlan({
     );
     normalizedCompositionPlan.pages[index] = normalizedCompositionPage;
     const structuralAlternatives = candidateSet.candidates.filter((item) => !item.fallbackBody);
-    if (candidate.fallbackBody && structuralAlternatives.length) {
+    const runtimeOverflowFallback = (previousResolution?.feedback ?? []).some((item) => (
+      item.pageId === planPage.pageId && item.code === "component-runtime-overflow"
+    ));
+    if (candidate.fallbackBody && structuralAlternatives.length && !runtimeOverflowFallback) {
       feedback.push({
         pageId: planPage.pageId,
         code: "structural-candidate-skipped",

@@ -1,0 +1,185 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "deck-2025-liudi-red",
+  "skinId": "northeastern-university-001",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "compositionId": "fixed-cover",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "compositionId": "fixed-agenda",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "p1",
+      "intentId": "p1-intent",
+      "compositionId": "editorial-dual-statement",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "left",
+          "sourceItemIds": [
+            "greeting"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "right",
+          "sourceItemIds": [
+            "theme"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "textLayoutChoices": [],
+      "reason": "当前 Logic 无适配结构，使用主题正文 Composition 承载内容"
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2-intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "dilemma",
+            "red-practice"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "turning"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "textLayoutChoices": [],
+      "reason": "当前 Logic 无适配结构，使用主题正文 Composition 承载内容"
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "chain",
+        "three-classes",
+        "n-scenes"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "textLayoutChoices": [
+        {
+          "regionKey": "items[].support",
+          "layoutId": "heading-content-flow"
+        },
+        {
+          "regionKey": "items[].title",
+          "layoutId": "statement-flow"
+        }
+      ],
+      "reason": "Structure Group 承担完整页面内容，字段由正式 Slot Contract 确定性绑定"
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4-intent",
+      "compositionId": "editorial-list",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "task-list",
+            "vr-base",
+            "lecture-group"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "friend-circle",
+            "mechanism"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "textLayoutChoices": [],
+      "reason": "当前 Logic 无适配结构，使用主题正文 Composition 承载内容"
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "belief",
+        "skill",
+        "voice",
+        "step"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "textLayoutChoices": [
+        {
+          "regionKey": "items[].support",
+          "layoutId": "heading-content-flow"
+        },
+        {
+          "regionKey": "items[].title",
+          "layoutId": "statement-flow"
+        }
+      ],
+      "reason": "Structure Group 承担完整页面内容，字段由正式 Slot Contract 确定性绑定"
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6-intent",
+      "compositionId": "editorial-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "actions"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "quote",
+            "closing"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "reason": "当前 Logic 无适配结构，使用主题正文 Composition 承载内容；按解析器返回的同候选合法 Composition 修正"
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "compositionId": "fixed-closing",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

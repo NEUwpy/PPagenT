@@ -1,0 +1,424 @@
+[
+  {
+    "schemaVersion": "1.0",
+    "intentId": "shell-cover-intent",
+    "assetId": "northeastern-university-cover-001",
+    "parameters": {
+      "title": "为什么做 PPagenT",
+      "presenter": "",
+      "organization": "",
+      "date": "",
+      "subtitle": ""
+    },
+    "mappings": [],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "shell-agenda-intent",
+    "assetId": "northeastern-university-agenda-001",
+    "parameters": {
+      "title": "目录",
+      "items": [
+        "痛点",
+        "理念",
+        "分工",
+        "价值",
+        "愿景"
+      ]
+    },
+    "mappings": [
+      {
+        "sourceItemId": "agenda-1",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-2",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-3",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-4",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-5",
+        "parameterPath": "items"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p1-intent",
+    "assetId": "hub-radial-001",
+    "parameters": {
+      "title": "做 PPT，真正费时间的不是“画”",
+      "center": {
+        "title": "做 PPT，真正费时间的不是“画”",
+        "body": ""
+      },
+      "items": [
+        {
+          "key": "question1",
+          "title": "怎么讲",
+          "body": "这场汇报到底怎么讲",
+          "iconQuery": "presentation"
+        },
+        {
+          "key": "question2",
+          "title": "拆几页",
+          "body": "一篇长稿应拆成多少页",
+          "iconQuery": "page layout"
+        },
+        {
+          "key": "question3",
+          "title": "每页讲什么",
+          "body": "每一页只讲什么内容",
+          "iconQuery": "content focus"
+        },
+        {
+          "key": "question4",
+          "title": "什么关系",
+          "body": "观点是并列、递进、因果还是流程",
+          "iconQuery": "relationship diagram"
+        },
+        {
+          "key": "question5",
+          "title": "哪里突出",
+          "body": "哪里应该突出，什么时候用图",
+          "iconQuery": "highlight emphasis"
+        }
+      ],
+      "visualVariantId": "balanced-orbit-anchor",
+      "textLayoutBindings": {
+        "center-content-region": "heading-content-flow",
+        "strategy-content-region": "heading-content-flow",
+        "data-content-region": "heading-content-flow",
+        "platform-content-region": "heading-content-flow",
+        "governance-content-region": "heading-content-flow",
+        "service-content-region": "heading-content-flow"
+      }
+    },
+    "mappings": [
+      {
+        "sourceItemId": "question1",
+        "parameterPath": "items[0]"
+      },
+      {
+        "sourceItemId": "question2",
+        "parameterPath": "items[1]"
+      },
+      {
+        "sourceItemId": "question3",
+        "parameterPath": "items[2]"
+      },
+      {
+        "sourceItemId": "question4",
+        "parameterPath": "items[3]"
+      },
+      {
+        "sourceItemId": "question5",
+        "parameterPath": "items[4]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p2-intent",
+    "assetId": "parallel-equal-cards-001",
+    "parameters": {
+      "title": "工作里的 PPT，不需要每次重新发明",
+      "items": [
+        {
+          "key": "org-style",
+          "title": "组织风格",
+          "body": "学校、企业各有固定样式",
+          "points": [],
+          "iconQuery": "organization"
+        },
+        {
+          "key": "personal-style",
+          "title": "个人风格",
+          "body": "长期形成的表达方式",
+          "points": [],
+          "iconQuery": "personal style"
+        },
+        {
+          "key": "fixed-structure",
+          "title": "固定结构",
+          "body": "反复证明好用的页面结构",
+          "points": [],
+          "iconQuery": "structure"
+        }
+      ],
+      "visualVariantId": "equal-floating-cards",
+      "textLayoutBindings": {
+        "professional-title-region": "statement-flow",
+        "professional-content-region": "heading-content-flow",
+        "collaboration-title-region": "statement-flow",
+        "collaboration-content-region": "heading-content-flow",
+        "innovation-title-region": "statement-flow",
+        "innovation-content-region": "heading-content-flow"
+      }
+    },
+    "mappings": [
+      {
+        "sourceItemId": "org-style",
+        "parameterPath": "items[0]"
+      },
+      {
+        "sourceItemId": "personal-style",
+        "parameterPath": "items[1]"
+      },
+      {
+        "sourceItemId": "fixed-structure",
+        "parameterPath": "items[2]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p3-intent",
+    "assetId": "sequence-flow-001",
+    "parameters": {
+      "title": "AI 负责理解，规则负责决定，代码负责执行",
+      "items": [
+        {
+          "key": "p3-structure-1",
+          "title": "AI",
+          "body": "理解"
+        },
+        {
+          "key": "p3-structure-2",
+          "title": "规则",
+          "body": "决定"
+        },
+        {
+          "key": "p3-structure-3",
+          "title": "代码",
+          "body": "执行"
+        }
+      ],
+      "visualVariantId": "continuous-numbered-rail"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p3-structure-1",
+        "parameterPath": "items[0]"
+      },
+      {
+        "sourceItemId": "p3-structure-2",
+        "parameterPath": "items[1]"
+      },
+      {
+        "sourceItemId": "p3-structure-3",
+        "parameterPath": "items[2]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p4-intent",
+    "assetId": "comparison-dual-verdict-001",
+    "parameters": {
+      "title": "稳定的 80 分，比随机的 95 分更值钱",
+      "comparisonLabel": "VS",
+      "sides": [
+        {
+          "title": "稳定的 80 分",
+          "tone": "positive",
+          "items": [
+            "结构清楚",
+            "视觉规范",
+            "符合组织风格",
+            "次日可继续修改"
+          ]
+        },
+        {
+          "title": "随机的 95 分",
+          "tone": "negative",
+          "items": [
+            "难以稳定复现",
+            "可能需要推翻重来",
+            "不确定能用于实际",
+            "风险高"
+          ]
+        }
+      ],
+      "visualVariantId": "dual-verdict-mirror"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "stable80",
+        "parameterPath": "sides[0]"
+      },
+      {
+        "sourceItemId": "random95",
+        "parameterPath": "sides[1]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p5-intent",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "不只服务最会做 PPT 的那 1%",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "experts",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "majority",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p6-intent",
+    "assetId": "hub-radial-001",
+    "parameters": {
+      "title": "真正积累的不是一万个模板",
+      "center": {
+        "title": "真正积累的不是一万个模板",
+        "body": ""
+      },
+      "items": [
+        {
+          "key": "expression",
+          "title": "表达适配",
+          "body": "什么内容适合怎样表达",
+          "iconQuery": "expression"
+        },
+        {
+          "key": "capacity",
+          "title": "容量判断",
+          "body": "一个版式能处理多少内容",
+          "iconQuery": "capacity"
+        },
+        {
+          "key": "variation",
+          "title": "边界变化",
+          "body": "超过边界以后怎样变化",
+          "iconQuery": "variation"
+        },
+        {
+          "key": "constraint",
+          "title": "使用禁忌",
+          "body": "哪些情况即使能画也不该用",
+          "iconQuery": "constraint"
+        }
+      ],
+      "visualVariantId": "balanced-orbit-anchor",
+      "textLayoutBindings": {
+        "center-content-region": "heading-content-flow",
+        "strategy-content-region": "heading-content-flow",
+        "data-content-region": "heading-content-flow",
+        "platform-content-region": "heading-content-flow",
+        "governance-content-region": "heading-content-flow"
+      }
+    },
+    "mappings": [
+      {
+        "sourceItemId": "expression",
+        "parameterPath": "items[0]"
+      },
+      {
+        "sourceItemId": "capacity",
+        "parameterPath": "items[1]"
+      },
+      {
+        "sourceItemId": "variation",
+        "parameterPath": "items[2]"
+      },
+      {
+        "sourceItemId": "constraint",
+        "parameterPath": "items[3]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p7-intent",
+    "assetId": "parallel-equal-cards-001",
+    "parameters": {
+      "title": "最后，它想解决的是一件很普通的事",
+      "items": [
+        {
+          "key": "ai-read",
+          "title": "AI 读稿",
+          "body": "让 AI 帮我们读稿子",
+          "points": [],
+          "iconQuery": "AI reading"
+        },
+        {
+          "key": "rule-judge",
+          "title": "规则判断",
+          "body": "让规则帮我们做判断",
+          "points": [],
+          "iconQuery": "rule judgment"
+        },
+        {
+          "key": "code-execute",
+          "title": "代码执行",
+          "body": "让代码完成重复劳动",
+          "points": [],
+          "iconQuery": "code execution"
+        }
+      ],
+      "visualVariantId": "equal-floating-cards",
+      "textLayoutBindings": {
+        "professional-title-region": "statement-flow",
+        "professional-content-region": "heading-content-flow",
+        "collaboration-title-region": "statement-flow",
+        "collaboration-content-region": "heading-content-flow",
+        "innovation-title-region": "statement-flow",
+        "innovation-content-region": "heading-content-flow"
+      }
+    },
+    "mappings": [
+      {
+        "sourceItemId": "ai-read",
+        "parameterPath": "items[0]"
+      },
+      {
+        "sourceItemId": "rule-judge",
+        "parameterPath": "items[1]"
+      },
+      {
+        "sourceItemId": "code-execute",
+        "parameterPath": "items[2]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "shell-closing-intent",
+    "assetId": "northeastern-university-closing-001",
+    "parameters": {
+      "text": "PPagenT 通过稳定可靠的流程，将专业 PPT 能力转化为生产工具"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "closing-takeaway",
+        "parameterPath": "text"
+      }
+    ],
+    "omissions": []
+  }
+]

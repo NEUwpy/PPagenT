@@ -1,0 +1,51 @@
+{
+  "status": "needs-director-revision",
+  "feedback": [
+    {
+      "pageId": "p2",
+      "code": "composition-invalid",
+      "issues": [
+        {
+          "code": "composition-text-slot-item-count-exceeded",
+          "slots": [
+            {
+              "slotId": "lead",
+              "actual": 2,
+              "max": 1
+            }
+          ]
+        },
+        {
+          "code": "composition-text-fit-failed",
+          "role": "leadBody",
+          "slotId": "lead",
+          "message": "leadBody 无法在正文槽位允许的字号档位内排下"
+        }
+      ],
+      "legalAlternatives": []
+    },
+    {
+      "pageId": "p4",
+      "code": "composition-invalid",
+      "issues": [
+        {
+          "code": "composition-text-slot-item-count-exceeded",
+          "slots": [
+            {
+              "slotId": "lead",
+              "actual": 3,
+              "max": 1
+            }
+          ]
+        },
+        {
+          "code": "composition-text-fit-failed",
+          "role": "rowBody",
+          "slotId": "body",
+          "message": "rowBody 无法在正文槽位允许的字号档位内排下"
+        }
+      ],
+      "legalAlternatives": []
+    }
+  ]
+}

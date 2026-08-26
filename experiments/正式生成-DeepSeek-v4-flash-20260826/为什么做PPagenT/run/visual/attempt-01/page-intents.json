@@ -1,0 +1,452 @@
+[
+  {
+    "intentId": "shell-cover-intent",
+    "purposeKey": "present_cover",
+    "purposeText": "呈现演示标题",
+    "baseRelation": "none",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 0,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 0,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "low",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [
+      "该页由 Shell 固定提供，不进入正文视觉导演选择"
+    ],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 12,
+      "itemCount": 0,
+      "maxItemChars": 0,
+      "avgItemChars": 0,
+      "minItemChars": 0,
+      "maxItemTitleChars": 0,
+      "maxItemBodyChars": 0,
+      "imbalanceRatio": 0
+    }
+  },
+  {
+    "intentId": "shell-agenda-intent",
+    "purposeKey": "present_agenda",
+    "purposeText": "呈现演示目录",
+    "baseRelation": "none",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 5,
+      "ordered": true,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 5,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "low",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [
+      "该页由 Shell 固定提供，不进入正文视觉导演选择"
+    ],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 2,
+      "itemCount": 5,
+      "maxItemChars": 2,
+      "avgItemChars": 2,
+      "minItemChars": 2,
+      "maxItemTitleChars": 2,
+      "maxItemBodyChars": 0,
+      "imbalanceRatio": 1
+    }
+  },
+  {
+    "intentId": "p1-intent",
+    "purposeKey": "explain_topics",
+    "purposeText": "原稿列举围绕做 PPT 的多项并列判断问题，均由同一中心任务辐射",
+    "baseRelation": "hub",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 5,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 5,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "unknown",
+    "emphasis": [
+      0
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 5,
+      "maxItemChars": 19,
+      "avgItemChars": 15,
+      "minItemChars": 12,
+      "maxItemTitleChars": 5,
+      "maxItemBodyChars": 15,
+      "imbalanceRatio": 1.58
+    }
+  },
+  {
+    "intentId": "p2-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "原稿列举组织、个人、固定结构三类无需改变的既有元素，为并列关系",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 3,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 3,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "unknown",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 18,
+      "itemCount": 3,
+      "maxItemChars": 15,
+      "avgItemChars": 14.33,
+      "minItemChars": 13,
+      "maxItemTitleChars": 4,
+      "maxItemBodyChars": 11,
+      "imbalanceRatio": 1.15
+    }
+  },
+  {
+    "intentId": "p3-intent",
+    "purposeKey": "explain_process",
+    "purposeText": "程序从原稿识别出高置信 sequence 主关系",
+    "baseRelation": "sequence",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 3,
+      "ordered": true,
+      "sameLevel": false,
+      "dimensions": {
+        "items": 3,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "unknown",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 3,
+      "maxItemChars": 4,
+      "avgItemChars": 4,
+      "minItemChars": 4,
+      "maxItemTitleChars": 2,
+      "maxItemBodyChars": 2,
+      "imbalanceRatio": 1
+    }
+  },
+  {
+    "intentId": "p4-intent",
+    "purposeKey": "compare_options",
+    "purposeText": "标题直接比较两种方案，原稿提供共同维度",
+    "baseRelation": "comparison",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 2,
+        "maxPointsPerItem": 4,
+        "maxPointChars": 8,
+        "totalPoints": 8,
+        "groups": 2,
+        "itemsPerGroup": 1
+      }
+    },
+    "density": "unknown",
+    "emphasis": [
+      0
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 2,
+      "maxItemChars": 41,
+      "avgItemChars": 41,
+      "minItemChars": 41,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 12,
+      "imbalanceRatio": 1
+    }
+  },
+  {
+    "intentId": "p5-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "原稿并列两类不同处境的人，无优劣关系",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 2,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "unknown",
+    "emphasis": [
+      1
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 2,
+      "maxItemChars": 16,
+      "avgItemChars": 15.5,
+      "minItemChars": 15,
+      "maxItemTitleChars": 5,
+      "maxItemBodyChars": 12,
+      "imbalanceRatio": 1.07
+    }
+  },
+  {
+    "intentId": "p6-intent",
+    "purposeKey": "explain_topics",
+    "purposeText": "原稿列举围绕经验积累的多个并列判断维度",
+    "baseRelation": "hub",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 4,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "unknown",
+    "emphasis": [
+      0
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 12,
+      "itemCount": 4,
+      "maxItemChars": 16,
+      "avgItemChars": 14.75,
+      "minItemChars": 14,
+      "maxItemTitleChars": 4,
+      "maxItemBodyChars": 12,
+      "imbalanceRatio": 1.14
+    }
+  },
+  {
+    "intentId": "p7-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "原稿三分句并列表达三个动作的分解",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 3,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 3,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "unknown",
+    "emphasis": [
+      0,
+      1,
+      2
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 16,
+      "itemCount": 3,
+      "maxItemChars": 16,
+      "avgItemChars": 14,
+      "minItemChars": 13,
+      "maxItemTitleChars": 5,
+      "maxItemBodyChars": 11,
+      "imbalanceRatio": 1.23
+    }
+  },
+  {
+    "intentId": "shell-closing-intent",
+    "purposeKey": "present_closing",
+    "purposeText": "收束整套演示",
+    "baseRelation": "none",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 1,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 1,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "low",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [
+      "该页由 Shell 固定提供，不进入正文视觉导演选择"
+    ],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 0,
+      "itemCount": 1,
+      "maxItemChars": 35,
+      "avgItemChars": 35,
+      "minItemChars": 35,
+      "maxItemTitleChars": 0,
+      "maxItemBodyChars": 35,
+      "imbalanceRatio": 1
+    }
+  }
+]

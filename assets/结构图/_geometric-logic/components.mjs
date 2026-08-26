@@ -149,25 +149,6 @@ export const geometricBranchingDecisionTable = component("branching-decision-tab
   return result;
 });
 
-const wbsCss = `
-.wbs .root{position:absolute;z-index:4;left:18px;top:157px;width:190px;height:178px;border-radius:30px;padding:24px;font-size:18pt}.wbs .package{position:absolute;z-index:4;left:360px;transform:translateY(-50%);width:220px;min-height:66px;padding:13px 20px 13px 30px;clip-path:polygon(0 0,92% 0,100% 50%,92% 100%,0 100%,8% 50%);background:linear-gradient(90deg,var(--tone),var(--light));color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;font-size:14pt;font-weight:700}.wbs .tasks{position:absolute;z-index:4;left:625px;right:20px;transform:translateY(-50%);display:flex;gap:10px}.wbs .tasks span{flex:1;min-width:0;padding:15px 8px;border-radius:11px;background:#f1f5f7;border:1px solid #e0e8ed;text-align:center;color:#4b6172;font-size:11.5pt}
-`;
-function renderWbs(p) {
-  const packages = p.packages ?? [];
-  const ys = Array.from({ length: packages.length }, (_, i) => 70 + i * (352 / Math.max(1, packages.length - 1)));
-  const paths = ys.map((y, i) => `<path class="path" d="M194 246 C280 246 280 ${y} 375 ${y}" stroke="url(#w${i})" stroke-width="${15 - i}"/><linearGradient id="w${i}" gradientUnits="userSpaceOnUse" x1="194" y1="246" x2="375" y2="${y}"><stop stop-color="${BRANCH_TONES[i].dark}"/><stop offset="1" stop-color="${BRANCH_TONES[i].light}"/></linearGradient>`).join("");
-  return `<section class="geo wbs" data-ppt-root data-package-count="${packages.length}"><svg viewBox="0 0 1170 492">${paths}</svg><div class="root anchor">${slot("root", p.root, "span", "root")}</div>${packages.map((pkg, i) => `<article class="package" style="top:${ys[i]}px;--tone:${BRANCH_TONES[i].dark};--light:${BRANCH_TONES[i].light}">${slot(`packages[${i}].title`, pkg.title, "span", "package")}</article><div class="tasks" style="top:${ys[i]}px">${(pkg.tasks ?? []).map((task, j) => slot(`packages[${i}].tasks[${j}]`, task, "span", "task")).join("")}</div>`).join("")}</section>`;
-}
-export const geometricHierarchyWbs = component("hierarchy-unbalanced-wbs", wbsCss, renderWbs, {
-  root: "Visual Skill 建设",
-  packages: [
-    { title: "来源蒸馏", tasks: ["选页", "结构描述", "黄金复现"] },
-    { title: "组件扩散", tasks: ["数量状态", "内容槽位"] },
-    { title: "审核入库", tasks: ["HTML 审核", "Native 检查", "用户确认", "正式登记"] },
-    { title: "运行反馈", tasks: ["失败记录"] },
-  ],
-}, (base, state) => ({ ...clone(base), packages: take(base.packages, state?.packageCount ?? 3) }));
-
 const authorityCss = `
 .authority{padding:20px 75px}.authority .tiers{height:452px;display:flex;flex-direction:column;justify-content:center;gap:9px}.authority .tier{height:var(--h);margin:0 auto;display:grid;grid-template-columns:170px 1fr;align-items:center;padding:0 28px 0 40px;clip-path:polygon(4% 0,96% 0,100% 50%,96% 100%,4% 100%,0 50%);background:linear-gradient(90deg,var(--tone),#d9e7ef)}.authority .tier h3{color:#fff;font-size:14pt}.authority .roles{display:flex;gap:9px}.authority .roles span{flex:1;min-width:0;padding:10px 8px;border-radius:9px;background:rgba(255,255,255,.92);text-align:center;color:#4c6170;font-size:11.5pt;box-shadow:0 3px 8px rgba(48,81,103,.06)}
 `;
@@ -202,25 +183,6 @@ export const geometricHierarchyPyramid = component("hierarchy-concept-pyramid", 
     { title: "基础层", body: "提供制度、数据与资源底座" },
   ],
 }, (base, state) => ({ ...clone(base), levels: take(base.levels, state?.levelCount ?? 4) }));
-
-const taxonomyCss = `
-.taxonomy .root{position:absolute;z-index:4;left:15px;top:156px;width:188px;height:180px;border-radius:28px;padding:24px;font-size:17pt}.taxonomy .category{position:absolute;z-index:4;left:360px;transform:translateY(-50%);width:275px;min-height:78px;padding:12px 18px}.taxonomy .category h3{font-size:14.5pt;color:#285777;margin-bottom:5px}.taxonomy .category p{font-size:11.5pt;color:#647581;line-height:1.35}.taxonomy .children{position:absolute;z-index:4;left:690px;right:20px;transform:translateY(-50%);display:flex;gap:9px}.taxonomy .children span{flex:1;min-width:0;padding:14px 7px;border-radius:10px;background:#f2f5f7;border:1px solid #e0e7eb;text-align:center;color:#4b6171;font-size:11.5pt}
-`;
-function renderTaxonomy(p) {
-  const branches = p.branches ?? [];
-  const ys = Array.from({ length: branches.length }, (_, i) => 70 + i * (352 / Math.max(1, branches.length - 1)));
-  const paths = branches.map((_, i) => `<path class="path" d="M190 246 C280 246 275 ${ys[i]} 375 ${ys[i]}" stroke="url(#t${i})" stroke-width="${14 - i * .7}"/><linearGradient id="t${i}" gradientUnits="userSpaceOnUse" x1="190" y1="246" x2="375" y2="${ys[i]}"><stop stop-color="${BRANCH_TONES[i].dark}"/><stop offset="1" stop-color="${BRANCH_TONES[i].light}"/></linearGradient>`).join("");
-  return `<section class="geo taxonomy" data-ppt-root data-branch-count="${branches.length}"><svg viewBox="0 0 1170 492">${paths}</svg><div class="root anchor">${slot("root", p.root, "span", "root")}</div>${branches.map((b, i) => `<article class="category paper" style="top:${ys[i]}px">${slot(`branches[${i}].title`, b.title, "h3", "category-title")}${slot(`branches[${i}].body`, b.body, "p", "category-body")}</article><div class="children" style="top:${ys[i]}px">${(b.children ?? []).map((child, j) => slot(`branches[${i}].children[${j}]`, child, "span", "child")).join("")}</div>`).join("")}</section>`;
-}
-export const geometricHierarchyTaxonomy = component("hierarchy-concept-tree", taxonomyCss, renderTaxonomy, {
-  root: "PPagenT 视觉能力",
-  branches: [
-    { title: "Logic", body: "识别页面要表达的关系", children: ["并列与顺序", "因果与对比", "层级与汇聚"] },
-    { title: "结构组", body: "为关系提供互补拓扑", children: ["黄金状态", "响应扩散", "失败边界"] },
-    { title: "State", body: "按真实内容求解数量", children: ["容器尺寸", "文字容量", "媒体条件"] },
-    { title: "输出", body: "统一编译和审查交付", children: ["Native PPT", "Skin 页面", "质量记录"] },
-  ],
-}, (base, state) => ({ ...clone(base), branches: take(base.branches, state?.branchCount ?? 3) }));
 
 const cascadeCss = `
 .cascade{padding:18px 40px}.cascade .row{position:absolute;left:50%;top:var(--top);transform:translateX(-50%);width:var(--w);height:var(--h);display:grid;grid-template-columns:118px 1fr;align-items:center;padding:0 24px;clip-path:polygon(3% 0,97% 0,100% 50%,97% 100%,3% 100%,0 50%);background:linear-gradient(90deg,var(--tone),#dbe8ef)}.cascade .row h3{color:#fff;font-size:14pt}.cascade .values{display:flex;gap:8px}.cascade .values span{flex:1;min-width:0;padding:10px 7px;border-radius:8px;background:rgba(255,255,255,.94);text-align:center;color:#465f71;font-size:10.8pt}.cascade .spine{position:absolute;left:581px;top:35px;width:8px;height:420px;border-radius:4px;background:linear-gradient(#275f89,#9ab8c8);opacity:.22}

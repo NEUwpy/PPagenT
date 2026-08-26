@@ -1,0 +1,122 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "deck-2025-liudi-red",
+  "skinId": "northeastern-university-001",
+  "visualLanguage": "遵循所选主题与已确认 Structure Group 的统一设计语言",
+  "rhythmStrategy": "优先使用语义适配的核心结构，避免相邻页面机械重复",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "familyId": "skin-cover",
+      "variantId": "default",
+      "silhouette": "cover",
+      "adaptationStatus": "fixed",
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "familyId": "skin-agenda",
+      "variantId": "default",
+      "silhouette": "agenda",
+      "adaptationStatus": "fixed",
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "p1",
+      "intentId": "p1-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "开场页适合正文编辑结构，直接承载问候与主题发布。"
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "编辑结构适合流程叙述，避免前序反馈中正文槽位超限，无额外排版需求。"
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3-intent",
+      "familyId": "parallel-cards",
+      "variantId": "equal-floating-cards",
+      "silhouette": "equal-cards-with-round-anchors",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "chain",
+          "query": "chain link"
+        },
+        {
+          "sourceItemId": "three-classes",
+          "query": "graduation cap"
+        },
+        {
+          "sourceItemId": "n-scenes",
+          "query": "scenery"
+        }
+      ],
+      "reason": "平行结构选择等宽卡片组，三项内容用语义图标区分。"
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "编辑结构避免前序排版失败，正文列表展示五个抓手，无需额外区域。"
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5-intent",
+      "familyId": "parallel-cards",
+      "variantId": "equal-floating-cards",
+      "silhouette": "equal-cards-with-round-anchors",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "belief",
+          "query": "heart"
+        },
+        {
+          "sourceItemId": "skill",
+          "query": "wrench"
+        },
+        {
+          "sourceItemId": "voice",
+          "query": "megaphone"
+        },
+        {
+          "sourceItemId": "step",
+          "query": "footprints"
+        }
+      ],
+      "reason": "平行成效展示，等宽卡片加图标使数据更直观。"
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "因果逻辑无并行结构，正文编排避免复合槽问题。"
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "familyId": "skin-closing",
+      "variantId": "default",
+      "silhouette": "closing",
+      "adaptationStatus": "fixed",
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

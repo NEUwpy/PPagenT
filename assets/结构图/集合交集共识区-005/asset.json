@@ -1,5 +1,5 @@
 {
-  "id": "convergence-consensus-field-005",
+  "id": "containment-consensus-field-005",
   "name": "集合交集共识区",
   "kind": "component",
   "category": "结构图",
@@ -15,23 +15,23 @@
     "previewParametersExport": "previewParameters",
     "previewResolverExport": "resolvePreviewParameters",
     "mapperExport": "mapPageContent",
-    "logicId": "convergence",
-    "structureGroupId": "convergence-consensus-field",
-    "familyId": "convergence",
+    "logicId": "containment",
+    "structureGroupId": "containment-consensus-field",
+    "familyId": "containment-set-relations",
     "variantId": "consensus-field",
     "silhouette": "two-to-five-icon-podiums-on-elliptical-orbit-around-consensus-field",
-    "supportedBaseRelations": ["convergence"],
+    "supportedBaseRelations": ["intersection"],
     "supportedPurposeKeys": ["explain_shared_scope"],
     "itemCount": { "min": 2, "preferred": [3, 4], "max": 5 },
     "stateContract": { "resolver": "setCount", "states": [2, 3, 4, 5], "previewDefault": 3 },
-    "contentContract": { "itemRole": "semantic-node", "points": "optional", "ordered": false },
+    "contentContract": { "itemRole": "semantic-node", "points": "optional", "ordered": false, "requiresStructuredDataType": "multi-set-common-intersection" },
     "textFlow": { "profile": "text-region-layout-library", "scope": "per-contiguous-region" },
     "contract": {
       "abstractionLevel": "foundation",
       "adaptationStatus": "adaptive",
       "constraints": {
         "semantic": { "ordered": false, "sameLevel": true },
-        "relationTraits": { "converging": true },
+        "relationTraits": {},
         "density": ["low", "medium"]
       }
     },

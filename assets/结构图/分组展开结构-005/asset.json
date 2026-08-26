@@ -1,0 +1,179 @@
+{
+  "id": "hierarchy-grouped-breakdown-005",
+  "name": "分组展开结构",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
+    "slides": [109]
+  },
+  "references": [
+    {
+      "file": "PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx",
+      "slides": [424],
+      "role": "语义覆盖验证",
+      "adopted": "确认分类语义可由相同的根—分组—组内分点契约承载，不再保留边界近似的独立分类树"
+    }
+  ],
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "hierarchy",
+    "structureGroupId": "hierarchy-grouped-breakdown",
+    "familyId": "hierarchy",
+    "variantId": "grouped-breakdown-with-points",
+    "silhouette": "root-to-groups-with-continuous-point-regions",
+    "supportedBaseRelations": ["hierarchy"],
+    "supportedPurposeKeys": ["explain_hierarchy"],
+    "itemCount": {
+      "min": 2,
+      "preferred": [3, 4],
+      "max": 5
+    },
+    "stateContract": {
+      "resolver": "groupCount",
+      "states": [2, 3, 4, 5],
+      "previewDefault": 3
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "required",
+      "pointCount": {
+        "min": 1,
+        "max": 4,
+        "balancedAcrossItems": false
+      },
+      "ordered": false
+    },
+    "textFlow": {
+      "profile": "text-region-layout-library",
+      "scope": "per-contiguous-region"
+    },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "semantic": {
+          "ordered": false,
+          "sameLevel": true
+        },
+        "relationTraits": {
+          "hierarchy": true
+        },
+        "density": ["medium", "high"]
+      },
+      "fallback": {
+        "tooMany": "split"
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": {
+        "selection": {
+          "groupCount": 3
+        }
+      },
+      "controls": [
+        {
+          "key": "groupCount",
+          "label": "分组数",
+          "values": [2, 3, 4, 5],
+          "default": 3
+        }
+      ]
+    }
+  },
+  "coverageDelta": "人物组织树依赖人员身份，概念金字塔表达单链等级，普通并列不能保留组内归属；本组覆盖一个总主题下 2–5 个具名分组、每组继续包含来源明确分点的通用层级表达，并合并原不均衡任务分解树与横向概念分类树的重叠能力。",
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "1 个根主题、2–5 个分组；2–4 组时每组 1–4 个分点，5 组时每组 1–3 个分点",
+    "rule": "同一组件根据分组数和各组分点数重算行高、分支曲线与文字密度，不按领域或均衡状态维护多份结构"
+  },
+  "componentModel": {
+    "fixed": [
+      "根主题→分组→组内分点的两级归属关系",
+      "从左到右的阅读路径",
+      "每个分点只属于一个分组"
+    ],
+    "variable": [
+      "根主题文字",
+      "2–5 个分组标题",
+      "各组 1–4 个来源分点及其非均衡数量"
+    ]
+  },
+  "fieldContract": {
+    "editable": [
+      {
+        "field": "root",
+        "meaning": "稿件中明确的总主题、总目标、体系或上位概念"
+      },
+      {
+        "field": "items[].title",
+        "meaning": "总主题下 2–5 个具名分组"
+      },
+      {
+        "field": "items[].points[]",
+        "meaning": "每个分组在稿件中已有的任务、做法、功能、子观点或子能力"
+      }
+    ],
+    "generated": [
+      {
+        "field": "layout",
+        "meaning": "程序根据分组数与分点数求解行高、连接线和文字排布"
+      }
+    ],
+    "fixed": [
+      "一个根主题向多个分组展开",
+      "分点保持所属分组，不提升为同级主节点"
+    ],
+    "unavailable": [
+      "稿件没有真实组内分点",
+      "人员汇报关系",
+      "分点跨组归属或多对多依赖",
+      "条件路线、顺序阶段或多路汇聚",
+      "单个分点需要长段解释"
+    ]
+  },
+  "spatialContract": {
+    "coordinateSystem": {
+      "width": 1280,
+      "height": 720
+    },
+    "contentFrame": {
+      "left": 55,
+      "top": 166,
+      "width": 1170,
+      "height": 492
+    },
+    "aspectRatio": 2.378,
+    "minimumFrame": {
+      "width": 1170,
+      "height": 492
+    },
+    "preferredFrame": {
+      "width": 1170,
+      "height": 492
+    },
+    "resizeMode": "natural",
+    "minFontSize": 15,
+    "safePadding": 10,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "1 个根主题、2–5 个分组；2–4 组时每组 1–4 个分点，5 组时每组 1–3 个分点；根主题不超过 14 字、分组标题不超过 6 字、单个分点不超过 12 字",
+  "semanticContract": "一个总主题、总目标或上位概念被拆成若干具名分组，每个分组继续包含一组来源明确且只归属该组的子项",
+  "doNotUseWhen": "只有同级观点而没有组内分点，输入共同汇聚为一个结果，存在条件分支、顺序阶段、人员汇报、跨组多对多关系，或必须由模型发明子项",
+  "review": "用户已确认分组展开结构 HTML；已补齐正式内容映射并编译黄金状态 Native PPTX，保留 2–5 组响应式扩展及组内来源分点契约，可进入核心资产库"
+}

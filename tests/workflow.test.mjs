@@ -200,6 +200,27 @@ test("workflow schemas including CompositionPlan are registered", async () => {
   assert.equal(typeof validators.validateVisualReview, "function");
 });
 
+test("内容导演返回空 structuredData 时按未提供处理", async (t) => {
+  const outputDir = await makeTempDir(t);
+  const provider = completeProvider({
+    async contentDirector() {
+      const output = contentOutput();
+      output.pageContents[0].structuredData = {};
+      return output;
+    },
+  });
+  const result = await runDirectorWorkflow({
+    input: { rawMarkdown },
+    provider,
+    outputDir,
+    reviewMode: "production",
+    visualCandidateProvider: candidateProvider,
+    visualResolver: resolver,
+    renderer,
+  });
+  assert.equal(result.status, "delivered");
+});
+
 test("缺少 DirectorProvider 或任一导演调用时失败关闭", async () => {
   await assert.rejects(
     runDirectorWorkflow({

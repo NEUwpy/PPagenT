@@ -61,6 +61,20 @@ function assertOperationalDependency(value, label) {
   }
 }
 
+function normalizeEmptyOptionalStructures(output) {
+  if (!output || typeof output !== "object" || !Array.isArray(output.pageContents)) return output;
+  const normalized = structuredClone(output);
+  normalized.pageContents = normalized.pageContents.map((page) => {
+    const structured = page?.structuredData;
+    if (!structured || typeof structured !== "object" || Array.isArray(structured)) return page;
+    if (Object.keys(structured).length) return page;
+    const clean = { ...page };
+    delete clean.structuredData;
+    return clean;
+  });
+  return normalized;
+}
+
 function assertSchema(validators, validator, value, label, stage) {
   if (!validator(value)) {
     throw new WorkflowError(
@@ -94,6 +108,7 @@ function assertContentOutput(validators, output, rawMarkdown) {
     throw new WorkflowError("DIRECTOR_OUTPUT_INVALID", "content-director", "内容导演必须输出 deckPlan 和 pageContents");
   }
   assertSchema(validators, validators.validateDeckPlan, output.deckPlan, "DeckPlan", "content-director");
+  const capacityIssues = [];
   output.pageContents.forEach((page, index) => {
     assertSchema(validators, validators.validatePageContent, page, `PageContent[${index}]`, "content-director");
     const structuredReferenceIssues = validateStructuredDataReferences(page);
@@ -129,21 +144,25 @@ function assertContentOutput(validators, output, rawMarkdown) {
     if (stats.itemCount > 1 && (
       stats.itemCount > 13 || estimatedTotal > 240 || stats.maxItemChars > 80
     )) {
-      throw new WorkflowError(
-        "CONTENT_CAPACITY_EXCEEDED",
-        "content-director",
-        `${page.pageId} 的多项内容密度超过正式字号与已登记版式的通用容量`,
-        {
-          pageId: page.pageId,
-          itemCount: stats.itemCount,
-          estimatedTotalChars: estimatedTotal,
-          maxItemChars: stats.maxItemChars,
-          required: { maxItems: 13, maxTotalChars: 240, maxItemChars: 80 },
-          guidance: "压缩每项正文与分点、删除重复表达，或按叙事职责拆成两页；不得缩小字号硬塞",
-        },
-      );
+      capacityIssues.push({
+        pageId: page.pageId,
+        itemCount: stats.itemCount,
+        estimatedTotalChars: estimatedTotal,
+        maxItemChars: stats.maxItemChars,
+        required: { maxItems: 13, maxTotalChars: 240, maxItemChars: 80 },
+        guidance: "压缩每项正文与分点、删除重复表达，或按叙事职责拆成两页；不得缩小字号硬塞",
+      });
     }
   });
+
+  if (capacityIssues.length) {
+    throw new WorkflowError(
+      "CONTENT_CAPACITY_EXCEEDED",
+      "content-director",
+      `${capacityIssues.length} 个页面的多项内容密度超过正式字号与已登记版式的通用容量`,
+      { ...capacityIssues[0], issues: capacityIssues },
+    );
+  }
 
   const planIds = output.deckPlan.pages.map((page) => page.pageId);
   const contentIds = output.pageContents.map((page) => page.pageId);
@@ -394,13 +413,13 @@ export async function runDirectorWorkflow(options) {
   let contentAttempt = 0;
   async function executeContentAttempt(extra = {}) {
     contentAttempt += 1;
-    contentOutput = await provider.contentDirector({
+    contentOutput = normalizeEmptyOptionalStructures(await provider.contentDirector({
       ...input,
       attempt: contentAttempt,
       previous: contentOutput,
       previousReview: contentReview,
       ...extra,
-    });
+    }));
     assertContentOutput(validators, contentOutput, input.rawMarkdown);
     await persistContentAttempt(outputDir, contentAttempt, contentOutput, null);
 
@@ -634,6 +653,7 @@ export async function runDirectorWorkflow(options) {
       compositionPlan: visual.compositionPlan,
       pageIntents: visual.pageIntents,
       candidateSets: visual.candidateSets,
+      previousResolution: visualResolution,
     });
     visualResolution = resolved;
     if (!visualResolutionAccepted(resolved)) {
@@ -688,18 +708,33 @@ export async function runDirectorWorkflow(options) {
     }
 
     const attemptDir = path.join(outputDir, "visual", `attempt-${String(attempt).padStart(2, "0")}`);
-    renderResult = await options.renderer({
-      root,
-      skinId: input.skinId,
-      outputDir: path.join(attemptDir, "render"),
-      deckPlan: presentationOutput.deckPlan,
-      pageContents: presentationOutput.pageContents,
-      visualPlan: visual.visualPlan,
-      compositionPlan: visual.compositionPlan,
-      pageIntents: visual.pageIntents,
-      layoutDecisions: resolved.layoutDecisions,
-      renderPayloads: resolved.renderPayloads,
-    });
+    try {
+      renderResult = await options.renderer({
+        root,
+        skinId: input.skinId,
+        outputDir: path.join(attemptDir, "render"),
+        deckPlan: presentationOutput.deckPlan,
+        pageContents: presentationOutput.pageContents,
+        visualPlan: visual.visualPlan,
+        compositionPlan: visual.compositionPlan,
+        pageIntents: visual.pageIntents,
+        layoutDecisions: resolved.layoutDecisions,
+        renderPayloads: resolved.renderPayloads,
+      });
+    } catch (error) {
+      if (error?.code !== "COMPONENT_RUNTIME_OVERFLOW" || attempt === maxVisualAttempts) throw error;
+      visualResolution = {
+        status: "needs-director-revision",
+        feedback: [{
+          pageId: error.pageId,
+          assetId: error.assetId,
+          code: "component-runtime-overflow",
+          message: "所选 Structure Group 在真实 HTML→PPT 编译时无法以规范字号完整承载；请改选该页的正文兜底候选",
+        }],
+      };
+      await persistVisualAttempt(outputDir, attempt, visual, resolved, "render-runtime-overflow.json", visualResolution);
+      continue;
+    }
     await assertRenderResult(renderResult, presentationOutput.pageContents.length);
     const persistedRenderResult = {
       ...renderResult,
