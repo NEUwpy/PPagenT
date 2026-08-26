@@ -100,12 +100,13 @@ ${htmlTextFlowCss()}
 
 /* restrained generative iceberg: one silhouette, faceted with a quiet blue scale */
 .rev-iceberg{background:linear-gradient(180deg,#fff 0 35.5%,#f3f7fa 35.5% 100%)}
-.rev-iceberg .iceberg-art{position:absolute;inset:0;width:1170px;height:492px;filter:drop-shadow(0 12px 20px rgba(39,78,107,.10))}
+.rev-iceberg .iceberg-art{position:absolute;inset:0;width:1170px;height:492px}
 .rev-iceberg .waterline{stroke:#9ab8ca;stroke-width:2.5}
 .rev-iceberg .water-glint{stroke:#d9e7ef;stroke-width:1.5;opacity:.9}
 .rev-iceberg .berg-piece{stroke:#fff;stroke-width:4;stroke-linejoin:round}
 .rev-iceberg .visible-label,.rev-iceberg .hidden-label{position:absolute;display:grid;place-items:center;text-align:center;overflow:hidden;--title-size:15pt}
-.rev-iceberg .visible-label{padding:0 10px;color:#315c7b;--title-color:#315c7b}
+.rev-iceberg .visible-label{padding:2px 5px;color:#315c7b;--title-color:#315c7b}
+.rev-iceberg .visible-label>.ppagent-text-flow{width:100%;height:100%}
 .rev-iceberg .hidden-label{padding:8px 30px;--title-color:#315a76}
 .rev-iceberg .hidden-label.tone-deep{--title-color:#fff}
 
@@ -203,6 +204,11 @@ function renderBalance(p) {
 
 function renderIceberg(p) {
   const visible = list(p.visible, 1, 5, "visible"); const hidden = list(p.hidden, 2, 5, "hidden");
+  const pointPath = (points) => `M ${points} Z`;
+  const shiftPoints = (points, dx, dy) => points.split(/\s+/).map((pair) => {
+    const [x, y] = pair.split(",").map(Number);
+    return `${x + dx},${y + dy}`;
+  }).join(" ");
   const boundaries = {
     2: [184, 326, 468],
     3: [184, 278, 374, 468],
@@ -219,38 +225,57 @@ function renderIceberg(p) {
     };
   });
   const upperGeometry = {
-    1: { outline: "425,178 486,119 560,22 626,106 745,178", facets: ["425,178 486,119 560,22 528,178", "560,22 626,106 651,178 528,178", "626,106 745,178 651,178"] },
-    2: { outline: "380,178 452,105 520,122 598,24 674,109 790,178", facets: ["380,178 452,105 520,122 520,178", "520,122 598,24 618,178 520,178", "598,24 674,109 690,178 618,178", "674,109 790,178 690,178"] },
-    3: { outline: "330,178 416,122 470,132 558,18 617,94 667,82 840,178", facets: ["330,178 416,122 470,132 514,178", "470,132 558,18 617,94 632,178 514,178", "617,94 667,82 728,178 632,178", "667,82 840,178 728,178"] },
-    4: { outline: "255,178 352,128 419,70 478,132 551,18 612,104 681,65 748,130 915,178", facets: ["255,178 352,128 419,70 438,178", "419,70 478,132 551,18 575,178 438,178", "551,18 612,104 655,178 575,178", "612,104 681,65 748,130 770,178 655,178", "748,130 915,178 770,178"] },
-    5: { outline: "185,178 314,126 382,82 445,135 520,22 578,104 642,58 706,130 779,88 848,137 985,178", facets: ["185,178 314,126 382,82 404,178", "382,82 445,135 520,22 548,178 404,178", "520,22 578,104 642,58 666,178 548,178", "642,58 706,130 779,88 812,178 666,178", "779,88 848,137 985,178 812,178"] },
+    1: {
+      outline: "425,178 486,119 560,22 626,106 745,178",
+      facets: ["425,178 486,119 560,22 528,178", "560,22 626,106 651,178 528,178", "626,106 745,178 651,178"],
+      labelFrames: [{ left: 500, top: 108, width: 150, height: 54 }],
+    },
+    2: {
+      outline: "380,178 452,105 520,122 598,24 674,109 790,178",
+      facets: ["380,178 452,105 520,122 520,178", "520,122 598,24 618,178 520,178", "598,24 674,109 690,178 618,178", "674,109 790,178 690,178"],
+      labelFrames: [{ left: 416, top: 126, width: 112, height: 46 }, { left: 604, top: 112, width: 126, height: 56 }],
+    },
+    3: {
+      outline: "330,178 416,122 470,132 558,18 617,94 667,82 840,178",
+      facets: ["330,178 416,122 470,132 514,178", "470,132 558,18 617,94 632,178 514,178", "617,94 667,82 728,178 632,178", "667,82 840,178 728,178"],
+      labelFrames: [{ left: 391, top: 135, width: 112, height: 38 }, { left: 526, top: 112, width: 112, height: 56 }, { left: 674, top: 119, width: 118, height: 52 }],
+    },
+    4: {
+      outline: "255,178 352,128 419,70 478,132 551,18 612,104 681,65 748,130 915,178",
+      facets: ["255,178 352,128 419,70 438,178", "419,70 478,132 551,18 575,178 438,178", "551,18 612,104 655,178 575,178", "612,104 681,65 748,130 770,178 655,178", "748,130 915,178 770,178"],
+      labelFrames: [{ left: 328, top: 132, width: 104, height: 42 }, { left: 456, top: 119, width: 108, height: 52 }, { left: 584, top: 112, width: 104, height: 58 }, { left: 735, top: 134, width: 112, height: 40 }],
+    },
+    5: {
+      outline: "185,178 314,126 382,82 445,135 520,22 578,104 642,58 706,130 779,88 848,137 985,178",
+      facets: ["185,178 314,126 382,82 404,178", "382,82 445,135 520,22 548,178 404,178", "520,22 578,104 642,58 666,178 548,178", "642,58 706,130 779,88 812,178 666,178", "779,88 848,137 985,178 812,178"],
+      labelFrames: [{ left: 291, top: 127, width: 105, height: 47 }, { left: 421, top: 116, width: 108, height: 56 }, { left: 551, top: 105, width: 108, height: 66 }, { left: 684, top: 117, width: 108, height: 55 }, { left: 812, top: 132, width: 112, height: 42 }],
+    },
   }[visible.length];
-  const visibleFrameConfig = {
-    1: { width: 220, gap: 0 },
-    2: { width: 170, gap: 30 },
-    3: { width: 150, gap: 5 },
-    4: { width: 145, gap: 6 },
-    5: { width: 155, gap: 5 },
-  }[visible.length];
-  const visibleGroupWidth = visible.length * visibleFrameConfig.width + (visible.length - 1) * visibleFrameConfig.gap;
-  const visibleGroupLeft = (1170 - visibleGroupWidth) / 2;
-  const visibleFrames = visible.map((_, i) => ({ left: visibleGroupLeft + i * (visibleFrameConfig.width + visibleFrameConfig.gap), top: 138, width: visibleFrameConfig.width, height: 36 }));
+  const visibleFrames = upperGeometry.labelFrames;
   const baseHalf = [0,160,205,255,330,400][visible.length];
-  const lowerSilhouette = `${585-baseHalf},184 ${585+baseHalf},184 ${585+baseHalf+44},251 ${585+baseHalf+22},307 ${585+baseHalf-8},349 ${585+baseHalf-44},374 752,427 660,468 510,462 447,419 ${585-baseHalf+75},380 ${585-baseHalf+33},354 ${585-baseHalf-2},314 ${585-baseHalf-34},251`;
+  const leftBoundary = [[585-baseHalf,184],[585-baseHalf-34,251],[585-baseHalf-2,314],[585-baseHalf+33,354],[585-baseHalf+75,380],[447,419],[510,468]];
+  const rightBoundary = [[585+baseHalf,184],[585+baseHalf+44,251],[585+baseHalf+22,307],[585+baseHalf-8,349],[585+baseHalf-44,374],[752,427],[660,468]];
+  const boundaryX = (points, y) => {
+    const index = Math.max(0, points.findIndex((point) => point[1] >= y) - 1);
+    const [x1, y1] = points[index];
+    const [x2, y2] = points[Math.min(index + 1, points.length - 1)];
+    if (y2 === y1) return x1;
+    return x1 + (x2 - x1) * ((y - y1) / (y2 - y1));
+  };
+  const lowerSilhouette = `${leftBoundary.map(([x,y]) => `${x},${y}`).join(" ")} ${[...rightBoundary].reverse().map(([x,y]) => `${x},${y}`).join(" ")}`;
+  const bandPaths = bands.map((band) => `${boundaryX(leftBoundary, band.y1)},${band.y1} ${boundaryX(rightBoundary, band.y1)},${band.y1} ${boundaryX(rightBoundary, band.y2)},${band.y2} ${boundaryX(leftBoundary, band.y2)},${band.y2}`);
   return `<section class="rev rev-iceberg" data-ppt-root data-visible-count="${visible.length}" data-hidden-count="${hidden.length}">
     <svg class="iceberg-art" viewBox="0 0 1170 492" role="img" aria-label="水上成果与水下支撑构成的抽象冰山">
-      <defs><clipPath id="iceberg-underwater-clip"><polygon points="${lowerSilhouette}"/></clipPath></defs>
-      <path class="water-glint" d="M0 194 C155 184 270 202 412 191 M758 191 C900 201 1018 184 1170 194" fill="none"/>
-      <polygon class="berg-piece" points="${upperGeometry.outline}" fill="#e7f1f6"/>
-      ${upperGeometry.facets.map((points, i) => `<polygon class="berg-piece" points="${points}" fill="${["#f3f7fa","#dce9f1","#cfe1eb","#c3d9e6","#b8d2e1"][i]}"/>`).join("")}
-      <g clip-path="url(#iceberg-underwater-clip)">
-        ${bands.map((band, i) => `<rect x="270" y="${band.y1}" width="630" height="${band.y2 - band.y1}" fill="${palette[i]}"/>`).join("")}
-        ${boundaries.slice(1,-1).map((y) => `<path d="M270 ${y} H900" stroke="#fff" stroke-width="4"/>`).join("")}
-        <polygon points="585,184 716,292 650,468 548,468 474,324" fill="rgba(255,255,255,.13)"/>
-        <polygon points="296,251 474,324 447,419 328,314" fill="rgba(255,255,255,.09)"/>
-      </g>
-      <polygon points="${lowerSilhouette}" fill="none" stroke="#fff" stroke-width="4" stroke-linejoin="round"/>
-      <path class="waterline" d="M0 178 H1170" fill="none"/>
+      <path d="${pointPath(shiftPoints(upperGeometry.outline,0,7))}" fill="#284f70" opacity=".07" data-ppt-kind="path" data-ppt-name="iceberg-upper-shadow"/>
+      <path d="${pointPath(shiftPoints(lowerSilhouette,0,7))}" fill="#284f70" opacity=".07" data-ppt-kind="path" data-ppt-name="iceberg-lower-shadow"/>
+      <path class="water-glint" d="M0 194 C155 184 270 202 412 191 M758 191 C900 201 1018 184 1170 194" fill="none" data-ppt-kind="path" data-ppt-name="iceberg-water-glint"/>
+      <path class="berg-piece" d="${pointPath(upperGeometry.outline)}" fill="#e7f1f6" data-ppt-kind="path" data-ppt-name="iceberg-upper-base"/>
+      ${upperGeometry.facets.map((points, i) => `<path class="berg-piece" d="${pointPath(points)}" fill="${["#f3f7fa","#dce9f1","#cfe1eb","#c3d9e6","#b8d2e1"][i]}" data-ppt-kind="path" data-ppt-name="iceberg-upper-facet-${i}"/>`).join("")}
+      ${bandPaths.map((points, i) => `<path class="berg-piece" d="${pointPath(points)}" fill="${palette[i]}" data-ppt-kind="path" data-ppt-name="iceberg-hidden-band-${i}"/>`).join("")}
+      <path d="${pointPath("585,184 716,292 650,468 548,468 474,324")}" fill="#fff" opacity=".13" data-ppt-kind="path" data-ppt-name="iceberg-lower-highlight-center"/>
+      <path d="${pointPath(`${boundaryX(leftBoundary,251)},251 474,324 447,419 ${boundaryX(leftBoundary,314)},314`)}" fill="#fff" opacity=".09" data-ppt-kind="path" data-ppt-name="iceberg-lower-highlight-left"/>
+      <path d="${pointPath(lowerSilhouette)}" fill="none" stroke="#fff" stroke-width="4" stroke-linejoin="round" data-ppt-kind="path" data-ppt-name="iceberg-lower-outline"/>
+      <path class="waterline" d="M0 178 H1170" fill="none" data-ppt-kind="path" data-ppt-name="iceberg-waterline"/>
     </svg>
     ${visible.map((item, i) => { const frame = visibleFrames[i]; return `<div class="visible-label" style="left:${frame.left}px;top:${frame.top}px;width:${frame.width}px;height:${frame.height}px">${flow(`visible[${i}]`, { title: item }, { id: `iceberg-visible-${i}`, align: "center" })}</div>`; }).join("")}
     ${hidden.map((item, i) => { const frame = bands[i].frame; return `<div class="hidden-label ${i >= Math.max(2, hidden.length - 1) ? "tone-deep" : ""}" style="left:${frame.left}px;top:${frame.top}px;width:${frame.width}px;height:${frame.height}px">${flow(`hidden[${i}]`, { title: item }, { id: `iceberg-hidden-${i}`, align: "center", tone: i >= Math.max(2, hidden.length - 1) ? "dark" : "light" })}</div>`; }).join("")}

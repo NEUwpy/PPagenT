@@ -29,12 +29,13 @@
     "stateContract": { "resolver": "itemCount", "states": [3, 4, 5, 6], "previewDefault": 4 },
     "mediaContract": { "mode": "no-image" },
     "textFlow": { "profile": "text-region-layout-library", "scope": "per-contiguous-region" },
-    "contentContract": { "itemRole": "forward-stage", "points": "inline", "ordered": true },
+    "contentContract": { "itemRole": "semantic-node", "points": "optional", "ordered": true },
     "contract": {
       "abstractionLevel": "foundation",
       "adaptationStatus": "adaptive",
       "constraints": {
-        "relationTraits": { "cycle": true, "ordered": true, "feedbackReturn": true },
+        "semantic": { "ordered": true },
+        "relationTraits": { "cyclic": true, "sequence": true },
         "density": ["low", "medium"]
       }
     },
