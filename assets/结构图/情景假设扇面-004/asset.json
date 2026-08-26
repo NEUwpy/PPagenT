@@ -1,1 +1,111 @@
-{"id":"branching-scenario-fan-004","name":"情景假设扇面","kind":"component","category":"结构图","creationMethod":"distillation","status":"pending-review","source":{"file":"PPT源/06-【柏林蓝】定制级学术型灵感手册-宽屏.pptx","slides":[121]},"runtime":{"renderer":"html-component","entry":"review.mjs","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","logicId":"branching","structureGroupId":"branching-scenario-fan","familyId":"branching","variantId":"assumption-to-scenarios-and-outcomes","silhouette":"assumption-to-scenarios-and-outcomes","supportedBaseRelations":["branching"],"supportedPurposeKeys":["cover_expression_gap"],"itemCount":{"min":3,"preferred":[4],"max":5},"stateContract":{"resolver":"scenarioCount","states":[3,4,5],"previewDefault":4},"contentContract":{"itemRole":"semantic-unit","points":"forbidden","ordered":false},"contract":{"abstractionLevel":"foundation","adaptationStatus":"adaptive","constraints":{"coverageGap":true,"density":["medium"]}},"review":{"entry":"review.mjs","visualIntent":"visual-intent.md","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","implementation":"asset-specific-html","goldenState":{"selection":{"scenarioCount":4}},"controls":[{"key":"scenarioCount","label":"情景数","values":[3,4,5],"default":4}]}},"coverageDelta":"补齐决策树依赖是/否判断、路径组依赖路线选择，而不能表达围绕同一不确定假设并列展开多种未来情景的缺口。","layoutExpansion":{"mode":"responsive","range":"1 个共同假设 → 3–5 个情景，每个含触发与结果","rule":"按已声明控制项重算组件内部拓扑与空间，不维护逐项数独立代码"},"componentModel":{"fixed":["逻辑关系与阅读路径","字段角色","失败边界"],"variable":["1 个共同假设 → 3–5 个情景，每个含触发与结果","文本内容"]},"fieldContract":{"editable":[{"field":"parameters","meaning":"按组件声明填写的结构化内容"}],"generated":[{"field":"layout","meaning":"由 HTML 组件按状态统一求解"}],"fixed":["组件拓扑与语义角色"],"unavailable":["分支由明确决策问题驱动、情景之间有顺序或需要计算概率树"]},"spatialContract":{"coordinateSystem":{"width":1280,"height":720},"contentFrame":{"left":55,"top":166,"width":1170,"height":492},"aspectRatio":2.378,"minimumFrame":{"width":1170,"height":492},"preferredFrame":{"width":1170,"height":492},"resizeMode":"natural","minFontSize":15,"safePadding":10,"supportedCompositionIds":["component-full"]},"capacity":"1 个共同假设 → 3–5 个情景，每个含触发与结果","semanticContract":"在同一关键假设下并列推演多个可能情景，每个情景包含触发条件与预期结果","doNotUseWhen":"分支由明确决策问题驱动、情景之间有顺序或需要计算概率树","review":"等待用户统一审核 HTML；未生成 Native PPT"}
+{
+  "id": "branching-scenario-fan-004",
+  "name": "情景假设扇面",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "PPT源/06-【柏林蓝】定制级学术型灵感手册-宽屏.pptx",
+    "slides": [121]
+  },
+  "runtime": {
+    "renderer": "html-component",
+    "textFlow": { "profile": "standard", "scope": "per-contiguous-region" },
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "branching",
+    "structureGroupId": "branching-scenario-fan",
+    "familyId": "branching",
+    "variantId": "assumption-to-scenarios-and-outcomes",
+    "silhouette": "assumption-to-scenarios-and-outcomes",
+    "supportedBaseRelations": ["branching"],
+    "supportedPurposeKeys": ["route_by_condition"],
+    "itemCount": { "min": 3, "preferred": [4], "max": 5 },
+    "stateContract": {
+      "resolver": "scenarioCount",
+      "states": [3, 4, 5],
+      "previewDefault": 4
+    },
+    "mediaContract": { "mode": "no-image" },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "forbidden",
+      "ordered": false,
+      "requiresStructuredDataType": "branching-scenario"
+    },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "semantic": { "ordered": false, "sameLevel": true },
+        "relationTraits": { "branched": true, "scenarioAnalysis": true },
+        "density": ["medium"]
+      },
+      "fallback": {
+        "semanticMismatch": "reject",
+        "tooFew": "simple-layout",
+        "tooMany": "split",
+        "tooLong": "switch-layout"
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": { "selection": { "scenarioCount": 4 } },
+      "controls": [
+        { "key": "scenarioCount", "label": "情景数", "values": [3, 4, 5], "default": 4 }
+      ],
+      "exampleSelections": [
+        { "scenarioCount": 4 }
+      ]
+    }
+  },
+  "coverageDelta": "补齐决策树依赖明确判断、路径组依赖互斥路线，而不能表达围绕同一不确定假设并列推演多种未来情景的缺口。",
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "1 个共同假设 → 3–5 个情景，每个含触发与结果",
+    "rule": "按情景数重新计算扇出路径、卡片中心与间距；共同假设保持顶部中轴稳定。"
+  },
+  "componentModel": {
+    "fixed": ["顶部共同假设", "向下扇出的多条情景路径", "每个情景包含触发条件与预期结果"],
+    "variable": ["3–5 个情景", "共同假设、情景标题、触发条件与结果文字"]
+  },
+  "fieldContract": {
+    "editable": [
+      { "field": "structuredData.assumption", "meaning": "所有情景共同成立的不确定假设" },
+      { "field": "items[].title", "meaning": "情景名称" },
+      { "field": "structuredData.scenarios[].trigger", "meaning": "进入该情景的触发条件" },
+      { "field": "structuredData.scenarios[].outcome", "meaning": "该情景对应的预期结果" }
+    ],
+    "generated": [
+      { "field": "scenarios[].position", "meaning": "程序按当前情景数生成扇出路径和卡片位置" }
+    ],
+    "fixed": ["所有情景围绕同一个假设展开", "情景之间同级且不表示概率大小"],
+    "unavailable": ["明确的是/否决策", "情景具有先后顺序", "需要计算概率树", "缺少真实触发条件或结果"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "resizeMode": "natural",
+    "minFontSize": 12,
+    "safePadding": 10,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "1 个共同假设、3–5 个同级情景；情景标题不超过 8 字，触发与结果各不超过 16 字。",
+  "semanticContract": "在同一关键假设下并列推演 3–5 个可能情景，每个情景都由原稿明确给出触发条件与预期结果。",
+  "doNotUseWhen": "分支由明确决策问题驱动、情景之间有顺序、需要计算概率，或原稿没有同时给出各情景的触发条件与结果。",
+  "review": "用户明确确认情景假设扇面的 HTML 黄金状态可以正式落地；HTML 是唯一布局源，Native/PPT 由同一组件编译。"
+}

@@ -62,6 +62,24 @@ test("结构化数据只接受完整且唯一的 PageContent 引用", () => {
   assert.ok(branchingIssues.some((issue) => issue.code === "UNKNOWN_ITEM_REFERENCE"));
   assert.ok(branchingIssues.some((issue) => issue.code === "UNASSIGNED_ITEM"));
 
+  const scenario = {
+    items: [item("stable"), item("growth"), item("shortage")],
+    structuredData: {
+      type: "branching-scenario",
+      assumption: "外部需求存在不确定性",
+      scenarios: [
+        { id: "stable", trigger: "需求稳定", outcome: "持续复用" },
+        { id: "growth", trigger: "需求增长", outcome: "扩充资产" },
+        { id: "shortage", trigger: "结构短缺", outcome: "降级排版" },
+      ],
+    },
+  };
+  assert.deepEqual(validateStructuredDataReferences(scenario), []);
+  scenario.structuredData.scenarios[2].id = "unknown";
+  const scenarioIssues = validateStructuredDataReferences(scenario);
+  assert.ok(scenarioIssues.some((issue) => issue.code === "UNKNOWN_ITEM_REFERENCE"));
+  assert.ok(scenarioIssues.some((issue) => issue.code === "UNASSIGNED_ITEM"));
+
   const network = {
     items: [item("internal-a"), item("internal-b"), item("external-a"), item("external-b")],
     structuredData: {

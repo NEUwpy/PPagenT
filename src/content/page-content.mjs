@@ -93,6 +93,13 @@ export function validateStructuredDataReferences(pageContent) {
     compareIdSets(branchIds, itemIds, "structuredData.branches", issues);
   }
 
+  if (structured.type === "branching-scenario") {
+    const scenarioIds = structured.scenarios.map((scenario) => scenario.id);
+    const duplicates = duplicateValues(scenarioIds);
+    if (duplicates.length) issues.push({ field: "structuredData.scenarios", code: "DUPLICATE_REFERENCE", ids: duplicates });
+    compareIdSets(scenarioIds, itemIds, "structuredData.scenarios", issues);
+  }
+
   if (structured.type === "goal-strategy-metrics") {
     const strategyIds = structured.strategies.map((strategy) => strategy.id);
     const duplicates = duplicateValues(strategyIds);
@@ -301,6 +308,7 @@ function inferredLogicId(pageContent) {
   if (pageContent.structuredData?.type === "multi-set-common-intersection") return "containment";
   if (pageContent.structuredData?.type === "internal-external-ecosystem") return "network";
   if (pageContent.structuredData?.type === "branching-decision") return "branching";
+  if (pageContent.structuredData?.type === "branching-scenario") return "branching";
   if (pageContent.structuredData?.type === "goal-strategy-metrics") return "goal-alignment";
   if (pageContent.structuredData?.type === "role-stage") return "role-stage";
   if (pageContent.structuredData?.type === "matrix") return "matrix";

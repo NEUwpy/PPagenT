@@ -184,6 +184,21 @@
         {
           "type": "object",
           "additionalProperties": false,
+          "required": ["type", "assumption", "scenarios"],
+          "properties": {
+            "type": { "const": "branching-scenario" },
+            "assumption": { "type": "string", "minLength": 1, "maxLength": 30 },
+            "scenarios": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 5,
+              "items": { "$ref": "#/$defs/branchingScenario" }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
           "required": ["type", "goal", "strategies"],
           "properties": {
             "type": { "const": "goal-strategy-metrics" },
@@ -279,6 +294,16 @@
         "id": { "type": "string", "minLength": 1 },
         "condition": { "type": "string", "minLength": 1, "maxLength": 8 },
         "outcome": { "type": "string", "maxLength": 10 }
+      }
+    },
+    "branchingScenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "trigger", "outcome"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "trigger": { "type": "string", "minLength": 1, "maxLength": 16 },
+        "outcome": { "type": "string", "minLength": 1, "maxLength": 16 }
       }
     },
     "goalMetric": {

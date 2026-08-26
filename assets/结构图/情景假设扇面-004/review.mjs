@@ -1,4 +1,4 @@
-import { geometricBranchingScenario as component } from "../_geometric-logic/components.mjs?v=4";
+import { geometricBranchingScenario as component } from "../_geometric-logic/components.mjs?v=5";
 
 export const visualComponent = component.visualComponent;
 export const previewParameters = component.previewParameters;

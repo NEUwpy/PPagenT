@@ -37,11 +37,15 @@ test("正式结构候选来自当前核心 HTML 资产包", async () => {
   assert.deepEqual(structural.map((variant) => variant.assetId), [
     "argument-evidence-conclusion-001",
     "branching-decision-routes-001",
+    "branching-scenario-fan-004",
     "causal-fishbone-attribution-001",
     "comparison-dual-verdict-001",
     "containment-multi-set-intersection-001",
+    "convergence-many-to-one-003",
     "convergence-funnel-001",
     "convergence-simple-funnel-001",
+    "cycle-racetrack-loop-005",
+    "cycle-single-chain-feedback-002",
     "cycle-loop-001",
     "goal-alignment-strategy-metrics-001",
     "hierarchy-people-tree-001",
@@ -56,6 +60,16 @@ test("正式结构候选来自当前核心 HTML 资产包", async () => {
     "role-stage-collaboration-001",
     "sequence-flow-001",
   ]);
+  assert.deepEqual(
+    queryVisualVariants(structural, {
+      logicId: "branching",
+      baseRelation: "branching",
+      purposeKey: "route_by_condition",
+      itemCount: 4,
+      structuredDataType: "branching-scenario",
+    }).map((variant) => variant.structureGroupId),
+    ["branching-scenario-fan"],
+  );
   assert.deepEqual(
     queryVisualVariants(structural, {
       logicId: "cycle",
@@ -77,7 +91,7 @@ test("正式结构候选来自当前核心 HTML 资产包", async () => {
       itemCount: 4,
       structuredDataType: "convergence",
     }).map((variant) => variant.structureGroupId),
-    ["convergence-staged-funnel", "convergence-simple-funnel"],
+    ["convergence-many-to-one", "convergence-staged-funnel", "convergence-simple-funnel"],
   );
   assert.deepEqual(
     queryVisualVariants(structural, {
@@ -87,7 +101,7 @@ test("正式结构候选来自当前核心 HTML 资产包", async () => {
       itemCount: 4,
       structuredDataType: undefined,
     }).map((variant) => variant.structureGroupId),
-    ["convergence-simple-funnel"],
+    ["convergence-many-to-one", "convergence-simple-funnel"],
   );
   assert.deepEqual(
     queryVisualVariants(structural, {
@@ -150,12 +164,16 @@ test("运行时登记当前核心结构资产", async () => {
   assert.deepEqual(builders.defaultAssetIds, [
     "argument-evidence-conclusion-001",
     "branching-decision-routes-001",
+    "branching-scenario-fan-004",
     "causal-fishbone-attribution-001",
     "comparison-dual-verdict-001",
     "containment-multi-set-intersection-001",
     "convergence-funnel-001",
+    "convergence-many-to-one-003",
     "convergence-simple-funnel-001",
     "cycle-loop-001",
+    "cycle-racetrack-loop-005",
+    "cycle-single-chain-feedback-002",
     "goal-alignment-strategy-metrics-001",
     "hierarchy-people-tree-001",
     "hub-radial-001",
@@ -172,12 +190,16 @@ test("运行时登记当前核心结构资产", async () => {
   assert.deepEqual(builders.variantBuilderKeys, [
     "argument-evidence-conclusion-001:proof-stack-1n1",
     "branching-decision-routes-001:single-decision-fanout",
+    "branching-scenario-fan-004:assumption-to-scenarios-and-outcomes",
     "causal-fishbone-attribution-001:fishbone-attribution",
     "comparison-dual-verdict-001:dual-verdict-mirror",
     "containment-multi-set-intersection-001:multi-set-common-core",
     "convergence-funnel-001:staged-input-content-funnel",
+    "convergence-many-to-one-003:multiple-lanes-merge-to-output",
     "convergence-simple-funnel-001:input-steps-only",
     "cycle-loop-001:default",
+    "cycle-racetrack-loop-005:racetrack-loop",
+    "cycle-single-chain-feedback-002:single-chain-return-control",
     "goal-alignment-strategy-metrics-001:typographic-goal-strategy-field-with-metric-band",
     "hierarchy-people-tree-001:three-level-portraits",
     "hub-radial-001:balanced-orbit-anchor",

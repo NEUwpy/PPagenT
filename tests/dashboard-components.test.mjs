@@ -96,7 +96,7 @@ test("看板只把资产专属 HTML 计入迁移完成度", async () => {
   )));
   assert.equal(cycle?.builderExport, "");
   assert.equal(cycle?.componentInitialSelection.stepCount, 4);
-  assert.equal(data.summary.htmlDesignComponents, 23);
+  assert.equal(data.summary.htmlDesignComponents, 24);
   assert.match(cycle?.previewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.componentPreviewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.nativeStatePreviewUrl ?? "", /[?&]v=\d+/);
@@ -187,7 +187,8 @@ test("作废的旧 Logic 不再出现在核心库或正式生成候选中", asyn
     "causal-fishbone-attribution-001", "problem-solution-outcome-001",
     "matrix-quadrant-priority-001", "argument-evidence-conclusion-001",
     "problem-method-result-001", "progression-spectrum-focus-001",
-    "branching-decision-routes-001", "goal-alignment-strategy-metrics-001",
+    "branching-decision-routes-001", "branching-scenario-fan-004",
+    "goal-alignment-strategy-metrics-001",
     "role-stage-collaboration-001", "containment-multi-set-intersection-001",
     "network-internal-external-ecosystem-001", "cycle-racetrack-loop-005",
     "cycle-single-chain-feedback-002", "convergence-many-to-one-003",
@@ -250,7 +251,7 @@ test("Logic 能力地图保留空槽位，只把合格资产填入对应位置",
   assert.equal(argumentEvidence?.status, "available");
 
   const branching = data.logics.find((logic) => logic.id === "branching");
-  assert.deepEqual(branching?.assetIds, ["branching-decision-routes-001"]);
+  assert.deepEqual(branching?.assetIds, ["branching-decision-routes-001", "branching-scenario-fan-004"]);
   assert.equal(branching?.status, "available");
 
   const network = data.logics.find((logic) => logic.id === "network");
