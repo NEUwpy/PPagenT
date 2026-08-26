@@ -225,13 +225,30 @@ function gateShapeMarkup(frame, index) {
   const topCenter = offset(frame.center, frame.normal, frame.side * 3);
   const plateWidth = 42 - frame.progress * 7;
   const plateHeight = 29 - frame.progress * 4;
+  const capHalf = frame.gateDepth / 2 + 3;
+  const capThickness = 7;
+  const stemHalf = 3.2;
+  const localPoint = (u, v) => offset(offset(frame.center, frame.tangent, u), frame.normal, v);
+  const iBeam = [
+    localPoint(-capHalf, span),
+    localPoint(capHalf, span),
+    localPoint(capHalf, span - capThickness),
+    localPoint(stemHalf, span - capThickness),
+    localPoint(stemHalf, -span + capThickness),
+    localPoint(capHalf, -span + capThickness),
+    localPoint(capHalf, -span),
+    localPoint(-capHalf, -span),
+    localPoint(-capHalf, -span + capThickness),
+    localPoint(-stemHalf, -span + capThickness),
+    localPoint(-stemHalf, span - capThickness),
+    localPoint(-capHalf, span - capThickness),
+  ];
   const lineEnd = frame.side < 0
     ? { x: frame.labelLeft + frame.labelWidth * 0.5, y: frame.labelTop + frame.labelHeight }
     : { x: frame.labelLeft + frame.labelWidth * 0.5, y: frame.labelTop };
   return `<svg class="gate-geometry" viewBox="0 0 ${DESIGN_FRAME.width} ${DESIGN_FRAME.height}" preserveAspectRatio="none" aria-hidden="true">
     <path class="gate-plane" data-ppt-kind="path" data-ppt-name="gate-${index + 1}-plane" d="M ${pointString(backA)} L ${pointString(backB)} L ${pointString(frontB)} L ${pointString(frontA)} Z"></path>
-    <path class="gate-frame" data-ppt-kind="path" data-ppt-name="gate-${index + 1}-frame" d="M ${pointString(backA)} L ${pointString(frontA)} M ${pointString(backB)} L ${pointString(frontB)}"></path>
-    <path class="gate-threshold" data-ppt-kind="path" data-ppt-name="gate-${index + 1}-threshold" d="M ${pointString(baseA)} L ${pointString(baseB)}"></path>
+    <path class="gate-i-beam" data-ppt-kind="path" data-ppt-name="gate-${index + 1}-i-beam" d="M ${iBeam.map(pointString).join(" L ")} Z"></path>
     <path class="gate-label-link" data-ppt-kind="path" data-ppt-name="gate-${index + 1}-label-link" d="M ${pointString(topCenter)} L ${pointString(lineEnd)}"></path>
   </svg>
   <div class="gate-check" style="left:${round(topCenter.x - plateWidth / 2)}px;top:${round(topCenter.y - plateHeight / 2)}px;width:${round(plateWidth)}px;height:${round(plateHeight)}px" data-ppt-kind="shape-text" data-ppt-shape="roundRect" data-ppt-name="gate-${index + 1}-check">✓</div>`;
@@ -262,6 +279,7 @@ function gateMarkup(gate, index, model, g) {
   return `<article class="gate" data-gate-key="${escapeHtml(gate.key)}">
     ${gateShapeMarkup(frame, index)}
     <div class="gate-tag" style="left:${round(frame.labelLeft)}px;top:${round(frame.labelTop - 19)}px;width:${frame.labelWidth}px" data-ppt-kind="text" data-ppt-name="gate-${index + 1}-tag">门禁 ${String(index + 1).padStart(2, "0")}</div>
+    <div class="gate-content-surface" style="left:${round(frame.labelLeft)}px;top:${round(frame.labelTop)}px;width:${frame.labelWidth}px;height:${frame.labelHeight}px" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="gate-${index + 1}-content-surface"></div>
     ${region}
   </article>`;
 }

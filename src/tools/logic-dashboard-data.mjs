@@ -375,7 +375,9 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
   const coreAssets = records.filter((record) => record.library === "core" && record.status === "core");
   const formalLogics = coreAssets.filter((record) => record.renderer !== "skin" && record.autoCallable);
   const pendingApproval = records.filter((record) => (
-    record.renderer === "html-component"
+    record.status !== "superseded"
+    && record.status !== "withdrawn"
+    && record.renderer === "html-component"
     && record.componentFidelityStatus
     && record.componentFidelityStatus !== "user-approved"
   ));

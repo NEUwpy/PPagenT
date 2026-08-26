@@ -1,10 +1,12 @@
 {
   "id": "hub-two-tier-capabilities-004",
-  "name": "两级能力生态辐射",
+  "name": "行星环",
   "kind": "component",
   "category": "结构图",
   "creationMethod": "distillation",
-  "status": "pending-review",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
   "source": { "file": "PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx", "slides": [365, 366] },
   "references": [
     {
@@ -16,20 +18,35 @@
   ],
   "runtime": {
     "renderer": "html-component",
-    "entry": "review.mjs",
+    "entry": "runtime.mjs",
     "componentExport": "visualComponent",
     "previewParametersExport": "previewParameters",
     "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
     "logicId": "hub",
     "structureGroupId": "hub-two-tier-capabilities",
     "familyId": "hub",
     "variantId": "core-orbital-capabilities-shared-outcomes",
-    "silhouette": "atomic-nucleus-two-concentric-semantic-orbits",
+    "silhouette": "shared-perspective-two-orbit-planetary-system",
     "supportedBaseRelations": ["hub"],
     "supportedPurposeKeys": ["explain_capability_system"],
-    "itemCount": { "min": 3, "preferred": [4], "max": 8 },
-    "stateContract": { "resolver": "innerCount+outerCount", "states": [3, 4], "previewDefault": 4 },
-    "contentContract": { "itemRole": "tiered-semantic-unit", "points": "forbidden", "ordered": false },
+    "itemCount": { "min": 3, "preferred": [4, 10], "max": 13 },
+    "stateContract": {
+      "resolver": "innerCount+outerCount",
+      "dimensions": {
+        "innerCount": [3, 4, 5],
+        "outerCount": [0, 3, 4, 5, 6, 7, 8]
+      },
+      "previewDefault": { "innerCount": 4, "outerCount": 6 }
+    },
+    "mediaContract": { "mode": "no-image" },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "forbidden",
+      "ordered": false,
+      "requiresStructuredDataType": "hub-tiered-ecosystem"
+    },
+    "textFlow": { "profile": "text-region-layout-library", "scope": "per-contiguous-region" },
     "contract": {
       "abstractionLevel": "foundation",
       "adaptationStatus": "adaptive",
@@ -44,23 +61,23 @@
       "implementation": "asset-specific-html",
       "goldenState": { "selection": { "innerCount": 4, "outerCount": 6 } },
       "controls": [
-        { "key": "innerCount", "label": "内圈能力数", "values": [3, 4], "default": 4 },
-        { "key": "outerCount", "label": "共同结果数", "values": [4, 6, 8], "default": 6 }
+        { "key": "innerCount", "label": "内圈能力数", "values": [3, 4, 5], "default": 4 },
+        { "key": "outerCount", "label": "共同结果数", "values": [0, 3, 4, 5, 6, 7, 8], "default": 6 }
       ]
     }
   },
-  "coverageDelta": "表达核心—直接能力层—共同结果层三种角色；外圈是能力组合形成的共同结果，不声明某一结果专属于某一能力。",
-  "layoutExpansion": { "mode": "responsive", "range": "1 个核心、3–4 个直接能力、4–8 个共同结果", "rule": "第一级能力沿较近原子轨道重排，第二级成果沿较远原子轨道重排，两层始终共用同一原子核" },
-  "componentModel": { "fixed": ["核心、直接能力层、共同结果层", "外圈无单独归属"], "variable": ["3–4 个内圈能力", "4–8 个共同结果", "字段文字"] },
+  "coverageDelta": "既可表达核心—直接能力的单圈辐射，也可表达核心—直接能力—共同结果的两级生态；外圈结果不声明属于某一单独能力。",
+  "layoutExpansion": { "mode": "responsive", "range": "1 个核心、3–5 个直接能力、0 或 3–8 个共同结果", "rule": "外圈为 0 时只保留中心与近轨；存在外圈时两层共享同一投影函数、前后层级与中心" },
+  "componentModel": { "fixed": ["唯一核心与直接能力轨道", "存在外圈时不建立单独归属"], "variable": ["3–5 个内圈能力", "0 或 3–8 个共同结果", "字段文字"] },
   "fieldContract": {
     "editable": [
       { "field": "center", "meaning": "唯一核心平台、价值或系统" },
-      { "field": "inner[]", "meaning": "3–4 个直接支撑核心的能力" },
-      { "field": "outer[]", "meaning": "4–8 个由能力组合共同形成的结果" }
+      { "field": "inner[]", "meaning": "3–5 个直接支撑核心的能力" },
+      { "field": "outer[]", "meaning": "可为空；存在时为 3–8 个由能力组合共同形成的结果" }
     ],
-    "generated": [{ "field": "layout", "meaning": "按两级数量分别生成近轨与远轨节点，保持统一原子核和清晰层级" }],
-    "fixed": ["两级圈层", "外圈结果不归属于单一内圈能力"],
-    "unavailable": ["单层辐射", "每个结果分别归属于某一能力", "内外圈无角色差异"]
+    "generated": [{ "field": "layout", "meaning": "按两级数量分别生成近轨与远轨节点；两层共享相机角度、投影、深度缩放与遮挡顺序" }],
+    "fixed": ["唯一核心与直接能力近轨", "外圈结果不归属于单一内圈能力"],
+    "unavailable": ["每个结果分别归属于某一能力", "存在外圈但内外圈没有角色差异"]
   },
   "spatialContract": {
     "coordinateSystem": { "width": 1280, "height": 720 },
@@ -69,12 +86,12 @@
     "minimumFrame": { "width": 1170, "height": 492 },
     "preferredFrame": { "width": 1170, "height": 492 },
     "resizeMode": "natural",
-    "minFontSize": 15,
+    "minFontSize": 12,
     "safePadding": 10,
     "supportedCompositionIds": ["component-full"]
   },
-  "capacity": "1 个核心、3–4 个直接能力、4–8 个共同结果；各节点为短标题",
-  "semanticContract": "一个核心由少量直接能力共同支撑，这些能力作为整体向外形成更多共同结果或影响。",
-  "doNotUseWhen": "只有单层辐射，或外圈结果需要明确归属到某一个内圈能力",
-  "review": "已按用户反馈将整个两级关系改为原子系统：中央大圆、近轨深色一级能力、远轨浅色二级成果；仅用 SVG 平面几何与同色阶同心圆盘形成浮雕层次，等待用户复审，未生成 Native PPT"
+  "capacity": "1 个核心、3–5 个直接能力、0 或 3–8 个共同结果；各节点为短标题",
+  "semanticContract": "一个核心由少量直接能力共同支撑；当存在外圈时，这些能力作为整体向外形成共同结果或影响。",
+  "doNotUseWhen": "外圈结果需要明确归属到某一个内圈能力，或内外两层没有语义差异",
+  "review": "用户已确认共享透视的行星生态系统及其单圈、双圈扩散；内圈支持 3–5 项，外圈支持 0 或 3–8 项。Native/PPT 由同一 HTML 组件编译，可进入核心资产库和正式生成线"
 }

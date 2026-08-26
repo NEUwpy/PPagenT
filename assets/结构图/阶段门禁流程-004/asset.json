@@ -4,31 +4,43 @@
   "kind": "component",
   "category": "结构图",
   "creationMethod": "distillation",
-  "status": "pending-review",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
   "source": {
     "file": "PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
     "slides": [127]
   },
   "runtime": {
     "renderer": "html-component",
-    "entry": "review.mjs",
+    "entry": "runtime.mjs",
     "componentExport": "visualComponent",
     "previewParametersExport": "previewParameters",
     "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
     "logicId": "sequence",
     "structureGroupId": "sequence-phase-gates",
     "familyId": "sequence",
     "variantId": "ordered-phases-with-gates",
     "silhouette": "winding-arrow-river-with-sluice-gates",
     "supportedBaseRelations": ["sequence"],
-    "supportedPurposeKeys": ["cover_expression_gap"],
+    "supportedPurposeKeys": ["explain_process", "present_steps"],
     "itemCount": { "min": 3, "preferred": [4], "max": 5 },
     "stateContract": { "resolver": "phaseCount", "states": [3, 4, 5], "previewDefault": 4 },
-    "contentContract": { "itemRole": "phase-and-gate", "points": "optional", "ordered": true },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "required",
+      "pointCount": { "min": 1, "max": 3 },
+      "ordered": true
+    },
     "contract": {
       "abstractionLevel": "foundation",
       "adaptationStatus": "adaptive",
-      "constraints": { "coverageGap": true, "density": ["medium"] }
+      "constraints": {
+        "semantic": { "ordered": true },
+        "relationTraits": { "sequence": true },
+        "density": ["medium"]
+      }
     },
     "review": {
       "entry": "review.mjs",
@@ -53,8 +65,9 @@
   },
   "fieldContract": {
     "editable": [
-      { "field": "phases[].title|body|points[]", "meaning": "阶段内连续文字区域，可用标题、正文或分点" },
-      { "field": "gates[].title|body", "meaning": "相邻阶段之间必须满足的检查或决策条件" }
+      { "field": "PageContent.items[].title|body", "meaning": "阶段标题与阶段说明" },
+      { "field": "PageContent.items[0..n-2].points[0]", "meaning": "进入下一阶段前必须满足的明确门禁条件" },
+      { "field": "PageContent.items[].points[1..]", "meaning": "阶段内可选补充说明；最终阶段保留全部分点" }
     ],
     "generated": [
       { "field": "layout", "meaning": "由 HTML 组件按阶段数统一求解" },
@@ -78,12 +91,12 @@
     "minimumFrame": { "width": 1170, "height": 492 },
     "preferredFrame": { "width": 1170, "height": 492 },
     "resizeMode": "natural",
-    "minFontSize": 14,
+    "minFontSize": 12,
     "safePadding": 10,
     "supportedCompositionIds": ["component-full"]
   },
   "capacity": "3–5 个阶段；每两个相邻阶段之间一个门禁",
   "semanticContract": "流程按阶段推进，每个相邻阶段之间存在必须通过的检查或决策门槛",
   "doNotUseWhen": "只是连续动作、没有阶段门槛、时间日期才是核心信息",
-  "review": "等待用户审核 HTML；未生成 Native PPT"
+  "review": "用户确认蜿蜒箭形河道、抽象门闸及 3–5 阶段扩散；已进入 Native/PPT 与正式生成落地阶段"
 }

@@ -214,6 +214,31 @@
         {
           "type": "object",
           "additionalProperties": false,
+          "required": ["type", "center", "innerIds", "outerIds"],
+          "properties": {
+            "type": { "const": "hub-tiered-ecosystem" },
+            "center": { "$ref": "#/$defs/structuredEndpoint" },
+            "innerIds": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 5,
+              "items": { "type": "string", "minLength": 1 },
+              "uniqueItems": true
+            },
+            "outerIds": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 },
+              "uniqueItems": true,
+              "anyOf": [
+                { "maxItems": 0 },
+                { "minItems": 3, "maxItems": 8 }
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
           "required": ["type", "context", "decision", "branches"],
           "properties": {
             "type": { "const": "branching-decision" },

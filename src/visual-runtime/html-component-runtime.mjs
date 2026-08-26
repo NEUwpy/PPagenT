@@ -805,8 +805,14 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
           clone.style.position = "fixed";
           clone.style.left = "-10000px";
           clone.style.top = "0";
+          clone.style.right = "auto";
+          clone.style.bottom = "auto";
           clone.style.width = `${innerWidth}px`;
           clone.style.height = "auto";
+          clone.style.display = "block";
+          clone.style.padding = "0";
+          clone.style.border = "0";
+          clone.style.minHeight = "0";
           clone.style.maxHeight = "none";
           clone.style.overflow = "visible";
           clone.style.whiteSpace = style.whiteSpace;

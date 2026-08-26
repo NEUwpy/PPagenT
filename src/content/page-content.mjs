@@ -100,6 +100,13 @@ export function validateStructuredDataReferences(pageContent) {
     }
   }
 
+  if (structured.type === "hub-tiered-ecosystem") {
+    const assigned = [...structured.innerIds, ...structured.outerIds];
+    const duplicates = duplicateValues(assigned);
+    if (duplicates.length) issues.push({ field: "structuredData.innerIds/outerIds", code: "DUPLICATE_REFERENCE", ids: duplicates });
+    compareIdSets(assigned, itemIds, "structuredData.innerIds/outerIds", issues);
+  }
+
   if (structured.type === "branching-decision") {
     const branchIds = structured.branches.map((branch) => branch.id);
     const duplicates = duplicateValues(branchIds);
@@ -323,6 +330,7 @@ function inferredLogicId(pageContent) {
   if (pageContent.structuredData?.type === "iceberg-visible-hidden") return "layered";
   if (pageContent.structuredData?.type === "decision-tradeoff") return "comparison";
   if (pageContent.structuredData?.type === "internal-external-ecosystem") return "network";
+  if (pageContent.structuredData?.type === "hub-tiered-ecosystem") return "hub";
   if (pageContent.structuredData?.type === "branching-decision") return "branching";
   if (pageContent.structuredData?.type === "branching-scenario") return "branching";
   if (pageContent.structuredData?.type === "goal-strategy-metrics") return "goal-alignment";
