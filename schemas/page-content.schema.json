@@ -159,6 +159,30 @@
         {
           "type": "object",
           "additionalProperties": false,
+          "required": ["type", "benefitIds", "riskIds", "verdict", "balanceState"],
+          "properties": {
+            "type": { "const": "decision-tradeoff" },
+            "benefitIds": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 4,
+              "items": { "type": "string", "minLength": 1 },
+              "uniqueItems": true
+            },
+            "riskIds": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 4,
+              "items": { "type": "string", "minLength": 1 },
+              "uniqueItems": true
+            },
+            "verdict": { "$ref": "#/$defs/structuredEndpoint" },
+            "balanceState": { "enum": ["收益侧更重", "基本平衡", "风险侧更重"] }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
           "required": ["type", "internalTitle", "externalTitle", "internalIds", "externalIds", "core", "links"],
           "properties": {
             "type": { "const": "internal-external-ecosystem" },

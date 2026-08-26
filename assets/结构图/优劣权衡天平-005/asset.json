@@ -1,1 +1,113 @@
-{"id":"comparison-pros-cons-balance-005","name":"优劣权衡天平","kind":"component","category":"结构图","creationMethod":"distillation","status":"pending-review","source":{"file":"PPT源/06-【柏林蓝】定制级学术型灵感手册-宽屏.pptx","slides":[83]},"runtime":{"renderer":"html-component","entry":"review.mjs","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","logicId":"comparison","structureGroupId":"comparison-pros-cons-balance","familyId":"comparison","variantId":"comparison-pros-cons-balance","silhouette":"comparison-pros-cons-balance","supportedBaseRelations":["comparison"],"supportedPurposeKeys":["cover_expression_gap"],"itemCount":{"min":2,"preferred":[3],"max":4},"stateContract":{"resolver":"itemCount","states":[2,3,4],"previewDefault":3},"contentContract":{"itemRole":"semantic-unit","points":"forbidden","ordered":false},"contract":{"abstractionLevel":"foundation","adaptationStatus":"adaptive","constraints":{"coverageGap":true,"density":["medium"]}},"review":{"entry":"review.mjs","visualIntent":"visual-intent.md","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","implementation":"asset-specific-html","goldenState":{"selection":{"itemCount":3}},"controls":[{"key":"itemCount","label":"每侧要点数","values":[2,3,4],"default":3}]}},"coverageDelta":"当前对比资产都在比较两个对象或两个时期，缺少对同一个方案同时陈列收益与风险并形成权衡判断的结构。","layoutExpansion":{"mode":"responsive","range":"一个对象；2–4 条优势、2–4 条风险和一个判断","rule":"同一组件根据声明状态重算内容区域内的拓扑、间距和字号，不维护逐数量独立实现"},"componentModel":{"fixed":["逻辑关系","阅读路径","内容角色与失败边界"],"variable":["一个对象；2–4 条优势、2–4 条风险和一个判断","字段内容与状态"]},"fieldContract":{"editable":[{"field":"topic","meaning":"需要权衡的同一个方案或决策"},{"field":"pros[]","meaning":"2–4 条优势"},{"field":"cons[]","meaning":"2–4 条代价或风险"},{"field":"verdict","meaning":"一条综合判断"}],"generated":[{"field":"layout","meaning":"两侧对称承载并保持真实天平骨架"}],"fixed":["左右必须围绕同一决策，不能是两个独立对象"],"unavailable":["没有综合判断、只有单边信息、需要逐维度对象比较"]},"spatialContract":{"coordinateSystem":{"width":1280,"height":720},"contentFrame":{"left":55,"top":166,"width":1170,"height":492},"aspectRatio":2.378,"minimumFrame":{"width":1170,"height":492},"preferredFrame":{"width":1170,"height":492},"resizeMode":"natural","minFontSize":15,"safePadding":10,"supportedCompositionIds":["component-full"]},"capacity":"一个对象；2–4 条优势、2–4 条风险和一个判断","semanticContract":"围绕同一个方案或决策，同时呈现优势和风险，并在中部或底部给出综合判断","doNotUseWhen":"比较两个独立对象、需要逐维度对照或没有可陈述的权衡结论","review":"等待用户统一审核 HTML；未生成 Native PPT"}
+{
+  "id": "comparison-pros-cons-balance-005",
+  "name": "优劣权衡天平",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "PPT源/06-【柏林蓝】定制级学术型灵感手册-宽屏.pptx",
+    "slides": [83]
+  },
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "comparison",
+    "structureGroupId": "comparison-pros-cons-balance",
+    "familyId": "comparison",
+    "variantId": "geometric-balance-with-verdict",
+    "silhouette": "continuous-balance-with-two-pans-and-central-verdict",
+    "supportedBaseRelations": ["comparison"],
+    "supportedPurposeKeys": ["compare_options"],
+    "itemCount": {
+      "min": 4,
+      "preferred": [6],
+      "max": 8
+    },
+    "stateContract": {
+      "resolver": "prosCount+consCount+balanceState",
+      "states": [2, 3, 4],
+      "previewDefault": 3
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "optional",
+      "ordered": false,
+      "requiresStructuredDataType": "decision-tradeoff"
+    },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "semantic": { "ordered": false },
+        "relationTraits": { "comparison": true, "directionalPreference": true },
+        "density": ["medium"]
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": {
+        "selection": {
+          "prosCount": 3,
+          "consCount": 3,
+          "balanceState": "收益侧更重"
+        }
+      },
+      "controls": [
+        { "key": "prosCount", "label": "收益要点数", "values": [2, 3, 4], "default": 3 },
+        { "key": "consCount", "label": "风险要点数", "values": [2, 3, 4], "default": 3 },
+        { "key": "balanceState", "label": "结论倾向", "values": ["收益侧更重", "基本平衡", "风险侧更重"], "default": "收益侧更重" }
+      ]
+    }
+  },
+  "coverageDelta": "现有对比资产用于比较两个对象或两个时期；本组覆盖同一个决策内部的收益—代价权衡，并把综合判断编码到天平倾向。",
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "一个决策；左右各 2–4 条要点；三种结论倾向",
+    "rule": "左右要点数独立扩散，秤盘文字区域保持连续；梁、吊线和秤盘位置随结论倾向统一求解"
+  },
+  "componentModel": {
+    "fixed": ["同一决策主题", "收益与代价两侧", "综合判断", "连续天平骨架"],
+    "variable": ["左右各 2–4 条要点", "收益／平衡／风险倾向", "字段内容"]
+  },
+  "fieldContract": {
+    "editable": [
+      { "field": "topic", "meaning": "需要权衡的同一个方案或决策" },
+      { "field": "pros[]", "meaning": "2–4 条收益或优势" },
+      { "field": "cons[]", "meaning": "2–4 条代价或风险" },
+      { "field": "verdict", "meaning": "一条综合判断" }
+    ],
+    "generated": [
+      { "field": "balanceState", "meaning": "根据原稿明确结论选择收益侧更重、基本平衡或风险侧更重" },
+      { "field": "layout", "meaning": "按两侧数量和结论倾向统一求解天平几何" }
+    ],
+    "fixed": ["左右内容必须围绕同一个决策", "结论倾向不得由系统臆造"],
+    "unavailable": ["两个独立对象的逐项比较", "没有综合判断", "只有单边信息"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "resizeMode": "natural",
+    "minFontSize": 12,
+    "safePadding": 10,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "一个决策；左右各 2–4 条要点；一条综合判断",
+  "semanticContract": "围绕同一个方案或决策，同时呈现收益和代价，并给出能够判断倾向的综合结论",
+  "doNotUseWhen": "比较两个独立对象、需要逐维度对照、只有单边信息，或原稿没有能够支撑倾向判断的结论",
+  "review": "用户确认克制蓝灰天平视觉、左右独立 2–4 项扩散、三种结论倾向、居中文字与支点安全区；Native/PPT 与东北大学 Skin 同步落地，可进入正式生成线"
+}

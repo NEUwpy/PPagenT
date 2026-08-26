@@ -65,6 +65,13 @@ export function validateStructuredDataReferences(pageContent) {
     compareIdSets(assigned, itemIds, "structuredData.visibleIds/hiddenIds", issues);
   }
 
+  if (structured.type === "decision-tradeoff") {
+    const assigned = [...structured.benefitIds, ...structured.riskIds];
+    const duplicates = duplicateValues(assigned);
+    if (duplicates.length) issues.push({ field: "structuredData.benefitIds/riskIds", code: "DUPLICATE_REFERENCE", ids: duplicates });
+    compareIdSets(assigned, itemIds, "structuredData.benefitIds/riskIds", issues);
+  }
+
   if (structured.type === "internal-external-ecosystem") {
     const assigned = [...structured.internalIds, ...structured.externalIds];
     const duplicates = duplicateValues(assigned);
@@ -314,6 +321,7 @@ function inferredLogicId(pageContent) {
   if (pageContent.structuredData?.type === "argument-evidence") return "argument-evidence";
   if (pageContent.structuredData?.type === "multi-set-common-intersection") return "containment";
   if (pageContent.structuredData?.type === "iceberg-visible-hidden") return "layered";
+  if (pageContent.structuredData?.type === "decision-tradeoff") return "comparison";
   if (pageContent.structuredData?.type === "internal-external-ecosystem") return "network";
   if (pageContent.structuredData?.type === "branching-decision") return "branching";
   if (pageContent.structuredData?.type === "branching-scenario") return "branching";

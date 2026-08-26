@@ -181,7 +181,7 @@ test("作废的旧 Logic 不再出现在核心库或正式生成候选中", asyn
   assert.equal(data.records.some((record) => removedIds.has(record.id)), false);
   const formalIds = new Set(data.formalLogics.map((record) => record.id));
   assert.deepEqual(formalIds, new Set([
-    "comparison-dual-verdict-001", "cycle-loop-001", "hierarchy-people-tree-001",
+    "comparison-dual-verdict-001", "comparison-pros-cons-balance-005", "cycle-loop-001", "hierarchy-people-tree-001",
     "hub-radial-001", "layered-architecture-001", "layered-iceberg-depth-006", "parallel-equal-cards-001",
     "convergence-simple-funnel-001", "convergence-funnel-001", "sequence-flow-001",
     "causal-fishbone-attribution-001", "problem-solution-outcome-001",
