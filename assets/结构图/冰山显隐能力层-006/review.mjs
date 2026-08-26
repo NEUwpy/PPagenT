@@ -1,4 +1,4 @@
-import { getCandidate } from "../_review-refresh/components.mjs?v=2";
+import { getCandidate } from "../_review-refresh/components.mjs?v=6";
 
 const candidate = getCandidate("layered-iceberg-depth-006");
 export const visualComponent = candidate.visualComponent;
