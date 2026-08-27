@@ -308,6 +308,8 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
         maxPointsPerItem: intent.structure.dimensions?.maxPointsPerItem ?? 0,
         maxPointChars: intent.structure.dimensions?.maxPointChars ?? 0,
         pointCounts: pageContents[index].items.map((item) => item.points?.length ?? 0),
+        polarities: pageContents[index].items.map((item) => item.polarity),
+        emphases: pageContents[index].items.map((item) => item.emphasis === true),
         structuredDataType: pageContents[index].structuredData?.type,
       });
       const provisional = compatible.length ? [] : queryVisualVariants(detailedVariants, {
@@ -318,6 +320,8 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
         maxPointsPerItem: intent.structure.dimensions?.maxPointsPerItem ?? 0,
         maxPointChars: intent.structure.dimensions?.maxPointChars ?? 0,
         pointCounts: pageContents[index].items.map((item) => item.points?.length ?? 0),
+        polarities: pageContents[index].items.map((item) => item.polarity),
+        emphases: pageContents[index].items.map((item) => item.emphasis === true),
         structuredDataType: pageContents[index].structuredData?.type,
         allowMissingRequiredPoints: true,
       }).filter((variant) => variant.contentContract?.points === "required");
@@ -1058,6 +1062,8 @@ export async function resolveVisualPlan({
         purposeKey: pageIntents[index].purposeKey,
         visualStructureGroupId: candidate.structureGroupId,
         pointCounts: pageContents[index].items.map((item) => item.points?.length ?? 0),
+        polarities: pageContents[index].items.map((item) => item.polarity),
+        emphases: pageContents[index].items.map((item) => item.emphasis === true),
         maxPointsPerItem: pageIntents[index].structure?.dimensions?.maxPointsPerItem ?? 0,
         maxPointChars: pageIntents[index].structure?.dimensions?.maxPointChars ?? 0,
         requiredItemRole: /PPagenT节点接口=semantic-node\+points/.test(pageContents[index].notes ?? "")

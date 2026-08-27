@@ -137,6 +137,14 @@ export function queryVisualVariants(variants, query = {}) {
       || pointCounts.some((count) => count < pointCountContract.min || count > pointCountContract.max)
       || (pointCountContract.balancedAcrossItems && new Set(pointCounts).size > 1)
     )) return false;
+    if (variant.contentContract?.polarity === "one-positive-one-negative") {
+      const polarities = query.polarities ?? [];
+      const explicitPair = polarities.length === 2
+        && polarities.includes("positive")
+        && polarities.includes("negative");
+      const emphasisCount = (query.emphases ?? []).filter(Boolean).length;
+      if (!explicitPair && emphasisCount !== 1) return false;
+    }
     if (query.itemCount !== undefined) {
       if (query.itemCount < variant.itemCount.min || query.itemCount > variant.itemCount.max) return false;
     }
@@ -190,7 +198,7 @@ function compareScore(left, right) {
 
 function rankVisualVariantCandidates({
   logicId, structureGroupId, familyId, assetId, itemCount, baseRelation, purposeKey,
-  pointCounts, maxPointsPerItem, maxPointChars, requiredItemRole, structuredDataType,
+  pointCounts, polarities, emphases, maxPointsPerItem, maxPointChars, requiredItemRole, structuredDataType,
   history = [], variants,
 }) {
   const candidates = queryVisualVariants(variants, {
@@ -202,6 +210,8 @@ function rankVisualVariantCandidates({
     baseRelation,
     purposeKey,
     pointCounts,
+    polarities,
+    emphases,
     maxPointsPerItem,
     maxPointChars,
     requiredItemRole,

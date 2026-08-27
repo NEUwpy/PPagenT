@@ -66,8 +66,9 @@ function normalizeEmptyOptionalStructures(output) {
   const normalized = structuredClone(output);
   normalized.pageContents = normalized.pageContents.map((page) => {
     const structured = page?.structuredData;
-    if (!structured || typeof structured !== "object" || Array.isArray(structured)) return page;
-    if (Object.keys(structured).length) return page;
+    if (structured === undefined) return page;
+    if (structured !== null && (typeof structured !== "object" || Array.isArray(structured))) return page;
+    if (structured !== null && Object.keys(structured).length) return page;
     const clean = { ...page };
     delete clean.structuredData;
     return clean;

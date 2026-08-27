@@ -132,6 +132,10 @@ test("正式流程不会暴露缺少视觉意图和用户确认的 HTML 资产",
     "hub-radial-001",
     "northeastern-university-body-001",
   ]);
+  const directedHub = set.candidates.find((candidate) => candidate.assetId === "hub-directed-outcomes-002");
+  assert.ok(directedHub.slotCapabilities.textSlots.some((slot) => (
+    slot.role === "center-title" && slot.maxChars === 10
+  )));
   assert.equal(set.capacityDensity, "low");
 });
 

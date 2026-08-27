@@ -93,6 +93,15 @@ export const visualComponent = Object.freeze({
   schemaVersion: 7,
   designFrame: DESIGN_FRAME,
   cssFile: "component.css",
+  textCapacity: Object.freeze({
+    maxCenterChars: 10,
+    maxCenterLines: 2,
+    maxItemTitleChars: 9,
+    maxItemTitleLines: 1,
+    maxItemBodyChars: 28,
+    maxItemBodyLines: 3,
+    maxPointsPerItem: 0,
+  }),
   textFlow: Object.freeze({ profile: "text-region-layout-library", scope: "per-contiguous-region" }),
   renderMarkup(parameters) {
     const model = normalize(parameters);

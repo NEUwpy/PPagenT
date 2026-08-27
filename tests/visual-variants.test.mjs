@@ -161,9 +161,16 @@ test("正式结构候选来自当前核心 HTML 资产包", async () => {
   assert.deepEqual(
     queryVisualVariants(structural, {
       logicId: "comparison", baseRelation: "comparison", purposeKey: "compare_options",
-      itemCount: 2, pointCounts: [3, 3],
+      itemCount: 2, pointCounts: [3, 3], polarities: ["negative", "positive"],
     }).map((variant) => variant.assetId),
     ["comparison-dual-verdict-001"],
+  );
+  assert.deepEqual(
+    queryVisualVariants(structural, {
+      logicId: "comparison", baseRelation: "comparison", purposeKey: "compare_options",
+      itemCount: 2, pointCounts: [3, 3], polarities: ["positive", "neutral"],
+    }),
+    [],
   );
   assert.deepEqual(
     queryVisualVariants(structural, {
@@ -317,6 +324,7 @@ test("视觉导演仍需明确选择循环闭环 Structure Group", async () => {
       purposeKey: "compare_options",
       itemCount: 2,
       pointCounts: [3, 3],
+      polarities: ["positive", "negative"],
       visualStructureGroupId: "comparison-dual-verdict",
     },
     {

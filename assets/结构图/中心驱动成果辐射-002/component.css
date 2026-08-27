@@ -23,6 +23,9 @@ body { color: #284b67; background: transparent; font-family: var(--ppagent-font-
 .node-accent { position: absolute; left: 0; top: 0; bottom: 0; z-index: 1; width: 4px; background: var(--tone); }
 .radial-node[data-side="left"] .node-accent { right: 0; left: auto; }
 .radial-node[data-side="top"] .node-accent, .radial-node[data-side="bottom"] .node-accent { right: 0; bottom: auto; width: auto; height: 3px; }
-.node-region { position: absolute; inset: 0; z-index: 2; --ppagent-heading-color: var(--tone); --ppagent-text-color: #5a6f7e; --ppagent-text-layout-gap: 3px; }
+.node-region { position: absolute; inset: 7px 9px 7px 15px; z-index: 2; --ppagent-heading-color: var(--tone); --ppagent-text-color: #5a6f7e; --ppagent-text-layout-gap: 3px; }
+.radial-node[data-side="left"] .node-region { inset: 7px 15px 7px 9px; }
+.radial-node[data-side="top"] .node-region,
+.radial-node[data-side="bottom"] .node-region { inset: 7px 14px; }
 .node-region .ppagent-text-primitive--heading { color: var(--tone); font-size: var(--ppagent-component-label-size, 17pt); line-height: 1.14; }
 .node-region .ppagent-text-primitive--body { color: #5a6f7e; font-size: var(--ppagent-component-meta-size, 15pt); line-height: 1.22; }
