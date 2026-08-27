@@ -4,24 +4,27 @@
   "kind": "component",
   "category": "结构图",
   "creationMethod": "distillation",
-  "status": "pending-review",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
   "source": {
     "file": "PPT源/【动画版】500页创意图文排版PPT模板-深蓝版.pptx",
     "slides": [216]
   },
   "runtime": {
     "renderer": "html-component",
-    "entry": "review.mjs",
+    "entry": "runtime.mjs",
     "componentExport": "visualComponent",
     "previewParametersExport": "previewParameters",
     "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
     "logicId": "progression",
     "structureGroupId": "progression-growth-curve",
     "familyId": "progression",
     "variantId": "faceted-mountain-road-progression",
     "silhouette": "large-low-poly-mountain-with-winding-ascent-route",
     "supportedBaseRelations": ["progression"],
-    "supportedPurposeKeys": ["cover_expression_gap"],
+    "supportedPurposeKeys": ["explain_evolution"],
     "itemCount": { "min": 3, "preferred": [4, 5], "max": 6 },
     "stateContract": { "resolver": "pointCount", "states": [3, 4, 5, 6], "previewDefault": 5 },
     "contentContract": { "itemRole": "semantic-node", "points": "forbidden", "ordered": true },
@@ -30,7 +33,7 @@
       "adaptationStatus": "adaptive",
       "constraints": {
         "semantic": { "ordered": true },
-        "relationTraits": { "progression": true, "continuousAscent": true },
+        "relationTraits": {},
         "density": ["medium"]
       }
     },
@@ -42,6 +45,9 @@
       "previewResolverExport": "resolvePreviewParameters",
       "implementation": "asset-specific-html",
       "goldenState": { "selection": { "pointCount": 5 } },
+      "exampleSelections": [
+        { "pointCount": 5 }
+      ],
       "controls": [
         { "key": "pointCount", "label": "里程点数", "values": [3, 4, 5, 6], "default": 5 }
       ]
@@ -51,15 +57,15 @@
   "layoutExpansion": {
     "mode": "responsive",
     "range": "3–6 个沿山路上升的里程点",
-    "rule": "按里程点数共同求解连续山脊、局部峰顶与上升路径；每个里程点落在对应的小山头上"
+    "rule": "按里程点数共同求解共享山脊、非等距峰谷、跨峰低多边形切面与上升路径；山体使用同一蓝色色相的不同明度构成，不把每个节点复制成同构山峰"
   },
   "componentModel": {
-    "fixed": ["由连续局部山峰组成的低多边形抽象山体", "由山脚通向峰顶的上升路径", "里程点与局部峰顶重合", "高度持续增加"],
+    "fixed": ["由同色阶多边形交叠构成的连续山脉", "由山脚通向峰顶的上升路径", "里程点与关键局部峰顶重合", "高度持续增加"],
     "variable": ["3–6 个里程点", "节点标题与说明"]
   },
   "fieldContract": {
     "editable": [{ "field": "points[]", "meaning": "依次上升的里程点标题与说明" }],
-    "generated": [{ "field": "layout", "meaning": "按点数共同计算山脊分面、局部峰顶、上升路径和文字区域" }],
+    "generated": [{ "field": "layout", "meaning": "按点数共同计算峰谷、低多边形色面、上升路径和文字区域" }],
     "fixed": ["阅读方向从山脚到峰顶", "节点表示持续进阶而非硬性门槛"],
     "unavailable": ["明确成熟度等级", "时间事件排期", "双轨同步进阶"]
   },
@@ -70,12 +76,12 @@
     "minimumFrame": { "width": 1170, "height": 492 },
     "preferredFrame": { "width": 1170, "height": 492 },
     "resizeMode": "natural",
-    "minFontSize": 15,
+    "minFontSize": 12,
     "safePadding": 10,
     "supportedCompositionIds": ["component-full"]
   },
   "capacity": "3–6 个里程点；标题 10 字，说明 22 字",
   "semanticContract": "对象沿一个持续向上的路径逐步积累和突破，节点是里程点而不是严格等级门槛",
   "doNotUseWhen": "存在明确准入等级、重点是时间事件、趋势并非单调上升或需要两条并行轨道",
-  "review": "等待用户审核山体构成、山路递进语义及 3–6 点扩散；未生成 Native PPT"
+  "review": "用户确认连续山脊、低多边形明暗构成、主折脊与坡肩山腰次级色块、最高峰雪面和旗杆层级，以及 3–6 点扩散；Native/PPT 与东北大学 Skin 同步落地，可进入正式生成线"
 }

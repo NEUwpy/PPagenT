@@ -23,6 +23,10 @@ function pointAt(index, count) {
   };
 }
 
+function pointsAttribute(points) {
+  return points.map((point) => `${point.x.toFixed(1)},${point.y.toFixed(1)}`).join(" ");
+}
+
 function interpolate(from, to, ratio) {
   return {
     x: from.x + (to.x - from.x) * ratio,
@@ -30,65 +34,124 @@ function interpolate(from, to, ratio) {
   };
 }
 
-function pointsAttribute(points) {
-  return points.map((point) => `${point.x.toFixed(1)},${point.y.toFixed(1)}`).join(" ");
-}
-
 function mountainMarkup(peaks) {
   const baseY = 460;
   const leftEdge = { x: 28, y: baseY };
   const rightEdge = { x: 1138, y: baseY };
-  const valleys = peaks.slice(0, -1).map((peak, index) => {
-    const next = peaks[index + 1];
+  const profiles = [
+    { left: .31, right: .29, leftDrop: .27, rightDrop: .23, valley: .50, split: .46 },
+    { left: .27, right: .34, leftDrop: .20, rightDrop: .29, valley: .46, split: .55 },
+    { left: .34, right: .27, leftDrop: .39, rightDrop: .32, valley: .53, split: .43 },
+    { left: .28, right: .35, leftDrop: .24, rightDrop: .31, valley: .48, split: .58 },
+    { left: .33, right: .26, leftDrop: .37, rightDrop: .29, valley: .52, split: .45 },
+    { left: .28, right: .31, leftDrop: .31, rightDrop: .25, valley: .47, split: .54 },
+  ];
+  const shoulders = peaks.map((peak, index) => {
+    const previousX = index === 0 ? leftEdge.x : peaks[index - 1].x;
+    const nextX = index === peaks.length - 1 ? rightEdge.x : peaks[index + 1].x;
+    const profile = profiles[index];
     return {
-      x: (peak.x + next.x) / 2,
-      y: Math.min(baseY - 24, (peak.y + next.y) / 2 + 72),
+      left: {
+        x: peak.x - (peak.x - previousX) * profile.left,
+        y: peak.y + (baseY - peak.y) * profile.leftDrop,
+      },
+      right: {
+        x: peak.x + (nextX - peak.x) * profile.right,
+        y: peak.y + (baseY - peak.y) * profile.rightDrop,
+      },
     };
   });
-
-  return peaks.map((peak, index) => {
-    const left = index === 0 ? leftEdge : valleys[index - 1];
-    const right = index === peaks.length - 1 ? rightEdge : valleys[index];
-    const baseLeft = index === 0 ? leftEdge : { x: valleys[index - 1].x, y: baseY };
-    const baseRight = index === peaks.length - 1 ? rightEdge : { x: valleys[index].x, y: baseY };
-    const split = {
-      x: peak.x + (index % 2 === 0 ? 18 : -18),
-      y: peak.y + (baseY - peak.y) * (0.48 + (index % 3) * 0.035),
+  const ridge = [leftEdge];
+  peaks.forEach((peak, index) => {
+    ridge.push(shoulders[index].left, peak, shoulders[index].right);
+    if (index >= peaks.length - 1) return;
+    const nextLeft = shoulders[index + 1].left;
+    const profile = profiles[index];
+    ridge.push({
+      x: shoulders[index].right.x + (nextLeft.x - shoulders[index].right.x) * profile.valley,
+      y: Math.min(baseY - 18, Math.max(shoulders[index].right.y, nextLeft.y) + 17 + (index % 2) * 5),
+    });
+  });
+  ridge.push(rightEdge);
+  const silhouette = [...ridge, rightEdge, leftEdge];
+  const lightTones = ["#dce7ec", "#d1dfe5", "#c7d8df", "#d4e2e8", "#bfd2db", "#c9d9e1"];
+  const detailTones = ["#ccdce3", "#c0d2da", "#afc3cd", "#bfd1d9", "#a3bbc7", "#adc4ce"];
+  const shadeTones = ["#b7cbd5", "#a9c0cc", "#9fb8c5", "#aec4cf", "#91aebb", "#9cb7c4"];
+  const detailSides = ["none", "left", "right", "left", "right", "left"];
+  const facets = [];
+  peaks.forEach((peak, index) => {
+    const leftRidgeIndex = index === 0 ? 0 : index * 4;
+    const peakRidgeIndex = index * 4 + 2;
+    const rightRidgeIndex = index === peaks.length - 1 ? ridge.length - 1 : index * 4 + 4;
+    const leftBoundary = ridge[leftRidgeIndex];
+    const rightBoundary = ridge[rightRidgeIndex];
+    const profile = profiles[index];
+    const splitAnchor = {
+      x: leftBoundary.x + (rightBoundary.x - leftBoundary.x) * profile.split,
+      y: baseY - 8 - (index % 3) * 8,
     };
-    const leftShoulder = interpolate(peak, left, 0.34);
-    const rightShoulder = interpolate(peak, right, 0.31);
-    const capCenter = {
-      x: peak.x + (index % 2 === 0 ? 4 : -5),
-      y: peak.y + Math.min(34, (baseY - peak.y) * 0.18),
-    };
-    const tone = index % 5;
+    const leftBase = { x: leftBoundary.x, y: baseY };
+    const rightBase = { x: rightBoundary.x, y: baseY };
+    const leftFace = [leftBase, ...ridge.slice(leftRidgeIndex, peakRidgeIndex + 1), splitAnchor];
+    const rightFace = [splitAnchor, ...ridge.slice(peakRidgeIndex, rightRidgeIndex + 1), rightBase];
+    facets.push(`<polygon class="facet mountain-face mountain-face--light" fill="${lightTones[index]}" points="${pointsAttribute(leftFace)}" data-ppt-kind="path" data-ppt-name="mountain-${index + 1}-light-face"/>`);
+    facets.push(`<polygon class="facet mountain-face mountain-face--shade" fill="${shadeTones[index]}" points="${pointsAttribute(rightFace)}" data-ppt-kind="path" data-ppt-name="mountain-${index + 1}-shade-face"/>`);
 
-    return `<g class="mountain-cell mountain-cell--${tone}">
-      <polygon class="facet facet-left" points="${pointsAttribute([left, peak, split, baseLeft])}"/>
-      <polygon class="facet facet-right" points="${pointsAttribute([peak, right, baseRight, split])}"/>
-      <polygon class="facet facet-lower" points="${pointsAttribute([baseLeft, split, baseRight])}"/>
-      <polygon class="facet facet-cap" points="${pointsAttribute([peak, rightShoulder, capCenter, leftShoulder])}"/>
-      <polyline class="ridge-seam" points="${pointsAttribute([leftShoulder, peak, rightShoulder])}"/>
-    </g>`;
-  }).join("");
+    const detailSide = detailSides[index];
+    const seamMid = interpolate(peak, splitAnchor, .52 + (index % 3) * .07);
+    if (detailSide === "left") {
+      const detailFace = [leftBase, leftBoundary, shoulders[index].left, seamMid, splitAnchor];
+      facets.push(`<polygon class="facet mountain-face mountain-face--detail" fill="${detailTones[index]}" points="${pointsAttribute(detailFace)}" data-ppt-kind="path" data-ppt-name="mountain-${index + 1}-slope-detail"/>`);
+    } else if (detailSide === "right") {
+      const detailFace = [splitAnchor, seamMid, shoulders[index].right, rightBoundary, rightBase];
+      facets.push(`<polygon class="facet mountain-face mountain-face--detail" fill="${detailTones[index]}" points="${pointsAttribute(detailFace)}" data-ppt-kind="path" data-ppt-name="mountain-${index + 1}-slope-detail"/>`);
+    }
+  });
+
+  const finalPeak = peaks.at(-1);
+  const finalShoulders = shoulders.at(-1);
+  const snowLeftEdge = interpolate(finalPeak, finalShoulders.left, .39);
+  const snowRightEdge = interpolate(finalPeak, finalShoulders.right, .40);
+  const snowDivide = { x: finalPeak.x + 5, y: finalPeak.y + 48 };
+  const snowLeftNotch = { x: finalPeak.x - 18, y: finalPeak.y + 51 };
+  const snowRightNotch = { x: finalPeak.x + 22, y: finalPeak.y + 55 };
+  const snow = `<polygon class="snow-face snow-face--light" points="${pointsAttribute([finalPeak, snowLeftEdge, snowLeftNotch, snowDivide])}" data-ppt-kind="path" data-ppt-name="summit-snow-light"/>
+    <polygon class="snow-face snow-face--shade" points="${pointsAttribute([finalPeak, snowDivide, snowRightNotch, snowRightEdge])}" data-ppt-kind="path" data-ppt-name="summit-snow-shade"/>`;
+  const foreground = [
+    { x: leftEdge.x, y: baseY },
+    { x: peaks[Math.max(0, peaks.length - 3)].x - 42, y: baseY - 18 },
+    { x: peaks[Math.max(0, peaks.length - 2)].x + 18, y: baseY - 54 },
+    { x: rightEdge.x, y: baseY - 16 },
+    rightEdge,
+  ];
+
+  return `<polygon class="mountain-base" points="${pointsAttribute(silhouette)}" data-ppt-kind="path" data-ppt-name="mountain-silhouette-base"/>
+    ${facets.join("")}
+    <polygon class="foreground-plane" points="${pointsAttribute(foreground)}" data-ppt-kind="path" data-ppt-name="mountain-foreground-plane"/>
+    ${snow}
+    <polyline class="ridge-seam" points="${pointsAttribute(ridge)}" data-ppt-kind="path" data-ppt-name="mountain-ridge-outline"/>`;
 }
 
 function labelMarkup(point, index, count, position) {
   const isLast = index === count - 1;
-  const isCrowdedPenultimate = count === 6 && index === count - 2;
+  const isPenultimate = count >= 5 && index === count - 2;
   const left = isLast
-    ? Math.max(12, position.x - 180)
-    : isCrowdedPenultimate
-      ? Math.max(12, position.x - 195)
+    ? Math.max(12, position.x - 170)
+    : isPenultimate
+      ? Math.max(12, position.x - 174)
       : Math.max(12, Math.min(990, position.x - 80));
-  const top = Math.max(5, position.y - 94);
+  const top = isLast
+    ? Math.max(24, position.y - 80)
+    : isPenultimate
+      ? Math.min(FRAME.height - 82, position.y - 50)
+      : Math.max(5, position.y - 94);
   return `${textRegionMarkup({
     id: `${point.key}-text`, field: `points[${index}]`, itemId: point.key, regionId: `milestone-${index + 1}`,
     layoutId: "heading-content-flow",
     compatibleLayoutIds: ["statement-flow", "heading-content-flow"], content: { heading: point.title, body: point.body },
     className: `milestone-copy${isLast ? " milestone-copy--last" : ""}`, align: "left", valign: "bottom", density: "compact", tone: "dark",
   }).replace(`class="ppagent-text-region milestone-copy${isLast ? " milestone-copy--last" : ""}"`, `class="ppagent-text-region milestone-copy${isLast ? " milestone-copy--last" : ""}" style="left:${left}px;top:${top}px"`)}
-  <div class="milestone-node" style="left:${position.x - 20}px;top:${position.y - 20}px">${String(index + 1).padStart(2, "0")}</div>`;
+  <div class="milestone-node" style="left:${position.x - 20}px;top:${position.y - 20}px" data-ppt-kind="shape-text" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="mountain-milestone-${index + 1}">${String(index + 1).padStart(2, "0")}</div>`;
 }
 
 function routePath(points) {
@@ -110,7 +173,9 @@ export const visualComponent = Object.freeze({
     const points = normalize(parameters);
     const positions = points.map((_, index) => pointAt(index, points.length));
     const route = routePath(positions);
-    return `<section class="mountain-progress" data-ppt-root data-point-count="${points.length}"><svg class="mountain-art" viewBox="0 0 1170 492" aria-hidden="true"><defs><linearGradient id="mountain-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7fafc"/><stop offset="1" stop-color="#edf3f7"/></linearGradient></defs><rect width="1170" height="492" fill="url(#mountain-sky)" rx="22"/>${mountainMarkup(positions)}<path class="route-shadow" d="${route}"/><path class="route-line" d="${route}"/></svg>${points.map((point, index) => labelMarkup(point, index, points.length, positions[index])).join("")}<div class="summit-mark" style="left:${positions.at(-1).x - 6}px;top:${positions.at(-1).y - 56}px"><span></span></div></section>`;
+    const summit = positions.at(-1);
+    const flag = `<line class="summit-pole" x1="${summit.x}" y1="${summit.y - 54}" x2="${summit.x}" y2="${summit.y + 3}" data-ppt-kind="shape" data-ppt-shape="line" data-ppt-name="summit-flag-pole"/><polygon class="summit-flag" points="${summit.x},${summit.y - 54} ${summit.x + 32},${summit.y - 45} ${summit.x},${summit.y - 36}" data-ppt-kind="path" data-ppt-name="summit-flag"/>`;
+    return `<section class="mountain-progress" data-ppt-root data-point-count="${points.length}"><svg class="mountain-art" viewBox="0 0 1170 492" aria-hidden="true">${mountainMarkup(positions)}${flag}<path class="route-shadow" d="${route}" data-ppt-kind="path" data-ppt-name="mountain-route-halo"/><path class="route-line" d="${route}" data-ppt-kind="path" data-ppt-name="mountain-route"/></svg>${points.map((point, index) => labelMarkup(point, index, points.length, positions[index])).join("")}</section>`;
   },
 });
 
