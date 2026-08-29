@@ -1,7 +1,10 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { inspectAssetIntakeState } from "./asset-intake-state.mjs";
 import { inspectHtmlComponentEligibility } from "./html-component-eligibility.mjs";
+import { inspectCoreAssetReachability } from "./core-asset-reachability.mjs";
+import { assertAssetManifestContract } from "./asset-manifest-contract.mjs";
 import { summarizeTextRegionContract } from "../visual-runtime/typography-matcher.mjs";
 
 const defaultRoot = path.resolve(import.meta.dirname, "../..");
@@ -31,49 +34,16 @@ async function discoverManifestPaths(root) {
   return paths.sort((left, right) => left.localeCompare(right, "zh-CN"));
 }
 
-function validateManifest(asset, manifestPath) {
-  const runtime = asset.runtime;
-  const renderer = runtime.renderer;
-  requireValue(new Set(["skin", "html-component", "legacy-builder"]).has(renderer), `${asset.id} 的 runtime.renderer 非法或缺失`);
-  requireValue(typeof asset.id === "string" && asset.id, `${manifestPath} 缺少资产 id`);
-  requireValue(typeof runtime.entry === "string" && runtime.entry, `${asset.id} 缺少 runtime.entry`);
-  requireValue(typeof runtime.mapperExport === "string" && runtime.mapperExport, `${asset.id} 缺少 mapperExport`);
-  if (renderer !== "skin") requireValue(typeof runtime.logicId === "string" && runtime.logicId, `${asset.id} 缺少 logicId`);
-  if (renderer !== "skin") requireValue(typeof runtime.structureGroupId === "string" && runtime.structureGroupId, `${asset.id} 缺少 structureGroupId`);
-  requireValue(typeof runtime.familyId === "string" && runtime.familyId, `${asset.id} 缺少 familyId`);
-  requireValue(typeof runtime.variantId === "string" && runtime.variantId, `${asset.id} 缺少 variantId`);
-  requireValue(typeof runtime.silhouette === "string" && runtime.silhouette, `${asset.id} 缺少 silhouette`);
-  requireValue(Array.isArray(runtime.supportedBaseRelations), `${asset.id} 缺少 supportedBaseRelations`);
-  requireValue(Number.isInteger(runtime.itemCount?.min) && Number.isInteger(runtime.itemCount?.max), `${asset.id} 缺少 itemCount 范围`);
-  if (runtime.contentContract) {
-    requireValue(runtime.contentContract.itemRole === "semantic-node", `${asset.id} 的 contentContract.itemRole 必须是 semantic-node`);
-    requireValue(new Set(["forbidden", "optional", "required"]).has(runtime.contentContract.points), `${asset.id} 的 contentContract.points 非法`);
-    if (runtime.contentContract.bindings) {
-      requireValue(Array.isArray(runtime.contentContract.bindings), `${asset.id} 的 contentContract.bindings 必须是数组`);
-      for (const binding of runtime.contentContract.bindings) {
-        requireValue(typeof binding.id === "string" && binding.id, `${asset.id} 的 binding 缺少 id`);
-        requireValue(binding.scope === "per-component-item", `${asset.id}:${binding.id} 的 binding.scope 暂只支持 per-component-item`);
-        requireValue(binding.valueType === "text-list", `${asset.id}:${binding.id} 的 binding.valueType 暂只支持 text-list`);
-        requireValue(Number.isInteger(binding.minItems) && Number.isInteger(binding.maxItems)
-          && binding.minItems >= 1 && binding.maxItems >= binding.minItems,
-        `${asset.id}:${binding.id} 的条目范围非法`);
-        requireValue(Number.isInteger(binding.maxChars) && binding.maxChars > 0, `${asset.id}:${binding.id} 缺少 maxChars`);
-        requireValue(binding.grounding === "source-fragment", `${asset.id}:${binding.id} 的 grounding 非法`);
-      }
-    }
-  }
-  if (runtime.slotContract) {
-    requireValue(runtime.slotContract.schemaVersion === "1.0", `${asset.id} 的 slotContract.schemaVersion 非法`);
-    requireValue(runtime.slotContract.coordinateSpace === "design-frame", `${asset.id} 的 slotContract.coordinateSpace 必须是 design-frame`);
-    requireValue(typeof runtime.slotContract.resolverExport === "string" && runtime.slotContract.resolverExport, `${asset.id} 的 slotContract 缺少 resolverExport`);
-    requireValue(typeof runtime.slotContract.binding === "string" && runtime.slotContract.binding, `${asset.id} 的 slotContract 缺少 binding`);
-    requireValue(runtime.slotContract.maxDepth === 1, `${asset.id} 的 slotContract.maxDepth 当前只允许 1`);
-    requireValue(runtime.slotContract.childPolicy === "registered-core-only", `${asset.id} 的 slotContract.childPolicy 必须是 registered-core-only`);
-    requireValue(runtime.slotContract.fallback === "plain-text", `${asset.id} 的 slotContract.fallback 必须是 plain-text`);
+async function readLogicMap(root) {
+  try {
+    return JSON.parse(await fs.readFile(path.join(root, "catalog", "logic-map.json"), "utf8"));
+  } catch (error) {
+    if (error.code === "ENOENT") return { logics: [] };
+    throw error;
   }
 }
 
-async function loadDescriptor(manifestPath) {
+async function loadDescriptor(manifestPath, logicMap, root) {
   let asset;
   try {
     asset = JSON.parse(await fs.readFile(manifestPath, "utf8"));
@@ -83,11 +53,17 @@ async function loadDescriptor(manifestPath) {
   }
   if (asset.status !== "core" || !asset.runtime) return null;
   const assetDir = path.dirname(manifestPath);
-  if (asset.runtime.renderer === "html-component") {
-    const eligibility = await inspectHtmlComponentEligibility(assetDir, asset.id);
-    if (!eligibility.eligible) return null;
+  if (asset.intake?.schemaVersion === "1.0") {
+    const intakeState = await inspectAssetIntakeState({ asset, assetDir, logicMap, root });
+    if (!intakeState.coreConsistent) return null;
+  } else {
+    if (asset.runtime.renderer === "html-component") {
+      const eligibility = await inspectHtmlComponentEligibility(assetDir, asset.id);
+      if (!eligibility.eligible) return null;
+    }
+    assertAssetManifestContract(asset, manifestPath);
+    if (!inspectCoreAssetReachability(asset).reachable) return null;
   }
-  validateManifest(asset, manifestPath);
   const entryPath = path.resolve(assetDir, asset.runtime.entry);
   requireValue(inside(assetDir, entryPath), `${asset.id} 的运行入口必须位于资产目录内`);
   return {
@@ -129,7 +105,9 @@ export async function discoverCoreAssetPackages(root = defaultRoot) {
   const resolvedRoot = path.resolve(root);
   if (!indexCache.has(resolvedRoot)) {
     indexCache.set(resolvedRoot, (async () => {
-      const packages = (await Promise.all((await discoverManifestPaths(resolvedRoot)).map(loadDescriptor)))
+      const logicMap = await readLogicMap(resolvedRoot);
+      const packages = (await Promise.all((await discoverManifestPaths(resolvedRoot))
+        .map((manifestPath) => loadDescriptor(manifestPath, logicMap, resolvedRoot))))
         .filter(Boolean);
       const ids = new Set();
       for (const item of packages) {

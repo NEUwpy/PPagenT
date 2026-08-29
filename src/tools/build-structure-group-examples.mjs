@@ -8,6 +8,7 @@ import {
   compileResolvedVisualTree,
   resolveHtmlComponent,
 } from "../visual-runtime/html-component-runtime.mjs";
+import { inspectHtmlComponentEligibility } from "../runtime/html-component-eligibility.mjs";
 
 const projectRoot = path.resolve(process.argv[2] ?? path.resolve(import.meta.dirname, "../.."));
 const assetFilter = new Set((process.argv.find((value) => value.startsWith("--assets="))?.slice("--assets=".length) ?? "")
@@ -65,7 +66,7 @@ for (const { assetDir, manifest } of await assetManifests()) {
   const runtime = manifest.runtime ?? {};
   const review = runtime.review;
   if (
-    manifest.status !== "core"
+    !new Set(["pending-review", "core"]).has(manifest.status)
     || (assetFilter.size && !assetFilter.has(manifest.id))
     || !runtime.entry
     || (runtime.renderer === "legacy-builder" && !runtime.builderExport)
@@ -75,6 +76,10 @@ for (const { assetDir, manifest } of await assetManifests()) {
     || !Array.isArray(review.controls)
     || !review.controls.length
   ) continue;
+  if (runtime.renderer === "html-component") {
+    const eligibility = await inspectHtmlComponentEligibility(assetDir, manifest.id);
+    if (!eligibility.htmlApproved) continue;
+  } else if (manifest.status !== "core") continue;
 
   const [runtimeModule, reviewModule] = await Promise.all([
     importFresh(path.resolve(assetDir, runtime.entry)),

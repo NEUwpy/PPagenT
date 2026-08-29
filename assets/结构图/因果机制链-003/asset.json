@@ -1,1 +1,200 @@
-{"id":"causal-mediator-chain-003","name":"因果机制链","kind":"component","category":"结构图","creationMethod":"distillation","status":"pending-review","source":{"file":"PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx","slides":[91]},"runtime":{"renderer":"html-component","entry":"review.mjs","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","logicId":"causal","structureGroupId":"causal-mediator-chain","familyId":"causal","variantId":"trigger-mediators-outcome","silhouette":"trigger-through-mediators-to-outcome","supportedBaseRelations":["causal"],"supportedPurposeKeys":["analyze_causes"],"itemCount":{"min":2,"preferred":[3,4],"max":4},"stateContract":{"resolver":"mediatorCount","states":[2,3,4],"previewDefault":3},"contentContract":{"itemRole":"causal-mediator","points":"forbidden","ordered":true},"contract":{"abstractionLevel":"foundation","adaptationStatus":"adaptive","constraints":{"relationTraits":{"causal":true,"mediation":true},"density":["medium"]}},"review":{"entry":"review.mjs","visualIntent":"visual-intent.md","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","implementation":"asset-specific-html","goldenState":{"selection":{"mediatorCount":3}},"controls":[{"key":"mediatorCount","label":"中介机制数","values":[2,3,4],"default":3}]}},"coverageDelta":"补齐鱼骨图的并列归因和 5Why 的反向追问之外，缺少从起始条件经明确中介机制正向导致结果的表达；本组固定触发—机制—结果三类内容角色。","layoutExpansion":{"mode":"responsive","range":"起始条件 1 个、中介机制 2–4 个、结果 1 个","rule":"按机制数重算卡宽和箭头间距，方向始终从左到右"},"componentModel":{"fixed":["左侧起始条件","中部连续机制","右侧结果","每段箭头标示作用"],"variable":["2–4 个机制","条件、机制和结果文本","卡宽"]},"fieldContract":{"editable":[{"field":"trigger","meaning":"起始条件"},{"field":"mediators[].title/body","meaning":"中介机制"},{"field":"outcome","meaning":"最终结果"}],"generated":[],"fixed":["因果方向从条件经机制到结果"],"unavailable":["反向为什么追问","并列原因类别","相关性无机制"]},"spatialContract":{"coordinateSystem":{"width":1280,"height":720},"contentFrame":{"left":55,"top":166,"width":1170,"height":492},"aspectRatio":2.378,"minimumFrame":{"width":1170,"height":492},"preferredFrame":{"width":1170,"height":492},"resizeMode":"natural","minFontSize":15,"safePadding":10,"supportedCompositionIds":["component-full"]},"capacity":"2–4 个机制；两端标题 10 字、说明 24 字，机制标题 8 字、说明 24 字","semanticContract":"一个起始条件通过若干可解释的中介机制逐步作用，最终导致一个结果","doNotUseWhen":"只是反向追问根因、原因彼此并列、缺少可说明的机制或只有相关性","review":"等待用户审核 HTML；未生成 Native PPT"}
+{
+  "id": "causal-mediator-chain-003",
+  "name": "因果机制链",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
+    "slides": [
+      123
+    ]
+  },
+  "references": [
+    {
+      "file": "PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
+      "slides": [
+        123
+      ],
+      "role": "连续传导主骨架",
+      "adopted": "吸收上升箭带承载连续动作、节点嵌入同一主路径以及端点收束的构图关系"
+    },
+    {
+      "file": "PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
+      "slides": [
+        145
+      ],
+      "role": "阶段同步与阅读秩序",
+      "adopted": "吸收单一横向路径、阶段节点与辅助内容同步对齐的阅读秩序"
+    }
+  ],
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "causal",
+    "structureGroupId": "causal-mediator-chain",
+    "familyId": "causal",
+    "variantId": "trigger-mediators-outcome",
+    "silhouette": "rising-ribbon-with-disc-nodes-and-staircase-notes",
+    "supportedBaseRelations": [
+      "causal"
+    ],
+    "supportedPurposeKeys": [
+      "analyze_causes"
+    ],
+    "itemCount": {
+      "min": 2,
+      "preferred": [
+        3,
+        4
+      ],
+      "max": 4
+    },
+    "stateContract": {
+      "resolver": "mediatorCount",
+      "states": [
+        2,
+        3,
+        4
+      ],
+      "previewDefault": 3
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "forbidden",
+      "ordered": true
+    },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "relationTraits": {},
+        "density": [
+          "medium"
+        ]
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": {
+        "selection": {
+          "mediatorCount": 3
+        }
+      },
+      "controls": [
+        {
+          "key": "mediatorCount",
+          "label": "中介机制数",
+          "values": [
+            2,
+            3,
+            4
+          ],
+          "default": 3
+        }
+      ]
+    }
+  },
+  "coverageDelta": "补齐鱼骨图只能表达并列归因、不能表达起始条件经明确中介机制正向导致结果的缺口；本组固定触发—机制—结果三类内容角色。",
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "起始条件 1 个、中介机制 2–4 个、结果 1 个",
+    "rule": "按机制数在同一上升箭带上重新分配圆形节点，并让说明块沿相同斜率形成阶梯；方向始终从左下指向右上"
+  },
+  "componentModel": {
+    "fixed": [
+      "近端隐式起势",
+      "单条有顶面与侧面的上升箭带",
+      "圆形节点与阶梯说明块成对连接"
+    ],
+    "variable": [
+      "2–4 个机制",
+      "机制标题与说明",
+      "节点直径、间距与说明块位置"
+    ]
+  },
+  "fieldContract": {
+    "editable": [
+      {
+        "field": "mediators[].title/body",
+        "meaning": "2–4 个中介机制的标题与说明"
+      }
+    ],
+    "generated": [
+      {
+        "field": "layout",
+        "meaning": "程序按机制数量计算因果脊线、节点位置与说明连接"
+      },
+      {
+        "field": "trigger",
+        "meaning": "保留为因果语义输入，近端不显示独立起点卡"
+      },
+      {
+        "field": "outcome",
+        "meaning": "保留为因果终点语义，当前由箭头收束表达，不显示独立文字或标线"
+      }
+    ],
+    "fixed": [
+      "因果方向从条件经机制到结果"
+    ],
+    "unavailable": [
+      "反向为什么追问",
+      "并列原因类别",
+      "相关性无机制",
+      "反馈回路"
+    ]
+  },
+  "spatialContract": {
+    "coordinateSystem": {
+      "width": 1280,
+      "height": 720
+    },
+    "contentFrame": {
+      "left": 55,
+      "top": 166,
+      "width": 1170,
+      "height": 492
+    },
+    "aspectRatio": 2.378,
+    "minimumFrame": {
+      "width": 1170,
+      "height": 492
+    },
+    "preferredFrame": {
+      "width": 1170,
+      "height": 492
+    },
+    "resizeMode": "natural",
+    "minFontSize": 12,
+    "safePadding": 10,
+    "supportedCompositionIds": [
+      "component-full"
+    ]
+  },
+  "capacity": "2–4 个机制；机制标题 8 字、说明 24 字",
+  "semanticContract": "一个起始条件通过若干可解释的中介机制逐步作用，最终导致一个结果",
+  "doNotUseWhen": "原因彼此并列、缺少可说明的中介机制、只有相关性、主要表达反馈回路或中间项只是事件步骤",
+  "review": "用户已通过 HTML、Native/PPT 与东北大学 Skin 二次审核；三项和四项共享同一透视模型，右下结果文字与附加标线保持移除，正式进入核心库",
+  "intake": {
+    "schemaVersion": "1.0",
+    "state": "registered",
+    "witness": {
+      "logicId": "causal",
+      "baseRelation": "causal",
+      "purposeKey": "analyze_causes",
+      "itemCount": 3
+    }
+  }
+}

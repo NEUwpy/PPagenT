@@ -16,7 +16,8 @@
     "baseRelation": {
       "enum": [
         "parallel", "sequence", "cycle", "hierarchy", "comparison", "matrix",
-        "hub", "layered", "progression", "causal", "convergence", "branching", "network", "composite", "none", "other"
+        "hub", "layered", "progression", "causal", "convergence", "branching", "network",
+        "intersection", "goal-alignment", "composite", "none", "other"
       ]
     },
     "relationTraits": {
@@ -29,7 +30,8 @@
         "converging": { "type": "boolean" },
         "branched": { "type": "boolean" },
         "dimensions": { "type": "integer", "minimum": 1, "maximum": 3 },
-        "secondaryDimension": { "enum": ["none", "role", "time", "layer", "category", "domain", "other"] }
+        "secondaryDimension": { "enum": ["none", "role", "time", "layer", "category", "domain", "other"] },
+        "progressionMode": { "enum": ["growth-path", "continuous-spectrum", "discrete-levels"] }
       }
     },
     "structure": {

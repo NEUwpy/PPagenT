@@ -46,13 +46,13 @@
     "supportedBaseRelations": ["parallel"],
     "supportedPurposeKeys": ["present_parallel_points", "explain_topics"],
     "itemCount": {
-      "min": 3,
-      "preferred": [3, 4, 5],
+      "min": 2,
+      "preferred": [2, 3, 4, 5],
       "max": 5
     },
     "stateContract": {
       "resolver": "itemCount",
-      "states": [3, 4, 5],
+      "states": [2, 3, 4, 5],
       "previewDefault": 4
     },
     "mediaContract": {
@@ -94,7 +94,7 @@
         {
           "key": "itemCount",
           "label": "并列项目数",
-          "values": [3, 4, 5],
+          "values": [2, 3, 4, 5],
           "default": 4
         }
       ]
@@ -102,7 +102,7 @@
   },
   "layoutExpansion": {
     "mode": "responsive",
-    "range": "同一 Structure Group 支持 3–5 项；每个状态重新计算卡片宽度、间距与整体居中位置",
+    "range": "同一 Structure Group 支持 2–5 项；每个状态重新计算卡片宽度、间距与整体居中位置",
     "rule": "所有项目等宽、等高、等距并围绕共同中轴居中；不得把顺序、中心或层级关系混入本组"
   },
   "componentModel": {
@@ -112,7 +112,7 @@
       "完整浅蓝灰承载面、轻阴影与稳定内部留白"
     ],
     "variable": [
-      "3–5 个同级要点的标题和正文",
+      "2–5 个同级要点的标题和正文",
       "由视觉导演提供语义短语、本地 Top 1 检索后填入的线性图标",
       "项目数变化时由同一 HTML 组件重新计算栅格，不隐藏预设槽位"
     ]
@@ -122,7 +122,7 @@
       {
         "field": "items.length",
         "source": "PageContent.items.length",
-        "meaning": "选择 3、4 或 5 项 State，并触发整组重新排布"
+        "meaning": "选择 2、3、4 或 5 项 State，并触发整组重新排布"
       },
       {
         "field": "items[].title",
@@ -164,6 +164,7 @@
     "minimumFrame": { "width": 1170, "height": 492 },
     "preferredFrame": { "width": 1170, "height": 492 },
     "stateFootprints": {
+      "2": { "width": 774, "height": 410, "basis": "component-root-visible-bounds" },
       "3": { "width": 1006, "height": 410, "basis": "component-root-visible-bounds" },
       "4": { "width": 1110, "height": 410, "basis": "component-root-visible-bounds" },
       "5": { "width": 1140, "height": 410, "basis": "component-root-visible-bounds" }
@@ -173,8 +174,8 @@
     "safePadding": 12,
     "supportedCompositionIds": ["component-full"]
   },
-  "capacity": "承载 3–5 个同级要点；每项只有一个动态文字区域，标题、正文和分点均可选，实际容量由容器几何和 Skin 规范字号在编译时派生",
-  "semanticContract": "3–5 个对象处于同一层级，彼此没有先后、因果、中心支撑或上下级关系",
+  "capacity": "承载 2–5 个同级要点；每项只有一个动态文字区域，标题、正文和分点均可选，实际容量由容器几何和 Skin 规范字号在编译时派生",
+  "semanticContract": "2–5 个对象处于同一层级，彼此没有先后、因果、中心支撑或上下级关系",
   "doNotUseWhen": "内容存在正反比较、步骤顺序、中心辐射、问题—措施或层级关系",
-  "review": "用户已确认 HTML 黄金状态、3–5 项扩散状态及 Native/东北大学主题结果，同意进入核心资产库"
+  "review": "用户已确认 HTML 黄金状态、2–5 项扩散状态及 Native/东北大学主题结果，同意进入核心资产库"
 }

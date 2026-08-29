@@ -179,6 +179,12 @@ function routingError(message, details = {}) {
   return error;
 }
 
+function mediaBurden(candidate) {
+  const mode = candidate.mediaContract?.mode ?? "no-image";
+  if (mode === "no-image") return 0;
+  return candidate.mediaContract?.requiredPerComponentItem ? 2 : 1;
+}
+
 export function expandVisualSkillRouting(routing, input) {
   const byPage = new Map();
   for (const selection of routing?.selections ?? []) {
@@ -188,6 +194,7 @@ export function expandVisualSkillRouting(routing, input) {
   const visualPages = [];
   const compositionPages = [];
   const semanticRefinementRequests = [];
+  const structureUsage = new Map();
 
   input.pageContents.forEach((page, index) => {
     const intent = input.pageIntents[index];
@@ -199,13 +206,34 @@ export function expandVisualSkillRouting(routing, input) {
     if (!selectedCandidate) throw routingError("视觉路由选择了该页不存在的 Structure Group", {
       pageId: page.pageId, candidateId: selection.candidateId,
     });
+    const validItemIds = new Set(page.items.map((item) => item.id));
+    const refinementItemIds = [...new Set(selection.refinementItemIds ?? [])]
+      .filter((itemId) => validItemIds.has(itemId));
     const readyCoreCandidates = input.candidateSets[index].candidates.filter((item) => (
       !item.fallbackBody && (item.contentReadiness ?? "ready") === "ready"
     ));
-    const candidate = readyCoreCandidates.length === 1 ? readyCoreCandidates[0] : selectedCandidate;
+    let candidate = readyCoreCandidates.length === 1 ? readyCoreCandidates[0] : selectedCandidate;
+    let diversityAdjusted = false;
+    if (!candidate.fallbackBody && readyCoreCandidates.length > 1) {
+      const selectedUses = structureUsage.get(candidate.assetId) ?? 0;
+      const alternatives = readyCoreCandidates
+        .filter((item) => item.assetId !== candidate.assetId)
+        .filter((item) => mediaBurden(item) <= mediaBurden(candidate))
+        .sort((left, right) => (
+          (structureUsage.get(left.assetId) ?? 0) - (structureUsage.get(right.assetId) ?? 0)
+          || left.assetId.localeCompare(right.assetId)
+        ));
+      const alternative = alternatives[0];
+      if (alternative && (structureUsage.get(alternative.assetId) ?? 0) < selectedUses) {
+        candidate = alternative;
+        diversityAdjusted = true;
+      }
+    }
+    if (!candidate.fallbackBody) {
+      structureUsage.set(candidate.assetId, (structureUsage.get(candidate.assetId) ?? 0) + 1);
+    }
     const composition = chooseComposition(candidate, page);
     if (!composition) throw routingError("Structure Group 没有可用 Composition", { pageId: page.pageId });
-    const validItemIds = new Set(page.items.map((item) => item.id));
     const iconQueries = (selection.iconQueries ?? []).filter((item) => validItemIds.has(item.sourceItemId));
     visualPages.push({
       pageId: page.pageId,
@@ -215,9 +243,11 @@ export function expandVisualSkillRouting(routing, input) {
       silhouette: candidate.silhouette,
       adaptationStatus: candidate.adaptationStatus,
       ...(candidate.mediaContract?.mode === "semantic-icon" ? { iconQueries } : {}),
-      reason: candidate === selectedCandidate
-        ? selection.reason
-        : "程序确认该页只有一个语义、数量与容量均适配的核心 Structure Group，直接调用",
+      reason: diversityAdjusted
+        ? "所选结构已在本稿使用，程序改用同页合法且使用次数更少的 Structure Group"
+        : candidate === selectedCandidate
+          ? selection.reason
+          : "程序确认该页只有一个语义、数量与容量均适配的核心 Structure Group，直接调用",
     });
     const requiresComponent = Boolean(composition.requiresComponent);
     const bindings = requiresComponent ? buildComponentBindings(candidate, page) : undefined;
@@ -245,8 +275,6 @@ export function expandVisualSkillRouting(routing, input) {
         ? "Structure Group 承担完整页面内容，字段由正式 Slot Contract 确定性绑定"
         : "当前 Logic 无适配结构，使用主题正文 Composition 承载内容",
     });
-    const refinementItemIds = [...new Set(selection.refinementItemIds ?? [])]
-      .filter((itemId) => validItemIds.has(itemId));
     if (candidate.contentReadiness === "needs-semantic-refinement" && refinementItemIds.length) {
       semanticRefinementRequests.push({
         pageId: page.pageId,

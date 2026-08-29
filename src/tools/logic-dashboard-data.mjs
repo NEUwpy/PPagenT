@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { inspectHtmlComponentEligibility } from "../runtime/html-component-eligibility.mjs";
+import { inspectAssetIntakeState } from "../runtime/asset-intake-state.mjs";
 import { academicReportShell } from "../runtime/shells/academic-report.mjs";
 import { northeasternUniversityTheme } from "../runtime/skins/northeastern-university-theme.mjs";
 import {
@@ -96,7 +96,7 @@ function itemRange(runtime) {
   return { min, max, preferred };
 }
 
-async function normalizeRecord(entry, coverageTags, purposeMap, coreIds, root) {
+async function normalizeRecord(entry, coverageTags, purposeMap, logicMap, root) {
   const { manifest, manifestPath, assetDir, library } = entry;
   const runtime = manifest.runtime ?? {};
   const reviewRuntime = runtime.review ?? (runtime.componentExport && runtime.previewParametersExport ? {
@@ -112,17 +112,22 @@ async function normalizeRecord(entry, coverageTags, purposeMap, coreIds, root) {
     }] : [],
   } : null);
   const renderer = rendererOf(manifest);
-  const htmlEligibility = renderer === "html-component"
-    ? await inspectHtmlComponentEligibility(assetDir, manifest.id)
-    : null;
+  const intakeState = await inspectAssetIntakeState({ asset: manifest, assetDir, logicMap, root });
+  const htmlEligibility = renderer === "html-component" ? intakeState.htmlEligibility : null;
+  const formalReachability = intakeState.formalReachability;
   const purposes = (runtime.supportedPurposeKeys ?? []).map((key) => ({
     key,
     description: purposeMap.get(key) ?? "",
   }));
-  const autoCallable = library === "core"
-    && ["skin", "html-component", "legacy-builder"].includes(renderer)
-    && Boolean(runtime.entry && runtime.mapperExport)
-    && (renderer !== "html-component" || htmlEligibility?.eligible === true);
+  const autoCallable = library === "core" && (
+    manifest.intake?.schemaVersion === "1.0"
+      ? intakeState.coreConsistent
+      : manifest.status === "core"
+        && ["skin", "html-component", "legacy-builder"].includes(renderer)
+        && Boolean(runtime.entry && runtime.mapperExport)
+        && (renderer !== "html-component" || htmlEligibility?.eligible === true)
+        && formalReachability.reachable
+  );
   const showcaseName = manifest.showcase || "example.pptx";
   const showcasePath = path.resolve(assetDir, showcaseName);
   const showcaseInsideAsset = !path.relative(assetDir, showcasePath).startsWith("..") && path.relative(assetDir, showcasePath) !== "";
@@ -216,6 +221,9 @@ async function normalizeRecord(entry, coverageTags, purposeMap, coreIds, root) {
     creationMethod: manifest.creationMethod ?? "",
     renderer,
     autoCallable,
+    intakeStage: intakeState.stage,
+    intakeIssues: intakeState.readinessIssues,
+    formalReachability,
     logicId: runtime.logicId ?? (renderer === "skin" ? "skin" : "未归类"),
     structureGroupId: runtime.structureGroupId ?? runtime.variantId ?? manifest.id,
     familyId: runtime.familyId ?? "",
@@ -264,6 +272,7 @@ async function normalizeRecord(entry, coverageTags, purposeMap, coreIds, root) {
     componentFidelityStatus: htmlEligibility?.stage ?? "legacy-or-unreviewed",
     hasVisualIntent: htmlEligibility?.hasVisualIntent ?? false,
     visualIntentText,
+    userApprovedHtml: htmlEligibility?.htmlApproved ?? false,
     userApprovedHtmlNative: htmlEligibility?.userApproved ?? false,
     componentGoldenState: reviewRuntime?.goldenState ?? null,
     componentPreviewUrl: hasDesignComponent
@@ -281,13 +290,13 @@ async function normalizeRecord(entry, coverageTags, purposeMap, coreIds, root) {
     nativeBuilderAvailable,
     nativeCompiledOutputAvailable,
     nativeOutputAvailable: nativeBuilderAvailable || nativeCompiledOutputAvailable,
-    nativeStatePreviewUrl: htmlEligibility?.userApproved && componentControls.length && (nativeBuilderAvailable || nativeCompiledOutputAvailable)
+    nativeStatePreviewUrl: htmlEligibility?.htmlApproved && componentControls.length && (nativeBuilderAvailable || nativeCompiledOutputAvailable)
       ? versionedUrl(`/api/native-state-preview?library=${encodeURIComponent(library)}&id=${encodeURIComponent(manifest.id)}`, componentVersion)
       : null,
-    nativeStatePptxUrl: htmlEligibility?.userApproved && componentControls.length && (nativeBuilderAvailable || nativeCompiledOutputAvailable)
+    nativeStatePptxUrl: htmlEligibility?.htmlApproved && componentControls.length && (nativeBuilderAvailable || nativeCompiledOutputAvailable)
       ? versionedUrl(`/api/native-state-pptx?library=${encodeURIComponent(library)}&id=${encodeURIComponent(manifest.id)}`, componentVersion)
       : null,
-    skinStatePreviewUrl: htmlEligibility?.userApproved && componentControls.length && (nativeBuilderAvailable || nativeCompiledOutputAvailable) && renderer !== "skin"
+    skinStatePreviewUrl: htmlEligibility?.htmlApproved && componentControls.length && (nativeBuilderAvailable || nativeCompiledOutputAvailable) && renderer !== "skin"
       ? versionedUrl(`/api/skin-state-preview?library=${encodeURIComponent(library)}&id=${encodeURIComponent(manifest.id)}`, componentVersion)
       : null,
     runtimeEntry: runtime.entry ?? "",
@@ -358,12 +367,11 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
     }
   }
   const purposeMap = new Map((purposes.purposes ?? []).map((item) => [item.key, item.description]));
-  const coreIds = new Set(coreEntries.map((entry) => entry.manifest.id));
   const records = await Promise.all(coreEntries.map((entry) => normalizeRecord(
     entry,
     coverageByAsset.get(entry.manifest.id) ?? [],
     purposeMap,
-    coreIds,
+    logicMap,
     root,
   )));
   const primaryAssets = uniqueById(records);
@@ -374,13 +382,20 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
 
   const coreAssets = records.filter((record) => record.library === "core" && record.status === "core");
   const formalLogics = coreAssets.filter((record) => record.renderer !== "skin" && record.autoCallable);
-  const pendingApproval = records.filter((record) => (
+  const formalAssetsByLogic = new Map();
+  for (const asset of formalLogics) {
+    const bucket = formalAssetsByLogic.get(asset.logicId) ?? [];
+    bucket.push(asset);
+    formalAssetsByLogic.set(asset.logicId, bucket);
+  }
+  const reviewableHtmlAssets = records.filter((record) => (
     record.status !== "superseded"
     && record.status !== "withdrawn"
     && record.renderer === "html-component"
-    && record.componentFidelityStatus
-    && record.componentFidelityStatus !== "user-approved"
   ));
+  const pendingHtmlApproval = reviewableHtmlAssets.filter((record) => !record.userApprovedHtml);
+  const pendingNativeApproval = reviewableHtmlAssets.filter((record) => record.userApprovedHtml && !record.userApprovedHtmlNative);
+  const pendingApproval = [...pendingHtmlApproval, ...pendingNativeApproval];
   const categoryCounts = Object.entries(primaryAssets.reduce((accumulator, record) => {
     accumulator[record.category] = (accumulator[record.category] ?? 0) + 1;
     return accumulator;
@@ -403,6 +418,8 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
       coreAssets: coreAssets.length,
       formalLogics: formalLogics.length,
       pendingApproval: pendingApproval.length,
+      pendingHtmlApproval: pendingHtmlApproval.length,
+      pendingNativeApproval: pendingNativeApproval.length,
       htmlDesignComponents: formalLogics.filter((record) => record.renderer === "html-component" && record.componentPreviewAvailable).length,
       legacyBuilders: formalLogics.filter((record) => record.renderer === "legacy-builder").length,
       skins: coreAssets.filter((record) => record.renderer === "skin").length,
@@ -423,14 +440,34 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
     primaryAssets,
     formalLogics,
     pendingApproval,
-    logics: logics.map((logic) => ({
-      id: logic.id,
-      name: logic.name,
-      tier: logic.tier,
-      description: logic.description,
-      assetIds: logic.assetIds ?? [],
-      status: (logic.assetIds ?? []).length ? "available" : "empty",
-    })),
+    pendingHtmlApproval,
+    pendingNativeApproval,
+    logics: logics.map((logic) => {
+      const callableAssets = formalAssetsByLogic.get(logic.id) ?? [];
+      const callableById = new Map(callableAssets.map((asset) => [asset.id, asset]));
+      const orderedAssetIds = (logic.assetIds ?? []).filter((id) => callableById.has(id));
+      const genericAssetIds = orderedAssetIds.filter((id) => (
+        callableById.get(id).formalReachability.applicability?.scope === "generic"
+      ));
+      const specializedAssetIds = orderedAssetIds.filter((id) => (
+        callableById.get(id).formalReachability.applicability?.scope === "specialized"
+      ));
+      return {
+        id: logic.id,
+        name: logic.name,
+        tier: logic.tier,
+        description: logic.description,
+        assetIds: orderedAssetIds,
+        genericAssetIds,
+        specializedAssetIds,
+        genericCoverage: genericAssetIds.length === 0
+          ? "none"
+          : genericAssetIds.length === 1
+            ? "single"
+            : "diverse",
+        status: callableAssets.length ? "available" : "empty",
+      };
+    }),
     purposes: purposes.purposes ?? [],
     compositions: compositions.layouts ?? [],
     failureCases: failures.cases ?? [],

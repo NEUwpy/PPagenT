@@ -1,0 +1,186 @@
+{
+  "id": "matrix-cross-grid-003",
+  "name": "行列交叉矩阵",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "PPT源/06-【柏林蓝】定制级学术型灵感手册-宽屏.pptx",
+    "slides": [
+      83
+    ]
+  },
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "matrix",
+    "structureGroupId": "matrix-cross-grid",
+    "familyId": "matrix",
+    "variantId": "row-column-cells",
+    "silhouette": "row-column-grid-with-pluggable-cell-renderer",
+    "supportedBaseRelations": [
+      "matrix"
+    ],
+    "supportedPurposeKeys": [
+      "organize_matrix"
+    ],
+    "itemCount": {
+      "min": 0,
+      "preferred": [
+        4,
+        5
+      ],
+      "max": 25
+    },
+    "stateContract": {
+      "resolver": "rowCount+columnCount+cellMode",
+      "rowStates": [2, 3, 4, 5],
+      "columnStates": [2, 3, 4, 5],
+      "cellModes": ["条目", "标记", "强度"],
+      "previewDefault": { "rowCount": 4, "columnCount": 4, "cellMode": "标记" }
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "forbidden",
+      "ordered": false,
+      "requiresStructuredDataType": "matrix-grid"
+    },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "relationTraits": {
+          "dimensions": 2
+        },
+        "density": [
+          "medium",
+          "high"
+        ]
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": {
+        "selection": {
+          "rowCount": 4,
+          "columnCount": 4,
+          "cellMode": "标记"
+        }
+      },
+      "controls": [
+        {
+          "key": "rowCount",
+          "label": "行数",
+          "values": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "default": 4
+        },
+        {
+          "key": "columnCount",
+          "label": "列数",
+          "values": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "default": 4
+        },
+        {
+          "key": "cellMode",
+          "label": "单元表达",
+          "values": ["条目", "标记", "强度"],
+          "default": "标记"
+        }
+      ]
+    }
+  },
+  "coverageDelta": "补齐二维定位结构不能表达离散行列交叉的缺口；同一网格通过单元排版模式覆盖责任标记、离散强度和格内短条目，不再为 RACI、热力图和风险九宫格维护近似结构。",
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "2–5 行、2–5 列；单元支持条目、标记或强度",
+    "rule": "根据完整行、列和单元矩阵统一求解网格；改变单元内容形式不新增 Structure Group"
+  },
+  "componentModel": {
+    "fixed": [
+      "两个离散维度分别形成行和列",
+      "每个单元只对应一个行列交点",
+      "所有单元共享严格对齐的网格几何"
+    ],
+    "variable": [
+      "2–5 行",
+      "2–5 列",
+      "单元使用条目、标记或强度排版"
+    ]
+  },
+  "fieldContract": {
+    "editable": [
+      {
+        "field": "rows[]",
+        "meaning": "行维度及其标签"
+      },
+      {
+        "field": "columns[]",
+        "meaning": "列维度及其标签"
+      },
+      {
+        "field": "cells[][]",
+        "meaning": "完整行列单元矩阵；每格可存短条目、标记或离散强度"
+      }
+    ],
+    "generated": [],
+    "fixed": ["行列交叉关系不因单元排版方式变化"],
+    "unavailable": [
+      "连续坐标",
+      "第三个连续变量",
+      "长正文"
+    ]
+  },
+  "spatialContract": {
+    "coordinateSystem": {
+      "width": 1280,
+      "height": 720
+    },
+    "contentFrame": {
+      "left": 55,
+      "top": 166,
+      "width": 1170,
+      "height": 492
+    },
+    "aspectRatio": 2.378,
+    "minimumFrame": {
+      "width": 1170,
+      "height": 492
+    },
+    "preferredFrame": {
+      "width": 1170,
+      "height": 492
+    },
+    "resizeMode": "natural",
+    "minFontSize": 15,
+    "safePadding": 10,
+    "supportedCompositionIds": [
+      "component-full"
+    ]
+  },
+  "capacity": "2–5 行 × 2–5 列；单元支持一个短标记、0–4 级强度或 0–3 个短条目",
+  "semanticContract": "两个离散维度形成完整行列交叉，每个单元承载该交点的明确内容",
+  "doNotUseWhen": "需要连续坐标定位、第三个连续变量、父子层级、路径判断或长段正文",
+  "review": "用户已确认行列交叉矩阵的 HTML 黄金状态与 Native/PPT 二轮结果，正式落地"
+}

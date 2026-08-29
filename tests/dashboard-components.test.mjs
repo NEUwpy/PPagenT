@@ -43,6 +43,11 @@ import {
 import { mapPageContent as mapMatrixPageContent } from "../assets/结构图/矩阵象限-001/runtime.mjs";
 import { mapPageContent as mapIntersectionPageContent } from "../assets/结构图/多集合交集-001/runtime.mjs";
 import { mapPageContent as mapConsensusFieldPageContent } from "../assets/结构图/集合交集共识区-005/runtime.mjs";
+import {
+  previewParameters as deepHierarchyPreviewParameters,
+  resolvePreviewParameters as resolveDeepHierarchyPreviewParameters,
+  visualComponent as deepHierarchyVisualComponent,
+} from "../assets/结构图/目标策略举措任务级联-006/review.mjs";
 import { mapPageContent as mapNetworkPageContent } from "../assets/结构图/关系生态网络-001/runtime.mjs";
 import { mapPageContent as mapTieredHubPageContent } from "../assets/结构图/两级能力生态辐射-004/runtime.mjs";
 
@@ -98,7 +103,7 @@ test("看板只把资产专属 HTML 计入迁移完成度", async () => {
   )));
   assert.equal(cycle?.builderExport, "");
   assert.equal(cycle?.componentInitialSelection.stepCount, 4);
-  assert.equal(data.summary.htmlDesignComponents, 33);
+  assert.equal(data.summary.htmlDesignComponents, data.formalLogics.filter((record) => record.renderer === "html-component" && record.componentPreviewAvailable).length);
   assert.match(cycle?.previewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.componentPreviewUrl ?? "", /[?&]v=\d+/);
   assert.match(cycle?.nativeStatePreviewUrl ?? "", /[?&]v=\d+/);
@@ -154,8 +159,9 @@ test("预览使用版本化长期缓存，主数据仍保持实时", async () =>
   assert.match(server, /await runRenderer\(pptxPath, outputDir\)/);
   assert.match(template, /asset\.nativeStatePreviewUrl[\s\S]*selectionQuery\(asset\.componentInitialSelection/);
   assert.doesNotMatch(template, /overlay=0/);
-  assert.match(template, /class="coverage-tier-grid" id="approval-grid"/);
-  assert.match(template, /class="coverage-card available"[\s\S]*coverage-count">待审批/);
+  assert.match(template, /class="coverage-tier-grid" id="html-approval-grid"/);
+  assert.match(template, /class="coverage-tier-grid" id="native-approval-grid"/);
+  assert.match(template, /coverage-count">' \+ badge/);
   assert.doesNotMatch(template, /preloadAssetEvidence/);
 });
 
@@ -183,12 +189,12 @@ test("作废的旧 Logic 不再出现在核心库或正式生成候选中", asyn
   assert.equal(data.records.some((record) => removedIds.has(record.id)), false);
   const formalIds = new Set(data.formalLogics.map((record) => record.id));
   assert.deepEqual(formalIds, new Set([
-    "comparison-dual-verdict-001", "comparison-pros-cons-balance-005", "cycle-loop-001", "hierarchy-people-tree-001",
-    "hierarchy-grouped-breakdown-005",
-    "hub-directed-outcomes-002", "hub-radial-001", "hub-two-tier-capabilities-004", "layered-architecture-001", "layered-iceberg-depth-006", "parallel-equal-cards-001",
+    "comparison-dual-verdict-001", "comparison-pros-cons-balance-005", "cycle-loop-001",
+    "hierarchy-grouped-breakdown-005", "causal-mediator-chain-003",
+    "hub-directed-outcomes-002", "hub-radial-001", "hub-two-tier-capabilities-004", "layered-architecture-001", "layered-iceberg-depth-006", "parallel-equal-cards-001", "parallel-folded-notes-grid-002",
     "convergence-simple-funnel-001", "convergence-funnel-001", "sequence-flow-001", "sequence-phase-gates-004",
     "causal-fishbone-attribution-001", "problem-solution-outcome-001",
-    "matrix-quadrant-priority-001", "argument-evidence-conclusion-001",
+    "matrix-quadrant-priority-001", "matrix-cross-grid-003", "argument-evidence-conclusion-001",
     "problem-method-result-001", "progression-spectrum-focus-001", "progression-maturity-steps-002", "progression-growth-curve-004",
     "branching-decision-routes-001", "branching-scenario-fan-004",
     "goal-alignment-strategy-metrics-001",
@@ -214,7 +220,7 @@ test("Logic 能力地图保留空槽位，只把合格资产填入对应位置",
   assert.equal(cycle?.status, "available");
 
   const parallel = data.logics.find((logic) => logic.id === "parallel");
-  assert.deepEqual(parallel?.assetIds, ["parallel-equal-cards-001"]);
+  assert.deepEqual(parallel?.assetIds, ["parallel-equal-cards-001", "parallel-folded-notes-grid-002"]);
   assert.equal(parallel?.status, "available");
 
   const sequence = data.logics.find((logic) => logic.id === "sequence");
@@ -226,7 +232,9 @@ test("Logic 能力地图保留空槽位，只把合格资产填入对应位置",
   assert.equal(layered?.status, "available");
 
   const hierarchy = data.logics.find((logic) => logic.id === "hierarchy");
-  assert.deepEqual(hierarchy?.assetIds, ["hierarchy-people-tree-001", "hierarchy-grouped-breakdown-005"]);
+  assert.deepEqual(hierarchy?.assetIds, [
+    "hierarchy-grouped-breakdown-005",
+  ]);
   assert.equal(hierarchy?.status, "available");
   assert.match(hierarchy?.description ?? "", /上下级|归属/);
 
@@ -239,7 +247,7 @@ test("Logic 能力地图保留空槽位，只把合格资产填入对应位置",
   assert.equal(convergence?.status, "available");
 
   const causal = data.logics.find((logic) => logic.id === "causal");
-  assert.deepEqual(causal?.assetIds, ["causal-fishbone-attribution-001"]);
+  assert.deepEqual(causal?.assetIds, ["causal-fishbone-attribution-001", "causal-mediator-chain-003"]);
   assert.equal(causal?.status, "available");
 
   const problemSolution = data.logics.find((logic) => logic.id === "problem-solution");
@@ -247,7 +255,10 @@ test("Logic 能力地图保留空槽位，只把合格资产填入对应位置",
   assert.equal(problemSolution?.status, "available");
 
   const matrix = data.logics.find((logic) => logic.id === "matrix");
-  assert.deepEqual(matrix?.assetIds, ["matrix-quadrant-priority-001"]);
+  assert.deepEqual(matrix?.assetIds, [
+    "matrix-quadrant-priority-001",
+    "matrix-cross-grid-003",
+  ]);
   assert.equal(matrix?.status, "available");
 
   const argumentEvidence = data.logics.find((logic) => logic.id === "argument-evidence");
@@ -270,6 +281,89 @@ test("Logic 能力地图保留空槽位，只把合格资产填入对应位置",
   assert.match(template, /data-carousel-select/);
   assert.match(template, /coverage-asset-tab/);
   assert.match(template, /candidate\.name/);
+});
+
+test("能力地图区分通用覆盖与专用结构，提前暴露单候选重复风险", async () => {
+  const data = await collectLogicDashboardData(root);
+  const parallel = data.logics.find((logic) => logic.id === "parallel");
+  const sequence = data.logics.find((logic) => logic.id === "sequence");
+  assert.deepEqual(parallel?.genericAssetIds, ["parallel-equal-cards-001", "parallel-folded-notes-grid-002"]);
+  assert.equal(parallel?.genericCoverage, "diverse");
+  assert.ok(sequence?.genericAssetIds.includes("sequence-flow-001"));
+  assert.ok(sequence?.specializedAssetIds.includes("sequence-phase-gates-004"));
+  assert.equal(sequence?.genericCoverage, "single");
+});
+
+test("深层归属树用一个 HTML 组件覆盖 2–5 层及各层可变节点数", () => {
+  const states = [
+    { levelCount: 2, level2Count: 4, expected: [1, 4] },
+    { levelCount: 3, level2Count: 2, level3Count: 1, expected: [1, 2, 1] },
+    { levelCount: 4, level2Count: 3, level3Count: 6, level4Count: 8, expected: [1, 3, 6, 8] },
+    { levelCount: 5, level2Count: 4, level3Count: 8, level4Count: 10, level5Count: 9, expected: [1, 4, 8, 10, 9] },
+  ];
+  for (const state of states) {
+    const parameters = resolveDeepHierarchyPreviewParameters(deepHierarchyPreviewParameters, state);
+    const markup = deepHierarchyVisualComponent.renderMarkup(parameters);
+    assert.match(markup, new RegExp(`data-level-count="${state.levelCount}"`));
+    state.expected.forEach((count, index) => {
+      assert.equal((markup.match(new RegExp(`class="hierarchy-node level-${index + 1}`, "g")) ?? []).length, count);
+    });
+    assert.equal((markup.match(/data-ppt-name="hierarchy-link/g) ?? []).length, state.expected.slice(1).reduce((sum, count) => sum + count, 0));
+    assert.doesNotMatch(markup, /目标|策略|举措|任务/);
+  }
+});
+
+test("深层归属树用关系矩阵表达层节点数减少的 2→1 归属", () => {
+  const parameters = {
+    topology: {
+      layers: [
+        [{ key: "root", title: "总体体系" }],
+        [{ key: "branch-a", title: "分支甲" }, { key: "branch-b", title: "分支乙" }],
+        [{ key: "result", title: "共同后续层" }],
+      ],
+      adjacency: [
+        [[1, 1]],
+        [[0], [1]],
+      ],
+    },
+  };
+  const markup = deepHierarchyVisualComponent.renderMarkup(parameters);
+  assert.equal((markup.match(/class="hierarchy-node level-2/g) ?? []).length, 2);
+  assert.equal((markup.match(/class="hierarchy-node level-3/g) ?? []).length, 1);
+  assert.match(markup, /hierarchy-link-root-branch-a/);
+  assert.match(markup, /hierarchy-link-root-branch-b/);
+  assert.match(markup, /hierarchy-link-branch-b-result/);
+  assert.doesNotMatch(markup, /hierarchy-link-branch-a-result/);
+});
+
+test("深层归属树按稿件的真实父子归属排布，不把同层节点强行平均分组", () => {
+  const parameters = {
+    root: {
+      key: "root",
+      title: "总体体系",
+      children: [
+        {
+          key: "branch-a",
+          title: "分支甲",
+          children: [
+            { key: "a-1", title: "甲一", children: [] },
+            { key: "a-2", title: "甲二", children: [] },
+            { key: "a-3", title: "甲三", children: [] },
+          ],
+        },
+        {
+          key: "branch-b",
+          title: "分支乙",
+          children: [{ key: "b-1", title: "乙一", children: [] }],
+        },
+      ],
+    },
+  };
+  const markup = deepHierarchyVisualComponent.renderMarkup(parameters);
+  assert.match(markup, /hierarchy-link-branch-a-a-1/);
+  assert.match(markup, /hierarchy-link-branch-a-a-3/);
+  assert.match(markup, /hierarchy-link-branch-b-b-1/);
+  assert.doesNotMatch(markup, /hierarchy-link-branch-b-a-3/);
 });
 
 test("鱼骨归因由同一组件扩散类别与因素状态，并由 Mapper 绑定结果和原因", () => {

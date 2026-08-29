@@ -57,7 +57,7 @@ test("高置信结构线索保留判断簇、枚举、重复职责和转化链",
     ["role-sequence", "sequence"],
     ["parallel-enumeration", "parallel"],
     ["category-contrast", "parallel"],
-    ["direct-comparison", "comparison"],
+    ["paired-contrast", "comparison"],
     ["sequence-transformation", "sequence"],
   ]);
   assert.deepEqual(cues.at(-1).anchorTitles, ["作品", "规律", "能力"]);
@@ -89,6 +89,28 @@ test("结构线索并行独立调用且保留程序确定的关系", async () =>
     "hub", "sequence", "parallel", "parallel", "comparison", "sequence",
   ]);
   assert.deepEqual(hints.map((hint) => hint.atoms.length), [4, 3, 4, 2, 2, 3]);
+});
+
+test("转场对照与独立行动不会被压成正文或误判为流程", () => {
+  const cues = detectStructuralCues(`# 示例
+
+## 时空切换
+
+从1937年的血火记忆切换到今天的和平生活。
+
+## 三项行动
+
+首先要守护真相；其次要珍惜和平；最后要开创未来。
+
+## 共同目的
+
+为了守护真相、珍惜和平、开创未来，我们必须行动。
+`);
+  assert.deepEqual(cues.map((cue) => [cue.type, cue.relation, cue.explicitItemCount]), [
+    ["paired-contrast", "comparison", undefined],
+    ["ordinal-parallel-actions", "parallel", 3],
+    ["parallel-action-list", "parallel", 3],
+  ]);
 });
 
 test("产品叙事的十节正文均能提取结构技能线索且不把结论误当单节点页", async () => {

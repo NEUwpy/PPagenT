@@ -1,1 +1,263 @@
-{"id":"hierarchy-goal-cascade-006","name":"目标策略举措任务级联","kind":"component","category":"结构图","creationMethod":"distillation","status":"pending-review","source":{"file":"PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx","slides":[79]},"runtime":{"renderer":"html-component","entry":"review.mjs","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","logicId":"hierarchy","structureGroupId":"hierarchy-goal-cascade","familyId":"hierarchy","variantId":"hierarchy-goal-cascade","silhouette":"hierarchy-goal-cascade","supportedBaseRelations":["hierarchy"],"supportedPurposeKeys":["cover_expression_gap"],"itemCount":{"min":2,"preferred":[3],"max":4},"stateContract":{"resolver":"strategyCount","states":[2,3,4],"previewDefault":3},"contentContract":{"itemRole":"semantic-unit","points":"forbidden","ordered":false},"contract":{"abstractionLevel":"foundation","adaptationStatus":"adaptive","constraints":{"coverageGap":true,"density":["medium"]}},"review":{"entry":"review.mjs","visualIntent":"visual-intent.md","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","implementation":"asset-specific-html","goldenState":{"selection":{"strategyCount":3}},"controls":[{"key":"strategyCount","label":"策略数","values":[2,3,4],"default":3}]}},"coverageDelta":"现有层级结构最多承担三层树或单概念层级，缺少从战略目标一直拆解到执行任务的四级级联。","layoutExpansion":{"mode":"responsive","range":"固定四级：目标 → 2–4 策略 → 3–5 举措 → 4–6 任务","rule":"同一组件根据声明状态重算内容区域内的拓扑、间距和字号，不维护逐数量独立实现"},"componentModel":{"fixed":["逻辑关系","阅读路径","内容角色与失败边界"],"variable":["固定四级：目标 → 2–4 策略 → 3–5 举措 → 4–6 任务","字段内容与状态"]},"fieldContract":{"editable":[{"field":"parameters","meaning":"按组件声明填写的语义字段"}],"generated":[{"field":"layout","meaning":"HTML 组件统一求解布局"}],"fixed":["结构语法"],"unavailable":["只有两三层、分支需要汇合、同一任务归属多个举措或关系是时间过程"]},"spatialContract":{"coordinateSystem":{"width":1280,"height":720},"contentFrame":{"left":55,"top":166,"width":1170,"height":492},"aspectRatio":2.378,"minimumFrame":{"width":1170,"height":492},"preferredFrame":{"width":1170,"height":492},"resizeMode":"natural","minFontSize":15,"safePadding":10,"supportedCompositionIds":["component-full"]},"capacity":"固定四级：目标 → 2–4 策略 → 3–5 举措 → 4–6 任务","semanticContract":"一个总目标逐级分解为策略、举措和具体任务，层级越低越接近执行","doNotUseWhen":"只有两三层、分支需要汇合、同一任务归属多个举措或关系是时间过程","review":"等待用户统一审核 HTML；未生成 Native PPT"}
+{
+  "id": "hierarchy-goal-cascade-006",
+  "name": "深层归属树",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "pending-review",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
+    "slides": [
+      79
+    ]
+  },
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "hierarchy",
+    "structureGroupId": "hierarchy-deep-cascade",
+    "familyId": "hierarchy",
+    "variantId": "deep-parent-child-cascade",
+    "silhouette": "left-to-right-irregular-parent-child-tree",
+    "supportedBaseRelations": [
+      "hierarchy"
+    ],
+    "supportedPurposeKeys": [
+      "explain_hierarchy"
+    ],
+    "itemCount": {
+      "min": 2,
+      "preferred": [
+        3,
+        4,
+        6,
+        8
+      ],
+      "max": 10
+    },
+    "stateContract": {
+      "resolver": "layerAdjacencyMatrix",
+      "states": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "previewDefault": 4
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "forbidden",
+      "structuredData": "layered-adjacency-matrix",
+      "requiresStructuredDataType": "hierarchy",
+      "ordered": false
+    },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "density": [
+          "medium"
+        ]
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": {
+        "selection": {
+          "levelCount": 4,
+          "level2Count": 3,
+          "level3Count": 6,
+          "level4Count": 8,
+          "level5Count": 9
+        }
+      },
+      "controls": [
+        {
+          "key": "levelCount",
+          "label": "层级数",
+          "values": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "default": 4
+        },
+        {
+          "key": "level2Count",
+          "label": "第 2 层节点数",
+          "values": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "default": 3
+        },
+        {
+          "key": "level3Count",
+          "label": "第 3 层节点数",
+          "values": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "default": 6,
+          "when": {
+            "levelCount": [
+              3,
+              4,
+              5
+            ]
+          }
+        },
+        {
+          "key": "level4Count",
+          "label": "第 4 层节点数",
+          "values": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "default": 8,
+          "when": {
+            "levelCount": [
+              4,
+              5
+            ]
+          }
+        },
+        {
+          "key": "level5Count",
+          "label": "第 5 层节点数",
+          "values": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "default": 9,
+          "when": {
+            "levelCount": [
+              5
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "coverageDelta": "分组展开结构适合一个根主题下的具名分组与组内分点，但不能清晰表达层数和各层节点数都随稿件变化的真实父子树。本组只补 2–5 层可变、每个子节点只有一个父节点的通用归属关系。",
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "2–5 层；根层固定 1 个节点，后续每层 1–10 个节点；相邻层数量允许增加、减少或不变",
+    "rule": "真实运行读取分层节点表与相邻层 0/1 关系矩阵。程序分别按每层节点数求解纵向坐标，再按矩阵绘制真实父子连接；代表状态不作为运行时模板"
+  },
+  "componentModel": {
+    "fixed": [
+      "从左到右逐层展开的单父节点归属关系",
+      "同层节点使用同一色阶与几何语法",
+      "连接线只连接真实父子节点"
+    ],
+    "variable": [
+      "2–5 层",
+      "每层 1–10 个节点，层间数量可增加、减少或不变",
+      "相邻层关系矩阵记录的真实父子归属",
+      "每个节点的文字排版"
+    ]
+  },
+  "fieldContract": {
+    "editable": [
+      {
+        "field": "topology.layers",
+        "meaning": "按层记录节点；每个节点包含 key 与 title"
+      },
+      {
+        "field": "topology.adjacency",
+        "meaning": "记录每两层之间的 0/1 关系矩阵；每一列必须且只能有一个 1"
+      }
+    ],
+    "generated": [
+      {
+        "field": "layout",
+        "meaning": "程序根据分层节点表和关系矩阵计算节点位置、父子曲线和层级色阶"
+      }
+    ],
+    "fixed": [
+      "每个子节点只能有一个父节点",
+      "阅读方向从左到右"
+    ],
+    "unavailable": [
+      "只有一个根主题与一层分组且适合使用分组展开结构",
+      "子节点有多个父节点或存在交叉依赖",
+      "关系本质是时间、流程、阶段或目标指标对齐"
+    ]
+  },
+  "spatialContract": {
+    "coordinateSystem": {
+      "width": 1280,
+      "height": 720
+    },
+    "contentFrame": {
+      "left": 55,
+      "top": 166,
+      "width": 1170,
+      "height": 492
+    },
+    "aspectRatio": 2.378,
+    "minimumFrame": {
+      "width": 1170,
+      "height": 492
+    },
+    "preferredFrame": {
+      "width": 1170,
+      "height": 492
+    },
+    "resizeMode": "natural",
+    "minFontSize": 15,
+    "safePadding": 10,
+    "supportedCompositionIds": [
+      "component-full"
+    ]
+  },
+  "capacity": "2–5 层；根层固定 1 个节点，后续每层 1–10 个节点；单个父节点最多 10 个直接子节点；节点标题建议不超过 8 字",
+  "semanticContract": "一个根节点经过 2–5 层逐级展开；层数、每层节点数和各父节点的子节点数均由真实稿件决定，每个子节点只归属于一个直接父节点",
+  "doNotUseWhen": "只有一层普通分组、子节点多重归属、层间发生汇聚，或关系本质是流程、阶段、递进等级或目标指标对齐",
+  "review": "用户已确认深层归属树的 HTML 黄金状态与 Native/PPT 二轮结果，正式落地",
+  "topologyContract": {
+    "representation": "layered-adjacency-matrix",
+    "nodes": "topology.layers[层索引][节点索引]",
+    "relations": "topology.adjacency[相邻层索引][父节点索引][子节点索引]",
+    "invariant": "每个关系矩阵的每一列必须且只能有一个 1；数量变化与父子归属变化均不新增 Structure Group",
+    "compatibilityInput": "嵌套单父树可在规范化阶段转换为同一矩阵契约"
+  }
+}

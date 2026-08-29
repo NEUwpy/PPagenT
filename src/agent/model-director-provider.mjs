@@ -10,6 +10,7 @@ import {
   expandVisualSkillRouting,
   visualSkillRoutingSchema,
 } from "./visual-skill-router.mjs";
+import { extractManuscriptSections } from "../content/manuscript-sections.mjs";
 
 function assertModel(model, label) {
   if (!model || typeof model.generateJson !== "function") {
@@ -19,12 +20,17 @@ function assertModel(model, label) {
 }
 
 function sourceRule(rawMarkdown) {
+  const sections = extractManuscriptSections(rawMarkdown);
+  const programBindsExplicitPages = sections.length > 0
+    && sections.every((section) => section.markerKind === "explicit-page");
   return {
     source: rawMarkdown,
     rules: [
       "只能使用 source 中可核对的信息",
       "不得把资产、坐标、familyId 或 variantId 写进 PageContent",
-      "每个 PageContent.sourceText 必须直接复制 source 中一个非空、连续的原文子串，包含原有 Markdown 标记、标点和空格；不得摘要、改写、去掉标题井号或拼接不连续片段",
+      programBindsExplicitPages
+        ? "原稿已经用显式页标记完整分页；不要输出 PageContent.sourceText，程序会按页序绑定完整原文和来源锚点"
+        : "每个 PageContent.sourceText 必须直接复制 source 中一个非空、连续的原文子串，包含原有 Markdown 标记、标点和空格；不得摘要、改写、去掉标题井号或拼接不连续片段",
     ],
   };
 }
@@ -38,12 +44,15 @@ function contentRevisionDirective(previousReview) {
       const capacityIssues = Array.isArray(details.issues) && details.issues.length
         ? details.issues
         : [details];
-      return capacityIssues.map((capacityIssue) =>
-        `${capacityIssue.pageId ?? "指定页面"} 当前总量约 ${capacityIssue.estimatedTotalChars ?? "超限"} 字、最长单项约 ${capacityIssue.maxItemChars ?? "超限"} 字；必须同时把总量压到 ${capacityIssue.required?.maxTotalChars ?? "总容量上限"} 字以内、每个单项压到 ${capacityIssue.required?.maxItemChars ?? "单项容量上限"} 字以内。只压缩重复表述或按原稿章节拆页，不得缩字、删掉主关系或改动其他已合法页面`
-      ).join("；");
+      return capacityIssues.map((capacityIssue) => {
+        if (capacityIssue.sourceItemId && Number.isFinite(capacityIssue.maxChars)) {
+          return `${capacityIssue.pageId ?? "指定页面"} 的 ${capacityIssue.sourceItemId} ${capacityIssue.role ?? "文字"} 当前 ${capacityIssue.actualChars ?? "超限"} 字，必须压到 ${capacityIssue.maxChars} 字以内；只压缩该字段的重复修饰，保留节点含义、节点数量和原稿关系，不得改动其他已合法页面`;
+        }
+        return `${capacityIssue.pageId ?? "指定页面"} 当前总量约 ${capacityIssue.estimatedTotalChars ?? "超限"} 字、最长单项约 ${capacityIssue.maxItemChars ?? "超限"} 字；必须同时把总量压到 ${capacityIssue.required?.maxTotalChars ?? "总容量上限"} 字以内、每个单项压到 ${capacityIssue.required?.maxItemChars ?? "单项容量上限"} 字以内。只压缩重复表述或按原稿章节拆页，不得缩字、删掉主关系或改动其他已合法页面`;
+      }).join("；");
     }
     if (issue.errorCode === "SECTION_COVERAGE_FAILED") {
-      return `原稿二级标题“${details.sectionHeading ?? "指定章节"}”被遗漏；必须恢复为独立内容页，并让 title、sourceText、主张和支撑内容都来自该章节，不得用封面、目录或相邻章节代替`;
+      return `原稿页面或正文标题“${details.sectionHeading ?? "指定章节"}”被遗漏；必须恢复为独立内容页，并让 title、sourceText、主张和支撑内容都来自该章节，不得用封面、目录或相邻章节代替`;
     }
     if (issue.errorCode === "SCHEMA_VALIDATION_FAILED") {
       const schemaErrors = Array.isArray(details.errors) ? details.errors : [];
@@ -69,6 +78,30 @@ function assertSchemas(schemas) {
   const missing = required.filter((key) => !schemas?.[key]);
   if (missing.length) throw new Error(`DirectorProvider 缺少输出 schema：${missing.join(", ")}`);
   return schemas;
+}
+
+export function candidateSetsForVisualDirector(candidateSets, previousFeedback = []) {
+  const overflowPages = new Set(previousFeedback
+    .filter((item) => item.code === "component-runtime-overflow")
+    .map((item) => item.pageId));
+  return candidateSets.map((set) => {
+    const structural = set.candidates.filter((candidate) => !candidate.fallbackBody);
+    const readyStructural = structural.filter((candidate) => candidate.contentReadiness !== "needs-semantic-refinement");
+    const fallback = set.candidates.filter((candidate) => candidate.fallbackBody);
+    if (overflowPages.has(set.pageId) && fallback.length) return { ...set, candidates: fallback };
+    if (readyStructural.length) return { ...set, candidates: readyStructural };
+    if (structural.length) {
+      return {
+        ...set,
+        candidates: [],
+        gap: set.gap ?? {
+          type: "asset-gap",
+          reason: "structural-candidates-require-semantic-refinement",
+        },
+      };
+    }
+    return set;
+  });
 }
 
 function visualIntentSchemaWithPurposeVocabulary(outputSchema, vocabulary = []) {
@@ -307,10 +340,9 @@ export function normalizeVisualCompositionOutput(output, input) {
   return normalized;
 }
 
-function contentSchemaWithSectionFloor(outputSchema, rawMarkdown, logicSkillIndex = []) {
-  const source = String(rawMarkdown ?? "");
-  const sectionMatches = [...source.matchAll(/^##\s+.+$/gm)];
-  const sectionCount = sectionMatches.length;
+export function contentSchemaWithSectionFloor(outputSchema, rawMarkdown, logicSkillIndex = []) {
+  const sections = extractManuscriptSections(rawMarkdown);
+  const sectionCount = sections.length;
   const specialized = structuredClone(outputSchema);
   const pageContents = specialized.schema?.properties?.pageContents;
   if (!pageContents?.items?.properties?.logicIntent) return specialized;
@@ -319,64 +351,85 @@ function contentSchemaWithSectionFloor(outputSchema, rawMarkdown, logicSkillInde
   const logicIds = logicSkillIndex.map((item) => item.logicId).filter(Boolean);
   if (logicIds.length) pageContentSchema.properties.logicIntent.properties.logicId.enum = logicIds;
   if (sectionCount) {
-    const splitAllowance = sectionMatches.filter((match, index) => {
-      const body = source.slice(match.index + match[0].length, sectionMatches[index + 1]?.index).trim();
-      return Array.from(body).length > 900;
-    }).length;
+    const splitAllowance = sections.reduce((total, section) => {
+      if (section.markerKind === "explicit-page") return total;
+      return total + Math.min(2, Math.max(0, Math.ceil(Array.from(section.body).length / 900) - 1));
+    }, 0);
     const pages = specialized.schema.properties.deckPlan.properties.pages;
     pages.minItems = sectionCount;
     pages.maxItems = sectionCount + splitAllowance;
     pageContents.minItems = sectionCount;
     pageContents.maxItems = sectionCount + splitAllowance;
+    if (sections.every((section) => section.markerKind === "explicit-page")) {
+      delete pageContentSchema.properties.sourceText;
+      pageContentSchema.required = pageContentSchema.required.filter((field) => field !== "sourceText");
+    }
   }
   return specialized;
 }
 
 export function enforceSectionPageContract(contentOutput, rawMarkdown, structuralHints = []) {
   const source = String(rawMarkdown ?? "");
-  const sectionMatches = [...source.matchAll(/^##\s+.+$/gm)];
-  if (!sectionMatches.length) return contentOutput;
-  const sections = sectionMatches.map((match, index) => ({
-    heading: match[0].replace(/^##\s+/, "").trim(),
-    headingLine: match[0],
-    sourceText: source.slice(match.index, sectionMatches[index + 1]?.index).trim(),
-  }));
-  const allowances = sectionMatches.map((match, index) => (
-    Array.from(source.slice(match.index + match[0].length, sectionMatches[index + 1]?.index).trim()).length > 900 ? 1 : 0
+  const sections = extractManuscriptSections(source);
+  if (!sections.length) return contentOutput;
+  const allowances = sections.map((section) => (
+    section.markerKind === "explicit-page"
+      ? 0
+      : Math.min(2, Math.max(0, Math.ceil(Array.from(section.body).length / 900) - 1))
   ));
-  const sectionIndexForPage = (page) => {
-    const sourceText = String(page.sourceText ?? "");
-    const explicit = sectionMatches.findIndex((match) => sourceText.includes(match[0]));
-    if (explicit >= 0) return explicit;
-    const title = String(page.title ?? "").trim();
-    const titleMatch = sections.findIndex((section) => (
-      title === section.heading || title.includes(section.heading) || section.heading.includes(title)
-    ));
-    if (titleMatch >= 0) return titleMatch;
-    const sourceIndex = sourceText ? source.indexOf(sourceText) : -1;
-    if (sourceIndex < 0) return -1;
-    let result = -1;
-    sectionMatches.forEach((match, index) => { if (match.index <= sourceIndex) result = index; });
-    return result;
-  };
   const output = structuredClone(contentOutput);
   const planById = new Map(output.deckPlan.pages.map((page) => [page.pageId, page]));
-  const assignedCounts = Array(sectionMatches.length).fill(0);
-  const assignedPages = Array.from({ length: sectionMatches.length }, () => []);
-  output.pageContents.forEach((page) => {
-    const sectionIndex = sectionIndexForPage(page);
+  const sectionTag = (section) => `PPagenT来源章节=${section.sectionKey}`;
+  const shellTag = (section) => (section.shellRole ? `PPagenTShellRole=${section.shellRole}` : "");
+  const tagPage = (page, section) => ({
+    ...page,
+    // 显式“第 X 页：…”是原稿分页标记，不是应出现在 PPT 中的标题。
+    // 内容导演即使原样返回了 heading，此处也使用解析后的语义标题收口。
+    ...(section.markerKind === "explicit-page" && section.semanticTitle
+      ? {
+        title: section.semanticTitle,
+        sourceText: section.sourceText,
+      }
+      : {}),
+    notes: [page.notes, sectionTag(section), shellTag(section)].filter(Boolean).join("；"),
+  });
+  const allExplicitPages = sections.every((section) => section.markerKind === "explicit-page");
+  const positionalAssignmentAllowed = allExplicitPages && output.pageContents.length === sections.length;
+  const sectionIndexForPage = (page, pageIndex) => {
+    const sourceText = String(page.sourceText ?? "");
+    const existingTag = sections.findIndex((section) => String(page.notes ?? "").includes(sectionTag(section)));
+    if (existingTag >= 0) return existingTag;
+    const planAnchors = planById.get(page.pageId)?.sourceAnchors ?? [];
+    if (sourceText) {
+      const containing = sections
+        .map((section, index) => (section.sourceText.includes(sourceText) ? index : -1))
+        .filter((index) => index >= 0);
+      if (containing.length === 1) return containing[0];
+    }
+    const markerMatches = sections
+      .map((section, index) => (
+        sourceText.includes(section.markerLine)
+        || planAnchors.some((anchor) => String(anchor).includes(section.markerLine))
+          ? index
+          : -1
+      ))
+      .filter((index) => index >= 0);
+    if (markerMatches.length === 1) return markerMatches[0];
+    return positionalAssignmentAllowed ? pageIndex : -1;
+  };
+  const assignedCounts = Array(sections.length).fill(0);
+  const assignedPages = Array.from({ length: sections.length }, () => []);
+  output.pageContents.forEach((page, pageIndex) => {
+    const sectionIndex = sectionIndexForPage(page, pageIndex);
     if (sectionIndex < 0 || assignedCounts[sectionIndex] >= 1 + allowances[sectionIndex]) return;
     assignedCounts[sectionIndex] += 1;
-    assignedPages[sectionIndex].push({
-      ...page,
-      title: sections[sectionIndex].heading,
-      sourceText: sections[sectionIndex].sourceText,
-    });
+    assignedPages[sectionIndex].push(tagPage(page, sections[sectionIndex]));
   });
   const usedIds = new Set(output.pageContents.map((page) => page.pageId));
   sections.forEach((section, sectionIndex) => {
     if (assignedPages[sectionIndex].length) return;
-    const hint = structuralHints.find((item) => item.sectionHeading === section.heading);
+    const hint = structuralHints.find((item) => item.sectionKey === section.sectionKey)
+      ?? structuralHints.find((item) => item.sectionHeading === section.heading);
     if (!hint) {
       const error = new Error(`内容导演遗漏章节且没有可用结构线索：${section.heading}`);
       error.code = "SECTION_COVERAGE_FAILED";
@@ -386,10 +439,10 @@ export function enforceSectionPageContract(contentOutput, rawMarkdown, structura
     let pageId = `section-${sectionIndex + 1}`;
     while (usedIds.has(pageId)) pageId = `${pageId}-restored`;
     usedIds.add(pageId);
-    assignedPages[sectionIndex].push({
+    assignedPages[sectionIndex].push(tagPage({
       schemaVersion: "1.0",
       pageId,
-      title: section.heading,
+      title: section.semanticTitle || section.heading,
       logicIntent: {
         logicId: hint.relation === "none" ? "editorial" : hint.relation,
         reason: `程序从原稿恢复出 ${hint.relation} 主关系`,
@@ -404,17 +457,22 @@ export function enforceSectionPageContract(contentOutput, rawMarkdown, structura
       })),
       notes: `PPagenT主关系=${hint.relation}`,
       sourceText: section.sourceText,
-    });
+    }, section));
   });
   output.pageContents = assignedPages.flat();
   output.deckPlan.pages = output.pageContents.map((page, index) => {
-    const sectionIndex = sections.findIndex((section) => page.sourceText === section.sourceText);
+    const sectionIndex = sections.findIndex((section) => String(page.notes ?? "").includes(sectionTag(section)));
     const existing = planById.get(page.pageId);
     return {
+      ...existing,
       pageId: page.pageId,
       sequence: index + 1,
       narrativeJob: existing?.narrativeJob ?? `说明“${page.title}”并支撑整套核心主张`,
-      sourceAnchors: [sections[sectionIndex].headingLine],
+      sourceAnchors: sections[sectionIndex]?.markerKind === "explicit-page"
+        ? [sections[sectionIndex].markerLine]
+        : (existing?.sourceAnchors?.length
+          ? existing.sourceAnchors
+          : [sections[sectionIndex]?.markerLine ?? page.sourceText]),
     };
   });
   return output;
@@ -458,7 +516,7 @@ export function createModelDirectorProvider({
       ];
       const contentOutput = await content.generateJson({
         role: "PPagenT 内容导演",
-        task: `${contentRevisionDirective(input.previousReview)}在整套尺度决定叙事弧、页数、页序、每页职责、拆分、轻重，并为每个正文页选择一个 Logic；输出 deckPlan 与 pageContents。availableLogicSkills 是完整的语义 Logic 目录，不是现有资产菜单：PageContent.logicIntent.logicId 必须从中逐字选择，availableStructureGroupCount 即使为 0 也照样可以选择，后续程序会把它报告为资产缺口；绝不能因为暂时没有 Structure Group 就改成相近 Logic 或 editorial。reason 简要说明原稿关系为何属于该 Logic。structuralGuides 是程序直接从原稿句法识别出的高置信结构证据，不是资产推荐：对应章节必须保持 guide.relation，并按 guide.itemRange 提取主 items；guide.task 说明节点边界，fixedAtoms 若存在则必须逐项使用。不得用一句总括、背景或结论替换 structuralGuides 已证实存在的多个对象。内容导演只选 Logic，不读取也不选择 assetId、Structure Group、容器、坐标或图标；这些属于视觉导演。只有原稿确实没有可视化关系时才选择 editorial，绝不为套结构图篡改原稿。narrativeArc 是供目录页使用的 3 到 5 个简短章节名，不是逐页摘要。原稿的 Markdown 二级标题默认是一页内容单元；同一节中的反问、引文或总结通常留在该页，不单独拆成过渡页，除非该节容量确实必须拆分。先识别听众必须区分的全部对象，再压缩字句；醒目的引文、结论或标题通常是页面主张，不能替代支撑它的三至六个对象。structuralHints 是可选结构读取器形成的精确 atoms 覆盖结果：对应页面必须逐项使用 atoms 作为主 items 并保持 relation，允许忠实压缩，但不得用总括、背景或结论替换。items 只表示主关系中的同级节点；节点内部的说明维度、例子和枚举进入 points，不得提升为同级节点。没有 structuralGuides 的页面再按原稿关系判断。冒号、分号、项目符号或‘包括／分别／一是二是’明确列出三至六个同级机制、抓手、标准、结果或场景时，必须保留为三至六个 items；不要把它们塞进一个总括 item 的 points。只有这些条目都在解释同一个更小主节点时才放入 points。两个极端衬托中间主体时，必须保留左端、中间主体和右端；描述 A 进入或支撑 B、B 再服务 C 时，中介节点 B 不能被压掉。存在人物或组织层级时，用 structuredData.type=hierarchy 保存真实父子关系；只有原稿明确提供图片路径时才填写 portrait。明确同时给出输入对象、逐级收窄节点和 2–3 个宏观阶段时，才用 structuredData.type=convergence；没有阶段不得编造。明确给出 2–4 组问题与方案及共同结果时，用 structuredData.type=problem-solution；一个问题由 2–5 项同级方法共同处理并得到一个结果时，用 structuredData.type=problem-method-result，items 只保存方法且 methodIds 逐项引用；一个论点由 2–5 条证据共同支撑并收束为结论时，用 structuredData.type=argument-evidence，items 只保存证据且 evidenceIds 逐项引用；一个明确判断把同一情境分流到 2–4 条后续路径时，用 structuredData.type=branching-decision，items 保存路径动作与说明，branches 以相同 id 补充进入条件和可选结果；围绕同一不确定假设并列推演 3–5 个情景，且每个情景都有明确触发和结果时，用 structuredData.type=branching-scenario，items 保存情景名称，scenarios 以相同 id 补充触发与结果。起点、终点、条件、假设和结果必须来自原稿。明确给出两个判断维度和四个象限时，用 structuredData.type=matrix，均不得凭空补字段。标题或核心结论明确比较 A 与 B 时，items 必须恰好是双方；若来源提供共同维度，应为两侧提取数量一致的 3–5 条 points；原稿结论明确偏向一侧时，偏向侧设 polarity=positive、另一侧设 polarity=negative，只有原稿真正等权时才使用 neutral。除此以外不要按段落机械拆项，允许只有一个主要观点。结构性项目标题不超过 10 个汉字，body 尽量 15–30 个汉字；正文与 points 不重复。多项页面必须控制在正式字号可承载范围；收到容量反馈时压缩或拆页，不得缩字。不得为了套资产改变语义。`,
+        task: `${contentRevisionDirective(input.previousReview)}在整套尺度决定叙事弧、页数、页序、每页职责、拆分、轻重，并为每个正文页选择一个 Logic；输出 deckPlan 与 pageContents。availableLogicSkills 是完整的语义 Logic 目录，不是现有资产菜单：PageContent.logicIntent.logicId 必须从中逐字选择，availableStructureGroupCount 即使为 0 也照样可以选择，后续程序会把它报告为资产缺口；绝不能因为暂时没有 Structure Group 就改成相近 Logic 或 editorial。reason 简要说明原稿关系为何属于该 Logic。structuralGuides 是程序直接从原稿句法识别出的高置信结构证据，不是资产推荐：对应章节必须保持 guide.relation，并按 guide.itemRange 提取主 items；guide.task 说明节点边界，fixedAtoms 若存在则必须逐项使用。不得用一句总括、背景或结论替换 structuralGuides 已证实存在的多个对象。内容导演只选 Logic，不读取也不选择 assetId、Structure Group、容器、坐标或图标；这些属于视觉导演。只有原稿确实没有可视化关系时才选择 editorial，绝不为套结构图篡改原稿。narrativeArc 是供目录页使用的 3 到 5 个简短章节名，不是逐页摘要。原稿的 Markdown 二级标题默认是一页内容单元；同一节中的反问、引文或总结通常留在该页，不单独拆成过渡页，除非该节容量确实必须拆分。先识别听众必须区分的全部对象，再压缩字句；醒目的引文、结论或标题通常是页面主张，不能替代支撑它的三至六个对象。structuralHints 是可选结构读取器形成的精确 atoms 覆盖结果：对应页面必须逐项使用 atoms 作为主 items 并保持 relation，允许忠实压缩，但不得用总括、背景或结论替换。items 只表示主关系中的同级节点；只有原稿在某个节点内明确列出两项及以上的下级维度、例子或枚举时才写 points，不得把 body 的叙述拆成自创 points，也不得为了显得结构丰富而补凑三点。没有 structuralGuides 的页面再按原稿关系判断。冒号、分号、项目符号或‘包括／分别／一是二是’明确列出三至六个同级机制、抓手、标准、结果或场景时，必须保留为三至六个 items；不要把它们塞进一个总括 item 的 points。只有这些条目都在解释同一个更小主节点时才放入 points。两个极端衬托中间主体时，必须保留左端、中间主体和右端；描述 A 进入或支撑 B、B 再服务 C 时，中介节点 B 不能被压掉。存在人物或组织层级时，用 structuredData.type=hierarchy 保存真实父子关系；只有原稿明确提供图片路径时才填写 portrait。明确同时给出输入对象、逐级收窄节点和 2–3 个宏观阶段时，才用 structuredData.type=convergence；没有阶段不得编造。明确给出 2–4 组问题与方案及共同结果时，用 structuredData.type=problem-solution；一个问题由 2–5 项同级方法共同处理并得到一个结果时，用 structuredData.type=problem-method-result，items 只保存方法且 methodIds 逐项引用；一个论点由 2–5 条证据共同支撑并收束为结论时，用 structuredData.type=argument-evidence，items 只保存证据且 evidenceIds 逐项引用；一个明确判断把同一情境分流到 2–4 条后续路径时，用 structuredData.type=branching-decision，items 保存路径动作与说明，branches 以相同 id 补充进入条件和可选结果；围绕同一不确定假设并列推演 3–5 个情景，且每个情景都有明确触发和结果时，用 structuredData.type=branching-scenario，items 保存情景名称，scenarios 以相同 id 补充触发与结果。起点、终点、条件、假设和结果必须来自原稿。明确给出两个判断维度和四个象限时，用 structuredData.type=matrix，均不得凭空补字段。标题或核心结论明确比较 A 与 B 时，items 必须恰好是双方；若来源提供共同维度，应为两侧提取数量一致的 3–5 条 points；原稿结论明确偏向一侧，或以“而／但／相反”对立两侧并明确肯定其中一侧时，被肯定侧必须设 polarity=positive、被否定侧必须设 polarity=negative；没有价值偏向的客观差异才使用 neutral。除此以外不要按段落机械拆项，允许只有一个主要观点。结构性项目标题不超过 10 个汉字，body 尽量 15–30 个汉字；正文与 points 不重复。多项页面必须控制在正式字号可承载范围；收到容量反馈时压缩或拆页，不得缩字。不得为了套资产改变语义。`,
         context: {
           executionGuidelines: guidelines.content ?? "",
           availableLogicSkills: guidelines.logicSkillIndex ?? [],
@@ -518,10 +576,14 @@ export function createModelDirectorProvider({
     },
     async visualDirector(input) {
       if (input.phase === "intent") throw new Error("正式流程已取消视觉意图模型调用；Logic 由内容导演负责");
+      const disclosedCandidateSets = candidateSetsForVisualDirector(
+        input.candidateSets,
+        input.previousResolution?.feedback ?? [],
+      );
       const compactPages = compactVisualSkillContext(
         input.pageContents,
         input.pageIntents,
-        input.candidateSets,
+        disclosedCandidateSets,
       );
       const routingOutput = await visualComposition.generateJson({
         role: "PPagenT 视觉导演",
@@ -530,10 +592,10 @@ export function createModelDirectorProvider({
           pages: compactPages,
           previousFeedback: input.previousResolution?.feedback ?? [],
         },
-        outputSchema: visualSkillRoutingSchema(input.pageContents, input.candidateSets),
+        outputSchema: visualSkillRoutingSchema(input.pageContents, disclosedCandidateSets),
       });
       return normalizeVisualCompositionOutput(
-        expandVisualSkillRouting(routingOutput, input),
+        expandVisualSkillRouting(routingOutput, { ...input, candidateSets: disclosedCandidateSets }),
         input,
       );
 

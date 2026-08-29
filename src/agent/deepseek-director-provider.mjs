@@ -33,6 +33,7 @@ export class DeepSeekJsonModel {
     maxJsonAttempts = 2,
     requestTimeoutMs = 120000,
     fetchImpl = globalThis.fetch,
+    observer = null,
   }) {
     if (!apiKey) throw new Error("缺少 DEEPSEEK_API_KEY");
     if (!model) throw new Error("缺少 PPAGENT_DEEPSEEK_MODEL");
@@ -51,7 +52,12 @@ export class DeepSeekJsonModel {
     this.maxJsonAttempts = maxJsonAttempts;
     this.requestTimeoutMs = requestTimeoutMs;
     this.fetchImpl = fetchImpl;
+    this.observer = typeof observer === "function" ? observer : null;
     this.identity = `deepseek-chat-completions:${model}:${this.thinking}`;
+  }
+
+  async observe(event) {
+    if (this.observer) await this.observer({ source: "model", ...event });
   }
 
   async generateJson({
@@ -92,12 +98,20 @@ export class DeepSeekJsonModel {
       const requestBody = structuredClone(body);
       if (attempt > 1) {
         requestBody.messages[0].content += " 上一响应为空或不是可解析 JSON；本次必须正确转义 JSON 字符串中的双引号。";
-        if (lastError?.code === "MODEL_CONTENT_EMPTY" && requestBody.thinking?.type === "enabled") {
+        if (requestBody.thinking?.type === "enabled") {
           requestBody.thinking = { type: "disabled" };
           delete requestBody.reasoning_effort;
-          requestBody.messages[0].content += " 上一轮思考模式没有返回最终内容，本次关闭思考并直接输出 JSON。";
+          requestBody.messages[0].content += " 上一轮未形成可解析的最终 JSON；本次关闭思考并直接输出完整 JSON，不得省略、截断或附加尾逗号。";
         }
       }
+      const callId = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+      const startedAt = Date.now();
+      const stage = role.includes("局部细化") ? "semantic-refinement" : role.includes("内容") ? "content-director" : role.includes("视觉") ? "visual-director" : "model";
+      await this.observe({
+        type: "api-call", status: "running", stage, callId, attempt,
+        provider: "DeepSeek", model: this.model, endpoint: this.endpoint,
+        role, task, context, outputSchema, request: requestBody,
+      });
       let response;
       try {
         response = await this.fetchImpl(this.endpoint, {
@@ -111,18 +125,40 @@ export class DeepSeekJsonModel {
         });
       } catch (error) {
         lastError = error;
+        await this.observe({
+          type: "api-call", status: "failed", stage, callId, attempt,
+          durationMs: Date.now() - startedAt,
+          error: { code: error?.code, message: error?.message ?? String(error) },
+        });
         if (attempt < maxJsonAttempts) continue;
         const requestError = new Error(`DeepSeek 请求在 ${requestTimeoutMs}ms 内没有完成：${error.message}`);
         requestError.code = "MODEL_REQUEST_TIMEOUT";
         throw requestError;
       }
       if (!response.ok) {
-        throw new Error(`DeepSeek Chat Completions API 调用失败：${response.status} ${await response.text()}`);
+        const responseText = await response.text();
+        await this.observe({
+          type: "api-call", status: "failed", stage, callId, attempt,
+          durationMs: Date.now() - startedAt, responseStatus: response.status, responseText,
+        });
+        throw new Error(`DeepSeek Chat Completions API 调用失败：${response.status} ${responseText}`);
       }
       try {
-        return JSON.parse(messageContent(await response.json()));
+        const responseJson = await response.json();
+        const output = JSON.parse(messageContent(responseJson));
+        await this.observe({
+          type: "api-call", status: "succeeded", stage, callId, attempt,
+          durationMs: Date.now() - startedAt, usage: responseJson.usage ?? null,
+          response: responseJson, output,
+        });
+        return output;
       } catch (error) {
         lastError = error;
+        await this.observe({
+          type: "api-call", status: "invalid-output", stage, callId, attempt,
+          durationMs: Date.now() - startedAt,
+          error: { code: error?.code, message: error?.message ?? String(error) },
+        });
       }
     }
     const error = new Error(`DeepSeek 连续 ${maxJsonAttempts} 次没有返回可解析 JSON：${lastError?.message ?? "unknown error"}`);
@@ -146,13 +182,14 @@ export async function createDeepSeekDirectorProvider({
   visualComposition = {},
   reviewer = {},
   fetchImpl,
+  observer,
 }) {
   const resolvedRoot = path.resolve(root);
   const [schemas, guidelines] = await Promise.all([
     loadDirectorOutputSchemas(resolvedRoot),
     loadDirectorGuidelines(resolvedRoot),
   ]);
-  const shared = { apiKey, model, endpoint, thinking, reasoningEffort, maxTokens, requestTimeoutMs, fetchImpl };
+  const shared = { apiKey, model, endpoint, thinking, reasoningEffort, maxTokens, requestTimeoutMs, fetchImpl, observer };
   const contentModel = new DeepSeekJsonModel({ ...shared, ...content });
   const structureModel = structure?.enabled === true
     ? new DeepSeekJsonModel({ ...shared, ...structure })

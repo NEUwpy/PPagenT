@@ -1,0 +1,103 @@
+{
+  "id": "comparison-two-object-summary-007",
+  "name": "二对象概括对比",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "coverage-expansion",
+  "status": "pending-review",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "type": "formal-run-gap",
+    "runId": "20260828010845-13d91e",
+    "affectedPageIds": ["p08", "p12", "p13", "p16"]
+  },
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "comparison",
+    "structureGroupId": "comparison-two-object-summary",
+    "familyId": "comparison",
+    "variantId": "two-facing-summary-fields",
+    "silhouette": "mirrored-facing-fields-with-central-hinge",
+    "supportedBaseRelations": ["comparison"],
+    "supportedPurposeKeys": ["compare_options"],
+    "itemCount": {
+      "min": 2,
+      "preferred": [2],
+      "max": 2
+    },
+    "stateContract": {
+      "resolver": "contentMode",
+      "states": ["标题+正文", "仅标题", "仅正文"],
+      "previewDefault": "标题+正文"
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "points": "forbidden",
+      "ordered": false
+    },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "semantic": { "ordered": false },
+        "relationTraits": { "comparison": true, "directionalPreference": false },
+        "density": ["low", "medium"]
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": { "selection": { "contentMode": "标题+正文" } },
+      "controls": [
+        { "key": "contentMode", "label": "文字示例", "values": ["标题+正文", "仅标题", "仅正文"], "default": "标题+正文" }
+      ]
+    }
+  },
+  "coverageDelta": "补齐现有双向结论对比要求正负取舍和 3–5 组对应要点、双列维度表要求共同维度的缺口；本组只承载两个对象各自一段概括说明。",
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "固定两个对象；每侧支持仅标题、仅正文或标题加正文",
+    "rule": "两侧保持等宽镜像，文字由连续 TextRegion 内的排版系统适配，不因标题或正文存在与否裂变 Structure State"
+  },
+  "componentModel": {
+    "fixed": ["两个等权对象", "左右镜像承载面", "中央关系铰点"],
+    "variable": ["两侧标题与正文", "中央关系标签", "文字排版方案"]
+  },
+  "fieldContract": {
+    "editable": [
+      { "field": "items[0]", "meaning": "左侧对象的标题与概括正文" },
+      { "field": "items[1]", "meaning": "右侧对象的标题与概括正文" },
+      { "field": "relationLabel", "meaning": "中央短关系标签" }
+    ],
+    "generated": [
+      { "field": "textLayoutBindings", "meaning": "视觉导演为左右连续 TextRegion 选择文字排版" }
+    ],
+    "fixed": ["对象数量始终为两个", "两侧视觉重量相等"],
+    "unavailable": ["逐维度对照", "3 项以上对象", "一侧多条对应要点", "必须表达推荐结论"]
+  },
+  "spatialContract": {
+    "coordinateSystem": { "width": 1280, "height": 720 },
+    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "aspectRatio": 2.378,
+    "minimumFrame": { "width": 1170, "height": 492 },
+    "preferredFrame": { "width": 1170, "height": 492 },
+    "resizeMode": "natural",
+    "minFontSize": 15,
+    "safePadding": 10,
+    "supportedCompositionIds": ["component-full"]
+  },
+  "capacity": "固定两个对象；每侧标题建议不超过 12 字，正文建议不超过 46 字；中央标签不超过 4 字",
+  "semanticContract": "两个对象围绕同一主题形成概括层面的对照，但不要求共同维度、正负取舍或逐项对应",
+  "doNotUseWhen": "需要共同维度逐项比较、明确优劣取舍、前后变化方向、3 项以上对象或只有单边信息",
+  "review": "用户已确认极简 HTML 方案并同意落地；Native/PPT 与东北大学主题结果保持一致，已进入核心资产库"
+}

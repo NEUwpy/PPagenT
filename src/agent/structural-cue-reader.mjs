@@ -1,10 +1,4 @@
-function markdownSections(rawMarkdown) {
-  const matches = [...String(rawMarkdown ?? "").matchAll(/^##\s+(.+)$/gm)];
-  return matches.map((match, index) => ({
-    heading: match[1].trim(),
-    body: String(rawMarkdown).slice(match.index + match[0].length, matches[index + 1]?.index).trim(),
-  }));
-}
+import { extractManuscriptSections } from "../content/manuscript-sections.mjs";
 
 function paragraphContaining(section, pattern) {
   return section.body.split(/\n\s*\n/).find((paragraph) => pattern.test(paragraph))?.trim() ?? "";
@@ -111,6 +105,93 @@ function expansionSequence(section) {
   ))?.trim() ?? section.body.trim();
 }
 
+function explicitOrdinalSequence(section) {
+  const source = `${section.heading}\n${section.body}`;
+  const markers = [...source.matchAll(/第[一二三四五六七八九十\d]+(?:次|步|阶段|轮|层)/g)]
+    .map((match) => match[0]);
+  const uniqueMarkers = [...new Set(markers)];
+  if (uniqueMarkers.length >= 3 && uniqueMarkers.length <= 7) {
+    return { source: section.sourceText, count: uniqueMarkers.length };
+  }
+  const discourseMarkers = [...source.matchAll(/(?:首先|其次|接着|然后|随后|最后)/g)];
+  const hasCompleteOrder = /首先/.test(source)
+    && /(?:其次|接着|然后|随后)/.test(source)
+    && /最后/.test(source);
+  return hasCompleteOrder && discourseMarkers.length >= 3 && discourseMarkers.length <= 7
+    ? { source: section.sourceText, count: discourseMarkers.length }
+    : null;
+}
+
+function stateProgression(section) {
+  return section.body.split(/\n\s*\n/).find((paragraph) => (
+    /(?:最初|起初|一开始|曾经)/.test(paragraph)
+    && /(?:逐渐|继而|进而|开始)/.test(paragraph)
+    && /(?:最终|终于|最后)/.test(paragraph)
+    && /(?:变化|转变|成长|提升|深化|成熟|扩大|觉醒|走向|从.+到)/.test(paragraph)
+  ))?.trim() ?? "";
+}
+
+function pairedContrast(section) {
+  const patterns = [
+    /一方面[\s\S]{2,120}(?:另一方面|而另一方面)/,
+    /一边[\s\S]{2,120}另一边/,
+    /(?:之前|台前|幕前)[\s\S]{2,120}(?:之后|台后|幕后)/,
+    /在[^，。；]{1,24}(?:中|时|年代|时期|情境|场景)[^。；]{2,80}[，；]而在[^，。；]{1,24}(?:中|时|年代|时期|情境|场景)/,
+    /[^，。；]{1,18}(?:用|使用|利用|借助)[^。；]{2,80}[，；]而[^，。；]{1,24}[，,]?(?:却|则)?(?:用|使用|利用|借助)/,
+    /[^，。；]{1,24}比[^，。；]{1,24}更[^。；]{1,48}/,
+    /[^，。；]{1,24}与[^，。；]{1,24}(?:对比|比较)/,
+    /从[^。；]{1,80}(?:切换到|转为|变为)[^。；]{1,80}/,
+  ];
+  return section.body.split(/\n\s*\n/)
+    .find((paragraph) => patterns.some((pattern) => pattern.test(paragraph)))?.trim() ?? "";
+}
+
+function ordinalParallelActions(section) {
+  const source = section.body;
+  const matches = [...source.matchAll(/(?:首先|其次|最后)[，,]?\s*(?:我们)?(?:要|应当|应该|需要|必须)([^；。]+)/g)];
+  if (matches.length < 3 || matches.length > 6) return null;
+  const clauses = matches.map((match) => match[1].trim()).filter(Boolean);
+  if (clauses.length !== matches.length) return null;
+  if (clauses.some((clause) => /(?:完成后|之后再|随后进入|形成后|依次|前一步|下一步)/.test(clause))) return null;
+  return { source: matches.map((match) => match[0]).join("；"), count: matches.length };
+}
+
+function questionCluster(section) {
+  for (const paragraph of section.body.split(/\n\s*\n/)) {
+    const questions = (paragraph.match(/[^。！？?]{2,80}[？?]/g) ?? [])
+      .filter((question) => !/^(?:为什么|为何|怎么说|如何理解|怎么理解)[？?]$/.test(question.trim()));
+    if (questions.length >= 3 && questions.length <= 6) {
+      return { source: paragraph.trim(), count: questions.length };
+    }
+  }
+  return null;
+}
+
+function temporalSequence(section) {
+  const source = section.body;
+  if (/过去/.test(source) && /现在|当下/.test(source) && /未来/.test(source)) {
+    return { source: section.sourceText, count: 3, type: "past-present-future" };
+  }
+  const markers = [...source.matchAll(/(?:\d{4}\s*年|当年|起初|随后|后来|最终)/g)];
+  if (markers.length >= 3 && markers.length <= 6) {
+    return { source: section.sourceText, count: markers.length, type: "chronological" };
+  }
+  return null;
+}
+
+function parallelActionList(section) {
+  for (const sentence of section.body.split(/[。！？]/).map((item) => item.trim()).filter(Boolean)) {
+    if (!/(?:让我们|希望|我们要|我们需要|必须|应当|需要|为了)/.test(sentence)) continue;
+    const groups = sentence.split(/[，,]/).map((item) => item.trim()).filter(Boolean);
+    const candidates = groups
+      .map((group) => ({ source: group, count: (group.match(/、/g) ?? []).length + 1 }))
+      .filter((group) => group.count >= 3 && group.count <= 6)
+      .sort((left, right) => right.count - left.count);
+    if (candidates.length) return candidates[0];
+  }
+  return null;
+}
+
 function transformationAnchors(source) {
   const endpoints = String(source).match(/从(?:一件|一个|一种)?([^，。；]{1,8}?)变成(?:一件|一个|一种)?([^，。；]{1,8})/);
   if (!endpoints) return [];
@@ -131,12 +212,17 @@ function transformationPointCount(source) {
 
 export function detectStructuralCues(rawMarkdown) {
   const cues = [];
-  markdownSections(rawMarkdown).forEach((section, sectionIndex) => {
+  extractManuscriptSections(rawMarkdown).forEach((section, sectionIndex) => {
     const idPrefix = `section-${sectionIndex + 1}`;
+    const addCue = (cue) => cues.push({
+      sectionKey: section.sectionKey,
+      markerLine: section.markerLine,
+      ...cue,
+    });
     const roles = repeatedBoldRoles(section);
     if (roles) {
       const atoms = responsibilityAtoms(roles);
-      cues.push({
+      addCue({
         cueId: `${idPrefix}-roles`,
         sectionHeading: section.heading,
         type: "role-sequence",
@@ -150,7 +236,7 @@ export function detectStructuralCues(rawMarkdown) {
     const responsibility = responsibilitySequence(section);
     if (responsibility) {
       const atoms = responsibilityAtoms(responsibility);
-      cues.push({
+      addCue({
         cueId: `${idPrefix}-responsibilities`,
         sectionHeading: section.heading,
         type: "role-sequence",
@@ -163,7 +249,7 @@ export function detectStructuralCues(rawMarkdown) {
 
     const architecture = mermaidArchitecture(section);
     if (architecture) {
-      cues.push({
+      addCue({
         cueId: `${idPrefix}-architecture`,
         sectionHeading: section.heading,
         type: "architecture-pipeline",
@@ -176,7 +262,7 @@ export function detectStructuralCues(rawMarkdown) {
 
     const spectrum = spectrumWithMiddle(section);
     if (spectrum) {
-      cues.push({
+      addCue({
         cueId: `${idPrefix}-spectrum`,
         sectionHeading: section.heading,
         type: "spectrum-focus",
@@ -188,7 +274,7 @@ export function detectStructuralCues(rawMarkdown) {
 
     const decisionEnumeration = colonEnumeration(section, { requireDecisionWords: true });
     if (decisionEnumeration) {
-      cues.push({
+      addCue({
         cueId: `${idPrefix}-decisions`,
         sectionHeading: section.heading,
         type: "decision-cluster",
@@ -198,13 +284,95 @@ export function detectStructuralCues(rawMarkdown) {
       return;
     }
 
-    if (/比.+更|与.+(?:对比|比较)|和.+(?:对比|比较)/.test(`${section.heading}\n${section.body}`)) {
-      cues.push({
-        cueId: `${idPrefix}-comparison`,
+    const progression = stateProgression(section);
+    if (progression) {
+      addCue({
+        cueId: `${idPrefix}-state-progression`,
+        sectionKey: section.sectionKey,
         sectionHeading: section.heading,
-        type: "direct-comparison",
+        type: "state-progression",
+        relation: "progression",
+        source: progression,
+      });
+      return;
+    }
+
+    const contrast = pairedContrast(section);
+    if (contrast) {
+      addCue({
+        cueId: `${idPrefix}-paired-contrast`,
+        sectionKey: section.sectionKey,
+        sectionHeading: section.heading,
+        type: "paired-contrast",
         relation: "comparison",
-        source: `## ${section.heading}\n\n${section.body}`,
+        source: contrast,
+      });
+      return;
+    }
+
+    const ordinalActions = ordinalParallelActions(section);
+    if (ordinalActions) {
+      addCue({
+        cueId: `${idPrefix}-ordinal-parallel-actions`,
+        sectionHeading: section.heading,
+        type: "ordinal-parallel-actions",
+        relation: "parallel",
+        source: ordinalActions.source,
+        explicitItemCount: ordinalActions.count,
+      });
+      return;
+    }
+
+    const ordinalSequence = explicitOrdinalSequence(section);
+    if (ordinalSequence) {
+      addCue({
+        cueId: `${idPrefix}-ordinal-sequence`,
+        sectionKey: section.sectionKey,
+        sectionHeading: section.heading,
+        type: "ordinal-sequence",
+        relation: "sequence",
+        source: ordinalSequence.source,
+        explicitItemCount: ordinalSequence.count,
+      });
+      return;
+    }
+
+    const temporal = temporalSequence(section);
+    if (temporal) {
+      addCue({
+        cueId: `${idPrefix}-temporal-sequence`,
+        sectionHeading: section.heading,
+        type: "temporal-sequence",
+        relation: "sequence",
+        source: temporal.source,
+        explicitItemCount: temporal.count,
+        temporalSequenceType: temporal.type,
+      });
+      return;
+    }
+
+    const questions = questionCluster(section);
+    if (questions) {
+      addCue({
+        cueId: `${idPrefix}-question-cluster`,
+        sectionHeading: section.heading,
+        type: "question-cluster",
+        relation: "hub",
+        source: questions.source,
+        explicitItemCount: questions.count,
+      });
+      return;
+    }
+
+    const actionList = parallelActionList(section);
+    if (actionList) {
+      addCue({
+        cueId: `${idPrefix}-parallel-action-list`,
+        sectionHeading: section.heading,
+        type: "parallel-action-list",
+        relation: "parallel",
+        source: actionList.source,
+        explicitItemCount: actionList.count,
       });
       return;
     }
@@ -212,7 +380,7 @@ export function detectStructuralCues(rawMarkdown) {
     const parallelColon = colonEnumeration(section);
     if (parallelColon) {
       const ordered = /(?:先|首先).{0,80}(?:再|然后|最后)/.test(parallelColon);
-      cues.push({
+      addCue({
         cueId: `${idPrefix}-enumeration`,
         sectionHeading: section.heading,
         type: ordered ? "sequence-enumeration" : "parallel-enumeration",
@@ -224,7 +392,7 @@ export function detectStructuralCues(rawMarkdown) {
 
     const quoteEnumeration = semicolonEnumeration(section);
     if (quoteEnumeration && /[>\-*]/.test(quoteEnumeration)) {
-      cues.push({
+      addCue({
         cueId: `${idPrefix}-quote-enumeration`,
         sectionHeading: section.heading,
         type: "parallel-enumeration",
@@ -236,7 +404,7 @@ export function detectStructuralCues(rawMarkdown) {
 
     const expansion = expansionSequence(section);
     if (expansion) {
-      cues.push({
+      addCue({
         cueId: `${idPrefix}-expansion`,
         sectionHeading: section.heading,
         type: "expansion-sequence",
@@ -252,7 +420,7 @@ export function detectStructuralCues(rawMarkdown) {
       const paragraphs = section.body.split(/\n\s*\n/);
       const index = paragraphs.indexOf(transformation);
       const context = [paragraphs[index - 1], transformation].filter(Boolean).join("\n\n");
-      cues.push({
+      addCue({
         cueId: `${idPrefix}-transformation`,
         sectionHeading: section.heading,
         type: "sequence-transformation",
@@ -266,7 +434,7 @@ export function detectStructuralCues(rawMarkdown) {
 
     const semicolon = semicolonEnumeration(section);
     if (semicolon) {
-      cues.push({
+      addCue({
         cueId: `${idPrefix}-enumeration`,
         sectionHeading: section.heading,
         type: "parallel-enumeration",
@@ -277,7 +445,7 @@ export function detectStructuralCues(rawMarkdown) {
     }
 
     if (/少数人[\s\S]{0,180}(?:但|而)更多的人/.test(section.body)) {
-      cues.push({
+      addCue({
         cueId: `${idPrefix}-categories`,
         sectionHeading: section.heading,
         type: "category-contrast",
@@ -315,6 +483,27 @@ function cueTask(cue) {
   if (cue.type === "direct-comparison") {
     return "从标题或核心结论中提取被直接比较的 A、B 双方，必须恰好两个 atoms。使用场景、结论和价值不能取代双方；双方 body 分别保留来源支持的区别，并按原稿明确倾向填写 polarity 与 emphasis。每侧还必须提取 3–5 条能够按相同维度逐行对应的短 points，数量一致；如果来源无法支持某一侧，不得编造。";
   }
+  if (cue.type === "paired-contrast") {
+    return "提取原稿明确对照的 A、B 两方，必须恰好两个 atoms。双方可以是对象、处境、时间截面或相反用途；body 分别保留原稿支持的核心差异。只有原稿存在逐项对应维度时才填写 points，不得为了套现有对比结构而编造。";
+  }
+  if (cue.type === "state-progression") {
+    return "提取同一主体从初始状态、过渡状态到最终状态的 3–5 个真实阶段，保持状态变化顺序；原因、例子和评价放入对应节点说明，不得提升为并列主节点。";
+  }
+  if (cue.type === "ordinal-sequence") {
+    return "按原稿显式序号提取全部步骤、批次或接力节点，保持原顺序；每个序号恰好对应一个 atom，不得把节点内部说明拆成额外步骤。";
+  }
+  if (cue.type === "temporal-sequence") {
+    return "按原稿明确的时间锚点提取全部阶段并保持先后次序。过去、现在、未来分别成为节点；历史事件链则按真实事件发生顺序提取。背景评价不得冒充阶段。";
+  }
+  if (cue.type === "question-cluster") {
+    return "提取围绕同一中心议题明确提出的全部独立问题，每个独立问题对应一个 atom，保持原顺序；‘为什么、为何、怎么说、如何理解’等短追问并入前一个问题，不单列节点；中心议题不作为额外 atom，也不得替问题作答。";
+  }
+  if (cue.type === "parallel-action-list") {
+    return "提取原稿明确列出的全部同行动或要求，每个顿号分隔的行动恰好对应一个 atom；开场号召与最终愿景不作为额外 atom。";
+  }
+  if (cue.type === "ordinal-parallel-actions") {
+    return "提取原稿以‘首先、其次、最后’列出的全部独立行动。顺序词只负责组织表述；若各行动不存在前一步完成后才能进入下一步的依赖，就保持为同级并列，不得机械改成流程。";
+  }
   if (cue.type === "category-contrast") return "提取来源中两个不同处境或角色类别，必须恰好两个 atoms。它们是并列类别，不是优劣方案；背景和产品结论不得成为第三项。";
   return "提取枚举中全部子句所表达的同级决策维度或承诺维度。每个子句必须且只能进入一个 sourceFragments；语义上属于同一个维度的相邻子句应合并，不能遗漏，也不能输出总括词。";
 }
@@ -325,6 +514,13 @@ function itemRangeForCue(cue) {
     return { minItems: count, maxItems: count };
   }
   if (cue.type === "direct-comparison") return { minItems: 2, maxItems: 2 };
+  if (cue.type === "paired-contrast") return { minItems: 2, maxItems: 2 };
+  if (cue.type === "state-progression") return { minItems: 3, maxItems: 5 };
+  if (cue.type === "ordinal-sequence") return { minItems: cue.explicitItemCount, maxItems: cue.explicitItemCount };
+  if (cue.type === "temporal-sequence") return { minItems: cue.explicitItemCount, maxItems: cue.explicitItemCount };
+  if (cue.type === "question-cluster") return { minItems: cue.explicitItemCount, maxItems: cue.explicitItemCount };
+  if (cue.type === "parallel-action-list") return { minItems: cue.explicitItemCount, maxItems: cue.explicitItemCount };
+  if (cue.type === "ordinal-parallel-actions") return { minItems: cue.explicitItemCount, maxItems: cue.explicitItemCount };
   if (cue.type === "architecture-pipeline") return { minItems: 3, maxItems: 3 };
   if (cue.type === "category-contrast") return { minItems: 2, maxItems: 2 };
   if (cue.type === "spectrum-focus") return { minItems: 3, maxItems: 3 };
@@ -386,8 +582,9 @@ function compactStructuralBody(value) {
 }
 
 function pageForHint(pageContents, hint) {
-  const headingLine = `## ${hint.sectionHeading}`;
-  return pageContents.find((page) => String(page.sourceText ?? "").includes(headingLine))
+  const sectionTag = `PPagenT来源章节=${hint.sectionKey}`;
+  return pageContents.find((page) => String(page.notes ?? "").includes(sectionTag))
+    ?? pageContents.find((page) => String(page.sourceText ?? "").includes(hint.markerLine ?? hint.sectionHeading))
     ?? pageContents.find((page) => String(page.title ?? "").includes(hint.sectionHeading));
 }
 
@@ -467,6 +664,8 @@ function batchOutputSchema(cues) {
 export function buildStructuralCueGuides(rawMarkdown) {
   return detectStructuralCues(rawMarkdown).map((cue) => ({
     cueId: cue.cueId,
+    sectionKey: cue.sectionKey,
+    markerLine: cue.markerLine,
     sectionHeading: cue.sectionHeading,
     type: cue.type,
     relation: cue.relation,
@@ -530,6 +729,7 @@ function structuralHintInvalid(cue, value) {
 function batchCueContext(cues) {
   return cues.map((cue) => ({
     cueId: cue.cueId,
+    sectionKey: cue.sectionKey,
     sectionHeading: cue.sectionHeading,
     relation: cue.relation,
     task: cueTask(cue),

@@ -302,7 +302,7 @@
   <header class="topbar">
     <div class="brand"><strong>PPA 看板</strong><span>PPagenT · Logic / Structure Group / State / 自动化入口</span></div>
     <nav class="nav" aria-label="页面导航">
-      <a href="#overview">总览</a><a href="#intake-review">入库线</a><a href="#automation">生成线</a><a href="#text-layouts">文字排版</a><a href="#approval">待审批</a><a href="#capabilities">能力地图</a><a href="#assets">全部资产</a><a href="#skin">Skin 容器</a><a href="#catalog">数据目录</a>
+      <a href="#overview">总览</a><a href="#capabilities">能力地图</a><a href="#intake-review">入库线</a><a href="#automation">生成线</a><a href="#html-approval">一轮审批</a><a href="#native-approval">二轮审批</a><a href="#assets">全部资产</a><a href="#skin">Skin 容器</a><a href="#catalog">规则目录</a><a href="#stores">数据域</a><a href="#text-layouts">文字排版</a>
     </nav>
     <div class="top-status"><span id="generated-at"></span><br><span id="data-mode"></span></div>
     <button class="refresh-button" id="refresh-dashboard" type="button">刷新仓库</button>
@@ -324,6 +324,11 @@
     <div class="mode-notice" id="mode-notice"></div>
 
     <section class="metrics" id="metric-grid" aria-label="建设指标"></section>
+
+    <section class="section" id="capabilities">
+      <div class="section-head"><div><h2>Logic 能力地图</h2><p>一张图同时展示能力规划与当前可用资产：灰色槽位表示待建设；已有合格 Structure Group 的 Logic 直接显示真实页面。同一 Logic 有多个组时会在卡片内轮播，也可手动切换。</p></div><span class="pill pending" id="logic-count"></span></div>
+      <div class="coverage-grid" id="coverage-grid"></div>
+    </section>
 
     <section class="section" id="intake-review">
       <div class="section-head"><div><h2>入库线 · 把优秀参考变成可调用能力</h2><p>入库线由维护者和用户协作完成。目标不是收藏页面，而是在某个 Logic 下建立经确认、可扩散、可机械编译的 Structure Group。</p></div><span class="pill html-component">建设流程</span></div>
@@ -373,25 +378,14 @@
       </div>
     </section>
 
-    <section class="section">
-      <div class="section-head"><div><h2>当前数据域</h2><p>这些目录共同构成现在的“资产数据库”。只有核心资产库会被正式生成线自动发现。</p></div></div>
-      <div class="store-grid" id="store-grid"></div>
+    <section class="section" id="html-approval">
+      <div class="section-head"><div><h2>一轮审批 · HTML Structure Group</h2><p>只检查逻辑表达、设计语言、可变参数与代表性 State。这里通过后，资产才进入 Native/PPT 机械编译。</p></div><span class="pill pending" id="html-approval-count"></span></div>
+      <div class="coverage-tier-grid" id="html-approval-grid"></div>
     </section>
 
-    <section class="section" id="text-layouts">
-      <div class="section-head"><div><h2>文字排版库</h2><p>Structure Group 只提供实际安全书写 box；基础文字组件组成已登记的组合排版，再由视觉导演从兼容集合中选择。</p></div><span class="pill core" id="text-layout-count"></span></div>
-      <div class="text-primitive-grid" id="text-primitive-grid"></div>
-      <div class="text-layout-grid" id="text-layout-grid"></div>
-    </section>
-
-    <section class="section" id="approval">
-      <div class="section-head"><div><h2>待确认 Structure Group</h2><p>这里直接读取核心库内尚未用户确认的资产的实时 HTML。它们不会被正式生成线调用；点击卡片可查看来源、视觉意图和当前建设阶段。</p></div><span class="pill pending" id="approval-count"></span></div>
-      <div class="coverage-tier-grid" id="approval-grid"></div>
-    </section>
-
-    <section class="section" id="capabilities">
-      <div class="section-head"><div><h2>Logic 能力地图</h2><p>一张图同时展示能力规划与当前可用资产：灰色槽位表示待建设；已有合格 Structure Group 的 Logic 直接显示真实页面。同一 Logic 有多个组时会在卡片内轮播，也可手动切换。</p></div><span class="pill pending" id="logic-count"></span></div>
-      <div class="coverage-grid" id="coverage-grid"></div>
+    <section class="section" id="native-approval">
+      <div class="section-head"><div><h2>二轮审批 · Native PPT 与 Skin</h2><p>只检查 HTML 到可编辑 PPT 的还原，以及进入统一 Skin 后的结果。这里通过后，资产才进入核心调用目录。</p></div><span class="pill pending" id="native-approval-count"></span></div>
+      <div class="coverage-tier-grid" id="native-approval-grid"></div>
     </section>
 
     <section class="section" id="assets">
@@ -421,6 +415,17 @@
       </div>
     </section>
 
+    <section class="section" id="stores">
+      <div class="section-head"><div><h2>当前数据域</h2><p>这些目录共同构成现在的“资产数据库”。数量与状态均由实时接口读取，不在页面里手工登记。</p></div></div>
+      <div class="store-grid" id="store-grid"></div>
+    </section>
+
+    <section class="section" id="text-layouts">
+      <div class="section-head"><div><h2>文字排版库</h2><p>Structure Group 只提供实际安全书写 box；基础文字组件组成已登记的组合排版，再由视觉导演从兼容集合中选择。</p></div><span class="pill core" id="text-layout-count"></span></div>
+      <div class="text-primitive-grid" id="text-primitive-grid"></div>
+      <div class="text-layout-grid" id="text-layout-grid"></div>
+    </section>
+
     <div class="footer" id="footer-mode"></div>
   </main>
 
@@ -443,7 +448,8 @@
       core: "核心目录", "html-component": "HTML 路线",
       "legacy-builder": "原有代码路线", "native-builder": "代码生成 PPT",
       "native-compiled-output": "HTML 编译 PPT", skin: "主题 Shell", "not-wired": "未接入运行时",
-      "user-approved": "用户已确认", "awaiting-user-review": "等待用户确认",
+      "user-approved": "两轮审批通过", "awaiting-html-review": "等待 HTML 一审",
+      "awaiting-native-review": "等待 PPT 二审", "awaiting-user-review": "等待用户确认",
       "requires-redistillation": "需要重新蒸馏", "legacy-or-unreviewed": "旧流程资产",
     };
     const state = { search: "", library: "all", category: "all", renderer: "all", coverage: null, logicCarousel: {} };
@@ -695,7 +701,7 @@
     function reviewWorkflowMarkup(asset) {
       if (!liveMode) return '<div class="review-flow"><h3>建设链证据</h3><p>静态快照不加载来源页和实时 HTML。请双击 PPA看板.exe。</p></div>';
       const htmlRoute = asset.renderer === 'html-component';
-      const awaitingHtmlApproval = htmlRoute && asset.componentFidelityStatus !== 'user-approved';
+      const awaitingHtmlApproval = htmlRoute && !asset.userApprovedHtml;
       const sourcePreviews = asset.sourcePreviewUrls ?? [];
       const sourceButtons = sourcePreviews.length > 1 ? '<div class="state-switcher"><div class="state-control"><b>来源参考</b>' + sourcePreviews.map((item, index) => '<button type="button" class="state-button' + (index === 0 ? ' active' : '') + '" data-source-preview="' + esc(item.url) + '" data-source-slide="' + item.slide + '">来源 ' + (index + 1) + '</button>').join('') + '</div></div>' : '';
       const sourceMedia = asset.sourcePreviewAvailable && asset.sourcePreviewUrl
@@ -819,7 +825,8 @@
       ];
       document.getElementById("metric-grid").innerHTML = metrics.map(([value, label]) => '<article class="metric"><div class="value">' + value + '</div><div class="label">' + esc(label) + '</div></article>').join("");
       document.getElementById("auto-callable-pill").textContent = DATA.summary.autoCallable + " 个核心包可自动发现";
-      document.getElementById("approval-count").textContent = DATA.summary.pendingApproval + " 个资产等待用户确认";
+      document.getElementById("html-approval-count").textContent = DATA.summary.pendingHtmlApproval + " 个等待 HTML 确认";
+      document.getElementById("native-approval-count").textContent = DATA.summary.pendingNativeApproval + " 个等待 PPT 确认";
       document.getElementById("logic-count").textContent = DATA.summary.logicFilled + " / " + DATA.summary.logicSlots + " 个 Logic 已填充 · " + DATA.summary.formalLogics + " 个 Structure Group";
     }
 
@@ -839,18 +846,26 @@
       }).join("");
     }
 
-    function renderPendingApproval() {
-      const grid = document.getElementById("approval-grid");
-      if (!DATA.pendingApproval.length) {
-        grid.innerHTML = '<div class="empty">当前没有等待用户确认的资产。</div>';
+    function renderApprovalGrid(gridId, assets, stage) {
+      const grid = document.getElementById(gridId);
+      if (!assets.length) {
+        grid.innerHTML = '<div class="empty">当前没有等待本轮确认的资产。</div>';
         return;
       }
-      grid.innerHTML = DATA.pendingApproval.map((asset) => {
+      grid.innerHTML = assets.map((asset) => {
         const topic = DATA.logics.find((item) => item.id === asset.logicId);
         const logicName = topic?.name ?? asset.logicId;
         const logicDescription = topic?.description ?? asset.semanticContract ?? '';
-        return '<article class="coverage-card available" role="button" tabindex="0" data-asset-key="' + esc(asset.library + ':' + asset.id) + '"><div class="coverage-card-head"><div><strong>' + esc(logicName) + '</strong><span class="coverage-description">' + esc(logicDescription) + '</span></div><span class="coverage-count">待审批</span></div>' + pendingApprovalPreviewMarkup(asset) + '<span class="coverage-asset-name">' + esc(asset.name) + '</span><span class="coverage-asset-meta">' + esc(asset.structureGroupId) + '</span><span class="coverage-status">' + esc(range(asset)) + ' · 点击查看详情</span></article>';
+        const isHtml = stage === 'html';
+        const preview = isHtml ? pendingApprovalPreviewMarkup(asset) : previewMarkup(asset);
+        const badge = isHtml ? 'HTML 一审' : 'PPT 二审';
+        return '<article class="coverage-card available" role="button" tabindex="0" data-asset-key="' + esc(asset.library + ':' + asset.id) + '"><div class="coverage-card-head"><div><strong>' + esc(logicName) + '</strong><span class="coverage-description">' + esc(logicDescription) + '</span></div><span class="coverage-count">' + badge + '</span></div>' + preview + '<span class="coverage-asset-name">' + esc(asset.name) + '</span><span class="coverage-asset-meta">' + esc(asset.structureGroupId) + '</span><span class="coverage-status">' + esc(range(asset)) + ' · 点击查看详情</span></article>';
       }).join("");
+    }
+
+    function renderPendingApproval() {
+      renderApprovalGrid("html-approval-grid", DATA.pendingHtmlApproval ?? [], "html");
+      renderApprovalGrid("native-approval-grid", DATA.pendingNativeApproval ?? [], "native");
     }
 
     function renderCoverage() {
@@ -879,10 +894,15 @@
       const index = Math.min(state.logicCarousel[topic.id] ?? 0, assets.length - 1);
       state.logicCarousel[topic.id] = index;
       const asset = assets[index];
+      const genericCoverage = topic.genericCoverage === 'diverse'
+        ? '通用结构 ' + topic.genericAssetIds.length + ' 组'
+        : topic.genericCoverage === 'single'
+          ? '通用结构仅 1 组 · 重复风险'
+          : '仅专用结构 · 通用覆盖缺口';
       const carousel = assets.length > 1
         ? '<div class="coverage-asset-tabs" aria-label="该 Logic 的 Structure Group">' + assets.map((candidate, tabIndex) => '<button type="button" class="coverage-asset-tab ' + (tabIndex === index ? 'active' : '') + '" data-carousel-select="' + tabIndex + '" data-logic-id="' + esc(topic.id) + '" aria-pressed="' + (tabIndex === index ? 'true' : 'false') + '">' + esc(candidate.name) + '</button>').join('') + '</div>'
         : '';
-      return '<article class="coverage-card available" role="button" tabindex="0" data-logic-card="' + esc(topic.id) + '" data-asset-key="' + esc(asset.library + ':' + asset.id) + '"><div class="coverage-card-head"><div><strong>' + esc(topic.name) + '</strong><span class="coverage-description">' + esc(topic.description) + '</span></div><span class="coverage-count">' + (index + 1) + ' / ' + assets.length + '</span></div>' + previewMarkup(asset) + carousel + '<span class="coverage-asset-name">当前预览 · ' + esc(asset.name) + '</span><span class="coverage-asset-meta">' + esc(asset.structureGroupId) + '</span><span class="coverage-status">' + esc(range(asset)) + ' · 点击查看详情</span></article>';
+      return '<article class="coverage-card available" role="button" tabindex="0" data-logic-card="' + esc(topic.id) + '" data-asset-key="' + esc(asset.library + ':' + asset.id) + '"><div class="coverage-card-head"><div><strong>' + esc(topic.name) + '</strong><span class="coverage-description">' + esc(topic.description) + '</span></div><span class="coverage-count">' + (index + 1) + ' / ' + assets.length + '</span></div>' + previewMarkup(asset) + carousel + '<span class="coverage-asset-name">当前预览 · ' + esc(asset.name) + '</span><span class="coverage-asset-meta">' + esc(asset.structureGroupId) + '</span><span class="coverage-status">' + esc(genericCoverage) + ' · ' + esc(range(asset)) + ' · 点击查看详情</span></article>';
     }
 
     function selectLogicCarousel(logicId, index) {

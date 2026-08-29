@@ -1,1 +1,30 @@
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}body{background:transparent}
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { color: #3f5668; background: transparent; font-family: var(--ppagent-font-body, "Microsoft YaHei"), sans-serif; }
+
+.deep-hierarchy { position: relative; width: 1170px; height: 492px; overflow: hidden; background: transparent; }
+.hierarchy-links { position: absolute; inset: 0; z-index: 0; width: 1170px; height: 492px; overflow: visible; }
+.hierarchy-node { position: absolute; left: var(--left); top: var(--top); z-index: 2; width: var(--width); height: var(--height); }
+.node-shape { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.node-index { position: absolute; z-index: 2; left: 18px; top: 10px; color: rgba(255,255,255,.56); font-size: var(--ppagent-component-meta-size, 15pt); font-weight: 700; letter-spacing: .08em; }
+.node-marker { position: absolute; z-index: 2; left: 25px; top: 50%; width: 9px; height: 9px; transform: translateY(-50%); border-radius: 50%; background: var(--tone); }
+.node-text { position: absolute; z-index: 3; left: 20px; right: 20px; top: 21px; bottom: 13px; --ppagent-heading-color: #fff; }
+.node-text .ppagent-text-primitive--heading { color: #fff; font-size: var(--ppagent-component-lead-size, 19pt); font-weight: 700; line-height: 1.18; }
+.level-1 .node-text { left: 20px; right: 28px; top: 15px; bottom: 15px; }
+.level-1 .node-text .ppagent-text-primitive--heading { font-size: var(--ppagent-component-lead-size, 19pt); }
+.light-node .node-index { left: 24px; top: 50%; transform: translateY(-50%); color: var(--tone); font-size: var(--ppagent-component-meta-size, 15pt); }
+.light-node .node-text { left: 51px; right: 24px; top: 8px; bottom: 8px; --ppagent-heading-color: #40586a; }
+.light-node .node-text .ppagent-text-primitive--heading { color: #40586a; font-size: var(--ppagent-component-body-size, 17pt); font-weight: 650; line-height: 1.18; }
+.deep-hierarchy[data-level-count="4"] .level-3 .node-text,
+.deep-hierarchy[data-level-count="4"] .level-4 .node-text { left: 48px; right: 17px; top: 6px; bottom: 6px; }
+.deep-hierarchy[data-level-count="4"] .level-3 .node-text .ppagent-text-primitive--heading,
+.deep-hierarchy[data-level-count="4"] .level-4 .node-text .ppagent-text-primitive--heading { font-size: var(--ppagent-component-body-size, 17pt); }
+.deep-hierarchy[data-level-count="4"] .level-3 .node-marker,
+.deep-hierarchy[data-level-count="4"] .level-4 .node-marker { left: 24px; }
+.deep-hierarchy[data-level-count="5"] .level-2 .node-text .ppagent-text-primitive--heading { font-size: var(--ppagent-component-body-size, 17pt); }
+.deep-hierarchy[data-level-count="5"] .light-node .node-text { left: 43px; right: 12px; top: 5px; bottom: 5px; }
+.deep-hierarchy[data-level-count="5"] .light-node .node-marker { left: 21px; width: 8px; height: 8px; }
+.deep-hierarchy[data-max-level-size="7"] .light-node .node-text .ppagent-text-primitive--heading,
+.deep-hierarchy[data-max-level-size="8"] .light-node .node-text .ppagent-text-primitive--heading,
+.deep-hierarchy[data-max-level-size="9"] .light-node .node-text .ppagent-text-primitive--heading,
+.deep-hierarchy[data-max-level-size="10"] .light-node .node-text .ppagent-text-primitive--heading { font-size: var(--ppagent-component-meta-size, 15pt); }

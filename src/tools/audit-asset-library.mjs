@@ -2,6 +2,9 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { discoverAssetManifestEntries } from "./asset-manifest-inventory.mjs";
+import { inspectAssetIntakeState } from "../runtime/asset-intake-state.mjs";
+import { inspectAssetManifestContract } from "../runtime/asset-manifest-contract.mjs";
+import { inspectCoreAssetReachability } from "../runtime/core-asset-reachability.mjs";
 
 const require = createRequire(import.meta.url);
 const JSZip = require("jszip");
@@ -54,26 +57,51 @@ for (const entry of coreAssets) {
   assetIds.add(entry.id);
   const isCore = entry.status === "core";
   const isPendingReview = entry.status === "pending-review";
+  const isWithdrawn = entry.status === "withdrawn";
+  const isSuperseded = entry.status === "superseded";
   if (isCore) coreIds.add(entry.id);
   else if (isPendingReview) pendingReviewIds.add(entry.id);
+  else if (isWithdrawn) {
+    // 保留历史实现，但不进入审批或正式调用目录。
+  }
+  else if (isSuperseded) {
+    // 已被新资产替代，仅保留历史实现。
+  }
   else issues.push(`资产状态错误: ${entry.id}/${entry.status ?? "未声明"}`);
-  if (!entry.layoutExpansion || !new Set(["fixed", "responsive"]).has(entry.layoutExpansion.mode)) {
+  if (isCore) {
+    if (entry.metadata.intake?.schemaVersion === "1.0") {
+      const intake = await inspectAssetIntakeState({
+        asset: entry.metadata,
+        assetDir: entry.directory,
+        logicMap,
+        root,
+      });
+      for (const issue of intake.readinessIssues) issues.push(`核心资产入库状态非法: ${entry.id}/${issue}`);
+      if (!intake.registered) issues.push(`核心资产尚未完成 Logic 注册: ${entry.id}/${intake.logicId ?? "未声明"}`);
+    } else {
+      const manifestContract = inspectAssetManifestContract(entry.metadata);
+      for (const issue of manifestContract.issues) issues.push(`核心资产运行声明非法: ${entry.id}/${issue}`);
+      const reachability = inspectCoreAssetReachability(entry.metadata);
+      for (const issue of reachability.issues) issues.push(`核心资产正式不可达: ${entry.id}/${issue}`);
+    }
+  }
+  if (!isWithdrawn && !isSuperseded && (!entry.layoutExpansion || !new Set(["fixed", "responsive"]).has(entry.layoutExpansion.mode))) {
     issues.push(`核心资产缺少版式扩散模式: ${entry.id}`);
   }
-  if (!entry.layoutExpansion?.range?.trim()) issues.push(`核心资产缺少版式扩散范围: ${entry.id}`);
-  if (!entry.layoutExpansion?.rule?.trim()) issues.push(`核心资产缺少版式扩散规则: ${entry.id}`);
+  if (!isWithdrawn && !isSuperseded && !entry.layoutExpansion?.range?.trim()) issues.push(`核心资产缺少版式扩散范围: ${entry.id}`);
+  if (!isWithdrawn && !isSuperseded && !entry.layoutExpansion?.rule?.trim()) issues.push(`核心资产缺少版式扩散规则: ${entry.id}`);
   const directory = entry.directory;
   const metadata = entry.metadata;
-  for (const name of isCore ? ["generate.mjs"] : ["review.mjs", "component.css", "visual-intent.md"]) {
+  for (const name of isCore ? ["generate.mjs"] : isPendingReview ? ["review.mjs", "component.css", "visual-intent.md"] : []) {
     if (!(await exists(path.join(directory, name)))) issues.push(`${isCore ? "核心资产" : "待确认资产"}缺少 ${name}: ${entry.id}`);
   }
   if (metadata.status !== entry.status) issues.push(`资产元数据状态错误: ${entry.id}`);
   if (isPendingReview && metadata.runtime?.renderer !== "html-component") issues.push(`待确认资产必须使用 HTML 路线: ${entry.id}`);
-  if (isPendingReview && await exists(path.join(directory, "user-approval.json"))) issues.push(`待确认资产不应已有用户确认记录: ${entry.id}`);
-  if (metadata.kind === "component" && !metadata.spatialContract) issues.push(`核心结构资产缺少空间契约: ${entry.id}`);
+  if (!isWithdrawn && !isSuperseded && metadata.kind === "component" && !metadata.spatialContract) issues.push(`核心结构资产缺少空间契约: ${entry.id}`);
   const sourceFile = typeof metadata.source === "string" ? metadata.source : metadata.source?.file;
-  if (!sourceFile) issues.push(`核心资产缺少可追溯来源: ${entry.id}`);
-  else if (mode === "local" && !(await exists(path.join(root, sourceFile)))) issues.push(`核心资产来源不存在: ${entry.id}`);
+  const sourceRun = metadata.source?.type === "formal-run-gap" && metadata.source?.runId;
+  if (!sourceFile && !sourceRun) issues.push(`核心资产缺少可追溯来源: ${entry.id}`);
+  else if (sourceFile && mode === "local" && !(await exists(path.join(root, sourceFile)))) issues.push(`核心资产来源不存在: ${entry.id}`);
   const showcase = metadata.showcase ? path.join(directory, metadata.showcase) : null;
   if (showcase && !(await exists(showcase))) issues.push(`核心资产声明的示例不存在: ${entry.id}/${metadata.showcase}`);
   if (showcase && await exists(showcase)) {

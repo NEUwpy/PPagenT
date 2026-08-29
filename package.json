@@ -17,8 +17,11 @@
     "assets:dashboard": "node src/tools/serve-logic-dashboard.mjs",
     "assets:dashboard:build": "node src/tools/build-logic-dashboard.mjs",
     "assets:dashboard:exe": "npx -y node@25.5.0 src/tools/build-dashboard-exe.mjs",
+    "production:workbench": "node src/tools/serve-production-workbench.mjs",
+    "production:workbench:exe": "npx -y node@25.5.0 src/tools/build-production-workbench-exe.mjs",
     "assets:examples": "node src/tools/build-structure-group-examples.mjs .",
     "assets:slot-contracts": "node src/tools/build-html-slot-contracts.mjs .",
+    "assets:intake:finalize": "node src/tools/finalize-asset-intake.mjs --root .",
     "validate:contracts": "node src/tools/validate-rule-layer.mjs .",
     "match": "node src/tools/match-page-intent.mjs --root .",
     "agent:run": "node src/agent/run-workflow.mjs --root .",
@@ -32,6 +35,7 @@
     "@tabler/icons": "3.46.0",
     "ajv": "^8.17.1",
     "jszip": "^3.10.1",
+    "mammoth": "^1.12.1",
     "playwright-core": "^1.62.1"
   }
 }

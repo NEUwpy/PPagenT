@@ -10,5 +10,5 @@ export { previewParameters, resolvePreviewParameters, visualComponent };
 await runHtmlComponentGenerator(
   import.meta.url,
   visualComponent,
-  resolvePreviewParameters(previewParameters, { itemCount: 4 }),
+  resolvePreviewParameters(previewParameters, { itemCount: 2 }),
 );

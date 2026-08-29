@@ -4,7 +4,7 @@
   "kind": "component",
   "category": "结构图",
   "creationMethod": "distillation",
-  "status": "core",
+  "status": "withdrawn",
   "generator": "generate.mjs",
   "showcase": "example.pptx",
   "source": {
@@ -115,5 +115,5 @@
   "capacity": "2–3 个部门，每部门 1–3 名成员；姓名不超过 6 字，部门不超过 8 字，角色不超过 6 字；肖像可选，缺少时自动使用语义图标",
   "semanticContract": "一个负责人统领多个部门，每个部门负责人再管理若干普通成员的三层归属关系",
   "doNotUseWhen": "只有部门没有成员、层级超过三层、需要承载职责长文，或表达的是系统技术分层而非人物／组织归属",
-  "review": "用户确认三层人物组织树可以继续正式落地；人物媒体采用肖像优先、语义图标兜底，完成一次 Native/PPT 与东北大学 Skin 轻量编译后进入核心库"
+  "review": "2026-08-27 打回：人物媒体依赖强、使用频率低且与通用层级树能力重叠。保留历史实现，不进入能力地图、审批队列或正式生成线。"
 }

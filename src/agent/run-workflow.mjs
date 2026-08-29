@@ -41,6 +41,38 @@ function normalizedText(value) {
   return String(value).replaceAll("\r\n", "\n");
 }
 
+async function observeOperation(observer, stage, input, operation) {
+  if (typeof observer !== "function") return operation();
+  const callId = `${stage}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
+  const startedAt = Date.now();
+  await observer({ source: "workflow", type: "stage-call", status: "running", stage, callId, input });
+  try {
+    const output = await operation();
+    await observer({
+      source: "workflow", type: "stage-call", status: "succeeded", stage, callId,
+      durationMs: Date.now() - startedAt, output,
+    });
+    return output;
+  } catch (error) {
+    await observer({
+      source: "workflow", type: "stage-call", status: "failed", stage, callId,
+      durationMs: Date.now() - startedAt,
+      error: { name: error?.name, code: error?.code, stage: error?.stage, message: error?.message ?? String(error), details: error?.details },
+    });
+    throw error;
+  }
+}
+
+function observedProvider(provider, observer) {
+  if (typeof observer !== "function") return provider;
+  const wrapped = { metadata: provider.metadata };
+  for (const method of ["contentDirector", "visualDirector", "refineContent", "contentReview", "visualReview"]) {
+    if (typeof provider[method] !== "function") continue;
+    wrapped[method] = (input) => observeOperation(observer, method === "refineContent" ? "semantic-refinement" : method.replace(/[A-Z]/g, (value) => `-${value.toLowerCase()}`), input, () => provider[method](input));
+  }
+  return wrapped;
+}
+
 async function sha256JsonFile(filePath) {
   return sha256(JSON.stringify(JSON.parse(await fs.readFile(filePath, "utf8"))));
 }
@@ -84,9 +116,9 @@ export async function runWorkflowCli(options) {
   }
   const inputPath = resolveFromRoot(options.input);
   const rawMarkdown = await fs.readFile(inputPath, "utf8");
-  const providerPath = resolveFromRoot(options.provider);
-  const providerModule = await import(pathToFileURL(providerPath).href);
-  const provider = providerModule.default ?? providerModule.provider;
+  const providerPath = options.providerInstance ? null : resolveFromRoot(options.provider);
+  const providerModule = providerPath ? await import(pathToFileURL(providerPath).href) : null;
+  const provider = options.providerInstance ?? providerModule?.default ?? providerModule?.provider;
   if (!provider) throw new Error("DirectorProvider 模块必须导出 default 或 provider");
   const renderer = createNortheasternUniversityRenderer({
     root,
@@ -98,12 +130,12 @@ export async function runWorkflowCli(options) {
   const result = await runDirectorWorkflow({
     root,
     input: { rawMarkdown, skinId: options.skin ?? DEFAULT_SKIN_ID },
-    provider,
+    provider: observedProvider(provider, options.observer),
     outputDir: runDir,
-    visualCandidateProvider: buildVisualCandidateSets,
-    visualResolver: resolveVisualPlan,
-    shellScaffolder: applyAcademicReportShellScaffold,
-    renderer,
+    visualCandidateProvider: (input) => observeOperation(options.observer, "visual-candidates", input, () => buildVisualCandidateSets(input)),
+    visualResolver: (input) => observeOperation(options.observer, "visual-resolution", input, () => resolveVisualPlan(input)),
+    shellScaffolder: (input) => observeOperation(options.observer, "shell-scaffold", input, () => applyAcademicReportShellScaffold(input)),
+    renderer: (input) => observeOperation(options.observer, "render", input, () => renderer(input)),
     reviewMode: options.mode === "development" ? "development" : "none",
   });
   const overflow = await runOverflowCheck(options, result.outputPptx);
@@ -139,7 +171,9 @@ export async function runWorkflowCli(options) {
       skinId: options.skin ?? DEFAULT_SKIN_ID,
     },
     provider: {
-      module: path.relative(root, providerPath).replaceAll("\\", "/"),
+      module: providerPath
+        ? path.relative(root, providerPath).replaceAll("\\", "/")
+        : (options.providerLabel ?? "in-process-provider"),
       identity: provider.metadata ?? { providerKind: "module-without-metadata" },
     },
     artifacts,

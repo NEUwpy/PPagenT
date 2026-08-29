@@ -32,9 +32,11 @@
           "fitSignals": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["purposeSpecific", "preferredMetrics", "totalPreferredMetrics", "validated", "realManuscriptValidated"],
+            "required": ["purposeSpecific", "densityCompatible", "metricDistance", "preferredMetrics", "totalPreferredMetrics", "validated", "realManuscriptValidated"],
             "properties": {
               "purposeSpecific": { "type": "boolean" },
+              "densityCompatible": { "type": "boolean" },
+              "metricDistance": { "type": "integer", "minimum": 0 },
               "preferredMetrics": { "type": "integer", "minimum": 0 },
               "totalPreferredMetrics": { "type": "integer", "minimum": 0 },
               "validated": { "type": "boolean" },

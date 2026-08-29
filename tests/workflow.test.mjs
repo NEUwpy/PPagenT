@@ -5,7 +5,13 @@ import path from "node:path";
 import test from "node:test";
 import { DirectorProviderError } from "../src/agent/director-provider.mjs";
 import { runWorkflowCli } from "../src/agent/run-workflow.mjs";
-import { DEFAULT_SKIN_ID, WorkflowError, runDirectorWorkflow } from "../src/agent/workflow.mjs";
+import {
+  DEFAULT_SKIN_ID,
+  WorkflowError,
+  buildAssetGapReport,
+  buildProductionStatistics,
+  runDirectorWorkflow,
+} from "../src/agent/workflow.mjs";
 import { computeContentStats } from "../src/content/page-content.mjs";
 import { createRuleValidators } from "../src/selection/validation.mjs";
 
@@ -499,6 +505,62 @@ test("多项内容超过正式容量时退回内容导演压缩而不是进入�
   assert.equal(receivedReview.issues[0].errorCode, "CONTENT_CAPACITY_EXCEEDED");
 });
 
+test("候选阶段只有文字容量超限时定向退回内容导演而不误报资产缺口", async (t) => {
+  const outputDir = await makeTempDir(t);
+  let contentCalls = 0;
+  let receivedReview = null;
+  const provider = completeProvider({
+    async contentDirector({ previousReview }) {
+      contentCalls += 1;
+      if (contentCalls === 2) receivedReview = previousReview;
+      const output = contentOutput();
+      if (contentCalls === 1) output.pageContents[0].items[0].title = "判断观点属于哪一种逻辑";
+      return output;
+    },
+  });
+  const capacityAwareCandidates = async ({ pageContents }) => {
+    if (Array.from(pageContents[0].items[0].title).length <= 8) return candidateProvider();
+    const capacityRejections = [{
+      assetId: "radial-hub-001",
+      variantId: "orbit",
+      issues: [{
+        role: "item-title",
+        sourceItemId: "point-1",
+        sourceField: "title",
+        actualChars: 11,
+        actualLines: 1,
+        maxChars: 8,
+        maxLines: 1,
+      }],
+    }];
+    return [{
+      pageId: "problem",
+      intentId: "problem-intent",
+      candidates: [],
+      gap: {
+        type: "content-capacity-gap",
+        reason: "存在语义兼容结构，但标题超出容量",
+        capacityRejections,
+      },
+      capacityRejections,
+    }];
+  };
+  const result = await runDirectorWorkflow({
+    input: { rawMarkdown },
+    provider,
+    outputDir,
+    reviewMode: "production",
+    visualCandidateProvider: capacityAwareCandidates,
+    visualResolver: resolver,
+    renderer,
+    maxContentAttempts: 2,
+  });
+  assert.equal(result.status, "delivered");
+  assert.equal(contentCalls, 2);
+  assert.equal(receivedReview.issues[0].errorCode, "CONTENT_CAPACITY_EXCEEDED");
+  assert.equal(receivedReview.issues[0].details.issues[0].sourceItemId, "point-1");
+});
+
 test("每次正式生成都必须带通过的确定性质量审计，否则不得交付", async (t) => {
   const outputDir = await makeTempDir(t);
   await assert.rejects(
@@ -636,6 +698,177 @@ test("没有语义兼容候选时直接报告资产缺口，不要求内容导�
     && error.details.gaps[0].logicId === "progression"
   ));
   assert.equal(candidateCalls, 1);
+});
+
+test("正式生成遇到资产缺口时用正文候选完成交付并暴露必要结构补充", async (t) => {
+  const outputDir = await makeTempDir(t);
+  const fallbackProvider = async () => [{
+    pageId: "problem",
+    intentId: "problem-intent",
+    candidates: [{
+      familyId: "skin-body-editorial",
+      assetId: "northeastern-university-body-001",
+      variantId: "editorial",
+      silhouette: "editorial-page",
+      adaptationStatus: "adaptive",
+      fallbackBody: true,
+      compositionIds: ["body-copy"],
+    }],
+    gap: {
+      type: "asset-gap",
+      logicId: "comparison",
+      baseRelation: "comparison",
+      itemCount: 2,
+      reason: "当前核心资产库没有语义与容量均兼容的 Structure Group",
+    },
+  }];
+  const provider = completeProvider({
+    async visualDirector({ phase, skinId }) {
+      if (phase === "intent") return visualIntentOutput();
+      const output = visualPlanOutput(skinId);
+      output.visualPlan.pages[0] = {
+        ...output.visualPlan.pages[0],
+        familyId: "skin-body-editorial",
+        variantId: "editorial",
+        silhouette: "editorial-page",
+      };
+      output.compositionPlan.pages[0] = {
+        ...output.compositionPlan.pages[0],
+        compositionId: "body-copy",
+      };
+      return output;
+    },
+  });
+  const result = await runDirectorWorkflow({
+    input: { rawMarkdown },
+    provider,
+    outputDir,
+    reviewMode: "production",
+    visualCandidateProvider: fallbackProvider,
+    visualResolver: ({ compositionPlan }) => ({
+      status: "accepted",
+      results: [],
+      feedback: [],
+      layoutDecisions: [{
+        schemaVersion: "1.0",
+        intentId: "problem-intent",
+        decision: "single-match",
+        selectedFamilyId: "skin-body-editorial",
+        selectedAssetId: "northeastern-university-body-001",
+        selectedVariantId: "editorial",
+        selectedSilhouette: "editorial-page",
+        selectionState: "selected",
+        selectionOwner: "visual-director",
+        candidates: [],
+        rejections: [],
+        resolutionPlan: null,
+      }],
+      renderPayloads: [{
+        schemaVersion: "1.0",
+        intentId: "problem-intent",
+        assetId: "northeastern-university-body-001",
+        parameters: { title: "模板有时尽，现状无穷多", items: [], visualVariantId: "editorial" },
+        mappings: [],
+        omissions: [],
+      }],
+      compositionPlan,
+    }),
+    renderer,
+  });
+  assert.equal(result.status, "delivered");
+  assert.equal(result.assetGapReport.fallbackPageCount, 1);
+  assert.equal(result.assetGapReport.fallbackPages[0].pageId, "problem");
+  assert.equal(result.assetGapReport.recommendedStructureSupplements[0].assessment, "necessary-existing-logic-supplement");
+  await fs.access(path.join(outputDir, "asset-gap-report.json"));
+});
+
+test("资产缺口报告按既有 Logic 聚合，而不是把退回页改成 editorial", () => {
+  const report = buildAssetGapReport([{
+    pageId: "problem",
+    candidates: [{ assetId: "body", fallbackBody: true }],
+    gap: { type: "asset-gap", logicId: "comparison", baseRelation: "comparison", itemCount: 2, reason: "缺结构" },
+  }], [{ pageId: "problem", title: "两端需求", items: [{}, {}], logicIntent: { logicId: "comparison" } }]);
+  assert.equal(report.fallbackPages[0].logicId, "comparison");
+  assert.equal(report.recommendedStructureSupplements[0].logicLabel, "对比与选择");
+  assert.match(report.recommendedStructureSupplements[0].recommendation, /通用 Structure Group/);
+});
+
+test("生产统计记录结构使用、重复次数和退回数量", () => {
+  const pageContents = [
+    { pageId: "p1", title: "一", items: [], logicIntent: { logicId: "parallel" } },
+    { pageId: "p2", title: "二", items: [], logicIntent: { logicId: "parallel" } },
+    { pageId: "p3", title: "三", items: [], logicIntent: { logicId: "comparison" } },
+  ];
+  const structure = {
+    assetId: "parallel-equal-cards-001",
+    logicId: "parallel",
+    structureGroupId: "parallel-equal-cards",
+    familyId: "parallel-cards",
+    variantId: "equal",
+    silhouette: "cards",
+    fallbackBody: false,
+  };
+  const fallback = {
+    assetId: "northeastern-university-body-001",
+    familyId: "skin-body-editorial",
+    variantId: "editorial",
+    silhouette: "editorial-page",
+    fallbackBody: true,
+  };
+  const candidateSets = [
+    { pageId: "p1", intentId: "i1", candidates: [structure] },
+    { pageId: "p2", intentId: "i2", candidates: [structure] },
+    { pageId: "p3", intentId: "i3", candidates: [fallback], gap: { type: "asset-gap", logicId: "comparison" } },
+  ];
+  const layoutDecisions = [
+    { intentId: "i1", selectedAssetId: structure.assetId },
+    { intentId: "i2", selectedAssetId: structure.assetId },
+    { intentId: "i3", selectedAssetId: fallback.assetId },
+  ];
+  const assetGapReport = buildAssetGapReport(candidateSets, pageContents);
+  const statistics = buildProductionStatistics({ candidateSets, pageContents, layoutDecisions, assetGapReport });
+  assert.equal(statistics.bodyPageCount, 3);
+  assert.equal(statistics.structurePageCount, 2);
+  assert.equal(statistics.fallbackPageCount, 1);
+  assert.equal(statistics.uniqueStructureCount, 1);
+  assert.equal(statistics.repeatedStructureCount, 1);
+  assert.equal(statistics.repeatedUseCount, 1);
+  assert.deepEqual(statistics.structureUsage[0].pageIds, ["p1", "p2"]);
+  assert.deepEqual(statistics.candidateAvailability, {
+    zeroCandidatePageCount: 1,
+    singleCandidatePageCount: 2,
+    multipleCandidatePageCount: 0,
+  });
+  assert.deepEqual(statistics.candidateAvailabilityByLogic, [
+    {
+      logicId: "parallel",
+      logicLabel: "并列与枚举",
+      pageCount: 2,
+      zeroCandidatePageCount: 0,
+      singleCandidatePageCount: 2,
+      multipleCandidatePageCount: 0,
+      eligibleAssetIds: ["parallel-equal-cards-001"],
+    },
+    {
+      logicId: "comparison",
+      logicLabel: "对比与选择",
+      pageCount: 1,
+      zeroCandidatePageCount: 1,
+      singleCandidatePageCount: 0,
+      multipleCandidatePageCount: 0,
+      eligibleAssetIds: [],
+    },
+  ]);
+  assert.deepEqual(statistics.diversityGaps, [{
+    logicId: "parallel",
+    logicLabel: "并列与枚举",
+    affectedPageCount: 2,
+    onlyEligibleAssetId: "parallel-equal-cards-001",
+    type: "single-generic-candidate",
+    recommendation: "该 Logic 的高频普通内容只有一个合法候选；下一次独立入库任务应补充一组通用 Structure Group，或为现有组增加经审批的等价视觉变体。",
+  }]);
+  assert.equal(statistics.pageCandidateDiagnostics.find((item) => item.pageId === "p1").diagnosis, "single-legal-candidate");
+  assert.equal(statistics.pageCandidateDiagnostics.find((item) => item.pageId === "p3").diagnosis, "asset-gap");
 });
 
 test("渲染前视觉 error 未关闭时绝不调用 renderer", async (t) => {

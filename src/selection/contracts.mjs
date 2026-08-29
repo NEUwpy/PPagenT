@@ -1,60 +1,19 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { discoverCoreAssetPackages } from "../runtime/core-asset-packages.mjs";
+import {
+  formalAssetContractFromManifest,
+  normalizeFormalAssetContract,
+} from "../runtime/formal-asset-contract.mjs";
 
-function mergeObject(base, override) {
-  return { ...(base ?? {}), ...(override ?? {}) };
-}
-
-export function normalizeContract(defaults, contract) {
-  return {
-    ...defaults,
-    ...contract,
-    supportedIntents: mergeObject(defaults.supportedIntents, contract.supportedIntents),
-    constraints: {
-      ...mergeObject(defaults.constraints, contract.constraints),
-      semantic: mergeObject(defaults.constraints?.semantic, contract.constraints?.semantic),
-      relationTraits: mergeObject(defaults.constraints?.relationTraits, contract.constraints?.relationTraits),
-      metrics: contract.constraints?.metrics ?? defaults.constraints?.metrics ?? [],
-      density: contract.constraints?.density ?? defaults.constraints?.density ?? [],
-    },
-    textBudget: mergeObject(defaults.textBudget, contract.textBudget),
-    fallback: mergeObject(defaults.fallback, contract.fallback),
-    evidence: {
-      ...mergeObject(defaults.evidence, contract.evidence),
-      basis: contract.evidence?.basis ?? defaults.evidence?.basis ?? [],
-    },
-  };
-}
+export const normalizeContract = normalizeFormalAssetContract;
 
 export async function loadContractCatalog(root = process.cwd()) {
   const target = path.join(root, "catalog", "asset-contracts.json");
   const catalog = JSON.parse(await fs.readFile(target, "utf8"));
   const packages = await discoverCoreAssetPackages(root);
   const packagedIds = new Set(packages.map((item) => item.assetId));
-  const packagedContracts = packages.map((item) => normalizeContract(catalog.defaults, {
-    assetId: item.assetId,
-    status: "validated",
-    abstractionLevel: item.runtime.contract.abstractionLevel,
-    adaptationStatus: item.runtime.contract.adaptationStatus,
-    supportedIntents: {
-      baseRelations: item.runtime.supportedBaseRelations,
-      purposeKeys: item.runtime.supportedPurposeKeys ?? [],
-    },
-    constraints: {
-      ...item.runtime.contract.constraints,
-      metrics: [
-        ...(item.runtime.contract.constraints?.metrics ?? []),
-        { field: "itemCount", ...item.runtime.itemCount },
-      ],
-    },
-    fallback: item.runtime.contract.fallback ?? {},
-    evidence: {
-      basis: ["metadata", "user-confirmation"],
-      realManuscriptValidated: true,
-      notes: item.asset.review ?? "用户确认后进入核心资产包。",
-    },
-  }));
+  const packagedContracts = packages.map((item) => formalAssetContractFromManifest(catalog.defaults, item.asset));
   return [
     ...catalog.contracts
       .filter((contract) => !packagedIds.has(contract.assetId))
@@ -113,9 +72,6 @@ function evaluateContract(intent, contract) {
     if (intent.relationTraits[field] !== expected) reasons.push(`trait:${field}`);
   }
 
-  if (contract.constraints.density.length && !contract.constraints.density.includes(intent.density)) {
-    reasons.push(`density:${intent.density}`);
-  }
   evaluateTextBudget(intent, contract, reasons);
 
   return { eligible: reasons.length === 0, reasons };
@@ -125,6 +81,13 @@ const LEVEL_ORDER = { foundation: 0, composite: 1, deferred: 2 };
 const ADAPTATION_ORDER = { adaptive: 0, partial: 1, fixed: 2, unknown: 3 };
 
 function fitSignals(intent, contract) {
+  const metricDistance = contract.constraints.metrics.reduce((total, metric) => {
+    const value = metricValue(intent, metric.field);
+    if (!Number.isInteger(value)) return total;
+    if (metric.min !== undefined && value < metric.min) return total + (metric.min - value);
+    if (metric.max !== undefined && value > metric.max) return total + (value - metric.max);
+    return total;
+  }, 0);
   const preferredMetrics = contract.constraints.metrics.filter((metric) => {
     if (!metric.preferred?.length) return false;
     return metric.preferred.includes(metricValue(intent, metric.field));
@@ -132,6 +95,9 @@ function fitSignals(intent, contract) {
   const totalPreferredMetrics = contract.constraints.metrics.filter((metric) => metric.preferred?.length).length;
   return {
     purposeSpecific: contract.supportedIntents.purposeKeys.length > 0,
+    densityCompatible: !contract.constraints.density.length
+      || contract.constraints.density.includes(intent.density),
+    metricDistance,
     preferredMetrics,
     totalPreferredMetrics,
     validated: contract.status === "validated",
@@ -148,6 +114,8 @@ function compareCandidates(left, right) {
   const rightSignals = right.fitSignals;
   return left.reasons.length - right.reasons.length
     || Number(rightSignals.purposeSpecific) - Number(leftSignals.purposeSpecific)
+    || leftSignals.metricDistance - rightSignals.metricDistance
+    || Number(rightSignals.densityCompatible) - Number(leftSignals.densityCompatible)
     || preferredRatio(rightSignals) - preferredRatio(leftSignals)
     || Number(rightSignals.validated) - Number(leftSignals.validated)
     || Number(rightSignals.realManuscriptValidated) - Number(leftSignals.realManuscriptValidated)
@@ -159,6 +127,8 @@ function compareCandidates(left, right) {
 function sameFit(left, right) {
   if (!left || !right) return false;
   return left.fitSignals.purposeSpecific === right.fitSignals.purposeSpecific
+    && left.fitSignals.metricDistance === right.fitSignals.metricDistance
+    && left.fitSignals.densityCompatible === right.fitSignals.densityCompatible
     && preferredRatio(left.fitSignals) === preferredRatio(right.fitSignals)
     && left.fitSignals.validated === right.fitSignals.validated
     && left.fitSignals.realManuscriptValidated === right.fitSignals.realManuscriptValidated
@@ -169,7 +139,7 @@ function sameFit(left, right) {
 function fallbackKey(reason) {
   if (reason.startsWith("above-max:")) return "tooMany";
   if (reason.startsWith("below-min:")) return "tooFew";
-  if (reason.startsWith("too-long:") || reason.startsWith("density:")) return "tooLong";
+  if (reason.startsWith("too-long:")) return "tooLong";
   return "semanticMismatch";
 }
 

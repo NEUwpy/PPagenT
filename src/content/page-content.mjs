@@ -1,3 +1,12 @@
+import {
+  hierarchyMatrixFromStructuredData,
+  hierarchyMatrixIssues,
+} from "./hierarchy-matrix.mjs";
+import {
+  LOGIC_INTENT_DEFAULTS,
+  logicIdForStructuredData,
+} from "./formal-logic-contract.mjs";
+
 function countChars(value) {
   return Array.from(String(value ?? "").trim()).length;
 }
@@ -31,6 +40,10 @@ export function validateStructuredDataReferences(pageContent) {
 
   const structured = pageContent.structuredData;
   if (!structured) return issues;
+
+  if (structured.type === "hierarchy") {
+    issues.push(...hierarchyMatrixIssues(hierarchyMatrixFromStructuredData(structured)));
+  }
 
   if (structured.type === "problem-solution") {
     const pairIds = structured.pairs.map((pair) => pair.id);
@@ -162,6 +175,38 @@ export function validateStructuredDataReferences(pageContent) {
     compareIdSets(assigned, itemIds, "structuredData.quadrants[].itemIds", issues);
   }
 
+  if (structured.type === "matrix-grid") {
+    const rowIds = structured.rows.map((row) => row.id);
+    const columnIds = structured.columns.map((column) => column.id);
+    const duplicateRows = duplicateValues(rowIds);
+    const duplicateColumns = duplicateValues(columnIds);
+    if (duplicateRows.length) issues.push({ field: "structuredData.rows", code: "DUPLICATE_MATRIX_ROW", ids: duplicateRows });
+    if (duplicateColumns.length) issues.push({ field: "structuredData.columns", code: "DUPLICATE_MATRIX_COLUMN", ids: duplicateColumns });
+    const rowSet = new Set(rowIds);
+    const columnSet = new Set(columnIds);
+    const cellKeys = structured.cells.map((cell) => `${cell.rowId}|${cell.columnId}`);
+    const duplicateCells = duplicateValues(cellKeys);
+    if (duplicateCells.length) issues.push({ field: "structuredData.cells", code: "DUPLICATE_MATRIX_CELL", ids: duplicateCells });
+    structured.cells.forEach((cell, index) => {
+      if (!rowSet.has(cell.rowId)) issues.push({ field: `structuredData.cells[${index}].rowId`, code: "UNKNOWN_MATRIX_ROW", ids: [cell.rowId] });
+      if (!columnSet.has(cell.columnId)) issues.push({ field: `structuredData.cells[${index}].columnId`, code: "UNKNOWN_MATRIX_COLUMN", ids: [cell.columnId] });
+      if (structured.cellMode === "intensity" && !Number.isInteger(cell.intensity)) {
+        issues.push({ field: `structuredData.cells[${index}].intensity`, code: "MISSING_MATRIX_INTENSITY" });
+      }
+    });
+    const expectedCells = rowIds.flatMap((rowId) => columnIds.map((columnId) => `${rowId}|${columnId}`));
+    const actualCellSet = new Set(cellKeys);
+    const missingCells = expectedCells.filter((key) => !actualCellSet.has(key));
+    if (missingCells.length) issues.push({ field: "structuredData.cells", code: "MISSING_MATRIX_CELL", ids: missingCells });
+    const assigned = [
+      ...structured.rows.map((row) => row.itemId).filter(Boolean),
+      ...structured.cells.flatMap((cell) => cell.itemIds ?? []),
+    ];
+    const duplicates = duplicateValues(assigned);
+    if (duplicates.length) issues.push({ field: "structuredData.rows[].itemId/structuredData.cells[].itemIds", code: "DUPLICATE_REFERENCE", ids: duplicates });
+    compareIdSets(assigned, itemIds, "structuredData.rows[].itemId/structuredData.cells[].itemIds", issues);
+  }
+
   if (structured.type === "convergence") {
     const inputIds = structured.inputs.map((input) => input.id);
     const phaseIds = structured.phases.map((phase) => phase.id);
@@ -179,6 +224,24 @@ export function validateStructuredDataReferences(pageContent) {
 }
 
 export function computeContentStats(pageContent) {
+  if (pageContent.structuredData?.type === "hierarchy") {
+    const topology = hierarchyMatrixFromStructuredData(pageContent.structuredData);
+    const nodes = topology?.layers.flat() ?? [];
+    const lengths = nodes.map((node) => countChars(node.label) + countChars(node.role) + countChars(node.groupLabel));
+    const maxItemChars = lengths.length ? Math.max(...lengths) : 0;
+    const minItemChars = lengths.length ? Math.min(...lengths) : 0;
+    const average = lengths.length ? lengths.reduce((sum, value) => sum + value, 0) / lengths.length : 0;
+    return {
+      titleChars: countChars(pageContent.title),
+      itemCount: Math.max(0, ...((topology?.layers.slice(1) ?? []).map((layer) => layer.length))),
+      maxItemChars,
+      avgItemChars: round(average),
+      minItemChars,
+      maxItemTitleChars: nodes.length ? Math.max(...nodes.map((node) => countChars(node.label))) : 0,
+      maxItemBodyChars: nodes.length ? Math.max(...nodes.map((node) => countChars(node.role) + countChars(node.groupLabel))) : 0,
+      imbalanceRatio: minItemChars > 0 ? round(maxItemChars / minItemChars) : maxItemChars > 0 ? maxItemChars : 0,
+    };
+  }
   if (pageContent.structuredData?.type === "problem-solution") {
     const pairs = pageContent.structuredData.pairs ?? [];
     const pairLengths = pairs.map((pair) => [
@@ -258,86 +321,29 @@ export function enrichPageIntent(intentDraft, pageContent) {
   };
 }
 
-const LOGIC_INTENT_DEFAULTS = Object.freeze({
-  parallel: { purposeKey: "present_parallel_points", baseRelation: "parallel", sameLevel: true },
-  sequence: { purposeKey: "explain_process", baseRelation: "sequence", ordered: true },
-  cycle: { purposeKey: "explain_cycle", baseRelation: "cycle", ordered: true, cyclic: true },
-  comparison: { purposeKey: "compare_options", baseRelation: "comparison", sameLevel: true },
-  hierarchy: { purposeKey: "explain_hierarchy", baseRelation: "hierarchy", branched: true },
-  layered: {
-    purposeKey: "explain_layers",
-    baseRelation: "layered",
-    ordered: true,
-    secondaryDimension: "layer",
-  },
-  progression: { purposeKey: "explain_evolution", baseRelation: "progression", ordered: true },
-  hub: { purposeKey: "explain_topics", baseRelation: "hub", sameLevel: true },
-  matrix: { purposeKey: "organize_matrix", baseRelation: "matrix", dimensions: 2, sameLevel: true },
-  convergence: { purposeKey: "explain_conversion", baseRelation: "convergence", ordered: true, converging: true },
-  causal: { purposeKey: "analyze_causes", baseRelation: "causal", converging: true },
-  "problem-solution": {
-    purposeKey: "connect_problems_and_solutions",
-    baseRelation: "composite",
-    converging: true,
-  },
-  "argument-evidence": {
-    purposeKey: "support_claim_with_evidence",
-    baseRelation: "composite",
-    converging: true,
-  },
-  containment: {
-    purposeKey: "explain_shared_scope",
-    baseRelation: "intersection",
-    sameLevel: true,
-  },
-  network: {
-    purposeKey: "explain_internal_external_ecosystem",
-    baseRelation: "network",
-    sameLevel: true,
-  },
-  "goal-alignment": {
-    purposeKey: "align_goal_and_metrics",
-    baseRelation: "goal-alignment",
-    sameLevel: false,
-  },
-  "role-stage": {
-    purposeKey: "explain_cross_role_process",
-    baseRelation: "sequence",
-    ordered: true,
-    dimensions: 2,
-    secondaryDimension: "role",
-  },
-  branching: {
-    purposeKey: "route_by_condition",
-    baseRelation: "branching",
-    branched: true,
-  },
-  editorial: { purposeKey: "summarize_research_method", baseRelation: "none" },
-});
+function hierarchyDepth(structuredData) {
+  return hierarchyMatrixFromStructuredData(structuredData)?.layers.length ?? 0;
+}
 
-function hierarchyDepth(node) {
-  if (!node) return 0;
-  const childDepths = (node.children ?? []).map(hierarchyDepth);
-  return 1 + (childDepths.length ? Math.max(...childDepths) : 0);
+function progressionMode(pageContent) {
+  const source = [
+    pageContent.title,
+    pageContent.logicIntent?.reason,
+    pageContent.sourceText,
+  ].filter(Boolean).join("\n");
+  if (/(?:连续维度|连续区间|光谱|分布|一端是|另一端是|低[^，。；]{0,12}中[^，。；]{0,12}高|中间区域|重点区域)/.test(source)) {
+    return "continuous-spectrum";
+  }
+  if (/(?:成熟度|等级|级别|门槛|分级|L[1-9]|当前级|目标级)/i.test(source)) {
+    return "discrete-levels";
+  }
+  return "growth-path";
 }
 
 function inferredLogicId(pageContent) {
   if (pageContent.logicIntent?.logicId) return pageContent.logicIntent.logicId;
-  if (pageContent.structuredData?.type === "problem-solution") return "problem-solution";
-  if (pageContent.structuredData?.type === "problem-method-result") return "problem-solution";
-  if (pageContent.structuredData?.type === "argument-evidence") return "argument-evidence";
-  if (pageContent.structuredData?.type === "multi-set-common-intersection") return "containment";
-  if (pageContent.structuredData?.type === "iceberg-visible-hidden") return "layered";
-  if (pageContent.structuredData?.type === "decision-tradeoff") return "comparison";
-  if (pageContent.structuredData?.type === "internal-external-ecosystem") return "network";
-  if (pageContent.structuredData?.type === "hub-tiered-ecosystem") return "hub";
-  if (pageContent.structuredData?.type === "branching-decision") return "branching";
-  if (pageContent.structuredData?.type === "branching-scenario") return "branching";
-  if (pageContent.structuredData?.type === "goal-strategy-metrics") return "goal-alignment";
-  if (pageContent.structuredData?.type === "role-stage") return "role-stage";
-  if (pageContent.structuredData?.type === "matrix") return "matrix";
-  if (pageContent.structuredData?.type === "convergence") return "convergence";
-  if (pageContent.structuredData?.type === "hierarchy") return "hierarchy";
+  const structuredLogicId = logicIdForStructuredData(pageContent.structuredData?.type);
+  if (structuredLogicId) return structuredLogicId;
   const noteMatch = String(pageContent.notes ?? "").match(/PPagenT主关系=([a-z-]+)/);
   return noteMatch?.[1] ?? "editorial";
 }
@@ -355,14 +361,25 @@ export function buildPageIntentFromContent(pageContent) {
   const source = String(pageContent.sourceText ?? "");
   const temporal = logicId === "sequence"
     && /(?:\d{4}\s*年|第[一二三四五六七八九十\d]+阶段|时间轴|里程碑|路线图|历史|演进|年度|季度|月份|未来\s*\d+)/.test(source);
+  const hierarchyTopology = logicId === "hierarchy" ? hierarchyMatrixFromStructuredData(pageContent.structuredData) : null;
+  const hierarchyItemCount = hierarchyTopology
+    ? Math.max(0, ...hierarchyTopology.layers.slice(1).map((layer) => layer.length))
+    : 0;
+  const structureItemCount = logicId === "hierarchy" ? hierarchyItemCount : (pageContent.items?.length ?? 0);
   const structure = {
-    itemCount: pageContent.items?.length ?? 0,
+    itemCount: structureItemCount,
     ordered: Boolean(defaults.ordered),
     sameLevel: Boolean(defaults.sameLevel),
-    dimensions: { items: pageContent.items?.length ?? 0 },
+    dimensions: { items: structureItemCount },
   };
   if (logicId === "hierarchy") {
-    structure.hierarchyDepth = hierarchyDepth(pageContent.structuredData?.root);
+    structure.hierarchyDepth = hierarchyDepth(pageContent.structuredData);
+    structure.dimensions.levels = structure.hierarchyDepth;
+  }
+  if (pageContent.structuredData?.type === "matrix-grid") {
+    structure.dimensions.rows = pageContent.structuredData.rows.length;
+    structure.dimensions.columns = pageContent.structuredData.columns.length;
+    structure.dimensions.cellMode = pageContent.structuredData.cellMode;
   }
   return enrichPageIntent({
     intentId: `${pageContent.pageId}-intent`,
@@ -376,6 +393,7 @@ export function buildPageIntentFromContent(pageContent) {
       branched: Boolean(defaults.branched),
       dimensions: defaults.dimensions ?? 1,
       secondaryDimension: defaults.secondaryDimension ?? "none",
+      ...(logicId === "progression" ? { progressionMode: progressionMode(pageContent) } : {}),
     },
     structure,
     density: "unknown",

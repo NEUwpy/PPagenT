@@ -1,0 +1,74 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body {
+  background: transparent;
+  color: #40505f;
+  font-family: var(--ppagent-font-body, "Microsoft YaHei"), sans-serif;
+}
+.summary-review {
+  position: relative;
+  width: 1170px;
+  height: 492px;
+  overflow: hidden;
+  background: transparent;
+}
+.summary-geometry {
+  position: absolute;
+  inset: 0;
+  width: 1170px;
+  height: 492px;
+  overflow: visible;
+}
+.summary-half-left { fill: #edf5fa; stroke: none; }
+.summary-half-right { fill: #f3f7fa; stroke: none; }
+.summary-outline { fill: none; stroke: #cddfeb; stroke-width: 2px; }
+.summary-divider { fill: none; stroke: #b7cede; stroke-width: 2px; }
+.summary-hinge-halo { fill: #fff; stroke: #cddfeb; stroke-width: 2px; }
+.summary-hinge-core { fill: #2d6fa6; stroke: none; }
+.summary-field {
+  position: absolute;
+  top: 90px;
+  width: 490px;
+  height: 312px;
+  z-index: 2;
+}
+.summary-field-left { left: 65px; }
+.summary-field-right { right: 65px; }
+.summary-text-region {
+  position: absolute;
+  left: 54px;
+  right: 54px;
+  top: 66px;
+  bottom: 66px;
+}
+.summary-field-left .summary-text-region { padding-right: 18px; }
+.summary-field-right .summary-text-region { padding-left: 18px; }
+.summary-text-region .ppagent-text-flow,
+.summary-text-region .ppagent-text-layout {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.summary-text-region .ppagent-text-heading {
+  font-size: 23pt;
+  line-height: 1.25;
+}
+.summary-text-region .ppagent-text-body {
+  font-size: 17pt;
+  line-height: 1.45;
+}
+.summary-hinge-label {
+  position: absolute;
+  left: 537px;
+  top: 222px;
+  width: 96px;
+  height: 48px;
+  z-index: 4;
+  overflow: hidden;
+  color: #fff;
+  font-size: 19pt;
+  font-weight: 700;
+  line-height: 48px;
+  text-align: center;
+  white-space: nowrap;
+}

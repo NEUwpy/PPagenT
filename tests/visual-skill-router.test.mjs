@@ -18,6 +18,7 @@ const page = {
 const intent = { intentId: "p1-intent", baseRelation: "hub", purposeKey: "explain_topics" };
 const core = {
   logicId: "hub",
+  assetId: "hub-radial-001",
   structureGroupId: "hub-radial-anchor",
   familyId: "hub-radial",
   variantId: "balanced-orbit-anchor",
@@ -87,4 +88,45 @@ test("视觉路由只看紧凑 Skill 摘要并由程序展开正式表单", () =
     regionKey: "items[].support",
     layoutId: "statement-flow",
   }]);
+});
+
+test("同一稿件连续页面有多个合法结构时优先使用较少出现的结构", () => {
+  const alternate = {
+    ...core,
+    assetId: "hub-directed-outcomes-002",
+    structureGroupId: "hub-directed-outcomes",
+    familyId: "hub-directed-outcomes",
+    variantId: "directed-outcomes",
+    silhouette: "directed-radial",
+    mediaContract: { mode: "no-image" },
+  };
+  const pages = [
+    page,
+    { ...page, pageId: "p2", title: "第二个中心主题" },
+  ];
+  const intents = [
+    intent,
+    { ...intent, intentId: "p2-intent" },
+  ];
+  const candidateSets = pages.map((item) => ({ pageId: item.pageId, candidates: [core, alternate] }));
+  const routing = { selections: pages.map((item) => ({
+    pageId: item.pageId,
+    candidateId: "hub-radial::balanced-orbit-anchor::radial",
+    centerLabel: "中心",
+    iconQueries: [],
+    textLayoutChoices: [],
+    refinementItemIds: [],
+    reason: "模型连续选择同一结构",
+  })) };
+  const expanded = expandVisualSkillRouting(routing, {
+    deckPlan: { deckId: "deck" },
+    skinId: "skin",
+    pageContents: pages,
+    pageIntents: intents,
+    candidateSets,
+  });
+  assert.deepEqual(expanded.visualPlan.pages.map((item) => item.familyId), [
+    "hub-radial",
+    "hub-directed-outcomes",
+  ]);
 });

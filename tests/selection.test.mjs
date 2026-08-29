@@ -58,11 +58,11 @@ test("双组对比的组数和每组条目数由 PageContent 确定性补齐", (
   assert.equal(intent.structure.dimensions.itemsPerGroup, 3);
 });
 
-test("普通顺序过程只匹配基础顺序语法", async () => {
+test("普通顺序过程至少包含基础顺序语法，密度不作为硬拒绝条件", async () => {
   const intent = await readFixture("sequence.intent.json");
   const result = matchPageIntent(intent, contracts);
-  assert.equal(result.decision, "single-match");
-  assert.equal(result.selectedAssetId, "sequence-flow-001");
+  assert.ok(["single-match", "needs-ranking"].includes(result.decision));
+  assert.ok(result.candidates.some((item) => item.assetId === "sequence-flow-001"));
 });
 
 test("purposeText 可自由变化，执行只依赖受控 purposeKey", async () => {
@@ -88,21 +88,21 @@ test("受控 purposeKey 拒绝未登记同义词", async () => {
   assert.equal(validators.purposeKeys.has("describe_steps_in_order"), false);
 });
 
-test("中心辐射超过容量时生成可执行退化计划", async () => {
+test("中心辐射超过全库最大容量时生成可执行退化计划", async () => {
   const base = await readFixture("sequence.intent.json");
   const intent = {
     ...base,
     intentId: "hub-overflow",
     purposeKey: "explain_topics",
-    purposeText: "说明一个中心主题周围的九个同级要点",
+    purposeText: "说明一个中心主题周围的十四个同级要点",
     baseRelation: "hub",
     relationTraits: { ...base.relationTraits, branched: false },
-    structure: { ...base.structure, itemCount: 9, ordered: false, sameLevel: true },
-    contentStats: { ...base.contentStats, itemCount: 9 },
+    structure: { ...base.structure, itemCount: 14, ordered: false, sameLevel: true },
+    contentStats: { ...base.contentStats, itemCount: 14 },
   };
   const result = matchPageIntent(intent, contracts);
   assert.equal(result.decision, "fallback");
-  assert.equal(result.resolutionPlan.sourceAssetId, "hub-radial-001");
+  assert.equal(result.resolutionPlan.sourceAssetId, "hub-two-tier-capabilities-004");
   assert.equal(result.resolutionPlan.reason, "above-max:itemCount");
   assert.equal(result.resolutionPlan.action, "defer-to-review");
   assert.equal(result.resolutionPlan.requiresReview, true);

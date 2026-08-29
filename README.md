@@ -70,7 +70,7 @@ npm test
 
 `npm test` 会校验规则层契约、版式合法性筛选、公开仓库资产结构，以及资产覆盖清单中引用的 ID 与状态是否真实。完整资产库存直接扫描 `asset.json`，不靠清单登记。包含原始模板和样本文件的本地工作区可额外执行 `npm run audit:local`。
 
-正式入口为 `npm run agent:run`，只接受原稿、Skin、输出位置、运行记录目录和 DirectorProvider；不接受人工准备的逐页 `pages`。生成带文字统计的 `PageIntent` 可使用 `npm run intent:stats -- --content <page-content.json> --intent-draft <intent-draft.json>`。
+底层正式入口为 `npm run agent:run`，只接受原稿、Skin、输出位置、运行记录目录和 DirectorProvider；不接受人工准备的逐页 `pages`。日常使用及 Codex 代为生成统一通过 `PPA生产工作台.exe` 进入这条正式线，以便用户与 Codex 读取同一份过程记录。生成带文字统计的 `PageIntent` 可使用 `npm run intent:stats -- --content <page-content.json> --intent-draft <intent-draft.json>`。
 
 项目内稿件统一使用仓库相对路径 `稿件/<文件名>`。当前两份回归稿件为 `稿件/为什么做PPagenT-v1.md` 和 `稿件/让六地红-v1.md`；具体放置和命名规则见[放入稿件说明](稿件/放入稿件说明.md)。
 

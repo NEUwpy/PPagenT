@@ -75,8 +75,13 @@
             "layered": { "type": "boolean" },
             "comparison": { "type": "boolean" },
             "hierarchy": { "type": "boolean" },
+            "hub": { "type": "boolean" },
+            "twoTier": { "type": "boolean" },
+            "branchOwnership": { "type": "boolean" },
+            "scenarioAnalysis": { "type": "boolean" },
             "peopleIdentity": { "type": "boolean" },
-            "directionalPreference": { "type": "boolean" }
+            "directionalPreference": { "type": "boolean" },
+            "progressionMode": { "enum": ["growth-path", "continuous-spectrum", "discrete-levels"] }
           }
         },
         "density": {

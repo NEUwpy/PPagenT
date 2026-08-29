@@ -129,6 +129,19 @@ function assertContentOutput(validators, output, rawMarkdown) {
         { pageId: page.pageId },
       );
     }
+    if (page.logicIntent?.logicId === "problem-solution"
+      && !new Set(["problem-solution", "problem-method-result"]).has(page.structuredData?.type)) {
+      throw new WorkflowError(
+        "CONTENT_LOGIC_MISMATCH",
+        "content-director",
+        `${page.pageId} 选择了问题方案结果 Logic，却没有提供可调用资产所需的问题—方案结构化关系`,
+        {
+          pageId: page.pageId,
+          logicId: page.logicIntent.logicId,
+          requiredStructuredDataTypes: ["problem-solution", "problem-method-result"],
+        },
+      );
+    }
     const componentSpecificIds = page.items
       .map((item) => item.id)
       .filter((id) => /^(source-|app-)|^platform$/i.test(id));
@@ -196,6 +209,233 @@ function unresolvedErrors(review) {
 
 function reviewPasses(review) {
   return review.verdict === "pass" && unresolvedErrors(review).length === 0;
+}
+
+const logicLabels = {
+  comparison: "对比与选择",
+  sequence: "顺序流程",
+  progression: "递进与成熟度",
+  parallel: "并列与枚举",
+  hierarchy: "层级与组织",
+  convergence: "汇聚、分流与转化",
+  "problem-solution": "问题、方案与结果",
+};
+
+export function buildAssetGapReport(candidateSets, pageContents) {
+  const pageById = new Map(pageContents.map((page) => [page.pageId, page]));
+  const fallbackPages = candidateSets
+    .filter((set) => set.gap?.type === "asset-gap" && set.candidates?.some((item) => item.fallbackBody))
+    .map((set) => {
+      const page = pageById.get(set.pageId);
+      return {
+        pageId: set.pageId,
+        title: page?.title ?? set.pageId,
+        logicId: set.gap.logicId ?? page?.logicIntent?.logicId ?? null,
+        baseRelation: set.gap.baseRelation ?? null,
+        itemCount: set.gap.itemCount ?? page?.items?.length ?? 0,
+        reason: set.gap.reason,
+        fallbackAssetId: set.candidates.find((item) => item.fallbackBody)?.assetId ?? null,
+      };
+    });
+  const grouped = new Map();
+  for (const page of fallbackPages) {
+    const key = `${page.logicId ?? "unknown"}:${page.baseRelation ?? "unknown"}`;
+    const entry = grouped.get(key) ?? {
+      logicId: page.logicId,
+      logicLabel: logicLabels[page.logicId] ?? page.logicId ?? "待确认 Logic",
+      baseRelation: page.baseRelation,
+      affectedPageIds: [],
+      itemCounts: new Set(),
+    };
+    entry.affectedPageIds.push(page.pageId);
+    entry.itemCounts.add(page.itemCount);
+    grouped.set(key, entry);
+  }
+  const recommendedStructureSupplements = [...grouped.values()].map((entry) => {
+    const itemCounts = [...entry.itemCounts].sort((a, b) => a - b);
+    return {
+      logicId: entry.logicId,
+      logicLabel: entry.logicLabel,
+      baseRelation: entry.baseRelation,
+      itemCounts,
+      affectedPageIds: entry.affectedPageIds,
+      assessment: "necessary-existing-logic-supplement",
+      recommendation: `为“${entry.logicLabel}”补充可承载 ${itemCounts.join("/")} 项标题与正文的通用 Structure Group`,
+      reason: "原稿关系已明确属于该 Logic，但当前核心资产没有语义与容量均兼容的表达方式",
+    };
+  });
+  return {
+    schemaVersion: "1.0",
+    status: fallbackPages.length ? "fallback-used" : "no-gap",
+    fallbackPageCount: fallbackPages.length,
+    fallbackPages,
+    recommendedStructureSupplements,
+  };
+}
+
+export function buildProductionStatistics({ candidateSets, pageContents, layoutDecisions, assetGapReport }) {
+  const decisionsByIntent = new Map((layoutDecisions ?? []).map((decision) => [decision.intentId, decision]));
+  const pageById = new Map(pageContents.map((page) => [page.pageId, page]));
+  const usageByAsset = new Map();
+  const logicById = new Map();
+  const pageCandidateDiagnostics = [];
+  let editorialPageCount = 0;
+  let structurePageCount = 0;
+  const bodyPages = pageContents.filter((page) => !isShellPage(page));
+
+  for (const set of candidateSets.filter((item) => bodyPages.some((page) => page.pageId === item.pageId))) {
+    const decision = decisionsByIntent.get(set.intentId);
+    const selected = set.candidates.find((candidate) => (
+      candidate.assetId === decision?.selectedAssetId
+      || (candidate.familyId === decision?.selectedFamilyId
+        && candidate.variantId === decision?.selectedVariantId
+        && candidate.silhouette === decision?.selectedSilhouette)
+    ));
+    const page = pageById.get(set.pageId);
+    const eligibleCandidates = set.candidateDiagnostics
+      ? set.candidateDiagnostics.eligible
+        .filter((candidate) => candidate.variants.some((variant) => variant.contentReadiness === "ready"))
+      : set.candidates
+        .filter((candidate) => !candidate.fallbackBody)
+        .map((candidate) => ({
+          assetId: candidate.assetId,
+          structureGroupId: candidate.structureGroupId,
+          variants: [{
+            variantId: candidate.variantId,
+            contentReadiness: candidate.contentReadiness ?? "ready",
+          }],
+        }));
+    const legalCandidateCount = eligibleCandidates.length;
+    const editorial = page?.logicIntent?.logicId === "editorial"
+      || (selected?.fallbackBody && set.gap?.type !== "asset-gap");
+    pageCandidateDiagnostics.push({
+      pageId: set.pageId,
+      title: page?.title ?? set.pageId,
+      logicId: set.candidateDiagnostics?.query?.logicId ?? page?.logicIntent?.logicId ?? null,
+      candidateCount: legalCandidateCount,
+      diagnosis: editorial
+        ? "editorial"
+        : legalCandidateCount === 0
+        ? (set.gap?.type ?? "no-structure-candidate")
+        : legalCandidateCount === 1
+          ? "single-legal-candidate"
+          : "multiple-legal-candidates",
+      selectedAssetId: selected?.fallbackBody ? null : selected?.assetId ?? null,
+      eligibleCandidates,
+      rejectedCandidates: set.candidateDiagnostics?.rejected ?? [],
+    });
+    if (!selected) continue;
+    const logicId = set.gap?.logicId ?? selected.logicId ?? page?.logicIntent?.logicId ?? "unknown";
+    const logic = logicById.get(logicId) ?? {
+      logicId,
+      logicLabel: logicLabels[logicId] ?? logicId,
+      pageIds: [],
+      structurePageIds: [],
+      fallbackPageIds: [],
+      editorialPageIds: [],
+      assetIds: new Set(),
+    };
+    logic.pageIds.push(set.pageId);
+    if (selected.fallbackBody) {
+      if (set.gap?.type === "asset-gap") logic.fallbackPageIds.push(set.pageId);
+      else {
+        editorialPageCount += 1;
+        logic.editorialPageIds.push(set.pageId);
+      }
+    } else {
+      structurePageCount += 1;
+      logic.structurePageIds.push(set.pageId);
+      logic.assetIds.add(selected.assetId);
+      const usage = usageByAsset.get(selected.assetId) ?? {
+        assetId: selected.assetId,
+        logicId,
+        structureGroupId: selected.structureGroupId ?? null,
+        familyId: selected.familyId,
+        variantId: selected.variantId,
+        pageIds: [],
+      };
+      usage.pageIds.push(set.pageId);
+      usageByAsset.set(selected.assetId, usage);
+    }
+    logicById.set(logicId, logic);
+  }
+
+  const structureUsage = [...usageByAsset.values()]
+    .map((usage) => ({ ...usage, useCount: usage.pageIds.length }))
+    .sort((a, b) => b.useCount - a.useCount || a.assetId.localeCompare(b.assetId));
+  const repeatedStructures = structureUsage
+    .filter((usage) => usage.useCount > 1)
+    .map((usage) => ({ ...usage, repeatedUseCount: usage.useCount - 1 }));
+  const logicUsage = [...logicById.values()].map((logic) => ({
+    ...logic,
+    pageCount: logic.pageIds.length,
+    structurePageCount: logic.structurePageIds.length,
+    fallbackPageCount: logic.fallbackPageIds.length,
+    editorialPageCount: logic.editorialPageIds.length,
+    assetIds: [...logic.assetIds],
+  }));
+  const fallbackPageCount = assetGapReport?.fallbackPageCount ?? 0;
+  const structuralDiagnostics = pageCandidateDiagnostics.filter((item) => item.diagnosis !== "editorial");
+  const candidateAvailability = {
+    zeroCandidatePageCount: structuralDiagnostics.filter((item) => item.candidateCount === 0).length,
+    singleCandidatePageCount: structuralDiagnostics.filter((item) => item.candidateCount === 1).length,
+    multipleCandidatePageCount: structuralDiagnostics.filter((item) => item.candidateCount > 1).length,
+  };
+  const availabilityByLogic = new Map();
+  for (const item of structuralDiagnostics) {
+    const entry = availabilityByLogic.get(item.logicId) ?? {
+      logicId: item.logicId,
+      logicLabel: logicLabels[item.logicId] ?? item.logicId,
+      pageCount: 0,
+      zeroCandidatePageCount: 0,
+      singleCandidatePageCount: 0,
+      multipleCandidatePageCount: 0,
+      eligibleAssetIds: new Set(),
+    };
+    entry.pageCount += 1;
+    if (item.candidateCount === 0) entry.zeroCandidatePageCount += 1;
+    else if (item.candidateCount === 1) entry.singleCandidatePageCount += 1;
+    else entry.multipleCandidatePageCount += 1;
+    item.eligibleCandidates.forEach((candidate) => entry.eligibleAssetIds.add(candidate.assetId));
+    availabilityByLogic.set(item.logicId, entry);
+  }
+  const candidateAvailabilityByLogic = [...availabilityByLogic.values()].map((entry) => ({
+    ...entry,
+    eligibleAssetIds: [...entry.eligibleAssetIds],
+  }));
+  const diversityGaps = candidateAvailabilityByLogic
+    .filter((entry) => (
+      entry.pageCount >= 2
+      && entry.singleCandidatePageCount === entry.pageCount
+      && entry.eligibleAssetIds.length === 1
+    ))
+    .map((entry) => ({
+      logicId: entry.logicId,
+      logicLabel: entry.logicLabel,
+      affectedPageCount: entry.pageCount,
+      onlyEligibleAssetId: entry.eligibleAssetIds[0],
+      type: "single-generic-candidate",
+      recommendation: "该 Logic 的高频普通内容只有一个合法候选；下一次独立入库任务应补充一组通用 Structure Group，或为现有组增加经审批的等价视觉变体。",
+    }));
+  return {
+    schemaVersion: "1.0",
+    bodyPageCount: bodyPages.length,
+    structurePageCount,
+    editorialPageCount,
+    fallbackPageCount,
+    structureCoverageRate: bodyPages.length ? Number((structurePageCount / bodyPages.length).toFixed(4)) : 0,
+    uniqueStructureCount: structureUsage.length,
+    repeatedStructureCount: repeatedStructures.length,
+    repeatedUseCount: repeatedStructures.reduce((sum, item) => sum + item.repeatedUseCount, 0),
+    structureUsage,
+    repeatedStructures,
+    logicUsage,
+    candidateAvailability,
+    candidateAvailabilityByLogic,
+    diversityGaps,
+    pageCandidateDiagnostics,
+    recommendedStructureSupplements: assetGapReport?.recommendedStructureSupplements ?? [],
+  };
 }
 
 function assertReviewIdentity(review, { deckId, attempt, stage }) {
@@ -323,6 +563,21 @@ function assertResolvedVisual(validators, resolved, pageIntents, visualPlan, com
 
 function visualResolutionAccepted(resolved) {
   return resolved?.status === "accepted";
+}
+
+function capacityIssuesFromCandidateSets(candidateSets) {
+  return candidateSets.flatMap((set) => (
+    set.gap?.type === "content-capacity-gap"
+      ? (set.gap.capacityRejections ?? set.capacityRejections ?? []).flatMap((rejection) => (
+        (rejection.issues ?? []).map((issue) => ({
+          pageId: set.pageId,
+          assetId: rejection.assetId,
+          variantId: rejection.variantId,
+          ...issue,
+        }))
+      ))
+      : []
+  ));
 }
 
 async function assertRenderResult(result, pageCount) {
@@ -475,6 +730,8 @@ export async function runDirectorWorkflow(options) {
   let visualResolution = null;
   let renderResult = null;
   let semanticRefinementUsed = false;
+  let assetGapReport = buildAssetGapReport([], []);
+  let productionStatistics = null;
   for (let attempt = 1; attempt <= maxVisualAttempts; attempt += 1) {
     let presentationOutput = options.shellScaffolder
       ? await options.shellScaffolder(contentOutput)
@@ -504,13 +761,49 @@ export async function runDirectorWorkflow(options) {
         type: "asset-gap",
         reason: "候选集为空",
       });
+      const capacityOnly = !invalidCandidateSets
+        && gaps.length > 0
+        && gaps.every((gap) => gap.type === "content-capacity-gap");
+      const capacityIssues = capacityIssuesFromCandidateSets(emptyCandidateSets);
+      if (!invalidCandidateSets && capacityIssues.length && contentAttempt < maxContentAttempts) {
+        contentReview = {
+          verdict: "revise",
+          summary: gaps.some((gap) => gap.type === "asset-gap")
+            ? "部分页面存在资产缺口，但另有页面只是文字超容量；先修复可修的容量问题，再重新判断剩余缺口"
+            : "结构语义已经命中，但部分文字超过资产容量；只定向压缩报错字段",
+          issues: [{
+            severity: "error",
+            category: "content-capacity",
+            status: "open",
+            evidence: "候选生成阶段存在只由文字容量造成的空候选集",
+            targets: [...new Set(capacityIssues.map((issue) => issue.pageId))],
+            errorCode: "CONTENT_CAPACITY_EXCEEDED",
+            details: { issues: capacityIssues },
+          }],
+        };
+        await executeContentAttempt({ capacityFeedback: capacityIssues });
+        attempt -= 1;
+        continue;
+      }
+      if (capacityOnly) {
+        throw new WorkflowError(
+          "CONTENT_CAPACITY_EXCEEDED",
+          "visual-candidates",
+          "页面关系已有匹配资产，但文字在定向修订后仍超过已登记容量",
+          { candidateSets, gaps, capacityIssues, contentAttempt },
+        );
+      }
       throw new WorkflowError(
         "ASSET_GAP",
         "visual-candidates",
-        "原稿需要的结构尚未被核心资产库覆盖；流程已停止，未改写语义或退回正文兜底",
-        { candidateSets, gaps, contentAttempt },
+        gaps.some((gap) => gap.type === "content-capacity-gap")
+          ? "原稿同时存在真实资产缺口和可压缩的容量问题；因资产缺口流程已停止"
+          : "原稿需要的结构尚未被核心资产库覆盖；流程已停止，未改写语义或退回正文兜底",
+        { candidateSets, gaps, capacityIssues, contentAttempt },
       );
     }
+    assetGapReport = buildAssetGapReport(candidateSets, presentationOutput.pageContents);
+    await writeJson(path.join(outputDir, "asset-gap-report.json"), assetGapReport);
     let normalizedPlans;
     try {
       const compositionOutput = await provider.visualDirector({
@@ -678,6 +971,13 @@ export async function runDirectorWorkflow(options) {
       feedback: resolved.feedback ?? [],
       warnings: resolved.warnings ?? [],
     });
+    productionStatistics = buildProductionStatistics({
+      candidateSets: visual.candidateSets,
+      pageContents: presentationOutput.pageContents,
+      layoutDecisions: resolved.layoutDecisions,
+      assetGapReport,
+    });
+    await writeJson(path.join(outputDir, "production-statistics.json"), productionStatistics);
 
     if (developmentReview) visualReview = await provider.visualReview({
       ...input,
@@ -757,6 +1057,8 @@ export async function runDirectorWorkflow(options) {
         pageCount: presentationOutput.pageContents.length,
         outputPptx: renderResult.outputPptx,
         deterministicQualityAudit: renderResult.qualityAudit,
+        assetGapReport,
+        productionStatistics,
       };
       await writeJson(path.join(outputDir, "workflow-result.json"), delivery);
       return { ...delivery, deckPlan: presentationOutput.deckPlan, pageContents: presentationOutput.pageContents, renderResult };
@@ -790,6 +1092,8 @@ export async function runDirectorWorkflow(options) {
         outputPptx: renderResult.outputPptx,
         contentReviewId: contentReview.reviewId,
         visualReviewId: visualReview.reviewId,
+        assetGapReport,
+        productionStatistics,
       };
       await writeJson(path.join(outputDir, "workflow-result.json"), audit);
       return { ...audit, deckPlan: presentationOutput.deckPlan, pageContents: presentationOutput.pageContents, renderResult };

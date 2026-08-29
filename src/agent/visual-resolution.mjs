@@ -231,6 +231,180 @@ export function fixedSlotSourceCapacityIssues(content, candidate) {
   return issues;
 }
 
+function visualVariantQuery(intent, content, requiredItemRole, extra = {}) {
+  return {
+    itemCount: intent.structure.itemCount,
+    baseRelation: intent.baseRelation,
+    purposeKey: intent.purposeKey,
+    requiredItemRole,
+    maxPointsPerItem: intent.structure.dimensions?.maxPointsPerItem ?? 0,
+    maxPointChars: intent.structure.dimensions?.maxPointChars ?? 0,
+    pointCounts: content.items.map((item) => item.points?.length ?? 0),
+    polarities: content.items.map((item) => item.polarity),
+    emphases: content.items.map((item) => item.emphasis === true),
+    structuredDataType: content.structuredData?.type,
+    ...extra,
+  };
+}
+
+function hardVariantRejectionReasons(variant, query) {
+  const reasons = [];
+  if (query.baseRelation && !variant.supportedBaseRelations?.includes(query.baseRelation)) {
+    reasons.push(`base-relation:${query.baseRelation}`);
+  }
+  if (query.requiredItemRole && variant.contentContract?.itemRole !== query.requiredItemRole) {
+    reasons.push(`item-role:${query.requiredItemRole}`);
+  }
+  if (variant.contentContract?.requiresStructuredDataType
+    && variant.contentContract.requiresStructuredDataType !== query.structuredDataType) {
+    reasons.push(`structured-data:${variant.contentContract.requiresStructuredDataType}`);
+  }
+  if ((query.maxPointsPerItem ?? 0) > 0 && variant.contentContract?.points === "forbidden") {
+    reasons.push("points:forbidden");
+  }
+  const pointCounts = query.pointCounts ?? [];
+  if (variant.contentContract?.points === "required"
+    && (!pointCounts.length || pointCounts.some((count) => count <= 0))) {
+    reasons.push("points:required-per-item");
+  }
+  const pointCount = variant.contentContract?.pointCount;
+  if (pointCount && (
+    pointCounts.length !== query.itemCount
+    || pointCounts.some((count) => count < pointCount.min || count > pointCount.max)
+  )) {
+    reasons.push(`point-count:${pointCount.min}-${pointCount.max}`);
+  }
+  if (pointCount?.balancedAcrossItems && new Set(pointCounts).size > 1) {
+    reasons.push("point-count:balanced-required");
+  }
+  if (variant.contentContract?.polarity === "one-positive-one-negative") {
+    const explicitPair = (query.polarities ?? []).length === 2
+      && query.polarities.includes("positive")
+      && query.polarities.includes("negative");
+    const emphasisCount = (query.emphases ?? []).filter(Boolean).length;
+    if (!explicitPair && emphasisCount !== 1) reasons.push("polarity:positive-negative-pair");
+  }
+  if (query.itemCount < variant.itemCount.min || query.itemCount > variant.itemCount.max) {
+    reasons.push(`item-count:${variant.itemCount.min}-${variant.itemCount.max}`);
+  }
+  if (variant.textCapacity?.maxPointsPerItem !== undefined
+    && (query.maxPointsPerItem ?? 0) > variant.textCapacity.maxPointsPerItem) {
+    reasons.push(`max-points-per-item:${variant.textCapacity.maxPointsPerItem}`);
+  }
+  if (variant.textCapacity?.maxPointChars !== undefined
+    && (query.maxPointChars ?? 0) > variant.textCapacity.maxPointChars) {
+    reasons.push(`max-point-chars:${variant.textCapacity.maxPointChars}`);
+  }
+  return reasons;
+}
+
+function variantRejectionReasons(variants, query) {
+  const hardPass = variants.filter((variant) => !hardVariantRejectionReasons(variant, query).length);
+  const purposeSpecific = query.purposeKey
+    ? hardPass.filter((variant) => variant.supportedPurposeKeys?.includes(query.purposeKey))
+    : [];
+  const reasons = variants.flatMap((variant) => {
+    const hardReasons = hardVariantRejectionReasons(variant, query);
+    if (hardReasons.length) return hardReasons;
+    if (!query.purposeKey) return [];
+    if (purposeSpecific.length && !variant.supportedPurposeKeys?.includes(query.purposeKey)) {
+      return ["purpose:more-specific-variant-exists"];
+    }
+    if (!purposeSpecific.length && variant.supportedPurposeKeys?.length) {
+      return [`purpose-key:${query.purposeKey}`];
+    }
+    return [];
+  });
+  return [...new Set(reasons.length ? reasons : ["variant-contract:filtered"])];
+}
+
+function buildCandidateDiagnostics({
+  content,
+  intent,
+  capacityDensity,
+  structuralCandidates,
+  semantic,
+  capacityRejections,
+  variants,
+  variantsByAsset,
+  detailedVariantsByAsset,
+  query,
+}) {
+  const logicId = content.logicIntent?.logicId ?? null;
+  const semanticRejectedById = new Map(semantic.rejections.map((item) => [item.assetId, item.reasons]));
+  const capacityRejectedById = new Map();
+  for (const item of capacityRejections) {
+    const bucket = capacityRejectedById.get(item.assetId) ?? [];
+    bucket.push(...item.issues);
+    capacityRejectedById.set(item.assetId, bucket);
+  }
+  const eligibleByAsset = new Map();
+  const provisionalByAsset = new Map();
+  for (const candidate of structuralCandidates) {
+    const target = candidate.contentReadiness === "needs-semantic-refinement"
+      ? provisionalByAsset
+      : eligibleByAsset;
+    const bucket = target.get(candidate.assetId) ?? {
+      assetId: candidate.assetId,
+      structureGroupId: candidate.structureGroupId,
+      variants: [],
+    };
+    bucket.variants.push({
+      variantId: candidate.variantId,
+      contentReadiness: candidate.contentReadiness ?? "ready",
+    });
+    target.set(candidate.assetId, bucket);
+  }
+  const sameLogicAssetIds = [...new Set(
+    variants.filter((variant) => variant.logicId === logicId).map((variant) => variant.assetId),
+  )];
+  const rejected = [];
+  for (const assetId of sameLogicAssetIds) {
+    if (eligibleByAsset.has(assetId)) continue;
+    if (provisionalByAsset.has(assetId)) {
+      const detailed = detailedVariantsByAsset.get(assetId) ?? variantsByAsset.get(assetId) ?? [];
+      rejected.push({
+        assetId,
+        stage: "semantic-refinement",
+        reasons: variantRejectionReasons(detailed, query),
+      });
+      continue;
+    }
+    if (capacityRejectedById.has(assetId)) {
+      rejected.push({
+        assetId,
+        stage: "capacity",
+        reasons: [...new Set(capacityRejectedById.get(assetId).map((issue) => (
+          `${issue.role}:${issue.actualChars}>${issue.maxChars ?? "?"}`
+        )))],
+      });
+      continue;
+    }
+    if (semanticRejectedById.has(assetId)) {
+      rejected.push({ assetId, stage: "semantic-contract", reasons: semanticRejectedById.get(assetId) });
+      continue;
+    }
+    const detailed = detailedVariantsByAsset.get(assetId) ?? variantsByAsset.get(assetId) ?? [];
+    rejected.push({
+      assetId,
+      stage: "variant-contract",
+      reasons: variantRejectionReasons(detailed, query),
+    });
+  }
+  return {
+    query: {
+      logicId,
+      baseRelation: intent.baseRelation,
+      purposeKey: intent.purposeKey,
+      itemCount: intent.structure.itemCount,
+      structuredDataType: content.structuredData?.type ?? null,
+      capacityDensity,
+    },
+    eligible: [...eligibleByAsset.values()],
+    rejected,
+  };
+}
+
 export async function buildVisualCandidateSets({ root = process.cwd(), pageContents, pageIntents }) {
   const [contracts, variants, coreAssetIds, layouts, metadataById] = await Promise.all([
     loadContractCatalog(root),
@@ -286,6 +460,8 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
     });
     const structuralCandidates = [];
     const capacityRejections = [];
+    const detailedVariantsByAsset = new Map();
+    const query = visualVariantQuery(intent, pageContents[index], requiredItemRole);
     const appendStructuralCandidate = (variant, contract, compositions, contentReadiness = "ready") => {
       const exposed = publicVariant(variant, contract, compositions, intent.structure.itemCount, contentReadiness);
       const issues = fixedSlotSourceCapacityIssues(pageContents[index], exposed);
@@ -300,29 +476,10 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
         (variantsByAsset.get(candidate.assetId) ?? [])
           .map((variant) => loadVisualVariantCapabilities(variant, root)),
       );
-      const compatible = queryVisualVariants(detailedVariants, {
-        itemCount: intent.structure.itemCount,
-        baseRelation: intent.baseRelation,
-        purposeKey: intent.purposeKey,
-        requiredItemRole,
-        maxPointsPerItem: intent.structure.dimensions?.maxPointsPerItem ?? 0,
-        maxPointChars: intent.structure.dimensions?.maxPointChars ?? 0,
-        pointCounts: pageContents[index].items.map((item) => item.points?.length ?? 0),
-        polarities: pageContents[index].items.map((item) => item.polarity),
-        emphases: pageContents[index].items.map((item) => item.emphasis === true),
-        structuredDataType: pageContents[index].structuredData?.type,
-      });
+      detailedVariantsByAsset.set(candidate.assetId, detailedVariants);
+      const compatible = queryVisualVariants(detailedVariants, query);
       const provisional = compatible.length ? [] : queryVisualVariants(detailedVariants, {
-        itemCount: intent.structure.itemCount,
-        baseRelation: intent.baseRelation,
-        purposeKey: intent.purposeKey,
-        requiredItemRole,
-        maxPointsPerItem: intent.structure.dimensions?.maxPointsPerItem ?? 0,
-        maxPointChars: intent.structure.dimensions?.maxPointChars ?? 0,
-        pointCounts: pageContents[index].items.map((item) => item.points?.length ?? 0),
-        polarities: pageContents[index].items.map((item) => item.polarity),
-        emphases: pageContents[index].items.map((item) => item.emphasis === true),
-        structuredDataType: pageContents[index].structuredData?.type,
+        ...query,
         allowMissingRequiredPoints: true,
       }).filter((variant) => variant.contentContract?.points === "required");
       const metadata = metadataById.get(candidate.assetId);
@@ -349,32 +506,64 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
       compositionCandidatesForAsset(layouts, bodyVariant.assetId, bodyMetadata),
       intent.structure.itemCount,
     );
-    if (!structuralCandidates.length && !isEditorial) {
+    const readyStructuralCandidates = structuralCandidates.filter((candidate) => (
+      candidate.contentReadiness !== "needs-semantic-refinement"
+    ));
+    const candidateDiagnostics = buildCandidateDiagnostics({
+      content: pageContents[index],
+      intent,
+      capacityDensity,
+      structuralCandidates,
+      semantic,
+      capacityRejections,
+      variants,
+      variantsByAsset,
+      detailedVariantsByAsset,
+      query,
+    });
+    if (!readyStructuralCandidates.length && !isEditorial) {
+      const capacityRecoverable = capacityRejections.length > 0;
       const gap = {
-        type: "asset-gap",
+        type: capacityRecoverable ? "content-capacity-gap" : "asset-gap",
         logicId: pageContents[index].logicIntent?.logicId ?? null,
         baseRelation: intent.baseRelation,
         itemCount: intent.structure.itemCount,
-        reason: "当前核心资产库没有语义与容量均兼容的 Structure Group",
+        reason: capacityRecoverable
+          ? "存在语义兼容的 Structure Group，但当前文字超过其已登记容量"
+          : "当前核心资产库没有语义与容量均兼容的 Structure Group",
+        provisionalAssetIds: structuralCandidates.map((candidate) => candidate.assetId),
+        ...(capacityRecoverable ? { capacityRejections } : {}),
       };
-      const fixedShellPurpose = new Set(["present_cover", "present_agenda", "present_closing"]).has(intent.purposeKey);
       return {
         pageId,
         intentId: intent.intentId,
-        candidates: fixedShellPurpose ? [] : [bodyCandidate],
+        // A real asset gap must remain visible, but it must not prevent a
+        // formal deck from being delivered. Capacity gaps are still repaired
+        // upstream; only genuine missing coverage receives the safe body
+        // composition as the sole candidate.
+        candidates: capacityRecoverable ? [] : [bodyCandidate],
         capacityDensity,
         gap,
+        ...(capacityRecoverable ? {} : {
+          fallback: {
+            type: "asset-gap",
+            assetId: bodyCandidate.assetId,
+            reason: "缺少兼容 Structure Group，本页退回通用正文排版",
+          },
+        }),
         semanticRejections: semantic.rejections,
         capacityRejections,
+        candidateDiagnostics,
       };
     }
     return {
       pageId,
       intentId: intent.intentId,
-      candidates: [...structuralCandidates, bodyCandidate],
+      candidates: isEditorial ? [bodyCandidate] : readyStructuralCandidates,
       capacityDensity,
       semanticRejections: semantic.rejections,
       capacityRejections,
+      candidateDiagnostics,
     };
   }));
 }
@@ -1002,7 +1191,9 @@ export async function resolveVisualPlan({
       layouts.get(normalizedCompositionPlan.pages[index].compositionId),
     );
     normalizedCompositionPlan.pages[index] = normalizedCompositionPage;
-    const structuralAlternatives = candidateSet.candidates.filter((item) => !item.fallbackBody);
+    const structuralAlternatives = candidateSet.candidates.filter((item) => (
+      !item.fallbackBody && item.contentReadiness !== "needs-semantic-refinement"
+    ));
     const runtimeOverflowFallback = (previousResolution?.feedback ?? []).some((item) => (
       item.pageId === planPage.pageId && item.code === "component-runtime-overflow"
     ));

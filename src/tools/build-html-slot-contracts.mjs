@@ -208,7 +208,7 @@ try {
     const runtime = manifest.runtime ?? {};
     const review = runtime.review ?? {};
     if (
-      manifest.status !== "core"
+      !new Set(["pending-review", "core"]).has(manifest.status)
       || runtime.renderer !== "html-component"
       || !runtime.entry
       || !runtime.componentExport
@@ -216,8 +216,6 @@ try {
       || !review.previewParametersExport
       || (assetFilter.size && !assetFilter.has(manifest.id))
     ) continue;
-    const approvalPath = path.join(assetDir, "user-approval.json");
-    if (!await exists(approvalPath) || (await readJson(approvalPath)).decision !== "approved") continue;
     const contractPath = path.join(assetDir, "slot-contract.json");
     if (skipExisting && await exists(contractPath)) continue;
 

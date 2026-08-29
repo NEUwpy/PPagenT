@@ -1,9 +1,29 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { validateStructuredDataReferences } from "../src/content/page-content.mjs";
+import { composeHierarchyPathMatrices } from "../src/content/hierarchy-matrix.mjs";
+import { buildPageIntentFromContent, validateStructuredDataReferences } from "../src/content/page-content.mjs";
+import { createRuleValidators } from "../src/selection/validation.mjs";
 
 const item = (id, title = id, body = "说明") => ({ id, title, body });
+
+test("递进逻辑区分成长路径、连续区间和离散等级", () => {
+  const page = {
+    schemaVersion: "1.0",
+    pageId: "progression-page",
+    title: "从恐惧到觉醒再到行动",
+    sourceText: "最初选择沉默，逐渐看清责任，最终开始行动。",
+    logicIntent: { logicId: "progression", reason: "人物状态逐渐成长" },
+    items: [item("a", "恐惧"), item("b", "觉醒"), item("c", "行动")],
+  };
+  assert.equal(buildPageIntentFromContent(page).relationTraits.progressionMode, "growth-path");
+  page.title = "需求复杂度连续分布";
+  page.logicIntent.reason = "连续区间中间区域是主要需求";
+  assert.equal(buildPageIntentFromContent(page).relationTraits.progressionMode, "continuous-spectrum");
+  page.title = "能力成熟度等级";
+  page.logicIntent.reason = "从当前级走向目标级";
+  assert.equal(buildPageIntentFromContent(page).relationTraits.progressionMode, "discrete-levels");
+});
 
 test("结构化数据只接受完整且唯一的 PageContent 引用", () => {
   const problemSolution = {
@@ -111,4 +131,78 @@ test("结构化数据只接受完整且唯一的 PageContent 引用", () => {
   const tieredHubIssues = validateStructuredDataReferences(tieredHub);
   assert.ok(tieredHubIssues.some((issue) => issue.code === "DUPLICATE_REFERENCE"));
   assert.ok(tieredHubIssues.some((issue) => issue.code === "UNASSIGNED_ITEM"));
+});
+
+test("层级内容用节点层和相邻关系矩阵表达，并以布尔乘法派生跨层路径", async () => {
+  const pageContent = {
+    schemaVersion: "1.0",
+    pageId: "hierarchy-matrix-page",
+    title: "层级矩阵",
+    items: [],
+    structuredData: {
+      type: "hierarchy",
+      layers: [
+        [{ id: "root", label: "总体体系" }],
+        [{ id: "a", label: "分支甲" }, { id: "b", label: "分支乙" }],
+        [{ id: "result", label: "后续节点" }],
+      ],
+      adjacency: [
+        [[1, 1]],
+        [[0], [1]],
+      ],
+    },
+  };
+  const validators = await createRuleValidators();
+  assert.equal(validators.validatePageContent(pageContent), true);
+  assert.deepEqual(validateStructuredDataReferences(pageContent), []);
+  assert.deepEqual(composeHierarchyPathMatrices(pageContent.structuredData.adjacency), [
+    [[1, 1]],
+    [[1]],
+  ]);
+  const intent = buildPageIntentFromContent(pageContent);
+  assert.equal(intent.structure.itemCount, 2);
+  assert.equal(intent.structure.hierarchyDepth, 3);
+  assert.equal(intent.structure.dimensions.levels, 3);
+  assert.equal(intent.contentStats.maxItemTitleChars, 4);
+
+  pageContent.structuredData.adjacency[1] = [[1], [1]];
+  assert.ok(validateStructuredDataReferences(pageContent).some((issue) => issue.code === "INVALID_HIERARCHY_PARENT_COUNT"));
+});
+
+test("行列交叉矩阵提交完整二维单元表，而不是为每种表格复制结构", async () => {
+  const pageContent = {
+    schemaVersion: "1.0",
+    pageId: "matrix-grid-page",
+    title: "任务角色交叉关系",
+    items: [
+      { id: "task-a", title: "任务甲", body: "", points: [], emphasis: false },
+      { id: "task-b", title: "任务乙", body: "", points: [], emphasis: false },
+    ],
+    structuredData: {
+      type: "matrix-grid",
+      cellMode: "marker",
+      cornerLabel: "任务 × 角色",
+      rows: [
+        { id: "row-a", label: "任务甲", itemId: "task-a" },
+        { id: "row-b", label: "任务乙", itemId: "task-b" },
+      ],
+      columns: [
+        { id: "role-a", label: "角色甲" },
+        { id: "role-b", label: "角色乙" },
+      ],
+      cells: [
+        { rowId: "row-a", columnId: "role-a", marker: "R" },
+        { rowId: "row-a", columnId: "role-b", marker: "A" },
+        { rowId: "row-b", columnId: "role-a", marker: "C" },
+        { rowId: "row-b", columnId: "role-b", marker: "R" },
+      ],
+    },
+  };
+  const validators = await createRuleValidators();
+  assert.equal(validators.validatePageContent(pageContent), true);
+  assert.deepEqual(validateStructuredDataReferences(pageContent), []);
+  assert.equal(buildPageIntentFromContent(pageContent).baseRelation, "matrix");
+
+  pageContent.structuredData.cells.pop();
+  assert.ok(validateStructuredDataReferences(pageContent).some((issue) => issue.code === "MISSING_MATRIX_CELL"));
 });

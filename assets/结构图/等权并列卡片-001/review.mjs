@@ -22,8 +22,8 @@ function pointRows(item) {
 function normalizeParameters(parameters) {
   if (!parameters || !Array.isArray(parameters.items)) throw new Error("等权并列卡片需要 items 数组");
   const itemCount = parameters.items.length;
-  if (!Number.isInteger(itemCount) || itemCount < 3 || itemCount > 5) {
-    throw new Error("等权并列卡片支持 3–5 个并列项目");
+  if (!Number.isInteger(itemCount) || itemCount < 2 || itemCount > 5) {
+    throw new Error("等权并列卡片支持 2–5 个并列项目");
   }
   return {
     textLayoutBindings: parameters?.textLayoutBindings && typeof parameters.textLayoutBindings === "object"
@@ -124,8 +124,8 @@ export const previewParameters = Object.freeze({
 
 export function resolvePreviewParameters(base, selection) {
   const itemCount = Number(selection?.itemCount);
-  if (!Number.isInteger(itemCount) || itemCount < 3 || itemCount > 5) {
-    throw new Error("等权并列卡片支持 3–5 项");
+  if (!Number.isInteger(itemCount) || itemCount < 2 || itemCount > 5) {
+    throw new Error("等权并列卡片支持 2–5 项");
   }
   const result = structuredClone(base);
   result.items = result.items.slice(0, itemCount);

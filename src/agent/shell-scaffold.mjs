@@ -14,6 +14,10 @@ export function isShellPage(page) {
   return Boolean(shellRoleForPage(page));
 }
 
+function sourceShellRole(page) {
+  return String(page?.notes ?? "").match(/(?:^|；)PPagenTShellRole=(cover|agenda|closing)(?:；|$)/)?.[1] ?? null;
+}
+
 function compactAgendaLabel(value) {
   const text = String(value ?? "").trim();
   const semanticTail = text.split(/[：:]/).at(-1)?.trim() || text;
@@ -42,10 +46,19 @@ function shellPlanPage(pageId, sequence, narrativeJob, anchor) {
 }
 
 export function applyAcademicReportShellScaffold(contentOutput) {
-  const bodyPages = contentOutput.pageContents.filter((page) => !isShellPage(page));
-  const bodyPlanPages = contentOutput.deckPlan.pages.filter((page) => !SHELL_ROLES[page.pageId]);
+  const sourceShellPages = new Map(contentOutput.pageContents
+    .map((page) => [sourceShellRole(page), page])
+    .filter(([role]) => role));
+  const bodyPages = contentOutput.pageContents.filter((page) => !isShellPage(page) && !sourceShellRole(page));
+  const bodyPageIds = new Set(bodyPages.map((page) => page.pageId));
+  const planById = new Map(contentOutput.deckPlan.pages.map((page) => [page.pageId, page]));
+  const bodyPlanPages = contentOutput.deckPlan.pages.filter((page) => bodyPageIds.has(page.pageId));
   const firstAnchor = bodyPlanPages[0]?.sourceAnchors?.[0] ?? contentOutput.deckPlan.title;
   const lastAnchor = bodyPlanPages.at(-1)?.sourceAnchors?.[0] ?? firstAnchor;
+  const shellAnchor = (role, fallback) => {
+    const sourcePage = sourceShellPages.get(role);
+    return planById.get(sourcePage?.pageId)?.sourceAnchors?.[0] ?? sourcePage?.sourceText ?? fallback;
+  };
   const agenda = agendaItems(contentOutput.deckPlan);
   const cover = {
     schemaVersion: "1.0",
@@ -53,6 +66,7 @@ export function applyAcademicReportShellScaffold(contentOutput) {
     title: contentOutput.deckPlan.title,
     logicIntent: { logicId: "editorial", reason: "封面由 Skin 固定提供" },
     items: [],
+    ...(sourceShellPages.get("cover")?.sourceText ? { sourceText: sourceShellPages.get("cover").sourceText } : {}),
   };
   const agendaPage = {
     schemaVersion: "1.0",
@@ -60,6 +74,7 @@ export function applyAcademicReportShellScaffold(contentOutput) {
     title: "目录",
     logicIntent: { logicId: "editorial", reason: "目录由 Skin 固定提供" },
     items: agenda,
+    ...(sourceShellPages.get("agenda")?.sourceText ? { sourceText: sourceShellPages.get("agenda").sourceText } : {}),
   };
   const closing = {
     schemaVersion: "1.0",
@@ -72,13 +87,14 @@ export function applyAcademicReportShellScaffold(contentOutput) {
       body: contentOutput.deckPlan.centralTakeaway,
       emphasis: true,
     }],
+    ...(sourceShellPages.get("closing")?.sourceText ? { sourceText: sourceShellPages.get("closing").sourceText } : {}),
   };
   const pageContents = [cover, agendaPage, ...bodyPages, closing];
   const pages = [
-    shellPlanPage("shell-cover", 1, "封面", firstAnchor),
-    shellPlanPage("shell-agenda", 2, "目录", firstAnchor),
+    shellPlanPage("shell-cover", 1, "封面", shellAnchor("cover", firstAnchor)),
+    shellPlanPage("shell-agenda", 2, "目录", shellAnchor("agenda", firstAnchor)),
     ...bodyPlanPages.map((page, index) => ({ ...page, sequence: index + 3 })),
-    shellPlanPage("shell-closing", pageContents.length, "收束", lastAnchor),
+    shellPlanPage("shell-closing", pageContents.length, "收束", shellAnchor("closing", lastAnchor)),
   ];
   return {
     deckPlan: { ...contentOutput.deckPlan, pages },

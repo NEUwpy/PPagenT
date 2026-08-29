@@ -1,10 +1,209 @@
 {
-  "id":"parallel-folded-notes-grid-002","name":"双排折角便签阵列","kind":"component","category":"结构图","creationMethod":"distillation","status":"pending-review","source":{"file":"PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx","slides":[150]},
-  "runtime":{"renderer":"html-component","entry":"review.mjs","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","logicId":"parallel","structureGroupId":"parallel-folded-notes-grid","familyId":"parallel-grid","variantId":"two-row-folded-notes","silhouette":"centered-two-row-grid-of-folded-notes","supportedBaseRelations":["parallel"],"supportedPurposeKeys":["present_parallel_points","explain_topics"],"itemCount":{"min":4,"preferred":[4,6,8],"max":8},"stateContract":{"resolver":"itemCount","states":[4,5,6,7,8],"previewDefault":6},"contentContract":{"itemRole":"semantic-node","points":"optional","ordered":false},"contract":{"abstractionLevel":"foundation","adaptationStatus":"adaptive","constraints":{"semantic":{"ordered":false},"relationTraits":{"parallel":true},"density":["medium","high"]}},"review":{"entry":"review.mjs","visualIntent":"visual-intent.md","componentExport":"visualComponent","previewParametersExport":"previewParameters","previewResolverExport":"resolvePreviewParameters","implementation":"asset-specific-html","goldenState":{"selection":{"itemCount":6}},"controls":[{"key":"itemCount","label":"并列项目数","values":[4,5,6,7,8],"default":6}]}},
-  "coverageDelta":"补齐现有等权单排卡片无法承载的 6–8 项高密度、无图标并列枚举；采用双排自动居中并允许短分点。",
-  "layoutExpansion":{"mode":"responsive","range":"4–8 个同级项目","rule":"4 项使用 2×2；5–6 项使用每行最多 3 项；7–8 项使用每行最多 4 项，末行自动居中"},
-  "componentModel":{"fixed":["两排自动居中的等权阵列","折角便签承载面","标题色带与正文分区"],"variable":["4–8 个项目","标题、短正文和至多两条分点","列数、卡宽和末行居中位置"]},
-  "fieldContract":{"editable":[{"field":"items[].title","meaning":"同级项目标题"},{"field":"items[].body","meaning":"项目短说明"},{"field":"items[].points[]","meaning":"可选的一至两条短分点"}],"generated":[],"fixed":["项目无顺序、无中心、无层级"],"unavailable":["图标","图片","长段落"]},
-  "spatialContract":{"coordinateSystem":{"width":1280,"height":720},"contentFrame":{"left":55,"top":166,"width":1170,"height":492},"aspectRatio":2.378,"minimumFrame":{"width":1170,"height":492},"preferredFrame":{"width":1170,"height":492},"resizeMode":"natural","minFontSize":15,"safePadding":10,"supportedCompositionIds":["component-full"]},
-  "capacity":"4–8 个同级项目；标题不超过 8 字，正文与分点合计不超过 38/34/30/26/24 字","semanticContract":"较多同级要点需要在一页内紧凑枚举，但彼此没有顺序、因果、中心或层级","doNotUseWhen":"项目少于 4 个、单项需要长段解释、存在顺序或二维分类","review":"等待用户审核 HTML 黄金状态与 4–8 项扩散；未生成 Native PPT"
+  "id": "parallel-folded-notes-grid-002",
+  "name": "双排折角便签阵列",
+  "kind": "component",
+  "category": "结构图",
+  "creationMethod": "distillation",
+  "status": "core",
+  "generator": "generate.mjs",
+  "showcase": "example.pptx",
+  "source": {
+    "file": "PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
+    "slides": [
+      150
+    ]
+  },
+  "runtime": {
+    "renderer": "html-component",
+    "entry": "runtime.mjs",
+    "componentExport": "visualComponent",
+    "previewParametersExport": "previewParameters",
+    "previewResolverExport": "resolvePreviewParameters",
+    "mapperExport": "mapPageContent",
+    "logicId": "parallel",
+    "structureGroupId": "parallel-folded-notes-grid",
+    "familyId": "parallel-grid",
+    "variantId": "two-row-folded-notes",
+    "silhouette": "centered-two-row-grid-of-folded-notes",
+    "supportedBaseRelations": [
+      "parallel"
+    ],
+    "supportedPurposeKeys": [
+      "present_parallel_points",
+      "explain_topics"
+    ],
+    "itemCount": {
+      "min": 4,
+      "preferred": [
+        4,
+        6,
+        8
+      ],
+      "max": 8
+    },
+    "stateContract": {
+      "resolver": "itemCount",
+      "states": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "previewDefault": 6
+    },
+    "mediaContract": {
+      "mode": "semantic-icon",
+      "provider": "tabler-icons",
+      "selection": "local-top-1",
+      "queryOwner": "visual-director",
+      "requiredPerComponentItem": true
+    },
+    "contentContract": {
+      "itemRole": "semantic-node",
+      "title": "required",
+      "points": "optional",
+      "ordered": false
+    },
+    "contract": {
+      "abstractionLevel": "foundation",
+      "adaptationStatus": "adaptive",
+      "constraints": {
+        "semantic": {
+          "ordered": false
+        },
+        "relationTraits": {
+          "parallel": true
+        },
+        "density": [
+          "medium",
+          "high"
+        ]
+      }
+    },
+    "review": {
+      "entry": "review.mjs",
+      "visualIntent": "visual-intent.md",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "implementation": "asset-specific-html",
+      "goldenState": {
+        "selection": {
+          "itemCount": 6
+        }
+      },
+      "controls": [
+        {
+          "key": "itemCount",
+          "label": "并列项目数",
+          "values": [
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "default": 6
+        }
+      ]
+    }
+  },
+  "coverageDelta": "补齐现有等权单排卡片无法承载的 6–8 项高密度并列枚举；采用双排自动居中、标题前语义图标并允许短分点。",
+  "layoutExpansion": {
+    "mode": "responsive",
+    "range": "4–8 个同级项目",
+    "rule": "4 项使用 2×2；5–6 项使用每行最多 3 项；7–8 项使用每行最多 4 项，末行自动居中"
+  },
+  "componentModel": {
+    "fixed": [
+      "两排自动居中的等权阵列",
+      "折角便签承载面",
+      "每张便签的标题头与标题前图标安全槽",
+      "每张便签一个连续 TextRegion"
+    ],
+    "variable": [
+      "4–8 个项目",
+      "必填标题、短正文和至多两条分点",
+      "每项的语义图标查询",
+      "文字排版组合",
+      "列数、卡宽和末行居中位置"
+    ]
+  },
+  "fieldContract": {
+    "editable": [
+      {
+        "field": "items[].title",
+        "meaning": "每张便签必填的同级项目标题"
+      },
+      {
+        "field": "items[].body",
+        "meaning": "项目短说明"
+      },
+      {
+        "field": "items[].points[]",
+        "meaning": "可选的一至两条短分点"
+      },
+      {
+        "field": "items[].iconQuery",
+        "source": "VisualPlan.pages[].iconQueries[]",
+        "meaning": "视觉导演提供的语义图标检索短语"
+      }
+    ],
+    "generated": [
+      {
+        "field": "items[].iconKey",
+        "meaning": "程序从本地 Tabler Icons 元数据检索得到的唯一 Top 1 图标"
+      }
+    ],
+    "fixed": [
+      "项目无顺序、无中心、无层级",
+      "每张便签都有标题头和标题前图标安全槽"
+    ],
+    "unavailable": [
+      "图片",
+      "长段落"
+    ]
+  },
+  "spatialContract": {
+    "coordinateSystem": {
+      "width": 1280,
+      "height": 720
+    },
+    "contentFrame": {
+      "left": 55,
+      "top": 166,
+      "width": 1170,
+      "height": 492
+    },
+    "aspectRatio": 2.378,
+    "minimumFrame": {
+      "width": 1170,
+      "height": 492
+    },
+    "preferredFrame": {
+      "width": 1170,
+      "height": 492
+    },
+    "resizeMode": "natural",
+    "minFontSize": 12,
+    "safePadding": 10,
+    "supportedCompositionIds": [
+      "component-full"
+    ]
+  },
+  "capacity": "4–8 个同级项目；每张便签必须有标题和语义图标，并提供一个连续 TextRegion；文字容量由区域、规范字号和所选 Text Layout 派生，15pt 仍放不下时拒绝",
+  "semanticContract": "较多同级要点需要在一页内紧凑枚举，但彼此没有顺序、因果、中心或层级",
+  "doNotUseWhen": "项目少于 4 个、单项需要长段解释、存在顺序或二维分类",
+  "review": "用户已通过 HTML、Native/PPT 与东北大学 Skin 二次审核，正式进入核心库",
+  "intake": {
+    "schemaVersion": "1.0",
+    "state": "registered",
+    "witness": {
+      "logicId": "parallel",
+      "baseRelation": "parallel",
+      "purposeKey": "present_parallel_points",
+      "itemCount": 4
+    }
+  }
 }
