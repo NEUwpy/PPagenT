@@ -60,7 +60,7 @@ export function visualSkillRoutingSchema(pageContents, candidateSets) {
           items: {
             type: "object",
             additionalProperties: false,
-            required: ["pageId", "candidateId", "centerLabel", "iconQueries", "textLayoutChoices", "refinementItemIds", "reason"],
+            required: ["pageId", "candidateId", "centerLabel"],
             properties: {
               pageId: { type: "string", enum: pageIds },
               candidateId: { type: "string", enum: candidateIds },
@@ -246,7 +246,7 @@ export function expandVisualSkillRouting(routing, input) {
       reason: diversityAdjusted
         ? "所选结构已在本稿使用，程序改用同页合法且使用次数更少的 Structure Group"
         : candidate === selectedCandidate
-          ? selection.reason
+          ? (selection.reason ?? "视觉导演选择该页语义与容量均适配的 Structure Group")
           : "程序确认该页只有一个语义、数量与容量均适配的核心 Structure Group，直接调用",
     });
     const requiresComponent = Boolean(composition.requiresComponent);

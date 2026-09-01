@@ -17,7 +17,15 @@ function minimalContentSchema() {
           items: {
             required: [],
             properties: {
-              logicIntent: { properties: { logicId: {} } },
+              logicIntent: {
+                required: ["logicId", "reason"],
+                properties: {
+                  logicId: {},
+                  reason: {},
+                  evidenceFragments: {},
+                  confidence: {},
+                },
+              },
             },
           },
         },
@@ -96,6 +104,8 @@ test("页数 schema、结构线索与覆盖契约共用同一显式分段", () =
   assert.equal(schema.schema.properties.pageContents.minItems, 3);
   assert.equal(schema.schema.properties.pageContents.maxItems, 3);
   assert.equal(schema.schema.properties.pageContents.items.properties.sourceText, undefined);
+  assert.ok(schema.schema.properties.pageContents.items.properties.logicIntent.required.includes("evidenceFragments"));
+  assert.ok(schema.schema.properties.pageContents.items.properties.logicIntent.required.includes("confidence"));
   const [guide] = buildStructuralCueGuides(markdown);
   assert.equal(guide.sectionHeading, "第3页：三个步骤");
   assert.equal(guide.relation, "sequence");

@@ -61,15 +61,34 @@ function assertOperationalDependency(value, label) {
   }
 }
 
-function normalizeEmptyOptionalStructures(output) {
+function normalizeContentOutput(output) {
   if (!output || typeof output !== "object" || !Array.isArray(output.pageContents)) return output;
   const normalized = structuredClone(output);
   normalized.pageContents = normalized.pageContents.map((page) => {
-    const structured = page?.structuredData;
-    if (structured === undefined) return page;
-    if (structured !== null && (typeof structured !== "object" || Array.isArray(structured))) return page;
-    if (structured !== null && Object.keys(structured).length) return page;
-    const clean = { ...page };
+    const evidenceFragments = page?.logicIntent?.evidenceFragments;
+    const groundedEvidenceFragments = Array.isArray(evidenceFragments)
+      ? evidenceFragments.filter((fragment) => typeof fragment === "string" && page.sourceText?.includes(fragment))
+      : [];
+    const validEvidenceFragments = groundedEvidenceFragments.length
+      ? groundedEvidenceFragments.slice(0, 3)
+      : evidenceFragments;
+    const evidenceChanged = Array.isArray(evidenceFragments)
+      && (validEvidenceFragments.length !== evidenceFragments.length
+        || validEvidenceFragments.some((fragment, index) => fragment !== evidenceFragments[index]));
+    const normalizedPage = evidenceChanged
+      ? {
+        ...page,
+        logicIntent: {
+          ...page.logicIntent,
+          evidenceFragments: validEvidenceFragments,
+        },
+      }
+      : page;
+    const structured = normalizedPage?.structuredData;
+    if (structured === undefined) return normalizedPage;
+    if (structured !== null && (typeof structured !== "object" || Array.isArray(structured))) return normalizedPage;
+    if (structured !== null && Object.keys(structured).length) return normalizedPage;
+    const clean = { ...normalizedPage };
     delete clean.structuredData;
     return clean;
   });
@@ -127,6 +146,15 @@ function assertContentOutput(validators, output, rawMarkdown) {
         "content-director",
         `${page.pageId} 的 sourceText 不是原稿中的可核对文本`,
         { pageId: page.pageId },
+      );
+    }
+    const evidenceFragments = page.logicIntent?.evidenceFragments ?? [];
+    if (evidenceFragments.some((fragment) => !page.sourceText.includes(fragment))) {
+      throw new WorkflowError(
+        "SOURCE_GROUNDING_FAILED",
+        "content-director",
+        `${page.pageId} 的 Logic 判断证据不是该页原文中的连续片段`,
+        { pageId: page.pageId, field: "logicIntent.evidenceFragments" },
       );
     }
     if (page.logicIntent?.logicId === "problem-solution"
@@ -655,8 +683,9 @@ export async function runDirectorWorkflow(options) {
     throw new WorkflowError("OUTPUT_DIR_REQUIRED", "bootstrap", "缺少工作流输出目录");
   }
   const root = path.resolve(options.root ?? process.cwd());
-  const maxContentAttempts = options.maxContentAttempts ?? 3;
-  const maxVisualAttempts = options.maxVisualAttempts ?? 3;
+  const maxContentAttempts = options.maxContentAttempts ?? (developmentReview ? 3 : 1);
+  const maxVisualAttempts = options.maxVisualAttempts ?? (developmentReview ? 3 : 1);
+  const semanticRefinementEnabled = options.allowSemanticRefinement === true;
   if (!Number.isInteger(maxContentAttempts) || maxContentAttempts < 1
     || !Number.isInteger(maxVisualAttempts) || maxVisualAttempts < 1) {
     throw new WorkflowError("INVALID_ATTEMPT_LIMIT", "bootstrap", "工作流循环次数必须是正整数");
@@ -669,7 +698,7 @@ export async function runDirectorWorkflow(options) {
   let contentAttempt = 0;
   async function executeContentAttempt(extra = {}) {
     contentAttempt += 1;
-    contentOutput = normalizeEmptyOptionalStructures(await provider.contentDirector({
+    contentOutput = normalizeContentOutput(await provider.contentDirector({
       ...input,
       attempt: contentAttempt,
       previous: contentOutput,
@@ -818,9 +847,11 @@ export async function runDirectorWorkflow(options) {
         previousReview: visualReview,
         previousResolution: visualResolution,
         previousRenderResult: renderResult,
-        semanticRefinementAllowed: !semanticRefinementUsed && typeof provider.refineContent === "function",
+        semanticRefinementAllowed: semanticRefinementEnabled
+          && !semanticRefinementUsed
+          && typeof provider.refineContent === "function",
       });
-      const refinementRequests = semanticRefinementUsed ? [] : normalizeSemanticRefinementRequests(
+      const refinementRequests = !semanticRefinementEnabled || semanticRefinementUsed ? [] : normalizeSemanticRefinementRequests(
         compositionOutput.semanticRefinementRequests,
         bodyPageContents,
         candidateSets.filter((_, index) => !isShellPage(presentationOutput.pageContents[index])),

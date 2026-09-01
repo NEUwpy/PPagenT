@@ -395,6 +395,7 @@ test("视觉导演可用一次小请求补齐节点内分点且不重跑整篇�
       return resolver(args);
     },
     renderer,
+    allowSemanticRefinement: true,
   });
 
   assert.equal(result.status, "delivered");
@@ -466,6 +467,81 @@ test("内容来源溯源错误会在受控次数内反馈重试", async (t) => {
   assert.equal(result.status, "delivered");
   assert.equal(contentCalls, 2);
   assert.equal(receivedReview.issues[0].errorCode, "SOURCE_GROUNDING_FAILED");
+});
+
+test("Logic 判断证据必须是该页原文中的连续片段", async (t) => {
+  const outputDir = await makeTempDir(t);
+  let contentCalls = 0;
+  let receivedReview = null;
+  const provider = {
+    async contentDirector({ previousReview }) {
+      contentCalls += 1;
+      if (contentCalls === 2) receivedReview = previousReview;
+      const output = contentOutput();
+      output.pageContents[0].logicIntent = {
+        logicId: "comparison",
+        reason: "原稿提出模板与现状的矛盾",
+        evidenceFragments: [contentCalls === 1 ? "模型补写的证据" : "模板有时尽，现状无穷多。"],
+        confidence: "high",
+      };
+      return output;
+    },
+    async visualDirector({ phase, skinId }) {
+      return phase === "intent" ? visualIntentOutput() : visualPlanOutput(skinId);
+    },
+  };
+  const result = await runDirectorWorkflow({
+    input: { rawMarkdown },
+    provider,
+    outputDir,
+    reviewMode: "production",
+    visualCandidateProvider: candidateProvider,
+    visualResolver: resolver,
+    renderer,
+    maxContentAttempts: 2,
+  });
+  assert.equal(result.status, "delivered");
+  assert.equal(contentCalls, 2);
+  assert.equal(receivedReview.issues[0].errorCode, "SOURCE_GROUNDING_FAILED");
+  assert.equal(receivedReview.issues[0].details.field, "logicIntent.evidenceFragments");
+});
+
+test("content evidence overage is normalized without another director call", async (t) => {
+  const outputDir = await makeTempDir(t);
+  let contentCalls = 0;
+  const provider = {
+    async contentDirector() {
+      contentCalls += 1;
+      const output = contentOutput();
+      const source = output.pageContents[0].sourceText;
+      output.pageContents[0].logicIntent = {
+        logicId: "comparison",
+        reason: "The source contrasts a finite template with changing needs.",
+        evidenceFragments: [source.slice(0, 1), "paraphrased", source.slice(1, 2), source.slice(2, 3)],
+        confidence: "high",
+      };
+      return output;
+    },
+    async visualDirector({ phase, skinId }) {
+      return phase === "intent" ? visualIntentOutput() : visualPlanOutput(skinId);
+    },
+  };
+  const result = await runDirectorWorkflow({
+    input: { rawMarkdown },
+    provider,
+    outputDir,
+    reviewMode: "production",
+    visualCandidateProvider: candidateProvider,
+    visualResolver: resolver,
+    renderer,
+    maxContentAttempts: 2,
+  });
+  assert.equal(result.status, "delivered");
+  assert.equal(contentCalls, 1);
+  assert.deepEqual(
+    result.pageContents[0].logicIntent.evidenceFragments,
+    contentOutput().pageContents[0].sourceText.slice(0, 3).split(""),
+  );
 });
 
 test("多项内容超过正式容量时退回内容导演压缩而不是进入渲染", async (t) => {

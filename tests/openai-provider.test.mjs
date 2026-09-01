@@ -35,6 +35,10 @@ test("模型 DirectorProvider 为两位导演和研发审查调用传入明确�
     guidelines: {
       content: "内容准则",
       visual: "视觉准则",
+      structureCapabilities: [{
+        logicId: "parallel",
+        contentShapes: [{ contentShape: "两个同级要点" }],
+      }],
       purposeVocabulary: [{ key: "explain_topics", description: "说明主题" }],
     },
   });
@@ -51,16 +55,23 @@ test("模型 DirectorProvider 为两位导演和研发审查调用传入明确�
   ]);
   assert.deepEqual(calls.at(-1).imagePaths, ["a.png"]);
   assert.equal(calls[0].context.executionGuidelines, "内容准则");
+  assert.equal(calls[0].context.structureCapabilities[0].logicId, "parallel");
+  assert.match(calls[0].role, /判断优先级/);
+  assert.match(calls[0].task, /一次完成整套/);
+  assert.match(calls[0].task, /requiredFields/);
+  assert.equal(calls[0].maxJsonAttempts, 1);
+  assert.doesNotMatch(calls[0].task, /comparison-dual-verdict/);
   assert.deepEqual(Object.keys(calls[2].context).sort(), ["pages", "requests"]);
   assert.deepEqual(calls[3].context.pages, []);
   assert.match(calls[3].task, /Skills/);
+  assert.equal(calls[3].maxJsonAttempts, 1);
   assert.equal(provider.metadata.providerKind, "live-schema-aware-model-provider");
 });
 
 test("API 运行时直接读取正式生成工作流中的两份导演提示词", async () => {
   const root = path.resolve(new URL("..", import.meta.url).pathname.replace(/^\/(.:)/, "$1"));
   const guidelines = await loadDirectorGuidelines(root);
-  assert.match(guidelines.content, /内容导演读取完整原稿/);
+  assert.match(guidelines.content, /单次调用中的工作顺序/);
   assert.match(guidelines.visual, /不得现场自创结构/);
   assert.match(guidelines.visual, /整页信息构成/);
   assert.ok(guidelines.logicSkillIndex.length >= 8);
@@ -68,6 +79,13 @@ test("API 运行时直接读取正式生成工作流中的两份导演提示词"
     logic.logicId === "parallel" && logic.availableStructureGroupCount > 0
   )));
   assert.ok(guidelines.logicSkillIndex.every((logic) => !("structureGroups" in logic)));
+  assert.ok(guidelines.structureCapabilities.length >= 12);
+  assert.ok(guidelines.structureCapabilities.some((capability) => (
+    capability.logicId === "sequence"
+    && capability.contentShapes.some((shape) => shape.requiredFields.includes("items[].points"))
+  )));
+  const disclosed = JSON.stringify(guidelines.structureCapabilities);
+  assert.doesNotMatch(disclosed, /assetId|familyId|variantId|silhouette/);
 });
 
 test("视觉编排只重做失败页并把组件文字合同编译为合法字段", () => {

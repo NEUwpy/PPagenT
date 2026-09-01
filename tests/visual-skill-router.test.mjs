@@ -64,6 +64,7 @@ test("视觉路由只看紧凑 Skill 摘要并由程序展开正式表单", () =
   ]);
   const schema = visualSkillRoutingSchema([page], sets);
   assert.equal(schema.schema.properties.selections.minItems, 1);
+  assert.deepEqual(schema.schema.properties.selections.items.required, ["pageId", "candidateId", "centerLabel"]);
 
   const expanded = expandVisualSkillRouting({ selections: [{
     pageId: "p1",
@@ -88,6 +89,19 @@ test("视觉路由只看紧凑 Skill 摘要并由程序展开正式表单", () =
     regionKey: "items[].support",
     layoutId: "statement-flow",
   }]);
+});
+
+test("视觉路由可省略空数组和理由并由程序补默认值", () => {
+  const sets = [{ pageId: "p1", candidates: [fallback] }];
+  const expanded = expandVisualSkillRouting({ selections: [{
+    pageId: "p1",
+    candidateId: "skin-body-editorial::editorial::editorial-page",
+    centerLabel: "判断中心",
+  }] }, {
+    deckPlan: { deckId: "deck" }, skinId: "skin", pageContents: [page], pageIntents: [intent], candidateSets: sets,
+  });
+  assert.match(expanded.visualPlan.pages[0].reason, /视觉导演选择/);
+  assert.deepEqual(expanded.compositionPlan.pages[0].textLayoutChoices, []);
 });
 
 test("同一稿件连续页面有多个合法结构时优先使用较少出现的结构", () => {

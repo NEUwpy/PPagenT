@@ -12,6 +12,27 @@ import {
 } from "./visual-skill-router.mjs";
 import { extractManuscriptSections } from "../content/manuscript-sections.mjs";
 
+const CONTENT_DIRECTOR_SYSTEM_PROMPT = [
+  "PPagenT 内容导演",
+  "一次读取完整稿件，输出整套 DeckPlan 与逐页 PageContent",
+  "只负责内容理解、叙事规划、Logic 判断和版式中立的结构字段提取，不选择最终 Structure Group，不处理坐标、颜色和组件实现",
+  "判断优先级依次是原稿证据真实性、原稿结构完整性、全稿叙事完整性、页面容量、现有结构能力的可承载性",
+  "不得为了提高结构使用率改变关系、增加节点、补造分点或虚构数据；只有原稿确实没有可视化关系时才使用 editorial",
+].join("。\n");
+
+const CONTENT_DIRECTOR_TASK = [
+  "读取 context.source，一次完成整套 deckPlan 和 pageContents。",
+  "按以下顺序工作：1.确认程序给出的页面边界与全稿叙事；2.逐页识别最外层关系；3.列出听众必须区分的全部主节点；4.提取原稿明确提供的节点内 points、时间、角色、极性和 structuredData；5.参考 structureCapabilities 检查是否遗漏了原稿真实存在且后续结构需要的字段；6.压缩文字并输出完整 JSON。",
+  "availableLogicSkills 是完整 Logic 目录；logicIntent.logicId 必须逐字选择，不能因现有结构数量少或为 0 而改成相近 Logic 或 editorial。",
+  "structureCapabilities 是当前核心结构按 Logic 分组生成的匿名内容形状摘要，只帮助保留必要字段，不是资产菜单；不得复写能力摘要，不得反向套结构。",
+  "一旦选择的 Logic 能力把 structuredData.type、items[].points 或其他字段列为 requiredFields，就必须按 PageContent Schema 填全这些字段；不能只写 logicIntent 而省略该 Logic 的可调用关系数据。",
+  "每页 logicIntent.reason 说明关系判断，evidenceFragments 逐字复制该页 sourceText 中 1–3 个最短连续证据片段，confidence 按证据明确程度填写 high、medium 或 low。",
+  "structuralGuides 与 structuralHints 是程序从原稿提取的高置信证据；对应页面必须保持 relation、itemRange、主节点和 points 层级。",
+  "items 只保存最外层关系中的同级节点；只有原稿明确列出的节点内下级内容才进入 points。不得用醒目标题、引文或结论替换原稿中的多个真实对象。",
+  "narrativeArc 只输出 3–5 个简短章节名。结构性 item 标题不超过 10 个汉字，body 尽量 15–30 个汉字；正文与 points 不重复。",
+  "不得输出 assetId、familyId、variantId、Structure Group、容器、坐标、颜色、图标或组件专属槽位。不得为了适配能力卡改变语义。",
+].join("\n");
+
 function assertModel(model, label) {
   if (!model || typeof model.generateJson !== "function") {
     throw new Error(`${label} 必须提供 generateJson({role, task, context})`);
@@ -348,8 +369,15 @@ export function contentSchemaWithSectionFloor(outputSchema, rawMarkdown, logicSk
   if (!pageContents?.items?.properties?.logicIntent) return specialized;
   const pageContentSchema = pageContents.items;
   if (!pageContentSchema.required.includes("logicIntent")) pageContentSchema.required.push("logicIntent");
+  const logicIntentSchema = pageContentSchema.properties.logicIntent;
+  logicIntentSchema.required ??= [];
+  for (const field of ["evidenceFragments", "confidence"]) {
+    if (logicIntentSchema.properties?.[field] && !logicIntentSchema.required.includes(field)) {
+      logicIntentSchema.required.push(field);
+    }
+  }
   const logicIds = logicSkillIndex.map((item) => item.logicId).filter(Boolean);
-  if (logicIds.length) pageContentSchema.properties.logicIntent.properties.logicId.enum = logicIds;
+  if (logicIds.length) logicIntentSchema.properties.logicId.enum = logicIds;
   if (sectionCount) {
     const splitAllowance = sections.reduce((total, section) => {
       if (section.markerKind === "explicit-page") return total;
@@ -446,6 +474,8 @@ export function enforceSectionPageContract(contentOutput, rawMarkdown, structura
       logicIntent: {
         logicId: hint.relation === "none" ? "editorial" : hint.relation,
         reason: `程序从原稿恢复出 ${hint.relation} 主关系`,
+        evidenceFragments: [section.markerLine],
+        confidence: "high",
       },
       items: hint.atoms.map((atom, itemIndex) => ({
         id: `${pageId}-structure-${itemIndex + 1}`,
@@ -515,21 +545,12 @@ export function createModelDirectorProvider({
         ...structuralHints.filter((hint) => !deterministicHints.some((fixed) => fixed.cueId === hint.cueId)),
       ];
       const contentOutput = await content.generateJson({
-        role: "PPagenT 内容导演",
-        task: `${contentRevisionDirective(input.previousReview)}在整套尺度决定叙事弧、页数、页序、每页职责、拆分、轻重，并为每个正文页选择一个 Logic；输出 deckPlan 与 pageContents。availableLogicSkills 是完整的语义 Logic 目录，不是现有资产菜单：PageContent.logicIntent.logicId 必须从中逐字选择，availableStructureGroupCount 即使为 0 也照样可以选择，后续程序会把它报告为资产缺口；绝不能因为暂时没有 Structure Group 就改成相近 Logic 或 editorial。reason 简要说明原稿关系为何属于该 Logic。structuralGuides 是程序直接从原稿句法识别出的高置信结构证据，不是资产推荐：对应章节必须保持 guide.relation，并按 guide.itemRange 提取主 items；guide.task 说明节点边界，fixedAtoms 若存在则必须逐项使用。不得用一句总括、背景或结论替换 structuralGuides 已证实存在的多个对象。内容导演只选 Logic，不读取也不选择 assetId、Structure Group、容器、坐标或图标；这些属于视觉导演。只有原稿确实没有可视化关系时才选择 editorial，绝不为套结构图篡改原稿。narrativeArc 是供目录页使用的 3 到 5 个简短章节名，不是逐页摘要。原稿的 Markdown 二级标题默认是一页内容单元；同一节中的反问、引文或总结通常留在该页，不单独拆成过渡页，除非该节容量确实必须拆分。先识别听众必须区分的全部对象，再压缩字句；醒目的引文、结论或标题通常是页面主张，不能替代支撑它的三至六个对象。structuralHints 是可选结构读取器形成的精确 atoms 覆盖结果：对应页面必须逐项使用 atoms 作为主 items 并保持 relation，允许忠实压缩，但不得用总括、背景或结论替换。items 只表示主关系中的同级节点；只有原稿在某个节点内明确列出两项及以上的下级维度、例子或枚举时才写 points，不得把 body 的叙述拆成自创 points，也不得为了显得结构丰富而补凑三点。没有 structuralGuides 的页面再按原稿关系判断。冒号、分号、项目符号或‘包括／分别／一是二是’明确列出三至六个同级机制、抓手、标准、结果或场景时，必须保留为三至六个 items；不要把它们塞进一个总括 item 的 points。只有这些条目都在解释同一个更小主节点时才放入 points。两个极端衬托中间主体时，必须保留左端、中间主体和右端；描述 A 进入或支撑 B、B 再服务 C 时，中介节点 B 不能被压掉。存在人物或组织层级时，用 structuredData.type=hierarchy 保存真实父子关系；只有原稿明确提供图片路径时才填写 portrait。明确同时给出输入对象、逐级收窄节点和 2–3 个宏观阶段时，才用 structuredData.type=convergence；没有阶段不得编造。明确给出 2–4 组问题与方案及共同结果时，用 structuredData.type=problem-solution；一个问题由 2–5 项同级方法共同处理并得到一个结果时，用 structuredData.type=problem-method-result，items 只保存方法且 methodIds 逐项引用；一个论点由 2–5 条证据共同支撑并收束为结论时，用 structuredData.type=argument-evidence，items 只保存证据且 evidenceIds 逐项引用；一个明确判断把同一情境分流到 2–4 条后续路径时，用 structuredData.type=branching-decision，items 保存路径动作与说明，branches 以相同 id 补充进入条件和可选结果；围绕同一不确定假设并列推演 3–5 个情景，且每个情景都有明确触发和结果时，用 structuredData.type=branching-scenario，items 保存情景名称，scenarios 以相同 id 补充触发与结果。起点、终点、条件、假设和结果必须来自原稿。明确给出两个判断维度和四个象限时，用 structuredData.type=matrix，均不得凭空补字段。标题或核心结论明确比较 A 与 B 时，items 必须恰好是双方；若来源提供共同维度，应为两侧提取数量一致的 3–5 条 points；原稿结论明确偏向一侧，或以“而／但／相反”对立两侧并明确肯定其中一侧时，被肯定侧必须设 polarity=positive、被否定侧必须设 polarity=negative；没有价值偏向的客观差异才使用 neutral。除此以外不要按段落机械拆项，允许只有一个主要观点。结构性项目标题不超过 10 个汉字，body 尽量 15–30 个汉字；正文与 points 不重复。多项页面必须控制在正式字号可承载范围；收到容量反馈时压缩或拆页，不得缩字。不得为了套资产改变语义。`,
+        role: CONTENT_DIRECTOR_SYSTEM_PROMPT,
+        task: `${contentRevisionDirective(input.previousReview)}${CONTENT_DIRECTOR_TASK}`,
         context: {
           executionGuidelines: guidelines.content ?? "",
           availableLogicSkills: guidelines.logicSkillIndex ?? [],
-          structuredDataGuidance: [
-            "原稿明确包含一个总目标、2–4 项策略且每项策略各自绑定 1–2 个指标时，使用 structuredData.type=goal-strategy-metrics；items 只保存策略，strategies 用相同 id 绑定指标。",
-            "原稿明确同时包含 3–5 个阶段、2–4 个角色以及 3–8 项职责分配时，使用 structuredData.type=role-stage；items 保存职责任务，assignments 用相同 id 绑定真实 stageId 与 roleId；允许空单元格，不得为了填满矩阵虚构任务。",
-            "原稿明确存在 2–5 个同级集合，且明确给出所有集合共同成立的部分时，使用 structuredData.type=multi-set-common-intersection；items 只保存各集合，setIds 逐项引用，shared 保存原稿中的共同部分。没有明确共同部分时不得使用，也不得自行补写交集。",
-            "原稿明确区分 1–5 个表面可见成果与 2–5 个更深层、通常不可见的支撑条件时，使用 structuredData.type=iceberg-visible-hidden；items 同时保存成果和支撑条件，visibleIds 与 hiddenIds 分组引用。两组必须均来自原稿，不得把普通上下分层硬改为冰山显隐关系。",
-            "原稿围绕同一个方案或决策，明确给出 2–4 条收益、2–4 条代价或风险以及一条综合判断时，使用 structuredData.type=decision-tradeoff；items 保存全部收益与风险，benefitIds 与 riskIds 分组引用，verdict 保存原稿判断，balanceState 只按原稿结论选择收益侧更重、基本平衡或风险侧更重。不得把两个独立对象的逐项比较改成权衡，也不得自行补写结论。",
-            "原稿明确区分 2–4 个内部主体和 2–4 个外部伙伴，并明确给出至少一条内部关系、一条外部关系和一条跨域关系时，使用 structuredData.type=internal-external-ecosystem；items 只保存真实主体，internalIds 与 externalIds 分组引用，core 保存原稿中的共同价值，links 只记录原稿明确支持的主体连接。不得为了画网状图补写关系。",
-            "原稿明确给出一个中心、3–5 个直接支撑中心的能力，并可选地给出 3–8 个由这些能力共同形成且不分别归属某一能力的结果时，使用 structuredData.type=hub-tiered-ecosystem；items 保存全部能力与结果，innerIds 与 outerIds 分组引用，center 保存原稿中心。只有直接能力而没有共同结果时 outerIds 为空；不得把分属于单一能力的结果强行改成共同外圈。",
-            "原稿围绕同一个不确定假设并列给出 3–5 个未来情景，且每个情景都有明确触发条件与预期结果时，使用 structuredData.type=branching-scenario；items 只保存情景名称，scenarios 用相同 id 保存触发与结果。缺少任一字段时不得补写。",
-          ],
+          structureCapabilities: guidelines.structureCapabilities ?? [],
           structuralGuides,
           structuralHints: effectiveStructuralHints,
           ...sourceRule(input.rawMarkdown),
@@ -543,6 +564,7 @@ export function createModelDirectorProvider({
           input.rawMarkdown,
           guidelines.logicSkillIndex,
         ),
+        maxJsonAttempts: 1,
       });
       const normalized = applyStructuralHints(
         enforceSectionPageContract(contentOutput, input.rawMarkdown, effectiveStructuralHints),
@@ -587,12 +609,13 @@ export function createModelDirectorProvider({
       );
       const routingOutput = await visualComposition.generateJson({
         role: "PPagenT 视觉导演",
-        task: "内容导演已经为每页确定 Logic，你不得重新分类或跨 Logic 选择。像调用 Skills 一样，只在该页合法候选中选择具体 Structure Group，并决定核心短标签、语义图标查询、TextRegion 的组合排版以及必要的局部内容细化。candidateId 必须逐字复制该页 candidates 中的值。选定候选若披露 textRegions，只能从各 Region 的 compatibleLayoutIds 中选择；同级重复 Region 只按 regionKey 选择一次，程序会扩展到每个实际区域。没有文字区域或默认排版已经合适时，textLayoutChoices=[]。优先使用语义与容量都合法的 Structure Group；如果该页只提供 fallbackBody 候选，或 previousFeedback 明确报告 component-runtime-overflow，则选择正文兜底，不得继续选择已证明装不下的结构。centerLabel 是页面核心概念的 2–8 字中文短标签，所有页面都填写；若结构没有中心标签槽，程序会忽略。若选中 mediaMode=semantic-icon 的候选，必须为每个 item 输出一个简短英文 icon query，sourceItemId 使用该 item.id；其他候选 iconQueries=[]。若 contentReadiness=needs-semantic-refinement，只在原文明确支持缺失分点时列出对应 refinementItemIds，否则改选其他合法结构；不得改变 Logic。不要输出坐标、字号、间距、CompositionPlan、HTML/CSS 或重复正文；程序会读取 Structure Group 表单、形成 TextBinding，并用确定性排版器完成适配。按 pages 原顺序逐页输出且不得遗漏。",
+        task: "内容导演已经为每页确定 Logic，你不得重新分类或跨 Logic 选择。像调用 Skills 一样，只在该页合法候选中选择具体 Structure Group，并决定核心短标签、语义图标查询、TextRegion 的组合排版以及必要的局部内容细化。candidateId 必须逐字复制该页 candidates 中的值。选定候选若披露 textRegions，只能从各 Region 的 compatibleLayoutIds 中选择；同级重复 Region 只按 regionKey 选择一次，程序会扩展到每个实际区域。没有文字区域或默认排版已经合适时省略 textLayoutChoices。优先使用语义与容量都合法的 Structure Group；如果该页只提供 fallbackBody 候选，或 previousFeedback 明确报告 component-runtime-overflow，则选择正文兜底，不得继续选择已证明装不下的结构。centerLabel 是页面核心概念的 2–8 字中文短标签，所有页面都填写；若结构没有中心标签槽，程序会忽略。若选中 mediaMode=semantic-icon 的候选，必须为每个 item 输出一个简短英文 icon query，sourceItemId 使用该 item.id；其他候选省略 iconQueries。只有 contentReadiness=needs-semantic-refinement 且原文明确支持缺失分点时才输出 refinementItemIds，否则省略；不得改变 Logic。只有同页存在多个候选或需要响应 previousFeedback 时才写简短 reason，否则省略。不要输出坐标、字号、间距、CompositionPlan、HTML/CSS 或重复正文；程序会读取 Structure Group 表单、形成 TextBinding，并用确定性排版器完成适配。按 pages 原顺序逐页输出且不得遗漏。",
         context: {
           pages: compactPages,
           previousFeedback: input.previousResolution?.feedback ?? [],
         },
         outputSchema: visualSkillRoutingSchema(input.pageContents, disclosedCandidateSets),
+        maxJsonAttempts: 1,
       });
       return normalizeVisualCompositionOutput(
         expandVisualSkillRouting(routingOutput, { ...input, candidateSets: disclosedCandidateSets }),

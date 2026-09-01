@@ -588,6 +588,20 @@ function pageForHint(pageContents, hint) {
     ?? pageContents.find((page) => String(page.title ?? "").includes(hint.sectionHeading));
 }
 
+function hintEvidenceFragments(page, hint) {
+  const sourceText = String(page.sourceText ?? "");
+  const candidates = [
+    ...(hint.atoms ?? []).flatMap((atom) => atom.sourceFragments ?? []),
+    hint.source,
+    hint.markerLine,
+  ]
+    .map((value) => String(value ?? "").trim())
+    .filter((value) => value && sourceText.includes(value));
+  const grounded = [...new Set(candidates)].slice(0, 3);
+  if (!grounded.length && sourceText) grounded.push(Array.from(sourceText).slice(0, 160).join(""));
+  return grounded.map((value) => Array.from(value).slice(0, 160).join(""));
+}
+
 export function applyStructuralHints(contentOutput, hints) {
   if (!hints?.length) return contentOutput;
   const output = structuredClone(contentOutput);
@@ -611,6 +625,8 @@ export function applyStructuralHints(contentOutput, hints) {
     page.logicIntent = {
       logicId: hint.relation === "none" ? "editorial" : hint.relation,
       reason: `程序从原稿识别出高置信 ${hint.relation} 主关系`,
+      evidenceFragments: hintEvidenceFragments(page, hint),
+      confidence: "high",
     };
     if (page.structuredData && hint.relation !== "hierarchy") delete page.structuredData;
   }

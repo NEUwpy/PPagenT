@@ -6,7 +6,7 @@ PPagenT 是一个面向固定使用场景、以可靠生成原生可编辑 Power
 
 ## 当前阶段
 
-两份真实稿件已经用于校准正式生成线。当前冻结 Shell 与 Content Frame，并已验证 `Logic → Structure Group → State → Native PPT`：HTML/CSS 组件负责响应布局并向通用编译器提供最终几何，编译结果仍是原生可编辑对象。当前状态见[当前阶段](docs/当前阶段.md)，几何和颗粒度见[Shell 与 Logic 契约](docs/Shell与Logic契约.md)，长任务边界见[方向校正](docs/方向校正.md)。
+两份真实稿件已经用于校准正式生成线。当前冻结 Shell 与 Content Frame，并已验证 `Logic → Structure Group → State → Native PPT`：HTML/CSS 组件负责响应布局并向通用编译器提供最终几何，编译结果仍是原生可编辑对象。正式库现有 35 个结构组件，覆盖 20 类 Logic 中的 18 类；当前状态见[当前阶段](docs/当前阶段.md)，逐项覆盖见[资产覆盖清单](docs/工作流/资产积累与入库/资产覆盖清单.md)，几何和颗粒度见[Shell 与 Logic 契约](docs/Shell与Logic契约.md)。
 
 ## 核心工程取舍
 
