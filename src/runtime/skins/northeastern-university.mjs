@@ -34,20 +34,23 @@ function fitSkinText(value, frame, roleName, { preferSemanticBreaks = false } = 
   return result;
 }
 
-function sourceNotes(page, manuscriptSource) {
+function sourceNotes(page, manuscriptSource, templateSourceKind) {
+  const templateDescription = templateSourceKind === "bundled-runtime"
+    ? "assets/主题/东北大学-001/runtime-template.pptx（随仓库发布的运行模板）"
+    : "PPT源/PPT模板-封面正文尾页.pptx（本地原始模板）";
   return [
     "[Sources]",
     `- 内容：${manuscriptSource}`,
-    "- 视觉：PPT模板-封面正文尾页.pptx（用户提供的东北大学模板）",
+    `- 视觉：${templateDescription}`,
     `- PPagenT：${page.intent.intentId} → ${page.decision.selectedAssetId}`,
     ...(page.composition ? [`- 整页编排：${page.composition.compositionId}`] : []),
     "[/Sources]",
   ].join("\n");
 }
 
-function pageRecipe(page, index, manuscriptSource) {
+function pageRecipe(page, index, manuscriptSource, templateSourceKind) {
   const assetId = page.payload.assetId;
-  const notes = sourceNotes(page, manuscriptSource);
+  const notes = sourceNotes(page, manuscriptSource, templateSourceKind);
   if (assetId === "northeastern-university-cover-001") {
     const titleFrame = { left: 16.98, top: 198.16, width: 1252.71, height: 169.4 };
     const subtitleFrame = { left: 240, top: 400, width: 800, height: 76 };
@@ -200,6 +203,7 @@ export async function renderNortheasternUniversityDeck({
   outputPptx,
   qaDir,
   manuscriptSource,
+  templateSourceKind = "local-source",
   structureRenderer = renderStructureAsset,
 }) {
   const starterPptx = path.join(path.dirname(outputPptx), ".runtime", "template-starter.pptx");
@@ -211,7 +215,7 @@ export async function renderNortheasternUniversityDeck({
       "northeastern-university-closing-001",
     ].includes(page.payload.assetId);
     if (isBody) bodyPageNumber += 1;
-    return pageRecipe(page, isBody ? bodyPageNumber : 0, manuscriptSource);
+    return pageRecipe(page, isBody ? bodyPageNumber : 0, manuscriptSource, templateSourceKind);
   });
   await prepareTemplateMappedStarter({
     sourcePptx,

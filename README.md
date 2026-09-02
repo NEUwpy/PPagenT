@@ -42,22 +42,24 @@ PPagenT 采用“AI 理解与选择、参数化代码确定性绘制”的生成
 
 - `assets/`：核心资产库，只放已进入正式调用并接受持续优化的版式家族；各资产目录的 `asset.json` 是唯一登记真源，不维护中央注册表。
 - `稿件/`：正式生成线的统一原始稿件目录；当前优先保存 UTF-8 Markdown，不放导演中间产物或生成结果。
-- `PPT源/`：全部原始 PPT 的唯一目录；整目录不进入 Git，换电脑时单独复制到仓库根目录。
+- `PPT源/`：全部原始 PPT 的唯一目录；整目录不进入 Git，只在继续蒸馏、审查来源时跨电脑单独复制。
+- `assets/主题/东北大学-001/runtime-template.pptx`：正式生成随仓库发布的最小运行模板；全新克隆没有 `PPT源/` 时，Renderer 自动使用它。
 - `src/asset-runtime/`：原生 PPT 共享原语、旧资产兼容 Builder，以及 HTML 组件到 Native 对象的编译支撑。
 - `assets/<分类>/<资产>/asset.json + runtime.mjs + review.mjs + generate.mjs`：`asset.json` 用于轻量发现，`runtime.mjs` 暴露入围后才读取的组件容量与 Mapper，`generate.mjs` 只在实际编译时加载重型运行库；结构资产只维护一份 HTML 布局真源，看板缩略图、详情预览与下载共用按 State 生成的 Native PPTX。`example.pptx` 仅作兼容示例。
 - `experiments/`：只保留仍在使用的最小架构实验和 Shell 标注，不再提交整套稿件运行输出或批量渲染物。
 
 ## 公开仓库范围
 
-公开仓库保存项目代码、文档、资产元数据和可由代码生成的候选示例。第三方原始模板、从原模板提取的单页 PPT 与预览图，以及本地实验输出只保存在本地工作区，不提交到 Git。
+公开仓库保存项目代码、文档、资产元数据、可由代码生成的候选示例，以及当前 Skin 正式生成必需的最小运行模板。第三方原始模板、用于继续蒸馏的来源 PPT、来源预览图和本地实验输出只保存在本地工作区，不提交到 Git。
 
 ## 换电脑继续工作
 
-1. 克隆仓库或切换所需分支。
-2. 把完整的 `PPT源/` 文件夹复制到仓库根目录；目录名和内部文件名保持不变。
-3. 执行 `npm install`，再执行 `npm run setup:workspace`，连接当前电脑 Codex 自带的 PPT 运行依赖。
+1. 克隆仓库或切换所需分支，并确认已安装 Node.js 20 或更高版本。
+2. 执行 `npm ci`，再执行 `npm run setup:workspace`，连接当前电脑 Codex 自带的 PPT 运行依赖。
+3. 双击 `启动PPA生产工作台.cmd` / `启动PPA看板.cmd`，或分别执行 `npm run production:workbench` / `npm run assets:dashboard`。
+4. 只有继续做资产蒸馏、来源审查或使用尚未打包的其他主题时，才需要把完整 `PPT源/` 复制到仓库根目录。
 
-所有来源记录只使用仓库相对路径 `PPT源/<文件名>`，不写死电脑盘符或用户目录。`PPT源/` 整体由 Git 忽略，因此 Git 操作不会上传、删除或覆盖其中的原始模板。
+所有来源记录只使用仓库相对路径 `PPT源/<文件名>`，不写死电脑盘符或用户目录。`PPT源/` 整体由 Git 忽略，因此 Git 操作不会上传、删除或覆盖其中的原始模板。当前东北大学正式生成优先使用本地同名原始模板；缺少时自动退回随仓库发布的最小运行模板，不影响工作台完成确定性渲染。
 
 ## 本地验证
 
@@ -70,7 +72,7 @@ npm test
 
 `npm test` 会校验规则层契约、版式合法性筛选、公开仓库资产结构，以及资产覆盖清单中引用的 ID 与状态是否真实。完整资产库存直接扫描 `asset.json`，不靠清单登记。包含原始模板和样本文件的本地工作区可额外执行 `npm run audit:local`。
 
-底层正式入口为 `npm run agent:run`，只接受原稿、Skin、输出位置、运行记录目录和 DirectorProvider；不接受人工准备的逐页 `pages`。日常使用及 Codex 代为生成统一通过 `PPA生产工作台.exe` 进入这条正式线，以便用户与 Codex 读取同一份过程记录。生成带文字统计的 `PageIntent` 可使用 `npm run intent:stats -- --content <page-content.json> --intent-draft <intent-draft.json>`。
+底层正式入口为 `npm run agent:run`，只接受原稿、Skin、输出位置、运行记录目录和 DirectorProvider；不接受人工准备的逐页 `pages`。日常使用及 Codex 代为生成统一通过生产工作台进入这条正式线，以便用户与 Codex 读取同一份过程记录。Git 克隆版可双击 `启动PPA生产工作台.cmd`；本机 EXE 是可选便捷启动器，可用 `npm run production:workbench:exe` 重建，不作为远端仓库的必要文件。生成带文字统计的 `PageIntent` 可使用 `npm run intent:stats -- --content <page-content.json> --intent-draft <intent-draft.json>`。
 
 项目内稿件统一使用仓库相对路径 `稿件/<文件名>`。当前两份回归稿件为 `稿件/为什么做PPagenT-v1.md` 和 `稿件/让六地红-v1.md`；具体放置和命名规则见[放入稿件说明](稿件/放入稿件说明.md)。
 

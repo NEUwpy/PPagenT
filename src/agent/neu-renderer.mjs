@@ -29,7 +29,13 @@ function compactSectionName(intent, job) {
   }[intent?.baseRelation] ?? "观点";
 }
 
-export function createNortheasternUniversityRenderer({ root = process.cwd(), sourcePptx, outputPptx, manuscriptSource }) {
+export function createNortheasternUniversityRenderer({
+  root = process.cwd(),
+  sourcePptx,
+  templateSourceKind = "local-source",
+  outputPptx,
+  manuscriptSource,
+}) {
   if (!sourcePptx || !outputPptx) throw new Error("NEU renderer 需要 sourcePptx 和 outputPptx");
   return async function renderWorkflowDeck({
     outputDir,
@@ -58,6 +64,7 @@ export function createNortheasternUniversityRenderer({ root = process.cwd(), sou
       outputPptx: path.resolve(outputPptx),
       qaDir,
       manuscriptSource,
+      templateSourceKind,
     });
     const requiredQaSlides = layoutDecisions
       .map((decision, index) => [

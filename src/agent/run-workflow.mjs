@@ -8,6 +8,7 @@ import { createNortheasternUniversityRenderer } from "./neu-renderer.mjs";
 import { applyAcademicReportShellScaffold } from "./shell-scaffold.mjs";
 import { buildVisualCandidateSets, resolveVisualPlan } from "./visual-resolution.mjs";
 import { DEFAULT_SKIN_ID, runDirectorWorkflow } from "./workflow.mjs";
+import { resolveNortheasternUniversityTemplate } from "../runtime/skins/template-source.mjs";
 
 function parseArgs(argv) {
   const options = {
@@ -120,9 +121,11 @@ export async function runWorkflowCli(options) {
   const providerModule = providerPath ? await import(pathToFileURL(providerPath).href) : null;
   const provider = options.providerInstance ?? providerModule?.default ?? providerModule?.provider;
   if (!provider) throw new Error("DirectorProvider 模块必须导出 default 或 provider");
+  const template = resolveNortheasternUniversityTemplate(root);
   const renderer = createNortheasternUniversityRenderer({
     root,
-    sourcePptx: path.join(root, "PPT源", "PPT模板-封面正文尾页.pptx"),
+    sourcePptx: template.path,
+    templateSourceKind: template.kind,
     outputPptx: resolveFromRoot(options.output),
     manuscriptSource: path.relative(root, inputPath).replaceAll("\\", "/"),
   });
