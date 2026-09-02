@@ -79,27 +79,25 @@ test("看板只把资产专属 HTML 计入迁移完成度", async () => {
   assert.equal(data.activeSkin?.typographyUnit, "ppt-pt");
   assert.equal(data.activeSkin?.pptPointScale, 1);
   assert.deepEqual(data.textLayouts.map((item) => item.id), [
-    "statement-flow",
-    "heading-content-flow",
-    "label-content-flow",
-    "structured-list-flow",
-    "metric-content-flow",
-    "metric-set-flow",
-    "key-value-flow",
-    "quote-attribution-flow",
-    "heading-metric-content-flow",
-    "summary-information-flow",
+    "markdown-flow",
+    "markdown-zoned",
   ]);
-  assert.equal(data.textPrimitives.length, 8);
-  assert.equal(data.summary.textLayouts, 10);
-  assert.equal(data.summary.textPrimitives, 8);
+  assert.equal(data.textPrimitives.length, 7);
+  assert.equal(data.summary.textLayouts, 2);
+  assert.equal(data.summary.textPrimitives, 7);
+  assert.equal(data.textSurfaces.length, 6);
+  assert.equal(data.summary.textSurfaces, 6);
   assert.match(data.textLayoutCss, /\.ppagent-text-layout/);
+  assert.match(data.textLayoutCss, /--ppagent-color-accent:#2F5EA8/);
   assert.ok(data.textLayouts.every((layout) => (
     layout.previews.length === 3
     && layout.previews[0].id === "minimum"
     && layout.previews[0].frame.width === layout.minimumFrame.width
     && layout.previews[0].frame.height === layout.minimumFrame.height
-    && layout.previews.every((preview) => /data-ppagent-text-region/.test(preview.markup))
+    && layout.visualStyle === "markdown-skin"
+    && layout.visualReviewStatus === "awaiting-user-review"
+    && layout.previews.map((preview) => preview.id).join(",") === "minimum,representative,dense"
+    && layout.previews.every((preview) => /data-ppagent-text-region/.test(preview.markup) && /data-text-layout-style="markdown-skin"/.test(preview.markup))
   )));
   assert.equal(cycle?.builderExport, "");
   assert.equal(cycle?.componentInitialSelection.stepCount, 4);
@@ -281,6 +279,20 @@ test("Logic 能力地图保留空槽位，只把合格资产填入对应位置",
   assert.match(template, /data-carousel-select/);
   assert.match(template, /coverage-asset-tab/);
   assert.match(template, /candidate\.name/);
+});
+
+test("PPA 看板只保留四个顶层能力域并把正式运行交给生产工作台", async () => {
+  const template = await fs.readFile(path.join(root, "src/tools/templates/logic-dashboard.html"), "utf8");
+  assert.match(template, /href="#capabilities">结构<\/a>/);
+  assert.match(template, /href="#text-layouts">文字<\/a>/);
+  assert.match(template, /href="#media-library">图像<\/a>/);
+  assert.match(template, /href="#skin">排版<\/a>/);
+  assert.match(template, /href="http:\/\/127\.0\.0\.1:4212\/"[^>]*>生产工作台/);
+  assert.match(template, /<details class="technical-details approval-details" id="asset-approval">/);
+  assert.match(template, /<details class="technical-details" id="assets">/);
+  assert.doesNotMatch(template, /id="automation"|id="intake-review"|id="metric-grid"/);
+  assert.match(template, /DATA\.logics\.map\(coverageCardMarkup\)/);
+  assert.doesNotMatch(template, /\["基础", "常用", "补充"\]\.map/);
 });
 
 test("能力地图区分通用覆盖与专用结构，提前暴露单候选重复风险", async () => {
@@ -715,7 +727,7 @@ test("已审批并列组件进入核心库并可被正式生成线发现", async
   const core = data.records.find((record) => record.library === "core" && record.id === "parallel-equal-cards-001");
   assert.equal(core?.status, "core");
   assert.equal(core?.autoCallable, true);
-  assert.deepEqual(core?.componentStates, [3, 4, 5]);
+  assert.deepEqual(core?.componentStates, [2, 3, 4, 5]);
   assert.ok(core?.nativeStatePreviewUrl);
   assert.ok(core?.nativeStatePptxUrl);
   assert.ok(core?.skinStatePreviewUrl);

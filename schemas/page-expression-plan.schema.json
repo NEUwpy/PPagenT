@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/NEUwpy/PPagenT/schemas/page-expression-plan.schema.json",
+  "title": "PPagenT PageExpressionPlan candidate v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "planId", "pageId", "compositionId", "expressions", "derivations"],
+  "properties": {
+    "schemaVersion": { "const": "0.1" },
+    "planId": { "type": "string", "minLength": 1 },
+    "pageId": { "type": "string", "minLength": 1 },
+    "compositionId": { "type": "string", "minLength": 1 },
+    "expressions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": { "$ref": "#/$defs/expression" }
+    },
+    "derivations": {
+      "type": "array",
+      "maxItems": 16,
+      "items": { "$ref": "#/$defs/derivation" }
+    }
+  },
+  "$defs": {
+    "contentBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contentRef", "mode"],
+      "properties": {
+        "contentRef": { "type": "string", "minLength": 1 },
+        "mode": { "enum": ["full", "markdown", "items", "title", "summary"] }
+      }
+    },
+    "textDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rendererId", "surfaceId"],
+      "properties": {
+        "rendererId": { "enum": ["markdown-flow", "markdown-zoned"] },
+        "zoneTemplateId": { "type": "string", "minLength": 1 },
+        "surfaceId": { "type": "string", "minLength": 1 }
+      }
+    },
+    "structureDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["logicId", "structureGroupId"],
+      "properties": {
+        "logicId": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+        "structureGroupId": { "type": "string", "minLength": 1 },
+        "stateHint": { "type": "string", "minLength": 1 },
+        "prototype": { "type": "boolean" }
+      }
+    },
+    "mediaDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mediaFit"],
+      "properties": {
+        "mediaFit": { "enum": ["contain", "cover"] }
+      }
+    },
+    "expression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expressionId", "type", "regionKey", "contentBindings", "children"],
+      "properties": {
+        "expressionId": { "type": "string", "minLength": 1 },
+        "type": { "enum": ["structure", "text", "media"] },
+        "regionKey": { "type": "string", "minLength": 1 },
+        "contentBindings": {
+          "type": "array",
+          "maxItems": 12,
+          "items": { "$ref": "#/$defs/contentBinding" }
+        },
+        "text": { "$ref": "#/$defs/textDecision" },
+        "structure": { "$ref": "#/$defs/structureDecision" },
+        "media": { "$ref": "#/$defs/mediaDecision" },
+        "children": {
+          "type": "array",
+          "maxItems": 8,
+          "items": { "$ref": "#/$defs/expression" }
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "text" } } },
+          "then": { "required": ["text"] }
+        },
+        {
+          "if": { "properties": { "type": { "const": "structure" } } },
+          "then": { "required": ["structure"] }
+        },
+        {
+          "if": { "properties": { "type": { "const": "media" } } },
+          "then": { "required": ["media"] }
+        }
+      ]
+    },
+    "derivation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["derivationId", "type", "sourceRefs", "result", "reason"],
+      "properties": {
+        "derivationId": { "type": "string", "minLength": 1 },
+        "type": { "enum": ["compress", "merge", "summarize"] },
+        "sourceRefs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "result": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1, "maxLength": 200 }
+      }
+    }
+  }
+}

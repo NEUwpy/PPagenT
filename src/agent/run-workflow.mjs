@@ -137,6 +137,7 @@ export async function runWorkflowCli(options) {
     shellScaffolder: (input) => observeOperation(options.observer, "shell-scaffold", input, () => applyAcademicReportShellScaffold(input)),
     renderer: (input) => observeOperation(options.observer, "render", input, () => renderer(input)),
     reviewMode: options.mode === "development" ? "development" : "none",
+    guaranteeDelivery: options.guaranteeDelivery !== false,
   });
   const overflow = await runOverflowCheck(options, result.outputPptx);
   const workflowResultPath = path.join(runDir, "workflow-result.json");

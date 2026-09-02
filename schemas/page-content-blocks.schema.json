@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/NEUwpy/PPagenT/schemas/page-content-blocks.schema.json",
+  "title": "PPagenT PageContentBlocks candidate v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "pageId", "title", "coreMessage", "contentBlocks", "blockRelations"],
+  "properties": {
+    "schemaVersion": { "const": "0.1" },
+    "pageId": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "coreMessage": { "$ref": "#/$defs/sourcedMarkdown" },
+    "contentBlocks": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": { "$ref": "#/$defs/contentBlock" }
+    },
+    "blockRelations": {
+      "type": "array",
+      "maxItems": 16,
+      "items": { "$ref": "#/$defs/blockRelation" }
+    }
+  },
+  "$defs": {
+    "sourceFragment": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourcedMarkdown": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["markdown", "sourceFragments"],
+      "properties": {
+        "markdown": { "type": "string", "minLength": 1 },
+        "sourceFragments": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/sourceFragment" }
+        }
+      }
+    },
+    "contentItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "markdown", "sourceFragments", "required"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "markdown": { "type": "string", "minLength": 1 },
+        "sourceFragments": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/sourceFragment" }
+        },
+        "required": { "type": "boolean" }
+      }
+    },
+    "logicIntent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["logicId", "reason", "evidenceFragments"],
+      "properties": {
+        "logicId": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+        "reason": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "evidenceFragments": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/sourceFragment" }
+        }
+      }
+    },
+    "contentBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "role", "required", "markdown", "items", "sourceFragments"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "role": {
+          "enum": ["core", "context", "component", "evidence", "explanation", "case", "conclusion", "transition"]
+        },
+        "required": { "type": "boolean" },
+        "markdown": { "type": "string" },
+        "logicIntent": { "$ref": "#/$defs/logicIntent" },
+        "items": {
+          "type": "array",
+          "maxItems": 12,
+          "items": { "$ref": "#/$defs/contentItem" }
+        },
+        "sourceFragments": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/sourceFragment" }
+        }
+      }
+    },
+    "blockRelation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to", "type"],
+      "properties": {
+        "from": { "type": "string", "minLength": 1 },
+        "to": { "type": "string", "minLength": 1 },
+        "type": { "enum": ["supports", "explains", "composes", "contrasts", "precedes", "concludes"] }
+      }
+    }
+  }
+}

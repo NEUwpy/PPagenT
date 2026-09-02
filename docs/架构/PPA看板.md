@@ -1,6 +1,19 @@
 # PPA 看板
 
-PPA 看板是 PPagenT 的本地资产建设与审查入口。它不保存第二份资产数据库，也不把当前资产清单写死在应用里。正式运行时两个导演只输出内容和选择结果；看板展示的 HTML 与 PPT 来自 Structure Group 资产包中已经保存的确定性代码。
+PPA 看板是 PPagenT 的本地资产建设与审查入口，不是正式生成的运行监控页。它不保存第二份资产数据库，也不把当前资产清单写死在应用里。正式生成、API 调用、运行日志和交付结果统一进入 PPA 生产工作台。
+
+## 四个能力域
+
+看板顶层只保留四个长期能力域：
+
+- **结构**：按 `Logic → Structure Group → State` 组织，不再设置“基础、常用、补充”层级；
+- **文字**：统一管理受控 Markdown 语法、传统流式 Renderer 与命名区域模板，页面直接文字和 Structure 内文字共用同一套能力；
+- **图像**：预留 Media、背景图、插画和截图的来源、裁切与安全区域管理；当前尚未建设，不用图标或装饰图形冒充；
+- **排版**：展示 Skin、Shell、Content Frame、Composition 与 Surface，并为后续整页组合实验台提供容器边界。
+
+“全部资产”、Manifest、规则目录和原始数据源只作为默认收起的技术记录，不再与四个能力域并列。Structure 的 HTML 与 Native/Skin 审批队列也默认收起，需要审查时再展开。
+
+排版区只展示可复用的 Skin、Shell、Content Frame、Composition 与 Surface 能力，不再放置“人工代替视觉导演”的生成实验台。视觉导演的输入、输出和人工修改属于一次具体稿件的生成运行，统一进入 PPA 生产工作台。候选 `PageContentBlocks / PageExpressionPlan` Schema、固定内容原型与验证器仍作为2+3架构研究代码保留，但不会伪装成 PPA 已入库资产。
 
 ## 使用
 
@@ -9,18 +22,13 @@ PPA 看板是 PPagenT 的本地资产建设与审查入口。它不保存第二�
 1. 识别当前 PPagenT 仓库；
 2. 结束这个仓库上一次遗留的看板进程；
 3. 重新启动只绑定本机的实时只读接口；
-4. 用新的启动地址打开正式 Logic 审查区，并重新读取仓库数据；
+4. 用新的启动地址打开 PPA 资产看板，并重新读取仓库数据；
 
 因此，关闭网页不会强制结束后台服务，但再次双击 `PPA看板.exe` 会自动重启它，不需要手工结束 Node.js 进程。
 
 页面右上角的“刷新仓库”会重新读取仓库声明。
 
-看板顶部固定展示两条完整流程：
-
-- **入库线**：Logic 缺口 → 参考组 → 视觉意图 → HTML 黄金状态 → State 扩散与 Slot Map → Native 编译 → Skin 人审 → 用户确认进入核心库；
-- **正式生成线**：稿件与 Skin → 内容导演 → 页面 Logic → 合法 Structure Group 候选 → 视觉导演选组 → State 与内容绑定 → Icon 本地匹配 → Native 编译 → Shell 组装并交付 PPTX。
-
-生成线同时显示三类所有权：内容导演决定“讲什么”，视觉导演决定“用什么 Logic 和 Structure Group 组织”，程序负责合法过滤、State 求解、字段绑定、Icon Top 1 检索和确定性绘制。层级关系固定为 `PageContent → Logic → Structure Group → State → Slot / Icon → Shell + Skin`；Icon 只是资产槽位里的可替换内容，不是独立的 Logic 层。
+看板不再展示正式生成流程、最近运行或调用统计。这些运行态信息由 PPA 生产工作台统一承载；资产看板只保留能力发现、预览和审批。入库不是顶层导航，HTML 与 Native/Skin 审批队列作为默认收起的建设链入口，需要时展开。
 
 点击资产后，建设链区域依次显示：
 

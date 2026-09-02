@@ -3,12 +3,34 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
+import Ajv2020 from "ajv/dist/2020.js";
 import {
+  candidateSetsForVisualDirector,
   createModelDirectorProvider,
   normalizeVisualCompositionOutput,
 } from "../src/agent/model-director-provider.mjs";
 import { OpenAIJsonModel } from "../src/agent/openai-director-provider.mjs";
 import { loadDirectorGuidelines } from "../src/agent/director-guidelines.mjs";
+import { loadDirectorOutputSchemas } from "../src/agent/director-output-schemas.mjs";
+
+test("不兼容结构候选转为内容契约缺口时不会在视觉导演前崩溃", () => {
+  const [result] = candidateSetsForVisualDirector([{
+    pageId: "p1",
+    intentId: "i1",
+    candidates: [{
+      assetId: "incompatible-001",
+      structureGroupId: "parallel",
+      familyId: "parallel-cards",
+      variantId: "equal",
+      silhouette: "cards",
+      readiness: "incompatible",
+      reasons: ["content-contract-mismatch"],
+      fallbackBody: false,
+    }],
+  }]);
+  assert.equal(result.candidates.length, 0);
+  assert.equal(result.gap.type, "content-contract-gap");
+});
 
 test("模型 DirectorProvider 为两位导演和研发审查调用传入明确输出 schema 与渲染图片", async () => {
   const calls = [];
@@ -17,6 +39,27 @@ test("模型 DirectorProvider 为两位导演和研发审查调用传入明确�
     async generateJson(input) {
       calls.push(input);
       if (input.outputSchema.name === "visualIntent") return { pageIntents: [] };
+      if (input.outputSchema.name === "contentDirector") {
+        return {
+          schemaVersion: "0.1",
+          deckMetadata: {
+            deckId: "test-deck",
+            title: "测试稿",
+            communicationJob: "说明原稿",
+            audience: "测试者",
+            audienceOutcome: "理解原稿",
+            centralTakeaway: "说明原稿。",
+            narrativeArc: ["说明"],
+          },
+          contentMarkdown: "# 原稿\n\n> 说明唯一内容。\n\n## 内容\n\n原稿。",
+          pageMetadata: [{
+            logicIntent: {
+              logicId: "editorial", reason: "原稿只有一个陈述", evidenceFragments: ["原稿"], confidence: "high",
+            },
+            sourceAnchors: ["原稿"],
+          }],
+        };
+      }
       return {};
     },
   };
@@ -57,7 +100,8 @@ test("模型 DirectorProvider 为两位导演和研发审查调用传入明确�
   assert.equal(calls[0].context.executionGuidelines, "内容准则");
   assert.equal(calls[0].context.structureCapabilities[0].logicId, "parallel");
   assert.match(calls[0].role, /判断优先级/);
-  assert.match(calls[0].task, /一次完成整套/);
+  assert.match(calls[0].task, /一次完成 contentMarkdown/);
+  assert.match(calls[0].task, /每个 H1 就是一页/);
   assert.match(calls[0].task, /requiredFields/);
   assert.equal(calls[0].maxJsonAttempts, 1);
   assert.doesNotMatch(calls[0].task, /comparison-dual-verdict/);
@@ -86,6 +130,38 @@ test("API 运行时直接读取正式生成工作流中的两份导演提示词"
   )));
   const disclosed = JSON.stringify(guidelines.structureCapabilities);
   assert.doesNotMatch(disclosed, /assetId|familyId|variantId|silhouette/);
+});
+
+test("内容导演真实输出 Schema 接受 Markdown 元数据和三维邻接矩阵", async () => {
+  const root = path.resolve(new URL("..", import.meta.url).pathname.replace(/^\/(.:)/, "$1"));
+  const schemas = await loadDirectorOutputSchemas(root);
+  const validate = new Ajv2020({ allErrors: true, strict: true }).compile(schemas.contentDirector.schema);
+  const value = {
+    schemaVersion: "0.1",
+    deckMetadata: {
+      deckId: "deck",
+      title: "标题",
+      communicationJob: "说明层级",
+      audience: "团队",
+      audienceOutcome: "理解关系",
+      centralTakeaway: "说明上下归属。",
+      narrativeArc: ["解释层级"],
+    },
+    contentMarkdown: "# 页面\n\n> 职责\n\n## 上层\n正文\n\n## 下层\n正文",
+    pageMetadata: [{
+      logicIntent: {
+        logicId: "hierarchy", reason: "存在上下归属", evidenceFragments: ["层级"], confidence: "high",
+      },
+      itemMetadata: [{ emphasis: true }, { polarity: "neutral" }],
+      sourceBlockIds: ["source-001"],
+      relationBindings: {
+        type: "hierarchy",
+        literals: [{ path: "/adjacency", value: [[[1, 0], [0, 1]]] }],
+        references: [{ path: "/layers/0/0/label", ref: "item:1.title" }],
+      },
+    }],
+  };
+  assert.equal(validate(value), true, JSON.stringify(validate.errors));
 });
 
 test("视觉编排只重做失败页并把组件文字合同编译为合法字段", () => {

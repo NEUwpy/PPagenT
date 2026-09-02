@@ -7,8 +7,11 @@ import { northeasternUniversityTheme } from "../runtime/skins/northeastern-unive
 import {
   listTextLayoutPrimitives,
   listTextLayouts,
+  listTextSurfaces,
   textLayoutCatalogPreviewMarkup,
 } from "../visual-runtime/text-layout-library.mjs";
+import { htmlComponentThemeCss } from "../visual-runtime/html-component-theme.mjs";
+import { markdownTextCss } from "../visual-runtime/markdown-text.mjs";
 import { htmlTextFlowCss } from "../visual-runtime/text-flow.mjs";
 
 export const defaultProjectRoot = path.resolve(import.meta.dirname, "../..");
@@ -330,32 +333,30 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
   const experimentalVariants = await readJson(path.join(root, "catalog", "visual-variants.json"));
   const textLayouts = listTextLayouts().map((layout) => {
     const minimum = layout.minimumFrame;
-    const comfortable = {
-      width: Math.round(Math.min(460, minimum.width * 1.18)),
-      height: Math.round(Math.min(260, minimum.height * 1.18)),
-    };
-    const large = {
-      width: Math.round(Math.min(520, minimum.width * 1.36)),
-      height: Math.round(Math.min(300, minimum.height * 1.36)),
-    };
+    const comfortable = layout.previewFrames.representative;
+    const large = layout.previewFrames.dense;
     return {
       ...layout,
       previews: [
-        { id: "minimum", label: "最小可用框", frame: minimum, density: "standard" },
-        { id: "comfortable", label: "宽松框", frame: comfortable, density: "loose" },
-        { id: "large", label: "大框", frame: large, density: "loose" },
+        { id: "minimum", label: "较少内容", frame: minimum, density: "standard", profile: "minimal", surfaceId: "plain" },
+        { id: "representative", label: "代表性内容", frame: comfortable, density: "standard", profile: "representative", surfaceId: "field" },
+        { id: "dense", label: "较多内容", frame: large, density: "compact", profile: "dense", surfaceId: "rule" },
       ].map((preview) => ({
         ...preview,
         markup: textLayoutCatalogPreviewMarkup({
           layoutId: layout.id,
           id: `catalog-${layout.id}-${preview.id}`,
-          profile: "representative",
+          profile: preview.profile,
           density: preview.density,
         }),
       })),
     };
   });
-  const textPrimitives = listTextLayoutPrimitives();
+  const textPrimitives = listTextLayoutPrimitives().map((primitive) => ({
+    ...primitive,
+    candidateMinimumFontSizePt: Math.max(15, primitive.defaultFontSizePt),
+  }));
+  const textSurfaces = listTextSurfaces();
 
   const coverageByAsset = new Map();
   const logics = logicMap.logics ?? [];
@@ -435,6 +436,7 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
       experimentalVariants: experimentalVariants.variants?.length ?? 0,
       textLayouts: textLayouts.length,
       textPrimitives: textPrimitives.length,
+      textSurfaces: textSurfaces.length,
     },
     records,
     primaryAssets,
@@ -474,12 +476,13 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
     sourceFiles,
     textLayouts,
     textPrimitives,
-    textLayoutCss: htmlTextFlowCss(),
+    textSurfaces,
+    textLayoutCss: `${htmlComponentThemeCss(northeasternUniversityTheme)}${htmlTextFlowCss()}${markdownTextCss()}`,
     categoryCounts,
     stores: [
       { name: "原始 PPT 来源", path: "PPT源/", count: sourceFiles.length, role: "只提供入库线的原始视觉来源", tone: "source" },
       { name: "核心资产库", path: "assets/", count: coreAssets.length, role: "正式生成线自动发现并只读调用", tone: "core" },
-      { name: "文字排版库", path: "src/visual-runtime/text-layout-library.mjs", count: textLayouts.length, role: `用 ${textPrimitives.length} 个基础文字组件组成可复用排版`, tone: "core" },
+      { name: "Markdown 文字库", path: "src/visual-runtime/markdown-text.mjs", count: textLayouts.length, role: `用 ${textPrimitives.length} 种受控 Markdown 语法支持流式与区域模板渲染`, tone: "core" },
       { name: "规则与能力目录", path: "catalog/", count: (compositions.layouts?.length ?? 0) + (purposes.purposes?.length ?? 0), role: "保存 Composition、Purpose、契约与失败经验", tone: "catalog" },
       { name: "Logic 运行声明", path: "*/asset.json", count: formalLogics.length, role: "声明 Logic、Structure Group、触发条件和运行入口", tone: "runtime" },
     ],

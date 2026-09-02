@@ -46,7 +46,7 @@ export async function createConfiguredDeepSeekProvider({ root = process.cwd(), o
   );
   const model = process.env.PPAGENT_DEEPSEEK_MODEL || local.model || "deepseek-v4-flash";
   const settings = {
-    content: roleSettings(local, "content", { thinking: "enabled", reasoningEffort: "low", maxTokens: 16384 }, maxTokens),
+    content: roleSettings(local, "content", { thinking: "disabled", reasoningEffort: "low", maxTokens: 16384 }, maxTokens),
     structure: roleSettings(local, "structure", { enabled: false, thinking: "disabled", maxTokens: 4096 }, maxTokens),
     visualIntent: roleSettings(local, "visualIntent", { thinking: "disabled", maxTokens: 8192 }, maxTokens),
     visualComposition: roleSettings(local, "visualComposition", { thinking: "disabled", maxTokens: 8192 }, maxTokens),

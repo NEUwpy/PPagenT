@@ -141,7 +141,10 @@ export class DeepSeekJsonModel {
           type: "api-call", status: "failed", stage, callId, attempt,
           durationMs: Date.now() - startedAt, responseStatus: response.status, responseText,
         });
-        throw new Error(`DeepSeek Chat Completions API 调用失败：${response.status} ${responseText}`);
+        const requestError = new Error(`DeepSeek Chat Completions API 调用失败：${response.status} ${responseText}`);
+        requestError.code = "MODEL_REQUEST_FAILED";
+        requestError.status = response.status;
+        throw requestError;
       }
       try {
         const responseJson = await response.json();

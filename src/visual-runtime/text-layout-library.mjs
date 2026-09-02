@@ -1,15 +1,19 @@
 import {
-  listTextPrimitives,
   textListPrimitiveMarkup,
   textPrimitiveMarkup,
 } from "./text-primitives.mjs";
 import { textRegionAttributes } from "./text-flow.mjs";
+import {
+  inferMarkdownRoles,
+  listMarkdownBlockTypes,
+  markdownTextRegionMarkup,
+} from "./markdown-text.mjs";
 
 const ALIGNMENTS = new Set(["left", "center", "right"]);
 const VERTICAL_ALIGNMENTS = new Set(["top", "middle", "bottom"]);
 const DENSITIES = new Set(["compact", "standard", "loose"]);
 
-function layout({ id, name, description, roles, compositions, recommended, status }) {
+function layout({ id, name, description, roles, compositions, recommended, previewFrames, status, visualStyle = "swiss-international" }) {
   return Object.freeze({
     id,
     name,
@@ -19,24 +23,48 @@ function layout({ id, name, description, roles, compositions, recommended, statu
     compositions: Object.freeze(compositions),
     minimumFrame: Object.freeze({ width: recommended[0], height: recommended[1] }),
     recommendedFrame: Object.freeze({ width: recommended[0], height: recommended[1] }),
+    previewFrames: Object.freeze({
+      representative: Object.freeze({ width: previewFrames[0][0], height: previewFrames[0][1] }),
+      dense: Object.freeze({ width: previewFrames[1][0], height: previewFrames[1][1] }),
+    }),
     alignments: Object.freeze(["left", "center", "right"]),
     verticalAlignments: Object.freeze(["top", "middle", "bottom"]),
     densities: Object.freeze(["compact", "standard", "loose"]),
+    visualStyle,
+    visualReviewStatus: "awaiting-user-review",
   });
 }
 
-const DEFINITIONS = Object.freeze([
-  layout({ id: "statement-flow", name: "单段陈述", description: "用标题、正文或强调语独立表达一个完整观点。", roles: ["heading", "body", "emphasis"], compositions: ["heading-only", "body-only", "emphasis-only"], recommended: [220, 80], status: "candidate" }),
-  layout({ id: "heading-content-flow", name: "标题内容", description: "标题与正文或分点按同一信息层级自适应排列。", roles: ["heading", "body", "list"], compositions: ["heading-only", "body-only", "list-only", "heading-body", "heading-list"], recommended: [240, 130], status: "approved" }),
-  layout({ id: "label-content-flow", name: "标签内容", description: "用短标签建立语境，再承接标题或正文。", roles: ["label", "heading", "body"], compositions: ["label-heading", "label-body", "label-heading-body"], recommended: [250, 130], status: "candidate" }),
-  layout({ id: "structured-list-flow", name: "结构化列表", description: "在一个区域中排列多组小标题与说明，支持编号、分点或无标记。", roles: ["heading", "body", "list"], compositions: ["heading-items", "items-only"], recommended: [300, 190], status: "candidate" }),
-  layout({ id: "metric-content-flow", name: "数值说明", description: "突出数值，并用标签或说明交代指标含义。", roles: ["metric", "label", "annotation"], compositions: ["metric-only", "metric-label", "metric-label-annotation"], recommended: [160, 105], status: "approved" }),
-  layout({ id: "metric-set-flow", name: "多指标组", description: "在一个连续区域内并列呈现二至四项指标。", roles: ["metric", "label", "annotation"], compositions: ["metric-set"], recommended: [320, 120], status: "candidate" }),
-  layout({ id: "key-value-flow", name: "键值信息", description: "以稳定的名称—内容关系排列多项事实。", roles: ["label", "body", "metric"], compositions: ["key-value-list"], recommended: [280, 160], status: "candidate" }),
-  layout({ id: "quote-attribution-flow", name: "引语来源", description: "呈现引语、人物或来源以及可选补充说明。", roles: ["quote", "label", "annotation"], compositions: ["quote-only", "quote-source", "quote-source-annotation"], recommended: [300, 165], status: "candidate" }),
-  layout({ id: "heading-metric-content-flow", name: "标题指标正文", description: "标题、突出指标和解释文字形成清晰的三层层级。", roles: ["heading", "metric", "label", "body", "annotation"], compositions: ["heading-metric", "heading-metric-body", "heading-metric-annotation"], recommended: [280, 190], status: "candidate" }),
-  layout({ id: "summary-information-flow", name: "摘要信息组", description: "用若干短标签、关键词和简短说明组织高密度摘要。", roles: ["label", "emphasis", "body", "annotation"], compositions: ["summary-items"], recommended: [330, 185], status: "candidate" }),
+const SURFACES = Object.freeze([
+  Object.freeze({ id: "plain", name: "无承载面", description: "只保留网格、层级和留白。", status: "candidate" }),
+  Object.freeze({ id: "field", name: "浅色域", description: "使用 Skin 的浅强调色建立区域。", status: "candidate" }),
+  Object.freeze({ id: "outline", name: "细线边框", description: "使用 Skin 线色形成克制边界。", status: "candidate" }),
+  Object.freeze({ id: "rule", name: "强调边", description: "使用 Skin 主色建立单侧阅读基线。", status: "candidate" }),
+  Object.freeze({ id: "inverse", name: "反色强调", description: "使用 Skin 深色与背景色形成反色区域。", status: "candidate" }),
+  Object.freeze({ id: "accent", name: "主色色块", description: "使用 Skin 主色承载短而重要的内容。", status: "candidate" }),
 ]);
+
+const MARKDOWN_DEFINITIONS = Object.freeze([
+  layout({ id: "markdown-flow", name: "Markdown 传统流式", description: "把一个连续文字区域中的标题、段落、列表、引语和强调按标准文档流自动排列。", roles: ["heading", "body", "list", "quote", "emphasis"], compositions: ["controlled-commonmark", "single-region-flow"], recommended: [300, 170], previewFrames: [[420, 260], [540, 380]], status: "candidate", visualStyle: "markdown-skin" }),
+  layout({ id: "markdown-zoned", name: "Markdown 区域模板", description: "仍使用同一份 Markdown 内容，但在一个 TextRegion 内把主标题与其余内容分配到命名区域；复杂排版只增加区域模板，不增加字段组合排版。", roles: ["heading", "body", "list", "quote", "emphasis"], compositions: ["controlled-commonmark", "lead-body-zone-template"], recommended: [360, 180], previewFrames: [[500, 270], [620, 390]], status: "candidate", visualStyle: "markdown-skin" }),
+]);
+
+// 已审批 Structure Group 仍引用这些 ID。它们不再出现在 PPA 新文字库或
+// 新2+3候选中，只作为迁移期间的隐藏兼容渲染器，避免本轮改变正式资产。
+const LEGACY_DEFINITIONS = Object.freeze([
+  layout({ id: "statement-flow", name: "单段陈述", description: "用标题、正文或强调语独立表达一个完整观点。", roles: ["heading", "body", "emphasis"], compositions: ["heading-only", "body-only", "emphasis-only"], recommended: [220, 80], previewFrames: [[320, 160], [420, 230]], status: "candidate" }),
+  layout({ id: "heading-content-flow", name: "标题内容", description: "标题与正文或分点按同一信息层级自适应排列。", roles: ["heading", "body", "list"], compositions: ["heading-only", "body-only", "list-only", "heading-body", "heading-list"], recommended: [240, 130], previewFrames: [[360, 250], [480, 390]], status: "approved" }),
+  layout({ id: "label-content-flow", name: "标签内容", description: "用短标签建立语境，再承接标题或正文。", roles: ["label", "heading", "body"], compositions: ["label-heading", "label-body", "label-heading-body"], recommended: [250, 130], previewFrames: [[360, 240], [440, 300]], status: "candidate" }),
+  layout({ id: "structured-list-flow", name: "结构化列表", description: "在一个区域中排列多组小标题与说明，支持编号、分点或无标记。", roles: ["heading", "body", "list"], compositions: ["heading-items", "items-only"], recommended: [300, 190], previewFrames: [[480, 310], [560, 440]], status: "candidate" }),
+  layout({ id: "metric-content-flow", name: "数值说明", description: "突出数值，并用标签或说明交代指标含义。", roles: ["metric", "label", "annotation"], compositions: ["metric-only", "metric-label", "metric-label-annotation"], recommended: [160, 105], previewFrames: [[220, 165], [300, 230]], status: "approved" }),
+  layout({ id: "metric-set-flow", name: "多指标组", description: "在一个连续区域内并列呈现二至四项指标。", roles: ["metric", "label", "annotation"], compositions: ["metric-set"], recommended: [320, 120], previewFrames: [[460, 190], [620, 300]], status: "candidate" }),
+  layout({ id: "key-value-flow", name: "键值信息", description: "以稳定的名称—内容关系排列多项事实。", roles: ["label", "body", "metric"], compositions: ["key-value-list"], recommended: [280, 160], previewFrames: [[400, 260], [500, 350]], status: "candidate" }),
+  layout({ id: "quote-attribution-flow", name: "引语来源", description: "呈现引语、人物或来源以及可选补充说明。", roles: ["quote", "label", "annotation"], compositions: ["quote-only", "quote-source", "quote-source-annotation"], recommended: [300, 165], previewFrames: [[420, 240], [520, 340]], status: "candidate" }),
+  layout({ id: "heading-metric-content-flow", name: "标题指标正文", description: "标题、突出指标和解释文字形成清晰的三层层级。", roles: ["heading", "metric", "label", "body", "annotation"], compositions: ["heading-metric", "heading-metric-body", "heading-metric-annotation"], recommended: [280, 190], previewFrames: [[420, 300], [520, 380]], status: "candidate" }),
+  layout({ id: "summary-information-flow", name: "摘要信息组", description: "用若干短标签、关键词和简短说明组织高密度摘要。", roles: ["label", "emphasis", "body", "annotation"], compositions: ["summary-items"], recommended: [330, 185], previewFrames: [[460, 300], [560, 400]], status: "candidate" }),
+]);
+
+const DEFINITIONS = Object.freeze([...MARKDOWN_DEFINITIONS, ...LEGACY_DEFINITIONS]);
 
 const ALIASES = Object.freeze({
   "title-body-adaptive": "heading-content-flow",
@@ -44,6 +72,8 @@ const ALIASES = Object.freeze({
 });
 
 const BINDING_CONTRACTS = Object.freeze({
+  "markdown-flow": Object.freeze({ required: Object.freeze(["markdown"]), optional: Object.freeze([]), rule: "受控 CommonMark 语法进入一个连续文档流；空块自动消失" }),
+  "markdown-zoned": Object.freeze({ required: Object.freeze(["markdown"]), optional: Object.freeze(["zoneTemplate"]), rule: "同一 Markdown Token 流按命名区域模板分配；模板不得改写内容" }),
   "statement-flow": Object.freeze({ optional: Object.freeze(["title", "body", "emphasis"]), rule: "至少一个字段；只呈现一个主陈述" }),
   "heading-content-flow": Object.freeze({ optional: Object.freeze(["title", "body", "points[]", "listMarker"]), rule: "至少一个内容字段；空字段自动折叠" }),
   "label-content-flow": Object.freeze({ required: Object.freeze(["label"]), optional: Object.freeze(["title", "body"]) }),
@@ -57,6 +87,8 @@ const BINDING_CONTRACTS = Object.freeze({
 });
 
 const PREVIEW_CONTENT = Object.freeze({
+  "markdown-flow": Object.freeze({ markdown: "## Markdown 负责内容层级\n\n标题、正文和列表使用同一份成熟语法。\n\n- 内容与样式分离\n- Skin 统一主题\n\n> 复杂关系仍交给 Structure。" }),
+  "markdown-zoned": Object.freeze({ markdown: "## 一份内容，两种渲染\n\nMarkdown 保持不变，区域模板把标题与说明放入不同命名区域。\n\n- 不新增字段组合\n- 不扩大导演候选" }),
   "statement-flow": Object.freeze({ emphasis: "把复杂内容讲清楚" }),
   "heading-content-flow": Object.freeze({ title: "内容标准化", body: "把原稿整理为稳定、可复用的结构化字段" }),
   "label-content-flow": Object.freeze({ label: "核心能力", title: "可靠生成", body: "规则约束下稳定交付" }),
@@ -70,6 +102,8 @@ const PREVIEW_CONTENT = Object.freeze({
 });
 
 const PREVIEW_MINIMAL_CONTENT = Object.freeze({
+  "markdown-flow": Object.freeze({ markdown: "## 可靠生成\n\n把稿件转化为稳定页面。" }),
+  "markdown-zoned": Object.freeze({ markdown: "## 内容与样式分离\n\n同一份 Markdown 进入区域模板。" }),
   "statement-flow": Object.freeze({ emphasis: "讲清重点" }),
   "heading-content-flow": Object.freeze({ title: "内容标准化" }),
   "label-content-flow": Object.freeze({ label: "核心能力", title: "可靠生成" }),
@@ -80,6 +114,21 @@ const PREVIEW_MINIMAL_CONTENT = Object.freeze({
   "quote-attribution-flow": Object.freeze({ quote: "模板有时尽，现状无穷多。" }),
   "heading-metric-content-flow": Object.freeze({ title: "稳定交付", value: "17pt", label: "正文" }),
   "summary-information-flow": Object.freeze({ items: Object.freeze([{ label: "输入", value: "稿件" }, { label: "输出", value: "PPT" }]) }),
+});
+
+const PREVIEW_DENSE_CONTENT = Object.freeze({
+  "markdown-flow": Object.freeze({ markdown: "## 受控 Markdown 文字能力\n\n文字区域只描述内容与局部层级，程序根据真实区域完成换行、间距和规范字号求解。\n\n1. 解析 CommonMark Token\n2. 生成可审计 HTML\n3. 读取当前 Skin\n4. 执行最低字号与越界门禁\n\n> 放不下时扩区、换组合、拆页或拒绝，不连续缩小字号。" }),
+  "markdown-zoned": Object.freeze({ markdown: "## 复杂排版不必形成组合爆炸\n\n模板只声明区域几何与内容分配规则，Markdown 仍然保存标题、段落、列表和引语。\n\n- 标题进入 lead 区\n- 其余内容进入 body 区\n- Surface 在外层独立选择\n- 新模板不改变内容契约" }),
+  "statement-flow": Object.freeze({ title: "每一页都应当只有一个清楚的阅读起点", body: "标题提出判断，正文限定范围；结构、文字和媒体共同服务于这一阅读顺序。" }),
+  "heading-content-flow": Object.freeze({ title: "HTML 承担真实排版计算", body: "浏览器先计算换行、间距、对齐和承载区域，再执行最低字号、越界、裁切与遮挡检查。", points: Object.freeze(["只调用已验证原语", "确认后再编译 Native", "不逐页修补转换结果"]) }),
+  "label-content-flow": Object.freeze({ label: "CONTENT MODEL", title: "内容角色与内部逻辑分开", body: "角色说明内容承担核心、证据、解释或结论；Logic 说明内容块内部的并列、过程、层级、对比或因果关系。" }),
+  "structured-list-flow": Object.freeze({ title: "进入正式使用前必须通过", items: Object.freeze([{ title: "内容状态", body: "覆盖较少、代表性和较多内容。" }, { title: "区域状态", body: "覆盖宽区、中区和窄区。" }, { title: "显示门禁", body: "检查字号、裁切、越界与遮挡。" }, { title: "转换门禁", body: "HTML 确认后执行 Native 对照。" }]) }),
+  "metric-content-flow": Object.freeze({ value: "15 pt", label: "文字最小字号", annotation: "低于下限则换排版、扩区或拒绝" }),
+  "metric-set-flow": Object.freeze({ metrics: Object.freeze([{ value: "10", label: "组合排版", annotation: "统一入口" }, { value: "3", label: "内容状态", annotation: "前置验证" }, { value: "0", label: "允许溢出", annotation: "硬门禁" }, { value: "1", label: "Skin 来源", annotation: "颜色与字体" }]) }),
+  "key-value-flow": Object.freeze({ items: Object.freeze([{ label: "表达层", value: "Structure / Text / Media" }, { label: "结构深度", value: "最多两层" }, { label: "风格", value: "瑞士国际主义排版" }, { label: "主题", value: "由当前 Skin 提供" }]) }),
+  "quote-attribution-flow": Object.freeze({ quote: "瑞士国际主义约束的是网格、层级、对齐和留白，不是把所有主题固定成黑白红。", attribution: "PPagenT", annotation: "文字排版原则" }),
+  "heading-metric-content-flow": Object.freeze({ title: "前置验证", body: "同一真实排版必须通过多内容状态与多区域状态。", metrics: Object.freeze([{ value: "3", label: "内容状态" }, { value: "3", label: "区域尺度" }]), annotation: "确认后才进入 Native 对照" }),
+  "summary-information-flow": Object.freeze({ items: Object.freeze([{ label: "输入", value: "稿件", body: "识别核心信息和内容块" }, { label: "选择", value: "资产", body: "在合法能力内编排" }, { label: "预览", value: "HTML", body: "用户确认真实排版" }, { label: "输出", value: "PPT", body: "编译原生可编辑对象" }]) }),
 });
 
 function text(value) {
@@ -270,6 +319,7 @@ const RENDERERS = Object.freeze({
 });
 
 function presentRoles(content) {
+  if (text(content?.markdown)) return inferMarkdownRoles(content.markdown);
   const roles = new Set();
   if (text(content?.title ?? content?.heading)) roles.add("heading");
   if (text(content?.body ?? content?.text)) roles.add("body");
@@ -290,12 +340,16 @@ function presentRoles(content) {
 }
 
 export function listTextLayouts({ status = "all" } = {}) {
-  const result = status === "all" ? DEFINITIONS : DEFINITIONS.filter((item) => item.status === status);
+  const result = status === "all" ? MARKDOWN_DEFINITIONS : MARKDOWN_DEFINITIONS.filter((item) => item.status === status);
   return structuredClone(result.map((item) => ({ ...item, bindingContract: BINDING_CONTRACTS[item.id] })));
 }
 
 export function listTextLayoutPrimitives() {
-  return listTextPrimitives();
+  return listMarkdownBlockTypes();
+}
+
+export function listTextSurfaces() {
+  return structuredClone(SURFACES);
 }
 
 export function resolveTextLayoutDefinition(layoutId) {
@@ -321,7 +375,22 @@ export function inferTextContentRoles(content = {}) {
 
 export function textLayoutCatalogPreviewMarkup({ layoutId, id = `catalog-${layoutId}`, profile = "representative", align = "left", valign = "middle", density = "standard" } = {}) {
   const canonicalId = canonicalLayoutId(layoutId);
-  const previewContent = profile === "minimal" ? PREVIEW_MINIMAL_CONTENT[canonicalId] : PREVIEW_CONTENT[canonicalId];
+  const previewContent = profile === "minimal"
+    ? PREVIEW_MINIMAL_CONTENT[canonicalId]
+    : profile === "dense"
+      ? PREVIEW_DENSE_CONTENT[canonicalId]
+      : PREVIEW_CONTENT[canonicalId];
+  if (canonicalId === "markdown-flow" || canonicalId === "markdown-zoned") {
+    return markdownTextRegionMarkup({
+      id,
+      field: `textLayouts.${canonicalId}`,
+      markdown: previewContent.markdown,
+      mode: canonicalId === "markdown-zoned" ? "zoned" : "flow",
+      align,
+      valign,
+      density,
+    });
+  }
   return textRegionMarkup({
     id,
     field: `textLayouts.${canonicalId}`,
@@ -331,6 +400,7 @@ export function textLayoutCatalogPreviewMarkup({ layoutId, id = `catalog-${layou
     align,
     valign,
     density,
+    styleProfile: "swiss-international",
   });
 }
 
@@ -357,6 +427,7 @@ export function textRegionMarkup({
   valign = "middle",
   density = "standard",
   tone = "light",
+  styleProfile = "default",
   required = true,
   names = {},
 } = {}) {
@@ -364,6 +435,23 @@ export function textRegionMarkup({
   if (!VERTICAL_ALIGNMENTS.has(valign)) throw new Error(`${id} 的纵向对齐非法：${valign}`);
   if (!DENSITIES.has(density)) throw new Error(`${id} 的排版密度非法：${density}`);
   const resolvedLayout = definition(layoutId);
+  if (resolvedLayout.id === "markdown-flow" || resolvedLayout.id === "markdown-zoned") {
+    return markdownTextRegionMarkup({
+      id,
+      field,
+      itemId,
+      regionId,
+      markdown: content.markdown,
+      mode: resolvedLayout.id === "markdown-zoned" ? "zoned" : "flow",
+      zoneTemplate: content.zoneTemplate ?? "lead-body",
+      className,
+      align,
+      valign,
+      density,
+      tone,
+      required,
+    });
+  }
   const roles = presentRoles(content).filter((role) => resolvedLayout.contentRoles.includes(role));
   if (required && !roles.length) throw new Error(`${id} 的文字区域不能为空`);
   const innerMarkup = RENDERERS[resolvedLayout.id](id, content, names);
@@ -374,6 +462,6 @@ export function textRegionMarkup({
   const regionClasses = ["ppagent-text-region", className].filter(Boolean).join(" ");
   const layoutClasses = ["ppagent-text-layout", `ppagent-text-layout--${resolvedLayout.id}`, layoutClassName].filter(Boolean).join(" ");
   return `<div class="${escapeHtml(regionClasses)}" ${textRegionAttributes({ id, field, itemId, regionId, required })} data-text-layout-id="${resolvedLayout.id}" data-text-layout-default-id="${resolvedLayout.id}" data-text-layout-compatible="${escapeHtml(compatible.join(","))}" data-text-layout-content-roles="${escapeHtml(roles.join(","))}">
-    <div class="${escapeHtml(layoutClasses)}" data-ppagent-text-layout data-text-layout-id="${resolvedLayout.id}" data-text-layout-align="${align}" data-text-layout-valign="${valign}" data-text-layout-density="${density}" data-text-layout-tone="${escapeHtml(tone)}">${innerMarkup}</div>
+    <div class="${escapeHtml(layoutClasses)}" data-ppagent-text-layout data-text-layout-id="${resolvedLayout.id}" data-text-layout-align="${align}" data-text-layout-valign="${valign}" data-text-layout-density="${density}" data-text-layout-tone="${escapeHtml(tone)}" data-text-layout-style="${escapeHtml(styleProfile)}">${innerMarkup}</div>
   </div>`;
 }

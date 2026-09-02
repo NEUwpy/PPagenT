@@ -1,9 +1,3 @@
-import {
-  applyStructuralHints,
-  assertStructuralCueCompliance,
-  buildStructuralCueGuides,
-  readStructuralCues,
-} from "./structural-cue-reader.mjs";
 import { refinementOutputSchema } from "./semantic-refinement.mjs";
 import {
   compactVisualSkillContext,
@@ -11,26 +5,34 @@ import {
   visualSkillRoutingSchema,
 } from "./visual-skill-router.mjs";
 import { extractManuscriptSections } from "../content/manuscript-sections.mjs";
+import { compileContentDirectorDraft } from "../content/content-director-markdown.mjs";
+import { sourceBlocksForModel } from "../content/source-blocks.mjs";
 import { candidateReadiness, normalizeDerivationPolicy } from "./visual-resolution.mjs";
 
 const CONTENT_DIRECTOR_SYSTEM_PROMPT = [
   "PPagenT 内容导演",
-  "一次读取完整稿件，输出整套 DeckPlan 与逐页 PageContent",
+  "一次读取完整稿件，输出一份既可直接阅读、又能由程序确定性解析的逐页 Markdown 内容稿",
   "只负责内容理解、叙事规划、Logic 判断和版式中立的结构字段提取，不选择最终 Structure Group，不处理坐标、颜色和组件实现",
   "判断优先级依次是原稿证据真实性、原稿结构完整性、全稿叙事完整性、页面容量、现有结构能力的可承载性",
   "不得为了提高结构使用率改变关系、增加节点、补造分点或虚构数据；只有原稿确实没有可视化关系时才使用 editorial",
+  "Markdown 是唯一内容层级与正文事实源，机器元数据不得重复页面标题、章节、正文、节点或分点",
 ].join("。\n");
 
 const CONTENT_DIRECTOR_TASK = [
-  "读取 context.source，一次完成整套 deckPlan 和 pageContents。",
-  "按以下顺序工作：1.确认程序给出的页面边界与全稿叙事；2.逐页识别最外层关系；3.列出听众必须区分的全部主节点；4.提取原稿明确提供的节点内 points、时间、角色、极性和 structuredData；5.参考 structureCapabilities 检查是否遗漏了原稿真实存在且后续结构需要的字段；6.压缩文字并输出完整 JSON。",
+  "读取 context.sourceBlocks 中按顺序编号的完整原稿段落，一次完成 contentMarkdown、deckMetadata 和按 H1 页面顺序对齐的 pageMetadata。",
+  "先识别整稿最大的叙事章节，再识别每个章节中可以独立承担一页职责的最小语义单元；普通原稿 Markdown 标题只是来源组织，不是 PPT 页数上限。只有原稿完整行写明‘第 X 页’时才必须保持其页数与顺序。",
+  "contentMarkdown 只有一个页面边界规则：每个 H1 就是一页，H1 文本是页标题，紧随 H1 的首个引用块是本页叙事职责；H2 是页面最外层关系中的一个同级主节点，H2 下普通段落是 body，列表是该节点的 points；H3 仅用于 H2 节点内部确有必要的小标题。不得用 H2 或 H3 暗示另一套页边界，不使用 H4 及更深标题。",
+  "一页可以有多个 H2 主节点；开场、案例、论证和收束若承担不同叙事职责，应拆成不同 H1 页面。每页在正式字号下保持适量，不得把整章硬压成一个巨型并列、时序或卡片页，也不得为了多页而重复内容。",
+  "按以下顺序工作：1.通读全稿并在 deckMetadata.narrativeArc 中概括最大叙事阶段；2.确定 H1 页序与职责；3.逐页识别最外层 Logic；4.用 H2 列出听众必须区分的全部主节点；5.把原稿明确提供的节点内下级内容写成列表，必要时用 H3 标明节点内小节；6.参考 structureCapabilities 检查是否遗漏了原稿真实存在且后续结构需要的关系字段；7.压缩文字并输出完整对象。",
   "availableLogicSkills 是完整 Logic 目录；logicIntent.logicId 必须逐字选择，不能因现有结构数量少或为 0 而改成相近 Logic 或 editorial。",
   "structureCapabilities 是当前核心结构按 Logic 分组生成的匿名内容形状摘要，只帮助保留必要字段，不是资产菜单；不得复写能力摘要，不得反向套结构。",
-  "一旦选择的 Logic 能力把 structuredData.type、items[].points 或其他字段列为 requiredFields，就必须按 PageContent Schema 填全这些字段；不能只写 logicIntent 而省略该 Logic 的可调用关系数据。",
-  "每页 logicIntent.reason 说明关系判断，evidenceFragments 逐字复制该页 sourceText 中 1–3 个最短连续证据片段，confidence 按证据明确程度填写 high、medium 或 low。",
-  "structuralGuides 与 structuralHints 是程序从原稿提取的高置信证据；对应页面必须保持 relation、itemRange、主节点和 points 层级。",
-  "items 只保存最外层关系中的同级节点；只有原稿明确列出的节点内下级内容才进入 points。不得用醒目标题、引文或结论替换原稿中的多个真实对象。",
-  "narrativeArc 只输出 3–5 个简短章节名。结构性 item 标题不超过 10 个汉字，body 尽量 15–30 个汉字；正文与 points 不重复。",
+  "若 structureCapabilities 的 requiredFields 表明该 Logic 需要节点内 points 或复杂关系字段，先把全部人类可读内容写进 Markdown，再用 relationBindings 只补机器关系。",
+  "deckMetadata 保存整套标题、沟通任务、受众、期望结果、核心结论与简短 narrativeArc；这些整套字段不在 contentMarkdown 里伪装成页面。",
+  "每个 pageMetadata 只保存 logicIntent、sourceBlockIds、可选 itemMetadata 和必要的 relationBindings，并严格对应同序 H1；pageId 由程序按 H1 顺序生成。itemMetadata 必须与本页 H2 同序等长且只填写 emphasis / polarity，不得重复 Markdown 中的页标题、职责、H2 正文或列表。",
+  "sourceBlockIds 从 context.sourceBlocks 逐字选择一至两个 ID：它们只证明本页内容来自哪些原稿段落，不负责把全文切成互不重叠的连续区间。不同页面可以回看、交叠或重排来源段落，但不得使用完全相同的段落范围制造重复页。不要自行抄写 sourceAnchors；程序会按 ID 生成逐字证据与 sourceText。evidenceFragments 尽量逐字复制，若有空白或标点偏差程序会以 sourceBlockIds 的原文收口。",
+  "普通 editorial、parallel、sequence 等只需 Markdown 节点。复杂 Logic 必须用 relationBindings 生成旧 structuredData：references 的 ref 只能引用 page.title、item:N.id/title/body 或 item:N.point:M；literals 只填 ID、枚举、布尔、数值或邻接矩阵，不得重复正文。",
+  "程序按页面顺序生成 page-01、page-02，并按每页 H2 顺序生成 page-01-item-1 等稳定 ID；relationBindings 中所有 itemIds、methodIds、evidenceIds 等必须使用这些可预测 ID，不能自创组件专属 ID。",
+  "H2 标题不超过 10 个汉字，body 尽量 15–30 个汉字；正文与 points 不重复。",
   "不得输出 assetId、familyId、variantId、Structure Group、容器、坐标、颜色、图标或组件专属槽位。不得为了适配能力卡改变语义。",
 ].join("\n");
 
@@ -46,13 +48,14 @@ function sourceRule(rawMarkdown) {
   const programBindsExplicitPages = sections.length > 0
     && sections.every((section) => section.markerKind === "explicit-page");
   return {
-    source: rawMarkdown,
+    sourceBlocks: sourceBlocksForModel(rawMarkdown),
     rules: [
-      "只能使用 source 中可核对的信息",
+      "只能使用 sourceBlocks[].text 中可核对的信息",
       "不得把资产、坐标、familyId 或 variantId 写进 PageContent",
       programBindsExplicitPages
-        ? "原稿已经用显式页标记完整分页；不要输出 PageContent.sourceText，程序会按页序绑定完整原文和来源锚点"
-        : "每个 PageContent.sourceText 必须直接复制 source 中一个非空、连续的原文子串，包含原有 Markdown 标记、标点和空格；不得摘要、改写、去掉标题井号或拼接不连续片段",
+        ? `原稿已经用显式页标记完整分页，共 ${sections.length} 页；contentMarkdown 必须输出相同数量和顺序的 H1，程序会按页序绑定完整原文`
+        : "普通 Markdown 标题只表示来源章节，不是输出页边界；由 contentMarkdown 的 H1 表达最终逐页稿",
+      "sourceBlockIds 必须从 sourceBlocks 的 id 中选择；不得自造 ID，程序会据此生成逐字来源证据",
     ],
   };
 }
@@ -70,8 +73,23 @@ function contentRevisionDirective(previousReview) {
         if (capacityIssue.sourceItemId && Number.isFinite(capacityIssue.maxChars)) {
           return `${capacityIssue.pageId ?? "指定页面"} 的 ${capacityIssue.sourceItemId} ${capacityIssue.role ?? "文字"} 当前 ${capacityIssue.actualChars ?? "超限"} 字，必须压到 ${capacityIssue.maxChars} 字以内；只压缩该字段的重复修饰，保留节点含义、节点数量和原稿关系，不得改动其他已合法页面`;
         }
-        return `${capacityIssue.pageId ?? "指定页面"} 当前总量约 ${capacityIssue.estimatedTotalChars ?? "超限"} 字、最长单项约 ${capacityIssue.maxItemChars ?? "超限"} 字；必须同时把总量压到 ${capacityIssue.required?.maxTotalChars ?? "总容量上限"} 字以内、每个单项压到 ${capacityIssue.required?.maxItemChars ?? "单项容量上限"} 字以内。只压缩重复表述或按原稿章节拆页，不得缩字、删掉主关系或改动其他已合法页面`;
+        return `${capacityIssue.pageId ?? "指定页面"} 当前总量约 ${capacityIssue.estimatedTotalChars ?? "超限"} 字、最长单项约 ${capacityIssue.maxItemChars ?? "超限"} 字；必须同时把总量压到 ${capacityIssue.required?.maxTotalChars ?? "总容量上限"} 字以内、每个单项压到 ${capacityIssue.required?.maxItemChars ?? "单项容量上限"} 字以内。优先把该 H1 按不同叙事职责拆成两个 H1，并同步补齐 pageMetadata 与各页可核对的来源证据；也可压缩重复修饰。不得缩字、删掉主关系或改动其他已合法页面`;
       }).join("；");
+    }
+    if (issue.errorCode === "CONTENT_METADATA_MISMATCH") {
+      const page = details.pageId ? `页面 ${details.pageId}` : "报错页面";
+      const anchor = details.anchor ? `旧式锚点“${details.anchor}”` : "来源段落 ID 或同序元数据";
+      return `${page} 的 ${anchor} 未通过确定性校验。previous 中是上一轮已经完成的完整草稿；必须保留其 H1 页序、H2/H3 页内内容、页面正文、Logic 和其他已合法元数据，只修正报错页的 sourceBlockIds 或与同序 H1 的元数据对应关系。不得把 H2/H3 当成页面，不得借机重写整套内容稿`;
+    }
+    if (issue.errorCode === "CONTENT_CONTRACT_GAP") {
+      const gapRequirements = (details.gaps ?? []).map((gap) => {
+        const reasons = (gap.rejected ?? []).flatMap((candidate) => candidate.reasons ?? []);
+        return `${gap.pageId ?? "报错页面"} 的 ${gap.logicId ?? "既有 Logic"} 缺少候选所需字段：${[...new Set(reasons)].join("、") || gap.reason || "核心字段不足"}`;
+      });
+      return `${gapRequirements.join("；")}。previous 中是上一轮完整草稿；只在原稿 source 明确支持时，为报错 H1 的现有 H2 补齐或压缩 points／关系字段，并保持 H1 页序、H2/H3 内容、Logic、节点数量和其他页面不变。允许忠实概括原稿已有语句以适配字段长度，不得新增事实、节点、因果或结论`;
+    }
+    if (issue.errorCode === "CONTENT_RELATION_COMPILE_FAILED") {
+      return `${issue.evidence ?? previousReview.summary ?? "关系元数据无法编译"}。previous 中是上一轮完整草稿；保持 contentMarkdown、H1 页序、Logic、节点和其他元数据不变，只删除或修正报错页中不受支持的可选 relationBindings。普通 editorial、parallel、sequence、comparison 可直接依靠 Markdown 节点表达，不得发明机器字段或为了保留 relationBindings 改写正文`;
     }
     if (issue.errorCode === "SECTION_COVERAGE_FAILED") {
       return `原稿页面或正文标题“${details.sectionHeading ?? "指定章节"}”被遗漏；必须恢复为独立内容页，并让 title、sourceText、主张和支撑内容都来自该章节，不得用封面、目录或相邻章节代替`;
@@ -92,7 +110,7 @@ function contentRevisionDirective(previousReview) {
     }
     return `${issue.errorCode ?? "内容错误"}：${issue.evidence ?? previousReview.summary ?? "按反馈修正"}`;
   });
-  return `这是失败后的定向修订轮。必须先完成以下要求，再输出完整合法 JSON：${requirements.join("；")}。`;
+  return `这是唯一一次失败兜底。必须先完成以下要求，再输出完整的 Markdown 内容稿与机器元数据：${requirements.join("；")}。`;
 }
 
 function assertSchemas(schemas) {
@@ -431,13 +449,12 @@ export function normalizeVisualCompositionOutput(output, input) {
 
 export function contentSchemaWithSectionFloor(outputSchema, rawMarkdown, logicSkillIndex = []) {
   const sections = extractManuscriptSections(rawMarkdown);
-  const sectionCount = sections.length;
   const specialized = structuredClone(outputSchema);
-  const pageContents = specialized.schema?.properties?.pageContents;
-  if (!pageContents?.items?.properties?.logicIntent) return specialized;
-  const pageContentSchema = pageContents.items;
-  if (!pageContentSchema.required.includes("logicIntent")) pageContentSchema.required.push("logicIntent");
-  const logicIntentSchema = pageContentSchema.properties.logicIntent;
+  const pageMetadata = specialized.schema?.properties?.pageMetadata;
+  if (!pageMetadata?.items?.properties?.logicIntent) return specialized;
+  const metadataSchema = pageMetadata.items;
+  if (!metadataSchema.required.includes("logicIntent")) metadataSchema.required.push("logicIntent");
+  const logicIntentSchema = metadataSchema.properties.logicIntent;
   logicIntentSchema.required ??= [];
   for (const field of ["evidenceFragments", "confidence"]) {
     if (logicIntentSchema.properties?.[field] && !logicIntentSchema.required.includes(field)) {
@@ -446,20 +463,20 @@ export function contentSchemaWithSectionFloor(outputSchema, rawMarkdown, logicSk
   }
   const logicIds = logicSkillIndex.map((item) => item.logicId).filter(Boolean);
   if (logicIds.length) logicIntentSchema.properties.logicId.enum = logicIds;
-  if (sectionCount) {
-    const splitAllowance = sections.reduce((total, section) => {
-      if (section.markerKind === "explicit-page") return total;
-      return total + Math.min(2, Math.max(0, Math.ceil(Array.from(section.body).length / 900) - 1));
-    }, 0);
-    const pages = specialized.schema.properties.deckPlan.properties.pages;
-    pages.minItems = sectionCount;
-    pages.maxItems = sectionCount + splitAllowance;
-    pageContents.minItems = sectionCount;
-    pageContents.maxItems = sectionCount + splitAllowance;
-    if (sections.every((section) => section.markerKind === "explicit-page")) {
-      delete pageContentSchema.properties.sourceText;
-      pageContentSchema.required = pageContentSchema.required.filter((field) => field !== "sourceText");
-    }
+  const sourceBlockIds = sourceBlocksForModel(rawMarkdown).map((block) => block.id);
+  if (metadataSchema.properties?.sourceBlockIds && sourceBlockIds.length) {
+    metadataSchema.properties.sourceBlockIds.items.enum = sourceBlockIds;
+  }
+  const explicitPages = sections.length > 0
+    && sections.every((section) => section.markerKind === "explicit-page");
+  if (explicitPages) {
+    pageMetadata.minItems = sections.length;
+    pageMetadata.maxItems = sections.length;
+  } else {
+    // Ordinary source headings describe manuscript organization, not PPT pages.
+    // The content director expresses final page boundaries with H1 in Markdown.
+    pageMetadata.minItems = 1;
+    pageMetadata.maxItems = 30;
   }
   return specialized;
 }
@@ -610,27 +627,21 @@ export function createModelDirectorProvider({
       reviewerModel: reviewer.identity ?? "unknown",
     },
     async contentDirector(input) {
-      const structuralGuides = buildStructuralCueGuides(input.rawMarkdown);
-      const structuralHints = await readStructuralCues(input.rawMarkdown, structureModel);
-      const deterministicHints = structuralGuides
-        .filter((guide) => guide.fixedAtoms?.length)
-        .map((guide) => ({ ...guide, atoms: guide.fixedAtoms }));
-      const effectiveStructuralHints = [
-        ...deterministicHints,
-        ...structuralHints.filter((hint) => !deterministicHints.some((fixed) => fixed.cueId === hint.cueId)),
-      ];
-      const contentOutput = await content.generateJson({
+      const contentDraft = await content.generateJson({
         role: CONTENT_DIRECTOR_SYSTEM_PROMPT,
         task: `${contentRevisionDirective(input.previousReview)}${CONTENT_DIRECTOR_TASK}`,
         context: {
           executionGuidelines: guidelines.content ?? "",
           availableLogicSkills: guidelines.logicSkillIndex ?? [],
           structureCapabilities: guidelines.structureCapabilities ?? [],
-          structuralGuides,
-          structuralHints: effectiveStructuralHints,
           ...sourceRule(input.rawMarkdown),
           attempt: input.attempt,
-          previous: input.previous,
+          previous: input.previous?.contentDraftMarkdown
+            ? {
+              contentMarkdown: input.previous.contentDraftMarkdown,
+              contentMetadata: input.previous.contentMetadata,
+            }
+            : undefined,
           previousReview: input.previousReview,
           visualFeedback: input.visualFeedback,
         },
@@ -639,13 +650,18 @@ export function createModelDirectorProvider({
           input.rawMarkdown,
           guidelines.logicSkillIndex,
         ),
+        // 内容导演的唯一恢复预算由工作流统一管理，避免模型层与
+        // Markdown 编译层各自重试，叠加成四次 API 连接。
         maxJsonAttempts: 1,
       });
-      const normalized = applyStructuralHints(
-        enforceSectionPageContract(contentOutput, input.rawMarkdown, effectiveStructuralHints),
-        effectiveStructuralHints,
-      );
-      return assertStructuralCueCompliance(normalized, structuralGuides);
+      try {
+        return compileContentDirectorDraft(input.rawMarkdown, contentDraft, { repairMode: true });
+      } catch (error) {
+        // The only content-revision turn needs the actual failed draft so it
+        // can repair the reported field instead of reconstructing the deck.
+        error.contentDirectorDraft = contentDraft;
+        throw error;
+      }
     },
     refineContent(input) {
       return refinement.generateJson({

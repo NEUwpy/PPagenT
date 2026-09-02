@@ -5,6 +5,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { normalizeManuscript, supportedManuscriptExtensions } from "../workbench/manuscript-normalizer.mjs";
 import { createTraceRecorder, readTraceEvents } from "../workbench/trace-recorder.mjs";
+import { createVisualDirectorCheckpoint, withVisualDirectorCheckpoint } from "../workbench/visual-director-checkpoint.mjs";
+import { candidateSetsForVisualDirector } from "../agent/model-director-provider.mjs";
 
 function option(name, fallback) {
   const index = process.argv.indexOf(name);
@@ -21,6 +23,7 @@ const runsRoot = path.join(workbenchRoot, "runs");
 const currentRunPath = path.join(workbenchRoot, "current-run.json");
 const maxUploadBytes = 30 * 1024 * 1024;
 let activeRunId = null;
+const activeVisualCheckpoints = new Map();
 
 function send(response, status, body, contentType = "text/plain; charset=utf-8", headers = {}) {
   response.writeHead(status, { "content-type": contentType, "x-content-type-options": "nosniff", ...headers });
@@ -60,13 +63,17 @@ async function readBody(request) {
 
 async function writeSummary(targetRunDir, summary) {
   await fs.writeFile(path.join(targetRunDir, "summary.json"), `${JSON.stringify(summary, null, 2)}\n`, "utf8");
+  await writeCurrentRunPointer(targetRunDir, summary);
+}
+
+async function writeCurrentRunPointer(targetRunDir, summary) {
   const relativeRunDir = path.relative(projectRoot, targetRunDir).replaceAll("\\", "/");
   const pointer = {
     schemaVersion: "1.0",
     runId: summary.runId,
     status: summary.status,
     originalName: summary.originalName,
-    active: ["normalizing", "running"].includes(summary.status),
+    active: ["normalizing", "running", "awaiting-visual-approval"].includes(summary.status),
     runDir: relativeRunDir,
     summary: `${relativeRunDir}/summary.json`,
     events: `${relativeRunDir}/events.jsonl`,
@@ -84,7 +91,7 @@ async function readSummary(targetRunDir) {
   return JSON.parse(await fs.readFile(path.join(targetRunDir, "summary.json"), "utf8"));
 }
 
-async function listRuns() {
+async function listAllRuns() {
   await fs.mkdir(runsRoot, { recursive: true });
   const entries = await fs.readdir(runsRoot, { withFileTypes: true });
   const summaries = [];
@@ -92,7 +99,90 @@ async function listRuns() {
     if (!entry.isDirectory()) continue;
     try { summaries.push(await readSummary(path.join(runsRoot, entry.name))); } catch {}
   }
-  return summaries.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt))).slice(0, 30);
+  return summaries.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+}
+
+async function listRuns() {
+  return (await listAllRuns()).slice(0, 30);
+}
+
+function checkedRunDir(runId) {
+  const targetRunDir = path.resolve(runDir(runId));
+  const resolvedRunsRoot = path.resolve(runsRoot);
+  if (path.dirname(targetRunDir) !== resolvedRunsRoot || targetRunDir === resolvedRunsRoot) {
+    const error = new Error("删除目标不在运行记录目录内");
+    error.statusCode = 403;
+    throw error;
+  }
+  return targetRunDir;
+}
+
+async function deleteRuns(runIds) {
+  const uniqueRunIds = [...new Set(runIds)];
+  if (!uniqueRunIds.length) {
+    const error = new Error("没有选择可删除的运行记录");
+    error.statusCode = 400;
+    throw error;
+  }
+  if (uniqueRunIds.length > 500) {
+    const error = new Error("单次最多删除 500 条运行记录");
+    error.statusCode = 400;
+    throw error;
+  }
+  if (uniqueRunIds.some((runId) => typeof runId !== "string" || !/^[a-z0-9-]+$/i.test(runId))) {
+    const error = new Error("批量删除包含非法运行编号");
+    error.statusCode = 400;
+    throw error;
+  }
+  const activeTargets = uniqueRunIds.filter((runId) => activeRunId === runId || activeVisualCheckpoints.has(runId));
+  if (activeTargets.length) {
+    const error = new Error("正在运行或等待表单确认的记录不能删除");
+    error.statusCode = 409;
+    error.activeRunIds = activeTargets;
+    throw error;
+  }
+  const targets = uniqueRunIds.map((runId) => ({ runId, targetRunDir: checkedRunDir(runId) }));
+  await Promise.all(targets.map(({ targetRunDir }) => readSummary(targetRunDir)));
+  let currentPointer = null;
+  try { currentPointer = JSON.parse(await fs.readFile(currentRunPath, "utf8")); } catch {}
+  for (const { targetRunDir } of targets) {
+    await fs.rm(targetRunDir, { recursive: true, force: false });
+  }
+  const remainingRuns = await listAllRuns();
+  const deletedCurrent = uniqueRunIds.includes(currentPointer?.runId);
+  if (deletedCurrent) {
+    if (remainingRuns[0]) await writeCurrentRunPointer(runDir(remainingRuns[0].runId), remainingRuns[0]);
+    else await fs.rm(currentRunPath, { force: true });
+  }
+  return {
+    deletedRunIds: uniqueRunIds,
+    currentRunId: deletedCurrent ? (remainingRuns[0]?.runId ?? null) : currentPointer?.runId ?? null,
+  };
+}
+
+async function deleteRun(response, runId) {
+  try {
+    const result = await deleteRuns([runId]);
+    return sendJson(response, 200, { ...result, deletedRunId: runId });
+  } catch (error) {
+    if (error.activeRunIds) return sendJson(response, error.statusCode, { error: error.message, activeRunIds: error.activeRunIds });
+    throw error;
+  }
+}
+
+async function deleteRunBatch(request, response) {
+  const value = JSON.parse((await readBody(request)).toString("utf8"));
+  const allRuns = await listAllRuns();
+  const runIds = value?.mode === "all-deletable"
+    ? allRuns.map((run) => run.runId).filter((runId) => activeRunId !== runId && !activeVisualCheckpoints.has(runId))
+    : value?.runIds;
+  if (!Array.isArray(runIds)) return sendJson(response, 400, { error: "runIds 必须是数组" });
+  try {
+    return sendJson(response, 200, await deleteRuns(runIds));
+  } catch (error) {
+    if (error.activeRunIds) return sendJson(response, error.statusCode, { error: error.message, activeRunIds: error.activeRunIds });
+    throw error;
+  }
 }
 
 function relativeArtifact(targetRunDir, absolutePath) {
@@ -107,6 +197,44 @@ async function executeRun(targetRunDir, summary, normalizedPath, recorder) {
       import("../agent/run-workflow.mjs"),
     ]);
     const { provider, publicConfig } = await createConfiguredDeepSeekProvider({ root: projectRoot, observer: recorder.observe });
+    const unavailableDirector = () => {
+      const error = new Error("DeepSeek 未配置，正式工作流将使用确定性保底路径");
+      error.code = "DIRECTOR_PROVIDER_UNAVAILABLE";
+      throw error;
+    };
+    let providerInstance = publicConfig.configured ? provider : {
+      metadata: { providerKind: "deterministic-fallback-only" },
+      contentDirector: unavailableDirector,
+      visualDirector: unavailableDirector,
+    };
+    if (summary.visualCheckpointMode === "manual") {
+      const checkpoint = createVisualDirectorCheckpoint({
+        runDir: targetRunDir,
+        onAwaiting: async (state) => {
+          summary.status = "awaiting-visual-approval";
+          summary.visualCheckpoint = { stage: state.stage, status: state.status, updatedAt: state.updatedAt };
+          await recorder.observe({
+            source: "workbench", type: "manual-checkpoint", status: "awaiting-user", stage: "visual-director",
+            output: { expectedPageIds: state.expectedPageIds, checkpoint: "checkpoint/visual-director.json" },
+          });
+          await writeSummary(targetRunDir, summary);
+        },
+        onResumed: async (state) => {
+          summary.status = "running";
+          summary.visualCheckpoint = { stage: state.stage, status: state.status, updatedAt: state.updatedAt };
+          await recorder.observe({
+            source: "workbench", type: "manual-checkpoint", status: "succeeded", stage: "visual-director",
+            output: { edited: true, expectedPageIds: state.expectedPageIds },
+          });
+          await writeSummary(targetRunDir, summary);
+        },
+      });
+      activeVisualCheckpoints.set(summary.runId, checkpoint);
+      providerInstance = withVisualDirectorCheckpoint(provider, checkpoint, (input) => ({
+        ...input,
+        candidateSets: candidateSetsForVisualDirector(input.candidateSets, input.previousResolution?.feedback ?? []),
+      }));
+    }
     summary.provider = publicConfig;
     await writeSummary(targetRunDir, summary);
     const outputPptx = path.join(targetRunDir, "delivery", `${path.parse(summary.originalName).name || "PPagenT"}-v1.pptx`);
@@ -118,7 +246,7 @@ async function executeRun(targetRunDir, summary, normalizedPath, recorder) {
       output: outputPptx,
       "run-dir": path.join(targetRunDir, "workflow"),
       provider: "",
-      providerInstance: provider,
+      providerInstance,
       providerLabel: "configured-deepseek-provider",
       observer: recorder.observe,
       mode: "production",
@@ -130,6 +258,9 @@ async function executeRun(targetRunDir, summary, normalizedPath, recorder) {
       { label: "规范化 Markdown", kind: "markdown", path: relativeArtifact(targetRunDir, normalizedPath) },
       { label: "运行结果", kind: "json", path: "workflow/workflow-result.json" },
       { label: "生产统计", kind: "json", path: "workflow/production-statistics.json" },
+      ...(result.resilienceReport?.events?.length
+        ? [{ label: "鲁棒性与兜底报告", kind: "json", path: "workflow/resilience-report.json" }]
+        : []),
       ...(result.assetGapReport?.fallbackPageCount
         ? [{ label: "结构缺口与退回报告", kind: "json", path: "workflow/asset-gap-report.json" }]
         : []),
@@ -153,6 +284,7 @@ async function executeRun(targetRunDir, summary, normalizedPath, recorder) {
           ?? 0,
         recommendedStructureSupplements: result.assetGapReport?.recommendedStructureSupplements ?? [],
         productionStatistics: result.productionStatistics,
+        resilienceReport: result.resilienceReport,
       },
     });
     summary.status = "succeeded";
@@ -162,6 +294,7 @@ async function executeRun(targetRunDir, summary, normalizedPath, recorder) {
     summary.deliveryStatus = result.deliveryStatus ?? result.status;
     summary.assetGapReport = result.assetGapReport;
     summary.productionStatistics = result.productionStatistics;
+    summary.resilienceReport = result.resilienceReport;
     summary.artifacts = artifacts;
   } catch (error) {
     await recorder.observe({
@@ -177,6 +310,7 @@ async function executeRun(targetRunDir, summary, normalizedPath, recorder) {
     await recorder.flush();
     await writeSummary(targetRunDir, summary);
     activeRunId = null;
+    activeVisualCheckpoints.delete(summary.runId);
   }
 }
 
@@ -199,9 +333,11 @@ async function createRun(request, response, url) {
   const summary = {
     schemaVersion: "1.0", runId, originalName, createdAt, status: "normalizing",
     skin: { id: "northeastern-university-001", name: "东北大学" },
+    visualCheckpointMode: url.searchParams.get("visualCheckpoint") === "manual" ? "manual" : "auto",
     artifacts: [],
   };
   await writeSummary(targetRunDir, summary);
+  activeRunId = runId;
   try {
     const normalizeStarted = Date.now();
     await recorder.observe({
@@ -219,7 +355,6 @@ async function createRun(request, response, url) {
     summary.status = "running";
     summary.normalizedFormat = normalized.format;
     await writeSummary(targetRunDir, summary);
-    activeRunId = runId;
     executeRun(targetRunDir, summary, normalizedPath, recorder);
     return sendJson(response, 202, summary);
   } catch (error) {
@@ -231,6 +366,7 @@ async function createRun(request, response, url) {
     summary.status = "failed";
     summary.error = { stage: "manuscript-normalization", message: error?.message ?? String(error) };
     await writeSummary(targetRunDir, summary);
+    activeRunId = null;
     return sendJson(response, 422, summary);
   }
 }
@@ -267,6 +403,18 @@ async function publicConfig() {
   };
 }
 
+async function readVisualCheckpoint(targetRunDir) {
+  return JSON.parse(await fs.readFile(path.join(targetRunDir, "checkpoint", "visual-director.json"), "utf8"));
+}
+
+async function submitVisualCheckpoint(request, response, runId) {
+  const checkpoint = activeVisualCheckpoints.get(runId);
+  if (!checkpoint) return sendJson(response, 409, { error: "该运行当前没有可继续的视觉导演表单调试暂停；服务重启后不能恢复已暂停任务" });
+  const value = JSON.parse((await readBody(request)).toString("utf8"));
+  const state = await checkpoint.submit(value.output);
+  return sendJson(response, 200, { checkpoint: { stage: state.stage, status: state.status, updatedAt: state.updatedAt } });
+}
+
 const server = http.createServer(async (request, response) => {
   try {
     const url = new URL(request.url, `http://${host}:${port}`);
@@ -280,8 +428,18 @@ const server = http.createServer(async (request, response) => {
     if (request.method === "GET" && url.pathname === "/api/workbench/current") {
       return send(response, 200, await fs.readFile(currentRunPath), "application/json; charset=utf-8", { "cache-control": "no-store" });
     }
-    if (request.method === "GET" && url.pathname === "/api/workbench/runs") return sendJson(response, 200, { runs: await listRuns(), activeRunId });
+    if (request.method === "GET" && url.pathname === "/api/workbench/runs") {
+      const [runs, allRuns] = await Promise.all([listRuns(), listAllRuns()]);
+      const deletableRunCount = allRuns.filter((run) => activeRunId !== run.runId && !activeVisualCheckpoints.has(run.runId)).length;
+      return sendJson(response, 200, { runs, activeRunId, totalRunCount: allRuns.length, deletableRunCount });
+    }
     if (request.method === "POST" && url.pathname === "/api/workbench/runs") return await createRun(request, response, url);
+    if (request.method === "POST" && url.pathname === "/api/workbench/runs/batch-delete") return await deleteRunBatch(request, response);
+    const deleteMatch = url.pathname.match(/^\/api\/workbench\/runs\/([a-z0-9-]+)$/i);
+    if (deleteMatch && request.method === "DELETE") return await deleteRun(response, deleteMatch[1]);
+    const checkpointMatch = url.pathname.match(/^\/api\/workbench\/runs\/([a-z0-9-]+)\/checkpoint\/visual-director$/i);
+    if (checkpointMatch && request.method === "GET") return sendJson(response, 200, await readVisualCheckpoint(runDir(checkpointMatch[1])));
+    if (checkpointMatch && request.method === "POST") return await submitVisualCheckpoint(request, response, checkpointMatch[1]);
     const match = url.pathname.match(/^\/api\/workbench\/runs\/([a-z0-9-]+)(?:\/(events|trace|artifact))?(?:\/([a-z0-9-]+))?$/i);
     if (match) {
       const targetRunDir = runDir(match[1]);

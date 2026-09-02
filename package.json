@@ -16,6 +16,8 @@
     "assets:discover": "node src/tools/list-core-asset-packages.mjs .",
     "assets:dashboard": "node src/tools/serve-logic-dashboard.mjs",
     "assets:dashboard:build": "node src/tools/build-logic-dashboard.mjs",
+    "text-layouts:validate": "node src/tools/validate-text-layout-dashboard.mjs",
+    "expressions:validate": "node src/tools/validate-page-expression-prototypes.mjs",
     "assets:dashboard:exe": "npx -y node@25.5.0 src/tools/build-dashboard-exe.mjs",
     "production:workbench": "node src/tools/serve-production-workbench.mjs",
     "production:workbench:exe": "npx -y node@25.5.0 src/tools/build-production-workbench-exe.mjs",
@@ -36,6 +38,7 @@
     "ajv": "^8.17.1",
     "jszip": "^3.10.1",
     "mammoth": "^1.12.1",
+    "markdown-it": "14.1.0",
     "playwright-core": "^1.62.1"
   }
 }

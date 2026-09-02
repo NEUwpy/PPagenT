@@ -12,6 +12,7 @@ import {
   buildProductionStatistics,
   runDirectorWorkflow,
 } from "../src/agent/workflow.mjs";
+import { buildVisualCandidateSets, resolveVisualPlan } from "../src/agent/visual-resolution.mjs";
 import { computeContentStats } from "../src/content/page-content.mjs";
 import { createRuleValidators } from "../src/selection/validation.mjs";
 
@@ -197,6 +198,43 @@ async function renderer({ outputDir }) {
   await fs.writeFile(evidence, "test");
   return { outputPptx, pageEvidence: [evidence], qualityAudit: { status: "passed" } };
 }
+
+async function dynamicRenderer({ outputDir, pageContents }) {
+  await fs.mkdir(outputDir, { recursive: true });
+  const outputPptx = path.join(outputDir, "deck.pptx");
+  await fs.writeFile(outputPptx, "test");
+  const pageEvidence = await Promise.all(pageContents.map(async (_, index) => {
+    const target = path.join(outputDir, `slide-${index + 1}.png`);
+    await fs.writeFile(target, "test");
+    return target;
+  }));
+  return { outputPptx, pageEvidence, qualityAudit: { status: "passed" } };
+}
+
+test("正式工作流在两位导演均失败时仍以确定性双兜底交付", async (t) => {
+  const outputDir = await makeTempDir(t);
+  const modelFailure = () => {
+    const error = new Error("模型响应不可用");
+    error.code = "MODEL_JSON_INVALID";
+    throw error;
+  };
+  const result = await runDirectorWorkflow({
+    root,
+    input: { rawMarkdown: "# 主题\n\n第一部分说明现状。\n\n第二部分给出行动。", skinId: DEFAULT_SKIN_ID },
+    provider: { contentDirector: modelFailure, visualDirector: modelFailure },
+    outputDir,
+    visualCandidateProvider: buildVisualCandidateSets,
+    visualResolver: resolveVisualPlan,
+    renderer: dynamicRenderer,
+    reviewMode: "production",
+    maxContentAttempts: 1,
+    maxVisualAttempts: 1,
+    guaranteeDelivery: true,
+  });
+  assert.equal(result.status, "delivered-with-fallback");
+  assert.deepEqual(result.resilienceReport.events.map((event) => event.stage), ["content-director", "visual-director"]);
+  await fs.access(path.join(outputDir, "resilience-report.json"));
+});
 
 test("workflow schemas including CompositionPlan are registered", async () => {
   const validators = await createRuleValidators(root);
@@ -458,35 +496,34 @@ test("正式流程不再调用视觉意图阶段，内部 PageIntent 由 PageCon
   assert.equal(compositionCalls, 1);
 });
 
-test("内容来源溯源错误会在受控次数内反馈重试", async (t) => {
+test("编译后的内容来源错误失败关闭且不消耗兜底调用", async (t) => {
   const outputDir = await makeTempDir(t);
   let contentCalls = 0;
-  let receivedReview = null;
   const provider = {
-    async contentDirector({ previousReview }) {
+    async contentDirector() {
       contentCalls += 1;
-      if (contentCalls === 2) receivedReview = previousReview;
       const output = contentOutput();
-      if (contentCalls === 1) output.pageContents[0].sourceText = "改写后的非原文";
+      output.pageContents[0].sourceText = "改写后的非原文";
       return output;
     },
     async visualDirector({ phase, skinId }) {
       return phase === "intent" ? visualIntentOutput() : visualPlanOutput(skinId);
     },
   };
-  const result = await runDirectorWorkflow({
-    input: { rawMarkdown },
-    provider,
-    outputDir,
-    reviewMode: "production",
-    visualCandidateProvider: candidateProvider,
-    visualResolver: resolver,
-    renderer,
-    maxContentAttempts: 2,
-  });
-  assert.equal(result.status, "delivered");
-  assert.equal(contentCalls, 2);
-  assert.equal(receivedReview.issues[0].errorCode, "SOURCE_GROUNDING_FAILED");
+  await assert.rejects(
+    runDirectorWorkflow({
+      input: { rawMarkdown },
+      provider,
+      outputDir,
+      reviewMode: "production",
+      visualCandidateProvider: candidateProvider,
+      visualResolver: resolver,
+      renderer,
+      maxContentAttempts: 2,
+    }),
+    (error) => error instanceof WorkflowError && error.code === "SOURCE_GROUNDING_FAILED",
+  );
+  assert.equal(contentCalls, 1);
 });
 
 test("内容导演把可选 points 留空时在 schema 校验前按未提供处理", async (t) => {
@@ -519,19 +556,48 @@ test("内容导演把可选 points 留空时在 schema 校验前按未提供处�
   assert.equal(Object.hasOwn(result.pageContents[0].items[1], "points"), false);
 });
 
+test("内容尝试同时保存 Markdown 事实源、机器元数据和旧编译表单", async (t) => {
+  const outputDir = await makeTempDir(t);
+  const provider = completeProvider({
+    async contentDirector() {
+      return {
+        ...contentOutput(),
+        contentDraftMarkdown: "# 测试内容稿\n\n> 核心结论。\n\n## 正文\n\n### 问题\n\n> 解释问题。\n\n#### 约束\n\n正文。",
+        contentMetadata: {
+          schemaVersion: "0.1",
+          deckMetadata: { deckId: "test-deck" },
+          pageMetadata: [{ pageId: "problem" }],
+        },
+      };
+    },
+  });
+  await runDirectorWorkflow({
+    input: { rawMarkdown },
+    provider,
+    outputDir,
+    reviewMode: "production",
+    visualCandidateProvider: candidateProvider,
+    visualResolver: resolver,
+    renderer,
+  });
+  const attemptDir = path.join(outputDir, "content", "attempt-01");
+  assert.match(await fs.readFile(path.join(attemptDir, "content-draft.md"), "utf8"), /### 问题/);
+  assert.equal(JSON.parse(await fs.readFile(path.join(attemptDir, "content-metadata.json"), "utf8")).schemaVersion, "0.1");
+  await fs.access(path.join(attemptDir, "deck-plan.json"));
+  await fs.access(path.join(attemptDir, "page-contents.json"));
+});
+
 test("Logic 判断证据必须是该页原文中的连续片段", async (t) => {
   const outputDir = await makeTempDir(t);
   let contentCalls = 0;
-  let receivedReview = null;
   const provider = {
-    async contentDirector({ previousReview }) {
+    async contentDirector() {
       contentCalls += 1;
-      if (contentCalls === 2) receivedReview = previousReview;
       const output = contentOutput();
       output.pageContents[0].logicIntent = {
         logicId: "comparison",
         reason: "原稿提出模板与现状的矛盾",
-        evidenceFragments: [contentCalls === 1 ? "模型补写的证据" : "模板有时尽，现状无穷多。"],
+        evidenceFragments: ["模型补写的证据"],
         confidence: "high",
       };
       return output;
@@ -540,20 +606,22 @@ test("Logic 判断证据必须是该页原文中的连续片段", async (t) => {
       return phase === "intent" ? visualIntentOutput() : visualPlanOutput(skinId);
     },
   };
-  const result = await runDirectorWorkflow({
-    input: { rawMarkdown },
-    provider,
-    outputDir,
-    reviewMode: "production",
-    visualCandidateProvider: candidateProvider,
-    visualResolver: resolver,
-    renderer,
-    maxContentAttempts: 2,
-  });
-  assert.equal(result.status, "delivered");
-  assert.equal(contentCalls, 2);
-  assert.equal(receivedReview.issues[0].errorCode, "SOURCE_GROUNDING_FAILED");
-  assert.equal(receivedReview.issues[0].details.field, "logicIntent.evidenceFragments");
+  await assert.rejects(
+    runDirectorWorkflow({
+      input: { rawMarkdown },
+      provider,
+      outputDir,
+      reviewMode: "production",
+      visualCandidateProvider: candidateProvider,
+      visualResolver: resolver,
+      renderer,
+      maxContentAttempts: 2,
+    }),
+    (error) => error instanceof WorkflowError
+      && error.code === "SOURCE_GROUNDING_FAILED"
+      && error.details.field === "logicIntent.evidenceFragments",
+  );
+  assert.equal(contentCalls, 1);
 });
 
 test("content evidence overage is normalized without another director call", async (t) => {
@@ -631,6 +699,126 @@ test("多项内容超过正式容量时退回内容导演压缩而不是进入�
   assert.equal(receivedReview.issues[0].errorCode, "CONTENT_CAPACITY_EXCEEDED");
 });
 
+test("内容编译失败时把原始导演草稿交回唯一修订轮", async (t) => {
+  const outputDir = await makeTempDir(t);
+  const failedDraft = {
+    schemaVersion: "0.1",
+    contentMarkdown: "# 旧稿\n\n> 核心结论\n\n## 章节\n\n### 页面\n\n> 页面职责\n\n#### 节点\n\n正文",
+    deckMetadata: { deckId: "failed-draft" },
+    pageMetadata: [{ pageId: "problem", sourceAnchors: ["不存在的锚点"] }],
+  };
+  let contentCalls = 0;
+  let receivedPrevious = null;
+  let receivedReview = null;
+  const provider = completeProvider({
+    async contentDirector({ previous, previousReview }) {
+      contentCalls += 1;
+      if (contentCalls === 1) {
+        const error = new Error("来源锚点不存在");
+        error.code = "CONTENT_METADATA_MISMATCH";
+        error.details = { pageId: "problem", anchor: "不存在的锚点" };
+        error.contentDirectorDraft = failedDraft;
+        throw error;
+      }
+      receivedPrevious = previous;
+      receivedReview = previousReview;
+      return contentOutput();
+    },
+  });
+
+  const result = await runDirectorWorkflow({
+    input: { rawMarkdown },
+    provider,
+    outputDir,
+    reviewMode: "production",
+    visualCandidateProvider: candidateProvider,
+    visualResolver: resolver,
+    renderer,
+    maxContentAttempts: 2,
+  });
+
+  assert.equal(result.status, "delivered");
+  assert.equal(contentCalls, 2);
+  assert.equal(receivedPrevious.contentDraftMarkdown, failedDraft.contentMarkdown);
+  assert.deepEqual(receivedPrevious.contentMetadata.pageMetadata, failedDraft.pageMetadata);
+  assert.equal(receivedReview.issues[0].errorCode, "CONTENT_METADATA_MISMATCH");
+});
+
+test("可选关系元数据编译失败时使用唯一内容恢复", async (t) => {
+  const outputDir = await makeTempDir(t);
+  let contentCalls = 0;
+  let receivedPrevious = null;
+  let receivedReview = null;
+  const provider = completeProvider({
+    async contentDirector({ previous, previousReview }) {
+      contentCalls += 1;
+      if (contentCalls === 1) {
+        const error = new Error("relationBindings 不允许机器字段 /comparisonOrientation");
+        error.code = "CONTENT_RELATION_COMPILE_FAILED";
+        error.contentDirectorDraft = {
+          schemaVersion: "0.1",
+          contentMarkdown: "# 旧稿",
+          deckMetadata: { deckId: "failed-relation" },
+          pageMetadata: [{ pageId: "problem", relationBindings: { type: "comparison" } }],
+        };
+        throw error;
+      }
+      receivedPrevious = previous;
+      receivedReview = previousReview;
+      return contentOutput();
+    },
+  });
+
+  const result = await runDirectorWorkflow({
+    input: { rawMarkdown },
+    provider,
+    outputDir,
+    reviewMode: "production",
+    visualCandidateProvider: candidateProvider,
+    visualResolver: resolver,
+    renderer,
+    maxContentAttempts: 2,
+  });
+
+  assert.equal(result.status, "delivered");
+  assert.equal(contentCalls, 2);
+  assert.equal(receivedPrevious.contentMetadata.pageMetadata[0].pageId, "problem");
+  assert.equal(receivedReview.issues[0].errorCode, "CONTENT_RELATION_COMPILE_FAILED");
+});
+
+test("模型 JSON 失败与内容修订共享同一次恢复预算", async (t) => {
+  const outputDir = await makeTempDir(t);
+  let contentCalls = 0;
+  let receivedReview = null;
+  const provider = completeProvider({
+    async contentDirector({ previousReview }) {
+      contentCalls += 1;
+      if (contentCalls === 1) {
+        const error = new Error("模型没有返回可解析 JSON");
+        error.code = "MODEL_JSON_INVALID";
+        throw error;
+      }
+      receivedReview = previousReview;
+      return contentOutput();
+    },
+  });
+
+  const result = await runDirectorWorkflow({
+    input: { rawMarkdown },
+    provider,
+    outputDir,
+    reviewMode: "production",
+    visualCandidateProvider: candidateProvider,
+    visualResolver: resolver,
+    renderer,
+    maxContentAttempts: 2,
+  });
+
+  assert.equal(result.status, "delivered");
+  assert.equal(contentCalls, 2);
+  assert.equal(receivedReview.issues[0].errorCode, "MODEL_JSON_INVALID");
+});
+
 test("候选阶段只有文字容量超限时定向退回内容导演而不误报资产缺口", async (t) => {
   const outputDir = await makeTempDir(t);
   let contentCalls = 0;
@@ -685,6 +873,58 @@ test("候选阶段只有文字容量超限时定向退回内容导演而不误�
   assert.equal(contentCalls, 2);
   assert.equal(receivedReview.issues[0].errorCode, "CONTENT_CAPACITY_EXCEEDED");
   assert.equal(receivedReview.issues[0].details.issues[0].sourceItemId, "point-1");
+});
+
+test("候选阶段少量核心字段缺失时消耗唯一内容恢复而不是误报资产缺口", async (t) => {
+  const outputDir = await makeTempDir(t);
+  let contentCalls = 0;
+  let receivedReview = null;
+  const provider = completeProvider({
+    async contentDirector({ previousReview }) {
+      contentCalls += 1;
+      if (contentCalls === 2) receivedReview = previousReview;
+      const output = contentOutput();
+      if (contentCalls === 2) output.pageContents[0].items[0].points = ["原稿已有支撑点"];
+      return output;
+    },
+  });
+  const contractAwareCandidates = async ({ pageContents }) => {
+    if (pageContents[0].items[0].points?.length) return candidateProvider();
+    return [{
+      pageId: "problem",
+      intentId: "problem-intent",
+      candidates: [],
+      gap: {
+        type: "content-contract-gap",
+        logicId: "parallel",
+        reason: "现有结构要求节点内支撑点",
+      },
+      candidateDiagnostics: {
+        rejected: [{
+          assetId: "radial-hub-001",
+          readiness: "incompatible",
+          stage: "semantic-contract",
+          reasons: ["points:required-per-item"],
+        }],
+      },
+    }];
+  };
+
+  const result = await runDirectorWorkflow({
+    input: { rawMarkdown },
+    provider,
+    outputDir,
+    reviewMode: "production",
+    visualCandidateProvider: contractAwareCandidates,
+    visualResolver: resolver,
+    renderer,
+    maxContentAttempts: 2,
+  });
+
+  assert.equal(result.status, "delivered");
+  assert.equal(contentCalls, 2);
+  assert.equal(receivedReview.issues[0].errorCode, "CONTENT_CONTRACT_GAP");
+  assert.equal(receivedReview.issues[0].details.gaps[0].rejected[0].reasons[0], "points:required-per-item");
 });
 
 test("每次正式生成都必须带通过的确定性质量审计，否则不得交付", async (t) => {

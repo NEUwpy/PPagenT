@@ -11,8 +11,7 @@ function minimalContentSchema() {
     schema: {
       type: "object",
       properties: {
-        deckPlan: { properties: { pages: { type: "array", items: {} } } },
-        pageContents: {
+        pageMetadata: {
           type: "array",
           items: {
             required: [],
@@ -101,11 +100,10 @@ test("页数 schema、结构线索与覆盖契约共用同一显式分段", () =
 
 谢谢。`;
   const schema = contentSchemaWithSectionFloor(minimalContentSchema(), markdown, [{ logicId: "sequence" }]);
-  assert.equal(schema.schema.properties.pageContents.minItems, 3);
-  assert.equal(schema.schema.properties.pageContents.maxItems, 3);
-  assert.equal(schema.schema.properties.pageContents.items.properties.sourceText, undefined);
-  assert.ok(schema.schema.properties.pageContents.items.properties.logicIntent.required.includes("evidenceFragments"));
-  assert.ok(schema.schema.properties.pageContents.items.properties.logicIntent.required.includes("confidence"));
+  assert.equal(schema.schema.properties.pageMetadata.minItems, 3);
+  assert.equal(schema.schema.properties.pageMetadata.maxItems, 3);
+  assert.ok(schema.schema.properties.pageMetadata.items.properties.logicIntent.required.includes("evidenceFragments"));
+  assert.ok(schema.schema.properties.pageMetadata.items.properties.logicIntent.required.includes("confidence"));
   const [guide] = buildStructuralCueGuides(markdown);
   assert.equal(guide.sectionHeading, "第3页：三个步骤");
   assert.equal(guide.relation, "sequence");
@@ -135,6 +133,24 @@ test("页数 schema、结构线索与覆盖契约共用同一显式分段", () =
   assert.match(output.pageContents[0].notes, /PPagenTShellRole=cover/);
   assert.match(output.pageContents[2].notes, /PPagenTShellRole=closing/);
   assert.equal(output.deckPlan.pages[1].narrativeJob, "步骤");
+});
+
+test("普通原稿标题只标记来源章节，不再限制内容稿的 H1 页面数", () => {
+  const markdown = `## 青春不怕远征难
+
+开场问题。
+
+第一个故事。
+
+第二个故事。
+
+第三个故事。
+
+结尾号召。`;
+  const schema = contentSchemaWithSectionFloor(minimalContentSchema(), markdown, [{ logicId: "parallel" }]);
+  assert.equal(extractManuscriptSections(markdown).length, 1);
+  assert.equal(schema.schema.properties.pageMetadata.minItems, 1);
+  assert.equal(schema.schema.properties.pageMetadata.maxItems, 30);
 });
 
 test("重复 Markdown 标题依靠正文归属到不同 sectionKey", () => {

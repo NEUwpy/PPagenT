@@ -14,6 +14,10 @@ import {
   textRegionMarkup,
 } from "../src/visual-runtime/text-layout-library.mjs";
 import {
+  markdownTextRegionMarkup,
+  parseControlledMarkdown,
+} from "../src/visual-runtime/markdown-text.mjs";
+import {
   matchTextLayoutsForPayload,
   summarizeTextRegionContract,
 } from "../src/visual-runtime/typography-matcher.mjs";
@@ -85,28 +89,19 @@ test("TextRegion 披露连续复合文字大区而不规定内部块数量", () 
   assert.doesNotMatch(attributes, /max-chars|max-lines/);
 });
 
-test("文字排版库让一个大区绑定排法而不是暴露固定小槽", () => {
+test("PPA 文字库只暴露 Markdown 流式与区域模板两种渲染模式", () => {
   assert.deepEqual(listTextLayouts().map((item) => item.id), [
-    "statement-flow",
-    "heading-content-flow",
-    "label-content-flow",
-    "structured-list-flow",
-    "metric-content-flow",
-    "metric-set-flow",
-    "key-value-flow",
-    "quote-attribution-flow",
-    "heading-metric-content-flow",
-    "summary-information-flow",
+    "markdown-flow",
+    "markdown-zoned",
   ]);
   assert.deepEqual(listTextLayoutPrimitives().map((item) => item.id), [
     "heading",
-    "body",
-    "list",
-    "metric",
-    "label",
-    "annotation",
+    "paragraph",
+    "unordered-list",
+    "ordered-list",
     "quote",
     "emphasis",
+    "divider",
   ]);
   const markup = textRegionMarkup({
     id: "metric-1",
@@ -138,7 +133,39 @@ test("文字排版库让一个大区绑定排法而不是暴露固定小槽", ()
   assert.ok(listTextLayouts().every((layout) => (
     layout.minimumFrame.width === layout.recommendedFrame.width
     && layout.minimumFrame.height === layout.recommendedFrame.height
+    && layout.visualStyle === "markdown-skin"
+    && layout.visualReviewStatus === "awaiting-user-review"
   )));
+});
+
+test("受控 Markdown 用成熟语法生成一个 TextRegion，并允许区域模板重排同一 Token", () => {
+  const markdown = "## 可靠生成\n\n把稿件转化为稳定页面。\n\n- 内容与样式分离\n- 统一读取 Skin\n\n> 复杂关系仍交给 Structure。";
+  assert.deepEqual(parseControlledMarkdown(markdown).map((block) => block.type), [
+    "heading",
+    "paragraph",
+    "unordered-list",
+    "quote",
+  ]);
+  const flow = markdownTextRegionMarkup({ id: "md-flow", field: "blocks[0].markdown", markdown });
+  assert.equal((flow.match(/data-slot-id=/g) ?? []).length, 1);
+  assert.match(flow, /data-text-layout-id="markdown-flow"/);
+  assert.match(flow, /data-markdown-renderer="controlled-commonmark"/);
+  assert.match(flow, /data-text-primitive="heading"/);
+  assert.match(flow, /data-text-primitive="list"/);
+  const zoned = markdownTextRegionMarkup({ id: "md-zoned", field: "blocks[0].markdown", markdown, mode: "zoned" });
+  assert.match(zoned, /data-text-layout-id="markdown-zoned"/);
+  assert.match(zoned, /data-markdown-zone="lead"/);
+  assert.match(zoned, /data-markdown-zone="body"/);
+});
+
+test("受控 Markdown 拒绝图片和多层列表，不把自由网页带入文字系统", () => {
+  assert.throws(() => parseControlledMarkdown("![图](https://example.com/image.png)"), /不支持图片/);
+  assert.throws(() => parseControlledMarkdown("[链接](https://example.com)"), /不支持链接/);
+  assert.throws(() => parseControlledMarkdown("`代码`"), /不支持行内代码/);
+  assert.throws(() => parseControlledMarkdown("<b>原始 HTML</b>"), /不支持原始 HTML/);
+  assert.throws(() => parseControlledMarkdown("| A | B |\n| - | - |\n| 1 | 2 |"), /不支持表格/);
+  assert.throws(() => parseControlledMarkdown("#### 四级标题"), /最多三级/);
+  assert.throws(() => parseControlledMarkdown("- 一级\n  - 二级"), /最多一层/);
 });
 
 test("Typography Matcher 只在已登记候选中按内容角色展开 Region 绑定", () => {

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>PPA 看板 · PPagenT Logic</title>
+  <title>PPA 资产看板 · PPagenT</title>
   <style>
     :root {
       color-scheme: light;
@@ -36,11 +36,23 @@
     .nav { display: flex; gap: 8px; flex-wrap: wrap; }
     .nav a { padding: 8px 12px; color: #cbd6e7; text-decoration: none; border-radius: 8px; font-size: 13px; }
     .nav a:hover { color: #fff; background: rgba(255,255,255,.09); }
+    .nav a.production-link { margin-left: 8px; color: #fff; border: 1px solid rgba(255,255,255,.26); }
     .top-status { margin-left: auto; text-align: right; color: #b8c5d8; font-size: 12px; }
     .refresh-button { min-height: 38px; padding: 8px 14px; color: #fff; border: 1px solid rgba(255,255,255,.24); border-radius: 9px; background: rgba(255,255,255,.09); font-size: 13px; white-space: nowrap; }
     .refresh-button:hover { background: rgba(255,255,255,.16); }
     .refresh-button:disabled { cursor: default; color: #8290a5; border-color: rgba(255,255,255,.08); background: rgba(255,255,255,.03); }
     main { width: min(1540px, calc(100% - 40px)); margin: 0 auto; padding: 34px 0 90px; }
+    .asset-home { display:grid; grid-template-columns:minmax(330px,.72fr) minmax(0,1.28fr); gap:24px; margin-bottom:28px; padding:30px; border:1px solid var(--line); border-radius:20px; background:var(--panel); box-shadow:var(--shadow); }
+    .asset-home-copy { padding:8px 10px; }
+    .asset-home .eyebrow { color:var(--blue); border-color:#b9ceeF; border-radius:4px; }
+    .asset-home h1 { margin:20px 0 12px; font-size:clamp(28px,3.3vw,42px); }
+    .asset-home p { margin:0; color:var(--muted); font-size:14px; line-height:1.75; }
+    .domain-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    .domain-grid a { display:grid; grid-template-columns:34px 1fr; align-content:center; min-height:118px; padding:18px; color:var(--ink); border:1px solid var(--line); background:#fafbfd; text-decoration:none; }
+    .domain-grid a:hover { border-color:#8eb2e8; background:#f3f7fd; }
+    .domain-grid span { grid-row:1 / 3; color:var(--blue); font:700 12px/1 ui-monospace,Consolas,monospace; }
+    .domain-grid strong { font-size:20px; }
+    .domain-grid small { margin-top:7px; color:var(--muted); font-size:11px; }
     .hero { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(340px, .6fr); gap: 22px; margin-bottom: 22px; }
     .hero-copy { position: relative; overflow: hidden; min-height: 260px; padding: 34px 38px; color: #fff; border-radius: 22px; background: linear-gradient(128deg, #18355f 0%, #245db4 56%, #5b8def 100%); box-shadow: var(--shadow); }
     .hero-copy::after { content: ""; position: absolute; right: -90px; top: -120px; width: 360px; height: 360px; border: 1px solid rgba(255,255,255,.18); border-radius: 50%; box-shadow: 0 0 0 44px rgba(255,255,255,.05), 0 0 0 92px rgba(255,255,255,.04); }
@@ -62,6 +74,80 @@
     .section-head > div:first-child { flex: 1; }
     .section h2 { margin: 0; font-size: 23px; letter-spacing: -.02em; }
     .section-head p { margin: 7px 0 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+    .subsection { margin-top:24px; padding-top:22px; border-top:1px solid var(--line); }
+    .subsection-head { display:flex; align-items:flex-end; justify-content:space-between; gap:18px; margin-bottom:14px; }
+    .subsection-head h3 { margin:0; font-size:17px; }
+    .subsection-head p { margin:5px 0 0; color:var(--muted); font-size:12px; line-height:1.6; }
+    .technical-details { margin-top:24px; border:1px solid var(--line); background:#fafbfd; }
+    .technical-details > summary { padding:15px 17px; color:#51647e; cursor:pointer; font-size:13px; font-weight:700; }
+    .technical-details[open] > summary { border-bottom:1px solid var(--line); }
+    .technical-body { padding:18px; }
+    .technical-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:18px; }
+    .media-empty { display:grid; grid-template-columns:minmax(0,.7fr) minmax(320px,1.3fr); gap:28px; align-items:center; min-height:310px; padding:28px; border:1px dashed #aebdd1; background:#fafbfd; }
+    .media-empty strong { display:block; margin-bottom:10px; font-size:22px; }
+    .media-empty p { margin:0; color:var(--muted); font-size:13px; line-height:1.8; }
+    .media-canvas { display:grid; place-items:center; min-height:230px; color:#8a99ad; border:1px solid var(--line); background:repeating-linear-gradient(135deg,#f2f5f9 0,#f2f5f9 14px,#f8fafc 14px,#f8fafc 28px); font-size:13px; }
+    .layout-grid { display:grid; grid-template-columns:minmax(0,1.25fr) minmax(340px,.75fr); gap:18px; }
+    .layout-panel { padding:18px; border:1px solid var(--line); background:#fafbfd; }
+    .layout-panel h3 { margin:0 0 8px; font-size:16px; }
+    .layout-panel p { margin:0 0 14px; color:var(--muted); font-size:12px; line-height:1.65; }
+    .composition-lab { min-height:260px; }
+    .composition-lab-stage { min-height:190px; }
+    .composition-lab-canvas { min-width:0; color:#52667f; border-top:1px solid #cad6e5; background:#fff; font-size:12px; line-height:1.7; }
+    .expression-prototype-tabs { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
+    .expression-prototype-tab { padding:8px 11px; border:1px solid var(--line); background:#fff; color:#52667f; cursor:pointer; }
+    .expression-prototype-tab.active { border-color:var(--blue); background:var(--blue-soft); color:var(--blue); }
+    .expression-prototype-meta { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; margin-bottom:12px; }
+    .expression-prototype-meta h4 { margin:0 0 3px; color:var(--text); font-size:15px; }
+    .expression-prototype-meta p { margin:0; max-width:820px; }
+    .expression-workbench { display:grid; grid-template-columns:300px 360px minmax(748px,1fr); gap:16px; align-items:start; }
+    .expression-workbench-source,.expression-workbench-form { max-height:690px; overflow:auto; border:1px solid #c7d3e2; background:#f8fafc; }
+    .expression-workbench-source { background:#f3f7fc; }
+    .expression-form-head { position:sticky; top:0; z-index:4; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:13px 15px; border-bottom:1px solid #c7d3e2; background:#fff; }
+    .expression-form-head strong { color:var(--text); font-size:13px; }
+    .expression-form-head span { color:var(--muted); font-size:11px; }
+    .director-form { padding:15px; border-bottom:1px solid #d7e0eb; }
+    .director-form:last-child { border-bottom:0; }
+    .director-form h5 { margin:0 0 3px; color:var(--text); font-size:14px; }
+    .director-form > p { margin:0 0 13px; color:var(--muted); font-size:11px; line-height:1.55; }
+    .director-block { margin:0 0 14px; padding:12px; border-left:3px solid #9bb5d4; background:#fff; }
+    .director-block:last-child { margin-bottom:0; }
+    .director-block-head { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:9px; }
+    .director-block-head strong { color:var(--text); font-size:12px; }
+    .director-block-head code { color:#61738a; font-size:10px; }
+    .director-field { display:block; margin:0 0 10px; }
+    .director-field:last-child { margin-bottom:0; }
+    .director-field > span { display:flex; justify-content:space-between; gap:8px; margin-bottom:4px; color:#61738a; font-size:10px; font-weight:700; }
+    .director-field input,.director-field textarea,.director-field select { width:100%; padding:8px 9px; border:1px solid #c7d3e2; border-radius:0; background:#fff; color:#27364a; font:12px/1.55 "Microsoft YaHei",sans-serif; }
+    .director-field textarea { min-height:74px; resize:vertical; }
+    .director-field input:focus,.director-field textarea:focus,.director-field select:focus { outline:2px solid rgba(47,94,168,.18); border-color:var(--blue); }
+    .director-field input:disabled,.director-field textarea:disabled,.director-field select:disabled { color:#7c8999; background:#edf1f5; }
+    .content-source-page { padding:14px; }
+    .content-source-section { margin-bottom:12px; padding:11px 12px; border:1px solid #cbd8e8; background:#fff; }
+    .content-source-section:last-child { margin-bottom:0; }
+    .content-source-section > strong { display:block; margin-bottom:5px; color:var(--text); font-size:12px; }
+    .content-source-section > small { display:block; margin-bottom:8px; color:var(--muted); font-size:10px; }
+    .content-source-markdown { margin:0; color:#34475f; font:11px/1.65 Consolas,"Microsoft YaHei",sans-serif; white-space:pre-wrap; overflow-wrap:anywhere; }
+    .content-source-item { margin-top:8px; padding:8px 9px; border-left:3px solid #9cb6d7; background:#f6f9fd; }
+    .content-source-item code { display:block; margin-bottom:4px; color:#607590; font-size:9px; }
+    .expression-node { margin-bottom:9px; padding:10px; border-top:3px solid var(--blue); background:#fff; }
+    .expression-node:last-child { margin-bottom:0; }
+    .expression-node-title { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:7px; }
+    .expression-node-title strong { color:var(--text); font-size:11px; }
+    .expression-node-title code { color:var(--blue); font-size:10px; }
+    .expression-node-meta { margin-bottom:8px; color:var(--muted); font-size:10px; }
+    .expression-form-actions { display:flex; flex-wrap:wrap; gap:7px; padding:12px 15px; border-top:1px solid #c7d3e2; background:#fff; }
+    .expression-form-actions button { padding:7px 10px; border:1px solid #aebed1; background:#fff; color:#3d526c; cursor:pointer; }
+    .expression-form-actions button.primary { border-color:var(--blue); background:var(--blue); color:#fff; }
+    .expression-workbench-preview { min-width:0; }
+    .expression-preview-toolbar { display:flex; align-items:center; justify-content:space-between; gap:14px; min-height:42px; padding:0 12px; border:1px solid #c7d3e2; border-bottom:0; background:#fff; }
+    .expression-preview-status { color:var(--muted); font-size:11px; }
+    .expression-preview-status.valid { color:var(--green); }
+    .expression-preview-status.invalid { color:#b14949; }
+    .expression-prototype-stage { width:748px; height:329px; padding:11px; overflow:hidden; background:#e8edf3; }
+    .expression-prototype-frame { width:1170px; height:492px; border:1px solid #b9c8da; background:#fff; box-shadow:0 8px 24px rgba(38,62,91,.10); transform:scale(.62); transform-origin:left top; }
+    .expression-prototype-contract { display:flex; flex-wrap:wrap; gap:7px; margin-top:11px; }
+    .expression-schema-note { margin-top:12px; padding:11px 13px; border-left:3px solid var(--blue); background:#f2f6fb; color:#5d6f85; font-size:11px; line-height:1.65; }
     .pill { display: inline-flex; align-items: center; gap: 6px; min-height: 26px; padding: 4px 9px; border-radius: 999px; background: #eef2f7; color: #536176; font-size: 11px; white-space: nowrap; }
     .pill.core, .pill.html-component { background: var(--green-soft); color: var(--green); }
     .pill.pending, .pill.not-wired { background: var(--amber-soft); color: var(--amber); }
@@ -92,7 +178,17 @@
     .store h3 { margin: 0 0 10px; font-size: 15px; }
     .store code { color: #4c5b72; font-size: 12px; }
     .store p { clear: both; margin: 13px 0 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .technical-grid .store-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
     .text-layout-grid { display:grid; grid-template-columns:240px minmax(0,1fr); gap:18px; align-items:start; }
+    .text-surface-grid { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:9px; margin-bottom:16px; }
+    .text-surface-sample { display:flex; min-height:78px; flex-direction:column; justify-content:flex-end; padding:12px; color:var(--ppagent-color-body); background:var(--ppagent-color-surface); font-size:12px; }
+    .text-surface-sample b { margin-bottom:5px; }
+    .text-surface-sample code { color:inherit; opacity:.72; }
+    .text-surface-sample--field { background:var(--ppagent-color-accent-soft); }
+    .text-surface-sample--outline { border:1px solid var(--ppagent-color-line); }
+    .text-surface-sample--rule { border-left:7px solid var(--ppagent-color-accent); }
+    .text-surface-sample--inverse { color:var(--ppagent-color-background); background:var(--ppagent-color-dark); }
+    .text-surface-sample--accent { color:var(--ppagent-color-background); background:var(--ppagent-color-accent); }
     .text-primitive-grid { display:flex; flex-wrap:wrap; gap:9px; margin-bottom:16px; }
     .text-primitive-chip { padding:9px 12px; border:1px solid #dbe4f1; border-radius:10px; color:#405575; background:#fff; font-size:12px; }
     .text-primitive-chip b { margin-right:6px; color:#285f9f; }
@@ -118,7 +214,14 @@
     .text-layout-preview-stage { display:flex; min-height:278px; align-items:center; justify-content:center; overflow:auto; padding:20px; border-radius:13px; background:linear-gradient(135deg,#f3f6fa,#e9eff7); }
     .text-layout-preview { display:flex; flex-direction:column; gap:7px; align-items:flex-start; }
     .text-layout-preview__label { color:#64758c; font-size:11px; }
-    .text-layout-preview-frame { box-sizing:border-box; flex:0 0 auto; overflow:hidden; padding:0; border:1.5px dashed #6f9bd8; border-radius:8px; background:#fff; box-shadow:0 7px 20px rgba(46,76,112,.11); --ppagent-font-body:"Microsoft YaHei"; --ppagent-text-color:#46566a; --ppagent-heading-color:#254b7c; --ppagent-value-color:#2f5ea8; --ppagent-label-color:#60758d; --ppagent-annotation-color:#748495; }
+    .text-layout-preview-frame { box-sizing:border-box; flex:0 0 auto; overflow:hidden; padding:0; background:var(--ppagent-color-surface); }
+    .text-layout-preview-frame[data-text-layout-surface="field"] { background:var(--ppagent-color-accent-soft); }
+    .text-layout-preview-frame[data-text-layout-surface="outline"] { border:1px solid var(--ppagent-color-line); }
+    .text-layout-preview-frame[data-text-layout-surface="rule"] { border-left:7px solid var(--ppagent-color-accent); }
+    .text-layout-preview-frame[data-text-layout-surface="inverse"] { color:var(--ppagent-color-background);background:var(--ppagent-color-dark); }
+    .text-layout-preview-frame[data-text-layout-surface="accent"] { color:var(--ppagent-color-background);background:var(--ppagent-color-accent); }
+    .text-layout-preview-frame[data-text-layout-surface="inverse"] > .ppagent-text-region,
+    .text-layout-preview-frame[data-text-layout-surface="accent"] > .ppagent-text-region { --ppagent-color-body:var(--ppagent-color-background);--ppagent-color-dark:var(--ppagent-color-background);--ppagent-color-muted:var(--ppagent-color-background);--ppagent-color-accent:var(--ppagent-color-background); }
     .text-layout-preview-frame > .ppagent-text-region { width:100%; height:100%; }
     .shell-map-wrap { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(260px, .75fr); gap: 20px; align-items: start; }
     .shell-map { position: relative; overflow: hidden; aspect-ratio: 16 / 9; border: 1px solid #cfd9e8; border-radius: 14px; background: linear-gradient(#fff,#f8fafc); box-shadow: inset 0 0 0 12px #eef3f8; }
@@ -277,17 +380,19 @@
       .pipeline, .pipeline.intake-line, .pipeline.generation-line { grid-template-columns: repeat(4, 1fr); }
       .pipe-step::after { display: none; }
       .workflow-summary { grid-template-columns: 1fr; }
+      .expression-workbench { grid-template-columns:1fr; }
+      .expression-workbench-source,.expression-workbench-form { max-height:520px; }
     }
     @media (max-width: 760px) {
       .topbar { align-items: flex-start; padding: 12px 18px; }
       .nav, .top-status { display: none; }
       main { width: min(100% - 22px, 1540px); padding-top: 18px; }
-      .hero { grid-template-columns: 1fr; }
+      .hero, .asset-home, .layout-grid, .media-empty { grid-template-columns: 1fr; }
       .hero-copy { padding: 28px 24px; }
       .metrics { grid-template-columns: repeat(2, 1fr); }
       .section { padding: 20px 16px; }
       .section-head { align-items: flex-start; flex-direction: column; }
-      .pipeline, .pipeline.intake-line, .pipeline.generation-line, .logic-grid, .coverage-grid, .coverage-tier-grid, .store-grid, .text-layout-grid, .catalog-grid, .shell-map-wrap, .role-grid { grid-template-columns: 1fr; }
+      .pipeline, .pipeline.intake-line, .pipeline.generation-line, .logic-grid, .coverage-grid, .coverage-tier-grid, .store-grid, .text-layout-grid, .catalog-grid, .shell-map-wrap, .role-grid, .text-surface-grid { grid-template-columns: 1fr; }
       .text-layout-catalog { position:static; }
       .text-layout-contract { grid-template-columns:1fr; }
       .capability-chain { flex-direction: column; }
@@ -295,135 +400,88 @@
       .filters { grid-template-columns: 1fr 1fr; }
       .filters input { grid-column: 1 / -1; }
       .detail-grid { grid-template-columns: 1fr; gap: 2px; }
+      .domain-grid { grid-template-columns:1fr; }
+      .technical-grid { grid-template-columns:1fr; }
+      .composition-lab-stage { grid-template-columns:1fr; }
     }
   </style>
 </head>
 <body>
   <header class="topbar">
-    <div class="brand"><strong>PPA 看板</strong><span>PPagenT · Logic / Structure Group / State / 自动化入口</span></div>
+    <div class="brand"><strong>PPA 资产看板</strong><span>Structure / Text / Media / Layout</span></div>
     <nav class="nav" aria-label="页面导航">
-      <a href="#overview">总览</a><a href="#capabilities">能力地图</a><a href="#intake-review">入库线</a><a href="#automation">生成线</a><a href="#html-approval">一轮审批</a><a href="#native-approval">二轮审批</a><a href="#assets">全部资产</a><a href="#skin">Skin 容器</a><a href="#catalog">规则目录</a><a href="#stores">数据域</a><a href="#text-layouts">文字排版</a>
+      <a href="#capabilities">结构</a><a href="#text-layouts">文字</a><a href="#media-library">图像</a><a href="#skin">排版</a><a class="production-link" href="http://127.0.0.1:4212/" target="_blank" rel="noreferrer">生产工作台 ↗</a>
     </nav>
     <div class="top-status"><span id="generated-at"></span><br><span id="data-mode"></span></div>
     <button class="refresh-button" id="refresh-dashboard" type="button">刷新仓库</button>
   </header>
 
   <main>
-    <section class="hero" id="overview">
-      <div class="hero-copy">
-        <span class="eyebrow" id="hero-mode">点击任意 Logic 查看触发与运行详情</span>
-        <h1>现在已经建设了什么，哪些能自动调用？</h1>
-        <p>本页同时展示资产怎样进入核心库，以及一份稿件怎样调用这些能力生成 PPT。它还把 Logic、Structure Group、State、内容槽和 Icon 的包含与选择关系放在同一视图中。</p>
-      </div>
-      <aside class="migration">
-        <div><h2>HTML 审美工作台覆盖</h2><div class="big" id="migration-value"></div></div>
-        <div><div class="progress"><span id="migration-progress"></span></div><div class="caption" id="migration-caption"></div></div>
-      </aside>
+    <section class="asset-home" id="overview">
+      <div class="asset-home-copy"><span class="eyebrow">PPA / ASSET SYSTEM</span><h1>四个能力域，共同组成一页 PPT</h1><p>PPA 只负责建设、查看和审批可复用能力。正式生成、API 调用、运行日志和交付结果统一进入 PPA 生产工作台。</p></div>
+      <nav class="domain-grid" aria-label="四个能力域">
+        <a href="#capabilities"><span>01</span><strong>结构</strong><small>Logic → Structure Group → State</small></a>
+        <a href="#text-layouts"><span>02</span><strong>文字</strong><small>Markdown → Renderer / Zone Template</small></a>
+        <a href="#media-library"><span>03</span><strong>图像</strong><small>Media / Background / Illustration</small></a>
+        <a href="#skin"><span>04</span><strong>排版</strong><small>Skin / Shell / Container / Surface</small></a>
+      </nav>
     </section>
 
     <div class="mode-notice" id="mode-notice"></div>
 
-    <section class="metrics" id="metric-grid" aria-label="建设指标"></section>
-
     <section class="section" id="capabilities">
-      <div class="section-head"><div><h2>Logic 能力地图</h2><p>一张图同时展示能力规划与当前可用资产：灰色槽位表示待建设；已有合格 Structure Group 的 Logic 直接显示真实页面。同一 Logic 有多个组时会在卡片内轮播，也可手动切换。</p></div><span class="pill pending" id="logic-count"></span></div>
+      <div class="section-head"><div><h2>01 · 结构库</h2><p>结构按 Logic 组织；每个 Logic 内列出真正可独立调用的 Structure Group 与 State。这里不再按“基础、常用、补充”人为分层。</p></div><span class="pill pending" id="logic-count"></span></div>
       <div class="coverage-grid" id="coverage-grid"></div>
-    </section>
-
-    <section class="section" id="intake-review">
-      <div class="section-head"><div><h2>入库线 · 把优秀参考变成可调用能力</h2><p>入库线由维护者和用户协作完成。目标不是收藏页面，而是在某个 Logic 下建立经确认、可扩散、可机械编译的 Structure Group。</p></div><span class="pill html-component">建设流程</span></div>
-      <div class="pipeline intake-line">
-        <div class="pipe-step"><strong>1 · 确认 Logic 缺口</strong><span>先说明要补哪类关系表达，不从“有一张好看页面”倒推分类。</span></div>
-        <div class="pipe-step"><strong>2 · 组建参考组</strong><span>选择多张参考，分别标注逻辑、审美、层级或细节贡献。</span></div>
-        <div class="pipe-step"><strong>3 · 提炼视觉意图</strong><span>总结关系怎样被表达、画面语言怎样成立，形成 visual-intent。</span></div>
-        <div class="pipe-step"><strong>4 · HTML 黄金状态</strong><span>HTML 只读取综合意图，重新设计一个最能代表本组的状态。</span></div>
-        <div class="pipe-step"><strong>5 · 扩散 State</strong><span>同一组件按数量和容量重新排布，并从真实 DOM 暴露 Slot Map。</span></div>
-        <div class="pipe-step"><strong>6 · Native 编译</strong><span>读取 DOM/CSS/SVG，机械转换为原生可编辑 PowerPoint 对象。</span></div>
-        <div class="pipe-step"><strong>7 · Skin 中人审</strong><span>在统一 Content Frame 中查看全部 State；有问题只返修该资产。</span></div>
-        <div class="pipe-step"><strong>8 · 进入核心库</strong><span>用户明确通过后改为 core，正式生成线才可以发现和调用。</span></div>
-      </div>
-    </section>
-
-    <section class="section" id="automation">
-      <div class="section-head"><div><h2>正式生成线 · 从稿件到可编辑 PPTX</h2><p>两个导演只负责理解、组织和选择；程序负责合法过滤、确定性求解和绘制。生成线不会临时发明 Structure Group。</p></div><span class="pill core" id="auto-callable-pill"></span></div>
-      <div class="pipeline generation-line">
-        <div class="pipe-step"><strong>1 · 稿件 + Skin</strong><span>用户提供原稿并选择主题；Skin 固定字体、字号、颜色、Shell 和 Content Frame。</span></div>
-        <div class="pipe-step"><strong>2 · 内容导演</strong><span>忠实读稿，规划叙事、页序与拆页，输出版式中立的 PageContent。</span></div>
-        <div class="pipe-step"><strong>3 · 判断页面 Logic</strong><span>视觉导演先判断这一页需要并列、循环、对比、层级等哪种关系能力。</span></div>
-        <div class="pipe-step"><strong>4 · 生成合法候选</strong><span>程序进入该 Logic，按数量、容量、媒体和 Content Frame 筛 Structure Group。</span></div>
-        <div class="pipe-step"><strong>5 · 视觉导演选组</strong><span>在合法组中选择最合适的 Structure Group，并兼顾整套节奏和重复。</span></div>
-        <div class="pipe-step"><strong>6 · 区域与排版绑定</strong><span>程序按数量求解 State；再为连续文字区域选择兼容的文字排版并填入内容。</span></div>
-        <div class="pipe-step"><strong>7 · Icon 本地匹配</strong><span>若组内有图标槽，导演给语义词，程序从 Tabler 元数据模糊匹配唯一 Top 1。</span></div>
-        <div class="pipe-step"><strong>8 · Native 编译</strong><span>统一编译器把已确认 HTML 结构机械转换为原生可编辑对象。</span></div>
-        <div class="pipe-step"><strong>9 · Shell 组装交付</strong><span>把内容装入 Skin/Shell，完成整套页面并输出可编辑 PPTX。</span></div>
-      </div>
-      <div class="workflow-summary">
-        <div class="role-grid" aria-label="生成线角色边界">
-          <div class="role-card"><strong>内容导演 · 讲什么</strong><span>负责忠实、叙事、节奏和拆页；不提前迎合某个 Structure Group。</span></div>
-          <div class="role-card"><strong>视觉导演 · 怎么组织</strong><span>判断页面 Logic，在合法候选中选 Structure Group 和 Composition；不现场画图。</span></div>
-          <div class="role-card"><strong>程序 · 确定性执行</strong><span>过滤候选、求解 State、绑定字段、匹配 Icon、编译 Native 并套入 Skin。</span></div>
-        </div>
-        <div class="hierarchy-card">
-          <strong>一页内容怎样落到资产上</strong>
-          <p>先确定语义关系，再逐层缩小选择范围。Icon 是 Structure Group 槽位中的内容，不是与 Logic 并列的新层。</p>
-          <div class="capability-chain" aria-label="Logic 与 Structure Group 包含关系">
-            <div class="chain-node"><b>PageContent</b><small>本页要讲什么</small></div><span class="chain-arrow">→</span>
-            <div class="chain-node"><b>Logic</b><small>需要哪类关系</small></div><span class="chain-arrow">→</span>
-            <div class="chain-node"><b>Structure Group</b><small>该 Logic 下的具体视觉语法</small></div><span class="chain-arrow">→</span>
-            <div class="chain-node"><b>State</b><small>按数量与容量确定</small></div><span class="chain-arrow">→</span>
-            <div class="chain-node"><b>Region / Text Layout</b><small>文字区域选择兼容排版</small></div><span class="chain-arrow">→</span>
-            <div class="chain-node"><b>Shell + Skin</b><small>整页骨架与主题</small></div>
+      <details class="technical-details approval-details" id="asset-approval">
+        <summary>结构资产审批队列（默认收起）</summary>
+        <div class="technical-body">
+          <div class="subsection" id="html-approval">
+            <div class="subsection-head"><div><h3>HTML 待审批</h3><p>检查结构语法、视觉语言、字段和代表性 State；通过后才进入 Native 编译。</p></div><span class="pill pending" id="html-approval-count"></span></div>
+            <div class="coverage-tier-grid" id="html-approval-grid"></div>
+          </div>
+          <div class="subsection" id="native-approval">
+            <div class="subsection-head"><div><h3>Native / Skin 待审批</h3><p>检查同一 State 的原生还原与 Skin 结果；通过后才进入正式调用目录。</p></div><span class="pill pending" id="native-approval-count"></span></div>
+            <div class="coverage-tier-grid" id="native-approval-grid"></div>
           </div>
         </div>
-      </div>
-    </section>
-
-    <section class="section" id="html-approval">
-      <div class="section-head"><div><h2>一轮审批 · HTML Structure Group</h2><p>只检查逻辑表达、设计语言、可变参数与代表性 State。这里通过后，资产才进入 Native/PPT 机械编译。</p></div><span class="pill pending" id="html-approval-count"></span></div>
-      <div class="coverage-tier-grid" id="html-approval-grid"></div>
-    </section>
-
-    <section class="section" id="native-approval">
-      <div class="section-head"><div><h2>二轮审批 · Native PPT 与 Skin</h2><p>只检查 HTML 到可编辑 PPT 的还原，以及进入统一 Skin 后的结果。这里通过后，资产才进入核心调用目录。</p></div><span class="pill pending" id="native-approval-count"></span></div>
-      <div class="coverage-tier-grid" id="native-approval-grid"></div>
-    </section>
-
-    <section class="section" id="assets">
-      <div class="section-head">
-        <div><h2>全部资产记录</h2><p id="result-caption"></p></div>
-        <div class="filters">
-          <input id="search" type="search" placeholder="搜索名称、ID、Logic、Structure Group 或触发关系" aria-label="搜索资产">
-          <select id="library-filter" aria-label="按资产库筛选"><option value="all">全部资产库</option><option value="core">核心库</option></select>
-          <select id="category-filter" aria-label="按分类筛选"><option value="all">全部分类</option></select>
-          <select id="renderer-filter" aria-label="按布局入口筛选"><option value="all">全部实现方式</option><option value="html-component">HTML 路线</option><option value="legacy-builder">原有代码路线</option><option value="skin">主题 Shell</option><option value="not-wired">未接入</option></select>
+      </details>
+      <details class="technical-details" id="assets">
+        <summary>技术记录 · Type / Manifest / 规则与数据目录（默认收起）</summary>
+        <div class="technical-body">
+          <div class="filters">
+            <input id="search" type="search" placeholder="搜索名称、ID、Logic 或 Structure Group" aria-label="搜索资产">
+            <select id="library-filter" aria-label="按资产库筛选"><option value="all">全部资产库</option><option value="core">核心库</option></select>
+            <select id="category-filter" aria-label="按分类筛选"><option value="all">全部分类</option></select>
+            <select id="renderer-filter" aria-label="按布局入口筛选"><option value="all">全部实现方式</option><option value="html-component">HTML 路线</option><option value="legacy-builder">原有代码路线</option><option value="skin">主题 Shell</option><option value="not-wired">未接入</option></select>
+          </div>
+          <p id="result-caption"></p>
+          <div class="table-wrap"><table><thead><tr><th>资产</th><th>库 / 状态</th><th>Logic</th><th>Structure Group</th><th>触发关系</th><th>数量或容量</th><th>建设状态</th><th>自动调用</th></tr></thead><tbody id="asset-table"></tbody></table></div>
+          <div class="technical-grid">
+            <div class="catalog-card"><h3>Purpose 与质量记录</h3><div class="catalog-list" id="purpose-list"></div><div class="catalog-list" id="quality-list"></div></div>
+            <div class="store-grid" id="store-grid"></div>
+          </div>
         </div>
-      </div>
-      <div class="table-wrap"><table><thead><tr><th>资产</th><th>库 / 状态</th><th>Logic</th><th>Structure Group</th><th>触发关系</th><th>数量或容量</th><th>建设状态</th><th>自动调用</th></tr></thead><tbody id="asset-table"></tbody></table></div>
-    </section>
-
-    <section class="section" id="skin">
-      <div class="section-head"><div><h2>Skin / Shell 容器地图</h2><p>这里直接读取当前 Shell 的真实坐标，不另建一份手工登记表。鼠标移入色块可查看容器名称与尺寸。</p></div><span class="pill skin" id="skin-id"></span></div>
-      <div class="shell-map-wrap"><div class="shell-map" id="shell-map"></div><div class="shell-map-notes"><strong>容器来源</strong><br>Shell 源代码是唯一真源；看板按当前坐标即时绘制。绿色区域是一级 Logic 共用的 Content Frame，灰色区域由 Skin/Shell 管理。结构内部的标题、正文和图标安全区则从各 State 的真实 HTML DOM 自动解析。</div></div>
-    </section>
-
-    <section class="section" id="catalog">
-      <div class="section-head"><div><h2>规则、词表与经验库</h2><p>这些不是视觉资产本身，而是帮助导演和程序判断“该不该用、怎么用、失败后怎么修”的结构化信息。</p></div></div>
-      <div class="catalog-grid">
-        <div class="catalog-card"><h3>Composition · 页面槽位</h3><div class="catalog-list" id="composition-list"></div></div>
-        <div class="catalog-card"><h3>Purpose · 页面目的</h3><div class="catalog-list" id="purpose-list"></div></div>
-        <div class="catalog-card"><h3>质量经验</h3><div class="catalog-list" id="quality-list"></div></div>
-      </div>
-    </section>
-
-    <section class="section" id="stores">
-      <div class="section-head"><div><h2>当前数据域</h2><p>这些目录共同构成现在的“资产数据库”。数量与状态均由实时接口读取，不在页面里手工登记。</p></div></div>
-      <div class="store-grid" id="store-grid"></div>
+      </details>
     </section>
 
     <section class="section" id="text-layouts">
-      <div class="section-head"><div><h2>文字排版库</h2><p>Structure Group 只提供实际安全书写 box；基础文字组件组成已登记的组合排版，再由视觉导演从兼容集合中选择。</p></div><span class="pill core" id="text-layout-count"></span></div>
+      <div class="section-head"><div><h2>02 · 文字库</h2><p>Markdown 保存文字与局部层级；统一 Renderer 负责传统流式排版，也允许用少量命名区域模板形成更有设计感的复杂排版。页面直接文字与 Structure 内文字共用同一套能力。</p></div><span class="pill core" id="text-layout-count"></span></div>
       <div class="text-primitive-grid" id="text-primitive-grid"></div>
       <div class="text-layout-grid" id="text-layout-grid"></div>
+    </section>
+
+    <section class="section" id="media-library">
+      <div class="section-head"><div><h2>03 · 图像库</h2><p>未来集中管理图片、背景图、插画、截图和其他 Media 的来源、裁切与安全区域。</p></div><span class="pill pending">尚未建设</span></div>
+      <div class="media-empty"><div><strong>当前为空，保持真实</strong><p>本阶段不把 Tabler 图标或结构中的装饰图形冒充图像资产。等 Media 契约和真实使用需求确认后，再从这里建设。</p></div><div class="media-canvas">Media library placeholder<br>source / fit / crop / safe region</div></div>
+    </section>
+
+    <section class="section" id="skin">
+      <div class="section-head"><div><h2>04 · 排版系统</h2><p>Skin 提供主题身份，Shell 与 Content Frame 提供页面容器，Composition 和 Surface 负责把结构、文字与图像组织成一页。</p></div><span class="pill skin" id="skin-id"></span></div>
+      <div class="layout-grid">
+        <div class="layout-panel"><h3>Skin / Shell / Content Frame</h3><p>直接读取当前 Skin 与 Shell 真源；结构和文字只在合法容器内组合。</p><div class="shell-map-wrap"><div class="shell-map" id="shell-map"></div><div class="shell-map-notes"><strong>容器来源</strong><br>Shell 源代码是唯一真源。绿色区域是 Content Frame，灰色区域由 Skin / Shell 管理。</div></div></div>
+        <div class="layout-panel"><h3>Composition · 页面容器</h3><p>现有确定性页面槽位；未来组合实验台继续复用这些容器，而不是自由画坐标。</p><div class="catalog-list" id="composition-list"></div></div>
+      </div>
+      <div class="subsection"><div class="subsection-head"><div><h3>Surface · 背景、色块与边界</h3><p>Surface 不是第四种内容表达，颜色全部读取当前 Skin。</p></div></div><div class="text-surface-grid" id="text-surface-grid"></div></div>
     </section>
 
     <div class="footer" id="footer-mode"></div>
@@ -801,9 +859,8 @@
     function renderSummary() {
       document.getElementById("generated-at").textContent = (liveMode ? "读取于 " : "生成于 ") + new Date(DATA.generatedAt).toLocaleString("zh-CN", { hour12: false });
       document.getElementById("data-mode").textContent = liveMode ? "实时仓库接口 · 每次刷新重读" : "静态仓库快照 · 不会自动刷新";
-      document.getElementById("hero-mode").textContent = (liveMode ? "实时读取当前仓库" : "当前仓库静态快照") + " · 点击任意 Logic 查看触发与运行详情";
       document.getElementById("footer-mode").innerHTML = liveMode
-        ? 'PPagenT Logic Dashboard · 数据实时来自仓库；PPT 预览按需生成并按源文件时间缓存'
+        ? 'PPA 资产看板 · Structure / Text / Media / Layout · 正式运行与日志请进入 PPA 生产工作台'
         : '当前文件是便携静态快照。双击项目根目录的 <code>PPA看板.exe</code>，才能实时读取仓库并查看 PPT 外观。';
       if (!liveMode) {
         const notice = document.getElementById("mode-notice");
@@ -812,19 +869,6 @@
         document.getElementById("refresh-dashboard").disabled = true;
         document.getElementById("refresh-dashboard").textContent = "静态快照";
       }
-      const migrated = DATA.summary.htmlDesignComponents;
-      const total = DATA.summary.formalLogics;
-      const percent = total ? Math.round(migrated / total * 100) : 0;
-      document.getElementById("migration-value").textContent = migrated + " / " + total;
-      document.getElementById("migration-progress").style.width = percent + "%";
-      document.getElementById("migration-caption").textContent = percent + "% 已有资产专属的实时 HTML 设计组件；通用占位组件不计入迁移完成度。";
-      const metrics = [
-        [DATA.summary.coreAssets, "核心资产"], [DATA.summary.formalLogics, "正式结构 Logic"],
-        [DATA.summary.pendingApproval, "等待确认资产"], [DATA.summary.logicSlots, "逻辑能力槽位"],
-        [DATA.summary.compositions, "页面 Composition"], [DATA.summary.sourceDecks, "原始 PPT 文件"],
-      ];
-      document.getElementById("metric-grid").innerHTML = metrics.map(([value, label]) => '<article class="metric"><div class="value">' + value + '</div><div class="label">' + esc(label) + '</div></article>').join("");
-      document.getElementById("auto-callable-pill").textContent = DATA.summary.autoCallable + " 个核心包可自动发现";
       document.getElementById("html-approval-count").textContent = DATA.summary.pendingHtmlApproval + " 个等待 HTML 确认";
       document.getElementById("native-approval-count").textContent = DATA.summary.pendingNativeApproval + " 个等待 PPT 确认";
       document.getElementById("logic-count").textContent = DATA.summary.logicFilled + " / " + DATA.summary.logicSlots + " 个 Logic 已填充 · " + DATA.summary.formalLogics + " 个 Structure Group";
@@ -869,16 +913,7 @@
     }
 
     function renderCoverage() {
-      const tierNotes = {
-        "基础": "高频通用关系，优先建设，覆盖多数工作型 PPT。",
-        "常用": "明确场景下经常使用，但不是每份稿件都需要。",
-        "补充": "低频或专门场景能力，用于补齐长尾需求。",
-      };
-      const card = coverageCardMarkup;
-      document.getElementById("coverage-grid").innerHTML = ["基础", "常用", "补充"].map((tier) => {
-        const topics = DATA.logics.filter((topic) => topic.tier === tier);
-        return '<section class="coverage-tier"><div class="coverage-tier-head"><h3>' + esc(tier) + '</h3><p>' + esc(tierNotes[tier]) + '</p></div><div class="coverage-tier-grid">' + topics.map(card).join("") + '</div></section>';
-      }).join("");
+      document.getElementById("coverage-grid").innerHTML = DATA.logics.map(coverageCardMarkup).join("");
       activatePreviewImages();
     }
 
@@ -981,6 +1016,9 @@
 
     let selectedTextLayoutId = null;
     let selectedTextPreviewId = "minimum";
+    let selectedExpressionPrototypeId = null;
+    const expressionWorkbenchDrafts = new Map();
+    let expressionRenderTimer = null;
 
     function textLayoutBindingSummary(layout) {
       const contract = layout.bindingContract ?? {};
@@ -1004,11 +1042,12 @@
       const status = layout.status === "approved" ? pill("正式", "core") : pill("候选待审批", "pending");
       const contract = textLayoutBindingSummary(layout);
       const sizeTabs = (layout.previews ?? []).map((item) => '<button class="text-layout-size-button ' + (item.id === selectedTextPreviewId ? 'active' : '') + '" type="button" data-text-preview-select="' + esc(item.id) + '">' + esc(item.label) + '</button>').join('');
-      const previewMarkup = preview ? '<div class="text-layout-preview"><span class="text-layout-preview__label">当前预览 · ' + esc(preview.frame.width) + '×' + esc(preview.frame.height) + '</span><div class="text-layout-preview-frame" style="width:' + esc(preview.frame.width) + 'px;height:' + esc(preview.frame.height) + 'px">' + preview.markup + '</div></div>' : '<span class="muted">暂无预览</span>';
-      detail.innerHTML = '<div class="text-layout-detail__head"><div><h3>' + esc(layout.name) + '</h3><code>' + esc(layout.id) + '</code></div>' + status + '</div>'
+      const previewMarkup = preview ? '<div class="text-layout-preview"><span class="text-layout-preview__label">当前预览 · ' + esc(preview.frame.width) + '×' + esc(preview.frame.height) + ' · ' + esc(preview.surfaceId) + '</span><div class="text-layout-preview-frame" data-text-layout-surface="' + esc(preview.surfaceId) + '" style="width:' + esc(preview.frame.width) + 'px;height:' + esc(preview.frame.height) + 'px">' + preview.markup + '</div></div>' : '<span class="muted">暂无预览</span>';
+      const visualStatus = layout.visualReviewStatus === "approved" ? pill("Markdown 渲染已确认", "core") : pill("Markdown HTML 待审批", "pending");
+      detail.innerHTML = '<div class="text-layout-detail__head"><div><h3>' + esc(layout.name) + '</h3><code>' + esc(layout.id) + '</code></div><div>' + status + visualStatus + '</div></div>'
         + '<p class="text-layout-detail__description">' + esc(layout.description) + '</p>'
         + '<div class="tags">' + layout.compositions.map((item) => pill(item)).join('') + '</div>'
-        + '<div class="text-layout-contract"><div><b>字段契约</b>' + esc(contract.fields) + '<br>' + esc(contract.rule) + '</div><div><b>尺寸规则</b>' + esc(contract.sizing) + '<br>对齐与密度由文字系统统一控制</div></div>'
+        + '<div class="text-layout-contract"><div><b>Markdown 契约</b>' + esc(contract.fields) + '<br>' + esc(contract.rule) + '</div><div><b>尺寸规则</b>' + esc(contract.sizing) + '<br>区域模板只分配 Token，不改写内容</div></div>'
         + '<div class="text-layout-size-tabs" aria-label="预览尺寸">' + sizeTabs + '</div>'
         + '<div class="text-layout-preview-stage">' + previewMarkup + '</div>';
     }
@@ -1016,24 +1055,228 @@
     function renderTextLayouts() {
       const layouts = DATA.textLayouts ?? [];
       const primitives = DATA.textPrimitives ?? [];
+      const surfaces = DATA.textSurfaces ?? [];
       if (!document.getElementById('ppagent-text-layout-runtime-css')) {
         const style = document.createElement('style');
         style.id = 'ppagent-text-layout-runtime-css';
         style.textContent = DATA.textLayoutCss ?? '';
         document.head.appendChild(style);
       }
-      document.getElementById("text-layout-count").textContent = primitives.length + " 个基础组件 · " + layouts.length + " 种组合排版";
-      document.getElementById("text-primitive-grid").innerHTML = primitives.map((primitive) => '<div class="text-primitive-chip"><b>' + esc(primitive.name) + '</b><code>' + esc(primitive.id) + '</code> · ' + esc(primitive.defaultFontSizePt) + ' pt</div>').join('');
+      document.getElementById("text-layout-count").textContent = primitives.length + " 种受控语法 · " + layouts.length + " 种渲染模式";
+      document.getElementById("text-surface-grid").innerHTML = surfaces.map((surface) => '<div class="text-surface-sample text-surface-sample--' + esc(surface.id) + '"><b>' + esc(surface.name) + '</b><code>' + esc(surface.id) + ' · Skin</code></div>').join('');
+      document.getElementById("text-primitive-grid").innerHTML = primitives.map((primitive) => '<div class="text-primitive-chip"><b>' + esc(primitive.name) + '</b><code>' + esc(primitive.syntax) + '</code> · Skin ' + esc(primitive.defaultFontSizePt) + ' pt / 下限 ' + esc(primitive.candidateMinimumFontSizePt) + ' pt</div>').join('');
       if (!selectedTextLayoutId || !layouts.some((layout) => layout.id === selectedTextLayoutId)) {
         selectedTextLayoutId = layouts.find((layout) => layout.status === "approved")?.id ?? layouts[0]?.id ?? null;
       }
-      const groups = [
-        ["正式", layouts.filter((layout) => layout.status === "approved")],
-        ["候选", layouts.filter((layout) => layout.status !== "approved")],
-      ];
+      const groups = [["Markdown Renderer", layouts]];
       const catalog = groups.map(([label, items]) => '<h3>' + label + '</h3>' + items.map((layout) => '<button type="button" class="text-layout-choice ' + (layout.id === selectedTextLayoutId ? 'active' : '') + '" data-text-layout-select="' + esc(layout.id) + '"><strong>' + esc(layout.name) + '</strong><code>' + esc(layout.id) + '</code></button>').join('')).join('');
       document.getElementById("text-layout-grid").innerHTML = '<nav class="text-layout-catalog" aria-label="文字排版目录">' + catalog + '</nav><article class="text-layout-detail" id="text-layout-detail"></article>';
       renderTextLayoutDetail();
+    }
+
+    function cloneWorkbenchValue(value) {
+      return JSON.parse(JSON.stringify(value));
+    }
+
+    function flattenWorkbenchExpressions(expressions, depth = 0, result = []) {
+      for (const expression of expressions ?? []) {
+        const structureDepth = depth + (expression.type === "structure" ? 1 : 0);
+        result.push({ expression, structureDepth });
+        flattenWorkbenchExpressions(expression.children, structureDepth, result);
+      }
+      return result;
+    }
+
+    function expressionDraft(prototype) {
+      if (!expressionWorkbenchDrafts.has(prototype.id)) {
+        expressionWorkbenchDrafts.set(prototype.id, {
+          pageContent: cloneWorkbenchValue(prototype.pageContent),
+          plan: cloneWorkbenchValue(prototype.plan),
+          markup: prototype.markup,
+          validation: cloneWorkbenchValue(prototype.validation),
+        });
+      }
+      return expressionWorkbenchDrafts.get(prototype.id);
+    }
+
+    function workbenchDisabled() {
+      return liveMode ? "" : " disabled";
+    }
+
+    function renderContentDirectorFields(draft) {
+      const blocks = draft.pageContent.contentBlocks.map((block) => {
+        const logicId = block.logicIntent?.logicId ?? "无强制 Logic";
+        const items = block.items.map((item) => '<div class="content-source-item"><code>blocks.' + esc(block.id) + '.items.' + esc(item.id) + (item.required ? ' · 必须保留' : '') + '</code><pre class="content-source-markdown">' + esc(item.markdown) + '</pre></div>').join('');
+        return '<section class="content-source-section"><strong>' + esc(block.id) + ' · ' + esc(block.role) + '</strong><small>块内 Logic：' + esc(logicId) + ' · 引用键 blocks.' + esc(block.id) + '</small>'
+          + (block.markdown ? '<pre class="content-source-markdown">' + esc(block.markdown) + '</pre>' : '') + items + '</section>';
+      }).join('');
+      return '<div class="content-source-page"><section class="content-source-section"><strong>' + esc(draft.pageContent.title) + '</strong><small>coreMessage · 内容导演已经完成分页与内容整理</small><pre class="content-source-markdown" data-content-core-markdown>' + esc(draft.pageContent.coreMessage.markdown) + '</pre></section>' + blocks + '</div>';
+    }
+
+    function workbenchContentRefs(pageContent, expressionType) {
+      const refs = [{ value: 'coreMessage', label: 'coreMessage · 页面核心信息', kind: 'core' }];
+      for (const block of pageContent.contentBlocks ?? []) {
+        refs.push({ value: 'blocks.' + block.id, label: 'blocks.' + block.id + ' · ' + block.role, kind: 'block' });
+        for (const item of block.items ?? []) refs.push({ value: 'blocks.' + block.id + '.items.' + item.id, label: block.id + ' / ' + item.id, kind: 'item' });
+      }
+      return expressionType === 'structure' ? refs.filter((item) => item.kind === 'block') : refs;
+    }
+
+    function renderVisualDirectorFields(draft) {
+      const disabled = workbenchDisabled();
+      const nodes = flattenWorkbenchExpressions(draft.plan.expressions).map(({ expression, structureDepth }) => {
+        const currentBinding = expression.contentBindings?.[0]?.contentRef ?? '';
+        const bindingControl = currentBinding
+          ? '<label class="director-field"><span>填入内容 <b>contentRef</b></span><select data-expression-binding="' + esc(expression.expressionId) + '"' + disabled + '>' + workbenchContentRefs(draft.pageContent, expression.type).map((item) => '<option value="' + esc(item.value) + '"' + (item.value === currentBinding ? ' selected' : '') + '>' + esc(item.label) + '</option>').join('') + '</select></label>'
+          : '<div class="expression-node-meta">此节点只建立父级可填区域，不直接消费内容。</div>';
+        let controls = '';
+        if (expression.type === 'text') {
+          const renderer = expression.text?.rendererId ?? 'markdown-flow';
+          controls = '<label class="director-field"><span>文字资产 <b>Renderer</b></span><select data-expression-renderer="' + esc(expression.expressionId) + '"' + disabled + '><option value="markdown-flow"' + (renderer === 'markdown-flow' ? ' selected' : '') + '>markdown-flow</option><option value="markdown-zoned"' + (renderer === 'markdown-zoned' ? ' selected' : '') + '>markdown-zoned</option></select></label>';
+        } else if (expression.type === 'structure') {
+          controls = '<div class="expression-node-meta">结构资产：<code>' + esc(expression.structure?.structureGroupId ?? '—') + '</code><br>承载 Logic：<code>' + esc(expression.structure?.logicId ?? '—') + '</code><br>容量／State：<code>' + esc(expression.structure?.stateHint ?? '由程序求解') + '</code></div>';
+        }
+        return '<div class="expression-node"><div class="expression-node-title"><strong>' + esc(expression.expressionId) + '</strong><code>' + esc(expression.type) + (expression.type === 'structure' ? ' · depth ' + structureDepth : '') + '</code></div><div class="expression-node-meta">页面／父资产可填区域：<code>' + esc(expression.regionKey) + '</code></div>' + bindingControl + controls + '</div>';
+      }).join('');
+      return '<section class="director-form"><h5>视觉导演表达表</h5><p>依据左侧逐页内容稿，选择页面容器、表达资产，并把内容引用填入资产允许的区域。程序负责 State、坐标、字号与容量门禁。</p>'
+        + '<div class="director-block"><div class="director-block-head"><strong>Composition</strong><code>' + esc(draft.plan.compositionId) + '</code></div><div class="expression-node-meta">当前两个原型各自固定一个可用整页容器，避免把未验证组合冒充能力。</div></div>'
+        + nodes
+        + '<details class="director-block"><summary>高级 · 视觉导演输出 JSON</summary><label class="director-field"><span>PageExpressionPlan 0.1 <b>可编辑</b></span><textarea style="min-height:240px" data-expression-plan-json' + disabled + '>' + esc(JSON.stringify(draft.plan, null, 2)) + '</textarea></label><button type="button" data-expression-plan-apply' + disabled + '>应用这份表达方案</button></details></section>';
+    }
+
+    function inspectExpressionPreview() {
+      const root = document.querySelector('#composition-lab-canvas .ppagent-expression-page');
+      if (!root) return { issues: ['preview-missing'], minimumFontSizePt: null };
+      const rootBox = root.getBoundingClientRect();
+      const issues = [];
+      let minimum = Infinity;
+      const textNodes = [...root.querySelectorAll('[data-ppt-kind="text"],[data-ppt-kind="shape-text"]')]
+        .filter((node) => !node.querySelector('[data-ppt-kind="text"],[data-ppt-kind="shape-text"]'));
+      for (const node of textNodes) {
+        const box = node.getBoundingClientRect();
+        const fontSizePt = Number.parseFloat(getComputedStyle(node).fontSize) * .75;
+        minimum = Math.min(minimum, fontSizePt);
+        if (fontSizePt < 14.95) issues.push('字号低于15pt');
+        if (box.left < rootBox.left - 1 || box.top < rootBox.top - 1 || box.right > rootBox.right + 1 || box.bottom > rootBox.bottom + 1) issues.push('文字越出Content Frame');
+        if (node.scrollWidth > node.clientWidth + 2 || node.scrollHeight > node.clientHeight + 3) issues.push('文字裁切');
+      }
+      for (const node of root.querySelectorAll('[data-expression-id]')) {
+        const box = node.getBoundingClientRect();
+        if (box.left < rootBox.left - 1 || box.top < rootBox.top - 1 || box.right > rootBox.right + 1 || box.bottom > rootBox.bottom + 1) issues.push('表达越界');
+        if (node.scrollWidth > node.clientWidth + 2 || node.scrollHeight > node.clientHeight + 3) issues.push('表达溢出');
+      }
+      return { issues: [...new Set(issues)], minimumFontSizePt: Number.isFinite(minimum) ? Math.round(minimum * 10) / 10 : null };
+    }
+
+    function updateExpressionContract(draft, browserValidation = null) {
+      const target = document.getElementById('expression-prototype-contract');
+      if (!target) return;
+      const geometry = browserValidation ?? { issues: [], minimumFontSizePt: null };
+      target.innerHTML = pill('Composition · ' + draft.plan.compositionId)
+        + pill('表达节点 ' + draft.validation.expressionCount)
+        + pill('Structure 深度 ' + draft.validation.maximumStructureDepth + ' / 2')
+        + pill('必需内容恰好覆盖', 'core')
+        + pill(geometry.minimumFontSizePt === null ? '字号待读取' : '最小字号 ' + geometry.minimumFontSizePt + 'pt', geometry.issues.length ? 'pending' : 'core')
+        + pill(geometry.issues.length ? 'HTML 门禁：' + geometry.issues.join('、') : 'HTML 几何检查通过', geometry.issues.length ? 'pending' : 'core')
+        + pill('Native 未生成', 'pending');
+    }
+
+    async function refreshExpressionPreview() {
+      if (!liveMode) return;
+      const prototype = (DATA.expressionPrototypes ?? []).find((item) => item.id === selectedExpressionPrototypeId);
+      if (!prototype) return;
+      const draft = expressionDraft(prototype);
+      const status = document.getElementById('expression-preview-status');
+      if (status) { status.className = 'expression-preview-status'; status.textContent = '正在按内容稿与视觉方案重新求解…'; }
+      try {
+        const response = await fetch('/api/page-expression/render', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ pageContent: draft.pageContent, plan: draft.plan }),
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.message || '表达方案无效');
+        draft.markup = result.markup;
+        draft.validation = result.validation;
+        const frame = document.getElementById('expression-prototype-frame');
+        if (frame) frame.innerHTML = result.markup;
+        await document.fonts.ready;
+        const geometry = inspectExpressionPreview();
+        updateExpressionContract(draft, geometry);
+        if (status) {
+          status.className = 'expression-preview-status ' + (geometry.issues.length ? 'invalid' : 'valid');
+          status.textContent = geometry.issues.length ? '内容覆盖有效；HTML仍有：' + geometry.issues.join('、') : '内容稿与视觉方案有效 · HTML 门禁通过';
+        }
+      } catch (error) {
+        if (status) { status.className = 'expression-preview-status invalid'; status.textContent = error.message; }
+      }
+    }
+
+    function scheduleExpressionPreview() {
+      clearTimeout(expressionRenderTimer);
+      expressionRenderTimer = setTimeout(refreshExpressionPreview, 260);
+    }
+
+    function renderExpressionPrototypes() {
+      const prototypes = DATA.expressionPrototypes ?? [];
+      const target = document.getElementById("composition-lab-canvas");
+      if (!target) return;
+      if (!document.getElementById("ppagent-page-expression-runtime-css")) {
+        const style = document.createElement("style");
+        style.id = "ppagent-page-expression-runtime-css";
+        style.textContent = DATA.pageExpressionCss ?? "";
+        document.head.appendChild(style);
+      }
+      if (!prototypes.length) {
+        target.innerHTML = "<div class=\"empty\">当前没有2+3组合原型。</div>";
+        return;
+      }
+      if (!selectedExpressionPrototypeId || !prototypes.some((item) => item.id === selectedExpressionPrototypeId)) selectedExpressionPrototypeId = prototypes[0].id;
+      const prototype = prototypes.find((item) => item.id === selectedExpressionPrototypeId);
+      const draft = expressionDraft(prototype);
+      const tabs = prototypes.map((item) => '<button type="button" class="expression-prototype-tab ' + (item.id === prototype.id ? 'active' : '') + '" data-expression-prototype-select="' + esc(item.id) + '">' + esc(item.name) + '</button>').join('');
+      const modeNote = liveMode ? '视觉绑定改动会交给本地确定性渲染器；不调用模型、不写仓库。' : '这是静态快照。双击 PPA看板.exe 后才可填写视觉方案并实时验证。';
+      target.innerHTML = '<div style="padding:14px"><div class="expression-prototype-tabs">' + tabs + '</div>'
+        + '<div class="expression-prototype-meta"><div><h4>' + esc(prototype.name) + '</h4><p>' + esc(prototype.description) + '</p></div>' + pill('候选 · 不进入正式生成', 'pending') + '</div>'
+        + '<div class="expression-workbench"><aside class="expression-workbench-source"><div class="expression-form-head"><strong>输入 · 内容导演逐页稿</strong><span>只读素材</span></div>' + renderContentDirectorFields(draft) + '</aside>'
+        + '<aside class="expression-workbench-form"><div class="expression-form-head"><strong>人工代替视觉导演</strong><span>填写资产与内容绑定</span></div>' + renderVisualDirectorFields(draft)
+        + '<div class="expression-form-actions"><button type="button" class="primary" data-expression-render-now' + workbenchDisabled() + '>立即预览</button><button type="button" data-expression-copy>复制输入与视觉方案</button><button type="button" data-expression-reset' + workbenchDisabled() + '>恢复视觉样例</button></div></aside>'
+        + '<section class="expression-workbench-preview"><div class="expression-preview-toolbar"><strong>结果 · HTML 1170 × 492</strong><span class="expression-preview-status" id="expression-preview-status">' + esc(modeNote) + '</span></div><div class="expression-prototype-stage"><div class="expression-prototype-frame" id="expression-prototype-frame">' + draft.markup + '</div></div><div class="expression-prototype-contract" id="expression-prototype-contract"></div><div class="expression-schema-note"><strong>验证对象：</strong>左侧 <code>PageContentBlocks</code> 是内容导演交来的素材，不在这里重写；中间手工形成 <code>PageExpressionPlan</code>，验证现有 Composition、Structure、Text、Media 及其可填区域能否把这页内容完整承接。</div></section></div></div>';
+      document.fonts.ready.then(() => updateExpressionContract(draft, inspectExpressionPreview()));
+    }
+
+    function selectedWorkbenchDraft() {
+      const prototype = (DATA.expressionPrototypes ?? []).find((item) => item.id === selectedExpressionPrototypeId);
+      return prototype ? expressionDraft(prototype) : null;
+    }
+
+    function findWorkbenchExpression(expressions, expressionId) {
+      for (const expression of expressions ?? []) {
+        if (expression.expressionId === expressionId) return expression;
+        const nested = findWorkbenchExpression(expression.children, expressionId);
+        if (nested) return nested;
+      }
+      return null;
+    }
+
+    function syncWorkbenchPlanJson(draft) {
+      const editor = document.querySelector('[data-expression-plan-json]');
+      if (editor && document.activeElement !== editor) editor.value = JSON.stringify(draft.plan, null, 2);
+    }
+
+    function applyWorkbenchField(target) {
+      const draft = selectedWorkbenchDraft();
+      if (!draft || target.disabled) return false;
+      if (target.matches('[data-expression-binding]')) {
+        const expression = findWorkbenchExpression(draft.plan.expressions, target.dataset.expressionBinding);
+        if (expression?.contentBindings?.[0]) expression.contentBindings[0].contentRef = target.value;
+      } else if (target.matches('[data-expression-renderer]')) {
+        const expression = findWorkbenchExpression(draft.plan.expressions, target.dataset.expressionRenderer);
+        if (expression?.text) expression.text.rendererId = target.value;
+      } else return false;
+      syncWorkbenchPlanJson(draft);
+      scheduleExpressionPreview();
+      return true;
     }
 
     function closeDrawer() {
@@ -1058,7 +1301,7 @@
       document.getElementById("category-filter").innerHTML += categories.map((category) => '<option value="' + esc(category) + '">' + esc(category) + '</option>').join("");
     }
 
-    document.addEventListener("click", (event) => {
+    document.addEventListener("click", async (event) => {
       const textLayoutTarget = event.target.closest("[data-text-layout-select]");
       if (textLayoutTarget) {
         selectedTextLayoutId = textLayoutTarget.dataset.textLayoutSelect;
@@ -1176,6 +1419,7 @@
         document.getElementById("category-filter").value = "all";
         document.getElementById("renderer-filter").value = "all";
         renderTable();
+        document.getElementById("assets").open = true;
         document.getElementById("assets").scrollIntoView({ behavior: "smooth" });
       }
       if (event.target.id === "drawer-backdrop" || event.target.id === "drawer-close") closeDrawer();
