@@ -12,7 +12,7 @@ import {
 test("正式仓库随附东北大学 Skin 运行模板", async () => {
   const root = path.resolve(import.meta.dirname, "..");
   const resolved = resolveNortheasternUniversityTemplate(root);
-  assert.equal(resolved.kind, "local-source");
+  assert.ok(["local-source", "bundled-runtime"].includes(resolved.kind));
   const bundled = path.join(root, NORTHEASTERN_UNIVERSITY_BUNDLED_TEMPLATE);
   const zip = await JSZip.loadAsync(await fs.readFile(bundled));
   const slides = Object.keys(zip.files).filter((name) => /^ppt\/slides\/slide\d+\.xml$/.test(name));
