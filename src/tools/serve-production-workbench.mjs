@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import { normalizeManuscript, supportedManuscriptExtensions } from "../workbench/manuscript-normalizer.mjs";
 import { createTraceRecorder, readTraceEvents } from "../workbench/trace-recorder.mjs";
 import { createVisualDirectorCheckpoint, withVisualDirectorCheckpoint } from "../workbench/visual-director-checkpoint.mjs";
+import { readJsonState, writeJsonState } from "../workbench/json-state-file.mjs";
 import { candidateSetsForVisualDirector } from "../agent/model-director-provider.mjs";
 
 function option(name, fallback) {
@@ -62,7 +63,7 @@ async function readBody(request) {
 }
 
 async function writeSummary(targetRunDir, summary) {
-  await fs.writeFile(path.join(targetRunDir, "summary.json"), `${JSON.stringify(summary, null, 2)}\n`, "utf8");
+  await writeJsonState(path.join(targetRunDir, "summary.json"), summary);
   await writeCurrentRunPointer(targetRunDir, summary);
 }
 
@@ -83,12 +84,11 @@ async function writeCurrentRunPointer(targetRunDir, summary) {
     deliveryDir: `${relativeRunDir}/delivery`,
     updatedAt: new Date().toISOString(),
   };
-  await fs.mkdir(workbenchRoot, { recursive: true });
-  await fs.writeFile(currentRunPath, `${JSON.stringify(pointer, null, 2)}\n`, "utf8");
+  await writeJsonState(currentRunPath, pointer);
 }
 
 async function readSummary(targetRunDir) {
-  return JSON.parse(await fs.readFile(path.join(targetRunDir, "summary.json"), "utf8"));
+  return readJsonState(path.join(targetRunDir, "summary.json"));
 }
 
 async function listAllRuns() {
@@ -426,7 +426,7 @@ const server = http.createServer(async (request, response) => {
     }
     if (request.method === "GET" && url.pathname === "/api/workbench/config") return sendJson(response, 200, await publicConfig());
     if (request.method === "GET" && url.pathname === "/api/workbench/current") {
-      return send(response, 200, await fs.readFile(currentRunPath), "application/json; charset=utf-8", { "cache-control": "no-store" });
+      return sendJson(response, 200, await readJsonState(currentRunPath));
     }
     if (request.method === "GET" && url.pathname === "/api/workbench/runs") {
       const [runs, allRuns] = await Promise.all([listRuns(), listAllRuns()]);
