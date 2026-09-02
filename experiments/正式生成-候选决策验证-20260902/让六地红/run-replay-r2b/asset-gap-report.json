@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.0",
+  "status": "fallback-used",
+  "fallbackPageCount": 1,
+  "fallbackPages": [
+    {
+      "pageId": "p2",
+      "title": "从“三高三低”到深耕辽宁",
+      "logicId": "comparison",
+      "baseRelation": "comparison",
+      "itemCount": 2,
+      "reason": "当前核心资产库没有语义与容量均兼容的 Structure Group",
+      "fallbackAssetId": "northeastern-university-body-001"
+    }
+  ],
+  "recommendedStructureSupplements": [
+    {
+      "logicId": "comparison",
+      "logicLabel": "对比与选择",
+      "baseRelation": "comparison",
+      "itemCounts": [
+        2
+      ],
+      "affectedPageIds": [
+        "p2"
+      ],
+      "assessment": "necessary-existing-logic-supplement",
+      "recommendation": "为“对比与选择”补充可承载 2 项标题与正文的通用 Structure Group",
+      "reason": "原稿关系已明确属于该 Logic，但当前核心资产没有语义与容量均兼容的表达方式"
+    }
+  ]
+}

@@ -1,7 +1,16 @@
 import { canonicalTextLayoutId } from "../visual-runtime/text-layout-library.mjs";
+import { candidateReadiness, normalizeDerivationPolicy } from "./visual-resolution.mjs";
 
 function candidateId(candidate) {
   return [candidate.familyId, candidate.variantId, candidate.silhouette].join("::");
+}
+
+function mediaSourceItemIds(page, candidate) {
+  if (candidate.mediaContract?.mode !== "semantic-icon") return [];
+  if (candidate.mediaContract.source === "structuredData.inputs") {
+    return (page.structuredData?.inputs ?? []).map((item) => item.id);
+  }
+  return page.items.map((item) => item.id);
 }
 
 export function compactVisualSkillContext(pageContents, pageIntents, candidateSets) {
@@ -11,17 +20,30 @@ export function compactVisualSkillContext(pageContents, pageIntents, candidateSe
     title: page.title,
     relation: pageIntents[index].baseRelation,
     purposeKey: pageIntents[index].purposeKey,
+    selectionMode: candidateSets[index].selectionMode ?? "visual-selectable",
+    ...(candidateSets[index].lockedStructureGroupId
+      ? { lockedStructureGroupId: candidateSets[index].lockedStructureGroupId }
+      : {}),
     items: page.items.map((item) => ({
       id: item.id, title: item.title, body: item.body, pointCount: item.points?.length ?? 0,
     })),
-    candidates: candidateSets[index].candidates.map((candidate) => ({
+    candidates: candidateSets[index].candidates.map((candidate) => {
+      const readiness = candidateReadiness(candidate);
+      const derivation = normalizeDerivationPolicy(
+        candidate.derivationPolicy ?? candidate.contentContract?.derivationPolicy,
+      );
+      return {
       candidateId: candidateId(candidate),
       logicId: candidate.logicId,
       structureGroupId: candidate.structureGroupId,
       itemRange: candidate.itemCount,
-      contentReadiness: candidate.contentReadiness ?? "ready",
+      readiness,
+      reasons: candidate.reasons ?? [],
+      selectionMode: candidate.selectionMode ?? candidateSets[index].selectionMode ?? "visual-selectable",
+      ...(readiness === "derivable" && derivation.valid ? { derivationPolicy: derivation.policy } : {}),
       mediaMode: candidate.mediaContract?.mode ?? "no-image",
       iconsRequiredPerItem: Boolean(candidate.mediaContract?.requiredPerComponentItem),
+      iconSourceItemIds: mediaSourceItemIds(page, candidate),
       fallbackBody: Boolean(candidate.fallbackBody),
       textRegions: (candidate.textRegions ?? []).map((region) => ({
         regionKey: region.regionKey,
@@ -30,22 +52,75 @@ export function compactVisualSkillContext(pageContents, pageIntents, candidateSe
         compatibleLayoutIds: region.compatibleLayoutIds,
         frameRange: region.frameRange,
       })),
-    })),
+      };
+    }),
   }));
 }
 
 export function visualSkillRoutingSchema(pageContents, candidateSets) {
-  const candidateIds = [...new Set(candidateSets.flatMap((set) => (
-    set.candidates.map((candidate) => candidateId(candidate))
-  )))];
-  const pageIds = pageContents.map((page) => page.pageId);
-  const itemIds = [...new Set(pageContents.flatMap((page) => page.items.map((item) => item.id)))];
-  const regionKeys = [...new Set(candidateSets.flatMap((set) => set.candidates.flatMap((candidate) => (
-    (candidate.textRegions ?? []).map((region) => region.regionKey)
-  ))))];
-  const textLayoutIds = [...new Set(candidateSets.flatMap((set) => set.candidates.flatMap((candidate) => (
-    (candidate.textRegions ?? []).flatMap((region) => region.compatibleLayoutIds ?? [])
-  ))))];
+  const pageSchemas = pageContents.map((page, index) => {
+    const set = candidateSets[index];
+    const lockedCandidates = set.lockedStructureGroupId
+      ? set.candidates.filter((candidate) => candidate.structureGroupId === set.lockedStructureGroupId)
+      : set.candidates;
+    const candidateIds = [...new Set(lockedCandidates.map((candidate) => candidateId(candidate)))];
+    const itemIds = [...new Set(lockedCandidates.flatMap((candidate) => (
+      mediaSourceItemIds(page, candidate)
+    )))];
+    const regionKeys = [...new Set(lockedCandidates.flatMap((candidate) => (
+      (candidate.textRegions ?? []).map((region) => region.regionKey)
+    )))];
+    const textLayoutIds = [...new Set(lockedCandidates.flatMap((candidate) => (
+      (candidate.textRegions ?? []).flatMap((region) => region.compatibleLayoutIds ?? [])
+    )))];
+    return {
+      type: "object",
+      additionalProperties: false,
+      required: ["pageId", "candidateId", "centerLabel"],
+      properties: {
+        pageId: { const: page.pageId },
+        candidateId: candidateIds.length === 1
+          ? { const: candidateIds[0] }
+          : candidateIds.length > 1
+            ? { type: "string", enum: candidateIds }
+            : { const: "__no-legal-candidate__" },
+        centerLabel: { type: "string", minLength: 2, maxLength: 8 },
+        iconQueries: {
+          type: "array",
+          maxItems: 12,
+          items: {
+            type: "object",
+            additionalProperties: false,
+            required: ["sourceItemId", "query"],
+            properties: {
+              sourceItemId: itemIds.length
+                ? { type: "string", enum: itemIds }
+                : { const: "__no-source-item__" },
+              query: { type: "string", minLength: 1, maxLength: 40 },
+            },
+          },
+        },
+        textLayoutChoices: {
+          type: "array",
+          maxItems: 16,
+          items: {
+            type: "object",
+            additionalProperties: false,
+            required: ["regionKey", "layoutId"],
+            properties: {
+              regionKey: regionKeys.length
+                ? { type: "string", enum: regionKeys }
+                : { type: "string", minLength: 1 },
+              layoutId: textLayoutIds.length
+                ? { type: "string", enum: textLayoutIds }
+                : { type: "string", minLength: 1 },
+            },
+          },
+        },
+        reason: { type: "string", minLength: 1, maxLength: 120 },
+      },
+    };
+  });
   return {
     name: "ppagent_visual_skill_routing",
     schema: {
@@ -57,53 +132,7 @@ export function visualSkillRoutingSchema(pageContents, candidateSets) {
           type: "array",
           minItems: pageContents.length,
           maxItems: pageContents.length,
-          items: {
-            type: "object",
-            additionalProperties: false,
-            required: ["pageId", "candidateId", "centerLabel"],
-            properties: {
-              pageId: { type: "string", enum: pageIds },
-              candidateId: { type: "string", enum: candidateIds },
-              centerLabel: { type: "string", minLength: 2, maxLength: 8 },
-              iconQueries: {
-                type: "array",
-                maxItems: 12,
-                items: {
-                  type: "object",
-                  additionalProperties: false,
-                  required: ["sourceItemId", "query"],
-                  properties: {
-                    sourceItemId: { type: "string", enum: itemIds },
-                    query: { type: "string", minLength: 1, maxLength: 40 },
-                  },
-                },
-              },
-              textLayoutChoices: {
-                type: "array",
-                maxItems: 16,
-                items: {
-                  type: "object",
-                  additionalProperties: false,
-                  required: ["regionKey", "layoutId"],
-                  properties: {
-                    regionKey: regionKeys.length
-                      ? { type: "string", enum: regionKeys }
-                      : { type: "string", minLength: 1 },
-                    layoutId: textLayoutIds.length
-                      ? { type: "string", enum: textLayoutIds }
-                      : { type: "string", minLength: 1 },
-                  },
-                },
-              },
-              refinementItemIds: {
-                type: "array",
-                maxItems: 6,
-                uniqueItems: true,
-                items: { type: "string", enum: itemIds },
-              },
-              reason: { type: "string", minLength: 1, maxLength: 120 },
-            },
-          },
+          items: { anyOf: pageSchemas },
         },
       },
     },
@@ -143,11 +172,14 @@ function distributeTextSlots(page, composition) {
   if (slots.length === 1) {
     return [{ slotId: slots[0].id, sourceItemIds: page.items.map((item) => item.id), contentMode: "full" }];
   }
-  const groups = Array.from({ length: slots.length }, () => []);
-  page.items.forEach((item, index) => {
-    const groupIndex = Math.min(slots.length - 1, Math.floor(index * slots.length / page.items.length));
-    groups[groupIndex].push(item.id);
-  });
+  // Editorial multi-slot layouts use the early regions as lead/support slots.
+  // Keep one source item in each of them and let the final body region carry
+  // the remaining items; an even split can illegally place two items in lead.
+  const groups = slots.map((_, index) => (
+    index < slots.length - 1
+      ? [page.items[index]?.id].filter(Boolean)
+      : page.items.slice(index).map((item) => item.id)
+  ));
   return slots.flatMap((slot, index) => (
     groups[index].length
       ? [{ slotId: slot.id, sourceItemIds: groups[index], contentMode: "full" }]
@@ -179,12 +211,6 @@ function routingError(message, details = {}) {
   return error;
 }
 
-function mediaBurden(candidate) {
-  const mode = candidate.mediaContract?.mode ?? "no-image";
-  if (mode === "no-image") return 0;
-  return candidate.mediaContract?.requiredPerComponentItem ? 2 : 1;
-}
-
 export function expandVisualSkillRouting(routing, input) {
   const byPage = new Map();
   for (const selection of routing?.selections ?? []) {
@@ -194,41 +220,55 @@ export function expandVisualSkillRouting(routing, input) {
   const visualPages = [];
   const compositionPages = [];
   const semanticRefinementRequests = [];
+  const routingDiagnostics = [];
   const structureUsage = new Map();
 
   input.pageContents.forEach((page, index) => {
     const intent = input.pageIntents[index];
     const selection = byPage.get(page.pageId);
     if (!selection) throw routingError("视觉路由遗漏页面", { pageId: page.pageId });
-    const selectedCandidate = input.candidateSets[index].candidates.find((item) => (
+    const candidateSet = input.candidateSets[index];
+    const requestedCandidate = candidateSet.candidates.find((item) => (
       candidateId(item) === selection.candidateId
     ));
-    if (!selectedCandidate) throw routingError("视觉路由选择了该页不存在的 Structure Group", {
+    const lockedStructureGroupId = candidateSet.lockedStructureGroupId;
+    const lockedCandidates = lockedStructureGroupId
+      ? candidateSet.candidates.filter((item) => item.structureGroupId === lockedStructureGroupId)
+      : [];
+    const fallbackLockedCandidates = candidateSet.selectionMode === "fallback-locked"
+      ? candidateSet.candidates.filter((item) => candidateReadiness(item, {
+        assetGap: true,
+      }) === "fallback")
+      : [];
+    if (lockedStructureGroupId && !lockedCandidates.length) {
+      throw routingError("程序锁定的 Structure Group 没有可用候选", {
+        pageId: page.pageId,
+        lockedStructureGroupId,
+      });
+    }
+    const candidate = fallbackLockedCandidates.length
+      ? (requestedCandidate && fallbackLockedCandidates.includes(requestedCandidate)
+        ? requestedCandidate
+        : fallbackLockedCandidates[0])
+      : lockedStructureGroupId
+      ? (requestedCandidate?.structureGroupId === lockedStructureGroupId
+        ? requestedCandidate
+        : lockedCandidates[0])
+      : requestedCandidate;
+    if (!candidate) throw routingError("视觉路由选择了该页不存在的 Structure Group", {
       pageId: page.pageId, candidateId: selection.candidateId,
     });
-    const validItemIds = new Set(page.items.map((item) => item.id));
-    const refinementItemIds = [...new Set(selection.refinementItemIds ?? [])]
-      .filter((itemId) => validItemIds.has(itemId));
-    const readyCoreCandidates = input.candidateSets[index].candidates.filter((item) => (
-      !item.fallbackBody && (item.contentReadiness ?? "ready") === "ready"
-    ));
-    let candidate = readyCoreCandidates.length === 1 ? readyCoreCandidates[0] : selectedCandidate;
-    let diversityAdjusted = false;
-    if (!candidate.fallbackBody && readyCoreCandidates.length > 1) {
-      const selectedUses = structureUsage.get(candidate.assetId) ?? 0;
-      const alternatives = readyCoreCandidates
-        .filter((item) => item.assetId !== candidate.assetId)
-        .filter((item) => mediaBurden(item) <= mediaBurden(candidate))
-        .sort((left, right) => (
-          (structureUsage.get(left.assetId) ?? 0) - (structureUsage.get(right.assetId) ?? 0)
-          || left.assetId.localeCompare(right.assetId)
-        ));
-      const alternative = alternatives[0];
-      if (alternative && (structureUsage.get(alternative.assetId) ?? 0) < selectedUses) {
-        candidate = alternative;
-        diversityAdjusted = true;
-      }
+    if ((lockedStructureGroupId || fallbackLockedCandidates.length) && candidateId(candidate) !== selection.candidateId) {
+      routingDiagnostics.push({
+        pageId: page.pageId,
+        ...(lockedStructureGroupId ? { lockedStructureGroupId } : { selectionMode: "fallback-locked" }),
+        ignoredRequestedCandidateId: selection.candidateId,
+        appliedCandidateId: candidateId(candidate),
+      });
     }
+    const validItemIds = new Set(mediaSourceItemIds(page, candidate));
+    const previousUses = structureUsage.get(candidate.assetId) ?? 0;
+    const hasAlternativeStructure = new Set(candidateSet.candidates.map((item) => item.structureGroupId)).size > 1;
     if (!candidate.fallbackBody) {
       structureUsage.set(candidate.assetId, (structureUsage.get(candidate.assetId) ?? 0) + 1);
     }
@@ -243,11 +283,14 @@ export function expandVisualSkillRouting(routing, input) {
       silhouette: candidate.silhouette,
       adaptationStatus: candidate.adaptationStatus,
       ...(candidate.mediaContract?.mode === "semantic-icon" ? { iconQueries } : {}),
-      reason: diversityAdjusted
-        ? "所选结构已在本稿使用，程序改用同页合法且使用次数更少的 Structure Group"
-        : candidate === selectedCandidate
-          ? (selection.reason ?? "视觉导演选择该页语义与容量均适配的 Structure Group")
-          : "程序确认该页只有一个语义、数量与容量均适配的核心 Structure Group，直接调用",
+      reason: [
+        selection.reason ?? (lockedStructureGroupId
+          ? "程序锁定唯一合法 Structure Group，视觉导演完成展示适配"
+          : "视觉导演选择该页语义与容量均适配的 Structure Group"),
+        previousUses > 0 && hasAlternativeStructure
+          ? `该 Structure Group 此前已使用 ${previousUses} 次，保留视觉导演选择并记录重复`
+          : "",
+      ].filter(Boolean).join("；"),
     });
     const requiresComponent = Boolean(composition.requiresComponent);
     const bindings = requiresComponent ? buildComponentBindings(candidate, page) : undefined;
@@ -271,19 +314,12 @@ export function expandVisualSkillRouting(routing, input) {
           sourceFragment: page.title,
         }],
       } : {}),
-      reason: requiresComponent
-        ? "Structure Group 承担完整页面内容，字段由正式 Slot Contract 确定性绑定"
-        : "当前 Logic 无适配结构，使用主题正文 Composition 承载内容",
+      reason: candidateReadiness(candidate) === "fallback"
+        ? "当前 Logic 无适配结构或结构运行时溢出，使用主题正文 Composition 兜底"
+        : requiresComponent
+          ? "Structure Group 承担完整页面内容，字段由正式 Slot Contract 确定性绑定"
+          : "正文页面使用主题 Composition 承载内容",
     });
-    if (candidate.contentReadiness === "needs-semantic-refinement" && refinementItemIds.length) {
-      semanticRefinementRequests.push({
-        pageId: page.pageId,
-        familyId: candidate.familyId,
-        variantId: candidate.variantId,
-        itemIds: refinementItemIds,
-        reason: "所选 Structure Group 的节点内字段尚未满足合同",
-      });
-    }
   });
 
   return {
@@ -302,5 +338,6 @@ export function expandVisualSkillRouting(routing, input) {
       pages: compositionPages,
     },
     semanticRefinementRequests,
+    routingDiagnostics,
   };
 }

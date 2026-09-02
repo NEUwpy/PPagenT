@@ -12,6 +12,7 @@ import {
   validateComponentText,
 } from "../src/agent/visual-resolution.mjs";
 import { candidateSetsForVisualDirector } from "../src/agent/model-director-provider.mjs";
+import { expandVisualSkillRouting } from "../src/agent/visual-skill-router.mjs";
 import { buildPageIntentFromContent, enrichPageIntent } from "../src/content/page-content.mjs";
 import { mapRenderPayload } from "../src/render/render-payload.mjs";
 
@@ -195,7 +196,7 @@ test("循环父候选向视觉导演暴露 TextRegion 契约但不开放子结�
     { id: "check", title: "检查", body: "核对结果" },
     { id: "act", title: "改进", body: "进入下一轮" },
   ]);
-  const draft = intentDraft("cycle-intent", "explain_cycle", "sequence", {
+  const draft = intentDraft("cycle-intent", "explain_cycle", "cycle", {
     ordered: true,
     sameLevel: true,
   });
@@ -244,7 +245,7 @@ test("视觉导演选择 Text Layout 后由程序形成 RenderPayload 绑定", a
     { id: "check", title: "检查阶段结果核对说明", body: "对照既定目标核对执行结果和关键偏差" },
   ]);
   page.title = "面向复杂任务的持续改进循环机制";
-  const draft = intentDraft("cycle-adaptation-intent", "explain_cycle", "sequence", {
+  const draft = intentDraft("cycle-adaptation-intent", "explain_cycle", "cycle", {
     ordered: true,
     sameLevel: true,
   });
@@ -292,7 +293,7 @@ test("视觉导演选择 Text Layout 后由程序形成 RenderPayload 绑定", a
   });
 });
 
-test("两个互补事实不会误用比较资产，缺少二项并列结构时明确报告缺口", async () => {
+test("两个互补事实不会误用比较资产，并优先使用合法二项并列结构", async () => {
   const page = content("scope", [
     { id: "skin", title: "视觉规范可以替换", body: "学校视觉规范是可替换的组织视觉系统。" },
     { id: "capability", title: "经验能力可以复用", body: "内容理解和表达规则可以服务多个场景。", emphasis: true },
@@ -304,8 +305,8 @@ test("两个互补事实不会误用比较资产，缺少二项并列结构时�
     { ordered: false, sameLevel: true },
   ), page);
   const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.deepEqual(set.candidates.map((candidate) => candidate.fallbackBody), [true]);
-  assert.equal(set.gap.type, "asset-gap");
+  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), ["parallel-equal-cards-001"]);
+  assert.equal(set.gap, undefined);
   assert.equal(set.candidates.some((candidate) => candidate.assetId === "comparison-structure-001"), false);
 });
 
@@ -513,6 +514,7 @@ test("唯一家族与变体确定后由候选回填冗余 silhouette", async () 
   const intent = enrichPageIntent(intentDraft("opening-intent", "summarize_research_method", "none"), page);
   const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
   const candidate = set.candidates.find((item) => item.fallbackBody);
+  assert.equal(candidate.readiness, "ready");
   const result = await resolveVisualPlan({
     root,
     pageContents: [page],
@@ -541,6 +543,55 @@ test("唯一家族与变体确定后由候选回填冗余 silhouette", async () 
   assert.equal(result.status, "accepted");
   assert.equal(result.visualPlan.pages[0].silhouette, candidate.silhouette);
   assert.equal(result.layoutDecisions[0].selectedSilhouette, candidate.silhouette);
+  assert.equal(result.layoutDecisions[0].selectionSource, "program-locked");
+  assert.equal(result.layoutDecisions[0].selectionOwner, "program");
+});
+
+test("多个合法候选时 LayoutDecision 保留视觉导演的实际选择", async () => {
+  const page = content("visual-choice", [
+    { id: "a", title: "A", body: "A body" },
+    { id: "b", title: "B", body: "B body" },
+  ]);
+  page.logicIntent = { logicId: "editorial", reason: "测试多候选视觉选择" };
+  const intent = enrichPageIntent(intentDraft(
+    "visual-choice-intent", "summarize_research_method", "none",
+  ), page);
+  const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
+  const primary = set.candidates[0];
+  const alternative = {
+    ...primary,
+    variantId: "editorial-alternative",
+    silhouette: "editorial-page-alternative",
+  };
+  const result = await resolveVisualPlan({
+    root,
+    pageContents: [page],
+    pageIntents: [intent],
+    candidateSets: [{ ...set, candidates: [primary, alternative], selectionMode: "visual-selectable" }],
+    visualPlan: { pages: [{
+      pageId: page.pageId,
+      intentId: intent.intentId,
+      familyId: alternative.familyId,
+      variantId: alternative.variantId,
+      silhouette: alternative.silhouette,
+    }] },
+    compositionPlan: { pages: [{
+      pageId: page.pageId,
+      intentId: intent.intentId,
+      compositionId: "editorial-dual-statement",
+      componentItemIds: [],
+      componentContentMode: "none",
+      textSlots: [
+        { slotId: "left", sourceItemIds: ["a"], contentMode: "full" },
+        { slotId: "right", sourceItemIds: ["b"], contentMode: "full" },
+      ],
+      reason: "test",
+    }] },
+  });
+  assert.equal(result.status, "accepted", JSON.stringify(result.feedback));
+  assert.equal(result.layoutDecisions[0].selectedVariantId, alternative.variantId);
+  assert.equal(result.layoutDecisions[0].selectionSource, "visual-director");
+  assert.equal(result.layoutDecisions[0].selectionOwner, "visual-director");
 });
 
 test("待语义补齐结构不再允许静默选择正文兜底", async () => {
@@ -568,7 +619,7 @@ test("待语义补齐结构不再允许静默选择正文兜底", async () => {
     { ...baseSet, candidates: [provisional, fallback] },
   ]);
   assert.deepEqual(directorSet.candidates, []);
-  assert.equal(directorSet.gap.type, "asset-gap");
+  assert.equal(directorSet.gap.type, "content-contract-gap");
 });
 
 test("已审批的分层架构由正式发现按层与层内能力映射", async () => {
@@ -671,7 +722,7 @@ test("component titles-only cannot silently drop item bodies", async () => {
     { id: "b", title: "B", body: "B body" },
     { id: "c", title: "C", body: "C body" },
   ]);
-  const draft = intentDraft("cycle-titles-only-intent", "explain_cycle", "sequence", {
+  const draft = intentDraft("cycle-titles-only-intent", "explain_cycle", "cycle", {
     ordered: true,
     sameLevel: true,
   });
@@ -718,6 +769,7 @@ test("结构页面内容超出全部结构容量时在视觉导演前明确报�
   const intent = enrichPageIntent(intentDraft("conclusion-intent", "present_parallel_points", "parallel"), page);
   const [candidateSet] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
   assert.deepEqual(candidateSet.candidates.map((candidate) => candidate.fallbackBody), [true]);
+  assert.equal(candidateSet.candidates[0].readiness, "fallback");
   assert.equal(candidateSet.gap.type, "asset-gap");
 });
 
@@ -731,6 +783,7 @@ test("closing purpose cannot bypass fixed closing capacity", async () => {
   const intent = enrichPageIntent(intentDraft("closing-like-intent", "present_closing", "parallel"), page);
   const [candidateSet] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
   assert.deepEqual(candidateSet.candidates.map((candidate) => candidate.fallbackBody), [true]);
+  assert.equal(candidateSet.candidates[0].readiness, "fallback");
   assert.equal(candidateSet.gap.type, "asset-gap");
   assert.ok(candidateSet.candidates.every((item) => item.assetId !== "northeastern-university-closing-001"));
 });
@@ -748,6 +801,7 @@ test("结构性 Logic 有兼容资产时只返回对应结构", async () => {
   const [candidateSet] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
   assert.ok(candidateSet.candidates.some((item) => item.assetId === "progression-spectrum-focus-001"));
   assert.ok(candidateSet.candidates.every((item) => !item.fallbackBody));
+  assert.equal(candidateSet.fallbackCandidate.readiness, "fallback");
   assert.ok(candidateSet.candidates.every((item) => item.assetId !== "sequential-process-001"));
   assert.equal(candidateSet.gap, undefined);
 });
@@ -816,6 +870,57 @@ test("候选日志说明同一 Logic 下结构为何未成为合法候选", asyn
   const phaseGate = candidateSet.candidateDiagnostics.rejected.find((item) => (
     item.assetId === "sequence-phase-gates-004"
   ));
-  assert.equal(phaseGate.stage, "semantic-refinement");
+  assert.equal(phaseGate.stage, "semantic-contract");
+  assert.equal(phaseGate.readiness, "incompatible");
   assert.ok(phaseGate.reasons.includes("points:required-per-item"));
+});
+
+test("真实结构候选在运行时溢出后披露内部正文 fallbackCandidate", async () => {
+  const page = content("overflow-fallback", [
+    { id: "low", title: "起点", body: "当前状态" },
+    { id: "middle", title: "过渡", body: "持续演进" },
+    { id: "high", title: "目标", body: "最终状态" },
+  ]);
+  page.logicIntent = { logicId: "progression", reason: "三个状态逐级演进" };
+  const intent = enrichPageIntent(intentDraft(
+    "overflow-fallback-intent", "explain_evolution", "progression", { ordered: true },
+  ), page);
+  const [candidateSet] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
+  assert.ok(candidateSet.candidates.some((item) => !item.fallbackBody));
+  assert.equal(candidateSet.fallbackCandidate.readiness, "fallback");
+
+  const [disclosed] = candidateSetsForVisualDirector(
+    [candidateSet],
+    [{ pageId: page.pageId, code: "component-runtime-overflow" }],
+  );
+  assert.equal(disclosed.selectionMode, "fallback-locked");
+  assert.deepEqual(disclosed.candidates.map((item) => item.assetId), [candidateSet.fallbackCandidate.assetId]);
+  assert.ok(disclosed.candidates.every((item) => item.readiness === "fallback"));
+
+  const selected = disclosed.candidates[0];
+  const routed = expandVisualSkillRouting({ selections: [{
+    pageId: page.pageId,
+    candidateId: `${selected.familyId}::${selected.variantId}::${selected.silhouette}`,
+    centerLabel: "正文兜底",
+  }] }, {
+    deckPlan: { deckId: "deck" },
+    skinId: "skin",
+    pageContents: [page],
+    pageIntents: [intent],
+    candidateSets: [disclosed],
+  });
+  const resolved = await resolveVisualPlan({
+    root,
+    pageContents: [page],
+    pageIntents: [intent],
+    candidateSets: [candidateSet],
+    visualPlan: routed.visualPlan,
+    compositionPlan: routed.compositionPlan,
+    previousResolution: { feedback: [{ pageId: page.pageId, code: "component-runtime-overflow" }] },
+  });
+  assert.equal(resolved.status, "accepted", JSON.stringify(resolved.feedback));
+  assert.equal(resolved.layoutDecisions[0].selectedAssetId, candidateSet.fallbackCandidate.assetId);
+  assert.equal(resolved.layoutDecisions[0].selectionSource, "deterministic-fallback");
+  assert.equal(resolved.layoutDecisions[0].selectionOwner, "program");
+  assert.equal(resolved.layoutDecisions[0].selectionState, "fallback");
 });

@@ -1,0 +1,641 @@
+[
+  {
+    "schemaVersion": "1.0",
+    "intentId": "shell-cover-intent",
+    "assetId": "northeastern-university-cover-001",
+    "parameters": {
+      "title": "把 PPT 生成变成可靠的生产过程",
+      "presenter": "",
+      "organization": "",
+      "date": "",
+      "subtitle": ""
+    },
+    "mappings": [],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "shell-agenda-intent",
+    "assetId": "northeastern-university-agenda-001",
+    "parameters": {
+      "title": "目录",
+      "items": [
+        "问题与判断成本",
+        "需求选择与可靠性",
+        "产品架构与能力积累",
+        "扩展与最终目标"
+      ]
+    },
+    "mappings": [
+      {
+        "sourceItemId": "agenda-1",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-2",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-3",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-4",
+        "parameterPath": "items"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p1-intent",
+    "assetId": "hub-directed-outcomes-002",
+    "parameters": {
+      "connectionMode": "none",
+      "center": {
+        "title": "判断成本",
+        "body": ""
+      },
+      "nodes": [
+        {
+          "title": "怎么讲",
+          "body": "确定这场汇报的讲述方式"
+        },
+        {
+          "title": "拆多少页",
+          "body": "把长稿合理拆分页数"
+        },
+        {
+          "title": "每页职责",
+          "body": "一页只承担一项职责"
+        },
+        {
+          "title": "观点关系",
+          "body": "判断并列、递进或因果"
+        },
+        {
+          "title": "哪里突出",
+          "body": "决定需要强调的重点"
+        },
+        {
+          "title": "何时用图",
+          "body": "或只用一句话更有力量"
+        }
+      ],
+      "visualVariantId": "center-periphery-radial-connections",
+      "textLayoutBindings": {
+        "radial-center": "heading-content-flow",
+        "radial-node-0": "heading-content-flow",
+        "radial-node-1": "heading-content-flow",
+        "radial-node-2": "heading-content-flow",
+        "radial-node-3": "heading-content-flow",
+        "radial-node-4": "heading-content-flow",
+        "radial-node-5": "heading-content-flow"
+      }
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p1-item1",
+        "parameterPath": "nodes[0]"
+      },
+      {
+        "sourceItemId": "p1-item2",
+        "parameterPath": "nodes[1]"
+      },
+      {
+        "sourceItemId": "p1-item3",
+        "parameterPath": "nodes[2]"
+      },
+      {
+        "sourceItemId": "p1-item4",
+        "parameterPath": "nodes[3]"
+      },
+      {
+        "sourceItemId": "p1-item5",
+        "parameterPath": "nodes[4]"
+      },
+      {
+        "sourceItemId": "p1-item6",
+        "parameterPath": "nodes[5]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p2-intent",
+    "assetId": "progression-spectrum-focus-001",
+    "parameters": {
+      "title": "需求分布：中间主体最大",
+      "dimensionLabel": "程度",
+      "axisLow": "低",
+      "axisHigh": "高",
+      "focusIndex": 1,
+      "items": [
+        {
+          "key": "p2-item1",
+          "title": "低要求端",
+          "body": "几乎不在意版式，只放文字"
+        },
+        {
+          "key": "p2-item2",
+          "title": "中间主体",
+          "body": "学校、科研院所、央国企等需要快速规范产出"
+        },
+        {
+          "key": "p2-item3",
+          "title": "高度定制端",
+          "body": "发布会、品牌路演与高水平比赛"
+        }
+      ],
+      "visualVariantId": "ordered-regions-with-focus",
+      "textLayoutBindings": {
+        "low-content-region": "heading-content-flow",
+        "work-content-region": "heading-content-flow",
+        "custom-content-region": "heading-content-flow"
+      }
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p2-item1",
+        "parameterPath": "items[0]"
+      },
+      {
+        "sourceItemId": "p2-item2",
+        "parameterPath": "items[1]"
+      },
+      {
+        "sourceItemId": "p2-item3",
+        "parameterPath": "items[2]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p3-intent",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "稳定比惊艳更重要",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p3-item1",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "p3-item2",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p4-intent",
+    "assetId": "parallel-equal-cards-001",
+    "parameters": {
+      "title": "用限制自由换取可靠性",
+      "items": [
+        {
+          "key": "p4-item1",
+          "title": "确定视觉规范",
+          "body": "颜色、字体、Logo 等保持稳定",
+          "points": [],
+          "iconQuery": "rules"
+        },
+        {
+          "key": "p4-item2",
+          "title": "验证表达能力",
+          "body": "使用经过验证的版式与结构",
+          "points": [],
+          "iconQuery": "validation"
+        },
+        {
+          "key": "p4-item3",
+          "title": "明确数量容量",
+          "body": "限定每页可承载的内容量",
+          "points": [],
+          "iconQuery": "capacity"
+        },
+        {
+          "key": "p4-item4",
+          "title": "登记退化方式",
+          "body": "未匹配时退化为简单排版",
+          "points": [],
+          "iconQuery": "fallback"
+        }
+      ],
+      "visualVariantId": "equal-floating-cards",
+      "textLayoutBindings": {
+        "professional-title-region": "statement-flow",
+        "professional-content-region": "heading-content-flow",
+        "collaboration-title-region": "statement-flow",
+        "collaboration-content-region": "heading-content-flow",
+        "innovation-title-region": "statement-flow",
+        "innovation-content-region": "heading-content-flow",
+        "execution-title-region": "statement-flow",
+        "execution-content-region": "heading-content-flow"
+      }
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p4-item1",
+        "parameterPath": "items[0]"
+      },
+      {
+        "sourceItemId": "p4-item2",
+        "parameterPath": "items[1]"
+      },
+      {
+        "sourceItemId": "p4-item3",
+        "parameterPath": "items[2]"
+      },
+      {
+        "sourceItemId": "p4-item4",
+        "parameterPath": "items[3]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p5-intent",
+    "assetId": "sequence-flow-001",
+    "parameters": {
+      "title": "AI 是控制器，不是画师",
+      "items": [
+        {
+          "key": "p5-structure-1",
+          "title": "AI",
+          "body": "理解和路由"
+        },
+        {
+          "key": "p5-structure-2",
+          "title": "规则",
+          "body": "约束和选择"
+        },
+        {
+          "key": "p5-structure-3",
+          "title": "代码",
+          "body": "稳定生成"
+        }
+      ],
+      "visualVariantId": "continuous-numbered-rail"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p5-structure-1",
+        "parameterPath": "items[0]"
+      },
+      {
+        "sourceItemId": "p5-structure-2",
+        "parameterPath": "items[1]"
+      },
+      {
+        "sourceItemId": "p5-structure-3",
+        "parameterPath": "items[2]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p6-intent",
+    "assetId": "layered-architecture-001",
+    "parameters": {
+      "title": "核心架构：建设能力，再稳定调用",
+      "layers": [
+        {
+          "key": "p6-structure-1",
+          "title": "资产入库",
+          "items": [
+            {
+              "key": "p6-structure-1-item-1",
+              "title": "优秀参考"
+            },
+            {
+              "key": "p6-structure-1-item-2",
+              "title": "提炼逻辑规律"
+            },
+            {
+              "key": "p6-structure-1-item-3",
+              "title": "扩展复用能力"
+            },
+            {
+              "key": "p6-structure-1-item-4",
+              "title": "用户确认"
+            }
+          ]
+        },
+        {
+          "key": "p6-structure-2",
+          "title": "核心资产",
+          "items": [
+            {
+              "key": "p6-structure-2-item-1",
+              "title": "用户确认"
+            },
+            {
+              "key": "p6-structure-2-item-2",
+              "title": "只读调用"
+            }
+          ]
+        },
+        {
+          "key": "p6-structure-3",
+          "title": "正式生成",
+          "items": [
+            {
+              "key": "p6-structure-3-item-1",
+              "title": "AI理解编排"
+            },
+            {
+              "key": "p6-structure-3-item-2",
+              "title": "选择合法能力"
+            },
+            {
+              "key": "p6-structure-3-item-3",
+              "title": "确定性编译"
+            },
+            {
+              "key": "p6-structure-3-item-4",
+              "title": "原生可编辑PPT"
+            }
+          ]
+        }
+      ],
+      "visualVariantId": "curved-frustum-stack"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p6-structure-1",
+        "parameterPath": "layers[0]"
+      },
+      {
+        "sourceItemId": "p6-structure-2",
+        "parameterPath": "layers[1]"
+      },
+      {
+        "sourceItemId": "p6-structure-3",
+        "parameterPath": "layers[2]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p7-intent",
+    "assetId": "sequence-flow-001",
+    "parameters": {
+      "title": "把昂贵的计算前移",
+      "items": [
+        {
+          "key": "p7-item1",
+          "title": "筛选优秀页面",
+          "body": "从参考中选出高质量页面"
+        },
+        {
+          "key": "p7-item2",
+          "title": "理解好看原因",
+          "body": "提炼视觉逻辑与设计规律"
+        },
+        {
+          "key": "p7-item3",
+          "title": "参数化内容",
+          "body": "把内容、图片和数量参数化"
+        },
+        {
+          "key": "p7-item4",
+          "title": "验证不同状态",
+          "body": "测试多数量与多形态表现"
+        },
+        {
+          "key": "p7-item5",
+          "title": "用户确认入库",
+          "body": "确认后进入正式资产库"
+        }
+      ],
+      "visualVariantId": "continuous-numbered-rail"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p7-item1",
+        "parameterPath": "items[0]"
+      },
+      {
+        "sourceItemId": "p7-item2",
+        "parameterPath": "items[1]"
+      },
+      {
+        "sourceItemId": "p7-item3",
+        "parameterPath": "items[2]"
+      },
+      {
+        "sourceItemId": "p7-item4",
+        "parameterPath": "items[3]"
+      },
+      {
+        "sourceItemId": "p7-item5",
+        "parameterPath": "items[4]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p8-intent",
+    "assetId": "hub-directed-outcomes-002",
+    "parameters": {
+      "connectionMode": "none",
+      "center": {
+        "title": "经验积累",
+        "body": ""
+      },
+      "nodes": [
+        {
+          "title": "内容适合什么表达",
+          "body": "判断内容与表达形式匹配"
+        },
+        {
+          "title": "版式处理内容量",
+          "body": "明确一个版式能承载的内容量"
+        },
+        {
+          "title": "数量变化重排",
+          "body": "数量变化时重新排布版式"
+        },
+        {
+          "title": "超边界处理",
+          "body": "换样式、拆页或退化为简单排版"
+        },
+        {
+          "title": "不可用结构",
+          "body": "能画出来但不应使用的结构"
+        }
+      ],
+      "visualVariantId": "center-periphery-radial-connections",
+      "textLayoutBindings": {
+        "radial-center": "heading-content-flow",
+        "radial-node-0": "heading-content-flow",
+        "radial-node-1": "heading-content-flow",
+        "radial-node-2": "heading-content-flow",
+        "radial-node-3": "heading-content-flow",
+        "radial-node-4": "heading-content-flow"
+      }
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p8-item1",
+        "parameterPath": "nodes[0]"
+      },
+      {
+        "sourceItemId": "p8-item2",
+        "parameterPath": "nodes[1]"
+      },
+      {
+        "sourceItemId": "p8-item3",
+        "parameterPath": "nodes[2]"
+      },
+      {
+        "sourceItemId": "p8-item4",
+        "parameterPath": "nodes[3]"
+      },
+      {
+        "sourceItemId": "p8-item5",
+        "parameterPath": "nodes[4]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p9-intent",
+    "assetId": "sequence-flow-001",
+    "parameters": {
+      "title": "从一个学校，走向更多组织",
+      "items": [
+        {
+          "key": "p9-item1",
+          "title": "东北大学",
+          "body": "第一个正式落地场景"
+        },
+        {
+          "key": "p9-item2",
+          "title": "其他学校",
+          "body": "扩展服务对象之一"
+        },
+        {
+          "key": "p9-item3",
+          "title": "科研院所",
+          "body": "适合标准化汇报场景"
+        },
+        {
+          "key": "p9-item4",
+          "title": "实验室",
+          "body": "需要持续汇报的团队"
+        },
+        {
+          "key": "p9-item5",
+          "title": "企业与团队",
+          "body": "可复用长期表达风格"
+        }
+      ],
+      "visualVariantId": "continuous-numbered-rail"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p9-item1",
+        "parameterPath": "items[0]"
+      },
+      {
+        "sourceItemId": "p9-item2",
+        "parameterPath": "items[1]"
+      },
+      {
+        "sourceItemId": "p9-item3",
+        "parameterPath": "items[2]"
+      },
+      {
+        "sourceItemId": "p9-item4",
+        "parameterPath": "items[3]"
+      },
+      {
+        "sourceItemId": "p9-item5",
+        "parameterPath": "items[4]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p10-intent",
+    "assetId": "parallel-equal-cards-001",
+    "parameters": {
+      "title": "最后，它仍然只想解决一件普通的事",
+      "items": [
+        {
+          "key": "p10-item1",
+          "title": "AI 帮我们读稿子",
+          "body": "让 AI 承担阅读理解",
+          "points": [],
+          "iconQuery": "ai reading"
+        },
+        {
+          "key": "p10-item2",
+          "title": "规则帮我们做判断",
+          "body": "让规则负责决策选择",
+          "points": [],
+          "iconQuery": "rules decision"
+        },
+        {
+          "key": "p10-item3",
+          "title": "代码完成重复劳动",
+          "body": "让代码执行重复绘制",
+          "points": [],
+          "iconQuery": "code drawing"
+        }
+      ],
+      "visualVariantId": "equal-floating-cards",
+      "textLayoutBindings": {
+        "professional-title-region": "statement-flow",
+        "professional-content-region": "heading-content-flow",
+        "collaboration-title-region": "statement-flow",
+        "collaboration-content-region": "heading-content-flow",
+        "innovation-title-region": "statement-flow",
+        "innovation-content-region": "heading-content-flow"
+      }
+    },
+    "mappings": [
+      {
+        "sourceItemId": "p10-item1",
+        "parameterPath": "items[0]"
+      },
+      {
+        "sourceItemId": "p10-item2",
+        "parameterPath": "items[1]"
+      },
+      {
+        "sourceItemId": "p10-item3",
+        "parameterPath": "items[2]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "shell-closing-intent",
+    "assetId": "northeastern-university-closing-001",
+    "parameters": {
+      "text": "PPagenT 把 PPT 生成变成可靠的生产过程，而非偶然惊艳"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "closing-takeaway",
+        "parameterPath": "text"
+      }
+    ],
+    "omissions": []
+  }
+]

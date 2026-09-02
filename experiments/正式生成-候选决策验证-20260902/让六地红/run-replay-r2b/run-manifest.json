@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "1.0",
+  "status": "delivered-with-fallback",
+  "input": {
+    "sourcePath": "稿件/让六地红-v1.md",
+    "sourceSha256": "674810d32c0c6b7ccd8a29276c8386f6d09c5e30a3cbd8d4a05aa46b0bf08d15",
+    "skinId": "northeastern-university-001"
+  },
+  "provider": {
+    "module": "experiments/正式生成-候选决策验证-20260902/让六地红/replay-r2-provider.mjs",
+    "identity": {
+      "providerKind": "saved-director-output-replay",
+      "sourceRun": "run-r2",
+      "purpose": "verify icon-source contract fix without another API call"
+    }
+  },
+  "artifacts": {
+    "asset-gap-report.json": "3873dd6c1164a09119f2cfea0878b3c2af0acdb6596980db207343f29a6d6862",
+    "content/attempt-01/deck-plan.json": "4e4a9d50c00edd29ea273196e694105364786c19cb72909e3c64751838acd1e8",
+    "content/attempt-01/page-contents.json": "39f2c3bc7779f27bbeef6ec56e8b9a823c6a93432385e61bfd4ebc74cefd9f34",
+    "production-statistics.json": "a8c9af70edca5baa3aef0735e881e2cd9bdc020ab62b2c3fc30232c5014c07bc",
+    "visual/attempt-01/candidate-sets.json": "ed352d160d334b695007d00fd273a7e519e990ccd7594a5abfaacbcb3b4eb775",
+    "visual/attempt-01/composition-plan.json": "d8788e334d09c7ce40dc72fa3402a9130fc3f6ad3ab4a826befb91f4776968f5",
+    "visual/attempt-01/layout-decisions.json": "d849be17503b8fed9b34af908dc8f8a96d67831848b2399cc035b8d07e2467bc",
+    "visual/attempt-01/page-intents.json": "2722dfb5aa933194ee6753cf38e95f86567d26ecdf1ca88fceea722e6ca74954",
+    "visual/attempt-01/render-payloads.json": "f224af206ec01c1b4d41adde691ca67540f1370da04bedbb80b3e000e13f8dff",
+    "visual/attempt-01/render-result.json": "6cb7db62b071c759c70c8524245458c4fdd931847bd548106abde0db51f04b47",
+    "visual/attempt-01/render/qa/slide-01.layout.json": "7fcb42bf59cf971147aca3a9ae1334f1bf614e3bfe114e645b8be0ef5e19fd56",
+    "visual/attempt-01/render/qa/slide-02.layout.json": "f4d3568ed95b09627ecd7ad927820a13f133d64bc5be681c4a6b3af35e085ee6",
+    "visual/attempt-01/render/qa/slide-03.layout.json": "9be627b5d18161a85c87e77d0997c2af1cb100fef3e0886159f5f90d2e2c8bcd",
+    "visual/attempt-01/render/qa/slide-04.layout.json": "31b1bfc141ebd888e6f25759af8cd3800ec392449913d06bf61d8733db6b63cb",
+    "visual/attempt-01/render/qa/slide-05.layout.json": "efaa205da7b0fbdca2662547954cf781046edf88490f8fcd62a413987023d602",
+    "visual/attempt-01/render/qa/slide-06.layout.json": "9302efb8c7bf205993d9038fe4a67448543da21c63acdb8a1caa9d31d0f9ec27",
+    "visual/attempt-01/render/qa/slide-07.layout.json": "8be743ffd6940bc1692d380e4339b3b4e9f2deacbd8d85056bdc9c19cfb3b382",
+    "visual/attempt-01/render/qa/slide-08.layout.json": "bb5eb3adeb7ad34cfe8c0e581e27d3dce919f9a5077c6d990c1ab28c5ecfeb55",
+    "visual/attempt-01/render/qa/slide-09.layout.json": "7c5e026c4070e7516151c0f5f059a22b77506f06e4d1cfd13bd8bf7601285ce8",
+    "visual/attempt-01/visual-plan.json": "169e8b2bb38f9bbbe6bee8e99d9e87e241f3600e276b4d8b48732fddc9fa50cc",
+    "visual/attempt-01/visual-resolution.json": "c70eaabc6142fb7670fb1a4b0394b7a0cea2b87fffca303faca66b5c3224d403",
+    "workflow-result.json": "4a303761d2f412fbdebde778e1023a28cea33f6ced0b9d4d7a6b3132ef1cd2a1"
+  },
+  "output": {
+    "path": "experiments/正式生成-候选决策验证-20260902/让六地红/让六地红-候选决策验证-replay-r2b.pptx",
+    "sha256": "c333c6b268c282c16ce307cf2ae104110a5e56d9c7535109e5fe176f50f70f2d"
+  },
+  "pageEvidence": {
+    "slide-01": "67897bfe4c765183d313a5abda95d9a7be02649bb276bc632c454fef6879ea3a",
+    "slide-02": "cfff4648bc64e120824e6ea0bcb8c0aef59a659bdbf3c3fbb9374e2f11824419",
+    "slide-03": "90306db54418e77e13b9631b171600fb745617afd86e0718ed91e2ec104536b7",
+    "slide-04": "7427a988b52f5df718db37dd294cc79cf42644e026857c348127c3e7b6c163da",
+    "slide-05": "c810bd90d23e659d7f745aa508ed5f7c7713037203f2b9e19ffd907fc52af934",
+    "slide-06": "3520f6a29c139264ea2ea75b24d3d8ddf729123a1cea18b035bbe5b14039209f",
+    "slide-07": "60d5fe7a8d3dfb4069f47740737c08486e1ac6cc392f058e35fb515dad240320",
+    "slide-08": "03afe8ff6f34b3b66df28e1b8c6ca580cbb86c31f892adb4a4549e8c35b41740",
+    "slide-09": "4acaaa9f7fda3366df1ce9b51bbeb05840b4821f67777a506caa77749e1c0e0d"
+  },
+  "qa": {
+    "deterministicQualityAudit": {
+      "status": "passed",
+      "typography": {
+        "status": "passed",
+        "minimumFontSize": 12,
+        "violations": []
+      },
+      "geometry": {
+        "status": "passed",
+        "tolerance": 0.5,
+        "qaParentCount": 7,
+        "connectorCount": 0,
+        "qaParentCountBySlide": {
+          "slide-01": 0,
+          "slide-02": 0,
+          "slide-03": 1,
+          "slide-04": 2,
+          "slide-05": 1,
+          "slide-06": 1,
+          "slide-07": 1,
+          "slide-08": 1,
+          "slide-09": 0
+        },
+        "violations": []
+      }
+    },
+    "postRenderReview": "not-part-of-production-workflow",
+    "overflow": {
+      "status": "passed",
+      "tool": {
+        "name": "slides_test.py",
+        "sha256": "e0f660c3a03c524e54a2b0ac4cdd55646502f18bad409593d056a1ea570f5de0"
+      },
+      "output": "Test passed. No overflow detected."
+    }
+  }
+}

@@ -1,0 +1,202 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "liaoning-liudi-red-education",
+  "skinId": "northeastern-university-001",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "compositionId": "fixed-cover",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "compositionId": "fixed-agenda",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "p1",
+      "intentId": "p1-intent",
+      "compositionId": "editorial-single-focus",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "item1"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "textLayoutChoices": [],
+      "reason": "正文页面使用主题 Composition 承载内容"
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2-intent",
+      "compositionId": "editorial-dual-statement",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [
+        {
+          "slotId": "left",
+          "sourceItemIds": [
+            "item-past"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "right",
+          "sourceItemIds": [
+            "item-now"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "textLayoutChoices": [],
+      "reason": "当前 Logic 无适配结构或结构运行时溢出，使用主题正文 Composition 兜底"
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "item-chain",
+        "item-classes",
+        "item-scenes"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "textLayoutChoices": [
+        {
+          "regionKey": "items[].support",
+          "layoutId": "heading-content-flow"
+        },
+        {
+          "regionKey": "items[].title",
+          "layoutId": "statement-flow"
+        }
+      ],
+      "reason": "Structure Group 承担完整页面内容，字段由正式 Slot Contract 确定性绑定"
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "item-task",
+        "item-vr",
+        "item-lecture",
+        "item-friend",
+        "item-mechanism"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "textLayoutChoices": [
+        {
+          "regionKey": "items[].support",
+          "layoutId": "heading-content-flow"
+        },
+        {
+          "regionKey": "items[].title",
+          "layoutId": "statement-flow"
+        }
+      ],
+      "reason": "Structure Group 承担完整页面内容，字段由正式 Slot Contract 确定性绑定"
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "item-faith",
+        "item-skill",
+        "item-voice",
+        "item-step"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "textLayoutChoices": [
+        {
+          "regionKey": "items[].support",
+          "layoutId": "heading-content-flow"
+        },
+        {
+          "regionKey": "items[].title",
+          "layoutId": "statement-flow"
+        }
+      ],
+      "reason": "Structure Group 承担完整页面内容，字段由正式 Slot Contract 确定性绑定"
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6-intent",
+      "compositionId": "component-full",
+      "componentItemIds": [
+        "item-chain-sum",
+        "item-task-sum",
+        "item-vr-sum",
+        "item-lecture-sum",
+        "item-mech-sum"
+      ],
+      "componentContentMode": "full",
+      "textSlots": [],
+      "textLayoutChoices": [],
+      "reason": "Structure Group 承担完整页面内容，字段由正式 Slot Contract 确定性绑定",
+      "componentText": [
+        {
+          "sourceItemId": "item-chain-sum",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "研学链",
+          "sourceFragment": "研学链"
+        },
+        {
+          "sourceItemId": "item-task-sum",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "任务单",
+          "sourceFragment": "任务单"
+        },
+        {
+          "sourceItemId": "item-vr-sum",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "VR基地",
+          "sourceFragment": "VR基地"
+        },
+        {
+          "sourceItemId": "item-lecture-sum",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "宣讲团",
+          "sourceFragment": "宣讲团"
+        },
+        {
+          "sourceItemId": "item-mech-sum",
+          "sourceField": "title",
+          "targetRole": "item-title",
+          "text": "育人机制",
+          "sourceFragment": "育人机制"
+        }
+      ]
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "compositionId": "fixed-closing",
+      "componentItemIds": [],
+      "componentContentMode": "none",
+      "textSlots": [],
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

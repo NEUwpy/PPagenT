@@ -145,9 +145,12 @@ async function executeRun(targetRunDir, summary, normalizedPath, recorder) {
       durationMs: Date.now() - startedAt,
       output: {
         pageCount: result.pageCount,
+        deliveryStatus: result.deliveryStatus ?? result.status,
         outputPptx: artifacts[0].path,
         qualityAudit: result.renderResult.qualityAudit,
-        fallbackPageCount: result.assetGapReport?.fallbackPageCount ?? 0,
+        fallbackPageCount: result.productionStatistics?.fallbackPageCount
+          ?? result.assetGapReport?.fallbackPageCount
+          ?? 0,
         recommendedStructureSupplements: result.assetGapReport?.recommendedStructureSupplements ?? [],
         productionStatistics: result.productionStatistics,
       },
@@ -156,6 +159,7 @@ async function executeRun(targetRunDir, summary, normalizedPath, recorder) {
     summary.finishedAt = new Date().toISOString();
     summary.durationMs = Date.now() - startedAt;
     summary.pageCount = result.pageCount;
+    summary.deliveryStatus = result.deliveryStatus ?? result.status;
     summary.assetGapReport = result.assetGapReport;
     summary.productionStatistics = result.productionStatistics;
     summary.artifacts = artifacts;

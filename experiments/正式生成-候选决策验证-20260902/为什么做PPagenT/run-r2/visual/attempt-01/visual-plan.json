@@ -1,0 +1,158 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "ppagent-product-narrative-2024",
+  "skinId": "northeastern-university-001",
+  "visualLanguage": "遵循所选主题与已确认 Structure Group 的统一设计语言",
+  "rhythmStrategy": "优先使用语义适配的核心结构，避免相邻页面机械重复",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "familyId": "skin-cover",
+      "variantId": "default",
+      "silhouette": "cover",
+      "adaptationStatus": "fixed",
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "familyId": "skin-agenda",
+      "variantId": "default",
+      "silhouette": "agenda",
+      "adaptationStatus": "fixed",
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "p1",
+      "intentId": "p1-intent",
+      "familyId": "hub",
+      "variantId": "center-periphery-radial-connections",
+      "silhouette": "center-with-optional-directed-radial-paths",
+      "adaptationStatus": "adaptive",
+      "reason": "中心辐射结构清晰展示判断的多个维度"
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2-intent",
+      "familyId": "progression-spectrum",
+      "variantId": "ordered-regions-with-focus",
+      "silhouette": "ordered-spectrum-with-raised-focus",
+      "adaptationStatus": "adaptive",
+      "reason": "程序锁定唯一合法 Structure Group，视觉导演完成展示适配"
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "视觉导演选择该页语义与容量均适配的 Structure Group"
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4-intent",
+      "familyId": "parallel-cards",
+      "variantId": "equal-floating-cards",
+      "silhouette": "equal-cards-with-round-anchors",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "p4-item1",
+          "query": "rules"
+        },
+        {
+          "sourceItemId": "p4-item2",
+          "query": "validation"
+        },
+        {
+          "sourceItemId": "p4-item3",
+          "query": "capacity"
+        },
+        {
+          "sourceItemId": "p4-item4",
+          "query": "fallback"
+        }
+      ],
+      "reason": "卡片结构并行展示四个限制维度"
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5-intent",
+      "familyId": "sequence-process",
+      "variantId": "continuous-numbered-rail",
+      "silhouette": "continuous-arrow-rail",
+      "adaptationStatus": "adaptive",
+      "reason": "程序锁定唯一合法 Structure Group，视觉导演完成展示适配"
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6-intent",
+      "familyId": "layered-architecture",
+      "variantId": "curved-frustum-stack",
+      "silhouette": "centered-curved-frustum-stack",
+      "adaptationStatus": "adaptive",
+      "reason": "程序锁定唯一合法 Structure Group，视觉导演完成展示适配"
+    },
+    {
+      "pageId": "p7",
+      "intentId": "p7-intent",
+      "familyId": "sequence-process",
+      "variantId": "continuous-numbered-rail",
+      "silhouette": "continuous-arrow-rail",
+      "adaptationStatus": "adaptive",
+      "reason": "程序锁定唯一合法 Structure Group，视觉导演完成展示适配"
+    },
+    {
+      "pageId": "p8",
+      "intentId": "p8-intent",
+      "familyId": "hub",
+      "variantId": "center-periphery-radial-connections",
+      "silhouette": "center-with-optional-directed-radial-paths",
+      "adaptationStatus": "adaptive",
+      "reason": "中心辐射结构展示不同层面的经验；该 Structure Group 此前已使用 1 次，保留视觉导演选择并记录重复"
+    },
+    {
+      "pageId": "p9",
+      "intentId": "p9-intent",
+      "familyId": "sequence-process",
+      "variantId": "continuous-numbered-rail",
+      "silhouette": "continuous-arrow-rail",
+      "adaptationStatus": "adaptive",
+      "reason": "程序锁定唯一合法 Structure Group，视觉导演完成展示适配"
+    },
+    {
+      "pageId": "p10",
+      "intentId": "p10-intent",
+      "familyId": "parallel-cards",
+      "variantId": "equal-floating-cards",
+      "silhouette": "equal-cards-with-round-anchors",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "p10-item1",
+          "query": "ai reading"
+        },
+        {
+          "sourceItemId": "p10-item2",
+          "query": "rules decision"
+        },
+        {
+          "sourceItemId": "p10-item3",
+          "query": "code drawing"
+        }
+      ],
+      "reason": "程序锁定唯一合法 Structure Group，视觉导演完成展示适配"
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "familyId": "skin-closing",
+      "variantId": "default",
+      "silhouette": "closing",
+      "adaptationStatus": "fixed",
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

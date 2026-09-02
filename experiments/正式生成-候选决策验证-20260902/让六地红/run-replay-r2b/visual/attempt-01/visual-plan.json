@@ -1,0 +1,144 @@
+{
+  "schemaVersion": "1.0",
+  "deckId": "liaoning-liudi-red-education",
+  "skinId": "northeastern-university-001",
+  "visualLanguage": "遵循所选主题与已确认 Structure Group 的统一设计语言",
+  "rhythmStrategy": "优先使用语义适配的核心结构，避免相邻页面机械重复",
+  "pages": [
+    {
+      "pageId": "shell-cover",
+      "intentId": "shell-cover-intent",
+      "familyId": "skin-cover",
+      "variantId": "default",
+      "silhouette": "cover",
+      "adaptationStatus": "fixed",
+      "reason": "由 cover Shell 固定提供"
+    },
+    {
+      "pageId": "shell-agenda",
+      "intentId": "shell-agenda-intent",
+      "familyId": "skin-agenda",
+      "variantId": "default",
+      "silhouette": "agenda",
+      "adaptationStatus": "fixed",
+      "reason": "由 agenda Shell 固定提供"
+    },
+    {
+      "pageId": "p1",
+      "intentId": "p1-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "程序锁定唯一合法 Structure Group，视觉导演完成展示适配"
+    },
+    {
+      "pageId": "p2",
+      "intentId": "p2-intent",
+      "familyId": "skin-body-editorial",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "reason": "视觉导演选择该页语义与容量均适配的 Structure Group"
+    },
+    {
+      "pageId": "p3",
+      "intentId": "p3-intent",
+      "familyId": "parallel-cards",
+      "variantId": "equal-floating-cards",
+      "silhouette": "equal-cards-with-round-anchors",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "item-chain",
+          "query": "chain"
+        },
+        {
+          "sourceItemId": "item-classes",
+          "query": "class"
+        },
+        {
+          "sourceItemId": "item-scenes",
+          "query": "scene"
+        }
+      ],
+      "reason": "程序锁定唯一合法 Structure Group，视觉导演完成展示适配"
+    },
+    {
+      "pageId": "p4",
+      "intentId": "p4-intent",
+      "familyId": "parallel-cards",
+      "variantId": "equal-floating-cards",
+      "silhouette": "equal-cards-with-round-anchors",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "item-task",
+          "query": "task"
+        },
+        {
+          "sourceItemId": "item-vr",
+          "query": "vr"
+        },
+        {
+          "sourceItemId": "item-lecture",
+          "query": "lecture"
+        },
+        {
+          "sourceItemId": "item-friend",
+          "query": "friend"
+        },
+        {
+          "sourceItemId": "item-mechanism",
+          "query": "mechanism"
+        }
+      ],
+      "reason": "并列展示五类抓手，等宽卡片清晰呈现；该 Structure Group 此前已使用 1 次，保留视觉导演选择并记录重复"
+    },
+    {
+      "pageId": "p5",
+      "intentId": "p5-intent",
+      "familyId": "parallel-cards",
+      "variantId": "equal-floating-cards",
+      "silhouette": "equal-cards-with-round-anchors",
+      "adaptationStatus": "adaptive",
+      "iconQueries": [
+        {
+          "sourceItemId": "item-faith",
+          "query": "faith"
+        },
+        {
+          "sourceItemId": "item-skill",
+          "query": "skill"
+        },
+        {
+          "sourceItemId": "item-voice",
+          "query": "voice"
+        },
+        {
+          "sourceItemId": "item-step",
+          "query": "step"
+        }
+      ],
+      "reason": "展示四项成效，卡片式并列适合对比；该 Structure Group 此前已使用 2 次，保留视觉导演选择并记录重复"
+    },
+    {
+      "pageId": "p6",
+      "intentId": "p6-intent",
+      "familyId": "convergence-funnel",
+      "variantId": "input-steps-only",
+      "silhouette": "inputs-centered-funnel",
+      "adaptationStatus": "adaptive",
+      "reason": "程序锁定唯一合法 Structure Group，视觉导演完成展示适配"
+    },
+    {
+      "pageId": "shell-closing",
+      "intentId": "shell-closing-intent",
+      "familyId": "skin-closing",
+      "variantId": "default",
+      "silhouette": "closing",
+      "adaptationStatus": "fixed",
+      "reason": "由 closing Shell 固定提供"
+    }
+  ]
+}

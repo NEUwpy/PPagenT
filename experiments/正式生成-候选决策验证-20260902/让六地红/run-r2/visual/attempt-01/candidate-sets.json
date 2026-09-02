@@ -1,0 +1,4481 @@
+[
+  {
+    "pageId": "shell-cover",
+    "intentId": "shell-cover-intent",
+    "candidates": [
+      {
+        "logicId": "skin",
+        "structureGroupId": "default",
+        "familyId": "skin-cover",
+        "assetId": "northeastern-university-cover-001",
+        "variantId": "default",
+        "silhouette": "cover",
+        "adaptationStatus": "fixed",
+        "readiness": "ready",
+        "reasons": [],
+        "itemCount": {
+          "min": 0,
+          "preferred": [
+            2
+          ],
+          "max": 4
+        },
+        "textCapacity": null,
+        "textFlow": null,
+        "contentContract": null,
+        "mediaContract": {
+          "mode": "no-image",
+          "required": []
+        },
+        "slotContract": null,
+        "textRegions": [],
+        "slotCapabilities": {
+          "state": {
+            "itemCount": 0
+          },
+          "contentFrame": null,
+          "container": {
+            "pointRendering": "merged-body",
+            "bodyContainerMode": "single-flow",
+            "itemTitleRequired": false,
+            "itemBodyRequired": false,
+            "itemBodySourceField": "support",
+            "itemBodyTextMode": "flow",
+            "itemBodyListPolicy": "inline"
+          },
+          "textSlots": [],
+          "mediaSlots": []
+        },
+        "renderer": "skin",
+        "fallbackBody": false,
+        "compositionIds": [
+          "fixed-cover"
+        ],
+        "compositions": [
+          {
+            "id": "fixed-cover",
+            "silhouette": "cover",
+            "requiresComponent": false,
+            "requiresMedia": false,
+            "slots": []
+          }
+        ]
+      }
+    ],
+    "fallbackCandidate": {
+      "logicId": "skin",
+      "structureGroupId": "editorial",
+      "familyId": "skin-body-editorial",
+      "assetId": "northeastern-university-body-001",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "readiness": "fallback",
+      "reasons": [
+        "deterministic-body-fallback"
+      ],
+      "itemCount": {
+        "min": 0,
+        "preferred": [
+          2,
+          3,
+          4
+        ],
+        "max": 20
+      },
+      "textCapacity": null,
+      "textFlow": null,
+      "contentContract": null,
+      "mediaContract": {
+        "mode": "no-image",
+        "required": []
+      },
+      "slotContract": null,
+      "textRegions": [],
+      "slotCapabilities": {
+        "state": {
+          "itemCount": 0
+        },
+        "contentFrame": null,
+        "container": {
+          "pointRendering": "merged-body",
+          "bodyContainerMode": "single-flow",
+          "itemTitleRequired": false,
+          "itemBodyRequired": false,
+          "itemBodySourceField": "support",
+          "itemBodyTextMode": "flow",
+          "itemBodyListPolicy": "inline"
+        },
+        "textSlots": [],
+        "mediaSlots": []
+      },
+      "renderer": "skin",
+      "fallbackBody": true,
+      "compositionIds": [
+        "editorial-list",
+        "editorial-focus",
+        "editorial-focus-reverse",
+        "editorial-single-focus",
+        "editorial-dual-statement",
+        "editorial-grid"
+      ],
+      "compositions": [
+        {
+          "id": "editorial-list",
+          "silhouette": "editorial-lead-and-list",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "lead",
+              "role": "text"
+            },
+            {
+              "id": "body",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-focus",
+          "silhouette": "large-thesis-with-support",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "primary",
+              "role": "text"
+            },
+            {
+              "id": "support",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-focus-reverse",
+          "silhouette": "support-with-large-thesis-right",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "support",
+              "role": "text"
+            },
+            {
+              "id": "primary",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-single-focus",
+          "silhouette": "centered-single-thesis",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "primary",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-dual-statement",
+          "silhouette": "balanced-dual-statement",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "left",
+              "role": "text"
+            },
+            {
+              "id": "right",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-grid",
+          "silhouette": "responsive-editorial-grid",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "body",
+              "role": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "pageId": "shell-agenda",
+    "intentId": "shell-agenda-intent",
+    "candidates": [
+      {
+        "logicId": "skin",
+        "structureGroupId": "default",
+        "familyId": "skin-agenda",
+        "assetId": "northeastern-university-agenda-001",
+        "variantId": "default",
+        "silhouette": "agenda",
+        "adaptationStatus": "fixed",
+        "readiness": "ready",
+        "reasons": [],
+        "itemCount": {
+          "min": 1,
+          "preferred": [
+            3,
+            4,
+            5
+          ],
+          "max": 5
+        },
+        "textCapacity": null,
+        "textFlow": null,
+        "contentContract": null,
+        "mediaContract": {
+          "mode": "no-image",
+          "required": []
+        },
+        "slotContract": null,
+        "textRegions": [],
+        "slotCapabilities": {
+          "state": {
+            "itemCount": 5
+          },
+          "contentFrame": null,
+          "container": {
+            "pointRendering": "merged-body",
+            "bodyContainerMode": "single-flow",
+            "itemTitleRequired": false,
+            "itemBodyRequired": false,
+            "itemBodySourceField": "support",
+            "itemBodyTextMode": "flow",
+            "itemBodyListPolicy": "inline"
+          },
+          "textSlots": [],
+          "mediaSlots": []
+        },
+        "renderer": "skin",
+        "fallbackBody": false,
+        "compositionIds": [
+          "fixed-agenda"
+        ],
+        "compositions": [
+          {
+            "id": "fixed-agenda",
+            "silhouette": "agenda",
+            "requiresComponent": false,
+            "requiresMedia": false,
+            "slots": []
+          }
+        ]
+      }
+    ],
+    "fallbackCandidate": {
+      "logicId": "skin",
+      "structureGroupId": "editorial",
+      "familyId": "skin-body-editorial",
+      "assetId": "northeastern-university-body-001",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "readiness": "fallback",
+      "reasons": [
+        "deterministic-body-fallback"
+      ],
+      "itemCount": {
+        "min": 0,
+        "preferred": [
+          2,
+          3,
+          4
+        ],
+        "max": 20
+      },
+      "textCapacity": null,
+      "textFlow": null,
+      "contentContract": null,
+      "mediaContract": {
+        "mode": "no-image",
+        "required": []
+      },
+      "slotContract": null,
+      "textRegions": [],
+      "slotCapabilities": {
+        "state": {
+          "itemCount": 5
+        },
+        "contentFrame": null,
+        "container": {
+          "pointRendering": "merged-body",
+          "bodyContainerMode": "single-flow",
+          "itemTitleRequired": false,
+          "itemBodyRequired": false,
+          "itemBodySourceField": "support",
+          "itemBodyTextMode": "flow",
+          "itemBodyListPolicy": "inline"
+        },
+        "textSlots": [],
+        "mediaSlots": []
+      },
+      "renderer": "skin",
+      "fallbackBody": true,
+      "compositionIds": [
+        "editorial-list",
+        "editorial-focus",
+        "editorial-focus-reverse",
+        "editorial-single-focus",
+        "editorial-dual-statement",
+        "editorial-grid"
+      ],
+      "compositions": [
+        {
+          "id": "editorial-list",
+          "silhouette": "editorial-lead-and-list",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "lead",
+              "role": "text"
+            },
+            {
+              "id": "body",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-focus",
+          "silhouette": "large-thesis-with-support",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "primary",
+              "role": "text"
+            },
+            {
+              "id": "support",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-focus-reverse",
+          "silhouette": "support-with-large-thesis-right",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "support",
+              "role": "text"
+            },
+            {
+              "id": "primary",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-single-focus",
+          "silhouette": "centered-single-thesis",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "primary",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-dual-statement",
+          "silhouette": "balanced-dual-statement",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "left",
+              "role": "text"
+            },
+            {
+              "id": "right",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-grid",
+          "silhouette": "responsive-editorial-grid",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "body",
+              "role": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "pageId": "p1",
+    "intentId": "p1-intent",
+    "candidates": [
+      {
+        "logicId": "skin",
+        "structureGroupId": "editorial",
+        "familyId": "skin-body-editorial",
+        "assetId": "northeastern-university-body-001",
+        "variantId": "editorial",
+        "silhouette": "editorial-page",
+        "adaptationStatus": "adaptive",
+        "readiness": "ready",
+        "reasons": [
+          "editorial-body"
+        ],
+        "itemCount": {
+          "min": 0,
+          "preferred": [
+            2,
+            3,
+            4
+          ],
+          "max": 20
+        },
+        "textCapacity": null,
+        "textFlow": null,
+        "contentContract": null,
+        "mediaContract": {
+          "mode": "no-image",
+          "required": []
+        },
+        "slotContract": null,
+        "textRegions": [],
+        "slotCapabilities": {
+          "state": {
+            "itemCount": 1
+          },
+          "contentFrame": null,
+          "container": {
+            "pointRendering": "merged-body",
+            "bodyContainerMode": "single-flow",
+            "itemTitleRequired": false,
+            "itemBodyRequired": false,
+            "itemBodySourceField": "support",
+            "itemBodyTextMode": "flow",
+            "itemBodyListPolicy": "inline"
+          },
+          "textSlots": [],
+          "mediaSlots": []
+        },
+        "renderer": "skin",
+        "fallbackBody": true,
+        "compositionIds": [
+          "editorial-list",
+          "editorial-focus",
+          "editorial-focus-reverse",
+          "editorial-single-focus",
+          "editorial-dual-statement",
+          "editorial-grid"
+        ],
+        "compositions": [
+          {
+            "id": "editorial-list",
+            "silhouette": "editorial-lead-and-list",
+            "requiresComponent": false,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "lead",
+                "role": "text"
+              },
+              {
+                "id": "body",
+                "role": "text"
+              }
+            ]
+          },
+          {
+            "id": "editorial-focus",
+            "silhouette": "large-thesis-with-support",
+            "requiresComponent": false,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "primary",
+                "role": "text"
+              },
+              {
+                "id": "support",
+                "role": "text"
+              }
+            ]
+          },
+          {
+            "id": "editorial-focus-reverse",
+            "silhouette": "support-with-large-thesis-right",
+            "requiresComponent": false,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "support",
+                "role": "text"
+              },
+              {
+                "id": "primary",
+                "role": "text"
+              }
+            ]
+          },
+          {
+            "id": "editorial-single-focus",
+            "silhouette": "centered-single-thesis",
+            "requiresComponent": false,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "primary",
+                "role": "text"
+              }
+            ]
+          },
+          {
+            "id": "editorial-dual-statement",
+            "silhouette": "balanced-dual-statement",
+            "requiresComponent": false,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "left",
+                "role": "text"
+              },
+              {
+                "id": "right",
+                "role": "text"
+              }
+            ]
+          },
+          {
+            "id": "editorial-grid",
+            "silhouette": "responsive-editorial-grid",
+            "requiresComponent": false,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "body",
+                "role": "text"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "capacityDensity": "medium",
+    "semanticRejections": [
+      {
+        "assetId": "argument-evidence-conclusion-001",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "branching-decision-routes-001",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount",
+          "trait:branched"
+        ]
+      },
+      {
+        "assetId": "branching-scenario-fan-004",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount",
+          "semantic:sameLevel",
+          "trait:branched"
+        ]
+      },
+      {
+        "assetId": "causal-fishbone-attribution-001",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "causal-mediator-chain-003",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount"
+        ]
+      },
+      {
+        "assetId": "comparison-dual-verdict-001",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount"
+        ]
+      },
+      {
+        "assetId": "comparison-pros-cons-balance-005",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount"
+        ]
+      },
+      {
+        "assetId": "containment-consensus-field-005",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount",
+          "semantic:sameLevel"
+        ]
+      },
+      {
+        "assetId": "containment-multi-set-intersection-001",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount",
+          "semantic:sameLevel"
+        ]
+      },
+      {
+        "assetId": "convergence-funnel-001",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount",
+          "semantic:ordered",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "convergence-many-to-one-003",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount",
+          "semantic:sameLevel",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "convergence-simple-funnel-001",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount",
+          "semantic:ordered",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "cycle-loop-001",
+        "reasons": [
+          "base-relation:none",
+          "below-min:itemCount",
+          "semantic:ordered",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "cycle-racetrack-loop-005",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount",
+          "semantic:ordered",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "cycle-single-chain-feedback-002",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount",
+          "semantic:ordered",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "goal-alignment-strategy-metrics-001",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount"
+        ]
+      },
+      {
+        "assetId": "hierarchy-grouped-breakdown-005",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount",
+          "semantic:sameLevel"
+        ]
+      },
+      {
+        "assetId": "hub-directed-outcomes-002",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount",
+          "semantic:sameLevel"
+        ]
+      },
+      {
+        "assetId": "hub-radial-001",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount"
+        ]
+      },
+      {
+        "assetId": "hub-two-tier-capabilities-004",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount"
+        ]
+      },
+      {
+        "assetId": "layered-architecture-001",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "layered-iceberg-depth-006",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount"
+        ]
+      },
+      {
+        "assetId": "matrix-cross-grid-003",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "trait:dimensions"
+        ]
+      },
+      {
+        "assetId": "matrix-quadrant-priority-001",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount",
+          "trait:dimensions"
+        ]
+      },
+      {
+        "assetId": "network-internal-external-ecosystem-001",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount",
+          "semantic:sameLevel",
+          "trait:dimensions",
+          "trait:secondaryDimension"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-agenda-001",
+        "reasons": [
+          "purpose-key:summarize_research_method",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-closing-001",
+        "reasons": [
+          "purpose-key:summarize_research_method"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-cover-001",
+        "reasons": [
+          "purpose-key:summarize_research_method"
+        ]
+      },
+      {
+        "assetId": "parallel-equal-cards-001",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount"
+        ]
+      },
+      {
+        "assetId": "parallel-folded-notes-grid-002",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount"
+        ]
+      },
+      {
+        "assetId": "problem-method-result-001",
+        "reasons": [
+          "base-relation:none",
+          "below-min:itemCount",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "problem-solution-outcome-001",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "progression-growth-curve-004",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "progression-maturity-steps-002",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "progression-spectrum-focus-001",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "role-stage-collaboration-001",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount",
+          "trait:temporal",
+          "trait:dimensions",
+          "trait:secondaryDimension"
+        ]
+      },
+      {
+        "assetId": "sequence-flow-001",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "sequence-phase-gates-004",
+        "reasons": [
+          "base-relation:none",
+          "purpose-key:summarize_research_method",
+          "below-min:itemCount",
+          "semantic:ordered"
+        ]
+      }
+    ],
+    "capacityRejections": [],
+    "candidateDiagnostics": {
+      "query": {
+        "logicId": "editorial",
+        "baseRelation": "none",
+        "purposeKey": "summarize_research_method",
+        "itemCount": 1,
+        "structuredDataType": null,
+        "capacityDensity": "medium"
+      },
+      "eligible": [
+        {
+          "assetId": "northeastern-university-body-001",
+          "structureGroupId": "editorial",
+          "variants": [
+            {
+              "variantId": "editorial",
+              "readiness": "ready"
+            }
+          ]
+        }
+      ],
+      "rejected": []
+    }
+  },
+  {
+    "pageId": "p2",
+    "intentId": "p2-intent",
+    "candidates": [
+      {
+        "logicId": "skin",
+        "structureGroupId": "editorial",
+        "familyId": "skin-body-editorial",
+        "assetId": "northeastern-university-body-001",
+        "variantId": "editorial",
+        "silhouette": "editorial-page",
+        "adaptationStatus": "adaptive",
+        "readiness": "fallback",
+        "reasons": [
+          "deterministic-body-fallback"
+        ],
+        "itemCount": {
+          "min": 0,
+          "preferred": [
+            2,
+            3,
+            4
+          ],
+          "max": 20
+        },
+        "textCapacity": null,
+        "textFlow": null,
+        "contentContract": null,
+        "mediaContract": {
+          "mode": "no-image",
+          "required": []
+        },
+        "slotContract": null,
+        "textRegions": [],
+        "slotCapabilities": {
+          "state": {
+            "itemCount": 2
+          },
+          "contentFrame": null,
+          "container": {
+            "pointRendering": "merged-body",
+            "bodyContainerMode": "single-flow",
+            "itemTitleRequired": false,
+            "itemBodyRequired": false,
+            "itemBodySourceField": "support",
+            "itemBodyTextMode": "flow",
+            "itemBodyListPolicy": "inline"
+          },
+          "textSlots": [],
+          "mediaSlots": []
+        },
+        "renderer": "skin",
+        "fallbackBody": true,
+        "compositionIds": [
+          "editorial-list",
+          "editorial-focus",
+          "editorial-focus-reverse",
+          "editorial-single-focus",
+          "editorial-dual-statement",
+          "editorial-grid"
+        ],
+        "compositions": [
+          {
+            "id": "editorial-list",
+            "silhouette": "editorial-lead-and-list",
+            "requiresComponent": false,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "lead",
+                "role": "text"
+              },
+              {
+                "id": "body",
+                "role": "text"
+              }
+            ]
+          },
+          {
+            "id": "editorial-focus",
+            "silhouette": "large-thesis-with-support",
+            "requiresComponent": false,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "primary",
+                "role": "text"
+              },
+              {
+                "id": "support",
+                "role": "text"
+              }
+            ]
+          },
+          {
+            "id": "editorial-focus-reverse",
+            "silhouette": "support-with-large-thesis-right",
+            "requiresComponent": false,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "support",
+                "role": "text"
+              },
+              {
+                "id": "primary",
+                "role": "text"
+              }
+            ]
+          },
+          {
+            "id": "editorial-single-focus",
+            "silhouette": "centered-single-thesis",
+            "requiresComponent": false,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "primary",
+                "role": "text"
+              }
+            ]
+          },
+          {
+            "id": "editorial-dual-statement",
+            "silhouette": "balanced-dual-statement",
+            "requiresComponent": false,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "left",
+                "role": "text"
+              },
+              {
+                "id": "right",
+                "role": "text"
+              }
+            ]
+          },
+          {
+            "id": "editorial-grid",
+            "silhouette": "responsive-editorial-grid",
+            "requiresComponent": false,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "body",
+                "role": "text"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "fallbackCandidate": {
+      "logicId": "skin",
+      "structureGroupId": "editorial",
+      "familyId": "skin-body-editorial",
+      "assetId": "northeastern-university-body-001",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "readiness": "fallback",
+      "reasons": [
+        "deterministic-body-fallback"
+      ],
+      "itemCount": {
+        "min": 0,
+        "preferred": [
+          2,
+          3,
+          4
+        ],
+        "max": 20
+      },
+      "textCapacity": null,
+      "textFlow": null,
+      "contentContract": null,
+      "mediaContract": {
+        "mode": "no-image",
+        "required": []
+      },
+      "slotContract": null,
+      "textRegions": [],
+      "slotCapabilities": {
+        "state": {
+          "itemCount": 2
+        },
+        "contentFrame": null,
+        "container": {
+          "pointRendering": "merged-body",
+          "bodyContainerMode": "single-flow",
+          "itemTitleRequired": false,
+          "itemBodyRequired": false,
+          "itemBodySourceField": "support",
+          "itemBodyTextMode": "flow",
+          "itemBodyListPolicy": "inline"
+        },
+        "textSlots": [],
+        "mediaSlots": []
+      },
+      "renderer": "skin",
+      "fallbackBody": true,
+      "compositionIds": [
+        "editorial-list",
+        "editorial-focus",
+        "editorial-focus-reverse",
+        "editorial-single-focus",
+        "editorial-dual-statement",
+        "editorial-grid"
+      ],
+      "compositions": [
+        {
+          "id": "editorial-list",
+          "silhouette": "editorial-lead-and-list",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "lead",
+              "role": "text"
+            },
+            {
+              "id": "body",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-focus",
+          "silhouette": "large-thesis-with-support",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "primary",
+              "role": "text"
+            },
+            {
+              "id": "support",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-focus-reverse",
+          "silhouette": "support-with-large-thesis-right",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "support",
+              "role": "text"
+            },
+            {
+              "id": "primary",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-single-focus",
+          "silhouette": "centered-single-thesis",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "primary",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-dual-statement",
+          "silhouette": "balanced-dual-statement",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "left",
+              "role": "text"
+            },
+            {
+              "id": "right",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-grid",
+          "silhouette": "responsive-editorial-grid",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "body",
+              "role": "text"
+            }
+          ]
+        }
+      ]
+    },
+    "capacityDensity": "medium",
+    "gap": {
+      "type": "asset-gap",
+      "logicId": "comparison",
+      "baseRelation": "comparison",
+      "itemCount": 2,
+      "reason": "当前核心资产库没有语义与容量均兼容的 Structure Group",
+      "incompatibleAssetIds": []
+    },
+    "fallback": {
+      "type": "asset-gap",
+      "assetId": "northeastern-university-body-001",
+      "reason": "缺少兼容 Structure Group，本页退回通用正文排版"
+    },
+    "semanticRejections": [
+      {
+        "assetId": "argument-evidence-conclusion-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "branching-decision-routes-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "trait:branched"
+        ]
+      },
+      {
+        "assetId": "branching-scenario-fan-004",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "below-min:itemCount",
+          "trait:branched"
+        ]
+      },
+      {
+        "assetId": "causal-fishbone-attribution-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "below-min:itemCount",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "causal-mediator-chain-003",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options"
+        ]
+      },
+      {
+        "assetId": "comparison-pros-cons-balance-005",
+        "reasons": [
+          "below-min:itemCount"
+        ]
+      },
+      {
+        "assetId": "containment-consensus-field-005",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options"
+        ]
+      },
+      {
+        "assetId": "containment-multi-set-intersection-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options"
+        ]
+      },
+      {
+        "assetId": "convergence-funnel-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "below-min:itemCount",
+          "semantic:ordered",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "convergence-many-to-one-003",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "below-min:itemCount",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "convergence-simple-funnel-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "below-min:itemCount",
+          "semantic:ordered",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "cycle-loop-001",
+        "reasons": [
+          "base-relation:comparison",
+          "below-min:itemCount",
+          "semantic:ordered",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "cycle-racetrack-loop-005",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "below-min:itemCount",
+          "semantic:ordered",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "cycle-single-chain-feedback-002",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "below-min:itemCount",
+          "semantic:ordered",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "goal-alignment-strategy-metrics-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options"
+        ]
+      },
+      {
+        "assetId": "hierarchy-grouped-breakdown-005",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options"
+        ]
+      },
+      {
+        "assetId": "hub-directed-outcomes-002",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "below-min:itemCount"
+        ]
+      },
+      {
+        "assetId": "hub-radial-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "below-min:itemCount"
+        ]
+      },
+      {
+        "assetId": "hub-two-tier-capabilities-004",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "below-min:itemCount"
+        ]
+      },
+      {
+        "assetId": "layered-architecture-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "below-min:itemCount",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "layered-iceberg-depth-006",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "below-min:itemCount"
+        ]
+      },
+      {
+        "assetId": "matrix-cross-grid-003",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "trait:dimensions"
+        ]
+      },
+      {
+        "assetId": "matrix-quadrant-priority-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "below-min:itemCount",
+          "trait:dimensions"
+        ]
+      },
+      {
+        "assetId": "network-internal-external-ecosystem-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "below-min:itemCount",
+          "trait:dimensions",
+          "trait:secondaryDimension"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-agenda-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-body-001",
+        "reasons": [
+          "base-relation:comparison"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-closing-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-cover-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options"
+        ]
+      },
+      {
+        "assetId": "parallel-equal-cards-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options"
+        ]
+      },
+      {
+        "assetId": "parallel-folded-notes-grid-002",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "below-min:itemCount"
+        ]
+      },
+      {
+        "assetId": "problem-method-result-001",
+        "reasons": [
+          "base-relation:comparison",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "problem-solution-outcome-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "progression-growth-curve-004",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "below-min:itemCount",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "progression-maturity-steps-002",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "below-min:itemCount",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "progression-spectrum-focus-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "below-min:itemCount",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "role-stage-collaboration-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "below-min:itemCount",
+          "trait:temporal",
+          "trait:dimensions",
+          "trait:secondaryDimension"
+        ]
+      },
+      {
+        "assetId": "sequence-flow-001",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "below-min:itemCount",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "sequence-phase-gates-004",
+        "reasons": [
+          "base-relation:comparison",
+          "purpose-key:compare_options",
+          "below-min:itemCount",
+          "semantic:ordered"
+        ]
+      }
+    ],
+    "capacityRejections": [],
+    "candidateDiagnostics": {
+      "query": {
+        "logicId": "comparison",
+        "baseRelation": "comparison",
+        "purposeKey": "compare_options",
+        "itemCount": 2,
+        "structuredDataType": null,
+        "capacityDensity": "medium"
+      },
+      "eligible": [],
+      "rejected": [
+        {
+          "assetId": "comparison-pros-cons-balance-005",
+          "readiness": "incompatible",
+          "stage": "semantic-contract",
+          "reasons": [
+            "below-min:itemCount"
+          ]
+        },
+        {
+          "assetId": "comparison-dual-verdict-001",
+          "readiness": "incompatible",
+          "stage": "variant-contract",
+          "reasons": [
+            "points:required-per-item",
+            "point-count:3-5",
+            "polarity:positive-negative-pair"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "pageId": "p3",
+    "intentId": "p3-intent",
+    "candidates": [
+      {
+        "logicId": "parallel",
+        "structureGroupId": "parallel-equal-cards",
+        "familyId": "parallel-cards",
+        "assetId": "parallel-equal-cards-001",
+        "variantId": "equal-floating-cards",
+        "silhouette": "equal-cards-with-round-anchors",
+        "adaptationStatus": "adaptive",
+        "readiness": "ready",
+        "reasons": [
+          "semantic-contract-compatible",
+          "capacity-compatible"
+        ],
+        "itemCount": {
+          "min": 2,
+          "preferred": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "max": 5
+        },
+        "textCapacity": null,
+        "textFlow": {
+          "profile": "text-region-layout-library",
+          "scope": "per-contiguous-region"
+        },
+        "contentContract": {
+          "itemRole": "semantic-node",
+          "points": "optional",
+          "ordered": false
+        },
+        "mediaContract": {
+          "mode": "semantic-icon",
+          "provider": "tabler-icons",
+          "selection": "local-top-1",
+          "queryOwner": "visual-director",
+          "requiredPerComponentItem": true
+        },
+        "slotContract": null,
+        "textRegions": [
+          {
+            "regionKey": "items[].support",
+            "contentRoles": [
+              "body"
+            ],
+            "defaultLayoutId": "heading-content-flow",
+            "compatibleLayoutIds": [
+              "heading-content-flow"
+            ],
+            "frameRange": {
+              "minWidth": 173.594,
+              "maxWidth": 304,
+              "minHeight": 130,
+              "maxHeight": 142
+            }
+          },
+          {
+            "regionKey": "items[].title",
+            "contentRoles": [
+              "heading"
+            ],
+            "defaultLayoutId": "statement-flow",
+            "compatibleLayoutIds": [
+              "statement-flow"
+            ],
+            "frameRange": {
+              "minWidth": 173.594,
+              "maxWidth": 304,
+              "minHeight": 58,
+              "maxHeight": 58
+            }
+          }
+        ],
+        "slotCapabilities": {
+          "state": {
+            "itemCount": 3
+          },
+          "contentFrame": null,
+          "container": {
+            "pointRendering": "merged-body",
+            "bodyContainerMode": "single-flow",
+            "itemTitleRequired": false,
+            "itemBodyRequired": false,
+            "itemBodySourceField": "support",
+            "itemBodyTextMode": "flow",
+            "itemBodyListPolicy": "inline"
+          },
+          "textSlots": [],
+          "mediaSlots": [
+            {
+              "role": "icon",
+              "scope": "per-item",
+              "count": 3,
+              "type": "icon",
+              "provider": "tabler-icons",
+              "required": true,
+              "selection": "local-top-1"
+            }
+          ]
+        },
+        "renderer": "html-component",
+        "fallbackBody": false,
+        "compositionIds": [
+          "component-full"
+        ],
+        "compositions": [
+          {
+            "id": "component-full",
+            "silhouette": "full-width-visual",
+            "requiresComponent": true,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "component",
+                "role": "component"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "fallbackCandidate": {
+      "logicId": "skin",
+      "structureGroupId": "editorial",
+      "familyId": "skin-body-editorial",
+      "assetId": "northeastern-university-body-001",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "readiness": "fallback",
+      "reasons": [
+        "deterministic-body-fallback"
+      ],
+      "itemCount": {
+        "min": 0,
+        "preferred": [
+          2,
+          3,
+          4
+        ],
+        "max": 20
+      },
+      "textCapacity": null,
+      "textFlow": null,
+      "contentContract": null,
+      "mediaContract": {
+        "mode": "no-image",
+        "required": []
+      },
+      "slotContract": null,
+      "textRegions": [],
+      "slotCapabilities": {
+        "state": {
+          "itemCount": 3
+        },
+        "contentFrame": null,
+        "container": {
+          "pointRendering": "merged-body",
+          "bodyContainerMode": "single-flow",
+          "itemTitleRequired": false,
+          "itemBodyRequired": false,
+          "itemBodySourceField": "support",
+          "itemBodyTextMode": "flow",
+          "itemBodyListPolicy": "inline"
+        },
+        "textSlots": [],
+        "mediaSlots": []
+      },
+      "renderer": "skin",
+      "fallbackBody": true,
+      "compositionIds": [
+        "editorial-list",
+        "editorial-focus",
+        "editorial-focus-reverse",
+        "editorial-single-focus",
+        "editorial-dual-statement",
+        "editorial-grid"
+      ],
+      "compositions": [
+        {
+          "id": "editorial-list",
+          "silhouette": "editorial-lead-and-list",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "lead",
+              "role": "text"
+            },
+            {
+              "id": "body",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-focus",
+          "silhouette": "large-thesis-with-support",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "primary",
+              "role": "text"
+            },
+            {
+              "id": "support",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-focus-reverse",
+          "silhouette": "support-with-large-thesis-right",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "support",
+              "role": "text"
+            },
+            {
+              "id": "primary",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-single-focus",
+          "silhouette": "centered-single-thesis",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "primary",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-dual-statement",
+          "silhouette": "balanced-dual-statement",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "left",
+              "role": "text"
+            },
+            {
+              "id": "right",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-grid",
+          "silhouette": "responsive-editorial-grid",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "body",
+              "role": "text"
+            }
+          ]
+        }
+      ]
+    },
+    "capacityDensity": "medium",
+    "semanticRejections": [
+      {
+        "assetId": "argument-evidence-conclusion-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "branching-decision-routes-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:branched"
+        ]
+      },
+      {
+        "assetId": "branching-scenario-fan-004",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:branched"
+        ]
+      },
+      {
+        "assetId": "causal-fishbone-attribution-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "below-min:itemCount",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "causal-mediator-chain-003",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "comparison-dual-verdict-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "above-max:itemCount"
+        ]
+      },
+      {
+        "assetId": "comparison-pros-cons-balance-005",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "below-min:itemCount"
+        ]
+      },
+      {
+        "assetId": "containment-consensus-field-005",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "containment-multi-set-intersection-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "convergence-funnel-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "convergence-many-to-one-003",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "convergence-simple-funnel-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "cycle-loop-001",
+        "reasons": [
+          "base-relation:parallel",
+          "semantic:ordered",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "cycle-racetrack-loop-005",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "cycle-single-chain-feedback-002",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "goal-alignment-strategy-metrics-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "hierarchy-grouped-breakdown-005",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "hub-directed-outcomes-002",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "hub-radial-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "hub-two-tier-capabilities-004",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "layered-architecture-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "layered-iceberg-depth-006",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "matrix-cross-grid-003",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:dimensions"
+        ]
+      },
+      {
+        "assetId": "matrix-quadrant-priority-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "below-min:itemCount",
+          "trait:dimensions"
+        ]
+      },
+      {
+        "assetId": "network-internal-external-ecosystem-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "below-min:itemCount",
+          "trait:dimensions",
+          "trait:secondaryDimension"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-agenda-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-body-001",
+        "reasons": [
+          "base-relation:parallel"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-closing-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-cover-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "parallel-folded-notes-grid-002",
+        "reasons": [
+          "below-min:itemCount"
+        ]
+      },
+      {
+        "assetId": "problem-method-result-001",
+        "reasons": [
+          "base-relation:parallel",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "problem-solution-outcome-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "progression-growth-curve-004",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "progression-maturity-steps-002",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "progression-spectrum-focus-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "role-stage-collaboration-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:temporal",
+          "trait:dimensions",
+          "trait:secondaryDimension"
+        ]
+      },
+      {
+        "assetId": "sequence-flow-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "sequence-phase-gates-004",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered"
+        ]
+      }
+    ],
+    "capacityRejections": [],
+    "candidateDiagnostics": {
+      "query": {
+        "logicId": "parallel",
+        "baseRelation": "parallel",
+        "purposeKey": "present_parallel_points",
+        "itemCount": 3,
+        "structuredDataType": null,
+        "capacityDensity": "medium"
+      },
+      "eligible": [
+        {
+          "assetId": "parallel-equal-cards-001",
+          "structureGroupId": "parallel-equal-cards",
+          "variants": [
+            {
+              "variantId": "equal-floating-cards",
+              "readiness": "ready"
+            }
+          ]
+        }
+      ],
+      "rejected": [
+        {
+          "assetId": "parallel-folded-notes-grid-002",
+          "readiness": "incompatible",
+          "stage": "semantic-contract",
+          "reasons": [
+            "below-min:itemCount"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "pageId": "p4",
+    "intentId": "p4-intent",
+    "candidates": [
+      {
+        "logicId": "parallel",
+        "structureGroupId": "parallel-equal-cards",
+        "familyId": "parallel-cards",
+        "assetId": "parallel-equal-cards-001",
+        "variantId": "equal-floating-cards",
+        "silhouette": "equal-cards-with-round-anchors",
+        "adaptationStatus": "adaptive",
+        "readiness": "ready",
+        "reasons": [
+          "semantic-contract-compatible",
+          "capacity-compatible"
+        ],
+        "itemCount": {
+          "min": 2,
+          "preferred": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "max": 5
+        },
+        "textCapacity": null,
+        "textFlow": {
+          "profile": "text-region-layout-library",
+          "scope": "per-contiguous-region"
+        },
+        "contentContract": {
+          "itemRole": "semantic-node",
+          "points": "optional",
+          "ordered": false
+        },
+        "mediaContract": {
+          "mode": "semantic-icon",
+          "provider": "tabler-icons",
+          "selection": "local-top-1",
+          "queryOwner": "visual-director",
+          "requiredPerComponentItem": true
+        },
+        "slotContract": null,
+        "textRegions": [
+          {
+            "regionKey": "items[].support",
+            "contentRoles": [
+              "body"
+            ],
+            "defaultLayoutId": "heading-content-flow",
+            "compatibleLayoutIds": [
+              "heading-content-flow"
+            ],
+            "frameRange": {
+              "minWidth": 173.594,
+              "maxWidth": 304,
+              "minHeight": 130,
+              "maxHeight": 142
+            }
+          },
+          {
+            "regionKey": "items[].title",
+            "contentRoles": [
+              "heading"
+            ],
+            "defaultLayoutId": "statement-flow",
+            "compatibleLayoutIds": [
+              "statement-flow"
+            ],
+            "frameRange": {
+              "minWidth": 173.594,
+              "maxWidth": 304,
+              "minHeight": 58,
+              "maxHeight": 58
+            }
+          }
+        ],
+        "slotCapabilities": {
+          "state": {
+            "itemCount": 5
+          },
+          "contentFrame": null,
+          "container": {
+            "pointRendering": "merged-body",
+            "bodyContainerMode": "single-flow",
+            "itemTitleRequired": false,
+            "itemBodyRequired": false,
+            "itemBodySourceField": "support",
+            "itemBodyTextMode": "flow",
+            "itemBodyListPolicy": "inline"
+          },
+          "textSlots": [],
+          "mediaSlots": [
+            {
+              "role": "icon",
+              "scope": "per-item",
+              "count": 5,
+              "type": "icon",
+              "provider": "tabler-icons",
+              "required": true,
+              "selection": "local-top-1"
+            }
+          ]
+        },
+        "renderer": "html-component",
+        "fallbackBody": false,
+        "compositionIds": [
+          "component-full"
+        ],
+        "compositions": [
+          {
+            "id": "component-full",
+            "silhouette": "full-width-visual",
+            "requiresComponent": true,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "component",
+                "role": "component"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "logicId": "parallel",
+        "structureGroupId": "parallel-folded-notes-grid",
+        "familyId": "parallel-grid",
+        "assetId": "parallel-folded-notes-grid-002",
+        "variantId": "two-row-folded-notes",
+        "silhouette": "centered-two-row-grid-of-folded-notes",
+        "adaptationStatus": "adaptive",
+        "readiness": "ready",
+        "reasons": [
+          "semantic-contract-compatible",
+          "capacity-compatible"
+        ],
+        "itemCount": {
+          "min": 4,
+          "preferred": [
+            4,
+            6,
+            8
+          ],
+          "max": 8
+        },
+        "textCapacity": {
+          "maxCombinedCharsByState": {
+            "4": 52,
+            "5": 46,
+            "6": 42,
+            "7": 34,
+            "8": 32
+          },
+          "maxPointsPerItem": 2
+        },
+        "textFlow": {
+          "profile": "text-region-layout-library",
+          "scope": "per-contiguous-region"
+        },
+        "contentContract": {
+          "itemRole": "semantic-node",
+          "title": "required",
+          "points": "optional",
+          "ordered": false
+        },
+        "mediaContract": {
+          "mode": "semantic-icon",
+          "provider": "tabler-icons",
+          "selection": "local-top-1",
+          "queryOwner": "visual-director",
+          "requiredPerComponentItem": true
+        },
+        "slotContract": null,
+        "textRegions": [
+          {
+            "regionKey": "items[]",
+            "contentRoles": [
+              "body",
+              "heading",
+              "list"
+            ],
+            "defaultLayoutId": "heading-content-flow",
+            "compatibleLayoutIds": [
+              "heading-content-flow"
+            ],
+            "frameRange": {
+              "minWidth": 241.125,
+              "maxWidth": 290.406,
+              "minHeight": 157.047,
+              "maxHeight": 157.047
+            }
+          }
+        ],
+        "slotCapabilities": {
+          "state": {
+            "itemCount": 5
+          },
+          "contentFrame": null,
+          "container": {
+            "pointRendering": "merged-body",
+            "bodyContainerMode": "single-flow",
+            "itemTitleRequired": false,
+            "itemBodyRequired": false,
+            "itemBodySourceField": "support",
+            "itemBodyTextMode": "flow",
+            "itemBodyListPolicy": "inline"
+          },
+          "textSlots": [],
+          "mediaSlots": [
+            {
+              "role": "icon",
+              "scope": "per-item",
+              "count": 5,
+              "type": "icon",
+              "provider": "tabler-icons",
+              "required": true,
+              "selection": "local-top-1"
+            }
+          ]
+        },
+        "renderer": "html-component",
+        "fallbackBody": false,
+        "compositionIds": [
+          "component-full"
+        ],
+        "compositions": [
+          {
+            "id": "component-full",
+            "silhouette": "full-width-visual",
+            "requiresComponent": true,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "component",
+                "role": "component"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "fallbackCandidate": {
+      "logicId": "skin",
+      "structureGroupId": "editorial",
+      "familyId": "skin-body-editorial",
+      "assetId": "northeastern-university-body-001",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "readiness": "fallback",
+      "reasons": [
+        "deterministic-body-fallback"
+      ],
+      "itemCount": {
+        "min": 0,
+        "preferred": [
+          2,
+          3,
+          4
+        ],
+        "max": 20
+      },
+      "textCapacity": null,
+      "textFlow": null,
+      "contentContract": null,
+      "mediaContract": {
+        "mode": "no-image",
+        "required": []
+      },
+      "slotContract": null,
+      "textRegions": [],
+      "slotCapabilities": {
+        "state": {
+          "itemCount": 5
+        },
+        "contentFrame": null,
+        "container": {
+          "pointRendering": "merged-body",
+          "bodyContainerMode": "single-flow",
+          "itemTitleRequired": false,
+          "itemBodyRequired": false,
+          "itemBodySourceField": "support",
+          "itemBodyTextMode": "flow",
+          "itemBodyListPolicy": "inline"
+        },
+        "textSlots": [],
+        "mediaSlots": []
+      },
+      "renderer": "skin",
+      "fallbackBody": true,
+      "compositionIds": [
+        "editorial-list",
+        "editorial-focus",
+        "editorial-focus-reverse",
+        "editorial-single-focus",
+        "editorial-dual-statement",
+        "editorial-grid"
+      ],
+      "compositions": [
+        {
+          "id": "editorial-list",
+          "silhouette": "editorial-lead-and-list",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "lead",
+              "role": "text"
+            },
+            {
+              "id": "body",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-focus",
+          "silhouette": "large-thesis-with-support",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "primary",
+              "role": "text"
+            },
+            {
+              "id": "support",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-focus-reverse",
+          "silhouette": "support-with-large-thesis-right",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "support",
+              "role": "text"
+            },
+            {
+              "id": "primary",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-single-focus",
+          "silhouette": "centered-single-thesis",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "primary",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-dual-statement",
+          "silhouette": "balanced-dual-statement",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "left",
+              "role": "text"
+            },
+            {
+              "id": "right",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-grid",
+          "silhouette": "responsive-editorial-grid",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "body",
+              "role": "text"
+            }
+          ]
+        }
+      ]
+    },
+    "capacityDensity": "medium",
+    "semanticRejections": [
+      {
+        "assetId": "argument-evidence-conclusion-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "branching-decision-routes-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "above-max:itemCount",
+          "trait:branched"
+        ]
+      },
+      {
+        "assetId": "branching-scenario-fan-004",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:branched"
+        ]
+      },
+      {
+        "assetId": "causal-fishbone-attribution-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "causal-mediator-chain-003",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "above-max:itemCount"
+        ]
+      },
+      {
+        "assetId": "comparison-dual-verdict-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "above-max:itemCount"
+        ]
+      },
+      {
+        "assetId": "comparison-pros-cons-balance-005",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "containment-consensus-field-005",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "containment-multi-set-intersection-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "convergence-funnel-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "convergence-many-to-one-003",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "convergence-simple-funnel-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "cycle-loop-001",
+        "reasons": [
+          "base-relation:parallel",
+          "semantic:ordered",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "cycle-racetrack-loop-005",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "cycle-single-chain-feedback-002",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "goal-alignment-strategy-metrics-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "above-max:itemCount"
+        ]
+      },
+      {
+        "assetId": "hierarchy-grouped-breakdown-005",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "hub-directed-outcomes-002",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "hub-radial-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "hub-two-tier-capabilities-004",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "layered-architecture-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "layered-iceberg-depth-006",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "matrix-cross-grid-003",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:dimensions"
+        ]
+      },
+      {
+        "assetId": "matrix-quadrant-priority-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:dimensions"
+        ]
+      },
+      {
+        "assetId": "network-internal-external-ecosystem-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:dimensions",
+          "trait:secondaryDimension"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-agenda-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-body-001",
+        "reasons": [
+          "base-relation:parallel"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-closing-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "above-max:itemCount"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-cover-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "above-max:itemCount"
+        ]
+      },
+      {
+        "assetId": "problem-method-result-001",
+        "reasons": [
+          "base-relation:parallel",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "problem-solution-outcome-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "above-max:itemCount",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "progression-growth-curve-004",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "progression-maturity-steps-002",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "progression-spectrum-focus-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "role-stage-collaboration-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:temporal",
+          "trait:dimensions",
+          "trait:secondaryDimension"
+        ]
+      },
+      {
+        "assetId": "sequence-flow-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "sequence-phase-gates-004",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered"
+        ]
+      }
+    ],
+    "capacityRejections": [],
+    "candidateDiagnostics": {
+      "query": {
+        "logicId": "parallel",
+        "baseRelation": "parallel",
+        "purposeKey": "present_parallel_points",
+        "itemCount": 5,
+        "structuredDataType": null,
+        "capacityDensity": "medium"
+      },
+      "eligible": [
+        {
+          "assetId": "parallel-equal-cards-001",
+          "structureGroupId": "parallel-equal-cards",
+          "variants": [
+            {
+              "variantId": "equal-floating-cards",
+              "readiness": "ready"
+            }
+          ]
+        },
+        {
+          "assetId": "parallel-folded-notes-grid-002",
+          "structureGroupId": "parallel-folded-notes-grid",
+          "variants": [
+            {
+              "variantId": "two-row-folded-notes",
+              "readiness": "ready"
+            }
+          ]
+        }
+      ],
+      "rejected": []
+    }
+  },
+  {
+    "pageId": "p5",
+    "intentId": "p5-intent",
+    "candidates": [
+      {
+        "logicId": "parallel",
+        "structureGroupId": "parallel-equal-cards",
+        "familyId": "parallel-cards",
+        "assetId": "parallel-equal-cards-001",
+        "variantId": "equal-floating-cards",
+        "silhouette": "equal-cards-with-round-anchors",
+        "adaptationStatus": "adaptive",
+        "readiness": "ready",
+        "reasons": [
+          "semantic-contract-compatible",
+          "capacity-compatible"
+        ],
+        "itemCount": {
+          "min": 2,
+          "preferred": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "max": 5
+        },
+        "textCapacity": null,
+        "textFlow": {
+          "profile": "text-region-layout-library",
+          "scope": "per-contiguous-region"
+        },
+        "contentContract": {
+          "itemRole": "semantic-node",
+          "points": "optional",
+          "ordered": false
+        },
+        "mediaContract": {
+          "mode": "semantic-icon",
+          "provider": "tabler-icons",
+          "selection": "local-top-1",
+          "queryOwner": "visual-director",
+          "requiredPerComponentItem": true
+        },
+        "slotContract": null,
+        "textRegions": [
+          {
+            "regionKey": "items[].support",
+            "contentRoles": [
+              "body"
+            ],
+            "defaultLayoutId": "heading-content-flow",
+            "compatibleLayoutIds": [
+              "heading-content-flow"
+            ],
+            "frameRange": {
+              "minWidth": 173.594,
+              "maxWidth": 304,
+              "minHeight": 130,
+              "maxHeight": 142
+            }
+          },
+          {
+            "regionKey": "items[].title",
+            "contentRoles": [
+              "heading"
+            ],
+            "defaultLayoutId": "statement-flow",
+            "compatibleLayoutIds": [
+              "statement-flow"
+            ],
+            "frameRange": {
+              "minWidth": 173.594,
+              "maxWidth": 304,
+              "minHeight": 58,
+              "maxHeight": 58
+            }
+          }
+        ],
+        "slotCapabilities": {
+          "state": {
+            "itemCount": 4
+          },
+          "contentFrame": null,
+          "container": {
+            "pointRendering": "merged-body",
+            "bodyContainerMode": "single-flow",
+            "itemTitleRequired": false,
+            "itemBodyRequired": false,
+            "itemBodySourceField": "support",
+            "itemBodyTextMode": "flow",
+            "itemBodyListPolicy": "inline"
+          },
+          "textSlots": [],
+          "mediaSlots": [
+            {
+              "role": "icon",
+              "scope": "per-item",
+              "count": 4,
+              "type": "icon",
+              "provider": "tabler-icons",
+              "required": true,
+              "selection": "local-top-1"
+            }
+          ]
+        },
+        "renderer": "html-component",
+        "fallbackBody": false,
+        "compositionIds": [
+          "component-full"
+        ],
+        "compositions": [
+          {
+            "id": "component-full",
+            "silhouette": "full-width-visual",
+            "requiresComponent": true,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "component",
+                "role": "component"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "logicId": "parallel",
+        "structureGroupId": "parallel-folded-notes-grid",
+        "familyId": "parallel-grid",
+        "assetId": "parallel-folded-notes-grid-002",
+        "variantId": "two-row-folded-notes",
+        "silhouette": "centered-two-row-grid-of-folded-notes",
+        "adaptationStatus": "adaptive",
+        "readiness": "ready",
+        "reasons": [
+          "semantic-contract-compatible",
+          "capacity-compatible"
+        ],
+        "itemCount": {
+          "min": 4,
+          "preferred": [
+            4,
+            6,
+            8
+          ],
+          "max": 8
+        },
+        "textCapacity": {
+          "maxCombinedCharsByState": {
+            "4": 52,
+            "5": 46,
+            "6": 42,
+            "7": 34,
+            "8": 32
+          },
+          "maxPointsPerItem": 2
+        },
+        "textFlow": {
+          "profile": "text-region-layout-library",
+          "scope": "per-contiguous-region"
+        },
+        "contentContract": {
+          "itemRole": "semantic-node",
+          "title": "required",
+          "points": "optional",
+          "ordered": false
+        },
+        "mediaContract": {
+          "mode": "semantic-icon",
+          "provider": "tabler-icons",
+          "selection": "local-top-1",
+          "queryOwner": "visual-director",
+          "requiredPerComponentItem": true
+        },
+        "slotContract": null,
+        "textRegions": [
+          {
+            "regionKey": "items[]",
+            "contentRoles": [
+              "body",
+              "heading",
+              "list"
+            ],
+            "defaultLayoutId": "heading-content-flow",
+            "compatibleLayoutIds": [
+              "heading-content-flow"
+            ],
+            "frameRange": {
+              "minWidth": 241.125,
+              "maxWidth": 290.406,
+              "minHeight": 157.047,
+              "maxHeight": 157.047
+            }
+          }
+        ],
+        "slotCapabilities": {
+          "state": {
+            "itemCount": 4
+          },
+          "contentFrame": null,
+          "container": {
+            "pointRendering": "merged-body",
+            "bodyContainerMode": "single-flow",
+            "itemTitleRequired": false,
+            "itemBodyRequired": false,
+            "itemBodySourceField": "support",
+            "itemBodyTextMode": "flow",
+            "itemBodyListPolicy": "inline"
+          },
+          "textSlots": [],
+          "mediaSlots": [
+            {
+              "role": "icon",
+              "scope": "per-item",
+              "count": 4,
+              "type": "icon",
+              "provider": "tabler-icons",
+              "required": true,
+              "selection": "local-top-1"
+            }
+          ]
+        },
+        "renderer": "html-component",
+        "fallbackBody": false,
+        "compositionIds": [
+          "component-full"
+        ],
+        "compositions": [
+          {
+            "id": "component-full",
+            "silhouette": "full-width-visual",
+            "requiresComponent": true,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "component",
+                "role": "component"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "fallbackCandidate": {
+      "logicId": "skin",
+      "structureGroupId": "editorial",
+      "familyId": "skin-body-editorial",
+      "assetId": "northeastern-university-body-001",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "readiness": "fallback",
+      "reasons": [
+        "deterministic-body-fallback"
+      ],
+      "itemCount": {
+        "min": 0,
+        "preferred": [
+          2,
+          3,
+          4
+        ],
+        "max": 20
+      },
+      "textCapacity": null,
+      "textFlow": null,
+      "contentContract": null,
+      "mediaContract": {
+        "mode": "no-image",
+        "required": []
+      },
+      "slotContract": null,
+      "textRegions": [],
+      "slotCapabilities": {
+        "state": {
+          "itemCount": 4
+        },
+        "contentFrame": null,
+        "container": {
+          "pointRendering": "merged-body",
+          "bodyContainerMode": "single-flow",
+          "itemTitleRequired": false,
+          "itemBodyRequired": false,
+          "itemBodySourceField": "support",
+          "itemBodyTextMode": "flow",
+          "itemBodyListPolicy": "inline"
+        },
+        "textSlots": [],
+        "mediaSlots": []
+      },
+      "renderer": "skin",
+      "fallbackBody": true,
+      "compositionIds": [
+        "editorial-list",
+        "editorial-focus",
+        "editorial-focus-reverse",
+        "editorial-single-focus",
+        "editorial-dual-statement",
+        "editorial-grid"
+      ],
+      "compositions": [
+        {
+          "id": "editorial-list",
+          "silhouette": "editorial-lead-and-list",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "lead",
+              "role": "text"
+            },
+            {
+              "id": "body",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-focus",
+          "silhouette": "large-thesis-with-support",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "primary",
+              "role": "text"
+            },
+            {
+              "id": "support",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-focus-reverse",
+          "silhouette": "support-with-large-thesis-right",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "support",
+              "role": "text"
+            },
+            {
+              "id": "primary",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-single-focus",
+          "silhouette": "centered-single-thesis",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "primary",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-dual-statement",
+          "silhouette": "balanced-dual-statement",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "left",
+              "role": "text"
+            },
+            {
+              "id": "right",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-grid",
+          "silhouette": "responsive-editorial-grid",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "body",
+              "role": "text"
+            }
+          ]
+        }
+      ]
+    },
+    "capacityDensity": "medium",
+    "semanticRejections": [
+      {
+        "assetId": "argument-evidence-conclusion-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "branching-decision-routes-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:branched"
+        ]
+      },
+      {
+        "assetId": "branching-scenario-fan-004",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:branched"
+        ]
+      },
+      {
+        "assetId": "causal-fishbone-attribution-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "causal-mediator-chain-003",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "comparison-dual-verdict-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "above-max:itemCount"
+        ]
+      },
+      {
+        "assetId": "comparison-pros-cons-balance-005",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "containment-consensus-field-005",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "containment-multi-set-intersection-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "convergence-funnel-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "convergence-many-to-one-003",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "convergence-simple-funnel-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "cycle-loop-001",
+        "reasons": [
+          "base-relation:parallel",
+          "semantic:ordered",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "cycle-racetrack-loop-005",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "cycle-single-chain-feedback-002",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "goal-alignment-strategy-metrics-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "hierarchy-grouped-breakdown-005",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "hub-directed-outcomes-002",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "hub-radial-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "hub-two-tier-capabilities-004",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "layered-architecture-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "layered-iceberg-depth-006",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "matrix-cross-grid-003",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:dimensions"
+        ]
+      },
+      {
+        "assetId": "matrix-quadrant-priority-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:dimensions"
+        ]
+      },
+      {
+        "assetId": "network-internal-external-ecosystem-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:dimensions",
+          "trait:secondaryDimension"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-agenda-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-body-001",
+        "reasons": [
+          "base-relation:parallel"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-closing-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "above-max:itemCount"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-cover-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points"
+        ]
+      },
+      {
+        "assetId": "problem-method-result-001",
+        "reasons": [
+          "base-relation:parallel",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "problem-solution-outcome-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:converging"
+        ]
+      },
+      {
+        "assetId": "progression-growth-curve-004",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "progression-maturity-steps-002",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "progression-spectrum-focus-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "role-stage-collaboration-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "trait:temporal",
+          "trait:dimensions",
+          "trait:secondaryDimension"
+        ]
+      },
+      {
+        "assetId": "sequence-flow-001",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "sequence-phase-gates-004",
+        "reasons": [
+          "base-relation:parallel",
+          "purpose-key:present_parallel_points",
+          "semantic:ordered"
+        ]
+      }
+    ],
+    "capacityRejections": [],
+    "candidateDiagnostics": {
+      "query": {
+        "logicId": "parallel",
+        "baseRelation": "parallel",
+        "purposeKey": "present_parallel_points",
+        "itemCount": 4,
+        "structuredDataType": null,
+        "capacityDensity": "medium"
+      },
+      "eligible": [
+        {
+          "assetId": "parallel-equal-cards-001",
+          "structureGroupId": "parallel-equal-cards",
+          "variants": [
+            {
+              "variantId": "equal-floating-cards",
+              "readiness": "ready"
+            }
+          ]
+        },
+        {
+          "assetId": "parallel-folded-notes-grid-002",
+          "structureGroupId": "parallel-folded-notes-grid",
+          "variants": [
+            {
+              "variantId": "two-row-folded-notes",
+              "readiness": "ready"
+            }
+          ]
+        }
+      ],
+      "rejected": []
+    }
+  },
+  {
+    "pageId": "p6",
+    "intentId": "p6-intent",
+    "candidates": [
+      {
+        "logicId": "convergence",
+        "structureGroupId": "convergence-simple-funnel",
+        "familyId": "convergence-funnel",
+        "assetId": "convergence-simple-funnel-001",
+        "variantId": "input-steps-only",
+        "silhouette": "inputs-centered-funnel",
+        "adaptationStatus": "adaptive",
+        "readiness": "ready",
+        "reasons": [
+          "semantic-contract-compatible",
+          "capacity-compatible"
+        ],
+        "itemCount": {
+          "min": 3,
+          "preferred": [
+            3,
+            4,
+            5
+          ],
+          "max": 6
+        },
+        "textCapacity": {
+          "maxInputLabelChars": 4,
+          "maxItemTitleChars": 8
+        },
+        "textFlow": null,
+        "contentContract": {
+          "itemRole": "semantic-node",
+          "points": "optional",
+          "ordered": true,
+          "orderDirection": "top-to-bottom",
+          "relationTraits": {
+            "converging": true
+          },
+          "inputs": {
+            "min": 0,
+            "max": 7,
+            "optional": true
+          },
+          "structuredDataType": "convergence-optional"
+        },
+        "mediaContract": {
+          "mode": "semantic-icon",
+          "provider": "tabler-icons",
+          "selection": "local-top-1",
+          "queryOwner": "visual-director",
+          "source": "structuredData.inputs",
+          "requiredPerInput": false,
+          "inputCount": {
+            "min": 0,
+            "max": 7
+          }
+        },
+        "slotContract": null,
+        "textRegions": [],
+        "slotCapabilities": {
+          "state": {
+            "itemCount": 5
+          },
+          "contentFrame": null,
+          "container": {
+            "pointRendering": "merged-body",
+            "bodyContainerMode": "single-flow",
+            "itemTitleRequired": false,
+            "itemBodyRequired": false,
+            "itemBodySourceField": "support",
+            "itemBodyTextMode": "flow",
+            "itemBodyListPolicy": "inline"
+          },
+          "textSlots": [
+            {
+              "role": "item-title",
+              "scope": "per-item",
+              "maxChars": 8,
+              "count": 5,
+              "sourceField": "title",
+              "required": false,
+              "textMode": "single-line",
+              "listPolicy": "none"
+            }
+          ],
+          "mediaSlots": [
+            {
+              "role": "icon",
+              "scope": "structured-input",
+              "count": {
+                "min": 0,
+                "max": 7
+              },
+              "type": "icon",
+              "provider": "tabler-icons",
+              "required": false,
+              "selection": "local-top-1"
+            }
+          ]
+        },
+        "renderer": "html-component",
+        "fallbackBody": false,
+        "compositionIds": [
+          "component-full"
+        ],
+        "compositions": [
+          {
+            "id": "component-full",
+            "silhouette": "full-width-visual",
+            "requiresComponent": true,
+            "requiresMedia": false,
+            "slots": [
+              {
+                "id": "component",
+                "role": "component"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "fallbackCandidate": {
+      "logicId": "skin",
+      "structureGroupId": "editorial",
+      "familyId": "skin-body-editorial",
+      "assetId": "northeastern-university-body-001",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "readiness": "fallback",
+      "reasons": [
+        "deterministic-body-fallback"
+      ],
+      "itemCount": {
+        "min": 0,
+        "preferred": [
+          2,
+          3,
+          4
+        ],
+        "max": 20
+      },
+      "textCapacity": null,
+      "textFlow": null,
+      "contentContract": null,
+      "mediaContract": {
+        "mode": "no-image",
+        "required": []
+      },
+      "slotContract": null,
+      "textRegions": [],
+      "slotCapabilities": {
+        "state": {
+          "itemCount": 5
+        },
+        "contentFrame": null,
+        "container": {
+          "pointRendering": "merged-body",
+          "bodyContainerMode": "single-flow",
+          "itemTitleRequired": false,
+          "itemBodyRequired": false,
+          "itemBodySourceField": "support",
+          "itemBodyTextMode": "flow",
+          "itemBodyListPolicy": "inline"
+        },
+        "textSlots": [],
+        "mediaSlots": []
+      },
+      "renderer": "skin",
+      "fallbackBody": true,
+      "compositionIds": [
+        "editorial-list",
+        "editorial-focus",
+        "editorial-focus-reverse",
+        "editorial-single-focus",
+        "editorial-dual-statement",
+        "editorial-grid"
+      ],
+      "compositions": [
+        {
+          "id": "editorial-list",
+          "silhouette": "editorial-lead-and-list",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "lead",
+              "role": "text"
+            },
+            {
+              "id": "body",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-focus",
+          "silhouette": "large-thesis-with-support",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "primary",
+              "role": "text"
+            },
+            {
+              "id": "support",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-focus-reverse",
+          "silhouette": "support-with-large-thesis-right",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "support",
+              "role": "text"
+            },
+            {
+              "id": "primary",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-single-focus",
+          "silhouette": "centered-single-thesis",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "primary",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-dual-statement",
+          "silhouette": "balanced-dual-statement",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "left",
+              "role": "text"
+            },
+            {
+              "id": "right",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-grid",
+          "silhouette": "responsive-editorial-grid",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "body",
+              "role": "text"
+            }
+          ]
+        }
+      ]
+    },
+    "capacityDensity": "medium",
+    "semanticRejections": [
+      {
+        "assetId": "argument-evidence-conclusion-001",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion"
+        ]
+      },
+      {
+        "assetId": "branching-decision-routes-001",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion",
+          "above-max:itemCount",
+          "trait:branched"
+        ]
+      },
+      {
+        "assetId": "branching-scenario-fan-004",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion",
+          "semantic:ordered",
+          "semantic:sameLevel",
+          "trait:branched"
+        ]
+      },
+      {
+        "assetId": "causal-fishbone-attribution-001",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion"
+        ]
+      },
+      {
+        "assetId": "causal-mediator-chain-003",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion",
+          "above-max:itemCount"
+        ]
+      },
+      {
+        "assetId": "comparison-dual-verdict-001",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion",
+          "above-max:itemCount"
+        ]
+      },
+      {
+        "assetId": "comparison-pros-cons-balance-005",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "containment-consensus-field-005",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion",
+          "semantic:ordered",
+          "semantic:sameLevel"
+        ]
+      },
+      {
+        "assetId": "containment-multi-set-intersection-001",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion",
+          "semantic:sameLevel"
+        ]
+      },
+      {
+        "assetId": "convergence-many-to-one-003",
+        "reasons": [
+          "semantic:ordered",
+          "semantic:sameLevel"
+        ]
+      },
+      {
+        "assetId": "cycle-loop-001",
+        "reasons": [
+          "base-relation:convergence",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "cycle-racetrack-loop-005",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "cycle-single-chain-feedback-002",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion",
+          "trait:cyclic"
+        ]
+      },
+      {
+        "assetId": "goal-alignment-strategy-metrics-001",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion",
+          "above-max:itemCount"
+        ]
+      },
+      {
+        "assetId": "hierarchy-grouped-breakdown-005",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion",
+          "semantic:ordered",
+          "semantic:sameLevel"
+        ]
+      },
+      {
+        "assetId": "hub-directed-outcomes-002",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion",
+          "semantic:sameLevel"
+        ]
+      },
+      {
+        "assetId": "hub-radial-001",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "hub-two-tier-capabilities-004",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion"
+        ]
+      },
+      {
+        "assetId": "layered-architecture-001",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion"
+        ]
+      },
+      {
+        "assetId": "layered-iceberg-depth-006",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "matrix-cross-grid-003",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion",
+          "trait:dimensions"
+        ]
+      },
+      {
+        "assetId": "matrix-quadrant-priority-001",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion",
+          "trait:dimensions"
+        ]
+      },
+      {
+        "assetId": "network-internal-external-ecosystem-001",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion",
+          "semantic:ordered",
+          "semantic:sameLevel",
+          "trait:dimensions",
+          "trait:secondaryDimension"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-agenda-001",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-body-001",
+        "reasons": [
+          "base-relation:convergence"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-closing-001",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion",
+          "above-max:itemCount",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "northeastern-university-cover-001",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion",
+          "above-max:itemCount",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "parallel-equal-cards-001",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "parallel-folded-notes-grid-002",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion",
+          "semantic:ordered"
+        ]
+      },
+      {
+        "assetId": "problem-method-result-001",
+        "reasons": [
+          "base-relation:convergence"
+        ]
+      },
+      {
+        "assetId": "problem-solution-outcome-001",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion",
+          "above-max:itemCount"
+        ]
+      },
+      {
+        "assetId": "progression-growth-curve-004",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion"
+        ]
+      },
+      {
+        "assetId": "progression-maturity-steps-002",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion"
+        ]
+      },
+      {
+        "assetId": "progression-spectrum-focus-001",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion"
+        ]
+      },
+      {
+        "assetId": "role-stage-collaboration-001",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion",
+          "trait:temporal",
+          "trait:dimensions",
+          "trait:secondaryDimension"
+        ]
+      },
+      {
+        "assetId": "sequence-flow-001",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion"
+        ]
+      },
+      {
+        "assetId": "sequence-phase-gates-004",
+        "reasons": [
+          "base-relation:convergence",
+          "purpose-key:explain_conversion"
+        ]
+      }
+    ],
+    "capacityRejections": [],
+    "candidateDiagnostics": {
+      "query": {
+        "logicId": "convergence",
+        "baseRelation": "convergence",
+        "purposeKey": "explain_conversion",
+        "itemCount": 5,
+        "structuredDataType": null,
+        "capacityDensity": "medium"
+      },
+      "eligible": [
+        {
+          "assetId": "convergence-simple-funnel-001",
+          "structureGroupId": "convergence-simple-funnel",
+          "variants": [
+            {
+              "variantId": "input-steps-only",
+              "readiness": "ready"
+            }
+          ]
+        }
+      ],
+      "rejected": [
+        {
+          "assetId": "convergence-many-to-one-003",
+          "readiness": "incompatible",
+          "stage": "semantic-contract",
+          "reasons": [
+            "semantic:ordered",
+            "semantic:sameLevel"
+          ]
+        },
+        {
+          "assetId": "convergence-funnel-001",
+          "readiness": "incompatible",
+          "stage": "variant-contract",
+          "reasons": [
+            "structured-data:convergence"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "pageId": "shell-closing",
+    "intentId": "shell-closing-intent",
+    "candidates": [
+      {
+        "logicId": "skin",
+        "structureGroupId": "default",
+        "familyId": "skin-closing",
+        "assetId": "northeastern-university-closing-001",
+        "variantId": "default",
+        "silhouette": "closing",
+        "adaptationStatus": "fixed",
+        "readiness": "ready",
+        "reasons": [],
+        "itemCount": {
+          "min": 0,
+          "preferred": [
+            1,
+            2
+          ],
+          "max": 3
+        },
+        "textCapacity": null,
+        "textFlow": null,
+        "contentContract": null,
+        "mediaContract": {
+          "mode": "no-image",
+          "required": []
+        },
+        "slotContract": null,
+        "textRegions": [],
+        "slotCapabilities": {
+          "state": {
+            "itemCount": 1
+          },
+          "contentFrame": null,
+          "container": {
+            "pointRendering": "merged-body",
+            "bodyContainerMode": "single-flow",
+            "itemTitleRequired": false,
+            "itemBodyRequired": false,
+            "itemBodySourceField": "support",
+            "itemBodyTextMode": "flow",
+            "itemBodyListPolicy": "inline"
+          },
+          "textSlots": [],
+          "mediaSlots": []
+        },
+        "renderer": "skin",
+        "fallbackBody": false,
+        "compositionIds": [
+          "fixed-closing"
+        ],
+        "compositions": [
+          {
+            "id": "fixed-closing",
+            "silhouette": "closing",
+            "requiresComponent": false,
+            "requiresMedia": false,
+            "slots": []
+          }
+        ]
+      }
+    ],
+    "fallbackCandidate": {
+      "logicId": "skin",
+      "structureGroupId": "editorial",
+      "familyId": "skin-body-editorial",
+      "assetId": "northeastern-university-body-001",
+      "variantId": "editorial",
+      "silhouette": "editorial-page",
+      "adaptationStatus": "adaptive",
+      "readiness": "fallback",
+      "reasons": [
+        "deterministic-body-fallback"
+      ],
+      "itemCount": {
+        "min": 0,
+        "preferred": [
+          2,
+          3,
+          4
+        ],
+        "max": 20
+      },
+      "textCapacity": null,
+      "textFlow": null,
+      "contentContract": null,
+      "mediaContract": {
+        "mode": "no-image",
+        "required": []
+      },
+      "slotContract": null,
+      "textRegions": [],
+      "slotCapabilities": {
+        "state": {
+          "itemCount": 1
+        },
+        "contentFrame": null,
+        "container": {
+          "pointRendering": "merged-body",
+          "bodyContainerMode": "single-flow",
+          "itemTitleRequired": false,
+          "itemBodyRequired": false,
+          "itemBodySourceField": "support",
+          "itemBodyTextMode": "flow",
+          "itemBodyListPolicy": "inline"
+        },
+        "textSlots": [],
+        "mediaSlots": []
+      },
+      "renderer": "skin",
+      "fallbackBody": true,
+      "compositionIds": [
+        "editorial-list",
+        "editorial-focus",
+        "editorial-focus-reverse",
+        "editorial-single-focus",
+        "editorial-dual-statement",
+        "editorial-grid"
+      ],
+      "compositions": [
+        {
+          "id": "editorial-list",
+          "silhouette": "editorial-lead-and-list",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "lead",
+              "role": "text"
+            },
+            {
+              "id": "body",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-focus",
+          "silhouette": "large-thesis-with-support",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "primary",
+              "role": "text"
+            },
+            {
+              "id": "support",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-focus-reverse",
+          "silhouette": "support-with-large-thesis-right",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "support",
+              "role": "text"
+            },
+            {
+              "id": "primary",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-single-focus",
+          "silhouette": "centered-single-thesis",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "primary",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-dual-statement",
+          "silhouette": "balanced-dual-statement",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "left",
+              "role": "text"
+            },
+            {
+              "id": "right",
+              "role": "text"
+            }
+          ]
+        },
+        {
+          "id": "editorial-grid",
+          "silhouette": "responsive-editorial-grid",
+          "requiresComponent": false,
+          "requiresMedia": false,
+          "slots": [
+            {
+              "id": "body",
+              "role": "text"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

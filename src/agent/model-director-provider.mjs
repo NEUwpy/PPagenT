@@ -11,6 +11,7 @@ import {
   visualSkillRoutingSchema,
 } from "./visual-skill-router.mjs";
 import { extractManuscriptSections } from "../content/manuscript-sections.mjs";
+import { candidateReadiness, normalizeDerivationPolicy } from "./visual-resolution.mjs";
 
 const CONTENT_DIRECTOR_SYSTEM_PROMPT = [
   "PPagenT 内容导演",
@@ -105,23 +106,90 @@ export function candidateSetsForVisualDirector(candidateSets, previousFeedback =
   const overflowPages = new Set(previousFeedback
     .filter((item) => item.code === "component-runtime-overflow")
     .map((item) => item.pageId));
+  const normalizeCandidate = (candidate, context = {}) => {
+    if (!candidate) return null;
+    const derivation = normalizeDerivationPolicy(
+      candidate.derivationPolicy ?? candidate.contentContract?.derivationPolicy,
+    );
+    const readiness = candidateReadiness(candidate, context);
+    const normalized = {
+      ...candidate,
+      readiness,
+      reasons: readiness === "incompatible" && candidate.readiness === "derivable"
+        ? [...(candidate.reasons ?? []), ...derivation.errors]
+        : candidate.reasons ?? [],
+      ...(readiness === "derivable" ? { derivationPolicy: derivation.policy } : {}),
+    };
+    if (readiness !== "derivable") delete normalized.derivationPolicy;
+    delete normalized.contentReadiness;
+    return normalized;
+  };
+  const uniqueCandidates = (candidates, context = {}) => {
+    const seen = new Set();
+    return candidates.flatMap((candidate) => {
+      const normalized = normalizeCandidate(candidate, context);
+      if (!normalized) return [];
+      const key = [normalized.assetId, normalized.familyId, normalized.variantId, normalized.silhouette].join("::");
+      if (seen.has(key)) return [];
+      seen.add(key);
+      return [normalized];
+    });
+  };
+  const finalize = (set, candidates, context, forcedMode = null) => {
+    const groups = [...new Set(candidates.map((candidate) => candidate.structureGroupId).filter(Boolean))];
+    const selectionMode = !candidates.length ? null : forcedMode
+      ?? (candidates.every((candidate) => candidate.readiness === "fallback")
+        ? "fallback-locked"
+        : groups.length <= 1 ? "group-locked" : "visual-selectable");
+    const lockedStructureGroupId = selectionMode === "group-locked" && groups.length === 1
+      ? groups[0]
+      : null;
+    return {
+      ...set,
+      candidates: candidates.map((candidate) => ({ ...candidate, selectionMode })),
+      ...(selectionMode ? { selectionMode } : {}),
+      ...(set.fallbackCandidate ? { fallbackCandidate: normalizeCandidate(set.fallbackCandidate, context) } : {}),
+      ...(lockedStructureGroupId ? { lockedStructureGroupId } : {}),
+    };
+  };
+
   return candidateSets.map((set) => {
-    const structural = set.candidates.filter((candidate) => !candidate.fallbackBody);
-    const readyStructural = structural.filter((candidate) => candidate.contentReadiness !== "needs-semantic-refinement");
-    const fallback = set.candidates.filter((candidate) => candidate.fallbackBody);
-    if (overflowPages.has(set.pageId) && fallback.length) return { ...set, candidates: fallback };
-    if (readyStructural.length) return { ...set, candidates: readyStructural };
-    if (structural.length) {
+    const context = {
+      assetGap: set.gap?.type === "asset-gap",
+      runtimeOverflow: overflowPages.has(set.pageId),
+    };
+    const normalized = uniqueCandidates(set.candidates ?? [], context);
+    const structural = normalized.filter((candidate) => !candidate.fallbackBody);
+    const legalStructural = structural.filter((candidate) => (
+      new Set(["ready", "derivable"]).has(candidate.readiness)
+    ));
+    const incompatibleStructural = structural.filter((candidate) => candidate.readiness === "incompatible");
+    const contextualReadyBody = normalized.filter((candidate) => candidate.fallbackBody && candidate.readiness === "ready");
+    const contextualFallbackCandidate = context.assetGap || context.runtimeOverflow
+      ? [set.fallbackCandidate]
+      : [];
+    const fallback = uniqueCandidates([
+      ...normalized.filter((candidate) => candidate.readiness === "fallback"),
+      ...contextualFallbackCandidate,
+    ], context).map((candidate) => ({
+      ...candidate,
+      readiness: "fallback",
+      reasons: candidate.reasons?.length ? candidate.reasons : ["deterministic-body-fallback"],
+    }));
+    if (overflowPages.has(set.pageId) && fallback.length) return finalize(set, fallback, context, "fallback-locked");
+    if (legalStructural.length) return finalize(set, legalStructural, context);
+    if (incompatibleStructural.length) {
       return {
-        ...set,
-        candidates: [],
+        ...finalize(set, [], context, null),
         gap: set.gap ?? {
-          type: "asset-gap",
-          reason: "structural-candidates-require-semantic-refinement",
+          type: "content-contract-gap",
+          reason: "structural-candidates-miss-core-content-fields",
         },
       };
     }
-    return set;
+    if (contextualReadyBody.length) return finalize(set, contextualReadyBody, context, "group-locked");
+    if (fallback.length) return finalize(set, fallback, context, "fallback-locked");
+    return finalize(set, [], context, null);
   });
 }
 
@@ -421,8 +489,8 @@ export function enforceSectionPageContract(contentOutput, rawMarkdown, structura
       : {}),
     notes: [page.notes, sectionTag(section), shellTag(section)].filter(Boolean).join("；"),
   });
-  const allExplicitPages = sections.every((section) => section.markerKind === "explicit-page");
-  const positionalAssignmentAllowed = allExplicitPages && output.pageContents.length === sections.length;
+  const onePagePerSection = output.pageContents.length === sections.length;
+  const positionalAssignmentAllowed = onePagePerSection;
   const sectionIndexForPage = (page, pageIndex) => {
     const sourceText = String(page.sourceText ?? "");
     const existingTag = sections.findIndex((section) => String(page.notes ?? "").includes(sectionTag(section)));
@@ -451,7 +519,12 @@ export function enforceSectionPageContract(contentOutput, rawMarkdown, structura
     const sectionIndex = sectionIndexForPage(page, pageIndex);
     if (sectionIndex < 0 || assignedCounts[sectionIndex] >= 1 + allowances[sectionIndex]) return;
     assignedCounts[sectionIndex] += 1;
-    assignedPages[sectionIndex].push(tagPage(page, sections[sectionIndex]));
+    const section = sections[sectionIndex];
+    const pageSource = String(page.sourceText ?? "");
+    const groundedPage = onePagePerSection && (!pageSource || !section.sourceText.includes(pageSource))
+      ? { ...page, sourceText: section.sourceText }
+      : page;
+    assignedPages[sectionIndex].push(tagPage(groundedPage, section));
   });
   const usedIds = new Set(output.pageContents.map((page) => page.pageId));
   sections.forEach((section, sectionIndex) => {
@@ -493,16 +566,18 @@ export function enforceSectionPageContract(contentOutput, rawMarkdown, structura
   output.deckPlan.pages = output.pageContents.map((page, index) => {
     const sectionIndex = sections.findIndex((section) => String(page.notes ?? "").includes(sectionTag(section)));
     const existing = planById.get(page.pageId);
+    const section = sections[sectionIndex];
+    const groundedAnchors = (existing?.sourceAnchors ?? []).filter((anchor) => (
+      section?.sourceText.includes(String(anchor))
+    ));
     return {
       ...existing,
       pageId: page.pageId,
       sequence: index + 1,
       narrativeJob: existing?.narrativeJob ?? `说明“${page.title}”并支撑整套核心主张`,
-      sourceAnchors: sections[sectionIndex]?.markerKind === "explicit-page"
-        ? [sections[sectionIndex].markerLine]
-        : (existing?.sourceAnchors?.length
-          ? existing.sourceAnchors
-          : [sections[sectionIndex]?.markerLine ?? page.sourceText]),
+      sourceAnchors: section?.markerKind === "explicit-page"
+        ? [section.markerLine]
+        : (groundedAnchors.length ? groundedAnchors : [section?.markerLine ?? page.sourceText]),
     };
   });
   return output;
@@ -609,8 +684,9 @@ export function createModelDirectorProvider({
       );
       const routingOutput = await visualComposition.generateJson({
         role: "PPagenT 视觉导演",
-        task: "内容导演已经为每页确定 Logic，你不得重新分类或跨 Logic 选择。像调用 Skills 一样，只在该页合法候选中选择具体 Structure Group，并决定核心短标签、语义图标查询、TextRegion 的组合排版以及必要的局部内容细化。candidateId 必须逐字复制该页 candidates 中的值。选定候选若披露 textRegions，只能从各 Region 的 compatibleLayoutIds 中选择；同级重复 Region 只按 regionKey 选择一次，程序会扩展到每个实际区域。没有文字区域或默认排版已经合适时省略 textLayoutChoices。优先使用语义与容量都合法的 Structure Group；如果该页只提供 fallbackBody 候选，或 previousFeedback 明确报告 component-runtime-overflow，则选择正文兜底，不得继续选择已证明装不下的结构。centerLabel 是页面核心概念的 2–8 字中文短标签，所有页面都填写；若结构没有中心标签槽，程序会忽略。若选中 mediaMode=semantic-icon 的候选，必须为每个 item 输出一个简短英文 icon query，sourceItemId 使用该 item.id；其他候选省略 iconQueries。只有 contentReadiness=needs-semantic-refinement 且原文明确支持缺失分点时才输出 refinementItemIds，否则省略；不得改变 Logic。只有同页存在多个候选或需要响应 previousFeedback 时才写简短 reason，否则省略。不要输出坐标、字号、间距、CompositionPlan、HTML/CSS 或重复正文；程序会读取 Structure Group 表单、形成 TextBinding，并用确定性排版器完成适配。按 pages 原顺序逐页输出且不得遗漏。",
+        task: "内容导演已经为每页确定 Logic，你不得重新分类或跨 Logic 选择。像调用 Skills 一样，只在该页合法候选中选择具体 Structure Group，并决定核心短标签、语义图标查询和 TextRegion 的组合排版。candidateId 必须逐字复制该页 candidates 中的值；selectionMode=group-locked 表示程序已经锁定唯一合法 Structure Group，你仍需为该页完成 centerLabel、图标、文字布局和整套节奏判断，但不得跨出 lockedStructureGroupId。readiness=ready 可直接绑定，readiness=derivable 只允许按 derivationPolicy.allowedFields 补展示字段；reasons 只是解释，不授予派生权限，不得补造核心节点、分点或关系。选定候选若披露 textRegions，只能从各 Region 的 compatibleLayoutIds 中选择；同级重复 Region 只按 regionKey 选择一次，程序会扩展到每个实际区域。没有文字区域或默认排版已经合适时省略 textLayoutChoices。如果该页 selectionMode=fallback-locked，或 previousFeedback 明确报告 component-runtime-overflow，则使用已锁定的正文兜底，不得继续选择已证明装不下的结构。centerLabel 是页面核心概念的 2–8 字中文短标签，所有页面都填写；若结构没有中心标签槽，程序会忽略。若选中 mediaMode=semantic-icon 的候选，只为该候选披露的 iconSourceItemIds 逐项输出简短英文 icon query，sourceItemId 必须逐字复制；iconSourceItemIds 为空时省略 iconQueries，不得改用普通 items。其他候选也省略 iconQueries。只有 selectionMode=visual-selectable 或需要响应 previousFeedback 时才写简短 reason，否则省略。不要输出坐标、字号、间距、CompositionPlan、HTML/CSS、重复正文或内容细化请求；程序会读取 Structure Group 表单、形成 TextBinding，并用确定性排版器完成适配。按 pages 原顺序逐页输出且不得遗漏。",
         context: {
+          deckPlan: input.deckPlan,
           pages: compactPages,
           previousFeedback: input.previousResolution?.feedback ?? [],
         },

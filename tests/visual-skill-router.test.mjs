@@ -55,20 +55,31 @@ const fallback = {
   }],
 };
 
-test("视觉路由只看紧凑 Skill 摘要并由程序展开正式表单", () => {
-  const sets = [{ pageId: "p1", candidates: [core, fallback] }];
+test("锁定 Structure Group 的页面仍向视觉导演披露展示适配字段", () => {
+  const sets = [{
+    pageId: "p1",
+    candidates: [{ ...core, readiness: "ready", reasons: ["semantic-contract-compatible"], selectionMode: "group-locked" }],
+    fallbackCandidate: { ...fallback, readiness: "fallback" },
+    selectionMode: "group-locked",
+    lockedStructureGroupId: "hub-radial-anchor",
+  }];
   const compact = compactVisualSkillContext([page], [intent], sets);
+  assert.equal(compact[0].selectionMode, "group-locked");
+  assert.equal(compact[0].lockedStructureGroupId, "hub-radial-anchor");
   assert.deepEqual(Object.keys(compact[0].candidates[0]).sort(), [
-    "candidateId", "contentReadiness", "fallbackBody", "iconsRequiredPerItem",
-    "itemRange", "logicId", "mediaMode", "structureGroupId", "textRegions",
+    "candidateId", "fallbackBody", "iconSourceItemIds", "iconsRequiredPerItem", "itemRange", "logicId",
+    "mediaMode", "readiness", "reasons", "selectionMode", "structureGroupId", "textRegions",
   ]);
   const schema = visualSkillRoutingSchema([page], sets);
   assert.equal(schema.schema.properties.selections.minItems, 1);
-  assert.deepEqual(schema.schema.properties.selections.items.required, ["pageId", "candidateId", "centerLabel"]);
+  const pageSchema = schema.schema.properties.selections.items.anyOf[0];
+  assert.deepEqual(pageSchema.required, ["pageId", "candidateId", "centerLabel"]);
+  assert.equal(pageSchema.properties.pageId.const, "p1");
+  assert.equal(pageSchema.properties.candidateId.const, "hub-radial::balanced-orbit-anchor::radial");
 
   const expanded = expandVisualSkillRouting({ selections: [{
     pageId: "p1",
-    candidateId: "skin-body-editorial::editorial::editorial-page",
+    candidateId: "hub-radial::balanced-orbit-anchor::radial",
     centerLabel: "判断中心",
     iconQueries: [
       { sourceItemId: "a", query: "target" },
@@ -104,7 +115,39 @@ test("视觉路由可省略空数组和理由并由程序补默认值", () => {
   assert.deepEqual(expanded.compositionPlan.pages[0].textLayoutChoices, []);
 });
 
-test("同一稿件连续页面有多个合法结构时优先使用较少出现的结构", () => {
+test("结构化输入图标契约不会把普通 items 当作图标来源", () => {
+  const candidate = {
+    ...core,
+    mediaContract: {
+      mode: "semantic-icon",
+      source: "structuredData.inputs",
+      requiredPerInput: false,
+    },
+  };
+  const sets = [{
+    pageId: "p1",
+    candidates: [candidate],
+    selectionMode: "group-locked",
+    lockedStructureGroupId: candidate.structureGroupId,
+  }];
+  const compact = compactVisualSkillContext([page], [intent], sets);
+  assert.deepEqual(compact[0].candidates[0].iconSourceItemIds, []);
+  const pageSchema = visualSkillRoutingSchema([page], sets)
+    .schema.properties.selections.items.anyOf[0];
+  assert.equal(pageSchema.properties.iconQueries.items.properties.sourceItemId.const, "__no-source-item__");
+
+  const expanded = expandVisualSkillRouting({ selections: [{
+    pageId: "p1",
+    candidateId: "hub-radial::balanced-orbit-anchor::radial",
+    centerLabel: "共同目标",
+    iconQueries: page.items.map((item) => ({ sourceItemId: item.id, query: "target" })),
+  }] }, {
+    deckPlan: { deckId: "deck" }, skinId: "skin", pageContents: [page], pageIntents: [intent], candidateSets: sets,
+  });
+  assert.deepEqual(expanded.visualPlan.pages[0].iconQueries, []);
+});
+
+test("多候选重复选择只记录而不再被程序静默改选", () => {
   const alternate = {
     ...core,
     assetId: "hub-directed-outcomes-002",
@@ -141,6 +184,98 @@ test("同一稿件连续页面有多个合法结构时优先使用较少出现�
   });
   assert.deepEqual(expanded.visualPlan.pages.map((item) => item.familyId), [
     "hub-radial",
-    "hub-directed-outcomes",
+    "hub-radial",
   ]);
+  assert.match(expanded.visualPlan.pages[1].reason, /保留视觉导演选择并记录重复/);
+});
+
+test("逐页 schema 不允许把另一页候选填到锁定页", () => {
+  const second = {
+    ...core,
+    assetId: "sequence-flow-001",
+    structureGroupId: "sequence-flow",
+    familyId: "sequence-process",
+    variantId: "flow",
+    silhouette: "rail",
+  };
+  const pages = [page, { ...page, pageId: "p2" }];
+  const intents = [intent, { ...intent, intentId: "p2-intent" }];
+  const sets = [
+    {
+      pageId: "p1", candidates: [core], selectionMode: "group-locked", lockedStructureGroupId: core.structureGroupId,
+    },
+    {
+      pageId: "p2", candidates: [second], selectionMode: "group-locked", lockedStructureGroupId: second.structureGroupId,
+    },
+  ];
+  const schema = visualSkillRoutingSchema(pages, sets).schema.properties.selections.items.anyOf;
+  assert.equal(schema[0].properties.candidateId.const, "hub-radial::balanced-orbit-anchor::radial");
+  assert.equal(schema[1].properties.candidateId.const, "sequence-process::flow::rail");
+  assert.notEqual(schema[0].properties.candidateId.const, schema[1].properties.candidateId.const);
+});
+
+test("锁定页忽略越权 candidateId 并继续应用实际候选的展示字段", () => {
+  const alternate = {
+    ...core,
+    assetId: "hub-directed-outcomes-002",
+    structureGroupId: "hub-directed-outcomes",
+    familyId: "hub-directed-outcomes",
+    variantId: "directed-outcomes",
+    silhouette: "directed-radial",
+  };
+  const set = {
+    pageId: "p1",
+    candidates: [core, alternate],
+    selectionMode: "group-locked",
+    lockedStructureGroupId: core.structureGroupId,
+  };
+  const expanded = expandVisualSkillRouting({ selections: [{
+    pageId: "p1",
+    candidateId: "hub-directed-outcomes::directed-outcomes::directed-radial",
+    centerLabel: "锁定中心",
+    textLayoutChoices: [{ regionKey: "items[].support", layoutId: "statement-flow" }],
+  }] }, {
+    deckPlan: { deckId: "deck" }, skinId: "skin", pageContents: [page], pageIntents: [intent], candidateSets: [set],
+  });
+  assert.equal(expanded.visualPlan.pages[0].familyId, core.familyId);
+  assert.equal(expanded.compositionPlan.pages[0].componentText[0].text, "锁定中心");
+  assert.deepEqual(expanded.routingDiagnostics, [{
+    pageId: "p1",
+    lockedStructureGroupId: core.structureGroupId,
+    ignoredRequestedCandidateId: "hub-directed-outcomes::directed-outcomes::directed-radial",
+    appliedCandidateId: "hub-radial::balanced-orbit-anchor::radial",
+  }]);
+});
+
+test("fallback 锁定页忽略越权 candidateId 并保持正文兜底", () => {
+  const set = {
+    pageId: "p1",
+    candidates: [{ ...fallback, readiness: "fallback", reasons: ["asset-gap"] }],
+    selectionMode: "fallback-locked",
+  };
+  const result = expandVisualSkillRouting({ selections: [{
+    pageId: "p1",
+    candidateId: "unrelated::candidate::id",
+    centerLabel: "正文兜底",
+  }] }, {
+    deckPlan: { deckId: "deck" }, skinId: "skin", pageContents: [page], pageIntents: [intent], candidateSets: [set],
+  });
+  assert.equal(result.visualPlan.pages[0].familyId, fallback.familyId);
+  assert.equal(result.compositionPlan.pages[0].compositionId, "editorial-list");
+  assert.equal(result.routingDiagnostics[0].selectionMode, "fallback-locked");
+  assert.equal(result.routingDiagnostics[0].ignoredRequestedCandidateId, "unrelated::candidate::id");
+});
+
+test("能力卡只向合法 derivable 候选披露白名单 derivationPolicy", () => {
+  const candidate = {
+    ...core,
+    readiness: "derivable",
+    derivationPolicy: { allowedFields: ["centerLabel", "compressedBody"] },
+  };
+  const compact = compactVisualSkillContext([page], [intent], [{
+    pageId: "p1", candidates: [candidate], selectionMode: "group-locked", lockedStructureGroupId: candidate.structureGroupId,
+  }]);
+  assert.deepEqual(compact[0].candidates[0].derivationPolicy, {
+    allowedFields: ["centerLabel", "compressedBody"],
+  });
 });

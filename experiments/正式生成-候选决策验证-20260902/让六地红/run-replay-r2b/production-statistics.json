@@ -1,0 +1,666 @@
+{
+  "schemaVersion": "1.0",
+  "bodyPageCount": 6,
+  "structurePageCount": 4,
+  "editorialPageCount": 1,
+  "fallbackPageCount": 1,
+  "selectionSourceCounts": {
+    "program-locked": 3,
+    "visual-director": 2,
+    "deterministic-ranking": 0,
+    "deterministic-fallback": 1
+  },
+  "structureCoverageRate": 0.6667,
+  "uniqueStructureCount": 2,
+  "repeatedStructureCount": 1,
+  "repeatedUseCount": 2,
+  "structureUsage": [
+    {
+      "assetId": "parallel-equal-cards-001",
+      "logicId": "parallel",
+      "structureGroupId": "parallel-equal-cards",
+      "familyId": "parallel-cards",
+      "variantId": "equal-floating-cards",
+      "silhouette": "equal-cards-with-round-anchors",
+      "pageIds": [
+        "p3",
+        "p4",
+        "p5"
+      ],
+      "useCount": 3
+    },
+    {
+      "assetId": "convergence-simple-funnel-001",
+      "logicId": "convergence",
+      "structureGroupId": "convergence-simple-funnel",
+      "familyId": "convergence-funnel",
+      "variantId": "input-steps-only",
+      "silhouette": "inputs-centered-funnel",
+      "pageIds": [
+        "p6"
+      ],
+      "useCount": 1
+    }
+  ],
+  "repeatedStructures": [
+    {
+      "assetId": "parallel-equal-cards-001",
+      "logicId": "parallel",
+      "structureGroupId": "parallel-equal-cards",
+      "familyId": "parallel-cards",
+      "variantId": "equal-floating-cards",
+      "silhouette": "equal-cards-with-round-anchors",
+      "pageIds": [
+        "p3",
+        "p4",
+        "p5"
+      ],
+      "useCount": 3,
+      "repeatedUseCount": 2
+    }
+  ],
+  "logicUsage": [
+    {
+      "logicId": "skin",
+      "logicLabel": "skin",
+      "pageIds": [
+        "p1"
+      ],
+      "structurePageIds": [],
+      "fallbackPageIds": [],
+      "editorialPageIds": [
+        "p1"
+      ],
+      "assetIds": [],
+      "pageCount": 1,
+      "structurePageCount": 0,
+      "fallbackPageCount": 0,
+      "editorialPageCount": 1
+    },
+    {
+      "logicId": "comparison",
+      "logicLabel": "对比与选择",
+      "pageIds": [
+        "p2"
+      ],
+      "structurePageIds": [],
+      "fallbackPageIds": [
+        "p2"
+      ],
+      "editorialPageIds": [],
+      "assetIds": [],
+      "pageCount": 1,
+      "structurePageCount": 0,
+      "fallbackPageCount": 1,
+      "editorialPageCount": 0
+    },
+    {
+      "logicId": "parallel",
+      "logicLabel": "并列与枚举",
+      "pageIds": [
+        "p3",
+        "p4",
+        "p5"
+      ],
+      "structurePageIds": [
+        "p3",
+        "p4",
+        "p5"
+      ],
+      "fallbackPageIds": [],
+      "editorialPageIds": [],
+      "assetIds": [
+        "parallel-equal-cards-001"
+      ],
+      "pageCount": 3,
+      "structurePageCount": 3,
+      "fallbackPageCount": 0,
+      "editorialPageCount": 0
+    },
+    {
+      "logicId": "convergence",
+      "logicLabel": "汇聚、分流与转化",
+      "pageIds": [
+        "p6"
+      ],
+      "structurePageIds": [
+        "p6"
+      ],
+      "fallbackPageIds": [],
+      "editorialPageIds": [],
+      "assetIds": [
+        "convergence-simple-funnel-001"
+      ],
+      "pageCount": 1,
+      "structurePageCount": 1,
+      "fallbackPageCount": 0,
+      "editorialPageCount": 0
+    }
+  ],
+  "candidateAvailability": {
+    "zeroCandidatePageCount": 1,
+    "singleCandidatePageCount": 2,
+    "multipleCandidatePageCount": 2
+  },
+  "candidateAvailabilityByLogic": [
+    {
+      "logicId": "comparison",
+      "logicLabel": "对比与选择",
+      "pageCount": 1,
+      "zeroCandidatePageCount": 1,
+      "singleCandidatePageCount": 0,
+      "multipleCandidatePageCount": 0,
+      "eligibleAssetIds": []
+    },
+    {
+      "logicId": "parallel",
+      "logicLabel": "并列与枚举",
+      "pageCount": 3,
+      "zeroCandidatePageCount": 0,
+      "singleCandidatePageCount": 1,
+      "multipleCandidatePageCount": 2,
+      "eligibleAssetIds": [
+        "parallel-equal-cards-001",
+        "parallel-folded-notes-grid-002"
+      ]
+    },
+    {
+      "logicId": "convergence",
+      "logicLabel": "汇聚、分流与转化",
+      "pageCount": 1,
+      "zeroCandidatePageCount": 0,
+      "singleCandidatePageCount": 1,
+      "multipleCandidatePageCount": 0,
+      "eligibleAssetIds": [
+        "convergence-simple-funnel-001"
+      ]
+    }
+  ],
+  "diversityGaps": [],
+  "pageCandidateDiagnostics": [
+    {
+      "pageId": "p1",
+      "title": "开场",
+      "logicId": "editorial",
+      "candidateCount": 1,
+      "diagnosis": "editorial",
+      "selectedAssetId": "northeastern-university-body-001",
+      "selectedStructureAssetId": null,
+      "selectedCompositionId": "editorial-single-focus",
+      "selectedReadiness": "ready",
+      "selectionSource": "program-locked",
+      "selectionOwner": "program",
+      "selected": {
+        "assetId": "northeastern-university-body-001",
+        "structureAssetId": null,
+        "structureGroupId": "editorial",
+        "familyId": "skin-body-editorial",
+        "variantId": "editorial",
+        "silhouette": "editorial-page",
+        "compositionId": "editorial-single-focus",
+        "readiness": "ready",
+        "source": "program-locked",
+        "owner": "program"
+      },
+      "fallback": {
+        "used": false,
+        "reason": null
+      },
+      "retainedCandidates": [
+        {
+          "assetId": "northeastern-university-body-001",
+          "structureGroupId": "editorial",
+          "familyId": "skin-body-editorial",
+          "variantId": "editorial",
+          "silhouette": "editorial-page",
+          "readiness": "ready",
+          "reasons": [
+            "editorial-body"
+          ]
+        }
+      ],
+      "excludedCandidates": [],
+      "eligibleCandidates": [
+        {
+          "assetId": "northeastern-university-body-001",
+          "structureGroupId": "editorial",
+          "variants": [
+            {
+              "variantId": "editorial",
+              "readiness": "ready"
+            }
+          ]
+        }
+      ],
+      "rejectedCandidates": []
+    },
+    {
+      "pageId": "p2",
+      "title": "从“三高三低”到深耕辽宁",
+      "logicId": "comparison",
+      "candidateCount": 0,
+      "diagnosis": "asset-gap",
+      "selectedAssetId": "northeastern-university-body-001",
+      "selectedStructureAssetId": null,
+      "selectedCompositionId": "editorial-dual-statement",
+      "selectedReadiness": "fallback",
+      "selectionSource": "deterministic-fallback",
+      "selectionOwner": "program",
+      "selected": {
+        "assetId": "northeastern-university-body-001",
+        "structureAssetId": null,
+        "structureGroupId": "editorial",
+        "familyId": "skin-body-editorial",
+        "variantId": "editorial",
+        "silhouette": "editorial-page",
+        "compositionId": "editorial-dual-statement",
+        "readiness": "fallback",
+        "source": "deterministic-fallback",
+        "owner": "program"
+      },
+      "fallback": {
+        "used": true,
+        "reason": {
+          "code": "asset-gap",
+          "detail": "当前核心资产库没有语义与容量均兼容的 Structure Group"
+        }
+      },
+      "retainedCandidates": [
+        {
+          "assetId": "northeastern-university-body-001",
+          "structureGroupId": "editorial",
+          "familyId": "skin-body-editorial",
+          "variantId": "editorial",
+          "silhouette": "editorial-page",
+          "readiness": "fallback",
+          "reasons": [
+            "deterministic-body-fallback"
+          ]
+        }
+      ],
+      "excludedCandidates": [
+        {
+          "assetId": "comparison-pros-cons-balance-005",
+          "readiness": "incompatible",
+          "stage": "semantic-contract",
+          "reasons": [
+            "below-min:itemCount"
+          ]
+        },
+        {
+          "assetId": "comparison-dual-verdict-001",
+          "readiness": "incompatible",
+          "stage": "variant-contract",
+          "reasons": [
+            "points:required-per-item",
+            "point-count:3-5",
+            "polarity:positive-negative-pair"
+          ]
+        }
+      ],
+      "eligibleCandidates": [],
+      "rejectedCandidates": [
+        {
+          "assetId": "comparison-pros-cons-balance-005",
+          "readiness": "incompatible",
+          "stage": "semantic-contract",
+          "reasons": [
+            "below-min:itemCount"
+          ]
+        },
+        {
+          "assetId": "comparison-dual-verdict-001",
+          "readiness": "incompatible",
+          "stage": "variant-contract",
+          "reasons": [
+            "points:required-per-item",
+            "point-count:3-5",
+            "polarity:positive-negative-pair"
+          ]
+        }
+      ]
+    },
+    {
+      "pageId": "p3",
+      "title": "“1+3+N”新矩阵",
+      "logicId": "parallel",
+      "candidateCount": 1,
+      "diagnosis": "single-legal-candidate",
+      "selectedAssetId": "parallel-equal-cards-001",
+      "selectedStructureAssetId": "parallel-equal-cards-001",
+      "selectedCompositionId": "component-full",
+      "selectedReadiness": "ready",
+      "selectionSource": "program-locked",
+      "selectionOwner": "program",
+      "selected": {
+        "assetId": "parallel-equal-cards-001",
+        "structureAssetId": "parallel-equal-cards-001",
+        "structureGroupId": "parallel-equal-cards",
+        "familyId": "parallel-cards",
+        "variantId": "equal-floating-cards",
+        "silhouette": "equal-cards-with-round-anchors",
+        "compositionId": "component-full",
+        "readiness": "ready",
+        "source": "program-locked",
+        "owner": "program"
+      },
+      "fallback": {
+        "used": false,
+        "reason": null
+      },
+      "retainedCandidates": [
+        {
+          "assetId": "parallel-equal-cards-001",
+          "structureGroupId": "parallel-equal-cards",
+          "familyId": "parallel-cards",
+          "variantId": "equal-floating-cards",
+          "silhouette": "equal-cards-with-round-anchors",
+          "readiness": "ready",
+          "reasons": [
+            "semantic-contract-compatible",
+            "capacity-compatible"
+          ]
+        }
+      ],
+      "excludedCandidates": [
+        {
+          "assetId": "parallel-folded-notes-grid-002",
+          "readiness": "incompatible",
+          "stage": "semantic-contract",
+          "reasons": [
+            "below-min:itemCount"
+          ]
+        }
+      ],
+      "eligibleCandidates": [
+        {
+          "assetId": "parallel-equal-cards-001",
+          "structureGroupId": "parallel-equal-cards",
+          "variants": [
+            {
+              "variantId": "equal-floating-cards",
+              "readiness": "ready"
+            }
+          ]
+        }
+      ],
+      "rejectedCandidates": [
+        {
+          "assetId": "parallel-folded-notes-grid-002",
+          "readiness": "incompatible",
+          "stage": "semantic-contract",
+          "reasons": [
+            "below-min:itemCount"
+          ]
+        }
+      ]
+    },
+    {
+      "pageId": "p4",
+      "title": "五类实践抓手",
+      "logicId": "parallel",
+      "candidateCount": 2,
+      "diagnosis": "multiple-legal-candidates",
+      "selectedAssetId": "parallel-equal-cards-001",
+      "selectedStructureAssetId": "parallel-equal-cards-001",
+      "selectedCompositionId": "component-full",
+      "selectedReadiness": "ready",
+      "selectionSource": "visual-director",
+      "selectionOwner": "visual-director",
+      "selected": {
+        "assetId": "parallel-equal-cards-001",
+        "structureAssetId": "parallel-equal-cards-001",
+        "structureGroupId": "parallel-equal-cards",
+        "familyId": "parallel-cards",
+        "variantId": "equal-floating-cards",
+        "silhouette": "equal-cards-with-round-anchors",
+        "compositionId": "component-full",
+        "readiness": "ready",
+        "source": "visual-director",
+        "owner": "visual-director"
+      },
+      "fallback": {
+        "used": false,
+        "reason": null
+      },
+      "retainedCandidates": [
+        {
+          "assetId": "parallel-equal-cards-001",
+          "structureGroupId": "parallel-equal-cards",
+          "familyId": "parallel-cards",
+          "variantId": "equal-floating-cards",
+          "silhouette": "equal-cards-with-round-anchors",
+          "readiness": "ready",
+          "reasons": [
+            "semantic-contract-compatible",
+            "capacity-compatible"
+          ]
+        },
+        {
+          "assetId": "parallel-folded-notes-grid-002",
+          "structureGroupId": "parallel-folded-notes-grid",
+          "familyId": "parallel-grid",
+          "variantId": "two-row-folded-notes",
+          "silhouette": "centered-two-row-grid-of-folded-notes",
+          "readiness": "ready",
+          "reasons": [
+            "semantic-contract-compatible",
+            "capacity-compatible"
+          ]
+        }
+      ],
+      "excludedCandidates": [],
+      "eligibleCandidates": [
+        {
+          "assetId": "parallel-equal-cards-001",
+          "structureGroupId": "parallel-equal-cards",
+          "variants": [
+            {
+              "variantId": "equal-floating-cards",
+              "readiness": "ready"
+            }
+          ]
+        },
+        {
+          "assetId": "parallel-folded-notes-grid-002",
+          "structureGroupId": "parallel-folded-notes-grid",
+          "variants": [
+            {
+              "variantId": "two-row-folded-notes",
+              "readiness": "ready"
+            }
+          ]
+        }
+      ],
+      "rejectedCandidates": []
+    },
+    {
+      "pageId": "p5",
+      "title": "五年成效",
+      "logicId": "parallel",
+      "candidateCount": 2,
+      "diagnosis": "multiple-legal-candidates",
+      "selectedAssetId": "parallel-equal-cards-001",
+      "selectedStructureAssetId": "parallel-equal-cards-001",
+      "selectedCompositionId": "component-full",
+      "selectedReadiness": "ready",
+      "selectionSource": "visual-director",
+      "selectionOwner": "visual-director",
+      "selected": {
+        "assetId": "parallel-equal-cards-001",
+        "structureAssetId": "parallel-equal-cards-001",
+        "structureGroupId": "parallel-equal-cards",
+        "familyId": "parallel-cards",
+        "variantId": "equal-floating-cards",
+        "silhouette": "equal-cards-with-round-anchors",
+        "compositionId": "component-full",
+        "readiness": "ready",
+        "source": "visual-director",
+        "owner": "visual-director"
+      },
+      "fallback": {
+        "used": false,
+        "reason": null
+      },
+      "retainedCandidates": [
+        {
+          "assetId": "parallel-equal-cards-001",
+          "structureGroupId": "parallel-equal-cards",
+          "familyId": "parallel-cards",
+          "variantId": "equal-floating-cards",
+          "silhouette": "equal-cards-with-round-anchors",
+          "readiness": "ready",
+          "reasons": [
+            "semantic-contract-compatible",
+            "capacity-compatible"
+          ]
+        },
+        {
+          "assetId": "parallel-folded-notes-grid-002",
+          "structureGroupId": "parallel-folded-notes-grid",
+          "familyId": "parallel-grid",
+          "variantId": "two-row-folded-notes",
+          "silhouette": "centered-two-row-grid-of-folded-notes",
+          "readiness": "ready",
+          "reasons": [
+            "semantic-contract-compatible",
+            "capacity-compatible"
+          ]
+        }
+      ],
+      "excludedCandidates": [],
+      "eligibleCandidates": [
+        {
+          "assetId": "parallel-equal-cards-001",
+          "structureGroupId": "parallel-equal-cards",
+          "variants": [
+            {
+              "variantId": "equal-floating-cards",
+              "readiness": "ready"
+            }
+          ]
+        },
+        {
+          "assetId": "parallel-folded-notes-grid-002",
+          "structureGroupId": "parallel-folded-notes-grid",
+          "variants": [
+            {
+              "variantId": "two-row-folded-notes",
+              "readiness": "ready"
+            }
+          ]
+        }
+      ],
+      "rejectedCandidates": []
+    },
+    {
+      "pageId": "p6",
+      "title": "收束",
+      "logicId": "convergence",
+      "candidateCount": 1,
+      "diagnosis": "single-legal-candidate",
+      "selectedAssetId": "convergence-simple-funnel-001",
+      "selectedStructureAssetId": "convergence-simple-funnel-001",
+      "selectedCompositionId": "component-full",
+      "selectedReadiness": "ready",
+      "selectionSource": "program-locked",
+      "selectionOwner": "program",
+      "selected": {
+        "assetId": "convergence-simple-funnel-001",
+        "structureAssetId": "convergence-simple-funnel-001",
+        "structureGroupId": "convergence-simple-funnel",
+        "familyId": "convergence-funnel",
+        "variantId": "input-steps-only",
+        "silhouette": "inputs-centered-funnel",
+        "compositionId": "component-full",
+        "readiness": "ready",
+        "source": "program-locked",
+        "owner": "program"
+      },
+      "fallback": {
+        "used": false,
+        "reason": null
+      },
+      "retainedCandidates": [
+        {
+          "assetId": "convergence-simple-funnel-001",
+          "structureGroupId": "convergence-simple-funnel",
+          "familyId": "convergence-funnel",
+          "variantId": "input-steps-only",
+          "silhouette": "inputs-centered-funnel",
+          "readiness": "ready",
+          "reasons": [
+            "semantic-contract-compatible",
+            "capacity-compatible"
+          ]
+        }
+      ],
+      "excludedCandidates": [
+        {
+          "assetId": "convergence-many-to-one-003",
+          "readiness": "incompatible",
+          "stage": "semantic-contract",
+          "reasons": [
+            "semantic:ordered",
+            "semantic:sameLevel"
+          ]
+        },
+        {
+          "assetId": "convergence-funnel-001",
+          "readiness": "incompatible",
+          "stage": "variant-contract",
+          "reasons": [
+            "structured-data:convergence"
+          ]
+        }
+      ],
+      "eligibleCandidates": [
+        {
+          "assetId": "convergence-simple-funnel-001",
+          "structureGroupId": "convergence-simple-funnel",
+          "variants": [
+            {
+              "variantId": "input-steps-only",
+              "readiness": "ready"
+            }
+          ]
+        }
+      ],
+      "rejectedCandidates": [
+        {
+          "assetId": "convergence-many-to-one-003",
+          "readiness": "incompatible",
+          "stage": "semantic-contract",
+          "reasons": [
+            "semantic:ordered",
+            "semantic:sameLevel"
+          ]
+        },
+        {
+          "assetId": "convergence-funnel-001",
+          "readiness": "incompatible",
+          "stage": "variant-contract",
+          "reasons": [
+            "structured-data:convergence"
+          ]
+        }
+      ]
+    }
+  ],
+  "recommendedStructureSupplements": [
+    {
+      "logicId": "comparison",
+      "logicLabel": "对比与选择",
+      "baseRelation": "comparison",
+      "itemCounts": [
+        2
+      ],
+      "affectedPageIds": [
+        "p2"
+      ],
+      "assessment": "necessary-existing-logic-supplement",
+      "recommendation": "为“对比与选择”补充可承载 2 项标题与正文的通用 Structure Group",
+      "reason": "原稿关系已明确属于该 Logic，但当前核心资产没有语义与容量均兼容的表达方式"
+    }
+  ]
+}

@@ -153,7 +153,8 @@ function resolver({ compositionPlan } = {}) {
       selectedVariantId: "orbit",
       selectedSilhouette: "center-orbit",
       selectionState: "selected",
-      selectionOwner: "visual-director",
+      selectionOwner: "program",
+      selectionSource: "program-locked",
       candidates: [],
       rejections: [],
       resolutionPlan: null,
@@ -204,6 +205,25 @@ test("workflow schemas including CompositionPlan are registered", async () => {
   assert.equal(typeof validators.validateVisualPlan, "function");
   assert.equal(typeof validators.validateCompositionPlan, "function");
   assert.equal(typeof validators.validateVisualReview, "function");
+});
+
+test("LayoutDecision 的机器选择来源与 owner 必须显式配对", async () => {
+  const validators = await createRuleValidators(root);
+  const base = resolver({ compositionPlan: visualPlanOutput().compositionPlan }).layoutDecisions[0];
+  const pairs = [
+    ["program-locked", "program"],
+    ["visual-director", "visual-director"],
+    ["deterministic-ranking", "program"],
+    ["deterministic-fallback", "program"],
+  ];
+  for (const [selectionSource, selectionOwner] of pairs) {
+    assert.equal(validators.validateLayoutDecision({ ...base, selectionSource, selectionOwner }), true);
+  }
+  assert.equal(validators.validateLayoutDecision({
+    ...base,
+    selectionSource: "program-locked",
+    selectionOwner: "visual-director",
+  }), false);
 });
 
 test("内容导演返回空 structuredData 时按未提供处理", async (t) => {
@@ -467,6 +487,36 @@ test("内容来源溯源错误会在受控次数内反馈重试", async (t) => {
   assert.equal(result.status, "delivered");
   assert.equal(contentCalls, 2);
   assert.equal(receivedReview.issues[0].errorCode, "SOURCE_GROUNDING_FAILED");
+});
+
+test("内容导演把可选 points 留空时在 schema 校验前按未提供处理", async (t) => {
+  const outputDir = await makeTempDir(t);
+  const provider = completeProvider({
+    async contentDirector() {
+      const output = contentOutput();
+      output.pageContents[0].items[0].points = null;
+      output.pageContents[0].items.push({
+        id: "point-2",
+        title: "空分点",
+        body: "仍然只有正文",
+        points: "",
+      });
+      return output;
+    },
+  });
+
+  const result = await runDirectorWorkflow({
+    input: { rawMarkdown },
+    provider,
+    outputDir,
+    reviewMode: "production",
+    visualCandidateProvider: candidateProvider,
+    visualResolver: resolver,
+    renderer,
+  });
+
+  assert.equal(Object.hasOwn(result.pageContents[0].items[0], "points"), false);
+  assert.equal(Object.hasOwn(result.pageContents[0].items[1], "points"), false);
 });
 
 test("Logic 判断证据必须是该页原文中的连续片段", async (t) => {
@@ -828,13 +878,14 @@ test("正式生成遇到资产缺口时用正文候选完成交付并暴露必�
       layoutDecisions: [{
         schemaVersion: "1.0",
         intentId: "problem-intent",
-        decision: "single-match",
+        decision: "fallback",
         selectedFamilyId: "skin-body-editorial",
         selectedAssetId: "northeastern-university-body-001",
         selectedVariantId: "editorial",
         selectedSilhouette: "editorial-page",
-        selectionState: "selected",
-        selectionOwner: "visual-director",
+        selectionState: "fallback",
+        selectionOwner: "program",
+        selectionSource: "deterministic-fallback",
         candidates: [],
         rejections: [],
         resolutionPlan: null,
@@ -851,7 +902,8 @@ test("正式生成遇到资产缺口时用正文候选完成交付并暴露必�
     }),
     renderer,
   });
-  assert.equal(result.status, "delivered");
+  assert.equal(result.status, "delivered-with-fallback");
+  assert.equal(result.deliveryStatus, "delivered-with-fallback");
   assert.equal(result.assetGapReport.fallbackPageCount, 1);
   assert.equal(result.assetGapReport.fallbackPages[0].pageId, "problem");
   assert.equal(result.assetGapReport.recommendedStructureSupplements[0].assessment, "necessary-existing-logic-supplement");
@@ -945,6 +997,200 @@ test("生产统计记录结构使用、重复次数和退回数量", () => {
   }]);
   assert.equal(statistics.pageCandidateDiagnostics.find((item) => item.pageId === "p1").diagnosis, "single-legal-candidate");
   assert.equal(statistics.pageCandidateDiagnostics.find((item) => item.pageId === "p3").diagnosis, "asset-gap");
+});
+
+test("生产统计记录候选 readiness、排除原因、实际选择和四类来源", () => {
+  const pageContents = ["p1", "p2", "p3", "p4"].map((pageId) => ({
+    pageId,
+    title: pageId,
+    items: [],
+    logicIntent: { logicId: pageId === "p4" ? "comparison" : "parallel" },
+  }));
+  const structure = {
+    assetId: "parallel-equal-cards-001",
+    logicId: "parallel",
+    structureGroupId: "parallel-equal-cards",
+    familyId: "parallel-cards",
+    variantId: "equal",
+    silhouette: "cards",
+    readiness: "ready",
+    reasons: ["semantic-contract-compatible"],
+    fallbackBody: false,
+  };
+  const fallback = {
+    assetId: "northeastern-university-body-001",
+    structureGroupId: "editorial",
+    familyId: "skin-body-editorial",
+    variantId: "editorial",
+    silhouette: "editorial-page",
+    readiness: "fallback",
+    reasons: ["deterministic-body-fallback"],
+    fallbackBody: true,
+  };
+  const candidateDiagnostics = {
+    query: { logicId: "parallel" },
+    eligible: [{
+      assetId: structure.assetId,
+      structureGroupId: structure.structureGroupId,
+      variants: [{ variantId: structure.variantId, readiness: "ready" }],
+    }],
+    rejected: [{
+      assetId: "parallel-unsupported-002",
+      readiness: "incompatible",
+      stage: "capacity",
+      reasons: ["item-body:90>60"],
+    }],
+  };
+  const candidateSets = [
+    { pageId: "p1", intentId: "i1", candidates: [structure], candidateDiagnostics },
+    { pageId: "p2", intentId: "i2", candidates: [structure], candidateDiagnostics },
+    { pageId: "p3", intentId: "i3", candidates: [structure], candidateDiagnostics },
+    {
+      pageId: "p4",
+      intentId: "i4",
+      candidates: [fallback],
+      gap: { type: "asset-gap", logicId: "comparison", reason: "missing structure" },
+      candidateDiagnostics: { query: { logicId: "comparison" }, eligible: [], rejected: [] },
+    },
+  ];
+  const sources = ["program-locked", "visual-director", "deterministic-ranking", "deterministic-fallback"];
+  const layoutDecisions = sources.map((selectionSource, index) => ({
+    intentId: `i${index + 1}`,
+    selectedAssetId: index === 3 ? fallback.assetId : structure.assetId,
+    selectedFamilyId: index === 3 ? fallback.familyId : structure.familyId,
+    selectedVariantId: index === 3 ? fallback.variantId : structure.variantId,
+    selectedSilhouette: index === 3 ? fallback.silhouette : structure.silhouette,
+    selectionSource,
+    selectionOwner: selectionSource === "visual-director" ? "visual-director" : "program",
+  }));
+  const compositionPlan = {
+    pages: sources.map((_, index) => ({ intentId: `i${index + 1}`, compositionId: `composition-${index + 1}` })),
+  };
+  const assetGapReport = buildAssetGapReport(candidateSets, pageContents);
+  const statistics = buildProductionStatistics({
+    candidateSets, pageContents, layoutDecisions, compositionPlan, assetGapReport,
+  });
+  assert.deepEqual(statistics.selectionSourceCounts, {
+    "program-locked": 1,
+    "visual-director": 1,
+    "deterministic-ranking": 1,
+    "deterministic-fallback": 1,
+  });
+  const retained = statistics.pageCandidateDiagnostics.find((item) => item.pageId === "p1");
+  assert.equal(retained.retainedCandidates[0].readiness, "ready");
+  assert.deepEqual(retained.excludedCandidates[0], {
+    assetId: "parallel-unsupported-002",
+    readiness: "incompatible",
+    stage: "capacity",
+    reasons: ["item-body:90>60"],
+  });
+  assert.equal(retained.selected.assetId, structure.assetId);
+  assert.equal(retained.selected.structureAssetId, structure.assetId);
+  assert.equal(retained.selected.compositionId, "composition-1");
+  assert.equal(retained.selected.readiness, "ready");
+  assert.equal(retained.selected.source, "program-locked");
+  const fallbackLog = statistics.pageCandidateDiagnostics.find((item) => item.pageId === "p4");
+  assert.equal(fallbackLog.selected.assetId, fallback.assetId);
+  assert.equal(fallbackLog.selected.structureAssetId, null);
+  assert.equal(fallbackLog.fallback.used, true);
+  assert.equal(fallbackLog.fallback.reason.code, "asset-gap");
+  assert.equal(statistics.fallbackPageCount, 1);
+});
+
+test("生产统计按完整变体元组记录同一资产的实际选择", () => {
+  const base = {
+    assetId: "shared-asset",
+    logicId: "parallel",
+    structureGroupId: "shared-group",
+    familyId: "shared-family",
+    readiness: "ready",
+    fallbackBody: false,
+  };
+  const candidates = [
+    { ...base, variantId: "v1", silhouette: "first" },
+    { ...base, variantId: "v2", silhouette: "second" },
+  ];
+  const pageContents = ["p1", "p2"].map((pageId) => ({
+    pageId, title: "同资产多变体", items: [], logicIntent: { logicId: "parallel" },
+  }));
+  const candidateSets = [
+    { pageId: "p1", intentId: "i1", candidates },
+    { pageId: "p2", intentId: "i2", candidates },
+  ];
+  const layoutDecisions = ["v2", "v1"].map((variantId, index) => ({
+    intentId: `i${index + 1}`,
+    selectedAssetId: "shared-asset",
+    selectedFamilyId: "shared-family",
+    selectedVariantId: variantId,
+    selectedSilhouette: variantId === "v2" ? "second" : "first",
+    selectionSource: "visual-director",
+    selectionOwner: "visual-director",
+  }));
+  const statistics = buildProductionStatistics({
+    candidateSets,
+    pageContents,
+    layoutDecisions,
+    assetGapReport: buildAssetGapReport(candidateSets, pageContents),
+  });
+  const selected = statistics.pageCandidateDiagnostics[0].selected;
+  assert.equal(selected.variantId, "v2");
+  assert.equal(selected.silhouette, "second");
+  assert.equal(statistics.uniqueStructureCount, 2);
+  assert.equal(statistics.repeatedStructureCount, 0);
+  assert.deepEqual(statistics.structureUsage.map((item) => item.variantId).sort(), ["v1", "v2"]);
+});
+
+test("运行时溢出 fallback 保留结构候选诊断而不误记 editorial", () => {
+  const structure = {
+    assetId: "progression-001",
+    logicId: "progression",
+    structureGroupId: "progression-path",
+    familyId: "progression",
+    variantId: "path",
+    silhouette: "ascending-path",
+    readiness: "ready",
+    fallbackBody: false,
+  };
+  const fallback = {
+    assetId: "northeastern-university-body-001",
+    structureGroupId: "editorial",
+    familyId: "skin-body-editorial",
+    variantId: "editorial",
+    silhouette: "editorial-page",
+    readiness: "fallback",
+    fallbackBody: true,
+  };
+  const pageContents = [{
+    pageId: "p1", title: "运行时溢出", items: [], logicIntent: { logicId: "progression" },
+  }];
+  const candidateSets = [{
+    pageId: "p1", intentId: "i1", candidates: [structure], fallbackCandidate: fallback,
+  }];
+  const statistics = buildProductionStatistics({
+    candidateSets,
+    pageContents,
+    layoutDecisions: [{
+      intentId: "i1",
+      selectedAssetId: fallback.assetId,
+      selectedFamilyId: fallback.familyId,
+      selectedVariantId: fallback.variantId,
+      selectedSilhouette: fallback.silhouette,
+      selectionSource: "deterministic-fallback",
+      selectionOwner: "program",
+    }],
+    assetGapReport: buildAssetGapReport(candidateSets, pageContents),
+  });
+  const diagnostic = statistics.pageCandidateDiagnostics[0];
+  assert.equal(diagnostic.fallback.used, true);
+  assert.equal(diagnostic.fallback.reason.code, "component-runtime-overflow");
+  assert.equal(diagnostic.diagnosis, "single-legal-candidate");
+  assert.equal(statistics.editorialPageCount, 0);
+  assert.equal(statistics.fallbackPageCount, 1);
+  assert.deepEqual(statistics.candidateAvailability, {
+    zeroCandidatePageCount: 0,
+    singleCandidatePageCount: 1,
+    multipleCandidatePageCount: 0,
+  });
 });
 
 test("渲染前视觉 error 未关闭时绝不调用 renderer", async (t) => {

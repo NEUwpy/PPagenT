@@ -1,0 +1,572 @@
+[
+  {
+    "intentId": "shell-cover-intent",
+    "purposeKey": "present_cover",
+    "purposeText": "呈现演示标题",
+    "baseRelation": "none",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 0,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 0,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "low",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [
+      "该页由 Shell 固定提供，不进入正文视觉导演选择"
+    ],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 17,
+      "itemCount": 0,
+      "maxItemChars": 0,
+      "avgItemChars": 0,
+      "minItemChars": 0,
+      "maxItemTitleChars": 0,
+      "maxItemBodyChars": 0,
+      "imbalanceRatio": 0
+    }
+  },
+  {
+    "intentId": "shell-agenda-intent",
+    "purposeKey": "present_agenda",
+    "purposeText": "呈现演示目录",
+    "baseRelation": "none",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": true,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 4,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "low",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [
+      "该页由 Shell 固定提供，不进入正文视觉导演选择"
+    ],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 2,
+      "itemCount": 4,
+      "maxItemChars": 9,
+      "avgItemChars": 7.75,
+      "minItemChars": 7,
+      "maxItemTitleChars": 9,
+      "maxItemBodyChars": 0,
+      "imbalanceRatio": 1.29
+    }
+  },
+  {
+    "intentId": "p1-intent",
+    "purposeKey": "explain_topics",
+    "purposeText": "围绕“做PPT真正贵的是判断”这一中心，并列展开多个必须回答的判断问题",
+    "baseRelation": "hub",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 6,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 6,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "unknown",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 13,
+      "itemCount": 6,
+      "maxItemChars": 14,
+      "avgItemChars": 13.5,
+      "minItemChars": 13,
+      "maxItemTitleChars": 4,
+      "maxItemBodyChars": 11,
+      "imbalanceRatio": 1.08
+    }
+  },
+  {
+    "intentId": "p2-intent",
+    "purposeKey": "explain_evolution",
+    "purposeText": "需求沿从低到高的连续分布，中间是概率最大的区域",
+    "baseRelation": "progression",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none",
+      "progressionMode": "continuous-spectrum"
+    },
+    "structure": {
+      "itemCount": 3,
+      "ordered": true,
+      "sameLevel": false,
+      "dimensions": {
+        "items": 3,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "unknown",
+    "emphasis": [
+      1
+    ],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 11,
+      "itemCount": 3,
+      "maxItemChars": 24,
+      "avgItemChars": 19.67,
+      "minItemChars": 16,
+      "maxItemTitleChars": 5,
+      "maxItemBodyChars": 20,
+      "imbalanceRatio": 1.5
+    }
+  },
+  {
+    "intentId": "p3-intent",
+    "purposeKey": "compare_options",
+    "purposeText": "对比稳定可用与偶然惊艳两种结果，突出稳定更值钱",
+    "baseRelation": "comparison",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 2,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0,
+        "groups": 2,
+        "itemsPerGroup": 1
+      }
+    },
+    "density": "unknown",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 8,
+      "itemCount": 2,
+      "maxItemChars": 24,
+      "avgItemChars": 21.5,
+      "minItemChars": 19,
+      "maxItemTitleChars": 7,
+      "maxItemBodyChars": 17,
+      "imbalanceRatio": 1.26
+    }
+  },
+  {
+    "intentId": "p4-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列列举主动限制自由的四个维度，彼此无顺序关系",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 4,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "unknown",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 10,
+      "itemCount": 4,
+      "maxItemChars": 22,
+      "avgItemChars": 18.5,
+      "minItemChars": 17,
+      "maxItemTitleChars": 6,
+      "maxItemBodyChars": 16,
+      "imbalanceRatio": 1.29
+    }
+  },
+  {
+    "intentId": "p5-intent",
+    "purposeKey": "explain_process",
+    "purposeText": "程序从原稿识别出高置信 sequence 主关系",
+    "baseRelation": "sequence",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 3,
+      "ordered": true,
+      "sameLevel": false,
+      "dimensions": {
+        "items": 3,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "unknown",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 12,
+      "itemCount": 3,
+      "maxItemChars": 7,
+      "avgItemChars": 6.67,
+      "minItemChars": 6,
+      "maxItemTitleChars": 2,
+      "maxItemBodyChars": 5,
+      "imbalanceRatio": 1.17
+    }
+  },
+  {
+    "intentId": "p6-intent",
+    "purposeKey": "explain_layers",
+    "purposeText": "程序从原稿识别出高置信 layered 主关系",
+    "baseRelation": "layered",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "layer"
+    },
+    "structure": {
+      "itemCount": 3,
+      "ordered": true,
+      "sameLevel": false,
+      "dimensions": {
+        "items": 3,
+        "maxPointsPerItem": 4,
+        "maxPointChars": 8,
+        "totalPoints": 10
+      }
+    },
+    "density": "unknown",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 15,
+      "itemCount": 3,
+      "maxItemChars": 38,
+      "avgItemChars": 30.67,
+      "minItemChars": 21,
+      "maxItemTitleChars": 4,
+      "maxItemBodyChars": 9,
+      "imbalanceRatio": 1.81
+    }
+  },
+  {
+    "intentId": "p7-intent",
+    "purposeKey": "explain_process",
+    "purposeText": "建设期步骤依次推进，从筛选到确认入库有明确先后",
+    "baseRelation": "sequence",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 5,
+      "ordered": true,
+      "sameLevel": false,
+      "dimensions": {
+        "items": 5,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "unknown",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 8,
+      "itemCount": 5,
+      "maxItemChars": 17,
+      "avgItemChars": 16.8,
+      "minItemChars": 16,
+      "maxItemTitleChars": 6,
+      "maxItemBodyChars": 12,
+      "imbalanceRatio": 1.06
+    }
+  },
+  {
+    "intentId": "p8-intent",
+    "purposeKey": "explain_topics",
+    "purposeText": "围绕“页面背后的经验”中心，并列展开多个判断维度",
+    "baseRelation": "hub",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 5,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 5,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "unknown",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 12,
+      "itemCount": 5,
+      "maxItemChars": 20,
+      "avgItemChars": 18.4,
+      "minItemChars": 17,
+      "maxItemTitleChars": 8,
+      "maxItemBodyChars": 14,
+      "imbalanceRatio": 1.18
+    }
+  },
+  {
+    "intentId": "p9-intent",
+    "purposeKey": "explain_process",
+    "purposeText": "从东北大学向后扩展至更多组织，按由近到远推进",
+    "baseRelation": "sequence",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 5,
+      "ordered": true,
+      "sameLevel": false,
+      "dimensions": {
+        "items": 5,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "unknown",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 12,
+      "itemCount": 5,
+      "maxItemChars": 14,
+      "avgItemChars": 12.8,
+      "minItemChars": 12,
+      "maxItemTitleChars": 5,
+      "maxItemBodyChars": 9,
+      "imbalanceRatio": 1.17
+    }
+  },
+  {
+    "intentId": "p10-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "并列列举三件被验证的经验，无先后关系",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 3,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 3,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "unknown",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 16,
+      "itemCount": 3,
+      "maxItemChars": 20,
+      "avgItemChars": 18,
+      "minItemChars": 17,
+      "maxItemTitleChars": 9,
+      "maxItemBodyChars": 11,
+      "imbalanceRatio": 1.18
+    }
+  },
+  {
+    "intentId": "shell-closing-intent",
+    "purposeKey": "present_closing",
+    "purposeText": "收束整套演示",
+    "baseRelation": "none",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 1,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 1,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "low",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [
+      "该页由 Shell 固定提供，不进入正文视觉导演选择"
+    ],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 0,
+      "itemCount": 1,
+      "maxItemChars": 32,
+      "avgItemChars": 32,
+      "minItemChars": 32,
+      "maxItemTitleChars": 0,
+      "maxItemBodyChars": 32,
+      "imbalanceRatio": 1
+    }
+  }
+]

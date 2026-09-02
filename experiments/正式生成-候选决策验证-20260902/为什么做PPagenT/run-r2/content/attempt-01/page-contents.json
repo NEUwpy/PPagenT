@@ -1,0 +1,389 @@
+[
+  {
+    "schemaVersion": "1.0",
+    "pageId": "p1",
+    "title": "做 PPT 真正贵的是判断",
+    "items": [
+      {
+        "id": "p1-item1",
+        "title": "怎么讲",
+        "body": "确定这场汇报的讲述方式"
+      },
+      {
+        "id": "p1-item2",
+        "title": "拆多少页",
+        "body": "把长稿合理拆分页数"
+      },
+      {
+        "id": "p1-item3",
+        "title": "每页职责",
+        "body": "一页只承担一项职责"
+      },
+      {
+        "id": "p1-item4",
+        "title": "观点关系",
+        "body": "判断并列、递进或因果"
+      },
+      {
+        "id": "p1-item5",
+        "title": "哪里突出",
+        "body": "决定需要强调的重点"
+      },
+      {
+        "id": "p1-item6",
+        "title": "何时用图",
+        "body": "或只用一句话更有力量"
+      }
+    ],
+    "logicIntent": {
+      "logicId": "hub",
+      "reason": "围绕“做PPT真正贵的是判断”这一中心，并列展开多个必须回答的判断问题",
+      "evidenceFragments": [
+        "真正费时间的不是把文本框拖到左边还是右边，而是一连串判断"
+      ],
+      "confidence": "high"
+    },
+    "sourceText": "真正费时间的不是把文本框拖到左边还是右边，而是一连串判断：这场汇报到底怎么讲，一篇长稿应该拆成多少页，每一页只承担什么职责，这几个观点是并列、递进、因果还是流程，哪里应该突出，什么时候应该用图，什么时候一句话反而更有力量。",
+    "notes": "PPagenT来源章节=section-1@149"
+  },
+  {
+    "schemaVersion": "1.0",
+    "pageId": "p2",
+    "title": "需求分布：中间主体最大",
+    "items": [
+      {
+        "id": "p2-item1",
+        "title": "低要求端",
+        "body": "几乎不在意版式，只放文字"
+      },
+      {
+        "id": "p2-item2",
+        "title": "中间主体",
+        "body": "学校、科研院所、央国企等需要快速规范产出",
+        "emphasis": true
+      },
+      {
+        "id": "p2-item3",
+        "title": "高度定制端",
+        "body": "发布会、品牌路演与高水平比赛"
+      }
+    ],
+    "logicIntent": {
+      "logicId": "progression",
+      "reason": "需求沿从低到高的连续分布，中间是概率最大的区域",
+      "evidenceFragments": [
+        "一端是几乎不在意版式，只要把文字放上去；另一端是发布会、品牌路演和高水平比赛，需要高度定制的视觉创意。",
+        "更多需求位于中间：学校、科研院所、事业单位、央国企和普通企业需要快速把一份稿件变成结构清楚、视觉体面、符合组织规范的 PPT。"
+      ],
+      "confidence": "high"
+    },
+    "sourceText": "一端是几乎不在意版式，只要把文字放上去；另一端是发布会、品牌路演和高水平比赛，需要高度定制的视觉创意。两端都真实存在，但更多需求位于中间：学校、科研院所、事业单位、央国企和普通企业需要快速把一份稿件变成结构清楚、视觉体面、符合组织规范的 PPT。",
+    "notes": "PPagenT来源章节=section-2@509"
+  },
+  {
+    "schemaVersion": "1.0",
+    "pageId": "p3",
+    "title": "稳定比惊艳更重要",
+    "items": [
+      {
+        "id": "p3-item1",
+        "title": "稳定 80 分",
+        "body": "直接可用，可靠基础，投入与收益匹配"
+      },
+      {
+        "id": "p3-item2",
+        "title": "随机 95 分",
+        "body": "偶然惊艳但不可控，代价高"
+      }
+    ],
+    "logicIntent": {
+      "logicId": "comparison",
+      "reason": "对比稳定可用与偶然惊艳两种结果，突出稳定更值钱",
+      "evidenceFragments": [
+        "对工作来说，稳定的 80 分，很多时候比随机的 95 分更值钱。"
+      ],
+      "confidence": "high"
+    },
+    "sourceText": "> **对工作来说，稳定的 80 分，很多时候比随机的 95 分更值钱。**",
+    "notes": "PPagenT来源章节=section-3@981"
+  },
+  {
+    "schemaVersion": "1.0",
+    "pageId": "p4",
+    "title": "用限制自由换取可靠性",
+    "items": [
+      {
+        "id": "p4-item1",
+        "title": "确定视觉规范",
+        "body": "颜色、字体、Logo 等保持稳定"
+      },
+      {
+        "id": "p4-item2",
+        "title": "验证表达能力",
+        "body": "使用经过验证的版式与结构"
+      },
+      {
+        "id": "p4-item3",
+        "title": "明确数量容量",
+        "body": "限定每页可承载的内容量"
+      },
+      {
+        "id": "p4-item4",
+        "title": "登记退化方式",
+        "body": "未匹配时退化为简单排版"
+      }
+    ],
+    "logicIntent": {
+      "logicId": "parallel",
+      "reason": "并列列举主动限制自由的四个维度，彼此无顺序关系",
+      "evidenceFragments": [
+        "使用确定的组织视觉规范、经过验证的表达能力、明确的数量与容量边界，以及已经登记的退化方式"
+      ],
+      "confidence": "high"
+    },
+    "sourceText": "PPagenT 会主动限制一部分自由：使用确定的组织视觉规范、经过验证的表达能力、明确的数量与容量边界，以及已经登记的退化方式。",
+    "notes": "PPagenT来源章节=section-4@1393"
+  },
+  {
+    "schemaVersion": "1.0",
+    "pageId": "p5",
+    "title": "AI 是控制器，不是画师",
+    "items": [
+      {
+        "id": "p5-structure-1",
+        "title": "AI",
+        "body": "理解和路由"
+      },
+      {
+        "id": "p5-structure-2",
+        "title": "规则",
+        "body": "约束和选择"
+      },
+      {
+        "id": "p5-structure-3",
+        "title": "代码",
+        "body": "稳定生成"
+      }
+    ],
+    "logicIntent": {
+      "logicId": "sequence",
+      "reason": "程序从原稿识别出高置信 sequence 主关系",
+      "evidenceFragments": [
+        "AI 负责理解和路由",
+        "规则负责约束和选择",
+        "代码负责稳定生成"
+      ],
+      "confidence": "high"
+    },
+    "sourceText": "**AI 负责理解和路由，规则负责约束和选择，代码负责稳定生成。**",
+    "notes": "PPagenT来源章节=section-5@1798；PPagenT主关系=sequence"
+  },
+  {
+    "schemaVersion": "1.0",
+    "pageId": "p6",
+    "title": "核心架构：建设能力，再稳定调用",
+    "items": [
+      {
+        "id": "p6-structure-1",
+        "title": "资产入库",
+        "body": "建设并确认表达能力",
+        "points": [
+          "优秀参考",
+          "提炼逻辑规律",
+          "扩展复用能力",
+          "用户确认"
+        ]
+      },
+      {
+        "id": "p6-structure-2",
+        "title": "核心资产",
+        "body": "保存已经确认的能力",
+        "points": [
+          "用户确认",
+          "只读调用"
+        ]
+      },
+      {
+        "id": "p6-structure-3",
+        "title": "正式生成",
+        "body": "按稿件稳定调用能力",
+        "points": [
+          "AI理解编排",
+          "选择合法能力",
+          "确定性编译",
+          "原生可编辑PPT"
+        ]
+      }
+    ],
+    "logicIntent": {
+      "logicId": "layered",
+      "reason": "程序从原稿识别出高置信 layered 主关系",
+      "evidenceFragments": [
+        "资产入库线",
+        "正式生成线"
+      ],
+      "confidence": "high"
+    },
+    "sourceText": "PPagenT 把“建设视觉能力”和“使用视觉能力”分成两条路线。资产入库线允许人和工具反复理解参考、提炼规律、适应不同数量并确认效果；只有用户明确确认的能力才能进入正式生成线。正式生成线只读取核心库，不在交付现场临时创造结构，也不会因为一次生成成功就把未确认资产当作正式可用。",
+    "notes": "PPagenT来源章节=section-6@2274；PPagenT主关系=layered"
+  },
+  {
+    "schemaVersion": "1.0",
+    "pageId": "p7",
+    "title": "把昂贵的计算前移",
+    "items": [
+      {
+        "id": "p7-item1",
+        "title": "筛选优秀页面",
+        "body": "从参考中选出高质量页面"
+      },
+      {
+        "id": "p7-item2",
+        "title": "理解好看原因",
+        "body": "提炼视觉逻辑与设计规律"
+      },
+      {
+        "id": "p7-item3",
+        "title": "参数化内容",
+        "body": "把内容、图片和数量参数化"
+      },
+      {
+        "id": "p7-item4",
+        "title": "验证不同状态",
+        "body": "测试多数量与多形态表现"
+      },
+      {
+        "id": "p7-item5",
+        "title": "用户确认入库",
+        "body": "确认后进入正式资产库"
+      }
+    ],
+    "logicIntent": {
+      "logicId": "sequence",
+      "reason": "建设期步骤依次推进，从筛选到确认入库有明确先后",
+      "evidenceFragments": [
+        "人和工具先筛选优秀页面，理解它为什么好看，把内容、图片和数量参数化，验证不同状态，再由用户确认它可以进入正式资产库"
+      ],
+      "confidence": "high"
+    },
+    "sourceText": "PPagenT 选择把这些昂贵而不确定的工作前移到建设期：人和工具先筛选优秀页面，理解它为什么好看，把内容、图片和数量参数化，验证不同状态，再由用户确认它可以进入正式资产库。",
+    "notes": "PPagenT来源章节=section-7@3155"
+  },
+  {
+    "schemaVersion": "1.0",
+    "pageId": "p8",
+    "title": "真正积累的不是一万个模板",
+    "items": [
+      {
+        "id": "p8-item1",
+        "title": "内容适合什么表达",
+        "body": "判断内容与表达形式匹配"
+      },
+      {
+        "id": "p8-item2",
+        "title": "版式处理内容量",
+        "body": "明确一个版式能承载的内容量"
+      },
+      {
+        "id": "p8-item3",
+        "title": "数量变化重排",
+        "body": "数量变化时重新排布版式"
+      },
+      {
+        "id": "p8-item4",
+        "title": "超边界处理",
+        "body": "换样式、拆页或退化为简单排版"
+      },
+      {
+        "id": "p8-item5",
+        "title": "不可用结构",
+        "body": "能画出来但不应使用的结构"
+      }
+    ],
+    "logicIntent": {
+      "logicId": "hub",
+      "reason": "围绕“页面背后的经验”中心，并列展开多个判断维度",
+      "evidenceFragments": [
+        "什么内容适合怎样表达，一个版式能够处理多少内容，数量变化时怎样重新排布，超过边界以后应该换样式、拆页还是退化为简单排版，哪些结构即使能够画出来也不应该使用"
+      ],
+      "confidence": "high"
+    },
+    "sourceText": "所以 PPagenT 真正积累的不是页面数量，而是页面背后的经验：什么内容适合怎样表达，一个版式能够处理多少内容，数量变化时怎样重新排布，超过边界以后应该换样式、拆页还是退化为简单排版，哪些结构即使能够画出来也不应该使用。",
+    "notes": "PPagenT来源章节=section-8@3590"
+  },
+  {
+    "schemaVersion": "1.0",
+    "pageId": "p9",
+    "title": "从一个学校，走向更多组织",
+    "items": [
+      {
+        "id": "p9-item1",
+        "title": "东北大学",
+        "body": "第一个正式落地场景"
+      },
+      {
+        "id": "p9-item2",
+        "title": "其他学校",
+        "body": "扩展服务对象之一"
+      },
+      {
+        "id": "p9-item3",
+        "title": "科研院所",
+        "body": "适合标准化汇报场景"
+      },
+      {
+        "id": "p9-item4",
+        "title": "实验室",
+        "body": "需要持续汇报的团队"
+      },
+      {
+        "id": "p9-item5",
+        "title": "企业与团队",
+        "body": "可复用长期表达风格"
+      }
+    ],
+    "logicIntent": {
+      "logicId": "sequence",
+      "reason": "从东北大学向后扩展至更多组织，按由近到远推进",
+      "evidenceFragments": [
+        "东北大学是 PPagenT 的第一个正式落地场景",
+        "以后它可以服务其他学校、科研院所、实验室、企业和团队"
+      ],
+      "confidence": "high"
+    },
+    "sourceText": "## 从一个学校，走向更多组织\r\n\r\n东北大学是 PPagenT 的第一个正式落地场景，因为它具有明确的视觉规范、持续发生的汇报需求和真实可检验的使用边界。\r\n\r\n但东北大学不是最终边界。学校或组织的颜色、Logo、字体和页眉页脚可以由主题配置替换；大量内容理解规则和表达能力则可以继续复用。以后它可以服务其他学校、科研院所、实验室、企业和团队，也可以承载某个特别会做 PPT 的人的长期风格。\r\n\r\n这使 PPagenT 不只是一个模板工具。它可以把原本只存在于少数人头脑和电脑里的能力，转化成更多人可以低成本获得的生产能力；也让一个组织不用要求每名成员都成为设计师，就能让日常输出稳定达到自己的基本标准。\r\n\r\n> **它卖的不是一次偶然惊艳，而是把不可预测的 PPT 生成，变成概率上高度可预测的交付。**",
+    "notes": "PPagenT来源章节=section-9@4007"
+  },
+  {
+    "schemaVersion": "1.0",
+    "pageId": "p10",
+    "title": "最后，它仍然只想解决一件普通的事",
+    "items": [
+      {
+        "id": "p10-item1",
+        "title": "AI 帮我们读稿子",
+        "body": "让 AI 承担阅读理解"
+      },
+      {
+        "id": "p10-item2",
+        "title": "规则帮我们做判断",
+        "body": "让规则负责决策选择"
+      },
+      {
+        "id": "p10-item3",
+        "title": "代码完成重复劳动",
+        "body": "让代码执行重复绘制"
+      }
+    ],
+    "logicIntent": {
+      "logicId": "parallel",
+      "reason": "并列列举三件被验证的经验，无先后关系",
+      "evidenceFragments": [
+        "让 AI 帮我们读稿子，让规则帮我们做判断，让代码完成重复劳动"
+      ],
+      "confidence": "high"
+    },
+    "sourceText": "PPagenT 想把这些已经被验证的经验留下来：让 AI 帮我们读稿子，让规则帮我们做判断，让代码完成重复劳动。",
+    "notes": "PPagenT来源章节=section-10@4367"
+  }
+]

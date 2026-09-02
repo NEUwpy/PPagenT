@@ -19,6 +19,9 @@
     "selectedSilhouette": { "type": ["string", "null"] },
     "selectionState": { "enum": ["selected", "unresolved", "fallback", "legacy-asset-only"] },
     "selectionOwner": { "enum": ["visual-director", "legacy-matcher", "program"] },
+    "selectionSource": {
+      "enum": ["program-locked", "visual-director", "deterministic-ranking", "deterministic-fallback"]
+    },
     "candidates": {
       "type": "array",
       "items": {
@@ -59,5 +62,25 @@
       }
     },
     "resolutionPlan": { "anyOf": [{ "$ref": "resolution-plan.schema.json" }, { "type": "null" }] }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": ["selectionSource"],
+        "properties": { "selectionSource": { "const": "visual-director" } }
+      },
+      "then": { "properties": { "selectionOwner": { "const": "visual-director" } } }
+    },
+    {
+      "if": {
+        "required": ["selectionSource"],
+        "properties": {
+          "selectionSource": {
+            "enum": ["program-locked", "deterministic-ranking", "deterministic-fallback"]
+          }
+        }
+      },
+      "then": { "properties": { "selectionOwner": { "const": "program" } } }
+    }
+  ]
 }

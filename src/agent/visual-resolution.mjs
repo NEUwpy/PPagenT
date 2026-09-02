@@ -18,7 +18,59 @@ import { northeasternUniversitySkin } from "../runtime/skins/northeastern-univer
 import { validatePageCompositionTextFit } from "../render/page-composition-fit.mjs";
 import { resolveTextContainerContract } from "../visual-runtime/text-container-contract.mjs";
 import { matchTextLayoutsForPayload } from "../visual-runtime/typography-matcher.mjs";
+
 import { loadCoreAssetPackage } from "../runtime/core-asset-packages.mjs";
+
+export const DERIVATION_ALLOWED_FIELDS = Object.freeze([
+  "centerLabel",
+  "groupLabels",
+  "comparisonTopic",
+  "regionTitle",
+  "compressedBody",
+  "entailedSummary",
+  "commonTheme",
+  "iconQueries",
+]);
+
+const derivationAllowedFields = new Set(DERIVATION_ALLOWED_FIELDS);
+
+export function normalizeDerivationPolicy(policy) {
+  if (!policy || typeof policy !== "object" || Array.isArray(policy)) {
+    return { valid: false, policy: null, errors: ["derivation-policy-missing"] };
+  }
+  const allowedFields = [...new Set((policy.allowedFields ?? []).filter((field) => (
+    typeof field === "string" && field.length > 0
+  )))];
+  if (!allowedFields.length) {
+    return { valid: false, policy: null, errors: ["derivation-policy-empty"] };
+  }
+  const illegalFields = allowedFields.filter((field) => !derivationAllowedFields.has(field));
+  if (illegalFields.length) {
+    return {
+      valid: false,
+      policy: null,
+      errors: illegalFields.map((field) => `derivation-field-not-allowed:${field}`),
+    };
+  }
+  return { valid: true, policy: { allowedFields }, errors: [] };
+}
+
+export function candidateReadiness(candidate, context = {}) {
+  const declared = candidate?.readiness;
+  if (declared === "derivable") {
+    const policy = normalizeDerivationPolicy(
+      candidate.derivationPolicy ?? candidate.contentContract?.derivationPolicy,
+    );
+    return policy.valid ? "derivable" : "incompatible";
+  }
+  if (declared) return declared;
+  if (candidate?.contentReadiness === "needs-semantic-refinement") return "incompatible";
+  if (candidate?.contentReadiness === "ready") {
+    if (!candidate.fallbackBody) return "ready";
+    return context.assetGap || context.runtimeOverflow ? "fallback" : "ready";
+  }
+  return candidate?.fallbackBody ? "fallback" : "ready";
+}
 
 function publicComposition(layout) {
   return {
@@ -131,7 +183,13 @@ export function slotCapabilitiesForVariant(variant, itemCount) {
   };
 }
 
-function publicVariant(variant, contract, compositions, itemCount, contentReadiness = "ready") {
+function publicVariant(variant, contract, compositions, itemCount, readiness = "ready", reasons = []) {
+  const derivation = normalizeDerivationPolicy(
+    variant.derivationPolicy ?? variant.contentContract?.derivationPolicy,
+  );
+  const resolvedReadiness = readiness === "derivable" && !derivation.valid
+    ? "incompatible"
+    : readiness;
   return {
     logicId: variant.logicId,
     structureGroupId: variant.structureGroupId,
@@ -140,7 +198,9 @@ function publicVariant(variant, contract, compositions, itemCount, contentReadin
     variantId: variant.variantId,
     silhouette: variant.silhouette,
     adaptationStatus: contract.adaptationStatus,
-    contentReadiness,
+    readiness: resolvedReadiness,
+    reasons: resolvedReadiness === readiness ? reasons : [...reasons, ...derivation.errors],
+    ...(resolvedReadiness === "derivable" ? { derivationPolicy: derivation.policy } : {}),
     itemCount: variant.itemCount,
     textCapacity: variant.textCapacity ?? null,
     textFlow: variant.textFlow ?? null,
@@ -323,6 +383,7 @@ function buildCandidateDiagnostics({
   intent,
   capacityDensity,
   structuralCandidates,
+  incompatibleCandidates,
   semantic,
   capacityRejections,
   variants,
@@ -339,21 +400,31 @@ function buildCandidateDiagnostics({
     capacityRejectedById.set(item.assetId, bucket);
   }
   const eligibleByAsset = new Map();
-  const provisionalByAsset = new Map();
   for (const candidate of structuralCandidates) {
-    const target = candidate.contentReadiness === "needs-semantic-refinement"
-      ? provisionalByAsset
-      : eligibleByAsset;
-    const bucket = target.get(candidate.assetId) ?? {
+    const bucket = eligibleByAsset.get(candidate.assetId) ?? {
       assetId: candidate.assetId,
       structureGroupId: candidate.structureGroupId,
       variants: [],
     };
     bucket.variants.push({
       variantId: candidate.variantId,
-      contentReadiness: candidate.contentReadiness ?? "ready",
+      readiness: candidate.readiness ?? "ready",
     });
-    target.set(candidate.assetId, bucket);
+    eligibleByAsset.set(candidate.assetId, bucket);
+  }
+  const incompatibleByAsset = new Map();
+  for (const candidate of incompatibleCandidates) {
+    const bucket = incompatibleByAsset.get(candidate.assetId) ?? {
+      assetId: candidate.assetId,
+      structureGroupId: candidate.structureGroupId,
+      variants: [],
+    };
+    bucket.variants.push({
+      variantId: candidate.variantId,
+      readiness: "incompatible",
+      reasons: candidate.reasons ?? [],
+    });
+    incompatibleByAsset.set(candidate.assetId, bucket);
   }
   const sameLogicAssetIds = [...new Set(
     variants.filter((variant) => variant.logicId === logicId).map((variant) => variant.assetId),
@@ -361,18 +432,20 @@ function buildCandidateDiagnostics({
   const rejected = [];
   for (const assetId of sameLogicAssetIds) {
     if (eligibleByAsset.has(assetId)) continue;
-    if (provisionalByAsset.has(assetId)) {
-      const detailed = detailedVariantsByAsset.get(assetId) ?? variantsByAsset.get(assetId) ?? [];
+    if (incompatibleByAsset.has(assetId)) {
+      const variants = incompatibleByAsset.get(assetId).variants;
       rejected.push({
         assetId,
-        stage: "semantic-refinement",
-        reasons: variantRejectionReasons(detailed, query),
+        readiness: "incompatible",
+        stage: "semantic-contract",
+        reasons: [...new Set(variants.flatMap((variant) => variant.reasons))],
       });
       continue;
     }
     if (capacityRejectedById.has(assetId)) {
       rejected.push({
         assetId,
+        readiness: "incompatible",
         stage: "capacity",
         reasons: [...new Set(capacityRejectedById.get(assetId).map((issue) => (
           `${issue.role}:${issue.actualChars}>${issue.maxChars ?? "?"}`
@@ -381,12 +454,18 @@ function buildCandidateDiagnostics({
       continue;
     }
     if (semanticRejectedById.has(assetId)) {
-      rejected.push({ assetId, stage: "semantic-contract", reasons: semanticRejectedById.get(assetId) });
+      rejected.push({
+        assetId,
+        readiness: "incompatible",
+        stage: "semantic-contract",
+        reasons: semanticRejectedById.get(assetId),
+      });
       continue;
     }
     const detailed = detailedVariantsByAsset.get(assetId) ?? variantsByAsset.get(assetId) ?? [];
     rejected.push({
       assetId,
+      readiness: "incompatible",
       stage: "variant-contract",
       reasons: variantRejectionReasons(detailed, query),
     });
@@ -424,6 +503,26 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
   return Promise.all(pageIntents.map(async (intent, index) => {
     const pageId = pageContents[index].pageId;
     const contractsById = new Map(renderableContracts.map((contract) => [contract.assetId, contract]));
+    const bodyVariant = variants.find((variant) => variant.renderer === "skin" && variant.fallbackBody);
+    if (!bodyVariant) throw new Error("核心资产包缺少正文兜底页");
+    const bodyMetadata = metadataById.get(bodyVariant.assetId);
+    const bodyCompositions = compositionCandidatesForAsset(layouts, bodyVariant.assetId, bodyMetadata);
+    const editorialBodyCandidate = publicVariant(
+      bodyVariant,
+      contractsById.get(bodyVariant.assetId),
+      bodyCompositions,
+      intent.structure.itemCount,
+      "ready",
+      ["editorial-body"],
+    );
+    const fallbackCandidate = publicVariant(
+      bodyVariant,
+      contractsById.get(bodyVariant.assetId),
+      bodyCompositions,
+      intent.structure.itemCount,
+      "fallback",
+      ["deterministic-body-fallback"],
+    );
     const skinVariant = variants.find((variant) => (
       variant.renderer === "skin"
       && !variant.fallbackBody
@@ -446,6 +545,7 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
             intent.structure.itemCount,
           )]
           : [],
+        fallbackCandidate,
       };
     }
 
@@ -459,11 +559,23 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
       enableFallback: false,
     });
     const structuralCandidates = [];
+    const incompatibleCandidates = [];
     const capacityRejections = [];
     const detailedVariantsByAsset = new Map();
     const query = visualVariantQuery(intent, pageContents[index], requiredItemRole);
-    const appendStructuralCandidate = (variant, contract, compositions, contentReadiness = "ready") => {
-      const exposed = publicVariant(variant, contract, compositions, intent.structure.itemCount, contentReadiness);
+    const appendStructuralCandidate = (variant, contract, compositions, readiness = "ready", reasons = []) => {
+      const exposed = publicVariant(
+        variant,
+        contract,
+        compositions,
+        intent.structure.itemCount,
+        readiness,
+        reasons,
+      );
+      if (exposed.readiness === "incompatible") {
+        incompatibleCandidates.push(exposed);
+        return;
+      }
       const issues = fixedSlotSourceCapacityIssues(pageContents[index], exposed);
       if (issues.length) {
         capacityRejections.push({ assetId: exposed.assetId, variantId: exposed.variantId, issues });
@@ -488,32 +600,27 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
         variant,
         contractsById.get(candidate.assetId),
         compositions,
+        "ready",
+        ["semantic-contract-compatible", "capacity-compatible"],
       ));
       provisional.forEach((variant) => appendStructuralCandidate(
         variant,
         contractsById.get(candidate.assetId),
         compositions,
-        "needs-semantic-refinement",
+        "incompatible",
+        variantRejectionReasons([variant], query),
       ));
     }
     const isEditorial = pageContents[index].logicIntent?.logicId === "editorial" || intent.baseRelation === "none";
-    const bodyVariant = variants.find((variant) => variant.renderer === "skin" && variant.fallbackBody);
-    if (!bodyVariant) throw new Error("核心资产包缺少正文兜底页");
-    const bodyMetadata = metadataById.get(bodyVariant.assetId);
-    const bodyCandidate = publicVariant(
-      bodyVariant,
-      contractsById.get(bodyVariant.assetId),
-      compositionCandidatesForAsset(layouts, bodyVariant.assetId, bodyMetadata),
-      intent.structure.itemCount,
-    );
     const readyStructuralCandidates = structuralCandidates.filter((candidate) => (
-      candidate.contentReadiness !== "needs-semantic-refinement"
+      new Set(["ready", "derivable"]).has(candidate.readiness)
     ));
     const candidateDiagnostics = buildCandidateDiagnostics({
       content: pageContents[index],
       intent,
       capacityDensity,
       structuralCandidates,
+      incompatibleCandidates,
       semantic,
       capacityRejections,
       variants,
@@ -523,15 +630,22 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
     });
     if (!readyStructuralCandidates.length && !isEditorial) {
       const capacityRecoverable = capacityRejections.length > 0;
+      const contentContractIncompatible = incompatibleCandidates.length > 0;
       const gap = {
-        type: capacityRecoverable ? "content-capacity-gap" : "asset-gap",
+        type: capacityRecoverable
+          ? "content-capacity-gap"
+          : contentContractIncompatible
+            ? "content-contract-gap"
+            : "asset-gap",
         logicId: pageContents[index].logicIntent?.logicId ?? null,
         baseRelation: intent.baseRelation,
         itemCount: intent.structure.itemCount,
         reason: capacityRecoverable
           ? "存在语义兼容的 Structure Group，但当前文字超过其已登记容量"
-          : "当前核心资产库没有语义与容量均兼容的 Structure Group",
-        provisionalAssetIds: structuralCandidates.map((candidate) => candidate.assetId),
+          : contentContractIncompatible
+            ? "存在语义相近的 Structure Group，但 PageContent 缺少其核心语义字段"
+            : "当前核心资产库没有语义与容量均兼容的 Structure Group",
+        incompatibleAssetIds: incompatibleCandidates.map((candidate) => candidate.assetId),
         ...(capacityRecoverable ? { capacityRejections } : {}),
       };
       return {
@@ -541,13 +655,14 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
         // formal deck from being delivered. Capacity gaps are still repaired
         // upstream; only genuine missing coverage receives the safe body
         // composition as the sole candidate.
-        candidates: capacityRecoverable ? [] : [bodyCandidate],
+        candidates: capacityRecoverable || contentContractIncompatible ? [] : [fallbackCandidate],
+        fallbackCandidate,
         capacityDensity,
         gap,
-        ...(capacityRecoverable ? {} : {
+        ...(capacityRecoverable || contentContractIncompatible ? {} : {
           fallback: {
             type: "asset-gap",
-            assetId: bodyCandidate.assetId,
+            assetId: fallbackCandidate.assetId,
             reason: "缺少兼容 Structure Group，本页退回通用正文排版",
           },
         }),
@@ -559,7 +674,8 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
     return {
       pageId,
       intentId: intent.intentId,
-      candidates: isEditorial ? [bodyCandidate] : readyStructuralCandidates,
+      candidates: isEditorial ? [editorialBodyCandidate] : readyStructuralCandidates,
+      ...(!isEditorial ? { fallbackCandidate } : {}),
       capacityDensity,
       semanticRejections: semantic.rejections,
       capacityRejections,
@@ -574,6 +690,46 @@ function selectedCandidate(planPage, candidateSet) {
     && candidate.variantId === planPage.variantId
     && candidate.silhouette === planPage.silhouette
   ));
+}
+
+const selectionOwnerBySource = Object.freeze({
+  "program-locked": "program",
+  "visual-director": "visual-director",
+  "deterministic-ranking": "program",
+  "deterministic-fallback": "program",
+});
+
+function selectionAttribution(candidateSet, candidate, { runtimeOverflow = false } = {}) {
+  const readiness = candidateReadiness(candidate, {
+    assetGap: candidateSet.gap?.type === "asset-gap",
+    runtimeOverflow,
+  });
+  let selectionSource;
+  if (candidateSet.selectionMode === "deterministic-ranking") {
+    selectionSource = "deterministic-ranking";
+  } else if (candidateSet.selectionMode === "fallback-locked"
+    || readiness === "fallback"
+    || (candidate.fallbackBody && (candidateSet.gap?.type === "asset-gap" || runtimeOverflow))) {
+    selectionSource = "deterministic-fallback";
+  } else if (candidateSet.selectionMode === "visual-selectable") {
+    selectionSource = "visual-director";
+  } else {
+    const legalCandidates = (candidateSet.candidates ?? []).filter((item) => (
+      new Set(["ready", "derivable"]).has(candidateReadiness(item))
+    ));
+    const lockedCandidates = candidateSet.lockedStructureGroupId
+      ? legalCandidates.filter((item) => item.structureGroupId === candidateSet.lockedStructureGroupId)
+      : legalCandidates;
+    selectionSource = lockedCandidates.length === 1 ? "program-locked" : "visual-director";
+  }
+  return {
+    selectionSource,
+    selectionOwner: selectionOwnerBySource[selectionSource],
+    decision: selectionSource === "deterministic-fallback"
+      ? "fallback"
+      : selectionSource === "program-locked" ? "single-match" : "ranked-match",
+    selectionState: selectionSource === "deterministic-fallback" ? "fallback" : "selected",
+  };
 }
 
 function validateIconQueries(planPage, candidate, compositionPage, content) {
@@ -1141,6 +1297,31 @@ export async function resolveVisualPlan({
   if (!Array.isArray(candidateSets) || candidateSets.length !== pageIntents.length) {
     return { status: "needs-director-revision", feedback: [{ code: "candidate-set-mismatch" }] };
   }
+  const overflowPageIds = new Set((previousResolution?.feedback ?? [])
+    .filter((item) => item.code === "component-runtime-overflow" && item.pageId)
+    .map((item) => item.pageId));
+  const effectiveCandidateSets = candidateSets.map((set) => {
+    if (!overflowPageIds.has(set.pageId) || !set.fallbackCandidate) return set;
+    const fallback = {
+      ...set.fallbackCandidate,
+      readiness: "fallback",
+      reasons: [...new Set([
+        ...(set.fallbackCandidate.reasons ?? []),
+        "component-runtime-overflow",
+      ])],
+      selectionMode: "fallback-locked",
+    };
+    const alreadyPresent = (set.candidates ?? []).some((candidate) => (
+      candidate.familyId === fallback.familyId
+      && candidate.variantId === fallback.variantId
+      && candidate.silhouette === fallback.silhouette
+    ));
+    return {
+      ...set,
+      selectionMode: "fallback-locked",
+      candidates: alreadyPresent ? set.candidates : [...(set.candidates ?? []), fallback],
+    };
+  });
   if (!compositionPlan || !Array.isArray(compositionPlan.pages)
     || compositionPlan.pages.length !== pageIntents.length) {
     return { status: "needs-director-revision", feedback: [{ code: "composition-plan-mismatch" }] };
@@ -1153,7 +1334,7 @@ export async function resolveVisualPlan({
   const normalizedVisualPlan = {
     ...visualPlan,
     pages: visualPlan.pages.map((page, index) => {
-      const matches = (candidateSets[index]?.candidates ?? []).filter((candidate) => (
+      const matches = (effectiveCandidateSets[index]?.candidates ?? []).filter((candidate) => (
         candidate.familyId === page.familyId && candidate.variantId === page.variantId
       ));
       return matches.length === 1 && page.silhouette !== matches[0].silhouette
@@ -1174,7 +1355,7 @@ export async function resolveVisualPlan({
   const feedback = [];
   const warnings = [];
   normalizedVisualPlan.pages.forEach((planPage, index) => {
-    const candidateSet = candidateSets[index];
+    const candidateSet = effectiveCandidateSets[index];
     const candidate = selectedCandidate(planPage, candidateSet);
     if (!candidate) {
       feedback.push({
@@ -1192,7 +1373,7 @@ export async function resolveVisualPlan({
     );
     normalizedCompositionPlan.pages[index] = normalizedCompositionPage;
     const structuralAlternatives = candidateSet.candidates.filter((item) => (
-      !item.fallbackBody && item.contentReadiness !== "needs-semantic-refinement"
+      !item.fallbackBody && new Set(["ready", "derivable"]).has(candidateReadiness(item))
     ));
     const runtimeOverflowFallback = (previousResolution?.feedback ?? []).some((item) => (
       item.pageId === planPage.pageId && item.code === "component-runtime-overflow"
@@ -1290,20 +1471,26 @@ export async function resolveVisualPlan({
   const rhythm = planVisualVariants(structuralRequests, { variants });
   if (rhythm.status !== "accepted") return rhythm;
 
-  const layoutDecisions = selections.map((candidate, index) => ({
-    schemaVersion: "1.0",
-    intentId: pageIntents[index].intentId,
-    decision: "single-match",
-    selectedFamilyId: candidate.familyId,
-    selectedAssetId: candidate.assetId,
-    selectedVariantId: candidate.variantId,
-    selectedSilhouette: candidate.silhouette,
-    selectionState: "selected",
-    selectionOwner: "visual-director",
-    candidates: [],
-    rejections: [],
-    resolutionPlan: null,
-  }));
+  const layoutDecisions = selections.map((candidate, index) => {
+    const attribution = selectionAttribution(effectiveCandidateSets[index], candidate, {
+      runtimeOverflow: overflowPageIds.has(pageContents[index].pageId),
+    });
+    return {
+      schemaVersion: "1.0",
+      intentId: pageIntents[index].intentId,
+      decision: attribution.decision,
+      selectedFamilyId: candidate.familyId,
+      selectedAssetId: candidate.assetId,
+      selectedVariantId: candidate.variantId,
+      selectedSilhouette: candidate.silhouette,
+      selectionState: attribution.selectionState,
+      selectionOwner: attribution.selectionOwner,
+      selectionSource: attribution.selectionSource,
+      candidates: [],
+      rejections: [],
+      resolutionPlan: null,
+    };
+  });
   const payloadResults = await Promise.all(layoutDecisions.map(async (decision, index) => {
     const compositionPage = normalizedCompositionPlan.pages[index];
     const metadata = metadataById.get(decision.selectedAssetId);

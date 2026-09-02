@@ -1,0 +1,1604 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/i107q5of",
+    "id": "i107q5of",
+    "slide": 5,
+    "layoutId": "/ppt/slideLayouts/slideLayout3.xml",
+    "layoutName": "节标题",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "Office",
+    "colors": {
+      "accent1": "#4472C4",
+      "accent2": "#ED7D31",
+      "accent3": "#A5A5A5",
+      "accent4": "#FFC000",
+      "accent5": "#5B9BD5",
+      "accent6": "#70AD47",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#44546A",
+      "lt2": "#E7E6E6",
+      "hlink": "#0563C1",
+      "folHlink": "#954F72"
+    },
+    "fontScheme": {
+      "name": "Office",
+      "majorFont": {
+        "latinTypeface": "等线 Light"
+      },
+      "minorFont": {
+        "latinTypeface": "等线"
+      }
+    },
+    "typefaces": [
+      "HYWenRunSongYun U",
+      "Microsoft YaHei",
+      "汉仪粗宋简",
+      "等线",
+      "等线 Light"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout3.xml",
+      "name": "节标题",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": [
+        {
+          "order": 1,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout3.xml/333",
+          "id": "333",
+          "name": "矩形 332",
+          "bbox": [
+            35.17,
+            87.55,
+            1209.67,
+            52.42
+          ],
+          "geometry": "rect",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "verticalAlignment": "middle"
+          },
+          "lineWidth": 1.33
+        },
+        {
+          "order": 2,
+          "kind": "image",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout3.xml/334",
+          "id": "334",
+          "name": "图片 16",
+          "bbox": [
+            984.21,
+            20.82,
+            280.94,
+            62.29
+          ],
+          "contentType": "image/png",
+          "imageCrop": {
+            "left": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0.59104
+          },
+          "asset": {
+            "assetId": "/ppt/media/image3.png",
+            "contentType": "image/png",
+            "byteLength": 54711
+          },
+          "fillImage": {
+            "assetId": "/ppt/media/image3.png",
+            "contentType": "image/png",
+            "byteLength": 54711
+          }
+        },
+        {
+          "order": 3,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout3.xml/11",
+          "id": "11",
+          "name": "直接连接符 10",
+          "bbox": [
+            35.17,
+            689.24,
+            1209.67,
+            0
+          ],
+          "geometry": "line",
+          "lineColor": "accent1",
+          "lineWidth": 5.33
+        },
+        {
+          "order": 4,
+          "kind": "shape",
+          "scope": "layout",
+          "aid": "template/layout//ppt/slideLayouts/slideLayout3.xml/10",
+          "id": "10",
+          "name": "直接连接符 9",
+          "bbox": [
+            35.17,
+            147.22,
+            1209.67,
+            0
+          ],
+          "geometry": "line",
+          "lineWidth": 2.67
+        }
+      ]
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "type": "master",
+      "elements": [
+        {
+          "order": 1,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/2",
+          "id": "2",
+          "name": "标题占位符 1",
+          "bbox": [
+            88,
+            38.33,
+            1104,
+            139.17
+          ],
+          "geometry": "rect",
+          "text": "单击此处编辑母版标题样式",
+          "textPreview": "单击此处编辑母版标题样式",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "单击此处编辑母版标题样式",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "单击此处编辑母版标题样式"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/3",
+          "id": "3",
+          "name": "文本占位符 2",
+          "bbox": [
+            88,
+            191.67,
+            1104,
+            456.83
+          ],
+          "geometry": "rect",
+          "text": "单击此处编辑母版文本样式\n二级\n三级\n四级\n五级",
+          "textPreview": "单击此处编辑母版文本样式 | 二级 | 三级 | 四级 | 五级",
+          "resolvedTextStyle": {
+            "vertical": 1,
+            "autoFit": "shrinkText",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "单击此处编辑母版文本样式",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "单击此处编辑母版文本样式"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "text": "二级",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "二级"
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "text": "三级",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "三级"
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "text": "四级",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "四级"
+                }
+              ]
+            },
+            {
+              "index": 5,
+              "text": "五级",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "五级"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/4",
+          "id": "4",
+          "name": "日期占位符 3",
+          "bbox": [
+            88,
+            667.33,
+            288,
+            38.33
+          ],
+          "geometry": "rect",
+          "text": "2026/8/8",
+          "textPreview": "2026/8/8",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "2026/8/8",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "2026/8/8"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/5",
+          "id": "5",
+          "name": "页脚占位符 4",
+          "bbox": [
+            424,
+            667.33,
+            432,
+            38.33
+          ],
+          "geometry": "rect",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          }
+        },
+        {
+          "order": 5,
+          "kind": "shape",
+          "scope": "master",
+          "aid": "template/master//ppt/slideMasters/slideMaster1.xml/6",
+          "id": "6",
+          "name": "灯片编号占位符 5",
+          "bbox": [
+            904,
+            667.33,
+            288,
+            38.33
+          ],
+          "geometry": "rect",
+          "text": "‹#›",
+          "textPreview": "‹#›",
+          "resolvedTextStyle": {
+            "anchor": 2,
+            "vertical": 1,
+            "verticalAlignment": "middle",
+            "insets": {
+              "top": 4.8,
+              "right": 9.6,
+              "bottom": 4.8,
+              "left": 9.6
+            }
+          },
+          "paragraphs": [
+            {
+              "index": 1,
+              "text": "‹#›",
+              "runs": [
+                {
+                  "index": 1,
+                  "text": "‹#›"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/yhkbe1o7",
+      "id": "5",
+      "name": "文本框 4",
+      "bbox": [
+        9.04,
+        88.85,
+        1250.55,
+        48.47
+      ],
+      "geometry": "rect",
+      "text": "“1+3+N”新矩阵",
+      "textPreview": "“1+3+N”新矩阵",
+      "resolvedFontSize": 32,
+      "resolvedTextStyle": {
+        "fontSize": 32,
+        "typeface": "HYWenRunSongYun U",
+        "color": "tx1",
+        "alignment": "left",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "“1+3+N”新矩阵"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "“1+3+N”新矩阵",
+          "resolvedTextStyle": {
+            "fontSize": 32,
+            "typeface": "HYWenRunSongYun U"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "“1+3+N”新矩阵",
+              "fontSize": 32,
+              "typeface": "HYWenRunSongYun U",
+              "color": "bg1",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/032tgr6d",
+      "id": "7",
+      "name": "文本框 6",
+      "bbox": [
+        98.87,
+        31.9,
+        177.93,
+        45.24
+      ],
+      "geometry": "rect",
+      "text": "机制",
+      "textPreview": "机制",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "fontSize": 24,
+        "typeface": "等线",
+        "color": "tx1",
+        "alignment": "left",
+        "wrap": "square",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "机制"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "机制",
+          "runs": [
+            {
+              "index": 1,
+              "text": "机制",
+              "fontSize": 29.33,
+              "typeface": "汉仪粗宋简",
+              "color": {
+                "type": "theme",
+                "value": "tx1",
+                "transform": {
+                  "lighten": 0.25
+                }
+              }
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/n6dcr65o",
+      "id": "8",
+      "name": "直接连接符 7",
+      "bbox": [
+        97.13,
+        42.02,
+        0,
+        28.1
+      ],
+      "verticalFlip": true,
+      "geometry": "line",
+      "lineColor": {
+        "type": "theme",
+        "value": "bg1",
+        "transform": {
+          "darken": 0.5
+        }
+      },
+      "lineWidth": 1.33
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/m5kbi1oj",
+      "id": "9",
+      "name": "文本框 8",
+      "bbox": [
+        44.45,
+        31.9,
+        71.23,
+        48.47
+      ],
+      "geometry": "rect",
+      "text": "03",
+      "textPreview": "03",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "fontSize": 24,
+        "typeface": "等线",
+        "color": "tx1",
+        "alignment": "left",
+        "wrap": "square",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "03"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "03",
+          "runs": [
+            {
+              "index": 1,
+              "text": "03",
+              "fontSize": 32,
+              "typeface": "汉仪粗宋简",
+              "color": {
+                "type": "theme",
+                "value": "tx1",
+                "transform": {
+                  "lighten": 0.25
+                }
+              }
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ]
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/k7mxovud",
+      "id": "14",
+      "name": "文本框 13",
+      "bbox": [
+        46.78,
+        232.16,
+        404.25,
+        38.78
+      ],
+      "geometry": "rect",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "fontSize": 24,
+        "typeface": "等线",
+        "color": "tx1",
+        "alignment": "left",
+        "wrap": "square",
+        "autoFit": "resizeShapeToFitText",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": ""
+          }
+        ]
+      }
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/58vehgvy",
+      "id": "15",
+      "name": "PPAGENT_QA|parent=composition-component|domains=page-composition-zones",
+      "bbox": [
+        55,
+        166,
+        1170,
+        492
+      ],
+      "geometry": "rect",
+      "lineWidth": 0
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/i54fmlc7",
+      "id": "16",
+      "name": "parallel-card-underlay-0",
+      "bbox": [
+        145,
+        264,
+        296.66,
+        352
+      ],
+      "rotation": 0,
+      "geometry": "roundRect",
+      "fillColor": "#DFEAFA",
+      "lineColor": "#DCE8F7",
+      "lineWidth": 1
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/j6dwfqds",
+      "id": "17",
+      "name": "parallel-card-surface-0",
+      "bbox": [
+        137,
+        254,
+        312.66,
+        352
+      ],
+      "rotation": 0,
+      "geometry": "roundRect",
+      "fillColor": "#F4F8FD",
+      "lineColor": "#D2E0F2",
+      "lineWidth": 1
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/sb6xsvu9",
+      "id": "18",
+      "name": "parallel-card-accent-0",
+      "bbox": [
+        252.33,
+        254,
+        82,
+        8
+      ],
+      "rotation": 0,
+      "geometry": "roundRect",
+      "fillColor": "#78AEEF",
+      "lineWidth": 0
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/tcfel0vu",
+      "id": "19",
+      "name": "parallel-marker-halo-0",
+      "bbox": [
+        245.33,
+        206,
+        96,
+        96
+      ],
+      "rotation": 0,
+      "geometry": "ellipse",
+      "fillColor": "#EDF5FF",
+      "lineColor": "#D8E7FA",
+      "lineWidth": 1
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/hgrmpwj2",
+      "id": "20",
+      "name": "parallel-marker-core-0",
+      "bbox": [
+        259.33,
+        220,
+        68,
+        68
+      ],
+      "rotation": 0,
+      "geometry": "ellipse",
+      "fillColor": "#2F5EA8",
+      "lineWidth": 0
+    },
+    {
+      "order": 12,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/zu9wb6pc",
+      "id": "21",
+      "bbox": [
+        275.33,
+        236,
+        36,
+        36
+      ],
+      "alt": "dna",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "9dc839a7-798e-4e32-8c30-db296bd96c1d",
+        "contentType": "image/svg+xml",
+        "byteLength": 533
+      }
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/fe94nm1w",
+      "id": "22",
+      "name": "parallel-title-0",
+      "bbox": [
+        165,
+        340,
+        256.66,
+        30
+      ],
+      "rotation": 0,
+      "geometry": "rect",
+      "text": "1条研学链",
+      "textPreview": "1条研学链",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 24,
+        "typeface": "Microsoft YaHei",
+        "color": "#254B7C",
+        "bold": true,
+        "alignment": "center",
+        "verticalAlignment": "middle",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "1条研学链"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "1条研学链",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 24,
+            "typeface": "Microsoft YaHei",
+            "color": "#254B7C",
+            "bold": true,
+            "alignment": "center",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "1条研学链",
+              "fontSize": 24,
+              "typeface": "Microsoft YaHei",
+              "color": "#254B7C",
+              "bold": true,
+              "alignment": "center",
+              "lineSpacing": 1.25
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ud0ne10b",
+      "id": "23",
+      "name": "parallel-rule-0",
+      "bbox": [
+        266.33,
+        396,
+        54,
+        4
+      ],
+      "rotation": 0,
+      "geometry": "roundRect",
+      "fillColor": "#78AEEF",
+      "lineWidth": 0
+    },
+    {
+      "order": 15,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/pkr6tgjy",
+      "id": "24",
+      "name": "parallel-body-0",
+      "bbox": [
+        165,
+        437,
+        256.66,
+        84
+      ],
+      "rotation": 0,
+      "geometry": "rect",
+      "text": "对接22处示范教学点，按\n1+6+N设计路线，绘制红色足\n迹地图。",
+      "textPreview": "对接22处示范教学点，按 | 1+6+N设计路线，绘制红色足 | 迹地图。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 18.67,
+        "typeface": "Microsoft YaHei",
+        "color": "#46566A",
+        "alignment": "center",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "对接22处示范教学点，按"
+          },
+          {
+            "index": 2,
+            "text": "1+6+N设计路线，绘制红色足"
+          },
+          {
+            "index": 3,
+            "text": "迹地图。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "对接22处示范教学点，按",
+          "lineSpacingPercent": 150000,
+          "resolvedTextStyle": {
+            "fontSize": 18.67,
+            "typeface": "Microsoft YaHei",
+            "color": "#46566A",
+            "alignment": "center",
+            "lineSpacing": 1.5
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "对接22处示范教学点，按",
+              "fontSize": 18.67,
+              "typeface": "Microsoft YaHei",
+              "color": "#46566A",
+              "alignment": "center",
+              "lineSpacing": 1.5
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "1+6+N设计路线，绘制红色足",
+          "lineSpacingPercent": 150000,
+          "resolvedTextStyle": {
+            "fontSize": 18.67,
+            "typeface": "Microsoft YaHei",
+            "color": "#46566A",
+            "alignment": "center",
+            "lineSpacing": 1.5
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "1+6+N设计路线，绘制红色足",
+              "fontSize": 18.67,
+              "typeface": "Microsoft YaHei",
+              "color": "#46566A",
+              "alignment": "center",
+              "lineSpacing": 1.5
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 3,
+          "text": "迹地图。",
+          "lineSpacingPercent": 150000,
+          "resolvedTextStyle": {
+            "fontSize": 18.67,
+            "typeface": "Microsoft YaHei",
+            "color": "#46566A",
+            "alignment": "center",
+            "lineSpacing": 1.5
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "迹地图。",
+              "fontSize": 18.67,
+              "typeface": "Microsoft YaHei",
+              "color": "#46566A",
+              "alignment": "center",
+              "lineSpacing": 1.5
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 16,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/4ji5kbid",
+      "id": "25",
+      "name": "parallel-card-underlay-1",
+      "bbox": [
+        491.66,
+        264,
+        296.67,
+        352
+      ],
+      "rotation": 0,
+      "geometry": "roundRect",
+      "fillColor": "#DFEAFA",
+      "lineColor": "#DCE8F7",
+      "lineWidth": 1
+    },
+    {
+      "order": 17,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/3i94r61s",
+      "id": "26",
+      "name": "parallel-card-surface-1",
+      "bbox": [
+        483.66,
+        254,
+        312.67,
+        352
+      ],
+      "rotation": 0,
+      "geometry": "roundRect",
+      "fillColor": "#F4F8FD",
+      "lineColor": "#D2E0F2",
+      "lineWidth": 1
+    },
+    {
+      "order": 18,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/2h0ni107",
+      "id": "27",
+      "name": "parallel-card-accent-1",
+      "bbox": [
+        598.98,
+        254,
+        82,
+        8
+      ],
+      "rotation": 0,
+      "geometry": "roundRect",
+      "fillColor": "#78AEEF",
+      "lineWidth": 0
+    },
+    {
+      "order": 19,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/5o7mhcju",
+      "id": "28",
+      "name": "parallel-marker-halo-1",
+      "bbox": [
+        591.98,
+        206,
+        96,
+        96
+      ],
+      "rotation": 0,
+      "geometry": "ellipse",
+      "fillColor": "#EDF5FF",
+      "lineColor": "#D8E7FA",
+      "lineWidth": 1
+    },
+    {
+      "order": 20,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/kny587i9",
+      "id": "29",
+      "name": "parallel-marker-core-1",
+      "bbox": [
+        605.98,
+        220,
+        68,
+        68
+      ],
+      "rotation": 0,
+      "geometry": "ellipse",
+      "fillColor": "#2F5EA8",
+      "lineWidth": 0
+    },
+    {
+      "order": 21,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/5gfi9krm",
+      "id": "30",
+      "bbox": [
+        621.98,
+        236,
+        36,
+        36
+      ],
+      "alt": "military-rank",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "bd228953-6321-4549-b4d7-45ddc29caf59",
+        "contentType": "image/svg+xml",
+        "byteLength": 531
+      }
+    },
+    {
+      "order": 22,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/vu5kbihc",
+      "id": "31",
+      "name": "parallel-title-1",
+      "bbox": [
+        511.66,
+        340,
+        256.67,
+        30
+      ],
+      "rotation": 0,
+      "geometry": "rect",
+      "text": "3类青春课堂",
+      "textPreview": "3类青春课堂",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 24,
+        "typeface": "Microsoft YaHei",
+        "color": "#254B7C",
+        "bold": true,
+        "alignment": "center",
+        "verticalAlignment": "middle",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "3类青春课堂"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "3类青春课堂",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 24,
+            "typeface": "Microsoft YaHei",
+            "color": "#254B7C",
+            "bold": true,
+            "alignment": "center",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "3类青春课堂",
+              "fontSize": 24,
+              "typeface": "Microsoft YaHei",
+              "color": "#254B7C",
+              "bold": true,
+              "alignment": "center",
+              "lineSpacing": 1.25
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 23,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/wve1knyx",
+      "id": "32",
+      "name": "parallel-rule-1",
+      "bbox": [
+        612.98,
+        396,
+        54,
+        4
+      ],
+      "rotation": 0,
+      "geometry": "roundRect",
+      "fillColor": "#78AEEF",
+      "lineWidth": 0
+    },
+    {
+      "order": 24,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/xwn2dszi",
+      "id": "33",
+      "name": "parallel-body-1",
+      "bbox": [
+        511.66,
+        451,
+        256.67,
+        56
+      ],
+      "rotation": 0,
+      "geometry": "rect",
+      "text": "行走课堂、VR党课、互动课\n堂，覆盖沉浸式教育。",
+      "textPreview": "行走课堂、VR党课、互动课 | 堂，覆盖沉浸式教育。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 18.67,
+        "typeface": "Microsoft YaHei",
+        "color": "#46566A",
+        "alignment": "center",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "行走课堂、VR党课、互动课"
+          },
+          {
+            "index": 2,
+            "text": "堂，覆盖沉浸式教育。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "行走课堂、VR党课、互动课",
+          "lineSpacingPercent": 150000,
+          "resolvedTextStyle": {
+            "fontSize": 18.67,
+            "typeface": "Microsoft YaHei",
+            "color": "#46566A",
+            "alignment": "center",
+            "lineSpacing": 1.5
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "行走课堂、VR党课、互动课",
+              "fontSize": 18.67,
+              "typeface": "Microsoft YaHei",
+              "color": "#46566A",
+              "alignment": "center",
+              "lineSpacing": 1.5
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "堂，覆盖沉浸式教育。",
+          "lineSpacingPercent": 150000,
+          "resolvedTextStyle": {
+            "fontSize": 18.67,
+            "typeface": "Microsoft YaHei",
+            "color": "#46566A",
+            "alignment": "center",
+            "lineSpacing": 1.5
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "堂，覆盖沉浸式教育。",
+              "fontSize": 18.67,
+              "typeface": "Microsoft YaHei",
+              "color": "#46566A",
+              "alignment": "center",
+              "lineSpacing": 1.5
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 25,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ihw3mxg3",
+      "id": "34",
+      "name": "parallel-card-underlay-2",
+      "bbox": [
+        838.33,
+        264,
+        296.66,
+        352
+      ],
+      "rotation": 0,
+      "geometry": "roundRect",
+      "fillColor": "#DFEAFA",
+      "lineColor": "#DCE8F7",
+      "lineWidth": 1
+    },
+    {
+      "order": 26,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ji5kf2ho",
+      "id": "35",
+      "name": "parallel-card-surface-2",
+      "bbox": [
+        830.33,
+        254,
+        312.66,
+        352
+      ],
+      "rotation": 0,
+      "geometry": "roundRect",
+      "fillColor": "#F4F8FD",
+      "lineColor": "#D2E0F2",
+      "lineWidth": 1
+    },
+    {
+      "order": 27,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/kjelony9",
+      "id": "36",
+      "name": "parallel-card-accent-2",
+      "bbox": [
+        945.66,
+        254,
+        82,
+        8
+      ],
+      "rotation": 0,
+      "geometry": "roundRect",
+      "fillColor": "#78AEEF",
+      "lineWidth": 0
+    },
+    {
+      "order": 28,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/5kn2hszu",
+      "id": "37",
+      "name": "parallel-marker-halo-2",
+      "bbox": [
+        938.66,
+        206,
+        96,
+        96
+      ],
+      "rotation": 0,
+      "geometry": "ellipse",
+      "fillColor": "#EDF5FF",
+      "lineColor": "#D8E7FA",
+      "lineWidth": 1
+    },
+    {
+      "order": 29,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/e1sjatgz",
+      "id": "38",
+      "name": "parallel-marker-core-2",
+      "bbox": [
+        952.66,
+        220,
+        68,
+        68
+      ],
+      "rotation": 0,
+      "geometry": "ellipse",
+      "fillColor": "#2F5EA8",
+      "lineWidth": 0
+    },
+    {
+      "order": 30,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/g7q1ozq9",
+      "id": "39",
+      "bbox": [
+        968.66,
+        236,
+        36,
+        36
+      ],
+      "alt": "background",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "eefd178a-8762-4a43-aaca-5fe7c471a661",
+        "contentType": "image/svg+xml",
+        "byteLength": 507
+      }
+    },
+    {
+      "order": 31,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/fid07u98",
+      "id": "40",
+      "name": "parallel-title-2",
+      "bbox": [
+        858.33,
+        340,
+        256.66,
+        30
+      ],
+      "rotation": 0,
+      "geometry": "rect",
+      "text": "N个教育场景",
+      "textPreview": "N个教育场景",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 24,
+        "typeface": "Microsoft YaHei",
+        "color": "#254B7C",
+        "bold": true,
+        "alignment": "center",
+        "verticalAlignment": "middle",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "N个教育场景"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "N个教育场景",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 24,
+            "typeface": "Microsoft YaHei",
+            "color": "#254B7C",
+            "bold": true,
+            "alignment": "center",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "N个教育场景",
+              "fontSize": 24,
+              "typeface": "Microsoft YaHei",
+              "color": "#254B7C",
+              "bold": true,
+              "alignment": "center",
+              "lineSpacing": 1.25
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 32,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ehkzepsn",
+      "id": "41",
+      "name": "parallel-rule-2",
+      "bbox": [
+        959.66,
+        396,
+        54,
+        4
+      ],
+      "rotation": 0,
+      "geometry": "roundRect",
+      "fillColor": "#78AEEF",
+      "lineWidth": 0
+    },
+    {
+      "order": 33,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1kvi94re",
+      "id": "42",
+      "name": "parallel-body-2",
+      "bbox": [
+        858.33,
+        451,
+        256.66,
+        56
+      ],
+      "rotation": 0,
+      "geometry": "rect",
+      "text": "校地、校企、校校联建，实现\n全时全域红色教育。",
+      "textPreview": "校地、校企、校校联建，实现 | 全时全域红色教育。",
+      "resolvedFontSize": 18.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 18.67,
+        "typeface": "Microsoft YaHei",
+        "color": "#46566A",
+        "alignment": "center",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "校地、校企、校校联建，实现"
+          },
+          {
+            "index": 2,
+            "text": "全时全域红色教育。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "校地、校企、校校联建，实现",
+          "lineSpacingPercent": 150000,
+          "resolvedTextStyle": {
+            "fontSize": 18.67,
+            "typeface": "Microsoft YaHei",
+            "color": "#46566A",
+            "alignment": "center",
+            "lineSpacing": 1.5
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "校地、校企、校校联建，实现",
+              "fontSize": 18.67,
+              "typeface": "Microsoft YaHei",
+              "color": "#46566A",
+              "alignment": "center",
+              "lineSpacing": 1.5
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "全时全域红色教育。",
+          "lineSpacingPercent": 150000,
+          "resolvedTextStyle": {
+            "fontSize": 18.67,
+            "typeface": "Microsoft YaHei",
+            "color": "#46566A",
+            "alignment": "center",
+            "lineSpacing": 1.5
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "全时全域红色教育。",
+              "fontSize": 18.67,
+              "typeface": "Microsoft YaHei",
+              "color": "#46566A",
+              "alignment": "center",
+              "lineSpacing": 1.5
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

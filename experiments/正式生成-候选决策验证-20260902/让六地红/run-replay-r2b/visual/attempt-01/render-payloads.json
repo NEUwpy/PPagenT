@@ -1,0 +1,363 @@
+[
+  {
+    "schemaVersion": "1.0",
+    "intentId": "shell-cover-intent",
+    "assetId": "northeastern-university-cover-001",
+    "parameters": {
+      "title": "让“六地”红，成为理工青年最鲜亮的青春底色",
+      "presenter": "",
+      "organization": "",
+      "date": "",
+      "subtitle": ""
+    },
+    "mappings": [],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "shell-agenda-intent",
+    "assetId": "northeastern-university-agenda-001",
+    "parameters": {
+      "title": "目录",
+      "items": [
+        "缘起与转向",
+        "构建新矩阵",
+        "五类实践抓手",
+        "五年成效",
+        "收束与展望"
+      ]
+    },
+    "mappings": [
+      {
+        "sourceItemId": "agenda-1",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-2",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-3",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-4",
+        "parameterPath": "items"
+      },
+      {
+        "sourceItemId": "agenda-5",
+        "parameterPath": "items"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p1-intent",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "开场",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "item1",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p2-intent",
+    "assetId": "northeastern-university-body-001",
+    "parameters": {
+      "title": "从“三高三低”到深耕辽宁",
+      "compositionOnly": true
+    },
+    "mappings": [
+      {
+        "sourceItemId": "item-past",
+        "parameterPath": "composition"
+      },
+      {
+        "sourceItemId": "item-now",
+        "parameterPath": "composition"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p3-intent",
+    "assetId": "parallel-equal-cards-001",
+    "parameters": {
+      "title": "“1+3+N”新矩阵",
+      "items": [
+        {
+          "key": "item-chain",
+          "title": "1条研学链",
+          "body": "对接22处示范教学点，按1+6+N设计路线，绘制红色足迹地图。",
+          "points": [],
+          "iconQuery": "chain"
+        },
+        {
+          "key": "item-classes",
+          "title": "3类青春课堂",
+          "body": "行走课堂、VR党课、互动课堂，覆盖沉浸式教育。",
+          "points": [],
+          "iconQuery": "class"
+        },
+        {
+          "key": "item-scenes",
+          "title": "N个教育场景",
+          "body": "校地、校企、校校联建，实现全时全域红色教育。",
+          "points": [],
+          "iconQuery": "scene"
+        }
+      ],
+      "visualVariantId": "equal-floating-cards",
+      "textLayoutBindings": {
+        "professional-title-region": "statement-flow",
+        "professional-content-region": "heading-content-flow",
+        "collaboration-title-region": "statement-flow",
+        "collaboration-content-region": "heading-content-flow",
+        "innovation-title-region": "statement-flow",
+        "innovation-content-region": "heading-content-flow"
+      }
+    },
+    "mappings": [
+      {
+        "sourceItemId": "item-chain",
+        "parameterPath": "items[0]"
+      },
+      {
+        "sourceItemId": "item-classes",
+        "parameterPath": "items[1]"
+      },
+      {
+        "sourceItemId": "item-scenes",
+        "parameterPath": "items[2]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p4-intent",
+    "assetId": "parallel-equal-cards-001",
+    "parameters": {
+      "title": "五类实践抓手",
+      "items": [
+        {
+          "key": "item-task",
+          "title": "红色任务单",
+          "body": "拍短视频、解决微难题、带回微课题，三摆三写军令状。",
+          "points": [],
+          "iconQuery": "task"
+        },
+        {
+          "key": "item-vr",
+          "title": "VR示范基地",
+          "body": "重走总书记路线，开发7门红色VR党课，一键穿越一屏百年。",
+          "points": [],
+          "iconQuery": "vr"
+        },
+        {
+          "key": "item-lecture",
+          "title": "青春宣讲团",
+          "body": "32人混编梯队，10类互动课件，进社区进企业36场。",
+          "points": [],
+          "iconQuery": "lecture"
+        },
+        {
+          "key": "item-friend",
+          "title": "红色朋友圈",
+          "body": "与41家单位联建，VR党课共享，互派党员2000人次。",
+          "points": [],
+          "iconQuery": "friend"
+        },
+        {
+          "key": "item-mechanism",
+          "title": "红色育人机制",
+          "body": "四阶培养链，计入学分，36位红色导师持续传承。",
+          "points": [],
+          "iconQuery": "mechanism"
+        }
+      ],
+      "visualVariantId": "equal-floating-cards",
+      "textLayoutBindings": {
+        "professional-title-region": "statement-flow",
+        "professional-content-region": "heading-content-flow",
+        "collaboration-title-region": "statement-flow",
+        "collaboration-content-region": "heading-content-flow",
+        "innovation-title-region": "statement-flow",
+        "innovation-content-region": "heading-content-flow",
+        "execution-title-region": "statement-flow",
+        "execution-content-region": "heading-content-flow",
+        "learning-title-region": "statement-flow",
+        "learning-content-region": "heading-content-flow"
+      }
+    },
+    "mappings": [
+      {
+        "sourceItemId": "item-task",
+        "parameterPath": "items[0]"
+      },
+      {
+        "sourceItemId": "item-vr",
+        "parameterPath": "items[1]"
+      },
+      {
+        "sourceItemId": "item-lecture",
+        "parameterPath": "items[2]"
+      },
+      {
+        "sourceItemId": "item-friend",
+        "parameterPath": "items[3]"
+      },
+      {
+        "sourceItemId": "item-mechanism",
+        "parameterPath": "items[4]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p5-intent",
+    "assetId": "parallel-equal-cards-001",
+    "parameters": {
+      "title": "五年成效",
+      "items": [
+        {
+          "key": "item-faith",
+          "title": "信仰更强",
+          "body": "留辽意愿举手率从58%飙到87%，英雄起跑青年鸣枪。",
+          "points": [],
+          "iconQuery": "faith"
+        },
+        {
+          "key": "item-skill",
+          "title": "本领更硬",
+          "body": "26份微课题落地，8家企业当场收货，所学终有所用。",
+          "points": [],
+          "iconQuery": "skill"
+        },
+        {
+          "key": "item-voice",
+          "title": "声音更响",
+          "body": "青春宣讲团让理论飞入社区课堂，飞进百姓心坎。",
+          "points": [],
+          "iconQuery": "voice"
+        },
+        {
+          "key": "item-step",
+          "title": "脚步更稳",
+          "body": "选调生及重大装备研发比例提升40%，论文写在大地上。",
+          "points": [],
+          "iconQuery": "step"
+        }
+      ],
+      "visualVariantId": "equal-floating-cards",
+      "textLayoutBindings": {
+        "professional-title-region": "statement-flow",
+        "professional-content-region": "heading-content-flow",
+        "collaboration-title-region": "statement-flow",
+        "collaboration-content-region": "heading-content-flow",
+        "innovation-title-region": "statement-flow",
+        "innovation-content-region": "heading-content-flow",
+        "execution-title-region": "statement-flow",
+        "execution-content-region": "heading-content-flow"
+      }
+    },
+    "mappings": [
+      {
+        "sourceItemId": "item-faith",
+        "parameterPath": "items[0]"
+      },
+      {
+        "sourceItemId": "item-skill",
+        "parameterPath": "items[1]"
+      },
+      {
+        "sourceItemId": "item-voice",
+        "parameterPath": "items[2]"
+      },
+      {
+        "sourceItemId": "item-step",
+        "parameterPath": "items[3]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "p6-intent",
+    "assetId": "convergence-simple-funnel-001",
+    "parameters": {
+      "inputs": [],
+      "steps": [
+        {
+          "key": "item-chain-sum",
+          "title": "研学链"
+        },
+        {
+          "key": "item-task-sum",
+          "title": "任务单"
+        },
+        {
+          "key": "item-vr-sum",
+          "title": "VR基地"
+        },
+        {
+          "key": "item-lecture-sum",
+          "title": "宣讲团"
+        },
+        {
+          "key": "item-mech-sum",
+          "title": "育人机制"
+        }
+      ],
+      "visualVariantId": "input-steps-only"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "item-chain-sum",
+        "parameterPath": "steps[0]"
+      },
+      {
+        "sourceItemId": "item-task-sum",
+        "parameterPath": "steps[1]"
+      },
+      {
+        "sourceItemId": "item-vr-sum",
+        "parameterPath": "steps[2]"
+      },
+      {
+        "sourceItemId": "item-lecture-sum",
+        "parameterPath": "steps[3]"
+      },
+      {
+        "sourceItemId": "item-mech-sum",
+        "parameterPath": "steps[4]"
+      }
+    ],
+    "omissions": []
+  },
+  {
+    "schemaVersion": "1.0",
+    "intentId": "shell-closing-intent",
+    "assetId": "northeastern-university-closing-001",
+    "parameters": {
+      "text": "通过“1+3+N”矩阵和五类实践抓手，让“六地”红色文化成为理工青年最鲜亮的青春底色"
+    },
+    "mappings": [
+      {
+        "sourceItemId": "closing-takeaway",
+        "parameterPath": "text"
+      }
+    ],
+    "omissions": []
+  }
+]

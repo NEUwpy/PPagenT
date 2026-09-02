@@ -165,6 +165,36 @@ test("重复 Markdown 标题依靠正文归属到不同 sectionKey", () => {
   assert.match(output.pageContents[1].sourceText, /乙方案/);
 });
 
+test("普通 Markdown 章节与输出页一一对应时由程序按顺序绑定原文", () => {
+  const markdown = `# 标题
+
+## 第一节
+
+第一节完整原文。
+
+## 第二节
+
+第二节完整原文。`;
+  const output = enforceSectionPageContract({
+    deckPlan: {
+      title: "标题",
+      narrativeArc: ["第一节", "第二节"],
+      pages: [
+        { pageId: "page-1", sequence: 1, sourceAnchors: ["改写后的第一节摘要"] },
+        { pageId: "page-2", sequence: 2, sourceAnchors: ["改写后的第二节摘要"] },
+      ],
+    },
+    pageContents: [
+      { pageId: "page-1", title: "第一节", items: [], sourceText: "模型改写后的第一节原文" },
+      { pageId: "page-2", title: "第二节", items: [], sourceText: "模型改写后的第二节原文" },
+    ],
+  }, markdown);
+  assert.equal(output.pageContents[0].sourceText, "## 第一节\n\n第一节完整原文。");
+  assert.equal(output.pageContents[1].sourceText, "## 第二节\n\n第二节完整原文。");
+  assert.deepEqual(output.deckPlan.pages[0].sourceAnchors, ["## 第一节"]);
+  assert.deepEqual(output.deckPlan.pages[1].sourceAnchors, ["## 第二节"]);
+});
+
 test("显式封面和结束语映射为 Shell 后不会重复", () => {
   const result = applyAcademicReportShellScaffold({
     deckPlan: {

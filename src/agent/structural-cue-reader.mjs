@@ -185,7 +185,11 @@ function parallelActionList(section) {
     const groups = sentence.split(/[，,]/).map((item) => item.trim()).filter(Boolean);
     const candidates = groups
       .map((group) => ({ source: group, count: (group.match(/、/g) ?? []).length + 1 }))
-      .filter((group) => group.count >= 3 && group.count <= 6)
+      .filter((group) => (
+        group.count >= 3
+        && group.count <= 6
+        && /(?:让我们|希望|我们要|我们需要|必须|应当|需要|为了)/.test(group.source)
+      ))
       .sort((left, right) => right.count - left.count);
     if (candidates.length) return candidates[0];
   }

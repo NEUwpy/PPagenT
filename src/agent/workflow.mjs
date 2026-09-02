@@ -13,6 +13,7 @@ import {
   normalizeSemanticRefinementRequests,
 } from "./semantic-refinement.mjs";
 import { buildShellIntent, isShellPage, shellVisualSelection } from "./shell-scaffold.mjs";
+import { candidateReadiness } from "./visual-resolution.mjs";
 
 export const DEFAULT_SKIN_ID = "northeastern-university-001";
 
@@ -65,6 +66,18 @@ function normalizeContentOutput(output) {
   if (!output || typeof output !== "object" || !Array.isArray(output.pageContents)) return output;
   const normalized = structuredClone(output);
   normalized.pageContents = normalized.pageContents.map((page) => {
+    const items = Array.isArray(page?.items)
+      ? page.items.map((item) => {
+        if (!item || typeof item !== "object" || Array.isArray(item)
+          || !Object.hasOwn(item, "points") || Array.isArray(item.points)) return item;
+        if (item.points !== null && String(item.points).trim()) return item;
+        const cleanItem = { ...item };
+        delete cleanItem.points;
+        return cleanItem;
+      })
+      : page?.items;
+    const pointsChanged = Array.isArray(page?.items)
+      && items.some((item, index) => item !== page.items[index]);
     const evidenceFragments = page?.logicIntent?.evidenceFragments;
     const groundedEvidenceFragments = Array.isArray(evidenceFragments)
       ? evidenceFragments.filter((fragment) => typeof fragment === "string" && page.sourceText?.includes(fragment))
@@ -75,13 +88,16 @@ function normalizeContentOutput(output) {
     const evidenceChanged = Array.isArray(evidenceFragments)
       && (validEvidenceFragments.length !== evidenceFragments.length
         || validEvidenceFragments.some((fragment, index) => fragment !== evidenceFragments[index]));
-    const normalizedPage = evidenceChanged
+    const normalizedPage = evidenceChanged || pointsChanged
       ? {
         ...page,
-        logicIntent: {
-          ...page.logicIntent,
-          evidenceFragments: validEvidenceFragments,
-        },
+        ...(pointsChanged ? { items } : {}),
+        ...(evidenceChanged ? {
+          logicIntent: {
+            ...page.logicIntent,
+            evidenceFragments: validEvidenceFragments,
+          },
+        } : {}),
       }
       : page;
     const structured = normalizedPage?.structuredData;
@@ -301,8 +317,15 @@ export function buildAssetGapReport(candidateSets, pageContents) {
   };
 }
 
-export function buildProductionStatistics({ candidateSets, pageContents, layoutDecisions, assetGapReport }) {
+export function buildProductionStatistics({
+  candidateSets,
+  pageContents,
+  layoutDecisions,
+  compositionPlan = null,
+  assetGapReport,
+}) {
   const decisionsByIntent = new Map((layoutDecisions ?? []).map((decision) => [decision.intentId, decision]));
+  const compositionByIntent = new Map((compositionPlan?.pages ?? []).map((page) => [page.intentId, page]));
   const pageById = new Map(pageContents.map((page) => [page.pageId, page]));
   const usageByAsset = new Map();
   const logicById = new Map();
@@ -313,16 +336,26 @@ export function buildProductionStatistics({ candidateSets, pageContents, layoutD
 
   for (const set of candidateSets.filter((item) => bodyPages.some((page) => page.pageId === item.pageId))) {
     const decision = decisionsByIntent.get(set.intentId);
-    const selected = set.candidates.find((candidate) => (
+    const candidatePool = [...(set.candidates ?? []), ...(set.fallbackCandidate ? [set.fallbackCandidate] : [])];
+    const hasSelectedVariantTuple = Boolean(
+      decision?.selectedFamilyId && decision?.selectedVariantId && decision?.selectedSilhouette,
+    );
+    const selected = candidatePool.find((candidate) => (
       candidate.assetId === decision?.selectedAssetId
-      || (candidate.familyId === decision?.selectedFamilyId
+      && (!hasSelectedVariantTuple || (candidate.familyId === decision.selectedFamilyId
         && candidate.variantId === decision?.selectedVariantId
-        && candidate.silhouette === decision?.selectedSilhouette)
+        && candidate.silhouette === decision?.selectedSilhouette))
     ));
     const page = pageById.get(set.pageId);
     const eligibleCandidates = set.candidateDiagnostics
       ? set.candidateDiagnostics.eligible
-        .filter((candidate) => candidate.variants.some((variant) => variant.contentReadiness === "ready"))
+        .map((candidate) => ({
+          ...candidate,
+          variants: candidate.variants.filter((variant) => (
+            new Set(["ready", "derivable"]).has(variant.readiness ?? variant.contentReadiness)
+          )),
+        }))
+        .filter((candidate) => candidate.variants.length > 0)
       : set.candidates
         .filter((candidate) => !candidate.fallbackBody)
         .map((candidate) => ({
@@ -330,12 +363,44 @@ export function buildProductionStatistics({ candidateSets, pageContents, layoutD
           structureGroupId: candidate.structureGroupId,
           variants: [{
             variantId: candidate.variantId,
-            contentReadiness: candidate.contentReadiness ?? "ready",
+            readiness: candidateReadiness(candidate),
           }],
         }));
+    const retainedCandidates = (set.candidates ?? []).map((candidate) => ({
+      assetId: candidate.assetId,
+      structureGroupId: candidate.structureGroupId ?? null,
+      familyId: candidate.familyId,
+      variantId: candidate.variantId,
+      silhouette: candidate.silhouette,
+      readiness: candidateReadiness(candidate, { assetGap: set.gap?.type === "asset-gap" }),
+      reasons: candidate.reasons ?? [],
+    }));
+    const excludedCandidates = (set.candidateDiagnostics?.rejected ?? [])
+      .filter((candidate) => candidate.readiness === "incompatible")
+      .map((candidate) => ({
+        assetId: candidate.assetId,
+        readiness: "incompatible",
+        stage: candidate.stage,
+        reasons: candidate.reasons ?? [],
+      }));
+    const selectedReadiness = selected
+      ? candidateReadiness(selected, {
+        assetGap: set.gap?.type === "asset-gap",
+        runtimeOverflow: decision?.selectionSource === "deterministic-fallback" && set.gap?.type !== "asset-gap",
+      })
+      : null;
+    const fallbackUsed = decision?.selectionSource === "deterministic-fallback" || selectedReadiness === "fallback";
+    const fallbackReason = !fallbackUsed
+      ? null
+      : set.gap?.type === "asset-gap"
+        ? { code: "asset-gap", detail: set.gap.reason ?? null }
+        : selected && !(set.candidates ?? []).includes(selected) && set.fallbackCandidate
+          ? { code: "component-runtime-overflow", detail: null }
+          : { code: "deterministic-fallback", detail: null };
+    const selectedComposition = compositionByIntent.get(set.intentId);
     const legalCandidateCount = eligibleCandidates.length;
     const editorial = page?.logicIntent?.logicId === "editorial"
-      || (selected?.fallbackBody && set.gap?.type !== "asset-gap");
+      || (selected?.fallbackBody && !fallbackUsed);
     pageCandidateDiagnostics.push({
       pageId: set.pageId,
       title: page?.title ?? set.pageId,
@@ -348,7 +413,27 @@ export function buildProductionStatistics({ candidateSets, pageContents, layoutD
         : legalCandidateCount === 1
           ? "single-legal-candidate"
           : "multiple-legal-candidates",
-      selectedAssetId: selected?.fallbackBody ? null : selected?.assetId ?? null,
+      selectedAssetId: selected?.assetId ?? decision?.selectedAssetId ?? null,
+      selectedStructureAssetId: selected?.fallbackBody ? null : selected?.assetId ?? null,
+      selectedCompositionId: selectedComposition?.compositionId ?? null,
+      selectedReadiness,
+      selectionSource: decision?.selectionSource ?? null,
+      selectionOwner: decision?.selectionOwner ?? null,
+      selected: selected || decision ? {
+        assetId: selected?.assetId ?? decision?.selectedAssetId ?? null,
+        structureAssetId: selected?.fallbackBody ? null : selected?.assetId ?? null,
+        structureGroupId: selected?.structureGroupId ?? null,
+        familyId: selected?.familyId ?? decision?.selectedFamilyId ?? null,
+        variantId: selected?.variantId ?? decision?.selectedVariantId ?? null,
+        silhouette: selected?.silhouette ?? decision?.selectedSilhouette ?? null,
+        compositionId: selectedComposition?.compositionId ?? null,
+        readiness: selectedReadiness,
+        source: decision?.selectionSource ?? null,
+        owner: decision?.selectionOwner ?? null,
+      } : null,
+      fallback: { used: fallbackUsed, reason: fallbackReason },
+      retainedCandidates,
+      excludedCandidates,
       eligibleCandidates,
       rejectedCandidates: set.candidateDiagnostics?.rejected ?? [],
     });
@@ -365,7 +450,7 @@ export function buildProductionStatistics({ candidateSets, pageContents, layoutD
     };
     logic.pageIds.push(set.pageId);
     if (selected.fallbackBody) {
-      if (set.gap?.type === "asset-gap") logic.fallbackPageIds.push(set.pageId);
+      if (fallbackUsed) logic.fallbackPageIds.push(set.pageId);
       else {
         editorialPageCount += 1;
         logic.editorialPageIds.push(set.pageId);
@@ -374,16 +459,23 @@ export function buildProductionStatistics({ candidateSets, pageContents, layoutD
       structurePageCount += 1;
       logic.structurePageIds.push(set.pageId);
       logic.assetIds.add(selected.assetId);
-      const usage = usageByAsset.get(selected.assetId) ?? {
+      const usageKey = [
+        selected.assetId,
+        selected.familyId,
+        selected.variantId,
+        selected.silhouette,
+      ].join("::");
+      const usage = usageByAsset.get(usageKey) ?? {
         assetId: selected.assetId,
         logicId,
         structureGroupId: selected.structureGroupId ?? null,
         familyId: selected.familyId,
         variantId: selected.variantId,
+        silhouette: selected.silhouette,
         pageIds: [],
       };
       usage.pageIds.push(set.pageId);
-      usageByAsset.set(selected.assetId, usage);
+      usageByAsset.set(usageKey, usage);
     }
     logicById.set(logicId, logic);
   }
@@ -402,7 +494,7 @@ export function buildProductionStatistics({ candidateSets, pageContents, layoutD
     editorialPageCount: logic.editorialPageIds.length,
     assetIds: [...logic.assetIds],
   }));
-  const fallbackPageCount = assetGapReport?.fallbackPageCount ?? 0;
+  const fallbackPageCount = pageCandidateDiagnostics.filter((item) => item.fallback.used).length;
   const structuralDiagnostics = pageCandidateDiagnostics.filter((item) => item.diagnosis !== "editorial");
   const candidateAvailability = {
     zeroCandidatePageCount: structuralDiagnostics.filter((item) => item.candidateCount === 0).length,
@@ -445,12 +537,22 @@ export function buildProductionStatistics({ candidateSets, pageContents, layoutD
       type: "single-generic-candidate",
       recommendation: "该 Logic 的高频普通内容只有一个合法候选；下一次独立入库任务应补充一组通用 Structure Group，或为现有组增加经审批的等价视觉变体。",
     }));
+  const selectionSourceCounts = Object.fromEntries([
+    "program-locked",
+    "visual-director",
+    "deterministic-ranking",
+    "deterministic-fallback",
+  ].map((source) => [
+    source,
+    pageCandidateDiagnostics.filter((item) => item.selectionSource === source).length,
+  ]));
   return {
     schemaVersion: "1.0",
     bodyPageCount: bodyPages.length,
     structurePageCount,
     editorialPageCount,
     fallbackPageCount,
+    selectionSourceCounts,
     structureCoverageRate: bodyPages.length ? Number((structurePageCount / bodyPages.length).toFixed(4)) : 0,
     uniqueStructureCount: structureUsage.length,
     repeatedStructureCount: repeatedStructures.length,
@@ -549,7 +651,14 @@ function assertResolvedVisual(validators, resolved, pageIntents, visualPlan, com
         `${pageIntents[index].intentId} 没有形成可渲染且对应的 LayoutDecision`,
       );
     }
-    if (decision.selectionOwner !== "visual-director" || decision.selectionState !== "selected"
+    const expectedOwner = decision.selectionSource ? {
+      "program-locked": "program",
+      "visual-director": "visual-director",
+      "deterministic-ranking": "program",
+      "deterministic-fallback": "program",
+    }[decision.selectionSource] : "visual-director";
+    const expectedState = decision.selectionSource === "deterministic-fallback" ? "fallback" : "selected";
+    if (!expectedOwner || decision.selectionOwner !== expectedOwner || decision.selectionState !== expectedState
       || !decision.selectedFamilyId || !decision.selectedVariantId || !decision.selectedSilhouette) {
       throw new WorkflowError(
         "VISUAL_DECISION_OWNERSHIP_FAILED",
@@ -1006,6 +1115,7 @@ export async function runDirectorWorkflow(options) {
       candidateSets: visual.candidateSets,
       pageContents: presentationOutput.pageContents,
       layoutDecisions: resolved.layoutDecisions,
+      compositionPlan: visual.compositionPlan,
       assetGapReport,
     });
     await writeJson(path.join(outputDir, "production-statistics.json"), productionStatistics);
@@ -1079,9 +1189,13 @@ export async function runDirectorWorkflow(options) {
     await persistVisualAttempt(outputDir, attempt, visual, resolved, "render-result.json", persistedRenderResult);
 
     if (!developmentReview) {
+      const deliveryStatus = productionStatistics?.fallbackPageCount > 0
+        ? "delivered-with-fallback"
+        : "delivered";
       const delivery = {
         schemaVersion: "1.0",
-        status: "delivered",
+        status: deliveryStatus,
+        deliveryStatus,
         workflowMode: "production",
         deckId: presentationOutput.deckPlan.deckId,
         skinId: input.skinId,
@@ -1113,10 +1227,14 @@ export async function runDirectorWorkflow(options) {
     assertReviewIdentity(visualReview, { deckId: presentationOutput.deckPlan.deckId, attempt, stage: "post-render" });
     await persistVisualAttempt(outputDir, attempt, visual, resolved, "visual-review-post.json", visualReview);
     if (reviewPasses(visualReview)) {
+      const deliveryStatus = productionStatistics?.fallbackPageCount > 0
+        ? "delivered-with-fallback"
+        : "delivered";
       const audit = {
         schemaVersion: "1.0",
         status: "internally-approved-awaiting-user-review",
         workflowMode: "development",
+        deliveryStatus,
         deckId: presentationOutput.deckPlan.deckId,
         skinId: input.skinId,
         pageCount: presentationOutput.pageContents.length,

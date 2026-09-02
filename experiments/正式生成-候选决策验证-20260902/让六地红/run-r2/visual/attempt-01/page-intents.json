@@ -1,0 +1,397 @@
+[
+  {
+    "intentId": "shell-cover-intent",
+    "purposeKey": "present_cover",
+    "purposeText": "呈现演示标题",
+    "baseRelation": "none",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 0,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 0,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "low",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [
+      "该页由 Shell 固定提供，不进入正文视觉导演选择"
+    ],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 21,
+      "itemCount": 0,
+      "maxItemChars": 0,
+      "avgItemChars": 0,
+      "minItemChars": 0,
+      "maxItemTitleChars": 0,
+      "maxItemBodyChars": 0,
+      "imbalanceRatio": 0
+    }
+  },
+  {
+    "intentId": "shell-agenda-intent",
+    "purposeKey": "present_agenda",
+    "purposeText": "呈现演示目录",
+    "baseRelation": "none",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 5,
+      "ordered": true,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 5,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "low",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [
+      "该页由 Shell 固定提供，不进入正文视觉导演选择"
+    ],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 2,
+      "itemCount": 5,
+      "maxItemChars": 6,
+      "avgItemChars": 5,
+      "minItemChars": 4,
+      "maxItemTitleChars": 6,
+      "maxItemBodyChars": 0,
+      "imbalanceRatio": 1.5
+    }
+  },
+  {
+    "intentId": "p1-intent",
+    "purposeKey": "summarize_research_method",
+    "purposeText": "开场白仅引出主题，无结构化关系。",
+    "baseRelation": "none",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 1,
+      "ordered": false,
+      "sameLevel": false,
+      "dimensions": {
+        "items": 1,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "unknown",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 2,
+      "itemCount": 1,
+      "maxItemChars": 39,
+      "avgItemChars": 39,
+      "minItemChars": 39,
+      "maxItemTitleChars": 6,
+      "maxItemBodyChars": 33,
+      "imbalanceRatio": 1
+    }
+  },
+  {
+    "intentId": "p2-intent",
+    "purposeKey": "compare_options",
+    "purposeText": "从过去“走遍全国”转至“深耕辽宁”，形成方向性对比。",
+    "baseRelation": "comparison",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 2,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 2,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0,
+        "groups": 2,
+        "itemsPerGroup": 1
+      }
+    },
+    "density": "unknown",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 12,
+      "itemCount": 2,
+      "maxItemChars": 55,
+      "avgItemChars": 50.5,
+      "minItemChars": 46,
+      "maxItemTitleChars": 6,
+      "maxItemBodyChars": 49,
+      "imbalanceRatio": 1.2
+    }
+  },
+  {
+    "intentId": "p3-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "“1+3+N”新矩阵由三个同级要素构成，无先后因果。",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 3,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 3,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "unknown",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 10,
+      "itemCount": 3,
+      "maxItemChars": 36,
+      "avgItemChars": 31,
+      "minItemChars": 28,
+      "maxItemTitleChars": 6,
+      "maxItemBodyChars": 31,
+      "imbalanceRatio": 1.29
+    }
+  },
+  {
+    "intentId": "p4-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "五类实践抓手并列，共同推进红色教育。",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 5,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 5,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "unknown",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 6,
+      "itemCount": 5,
+      "maxItemChars": 34,
+      "avgItemChars": 31.2,
+      "minItemChars": 29,
+      "maxItemTitleChars": 6,
+      "maxItemBodyChars": 28,
+      "imbalanceRatio": 1.17
+    }
+  },
+  {
+    "intentId": "p5-intent",
+    "purposeKey": "present_parallel_points",
+    "purposeText": "五年成效从四个维度并列展示，互不隶属。",
+    "baseRelation": "parallel",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 4,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 4,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "unknown",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 4,
+      "itemCount": 4,
+      "maxItemChars": 30,
+      "avgItemChars": 28.75,
+      "minItemChars": 26,
+      "maxItemTitleChars": 4,
+      "maxItemBodyChars": 26,
+      "imbalanceRatio": 1.15
+    }
+  },
+  {
+    "intentId": "p6-intent",
+    "purposeKey": "explain_conversion",
+    "purposeText": "五类实践抓手共同作用，熔铸“听党话、跟党走”的坚定信念。",
+    "baseRelation": "convergence",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": true,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 5,
+      "ordered": true,
+      "sameLevel": false,
+      "dimensions": {
+        "items": 5,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "unknown",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 2,
+      "itemCount": 5,
+      "maxItemChars": 18,
+      "avgItemChars": 17.4,
+      "minItemChars": 17,
+      "maxItemTitleChars": 4,
+      "maxItemBodyChars": 14,
+      "imbalanceRatio": 1.06
+    }
+  },
+  {
+    "intentId": "shell-closing-intent",
+    "purposeKey": "present_closing",
+    "purposeText": "收束整套演示",
+    "baseRelation": "none",
+    "relationTraits": {
+      "temporal": false,
+      "cyclic": false,
+      "converging": false,
+      "branched": false,
+      "dimensions": 1,
+      "secondaryDimension": "none"
+    },
+    "structure": {
+      "itemCount": 1,
+      "ordered": false,
+      "sameLevel": true,
+      "dimensions": {
+        "items": 1,
+        "maxPointsPerItem": 0,
+        "maxPointChars": 0,
+        "totalPoints": 0
+      }
+    },
+    "density": "low",
+    "emphasis": [],
+    "evidenceTypes": [
+      "text"
+    ],
+    "confidence": 1,
+    "assumptions": [
+      "该页由 Shell 固定提供，不进入正文视觉导演选择"
+    ],
+    "schemaVersion": "1.1",
+    "contentStats": {
+      "titleChars": 0,
+      "itemCount": 1,
+      "maxItemChars": 42,
+      "avgItemChars": 42,
+      "minItemChars": 42,
+      "maxItemTitleChars": 0,
+      "maxItemBodyChars": 42,
+      "imbalanceRatio": 1
+    }
+  }
+]

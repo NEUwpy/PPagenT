@@ -241,6 +241,13 @@ test("多段案例中的局部分号枚举不会覆盖整节实践抓手", () =>
   assert.ok(cues.every((cue) => cue.type !== "parallel-enumeration"));
 });
 
+test("整句末尾的必须不会把前面的并列地名误判成行动清单", () => {
+  const cues = detectStructuralCues(`## 五类实践抓手
+
+累计26项微课题被沈阳、鞍山、抚顺等地“揭榜挂帅”，青年党员读懂振兴辽宁是我们可以也必须扛起的时代订单。`);
+  assert.ok(cues.every((cue) => cue.type !== "parallel-action-list"));
+});
+
 test("内容导演漏掉二级章节时由对应结构线索补回而不是静默缩页", () => {
   const markdown = "# 标题\n\n## 第一节\n\n第一节正文。\n\n## 第二节\n\n第二节正文。";
   const output = enforceSectionPageContract({
