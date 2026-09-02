@@ -1,6 +1,28 @@
 import assert from "node:assert/strict";
+import fs from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
 import test from "node:test";
 import { DeepSeekJsonModel } from "../src/agent/deepseek-director-provider.mjs";
+import { createConfiguredDeepSeekProvider } from "../src/agent/deepseek-provider-from-env.mjs";
+
+test("未配置 API Key 时 Provider 可加载并把导演调用交给工作流兜底", async (context) => {
+  const previous = process.env.DEEPSEEK_API_KEY;
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "ppagent-unconfigured-provider-"));
+  context.after(() => fs.rm(root, { recursive: true, force: true }));
+  delete process.env.DEEPSEEK_API_KEY;
+  try {
+    const { provider, publicConfig } = await createConfiguredDeepSeekProvider({ root });
+    assert.equal(publicConfig.configured, false);
+    await assert.rejects(
+      provider.contentDirector({}),
+      (error) => error.code === "DIRECTOR_PROVIDER_UNAVAILABLE",
+    );
+  } finally {
+    if (previous === undefined) delete process.env.DEEPSEEK_API_KEY;
+    else process.env.DEEPSEEK_API_KEY = previous;
+  }
+});
 
 test("DeepSeek Provider 使用 V4 Flash Chat Completions JSON 输出", async () => {
   let requestUrl = "";

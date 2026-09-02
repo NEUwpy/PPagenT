@@ -29,6 +29,20 @@ function roleSettings(local, name, defaults = {}, globalMaxTokens) {
   };
 }
 
+function unconfiguredProvider(model) {
+  const unavailable = async () => {
+    const error = new Error("DeepSeek 未配置，正式工作流将使用确定性兜底路径");
+    error.code = "DIRECTOR_PROVIDER_UNAVAILABLE";
+    throw error;
+  };
+  return {
+    metadata: { providerKind: "deepseek-unconfigured", model },
+    contentDirector: unavailable,
+    refineContent: unavailable,
+    visualDirector: unavailable,
+  };
+}
+
 export async function createConfiguredDeepSeekProvider({ root = process.cwd(), observer } = {}) {
   const resolvedRoot = path.resolve(root);
   const local = await loadDeepSeekLocalConfig(resolvedRoot);
@@ -45,6 +59,7 @@ export async function createConfiguredDeepSeekProvider({ root = process.cwd(), o
     10,
   );
   const model = process.env.PPAGENT_DEEPSEEK_MODEL || local.model || "deepseek-v4-flash";
+  const apiKey = process.env.DEEPSEEK_API_KEY || local.apiKey;
   const settings = {
     content: roleSettings(local, "content", { thinking: "disabled", reasoningEffort: "low", maxTokens: 16384 }, maxTokens),
     structure: roleSettings(local, "structure", { enabled: false, thinking: "disabled", maxTokens: 4096 }, maxTokens),
@@ -52,25 +67,27 @@ export async function createConfiguredDeepSeekProvider({ root = process.cwd(), o
     visualComposition: roleSettings(local, "visualComposition", { thinking: "disabled", maxTokens: 8192 }, maxTokens),
     reviewer: roleSettings(local, "reviewer", { thinking: "enabled", reasoningEffort: "low", maxTokens: 8192 }, maxTokens),
   };
-  const provider = await createDeepSeekDirectorProvider({
-    root: resolvedRoot,
-    apiKey: process.env.DEEPSEEK_API_KEY || local.apiKey,
-    model,
-    endpoint,
-    thinking: process.env.PPAGENT_DEEPSEEK_THINKING || local.thinking || "enabled",
-    reasoningEffort: process.env.PPAGENT_DEEPSEEK_REASONING_EFFORT || local.reasoningEffort || "high",
-    maxTokens,
-    requestTimeoutMs,
-    ...settings,
-    observer,
-  });
+  const provider = apiKey
+    ? await createDeepSeekDirectorProvider({
+      root: resolvedRoot,
+      apiKey,
+      model,
+      endpoint,
+      thinking: process.env.PPAGENT_DEEPSEEK_THINKING || local.thinking || "enabled",
+      reasoningEffort: process.env.PPAGENT_DEEPSEEK_REASONING_EFFORT || local.reasoningEffort || "high",
+      maxTokens,
+      requestTimeoutMs,
+      ...settings,
+      observer,
+    })
+    : unconfiguredProvider(model);
   return {
     provider,
     publicConfig: {
       provider: "DeepSeek",
       model,
       endpoint,
-      configured: Boolean(process.env.DEEPSEEK_API_KEY || local.apiKey),
+      configured: Boolean(apiKey),
       roles: { content: settings.content, visualComposition: settings.visualComposition },
     },
   };
