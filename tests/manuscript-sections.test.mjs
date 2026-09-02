@@ -232,6 +232,22 @@ test("显式封面和结束语映射为 Shell 后不会重复", () => {
   assert.deepEqual(result.pageContents.map((page) => page.pageId), ["shell-cover", "shell-agenda", "body", "shell-closing"]);
   assert.equal(result.pageContents.filter((page) => page.pageId === "shell-cover").length, 1);
   assert.equal(result.pageContents.filter((page) => page.pageId === "shell-closing").length, 1);
+  assert.equal(result.pageContents.at(-1).items[0].body, "感谢聆听\n敬请批评指正");
+});
+
+test("Shell 会把超长封面标题和中央结论限制在固定模板容量内", () => {
+  const result = applyAcademicReportShellScaffold({
+    deckPlan: {
+      title: "这是一条明显超过封面两行容量并且需要在确定性 Shell 中进行安全收束的超长演示文稿标题：后半段不应继续进入模板",
+      centralTakeaway: "这是一段很长的中央结论，不能直接塞进只承载短结束语的固定尾页槽位。".repeat(8),
+      narrativeArc: ["正文"],
+      pages: [{ pageId: "body", sequence: 1, sourceAnchors: ["正文"] }],
+    },
+    pageContents: [{ pageId: "body", title: "正文", items: [] }],
+  });
+
+  assert.ok(Array.from(result.pageContents[0].title).length <= 36);
+  assert.equal(result.pageContents.at(-1).items[0].body, "感谢聆听\n敬请批评指正");
 });
 
 test("通用关系线索只强制高置信顺序、递进与成对对照", () => {

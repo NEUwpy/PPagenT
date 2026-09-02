@@ -24,6 +24,13 @@ function compactAgendaLabel(value) {
   return Array.from(semanticTail).slice(0, 22).join("");
 }
 
+function compactCoverTitle(value) {
+  const text = String(value ?? "").trim();
+  if (Array.from(text).length <= 36) return text;
+  const firstClause = text.split(/[。！？；：:]/).map((item) => item.trim()).find((item) => Array.from(item).length >= 4);
+  return Array.from(firstClause || text).slice(0, 36).join("");
+}
+
 function agendaItems(deckPlan) {
   const labels = deckPlan.narrativeArc
     .map(compactAgendaLabel)
@@ -63,7 +70,7 @@ export function applyAcademicReportShellScaffold(contentOutput) {
   const cover = {
     schemaVersion: "1.0",
     pageId: "shell-cover",
-    title: contentOutput.deckPlan.title,
+    title: compactCoverTitle(contentOutput.deckPlan.title),
     logicIntent: { logicId: "editorial", reason: "封面由 Skin 固定提供" },
     items: [],
     ...(sourceShellPages.get("cover")?.sourceText ? { sourceText: sourceShellPages.get("cover").sourceText } : {}),
@@ -84,7 +91,7 @@ export function applyAcademicReportShellScaffold(contentOutput) {
     items: [{
       id: "closing-takeaway",
       title: "",
-      body: contentOutput.deckPlan.centralTakeaway,
+      body: "感谢聆听\n敬请批评指正",
       emphasis: true,
     }],
     ...(sourceShellPages.get("closing")?.sourceText ? { sourceText: sourceShellPages.get("closing").sourceText } : {}),
