@@ -1,5 +1,7 @@
 # PPA 看板
 
+> 状态：当前资产建设与审查工具。它展示仓库已经登记的事实，不代表候选三路径生成架构已经实现。
+
 PPA 看板是 PPagenT 的本地资产建设与审查入口，不是正式生成的运行监控页。它不保存第二份资产数据库，也不把当前资产清单写死在应用里。正式生成、API 调用、运行日志和交付结果统一进入 PPA 生产工作台。
 
 ## 四个能力域
@@ -13,7 +15,7 @@ PPA 看板是 PPagenT 的本地资产建设与审查入口，不是正式生成�
 
 “全部资产”、Manifest、规则目录和原始数据源只作为默认收起的技术记录，不再与四个能力域并列。Structure 的 HTML 与 Native/Skin 审批队列也默认收起，需要审查时再展开。
 
-排版区只展示可复用的 Skin、Shell、Content Frame、Composition 与 Surface 能力，不再放置“人工代替视觉导演”的生成实验台。视觉导演的输入、输出和人工修改属于一次具体稿件的生成运行，统一进入 PPA 生产工作台。候选 `PageContentBlocks / PageExpressionPlan` Schema、固定内容原型与验证器仍作为2+3架构研究代码保留，但不会伪装成 PPA 已入库资产。
+排版区只展示可复用的 Skin、Shell、Content Frame、Composition 与 Surface 能力，不再放置“人工代替视觉导演”的生成实验台。视觉导演的输入、输出和人工修改属于一次具体稿件的生成运行，统一进入 PPA 生产工作台。候选 `PageContentBlocks / PageExpressionPlan` Schema、固定内容原型与验证器仍作为多表达研究代码保留，但不会伪装成 PPA 已入库资产；Structure 第一轮集中建设已经冻结，看板以后还应能分别审查 Composition、Text 和 Media。
 
 ## 使用
 

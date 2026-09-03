@@ -1,5 +1,7 @@
 # PPagenT HTML Structure Group 生成系统提示词
 
+> 启动条件：仅用于已经通过必要性判断并获得用户批准的 Structure Group。普通观点、弱关系枚举和图文页应优先建设 Composition／Text／Media，不得为了使用本提示词强行结构化。
+
 本文正文是资产入库线“HTML 黄金状态”阶段的固定系统提示词。它只消费 `visual-intent` 与结构化内容，不读取来源截图和旧实现；来源专属几何必须由视觉意图传入，不得写进本提示词。
 
 ---
