@@ -257,7 +257,38 @@ function fixedSlotLimitsForItem(slot, item) {
  * fixed slot must never be offered and retried as if the model could repair it.
  */
 export function fixedSlotSourceCapacityIssues(content, candidate) {
-  if (candidate.textRegions?.length) return [];
+  if (candidate.textRegions?.length) {
+    const supportRegion = candidate.textRegions.find((region) => (
+      /(?:items|points)\[\](?:\.(?:support|body))?$/.test(region.regionKey)
+    ));
+    if (!supportRegion) return [];
+    const matchingState = (supportRegion.stateCapacities ?? []).find((state) => (
+      Object.values(state.selection ?? {}).some((value) => Number(value) === content.items.length)
+    ));
+    const estimatedMaxChars = matchingState?.estimatedMaxChars
+      ?? Math.min(...(supportRegion.stateCapacities ?? [])
+        .map((state) => state.estimatedMaxChars)
+        .filter(Number.isFinite));
+    if (!Number.isFinite(estimatedMaxChars)) return [];
+    const itemChars = content.items.map((item) => Array.from([
+      item.title,
+      item.body,
+      ...(item.points ?? []).map((point) => point?.text ?? point),
+    ].map((value) => String(value ?? "").trim()).filter(Boolean).join("\n")).length);
+    const overflowing = itemChars.filter((chars) => chars > estimatedMaxChars);
+    if (!overflowing.length) return [];
+    return [{
+      pageId: content.pageId,
+      role: "dynamic-item-content",
+      estimatedTotalChars: itemChars.reduce((sum, chars) => sum + chars, 0),
+      maxItemChars: Math.max(...itemChars),
+      overflowItemCount: overflowing.length,
+      required: {
+        maxTotalChars: estimatedMaxChars * content.items.length,
+        maxItemChars: estimatedMaxChars,
+      },
+    }];
+  }
   const slots = candidate.slotCapabilities?.textSlots ?? [];
   const issues = [];
   const check = (slot, item = null, pointIndex = null) => {
@@ -376,6 +407,58 @@ function variantRejectionReasons(variants, query) {
     return [];
   });
   return [...new Set(reasons.length ? reasons : ["variant-contract:filtered"])];
+}
+
+function recoverablePointCapacityIssue(content, variant, query) {
+  const reasons = hardVariantRejectionReasons(variant, query);
+  const allowed = reasons.every((reason) => (
+    reason === "points:required-per-item"
+    || reason === "point-count:balanced-required"
+    || reason.startsWith("point-count:")
+    || reason.startsWith("max-points-per-item:")
+    || reason.startsWith("max-point-chars:")
+  ));
+  const hasCapacityOverflow = reasons.some((reason) => (
+    reason.startsWith("max-points-per-item:") || reason.startsWith("max-point-chars:")
+  ));
+  if (!allowed || !hasCapacityOverflow) return null;
+
+  const itemCount = content.items.length;
+  const declaredMaxBodyChars = stateValue(variant.textCapacity?.maxItemBodyChars, itemCount);
+  const declaredMaxPointsPerItem = stateValue(variant.textCapacity?.maxPointsPerItem, itemCount);
+  const declaredMaxPointChars = stateValue(variant.textCapacity?.maxPointChars, itemCount);
+  const maxBodyChars = declaredMaxBodyChars ?? 0;
+  const maxPointsPerItem = declaredMaxPointsPerItem ?? 0;
+  const maxPointChars = declaredMaxPointChars ?? 0;
+  const itemCharCounts = content.items.map((item) => (
+    Array.from(item.body ?? "").length
+    + (item.points ?? []).reduce((total, point) => total + Array.from(point ?? "").length, 0)
+  ));
+  const estimatedTotalChars = itemCharCounts.reduce((total, count) => total + count, 0);
+  const observedMaxItemChars = Math.max(0, ...itemCharCounts);
+  const hasDeclaredCharCapacity = declaredMaxBodyChars !== null || declaredMaxPointChars !== null;
+  const maxItemCapacity = hasDeclaredCharCapacity
+    ? maxBodyChars + (maxPointsPerItem * maxPointChars)
+    : observedMaxItemChars;
+  const overflowItemCount = content.items.filter((item, index) => (
+    (maxPointsPerItem > 0 && (item.points?.length ?? 0) > maxPointsPerItem)
+    || (maxPointChars > 0 && (item.points ?? []).some((point) => Array.from(point ?? "").length > maxPointChars))
+    || (maxItemCapacity > 0 && itemCharCounts[index] > maxItemCapacity)
+  )).length;
+  return {
+    role: "item-point-capacity",
+    estimatedTotalChars,
+    maxItemChars: observedMaxItemChars,
+    overflowItemCount,
+    actualMaxPointsPerItem: query.maxPointsPerItem ?? 0,
+    actualMaxPointChars: query.maxPointChars ?? 0,
+    required: {
+      maxTotalChars: hasDeclaredCharCapacity ? maxItemCapacity * itemCount : estimatedTotalChars,
+      maxItemChars: maxItemCapacity,
+      ...(declaredMaxPointsPerItem !== null ? { maxPointsPerItem } : {}),
+      ...(declaredMaxPointChars !== null ? { maxPointChars } : {}),
+    },
+  };
 }
 
 function buildCandidateDiagnostics({
@@ -590,6 +673,18 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
       );
       detailedVariantsByAsset.set(candidate.assetId, detailedVariants);
       const compatible = queryVisualVariants(detailedVariants, query);
+      if (!compatible.length) {
+        for (const variant of detailedVariants) {
+          const issue = recoverablePointCapacityIssue(pageContents[index], variant, query);
+          if (issue) {
+            capacityRejections.push({
+              assetId: variant.assetId,
+              variantId: variant.variantId,
+              issues: [issue],
+            });
+          }
+        }
+      }
       const provisional = compatible.length ? [] : queryVisualVariants(detailedVariants, {
         ...query,
         allowMissingRequiredPoints: true,

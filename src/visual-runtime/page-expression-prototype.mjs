@@ -42,10 +42,10 @@ function blockItemRegion(block, item, expression, index, className = "") {
 }
 
 function renderChain(block, expression, depth) {
-  return `<section class="ppe-structure ppe-chain" data-expression-id="${escapeHtml(expression.expressionId)}" data-expression-type="structure" data-structure-depth="${depth}">
+  return `<section class="ppe-structure ppe-chain" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="${escapeHtml(expression.expressionId)}-surface" data-expression-id="${escapeHtml(expression.expressionId)}" data-expression-type="structure" data-structure-depth="${depth}">
     ${block.markdown ? markdownTextRegionMarkup({ id: `${expression.expressionId}-heading`, field: `contentBlocks.${block.id}.markdown`, markdown: block.markdown, mode: "flow", density: "compact", className: "ppe-structure-heading" }) : ""}
     <div class="ppe-chain-track" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="${escapeHtml(expression.expressionId)}-track"></div>
-    <div class="ppe-chain-items">${block.items.map((item, index) => `<article class="ppe-chain-item" data-expression-item="${escapeHtml(item.id)}">
+    <div class="ppe-chain-items">${block.items.map((item, index) => `<article class="ppe-chain-item" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="${escapeHtml(expression.expressionId)}-item-${index}" data-expression-item="${escapeHtml(item.id)}">
       <div class="ppe-chain-node" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="${escapeHtml(expression.expressionId)}-node-${index}"></div>
       ${blockItemRegion(block, item, expression, index, "ppe-chain-item-text")}
     </article>`).join("")}</div>
@@ -53,9 +53,9 @@ function renderChain(block, expression, depth) {
 }
 
 function renderParallel(block, expression, depth, variant) {
-  return `<section class="ppe-structure ppe-parallel ppe-parallel--${escapeHtml(variant)}" data-expression-id="${escapeHtml(expression.expressionId)}" data-expression-type="structure" data-structure-depth="${depth}">
+  return `<section class="ppe-structure ppe-parallel ppe-parallel--${escapeHtml(variant)}" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="${escapeHtml(expression.expressionId)}-surface" data-expression-id="${escapeHtml(expression.expressionId)}" data-expression-type="structure" data-structure-depth="${depth}">
     ${block.markdown ? markdownTextRegionMarkup({ id: `${expression.expressionId}-heading`, field: `contentBlocks.${block.id}.markdown`, markdown: block.markdown, mode: "flow", density: "compact", className: "ppe-structure-heading" }) : ""}
-    <div class="ppe-parallel-items">${block.items.map((item, index) => `<article class="ppe-parallel-item" data-expression-item="${escapeHtml(item.id)}">
+    <div class="ppe-parallel-items">${block.items.map((item, index) => `<article class="ppe-parallel-item" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="${escapeHtml(expression.expressionId)}-item-${index}" data-expression-item="${escapeHtml(item.id)}">
       <span class="ppe-item-index" data-ppt-kind="shape-text" data-ppt-shape="ellipse" data-ppt-name="${escapeHtml(expression.expressionId)}-index-${index}">${String(index + 1).padStart(2, "0")}</span>
       ${blockItemRegion(block, item, expression, index, "ppe-parallel-item-text")}
     </article>`).join("")}</div>
@@ -63,8 +63,8 @@ function renderParallel(block, expression, depth, variant) {
 }
 
 function renderSupportGrid(block, expression, depth) {
-  return `<section class="ppe-structure ppe-support-grid" data-expression-id="${escapeHtml(expression.expressionId)}" data-expression-type="structure" data-structure-depth="${depth}">
-    <div class="ppe-support-grid-items">${block.items.map((item, index) => `<article class="ppe-support-item" data-expression-item="${escapeHtml(item.id)}">
+  return `<section class="ppe-structure ppe-support-grid ppe-support-grid--${Math.min(6, block.items.length)}" data-expression-id="${escapeHtml(expression.expressionId)}" data-expression-type="structure" data-structure-depth="${depth}">
+    <div class="ppe-support-grid-items">${block.items.map((item, index) => `<article class="ppe-support-item" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="${escapeHtml(expression.expressionId)}-item-${index}" data-expression-item="${escapeHtml(item.id)}">
       <div class="ppe-support-accent" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="${escapeHtml(expression.expressionId)}-accent-${index}"></div>
       <span class="ppe-support-index" data-ppt-kind="text" data-ppt-name="${escapeHtml(expression.expressionId)}-index-${index}">${String(index + 1).padStart(2, "0")}</span>
       ${blockItemRegion(block, item, expression, index, "ppe-support-item-text")}
@@ -77,7 +77,8 @@ function renderExpression(pageContent, expression, depth = 0) {
     const resolved = bindingValue(pageContent, expression);
     const markdown = resolved?.value?.markdown ?? "";
     const surfaceId = expression.text?.surfaceId ?? "plain";
-    return `<section class="ppe-expression ppe-expression--text ppe-surface--${escapeHtml(surfaceId)}" data-expression-id="${escapeHtml(expression.expressionId)}" data-expression-type="text" data-region-key="${escapeHtml(expression.regionKey)}" data-surface-id="${escapeHtml(surfaceId)}">
+    return `<section class="ppe-expression ppe-expression--text ppe-surface--${escapeHtml(surfaceId)}" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="PPAGENT_QA|parent=expression-lead" data-expression-id="${escapeHtml(expression.expressionId)}" data-expression-type="text" data-region-key="${escapeHtml(expression.regionKey)}" data-surface-id="${escapeHtml(surfaceId)}">
+      <div class="ppe-text-accent" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="${escapeHtml(expression.expressionId)}-accent"></div>
       ${markdownRegion({ expression, markdown, field: expression.contentBindings[0].contentRef, className: "ppe-direct-text" })}
     </section>`;
   }
@@ -89,9 +90,14 @@ function renderExpression(pageContent, expression, depth = 0) {
   const groupId = expression.structure.structureGroupId;
   const resolved = bindingValue(pageContent, expression);
   const block = resolved?.kind === "block" ? resolved.value : null;
+  if (groupId === "prototype-multi-structure-system") {
+    return `<section class="ppe-expression ppe-expression--structure ppe-multi-system ppe-multi-system--${expression.children.length}" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="${escapeHtml(expression.expressionId)}-surface" data-expression-id="${escapeHtml(expression.expressionId)}" data-expression-type="structure" data-structure-depth="${structureDepth}" data-region-key="${escapeHtml(expression.regionKey)}">
+      ${expression.children.map((child) => `<div class="ppe-multi-system-child" data-expression-child="${escapeHtml(child.expressionId)}">${renderExpression(pageContent, child, structureDepth)}</div>`).join("")}
+    </section>`;
+  }
   if (groupId === "prototype-1-3-n-system") {
     const children = Object.fromEntries(expression.children.map((child) => [child.regionKey, child]));
-    return `<section class="ppe-expression ppe-expression--structure ppe-system" data-expression-id="${escapeHtml(expression.expressionId)}" data-expression-type="structure" data-structure-depth="${structureDepth}" data-region-key="${escapeHtml(expression.regionKey)}">
+    return `<section class="ppe-expression ppe-expression--structure ppe-system" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="${escapeHtml(expression.expressionId)}-surface" data-expression-id="${escapeHtml(expression.expressionId)}" data-expression-type="structure" data-structure-depth="${structureDepth}" data-region-key="${escapeHtml(expression.regionKey)}">
       <div class="ppe-system-axis" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="${escapeHtml(expression.expressionId)}-axis"></div>
       <div class="ppe-system-chain">${renderExpression(pageContent, children.chain, structureDepth)}</div>
       <div class="ppe-system-lower">
@@ -112,7 +118,7 @@ export function renderPageExpressionPrototype(pageContent, plan) {
   const validation = validatePageExpressionPlan(pageContent, plan);
   return {
     validation,
-    markup: `<article class="ppagent-expression-page ppagent-expression-page--${escapeHtml(plan.compositionId)}" data-page-id="${escapeHtml(pageContent.pageId)}" data-plan-id="${escapeHtml(plan.planId)}" data-composition-id="${escapeHtml(plan.compositionId)}">
+    markup: `<article class="ppagent-expression-page ppagent-expression-page--${escapeHtml(plan.compositionId)}" data-ppt-root data-page-id="${escapeHtml(pageContent.pageId)}" data-plan-id="${escapeHtml(plan.planId)}" data-composition-id="${escapeHtml(plan.compositionId)}">
       ${plan.expressions.map((expression) => renderExpression(pageContent, expression)).join("")}
     </article>`,
   };
@@ -275,13 +281,21 @@ export function pageExpressionPrototypeCss() {
     .ppagent-expression-page--claim-support-split{display:grid;grid-template-columns:365px minmax(0,1fr);gap:22px}
     .ppe-expression{position:relative;min-width:0;min-height:0;overflow:hidden}
     .ppe-expression--text{height:100%;border:1px solid var(--ppagent-color-line,#AFC6E8);background:linear-gradient(180deg,var(--ppagent-color-accent-soft,#DCE9FA),#fff)}
-    .ppe-expression--text::before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px;background:var(--ppagent-color-accent,#2F5EA8)}
+    .ppe-text-accent{position:absolute;left:0;top:0;bottom:0;width:7px;background:var(--ppagent-color-accent,#2F5EA8)}
     .ppe-direct-text{height:100%}
     .ppe-direct-text .ppagent-markdown-layout{padding:34px 28px 28px 32px;justify-content:center}
+    .ppe-direct-text .ppagent-markdown-block--paragraph{color:var(--ppagent-color-dark,#2B2B2B);font-size:19pt;font-weight:600;line-height:1.35}
     .ppe-system{display:grid;grid-template-rows:150px minmax(0,1fr);gap:14px;padding:14px;border:1px solid #d8e3f0;background:#f8fafc}
     .ppe-system-axis{position:absolute;left:26px;top:161px;width:calc(100% - 52px);height:3px;background:var(--ppagent-color-accent,#2F5EA8);opacity:.48}
     .ppe-system-chain,.ppe-system-classes,.ppe-system-scenes,.ppe-system-lower{min-width:0;min-height:0}
     .ppe-system-lower{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .ppe-multi-system{display:grid;gap:14px;padding:14px;border:1px solid #d8e3f0;background:#f8fafc}
+    .ppe-multi-system--2{grid-template-rows:repeat(2,minmax(0,1fr))}
+    .ppe-multi-system--3{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr))}
+    .ppe-multi-system--3 .ppe-multi-system-child:first-child{grid-column:1/-1}
+    .ppe-multi-system--4{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr))}
+    .ppe-multi-system-child{min-width:0;min-height:0;overflow:hidden}
+    .ppe-multi-system-child>.ppe-structure{height:100%}
     .ppe-structure{position:relative;width:100%;height:100%;overflow:hidden;border:1px solid #d9e3ef;background:#fff}
     .ppe-structure-heading{position:absolute;left:14px;right:14px;top:8px;height:38px;z-index:2}
     .ppe-structure-heading .ppagent-markdown-layout{padding:0;justify-content:center}
@@ -290,7 +304,7 @@ export function pageExpressionPrototypeCss() {
     .ppe-chain-track{position:absolute;left:15%;right:15%;top:92px;height:5px;border-radius:99px;background:var(--ppagent-color-line,#AFC6E8)}
     .ppe-chain-items{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;height:100%}
     .ppe-chain-item{position:relative;display:flex;align-items:center;min-width:0;padding:0 10px 0 54px;border:1px solid #d9e4f2;background:#f8fbff}
-    .ppe-chain-node{position:absolute;left:15px;top:50%;width:28px;height:28px;margin-top:-14px;border:5px solid #fff;border-radius:50%;background:var(--ppagent-color-accent,#2F5EA8);box-shadow:0 0 0 2px var(--ppagent-color-line,#AFC6E8)}
+    .ppe-chain-node{position:absolute;left:15px;top:50%;width:28px;height:28px;margin-top:-14px;border:3px solid var(--ppagent-color-line,#AFC6E8);border-radius:50%;background:var(--ppagent-color-accent,#2F5EA8)}
     .ppe-chain-item-text{width:100%;height:100%}
     .ppe-chain-item-text .ppagent-markdown-layout{padding:4px;justify-content:center;gap:3px}
     .ppe-chain-item-text .ppagent-markdown-block--heading{font-size:21pt;color:var(--ppagent-color-accent,#2F5EA8)}
@@ -307,17 +321,21 @@ export function pageExpressionPrototypeCss() {
     .ppe-parallel--rail .ppe-item-index{left:6px;top:50%;margin-top:-14px}
     .ppe-parallel-item-text{width:100%;height:100%}
     .ppe-parallel-item-text .ppagent-markdown-layout{padding:8px;justify-content:center;gap:4px;text-align:center}
-    .ppe-parallel--rail .ppe-parallel-item-text .ppagent-markdown-layout{text-align:left}
+    .ppe-parallel--rail .ppe-parallel-item-text .ppagent-markdown-layout{padding:0 8px;text-align:left}
     .ppe-parallel-item-text .ppagent-markdown-block--heading{font-size:17pt;color:var(--ppagent-color-dark,#2B2B2B)}
-    .ppe-parallel-item-text .ppagent-markdown-block{font-size:15pt;line-height:1.2}
+    .ppe-parallel-item-text .ppagent-markdown-block{font-size:15pt;line-height:1.08}
     .ppe-support-grid{border:0;background:transparent}
-    .ppe-support-grid-items{display:grid;grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(2,1fr);gap:14px;height:100%}
+    .ppe-support-grid-items{display:grid;gap:14px;height:100%}
+    .ppe-support-grid--1 .ppe-support-grid-items{grid-template-columns:1fr;grid-template-rows:1fr}
+    .ppe-support-grid--2 .ppe-support-grid-items{grid-template-columns:repeat(2,1fr);grid-template-rows:1fr}
+    .ppe-support-grid--3 .ppe-support-grid-items,.ppe-support-grid--4 .ppe-support-grid-items{grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(2,1fr)}
+    .ppe-support-grid--5 .ppe-support-grid-items,.ppe-support-grid--6 .ppe-support-grid-items{grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr)}
     .ppe-support-item{position:relative;min-width:0;min-height:0;overflow:hidden;padding:20px 18px 14px 24px;border:1px solid #d7e3f0;background:#f8fafc}
     .ppe-support-accent{position:absolute;left:0;top:0;bottom:0;width:7px;background:var(--ppagent-color-accent,#2F5EA8)}
     .ppe-support-index{position:absolute;right:13px;top:10px;color:#9ab2cf;font-size:17pt;font-weight:700}
     .ppe-support-item-text{width:100%;height:100%}
     .ppe-support-item-text .ppagent-markdown-layout{padding:8px 32px 8px 6px;justify-content:center;gap:8px}
     .ppe-support-item-text .ppagent-markdown-block--heading{font-size:19pt;color:var(--ppagent-color-accent,#2F5EA8)}
-    .ppe-support-item-text .ppagent-markdown-block{font-size:15pt;line-height:1.35}
+    .ppe-support-item-text .ppagent-markdown-block{font-size:15pt;line-height:1.08}
   `;
 }

@@ -27,6 +27,16 @@ export function compactVisualSkillContext(pageContents, pageIntents, candidateSe
     items: page.items.map((item) => ({
       id: item.id, title: item.title, body: item.body, pointCount: item.points?.length ?? 0,
     })),
+    // The automatic production line may only use expressions that have
+    // passed visual approval. The current 2+3 prototypes remain available in
+    // the manual checkpoint, but are not disclosed as automatic choices.
+    expressionStrategies: ["registered-structure"],
+    blockStructureOptions: page.items.map((item) => ({
+      sourceItemId: item.id,
+      allowedPatterns: (item.points?.length ?? 0) === 3
+        ? ["auto", "chain", "rail", "support-grid"]
+        : ["auto", "support-grid"],
+    })),
     candidates: candidateSets[index].candidates.map((candidate) => {
       const readiness = candidateReadiness(candidate);
       const derivation = normalizeDerivationPolicy(
@@ -85,6 +95,22 @@ export function visualSkillRoutingSchema(pageContents, candidateSets) {
             ? { type: "string", enum: candidateIds }
             : { const: "__no-legal-candidate__" },
         centerLabel: { type: "string", minLength: 2, maxLength: 8 },
+        expressionStrategy: {
+          enum: ["registered-structure"],
+        },
+        blockStructureModes: {
+          type: "array",
+          maxItems: page.items.length,
+          items: {
+            type: "object",
+            additionalProperties: false,
+            required: ["sourceItemId", "pattern"],
+            properties: {
+              sourceItemId: { type: "string", enum: page.items.map((item) => item.id) },
+              pattern: { enum: ["auto", "chain", "rail", "support-grid"] },
+            },
+          },
+        },
         iconQueries: {
           type: "array",
           maxItems: 12,
@@ -211,6 +237,13 @@ function routingError(message, details = {}) {
   return error;
 }
 
+function automaticExpressionStrategy() {
+  // 2+3 prototypes have not passed visual approval and currently bypass the
+  // selected registered asset. Keep them behind the manual checkpoint until
+  // child regions can bind real catalog assets without scaling typography.
+  return "registered-structure";
+}
+
 export function expandVisualSkillRouting(routing, input) {
   const byPage = new Map();
   for (const selection of routing?.selections ?? []) {
@@ -275,6 +308,15 @@ export function expandVisualSkillRouting(routing, input) {
     const composition = chooseComposition(candidate, page);
     if (!composition) throw routingError("Structure Group 没有可用 Composition", { pageId: page.pageId });
     const iconQueries = (selection.iconQueries ?? []).filter((item) => validItemIds.has(item.sourceItemId));
+    const expressionStrategy = automaticExpressionStrategy(selection, candidate);
+    if (selection.expressionStrategy && selection.expressionStrategy !== expressionStrategy) {
+      routingDiagnostics.push({
+        pageId: page.pageId,
+        code: "automatic-unapproved-expression-demoted",
+        requestedExpressionStrategy: selection.expressionStrategy,
+        appliedExpressionStrategy: expressionStrategy,
+      });
+    }
     visualPages.push({
       pageId: page.pageId,
       intentId: intent.intentId,
@@ -282,6 +324,12 @@ export function expandVisualSkillRouting(routing, input) {
       variantId: candidate.variantId,
       silhouette: candidate.silhouette,
       adaptationStatus: candidate.adaptationStatus,
+      expressionStrategy,
+      ...(selection.blockStructureModes?.length ? {
+        blockStructureModes: selection.blockStructureModes.filter((choice) => (
+          page.items.some((item) => item.id === choice.sourceItemId)
+        )),
+      } : {}),
       ...(candidate.mediaContract?.mode === "semantic-icon" ? { iconQueries } : {}),
       reason: [
         selection.reason ?? (lockedStructureGroupId
@@ -289,6 +337,9 @@ export function expandVisualSkillRouting(routing, input) {
           : "视觉导演选择该页语义与容量均适配的 Structure Group"),
         previousUses > 0 && hasAlternativeStructure
           ? `该 Structure Group 此前已使用 ${previousUses} 次，保留视觉导演选择并记录重复`
+          : "",
+        selection.expressionStrategy && selection.expressionStrategy !== expressionStrategy
+          ? "2+3组合原型尚未通过视觉验收，自动生产回到已登记资产"
           : "",
       ].filter(Boolean).join("；"),
     });

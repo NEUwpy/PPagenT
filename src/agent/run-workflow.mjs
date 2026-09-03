@@ -138,7 +138,9 @@ export async function runWorkflowCli(options) {
     visualCandidateProvider: (input) => observeOperation(options.observer, "visual-candidates", input, () => buildVisualCandidateSets(input)),
     visualResolver: (input) => observeOperation(options.observer, "visual-resolution", input, () => resolveVisualPlan(input)),
     shellScaffolder: (input) => observeOperation(options.observer, "shell-scaffold", input, () => applyAcademicReportShellScaffold(input)),
-    renderer: (input) => observeOperation(options.observer, "render", input, () => renderer(input)),
+    stagingRenderer: (input) => observeOperation(options.observer, "native-preview", input, () => renderer.stage(input)),
+    nativePreviewApprover: options.nativePreviewApprover,
+    renderer: (input) => observeOperation(options.observer, "delivery", input, () => renderer(input)),
     reviewMode: options.mode === "development" ? "development" : "none",
     guaranteeDelivery: options.guaranteeDelivery !== false,
   });

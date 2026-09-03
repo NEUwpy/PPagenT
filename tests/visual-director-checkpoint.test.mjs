@@ -43,6 +43,22 @@ test("视觉导演表单调试暂停同一次调用，并以人工版本继续",
   assert.equal(persisted.editedOutput.visualPlan.pages[0].variantId, "edited");
 });
 
+test("视觉导演等待确认时可以取消并结束暂停调用", async (context) => {
+  const runDir = await fs.mkdtemp(path.join(os.tmpdir(), "ppagent-visual-checkpoint-cancel-"));
+  context.after(() => fs.rm(runDir, { recursive: true, force: true }));
+  const checkpoint = createVisualDirectorCheckpoint({ runDir });
+  const provider = withVisualDirectorCheckpoint({
+    metadata: { name: "fake" },
+    async visualDirector() { return output(); },
+  }, checkpoint);
+  const pending = provider.visualDirector({ pageContents: [{ pageId: "p1" }, { pageId: "p2" }] });
+  const rejected = assert.rejects(pending, (error) => error.code === "WORKBENCH_RUN_CANCELLED");
+  await new Promise((resolve) => setImmediate(resolve));
+  await checkpoint.cancel();
+  await rejected;
+  assert.equal(checkpoint.read().status, "cancelled");
+});
+
 test("人工修改不能增删或重排视觉页面", () => {
   assert.throws(() => validateVisualDirectorOutput(output(["p2", "p1"]), ["p1", "p2"]), /不能增删页面或改变页面顺序/);
   const mismatched = output();

@@ -392,6 +392,103 @@ test("产品工作流只调用内容导演和视觉导演，不调用研发审�
   await assert.rejects(fs.access(path.join(outputDir, "visual", "attempt-01", "visual-review-post.json")));
 });
 
+test("正式生成先排版暂存 Native PPT 并确认，再交付同一份 PPTX", async (t) => {
+  const outputDir = await makeTempDir(t);
+  const order = [];
+  let approvedStaging = null;
+  const stagingRenderer = async ({ outputDir: previewDir, pageContents }) => {
+    order.push("stage");
+    await fs.mkdir(previewDir, { recursive: true });
+    const stagedPptx = path.join(previewDir, "staged-deck.pptx");
+    await fs.writeFile(stagedPptx, "test pptx");
+    const pageEvidence = await Promise.all(pageContents.map(async (_, index) => {
+      const target = path.join(previewDir, `slide-${index + 1}.png`);
+      await fs.writeFile(target, "test image");
+      return target;
+    }));
+    return {
+      status: "ready-for-approval",
+      stagedPptx,
+      pageEvidence,
+      pageCount: pageContents.length,
+      qualityAudit: { status: "passed" },
+    };
+  };
+
+  const result = await runDirectorWorkflow({
+    input: { rawMarkdown },
+    provider: completeProvider(),
+    outputDir,
+    reviewMode: "production",
+    visualCandidateProvider: candidateProvider,
+    visualResolver: resolver,
+    stagingRenderer,
+    nativePreviewApprover: async (preview) => {
+      order.push("approve");
+      approvedStaging = { ...preview, approvalStatus: "approved" };
+      return approvedStaging;
+    },
+    renderer: async (args) => {
+      order.push("deliver");
+      assert.equal(args.stagingResult.stagedPptx, approvedStaging.stagedPptx);
+      return renderer(args);
+    },
+  });
+
+  assert.equal(result.status, "delivered");
+  assert.deepEqual(order, ["stage", "approve", "deliver"]);
+});
+
+test("PPT 暂存排版降级进入鲁棒性报告并标记为 delivered-with-fallback", async (t) => {
+  const outputDir = await makeTempDir(t);
+  const stagingRenderer = async ({ outputDir: previewDir, pageContents }) => {
+    await fs.mkdir(previewDir, { recursive: true });
+    const stagedPptx = path.join(previewDir, "staged-deck.pptx");
+    await fs.writeFile(stagedPptx, "test pptx");
+    const pageEvidence = await Promise.all(pageContents.map(async (_, index) => {
+      const target = path.join(previewDir, `slide-${index + 1}.png`);
+      await fs.writeFile(target, "test image");
+      return target;
+    }));
+    return {
+      status: "ready-for-approval",
+      stagedPptx,
+      pageEvidence,
+      pageCount: pageContents.length,
+      qualityAudit: { status: "passed" },
+      renderFallbacks: [{
+        pageId: "page-01",
+        code: "multi-expression-overflow",
+        from: "multi-structure",
+        to: "text-plus-structure",
+      }],
+    };
+  };
+
+  const result = await runDirectorWorkflow({
+    input: { rawMarkdown },
+    provider: completeProvider(),
+    outputDir,
+    reviewMode: "production",
+    visualCandidateProvider: candidateProvider,
+    visualResolver: resolver,
+    stagingRenderer,
+    renderer,
+  });
+
+  assert.equal(result.status, "delivered-with-fallback");
+  assert.deepEqual(result.resilienceReport.events[0], {
+    stage: "native-preview",
+    code: "multi-expression-overflow",
+    trigger: "multi-structure",
+    message: "页面组合从 multi-structure 降级为 text-plus-structure",
+    pageIds: ["page-01"],
+    from: "multi-structure",
+    to: "text-plus-structure",
+  });
+  await fs.access(path.join(outputDir, "resilience-report.json"));
+});
+
 test("视觉导演可用一次小请求补齐节点内分点且不重跑整篇内容或视觉编排", async (t) => {
   const outputDir = await makeTempDir(t);
   let contentCalls = 0;
@@ -662,22 +759,18 @@ test("content evidence overage is normalized without another director call", asy
   );
 });
 
-test("多项内容超过正式容量时退回内容导演压缩而不是进入渲染", async (t) => {
+test("内容阶段不使用通用字数估算误判具体版式容量", async (t) => {
   const outputDir = await makeTempDir(t);
   let contentCalls = 0;
-  let receivedReview = null;
   const provider = {
-    async contentDirector({ previousReview }) {
+    async contentDirector() {
       contentCalls += 1;
-      if (contentCalls === 2) receivedReview = previousReview;
       const output = contentOutput();
-      if (contentCalls === 1) {
-        output.pageContents[0].items = [1, 2, 3].map((index) => ({
-          id: `point-${index}`,
-          title: `要点${index}`,
-          body: "长".repeat(90),
-        }));
-      }
+      output.pageContents[0].items = [1, 2, 3].map((index) => ({
+        id: `point-${index}`,
+        title: `要点${index}`,
+        body: "长".repeat(90),
+      }));
       return output;
     },
     async visualDirector({ phase, skinId }) {
@@ -695,8 +788,45 @@ test("多项内容超过正式容量时退回内容导演压缩而不是进入�
     maxContentAttempts: 2,
   });
   assert.equal(result.status, "delivered");
-  assert.equal(contentCalls, 2);
-  assert.equal(receivedReview.issues[0].errorCode, "CONTENT_CAPACITY_EXCEEDED");
+  assert.equal(contentCalls, 1);
+});
+
+test("轻微超过旧通用估算线的内容不会触发第二次 API 或整篇机械保底", async (t) => {
+  const outputDir = await makeTempDir(t);
+  let contentCalls = 0;
+  const provider = {
+    async contentDirector() {
+      contentCalls += 1;
+      const output = contentOutput();
+      output.pageContents[0].items = [
+        { id: "point-1", title: "核心要点", body: "长".repeat(77) },
+        { id: "point-2", title: "补充说明", body: "短内容" },
+      ];
+      return output;
+    },
+    async visualDirector({ skinId }) {
+      const output = visualPlanOutput(skinId);
+      output.compositionPlan.pages[0].componentItemIds = ["point-1", "point-2"];
+      return output;
+    },
+  };
+
+  const result = await runDirectorWorkflow({
+    input: { rawMarkdown },
+    provider,
+    outputDir,
+    reviewMode: "production",
+    visualCandidateProvider: candidateProvider,
+    visualResolver: resolver,
+    renderer,
+    maxContentAttempts: 2,
+    guaranteeDelivery: true,
+  });
+
+  assert.equal(contentCalls, 1);
+  assert.equal(result.pageContents[0].pageId, "problem");
+  assert.equal(result.status, "delivered");
+  assert.equal(result.resilienceReport.events.length, 0);
 });
 
 test("内容编译失败时把原始导演草稿交回唯一修订轮", async (t) => {
@@ -925,6 +1055,63 @@ test("候选阶段少量核心字段缺失时消耗唯一内容恢复而不是�
   assert.equal(contentCalls, 2);
   assert.equal(receivedReview.issues[0].errorCode, "CONTENT_CONTRACT_GAP");
   assert.equal(receivedReview.issues[0].details.gaps[0].rejected[0].reasons[0], "points:required-per-item");
+});
+
+test("candidate-stage content recovery exhaustion preserves the last validated content draft", async (t) => {
+  const outputDir = await makeTempDir(t);
+  let contentCalls = 0;
+  const provider = completeProvider({
+    async contentDirector() {
+      contentCalls += 1;
+      if (contentCalls === 2) {
+        const error = new Error("duplicate source range after candidate-stage revision");
+        error.code = "CONTENT_METADATA_MISMATCH";
+        throw error;
+      }
+      return contentOutput();
+    },
+    async visualDirector() {
+      const error = new Error("visual director unavailable in fallback regression");
+      error.code = "MODEL_JSON_INVALID";
+      throw error;
+    },
+  });
+  let candidateCalls = 0;
+  const capacityThenRealCandidates = async (args) => {
+    candidateCalls += 1;
+    if (candidateCalls > 1) return buildVisualCandidateSets(args);
+    const capacityRejections = [{
+      assetId: "radial-hub-001",
+      variantId: "orbit",
+      issues: [{ role: "item-title", sourceItemId: "point-1", actualChars: 20, maxChars: 8 }],
+    }];
+    return [{
+      pageId: "problem",
+      intentId: "problem-intent",
+      candidates: [],
+      gap: { type: "content-capacity-gap", reason: "test capacity gap", capacityRejections },
+      capacityRejections,
+    }];
+  };
+
+  const result = await runDirectorWorkflow({
+    root,
+    input: { rawMarkdown, skinId: DEFAULT_SKIN_ID },
+    provider,
+    outputDir,
+    reviewMode: "production",
+    visualCandidateProvider: capacityThenRealCandidates,
+    visualResolver: resolveVisualPlan,
+    renderer: dynamicRenderer,
+    maxContentAttempts: 2,
+    maxVisualAttempts: 1,
+    guaranteeDelivery: true,
+  });
+
+  assert.equal(contentCalls, 2);
+  assert.equal(result.status, "delivered-with-fallback");
+  assert.equal(result.pageContents[0].pageId, "problem");
+  assert.ok(result.resilienceReport.events.some((event) => event.code === "content-revision-exhausted-preserved-valid-draft"));
 });
 
 test("每次正式生成都必须带通过的确定性质量审计，否则不得交付", async (t) => {

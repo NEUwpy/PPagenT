@@ -1,6 +1,7 @@
 import { buildSourceBlocks } from "./source-blocks.mjs";
 
-const PAGE_CHAR_TARGET = 620;
+const PAGE_CHAR_TARGET = 180;
+const ITEM_CHAR_TARGET = 68;
 
 function chars(value) {
   return Array.from(String(value ?? ""));
@@ -57,12 +58,35 @@ function sourceUnits(rawMarkdown) {
 function displayFragments(sourceText) {
   const cleaned = cleanMarkdown(sourceText);
   const sentences = cleaned.split(/(?<=[。！？；])|\n+/u).map((item) => item.trim()).filter(Boolean);
+  const atoms = sentences.flatMap((sentence) => {
+    const sourceChars = chars(sentence);
+    const pieces = [];
+    let cursor = 0;
+    while (cursor < sourceChars.length) {
+      let end = Math.min(sourceChars.length, cursor + ITEM_CHAR_TARGET);
+      if (end < sourceChars.length) {
+        const window = sourceChars.slice(cursor, end);
+        let punctuation = -1;
+        for (let index = window.length - 1; index >= Math.floor(ITEM_CHAR_TARGET * 0.55); index -= 1) {
+          if (/[，、；：,;:]/u.test(window[index])) {
+            punctuation = index;
+            break;
+          }
+        }
+        if (punctuation >= 0) end = cursor + punctuation + 1;
+      }
+      const piece = sourceChars.slice(cursor, end).join("").trim();
+      if (piece) pieces.push(piece);
+      cursor = end;
+    }
+    return pieces;
+  });
   const groups = [];
-  for (const sentence of sentences) {
-    if (!groups.length || chars(groups.at(-1)).length + chars(sentence).length > 150) groups.push(sentence);
-    else groups[groups.length - 1] += sentence;
+  for (const atom of atoms) {
+    if (!groups.length || chars(groups.at(-1)).length + chars(atom).length > ITEM_CHAR_TARGET) groups.push(atom);
+    else groups[groups.length - 1] += atom;
   }
-  return groups.slice(0, 5);
+  return groups;
 }
 
 function itemFromFragment(fragment, pageId, index) {
@@ -70,7 +94,7 @@ function itemFromFragment(fragment, pageId, index) {
   const colon = plain.search(/[：:]/);
   const title = clip(colon > 0 && colon <= 12 ? plain.slice(0, colon) : plain, 10) || `内容${index + 1}`;
   const bodyStart = colon > 0 && colon <= 12 ? colon + 1 : Math.min(plain.length, title.length);
-  const body = clip(plain.slice(bodyStart).trim() || plain, 150);
+  const body = clip(plain.slice(bodyStart).trim() || plain, ITEM_CHAR_TARGET);
   return { id: `${pageId}-item-${index + 1}`, title, body };
 }
 

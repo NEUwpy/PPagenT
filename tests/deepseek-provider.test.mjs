@@ -185,3 +185,39 @@ test("DeepSeek Provider 的思考响应为空时第二次关闭思考直接返�
   assert.deepEqual(requests[1].thinking, { type: "disabled" });
   assert.equal("reasoning_effort" in requests[1], false);
 });
+
+test("DeepSeek Provider 的非法输出日志保留脱敏响应轮廓", async () => {
+  const events = [];
+  const model = new DeepSeekJsonModel({
+    apiKey: "test-key",
+    thinking: "disabled",
+    observer: async (event) => events.push(event),
+    fetchImpl: async () => ({
+      ok: true,
+      async json() {
+        return {
+          id: "response-test",
+          model: "deepseek-v4-flash",
+          choices: [{
+            finish_reason: "length",
+            message: { content: "", reasoning_content: "内部推理不应写入日志" },
+          }],
+          usage: { prompt_tokens: 10, completion_tokens: 20 },
+        };
+      },
+    }),
+  });
+  await assert.rejects(model.generateJson({
+    role: "导演",
+    task: "测试",
+    context: {},
+    outputSchema: { name: "test", schema: { type: "object" } },
+    maxJsonAttempts: 1,
+  }), (error) => error.code === "MODEL_JSON_INVALID");
+  const invalid = events.find((event) => event.status === "invalid-output");
+  assert.equal(invalid.responseDiagnostic.finishReason, "length");
+  assert.equal(invalid.responseDiagnostic.contentLength, 0);
+  assert.equal(invalid.responseDiagnostic.reasoningContentLength, 10);
+  assert.equal("response" in invalid, false);
+  assert.deepEqual(invalid.usage, { prompt_tokens: 10, completion_tokens: 20 });
+});

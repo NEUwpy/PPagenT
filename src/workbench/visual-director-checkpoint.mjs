@@ -83,6 +83,7 @@ export function createVisualDirectorCheckpoint({ runDir, onAwaiting, onResumed }
   const checkpointPath = path.join(checkpointDir, "visual-director.json");
   let state = null;
   let resolvePending = null;
+  let rejectPending = null;
   let readyPromise = Promise.resolve();
 
   async function persist() {
@@ -112,7 +113,10 @@ export function createVisualDirectorCheckpoint({ runDir, onAwaiting, onResumed }
       editedOutput: null,
     };
     const awaitingState = clone(state);
-    const pending = new Promise((resolve) => { resolvePending = resolve; });
+    const pending = new Promise((resolve, reject) => {
+      resolvePending = resolve;
+      rejectPending = reject;
+    });
     try {
       readyPromise = (async () => {
         await persist();
@@ -122,6 +126,7 @@ export function createVisualDirectorCheckpoint({ runDir, onAwaiting, onResumed }
       return pending;
     } catch (error) {
       resolvePending = null;
+      rejectPending = null;
       throw error;
     }
   }
@@ -149,14 +154,35 @@ export function createVisualDirectorCheckpoint({ runDir, onAwaiting, onResumed }
     await persist();
     await onResumed?.(acceptedState);
     resolvePending = null;
+    rejectPending = null;
     resolve(editedOutput);
     return acceptedState;
+  }
+
+  async function cancel() {
+    await readyPromise;
+    if (!state || state.status !== "awaiting-user" || !rejectPending) {
+      const error = new Error("当前运行没有可取消的视觉导演检查点");
+      error.statusCode = 409;
+      throw error;
+    }
+    state = { ...state, status: "cancelled", updatedAt: new Date().toISOString() };
+    await persist();
+    const reject = rejectPending;
+    resolvePending = null;
+    rejectPending = null;
+    const error = new Error("用户删除了等待确认的运行");
+    error.code = "WORKBENCH_RUN_CANCELLED";
+    error.stage = "visual-director";
+    reject(error);
+    return clone(state);
   }
 
   return {
     checkpointPath,
     pause,
     submit,
+    cancel,
     read: () => clone(state),
   };
 }

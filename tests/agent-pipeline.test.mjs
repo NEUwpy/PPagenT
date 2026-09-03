@@ -213,6 +213,14 @@ test("循环父候选向视觉导演暴露 TextRegion 契约但不开放子结�
     defaultLayoutId: "heading-content-flow",
     compatibleLayoutIds: ["heading-content-flow"],
     frameRange: { minWidth: 287, maxWidth: 302, minHeight: 136, maxHeight: 200 },
+    minimumFontSize: 12,
+    stateCapacities: [
+      { selection: { stepCount: 4 }, width: 287, height: 188, estimatedMaxChars: 122 },
+      { selection: { stepCount: 3 }, width: 287, height: 188, estimatedMaxChars: 122 },
+      { selection: { stepCount: 5 }, width: 302, height: 200, estimatedMaxChars: 144 },
+      { selection: { stepCount: 5 }, width: 302, height: 136, estimatedMaxChars: 100 },
+      { selection: { stepCount: 6 }, width: 302, height: 136, estimatedMaxChars: 100 },
+    ],
   }]);
   assert.deepEqual(cycle?.slotCapabilities?.textSlots, []);
   assert.deepEqual(cycle?.slotCapabilities?.mediaSlots, []);
@@ -768,9 +776,12 @@ test("结构页面内容超出全部结构容量时在视觉导演前明确报�
   ]);
   const intent = enrichPageIntent(intentDraft("conclusion-intent", "present_parallel_points", "parallel"), page);
   const [candidateSet] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.deepEqual(candidateSet.candidates.map((candidate) => candidate.fallbackBody), [true]);
-  assert.equal(candidateSet.candidates[0].readiness, "fallback");
-  assert.equal(candidateSet.gap.type, "asset-gap");
+  assert.deepEqual(candidateSet.candidates, []);
+  assert.equal(candidateSet.gap.type, "content-capacity-gap");
+  assert.ok(candidateSet.capacityRejections.some((rejection) => (
+    rejection.assetId === "parallel-folded-notes-grid-002"
+      && rejection.issues.some((issue) => issue.role === "item-point-capacity")
+  )));
 });
 
 test("closing purpose cannot bypass fixed closing capacity", async () => {
@@ -873,6 +884,77 @@ test("候选日志说明同一 Logic 下结构为何未成为合法候选", asyn
   assert.equal(phaseGate.stage, "semantic-contract");
   assert.equal(phaseGate.readiness, "incompatible");
   assert.ok(phaseGate.reasons.includes("points:required-per-item"));
+});
+
+test("动态 TextRegion 的正文与分点合计超容时在视觉导演前要求拆页", async () => {
+  const page = content("dense-parallel", Array.from({ length: 5 }, (_, index) => ({
+    id: `practice-${index + 1}`,
+    title: `实践${index + 1}`,
+    body: "该实践通过真实任务形成稳定的党员教育载体并持续扩大覆盖范围",
+    points: [
+      "完成一项具有明确成果的现场任务",
+      "形成可复用机制并覆盖更多参与单位",
+      "用真实数据检验实施成效和长期价值",
+    ],
+  })));
+  page.logicIntent = { logicId: "parallel", reason: "五项实践同级" };
+  const intent = buildPageIntentFromContent(page);
+  const [candidateSet] = await buildVisualCandidateSets({
+    root,
+    pageContents: [page],
+    pageIntents: [intent],
+  });
+  assert.deepEqual(candidateSet.candidates, []);
+  assert.equal(candidateSet.gap.type, "content-capacity-gap");
+  assert.ok(candidateSet.gap.capacityRejections.some((rejection) => (
+    rejection.assetId === "parallel-equal-cards-001"
+      && rejection.issues.some((issue) => issue.role === "dynamic-item-content"
+        && issue.sourceItemId === undefined)
+  )));
+});
+
+test("items[] 与 points[] 动态区域按真实节点数量和标题正文一起前置估容", () => {
+  const page = content("generic-regions", [
+    { id: "a", title: "团队构成", body: "博士硕士本科混编形成宣讲梯队" },
+    { id: "b", title: "宣教形式", body: "沉浸式故事情景短剧红色闯关等十类互动课件" },
+    { id: "c", title: "覆盖范围", body: "走进校园社区企业并覆盖大量师生群众" },
+  ]);
+  for (const regionKey of ["items[]", "points[]"]) {
+    const issues = fixedSlotSourceCapacityIssues(page, {
+      textRegions: [{
+        regionKey,
+        stateCapacities: [{ selection: { pointCount: 3 }, estimatedMaxChars: 24 }],
+      }],
+    });
+    assert.equal(issues.length, 1);
+    assert.equal(issues[0].role, "dynamic-item-content");
+    assert.ok(issues[0].overflowItemCount >= 1);
+  }
+});
+
+test("单个层级节点堆入过多分点时不退成正文而是先要求内容拆页", async () => {
+  const page = content("dense-layered", [
+    { id: "mode", title: "双轮驱动", body: "红色基因传承与实践研学赋能", points: [] },
+    {
+      id: "matrix",
+      title: "1+3+N矩阵",
+      body: "重构育人矩阵",
+      points: ["1条研学链", "22处教学点", "3类青春课堂", "行走课堂", "沉浸课堂", "青年课堂", "N个教育场景", "共享场景", "长效机制"],
+    },
+    { id: "ecosystem", title: "五位一体", body: "形成全时全域育人生态", points: [] },
+  ]);
+  page.logicIntent = { logicId: "layered", reason: "三个层级逐层展开" };
+  const intent = enrichPageIntent(intentDraft(
+    "dense-layered-intent", "explain_layers", "layered", { ordered: true, sameLevel: false },
+  ), page);
+  const [candidateSet] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
+  assert.deepEqual(candidateSet.candidates, []);
+  assert.equal(candidateSet.gap.type, "content-capacity-gap");
+  assert.ok(candidateSet.capacityRejections.some((rejection) => (
+    rejection.assetId === "layered-architecture-001"
+      && rejection.issues.some((issue) => issue.role === "item-point-capacity"
+        && issue.required.maxPointsPerItem > 0)
+  )));
 });
 
 test("真实结构候选在运行时溢出后披露内部正文 fallbackCandidate", async () => {

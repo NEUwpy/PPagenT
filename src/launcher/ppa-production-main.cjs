@@ -54,6 +54,15 @@ async function stopExisting(root) {
     for (let attempt = 0; attempt < 40 && !(await isPortFree(port)); attempt += 1) await new Promise(resolve => setTimeout(resolve, 100));
   }
 }
+async function findExisting(root) {
+  for (let port = 4212; port <= 4222; port += 1) {
+    const health = await getHealth(port);
+    if (health?.status === "ok" && health.app === "ppagent-production-workbench" && normalize(health.root) === normalize(root)) {
+      return { port, health };
+    }
+  }
+  return null;
+}
 async function waitFor(port, root) {
   for (let attempt = 0; attempt < 120; attempt += 1) {
     const health = await getHealth(port, 500);
@@ -65,7 +74,12 @@ async function waitFor(port, root) {
 async function launch() {
   const root = modeRoot;
   if (!root) throw new Error("请把 PPA生产工作台.exe 保留在 PPagenT 项目根目录内。");
-  await stopExisting(root);
+  const existing = await findExisting(root);
+  if (existing) {
+    const existingUrl = `http://${host}:${existing.port}/?launch=${Date.now()}`;
+    if (!args.includes("--no-open")) openBrowser(existingUrl); else console.log(existingUrl);
+    return;
+  }
   let selectedPort = null;
   for (let port = 4212; port <= 4222; port += 1) if (await isPortFree(port)) { selectedPort = port; break; }
   if (!selectedPort) throw new Error("4212–4222 端口均被占用。");

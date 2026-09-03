@@ -64,7 +64,9 @@ function componentDocument(markup, css, frame, theme) {
 
 export async function resolveHtmlComponent({ component, parameters, assetDir, targetFrame = null, theme = {} }) {
   requireValue(component && typeof component.renderMarkup === "function", "HTML Component 缺少 renderMarkup");
-  requireValue(typeof component.cssFile === "string" && component.cssFile, "HTML Component 缺少 cssFile");
+  const hasInlineCss = typeof component.cssText === "string" && component.cssText.trim().length > 0;
+  const hasCssFile = typeof component.cssFile === "string" && component.cssFile;
+  requireValue(hasInlineCss || hasCssFile, "HTML Component 缺少 cssText 或 cssFile");
   const designFrame = normalizeFrame({
     left: 0,
     top: 0,
@@ -76,10 +78,13 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
     const scale = Math.min(normalizedTargetFrame.width / designFrame.width, normalizedTargetFrame.height / designFrame.height);
     requireValue(Math.abs(scale - 1) < 0.001, `${component.id ?? "HTML Component"} 必须按自然字号渲染；目标区域不能缩放组件`);
   }
-  const cssPath = path.resolve(assetDir, component.cssFile);
-  const relativeCssPath = path.relative(path.resolve(assetDir), cssPath);
-  requireValue(relativeCssPath && !relativeCssPath.startsWith("..") && !path.isAbsolute(relativeCssPath), "cssFile 必须位于资产目录内");
-  const css = await fs.readFile(cssPath, "utf8");
+  let css = component.cssText ?? "";
+  if (!hasInlineCss) {
+    const cssPath = path.resolve(assetDir, component.cssFile);
+    const relativeCssPath = path.relative(path.resolve(assetDir), cssPath);
+    requireValue(relativeCssPath && !relativeCssPath.startsWith("..") && !path.isAbsolute(relativeCssPath), "cssFile 必须位于资产目录内");
+    css = await fs.readFile(cssPath, "utf8");
+  }
   const markup = component.renderMarkup(parameters);
   const browser = await getBrowser();
   const page = await browser.newPage({ viewport: { width: Math.ceil(designFrame.width), height: Math.ceil(designFrame.height) } });
@@ -150,7 +155,12 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         const maxLines = Number.isFinite(declaredMaxLines) && declaredMaxLines > 0
           ? declaredMaxLines
           : Math.max(1, Math.floor((available.height + 0.5) / lineHeight));
-        return lines <= maxLines && requiredHeight <= available.height + 1;
+        // Chromium rounds scrollHeight to whole CSS pixels while the visible
+        // line box and our extracted frame keep fractional pixels. A natural
+        // two-line block can therefore report ~1-2 px more scrollHeight even
+        // though its geometry is fully inside the parent layout. Use the same
+        // 2 px tolerance as the collective TextLayout containment check.
+        return lines <= maxLines && requiredHeight <= available.height + 2;
       };
 
       const renderedTextLines = (element) => {
@@ -301,7 +311,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
           }
         }
         if (!fits) {
-          const domFits = element.scrollWidth <= element.clientWidth + 1 && element.scrollHeight <= element.clientHeight + 1;
+          const domFits = element.scrollWidth <= element.clientWidth + 2 && element.scrollHeight <= element.clientHeight + 2;
           if (domFits) fits = true;
         }
         element.dataset.pptResolvedWrap = singleLine ? "none" : "square";
@@ -334,10 +344,22 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
             && box.top >= layoutBox.top - tolerance
             && box.bottom <= layoutBox.bottom + tolerance;
         });
+        const primitiveFits = parts.every((part) => {
+          if (part.dataset.pptFontFit !== "overflow") return true;
+          // Auto-height Markdown blocks can inherit Chromium's integer
+          // scrollHeight rounding even when every rendered line is visible.
+          // Accept that narrow case only when the extracted line geometry
+          // itself fits; fixed-height clipped text still fails this check.
+          const style = getComputedStyle(part);
+          const lineHeight = number(style.lineHeight) || number(style.fontSize) * 1.2;
+          const requiredLineBoxHeight = lineHeight * renderedLineCount(part);
+          return style.overflow === "visible"
+            && part.getBoundingClientRect().height + tolerance >= requiredLineBoxHeight;
+        });
         return inside
           && layout.scrollWidth <= layout.clientWidth + tolerance
           && layout.scrollHeight <= layout.clientHeight + tolerance
-          && parts.every((part) => part.dataset.pptFontFit !== "overflow");
+          && primitiveFits;
       };
       const collectiveFitOrder = ["body", "list", "annotation", "label", "heading", "quote", "emphasis", "metric"];
       for (const layout of root.querySelectorAll("[data-ppagent-text-layout]")) {

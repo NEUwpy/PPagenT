@@ -63,7 +63,7 @@ test("东北大学 Skin 经过统一 renderer 真实生成 PPTX 与逐页证据"
       { pageId: "closing", intentId: "closing-intent", compositionId: "fixed-closing", componentItemIds: [], componentContentMode: "none", textSlots: [], reason: "closing" },
     ],
   };
-  const result = await renderer({
+  const renderInput = {
     outputDir: path.join(temp, "runtime"),
     deckPlan: {
       pages: [
@@ -77,7 +77,9 @@ test("东北大学 Skin 经过统一 renderer 真实生成 PPTX 与逐页证据"
     compositionPlan,
     layoutDecisions,
     renderPayloads,
-  });
+  };
+  const stagingResult = await renderer.stage(renderInput);
+  const result = await renderer({ stagingResult });
   const pptx = await fs.readFile(result.outputPptx);
   assert.equal(pptx.subarray(0, 2).toString("ascii"), "PK");
   assert.equal(result.pageEvidence.length, 3);

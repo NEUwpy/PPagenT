@@ -123,6 +123,7 @@ export async function loadDirectorOutputSchemas(root) {
                     type: "object",
                     additionalProperties: false,
                     properties: {
+                      logicIntent,
                       emphasis: { type: "boolean" },
                       polarity: { enum: ["positive", "negative", "neutral"] },
                     },
@@ -137,7 +138,6 @@ export async function loadDirectorOutputSchemas(root) {
                 sourceBlockIds: {
                   type: "array",
                   minItems: 1,
-                  maxItems: 2,
                   uniqueItems: true,
                   items: { type: "string", pattern: "^source-[0-9]{3,}$" },
                 },

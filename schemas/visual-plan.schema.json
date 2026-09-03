@@ -25,6 +25,22 @@
           "variantId": { "type": "string", "minLength": 1 },
           "silhouette": { "type": "string", "minLength": 1 },
           "adaptationStatus": { "enum": ["native", "adaptive", "partial", "fixed", "unknown"] },
+          "expressionStrategy": {
+            "enum": ["registered-structure", "text-plus-structure", "multi-structure"]
+          },
+          "blockStructureModes": {
+            "type": "array",
+            "maxItems": 8,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["sourceItemId", "pattern"],
+              "properties": {
+                "sourceItemId": { "type": "string", "minLength": 1 },
+                "pattern": { "enum": ["auto", "chain", "rail", "support-grid"] }
+              }
+            }
+          },
           "iconQueries": {
             "type": "array",
             "maxItems": 12,

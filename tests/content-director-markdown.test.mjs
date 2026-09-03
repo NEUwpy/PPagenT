@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { compileContentDirectorDraft, parseContentDirectorMarkdown } from "../src/content/content-director-markdown.mjs";
 import { buildDeterministicContentFallback } from "../src/content/deterministic-content-fallback.mjs";
+import { computeContentStats } from "../src/content/page-content.mjs";
 
 const rawMarkdown = `# 原稿
 
@@ -95,6 +96,67 @@ test("Markdown 草稿确定性编译为现有 DeckPlan 与 PageContent", () => {
   assert.ok(output.pageContents[1].sourceText.includes("从今天开始行动"));
 });
 
+test("已选择来源中的数量层级不能被逐页 Markdown 泛化丢失", () => {
+  const source = "方案重构为1+3+N矩阵，其中主链采用1+6+N路线，另外包含三类课堂和N个场景。";
+  const base = {
+    schemaVersion: "0.1",
+    deckMetadata: {
+      deckId: "hierarchy-deck",
+      title: "复合体系",
+      communicationJob: "解释复合体系",
+      audience: "项目团队",
+      audienceOutcome: "理解体系构成",
+      centralTakeaway: "复合结构共同支撑体系。",
+      narrativeArc: ["解释体系"],
+    },
+    contentMarkdown: `# 复合体系\n\n> 多层结构共同形成完整体系。\n\n## 总体方案\n\n形成完整的复合矩阵。`,
+    pageMetadata: [{
+      logicIntent: { logicId: "hierarchy", reason: "存在多层数量结构", evidenceFragments: ["1+3+N"], confidence: "high" },
+      sourceAnchors: [source],
+    }],
+  };
+  assert.throws(
+    () => compileContentDirectorDraft(source, base),
+    (error) => error.code === "CONTENT_HIERARCHY_COVERAGE_FAILED"
+      && error.details.missingStructuralTokens.includes("1+3+N")
+      && error.details.missingStructuralTokens.includes("1+6+N"),
+  );
+  const complete = structuredClone(base);
+  complete.contentMarkdown = `# 复合体系\n\n> 1+3+N矩阵把主链、课堂与场景连成完整体系。\n\n## 1条主链\n\n采用1+6+N路线。\n\n## 3类课堂\n\n形成三类教学形态。\n\n## N个场景\n\n连接多种应用场景。`;
+  assert.doesNotThrow(() => compileContentDirectorDraft(source, complete));
+
+  const expandedNested = structuredClone(complete);
+  expandedNested.contentMarkdown = expandedNested.contentMarkdown.replace(
+    "采用1+6+N路线。",
+    "路线包含1个校本基地、6处核心场馆和N个配套教学点。",
+  );
+  assert.doesNotThrow(() => compileContentDirectorDraft(source, expandedNested));
+
+  const chineseExpanded = structuredClone(complete);
+  chineseExpanded.contentMarkdown = `# 复合体系\n\n> 一条主链、三类课堂与N个场景形成完整体系。\n\n## 一条主链\n\n路线包含一个校本基地、六处核心场馆和N个配套教学点。\n\n## 三类课堂\n\n形成三类教学形态。\n\n## N个场景\n\n连接多种应用场景。`;
+  assert.doesNotThrow(() => compileContentDirectorDraft(source, chineseExpanded));
+});
+
+test("共享背景来源段落中的公式不强制复制到只引用另一段证据的页面", () => {
+  const source = "总体采用1+3+N矩阵，并按1+6+N设计路线。\n\n任务单包含拍视频、解难题、带课题三项任务。";
+  const value = {
+    schemaVersion: "0.1",
+    deckMetadata: {
+      deckId: "shared-context", title: "任务单", communicationJob: "说明任务",
+      audience: "团队", audienceOutcome: "理解任务", centralTakeaway: "任务单推动实践", narrativeArc: ["实践"],
+    },
+    contentMarkdown: "# 任务单\n\n> 说明任务单的三项任务。\n\n## 拍视频\n\n记录历史。\n\n## 解难题\n\n服务场馆。\n\n## 带课题\n\n研究振兴。",
+    pageMetadata: [{
+      logicIntent: {
+        logicId: "parallel", reason: "三项任务并列",
+        evidenceFragments: ["任务单包含拍视频、解难题、带课题三项任务。"], confidence: "high",
+      },
+      sourceBlockIds: ["source-001", "source-002"],
+    }],
+  };
+  assert.doesNotThrow(() => compileContentDirectorDraft(source, value));
+});
+
 test("pageMetadata 必须与 H1 页面逐项对齐", () => {
   assert.throws(
     () => compileContentDirectorDraft(rawMarkdown, draft({ pageMetadata: draft().pageMetadata.slice(0, 1) })),
@@ -169,6 +231,24 @@ test("H2 节点的强调与极性由同序轻量元数据补充，不复制正�
   assert.equal(output.pageContents[1].items[1].polarity, "neutral");
 });
 
+test("内容导演可为 H2 节点登记独立 Logic，并保留来源证据", () => {
+  const value = draft();
+  value.pageMetadata[1].itemMetadata = [
+    {
+      logicIntent: {
+        logicId: "sequence",
+        reason: "该节点说明先整理再执行的顺序",
+        evidenceFragments: ["先整理再执行"],
+        confidence: "high",
+      },
+    },
+    {},
+  ];
+  const output = compileContentDirectorDraft(rawMarkdown, value);
+  assert.equal(output.pageContents[1].items[0].logicIntent.logicId, "sequence");
+  assert.deepEqual(output.pageContents[1].items[0].logicIntent.evidenceFragments, ["先整理再执行"]);
+});
+
 test("itemMetadata 数量必须与本页 H2 数量一致", () => {
   const value = draft();
   value.pageMetadata[1].itemMetadata = [{ emphasis: true }];
@@ -189,6 +269,105 @@ test("relationBindings 的正文必须引用 Markdown，不能在元数据重复
     () => compileContentDirectorDraft(rawMarkdown, invalid),
     (error) => error.code === "CONTENT_RELATION_COMPILE_FAILED",
   );
+});
+
+test("普通 Logic 名不能冒充 structuredData.type，修复模式只丢弃可选关系", () => {
+  const value = draft();
+  value.pageMetadata[1].relationBindings = {
+    type: "parallel",
+    literals: [],
+    references: [],
+  };
+  assert.throws(
+    () => compileContentDirectorDraft(rawMarkdown, value),
+    (error) => error.code === "CONTENT_RELATION_COMPILE_FAILED",
+  );
+
+  const repaired = compileContentDirectorDraft(rawMarkdown, value, { repairMode: true });
+  assert.equal(repaired.pageContents[1].structuredData, undefined);
+  assert.equal(repaired.pageContents[1].logicIntent.logicId, "sequence");
+  assert.ok(repaired.contentRepairReport.actions.some(
+    (action) => action.type === "drop-invalid-optional-relation-bindings" && action.pageId === "page-02",
+  ));
+});
+
+test("修复模式局部移除 H2 Logic 的非逐字证据，不降级整份内容稿", () => {
+  const value = draft();
+  value.pageMetadata[1].itemMetadata = [
+    {
+      logicIntent: {
+        logicId: "sequence",
+        reason: "该节点说明执行顺序",
+        evidenceFragments: ["先整理……再执行"],
+        confidence: "high",
+      },
+    },
+    {},
+  ];
+  const repaired = compileContentDirectorDraft(rawMarkdown, value, { repairMode: true });
+  assert.equal(repaired.pageContents.length, 2);
+  assert.equal(repaired.pageContents[1].items[0].logicIntent, undefined);
+  assert.ok(repaired.contentRepairReport.actions.some(
+    (action) => action.type === "drop-unverifiable-optional-item-logic" && action.pageId === "page-02",
+  ));
+});
+
+test("修复模式删除空证据的可选 H2 Logic，保留对应正文", () => {
+  const value = draft();
+  value.pageMetadata[1].itemMetadata = [
+    { logicIntent: { logicId: "sequence", reason: "尝试补充局部逻辑", evidenceFragments: [], confidence: "low" } },
+    {},
+  ];
+  const repaired = compileContentDirectorDraft(rawMarkdown, value, { repairMode: true });
+  assert.equal(repaired.pageContents[1].items[0].logicIntent, undefined);
+  assert.equal(repaired.pageContents[1].items[0].body, "先把输入梳理清楚。");
+  assert.ok(repaired.contentRepairReport.actions.some((action) => (
+    action.type === "drop-unverifiable-optional-item-logic" && action.itemId === "page-02-item-1"
+  )));
+});
+
+test("问题方案 Logic 缺少必需机器关系时按节点极性局部降级", () => {
+  const value = draft();
+  value.pageMetadata[0].itemMetadata = [{ polarity: "negative" }];
+  const repaired = compileContentDirectorDraft(rawMarkdown, value, { repairMode: true });
+  assert.equal(repaired.pageContents.length, 2);
+  assert.equal(repaired.pageContents[0].logicIntent.logicId, "parallel");
+  assert.equal(repaired.contentMetadata.pageMetadata[0].logicIntent.logicId, "parallel");
+  assert.equal(repaired.contentRepairReport.actions[0].type, "downgrade-unbound-required-logic");
+
+  const twoSided = draft();
+  twoSided.contentMarkdown = twoSided.contentMarkdown.replace(
+    "# 当前问题\n\n> 让听众理解旧流程的真实代价。\n\n## 重复劳动",
+    "# 当前问题\n\n> 让听众理解旧流程的真实代价。\n\n## 重复劳动",
+  ).replace(
+    "# 新方法",
+    "## 改进方向\n\n减少重复。\n\n# 新方法",
+  );
+  twoSided.pageMetadata[0].itemMetadata = [
+    { polarity: "negative" },
+    { polarity: "positive" },
+  ];
+  const comparison = compileContentDirectorDraft(rawMarkdown, twoSided, { repairMode: true });
+  assert.equal(comparison.pageContents[0].logicIntent.logicId, "comparison");
+});
+
+test("修复模式把超过 Schema 上限的有效 Logic 证据局部收口到三条", () => {
+  const value = draft();
+  value.pageMetadata[1].logicIntent.evidenceFragments = [
+    "第二项说明",
+    "新方法",
+    "先整理",
+    "再执行",
+  ];
+  const repaired = compileContentDirectorDraft(rawMarkdown, value, { repairMode: true });
+  assert.deepEqual(repaired.pageContents[1].logicIntent.evidenceFragments, [
+    "第二项说明",
+    "新方法",
+    "先整理",
+  ]);
+  assert.ok(repaired.contentRepairReport.actions.some(
+    (action) => action.type === "canonicalize-logic-evidence" && action.pageId === "page-02",
+  ));
 });
 
 test("relationBindings 不能覆盖 type 或写入原型链", () => {
@@ -295,11 +474,54 @@ test("原稿段落 ID 让程序生成逐字证据并本地收口无效可选关�
   )));
 });
 
+test("一页可以引用全部必要来源段落且不会卷入未选择的中间段落", () => {
+  const source = [
+    "第一项事实。",
+    "无关过渡甲。",
+    "第二项事实。",
+    "无关过渡乙。",
+    "第三项事实。",
+    "无关过渡丙。",
+    "第四项事实。",
+    "无关过渡丁。",
+    "第五项事实。",
+  ].join("\n\n");
+  const value = {
+    schemaVersion: "0.1",
+    deckMetadata: {
+      deckId: "multi-source", title: "标题", communicationJob: "汇总事实", audience: "团队",
+      audienceOutcome: "理解五项事实", centralTakeaway: "五项事实共同成立", narrativeArc: ["汇总"],
+    },
+    contentMarkdown: "# 五项事实\n\n> 汇总分散证据\n\n## 事实\n第一、第二、第三、第四、第五项事实。",
+    pageMetadata: [{
+      sourceBlockIds: ["source-001", "source-003", "source-005", "source-007", "source-009"],
+      logicIntent: {
+        logicId: "parallel",
+        reason: "五项事实同级",
+        evidenceFragments: ["第一项事实。", "第五项事实。"],
+        confidence: "high",
+      },
+    }],
+  };
+  const output = compileContentDirectorDraft(source, value);
+  assert.equal(output.pageContents[0].sourceText, [
+    "第一项事实。", "第二项事实。", "第三项事实。", "第四项事实。", "第五项事实。",
+  ].join("\n\n"));
+  assert.doesNotMatch(output.pageContents[0].sourceText, /无关过渡/);
+  assert.equal(output.deckPlan.pages[0].sourceAnchors.length, 5);
+});
+
 test("确定性内容兜底按原稿切页且不补造事实", () => {
   const source = `# 主题\n\n${"第一项内容。".repeat(90)}\n\n第二部分说明。`;
   const output = buildDeterministicContentFallback(source, { reason: "test" });
   assert.ok(output.pageContents.length >= 3);
   assert.ok(output.pageContents.every((page) => page.logicIntent.logicId === "editorial"));
   assert.ok(output.pageContents.every((page) => source.includes(page.sourceText)));
+  assert.ok(output.pageContents.every((page) => {
+    const stats = computeContentStats(page);
+    return stats.itemCount <= 13
+      && stats.avgItemChars * stats.itemCount <= 240
+      && stats.maxItemChars <= 80;
+  }));
   assert.equal(output.contentRepairReport.status, "deterministic-fallback");
 });

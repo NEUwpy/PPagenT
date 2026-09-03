@@ -18,19 +18,22 @@ const CONTENT_DIRECTOR_SYSTEM_PROMPT = [
   "Markdown 是唯一内容层级与正文事实源，机器元数据不得重复页面标题、章节、正文、节点或分点",
 ].join("。\n");
 
+const VISUAL_DIRECTOR_BATCH_PAGE_LIMIT = 8;
+
 const CONTENT_DIRECTOR_TASK = [
   "读取 context.sourceBlocks 中按顺序编号的完整原稿段落，一次完成 contentMarkdown、deckMetadata 和按 H1 页面顺序对齐的 pageMetadata。",
   "先识别整稿最大的叙事章节，再识别每个章节中可以独立承担一页职责的最小语义单元；普通原稿 Markdown 标题只是来源组织，不是 PPT 页数上限。只有原稿完整行写明‘第 X 页’时才必须保持其页数与顺序。",
-  "contentMarkdown 只有一个页面边界规则：每个 H1 就是一页，H1 文本是页标题，紧随 H1 的首个引用块是本页叙事职责；H2 是页面最外层关系中的一个同级主节点，H2 下普通段落是 body，列表是该节点的 points；H3 仅用于 H2 节点内部确有必要的小标题。不得用 H2 或 H3 暗示另一套页边界，不使用 H4 及更深标题。",
+  "contentMarkdown 只有一个页面边界规则：每个 H1 就是一页。H1 是简洁的页面主题标题；紧随 H1 的首个引用块是面向听众的页面主旨句，必须直接说清本页要让听众理解的判断，不能写成‘介绍、说明、呈现本页内容’之类制作职责，也不能与 H1 同义重复。H2 是页面最外层关系中的一个同级主节点，H2 下普通段落是 body，列表是该节点的 points；H3 仅用于 H2 节点内部确有必要的小标题。不得用 H2 或 H3 暗示另一套页边界，不使用 H4 及更深标题。",
   "一页可以有多个 H2 主节点；开场、案例、论证和收束若承担不同叙事职责，应拆成不同 H1 页面。每页在正式字号下保持适量，不得把整章硬压成一个巨型并列、时序或卡片页，也不得为了多页而重复内容。",
   "按以下顺序工作：1.通读全稿并在 deckMetadata.narrativeArc 中概括最大叙事阶段；2.确定 H1 页序与职责；3.逐页识别最外层 Logic；4.用 H2 列出听众必须区分的全部主节点；5.把原稿明确提供的节点内下级内容写成列表，必要时用 H3 标明节点内小节；6.参考 structureCapabilities 检查是否遗漏了原稿真实存在且后续结构需要的关系字段；7.压缩文字并输出完整对象。",
+  "当原稿同时给出一个总机制及其内部层级、数量组、类型组、阶段组或应用场景时，必须保留从最大机制到最小明确节点的层级：不能只留下一个泛化 H2 和两条概括而丢掉内部结构；用 H3、列表或独立 H1 保存原稿真实存在的下级节点。",
   "availableLogicSkills 是完整 Logic 目录；logicIntent.logicId 必须逐字选择，不能因现有结构数量少或为 0 而改成相近 Logic 或 editorial。",
   "structureCapabilities 是当前核心结构按 Logic 分组生成的匿名内容形状摘要，只帮助保留必要字段，不是资产菜单；不得复写能力摘要，不得反向套结构。",
   "若 structureCapabilities 的 requiredFields 表明该 Logic 需要节点内 points 或复杂关系字段，先把全部人类可读内容写进 Markdown，再用 relationBindings 只补机器关系。",
   "deckMetadata 保存整套标题、沟通任务、受众、期望结果、核心结论与简短 narrativeArc；这些整套字段不在 contentMarkdown 里伪装成页面。",
-  "每个 pageMetadata 只保存 logicIntent、sourceBlockIds、可选 itemMetadata 和必要的 relationBindings，并严格对应同序 H1；pageId 由程序按 H1 顺序生成。itemMetadata 必须与本页 H2 同序等长且只填写 emphasis / polarity，不得重复 Markdown 中的页标题、职责、H2 正文或列表。",
-  "sourceBlockIds 从 context.sourceBlocks 逐字选择一至两个 ID：它们只证明本页内容来自哪些原稿段落，不负责把全文切成互不重叠的连续区间。不同页面可以回看、交叠或重排来源段落，但不得使用完全相同的段落范围制造重复页。不要自行抄写 sourceAnchors；程序会按 ID 生成逐字证据与 sourceText。evidenceFragments 尽量逐字复制，若有空白或标点偏差程序会以 sourceBlockIds 的原文收口。",
-  "普通 editorial、parallel、sequence 等只需 Markdown 节点。复杂 Logic 必须用 relationBindings 生成旧 structuredData：references 的 ref 只能引用 page.title、item:N.id/title/body 或 item:N.point:M；literals 只填 ID、枚举、布尔、数值或邻接矩阵，不得重复正文。",
+  "每个 pageMetadata 只保存 logicIntent、sourceBlockIds、可选 itemMetadata 和必要的 relationBindings，并严格对应同序 H1；pageId 由程序按 H1 顺序生成。itemMetadata 必须与本页 H2 同序等长；当 H2 内部确有独立 Logic 时填写 itemMetadata.logicIntent，否则省略，只可另外填写 emphasis / polarity。不得重复 Markdown 中的页标题、职责、H2 正文或列表。",
+  "sourceBlockIds 从 context.sourceBlocks 逐字选择本页实际使用的全部必要 ID，至少一个且不得重复；不要为了凑数量选入无关段落。它们只证明本页内容来自哪些原稿段落，不负责把全文切成互不重叠的连续区间。不同页面可以回看、交叠或重排来源段落，但不得使用完全相同的证据集合制造重复页。不要自行抄写 sourceAnchors；程序会只按实际选择的 ID 生成逐字证据与 sourceText。evidenceFragments 尽量逐字复制，若有空白或标点偏差程序会以 sourceBlockIds 的原文收口。",
+  "Logic 名与 structuredData.type 不是一回事。普通 editorial、parallel、sequence、layered、hub、progression、network、comparison 只需 Markdown 节点，必须省略 relationBindings。只有确实要生成已登记机器关系时才填写 relationBindings，且 type 只能直接使用 hierarchy、convergence、problem-solution、problem-method-result、argument-evidence、multi-set-common-intersection、iceberg-visible-hidden、decision-tradeoff、internal-external-ecosystem、hub-tiered-ecosystem、branching-decision、branching-scenario、goal-strategy-metrics、role-stage、matrix、matrix-grid 之一；不得把 Logic 名写进 type，也不得用 /structuredData/type 间接改 type。references 的 ref 只能引用 page.title、item:N.id/title/body 或 item:N.point:M；literals 只填 ID、枚举、布尔、数值或邻接矩阵，不得重复正文。",
   "程序按页面顺序生成 page-01、page-02，并按每页 H2 顺序生成 page-01-item-1 等稳定 ID；relationBindings 中所有 itemIds、methodIds、evidenceIds 等必须使用这些可预测 ID，不能自创组件专属 ID。",
   "H2 标题不超过 10 个汉字，body 尽量 15–30 个汉字；正文与 points 不重复。",
   "不得输出 assetId、familyId、variantId、Structure Group、容器、坐标、颜色、图标或组件专属槽位。不得为了适配能力卡改变语义。",
@@ -73,10 +76,22 @@ function contentRevisionDirective(previousReview) {
         if (capacityIssue.sourceItemId && Number.isFinite(capacityIssue.maxChars)) {
           return `${capacityIssue.pageId ?? "指定页面"} 的 ${capacityIssue.sourceItemId} ${capacityIssue.role ?? "文字"} 当前 ${capacityIssue.actualChars ?? "超限"} 字，必须压到 ${capacityIssue.maxChars} 字以内；只压缩该字段的重复修饰，保留节点含义、节点数量和原稿关系，不得改动其他已合法页面`;
         }
-        return `${capacityIssue.pageId ?? "指定页面"} 当前总量约 ${capacityIssue.estimatedTotalChars ?? "超限"} 字、最长单项约 ${capacityIssue.maxItemChars ?? "超限"} 字；必须同时把总量压到 ${capacityIssue.required?.maxTotalChars ?? "总容量上限"} 字以内、每个单项压到 ${capacityIssue.required?.maxItemChars ?? "单项容量上限"} 字以内。优先把该 H1 按不同叙事职责拆成两个 H1，并同步补齐 pageMetadata 与各页可核对的来源证据；也可压缩重复修饰。不得缩字、删掉主关系或改动其他已合法页面`;
+        const pointLimits = [
+          Number.isFinite(capacityIssue.required?.maxPointsPerItem)
+            ? `每个 H2 最多 ${capacityIssue.required.maxPointsPerItem} 个分点`
+            : null,
+          Number.isFinite(capacityIssue.required?.maxPointChars)
+            ? `每个分点最多 ${capacityIssue.required.maxPointChars} 字`
+            : null,
+        ].filter(Boolean);
+        const pointLimit = pointLimits.length ? `；${pointLimits.join("、")}` : "";
+        return `${capacityIssue.pageId ?? "指定页面"} 当前总量约 ${capacityIssue.estimatedTotalChars ?? "超限"} 字、最长单项约 ${capacityIssue.maxItemChars ?? "超限"} 字；必须同时把总量压到 ${capacityIssue.required?.maxTotalChars ?? "总容量上限"} 字以内、每个单项压到 ${capacityIssue.required?.maxItemChars ?? "单项容量上限"} 字以内${pointLimit}。优先把该 H1 按不同叙事职责拆成两个 H1，并同步补齐 pageMetadata 与各页可核对的来源证据；也可压缩重复修饰，但不能把多个不同层级或不同类别硬塞进一个 H2。不得缩字、删掉主关系或改动其他已合法页面`;
       }).join("；");
     }
     if (issue.errorCode === "CONTENT_METADATA_MISMATCH") {
+      if (Number.isInteger(details.markdownPages) && Number.isInteger(details.metadataPages)) {
+        return `contentMarkdown 当前只有 ${details.markdownPages} 个 H1，但 pageMetadata 已有 ${details.metadataPages} 项。previous.pageMetadata 已经表达了完整逐页规划；必须把 contentMarkdown 补成严格同序、同数量的 ${details.metadataPages} 个 H1，每项 pageMetadata 对应一个 H1。保留已有页面内容，依据各项 sourceBlockIds 回到 context.sourceBlocks 补齐缺失页面；每页继续遵守 H1 页面、引用块主旨句、H2 主节点、正文和列表分点的 Markdown 契约，不得删除已有 pageMetadata 来迁就残缺 Markdown`;
+      }
       const page = details.pageId ? `页面 ${details.pageId}` : "报错页面";
       const anchor = details.anchor ? `旧式锚点“${details.anchor}”` : "来源段落 ID 或同序元数据";
       return `${page} 的 ${anchor} 未通过确定性校验。previous 中是上一轮已经完成的完整草稿；必须保留其 H1 页序、H2/H3 页内内容、页面正文、Logic 和其他已合法元数据，只修正报错页的 sourceBlockIds 或与同序 H1 的元数据对应关系。不得把 H2/H3 当成页面，不得借机重写整套内容稿`;
@@ -87,6 +102,10 @@ function contentRevisionDirective(previousReview) {
         return `${gap.pageId ?? "报错页面"} 的 ${gap.logicId ?? "既有 Logic"} 缺少候选所需字段：${[...new Set(reasons)].join("、") || gap.reason || "核心字段不足"}`;
       });
       return `${gapRequirements.join("；")}。previous 中是上一轮完整草稿；只在原稿 source 明确支持时，为报错 H1 的现有 H2 补齐或压缩 points／关系字段，并保持 H1 页序、H2/H3 内容、Logic、节点数量和其他页面不变。允许忠实概括原稿已有语句以适配字段长度，不得新增事实、节点、因果或结论`;
+    }
+    if (issue.errorCode === "CONTENT_HIERARCHY_COVERAGE_FAILED") {
+      const missing = details.missingStructuralTokens ?? [];
+      return `${details.pageId ?? "报错页面"} 已选择的来源段落包含数量层级 ${missing.join("、") || "结构公式"}，但逐页 Markdown 没有保留。previous 中是上一轮完整草稿；只修正该 H1，在 H2/H3/列表中恢复总结构及其明确下级组，并保持其他页面、事实和顺序不变。不得只把公式塞进一句正文，也不得补造来源没有的节点`;
     }
     if (issue.errorCode === "CONTENT_RELATION_COMPILE_FAILED") {
       return `${issue.evidence ?? previousReview.summary ?? "关系元数据无法编译"}。previous 中是上一轮完整草稿；保持 contentMarkdown、H1 页序、Logic、节点和其他元数据不变，只删除或修正报错页中不受支持的可选 relationBindings。普通 editorial、parallel、sequence、comparison 可直接依靠 Markdown 节点表达，不得发明机器字段或为了保留 relationBindings 改写正文`;
@@ -110,7 +129,7 @@ function contentRevisionDirective(previousReview) {
     }
     return `${issue.errorCode ?? "内容错误"}：${issue.evidence ?? previousReview.summary ?? "按反馈修正"}`;
   });
-  return `这是唯一一次失败兜底。必须先完成以下要求，再输出完整的 Markdown 内容稿与机器元数据：${requirements.join("；")}。`;
+  return `这是当前一次定向修订。必须先完成以下要求，再输出完整的 Markdown 内容稿与机器元数据：${requirements.join("；")}。若仍有格式或确定性校验错误，程序会保留草稿并继续给出更具体反馈。`;
 }
 
 function assertSchemas(schemas) {
@@ -693,24 +712,47 @@ export function createModelDirectorProvider({
         input.candidateSets,
         input.previousResolution?.feedback ?? [],
       );
-      const compactPages = compactVisualSkillContext(
-        input.pageContents,
-        input.pageIntents,
-        disclosedCandidateSets,
-      );
-      const routingOutput = await visualComposition.generateJson({
-        role: "PPagenT 视觉导演",
-        task: "内容导演已经为每页确定 Logic，你不得重新分类或跨 Logic 选择。像调用 Skills 一样，只在该页合法候选中选择具体 Structure Group，并决定核心短标签、语义图标查询和 TextRegion 的组合排版。candidateId 必须逐字复制该页 candidates 中的值；selectionMode=group-locked 表示程序已经锁定唯一合法 Structure Group，你仍需为该页完成 centerLabel、图标、文字布局和整套节奏判断，但不得跨出 lockedStructureGroupId。readiness=ready 可直接绑定，readiness=derivable 只允许按 derivationPolicy.allowedFields 补展示字段；reasons 只是解释，不授予派生权限，不得补造核心节点、分点或关系。选定候选若披露 textRegions，只能从各 Region 的 compatibleLayoutIds 中选择；同级重复 Region 只按 regionKey 选择一次，程序会扩展到每个实际区域。没有文字区域或默认排版已经合适时省略 textLayoutChoices。如果该页 selectionMode=fallback-locked，或 previousFeedback 明确报告 component-runtime-overflow，则使用已锁定的正文兜底，不得继续选择已证明装不下的结构。centerLabel 是页面核心概念的 2–8 字中文短标签，所有页面都填写；若结构没有中心标签槽，程序会忽略。若选中 mediaMode=semantic-icon 的候选，只为该候选披露的 iconSourceItemIds 逐项输出简短英文 icon query，sourceItemId 必须逐字复制；iconSourceItemIds 为空时省略 iconQueries，不得改用普通 items。其他候选也省略 iconQueries。只有 selectionMode=visual-selectable 或需要响应 previousFeedback 时才写简短 reason，否则省略。不要输出坐标、字号、间距、CompositionPlan、HTML/CSS、重复正文或内容细化请求；程序会读取 Structure Group 表单、形成 TextBinding，并用确定性排版器完成适配。按 pages 原顺序逐页输出且不得遗漏。",
-        context: {
-          deckPlan: input.deckPlan,
-          pages: compactPages,
-          previousFeedback: input.previousResolution?.feedback ?? [],
-        },
-        outputSchema: visualSkillRoutingSchema(input.pageContents, disclosedCandidateSets),
-        maxJsonAttempts: 1,
-      });
+      const batches = [];
+      for (let start = 0; start < input.pageContents.length; start += VISUAL_DIRECTOR_BATCH_PAGE_LIMIT) {
+        const end = Math.min(start + VISUAL_DIRECTOR_BATCH_PAGE_LIMIT, input.pageContents.length);
+        batches.push({
+          pageContents: input.pageContents.slice(start, end),
+          pageIntents: input.pageIntents.slice(start, end),
+          candidateSets: disclosedCandidateSets.slice(start, end),
+        });
+      }
+      if (!batches.length) batches.push({ pageContents: [], pageIntents: [], candidateSets: [] });
+      const selections = [];
+      for (const [batchIndex, batch] of batches.entries()) {
+        const pageIds = new Set(batch.pageContents.map((page) => page.pageId));
+        const compactPages = compactVisualSkillContext(
+          batch.pageContents,
+          batch.pageIntents,
+          batch.candidateSets,
+        );
+        const visualRequest = {
+          role: "PPagenT 视觉导演",
+          task: "内容导演已经为每页确定 Logic，你不得重新分类或跨 Logic 选择。你要把逐页内容稿与资产清单弥合：在该页合法候选中选择具体 Structure Group。当前自动正式线只开放 registered-structure，因为2+3组合原型尚未通过视觉验收、也还不能把已登记资产可靠地嵌入子区域；不要选择 text-plus-structure 或 multi-structure。candidateId 必须逐字复制该页 candidates 中的值；selectionMode=group-locked 表示程序已经锁定唯一合法 Structure Group，你仍需完成 centerLabel、图标、文字布局和整套节奏判断，但不得跨出 lockedStructureGroupId。readiness=ready 可直接绑定，readiness=derivable 只允许按 derivationPolicy.allowedFields 补展示字段；reasons 只是解释，不授予派生权限，不得补造核心节点、分点或关系。选定候选若披露 textRegions，只能从各 Region 的 compatibleLayoutIds 中选择；同级重复 Region 只按 regionKey 选择一次，程序会扩展到每个实际区域。没有文字区域或默认排版已经合适时省略 textLayoutChoices。如果该页 selectionMode=fallback-locked，或 previousFeedback 明确报告 component-runtime-overflow，则使用已锁定的正文兜底，不得继续选择已证明装不下的结构。centerLabel 是页面核心概念的 2–8 字中文短标签，所有页面都填写；若结构没有中心标签槽，程序会忽略。若选中 mediaMode=semantic-icon 的候选，只为该候选披露的 iconSourceItemIds 逐项输出简短英文 icon query，sourceItemId 必须逐字复制；iconSourceItemIds 为空时省略 iconQueries，不得改用普通 items。其他候选也省略 iconQueries。只有 selectionMode=visual-selectable 或需要响应 previousFeedback 时才写简短 reason，否则省略。不要输出坐标、字号、间距、CompositionPlan、HTML/CSS、重复正文或内容细化请求；程序会读取表单并用确定性排版器完成适配。按 pages 原顺序逐页输出且不得遗漏。",
+          context: {
+            deckPlan: input.deckPlan,
+            pages: compactPages,
+            previousFeedback: (input.previousResolution?.feedback ?? [])
+              .filter((item) => !item.pageId || pageIds.has(item.pageId)),
+            ...(batches.length > 1 ? {
+              batch: { index: batchIndex + 1, count: batches.length },
+              priorSelections: selections.map(({ pageId, candidateId }) => ({ pageId, candidateId })),
+            } : {}),
+          },
+          outputSchema: visualSkillRoutingSchema(batch.pageContents, batch.candidateSets),
+          // 每批通常只调用一次；空响应或非法 JSON 时仍保留一次受控重答。
+          maxJsonAttempts: 2,
+        };
+        visualRequest.task = `像调用 Skills 一样使用候选能力卡；当前自动正式线不启用实验性的 blockStructureModes。${visualRequest.task}`;
+        const routingOutput = await visualComposition.generateJson(visualRequest);
+        selections.push(...(routingOutput.selections ?? []));
+      }
       return normalizeVisualCompositionOutput(
-        expandVisualSkillRouting(routingOutput, { ...input, candidateSets: disclosedCandidateSets }),
+        expandVisualSkillRouting({ selections }, { ...input, candidateSets: disclosedCandidateSets }),
         input,
       );
 

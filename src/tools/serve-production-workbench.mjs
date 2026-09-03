@@ -7,6 +7,7 @@ import { normalizeManuscript, supportedManuscriptExtensions } from "../workbench
 import { createTraceRecorder, readTraceEvents } from "../workbench/trace-recorder.mjs";
 import { createVisualDirectorCheckpoint, withVisualDirectorCheckpoint } from "../workbench/visual-director-checkpoint.mjs";
 import { readJsonState, writeJsonState } from "../workbench/json-state-file.mjs";
+import { createNativePptCheckpoint, readNativePptCheckpoint } from "../workbench/native-ppt-checkpoint.mjs";
 import { candidateSetsForVisualDirector } from "../agent/model-director-provider.mjs";
 
 function option(name, fallback) {
@@ -25,6 +26,32 @@ const currentRunPath = path.join(workbenchRoot, "current-run.json");
 const maxUploadBytes = 30 * 1024 * 1024;
 let activeRunId = null;
 const activeVisualCheckpoints = new Map();
+const activeNativePptCheckpoints = new Map();
+const activeRunTasks = new Map();
+
+function awaitingCheckpoint(runId) {
+  const visual = activeVisualCheckpoints.get(runId);
+  if (visual?.read()?.status === "awaiting-user") return visual;
+  const native = activeNativePptCheckpoints.get(runId);
+  if (native?.read()?.status === "awaiting-user") return native;
+  return null;
+}
+
+function runIsDeletable(runId) {
+  if (awaitingCheckpoint(runId)) return true;
+  return activeRunId !== runId
+    && !activeVisualCheckpoints.has(runId)
+    && !activeNativePptCheckpoints.has(runId);
+}
+
+async function cancelAwaitingRun(runId) {
+  const checkpoint = awaitingCheckpoint(runId);
+  if (!checkpoint) return false;
+  const task = activeRunTasks.get(runId);
+  await checkpoint.cancel();
+  if (task) await task;
+  return true;
+}
 
 function send(response, status, body, contentType = "text/plain; charset=utf-8", headers = {}) {
   response.writeHead(status, { "content-type": contentType, "x-content-type-options": "nosniff", ...headers });
@@ -74,7 +101,7 @@ async function writeCurrentRunPointer(targetRunDir, summary) {
     runId: summary.runId,
     status: summary.status,
     originalName: summary.originalName,
-    active: ["normalizing", "running", "awaiting-visual-approval"].includes(summary.status),
+    active: ["normalizing", "running", "awaiting-visual-approval", "awaiting-native-preview-approval"].includes(summary.status),
     runDir: relativeRunDir,
     summary: `${relativeRunDir}/summary.json`,
     events: `${relativeRunDir}/events.jsonl`,
@@ -134,13 +161,14 @@ async function deleteRuns(runIds) {
     error.statusCode = 400;
     throw error;
   }
-  const activeTargets = uniqueRunIds.filter((runId) => activeRunId === runId || activeVisualCheckpoints.has(runId));
+  const activeTargets = uniqueRunIds.filter((runId) => !runIsDeletable(runId));
   if (activeTargets.length) {
-    const error = new Error("正在运行或等待表单确认的记录不能删除");
+    const error = new Error("仍在计算或交付的记录不能删除；等待确认的记录可以直接取消并删除");
     error.statusCode = 409;
     error.activeRunIds = activeTargets;
     throw error;
   }
+  for (const runId of uniqueRunIds) await cancelAwaitingRun(runId);
   const targets = uniqueRunIds.map((runId) => ({ runId, targetRunDir: checkedRunDir(runId) }));
   await Promise.all(targets.map(({ targetRunDir }) => readSummary(targetRunDir)));
   let currentPointer = null;
@@ -174,7 +202,7 @@ async function deleteRunBatch(request, response) {
   const value = JSON.parse((await readBody(request)).toString("utf8"));
   const allRuns = await listAllRuns();
   const runIds = value?.mode === "all-deletable"
-    ? allRuns.map((run) => run.runId).filter((runId) => activeRunId !== runId && !activeVisualCheckpoints.has(runId))
+    ? allRuns.map((run) => run.runId).filter(runIsDeletable)
     : value?.runIds;
   if (!Array.isArray(runIds)) return sendJson(response, 400, { error: "runIds 必须是数组" });
   try {
@@ -207,10 +235,12 @@ async function executeRun(targetRunDir, summary, normalizedPath, recorder) {
       contentDirector: unavailableDirector,
       visualDirector: unavailableDirector,
     };
+    let nativePreviewApprover = null;
     if (summary.visualCheckpointMode === "manual") {
       const checkpoint = createVisualDirectorCheckpoint({
         runDir: targetRunDir,
         onAwaiting: async (state) => {
+          if (activeRunId === summary.runId) activeRunId = null;
           summary.status = "awaiting-visual-approval";
           summary.visualCheckpoint = { stage: state.stage, status: state.status, updatedAt: state.updatedAt };
           await recorder.observe({
@@ -235,6 +265,39 @@ async function executeRun(targetRunDir, summary, normalizedPath, recorder) {
         candidateSets: candidateSetsForVisualDirector(input.candidateSets, input.previousResolution?.feedback ?? []),
       }));
     }
+    if (summary.nativePreviewCheckpointMode === "manual") {
+      const checkpoint = createNativePptCheckpoint({
+        runDir: targetRunDir,
+        onAwaiting: async (state) => {
+          if (activeRunId === summary.runId) activeRunId = null;
+          summary.status = "awaiting-native-preview-approval";
+          summary.nativePreview = {
+            status: state.status,
+            pageCount: state.preview.pageCount,
+            pptxPath: relativeArtifact(targetRunDir, state.preview.stagedPptx),
+            montagePath: state.preview.montage ? relativeArtifact(targetRunDir, state.preview.montage) : null,
+            pagePaths: state.preview.pageEvidence.map((item) => relativeArtifact(targetRunDir, item)),
+            updatedAt: state.updatedAt,
+          };
+          await recorder.observe({
+            source: "workbench", type: "manual-checkpoint", status: "awaiting-user", stage: "native-preview",
+            output: { pageCount: state.preview.pageCount, preview: summary.nativePreview.montagePath, stagedPptx: summary.nativePreview.pptxPath },
+          });
+          await writeSummary(targetRunDir, summary);
+        },
+        onResumed: async (state) => {
+          summary.status = "running";
+          summary.nativePreview = { ...summary.nativePreview, status: state.status, updatedAt: state.updatedAt };
+          await recorder.observe({
+            source: "workbench", type: "manual-checkpoint", status: "succeeded", stage: "native-preview",
+            output: { approved: true, pageCount: state.preview.pageCount },
+          });
+          await writeSummary(targetRunDir, summary);
+        },
+      });
+      activeNativePptCheckpoints.set(summary.runId, checkpoint);
+      nativePreviewApprover = checkpoint.pause;
+    }
     summary.provider = publicConfig;
     await writeSummary(targetRunDir, summary);
     const outputPptx = path.join(targetRunDir, "delivery", `${path.parse(summary.originalName).name || "PPagenT"}-v1.pptx`);
@@ -249,6 +312,7 @@ async function executeRun(targetRunDir, summary, normalizedPath, recorder) {
       providerInstance,
       providerLabel: "configured-deepseek-provider",
       observer: recorder.observe,
+      nativePreviewApprover,
       mode: "production",
       python: "",
       "overflow-tool": "",
@@ -297,20 +361,22 @@ async function executeRun(targetRunDir, summary, normalizedPath, recorder) {
     summary.resilienceReport = result.resilienceReport;
     summary.artifacts = artifacts;
   } catch (error) {
+    const cancelled = error?.code === "WORKBENCH_RUN_CANCELLED";
     await recorder.observe({
-      source: "workbench", type: "delivery", status: "failed", stage: error?.stage ?? "delivery",
+      source: "workbench", type: cancelled ? "cancellation" : "delivery", status: cancelled ? "cancelled" : "failed", stage: error?.stage ?? "delivery",
       durationMs: Date.now() - startedAt,
       error: { name: error?.name, code: error?.code, message: error?.message ?? String(error), details: error?.details },
     });
-    summary.status = "failed";
+    summary.status = cancelled ? "cancelled" : "failed";
     summary.finishedAt = new Date().toISOString();
     summary.durationMs = Date.now() - startedAt;
     summary.error = { name: error?.name, code: error?.code, stage: error?.stage, message: error?.message ?? String(error), details: error?.details };
   } finally {
     await recorder.flush();
     await writeSummary(targetRunDir, summary);
-    activeRunId = null;
+    if (activeRunId === summary.runId) activeRunId = null;
     activeVisualCheckpoints.delete(summary.runId);
+    activeNativePptCheckpoints.delete(summary.runId);
   }
 }
 
@@ -334,6 +400,7 @@ async function createRun(request, response, url) {
     schemaVersion: "1.0", runId, originalName, createdAt, status: "normalizing",
     skin: { id: "northeastern-university-001", name: "东北大学" },
     visualCheckpointMode: url.searchParams.get("visualCheckpoint") === "manual" ? "manual" : "auto",
+    nativePreviewCheckpointMode: url.searchParams.get("nativePreviewCheckpoint") === "auto" ? "auto" : "manual",
     artifacts: [],
   };
   await writeSummary(targetRunDir, summary);
@@ -355,7 +422,9 @@ async function createRun(request, response, url) {
     summary.status = "running";
     summary.normalizedFormat = normalized.format;
     await writeSummary(targetRunDir, summary);
-    executeRun(targetRunDir, summary, normalizedPath, recorder);
+    const task = executeRun(targetRunDir, summary, normalizedPath, recorder);
+    activeRunTasks.set(runId, task);
+    task.finally(() => activeRunTasks.delete(runId)).catch(() => {});
     return sendJson(response, 202, summary);
   } catch (error) {
     await recorder.observe({
@@ -375,7 +444,7 @@ function contentTypeFor(target) {
   const extension = path.extname(target).toLowerCase();
   return ({
     ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".json": "application/json; charset=utf-8",
-    ".md": "text/markdown; charset=utf-8", ".pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    ".md": "text/markdown; charset=utf-8", ".html": "text/html; charset=utf-8", ".pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
   })[extension] ?? "application/octet-stream";
 }
 
@@ -410,16 +479,43 @@ async function readVisualCheckpoint(targetRunDir) {
 async function submitVisualCheckpoint(request, response, runId) {
   const checkpoint = activeVisualCheckpoints.get(runId);
   if (!checkpoint) return sendJson(response, 409, { error: "该运行当前没有可继续的视觉导演表单调试暂停；服务重启后不能恢复已暂停任务" });
-  const value = JSON.parse((await readBody(request)).toString("utf8"));
-  const state = await checkpoint.submit(value.output);
-  return sendJson(response, 200, { checkpoint: { stage: state.stage, status: state.status, updatedAt: state.updatedAt } });
+  if (activeRunId && activeRunId !== runId) return sendJson(response, 409, { error: "另一个任务正在生成，请完成后再继续这个等待任务", activeRunId });
+  activeRunId = runId;
+  try {
+    const value = JSON.parse((await readBody(request)).toString("utf8"));
+    const state = await checkpoint.submit(value.output);
+    return sendJson(response, 200, { checkpoint: { stage: state.stage, status: state.status, updatedAt: state.updatedAt } });
+  } catch (error) {
+    if (activeRunId === runId) activeRunId = null;
+    throw error;
+  }
+}
+
+async function submitNativePptCheckpoint(response, runId) {
+  const checkpoint = activeNativePptCheckpoints.get(runId);
+  if (!checkpoint) return sendJson(response, 409, { error: "该运行当前没有可继续的 Native PPT 预览确认；服务重启后不能恢复已暂停任务" });
+  if (activeRunId && activeRunId !== runId) return sendJson(response, 409, { error: "另一个任务正在生成，请完成后再确认这个等待任务", activeRunId });
+  activeRunId = runId;
+  try {
+    const state = await checkpoint.approve();
+    return sendJson(response, 200, { checkpoint: { stage: state.stage, status: state.status, updatedAt: state.updatedAt } });
+  } catch (error) {
+    if (activeRunId === runId) activeRunId = null;
+    throw error;
+  }
 }
 
 const server = http.createServer(async (request, response) => {
   try {
     const url = new URL(request.url, `http://${host}:${port}`);
     if (request.method === "GET" && url.pathname === "/health") {
-      return sendJson(response, 200, { status: "ok", app: "ppagent-production-workbench", root: projectRoot, pid: process.pid });
+      return sendJson(response, 200, {
+        status: "ok",
+        app: "ppagent-production-workbench",
+        root: projectRoot,
+        pid: process.pid,
+        activeRunId,
+      });
     }
     if (request.method === "GET" && url.pathname === "/") {
       return send(response, 200, await fs.readFile(templatePath), "text/html; charset=utf-8", { "cache-control": "no-store" });
@@ -430,7 +526,7 @@ const server = http.createServer(async (request, response) => {
     }
     if (request.method === "GET" && url.pathname === "/api/workbench/runs") {
       const [runs, allRuns] = await Promise.all([listRuns(), listAllRuns()]);
-      const deletableRunCount = allRuns.filter((run) => activeRunId !== run.runId && !activeVisualCheckpoints.has(run.runId)).length;
+      const deletableRunCount = allRuns.filter((run) => runIsDeletable(run.runId)).length;
       return sendJson(response, 200, { runs, activeRunId, totalRunCount: allRuns.length, deletableRunCount });
     }
     if (request.method === "POST" && url.pathname === "/api/workbench/runs") return await createRun(request, response, url);
@@ -440,6 +536,9 @@ const server = http.createServer(async (request, response) => {
     const checkpointMatch = url.pathname.match(/^\/api\/workbench\/runs\/([a-z0-9-]+)\/checkpoint\/visual-director$/i);
     if (checkpointMatch && request.method === "GET") return sendJson(response, 200, await readVisualCheckpoint(runDir(checkpointMatch[1])));
     if (checkpointMatch && request.method === "POST") return await submitVisualCheckpoint(request, response, checkpointMatch[1]);
+    const nativeCheckpointMatch = url.pathname.match(/^\/api\/workbench\/runs\/([a-z0-9-]+)\/checkpoint\/native-ppt$/i);
+    if (nativeCheckpointMatch && request.method === "GET") return sendJson(response, 200, await readNativePptCheckpoint(runDir(nativeCheckpointMatch[1])));
+    if (nativeCheckpointMatch && request.method === "POST") return await submitNativePptCheckpoint(response, nativeCheckpointMatch[1]);
     const match = url.pathname.match(/^\/api\/workbench\/runs\/([a-z0-9-]+)(?:\/(events|trace|artifact))?(?:\/([a-z0-9-]+))?$/i);
     if (match) {
       const targetRunDir = runDir(match[1]);
@@ -456,8 +555,24 @@ const server = http.createServer(async (request, response) => {
 
 if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error(`invalid --port: ${port}`);
 await fs.mkdir(runsRoot, { recursive: true });
-const existingRuns = await listRuns();
-if (existingRuns[0]) await writeSummary(runDir(existingRuns[0].runId), existingRuns[0]);
+const existingRuns = await listAllRuns();
+const interruptedStatuses = new Set([
+  "normalizing", "running", "awaiting-visual-approval", "awaiting-native-preview-approval",
+]);
+for (const existingRun of existingRuns) {
+  if (!interruptedStatuses.has(existingRun.status)) continue;
+  await writeSummary(runDir(existingRun.runId), {
+    ...existingRun,
+    status: "failed",
+    finishedAt: new Date().toISOString(),
+    error: {
+      name: "WorkbenchProcessInterrupted",
+      code: "WORKBENCH_PROCESS_INTERRUPTED",
+      stage: existingRun.status,
+      message: "工作台进程在任务完成前中断；该任务不能从内存检查点恢复，请新建任务重试",
+    },
+  });
+}
 server.listen(port, host, () => process.stdout.write(`http://${host}:${port}/\n`));
 
 export { currentRunPath, projectRoot, runsRoot, server };

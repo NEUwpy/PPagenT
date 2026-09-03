@@ -25,6 +25,59 @@ function plainInline(value) {
     .trim();
 }
 
+function normalizedStructuralToken(value) {
+  return String(value ?? "").replace(/\s+/g, "").toUpperCase();
+}
+
+function structuralTokens(source) {
+  // Compact quantity formulae are semantic structure, not decorative copy.
+  // If a page explicitly claims the paragraph containing one, the controlled
+  // Markdown must keep the formula so the visual director can see its levels.
+  return [...new Set((String(source ?? "").match(/(?:\d+|[A-Za-z])(?:\s*\+\s*(?:\d+|[A-Za-z])){1,5}/g) ?? [])
+    .map(normalizedStructuralToken)
+    .filter((token) => token.length >= 3))];
+}
+
+function escapedRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function structuralTokenCovered(token, visible) {
+  if (visible.includes(token)) return true;
+  const parts = token.split("+").filter(Boolean);
+  if (parts.length < 2) return false;
+  // A nested formula may be expanded in controlled Markdown instead of being
+  // copied literally, e.g. “1条路线 / 1个基地 / 6处场馆 / N个配套点”.
+  // Count that as preserved only when every formula term remains attached to
+  // a Chinese quantity classifier, not merely when stray digits appear.
+  const chineseNumber = { 1: "一", 2: "二", 3: "三", 4: "四", 5: "五", 6: "六", 7: "七", 8: "八", 9: "九", 10: "十" };
+  return parts.every((part) => {
+    const alternatives = [part, chineseNumber[part]].filter(Boolean).map(escapedRegExp).join("|");
+    return new RegExp(
+      `(?:${alternatives})(?:个|条|类|处|项|座|组|层|步|阶段|场景|模块|部分|核心|地)`,
+      "i",
+    ).test(visible);
+  });
+}
+
+function assertStructuralTokenCoverage(page, parsedPage, structuralSourceText = page.sourceText) {
+  const required = structuralTokens(structuralSourceText);
+  if (!required.length) return;
+  const visible = normalizedStructuralToken([
+    page.title,
+    parsedPage.narrativeJob,
+    ...page.items.flatMap((item) => [item.title, item.body, ...(item.points ?? [])]),
+  ].join("\n"));
+  const missing = required.filter((token) => !structuralTokenCovered(token, visible));
+  if (missing.length) {
+    fail("CONTENT_HIERARCHY_COVERAGE_FAILED", `页面“${page.title}”遗漏了来源中的数量层级结构`, {
+      pageId: page.pageId,
+      missingStructuralTokens: missing,
+      guidance: "在 H1 页面内用 H2/H3/列表保留总结构及其下级数量组；不得只写泛化概括",
+    });
+  }
+}
+
 function quoteText(lines) {
   return plainInline(lines
     .filter((line) => /^\s*>/.test(line))
@@ -194,8 +247,8 @@ function locatePageSources(rawMarkdown, pageMetadata) {
     }
     const ranges = pageMetadata.map((metadata, pageIndex) => {
       const ids = metadata.sourceBlockIds;
-      if (ids.length < 1 || ids.length > 2 || new Set(ids).size !== ids.length) {
-        fail("CONTENT_METADATA_MISMATCH", `第 ${pageIndex + 1} 页 sourceBlockIds 必须包含一至两个不同的原稿段落 ID`, {
+      if (ids.length < 1 || new Set(ids).size !== ids.length) {
+        fail("CONTENT_METADATA_MISMATCH", `第 ${pageIndex + 1} 页 sourceBlockIds 必须包含至少一个且彼此不同的原稿段落 ID`, {
           pageId: metadata.pageId,
           sourceBlockIds: ids,
         });
@@ -208,29 +261,34 @@ function locatePageSources(rawMarkdown, pageMetadata) {
           missingSourceBlockIds: missing,
         });
       }
-      const first = selected.reduce((left, right) => (left.start <= right.start ? left : right));
-      const last = selected.reduce((left, right) => (left.start >= right.start ? left : right));
+      const ordered = [...selected].sort((left, right) => left.start - right.start);
       if (explicitPages) {
         const section = explicitSections[pageIndex];
-        if (first.start < section.startIndex || last.end > section.endIndex) {
+        if (ordered.some((block) => block.start < section.startIndex || block.end > section.endIndex)) {
           fail("CONTENT_METADATA_MISMATCH", `第 ${pageIndex + 1} 页来源段落不属于对应的显式页面`, {
             pageId: metadata.pageId,
             sourceBlockIds: ids,
           });
         }
       }
-      const sourceAnchors = [...new Set(selected.map(canonicalBlockAnchor).filter(Boolean))];
+      const sourceAnchors = ordered.map(canonicalBlockAnchor).filter(Boolean);
+      const logicEvidence = metadata.logicIntent?.evidenceFragments ?? [];
+      const evidenceBlocks = ordered.filter((block) => logicEvidence.some((fragment) => (
+        typeof fragment === "string" && fragment && block.text.includes(fragment)
+      )));
       return {
-        start: first.start,
-        end: last.end,
-        anchorStart: first.start,
-        anchorEnd: last.end,
+        sourceText: ordered.map((block) => block.text).join("\n\n"),
+        structuralSourceText: (evidenceBlocks.length ? evidenceBlocks : ordered)
+          .map((block) => block.text).join("\n\n"),
+        evidenceSignature: ordered.map((block) => block.id).join("|"),
         pageId: metadata.pageId,
         sourceAnchors,
       };
     });
     ranges.forEach((range, index) => {
-      const duplicate = duplicateRange(ranges, range, index);
+      const duplicate = ranges.slice(0, index).find((candidate) => (
+        candidate.evidenceSignature === range.evidenceSignature
+      ));
       if (duplicate) {
         fail("CONTENT_METADATA_MISMATCH", `第 ${index + 1} 页与前页使用了完全相同的来源证据范围`, {
           previousPageId: duplicate.pageId,
@@ -239,7 +297,8 @@ function locatePageSources(rawMarkdown, pageMetadata) {
       }
     });
     return ranges.map((range) => ({
-      sourceText: source.slice(range.start, range.end).trim(),
+      sourceText: range.sourceText,
+      structuralSourceText: range.structuralSourceText,
       sourceAnchors: range.sourceAnchors,
     }));
   }
@@ -389,6 +448,29 @@ const HUMAN_RELATION_FIELDS = new Set([
   "internalTitle", "externalTitle",
 ]);
 
+// relationBindings.type is the machine contract used by PageContent. It is
+// deliberately narrower than the open-ended Logic taxonomy. Simple Logic
+// names such as parallel, sequence, hub, progression, layered, or network are
+// expressed by Markdown nodes and must not leak into structuredData.type.
+const SUPPORTED_STRUCTURED_DATA_TYPES = new Set([
+  "hierarchy",
+  "convergence",
+  "problem-solution",
+  "problem-method-result",
+  "argument-evidence",
+  "multi-set-common-intersection",
+  "iceberg-visible-hidden",
+  "decision-tradeoff",
+  "internal-external-ecosystem",
+  "hub-tiered-ecosystem",
+  "branching-decision",
+  "branching-scenario",
+  "goal-strategy-metrics",
+  "role-stage",
+  "matrix",
+  "matrix-grid",
+]);
+
 function referenceTargetAllowed(path, reference) {
   const parts = decodePointer(path);
   const key = parts.at(-1);
@@ -405,6 +487,13 @@ function compileRelationBindings(bindings, page, parsedPage) {
   if (!bindings) return undefined;
   if (typeof bindings.type !== "string" || !bindings.type) {
     fail("CONTENT_RELATION_COMPILE_FAILED", `页面“${page.title}”的 relationBindings 缺少 type`);
+  }
+  if (!SUPPORTED_STRUCTURED_DATA_TYPES.has(bindings.type)) {
+    fail(
+      "CONTENT_RELATION_COMPILE_FAILED",
+      `页面“${page.title}”把 Logic 名“${bindings.type}”当成了 structuredData.type；普通 Logic 应直接由 Markdown 节点表达`,
+      { relationType: bindings.type },
+    );
   }
   const structuredData = { type: bindings.type };
   for (const literal of bindings.literals ?? []) {
@@ -450,6 +539,9 @@ export function compileContentDirectorDraft(rawMarkdown, draft, { repairMode = f
     }
     const items = parsedPage.itemBlocks.map((block, itemIndex) => ({
       ...parseItemBlock(block, meta.pageId, itemIndex),
+      ...(meta.itemMetadata?.[itemIndex]?.logicIntent
+        ? { logicIntent: meta.itemMetadata[itemIndex].logicIntent }
+        : {}),
       ...(meta.itemMetadata?.[itemIndex]?.emphasis !== undefined
         ? { emphasis: meta.itemMetadata[itemIndex].emphasis }
         : {}),
@@ -465,6 +557,47 @@ export function compileContentDirectorDraft(rawMarkdown, draft, { repairMode = f
       items,
       sourceText: sourceRecords[index].sourceText,
     };
+    for (const [itemIndex, item] of page.items.entries()) {
+      let evidence = item.logicIntent?.evidenceFragments ?? [];
+      const invalidEvidence = evidence.filter((fragment) => !page.sourceText.includes(fragment));
+      if (repairMode && (invalidEvidence.length || evidence.length > 3)) {
+        evidence = [...new Set(evidence.filter((fragment) => page.sourceText.includes(fragment)))].slice(0, 3);
+        item.logicIntent = { ...item.logicIntent };
+        if (evidence.length) item.logicIntent.evidenceFragments = evidence;
+        else delete item.logicIntent.evidenceFragments;
+        meta.itemMetadata[itemIndex] = {
+          ...meta.itemMetadata[itemIndex],
+          logicIntent: item.logicIntent,
+        };
+        repairActions.push({
+          pageId: page.pageId,
+          itemId: item.id,
+          type: "canonicalize-item-logic-evidence",
+          removed: invalidEvidence,
+          evidenceFragments: evidence,
+        });
+      }
+      if (repairMode && item.logicIntent && !evidence.length) {
+        delete item.logicIntent;
+        const { logicIntent: _discardedLogicIntent, ...remainingItemMetadata } = meta.itemMetadata[itemIndex];
+        meta.itemMetadata[itemIndex] = remainingItemMetadata;
+        repairActions.push({
+          pageId: page.pageId,
+          itemId: item.id,
+          type: "drop-unverifiable-optional-item-logic",
+          message: "H2 的可选 Logic 没有可核对证据，保留正文并删除该局部 Logic 元数据",
+        });
+        continue;
+      }
+      if (evidence.some((fragment) => !page.sourceText.includes(fragment))) {
+        fail("CONTENT_METADATA_MISMATCH", `页面“${page.title}”的 H2 Logic 证据不在来源范围内`, {
+          pageId: page.pageId,
+          itemId: item.id,
+          evidenceFragments: evidence,
+        });
+      }
+    }
+    assertStructuralTokenCoverage(page, parsedPage, sourceRecords[index].structuralSourceText);
     let structuredData;
     try {
       structuredData = compileRelationBindings(meta.relationBindings, page, parsedPage);
@@ -478,10 +611,26 @@ export function compileContentDirectorDraft(rawMarkdown, draft, { repairMode = f
       delete meta.relationBindings;
     }
     if (structuredData) page.structuredData = structuredData;
+    if (repairMode && page.logicIntent?.logicId === "problem-solution"
+      && !new Set(["problem-solution", "problem-method-result"]).has(page.structuredData?.type)) {
+      const polarities = new Set(page.items.map((item) => item.polarity).filter(Boolean));
+      const fallbackLogicId = polarities.has("negative") && polarities.has("positive")
+        ? "comparison"
+        : "parallel";
+      page.logicIntent = { ...page.logicIntent, logicId: fallbackLogicId };
+      meta.logicIntent = page.logicIntent;
+      repairActions.push({
+        pageId: page.pageId,
+        type: "downgrade-unbound-required-logic",
+        fromLogicId: "problem-solution",
+        toLogicId: fallbackLogicId,
+        message: "Markdown 节点未提供问题—方案资产要求的完整机器关系，保留原页内容并改用无需伪造关系的普通 Logic",
+      });
+    }
     let evidence = page.logicIntent?.evidenceFragments ?? [];
     const invalidEvidence = evidence.filter((fragment) => !page.sourceText.includes(fragment));
-    if (repairMode && invalidEvidence.length) {
-      const valid = evidence.filter((fragment) => page.sourceText.includes(fragment));
+    if (repairMode && (!evidence.length || invalidEvidence.length || evidence.length > 3)) {
+      const valid = evidence.filter((fragment) => page.sourceText.includes(fragment)).slice(0, 3);
       const canonical = meta.sourceAnchors.filter((anchor) => page.sourceText.includes(anchor));
       evidence = [...new Set([...valid, ...canonical])].slice(0, 3);
       page.logicIntent = { ...page.logicIntent, evidenceFragments: evidence };

@@ -7,7 +7,11 @@ import {
   exportTemplateMappedQa,
   prepareTemplateMappedStarter,
 } from "../../asset-runtime/template-utils.mjs";
-import { closeHtmlComponentRuntime, isSkinOnlyAsset, renderStructureAsset } from "../assets.mjs";
+import {
+  closeHtmlComponentRuntime,
+  isSkinOnlyAsset,
+  renderStructureAsset,
+} from "../assets.mjs";
 import { fitChineseTextToFrame } from "../../render/chinese-typography.mjs";
 import { loadCompositionLayouts } from "../../composition/layouts.mjs";
 import { renderPageComposition } from "../../render/page-composition.mjs";
@@ -32,6 +36,15 @@ function fitSkinText(value, frame, roleName, { preferSemanticBreaks = false } = 
     throw error;
   }
   return result;
+}
+
+function tagComponentRuntimeOverflow(error, page) {
+  if (String(error?.message ?? "").includes("组合排版无法在安全 box 内完整呈现")) {
+    error.code = "COMPONENT_RUNTIME_OVERFLOW";
+    error.pageId = page.content.pageId;
+    error.assetId = page.payload.assetId;
+  }
+  return error;
 }
 
 function sourceNotes(page, manuscriptSource, templateSourceKind) {
@@ -225,7 +238,7 @@ export async function renderNortheasternUniversityDeck({
   const presentation = await PresentationFile.importPptx(await FileBlob.load(starterPptx));
   const slides = await applyTemplateMappedRecipes(presentation, recipes);
   const layouts = await loadCompositionLayouts(root);
-
+  const componentOverflows = [];
   try {
     for (const [index, page] of pages.entries()) {
       if (!page.composition) {
@@ -247,14 +260,29 @@ export async function renderNortheasternUniversityDeck({
         try {
           await structureRenderer(slides[index], page.payload, northeasternUniversitySkin, componentFrame, root);
         } catch (error) {
-          if (String(error?.message ?? "").includes("组合排版无法在安全 box 内完整呈现")) {
-            error.code = "COMPONENT_RUNTIME_OVERFLOW";
-            error.pageId = page.content.pageId;
-            error.assetId = page.payload.assetId;
-          }
-          throw error;
+          const tagged = tagComponentRuntimeOverflow(error, page);
+          if (tagged.code !== "COMPONENT_RUNTIME_OVERFLOW") throw tagged;
+          componentOverflows.push(tagged);
         }
       }
+    }
+
+    if (componentOverflows.length) {
+      const pageIds = [...new Set(componentOverflows.map((error) => error.pageId))];
+      const first = componentOverflows[0];
+      const error = new Error(
+        `${pageIds.length} 个结构组件在正式字号下溢出：${componentOverflows.map((item) => item.message).join(" | ")}`,
+      );
+      error.code = "COMPONENT_RUNTIME_OVERFLOW";
+      error.pageId = first.pageId;
+      error.pageIds = pageIds;
+      error.assetId = first.assetId;
+      error.overflows = componentOverflows.map((item) => ({
+        pageId: item.pageId,
+        assetId: item.assetId,
+        message: item.message,
+      }));
+      throw error;
     }
 
     await fs.mkdir(path.dirname(outputPptx), { recursive: true });

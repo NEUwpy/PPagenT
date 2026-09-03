@@ -2,7 +2,6 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import {
   buildPageIntentFromContent,
-  computeContentStats,
   enrichPageIntent,
   validateStructuredDataReferences,
 } from "../content/page-content.mjs";
@@ -146,7 +145,6 @@ function assertContentOutput(validators, output, rawMarkdown) {
     throw new WorkflowError("DIRECTOR_OUTPUT_INVALID", "content-director", "内容导演必须输出 deckPlan 和 pageContents");
   }
   assertSchema(validators, validators.validateDeckPlan, output.deckPlan, "DeckPlan", "content-director");
-  const capacityIssues = [];
   output.pageContents.forEach((page, index) => {
     assertSchema(validators, validators.validatePageContent, page, `PageContent[${index}]`, "content-director");
     const structuredReferenceIssues = validateStructuredDataReferences(page);
@@ -158,11 +156,14 @@ function assertContentOutput(validators, output, rawMarkdown) {
         { pageId: page.pageId, issues: structuredReferenceIssues },
       );
     }
-    if (typeof page.sourceText !== "string" || !page.sourceText.trim() || !rawMarkdown.includes(page.sourceText)) {
+    const sourceFragments = typeof page.sourceText === "string"
+      ? page.sourceText.split(/\n\s*\n/).map((fragment) => fragment.trim()).filter(Boolean)
+      : [];
+    if (!sourceFragments.length || sourceFragments.some((fragment) => !rawMarkdown.includes(fragment))) {
       throw new WorkflowError(
         "SOURCE_GROUNDING_FAILED",
         "content-director",
-        `${page.pageId} 的 sourceText 不是原稿中的可核对文本`,
+        `${page.pageId} 的 sourceText 含有无法在原稿中核对的文本片段`,
         { pageId: page.pageId },
       );
     }
@@ -199,30 +200,7 @@ function assertContentOutput(validators, output, rawMarkdown) {
         { pageId: page.pageId, componentSpecificIds },
       );
     }
-    const stats = computeContentStats(page);
-    const estimatedTotal = stats.avgItemChars * stats.itemCount;
-    if (stats.itemCount > 1 && (
-      stats.itemCount > 13 || estimatedTotal > 240 || stats.maxItemChars > 80
-    )) {
-      capacityIssues.push({
-        pageId: page.pageId,
-        itemCount: stats.itemCount,
-        estimatedTotalChars: estimatedTotal,
-        maxItemChars: stats.maxItemChars,
-        required: { maxItems: 13, maxTotalChars: 240, maxItemChars: 80 },
-        guidance: "压缩每项正文与分点、删除重复表达，或按叙事职责拆成两页；不得缩小字号硬塞",
-      });
-    }
   });
-
-  if (capacityIssues.length) {
-    throw new WorkflowError(
-      "CONTENT_CAPACITY_EXCEEDED",
-      "content-director",
-      `${capacityIssues.length} 个页面的多项内容密度超过正式字号与已登记版式的通用容量`,
-      { ...capacityIssues[0], issues: capacityIssues },
-    );
-  }
 
   const planIds = output.deckPlan.pages.map((page) => page.pageId);
   const contentIds = output.pageContents.map((page) => page.pageId);
@@ -285,6 +263,25 @@ function lockCandidateSetsToBodyFallback(candidateSets, pageIds) {
       },
     };
   });
+}
+
+function recordNativePreviewFallbacks(fallbackEvents, stagingResult) {
+  for (const fallback of stagingResult?.renderFallbacks ?? []) {
+    const event = {
+      stage: "native-preview",
+      code: fallback.code ?? "render-fallback",
+      trigger: fallback.from ?? "resolved-layout",
+      message: `页面组合从 ${fallback.from ?? "unknown"} 降级为 ${fallback.to ?? "unknown"}`,
+      pageIds: fallback.pageId ? [fallback.pageId] : [],
+      from: fallback.from,
+      to: fallback.to,
+    };
+    const key = JSON.stringify([event.stage, event.code, event.pageIds, event.from, event.to]);
+    const duplicated = fallbackEvents.some((existing) => (
+      JSON.stringify([existing.stage, existing.code, existing.pageIds, existing.from, existing.to]) === key
+    ));
+    if (!duplicated) fallbackEvents.push(event);
+  }
 }
 
 export function buildDeterministicVisualFallback({
@@ -856,6 +853,38 @@ function visualResolutionAccepted(resolved) {
   return resolved?.status === "accepted";
 }
 
+function replacePlanPage(plan, replacement) {
+  return {
+    ...plan,
+    pages: plan.pages.map((page) => page.pageId === replacement.pageId ? replacement : page),
+  };
+}
+
+function firstLegalCompositionAlternative(resolved, pageId, intentId) {
+  const feedback = resolved?.feedback?.find((item) => item.pageId === pageId);
+  const alternative = feedback?.legalAlternatives?.[0];
+  if (!alternative) return null;
+  return {
+    pageId,
+    intentId,
+    ...alternative,
+  };
+}
+
+function applyLegalCompositionAlternatives({ resolved, compositionPlan, visualPlan }) {
+  let nextPlan = compositionPlan;
+  const changedPageIds = [];
+  for (const feedback of resolved?.feedback ?? []) {
+    if (!feedback?.pageId) continue;
+    const intentId = visualPlan?.pages?.find((item) => item.pageId === feedback.pageId)?.intentId;
+    const alternative = firstLegalCompositionAlternative(resolved, feedback.pageId, intentId);
+    if (!alternative) continue;
+    nextPlan = replacePlanPage(nextPlan, alternative);
+    changedPageIds.push(feedback.pageId);
+  }
+  return { compositionPlan: nextPlan, changedPageIds };
+}
+
 function capacityIssuesFromCandidateSets(candidateSets) {
   return candidateSets.flatMap((set) => (
     set.gap?.type === "content-capacity-gap"
@@ -911,6 +940,29 @@ async function assertRenderResult(result, pageCount) {
   }
 }
 
+async function assertNativePreviewResult(result, pageCount) {
+  if (!result || result.status !== "ready-for-approval"
+    || typeof result.stagedPptx !== "string" || !Array.isArray(result.pageEvidence)
+    || result.pageEvidence.length !== pageCount
+    || result.pageCount !== pageCount) {
+    throw new WorkflowError(
+      "NATIVE_PREVIEW_INVALID",
+      "native-preview",
+      "Native PPT 暂存阶段必须返回完整 PPTX 和逐页渲染证据",
+      { pageCount, result },
+    );
+  }
+  for (const target of [result.stagedPptx, ...result.pageEvidence]) await fs.access(path.resolve(target));
+  if (!result.qualityAudit || result.qualityAudit.status !== "passed") {
+    throw new WorkflowError(
+      "NATIVE_PREVIEW_QUALITY_GATE_MISSING",
+      "native-preview",
+      "Native PPT 暂存结果未通过确定性质量门禁",
+      { qualityAudit: result.qualityAudit ?? null },
+    );
+  }
+}
+
 async function persistContentAttempt(outputDir, attempt, output, review) {
   const attemptDir = path.join(outputDir, "content", `attempt-${String(attempt).padStart(2, "0")}`);
   if (typeof output.contentDraftMarkdown === "string") {
@@ -954,8 +1006,8 @@ export async function runDirectorWorkflow(options) {
     throw new WorkflowError("OUTPUT_DIR_REQUIRED", "bootstrap", "缺少工作流输出目录");
   }
   const root = path.resolve(options.root ?? process.cwd());
-  const maxContentAttempts = options.maxContentAttempts ?? (developmentReview ? 3 : 2);
-  const maxVisualAttempts = options.maxVisualAttempts ?? (developmentReview ? 3 : 1);
+  const maxContentAttempts = options.maxContentAttempts ?? 6;
+  const maxVisualAttempts = options.maxVisualAttempts ?? 3;
   const semanticRefinementEnabled = options.allowSemanticRefinement === true;
   const guaranteeDelivery = options.guaranteeDelivery === true;
   const fallbackEvents = [];
@@ -967,9 +1019,50 @@ export async function runDirectorWorkflow(options) {
   await fs.mkdir(outputDir, { recursive: true });
 
   let contentOutput = null;
+  let lastValidContentOutput = null;
   let previousContentDraft = null;
   let contentReview = null;
   let contentAttempt = 0;
+  const recoverableContentError = (error) => new Set([
+    "MODEL_JSON_INVALID",
+    "MODEL_REQUEST_TIMEOUT",
+    "MODEL_REQUEST_FAILED",
+    "MODEL_CONTENT_EMPTY",
+    "DIRECTOR_PROVIDER_UNAVAILABLE",
+    "CONTENT_MARKDOWN_INVALID",
+    "CONTENT_METADATA_MISMATCH",
+    "CONTENT_RELATION_COMPILE_FAILED",
+    "CONTENT_HIERARCHY_COVERAGE_FAILED",
+    "CONTENT_CAPACITY_EXCEEDED",
+    "SCHEMA_VALIDATION_FAILED",
+  ]).has(error?.code) || error?.name === "TypeError" || error?.name === "AbortError";
+  const contentRevisionReview = (error) => ({
+    verdict: "revise",
+    summary: error.message,
+    issues: [{
+      severity: "error",
+      category: "content-output-invalid",
+      status: "open",
+      evidence: error.message,
+      targets: error.details?.pageId ? [error.details.pageId] : [],
+      errorCode: error.code,
+      details: error.details ?? {},
+    }],
+  });
+  async function applyDeterministicContentFallback(error) {
+    contentOutput = normalizeContentOutput(buildDeterministicContentFallback(input.rawMarkdown, {
+      reason: `${error?.code ?? error?.name ?? "CONTENT_FAILURE"}: ${error?.message ?? String(error)}`,
+    }));
+    assertContentOutput(validators, contentOutput, input.rawMarkdown);
+    fallbackEvents.push({
+      stage: "content-director",
+      code: "deterministic-content-fallback",
+      trigger: error?.code ?? error?.name ?? "unknown",
+      message: error?.message ?? String(error),
+      pageIds: contentOutput.pageContents.map((page) => page.pageId),
+    });
+    await persistContentAttempt(outputDir, contentAttempt + 1, contentOutput, null);
+  }
   async function executeContentAttempt(extra = {}) {
     contentAttempt += 1;
     try {
@@ -996,6 +1089,7 @@ export async function runDirectorWorkflow(options) {
       throw error;
     }
     assertContentOutput(validators, contentOutput, input.rawMarkdown);
+    lastValidContentOutput = structuredClone(contentOutput);
     await persistContentAttempt(outputDir, contentAttempt, contentOutput, null);
 
     if (!developmentReview) return true;
@@ -1011,50 +1105,55 @@ export async function runDirectorWorkflow(options) {
     await persistContentAttempt(outputDir, contentAttempt, contentOutput, contentReview);
     return reviewPasses(contentReview);
   }
+  async function executeContentRecovery(extra = {}) {
+    while (contentAttempt < maxContentAttempts) {
+      try {
+        return await executeContentAttempt(extra);
+      } catch (error) {
+        if (!recoverableContentError(error)) throw error;
+        if (contentAttempt === maxContentAttempts) {
+          if (!guaranteeDelivery) throw error;
+          if (lastValidContentOutput && (extra.capacityFeedback || extra.contractFeedback)) {
+            contentOutput = structuredClone(lastValidContentOutput);
+            fallbackEvents.push({
+              stage: "content-director",
+              code: "content-revision-exhausted-preserved-valid-draft",
+              trigger: error?.code ?? error?.name ?? "unknown",
+              message: "候选阶段的定向内容修订未能收口，保留上一份已通过语义、来源和结构校验的内容稿，后续仅对装不下的页面使用排版兜底",
+              pageIds: contentOutput.pageContents.map((page) => page.pageId),
+            });
+            return true;
+          }
+          await applyDeterministicContentFallback(error);
+          return true;
+        }
+        contentReview = contentRevisionReview(error);
+      }
+    }
+    return false;
+  }
   while (contentAttempt < maxContentAttempts) {
     try {
       if (await executeContentAttempt()) break;
     } catch (error) {
-      const recoverableContentError = new Set([
-        "MODEL_JSON_INVALID",
-        "MODEL_REQUEST_TIMEOUT",
-        "MODEL_REQUEST_FAILED",
-        "MODEL_CONTENT_EMPTY",
-        "DIRECTOR_PROVIDER_UNAVAILABLE",
-        "CONTENT_MARKDOWN_INVALID",
-        "CONTENT_METADATA_MISMATCH",
-        "CONTENT_RELATION_COMPILE_FAILED",
-        "CONTENT_CAPACITY_EXCEEDED",
-      ]).has(error?.code) || error?.name === "TypeError" || error?.name === "AbortError";
-      if (recoverableContentError && contentAttempt === maxContentAttempts && guaranteeDelivery) {
-        contentOutput = normalizeContentOutput(buildDeterministicContentFallback(input.rawMarkdown, {
-          reason: `${error?.code ?? error?.name ?? "CONTENT_FAILURE"}: ${error?.message ?? String(error)}`,
-        }));
-        assertContentOutput(validators, contentOutput, input.rawMarkdown);
+      if (error?.code === "CONTENT_CAPACITY_EXCEEDED"
+        && contentOutput && contentAttempt === maxContentAttempts && guaranteeDelivery) {
+        await persistContentAttempt(outputDir, contentAttempt, contentOutput, null);
         fallbackEvents.push({
           stage: "content-director",
-          code: "deterministic-content-fallback",
-          trigger: error?.code ?? error?.name ?? "unknown",
-          message: error?.message ?? String(error),
-          pageIds: contentOutput.pageContents.map((page) => page.pageId),
+          code: "content-capacity-deferred-to-layout",
+          trigger: error.code,
+          message: "内容恢复结果只剩通用容量问题；保留已通过语义与来源校验的内容稿，交由精确候选容量和正文兜底继续收口",
+          pageIds: [...new Set((error.details?.issues ?? []).map((issue) => issue.pageId).filter(Boolean))],
         });
-        await persistContentAttempt(outputDir, contentAttempt + 1, contentOutput, null);
         break;
       }
-      if (!recoverableContentError || contentAttempt === maxContentAttempts) throw error;
-      contentReview = {
-        verdict: "revise",
-        summary: error.message,
-        issues: [{
-          severity: "error",
-          category: "content-output-invalid",
-          status: "open",
-          evidence: error.message,
-          targets: error.details?.pageId ? [error.details.pageId] : [],
-          errorCode: error.code,
-          details: error.details ?? {},
-        }],
-      };
+      if (recoverableContentError(error) && contentAttempt === maxContentAttempts && guaranteeDelivery) {
+        await applyDeterministicContentFallback(error);
+        break;
+      }
+      if (!recoverableContentError(error) || contentAttempt === maxContentAttempts) throw error;
+      contentReview = contentRevisionReview(error);
       continue;
     }
     if (contentAttempt === maxContentAttempts) {
@@ -1126,7 +1225,7 @@ export async function runDirectorWorkflow(options) {
             details: { issues: capacityIssues },
           }],
         };
-        await executeContentAttempt({ capacityFeedback: capacityIssues });
+        await executeContentRecovery({ capacityFeedback: capacityIssues });
         attempt -= 1;
         continue;
       }
@@ -1153,7 +1252,7 @@ export async function runDirectorWorkflow(options) {
             details: { gaps: contractGaps },
           }],
         };
-        await executeContentAttempt({ contractFeedback: contractGaps });
+        await executeContentRecovery({ contractFeedback: contractGaps });
         attempt -= 1;
         continue;
       }
@@ -1397,6 +1496,35 @@ export async function runDirectorWorkflow(options) {
         previousResolution: resolved,
       });
       visualResolution = resolved;
+      if (!visualResolutionAccepted(resolved)) {
+        const alternativeResult = applyLegalCompositionAlternatives({
+          resolved,
+          compositionPlan: visual.compositionPlan,
+          visualPlan: visual.visualPlan,
+        });
+        if (alternativeResult.changedPageIds.length) {
+          visual = { ...visual, compositionPlan: alternativeResult.compositionPlan };
+          resolved = await options.visualResolver({
+            root,
+            skinId: input.skinId,
+            deckPlan: presentationOutput.deckPlan,
+            pageContents: presentationOutput.pageContents,
+            visualPlan: visual.visualPlan,
+            compositionPlan: visual.compositionPlan,
+            pageIntents: visual.pageIntents,
+            candidateSets: visual.candidateSets,
+            previousResolution: resolved,
+          });
+          visualResolution = resolved;
+          fallbackEvents.push({
+            stage: "visual-resolution",
+            code: "legal-composition-fallback",
+            trigger: "deterministic-body-composition-not-accepted",
+            message: "正文兜底的默认文字组合仍无法承载内容，程序采用复核器返回的合法文字组合后重新复核",
+            pageIds: alternativeResult.changedPageIds,
+          });
+        }
+      }
       fallbackEvents.push({
         stage: "visual-resolution",
         code: "deterministic-body-fallback",
@@ -1465,7 +1593,30 @@ export async function runDirectorWorkflow(options) {
     }
 
     const attemptDir = path.join(outputDir, "visual", `attempt-${String(attempt).padStart(2, "0")}`);
+    let stagingResult = null;
     try {
+      if (options.stagingRenderer) {
+        stagingResult = await options.stagingRenderer({
+          root,
+          skinId: input.skinId,
+          outputDir: path.join(attemptDir, "native-preview"),
+          deckPlan: presentationOutput.deckPlan,
+          pageContents: presentationOutput.pageContents,
+          visualPlan: visual.visualPlan,
+          compositionPlan: visual.compositionPlan,
+          pageIntents: visual.pageIntents,
+          layoutDecisions: resolved.layoutDecisions,
+          renderPayloads: resolved.renderPayloads,
+        });
+        await assertNativePreviewResult(stagingResult, presentationOutput.pageContents.length);
+        recordNativePreviewFallbacks(fallbackEvents, stagingResult);
+        if (options.nativePreviewApprover) {
+          stagingResult = await options.nativePreviewApprover(stagingResult);
+          if (stagingResult?.approvalStatus !== "approved") {
+            throw new WorkflowError("NATIVE_PREVIEW_NOT_APPROVED", "native-preview", "Native PPT 预览尚未确认，不能交付");
+          }
+        }
+      }
       renderResult = await options.renderer({
         root,
         skinId: input.skinId,
@@ -1477,31 +1628,46 @@ export async function runDirectorWorkflow(options) {
         pageIntents: visual.pageIntents,
         layoutDecisions: resolved.layoutDecisions,
         renderPayloads: resolved.renderPayloads,
+        stagingResult,
       });
     } catch (error) {
       if (error?.code === "COMPONENT_RUNTIME_OVERFLOW" && guaranteeDelivery) {
-        const bodyIndexes = presentationOutput.pageContents
-          .map((page, index) => (!isShellPage(page) ? index : -1))
-          .filter((index) => index >= 0);
+        const overflowPageIds = [...new Set(
+          (Array.isArray(error.pageIds) && error.pageIds.length ? error.pageIds : [error.pageId]).filter(Boolean),
+        )];
+        const overflowEntries = overflowPageIds.map((pageId) => ({
+          pageId,
+          sourceIndex: presentationOutput.pageContents.findIndex((page) => page.pageId === pageId),
+          bodyIndex: bodyPageContents.findIndex((page) => page.pageId === pageId),
+          deckPage: bodyDeckPlan.pages.find((page) => page.pageId === pageId),
+        }));
+        if (!overflowEntries.length || overflowEntries.some((entry) => entry.sourceIndex < 0 || entry.bodyIndex < 0)) throw error;
         const deterministic = buildDeterministicVisualFallback({
-          deckPlan: bodyDeckPlan,
-          pageContents: bodyPageContents,
-          pageIntents: bodyIndexes.map((index) => pageIntents[index]),
-          candidateSets: bodyIndexes.map((index) => candidateSets[index]),
+          deckPlan: { ...bodyDeckPlan, pages: overflowEntries.map((entry) => entry.deckPage).filter(Boolean) },
+          pageContents: overflowEntries.map((entry) => bodyPageContents[entry.bodyIndex]),
+          pageIntents: overflowEntries.map((entry) => pageIntents[entry.sourceIndex]),
+          candidateSets: overflowEntries.map((entry) => candidateSets[entry.sourceIndex]),
           skinId: input.skinId,
-          forceFallbackPageIds: [error.pageId],
+          forceFallbackPageIds: overflowPageIds,
         });
-        bodyIndexes.forEach((sourceIndex, bodyIndex) => {
-          candidateSets[sourceIndex] = deterministic.candidateSets[bodyIndex];
+        overflowEntries.forEach((entry, index) => {
+          candidateSets[entry.sourceIndex] = deterministic.candidateSets[index];
         });
-        const fallbackPlans = mergeShellAndBodyPlans({
-          bodyPlans: deterministic.plans,
-          presentationOutput,
+        let fallbackVisualPlan = visual.visualPlan;
+        let fallbackCompositionPlan = visual.compositionPlan;
+        deterministic.plans.visualPlan.pages.forEach((page) => {
+          fallbackVisualPlan = replacePlanPage(fallbackVisualPlan, page);
+        });
+        deterministic.plans.compositionPlan.pages.forEach((page) => {
+          fallbackCompositionPlan = replacePlanPage(fallbackCompositionPlan, page);
+        });
+        visual = {
+          ...visual,
+          visualPlan: fallbackVisualPlan,
+          compositionPlan: fallbackCompositionPlan,
           pageIntents,
           candidateSets,
-          skinId: input.skinId,
-        });
-        visual = { ...fallbackPlans, pageIntents, candidateSets };
+        };
         resolved = await options.visualResolver({
           root,
           skinId: input.skinId,
@@ -1513,26 +1679,59 @@ export async function runDirectorWorkflow(options) {
           candidateSets: visual.candidateSets,
           previousResolution: {
             status: "needs-director-revision",
-            feedback: [{
-              pageId: error.pageId,
-              assetId: error.assetId,
+            feedback: overflowEntries.map((entry) => ({
+              pageId: entry.pageId,
+              assetId: error.overflows?.find((item) => item.pageId === entry.pageId)?.assetId ?? error.assetId,
               code: "component-runtime-overflow",
-            }],
+            })),
           },
         });
+        if (!visualResolutionAccepted(resolved)) {
+          let alternativeCompositionPlan = visual.compositionPlan;
+          let alternativeFound = false;
+          for (const entry of overflowEntries) {
+            const alternative = firstLegalCompositionAlternative(
+              resolved,
+              entry.pageId,
+              pageIntents[entry.sourceIndex].intentId,
+            );
+            if (!alternative) continue;
+            alternativeCompositionPlan = replacePlanPage(alternativeCompositionPlan, alternative);
+            alternativeFound = true;
+          }
+          if (alternativeFound) {
+            visual = {
+              ...visual,
+              compositionPlan: alternativeCompositionPlan,
+            };
+            resolved = await options.visualResolver({
+              root,
+              skinId: input.skinId,
+              deckPlan: presentationOutput.deckPlan,
+              pageContents: presentationOutput.pageContents,
+              visualPlan: visual.visualPlan,
+              compositionPlan: visual.compositionPlan,
+              pageIntents: visual.pageIntents,
+              candidateSets: visual.candidateSets,
+              previousResolution: resolved,
+            });
+          }
+        }
         if (!visualResolutionAccepted(resolved)) {
           throw new WorkflowError(
             "VISUAL_RESOLUTION_NOT_ACCEPTED",
             "visual-resolution",
             "运行时溢出后的正文兜底仍未通过确定性复核",
-            { pageId: error.pageId, feedback: resolved?.feedback ?? [] },
+            { pageIds: overflowPageIds, feedback: resolved?.feedback ?? [] },
           );
         }
+        if (resolved.visualPlan) visual.visualPlan = resolved.visualPlan;
+        if (resolved.compositionPlan) visual.compositionPlan = resolved.compositionPlan;
         visualResolution = resolved;
         assertResolvedVisual(validators, resolved, visual.pageIntents, visual.visualPlan, visual.compositionPlan);
         await persistVisualAttempt(outputDir, attempt, visual, resolved, "render-runtime-fallback.json", {
           status: "accepted",
-          trigger: { pageId: error.pageId, assetId: error.assetId, code: error.code },
+          trigger: { pageIds: overflowPageIds, overflows: error.overflows ?? [], code: error.code },
         });
         productionStatistics = buildProductionStatistics({
           candidateSets: visual.candidateSets,
@@ -1542,6 +1741,28 @@ export async function runDirectorWorkflow(options) {
           assetGapReport,
         });
         await writeJson(path.join(outputDir, "production-statistics.json"), productionStatistics);
+        if (options.stagingRenderer) {
+          stagingResult = await options.stagingRenderer({
+            root,
+            skinId: input.skinId,
+            outputDir: path.join(attemptDir, "native-preview-fallback"),
+            deckPlan: presentationOutput.deckPlan,
+            pageContents: presentationOutput.pageContents,
+            visualPlan: visual.visualPlan,
+            compositionPlan: visual.compositionPlan,
+            pageIntents: visual.pageIntents,
+            layoutDecisions: resolved.layoutDecisions,
+            renderPayloads: resolved.renderPayloads,
+          });
+          await assertNativePreviewResult(stagingResult, presentationOutput.pageContents.length);
+          recordNativePreviewFallbacks(fallbackEvents, stagingResult);
+          if (options.nativePreviewApprover) {
+            stagingResult = await options.nativePreviewApprover(stagingResult);
+            if (stagingResult?.approvalStatus !== "approved") {
+              throw new WorkflowError("NATIVE_PREVIEW_NOT_APPROVED", "native-preview", "Native PPT 兜底预览尚未确认，不能交付");
+            }
+          }
+        }
         renderResult = await options.renderer({
           root,
           skinId: input.skinId,
@@ -1553,13 +1774,14 @@ export async function runDirectorWorkflow(options) {
           pageIntents: visual.pageIntents,
           layoutDecisions: resolved.layoutDecisions,
           renderPayloads: resolved.renderPayloads,
+          stagingResult,
         });
         fallbackEvents.push({
           stage: "render",
           code: "component-overflow-body-fallback",
           trigger: error.code,
           message: "结构组件运行时溢出，程序改用主题正文版式并重新渲染",
-          pageIds: [error.pageId],
+          pageIds: overflowPageIds,
         });
       } else {
         if (error?.code !== "COMPONENT_RUNTIME_OVERFLOW" || attempt === maxVisualAttempts) throw error;

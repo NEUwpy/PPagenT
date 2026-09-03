@@ -13,6 +13,24 @@ function messageContent(response) {
   return content;
 }
 
+function responseDiagnostic(response) {
+  const choice = response?.choices?.[0];
+  const message = choice?.message;
+  const content = message?.content;
+  const reasoningContent = message?.reasoning_content;
+  return {
+    responseId: response?.id ?? null,
+    responseModel: response?.model ?? null,
+    choicesCount: Array.isArray(response?.choices) ? response.choices.length : null,
+    finishReason: choice?.finish_reason ?? null,
+    messageKeys: message && typeof message === "object" ? Object.keys(message) : [],
+    contentType: content === null ? "null" : typeof content,
+    contentLength: typeof content === "string" ? content.length : null,
+    reasoningContentType: reasoningContent === null ? "null" : typeof reasoningContent,
+    reasoningContentLength: typeof reasoningContent === "string" ? reasoningContent.length : null,
+  };
+}
+
 function normalizeThinking(value) {
   if (value === undefined || value === null || value === "") return "enabled";
   const normalized = String(value).toLowerCase();
@@ -146,8 +164,9 @@ export class DeepSeekJsonModel {
         requestError.status = response.status;
         throw requestError;
       }
+      let responseJson;
       try {
-        const responseJson = await response.json();
+        responseJson = await response.json();
         const output = JSON.parse(messageContent(responseJson));
         await this.observe({
           type: "api-call", status: "succeeded", stage, callId, attempt,
@@ -160,6 +179,8 @@ export class DeepSeekJsonModel {
         await this.observe({
           type: "api-call", status: "invalid-output", stage, callId, attempt,
           durationMs: Date.now() - startedAt,
+          usage: responseJson?.usage ?? null,
+          responseDiagnostic: responseDiagnostic(responseJson),
           error: { code: error?.code, message: error?.message ?? String(error) },
         });
       }

@@ -111,6 +111,10 @@ function canonicalLayoutIds(values = []) {
  * director. Exact DOM nodes and builder code remain undisclosed.
  */
 export function summarizeTextRegionContract(slotContract) {
+  const selectionByVariant = new Map((slotContract?.states ?? []).map((state) => (
+    [state.variantId, state.selection ?? {}]
+  )));
+  const minimumFontSize = Number(slotContract?.minimumFontSize) || 12;
   const groups = new Map();
   for (const variant of slotContract?.variants ?? []) {
     for (const slot of textRegionSlots(variant)) {
@@ -121,6 +125,7 @@ export function summarizeTextRegionContract(slotContract) {
         defaults: new Map(),
         compatible: new Set(),
         frames: [],
+        states: [],
       };
       const defaultLayoutId = canonicalTextLayoutId(slot.textLayout.defaultId || slot.textLayout.id);
       group.defaults.set(defaultLayoutId, (group.defaults.get(defaultLayoutId) ?? 0) + 1);
@@ -129,7 +134,21 @@ export function summarizeTextRegionContract(slotContract) {
         if (layoutStatus(layoutId) === "approved") group.compatible.add(layoutId);
       }
       for (const role of normalizeTextContentRoles(slot.textLayout.contentRoles ?? [])) group.contentRoles.add(role);
-      if (slot.frame?.width > 0 && slot.frame?.height > 0) group.frames.push(slot.frame);
+      if (slot.frame?.width > 0 && slot.frame?.height > 0) {
+        group.frames.push(slot.frame);
+        const width = slot.innerFrame?.width ?? slot.frame.width;
+        const height = slot.innerFrame?.height ?? slot.frame.height;
+        const fontPx = minimumFontSize * (4 / 3);
+        const estimatedMaxChars = Math.max(1, Math.floor(
+          Math.floor(width / fontPx) * Math.floor(height / (fontPx * 1.2)) * 0.8,
+        ));
+        group.states.push({
+          selection: selectionByVariant.get(variant.id) ?? {},
+          width,
+          height,
+          estimatedMaxChars,
+        });
+      }
       groups.set(regionKey, group);
     }
   }
@@ -143,6 +162,10 @@ export function summarizeTextRegionContract(slotContract) {
         Number(right === defaultLayoutId) - Number(left === defaultLayoutId)
         || left.localeCompare(right)
       ));
+    const stateCapacities = [...new Map(group.states.map((state) => [
+      JSON.stringify([state.selection, state.width, state.height, state.estimatedMaxChars]),
+      state,
+    ])).values()];
     return {
       regionKey: group.regionKey,
       contentRoles,
@@ -154,6 +177,8 @@ export function summarizeTextRegionContract(slotContract) {
         minHeight: Math.min(...group.frames.map((frame) => frame.height)),
         maxHeight: Math.max(...group.frames.map((frame) => frame.height)),
       } : null,
+      minimumFontSize,
+      stateCapacities,
     };
   }).sort((left, right) => left.regionKey.localeCompare(right.regionKey));
 }

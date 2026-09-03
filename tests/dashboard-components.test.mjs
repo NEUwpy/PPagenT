@@ -176,6 +176,17 @@ test("看板 EXE 每次启动都会重启旧服务并使用新地址打开", asy
   assert.match(launcher, /\?launch=\$\{Date\.now\(\)\}/);
 });
 
+test("生产工作台重复打开时复用现有服务且启动后标记中断任务", async () => {
+  const [launcher, server] = await Promise.all([
+    fs.readFile(path.join(root, "src/launcher/ppa-production-main.cjs"), "utf8"),
+    fs.readFile(path.join(root, "src/tools/serve-production-workbench.mjs"), "utf8"),
+  ]);
+  assert.match(launcher, /const existing = await findExisting\(root\)/);
+  assert.match(launcher, /if \(existing\)[\s\S]*existingUrl[\s\S]*return/);
+  assert.match(server, /WORKBENCH_PROCESS_INTERRUPTED/);
+  assert.match(server, /activeRunId,/);
+});
+
 test("作废的旧 Logic 不再出现在核心库或正式生成候选中", async () => {
   const data = await collectLogicDashboardData(root);
   const removedIds = new Set([

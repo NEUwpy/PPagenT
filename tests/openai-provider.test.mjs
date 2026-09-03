@@ -108,8 +108,74 @@ test("模型 DirectorProvider 为两位导演和研发审查调用传入明确�
   assert.deepEqual(Object.keys(calls[2].context).sort(), ["pages", "requests"]);
   assert.deepEqual(calls[3].context.pages, []);
   assert.match(calls[3].task, /Skills/);
-  assert.equal(calls[3].maxJsonAttempts, 1);
+  assert.equal(calls[3].maxJsonAttempts, 2);
   assert.equal(provider.metadata.providerKind, "live-schema-aware-model-provider");
+});
+
+test("视觉导演超过八页时按原页序分批并携带此前选择", async () => {
+  const calls = [];
+  const model = {
+    identity: "batch-test",
+    async generateJson(request) {
+      calls.push(request);
+      return {
+        selections: request.context.pages.map((page) => ({
+          pageId: page.pageId,
+          candidateId: page.candidates[0].candidateId,
+          centerLabel: "核心判断",
+        })),
+      };
+    },
+  };
+  const schemas = Object.fromEntries(
+    ["contentDirector", "contentReview", "visualIntent", "visualComposition", "visualReview"]
+      .map((name) => [name, { name, schema: { type: "object" } }]),
+  );
+  const provider = createModelDirectorProvider({
+    contentModel: model, visualModel: model, reviewerModel: model, schemas,
+  });
+  const pageContents = Array.from({ length: 10 }, (_, index) => ({
+    pageId: `page-${index + 1}`,
+    title: `页面${index + 1}`,
+    items: [{ id: `item-${index + 1}`, title: "要点", body: "正文" }],
+  }));
+  const pageIntents = pageContents.map((page) => ({
+    intentId: `${page.pageId}-intent`,
+    baseRelation: "editorial",
+    purposeKey: "explain_topics",
+  }));
+  const candidateSets = pageContents.map((page) => ({
+    pageId: page.pageId,
+    candidates: [{
+      logicId: "editorial",
+      structureGroupId: "editorial-body",
+      familyId: "skin-body-editorial",
+      variantId: "editorial",
+      silhouette: "editorial-page",
+      readiness: "ready",
+      mediaContract: { mode: "no-image" },
+      slotCapabilities: { textSlots: [] },
+      compositions: [{
+        id: "editorial-single-focus",
+        requiresComponent: false,
+        slots: [{ id: "primary", role: "text" }],
+      }],
+    }],
+  }));
+  const output = await provider.visualDirector({
+    phase: "composition",
+    deckPlan: { deckId: "deck" },
+    skinId: "skin",
+    pageContents,
+    pageIntents,
+    candidateSets,
+  });
+  assert.equal(calls.length, 2);
+  assert.deepEqual(calls.map((call) => call.context.pages.length), [8, 2]);
+  assert.equal(calls[0].context.batch.count, 2);
+  assert.equal(calls[0].context.priorSelections.length, 0);
+  assert.equal(calls[1].context.priorSelections.length, 8);
+  assert.deepEqual(output.visualPlan.pages.map((page) => page.pageId), pageContents.map((page) => page.pageId));
 });
 
 test("API 运行时直接读取正式生成工作流中的两份导演提示词", async () => {
@@ -159,6 +225,29 @@ test("内容导演真实输出 Schema 接受 Markdown 元数据和三维邻接�
         literals: [{ path: "/adjacency", value: [[[1, 0], [0, 1]]] }],
         references: [{ path: "/layers/0/0/label", ref: "item:1.title" }],
       },
+    }],
+  };
+  assert.equal(validate(value), true, JSON.stringify(validate.errors));
+});
+
+test("内容导演 Schema 允许一页引用超过两个必要来源段落", async () => {
+  const root = path.resolve(new URL("..", import.meta.url).pathname.replace(/^\/(.:)/, "$1"));
+  const schemas = await loadDirectorOutputSchemas(root);
+  const validate = new Ajv2020({ allErrors: true, strict: true }).compile(schemas.contentDirector.schema);
+  const value = {
+    schemaVersion: "0.1",
+    deckMetadata: {
+      deckId: "deck", title: "标题", communicationJob: "汇总事实", audience: "团队",
+      audienceOutcome: "理解事实", centralTakeaway: "事实共同成立", narrativeArc: ["汇总"],
+    },
+    contentMarkdown: "# 页面\n\n> 汇总事实\n\n## 事实\n正文",
+    pageMetadata: [{
+      logicIntent: {
+        logicId: "parallel", reason: "多项事实同级", evidenceFragments: ["事实"], confidence: "high",
+      },
+      sourceBlockIds: [
+        "source-001", "source-002", "source-003", "source-004", "source-005",
+      ],
     }],
   };
   assert.equal(validate(value), true, JSON.stringify(validate.errors));

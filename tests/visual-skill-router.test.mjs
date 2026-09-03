@@ -66,6 +66,7 @@ test("锁定 Structure Group 的页面仍向视觉导演披露展示适配字段
   const compact = compactVisualSkillContext([page], [intent], sets);
   assert.equal(compact[0].selectionMode, "group-locked");
   assert.equal(compact[0].lockedStructureGroupId, "hub-radial-anchor");
+  assert.deepEqual(compact[0].expressionStrategies, ["registered-structure"]);
   assert.deepEqual(Object.keys(compact[0].candidates[0]).sort(), [
     "candidateId", "fallbackBody", "iconSourceItemIds", "iconsRequiredPerItem", "itemRange", "logicId",
     "mediaMode", "readiness", "reasons", "selectionMode", "structureGroupId", "textRegions",
@@ -76,6 +77,7 @@ test("锁定 Structure Group 的页面仍向视觉导演披露展示适配字段
   assert.deepEqual(pageSchema.required, ["pageId", "candidateId", "centerLabel"]);
   assert.equal(pageSchema.properties.pageId.const, "p1");
   assert.equal(pageSchema.properties.candidateId.const, "hub-radial::balanced-orbit-anchor::radial");
+  assert.deepEqual(pageSchema.properties.expressionStrategy.enum, ["registered-structure"]);
 
   const expanded = expandVisualSkillRouting({ selections: [{
     pageId: "p1",
@@ -93,6 +95,7 @@ test("锁定 Structure Group 的页面仍向视觉导演披露展示适配字段
     deckPlan: { deckId: "deck" }, skinId: "skin", pageContents: [page], pageIntents: [intent], candidateSets: sets,
   });
   assert.equal(expanded.visualPlan.pages[0].familyId, "hub-radial");
+  assert.equal(expanded.visualPlan.pages[0].expressionStrategy, "registered-structure");
   assert.equal(expanded.visualPlan.pages[0].iconQueries.length, 3);
   assert.deepEqual(expanded.compositionPlan.pages[0].componentItemIds, ["a", "b", "c"]);
   assert.equal(expanded.compositionPlan.pages[0].componentText[0].text, "判断中心");
@@ -112,7 +115,28 @@ test("视觉路由可省略空数组和理由并由程序补默认值", () => {
     deckPlan: { deckId: "deck" }, skinId: "skin", pageContents: [page], pageIntents: [intent], candidateSets: sets,
   });
   assert.match(expanded.visualPlan.pages[0].reason, /视觉导演选择/);
+  assert.equal(expanded.visualPlan.pages[0].expressionStrategy, "registered-structure");
   assert.deepEqual(expanded.compositionPlan.pages[0].textLayoutChoices, []);
+});
+
+test("未验收的2+3表达不能进入自动正式生成", () => {
+  const set = {
+    pageId: "p1",
+    candidates: [core],
+    selectionMode: "group-locked",
+    lockedStructureGroupId: core.structureGroupId,
+  };
+  const expanded = expandVisualSkillRouting({ selections: [{
+    pageId: "p1",
+    candidateId: "hub-radial::balanced-orbit-anchor::radial",
+    centerLabel: "判断中心",
+    expressionStrategy: "multi-structure",
+  }] }, {
+    deckPlan: { deckId: "deck" }, skinId: "skin", pageContents: [page], pageIntents: [intent], candidateSets: [set],
+  });
+  assert.equal(expanded.visualPlan.pages[0].expressionStrategy, "registered-structure");
+  assert.match(expanded.visualPlan.pages[0].reason, /尚未通过视觉验收/);
+  assert.equal(expanded.routingDiagnostics[0].code, "automatic-unapproved-expression-demoted");
 });
 
 test("结构化输入图标契约不会把普通 items 当作图标来源", () => {

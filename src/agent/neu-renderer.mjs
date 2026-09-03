@@ -1,3 +1,4 @@
+import fs from "node:fs/promises";
 import path from "node:path";
 import { renderNortheasternUniversityDeck } from "../runtime/skins/northeastern-university.mjs";
 import { auditRenderedDeck } from "../tools/audit-rendered-typography.mjs";
@@ -37,31 +38,38 @@ export function createNortheasternUniversityRenderer({
   manuscriptSource,
 }) {
   if (!sourcePptx || !outputPptx) throw new Error("NEU renderer 需要 sourcePptx 和 outputPptx");
-  return async function renderWorkflowDeck({
+
+  function workflowPages({ deckPlan, pageContents, pageIntents, visualPlan, compositionPlan, layoutDecisions, renderPayloads }) {
+    return pageContents.map((content, index) => ({
+      meta: { sectionName: compactSectionName(pageIntents[index], deckPlan.pages[index]?.narrativeJob) },
+      narrativeJob: deckPlan.pages[index]?.narrativeJob ?? "",
+      content,
+      intent: pageIntents[index],
+      visual: visualPlan?.pages?.[index] ?? {},
+      decision: layoutDecisions[index],
+      payload: renderPayloads[index],
+      composition: compositionPlan.pages[index],
+    }));
+  }
+
+  async function stageWorkflowDeck({
     outputDir,
     deckPlan,
     pageContents,
     pageIntents,
+    visualPlan,
     compositionPlan,
     layoutDecisions,
     renderPayloads,
   }) {
     const qaDir = path.join(outputDir, "qa");
-    const pages = pageContents.map((content, index) => ({
-      meta: {
-        sectionName: compactSectionName(pageIntents[index], deckPlan.pages[index]?.narrativeJob),
-      },
-      content,
-      intent: pageIntents[index],
-      decision: layoutDecisions[index],
-      payload: renderPayloads[index],
-      composition: compositionPlan.pages[index],
-    }));
+    const stagedPptx = path.join(outputDir, "staged-deck.pptx");
+    const pages = workflowPages({ deckPlan, pageContents, pageIntents, visualPlan, compositionPlan, layoutDecisions, renderPayloads });
     await renderNortheasternUniversityDeck({
       root,
       pages,
       sourcePptx: path.resolve(sourcePptx),
-      outputPptx: path.resolve(outputPptx),
+      outputPptx: stagedPptx,
       qaDir,
       manuscriptSource,
       templateSourceKind,
@@ -85,10 +93,33 @@ export function createNortheasternUniversityRenderer({
       throw error;
     }
     return {
-      outputPptx: path.resolve(outputPptx),
+      schemaVersion: "1.0",
+      status: "ready-for-approval",
+      stagedPptx,
       pageEvidence: pages.map((_, index) => path.join(qaDir, `slide-${String(index + 1).padStart(2, "0")}.png`)),
       montage: path.join(qaDir, "montage.webp"),
+      pageCount: pages.length,
       qualityAudit,
     };
+  }
+
+  const renderWorkflowDeck = async function renderWorkflowDeck({ stagingResult }) {
+    if (!stagingResult?.stagedPptx) throw new Error("正式交付必须使用已经通过预览门禁的暂存 PPTX");
+    const stagedPptx = path.resolve(stagingResult.stagedPptx);
+    const finalPptx = path.resolve(outputPptx);
+    await fs.mkdir(path.dirname(finalPptx), { recursive: true });
+    await fs.copyFile(stagedPptx, finalPptx);
+    return {
+      outputPptx: finalPptx,
+      pageEvidence: stagingResult.pageEvidence,
+      montage: stagingResult.montage,
+      nativePreview: {
+        stagedPptx,
+        pageCount: stagingResult.pageCount,
+      },
+      qualityAudit: stagingResult.qualityAudit,
+    };
   };
+  renderWorkflowDeck.stage = stageWorkflowDeck;
+  return renderWorkflowDeck;
 }
