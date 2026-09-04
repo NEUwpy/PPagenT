@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>中性编辑排版 001｜Native/PPT 二审</title>
+  <style>
+    :root { --paper:#f5f4ef; --ink:#20201d; --body:#4b4a45; --muted:#85837b; --line:#d8d5cc; --accent:#a35d4f; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:#e9e8e3; color:var(--ink); font-family:"Noto Sans SC","Microsoft YaHei",sans-serif; }
+    main { width:min(1320px,calc(100vw - 24px)); margin:28px auto 72px; }
+    header { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin:0 4px 22px; }
+    h1 { margin:0 0 8px; font:700 28px/1.25 "Noto Serif SC","Songti SC",serif; }
+    header p { margin:0; color:var(--muted); font-size:14px; }
+    .actions { display:flex; align-items:center; gap:12px; }
+    .badge { padding:8px 11px; color:var(--accent); border:1px solid #c9b5ad; font-size:12px; letter-spacing:.08em; white-space:nowrap; }
+    .download { padding:8px 12px; color:var(--ink); border:1px solid var(--line); text-decoration:none; font-size:12px; white-space:nowrap; }
+    .case { margin-bottom:28px; padding:14px; background:rgba(255,255,255,.62); border:1px solid #d7d6d1; }
+    .case-head { display:flex; justify-content:space-between; gap:24px; margin:0 0 11px; color:var(--muted); font-size:12px; }
+    .case-head strong { color:var(--ink); font-weight:600; }
+    img { display:block; width:100%; height:auto; background:var(--paper); }
+    @media (max-width:760px) { main{width:min(100% - 10px,1320px);margin-top:10px} header{align-items:flex-start;flex-direction:column}.case{padding:7px}.actions{flex-wrap:wrap} }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div><h1>中性编辑排版 001｜Native/PPT 二审</h1><p>六页均为原生可编辑文字、线条和几何对象；本页展示最终 PPTX 的逐页渲染。</p></div>
+      <div class="actions"><span class="badge">等待 PPT 确认</span><a class="download" href="neutral-editorial-001-v2.pptx">打开 PPTX</a></div>
+    </header>
+    <section class="case"><div class="case-head"><strong>01｜封面</strong><span>大标题＋强调副标题＋侧栏引语</span></div><img src="rendered-v2/slide-01.png" alt="封面 PPT 预览" /></section>
+    <section class="case"><div class="case-head"><strong>02｜内容地图</strong><span>连续编号与细线导航</span></div><img src="rendered-v2/slide-02.png" alt="内容地图 PPT 预览" /></section>
+    <section class="case"><div class="case-head"><strong>03｜核心美学原则</strong><span>同级原则与符号索引</span></div><img src="rendered-v2/slide-03.png" alt="核心美学原则 PPT 预览" /></section>
+    <section class="case"><div class="case-head"><strong>04｜方法拆解</strong><span>连续步骤与单一强调色</span></div><img src="rendered-v2/slide-04.png" alt="方法拆解 PPT 预览" /></section>
+    <section class="case"><div class="case-head"><strong>05｜实战案例</strong><span>自然高度卡片在内容带内垂直居中</span></div><img src="rendered-v2/slide-05.png" alt="实战案例 PPT 预览" /></section>
+    <section class="case"><div class="case-head"><strong>06｜收束页</strong><span>结论＋关键词</span></div><img src="rendered-v2/slide-06.png" alt="收束页 PPT 预览" /></section>
+  </main>
+</body>
+</html>

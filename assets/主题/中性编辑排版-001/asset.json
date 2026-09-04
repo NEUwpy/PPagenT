@@ -5,11 +5,17 @@
   "category": "主题",
   "creationMethod": "reference-distillation",
   "status": "candidate",
-  "reviewStatus": "awaiting-user-review",
+  "reviewStatus": "awaiting-native-review",
   "source": "https://www.xiaohongshu.com/explore/6a17a37800000000070255dd",
   "sourceTitle": "如何打造高级感视觉？这份提示词建议收藏",
   "review": "review.html",
   "visualIntent": "visual-intent.md",
+  "htmlApproval": "html-approval.json",
+  "generator": "generate.mjs",
+  "nativeReview": {
+    "pptx": "native-review/neutral-editorial-001-v2.pptx",
+    "preview": "native-review/review.html"
+  },
   "pageFamily": [
     "cover",
     "agenda",
@@ -22,5 +28,5 @@
     "display": "Noto Serif SC",
     "body": "Noto Sans SC"
   },
-  "validation": "HTML visual review only; Native/PPT generation and formal runtime integration are pending user approval"
+  "validation": "HTML approved by the user; Native/PPT is in second-round review and formal runtime integration remains pending"
 }
