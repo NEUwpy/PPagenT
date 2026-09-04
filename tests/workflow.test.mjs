@@ -236,6 +236,183 @@ test("正式工作流在两位导演均失败时仍以确定性双兜底交付",
   await fs.access(path.join(outputDir, "resilience-report.json"));
 });
 
+test("视觉复核失败时只降级失败页并保留已经通过的结构页", async (t) => {
+  const outputDir = await makeTempDir(t);
+  const source = "# 两页回归\n\n第一页原文。\n\n第二页原文。";
+  const pages = [
+    {
+      schemaVersion: "1.0",
+      pageId: "p1",
+      title: "第一页",
+      items: [{ id: "p1-item", title: "问题", body: "第一页说明" }],
+      sourceText: "第一页原文。",
+    },
+    {
+      schemaVersion: "1.0",
+      pageId: "p2",
+      title: "第二页",
+      items: [{ id: "p2-item", title: "结论", body: "第二页说明" }],
+      sourceText: "第二页原文。",
+    },
+  ];
+  const deckPlan = {
+    schemaVersion: "1.0",
+    deckId: "partial-fallback",
+    title: "两页回归",
+    communicationJob: "验证失败页局部兜底",
+    audience: "开发者",
+    audienceOutcome: "确认合法页面不被连带降级",
+    centralTakeaway: "兜底范围必须等于失败范围",
+    narrativeArc: ["第一页", "第二页"],
+    pages: pages.map((page, index) => ({
+      pageId: page.pageId,
+      sequence: index + 1,
+      narrativeJob: page.title,
+      sourceAnchors: [page.sourceText],
+    })),
+  };
+  const bodyCandidate = {
+    logicId: "skin",
+    structureGroupId: "editorial",
+    familyId: "skin-body-editorial",
+    assetId: "northeastern-university-body-001",
+    variantId: "editorial",
+    silhouette: "editorial-page",
+    adaptationStatus: "adaptive",
+    fallbackBody: true,
+    compositionIds: ["editorial-list", "editorial-grid"],
+    compositions: [
+      {
+        id: "editorial-list",
+        requiresComponent: false,
+        requiresMedia: false,
+        slots: [{ id: "lead", role: "text" }, { id: "body", role: "text" }],
+      },
+      {
+        id: "editorial-grid",
+        requiresComponent: false,
+        requiresMedia: false,
+        slots: [{ id: "body", role: "text" }],
+      },
+    ],
+  };
+  const structureCandidate = (pageId) => ({
+    logicId: "parallel",
+    structureGroupId: `structure-${pageId}`,
+    familyId: `family-${pageId}`,
+    assetId: `asset-${pageId}`,
+    variantId: `variant-${pageId}`,
+    silhouette: `silhouette-${pageId}`,
+    adaptationStatus: "adaptive",
+    readiness: "ready",
+    compositionIds: ["component-full"],
+  });
+  const provider = completeProvider({
+    async contentDirector() { return { deckPlan, pageContents: pages }; },
+    async visualDirector({ skinId, pageIntents }) {
+      return {
+        visualPlan: {
+          schemaVersion: "1.0",
+          deckId: deckPlan.deckId,
+          skinId,
+          visualLanguage: "测试局部兜底",
+          rhythmStrategy: "保留合法页",
+          pages: pages.map((page, index) => ({
+            pageId: page.pageId,
+            intentId: pageIntents[index].intentId,
+            familyId: `family-${page.pageId}`,
+            variantId: `variant-${page.pageId}`,
+            silhouette: `silhouette-${page.pageId}`,
+            adaptationStatus: "adaptive",
+            reason: "视觉导演选择",
+          })),
+        },
+        compositionPlan: {
+          schemaVersion: "1.0",
+          deckId: deckPlan.deckId,
+          skinId,
+          pages: pages.map((page, index) => ({
+            pageId: page.pageId,
+            intentId: pageIntents[index].intentId,
+            compositionId: "component-full",
+            componentItemIds: [page.items[0].id],
+            componentContentMode: "full",
+            textSlots: [],
+            reason: "结构整页",
+          })),
+        },
+      };
+    },
+  });
+  let resolutionCalls = 0;
+  const result = await runDirectorWorkflow({
+    root,
+    input: { rawMarkdown: source, skinId: DEFAULT_SKIN_ID },
+    provider,
+    outputDir,
+    reviewMode: "production",
+    guaranteeDelivery: true,
+    maxVisualAttempts: 1,
+    visualCandidateProvider: async ({ pageIntents }) => pages.map((page, index) => ({
+      pageId: page.pageId,
+      intentId: pageIntents[index].intentId,
+      candidates: [structureCandidate(page.pageId)],
+      fallbackCandidate: bodyCandidate,
+    })),
+    visualResolver: ({ pageIntents, visualPlan, compositionPlan, candidateSets }) => {
+      resolutionCalls += 1;
+      if (resolutionCalls === 1) {
+        return { status: "needs-director-revision", feedback: [{ pageId: "p1", code: "composition-invalid" }] };
+      }
+      assert.equal(visualPlan.pages.find((page) => page.pageId === "p1").familyId, "skin-body-editorial");
+      assert.equal(visualPlan.pages.find((page) => page.pageId === "p2").familyId, "family-p2");
+      assert.equal(candidateSets.find((set) => set.pageId === "p1").candidates[0].fallbackBody, true);
+      assert.equal(candidateSets.find((set) => set.pageId === "p2").candidates[0].assetId, "asset-p2");
+      const selections = visualPlan.pages.map((planPage, index) => {
+        const selected = candidateSets[index].candidates.find((candidate) => (
+          candidate.familyId === planPage.familyId && candidate.variantId === planPage.variantId
+        ));
+        return { planPage, intent: pageIntents[index], selected };
+      });
+      return {
+        status: "accepted",
+        results: [],
+        feedback: [],
+        layoutDecisions: selections.map(({ planPage, intent, selected }) => ({
+          schemaVersion: "1.0",
+          intentId: intent.intentId,
+          decision: selected.fallbackBody ? "fallback" : "ranked-match",
+          selectedFamilyId: planPage.familyId,
+          selectedAssetId: selected.assetId,
+          selectedVariantId: planPage.variantId,
+          selectedSilhouette: planPage.silhouette,
+          selectionState: selected.fallbackBody ? "fallback" : "selected",
+          selectionOwner: selected.fallbackBody ? "program" : "visual-director",
+          selectionSource: selected.fallbackBody ? "deterministic-fallback" : "visual-director",
+          candidates: [],
+          rejections: [],
+          resolutionPlan: null,
+        })),
+        renderPayloads: selections.map(({ intent, selected }) => ({
+          schemaVersion: "1.0",
+          intentId: intent.intentId,
+          assetId: selected.assetId,
+          parameters: selected.fallbackBody ? {} : { visualVariantId: selected.variantId },
+          mappings: [],
+          omissions: [],
+        })),
+        visualPlan,
+        compositionPlan,
+      };
+    },
+    renderer: dynamicRenderer,
+  });
+  assert.equal(resolutionCalls, 2);
+  assert.equal(result.status, "delivered-with-fallback");
+  const fallbackEvent = result.resilienceReport.events.find((event) => event.code === "deterministic-body-fallback");
+  assert.deepEqual(fallbackEvent.pageIds, ["p1"]);
+});
+
 test("workflow schemas including CompositionPlan are registered", async () => {
   const validators = await createRuleValidators(root);
   assert.equal(typeof validators.validateDeckPlan, "function");
@@ -1218,6 +1395,7 @@ test("内容审查要求修订时把上一轮产物和审查交回内容导演",
     input: { rawMarkdown },
     provider,
     outputDir,
+    guaranteeDelivery: true,
     visualCandidateProvider: candidateProvider,
     visualResolver: resolver,
     renderer,
@@ -1695,6 +1873,7 @@ test("变体确定性复核未接受时把反馈送回视觉导演且不进入�
     input: { rawMarkdown },
     provider,
     outputDir,
+    guaranteeDelivery: true,
     visualCandidateProvider: candidateProvider,
     visualResolver,
     renderer: async (args) => {
@@ -1706,7 +1885,7 @@ test("变体确定性复核未接受时把反馈送回视觉导演且不进入�
   assert.equal(intentCalls, 0);
   assert.equal(reviewCalls, 2);
   assert.equal(renderCalls, 1);
-  const saved = JSON.parse(await fs.readFile(path.join(outputDir, "visual", "attempt-01", "visual-resolution.json"), "utf8"));
+  const saved = JSON.parse(await fs.readFile(path.join(outputDir, "visual", "attempt-01", "visual-resolution-primary-failed.json"), "utf8"));
   assert.equal(saved.status, "needs-director-revision");
 });
 

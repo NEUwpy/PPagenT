@@ -16,6 +16,10 @@ function pointText(point) {
   return String(point?.text ?? point ?? "").trim();
 }
 
+function charCount(value) {
+  return Array.from(String(value ?? "")).length;
+}
+
 function phaseBody(item) {
   return String(item?.body ?? "").trim();
 }
@@ -39,8 +43,9 @@ export function mapPageContent(content, intent, _decision, compositionPage) {
   }));
   const gates = items.slice(0, -1).map((item, index) => ({
     key: `gate-${item.id}-${items[index + 1].id}`,
-    title: pointText(item.points[0]),
-    body: "",
+    ...(charCount(pointText(item.points[0])) <= 6
+      ? { title: pointText(item.points[0]), body: "" }
+      : { title: "", body: pointText(item.points[0]) }),
   }));
   return renderPayload(
     intent,

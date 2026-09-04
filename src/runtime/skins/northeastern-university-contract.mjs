@@ -34,6 +34,8 @@ export const northeasternUniversitySkin = {
       singleSupport: { fontSizes: [19, 18, 17], maxLines: 3 },
       dualTitle: { fontSizes: [32, 29, 26], maxLines: 2 },
       dualBody: { fontSizes: [21, 19, 17], maxLines: 7 },
+      bandTitle: { fontSizes: [19, 18, 17], maxLines: 2 },
+      bandBody: { fontSizes: [18, 17, 16], maxLines: 2 },
     },
   },
 };

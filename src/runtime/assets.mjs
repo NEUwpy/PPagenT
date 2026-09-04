@@ -33,10 +33,44 @@ export async function renderStructureAsset(slide, renderPayload, skin, targetFra
   return compileResolvedStructureAsset(slide, resolved);
 }
 
+function payloadStateCount(parameters = {}) {
+  if (Array.isArray(parameters.items)) return parameters.items.length;
+  if (Array.isArray(parameters.causes)) return parameters.causes.length;
+  if (Array.isArray(parameters.sides) && Array.isArray(parameters.sides[0]?.items)) {
+    return parameters.sides[0].items.length;
+  }
+  if (Array.isArray(parameters.layers)) return parameters.layers.length;
+  return null;
+}
+
 export async function resolveStructureAsset(renderPayload, skin, targetFrame = skin.bodyFrame, root = process.cwd()) {
   const assetPackage = await loadCoreAssetPackage(renderPayload.assetId, root);
   if (assetPackage.runtime.renderer === "html-component") {
     const { resolveHtmlComponent } = await loadHtmlRuntime();
+    const designFrame = assetPackage.component.designFrame;
+    const stateCount = payloadStateCount(renderPayload.parameters);
+    const footprint = Number.isInteger(stateCount)
+      ? assetPackage.asset?.spatialContract?.stateFootprints?.[String(stateCount)]
+      : null;
+    const requiresNaturalCrop = targetFrame.width + 0.5 < designFrame.width
+      || targetFrame.height + 0.5 < designFrame.height;
+    if (requiresNaturalCrop && footprint
+      && targetFrame.width + 0.5 >= footprint.width
+      && targetFrame.height + 0.5 >= footprint.height) {
+      const tree = await resolveHtmlComponent({
+        component: assetPackage.component,
+        assetDir: assetPackage.assetDir,
+        variantId: assetPackage.runtime.variantId,
+        parameters: renderPayload.parameters,
+        theme: skin.componentTheme,
+      });
+      return {
+        renderer: "html-component",
+        tree,
+        targetFrame,
+        compileOptions: { mode: "natural-crop", footprint },
+      };
+    }
     const tree = await resolveHtmlComponent({
       component: assetPackage.component,
       assetDir: assetPackage.assetDir,
@@ -63,7 +97,7 @@ export async function resolveStructureAsset(renderPayload, skin, targetFrame = s
 export async function compileResolvedStructureAsset(slide, resolved) {
   if (resolved.renderer === "html-component") {
     const { compileResolvedVisualTree } = await loadHtmlRuntime();
-    return compileResolvedVisualTree(slide, resolved.tree, resolved.targetFrame);
+    return compileResolvedVisualTree(slide, resolved.tree, resolved.targetFrame, resolved.compileOptions);
   }
   if (resolved.renderer === "legacy-builder") {
     const { renderComponentIntoSlide } = await import("../asset-runtime/component-builders.mjs");

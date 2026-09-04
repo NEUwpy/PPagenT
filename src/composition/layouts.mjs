@@ -34,22 +34,52 @@ export function resolveNormalizedFrame(bodyFrame, normalized) {
   };
 }
 
-export function compositionCandidatesForAsset(layouts, assetId, metadata, { hasMedia = false } = {}) {
+function stateFootprint(metadata, itemCount) {
+  if (!Number.isInteger(itemCount)) return null;
+  return metadata?.spatialContract?.stateFootprints?.[String(itemCount)] ?? null;
+}
+
+function naturalCropFits(metadata, layout, bodyFrame, itemCount) {
+  if (layout.componentResizeMode !== "natural-crop") return false;
+  const footprint = stateFootprint(metadata, itemCount);
+  const componentSlot = layout.slots.find((slot) => slot.role === "component");
+  if (!footprint || !componentSlot) return false;
+  const frame = resolveNormalizedFrame(bodyFrame, componentSlot.frame);
+  return frame.width >= footprint.width && frame.height >= footprint.height;
+}
+
+export function compositionCandidatesForAsset(layouts, assetId, metadata, { hasMedia = false, itemCount = null } = {}) {
   const kind = assetKind(assetId, metadata);
   const allowedBySpatialContract = metadata?.spatialContract?.supportedCompositionIds ?? [];
+  const contentFrame = metadata?.spatialContract?.contentFrame;
+  const naturalBodyFrame = contentFrame
+    ? { left: 0, top: 0, width: contentFrame.width, height: contentFrame.height }
+    : null;
   return [...layouts.values()].filter((layout) => {
     if (!layout.allowedAssetKinds.includes(kind)) return false;
     if (layout.requiresMedia && !hasMedia) return false;
-    if (kind === "component" && !allowedBySpatialContract.includes(layout.id)) return false;
+    if (kind === "component"
+      && !allowedBySpatialContract.includes(layout.id)
+      && !(naturalBodyFrame && naturalCropFits(metadata, layout, naturalBodyFrame, itemCount))) return false;
     return true;
   });
 }
 
-export function assertSpatialFit(metadata, composition, bodyFrame) {
+export function assertSpatialFit(metadata, composition, bodyFrame, { itemCount = null } = {}) {
   if (metadata?.kind !== "component") return;
   const componentSlot = composition.slots.find((slot) => slot.role === "component");
   if (!componentSlot) throw new Error(`${composition.id} 缺少 component 槽位`);
   const frame = resolveNormalizedFrame(bodyFrame, componentSlot.frame);
+  if (composition.componentResizeMode === "natural-crop") {
+    const footprint = stateFootprint(metadata, itemCount);
+    if (!footprint) throw new Error(`${metadata.id} 的 ${itemCount ?? "?"} 项 State 没有登记自然占用尺寸`);
+    if (frame.width < footprint.width || frame.height < footprint.height) {
+      throw new Error(
+        `${metadata.id} 的 ${itemCount} 项自然占用不能放入 ${composition.id}：${Math.round(frame.width)}x${Math.round(frame.height)} < ${footprint.width}x${footprint.height}`,
+      );
+    }
+    return;
+  }
   const minimum = metadata.spatialContract?.minimumFrame;
   if (!minimum || frame.width < minimum.width || frame.height < minimum.height) {
     throw new Error(

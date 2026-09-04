@@ -17,6 +17,8 @@
     "selectedFamilyId": { "type": ["string", "null"] },
     "selectedVariantId": { "type": ["string", "null"] },
     "selectedSilhouette": { "type": ["string", "null"] },
+    "expressionStrategy": { "enum": ["registered-structure", "text-plus-structure", "multi-structure"] },
+    "structureSourceItemId": { "type": "string", "minLength": 1 },
     "selectionState": { "enum": ["selected", "unresolved", "fallback", "legacy-asset-only"] },
     "selectionOwner": { "enum": ["visual-director", "legacy-matcher", "program"] },
     "selectionSource": {

@@ -1,3 +1,4 @@
+import fs from "node:fs/promises";
 import path from "node:path";
 import { createModelDirectorProvider } from "./model-director-provider.mjs";
 import { loadDirectorGuidelines } from "./director-guidelines.mjs";
@@ -40,6 +41,42 @@ function normalizeThinking(value) {
   return normalized;
 }
 
+function imageMimeType(filePath) {
+  const extension = path.extname(filePath).toLowerCase();
+  if (extension === ".jpg" || extension === ".jpeg") return "image/jpeg";
+  if (extension === ".gif") return "image/gif";
+  if (extension === ".webp") return "image/webp";
+  return "image/png";
+}
+
+async function multimodalUserContent(text, imagePaths) {
+  if (!imagePaths?.length) return text;
+  const content = [{ type: "text", text }];
+  for (const imagePath of imagePaths) {
+    const resolved = path.resolve(imagePath);
+    const bytes = await fs.readFile(resolved);
+    content.push({
+      type: "image_url",
+      image_url: { url: `data:${imageMimeType(resolved)};base64,${bytes.toString("base64")}` },
+    });
+  }
+  return content;
+}
+
+function observableRequestBody(body) {
+  const copy = structuredClone(body);
+  for (const message of copy.messages ?? []) {
+    if (!Array.isArray(message.content)) continue;
+    message.content = message.content.map((part) => {
+      if (part.type !== "image_url") return part;
+      const url = part.image_url?.url ?? "";
+      const mime = String(url).match(/^data:([^;,]+)/)?.[1] ?? "image";
+      return { type: "image_url", image_url: { url: `[inline ${mime} omitted from log]` } };
+    });
+  }
+  return copy;
+}
+
 export class DeepSeekJsonModel {
   constructor({
     apiKey,
@@ -71,6 +108,7 @@ export class DeepSeekJsonModel {
     this.requestTimeoutMs = requestTimeoutMs;
     this.fetchImpl = fetchImpl;
     this.observer = typeof observer === "function" ? observer : null;
+    this.supportsImages = /vision/i.test(model);
     this.identity = `deepseek-chat-completions:${model}:${this.thinking}`;
   }
 
@@ -88,10 +126,13 @@ export class DeepSeekJsonModel {
     requestTimeoutMs = this.requestTimeoutMs,
   }) {
     if (!outputSchema?.name || !outputSchema?.schema) throw new Error("模型调用缺少输出 JSON schema");
-    if (imagePaths.length) {
-      throw new Error("DeepSeek V4 Flash Provider 当前不支持 PPagenT 的逐页图片审查；请使用 production 模式，或为 development 模式配置视觉模型 Provider");
+    if (imagePaths.length && !this.supportsImages) {
+      const error = new Error(`模型 ${this.model} 未声明视觉能力，不能接收图片；请为该角色配置 vision 模型`);
+      error.code = "MODEL_IMAGE_UNSUPPORTED";
+      throw error;
     }
     const schemaText = JSON.stringify(outputSchema.schema);
+    const userText = `${task}\n\n以下是唯一工作上下文：\n${JSON.stringify(context)}`;
     const body = {
       model: this.model,
       messages: [
@@ -101,7 +142,7 @@ export class DeepSeekJsonModel {
         },
         {
           role: "user",
-          content: `${task}\n\n以下是唯一工作上下文：\n${JSON.stringify(context)}`,
+          content: await multimodalUserContent(userText, imagePaths),
         },
       ],
       response_format: { type: "json_object" },
@@ -128,7 +169,7 @@ export class DeepSeekJsonModel {
       await this.observe({
         type: "api-call", status: "running", stage, callId, attempt,
         provider: "DeepSeek", model: this.model, endpoint: this.endpoint,
-        role, task, context, outputSchema, request: requestBody,
+        role, task, context, outputSchema, request: observableRequestBody(requestBody),
       });
       let response;
       try {
@@ -222,6 +263,7 @@ export async function createDeepSeekDirectorProvider({
   const visualCompositionModel = new DeepSeekJsonModel({ ...shared, ...visualComposition });
   const reviewerModel = new DeepSeekJsonModel({ ...shared, ...reviewer });
   return createModelDirectorProvider({
+    root: resolvedRoot,
     contentModel,
     structureModel,
     visualIntentModel,

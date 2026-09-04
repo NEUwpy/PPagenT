@@ -8,6 +8,8 @@ import { extractManuscriptSections } from "../content/manuscript-sections.mjs";
 import { compileContentDirectorDraft } from "../content/content-director-markdown.mjs";
 import { sourceBlocksForModel } from "../content/source-blocks.mjs";
 import { candidateReadiness, normalizeDerivationPolicy } from "./visual-resolution.mjs";
+import { collectVisualDirectorEvidence } from "./candidate-preview-evidence.mjs";
+import { summarizeRhythmPages } from "./deck-rhythm.mjs";
 
 const CONTENT_DIRECTOR_SYSTEM_PROMPT = [
   "PPagenT 内容导演",
@@ -166,7 +168,13 @@ export function candidateSetsForVisualDirector(candidateSets, previousFeedback =
     return candidates.flatMap((candidate) => {
       const normalized = normalizeCandidate(candidate, context);
       if (!normalized) return [];
-      const key = [normalized.assetId, normalized.familyId, normalized.variantId, normalized.silhouette].join("::");
+      const key = [
+        normalized.assetId,
+        normalized.familyId,
+        normalized.variantId,
+        normalized.silhouette,
+        normalized.expressionSource?.sourceItemId ?? "page",
+      ].join("::");
       if (seen.has(key)) return [];
       seen.add(key);
       return [normalized];
@@ -295,7 +303,12 @@ export function enforceStructuralIntentRelations(intentOutput, pageContents) {
 }
 
 function visualPageKey(page) {
-  return [page.familyId, page.variantId, page.silhouette].join("::");
+  return [
+    page.familyId,
+    page.variantId,
+    page.silhouette,
+    page.expressionSource?.sourceItemId ?? page.structureSourceItemId ?? "page",
+  ].join("::");
 }
 
 function componentTextKey(binding) {
@@ -463,6 +476,7 @@ export function normalizeVisualCompositionOutput(output, input) {
     delete clean.iconQueries;
     return clean;
   });
+  normalized.visualPlan.rhythmPlan = summarizeRhythmPages(normalized.visualPlan.pages);
   return normalized;
 }
 
@@ -620,6 +634,7 @@ export function enforceSectionPageContract(contentOutput, rawMarkdown, structura
 }
 
 export function createModelDirectorProvider({
+  root = process.cwd(),
   contentModel,
   structureModel = null,
   visualModel,
@@ -730,24 +745,42 @@ export function createModelDirectorProvider({
           batch.pageIntents,
           batch.candidateSets,
         );
+        const visualEvidence = visualComposition.supportsImages === true
+          ? await collectVisualDirectorEvidence({
+            root,
+            candidateSets: batch.candidateSets,
+            previousRenderResult: input.previousRenderResult,
+            pageIds: batch.pageContents.map((page) => page.pageId),
+          })
+          : { imagePaths: [], entries: [] };
         const visualRequest = {
           role: "PPagenT 视觉导演",
-          task: "内容导演已经为每页确定 Logic，你不得重新分类或跨 Logic 选择。你要把逐页内容稿与资产清单弥合：在该页合法候选中选择具体 Structure Group。当前自动正式线只开放 registered-structure，因为2+3组合原型尚未通过视觉验收、也还不能把已登记资产可靠地嵌入子区域；不要选择 text-plus-structure 或 multi-structure。candidateId 必须逐字复制该页 candidates 中的值；selectionMode=group-locked 表示程序已经锁定唯一合法 Structure Group，你仍需完成 centerLabel、图标、文字布局和整套节奏判断，但不得跨出 lockedStructureGroupId。readiness=ready 可直接绑定，readiness=derivable 只允许按 derivationPolicy.allowedFields 补展示字段；reasons 只是解释，不授予派生权限，不得补造核心节点、分点或关系。选定候选若披露 textRegions，只能从各 Region 的 compatibleLayoutIds 中选择；同级重复 Region 只按 regionKey 选择一次，程序会扩展到每个实际区域。没有文字区域或默认排版已经合适时省略 textLayoutChoices。如果该页 selectionMode=fallback-locked，或 previousFeedback 明确报告 component-runtime-overflow，则使用已锁定的正文兜底，不得继续选择已证明装不下的结构。centerLabel 是页面核心概念的 2–8 字中文短标签，所有页面都填写；若结构没有中心标签槽，程序会忽略。若选中 mediaMode=semantic-icon 的候选，只为该候选披露的 iconSourceItemIds 逐项输出简短英文 icon query，sourceItemId 必须逐字复制；iconSourceItemIds 为空时省略 iconQueries，不得改用普通 items。其他候选也省略 iconQueries。只有 selectionMode=visual-selectable 或需要响应 previousFeedback 时才写简短 reason，否则省略。不要输出坐标、字号、间距、CompositionPlan、HTML/CSS、重复正文或内容细化请求；程序会读取表单并用确定性排版器完成适配。按 pages 原顺序逐页输出且不得遗漏。",
+          task: "内容导演已经为每页确定 Logic，你不得重新分类或跨 Logic 选择。先把每页识别为独立的 pageRole，再规划 densityTarget、visualWeight、continuityGroup 和 contrastBreakBefore；随后在该页合法候选中选择具体 Structure Group 与 compositionId。compositionFamily 必须与所选候选的 compositionOptions 一致。整套优先形成清晰的阅读路径、疏密变化、锚点页和必要的转折；连续三页不要使用同一 compositionFamily，除非语义连续或没有合法替代；卡片和矩阵不能成为所有普通正文页的默认答案。若提供 visualEvidence，图片顺序严格对应 context.visualEvidence：candidate-structure-preview 是已登记资产的真实外观，只用于判断构图，不得把其中示例文字当成稿件事实；previous-deck-montage 或 previous-page-render 用于发现上一轮的重复、重心和承载问题。candidateId 必须逐字复制该页 candidates 中的值。普通候选使用 registered-structure；候选若明确披露 expressionSource、expressionStrategy=text-plus-structure 和 independentTextItemIds，表示程序已验证：该内容块的原文分点可进入真实登记结构，剩余内容块可作为独立文字，并且结构自然占用尺寸能放入子区域。只有这种候选才可选择 text-plus-structure；不要选择尚未开放的 multi-structure。selectionMode=group-locked 表示程序已经锁定唯一合法 Structure Group，你仍需完成 centerLabel、Composition、图标、文字布局和整套节奏判断，但不得跨出 lockedStructureGroupId。readiness=ready 可直接绑定，readiness=derivable 只允许按 derivationPolicy.allowedFields 补展示字段；reasons 只是解释，不授予派生权限，不得补造核心节点、分点或关系。选定候选若披露 textRegions，只能从各 Region 的 compatibleLayoutIds 中选择；同级重复 Region 只按 regionKey 选择一次，程序会扩展到每个实际区域。没有文字区域或默认排版已经合适时省略 textLayoutChoices。如果该页 selectionMode=fallback-locked，或 previousFeedback 明确报告 component-runtime-overflow，则使用已锁定的正文兜底，不得继续选择已证明装不下的结构。centerLabel 是页面核心概念的 2–8 字中文短标签，所有页面都填写；若结构没有中心标签槽，程序会忽略。若选中 mediaMode=semantic-icon 的候选，只为该候选披露的 iconSourceItemIds 逐项输出简短英文 icon query，sourceItemId 必须逐字复制；iconSourceItemIds 为空时省略 iconQueries，不得改用普通 items。其他候选也省略 iconQueries。只有 selectionMode=visual-selectable 或需要响应 previousFeedback 时才写简短 reason，否则省略。不要输出坐标、字号、间距、CompositionPlan、HTML/CSS、重复正文或内容细化请求；程序会读取表单并用确定性排版器完成适配。按 pages 原顺序逐页输出且不得遗漏。",
           context: {
             deckPlan: input.deckPlan,
             pages: compactPages,
+            ...(visualEvidence.entries.length ? { visualEvidence: visualEvidence.entries } : {}),
             previousFeedback: (input.previousResolution?.feedback ?? [])
               .filter((item) => !item.pageId || pageIds.has(item.pageId)),
             ...(batches.length > 1 ? {
               batch: { index: batchIndex + 1, count: batches.length },
-              priorSelections: selections.map(({ pageId, candidateId }) => ({ pageId, candidateId })),
+              priorSelections: selections.map((selection) => ({
+                pageId: selection.pageId,
+                candidateId: selection.candidateId,
+                pageRole: selection.pageRole,
+                densityTarget: selection.densityTarget,
+                visualWeight: selection.visualWeight,
+                compositionFamily: selection.compositionFamily,
+                continuityGroup: selection.continuityGroup,
+              })),
             } : {}),
           },
           outputSchema: visualSkillRoutingSchema(batch.pageContents, batch.candidateSets),
+          imagePaths: visualEvidence.imagePaths,
           // 每批通常只调用一次；空响应或非法 JSON 时仍保留一次受控重答。
           maxJsonAttempts: 2,
         };
-        visualRequest.task = `像调用 Skills 一样使用候选能力卡；当前自动正式线不启用实验性的 blockStructureModes。${visualRequest.task}`;
+        visualRequest.task = `像调用 Skills 一样使用候选能力卡；当前自动正式线不启用实验性的 blockStructureModes，只接受候选中明确披露的混合表达。${visualRequest.task}`;
         const routingOutput = await visualComposition.generateJson(visualRequest);
         selections.push(...(routingOutput.selections ?? []));
       }
@@ -758,7 +791,10 @@ export function createModelDirectorProvider({
 
     },
     visualReview(input) {
-      return reviewer.generateJson({
+      const reviewModel = input.stage === "post-render" && visualComposition.supportsImages === true
+        ? visualComposition
+        : reviewer;
+      return reviewModel.generateJson({
         role: "独立视觉对抗审查者",
         task: input.stage === "pre-render"
           ? "审查语义、容量、家族、变体、整套轮廓重复和节奏；输出 VisualReview。"

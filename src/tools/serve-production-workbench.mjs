@@ -24,6 +24,8 @@ const workbenchRoot = path.join(projectRoot, ".tmp", "production-workbench");
 const runsRoot = path.join(workbenchRoot, "runs");
 const currentRunPath = path.join(workbenchRoot, "current-run.json");
 const maxUploadBytes = 30 * 1024 * 1024;
+const runtimeRevision = process.env.PPAGENT_RUNTIME_REVISION || "source-direct";
+const serverStartedAt = new Date().toISOString();
 let activeRunId = null;
 const activeVisualCheckpoints = new Map();
 const activeNativePptCheckpoints = new Map();
@@ -462,13 +464,27 @@ async function sendArtifact(response, targetRunDir, requestedPath) {
 async function publicConfig() {
   let local = {};
   try { local = JSON.parse(await fs.readFile(path.join(projectRoot, "config", "deepseek.local.json"), "utf8")); } catch {}
+  const visual = local.roles?.visualComposition ?? {};
   return {
     app: "PPagenT 正式生成工作台",
     skin: { id: "northeastern-university-001", name: "东北大学" },
-    provider: { name: "DeepSeek", model: process.env.PPAGENT_DEEPSEEK_MODEL || local.model || "deepseek-v4-flash", configured: Boolean(process.env.DEEPSEEK_API_KEY || local.apiKey) },
+    provider: {
+      name: "DeepSeek",
+      model: process.env.PPAGENT_DEEPSEEK_MODEL || local.model || "deepseek-v4-flash",
+      configured: Boolean(process.env.DEEPSEEK_API_KEY || local.apiKey),
+      roles: {
+        visualComposition: {
+          model: process.env.PPAGENT_DEEPSEEK_VISUAL_COMPOSITION_MODEL || visual.model
+            || process.env.PPAGENT_DEEPSEEK_MODEL || local.model || "deepseek-v4-flash",
+          configured: Boolean(process.env.PPAGENT_DEEPSEEK_VISUAL_COMPOSITION_API_KEY || visual.apiKey
+            || process.env.DEEPSEEK_API_KEY || local.apiKey),
+        },
+      },
+    },
     formats: supportedManuscriptExtensions,
     maxUploadBytes,
     activeRunId,
+    runtime: { revision: runtimeRevision, startedAt: serverStartedAt },
   };
 }
 
@@ -515,6 +531,8 @@ const server = http.createServer(async (request, response) => {
         root: projectRoot,
         pid: process.pid,
         activeRunId,
+        runtimeRevision,
+        startedAt: serverStartedAt,
       });
     }
     if (request.method === "GET" && url.pathname === "/") {

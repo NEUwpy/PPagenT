@@ -141,6 +141,54 @@ function renderEditorialGrid(slide, content, layout, planPage, bodyFrame, typogr
   });
 }
 
+function renderComponentLeadBand(slide, content, layout, planPage, bodyFrame, typographyRoles) {
+  const plan = planPage.textSlots.find((slot) => slot.slotId === "lead");
+  const frame = slotFrame(layout, "lead", bodyFrame);
+  const item = plan ? slotItems(content, plan)[0] : null;
+  const within = "composition-component-lead";
+  zone(slide, within, frame);
+  addBox(slide, frame, {
+    name: qaElementName({ within, role: "surface" }),
+    geometry: "roundRect",
+    fill: "#F3F7FC",
+    line: { style: "solid", fill: "#D5E2F2", width: 1 },
+    shadow: "shadow-none",
+    borderRadius: 10,
+  });
+  accentBar(slide, within, { left: frame.left, top: frame.top, width: 7, height: frame.height });
+  const hasTitle = Boolean(item?.title);
+  const titleWidth = hasTitle ? Math.min(210, Math.max(140, frame.width * 0.18)) : 0;
+  if (hasTitle) {
+    const titleFrame = {
+      left: frame.left + 24, top: frame.top + 8, width: titleWidth - 24, height: frame.height - 16,
+    };
+    const title = fittedCompositionText(item.title, titleFrame, "bandTitle", typographyRoles);
+    addText(slide, title.text, titleFrame, {
+      name: qaElementName({ within, role: "title" }), typeface: typographyRoles.bodyTypeface,
+      fontSize: title.fontSize, bold: true, color: COLORS.blue, verticalAlignment: "middle", autoFit: "none",
+    });
+    addBox(slide, {
+      left: frame.left + titleWidth, top: frame.top + 13, width: 1, height: frame.height - 26,
+    }, {
+      name: qaElementName({ within, role: "divider" }), geometry: "rect", fill: COLORS.line,
+      line: { style: "solid", fill: "none", width: 0 }, shadow: "shadow-none", borderRadius: 0,
+    });
+  }
+  if (item?.body) {
+    const bodyFrame = {
+      left: frame.left + (hasTitle ? titleWidth + 24 : 24),
+      top: frame.top + 8,
+      width: frame.width - (hasTitle ? titleWidth + 42 : 42),
+      height: frame.height - 16,
+    };
+    const body = fittedCompositionText(item.body, bodyFrame, "bandBody", typographyRoles);
+    addText(slide, body.text, bodyFrame, {
+      name: qaElementName({ within, role: "body" }), typeface: typographyRoles.bodyTypeface,
+      fontSize: body.fontSize, color: COLORS.body, verticalAlignment: "middle", autoFit: "none",
+    });
+  }
+}
+
 function renderLead(slide, frame, item, within, eyebrow, typographyRoles) {
   accentBar(slide, within, { left: frame.left, top: frame.top, width: 7, height: frame.height });
   addText(slide, eyebrow, {
@@ -555,6 +603,9 @@ export function renderPageComposition(slide, content, layout, planPage, bodyFram
   if (layout.id === "editorial-dual-statement") {
     renderDualStatement(slide, content, layout, planPage, bodyFrame, typographyRoles);
     return { componentFrame: null };
+  }
+  if (layout.id === "component-lead-top") {
+    renderComponentLeadBand(slide, content, layout, planPage, bodyFrame, typographyRoles);
   }
   const componentSlot = layout.slots.find((slot) => slot.role === "component");
   const componentFrame = componentSlot ? resolveNormalizedFrame(bodyFrame, componentSlot.frame) : null;

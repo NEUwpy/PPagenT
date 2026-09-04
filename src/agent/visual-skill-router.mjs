@@ -1,12 +1,31 @@
 import { canonicalTextLayoutId } from "../visual-runtime/text-layout-library.mjs";
 import { candidateReadiness, normalizeDerivationPolicy } from "./visual-resolution.mjs";
+import {
+  COMPOSITION_FAMILIES,
+  DENSITY_TARGETS,
+  PAGE_ROLES,
+  VISUAL_WEIGHTS,
+  compositionFamilyFor,
+  deriveDensityTarget,
+  derivePageRole,
+  deriveVisualWeight,
+  summarizeRhythmPages,
+} from "./deck-rhythm.mjs";
 
 function candidateId(candidate) {
-  return [candidate.familyId, candidate.variantId, candidate.silhouette].join("::");
+  return [
+    candidate.familyId,
+    candidate.variantId,
+    candidate.silhouette,
+    ...(candidate.expressionSource?.sourceItemId ? [candidate.expressionSource.sourceItemId] : []),
+  ].join("::");
 }
 
 function mediaSourceItemIds(page, candidate) {
   if (candidate.mediaContract?.mode !== "semantic-icon") return [];
+  if (candidate.expressionSource?.projectedItemIds?.length) {
+    return candidate.expressionSource.projectedItemIds;
+  }
   if (candidate.mediaContract.source === "structuredData.inputs") {
     return (page.structuredData?.inputs ?? []).map((item) => item.id);
   }
@@ -20,17 +39,24 @@ export function compactVisualSkillContext(pageContents, pageIntents, candidateSe
     title: page.title,
     relation: pageIntents[index].baseRelation,
     purposeKey: pageIntents[index].purposeKey,
+    contentDensity: pageIntents[index].density,
+    evidenceTypes: pageIntents[index].evidenceTypes ?? [],
     selectionMode: candidateSets[index].selectionMode ?? "visual-selectable",
     ...(candidateSets[index].lockedStructureGroupId
       ? { lockedStructureGroupId: candidateSets[index].lockedStructureGroupId }
       : {}),
     items: page.items.map((item) => ({
-      id: item.id, title: item.title, body: item.body, pointCount: item.points?.length ?? 0,
+      id: item.id,
+      title: item.title,
+      body: item.body,
+      pointCount: item.points?.length ?? 0,
+      ...(item.points?.length ? { points: item.points.map((point) => String(point?.text ?? point)) } : {}),
     })),
-    // The automatic production line may only use expressions that have
-    // passed visual approval. The current 2+3 prototypes remain available in
-    // the manual checkpoint, but are not disclosed as automatic choices.
-    expressionStrategies: ["registered-structure"],
+    // Mixed output is disclosed only when the program has found a registered
+    // structure whose measured natural footprint fits a legal subregion.
+    expressionStrategies: candidateSets[index].candidates.some((candidate) => candidate.expressionSource)
+      ? ["registered-structure", "text-plus-structure"]
+      : ["registered-structure"],
     blockStructureOptions: page.items.map((item) => ({
       sourceItemId: item.id,
       allowedPatterns: (item.points?.length ?? 0) === 3
@@ -55,6 +81,22 @@ export function compactVisualSkillContext(pageContents, pageIntents, candidateSe
       iconsRequiredPerItem: Boolean(candidate.mediaContract?.requiredPerComponentItem),
       iconSourceItemIds: mediaSourceItemIds(page, candidate),
       fallbackBody: Boolean(candidate.fallbackBody),
+      ...(candidate.expressionSource ? {
+        expressionSource: candidate.expressionSource,
+        expressionStrategy: "text-plus-structure",
+        independentTextItemIds: page.items
+          .filter((item) => item.id !== candidate.expressionSource.sourceItemId)
+          .map((item) => item.id),
+      } : {}),
+      compositionOptions: (candidate.compositions ?? []).map((composition) => ({
+        compositionId: composition.id,
+        compositionFamily: compositionFamilyFor({
+          composition,
+          candidate,
+          intent: pageIntents[index],
+          page,
+        }),
+      })),
       textRegions: (candidate.textRegions ?? []).map((region) => ({
         regionKey: region.regionKey,
         contentRoles: region.contentRoles,
@@ -83,10 +125,19 @@ export function visualSkillRoutingSchema(pageContents, candidateSets) {
     const textLayoutIds = [...new Set(lockedCandidates.flatMap((candidate) => (
       (candidate.textRegions ?? []).flatMap((region) => region.compatibleLayoutIds ?? [])
     )))];
+    const expressionStrategies = set.candidates.some((candidate) => candidate.expressionSource)
+      ? ["registered-structure", "text-plus-structure"]
+      : ["registered-structure"];
+    const compositionIds = [...new Set(lockedCandidates.flatMap((candidate) => (
+      (candidate.compositions ?? []).map((composition) => composition.id)
+    )))];
     return {
       type: "object",
       additionalProperties: false,
-      required: ["pageId", "candidateId", "centerLabel"],
+      required: [
+        "pageId", "candidateId", "centerLabel", "pageRole", "densityTarget",
+        "visualWeight", "compositionId", "compositionFamily",
+      ],
       properties: {
         pageId: { const: page.pageId },
         candidateId: candidateIds.length === 1
@@ -96,8 +147,17 @@ export function visualSkillRoutingSchema(pageContents, candidateSets) {
             : { const: "__no-legal-candidate__" },
         centerLabel: { type: "string", minLength: 2, maxLength: 8 },
         expressionStrategy: {
-          enum: ["registered-structure"],
+          enum: expressionStrategies,
         },
+        pageRole: { enum: PAGE_ROLES },
+        densityTarget: { enum: DENSITY_TARGETS },
+        visualWeight: { enum: VISUAL_WEIGHTS },
+        compositionId: compositionIds.length
+          ? { type: "string", enum: compositionIds }
+          : { type: "string", minLength: 1 },
+        compositionFamily: { enum: COMPOSITION_FAMILIES },
+        continuityGroup: { type: "string", minLength: 1, maxLength: 40 },
+        contrastBreakBefore: { type: "boolean" },
         blockStructureModes: {
           type: "array",
           maxItems: page.items.length,
@@ -180,8 +240,16 @@ function legalTextLayoutChoices(selection, candidate) {
   return choices;
 }
 
-function chooseComposition(candidate, page) {
+function chooseComposition(candidate, page, requestedCompositionId) {
   const compositions = candidate.compositions ?? [];
+  const requested = compositions.find((item) => item.id === requestedCompositionId);
+  if (requested) return requested;
+  if (candidate.expressionSource) {
+    const mixed = compositions.find((item) => (
+      item.requiresComponent && item.slots.some((slot) => slot.role === "text")
+    ));
+    if (mixed) return mixed;
+  }
   const component = compositions.find((item) => item.requiresComponent);
   if (component) return component;
   const preferredId = page.items.length <= 1
@@ -237,11 +305,10 @@ function routingError(message, details = {}) {
   return error;
 }
 
-function automaticExpressionStrategy() {
-  // 2+3 prototypes have not passed visual approval and currently bypass the
-  // selected registered asset. Keep them behind the manual checkpoint until
-  // child regions can bind real catalog assets without scaling typography.
-  return "registered-structure";
+function automaticExpressionStrategy(_selection, candidate) {
+  // Mixed output is only enabled for a bounded block candidate that binds a
+  // real catalog asset and has passed natural-size spatial filtering.
+  return candidate.expressionSource ? "text-plus-structure" : "registered-structure";
 }
 
 export function expandVisualSkillRouting(routing, input) {
@@ -305,8 +372,43 @@ export function expandVisualSkillRouting(routing, input) {
     if (!candidate.fallbackBody) {
       structureUsage.set(candidate.assetId, (structureUsage.get(candidate.assetId) ?? 0) + 1);
     }
-    const composition = chooseComposition(candidate, page);
+    const requestedCompositionIsLegal = (candidate.compositions ?? [])
+      .some((item) => item.id === selection.compositionId);
+    const composition = chooseComposition(candidate, page, selection.compositionId);
     if (!composition) throw routingError("Structure Group 没有可用 Composition", { pageId: page.pageId });
+    if (selection.compositionId && !requestedCompositionIsLegal) {
+      routingDiagnostics.push({
+        pageId: page.pageId,
+        code: "composition-normalized-to-selected-candidate",
+        requestedCompositionId: selection.compositionId,
+        appliedCompositionId: composition.id,
+      });
+    }
+    const deckPage = input.deckPlan?.pages?.find((item) => item.pageId === page.pageId);
+    const pageRole = PAGE_ROLES.includes(selection.pageRole)
+      ? selection.pageRole
+      : derivePageRole({
+        page,
+        deckPage,
+        intent,
+        index,
+        pageCount: input.pageContents.length,
+      });
+    const densityTarget = DENSITY_TARGETS.includes(selection.densityTarget)
+      ? selection.densityTarget
+      : deriveDensityTarget(intent);
+    const visualWeight = VISUAL_WEIGHTS.includes(selection.visualWeight)
+      ? selection.visualWeight
+      : deriveVisualWeight(pageRole, densityTarget);
+    const compositionFamily = compositionFamilyFor({ composition, candidate, intent, page });
+    if (selection.compositionFamily && selection.compositionFamily !== compositionFamily) {
+      routingDiagnostics.push({
+        pageId: page.pageId,
+        code: "composition-family-normalized",
+        requestedCompositionFamily: selection.compositionFamily,
+        appliedCompositionFamily: compositionFamily,
+      });
+    }
     const iconQueries = (selection.iconQueries ?? []).filter((item) => validItemIds.has(item.sourceItemId));
     const expressionStrategy = automaticExpressionStrategy(selection, candidate);
     if (selection.expressionStrategy && selection.expressionStrategy !== expressionStrategy) {
@@ -324,7 +426,16 @@ export function expandVisualSkillRouting(routing, input) {
       variantId: candidate.variantId,
       silhouette: candidate.silhouette,
       adaptationStatus: candidate.adaptationStatus,
+      pageRole,
+      densityTarget,
+      visualWeight,
+      compositionFamily,
+      ...(selection.continuityGroup ? { continuityGroup: selection.continuityGroup } : {}),
+      ...(selection.contrastBreakBefore ? { contrastBreakBefore: true } : {}),
       expressionStrategy,
+      ...(candidate.expressionSource?.sourceItemId
+        ? { structureSourceItemId: candidate.expressionSource.sourceItemId }
+        : {}),
       ...(selection.blockStructureModes?.length ? {
         blockStructureModes: selection.blockStructureModes.filter((choice) => (
           page.items.some((item) => item.id === choice.sourceItemId)
@@ -344,7 +455,19 @@ export function expandVisualSkillRouting(routing, input) {
       ].filter(Boolean).join("；"),
     });
     const requiresComponent = Boolean(composition.requiresComponent);
-    const bindings = requiresComponent ? buildComponentBindings(candidate, page) : undefined;
+    const componentPage = candidate.expressionSource
+      ? {
+        ...page,
+        items: (page.items.find((item) => item.id === candidate.expressionSource.sourceItemId)?.points ?? [])
+          .map((point, pointIndex) => ({
+            id: candidate.expressionSource.projectedItemIds[pointIndex],
+            title: String(point?.text ?? point ?? "").trim(),
+            body: "",
+            points: [],
+          })),
+      }
+      : page;
+    const bindings = requiresComponent ? buildComponentBindings(candidate, componentPage) : undefined;
     const supportsCenterLabel = (candidate.slotCapabilities?.textSlots ?? [])
       .some((slot) => slot.role === "center-title");
     const textLayoutChoices = requiresComponent ? legalTextLayoutChoices(selection, candidate) : [];
@@ -352,10 +475,20 @@ export function expandVisualSkillRouting(routing, input) {
       pageId: page.pageId,
       intentId: intent.intentId,
       compositionId: composition.id,
-      componentItemIds: requiresComponent ? page.items.map((item) => item.id) : [],
+      componentItemIds: requiresComponent
+        ? (candidate.expressionSource ? [candidate.expressionSource.sourceItemId] : page.items.map((item) => item.id))
+        : [],
       componentContentMode: requiresComponent ? "full" : "none",
-      textSlots: requiresComponent ? [] : distributeTextSlots(page, composition),
+      textSlots: requiresComponent
+        ? (candidate.expressionSource
+          ? distributeTextSlots({
+            ...page,
+            items: page.items.filter((item) => item.id !== candidate.expressionSource.sourceItemId),
+          }, composition)
+          : [])
+        : distributeTextSlots(page, composition),
       textLayoutChoices,
+      ...(candidate.expressionSource ? { componentProjection: candidate.expressionSource } : {}),
       ...(bindings ? { componentBindings: bindings } : {}),
       ...(supportsCenterLabel ? {
         componentText: [{
@@ -367,19 +500,23 @@ export function expandVisualSkillRouting(routing, input) {
       } : {}),
       reason: candidateReadiness(candidate) === "fallback"
         ? "当前 Logic 无适配结构或结构运行时溢出，使用主题正文 Composition 兜底"
+        : candidate.expressionSource
+          ? "来源内容块的明确分点进入登记 Structure Group，其余来源内容保留为独立文字"
         : requiresComponent
           ? "Structure Group 承担完整页面内容，字段由正式 Slot Contract 确定性绑定"
           : "正文页面使用主题 Composition 承载内容",
     });
   });
 
+  const rhythmPlan = summarizeRhythmPages(visualPages);
   return {
     visualPlan: {
       schemaVersion: "1.0",
       deckId: input.deckPlan.deckId,
       skinId: input.skinId,
       visualLanguage: "遵循所选主题与已确认 Structure Group 的统一设计语言",
-      rhythmStrategy: "优先使用语义适配的核心结构，避免相邻页面机械重复",
+      rhythmStrategy: "先按页面职责分配疏密与视觉重心，再在合法候选中改变构图家族；连续复用必须显式归入 continuityGroup",
+      rhythmPlan,
       pages: visualPages,
     },
     compositionPlan: {

@@ -137,6 +137,21 @@ export function validatePageCompositionTextFit(content, layout, planPage, bodyFr
       check(item?.title, { left: frame.left, top: frame.top + 52, width: frame.width, height: 92 }, "dualTitle", slotId);
       check(item?.body, { left: frame.left, top: frame.top + 190, width: frame.width, height: frame.height - 200 }, "dualBody", slotId);
     });
+  } else if (layout.id === "component-lead-top") {
+    const plan = planPage.textSlots.find((slot) => slot.slotId === "lead");
+    const frame = slotFrame(layout, "lead", bodyFrame);
+    const item = plan ? slotItems(content, plan)[0] : null;
+    const hasTitle = Boolean(item?.title);
+    const titleWidth = hasTitle ? Math.min(210, Math.max(140, frame.width * 0.18)) : 0;
+    if (hasTitle) check(item.title, {
+      left: frame.left + 24, top: frame.top + 8, width: titleWidth - 24, height: frame.height - 16,
+    }, "bandTitle", "lead");
+    if (item?.body) check(item.body, {
+      left: frame.left + (hasTitle ? titleWidth + 24 : 24),
+      top: frame.top + 8,
+      width: frame.width - (hasTitle ? titleWidth + 42 : 42),
+      height: frame.height - 16,
+    }, "bandBody", "lead");
   } else {
     const asidePlan = planPage.textSlots.find((slot) => slot.slotId === "aside");
     if (asidePlan) {

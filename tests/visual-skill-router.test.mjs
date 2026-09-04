@@ -68,13 +68,16 @@ test("锁定 Structure Group 的页面仍向视觉导演披露展示适配字段
   assert.equal(compact[0].lockedStructureGroupId, "hub-radial-anchor");
   assert.deepEqual(compact[0].expressionStrategies, ["registered-structure"]);
   assert.deepEqual(Object.keys(compact[0].candidates[0]).sort(), [
-    "candidateId", "fallbackBody", "iconSourceItemIds", "iconsRequiredPerItem", "itemRange", "logicId",
+    "candidateId", "compositionOptions", "fallbackBody", "iconSourceItemIds", "iconsRequiredPerItem", "itemRange", "logicId",
     "mediaMode", "readiness", "reasons", "selectionMode", "structureGroupId", "textRegions",
   ]);
   const schema = visualSkillRoutingSchema([page], sets);
   assert.equal(schema.schema.properties.selections.minItems, 1);
   const pageSchema = schema.schema.properties.selections.items.anyOf[0];
-  assert.deepEqual(pageSchema.required, ["pageId", "candidateId", "centerLabel"]);
+  assert.deepEqual(pageSchema.required, [
+    "pageId", "candidateId", "centerLabel", "pageRole", "densityTarget",
+    "visualWeight", "compositionId", "compositionFamily",
+  ]);
   assert.equal(pageSchema.properties.pageId.const, "p1");
   assert.equal(pageSchema.properties.candidateId.const, "hub-radial::balanced-orbit-anchor::radial");
   assert.deepEqual(pageSchema.properties.expressionStrategy.enum, ["registered-structure"]);

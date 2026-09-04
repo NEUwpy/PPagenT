@@ -1,4 +1,5 @@
 const fs = require("node:fs");
+const crypto = require("node:crypto");
 const http = require("node:http");
 const net = require("node:net");
 const path = require("node:path");
@@ -9,6 +10,33 @@ const host = "127.0.0.1";
 const args = process.argv.slice(2);
 function option(name, fallback = "") { const index = args.indexOf(name); return index >= 0 && args[index + 1] ? args[index + 1] : fallback; }
 function isProjectRoot(candidate) { return fs.existsSync(path.join(candidate, "package.json")) && fs.existsSync(path.join(candidate, "src", "tools", "serve-production-workbench.mjs")); }
+const runtimeRevisionRoots = ["src", "schemas", "catalog", "assets", path.join("docs", "工作流", "正式生成"), "package.json", "package-lock.json"];
+const runtimeRevisionExtensions = new Set([".mjs", ".cjs", ".js", ".json", ".html", ".md", ".ps1"]);
+function runtimeFiles(root) {
+  const files = [];
+  const visit = (target) => {
+    if (!fs.existsSync(target)) return;
+    const stat = fs.statSync(target);
+    if (stat.isFile()) {
+      if (runtimeRevisionExtensions.has(path.extname(target).toLowerCase()) || path.basename(target) === "package-lock.json") files.push(target);
+      return;
+    }
+    for (const entry of fs.readdirSync(target, { withFileTypes: true })) visit(path.join(target, entry.name));
+  };
+  for (const relative of runtimeRevisionRoots) visit(path.join(root, relative));
+  return files.sort((left, right) => left.localeCompare(right, "zh-CN"));
+}
+function computeRuntimeRevision(root) {
+  const hash = crypto.createHash("sha256");
+  hash.update("ppagent-production-runtime-v1\0");
+  for (const target of runtimeFiles(root)) {
+    hash.update(path.relative(root, target).replaceAll("\\", "/"));
+    hash.update("\0");
+    hash.update(fs.readFileSync(target));
+    hash.update("\0");
+  }
+  return hash.digest("hex").slice(0, 16);
+}
 function findProjectRoot(explicitRoot = "") {
   for (const seed of [explicitRoot, path.dirname(process.execPath), process.cwd()].filter(Boolean)) {
     let current = path.resolve(seed);
@@ -27,6 +55,7 @@ function loadProjectModule(root, targetPath, targetArgv) {
 const modeRoot = findProjectRoot(option("--root"));
 if (args[0] === "--serve") {
   if (!modeRoot) throw new Error("找不到 PPagenT 项目根目录。");
+  process.env.PPAGENT_RUNTIME_REVISION = computeRuntimeRevision(modeRoot);
   loadProjectModule(modeRoot, path.join(modeRoot, "src", "tools", "serve-production-workbench.mjs"), ["--root", modeRoot, "--port", option("--port", "4212")]);
 } else {
   launch().catch((error) => {
@@ -74,11 +103,16 @@ async function waitFor(port, root) {
 async function launch() {
   const root = modeRoot;
   if (!root) throw new Error("请把 PPA生产工作台.exe 保留在 PPagenT 项目根目录内。");
+  const desiredRuntimeRevision = computeRuntimeRevision(root);
   const existing = await findExisting(root);
   if (existing) {
-    const existingUrl = `http://${host}:${existing.port}/?launch=${Date.now()}`;
-    if (!args.includes("--no-open")) openBrowser(existingUrl); else console.log(existingUrl);
-    return;
+    const isCurrent = existing.health.runtimeRevision === desiredRuntimeRevision;
+    if (isCurrent || existing.health.activeRunId) {
+      const existingUrl = `http://${host}:${existing.port}/?launch=${Date.now()}${isCurrent ? "" : "&update=pending"}`;
+      if (!args.includes("--no-open")) openBrowser(existingUrl); else console.log(existingUrl);
+      return;
+    }
+    await stopExisting(root);
   }
   let selectedPort = null;
   for (let port = 4212; port <= 4222; port += 1) if (await isPortFree(port)) { selectedPort = port; break; }

@@ -16,6 +16,10 @@ import {
 import { mapPageContent as mapComparisonPageContent } from "../assets/结构图/双向对比-001/runtime.mjs";
 import { mapPageContent as mapTradeoffPageContent } from "../assets/结构图/优劣权衡天平-005/runtime.mjs";
 import {
+  mapPageContent as mapPhaseGatePageContent,
+  visualComponent as phaseGateComponent,
+} from "../assets/结构图/阶段门禁流程-004/runtime.mjs";
+import {
   listRenderableVisualVariants,
   planVisualVariants,
   queryVisualVariants,
@@ -283,6 +287,26 @@ test("漏斗输入使用单一圆内标记槽，图标可选且文字可回退",
   assert.match(simpleHtml, /simple-input-marker-text/);
   assert.doesNotMatch(simpleHtml, /simple-input-label/);
   assert.match(stagedHtml, /funnel-input-text/);
+});
+
+test("阶段门禁流程公开通用分点容量并把较长门禁文字放入正文槽", () => {
+  assert.equal(phaseGateComponent.textCapacity.maxPointsPerItem, 3);
+  assert.equal(phaseGateComponent.textCapacity.maxPointChars, 12);
+  const content = {
+    pageId: "page-02",
+    title: "三代人的青春远征",
+    items: [
+      { id: "phase-1", title: "马灯守候", body: "门前点灯守望儿子归来", points: ["八个儿子全部参加红军", "请假条写下打完胜仗归来"] },
+      { id: "phase-2", title: "青春点灯", body: "在新疆戈壁教书育人", points: ["支教一年教六十个孩子", "学生成长后接力支教"] },
+      { id: "phase-3", title: "青春归来", body: "从等我回家变成跟我出发", points: ["青年投身西部", "孩子梦想被点亮"] },
+    ],
+  };
+  const payload = mapPhaseGatePageContent(content, { intentId: "page-02-intent" });
+  assert.equal(payload.parameters.gates[0].title, "");
+  assert.equal(payload.parameters.gates[0].body, "八个儿子全部参加红军");
+  assert.equal(payload.parameters.gates[1].title, "");
+  assert.equal(payload.parameters.gates[1].body, "支教一年教六十个孩子");
+  assert.doesNotThrow(() => phaseGateComponent.renderMarkup(payload.parameters));
 });
 
 test("两个漏斗的同级阶段标题使用统一字号", async () => {

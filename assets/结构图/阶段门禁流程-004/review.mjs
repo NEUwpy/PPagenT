@@ -302,6 +302,10 @@ export const visualComponent = Object.freeze({
   cssFile: "component.css",
   textFlow: Object.freeze({ profile: "text-region-layout-library", scope: "per-contiguous-region" }),
   textCapacity: Object.freeze({
+    maxItemTitleChars: PHASE_TITLE_LIMIT,
+    maxItemBodyChars: PHASE_BODY_LIMITS,
+    maxPointsPerItem: MAX_POINTS,
+    maxPointChars: POINT_LIMIT,
     phaseTitleChars: PHASE_TITLE_LIMIT,
     phaseBodyCharsByState: PHASE_BODY_LIMITS,
     phasePoints: `${MAX_POINTS} 条，每条 ${POINT_LIMIT} 字`,

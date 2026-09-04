@@ -1102,6 +1102,24 @@ function fittedTransform(tree, targetFrame) {
   };
 }
 
+function naturalCropTransform(tree, targetFrame, footprint) {
+  const source = normalizeFrame({
+    left: (tree.frame.width - footprint.width) / 2,
+    top: (tree.frame.height - footprint.height) / 2,
+    width: footprint.width,
+    height: footprint.height,
+  }, "naturalFootprint");
+  requireValue(
+    targetFrame.width + 0.5 >= source.width && targetFrame.height + 0.5 >= source.height,
+    `${tree.componentId ?? "HTML Component"} 的自然占用 ${source.width}x${source.height} 不能放入 ${Math.round(targetFrame.width)}x${Math.round(targetFrame.height)} 子区域`,
+  );
+  return {
+    scale: 1,
+    left: targetFrame.left + (targetFrame.width - source.width) / 2 - source.left,
+    top: targetFrame.top + (targetFrame.height - source.height) / 2 - source.top,
+  };
+}
+
 function scaledFrame(frame, transform) {
   return {
     left: transform.left + frame.left * transform.scale,
@@ -1134,10 +1152,12 @@ function applyText(shape, node, scale) {
   shape.text.wrap = node.style.wrap;
 }
 
-export function compileResolvedVisualTree(slide, tree, targetFrame = tree.targetFrame) {
+export function compileResolvedVisualTree(slide, tree, targetFrame = tree.targetFrame, options = {}) {
   requireValue(tree?.schemaVersion === TREE_SCHEMA_VERSION, `ResolvedVisualTree schemaVersion 必须为 ${TREE_SCHEMA_VERSION}`);
   const frame = normalizeFrame(targetFrame, "targetFrame");
-  const transform = fittedTransform(tree, frame);
+  const transform = options.mode === "natural-crop"
+    ? naturalCropTransform(tree, frame, options.footprint)
+    : fittedTransform(tree, frame);
   for (const node of sortResolvedVisualNodes(tree.nodes)) {
     const position = scaledFrame(node.frame, transform);
     if (node.kind === "path") {

@@ -116,6 +116,7 @@ test("视觉导演超过八页时按原页序分批并携带此前选择", async
   const calls = [];
   const model = {
     identity: "batch-test",
+    supportsImages: true,
     async generateJson(request) {
       calls.push(request);
       return {
@@ -132,6 +133,7 @@ test("视觉导演超过八页时按原页序分批并携带此前选择", async
       .map((name) => [name, { name, schema: { type: "object" } }]),
   );
   const provider = createModelDirectorProvider({
+    root: path.resolve(new URL("..", import.meta.url).pathname.replace(/^\/(.:)/, "$1")),
     contentModel: model, visualModel: model, reviewerModel: model, schemas,
   });
   const pageContents = Array.from({ length: 10 }, (_, index) => ({
@@ -147,6 +149,7 @@ test("视觉导演超过八页时按原页序分批并携带此前选择", async
   const candidateSets = pageContents.map((page) => ({
     pageId: page.pageId,
     candidates: [{
+      assetId: "hub-directed-outcomes-002",
       logicId: "editorial",
       structureGroupId: "editorial-body",
       familyId: "skin-body-editorial",
@@ -173,6 +176,8 @@ test("视觉导演超过八页时按原页序分批并携带此前选择", async
   assert.equal(calls.length, 2);
   assert.deepEqual(calls.map((call) => call.context.pages.length), [8, 2]);
   assert.equal(calls[0].context.batch.count, 2);
+  assert.equal(calls[0].imagePaths.length, 1);
+  assert.equal(calls[0].context.visualEvidence[0].assetId, "hub-directed-outcomes-002");
   assert.equal(calls[0].context.priorSelections.length, 0);
   assert.equal(calls[1].context.priorSelections.length, 8);
   assert.deepEqual(output.visualPlan.pages.map((page) => page.pageId), pageContents.map((page) => page.pageId));

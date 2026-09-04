@@ -24,6 +24,32 @@ test("未配置 API Key 时 Provider 可加载并把导演调用交给工作流�
   }
 });
 
+test("视觉导演可以使用独立模型与凭证且公开配置不泄露密钥", async (context) => {
+  const names = [
+    "DEEPSEEK_API_KEY",
+    "PPAGENT_DEEPSEEK_MODEL",
+    "PPAGENT_DEEPSEEK_VISUAL_COMPOSITION_API_KEY",
+    "PPAGENT_DEEPSEEK_VISUAL_COMPOSITION_MODEL",
+  ];
+  const previous = Object.fromEntries(names.map((name) => [name, process.env[name]]));
+  context.after(() => {
+    for (const name of names) {
+      if (previous[name] === undefined) delete process.env[name];
+      else process.env[name] = previous[name];
+    }
+  });
+  process.env.DEEPSEEK_API_KEY = "content-secret";
+  process.env.PPAGENT_DEEPSEEK_MODEL = "deepseek-v4-flash";
+  process.env.PPAGENT_DEEPSEEK_VISUAL_COMPOSITION_API_KEY = "visual-secret";
+  process.env.PPAGENT_DEEPSEEK_VISUAL_COMPOSITION_MODEL = "deepseek-v4-flash-vision-exp";
+  const { provider, publicConfig } = await createConfiguredDeepSeekProvider({ root: process.cwd() });
+  assert.match(provider.metadata.visualCompositionModel, /deepseek-v4-flash-vision-exp/);
+  assert.equal(publicConfig.model, "deepseek-v4-flash");
+  assert.equal(publicConfig.roles.visualComposition.model, "deepseek-v4-flash-vision-exp");
+  assert.equal(JSON.stringify(publicConfig).includes("content-secret"), false);
+  assert.equal(JSON.stringify(publicConfig).includes("visual-secret"), false);
+});
+
 test("DeepSeek Provider 使用 V4 Flash Chat Completions JSON 输出", async () => {
   let requestUrl = "";
   let requestBody = null;
@@ -69,18 +95,37 @@ test("DeepSeek Provider 使用 V4 Flash Chat Completions JSON 输出", async () 
   assert.match(requestBody.messages[0].content, /test_output/);
 });
 
-test("DeepSeek Provider 不伪装支持逐页图片审查", async () => {
-  const model = new DeepSeekJsonModel({ apiKey: "test-key" });
-  await assert.rejects(
-    model.generateJson({
-      role: "视觉审查者",
-      task: "审查页面",
-      context: {},
-      outputSchema: { name: "review", schema: { type: "object" } },
-      imagePaths: ["page.png"],
-    }),
-    /不支持 PPagenT 的逐页图片审查/,
-  );
+test("DeepSeek Vision Provider 使用多模态 Chat Completions 且日志不保留图片 base64", async (context) => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "ppagent-deepseek-vision-"));
+  context.after(() => fs.rm(root, { recursive: true, force: true }));
+  const imagePath = path.join(root, "page.png");
+  await fs.writeFile(imagePath, Buffer.from([0x89, 0x50, 0x4e, 0x47]));
+  let requestBody = null;
+  const events = [];
+  const model = new DeepSeekJsonModel({
+    apiKey: "test-key",
+    model: "deepseek-v4-flash-vision-exp",
+    observer: async (event) => events.push(event),
+    fetchImpl: async (_url, init) => {
+      requestBody = JSON.parse(init.body);
+      return {
+        ok: true,
+        async json() { return { choices: [{ message: { content: "{}" } }] }; },
+      };
+    },
+  });
+  await model.generateJson({
+    role: "视觉审查者",
+    task: "审查页面",
+    context: { imageOrder: [1] },
+    outputSchema: { name: "review", schema: { type: "object" } },
+    imagePaths: [imagePath],
+  });
+  assert.equal(requestBody.messages[1].content[0].type, "text");
+  assert.equal(requestBody.messages[1].content[1].type, "image_url");
+  assert.match(requestBody.messages[1].content[1].image_url.url, /^data:image\/png;base64,/);
+  const running = events.find((event) => event.status === "running");
+  assert.equal(running.request.messages[1].content[1].image_url.url, "[inline image/png omitted from log]");
 });
 
 test("DeepSeek Provider 可关闭思考模式以降低固定工作流延迟", async () => {

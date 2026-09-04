@@ -33,7 +33,21 @@ export function validateVisualDirectorOutput(output, expectedPageIds = []) {
 }
 
 function visualKey(page) {
-  return [page?.familyId, page?.variantId, page?.silhouette].join("::");
+  return [
+    page?.familyId,
+    page?.variantId,
+    page?.silhouette,
+    page?.expressionSource?.sourceItemId ?? page?.structureSourceItemId ?? "page",
+  ].join("::");
+}
+
+function routingCandidateId(candidate) {
+  return [
+    candidate?.familyId,
+    candidate?.variantId,
+    candidate?.silhouette,
+    ...(candidate?.expressionSource?.sourceItemId ? [candidate.expressionSource.sourceItemId] : []),
+  ].join("::");
 }
 
 export function rebuildChangedVisualSelections(output, originalOutput, input) {
@@ -53,8 +67,16 @@ export function rebuildChangedVisualSelections(output, originalOutput, input) {
       ?? page.pageId;
     return {
       pageId: page.pageId,
-      candidateId: visualKey(candidate),
+      candidateId: routingCandidateId(candidate),
       centerLabel,
+      ...(page.expressionStrategy ? { expressionStrategy: page.expressionStrategy } : {}),
+      ...(page.pageRole ? { pageRole: page.pageRole } : {}),
+      ...(page.densityTarget ? { densityTarget: page.densityTarget } : {}),
+      ...(page.visualWeight ? { visualWeight: page.visualWeight } : {}),
+      ...(compositionPage?.compositionId ? { compositionId: compositionPage.compositionId } : {}),
+      ...(page.compositionFamily ? { compositionFamily: page.compositionFamily } : {}),
+      ...(page.continuityGroup ? { continuityGroup: page.continuityGroup } : {}),
+      ...(page.contrastBreakBefore ? { contrastBreakBefore: true } : {}),
       ...(page.iconQueries ? { iconQueries: page.iconQueries } : {}),
       ...(compositionPage?.textLayoutChoices?.length ? { textLayoutChoices: compositionPage.textLayoutChoices } : {}),
       ...(page.reason ? { reason: page.reason } : {}),

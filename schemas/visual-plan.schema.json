@@ -11,6 +11,47 @@
     "skinId": { "type": "string", "minLength": 1 },
     "visualLanguage": { "type": "string", "minLength": 1 },
     "rhythmStrategy": { "type": "string", "minLength": 1 },
+    "rhythmPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "anchorPageIds", "quietPageIds", "continuityGroups", "contrastBreaks", "pages"],
+      "properties": {
+        "schemaVersion": { "const": "1.0" },
+        "anchorPageIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "quietPageIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "continuityGroups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["groupId", "pageIds"],
+            "properties": {
+              "groupId": { "type": "string", "minLength": 1, "maxLength": 40 },
+              "pageIds": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+            }
+          }
+        },
+        "contrastBreaks": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "pages": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["pageId", "pageRole", "densityTarget", "visualWeight", "compositionFamily"],
+            "properties": {
+              "pageId": { "type": "string", "minLength": 1 },
+              "pageRole": { "enum": ["opening", "orientation", "problem", "explanation", "evidence", "comparison", "process", "decision", "recommendation", "summary", "closing"] },
+              "densityTarget": { "enum": ["quiet", "balanced", "dense"] },
+              "visualWeight": { "enum": ["quiet", "normal", "anchor", "peak"] },
+              "compositionFamily": { "enum": ["cover", "agenda", "closing", "statement", "editorial-flow", "split", "cards", "comparison", "timeline", "flow", "matrix", "hierarchy", "network", "diagram"] },
+              "continuityGroup": { "type": "string", "minLength": 1, "maxLength": 40 },
+              "contrastBreakBefore": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    },
     "pages": {
       "type": "array",
       "minItems": 1,
@@ -25,9 +66,16 @@
           "variantId": { "type": "string", "minLength": 1 },
           "silhouette": { "type": "string", "minLength": 1 },
           "adaptationStatus": { "enum": ["native", "adaptive", "partial", "fixed", "unknown"] },
+          "pageRole": { "enum": ["opening", "orientation", "problem", "explanation", "evidence", "comparison", "process", "decision", "recommendation", "summary", "closing"] },
+          "densityTarget": { "enum": ["quiet", "balanced", "dense"] },
+          "visualWeight": { "enum": ["quiet", "normal", "anchor", "peak"] },
+          "compositionFamily": { "enum": ["cover", "agenda", "closing", "statement", "editorial-flow", "split", "cards", "comparison", "timeline", "flow", "matrix", "hierarchy", "network", "diagram"] },
+          "continuityGroup": { "type": "string", "minLength": 1, "maxLength": 40 },
+          "contrastBreakBefore": { "type": "boolean" },
           "expressionStrategy": {
             "enum": ["registered-structure", "text-plus-structure", "multi-structure"]
           },
+          "structureSourceItemId": { "type": "string", "minLength": 1 },
           "blockStructureModes": {
             "type": "array",
             "maxItems": 8,

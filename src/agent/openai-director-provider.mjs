@@ -29,6 +29,7 @@ export class OpenAIJsonModel {
     this.model = model;
     this.endpoint = endpoint;
     this.fetchImpl = fetchImpl;
+    this.supportsImages = true;
     this.identity = `openai-responses:${model}`;
   }
 
@@ -79,5 +80,5 @@ export async function createOpenAIDirectorProvider({ root, apiKey, model, endpoi
   const contentModel = new OpenAIJsonModel({ apiKey, model, endpoint, fetchImpl });
   const visualModel = new OpenAIJsonModel({ apiKey, model, endpoint, fetchImpl });
   const reviewerModel = new OpenAIJsonModel({ apiKey, model, endpoint, fetchImpl });
-  return createModelDirectorProvider({ contentModel, visualModel, reviewerModel, schemas, guidelines });
+  return createModelDirectorProvider({ root: resolvedRoot, contentModel, visualModel, reviewerModel, schemas, guidelines });
 }

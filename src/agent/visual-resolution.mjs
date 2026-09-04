@@ -18,6 +18,8 @@ import { northeasternUniversitySkin } from "../runtime/skins/northeastern-univer
 import { validatePageCompositionTextFit } from "../render/page-composition-fit.mjs";
 import { resolveTextContainerContract } from "../visual-runtime/text-container-contract.mjs";
 import { matchTextLayoutsForPayload } from "../visual-runtime/typography-matcher.mjs";
+import { buildPageIntentFromContent } from "../content/page-content.mjs";
+import { auditDeckRhythm } from "./deck-rhythm.mjs";
 
 import { loadCoreAssetPackage } from "../runtime/core-asset-packages.mjs";
 
@@ -567,7 +569,7 @@ function buildCandidateDiagnostics({
   };
 }
 
-export async function buildVisualCandidateSets({ root = process.cwd(), pageContents, pageIntents }) {
+async function buildBaseVisualCandidateSets({ root = process.cwd(), pageContents, pageIntents }) {
   const [contracts, variants, coreAssetIds, layouts, metadataById] = await Promise.all([
     loadContractCatalog(root),
     listRenderableVisualVariants({ root }),
@@ -589,7 +591,9 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
     const bodyVariant = variants.find((variant) => variant.renderer === "skin" && variant.fallbackBody);
     if (!bodyVariant) throw new Error("核心资产包缺少正文兜底页");
     const bodyMetadata = metadataById.get(bodyVariant.assetId);
-    const bodyCompositions = compositionCandidatesForAsset(layouts, bodyVariant.assetId, bodyMetadata);
+    const bodyCompositions = compositionCandidatesForAsset(layouts, bodyVariant.assetId, bodyMetadata, {
+      itemCount: intent.structure.itemCount,
+    });
     const editorialBodyCandidate = publicVariant(
       bodyVariant,
       contractsById.get(bodyVariant.assetId),
@@ -690,7 +694,9 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
         allowMissingRequiredPoints: true,
       }).filter((variant) => variant.contentContract?.points === "required");
       const metadata = metadataById.get(candidate.assetId);
-      const compositions = compositionCandidatesForAsset(layouts, candidate.assetId, metadata);
+      const compositions = compositionCandidatesForAsset(layouts, candidate.assetId, metadata, {
+        itemCount: intent.structure.itemCount,
+      });
       compatible.forEach((variant) => appendStructuralCandidate(
         variant,
         contractsById.get(candidate.assetId),
@@ -779,12 +785,103 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
   }));
 }
 
+function pointProjectionItem(sourceItem, point, index) {
+  const value = String(point?.text ?? point ?? "").trim();
+  const parts = value.match(/^(.{2,12}?)(?:：|:|——|—|，|,)(.+)$/);
+  return {
+    id: `${sourceItem.id}-point-${index + 1}`,
+    title: (parts?.[1] ?? value).trim(),
+    body: (parts?.[2] ?? "").trim(),
+    points: [],
+  };
+}
+
+export function projectCandidateContent(page, candidate) {
+  const source = candidate?.expressionSource;
+  if (source?.mode !== "item-points") return page;
+  const sourceItem = page.items.find((item) => item.id === source.sourceItemId);
+  if (!sourceItem) return page;
+  return {
+    ...page,
+    title: sourceItem.title || page.title,
+    logicIntent: sourceItem.logicIntent ?? page.logicIntent,
+    items: (sourceItem.points ?? []).map((point, index) => pointProjectionItem(sourceItem, point, index)),
+  };
+}
+
+function pointProjection(page, sourceItem) {
+  const projected = {
+    ...page,
+    title: sourceItem.title || page.title,
+    logicIntent: sourceItem.logicIntent ?? page.logicIntent,
+    items: (sourceItem.points ?? []).map((point, index) => pointProjectionItem(sourceItem, point, index)),
+  };
+  return {
+    content: projected,
+    intent: buildPageIntentFromContent(projected),
+    source: {
+      mode: "item-points",
+      sourceItemId: sourceItem.id,
+      projectedItemIds: projected.items.map((item) => item.id),
+    },
+  };
+}
+
+/**
+ * Build page candidates and a bounded set of block-level candidates. A block
+ * candidate is only exposed when a real registered asset can render the
+ * source item's explicit points and a legal mixed Composition can keep the
+ * remaining page items as independent text.
+ */
+export async function buildVisualCandidateSets({ root = process.cwd(), pageContents, pageIntents }) {
+  const pageSets = await buildBaseVisualCandidateSets({ root, pageContents, pageIntents });
+  return Promise.all(pageSets.map(async (pageSet, pageIndex) => {
+    const page = pageContents[pageIndex];
+    const projections = page.items.length === 2 ? page.items
+      .filter((item) => (item.points?.length ?? 0) >= 2 && item.logicIntent?.logicId !== "editorial")
+      .map((item) => pointProjection(page, item)) : [];
+    const blockCandidates = [];
+    for (const projection of projections) {
+      const [projectedSet] = await buildBaseVisualCandidateSets({
+        root,
+        pageContents: [projection.content],
+        pageIntents: [projection.intent],
+      });
+      for (const candidate of projectedSet.candidates ?? []) {
+        if (candidate.fallbackBody || !new Set(["ready", "derivable"]).has(candidateReadiness(candidate))) continue;
+        const hasMixedComposition = (candidate.compositions ?? []).some((composition) => (
+          composition.requiresComponent && composition.slots.some((slot) => slot.role === "text")
+        ));
+        if (!hasMixedComposition) continue;
+        blockCandidates.push({
+          ...candidate,
+          expressionSource: projection.source,
+          expressionIntent: projection.intent,
+          reasons: [...new Set([...(candidate.reasons ?? []), "block-level-explicit-points", "mixed-composition-compatible"])],
+        });
+      }
+    }
+    if (!blockCandidates.length) return pageSet;
+    const baseCandidates = (pageSet.candidates ?? []).filter((candidate) => !candidate.fallbackBody);
+    return {
+      ...pageSet,
+      candidates: [...baseCandidates, ...blockCandidates],
+      blockCandidateCount: blockCandidates.length,
+      ...(baseCandidates.length ? {} : { gap: undefined, fallback: undefined }),
+    };
+  }));
+}
+
 function selectedCandidate(planPage, candidateSet) {
-  return candidateSet.candidates.find((candidate) => (
+  const matches = candidateSet.candidates.filter((candidate) => (
     candidate.familyId === planPage.familyId
     && candidate.variantId === planPage.variantId
     && candidate.silhouette === planPage.silhouette
   ));
+  if (planPage.structureSourceItemId) {
+    return matches.find((candidate) => candidate.expressionSource?.sourceItemId === planPage.structureSourceItemId);
+  }
+  return matches.find((candidate) => !candidate.expressionSource) ?? matches[0];
 }
 
 const selectionOwnerBySource = Object.freeze({
@@ -834,7 +931,9 @@ function validateIconQueries(planPage, candidate, compositionPage, content) {
     return queries.length ? [{ code: "icon-queries-not-supported" }] : [];
   }
   const structuredInputMedia = contract.source === "structuredData.inputs";
-  const selectedIds = new Set(structuredInputMedia
+  const selectedIds = new Set(candidate.expressionSource?.projectedItemIds?.length
+    ? candidate.expressionSource.projectedItemIds
+    : structuredInputMedia
     ? (content.structuredData?.inputs ?? []).map((item) => item.id)
     : (compositionPage.componentItemIds ?? []));
   const seen = new Set();
@@ -1226,7 +1325,9 @@ function validateCompositionPage({ content, candidate, compositionPage, layouts,
     issues.push({ code: "composition-asset-kind-mismatch", compositionId: layout.id, assetId: candidate.assetId });
   }
   try {
-    if (metadata) assertSpatialFit(metadata, layout, northeasternUniversitySkin.bodyFrame);
+    if (metadata) assertSpatialFit(metadata, layout, northeasternUniversitySkin.bodyFrame, {
+      itemCount: projectCandidateContent(content, candidate).items.length,
+    });
   } catch (error) {
     issues.push({ code: "spatial-contract-failed", message: error.message });
   }
@@ -1237,12 +1338,16 @@ function validateCompositionPage({ content, candidate, compositionPage, layouts,
     ...compositionPage.textSlots.flatMap((slot) => slot.sourceItemIds),
   ];
   const expandedInText = new Set(compositionPage.textSlots.flatMap((slot) => slot.sourceItemIds));
+  const projectedComponentContent = projectCandidateContent(content, candidate);
+  const selectedComponentItems = candidate.expressionSource
+    ? projectedComponentContent.items
+    : content.items.filter((item) => compositionPage.componentItemIds.includes(item.id));
   const unknownIds = [...new Set(referencedIds.filter((id) => !sourceIds.has(id)))];
   if (unknownIds.length) issues.push({ code: "composition-source-item-missing", sourceItemIds: unknownIds });
   const omittedIds = [...sourceIds].filter((id) => !referencedIds.includes(id));
   const fixedPage = ["cover", "agenda", "closing"].includes(assetKind(candidate.assetId, metadata));
   if (!fixedPage && candidate.contentContract?.points === "required") {
-    const selected = content.items.filter((item) => compositionPage.componentItemIds.includes(item.id));
+    const selected = selectedComponentItems;
     const pointCounts = selected.map((item) => item.points?.length ?? 0);
     const range = candidate.contentContract.pointCount;
     if (!selected.length
@@ -1345,7 +1450,7 @@ function validateCompositionPage({ content, candidate, compositionPage, layouts,
     }
     if (compositionPage.componentContentMode === "full" && candidate.textCapacity
       && !(candidate.slotCapabilities?.textSlots?.length)) {
-      const selectedItems = content.items.filter((item) => compositionPage.componentItemIds.includes(item.id));
+      const selectedItems = selectedComponentItems;
       const titleOverflow = selectedItems
         .filter((item) => Number.isFinite(candidate.textCapacity.maxItemTitleChars)
           && Array.from(item.title ?? "").length > candidate.textCapacity.maxItemTitleChars)
@@ -1518,21 +1623,24 @@ export async function resolveVisualPlan({
     }
     selections.push(candidate);
     if (metadataById.get(candidate.assetId)?.kind === "component") {
+      const projectedContent = projectCandidateContent(pageContents[index], candidate);
       structuralRequests.push({
         pageId: planPage.pageId,
         logicId: candidate.logicId,
         structureGroupId: candidate.structureGroupId,
         familyId: candidate.familyId,
         assetId: candidate.assetId,
-        itemCount: normalizedCompositionPage.componentItemIds.length,
-        baseRelation: pageIntents[index].baseRelation,
-        purposeKey: pageIntents[index].purposeKey,
+        itemCount: projectedContent.items.length,
+        baseRelation: candidate.expressionIntent?.baseRelation ?? pageIntents[index].baseRelation,
+        purposeKey: candidate.expressionIntent?.purposeKey ?? pageIntents[index].purposeKey,
         visualStructureGroupId: candidate.structureGroupId,
-        pointCounts: pageContents[index].items.map((item) => item.points?.length ?? 0),
-        polarities: pageContents[index].items.map((item) => item.polarity),
-        emphases: pageContents[index].items.map((item) => item.emphasis === true),
-        maxPointsPerItem: pageIntents[index].structure?.dimensions?.maxPointsPerItem ?? 0,
-        maxPointChars: pageIntents[index].structure?.dimensions?.maxPointChars ?? 0,
+        pointCounts: projectedContent.items.map((item) => item.points?.length ?? 0),
+        polarities: projectedContent.items.map((item) => item.polarity),
+        emphases: projectedContent.items.map((item) => item.emphasis === true),
+        maxPointsPerItem: candidate.expressionIntent?.structure?.dimensions?.maxPointsPerItem
+          ?? pageIntents[index].structure?.dimensions?.maxPointsPerItem ?? 0,
+        maxPointChars: candidate.expressionIntent?.structure?.dimensions?.maxPointChars
+          ?? pageIntents[index].structure?.dimensions?.maxPointChars ?? 0,
         requiredItemRole: /PPagenT节点接口=semantic-node\+points/.test(pageContents[index].notes ?? "")
           ? "semantic-node"
           : undefined,
@@ -1562,6 +1670,13 @@ export async function resolveVisualPlan({
     }
     recentBodyCompositions.push({ index, compositionId });
   });
+  const rhythmAudit = auditDeckRhythm({
+    visualPlan: normalizedVisualPlan,
+    candidateSets: effectiveCandidateSets,
+    pageContents,
+    pageIntents,
+  });
+  warnings.push(...rhythmAudit.warnings);
   const variants = await listRenderableVisualVariants({ root });
   const rhythm = planVisualVariants(structuralRequests, { variants });
   if (rhythm.status !== "accepted") return rhythm;
@@ -1578,6 +1693,10 @@ export async function resolveVisualPlan({
       selectedAssetId: candidate.assetId,
       selectedVariantId: candidate.variantId,
       selectedSilhouette: candidate.silhouette,
+      expressionStrategy: normalizedVisualPlan.pages[index].expressionStrategy ?? "registered-structure",
+      ...(candidate.expressionSource?.sourceItemId
+        ? { structureSourceItemId: candidate.expressionSource.sourceItemId }
+        : {}),
       selectionState: attribution.selectionState,
       selectionOwner: attribution.selectionOwner,
       selectionSource: attribution.selectionSource,
@@ -1589,12 +1708,16 @@ export async function resolveVisualPlan({
   const payloadResults = await Promise.all(layoutDecisions.map(async (decision, index) => {
     const compositionPage = normalizedCompositionPlan.pages[index];
     const metadata = metadataById.get(decision.selectedAssetId);
+    const selected = selections[index];
+    const projectedContent = projectCandidateContent(pageContents[index], selected);
     const componentContent = metadata?.kind === "component"
-      ? filterComponentContent(applyComponentText(pageContents[index], compositionPage), compositionPage)
+      ? (selected?.expressionSource
+        ? applyComponentText(projectedContent, compositionPage)
+        : filterComponentContent(applyComponentText(pageContents[index], compositionPage), compositionPage))
       : pageContents[index];
     const payload = await mapRenderPayload(
       componentContent,
-      pageIntents[index],
+      selected?.expressionIntent ?? pageIntents[index],
       decision,
       compositionPage,
       normalizedVisualPlan.pages[index],

@@ -12,9 +12,10 @@ import {
   applySemanticRefinements,
   normalizeSemanticRefinementRequests,
 } from "./semantic-refinement.mjs";
-import { buildShellIntent, isShellPage, shellVisualSelection } from "./shell-scaffold.mjs";
+import { buildShellIntent, isShellPage, shellRoleForPage, shellVisualSelection } from "./shell-scaffold.mjs";
 import { candidateReadiness } from "./visual-resolution.mjs";
 import { expandVisualSkillRouting } from "./visual-skill-router.mjs";
+import { auditDeckRhythm, summarizeRhythmPages } from "./deck-rhythm.mjs";
 
 export const DEFAULT_SKIN_ID = "northeastern-university-001";
 
@@ -390,12 +391,24 @@ function mergeShellAndBodyPlans({
       candidateSet: candidateSets[index],
     }));
   });
+  const visualPages = presentationOutput.pageContents.map((page) => {
+    if (!isShellPage(page)) return bodyVisualByPageId.get(page.pageId);
+    const role = shellRoleForPage(page);
+    const shellPage = shellSelections.get(page.pageId).visualPage;
+    return {
+      ...shellPage,
+      pageRole: role === "cover" ? "opening" : role === "closing" ? "closing" : "orientation",
+      densityTarget: "quiet",
+      visualWeight: role === "cover" ? "peak" : role === "closing" ? "anchor" : "quiet",
+      compositionFamily: role,
+      ...(role === "agenda" ? { contrastBreakBefore: true } : {}),
+    };
+  });
   return {
     visualPlan: {
       ...bodyPlans.visualPlan,
-      pages: presentationOutput.pageContents.map((page) => (
-        isShellPage(page) ? shellSelections.get(page.pageId).visualPage : bodyVisualByPageId.get(page.pageId)
-      )),
+      rhythmPlan: summarizeRhythmPages(visualPages),
+      pages: visualPages,
     },
     compositionPlan: {
       ...bodyPlans.compositionPlan,
@@ -473,6 +486,7 @@ export function buildProductionStatistics({
   pageContents,
   layoutDecisions,
   compositionPlan = null,
+  visualPlan = null,
   assetGapReport,
 }) {
   const decisionsByIntent = new Map((layoutDecisions ?? []).map((decision) => [decision.intentId, decision]));
@@ -496,6 +510,8 @@ export function buildProductionStatistics({
       && (!hasSelectedVariantTuple || (candidate.familyId === decision.selectedFamilyId
         && candidate.variantId === decision?.selectedVariantId
         && candidate.silhouette === decision?.selectedSilhouette))
+      && (!decision?.structureSourceItemId
+        || candidate.expressionSource?.sourceItemId === decision.structureSourceItemId)
     ));
     const page = pageById.get(set.pageId);
     const eligibleCandidates = set.candidateDiagnostics
@@ -567,6 +583,8 @@ export function buildProductionStatistics({
       selectedAssetId: selected?.assetId ?? decision?.selectedAssetId ?? null,
       selectedStructureAssetId: selected?.fallbackBody ? null : selected?.assetId ?? null,
       selectedCompositionId: selectedComposition?.compositionId ?? null,
+      expressionStrategy: decision?.expressionStrategy ?? "registered-structure",
+      componentProjection: selectedComposition?.componentProjection ?? null,
       selectedReadiness,
       selectionSource: decision?.selectionSource ?? null,
       selectionOwner: decision?.selectionOwner ?? null,
@@ -646,6 +664,14 @@ export function buildProductionStatistics({
     assetIds: [...logic.assetIds],
   }));
   const fallbackPageCount = pageCandidateDiagnostics.filter((item) => item.fallback.used).length;
+  const mixedPages = pageCandidateDiagnostics
+    .filter((item) => item.expressionStrategy === "text-plus-structure")
+    .map((item) => ({
+      pageId: item.pageId,
+      assetId: item.selectedStructureAssetId,
+      compositionId: item.selectedCompositionId,
+      componentProjection: item.componentProjection,
+    }));
   const structuralDiagnostics = pageCandidateDiagnostics.filter((item) => item.diagnosis !== "editorial");
   const candidateAvailability = {
     zeroCandidatePageCount: structuralDiagnostics.filter((item) => item.candidateCount === 0).length,
@@ -697,12 +723,20 @@ export function buildProductionStatistics({
     source,
     pageCandidateDiagnostics.filter((item) => item.selectionSource === source).length,
   ]));
+  const rhythmAudit = auditDeckRhythm({
+    visualPlan,
+    candidateSets,
+    pageContents,
+    pageIntents: pageContents.map((page) => buildPageIntentFromContent(page)),
+  });
   return {
     schemaVersion: "1.0",
     bodyPageCount: bodyPages.length,
     structurePageCount,
     editorialPageCount,
     fallbackPageCount,
+    mixedPageCount: mixedPages.length,
+    mixedPages,
     selectionSourceCounts,
     structureCoverageRate: bodyPages.length ? Number((structurePageCount / bodyPages.length).toFixed(4)) : 0,
     uniqueStructureCount: structureUsage.length,
@@ -714,6 +748,11 @@ export function buildProductionStatistics({
     candidateAvailability,
     candidateAvailabilityByLogic,
     diversityGaps,
+    rhythmAudit,
+    compositionFamilyUsage: Object.fromEntries(
+      [...new Set((visualPlan?.pages ?? []).map((page) => page.compositionFamily).filter(Boolean))]
+        .map((family) => [family, visualPlan.pages.filter((page) => page.compositionFamily === family).length]),
+    ),
     pageCandidateDiagnostics,
     recommendedStructureSupplements: assetGapReport?.recommendedStructureSupplements ?? [],
   };
@@ -1462,28 +1501,57 @@ export async function runDirectorWorkflow(options) {
     visualResolution = resolved;
     if (!visualResolutionAccepted(resolved) && guaranteeDelivery) {
       await persistVisualAttempt(outputDir, attempt, visual, null, "visual-resolution-primary-failed.json", resolved);
-      const bodyIndexes = presentationOutput.pageContents
-        .map((page, index) => (!isShellPage(page) ? index : -1))
-        .filter((index) => index >= 0);
+      if (attempt < maxVisualAttempts) {
+        // Preserve the original deterministic feedback for the next model
+        // call. Falling back early can create a new overflow and obscure the
+        // actual page-level problem that the visual director should repair.
+        continue;
+      }
+      const failedPageIds = new Set((resolved?.feedback ?? [])
+        .map((item) => item?.pageId)
+        .filter((pageId) => bodyPageIds.has(pageId)));
+      const fallbackAllBodyPages = failedPageIds.size === 0;
+      const fallbackEntries = presentationOutput.pageContents
+        .map((page, sourceIndex) => ({
+          page,
+          sourceIndex,
+          bodyIndex: bodyPageContents.findIndex((bodyPage) => bodyPage.pageId === page.pageId),
+        }))
+        .filter((entry) => entry.bodyIndex >= 0
+          && (fallbackAllBodyPages || failedPageIds.has(entry.page.pageId)));
+      const fallbackPageIds = fallbackEntries.map((entry) => entry.page.pageId);
       const deterministic = buildDeterministicVisualFallback({
-        deckPlan: bodyDeckPlan,
-        pageContents: bodyPageContents,
-        pageIntents: bodyIndexes.map((index) => pageIntents[index]),
-        candidateSets: bodyIndexes.map((index) => candidateSets[index]),
+        deckPlan: {
+          ...bodyDeckPlan,
+          pages: bodyDeckPlan.pages.filter((page) => fallbackPageIds.includes(page.pageId)),
+        },
+        pageContents: fallbackEntries.map((entry) => bodyPageContents[entry.bodyIndex]),
+        pageIntents: fallbackEntries.map((entry) => pageIntents[entry.sourceIndex]),
+        candidateSets: fallbackEntries.map((entry) => candidateSets[entry.sourceIndex]),
         skinId: input.skinId,
-        forceFallbackPageIds: bodyPageContents.map((page) => page.pageId),
+        forceFallbackPageIds: fallbackPageIds,
       });
-      bodyIndexes.forEach((sourceIndex, bodyIndex) => {
-        candidateSets[sourceIndex] = deterministic.candidateSets[bodyIndex];
+      fallbackEntries.forEach((entry, fallbackIndex) => {
+        candidateSets[entry.sourceIndex] = deterministic.candidateSets[fallbackIndex];
       });
-      const fallbackPlans = mergeShellAndBodyPlans({
-        bodyPlans: deterministic.plans,
-        presentationOutput,
+      let fallbackVisualPlan = visual.visualPlan;
+      let fallbackCompositionPlan = visual.compositionPlan;
+      deterministic.plans.visualPlan.pages.forEach((page) => {
+        fallbackVisualPlan = replacePlanPage(fallbackVisualPlan, page);
+      });
+      deterministic.plans.compositionPlan.pages.forEach((page) => {
+        fallbackCompositionPlan = replacePlanPage(fallbackCompositionPlan, page);
+      });
+      fallbackVisualPlan = {
+        ...fallbackVisualPlan,
+        rhythmPlan: summarizeRhythmPages(fallbackVisualPlan.pages),
+      };
+      visual = {
+        visualPlan: fallbackVisualPlan,
+        compositionPlan: fallbackCompositionPlan,
         pageIntents,
         candidateSets,
-        skinId: input.skinId,
-      });
-      visual = { ...fallbackPlans, pageIntents, candidateSets };
+      };
       resolved = await options.visualResolver({
         root,
         skinId: input.skinId,
@@ -1529,8 +1597,8 @@ export async function runDirectorWorkflow(options) {
         stage: "visual-resolution",
         code: "deterministic-body-fallback",
         trigger: "visual-resolution-not-accepted",
-        message: "视觉选择未通过确定性复核，程序将正文页切换为主题正文兜底",
-        pageIds: bodyPageContents.map((page) => page.pageId),
+        message: "视觉选择未通过确定性复核，程序只将失败页切换为主题正文兜底",
+        pageIds: fallbackPageIds,
       });
     }
     if (!visualResolutionAccepted(resolved)) {
@@ -1559,6 +1627,7 @@ export async function runDirectorWorkflow(options) {
       pageContents: presentationOutput.pageContents,
       layoutDecisions: resolved.layoutDecisions,
       compositionPlan: visual.compositionPlan,
+      visualPlan: visual.visualPlan,
       assetGapReport,
     });
     await writeJson(path.join(outputDir, "production-statistics.json"), productionStatistics);
@@ -1738,6 +1807,7 @@ export async function runDirectorWorkflow(options) {
           pageContents: presentationOutput.pageContents,
           layoutDecisions: resolved.layoutDecisions,
           compositionPlan: visual.compositionPlan,
+          visualPlan: visual.visualPlan,
           assetGapReport,
         });
         await writeJson(path.join(outputDir, "production-statistics.json"), productionStatistics);

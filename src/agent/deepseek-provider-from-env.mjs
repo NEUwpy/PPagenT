@@ -15,7 +15,16 @@ export async function loadDeepSeekLocalConfig(root) {
 function roleSettings(local, name, defaults = {}, globalMaxTokens) {
   const role = local.roles?.[name] ?? {};
   const prefix = `PPAGENT_DEEPSEEK_${name.replace(/([a-z])([A-Z])/g, "$1_$2").toUpperCase()}`;
+  const apiKey = process.env[`${prefix}_API_KEY`] || role.apiKey;
+  const model = process.env[`${prefix}_MODEL`] || role.model;
+  const baseUrl = process.env[`${prefix}_BASE_URL`] || role.baseUrl;
+  const endpoint = process.env[`${prefix}_ENDPOINT`]
+    || role.endpoint
+    || (baseUrl ? `${baseUrl.replace(/\/$/, "")}/chat/completions` : undefined);
   return {
+    ...(apiKey ? { apiKey } : {}),
+    ...(model ? { model } : {}),
+    ...(endpoint ? { endpoint } : {}),
     enabled: role.enabled ?? defaults.enabled ?? true,
     thinking: process.env[`${prefix}_THINKING`] || role.thinking || defaults.thinking
       || process.env.PPAGENT_DEEPSEEK_THINKING || local.thinking || "enabled",
@@ -88,7 +97,18 @@ export async function createConfiguredDeepSeekProvider({ root = process.cwd(), o
       model,
       endpoint,
       configured: Boolean(apiKey),
-      roles: { content: settings.content, visualComposition: settings.visualComposition },
+      roles: Object.fromEntries(["content", "visualComposition", "reviewer"].map((name) => {
+        const setting = settings[name];
+        return [name, {
+          enabled: setting.enabled,
+          thinking: setting.thinking,
+          reasoningEffort: setting.reasoningEffort,
+          maxTokens: setting.maxTokens,
+          model: setting.model ?? model,
+          endpoint: setting.endpoint ?? endpoint,
+          configured: Boolean(setting.apiKey ?? apiKey),
+        }];
+      })),
     },
   };
 }

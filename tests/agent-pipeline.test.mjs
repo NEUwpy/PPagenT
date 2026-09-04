@@ -12,7 +12,7 @@ import {
   validateComponentText,
 } from "../src/agent/visual-resolution.mjs";
 import { candidateSetsForVisualDirector } from "../src/agent/model-director-provider.mjs";
-import { expandVisualSkillRouting } from "../src/agent/visual-skill-router.mjs";
+import { compactVisualSkillContext, expandVisualSkillRouting } from "../src/agent/visual-skill-router.mjs";
 import { buildPageIntentFromContent, enrichPageIntent } from "../src/content/page-content.mjs";
 import { mapRenderPayload } from "../src/render/render-payload.mjs";
 
@@ -119,6 +119,71 @@ function intentDraft(intentId, purposeKey, baseRelation, structure = {}) {
     assumptions: [],
   };
 }
+
+test("显式分点块可与独立文字组成真实登记结构混合页", async () => {
+  const page = {
+    schemaVersion: "1.0",
+    pageId: "mixed-task",
+    title: "任务单把认识转化为行动",
+    logicIntent: { logicId: "sequence", reason: "从任务到行动再到成效" },
+    items: [
+      {
+        id: "actions",
+        title: "三摆三写",
+        body: "",
+        points: ["把自己摆进去，写青春誓言", "把工作摆进去，写专业方案", "把职责摆进去，写振兴答卷"],
+        logicIntent: { logicId: "parallel", reason: "三项行动同级展开" },
+      },
+      {
+        id: "outcome",
+        title: "揭榜挂帅成效",
+        body: "五年26项微课题被地方揭榜，读懂辽宁是时代订单。",
+      },
+    ],
+    sourceText: "三摆三写：把自己摆进去，写青春誓言；把工作摆进去，写专业方案；把职责摆进去，写振兴答卷。五年26项微课题被地方揭榜。",
+  };
+  const intent = buildPageIntentFromContent(page);
+  const [rawSet] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
+  const [set] = candidateSetsForVisualDirector([rawSet]);
+  const candidate = set.candidates.find((item) => item.expressionSource?.sourceItemId === "actions");
+  assert.equal(candidate.assetId, "parallel-equal-cards-001");
+  assert.ok(candidate.compositionIds.includes("component-lead-top"));
+
+  const [context] = compactVisualSkillContext([page], [intent], [set]);
+  const disclosed = context.candidates.find((item) => item.expressionSource?.sourceItemId === "actions");
+  const expanded = expandVisualSkillRouting({ selections: [{
+    pageId: page.pageId,
+    candidateId: disclosed.candidateId,
+    centerLabel: "三摆三写",
+    expressionStrategy: "text-plus-structure",
+    iconQueries: disclosed.iconSourceItemIds.map((sourceItemId) => ({ sourceItemId, query: "action" })),
+  }] }, {
+    deckPlan: { deckId: "mixed-deck" },
+    skinId: "northeastern-university-001",
+    pageContents: [page],
+    pageIntents: [intent],
+    candidateSets: [set],
+  });
+  assert.equal(expanded.visualPlan.pages[0].expressionStrategy, "text-plus-structure");
+  assert.equal(expanded.visualPlan.pages[0].structureSourceItemId, "actions");
+  assert.equal(expanded.compositionPlan.pages[0].compositionId, "component-lead-top");
+  assert.deepEqual(expanded.compositionPlan.pages[0].componentItemIds, ["actions"]);
+  assert.deepEqual(expanded.compositionPlan.pages[0].textSlots[0].sourceItemIds, ["outcome"]);
+
+  const resolved = await resolveVisualPlan({
+    root,
+    pageContents: [page],
+    pageIntents: [intent],
+    candidateSets: [set],
+    ...expanded,
+  });
+  assert.equal(resolved.status, "accepted");
+  assert.equal(resolved.layoutDecisions[0].expressionStrategy, "text-plus-structure");
+  assert.equal(resolved.renderPayloads[0].assetId, "parallel-equal-cards-001");
+  assert.deepEqual(resolved.renderPayloads[0].parameters.items.map((item) => item.title), [
+    "把自己摆进去", "把工作摆进去", "把职责摆进去",
+  ]);
+});
 
 test("正式流程不会暴露缺少视觉意图和用户确认的 HTML 资产", async () => {
   const page = content("topics", [
@@ -884,6 +949,33 @@ test("候选日志说明同一 Logic 下结构为何未成为合法候选", asyn
   assert.equal(phaseGate.stage, "semantic-contract");
   assert.equal(phaseGate.readiness, "incompatible");
   assert.ok(phaseGate.reasons.includes("points:required-per-item"));
+});
+
+test("阶段门禁流程的分点超过 12 字时在视觉导演前形成容量缺口", async () => {
+  const page = content("phase-gate-capacity", [
+    { id: "phase-1", title: "马灯守候", body: "点灯守望", points: ["门禁一", "口头请假条打完胜仗就回来"] },
+    { id: "phase-2", title: "青春点灯", body: "接力支教", points: ["门禁二", "十年后学生成长为支教校友"] },
+    { id: "phase-3", title: "青春归来", body: "投身西部", points: ["青年投身西部建设", "孩子梦想被持续点亮"] },
+  ]);
+  page.logicIntent = { logicId: "sequence", reason: "三个阶段之间存在明确门禁" };
+  const intent = enrichPageIntent(intentDraft(
+    "phase-gate-capacity-intent",
+    "explain_process",
+    "sequence",
+    { ordered: true },
+  ), page);
+  const [candidateSet] = await buildVisualCandidateSets({
+    root,
+    pageContents: [page],
+    pageIntents: [intent],
+  });
+  const rejection = candidateSet.capacityRejections.find((item) => (
+    item.assetId === "sequence-phase-gates-004"
+  ));
+  assert.ok(rejection);
+  assert.ok(rejection.issues.some((issue) => (
+    issue.role === "item-point-capacity" && issue.required.maxPointChars === 12
+  )));
 });
 
 test("动态 TextRegion 的正文与分点合计超容时在视觉导演前要求拆页", async () => {

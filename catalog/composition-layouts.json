@@ -43,6 +43,17 @@
       ]
     },
     {
+      "id": "component-lead-top",
+      "silhouette": "editorial-lead-over-visual",
+      "requiresComponent": true,
+      "componentResizeMode": "natural-crop",
+      "allowedAssetKinds": ["component"],
+      "slots": [
+        { "id": "lead", "role": "text", "frame": { "left": 0, "top": 0, "width": 1, "height": 0.13 } },
+        { "id": "component", "role": "component", "frame": { "left": 0, "top": 0.166, "width": 1, "height": 0.834 } }
+      ]
+    },
+    {
       "id": "editorial-list",
       "silhouette": "editorial-lead-and-list",
       "requiresComponent": false,

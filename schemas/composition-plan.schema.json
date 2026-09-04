@@ -29,6 +29,22 @@
             "uniqueItems": true
           },
           "componentContentMode": { "enum": ["full", "titles-only", "none"] },
+          "componentProjection": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["mode", "sourceItemId", "projectedItemIds"],
+            "properties": {
+              "mode": { "const": "item-points" },
+              "sourceItemId": { "type": "string", "minLength": 1 },
+              "projectedItemIds": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 8,
+                "uniqueItems": true,
+                "items": { "type": "string", "minLength": 1 }
+              }
+            }
+          },
           "textSlots": {
             "type": "array",
             "items": {
