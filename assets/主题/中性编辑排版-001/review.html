@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="review-status" content="awaiting-user-review" />
+  <title>无主题 Skin｜中性编辑排版 001</title>
+  <style>
+    :root {
+      --paper: #f5f4ef;
+      --paper-2: #eeece5;
+      --ink: #20201d;
+      --body: #4b4a45;
+      --muted: #85837b;
+      --line: #d8d5cc;
+      --accent: #a35d4f;
+      --canvas: #e9e8e3;
+      --serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif;
+      --sans: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--canvas); color: var(--ink); font-family: var(--sans); }
+    main { width: min(1320px, calc(100vw - 24px)); margin: 28px auto 72px; }
+    .review-head { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: end; margin: 0 4px 22px; }
+    .review-head h1 { margin: 0 0 8px; font: 700 28px/1.25 var(--serif); }
+    .review-head p { margin: 0; color: var(--muted); font-size: 14px; }
+    .badge { padding: 8px 11px; color: var(--accent); border: 1px solid #c9b5ad; font-size: 12px; letter-spacing: .08em; }
+    .tokens { display: flex; flex-wrap: wrap; gap: 9px 18px; margin: 0 4px 22px; color: var(--body); font-size: 12px; }
+    .token { display: inline-flex; align-items: center; gap: 7px; }
+    .swatch { width: 16px; height: 16px; border: 1px solid rgba(0,0,0,.09); background: var(--c); }
+    .sample-serif { font-family: var(--serif); font-weight: 700; }
+    .sample-sans { font-family: var(--sans); }
+
+    .case { margin-bottom: 28px; padding: 14px; background: rgba(255,255,255,.62); border: 1px solid #d7d6d1; }
+    .case-head { display: none; }
+    .case-head strong { color: var(--ink); font-weight: 600; }
+    .case-head span { color: var(--muted); }
+    .slide-shell { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; background: var(--paper); }
+    .slide { position: absolute; inset: 0 auto auto 0; width: 1280px; height: 720px; transform-origin: left top; overflow: hidden; background: var(--paper); color: var(--ink); }
+
+    .page { position: relative; width: 100%; height: 100%; padding: 38px 56px 42px; }
+    .page.body-page { display: flex; flex-direction: column; }
+    .folio { position: absolute; right: 56px; bottom: 24px; color: var(--muted); font: 500 11px/1 var(--sans); letter-spacing: .06em; }
+    .page-title-row { display: grid; grid-template-columns: auto auto 1fr; gap: 14px; align-items: center; margin-top: 8px; }
+    .section-no { color: var(--accent); font: 500 18px/1 var(--sans); letter-spacing: .03em; }
+    .page-title { margin: 0; font: 700 25px/1.2 var(--serif); letter-spacing: .01em; }
+    .title-rule { height: 1px; margin: 0 4px; background: var(--line); }
+    .page-title-row .meta { color: var(--muted); font: 400 12px/1 var(--sans); letter-spacing: .08em; }
+
+    /* 01 Cover */
+    .cover .hero { display: grid; grid-template-columns: 8fr 4fr; gap: 68px; margin-top: 94px; }
+    .cover h2 { max-width: 780px; margin: 0; font: 700 58px/1.12 var(--serif); letter-spacing: .015em; }
+    .cover .subtitle { margin-top: 12px; color: var(--accent); font: 500 25px/1.35 var(--serif); }
+    .cover .summary { max-width: 650px; margin: 26px 0 0; color: var(--body); font: 400 17px/1.75 var(--sans); }
+    .cover .quote { align-self: start; margin-top: 10px; }
+    .cover .quote-mark { color: var(--accent); font: 700 48px/.8 var(--serif); }
+    .cover blockquote { margin: 12px 0 0; color: var(--body); font: 400 19px/1.65 var(--serif); }
+    .cover cite { display: block; margin-top: 18px; color: var(--muted); font: normal 15px/1 var(--sans); }
+
+    /* 02 Agenda */
+    .agenda-list { display: grid; grid-template-rows: repeat(4, 1fr); flex: 1; min-height: 0; margin: 44px 0 44px 46px; }
+    .agenda-row { display: grid; grid-template-columns: 74px 1fr 180px; align-items: center; min-height: 0; border-top: 1px solid var(--line); }
+    .agenda-row:last-child { border-bottom: 1px solid var(--line); }
+    .agenda-row .no { color: var(--accent); font: 500 22px/1 var(--serif); }
+    .agenda-row .label { font: 600 21px/1.35 var(--serif); }
+    .agenda-row .hint { color: var(--muted); font: 400 15px/1.5 var(--sans); text-align: right; }
+
+    /* 03 Principles */
+    .principle-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; flex: 1; min-height: 0; margin: 44px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .principle { display: flex; flex-direction: column; justify-content: center; min-height: 0; padding: 38px 34px; border-right: 1px solid var(--line); }
+    .principle:first-child { padding-left: 12px; }
+    .principle:last-child { border-right: 0; padding-right: 12px; }
+    .symbol { display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid #c5c2b9; border-radius: 50%; color: var(--ink); font: 500 19px/1 var(--serif); }
+    .principle h3 { margin: 30px 0 10px; font: 600 21px/1.35 var(--serif); }
+    .principle p { max-width: 285px; margin: 0; color: var(--body); font: 400 17px/1.75 var(--sans); }
+    .principle small { display: block; margin-top: 24px; color: var(--muted); font: 400 12px/1.4 var(--sans); letter-spacing: .05em; }
+
+    /* 04 Method */
+    .method-list { display: grid; grid-template-rows: repeat(4, 1fr); flex: 1; min-height: 0; margin: 38px 0; }
+    .method-row { display: grid; grid-template-columns: 72px 64px 240px 1fr; gap: 20px; align-items: center; min-height: 0; border-top: 1px solid var(--line); }
+    .method-row:last-child { border-bottom: 1px solid var(--line); }
+    .method-row .no { color: #b9b6ae; font: 400 30px/1 var(--serif); }
+    .method-row .symbol { width: 44px; height: 44px; font-size: 16px; }
+    .method-row h3 { margin: 0; font: 600 21px/1.35 var(--serif); }
+    .method-row p { margin: 0; color: var(--body); font: 400 17px/1.6 var(--sans); }
+    .method-row strong { color: var(--accent); font-weight: 600; }
+
+    /* 05 Comparison */
+    .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; flex: 1; min-height: 0; margin: 42px 0; }
+    .comparison { min-height: 0; padding: 24px 26px; border: 1px solid var(--line); }
+    .comparison .label { display: flex; align-items: center; gap: 10px; font: 600 21px/1.25 var(--serif); }
+    .comparison .state { display: grid; place-items: center; width: 24px; height: 24px; border: 1px solid #bdbab1; border-radius: 50%; font-size: 12px; }
+    .comparison.good .state { color: #fff; background: var(--ink); border-color: var(--ink); }
+    .wireframe { position: relative; height: 206px; margin-top: 22px; padding: 22px; background: var(--paper-2); border-top: 1px solid var(--line); }
+    .wireframe .wf-title { width: 38%; height: 10px; background: #c9c6bd; }
+    .wireframe .wf-line { height: 5px; margin-top: 12px; background: #d8d5cc; }
+    .wireframe .wf-line.short { width: 62%; }
+    .wireframe.bad .boxes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 26px; }
+    .wireframe.bad .boxes i { height: 74px; background: #dfddd7; border: 1px solid #d1cec6; }
+    .wireframe.good { background: #f8f7f3; }
+    .wireframe.good .wf-title { width: 52%; height: 13px; background: var(--ink); }
+    .wireframe.good .axis { position: absolute; left: 22px; right: 22px; bottom: 34px; height: 1px; background: #c7c4bb; }
+    .wireframe.good .steps { display: grid; grid-template-columns: 54px 1fr; gap: 8px 18px; margin-top: 28px; }
+    .wireframe.good .steps b { color: var(--accent); font: 500 16px/1 var(--serif); }
+    .wireframe.good .steps i { height: 5px; background: #d4d1c9; }
+    .comparison p { margin: 18px 0 0; color: var(--body); font: 400 17px/1.65 var(--sans); }
+
+    /* 06 Closing */
+    .closing .statement { display: grid; grid-template-columns: 8fr 4fr; gap: 60px; margin-top: 152px; align-items: end; }
+    .closing h2 { margin: 0; font: 700 58px/1.2 var(--serif); }
+    .closing h2 em { display: block; color: var(--accent); font-style: normal; font-weight: 500; }
+    .closing .takeaway { color: var(--body); font: 400 17px/1.7 var(--sans); }
+    .closing .keywords { display: flex; gap: 24px; margin-top: 52px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font: 500 13px/1 var(--sans); letter-spacing: .08em; }
+
+    @media (max-width: 760px) {
+      main { width: min(100% - 10px, 1320px); margin-top: 10px; }
+      .review-head { grid-template-columns: 1fr; gap: 10px; }
+      .case { padding: 7px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="review-head">
+      <div><h1>无主题 Skin｜中性编辑排版 001</h1><p>从参考图蒸馏教学结构、字体层级、网格、留白与色彩；不复制具体品牌和文案。</p></div>
+      <div class="badge">HTML 待审批</div>
+    </header>
+    <div class="tokens">
+      <span class="token"><i class="swatch" style="--c:#f5f4ef"></i>暖灰纸张</span>
+      <span class="token"><i class="swatch" style="--c:#20201d"></i>炭黑</span>
+      <span class="token"><i class="swatch" style="--c:#a35d4f"></i>克制砖红</span>
+      <span class="token sample-serif">思源宋体｜展示标题</span>
+      <span class="token sample-sans">思源黑体｜正文说明</span>
+    </div>
+
+    <section class="case"><div class="case-head"><strong>01｜封面</strong><span>大标题＋强调副标题＋侧栏引语</span></div><div class="slide-shell"><div class="slide"><div class="page cover">
+      <div class="hero"><div><h2>让复杂内容<br>更容易理解</h2><div class="subtitle">结构先于装饰，层级先于风格</div><p class="summary">一套不依赖组织标识的编辑式演示系统，用清晰的标题层级、连续编号和克制留白组织知识。</p></div><aside class="quote"><div class="quote-mark">“</div><blockquote>好的教学页面，不是展示更多信息，而是让读者更快找到下一步。</blockquote><cite>设计原则 01</cite></aside></div>
+      <div class="folio">01</div>
+    </div></div></div></section>
+
+    <section class="case"><div class="case-head"><strong>02｜目录</strong><span>编号与细线承担导航，不使用目录卡片</span></div><div class="slide-shell"><div class="slide"><div class="page body-page">
+      <div class="page-title-row"><span class="section-no">00</span><h2 class="page-title">内容地图</h2><i class="title-rule"></i></div>
+      <div class="agenda-list"><div class="agenda-row"><span class="no">01</span><span class="label">核心原则</span><span class="hint">建立共同判断标准</span></div><div class="agenda-row"><span class="no">02</span><span class="label">方法拆解</span><span class="hint">从原则进入操作步骤</span></div><div class="agenda-row"><span class="no">03</span><span class="label">对比示范</span><span class="hint">观察组织方式的差异</span></div><div class="agenda-row"><span class="no">04</span><span class="label">结论收束</span><span class="hint">留下可复用的行动准则</span></div></div>
+      <div class="folio">02</div>
+    </div></div></div></section>
+
+    <section class="case"><div class="case-head"><strong>03｜原则总览</strong><span>三个同级观点，共享基线和文字容量</span></div><div class="slide-shell"><div class="slide"><div class="page body-page">
+      <div class="page-title-row"><span class="section-no">01</span><h2 class="page-title">核心美学原则</h2><i class="title-rule"></i></div>
+      <div class="principle-grid"><article class="principle"><span class="symbol">A</span><h3>字重对比</h3><p>标题足够明确，正文足够安静。层级来自对比，而不是给每一段都增加装饰。</p></article><article class="principle"><span class="symbol">≈</span><h3>极致留白</h3><p>让模块之间拥有明显停顿，使视线能够聚焦，也让复杂信息保持可读。</p></article><article class="principle"><span class="symbol">◐</span><h3>克制色彩</h3><p>大部分页面由中性色构成，只用一种低饱和强调色标记真正关键的信息。</p></article></div>
+      <div class="folio">03</div>
+    </div></div></div></section>
+
+    <section class="case"><div class="case-head"><strong>04｜步骤教学</strong><span>连续编号＋符号＋标题＋说明</span></div><div class="slide-shell"><div class="slide"><div class="page body-page">
+      <div class="page-title-row"><span class="section-no">02</span><h2 class="page-title">方法拆解</h2><i class="title-rule"></i></div>
+      <div class="method-list"><div class="method-row"><span class="no">01</span><span class="symbol">□</span><h3>先确定阅读入口</h3><p>用一句结论或问题建立页面中心，其他内容都围绕它展开。</p></div><div class="method-row"><span class="no">02</span><span class="symbol">T</span><h3>建立字体层级</h3><p><strong>标题、引导语、正文、注释</strong>各自只承担一种角色。</p></div><div class="method-row"><span class="no">03</span><span class="symbol">↔</span><h3>放大模块间距</h3><p>先用空白分组，再用细线辅助；不让边框代替真正的层级。</p></div><div class="method-row"><span class="no">04</span><span class="symbol">●</span><h3>最后加入强调</h3><p>只选择一个强调色，并把它留给编号、关键词或最终行动点。</p></div></div>
+      <div class="folio">04</div>
+    </div></div></div></section>
+
+    <section class="case"><div class="case-head"><strong>05｜对比教学</strong><span>同一内容通过并列样例说明差异</span></div><div class="slide-shell"><div class="slide"><div class="page body-page">
+      <div class="page-title-row"><span class="section-no">03</span><h2 class="page-title">实战案例</h2><i class="title-rule"></i></div>
+      <div class="comparison-grid"><article class="comparison"><div class="label"><span class="state">×</span>信息被平均对待</div><div class="wireframe bad"><div class="wf-title"></div><div class="wf-line"></div><div class="wf-line short"></div><div class="boxes"><i></i><i></i><i></i></div></div><p>多个模块同时争夺注意力，标题、正文和卡片缺少明确的先后关系。</p></article><article class="comparison good"><div class="label"><span class="state">✓</span>信息沿单一路径展开</div><div class="wireframe good"><div class="wf-title"></div><div class="steps"><b>01</b><i></i><b>02</b><i></i><b>03</b><i></i></div><div class="axis"></div></div><p>先建立标题和编号轴，再让正文依次进入；读者不需要猜测从哪里开始。</p></article></div>
+      <div class="folio">05</div>
+    </div></div></div></section>
+
+    <section class="case"><div class="case-head"><strong>06｜收束／章节过渡</strong><span>一句结论＋三个关键词</span></div><div class="slide-shell"><div class="slide"><div class="page closing">
+      <div class="statement"><h2>少一点装饰，<em>多一点秩序。</em></h2><div class="takeaway">当标题、编号、间距和阅读路径都准确时，页面自然会呈现高级感。</div></div>
+      <div class="keywords"><span>层级</span><span>留白</span><span>节奏</span></div>
+      <div class="folio">06</div>
+    </div></div></div></section>
+  </main>
+  <script>
+    function scaleSlides() {
+      document.querySelectorAll('.slide-shell').forEach(shell => {
+        shell.querySelector('.slide').style.transform = `scale(${shell.clientWidth / 1280})`;
+      });
+    }
+    new ResizeObserver(scaleSlides).observe(document.querySelector('main'));
+    window.addEventListener('load', scaleSlides);
+    scaleSlides();
+  </script>
+</body>
+</html>
