@@ -143,6 +143,10 @@ export async function runWorkflowCli(options) {
     renderer: (input) => observeOperation(options.observer, "delivery", input, () => renderer(input)),
     reviewMode: options.mode === "development" ? "development" : "none",
     guaranteeDelivery: options.guaranteeDelivery !== false,
+    allowVisualContentFeedback: options.allowVisualContentFeedback === true,
+    preferLayoutFallbackOverContentCompression: options.preferLayoutFallbackOverContentCompression === true,
+    ...(Number.isInteger(options.maxContentAttempts) ? { maxContentAttempts: options.maxContentAttempts } : {}),
+    ...(Number.isInteger(options.maxVisualAttempts) ? { maxVisualAttempts: options.maxVisualAttempts } : {}),
   });
   const overflow = await runOverflowCheck(options, result.outputPptx);
   const workflowResultPath = path.join(runDir, "workflow-result.json");

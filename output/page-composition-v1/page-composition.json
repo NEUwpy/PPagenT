@@ -1,0 +1,88 @@
+{
+  "accepted": true,
+  "schemaVersion": "0.1",
+  "pageId": "page-01",
+  "pageJob": "让读者理解 PPagenT 从先构图到原生输出的工作方式",
+  "rhythm": "dense",
+  "focalRegion": "structure",
+  "readingOrder": [
+    "structure",
+    "aside"
+  ],
+  "regions": [
+    {
+      "regionId": "structure",
+      "role": "structure",
+      "frame": {
+        "left": 55,
+        "top": 221,
+        "width": 930,
+        "height": 382
+      },
+      "sourceContentIds": [
+        "step-1",
+        "step-2",
+        "step-3"
+      ],
+      "carrierType": "structure-skill",
+      "skillId": "sequence-flow-001",
+      "visualWeight": "primary"
+    },
+    {
+      "regionId": "aside",
+      "role": "text",
+      "frame": {
+        "left": 1009,
+        "top": 202,
+        "width": 216,
+        "height": 420
+      },
+      "sourceContentIds": [
+        "takeaway"
+      ],
+      "carrierType": "editorial-aside",
+      "skillId": "text/editorial-aside",
+      "visualWeight": "support"
+    }
+  ],
+  "layout": {
+    "id": "dynamic-structure-aside-right",
+    "silhouette": "natural-structure-left-editorial-right",
+    "requiresComponent": true,
+    "componentResizeMode": "natural-crop",
+    "allowedAssetKinds": [
+      "component"
+    ],
+    "slots": [
+      {
+        "id": "component",
+        "role": "component",
+        "frame": {
+          "left": 0,
+          "top": 0.11178861788617886,
+          "width": 0.7948717948717948,
+          "height": 0.7764227642276422
+        }
+      },
+      {
+        "id": "aside",
+        "role": "text",
+        "frame": {
+          "left": 0.8153846153846154,
+          "top": 0.07317073170731707,
+          "width": 0.18461538461538463,
+          "height": 0.8536585365853658
+        }
+      }
+    ]
+  },
+  "textSlots": [
+    {
+      "slotId": "aside",
+      "sourceItemIds": [
+        "takeaway"
+      ],
+      "contentMode": "full"
+    }
+  ]
+}

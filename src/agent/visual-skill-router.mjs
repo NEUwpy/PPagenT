@@ -203,6 +203,24 @@ export function visualSkillRoutingSchema(pageContents, candidateSets) {
             },
           },
         },
+        textSlotAssignments: {
+          type: "array",
+          maxItems: 8,
+          items: {
+            type: "object",
+            additionalProperties: false,
+            required: ["slotId", "sourceItemIds"],
+            properties: {
+              slotId: { type: "string", minLength: 1 },
+              sourceItemIds: {
+                type: "array",
+                minItems: 1,
+                items: { type: "string", enum: page.items.map((item) => item.id) },
+              },
+              contentMode: { enum: ["full", "title", "body"] },
+            },
+          },
+        },
         reason: { type: "string", minLength: 1, maxLength: 120 },
       },
     };
@@ -260,9 +278,31 @@ function chooseComposition(candidate, page, requestedCompositionId) {
   return compositions.find((item) => item.id === preferredId) ?? compositions[0];
 }
 
-function distributeTextSlots(page, composition) {
+function distributeTextSlots(page, composition, requestedAssignments = []) {
   const slots = (composition.slots ?? []).filter((slot) => slot.role === "text");
   if (!slots.length || !page.items.length) return [];
+  if (requestedAssignments.length) {
+    const legalSlotIds = new Set(slots.map((slot) => slot.id));
+    const legalItemIds = new Set(page.items.map((item) => item.id));
+    const usedSlots = new Set();
+    const usedItems = new Set();
+    const assignments = [];
+    for (const assignment of requestedAssignments) {
+      if (!legalSlotIds.has(assignment.slotId) || usedSlots.has(assignment.slotId)) continue;
+      const sourceItemIds = (assignment.sourceItemIds ?? []).filter((id) => (
+        legalItemIds.has(id) && !usedItems.has(id)
+      ));
+      if (!sourceItemIds.length) continue;
+      usedSlots.add(assignment.slotId);
+      sourceItemIds.forEach((id) => usedItems.add(id));
+      assignments.push({
+        slotId: assignment.slotId,
+        sourceItemIds,
+        contentMode: assignment.contentMode ?? "full",
+      });
+    }
+    if (usedItems.size === page.items.length) return assignments;
+  }
   if (slots.length === 1) {
     return [{ slotId: slots[0].id, sourceItemIds: page.items.map((item) => item.id), contentMode: "full" }];
   }
@@ -484,9 +524,9 @@ export function expandVisualSkillRouting(routing, input) {
           ? distributeTextSlots({
             ...page,
             items: page.items.filter((item) => item.id !== candidate.expressionSource.sourceItemId),
-          }, composition)
+          }, composition, selection.textSlotAssignments)
           : [])
-        : distributeTextSlots(page, composition),
+        : distributeTextSlots(page, composition, selection.textSlotAssignments),
       textLayoutChoices,
       ...(candidate.expressionSource ? { componentProjection: candidate.expressionSource } : {}),
       ...(bindings ? { componentBindings: bindings } : {}),

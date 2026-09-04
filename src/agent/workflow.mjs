@@ -1048,6 +1048,8 @@ export async function runDirectorWorkflow(options) {
   const maxContentAttempts = options.maxContentAttempts ?? 6;
   const maxVisualAttempts = options.maxVisualAttempts ?? 3;
   const semanticRefinementEnabled = options.allowSemanticRefinement === true;
+  const visualContentFeedbackEnabled = options.allowVisualContentFeedback === true;
+  const preferLayoutFallbackOverContentCompression = options.preferLayoutFallbackOverContentCompression === true;
   const guaranteeDelivery = options.guaranteeDelivery === true;
   const fallbackEvents = [];
   if (!Number.isInteger(maxContentAttempts) || maxContentAttempts < 1
@@ -1152,7 +1154,7 @@ export async function runDirectorWorkflow(options) {
         if (!recoverableContentError(error)) throw error;
         if (contentAttempt === maxContentAttempts) {
           if (!guaranteeDelivery) throw error;
-          if (lastValidContentOutput && (extra.capacityFeedback || extra.contractFeedback)) {
+          if (lastValidContentOutput && (extra.capacityFeedback || extra.contractFeedback || extra.visualFeedback)) {
             contentOutput = structuredClone(lastValidContentOutput);
             fallbackEvents.push({
               stage: "content-director",
@@ -1248,7 +1250,10 @@ export async function runDirectorWorkflow(options) {
         && gaps.length > 0
         && gaps.every((gap) => gap.type === "content-contract-gap");
       const capacityIssues = capacityIssuesFromCandidateSets(emptyCandidateSets);
-      if (!invalidCandidateSets && capacityIssues.length && contentAttempt < maxContentAttempts) {
+      if (!preferLayoutFallbackOverContentCompression
+        && !invalidCandidateSets
+        && capacityIssues.length
+        && contentAttempt < maxContentAttempts) {
         contentReview = {
           verdict: "revise",
           summary: gaps.some((gap) => gap.type === "asset-gap")
@@ -1268,7 +1273,9 @@ export async function runDirectorWorkflow(options) {
         attempt -= 1;
         continue;
       }
-      if (contentContractOnly && contentAttempt < maxContentAttempts) {
+      if (!preferLayoutFallbackOverContentCompression
+        && contentContractOnly
+        && contentAttempt < maxContentAttempts) {
         const contractGaps = emptyCandidateSets.map((set) => ({
           pageId: set.pageId,
           logicId: set.gap?.logicId,
@@ -1499,6 +1506,38 @@ export async function runDirectorWorkflow(options) {
       previousResolution: visualResolution,
     });
     visualResolution = resolved;
+    const visualTextFitFeedback = (resolved?.feedback ?? []).filter((item) => (
+      item?.code === "composition-invalid"
+      && (item.issues ?? []).some((issue) => issue?.code === "composition-text-fit-failed")
+    ));
+    if (!visualResolutionAccepted(resolved)
+      && visualContentFeedbackEnabled
+      && visualTextFitFeedback.length
+      && contentAttempt < maxContentAttempts) {
+      contentReview = {
+        verdict: "revise",
+        summary: "视觉布局已确定，但部分正文无法在合法字号内排下；只拆分或收紧这些页面",
+        issues: [{
+          severity: "error",
+          category: "visual-text-fit",
+          status: "open",
+          evidence: "视觉复核返回 composition-text-fit-failed",
+          targets: visualTextFitFeedback.map((item) => item.pageId),
+          errorCode: "VISUAL_TEXT_FIT_FAILED",
+          details: { feedback: visualTextFitFeedback },
+        }],
+      };
+      await executeContentRecovery({ visualFeedback: visualTextFitFeedback });
+      fallbackEvents.push({
+        stage: "visual-resolution",
+        code: "visual-feedback-to-content-director",
+        trigger: "composition-text-fit-failed",
+        message: "视觉导演把具体正文适配失败页退回内容导演做一次定向拆页或收紧",
+        pageIds: visualTextFitFeedback.map((item) => item.pageId),
+      });
+      attempt -= 1;
+      continue;
+    }
     if (!visualResolutionAccepted(resolved) && guaranteeDelivery) {
       await persistVisualAttempt(outputDir, attempt, visual, null, "visual-resolution-primary-failed.json", resolved);
       if (attempt < maxVisualAttempts) {
