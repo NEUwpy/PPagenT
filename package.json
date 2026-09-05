@@ -7,6 +7,7 @@
     "node": ">=20"
   },
   "scripts": {
+    "rules:load": "node src/tools/load-rules.mjs",
     "setup:workspace": "node src/tools/setup-workspace-dependencies.mjs",
     "audit": "node src/tools/audit-asset-library.mjs . --mode public && node src/tools/audit-asset-coverage-checklist.mjs .",
     "audit:local": "node src/tools/audit-asset-library.mjs . --mode local && node src/tools/audit-asset-coverage-checklist.mjs .",

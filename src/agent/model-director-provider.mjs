@@ -10,36 +10,13 @@ import { sourceBlocksForModel } from "../content/source-blocks.mjs";
 import { candidateReadiness, normalizeDerivationPolicy } from "./visual-resolution.mjs";
 import { collectVisualDirectorEvidence } from "./candidate-preview-evidence.mjs";
 import { summarizeRhythmPages } from "./deck-rhythm.mjs";
+import { loadRules } from "../runtime/rules-loader.mjs";
 
-const CONTENT_DIRECTOR_SYSTEM_PROMPT = [
-  "PPagenT 内容导演",
-  "一次读取完整稿件，输出一份既可直接阅读、又能由程序确定性解析的逐页 Markdown 内容稿",
-  "只负责内容理解、叙事规划、Logic 判断和版式中立的结构字段提取，不选择最终 Structure Group，不处理坐标、颜色和组件实现",
-  "判断优先级依次是原稿证据真实性、原稿结构完整性、全稿叙事完整性、页面容量、现有结构能力的可承载性",
-  "不得为了提高结构使用率改变关系、增加节点、补造分点或虚构数据；只有原稿确实没有可视化关系时才使用 editorial",
-  "Markdown 是唯一内容层级与正文事实源，机器元数据不得重复页面标题、章节、正文、节点或分点",
-].join("。\n");
+const CONTENT_DIRECTOR_SYSTEM_PROMPT = "你是 PPagenT 内容导演。遵循 context.executionGuidelines 中的内容原则与执行协议，按输出 Schema 完成任务。";
 
 const VISUAL_DIRECTOR_BATCH_PAGE_LIMIT = 8;
 
-const CONTENT_DIRECTOR_TASK = [
-  "读取 context.sourceBlocks 中按顺序编号的完整原稿段落，一次完成 contentMarkdown、deckMetadata 和按 H1 页面顺序对齐的 pageMetadata。",
-  "先识别整稿最大的叙事章节，再识别每个章节中可以独立承担一页职责的最小语义单元；普通原稿 Markdown 标题只是来源组织，不是 PPT 页数上限。只有原稿完整行写明‘第 X 页’时才必须保持其页数与顺序。",
-  "contentMarkdown 只有一个页面边界规则：每个 H1 就是一页。H1 是简洁的页面主题标题；紧随 H1 的首个引用块是面向听众的页面主旨句，必须直接说清本页要让听众理解的判断，不能写成‘介绍、说明、呈现本页内容’之类制作职责，也不能与 H1 同义重复。H2 是页面最外层关系中的一个同级主节点，H2 下普通段落是 body，列表是该节点的 points；H3 仅用于 H2 节点内部确有必要的小标题。不得用 H2 或 H3 暗示另一套页边界，不使用 H4 及更深标题。",
-  "一页可以有多个 H2 主节点；开场、案例、论证和收束若承担不同叙事职责，应拆成不同 H1 页面。每页在正式字号下保持适量，不得把整章硬压成一个巨型并列、时序或卡片页，也不得为了多页而重复内容。",
-  "按以下顺序工作：1.通读全稿并在 deckMetadata.narrativeArc 中概括最大叙事阶段；2.确定 H1 页序与职责；3.逐页识别最外层 Logic；4.用 H2 列出听众必须区分的全部主节点；5.把原稿明确提供的节点内下级内容写成列表，必要时用 H3 标明节点内小节；6.参考 structureCapabilities 检查是否遗漏了原稿真实存在且后续结构需要的关系字段；7.压缩文字并输出完整对象。",
-  "当原稿同时给出一个总机制及其内部层级、数量组、类型组、阶段组或应用场景时，必须保留从最大机制到最小明确节点的层级：不能只留下一个泛化 H2 和两条概括而丢掉内部结构；用 H3、列表或独立 H1 保存原稿真实存在的下级节点。",
-  "availableLogicSkills 是完整 Logic 目录；logicIntent.logicId 必须逐字选择，不能因现有结构数量少或为 0 而改成相近 Logic 或 editorial。",
-  "structureCapabilities 是当前核心结构按 Logic 分组生成的匿名内容形状摘要，只帮助保留必要字段，不是资产菜单；不得复写能力摘要，不得反向套结构。",
-  "若 structureCapabilities 的 requiredFields 表明该 Logic 需要节点内 points 或复杂关系字段，先把全部人类可读内容写进 Markdown，再用 relationBindings 只补机器关系。",
-  "deckMetadata 保存整套标题、沟通任务、受众、期望结果、核心结论与简短 narrativeArc；这些整套字段不在 contentMarkdown 里伪装成页面。",
-  "每个 pageMetadata 只保存 logicIntent、sourceBlockIds、可选 itemMetadata 和必要的 relationBindings，并严格对应同序 H1；pageId 由程序按 H1 顺序生成。itemMetadata 必须与本页 H2 同序等长；当 H2 内部确有独立 Logic 时填写 itemMetadata.logicIntent，否则省略，只可另外填写 emphasis / polarity。不得重复 Markdown 中的页标题、职责、H2 正文或列表。",
-  "sourceBlockIds 从 context.sourceBlocks 逐字选择本页实际使用的全部必要 ID，至少一个且不得重复；不要为了凑数量选入无关段落。它们只证明本页内容来自哪些原稿段落，不负责把全文切成互不重叠的连续区间。不同页面可以回看、交叠或重排来源段落，但不得使用完全相同的证据集合制造重复页。不要自行抄写 sourceAnchors；程序会只按实际选择的 ID 生成逐字证据与 sourceText。evidenceFragments 尽量逐字复制，若有空白或标点偏差程序会以 sourceBlockIds 的原文收口。",
-  "Logic 名与 structuredData.type 不是一回事。普通 editorial、parallel、sequence、layered、hub、progression、network、comparison 只需 Markdown 节点，必须省略 relationBindings。只有确实要生成已登记机器关系时才填写 relationBindings，且 type 只能直接使用 hierarchy、convergence、problem-solution、problem-method-result、argument-evidence、multi-set-common-intersection、iceberg-visible-hidden、decision-tradeoff、internal-external-ecosystem、hub-tiered-ecosystem、branching-decision、branching-scenario、goal-strategy-metrics、role-stage、matrix、matrix-grid 之一；不得把 Logic 名写进 type，也不得用 /structuredData/type 间接改 type。references 的 ref 只能引用 page.title、item:N.id/title/body 或 item:N.point:M；literals 只填 ID、枚举、布尔、数值或邻接矩阵，不得重复正文。",
-  "程序按页面顺序生成 page-01、page-02，并按每页 H2 顺序生成 page-01-item-1 等稳定 ID；relationBindings 中所有 itemIds、methodIds、evidenceIds 等必须使用这些可预测 ID，不能自创组件专属 ID。",
-  "H2 标题不超过 10 个汉字，body 尽量 15–30 个汉字；正文与 points 不重复。",
-  "不得输出 assetId、familyId、variantId、Structure Group、容器、坐标、颜色、图标或组件专属槽位。不得为了适配能力卡改变语义。",
-].join("\n");
+const CONTENT_DIRECTOR_TASK = "遵循 context.executionGuidelines，基于本次原稿和动态反馈完成内容导演任务，按输出 Schema 返回完整结果。";
 
 function assertModel(model, label) {
   if (!model || typeof model.generateJson !== "function") {
@@ -650,6 +627,13 @@ export function createModelDirectorProvider({
   const visualComposition = assertModel(visualCompositionModel, "visualCompositionModel");
   const reviewer = assertModel(reviewerModel, "reviewerModel");
   const outputs = assertSchemas(schemas);
+  const executionRules = async (profile, key) => {
+    const text = guidelines.loadExecutionGuidelines
+      ? await guidelines.loadExecutionGuidelines(profile)
+      : (guidelines[key] ?? (await loadRules(root, { profile })).text);
+    if (typeof text !== "string" || !text.trim()) throw new Error(`执行规则为空: ${profile}`);
+    return text;
+  };
   return {
     metadata: {
       providerKind: "live-schema-aware-model-provider",
@@ -665,7 +649,7 @@ export function createModelDirectorProvider({
         role: CONTENT_DIRECTOR_SYSTEM_PROMPT,
         task: `${contentRevisionDirective(input.previousReview)}${CONTENT_DIRECTOR_TASK}`,
         context: {
-          executionGuidelines: guidelines.content ?? "",
+          executionGuidelines: await executionRules("content-director", "content"),
           availableLogicSkills: guidelines.logicSkillIndex ?? [],
           structureCapabilities: guidelines.structureCapabilities ?? [],
           ...sourceRule(input.rawMarkdown),
@@ -723,6 +707,7 @@ export function createModelDirectorProvider({
     },
     async visualDirector(input) {
       if (input.phase === "intent") throw new Error("正式流程已取消视觉意图模型调用；Logic 由内容导演负责");
+      const executionGuidelines = await executionRules("visual-selector", "visual");
       const disclosedCandidateSets = candidateSetsForVisualDirector(
         input.candidateSets,
         input.previousResolution?.feedback ?? [],
@@ -755,8 +740,9 @@ export function createModelDirectorProvider({
           : { imagePaths: [], entries: [] };
         const visualRequest = {
           role: "PPagenT 视觉导演",
-          task: "内容导演已经为每页确定 Logic，你不得重新分类或跨 Logic 选择。先把每页识别为独立的 pageRole，再规划 densityTarget、visualWeight、continuityGroup 和 contrastBreakBefore；随后在该页合法候选中选择具体 Structure Group 与 compositionId。compositionFamily 必须与所选候选的 compositionOptions 一致。整套优先形成清晰的阅读路径、疏密变化、锚点页和必要的转折；连续三页不要使用同一 compositionFamily，除非语义连续或没有合法替代；卡片和矩阵不能成为所有普通正文页的默认答案。若提供 visualEvidence，图片顺序严格对应 context.visualEvidence：candidate-structure-preview 是已登记资产的真实外观，只用于判断构图，不得把其中示例文字当成稿件事实；previous-deck-montage 或 previous-page-render 用于发现上一轮的重复、重心和承载问题。candidateId 必须逐字复制该页 candidates 中的值。普通候选使用 registered-structure；候选若明确披露 expressionSource、expressionStrategy=text-plus-structure 和 independentTextItemIds，表示程序已验证：该内容块的原文分点可进入真实登记结构，剩余内容块可作为独立文字，并且结构自然占用尺寸能放入子区域。只有这种候选才可选择 text-plus-structure；不要选择尚未开放的 multi-structure。selectionMode=group-locked 表示程序已经锁定唯一合法 Structure Group，你仍需完成 centerLabel、Composition、图标、文字布局和整套节奏判断，但不得跨出 lockedStructureGroupId。readiness=ready 可直接绑定，readiness=derivable 只允许按 derivationPolicy.allowedFields 补展示字段；reasons 只是解释，不授予派生权限，不得补造核心节点、分点或关系。选定候选若披露 textRegions，只能从各 Region 的 compatibleLayoutIds 中选择；同级重复 Region 只按 regionKey 选择一次，程序会扩展到每个实际区域。没有文字区域或默认排版已经合适时省略 textLayoutChoices。如果该页 selectionMode=fallback-locked，或 previousFeedback 明确报告 component-runtime-overflow，则使用已锁定的正文兜底，不得继续选择已证明装不下的结构。centerLabel 是页面核心概念的 2–8 字中文短标签，所有页面都填写；若结构没有中心标签槽，程序会忽略。若选中 mediaMode=semantic-icon 的候选，只为该候选披露的 iconSourceItemIds 逐项输出简短英文 icon query，sourceItemId 必须逐字复制；iconSourceItemIds 为空时省略 iconQueries，不得改用普通 items。其他候选也省略 iconQueries。只有 selectionMode=visual-selectable 或需要响应 previousFeedback 时才写简短 reason，否则省略。不要输出坐标、字号、间距、CompositionPlan、HTML/CSS、重复正文或内容细化请求；程序会读取表单并用确定性排版器完成适配。按 pages 原顺序逐页输出且不得遗漏。",
+          task: "遵循 context.executionGuidelines，使用候选能力卡完成本批页面的视觉选择，按输出 Schema 返回。",
           context: {
+            executionGuidelines,
             deckPlan: input.deckPlan,
             pages: compactPages,
             ...(visualEvidence.entries.length ? { visualEvidence: visualEvidence.entries } : {}),
@@ -780,7 +766,6 @@ export function createModelDirectorProvider({
           // 每批通常只调用一次；空响应或非法 JSON 时仍保留一次受控重答。
           maxJsonAttempts: 2,
         };
-        visualRequest.task = `像调用 Skills 一样使用候选能力卡；当前自动正式线不启用实验性的 blockStructureModes，只接受候选中明确披露的混合表达。${visualRequest.task}`;
         const routingOutput = await visualComposition.generateJson(visualRequest);
         selections.push(...(routingOutput.selections ?? []));
       }

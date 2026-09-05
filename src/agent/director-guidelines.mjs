@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { discoverCoreAssetPackages } from "../runtime/core-asset-packages.mjs";
+import { loadRules } from "../runtime/rules-loader.mjs";
 
 async function loadLogicSkillIndex(root) {
   const [logicMap, packages] = await Promise.all([
@@ -69,10 +70,10 @@ function loadStructureCapabilityIndex(packages) {
 }
 
 export async function loadDirectorGuidelines(root) {
-  const read = (name) => fs.readFile(path.join(root, "docs", "工作流", "正式生成", name), "utf8");
+  const read = async (profile) => (await loadRules(root, { profile })).text;
   const [content, visual, purposeVocabulary, logicSkillIndex, packages] = await Promise.all([
-    read("内容导演提示词.md"),
-    read("视觉导演提示词.md"),
+    read("content-director"),
+    read("visual-selector"),
     fs.readFile(path.join(root, "catalog", "purpose-vocabulary.json"), "utf8").then(JSON.parse),
     loadLogicSkillIndex(root),
     discoverCoreAssetPackages(root),
@@ -81,6 +82,7 @@ export async function loadDirectorGuidelines(root) {
   return {
     content,
     visual,
+    loadExecutionGuidelines: read,
     logicSkillIndex,
     structureCapabilities: loadStructureCapabilityIndex(packages),
     purposeVocabulary: purposeVocabulary.purposes.map(({ key, description }) => ({ key, description })),

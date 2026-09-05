@@ -12,6 +12,7 @@ import {
 import { OpenAIJsonModel } from "../src/agent/openai-director-provider.mjs";
 import { loadDirectorGuidelines } from "../src/agent/director-guidelines.mjs";
 import { loadDirectorOutputSchemas } from "../src/agent/director-output-schemas.mjs";
+import { loadRules } from "../src/runtime/rules-loader.mjs";
 
 test("不兼容结构候选转为内容契约缺口时不会在视觉导演前崩溃", () => {
   const [result] = candidateSetsForVisualDirector([{
@@ -98,22 +99,23 @@ test("模型 DirectorProvider 为两位导演和研发审查调用传入明确�
   ]);
   assert.deepEqual(calls.at(-1).imagePaths, ["a.png"]);
   assert.equal(calls[0].context.executionGuidelines, "内容准则");
+  assert.equal(calls[3].context.executionGuidelines, "视觉准则");
   assert.equal(calls[0].context.structureCapabilities[0].logicId, "parallel");
-  assert.match(calls[0].role, /判断优先级/);
-  assert.match(calls[0].task, /一次完成 contentMarkdown/);
-  assert.match(calls[0].task, /每个 H1 就是一页/);
-  assert.match(calls[0].task, /requiredFields/);
+  assert.match(calls[0].role, /executionGuidelines/);
+  assert.match(calls[0].task, /executionGuidelines/);
+  assert.doesNotMatch(calls[0].role + calls[0].task, /判断优先级|每个 H1 就是一页|requiredFields|itemMetadata|relationBindings/);
   assert.equal(calls[0].maxJsonAttempts, 1);
   assert.doesNotMatch(calls[0].task, /comparison-dual-verdict/);
   assert.deepEqual(Object.keys(calls[2].context).sort(), ["pages", "requests"]);
   assert.deepEqual(calls[3].context.pages, []);
-  assert.match(calls[3].task, /Skills/);
+  assert.match(calls[3].task, /executionGuidelines/);
   assert.equal(calls[3].maxJsonAttempts, 2);
   assert.equal(provider.metadata.providerKind, "live-schema-aware-model-provider");
 });
 
 test("视觉导演超过八页时按原页序分批并携带此前选择", async () => {
   const calls = [];
+  let ruleReads = 0;
   const model = {
     identity: "batch-test",
     supportsImages: true,
@@ -135,6 +137,7 @@ test("视觉导演超过八页时按原页序分批并携带此前选择", async
   const provider = createModelDirectorProvider({
     root: path.resolve(new URL("..", import.meta.url).pathname.replace(/^\/(.:)/, "$1")),
     contentModel: model, visualModel: model, reviewerModel: model, schemas,
+    guidelines: { async loadExecutionGuidelines() { return `视觉规则读取 ${++ruleReads}`; } },
   });
   const pageContents = Array.from({ length: 10 }, (_, index) => ({
     pageId: `page-${index + 1}`,
@@ -180,15 +183,18 @@ test("视觉导演超过八页时按原页序分批并携带此前选择", async
   assert.equal(calls[0].context.visualEvidence[0].assetId, "hub-directed-outcomes-002");
   assert.equal(calls[0].context.priorSelections.length, 0);
   assert.equal(calls[1].context.priorSelections.length, 8);
+  assert.equal(ruleReads, 1);
+  assert.ok(calls.every((call) => call.context.executionGuidelines === "视觉规则读取 1"));
   assert.deepEqual(output.visualPlan.pages.map((page) => page.pageId), pageContents.map((page) => page.pageId));
 });
 
-test("API 运行时直接读取正式生成工作流中的两份导演提示词", async () => {
+test("API 运行时从根目录 rules 读取两位导演对应的规则 profile", async () => {
   const root = path.resolve(new URL("..", import.meta.url).pathname.replace(/^\/(.:)/, "$1"));
   const guidelines = await loadDirectorGuidelines(root);
-  assert.match(guidelines.content, /单次调用中的工作顺序/);
-  assert.match(guidelines.visual, /不得现场自创结构/);
-  assert.match(guidelines.visual, /整页信息构成/);
+  assert.match(guidelines.content, /工作顺序与页面协议/);
+  assert.match(guidelines.content, /每个 H1 就是一页/);
+  assert.match(guidelines.visual, /不授权自由绘图/);
+  assert.match(guidelines.visual, /compositionFamily/);
   assert.ok(guidelines.logicSkillIndex.length >= 8);
   assert.ok(guidelines.logicSkillIndex.some((logic) => (
     logic.logicId === "parallel" && logic.availableStructureGroupCount > 0
@@ -201,6 +207,60 @@ test("API 运行时直接读取正式生成工作流中的两份导演提示词"
   )));
   const disclosed = JSON.stringify(guidelines.structureCapabilities);
   assert.doesNotMatch(disclosed, /assetId|familyId|variantId|silhouette/);
+});
+
+test("实际模型请求注入现行规则正文且 selector 不加载自由生成或 Skin", async () => {
+  const root = path.resolve(new URL("..", import.meta.url).pathname.replace(/^\/(.:)/, "$1"));
+  const guidelines = await loadDirectorGuidelines(root);
+  const schemas = await loadDirectorOutputSchemas(root);
+  const calls = [];
+  const model = { async generateJson(request) { calls.push(request); throw new Error("captured-request"); } };
+  const provider = createModelDirectorProvider({ root, contentModel: model, visualModel: model, reviewerModel: model, schemas, guidelines });
+  await assert.rejects(provider.contentDirector({ rawMarkdown: "真实原稿。", attempt: 1 }), /captured-request/);
+  await assert.rejects(provider.visualDirector({ phase: "composition", pageContents: [], candidateSets: [], deckPlan: {} }), /captured-request/);
+  assert.equal(calls[0].context.executionGuidelines, (await loadRules(root, { profile: "content-director" })).text);
+  assert.match(calls[0].context.executionGuidelines, /一次完成 contentMarkdown/);
+  assert.match(calls[0].context.executionGuidelines, /每个 H1 就是一页/);
+  assert.match(calls[0].context.executionGuidelines, /requiredFields/);
+  assert.match(calls[0].context.executionGuidelines, /itemMetadata\.logicIntent/);
+  assert.match(calls[0].context.executionGuidelines, /面向听众的页面主旨句/);
+  assert.match(calls[0].context.executionGuidelines, /hub-tiered-ecosystem/);
+  assert.match(calls[0].context.executionGuidelines, /page-01-item-1/);
+  assert.doesNotMatch(calls[0].context.executionGuidelines, /首个引用块是本页叙事职责|只保存 `emphasis \/ polarity`/);
+  assert.equal(calls[1].context.executionGuidelines, (await loadRules(root, { profile: "visual-selector" })).text);
+  assert.match(calls[1].context.executionGuidelines, /text-plus-structure/);
+  assert.match(calls[1].context.executionGuidelines, /multi-structure/);
+  assert.doesNotMatch(calls[1].context.executionGuidelines, /rules\/skins\/|asset-fonts:|#F5F4EF/);
+});
+
+test("同一 Provider 的两位导演每次入口重新加载规则，读取失败不调用模型", async () => {
+  const root = path.resolve(new URL("..", import.meta.url).pathname.replace(/^\/(.:)/, "$1"));
+  const schemas = await loadDirectorOutputSchemas(root);
+  const calls = [];
+  let revision = 1;
+  const model = { async generateJson(request) { calls.push(request); throw new Error("captured-request"); } };
+  const provider = createModelDirectorProvider({
+    root, contentModel: model, visualModel: model, reviewerModel: model, schemas,
+    guidelines: {
+      content: "不可回退的旧内容规则",
+      visual: "不可回退的旧视觉规则",
+      async loadExecutionGuidelines(profile) {
+        if (revision === 3) throw new Error("rules-unavailable");
+        return `${profile} 现行规则 ${revision}`;
+      },
+    },
+  });
+  for (revision = 1; revision <= 2; revision += 1) {
+    await assert.rejects(provider.contentDirector({ rawMarkdown: "原稿", attempt: 1 }), /captured-request/);
+    await assert.rejects(provider.visualDirector({ phase: "composition", pageContents: [], candidateSets: [], deckPlan: {} }), /captured-request/);
+  }
+  assert.deepEqual(calls.map((call) => call.context.executionGuidelines), [
+    "content-director 现行规则 1", "visual-selector 现行规则 1",
+    "content-director 现行规则 2", "visual-selector 现行规则 2",
+  ]);
+  await assert.rejects(provider.contentDirector({ rawMarkdown: "原稿", attempt: 1 }), /rules-unavailable/);
+  await assert.rejects(provider.visualDirector({ phase: "composition", pageContents: [], candidateSets: [], deckPlan: {} }), /rules-unavailable/);
+  assert.equal(calls.length, 4);
 });
 
 test("内容导演真实输出 Schema 接受 Markdown 元数据和三维邻接矩阵", async () => {

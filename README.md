@@ -1,55 +1,21 @@
 # PPagenT
 
-PPagenT 是一个面向固定组织场景，使用受控视觉能力可靠生成原生可编辑 PowerPoint 的系统。
+PPagenT 面向工作型演示，把用户内容整理为表达清楚、视觉合适、原生可编辑的 PowerPoint。第一正式场景是东北大学，目标是让设计经验可复用，而不是让每页都套结构图。
 
-它不让模型在毫无积累的空白画布上自由绘制整份 PPT，而是把已经验证的版式、文字、图片和结构能力封装成可调用的 Skill。Agent 负责理解、编排和有限适配；Skill 内的程序负责可靠执行；确定性门禁负责守住可编辑性与几何底线。
+## 当前状态
 
-> Agent 负责判断与协作；Skill 负责复用设计经验；Native 程序负责生成与验证。
+现行生产线仍是内容导演编排、程序筛选候选、视觉导演选择、Native 生成与检查。它已支持已披露的文字加结构混合页，尚不是自主工具循环的 Agent Harness；正式 CLI 仍使用东北大学 Skin。
 
-## 当前里程碑
+本轮把现行设计与角色规则集中到根目录 [rules/](rules/README.md)，通过索引按用途读取。中性编辑排版可用于独立制作任务，其资产仍为 candidate，未接入正式 renderer。规则拆分不等于已经实现通用图文、复合页或四类输入自动处理。
 
-`Shell + Content Frame`、HTML 单源 Structure Group、Native PPTX 编译、资产看板和双导演正式线已经形成可运行基础。当前正式库有 35 个 Structure Group，覆盖 20 类 Logic 中的 18 类。结构资产的第一轮集中建设到此基本结束，默认冻结扩库。
+## 入口
 
-下一阶段不再以“每页命中一个完整结构图”为目标，而是探索一个 PPT 专用 Harness：由总 Agent 调用内容导演与视觉导演，按页渐进披露和调用 Skills。视觉系统由并列的 `Skin` 与 `Layout` 两部分组成，Layout 再组织 `Text / Media / Structure` 三类表达能力。当前生产代码仍按“一页一个主 Structure／Composition”运行，目标架构尚未完成迁移。
-
-当前状态与历史统一见[更新日志](docs/更新日志.md)，阶段性判断见[方向校正](docs/方向校正.md)，产品边界见[产品定义](docs/产品定义.md)。
-
-## 已确定的原则
-
-- 第一阶段先服务东北大学等固定组织场景，再验证跨组织复制。
-- `PPT源/` 是唯一原始 PPT 来源目录，来源记录只写 `PPT源/<文件名>`。
-- Skin／Shell 固定组织视觉规范；正文在 Content Frame 内使用受控能力。
-- 正式生成只从已登记、已审批的核心 Skill 出发；允许在其声明边界内生成本次稿件的临时适配，但不能临时发明新 Logic 或把派生结果自动写回核心库。没有合适结构时回退到合法的文字或图文排版。
-- HTML 主要用于资产入库时的复现、审美调整和看板审核；目标正式生成线直接调用 Native PPT Skills，不把 HTML 当成每次生成都必须经过的中间真源。
-- 最终输出必须是原生可编辑 `.pptx`。
-- 现有程序不会被丢弃，而是收进 Skill，成为可复用的确定性执行器；Agent 只在 Skill 声明的适配边界内调整。
-- 资产入库与正式生成是两条不同工作流；候选资产不得自行晋升。
-- 检查保持必要且轻量，不恢复全状态穷举、反复哈希和过重审查链。
-
-## 文档入口
-
-- [文档地图](docs/README.md)
-- [产品定义](docs/产品定义.md)
-- [产品叙事](docs/产品叙事.md)
-- [方向校正](docs/方向校正.md)
-- [更新日志与当前状态](docs/更新日志.md)
-- [正式生成工作流](docs/工作流/正式生成/工作流.md)
-- [资产积累与入库工作流](docs/工作流/资产积累与入库/工作流.md)
-- [资产覆盖清单](docs/工作流/资产积累与入库/资产覆盖清单.md)
-- [Shell、Content Frame 与 Logic 契约](docs/契约/Shell与Logic契约.md)
-- [运行配置信息](docs/契约/运行配置信息.md)
-
-## 主要目录
-
-- `assets/`：正式核心资产；各资产目录中的 `asset.json` 是登记真源。
-- `catalog/`：Logic、Composition、Purpose、覆盖与失败经验等目录数据。
-- `src/agent/`：当前稿件理解、候选生成、视觉决策和工作流编排；下一阶段将在这里验证总 Agent 与双导演协作。
-- `src/runtime/`：Skin、资产发现、正式运行和确定性渲染支撑。
-- `src/asset-runtime/`：现有 HTML 资产与 Native PowerPoint 之间的共享编译能力；迁移期继续复用，不再扩张为正式线唯一布局来源。
-- `稿件/`：正式生成使用的原始稿件。
-- `PPT源/`：唯一原始 PPT 来源；整目录由 Git 忽略。
-- `experiments/`：仍有决策价值的最小实验，不作为正式能力。
-- `docs/archive/`：已经被新决策取代的历史文档，只用于追溯。
+- [产品需求](docs/产品需求.md)：输入、交付与用户修改权限，不绑定实现架构。
+- [产品定义](docs/产品定义.md)：唯一的现行架构与目标边界说明。
+- [规则维护](rules/README.md)：单一规则来源、按需加载与经验沉淀。
+- [正式生成工作流](docs/工作流/正式生成/工作流.md)：可运行命令与当前限制。
+- [独立生成任务提示词](docs/工作流/正式生成/生成任务提示词.md)：新任务读取规则的短入口。
+- [文档地图](docs/README.md)、[更新日志](docs/更新日志.md)：其余资料与状态记录。
 
 ## 使用与验证
 
@@ -58,8 +24,17 @@ PPagenT 是一个面向固定组织场景，使用受控视觉能力可靠生成
 ```powershell
 npm ci
 npm run setup:workspace
+npm run production:workbench
 ```
 
-双击 `启动PPA生产工作台.cmd`／`启动PPA看板.cmd`，或运行 `npm run production:workbench`／`npm run assets:dashboard`。底层正式入口为 `npm run agent:run`；DeepSeek 入口为 `npm run agent:run:deepseek`。真实密钥只放在 Git 忽略的 `config/deepseek.local.json` 或环境变量中，详见[运行配置契约](docs/契约/运行配置信息.md)。
+也可双击 `启动PPA生产工作台.cmd`／`启动PPA看板.cmd`。Provider 和密钥配置见[运行配置契约](docs/契约/运行配置信息.md)；真实密钥不进入 Git。
 
-公开依赖安装完成后可运行 `npm test`。本地含 `PPT源/` 时可额外运行 `npm run audit:local`；熟悉项目或只改文档时不需要重新渲染 PPT 或运行完整测试。
+只读取独立制作所需规则，不启动模型或生成 PPT：
+
+```powershell
+npm run rules:load -- --profile generation --skin neutral-editorial-001
+```
+
+`npm test` 执行契约、程序测试和公开审计；本地有 `PPT源/` 时可额外运行 `npm run audit:local`。程序测试不能替代成品逐页视觉检查。
+
+主要目录：`rules/` 管规则正文；`assets/` 管资产声明与实现（含候选）；`catalog/` 管目录数据；`src/` 管加载、编排与执行；`稿件/` 管原稿；`PPT源/` 是唯一原始 PPT 来源且被 Git 忽略。实验和历史文档不作为当前生成入口。
