@@ -1,0 +1,26 @@
+{"kind":"slide","id":"sl/het8c2","slide":1,"title":"4.0 GB 上限下，先筛内存，再选分批处理","textShapes":18}
+{"kind":"textbox","id":"sh/ov2l03yh","slide":1,"name":"title","text":"4.0 GB 上限下，先筛内存，再选分批处理","textPreview":"4.0 GB 上限下，先筛内存，再选分批处理","textChars":22,"textLines":1,"bbox":[55,36,1170,46]}
+{"kind":"textbox","id":"sh/3u947yxw","slide":1,"name":"test-frame","text":"同一工作站 × 同一套 100 批次 × 固定线程参数｜单批耗时报告中位数，内存报告全程峰值","textPreview":"同一工作站 × 同一套 100 批次 × 固定线程参数｜单批耗时报告中位数，内存报告全程峰值","textChars":46,"textLines":1,"bbox":[55,91,1170,24]}
+{"kind":"shape","id":"sh/2903ytgb","slide":1,"name":"header-rule","bbox":[55,131,1170,0]}
+{"kind":"textbox","id":"sh/d0bmd8fy","slide":1,"name":"evidence-heading","text":"两项指标，共享三种运行方式","textPreview":"两项指标，共享三种运行方式","textChars":13,"textLines":1,"bbox":[55,154,500,28]}
+{"kind":"textbox","id":"sh/cz2543yd","slide":1,"name":"evidence-note","text":"三种方式均完整处理固定批次，未发生处理失败","textPreview":"三种方式均完整处理固定批次，未发生处理失败","textChars":21,"textLines":1,"bbox":[55,187,700,22]}
+{"kind":"textbox","id":"sh/byt4byxs","slide":1,"name":"time-label","text":"单批耗时中位数（秒）","textPreview":"单批耗时中位数（秒）","textChars":10,"textLines":1,"bbox":[55,218,330,24]}
+{"kind":"textbox","id":"sh/t4rm14fu","slide":1,"name":"memory-label","text":"全程峰值内存（GB）","textPreview":"全程峰值内存（GB）","textChars":10,"textLines":1,"bbox":[55,409,330,24]}
+{"kind":"textbox","id":"sh/mlwvq943","slide":1,"name":"chart-reading-note","text":"主色标出候选方案；其余颜色保留为对照。两张图的行顺序一致，便于先看门槛、再看速度。","textPreview":"主色标出候选方案；其余颜色保留为对照。两张图的行顺序一致，便于先看门槛、再看速度。","textChars":41,"textLines":1,"bbox":[55,596,800,24]}
+{"kind":"shape","id":"sh/nm5cjelo","slide":1,"name":"decision-surface","bbox":[900,154,325,470]}
+{"kind":"textbox","id":"sh/onedsjm9","slide":1,"name":"decision-kicker","text":"本轮试运行建议","textPreview":"本轮试运行建议","textChars":7,"textLines":1,"bbox":[925,181,250,26]}
+{"kind":"textbox","id":"sh/9onulo3u","slide":1,"name":"decision-choice","text":"分批处理","textPreview":"分批处理","textChars":4,"textLines":1,"bbox":[925,216,250,40]}
+{"kind":"textbox","id":"sh/apgvut4f","slide":1,"name":"decision-gate","text":"先过内存门槛：峰值 3.6 GB ≤ 4.0 GB","textPreview":"先过内存门槛：峰值 3.6 GB ≤ 4.0 GB","textChars":25,"textLines":1,"bbox":[925,263,270,42]}
+{"kind":"shape","id":"sh/bqpcnylk","slide":1,"name":"decision-rule-1","bbox":[925,320,270,0]}
+{"kind":"textbox","id":"sh/wrydw3m5","slide":1,"name":"decision-speed","text":"相对当前串行处理","textPreview":"相对当前串行处理","textChars":8,"textLines":1,"bbox":[925,338,220,22]}
+{"kind":"textbox","id":"sh/xs7epo3q","slide":1,"name":"decision-speed-value","text":"120 − 70 = 50 秒/批更快","textPreview":"120 − 70 = 50 秒/批更快","textChars":19,"textLines":1,"bbox":[925,365,270,30]}
+{"kind":"textbox","id":"sh/ytgvyt4b","slide":1,"name":"decision-headroom","text":"剩余内存空间：4.0 − 3.6 = 0.4 GB","textPreview":"剩余内存空间：4.0 − 3.6 = 0.4 GB","textChars":25,"textLines":1,"bbox":[925,403,270,28]}
+{"kind":"shape","id":"sh/jupwrylw","slide":1,"name":"decision-rule-2","bbox":[925,449,270,0]}
+{"kind":"textbox","id":"sh/vi9cfy14","slide":1,"name":"parallel-title","text":"为何不选最快的并行处理？","textPreview":"为何不选最快的并行处理？","textChars":12,"textLines":1,"bbox":[925,467,275,28]}
+{"kind":"textbox","id":"sh/uh0b6t0j","slide":1,"name":"parallel-explain","text":"45 秒/批虽最快，但峰值 7.4 GB，超过上限 3.4 GB；本机不能通过关闭必需任务来扩容。","textPreview":"45 秒/批虽最快，但峰值 7.4 GB，超过上限 3.4 GB；本机不能通过关闭必需任务来扩容。","textChars":49,"textLines":1,"bbox":[925,501,270,66]}
+{"kind":"textbox","id":"sh/hkruh8ju","slide":1,"name":"boundary","text":"边界：仅验证这台工作站与这组固定批次。下一轮做受控试运行并记录峰值；不承诺所有数据保持当前耗时，也不视为正式部署。","textPreview":"边界：仅验证这台工作站与这组固定批次。下一轮做受控试运行并记录峰值；不承诺所有数据保持当前耗时，也不视为正式部署。","textChars":57,"textLines":1,"bbox":[55,636,1140,25]}
+{"kind":"textbox","id":"sh/gjit83ip","slide":1,"name":"source","text":"来源：虚构测试数据｜设计验证素材，非真实算法性能报告","textPreview":"来源：虚构测试数据｜设计验证素材，非真实算法性能报告","textChars":26,"textLines":1,"bbox":[55,674,900,18]}
+{"kind":"textbox","id":"sh/7upcby1s","slide":1,"name":"page-number","text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[1170,674,55,18]}
+{"kind":"chart","id":"ch/ixwv6dkf","slide":1,"name":"","chartType":"bar","bbox":[55,247,800,142]}
+{"kind":"chart","id":"ch/knudwj21","slide":1,"name":"","chartType":"bar","bbox":[55,438,800,142]}
+{"kind":"notes","id":"nt/het8c2","slide":1,"text":"[Sources]\n- No external sources. All values and conditions are from the user-provided manuscript and are explicitly labeled as fictional test data.\n[/Sources]"}

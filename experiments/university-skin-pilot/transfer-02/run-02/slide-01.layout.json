@@ -1,0 +1,2385 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/8ibs7q",
+    "id": "8ibs7q",
+    "slide": 1,
+    "layoutId": "2801458f-f69d-4e4f-bfbe-650a4afe66ce",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "95ae7eed-9d7b-4c37-b2cd-22062071d981",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#FFFFFF",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "Microsoft YaHei"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "2801458f-f69d-4e4f-bfbe-650a4afe66ce",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "95ae7eed-9d7b-4c37-b2cd-22062071d981",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "95ae7eed-9d7b-4c37-b2cd-22062071d981",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/m903ax83",
+      "id": "1",
+      "name": "title",
+      "bbox": [
+        55,
+        36,
+        1170,
+        46
+      ],
+      "geometry": "rect",
+      "text": "在 4.0 GB 上限下，分批处理是下一轮试运行的可行选择",
+      "textPreview": "在 4.0 GB 上限下，分批处理是下一轮试运行的可行选择",
+      "resolvedFontSize": 32,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 32,
+        "typeface": "Microsoft YaHei",
+        "color": "#252B33",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "在 4.0 GB 上限下，分批处理是下一轮试运行的可行选择"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "在 4.0 GB 上限下，分批处理是下一轮试运行的可行选择",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 32,
+            "typeface": "Microsoft YaHei",
+            "color": "#252B33",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "在 4.0 GB 上限下，分批处理是下一轮试运行的可行选择",
+              "fontSize": 32,
+              "typeface": "Microsoft YaHei",
+              "color": "#252B33",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/9cb25s7e",
+      "id": "2",
+      "name": "method-line",
+      "bbox": [
+        55,
+        91,
+        1170,
+        24
+      ],
+      "geometry": "rect",
+      "text": "同一台工作站、同一套 100 个数据批次、固定线程参数｜耗时为单批中位数，内存为全程峰值",
+      "textPreview": "同一台工作站、同一套 100 个数据批次、固定线程参数｜耗时为单批中位数，内存为全程峰值",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Microsoft YaHei",
+        "color": "#707780",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "同一台工作站、同一套 100 个数据批次、固定线程参数｜耗时为单批中位数，内存为全程峰值"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "同一台工作站、同一套 100 个数据批次、固定线程参数｜耗时为单批中位数，内存为全程峰值",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Microsoft YaHei",
+            "color": "#707780",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "同一台工作站、同一套 100 个数据批次、固定线程参数｜耗时为单批中位数，内存为全程峰值",
+              "fontSize": 16,
+              "typeface": "Microsoft YaHei",
+              "color": "#707780",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ob2lcnq9",
+      "id": "3",
+      "name": "header-rule",
+      "bbox": [
+        55,
+        131,
+        1170,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#315F91",
+      "lineWidth": 2
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/zm9kfipc",
+      "id": "4",
+      "name": "main-claim",
+      "bbox": [
+        55,
+        154,
+        760,
+        28
+      ],
+      "geometry": "rect",
+      "text": "内存先筛选，速度再排序",
+      "textPreview": "内存先筛选，速度再排序",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 22,
+        "typeface": "Microsoft YaHei",
+        "color": "#252B33",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "内存先筛选，速度再排序"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "内存先筛选，速度再排序",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "typeface": "Microsoft YaHei",
+            "color": "#252B33",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "内存先筛选，速度再排序",
+              "fontSize": 22,
+              "typeface": "Microsoft YaHei",
+              "color": "#252B33",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/el036d8r",
+      "id": "5",
+      "name": "time-heading",
+      "bbox": [
+        55,
+        197,
+        360,
+        28
+      ],
+      "geometry": "rect",
+      "text": "单批耗时中位数（秒）",
+      "textPreview": "单批耗时中位数（秒）",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 22,
+        "typeface": "Microsoft YaHei",
+        "color": "#252B33",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "单批耗时中位数（秒）"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "单批耗时中位数（秒）",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "typeface": "Microsoft YaHei",
+            "color": "#252B33",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "单批耗时中位数（秒）",
+              "fontSize": 22,
+              "typeface": "Microsoft YaHei",
+              "color": "#252B33",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "chart",
+      "scope": "slide",
+      "aid": "ch/xkfipovq",
+      "id": "6",
+      "bbox": [
+        55,
+        228,
+        745,
+        148
+      ],
+      "chartType": "bar"
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/0nil8nqx",
+      "id": "7",
+      "name": "memory-heading",
+      "bbox": [
+        55,
+        399,
+        360,
+        28
+      ],
+      "geometry": "rect",
+      "text": "全程峰值内存（GB）",
+      "textPreview": "全程峰值内存（GB）",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 22,
+        "typeface": "Microsoft YaHei",
+        "color": "#252B33",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "全程峰值内存（GB）"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "全程峰值内存（GB）",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "typeface": "Microsoft YaHei",
+            "color": "#252B33",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "全程峰值内存（GB）",
+              "fontSize": 22,
+              "typeface": "Microsoft YaHei",
+              "color": "#252B33",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/jid4b2pw",
+      "id": "8",
+      "name": "memory-note",
+      "bbox": [
+        55,
+        428,
+        260,
+        20
+      ],
+      "geometry": "rect",
+      "text": "可用上限 = 4.0 GB",
+      "textPreview": "可用上限 = 4.0 GB",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Microsoft YaHei",
+        "color": "#707780",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "可用上限 = 4.0 GB"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "可用上限 = 4.0 GB",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Microsoft YaHei",
+            "color": "#707780",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "可用上限 = 4.0 GB",
+              "fontSize": 16,
+              "typeface": "Microsoft YaHei",
+              "color": "#707780",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/yhk3ih8b",
+      "id": "9",
+      "name": "memory-threshold",
+      "bbox": [
+        495,
+        421,
+        0,
+        163
+      ],
+      "geometry": "line",
+      "lineColor": "#315F91",
+      "lineWidth": 2
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/8v6d0nq1",
+      "id": "10",
+      "name": "threshold-label",
+      "bbox": [
+        443,
+        397,
+        110,
+        20
+      ],
+      "geometry": "rect",
+      "text": "4.0 GB 上限",
+      "textPreview": "4.0 GB 上限",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Microsoft YaHei",
+        "color": "#2D4D70",
+        "alignment": "center",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "4.0 GB 上限"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "4.0 GB 上限",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Microsoft YaHei",
+            "color": "#2D4D70",
+            "alignment": "center",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "4.0 GB 上限",
+              "fontSize": 16,
+              "typeface": "Microsoft YaHei",
+              "color": "#2D4D70",
+              "alignment": "center",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/9wzuts7m",
+      "id": "11",
+      "name": "memory-label-串行处理",
+      "bbox": [
+        55,
+        457,
+        125,
+        24
+      ],
+      "geometry": "rect",
+      "text": "串行处理",
+      "textPreview": "串行处理",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Microsoft YaHei",
+        "color": "#252B33",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "串行处理"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "串行处理",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Microsoft YaHei",
+            "color": "#252B33",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "串行处理",
+              "fontSize": 16,
+              "typeface": "Microsoft YaHei",
+              "color": "#252B33",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/mtovyd8v",
+      "id": "12",
+      "name": "memory-track-串行处理",
+      "bbox": [
+        215,
+        461,
+        560,
+        18
+      ],
+      "geometry": "rect",
+      "fillColor": "#F0F0F1",
+      "lineWidth": 0
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/7uxcripg",
+      "id": "13",
+      "name": "memory-bar-串行处理",
+      "bbox": [
+        215,
+        461,
+        140,
+        18
+      ],
+      "geometry": "rect",
+      "fillColor": "#C5D2E0",
+      "lineWidth": 0
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/kr6twnq5",
+      "id": "14",
+      "name": "memory-value-串行处理",
+      "bbox": [
+        365,
+        457,
+        80,
+        24
+      ],
+      "geometry": "rect",
+      "text": "2.0 GB",
+      "textPreview": "2.0 GB",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Microsoft YaHei",
+        "color": "#252B33",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "2.0 GB"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "2.0 GB",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Microsoft YaHei",
+            "color": "#252B33",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "2.0 GB",
+              "fontSize": 16,
+              "typeface": "Microsoft YaHei",
+              "color": "#252B33",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 15,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/lsfup87q",
+      "id": "15",
+      "name": "memory-label-分批处理",
+      "bbox": [
+        55,
+        503,
+        125,
+        24
+      ],
+      "geometry": "rect",
+      "text": "分批处理",
+      "textPreview": "分批处理",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Microsoft YaHei",
+        "color": "#252B33",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "分批处理"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "分批处理",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Microsoft YaHei",
+            "color": "#252B33",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "分批处理",
+              "fontSize": 16,
+              "typeface": "Microsoft YaHei",
+              "color": "#252B33",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 16,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ypobud8z",
+      "id": "16",
+      "name": "memory-track-分批处理",
+      "bbox": [
+        215,
+        507,
+        560,
+        18
+      ],
+      "geometry": "rect",
+      "fillColor": "#F0F0F1",
+      "lineWidth": 0
+    },
+    {
+      "order": 17,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/zqxcnipk",
+      "id": "17",
+      "name": "memory-bar-分批处理",
+      "bbox": [
+        215,
+        507,
+        252,
+        18
+      ],
+      "geometry": "rect",
+      "fillColor": "#315F91",
+      "lineWidth": 0
+    },
+    {
+      "order": 18,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/cnmts3qt",
+      "id": "18",
+      "name": "memory-value-分批处理",
+      "bbox": [
+        409,
+        482,
+        80,
+        24
+      ],
+      "geometry": "rect",
+      "text": "3.6 GB",
+      "textPreview": "3.6 GB",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Microsoft YaHei",
+        "color": "#252B33",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "3.6 GB"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "3.6 GB",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Microsoft YaHei",
+            "color": "#252B33",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "3.6 GB",
+              "fontSize": 16,
+              "typeface": "Microsoft YaHei",
+              "color": "#252B33",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 19,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/xoful87e",
+      "id": "19",
+      "name": "memory-label-并行处理",
+      "bbox": [
+        55,
+        549,
+        125,
+        24
+      ],
+      "geometry": "rect",
+      "text": "并行处理",
+      "textPreview": "并行处理",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Microsoft YaHei",
+        "color": "#252B33",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "并行处理"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "并行处理",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Microsoft YaHei",
+            "color": "#252B33",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "并行处理",
+              "fontSize": 16,
+              "typeface": "Microsoft YaHei",
+              "color": "#252B33",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 20,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/t8ni90f6",
+      "id": "20",
+      "name": "memory-track-并行处理",
+      "bbox": [
+        215,
+        553,
+        560,
+        18
+      ],
+      "geometry": "rect",
+      "fillColor": "#F0F0F1",
+      "lineWidth": 0
+    },
+    {
+      "order": 21,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/s7e10vel",
+      "id": "21",
+      "name": "memory-bar-并行处理",
+      "bbox": [
+        215,
+        553,
+        518,
+        18
+      ],
+      "geometry": "rect",
+      "fillColor": "#C5D2E0",
+      "lineWidth": 0
+    },
+    {
+      "order": 22,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/r6l07qx0",
+      "id": "22",
+      "name": "memory-value-并行处理",
+      "bbox": [
+        743,
+        549,
+        80,
+        24
+      ],
+      "geometry": "rect",
+      "text": "7.4 GB",
+      "textPreview": "7.4 GB",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Microsoft YaHei",
+        "color": "#252B33",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "7.4 GB"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "7.4 GB",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Microsoft YaHei",
+            "color": "#252B33",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "7.4 GB",
+              "fontSize": 16,
+              "typeface": "Microsoft YaHei",
+              "color": "#252B33",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 23,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/65cjylwf",
+      "id": "23",
+      "name": "memory-axis",
+      "bbox": [
+        215,
+        585,
+        560,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#D3D5D6",
+      "lineWidth": 1
+    },
+    {
+      "order": 24,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/543i50fu",
+      "id": "24",
+      "name": "memory-tick-0",
+      "bbox": [
+        215,
+        585,
+        0,
+        6
+      ],
+      "geometry": "line",
+      "lineColor": "#D3D5D6",
+      "lineWidth": 1
+    },
+    {
+      "order": 25,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/43u1wve9",
+      "id": "25",
+      "name": "memory-tick-label-0",
+      "bbox": [
+        203,
+        595,
+        24,
+        20
+      ],
+      "geometry": "rect",
+      "text": "0",
+      "textPreview": "0",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Microsoft YaHei",
+        "color": "#707780",
+        "alignment": "center",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "0"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "0",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Microsoft YaHei",
+            "color": "#707780",
+            "alignment": "center",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "0",
+              "fontSize": 16,
+              "typeface": "Microsoft YaHei",
+              "color": "#707780",
+              "alignment": "center",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 26,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/jil03qxo",
+      "id": "26",
+      "name": "memory-tick-2",
+      "bbox": [
+        355,
+        585,
+        0,
+        6
+      ],
+      "geometry": "line",
+      "lineColor": "#D3D5D6",
+      "lineWidth": 1
+    },
+    {
+      "order": 27,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ihcjulwj",
+      "id": "27",
+      "name": "memory-tick-label-2",
+      "bbox": [
+        343,
+        595,
+        24,
+        20
+      ],
+      "geometry": "rect",
+      "text": "2",
+      "textPreview": "2",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Microsoft YaHei",
+        "color": "#707780",
+        "alignment": "center",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "2"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "2",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Microsoft YaHei",
+            "color": "#707780",
+            "alignment": "center",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "2",
+              "fontSize": 16,
+              "typeface": "Microsoft YaHei",
+              "color": "#707780",
+              "alignment": "center",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 28,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/p072hkve",
+      "id": "28",
+      "name": "memory-tick-4",
+      "bbox": [
+        495,
+        585,
+        0,
+        6
+      ],
+      "geometry": "line",
+      "lineColor": "#D3D5D6",
+      "lineWidth": 1
+    },
+    {
+      "order": 29,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ozy18fet",
+      "id": "29",
+      "name": "memory-tick-label-4",
+      "bbox": [
+        483,
+        595,
+        24,
+        20
+      ],
+      "geometry": "rect",
+      "text": "4",
+      "textPreview": "4",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Microsoft YaHei",
+        "color": "#707780",
+        "alignment": "center",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "4"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "4",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Microsoft YaHei",
+            "color": "#707780",
+            "alignment": "center",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "4",
+              "fontSize": 16,
+              "typeface": "Microsoft YaHei",
+              "color": "#707780",
+              "alignment": "center",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 30,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ml8f2hcb",
+      "id": "30",
+      "name": "memory-tick-6",
+      "bbox": [
+        635,
+        585,
+        0,
+        6
+      ],
+      "geometry": "line",
+      "lineColor": "#D3D5D6",
+      "lineWidth": 1
+    },
+    {
+      "order": 31,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/7mhgbmdg",
+      "id": "31",
+      "name": "memory-tick-label-6",
+      "bbox": [
+        623,
+        595,
+        24,
+        20
+      ],
+      "geometry": "rect",
+      "text": "6",
+      "textPreview": "6",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Microsoft YaHei",
+        "color": "#707780",
+        "alignment": "center",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "6"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "6",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Microsoft YaHei",
+            "color": "#707780",
+            "alignment": "center",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "6",
+              "fontSize": 16,
+              "typeface": "Microsoft YaHei",
+              "color": "#707780",
+              "alignment": "center",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 32,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/8nqh4ru1",
+      "id": "32",
+      "name": "memory-tick-8",
+      "bbox": [
+        775,
+        585,
+        0,
+        6
+      ],
+      "geometry": "line",
+      "lineColor": "#D3D5D6",
+      "lineWidth": 1
+    },
+    {
+      "order": 33,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/9ojydwvm",
+      "id": "33",
+      "name": "memory-tick-label-8",
+      "bbox": [
+        763,
+        595,
+        24,
+        20
+      ],
+      "geometry": "rect",
+      "text": "8",
+      "textPreview": "8",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Microsoft YaHei",
+        "color": "#707780",
+        "alignment": "center",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "8"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "8",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Microsoft YaHei",
+            "color": "#707780",
+            "alignment": "center",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "8",
+              "fontSize": 16,
+              "typeface": "Microsoft YaHei",
+              "color": "#707780",
+              "alignment": "center",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 34,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/yh8fyhcz",
+      "id": "34",
+      "name": "explanation-divider",
+      "bbox": [
+        840,
+        197,
+        0,
+        388
+      ],
+      "geometry": "line",
+      "lineColor": "#D3D5D6",
+      "lineWidth": 1
+    },
+    {
+      "order": 35,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/zihg72dk",
+      "id": "35",
+      "name": "recommendation-heading",
+      "bbox": [
+        875,
+        197,
+        300,
+        28
+      ],
+      "geometry": "rect",
+      "text": "推荐分批处理",
+      "textPreview": "推荐分批处理",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 22,
+        "typeface": "Microsoft YaHei",
+        "color": "#2D4D70",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "推荐分批处理"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "推荐分批处理",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "typeface": "Microsoft YaHei",
+            "color": "#2D4D70",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "推荐分批处理",
+              "fontSize": 22,
+              "typeface": "Microsoft YaHei",
+              "color": "#2D4D70",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 36,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/kjqx07u5",
+      "id": "36",
+      "name": "recommendation-body",
+      "bbox": [
+        875,
+        239,
+        350,
+        104
+      ],
+      "geometry": "rect",
+      "text": "先过 4.0 GB 门槛，再看耗时。\n分批处理峰值 3.6 GB，满足上限；\n相对串行处理少 50 秒/批，\n余量 0.4 GB。",
+      "textPreview": "先过 4.0 GB 门槛，再看耗时。 | 分批处理峰值 3.6 GB，满足上限； | 相对串行处理少 50 秒/批， | 余量 0.4 GB。",
+      "resolvedFontSize": 20,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 20,
+        "typeface": "Microsoft YaHei",
+        "color": "#252B33",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 4,
+        "lines": [
+          {
+            "index": 1,
+            "text": "先过 4.0 GB 门槛，再看耗时。"
+          },
+          {
+            "index": 2,
+            "text": "分批处理峰值 3.6 GB，满足上限；"
+          },
+          {
+            "index": 3,
+            "text": "相对串行处理少 50 秒/批，"
+          },
+          {
+            "index": 4,
+            "text": "余量 0.4 GB。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "先过 4.0 GB 门槛，再看耗时。",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 20,
+            "typeface": "Microsoft YaHei",
+            "color": "#252B33",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "先过 4.0 GB 门槛，再看耗时。",
+              "fontSize": 20,
+              "typeface": "Microsoft YaHei",
+              "color": "#252B33",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "分批处理峰值 3.6 GB，满足上限；",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 20,
+            "typeface": "Microsoft YaHei",
+            "color": "#252B33",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "分批处理峰值 3.6 GB，满足上限；",
+              "fontSize": 20,
+              "typeface": "Microsoft YaHei",
+              "color": "#252B33",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 3,
+          "text": "相对串行处理少 50 秒/批，",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 20,
+            "typeface": "Microsoft YaHei",
+            "color": "#252B33",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "相对串行处理少 50 秒/批，",
+              "fontSize": 20,
+              "typeface": "Microsoft YaHei",
+              "color": "#252B33",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 4,
+          "text": "余量 0.4 GB。",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 20,
+            "typeface": "Microsoft YaHei",
+            "color": "#252B33",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "余量 0.4 GB。",
+              "fontSize": 20,
+              "typeface": "Microsoft YaHei",
+              "color": "#252B33",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 37,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/lkzy9cvq",
+      "id": "37",
+      "name": "parallel-heading",
+      "bbox": [
+        875,
+        371,
+        300,
+        28
+      ],
+      "geometry": "rect",
+      "text": "并行处理为何不适用",
+      "textPreview": "并行处理为何不适用",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 22,
+        "typeface": "Microsoft YaHei",
+        "color": "#252B33",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "并行处理为何不适用"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "并行处理为何不适用",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "typeface": "Microsoft YaHei",
+            "color": "#252B33",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "并行处理为何不适用",
+              "fontSize": 22,
+              "typeface": "Microsoft YaHei",
+              "color": "#252B33",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 38,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/idsza1c3",
+      "id": "38",
+      "name": "parallel-body",
+      "bbox": [
+        875,
+        413,
+        350,
+        100
+      ],
+      "geometry": "rect",
+      "text": "45 秒/批虽最快，但峰值内存 7.4 GB，\n超过本机上限 3.4 GB；\n本机不能通过关闭必需任务扩容。",
+      "textPreview": "45 秒/批虽最快，但峰值内存 7.4 GB， | 超过本机上限 3.4 GB； | 本机不能通过关闭必需任务扩容。",
+      "resolvedFontSize": 20,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 20,
+        "typeface": "Microsoft YaHei",
+        "color": "#252B33",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "45 秒/批虽最快，但峰值内存 7.4 GB，"
+          },
+          {
+            "index": 2,
+            "text": "超过本机上限 3.4 GB；"
+          },
+          {
+            "index": 3,
+            "text": "本机不能通过关闭必需任务扩容。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "45 秒/批虽最快，但峰值内存 7.4 GB，",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 20,
+            "typeface": "Microsoft YaHei",
+            "color": "#252B33",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "45 秒/批虽最快，但峰值内存 7.4 GB，",
+              "fontSize": 20,
+              "typeface": "Microsoft YaHei",
+              "color": "#252B33",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "超过本机上限 3.4 GB；",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 20,
+            "typeface": "Microsoft YaHei",
+            "color": "#252B33",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "超过本机上限 3.4 GB；",
+              "fontSize": 20,
+              "typeface": "Microsoft YaHei",
+              "color": "#252B33",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 3,
+          "text": "本机不能通过关闭必需任务扩容。",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 20,
+            "typeface": "Microsoft YaHei",
+            "color": "#252B33",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "本机不能通过关闭必需任务扩容。",
+              "fontSize": 20,
+              "typeface": "Microsoft YaHei",
+              "color": "#252B33",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 39,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/je1gj6to",
+      "id": "39",
+      "name": "test-status",
+      "bbox": [
+        875,
+        535,
+        350,
+        52
+      ],
+      "geometry": "rect",
+      "text": "三种方式均完整处理，未发生失败。",
+      "textPreview": "三种方式均完整处理，未发生失败。",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Microsoft YaHei",
+        "color": "#707780",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "三种方式均完整处理，未发生失败。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "三种方式均完整处理，未发生失败。",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Microsoft YaHei",
+            "color": "#707780",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "三种方式均完整处理，未发生失败。",
+              "fontSize": 16,
+              "typeface": "Microsoft YaHei",
+              "color": "#707780",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 40,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/36hcfyx4",
+      "id": "40",
+      "name": "next-step-heading",
+      "bbox": [
+        55,
+        616,
+        120,
+        24
+      ],
+      "geometry": "rect",
+      "text": "下一轮",
+      "textPreview": "下一轮",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 22,
+        "typeface": "Microsoft YaHei",
+        "color": "#252B33",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "下一轮"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "下一轮",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "typeface": "Microsoft YaHei",
+            "color": "#252B33",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "下一轮",
+              "fontSize": 22,
+              "typeface": "Microsoft YaHei",
+              "color": "#252B33",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 41,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/258v6tgj",
+      "id": "41",
+      "name": "next-step-body",
+      "bbox": [
+        175,
+        616,
+        1015,
+        26
+      ],
+      "geometry": "rect",
+      "text": "仅在这台工作站、这组固定批次上做受控试运行并记录峰值；其他批次与硬件未验证，不视为正式部署。",
+      "textPreview": "仅在这台工作站、这组固定批次上做受控试运行并记录峰值；其他批次与硬件未验证，不视为正式部署。",
+      "resolvedFontSize": 20,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 20,
+        "typeface": "Microsoft YaHei",
+        "color": "#252B33",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "仅在这台工作站、这组固定批次上做受控试运行并记录峰值；其他批次与硬件未验证，不视为正式部署。"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "仅在这台工作站、这组固定批次上做受控试运行并记录峰值；其他批次与硬件未验证，不视为正式部署。",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 20,
+            "typeface": "Microsoft YaHei",
+            "color": "#252B33",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "仅在这台工作站、这组固定批次上做受控试运行并记录峰值；其他批次与硬件未验证，不视为正式部署。",
+              "fontSize": 20,
+              "typeface": "Microsoft YaHei",
+              "color": "#252B33",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 42,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/p8zuh8fa",
+      "id": "42",
+      "name": "source",
+      "bbox": [
+        55,
+        674,
+        900,
+        18
+      ],
+      "geometry": "rect",
+      "text": "来源：虚构测试数据｜设计验证素材，非真实算法性能报告",
+      "textPreview": "来源：虚构测试数据｜设计验证素材，非真实算法性能报告",
+      "resolvedFontSize": 14,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 14,
+        "typeface": "Microsoft YaHei",
+        "color": "#707780",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "来源：虚构测试数据｜设计验证素材，非真实算法性能报告"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "来源：虚构测试数据｜设计验证素材，非真实算法性能报告",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Microsoft YaHei",
+            "color": "#707780",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "来源：虚构测试数据｜设计验证素材，非真实算法性能报告",
+              "fontSize": 14,
+              "typeface": "Microsoft YaHei",
+              "color": "#707780",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 43,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/o7qd83yp",
+      "id": "43",
+      "name": "page-number",
+      "bbox": [
+        1170,
+        674,
+        55,
+        18
+      ],
+      "geometry": "rect",
+      "text": "01",
+      "textPreview": "01",
+      "resolvedFontSize": 14,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 14,
+        "typeface": "Microsoft YaHei",
+        "color": "#707780",
+        "alignment": "right",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "01"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "01",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Microsoft YaHei",
+            "color": "#707780",
+            "alignment": "right",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "01",
+              "fontSize": 14,
+              "typeface": "Microsoft YaHei",
+              "color": "#707780",
+              "alignment": "right",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

@@ -1,0 +1,12 @@
+run-02 feedback revision based on run-01; not a cold start
+layout guide: docs/设计手册/科研咨询式排版-v6.md
+communication job: 让院系服务负责人读懂时间差异的证据边界，并能按下一轮真实职责与条件执行试点。
+visual route: explicit custom visual direction; native editable shapes/text; no CodexGrid or template selector.
+theme: university-blue-pilot; primary #315F91; font Microsoft YaHei; neutral ink #252B33 / muted #707780.
+page 1: shared-scale stage bars and a compact total row; adjacent text explains the largest gap, remaining concentration, and comparison boundary.
+page 2: three numbered nodes on a rightward connector skeleton; responsibilities align by column; gates are one-line labels; missing materials stays local to step 2.
+arrow verification: connectors use fromSide=right, toSide=left, and tail triangle at the destination end; exported proto must show fromElementId left node -> toElementId right node plus lineStyle.tail.
+authoring checks: PASS; 1280x720; title 32px; local headings 22px; body/node text 20px; chart labels 16px; source/page 14px.
+render_slides.py: PENDING
+slides_test.py: PENDING
+semantic checks: stage totals 5.0/3.2; delta -1.8 days / -36%; largest delta 1.0 day; no causal attribution; teacher authority preserved; four-week plan remains unimplemented.
