@@ -10,7 +10,7 @@ PPagenT 是一个面向固定组织场景，使用受控视觉能力可靠生成
 
 `Shell + Content Frame`、HTML 单源 Structure Group、Native PPTX 编译、资产看板和双导演正式线已经形成可运行基础。当前正式库有 35 个 Structure Group，覆盖 20 类 Logic 中的 18 类。结构资产的第一轮集中建设到此基本结束，默认冻结扩库。
 
-下一阶段不再以“每页命中一个完整结构图”为目标，而是探索一个 PPT 专用 Harness：由总 Agent 调用内容导演与视觉导演，按页渐进披露和调用 `Deck / Text / Media / Structure / QA` Skills。只有拓扑本身承载语义时才调用 Structure；普通页面由文字、图片和整页 Composition 协作表达。当前生产代码仍按“一页一个主 Structure／Composition”运行，目标架构尚未完成迁移。
+下一阶段不再以“每页命中一个完整结构图”为目标，而是探索一个 PPT 专用 Harness：由总 Agent 调用内容导演与视觉导演，按页渐进披露和调用 Skills。视觉系统由并列的 `Skin` 与 `Layout` 两部分组成，Layout 再组织 `Text / Media / Structure` 三类表达能力。当前生产代码仍按“一页一个主 Structure／Composition”运行，目标架构尚未完成迁移。
 
 当前状态与历史统一见[更新日志](docs/更新日志.md)，阶段性判断见[方向校正](docs/方向校正.md)，产品边界见[产品定义](docs/产品定义.md)。
 
