@@ -1,0 +1,45 @@
+东北大学 Skin 原生可编辑 PPTX：round-04
+
+交付
+- C:\PPagenT\experiments\university-skin-pilot\round-04\deck.pptx
+- 逐页预览：slide-01.png 至 slide-09.png
+- 逐页布局：slide-01.layout.json 至 slide-09.layout.json
+- 结构检查：inspect-final.ndjson、qa-layout-summary.json
+- 内容覆盖：content-coverage.txt
+- 布局意图：layout-intents.json
+- 模板盘点：template-audit.txt、template-frame-map.json、deviation-log.txt
+
+输入
+- C:\PPagenT\docs\工作流\正式生成\大学Skin设计提示词-v4.md
+- C:\PPagenT\experiments\university-skin-pilot\manuscript.md
+- C:\PPagenT\assets\主题\东北大学-001\runtime-template.pptx
+- 运行时参考：C:\PPagenT\src\runtime\shells\academic-report.mjs
+- Skin 契约参考：C:\PPagenT\src\runtime\skins\northeastern-university-contract.mjs
+
+页面意图
+1. 封面：以“实验数据归档”建立讨论主题，保留模板身份信息。
+2. 推进路径：把问题、记录、边界、方案与决策串成递进讨论。
+3. 问题界定：对照“找到图片”与“解释结果”的差异。
+4. 记录单元：用统一标签列展示共同解释一个结果的五类材料。
+5. 边界条件：对应讨论材料、受限原始数据、受控引用与访问权。
+6. 推进选择：同一口径比较集中补历史与先记新增实验，保留不确定性。
+7. 执行与检查：按真实先后展示提交、定位、补充、确认及授权暂停。
+8. 试点决策：展示四周范围、评估问题与停止/修改信号。
+9. 结尾：回到“先理解一次结果，再决定长期保存什么”的有限判断。
+
+实际检查结果
+- artifact-tool 构建成功：9 页，最终文件已导出。
+- PPTX 越界检查：slides_test.py 报告“Test passed. No overflow detected.”
+- 最终 XML 占位符检查：EMPTY_PLACEHOLDERS=0。
+- 最终 artifact-tool 重读：slideCount=9；9 页备注均含 [Sources]。
+- 最终重读对象统计：101 个文字对象、44 个形状对象、0 个图片对象；图片对象为 0 是本次无图片输入约束下的预期结果。
+- 布局数据检查：新增正文对象均位于 x=55、y=166、宽=1170、高=492 的正文安全区内；9 页新增局部对象的 outOfBodyFrame 均为 0。
+- 实际换行检查：标题带与页眉标题均为单行；第 3、5、6 页存在长比较句的两行换行；第 8 页周次、评估与停止信号为预期多行；第 8 页范围标签已修订为单行。
+- 角色检查：新增正文文字实际 typeface 均为 Microsoft YaHei，实际字号为 18、22 或 24；封面/页眉/标题带保留源模板字体与层级。
+- 原稿覆盖：逐段去向记录于 content-coverage.txt；未新增事实、数据、效率提升或完成率数字。
+
+未检查项与限制
+- 按用户要求未调用 view_image、截图或向上下文注入任何页面 PNG；因此没有做人工视觉像素审阅，视觉证据仅保留在逐页 PNG 供父任务查看。
+- 未做 PowerPoint 桌面端打开验证，也未验证特定本机字体是否已安装；artifact-tool 最终布局已读到字体名、字号、行数与对象范围。
+- presentations 自带 inspect_template_deck.mjs 在本环境因缺少可用的 unzip -Z1 失败；已用 artifact-tool 自写 inspect_sources.mjs 完成指定模板的 4 页文本、布局与渲染盘点，盘点产物在 source-inventory/。
+- 未使用外部资料、外部图片或结构库；备注中的 [Sources] 记录了原稿与模板来源。
