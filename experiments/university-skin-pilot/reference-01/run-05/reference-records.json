@@ -1,0 +1,34 @@
+{
+  "mode": "reference-recomposition-feedback-revision",
+  "basedOn": "experiments/university-skin-pilot/reference-01/run-04",
+  "layoutGuide": "docs/设计手册/科研咨询式排版-v7.md",
+  "sourceManuscript": "experiments/university-skin-pilot/argument-01/manuscript.txt",
+  "theme": "experiments/university-skin-pilot/reference-01/theme.json",
+  "referenceAssetIds": ["comparison-dual-verdict-001", "sequence-phase-gates-004"],
+  "pageScope": {"page01": "kept run-04 data page structure", "page02": "recomposed"},
+  "absorbedMethods": {
+    "comparison-dual-verdict-001": ["shared comparison axis retained on page 1"],
+    "sequence-phase-gates-004": ["continuous rightward sequence", "gates placed on connector boundaries", "local exception kept under its owning phase"]
+  },
+  "changesFromRun04": [
+    "replaced upper-half responsibility-first layout with a compact three-stage gate skeleton",
+    "removed duplicate numeric labels; stage names sit above three unnumbered nodes",
+    "moved responsibility statements below their corresponding stage and kept teacher-only judgment explicit",
+    "placed missing-material pause/refill/recheck under the material-check phase",
+    "gave five timestamp categories and four-week evaluation their own lower reading bands",
+    "kept authorization and unusual-case routing as a boundary statement without repeating the gate label"
+  ],
+  "readFiles": ["docs/设计手册/科研咨询式排版-v7.md", "experiments/university-skin-pilot/audit-text-overlaps.mjs", "experiments/university-skin-pilot/reference-01/run-04/builder.mjs", "assets/结构图/双向对比-001/asset.json", "assets/结构图/双向对比-001/runtime.mjs", "assets/结构图/阶段门禁流程-004/asset.json", "assets/结构图/阶段门禁流程-004/runtime.mjs"],
+  "checks": {
+    "invokeStructure": false,
+    "nativeEditableObjects": true,
+    "page01Kept": true,
+    "textOverlapAudit": {"page01": 0, "page02": 0},
+    "textRuleIntersectionAudit": {"page01": 0, "page02": 0},
+    "textRuleClearanceAudit": {"page01": 0, "page02": 0},
+    "arrowProto": {"connectors": 2, "fromTo": [{"fromElementId": "4", "toElementId": "5", "fromIdx": 6, "toIdx": 2, "tail": {"type": 2, "width": 1, "length": 1}}, {"fromElementId": "5", "toElementId": "6", "fromIdx": 6, "toIdx": 2, "tail": {"type": 2, "width": 1, "length": 1}}]},
+    "textLineRanges": "all exported text boxes fit their actual line count at v7 role sizes",
+    "geometry": "all exported element bboxes remain within 1280x720",
+    "semanticBoundaries": ["no causal attribution", "teacher professional judgment retained", "missing-material pause/refill/recheck retained", "five time categories retained", "four-week plan remains unimplemented", "fiction label visible on both pages"]
+  }
+}

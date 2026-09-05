@@ -1,0 +1,15 @@
+run-05 feedback revision based on run-04; not a cold start
+layout guide: docs/设计手册/科研咨询式排版-v7.md
+communication job: 让院系服务负责人读懂时间差异的证据边界，并能按下一轮真实职责与条件执行试点。
+visual route: explicit custom visual direction; native editable shapes/text; no CodexGrid or template selector.
+theme: university-blue-pilot; primary #315F91; font Microsoft YaHei; neutral ink #252B33 / muted #707780.
+page 1: kept run-04 data-page composition unchanged in the builder; only regenerated as part of the final deck.
+page 2: compact upper three-stage gate skeleton; stage names above unnumbered nodes; responsibilities below stages; missing-material exception under material check; five timestamp categories and four-week evaluation separated below.
+theme: builder reads theme.json at runtime and derives palette from #315F91 plus configured neutral colors.
+arrow verification: run-05 proto has from 4 -> 5 and 5 -> 6, fromIdx 6/toIdx 2, and lineStyle.tail triangle at the destination end.
+text/geometry checks: PASS; title32px; local headings22px; body/node20px; chart labels16px; source/page14px; all text line heights fit; all bboxes within 1280x720.
+text-overlap and line-clearance audit: PASS; page-01 and page-02 intersectionCount=0, textRuleIntersectionCount=0, textRuleClearanceCount=0.
+render_slides.py: PASS; rendered 2 slides to run-05/deck/slide-1.png and slide-2.png.
+slides_test.py: PASS; Test passed. No overflow detected.
+semantic checks: stage totals 5.0/3.2; delta -1.8 days / -36%; largest delta 1.0 day; no causal attribution; teacher authority preserved; four-week plan remains unimplemented.
+final artifact evidence: deck.pptx SHA256 260EE1F779B57FC1F7A46AF2D0DEDD2A519F07DFC5A196D828A5D8DD6D0D097E; official rendered PNGs were refreshed after the final PPTX export and copied to page-01.png/page-02.png; PNG write times 07:37:40 are later than PPTX write time 07:37:22.

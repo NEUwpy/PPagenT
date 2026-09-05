@@ -1,0 +1,43 @@
+{"kind":"slide","id":"sl/grjuhk","slide":1,"title":"在 4.0 GB 上限下，分批处理是下一轮试运行的可行选择","textShapes":25}
+{"kind":"textbox","id":"sh/xgrqx836","slide":1,"name":"title","text":"在 4.0 GB 上限下，分批处理是下一轮试运行的可行选择","textPreview":"在 4.0 GB 上限下，分批处理是下一轮试运行的可行选择","textChars":29,"textLines":1,"bbox":[55,36,1170,46]}
+{"kind":"textbox","id":"sh/adg72dkf","slide":1,"name":"method-line","text":"同一台工作站、100 个固定数据批次、固定输入顺序与线程参数；三种方式均完整处理","textPreview":"同一台工作站、100 个固定数据批次、固定输入顺序与线程参数；三种方式均完整处理","textChars":40,"textLines":1,"bbox":[55,91,1170,24]}
+{"kind":"shape","id":"sh/be98vyl0","slide":1,"name":"header-rule","bbox":[55,131,1170,0]}
+{"kind":"textbox","id":"sh/obyp0329","slide":1,"name":"time-heading","text":"单批耗时中位数（秒）","textPreview":"单批耗时中位数（秒）","textChars":10,"textLines":1,"bbox":[55,154,390,28]}
+{"kind":"textbox","id":"sh/29g7ytkj","slide":1,"name":"memory-heading","text":"全程峰值内存（GB）","textPreview":"全程峰值内存（GB）","textChars":10,"textLines":1,"bbox":[55,373,390,28]}
+{"kind":"textbox","id":"sh/nap8ryl4","slide":1,"name":"memory-label-串行处理","text":"串行处理","textPreview":"串行处理","textChars":4,"textLines":1,"bbox":[55,432,125,24]}
+{"kind":"shape","id":"sh/8729cn2t","slide":1,"name":"memory-track-串行处理","bbox":[215,435,560,18]}
+{"kind":"shape","id":"sh/t8bq5sje","slide":1,"name":"memory-bar-串行处理","bbox":[215,435,140,18]}
+{"kind":"textbox","id":"sh/pozi1ora","slide":1,"name":"memory-value-串行处理","text":"2.0","textPreview":"2.0","textChars":3,"textLines":1,"bbox":[313,432,38,24]}
+{"kind":"textbox","id":"sh/onqhsjqp","slide":1,"name":"memory-label-分批处理","text":"分批处理","textPreview":"分批处理","textChars":4,"textLines":1,"bbox":[55,478,125,24]}
+{"kind":"shape","id":"sh/nmh0ze94","slide":1,"name":"memory-track-分批处理","bbox":[215,481,560,18]}
+{"kind":"shape","id":"sh/2lozqt8z","slide":1,"name":"memory-bar-分批处理","bbox":[215,481,252,18]}
+{"kind":"textbox","id":"sh/1kfixore","slide":1,"name":"memory-value-分批处理","text":"3.6","textPreview":"3.6","textChars":3,"textLines":1,"bbox":[425,478,38,24]}
+{"kind":"textbox","id":"sh/0j6hojqt","slide":1,"name":"memory-label-并行处理","text":"并行处理","textPreview":"并行处理","textChars":4,"textLines":1,"bbox":[55,524,125,24]}
+{"kind":"shape","id":"sh/fix0ve98","slide":1,"name":"memory-track-并行处理","bbox":[215,527,560,18]}
+{"kind":"shape","id":"sh/ehozm98n","slide":1,"name":"memory-bar-并行处理","bbox":[215,527,518,18]}
+{"kind":"textbox","id":"sh/lgji987i","slide":1,"name":"memory-value-并行处理","text":"7.4","textPreview":"7.4","textChars":3,"textLines":1,"bbox":[691,524,38,24]}
+{"kind":"shape","id":"sh/kfa103qx","slide":1,"name":"memory-threshold","bbox":[495,414,0,143]}
+{"kind":"textbox","id":"sh/4ji1wry9","slide":1,"name":"threshold-label","text":"4.0 GB 上限","textPreview":"4.0 GB 上限","textChars":9,"textLines":1,"bbox":[501,389,110,20]}
+{"kind":"shape","id":"sh/5kr25cfu","slide":1,"name":"memory-axis","bbox":[215,568,560,0]}
+{"kind":"shape","id":"sh/ih0juhg3","slide":1,"name":"memory-tick-0","bbox":[215,568,0,6]}
+{"kind":"textbox","id":"sh/ji9k3mxo","slide":1,"name":"memory-tick-label-0","text":"0","textPreview":"0","textChars":1,"textLines":1,"bbox":[203,578,24,20]}
+{"kind":"shape","id":"sh/wvy1s7yx","slide":1,"name":"memory-tick-2","bbox":[355,568,0,6]}
+{"kind":"textbox","id":"sh/hw721cfi","slide":1,"name":"memory-tick-label-2","text":"2","textPreview":"2","textChars":1,"textLines":1,"bbox":[343,578,24,20]}
+{"kind":"shape","id":"sh/utgjqxg7","slide":1,"name":"memory-tick-4","bbox":[495,568,0,6]}
+{"kind":"textbox","id":"sh/vupkz2xs","slide":1,"name":"memory-tick-label-4","text":"4","textPreview":"4","textChars":1,"textLines":1,"bbox":[483,578,24,20]}
+{"kind":"shape","id":"sh/8ry1o7y1","slide":1,"name":"memory-tick-6","bbox":[635,568,0,6]}
+{"kind":"textbox","id":"sh/9s72xsfm","slide":1,"name":"memory-tick-label-6","text":"6","textPreview":"6","textChars":1,"textLines":1,"bbox":[623,578,24,20]}
+{"kind":"shape","id":"sh/bm5k7218","slide":1,"name":"memory-tick-8","bbox":[775,568,0,6]}
+{"kind":"textbox","id":"sh/qlw3ex03","slide":1,"name":"memory-tick-label-8","text":"8","textPreview":"8","textChars":1,"textLines":1,"bbox":[763,578,24,20]}
+{"kind":"shape","id":"sh/don29sje","slide":1,"name":"explanation-divider","bbox":[840,154,0,430]}
+{"kind":"textbox","id":"sh/cnelgnit","slide":1,"name":"recommendation-heading","text":"推荐分批处理","textPreview":"推荐分批处理","textChars":6,"textLines":1,"bbox":[875,154,350,28]}
+{"kind":"textbox","id":"sh/zqpkb21k","slide":1,"name":"recommendation-body","text":"先满足内存条件；仍有 0.4 GB 余量。\n相对串行处理，单批少 50 秒。","textPreview":"先满足内存条件；仍有 0.4 GB 余量。 | 相对串行处理，单批少 50 秒。","textChars":38,"textLines":2,"bbox":[875,198,350,72]}
+{"kind":"textbox","id":"sh/ypw3ix0z","slide":1,"name":"parallel-heading","text":"并行处理不适用","textPreview":"并行处理不适用","textChars":7,"textLines":1,"bbox":[875,316,350,28]}
+{"kind":"textbox","id":"sh/ls7mdcjq","slide":1,"name":"parallel-body","text":"速度优势无法抵消 3.4 GB 的超限；\n本机不能通过关闭必需任务扩容。","textPreview":"速度优势无法抵消 3.4 GB 的超限； | 本机不能通过关闭必需任务扩容。","textChars":36,"textLines":2,"bbox":[875,360,350,72]}
+{"kind":"textbox","id":"sh/krylk7i5","slide":1,"name":"test-status","text":"三种方式均完整处理，未发生失败。","textPreview":"三种方式均完整处理，未发生失败。","textChars":16,"textLines":1,"bbox":[875,468,350,24]}
+{"kind":"textbox","id":"sh/7up4fm1g","slide":1,"name":"next-step-heading","text":"下一轮","textPreview":"下一轮","textChars":3,"textLines":1,"bbox":[55,616,120,28]}
+{"kind":"textbox","id":"sh/mtg3mh0v","slide":1,"name":"next-step-body","text":"仅在本机与这组固定批次上受控试运行并记录峰值；其他批次与硬件未验证，不视为正式部署。","textPreview":"仅在本机与这组固定批次上受控试运行并记录峰值；其他批次与硬件未验证，不视为正式部署。","textChars":42,"textLines":1,"bbox":[175,616,1015,26]}
+{"kind":"textbox","id":"sh/698vy5cj","slide":1,"name":"source","text":"来源：虚构测试数据｜设计验证素材，非真实算法性能报告","textPreview":"来源：虚构测试数据｜设计验证素材，非真实算法性能报告","textChars":26,"textLines":1,"bbox":[55,674,900,18]}
+{"kind":"textbox","id":"sh/rahw7at4","slide":1,"name":"page-number","text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[1170,674,55,18]}
+{"kind":"chart","id":"ch/lk3exc7q","slide":1,"name":"","chartType":"bar","bbox":[55,190,745,158]}
+{"kind":"notes","id":"nt/grjuhk","slide":1,"text":"[Sources]\n- No external sources. All values and conditions come from the user-provided manuscript and are explicitly labeled as fictional test data.\n[/Sources]"}
