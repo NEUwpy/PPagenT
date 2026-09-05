@@ -1,0 +1,35 @@
+新稿迁移验证修订：中期同伴质询（run-02）
+
+修订范围
+- 保留 run-01 全部文件与证据；本轮只新增 run-02，不改指南、核心资产、正式 Skin 或 Git。
+- 不读取任何图片或截图；内容只来自指定虚构稿件。
+
+页面与选型
+1. 第 1 页仍调用 sequence-flow-001（3 步），表达“提交判断—提出质询—回应确认”的真实先后关系。图外说明改为“未决问题可保留”，正文改为“质询不等于否定；材料不足时，问题可以保留，不要求给出确定答案”，并按语义断行。
+2. 第 2 页仍调用 comparison-pros-cons-balance-005。收益、代价和天平倾向保留；页标题承担完整条件：“教师必须保留最终判断；同伴反馈不进入自动评分，也不替代教师评价”。结构内部改为“中期同伴质询”与“先做一次范围受控试点”，减少与标题重复。
+3. 第 3 页改为一个完整问题：“能否开展试点，要同时守住授权边界并控制复盘负担”。左栏处理材料共享与暂停授权，右栏处理拟定范围、复盘判断和收窄/停止条件；6 个项目组和 2 周只用 20 号正文呈现，不作为大字报。
+
+实际输出
+- deck.pptx：三页 1280×720 原生可编辑 PPTX。
+- slide-01/02/03.png 与 slide-01/02/03.layout.json：逐页导出。
+- structure-invocations.ndjson：两种结构资产的追加调用记录；共 12 个事件、6 个 success 事件，覆盖 3 次 builder 重跑后的 page-01/page-02。
+- evidence/final-layout-audit.json：最终逐元素读取的 bbox、geometry、文本、实际断行、字号、对齐、fill、line。
+- evidence/page-01-adaptation.json 与 page-02-adaptation.json：适配前后实际属性与 proto/path 证据。
+
+结构适配证据
+- 两页分别适配 29 与 26 个结构对象；ID、文本、bbox、geometry 均不变，所有适配操作错误为空。
+- page-01：path command 数量 242 → 242；page-02：2430 → 2430。实际 fill/line 已统一到当前 Skin 的白、近黑、灰、主题蓝及其浅色混合：承载面、轨道、节点、天平盘、梁、支点、连接线和分隔线均有记录。
+- page-02 的收益侧/代价侧极性仍由两侧承载面与天平倾向表达；纯装饰投影面改为透明填充并保留原对象。
+- page-01 结构 targetFrame 为 x=55..985；图外解释从 x=1017 开始，实际保留 32 单位通道。
+
+检查结果
+- builder.mjs 使用 bundled Node 与 @oai/artifact-tool 成功导出。
+- presentations bundled render_slides.py：成功渲染 3 页。
+- presentations bundled slides_test.py：Test passed. No overflow detected.
+- layout audit：越界对象 0；第一页图外解释标题 22 号、正文 20 号；第二页完整条件为标题 32 号两行；第三页标题 32 号，区块标题 22 号，正文 20 号且左对齐；页码/来源保留 16 号注释层。
+- 未发现 page label 重复标签或“图外解释”制作角色名；最终 inspect 保留原生 shape/text/notes 对象，未使用图片。
+
+未检查项与限制
+- 按任务要求未读取 PNG/截图，因此没有做视觉像素级审阅；父任务仍需查看实际预览。
+- 未验证不同 Office/字体环境下的替代字体、打印效果或人工审美偏好。
+- 所有教学成效、完成率和评分结果仍明确保持为未知；本稿只支持讨论一次范围受控试点，不支持推出长期效果结论。
