@@ -1,0 +1,609 @@
+<!doctype html><html><head><meta charset="utf-8"><style>body{margin:0;padding:14px;background:#f1f1f1;font-family:"Microsoft YaHei"}.row{display:flex;gap:14px}.panel{background:#fff}.label{height:30px;padding-left:10px;font-weight:700;line-height:30px;color:#333}iframe{display:block;width:1170px;height:492px;border:0}</style></head><body><div class="row"><section class="panel"><div class="label">默认蓝 #315F91</div><iframe srcdoc="<!doctype html><html><head><meta charset=&quot;utf-8&quot;><style>html,body{margin:0;width:1170px;height:492px;overflow:hidden}/* ppagent-theme:resolved */:root{
+    --ppagent-font-body:&quot;Microsoft YaHei&quot;;
+    --ppagent-color-background:#FFFFFF;
+    --ppagent-color-surface:#FFFFFF;
+    --ppagent-color-primary:#315F91;
+    --ppagent-color-primary-deep:#1C3754;
+    --ppagent-color-primary-dark:#25486E;
+    --ppagent-color-primary-light:#7795B6;
+    --ppagent-color-primary-pale:#B7C7D9;
+    --ppagent-color-primary-wash:#E6ECF2;
+    --ppagent-color-accent:#315F91;
+    --ppagent-color-accent-alt:#567CA5;
+    --ppagent-color-accent-soft:#DAE2EB;
+    --ppagent-color-cyan:#7B99B9;
+    --ppagent-color-dark:#2B2B2B;
+    --ppagent-color-body:#404040;
+    --ppagent-color-muted:#6F6F6F;
+    --ppagent-color-line:#B5C5D7;
+    --ppagent-component-heading-size:22pt;
+    --ppagent-component-title-size:20pt;
+    --ppagent-component-item-title-size:18pt;
+    --ppagent-component-lead-size:16pt;
+    --ppagent-component-body-size:14pt;
+    --ppagent-component-label-size:14pt;
+    --ppagent-component-meta-size:12pt;
+  }
+    .ppagent-text-region{
+      box-sizing:border-box;
+      min-width:0;
+      min-height:0;
+    }
+    .ppagent-text-region > .ppagent-text-flow,
+    .ppagent-text-region > .ppagent-text-layout{
+      width:100%;
+      height:100%;
+    }
+    .ppagent-text-layout{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-layout-gap,10px);
+      width:100%;
+      height:100%;
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,&quot;Microsoft YaHei&quot;),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-align=&quot;center&quot;]{text-align:center}
+    .ppagent-text-layout[data-text-layout-align=&quot;right&quot;]{text-align:right}
+    .ppagent-text-layout[data-text-layout-valign=&quot;top&quot;]{justify-content:flex-start}
+    .ppagent-text-layout[data-text-layout-valign=&quot;bottom&quot;]{justify-content:flex-end}
+    .ppagent-text-layout[data-text-layout-density=&quot;compact&quot;]{--ppagent-text-layout-gap:6px;--ppagent-text-layout-item-gap:5px}
+    .ppagent-text-layout[data-text-layout-density=&quot;standard&quot;]{--ppagent-text-layout-gap:10px;--ppagent-text-layout-item-gap:8px}
+    .ppagent-text-layout[data-text-layout-density=&quot;loose&quot;]{--ppagent-text-layout-gap:15px;--ppagent-text-layout-item-gap:12px}
+    .ppagent-text-primitive{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      color:var(--ppagent-text-color,#46566a);
+      text-align:inherit;
+      white-space:pre-line;
+      overflow-wrap:break-word;
+    }
+    .ppagent-text-primitive--heading{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-text-primitive--body{font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.45}
+    .ppagent-text-primitive--list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px)}
+    .ppagent-text-list__item{box-sizing:border-box;min-width:0;margin:0;padding:0;overflow:visible;color:var(--ppagent-text-color,#46566a);font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.38;text-align:inherit;white-space:pre-line;overflow-wrap:break-word}
+    .ppagent-text-primitive--metric{color:var(--ppagent-value-color,#2f5ea8);font-size:var(--ppagent-component-heading-size,25pt);font-weight:700;line-height:1.08}
+    .ppagent-text-primitive--label{color:var(--ppagent-label-color,#60758d);font-size:var(--ppagent-component-label-size,17pt);font-weight:600;line-height:1.2}
+    .ppagent-text-primitive--annotation{color:var(--ppagent-annotation-color,#748495);font-size:var(--ppagent-component-meta-size,15pt);font-weight:400;line-height:1.3}
+    .ppagent-text-primitive--quote{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:500;line-height:1.35}
+    .ppagent-text-primitive--emphasis{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-title-size,23pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-structured-list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-structured-list__item{display:flex;flex-direction:column;gap:4px;min-width:0}
+    .ppagent-structured-list__item .ppagent-text-primitive--heading{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-metric-set{display:grid;grid-template-columns:repeat(var(--ppagent-metric-columns,2),minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0;align-items:start}
+    .ppagent-metric-set[data-metric-count=&quot;3&quot;]{--ppagent-metric-columns:3}
+    .ppagent-metric-set[data-metric-count=&quot;4&quot;]{--ppagent-metric-columns:4}
+    .ppagent-metric-set__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-key-value{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-key-value__row{display:grid;grid-template-columns:minmax(64px,.42fr) minmax(0,1fr);gap:10px;align-items:start;min-width:0}
+    .ppagent-key-value__row .ppagent-text-primitive--metric{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label,
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--annotation{text-align:right}
+    .ppagent-summary-information{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0}
+    .ppagent-summary-information__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-summary-information__item .ppagent-text-primitive--emphasis{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;]{
+      justify-content:flex-start;
+      gap:12px;
+      padding:18px;
+      color:var(--ppagent-color-body);
+      background:transparent;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive{color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--emphasis,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--quote{color:var(--ppagent-color-dark);font-weight:700;letter-spacing:-.25px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--body,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-list__item{font-size:max(15pt,var(--ppagent-component-body-size))}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--label{color:var(--ppagent-color-accent);font-size:max(15pt,var(--ppagent-component-label-size));font-weight:700;letter-spacing:.7px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--annotation{color:var(--ppagent-color-muted);font-size:max(15pt,var(--ppagent-component-meta-size))}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--metric{color:var(--ppagent-color-accent);font-weight:700;letter-spacing:-.5px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-list__item{position:relative;padding-left:17px;color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-list__item::before{content:&quot;&quot;;position:absolute;left:0;top:.68em;width:8px;height:2px;background:var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--heading-content-flow > .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--label-content-flow > .ppagent-text-primitive--label,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--heading-metric-content-flow > .ppagent-text-primitive--heading{padding-bottom:10px;border-bottom:2px solid var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-structured-list{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-structured-list__item{display:grid;grid-template-columns:minmax(82px,.42fr) minmax(0,1fr);gap:14px;padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-structured-list__item .ppagent-text-primitive--body{margin:0}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-metric-set{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-metric-set__item{padding:12px 14px 4px 0}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-metric-set__item + .ppagent-metric-set__item{padding-left:14px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-key-value{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-key-value__row{padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--quote-attribution-flow{position:relative;padding-left:52px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--quote-attribution-flow::before{content:&quot;“&quot;;position:absolute;left:16px;top:8px;color:var(--ppagent-color-accent);font-family:Georgia,serif;font-size:42pt;font-weight:700;line-height:1}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label{margin-top:auto;padding-top:10px;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-summary-information{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-summary-information__item{padding:10px 12px 8px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-summary-information__item:nth-child(even){padding-left:12px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout--value-label{
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-value-label-gap,5px);
+      padding:var(--ppagent-value-label-padding,5px);
+      text-align:center;
+    }
+    .ppagent-text-layout__value,
+    .ppagent-text-layout__label{
+      box-sizing:border-box;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:hidden;
+      text-align:inherit;
+    }
+    .ppagent-text-layout__value{
+      color:var(--ppagent-value-color,#2f5ea8);
+      font-size:var(--ppagent-component-lead-size,19pt);
+      font-weight:700;
+      line-height:1.15;
+    }
+    .ppagent-text-layout__label{
+      color:var(--ppagent-label-color,#60758d);
+      font-size:var(--ppagent-component-meta-size,15pt);
+      font-weight:400;
+      line-height:1.2;
+    }
+    .ppagent-text-flow{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-flow-gap,10px);
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,&quot;Microsoft YaHei&quot;),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-flow[data-text-flow-align=&quot;center&quot;]{text-align:center}
+    .ppagent-text-flow[data-text-flow-align=&quot;right&quot;]{text-align:right}
+    .ppagent-text-flow[data-text-flow-valign=&quot;top&quot;]{justify-content:flex-start}
+    .ppagent-text-flow[data-text-flow-valign=&quot;bottom&quot;]{justify-content:flex-end}
+    .ppagent-text-flow__title,
+    .ppagent-text-flow__body{
+      position:relative;
+      box-sizing:border-box;
+      flex:0 0 auto;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      text-align:inherit;
+    }
+    .ppagent-text-flow__title{
+      font-size:var(--ppagent-component-item-title-size,21pt);
+      font-weight:700;
+      line-height:1.2;
+      white-space:normal;
+      text-wrap:balance;
+    }
+    .ppagent-text-flow__body{
+      font-size:var(--ppagent-component-body-size,17pt);
+      font-weight:400;
+      line-height:1.45;
+      white-space:pre-line;
+    }
+    .ppagent-text-flow__separator{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      align-self:center;
+      width:var(--ppagent-text-flow-separator-width,54px);
+      height:var(--ppagent-text-flow-separator-height,4px);
+      border:0;
+      border-radius:99px;
+      background:var(--ppagent-text-flow-separator-color,#78aeef);
+    }
+  * { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { color: #25486E; background: transparent; font-family: var(--ppagent-font-body, &quot;Microsoft YaHei&quot;), sans-serif; }
+.comparison-review { position: relative; width: 1170px; height: 492px; overflow: hidden; background: transparent; }
+/* 两个实体椭圆叠成可编辑平台环，避免透明描边在 Native 预览中丢失。 */
+.comparison-stage-outer { position: absolute; left: 12px; top: 409px; width: 1146px; height: 70px; border: 0; border-radius: 50%; background: #B7C7D9; }
+.comparison-stage-inner { position: absolute; left: 45px; top: 418px; width: 1080px; height: 48px; border: 0; border-radius: 50%; background: #fff; }
+.comparison-side { position: absolute; top: 24px; width: 480px; height: 412px; z-index: 1; }
+.comparison-side-0 { left: 20px; }
+.comparison-side-1 { right: 20px; }
+.comparison-side-shadow { position: absolute; left: 10px; right: 10px; top: 14px; bottom: 0; border: 0; border-radius: 28px; background: #E6ECF2; opacity: .78; }
+.comparison-side-surface { position: absolute; inset: 0 0 12px; border: 1px solid #E6ECF2; border-radius: 28px; background: #E6ECF2; box-shadow: 0 14px 30px rgba(37, 72, 110, .12); }
+.comparison-side-cap-top { position: absolute; left: 0; right: 0; top: 0; height: 56px; border: 0; border-radius: 28px; }
+.comparison-side-cap-bottom { position: absolute; left: 0; right: 0; top: 28px; height: 50px; border: 0; border-radius: 16px; }
+.comparison-side[data-tone=&quot;negative&quot;] .comparison-side-cap-top,
+.comparison-side[data-tone=&quot;negative&quot;] .comparison-side-cap-bottom { background: #315F91; }
+.comparison-side[data-tone=&quot;positive&quot;] .comparison-side-cap-top,
+.comparison-side[data-tone=&quot;positive&quot;] .comparison-side-cap-bottom { background: #315F91; }
+.comparison-side-title { position: absolute; left: 42px; right: 42px; top: 13px; height: 52px; margin: 0; overflow: hidden; color: #fff; font-size: var(--ppagent-component-title-size, 26px); font-weight: 700; line-height: 52px; text-align: center; white-space: nowrap; }
+.comparison-list { position: absolute; left: 34px; right: 34px; top: 95px; bottom: 29px; display: grid; align-content: center; }
+.comparison-review[data-item-count=&quot;3&quot;] .comparison-list { grid-template-rows: repeat(3, 62px); gap: 24px; }
+.comparison-review[data-item-count=&quot;4&quot;] .comparison-list { grid-template-rows: repeat(4, 56px); gap: 17px; }
+.comparison-review[data-item-count=&quot;5&quot;] .comparison-list { grid-template-rows: repeat(5, 49px); gap: 11px; }
+.comparison-row { position: relative; width: 100%; height: 100%; border-radius: 99px; }
+.comparison-side[data-tone=&quot;negative&quot;] .comparison-row { border: 1px solid #B7C7D9; background: #E6ECF2; }
+.comparison-side[data-tone=&quot;positive&quot;] .comparison-row { border: 1px solid #E6ECF2; background: #E6ECF2; }
+.comparison-row-marker { position: absolute; top: 50%; width: 38px; height: 38px; margin-top: -19px; border: 0; border-radius: 50%; }
+.comparison-side-0 .comparison-row-marker { right: 10px; }
+.comparison-side-1 .comparison-row-marker { left: 10px; }
+.comparison-side[data-tone=&quot;negative&quot;] .comparison-row-marker { background: #315F91; }
+.comparison-side[data-tone=&quot;positive&quot;] .comparison-row-marker { background: #315F91; }
+.comparison-row-symbol { display: block; width: 38px; height: 38px; color: #fff; font-size: var(--ppagent-component-label-size, 18px); font-weight: 700; line-height: 36px; text-align: center; }
+.comparison-row-text { position: absolute; top: 0; bottom: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; color: #25486E; font-size: var(--ppagent-component-body-size, 19px); font-weight: 500; line-height: 1.2; white-space: nowrap; }
+.comparison-side-0 .comparison-row-text,
+.comparison-side-1 .comparison-row-text { left: 62px; right: 62px; text-align: center; }
+.comparison-knot-ring { position: absolute; left: 520px; top: 188px; width: 130px; height: 130px; z-index: 2; border: 1px dashed #B7C7D9; border-radius: 50%; background: #fff; }
+.comparison-knot-halo { position: absolute; left: 531px; top: 199px; width: 108px; height: 108px; z-index: 2; border: 1px solid #E6ECF2; border-radius: 50%; background: #E6ECF2; }
+.comparison-knot-core { position: absolute; left: 542px; top: 210px; width: 86px; height: 86px; z-index: 2; border: 0; border-radius: 50%; background: #315F91; box-shadow: 0 10px 22px rgba(49, 95, 145, .24); }
+.comparison-knot-label { position: absolute; left: 542px; top: 210px; width: 86px; height: 86px; z-index: 3; overflow: hidden; color: #fff; font-size: var(--ppagent-component-title-size, 26px); font-weight: 700; line-height: 86px; text-align: center; white-space: nowrap; }
+</style></head><body><section class=&quot;comparison-review&quot; data-ppt-root data-item-count=&quot;3&quot;>
+      <div class=&quot;comparison-stage-outer&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;comparison-stage-outer&quot;></div>
+      <div class=&quot;comparison-stage-inner&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;comparison-stage-inner&quot;></div>
+      <article class=&quot;comparison-side comparison-side-0&quot; data-tone=&quot;negative&quot;>
+    <div class=&quot;comparison-side-shadow&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;comparison-shadow-0&quot;></div>
+    <div class=&quot;comparison-side-surface&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-shadow=&quot;shadow-sm&quot; data-ppt-name=&quot;comparison-surface-0&quot;></div>
+    <div class=&quot;comparison-side-cap-top&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;comparison-cap-top-0&quot;></div>
+    <div class=&quot;comparison-side-cap-bottom&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;comparison-cap-bottom-0&quot;></div>
+    <h3 class=&quot;comparison-side-title&quot; data-slot-id=&quot;side-0-title&quot; data-slot-role=&quot;item-title&quot; data-slot-field=&quot;sides[0].title&quot; data-slot-item-id=&quot;side-0&quot; data-slot-content-type=&quot;text&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;single-line&quot; data-slot-list-policy=&quot;none&quot; data-slot-max-chars=&quot;10&quot; data-slot-max-lines=&quot;1&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-title-0&quot;>传统工作方式</h3>
+    <div class=&quot;comparison-list&quot;><div class=&quot;comparison-row&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;comparison-row-0-0&quot;>
+    <div class=&quot;comparison-row-marker&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;comparison-marker-0-0&quot;>
+    <span class=&quot;comparison-row-symbol&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-symbol-0-0&quot; aria-label=&quot;不推荐&quot;>×</span>
+  </div>
+    <div class=&quot;comparison-row-text&quot; data-slot-id=&quot;side-0-item-0&quot; data-slot-role=&quot;item-body&quot; data-slot-field=&quot;sides[0].items[0]&quot; data-slot-item-id=&quot;side-0-item-0&quot; data-slot-content-type=&quot;text&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;single-line&quot; data-slot-list-policy=&quot;none&quot; data-slot-max-chars=&quot;16&quot; data-slot-max-lines=&quot;1&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-row-text-0-0&quot;>每页重新设计</div>
+  </div><div class=&quot;comparison-row&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;comparison-row-0-1&quot;>
+    <div class=&quot;comparison-row-marker&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;comparison-marker-0-1&quot;>
+    <span class=&quot;comparison-row-symbol&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-symbol-0-1&quot; aria-label=&quot;不推荐&quot;>×</span>
+  </div>
+    <div class=&quot;comparison-row-text&quot; data-slot-id=&quot;side-0-item-1&quot; data-slot-role=&quot;item-body&quot; data-slot-field=&quot;sides[0].items[1]&quot; data-slot-item-id=&quot;side-0-item-1&quot; data-slot-content-type=&quot;text&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;single-line&quot; data-slot-list-policy=&quot;none&quot; data-slot-max-chars=&quot;16&quot; data-slot-max-lines=&quot;1&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-row-text-0-1&quot;>规范依赖记忆</div>
+  </div><div class=&quot;comparison-row&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;comparison-row-0-2&quot;>
+    <div class=&quot;comparison-row-marker&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;comparison-marker-0-2&quot;>
+    <span class=&quot;comparison-row-symbol&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-symbol-0-2&quot; aria-label=&quot;不推荐&quot;>×</span>
+  </div>
+    <div class=&quot;comparison-row-text&quot; data-slot-id=&quot;side-0-item-2&quot; data-slot-role=&quot;item-body&quot; data-slot-field=&quot;sides[0].items[2]&quot; data-slot-item-id=&quot;side-0-item-2&quot; data-slot-content-type=&quot;text&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;single-line&quot; data-slot-list-policy=&quot;none&quot; data-slot-max-chars=&quot;16&quot; data-slot-max-lines=&quot;1&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-row-text-0-2&quot;>稿件反复压缩</div>
+  </div></div>
+  </article><article class=&quot;comparison-side comparison-side-1&quot; data-tone=&quot;positive&quot;>
+    <div class=&quot;comparison-side-shadow&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;comparison-shadow-1&quot;></div>
+    <div class=&quot;comparison-side-surface&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-shadow=&quot;shadow-sm&quot; data-ppt-name=&quot;comparison-surface-1&quot;></div>
+    <div class=&quot;comparison-side-cap-top&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;comparison-cap-top-1&quot;></div>
+    <div class=&quot;comparison-side-cap-bottom&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;comparison-cap-bottom-1&quot;></div>
+    <h3 class=&quot;comparison-side-title&quot; data-slot-id=&quot;side-1-title&quot; data-slot-role=&quot;item-title&quot; data-slot-field=&quot;sides[1].title&quot; data-slot-item-id=&quot;side-1&quot; data-slot-content-type=&quot;text&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;single-line&quot; data-slot-list-policy=&quot;none&quot; data-slot-max-chars=&quot;10&quot; data-slot-max-lines=&quot;1&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-title-1&quot;>受控生成系统</h3>
+    <div class=&quot;comparison-list&quot;><div class=&quot;comparison-row&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;comparison-row-1-0&quot;>
+    <div class=&quot;comparison-row-marker&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;comparison-marker-1-0&quot;>
+    <span class=&quot;comparison-row-symbol&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-symbol-1-0&quot; aria-label=&quot;推荐&quot;>✓</span>
+  </div>
+    <div class=&quot;comparison-row-text&quot; data-slot-id=&quot;side-1-item-0&quot; data-slot-role=&quot;item-body&quot; data-slot-field=&quot;sides[1].items[0]&quot; data-slot-item-id=&quot;side-1-item-0&quot; data-slot-content-type=&quot;text&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;single-line&quot; data-slot-list-policy=&quot;none&quot; data-slot-max-chars=&quot;16&quot; data-slot-max-lines=&quot;1&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-row-text-1-0&quot;>复用成熟结构</div>
+  </div><div class=&quot;comparison-row&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;comparison-row-1-1&quot;>
+    <div class=&quot;comparison-row-marker&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;comparison-marker-1-1&quot;>
+    <span class=&quot;comparison-row-symbol&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-symbol-1-1&quot; aria-label=&quot;推荐&quot;>✓</span>
+  </div>
+    <div class=&quot;comparison-row-text&quot; data-slot-id=&quot;side-1-item-1&quot; data-slot-role=&quot;item-body&quot; data-slot-field=&quot;sides[1].items[1]&quot; data-slot-item-id=&quot;side-1-item-1&quot; data-slot-content-type=&quot;text&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;single-line&quot; data-slot-list-policy=&quot;none&quot; data-slot-max-chars=&quot;16&quot; data-slot-max-lines=&quot;1&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-row-text-1-1&quot;>规则统一执行</div>
+  </div><div class=&quot;comparison-row&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;comparison-row-1-2&quot;>
+    <div class=&quot;comparison-row-marker&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;comparison-marker-1-2&quot;>
+    <span class=&quot;comparison-row-symbol&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-symbol-1-2&quot; aria-label=&quot;推荐&quot;>✓</span>
+  </div>
+    <div class=&quot;comparison-row-text&quot; data-slot-id=&quot;side-1-item-2&quot; data-slot-role=&quot;item-body&quot; data-slot-field=&quot;sides[1].items[2]&quot; data-slot-item-id=&quot;side-1-item-2&quot; data-slot-content-type=&quot;text&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;single-line&quot; data-slot-list-policy=&quot;none&quot; data-slot-max-chars=&quot;16&quot; data-slot-max-lines=&quot;1&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-row-text-1-2&quot;>容量提前判断</div>
+  </div></div>
+  </article>
+      <div class=&quot;comparison-knot-ring&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;comparison-knot-ring&quot;></div>
+      <div class=&quot;comparison-knot-halo&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;comparison-knot-halo&quot;></div>
+      <div class=&quot;comparison-knot-core&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;comparison-knot-core&quot;></div>
+      <div class=&quot;comparison-knot-label&quot; data-slot-id=&quot;comparison-label&quot; data-slot-role=&quot;label&quot; data-slot-field=&quot;comparisonLabel&quot; data-slot-content-type=&quot;text&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;single-line&quot; data-slot-list-policy=&quot;none&quot; data-slot-max-chars=&quot;4&quot; data-slot-max-lines=&quot;1&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-label&quot;>VS</div>
+    </section></body></html>"></iframe></section><section class="panel"><div class="label">替换紫 #6F42C1</div><iframe srcdoc="<!doctype html><html><head><meta charset=&quot;utf-8&quot;><style>html,body{margin:0;width:1170px;height:492px;overflow:hidden}/* ppagent-theme:resolved */:root{
+    --ppagent-font-body:&quot;Microsoft YaHei&quot;;
+    --ppagent-color-background:#FFFFFF;
+    --ppagent-color-surface:#FFFFFF;
+    --ppagent-color-primary:#6F42C1;
+    --ppagent-color-primary-deep:#402670;
+    --ppagent-color-primary-dark:#543293;
+    --ppagent-color-primary-light:#A082D6;
+    --ppagent-color-primary-pale:#CDBDE9;
+    --ppagent-color-primary-wash:#EEE8F8;
+    --ppagent-color-accent:#6F42C1;
+    --ppagent-color-accent-alt:#8964CC;
+    --ppagent-color-accent-soft:#E5DDF4;
+    --ppagent-color-cyan:#A386D7;
+    --ppagent-color-dark:#2B2B2B;
+    --ppagent-color-body:#404040;
+    --ppagent-color-muted:#6F6F6F;
+    --ppagent-color-line:#CBBBE9;
+    --ppagent-component-heading-size:22pt;
+    --ppagent-component-title-size:20pt;
+    --ppagent-component-item-title-size:18pt;
+    --ppagent-component-lead-size:16pt;
+    --ppagent-component-body-size:14pt;
+    --ppagent-component-label-size:14pt;
+    --ppagent-component-meta-size:12pt;
+  }
+    .ppagent-text-region{
+      box-sizing:border-box;
+      min-width:0;
+      min-height:0;
+    }
+    .ppagent-text-region > .ppagent-text-flow,
+    .ppagent-text-region > .ppagent-text-layout{
+      width:100%;
+      height:100%;
+    }
+    .ppagent-text-layout{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-layout-gap,10px);
+      width:100%;
+      height:100%;
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,&quot;Microsoft YaHei&quot;),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-align=&quot;center&quot;]{text-align:center}
+    .ppagent-text-layout[data-text-layout-align=&quot;right&quot;]{text-align:right}
+    .ppagent-text-layout[data-text-layout-valign=&quot;top&quot;]{justify-content:flex-start}
+    .ppagent-text-layout[data-text-layout-valign=&quot;bottom&quot;]{justify-content:flex-end}
+    .ppagent-text-layout[data-text-layout-density=&quot;compact&quot;]{--ppagent-text-layout-gap:6px;--ppagent-text-layout-item-gap:5px}
+    .ppagent-text-layout[data-text-layout-density=&quot;standard&quot;]{--ppagent-text-layout-gap:10px;--ppagent-text-layout-item-gap:8px}
+    .ppagent-text-layout[data-text-layout-density=&quot;loose&quot;]{--ppagent-text-layout-gap:15px;--ppagent-text-layout-item-gap:12px}
+    .ppagent-text-primitive{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      color:var(--ppagent-text-color,#46566a);
+      text-align:inherit;
+      white-space:pre-line;
+      overflow-wrap:break-word;
+    }
+    .ppagent-text-primitive--heading{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-text-primitive--body{font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.45}
+    .ppagent-text-primitive--list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px)}
+    .ppagent-text-list__item{box-sizing:border-box;min-width:0;margin:0;padding:0;overflow:visible;color:var(--ppagent-text-color,#46566a);font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.38;text-align:inherit;white-space:pre-line;overflow-wrap:break-word}
+    .ppagent-text-primitive--metric{color:var(--ppagent-value-color,#2f5ea8);font-size:var(--ppagent-component-heading-size,25pt);font-weight:700;line-height:1.08}
+    .ppagent-text-primitive--label{color:var(--ppagent-label-color,#60758d);font-size:var(--ppagent-component-label-size,17pt);font-weight:600;line-height:1.2}
+    .ppagent-text-primitive--annotation{color:var(--ppagent-annotation-color,#748495);font-size:var(--ppagent-component-meta-size,15pt);font-weight:400;line-height:1.3}
+    .ppagent-text-primitive--quote{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:500;line-height:1.35}
+    .ppagent-text-primitive--emphasis{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-title-size,23pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-structured-list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-structured-list__item{display:flex;flex-direction:column;gap:4px;min-width:0}
+    .ppagent-structured-list__item .ppagent-text-primitive--heading{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-metric-set{display:grid;grid-template-columns:repeat(var(--ppagent-metric-columns,2),minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0;align-items:start}
+    .ppagent-metric-set[data-metric-count=&quot;3&quot;]{--ppagent-metric-columns:3}
+    .ppagent-metric-set[data-metric-count=&quot;4&quot;]{--ppagent-metric-columns:4}
+    .ppagent-metric-set__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-key-value{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-key-value__row{display:grid;grid-template-columns:minmax(64px,.42fr) minmax(0,1fr);gap:10px;align-items:start;min-width:0}
+    .ppagent-key-value__row .ppagent-text-primitive--metric{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label,
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--annotation{text-align:right}
+    .ppagent-summary-information{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0}
+    .ppagent-summary-information__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-summary-information__item .ppagent-text-primitive--emphasis{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;]{
+      justify-content:flex-start;
+      gap:12px;
+      padding:18px;
+      color:var(--ppagent-color-body);
+      background:transparent;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive{color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--emphasis,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--quote{color:var(--ppagent-color-dark);font-weight:700;letter-spacing:-.25px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--body,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-list__item{font-size:max(15pt,var(--ppagent-component-body-size))}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--label{color:var(--ppagent-color-accent);font-size:max(15pt,var(--ppagent-component-label-size));font-weight:700;letter-spacing:.7px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--annotation{color:var(--ppagent-color-muted);font-size:max(15pt,var(--ppagent-component-meta-size))}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--metric{color:var(--ppagent-color-accent);font-weight:700;letter-spacing:-.5px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-list__item{position:relative;padding-left:17px;color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-list__item::before{content:&quot;&quot;;position:absolute;left:0;top:.68em;width:8px;height:2px;background:var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--heading-content-flow > .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--label-content-flow > .ppagent-text-primitive--label,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--heading-metric-content-flow > .ppagent-text-primitive--heading{padding-bottom:10px;border-bottom:2px solid var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-structured-list{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-structured-list__item{display:grid;grid-template-columns:minmax(82px,.42fr) minmax(0,1fr);gap:14px;padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-structured-list__item .ppagent-text-primitive--body{margin:0}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-metric-set{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-metric-set__item{padding:12px 14px 4px 0}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-metric-set__item + .ppagent-metric-set__item{padding-left:14px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-key-value{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-key-value__row{padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--quote-attribution-flow{position:relative;padding-left:52px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--quote-attribution-flow::before{content:&quot;“&quot;;position:absolute;left:16px;top:8px;color:var(--ppagent-color-accent);font-family:Georgia,serif;font-size:42pt;font-weight:700;line-height:1}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label{margin-top:auto;padding-top:10px;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-summary-information{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-summary-information__item{padding:10px 12px 8px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-summary-information__item:nth-child(even){padding-left:12px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout--value-label{
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-value-label-gap,5px);
+      padding:var(--ppagent-value-label-padding,5px);
+      text-align:center;
+    }
+    .ppagent-text-layout__value,
+    .ppagent-text-layout__label{
+      box-sizing:border-box;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:hidden;
+      text-align:inherit;
+    }
+    .ppagent-text-layout__value{
+      color:var(--ppagent-value-color,#2f5ea8);
+      font-size:var(--ppagent-component-lead-size,19pt);
+      font-weight:700;
+      line-height:1.15;
+    }
+    .ppagent-text-layout__label{
+      color:var(--ppagent-label-color,#60758d);
+      font-size:var(--ppagent-component-meta-size,15pt);
+      font-weight:400;
+      line-height:1.2;
+    }
+    .ppagent-text-flow{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-flow-gap,10px);
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,&quot;Microsoft YaHei&quot;),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-flow[data-text-flow-align=&quot;center&quot;]{text-align:center}
+    .ppagent-text-flow[data-text-flow-align=&quot;right&quot;]{text-align:right}
+    .ppagent-text-flow[data-text-flow-valign=&quot;top&quot;]{justify-content:flex-start}
+    .ppagent-text-flow[data-text-flow-valign=&quot;bottom&quot;]{justify-content:flex-end}
+    .ppagent-text-flow__title,
+    .ppagent-text-flow__body{
+      position:relative;
+      box-sizing:border-box;
+      flex:0 0 auto;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      text-align:inherit;
+    }
+    .ppagent-text-flow__title{
+      font-size:var(--ppagent-component-item-title-size,21pt);
+      font-weight:700;
+      line-height:1.2;
+      white-space:normal;
+      text-wrap:balance;
+    }
+    .ppagent-text-flow__body{
+      font-size:var(--ppagent-component-body-size,17pt);
+      font-weight:400;
+      line-height:1.45;
+      white-space:pre-line;
+    }
+    .ppagent-text-flow__separator{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      align-self:center;
+      width:var(--ppagent-text-flow-separator-width,54px);
+      height:var(--ppagent-text-flow-separator-height,4px);
+      border:0;
+      border-radius:99px;
+      background:var(--ppagent-text-flow-separator-color,#78aeef);
+    }
+  * { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { color: #543293; background: transparent; font-family: var(--ppagent-font-body, &quot;Microsoft YaHei&quot;), sans-serif; }
+.comparison-review { position: relative; width: 1170px; height: 492px; overflow: hidden; background: transparent; }
+/* 两个实体椭圆叠成可编辑平台环，避免透明描边在 Native 预览中丢失。 */
+.comparison-stage-outer { position: absolute; left: 12px; top: 409px; width: 1146px; height: 70px; border: 0; border-radius: 50%; background: #CDBDE9; }
+.comparison-stage-inner { position: absolute; left: 45px; top: 418px; width: 1080px; height: 48px; border: 0; border-radius: 50%; background: #fff; }
+.comparison-side { position: absolute; top: 24px; width: 480px; height: 412px; z-index: 1; }
+.comparison-side-0 { left: 20px; }
+.comparison-side-1 { right: 20px; }
+.comparison-side-shadow { position: absolute; left: 10px; right: 10px; top: 14px; bottom: 0; border: 0; border-radius: 28px; background: #EEE8F8; opacity: .78; }
+.comparison-side-surface { position: absolute; inset: 0 0 12px; border: 1px solid #EEE8F8; border-radius: 28px; background: #EEE8F8; box-shadow: 0 14px 30px rgba(84, 50, 147, .12); }
+.comparison-side-cap-top { position: absolute; left: 0; right: 0; top: 0; height: 56px; border: 0; border-radius: 28px; }
+.comparison-side-cap-bottom { position: absolute; left: 0; right: 0; top: 28px; height: 50px; border: 0; border-radius: 16px; }
+.comparison-side[data-tone=&quot;negative&quot;] .comparison-side-cap-top,
+.comparison-side[data-tone=&quot;negative&quot;] .comparison-side-cap-bottom { background: #6F42C1; }
+.comparison-side[data-tone=&quot;positive&quot;] .comparison-side-cap-top,
+.comparison-side[data-tone=&quot;positive&quot;] .comparison-side-cap-bottom { background: #6F42C1; }
+.comparison-side-title { position: absolute; left: 42px; right: 42px; top: 13px; height: 52px; margin: 0; overflow: hidden; color: #fff; font-size: var(--ppagent-component-title-size, 26px); font-weight: 700; line-height: 52px; text-align: center; white-space: nowrap; }
+.comparison-list { position: absolute; left: 34px; right: 34px; top: 95px; bottom: 29px; display: grid; align-content: center; }
+.comparison-review[data-item-count=&quot;3&quot;] .comparison-list { grid-template-rows: repeat(3, 62px); gap: 24px; }
+.comparison-review[data-item-count=&quot;4&quot;] .comparison-list { grid-template-rows: repeat(4, 56px); gap: 17px; }
+.comparison-review[data-item-count=&quot;5&quot;] .comparison-list { grid-template-rows: repeat(5, 49px); gap: 11px; }
+.comparison-row { position: relative; width: 100%; height: 100%; border-radius: 99px; }
+.comparison-side[data-tone=&quot;negative&quot;] .comparison-row { border: 1px solid #CDBDE9; background: #EEE8F8; }
+.comparison-side[data-tone=&quot;positive&quot;] .comparison-row { border: 1px solid #EEE8F8; background: #EEE8F8; }
+.comparison-row-marker { position: absolute; top: 50%; width: 38px; height: 38px; margin-top: -19px; border: 0; border-radius: 50%; }
+.comparison-side-0 .comparison-row-marker { right: 10px; }
+.comparison-side-1 .comparison-row-marker { left: 10px; }
+.comparison-side[data-tone=&quot;negative&quot;] .comparison-row-marker { background: #6F42C1; }
+.comparison-side[data-tone=&quot;positive&quot;] .comparison-row-marker { background: #6F42C1; }
+.comparison-row-symbol { display: block; width: 38px; height: 38px; color: #fff; font-size: var(--ppagent-component-label-size, 18px); font-weight: 700; line-height: 36px; text-align: center; }
+.comparison-row-text { position: absolute; top: 0; bottom: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; color: #543293; font-size: var(--ppagent-component-body-size, 19px); font-weight: 500; line-height: 1.2; white-space: nowrap; }
+.comparison-side-0 .comparison-row-text,
+.comparison-side-1 .comparison-row-text { left: 62px; right: 62px; text-align: center; }
+.comparison-knot-ring { position: absolute; left: 520px; top: 188px; width: 130px; height: 130px; z-index: 2; border: 1px dashed #CDBDE9; border-radius: 50%; background: #fff; }
+.comparison-knot-halo { position: absolute; left: 531px; top: 199px; width: 108px; height: 108px; z-index: 2; border: 1px solid #EEE8F8; border-radius: 50%; background: #EEE8F8; }
+.comparison-knot-core { position: absolute; left: 542px; top: 210px; width: 86px; height: 86px; z-index: 2; border: 0; border-radius: 50%; background: #6F42C1; box-shadow: 0 10px 22px rgba(111, 66, 193, .24); }
+.comparison-knot-label { position: absolute; left: 542px; top: 210px; width: 86px; height: 86px; z-index: 3; overflow: hidden; color: #fff; font-size: var(--ppagent-component-title-size, 26px); font-weight: 700; line-height: 86px; text-align: center; white-space: nowrap; }
+</style></head><body><section class=&quot;comparison-review&quot; data-ppt-root data-item-count=&quot;3&quot;>
+      <div class=&quot;comparison-stage-outer&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;comparison-stage-outer&quot;></div>
+      <div class=&quot;comparison-stage-inner&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;comparison-stage-inner&quot;></div>
+      <article class=&quot;comparison-side comparison-side-0&quot; data-tone=&quot;negative&quot;>
+    <div class=&quot;comparison-side-shadow&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;comparison-shadow-0&quot;></div>
+    <div class=&quot;comparison-side-surface&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-shadow=&quot;shadow-sm&quot; data-ppt-name=&quot;comparison-surface-0&quot;></div>
+    <div class=&quot;comparison-side-cap-top&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;comparison-cap-top-0&quot;></div>
+    <div class=&quot;comparison-side-cap-bottom&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;comparison-cap-bottom-0&quot;></div>
+    <h3 class=&quot;comparison-side-title&quot; data-slot-id=&quot;side-0-title&quot; data-slot-role=&quot;item-title&quot; data-slot-field=&quot;sides[0].title&quot; data-slot-item-id=&quot;side-0&quot; data-slot-content-type=&quot;text&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;single-line&quot; data-slot-list-policy=&quot;none&quot; data-slot-max-chars=&quot;10&quot; data-slot-max-lines=&quot;1&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-title-0&quot;>传统工作方式</h3>
+    <div class=&quot;comparison-list&quot;><div class=&quot;comparison-row&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;comparison-row-0-0&quot;>
+    <div class=&quot;comparison-row-marker&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;comparison-marker-0-0&quot;>
+    <span class=&quot;comparison-row-symbol&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-symbol-0-0&quot; aria-label=&quot;不推荐&quot;>×</span>
+  </div>
+    <div class=&quot;comparison-row-text&quot; data-slot-id=&quot;side-0-item-0&quot; data-slot-role=&quot;item-body&quot; data-slot-field=&quot;sides[0].items[0]&quot; data-slot-item-id=&quot;side-0-item-0&quot; data-slot-content-type=&quot;text&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;single-line&quot; data-slot-list-policy=&quot;none&quot; data-slot-max-chars=&quot;16&quot; data-slot-max-lines=&quot;1&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-row-text-0-0&quot;>每页重新设计</div>
+  </div><div class=&quot;comparison-row&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;comparison-row-0-1&quot;>
+    <div class=&quot;comparison-row-marker&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;comparison-marker-0-1&quot;>
+    <span class=&quot;comparison-row-symbol&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-symbol-0-1&quot; aria-label=&quot;不推荐&quot;>×</span>
+  </div>
+    <div class=&quot;comparison-row-text&quot; data-slot-id=&quot;side-0-item-1&quot; data-slot-role=&quot;item-body&quot; data-slot-field=&quot;sides[0].items[1]&quot; data-slot-item-id=&quot;side-0-item-1&quot; data-slot-content-type=&quot;text&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;single-line&quot; data-slot-list-policy=&quot;none&quot; data-slot-max-chars=&quot;16&quot; data-slot-max-lines=&quot;1&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-row-text-0-1&quot;>规范依赖记忆</div>
+  </div><div class=&quot;comparison-row&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;comparison-row-0-2&quot;>
+    <div class=&quot;comparison-row-marker&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;comparison-marker-0-2&quot;>
+    <span class=&quot;comparison-row-symbol&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-symbol-0-2&quot; aria-label=&quot;不推荐&quot;>×</span>
+  </div>
+    <div class=&quot;comparison-row-text&quot; data-slot-id=&quot;side-0-item-2&quot; data-slot-role=&quot;item-body&quot; data-slot-field=&quot;sides[0].items[2]&quot; data-slot-item-id=&quot;side-0-item-2&quot; data-slot-content-type=&quot;text&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;single-line&quot; data-slot-list-policy=&quot;none&quot; data-slot-max-chars=&quot;16&quot; data-slot-max-lines=&quot;1&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-row-text-0-2&quot;>稿件反复压缩</div>
+  </div></div>
+  </article><article class=&quot;comparison-side comparison-side-1&quot; data-tone=&quot;positive&quot;>
+    <div class=&quot;comparison-side-shadow&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;comparison-shadow-1&quot;></div>
+    <div class=&quot;comparison-side-surface&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-shadow=&quot;shadow-sm&quot; data-ppt-name=&quot;comparison-surface-1&quot;></div>
+    <div class=&quot;comparison-side-cap-top&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;comparison-cap-top-1&quot;></div>
+    <div class=&quot;comparison-side-cap-bottom&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;comparison-cap-bottom-1&quot;></div>
+    <h3 class=&quot;comparison-side-title&quot; data-slot-id=&quot;side-1-title&quot; data-slot-role=&quot;item-title&quot; data-slot-field=&quot;sides[1].title&quot; data-slot-item-id=&quot;side-1&quot; data-slot-content-type=&quot;text&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;single-line&quot; data-slot-list-policy=&quot;none&quot; data-slot-max-chars=&quot;10&quot; data-slot-max-lines=&quot;1&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-title-1&quot;>受控生成系统</h3>
+    <div class=&quot;comparison-list&quot;><div class=&quot;comparison-row&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;comparison-row-1-0&quot;>
+    <div class=&quot;comparison-row-marker&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;comparison-marker-1-0&quot;>
+    <span class=&quot;comparison-row-symbol&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-symbol-1-0&quot; aria-label=&quot;推荐&quot;>✓</span>
+  </div>
+    <div class=&quot;comparison-row-text&quot; data-slot-id=&quot;side-1-item-0&quot; data-slot-role=&quot;item-body&quot; data-slot-field=&quot;sides[1].items[0]&quot; data-slot-item-id=&quot;side-1-item-0&quot; data-slot-content-type=&quot;text&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;single-line&quot; data-slot-list-policy=&quot;none&quot; data-slot-max-chars=&quot;16&quot; data-slot-max-lines=&quot;1&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-row-text-1-0&quot;>复用成熟结构</div>
+  </div><div class=&quot;comparison-row&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;comparison-row-1-1&quot;>
+    <div class=&quot;comparison-row-marker&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;comparison-marker-1-1&quot;>
+    <span class=&quot;comparison-row-symbol&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-symbol-1-1&quot; aria-label=&quot;推荐&quot;>✓</span>
+  </div>
+    <div class=&quot;comparison-row-text&quot; data-slot-id=&quot;side-1-item-1&quot; data-slot-role=&quot;item-body&quot; data-slot-field=&quot;sides[1].items[1]&quot; data-slot-item-id=&quot;side-1-item-1&quot; data-slot-content-type=&quot;text&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;single-line&quot; data-slot-list-policy=&quot;none&quot; data-slot-max-chars=&quot;16&quot; data-slot-max-lines=&quot;1&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-row-text-1-1&quot;>规则统一执行</div>
+  </div><div class=&quot;comparison-row&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;comparison-row-1-2&quot;>
+    <div class=&quot;comparison-row-marker&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;comparison-marker-1-2&quot;>
+    <span class=&quot;comparison-row-symbol&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-symbol-1-2&quot; aria-label=&quot;推荐&quot;>✓</span>
+  </div>
+    <div class=&quot;comparison-row-text&quot; data-slot-id=&quot;side-1-item-2&quot; data-slot-role=&quot;item-body&quot; data-slot-field=&quot;sides[1].items[2]&quot; data-slot-item-id=&quot;side-1-item-2&quot; data-slot-content-type=&quot;text&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;single-line&quot; data-slot-list-policy=&quot;none&quot; data-slot-max-chars=&quot;16&quot; data-slot-max-lines=&quot;1&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-row-text-1-2&quot;>容量提前判断</div>
+  </div></div>
+  </article>
+      <div class=&quot;comparison-knot-ring&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;comparison-knot-ring&quot;></div>
+      <div class=&quot;comparison-knot-halo&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;comparison-knot-halo&quot;></div>
+      <div class=&quot;comparison-knot-core&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;comparison-knot-core&quot;></div>
+      <div class=&quot;comparison-knot-label&quot; data-slot-id=&quot;comparison-label&quot; data-slot-role=&quot;label&quot; data-slot-field=&quot;comparisonLabel&quot; data-slot-content-type=&quot;text&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;single-line&quot; data-slot-list-policy=&quot;none&quot; data-slot-max-chars=&quot;4&quot; data-slot-max-lines=&quot;1&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;comparison-label&quot;>VS</div>
+    </section></body></html>"></iframe></section></div></body></html>

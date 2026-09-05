@@ -5,7 +5,12 @@ import { fileURLToPath } from "node:url";
 import { chromium } from "playwright-core";
 import { Presentation, PresentationFile } from "@oai/artifact-tool";
 import { assertResolvedTextContainerSlots } from "./text-container-contract.mjs";
-import { htmlComponentThemeCss, resolveComponentTypography } from "./html-component-theme.mjs";
+import {
+  compileHtmlComponentTheme,
+  defaultStructurePrimaryColor,
+  htmlComponentThemeCss,
+  resolveComponentTypography,
+} from "./html-component-theme.mjs";
 import { htmlTextFlowCss } from "./text-flow.mjs";
 
 export { htmlComponentThemeCss } from "./html-component-theme.mjs";
@@ -85,7 +90,9 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
     requireValue(relativeCssPath && !relativeCssPath.startsWith("..") && !path.isAbsolute(relativeCssPath), "cssFile 必须位于资产目录内");
     css = await fs.readFile(cssPath, "utf8");
   }
-  const markup = component.renderMarkup(parameters);
+  const compiledTheme = compileHtmlComponentTheme({ markup: component.renderMarkup(parameters), css, theme });
+  const markup = compiledTheme.markup;
+  css = compiledTheme.css;
   const browser = await getBrowser();
   const page = await browser.newPage({ viewport: { width: Math.ceil(designFrame.width), height: Math.ceil(designFrame.height) } });
   try {
@@ -1232,7 +1239,12 @@ export async function closeHtmlComponentRuntime() {
 
 export async function runHtmlComponentGenerator(moduleUrl, component, defaults) {
   if (!process.argv[1] || path.resolve(process.argv[1]) !== fileURLToPath(moduleUrl)) return;
-  const values = { output: path.join(path.dirname(fileURLToPath(moduleUrl)), "example.pptx"), config: null };
+  const values = {
+    output: path.join(path.dirname(fileURLToPath(moduleUrl)), "example.pptx"),
+    config: null,
+    theme: null,
+    "primary-color": null,
+  };
   const args = process.argv.slice(2);
   for (let index = 0; index < args.length; index += 2) {
     const name = args[index];
@@ -1245,12 +1257,24 @@ export async function runHtmlComponentGenerator(moduleUrl, component, defaults) 
   const parameters = values.config
     ? { ...defaults, ...JSON.parse(await fs.readFile(path.resolve(values.config), "utf8")) }
     : defaults;
+  const loadedTheme = values.theme
+    ? JSON.parse(await fs.readFile(path.resolve(values.theme), "utf8"))
+    : {};
+  const theme = { ...(loadedTheme.componentTheme ?? loadedTheme) };
+  theme.primaryColor = values["primary-color"] ?? theme.primaryColor ?? defaultStructurePrimaryColor;
+  requireValue(/^#[0-9a-f]{6}$/i.test(theme.primaryColor), "--primary-color 必须是六位十六进制颜色");
   const presentation = Presentation.create({ slideSize: { width: 1280, height: 720 } });
   const slide = presentation.slides.add();
   slide.background.fill = "#FFFFFF";
   const targetFrame = { left: 55, top: 166, width: component.designFrame.width, height: component.designFrame.height };
   try {
-    const tree = await resolveHtmlComponent({ component, parameters, assetDir: path.dirname(fileURLToPath(moduleUrl)), targetFrame });
+    const tree = await resolveHtmlComponent({
+      component,
+      parameters,
+      assetDir: path.dirname(fileURLToPath(moduleUrl)),
+      targetFrame,
+      theme,
+    });
     compileResolvedVisualTree(slide, tree, targetFrame);
     await fs.mkdir(path.dirname(path.resolve(values.output)), { recursive: true });
     await (await PresentationFile.exportPptx(presentation)).save(path.resolve(values.output));

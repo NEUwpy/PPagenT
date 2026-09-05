@@ -76,6 +76,7 @@ test("看板只把资产专属 HTML 计入迁移完成度", async () => {
   assert.equal(cycle?.nativeOutputAvailable, true);
   assert.equal(cycle?.slotContract?.resolverExport, "resolveContentSlots");
   assert.equal(data.activeSkin?.componentTheme?.typography?.componentBody, 14);
+  assert.equal(data.activeSkin?.componentTheme?.primaryColor, "#315F91");
   assert.equal(data.activeSkin?.typographyUnit, "ppt-pt");
   assert.equal(data.activeSkin?.pptPointScale, 1);
   assert.deepEqual(data.textLayouts.map((item) => item.id), [
@@ -88,7 +89,8 @@ test("看板只把资产专属 HTML 计入迁移完成度", async () => {
   assert.equal(data.textSurfaces.length, 6);
   assert.equal(data.summary.textSurfaces, 6);
   assert.match(data.textLayoutCss, /\.ppagent-text-layout/);
-  assert.match(data.textLayoutCss, /--ppagent-color-accent:#2F5EA8/);
+  assert.match(data.textLayoutCss, /--ppagent-color-primary:#315F91/);
+  assert.match(data.textLayoutCss, /--ppagent-color-accent:#315F91/);
   assert.ok(data.textLayouts.every((layout) => (
     layout.previews.length === 3
     && layout.previews[0].id === "minimum"

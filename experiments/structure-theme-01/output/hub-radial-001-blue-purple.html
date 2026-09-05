@@ -1,0 +1,691 @@
+<!doctype html><html><head><meta charset="utf-8"><style>body{margin:0;padding:14px;background:#f1f1f1;font-family:"Microsoft YaHei"}.row{display:flex;gap:14px}.panel{background:#fff}.label{height:30px;padding-left:10px;font-weight:700;line-height:30px;color:#333}iframe{display:block;width:1170px;height:492px;border:0}</style></head><body><div class="row"><section class="panel"><div class="label">默认蓝 #315F91</div><iframe srcdoc="<!doctype html><html><head><meta charset=&quot;utf-8&quot;><style>html,body{margin:0;width:1170px;height:492px;overflow:hidden}/* ppagent-theme:resolved */:root{
+    --ppagent-font-body:&quot;Microsoft YaHei&quot;;
+    --ppagent-color-background:#FFFFFF;
+    --ppagent-color-surface:#FFFFFF;
+    --ppagent-color-primary:#315F91;
+    --ppagent-color-primary-deep:#1C3754;
+    --ppagent-color-primary-dark:#25486E;
+    --ppagent-color-primary-light:#7795B6;
+    --ppagent-color-primary-pale:#B7C7D9;
+    --ppagent-color-primary-wash:#E6ECF2;
+    --ppagent-color-accent:#315F91;
+    --ppagent-color-accent-alt:#567CA5;
+    --ppagent-color-accent-soft:#DAE2EB;
+    --ppagent-color-cyan:#7B99B9;
+    --ppagent-color-dark:#2B2B2B;
+    --ppagent-color-body:#404040;
+    --ppagent-color-muted:#6F6F6F;
+    --ppagent-color-line:#B5C5D7;
+    --ppagent-component-heading-size:22pt;
+    --ppagent-component-title-size:20pt;
+    --ppagent-component-item-title-size:18pt;
+    --ppagent-component-lead-size:16pt;
+    --ppagent-component-body-size:14pt;
+    --ppagent-component-label-size:14pt;
+    --ppagent-component-meta-size:12pt;
+  }
+    .ppagent-text-region{
+      box-sizing:border-box;
+      min-width:0;
+      min-height:0;
+    }
+    .ppagent-text-region > .ppagent-text-flow,
+    .ppagent-text-region > .ppagent-text-layout{
+      width:100%;
+      height:100%;
+    }
+    .ppagent-text-layout{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-layout-gap,10px);
+      width:100%;
+      height:100%;
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,&quot;Microsoft YaHei&quot;),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-align=&quot;center&quot;]{text-align:center}
+    .ppagent-text-layout[data-text-layout-align=&quot;right&quot;]{text-align:right}
+    .ppagent-text-layout[data-text-layout-valign=&quot;top&quot;]{justify-content:flex-start}
+    .ppagent-text-layout[data-text-layout-valign=&quot;bottom&quot;]{justify-content:flex-end}
+    .ppagent-text-layout[data-text-layout-density=&quot;compact&quot;]{--ppagent-text-layout-gap:6px;--ppagent-text-layout-item-gap:5px}
+    .ppagent-text-layout[data-text-layout-density=&quot;standard&quot;]{--ppagent-text-layout-gap:10px;--ppagent-text-layout-item-gap:8px}
+    .ppagent-text-layout[data-text-layout-density=&quot;loose&quot;]{--ppagent-text-layout-gap:15px;--ppagent-text-layout-item-gap:12px}
+    .ppagent-text-primitive{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      color:var(--ppagent-text-color,#46566a);
+      text-align:inherit;
+      white-space:pre-line;
+      overflow-wrap:break-word;
+    }
+    .ppagent-text-primitive--heading{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-text-primitive--body{font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.45}
+    .ppagent-text-primitive--list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px)}
+    .ppagent-text-list__item{box-sizing:border-box;min-width:0;margin:0;padding:0;overflow:visible;color:var(--ppagent-text-color,#46566a);font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.38;text-align:inherit;white-space:pre-line;overflow-wrap:break-word}
+    .ppagent-text-primitive--metric{color:var(--ppagent-value-color,#2f5ea8);font-size:var(--ppagent-component-heading-size,25pt);font-weight:700;line-height:1.08}
+    .ppagent-text-primitive--label{color:var(--ppagent-label-color,#60758d);font-size:var(--ppagent-component-label-size,17pt);font-weight:600;line-height:1.2}
+    .ppagent-text-primitive--annotation{color:var(--ppagent-annotation-color,#748495);font-size:var(--ppagent-component-meta-size,15pt);font-weight:400;line-height:1.3}
+    .ppagent-text-primitive--quote{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:500;line-height:1.35}
+    .ppagent-text-primitive--emphasis{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-title-size,23pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-structured-list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-structured-list__item{display:flex;flex-direction:column;gap:4px;min-width:0}
+    .ppagent-structured-list__item .ppagent-text-primitive--heading{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-metric-set{display:grid;grid-template-columns:repeat(var(--ppagent-metric-columns,2),minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0;align-items:start}
+    .ppagent-metric-set[data-metric-count=&quot;3&quot;]{--ppagent-metric-columns:3}
+    .ppagent-metric-set[data-metric-count=&quot;4&quot;]{--ppagent-metric-columns:4}
+    .ppagent-metric-set__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-key-value{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-key-value__row{display:grid;grid-template-columns:minmax(64px,.42fr) minmax(0,1fr);gap:10px;align-items:start;min-width:0}
+    .ppagent-key-value__row .ppagent-text-primitive--metric{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label,
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--annotation{text-align:right}
+    .ppagent-summary-information{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0}
+    .ppagent-summary-information__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-summary-information__item .ppagent-text-primitive--emphasis{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;]{
+      justify-content:flex-start;
+      gap:12px;
+      padding:18px;
+      color:var(--ppagent-color-body);
+      background:transparent;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive{color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--emphasis,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--quote{color:var(--ppagent-color-dark);font-weight:700;letter-spacing:-.25px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--body,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-list__item{font-size:max(15pt,var(--ppagent-component-body-size))}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--label{color:var(--ppagent-color-accent);font-size:max(15pt,var(--ppagent-component-label-size));font-weight:700;letter-spacing:.7px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--annotation{color:var(--ppagent-color-muted);font-size:max(15pt,var(--ppagent-component-meta-size))}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--metric{color:var(--ppagent-color-accent);font-weight:700;letter-spacing:-.5px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-list__item{position:relative;padding-left:17px;color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-list__item::before{content:&quot;&quot;;position:absolute;left:0;top:.68em;width:8px;height:2px;background:var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--heading-content-flow > .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--label-content-flow > .ppagent-text-primitive--label,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--heading-metric-content-flow > .ppagent-text-primitive--heading{padding-bottom:10px;border-bottom:2px solid var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-structured-list{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-structured-list__item{display:grid;grid-template-columns:minmax(82px,.42fr) minmax(0,1fr);gap:14px;padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-structured-list__item .ppagent-text-primitive--body{margin:0}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-metric-set{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-metric-set__item{padding:12px 14px 4px 0}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-metric-set__item + .ppagent-metric-set__item{padding-left:14px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-key-value{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-key-value__row{padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--quote-attribution-flow{position:relative;padding-left:52px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--quote-attribution-flow::before{content:&quot;“&quot;;position:absolute;left:16px;top:8px;color:var(--ppagent-color-accent);font-family:Georgia,serif;font-size:42pt;font-weight:700;line-height:1}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label{margin-top:auto;padding-top:10px;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-summary-information{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-summary-information__item{padding:10px 12px 8px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-summary-information__item:nth-child(even){padding-left:12px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout--value-label{
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-value-label-gap,5px);
+      padding:var(--ppagent-value-label-padding,5px);
+      text-align:center;
+    }
+    .ppagent-text-layout__value,
+    .ppagent-text-layout__label{
+      box-sizing:border-box;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:hidden;
+      text-align:inherit;
+    }
+    .ppagent-text-layout__value{
+      color:var(--ppagent-value-color,#2f5ea8);
+      font-size:var(--ppagent-component-lead-size,19pt);
+      font-weight:700;
+      line-height:1.15;
+    }
+    .ppagent-text-layout__label{
+      color:var(--ppagent-label-color,#60758d);
+      font-size:var(--ppagent-component-meta-size,15pt);
+      font-weight:400;
+      line-height:1.2;
+    }
+    .ppagent-text-flow{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-flow-gap,10px);
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,&quot;Microsoft YaHei&quot;),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-flow[data-text-flow-align=&quot;center&quot;]{text-align:center}
+    .ppagent-text-flow[data-text-flow-align=&quot;right&quot;]{text-align:right}
+    .ppagent-text-flow[data-text-flow-valign=&quot;top&quot;]{justify-content:flex-start}
+    .ppagent-text-flow[data-text-flow-valign=&quot;bottom&quot;]{justify-content:flex-end}
+    .ppagent-text-flow__title,
+    .ppagent-text-flow__body{
+      position:relative;
+      box-sizing:border-box;
+      flex:0 0 auto;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      text-align:inherit;
+    }
+    .ppagent-text-flow__title{
+      font-size:var(--ppagent-component-item-title-size,21pt);
+      font-weight:700;
+      line-height:1.2;
+      white-space:normal;
+      text-wrap:balance;
+    }
+    .ppagent-text-flow__body{
+      font-size:var(--ppagent-component-body-size,17pt);
+      font-weight:400;
+      line-height:1.45;
+      white-space:pre-line;
+    }
+    .ppagent-text-flow__separator{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      align-self:center;
+      width:var(--ppagent-text-flow-separator-width,54px);
+      height:var(--ppagent-text-flow-separator-height,4px);
+      border:0;
+      border-radius:99px;
+      background:var(--ppagent-text-flow-separator-color,#78aeef);
+    }
+  * { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { color: #25486E; background: transparent; font-family: var(--ppagent-font-body, &quot;Microsoft YaHei&quot;), sans-serif; }
+.hub-review { position: relative; width: 1170px; height: 492px; overflow: hidden; background: transparent; }
+.hub-orbit { position: absolute; left: 50%; top: 50%; z-index: 0; width: 1px; height: 1px; }
+.hub-orbit-dot { position: absolute; left: calc(var(--dot-size) / -2); top: calc(var(--dot-size) / -2); width: var(--dot-size); height: var(--dot-size); border-radius: 50%; background: #B7C7D9; opacity: var(--dot-opacity); transform: rotate(var(--angle)) translateX(var(--radius)); }
+.hub-center-halo, .hub-center-ring, .hub-center-core { position: absolute; left: 50%; top: 50%; z-index: 1; border-radius: 50%; transform: translate(-50%, -50%); }
+.hub-center-halo { width: 276px; height: 276px; border: 1px solid #E6ECF2; background: #E6ECF2; }
+.hub-center-ring { z-index: 2; width: 242px; height: 242px; border: 2px solid #7795B6; background: #fff; }
+.hub-center-core { z-index: 3; width: 222px; height: 222px; border: 0; background: #315F91; box-shadow: 0 12px 28px rgba(49, 95, 145, .22); }
+.hub-center-content { position: absolute; left: 50%; top: calc(50% - 50px); z-index: 4; width: 198px; height: 100px; color: #fff; transform: translateX(-50%); --ppagent-text-layout-gap: 6px; --ppagent-heading-color: #fff; --ppagent-text-color: #fff; }
+.hub-center-content .ppagent-text-primitive--heading { line-height: 1.25; }
+.hub-center-content .ppagent-text-primitive--body { line-height: 1.28; text-wrap: balance; }
+.hub-review[data-odd=&quot;true&quot;] .hub-orbit, .hub-review[data-odd=&quot;true&quot;] .hub-center-halo, .hub-review[data-odd=&quot;true&quot;] .hub-center-ring, .hub-review[data-odd=&quot;true&quot;] .hub-center-core { top: 59%; }
+.hub-review[data-odd=&quot;true&quot;] .hub-center-content { top: calc(59% - 50px); }
+.hub-item { position: absolute; left: var(--left); top: var(--top); z-index: 5; width: var(--width); height: var(--height); }
+.hub-item-underlay, .hub-item-surface { position: absolute; top: 5px; bottom: 1px; border-radius: 17px; }
+.hub-item-underlay { background: #E6ECF2; }
+.hub-item-surface { top: 0; bottom: 6px; border: 1px solid #E6ECF2; background: #E6ECF2; box-shadow: 0 7px 16px rgba(49, 95, 145, .09); }
+.hub-item-left .hub-item-underlay, .hub-item-left .hub-item-surface { left: 70px; right: 0; }
+.hub-item-right .hub-item-underlay, .hub-item-right .hub-item-surface { left: 0; right: 70px; }
+.hub-item-top .hub-item-underlay, .hub-item-top .hub-item-surface { left: 78px; right: 0; }
+.hub-icon-halo, .hub-icon-core, .hub-icon-slot { position: absolute; top: 50%; border-radius: 50%; transform: translateY(-50%); }
+.hub-icon-halo { z-index: 2; width: 74px; height: 74px; border: 1px solid #E6ECF2; background: #fff; box-shadow: 0 7px 16px rgba(49, 95, 145, .1); }
+.hub-icon-core { z-index: 3; width: 54px; height: 54px; border: 0; background: #315F91; }
+.hub-icon-slot { z-index: 4; display: grid; place-items: center; width: 38px; height: 38px; color: #fff; }
+.hub-item-left .hub-icon-halo, .hub-item-top .hub-icon-halo { left: 0; }
+.hub-item-left .hub-icon-core, .hub-item-top .hub-icon-core { left: 10px; }
+.hub-item-left .hub-icon-slot, .hub-item-top .hub-icon-slot { left: 18px; }
+.hub-item-right .hub-icon-halo { right: 0; }
+.hub-item-right .hub-icon-core { right: 10px; }
+.hub-item-right .hub-icon-slot { right: 18px; }
+.hub-icon-svg { width: 34px; height: 34px; color: #fff; stroke: currentColor; }
+.hub-icon-fallback { display: block; width: 12px; height: 12px; border: 2px solid #fff; border-radius: 50%; background: transparent; }
+.hub-item-content { position: absolute; top: 2px; z-index: 6; height: 76px; --ppagent-text-layout-gap: 2px; --ppagent-heading-color: #25486E; --ppagent-text-color: #25486E; }
+.hub-item-content .ppagent-text-primitive--heading { line-height: 1.18; }
+.hub-item-content .ppagent-text-primitive--body { line-height: 1.16; text-wrap: balance; }
+.hub-item-left .hub-item-content { left: 94px; right: 18px; }
+.hub-item-right .hub-item-content { left: 18px; right: 94px; }
+.hub-item-top .hub-item-content { left: 100px; right: 18px; }
+.hub-review[data-item-count=&quot;7&quot;] .hub-center-halo, .hub-review[data-item-count=&quot;8&quot;] .hub-center-halo { width: 260px; height: 260px; }
+.hub-review[data-item-count=&quot;7&quot;] .hub-center-ring, .hub-review[data-item-count=&quot;8&quot;] .hub-center-ring { width: 230px; height: 230px; }
+.hub-review[data-item-count=&quot;7&quot;] .hub-center-core, .hub-review[data-item-count=&quot;8&quot;] .hub-center-core { width: 210px; height: 210px; }
+</style></head><body><section class=&quot;hub-review&quot; data-ppt-root data-item-count=&quot;3&quot; data-odd=&quot;true&quot;>
+      <div class=&quot;hub-orbit&quot; aria-hidden=&quot;true&quot;><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:0.000deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-0&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:12.857deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-1&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:25.714deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-2&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:38.571deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-3&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:51.429deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-4&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:64.286deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-5&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:77.143deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-6&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:90.000deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-7&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:102.857deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-8&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:115.714deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-9&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:128.571deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-10&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:141.429deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-11&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:154.286deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-12&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:167.143deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-13&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:180.000deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-14&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:192.857deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-15&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:205.714deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-16&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:218.571deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-17&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:231.429deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-18&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:244.286deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-19&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:257.143deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-20&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:270.000deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-21&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:282.857deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-22&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:295.714deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-23&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:308.571deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-24&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:321.429deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-25&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:334.286deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-26&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:347.143deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-27&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:0.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-0&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:10.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-1&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:20.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-2&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:30.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-3&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:40.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-4&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:50.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-5&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:60.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-6&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:70.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-7&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:80.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-8&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:90.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-9&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:100.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-10&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:110.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-11&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:120.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-12&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:130.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-13&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:140.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-14&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:150.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-15&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:160.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-16&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:170.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-17&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:180.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-18&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:190.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-19&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:200.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-20&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:210.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-21&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:220.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-22&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:230.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-23&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:240.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-24&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:250.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-25&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:260.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-26&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:270.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-27&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:280.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-28&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:290.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-29&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:300.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-30&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:310.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-31&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:320.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-32&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:330.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-33&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:340.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-34&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:350.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-35&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:0.000deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-0&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:8.182deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-1&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:16.364deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-2&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:24.545deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-3&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:32.727deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-4&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:40.909deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-5&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:49.091deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-6&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:57.273deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-7&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:65.455deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-8&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:73.636deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-9&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:81.818deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-10&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:90.000deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-11&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:98.182deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-12&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:106.364deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-13&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:114.545deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-14&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:122.727deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-15&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:130.909deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-16&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:139.091deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-17&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:147.273deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-18&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:155.455deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-19&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:163.636deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-20&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:171.818deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-21&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:180.000deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-22&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:188.182deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-23&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:196.364deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-24&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:204.545deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-25&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:212.727deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-26&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:220.909deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-27&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:229.091deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-28&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:237.273deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-29&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:245.455deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-30&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:253.636deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-31&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:261.818deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-32&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:270.000deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-33&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:278.182deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-34&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:286.364deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-35&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:294.545deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-36&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:302.727deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-37&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:310.909deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-38&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:319.091deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-39&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:327.273deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-40&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:335.455deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-41&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:343.636deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-42&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:351.818deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-43&quot;></i></div>
+      <div class=&quot;hub-center-halo&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-center-halo&quot;></div>
+      <div class=&quot;hub-center-ring&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-center-ring&quot;></div>
+      <div class=&quot;hub-center-core&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-shadow=&quot;shadow-sm&quot; data-ppt-name=&quot;hub-center-core&quot;></div>
+      <div class=&quot;ppagent-text-region hub-center-content&quot; data-ppagent-text-region data-slot-id=&quot;center-content-region&quot; data-slot-role=&quot;text-region&quot; data-slot-field=&quot;center&quot; data-slot-item-id=&quot;center&quot; data-slot-region-id=&quot;center&quot; data-slot-content-type=&quot;text-region&quot; data-slot-safe-box=&quot;true&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;structured&quot; data-slot-list-policy=&quot;structured&quot; data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-default-id=&quot;heading-content-flow&quot; data-text-layout-compatible=&quot;heading-content-flow,statement-flow&quot; data-text-layout-content-roles=&quot;heading,body&quot;>
+    <div class=&quot;ppagent-text-layout ppagent-text-layout--heading-content-flow&quot; data-ppagent-text-layout data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-align=&quot;center&quot; data-text-layout-valign=&quot;middle&quot; data-text-layout-density=&quot;compact&quot; data-text-layout-tone=&quot;light&quot; data-text-layout-style=&quot;default&quot;><div class=&quot;ppagent-text-primitive ppagent-text-primitive--heading&quot; data-text-primitive=&quot;heading&quot; data-text-layout-part=&quot;heading&quot; data-text-layout-field=&quot;title&quot; data-text-primitive-font-tiers=&quot;22,20,18,16,14&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;hub-center-title&quot;>核心能力</div><div class=&quot;ppagent-text-primitive ppagent-text-primitive--body&quot; data-text-primitive=&quot;body&quot; data-text-layout-part=&quot;body&quot; data-text-layout-field=&quot;body&quot; data-text-primitive-font-tiers=&quot;16,14,12&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;hub-center-body&quot;>统一目标 · 协同资源</div></div>
+  </div>
+      <article class=&quot;hub-item hub-item-top&quot; style=&quot;--left:397px;--top:4px;--width:376px;--height:86px&quot; data-item-index=&quot;0&quot;>
+    <div class=&quot;hub-item-underlay&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;hub-item-underlay-0&quot;></div>
+    <div class=&quot;hub-item-surface&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-shadow=&quot;shadow-sm&quot; data-ppt-name=&quot;hub-item-surface-0&quot;></div>
+    <div class=&quot;hub-icon-halo&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-icon-halo-0&quot;></div>
+    <div class=&quot;hub-icon-core&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-icon-core-0&quot;></div>
+    <div class=&quot;hub-icon-slot&quot; data-slot-id=&quot;strategy-icon&quot; data-slot-role=&quot;icon&quot; data-slot-field=&quot;items[0].iconKey&quot; data-slot-item-id=&quot;strategy&quot; data-slot-content-type=&quot;icon&quot; data-slot-provider=&quot;tabler-icons&quot; data-slot-required=&quot;true&quot;><svg data-ppt-kind=&quot;image&quot; data-ppt-name=&quot;hub-icon-0&quot; data-icon-key=&quot;target&quot;
+  xmlns=&quot;http://www.w3.org/2000/svg&quot;
+  width=&quot;24&quot;
+  height=&quot;24&quot;
+  viewBox=&quot;0 0 24 24&quot;
+  fill=&quot;none&quot;
+  stroke=&quot;currentColor&quot;
+  stroke-width=&quot;2&quot;
+  stroke-linecap=&quot;round&quot;
+  stroke-linejoin=&quot;round&quot;
+  class=&quot;hub-icon-svg&quot;
+>
+  
+  <path d=&quot;M11 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0&quot; />
+  <path d=&quot;M7 12a5 5 0 1 0 10 0a5 5 0 1 0 -10 0&quot; />
+  <path d=&quot;M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0&quot; />
+</svg></div>
+    <div class=&quot;ppagent-text-region hub-item-content hub-item-content-top&quot; data-ppagent-text-region data-slot-id=&quot;strategy-content-region&quot; data-slot-role=&quot;text-region&quot; data-slot-field=&quot;items[0]&quot; data-slot-item-id=&quot;strategy&quot; data-slot-region-id=&quot;content&quot; data-slot-content-type=&quot;text-region&quot; data-slot-safe-box=&quot;true&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;structured&quot; data-slot-list-policy=&quot;structured&quot; data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-default-id=&quot;heading-content-flow&quot; data-text-layout-compatible=&quot;heading-content-flow,statement-flow&quot; data-text-layout-content-roles=&quot;heading,body&quot;>
+    <div class=&quot;ppagent-text-layout ppagent-text-layout--heading-content-flow&quot; data-ppagent-text-layout data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-align=&quot;left&quot; data-text-layout-valign=&quot;middle&quot; data-text-layout-density=&quot;compact&quot; data-text-layout-tone=&quot;light&quot; data-text-layout-style=&quot;default&quot;><div class=&quot;ppagent-text-primitive ppagent-text-primitive--heading&quot; data-text-primitive=&quot;heading&quot; data-text-layout-part=&quot;heading&quot; data-text-layout-field=&quot;title&quot; data-text-primitive-font-tiers=&quot;22,20,18,16,14&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;hub-item-title-0&quot;>战略牵引</div><div class=&quot;ppagent-text-primitive ppagent-text-primitive--body&quot; data-text-primitive=&quot;body&quot; data-text-layout-part=&quot;body&quot; data-text-layout-field=&quot;body&quot; data-text-primitive-font-tiers=&quot;16,14,12&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;hub-item-body-0&quot;>明确方向并形成共同目标</div></div>
+  </div>
+  </article><article class=&quot;hub-item hub-item-left&quot; style=&quot;--left:12px;--top:255px;--width:382px;--height:86px&quot; data-item-index=&quot;1&quot;>
+    <div class=&quot;hub-item-underlay&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;hub-item-underlay-1&quot;></div>
+    <div class=&quot;hub-item-surface&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-shadow=&quot;shadow-sm&quot; data-ppt-name=&quot;hub-item-surface-1&quot;></div>
+    <div class=&quot;hub-icon-halo&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-icon-halo-1&quot;></div>
+    <div class=&quot;hub-icon-core&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-icon-core-1&quot;></div>
+    <div class=&quot;hub-icon-slot&quot; data-slot-id=&quot;data-icon&quot; data-slot-role=&quot;icon&quot; data-slot-field=&quot;items[1].iconKey&quot; data-slot-item-id=&quot;data&quot; data-slot-content-type=&quot;icon&quot; data-slot-provider=&quot;tabler-icons&quot; data-slot-required=&quot;true&quot;><svg data-ppt-kind=&quot;image&quot; data-ppt-name=&quot;hub-icon-1&quot; data-icon-key=&quot;database&quot;
+  xmlns=&quot;http://www.w3.org/2000/svg&quot;
+  width=&quot;24&quot;
+  height=&quot;24&quot;
+  viewBox=&quot;0 0 24 24&quot;
+  fill=&quot;none&quot;
+  stroke=&quot;currentColor&quot;
+  stroke-width=&quot;2&quot;
+  stroke-linecap=&quot;round&quot;
+  stroke-linejoin=&quot;round&quot;
+  class=&quot;hub-icon-svg&quot;
+>
+  
+  <path d=&quot;M4 6a8 3 0 1 0 16 0a8 3 0 1 0 -16 0&quot; />
+  <path d=&quot;M4 6v6a8 3 0 0 0 16 0v-6&quot; />
+  <path d=&quot;M4 12v6a8 3 0 0 0 16 0v-6&quot; />
+</svg></div>
+    <div class=&quot;ppagent-text-region hub-item-content hub-item-content-left&quot; data-ppagent-text-region data-slot-id=&quot;data-content-region&quot; data-slot-role=&quot;text-region&quot; data-slot-field=&quot;items[1]&quot; data-slot-item-id=&quot;data&quot; data-slot-region-id=&quot;content&quot; data-slot-content-type=&quot;text-region&quot; data-slot-safe-box=&quot;true&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;structured&quot; data-slot-list-policy=&quot;structured&quot; data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-default-id=&quot;heading-content-flow&quot; data-text-layout-compatible=&quot;heading-content-flow,statement-flow&quot; data-text-layout-content-roles=&quot;heading,body&quot;>
+    <div class=&quot;ppagent-text-layout ppagent-text-layout--heading-content-flow&quot; data-ppagent-text-layout data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-align=&quot;left&quot; data-text-layout-valign=&quot;middle&quot; data-text-layout-density=&quot;compact&quot; data-text-layout-tone=&quot;light&quot; data-text-layout-style=&quot;default&quot;><div class=&quot;ppagent-text-primitive ppagent-text-primitive--heading&quot; data-text-primitive=&quot;heading&quot; data-text-layout-part=&quot;heading&quot; data-text-layout-field=&quot;title&quot; data-text-primitive-font-tiers=&quot;22,20,18,16,14&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;hub-item-title-1&quot;>数据支撑</div><div class=&quot;ppagent-text-primitive ppagent-text-primitive--body&quot; data-text-primitive=&quot;body&quot; data-text-layout-part=&quot;body&quot; data-text-layout-field=&quot;body&quot; data-text-primitive-font-tiers=&quot;16,14,12&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;hub-item-body-1&quot;>汇集信息并提供可靠依据</div></div>
+  </div>
+  </article><article class=&quot;hub-item hub-item-right&quot; style=&quot;--left:776px;--top:255px;--width:382px;--height:86px&quot; data-item-index=&quot;2&quot;>
+    <div class=&quot;hub-item-underlay&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;hub-item-underlay-2&quot;></div>
+    <div class=&quot;hub-item-surface&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-shadow=&quot;shadow-sm&quot; data-ppt-name=&quot;hub-item-surface-2&quot;></div>
+    <div class=&quot;hub-icon-halo&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-icon-halo-2&quot;></div>
+    <div class=&quot;hub-icon-core&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-icon-core-2&quot;></div>
+    <div class=&quot;hub-icon-slot&quot; data-slot-id=&quot;platform-icon&quot; data-slot-role=&quot;icon&quot; data-slot-field=&quot;items[2].iconKey&quot; data-slot-item-id=&quot;platform&quot; data-slot-content-type=&quot;icon&quot; data-slot-provider=&quot;tabler-icons&quot; data-slot-required=&quot;true&quot;><svg data-ppt-kind=&quot;image&quot; data-ppt-name=&quot;hub-icon-2&quot; data-icon-key=&quot;network&quot;
+  xmlns=&quot;http://www.w3.org/2000/svg&quot;
+  width=&quot;24&quot;
+  height=&quot;24&quot;
+  viewBox=&quot;0 0 24 24&quot;
+  fill=&quot;none&quot;
+  stroke=&quot;currentColor&quot;
+  stroke-width=&quot;2&quot;
+  stroke-linecap=&quot;round&quot;
+  stroke-linejoin=&quot;round&quot;
+  class=&quot;hub-icon-svg&quot;
+>
+  
+  <path d=&quot;M6 9a6 6 0 1 0 12 0a6 6 0 0 0 -12 0&quot; />
+  <path d=&quot;M12 3c1.333 .333 2 2.333 2 6s-.667 5.667 -2 6&quot; />
+  <path d=&quot;M12 3c-1.333 .333 -2 2.333 -2 6s.667 5.667 2 6&quot; />
+  <path d=&quot;M6 9h12&quot; />
+  <path d=&quot;M3 20h7&quot; />
+  <path d=&quot;M14 20h7&quot; />
+  <path d=&quot;M10 20a2 2 0 1 0 4 0a2 2 0 0 0 -4 0&quot; />
+  <path d=&quot;M12 15v3&quot; />
+</svg></div>
+    <div class=&quot;ppagent-text-region hub-item-content hub-item-content-right&quot; data-ppagent-text-region data-slot-id=&quot;platform-content-region&quot; data-slot-role=&quot;text-region&quot; data-slot-field=&quot;items[2]&quot; data-slot-item-id=&quot;platform&quot; data-slot-region-id=&quot;content&quot; data-slot-content-type=&quot;text-region&quot; data-slot-safe-box=&quot;true&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;structured&quot; data-slot-list-policy=&quot;structured&quot; data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-default-id=&quot;heading-content-flow&quot; data-text-layout-compatible=&quot;heading-content-flow,statement-flow&quot; data-text-layout-content-roles=&quot;heading,body&quot;>
+    <div class=&quot;ppagent-text-layout ppagent-text-layout--heading-content-flow&quot; data-ppagent-text-layout data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-align=&quot;right&quot; data-text-layout-valign=&quot;middle&quot; data-text-layout-density=&quot;compact&quot; data-text-layout-tone=&quot;light&quot; data-text-layout-style=&quot;default&quot;><div class=&quot;ppagent-text-primitive ppagent-text-primitive--heading&quot; data-text-primitive=&quot;heading&quot; data-text-layout-part=&quot;heading&quot; data-text-layout-field=&quot;title&quot; data-text-primitive-font-tiers=&quot;22,20,18,16,14&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;hub-item-title-2&quot;>平台赋能</div><div class=&quot;ppagent-text-primitive ppagent-text-primitive--body&quot; data-text-primitive=&quot;body&quot; data-text-layout-part=&quot;body&quot; data-text-layout-field=&quot;body&quot; data-text-primitive-font-tiers=&quot;16,14,12&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;hub-item-body-2&quot;>连接资源并提升协同效率</div></div>
+  </div>
+  </article>
+    </section></body></html>"></iframe></section><section class="panel"><div class="label">替换紫 #6F42C1</div><iframe srcdoc="<!doctype html><html><head><meta charset=&quot;utf-8&quot;><style>html,body{margin:0;width:1170px;height:492px;overflow:hidden}/* ppagent-theme:resolved */:root{
+    --ppagent-font-body:&quot;Microsoft YaHei&quot;;
+    --ppagent-color-background:#FFFFFF;
+    --ppagent-color-surface:#FFFFFF;
+    --ppagent-color-primary:#6F42C1;
+    --ppagent-color-primary-deep:#402670;
+    --ppagent-color-primary-dark:#543293;
+    --ppagent-color-primary-light:#A082D6;
+    --ppagent-color-primary-pale:#CDBDE9;
+    --ppagent-color-primary-wash:#EEE8F8;
+    --ppagent-color-accent:#6F42C1;
+    --ppagent-color-accent-alt:#8964CC;
+    --ppagent-color-accent-soft:#E5DDF4;
+    --ppagent-color-cyan:#A386D7;
+    --ppagent-color-dark:#2B2B2B;
+    --ppagent-color-body:#404040;
+    --ppagent-color-muted:#6F6F6F;
+    --ppagent-color-line:#CBBBE9;
+    --ppagent-component-heading-size:22pt;
+    --ppagent-component-title-size:20pt;
+    --ppagent-component-item-title-size:18pt;
+    --ppagent-component-lead-size:16pt;
+    --ppagent-component-body-size:14pt;
+    --ppagent-component-label-size:14pt;
+    --ppagent-component-meta-size:12pt;
+  }
+    .ppagent-text-region{
+      box-sizing:border-box;
+      min-width:0;
+      min-height:0;
+    }
+    .ppagent-text-region > .ppagent-text-flow,
+    .ppagent-text-region > .ppagent-text-layout{
+      width:100%;
+      height:100%;
+    }
+    .ppagent-text-layout{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-layout-gap,10px);
+      width:100%;
+      height:100%;
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,&quot;Microsoft YaHei&quot;),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-align=&quot;center&quot;]{text-align:center}
+    .ppagent-text-layout[data-text-layout-align=&quot;right&quot;]{text-align:right}
+    .ppagent-text-layout[data-text-layout-valign=&quot;top&quot;]{justify-content:flex-start}
+    .ppagent-text-layout[data-text-layout-valign=&quot;bottom&quot;]{justify-content:flex-end}
+    .ppagent-text-layout[data-text-layout-density=&quot;compact&quot;]{--ppagent-text-layout-gap:6px;--ppagent-text-layout-item-gap:5px}
+    .ppagent-text-layout[data-text-layout-density=&quot;standard&quot;]{--ppagent-text-layout-gap:10px;--ppagent-text-layout-item-gap:8px}
+    .ppagent-text-layout[data-text-layout-density=&quot;loose&quot;]{--ppagent-text-layout-gap:15px;--ppagent-text-layout-item-gap:12px}
+    .ppagent-text-primitive{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      color:var(--ppagent-text-color,#46566a);
+      text-align:inherit;
+      white-space:pre-line;
+      overflow-wrap:break-word;
+    }
+    .ppagent-text-primitive--heading{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-text-primitive--body{font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.45}
+    .ppagent-text-primitive--list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px)}
+    .ppagent-text-list__item{box-sizing:border-box;min-width:0;margin:0;padding:0;overflow:visible;color:var(--ppagent-text-color,#46566a);font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.38;text-align:inherit;white-space:pre-line;overflow-wrap:break-word}
+    .ppagent-text-primitive--metric{color:var(--ppagent-value-color,#2f5ea8);font-size:var(--ppagent-component-heading-size,25pt);font-weight:700;line-height:1.08}
+    .ppagent-text-primitive--label{color:var(--ppagent-label-color,#60758d);font-size:var(--ppagent-component-label-size,17pt);font-weight:600;line-height:1.2}
+    .ppagent-text-primitive--annotation{color:var(--ppagent-annotation-color,#748495);font-size:var(--ppagent-component-meta-size,15pt);font-weight:400;line-height:1.3}
+    .ppagent-text-primitive--quote{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:500;line-height:1.35}
+    .ppagent-text-primitive--emphasis{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-title-size,23pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-structured-list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-structured-list__item{display:flex;flex-direction:column;gap:4px;min-width:0}
+    .ppagent-structured-list__item .ppagent-text-primitive--heading{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-metric-set{display:grid;grid-template-columns:repeat(var(--ppagent-metric-columns,2),minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0;align-items:start}
+    .ppagent-metric-set[data-metric-count=&quot;3&quot;]{--ppagent-metric-columns:3}
+    .ppagent-metric-set[data-metric-count=&quot;4&quot;]{--ppagent-metric-columns:4}
+    .ppagent-metric-set__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-key-value{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-key-value__row{display:grid;grid-template-columns:minmax(64px,.42fr) minmax(0,1fr);gap:10px;align-items:start;min-width:0}
+    .ppagent-key-value__row .ppagent-text-primitive--metric{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label,
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--annotation{text-align:right}
+    .ppagent-summary-information{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0}
+    .ppagent-summary-information__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-summary-information__item .ppagent-text-primitive--emphasis{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;]{
+      justify-content:flex-start;
+      gap:12px;
+      padding:18px;
+      color:var(--ppagent-color-body);
+      background:transparent;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive{color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--emphasis,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--quote{color:var(--ppagent-color-dark);font-weight:700;letter-spacing:-.25px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--body,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-list__item{font-size:max(15pt,var(--ppagent-component-body-size))}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--label{color:var(--ppagent-color-accent);font-size:max(15pt,var(--ppagent-component-label-size));font-weight:700;letter-spacing:.7px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--annotation{color:var(--ppagent-color-muted);font-size:max(15pt,var(--ppagent-component-meta-size))}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--metric{color:var(--ppagent-color-accent);font-weight:700;letter-spacing:-.5px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-list__item{position:relative;padding-left:17px;color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-list__item::before{content:&quot;&quot;;position:absolute;left:0;top:.68em;width:8px;height:2px;background:var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--heading-content-flow > .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--label-content-flow > .ppagent-text-primitive--label,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--heading-metric-content-flow > .ppagent-text-primitive--heading{padding-bottom:10px;border-bottom:2px solid var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-structured-list{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-structured-list__item{display:grid;grid-template-columns:minmax(82px,.42fr) minmax(0,1fr);gap:14px;padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-structured-list__item .ppagent-text-primitive--body{margin:0}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-metric-set{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-metric-set__item{padding:12px 14px 4px 0}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-metric-set__item + .ppagent-metric-set__item{padding-left:14px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-key-value{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-key-value__row{padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--quote-attribution-flow{position:relative;padding-left:52px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--quote-attribution-flow::before{content:&quot;“&quot;;position:absolute;left:16px;top:8px;color:var(--ppagent-color-accent);font-family:Georgia,serif;font-size:42pt;font-weight:700;line-height:1}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label{margin-top:auto;padding-top:10px;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-summary-information{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-summary-information__item{padding:10px 12px 8px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-summary-information__item:nth-child(even){padding-left:12px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout--value-label{
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-value-label-gap,5px);
+      padding:var(--ppagent-value-label-padding,5px);
+      text-align:center;
+    }
+    .ppagent-text-layout__value,
+    .ppagent-text-layout__label{
+      box-sizing:border-box;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:hidden;
+      text-align:inherit;
+    }
+    .ppagent-text-layout__value{
+      color:var(--ppagent-value-color,#2f5ea8);
+      font-size:var(--ppagent-component-lead-size,19pt);
+      font-weight:700;
+      line-height:1.15;
+    }
+    .ppagent-text-layout__label{
+      color:var(--ppagent-label-color,#60758d);
+      font-size:var(--ppagent-component-meta-size,15pt);
+      font-weight:400;
+      line-height:1.2;
+    }
+    .ppagent-text-flow{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-flow-gap,10px);
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,&quot;Microsoft YaHei&quot;),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-flow[data-text-flow-align=&quot;center&quot;]{text-align:center}
+    .ppagent-text-flow[data-text-flow-align=&quot;right&quot;]{text-align:right}
+    .ppagent-text-flow[data-text-flow-valign=&quot;top&quot;]{justify-content:flex-start}
+    .ppagent-text-flow[data-text-flow-valign=&quot;bottom&quot;]{justify-content:flex-end}
+    .ppagent-text-flow__title,
+    .ppagent-text-flow__body{
+      position:relative;
+      box-sizing:border-box;
+      flex:0 0 auto;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      text-align:inherit;
+    }
+    .ppagent-text-flow__title{
+      font-size:var(--ppagent-component-item-title-size,21pt);
+      font-weight:700;
+      line-height:1.2;
+      white-space:normal;
+      text-wrap:balance;
+    }
+    .ppagent-text-flow__body{
+      font-size:var(--ppagent-component-body-size,17pt);
+      font-weight:400;
+      line-height:1.45;
+      white-space:pre-line;
+    }
+    .ppagent-text-flow__separator{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      align-self:center;
+      width:var(--ppagent-text-flow-separator-width,54px);
+      height:var(--ppagent-text-flow-separator-height,4px);
+      border:0;
+      border-radius:99px;
+      background:var(--ppagent-text-flow-separator-color,#78aeef);
+    }
+  * { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { color: #543293; background: transparent; font-family: var(--ppagent-font-body, &quot;Microsoft YaHei&quot;), sans-serif; }
+.hub-review { position: relative; width: 1170px; height: 492px; overflow: hidden; background: transparent; }
+.hub-orbit { position: absolute; left: 50%; top: 50%; z-index: 0; width: 1px; height: 1px; }
+.hub-orbit-dot { position: absolute; left: calc(var(--dot-size) / -2); top: calc(var(--dot-size) / -2); width: var(--dot-size); height: var(--dot-size); border-radius: 50%; background: #CDBDE9; opacity: var(--dot-opacity); transform: rotate(var(--angle)) translateX(var(--radius)); }
+.hub-center-halo, .hub-center-ring, .hub-center-core { position: absolute; left: 50%; top: 50%; z-index: 1; border-radius: 50%; transform: translate(-50%, -50%); }
+.hub-center-halo { width: 276px; height: 276px; border: 1px solid #EEE8F8; background: #EEE8F8; }
+.hub-center-ring { z-index: 2; width: 242px; height: 242px; border: 2px solid #A082D6; background: #fff; }
+.hub-center-core { z-index: 3; width: 222px; height: 222px; border: 0; background: #6F42C1; box-shadow: 0 12px 28px rgba(111, 66, 193, .22); }
+.hub-center-content { position: absolute; left: 50%; top: calc(50% - 50px); z-index: 4; width: 198px; height: 100px; color: #fff; transform: translateX(-50%); --ppagent-text-layout-gap: 6px; --ppagent-heading-color: #fff; --ppagent-text-color: #fff; }
+.hub-center-content .ppagent-text-primitive--heading { line-height: 1.25; }
+.hub-center-content .ppagent-text-primitive--body { line-height: 1.28; text-wrap: balance; }
+.hub-review[data-odd=&quot;true&quot;] .hub-orbit, .hub-review[data-odd=&quot;true&quot;] .hub-center-halo, .hub-review[data-odd=&quot;true&quot;] .hub-center-ring, .hub-review[data-odd=&quot;true&quot;] .hub-center-core { top: 59%; }
+.hub-review[data-odd=&quot;true&quot;] .hub-center-content { top: calc(59% - 50px); }
+.hub-item { position: absolute; left: var(--left); top: var(--top); z-index: 5; width: var(--width); height: var(--height); }
+.hub-item-underlay, .hub-item-surface { position: absolute; top: 5px; bottom: 1px; border-radius: 17px; }
+.hub-item-underlay { background: #EEE8F8; }
+.hub-item-surface { top: 0; bottom: 6px; border: 1px solid #EEE8F8; background: #EEE8F8; box-shadow: 0 7px 16px rgba(111, 66, 193, .09); }
+.hub-item-left .hub-item-underlay, .hub-item-left .hub-item-surface { left: 70px; right: 0; }
+.hub-item-right .hub-item-underlay, .hub-item-right .hub-item-surface { left: 0; right: 70px; }
+.hub-item-top .hub-item-underlay, .hub-item-top .hub-item-surface { left: 78px; right: 0; }
+.hub-icon-halo, .hub-icon-core, .hub-icon-slot { position: absolute; top: 50%; border-radius: 50%; transform: translateY(-50%); }
+.hub-icon-halo { z-index: 2; width: 74px; height: 74px; border: 1px solid #EEE8F8; background: #fff; box-shadow: 0 7px 16px rgba(111, 66, 193, .1); }
+.hub-icon-core { z-index: 3; width: 54px; height: 54px; border: 0; background: #6F42C1; }
+.hub-icon-slot { z-index: 4; display: grid; place-items: center; width: 38px; height: 38px; color: #fff; }
+.hub-item-left .hub-icon-halo, .hub-item-top .hub-icon-halo { left: 0; }
+.hub-item-left .hub-icon-core, .hub-item-top .hub-icon-core { left: 10px; }
+.hub-item-left .hub-icon-slot, .hub-item-top .hub-icon-slot { left: 18px; }
+.hub-item-right .hub-icon-halo { right: 0; }
+.hub-item-right .hub-icon-core { right: 10px; }
+.hub-item-right .hub-icon-slot { right: 18px; }
+.hub-icon-svg { width: 34px; height: 34px; color: #fff; stroke: currentColor; }
+.hub-icon-fallback { display: block; width: 12px; height: 12px; border: 2px solid #fff; border-radius: 50%; background: transparent; }
+.hub-item-content { position: absolute; top: 2px; z-index: 6; height: 76px; --ppagent-text-layout-gap: 2px; --ppagent-heading-color: #543293; --ppagent-text-color: #543293; }
+.hub-item-content .ppagent-text-primitive--heading { line-height: 1.18; }
+.hub-item-content .ppagent-text-primitive--body { line-height: 1.16; text-wrap: balance; }
+.hub-item-left .hub-item-content { left: 94px; right: 18px; }
+.hub-item-right .hub-item-content { left: 18px; right: 94px; }
+.hub-item-top .hub-item-content { left: 100px; right: 18px; }
+.hub-review[data-item-count=&quot;7&quot;] .hub-center-halo, .hub-review[data-item-count=&quot;8&quot;] .hub-center-halo { width: 260px; height: 260px; }
+.hub-review[data-item-count=&quot;7&quot;] .hub-center-ring, .hub-review[data-item-count=&quot;8&quot;] .hub-center-ring { width: 230px; height: 230px; }
+.hub-review[data-item-count=&quot;7&quot;] .hub-center-core, .hub-review[data-item-count=&quot;8&quot;] .hub-center-core { width: 210px; height: 210px; }
+</style></head><body><section class=&quot;hub-review&quot; data-ppt-root data-item-count=&quot;3&quot; data-odd=&quot;true&quot;>
+      <div class=&quot;hub-orbit&quot; aria-hidden=&quot;true&quot;><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:0.000deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-0&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:12.857deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-1&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:25.714deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-2&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:38.571deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-3&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:51.429deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-4&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:64.286deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-5&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:77.143deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-6&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:90.000deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-7&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:102.857deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-8&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:115.714deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-9&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:128.571deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-10&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:141.429deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-11&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:154.286deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-12&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:167.143deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-13&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:180.000deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-14&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:192.857deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-15&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:205.714deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-16&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:218.571deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-17&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:231.429deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-18&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:244.286deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-19&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:257.143deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-20&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:270.000deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-21&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:282.857deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-22&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:295.714deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-23&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:308.571deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-24&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:321.429deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-25&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:334.286deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-26&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:347.143deg;--radius:132px;--dot-size:5px;--dot-opacity:0.34&quot; data-ring=&quot;0&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-0-27&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:0.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-0&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:10.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-1&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:20.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-2&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:30.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-3&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:40.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-4&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:50.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-5&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:60.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-6&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:70.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-7&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:80.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-8&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:90.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-9&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:100.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-10&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:110.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-11&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:120.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-12&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:130.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-13&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:140.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-14&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:150.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-15&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:160.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-16&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:170.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-17&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:180.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-18&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:190.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-19&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:200.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-20&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:210.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-21&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:220.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-22&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:230.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-23&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:240.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-24&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:250.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-25&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:260.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-26&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:270.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-27&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:280.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-28&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:290.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-29&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:300.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-30&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:310.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-31&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:320.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-32&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:330.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-33&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:340.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-34&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:350.000deg;--radius:150px;--dot-size:4px;--dot-opacity:0.23&quot; data-ring=&quot;1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-1-35&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:0.000deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-0&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:8.182deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-1&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:16.364deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-2&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:24.545deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-3&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:32.727deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-4&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:40.909deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-5&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:49.091deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-6&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:57.273deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-7&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:65.455deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-8&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:73.636deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-9&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:81.818deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-10&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:90.000deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-11&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:98.182deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-12&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:106.364deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-13&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:114.545deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-14&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:122.727deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-15&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:130.909deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-16&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:139.091deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-17&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:147.273deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-18&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:155.455deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-19&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:163.636deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-20&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:171.818deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-21&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:180.000deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-22&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:188.182deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-23&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:196.364deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-24&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:204.545deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-25&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:212.727deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-26&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:220.909deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-27&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:229.091deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-28&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:237.273deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-29&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:245.455deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-30&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:253.636deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-31&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:261.818deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-32&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:270.000deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-33&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:278.182deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-34&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:286.364deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-35&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:294.545deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-36&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:302.727deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-37&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:310.909deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-38&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:319.091deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-39&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:327.273deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-40&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:335.455deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-41&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:343.636deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-42&quot;></i><i class=&quot;hub-orbit-dot&quot; style=&quot;--angle:351.818deg;--radius:168px;--dot-size:3px;--dot-opacity:0.14&quot; data-ring=&quot;2&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-orbit-dot-2-43&quot;></i></div>
+      <div class=&quot;hub-center-halo&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-center-halo&quot;></div>
+      <div class=&quot;hub-center-ring&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-center-ring&quot;></div>
+      <div class=&quot;hub-center-core&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-shadow=&quot;shadow-sm&quot; data-ppt-name=&quot;hub-center-core&quot;></div>
+      <div class=&quot;ppagent-text-region hub-center-content&quot; data-ppagent-text-region data-slot-id=&quot;center-content-region&quot; data-slot-role=&quot;text-region&quot; data-slot-field=&quot;center&quot; data-slot-item-id=&quot;center&quot; data-slot-region-id=&quot;center&quot; data-slot-content-type=&quot;text-region&quot; data-slot-safe-box=&quot;true&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;structured&quot; data-slot-list-policy=&quot;structured&quot; data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-default-id=&quot;heading-content-flow&quot; data-text-layout-compatible=&quot;heading-content-flow,statement-flow&quot; data-text-layout-content-roles=&quot;heading,body&quot;>
+    <div class=&quot;ppagent-text-layout ppagent-text-layout--heading-content-flow&quot; data-ppagent-text-layout data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-align=&quot;center&quot; data-text-layout-valign=&quot;middle&quot; data-text-layout-density=&quot;compact&quot; data-text-layout-tone=&quot;light&quot; data-text-layout-style=&quot;default&quot;><div class=&quot;ppagent-text-primitive ppagent-text-primitive--heading&quot; data-text-primitive=&quot;heading&quot; data-text-layout-part=&quot;heading&quot; data-text-layout-field=&quot;title&quot; data-text-primitive-font-tiers=&quot;22,20,18,16,14&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;hub-center-title&quot;>核心能力</div><div class=&quot;ppagent-text-primitive ppagent-text-primitive--body&quot; data-text-primitive=&quot;body&quot; data-text-layout-part=&quot;body&quot; data-text-layout-field=&quot;body&quot; data-text-primitive-font-tiers=&quot;16,14,12&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;hub-center-body&quot;>统一目标 · 协同资源</div></div>
+  </div>
+      <article class=&quot;hub-item hub-item-top&quot; style=&quot;--left:397px;--top:4px;--width:376px;--height:86px&quot; data-item-index=&quot;0&quot;>
+    <div class=&quot;hub-item-underlay&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;hub-item-underlay-0&quot;></div>
+    <div class=&quot;hub-item-surface&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-shadow=&quot;shadow-sm&quot; data-ppt-name=&quot;hub-item-surface-0&quot;></div>
+    <div class=&quot;hub-icon-halo&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-icon-halo-0&quot;></div>
+    <div class=&quot;hub-icon-core&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-icon-core-0&quot;></div>
+    <div class=&quot;hub-icon-slot&quot; data-slot-id=&quot;strategy-icon&quot; data-slot-role=&quot;icon&quot; data-slot-field=&quot;items[0].iconKey&quot; data-slot-item-id=&quot;strategy&quot; data-slot-content-type=&quot;icon&quot; data-slot-provider=&quot;tabler-icons&quot; data-slot-required=&quot;true&quot;><svg data-ppt-kind=&quot;image&quot; data-ppt-name=&quot;hub-icon-0&quot; data-icon-key=&quot;target&quot;
+  xmlns=&quot;http://www.w3.org/2000/svg&quot;
+  width=&quot;24&quot;
+  height=&quot;24&quot;
+  viewBox=&quot;0 0 24 24&quot;
+  fill=&quot;none&quot;
+  stroke=&quot;currentColor&quot;
+  stroke-width=&quot;2&quot;
+  stroke-linecap=&quot;round&quot;
+  stroke-linejoin=&quot;round&quot;
+  class=&quot;hub-icon-svg&quot;
+>
+  
+  <path d=&quot;M11 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0&quot; />
+  <path d=&quot;M7 12a5 5 0 1 0 10 0a5 5 0 1 0 -10 0&quot; />
+  <path d=&quot;M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0&quot; />
+</svg></div>
+    <div class=&quot;ppagent-text-region hub-item-content hub-item-content-top&quot; data-ppagent-text-region data-slot-id=&quot;strategy-content-region&quot; data-slot-role=&quot;text-region&quot; data-slot-field=&quot;items[0]&quot; data-slot-item-id=&quot;strategy&quot; data-slot-region-id=&quot;content&quot; data-slot-content-type=&quot;text-region&quot; data-slot-safe-box=&quot;true&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;structured&quot; data-slot-list-policy=&quot;structured&quot; data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-default-id=&quot;heading-content-flow&quot; data-text-layout-compatible=&quot;heading-content-flow,statement-flow&quot; data-text-layout-content-roles=&quot;heading,body&quot;>
+    <div class=&quot;ppagent-text-layout ppagent-text-layout--heading-content-flow&quot; data-ppagent-text-layout data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-align=&quot;left&quot; data-text-layout-valign=&quot;middle&quot; data-text-layout-density=&quot;compact&quot; data-text-layout-tone=&quot;light&quot; data-text-layout-style=&quot;default&quot;><div class=&quot;ppagent-text-primitive ppagent-text-primitive--heading&quot; data-text-primitive=&quot;heading&quot; data-text-layout-part=&quot;heading&quot; data-text-layout-field=&quot;title&quot; data-text-primitive-font-tiers=&quot;22,20,18,16,14&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;hub-item-title-0&quot;>战略牵引</div><div class=&quot;ppagent-text-primitive ppagent-text-primitive--body&quot; data-text-primitive=&quot;body&quot; data-text-layout-part=&quot;body&quot; data-text-layout-field=&quot;body&quot; data-text-primitive-font-tiers=&quot;16,14,12&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;hub-item-body-0&quot;>明确方向并形成共同目标</div></div>
+  </div>
+  </article><article class=&quot;hub-item hub-item-left&quot; style=&quot;--left:12px;--top:255px;--width:382px;--height:86px&quot; data-item-index=&quot;1&quot;>
+    <div class=&quot;hub-item-underlay&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;hub-item-underlay-1&quot;></div>
+    <div class=&quot;hub-item-surface&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-shadow=&quot;shadow-sm&quot; data-ppt-name=&quot;hub-item-surface-1&quot;></div>
+    <div class=&quot;hub-icon-halo&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-icon-halo-1&quot;></div>
+    <div class=&quot;hub-icon-core&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-icon-core-1&quot;></div>
+    <div class=&quot;hub-icon-slot&quot; data-slot-id=&quot;data-icon&quot; data-slot-role=&quot;icon&quot; data-slot-field=&quot;items[1].iconKey&quot; data-slot-item-id=&quot;data&quot; data-slot-content-type=&quot;icon&quot; data-slot-provider=&quot;tabler-icons&quot; data-slot-required=&quot;true&quot;><svg data-ppt-kind=&quot;image&quot; data-ppt-name=&quot;hub-icon-1&quot; data-icon-key=&quot;database&quot;
+  xmlns=&quot;http://www.w3.org/2000/svg&quot;
+  width=&quot;24&quot;
+  height=&quot;24&quot;
+  viewBox=&quot;0 0 24 24&quot;
+  fill=&quot;none&quot;
+  stroke=&quot;currentColor&quot;
+  stroke-width=&quot;2&quot;
+  stroke-linecap=&quot;round&quot;
+  stroke-linejoin=&quot;round&quot;
+  class=&quot;hub-icon-svg&quot;
+>
+  
+  <path d=&quot;M4 6a8 3 0 1 0 16 0a8 3 0 1 0 -16 0&quot; />
+  <path d=&quot;M4 6v6a8 3 0 0 0 16 0v-6&quot; />
+  <path d=&quot;M4 12v6a8 3 0 0 0 16 0v-6&quot; />
+</svg></div>
+    <div class=&quot;ppagent-text-region hub-item-content hub-item-content-left&quot; data-ppagent-text-region data-slot-id=&quot;data-content-region&quot; data-slot-role=&quot;text-region&quot; data-slot-field=&quot;items[1]&quot; data-slot-item-id=&quot;data&quot; data-slot-region-id=&quot;content&quot; data-slot-content-type=&quot;text-region&quot; data-slot-safe-box=&quot;true&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;structured&quot; data-slot-list-policy=&quot;structured&quot; data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-default-id=&quot;heading-content-flow&quot; data-text-layout-compatible=&quot;heading-content-flow,statement-flow&quot; data-text-layout-content-roles=&quot;heading,body&quot;>
+    <div class=&quot;ppagent-text-layout ppagent-text-layout--heading-content-flow&quot; data-ppagent-text-layout data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-align=&quot;left&quot; data-text-layout-valign=&quot;middle&quot; data-text-layout-density=&quot;compact&quot; data-text-layout-tone=&quot;light&quot; data-text-layout-style=&quot;default&quot;><div class=&quot;ppagent-text-primitive ppagent-text-primitive--heading&quot; data-text-primitive=&quot;heading&quot; data-text-layout-part=&quot;heading&quot; data-text-layout-field=&quot;title&quot; data-text-primitive-font-tiers=&quot;22,20,18,16,14&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;hub-item-title-1&quot;>数据支撑</div><div class=&quot;ppagent-text-primitive ppagent-text-primitive--body&quot; data-text-primitive=&quot;body&quot; data-text-layout-part=&quot;body&quot; data-text-layout-field=&quot;body&quot; data-text-primitive-font-tiers=&quot;16,14,12&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;hub-item-body-1&quot;>汇集信息并提供可靠依据</div></div>
+  </div>
+  </article><article class=&quot;hub-item hub-item-right&quot; style=&quot;--left:776px;--top:255px;--width:382px;--height:86px&quot; data-item-index=&quot;2&quot;>
+    <div class=&quot;hub-item-underlay&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;hub-item-underlay-2&quot;></div>
+    <div class=&quot;hub-item-surface&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-shadow=&quot;shadow-sm&quot; data-ppt-name=&quot;hub-item-surface-2&quot;></div>
+    <div class=&quot;hub-icon-halo&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-icon-halo-2&quot;></div>
+    <div class=&quot;hub-icon-core&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;hub-icon-core-2&quot;></div>
+    <div class=&quot;hub-icon-slot&quot; data-slot-id=&quot;platform-icon&quot; data-slot-role=&quot;icon&quot; data-slot-field=&quot;items[2].iconKey&quot; data-slot-item-id=&quot;platform&quot; data-slot-content-type=&quot;icon&quot; data-slot-provider=&quot;tabler-icons&quot; data-slot-required=&quot;true&quot;><svg data-ppt-kind=&quot;image&quot; data-ppt-name=&quot;hub-icon-2&quot; data-icon-key=&quot;network&quot;
+  xmlns=&quot;http://www.w3.org/2000/svg&quot;
+  width=&quot;24&quot;
+  height=&quot;24&quot;
+  viewBox=&quot;0 0 24 24&quot;
+  fill=&quot;none&quot;
+  stroke=&quot;currentColor&quot;
+  stroke-width=&quot;2&quot;
+  stroke-linecap=&quot;round&quot;
+  stroke-linejoin=&quot;round&quot;
+  class=&quot;hub-icon-svg&quot;
+>
+  
+  <path d=&quot;M6 9a6 6 0 1 0 12 0a6 6 0 0 0 -12 0&quot; />
+  <path d=&quot;M12 3c1.333 .333 2 2.333 2 6s-.667 5.667 -2 6&quot; />
+  <path d=&quot;M12 3c-1.333 .333 -2 2.333 -2 6s.667 5.667 2 6&quot; />
+  <path d=&quot;M6 9h12&quot; />
+  <path d=&quot;M3 20h7&quot; />
+  <path d=&quot;M14 20h7&quot; />
+  <path d=&quot;M10 20a2 2 0 1 0 4 0a2 2 0 0 0 -4 0&quot; />
+  <path d=&quot;M12 15v3&quot; />
+</svg></div>
+    <div class=&quot;ppagent-text-region hub-item-content hub-item-content-right&quot; data-ppagent-text-region data-slot-id=&quot;platform-content-region&quot; data-slot-role=&quot;text-region&quot; data-slot-field=&quot;items[2]&quot; data-slot-item-id=&quot;platform&quot; data-slot-region-id=&quot;content&quot; data-slot-content-type=&quot;text-region&quot; data-slot-safe-box=&quot;true&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;structured&quot; data-slot-list-policy=&quot;structured&quot; data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-default-id=&quot;heading-content-flow&quot; data-text-layout-compatible=&quot;heading-content-flow,statement-flow&quot; data-text-layout-content-roles=&quot;heading,body&quot;>
+    <div class=&quot;ppagent-text-layout ppagent-text-layout--heading-content-flow&quot; data-ppagent-text-layout data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-align=&quot;right&quot; data-text-layout-valign=&quot;middle&quot; data-text-layout-density=&quot;compact&quot; data-text-layout-tone=&quot;light&quot; data-text-layout-style=&quot;default&quot;><div class=&quot;ppagent-text-primitive ppagent-text-primitive--heading&quot; data-text-primitive=&quot;heading&quot; data-text-layout-part=&quot;heading&quot; data-text-layout-field=&quot;title&quot; data-text-primitive-font-tiers=&quot;22,20,18,16,14&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;hub-item-title-2&quot;>平台赋能</div><div class=&quot;ppagent-text-primitive ppagent-text-primitive--body&quot; data-text-primitive=&quot;body&quot; data-text-layout-part=&quot;body&quot; data-text-layout-field=&quot;body&quot; data-text-primitive-font-tiers=&quot;16,14,12&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;hub-item-body-2&quot;>连接资源并提升协同效率</div></div>
+  </div>
+  </article>
+    </section></body></html>"></iframe></section></div></body></html>

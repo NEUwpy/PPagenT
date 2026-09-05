@@ -13,7 +13,7 @@ import {
   resolveSourceSlide,
 } from "./logic-dashboard-data.mjs";
 import { northeasternUniversityTheme } from "../runtime/skins/northeastern-university-theme.mjs";
-import { htmlComponentThemeCss } from "../visual-runtime/html-component-theme.mjs";
+import { compileHtmlComponentTheme, htmlComponentThemeCss } from "../visual-runtime/html-component-theme.mjs";
 import { htmlTextFlowCss } from "../visual-runtime/text-flow.mjs";
 
 function option(name, fallback) {
@@ -248,7 +248,13 @@ async function componentPreviewHtml(library, assetId, searchParams) {
     if (relativeCssPath.startsWith("..") || path.isAbsolute(relativeCssPath)) return null;
     css = await fs.readFile(cssPath, "utf8");
   }
-  const markup = component.renderMarkup(previewParameters);
+  const compiledTheme = compileHtmlComponentTheme({
+    markup: component.renderMarkup(previewParameters),
+    css,
+    theme: northeasternUniversityTheme,
+  });
+  const markup = compiledTheme.markup;
+  css = compiledTheme.css;
   const stateLabel = (resolved.record.componentControls ?? []).map((control) => `${control.label} ${selection[control.key]}`).join(" · ");
   const designWidth = Number(component.designFrame?.width);
   const designHeight = Number(component.designFrame?.height);

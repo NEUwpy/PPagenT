@@ -1,0 +1,581 @@
+<!doctype html><html><head><meta charset="utf-8"><style>body{margin:0;padding:14px;background:#f1f1f1;font-family:"Microsoft YaHei"}.row{display:flex;gap:14px}.panel{background:#fff}.label{height:30px;padding-left:10px;font-weight:700;line-height:30px;color:#333}iframe{display:block;width:1170px;height:492px;border:0}</style></head><body><div class="row"><section class="panel"><div class="label">默认蓝 #315F91</div><iframe srcdoc="<!doctype html><html><head><meta charset=&quot;utf-8&quot;><style>html,body{margin:0;width:1170px;height:492px;overflow:hidden}/* ppagent-theme:resolved */:root{
+    --ppagent-font-body:&quot;Microsoft YaHei&quot;;
+    --ppagent-color-background:#FFFFFF;
+    --ppagent-color-surface:#FFFFFF;
+    --ppagent-color-primary:#315F91;
+    --ppagent-color-primary-deep:#1C3754;
+    --ppagent-color-primary-dark:#25486E;
+    --ppagent-color-primary-light:#7795B6;
+    --ppagent-color-primary-pale:#B7C7D9;
+    --ppagent-color-primary-wash:#E6ECF2;
+    --ppagent-color-accent:#315F91;
+    --ppagent-color-accent-alt:#567CA5;
+    --ppagent-color-accent-soft:#DAE2EB;
+    --ppagent-color-cyan:#7B99B9;
+    --ppagent-color-dark:#2B2B2B;
+    --ppagent-color-body:#404040;
+    --ppagent-color-muted:#6F6F6F;
+    --ppagent-color-line:#B5C5D7;
+    --ppagent-component-heading-size:22pt;
+    --ppagent-component-title-size:20pt;
+    --ppagent-component-item-title-size:18pt;
+    --ppagent-component-lead-size:16pt;
+    --ppagent-component-body-size:14pt;
+    --ppagent-component-label-size:14pt;
+    --ppagent-component-meta-size:12pt;
+  }
+    .ppagent-text-region{
+      box-sizing:border-box;
+      min-width:0;
+      min-height:0;
+    }
+    .ppagent-text-region > .ppagent-text-flow,
+    .ppagent-text-region > .ppagent-text-layout{
+      width:100%;
+      height:100%;
+    }
+    .ppagent-text-layout{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-layout-gap,10px);
+      width:100%;
+      height:100%;
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,&quot;Microsoft YaHei&quot;),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-align=&quot;center&quot;]{text-align:center}
+    .ppagent-text-layout[data-text-layout-align=&quot;right&quot;]{text-align:right}
+    .ppagent-text-layout[data-text-layout-valign=&quot;top&quot;]{justify-content:flex-start}
+    .ppagent-text-layout[data-text-layout-valign=&quot;bottom&quot;]{justify-content:flex-end}
+    .ppagent-text-layout[data-text-layout-density=&quot;compact&quot;]{--ppagent-text-layout-gap:6px;--ppagent-text-layout-item-gap:5px}
+    .ppagent-text-layout[data-text-layout-density=&quot;standard&quot;]{--ppagent-text-layout-gap:10px;--ppagent-text-layout-item-gap:8px}
+    .ppagent-text-layout[data-text-layout-density=&quot;loose&quot;]{--ppagent-text-layout-gap:15px;--ppagent-text-layout-item-gap:12px}
+    .ppagent-text-primitive{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      color:var(--ppagent-text-color,#46566a);
+      text-align:inherit;
+      white-space:pre-line;
+      overflow-wrap:break-word;
+    }
+    .ppagent-text-primitive--heading{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-text-primitive--body{font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.45}
+    .ppagent-text-primitive--list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px)}
+    .ppagent-text-list__item{box-sizing:border-box;min-width:0;margin:0;padding:0;overflow:visible;color:var(--ppagent-text-color,#46566a);font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.38;text-align:inherit;white-space:pre-line;overflow-wrap:break-word}
+    .ppagent-text-primitive--metric{color:var(--ppagent-value-color,#2f5ea8);font-size:var(--ppagent-component-heading-size,25pt);font-weight:700;line-height:1.08}
+    .ppagent-text-primitive--label{color:var(--ppagent-label-color,#60758d);font-size:var(--ppagent-component-label-size,17pt);font-weight:600;line-height:1.2}
+    .ppagent-text-primitive--annotation{color:var(--ppagent-annotation-color,#748495);font-size:var(--ppagent-component-meta-size,15pt);font-weight:400;line-height:1.3}
+    .ppagent-text-primitive--quote{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:500;line-height:1.35}
+    .ppagent-text-primitive--emphasis{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-title-size,23pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-structured-list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-structured-list__item{display:flex;flex-direction:column;gap:4px;min-width:0}
+    .ppagent-structured-list__item .ppagent-text-primitive--heading{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-metric-set{display:grid;grid-template-columns:repeat(var(--ppagent-metric-columns,2),minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0;align-items:start}
+    .ppagent-metric-set[data-metric-count=&quot;3&quot;]{--ppagent-metric-columns:3}
+    .ppagent-metric-set[data-metric-count=&quot;4&quot;]{--ppagent-metric-columns:4}
+    .ppagent-metric-set__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-key-value{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-key-value__row{display:grid;grid-template-columns:minmax(64px,.42fr) minmax(0,1fr);gap:10px;align-items:start;min-width:0}
+    .ppagent-key-value__row .ppagent-text-primitive--metric{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label,
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--annotation{text-align:right}
+    .ppagent-summary-information{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0}
+    .ppagent-summary-information__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-summary-information__item .ppagent-text-primitive--emphasis{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;]{
+      justify-content:flex-start;
+      gap:12px;
+      padding:18px;
+      color:var(--ppagent-color-body);
+      background:transparent;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive{color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--emphasis,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--quote{color:var(--ppagent-color-dark);font-weight:700;letter-spacing:-.25px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--body,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-list__item{font-size:max(15pt,var(--ppagent-component-body-size))}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--label{color:var(--ppagent-color-accent);font-size:max(15pt,var(--ppagent-component-label-size));font-weight:700;letter-spacing:.7px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--annotation{color:var(--ppagent-color-muted);font-size:max(15pt,var(--ppagent-component-meta-size))}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--metric{color:var(--ppagent-color-accent);font-weight:700;letter-spacing:-.5px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-list__item{position:relative;padding-left:17px;color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-list__item::before{content:&quot;&quot;;position:absolute;left:0;top:.68em;width:8px;height:2px;background:var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--heading-content-flow > .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--label-content-flow > .ppagent-text-primitive--label,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--heading-metric-content-flow > .ppagent-text-primitive--heading{padding-bottom:10px;border-bottom:2px solid var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-structured-list{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-structured-list__item{display:grid;grid-template-columns:minmax(82px,.42fr) minmax(0,1fr);gap:14px;padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-structured-list__item .ppagent-text-primitive--body{margin:0}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-metric-set{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-metric-set__item{padding:12px 14px 4px 0}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-metric-set__item + .ppagent-metric-set__item{padding-left:14px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-key-value{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-key-value__row{padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--quote-attribution-flow{position:relative;padding-left:52px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--quote-attribution-flow::before{content:&quot;“&quot;;position:absolute;left:16px;top:8px;color:var(--ppagent-color-accent);font-family:Georgia,serif;font-size:42pt;font-weight:700;line-height:1}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label{margin-top:auto;padding-top:10px;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-summary-information{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-summary-information__item{padding:10px 12px 8px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-summary-information__item:nth-child(even){padding-left:12px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout--value-label{
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-value-label-gap,5px);
+      padding:var(--ppagent-value-label-padding,5px);
+      text-align:center;
+    }
+    .ppagent-text-layout__value,
+    .ppagent-text-layout__label{
+      box-sizing:border-box;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:hidden;
+      text-align:inherit;
+    }
+    .ppagent-text-layout__value{
+      color:var(--ppagent-value-color,#2f5ea8);
+      font-size:var(--ppagent-component-lead-size,19pt);
+      font-weight:700;
+      line-height:1.15;
+    }
+    .ppagent-text-layout__label{
+      color:var(--ppagent-label-color,#60758d);
+      font-size:var(--ppagent-component-meta-size,15pt);
+      font-weight:400;
+      line-height:1.2;
+    }
+    .ppagent-text-flow{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-flow-gap,10px);
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,&quot;Microsoft YaHei&quot;),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-flow[data-text-flow-align=&quot;center&quot;]{text-align:center}
+    .ppagent-text-flow[data-text-flow-align=&quot;right&quot;]{text-align:right}
+    .ppagent-text-flow[data-text-flow-valign=&quot;top&quot;]{justify-content:flex-start}
+    .ppagent-text-flow[data-text-flow-valign=&quot;bottom&quot;]{justify-content:flex-end}
+    .ppagent-text-flow__title,
+    .ppagent-text-flow__body{
+      position:relative;
+      box-sizing:border-box;
+      flex:0 0 auto;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      text-align:inherit;
+    }
+    .ppagent-text-flow__title{
+      font-size:var(--ppagent-component-item-title-size,21pt);
+      font-weight:700;
+      line-height:1.2;
+      white-space:normal;
+      text-wrap:balance;
+    }
+    .ppagent-text-flow__body{
+      font-size:var(--ppagent-component-body-size,17pt);
+      font-weight:400;
+      line-height:1.45;
+      white-space:pre-line;
+    }
+    .ppagent-text-flow__separator{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      align-self:center;
+      width:var(--ppagent-text-flow-separator-width,54px);
+      height:var(--ppagent-text-flow-separator-height,4px);
+      border:0;
+      border-radius:99px;
+      background:var(--ppagent-text-flow-separator-color,#78aeef);
+    }
+  * { box-sizing: border-box; }
+:root { font-family: var(--ppagent-font-body, &quot;Microsoft YaHei&quot;), &quot;Noto Sans CJK SC&quot;, sans-serif; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { background: #fff; color: #315F91; }
+.phase-gates-review { position: relative; width: 1170px; height: 492px; overflow: hidden; background: #fff; }
+.flow-geometry,
+.gate-geometry { position: absolute; inset: 0; width: 1170px; height: 492px; overflow: visible; pointer-events: none; }
+.flow-geometry { z-index: 1; }
+.flow-bank { fill: #fff; stroke: #E6ECF2; stroke-width: 2px; stroke-linejoin: round; }
+.flow-phase { stroke: #fff; stroke-width: 5px; stroke-linejoin: round; }
+.flow-centerline { fill: none; stroke: rgba(49, 95, 145, .34); stroke-width: 2px; stroke-dasharray: 2 9; stroke-linecap: round; }
+.phase-index { position: absolute; z-index: 3; height: 20px; overflow: hidden; color: #315F91; font-size: var(--ppagent-component-annotation-size, 12pt); font-weight: 800; line-height: 20px; text-align: center; letter-spacing: .12em; white-space: nowrap; }
+.phase-content { position: absolute; z-index: 3; display: block; overflow: hidden; padding: 5px 8px; --ppagent-text-layout-gap: 6px; --ppagent-heading-color: #25486E; --ppagent-text-color: #315F91; }
+.phase-content .ppagent-text-primitive--heading { font-size: var(--ppagent-component-item-title-size, 18pt); line-height: 1.12; text-wrap: balance; }
+.phase-content .ppagent-text-primitive--body,
+.phase-content .ppagent-text-list { font-size: var(--ppagent-component-body-size, 14pt); line-height: 1.2; text-wrap: balance; }
+.gate { position: absolute; inset: 0; z-index: 4; }
+.gate-geometry { z-index: 4; }
+.gate-plane { fill: rgba(255, 255, 255, .42); stroke: none; }
+.gate-i-beam { fill: #315F91; stroke: none; }
+.gate-label-link { fill: none; stroke: #7795B6; stroke-width: 1.5px; stroke-dasharray: 5 6; stroke-linecap: round; }
+.gate-check { position: absolute; z-index: 6; display: grid; place-items: center; border: 3px solid #fff; border-radius: 8px; background: #315F91; color: #fff; font-size: var(--ppagent-component-body-size, 14pt); font-weight: 800; line-height: 1; text-align: center; white-space: nowrap; }
+.gate-tag { position: absolute; z-index: 6; height: 18px; overflow: hidden; color: #315F91; font-size: var(--ppagent-component-annotation-size, 12pt); font-weight: 800; line-height: 18px; text-align: center; letter-spacing: .08em; white-space: nowrap; }
+.gate-content-surface { position: absolute; z-index: 5; border-radius: 12px; background: #E6ECF2; }
+.gate-content { position: absolute; z-index: 6; display: block; overflow: hidden; padding: 6px 9px; --ppagent-text-layout-gap: 4px; --ppagent-heading-color: #315F91; --ppagent-text-color: #315F91; }
+.gate-content .ppagent-text-primitive--heading { font-size: var(--ppagent-component-body-size, 14pt); line-height: 1.1; text-wrap: balance; }
+.gate-content .ppagent-text-primitive--body { font-size: var(--ppagent-component-meta-size, 13pt); line-height: 1.14; text-wrap: balance; }
+.phase-gates-review[data-phase-count=&quot;5&quot;] .phase-content { padding-inline: 3px; --ppagent-text-layout-gap: 4px; }
+.phase-gates-review[data-phase-count=&quot;5&quot;] .phase-content .ppagent-text-primitive--heading { font-size: var(--ppagent-component-body-size, 17pt); }
+.phase-gates-review[data-phase-count=&quot;5&quot;] .gate-content { padding-inline: 5px; }
+</style></head><body><section class=&quot;phase-gates-review&quot; data-ppt-root data-phase-count=&quot;3&quot;>
+      <svg class=&quot;flow-geometry&quot; viewBox=&quot;0 0 1170 492&quot; preserveAspectRatio=&quot;none&quot; aria-hidden=&quot;true&quot;>
+    <path class=&quot;flow-bank&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;flow-bank&quot; d=&quot;M 44.6 448.1 L 90.8 460.2 L 135.7 464.5 L 178 461.8 L 217 453.3 L 252.5 440.9 L 284.7 426.1 L 314.3 410.3 L 342.1 394.3 L 368.7 379 L 394.5 365.1 L 420 353.1 L 445.8 343.4 L 472.4 336.4 L 500.7 332.4 L 540 331.5 L 587.3 326.7 L 630.5 316.9 L 669.8 303.3 L 705.8 287.1 L 739.3 269.5 L 771.6 251.3 L 803.6 233.4 L 836.8 216.2 L 872.2 200.1 L 911.2 185.7 L 955 173.4 L 1004.9 163.9 L 1062.1 158 L 1062.6 170.9 L 1137.3 108.5 L 1057.4 53.1 L 1057.9 66 L 993.2 70.3 L 935.2 78.7 L 883 90.7 L 836.2 105.3 L 794 121.6 L 755.8 138.6 L 721 155.3 L 688.9 170.8 L 658.8 184.1 L 629.7 194.9 L 600.9 202.8 L 570.9 207.6 L 538 208.9 L 496.3 207.5 L 452.2 210.6 L 411.2 218.4 L 373.3 229.6 L 338.4 243 L 306.4 257.3 L 276.8 271.4 L 249.6 284.5 L 224.4 295.5 L 201.3 303.9 L 180.3 309.4 L 160.8 311.8 L 142 311.4 L 122.1 307.7 L 99.4 299.9 Z&quot;></path>
+    <path class=&quot;flow-phase&quot; style=&quot;fill:#E6ECF2&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;flow-phase-1&quot; d=&quot;M 47.7 439.7 L 89.7 450.8 L 130.4 455.4 L 169 453.9 L 205.1 447.3 L 238.2 436.9 L 268.6 424 L 296.8 409.7 L 323.3 394.8 L 348.7 380.1 L 373.3 366.2 L 320.8 260.5 L 292.6 273.8 L 266.2 286.5 L 241.5 298 L 218.5 307.5 L 197 314.6 L 176.9 319.1 L 157.8 320.9 L 138.9 320.1 L 118.8 316.1 L 96.3 308.3 Z&quot;></path><path class=&quot;flow-phase&quot; style=&quot;fill:#E6ECF2&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;flow-phase-2&quot; d=&quot;M 373.3 366.2 L 397.7 353.5 L 422.1 342.5 L 447 333.6 L 472.8 327.1 L 500.4 323.4 L 536.6 322.6 L 580.2 318.7 L 620.1 310.5 L 656.8 298.7 L 690.6 284.5 L 652.6 196.3 L 625 205.8 L 597.1 212.8 L 567.8 216.9 L 535.7 217.8 L 496.7 216.5 L 456.4 219.2 L 418.8 225.8 L 383.6 235.6 L 351 247.5 L 320.8 260.5 Z&quot;></path><path class=&quot;flow-phase&quot; style=&quot;fill:#E6ECF2&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;flow-phase-3&quot; d=&quot;M 690.6 284.5 L 722.2 268.6 L 752.4 251.8 L 782.3 234.9 L 812.8 218.3 L 844.7 202.4 L 879.2 187.6 L 917.1 174.3 L 959.5 163.1 L 1007.4 154.5 L 1061.7 149 L 1062.2 161.9 L 1131.9 108.8 L 1057.8 62.1 L 1058.3 75 L 998.4 78.8 L 944.3 86.2 L 895.4 96.7 L 851.2 109.7 L 811.1 124.3 L 774.6 139.9 L 741.1 155.6 L 709.9 170.7 L 680.6 184.5 L 652.6 196.3 Z&quot;></path>
+    <path class=&quot;flow-centerline&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;flow-centerline&quot; d=&quot;M 72 374 L 102.3 383 L 130.9 387.4 L 158.1 387.8 L 184.2 384.6 L 209.3 378.4 L 233.9 369.7 L 258 359.2 L 281.9 347.4 L 306 334.7 L 330.4 321.8 L 355.5 309.2 L 381.4 297.5 L 408.4 287.1 L 436.7 278.7 L 466.7 272.8 L 498.5 270 L 533.7 270.2 L 569.4 268.3 L 602.3 263 L 633 254.9 L 662.1 244.3 L 690.3 231.9 L 718.1 218.1 L 746.3 203.3 L 775.5 188.2 L 806.2 173.1 L 839.2 158.6 L 875.1 145.2 L 914.5 133.3 L 958 123.5 L 1006.3 116.2 L 1060 112&quot;></path>
+  </svg>
+      <article class=&quot;phase-segment&quot; data-phase-key=&quot;define&quot;>
+    <div class=&quot;phase-index&quot; style=&quot;left:101.6px;top:308.7px;width:232px&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;phase-1-index&quot;>01</div>
+    <div class=&quot;ppagent-text-region phase-content&quot; style=&quot;left:101.6px;top:329.7px;width:232px;height:92px&quot; data-ppagent-text-region data-slot-id=&quot;phase-define-content&quot; data-slot-role=&quot;text-region&quot; data-slot-field=&quot;phases[0]&quot; data-slot-item-id=&quot;define&quot; data-slot-region-id=&quot;phase-content&quot; data-slot-content-type=&quot;text-region&quot; data-slot-safe-box=&quot;true&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;structured&quot; data-slot-list-policy=&quot;structured&quot; data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-default-id=&quot;heading-content-flow&quot; data-text-layout-compatible=&quot;heading-content-flow,statement-flow,structured-list-flow&quot; data-text-layout-content-roles=&quot;heading,body&quot;>
+    <div class=&quot;ppagent-text-layout ppagent-text-layout--heading-content-flow&quot; data-ppagent-text-layout data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-align=&quot;center&quot; data-text-layout-valign=&quot;middle&quot; data-text-layout-density=&quot;compact&quot; data-text-layout-tone=&quot;light&quot; data-text-layout-style=&quot;default&quot;><div class=&quot;ppagent-text-primitive ppagent-text-primitive--heading&quot; data-text-primitive=&quot;heading&quot; data-text-layout-part=&quot;heading&quot; data-text-layout-field=&quot;title&quot; data-text-primitive-font-tiers=&quot;22,20,18,16,14&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;phase-title-1&quot;>目标定义</div><div class=&quot;ppagent-text-primitive ppagent-text-primitive--body&quot; data-text-primitive=&quot;body&quot; data-text-layout-part=&quot;body&quot; data-text-layout-field=&quot;body&quot; data-text-primitive-font-tiers=&quot;16,14,12&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;phase-body-1&quot;>明确范围、对象与预期成果</div></div>
+  </div>
+  </article><article class=&quot;phase-segment&quot; data-phase-key=&quot;design&quot;>
+    <div class=&quot;phase-index&quot; style=&quot;left:382.5px;top:203px;width:232px&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;phase-2-index&quot;>02</div>
+    <div class=&quot;ppagent-text-region phase-content&quot; style=&quot;left:382.5px;top:224px;width:232px;height:92px&quot; data-ppagent-text-region data-slot-id=&quot;phase-design-content&quot; data-slot-role=&quot;text-region&quot; data-slot-field=&quot;phases[1]&quot; data-slot-item-id=&quot;design&quot; data-slot-region-id=&quot;phase-content&quot; data-slot-content-type=&quot;text-region&quot; data-slot-safe-box=&quot;true&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;structured&quot; data-slot-list-policy=&quot;structured&quot; data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-default-id=&quot;heading-content-flow&quot; data-text-layout-compatible=&quot;heading-content-flow,statement-flow,structured-list-flow&quot; data-text-layout-content-roles=&quot;heading,body&quot;>
+    <div class=&quot;ppagent-text-layout ppagent-text-layout--heading-content-flow&quot; data-ppagent-text-layout data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-align=&quot;center&quot; data-text-layout-valign=&quot;middle&quot; data-text-layout-density=&quot;compact&quot; data-text-layout-tone=&quot;light&quot; data-text-layout-style=&quot;default&quot;><div class=&quot;ppagent-text-primitive ppagent-text-primitive--heading&quot; data-text-primitive=&quot;heading&quot; data-text-layout-part=&quot;heading&quot; data-text-layout-field=&quot;title&quot; data-text-primitive-font-tiers=&quot;22,20,18,16,14&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;phase-title-2&quot;>方案设计</div><div class=&quot;ppagent-text-primitive ppagent-text-primitive--body&quot; data-text-primitive=&quot;body&quot; data-text-layout-part=&quot;body&quot; data-text-layout-field=&quot;body&quot; data-text-primitive-font-tiers=&quot;16,14,12&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;phase-body-2&quot;>形成路径并完成关键论证</div></div>
+  </div>
+  </article><article class=&quot;phase-segment&quot; data-phase-key=&quot;pilot&quot;>
+    <div class=&quot;phase-index&quot; style=&quot;left:711.9px;top:96.3px;width:232px&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;phase-3-index&quot;>03</div>
+    <div class=&quot;ppagent-text-region phase-content&quot; style=&quot;left:711.9px;top:117.3px;width:232px;height:92px&quot; data-ppagent-text-region data-slot-id=&quot;phase-pilot-content&quot; data-slot-role=&quot;text-region&quot; data-slot-field=&quot;phases[2]&quot; data-slot-item-id=&quot;pilot&quot; data-slot-region-id=&quot;phase-content&quot; data-slot-content-type=&quot;text-region&quot; data-slot-safe-box=&quot;true&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;structured&quot; data-slot-list-policy=&quot;structured&quot; data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-default-id=&quot;heading-content-flow&quot; data-text-layout-compatible=&quot;heading-content-flow,statement-flow,structured-list-flow&quot; data-text-layout-content-roles=&quot;heading,body&quot;>
+    <div class=&quot;ppagent-text-layout ppagent-text-layout--heading-content-flow&quot; data-ppagent-text-layout data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-align=&quot;center&quot; data-text-layout-valign=&quot;middle&quot; data-text-layout-density=&quot;compact&quot; data-text-layout-tone=&quot;light&quot; data-text-layout-style=&quot;default&quot;><div class=&quot;ppagent-text-primitive ppagent-text-primitive--heading&quot; data-text-primitive=&quot;heading&quot; data-text-layout-part=&quot;heading&quot; data-text-layout-field=&quot;title&quot; data-text-primitive-font-tiers=&quot;22,20,18,16,14&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;phase-title-3&quot;>试点验证</div><div class=&quot;ppagent-text-primitive ppagent-text-primitive--body&quot; data-text-primitive=&quot;body&quot; data-text-layout-part=&quot;body&quot; data-text-layout-field=&quot;body&quot; data-text-primitive-font-tiers=&quot;16,14,12&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;phase-body-3&quot;>在真实场景中检验可行性</div></div>
+  </div>
+  </article>
+      <article class=&quot;gate&quot; data-gate-key=&quot;scope-review&quot;>
+    <svg class=&quot;gate-geometry&quot; viewBox=&quot;0 0 1170 492&quot; preserveAspectRatio=&quot;none&quot; aria-hidden=&quot;true&quot;>
+    <path class=&quot;gate-plane&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;gate-1-plane&quot; d=&quot;M 363.3 374.5 L 308.1 263.5 L 330.8 252.2 L 386 363.2 Z&quot;></path>
+    <path class=&quot;gate-i-beam&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;gate-1-i-beam&quot; d=&quot;M 360.6 375.8 L 388.7 361.9 L 385.6 355.6 L 374.4 361.2 L 325.4 262.7 L 336.6 257.1 L 333.5 250.9 L 305.4 264.8 L 308.5 271.1 L 319.7 265.5 L 368.7 364 L 357.5 369.6 Z&quot;></path>
+    <path class=&quot;gate-label-link&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;gate-1-label-link&quot; d=&quot;M 345.7 310.7 L 279.8 200.2&quot;></path>
+  </svg>
+  <div class=&quot;gate-check&quot; style=&quot;left:325.9px;top:296.8px;width:39.7px;height:27.7px&quot; data-ppt-kind=&quot;shape-text&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;gate-1-check&quot;>✓</div>
+    <div class=&quot;gate-tag&quot; style=&quot;left:192.8px;top:107.2px;width:174px&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;gate-1-tag&quot;>门禁 01</div>
+    <div class=&quot;gate-content-surface&quot; style=&quot;left:192.8px;top:126.2px;width:174px;height:74px&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;gate-1-content-surface&quot;></div>
+    <div class=&quot;ppagent-text-region gate-content&quot; style=&quot;left:192.8px;top:126.2px;width:174px;height:74px&quot; data-ppagent-text-region data-slot-id=&quot;gate-scope-review-content&quot; data-slot-role=&quot;text-region&quot; data-slot-field=&quot;gates[0]&quot; data-slot-item-id=&quot;scope-review&quot; data-slot-region-id=&quot;gate-criterion&quot; data-slot-content-type=&quot;text-region&quot; data-slot-safe-box=&quot;true&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;structured&quot; data-slot-list-policy=&quot;structured&quot; data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-default-id=&quot;heading-content-flow&quot; data-text-layout-compatible=&quot;heading-content-flow,statement-flow&quot; data-text-layout-content-roles=&quot;heading,body&quot;>
+    <div class=&quot;ppagent-text-layout ppagent-text-layout--heading-content-flow&quot; data-ppagent-text-layout data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-align=&quot;center&quot; data-text-layout-valign=&quot;middle&quot; data-text-layout-density=&quot;compact&quot; data-text-layout-tone=&quot;light&quot; data-text-layout-style=&quot;default&quot;><div class=&quot;ppagent-text-primitive ppagent-text-primitive--heading&quot; data-text-primitive=&quot;heading&quot; data-text-layout-part=&quot;heading&quot; data-text-layout-field=&quot;title&quot; data-text-primitive-font-tiers=&quot;22,20,18,16,14&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;gate-title-1&quot;>范围评审</div><div class=&quot;ppagent-text-primitive ppagent-text-primitive--body&quot; data-text-primitive=&quot;body&quot; data-text-layout-part=&quot;body&quot; data-text-layout-field=&quot;body&quot; data-text-primitive-font-tiers=&quot;16,14,12&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;gate-body-1&quot;>目标与边界已确认</div></div>
+  </div>
+  </article><article class=&quot;gate&quot; data-gate-key=&quot;plan-review&quot;>
+    <svg class=&quot;gate-geometry&quot; viewBox=&quot;0 0 1170 492&quot; preserveAspectRatio=&quot;none&quot; aria-hidden=&quot;true&quot;>
+    <path class=&quot;gate-plane&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;gate-2-plane&quot; d=&quot;M 681.3 291.7 L 641 198 L 661.8 189.1 L 702.2 282.7 Z&quot;></path>
+    <path class=&quot;gate-i-beam&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;gate-2-i-beam&quot; d=&quot;M 678.6 292.9 L 704.9 281.5 L 702.1 275.1 L 691.9 279.5 L 657.1 198.7 L 667.3 194.3 L 664.5 187.9 L 638.2 199.2 L 641 205.7 L 651.2 201.2 L 686 282.1 L 675.8 286.5 Z&quot;></path>
+    <path class=&quot;gate-label-link&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;gate-2-label-link&quot; d=&quot;M 672.7 243.1 L 727 334.9&quot;></path>
+  </svg>
+  <div class=&quot;gate-check&quot; style=&quot;left:654.1px;top:230px;width:37.3px;height:26.3px&quot; data-ppt-kind=&quot;shape-text&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;gate-2-check&quot;>✓</div>
+    <div class=&quot;gate-tag&quot; style=&quot;left:640px;top:315.9px;width:174px&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;gate-2-tag&quot;>门禁 02</div>
+    <div class=&quot;gate-content-surface&quot; style=&quot;left:640px;top:334.9px;width:174px;height:74px&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;gate-2-content-surface&quot;></div>
+    <div class=&quot;ppagent-text-region gate-content&quot; style=&quot;left:640px;top:334.9px;width:174px;height:74px&quot; data-ppagent-text-region data-slot-id=&quot;gate-plan-review-content&quot; data-slot-role=&quot;text-region&quot; data-slot-field=&quot;gates[1]&quot; data-slot-item-id=&quot;plan-review&quot; data-slot-region-id=&quot;gate-criterion&quot; data-slot-content-type=&quot;text-region&quot; data-slot-safe-box=&quot;true&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;structured&quot; data-slot-list-policy=&quot;structured&quot; data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-default-id=&quot;heading-content-flow&quot; data-text-layout-compatible=&quot;heading-content-flow,statement-flow&quot; data-text-layout-content-roles=&quot;heading,body&quot;>
+    <div class=&quot;ppagent-text-layout ppagent-text-layout--heading-content-flow&quot; data-ppagent-text-layout data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-align=&quot;center&quot; data-text-layout-valign=&quot;middle&quot; data-text-layout-density=&quot;compact&quot; data-text-layout-tone=&quot;light&quot; data-text-layout-style=&quot;default&quot;><div class=&quot;ppagent-text-primitive ppagent-text-primitive--heading&quot; data-text-primitive=&quot;heading&quot; data-text-layout-part=&quot;heading&quot; data-text-layout-field=&quot;title&quot; data-text-primitive-font-tiers=&quot;22,20,18,16,14&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;gate-title-2&quot;>方案评审</div><div class=&quot;ppagent-text-primitive ppagent-text-primitive--body&quot; data-text-primitive=&quot;body&quot; data-text-layout-part=&quot;body&quot; data-text-layout-field=&quot;body&quot; data-text-primitive-font-tiers=&quot;16,14,12&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;gate-body-2&quot;>资源与路径可执行</div></div>
+  </div>
+  </article>
+    </section></body></html>"></iframe></section><section class="panel"><div class="label">替换紫 #6F42C1</div><iframe srcdoc="<!doctype html><html><head><meta charset=&quot;utf-8&quot;><style>html,body{margin:0;width:1170px;height:492px;overflow:hidden}/* ppagent-theme:resolved */:root{
+    --ppagent-font-body:&quot;Microsoft YaHei&quot;;
+    --ppagent-color-background:#FFFFFF;
+    --ppagent-color-surface:#FFFFFF;
+    --ppagent-color-primary:#6F42C1;
+    --ppagent-color-primary-deep:#402670;
+    --ppagent-color-primary-dark:#543293;
+    --ppagent-color-primary-light:#A082D6;
+    --ppagent-color-primary-pale:#CDBDE9;
+    --ppagent-color-primary-wash:#EEE8F8;
+    --ppagent-color-accent:#6F42C1;
+    --ppagent-color-accent-alt:#8964CC;
+    --ppagent-color-accent-soft:#E5DDF4;
+    --ppagent-color-cyan:#A386D7;
+    --ppagent-color-dark:#2B2B2B;
+    --ppagent-color-body:#404040;
+    --ppagent-color-muted:#6F6F6F;
+    --ppagent-color-line:#CBBBE9;
+    --ppagent-component-heading-size:22pt;
+    --ppagent-component-title-size:20pt;
+    --ppagent-component-item-title-size:18pt;
+    --ppagent-component-lead-size:16pt;
+    --ppagent-component-body-size:14pt;
+    --ppagent-component-label-size:14pt;
+    --ppagent-component-meta-size:12pt;
+  }
+    .ppagent-text-region{
+      box-sizing:border-box;
+      min-width:0;
+      min-height:0;
+    }
+    .ppagent-text-region > .ppagent-text-flow,
+    .ppagent-text-region > .ppagent-text-layout{
+      width:100%;
+      height:100%;
+    }
+    .ppagent-text-layout{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-layout-gap,10px);
+      width:100%;
+      height:100%;
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,&quot;Microsoft YaHei&quot;),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-align=&quot;center&quot;]{text-align:center}
+    .ppagent-text-layout[data-text-layout-align=&quot;right&quot;]{text-align:right}
+    .ppagent-text-layout[data-text-layout-valign=&quot;top&quot;]{justify-content:flex-start}
+    .ppagent-text-layout[data-text-layout-valign=&quot;bottom&quot;]{justify-content:flex-end}
+    .ppagent-text-layout[data-text-layout-density=&quot;compact&quot;]{--ppagent-text-layout-gap:6px;--ppagent-text-layout-item-gap:5px}
+    .ppagent-text-layout[data-text-layout-density=&quot;standard&quot;]{--ppagent-text-layout-gap:10px;--ppagent-text-layout-item-gap:8px}
+    .ppagent-text-layout[data-text-layout-density=&quot;loose&quot;]{--ppagent-text-layout-gap:15px;--ppagent-text-layout-item-gap:12px}
+    .ppagent-text-primitive{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      color:var(--ppagent-text-color,#46566a);
+      text-align:inherit;
+      white-space:pre-line;
+      overflow-wrap:break-word;
+    }
+    .ppagent-text-primitive--heading{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-text-primitive--body{font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.45}
+    .ppagent-text-primitive--list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px)}
+    .ppagent-text-list__item{box-sizing:border-box;min-width:0;margin:0;padding:0;overflow:visible;color:var(--ppagent-text-color,#46566a);font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.38;text-align:inherit;white-space:pre-line;overflow-wrap:break-word}
+    .ppagent-text-primitive--metric{color:var(--ppagent-value-color,#2f5ea8);font-size:var(--ppagent-component-heading-size,25pt);font-weight:700;line-height:1.08}
+    .ppagent-text-primitive--label{color:var(--ppagent-label-color,#60758d);font-size:var(--ppagent-component-label-size,17pt);font-weight:600;line-height:1.2}
+    .ppagent-text-primitive--annotation{color:var(--ppagent-annotation-color,#748495);font-size:var(--ppagent-component-meta-size,15pt);font-weight:400;line-height:1.3}
+    .ppagent-text-primitive--quote{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:500;line-height:1.35}
+    .ppagent-text-primitive--emphasis{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-title-size,23pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-structured-list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-structured-list__item{display:flex;flex-direction:column;gap:4px;min-width:0}
+    .ppagent-structured-list__item .ppagent-text-primitive--heading{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-metric-set{display:grid;grid-template-columns:repeat(var(--ppagent-metric-columns,2),minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0;align-items:start}
+    .ppagent-metric-set[data-metric-count=&quot;3&quot;]{--ppagent-metric-columns:3}
+    .ppagent-metric-set[data-metric-count=&quot;4&quot;]{--ppagent-metric-columns:4}
+    .ppagent-metric-set__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-key-value{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-key-value__row{display:grid;grid-template-columns:minmax(64px,.42fr) minmax(0,1fr);gap:10px;align-items:start;min-width:0}
+    .ppagent-key-value__row .ppagent-text-primitive--metric{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label,
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--annotation{text-align:right}
+    .ppagent-summary-information{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0}
+    .ppagent-summary-information__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-summary-information__item .ppagent-text-primitive--emphasis{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;]{
+      justify-content:flex-start;
+      gap:12px;
+      padding:18px;
+      color:var(--ppagent-color-body);
+      background:transparent;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive{color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--emphasis,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--quote{color:var(--ppagent-color-dark);font-weight:700;letter-spacing:-.25px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--body,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-list__item{font-size:max(15pt,var(--ppagent-component-body-size))}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--label{color:var(--ppagent-color-accent);font-size:max(15pt,var(--ppagent-component-label-size));font-weight:700;letter-spacing:.7px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--annotation{color:var(--ppagent-color-muted);font-size:max(15pt,var(--ppagent-component-meta-size))}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--metric{color:var(--ppagent-color-accent);font-weight:700;letter-spacing:-.5px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-list__item{position:relative;padding-left:17px;color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-list__item::before{content:&quot;&quot;;position:absolute;left:0;top:.68em;width:8px;height:2px;background:var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--heading-content-flow > .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--label-content-flow > .ppagent-text-primitive--label,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--heading-metric-content-flow > .ppagent-text-primitive--heading{padding-bottom:10px;border-bottom:2px solid var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-structured-list{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-structured-list__item{display:grid;grid-template-columns:minmax(82px,.42fr) minmax(0,1fr);gap:14px;padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-structured-list__item .ppagent-text-primitive--body{margin:0}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-metric-set{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-metric-set__item{padding:12px 14px 4px 0}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-metric-set__item + .ppagent-metric-set__item{padding-left:14px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-key-value{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-key-value__row{padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--quote-attribution-flow{position:relative;padding-left:52px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--quote-attribution-flow::before{content:&quot;“&quot;;position:absolute;left:16px;top:8px;color:var(--ppagent-color-accent);font-family:Georgia,serif;font-size:42pt;font-weight:700;line-height:1}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label{margin-top:auto;padding-top:10px;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-summary-information{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-summary-information__item{padding:10px 12px 8px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-summary-information__item:nth-child(even){padding-left:12px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout--value-label{
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-value-label-gap,5px);
+      padding:var(--ppagent-value-label-padding,5px);
+      text-align:center;
+    }
+    .ppagent-text-layout__value,
+    .ppagent-text-layout__label{
+      box-sizing:border-box;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:hidden;
+      text-align:inherit;
+    }
+    .ppagent-text-layout__value{
+      color:var(--ppagent-value-color,#2f5ea8);
+      font-size:var(--ppagent-component-lead-size,19pt);
+      font-weight:700;
+      line-height:1.15;
+    }
+    .ppagent-text-layout__label{
+      color:var(--ppagent-label-color,#60758d);
+      font-size:var(--ppagent-component-meta-size,15pt);
+      font-weight:400;
+      line-height:1.2;
+    }
+    .ppagent-text-flow{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-flow-gap,10px);
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,&quot;Microsoft YaHei&quot;),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-flow[data-text-flow-align=&quot;center&quot;]{text-align:center}
+    .ppagent-text-flow[data-text-flow-align=&quot;right&quot;]{text-align:right}
+    .ppagent-text-flow[data-text-flow-valign=&quot;top&quot;]{justify-content:flex-start}
+    .ppagent-text-flow[data-text-flow-valign=&quot;bottom&quot;]{justify-content:flex-end}
+    .ppagent-text-flow__title,
+    .ppagent-text-flow__body{
+      position:relative;
+      box-sizing:border-box;
+      flex:0 0 auto;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      text-align:inherit;
+    }
+    .ppagent-text-flow__title{
+      font-size:var(--ppagent-component-item-title-size,21pt);
+      font-weight:700;
+      line-height:1.2;
+      white-space:normal;
+      text-wrap:balance;
+    }
+    .ppagent-text-flow__body{
+      font-size:var(--ppagent-component-body-size,17pt);
+      font-weight:400;
+      line-height:1.45;
+      white-space:pre-line;
+    }
+    .ppagent-text-flow__separator{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      align-self:center;
+      width:var(--ppagent-text-flow-separator-width,54px);
+      height:var(--ppagent-text-flow-separator-height,4px);
+      border:0;
+      border-radius:99px;
+      background:var(--ppagent-text-flow-separator-color,#78aeef);
+    }
+  * { box-sizing: border-box; }
+:root { font-family: var(--ppagent-font-body, &quot;Microsoft YaHei&quot;), &quot;Noto Sans CJK SC&quot;, sans-serif; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { background: #fff; color: #6F42C1; }
+.phase-gates-review { position: relative; width: 1170px; height: 492px; overflow: hidden; background: #fff; }
+.flow-geometry,
+.gate-geometry { position: absolute; inset: 0; width: 1170px; height: 492px; overflow: visible; pointer-events: none; }
+.flow-geometry { z-index: 1; }
+.flow-bank { fill: #fff; stroke: #EEE8F8; stroke-width: 2px; stroke-linejoin: round; }
+.flow-phase { stroke: #fff; stroke-width: 5px; stroke-linejoin: round; }
+.flow-centerline { fill: none; stroke: rgba(111, 66, 193, .34); stroke-width: 2px; stroke-dasharray: 2 9; stroke-linecap: round; }
+.phase-index { position: absolute; z-index: 3; height: 20px; overflow: hidden; color: #6F42C1; font-size: var(--ppagent-component-annotation-size, 12pt); font-weight: 800; line-height: 20px; text-align: center; letter-spacing: .12em; white-space: nowrap; }
+.phase-content { position: absolute; z-index: 3; display: block; overflow: hidden; padding: 5px 8px; --ppagent-text-layout-gap: 6px; --ppagent-heading-color: #543293; --ppagent-text-color: #6F42C1; }
+.phase-content .ppagent-text-primitive--heading { font-size: var(--ppagent-component-item-title-size, 18pt); line-height: 1.12; text-wrap: balance; }
+.phase-content .ppagent-text-primitive--body,
+.phase-content .ppagent-text-list { font-size: var(--ppagent-component-body-size, 14pt); line-height: 1.2; text-wrap: balance; }
+.gate { position: absolute; inset: 0; z-index: 4; }
+.gate-geometry { z-index: 4; }
+.gate-plane { fill: rgba(255, 255, 255, .42); stroke: none; }
+.gate-i-beam { fill: #6F42C1; stroke: none; }
+.gate-label-link { fill: none; stroke: #A082D6; stroke-width: 1.5px; stroke-dasharray: 5 6; stroke-linecap: round; }
+.gate-check { position: absolute; z-index: 6; display: grid; place-items: center; border: 3px solid #fff; border-radius: 8px; background: #6F42C1; color: #fff; font-size: var(--ppagent-component-body-size, 14pt); font-weight: 800; line-height: 1; text-align: center; white-space: nowrap; }
+.gate-tag { position: absolute; z-index: 6; height: 18px; overflow: hidden; color: #6F42C1; font-size: var(--ppagent-component-annotation-size, 12pt); font-weight: 800; line-height: 18px; text-align: center; letter-spacing: .08em; white-space: nowrap; }
+.gate-content-surface { position: absolute; z-index: 5; border-radius: 12px; background: #EEE8F8; }
+.gate-content { position: absolute; z-index: 6; display: block; overflow: hidden; padding: 6px 9px; --ppagent-text-layout-gap: 4px; --ppagent-heading-color: #6F42C1; --ppagent-text-color: #6F42C1; }
+.gate-content .ppagent-text-primitive--heading { font-size: var(--ppagent-component-body-size, 14pt); line-height: 1.1; text-wrap: balance; }
+.gate-content .ppagent-text-primitive--body { font-size: var(--ppagent-component-meta-size, 13pt); line-height: 1.14; text-wrap: balance; }
+.phase-gates-review[data-phase-count=&quot;5&quot;] .phase-content { padding-inline: 3px; --ppagent-text-layout-gap: 4px; }
+.phase-gates-review[data-phase-count=&quot;5&quot;] .phase-content .ppagent-text-primitive--heading { font-size: var(--ppagent-component-body-size, 17pt); }
+.phase-gates-review[data-phase-count=&quot;5&quot;] .gate-content { padding-inline: 5px; }
+</style></head><body><section class=&quot;phase-gates-review&quot; data-ppt-root data-phase-count=&quot;3&quot;>
+      <svg class=&quot;flow-geometry&quot; viewBox=&quot;0 0 1170 492&quot; preserveAspectRatio=&quot;none&quot; aria-hidden=&quot;true&quot;>
+    <path class=&quot;flow-bank&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;flow-bank&quot; d=&quot;M 44.6 448.1 L 90.8 460.2 L 135.7 464.5 L 178 461.8 L 217 453.3 L 252.5 440.9 L 284.7 426.1 L 314.3 410.3 L 342.1 394.3 L 368.7 379 L 394.5 365.1 L 420 353.1 L 445.8 343.4 L 472.4 336.4 L 500.7 332.4 L 540 331.5 L 587.3 326.7 L 630.5 316.9 L 669.8 303.3 L 705.8 287.1 L 739.3 269.5 L 771.6 251.3 L 803.6 233.4 L 836.8 216.2 L 872.2 200.1 L 911.2 185.7 L 955 173.4 L 1004.9 163.9 L 1062.1 158 L 1062.6 170.9 L 1137.3 108.5 L 1057.4 53.1 L 1057.9 66 L 993.2 70.3 L 935.2 78.7 L 883 90.7 L 836.2 105.3 L 794 121.6 L 755.8 138.6 L 721 155.3 L 688.9 170.8 L 658.8 184.1 L 629.7 194.9 L 600.9 202.8 L 570.9 207.6 L 538 208.9 L 496.3 207.5 L 452.2 210.6 L 411.2 218.4 L 373.3 229.6 L 338.4 243 L 306.4 257.3 L 276.8 271.4 L 249.6 284.5 L 224.4 295.5 L 201.3 303.9 L 180.3 309.4 L 160.8 311.8 L 142 311.4 L 122.1 307.7 L 99.4 299.9 Z&quot;></path>
+    <path class=&quot;flow-phase&quot; style=&quot;fill:#EEE8F8&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;flow-phase-1&quot; d=&quot;M 47.7 439.7 L 89.7 450.8 L 130.4 455.4 L 169 453.9 L 205.1 447.3 L 238.2 436.9 L 268.6 424 L 296.8 409.7 L 323.3 394.8 L 348.7 380.1 L 373.3 366.2 L 320.8 260.5 L 292.6 273.8 L 266.2 286.5 L 241.5 298 L 218.5 307.5 L 197 314.6 L 176.9 319.1 L 157.8 320.9 L 138.9 320.1 L 118.8 316.1 L 96.3 308.3 Z&quot;></path><path class=&quot;flow-phase&quot; style=&quot;fill:#EEE8F8&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;flow-phase-2&quot; d=&quot;M 373.3 366.2 L 397.7 353.5 L 422.1 342.5 L 447 333.6 L 472.8 327.1 L 500.4 323.4 L 536.6 322.6 L 580.2 318.7 L 620.1 310.5 L 656.8 298.7 L 690.6 284.5 L 652.6 196.3 L 625 205.8 L 597.1 212.8 L 567.8 216.9 L 535.7 217.8 L 496.7 216.5 L 456.4 219.2 L 418.8 225.8 L 383.6 235.6 L 351 247.5 L 320.8 260.5 Z&quot;></path><path class=&quot;flow-phase&quot; style=&quot;fill:#EEE8F8&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;flow-phase-3&quot; d=&quot;M 690.6 284.5 L 722.2 268.6 L 752.4 251.8 L 782.3 234.9 L 812.8 218.3 L 844.7 202.4 L 879.2 187.6 L 917.1 174.3 L 959.5 163.1 L 1007.4 154.5 L 1061.7 149 L 1062.2 161.9 L 1131.9 108.8 L 1057.8 62.1 L 1058.3 75 L 998.4 78.8 L 944.3 86.2 L 895.4 96.7 L 851.2 109.7 L 811.1 124.3 L 774.6 139.9 L 741.1 155.6 L 709.9 170.7 L 680.6 184.5 L 652.6 196.3 Z&quot;></path>
+    <path class=&quot;flow-centerline&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;flow-centerline&quot; d=&quot;M 72 374 L 102.3 383 L 130.9 387.4 L 158.1 387.8 L 184.2 384.6 L 209.3 378.4 L 233.9 369.7 L 258 359.2 L 281.9 347.4 L 306 334.7 L 330.4 321.8 L 355.5 309.2 L 381.4 297.5 L 408.4 287.1 L 436.7 278.7 L 466.7 272.8 L 498.5 270 L 533.7 270.2 L 569.4 268.3 L 602.3 263 L 633 254.9 L 662.1 244.3 L 690.3 231.9 L 718.1 218.1 L 746.3 203.3 L 775.5 188.2 L 806.2 173.1 L 839.2 158.6 L 875.1 145.2 L 914.5 133.3 L 958 123.5 L 1006.3 116.2 L 1060 112&quot;></path>
+  </svg>
+      <article class=&quot;phase-segment&quot; data-phase-key=&quot;define&quot;>
+    <div class=&quot;phase-index&quot; style=&quot;left:101.6px;top:308.7px;width:232px&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;phase-1-index&quot;>01</div>
+    <div class=&quot;ppagent-text-region phase-content&quot; style=&quot;left:101.6px;top:329.7px;width:232px;height:92px&quot; data-ppagent-text-region data-slot-id=&quot;phase-define-content&quot; data-slot-role=&quot;text-region&quot; data-slot-field=&quot;phases[0]&quot; data-slot-item-id=&quot;define&quot; data-slot-region-id=&quot;phase-content&quot; data-slot-content-type=&quot;text-region&quot; data-slot-safe-box=&quot;true&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;structured&quot; data-slot-list-policy=&quot;structured&quot; data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-default-id=&quot;heading-content-flow&quot; data-text-layout-compatible=&quot;heading-content-flow,statement-flow,structured-list-flow&quot; data-text-layout-content-roles=&quot;heading,body&quot;>
+    <div class=&quot;ppagent-text-layout ppagent-text-layout--heading-content-flow&quot; data-ppagent-text-layout data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-align=&quot;center&quot; data-text-layout-valign=&quot;middle&quot; data-text-layout-density=&quot;compact&quot; data-text-layout-tone=&quot;light&quot; data-text-layout-style=&quot;default&quot;><div class=&quot;ppagent-text-primitive ppagent-text-primitive--heading&quot; data-text-primitive=&quot;heading&quot; data-text-layout-part=&quot;heading&quot; data-text-layout-field=&quot;title&quot; data-text-primitive-font-tiers=&quot;22,20,18,16,14&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;phase-title-1&quot;>目标定义</div><div class=&quot;ppagent-text-primitive ppagent-text-primitive--body&quot; data-text-primitive=&quot;body&quot; data-text-layout-part=&quot;body&quot; data-text-layout-field=&quot;body&quot; data-text-primitive-font-tiers=&quot;16,14,12&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;phase-body-1&quot;>明确范围、对象与预期成果</div></div>
+  </div>
+  </article><article class=&quot;phase-segment&quot; data-phase-key=&quot;design&quot;>
+    <div class=&quot;phase-index&quot; style=&quot;left:382.5px;top:203px;width:232px&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;phase-2-index&quot;>02</div>
+    <div class=&quot;ppagent-text-region phase-content&quot; style=&quot;left:382.5px;top:224px;width:232px;height:92px&quot; data-ppagent-text-region data-slot-id=&quot;phase-design-content&quot; data-slot-role=&quot;text-region&quot; data-slot-field=&quot;phases[1]&quot; data-slot-item-id=&quot;design&quot; data-slot-region-id=&quot;phase-content&quot; data-slot-content-type=&quot;text-region&quot; data-slot-safe-box=&quot;true&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;structured&quot; data-slot-list-policy=&quot;structured&quot; data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-default-id=&quot;heading-content-flow&quot; data-text-layout-compatible=&quot;heading-content-flow,statement-flow,structured-list-flow&quot; data-text-layout-content-roles=&quot;heading,body&quot;>
+    <div class=&quot;ppagent-text-layout ppagent-text-layout--heading-content-flow&quot; data-ppagent-text-layout data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-align=&quot;center&quot; data-text-layout-valign=&quot;middle&quot; data-text-layout-density=&quot;compact&quot; data-text-layout-tone=&quot;light&quot; data-text-layout-style=&quot;default&quot;><div class=&quot;ppagent-text-primitive ppagent-text-primitive--heading&quot; data-text-primitive=&quot;heading&quot; data-text-layout-part=&quot;heading&quot; data-text-layout-field=&quot;title&quot; data-text-primitive-font-tiers=&quot;22,20,18,16,14&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;phase-title-2&quot;>方案设计</div><div class=&quot;ppagent-text-primitive ppagent-text-primitive--body&quot; data-text-primitive=&quot;body&quot; data-text-layout-part=&quot;body&quot; data-text-layout-field=&quot;body&quot; data-text-primitive-font-tiers=&quot;16,14,12&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;phase-body-2&quot;>形成路径并完成关键论证</div></div>
+  </div>
+  </article><article class=&quot;phase-segment&quot; data-phase-key=&quot;pilot&quot;>
+    <div class=&quot;phase-index&quot; style=&quot;left:711.9px;top:96.3px;width:232px&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;phase-3-index&quot;>03</div>
+    <div class=&quot;ppagent-text-region phase-content&quot; style=&quot;left:711.9px;top:117.3px;width:232px;height:92px&quot; data-ppagent-text-region data-slot-id=&quot;phase-pilot-content&quot; data-slot-role=&quot;text-region&quot; data-slot-field=&quot;phases[2]&quot; data-slot-item-id=&quot;pilot&quot; data-slot-region-id=&quot;phase-content&quot; data-slot-content-type=&quot;text-region&quot; data-slot-safe-box=&quot;true&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;structured&quot; data-slot-list-policy=&quot;structured&quot; data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-default-id=&quot;heading-content-flow&quot; data-text-layout-compatible=&quot;heading-content-flow,statement-flow,structured-list-flow&quot; data-text-layout-content-roles=&quot;heading,body&quot;>
+    <div class=&quot;ppagent-text-layout ppagent-text-layout--heading-content-flow&quot; data-ppagent-text-layout data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-align=&quot;center&quot; data-text-layout-valign=&quot;middle&quot; data-text-layout-density=&quot;compact&quot; data-text-layout-tone=&quot;light&quot; data-text-layout-style=&quot;default&quot;><div class=&quot;ppagent-text-primitive ppagent-text-primitive--heading&quot; data-text-primitive=&quot;heading&quot; data-text-layout-part=&quot;heading&quot; data-text-layout-field=&quot;title&quot; data-text-primitive-font-tiers=&quot;22,20,18,16,14&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;phase-title-3&quot;>试点验证</div><div class=&quot;ppagent-text-primitive ppagent-text-primitive--body&quot; data-text-primitive=&quot;body&quot; data-text-layout-part=&quot;body&quot; data-text-layout-field=&quot;body&quot; data-text-primitive-font-tiers=&quot;16,14,12&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;phase-body-3&quot;>在真实场景中检验可行性</div></div>
+  </div>
+  </article>
+      <article class=&quot;gate&quot; data-gate-key=&quot;scope-review&quot;>
+    <svg class=&quot;gate-geometry&quot; viewBox=&quot;0 0 1170 492&quot; preserveAspectRatio=&quot;none&quot; aria-hidden=&quot;true&quot;>
+    <path class=&quot;gate-plane&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;gate-1-plane&quot; d=&quot;M 363.3 374.5 L 308.1 263.5 L 330.8 252.2 L 386 363.2 Z&quot;></path>
+    <path class=&quot;gate-i-beam&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;gate-1-i-beam&quot; d=&quot;M 360.6 375.8 L 388.7 361.9 L 385.6 355.6 L 374.4 361.2 L 325.4 262.7 L 336.6 257.1 L 333.5 250.9 L 305.4 264.8 L 308.5 271.1 L 319.7 265.5 L 368.7 364 L 357.5 369.6 Z&quot;></path>
+    <path class=&quot;gate-label-link&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;gate-1-label-link&quot; d=&quot;M 345.7 310.7 L 279.8 200.2&quot;></path>
+  </svg>
+  <div class=&quot;gate-check&quot; style=&quot;left:325.9px;top:296.8px;width:39.7px;height:27.7px&quot; data-ppt-kind=&quot;shape-text&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;gate-1-check&quot;>✓</div>
+    <div class=&quot;gate-tag&quot; style=&quot;left:192.8px;top:107.2px;width:174px&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;gate-1-tag&quot;>门禁 01</div>
+    <div class=&quot;gate-content-surface&quot; style=&quot;left:192.8px;top:126.2px;width:174px;height:74px&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;gate-1-content-surface&quot;></div>
+    <div class=&quot;ppagent-text-region gate-content&quot; style=&quot;left:192.8px;top:126.2px;width:174px;height:74px&quot; data-ppagent-text-region data-slot-id=&quot;gate-scope-review-content&quot; data-slot-role=&quot;text-region&quot; data-slot-field=&quot;gates[0]&quot; data-slot-item-id=&quot;scope-review&quot; data-slot-region-id=&quot;gate-criterion&quot; data-slot-content-type=&quot;text-region&quot; data-slot-safe-box=&quot;true&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;structured&quot; data-slot-list-policy=&quot;structured&quot; data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-default-id=&quot;heading-content-flow&quot; data-text-layout-compatible=&quot;heading-content-flow,statement-flow&quot; data-text-layout-content-roles=&quot;heading,body&quot;>
+    <div class=&quot;ppagent-text-layout ppagent-text-layout--heading-content-flow&quot; data-ppagent-text-layout data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-align=&quot;center&quot; data-text-layout-valign=&quot;middle&quot; data-text-layout-density=&quot;compact&quot; data-text-layout-tone=&quot;light&quot; data-text-layout-style=&quot;default&quot;><div class=&quot;ppagent-text-primitive ppagent-text-primitive--heading&quot; data-text-primitive=&quot;heading&quot; data-text-layout-part=&quot;heading&quot; data-text-layout-field=&quot;title&quot; data-text-primitive-font-tiers=&quot;22,20,18,16,14&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;gate-title-1&quot;>范围评审</div><div class=&quot;ppagent-text-primitive ppagent-text-primitive--body&quot; data-text-primitive=&quot;body&quot; data-text-layout-part=&quot;body&quot; data-text-layout-field=&quot;body&quot; data-text-primitive-font-tiers=&quot;16,14,12&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;gate-body-1&quot;>目标与边界已确认</div></div>
+  </div>
+  </article><article class=&quot;gate&quot; data-gate-key=&quot;plan-review&quot;>
+    <svg class=&quot;gate-geometry&quot; viewBox=&quot;0 0 1170 492&quot; preserveAspectRatio=&quot;none&quot; aria-hidden=&quot;true&quot;>
+    <path class=&quot;gate-plane&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;gate-2-plane&quot; d=&quot;M 681.3 291.7 L 641 198 L 661.8 189.1 L 702.2 282.7 Z&quot;></path>
+    <path class=&quot;gate-i-beam&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;gate-2-i-beam&quot; d=&quot;M 678.6 292.9 L 704.9 281.5 L 702.1 275.1 L 691.9 279.5 L 657.1 198.7 L 667.3 194.3 L 664.5 187.9 L 638.2 199.2 L 641 205.7 L 651.2 201.2 L 686 282.1 L 675.8 286.5 Z&quot;></path>
+    <path class=&quot;gate-label-link&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;gate-2-label-link&quot; d=&quot;M 672.7 243.1 L 727 334.9&quot;></path>
+  </svg>
+  <div class=&quot;gate-check&quot; style=&quot;left:654.1px;top:230px;width:37.3px;height:26.3px&quot; data-ppt-kind=&quot;shape-text&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;gate-2-check&quot;>✓</div>
+    <div class=&quot;gate-tag&quot; style=&quot;left:640px;top:315.9px;width:174px&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;gate-2-tag&quot;>门禁 02</div>
+    <div class=&quot;gate-content-surface&quot; style=&quot;left:640px;top:334.9px;width:174px;height:74px&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;gate-2-content-surface&quot;></div>
+    <div class=&quot;ppagent-text-region gate-content&quot; style=&quot;left:640px;top:334.9px;width:174px;height:74px&quot; data-ppagent-text-region data-slot-id=&quot;gate-plan-review-content&quot; data-slot-role=&quot;text-region&quot; data-slot-field=&quot;gates[1]&quot; data-slot-item-id=&quot;plan-review&quot; data-slot-region-id=&quot;gate-criterion&quot; data-slot-content-type=&quot;text-region&quot; data-slot-safe-box=&quot;true&quot; data-slot-required=&quot;true&quot; data-slot-text-mode=&quot;structured&quot; data-slot-list-policy=&quot;structured&quot; data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-default-id=&quot;heading-content-flow&quot; data-text-layout-compatible=&quot;heading-content-flow,statement-flow&quot; data-text-layout-content-roles=&quot;heading,body&quot;>
+    <div class=&quot;ppagent-text-layout ppagent-text-layout--heading-content-flow&quot; data-ppagent-text-layout data-text-layout-id=&quot;heading-content-flow&quot; data-text-layout-align=&quot;center&quot; data-text-layout-valign=&quot;middle&quot; data-text-layout-density=&quot;compact&quot; data-text-layout-tone=&quot;light&quot; data-text-layout-style=&quot;default&quot;><div class=&quot;ppagent-text-primitive ppagent-text-primitive--heading&quot; data-text-primitive=&quot;heading&quot; data-text-layout-part=&quot;heading&quot; data-text-layout-field=&quot;title&quot; data-text-primitive-font-tiers=&quot;22,20,18,16,14&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;gate-title-2&quot;>方案评审</div><div class=&quot;ppagent-text-primitive ppagent-text-primitive--body&quot; data-text-primitive=&quot;body&quot; data-text-layout-part=&quot;body&quot; data-text-layout-field=&quot;body&quot; data-text-primitive-font-tiers=&quot;16,14,12&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;gate-body-2&quot;>资源与路径可执行</div></div>
+  </div>
+  </article>
+    </section></body></html>"></iframe></section></div></body></html>
