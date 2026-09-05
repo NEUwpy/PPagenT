@@ -1,0 +1,21 @@
+{
+  "validatorNote": "Bundled Python quick_validate unavailable: missing PyYAML. Used existing Node YAML parser and equivalent metadata checks plus reference and invocation-boundary checks.",
+  "results": [
+    {
+      "file": ".codex/skills/ppagent-structure/SKILL.md",
+      "status": "valid metadata and linked resources"
+    },
+    {
+      "file": ".codex/skills/ppagent-structure/skills/ppagent-structure-sequence/SKILL.md",
+      "status": "valid metadata and linked resources"
+    },
+    {
+      "file": ".codex/skills/ppagent-structure/skills/ppagent-structure-comparison/SKILL.md",
+      "status": "valid metadata and linked resources"
+    },
+    {
+      "test": "insufficient natural frame rejects before rendering and logs failure",
+      "passed": true
+    }
+  ]
+}
