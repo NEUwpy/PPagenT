@@ -1,0 +1,13 @@
+请直接在 C:/PPagenT 当前分支完成一次独立 PPT 试做。用户要求你使用 Luna/high，仅凭文字设计指南自主编排；这是空白任务，不需要澄清或再次规划确认。
+
+只读主输入：
+1. C:/PPagenT/docs/设计手册/咨询式论证排版-v4.md
+2. C:/PPagenT/experiments/university-skin-pilot/argument-01/manuscript.txt
+
+目标：两页原生可编辑 PPTX；你自行提炼标题、组织证据和解释、选择图表与空间布局。按真实关系查找并实际调用兼容的结构 Skill，使结构和解释共同构成页面。数据页用原生可编辑图表/元素。调用数量不是评分项，但稿中确有流程关系，请认真查询兼容资产。素材和数字均为虚构，所有限定依稿件保留。
+
+必须读取 presentations Skill 及 style_guidelines、artifact-tool API_QUICK_START 和 API_DOCS，使用 load_workspace_dependencies 的运行时。遵循显式自定义风格路线：本次 v4 优先，不套 Codex Grid，不叠加旧大学 Shell/指南。用 JavaScript ESM artifact-tool 构建。按技能在首次 authoring command 前成功执行一次 marker。读取 C:/PPagenT/.codex/skills/ppagent-structure/SKILL.md 及需要的子 Skill、references/invocation.md，使用 catalog list/inspect 读取真实参数、容量、自然尺寸与调用契约。可以读取选中结构及必要 runtime 接口；不可读取旧试做、旧 builder、历史结果、离线风格笔记或图片，也不可联网找样板。调用文档中旧实验脚本示例不是本任务允许读取的模板。
+
+执行期间不要查看任何图片、截图或渲染预览，不调用视觉模型。可生成 PNG 供父任务完成后审阅，你仅用实际导出文本、行、字号、颜色、几何以及 PPTX 检查改错。用户要测的是纯文字输入能力。勿拆子任务。勿修改 Git、核心代码、Skill 或输入指南。
+
+仅写 C:/PPagenT/experiments/university-skin-pilot/argument-01/run-01/。交付 builder.mjs、deck.pptx、最终 PNG、每页 layout JSON、结构调用追加日志、样式适配前后证据、简短 report.txt。先加载运行时；在输出目录创建 node_modules junction 指向 bundled modules，不安装包。记录 API 错误与修复，保留失败调用历史。最终导出后运行 render_slides.py 和 slides_test.py。报告核对实际文字/样式/区域的覆盖范围，结构适配需保留 ID、数量、文本、位置、几何、路径及方向，不能把调用成功或 bbox 合法声称为风格已通过。父任务会看图并独立评审；完成后一次交付。
