@@ -1,0 +1,92 @@
+[
+  {
+    "phase": "content",
+    "requests": 4,
+    "toolCalls": 4,
+    "usage": [
+      {
+        "cache_read": 0,
+        "cache_write": 1663,
+        "output": 55,
+        "total": 1718
+      },
+      {
+        "cache_read": 1664,
+        "cache_write": 888,
+        "output": 2183,
+        "total": 4735
+      },
+      {
+        "cache_read": 4608,
+        "cache_write": 646,
+        "output": 4917,
+        "total": 10171
+      },
+      {
+        "cache_read": 10112,
+        "cache_write": 196,
+        "output": 83,
+        "total": 10391
+      }
+    ],
+    "durationMs": 70929
+  },
+  {
+    "phase": "visual",
+    "requests": 3,
+    "toolCalls": 3,
+    "usage": [
+      {
+        "cache_read": 0,
+        "cache_write": 1882,
+        "output": 35,
+        "total": 1917
+      },
+      {
+        "cache_read": 1792,
+        "cache_write": 2627,
+        "output": 1497,
+        "total": 5916
+      },
+      {
+        "cache_read": 4352,
+        "cache_write": 4597,
+        "output": 1013,
+        "total": 9962
+      }
+    ],
+    "durationMs": 32050
+  },
+  {
+    "phase": "visual",
+    "requests": 4,
+    "toolCalls": 4,
+    "usage": [
+      {
+        "cache_read": 1792,
+        "cache_write": 90,
+        "output": 44,
+        "total": 1926
+      },
+      {
+        "cache_read": 1792,
+        "cache_write": 4294,
+        "output": 16245,
+        "total": 22331
+      },
+      {
+        "cache_read": 22272,
+        "cache_write": 96,
+        "output": 64,
+        "total": 22432
+      },
+      {
+        "cache_read": 22400,
+        "cache_write": 812,
+        "output": 497,
+        "total": 23709
+      }
+    ],
+    "durationMs": 162135
+  }
+]

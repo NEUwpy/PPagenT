@@ -10,7 +10,9 @@ PPagenT 是一个面向固定组织场景，使用受控视觉能力可靠生成
 
 `Shell + Content Frame`、HTML 单源 Structure Group、Native PPTX 编译、资产看板和双导演正式线已经形成可运行基础。当前正式库有 35 个 Structure Group，覆盖 20 类 Logic 中的 18 类。结构资产的第一轮集中建设到此基本结束，默认冻结扩库。
 
-下一阶段不再以“每页命中一个完整结构图”为目标，而是探索一个 PPT 专用 Harness：由总 Agent 调用内容导演与视觉导演，按页渐进披露和调用 Skills。视觉系统由并列的 `Skin` 与 `Layout` 两部分组成，Layout 再组织 `Text / Media / Structure` 三类表达能力。当前生产代码仍按“一页一个主 Structure／Composition”运行，目标架构尚未完成迁移。
+当前分支探索一个 PPT 专用 Harness：一个 PPT Agent 分内容、视觉两个独立上下文，通过持久化 Deck Project 交接。PageBrief 保存语义，Layout 编排区域，区域 PageView 绑定展示文案与来源，Text / Media / Structure 按信息需要使用。模型默认无图片输入，通过网格、文字占用与几何反馈局部修正。正式入口尚未完成迁移。
+
+本机 codex/penguin-harness-v2 验证有限能力下的稿件驱动闭环；另一台电脑的 main 丰富版式、结构和排版规则，见[分支分工](docs/分支分工.md)。
 
 当前状态与历史统一见[更新日志](docs/更新日志.md)，阶段性判断见[方向校正](docs/方向校正.md)，产品边界见[产品定义](docs/产品定义.md)。
 
@@ -43,7 +45,7 @@ PPagenT 是一个面向固定组织场景，使用受控视觉能力可靠生成
 
 - `assets/`：正式核心资产；各资产目录中的 `asset.json` 是登记真源。
 - `catalog/`：Logic、Composition、Purpose、覆盖与失败经验等目录数据。
-- `src/agent/`：当前稿件理解、候选生成、视觉决策和工作流编排；下一阶段将在这里验证总 Agent 与双导演协作。
+- `src/agent/`：当前稿件理解、候选生成、视觉决策和工作流编排；实验阶段按独立内容/视觉上下文验证页面编排。
 - `src/runtime/`：Skin、资产发现、正式运行和确定性渲染支撑。
 - `src/asset-runtime/`：现有 HTML 资产与 Native PowerPoint 之间的共享编译能力；迁移期继续复用，不再扩张为正式线唯一布局来源。
 - `稿件/`：正式生成使用的原始稿件。

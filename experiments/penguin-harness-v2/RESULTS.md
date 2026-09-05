@@ -1,5 +1,7 @@
 # Penguin / Harness Anything 路线实验结论
 
+> 本文件保留前一轮候选选择实验的结论与当时的下一步。2026-09-05 已转向单 PPT Agent 双阶段、无图片网格反馈和局部内容重组；当前结果与验证边界见 [GRID-RESULTS.md](GRID-RESULTS.md)，分支责任见 [分支分工](../../docs/分支分工.md)。
+
 ## 结论
 
 PPagenT 应借鉴 Harness Anything 的不是 WPS COM 或某套固定 PPT 模板，而是它把复杂软件能力变成“Agent 可持续操作的项目状态与命令”。PPagenT 的资产基础更强，但此前交给模型的是一次性长表单；模型只能填表，不能像使用工具一样逐页观察、修改和验证。

@@ -1,0 +1,1144 @@
+{
+  "schemaVersion": "grid-pilot-1",
+  "sourcePath": "experiments/penguin-harness-v2/fixtures/grid-manuscript.md",
+  "sources": [
+    {
+      "id": "s1",
+      "heading": "从设备清单走向明确交接",
+      "text": "试点目标：让申请人知道何时可以使用，让管理员知道由谁交接，让负责人能够核对异常处理。本稿讨论一个拟议试点，没有提供已实现的成效统计。"
+    },
+    {
+      "id": "s2",
+      "heading": "从设备清单走向明确交接",
+      "text": "边界原则：先使用现有设备和人员安排，不新增自动审批承诺；涉及安全条件的申请仍须由责任人确认。"
+    },
+    {
+      "id": "s3",
+      "heading": "两种协调方式的差别",
+      "text": "临时协调：申请人在群里描述需求，管理员逐次确认设备和时间。入口简单，但调整记录分散，换班时需要重新解释。"
+    },
+    {
+      "id": "s4",
+      "heading": "两种协调方式的差别",
+      "text": "统一登记：申请先进入同一份登记表，管理员确认后再通知使用时间。记录便于交接，但需要有人持续维护状态。"
+    },
+    {
+      "id": "s5",
+      "heading": "两种协调方式的差别",
+      "text": "选择依据：试点优先验证交接是否清楚，再决定是否增加系统功能；统一登记并不意味着自动批准。"
+    },
+    {
+      "id": "s6",
+      "heading": "一次预约怎样完成",
+      "text": "登记需求：第一步由申请人写明设备、时间和使用目的，提交后等待管理员确认。"
+    },
+    {
+      "id": "s7",
+      "heading": "一次预约怎样完成",
+      "text": "确认安排：第二步由管理员核对设备状态与值班安排，明确是否接收申请，再通知申请人。"
+    },
+    {
+      "id": "s8",
+      "heading": "一次预约怎样完成",
+      "text": "使用归还：第三步由使用人完成现场交接，使用结束后归还设备并登记异常情况。"
+    },
+    {
+      "id": "s9",
+      "heading": "一次预约怎样完成",
+      "text": "异常处理：出现设备故障或时间冲突时暂停原安排，由管理员联系责任人处理；这项规则适用于整个预约过程。"
+    },
+    {
+      "id": "s10",
+      "heading": "首轮只检查三件事",
+      "text": "记录完整：检查登记信息、确认结果和归还记录是否能够对应，缺少任一环节就补齐交接信息。"
+    },
+    {
+      "id": "s11",
+      "heading": "首轮只检查三件事",
+      "text": "责任明确：检查申请人、管理员和责任人的分工是否清楚；有争议时先澄清责任，再讨论自动化。"
+    },
+    {
+      "id": "s12",
+      "heading": "首轮只检查三件事",
+      "text": "调整有据：记录取消、改期和故障的具体原因，以实际问题决定下一轮改进，不用页面里的示意流程冒充运行结果。"
+    }
+  ],
+  "deckBrief": {
+    "title": "设备交接试点验证",
+    "audience": "试点涉及的设备申请人、管理员与安全责任人",
+    "objective": "说明本稿是一个拟议试点而非已实现成果：先验证交接是否清楚（谁何时可用、由谁交接、异常如何核对），对比临时协调与统一登记两种方式，界定三步预约流程与贯穿全程的异常规则，并约定首轮只检查三件事。"
+  },
+  "pages": [
+    {
+      "pageId": "pilot-scope",
+      "title": "试点目标与边界",
+      "claim": "拟议试点用现有设备与人员验证交接是否清楚：申请人知道何时可用，管理员知道由谁交接，负责人能核对异常处理；不新增自动审批承诺。",
+      "relation": "parallel",
+      "items": [
+        {
+          "id": "item-goals",
+          "sourceIds": [
+            "s1"
+          ],
+          "sourceText": "试点目标：让申请人知道何时可以使用，让管理员知道由谁交接，让负责人能够核对异常处理。本稿讨论一个拟议试点，没有提供已实现的成效统计。"
+        },
+        {
+          "id": "item-boundary",
+          "sourceIds": [
+            "s2"
+          ],
+          "sourceText": "边界原则：先使用现有设备和人员安排，不新增自动审批承诺；涉及安全条件的申请仍须由责任人确认。"
+        }
+      ],
+      "revision": 1,
+      "composition": {
+        "pageId": "pilot-scope",
+        "alignment": "left",
+        "rationale": "两项目标与边界为平行说明，左右等宽分栏对等呈现。",
+        "regions": [
+          {
+            "id": "goals-card",
+            "x": 1,
+            "y": 2,
+            "w": 10,
+            "h": 7,
+            "skillId": "text/basic",
+            "view": [
+              {
+                "sourceItemId": "item-goals",
+                "title": "试点目标",
+                "body": "让申请人知道何时可以使用，让管理员知道由谁交接，让负责人能够核对异常处理。"
+              },
+              {
+                "sourceItemId": "item-goals",
+                "title": "",
+                "body": "本稿讨论一个拟议试点，没有提供已实现的成效统计。"
+              }
+            ]
+          },
+          {
+            "id": "boundary-card",
+            "x": 13,
+            "y": 2,
+            "w": 10,
+            "h": 7,
+            "skillId": "text/basic",
+            "view": [
+              {
+                "sourceItemId": "item-boundary",
+                "title": "边界原则",
+                "body": "先使用现有设备和人员安排，不新增自动审批承诺；涉及安全条件的申请仍须由责任人确认。"
+              }
+            ]
+          }
+        ]
+      },
+      "compositionRevision": 1
+    },
+    {
+      "pageId": "coordination-modes",
+      "title": "两种协调方式的差别",
+      "claim": "临时协调入口简单但记录分散，统一登记便于交接但需有人持续维护；试点先验证交接是否清楚，统一登记并不等于自动批准。",
+      "relation": "comparison",
+      "items": [
+        {
+          "id": "item-adhoc",
+          "sourceIds": [
+            "s3"
+          ],
+          "sourceText": "临时协调：申请人在群里描述需求，管理员逐次确认设备和时间。入口简单，但调整记录分散，换班时需要重新解释。"
+        },
+        {
+          "id": "item-registry",
+          "sourceIds": [
+            "s4"
+          ],
+          "sourceText": "统一登记：申请先进入同一份登记表，管理员确认后再通知使用时间。记录便于交接，但需要有人持续维护状态。"
+        },
+        {
+          "id": "item-choice-basis",
+          "sourceIds": [
+            "s5"
+          ],
+          "sourceText": "选择依据：试点优先验证交接是否清楚，再决定是否增加系统功能；统一登记并不意味着自动批准。"
+        }
+      ],
+      "revision": 1,
+      "composition": {
+        "pageId": "coordination-modes",
+        "alignment": "left",
+        "rationale": "两种方式对比各占一栏，底部放选择依据作为横向说明条。",
+        "regions": [
+          {
+            "id": "adhoc-card",
+            "x": 1,
+            "y": 1,
+            "w": 10,
+            "h": 6,
+            "skillId": "text/basic",
+            "view": [
+              {
+                "sourceItemId": "item-adhoc",
+                "title": "临时协调",
+                "body": "申请人在群里描述需求，管理员逐次确认设备和时间。入口简单，但调整记录分散，换班时需要重新解释。"
+              }
+            ]
+          },
+          {
+            "id": "registry-card",
+            "x": 13,
+            "y": 1,
+            "w": 10,
+            "h": 6,
+            "skillId": "text/basic",
+            "view": [
+              {
+                "sourceItemId": "item-registry",
+                "title": "统一登记",
+                "body": "申请先进入同一份登记表，管理员确认后再通知使用时间。记录便于交接，但需要有人持续维护状态。"
+              }
+            ]
+          },
+          {
+            "id": "basis-strip",
+            "x": 1,
+            "y": 8,
+            "w": 22,
+            "h": 3,
+            "skillId": "text/basic",
+            "view": [
+              {
+                "sourceItemId": "item-choice-basis",
+                "title": "选择依据",
+                "body": "试点优先验证交接是否清楚，再决定是否增加系统功能；统一登记并不意味着自动批准。"
+              }
+            ]
+          }
+        ]
+      },
+      "compositionRevision": 1
+    },
+    {
+      "pageId": "booking-flow",
+      "title": "一次预约的三步流程",
+      "claim": "一次预约按登记需求、确认安排、使用归还三步走，各步记录相互对应即构成可交接的完整链条。",
+      "relation": "sequence",
+      "items": [
+        {
+          "id": "item-step-register",
+          "sourceIds": [
+            "s6"
+          ],
+          "sourceText": "登记需求：第一步由申请人写明设备、时间和使用目的，提交后等待管理员确认。"
+        },
+        {
+          "id": "item-step-confirm",
+          "sourceIds": [
+            "s7"
+          ],
+          "sourceText": "确认安排：第二步由管理员核对设备状态与值班安排，明确是否接收申请，再通知申请人。"
+        },
+        {
+          "id": "item-step-use-return",
+          "sourceIds": [
+            "s8"
+          ],
+          "sourceText": "使用归还：第三步由使用人完成现场交接，使用结束后归还设备并登记异常情况。"
+        }
+      ],
+      "revision": 1,
+      "composition": {
+        "pageId": "booking-flow",
+        "alignment": "center",
+        "rationale": "登记、确认、归还三步有明确先后，用结构流整页居中呈现。",
+        "regions": [
+          {
+            "id": "flow",
+            "x": 2,
+            "y": 1,
+            "w": 20,
+            "h": 10,
+            "skillId": "sequence-flow-001",
+            "view": [
+              {
+                "sourceItemId": "item-step-register",
+                "title": "登记需求",
+                "body": "第一步由申请人写明设备、时间和使用目的，提交后等待管理员确认。"
+              },
+              {
+                "sourceItemId": "item-step-confirm",
+                "title": "确认安排",
+                "body": "第二步由管理员核对设备状态与值班安排，明确是否接收申请，再通知申请人。"
+              },
+              {
+                "sourceItemId": "item-step-use-return",
+                "title": "使用归还",
+                "body": "第三步由使用人完成现场交接，使用结束后归还设备并登记异常情况。"
+              }
+            ]
+          }
+        ]
+      },
+      "compositionRevision": 1
+    },
+    {
+      "pageId": "exception-rule",
+      "title": "异常处理贯穿全程",
+      "claim": "设备故障或时间冲突时暂停原安排，由管理员联系责任人处理；该规则适用于整个预约过程，而非某一个步骤。",
+      "relation": "none",
+      "items": [
+        {
+          "id": "item-exception-handling",
+          "sourceIds": [
+            "s9"
+          ],
+          "sourceText": "异常处理：出现设备故障或时间冲突时暂停原安排，由管理员联系责任人处理；这项规则适用于整个预约过程。"
+        }
+      ],
+      "revision": 1,
+      "composition": {
+        "pageId": "exception-rule",
+        "alignment": "center",
+        "rationale": "单条贯穿性规则：处理动作居中成块，适用范围单独成强调条带。",
+        "regions": [
+          {
+            "id": "action-block",
+            "x": 3,
+            "y": 3,
+            "w": 18,
+            "h": 4,
+            "skillId": "text/basic",
+            "view": [
+              {
+                "sourceItemId": "item-exception-handling",
+                "title": "异常处理",
+                "body": "出现设备故障或时间冲突时暂停原安排，由管理员联系责任人处理"
+              }
+            ]
+          },
+          {
+            "id": "scope-strip",
+            "x": 4,
+            "y": 8,
+            "w": 16,
+            "h": 2,
+            "skillId": "text/basic",
+            "view": [
+              {
+                "sourceItemId": "item-exception-handling",
+                "title": "",
+                "body": "这项规则适用于整个预约过程。"
+              }
+            ]
+          }
+        ]
+      },
+      "compositionRevision": 1
+    },
+    {
+      "pageId": "first-round-checks",
+      "title": "首轮只检查三件事",
+      "claim": "首轮只核对记录完整、责任明确、调整有据三项；有争议先澄清责任再讨论自动化，以实际问题决定下一轮改进。",
+      "relation": "parallel",
+      "items": [
+        {
+          "id": "item-check-record",
+          "sourceIds": [
+            "s10"
+          ],
+          "sourceText": "记录完整：检查登记信息、确认结果和归还记录是否能够对应，缺少任一环节就补齐交接信息。"
+        },
+        {
+          "id": "item-check-responsibility",
+          "sourceIds": [
+            "s11"
+          ],
+          "sourceText": "责任明确：检查申请人、管理员和责任人的分工是否清楚；有争议时先澄清责任，再讨论自动化。"
+        },
+        {
+          "id": "item-check-adjustment",
+          "sourceIds": [
+            "s12"
+          ],
+          "sourceText": "调整有据：记录取消、改期和故障的具体原因，以实际问题决定下一轮改进，不用页面里的示意流程冒充运行结果。"
+        }
+      ],
+      "revision": 1,
+      "composition": {
+        "pageId": "first-round-checks",
+        "alignment": "left",
+        "rationale": "三项检查改全宽横条逐行排布，标题在上说明在下，正文不再受窄栏挤压。",
+        "regions": [
+          {
+            "id": "record-band",
+            "x": 1,
+            "y": 1,
+            "w": 22,
+            "h": 3,
+            "skillId": "text/basic",
+            "view": [
+              {
+                "sourceItemId": "item-check-record",
+                "title": "记录完整",
+                "body": "检查登记信息、确认结果和归还记录是否能够对应，缺少任一环节就补齐交接信息。"
+              }
+            ]
+          },
+          {
+            "id": "responsibility-band",
+            "x": 1,
+            "y": 5,
+            "w": 22,
+            "h": 3,
+            "skillId": "text/basic",
+            "view": [
+              {
+                "sourceItemId": "item-check-responsibility",
+                "title": "责任明确",
+                "body": "检查申请人、管理员和责任人的分工是否清楚；有争议时先澄清责任，再讨论自动化。"
+              }
+            ]
+          },
+          {
+            "id": "adjustment-band",
+            "x": 1,
+            "y": 9,
+            "w": 22,
+            "h": 3,
+            "skillId": "text/basic",
+            "view": [
+              {
+                "sourceItemId": "item-check-adjustment",
+                "title": "调整有据",
+                "body": "记录取消、改期和故障的具体原因，以实际问题决定下一轮改进，不用页面里的示意流程冒充运行结果。"
+              }
+            ]
+          }
+        ]
+      },
+      "compositionRevision": 2
+    }
+  ],
+  "artifactState": {
+    "pilot-scope": {
+      "status": "passed",
+      "revision": 1,
+      "pptxPath": ".tmp/penguin-harness-v2/grid-loop-20260905-1/pages/pilot-scope/revision-1/deck.pptx",
+      "feedback": {
+        "pageId": "pilot-scope",
+        "accepted": true,
+        "issues": [],
+        "warnings": [],
+        "regionAllocation": {
+          "occupiedCellRatio": 0.4861111111111111,
+          "largestEmptyRectangle": {
+            "x": 0,
+            "y": 9,
+            "w": 24,
+            "h": 3,
+            "cells": 72,
+            "ratio": 0.25
+          },
+          "heatmap": [
+            "........................",
+            "........................",
+            ".##########..##########.",
+            ".##########..##########.",
+            ".##########..##########.",
+            ".##########..##########.",
+            ".##########..##########.",
+            ".##########..##########.",
+            ".##########..##########.",
+            "........................",
+            "........................",
+            "........................"
+          ]
+        },
+        "textOccupancyEstimate": {
+          "occupiedCellRatio": 0.17708333333333334,
+          "largestEmptyRectangle": {
+            "x": 0,
+            "y": 7,
+            "w": 24,
+            "h": 5,
+            "cells": 120,
+            "ratio": 0.4166666666666667
+          },
+          "heatmap": [
+            "........................",
+            "........................",
+            ".###.........###........",
+            ".########....#########..",
+            ".########....#########..",
+            ".#####..................",
+            ".######.................",
+            "........................",
+            "........................",
+            "........................",
+            "........................",
+            "........................"
+          ]
+        },
+        "textObjects": [
+          {
+            "name": "grid:goals-card:item-goals:title",
+            "bbox": [
+              111.75,
+              256,
+              471.5,
+              36
+            ],
+            "fontSize": 27,
+            "alignment": "left",
+            "lineCount": 1,
+            "text": "试点目标"
+          },
+          {
+            "name": "grid:goals-card:item-goals:body",
+            "bbox": [
+              111.75,
+              304,
+              471.5,
+              77.5
+            ],
+            "fontSize": 20,
+            "alignment": "left",
+            "lineCount": 2,
+            "text": "让申请人知道何时可以使用，让管理员知道\n由谁交接，让负责人能够核对异常处理。"
+          },
+          {
+            "name": "grid:goals-card:item-goals:body",
+            "bbox": [
+              111.75,
+              401.5,
+              471.5,
+              125.5
+            ],
+            "fontSize": 20,
+            "alignment": "left",
+            "lineCount": 2,
+            "text": "本稿讨论一个拟议试点，\n没有提供已实现的成效统计。"
+          },
+          {
+            "name": "grid:boundary-card:item-boundary:title",
+            "bbox": [
+              696.75,
+              256,
+              471.5,
+              36
+            ],
+            "fontSize": 27,
+            "alignment": "left",
+            "lineCount": 1,
+            "text": "边界原则"
+          },
+          {
+            "name": "grid:boundary-card:item-boundary:body",
+            "bbox": [
+              696.75,
+              304,
+              471.5,
+              223
+            ],
+            "fontSize": 20,
+            "alignment": "left",
+            "lineCount": 2,
+            "text": "先使用现有设备和人员安排，不新增自动审批\n承诺；涉及安全条件的申请仍须由责任人确认。"
+          }
+        ],
+        "evidenceBoundary": "来自 Native 导出的真实文本框与行；字形占用和空区是估计值，不包含装饰背景，也不证明审美正确。"
+      }
+    },
+    "coordination-modes": {
+      "status": "passed",
+      "revision": 1,
+      "pptxPath": ".tmp/penguin-harness-v2/grid-loop-20260905-1/pages/coordination-modes/revision-1/deck.pptx",
+      "feedback": {
+        "pageId": "coordination-modes",
+        "accepted": true,
+        "issues": [],
+        "warnings": [],
+        "regionAllocation": {
+          "occupiedCellRatio": 0.6458333333333334,
+          "largestEmptyRectangle": {
+            "x": 0,
+            "y": 0,
+            "w": 24,
+            "h": 1,
+            "cells": 24,
+            "ratio": 0.08333333333333333
+          },
+          "heatmap": [
+            "........................",
+            ".##########..##########.",
+            ".##########..##########.",
+            ".##########..##########.",
+            ".##########..##########.",
+            ".##########..##########.",
+            ".##########..##########.",
+            "........................",
+            ".######################.",
+            ".######################.",
+            ".######################.",
+            "........................"
+          ]
+        },
+        "textOccupancyEstimate": {
+          "occupiedCellRatio": 0.2361111111111111,
+          "largestEmptyRectangle": {
+            "x": 4,
+            "y": 5,
+            "w": 20,
+            "h": 4,
+            "cells": 80,
+            "ratio": 0.2777777777777778
+          },
+          "heatmap": [
+            "........................",
+            ".###.........###........",
+            ".#######.....#######....",
+            ".#######.....#######....",
+            ".#######.....#######....",
+            "........................",
+            "........................",
+            "........................",
+            ".###....................",
+            ".#################......",
+            "........................",
+            "........................"
+          ]
+        },
+        "textObjects": [
+          {
+            "name": "grid:adhoc-card:item-adhoc:title",
+            "bbox": [
+              111.75,
+              215,
+              471.5,
+              36
+            ],
+            "fontSize": 27,
+            "alignment": "left",
+            "lineCount": 1,
+            "text": "临时协调"
+          },
+          {
+            "name": "grid:adhoc-card:item-adhoc:body",
+            "bbox": [
+              111.75,
+              263,
+              471.5,
+              182
+            ],
+            "fontSize": 20,
+            "alignment": "left",
+            "lineCount": 3,
+            "text": "申请人在群里描述需求，管理员逐次\n确认设备和时间。入口简单，但调整\n记录分散，换班时需要重新解释。"
+          },
+          {
+            "name": "grid:registry-card:item-registry:title",
+            "bbox": [
+              696.75,
+              215,
+              471.5,
+              36
+            ],
+            "fontSize": 27,
+            "alignment": "left",
+            "lineCount": 1,
+            "text": "统一登记"
+          },
+          {
+            "name": "grid:registry-card:item-registry:body",
+            "bbox": [
+              696.75,
+              263,
+              471.5,
+              182
+            ],
+            "fontSize": 20,
+            "alignment": "left",
+            "lineCount": 3,
+            "text": "申请先进入同一份登记表，管理员\n确认后再通知使用时间。记录便于\n交接，但需要有人持续维护状态。"
+          },
+          {
+            "name": "grid:basis-strip:item-choice-basis:title",
+            "bbox": [
+              111.75,
+              502,
+              1056.5,
+              36
+            ],
+            "fontSize": 27,
+            "alignment": "left",
+            "lineCount": 1,
+            "text": "选择依据"
+          },
+          {
+            "name": "grid:basis-strip:item-choice-basis:body",
+            "bbox": [
+              111.75,
+              550,
+              1056.5,
+              59
+            ],
+            "fontSize": 20,
+            "alignment": "left",
+            "lineCount": 1,
+            "text": "试点优先验证交接是否清楚，再决定是否增加系统功能；统一登记并不意味着自动批准。"
+          }
+        ],
+        "evidenceBoundary": "来自 Native 导出的真实文本框与行；字形占用和空区是估计值，不包含装饰背景，也不证明审美正确。"
+      }
+    },
+    "booking-flow": {
+      "status": "passed",
+      "revision": 1,
+      "pptxPath": ".tmp/penguin-harness-v2/grid-loop-20260905-1/pages/booking-flow/revision-1/deck.pptx",
+      "feedback": {
+        "pageId": "booking-flow",
+        "accepted": true,
+        "issues": [],
+        "warnings": [],
+        "regionAllocation": {
+          "occupiedCellRatio": 0.6944444444444444,
+          "largestEmptyRectangle": {
+            "x": 0,
+            "y": 0,
+            "w": 24,
+            "h": 1,
+            "cells": 24,
+            "ratio": 0.08333333333333333
+          },
+          "heatmap": [
+            "........................",
+            "..####################..",
+            "..####################..",
+            "..####################..",
+            "..####################..",
+            "..####################..",
+            "..####################..",
+            "..####################..",
+            "..####################..",
+            "..####################..",
+            "..####################..",
+            "........................"
+          ]
+        },
+        "textOccupancyEstimate": {
+          "occupiedCellRatio": 0.23958333333333334,
+          "largestEmptyRectangle": {
+            "x": 0,
+            "y": 9,
+            "w": 24,
+            "h": 3,
+            "cells": 72,
+            "ratio": 0.25
+          },
+          "heatmap": [
+            "........................",
+            "....###....##....###....",
+            "....###....##....###....",
+            ".....#.....##.....#.....",
+            ".....#.....##.....#.....",
+            "........................",
+            "...############.#####...",
+            "...##################...",
+            "....###...####...###....",
+            "........................",
+            "........................",
+            "........................"
+          ]
+        },
+        "textObjects": [
+          {
+            "name": "sequence-title-0",
+            "bbox": [
+              187,
+              232,
+              286,
+              40
+            ],
+            "fontSize": 24,
+            "alignment": "center",
+            "lineCount": 1,
+            "text": "登记需求"
+          },
+          {
+            "name": "sequence-order-0",
+            "bbox": [
+              298,
+              312,
+              64,
+              64
+            ],
+            "fontSize": 24,
+            "alignment": "center",
+            "lineCount": 1,
+            "text": "01"
+          },
+          {
+            "name": "sequence-body-0",
+            "bbox": [
+              205,
+              443,
+              250,
+              88
+            ],
+            "fontSize": 18.67,
+            "alignment": "center",
+            "lineCount": 3,
+            "text": "第一步由申请人写明设备、时\n间和使用目的，提交后等待管\n理员确认。"
+          },
+          {
+            "name": "sequence-title-1",
+            "bbox": [
+              497,
+              232,
+              286,
+              40
+            ],
+            "fontSize": 24,
+            "alignment": "center",
+            "lineCount": 1,
+            "text": "确认安排"
+          },
+          {
+            "name": "sequence-order-1",
+            "bbox": [
+              608,
+              312,
+              64,
+              64
+            ],
+            "fontSize": 24,
+            "alignment": "center",
+            "lineCount": 1,
+            "text": "02"
+          },
+          {
+            "name": "sequence-body-1",
+            "bbox": [
+              515,
+              443,
+              250,
+              88
+            ],
+            "fontSize": 18.67,
+            "alignment": "center",
+            "lineCount": 3,
+            "text": "第二步由管理员核对设备状态\n与值班安排，明确是否接收申\n请，再通知申请人。"
+          },
+          {
+            "name": "sequence-title-2",
+            "bbox": [
+              807,
+              232,
+              286,
+              40
+            ],
+            "fontSize": 24,
+            "alignment": "center",
+            "lineCount": 1,
+            "text": "使用归还"
+          },
+          {
+            "name": "sequence-order-2",
+            "bbox": [
+              918,
+              312,
+              64,
+              64
+            ],
+            "fontSize": 24,
+            "alignment": "center",
+            "lineCount": 1,
+            "text": "03"
+          },
+          {
+            "name": "sequence-body-2",
+            "bbox": [
+              825,
+              443,
+              250,
+              88
+            ],
+            "fontSize": 18.67,
+            "alignment": "center",
+            "lineCount": 3,
+            "text": "第三步由使用人完成现场交\n接，使用结束后归还设备并登\n记异常情况。"
+          }
+        ],
+        "evidenceBoundary": "来自 Native 导出的真实文本框与行；字形占用和空区是估计值，不包含装饰背景，也不证明审美正确。"
+      }
+    },
+    "exception-rule": {
+      "status": "passed",
+      "revision": 1,
+      "pptxPath": ".tmp/penguin-harness-v2/grid-loop-20260905-1/pages/exception-rule/revision-1/deck.pptx",
+      "feedback": {
+        "pageId": "exception-rule",
+        "accepted": true,
+        "issues": [],
+        "warnings": [
+          {
+            "code": "sparse-content",
+            "actual": 0.0763888888888889,
+            "limit": 0.12
+          }
+        ],
+        "regionAllocation": {
+          "occupiedCellRatio": 0.3611111111111111,
+          "largestEmptyRectangle": {
+            "x": 0,
+            "y": 0,
+            "w": 24,
+            "h": 3,
+            "cells": 72,
+            "ratio": 0.25
+          },
+          "heatmap": [
+            "........................",
+            "........................",
+            "........................",
+            "...##################...",
+            "...##################...",
+            "...##################...",
+            "...##################...",
+            "........................",
+            "....################....",
+            "....################....",
+            "........................",
+            "........................"
+          ]
+        },
+        "textOccupancyEstimate": {
+          "occupiedCellRatio": 0.0763888888888889,
+          "largestEmptyRectangle": {
+            "x": 0,
+            "y": 0,
+            "w": 24,
+            "h": 3,
+            "cells": 72,
+            "ratio": 0.25
+          },
+          "heatmap": [
+            "........................",
+            "........................",
+            "........................",
+            "..........####..........",
+            "......############......",
+            "........................",
+            "........................",
+            "........................",
+            ".........######.........",
+            "........................",
+            "........................",
+            "........................"
+          ]
+        },
+        "textObjects": [
+          {
+            "name": "grid:action-block:item-exception-handling:title",
+            "bbox": [
+              209.25,
+              297,
+              861.5,
+              36
+            ],
+            "fontSize": 27,
+            "alignment": "center",
+            "lineCount": 1,
+            "text": "异常处理"
+          },
+          {
+            "name": "grid:action-block:item-exception-handling:body",
+            "bbox": [
+              209.25,
+              345,
+              861.5,
+              100
+            ],
+            "fontSize": 20,
+            "alignment": "center",
+            "lineCount": 1,
+            "text": "出现设备故障或时间冲突时暂停原安排，由管理员联系责任人处理"
+          },
+          {
+            "name": "grid:scope-strip:item-exception-handling:body",
+            "bbox": [
+              258,
+              502,
+              764,
+              66
+            ],
+            "fontSize": 20,
+            "alignment": "center",
+            "lineCount": 1,
+            "text": "这项规则适用于整个预约过程。"
+          }
+        ],
+        "evidenceBoundary": "来自 Native 导出的真实文本框与行；字形占用和空区是估计值，不包含装饰背景，也不证明审美正确。"
+      }
+    },
+    "first-round-checks": {
+      "status": "passed",
+      "revision": 2,
+      "pptxPath": ".tmp/penguin-harness-v2/grid-loop-20260905-1/pages/first-round-checks/revision-2/deck.pptx",
+      "feedback": {
+        "pageId": "first-round-checks",
+        "accepted": true,
+        "issues": [],
+        "warnings": [],
+        "regionAllocation": {
+          "occupiedCellRatio": 0.6875,
+          "largestEmptyRectangle": {
+            "x": 0,
+            "y": 0,
+            "w": 24,
+            "h": 1,
+            "cells": 24,
+            "ratio": 0.08333333333333333
+          },
+          "heatmap": [
+            "........................",
+            ".######################.",
+            ".######################.",
+            ".######################.",
+            "........................",
+            ".######################.",
+            ".######################.",
+            ".######################.",
+            "........................",
+            ".######################.",
+            ".######################.",
+            ".######################."
+          ]
+        },
+        "textOccupancyEstimate": {
+          "occupiedCellRatio": 0.21180555555555555,
+          "largestEmptyRectangle": {
+            "x": 17,
+            "y": 0,
+            "w": 7,
+            "h": 10,
+            "cells": 70,
+            "ratio": 0.24305555555555555
+          },
+          "heatmap": [
+            "........................",
+            ".###....................",
+            ".################.......",
+            "........................",
+            "........................",
+            ".###....................",
+            ".################.......",
+            "........................",
+            "........................",
+            ".###....................",
+            ".####################...",
+            "........................"
+          ]
+        },
+        "textObjects": [
+          {
+            "name": "grid:record-band:item-check-record:title",
+            "bbox": [
+              111.75,
+              215,
+              1056.5,
+              36
+            ],
+            "fontSize": 27,
+            "alignment": "left",
+            "lineCount": 1,
+            "text": "记录完整"
+          },
+          {
+            "name": "grid:record-band:item-check-record:body",
+            "bbox": [
+              111.75,
+              263,
+              1056.5,
+              59
+            ],
+            "fontSize": 20,
+            "alignment": "left",
+            "lineCount": 1,
+            "text": "检查登记信息、确认结果和归还记录是否能够对应，缺少任一环节就补齐交接信息。"
+          },
+          {
+            "name": "grid:responsibility-band:item-check-responsibility:title",
+            "bbox": [
+              111.75,
+              379,
+              1056.5,
+              36
+            ],
+            "fontSize": 27,
+            "alignment": "left",
+            "lineCount": 1,
+            "text": "责任明确"
+          },
+          {
+            "name": "grid:responsibility-band:item-check-responsibility:body",
+            "bbox": [
+              111.75,
+              427,
+              1056.5,
+              59
+            ],
+            "fontSize": 20,
+            "alignment": "left",
+            "lineCount": 1,
+            "text": "检查申请人、管理员和责任人的分工是否清楚；有争议时先澄清责任，再讨论自动化。"
+          },
+          {
+            "name": "grid:adjustment-band:item-check-adjustment:title",
+            "bbox": [
+              111.75,
+              543,
+              1056.5,
+              36
+            ],
+            "fontSize": 27,
+            "alignment": "left",
+            "lineCount": 1,
+            "text": "调整有据"
+          },
+          {
+            "name": "grid:adjustment-band:item-check-adjustment:body",
+            "bbox": [
+              111.75,
+              591,
+              1056.5,
+              59
+            ],
+            "fontSize": 20,
+            "alignment": "left",
+            "lineCount": 1,
+            "text": "记录取消、改期和故障的具体原因，以实际问题决定下一轮改进，不用页面里的示意流程冒充运行结果。"
+          }
+        ],
+        "evidenceBoundary": "来自 Native 导出的真实文本框与行；字形占用和空区是估计值，不包含装饰背景，也不证明审美正确。"
+      }
+    }
+  },
+  "phase": "ready",
+  "contentValidation": {
+    "accepted": true,
+    "issues": [],
+    "pageCount": 5,
+    "sourceCoverage": {
+      "used": 12,
+      "total": 12
+    },
+    "semanticLimit": "来源覆盖不自动证明分页、标题或结论正确，仍需人工核对。"
+  },
+  "warningDecisions": [
+    {
+      "pageId": "exception-rule",
+      "reason": "本页只承载一条贯穿性规则，全部上屏文字均逐字取自同一句源文，分为异常处理动作与适用范围强调两段，内容量天然低于稀疏阈值；规则禁止虚构或改写文字来充墨量，居中留白用于单点规则的强调阅读，故接受稀疏提示。"
+    }
+  ]
+}
