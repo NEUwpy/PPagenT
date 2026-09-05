@@ -22,11 +22,11 @@ description: 在 PPagenT 制作 PPT 时按内容逻辑查找并调用现有结�
 
 先读取 [调用接口](references/invocation.md)。在自己的 JavaScript PPT 构建脚本中导入 `scripts/invoke.mjs` 的 `invokeStructure`。它调用已有 HTML/Native 执行器，将结构加入当前 slide，并在成功或失败后向指定的运行记录文件追加事件。它不会生成整页截图来代替图示。
 
-正文区和字体主题使用 `src/runtime/skins/northeastern-university-contract.mjs`；整页排版遵守 `docs/工作流/正式生成/Agent排版规则.md`。实际 Shell 可复用 `assets/主题/东北大学-001/runtime-template.pptx`。不要把旧 grid 的固定文字槽位当作新规则；可直接创建不同尺寸的文字框。
+正文区、主题与对齐使用本次明确指定的 Skin 设计指南；未指定时读取 `docs/工作流/正式生成/Agent排版规则.md` 确认入口。`src/runtime/skins/northeastern-university-contract.mjs` 是旧大学接口参考，不覆盖本次 Skin。仅任务要求继承旧模板时复用其 Shell，不把旧 grid 文字槽位当作新规则。
 
 ## 适配与反馈
 
-数量、关系、极性、字段与自然尺寸必须符合所选资产。先读取契约再选区域，不能整体缩小后把字号补回来。复用资产内部对齐方式；当前任务每页正文只用一种对齐，冲突时换表达或调整区域组织。
+数量、关系、极性、字段与自然尺寸必须符合所选资产。先读取契约再选区域，不能整体缩小后把字号补回来。节点与连线的位置、方向及归属保留；本次 Skin 明确要求样式统一时，可以对调用产生的原生对象做样式适配，按[调用接口](references/invocation.md#原生样式适配)核对文本和几何不变。关系或语义依赖的样式不能抹去，无法兼容时换表达。
 
 发生错误先分清：参数/语义不合适、区域不足、Skill 说明缺失、运行环境故障。只修改有证据的问题后重试。禁止吞错后改成假结构并声称调用成功。保存失败与成功事件，报告实际采用的表达。新的页面组合不自动晋升核心资产。
 
