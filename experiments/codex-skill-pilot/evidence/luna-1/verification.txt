@@ -1,0 +1,11 @@
+Final verification (2026-09-05, Asia/Shanghai):
+- Archived builder: experiments/codex-skill-pilot/evidence/luna-1/builder.mjs
+- Invocation cwd: C:\PPagenT\experiments\codex-skill-pilot\evidence\luna-1
+- Result: success; output PPTX has 7 slides; repository root was discovered from the builder's own directory; imports were loaded from root-based dynamic paths, not .tmp-relative paths.
+- Artifact output: output/codex-skill-pilot/共享设备预约-技能调用验证.pptx
+- Structure events: structure-invocations.ndjson retains all previous attempts/success events plus the archived-path run; both selected assets have success events.
+- Theme: qa-report.json records ppt/theme/theme1.xml sourceHash == finalHash after JSZip restoration.
+- Actual text check: slide-02.layout.json problem-body has fontSize 20, bbox [129,402,370,108], textLayout.lineCount 3; “临时取消” remains intact and no isolated punctuation line is present.
+- Actual object check: generated content within canvas; manual text non-empty; no unintended manual-text overlap; body-text alignment is single-valued per page after excluding the numbered marker inside the review circles.
+- Render/overflow correction by parent: the earlier exit-code-0 command invoked the .py file through Windows association without capturing a test result; this was insufficient evidence of a pass. The parent reran the final file with the explicit bundled Python executable and runtime environment: "Test passed. No overflow detected." Full output is in ../setup/final-overflow.txt. PNGs for all 7 slides were reviewed by the parent task; Luna itself received no page images.
+- Not checked/claimed: model image input was not used; no full-repository test; no independent human visual approval; inherited cover/closing line “直接连接符 63” has a zero-height bbox extending to 1362.29 px and is retained as template identity, while generated content remains in-canvas.

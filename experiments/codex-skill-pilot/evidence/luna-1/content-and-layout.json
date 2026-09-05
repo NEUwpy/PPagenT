@@ -1,0 +1,59 @@
+{
+  "source": "experiments/codex-skill-pilot/manuscript.md",
+  "pagePlan": [
+    {
+      "page": 1,
+      "sourceSlideNumber": 1,
+      "notes": "[Sources]\n- 内容：experiments/codex-skill-pilot/manuscript.md（虚构试稿；非真实事件或实测结果）\n- 视觉：assets/主题/东北大学-001/runtime-template.pptx（东北大学 Skin 运行模板）\n- 页面：cover｜共享设备开放预约试点\n- PPagenT：显式使用东北大学 Skin cover；内容标注为虚构试稿\n[/Sources]"
+    },
+    {
+      "page": 2,
+      "sourceSlideNumber": 3,
+      "notes": "[Sources]\n- 内容：experiments/codex-skill-pilot/manuscript.md（虚构试稿；非真实事件或实测结果）\n- 视觉：assets/主题/东北大学-001/runtime-template.pptx（东北大学 Skin 运行模板）\n- 页面：pilot-boundary｜先把预约信息收拢，再谈扩大范围\n[/Sources]"
+    },
+    {
+      "page": 3,
+      "sourceSlideNumber": 3,
+      "notes": "[Sources]\n- 内容：experiments/codex-skill-pilot/manuscript.md（虚构试稿；非真实事件或实测结果）\n- 视觉：assets/主题/东北大学-001/runtime-template.pptx（东北大学 Skin 运行模板）\n- 页面：booking-process｜预约流程保留三步，安全暂停贯穿其中\n- PPagenT：调用 sequence-flow-001；安全暂停使用页内原生规则带\n[/Sources]"
+    },
+    {
+      "page": 4,
+      "sourceSlideNumber": 3,
+      "notes": "[Sources]\n- 内容：experiments/codex-skill-pilot/manuscript.md（虚构试稿；非真实事件或实测结果）\n- 视觉：assets/主题/东北大学-001/runtime-template.pptx（东北大学 Skin 运行模板）\n- 页面：tradeoff｜收益值得争取，但维护负担必须实测\n- PPagenT：调用 comparison-pros-cons-balance-005；balanceState=收益侧更重\n[/Sources]"
+    },
+    {
+      "page": 5,
+      "sourceSlideNumber": 3,
+      "notes": "[Sources]\n- 内容：experiments/codex-skill-pilot/manuscript.md（虚构试稿；非真实事件或实测结果）\n- 视觉：assets/主题/东北大学-001/runtime-template.pptx（东北大学 Skin 运行模板）\n- 页面：review-criteria｜复盘只看三件可核验的事\n[/Sources]"
+    },
+    {
+      "page": 6,
+      "sourceSlideNumber": 3,
+      "notes": "[Sources]\n- 内容：experiments/codex-skill-pilot/manuscript.md（虚构试稿；非真实事件或实测结果）\n- 视觉：assets/主题/东北大学-001/runtime-template.pptx（东北大学 Skin 运行模板）\n- 页面：approval-conditions｜批准条件要清楚，范围先保持可控\n[/Sources]"
+    },
+    {
+      "page": 7,
+      "sourceSlideNumber": 4,
+      "notes": "[Sources]\n- 内容：experiments/codex-skill-pilot/manuscript.md（虚构试稿；非真实事件或实测结果）\n- 视觉：assets/主题/东北大学-001/runtime-template.pptx（东北大学 Skin 运行模板）\n- 页面：closing｜小范围批准，复盘后再决定是否扩大\n- PPagenT：使用东北大学 Skin closing；未引入任何虚构结果\n[/Sources]"
+    }
+  ],
+  "selectedStructures": [
+    {
+      "pageId": "booking-process",
+      "assetId": "sequence-flow-001",
+      "state": "3 steps",
+      "reason": "strict order in manuscript"
+    },
+    {
+      "pageId": "tradeoff",
+      "assetId": "comparison-pros-cons-balance-005",
+      "state": "3 benefits + 3 costs + benefits heavier",
+      "reason": "single decision trade-off with explicit verdict"
+    }
+  ],
+  "nativePages": [
+    "pilot-boundary",
+    "review-criteria",
+    "approval-conditions"
+  ]
+}

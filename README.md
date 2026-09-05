@@ -14,6 +14,8 @@ PPagenT 是一个面向固定组织场景，使用受控视觉能力可靠生成
 
 本机 codex/penguin-harness-v2 验证有限能力下的稿件驱动闭环；另一台电脑的 main 丰富版式、结构和排版规则，见[分支分工](docs/分支分工.md)。
 
+已完成一轮[空白 Luna high 的 Codex Skill 试做](experiments/codex-skill-pilot/README.md)：通过结构主 Skill/逻辑子 Skill 查找并真实调用两种现有结构，文字直接按规则排放，反馈修订后生成 7 页原生 PPTX。先在 Codex 验证，再移植 Harness；本轮不代表正式入口已迁移或产品成本已验证。
+
 当前状态与历史统一见[更新日志](docs/更新日志.md)，阶段性判断见[方向校正](docs/方向校正.md)，产品边界见[产品定义](docs/产品定义.md)。
 
 ## 已确定的原则
