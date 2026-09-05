@@ -1,0 +1,28 @@
+{
+  "stage": "static review of first builder before final delivery",
+  "imageInput": false,
+  "findings": [
+    {
+      "rule": "T01",
+      "observed": "fit selects old composition singleTitle/dualBody/bandBody roles",
+      "requested": "use semantic typography roles from rule draft"
+    },
+    {
+      "rule": "L05",
+      "observed": "safety rule left with centered sequence; review footer centered with left body",
+      "requested": "check single body alignment per slide"
+    },
+    {
+      "rule": "QA",
+      "observed": "nativeChecks only asserts submitted boxes/font sizes",
+      "requested": "inspect exported text lines and object geometry; report unsupported checks"
+    },
+    {
+      "rule": "evidence",
+      "observed": "builder truncates invocation log on rerun",
+      "requested": "preserve actual attempt success/failure history"
+    }
+  ],
+  "answerLayoutProvided": false,
+  "childAskedToRepair": true
+}
