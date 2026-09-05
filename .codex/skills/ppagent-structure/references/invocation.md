@@ -52,3 +52,5 @@ catalog.mjs inspect sequence-flow-001
 仅本次 Skin 要求与现有组件样式不一致时使用。`invokeStructure` 的成功仍只表示原生生成完成；在当前 builder 中识别该次新增的对象，保留对象 ID、数量、文本、位置、路径与方向，再用 artifact-tool 已支持的文字样式、fill、line、shadow 属性对齐本次 Skin。`shape.shadow = "shadow-none"` 可去掉阴影。字体、颜色与对齐变化后重新读回实际行和边界。
 
 不修改核心资产文件，不删节点、连线或带含义的标记；不得把位图或重画的结构冒充原调用。带正负、强弱、分类等含义的视觉编码需原样保留语义。保存适配前后 ID/文本/几何对照及实际输出样式。遇到不能用样式属性解决的结构问题，换表达或报告限制，不通过偷偷移动节点绕过契约。
+
+实际 API 要点：结构对象的可见名称可从调用后 `slide.export({format:"layout"})` 的 `elements[].id/name` 取得，不能假定 `shape.name` 直接可读。先建立实际 id → name 映射，再按本次资产中已确认的对象职责适配。只设置字体不能替代颜色和对齐设置；完成后以导出的 resolvedTextStyle 为准。此路径已在 sequence-flow-001 上运行，其他资产仍需按其真实对象与语义检查。
