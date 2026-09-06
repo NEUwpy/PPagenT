@@ -1,0 +1,206 @@
+{
+  "source": "builder actual successful planConvergence parameters",
+  "cases": [
+    {
+      "id": "full-width-short",
+      "selected": {
+        "frame": {
+          "left": 62,
+          "top": 190,
+          "width": 1156,
+          "height": 410
+        },
+        "inputs": [
+          {
+            "title": "现场记录",
+            "body": "故障现象与发生时间"
+          },
+          {
+            "title": "检测记录",
+            "body": "测量读数与测试条件"
+          },
+          {
+            "title": "备件记录",
+            "body": "替换型号与领用数量"
+          }
+        ],
+        "result": {
+          "title": "维修交接单",
+          "body": "让接班人员追溯本次处理"
+        },
+        "inputWidth": 300,
+        "resultWidth": 280
+      },
+      "attempts": [
+        {
+          "attempt": 1,
+          "params": {
+            "frame": {
+              "left": 62,
+              "top": 190,
+              "width": 1156,
+              "height": 410
+            },
+            "inputs": [
+              {
+                "title": "现场记录",
+                "body": "故障现象与发生时间"
+              },
+              {
+                "title": "检测记录",
+                "body": "测量读数与测试条件"
+              },
+              {
+                "title": "备件记录",
+                "body": "替换型号与领用数量"
+              }
+            ],
+            "result": {
+              "title": "维修交接单",
+              "body": "让接班人员追溯本次处理"
+            },
+            "inputWidth": 300,
+            "resultWidth": 280
+          },
+          "result": {
+            "ok": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "half-width-short-with-note",
+      "selected": {
+        "frame": {
+          "left": 62,
+          "top": 180,
+          "width": 700,
+          "height": 400
+        },
+        "inputs": [
+          {
+            "title": "现场记录",
+            "body": "故障现象、发生时间"
+          },
+          {
+            "title": "检测记录",
+            "body": "读数、测试条件"
+          },
+          {
+            "title": "备件记录",
+            "body": "型号、领用数量"
+          }
+        ],
+        "result": {
+          "title": "维修交接单",
+          "body": "交接双方共同确认"
+        },
+        "inputWidth": 210,
+        "resultWidth": 180
+      },
+      "attempts": [
+        {
+          "attempt": 1,
+          "params": {
+            "frame": {
+              "left": 62,
+              "top": 180,
+              "width": 700,
+              "height": 400
+            },
+            "inputs": [
+              {
+                "title": "现场记录",
+                "body": "故障现象、发生时间"
+              },
+              {
+                "title": "检测记录",
+                "body": "读数、测试条件"
+              },
+              {
+                "title": "备件记录",
+                "body": "型号、领用数量"
+              }
+            ],
+            "result": {
+              "title": "维修交接单",
+              "body": "交接双方共同确认"
+            },
+            "inputWidth": 210,
+            "resultWidth": 180
+          },
+          "result": {
+            "ok": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "wide-long-with-note",
+      "selected": {
+        "frame": {
+          "left": 56,
+          "top": 168,
+          "width": 820,
+          "height": 460
+        },
+        "inputs": [
+          {
+            "title": "现场记录",
+            "body": "记录故障现象、发生时间，以及当班人员观察到的异常表现"
+          },
+          {
+            "title": "检测记录",
+            "body": "保留测量读数、测试条件，以及无法复现时的检查范围"
+          },
+          {
+            "title": "备件记录",
+            "body": "写清替换型号、领用数量，并注明是否完成旧件回收"
+          }
+        ],
+        "result": {
+          "title": "维修交接单",
+          "body": "让接班人员知道\n发生了什么、怎样检查\n以及换过什么"
+        },
+        "inputWidth": 280,
+        "resultWidth": 220
+      },
+      "attempts": [
+        {
+          "attempt": 1,
+          "params": {
+            "frame": {
+              "left": 56,
+              "top": 168,
+              "width": 820,
+              "height": 460
+            },
+            "inputs": [
+              {
+                "title": "现场记录",
+                "body": "记录故障现象、发生时间，以及当班人员观察到的异常表现"
+              },
+              {
+                "title": "检测记录",
+                "body": "保留测量读数、测试条件，以及无法复现时的检查范围"
+              },
+              {
+                "title": "备件记录",
+                "body": "写清替换型号、领用数量，并注明是否完成旧件回收"
+              }
+            ],
+            "result": {
+              "title": "维修交接单",
+              "body": "让接班人员知道\n发生了什么、怎样检查\n以及换过什么"
+            },
+            "inputWidth": 280,
+            "resultWidth": 220
+          },
+          "result": {
+            "ok": true
+          }
+        }
+      ]
+    }
+  ]
+}

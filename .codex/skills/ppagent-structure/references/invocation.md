@@ -49,6 +49,14 @@ catalog.mjs inspect sequence-flow-001
 - 每次构建使用独立 attempt 标记或追加日志，不在重跑开头清空 `structure-invocations.ndjson`。历史 attempt 与最终采用版本分开记录。
 - Windows 下用 `fileURLToPath(import.meta.url)` 解析脚本路径，不能直接用 URL.pathname。将脚本从临时目录归档到 evidence 后，重新检查相对导入和项目根定位，并实际从归档路径运行。
 
+### 独立实验的路径与交付
+
+`root` 是包含 `assets/` 与 `.codex/skills/ppagent-structure/` 的仓库根，不是实验目录。按 builder 所在目录解析后先检查这两个路径；结构包装器和最终交付工具所需的工作区不是同一个概念。
+
+使用 presentations 的 `finalizePresentation` 时，以工具当版接口为准。当前已验证的目录组织是在本次工作区下预先创建 `build/`、`evidence/`、`deliverables/` 三个同级目录：候选在 build，校验回执在 evidence，最终文件在 deliverables。回执不能位于最终文件的父目录或其子目录，最终父目录须已存在；重跑为最终文件和回执使用新的路径，避免覆盖冲突。交付后可复制已校验文件到本次公开链接位置，并核对哈希一致。
+
+最终化器的子进程导入需要 `RUNTIME_NODE_MODULES` 时，使用 `load_workspace_dependencies` 返回的 Node.js packages 路径传入；不要改用猜测的全局依赖。结构成功后的依赖或最终化失败属于交付阶段，保留候选后修复该阶段，不必反复重调结构。这些检查不代替最终 PPTX 的独立渲染与视觉复核。
+
 ## 原生样式适配
 
 仅本次 Skin 要求与现有组件样式不一致时使用。`invokeStructure` 的成功仍只表示原生生成完成；在当前 builder 中识别该次新增的对象，保留对象 ID、数量、文本、位置、路径与方向，再用 artifact-tool 已支持的文字样式、fill、line、shadow 属性对齐本次 Skin。`shape.shadow = "shadow-none"` 可去掉阴影。字体、颜色与对齐变化后重新读回实际行和边界。

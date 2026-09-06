@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>第06页 · 两种结构使用方式</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f5f4ef;color:#20201d;font-family:"Noto Sans SC","Microsoft YaHei",sans-serif;padding:32px}main{max-width:1800px;margin:auto}h1{font:600 30px "Noto Serif SC",serif;margin:0 0 12px}p{line-height:1.7;color:#4b4a45}a{color:#a35d4f}header{margin-bottom:26px}.controls{display:flex;gap:12px;align-items:center}button{border:1px solid #d8d5cc;background:transparent;padding:8px 14px;color:#20201d;cursor:pointer}button.active{background:#eeece5;border-color:#a35d4f}.compare{display:grid;grid-template-columns:1fr 1fr;gap:24px}.compare.stacked{grid-template-columns:1fr;max-width:1280px;margin:auto}figure{margin:0}figcaption{margin:0 0 10px;font-size:18px;font-weight:600}img{display:block;width:100%;height:auto;border:1px solid #d8d5cc}figure p{font-size:14px;margin:10px 0}.library{max-width:1000px;margin:40px auto 0}summary{cursor:pointer;font-size:18px;margin-bottom:16px}.note{padding:18px 0;border-top:1px solid #d8d5cc;margin-top:28px}@media(max-width:850px){body{padding:18px}.compare{grid-template-columns:1fr}}
+</style><main>
+<header><h1>同一页，浅参考与保留结构原貌</h1><p>A 是你已认可的版本；B 由 Luna high 保留结构库河道与门闸造型，适配中性主题后编排。比较表达效果，不替换原稿。</p><div class="controls"><button class="active" onclick="setMode(false,this)">并排比较</button><button onclick="setMode(true,this)">大图逐页看</button><a href="../neutral-magazine-reference-02/deck.pptx">原版完整 PPT</a></div></header>
+<div id="comparison" class="compare">
+<figure><figcaption>A · 已认可版：浅参考重组</figcaption><img src="original-06.png" alt="已认可版第06页"><p>方框、细线和文字条件，主要保留流程逻辑。</p></figure>
+<figure><figcaption>B · 保留库造型：中性主题适配</figcaption><img src="parent-final/slide-01.png" alt="Luna 编排的保留结构造型对照版"><p>保留河道、门闸与关系路径，文字内容使用同一份原稿。<a href="deck.pptx">下载单页可编辑 PPT</a></p></figure>
+</div>
+<details class="library"><summary>展开结构库原貌（蓝色、示例文案）</summary><img src="library-example/slide-01.png" alt="阶段门禁流程库示例"><p>用于核对造型保留程度；示例内容与本稿无关。</p></details>
+<div class="note"><p>原版检查点：<code>neutral-magazine-approved-20260906</code>。新版本仅供对比讨论。<a href="README.md">实验记录</a></p></div>
+</main><script>function setMode(stacked,button){document.getElementById('comparison').classList.toggle('stacked',stacked);document.querySelectorAll('button').forEach(b=>b.classList.remove('active'));button.classList.add('active')}</script></html>

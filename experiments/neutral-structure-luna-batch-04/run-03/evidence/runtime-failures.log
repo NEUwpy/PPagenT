@@ -1,0 +1,9 @@
+本轮保留的可恢复失败证据（均已诊断并修正）：
+
+1. 规则命令试探：`src/cli/index.mjs` 不存在，Node 报 `MODULE_NOT_FOUND`。随后按 package.json 的实际入口执行 `npm run rules:load -- --profile generation --skin neutral-editorial-001` 成功。
+2. 首次终检：4 个结构生成文本对象仍为 `Microsoft YaHei`，presentation-layout validator 拒绝。按导出对象名适配阶段编号文本为 Noto Serif SC 后重跑。
+3. 第二次终检：first-party Artifact Tool 导入子进程报 `RUNTIME_NODE_MODULES is required`。注入工作区依赖返回的绝对 Node 与 node_modules 路径后重跑。
+4. 第三次终检：receipt 位于 finalPath 父目录下，报 `Private validation receipt must stay inside the task workspace and outside final output`。预建同 run 下的 `.build` 与 `deliverables` 两个兄弟目录后重跑。
+5. 首次 PNG 渲染：render_slides 报 `RUNTIME_NODE is required`。按工作区依赖路径注入 `RUNTIME_NODE` 与 `RUNTIME_NODE_MODULES` 后渲染成功。
+
+这些失败没有被转写为 success 调用事件；最终成功事件见 `structure-invocations.ndjson`，终检报告见 `../.build/deck-v3.validation.json`。
