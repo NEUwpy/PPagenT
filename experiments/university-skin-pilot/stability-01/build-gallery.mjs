@@ -11,7 +11,7 @@ const html=`<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="
 <p id="summary"></p><p>原稿 + 冻结设计指南 + 单一蓝色主题；执行模型只使用文字与几何工具。这里展示最终 PPTX 的独立渲染。首轮与反馈修订分开留档。</p>
 <nav id="runs"></nav><div class="toolbar"><span><label>提交版本 <select id="round"></select></label></span><span><a id="deck">可编辑 PPTX</a> · <a id="verification">程序复核</a> · <a href="RESULTS.md">测试结论</a></span></div>
 <p id="note"></p><nav id="pages"></nav><figure><img id="slide" alt="PPT 页面预览"><figcaption id="caption"></figcaption></figure>
-<details><summary>测试边界与输入</summary><p>这些有限样本用于发现提示词的具体失效模式，不能保证生产成功率。父任务视觉判断与几何检查独立记录；最终修订通过不计为首轮成功。</p><a href="inputs/layout-guide.txt">冻结设计指南</a> · <a href="inputs/task-prompt.txt">完整通用任务提示</a> · <a href="input-hashes.json">输入指纹</a> · <a href="../v8-review/index.html">已认可的 v8 四页基线</a></details>
+<details><summary>测试边界与输入</summary><p>这些有限样本用于发现提示词的具体失效模式，不能保证生产成功率。父任务视觉判断与几何检查独立记录；最终修订通过不计为首轮成功。</p><a href="inputs-v9-execution-02/layout-guide.txt">冻结设计指南</a> · <a href="inputs-v9-execution-02/task-prompt.txt">完整通用任务提示</a> · <a href="input-v9-execution-02-hashes.json">输入指纹</a> · <a href="REUSE.md">复用说明</a> · <a href="../v8-review/index.html">已认可的 v8 四页基线</a></details>
 </main><script>const data=${safeData};const $=id=>document.getElementById(id);let ri=0,vi=0,pi=0;
 $('summary').textContent=data.summary;
 data.runs.forEach((r,i)=>{const b=document.createElement('button');b.textContent=r.title;b.onclick=()=>selectRun(i);$('runs').append(b)});

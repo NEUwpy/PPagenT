@@ -1,0 +1,630 @@
+{
+  "schema": "ppagent.connector-contract/v1",
+  "source": "C:\\PPagenT\\experiments\\university-skin-pilot\\stability-01\\red-b\\round-03\\deck.pptx",
+  "layoutDir": "C:\\PPagenT\\experiments\\university-skin-pilot\\stability-01\\red-b\\round-03",
+  "scope": "Top-level native p:cxnSp only. Ordinary line shapes and grouped connectors are not route-audited; non-straight or rotated paths are explicitly unsupported.",
+  "slides": [
+    {
+      "slide": 1,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\stability-01\\red-b\\round-03\\slide-1.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 2,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\stability-01\\red-b\\round-03\\slide-2.layout.json",
+      "connectors": [
+        {
+          "lineId": {
+            "xml": "34",
+            "layout": "16"
+          },
+          "geometry": "bentConnector4",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "7",
+            "name": "high-group"
+          },
+          "target": {
+            "id": "13",
+            "name": "pivot"
+          },
+          "sourceBinding": {
+            "id": "7",
+            "idx": "2"
+          },
+          "targetBinding": {
+            "id": "13",
+            "idx": "2"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            220,
+            458,
+            807.5,
+            24
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "unsupported-geometry",
+            "geometry": "bentConnector4",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "35",
+            "layout": "17"
+          },
+          "geometry": "bentConnector4",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "10",
+            "name": "low-group"
+          },
+          "target": {
+            "id": "13",
+            "name": "pivot"
+          },
+          "sourceBinding": {
+            "id": "10",
+            "idx": "2"
+          },
+          "targetBinding": {
+            "id": "13",
+            "idx": "2"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            595,
+            458,
+            432.5,
+            24
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "unsupported-geometry",
+            "geometry": "bentConnector4",
+            "candidates": []
+          }
+        }
+      ],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 3,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\stability-01\\red-b\\round-03\\slide-3.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 4,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\stability-01\\red-b\\round-03\\slide-4.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 5,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\stability-01\\red-b\\round-03\\slide-5.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 6,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\stability-01\\red-b\\round-03\\slide-6.layout.json",
+      "connectors": [
+        {
+          "lineId": {
+            "xml": "36",
+            "layout": "16"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "7",
+            "name": "vr-source"
+          },
+          "target": {
+            "id": "10",
+            "name": "vr-core"
+          },
+          "sourceBinding": {
+            "id": "7",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "10",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            305,
+            312,
+            85,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "37",
+            "layout": "17"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "10",
+            "name": "vr-core"
+          },
+          "target": {
+            "id": "13",
+            "name": "vr-use"
+          },
+          "sourceBinding": {
+            "id": "10",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "13",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            730,
+            312,
+            90,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        }
+      ],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 7,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\stability-01\\red-b\\round-03\\slide-7.layout.json",
+      "connectors": [
+        {
+          "lineId": {
+            "xml": "36",
+            "layout": "16"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "7",
+            "name": "speak-team"
+          },
+          "target": {
+            "id": "10",
+            "name": "speak-course"
+          },
+          "sourceBinding": {
+            "id": "7",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "10",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            325,
+            314,
+            67,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "37",
+            "layout": "17"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "10",
+            "name": "speak-course"
+          },
+          "target": {
+            "id": "13",
+            "name": "speak-reach"
+          },
+          "sourceBinding": {
+            "id": "10",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "13",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            742,
+            314,
+            88,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        }
+      ],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 8,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\stability-01\\red-b\\round-03\\slide-8.layout.json",
+      "connectors": [
+        {
+          "lineId": {
+            "xml": "39",
+            "layout": null
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "missing-or-ambiguous",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "14",
+            "name": "north-node"
+          },
+          "target": {
+            "id": "15",
+            "name": "west-node"
+          },
+          "sourceBinding": {
+            "id": "14",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "15",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            899,
+            341,
+            67,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "layout-missing",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "40",
+            "layout": null
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "missing-or-ambiguous",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "15",
+            "name": "west-node"
+          },
+          "target": {
+            "id": "14",
+            "name": "north-node"
+          },
+          "sourceBinding": {
+            "id": "15",
+            "idx": "1"
+          },
+          "targetBinding": {
+            "id": "14",
+            "idx": "3"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            899,
+            341,
+            67,
+            0
+          ],
+          "flip": {
+            "horizontal": true,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "layout-missing",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        }
+      ],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 9,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\stability-01\\red-b\\round-03\\slide-9.layout.json",
+      "connectors": [
+        {
+          "lineId": {
+            "xml": "52",
+            "layout": "23"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "7",
+            "name": "stage-0"
+          },
+          "target": {
+            "id": "11",
+            "name": "stage-1"
+          },
+          "sourceBinding": {
+            "id": "7",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "11",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            275,
+            318,
+            70,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "53",
+            "layout": "24"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "11",
+            "name": "stage-1"
+          },
+          "target": {
+            "id": "15",
+            "name": "stage-2"
+          },
+          "sourceBinding": {
+            "id": "11",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "15",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            565,
+            318,
+            70,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "54",
+            "layout": "25"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "15",
+            "name": "stage-2"
+          },
+          "target": {
+            "id": "19",
+            "name": "stage-3"
+          },
+          "sourceBinding": {
+            "id": "15",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "19",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            855,
+            318,
+            70,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        }
+      ],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 10,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\stability-01\\red-b\\round-03\\slide-10.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 11,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\stability-01\\red-b\\round-03\\slide-11.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    }
+  ],
+  "summary": {
+    "slideCount": 11,
+    "connectorCount": 11,
+    "boundCount": 11,
+    "unknownBindingCount": 0,
+    "reverseArrowCount": 0,
+    "unsupportedGeometryCount": 2,
+    "unsupportedTransformCount": 0,
+    "uninspectedGroupedConnectors": 0,
+    "uninspectedRouteCount": 4,
+    "textIntersectionCount": 0
+  }
+}
