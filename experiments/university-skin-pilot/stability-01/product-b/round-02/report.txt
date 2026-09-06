@@ -1,0 +1,23 @@
+Luna/high 独立全稿修订报告（round-02）
+
+round-01 原样保留；本轮只写 round-02。
+
+修订内容：
+1. 全部有向连接由 artifact-tool `head` 改为目标端 `tail`。最终 XML 核对：slide 2/5/6/7/8 的连接均为 `<a:tailEnd>`，`<a:headEnd>` 为 0；slide 6 端点映射为 core asset library -> choice node，正式生成线无反向写库。
+2. P2 两条连接改为上下外侧 elbow 走廊，确定性文本检查不再发现连线穿文字。
+3. P4 删除 95/80 之间箭头；右下说明压缩为两行，避免“80”与句末标点软换行。
+4. P6 恢复原稿的内容导演与视觉导演职责，正式生成线改为：原始稿件+主题 -> 内容导演 -> 视觉导演 -> 合法能力/简单排版 -> 确定性编译 -> PPTX；核心资产库只读供给选择节点。
+5. P8 将已验证能力及边界作为左侧大主体区，组织主题与更多组织作为右侧应用支持区。
+6. P3、P7、P8 的大块语义区域改为直角背景；保留轻圆角给短节点。
+
+程序检查结果：
+- audit-text-overlaps：9 页 textCapacityWarningCount=0、intersectionCount=0、textRuleIntersectionCount=0。剩余 textRuleClearanceCandidates 均是箭头与真实连接节点边界接触，非文字相交。
+- audit-node-labels：slide 2–8 共 24 个实际节点（P6 保留内容导演/视觉导演职责并调整节点），issueCount=0。
+- audit-visible-contract：全页 colorIssueCount=0、paintIssueCount=0。
+- audit-wrap-tails：9 页 count=0。该检查器只检查导出 textLayout.lines 的软换行尾行，不能替代视觉检查。
+- slides_test.py：Test passed. No overflow detected.
+- 官方 PPTX 渲染：render/slide-1.png 至 render/slide-9.png 已生成；未读取图片，父任务独立复核。
+
+剩余限制：布局与尾行工具不能证明字形边界、圆角轮廓或叙事审美；父任务需独立查看官方渲染。
+
+文件哈希：见同目录 hash.txt，由 Get-FileHash 计算。

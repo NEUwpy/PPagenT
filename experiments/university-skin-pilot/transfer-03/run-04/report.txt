@@ -1,0 +1,640 @@
+run-04 report
+communication job: 联合实验负责人应看懂两条准备可并行，但启动条件是两份证据齐全且项目负责人联合核验通过。
+content boundary: 虚构流程设计，尚未实施；没有添加真实学校、真实成果或统计数字。
+visual route: explicit custom visual direction from the supplied Skin guide + theme.json; no bundled template used.
+native output: visible text, nodes, gates, connectors and open explanations are native PowerPoint objects.
+actual exported layout: 22 non-empty text frames; 19 one-line frames; 2 two-line frames; 0 elements outside 1280x720.
+text sizing/bounds evidence: layoutJSON.json records resolvedFontSize, resolvedTextStyle, textLayout.lines and bbox for each exported text object.
+connector evidence: proto-connectors.json is extracted from presentation.toProto(); connector endpoint side/index records are in this report.
+proto arrow check: {"connectorCount":10,"forwardCount":8,"forwardDestinationTailType2":true,"feedbackCount":2,"feedbackDestinationTailType6":true}; forward arrows are encoded on destination tail, with no head arrow in proto.
+helper-render sha256: pending post-render verification.
+reference mode: reference; invokeStructure: not executed.
+
+REFERENCE RECORD
+{
+  "mode": "reference",
+  "referenceAssetIds": [
+    "parallel-equal-cards-001",
+    "convergence-many-to-one-003",
+    "branching-decision-routes-001",
+    "cycle-single-chain-feedback-002"
+  ],
+  "absorbedMethods": [
+    "共同起点与双轨对齐表达并行，但把说明从节点中移到开放文字。",
+    "双路证据向单一联合核验点收束，再经过独立的“通过？”门槛。",
+    "条件紧邻局部门槛；不合格与授权缺失分别回送设备组/数据组。",
+    "只保留局部反馈通道，不将准备工作画成已实现的收益循环。"
+  ],
+  "changesForThisPage": [
+    "压缩结构骨架，普通职责、证据解释、异常处理与负责人边界采用开放文字。",
+    "补入项目负责人职责限制、授权缺失样本隔离、不进入本轮清单，以及“证据齐全且联合核验通过”双重启动条件。",
+    "整页使用 theme.json 的 primaryColor 与派生色阶；不引入独立第二色相。"
+  ],
+  "invocation": {
+    "executed": false,
+    "note": "未执行 invokeStructure；本页为参考重组后的原生可编辑对象。"
+  }
+}
+
+CONNECTOR ENDPOINT LEDGER
+[
+  {
+    "label": "设备校准→合格门槛",
+    "id": "31",
+    "from": "equipment-task",
+    "fromSide": "right",
+    "fromIdx": 3,
+    "to": "equipment-gate",
+    "toSide": "left",
+    "toIdx": 1,
+    "kind": "straight",
+    "lineStyle": "solid",
+    "lineWidth": 2,
+    "head": "none",
+    "tail": "triangle"
+  },
+  {
+    "label": "合格门槛→签字校准记录",
+    "id": "32",
+    "from": "equipment-gate",
+    "fromSide": "right",
+    "fromIdx": 3,
+    "to": "equipment-evidence",
+    "toSide": "left",
+    "toIdx": 1,
+    "kind": "straight",
+    "lineStyle": "solid",
+    "lineWidth": 2,
+    "head": "none",
+    "tail": "triangle"
+  },
+  {
+    "label": "样本整理→完整门槛",
+    "id": "33",
+    "from": "data-task",
+    "fromSide": "right",
+    "fromIdx": 3,
+    "to": "data-gate",
+    "toSide": "left",
+    "toIdx": 1,
+    "kind": "straight",
+    "lineStyle": "solid",
+    "lineWidth": 2,
+    "head": "none",
+    "tail": "triangle"
+  },
+  {
+    "label": "完整门槛→去标识样本清单",
+    "id": "34",
+    "from": "data-gate",
+    "fromSide": "right",
+    "fromIdx": 3,
+    "to": "data-evidence",
+    "toSide": "left",
+    "toIdx": 1,
+    "kind": "straight",
+    "lineStyle": "solid",
+    "lineWidth": 2,
+    "head": "none",
+    "tail": "triangle"
+  },
+  {
+    "label": "校准记录→联合核验",
+    "id": "35",
+    "from": "equipment-evidence",
+    "fromSide": "right",
+    "fromIdx": 3,
+    "to": "joint-check",
+    "toSide": "left",
+    "toIdx": 1,
+    "kind": "elbow",
+    "lineStyle": "solid",
+    "lineWidth": 2,
+    "head": "none",
+    "tail": "triangle"
+  },
+  {
+    "label": "样本清单→联合核验",
+    "id": "36",
+    "from": "data-evidence",
+    "fromSide": "right",
+    "fromIdx": 3,
+    "to": "joint-check",
+    "toSide": "left",
+    "toIdx": 1,
+    "kind": "elbow",
+    "lineStyle": "solid",
+    "lineWidth": 2,
+    "head": "none",
+    "tail": "triangle"
+  },
+  {
+    "label": "联合核验→通过门槛",
+    "id": "37",
+    "from": "joint-check",
+    "fromSide": "right",
+    "fromIdx": 3,
+    "to": "joint-pass-gate",
+    "toSide": "left",
+    "toIdx": 1,
+    "kind": "straight",
+    "lineStyle": "solid",
+    "lineWidth": 2,
+    "head": "none",
+    "tail": "triangle"
+  },
+  {
+    "label": "通过门槛→确认可开始",
+    "id": "38",
+    "from": "joint-pass-gate",
+    "fromSide": "right",
+    "fromIdx": 3,
+    "to": "final-node",
+    "toSide": "left",
+    "toIdx": 1,
+    "kind": "straight",
+    "lineStyle": "solid",
+    "lineWidth": 2,
+    "head": "none",
+    "tail": "triangle"
+  },
+  {
+    "label": "不合格→设备组复校",
+    "id": "39",
+    "from": "equipment-gate",
+    "fromSide": "bottom",
+    "fromIdx": 2,
+    "to": "equipment-task",
+    "toSide": "bottom",
+    "toIdx": 2,
+    "kind": "elbow",
+    "lineStyle": "dashed",
+    "lineWidth": 1.5,
+    "head": "none",
+    "tail": "arrow"
+  },
+  {
+    "label": "授权缺失→数据组补齐",
+    "id": "40",
+    "from": "data-gate",
+    "fromSide": "bottom",
+    "fromIdx": 2,
+    "to": "data-task",
+    "toSide": "bottom",
+    "toIdx": 2,
+    "kind": "elbow",
+    "lineStyle": "dashed",
+    "lineWidth": 1.5,
+    "head": "none",
+    "tail": "arrow"
+  }
+]
+
+PROTO CONNECTOR OBJECTS
+[
+  {
+    "path": "root.slides[0].elements[30]",
+    "id": "31",
+    "name": "",
+    "shape": {
+      "geometry": 96,
+      "adjustmentList": [],
+      "customPaths": [],
+      "customGeometryGuides": [],
+      "line": {
+        "widthEmu": 19050,
+        "fill": {
+          "type": 1,
+          "color": {
+            "type": 1,
+            "value": "315F91"
+          },
+          "gradientStops": [],
+          "pictureEffects": []
+        },
+        "style": 1
+      }
+    },
+    "connector": {
+      "fromElementId": "7",
+      "fromIdx": 3,
+      "toElementId": "9",
+      "toIdx": 1,
+      "lineStyle": {
+        "tail": {
+          "type": 2,
+          "width": 1,
+          "length": 1
+        }
+      }
+    }
+  },
+  {
+    "path": "root.slides[0].elements[31]",
+    "id": "32",
+    "name": "",
+    "shape": {
+      "geometry": 96,
+      "adjustmentList": [],
+      "customPaths": [],
+      "customGeometryGuides": [],
+      "line": {
+        "widthEmu": 19050,
+        "fill": {
+          "type": 1,
+          "color": {
+            "type": 1,
+            "value": "315F91"
+          },
+          "gradientStops": [],
+          "pictureEffects": []
+        },
+        "style": 1
+      }
+    },
+    "connector": {
+      "fromElementId": "9",
+      "fromIdx": 3,
+      "toElementId": "11",
+      "toIdx": 1,
+      "lineStyle": {
+        "tail": {
+          "type": 2,
+          "width": 1,
+          "length": 1
+        }
+      }
+    }
+  },
+  {
+    "path": "root.slides[0].elements[32]",
+    "id": "33",
+    "name": "",
+    "shape": {
+      "geometry": 96,
+      "adjustmentList": [],
+      "customPaths": [],
+      "customGeometryGuides": [],
+      "line": {
+        "widthEmu": 19050,
+        "fill": {
+          "type": 1,
+          "color": {
+            "type": 1,
+            "value": "315F91"
+          },
+          "gradientStops": [],
+          "pictureEffects": []
+        },
+        "style": 1
+      }
+    },
+    "connector": {
+      "fromElementId": "8",
+      "fromIdx": 3,
+      "toElementId": "10",
+      "toIdx": 1,
+      "lineStyle": {
+        "tail": {
+          "type": 2,
+          "width": 1,
+          "length": 1
+        }
+      }
+    }
+  },
+  {
+    "path": "root.slides[0].elements[33]",
+    "id": "34",
+    "name": "",
+    "shape": {
+      "geometry": 96,
+      "adjustmentList": [],
+      "customPaths": [],
+      "customGeometryGuides": [],
+      "line": {
+        "widthEmu": 19050,
+        "fill": {
+          "type": 1,
+          "color": {
+            "type": 1,
+            "value": "315F91"
+          },
+          "gradientStops": [],
+          "pictureEffects": []
+        },
+        "style": 1
+      }
+    },
+    "connector": {
+      "fromElementId": "10",
+      "fromIdx": 3,
+      "toElementId": "12",
+      "toIdx": 1,
+      "lineStyle": {
+        "tail": {
+          "type": 2,
+          "width": 1,
+          "length": 1
+        }
+      }
+    }
+  },
+  {
+    "path": "root.slides[0].elements[34]",
+    "id": "35",
+    "name": "",
+    "shape": {
+      "geometry": 98,
+      "adjustmentList": [
+        {
+          "name": "adj1",
+          "formula": "val 50000"
+        }
+      ],
+      "customPaths": [],
+      "customGeometryGuides": [],
+      "line": {
+        "widthEmu": 19050,
+        "fill": {
+          "type": 1,
+          "color": {
+            "type": 1,
+            "value": "315F91"
+          },
+          "gradientStops": [],
+          "pictureEffects": []
+        },
+        "style": 1
+      }
+    },
+    "connector": {
+      "fromElementId": "11",
+      "fromIdx": 3,
+      "toElementId": "13",
+      "toIdx": 1,
+      "lineStyle": {
+        "tail": {
+          "type": 2,
+          "width": 1,
+          "length": 1
+        }
+      }
+    }
+  },
+  {
+    "path": "root.slides[0].elements[35]",
+    "id": "36",
+    "name": "",
+    "shape": {
+      "geometry": 98,
+      "adjustmentList": [
+        {
+          "name": "adj1",
+          "formula": "val 50000"
+        }
+      ],
+      "customPaths": [],
+      "customGeometryGuides": [],
+      "line": {
+        "widthEmu": 19050,
+        "fill": {
+          "type": 1,
+          "color": {
+            "type": 1,
+            "value": "315F91"
+          },
+          "gradientStops": [],
+          "pictureEffects": []
+        },
+        "style": 1
+      }
+    },
+    "connector": {
+      "fromElementId": "12",
+      "fromIdx": 3,
+      "toElementId": "13",
+      "toIdx": 1,
+      "lineStyle": {
+        "tail": {
+          "type": 2,
+          "width": 1,
+          "length": 1
+        }
+      }
+    }
+  },
+  {
+    "path": "root.slides[0].elements[36]",
+    "id": "37",
+    "name": "",
+    "shape": {
+      "geometry": 96,
+      "adjustmentList": [],
+      "customPaths": [],
+      "customGeometryGuides": [],
+      "line": {
+        "widthEmu": 19050,
+        "fill": {
+          "type": 1,
+          "color": {
+            "type": 1,
+            "value": "315F91"
+          },
+          "gradientStops": [],
+          "pictureEffects": []
+        },
+        "style": 1
+      }
+    },
+    "connector": {
+      "fromElementId": "13",
+      "fromIdx": 3,
+      "toElementId": "14",
+      "toIdx": 1,
+      "lineStyle": {
+        "tail": {
+          "type": 2,
+          "width": 1,
+          "length": 1
+        }
+      }
+    }
+  },
+  {
+    "path": "root.slides[0].elements[37]",
+    "id": "38",
+    "name": "",
+    "shape": {
+      "geometry": 96,
+      "adjustmentList": [],
+      "customPaths": [],
+      "customGeometryGuides": [],
+      "line": {
+        "widthEmu": 19050,
+        "fill": {
+          "type": 1,
+          "color": {
+            "type": 1,
+            "value": "315F91"
+          },
+          "gradientStops": [],
+          "pictureEffects": []
+        },
+        "style": 1
+      }
+    },
+    "connector": {
+      "fromElementId": "14",
+      "fromIdx": 3,
+      "toElementId": "15",
+      "toIdx": 1,
+      "lineStyle": {
+        "tail": {
+          "type": 2,
+          "width": 1,
+          "length": 1
+        }
+      }
+    }
+  },
+  {
+    "path": "root.slides[0].elements[38]",
+    "id": "39",
+    "name": "",
+    "shape": {
+      "geometry": 99,
+      "adjustmentList": [
+        {
+          "name": "adj1",
+          "formula": "val 0"
+        },
+        {
+          "name": "adj2",
+          "formula": "val 50000"
+        }
+      ],
+      "customPaths": [],
+      "customGeometryGuides": [],
+      "line": {
+        "widthEmu": 14288,
+        "fill": {
+          "type": 1,
+          "color": {
+            "type": 1,
+            "value": "315F91"
+          },
+          "gradientStops": [],
+          "pictureEffects": []
+        },
+        "style": 2
+      }
+    },
+    "connector": {
+      "fromElementId": "9",
+      "fromIdx": 2,
+      "toElementId": "7",
+      "toIdx": 2,
+      "lineStyle": {
+        "tail": {
+          "type": 6,
+          "width": 1,
+          "length": 1
+        }
+      }
+    }
+  },
+  {
+    "path": "root.slides[0].elements[39]",
+    "id": "40",
+    "name": "",
+    "shape": {
+      "geometry": 99,
+      "adjustmentList": [
+        {
+          "name": "adj1",
+          "formula": "val 0"
+        },
+        {
+          "name": "adj2",
+          "formula": "val 50000"
+        }
+      ],
+      "customPaths": [],
+      "customGeometryGuides": [],
+      "line": {
+        "widthEmu": 14288,
+        "fill": {
+          "type": 1,
+          "color": {
+            "type": 1,
+            "value": "315F91"
+          },
+          "gradientStops": [],
+          "pictureEffects": []
+        },
+        "style": 2
+      }
+    },
+    "connector": {
+      "fromElementId": "10",
+      "fromIdx": 2,
+      "toElementId": "8",
+      "toIdx": 2,
+      "lineStyle": {
+        "tail": {
+          "type": 6,
+          "width": 1,
+          "length": 1
+        }
+      }
+    }
+  }
+]
+
+EXPORTED OBJECT INSPECTION
+{"kind":"slide","id":"sl/usafek","slide":1,"title":"虚构流程设计 · 尚未实施","textShapes":22}
+{"kind":"textbox","id":"sh/nidwn2d8","slide":1,"name":"eyebrow","text":"虚构流程设计 · 尚未实施","textPreview":"虚构流程设计 · 尚未实施","textChars":13,"textLines":1,"bbox":[55,34,420,22]}
+{"kind":"textbox","id":"sh/83mxg7et","slide":1,"name":"title","text":"两条准备工作可并行，但联合实验必须等证据齐全且核验通过","textPreview":"两条准备工作可并行，但联合实验必须等证据齐全且核验通过","textChars":27,"textLines":1,"bbox":[55,64,1165,44]}
+{"kind":"shape","id":"sh/94vepcvy","slide":1,"name":"title-rule","bbox":[55,126,1170,0]}
+{"kind":"textbox","id":"sh/ydkvaxwb","slide":1,"name":"process-caption","text":"准备阶段：两条责任组路径同时推进","textPreview":"准备阶段：两条责任组路径同时推进","textChars":16,"textLines":1,"bbox":[55,143,510,22]}
+{"kind":"textbox","id":"sh/zetwj2dw","slide":1,"name":"equipment-label","text":"设备组","textPreview":"设备组","textChars":3,"textLines":1,"bbox":[55,206,76,28]}
+{"kind":"textbox","id":"sh/0f2dcneh","slide":1,"name":"data-label","text":"数据组","textPreview":"数据组","textChars":3,"textLines":1,"bbox":[55,354,76,28]}
+{"kind":"shape","id":"sh/lgbelsv2","slide":1,"name":"equipment-task","bbox":[160,198,150,56]}
+{"kind":"shape","id":"sh/i9ofmhwv","slide":1,"name":"data-task","bbox":[160,346,150,56]}
+{"kind":"shape","id":"sh/jaxwvmdg","slide":1,"name":"equipment-gate","bbox":[370,201,70,50]}
+{"kind":"shape","id":"sh/jy9sj2x8","slide":1,"name":"data-gate","bbox":[370,349,70,50]}
+{"kind":"shape","id":"sh/ix0baxgn","slide":1,"name":"equipment-evidence","bbox":[505,198,155,56]}
+{"kind":"shape","id":"sh/50balcfe","slide":1,"name":"data-evidence","bbox":[505,346,155,56]}
+{"kind":"shape","id":"sh/kzitc7yt","slide":1,"name":"joint-check","bbox":[730,276,160,54]}
+{"kind":"shape","id":"sh/72tsn2xk","slide":1,"name":"joint-pass-gate","bbox":[930,277,70,52]}
+{"kind":"shape","id":"sh/61kbehgz","slide":1,"name":"final-node","bbox":[1040,276,170,54]}
+{"kind":"textbox","id":"sh/t4bapcfa","slide":1,"name":"equipment-task-title","text":"设备校准","textPreview":"设备校准","textChars":4,"textLines":1,"bbox":[178,214,114,26]}
+{"kind":"textbox","id":"sh/s32tg7yp","slide":1,"name":"data-task-title","text":"样本整理","textPreview":"样本整理","textChars":4,"textLines":1,"bbox":[178,362,114,26]}
+{"kind":"textbox","id":"sh/f6tcrmxg","slide":1,"name":"equipment-gate-label","text":"合格？","textPreview":"合格？","textChars":3,"textLines":1,"bbox":[370,214,70,24]}
+{"kind":"textbox","id":"sh/u5kbihgv","slide":1,"name":"data-gate-label","text":"完整？","textPreview":"完整？","textChars":3,"textLines":1,"bbox":[370,362,70,24]}
+{"kind":"textbox","id":"sh/qx8n654f","slide":1,"name":"equipment-evidence-title","text":"校准记录","textPreview":"校准记录","textChars":4,"textLines":1,"bbox":[515,214,140,26]}
+{"kind":"textbox","id":"sh/byh4zal0","slide":1,"name":"data-evidence-title","text":"去标识清单","textPreview":"去标识清单","textChars":5,"textLines":1,"bbox":[515,362,140,26]}
+{"kind":"textbox","id":"sh/czq58fml","slide":1,"name":"joint-check-title","text":"联合核验","textPreview":"联合核验","textChars":4,"textLines":1,"bbox":[748,290,124,26]}
+{"kind":"textbox","id":"sh/d0zm1k36","slide":1,"name":"joint-pass-label","text":"通过？","textPreview":"通过？","textChars":3,"textLines":1,"bbox":[930,289,70,24]}
+{"kind":"textbox","id":"sh/29on254j","slide":1,"name":"final-node-title","text":"本轮可开始","textPreview":"本轮可开始","textChars":5,"textLines":1,"bbox":[1058,290,134,26]}
+{"kind":"textbox","id":"sh/3ax4valo","slide":1,"name":"equipment-evidence-note","text":"记录批次、执行人和结果；合格后提交签字校准记录。\n不合格由设备组调整后复校，不带问题进入联合实验。","textPreview":"记录批次、执行人和结果；合格后提交签字校准记录。 | 不合格由设备组调整后复校，不带问题进入联合实验。","textChars":49,"textLines":2,"bbox":[160,270,550,56]}
+{"kind":"textbox","id":"sh/ob654fm9","slide":1,"name":"data-evidence-note","text":"编号可追溯且授权完整，才形成去标识清单。\n缺授权样本隔离，不进入本轮清单；数据组继续补齐授权。","textPreview":"编号可追溯且授权完整，才形成去标识清单。 | 缺授权样本隔离，不进入本轮清单；数据组继续补齐授权。","textChars":47,"textLines":2,"bbox":[160,418,550,70]}
+{"kind":"textbox","id":"sh/pwzmxk3u","slide":1,"name":"and-label","text":"两份证据齐全","textPreview":"两份证据齐全","textChars":6,"textLines":1,"bbox":[690,238,240,22]}
+{"kind":"textbox","id":"sh/m5snep4n","slide":1,"name":"manager-boundary-note","text":"负责人做联合核验，不代签校准，也不代替数据组补授权。\n缺任一证据或核验未通过，就退回对应责任组，不启动本轮实验。","textPreview":"负责人做联合核验，不代签校准，也不代替数据组补授权。 | 缺任一证据或核验未通过，就退回对应责任组，不启动本轮实验。","textChars":56,"textLines":2,"bbox":[725,360,380,92]}
+{"kind":"textbox","id":"sh/n61o7ul8","slide":1,"name":"next-week-title","text":"下一周试行范围","textPreview":"下一周试行范围","textChars":7,"textLines":1,"bbox":[80,532,200,26]}
+{"kind":"textbox","id":"sh/h03qd8na","slide":1,"name":"next-week-body","text":"只验收两条准备可并行、职责边界清楚、两份证据留存完整；不承诺提前完成或减少等待。","textPreview":"只验收两条准备可并行、职责边界清楚、两份证据留存完整；不承诺提前完成或减少等待。","textChars":40,"textLines":1,"bbox":[80,562,1050,52]}
+{"kind":"shape","id":"sh/wzup436p","slide":1,"bbox":[310,226,60,0]}
+{"kind":"shape","id":"sh/vyl8by54","slide":1,"bbox":[440,226,65,0]}
+{"kind":"shape","id":"sh/axc72toj","slide":1,"bbox":[310,374,60,0]}
+{"kind":"shape","id":"sh/9w3q9one","slide":1,"bbox":[440,374,65,0]}
+{"kind":"shape","id":"sh/8vup0j6t","slide":1,"bbox":[660,226,70,77]}
+{"kind":"shape","id":"sh/nu187e58","slide":1,"bbox":[660,303,70,71]}
+{"kind":"shape","id":"sh/mts7y9on","slide":1,"bbox":[890,303,40,0]}
+{"kind":"shape","id":"sh/tsnq5sni","slide":1,"bbox":[1000,303,40,0]}
+{"kind":"shape","id":"sh/srepcn6x","slide":1,"bbox":[235,251,170,3]}
+{"kind":"shape","id":"sh/0jipgj2h","slide":1,"bbox":[235,399,170,3]}
+{"kind":"shape","id":"sh/1kr6poj2","slide":1,"name":"footer-rule","bbox":[55,646,1170,0]}
+{"kind":"textbox","id":"sh/ex07e9kb","slide":1,"name":"footer-source","text":"素材：虚构流程设计｜本页仅检验并行准备、职责边界、证据留存与联合核验","textPreview":"素材：虚构流程设计｜本页仅检验并行准备、职责边界、证据留存与联合核验","textChars":34,"textLines":1,"bbox":[55,660,920,22]}
+{"kind":"textbox","id":"sh/fy9one1w","slide":1,"name":"page-number","text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[1185,660,40,22]}
+{"kind":"notes","id":"nt/usafek","slide":1,"text":"[Sources]\n内容：experiments/university-skin-pilot/transfer-03/manuscript.txt\n设计：docs/设计手册/科研咨询式排版-v7.md；主题：experiments/university-skin-pilot/reference-01/theme.json\n结构参考重组：parallel-equal-cards-001、convergence-many-to-one-003、branching-decision-routes-001、cycle-single-chain-feedback-002；未执行 invokeStructure。"}

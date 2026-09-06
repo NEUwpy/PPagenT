@@ -1,0 +1,26 @@
+archive-d/round-01 首轮独立交付报告
+
+页数与目录：8页。
+1｜先把一次结果说明白（虚构场景、受众、四周小范围试点）
+2｜找到图片，不等于结果已经可以解释（问题边界与三类依据）
+3｜一个可讨论结果，需要五类信息共同解释（记录单元）
+4｜记录完整，与所有人都能看到全部文件，是两件事（授权边界）
+5｜建议先试新增实验，再逐项补历史结果（范围选择）
+6｜复核先确认别人能否理解结果如何产生（工作顺序与授权暂停）
+7｜试点范围小而明确，四周观察缺项与填写负担（范围和时间）
+8｜用三类问题决定保留、修改，还是停止（评估、启动、停止与收束）
+
+确定性修复：初检发现第2页标题说明与首个节点有5px边界交叠，已下移节点；第3页底部标题与纪律说明交叠，已增加通道；第4页授权分隔线穿过授权标签，已移开；第2页正文句号软换行、 第6页节点末字软换行、 第3页纪律句尾软换行，均已改写/显式分行；第7页时间轴底线覆盖节点，已移除多余底线，保留节点间原生箭头；第7页周节点改为圆角矩形并增大内边距以满足安全区。
+
+最终真实检查（均基于最后一次 builder 导出的 deck.pptx 与 slide-N.layout.json）：
+- audit-text-overlaps.mjs：8/8 页 textCapacityWarningCount=0，intersectionCount=0，textRuleIntersectionCount=0；第6/7页有端点接触候选，connector audit 进一步核对为清晰直线，不计为文字相交。
+- audit-node-labels.mjs：适用页1、2、3、6、7 共19个配对，issueCount=0；第4、5、8页无实际节点，明确记为不适用。
+- audit-visible-contract.mjs：8/8 页 colorIssueCount=0、paintIssueCount=0；此工具仅是候选发现器，不能证明字形或视觉验收。
+- audit-wrap-tails.mjs：8/8 页 count=0；工具仅覆盖部分软换行候选。
+- audit-connectors.py：8条顶层原生 straightConnector1，8/8 bound，8/8 arrowAt=target、actualArrowDirection=source-to-target，0 reverse、0 unsupported、0 textIntersection、0 declarationFailure。
+- presentations render_slides.py：生成官方渲染到 render/slide-1.png … render/slide-8.png；未读取图片，视觉检查由父任务完成。
+- presentations slides_test.py：Test passed. No overflow detected.
+
+未覆盖范围：未使用视觉能力，未读取或评审渲染图片；audit-visible-contract 不检查字形边界、圆角轮廓和逻辑正确性；audit-connectors 只覆盖顶层原生直线连接器，本稿无折线、曲线、旋转或分组连接器；结构参考均为 reference-recompose，未声称 invokeStructure 成功；P02 场景说明已压缩为封面边界句，纯开场问候未入稿。
+
+交付文件：deck.pptx、builder.mjs、source-map.json、reasoning.txt、coverage.txt、structure-usage.txt、text-crosscheck.txt、connections.json、每页 layout JSON、适用页 node-label-pairs JSON、官方 render/ PNG、check-*.json/log。

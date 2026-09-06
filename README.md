@@ -17,6 +17,10 @@ PPagenT 面向工作型演示，把用户内容整理为表达清楚、视觉合
 - [独立生成任务提示词](docs/工作流/正式生成/生成任务提示词.md)：新任务读取规则的短入口。
 - [文档地图](docs/README.md)、[更新日志](docs/更新日志.md)：其余资料与状态记录。
 
+## 已合并的大学咨询式排版实验
+
+`codex/penguin-harness-v2` 的提示词、结构主题适配、Harness 原型与完整生成证据已纳入 main。三篇 29 页精选稿及独立首轮对照见[整稿展示](experiments/university-skin-pilot/stability-01/index.html)，实际通过数与限制见[测试记录](experiments/university-skin-pilot/stability-01/RESULTS.md)。这些是实验成果；当前规则索引不因此自动新增大学咨询式绑定，也不代表正式 Harness 已迁移。
+
 ## 使用与验证
 
 安装 Node.js 20 或更高版本后：

@@ -1,0 +1,22 @@
+Luna/high 独立全稿编排第二轮修订报告
+
+本轮依据父任务逐页文字反馈修订，保留 round-01 原目录并另建本目录。交付为 9 页原生可编辑中文 PPTX；builder.mjs、deck.pptx、每页真实 Artifact layout JSON、适用页 node-label-pairs JSON、官方渲染 render/、coverage.txt、structure-usage.txt 与检查日志均已生成。
+
+本轮定向修订：
+- 第1页封面主判断改为“先让结果说清楚”，右侧压缩为一次有限归档试点，避免双重主标题。
+- 第3页中心改为“结果文件”，右侧改为原始数据处理、脚本版本、异常与排除三组，并明确四类依据共同解释结果文件。
+- 第4、6、7、8页全部改用主题主色派生与中性灰，去除黄褐/红色语义。
+- 第6页增加有语义的主流程区与独立跨流程授权门禁区，明确暂停共享、负责人处理、授权后继续。
+- 第8页补入“字段填满但定位不到脚本版本仍未解决追溯”的关键反例。
+- 分析页标题下统一使用横向细分隔，主要语义区域改为直角面；保留少量圆角节点以维持节点识别。
+- 第3、6、7、9页节点配对清单已补全；共19个节点/标签配对。
+
+确定性检查：
+- audit-text-overlaps.mjs：9页均 textCapacityWarningCount=0、textCapacityUnchecked=0、intersectionCount=0、textRuleIntersectionCount=0、textRuleClearanceCount=0。
+- audit-node-labels.mjs：第3、6、7、9页共19个配对，均 issueCount=0，水平/垂直居中与声明安全区检查通过。
+- presentations/render_slides.py：9页 PNG 全部成功生成。
+- presentations/slides_test.py：Test passed；未检测到画布溢出。
+
+最终 deck.pptx SHA-256：94D1CD56EB6054A1672D8315CD4342A1191BDFB3E67690981825AEA4D2A549BB
+
+真实限制：程序检查不等于视觉验收；按任务边界，本轮未读取渲染 PNG，最终视觉主次、阅读路径、字形细节与连接线观感仍由父任务检查。报告不将 round-01 称为全稿通过，仅记录本轮针对反馈的修订与检查结果。

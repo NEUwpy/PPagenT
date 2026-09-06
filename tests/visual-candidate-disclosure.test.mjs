@@ -8,20 +8,22 @@ import { expandVisualSkillRouting } from "../src/agent/visual-skill-router.mjs";
 
 const structural = { assetId: "structure", structureGroupId: "structure-group", fallbackBody: false };
 const fallback = { assetId: "body", structureGroupId: "editorial", fallbackBody: true };
+const editorial = { ...fallback, readiness: "ready" };
 
-test("已有合法结构时视觉导演看不到正文兜底", () => {
+test("已有合法结构时文字与结构都是视觉导演的正式候选", () => {
   const [set] = candidateSetsForVisualDirector([{
     pageId: "p1",
-    candidates: [structural, fallback],
+    candidates: [structural, editorial],
   }]);
-  assert.deepEqual(set.candidates.map((item) => item.assetId), ["structure"]);
-  assert.equal(set.selectionMode, "group-locked");
-  assert.equal(set.lockedStructureGroupId, "structure-group");
+  assert.deepEqual(set.candidates.map((item) => item.assetId), ["body", "structure"]);
+  assert.equal(set.selectionMode, "visual-selectable");
+  assert.equal(set.lockedStructureGroupId, undefined);
 });
 
-test("没有结构或组件已实际溢出时才披露正文兜底", () => {
-  const [noStructure] = candidateSetsForVisualDirector([{ pageId: "p1", candidates: [fallback] }]);
+test("没有结构时正文是正式候选，组件实际溢出时才转为兜底", () => {
+  const [noStructure] = candidateSetsForVisualDirector([{ pageId: "p1", candidates: [editorial] }]);
   assert.deepEqual(noStructure.candidates.map((item) => item.assetId), ["body"]);
+  assert.equal(noStructure.candidates[0].readiness, "ready");
 
   const [overflow] = candidateSetsForVisualDirector(
     [{ pageId: "p2", candidates: [structural, fallback] }],
@@ -31,11 +33,11 @@ test("没有结构或组件已实际溢出时才披露正文兜底", () => {
 
   const [needsRefinement] = candidateSetsForVisualDirector([{
     pageId: "p3",
-    candidates: [{ ...structural, contentReadiness: "needs-semantic-refinement" }, fallback],
+    candidates: [{ ...structural, contentReadiness: "needs-semantic-refinement" }, editorial],
   }]);
-  assert.deepEqual(needsRefinement.candidates, []);
+  assert.deepEqual(needsRefinement.candidates.map((item) => item.assetId), ["body"]);
   assert.equal(needsRefinement.gap.type, "content-contract-gap");
-  assert.equal(needsRefinement.selectionMode, undefined);
+  assert.equal(needsRefinement.selectionMode, "group-locked");
 });
 
 test("derivable 是合法结构但旧缺分点状态仍是不兼容", () => {
@@ -50,14 +52,15 @@ test("derivable 是合法结构但旧缺分点状态仍是不兼容", () => {
         derivationPolicy: { allowedFields: ["centerLabel"] },
       },
       { ...structural, assetId: "legacy", contentReadiness: "needs-semantic-refinement" },
-      fallback,
+      editorial,
     ],
   }]);
-  assert.deepEqual(set.candidates.map((item) => item.assetId), ["derived"]);
-  assert.equal(set.candidates[0].readiness, "derivable");
-  assert.deepEqual(set.candidates[0].derivationPolicy, { allowedFields: ["centerLabel"] });
-  assert.equal("contentReadiness" in set.candidates[0], false);
-  assert.equal(set.selectionMode, "group-locked");
+  assert.deepEqual(set.candidates.map((item) => item.assetId), ["body", "derived"]);
+  const derived = set.candidates.find((item) => item.assetId === "derived");
+  assert.equal(derived.readiness, "derivable");
+  assert.deepEqual(derived.derivationPolicy, { allowedFields: ["centerLabel"] });
+  assert.equal("contentReadiness" in derived, false);
+  assert.equal(set.selectionMode, "visual-selectable");
 });
 
 test("derivable 必须有合法 derivationPolicy，reasons 不授予权限", () => {
@@ -177,7 +180,7 @@ test("组件实际溢出后后续路由不能把正文兜底改回结构组件",
   assert.equal(result.compositionPlan.pages[0].compositionId, "editorial-single-focus");
 });
 
-test("临时结构尚未补齐语义时不再向视觉导演披露正文兜底", () => {
+test("临时结构尚未补齐语义时保留正式正文能力并报告结构缺口", () => {
   const provisional = {
     familyId: "sequence",
     variantId: "needs-points",
@@ -202,6 +205,8 @@ test("临时结构尚未补齐语义时不再向视觉导演披露正文兜底",
     pageId: "p1",
     candidates: [provisional, body],
   }]);
-  assert.deepEqual(result.candidates, []);
+  assert.deepEqual(result.candidates.map((item) => item.familyId), ["skin-body-editorial"]);
+  assert.equal(result.candidates[0].readiness, "ready");
+  assert.equal(result.selectionMode, "group-locked");
   assert.equal(result.gap.type, "content-contract-gap");
 });

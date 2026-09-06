@@ -39,7 +39,9 @@ function fitSkinText(value, frame, roleName, { preferSemanticBreaks = false } = 
 }
 
 function tagComponentRuntimeOverflow(error, page) {
-  if (String(error?.message ?? "").includes("组合排版无法在安全 box 内完整呈现")) {
+  const message = String(error?.message ?? "");
+  if (message.includes("组合排版无法在安全 box 内完整呈现")
+    || (/超出\s*\d+\s*项状态容量/.test(message))) {
     error.code = "COMPONENT_RUNTIME_OVERFLOW";
     error.pageId = page.content.pageId;
     error.assetId = page.payload.assetId;

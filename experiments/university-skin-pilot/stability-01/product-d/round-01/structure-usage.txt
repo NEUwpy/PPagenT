@@ -1,0 +1,10 @@
+mode: reference
+referenceAssetIds: sequence-flow-001, convergence-many-to-one-003, comparison-dual-verdict-001
+
+第7页采用 reference-recompose：
+- sequence-flow-001：吸收连续推进与编号节点绑定方法，重组为资产入库线与正式生成线两条原生泳道；不调用原组件。
+- convergence-many-to-one-003：吸收多路汇聚到共同结果的方法，重组为“用户确认→核心资产库→正式生成线”的唯一交汇；保持只读调用关系。
+
+第4/5/8页参考 comparison-dual-verdict-001 的共同口径、镜像扫描与权衡表达；按本稿重排为普通工作价值、自由度权衡、传统路线/PPagenT路线三种不同内容结构，不直接调用。
+
+实际方式：没有 invokeStructure；未生成直接调用成功事件。所有图形由 builder.mjs 使用 @oai/artifact-tool 原生 shapes/text/connectors 绘制。

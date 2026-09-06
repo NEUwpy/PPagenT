@@ -1,0 +1,29 @@
+{
+  "mode": "reference-recomposition-feedback-revision",
+  "basedOn": "experiments/university-skin-pilot/reference-01/run-01",
+  "theme": "experiments/university-skin-pilot/reference-01/theme.json",
+  "layoutGuide": "docs/设计手册/科研咨询式排版-v6.md",
+  "sourceManuscript": "experiments/university-skin-pilot/argument-01/manuscript.txt",
+  "referenceAssetIds": ["comparison-dual-verdict-001", "sequence-phase-gates-004"],
+  "absorbedMethods": {
+    "comparison-dual-verdict-001": ["共享比较轴与对应行", "用紧凑结论行收束总量，不再使用巨大结论卡", "主题色只强调试点侧及其关键含义"],
+    "sequence-phase-gates-004": ["用连续方向和阶段边界表达流程", "推进条件贴近连接边界并保持一行可读", "异常规则与主流程分开但贴近所属步骤"]
+  },
+  "changesFromRun01": {
+    "page-01": ["移除巨大总量卡片与制作式解读标题；改为左侧共享尺度阶段条形证据、总计行、右侧对象化解释", "统一使用 v6 角色字号：标题32、局部标题22、正文20、图表标签16、来源14", "条末标签改为数值与天的自然成组文本，并把工作日单位放到轴线下方避免与刻度3碰撞"],
+    "page-02": ["移除三张大圆角职责卡与门禁卡；改为三列文字 + 三个编号节点 + 两条连接骨架", "门禁改为一行条件文字，缺件规则作为第二步下方的局部说明，底部仅保留两个重要边界区域", "连接器从 head 改为 tail，实际端点保持左节点到右节点"]
+  },
+  "readFiles": ["docs/设计手册/科研咨询式排版-v6.md", ".codex/skills/ppagent-structure/references/reference-use.md", "assets/结构图/双向对比-001/asset.json", "assets/结构图/双向对比-001/runtime.mjs", "assets/结构图/阶段门禁流程-004/asset.json", "assets/结构图/阶段门禁流程-004/runtime.mjs", "experiments/university-skin-pilot/reference-01/run-01/deck.pptx.inspect.ndjson"],
+  "checks": {
+    "invokeStructure": false,
+    "nativeEditableObjects": true,
+    "arrowProto": {
+      "connectors": 2,
+      "fromTo": [{"fromElementId": "4", "toElementId": "5", "fromIdx": 6, "toIdx": 2, "tail": {"type": 2, "width": 1, "length": 1}}, {"fromElementId": "5", "toElementId": "6", "fromIdx": 6, "toIdx": 2, "tail": {"type": 2, "width": 1, "length": 1}}],
+      "interpretation": "左节点右侧起点 -> 右节点左侧终点，目的端使用 tail triangle"
+    },
+    "textLayout": "all exported text boxes checked for line count, role size, and container height",
+    "geometry": "all exported element bboxes remain within 1280x720",
+    "semanticBoundaries": ["no causal attribution", "teacher professional judgment retained", "missing-material pause remains local to step 2", "four-week plan remains unimplemented", "fiction label visible on both pages"]
+  }
+}

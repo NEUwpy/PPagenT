@@ -9,14 +9,23 @@ import {
   resolveHtmlComponent,
 } from "../visual-runtime/html-component-runtime.mjs";
 import { inspectHtmlComponentEligibility } from "../runtime/html-component-eligibility.mjs";
+import { defaultStructurePrimaryColor } from "../visual-runtime/html-component-theme.mjs";
 
-const projectRoot = path.resolve(process.argv[2] ?? path.resolve(import.meta.dirname, "../.."));
+const positionalRoot = process.argv.slice(2).find((value) => !value.startsWith("--"));
+const projectRoot = path.resolve(positionalRoot ?? path.resolve(import.meta.dirname, "../.."));
 const assetFilter = new Set((process.argv.find((value) => value.startsWith("--assets="))?.slice("--assets=".length) ?? "")
   .split(",").map((value) => value.trim()).filter(Boolean));
+const primaryColorOption = process.argv.find((value) => value.startsWith("--primary-color="))?.slice("--primary-color=".length);
+const themeOption = process.argv.find((value) => value.startsWith("--theme="))?.slice("--theme=".length);
 
 async function readJson(filePath) {
   return JSON.parse(await fs.readFile(filePath, "utf8"));
 }
+
+const loadedTheme = themeOption ? await readJson(path.resolve(themeOption)) : {};
+const componentTheme = { ...(loadedTheme.componentTheme ?? loadedTheme) };
+componentTheme.primaryColor = primaryColorOption ?? componentTheme.primaryColor ?? defaultStructurePrimaryColor;
+if (!/^#[0-9a-f]{6}$/i.test(componentTheme.primaryColor)) throw new Error("--primary-color 必须是六位十六进制颜色");
 
 async function assetManifests() {
   const result = [];
@@ -102,7 +111,13 @@ for (const { assetDir, manifest } of await assetManifests()) {
       const slide = presentation.slides.add();
       slide.background.fill = "#FFFFFF";
       const targetFrame = runtime.sourceFrame ?? { left: 55, top: 166, width: 1170, height: 492 };
-      const tree = await resolveHtmlComponent({ component, parameters, assetDir, targetFrame });
+      const tree = await resolveHtmlComponent({
+        component,
+        parameters,
+        assetDir,
+        targetFrame,
+        theme: componentTheme,
+      });
       compileResolvedVisualTree(slide, tree, targetFrame);
     } else {
       await builder(presentation, parameters);

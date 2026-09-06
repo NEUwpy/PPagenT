@@ -1,0 +1,275 @@
+[
+  {
+    "pageId": "shell-cover",
+    "contentTitle": "把 PPT 生成变成可靠的生产过程",
+    "payloadAssetId": "northeastern-university-cover-001",
+    "composition": null
+  },
+  {
+    "pageId": "shell-agenda",
+    "contentTitle": "目录",
+    "payloadAssetId": "northeastern-university-agenda-001",
+    "composition": null
+  },
+  {
+    "pageId": "p1",
+    "contentTitle": "做 PPT 真正贵的是判断",
+    "payloadAssetId": "hub-directed-outcomes-002",
+    "composition": {
+      "pageId": "p1",
+      "compositionId": "component-full",
+      "textSlots": []
+    }
+  },
+  {
+    "pageId": "p2",
+    "contentTitle": "需求分布：中间主体最大",
+    "payloadAssetId": "progression-spectrum-focus-001",
+    "composition": {
+      "pageId": "p2",
+      "compositionId": "component-full",
+      "textSlots": []
+    }
+  },
+  {
+    "pageId": "p3",
+    "contentTitle": "稳定比惊艳更重要",
+    "payloadAssetId": "northeastern-university-body-001",
+    "composition": {
+      "pageId": "p3",
+      "compositionId": "editorial-dual-statement",
+      "textSlots": [
+        {
+          "slotId": "left",
+          "sourceItemIds": [
+            "p3-item1"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "right",
+          "sourceItemIds": [
+            "p3-item2"
+          ],
+          "contentMode": "full"
+        }
+      ]
+    }
+  },
+  {
+    "pageId": "p4",
+    "contentTitle": "用限制自由换取可靠性",
+    "payloadAssetId": "parallel-equal-cards-001",
+    "composition": {
+      "pageId": "p4",
+      "compositionId": "component-full",
+      "textSlots": []
+    }
+  },
+  {
+    "pageId": "p5",
+    "contentTitle": "AI 是控制器，不是画师",
+    "payloadAssetId": "sequence-flow-001",
+    "composition": {
+      "accepted": true,
+      "schemaVersion": "0.1",
+      "pageId": "p5",
+      "pageJob": "解释 AI、规则与代码的职责边界",
+      "rhythm": "dense",
+      "focalRegion": "structure",
+      "readingOrder": [
+        "structure",
+        "aside"
+      ],
+      "regions": [
+        {
+          "regionId": "structure",
+          "role": "structure",
+          "frame": {
+            "left": 55,
+            "top": 221,
+            "width": 930,
+            "height": 382
+          },
+          "sourceContentIds": [
+            "p5-structure-1",
+            "p5-structure-2",
+            "p5-structure-3"
+          ],
+          "carrierType": "structure-skill",
+          "skillId": "sequence-flow-001",
+          "visualWeight": "primary"
+        },
+        {
+          "regionId": "aside",
+          "role": "text",
+          "frame": {
+            "left": 1009,
+            "top": 202,
+            "width": 216,
+            "height": 420
+          },
+          "sourceContentIds": [
+            "p5-takeaway"
+          ],
+          "carrierType": "editorial-aside",
+          "skillId": "text/editorial-aside",
+          "visualWeight": "support"
+        }
+      ],
+      "layout": {
+        "id": "dynamic-structure-aside-right",
+        "silhouette": "natural-structure-left-editorial-right",
+        "requiresComponent": true,
+        "componentResizeMode": "natural-crop",
+        "allowedAssetKinds": [
+          "component"
+        ],
+        "slots": [
+          {
+            "id": "component",
+            "role": "component",
+            "frame": {
+              "left": 0,
+              "top": 0.11178861788617886,
+              "width": 0.7948717948717948,
+              "height": 0.7764227642276422
+            }
+          },
+          {
+            "id": "aside",
+            "role": "text",
+            "frame": {
+              "left": 0.8153846153846154,
+              "top": 0.07317073170731707,
+              "width": 0.18461538461538463,
+              "height": 0.8536585365853658
+            }
+          }
+        ]
+      },
+      "textSlots": [
+        {
+          "slotId": "aside",
+          "sourceItemIds": [
+            "p5-takeaway"
+          ],
+          "contentMode": "full"
+        }
+      ],
+      "compositionId": "dynamic-structure-aside-right"
+    }
+  },
+  {
+    "pageId": "p6",
+    "contentTitle": "核心架构：建设能力，再稳定调用",
+    "payloadAssetId": "layered-architecture-001",
+    "composition": {
+      "pageId": "p6",
+      "compositionId": "component-full",
+      "textSlots": []
+    }
+  },
+  {
+    "pageId": "p7",
+    "contentTitle": "把昂贵的计算前移",
+    "payloadAssetId": "sequence-flow-001",
+    "composition": {
+      "pageId": "p7",
+      "compositionId": "component-lead-top",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "p7-lead"
+          ],
+          "contentMode": "full"
+        }
+      ]
+    }
+  },
+  {
+    "pageId": "p8",
+    "contentTitle": "真正积累的不是一万个模板",
+    "payloadAssetId": "hub-directed-outcomes-002",
+    "composition": {
+      "pageId": "p8",
+      "compositionId": "editorial-list",
+      "textSlots": [
+        {
+          "slotId": "lead",
+          "sourceItemIds": [
+            "p8-lead"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "body",
+          "sourceItemIds": [
+            "p8-item1",
+            "p8-item2",
+            "p8-item3",
+            "p8-item4",
+            "p8-item5"
+          ],
+          "contentMode": "full"
+        }
+      ]
+    }
+  },
+  {
+    "pageId": "p9",
+    "contentTitle": "从一个学校，走向更多组织",
+    "payloadAssetId": "sequence-flow-001",
+    "composition": {
+      "pageId": "p9",
+      "compositionId": "editorial-focus-reverse",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "p9-item1"
+          ],
+          "contentMode": "full"
+        },
+        {
+          "slotId": "support",
+          "sourceItemIds": [
+            "p9-item2",
+            "p9-item3",
+            "p9-item4",
+            "p9-item5"
+          ],
+          "contentMode": "full"
+        }
+      ]
+    }
+  },
+  {
+    "pageId": "p10",
+    "contentTitle": "最后，它仍然只想解决一件普通的事",
+    "payloadAssetId": "parallel-equal-cards-001",
+    "composition": {
+      "pageId": "p10",
+      "compositionId": "editorial-single-focus",
+      "textSlots": [
+        {
+          "slotId": "primary",
+          "sourceItemIds": [
+            "p10-thesis",
+            "p10-item1",
+            "p10-item2",
+            "p10-item3"
+          ],
+          "contentMode": "full"
+        }
+      ]
+    }
+  },
+  {
+    "pageId": "shell-closing",
+    "contentTitle": "",
+    "payloadAssetId": "northeastern-university-closing-001",
+    "composition": null
+  }
+]

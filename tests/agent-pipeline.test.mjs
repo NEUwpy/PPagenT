@@ -17,6 +17,8 @@ import { buildPageIntentFromContent, enrichPageIntent } from "../src/content/pag
 import { mapRenderPayload } from "../src/render/render-payload.mjs";
 
 const root = path.resolve(import.meta.dirname, "..");
+const structuralCandidates = (set) => set.candidates.filter((candidate) => !candidate.fallbackBody);
+const editorialCandidates = (set) => set.candidates.filter((candidate) => candidate.fallbackBody);
 
 test("没有时间证据的职责链不能选择时间轴", () => {
   const candidateSet = { candidates: [
@@ -145,6 +147,7 @@ test("显式分点块可与独立文字组成真实登记结构混合页", async
   const intent = buildPageIntentFromContent(page);
   const [rawSet] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
   const [set] = candidateSetsForVisualDirector([rawSet]);
+  assert.ok(set.candidates.some((item) => item.fallbackBody && item.readiness === "ready"));
   const candidate = set.candidates.find((item) => item.expressionSource?.sourceItemId === "actions");
   assert.equal(candidate.assetId, "parallel-equal-cards-001");
   assert.ok(candidate.compositionIds.includes("component-lead-top"));
@@ -156,6 +159,7 @@ test("显式分点块可与独立文字组成真实登记结构混合页", async
     candidateId: disclosed.candidateId,
     centerLabel: "三摆三写",
     expressionStrategy: "text-plus-structure",
+    compositionId: "component-full",
     iconQueries: disclosed.iconSourceItemIds.map((sourceItemId) => ({ sourceItemId, query: "action" })),
   }] }, {
     deckPlan: { deckId: "mixed-deck" },
@@ -169,6 +173,10 @@ test("显式分点块可与独立文字组成真实登记结构混合页", async
   assert.equal(expanded.compositionPlan.pages[0].compositionId, "component-lead-top");
   assert.deepEqual(expanded.compositionPlan.pages[0].componentItemIds, ["actions"]);
   assert.deepEqual(expanded.compositionPlan.pages[0].textSlots[0].sourceItemIds, ["outcome"]);
+  assert.ok(expanded.routingDiagnostics.some((item) => (
+    item.pageId === page.pageId
+      && item.code === "composition-normalized-for-expression-strategy"
+  )));
 
   const resolved = await resolveVisualPlan({
     root,
@@ -194,7 +202,7 @@ test("正式流程不会暴露缺少视觉意图和用户确认的 HTML 资产",
   ]);
   const intent = enrichPageIntent(intentDraft("topics-intent", "explain_topics", "hub"), page);
   const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), [
+  assert.deepEqual(structuralCandidates(set).map((candidate) => candidate.assetId), [
     "hub-directed-outcomes-002",
     "hub-radial-001",
   ]);
@@ -230,12 +238,12 @@ test("双轴与四象限归属齐全时二维定位象限进入正式候选", as
   draft.relationTraits.secondaryDimension = "axis";
   const intent = enrichPageIntent(draft, page);
   const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), [
+  assert.deepEqual(structuralCandidates(set).map((candidate) => candidate.assetId), [
     "matrix-quadrant-priority-001",
   ]);
 });
 
-test("结构性页面只向视觉导演披露已就绪的顺序流程", async () => {
+test("结构性页面同时披露正式正文能力与已就绪的顺序流程", async () => {
   const page = content("process", [
     { id: "a", title: "A", body: "A" },
     { id: "b", title: "B", body: "B" },
@@ -246,7 +254,8 @@ test("结构性页面只向视觉导演披露已就绪的顺序流程", async ()
     sameLevel: false,
   }), page);
   const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.deepEqual(set.candidates.map((candidate) => ({
+  assert.equal(editorialCandidates(set).length, 1);
+  assert.deepEqual(structuralCandidates(set).map((candidate) => ({
     assetId: candidate.assetId,
     variantId: candidate.variantId,
   })), [
@@ -366,7 +375,7 @@ test("视觉导演选择 Text Layout 后由程序形成 RenderPayload 绑定", a
   });
 });
 
-test("两个互补事实不会误用比较资产，并优先使用合法二项并列结构", async () => {
+test("两个互补事实不会误用比较资产，并保留合法二项并列结构", async () => {
   const page = content("scope", [
     { id: "skin", title: "视觉规范可以替换", body: "学校视觉规范是可替换的组织视觉系统。" },
     { id: "capability", title: "经验能力可以复用", body: "内容理解和表达规则可以服务多个场景。", emphasis: true },
@@ -378,7 +387,8 @@ test("两个互补事实不会误用比较资产，并优先使用合法二项�
     { ordered: false, sameLevel: true },
   ), page);
   const [set] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.deepEqual(set.candidates.map((candidate) => candidate.assetId), ["parallel-equal-cards-001"]);
+  assert.deepEqual(structuralCandidates(set).map((candidate) => candidate.assetId), ["parallel-equal-cards-001"]);
+  assert.equal(editorialCandidates(set).length, 1);
   assert.equal(set.gap, undefined);
   assert.equal(set.candidates.some((candidate) => candidate.assetId === "comparison-structure-001"), false);
 });
@@ -667,7 +677,7 @@ test("多个合法候选时 LayoutDecision 保留视觉导演的实际选择", a
   assert.equal(result.layoutDecisions[0].selectionOwner, "visual-director");
 });
 
-test("待语义补齐结构不再允许静默选择正文兜底", async () => {
+test("待语义补齐结构不阻断正式正文能力", async () => {
   const page = content("provisional-fallback", [
     { id: "a", title: "观点甲", body: "原稿没有可提取的节点内分点" },
     { id: "b", title: "观点乙", body: "因此不能强行补齐结构合同" },
@@ -691,7 +701,9 @@ test("待语义补齐结构不再允许静默选择正文兜底", async () => {
   const [directorSet] = candidateSetsForVisualDirector([
     { ...baseSet, candidates: [provisional, fallback] },
   ]);
-  assert.deepEqual(directorSet.candidates, []);
+  assert.deepEqual(directorSet.candidates.map((candidate) => candidate.assetId), [fallback.assetId]);
+  assert.equal(directorSet.candidates[0].readiness, "ready");
+  assert.equal(directorSet.selectionMode, "group-locked");
   assert.equal(directorSet.gap.type, "content-contract-gap");
 });
 
@@ -830,7 +842,7 @@ test("component titles-only cannot silently drop item bodies", async () => {
   assert.ok(result.feedback[0].issues.some((issue) => issue.code === "component-body-content-unplaced"));
 });
 
-test("结构页面内容超出全部结构容量时在视觉导演前明确报告缺口", async () => {
+test("结构页面内容超出全部结构容量时保留正文能力并明确报告缺口", async () => {
   const page = content("conclusion", [
     { id: "quote", title: "总书记嘱托", body: "讲好党的故事，把红色基因传承下去。" },
     { id: "summary", title: "五年实践总结", body: "用研学链、任务单、VR基地、宣讲团、育人机制，熔铸信念。", points: ["十年探路、五年深耕", "贯通红色血脉", "激发实干担当"] },
@@ -841,7 +853,8 @@ test("结构页面内容超出全部结构容量时在视觉导演前明确报�
   ]);
   const intent = enrichPageIntent(intentDraft("conclusion-intent", "present_parallel_points", "parallel"), page);
   const [candidateSet] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.deepEqual(candidateSet.candidates, []);
+  assert.equal(structuralCandidates(candidateSet).length, 0);
+  assert.equal(editorialCandidates(candidateSet).length, 1);
   assert.equal(candidateSet.gap.type, "content-capacity-gap");
   assert.ok(candidateSet.capacityRejections.some((rejection) => (
     rejection.assetId === "parallel-folded-notes-grid-002"
@@ -859,12 +872,12 @@ test("closing purpose cannot bypass fixed closing capacity", async () => {
   const intent = enrichPageIntent(intentDraft("closing-like-intent", "present_closing", "parallel"), page);
   const [candidateSet] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
   assert.deepEqual(candidateSet.candidates.map((candidate) => candidate.fallbackBody), [true]);
-  assert.equal(candidateSet.candidates[0].readiness, "fallback");
+  assert.equal(candidateSet.candidates[0].readiness, "ready");
   assert.equal(candidateSet.gap.type, "asset-gap");
   assert.ok(candidateSet.candidates.every((item) => item.assetId !== "northeastern-university-closing-001"));
 });
 
-test("结构性 Logic 有兼容资产时只返回对应结构", async () => {
+test("结构性 Logic 有兼容资产时仍保留文字与结构两类正式能力", async () => {
   const page = content("ordered-spectrum", [
     { id: "low", title: "低要求端", body: "不关注版式" },
     { id: "middle", title: "工作型需求", body: "强调规范可靠" },
@@ -876,13 +889,13 @@ test("结构性 Logic 有兼容资产时只返回对应结构", async () => {
   }), page);
   const [candidateSet] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
   assert.ok(candidateSet.candidates.some((item) => item.assetId === "progression-spectrum-focus-001"));
-  assert.ok(candidateSet.candidates.every((item) => !item.fallbackBody));
+  assert.equal(editorialCandidates(candidateSet).length, 1);
   assert.equal(candidateSet.fallbackCandidate.readiness, "fallback");
   assert.ok(candidateSet.candidates.every((item) => item.assetId !== "sequential-process-001"));
   assert.equal(candidateSet.gap, undefined);
 });
 
-test("语义已命中但固定文字槽超限时报告内容容量缺口而不是资产缺口", async () => {
+test("语义已命中但结构固定文字槽超限时保留正文能力并报告内容容量缺口", async () => {
   const page = content("long-sequence-title", [
     { id: "step-1", title: "判断观点属于哪一种逻辑", body: "先识别关系" },
     { id: "step-2", title: "选择结构", body: "只看合法候选" },
@@ -897,7 +910,8 @@ test("语义已命中但固定文字槽超限时报告内容容量缺口而不�
     pageContents: [page],
     pageIntents: [intent],
   });
-  assert.deepEqual(candidateSet.candidates, []);
+  assert.equal(structuralCandidates(candidateSet).length, 0);
+  assert.equal(editorialCandidates(candidateSet).length, 1);
   assert.equal(candidateSet.gap.type, "content-capacity-gap");
   assert.ok(candidateSet.gap.capacityRejections.some((rejection) => (
     rejection.assetId === "sequence-flow-001"
@@ -919,7 +933,7 @@ test("人物状态递进只进入成长路径，不再误用连续区间重点�
     pageContents: [page],
     pageIntents: [intent],
   });
-  assert.deepEqual(candidateSet.candidates.map((item) => item.assetId), ["progression-growth-curve-004"]);
+  assert.deepEqual(structuralCandidates(candidateSet).map((item) => item.assetId), ["progression-growth-curve-004"]);
 });
 
 test("候选日志说明同一 Logic 下结构为何未成为合法候选", async () => {
@@ -978,7 +992,7 @@ test("阶段门禁流程的分点超过 12 字时在视觉导演前形成容量�
   )));
 });
 
-test("动态 TextRegion 的正文与分点合计超容时在视觉导演前要求拆页", async () => {
+test("动态 TextRegion 的正文与分点合计超容时保留正文能力并标记结构超容", async () => {
   const page = content("dense-parallel", Array.from({ length: 5 }, (_, index) => ({
     id: `practice-${index + 1}`,
     title: `实践${index + 1}`,
@@ -996,7 +1010,8 @@ test("动态 TextRegion 的正文与分点合计超容时在视觉导演前要�
     pageContents: [page],
     pageIntents: [intent],
   });
-  assert.deepEqual(candidateSet.candidates, []);
+  assert.equal(structuralCandidates(candidateSet).length, 0);
+  assert.equal(editorialCandidates(candidateSet).length, 1);
   assert.equal(candidateSet.gap.type, "content-capacity-gap");
   assert.ok(candidateSet.gap.capacityRejections.some((rejection) => (
     rejection.assetId === "parallel-equal-cards-001"
@@ -1024,7 +1039,7 @@ test("items[] 与 points[] 动态区域按真实节点数量和标题正文一�
   }
 });
 
-test("单个层级节点堆入过多分点时不退成正文而是先要求内容拆页", async () => {
+test("单个层级节点堆入过多分点时保留正文能力并标记结构超容", async () => {
   const page = content("dense-layered", [
     { id: "mode", title: "双轮驱动", body: "红色基因传承与实践研学赋能", points: [] },
     {
@@ -1040,7 +1055,8 @@ test("单个层级节点堆入过多分点时不退成正文而是先要求内�
     "dense-layered-intent", "explain_layers", "layered", { ordered: true, sameLevel: false },
   ), page);
   const [candidateSet] = await buildVisualCandidateSets({ root, pageContents: [page], pageIntents: [intent] });
-  assert.deepEqual(candidateSet.candidates, []);
+  assert.equal(structuralCandidates(candidateSet).length, 0);
+  assert.equal(editorialCandidates(candidateSet).length, 1);
   assert.equal(candidateSet.gap.type, "content-capacity-gap");
   assert.ok(candidateSet.capacityRejections.some((rejection) => (
     rejection.assetId === "layered-architecture-001"

@@ -1,0 +1,27 @@
+页数：11页；文件：deck.pptx；官方渲染：render/slide-1.png 至 render/slide-11.png。
+目录：1产品定位；2问题成本；3目标场景与可靠度；4稳定可用；5受控自由；6角色分工；7核心架构；8成本前移；9能力包壁垒；10组织扩展；11收束。
+
+确定性修复：
+- 修正第8页数组节点尚未完整创建就连接的问题，最终连接器全部绑定。
+- 修正第5/6页节点标签垂直对齐与安全区声明。
+- 修正第6页支持句容量，最终无容量警告。
+- 修正第7页说明文字跨泳道底色边缘问题。
+- 修正第2页引号软换行尾部，最终无 wrap-tail 候选。
+
+最终真实检查（基于最后一次 builder 导出的 deck/layout）：
+- slides_test.py：通过，No overflow detected。
+- audit-text-overlaps.mjs：11页，容量警告0，文本交叠0，文字与线相交0；9个 clearance candidates 均为标题与其下方横向规则的近邻候选（title-rule-2至title-rule-10），不相交，已核对为页眉分隔线的预期净空。
+- audit-visible-contract.mjs：颜色问题0，底色/后画覆盖问题0。
+- audit-wrap-tails.mjs：0。
+- audit-node-labels.mjs：第5/6/7/8/10页共26组节点标签，issues均为0；其余页面没有形状内居中节点标签，明确不适用。
+- audit-connectors.py：11页20条原生 straightConnector1；20/20绑定；反向箭头0；声明失败0；文字相交0；不支持几何0；未绑定0。
+
+哈希（SHA256）：
+deck.pptx F52F4090F19A0837704FF85CDCFFEAEE75B5DB2DAC6801447A290A4A9844DF2C
+slide-7.layout.json 6241F27FE656821BCEBE49EF6B8EEE31A13ACB36CC7A5C44F5D36519194C40D4
+
+未覆盖范围与人工待审：
+- 结构检查器只审计顶层原生直线连接器；本稿没有折线、曲线、旋转或分组连接器，故无该类未覆盖路径。
+- clearance candidates 仅为分隔线邻近候选，工具不做字形轮廓证明；父任务仍需独立查看最终PPTX渲染的字体、中文字形与整体审美。
+- 未使用图片、图表或外部事实；mermaid与原稿链接仅按文字关系和来源说明重组。
+- 本轮无父任务逐页反馈，属于独立首轮结果。

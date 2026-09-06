@@ -1,0 +1,20 @@
+首轮独立 Luna/high 编排报告
+
+页数：12 页。
+输出：deck.pptx；每页 slide-N.layout.json；官方渲染位于 render/slide-N.png；适用页面有 node-label-pairs 与 node-label-check JSON；另有 check-text-overlaps.json、deck.pptx.inspect.ndjson、source-notes.txt、coverage.txt、structure-usage.txt。
+
+叙事：矛盾背景 -> 1+3+N 架构 -> 1+6+N 路线 -> 五类抓手 -> 三个代表性实践与共享网络 -> 四阶机制 -> 五年成效 -> 收束。
+
+确定性修复：
+- 首轮节点标签安全区审计发现标签框过近，统一缩进至节点内安全区，并重新导出。
+- 修正网络中心组标签的整体垂直中心关系。
+- 修正长标签容量和指标说明框宽度，消除文本容量估计警告与相邻文本框交叠。
+- 对页脚高度做统一容量修正。
+
+验证：
+- presentations/container_tools/render_slides.py 官方渲染成功。
+- slides_test.py：Test passed. No overflow detected.
+- audit-text-overlaps.mjs：12 页 textCapacityWarningCount=0、textCapacityUnchecked=0、intersectionCount=0、textRuleIntersectionCount=0。
+- audit-node-labels.mjs：slide-4/5/6/8/9/10 共 25 对标签，均 issueCount=0；glyph bounds 仍由渲染审查者复核。
+
+剩余限制：已生成最终 PPTX 与官方 PNG，但本执行单元遵守任务隔离而不读取图片；父任务需逐页检查视觉层面的主次、阅读路径、字体实际观感和连接线路径。工具审计本身不能替代视觉验收。

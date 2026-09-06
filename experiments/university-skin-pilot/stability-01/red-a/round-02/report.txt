@@ -1,0 +1,21 @@
+第二轮独立 Luna/high 编排报告
+
+页数：12 页。round-01 保留不改；本轮输出在 red-a/round-02。
+输出：deck.pptx；每页 slide-N.layout.json；官方渲染位于 render/slide-N.png；适用页面 node-label-pairs 与 node-label-check JSON；另有 check-text-overlaps.json、deck.pptx.inspect.ndjson、source-notes.txt、coverage.txt、structure-usage.txt。
+
+本轮按视觉反馈修订：
+- P2 明确三高三低是并存矛盾，实践位于下方作为应对。
+- P3 将 1+3+N 改为矩阵主区到育人生态的组织关系。
+- P4 将 1+6+N 改为路线构成，完整写出六个文化身份，删去虚构的馆序。
+- P5 改为五类抓手共同支撑，P6 改为三组对应关系。
+- P7 将 22 处全景数据与 7 门课程置于主证据区，实际预约/获评置于次区。
+- P8 压缩支持句；P9 加入东北与西部双向互学；P11 突出 58%→87% 并保留 40% 完整原口径；P12 补充“习近平总书记”署名。
+- 全稿分析页使用标题下横向细分隔、直角语义分区；页脚改为中文稿名与“数据据来稿”。
+
+确定性验证：
+- presentations/container_tools/render_slides.py 官方渲染成功。
+- slides_test.py：Test passed. No overflow detected.
+- audit-text-overlaps.mjs：12 页 textCapacityWarningCount=0、textCapacityUnchecked=0、intersectionCount=0、textRuleIntersectionCount=0。
+- audit-node-labels.mjs：slide-4/5/6/7/8/9/10 共 33 对标签，均 issueCount=0；glyph bounds 仍由父任务逐页视觉复核。
+
+剩余限制：本执行单元遵守隔离而不读取 PNG；父任务需逐页检查最终渲染中的主次、阅读路径、字体观感、连接线路径和视觉密度。工具审计不能替代视觉验收。

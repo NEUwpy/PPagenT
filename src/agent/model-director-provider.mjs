@@ -199,10 +199,17 @@ export function candidateSetsForVisualDirector(candidateSets, previousFeedback =
       reasons: candidate.reasons?.length ? candidate.reasons : ["deterministic-body-fallback"],
     }));
     if (overflowPages.has(set.pageId) && fallback.length) return finalize(set, fallback, context, "fallback-locked");
-    if (legalStructural.length) return finalize(set, legalStructural, context);
+    if (legalStructural.length) {
+      return finalize(set, [...contextualReadyBody, ...legalStructural], context, "visual-selectable");
+    }
     if (incompatibleStructural.length) {
       return {
-        ...finalize(set, [], context, null),
+        ...finalize(
+          set,
+          contextualReadyBody,
+          context,
+          contextualReadyBody.length ? "group-locked" : null,
+        ),
         gap: set.gap ?? {
           type: "content-contract-gap",
           reason: "structural-candidates-miss-core-content-fields",

@@ -1,0 +1,17 @@
+archive-c / round-01 首轮提交报告
+
+交付：8 页原生可编辑 PPTX，位于 deck.pptx；官方 PPTX 渲染位于 render/slide-1.png 至 render/slide-8.png；逐页 artifact-tool 布局位于 slide-1.layout.json 至 slide-8.layout.json。
+
+确定性修复：首轮构建后发现第5页编号文字框与标题文字框有 4px 文本框交叠，改为每个流程节点一个标题框加一个正文框并重新居中；第2页结果节点标签偏上 6px，调整后重新导出。修复后文本/文本真实交叠为 0，容量警告为 0；wrap-tails 为 0。页脚文字距页脚规则为 6.5px，工具列为 clearance candidate，不是交叠，保留人工待审。
+
+检查结果：
+- audit-text-overlaps：8 页 intersectionCount=0，textCapacityWarningCount=0，textRuleIntersectionCount=0；每页 2 个页脚近距候选（6.5px），不计为穿线。
+- audit-node-labels：第2页 2/2 配对无问题；第3页 6/6 配对无问题；第5页 4/4 配对无问题。所有声明节点标签 alignment=center、verticalAlignment=middle，safe frame 已核对；glyph bounds 仍需渲染人工审查。
+- audit-visible-contract：8 页 colorIssueCount=0、paintIssueCount=0；该发现器未覆盖字形和逻辑审美。
+- audit-wrap-tails：8 页均为 0；该检查器不证明中文断行完全自然。
+- audit-connectors：第5页 3 条 straightConnector1 均 bound，arrowAt=target，实际方向 source-to-target，文本路径候选均 clear，声明失败 0；其余页面无 connector。第6页时间轴为普通原生 line，已在 reasoning 中记录路径，未纳入 connector 工具。
+- slides_test.py：Test passed. No overflow detected.
+
+文件 SHA256：91292F671A0CCBC6F1DC6D9EC7C0BAD0AA4EF4E9F11A1DFC60B820656BF7D90C
+
+真实未覆盖项：未读取或检查渲染图片，因此不宣称视觉通过；父任务需独立检查官方 render/。自动检查不测字形边界、圆角轮廓、整体审美和逻辑是否符合受众阅读习惯；页脚规则的 6.5px 近距候选需人工确认。没有外部逐页反馈，本目录保留为无反馈首轮结果。

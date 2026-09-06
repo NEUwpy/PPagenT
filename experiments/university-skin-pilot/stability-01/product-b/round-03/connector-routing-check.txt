@@ -1,0 +1,21 @@
+最终 XML 连接关系检查
+
+结论：round-03 所有有向连接均使用 `<a:tailEnd>`，`<a:headEnd>` 数量为 0。
+
+slide 2（P2）
+- p2-narrative idx=3 -> p2-output idx=1，straight connector，目标端 tailEnd。
+- p2-visual idx=3 -> p2-output idx=1，straight connector，目标端 tailEnd。
+- 两条直线之间不依赖自动 elbow 路由；说明文本移到左侧节点下方，主结论说明移到输出节点下方。
+
+slide 6（P6）
+- p6-ref idx=3 -> p6-extract idx=1，tailEnd。
+- p6-extract idx=3 -> p6-confirm idx=1，tailEnd。
+- p6-confirm idx=3 -> p6-core idx=1，tailEnd。
+- p6-input idx=3 -> p6-content idx=1，tailEnd。
+- p6-content idx=3 -> p6-visual idx=1，tailEnd。
+- p6-visual idx=3 -> p6-choice idx=1，tailEnd。
+- p6-choice idx=3 -> p6-pptx idx=1，tailEnd。
+- p6-core idx=2 -> p6-choice idx=0，dashed read-only supply relation，tailEnd。
+- p6-core-note 放在竖向折线通道右侧；p6-generation-note 放在 choice -> PPTX 连接旁。
+
+审计边界：audit-text-overlaps 对文本框相交和轴对齐薄线进行检测，未覆盖 bentConnector 的真实路径。因此“连线穿文字”结论对 P2 由 straight connector 布局与零文本交叠共同支持；P6 bent connector 由 XML 端点与布局 bbox 对注释框的空间关系单独核对，不能把旧工具的 ruleIntersections=0 表述成全类型连线穿文字=0。

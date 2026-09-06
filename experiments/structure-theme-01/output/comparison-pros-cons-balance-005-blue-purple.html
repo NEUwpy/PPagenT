@@ -1,0 +1,651 @@
+<!doctype html><html><head><meta charset="utf-8"><style>body{margin:0;padding:14px;background:#f1f1f1;font-family:"Microsoft YaHei"}.row{display:flex;gap:14px}.panel{background:#fff}.label{height:30px;padding-left:10px;font-weight:700;line-height:30px;color:#333}iframe{display:block;width:1170px;height:492px;border:0}</style></head><body><div class="row"><section class="panel"><div class="label">默认蓝 #315F91</div><iframe srcdoc="<!doctype html><html><head><meta charset=&quot;utf-8&quot;><style>html,body{margin:0;width:1170px;height:492px;overflow:hidden}/* ppagent-theme:resolved */:root{
+    --ppagent-font-body:&quot;Microsoft YaHei&quot;;
+    --ppagent-color-background:#FFFFFF;
+    --ppagent-color-surface:#FFFFFF;
+    --ppagent-color-primary:#315F91;
+    --ppagent-color-primary-deep:#1C3754;
+    --ppagent-color-primary-dark:#25486E;
+    --ppagent-color-primary-light:#7795B6;
+    --ppagent-color-primary-pale:#B7C7D9;
+    --ppagent-color-primary-wash:#E6ECF2;
+    --ppagent-color-accent:#315F91;
+    --ppagent-color-accent-alt:#567CA5;
+    --ppagent-color-accent-soft:#DAE2EB;
+    --ppagent-color-cyan:#7B99B9;
+    --ppagent-color-dark:#2B2B2B;
+    --ppagent-color-body:#404040;
+    --ppagent-color-muted:#6F6F6F;
+    --ppagent-color-line:#B5C5D7;
+    --ppagent-component-heading-size:22pt;
+    --ppagent-component-title-size:20pt;
+    --ppagent-component-item-title-size:18pt;
+    --ppagent-component-lead-size:16pt;
+    --ppagent-component-body-size:14pt;
+    --ppagent-component-label-size:14pt;
+    --ppagent-component-meta-size:12pt;
+  }
+    .ppagent-text-region{
+      box-sizing:border-box;
+      min-width:0;
+      min-height:0;
+    }
+    .ppagent-text-region > .ppagent-text-flow,
+    .ppagent-text-region > .ppagent-text-layout{
+      width:100%;
+      height:100%;
+    }
+    .ppagent-text-layout{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-layout-gap,10px);
+      width:100%;
+      height:100%;
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,&quot;Microsoft YaHei&quot;),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-align=&quot;center&quot;]{text-align:center}
+    .ppagent-text-layout[data-text-layout-align=&quot;right&quot;]{text-align:right}
+    .ppagent-text-layout[data-text-layout-valign=&quot;top&quot;]{justify-content:flex-start}
+    .ppagent-text-layout[data-text-layout-valign=&quot;bottom&quot;]{justify-content:flex-end}
+    .ppagent-text-layout[data-text-layout-density=&quot;compact&quot;]{--ppagent-text-layout-gap:6px;--ppagent-text-layout-item-gap:5px}
+    .ppagent-text-layout[data-text-layout-density=&quot;standard&quot;]{--ppagent-text-layout-gap:10px;--ppagent-text-layout-item-gap:8px}
+    .ppagent-text-layout[data-text-layout-density=&quot;loose&quot;]{--ppagent-text-layout-gap:15px;--ppagent-text-layout-item-gap:12px}
+    .ppagent-text-primitive{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      color:var(--ppagent-text-color,#46566a);
+      text-align:inherit;
+      white-space:pre-line;
+      overflow-wrap:break-word;
+    }
+    .ppagent-text-primitive--heading{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-text-primitive--body{font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.45}
+    .ppagent-text-primitive--list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px)}
+    .ppagent-text-list__item{box-sizing:border-box;min-width:0;margin:0;padding:0;overflow:visible;color:var(--ppagent-text-color,#46566a);font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.38;text-align:inherit;white-space:pre-line;overflow-wrap:break-word}
+    .ppagent-text-primitive--metric{color:var(--ppagent-value-color,#2f5ea8);font-size:var(--ppagent-component-heading-size,25pt);font-weight:700;line-height:1.08}
+    .ppagent-text-primitive--label{color:var(--ppagent-label-color,#60758d);font-size:var(--ppagent-component-label-size,17pt);font-weight:600;line-height:1.2}
+    .ppagent-text-primitive--annotation{color:var(--ppagent-annotation-color,#748495);font-size:var(--ppagent-component-meta-size,15pt);font-weight:400;line-height:1.3}
+    .ppagent-text-primitive--quote{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:500;line-height:1.35}
+    .ppagent-text-primitive--emphasis{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-title-size,23pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-structured-list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-structured-list__item{display:flex;flex-direction:column;gap:4px;min-width:0}
+    .ppagent-structured-list__item .ppagent-text-primitive--heading{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-metric-set{display:grid;grid-template-columns:repeat(var(--ppagent-metric-columns,2),minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0;align-items:start}
+    .ppagent-metric-set[data-metric-count=&quot;3&quot;]{--ppagent-metric-columns:3}
+    .ppagent-metric-set[data-metric-count=&quot;4&quot;]{--ppagent-metric-columns:4}
+    .ppagent-metric-set__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-key-value{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-key-value__row{display:grid;grid-template-columns:minmax(64px,.42fr) minmax(0,1fr);gap:10px;align-items:start;min-width:0}
+    .ppagent-key-value__row .ppagent-text-primitive--metric{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label,
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--annotation{text-align:right}
+    .ppagent-summary-information{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0}
+    .ppagent-summary-information__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-summary-information__item .ppagent-text-primitive--emphasis{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;]{
+      justify-content:flex-start;
+      gap:12px;
+      padding:18px;
+      color:var(--ppagent-color-body);
+      background:transparent;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive{color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--emphasis,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--quote{color:var(--ppagent-color-dark);font-weight:700;letter-spacing:-.25px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--body,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-list__item{font-size:max(15pt,var(--ppagent-component-body-size))}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--label{color:var(--ppagent-color-accent);font-size:max(15pt,var(--ppagent-component-label-size));font-weight:700;letter-spacing:.7px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--annotation{color:var(--ppagent-color-muted);font-size:max(15pt,var(--ppagent-component-meta-size))}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--metric{color:var(--ppagent-color-accent);font-weight:700;letter-spacing:-.5px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-list__item{position:relative;padding-left:17px;color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-list__item::before{content:&quot;&quot;;position:absolute;left:0;top:.68em;width:8px;height:2px;background:var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--heading-content-flow > .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--label-content-flow > .ppagent-text-primitive--label,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--heading-metric-content-flow > .ppagent-text-primitive--heading{padding-bottom:10px;border-bottom:2px solid var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-structured-list{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-structured-list__item{display:grid;grid-template-columns:minmax(82px,.42fr) minmax(0,1fr);gap:14px;padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-structured-list__item .ppagent-text-primitive--body{margin:0}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-metric-set{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-metric-set__item{padding:12px 14px 4px 0}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-metric-set__item + .ppagent-metric-set__item{padding-left:14px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-key-value{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-key-value__row{padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--quote-attribution-flow{position:relative;padding-left:52px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--quote-attribution-flow::before{content:&quot;“&quot;;position:absolute;left:16px;top:8px;color:var(--ppagent-color-accent);font-family:Georgia,serif;font-size:42pt;font-weight:700;line-height:1}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label{margin-top:auto;padding-top:10px;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-summary-information{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-summary-information__item{padding:10px 12px 8px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-summary-information__item:nth-child(even){padding-left:12px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout--value-label{
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-value-label-gap,5px);
+      padding:var(--ppagent-value-label-padding,5px);
+      text-align:center;
+    }
+    .ppagent-text-layout__value,
+    .ppagent-text-layout__label{
+      box-sizing:border-box;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:hidden;
+      text-align:inherit;
+    }
+    .ppagent-text-layout__value{
+      color:var(--ppagent-value-color,#2f5ea8);
+      font-size:var(--ppagent-component-lead-size,19pt);
+      font-weight:700;
+      line-height:1.15;
+    }
+    .ppagent-text-layout__label{
+      color:var(--ppagent-label-color,#60758d);
+      font-size:var(--ppagent-component-meta-size,15pt);
+      font-weight:400;
+      line-height:1.2;
+    }
+    .ppagent-text-flow{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-flow-gap,10px);
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,&quot;Microsoft YaHei&quot;),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-flow[data-text-flow-align=&quot;center&quot;]{text-align:center}
+    .ppagent-text-flow[data-text-flow-align=&quot;right&quot;]{text-align:right}
+    .ppagent-text-flow[data-text-flow-valign=&quot;top&quot;]{justify-content:flex-start}
+    .ppagent-text-flow[data-text-flow-valign=&quot;bottom&quot;]{justify-content:flex-end}
+    .ppagent-text-flow__title,
+    .ppagent-text-flow__body{
+      position:relative;
+      box-sizing:border-box;
+      flex:0 0 auto;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      text-align:inherit;
+    }
+    .ppagent-text-flow__title{
+      font-size:var(--ppagent-component-item-title-size,21pt);
+      font-weight:700;
+      line-height:1.2;
+      white-space:normal;
+      text-wrap:balance;
+    }
+    .ppagent-text-flow__body{
+      font-size:var(--ppagent-component-body-size,17pt);
+      font-weight:400;
+      line-height:1.45;
+      white-space:pre-line;
+    }
+    .ppagent-text-flow__separator{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      align-self:center;
+      width:var(--ppagent-text-flow-separator-width,54px);
+      height:var(--ppagent-text-flow-separator-height,4px);
+      border:0;
+      border-radius:99px;
+      background:var(--ppagent-text-flow-separator-color,#78aeef);
+    }
+  * { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { color: #25486E; background: transparent; font-family: var(--ppagent-font-body, &quot;Microsoft YaHei&quot;), sans-serif; }
+.balance-review { position: relative; width: 1170px; height: 492px; overflow: hidden; background: transparent; }
+.balance-geometry { position: absolute; inset: 0; width: 1170px; height: 492px; overflow: visible; }
+.balance-topic-kicker { position: absolute; left: 445px; top: 2px; width: 280px; height: 24px; overflow: hidden; color: #315F91; font-size: var(--ppagent-component-meta-size, 15pt); font-weight: 600; line-height: 24px; letter-spacing: 3px; text-align: center; }
+.balance-topic-region { position: absolute; left: 330px; top: 27px; width: 510px; height: 72px; padding: 0 12px; }
+.balance-topic-flow .ppagent-text-flow__title { color: #25486E; font-size: var(--ppagent-component-title-size, 23pt); font-weight: 700; line-height: 1.2; }
+.balance-side-region { position: absolute; top: calc(var(--pan-top) + 24px); width: 328px; height: 158px; overflow: hidden; }
+.balance-side-region--left { left: 69px; }
+.balance-side-region--right { left: 773px; }
+.balance-side-flow { --ppagent-text-flow-gap: 9px; }
+.balance-side-flow .ppagent-text-flow__title { font-size: var(--ppagent-component-lead-size, 19pt); font-weight: 700; line-height: 1.18; }
+.balance-side-flow .ppagent-text-flow__separator { width: 42px; height: 3px; margin: 1px 0 2px; }
+.balance-side-flow .ppagent-text-flow__body { font-size: var(--ppagent-component-body-size, 17pt); font-weight: 400; line-height: 1.36; white-space: pre-line; }
+.balance-side-flow--benefit .ppagent-text-flow__title { color: #25486E; }
+.balance-side-flow--benefit .ppagent-text-flow__separator { align-self: center; background: #315F91; }
+.balance-side-flow--benefit .ppagent-text-flow__body { color: #25486E; }
+.balance-side-flow--risk .ppagent-text-flow__title { color: #315F91; }
+.balance-side-flow--risk .ppagent-text-flow__separator { align-self: center; background: #7795B6; }
+.balance-side-flow--risk .ppagent-text-flow__body { color: #315F91; }
+.balance-verdict-region { position: absolute; left: 460px; top: 331px; width: 250px; height: 127px; padding: 4px 7px; overflow: hidden; }
+.balance-verdict-flow { --ppagent-text-flow-gap: 7px; }
+.balance-verdict-flow .ppagent-text-flow__title { color: #25486E; font-size: var(--ppagent-component-label-size, 17pt); font-weight: 700; line-height: 1.18; }
+.balance-verdict-flow .ppagent-text-flow__separator { width: 36px; height: 3px; margin: 0 auto; background: #315F91; }
+.balance-verdict-flow .ppagent-text-flow__body { color: #25486E; font-size: var(--ppagent-component-body-small-size, 15pt); font-weight: 500; line-height: 1.32; white-space: pre-line; }
+</style></head><body><section class=&quot;balance-review&quot; data-ppt-root data-balance-state=&quot;benefit&quot; data-pros-count=&quot;2&quot; data-cons-count=&quot;2&quot;>
+      <svg class=&quot;balance-geometry&quot; viewBox=&quot;0 0 1170 492&quot; aria-hidden=&quot;true&quot;>
+    <path d=&quot;M 35 231 L 445 231 C 437 349 363 438 240 438 C 117 438 43 349 35 231 Z&quot; fill=&quot;#B7C7D9&quot; opacity=&quot;0.38&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;benefit-pan-shadow&quot; />
+    <path d=&quot;M 739 203 L 1149 203 C 1141 321 1067 410 944 410 C 821 410 747 321 739 203 Z&quot; fill=&quot;#B7C7D9&quot; opacity=&quot;0.38&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;risk-pan-shadow&quot; />
+    <path d=&quot;M 264 150.46762589928056 L 70 224&quot; fill=&quot;none&quot; stroke=&quot;#315F91&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;balance-hanger-1&quot; /><path d=&quot;M 264 150.46762589928056 L 396 224&quot; fill=&quot;none&quot; stroke=&quot;#315F91&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;balance-hanger-2&quot; /><path d=&quot;M 906 133.53237410071944 L 774 196&quot; fill=&quot;none&quot; stroke=&quot;#315F91&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;balance-hanger-3&quot; /><path d=&quot;M 906 133.53237410071944 L 1100 196&quot; fill=&quot;none&quot; stroke=&quot;#315F91&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;balance-hanger-4&quot; />
+    <path d=&quot;M 28 222 L 438 222 C 430 340 356 429 233 429 C 110 429 36 340 28 222 Z&quot; fill=&quot;#E6ECF2&quot; stroke=&quot;#315F91&quot; stroke-width=&quot;3&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;benefit-pan&quot; />
+    <path d=&quot;M 732 194 L 1142 194 C 1134 312 1060 401 937 401 C 814 401 740 312 732 194 Z&quot; fill=&quot;#E6ECF2&quot; stroke=&quot;#7795B6&quot; stroke-width=&quot;3&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;risk-pan&quot; />
+    <path d=&quot;M 46 229 L 420 229&quot; fill=&quot;none&quot; stroke=&quot;#FFFFFF&quot; stroke-width=&quot;4&quot; stroke-linecap=&quot;round&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;benefit-rim-highlight&quot; />
+    <path d=&quot;M 750 201 L 1124 201&quot; fill=&quot;none&quot; stroke=&quot;#FFFFFF&quot; stroke-width=&quot;4&quot; stroke-linecap=&quot;round&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;risk-rim-highlight&quot; />
+    <path d=&quot;M 558 156 L 612 156 L 785 466 L 385 466 Z&quot; fill=&quot;#E6ECF2&quot; stroke=&quot;#FFFFFF&quot; stroke-width=&quot;4&quot; stroke-linejoin=&quot;round&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;balance-fulcrum&quot; />
+    <path d=&quot;M 558 156 L 585 156 L 585 466 L 385 466 Z&quot; fill=&quot;#B7C7D9&quot; stroke=&quot;none&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;balance-fulcrum-facet&quot; />
+    <path d=&quot;M 168 146 L 1002 124 L 1002 134 L 168 156 Z&quot; fill=&quot;#315F91&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;balance-beam&quot; />
+    <circle cx=&quot;585&quot; cy=&quot;140&quot; r=&quot;24&quot; fill=&quot;#FFFFFF&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;balance-joint-ring&quot; />
+    <circle cx=&quot;585&quot; cy=&quot;140&quot; r=&quot;17&quot; fill=&quot;#315F91&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;balance-joint-core&quot; />
+  </svg>
+      <div class=&quot;balance-topic-kicker&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;balance-topic-kicker&quot;>决策权衡</div>
+      <div class=&quot;balance-topic-region&quot;><div class=&quot;ppagent-text-flow balance-topic-flow&quot;
+    data-ppagent-text-flow
+    data-text-flow-profile=&quot;standard&quot;
+    data-text-flow-composition=&quot;title-only&quot;
+    data-text-flow-align=&quot;center&quot;
+    data-text-flow-valign=&quot;middle&quot;
+    data-text-flow-tone=&quot;light&quot;
+    data-text-layout-id=&quot;title-body-adaptive&quot;
+    data-slot-id=&quot;balance-topic&quot;
+    data-slot-role=&quot;item-content&quot;
+    data-slot-field=&quot;topic&quot;
+    data-slot-item-id=&quot;&quot;
+    data-slot-region-id=&quot;topic&quot;
+    data-slot-content-type=&quot;text-flow&quot;
+    data-slot-required=&quot;true&quot;
+    data-slot-text-mode=&quot;flow&quot;
+    data-slot-list-policy=&quot;inline&quot;><div class=&quot;ppagent-text-flow__title&quot; data-text-flow-part=&quot;title&quot; data-text-flow-field=&quot;title&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;balance-topic-title&quot;>是否采用 HTML 作为单一布局源</div></div></div>
+      <div class=&quot;balance-side-region balance-side-region--left&quot; style=&quot;--pan-top:222px&quot;><div class=&quot;ppagent-text-flow balance-side-flow balance-side-flow--benefit&quot;
+    data-ppagent-text-flow
+    data-text-flow-profile=&quot;standard&quot;
+    data-text-flow-composition=&quot;title-body&quot;
+    data-text-flow-align=&quot;center&quot;
+    data-text-flow-valign=&quot;middle&quot;
+    data-text-flow-tone=&quot;light&quot;
+    data-text-layout-id=&quot;title-body-adaptive&quot;
+    data-slot-id=&quot;benefit-content&quot;
+    data-slot-role=&quot;item-content&quot;
+    data-slot-field=&quot;pros&quot;
+    data-slot-item-id=&quot;&quot;
+    data-slot-region-id=&quot;benefit-pan&quot;
+    data-slot-content-type=&quot;text-flow&quot;
+    data-slot-required=&quot;true&quot;
+    data-slot-text-mode=&quot;flow&quot;
+    data-slot-list-policy=&quot;inline&quot;><div class=&quot;ppagent-text-flow__title&quot; data-text-flow-part=&quot;title&quot; data-text-flow-field=&quot;title&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;benefit-heading&quot;>收益</div><div class=&quot;ppagent-text-flow__separator&quot; data-text-flow-part=&quot;separator&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;benefit-separator&quot;></div><div class=&quot;ppagent-text-flow__body&quot; data-text-flow-part=&quot;body&quot; data-text-flow-field=&quot;body&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;benefit-points&quot;>数量状态可以响应扩散
+审美结果可直接审核</div></div></div>
+      <div class=&quot;balance-side-region balance-side-region--right&quot; style=&quot;--pan-top:194px&quot;><div class=&quot;ppagent-text-flow balance-side-flow balance-side-flow--risk&quot;
+    data-ppagent-text-flow
+    data-text-flow-profile=&quot;standard&quot;
+    data-text-flow-composition=&quot;title-body&quot;
+    data-text-flow-align=&quot;center&quot;
+    data-text-flow-valign=&quot;middle&quot;
+    data-text-flow-tone=&quot;light&quot;
+    data-text-layout-id=&quot;title-body-adaptive&quot;
+    data-slot-id=&quot;risk-content&quot;
+    data-slot-role=&quot;item-content&quot;
+    data-slot-field=&quot;cons&quot;
+    data-slot-item-id=&quot;&quot;
+    data-slot-region-id=&quot;risk-pan&quot;
+    data-slot-content-type=&quot;text-flow&quot;
+    data-slot-required=&quot;true&quot;
+    data-slot-text-mode=&quot;flow&quot;
+    data-slot-list-policy=&quot;inline&quot;><div class=&quot;ppagent-text-flow__title&quot; data-text-flow-part=&quot;title&quot; data-text-flow-field=&quot;title&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;risk-heading&quot;>代价与风险</div><div class=&quot;ppagent-text-flow__separator&quot; data-text-flow-part=&quot;separator&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;risk-separator&quot;></div><div class=&quot;ppagent-text-flow__body&quot; data-text-flow-part=&quot;body&quot; data-text-flow-field=&quot;body&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;risk-points&quot;>复杂样式需要限制
+媒体依赖必须声明</div></div></div>
+      <div class=&quot;balance-verdict-region&quot;><div class=&quot;ppagent-text-flow balance-verdict-flow&quot;
+    data-ppagent-text-flow
+    data-text-flow-profile=&quot;standard&quot;
+    data-text-flow-composition=&quot;title-body&quot;
+    data-text-flow-align=&quot;center&quot;
+    data-text-flow-valign=&quot;middle&quot;
+    data-text-flow-tone=&quot;light&quot;
+    data-text-layout-id=&quot;title-body-adaptive&quot;
+    data-slot-id=&quot;balance-verdict&quot;
+    data-slot-role=&quot;item-content&quot;
+    data-slot-field=&quot;verdict&quot;
+    data-slot-item-id=&quot;&quot;
+    data-slot-region-id=&quot;fulcrum&quot;
+    data-slot-content-type=&quot;text-flow&quot;
+    data-slot-required=&quot;true&quot;
+    data-slot-text-mode=&quot;flow&quot;
+    data-slot-list-policy=&quot;inline&quot;><div class=&quot;ppagent-text-flow__title&quot; data-text-flow-part=&quot;title&quot; data-text-flow-field=&quot;title&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;balance-verdict-title&quot;>综合判断</div><div class=&quot;ppagent-text-flow__separator&quot; data-text-flow-part=&quot;separator&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;balance-verdict-separator&quot;></div><div class=&quot;ppagent-text-flow__body&quot; data-text-flow-part=&quot;body&quot; data-text-flow-field=&quot;body&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;balance-verdict-body&quot;>收益更具长期价值，但必须以审核组件和明确失败边界为前提</div></div></div>
+    </section></body></html>"></iframe></section><section class="panel"><div class="label">替换紫 #6F42C1</div><iframe srcdoc="<!doctype html><html><head><meta charset=&quot;utf-8&quot;><style>html,body{margin:0;width:1170px;height:492px;overflow:hidden}/* ppagent-theme:resolved */:root{
+    --ppagent-font-body:&quot;Microsoft YaHei&quot;;
+    --ppagent-color-background:#FFFFFF;
+    --ppagent-color-surface:#FFFFFF;
+    --ppagent-color-primary:#6F42C1;
+    --ppagent-color-primary-deep:#402670;
+    --ppagent-color-primary-dark:#543293;
+    --ppagent-color-primary-light:#A082D6;
+    --ppagent-color-primary-pale:#CDBDE9;
+    --ppagent-color-primary-wash:#EEE8F8;
+    --ppagent-color-accent:#6F42C1;
+    --ppagent-color-accent-alt:#8964CC;
+    --ppagent-color-accent-soft:#E5DDF4;
+    --ppagent-color-cyan:#A386D7;
+    --ppagent-color-dark:#2B2B2B;
+    --ppagent-color-body:#404040;
+    --ppagent-color-muted:#6F6F6F;
+    --ppagent-color-line:#CBBBE9;
+    --ppagent-component-heading-size:22pt;
+    --ppagent-component-title-size:20pt;
+    --ppagent-component-item-title-size:18pt;
+    --ppagent-component-lead-size:16pt;
+    --ppagent-component-body-size:14pt;
+    --ppagent-component-label-size:14pt;
+    --ppagent-component-meta-size:12pt;
+  }
+    .ppagent-text-region{
+      box-sizing:border-box;
+      min-width:0;
+      min-height:0;
+    }
+    .ppagent-text-region > .ppagent-text-flow,
+    .ppagent-text-region > .ppagent-text-layout{
+      width:100%;
+      height:100%;
+    }
+    .ppagent-text-layout{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-layout-gap,10px);
+      width:100%;
+      height:100%;
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,&quot;Microsoft YaHei&quot;),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-align=&quot;center&quot;]{text-align:center}
+    .ppagent-text-layout[data-text-layout-align=&quot;right&quot;]{text-align:right}
+    .ppagent-text-layout[data-text-layout-valign=&quot;top&quot;]{justify-content:flex-start}
+    .ppagent-text-layout[data-text-layout-valign=&quot;bottom&quot;]{justify-content:flex-end}
+    .ppagent-text-layout[data-text-layout-density=&quot;compact&quot;]{--ppagent-text-layout-gap:6px;--ppagent-text-layout-item-gap:5px}
+    .ppagent-text-layout[data-text-layout-density=&quot;standard&quot;]{--ppagent-text-layout-gap:10px;--ppagent-text-layout-item-gap:8px}
+    .ppagent-text-layout[data-text-layout-density=&quot;loose&quot;]{--ppagent-text-layout-gap:15px;--ppagent-text-layout-item-gap:12px}
+    .ppagent-text-primitive{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      color:var(--ppagent-text-color,#46566a);
+      text-align:inherit;
+      white-space:pre-line;
+      overflow-wrap:break-word;
+    }
+    .ppagent-text-primitive--heading{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-text-primitive--body{font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.45}
+    .ppagent-text-primitive--list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px)}
+    .ppagent-text-list__item{box-sizing:border-box;min-width:0;margin:0;padding:0;overflow:visible;color:var(--ppagent-text-color,#46566a);font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.38;text-align:inherit;white-space:pre-line;overflow-wrap:break-word}
+    .ppagent-text-primitive--metric{color:var(--ppagent-value-color,#2f5ea8);font-size:var(--ppagent-component-heading-size,25pt);font-weight:700;line-height:1.08}
+    .ppagent-text-primitive--label{color:var(--ppagent-label-color,#60758d);font-size:var(--ppagent-component-label-size,17pt);font-weight:600;line-height:1.2}
+    .ppagent-text-primitive--annotation{color:var(--ppagent-annotation-color,#748495);font-size:var(--ppagent-component-meta-size,15pt);font-weight:400;line-height:1.3}
+    .ppagent-text-primitive--quote{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:500;line-height:1.35}
+    .ppagent-text-primitive--emphasis{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-title-size,23pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-structured-list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-structured-list__item{display:flex;flex-direction:column;gap:4px;min-width:0}
+    .ppagent-structured-list__item .ppagent-text-primitive--heading{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-metric-set{display:grid;grid-template-columns:repeat(var(--ppagent-metric-columns,2),minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0;align-items:start}
+    .ppagent-metric-set[data-metric-count=&quot;3&quot;]{--ppagent-metric-columns:3}
+    .ppagent-metric-set[data-metric-count=&quot;4&quot;]{--ppagent-metric-columns:4}
+    .ppagent-metric-set__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-key-value{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-key-value__row{display:grid;grid-template-columns:minmax(64px,.42fr) minmax(0,1fr);gap:10px;align-items:start;min-width:0}
+    .ppagent-key-value__row .ppagent-text-primitive--metric{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label,
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--annotation{text-align:right}
+    .ppagent-summary-information{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0}
+    .ppagent-summary-information__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-summary-information__item .ppagent-text-primitive--emphasis{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;]{
+      justify-content:flex-start;
+      gap:12px;
+      padding:18px;
+      color:var(--ppagent-color-body);
+      background:transparent;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive{color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--emphasis,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--quote{color:var(--ppagent-color-dark);font-weight:700;letter-spacing:-.25px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--body,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-list__item{font-size:max(15pt,var(--ppagent-component-body-size))}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--label{color:var(--ppagent-color-accent);font-size:max(15pt,var(--ppagent-component-label-size));font-weight:700;letter-spacing:.7px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--annotation{color:var(--ppagent-color-muted);font-size:max(15pt,var(--ppagent-component-meta-size))}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-primitive--metric{color:var(--ppagent-color-accent);font-weight:700;letter-spacing:-.5px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-list__item{position:relative;padding-left:17px;color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-text-list__item::before{content:&quot;&quot;;position:absolute;left:0;top:.68em;width:8px;height:2px;background:var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--heading-content-flow > .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--label-content-flow > .ppagent-text-primitive--label,
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--heading-metric-content-flow > .ppagent-text-primitive--heading{padding-bottom:10px;border-bottom:2px solid var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-structured-list{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-structured-list__item{display:grid;grid-template-columns:minmax(82px,.42fr) minmax(0,1fr);gap:14px;padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-structured-list__item .ppagent-text-primitive--body{margin:0}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-metric-set{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-metric-set__item{padding:12px 14px 4px 0}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-metric-set__item + .ppagent-metric-set__item{padding-left:14px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-key-value{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-key-value__row{padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--quote-attribution-flow{position:relative;padding-left:52px}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--quote-attribution-flow::before{content:&quot;“&quot;;position:absolute;left:16px;top:8px;color:var(--ppagent-color-accent);font-family:Georgia,serif;font-size:42pt;font-weight:700;line-height:1}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;].ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label{margin-top:auto;padding-top:10px;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-summary-information{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-summary-information__item{padding:10px 12px 8px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style=&quot;swiss-international&quot;] .ppagent-summary-information__item:nth-child(even){padding-left:12px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout--value-label{
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-value-label-gap,5px);
+      padding:var(--ppagent-value-label-padding,5px);
+      text-align:center;
+    }
+    .ppagent-text-layout__value,
+    .ppagent-text-layout__label{
+      box-sizing:border-box;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:hidden;
+      text-align:inherit;
+    }
+    .ppagent-text-layout__value{
+      color:var(--ppagent-value-color,#2f5ea8);
+      font-size:var(--ppagent-component-lead-size,19pt);
+      font-weight:700;
+      line-height:1.15;
+    }
+    .ppagent-text-layout__label{
+      color:var(--ppagent-label-color,#60758d);
+      font-size:var(--ppagent-component-meta-size,15pt);
+      font-weight:400;
+      line-height:1.2;
+    }
+    .ppagent-text-flow{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-flow-gap,10px);
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,&quot;Microsoft YaHei&quot;),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-flow[data-text-flow-align=&quot;center&quot;]{text-align:center}
+    .ppagent-text-flow[data-text-flow-align=&quot;right&quot;]{text-align:right}
+    .ppagent-text-flow[data-text-flow-valign=&quot;top&quot;]{justify-content:flex-start}
+    .ppagent-text-flow[data-text-flow-valign=&quot;bottom&quot;]{justify-content:flex-end}
+    .ppagent-text-flow__title,
+    .ppagent-text-flow__body{
+      position:relative;
+      box-sizing:border-box;
+      flex:0 0 auto;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      text-align:inherit;
+    }
+    .ppagent-text-flow__title{
+      font-size:var(--ppagent-component-item-title-size,21pt);
+      font-weight:700;
+      line-height:1.2;
+      white-space:normal;
+      text-wrap:balance;
+    }
+    .ppagent-text-flow__body{
+      font-size:var(--ppagent-component-body-size,17pt);
+      font-weight:400;
+      line-height:1.45;
+      white-space:pre-line;
+    }
+    .ppagent-text-flow__separator{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      align-self:center;
+      width:var(--ppagent-text-flow-separator-width,54px);
+      height:var(--ppagent-text-flow-separator-height,4px);
+      border:0;
+      border-radius:99px;
+      background:var(--ppagent-text-flow-separator-color,#78aeef);
+    }
+  * { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { color: #543293; background: transparent; font-family: var(--ppagent-font-body, &quot;Microsoft YaHei&quot;), sans-serif; }
+.balance-review { position: relative; width: 1170px; height: 492px; overflow: hidden; background: transparent; }
+.balance-geometry { position: absolute; inset: 0; width: 1170px; height: 492px; overflow: visible; }
+.balance-topic-kicker { position: absolute; left: 445px; top: 2px; width: 280px; height: 24px; overflow: hidden; color: #6F42C1; font-size: var(--ppagent-component-meta-size, 15pt); font-weight: 600; line-height: 24px; letter-spacing: 3px; text-align: center; }
+.balance-topic-region { position: absolute; left: 330px; top: 27px; width: 510px; height: 72px; padding: 0 12px; }
+.balance-topic-flow .ppagent-text-flow__title { color: #543293; font-size: var(--ppagent-component-title-size, 23pt); font-weight: 700; line-height: 1.2; }
+.balance-side-region { position: absolute; top: calc(var(--pan-top) + 24px); width: 328px; height: 158px; overflow: hidden; }
+.balance-side-region--left { left: 69px; }
+.balance-side-region--right { left: 773px; }
+.balance-side-flow { --ppagent-text-flow-gap: 9px; }
+.balance-side-flow .ppagent-text-flow__title { font-size: var(--ppagent-component-lead-size, 19pt); font-weight: 700; line-height: 1.18; }
+.balance-side-flow .ppagent-text-flow__separator { width: 42px; height: 3px; margin: 1px 0 2px; }
+.balance-side-flow .ppagent-text-flow__body { font-size: var(--ppagent-component-body-size, 17pt); font-weight: 400; line-height: 1.36; white-space: pre-line; }
+.balance-side-flow--benefit .ppagent-text-flow__title { color: #543293; }
+.balance-side-flow--benefit .ppagent-text-flow__separator { align-self: center; background: #6F42C1; }
+.balance-side-flow--benefit .ppagent-text-flow__body { color: #543293; }
+.balance-side-flow--risk .ppagent-text-flow__title { color: #6F42C1; }
+.balance-side-flow--risk .ppagent-text-flow__separator { align-self: center; background: #A082D6; }
+.balance-side-flow--risk .ppagent-text-flow__body { color: #6F42C1; }
+.balance-verdict-region { position: absolute; left: 460px; top: 331px; width: 250px; height: 127px; padding: 4px 7px; overflow: hidden; }
+.balance-verdict-flow { --ppagent-text-flow-gap: 7px; }
+.balance-verdict-flow .ppagent-text-flow__title { color: #543293; font-size: var(--ppagent-component-label-size, 17pt); font-weight: 700; line-height: 1.18; }
+.balance-verdict-flow .ppagent-text-flow__separator { width: 36px; height: 3px; margin: 0 auto; background: #6F42C1; }
+.balance-verdict-flow .ppagent-text-flow__body { color: #543293; font-size: var(--ppagent-component-body-small-size, 15pt); font-weight: 500; line-height: 1.32; white-space: pre-line; }
+</style></head><body><section class=&quot;balance-review&quot; data-ppt-root data-balance-state=&quot;benefit&quot; data-pros-count=&quot;2&quot; data-cons-count=&quot;2&quot;>
+      <svg class=&quot;balance-geometry&quot; viewBox=&quot;0 0 1170 492&quot; aria-hidden=&quot;true&quot;>
+    <path d=&quot;M 35 231 L 445 231 C 437 349 363 438 240 438 C 117 438 43 349 35 231 Z&quot; fill=&quot;#CDBDE9&quot; opacity=&quot;0.38&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;benefit-pan-shadow&quot; />
+    <path d=&quot;M 739 203 L 1149 203 C 1141 321 1067 410 944 410 C 821 410 747 321 739 203 Z&quot; fill=&quot;#CDBDE9&quot; opacity=&quot;0.38&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;risk-pan-shadow&quot; />
+    <path d=&quot;M 264 150.46762589928056 L 70 224&quot; fill=&quot;none&quot; stroke=&quot;#6F42C1&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;balance-hanger-1&quot; /><path d=&quot;M 264 150.46762589928056 L 396 224&quot; fill=&quot;none&quot; stroke=&quot;#6F42C1&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;balance-hanger-2&quot; /><path d=&quot;M 906 133.53237410071944 L 774 196&quot; fill=&quot;none&quot; stroke=&quot;#6F42C1&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;balance-hanger-3&quot; /><path d=&quot;M 906 133.53237410071944 L 1100 196&quot; fill=&quot;none&quot; stroke=&quot;#6F42C1&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;balance-hanger-4&quot; />
+    <path d=&quot;M 28 222 L 438 222 C 430 340 356 429 233 429 C 110 429 36 340 28 222 Z&quot; fill=&quot;#EEE8F8&quot; stroke=&quot;#6F42C1&quot; stroke-width=&quot;3&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;benefit-pan&quot; />
+    <path d=&quot;M 732 194 L 1142 194 C 1134 312 1060 401 937 401 C 814 401 740 312 732 194 Z&quot; fill=&quot;#EEE8F8&quot; stroke=&quot;#A082D6&quot; stroke-width=&quot;3&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;risk-pan&quot; />
+    <path d=&quot;M 46 229 L 420 229&quot; fill=&quot;none&quot; stroke=&quot;#FFFFFF&quot; stroke-width=&quot;4&quot; stroke-linecap=&quot;round&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;benefit-rim-highlight&quot; />
+    <path d=&quot;M 750 201 L 1124 201&quot; fill=&quot;none&quot; stroke=&quot;#FFFFFF&quot; stroke-width=&quot;4&quot; stroke-linecap=&quot;round&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;risk-rim-highlight&quot; />
+    <path d=&quot;M 558 156 L 612 156 L 785 466 L 385 466 Z&quot; fill=&quot;#EEE8F8&quot; stroke=&quot;#FFFFFF&quot; stroke-width=&quot;4&quot; stroke-linejoin=&quot;round&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;balance-fulcrum&quot; />
+    <path d=&quot;M 558 156 L 585 156 L 585 466 L 385 466 Z&quot; fill=&quot;#CDBDE9&quot; stroke=&quot;none&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;balance-fulcrum-facet&quot; />
+    <path d=&quot;M 168 146 L 1002 124 L 1002 134 L 168 156 Z&quot; fill=&quot;#6F42C1&quot; data-ppt-kind=&quot;path&quot; data-ppt-name=&quot;balance-beam&quot; />
+    <circle cx=&quot;585&quot; cy=&quot;140&quot; r=&quot;24&quot; fill=&quot;#FFFFFF&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;balance-joint-ring&quot; />
+    <circle cx=&quot;585&quot; cy=&quot;140&quot; r=&quot;17&quot; fill=&quot;#6F42C1&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;ellipse&quot; data-ppt-name=&quot;balance-joint-core&quot; />
+  </svg>
+      <div class=&quot;balance-topic-kicker&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;balance-topic-kicker&quot;>决策权衡</div>
+      <div class=&quot;balance-topic-region&quot;><div class=&quot;ppagent-text-flow balance-topic-flow&quot;
+    data-ppagent-text-flow
+    data-text-flow-profile=&quot;standard&quot;
+    data-text-flow-composition=&quot;title-only&quot;
+    data-text-flow-align=&quot;center&quot;
+    data-text-flow-valign=&quot;middle&quot;
+    data-text-flow-tone=&quot;light&quot;
+    data-text-layout-id=&quot;title-body-adaptive&quot;
+    data-slot-id=&quot;balance-topic&quot;
+    data-slot-role=&quot;item-content&quot;
+    data-slot-field=&quot;topic&quot;
+    data-slot-item-id=&quot;&quot;
+    data-slot-region-id=&quot;topic&quot;
+    data-slot-content-type=&quot;text-flow&quot;
+    data-slot-required=&quot;true&quot;
+    data-slot-text-mode=&quot;flow&quot;
+    data-slot-list-policy=&quot;inline&quot;><div class=&quot;ppagent-text-flow__title&quot; data-text-flow-part=&quot;title&quot; data-text-flow-field=&quot;title&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;balance-topic-title&quot;>是否采用 HTML 作为单一布局源</div></div></div>
+      <div class=&quot;balance-side-region balance-side-region--left&quot; style=&quot;--pan-top:222px&quot;><div class=&quot;ppagent-text-flow balance-side-flow balance-side-flow--benefit&quot;
+    data-ppagent-text-flow
+    data-text-flow-profile=&quot;standard&quot;
+    data-text-flow-composition=&quot;title-body&quot;
+    data-text-flow-align=&quot;center&quot;
+    data-text-flow-valign=&quot;middle&quot;
+    data-text-flow-tone=&quot;light&quot;
+    data-text-layout-id=&quot;title-body-adaptive&quot;
+    data-slot-id=&quot;benefit-content&quot;
+    data-slot-role=&quot;item-content&quot;
+    data-slot-field=&quot;pros&quot;
+    data-slot-item-id=&quot;&quot;
+    data-slot-region-id=&quot;benefit-pan&quot;
+    data-slot-content-type=&quot;text-flow&quot;
+    data-slot-required=&quot;true&quot;
+    data-slot-text-mode=&quot;flow&quot;
+    data-slot-list-policy=&quot;inline&quot;><div class=&quot;ppagent-text-flow__title&quot; data-text-flow-part=&quot;title&quot; data-text-flow-field=&quot;title&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;benefit-heading&quot;>收益</div><div class=&quot;ppagent-text-flow__separator&quot; data-text-flow-part=&quot;separator&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;benefit-separator&quot;></div><div class=&quot;ppagent-text-flow__body&quot; data-text-flow-part=&quot;body&quot; data-text-flow-field=&quot;body&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;benefit-points&quot;>数量状态可以响应扩散
+审美结果可直接审核</div></div></div>
+      <div class=&quot;balance-side-region balance-side-region--right&quot; style=&quot;--pan-top:194px&quot;><div class=&quot;ppagent-text-flow balance-side-flow balance-side-flow--risk&quot;
+    data-ppagent-text-flow
+    data-text-flow-profile=&quot;standard&quot;
+    data-text-flow-composition=&quot;title-body&quot;
+    data-text-flow-align=&quot;center&quot;
+    data-text-flow-valign=&quot;middle&quot;
+    data-text-flow-tone=&quot;light&quot;
+    data-text-layout-id=&quot;title-body-adaptive&quot;
+    data-slot-id=&quot;risk-content&quot;
+    data-slot-role=&quot;item-content&quot;
+    data-slot-field=&quot;cons&quot;
+    data-slot-item-id=&quot;&quot;
+    data-slot-region-id=&quot;risk-pan&quot;
+    data-slot-content-type=&quot;text-flow&quot;
+    data-slot-required=&quot;true&quot;
+    data-slot-text-mode=&quot;flow&quot;
+    data-slot-list-policy=&quot;inline&quot;><div class=&quot;ppagent-text-flow__title&quot; data-text-flow-part=&quot;title&quot; data-text-flow-field=&quot;title&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;risk-heading&quot;>代价与风险</div><div class=&quot;ppagent-text-flow__separator&quot; data-text-flow-part=&quot;separator&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;risk-separator&quot;></div><div class=&quot;ppagent-text-flow__body&quot; data-text-flow-part=&quot;body&quot; data-text-flow-field=&quot;body&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;risk-points&quot;>复杂样式需要限制
+媒体依赖必须声明</div></div></div>
+      <div class=&quot;balance-verdict-region&quot;><div class=&quot;ppagent-text-flow balance-verdict-flow&quot;
+    data-ppagent-text-flow
+    data-text-flow-profile=&quot;standard&quot;
+    data-text-flow-composition=&quot;title-body&quot;
+    data-text-flow-align=&quot;center&quot;
+    data-text-flow-valign=&quot;middle&quot;
+    data-text-flow-tone=&quot;light&quot;
+    data-text-layout-id=&quot;title-body-adaptive&quot;
+    data-slot-id=&quot;balance-verdict&quot;
+    data-slot-role=&quot;item-content&quot;
+    data-slot-field=&quot;verdict&quot;
+    data-slot-item-id=&quot;&quot;
+    data-slot-region-id=&quot;fulcrum&quot;
+    data-slot-content-type=&quot;text-flow&quot;
+    data-slot-required=&quot;true&quot;
+    data-slot-text-mode=&quot;flow&quot;
+    data-slot-list-policy=&quot;inline&quot;><div class=&quot;ppagent-text-flow__title&quot; data-text-flow-part=&quot;title&quot; data-text-flow-field=&quot;title&quot; data-ppt-kind=&quot;text&quot; data-ppt-name=&quot;balance-verdict-title&quot;>综合判断</div><div class=&quot;ppagent-text-flow__separator&quot; data-text-flow-part=&quot;separator&quot; data-ppt-kind=&quot;shape&quot; data-ppt-shape=&quot;roundRect&quot; data-ppt-name=&quot;balance-verdict-separator&quot;></div><div class=&quot;ppagent-text-flow__body&quot; data-text-flow-part=&quot;body&quot; data-text-flow-field=&quot;body&quot; data-ppt-kind=&quot;text&quot; data-ppt-preserve-lines=&quot;true&quot; data-ppt-name=&quot;balance-verdict-body&quot;>收益更具长期价值，但必须以审核组件和明确失败边界为前提</div></div></div>
+    </section></body></html>"></iframe></section></div></body></html>

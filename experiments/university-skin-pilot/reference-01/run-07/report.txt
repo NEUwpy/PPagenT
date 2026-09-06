@@ -1,0 +1,18 @@
+run-07 single feedback correction based on run-06; page 1 and page 2 geometry retained
+layout guide: docs/设计手册/科研咨询式排版-v7.md
+communication job: 让院系服务负责人读懂时间差异的证据边界，并能按下一轮真实职责与条件执行试点。
+visual route: explicit custom visual direction; native editable shapes/text; no images; no CodexGrid or template selector.
+theme: university-blue-pilot; primary #315F91; font Microsoft YaHei; neutral ink #252B33 / muted #707780; theme.json read at runtime.
+page 1: unchanged from run-06; shared-scale stage bars and compact total row, with evidence-boundary explanation.
+page 2: unchanged from run-06 in content and coordinates; only gate-1-text and gate-2-text received explicit alignment=center.
+page 2 footer rule: intentionally absent so the lower evidence region is not split by an unrelated horizontal line.
+arrow verification: connectors use fromSide=right, toSide=left, and tail triangle at the destination end; exported proto shows 4->5 and 5->6 with lineStyle.tail type=2 width=1 length=1.
+authoring checks: PASS; 1280x720; title 32px; local headings 22px; body/node text 20px; chart labels 16px; source/page 14px.
+text-overlap and line-clearance audit: PASS; page-01 intersectionCount=0, textRuleIntersectionCount=0, textRuleClearanceCount=0; page-02 intersectionCount=0, textRuleIntersectionCount=0, textRuleClearanceCount=0.
+geometry checks: PASS; fit=[], bounds=[], forbidden=[]; page-02 left-aligned groups and gate centers unchanged from run-06; footer-rule-2 absent.
+alignment check: PASS; exported page-02 layout JSON reports gate-1-text.resolvedTextStyle.alignment=center and gate-2-text.resolvedTextStyle.alignment=center.
+render_slides.py: PASS; official PNGs copied from deck/slide-1.png and deck/slide-2.png.
+slides_test.py: PASS; no overflow detected.
+final artifact SHA256: D7E95B17925C51854652955A2C1A0F6653C7F612E3866842C0E0B1337BAEF1B6.
+artifact times (UTC): deck.pptx 2026-09-05T23:47:54.3247183Z; page-01.png 2026-09-05T23:48:42.8102039Z; page-02.png 2026-09-05T23:48:42.9874656Z.
+semantic boundary: stage totals remain 5.0/3.2; delta -1.8 days / -36%; largest delta 1.0 day; no causal attribution; teacher authority preserved; four-week plan remains unimplemented and is not promised to reduce time.

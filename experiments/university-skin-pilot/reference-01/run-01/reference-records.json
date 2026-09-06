@@ -1,0 +1,57 @@
+{
+  "mode": "reference",
+  "theme": {
+    "file": "experiments/university-skin-pilot/reference-01/theme.json",
+    "id": "university-blue-pilot",
+    "primaryColor": "#315F91",
+    "font": "Microsoft YaHei"
+  },
+  "sourceManuscript": "experiments/university-skin-pilot/argument-01/manuscript.txt",
+  "layoutGuide": "docs/设计手册/科研咨询式排版-v5.md",
+  "readFiles": [
+    ".codex/skills/ppagent-structure/SKILL.md",
+    ".codex/skills/ppagent-structure/references/reference-use.md",
+    ".codex/skills/ppagent-structure/skills/ppagent-structure-comparison/SKILL.md",
+    ".codex/skills/ppagent-structure/skills/ppagent-structure-sequence/SKILL.md",
+    "assets/结构图/双向对比-001/asset.json",
+    "assets/结构图/双向对比-001/runtime.mjs",
+    "assets/结构图/阶段门禁流程-004/asset.json",
+    "assets/结构图/阶段门禁流程-004/runtime.mjs"
+  ],
+  "referenceAssetIds": [
+    "comparison-dual-verdict-001",
+    "sequence-phase-gates-004"
+  ],
+  "absorbedMethods": {
+    "comparison-dual-verdict-001": [
+      "共享比较轴与逐行对应",
+      "中央结论节点收束两侧证据",
+      "强调色、状态承载面和标题共同表达语义"
+    ],
+    "sequence-phase-gates-004": [
+      "连续推进方向由连接线表达",
+      "阶段之间用独立门禁条件表示推进资格",
+      "条件标牌贴近对应边界，避免把规则误读为步骤"
+    ]
+  },
+  "pageChanges": {
+    "page-01": [
+      "未复用双向对比的固定镜像舱；重组为两批在共同工作日尺度上的三阶段原生条形证据",
+      "保留中央结论节点方法，改为 5.0 → 3.2、−1.8 天、−36%",
+      "把差距集中环节、试点剩余耗时和因果/拆分边界放在图旁解释"
+    ],
+    "page-02": [
+      "未调用阶段门禁组件；自主绘制三步连续主流程",
+      "保留两个真实推进条件：授权常规事项、材料齐备",
+      "把缺件暂停/补齐/重新核对作为第二步局部异常规则，并单独放置超授权边界与四周评估条件"
+    ]
+  },
+  "checks": {
+    "invokeStructure": false,
+    "nativeEditableObjects": true,
+    "relationsPreserved": true,
+    "causalAttributionDenied": true,
+    "teacherAuthorityPreserved": true,
+    "fictionLabelVisibleOnBothPages": true
+  }
+}

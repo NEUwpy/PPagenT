@@ -1,0 +1,146 @@
+[
+  {
+    "phase": "content",
+    "requests": 4,
+    "toolCalls": 5,
+    "usage": [
+      {
+        "cache_read": 0,
+        "cache_write": 1152,
+        "output": 49,
+        "total": 1201
+      },
+      {
+        "cache_read": 1024,
+        "cache_write": 696,
+        "output": 3034,
+        "total": 4754
+      },
+      {
+        "cache_read": 4736,
+        "cache_write": 203,
+        "output": 209,
+        "total": 5148
+      },
+      {
+        "cache_read": 5120,
+        "cache_write": 201,
+        "output": 56,
+        "total": 5377
+      }
+    ],
+    "durationMs": 28035
+  },
+  {
+    "phase": "visual",
+    "requests": 14,
+    "toolCalls": 15,
+    "usage": [
+      {
+        "cache_read": 0,
+        "cache_write": 1656,
+        "output": 44,
+        "total": 1700
+      },
+      {
+        "cache_read": 1664,
+        "cache_write": 1432,
+        "output": 16326,
+        "total": 19422
+      },
+      {
+        "cache_read": 19328,
+        "cache_write": 132,
+        "output": 1565,
+        "total": 21025
+      },
+      {
+        "cache_read": 20992,
+        "cache_write": 236,
+        "output": 7683,
+        "total": 28911
+      },
+      {
+        "cache_read": 28800,
+        "cache_write": 150,
+        "output": 109,
+        "total": 29059
+      },
+      {
+        "cache_read": 29056,
+        "cache_write": 1406,
+        "output": 913,
+        "total": 31375
+      },
+      {
+        "cache_read": 31360,
+        "cache_write": 181,
+        "output": 335,
+        "total": 31876
+      },
+      {
+        "cache_read": 31872,
+        "cache_write": 73,
+        "output": 417,
+        "total": 32362
+      },
+      {
+        "cache_read": 32256,
+        "cache_write": 243,
+        "output": 513,
+        "total": 33012
+      },
+      {
+        "cache_read": 32896,
+        "cache_write": 1529,
+        "output": 479,
+        "total": 34904
+      },
+      {
+        "cache_read": 34816,
+        "cache_write": 254,
+        "output": 618,
+        "total": 35688
+      },
+      {
+        "cache_read": 35584,
+        "cache_write": 173,
+        "output": 81,
+        "total": 35838
+      },
+      {
+        "cache_read": 35712,
+        "cache_write": 196,
+        "output": 70,
+        "total": 35978
+      },
+      {
+        "cache_read": 35968,
+        "cache_write": 81,
+        "output": 1092,
+        "total": 37141
+      }
+    ],
+    "durationMs": 273066
+  },
+  {
+    "phase": "visual",
+    "requests": 2,
+    "toolCalls": 3,
+    "usage": [
+      {
+        "cache_read": 1536,
+        "cache_write": 120,
+        "output": 57,
+        "total": 1713
+      },
+      {
+        "cache_read": 1664,
+        "cache_write": 4104,
+        "output": 1107,
+        "total": 6875
+      }
+    ],
+    "durationMs": 129533
+  }
+]

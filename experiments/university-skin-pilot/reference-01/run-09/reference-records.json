@@ -1,0 +1,51 @@
+{
+  "run": "run-09",
+  "mode": "native comparison layout",
+  "referenceAssetIds": [],
+  "source": {
+    "manuscript": "argument-01/manuscript.txt",
+    "theme": "reference-01/theme.json",
+    "layoutGuide": "docs/设计手册/科研咨询式排版-v8.md"
+  },
+  "invokeStructure": false,
+  "pageIntent": "让负责人先读懂总差异，再定位阶段差异，最后读清比较与解释边界。",
+  "comparisonContract": {
+    "objects": "人工受理批次 vs 试点受理批次",
+    "unit": "从首次提交到完成处理的平均工作日",
+    "coverage": "两批各120件已结案申请，来自不同月份",
+    "ordering": ["受理分流", "材料核对", "教师处理及等待"],
+    "additivity": "三个阶段依次发生、互不重叠，阶段均值可以相加",
+    "direction": "试点批次少1.8天（36%），但不作因果归因"
+  },
+  "data": {
+    "stageValues": [
+      {"stage": "受理分流", "manual": 0.8, "pilot": 0.6},
+      {"stage": "材料核对", "manual": 1.6, "pilot": 1.0},
+      {"stage": "教师处理及等待", "manual": 2.6, "pilot": 1.6}
+    ],
+    "totals": {"manual": 5.0, "pilot": 3.2, "delta": -1.8, "relativeDelta": -0.36}
+  },
+  "boundary": [
+    "两批事项难度和人员负荷未控制，无随机分组，不能将时间差异归因于试点。",
+    "教师处理及等待合并记录，不能把1.6天全部称为排队。",
+    "下一轮方案尚未实施，当前数据不能承诺再次降时。"
+  ],
+  "layout": {
+    "mainEvidenceZone": "shared-scale paired bars and additive total row",
+    "interpretationZone": "one emphasized delta, maximum gap, decomposition/causality limits, and next-round non-promise",
+    "visualHierarchy": "main chart zone is larger than either explanation group; one emphasized delta only",
+    "deduplication": "comparison/additivity statement kept under the chart; duplicate wording removed from context and lower-left note"
+  },
+  "verification": {
+    "textCapacityWarningCount": 0,
+    "intersectionCount": 0,
+    "textRuleIntersectionCount": 0,
+    "textRuleClearanceCount": 0,
+    "boundsViolations": false,
+    "render": "PASS: official render_slides.py completed",
+    "slidesTest": "PASS: no overflow detected",
+    "visualReview": "not performed by agent; final PNG is provided for parent visual inspection",
+    "rightZoneBottomClearance": 16,
+    "finalSha256": "9983E327F28453918B68E5A1934A004BF74BA24A59CC728D6E9463A0EF98E8F7"
+  }
+}

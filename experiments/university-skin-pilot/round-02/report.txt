@@ -1,0 +1,25 @@
+大学 Skin 试点 Round-02 生成报告
+设计输入：C:/PPagenT/docs/工作流/正式生成/大学Skin设计提示词-v2.md
+内容输入：C:/PPagenT/experiments/university-skin-pilot/manuscript.md
+视觉源：C:/PPagenT/assets/主题/东北大学-001/runtime-template.pptx
+
+已完成：
+- 9 页原生可编辑 PPTX：1 页封面、7 页正文、1 页结尾。
+- 正文使用源 Shell 的页码、栏目、Logo、标题带与底部保留区；新增内容均为文本、矩形浅底和细线。
+- 未调用结构库，未新增或读取图片；生成 PNG 仅作为交付物。
+- 已在最终导出后恢复源主题 XML。
+
+实际检查：
+- Artifact Tool inspect 记录：176 条；新增正文文本对象：83 个。
+- 正文新文本越出 contentFrame：0 个。
+- 正文文本框相互碰撞：0 处。
+- 正文 Shell 标题记录：7 个；标题意外换行：0 个。
+- 最终 PPTX slide XML 中空结构占位符：0 个。
+- 已输出逐页 layout JSON，并保存 final-inspect.ndjson 作为文字/对象证据。
+- 交付后用 presentations 的 render_slides.py 重渲染 9 页；slides_test.py 报告无越界。
+- 逐项字节比对确认 ppt/theme/theme1.xml 与源模板一致。
+
+未检查项：
+- 执行模型未读取 PNG、截图或 montage，因此未做视觉像素级审阅；父任务可直接查看逐页 PNG。
+- 未做真实大学项目成效验证；稿件中的四周、两人、周次和停止信号均按拟定范围保留。
+- 未运行全仓库测试、未执行 Git、未改动本目录外文件。

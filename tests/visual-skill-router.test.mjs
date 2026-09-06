@@ -122,6 +122,26 @@ test("视觉路由可省略空数组和理由并由程序补默认值", () => {
   assert.deepEqual(expanded.compositionPlan.pages[0].textLayoutChoices, []);
 });
 
+test("视觉导演可在合法正文 Composition 内重排内容槽位", () => {
+  const sets = [{ pageId: "p1", candidates: [fallback] }];
+  const expanded = expandVisualSkillRouting({ selections: [{
+    pageId: "p1",
+    candidateId: "skin-body-editorial::editorial::editorial-page",
+    centerLabel: "判断中心",
+    compositionId: "editorial-list",
+    textSlotAssignments: [
+      { slotId: "lead", sourceItemIds: ["b"], contentMode: "full" },
+      { slotId: "body", sourceItemIds: ["a", "c"], contentMode: "full" },
+    ],
+  }] }, {
+    deckPlan: { deckId: "deck" }, skinId: "skin", pageContents: [page], pageIntents: [intent], candidateSets: sets,
+  });
+  assert.deepEqual(expanded.compositionPlan.pages[0].textSlots, [
+    { slotId: "lead", sourceItemIds: ["b"], contentMode: "full" },
+    { slotId: "body", sourceItemIds: ["a", "c"], contentMode: "full" },
+  ]);
+});
+
 test("未验收的2+3表达不能进入自动正式生成", () => {
   const set = {
     pageId: "p1",

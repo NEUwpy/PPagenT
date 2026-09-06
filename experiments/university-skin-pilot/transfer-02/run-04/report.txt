@@ -1,0 +1,38 @@
+run-04 设计迁移验证报告
+
+沟通任务
+让实验室数据处理负责人先回答“4.0 GB 上限下哪个方案可试运行”，再看到共同口径证据、速度差、不可用原因与适用边界。
+
+页面组织
+- 顶部采用白标题带、近黑判断与细蓝分隔：在 4.0 GB 上限下，分批处理是下一轮试运行的可行选择。
+- 主证据区为较大的浅灰分析面，集中承载两项共同顺序的比较：单批耗时中位数与全程峰值内存。
+- 解释/决策区为较小的浅主题色面，并用主题色标题带建立归属；只保留推荐、50 秒/批差值、0.4 GB 余量、并行不适用原因和适用条件。
+- 次要柱条使用清晰的中性灰，分批处理使用主题主色；页面底部另设浅灰边界带，保留未验证条件、受控试运行与非正式部署边界。
+- 页面没有把制作思路、配色说明或自检语言放上屏。
+
+数据与逻辑
+- 同一台工作站、100 个固定数据批次、相同输入顺序与线程参数；三种方式均完整处理且未发生失败。
+- 耗时用单批中位数：串行 120 秒、分批 70 秒、并行 45 秒。
+- 内存用全程峰值：串行 2.0 GB、分批 3.6 GB、并行 7.4 GB。
+- 4.0 GB 门槛直接画在 0–8 GB 内存实际尺度上；先满足门槛，再比较耗时。分批相对串行少 50 秒/批，余量 0.4 GB；并行超限 3.4 GB，不能通过关闭必需任务扩容。
+- 所有数字与单位采用不换行空格；上下两幅图均使用同一套原生可编辑条形几何：标签列 x=85、宽125，绘图区 x=245、宽535，类别字号/颜色和条末标签方式一致；最终顺序均为串行 → 分批 → 并行。耗时使用 0–120 秒尺度，内存使用 0–8 GB 尺度。
+
+主题入口
+builder.mjs 运行时读取 C:/PPagenT/experiments/university-skin-pilot/reference-01/theme.json，使用 primaryColor、font 与 neutral 字段；所有浅色、深色、轨道色与轴线色由主题入口动态混合派生，没有复制固定蓝色常量表。
+
+实现与交付
+- 使用 @oai/artifact-tool JavaScript ESM 生成一页原生可编辑 PPTX；耗时与内存均为可编辑矩形、文字和轴线；没有读取图片或复制旧输出目录。
+- 首次 authoring marker：成功执行一次。
+- 交付文件：builder.mjs、deck.pptx、deck/slide-1.png、slide-01.layout.json、deck-montage.webp、inspect.ndjson、text-overlap-audit.json、report.txt。
+
+实际检查
+- `audit-text-overlaps.mjs`：textCapacityWarningCount=0；textCapacityUnchecked=0；intersectionCount=0；textRuleIntersectionCount=0；textRuleClearanceCount=0。
+- layout JSON：所有对象在 1280×720 内；字号集合为 14、16、18、20、22、32、40；40 px 仅用于一次“少 50 秒/批”差值强调；正文未全部加粗。
+- 实际多行文本：并行限制正文 2 行；新增浅灰边界带采用 16 px 单行；文本容量审计无警告，数字与单位不拆分。
+- `render_slides.py`：成功渲染 1 页最新 PPTX；最终 `deck/slide-1.png` 时间晚于最终 `deck.pptx`。
+- `slides_test.py`：Test passed. No overflow detected.
+- 最终 deck.pptx SHA-256：AB0E4D2742CE5782413E971A92BFE839678A10C2467E574EA17467EFD36811DF。
+- 最终文件时间：deck.pptx 2026-09-06 08:36:46；deck/slide-1.png 2026-09-06 08:37:07，PNG 晚于 PPTX。
+
+数据边界
+全部数字、工作负载与结果均为虚构设计验证素材，页面已明确标注“虚构测试数据”。结论仅限这台工作站与这组固定批次；其他批次大小与硬件未验证。下一轮只安排受控试运行并记录峰值，不承诺所有数据保持当前耗时，也不称为正式部署。

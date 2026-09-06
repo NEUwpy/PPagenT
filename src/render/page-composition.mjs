@@ -17,9 +17,21 @@ function itemMap(content) {
   return new Map(content.items.map((item) => [item.id, item]));
 }
 
+function bindClosingPunctuation(value) {
+  return String(value ?? "").replace(/([\p{Script=Han}A-Za-z0-9])([。！？；])/gu, "$1\u2060$2");
+}
+
 function editorialItem(item) {
-  const pointText = (item.points ?? []).map((point) => `• ${point}`).join("\n");
-  return { ...item, body: [item.body, pointText].filter(Boolean).join("\n") };
+  const pointText = (item.points ?? [])
+    .map((point) => String(point?.text ?? point ?? "").trim())
+    .filter(Boolean)
+    .map((point) => `•\u2060${point}`)
+    .join("\n");
+  return {
+    ...item,
+    title: bindClosingPunctuation(item.title),
+    body: bindClosingPunctuation([item.body, pointText].filter(Boolean).join("\n")),
+  };
 }
 
 function slotItems(content, slotPlan) {
@@ -79,7 +91,7 @@ function fittedCompositionText(value, frame, roleName, typographyRoles) {
 }
 
 function gridItemFrames(frame, itemCount) {
-  const columns = itemCount >= 5 ? 3 : 2;
+  const columns = itemCount <= 1 ? 1 : itemCount === 3 || itemCount >= 5 ? 3 : 2;
   const rows = Math.ceil(itemCount / columns);
   const columnGap = 20;
   const rowGap = 18;

@@ -1,0 +1,16 @@
+在 C:/PPagenT 当前分支直接执行独立 PPT 试做，使用当前 Luna/high，本任务不再委派。用户要让文字排版指南驱动可复用的科研/麦肯锡式分析页，并以现有结构为参考自主重组，使结构能与解释共同成页。请完成两页，不需确认。
+
+只读输入：
+C:/PPagenT/docs/设计手册/科研咨询式排版-v5.md
+C:/PPagenT/experiments/university-skin-pilot/reference-01/theme.json
+C:/PPagenT/experiments/university-skin-pilot/argument-01/manuscript.txt
+
+依稿件两页，一页定量分析，一页下一轮真实流程/职责/条件。你自主确定标题、图表、参考结构、空间与文字，父任务不提供页面答案。此轮主题与排版分开：Theme 管配色字体，v5 管整页逻辑与视觉组织。当前不加学校 Logo/旧 Shell。主色固定试做配置 #315F91，派生深浅与中性色。
+
+关键：本轮优先走结构 Skill 的“参考重组”，不是强制 invokeStructure。读 .codex/skills/ppagent-structure/SKILL.md、references/reference-use.md 与必要子 Skill，catalog list/ reference 真实资产；再按需读 visual-intent 和实际实现，学它的关系表达/设计方法，然后在本次builder自主绘制原生元素。可重新布局、改变尺寸和造型、把解释移到图外，源minimumFrame不约束参考重组；保留稿件顺序、门禁、缺件规则与权限，不能变成三张平级卡片或删除条件。不要把重组声称为原组件调用。保存参考记录含真实ID、读过的文件、吸收的方法与主要变化，实际图形要能体现所吸收关系。
+
+只写 C:/PPagenT/experiments/university-skin-pilot/reference-01/run-01/。不可读任何参考图片、截图、旧试做、旧builder、评审与离线风格笔记，不联网，不用视觉模型；不读取实验README中的历史结果。允许读取必要实际结构源码、通用制稿API。独立主题任务在改共享主题解析器，本次直接从固定theme.json生成自身原生对象，避免依赖其进行中的工作。
+
+读取 presentations Skill/style_guidelines，load_workspace_dependencies，使用指定artifact-tool JavaScript ESM与bundled运行时，读API_QUICK_START与API_DOCS。显式自定义路线，不使用CodexGrid或模板选择器。原生图表、关系结构、文字绘制是用户明确授权。只创建输出目录中的node_modules junction，不安装依赖。首次authoring command前按技能成功执行一次marker。输出builder.mjs、deck.pptx、两页最终PNG/layout、reference-records.json、report.txt。生成后render_slides.py和slides_test.py；你不打开任何图，父任务在你完成后查看最终PPTX渲染并评审。
+
+文本与几何检查以实际导出为准，检查角色字号与颜色、文本行/内边距/可见区域、对齐与连接、重要条件覆盖。避免盲目连续缩字试错，空间不足先改布局或短句分组；保留虚构标注、观察差异边界与计划状态。检查通过后即提交完整结果，让父任务按视觉把关；不得声称风格已获用户认可。不要修改核心源码、Skill、输入文档或Git。

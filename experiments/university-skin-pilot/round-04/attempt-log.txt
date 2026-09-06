@@ -1,0 +1,10 @@
+尝试日志
+
+1. 读取 v4 设计提示词、manuscript.md、指定 runtime-template.pptx，并读取 presentations 技能、artifact-tool API、shell、Skin 契约与模板工具。
+2. presentations 官方 inspect_template_deck.mjs 尝试失败：本 Windows 环境缺少可用的 unzip -Z1；未改用图片或其他来源，改用 artifact-tool 自写 inspect_sources.mjs 完成 4 页模板盘点。
+3. 建立 round-04/node_modules junction，指向运行时提供的 Node packages。
+4. 独立运行 mark_artifact_operation_started.mjs create 一次成功。
+5. 首次 builder.mjs 构建成功，导出 9 页 deck.pptx、PNG、layout JSON、inspect 快照与 montage。
+6. 首轮 QA：slides_test.py 因未设置运行时环境变量而失败，补齐 RUNTIME_NODE、RUNTIME_NODE_MODULES、RUNTIME_BIN_DIR 后重跑通过；XML 空占位符检查为 0。
+7. 布局数据发现第 8 页长范围标签为两行，调整其宽度后重新构建并复核。
+8. 最终 QA：越界检查通过；XML 空占位符为 0；最终重读 9 页；实际对象、换行、字号、字体与正文安全区检查通过。

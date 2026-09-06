@@ -1,0 +1,32 @@
+{
+  "mode": "reference-recomposition-feedback-revision",
+  "basedOn": "experiments/university-skin-pilot/reference-01/run-03",
+  "layoutGuide": "docs/设计手册/科研咨询式排版-v7.md",
+  "sourceManuscript": "experiments/university-skin-pilot/argument-01/manuscript.txt",
+  "theme": "experiments/university-skin-pilot/reference-01/theme.json",
+  "referenceAssetIds": ["comparison-dual-verdict-001", "sequence-phase-gates-004"],
+  "absorbedMethods": {
+    "comparison-dual-verdict-001": ["共享阶段比较轴与对应行", "用紧凑总计行收束分量证据", "主题色只强调试点侧及其关键含义"],
+    "sequence-phase-gates-004": ["用连续右向连接骨架表达先后", "用落在线上的菱形标记表示推进条件", "把缺件规则留在第二阶段的局部说明中"]
+  },
+  "changesFromRun03": {
+    "page-01": ["保留已成立的报告式数据页；按最新版细线审计拆分网格线并避开条末标签，调整总计线与文字清距"],
+    "page-02": ["删除标题前的重复阶段编号，仅保留圆节点编号", "门禁改为直接落在对应连接线上的菱形标记与相邻一行条件文字", "取消无信息底部分隔线，压缩缺件说明为单行并为底部边界和页脚留出净空"]
+  },
+  "readFiles": ["docs/设计手册/科研咨询式排版-v7.md", "experiments/university-skin-pilot/audit-text-overlaps.mjs", "assets/结构图/双向对比-001/asset.json", "assets/结构图/双向对比-001/runtime.mjs", "assets/结构图/阶段门禁流程-004/asset.json", "assets/结构图/阶段门禁流程-004/runtime.mjs"],
+  "checks": {
+    "invokeStructure": false,
+    "nativeEditableObjects": true,
+    "themeRuntime": "builder reads theme.json at runtime and derives primaryDark/Light/Pale/grid/old from primaryColor and neutral colors",
+    "textOverlapAudit": {"page01": 0, "page02": 0},
+    "textRuleIntersectionAudit": {"page01": 0, "page02": 0},
+    "textRuleClearanceAudit": {"page01": 0, "page02": 0},
+    "arrowProto": {
+      "connectors": 2,
+      "fromTo": [{"fromElementId": "4", "toElementId": "5", "fromIdx": 6, "toIdx": 2, "tail": {"type": 2, "width": 1, "length": 1}}, {"fromElementId": "5", "toElementId": "6", "fromIdx": 6, "toIdx": 2, "tail": {"type": 2, "width": 1, "length": 1}}]
+    },
+    "textLineRanges": "all exported text boxes fit their actual line count at v7 role sizes",
+    "geometry": "all exported element bboxes remain within 1280x720",
+    "semanticBoundaries": ["no causal attribution", "teacher professional judgment retained", "missing-material pause remains local to step 2", "four-week plan remains unimplemented", "fiction label visible on both pages"]
+  }
+}

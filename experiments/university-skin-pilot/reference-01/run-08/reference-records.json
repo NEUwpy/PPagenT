@@ -1,0 +1,54 @@
+{
+  "run": "run-08",
+  "mode": "reference",
+  "referenceAssetIds": ["sequence-phase-gates-004"],
+  "source": {
+    "manuscript": "argument-01/manuscript.txt",
+    "theme": "reference-01/theme.json",
+    "layoutGuide": "docs/设计手册/科研咨询式排版-v8.md"
+  },
+  "invokeStructure": false,
+  "absorbedMethod": "保留三阶段顺序与相邻门禁的关系骨架；改用本页的大型连续主流程区、阶段矩形节点、门禁条件标签和显式箭头，不复制参考页坐标或装饰。",
+  "pageIntent": "让负责人先读懂三阶段主路径、责任与准入条件，再读异常、跨阶段记录和四周核验边界。",
+  "composition": {
+    "mainEvidenceZone": "主流程区 x=55..1225, y=156..474；三节点与两道门禁为视觉中心。",
+    "supportZone": "每个阶段下方只保留该阶段的短操作/异常/权限说明。",
+    "secondaryZone": "x=55..1225, y=500..630；左侧跨阶段记录，右侧四周验收范围。"
+  },
+  "contentBoundary": [
+    "授权常规才推进；非常规/超授权由负责人指定。",
+    "缺件暂停、通知补齐、复核；齐备后才送教师。",
+    "教师作专业判断并确认答复；助理不得代替教师承诺。",
+    "四周计划尚未实施；只验证分工可执行与记录完整，不承诺降时。",
+    "记录首次提交、核对完成、教师接收、最终答复和缺件暂停区间。"
+  ],
+  "verification": {
+    "nativeEditableObjects": true,
+    "nodeLabelPairsFile": "node-label-pairs.json",
+    "nodeTextAlignment": "three node groups; each combined title/owner label boundary is center/middle",
+    "visibleArrowShapes": [
+      {"name": "visible-arrow-1", "geometry": "rightArrow", "bbox": [385, 292, 85, 28]},
+      {"name": "visible-arrow-2", "geometry": "rightArrow", "bbox": [760, 292, 85, 28]}
+    ],
+    "nodeLabelAudit": {
+      "pairCount": 3,
+      "issueCount": 0,
+      "visualAcceptance": "not assessed",
+      "glyphBoundsVerified": false,
+      "centerDelta": [[0, -2], [0, -2], [0, -2]]
+    },
+    "layoutTextLineCheck": {
+      "phaseLabels": "all six phase title/owner labels lineCount=1",
+      "secondaryText": "acceptance-body lineCount=2; phase-2-detail lineCount=2",
+      "boundsViolations": false
+    },
+    "textOverlap": {
+      "intersectionCount": 0,
+      "textRuleIntersectionCount": 0,
+      "textRuleClearanceCount": 0
+    },
+    "render": "PASS: official render_slides.py completed",
+    "slidesTest": "PASS: no overflow detected",
+    "visualReview": "not performed by agent; final PNG is provided for parent visual inspection"
+  }
+}

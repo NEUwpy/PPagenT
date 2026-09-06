@@ -1,0 +1,71 @@
+{
+  "run": "run-07",
+  "mode": "single feedback correction",
+  "basedOn": "run-06",
+  "source": {
+    "manuscript": "argument-01/manuscript.txt",
+    "theme": "reference-01/theme.json",
+    "layoutGuide": "docs/设计手册/科研咨询式排版-v7.md"
+  },
+  "communicationJob": "让院系服务负责人读懂时间差异的证据边界，并能按下一轮真实职责与条件执行试点。",
+  "references": [
+    {
+      "id": "comparison-dual-verdict-001",
+      "use": "page-01 retained the shared-scale comparison and dual verdict structure"
+    },
+    {
+      "id": "sequence-phase-gates-004",
+      "use": "page-02 recomposed as a left-to-right phase sequence with explicit gates and local exception branches"
+    }
+  ],
+  "pageScope": {
+    "page-01": "retained from run-06; no content/layout change",
+    "page-02": "retained from run-06 except gate-label text alignment"
+  },
+  "changes": [
+    "Preserved all run-06 page-01/page-02 content, coordinates, shapes, and connectors.",
+    "Set gate-1-text and gate-2-text alignment explicitly to center; no other layout change.",
+    "Preserved native editable text, shapes, and connectors; no images were used."
+  ],
+  "verification": {
+    "invokeStructure": false,
+    "nativeEditableObjects": true,
+    "textOverlap": {
+      "intersectionCount": 0,
+      "textRuleIntersectionCount": 0,
+      "textRuleClearanceCount": 0
+    },
+    "geometry": {
+      "fit": [],
+      "bounds": [],
+      "forbidden": [],
+      "page02LeftAlignedGroups": [
+        ["boundary-heading", "boundary-body"],
+        ["exception-heading", "exception-body"],
+        ["timestamp-heading", "timestamp-values", "timestamp-meaning"],
+        ["measure-heading", "measure-body"]
+      ],
+      "page02GateCenters": [
+        {"label": "gate-1-text", "labelCenterX": 430, "diamondCenterX": 430},
+        {"label": "gate-2-text", "labelCenterX": 850, "diamondCenterX": 850}
+      ],
+      "gateTextAlignment": [
+        {"name": "gate-1-text", "resolvedTextStyle.alignment": "center"},
+        {"name": "gate-2-text", "resolvedTextStyle.alignment": "center"}
+      ],
+      "page02FooterRule": "absent"
+    },
+    "connectors": {
+      "fromSide": "right",
+      "toSide": "left",
+      "tail": "triangle at destination end",
+      "proto": [
+        {"from": "4", "to": "5", "tail": {"type": 2, "width": 1, "length": 1}},
+        {"from": "5", "to": "6", "tail": {"type": 2, "width": 1, "length": 1}}
+      ]
+    },
+    "themeRuntime": "theme.json read at runtime; palette and font derived from theme values",
+    "render": "PASS",
+    "slidesTest": "PASS"
+  }
+}

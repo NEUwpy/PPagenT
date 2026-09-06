@@ -1,0 +1,602 @@
+{
+  "schema": "ppagent.connector-contract/v1",
+  "source": "C:\\PPagenT\\experiments\\university-skin-pilot\\stability-01\\archive-d\\round-01\\deck.pptx",
+  "layoutDir": "C:\\PPagenT\\experiments\\university-skin-pilot\\stability-01\\archive-d\\round-01",
+  "scope": "Top-level native p:cxnSp only. Ordinary line shapes and grouped connectors are not route-audited; non-straight or rotated paths are explicitly unsupported.",
+  "slides": [
+    {
+      "slide": 1,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\stability-01\\archive-d\\round-01\\slide-1.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 2,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\stability-01\\archive-d\\round-01\\slide-2.layout.json",
+      "connectors": [
+        {
+          "lineId": {
+            "xml": "29",
+            "layout": "10"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "7",
+            "name": "s2-sample-node"
+          },
+          "target": {
+            "id": "6",
+            "name": "s2-result-node"
+          },
+          "sourceBinding": {
+            "id": "7",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "6",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            535,
+            281,
+            255,
+            49
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "30",
+            "layout": "11"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "8",
+            "name": "s2-script-node"
+          },
+          "target": {
+            "id": "6",
+            "name": "s2-result-node"
+          },
+          "sourceBinding": {
+            "id": "8",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "6",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            535,
+            330,
+            255,
+            35
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": true
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "31",
+            "layout": "12"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "9",
+            "name": "s2-exclusion-node"
+          },
+          "target": {
+            "id": "6",
+            "name": "s2-result-node"
+          },
+          "sourceBinding": {
+            "id": "9",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "6",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            535,
+            330,
+            255,
+            119
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": true
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        }
+      ],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 3,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\stability-01\\archive-d\\round-01\\slide-3.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 4,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\stability-01\\archive-d\\round-01\\slide-4.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 5,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\stability-01\\archive-d\\round-01\\slide-5.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 6,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\stability-01\\archive-d\\round-01\\slide-6.layout.json",
+      "connectors": [
+        {
+          "lineId": {
+            "xml": "30",
+            "layout": "9"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "5",
+            "name": "s6-submit-node"
+          },
+          "target": {
+            "id": "6",
+            "name": "s6-locate-node"
+          },
+          "sourceBinding": {
+            "id": "5",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "6",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            320,
+            320,
+            60,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "31",
+            "layout": "10"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "6",
+            "name": "s6-locate-node"
+          },
+          "target": {
+            "id": "7",
+            "name": "s6-supplement-node"
+          },
+          "sourceBinding": {
+            "id": "6",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "7",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            625,
+            320,
+            60,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "32",
+            "layout": "11"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "7",
+            "name": "s6-supplement-node"
+          },
+          "target": {
+            "id": "8",
+            "name": "s6-discussable-node"
+          },
+          "sourceBinding": {
+            "id": "7",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "8",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            930,
+            320,
+            60,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        }
+      ],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 7,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\stability-01\\archive-d\\round-01\\slide-7.layout.json",
+      "connectors": [
+        {
+          "lineId": {
+            "xml": "28",
+            "layout": "11"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "5",
+            "name": "s7-w1-node"
+          },
+          "target": {
+            "id": "7",
+            "name": "s7-w23-node"
+          },
+          "sourceBinding": {
+            "id": "5",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "7",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            340,
+            345,
+            140,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "29",
+            "layout": "12"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "7",
+            "name": "s7-w23-node"
+          },
+          "target": {
+            "id": "9",
+            "name": "s7-w4-node"
+          },
+          "sourceBinding": {
+            "id": "7",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "9",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            650,
+            345,
+            200,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        }
+      ],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 8,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\stability-01\\archive-d\\round-01\\slide-8.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    }
+  ],
+  "summary": {
+    "slideCount": 8,
+    "connectorCount": 8,
+    "boundCount": 8,
+    "unknownBindingCount": 0,
+    "reverseArrowCount": 0,
+    "unsupportedGeometryCount": 0,
+    "unsupportedTransformCount": 0,
+    "uninspectedGroupedConnectors": 0,
+    "uninspectedRouteCount": 0,
+    "textIntersectionCount": 0,
+    "declarationFailureCount": 0
+  },
+  "declarationChecks": [
+    {
+      "slide": 2,
+      "source": "s2-sample-node",
+      "target": "s2-result-node",
+      "lineId": {
+        "xml": "29",
+        "layout": "10"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 2,
+      "source": "s2-script-node",
+      "target": "s2-result-node",
+      "lineId": {
+        "xml": "30",
+        "layout": "11"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 2,
+      "source": "s2-exclusion-node",
+      "target": "s2-result-node",
+      "lineId": {
+        "xml": "31",
+        "layout": "12"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 6,
+      "source": "s6-submit-node",
+      "target": "s6-locate-node",
+      "lineId": {
+        "xml": "30",
+        "layout": "9"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 6,
+      "source": "s6-locate-node",
+      "target": "s6-supplement-node",
+      "lineId": {
+        "xml": "31",
+        "layout": "10"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 6,
+      "source": "s6-supplement-node",
+      "target": "s6-discussable-node",
+      "lineId": {
+        "xml": "32",
+        "layout": "11"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 7,
+      "source": "s7-w1-node",
+      "target": "s7-w23-node",
+      "lineId": {
+        "xml": "28",
+        "layout": "11"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 7,
+      "source": "s7-w23-node",
+      "target": "s7-w4-node",
+      "lineId": {
+        "xml": "29",
+        "layout": "12"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    }
+  ]
+}

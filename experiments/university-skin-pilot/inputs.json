@@ -1,0 +1,31 @@
+{
+  "branch": "codex/penguin-harness-v2",
+  "commit": "f3feb92",
+  "round": "round-02",
+  "threadId": "01a07189-50f7-70f0-95f7-01f2c6765c41",
+  "model": "gpt-5.6-luna",
+  "thinking": "high",
+  "executorPageImages": false,
+  "parentVisualReview": true,
+  "structureMode": "disabled-for-text-baseline",
+  "inputs": [
+    {
+      "path": "docs/工作流/正式生成/大学Skin设计提示词-v2.md",
+      "sha256": "4068cc25f996c04a4f5c30c3caad07be36cc7b09e5bedb8dea77a49225eeadc7"
+    },
+    {
+      "path": "experiments/university-skin-pilot/manuscript.md",
+      "sha256": "dacfc82d8b43e9052be4958483fc53a43378b095d87f120199cc7d4a1104464f"
+    },
+    {
+      "path": "assets/主题/东北大学-001/runtime-template.pptx",
+      "sha256": "366a4eb3d04987b314d749893456e7bf8e5f56eddd8a41a344d6b12335135f57"
+    }
+  ],
+  "interruptedRound": {
+    "threadId": "01a07183-e61e-7ab3-bcb6-698fbcc321d3",
+    "downstreamThreadId": "01a07184-7239-7022-909c-96aa4e441d6d",
+    "status": "stopped-after-user-design-direction-update",
+    "completedDeck": false
+  }
+}

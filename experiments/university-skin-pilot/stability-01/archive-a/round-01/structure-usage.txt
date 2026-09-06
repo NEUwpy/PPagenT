@@ -1,0 +1,14 @@
+结构检索与采用记录
+
+mode: reference
+referenceAssetIds: sequence-flow-001, sequence-phase-gates-004
+
+实际检索：
+- `catalog.mjs list --logic sequence`
+- `catalog.mjs inspect sequence-flow-001`
+- `catalog.mjs inspect sequence-phase-gates-004`
+- 阅读 `references/reference-use.md` 与顺序结构 Skill
+
+采用方式：未调用 invokeStructure；采用 reference-recompose。sequence-flow-001 提供左到右连续主路径、等距阶段节点与步骤/内容绑定方法，用于第6页工作顺序。sequence-phase-gates-004 提供“阶段间必须通过检查或决策门槛”的语义，用于第6页授权暂停分支。其余页面按原稿的中心关系、比较关系、访问边界与决策关系使用原生形状重组。
+
+关系检查：第3页四类依据汇聚到一个实验结果；第4页讨论材料与受限原始数据并列且边界清楚；第5页共享范围与条件对齐；第6页主路径与授权暂停；第7页周次顺序；第8页三个评估问题与停止信号；第9页启动确认项与试点目标收束。

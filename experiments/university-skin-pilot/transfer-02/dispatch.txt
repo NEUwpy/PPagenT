@@ -1,0 +1,14 @@
+请在 C:/PPagenT 当前分支独立制作一页原生可编辑PPTX。用户要求空白Luna/high只凭文字指南实现科研/咨询式报告排版。本任务是一份不同稿件的迁移验证，不需要澄清，不委派其他任务。
+
+输入仅限：
+C:/PPagenT/docs/设计手册/科研咨询式排版-v6.md
+C:/PPagenT/experiments/university-skin-pilot/reference-01/theme.json
+C:/PPagenT/experiments/university-skin-pilot/transfer-02/manuscript.txt
+
+你自行选择标题、图表、比较方式、解释与空间布局。Theme管单主色/字体，v6管整页方法与边界；不加旧大学Shell/Logo。数值、内存约束与试运行状态来自稿件，所有数据虚构需可见注明。主要任务是使两个维度与筛选理由可读，不给你预制页坐标或答案。不强制结构；若需要则读ppagent-structure Skill，catalog list/reference检索真实结构并参考重组，记录参考及变化；不是invoke调用就不要冒充直接调用。
+
+不得读旧输出、旧builder、历史评审、其他实验README、离线参考笔记或任何图片，不联网、不调用视觉模型。可以读取必要的实际结构/通用API源码。不要修改Git、核心代码、Skill、主题或指南。仅读本稿和文字规则，自主完成新页面。
+
+仅写 C:/PPagenT/experiments/university-skin-pilot/transfer-02/run-01/。使用presentations Skill/style_guidelines、load_workspace_dependencies和bundled artifact-tool JavaScript ESM，读API_QUICK_START与API_DOCS。显式自定义风格，不用CodexGrid/模板选择器。原生图表、结构、文字是用户授权，保持可编辑。输出目录node_modules junction指向bundled modules，不安装依赖。首次authoring前成功执行一次marker。
+
+交付builder.mjs、deck.pptx、PNG/layout、简短report.txt，结构来源记录如适用。保持数据/单位/统计口径，实际导出后核对字号、颜色、文字行与容量、无意遮挡、图表尺度、数据标签和连接方向。按实际容量调整排放，不连续缩字试错。运行render_slides.py与slides_test.py但不看任何图片；父任务会等完整交付后独立查看最终PPTX渲染，不把脚本通过称作审美通过。

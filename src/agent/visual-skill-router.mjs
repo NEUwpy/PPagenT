@@ -90,6 +90,13 @@ export function compactVisualSkillContext(pageContents, pageIntents, candidateSe
       } : {}),
       compositionOptions: (candidate.compositions ?? []).map((composition) => ({
         compositionId: composition.id,
+        requiresComponent: Boolean(composition.requiresComponent),
+        supportsIndependentText: Boolean(
+          composition.requiresComponent && composition.slots.some((slot) => slot.role === "text"),
+        ),
+        textSlotIds: composition.slots
+          .filter((slot) => slot.role === "text")
+          .map((slot) => slot.id),
         compositionFamily: compositionFamilyFor({
           composition,
           candidate,
@@ -203,6 +210,24 @@ export function visualSkillRoutingSchema(pageContents, candidateSets) {
             },
           },
         },
+        textSlotAssignments: {
+          type: "array",
+          maxItems: 8,
+          items: {
+            type: "object",
+            additionalProperties: false,
+            required: ["slotId", "sourceItemIds"],
+            properties: {
+              slotId: { type: "string", minLength: 1 },
+              sourceItemIds: {
+                type: "array",
+                minItems: 1,
+                items: { type: "string", enum: page.items.map((item) => item.id) },
+              },
+              contentMode: { enum: ["full", "title", "body"] },
+            },
+          },
+        },
         reason: { type: "string", minLength: 1, maxLength: 120 },
       },
     };
@@ -243,13 +268,19 @@ function legalTextLayoutChoices(selection, candidate) {
 function chooseComposition(candidate, page, requestedCompositionId) {
   const compositions = candidate.compositions ?? [];
   const requested = compositions.find((item) => item.id === requestedCompositionId);
-  if (requested) return requested;
   if (candidate.expressionSource) {
+    // A block-level candidate promises that the selected Structure only owns
+    // one source block. The remaining source items therefore require a real
+    // text slot. Do not accept component-full even when the model requests it.
+    if (requested?.requiresComponent && requested.slots.some((slot) => slot.role === "text")) {
+      return requested;
+    }
     const mixed = compositions.find((item) => (
       item.requiresComponent && item.slots.some((slot) => slot.role === "text")
     ));
     if (mixed) return mixed;
   }
+  if (requested) return requested;
   const component = compositions.find((item) => item.requiresComponent);
   if (component) return component;
   const preferredId = page.items.length <= 1
@@ -260,9 +291,31 @@ function chooseComposition(candidate, page, requestedCompositionId) {
   return compositions.find((item) => item.id === preferredId) ?? compositions[0];
 }
 
-function distributeTextSlots(page, composition) {
+function distributeTextSlots(page, composition, requestedAssignments = []) {
   const slots = (composition.slots ?? []).filter((slot) => slot.role === "text");
   if (!slots.length || !page.items.length) return [];
+  if (requestedAssignments.length) {
+    const legalSlotIds = new Set(slots.map((slot) => slot.id));
+    const legalItemIds = new Set(page.items.map((item) => item.id));
+    const usedSlots = new Set();
+    const usedItems = new Set();
+    const assignments = [];
+    for (const assignment of requestedAssignments) {
+      if (!legalSlotIds.has(assignment.slotId) || usedSlots.has(assignment.slotId)) continue;
+      const sourceItemIds = (assignment.sourceItemIds ?? []).filter((id) => (
+        legalItemIds.has(id) && !usedItems.has(id)
+      ));
+      if (!sourceItemIds.length) continue;
+      usedSlots.add(assignment.slotId);
+      sourceItemIds.forEach((id) => usedItems.add(id));
+      assignments.push({
+        slotId: assignment.slotId,
+        sourceItemIds,
+        contentMode: assignment.contentMode ?? "full",
+      });
+    }
+    if (usedItems.size === page.items.length) return assignments;
+  }
   if (slots.length === 1) {
     return [{ slotId: slots[0].id, sourceItemIds: page.items.map((item) => item.id), contentMode: "full" }];
   }
@@ -383,6 +436,13 @@ export function expandVisualSkillRouting(routing, input) {
         requestedCompositionId: selection.compositionId,
         appliedCompositionId: composition.id,
       });
+    } else if (selection.compositionId && selection.compositionId !== composition.id) {
+      routingDiagnostics.push({
+        pageId: page.pageId,
+        code: "composition-normalized-for-expression-strategy",
+        requestedCompositionId: selection.compositionId,
+        appliedCompositionId: composition.id,
+      });
     }
     const deckPage = input.deckPlan?.pages?.find((item) => item.pageId === page.pageId);
     const pageRole = PAGE_ROLES.includes(selection.pageRole)
@@ -484,9 +544,9 @@ export function expandVisualSkillRouting(routing, input) {
           ? distributeTextSlots({
             ...page,
             items: page.items.filter((item) => item.id !== candidate.expressionSource.sourceItemId),
-          }, composition)
+          }, composition, selection.textSlotAssignments)
           : [])
-        : distributeTextSlots(page, composition),
+        : distributeTextSlots(page, composition, selection.textSlotAssignments),
       textLayoutChoices,
       ...(candidate.expressionSource ? { componentProjection: candidate.expressionSource } : {}),
       ...(bindings ? { componentBindings: bindings } : {}),

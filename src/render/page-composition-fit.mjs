@@ -1,11 +1,23 @@
 import { resolveNormalizedFrame } from "../composition/layouts.mjs";
 import { fitChineseTextToFrame } from "./chinese-typography.mjs";
 
+function bindClosingPunctuation(value) {
+  return String(value ?? "").replace(/([\p{Script=Han}A-Za-z0-9])([。！？；])/gu, "$1\u2060$2");
+}
+
 function slotItems(content, slotPlan) {
   const byId = new Map(content.items.map((item) => [item.id, item]));
   return slotPlan.sourceItemIds.map((id) => byId.get(id)).filter(Boolean).map((item) => {
-    const pointText = (item.points ?? []).map((point) => `• ${point}`).join("\n");
-    const normalized = { ...item, body: [item.body, pointText].filter(Boolean).join("\n") };
+    const pointText = (item.points ?? [])
+      .map((point) => String(point?.text ?? point ?? "").trim())
+      .filter(Boolean)
+      .map((point) => `•\u2060${point}`)
+      .join("\n");
+    const normalized = {
+      ...item,
+      title: bindClosingPunctuation(item.title),
+      body: bindClosingPunctuation([item.body, pointText].filter(Boolean).join("\n")),
+    };
     if (slotPlan.contentMode === "title") return { ...normalized, body: "" };
     if (slotPlan.contentMode === "body") return { ...normalized, title: "" };
     return normalized;
@@ -32,7 +44,7 @@ function fittedCompositionText(value, frame, roleName, typographyRoles) {
 }
 
 function gridItemFrames(frame, itemCount) {
-  const columns = itemCount >= 5 ? 3 : 2;
+  const columns = itemCount <= 1 ? 1 : itemCount === 3 || itemCount >= 5 ? 3 : 2;
   const rows = Math.ceil(itemCount / columns);
   const columnGap = 20;
   const rowGap = 18;

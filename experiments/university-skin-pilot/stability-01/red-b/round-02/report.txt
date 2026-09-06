@@ -1,0 +1,23 @@
+独立 Luna/high 全稿编排第二轮
+
+输出：11页原生可编辑中文 PPTX，使用 Microsoft YaHei、1280×720、冻结主题 primaryColor #315F91 与中性灰派生；未使用图片、外部事实、虚构图表或第二色相。
+
+本轮修复：
+- 修正连接关系：arrow helper 改用目标端 tail，删除 head；XML 核对第2、6、7、8、9页共17个连接，tailEnd=17、headEnd=0。
+- 第4页改为“红色基因传承 + 实践研学赋能”双轮驱动，补回对接22处“六地”示范教学点；1+6+N仅作为研学链内部路线。
+- 第5页三项任务改为并列共同归属；三摆三写作为机制重心；五年累计26项与成效报告26份/8家分开。
+- 第8页整体共学联建单独承载41家单位与2000余人次/年；东北↔西部双向互学单独承载辽宁合作网络与西部三校。
+- 第10页以58%→87%为最大主证据；26份/8家、声音文字结果与完整“党员考取辽宁选调生、投身重大装备研发比例提升40%”置于支持区。
+- 删除封面重复“六地红”徽章；页脚改为面向受众的“数据来自来稿《让‘六地’红》”。
+
+检查结果：
+- audit-text-overlaps.mjs：11页 textCapacityWarningCount=0、intersectionCount=0、textRuleIntersectionCount=0。
+- audit-wrap-tails.mjs：11页 count=0，无软换行单字符尾。
+- audit-node-labels.mjs：第2–10页共35个节点配对，issueCount=0；第1、11页无语义节点，未生成空 manifest。
+- audit-visible-contract.mjs：11页 colorIssueCount=0、paintIssueCount=0。
+- presentations/render_slides.py：已完成官方 PPTX 渲染；最终交付副本位于 render/slide-1.png 至 render/slide-11.png，原始渲染目录为 deck/。
+- slides_test.py：退出码 0，无输出，未发现画布溢出。
+- XML 方向核对：所有过程连接仅写入 tailEnd，未写入 headEnd，目标端箭头方向与 API 约束一致。
+- SHA-256：所有 round-02 交付文件（deck、builder、layout、nodepairs、render、审计与说明）已由 Get-FileHash 计算并记录于 hashes.json。
+
+剩余限制：程序检查不等同于视觉验收；audit-visible-contract 只检查声明颜色与对象框，audit-node-labels 不测字形轮廓；最终 PNG 的视觉复核由父任务独立完成。本轮不读取渲染图片，保留第二轮无逐页视觉反馈状态。

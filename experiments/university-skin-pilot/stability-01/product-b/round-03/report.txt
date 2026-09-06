@@ -1,0 +1,20 @@
+Luna/high 独立全稿修订报告（round-03）
+
+round-02 原样保留；本轮只写 round-03，修订 P2 与 P6。
+
+修订内容：
+1. P2 删除自动 elbow 依赖，改为两条 straight connector：p2-narrative -> p2-output、p2-visual -> p2-output。说明文字移出中部线路走廊，最终文本框相交为 0。
+2. P6 将核心资产库注释放到 bent connector 的竖向通道外，并在选择 -> PPTX 连接旁增加“确定性生成”。核心资产库 -> 合法能力/简单排版保持只读供给选择语义。
+3. 全部有向连接继续使用目标端 `tailEnd`。最终 XML slide 2、5、6、7、8 均无 `headEnd`，所有连接均有 `tailEnd`；slide 6 端点映射见 connector-routing-check.txt。
+
+程序检查结果：
+- audit-text-overlaps：9 页 textCapacityWarningCount=0、intersectionCount=0、textRuleIntersectionCount=0。工具仅检查文本框相交及轴对齐薄线，未覆盖 bentConnector 的真实路径；因此不将 ruleIntersections=0 表述为全类型“连线穿文字=0”。P2 的 straight connector 另以布局与 XML 端点检查支持线路不穿文字；P6 bent connector 以 XML 端点和 bbox 分离单独核对。
+- audit-node-labels：slide 2–8 共 24 个实际节点，issueCount=0。
+- audit-visible-contract：全页 colorIssueCount=0、paintIssueCount=0。
+- audit-wrap-tails：9 页 count=0。
+- slides_test.py：Test passed. No overflow detected.
+- 官方 PPTX 渲染：render/slide-1.png 至 render/slide-9.png 已生成；未读取图片，父任务独立复核。
+
+剩余限制：程序布局审计不能证明字形边界、圆角轮廓或视觉审美；父任务需独立查看官方渲染。
+
+文件哈希：见同目录 hash.txt，由 Get-FileHash 计算。

@@ -1,0 +1,14 @@
+Luna/high 独立全稿编排首轮报告
+
+交付：9页原生可编辑中文 PPTX，输出目录为本目录；builder.mjs 与 deck.pptx 已生成。每页已导出真实 Artifact layout JSON；适用页已提供 node-label-pairs JSON；官方 PPTX 渲染位于 render/。
+最终 deck.pptx SHA-256：6750884BF4EA15AD26C126E5AD2FF07162A90EC63663A1F56F277965243FBE49
+
+确定性自查：
+- audit-text-overlaps.mjs：9页均 textCapacityWarningCount=0、textCapacityUnchecked=0、intersectionCount=0、textRuleIntersectionCount=0、textRuleClearanceCount=0。
+- audit-node-labels.mjs：第3、6、7、9页共16个配对，均 issueCount=0，水平/垂直居中与声明安全区检查通过。
+- presentations/render_slides.py：9页 PNG 全部成功生成。
+- presentations/slides_test.py：Test passed；未检测到画布溢出。
+
+本轮修复：首轮自查发现第2页箭头与说明文字间距候选过窄，已缩短箭头并重新导出；节点标签配对发现容器内安全区声明与文字框偏移不一致，已按真实导出几何调整 padding；第7页周次标签改为中线对齐并重新导出；第9页编号背景与文字层序已保证文字可见。
+
+剩余限制：程序检查不等于视觉验收；按任务边界，本轮未读取渲染 PNG，最终视觉主次、阅读路径、字形细节与连接线观感由父任务独立检查。无外部资产与外部事实来源，本稿仅据 archive.txt。

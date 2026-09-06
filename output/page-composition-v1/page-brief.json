@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "0.1",
+  "pageId": "page-01",
+  "pageJob": "让读者理解 PPagenT 从先构图到原生输出的工作方式",
+  "audienceMove": "把结构资产理解为整页模板 → 把 Skill 理解为区域内的设计能力",
+  "coreMessage": "页面先完成宏观构图，再调用结构 Skill。",
+  "rhythm": "dense",
+  "content": {
+    "title": "页面先构图，再调用结构 Skill",
+    "items": [
+      {
+        "id": "step-1",
+        "title": "内容定页",
+        "body": "冻结本页主旨与三步关系"
+      },
+      {
+        "id": "step-2",
+        "title": "区域编排",
+        "body": "分配结构区与解释区"
+      },
+      {
+        "id": "step-3",
+        "title": "原生生成",
+        "body": "各 Skill 汇入可编辑 PPTX"
+      },
+      {
+        "id": "takeaway",
+        "title": "关键变化",
+        "body": "Structure Skill 不再占据整页，而是作为区域组件参与组合。",
+        "emphasis": true
+      }
+    ]
+  },
+  "structure": {
+    "skillId": "sequence-flow-001",
+    "sourceItemIds": [
+      "step-1",
+      "step-2",
+      "step-3"
+    ]
+  },
+  "aside": {
+    "sourceItemIds": [
+      "takeaway"
+    ]
+  }
+}

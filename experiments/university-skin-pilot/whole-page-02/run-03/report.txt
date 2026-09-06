@@ -1,0 +1,23 @@
+whole-page-02 / run-03（第二次反馈修订；非冷启动）
+
+第 1 页：流程页
+- 保持已验证的 sequence-flow-001 四步几何与统一样式：提交记录 → 另一位成员复核 → 补充缺项 → 负责人确认。
+- 可见复核边界：复核先检查别人能否理解结果来源；不要求复做整项实验，也不代替科学结论审查。
+- 可见授权闭环：出现新的访问授权先暂停共享，由负责人处理授权后再继续。条件区 y=580–658，结构底部 y=548，通道=32。
+
+第 2 页：授权处置页
+- 删除总结句；行动区只保留“权限边界无法说明时缩小要求或停止试点”的行动条件。
+- action-surface=(55,448,1170,82)，内容自然高度 82；上方竖线=(590,180,1,180)，不穿过行动区。
+- 页面只讨论可见范围、原授权位置、授权触发处置和停止条件，不引入历史补档议题。
+
+实际检查
+- invoke 成功；本次适配对象 38 个，前后 ID/文本/bbox 不变量：PASS。
+- 结构实际文本样式：{"sequence-title-0":{"fontSize":20,"typeface":"Microsoft YaHei","color":"#252B33","alignment":"left","verticalAlignment":"middle"},"sequence-order-0":{"fontSize":20,"typeface":"Microsoft YaHei","color":"#FFFFFF","alignment":"center","verticalAlignment":"middle"},"sequence-body-0":{"fontSize":20,"typeface":"Microsoft YaHei","color":"#252B33","alignment":"left","verticalAlignment":"middle"},"sequence-title-1":{"fontSize":20,"typeface":"Microsoft YaHei","color":"#252B33","alignment":"left","verticalAlignment":"middle"},"sequence-order-1":{"fontSize":20,"typeface":"Microsoft YaHei","color":"#FFFFFF","alignment":"center","verticalAlignment":"middle"},"sequence-body-1":{"fontSize":20,"typeface":"Microsoft YaHei","color":"#252B33","alignment":"left","verticalAlignment":"middle"},"sequence-title-2":{"fontSize":20,"typeface":"Microsoft YaHei","color":"#252B33","alignment":"left","verticalAlignment":"middle"},"sequence-order-2":{"fontSize":20,"typeface":"Microsoft YaHei","color":"#FFFFFF","alignment":"center","verticalAlignment":"middle"},"sequence-body-2":{"fontSize":20,"typeface":"Microsoft YaHei","color":"#252B33","alignment":"left","verticalAlignment":"middle"},"sequence-title-3":{"fontSize":20,"typeface":"Microsoft YaHei","color":"#252B33","alignment":"left","verticalAlignment":"middle"},"sequence-order-3":{"fontSize":20,"typeface":"Microsoft YaHei","color":"#FFFFFF","alignment":"center","verticalAlignment":"middle"},"sequence-body-3":{"fontSize":20,"typeface":"Microsoft YaHei","color":"#252B33","alignment":"left","verticalAlignment":"middle"}}
+- 最终角色：节点标题与正文 20px、Microsoft YaHei、#252B33、左对齐；编号 20px、白色、居中；组标题 22px；页面标题 32px；页脚 16px。
+- 非语义结构面按本页 Skin 适配为白色/细线/无阴影；未改变结构数量、文本、几何、路径或方向。
+- 已导出 deck.pptx、逐页 PNG/layout.json、汇总 layout.json、调用日志和适配证据；slides_test 在外部命令中通过。
+
+限制与未检查项
+- run-02 保持原样；未修改核心资产、正式 Skin、指南、Git 或其他目录。
+- 执行者未读取 PNG/截图；预览供父任务审阅。几何与文字布局已通过 layout.json 实测。
+- 调用 success、样式读回和无溢出不等同于整页风格通过，最终视觉判断仍由父任务完成。

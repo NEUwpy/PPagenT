@@ -1,0 +1,19 @@
+Luna/high 独立全稿修订报告（round-04）
+
+round-03 原样保留；本轮只修 P2 叙事说明文本，其他页面保持。
+
+修订内容：
+1. P2 叙事说明由长句改为两组完整短语：“讲法、拆页、页面职责”与“并列、递进、因果、流程”。保留讲法、拆页、页面职责及关系含义，几何不变。
+2. P2/P6 连接方向和走廊沿用 round-03：目标端使用 `tailEnd`；P2 为 straight connectors；P6 库只读供给选择，选择旁保留“确定性生成”。
+
+最新程序检查结果（基于 round-04 最新 layout）：
+- audit-text-overlaps：9 页 textCapacityWarningCount=0、intersectionCount=0、textRuleIntersectionCount=0。该工具仅检查文本框相交和轴对齐薄线，未覆盖 bentConnector 的真实路径；因此不把 ruleIntersections=0 表述为全类型“连线穿文字=0”。
+- audit-node-labels：slide 2–8 共 24 个实际节点，issueCount=0。
+- audit-visible-contract：全页 colorIssueCount=0、paintIssueCount=0。
+- audit-wrap-tails：9 页 count=0；P2 最新 layout 不再出现单字尾行。
+- slides_test.py：Test passed. No overflow detected.
+- 官方 PPTX 渲染：render/slide-1.png 至 render/slide-9.png 已生成；未读取图片，父任务独立复核。
+
+剩余限制：P6 唯一 bent 路径的净空由父任务视觉复核；程序工具不支持该路径的真实几何净空判断。其他程序布局审计也不能证明字形边界、圆角轮廓或视觉审美。
+
+文件哈希：见同目录 hash.txt，由 Get-FileHash 计算。

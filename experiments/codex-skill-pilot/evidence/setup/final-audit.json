@@ -1,0 +1,94 @@
+{
+  "pptxSha256": "db8028d9ebfd134a13f3ee4bd49e7bf71e679a883c2aae7342e801c3529b24ee",
+  "slideCount": 7,
+  "slides": [
+    {
+      "slide": "ppt/slides/slide1.xml",
+      "nativeTextRuns": 3,
+      "nativeShapes": 5,
+      "slideLocalPictures": 0
+    },
+    {
+      "slide": "ppt/slides/slide2.xml",
+      "nativeTextRuns": 16,
+      "nativeShapes": 15,
+      "slideLocalPictures": 0
+    },
+    {
+      "slide": "ppt/slides/slide3.xml",
+      "nativeTextRuns": 16,
+      "nativeShapes": 37,
+      "slideLocalPictures": 0
+    },
+    {
+      "slide": "ppt/slides/slide4.xml",
+      "nativeTextRuns": 17,
+      "nativeShapes": 31,
+      "slideLocalPictures": 0
+    },
+    {
+      "slide": "ppt/slides/slide5.xml",
+      "nativeTextRuns": 16,
+      "nativeShapes": 20,
+      "slideLocalPictures": 0
+    },
+    {
+      "slide": "ppt/slides/slide6.xml",
+      "nativeTextRuns": 12,
+      "nativeShapes": 13,
+      "slideLocalPictures": 0
+    },
+    {
+      "slide": "ppt/slides/slide7.xml",
+      "nativeTextRuns": 1,
+      "nativeShapes": 3,
+      "slideLocalPictures": 0
+    }
+  ],
+  "sourceNotePages": 7,
+  "themeByteIdentical": {
+    "ppt/theme/theme1.xml": true
+  },
+  "problemBodyActualLines": [
+    {
+      "index": 1,
+      "text": "申请散落在不同聊天群，管理员"
+    },
+    {
+      "index": 2,
+      "text": "反复确认设备、日期和负责人；"
+    },
+    {
+      "index": 3,
+      "text": "临时取消也难及时通知下一位使用者。"
+    }
+  ],
+  "problemBodyFontSize": 20,
+  "structureAttempts": 14,
+  "structureSuccesses": 14,
+  "structureFailures": 0,
+  "distinctAssets": [
+    "comparison-pros-cons-balance-005",
+    "sequence-flow-001"
+  ],
+  "overflowEvidence": "evidence/setup/final-overflow.txt",
+  "overflowResult": "Test passed. No overflow detected.",
+  "parentPreviewReview": {
+    "allSevenPagesViewed": true,
+    "finding": "Page 2 orphan line reported as Native data; final three-line version verified. Text-page spacing remains a design refinement, not claimed as universal aesthetic validation."
+  },
+  "executionEvidence": {
+    "lunaModel": "gpt-5.6-luna",
+    "effort": "high",
+    "threadId": "01a06ff6-2a2f-7121-8ea6-aada85500ad9",
+    "threadDurationMs": 1264174,
+    "archivedBuilderReplayDurationMs": 6125,
+    "durationNote": "Task duration includes tool discovery, coding, feedback and retries; not API latency or product cost."
+  },
+  "limitations": [
+    "explicit Skill loading; catalog discovery observed but automatic selection not tested",
+    "two distinct structure assets in one manuscript",
+    "Luna used no page images; parent inspected previews and supplied review feedback",
+    "manual text overlap check is narrower than complete semantic/visual QA"
+  ]
+}

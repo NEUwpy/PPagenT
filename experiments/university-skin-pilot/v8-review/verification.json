@@ -1,0 +1,97 @@
+{
+  "verifiedAt": "2026-09-06T00:41:04.631Z",
+  "results": [
+    {
+      "id": "data",
+      "pptx": "../reference-01/run-09/deck.pptx",
+      "sha256": "9983e327f28453918b68e5a1934a004bf74ba24a59cc728d6e9463a0ef98e8f7",
+      "render": "data-render/slide-1.png",
+      "renderSha256": "84c3c3bbaf861b35da757582110b628dbd1887c4b91ab8ec3238cd47fcb37cec",
+      "textCapacityWarnings": 0,
+      "textFrameIntersections": 0,
+      "textRuleIntersections": 0,
+      "nodePairs": 0,
+      "nodeIssues": 0,
+      "native": [
+        {
+          "slide": "ppt/slides/slide1.xml",
+          "shapes": 52,
+          "connectors": 0,
+          "pictures": 0,
+          "textRuns": 36
+        }
+      ],
+      "testOutput": "Test passed. No overflow detected.",
+      "visualAcceptance": "separate manual review in review.txt"
+    },
+    {
+      "id": "flow",
+      "pptx": "../reference-01/run-08/deck.pptx",
+      "sha256": "b7d10c98d172525329d5ae920a89e21b8ec140bdc5f99aeba0010a2fca64b698",
+      "render": "flow-render/slide-1.png",
+      "renderSha256": "1a24ebad35e17285049aa7da73b8cca59306714ef73a43a347db3c1364a13f73",
+      "textCapacityWarnings": 0,
+      "textFrameIntersections": 0,
+      "textRuleIntersections": 0,
+      "nodePairs": 3,
+      "nodeIssues": 0,
+      "native": [
+        {
+          "slide": "ppt/slides/slide1.xml",
+          "shapes": 41,
+          "connectors": 2,
+          "pictures": 0,
+          "textRuns": 28
+        }
+      ],
+      "testOutput": "Previously checked unchanged source in this review: Test passed. No overflow detected.",
+      "visualAcceptance": "separate manual review in review.txt"
+    },
+    {
+      "id": "decision",
+      "pptx": "../transfer-02/run-04/deck.pptx",
+      "sha256": "ab0e4d2742ce5782413e971a92bfe839678a10c2467e574ea17467efd36811df",
+      "render": "decision-render/slide-1.png",
+      "renderSha256": "eb7bdc4c90fecfc0e8cd54d684eaf91dbdd1a2c4b9d47bf84639fd09bec4b42b",
+      "textCapacityWarnings": 0,
+      "textFrameIntersections": 0,
+      "textRuleIntersections": 0,
+      "nodePairs": 0,
+      "nodeIssues": 0,
+      "native": [
+        {
+          "slide": "ppt/slides/slide1.xml",
+          "shapes": 72,
+          "connectors": 0,
+          "pictures": 0,
+          "textRuns": 40
+        }
+      ],
+      "testOutput": "Test passed. No overflow detected.",
+      "visualAcceptance": "separate manual review in review.txt"
+    },
+    {
+      "id": "parallel",
+      "pptx": "../transfer-03/run-05/deck.pptx",
+      "sha256": "b95589e4abae8f60d334b16ab4b0d659077646a8d3d05ae7d0ed03dd5260d444",
+      "render": "parallel-render/slide-1.png",
+      "renderSha256": "c169b36ea56fe46d639a3b7761b83d2bb626c3a3eb64a7c7af68e09758aa715c",
+      "textCapacityWarnings": 0,
+      "textFrameIntersections": 0,
+      "textRuleIntersections": 0,
+      "nodePairs": 9,
+      "nodeIssues": 0,
+      "native": [
+        {
+          "slide": "ppt/slides/slide1.xml",
+          "shapes": 40,
+          "connectors": 10,
+          "pictures": 0,
+          "textRuns": 27
+        }
+      ],
+      "testOutput": "Test passed. No overflow detected.",
+      "visualAcceptance": "separate manual review in review.txt"
+    }
+  ]
+}
