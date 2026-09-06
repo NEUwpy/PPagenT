@@ -5,6 +5,12 @@
     "visual-selector": ["执行/视觉选择.md"]
   },
   "skins": {
-    "neutral-editorial-001": ["skins/中性编辑排版.md"]
+    "neutral-editorial-001": {
+      "rules": ["skins/中性编辑排版.md"],
+      "layout": "magazine"
+    }
+  },
+  "layouts": {
+    "magazine": ["排版体系/杂志风.md"]
   }
 }

@@ -33,8 +33,9 @@ function paths(value, label) {
 }
 
 /** Read the selected bodies on every call; no module or process-level rule cache. */
-export async function loadRules(root, { profile, skin } = {}) {
+export async function loadRules(root, { profile, skin, layout } = {}) {
   if (!PROFILES.has(profile)) throw new Error(`非法规则 profile: ${profile}`);
+  if (layout !== undefined) throw new Error("排版体系由 Skin 唯一指定，不允许单独覆盖 layout");
   if (skin !== undefined && (profile !== "generation" || typeof skin !== "string" || !ID.test(skin))) {
     throw new Error("仅 generation 允许合法 skin ID");
   }
@@ -48,12 +49,26 @@ export async function loadRules(root, { profile, skin } = {}) {
   if (!index.skins || Array.isArray(index.skins) || typeof index.skins !== "object") {
     throw new Error("规则索引缺少 skins 映射");
   }
-  for (const [key, value] of Object.entries(index.skins)) {
-    if (!ID.test(key)) throw new Error(`非法 skin ID: ${key}`);
+  if (!index.layouts || Array.isArray(index.layouts) || typeof index.layouts !== "object") {
+    throw new Error("规则索引缺少 layouts 映射");
+  }
+  for (const [key, value] of Object.entries(index.layouts)) {
+    if (!ID.test(key)) throw new Error(`非法 layout ID: ${key}`);
     paths(value, key);
   }
+  for (const [key, value] of Object.entries(index.skins)) {
+    if (!ID.test(key)) throw new Error(`非法 skin ID: ${key}`);
+    if (!value || Array.isArray(value) || typeof value !== "object"
+      || Object.keys(value).some((field) => !["rules", "layout"].includes(field))) {
+      throw new Error(`Skin 必须声明 rules 与唯一 layout: ${key}`);
+    }
+    paths(value.rules, key);
+    if (typeof value.layout !== "string" || !ID.test(value.layout)
+      || !Object.hasOwn(index.layouts, value.layout)) throw new Error(`Skin 排版体系缺失或未知: ${key}`);
+  }
   if (skin !== undefined && !Object.hasOwn(index.skins, skin)) throw new Error(`未知 skin: ${skin}`);
-  const selected = [...index.profiles[profile], ...(skin === undefined ? [] : index.skins[skin])];
+  const skinConfig = skin === undefined ? undefined : index.skins[skin];
+  const selected = [...index.profiles[profile], ...(skinConfig ? [...skinConfig.rules, ...index.layouts[skinConfig.layout]] : [])];
   const files = [];
   const seen = new Set();
   const configurationSources = [];
@@ -89,5 +104,5 @@ export async function loadRules(root, { profile, skin } = {}) {
     ...files.map((file) => `<!-- rules/${file.path} -->\n${file.body.trim()}`),
     ...configurationSources.map((source) => `## Skin 字体配置（${source.path}#${source.field}）\n\n\`\`\`json\n${JSON.stringify(source.value, null, 2)}\n\`\`\``),
   ].join("\n\n");
-  return { profile, ...(skin === undefined ? {} : { skin }), files, configurationSources, text };
+  return { profile, ...(skinConfig ? { skin, layout: skinConfig.layout } : {}), files, configurationSources, text };
 }

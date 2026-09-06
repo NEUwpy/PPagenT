@@ -17,11 +17,12 @@ async function fixture(t) {
   await fs.mkdir(path.join(dir, "rules"));
   const index = {
     profiles: { generation: ["shared.md", "shared.md"], "content-director": ["content.md"], "visual-selector": ["visual.md"] },
-    skins: { "test-skin": ["skin.md", "shared.md"] },
+    skins: { "test-skin": { rules: ["skin.md", "shared.md"], layout: "magazine" } },
+    layouts: { magazine: ["layout.md", "shared.md"] },
   };
   const writeIndex = () => fs.writeFile(path.join(dir, "rules/index.json"), JSON.stringify(index));
   await writeIndex();
-  for (const name of ["shared", "content", "visual", "skin"]) {
+  for (const name of ["shared", "content", "visual", "skin", "layout"]) {
     await fs.writeFile(path.join(dir, `rules/${name}.md`), `${name} 规则正文`);
   }
   return { dir, index, writeIndex };
@@ -30,12 +31,17 @@ async function fixture(t) {
 test("规则按 profile/skin 读取正文、去重且下次调用读取修改", async (t) => {
   const { dir } = await fixture(t);
   const first = await loadRules(dir, { profile: "generation", skin: "test-skin" });
-  assert.deepEqual(first.files.map((item) => item.path), ["shared.md", "skin.md"]);
+  assert.deepEqual(first.files.map((item) => item.path), ["shared.md", "skin.md", "layout.md"]);
+  assert.equal(first.layout, "magazine");
   assert.match(first.text, /shared 规则正文/);
   assert.doesNotMatch(first.text, /visual 规则正文/);
   await fs.writeFile(path.join(dir, "rules/shared.md"), "更新后的现行规则");
   assert.match((await loadRules(dir, { profile: "generation" })).text, /更新后的现行规则/);
   assert.deepEqual((await loadRules(dir, { profile: "visual-selector" })).files.map((item) => item.path), ["visual.md"]);
+  assert.deepEqual((await loadRules(dir, { profile: "content-director" })).files.map((item) => item.path), ["content.md"]);
+  assert.deepEqual((await loadRules(dir, { profile: "generation" })).files.map((item) => item.path), ["shared.md"]);
+  await fs.writeFile(path.join(dir, "rules/layout.md"), "更新后的排版体系");
+  assert.match((await loadRules(dir, { profile: "generation", skin: "test-skin" })).text, /更新后的排版体系/);
 });
 
 test("未知 profile/skin、非法 ID 和正式导演附加 skin 均失败", async (t) => {
@@ -43,8 +49,44 @@ test("未知 profile/skin、非法 ID 和正式导演附加 skin 均失败", asy
   for (const options of [
     {}, { profile: "unknown" }, { profile: "../generation" },
     { profile: "generation", skin: "unknown" }, { profile: "generation", skin: "../test" },
+    { profile: "generation", skin: "test-skin", layout: "magazine" },
     { profile: "visual-selector", skin: "test-skin" }, { profile: "content-director", skin: "test-skin" },
   ]) await assert.rejects(loadRules(dir, options));
+});
+
+test("多个 Skin 共享一个排版体系，且只能通过 Skin 选择", async (t) => {
+  const { dir, index, writeIndex } = await fixture(t);
+  index.skins["other-skin"] = { rules: ["other.md"], layout: "magazine" };
+  await fs.writeFile(path.join(dir, "rules/other.md"), "另一颜色体系");
+  await writeIndex();
+  const original = await loadRules(dir, { profile: "generation", skin: "test-skin" });
+  const other = await loadRules(dir, { profile: "generation", skin: "other-skin" });
+  assert.equal(other.layout, original.layout);
+  assert.equal(other.files.find((file) => file.path === "layout.md").body, original.files.find((file) => file.path === "layout.md").body);
+  assert.doesNotMatch(other.text, /skin 规则正文/);
+  assert.match(other.text, /另一颜色体系/);
+});
+
+test("排版体系缺失、非法绑定、空文件或越界均显式失败", async (t) => {
+  const { dir, index, writeIndex } = await fixture(t);
+  for (const binding of [undefined, "unknown", ["magazine"], "../magazine"]) {
+    index.skins["test-skin"].layout = binding;
+    await writeIndex();
+    await assert.rejects(loadRules(dir, { profile: "generation", skin: "test-skin" }), /排版体系/);
+  }
+  index.skins["test-skin"].layout = "magazine";
+  for (const invalid of [[], ["missing.md"], ["../outside.md"], ["layout.json"]]) {
+    index.layouts.magazine = invalid;
+    await writeIndex();
+    await assert.rejects(loadRules(dir, { profile: "generation", skin: "test-skin" }));
+  }
+  index.layouts.magazine = ["layout.md"];
+  await fs.writeFile(path.join(dir, "rules/layout.md"), " \n");
+  await writeIndex();
+  await assert.rejects(loadRules(dir, { profile: "generation", skin: "test-skin" }), /正文为空/);
+  delete index.layouts;
+  await writeIndex();
+  await assert.rejects(loadRules(dir, { profile: "generation", skin: "test-skin" }), /layouts/);
 });
 
 test("缺失/空规则、非法清单路径均失败且不静默降级", async (t) => {
@@ -101,7 +143,10 @@ test("CLI 输出实际规则正文及 Skin 字体配置，错误参数非零退�
   for (const file of loaded.files) assert.ok(result.stdout.includes(file.body.trim()));
   const asset = JSON.parse(await fs.readFile(path.join(root, "assets/主题/中性编辑排版-001/asset.json"), "utf8"));
   assert.ok(loaded.configurationSources.length > 0);
+  assert.equal(loaded.layout, "magazine");
+  assert.ok(loaded.files.some((file) => file.path === "排版体系/杂志风.md"));
   for (const font of Object.values(asset.fonts)) assert.ok(result.stdout.includes(font));
   await assert.rejects(run(process.execPath, ["src/tools/load-rules.mjs", "--profile", "visual-selector", "--skin", "neutral-editorial-001"], { cwd: root }));
   await assert.rejects(run(process.execPath, ["src/tools/load-rules.mjs", "--profile", "generation", "--profile", "generation"], { cwd: root }));
+  await assert.rejects(run(process.execPath, ["src/tools/load-rules.mjs", "--profile", "generation", "--skin", "neutral-editorial-001", "--layout", "magazine"], { cwd: root }));
 });
