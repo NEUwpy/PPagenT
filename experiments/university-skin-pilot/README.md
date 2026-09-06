@@ -6,7 +6,9 @@
 
 当前输入为[科研／咨询式排版 v7](../../docs/设计手册/科研咨询式排版-v7.md)。Theme 与 LayoutGuide 分离，结构支持直接调用与参考重组；参考重组吸收真实关系表达，重新安排局部几何，不再受旧满页 minimumFrame 限制。主题实现见[35个结构的主题报告](../structure-theme-01/REPORT.md)。排版尚未迁入正式 Harness。
 
-本轮验证：reference-01 对同一数据／流程稿持续反馈修订；transfer-02 使用不同的数据决策稿，v6首轮未通过，v7修订中；transfer-03 使用新的双轨协同稿与空白 Luna/high 检查 v7。生成任务只看文本、Skill 和几何数据，父任务查看最终 PPTX 渲染；不是把父任务亲自修改的成品归因于 Luna。具体验收状态以各目录评审为准。
+本轮最终通过4页：[reference-01/run-07](reference-01/run-07/deck.pptx)数据与顺序门禁两页，[transfer-02/run-03](transfer-02/run-03/deck.pptx)不同稿件的数据决策页，[transfer-03/run-04](transfer-03/run-04/deck.pptx)双轨协同页。父任务逐页从最终PPTX重新渲染验收，通过样稿见[汇总预览](accepted/index.html)。生成任务只看文本、Skill和几何数据，父任务未修改builder。
+
+这些都是多轮反馈后的通过样本，三份稿件首轮均未通过。已形成可复用指南、主题入口、结构参考与检查工具，当前证据支持本地Luna/high文本反馈闭环，尚不支持“仅一次提示就稳定达到参考风格”的声明。没有迁移正式Harness。复用见[使用说明](../../docs/设计手册/科研咨询式排版使用说明.md)。
 
 新稿迁移[transfer-01](transfer-01/README.md)是历史试验：两类结构真实调用成立，整页风格未通过。随后完成[28张图的参考归档](../../docs/设计手册/麦肯锡风格参考/风格参考笔记.md)。[论证排版 v4](../../docs/设计手册/咨询式论证排版-v4.md)和[数据与流程独立试做](argument-01/README.md)确认旧组件缺少紧凑使用契约，用户继而选择先开放参考重组。
 
