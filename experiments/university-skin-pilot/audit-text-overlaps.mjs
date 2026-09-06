@@ -8,6 +8,30 @@ const results = [];
 for (const file of files) {
   const layout = JSON.parse((await fs.readFile(file, 'utf8')).replace(/^\uFEFF/, ''));
   const text = layout.elements.filter(e => e.text?.trim() && Array.isArray(e.bbox));
+  // Exported line counts permit a capacity estimate even without glyph boxes.
+  // Use the largest run size/spacing for mixed text. Warnings require review;
+  // font metrics and paragraph spacing can make the true height different.
+  const textCapacityWarnings = [];
+  let textCapacityUnchecked = 0;
+  for (const e of text) {
+    const count = e.textLayout?.lineCount;
+    const fontSize = Math.max(Number(e.resolvedFontSize ?? 0),
+      ...(e.paragraphs ?? []).flatMap(p => (p.runs ?? []).map(r => Number(r.fontSize ?? 0))));
+    if (!Number.isFinite(count) || count < 1 || !Number.isFinite(fontSize) || fontSize <= 0) {
+      textCapacityUnchecked++;
+      continue;
+    }
+    const spacing = Math.max(1, ...(e.paragraphs ?? []).map(p =>
+      p.lineSpacingPercent ? p.lineSpacingPercent / 100000 : Number(p.resolvedTextStyle?.lineSpacing ?? 1)));
+    const ins = e.resolvedTextStyle?.insets ?? {};
+    const availableHeight = e.bbox[3] - (ins.top ?? 0) - (ins.bottom ?? 0);
+    const estimatedMinimumHeight = fontSize + (count - 1) * fontSize * spacing;
+    if (estimatedMinimumHeight > availableHeight + 1) textCapacityWarnings.push({
+      id:e.id,name:e.name,text:e.text,lineCount:count,fontSize,lineSpacing:spacing,
+      availableHeight,estimatedMinimumHeight,excess:estimatedMinimumHeight-availableHeight,
+      measurement:'estimate from exported line count; glyph bounds not measured',
+    });
+  }
   const intersections = [];
   for (let i=0;i<text.length;i++) for(let j=i+1;j<text.length;j++) {
     const a=text[i], b=text[j];
@@ -44,7 +68,8 @@ for (const file of files) {
       });
     }
   }
-  results.push({file,textFrames:text.length,intersectionCount:intersections.length,intersections,
+  results.push({file,textFrames:text.length,textCapacityWarningCount:textCapacityWarnings.length,
+    textCapacityUnchecked,textCapacityWarnings,intersectionCount:intersections.length,intersections,
     textRuleIntersectionCount:textRuleIntersections.length,textRuleIntersections,
     textRuleClearanceCount:textRuleClearanceCandidates.length,textRuleClearanceCandidates});
 }

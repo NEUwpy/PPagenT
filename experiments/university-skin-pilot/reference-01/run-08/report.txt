@@ -1,0 +1,16 @@
+run-08｜v8流程页重做；仅生成一页，不重做数据页
+source: argument-01/manuscript.txt; theme: reference-01/theme.json; layout guide: docs/设计手册/科研咨询式排版-v8.md。
+mode: reference；referenceAssetIds: sequence-phase-gates-004；未执行 invokeStructure。吸收三阶段顺序与相邻门禁的关系骨架，按本页主题重组为连续主流程区、阶段节点、门禁标签、阶段附属说明和独立次区。
+主判断：下一轮先把三步分工跑通，再用时间记录判断哪里在等待。
+主区：三阶段真实主路径为“受理分流 → 核对材料 → 教师处理”；主路径由两个原生 rightArrow 形状显式呈现，并保留可编辑连接关系调用。
+边界完整：授权常规才推进；非常规/超授权暂停，由负责人指定处理人；缺件暂停、通知补齐、复核，齐备后才送教师；教师作专业判断并确认答复，助理不得代替教师承诺。
+操作信息：保留登记事项类型＋提交时间、按清单核对齐备性、教师判断并确认答复等短操作行。
+次区：记录首次提交、核对完成、教师接收、最终答复和缺件暂停区间；四周后只判断分工可执行与记录完整，不承诺再次降时。
+node-label-pairs.json：按每个节点一组 labels 联合边界记录三组；现成 audit-node-labels 检查 pairCount=3、issueCount=0；三组整体标签边界均 alignment=center、verticalAlignment=middle，padding=8，centerDelta=[0,-2]；单行标题/责任标签 lineCount=1。
+layout bounds：boundsViolations=False。
+text-overlap and line-clearance audit：PASS；intersectionCount=0；textRuleIntersectionCount=0；textRuleClearanceCount=0。
+official render_slides.py：PASS；最终 PNG 为 deck/slide-1.png 的复制结果。
+official slides_test.py：PASS；No overflow detected。
+final artifact SHA256: B7D10C98D172525329D5AE920A89E21B8EC140BDC5F99AEBA0010A2FCA64B698。
+artifact times (UTC): deck.pptx 2026-09-06T00:27:29.0002070Z; page-01.png 2026-09-06T00:27:46.2195732Z。
+visual review boundary: agent did not open the PNG or claim visual acceptance; parent should inspect final rendered page for the intended main-path weight and arrow visibility.

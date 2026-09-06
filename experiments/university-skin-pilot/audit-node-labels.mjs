@@ -6,19 +6,37 @@ import { pathToFileURL } from 'node:url';
 export function auditNodeLabels(layout, manifest) {
   const elements = layout.elements ?? [];
   const results = [];
+  if (!Array.isArray(manifest.pairs) || !manifest.pairs.length) {
+    return {pairCount:0,issueCount:1,visualAcceptance:'not assessed',glyphBoundsVerified:false,
+      results:[{issues:['MISSING_PAIR_MANIFEST']}]};
+  }
   for (const pair of manifest.pairs ?? []) {
     const nodeMatches = elements.filter(e => e.name === pair.node);
-    const labelMatches = elements.filter(e => e.name === pair.label);
+    const labelNames = pair.labels ?? [pair.label];
+    const labelMatches = elements.filter(e => labelNames.includes(e.name));
     const issues = [];
-    if (nodeMatches.length !== 1 || labelMatches.length !== 1) {
+    if (nodeMatches.length !== 1 || !labelNames.length || labelMatches.length !== labelNames.length
+      || labelNames.some(name => elements.filter(e => e.name === name).length !== 1)) {
       results.push({ ...pair, issues: ['MISSING_OR_AMBIGUOUS_OBJECT'] });
       continue;
     }
-    const node = nodeMatches[0], label = labelMatches[0];
+    const node = nodeMatches[0];
+    if (labelMatches.some(e => !Array.isArray(e.bbox) || e.bbox.length !== 4 || !e.bbox.every(Number.isFinite))) {
+      results.push({...pair,issues:['MISSING_GEOMETRY']});
+      continue;
+    }
+    let label = labelMatches[0];
+    if (labelMatches.length > 1 && labelMatches.every(e => Array.isArray(e.bbox) && e.bbox.length === 4)) {
+      const x = Math.min(...labelMatches.map(e => e.bbox[0]));
+      const y = Math.min(...labelMatches.map(e => e.bbox[1]));
+      label = { ...label, text:labelMatches.map(e => e.text).join('\n'), bbox:[x,y,
+        Math.max(...labelMatches.map(e => e.bbox[0]+e.bbox[2]))-x,
+        Math.max(...labelMatches.map(e => e.bbox[1]+e.bbox[3]))-y] };
+    }
     const style = label.resolvedTextStyle ?? {};
     if (!label.text?.trim()) issues.push('EMPTY_LABEL');
-    if (style.alignment !== 'center') issues.push('HORIZONTAL_ALIGNMENT');
-    if (style.verticalAlignment !== 'middle') issues.push('VERTICAL_ALIGNMENT');
+    if (labelMatches.some(e => e.resolvedTextStyle?.alignment !== 'center')) issues.push('HORIZONTAL_ALIGNMENT');
+    if (labelMatches.some(e => e.resolvedTextStyle?.verticalAlignment !== 'middle')) issues.push('VERTICAL_ALIGNMENT');
     if (![node.bbox, label.bbox].every(b => Array.isArray(b) && b.length === 4 && b.every(Number.isFinite))) {
       results.push({ ...pair, issues: [...issues, 'MISSING_GEOMETRY'] });
       continue;
