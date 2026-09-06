@@ -1,0 +1,817 @@
+{
+  "schema": "ppagent.connector-contract/v1",
+  "source": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\evidence\\round-01\\deck.pptx",
+  "layoutDir": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\evidence\\round-01",
+  "scope": "Top-level native p:cxnSp only. Ordinary line shapes and grouped connectors are not route-audited; non-straight or rotated paths are explicitly unsupported.",
+  "slides": [
+    {
+      "slide": 1,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\evidence\\round-01\\slide-1.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 2,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\evidence\\round-01\\slide-2.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 3,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\evidence\\round-01\\slide-3.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 4,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\evidence\\round-01\\slide-4.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 5,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\evidence\\round-01\\slide-5.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 6,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\evidence\\round-01\\slide-6.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 7,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\evidence\\round-01\\slide-7.layout.json",
+      "connectors": [
+        {
+          "lineId": {
+            "xml": "48",
+            "layout": "15"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "7",
+            "name": "优秀参考"
+          },
+          "target": {
+            "id": "8",
+            "name": "提炼规律"
+          },
+          "sourceBinding": {
+            "id": "7",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "8",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            320,
+            268,
+            35,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "49",
+            "layout": "16"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "8",
+            "name": "提炼规律"
+          },
+          "target": {
+            "id": "9",
+            "name": "适应数量"
+          },
+          "sourceBinding": {
+            "id": "8",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "9",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            585,
+            268,
+            35,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "50",
+            "layout": "17"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "9",
+            "name": "适应数量"
+          },
+          "target": {
+            "id": "10",
+            "name": "核心资产库"
+          },
+          "sourceBinding": {
+            "id": "9",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "10",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            850,
+            268,
+            50,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "51",
+            "layout": "18"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "11",
+            "name": "原始稿件"
+          },
+          "target": {
+            "id": "12",
+            "name": "理解与编排"
+          },
+          "sourceBinding": {
+            "id": "11",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "12",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            320,
+            484,
+            35,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "52",
+            "layout": "19"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "12",
+            "name": "理解与编排"
+          },
+          "target": {
+            "id": "13",
+            "name": "选择合法能力"
+          },
+          "sourceBinding": {
+            "id": "12",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "13",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            585,
+            484,
+            35,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "53",
+            "layout": "20"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "13",
+            "name": "选择合法能力"
+          },
+          "target": {
+            "id": "14",
+            "name": "原生可编辑 PPTX"
+          },
+          "sourceBinding": {
+            "id": "13",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "14",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            850,
+            484,
+            50,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "54",
+            "layout": "21"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "10",
+            "name": "核心资产库"
+          },
+          "target": {
+            "id": "13",
+            "name": "选择合法能力"
+          },
+          "sourceBinding": {
+            "id": "10",
+            "idx": "2"
+          },
+          "targetBinding": {
+            "id": "13",
+            "idx": "3"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            850,
+            334,
+            172.5,
+            150
+          ],
+          "flip": {
+            "horizontal": true,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        }
+      ],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 8,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\evidence\\round-01\\slide-8.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 9,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\evidence\\round-01\\slide-9.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 10,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\evidence\\round-01\\slide-10.layout.json",
+      "connectors": [
+        {
+          "lineId": {
+            "xml": "42",
+            "layout": "19"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "7",
+            "name": "东北大学"
+          },
+          "target": {
+            "id": "10",
+            "name": "主题配置"
+          },
+          "sourceBinding": {
+            "id": "7",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "10",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            355,
+            252,
+            137,
+            76
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": true
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "43",
+            "layout": "20"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "7",
+            "name": "东北大学"
+          },
+          "target": {
+            "id": "13",
+            "name": "理解规则"
+          },
+          "sourceBinding": {
+            "id": "7",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "13",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            355,
+            328,
+            137,
+            98
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "44",
+            "layout": "21"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "10",
+            "name": "主题配置"
+          },
+          "target": {
+            "id": "16",
+            "name": "更多组织"
+          },
+          "sourceBinding": {
+            "id": "10",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "16",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            802,
+            252,
+            128,
+            76
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "45",
+            "layout": "22"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "13",
+            "name": "理解规则"
+          },
+          "target": {
+            "id": "16",
+            "name": "更多组织"
+          },
+          "sourceBinding": {
+            "id": "13",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "16",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            802,
+            328,
+            128,
+            98
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": true
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        }
+      ],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 11,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\evidence\\round-01\\slide-11.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    }
+  ],
+  "summary": {
+    "slideCount": 11,
+    "connectorCount": 11,
+    "boundCount": 11,
+    "unknownBindingCount": 0,
+    "reverseArrowCount": 0,
+    "unsupportedGeometryCount": 0,
+    "unsupportedTransformCount": 0,
+    "uninspectedGroupedConnectors": 0,
+    "uninspectedRouteCount": 0,
+    "textIntersectionCount": 0,
+    "declarationFailureCount": 0
+  },
+  "declarationChecks": [
+    {
+      "slide": 7,
+      "source": "优秀参考",
+      "target": "提炼规律",
+      "lineId": {
+        "xml": "48",
+        "layout": "15"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 7,
+      "source": "提炼规律",
+      "target": "适应数量",
+      "lineId": {
+        "xml": "49",
+        "layout": "16"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 7,
+      "source": "适应数量",
+      "target": "核心资产库",
+      "lineId": {
+        "xml": "50",
+        "layout": "17"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 7,
+      "source": "原始稿件",
+      "target": "理解与编排",
+      "lineId": {
+        "xml": "51",
+        "layout": "18"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 7,
+      "source": "理解与编排",
+      "target": "选择合法能力",
+      "lineId": {
+        "xml": "52",
+        "layout": "19"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 7,
+      "source": "选择合法能力",
+      "target": "原生可编辑 PPTX",
+      "lineId": {
+        "xml": "53",
+        "layout": "20"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 7,
+      "source": "核心资产库",
+      "target": "选择合法能力",
+      "lineId": {
+        "xml": "54",
+        "layout": "21"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 10,
+      "source": "东北大学",
+      "target": "主题配置",
+      "lineId": {
+        "xml": "42",
+        "layout": "19"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 10,
+      "source": "东北大学",
+      "target": "理解规则",
+      "lineId": {
+        "xml": "43",
+        "layout": "20"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 10,
+      "source": "主题配置",
+      "target": "更多组织",
+      "lineId": {
+        "xml": "44",
+        "layout": "21"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 10,
+      "source": "理解规则",
+      "target": "更多组织",
+      "lineId": {
+        "xml": "45",
+        "layout": "22"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    }
+  ]
+}

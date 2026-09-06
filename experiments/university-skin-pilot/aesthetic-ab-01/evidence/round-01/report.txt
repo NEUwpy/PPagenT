@@ -1,0 +1,17 @@
+首轮交付报告（aesthetic-ab-01 / evidence/round-01）
+
+范围：严格使用 inputs/product.txt、inputs/evidence/layout-guide.txt、inputs/theme.json、inputs/execution-contract.txt；生成 11 页中文原生可编辑 PPTX。过程曾因额度中断，恢复后继续同一 round-01；没有重开实验、没有读取其他实验/历史输出/图片/父审记录、没有视觉审查、没有 Git 操作。
+
+交付文件：builder.mjs、deck.pptx、slide-1.layout.json 至 slide-11.layout.json、slide-7.node-label-pairs.json、slide-10.node-label-pairs.json、connections.json、line-paths.json、source-map.json、final-text-export.json、coverage.txt、reasoning.txt、structure-usage.txt、检查 JSON、render/、render.log、slides-test.log、final-hash.txt。
+
+确定性检查（基于最终导出的 deck.pptx 与最新 layout）：
+- slides_test.py：Test passed. No overflow detected.
+- audit-text-overlaps.mjs：11 页；文本交叠 0 页；文字与普通线交叠 0 页；容量估算告警 0 页。
+- audit-wrap-tails.mjs：0 条候选。
+- audit-visible-contract.mjs：颜色偏离 0；paint issue 0；审计自身声明不等同视觉验收。
+- audit-node-labels.mjs：第 7 页 8 个节点配对，0 issues；第 10 页 4 个节点配对，0 issues。每个配对包含节点全部标题与说明 labels。
+- audit-connectors.py：11 个原生 connector，11 个绑定，0 反向箭头，0 声明失败，0 不支持几何，0 路径文字交叠。第 7 页与第 10 页关系依据记录在 connections.json。
+
+线条范围：页首/页脚与比较分隔线、封面强调条、步骤进度细线均登记于 line-paths.json；连接器由 connections.json 与 connector audit 覆盖。工具对普通 line 的路径不做语义审核，普通线的关系对象和端点已如实记录。
+
+审查边界：本报告只陈述文字/几何/连接器确定性工具结果，不自称视觉或审美通过；render/ 已由 render_slides.py 重新生成，交由父任务独立审查。

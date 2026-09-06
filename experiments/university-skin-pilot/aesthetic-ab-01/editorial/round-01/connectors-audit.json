@@ -1,0 +1,883 @@
+{
+  "schema": "ppagent.connector-contract/v1",
+  "source": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\editorial\\round-01\\deck.pptx",
+  "layoutDir": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\editorial\\round-01",
+  "scope": "Top-level native p:cxnSp only. Ordinary line shapes and grouped connectors are not route-audited; non-straight or rotated paths are explicitly unsupported.",
+  "slides": [
+    {
+      "slide": 1,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\editorial\\round-01\\slide-1.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 2,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\editorial\\round-01\\slide-2.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 3,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\editorial\\round-01\\slide-3.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 4,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\editorial\\round-01\\slide-4.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 5,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\editorial\\round-01\\slide-5.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 6,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\editorial\\round-01\\slide-6.layout.json",
+      "connectors": [
+        {
+          "lineId": {
+            "xml": "44",
+            "layout": "20"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "12",
+            "name": "ai-understands"
+          },
+          "target": {
+            "id": "13",
+            "name": "rules-constrain"
+          },
+          "sourceBinding": {
+            "id": "12",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "13",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            300,
+            521,
+            55,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "45",
+            "layout": "21"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "13",
+            "name": "rules-constrain"
+          },
+          "target": {
+            "id": "14",
+            "name": "code-stable"
+          },
+          "sourceBinding": {
+            "id": "13",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "14",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            600,
+            521,
+            55,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "46",
+            "layout": "22"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "14",
+            "name": "code-stable"
+          },
+          "target": {
+            "id": "15",
+            "name": "native-pptx"
+          },
+          "sourceBinding": {
+            "id": "14",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "15",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            900,
+            521,
+            55,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        }
+      ],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 7,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\editorial\\round-01\\slide-7.layout.json",
+      "connectors": [
+        {
+          "lineId": {
+            "xml": "56",
+            "layout": "17"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "7",
+            "name": "excellent-reference"
+          },
+          "target": {
+            "id": "8",
+            "name": "design-rules"
+          },
+          "sourceBinding": {
+            "id": "7",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "8",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            245,
+            311,
+            40,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "57",
+            "layout": "18"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "8",
+            "name": "design-rules"
+          },
+          "target": {
+            "id": "9",
+            "name": "reusable-ability"
+          },
+          "sourceBinding": {
+            "id": "8",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "9",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            475,
+            311,
+            40,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "58",
+            "layout": "19"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "9",
+            "name": "reusable-ability"
+          },
+          "target": {
+            "id": "10",
+            "name": "user-confirm"
+          },
+          "sourceBinding": {
+            "id": "9",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "10",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            705,
+            311,
+            40,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "59",
+            "layout": "20"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "10",
+            "name": "user-confirm"
+          },
+          "target": {
+            "id": "11",
+            "name": "core-asset-library"
+          },
+          "sourceBinding": {
+            "id": "10",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "11",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            935,
+            311,
+            40,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "71",
+            "layout": "32"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "22",
+            "name": "raw-manuscript"
+          },
+          "target": {
+            "id": "23",
+            "name": "ai-orchestration"
+          },
+          "sourceBinding": {
+            "id": "22",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "23",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            270,
+            506,
+            45,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "72",
+            "layout": "33"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "23",
+            "name": "ai-orchestration"
+          },
+          "target": {
+            "id": "24",
+            "name": "select-legal-ability"
+          },
+          "sourceBinding": {
+            "id": "23",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "24",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            530,
+            506,
+            45,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "73",
+            "layout": "34"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "24",
+            "name": "select-legal-ability"
+          },
+          "target": {
+            "id": "25",
+            "name": "deterministic-compile"
+          },
+          "sourceBinding": {
+            "id": "24",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "25",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            790,
+            506,
+            45,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "74",
+            "layout": "35"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "25",
+            "name": "deterministic-compile"
+          },
+          "target": {
+            "id": "26",
+            "name": "editable-output"
+          },
+          "sourceBinding": {
+            "id": "25",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "26",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            1050,
+            506,
+            45,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "75",
+            "layout": "36"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "11",
+            "name": "core-asset-library"
+          },
+          "target": {
+            "id": "24",
+            "name": "select-legal-ability"
+          },
+          "sourceBinding": {
+            "id": "11",
+            "idx": "2"
+          },
+          "targetBinding": {
+            "id": "24",
+            "idx": "0"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            682.5,
+            352,
+            417.5,
+            113
+          ],
+          "flip": {
+            "horizontal": true,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        }
+      ],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 8,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\editorial\\round-01\\slide-8.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 9,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\editorial\\round-01\\slide-9.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 10,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\editorial\\round-01\\slide-10.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 11,
+      "layout": "C:\\PPagenT\\experiments\\university-skin-pilot\\aesthetic-ab-01\\editorial\\round-01\\slide-11.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    }
+  ],
+  "summary": {
+    "slideCount": 11,
+    "connectorCount": 12,
+    "boundCount": 12,
+    "unknownBindingCount": 0,
+    "reverseArrowCount": 0,
+    "unsupportedGeometryCount": 0,
+    "unsupportedTransformCount": 0,
+    "uninspectedGroupedConnectors": 0,
+    "uninspectedRouteCount": 0,
+    "textIntersectionCount": 0,
+    "declarationFailureCount": 0
+  },
+  "declarationChecks": [
+    {
+      "slide": 6,
+      "source": "ai-understands",
+      "target": "rules-constrain",
+      "lineId": {
+        "xml": "44",
+        "layout": "20"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 6,
+      "source": "rules-constrain",
+      "target": "code-stable",
+      "lineId": {
+        "xml": "45",
+        "layout": "21"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 6,
+      "source": "code-stable",
+      "target": "native-pptx",
+      "lineId": {
+        "xml": "46",
+        "layout": "22"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 7,
+      "source": "excellent-reference",
+      "target": "design-rules",
+      "lineId": {
+        "xml": "56",
+        "layout": "17"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 7,
+      "source": "design-rules",
+      "target": "reusable-ability",
+      "lineId": {
+        "xml": "57",
+        "layout": "18"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 7,
+      "source": "reusable-ability",
+      "target": "user-confirm",
+      "lineId": {
+        "xml": "58",
+        "layout": "19"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 7,
+      "source": "user-confirm",
+      "target": "core-asset-library",
+      "lineId": {
+        "xml": "59",
+        "layout": "20"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 7,
+      "source": "raw-manuscript",
+      "target": "ai-orchestration",
+      "lineId": {
+        "xml": "71",
+        "layout": "32"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 7,
+      "source": "ai-orchestration",
+      "target": "select-legal-ability",
+      "lineId": {
+        "xml": "72",
+        "layout": "33"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 7,
+      "source": "select-legal-ability",
+      "target": "deterministic-compile",
+      "lineId": {
+        "xml": "73",
+        "layout": "34"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 7,
+      "source": "deterministic-compile",
+      "target": "editable-output",
+      "lineId": {
+        "xml": "74",
+        "layout": "35"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    },
+    {
+      "slide": 7,
+      "source": "core-asset-library",
+      "target": "select-legal-ability",
+      "lineId": {
+        "xml": "75",
+        "layout": "36"
+      },
+      "status": "ok",
+      "expectedArrowAt": "target",
+      "actualArrowAt": "target",
+      "textIntersection": {
+        "status": "clear",
+        "geometry": "straightConnector1",
+        "candidates": []
+      }
+    }
+  ]
+}

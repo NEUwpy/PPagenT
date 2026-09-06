@@ -1,0 +1,89 @@
+{
+  "connections": [
+    {
+      "source": "ai-understands",
+      "target": "rules-constrain",
+      "arrowAt": "target",
+      "evidence": "AI 负责理解和路由；规则负责约束和选择。",
+      "slide": 6
+    },
+    {
+      "source": "rules-constrain",
+      "target": "code-stable",
+      "arrowAt": "target",
+      "evidence": "规则作出合法选择后，由确定性代码完成重复绘制。",
+      "slide": 6
+    },
+    {
+      "source": "code-stable",
+      "target": "native-pptx",
+      "arrowAt": "target",
+      "evidence": "程序把决策编译成原生可编辑 PowerPoint。",
+      "slide": 6
+    },
+    {
+      "source": "excellent-reference",
+      "target": "design-rules",
+      "arrowAt": "target",
+      "evidence": "资产入库线：筛选优秀页面并提炼逻辑与设计规律。",
+      "slide": 7
+    },
+    {
+      "source": "design-rules",
+      "target": "reusable-ability",
+      "arrowAt": "target",
+      "evidence": "将规律扩展为可复用能力。",
+      "slide": 7
+    },
+    {
+      "source": "reusable-ability",
+      "target": "user-confirm",
+      "arrowAt": "target",
+      "evidence": "只有经过用户确认的能力可进入正式资产库。",
+      "slide": 7
+    },
+    {
+      "source": "user-confirm",
+      "target": "core-asset-library",
+      "arrowAt": "target",
+      "evidence": "确认通过后进入核心资产库。",
+      "slide": 7
+    },
+    {
+      "source": "raw-manuscript",
+      "target": "ai-orchestration",
+      "arrowAt": "target",
+      "evidence": "正式生成线从原始稿件与组织主题开始。",
+      "slide": 7
+    },
+    {
+      "source": "ai-orchestration",
+      "target": "select-legal-ability",
+      "arrowAt": "target",
+      "evidence": "AI 负责理解与编排，再从核心库选择合法能力。",
+      "slide": 7
+    },
+    {
+      "source": "select-legal-ability",
+      "target": "deterministic-compile",
+      "arrowAt": "target",
+      "evidence": "确定性排版与编译完成稳定生成。",
+      "slide": 7
+    },
+    {
+      "source": "deterministic-compile",
+      "target": "editable-output",
+      "arrowAt": "target",
+      "evidence": "交付原生可编辑 PPTX。",
+      "slide": 7
+    },
+    {
+      "source": "core-asset-library",
+      "target": "select-legal-ability",
+      "arrowAt": "target",
+      "evidence": "正式生成线只读调用用户确认后进入核心资产库的能力。",
+      "geometry": "straight bottom-to-top",
+      "slide": 7
+    }
+  ]
+}

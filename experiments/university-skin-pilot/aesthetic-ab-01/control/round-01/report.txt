@@ -1,0 +1,24 @@
+control/round-01 首轮冻结报告
+
+实验状态：首轮无父任务逐页反馈；中途发生额度中断，随后从本 run 目录恢复继续，本次恢复不作为新独立实验。输入、页数与输出目录保持不变。
+
+交付：11 页中文原生可编辑 PPTX；builder.mjs；deck.pptx；slide-1.layout.json 至 slide-11.layout.json；9 份适用页 node-label-pairs.json 与对应实际审计输出；connections.json；line-paths.json；source-map.json；coverage.txt；coverage-check.txt；actual-text.txt；reasoning.txt；structure-usage.txt；本报告；最终 hash.txt。
+
+内容与关系：原稿 11 个主段逐项映射 11 页；保留两个导演、AI 控制器、只读核心库、用户确认、缺口退路、可靠度概念、80/95 比喻、建设期/运行期成本和组织扩展。第 7 页保留资产入库线与正式生成线的唯一交汇点；第 6 页与第 10 页连接器方向均按 source → target 记录。
+
+实际文字覆盖：coverage-check.txt 从最终逐页 layout JSON 检查 78 个命名可见锚点，11/11 页存在，78/78 非空；actual-text.txt 来自最终 deck.pptx.inspect.ndjson 的实际文字记录（包含对象检查中的重复记录），不以表格或计划文件替代导出核对。
+
+确定性检查（最后一次 builder 改动后重跑）：
+- render_slides.py：成功渲染 11 页，日志见 render-log.txt；未使用图片读取、截图或视觉分析。
+- slides_test.py：Test passed. No overflow detected. 日志见 slides-test-log.txt。
+- audit-text-overlaps.mjs：正文与形状交集为 0；title-rule 的 clearance candidate 仅为标题区分隔线下方 6px 的候选，不是相交。
+- audit-node-labels.mjs：9 个适用页、共 34 个节点配对，全部 issueCount=0；每个配对包含节点全部标题与说明 labels。视觉接受度仍是 not assessed。
+- audit-visible-contract.mjs：11/11 页 colorIssueCount=0、paintIssueCount=0；工具只覆盖声明颜色与框架，不等于审美通过。
+- audit-wrap-tails.mjs：11/11 页 count=0。
+- audit-connectors.py：boundCount=17、unknownBindingCount=0、reverseArrowCount=0、unsupportedGeometryCount=0、uninspectedRouteCount=0、textIntersectionCount=0、declarationFailureCount=0。
+
+线清单：connections.json 列出 17 条原生 connector，均记录 source、target、arrowAt 和证据；line-paths.json 列出 22 条普通直角分隔线的真实端点。普通分隔线只承担分组，不伪造节点绑定；audit-connectors.py 的覆盖范围不包含普通 line/细矩形，故它们由 line-paths.json 单独记录。
+
+结构使用：只读取 ppagent-structure/SKILL.md；没有调用 catalog、inspect、reference 或 invokeStructure，详见 structure-usage.txt。
+
+限制披露：未进行视觉检查，未声明视觉或审美通过；配对审计的 glyphBoundsVerified 仍为 false；工具不证明中文字形观感、圆角轮廓安全、逻辑内容正确性或审美接受度。交付后由父任务独立视觉审查。

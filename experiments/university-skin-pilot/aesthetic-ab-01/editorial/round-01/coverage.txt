@@ -1,0 +1,3 @@
+source-map.json 已按原稿 11 个段落组保存原文，并为每项登记关键事实、条件、方案/对照与代价及页码。页内实际文本由 builder.mjs 从对应页文案落入 PPTX；最终以 deck.pptx 导出的 layout 文字回读后再核对 source-map。
+
+实际回读：actual-text-export.txt 从 11 个最终 slide-N.layout.json 导出所有可见文字；coverage-check.json 对每个 source-map 项按页检查关键事实词，11/11 项命中，缺失词 0。该检查验证了关键事实与主题覆盖，不能等同于逐字相同或视觉审美验收。
