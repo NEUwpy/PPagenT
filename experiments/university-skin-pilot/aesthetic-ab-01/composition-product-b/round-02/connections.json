@@ -1,0 +1,34 @@
+[
+  {
+    "page": 6,
+    "id": "6-ai-to-rules",
+    "source": "node-0",
+    "target": "node-1",
+    "arrowAt": "target(tail)",
+    "reason": "原稿：AI 负责理解、组织、路由；规则负责约束和选择"
+  },
+  {
+    "page": 6,
+    "id": "6-rules-to-code",
+    "source": "node-1",
+    "target": "node-2",
+    "arrowAt": "target(tail)",
+    "reason": "原稿：规则完成约束与选择后由代码稳定生成"
+  },
+  {
+    "page": 7,
+    "id": "7-intake-to-core",
+    "source": "7-ls3",
+    "target": "core",
+    "arrowAt": "target(tail)",
+    "reason": "原稿：用户确认通过后进入核心资产库"
+  },
+  {
+    "page": 7,
+    "id": "7-core-to-formal",
+    "source": "core",
+    "target": "7-rs2",
+    "arrowAt": "target(tail)",
+    "reason": "原稿：核心库向正式生成线提供只读调用"
+  }
+]

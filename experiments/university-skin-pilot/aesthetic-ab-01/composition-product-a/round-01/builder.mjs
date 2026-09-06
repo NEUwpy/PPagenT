@@ -72,7 +72,7 @@ function addDivider(slide, page, y = 105) {
   lineRecords.push({ page, name: `p${page}-divider`, kind: 'separator', from: { x: 55, y }, to: { x: 1225, y }, relation: 'title-body separation', isSeparator: true });
 }
 function addHeader(slide, page, title, eyebrow = 'PPagenT / PRODUCT NARRATIVE') {
-  addText(slide, `p${page}-eyebrow`, eyebrow, box(55, 26, 420, 24), 'footer', { color: C.primary, bold: true });
+  addText(slide, `p${page}-eyebrow`, eyebrow, box(55, 26, 420, 24), 'footer', { color: C.primary });
   addText(slide, `p${page}-title`, title, box(55, 60, 1165, 42), 'claim');
   addDivider(slide, page);
   addText(slide, `p${page}-footer`, `PPagenT  ·  ${String(page).padStart(2, '0')} / 11`, box(55, 680, 1170, 26), 'footer', { alignment: 'right' });
@@ -114,6 +114,7 @@ function paragraphSourceMap(sourceText) {
   }
   flush();
   const pageBySection = {
+    'PPagenT 产品叙事：把 PPT 生成变成可靠的生产过程': [1],
     '做 PPT，真正昂贵的不是“画”': [2],
     'PPagenT 选择的是概率最大的需求': [3],
     '稳定跨过可用线，比偶然惊艳更重要': [4],
@@ -185,11 +186,11 @@ function newSlide(page) {
   addText(s, 'p3-low', '只要能用', box(78, 394, 150, 28), 'note');
   addText(s, 'p3-target', '工作型 PPT', box(305, 322, 150, 34), 'group', { alignment: 'center', verticalAlignment: 'middle' });
   addText(s, 'p3-high', '高度定制', box(498, 394, 120, 28), 'note', { alignment: 'right' });
-  addText(s, 'p3-band-note', '不能乱、不能丑、不能掉价、不能生成完以后无法修改。', box(88, 438, 520, 66), 'body');
+  addText(s, 'p3-band-note', '不能乱、不能丑、不能掉价、不能生成完以后无法修改。\n主要场景：学校、科研院所、事业单位、央国企和普通企业。', box(88, 438, 520, 66), 'body');
   addRect(s, 'p3-formula-surface', box(690, 214, 470, 234), C.pale2);
   addText(s, 'p3-formula-label', '产品可靠度 R', box(730, 246, 300, 34), 'group');
   addText(s, 'p3-formula', 'R = P(Q ≥ Q可用 | 目标工作场景)', box(710, 292, 430, 100), 'metric', { alignment: 'center', verticalAlignment: 'middle' });
-  addText(s, 'p3-formula-body', '真正想提高的，是随机工作稿达到可用标准的概率。', box(710, 408, 430, 60), 'body', { alignment: 'center', verticalAlignment: 'middle' });
+  addText(s, 'p3-formula-body', '要提高的，是工作稿达到可用标准的概率。', box(710, 402, 430, 44), 'body', { alignment: 'center', verticalAlignment: 'middle' });
 }
 
 // 4. Stable 80 vs random 95
@@ -198,9 +199,9 @@ function newSlide(page) {
   addHeader(s, p, '稳定跨过可用线，比偶然惊艳更有价值');
   addText(s, 'p4-intro', '“80 分”是稳定可用状态的形象称呼，不是产品给自己设置的质量上限。', box(55, 132, 1130, 40), 'body');
   addText(s, 'p4-dim', '共同维度', box(76, 208, 190, 36), 'group');
+  addRect(s, 'p4-b-surface', box(810, 192, 380, 332), C.pale);
   addText(s, 'p4-a-title', '偶然的 95 分', box(365, 208, 320, 36), 'group', { color: C.muted });
   addText(s, 'p4-b-title', '稳定的 80 分', box(835, 208, 320, 36), 'group');
-  addRect(s, 'p4-b-surface', box(810, 192, 380, 332), C.pale);
   const rows = [
     ['价值', '偶尔让人惊叹', '直接使用不失专业'],
     ['场景', '高度定制的视觉作品', '明天要汇报的普通工作'],
@@ -292,7 +293,7 @@ function newSlide(page) {
   connect(s, p, bottomShapes[2].shape, coreText, bottomShapes[2].name, 'p7-core', '正式生成只读取核心库');
   const out = addText(s, 'p7-out', '确定性编译 → 可编辑 PPTX', box(914, 334, 285, 56), 'group', { alignment: 'center', verticalAlignment: 'middle' });
   connect(s, p, coreText, out, 'p7-core', 'p7-out', '核心能力进入确定性编译');
-  addText(s, 'p7-note', '两条路线的唯一交汇点，是经过确认的核心资产库。', box(74, 602, 1100, 32), 'note');
+  addText(s, 'p7-note', '两条路线的唯一交汇点，是经过确认的核心资产库。\n没有合适结构时，退回简单排版 / 拆页；缺口是否另行建设，由用户决定。', box(74, 590, 1100, 62), 'note');
 }
 
 // 8. Front-load expensive computation
@@ -307,7 +308,7 @@ function newSlide(page) {
   addLine(s, p, 'p8-arrow', 530, 365, 750, 365, C.primary, 2, 'build to runtime');
   addText(s, 'p8-runtime-title', '正式生成 / 多次运行', box(820, 215, 360, 34), 'group');
   addText(s, 'p8-runtime', '理解、分类、路由和填参\n规则约束与确定性代码\n真实任务中持续校准', box(820, 274, 360, 126), 'body');
-  addText(s, 'p8-result', '视觉理解从在线成本变成离线资产。', box(820, 458, 360, 44), 'note');
+  addText(s, 'p8-result', '视觉理解从在线成本变成离线资产。\n视觉模型服务建设期审查，不成为每次交付的必要成本。', box(820, 450, 360, 72), 'note');
 }
 
 // 9. Reusable capabilities, layered
@@ -336,7 +337,7 @@ function newSlide(page) {
   addHeader(s, p, '从一个学校走向更多组织，主题替换而能力复用');
   addText(s, 'p10-intro', '东北大学是第一个正式落地场景，但学校或组织的主题可替换，内容理解规则与表达能力可以继续复用。', box(55, 132, 1130, 42), 'body');
   const inputs = [
-    ['学校视觉规范', 208], ['科研院所', 286], ['企业团队', 364], ['个人长期风格', 442]
+    ['学校视觉规范', 208], ['科研院所 / 实验室', 286], ['企业团队', 364], ['个人长期风格', 442]
   ];
   inputs.forEach(([txt, y], i) => {
     addRect(s, `p10-in-${i}`, box(90, y, 250, 48), C.pale2);
@@ -358,6 +359,7 @@ function newSlide(page) {
   addText(s, 'p11-quote', '不一定惊艳，但靠谱；不一定独一无二，但真的好用；可以立刻拿去讲，也可以继续修改的 PPT。', box(92, 276, 980, 90), 'body');
   addDivider(s, 11, 414);
   addText(s, 'p11-last', '如果能持续做到这一点，这个普通问题就能成为一项可靠的产品能力。', box(92, 456, 900, 40), 'group');
+  addText(s, 'p11-opportunity', '也有机会形成一门真正的生意。', box(92, 520, 900, 30), 'note');
   addText(s, 'p11-page', '11 / 11', box(1120, 660, 105, 26), 'footer', { alignment: 'right' });
 }
 

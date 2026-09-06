@@ -1,5 +1,15 @@
-首轮独立生成已完成：11 页（含封面与收束），输出 deck.pptx。
-内容核对：source-map.json 由唯一原稿逐段解析，页面覆盖按原稿章节分配；最终 PPTX 已导出并生成逐页 layout JSON、text-roles、connections、line-paths。
-确定性检查：待运行 audit-text-overlaps、audit-node-labels、audit-visible-contract、audit-wrap-tails、audit-connectors、slides_test 与 render_slides.py；结果写入本目录。
-结构使用：reference 模式，未调用结构执行器。
-视觉审查：生成者不读取渲染图片，不自称视觉通过；由父任务独立审查。
+恢复状态：本轮从上个执行上下文结束处恢复，沿用已有 builder、deck 与证据文件；没有页级父审反馈，不计新独立首稿。
+
+交付：最终 deck.pptx 共 11 页，含封面与收束；builder.mjs、逐页 layout JSON、text-roles、node-label-pairs、connections、line-paths、source-map、coverage、reasoning、structure-usage 与检查输出均保存在本目录。
+
+内容核对：source-map.json 由 inputs/product.txt 逐段解析，共 60 条，全部分配到页面；final-text-export.json 从最终 deck.pptx 重新导出 131 个文本框；content-check.json 的页面实质关键词核对为 covered，未发现缺失项。补回了目标工作场景示例、无合适结构时的简单排版/拆页退化、建设期视觉模型边界、实验室示例和商业化收束。
+
+确定性检查：audit-text-overlaps 覆盖 11 页，文字相交 0、容量警告 0；28 个规则净距候选均为分隔线或连接通道候选，不是文字相交。audit-visible-contract 颜色问题 0、绘制问题 0；audit-wrap-tails 候选 0。audit-connectors 共 9 条有向连接，9/9 绑定，反向箭头 0、不支持几何 0、文字相交 0；3 组节点标签共 16 个配对，问题 0。audit-text-roles 检查 131/131 个文本声明，问题 0，字体与角色字号/字重符合契约。slides_test.py 输出 Test passed. No overflow detected.
+
+最终渲染：render/ 已由 presentations container_tools 从最终 deck.pptx 重新生成 11 张 PNG；生成者不读取渲染图片，不自称视觉审查通过，视觉审查仍由父任务独立完成。
+
+结构使用：reference 模式，未调用 invokeStructure；结构来源与重组差异记录在 structure-usage.txt。
+
+最终 SHA256：11F9DBC725A37B8E0B10368B69A614E954B0BB97D0540028257B0A8BBAD2D5BC（见 final-hash.txt）。
+
+冻结：以上内容、检查、渲染与 hash 完成后，本轮目录冻结，不再修改。
