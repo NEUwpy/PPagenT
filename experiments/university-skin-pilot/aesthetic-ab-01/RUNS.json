@@ -11,6 +11,11 @@
   "firstSubmissionInterventions": [
     "All three agents received the same procedural reminder to complete actual-PPTX coverage, all-label node pairing, and disclose unchecked scope. No page-specific content or layout feedback was supplied."
   ],
+  "compositionRuns": [
+    {"agent": "/root/luna_composition_product_a", "source": "inputs/product.txt", "pages": 11, "guide": "inputs/composition/layout-guide.txt", "task": "inputs/task-composition.txt", "output": "composition-product-a/round-01"},
+    {"agent": "/root/luna_composition_product_b", "source": "inputs/product.txt", "pages": 11, "guide": "inputs/composition/layout-guide.txt", "task": "inputs/task-composition.txt", "output": "composition-product-b/round-01"},
+    {"agent": "/root/luna_composition_archive", "source": "inputs/archive.txt", "pages": 8, "guide": "inputs/composition/layout-guide.txt", "task": "inputs/task-composition.txt", "output": "composition-archive/round-01"}
+  ],
   "runs": [
     {"agent": "/root/luna_aesthetic_control", "condition": "old-v9", "guide": "inputs/control/layout-guide.txt", "output": "control/round-01"},
     {"agent": "/root/luna_aesthetic_editorial", "condition": "natural-text-groups", "guide": "inputs/editorial/layout-guide.txt", "output": "editorial/round-01"},

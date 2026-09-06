@@ -1,0 +1,10 @@
+首稿已导出：deck.pptx
+页数：8（含封面与收束）
+内容核对：source-map.json 在编排前建立，覆盖原稿 8 个主题段落；已解包最终 PPTX，导出 8 页、122 个文字 run，并用 pptx-text-audit.json 核对关键事实、条件、方案与停止边界。
+文字角色：audit-text-roles.json，120 个声明角色逐项对照最终 layout，0 个角色、字号、字重或字体不一致。
+结构：sequence-phase-gates-004、comparison-dual-verdict-001、role-stage-collaboration-001 仅作参考重组，未调用 invokeStructure。
+确定性检查：audit-text-overlaps.json（文本交叠 0、容量警告 0、文字与规则直接交叠 0）；audit-visible-contract.json（颜色问题 0、绘制穿越问题 0）；audit-wrap-tails.json（候选 0）；audit-node-labels.json（4 对节点、0 问题）；audit-connectors.json（3/3 有向连接绑定、方向正确、文字交叠 0、不支持几何 0）。页脚与分隔线的近距项属于已知检查候选，未判作交叠。
+越界检查：slides_test.py 通过，未发现画布溢出。
+渲染：render_slides.py 已重新读取最终 deck.pptx，生成 render/deck/；生成者按任务要求不读取渲染图片，不自称视觉通过。
+视觉审查：未执行；由父任务独立审查。
+SHA-256：b21fc6c46c23ddb8135246d7a15041bcadf66d850623460ce35285006c1b0be1

@@ -1,0 +1,5 @@
+首轮独立生成已完成：11 页（含封面与收束），输出 deck.pptx。
+内容核对：source-map.json 由唯一原稿逐段解析，页面覆盖按原稿章节分配；最终 PPTX 已导出并生成逐页 layout JSON、text-roles、connections、line-paths。
+确定性检查：待运行 audit-text-overlaps、audit-node-labels、audit-visible-contract、audit-wrap-tails、audit-connectors、slides_test 与 render_slides.py；结果写入本目录。
+结构使用：reference 模式，未调用结构执行器。
+视觉审查：生成者不读取渲染图片，不自称视觉通过；由父任务独立审查。
