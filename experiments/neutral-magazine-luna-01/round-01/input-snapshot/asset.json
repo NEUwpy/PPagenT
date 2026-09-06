@@ -1,0 +1,33 @@
+{
+  "id": "neutral-editorial-001",
+  "name": "中性编辑排版 001",
+  "kind": "skin",
+  "category": "主题",
+  "creationMethod": "reference-distillation",
+  "status": "candidate",
+  "reviewStatus": "awaiting-native-review",
+  "source": "https://www.xiaohongshu.com/explore/6a17a37800000000070255dd",
+  "sourceTitle": "如何打造高级感视觉？这份提示词建议收藏",
+  "review": "review.html",
+  "visualIntent": "visual-intent.md",
+  "designRules": "../../../rules/skins/中性编辑排版.md",
+  "htmlApproval": "html-approval.json",
+  "generator": "generate.mjs",
+  "nativeReview": {
+    "pptx": "native-review/neutral-editorial-001-v2.pptx",
+    "preview": "native-review/review.html"
+  },
+  "pageFamily": [
+    "cover",
+    "agenda",
+    "principles",
+    "method",
+    "comparison",
+    "closing"
+  ],
+  "fonts": {
+    "display": "Noto Serif SC",
+    "body": "Noto Sans SC"
+  },
+  "validation": "HTML approved by the user; Native/PPT is in second-round review and formal runtime integration remains pending"
+}

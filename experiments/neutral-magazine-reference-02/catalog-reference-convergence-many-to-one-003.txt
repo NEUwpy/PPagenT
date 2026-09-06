@@ -1,0 +1,23 @@
+command: node .codex/skills/ppagent-structure/scripts/catalog.mjs reference convergence-many-to-one-003
+{
+  "mode": "reference",
+  "referenceAssetId": "convergence-many-to-one-003",
+  "name": "多路汇聚结果",
+  "logic": "convergence",
+  "semantic": "3–6 个相对独立且同级的输入、资源、规范或工作流，不经中间筛选或归纳层，直接合并为一个共同结果。",
+  "avoid": "需要表达中心主题、输入逐级收窄、存在中间归纳层、每路有独立结果或存在条件分支。",
+  "source": {
+    "file": "PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
+    "slides": [
+      125
+    ]
+  },
+  "visualIntent": "# 多路汇聚结果：视觉意图\r\n\r\n- 来源：逻辑框架模板第 125 页。吸收多路径收束、右侧终点和连续动势，不复制 Shell。\r\n- 覆盖增量：漏斗表示筛选；本组表示多路输入不经淘汰直接合并。\r\n- 阅读路径：逐行识别输入，再沿平滑汇聚带进入唯一结果。\r\n- 结构语法：左侧彩色输入泳道、中部逐渐合并、右侧深色结果锚。\r\n- 失败边界：出现逐级筛选或多个独立结果时换组。\r\n",
+  "implementation": {
+    "manifest": "assets\\结构图\\多路汇聚结果-003\\asset.json",
+    "runtime": "assets\\结构图\\多路汇聚结果-003\\runtime.mjs",
+    "review": "assets\\结构图\\多路汇聚结果-003\\review.mjs",
+    "styles": "assets\\结构图\\多路汇聚结果-003\\component.css"
+  },
+  "guidance": "参考中的关系与设计方法供本稿重组；源坐标、尺寸、节点容量与内部造型不限制新表达。按稿件保留关系与条件，按本次主题与排版指南绘制原生元素。记录来源与变化，不把参考重组报告为 invokeStructure 成功，也不自动修改或晋升核心资产。直接执行原组件时仍须 inspect 并遵守原调用契约。"
+}

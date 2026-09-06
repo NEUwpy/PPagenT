@@ -14,7 +14,7 @@ test("东北大学 Theme 引用共享默认主色常量", () => {
   assert.equal(northeasternUniversityTheme.primaryColor, defaultStructurePrimaryColor);
 });
 
-test("单一 primaryColor 推导离散结构色阶并压过旧 secondary tokens", () => {
+test("主色推导强调色阶，显式 Skin 文字角色独立保留", () => {
   const theme = resolveStructureTheme({
     primaryColor: "#6F42C1",
     accent: "#FF0000",
@@ -28,9 +28,34 @@ test("单一 primaryColor 推导离散结构色阶并压过旧 secondary tokens"
   assert.notEqual(theme.accentAlt, "#00FFFF");
   assert.notEqual(theme.accentSoft, "#FFFF00");
   assert.notEqual(theme.cyan, "#00FF00");
-  assert.equal(theme.body, "#404040");
+  assert.equal(theme.body, "#FF00FF");
   assert.match(theme.primaryDeep, /^#[0-9A-F]{6}$/);
   assert.match(theme.primaryWash, /^#[0-9A-F]{6}$/);
+});
+
+test("纸色 Skin 的完整用途配色不被主色派生覆盖，CSS 与解析结果一致", () => {
+  const input = {
+    primaryColor: "#A35D4F", background: "#F5F4EF", surface: "#EEECE5",
+    dark: "#20201D", body: "#4B4A45", muted: "#85837B", line: "#D8D5CC",
+  };
+  const resolved = resolveStructureTheme(input);
+  for (const [role, color] of Object.entries(input)) assert.equal(resolved[role], color);
+  const css = htmlComponentThemeCss(input);
+  for (const role of ["background", "surface", "dark", "body", "muted", "line"]) {
+    assert.ok(css.includes(`--ppagent-color-${role}:${input[role]};`));
+  }
+  // Choosing another accent must not alter the explicit page/text/line roles.
+  const changed = resolveStructureTheme({ ...input, primaryColor: "#6F42C1" });
+  for (const role of ["background", "surface", "dark", "body", "muted", "line"]) {
+    assert.equal(changed[role], input[role]);
+  }
+});
+
+test("缺省与非法用途色保留原有默认值，短十六进制仍可用", () => {
+  const base = resolveStructureTheme({ primaryColor: "#315F91" });
+  const invalid = resolveStructureTheme({ primaryColor: "#315F91", line: "bad", background: "url(x)", surface: null });
+  for (const role of ["line", "background", "surface"]) assert.equal(invalid[role], base[role]);
+  assert.equal(resolveStructureTheme({ primaryColor: "#315F91", line: "#abc" }).line, "#AABBCC");
 });
 
 test("历史彩色字面量进入共享角色，中性色与透明度保持", () => {

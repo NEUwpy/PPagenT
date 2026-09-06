@@ -51,6 +51,41 @@ const argumentAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/
 const problemMethodAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/问题方法结果-001");
 const intersectionAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/多集合交集-001");
 
+test("显式纸色与用途色经过真实浏览器和 Native 编译保持，线框不会连文字一起淡化", async () => {
+  const component = {
+    id: "paper-role-fixture",
+    designFrame: { width: 320, height: 160 },
+    cssText: "*{box-sizing:border-box}",
+    renderMarkup: () => `<section data-ppt-root style="position:relative;width:320px;height:160px">
+      <div data-ppt-kind="shape" data-ppt-name="paper" style="position:absolute;width:320px;height:160px;background:var(--ppagent-color-background)"></div>
+      <div data-ppt-kind="shape" data-ppt-name="surface" style="position:absolute;left:10px;top:10px;width:140px;height:140px;background:var(--ppagent-color-surface);border:1px solid var(--ppagent-color-line)"></div>
+      <div data-ppt-kind="shape" data-ppt-name="outline" style="position:absolute;left:170px;top:10px;width:140px;height:140px;background:var(--ppagent-color-background);border:1px solid var(--ppagent-color-body)"></div>
+      <span data-ppt-kind="text" data-ppt-name="label" style="position:absolute;left:185px;top:65px;width:110px;height:30px;font:16px/30px var(--ppagent-font-body);color:var(--ppagent-color-dark)">真实关系</span>
+    </section>`,
+  };
+  try {
+    const tree = await resolveHtmlComponent({ component, parameters: {}, assetDir,
+      targetFrame: { left: 0, top: 0, width: 320, height: 160 },
+      theme: { primaryColor: "#A35D4F", background: "#F5F4EF", surface: "#EEECE5", line: "#D8D5CC", body: "#4B4A45", dark: "#20201D" },
+    });
+    const byName = Object.fromEntries(tree.nodes.map((node) => [node.name, node]));
+    assert.equal(byName.paper.fill, "#F5F4EF");
+    assert.equal(byName.surface.fill, "#EEECE5");
+    assert.equal(byName.surface.line.fill, "#D8D5CC");
+    assert.equal(byName.outline.fill, "#F5F4EF");
+    assert.equal(byName.outline.line.fill, "#4B4A45");
+    assert.equal(byName.label.style.color, "#20201D");
+    const presentation = createPresentation();
+    compileResolvedVisualTree(presentation.slides.add(), tree);
+    const inspection = await presentation.inspect({ kind: "slide,textbox,shape,image", maxChars: 100000 });
+    const rows = inspection.ndjson.split(/\r?\n/).filter(Boolean).map(JSON.parse);
+    assert.equal(rows.some((row) => row.kind === "image"), false);
+    for (const name of ["paper", "surface", "outline", "label"]) assert.ok(rows.some((row) => row.name === name));
+  } finally {
+    await closeHtmlComponentRuntime();
+  }
+});
+
 test("Native 编译把浏览器 computed px 原样交给 Artifact Tool，避免重复 pt 换算", () => {
   let compiledTextStyle = null;
   let compiledTextWrap = null;

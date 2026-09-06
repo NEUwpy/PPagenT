@@ -1,0 +1,10 @@
+import path from "node:path";
+import { pathToFileURL } from "node:url";
+import fs from "node:fs/promises";
+const {Presentation,PresentationFile}=await import(pathToFileURL("C:/Users/ilove/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/@oai/artifact-tool/dist/artifact_tool.mjs").href);
+const p=Presentation.create({slideSize:{width:1280,height:720}}); const s=p.slides.add(); s.background.fill="#F5F4EF";
+const r=(x,y)=>s.shapes.add({geometry:"rect",position:{left:x,top:y,width:200,height:80},fill:"#EEECE5",line:{style:"solid",fill:"#D8D5CC",width:1}});
+const a=r(100,100), b=r(500,100), c=r(100,300), d=r(500,300);
+s.shapes.connect(a,b,{kind:"elbow",fromSide:"right",toSide:"left",line:{style:"solid",fill:"#20201D",width:2},head:{type:"arrow",width:"med",length:"med"}});
+s.shapes.connect(c,d,{kind:"elbow",fromSide:"right",toSide:"left",line:{style:"solid",fill:"#A35D4F",width:2},tail:{type:"arrow",width:"med",length:"med"}});
+await (await PresentationFile.exportPptx(p)).save("C:/PPagenT/experiments/neutral-magazine-luna-01/round-01/.codex-build/test-connect.pptx");

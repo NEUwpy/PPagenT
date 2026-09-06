@@ -17,13 +17,6 @@ function cssColor(value, fallback) {
   return normalizeHex(value) ?? fallback;
 }
 
-function neutralCssColor(value, fallback, strict) {
-  const color = normalizeHex(value);
-  if (!color) return fallback;
-  if (!strict || rgbToHsl(hexToRgb(color)).s < 0.075) return color;
-  return fallback;
-}
-
 function hexToRgb(hex) {
   const value = normalizeHex(hex);
   if (!value) return null;
@@ -90,12 +83,14 @@ export function resolveStructureTheme(theme = {}) {
     accentAlt: explicitPrimary ? derived.accentAlt : cssColor(theme.accentAlt, derived.accentAlt),
     accentSoft: explicitPrimary ? derived.accentSoft : cssColor(theme.accentSoft, derived.accentSoft),
     cyan: explicitPrimary ? derived.cyan : cssColor(theme.cyan, derived.cyan),
-    line: explicitPrimary ? derived.line : cssColor(theme.line, derived.line),
-    background: neutralCssColor(theme.background, "#FFFFFF", Boolean(explicitPrimary)),
-    surface: neutralCssColor(theme.surface, "#FFFFFF", Boolean(explicitPrimary)),
-    dark: neutralCssColor(theme.dark, "#2B2B2B", Boolean(explicitPrimary)),
-    body: neutralCssColor(theme.body, "#404040", Boolean(explicitPrimary)),
-    muted: neutralCssColor(theme.muted, "#6F6F6F", Boolean(explicitPrimary)),
+    // Skin roles are explicit colors, not secondary accent shades. In
+    // particular, near-white paper colors can have high HSL saturation.
+    line: cssColor(theme.line, derived.line),
+    background: cssColor(theme.background, "#FFFFFF"),
+    surface: cssColor(theme.surface, "#FFFFFF"),
+    dark: cssColor(theme.dark, "#2B2B2B"),
+    body: cssColor(theme.body, "#404040"),
+    muted: cssColor(theme.muted, "#6F6F6F"),
     font: theme.font ?? "Microsoft YaHei",
   });
 }
