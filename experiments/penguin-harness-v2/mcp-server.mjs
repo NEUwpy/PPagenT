@@ -318,6 +318,71 @@ async function visualState() {
 }
 
 async function registerVisualTools(server) {
+  const visualChoiceSchema = z.object({
+    pageId: z.string().min(1),
+    candidateId: z.string().min(1),
+    centerLabel: z.string().min(2).max(8),
+    compositionId: z.string().min(1).optional(),
+    pageRole: z.enum(["opening", "orientation", "problem", "explanation", "evidence", "comparison", "process", "decision", "recommendation", "summary", "closing"]).optional(),
+    densityTarget: z.enum(["quiet", "balanced", "dense"]).optional(),
+    visualWeight: z.enum(["quiet", "normal", "anchor", "peak"]).optional(),
+    continuityGroup: z.string().min(1).max(40).optional(),
+    contrastBreakBefore: z.boolean().optional(),
+    expressionStrategy: z.enum(["registered-structure", "text-plus-structure"]).optional(),
+    blockStructureModes: z.array(z.object({
+      sourceItemId: z.string().min(1),
+      pattern: z.enum(["auto", "chain", "rail", "support-grid"]),
+    })).max(16).optional(),
+    reason: z.string().max(160).optional(),
+    iconQueries: z.array(z.object({ sourceItemId: z.string().min(1), query: z.string().min(1).max(40) })).max(12).optional(),
+    textLayoutChoices: z.array(z.object({ regionKey: z.string().min(1), layoutId: z.string().min(1) })).max(16).optional(),
+    textSlotAssignments: z.array(z.object({
+      slotId: z.string().min(1),
+      sourceItemIds: z.array(z.string().min(1)).min(1),
+      contentMode: z.enum(["full", "title", "body"]).optional(),
+    })).max(8).optional(),
+  });
+
+  async function saveVisualChoices(choices) {
+    const { input } = await visualState();
+    const duplicatedPageIds = choices
+      .map((choice) => choice.pageId)
+      .filter((pageId, index, values) => values.indexOf(pageId) !== index);
+    if (duplicatedPageIds.length) return {
+      accepted: false,
+      error: "同一批次不能重复保存页面",
+      duplicatedPageIds: [...new Set(duplicatedPageIds)],
+    };
+    for (const choice of choices) {
+      const set = input.candidateSets.find((item) => item.pageId === choice.pageId);
+      const candidate = set?.candidates.find((item) => candidateId(item) === choice.candidateId);
+      if (!candidate) return { accepted: false, pageId: choice.pageId, error: "候选不属于该页面" };
+      if (choice.compositionId && !(candidate.compositions ?? []).some((item) => item.id === choice.compositionId)) {
+        return {
+          accepted: false,
+          pageId: choice.pageId,
+          error: "Composition 不属于该候选",
+          legalCompositionIds: (candidate.compositions ?? []).map((item) => item.id),
+        };
+      }
+    }
+    const draft = await optionalJson(draftPath, { selections: [] });
+    const incomingPageIds = new Set(choices.map((choice) => choice.pageId));
+    const selections = (draft.selections ?? []).filter((item) => !incomingPageIds.has(item.pageId));
+    selections.push(...choices);
+    const order = new Map(input.pageContents.map((page, index) => [page.pageId, index]));
+    selections.sort((a, b) => order.get(a.pageId) - order.get(b.pageId));
+    await writeJson(draftPath, { selections });
+    return {
+      accepted: true,
+      savedPageIds: choices.map((choice) => choice.pageId),
+      selectedCount: selections.length,
+      missingPageIds: input.pageContents
+        .map((page) => page.pageId)
+        .filter((pageId) => !selections.some((choice) => choice.pageId === pageId)),
+    };
+  }
+
   server.registerTool("get_visual_overview", {
     title: "获取全稿视觉概览",
     description: "返回页序、关系、节点数量、候选摘要和上一轮问题；视觉阶段必须先调用。",
@@ -333,19 +398,18 @@ async function registerVisualTools(server) {
         relation: page.relation,
         purposeKey: page.purposeKey,
         itemCount: page.items.length,
+        itemIds: page.items.map((item) => item.id),
         itemPointCounts: page.items.map((item) => item.pointCount),
-        items: page.items.map((item) => ({
-          id: item.id,
-          title: item.title,
-          bodyChars: Array.from(item.body ?? "").length,
-          pointCount: item.pointCount,
-          pointPreviews: (item.points ?? []).map((point) => String(point).slice(0, 28)),
-        })),
+        visibleChars: page.items.reduce((sum, item) => (
+          sum + Array.from(item.title ?? "").length + Array.from(item.body ?? "").length
+            + (item.points ?? []).reduce((pointSum, point) => pointSum + Array.from(String(point)).length, 0)
+        ), 0),
         candidateCount: page.candidates.length,
         candidates: page.candidates.map((candidate) => ({
           candidateId: candidate.candidateId,
           assetId: candidate.assetId,
           structureGroupId: candidate.structureGroupId,
+          carrierKind: candidate.fallbackBody ? "text" : "structure",
           selectionMode: candidate.selectionMode,
           readiness: candidate.readiness,
           compositionOptions: candidate.compositionOptions ?? [],
@@ -371,6 +435,28 @@ async function registerVisualTools(server) {
     } });
   });
 
+  server.registerTool("inspect_page_contents", {
+    title: "批量检查页面内容",
+    description: "按页序一次展开至多六页的完整内容；用于成组编排，减少逐页往返。",
+    inputSchema: z.object({ pageIds: z.array(z.string().min(1)).min(1).max(6) }),
+  }, async ({ pageIds }) => {
+    const { input } = await visualState();
+    const byId = new Map(input.pageContents.map((item) => [item.pageId, item]));
+    const pages = pageIds.flatMap((pageId) => {
+      const page = byId.get(pageId);
+      return page ? [{
+        pageId: page.pageId,
+        title: page.title,
+        logicIntent: page.logicIntent,
+        items: page.items,
+      }] : [];
+    });
+    return result({
+      pages,
+      missingPageIds: pageIds.filter((pageId) => !byId.has(pageId)),
+    });
+  });
+
   server.registerTool("inspect_candidate", {
     title: "检查候选详情",
     description: "只展开指定页面的一个合法候选。",
@@ -385,6 +471,7 @@ async function registerVisualTools(server) {
       assetId: candidate.assetId,
       logicId: candidate.logicId,
       structureGroupId: candidate.structureGroupId,
+      carrierKind: candidate.fallbackBody ? "text" : "structure",
       semanticContract: candidate.semanticContract,
       itemCount: candidate.itemCount,
       readiness: candidate.readiness,
@@ -394,7 +481,6 @@ async function registerVisualTools(server) {
       contentContract: candidate.contentContract ?? null,
       compositions: candidate.compositions ?? [],
       expressionStrategy: candidate.expressionStrategy ?? null,
-      previewPath: await assetPreviewForId(candidate.assetId),
     } });
   });
 
@@ -414,64 +500,17 @@ async function registerVisualTools(server) {
     });
   });
 
-  server.registerTool("read_candidate_preview", {
-    title: "读取候选预览",
-    description: "读取已登记 Structure 的真实预览；只用于理解构图，不把示例文字当作稿件事实。",
-    inputSchema: z.object({ assetId: z.string().min(1) }),
-  }, async ({ assetId }) => {
-    const file = await assetPreviewForId(assetId);
-    if (!file) return result({ found: false, assetId, error: "未找到已登记候选预览" });
-    try {
-      const data = await fs.readFile(file);
-      return { content: [{ type: "image", data: data.toString("base64"), mimeType: "image/png" }, { type: "text", text: JSON.stringify({ assetId, path: file }) }] };
-    } catch (error) {
-      return result({ found: false, assetId, error: safeError(error) });
-    }
-  });
-
   server.registerTool("choose_page_visual", {
     title: "保存单页视觉选择",
-    description: "保存一个页面的合法 Skill、Layout 和展示参数。",
-    inputSchema: z.object({
-      pageId: z.string().min(1),
-      candidateId: z.string().min(1),
-      centerLabel: z.string().min(2).max(8),
-      compositionId: z.string().min(1).optional(),
-      pageRole: z.enum(["opening", "orientation", "problem", "explanation", "evidence", "comparison", "process", "decision", "recommendation", "summary", "closing"]).optional(),
-      densityTarget: z.enum(["quiet", "balanced", "dense"]).optional(),
-      visualWeight: z.enum(["quiet", "normal", "anchor", "peak"]).optional(),
-      continuityGroup: z.string().min(1).max(40).optional(),
-      contrastBreakBefore: z.boolean().optional(),
-      expressionStrategy: z.enum(["registered-structure", "text-plus-structure"]).optional(),
-      blockStructureModes: z.array(z.object({
-        sourceItemId: z.string().min(1),
-        pattern: z.enum(["auto", "chain", "rail", "support-grid"]),
-      })).max(16).optional(),
-      reason: z.string().max(160).optional(),
-      iconQueries: z.array(z.object({ sourceItemId: z.string().min(1), query: z.string().min(1).max(40) })).max(12).optional(),
-      textLayoutChoices: z.array(z.object({ regionKey: z.string().min(1), layoutId: z.string().min(1) })).max(16).optional(),
-      textSlotAssignments: z.array(z.object({
-        slotId: z.string().min(1),
-        sourceItemIds: z.array(z.string().min(1)).min(1),
-        contentMode: z.enum(["full", "title", "body"]).optional(),
-      })).max(8).optional(),
-    }),
-  }, async (choice) => {
-    const { input } = await visualState();
-    const set = input.candidateSets.find((item) => item.pageId === choice.pageId);
-    const candidate = set?.candidates.find((item) => candidateId(item) === choice.candidateId);
-    if (!candidate) return result({ accepted: false, error: "候选不属于该页面" });
-    if (choice.compositionId && !(candidate.compositions ?? []).some((item) => item.id === choice.compositionId)) {
-      return result({ accepted: false, error: "Composition 不属于该候选", legalCompositionIds: (candidate.compositions ?? []).map((item) => item.id) });
-    }
-    const draft = await optionalJson(draftPath, { selections: [] });
-    const selections = (draft.selections ?? []).filter((item) => item.pageId !== choice.pageId);
-    selections.push(choice);
-    const order = new Map(input.pageContents.map((page, index) => [page.pageId, index]));
-    selections.sort((a, b) => order.get(a.pageId) - order.get(b.pageId));
-    await writeJson(draftPath, { selections });
-    return result({ accepted: true, savedPageId: choice.pageId, selectedCount: selections.length });
-  });
+    description: "兼容旧流程：保存一个页面；新流程应优先使用 upsert_page_visuals。",
+    inputSchema: visualChoiceSchema,
+  }, async (choice) => result(await saveVisualChoices([choice])));
+
+  server.registerTool("upsert_page_visuals", {
+    title: "批量保存页面视觉选择",
+    description: "一次新增或覆盖至多六页的合法 Skill、Layout 与展示参数；用于减少逐页往返。",
+    inputSchema: z.object({ choices: z.array(visualChoiceSchema).min(1).max(6) }),
+  }, async ({ choices }) => result(await saveVisualChoices(choices)));
 
   server.registerTool("validate_visual_plan", {
     title: "验证整套视觉计划",

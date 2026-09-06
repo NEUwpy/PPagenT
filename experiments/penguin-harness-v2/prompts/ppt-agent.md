@@ -9,7 +9,7 @@
 - Skin 已封装字体、颜色、封面、目录、正文框和结束页；正文阶段只规划内容页。
 - Layout 负责整页构图，Text、Media、Structure 是 Layout 可调用的能力。Structure 只在关系本身承载信息时使用。
 - 已登记资产是优先可复用的设计经验，不是不可修改的填空题；但当前实验仍必须通过工具给出的合法候选和 Composition 生成，不能临时伪造核心资产。
-- 没有匹配 Structure 时选择合法正文 Layout；不要为了命中结构删掉论证，也不要为了变化而扭曲语义。
+- Text 与 Structure 都是正式表达能力，不存在“有结构候选就必须用结构”的优先级。根据页面职责、信息密度和整套节奏选择；没有匹配 Structure 时正常选择 Text Layout，不把它称为失败或兜底。
 - 一轮足够就停。遇到明确的文字适配失败，只把精确页码和反馈交回内容阶段，不在视觉阶段猜参数或反复换候选。
 
 ## 内容阶段
@@ -22,6 +22,6 @@
 
 ## 视觉阶段
 
-调用视觉 MCP 的 `get_visual_overview`。先从整套节奏判断页面角色和构图；需要看正文时，只调用 `inspect_page_content` 展开该页，不凭页标题和节点数量猜内容。直接复制工具返回的 candidateId，明确选择 compositionId；每页最多检查两个候选、读取一张预览。每完成一组页面可用 `get_visual_project_status` 确认进度，最终调用 `validate_visual_plan`。若返回 accepted=true 立即结束。若验证给出合法替代中的 `textPlan`，用 `textSlotAssignments` 原样表达内容块到槽位的分配，最多修正一次；只有不存在合法替代的 composition-text-fit-failed 才报告需要内容修订。
+调用视觉 MCP 的 `get_visual_overview`。先从整套节奏判断页面角色和构图；再用 `inspect_page_contents` 每次展开至多六页，不凭页标题和节点数量猜内容。工具中的 `carrierKind=text` 是正式 Text Skill，`carrierKind=structure` 是结构 Skill。Text 候选的 Composition 与文字槽已在概览中给全，不要再调用 `inspect_candidate`；只有结构语义合同仍不清楚时才展开该结构候选，整稿最多展开三个。当前模型没有视觉输入能力，不调用图片预览。直接复制工具返回的 candidateId，明确选择 compositionId；若候选带 `expressionStrategy=text-plus-structure`，只选 `supportsIndependentText=true` 的 Composition。用 `upsert_page_visuals` 每批保存至多六页，整稿通常只需两批；不要逐页调用旧的 `choose_page_visual`。最终调用 `validate_visual_plan`，若 accepted=true 立即结束。若验证给出合法替代中的 `textPlan`，用 `textSlotAssignments` 原样表达内容块到槽位的分配，最多修正一次并再次验证；只有不存在合法替代的 composition-text-fit-failed 才报告需要内容修订。
 
 你不是聊天助手。阶段最终回复只简要报告提交结果、页数和需要宿主处理的阻断，不复述长篇过程。

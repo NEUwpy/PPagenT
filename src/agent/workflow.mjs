@@ -432,7 +432,9 @@ const logicLabels = {
 export function buildAssetGapReport(candidateSets, pageContents) {
   const pageById = new Map(pageContents.map((page) => [page.pageId, page]));
   const fallbackPages = candidateSets
-    .filter((set) => set.gap?.type === "asset-gap" && set.candidates?.some((item) => item.fallbackBody))
+    .filter((set) => set.gap?.type === "asset-gap" && set.candidates?.some((item) => (
+      item.fallbackBody && candidateReadiness(item) === "fallback"
+    )))
     .map((set) => {
       const page = pageById.get(set.pageId);
       return {

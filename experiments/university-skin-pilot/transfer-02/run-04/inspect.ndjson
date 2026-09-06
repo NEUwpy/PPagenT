@@ -1,0 +1,74 @@
+{"kind":"slide","id":"sl/cbgzwe","slide":1,"title":"4.0 GB 上限下，分批处理是下一轮试运行的可行选择","textShapes":39}
+{"kind":"shape","id":"sh/yxwvi1wr","slide":1,"name":"title-band","bbox":[0,0,1280,126]}
+{"kind":"textbox","id":"sh/l0netwvi","slide":1,"name":"title","text":"4.0 GB 上限下，分批处理是下一轮试运行的可行选择","textPreview":"4.0 GB 上限下，分批处理是下一轮试运行的可行选择","textChars":27,"textLines":1,"bbox":[55,35,1170,46]}
+{"kind":"textbox","id":"sh/0zedkbex","slide":1,"name":"method-line","text":"同一台工作站｜100 个固定数据批次｜相同输入顺序与线程参数｜三种方式均完整处理","textPreview":"同一台工作站｜100 个固定数据批次｜相同输入顺序与线程参数｜三种方式均完整处理","textChars":40,"textLines":1,"bbox":[55,87,1170,24]}
+{"kind":"shape","id":"sh/n2pwv6do","slide":1,"name":"header-rule","bbox":[55,126,1170,0]}
+{"kind":"shape","id":"sh/m1wvm1w3","slide":1,"name":"evidence-region","bbox":[55,153,790,475]}
+{"kind":"textbox","id":"sh/947exgve","slide":1,"name":"evidence-criteria","text":"同一批次、同一线程参数；耗时看中位数，内存看峰值","textPreview":"同一批次、同一线程参数；耗时看中位数，内存看峰值","textChars":24,"textLines":1,"bbox":[85,178,610,22]}
+{"kind":"textbox","id":"sh/83ydobet","slide":1,"name":"time-heading","text":"单批耗时中位数（秒）","textPreview":"单批耗时中位数（秒）","textChars":10,"textLines":1,"bbox":[85,211,390,28]}
+{"kind":"textbox","id":"sh/36lcjmx4","slide":1,"name":"time-label-串行处理","text":"串行处理","textPreview":"串行处理","textChars":4,"textLines":1,"bbox":[85,256,125,24]}
+{"kind":"shape","id":"sh/25cvahwj","slide":1,"name":"time-track-串行处理","bbox":[245,259,535,18]}
+{"kind":"shape","id":"sh/wjutojut","slide":1,"name":"time-bar-串行处理","bbox":[245,259,535,18]}
+{"kind":"textbox","id":"sh/hknuhove","slide":1,"name":"time-value-串行处理","text":"120 秒","textPreview":"120 秒","textChars":5,"textLines":1,"bbox":[706,256,68,24]}
+{"kind":"textbox","id":"sh/ahcbm9cn","slide":1,"name":"time-label-分批处理","text":"分批处理","textPreview":"分批处理","textChars":4,"textLines":1,"bbox":[85,295,125,24]}
+{"kind":"shape","id":"sh/vilcved8","slide":1,"name":"time-track-分批处理","bbox":[245,298,535,18]}
+{"kind":"shape","id":"sh/4netsju5","slide":1,"name":"time-bar-分批处理","bbox":[245,298,312.08,18]}
+{"kind":"textbox","id":"sh/5onulova","slide":1,"name":"time-value-分批处理","text":"70 秒","textPreview":"70 秒","textChars":4,"textLines":1,"bbox":[483.08,295,68,24]}
+{"kind":"textbox","id":"sh/ilwbqtcz","slide":1,"name":"time-label-并行处理","text":"并行处理","textPreview":"并行处理","textChars":4,"textLines":1,"bbox":[85,334,125,24]}
+{"kind":"shape","id":"sh/jm5cjydk","slide":1,"name":"time-track-并行处理","bbox":[245,337,535,18]}
+{"kind":"shape","id":"sh/0ratgzul","slide":1,"name":"time-bar-并行处理","bbox":[245,337,200.62,18]}
+{"kind":"textbox","id":"sh/ls3ap4v6","slide":1,"name":"time-value-并行处理","text":"45 秒","textPreview":"45 秒","textChars":4,"textLines":1,"bbox":[371.62,334,68,24]}
+{"kind":"shape","id":"sh/1ovadgnu","slide":1,"name":"time-axis","bbox":[245,369,535,0]}
+{"kind":"shape","id":"sh/0n29kv6p","slide":1,"name":"time-tick-0","bbox":[245,369,0,6]}
+{"kind":"textbox","id":"sh/fmt8bq54","slide":1,"name":"time-tick-label-0","text":"0","textPreview":"0","textChars":1,"textLines":1,"bbox":[233,379,24,20]}
+{"kind":"shape","id":"sh/elkriloj","slide":1,"name":"time-tick-30","bbox":[378.75,369,0,6]}
+{"kind":"textbox","id":"sh/pcvah0n6","slide":1,"name":"time-tick-label-30","text":"30","textPreview":"30","textChars":2,"textLines":1,"bbox":[366.75,379,24,20]}
+{"kind":"shape","id":"sh/obm9ov6l","slide":1,"name":"time-tick-60","bbox":[512.5,369,0,6]}
+{"kind":"textbox","id":"sh/nadsfq50","slide":1,"name":"time-tick-label-60","text":"60","textPreview":"60","textChars":2,"textLines":1,"bbox":[500.5,379,24,20]}
+{"kind":"shape","id":"sh/294rmlof","slide":1,"name":"time-tick-90","bbox":[646.25,369,0,6]}
+{"kind":"textbox","id":"sh/xgfalkn2","slide":1,"name":"time-tick-label-90","text":"90","textPreview":"90","textChars":2,"textLines":1,"bbox":[634.25,379,24,20]}
+{"kind":"shape","id":"sh/cfm9sfmh","slide":1,"name":"time-tick-120","bbox":[780,369,0,6]}
+{"kind":"textbox","id":"sh/ulg7mx4z","slide":1,"name":"time-tick-label-120","text":"120","textPreview":"120","textChars":3,"textLines":1,"bbox":[768,379,24,20]}
+{"kind":"textbox","id":"sh/vmpof2lk","slide":1,"name":"memory-heading","text":"全程峰值内存（GB）","textPreview":"全程峰值内存（GB）","textChars":10,"textLines":1,"bbox":[85,407,390,28]}
+{"kind":"textbox","id":"sh/gnypo7m5","slide":1,"name":"memory-label-串行处理","text":"串行处理","textPreview":"串行处理","textChars":4,"textLines":1,"bbox":[85,443,125,24]}
+{"kind":"shape","id":"sh/ho76hc3q","slide":1,"name":"memory-track-串行处理","bbox":[245,446,535,18]}
+{"kind":"shape","id":"sh/ip07qh4b","slide":1,"name":"memory-bar-串行处理","bbox":[245,446,133.75,18]}
+{"kind":"textbox","id":"sh/3q9ojmlw","slide":1,"name":"memory-value-串行处理","text":"2.0 GB","textPreview":"2.0 GB","textChars":6,"textLines":1,"bbox":[304.75,443,68,24]}
+{"kind":"textbox","id":"sh/4ripsrmh","slide":1,"name":"memory-label-分批处理","text":"分批处理","textPreview":"分批处理","textChars":4,"textLines":1,"bbox":[85,483,125,24]}
+{"kind":"shape","id":"sh/5sr6lw3m","slide":1,"name":"memory-track-分批处理","bbox":[245,486,535,18]}
+{"kind":"shape","id":"sh/qt07uh47","slide":1,"name":"memory-bar-分批处理","bbox":[245,486,240.75,18]}
+{"kind":"textbox","id":"sh/ru9onmls","slide":1,"name":"memory-value-分批处理","text":"3.6 GB","textPreview":"3.6 GB","textChars":6,"textLines":1,"bbox":[411.75,483,68,24]}
+{"kind":"textbox","id":"sh/fy5gr29k","slide":1,"name":"memory-label-并行处理","text":"并行处理","textPreview":"并行处理","textChars":4,"textLines":1,"bbox":[85,523,125,24]}
+{"kind":"shape","id":"sh/excfix8f","slide":1,"name":"memory-track-并行处理","bbox":[245,526,535,18]}
+{"kind":"shape","id":"sh/10nytsrq","slide":1,"name":"memory-bar-并行处理","bbox":[245,526,494.87,18]}
+{"kind":"textbox","id":"sh/0zexknq5","slide":1,"name":"memory-value-并行处理","text":"7.4 GB","textPreview":"7.4 GB","textChars":6,"textLines":1,"bbox":[665.87,523,68,24]}
+{"kind":"shape","id":"sh/n25gv29w","slide":1,"name":"memory-threshold","bbox":[512.5,434,0,114]}
+{"kind":"shape","id":"sh/21wfmx8b","slide":1,"name":"threshold-tag","bbox":[519.5,419,108,24]}
+{"kind":"textbox","id":"sh/p4nyxcr2","slide":1,"name":"threshold-label","text":"4.0 GB 上限","textPreview":"4.0 GB 上限","textChars":9,"textLines":1,"bbox":[522.5,420,100,20]}
+{"kind":"shape","id":"sh/o3exo7qh","slide":1,"name":"memory-axis","bbox":[245,558,535,0]}
+{"kind":"shape","id":"sh/361wji9s","slide":1,"name":"memory-tick-0","bbox":[245,558,0,6]}
+{"kind":"textbox","id":"sh/i5sfads7","slide":1,"name":"memory-tick-label-0","text":"0","textPreview":"0","textChars":1,"textLines":1,"bbox":[233,568,24,20]}
+{"kind":"shape","id":"sh/8bqdkjqp","slide":1,"name":"memory-tick-2","bbox":[378.75,558,0,6]}
+{"kind":"textbox","id":"sh/9czut47a","slide":1,"name":"memory-tick-label-2","text":"2","textPreview":"2","textChars":1,"textLines":1,"bbox":[366.75,568,24,20]}
+{"kind":"shape","id":"sh/m98bi98z","slide":1,"name":"memory-tick-4","bbox":[512.5,558,0,6]}
+{"kind":"textbox","id":"sh/7ahcrepk","slide":1,"name":"memory-tick-label-4","text":"4","textPreview":"4","textChars":1,"textLines":1,"bbox":[500.5,568,24,20]}
+{"kind":"shape","id":"sh/k7qtgzqt","slide":1,"name":"memory-tick-6","bbox":[646.25,558,0,6]}
+{"kind":"textbox","id":"sh/l8zup47e","slide":1,"name":"memory-tick-label-6","text":"6","textPreview":"6","textChars":1,"textLines":1,"bbox":[634.25,568,24,20]}
+{"kind":"shape","id":"sh/y5obep8n","slide":1,"name":"memory-tick-8","bbox":[780,558,0,6]}
+{"kind":"textbox","id":"sh/z6xcnup8","slide":1,"name":"memory-tick-label-8","text":"8","textPreview":"8","textChars":1,"textLines":1,"bbox":[768,568,24,20]}
+{"kind":"shape","id":"sh/43ads36x","slide":1,"name":"decision-region","bbox":[875,153,350,475]}
+{"kind":"shape","id":"sh/54ju1o7i","slide":1,"name":"decision-band","bbox":[875,153,350,64]}
+{"kind":"textbox","id":"sh/dkfu5ozm","slide":1,"name":"decision-heading","text":"本轮建议：分批处理","textPreview":"本轮建议：分批处理","textChars":9,"textLines":1,"bbox":[905,173,290,28]}
+{"kind":"textbox","id":"sh/cz6tcjy1","slide":1,"name":"delta-value","text":"少 50 秒/批","textPreview":"少 50 秒/批","textChars":8,"textLines":1,"bbox":[905,242,280,48]}
+{"kind":"textbox","id":"sh/ryxc3ehw","slide":1,"name":"delta-caption","text":"相对当前串行处理","textPreview":"相对当前串行处理","textChars":8,"textLines":1,"bbox":[905,292,260,20]}
+{"kind":"shape","id":"sh/qxobatgb","slide":1,"name":"decision-rule-1","bbox":[905,332,290,0]}
+{"kind":"textbox","id":"sh/pwfu1ozq","slide":1,"name":"headroom","text":"内存余量：0.4 GB","textPreview":"内存余量：0.4 GB","textChars":11,"textLines":1,"bbox":[905,350,280,28]}
+{"kind":"textbox","id":"sh/4v6t8jy5","slide":1,"name":"parallel-heading","text":"并行处理不适用","textPreview":"并行处理不适用","textChars":7,"textLines":1,"bbox":[905,412,280,28]}
+{"kind":"textbox","id":"sh/3uxczehk","slide":1,"name":"parallel-body","text":"超出内存上限；\n关闭必需任务也不能扩容。","textPreview":"超出内存上限； | 关闭必需任务也不能扩容。","textChars":20,"textLines":2,"bbox":[905,454,300,56]}
+{"kind":"textbox","id":"sh/2t4b69gz","slide":1,"name":"scope-heading","text":"适用条件","textPreview":"适用条件","textChars":4,"textLines":1,"bbox":[905,545,280,28]}
+{"kind":"textbox","id":"sh/hsvux4ze","slide":1,"name":"scope-body","text":"仅验证本机与这组固定批次。","textPreview":"仅验证本机与这组固定批次。","textChars":13,"textLines":1,"bbox":[905,582,300,24]}
+{"kind":"shape","id":"sh/grmt4zy9","slide":1,"name":"boundary-band","bbox":[55,636,1170,28]}
+{"kind":"textbox","id":"sh/6xkre5wr","slide":1,"name":"boundary-line","text":"边界：其他批次与硬件未验证；下一轮受控试运行并记录峰值；不承诺所有数据保持当前耗时，不视为正式部署。","textPreview":"边界：其他批次与硬件未验证；下一轮受控试运行并记录峰值；不承诺所有数据保持当前耗时，不视为正式部署。","textChars":50,"textLines":1,"bbox":[70,640,1140,20]}
+{"kind":"textbox","id":"sh/7yts7axc","slide":1,"name":"source","text":"来源：虚构测试数据｜设计验证素材，非真实算法性能报告","textPreview":"来源：虚构测试数据｜设计验证素材，非真实算法性能报告","textChars":26,"textLines":1,"bbox":[55,674,900,18]}
+{"kind":"textbox","id":"sh/8z29gfex","slide":1,"name":"page-number","text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[1170,674,55,18]}
+{"kind":"notes","id":"nt/cbgzwe","slide":1,"text":"[Sources]\n- No external sources. All values and conditions come from the user-provided manuscript and are explicitly labeled as fictional test data.\n[/Sources]"}

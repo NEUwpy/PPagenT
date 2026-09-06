@@ -113,6 +113,9 @@ export class PenguinSinglePptAgent {
       description: "共享上下文的 PPagenT 内容与视觉生成 Agent",
       version: 3,
       system_prompt: prompt,
+      // Batch tools reduce the normal path, while ten turns still leave room
+      // for one evidence-based validation repair. This is a ceiling, not a
+      // target; the Agent should stop as soon as validation succeeds.
       max_turns: 10,
       model: { ...base.model, max_tokens: 4096, thinking_level: "low", timeoutMs: 180000 },
       memory: { ...base.memory, enabled: false },

@@ -37,7 +37,9 @@ const config = {
 await fs.mkdir(runDir, { recursive: true });
 const liveProvider = createPenguinSingleAgentProvider({ root, runDir, config });
 const seedContentPath = args["seed-content"] ? path.resolve(root, args["seed-content"]) : null;
+const seedVisualPath = args["seed-visual"] ? path.resolve(root, args["seed-visual"]) : null;
 let seededContent = null;
+let seededVisual = null;
 if (seedContentPath) {
   const stat = await fs.stat(seedContentPath);
   seededContent = stat.isDirectory() ? {
@@ -47,7 +49,13 @@ if (seedContentPath) {
     contentMetadata: JSON.parse(await fs.readFile(path.join(seedContentPath, "content-metadata.json"), "utf8")),
   } : JSON.parse(await fs.readFile(seedContentPath, "utf8"));
 }
-const provider = seededContent ? {
+if (seedVisualPath) {
+  const stat = await fs.stat(seedVisualPath);
+  seededVisual = stat.isDirectory()
+    ? JSON.parse(await fs.readFile(path.join(seedVisualPath, "final.json"), "utf8"))
+    : JSON.parse(await fs.readFile(seedVisualPath, "utf8"));
+}
+const provider = seededContent || seededVisual ? {
   ...liveProvider,
   async contentDirector(input) {
     if (seededContent) {
@@ -56,6 +64,14 @@ const provider = seededContent ? {
       return value;
     }
     return liveProvider.contentDirector(input);
+  },
+  async visualDirector(input) {
+    if (seededVisual) {
+      const value = seededVisual;
+      seededVisual = null;
+      return value;
+    }
+    return liveProvider.visualDirector(input);
   },
 } : liveProvider;
 const startedAt = Date.now();

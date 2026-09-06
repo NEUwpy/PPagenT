@@ -35,6 +35,23 @@ PPagenT 应借鉴 Harness Anything 的不是 WPS COM 或某套固定 PPT 模板�
 - 尝试把 Penguin 模型配置的单轮 `max_tokens` 从 16K 收紧到 4K，但 DeepSeek 返回的推理/输出计数仍有单轮超过 4K 的情况，整轮耗时也没有降低。当前不能宣称 Token 问题已解决；需要继续检查 Penguin 的 OpenAI 兼容参数到 DeepSeek 推理参数的映射，或改用能明确约束思考预算的调用方式。
 - 视觉阶段在第二次合法修正后触及 8 轮上限，外围工作流仍完成 PPTX；实验配置已把上限调为 10，避免仅差最终确认消息就被截断。
 
+### Text / Structure 同级候选纵向切片
+
+- 把正文 Text Layout 从“没有 Structure 才出现的兜底”改为正式候选；当结构合法时，视觉阶段同时看到 Text 与 Structure，再按页面职责、密度和整套节奏选择。
+- 使用上一轮已确认的 11 页内容稿，只重跑 Penguin 视觉阶段，最终得到 14 页完整 PPTX：8 页正式 Editorial、2 页 Structure、1 页运行时兜底，另含封面、目录和结束页。对比此前同内容的 1 页 Editorial、2 页 Structure、8 页兜底，核心机制成立。
+- 视觉阶段选择了 `parallel-equal-cards-001` 与 `parallel-folded-notes-grid-002`；文字页也不再只有一种卡片，实际使用双陈述、左右焦点、反向焦点、列表和响应式网格。
+- Native Builder 的确定性排版与几何检查通过；最终 PPTX 的独立 overflow 检查也通过。三项网格已改为三列，避免四宫格留下无意义空位。
+- 仍有一个明确缺口：`mixedPageCount=0`。当前已证明“Text 或 Structure”能工作，但还没有证明同页内 Layout 能自然组合 Text + Structure / Media；第 7 页的组合尝试仍退回确定性正文页。
+- Penguin 视觉阶段共发起 10 次模型请求、28 次工具调用并触及轮次上限，耗时约 367 秒；事件日志累计约 36 万 token（大部分为重复上下文的 cache read）。因此结果质量方向正确，但当前 Penguin 适配器仍过重，不能作为正式生产成本基线。
+- 已增加 `--seed-visual` 复编译入口。确认视觉决策后，后续只改排版或 Native Builder 时可以跳过模型调用，数秒内重新编译与检查，不再重复消耗视觉 Agent token。
+
+### 批量 Harness 最小闭环
+
+- 视觉 MCP 改为“概览一次、正文分两批读取、选择分两批写入、整稿校验”；单页读写接口仅保留为兼容入口。无视觉模型不再暴露图片预览工具，避免为不可读取的预览消耗轮次。
+- 同一份 11 页正文稿最终生成 14 页完整 PPTX：2 页 Structure、9 页正式 Text、0 页确定性兜底。首次校验后仅按合法 `textPlan` 修正一次，第二次校验 accepted；Native Builder QA 与独立 overflow 检查均通过。
+- 视觉阶段从旧版 10 次请求、28 次工具调用、约 367 秒，降为 9 次请求、9 次工具调用、约 169 秒。累计上下文 token 从约 36.1 万降为约 22.9 万；主要剩余成本是 Harness 每轮继续携带会话上下文。
+- Text 与 Structure 同级选择已在整稿中成立；同页 Text + Structure 的正式路由与解析由集成测试验证。该稿没有合适的低密度混合页，因此 `mixedPageCount=0` 是视觉选择结果，不应为满足指标强行混排。
+
 ## 真正的架构缺口：PageBrief 与 PageView 没有分开
 
 当前 `PageContent` 同时承担两件互相冲突的事：保存完整论证，以及直接充当结构图槽位文字。完整论证通常比结构图可见文字长，于是资产要么在候选阶段被删掉，要么运行时溢出。

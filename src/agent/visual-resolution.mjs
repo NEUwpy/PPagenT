@@ -752,21 +752,14 @@ async function buildBaseVisualCandidateSets({ root = process.cwd(), pageContents
       return {
         pageId,
         intentId: intent.intentId,
-        // A real asset gap must remain visible, but it must not prevent a
-        // formal deck from being delivered. Capacity gaps are still repaired
-        // upstream; only genuine missing coverage receives the safe body
-        // composition as the sole candidate.
-        candidates: capacityRecoverable || contentContractIncompatible ? [] : [fallbackCandidate],
+        // Text is a first-class expression capability, not a failure path.
+        // Keep the structure gap visible for diagnostics, while still letting
+        // the visual director compose a legal page without forcing content to
+        // fit a structure asset.
+        candidates: [editorialBodyCandidate],
         fallbackCandidate,
         capacityDensity,
         gap,
-        ...(capacityRecoverable || contentContractIncompatible ? {} : {
-          fallback: {
-            type: "asset-gap",
-            assetId: fallbackCandidate.assetId,
-            reason: "缺少兼容 Structure Group，本页退回通用正文排版",
-          },
-        }),
         semanticRejections: semantic.rejections,
         capacityRejections,
         candidateDiagnostics,
@@ -775,7 +768,12 @@ async function buildBaseVisualCandidateSets({ root = process.cwd(), pageContents
     return {
       pageId,
       intentId: intent.intentId,
-      candidates: isEditorial ? [editorialBodyCandidate] : readyStructuralCandidates,
+      // Layout/Text and Structure are peers under PageComposition. Even when
+      // a structure matches, the visual director may legitimately choose a
+      // text-led page for deck rhythm, density, or emphasis.
+      candidates: isEditorial
+        ? [editorialBodyCandidate]
+        : [editorialBodyCandidate, ...readyStructuralCandidates],
       ...(!isEditorial ? { fallbackCandidate } : {}),
       capacityDensity,
       semanticRejections: semantic.rejections,
@@ -862,7 +860,11 @@ export async function buildVisualCandidateSets({ root = process.cwd(), pageConte
       }
     }
     if (!blockCandidates.length) return pageSet;
-    const baseCandidates = (pageSet.candidates ?? []).filter((candidate) => !candidate.fallbackBody);
+    // Block-level Structure augments the page choices; it must not erase the
+    // first-class Text candidate. If the mixed composition is too dense, the
+    // visual director can still choose a legal editorial layout without
+    // turning the page into a deterministic failure fallback.
+    const baseCandidates = pageSet.candidates ?? [];
     return {
       ...pageSet,
       candidates: [...baseCandidates, ...blockCandidates],
@@ -901,7 +903,7 @@ function selectionAttribution(candidateSet, candidate, { runtimeOverflow = false
     selectionSource = "deterministic-ranking";
   } else if (candidateSet.selectionMode === "fallback-locked"
     || readiness === "fallback"
-    || (candidate.fallbackBody && (candidateSet.gap?.type === "asset-gap" || runtimeOverflow))) {
+    || (candidate.fallbackBody && runtimeOverflow)) {
     selectionSource = "deterministic-fallback";
   } else if (candidateSet.selectionMode === "visual-selectable") {
     selectionSource = "visual-director";
@@ -1572,25 +1574,6 @@ export async function resolveVisualPlan({
       layouts.get(normalizedCompositionPlan.pages[index].compositionId),
     );
     normalizedCompositionPlan.pages[index] = normalizedCompositionPage;
-    const structuralAlternatives = candidateSet.candidates.filter((item) => (
-      !item.fallbackBody && new Set(["ready", "derivable"]).has(candidateReadiness(item))
-    ));
-    const runtimeOverflowFallback = (previousResolution?.feedback ?? []).some((item) => (
-      item.pageId === planPage.pageId && item.code === "component-runtime-overflow"
-    ));
-    if (candidate.fallbackBody && structuralAlternatives.length && !runtimeOverflowFallback) {
-      feedback.push({
-        pageId: planPage.pageId,
-        code: "structural-candidate-skipped",
-        message: "已有通过语义与容量过滤的结构候选，不得无理由退回正文兜底",
-        legalAlternatives: structuralAlternatives.map((item) => ({
-          familyId: item.familyId,
-          variantId: item.variantId,
-          silhouette: item.silhouette,
-          compositionIds: item.compositionIds,
-        })),
-      });
-    }
     if (timelineLacksTemporalEvidence(pageContents[index], candidate, candidateSet)) {
       const sequentialAlternatives = candidateSet.candidates.filter((item) => item.assetId === "sequential-process-001");
       feedback.push({

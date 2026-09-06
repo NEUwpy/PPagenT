@@ -90,6 +90,13 @@ export function compactVisualSkillContext(pageContents, pageIntents, candidateSe
       } : {}),
       compositionOptions: (candidate.compositions ?? []).map((composition) => ({
         compositionId: composition.id,
+        requiresComponent: Boolean(composition.requiresComponent),
+        supportsIndependentText: Boolean(
+          composition.requiresComponent && composition.slots.some((slot) => slot.role === "text"),
+        ),
+        textSlotIds: composition.slots
+          .filter((slot) => slot.role === "text")
+          .map((slot) => slot.id),
         compositionFamily: compositionFamilyFor({
           composition,
           candidate,
@@ -261,13 +268,19 @@ function legalTextLayoutChoices(selection, candidate) {
 function chooseComposition(candidate, page, requestedCompositionId) {
   const compositions = candidate.compositions ?? [];
   const requested = compositions.find((item) => item.id === requestedCompositionId);
-  if (requested) return requested;
   if (candidate.expressionSource) {
+    // A block-level candidate promises that the selected Structure only owns
+    // one source block. The remaining source items therefore require a real
+    // text slot. Do not accept component-full even when the model requests it.
+    if (requested?.requiresComponent && requested.slots.some((slot) => slot.role === "text")) {
+      return requested;
+    }
     const mixed = compositions.find((item) => (
       item.requiresComponent && item.slots.some((slot) => slot.role === "text")
     ));
     if (mixed) return mixed;
   }
+  if (requested) return requested;
   const component = compositions.find((item) => item.requiresComponent);
   if (component) return component;
   const preferredId = page.items.length <= 1
@@ -420,6 +433,13 @@ export function expandVisualSkillRouting(routing, input) {
       routingDiagnostics.push({
         pageId: page.pageId,
         code: "composition-normalized-to-selected-candidate",
+        requestedCompositionId: selection.compositionId,
+        appliedCompositionId: composition.id,
+      });
+    } else if (selection.compositionId && selection.compositionId !== composition.id) {
+      routingDiagnostics.push({
+        pageId: page.pageId,
+        code: "composition-normalized-for-expression-strategy",
         requestedCompositionId: selection.compositionId,
         appliedCompositionId: composition.id,
       });
