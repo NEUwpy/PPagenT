@@ -1,0 +1,21 @@
+Luna/high 独立全稿编排报告
+
+页数：9 页。
+输出：deck.pptx；builder.mjs；每页 slide-N.layout.json；适用页面（2–8）对应 node-label-pairs；render/slide-N.png；audit-text-overlaps.json；audit-node-labels.jsonl；audit-visible-contract.json；slides-test.txt；coverage.txt；structure-usage.txt；reasoning.txt。
+
+确定性修复：
+1. 初次节点标签审查发现配对缺少 label 字段，已补齐并重编译；最终 slide 2–8 共 25 个实际节点，标签居中、垂直居中、安全区检查均为 0 issue。
+2. 文本容量审查发现第 4 页说明框高度不足，已将高度从 60 px 调整为 84 px；最终容量警告为 0。
+3. 文本交叠审查发现第 7 页箭头说明与建设期节点相交，已上移说明；最终 text-text intersection 为 0。
+4. 可见契约发现器发现第 3 页工作型 PPT 节点跨越底层整条谱带背景，已拆除连续背景并保留左右谱段；最终 colorIssueCount 与 paintIssueCount 全页均为 0。
+
+程序检查结果：
+- audit-text-overlaps：9 页 textCapacityWarningCount=0、intersectionCount=0、textRuleIntersectionCount=0。仍有若干 textRuleClearanceCandidates，均为箭头与其真实连接节点的边界接触，属于连接关系候选，不是文字相交。
+- audit-node-labels：slide 2–8 共 25 个节点，issueCount=0；slide 1 与 9 无节点，按指南不生成空 manifest，记为不适用。
+- audit-visible-contract：9 页 colorIssueCount=0、paintIssueCount=0；该工具不等同字形或逻辑验收。
+- slides_test.py：Test passed. No overflow detected.
+- 官方 PPTX 渲染：render/slide-1.png 至 render/slide-9.png 已生成。未进行视觉验收，按任务要求由父任务独立复核。
+
+剩余限制：artifact-tool layout 检查不能证明字形边界、圆角轮廓与逻辑正确性；父任务仍需独立查看官方渲染，重点检查中文换行、箭头可读性、双泳道密度和整体叙事节奏。
+
+文件哈希（Get-FileHash 工具计算）：见同目录 hash.txt。
