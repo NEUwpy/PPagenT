@@ -243,6 +243,43 @@
         9
       ],
       "wholeDeckAccepted": true
+    },
+    {
+      "run": "archive-d/round-01",
+      "input": "v9-execution-02",
+      "independentFirst": true,
+      "pages": 8,
+      "accepted": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "wholeDeckAccepted": true,
+      "note": "No parent page feedback. All source paragraphs covered. Minor low-contrast cover footer and sparse comparison regions remain as polish, not relation/content failures."
+    },
+    {
+      "run": "product-d/round-01",
+      "input": "v9-execution-02",
+      "independentFirst": true,
+      "pages": 11,
+      "accepted": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        10,
+        11
+      ],
+      "wholeDeckAccepted": false,
+      "note": "Page 5 node pairing omits body and combined text sits low; page 9 ordinary line segments for lower members stop at empty space, not central group. Automated connector zero does not cover ordinary shapes."
     }
   ]
 }

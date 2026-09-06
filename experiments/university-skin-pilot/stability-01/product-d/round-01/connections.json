@@ -1,0 +1,22 @@
+{"connections":[
+  {"slide":5,"source":"freedom-box","target":"failure-box","arrowAt":"target"},
+  {"slide":5,"source":"failure-box","target":"bounded-box","arrowAt":"target"},
+  {"slide":6,"source":"role-content","target":"role-visual","arrowAt":"target"},
+  {"slide":6,"source":"role-visual","target":"role-code","arrowAt":"target"},
+  {"slide":7,"source":"build-ref","target":"build-rule","arrowAt":"target"},
+  {"slide":7,"source":"build-rule","target":"build-pack","arrowAt":"target"},
+  {"slide":7,"source":"build-pack","target":"build-confirm","arrowAt":"target"},
+  {"slide":7,"source":"run-input","target":"run-ai","arrowAt":"target"},
+  {"slide":7,"source":"run-ai","target":"run-choice","arrowAt":"target"},
+  {"slide":7,"source":"run-choice","target":"run-compile","arrowAt":"target"},
+  {"slide":7,"source":"build-confirm","target":"core-library","arrowAt":"target"},
+  {"slide":7,"source":"core-library","target":"run-choice","arrowAt":"target"},
+  {"slide":8,"source":"old-0","target":"old-1","arrowAt":"target"},
+  {"slide":8,"source":"old-1","target":"old-2","arrowAt":"target"},
+  {"slide":8,"source":"old-2","target":"old-3","arrowAt":"target"},
+  {"slide":8,"source":"new-0","target":"new-1","arrowAt":"target"},
+  {"slide":8,"source":"new-1","target":"new-2","arrowAt":"target"},
+  {"slide":8,"source":"new-2","target":"new-3","arrowAt":"target"},
+  {"slide":10,"source":"org-neu","target":"org-theme","arrowAt":"target"},
+  {"slide":10,"source":"org-theme","target":"org-targets","arrowAt":"target"}
+]}

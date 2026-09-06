@@ -2,6 +2,8 @@
 
 用户认可 v8 的显著改善后，要求保存并扩大验证。本轮使用冻结的指南、Theme、同一任务提示和检查工具，不给执行模型图片、旧 builder 或逐页答案。生成模型为 gpt-5.6-luna / high。
 
+当前入口：[三篇整稿与版本对照](index.html)、[实际测试结论](RESULTS.md)、[复用提示](REUSE.md)。精选交付与独立首轮分别记录，不能只取修订后的通过数评价提示稳定性。
+
 ## 测试范围
 
 - product-a：稿件/为什么做PPagenT-v1.md，全稿转为演示；保留原稿版本观点，不自动更新项目架构。
@@ -9,6 +11,8 @@
 - archive-a：experiments/university-skin-pilot/manuscript.md，全稿转为演示；保留虚构、拟议、授权与试点边界。
 - archive-b：同一归档稿的第二次独立生成，使用另一空白 Luna/high 上下文，检查同稿波动。
 - product-b、red-b：根据首批失败改写 v9 指南后，使用两个新 Luna/high 上下文复验完整原稿。输入单独冻结在 inputs-v9。
+- archive-c：新上下文使用 inputs-v9-execution-01，加入连接线执行约定和换行检查。
+- product-d、archive-d：再用两个新上下文使用 inputs-v9-execution-02，加入逐段源稿事实映射和最终检查刷新要求。
 
 每次运行以独立上下文开始，只能读取分配的原稿、冻结输入、结构 Skill 和执行器/API 文档。页数由模型按全稿内容决定，不设版式或结构数量配额。三篇覆盖产品论证、实践汇报和科研方案，不将四次运行等同于产品级稳定性证明。
 
