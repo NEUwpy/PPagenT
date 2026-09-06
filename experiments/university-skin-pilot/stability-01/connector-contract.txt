@@ -1,0 +1,93 @@
+Connector contract audit
+========================
+
+Files
+-----
+* `audit-connectors.py` is a read-only Python standard-library checker.  It
+  reads native `ppt/slides/slideN.xml` and the matching artifact-tool
+  `slide-N.layout.json`; it does not render or rewrite a deck.
+* `connector-contract.test.py` runs seven real/fixture checks with `unittest`.
+
+Contract schema
+---------------
+The checker emits `ppagent.connector-contract/v1`.  Each slide lists every
+native `p:cxnSp` line.  Each line reports the XML cNvPr id, the matched layout
+id, geometry, `stCxn`/`endCxn` ids and connection-site indices, source/target
+shape ids and names, `headEnd`/`tailEnd`, arrow placement, actual arrow
+direction, bbox and horizontal/vertical flips.  `headEnd` is the XML start
+(`stCxn`) side; `tailEnd` is the XML end (`endCxn`) side.  Therefore a
+source-to-target declaration with an arrow at the target requires
+`tailEnd`, while `headEnd` is a target-to-source arrow.
+This is the checker’s explicit interpretation of the observed native export
+and endpoint contract; it does not claim that the API reference is erroneous.
+
+Missing bindings are reported as `missing-start-binding`,
+`missing-end-binding`, or `unbound`.  The checker never infers an endpoint from
+geometry when XML bindings are absent.
+
+An optional declaration manifest is intentionally separate from those facts:
+
+```json
+{
+  "pptx": "product-b/round-01/deck.pptx",
+  "layoutDir": "product-b/round-01",
+  "connections": [
+    {"slide": 2, "source": "p2-narrative", "target": "p2-output",
+     "direction": "source-to-target"}
+  ]
+}
+```
+
+`source` and `target` may be a shape name or id.  The checker matches the
+declaration to the bound XML endpoints and separately returns
+`ok`, `arrow-direction-mismatch`, `missing-declared-connection`, or
+`ambiguous-declared-connection`.  A declaration is never treated as proof of
+the XML relationship.
+
+Text crossing rule and limits
+-----------------------------
+For `straightConnector1`, the checker reconstructs the diagonal from the
+actual layout bbox and XML/layout `flipH`/`flipV`, then tests the open interior
+of every text-bearing layout bbox.  A 2 px inward padding avoids treating a
+connection boundary touch as a text crossing.  Endpoint node text is still a
+candidate if the segment enters the node's interior.  Results are candidates
+for review: the layout bbox is not a glyph outline and cannot prove visual
+legibility.
+
+`bentConnector*`, `curvedConnector*`, and other non-straight routes are reported
+as `unsupported-geometry`; no claim of route-wide text clearance is made for
+them.  The checker does not use images or screenshots.
+
+Rotated paths report unsupported-transform. Grouped connectors and ordinary
+line shapes are outside the route audit; grouped connector counts are exposed.
+Only arrow/triangle/stealth ends imply direction; oval/diamond markers remain
+in raw endpoint data without being interpreted as a flow arrow. Shape names
+are taken from native XML binding ids, not numerically coincident layout ids.
+
+Usage
+-----
+
+```text
+python audit-connectors.py product-b/round-01/deck.pptx --layout-dir product-b/round-01
+python audit-connectors.py product-b/round-01/deck.pptx --layout-dir product-b/round-01 --manifest manifest.json
+python connector-contract.test.py -v
+```
+
+Observed native evidence
+-------------------------
+The actual `product-b/round-01/deck.pptx` slide 2 contains two
+`straightConnector1` lines (XML cNvPr ids 24 and 25).  Both bind
+`p2-narrative`/`p2-visual` to `p2-output`, both have `headEnd type="arrow"`
+and no tail arrow, so the native contract says `arrowAt=source` and
+`actualArrowDirection=target-to-source`.  Their reconstructed lines intersect
+the corresponding detail text boxes `p2-narrative-detail` and
+`p2-visual-detail` after the 2 px inward padding.
+
+The actual `red-b/round-01/deck.pptx` includes bent and curved connectors.  The
+checker lists their bindings and arrows but marks text-route inspection
+`unsupported-geometry`, preserving the evidence boundary.
+
+The test fixture changes only a copy of product-b slide 2 XML in memory from
+`headEnd` to `tailEnd`; it observes `arrowAt=target` while still finding the
+independent text intersections.  A second memory fixture removes one
+`stCxn`; its endpoint is reported unknown rather than guessed.

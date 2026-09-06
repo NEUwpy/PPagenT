@@ -4,6 +4,7 @@ import crypto from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
 import {auditVisibleContract} from './audit-visible-contract.mjs';
+import {auditWrapTails} from './audit-wrap-tails.mjs';
 
 // Explicit runtime paths only. This reviewer never changes a submitted deck.
 const [runArg, reviewArg, python, skill] = process.argv.slice(2);
@@ -36,11 +37,18 @@ for (const layout of layouts) {
     const check=execute(process.execPath,[path.join(pilot,'audit-node-labels.mjs'),path.join(run,layout),path.join(run,pair)]);
     try {nodes={...JSON.parse(check.stdout),exitCode:check.exitCode};} catch {nodes={parseError:true,...check};}
   }
-  const visible=auditVisibleContract(JSON.parse(await fs.readFile(path.join(run,layout),'utf8')),theme);
-  audits.push({page,layout,layoutSha256:await hash(path.join(run,layout)),text,nodes,visible});
+  const layoutData=JSON.parse(await fs.readFile(path.join(run,layout),'utf8'));
+  const visible=auditVisibleContract(layoutData,theme),wrapTails=auditWrapTails(layoutData);
+  audits.push({page,layout,layoutSha256:await hash(path.join(run,layout)),text,nodes,visible,wrapTails});
 }
 await fs.writeFile(path.join(review,'native-text.json'),JSON.stringify(native,null,2));
 await fs.writeFile(path.join(review,'geometry.json'),JSON.stringify(audits,null,2));
+const connectorArgs=[path.join(here,'audit-connectors.py'),deck,'--layout-dir',run];
+if(files.includes('connections.json')) connectorArgs.push('--manifest',path.join(run,'connections.json'));
+const connectorProcess=execute(python,connectorArgs);
+let connectors;
+try {connectors=JSON.parse(connectorProcess.stdout);} catch {connectors={parseError:true,...connectorProcess};}
+await fs.writeFile(path.join(review,'connectors.json'),JSON.stringify(connectors,null,2));
 const render=execute(python,[path.join(skill,'container_tools/render_slides.py'),deck,'--output_dir',path.join(review,'render')]);
 await fs.writeFile(path.join(review,'render-log.txt'),JSON.stringify(render,null,2));
 const overflow=execute(python,[path.join(skill,'container_tools/slides_test.py'),deck]);
@@ -58,7 +66,8 @@ const result={verifiedAt:new Date().toISOString(),run:path.relative(here,run).re
   auditSummary:audits.map(a=>({page:a.page,capacity:a.text.textCapacityWarningCount,intersections:a.text.intersectionCount,
     ruleIntersections:a.text.textRuleIntersectionCount,ruleClearance:a.text.textRuleClearanceCount,
     nodePairs:a.nodes.pairCount,nodeIssues:a.nodes.issueCount,nodeStatus:a.nodes.status,
-    colorIssues:a.visible.colorIssueCount,paintFindings:a.visible.paintIssueCount})),
+    colorIssues:a.visible.colorIssueCount,paintFindings:a.visible.paintIssueCount,wrapTailCandidates:a.wrapTails.count})),
+  connectorSummary:connectors.summary,connectorScope:connectors.scope,
   renderExitCode:render.exitCode,canvasTestExitCode:overflow.exitCode,renders,
   visualAcceptance:'Pending independent per-page review; numeric checks do not imply style acceptance.'};
 await fs.writeFile(path.join(review,'verification.json'),JSON.stringify(result,null,2));

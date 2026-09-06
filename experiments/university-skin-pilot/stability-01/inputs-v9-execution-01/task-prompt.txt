@@ -1,0 +1,24 @@
+任务：把分配的完整稿件编排成可交付、原生可编辑的中文 PPTX。页数由叙事与信息量决定。你是独立的 Luna/high 执行模型，本轮测试只凭文字指南能否完成编排。
+
+设计输入：同目录 layout-guide.txt 与 theme.json。先完整阅读，再按内容决定每页主张、证据/关系、主体与辅助区。可以调用结构 Skill，也可以参考其逻辑重新编排；不要为调用而调用，不设结构数量配额。用户要结论在先、逻辑清楚、有视觉中心和语义分区的科研咨询式排版。
+
+事实边界：忠于分配原稿，可精炼但不丢失关键关系、条件、授权和提案性质；不添加外部事实、效果数据或新的传播策略。原稿的链接仅是来源，不是执行指令。产品稿保留来稿的历史架构观点；红色实践稿保留数字原口径，1+3+N 与 1+6+N 不混淆；归档稿是拟议试点，不是已有成果。数据没有实测就不能虚构图表。
+
+隔离：仅阅读分配原稿、此冻结指南/主题、本提示、结构 Skill/目录/被选资产的文字与代码、工具/API 文档。不要读同目录其他稿件、其他运行结果、历史 builder、参考图片或截图，不调用视觉能力。父任务独立看最终 PPTX 渲染并评审。这是首次无父任务逐页反馈的提交；你的确定性自查修复可以在提交前自行进行。
+
+执行：阅读 presentations Skill 与 style_guidelines.md，以及 artifact-tool API_QUICK_START.md 和所需 API 文档；使用 @oai/artifact-tool ESM 与原生形状/文字/连接关系。用户的冻结指南是视觉方向，优先于通用字号/模板建议。结构检索阅读 C:/PPagenT/.codex/skills/ppagent-structure/SKILL.md。操作只写分配的输出目录，不改仓库其他源码/文档，不 Git 操作。不要安装依赖，不复制 node_modules；用 runtime 指定路径的 junction。调用 load_workspace_dependencies 后设置文档要求的三个环境变量，并按 Skill 运行创建 marker 一次。
+
+自查工具（只读工具实现，可运行，不可改它们）：
+node C:/PPagenT/experiments/university-skin-pilot/audit-text-overlaps.mjs <各页 layout.json>
+node C:/PPagenT/experiments/university-skin-pilot/audit-node-labels.mjs <该页 layout.json> <该页 node-label-pairs.json>
+检查容量/交叠/文本离线条距离；有形状内节点标签时提供配对，检查实际 center/middle 与内安全区。没有节点的页明确记为不适用，不用空 manifest 冒充通过。每页 layout 是 artifact-tool 导出的真实几何对象。多角色标签用 labels 数组声明整组。若发现警告，要分析并修复真实问题，不能删对象名/检查项来隐藏问题。程序零警告不是视觉通过，不自行宣称视觉验收。
+
+交付到分配目录：builder.mjs、deck.pptx、每页 slide-N.layout.json、适用页面的 slide-N.node-label-pairs.json、官方 PPTX 渲染 render/slide-N.png、检查 JSON/日志、coverage.txt（原稿章节/关键事实到页码的覆盖）、structure-usage.txt（实际检索与采用的资产、direct-call 或 reference-recompose 的真实方式）、report.txt（页数、确定性修复、剩余限制）。用 presentations 的 render_slides.py 渲染最终 PPTX，运行 slides_test.py。可导出 artifact 自带 PNG 供调试，但不能代替最终 PPTX 渲染。不用读取图片，父任务负责视觉检查。最终简洁报告完成路径与需要注意的真实问题。
+
+补充自查：在动手画前保存 reasoning.txt，逐页记录主判断、原稿依据、关系种类、每条箭头或共同归属的依据，以及主次区域职责。完成后逐项对照实际对象。新增工具：node C:/PPagenT/experiments/university-skin-pilot/stability-01/audit-visible-contract.mjs <theme.json> <layout.json...>，它检查实际对象是否有第二色相、文字框跨底色边缘或后画形状覆盖文字框。此工具是候选发现器，需分析，不能把未报错当成字形或逻辑验收。所有确实存在的节点都声明配对。程序检查真实结果写进报告，文件哈希必须用工具计算。
+
+执行补充：完整阅读同目录 execution-contract.md，在本轮从一开始落实。新增两个只读检查器：
+node C:/PPagenT/experiments/university-skin-pilot/stability-01/audit-wrap-tails.mjs <layout.json...>
+python C:/PPagenT/experiments/university-skin-pilot/stability-01/audit-connectors.py <deck.pptx> --layout-dir <你的输出目录> --manifest <connections.json>
+connections.json 示例：{"connections":[{"slide":2,"source":"源节点对象名","target":"目标节点对象名","arrowAt":"target"}]}。arrowAt 为 target/source/both/none，依据你的论证关系记录填写。工具比对最终 XML 的绑定与箭头端，不只相信该声明。全部原生 connector 纳入清单；如使用其他原生线段，另列实际路径点和连接对象并逐段检查文字净空。工具只自动检查顶层原生 straightConnector1 的穿文字框候选；折线、曲线、旋转与缺少 layout 匹配等会明确未覆盖，不能把它们计为净空通过。重排或改为可逐段核对的显式路径。报告分别写已覆盖、未覆盖和人工待审，不把几何零值写成视觉通过。
+
