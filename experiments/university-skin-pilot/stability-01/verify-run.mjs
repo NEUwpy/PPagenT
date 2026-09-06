@@ -3,6 +3,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
+import {auditVisibleContract} from './audit-visible-contract.mjs';
 
 // Explicit runtime paths only. This reviewer never changes a submitted deck.
 const [runArg, reviewArg, python, skill] = process.argv.slice(2);
@@ -23,6 +24,7 @@ const native = JSON.parse(inventory.stdout);
 const files = await fs.readdir(run);
 const layouts = files.filter(n=>/^slide-\d+\.layout\.json$/.test(n)).sort((a,b)=>parseInt(a.match(/\d+/)[0])-parseInt(b.match(/\d+/)[0]));
 const audits=[];
+const theme=JSON.parse(await fs.readFile(path.join(here,'inputs/theme.json'),'utf8'));
 for (const layout of layouts) {
   const page = Number(layout.match(/\d+/)[0]);
   const textProcess=execute(process.execPath,[path.join(pilot,'audit-text-overlaps.mjs'),path.join(run,layout)]);
@@ -34,7 +36,8 @@ for (const layout of layouts) {
     const check=execute(process.execPath,[path.join(pilot,'audit-node-labels.mjs'),path.join(run,layout),path.join(run,pair)]);
     try {nodes={...JSON.parse(check.stdout),exitCode:check.exitCode};} catch {nodes={parseError:true,...check};}
   }
-  audits.push({page,layout,layoutSha256:await hash(path.join(run,layout)),text,nodes});
+  const visible=auditVisibleContract(JSON.parse(await fs.readFile(path.join(run,layout),'utf8')),theme);
+  audits.push({page,layout,layoutSha256:await hash(path.join(run,layout)),text,nodes,visible});
 }
 await fs.writeFile(path.join(review,'native-text.json'),JSON.stringify(native,null,2));
 await fs.writeFile(path.join(review,'geometry.json'),JSON.stringify(audits,null,2));
@@ -54,7 +57,8 @@ const result={verifiedAt:new Date().toISOString(),run:path.relative(here,run).re
   native:native.map(({text,...rest})=>({...rest,textRuns:text.length})),
   auditSummary:audits.map(a=>({page:a.page,capacity:a.text.textCapacityWarningCount,intersections:a.text.intersectionCount,
     ruleIntersections:a.text.textRuleIntersectionCount,ruleClearance:a.text.textRuleClearanceCount,
-    nodePairs:a.nodes.pairCount,nodeIssues:a.nodes.issueCount,nodeStatus:a.nodes.status})),
+    nodePairs:a.nodes.pairCount,nodeIssues:a.nodes.issueCount,nodeStatus:a.nodes.status,
+    colorIssues:a.visible.colorIssueCount,paintFindings:a.visible.paintIssueCount})),
   renderExitCode:render.exitCode,canvasTestExitCode:overflow.exitCode,renders,
   visualAcceptance:'Pending independent per-page review; numeric checks do not imply style acceptance.'};
 await fs.writeFile(path.join(review,'verification.json'),JSON.stringify(result,null,2));

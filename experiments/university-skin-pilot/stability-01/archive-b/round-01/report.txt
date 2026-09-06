@@ -1,0 +1,27 @@
+archive-b round-01 独立 Luna/high 全稿编排报告
+
+交付：
+- 8 页原生可编辑 PPTX：deck.pptx
+- 构建源：builder.mjs
+- 每页 artifact-tool 真实几何：slide-1.layout.json 至 slide-8.layout.json
+- 官方 PPTX 渲染：render/slide-1.png 至 render/slide-8.png
+- 文字/规则检查：text-overlap-audit.json
+- 节点标签检查：slide-2/3/6/7.node-label-audit.json
+- 基础测试：slides-test.log
+
+确定性自查结果：
+- 8/8 页 textCapacityWarningCount=0、intersectionCount=0、textRuleIntersectionCount=0。
+- 8/8 页没有文字与规则的净距候选警告。
+- 适用节点标签页：slide-2（1 对）、slide-3（6 对）、slide-6（5 对）、slide-7（4 对），issueCount 均为 0；节点标签均声明水平/垂直居中与安全内区。
+- 官方 render_slides.py 已生成全部 8 页 PNG。
+- slides_test.py：Test passed. No overflow detected.
+
+确定性修复：
+- 首轮发现并修复短文本框的容量估算警告：统一设置 2 px 内边距，扩展多行说明容器；没有缩小正文或隐藏警告。
+- 将第 7 页时间轨道拆成节点间线段，消除数字节点标签与轨道的真实交叠。
+- 调整第 1 页关系线、第 5 页范围箭头和页脚间距，消除交叠/净距候选。
+
+剩余限制：
+- 本轮按隔离要求未读取或检查渲染 PNG；父任务负责最终视觉检查（3 秒主次、阅读路径、字形溢出与连接路径）。
+- 全稿无外部图片与外部非平凡事实，未添加来源备注块。
+- 页面表达忠于 archive.txt 的拟议性质；四周、两人、周次仅作为试点范围，没有效果数据图表或效率结论。

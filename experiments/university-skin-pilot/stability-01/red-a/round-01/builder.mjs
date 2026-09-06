@@ -1,0 +1,338 @@
+import fs from "node:fs/promises";
+import { Presentation, PresentationFile } from "@oai/artifact-tool";
+
+const OUT = "C:/PPagenT/experiments/university-skin-pilot/stability-01/red-a/round-01";
+const W = 1280;
+const H = 720;
+const FONT = "Microsoft YaHei";
+const C = {
+  primary: "#315F91",
+  ink: "#252B33",
+  muted: "#707780",
+  bg: "#FFFFFF",
+  pale: "#F2F6FA",
+  pale2: "#E6EEF6",
+  line: "#C9D6E3",
+  deep: "#21456B",
+};
+
+async function writeBlob(path, blob) {
+  await fs.writeFile(path, new Uint8Array(await blob.arrayBuffer()));
+}
+
+function addBox(slide, name, x, y, w, h, fill = C.bg, line = C.line, radius = "rounded-lg") {
+  return slide.shapes.add({
+    geometry: radius ? "roundRect" : "rect",
+    name,
+    position: { left: x, top: y, width: w, height: h },
+    fill,
+    line: { style: "solid", fill: line || "none", width: line ? 1 : 0 },
+    ...(radius ? { borderRadius: radius } : {}),
+  });
+}
+
+function addText(slide, name, text, x, y, w, h, size = 18, color = C.ink, opts = {}) {
+  const shape = slide.shapes.add({
+    geometry: "textbox",
+    name,
+    position: { left: x, top: y, width: w, height: h },
+    fill: "none",
+    line: { style: "solid", fill: "none", width: 0 },
+  });
+  shape.text = text;
+  shape.text.style = {
+    fontSize: size,
+    color,
+    fontFamily: FONT,
+    bold: !!opts.bold,
+    alignment: opts.align || "left",
+    verticalAlignment: opts.valign || "middle",
+    ...(opts.italic ? { italic: true } : {}),
+  };
+  return shape;
+}
+
+function addRule(slide, name, x, y, w, color = C.primary, width = 3) {
+  return slide.shapes.add({
+    geometry: "rect",
+    name,
+    position: { left: x, top: y, width: w, height: width },
+    fill: color,
+    line: { style: "solid", fill: color, width: 0 },
+  });
+}
+
+function chrome(slide, title, kicker = "辽宁“六地”红色文化标识融入党员教育") {
+  slide.background.fill = C.bg;
+  addText(slide, "kicker", kicker, 55, 22, 500, 24, 14, C.muted, { bold: true });
+  addRule(slide, "title-rule", 55, 57, 58, C.primary, 4);
+  addText(slide, "slide-title", title, 55, 68, 1170, 52, 32, C.ink, { bold: true });
+  addText(slide, "page-mark", String(slide.index + 1).padStart(2, "0"), 1168, 26, 55, 24, 14, C.muted, { align: "right", bold: true });
+  addText(slide, "footer", "来源：分配原稿 red.txt｜本页为案例分享编排", 55, 680, 620, 26, 12, C.muted);
+}
+
+function notes(slide) {
+  slide.speakerNotes.textFrame.setText(["[Sources]", "- 分配原稿：red.txt（本页全部事实与表述依据）"]);
+  slide.speakerNotes.setVisible(true);
+}
+
+function node(slide, name, label, x, y, w, h, fill = C.primary, fs = 19) {
+  const s = addBox(slide, name, x, y, w, h, fill, fill, "rounded-lg");
+  // Keep the exported label frame inside the node's declared safe inset.
+  addText(slide, `${name}-label`, label, x + 18, y + 14, w - 36, h - 28, fs, C.bg, { bold: true, align: "center", valign: "middle" });
+  return s;
+}
+
+function arrow(slide, source, target, color = C.primary) {
+  return slide.shapes.connect(source, target, {
+    kind: "straight",
+    fromSide: "right",
+    toSide: "left",
+    line: { style: "solid", fill: color, width: 3 },
+    tail: { type: "triangle", width: "med", length: "med" },
+  });
+}
+
+function addMetric(slide, x, y, value, label, sub = "") {
+  addText(slide, `metric-value-${x}-${y}`, value, x, y, 180, 44, 34, C.primary, { bold: true });
+  addText(slide, `metric-label-${x}-${y}`, label, x, y + 43, 190, 48, 18, C.ink, { bold: true });
+  if (sub) addText(slide, `metric-sub-${x}-${y}`, sub, x, y + 91, 210, 30, 16, C.muted);
+}
+
+function slideTitleOnly(p, title) {
+  const s = p.slides.add();
+  chrome(s, title);
+  notes(s);
+  return s;
+}
+
+async function main() {
+  await fs.mkdir(OUT, { recursive: true });
+  const p = Presentation.create({ slideSize: { width: W, height: H } });
+
+  // 1. Cover
+  {
+    const s = p.slides.add();
+    s.background.fill = C.primary;
+    addRule(s, "cover-accent", 70, 90, 120, "#FFFFFF", 6);
+    addText(s, "cover-kicker", "创新案例分享｜党员教育", "70", 116, 470, 30, 18, "#DDE9F4", { bold: true });
+    addText(s, "cover-title", "让“六地”红，成为\n理工青年最鲜亮的青春底色", 70, 175, 760, 170, 42, C.bg, { bold: true });
+    addText(s, "cover-subtitle", "辽宁“六地”红色文化标识融入党员教育的创新实践", 74, 366, 720, 48, 22, "#E8F0F7");
+    addBox(s, "cover-quote", 860, 176, 300, 280, "#21456B", "#6E91B2", "rounded-xl");
+    addText(s, "cover-quote-text", "让辽宁故事\n成为离理工青年\n最近、最燃、最硬核的\n党员教育现场", 895, 215, 230, 170, 24, C.bg, { bold: true, valign: "middle" });
+    addText(s, "cover-bottom", "十年探路｜五年深耕｜从校园“小盆景”到区域“大风景”", 70, 618, 820, 28, 17, "#DDE9F4", { bold: true });
+    addText(s, "cover-no", "01", 1150, 650, 60, 24, 14, "#DDE9F4", { align: "right", bold: true });
+    notes(s);
+  }
+
+  // 2. Problem and thesis
+  {
+    const s = slideTitleOnly(p, "理工学生的优势很突出，党员教育的情感转化仍要补上");
+    addText(s, "problem-lead", "十年前，学院党委面对的是一组并存矛盾：能力优势没有自动转化为身份认同与行动担当。", 55, 128, 1050, 34, 20, C.ink);
+    addBox(s, "high-zone", 55, 195, 385, 255, C.pale, C.line, "rounded-xl");
+    addText(s, "high-title", "三高", 86, 225, 120, 58, 42, C.primary, { bold: true });
+    addText(s, "high-body", "高学分\n高竞赛\n高科研", 88, 296, 260, 118, 26, C.ink, { bold: true });
+    addBox(s, "low-zone", 840, 195, 385, 255, "#F7F8F9", C.line, "rounded-xl");
+    addText(s, "low-title", "三低", 872, 225, 120, 58, 42, C.deep, { bold: true });
+    addText(s, "low-body", "理论情感浓度低\n身份认同声量低\n知行合一燃值低", 872, 296, 290, 118, 24, C.ink, { bold: true });
+    const c = slideShapes(s, 480, 298, 290, 52, C.primary);
+    addText(s, "bridge", "党建核心\n实践转化", 520, 245, 210, 100, 23, C.bg, { bold: true, align: "center" });
+    addText(s, "bridge-note", "红色梦想实践团走遍全国九省，形成“理论＋实践”立体化红色矩阵", 466, 382, 320, 72, 17, C.muted, { align: "center" });
+    addRule(s, "bottom-rule", 55, 500, 1170, C.primary, 2);
+    addText(s, "thesis", "今天的选择：把“走遍全国”进一步收束为“深耕辽宁”，让六块红色标识成为离青年最近的教育现场。", 55, 530, 1140, 74, 24, C.primary, { bold: true });
+  }
+
+  // 3. 1+3+N architecture
+  {
+    const s = slideTitleOnly(p, "新矩阵把一条红色研学链，接入三类课堂与 N 个真实场景");
+    addText(s, "arch-lead", "双轮驱动：深挖“六地”文化内涵 + 实践研学赋能，重塑“五位一体”红色育人生态。", 55, 127, 1100, 32, 19, C.ink);
+    addBox(s, "one-zone", 55, 185, 450, 405, C.pale, C.line, "rounded-xl");
+    addText(s, "one-num", "1", 88, 215, 90, 88, 68, C.primary, { bold: true });
+    addText(s, "one-head", "条“六地”红色研学链", 178, 238, 270, 38, 24, C.ink, { bold: true });
+    addText(s, "one-body", "对接省委宣传部公布的\n22 处“六地”示范教学点", 90, 325, 340, 72, 21, C.primary, { bold: true });
+    addText(s, "one-detail", "1 个校本基地（校史馆）\n6 处核心“六地”场馆\nN 个配套教学点", 90, 427, 350, 112, 19, C.ink);
+    addBox(s, "three-zone", 542, 185, 310, 405, "#F7F8F9", C.line, "rounded-xl");
+    addText(s, "three-num", "3", 575, 215, 90, 88, 68, C.primary, { bold: true });
+    addText(s, "three-head", "类青春课堂", 665, 238, 150, 38, 24, C.ink, { bold: true });
+    addRule(s, "three-line", 580, 320, 220, C.primary, 2);
+    addText(s, "three-body", "行走课堂\n沉浸课堂（VR党课）\n互动课堂（青春宣讲）", 580, 345, 230, 125, 20, C.ink, { bold: true });
+    addBox(s, "n-zone", 889, 185, 336, 405, C.pale, C.line, "rounded-xl");
+    addText(s, "n-num", "N", 925, 215, 100, 88, 68, C.primary, { bold: true });
+    addText(s, "n-head", "个党员教育场景", 1035, 238, 150, 54, 22, C.ink, { bold: true });
+    addText(s, "n-body", "校地联建\n校企联建\n校校联建", 926, 342, 220, 110, 22, C.ink, { bold: true });
+    addText(s, "n-foot", "从“一时一地”到“全时全域”", 925, 510, 250, 28, 17, C.primary, { bold: true });
+  }
+
+  // 4. Route sequence (reference recompose)
+  {
+    const s = slideTitleOnly(p, "研学路线先立根基，再穿行六地，最后把现场扩展到 N 个教学点");
+    addText(s, "route-lead", "“红色足迹地图”把 22 处示范教学点组织成可持续使用的路线，而不是一次性打卡。", 55, 127, 1100, 32, 19, C.ink);
+    addBox(s, "route-bg", 55, 190, 1170, 340, C.pale, "none", "rounded-xl");
+    addRule(s, "route-track", 140, 348, 1000, C.pale2, 10);
+    const a = node(s, "route-1", "1\n校史馆", 112, 305, 150, 86, C.primary, 20);
+    const b = node(s, "route-2", "核心场馆\n①②", 300, 305, 150, 86, C.deep, 18);
+    const c = node(s, "route-3", "核心场馆\n③④", 488, 305, 150, 86, C.deep, 18);
+    const d = node(s, "route-4", "核心场馆\n⑤⑥", 676, 305, 150, 86, C.deep, 18);
+    const e = node(s, "route-5", "N\n配套教学点", 864, 305, 180, 86, C.primary, 19);
+    arrow(s, a, b); arrow(s, b, c); arrow(s, c, d); arrow(s, d, e);
+    addText(s, "route-cap-1", "校本基地\n先建立身份入口", 112, 423, 150, 55, 17, C.muted, { align: "center" });
+    addText(s, "route-cap-2", "六处核心“六地”场馆\n构成主路径", 380, 423, 320, 55, 17, C.muted, { align: "center" });
+    addText(s, "route-cap-3", "N 个配套点\n把教育嵌入地方现场", 820, 423, 260, 55, 17, C.muted, { align: "center" });
+    addText(s, "route-foot", "1 + 6 + N 是研学链的路线设计；1 + 3 + N 是整体教育矩阵的架构，两者口径各自清楚。", 55, 570, 1170, 40, 20, C.primary, { bold: true });
+  }
+
+  // 5. Five practice handles overview
+  {
+    const s = slideTitleOnly(p, "五类实践抓手，把红色教育从“听过”推进到“做过、共享、长效”");
+    addText(s, "handles-lead", "每个抓手承担一个具体转化任务，共同支撑“红色先锋”的成长结果。", 55, 127, 900, 32, 19, C.ink);
+    addBox(s, "handle-bg", 55, 202, 1170, 330, C.pale, "none", "rounded-xl");
+    addRule(s, "handle-track", 120, 350, 1020, C.pale2, 10);
+    const xs = [92, 300, 508, 716, 924];
+    const labels = ["红色任务单", "VR 示范基地", "青春有理", "红色朋友圈", "红色育人机制"];
+    const subs = ["把任务做实", "把现场做深", "把理论讲活", "把资源共享", "把培养做长"];
+    const nodes = [];
+    for (let i = 0; i < 5; i++) {
+      nodes.push(node(s, `handle-${i + 1}`, String(i + 1).padStart(2, "0"), xs[i], 307, 78, 86, i === 4 ? C.deep : C.primary, 24));
+      addText(s, `handle-label-${i + 1}`, labels[i], xs[i] - 35, 416, 148, 30, 18, C.ink, { bold: true, align: "center" });
+      addText(s, `handle-sub-${i + 1}`, subs[i], xs[i] - 35, 451, 148, 25, 16, C.muted, { align: "center" });
+      if (i > 0) arrow(s, nodes[i - 1], nodes[i], C.primary);
+    }
+    addText(s, "handle-note", "五类抓手不是平行清单，而是一条从任务、场景、表达、协同到机制的推进链。", 55, 576, 1170, 42, 21, C.primary, { bold: true });
+  }
+
+  // 6. Task sheet
+  {
+    const s = slideTitleOnly(p, "一张“红色任务单”，让学生在专业问题里读懂振兴担当");
+    addText(s, "task-lead", "任务单不是打卡清单，而是“三摆三写”的军令状：把自己、工作、职责都放进地方问题。", 55, 127, 1130, 34, 19, C.ink);
+    addBox(s, "task-main", 55, 190, 500, 390, C.pale, C.line, "rounded-xl");
+    addText(s, "task-title", "三摆三写", 90, 220, 250, 50, 32, C.primary, { bold: true });
+    const t1 = node(s, "task-1", "把自己摆进去\n写青春誓言", 90, 302, 220, 78, C.primary, 20);
+    const t2 = node(s, "task-2", "把工作摆进去\n写专业方案", 330, 302, 190, 78, C.deep, 19);
+    const t3 = node(s, "task-3", "把职责摆进去\n写振兴答卷", 210, 420, 220, 78, C.primary, 20);
+    arrow(s, t1, t2); arrow(s, t2, t3, C.deep);
+    addBox(s, "task-evidence", 590, 190, 635, 390, "#F7F8F9", C.line, "rounded-xl");
+    addText(s, "task-evidence-title", "五年沉淀：26 项微课题被“揭榜挂帅”", 625, 220, 560, 44, 24, C.ink, { bold: true });
+    addText(s, "task-actions", "拍一段“青声说史”短视频\n解决一个场馆或教学点“微难题”\n带回一个“振兴微课题”", 625, 292, 510, 120, 21, C.primary, { bold: true });
+    addRule(s, "task-sep", 625, 437, 520, C.primary, 2);
+    addText(s, "task-examples", "抗美援朝纪念馆：升级“声景”展项\n抚顺雷锋纪念馆：解决“志愿时间银行”互认\n专业调研：形成场馆沉浸式讲解词年轻化报告", 625, 462, 550, 94, 17, C.ink);
+  }
+
+  // 7. VR base
+  {
+    const s = slideTitleOnly(p, "VR 示范基地把 22 处旧址做成“一屏百年”的沉浸课堂");
+    addText(s, "vr-lead", "重走总书记辽宁考察路线与六地经典路线，先把红色现场采集为全景数据，再把它变成可预约的党员教育产品。", 55, 127, 1120, 36, 19, C.ink);
+    addBox(s, "vr-visual", 55, 196, 480, 350, C.primary, C.primary, "rounded-xl");
+    addText(s, "vr-big", "一键穿越\n一屏百年", 90, 255, 410, 150, 42, C.bg, { bold: true });
+    addText(s, "vr-small", "22 处旧址全景数据\n7 门“红色 VR 党课”", 92, 448, 360, 58, 20, "#DDE9F4", { bold: true });
+    addBox(s, "vr-facts", 585, 196, 640, 350, C.pale, C.line, "rounded-xl");
+    addMetric(s, 625, 235, "170", "省内外支部", "预约体验");
+    addMetric(s, 850, 235, "2400+", "党员", "预约体验");
+    addMetric(s, 625, 380, "一等奖", "省高校基层党建创新案例", "相关案例获评");
+    addMetric(s, 850, 380, "示范基地", "辽宁省党员教育培训示范基地", "基地获评");
+    addText(s, "vr-proof", "建设获中组部组织二局、教育部教师工作司负责同志充分肯定，成为辽沈大地线上打卡点。", 55, 590, 1170, 46, 19, C.primary, { bold: true });
+  }
+
+  // 8. Youth speaking
+  {
+    const s = slideTitleOnly(p, "“青春有理”用青年语态重构理论传播，让青年讲、青年听、青年信");
+    addText(s, "speak-lead", "博士、硕士、本科生组成 32 人混编梯队，把“六地”精神改写成可参与的互动课堂。", 55, 127, 1100, 34, 19, C.ink);
+    addBox(s, "speak-path", 55, 194, 1170, 195, C.pale, "none", "rounded-xl");
+    const s1=node(s,"speak-1","32 人\n混编梯队",108,246,180,88,C.primary,21);
+    const s2=node(s,"speak-2","10 类\n互动课件",395,246,180,88,C.deep,21);
+    const s3=node(s,"speak-3","36 场\n进校园/社区/企业",682,238,210,104,C.primary,20);
+    const s4=node(s,"speak-4","3800+\n师生群众",1000,246,170,88,C.deep,21);
+    arrow(s,s1,s2); arrow(s,s2,s3); arrow(s,s3,s4);
+    addBox(s, "speak-detail", 55, 430, 1170, 135, "#F7F8F9", C.line, "rounded-xl");
+    addText(s, "speak-detail-text", "沉浸式故事 · 情景短剧 · 红色闯关\n进校园、进社区、进企业，让党的创新理论飞出校园，飞入生产一线与百姓心坎。", 90, 458, 1050, 72, 22, C.ink, { bold: true });
+    addText(s, "speak-award", "获评：辽宁省大学生红色理论宣讲团", 55, 606, 700, 34, 19, C.primary, { bold: true });
+  }
+
+  // 9. Shared network
+  {
+    const s = slideTitleOnly(p, "“红色朋友圈”把一地实践变成多方共学的共享循环");
+    addText(s, "network-lead", "以组织互联、资源互通、经验互鉴为连接机制，推动“东北故事西部讲、西部经验东北学”。", 55, 127, 1100, 34, 19, C.ink);
+    const center = addBox(s, "network-center", 470, 256, 340, 180, C.primary, C.primary, "rounded-xl");
+    addText(s, "network-center-t", "共享的党课", 505, 288, 270, 48, 30, C.bg, { bold: true, align: "center" });
+    addText(s, "network-center-s", "VR 共享 · 主题党日联办\n资源联用 · 志愿联动", 505, 350, 270, 52, 18, "#E8F0F7", { align: "center" });
+    const n1=node(s,"network-left","41 家单位\n共学联建",90,280,240,90,C.primary,20);
+    const n2=node(s,"network-right","一年互派\n2000+ 人次",950,280,240,90,C.primary,20);
+    const n3=node(s,"network-bottom","“六地精神西部行”\n新疆农业大学 · 西北师范大学 · 兰州工业学院",400,510,480,78,C.deep,18);
+    // Explicit links with center shape kept above for stable visual relationship.
+    s.shapes.connect(n1, center, { kind: "straight", fromSide: "right", toSide: "left", line: { style: "solid", fill: C.primary, width: 3 }, tail: { type: "triangle", width: "med", length: "med" } });
+    s.shapes.connect(center, n2, { kind: "straight", fromSide: "right", toSide: "left", line: { style: "solid", fill: C.primary, width: 3 }, tail: { type: "triangle", width: "med", length: "med" } });
+    s.shapes.connect(center, n3, { kind: "elbow", fromSide: "bottom", toSide: "top", line: { style: "solid", fill: C.primary, width: 3 }, tail: { type: "triangle", width: "med", length: "med" } });
+    addText(s, "network-foot", "让“红色朋友圈”刷成振兴中国的“同心圆”，把校园“小盆景”扩展为区域“大风景”。", 55, 620, 1170, 34, 20, C.primary, { bold: true });
+  }
+
+  // 10. Mechanism
+  {
+    const s = slideTitleOnly(p, "红色育人机制把教育嵌入党员成长全周期，确保年年有人抓、届届有人传");
+    addText(s, "mech-lead", "把红色实践计入学分、把 VR 党课写进“三会一课”，让一次活动沉淀为持续培养链。", 55, 127, 1100, 34, 19, C.ink);
+    addBox(s, "mech-bg", 55, 202, 1170, 275, C.pale, "none", "rounded-xl");
+    addRule(s, "mech-track", 125, 330, 1010, C.pale2, 10);
+    const ms=[]; const mx=[115,370,625,880]; const ml=["入学","入党","转正","毕业"];
+    for(let i=0;i<4;i++){
+      ms.push(node(s,`mech-${i+1}`,ml[i],mx[i],286,170,88,i===3?C.deep:C.primary,22));
+      addText(s,`mech-sub-${i+1}`,i===0?"建立红色认知":i===1?"进入培养主线":i===2?"接受实践检验":"带着信仰走向岗位",mx[i]-12,399,195,42,17,C.muted,{align:"center"});
+      if(i>0) arrow(s,ms[i-1],ms[i]);
+    }
+    addBox(s,"mech-mentor",55,520,1170,100,"#F7F8F9",C.line,"rounded-xl");
+    addText(s,"mech-mentor-t","36 位纪念馆专家、抗美援朝老战士担任“红色导师”",90,548,690,38,22,C.ink,{bold:true});
+    addText(s,"mech-mentor-s","红色育人进入制度、课堂与成长节点",845,548,315,38,18,C.primary,{bold:true,align:"right"});
+  }
+
+  // 11. Outcomes
+  {
+    const s = slideTitleOnly(p, "五年深耕后，学生党员获得了“红色先锋”的新标签");
+    addText(s, "outcome-lead", "成效集中落在四个可感知的变化：愿意留下、本领有用、声音传开、成长不断线。", 55, 127, 1100, 34, 19, C.ink);
+    const rows=[
+      ["信仰更强","58% → 87%","毕业后留辽意愿举手率","“我的青春也要从这里鸣枪”"],
+      ["本领更硬","26 份","振兴微课题；8 家企业收货","公式进高炉、代码进小区、图纸进车间"],
+      ["声音更响","36 场 / 3800+","宣讲进入校园、社区、企业","党的创新理论飞入生产一线"],
+      ["脚步更稳","提升 40%","选调生、重大装备研发比例","论文写在大地，青春植根黑土"],
+    ];
+    rows.forEach((r,i)=>{
+      const y=190+i*111;
+      addBox(s,`outcome-row-${i}`,55,y,1170,88,i%2===0?C.pale:"#F7F8F9", "none", "rounded-lg");
+      addText(s,`outcome-head-${i}`,r[0],85,y+20,145,32,22,C.primary,{bold:true});
+      addText(s,`outcome-value-${i}`,r[1],260,y+17,230,38,28,C.ink,{bold:true});
+      addText(s,`outcome-label-${i}`,r[2],505,y+14,390,30,18,C.ink,{bold:true});
+      addText(s,`outcome-sub-${i}`,r[3],505,y+53,620,30,16,C.muted);
+    });
+    addText(s,"outcome-foot","所学终有所用，学生党员开始把名字写进振兴辽宁的下一行代码。",55,638,1170,32,20,C.primary,{bold:true});
+  }
+
+  // 12. Close
+  {
+    const s = p.slides.add();
+    s.background.fill = C.primary;
+    addText(s,"close-kicker","收束｜把红色基因传承下去",70,70,500,30,18,"#DDE9F4",{bold:true});
+    addText(s,"close-title","一条研学链、\n一张任务单、\n一座 VR 基地、\n一支宣讲团、\n一个育人机制",70,130,560,330,34,C.bg,{bold:true});
+    addRule(s,"close-rule",690,140,4, "#AFC8DE", 360);
+    addText(s,"close-quote","“红色江山来之不易，守好江山责任重大。”",760,170,400,60,25,C.bg,{bold:true});
+    addText(s,"close-body","十年探路，五年深耕。\n让“听党话、跟党走”的坚定信念，\n熔铸进学生生涯的每一段青春年轮。",760,275,390,140,23,"#E8F0F7",{bold:true});
+    addText(s,"close-final","“六地”红，成为理工青年投身东北全面振兴的鲜亮底色。",760,490,390,82,24,C.bg,{bold:true});
+    addText(s,"close-thanks","我的汇报完毕，谢谢大家！",70,635,480,28,18,"#DDE9F4",{bold:true});
+    addText(s,"close-no","12",1150,650,60,24,14,"#DDE9F4",{align:"right",bold:true});
+    notes(s);
+  }
+
+  // Export deterministic artifacts.
+  for (const [i, slide] of p.slides.items.entries()) {
+    const stem = `slide-${i + 1}`;
+    await writeBlob(`${OUT}/${stem}.png`, await p.export({ slide, format: "png", scale: 1 }));
+    const layout = await slide.export({ format: "layout" });
+    await fs.writeFile(`${OUT}/${stem}.layout.json`, await layout.text());
+  }
+  const pptx = await PresentationFile.exportPptx(p);
+  await pptx.save(`${OUT}/deck.pptx`);
+}
+
+function slideShapes(slide, x, y, w, h, fill) {
+  return addBox(slide, "bridge-box", x, y, w, h, fill, fill, "rounded-lg");
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});

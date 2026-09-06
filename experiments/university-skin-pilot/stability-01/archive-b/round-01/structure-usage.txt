@@ -1,0 +1,15 @@
+mode: reference
+referenceAssetIds: sequence-flow-001
+
+检索：
+- catalog.mjs list --logic sequence
+- catalog.mjs reference sequence-flow-001
+- catalog.mjs inspect sequence-flow-001
+
+采用：
+- 第 6 页参考 sequence-flow-001 的“左到右连续推进、阶段节点、标题与说明绑定”关系骨架，按本稿五个真实复核阶段重组为原生可编辑矩形节点、连接线和文本。
+- 保留第 6 页的授权分支为流程外的门禁说明，不把它伪造成第六个步骤。
+- 第 7 页是时间刻度的独立原生排版，未调用 sequence 资产，避免把拟定周次误写成五步动作链。
+
+方式：reference-recompose（未执行 invokeStructure；没有 direct-call success 事件）。
+视觉和容量：全稿使用本轮 university-blue-pilot 主题与 layout-guide；连接关系由原生对象生成，节点标签在 slide-2/3/6/7 提供配对清单并通过标签检查。
