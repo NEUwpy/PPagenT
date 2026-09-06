@@ -1,0 +1,411 @@
+run-05 report
+communication job: 联合实验负责人应理解两条准备彼此并行，只有两份证据齐全且负责人核验通过后才启动。
+content boundary: 虚构流程设计，尚未实施；没有真实学校、成果、统计数字或提效承诺。
+visual route: explicit custom visual direction from docs/设计手册/科研咨询式排版-v8.md + theme.json; no bundled template used.
+native output: all visible text, zones, nodes, gates and connectors are native PowerPoint objects.
+actual exported layout: 24 non-empty text frames; 0 elements outside 1280x720. The right-column manager-boundary frame is 3 lines at 18px in bbox [880,480,330,80], leaving 16px between its frame bottom and the decision-zone bottom.
+text capacity estimate: warningCount=0; estimated height = exported lineCount × resolvedFontSize × resolved lineSpacing, compared with exported bbox height. This is a frame-capacity estimate, not glyph-bound measurement.
+node label geometry: audit-node-labels.mjs returned pairCount=9, issueCount=0, all centerDelta=[0,0], all alignment=center/verticalAlignment=middle, and all diamond safe frames verified. Glyph bounds are not available in layout JSON, so glyphBoundsVerified is not claimed.
+text collision geometry: audit-text-overlaps.mjs returned textCapacityWarningCount=0, intersectionCount=0 and textRuleIntersectionCount=0.
+proto arrow check: {"connectorCount":10,"forwardCount":8,"forwardDestinationTailType2":true,"feedbackCount":2,"feedbackDestinationTailType6":true}; the final proto stores forward arrows on destination tail and feedback arrows on destination tail.
+post-render QA: render_slides.py generated final-pptx-render/slide-1.png; slides_test.py returned Test passed. No overflow detected.; both audit scripts were run after the final export. The official PNG was visually inspected for right-column bottom clearance and the independent bottom trial strip; no visual-style pass is claimed.
+sha256: deck.pptx = B95589E4ABAE8F60D334B16AB4B0D659077646A8D3D05AE7D0ED03DD5260D444; final-render.png = 4A81A52E80B993DD3746270D861DCE22189AA4B6F83E0D6A14FAA53A4A169A16; final-pptx-render/slide-1.png = C169B36EA56FE46D639A3B7761B83D2BB626C3A3EB64A7C7AF68E09758AA715C.
+reference mode: reference; invokeStructure: not executed.
+
+REFERENCE RECORD
+{
+  "mode": "reference",
+  "referenceAssetIds": [
+    "parallel-equal-cards-001",
+    "convergence-many-to-one-003",
+    "branching-decision-routes-001",
+    "cycle-single-chain-feedback-002"
+  ],
+  "absorbedMethods": [
+    "共同水平起点表达真实并行，不借用等权卡片的无关系语义。",
+    "两份证据沿汇聚线进入单一联合核验点，再经独立通过门槛进入启动。",
+    "条件与异常回路贴近对应责任组；负责人边界留在决策区的开放说明。",
+    "仅保留异常回送语义，不把尚未实施的流程画成收益闭环。"
+  ],
+  "changesForThisPage": [
+    "用浅色证据区、浅色决策区和底部边界区建立主体/支持层，不把整页变成同权节点集合。",
+    "节点只保留短标签；责任、证据、隔离、回退和负责人权限移到开放文字。",
+    "主色和派生色均从 theme.json 计算，没有引入独立第二色相。"
+  ],
+  "invocation": {
+    "executed": false,
+    "note": "未执行 invokeStructure；本页为参考重组后的原生可编辑对象。"
+  }
+}
+
+CONNECTOR ENDPOINT LEDGER
+[
+  {
+    "label": "设备校准→合格",
+    "id": "38",
+    "from": "equipment-task",
+    "fromSide": "right",
+    "fromIdx": 3,
+    "to": "equipment-gate",
+    "toSide": "left",
+    "toIdx": 1,
+    "kind": "straight",
+    "lineStyle": "solid",
+    "head": "none",
+    "tail": "triangle"
+  },
+  {
+    "label": "合格→签字校准记录",
+    "id": "39",
+    "from": "equipment-gate",
+    "fromSide": "right",
+    "fromIdx": 3,
+    "to": "equipment-evidence",
+    "toSide": "left",
+    "toIdx": 1,
+    "kind": "straight",
+    "lineStyle": "solid",
+    "head": "none",
+    "tail": "triangle"
+  },
+  {
+    "label": "样本整理→完整",
+    "id": "40",
+    "from": "data-task",
+    "fromSide": "right",
+    "fromIdx": 3,
+    "to": "data-gate",
+    "toSide": "left",
+    "toIdx": 1,
+    "kind": "straight",
+    "lineStyle": "solid",
+    "head": "none",
+    "tail": "triangle"
+  },
+  {
+    "label": "完整→去标识样本清单",
+    "id": "41",
+    "from": "data-gate",
+    "fromSide": "right",
+    "fromIdx": 3,
+    "to": "data-evidence",
+    "toSide": "left",
+    "toIdx": 1,
+    "kind": "straight",
+    "lineStyle": "solid",
+    "head": "none",
+    "tail": "triangle"
+  },
+  {
+    "label": "校准记录→联合核验",
+    "id": "42",
+    "from": "equipment-evidence",
+    "fromSide": "right",
+    "fromIdx": 3,
+    "to": "joint-check",
+    "toSide": "left",
+    "toIdx": 1,
+    "kind": "elbow",
+    "lineStyle": "solid",
+    "head": "none",
+    "tail": "triangle"
+  },
+  {
+    "label": "样本清单→联合核验",
+    "id": "43",
+    "from": "data-evidence",
+    "fromSide": "right",
+    "fromIdx": 3,
+    "to": "joint-check",
+    "toSide": "left",
+    "toIdx": 1,
+    "kind": "elbow",
+    "lineStyle": "solid",
+    "head": "none",
+    "tail": "triangle"
+  },
+  {
+    "label": "联合核验→通过",
+    "id": "44",
+    "from": "joint-check",
+    "fromSide": "bottom",
+    "fromIdx": 2,
+    "to": "joint-pass-gate",
+    "toSide": "top",
+    "toIdx": 0,
+    "kind": "elbow",
+    "lineStyle": "solid",
+    "head": "none",
+    "tail": "triangle"
+  },
+  {
+    "label": "通过→本轮可开始",
+    "id": "45",
+    "from": "joint-pass-gate",
+    "fromSide": "bottom",
+    "fromIdx": 2,
+    "to": "final-node",
+    "toSide": "top",
+    "toIdx": 0,
+    "kind": "elbow",
+    "lineStyle": "solid",
+    "head": "none",
+    "tail": "triangle"
+  },
+  {
+    "label": "不合格→设备组复校",
+    "id": "46",
+    "from": "equipment-gate",
+    "fromSide": "bottom",
+    "fromIdx": 2,
+    "to": "equipment-task",
+    "toSide": "bottom",
+    "toIdx": 2,
+    "kind": "elbow",
+    "lineStyle": "dashed",
+    "head": "none",
+    "tail": "arrow"
+  },
+  {
+    "label": "缺授权→数据组补齐",
+    "id": "47",
+    "from": "data-gate",
+    "fromSide": "bottom",
+    "fromIdx": 2,
+    "to": "data-task",
+    "toSide": "bottom",
+    "toIdx": 2,
+    "kind": "elbow",
+    "lineStyle": "dashed",
+    "head": "none",
+    "tail": "arrow"
+  }
+]
+
+PROTO CONNECTOR OBJECTS
+[
+  {
+    "path": "root.slides[0].elements[37]",
+    "id": "38",
+    "connector": {
+      "fromElementId": "12",
+      "fromIdx": 3,
+      "toElementId": "14",
+      "toIdx": 1,
+      "lineStyle": {
+        "tail": {
+          "type": 2,
+          "width": 1,
+          "length": 1
+        }
+      }
+    }
+  },
+  {
+    "path": "root.slides[0].elements[38]",
+    "id": "39",
+    "connector": {
+      "fromElementId": "14",
+      "fromIdx": 3,
+      "toElementId": "16",
+      "toIdx": 1,
+      "lineStyle": {
+        "tail": {
+          "type": 2,
+          "width": 1,
+          "length": 1
+        }
+      }
+    }
+  },
+  {
+    "path": "root.slides[0].elements[39]",
+    "id": "40",
+    "connector": {
+      "fromElementId": "13",
+      "fromIdx": 3,
+      "toElementId": "15",
+      "toIdx": 1,
+      "lineStyle": {
+        "tail": {
+          "type": 2,
+          "width": 1,
+          "length": 1
+        }
+      }
+    }
+  },
+  {
+    "path": "root.slides[0].elements[40]",
+    "id": "41",
+    "connector": {
+      "fromElementId": "15",
+      "fromIdx": 3,
+      "toElementId": "17",
+      "toIdx": 1,
+      "lineStyle": {
+        "tail": {
+          "type": 2,
+          "width": 1,
+          "length": 1
+        }
+      }
+    }
+  },
+  {
+    "path": "root.slides[0].elements[41]",
+    "id": "42",
+    "connector": {
+      "fromElementId": "16",
+      "fromIdx": 3,
+      "toElementId": "18",
+      "toIdx": 1,
+      "lineStyle": {
+        "tail": {
+          "type": 2,
+          "width": 1,
+          "length": 1
+        }
+      }
+    }
+  },
+  {
+    "path": "root.slides[0].elements[42]",
+    "id": "43",
+    "connector": {
+      "fromElementId": "17",
+      "fromIdx": 3,
+      "toElementId": "18",
+      "toIdx": 1,
+      "lineStyle": {
+        "tail": {
+          "type": 2,
+          "width": 1,
+          "length": 1
+        }
+      }
+    }
+  },
+  {
+    "path": "root.slides[0].elements[43]",
+    "id": "44",
+    "connector": {
+      "fromElementId": "18",
+      "fromIdx": 2,
+      "toElementId": "19",
+      "toIdx": 0,
+      "lineStyle": {
+        "tail": {
+          "type": 2,
+          "width": 1,
+          "length": 1
+        }
+      }
+    }
+  },
+  {
+    "path": "root.slides[0].elements[44]",
+    "id": "45",
+    "connector": {
+      "fromElementId": "19",
+      "fromIdx": 2,
+      "toElementId": "20",
+      "toIdx": 0,
+      "lineStyle": {
+        "tail": {
+          "type": 2,
+          "width": 1,
+          "length": 1
+        }
+      }
+    }
+  },
+  {
+    "path": "root.slides[0].elements[45]",
+    "id": "46",
+    "connector": {
+      "fromElementId": "14",
+      "fromIdx": 2,
+      "toElementId": "12",
+      "toIdx": 2,
+      "lineStyle": {
+        "tail": {
+          "type": 6,
+          "width": 1,
+          "length": 1
+        }
+      }
+    }
+  },
+  {
+    "path": "root.slides[0].elements[46]",
+    "id": "47",
+    "connector": {
+      "fromElementId": "15",
+      "fromIdx": 2,
+      "toElementId": "13",
+      "toIdx": 2,
+      "lineStyle": {
+        "tail": {
+          "type": 6,
+          "width": 1,
+          "length": 1
+        }
+      }
+    }
+  }
+]
+
+EXPORTED OBJECT INSPECTION
+{"kind":"slide","id":"sl/0a6rig","slide":1,"title":"虚构流程设计 · 尚未实施","textShapes":24}
+{"kind":"textbox","id":"sh/jetgvu1g","slide":1,"name":"eyebrow","text":"虚构流程设计 · 尚未实施","textPreview":"虚构流程设计 · 尚未实施","textChars":13,"textLines":1,"bbox":[55,34,420,22]}
+{"kind":"textbox","id":"sh/kf2x4z21","slide":1,"name":"title","text":"两条准备可并行，证据齐全且核验通过才启动联合实验","textPreview":"两条准备可并行，证据齐全且核验通过才启动联合实验","textChars":24,"textLines":1,"bbox":[55,64,1165,44]}
+{"kind":"shape","id":"sh/5gbyx4j6","slide":1,"name":"title-rule","bbox":[55,126,1170,0]}
+{"kind":"textbox","id":"sh/6hkf69kr","slide":1,"name":"process-caption","text":"设备校准与样本整理同步推进","textPreview":"设备校准与样本整理同步推进","textChars":13,"textLines":1,"bbox":[55,143,510,22]}
+{"kind":"shape","id":"sh/7itgzu1c","slide":1,"name":"evidence-zone","bbox":[55,176,780,400]}
+{"kind":"shape","id":"sh/sjmx8z2x","slide":1,"name":"decision-zone","bbox":[865,176,360,400]}
+{"kind":"shape","id":"sh/tkvy14ji","slide":1,"name":"boundary-zone","bbox":[55,590,1170,38]}
+{"kind":"shape","id":"sh/ml0fu5kn","slide":1,"name":"decision-accent","bbox":[865,176,6,400]}
+{"kind":"shape","id":"sh/nm9wna18","slide":1,"name":"boundary-accent","bbox":[55,590,6,38]}
+{"kind":"textbox","id":"sh/3qp8vidk","slide":1,"name":"evidence-zone-title","text":"准备证据","textPreview":"准备证据","textChars":4,"textLines":1,"bbox":[80,192,200,28]}
+{"kind":"textbox","id":"sh/25gr2dwz","slide":1,"name":"decision-zone-title","text":"共同启动条件","textPreview":"共同启动条件","textChars":6,"textLines":1,"bbox":[890,192,250,28]}
+{"kind":"shape","id":"sh/ps7qx8vq","slide":1,"name":"equipment-task","bbox":[190,226,150,56]}
+{"kind":"shape","id":"sh/ory94ne5","slide":1,"name":"data-task","bbox":[190,374,150,56]}
+{"kind":"shape","id":"sh/f258ryd8","slide":1,"name":"equipment-gate","bbox":[365,213,130,82]}
+{"kind":"shape","id":"sh/e1wrytw3","slide":1,"name":"data-gate","bbox":[365,361,130,82]}
+{"kind":"shape","id":"sh/14nqt8ve","slide":1,"name":"equipment-evidence","bbox":[525,226,190,56]}
+{"kind":"shape","id":"sh/g3e903et","slide":1,"name":"data-evidence","bbox":[525,374,190,56]}
+{"kind":"shape","id":"sh/ry58nydc","slide":1,"name":"joint-check","bbox":[965,250,160,44]}
+{"kind":"shape","id":"sh/6xc7utwr","slide":1,"name":"joint-pass-gate","bbox":[980,297,130,82]}
+{"kind":"shape","id":"sh/utcr6tgj","slide":1,"name":"final-node","bbox":[955,390,180,48]}
+{"kind":"textbox","id":"sh/vulsfyx4","slide":1,"name":"equipment-label","text":"设备组","textPreview":"设备组","textChars":3,"textLines":1,"bbox":[80,242,80,28]}
+{"kind":"textbox","id":"sh/wvu98jyp","slide":1,"name":"data-label","text":"数据组","textPreview":"数据组","textChars":3,"textLines":1,"bbox":[80,390,80,28]}
+{"kind":"textbox","id":"sh/hw3ahofa","slide":1,"name":"equipment-task-label","text":"设备校准","textPreview":"设备校准","textChars":4,"textLines":1,"bbox":[205,242,120,24]}
+{"kind":"textbox","id":"sh/ixcratgv","slide":1,"name":"data-task-label","text":"样本整理","textPreview":"样本整理","textChars":4,"textLines":1,"bbox":[205,390,120,24]}
+{"kind":"textbox","id":"sh/jy5sjyxg","slide":1,"name":"equipment-gate-label","text":"合格？","textPreview":"合格？","textChars":3,"textLines":1,"bbox":[399,243,62,22]}
+{"kind":"textbox","id":"sh/4ze9c3y1","slide":1,"name":"data-gate-label","text":"完整？","textPreview":"完整？","textChars":3,"textLines":1,"bbox":[399,391,62,22]}
+{"kind":"textbox","id":"sh/50nal8f6","slide":1,"name":"equipment-evidence-label","text":"签字校准记录","textPreview":"签字校准记录","textChars":6,"textLines":1,"bbox":[535,242,170,24]}
+{"kind":"textbox","id":"sh/61wredgr","slide":1,"name":"data-evidence-label","text":"去标识样本清单","textPreview":"去标识样本清单","textChars":7,"textLines":1,"bbox":[535,390,170,24]}
+{"kind":"textbox","id":"sh/r25snixc","slide":1,"name":"joint-check-label","text":"联合核验","textPreview":"联合核验","textChars":4,"textLines":1,"bbox":[983,260,124,24]}
+{"kind":"textbox","id":"sh/1w7udcze","slide":1,"name":"joint-pass-label","text":"通过？","textPreview":"通过？","textChars":3,"textLines":1,"bbox":[1014,327,62,22]}
+{"kind":"textbox","id":"sh/gvyd47i9","slide":1,"name":"final-node-label","text":"本轮可开始","textPreview":"本轮可开始","textChars":5,"textLines":1,"bbox":[965,402,160,24]}
+{"kind":"textbox","id":"sh/fupcb2ho","slide":1,"name":"equipment-support","text":"批次、执行人和结果留存；合格后提交签字记录。\n不合格由设备组复校，不能带问题进入联合实验。","textPreview":"批次、执行人和结果留存；合格后提交签字记录。 | 不合格由设备组复校，不能带问题进入联合实验。","textChars":45,"textLines":2,"bbox":[190,300,545,54]}
+{"kind":"textbox","id":"sh/etgv2x03","slide":1,"name":"data-support","text":"编号可追溯且授权完整，才形成去标识清单。\n缺授权样本隔离，不进入本轮清单；数据组继续补齐授权。","textPreview":"编号可追溯且授权完整，才形成去标识清单。 | 缺授权样本隔离，不进入本轮清单；数据组继续补齐授权。","textChars":47,"textLines":2,"bbox":[190,448,545,54]}
+{"kind":"textbox","id":"sh/pkruhczq","slide":1,"name":"and-condition","text":"两份证据齐全","textPreview":"两份证据齐全","textChars":6,"textLines":1,"bbox":[900,222,210,18]}
+{"kind":"textbox","id":"sh/ojid87i5","slide":1,"name":"manager-boundary","text":"负责人核验；不代签、不代补授权。\n缺证据或核验失败：退回对应组，本轮不启动。","textPreview":"负责人核验；不代签、不代补授权。 | 缺证据或核验失败：退回对应组，本轮不启动。","textChars":38,"textLines":2,"bbox":[880,480,330,80]}
+{"kind":"textbox","id":"sh/3i9cf2hk","slide":1,"name":"boundary-title","text":"下一周试行范围","textPreview":"下一周试行范围","textChars":7,"textLines":1,"bbox":[80,594,190,28]}
+{"kind":"textbox","id":"sh/2x0v6h0z","slide":1,"name":"boundary-body","text":"只验收并行准备、职责边界与证据留存；流程尚未实施，不承诺提前完成或减少等待。","textPreview":"只验收并行准备、职责边界与证据留存；流程尚未实施，不承诺提前完成或减少等待。","textChars":38,"textLines":1,"bbox":[285,598,850,24]}
+{"kind":"shape","id":"sh/dorulwzm","slide":1,"bbox":[340,254,25,0]}
+{"kind":"shape","id":"sh/cnidcri1","slide":1,"bbox":[495,254,30,0]}
+{"kind":"shape","id":"sh/8v6p0f6l","slide":1,"bbox":[340,402,25,0]}
+{"kind":"shape","id":"sh/9wf6tkn6","slide":1,"bbox":[495,402,30,0]}
+{"kind":"shape","id":"sh/mt47ypof","slide":1,"bbox":[715,254,250,18]}
+{"kind":"shape","id":"sh/7uxora50","slide":1,"bbox":[715,272,250,130]}
+{"kind":"shape","id":"sh/krm5wf6p","slide":1,"bbox":[1045,294,0,3]}
+{"kind":"shape","id":"sh/lsv6pkna","slide":1,"bbox":[1045,379,0,11]}
+{"kind":"shape","id":"sh/yp4nu5oj","slide":1,"bbox":[265,282,165,13]}
+{"kind":"shape","id":"sh/zqdona54","slide":1,"bbox":[265,430,165,13]}
+{"kind":"shape","id":"sh/4nqp8z6t","slide":1,"name":"footer-rule","bbox":[55,646,1170,0]}
+{"kind":"textbox","id":"sh/5oz614ne","slide":1,"name":"footer-source","text":"素材：虚构流程设计｜本页仅检验并行准备、职责边界、证据留存与联合核验","textPreview":"素材：虚构流程设计｜本页仅检验并行准备、职责边界、证据留存与联合核验","textChars":34,"textLines":1,"bbox":[55,660,920,22]}
+{"kind":"textbox","id":"sh/fi1srypg","slide":1,"name":"page-number","text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[1185,660,40,22]}
+{"kind":"notes","id":"nt/0a6rig","slide":1,"text":"[Sources]\n内容：experiments/university-skin-pilot/transfer-03/manuscript.txt\n设计：docs/设计手册/科研咨询式排版-v8.md；主题：experiments/university-skin-pilot/reference-01/theme.json\n结构参考重组：parallel-equal-cards-001、convergence-many-to-one-003、branching-decision-routes-001、cycle-single-chain-feedback-002；未执行 invokeStructure。"}

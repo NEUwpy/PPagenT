@@ -1,0 +1,14 @@
+run-09｜原稿第一张定量证据页；仅生成一页，不重做流程页
+source: argument-01/manuscript.txt; theme: reference-01/theme.json; layout guide: docs/设计手册/科研咨询式排版-v8.md。
+mode: native comparison layout；未调用结构组件，referenceAssetIds=[]。
+主判断：两批已结案记录相差1.8个工作日，最大差距在教师处理及等待。
+主证据：共享工作日尺度展示三阶段人工/试点均值；完整保留0.8/0.6、1.6/1.0、2.6/1.6和总计5.0/3.2；总差异明确标为“少1.8天（36%）”。右栏只保留最大差距、读法限制和下一轮边界，不重复抄录阶段数字；副说明与图下相加解释已去重。
+比较口径：从首次提交到完成处理的平均工作日；两批各120件已结案申请，来自不同月份；三个阶段依次发生、互不重叠，均值可相加。
+解释边界：难度与人员负荷未控制、无随机分组，不归因于试点；教师处理及等待合并记录，不能把这段全部写成排队；下一轮不承诺再次降时。右栏边界句按四条有意换行，避免数字/单位拆行。
+official render_slides.py: PASS；官方 PNG 已从 deck/slide-1.png 复制。
+official slides_test.py: PASS；No overflow detected。
+audit-text-overlaps.mjs: PASS；textCapacityWarningCount=0、intersectionCount=0、textRuleIntersectionCount=0、textRuleClearanceCount=0。
+bounds check: PASS；无越界元素；右栏最后一句距背景底16px。
+final artifact SHA256: 9983E327F28453918B68E5A1934A004BF74BA24A59CC728D6E9463A0EF98E8F7。
+artifact times (UTC): deck.pptx 2026-09-06T00:39:08.2562015Z; page-01.png 2026-09-06T00:39:20.6493573Z。
+visual review boundary: agent did not open the PNG or claim visual acceptance; parent should inspect final rendered page for the intended chart weight and reading path.

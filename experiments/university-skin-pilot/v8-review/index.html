@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>科研咨询式排版 v8 · 修订对照</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#edf1f5;color:#252b33;font:16px/1.55 'Microsoft YaHei',sans-serif}main{max-width:1440px;margin:auto;padding:28px 30px}h1{font-size:25px;margin:0 0 8px}p{margin:8px 0;color:#536171}a{color:#315f91}nav,.controls{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0 14px}button{font:inherit;padding:9px 17px;border:1px solid #b9c6d4;background:white;color:#315f91;cursor:pointer}button[aria-pressed=true]{background:#315f91;color:white;border-color:#315f91}.controls{align-items:center;justify-content:space-between;margin:12px 0}figure{margin:0;background:white}figure img{display:block;width:100%;height:auto}figcaption{padding:10px 16px;border-top:1px solid #edf1f5;color:#536171}#comparison{display:grid;grid-template-columns:1fr;gap:20px}#comparison.paired{grid-template-columns:1fr 1fr}.hidden{display:none}details{margin-top:26px;border-top:1px solid #c9d3df;padding-top:18px}details .refs{display:grid;grid-template-columns:1fr 1fr;gap:20px}.refs img{width:100%;height:580px;object-fit:contain;background:white}.status{font-size:14px}#note{background:#e0e8f0;padding:12px 16px;margin:0 0 16px}@media(max-width:900px){main{padding:18px}#comparison.paired,details .refs{grid-template-columns:1fr}}
+</style>
+<main>
+<h1>科研咨询式排版 v8 · 修订对照</h1>
+<p>同一稿件、同一蓝色主题，比较信息主次、分区和结构表达。新版由 Luna / high 根据文字指南与反馈生成；这里展示最终 PPTX 的独立渲染。</p>
+<p class="status">旧四页的内部通过结论已撤销。本页记录修订结果与父任务复核，不代替用户评价。</p>
+<nav id="pages" aria-label="页面选择"></nav>
+<div class="controls"><label><input type="checkbox" id="compare"> 同时显示修订前</label><span><a id="pptx" href="#">新版可编辑 PPTX</a> · <a href="review.txt">复核记录</a> · <a href="../../../docs/设计手册/科研咨询式排版-v8.md">设计指南</a></span></div>
+<p id="note"></p>
+<div id="comparison"><figure id="old" class="hidden"><img id="old-image" alt="修订前"><figcaption>修订前 · 用户已退回</figcaption></figure><figure><img id="new-image" alt="修订后"><figcaption id="caption">修订后</figcaption></figure></div>
+<details><summary>查看离线风格参考</summary><p>参考用于对照层次与论证编排，示例业务内容不作为事实引用。完整来源见<a href="../../../docs/设计手册/麦肯锡风格参考/风格参考笔记.md">离线参考笔记</a>。</p><div class="refs"><img src="../../../docs/设计手册/麦肯锡风格参考/images/05-ai-sample/02.webp" alt="用户指定 AI 样板"><img src="../../../docs/设计手册/麦肯锡风格参考/images/02-elite/04.webp" alt="图文分区与共同结果参考"></div></details>
+</main>
+<script>
+const pages=[
+ {title:'01 阶段用时比较',old:'../reference-01/run-07/deck/slide-1.png',image:'data-render/slide-1.png',pptx:'../reference-01/run-09/deck.pptx',note:'比较证据与解释分区，突出总差值和主要贡献环节，同时保留非因果比较的边界。'},
+ {title:'02 三阶段分工',old:'../reference-01/run-07/deck/slide-2.png',image:'flow-render/slide-1.png',pptx:'../reference-01/run-08/deck.pptx',note:'连续主流程成为主体；职责随节点，异常随阶段，跨阶段记录与四周核验降为次区。'},
+ {title:'03 内存约束决策',old:'../transfer-02/run-03/deck/slide-1.png',image:'decision-render/slide-1.png',pptx:'../transfer-02/run-04/deck.pptx',note:'先看内存约束再比较耗时，用颜色和区域层次连接门槛、可行选择与差值。'},
+ {title:'04 双轨准备与核验',old:'../transfer-03/run-04/deck/slide-1.png',image:'parallel-render/slide-1.png',pptx:'../transfer-03/run-05/deck.pptx',note:'并行准备按责任分区，两份证据共同汇入核验；节点短标签居中，例外和权限单独归组。'}
+];
+const $=id=>document.getElementById(id);let active=1;
+pages.forEach((p,i)=>{const b=document.createElement('button');b.textContent=p.title;b.onclick=()=>show(i);$('pages').append(b)});
+function show(i){active=i;const p=pages[i];$('old-image').src=p.old;$('new-image').src=p.image;$('pptx').href=p.pptx;$('note').textContent=p.note;$('caption').textContent=p.title+' · 修订后';[...$('pages').children].forEach((b,j)=>b.setAttribute('aria-pressed',String(i===j)));}
+$('compare').onchange=()=>{$('comparison').classList.toggle('paired',$('compare').checked);$('old').classList.toggle('hidden',!$('compare').checked)};
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')show((active+1)%pages.length);if(e.key==='ArrowLeft')show((active+pages.length-1)%pages.length)});show(active);
+</script></html>
