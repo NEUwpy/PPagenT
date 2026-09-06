@@ -24,8 +24,14 @@
 
 | 独立任务 | 原稿 | 页数 | 当前状态 |
 |---|---|---:|---|
-| luna_composition_product_a | product.txt | 11 | 执行中 |
-| luna_composition_product_b | product.txt | 11 | 执行中，同稿独立重复 |
-| luna_composition_archive | archive.txt | 8 | 执行中，另稿迁移 |
+| luna_composition_product_a | product.txt | 11 | 已完成；整稿未通过 |
+| luna_composition_product_b | product.txt | 11 | 已完成并反馈修订；整稿未通过 |
+| luna_composition_archive | archive.txt | 首轮 8，修订 9 | 已完成并反馈修订；局部改善，整稿未通过 |
 
 本轮大学咨询式不接正式 Skin、不改核心库、不扩新 Harness。风格方法仍处在验证阶段。父任务只写指南和审查工具，不写或改制作脚本、坐标或 PPT 成品。
+
+## 证据重心候选：四页独立重复
+
+重新查看本地 McKinsey 总览、AI 样板和精英感纯文字分析参考，新增 inputs/composition-v2。重点从“整齐的文字组”推进到“连续的主分析 + 有独立贡献的解释”，明确定性材料如何转成比较维度、关系及例外，色面怎样标记信息职责。该候选的效果尚待验证。
+
+focus-a 与 focus-b 为两次独立 Luna High，同一四页归档研究材料，无图片输入，无逐页父审反馈。审核最终渲染后记录结果；四页成功也不等同于长稿稳定。
