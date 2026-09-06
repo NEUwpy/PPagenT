@@ -1,0 +1,25 @@
+实验：aesthetic-ab-01 / focus-a / round-01
+输出：四页内容分析页，无封面、目录或额外收束页。
+
+实现
+- 使用 presentations skill、style_guidelines.md、artifact-tool API 文档与 @oai/artifact-tool ES module。
+- 主题取自 inputs/theme.json：Microsoft YaHei、#315F91、#252B33、#707780、白底。
+- 原稿唯一来源为 inputs/composition-v2/study.txt；指南唯一来源为 inputs/composition-v2/layout-guide.txt。
+- 第 2 页参考重组 comparison-dual-verdict-001，第 3 页参考重组 sequence-phase-gates-004；未调用 invokeStructure。
+- 所有可见内容为原生文字、矩形、线条或连接器；未使用图片或整页截图。
+
+检查
+- render_slides.py：最终 deck.pptx 的 4 页已渲染到 render/slides/；父任务可独立审查渲染图。
+- slides_test.py：Test passed. No overflow detected.
+- audit-text-overlaps.mjs：4 页 intersectionCount=0；textRuleIntersectionCount=0；textCapacityWarningCount=0。
+- audit-visible-contract.mjs：4 页 colorIssueCount=0；paintIssueCount=0。
+- audit-wrap-tails.mjs：4 页 count=0。
+- audit-node-labels.mjs：第 3 页 9/9 节点配对、issueCount=0；第 4 页 3/3 节点配对、issueCount=0。
+- audit-connectors.py：9/9 连接器有绑定，reverseArrowCount=0，unsupportedGeometryCount=0，uninspectedRouteCount=0，textIntersectionCount=0，declarationFailureCount=0。
+- audit-text-roles.mjs：88/88 角色字号、字重和字体匹配，mismatchCount=0。
+- audit-source-coverage.mjs：从最终 deck.pptx 导出 4 页、88 个文本框；覆盖核对记录于 coverage.txt。
+
+边界
+- 检查结果是确定性对象证据，不是审美验收；生成代理没有读取渲染图片，也没有宣称审美通过。
+- 原稿中的建议、范围与“没有证明效率提升/没有实测效率或完成率”按原稿口径保留，未改写成测量结果。
+- 所有普通可见线条已记录于 line-paths.json；有向关系的源、目标、arrowAt 与依据已记录于 connections.json。

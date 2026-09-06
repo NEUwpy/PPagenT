@@ -17,7 +17,8 @@ for(const file of layouts){
 }
 const issues=[],checked=[],seen=new Set();
 for(const r of roles){
- const key=`${r.page}:${r.shapeId??r.id}`;
+ // Executors use either page/shapeId or slide/shape; both refer to exported IDs.
+ const key=`${r.page??r.slide}:${r.shapeId??r.id??r.shape}`;
  const role=r.role??r.declaredRole;
  if(seen.has(key))issues.push({key,issue:'duplicate-declaration'});
  seen.add(key);

@@ -1,0 +1,76 @@
+{
+  "connections": [
+    {
+      "slide": 3,
+      "source": "p3-node-submit",
+      "target": "p3-node-locate",
+      "arrowAt": "target",
+      "relation": "正常复核顺序",
+      "evidence": "study paragraph 3"
+    },
+    {
+      "slide": 3,
+      "source": "p3-node-locate",
+      "target": "p3-node-supplement",
+      "arrowAt": "target",
+      "relation": "正常复核顺序",
+      "evidence": "study paragraph 3"
+    },
+    {
+      "slide": 3,
+      "source": "p3-node-supplement",
+      "target": "p3-node-confirm",
+      "arrowAt": "target",
+      "relation": "正常复核顺序",
+      "evidence": "study paragraph 3"
+    },
+    {
+      "slide": 3,
+      "source": "p3-node-confirm",
+      "target": "p3-node-discuss",
+      "arrowAt": "target",
+      "relation": "正常复核顺序",
+      "evidence": "study paragraph 3"
+    },
+    {
+      "slide": 3,
+      "source": "p3-ex-node-detect",
+      "target": "p3-ex-node-pause",
+      "arrowAt": "target",
+      "relation": "授权例外顺序",
+      "evidence": "study paragraph 3"
+    },
+    {
+      "slide": 3,
+      "source": "p3-ex-node-pause",
+      "target": "p3-ex-node-owner",
+      "arrowAt": "target",
+      "relation": "授权例外顺序",
+      "evidence": "study paragraph 3"
+    },
+    {
+      "slide": 3,
+      "source": "p3-ex-node-owner",
+      "target": "p3-ex-node-resume",
+      "arrowAt": "target",
+      "relation": "授权例外顺序",
+      "evidence": "study paragraph 3"
+    },
+    {
+      "slide": 4,
+      "source": "p4-week1",
+      "target": "p4-week23",
+      "arrowAt": "target",
+      "relation": "四周试点顺序",
+      "evidence": "study paragraph 4"
+    },
+    {
+      "slide": 4,
+      "source": "p4-week23",
+      "target": "p4-week4",
+      "arrowAt": "target",
+      "relation": "四周试点顺序",
+      "evidence": "study paragraph 4"
+    }
+  ]
+}

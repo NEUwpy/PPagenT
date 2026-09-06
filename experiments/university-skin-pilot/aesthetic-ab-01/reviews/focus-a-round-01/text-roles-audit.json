@@ -1,0 +1,683 @@
+{
+  "scope": "Declared base typography against exported layout. Partial rich-text spans and semantic role suitability require separate review; this is not style acceptance.",
+  "actualTextCount": 88,
+  "declarationCount": 88,
+  "checkedCount": 88,
+  "issueCount": 4,
+  "issues": [
+    {
+      "key": "1:1",
+      "issue": "role-style-mismatch",
+      "role": "note",
+      "expected": [
+        16,
+        false
+      ],
+      "actual": [
+        16,
+        true
+      ],
+      "text": "ANALYSIS  /  01  ·  RESULT RECORD"
+    },
+    {
+      "key": "2:1",
+      "issue": "role-style-mismatch",
+      "role": "note",
+      "expected": [
+        16,
+        false
+      ],
+      "actual": [
+        16,
+        true
+      ],
+      "text": "ANALYSIS  /  02  ·  SCOPE CHOICE"
+    },
+    {
+      "key": "3:1",
+      "issue": "role-style-mismatch",
+      "role": "note",
+      "expected": [
+        16,
+        false
+      ],
+      "actual": [
+        16,
+        true
+      ],
+      "text": "ANALYSIS  /  03  ·  REVIEW PATH"
+    },
+    {
+      "key": "4:1",
+      "issue": "role-style-mismatch",
+      "role": "note",
+      "expected": [
+        16,
+        false
+      ],
+      "actual": [
+        16,
+        true
+      ],
+      "text": "ANALYSIS  /  04  ·  PILOT DECISION"
+    }
+  ],
+  "checked": [
+    {
+      "key": "1:1",
+      "role": "note",
+      "size": 16,
+      "bold": true,
+      "text": "ANALYSIS  /  01  ·  RESULT RECORD"
+    },
+    {
+      "key": "1:2",
+      "role": "claim",
+      "size": 30,
+      "bold": true,
+      "text": "一个结果，需要共同可追溯的记录单元"
+    },
+    {
+      "key": "1:4",
+      "role": "footer",
+      "size": 12,
+      "bold": false,
+      "text": "UNIVERSITY BLUE PILOT  /  分析记录试点"
+    },
+    {
+      "key": "1:5",
+      "role": "footer",
+      "size": 12,
+      "bold": false,
+      "text": "01  /  04"
+    },
+    {
+      "key": "1:7",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "记录单元"
+    },
+    {
+      "key": "1:8",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "共同解释这个结果"
+    },
+    {
+      "key": "1:9",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "原始数据位置"
+    },
+    {
+      "key": "1:10",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "知道结果从哪里产生。"
+    },
+    {
+      "key": "1:12",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "样本与采集条件"
+    },
+    {
+      "key": "1:13",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "把结果放回它的采集边界。"
+    },
+    {
+      "key": "1:15",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "处理脚本版本"
+    },
+    {
+      "key": "1:16",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "定位实际运行代码。"
+    },
+    {
+      "key": "1:18",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "结果文件"
+    },
+    {
+      "key": "1:19",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "保留结果本体，便于讨论。"
+    },
+    {
+      "key": "1:22",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "异常及排除说明"
+    },
+    {
+      "key": "1:23",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "说明哪些样本未纳入结果及其依据。"
+    },
+    {
+      "key": "1:24",
+      "role": "note",
+      "size": 16,
+      "bold": false,
+      "text": "五项共同解释一个结果，不是五个先后步骤。"
+    },
+    {
+      "key": "1:27",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "记录完整 ≠ 全部开放"
+    },
+    {
+      "key": "1:28",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "保存纪律"
+    },
+    {
+      "key": "1:29",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "原始数据保持原貌；清洗另存\n排除样本保留依据。"
+    },
+    {
+      "key": "1:31",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "访问边界"
+    },
+    {
+      "key": "1:32",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "讨论材料：结果图与可公开解释。\n受限数据：留在原授权位置。\n记录只含受控引用与访问条件。"
+    },
+    {
+      "key": "1:33",
+      "role": "note",
+      "size": 16,
+      "bold": false,
+      "text": "路径不代表访问权。"
+    },
+    {
+      "key": "2:1",
+      "role": "note",
+      "size": 16,
+      "bold": true,
+      "text": "ANALYSIS  /  02  ·  SCOPE CHOICE"
+    },
+    {
+      "key": "2:2",
+      "role": "claim",
+      "size": 30,
+      "bold": true,
+      "text": "新增先记，历史按需补：这是范围选择"
+    },
+    {
+      "key": "2:4",
+      "role": "footer",
+      "size": 12,
+      "bold": false,
+      "text": "UNIVERSITY BLUE PILOT  /  分析记录试点"
+    },
+    {
+      "key": "2:5",
+      "role": "footer",
+      "size": 12,
+      "bold": false,
+      "text": "02  /  04"
+    },
+    {
+      "key": "2:7",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "比较维度"
+    },
+    {
+      "key": "2:8",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "集中补历史"
+    },
+    {
+      "key": "2:9",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "先记录新增"
+    },
+    {
+      "key": "2:11",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "可得到什么"
+    },
+    {
+      "key": "2:12",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "一次形成较大目录。"
+    },
+    {
+      "key": "2:13",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "上下文清楚时即可记录。"
+    },
+    {
+      "key": "2:16",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "代价"
+    },
+    {
+      "key": "2:17",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "追查遗失上下文耗时。"
+    },
+    {
+      "key": "2:18",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "短期无法解决全部历史材料追溯。"
+    },
+    {
+      "key": "2:20",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "最大边界"
+    },
+    {
+      "key": "2:21",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "可能把不确定记忆写成确定说明。"
+    },
+    {
+      "key": "2:22",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "不能把新增记录当成历史补全。"
+    },
+    {
+      "key": "2:24",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "原稿建议"
+    },
+    {
+      "key": "2:26",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "先记录新增；对真正需要复核的历史结果逐项补充。"
+    },
+    {
+      "key": "2:27",
+      "role": "note",
+      "size": 16,
+      "bold": false,
+      "text": "这是范围选择，没有证明效率提升。"
+    },
+    {
+      "key": "2:28",
+      "role": "note",
+      "size": 16,
+      "bold": false,
+      "text": "比较的是覆盖方式与可解释性，不是已测得的效率差。"
+    },
+    {
+      "key": "3:1",
+      "role": "note",
+      "size": 16,
+      "bold": true,
+      "text": "ANALYSIS  /  03  ·  REVIEW PATH"
+    },
+    {
+      "key": "3:2",
+      "role": "claim",
+      "size": 30,
+      "bold": true,
+      "text": "复核确认的是结果如何产生，不代替科学结论审查"
+    },
+    {
+      "key": "3:4",
+      "role": "footer",
+      "size": 12,
+      "bold": false,
+      "text": "UNIVERSITY BLUE PILOT  /  分析记录试点"
+    },
+    {
+      "key": "3:5",
+      "role": "footer",
+      "size": 12,
+      "bold": false,
+      "text": "03  /  04"
+    },
+    {
+      "key": "3:6",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "正常复核路径"
+    },
+    {
+      "key": "3:16",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "提交"
+    },
+    {
+      "key": "3:17",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "记录与受控引用"
+    },
+    {
+      "key": "3:18",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "定位缺项"
+    },
+    {
+      "key": "3:19",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "数据、脚本和条件"
+    },
+    {
+      "key": "3:20",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "执行者补充"
+    },
+    {
+      "key": "3:21",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "补齐缺项"
+    },
+    {
+      "key": "3:22",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "负责人确认"
+    },
+    {
+      "key": "3:23",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "确认后继续"
+    },
+    {
+      "key": "3:24",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "可讨论版本"
+    },
+    {
+      "key": "3:25",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "进入讨论"
+    },
+    {
+      "key": "3:27",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "新增访问授权时，正常流程暂停"
+    },
+    {
+      "key": "3:35",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "发现授权"
+    },
+    {
+      "key": "3:36",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "新增访问授权"
+    },
+    {
+      "key": "3:37",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "暂停共享"
+    },
+    {
+      "key": "3:38",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "等待负责人处理"
+    },
+    {
+      "key": "3:39",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "负责人处理"
+    },
+    {
+      "key": "3:40",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "完成授权处理"
+    },
+    {
+      "key": "3:41",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "继续共享"
+    },
+    {
+      "key": "3:42",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "回到复核路径"
+    },
+    {
+      "key": "3:44",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "复核范围"
+    },
+    {
+      "key": "3:45",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "检查结果如何产生；不要求复做实验，也不代替科学结论审查。"
+    },
+    {
+      "key": "4:1",
+      "role": "note",
+      "size": 16,
+      "bold": true,
+      "text": "ANALYSIS  /  04  ·  PILOT DECISION"
+    },
+    {
+      "key": "4:2",
+      "role": "claim",
+      "size": 30,
+      "bold": true,
+      "text": "四周试点用过程反馈决定保留、修改或停止"
+    },
+    {
+      "key": "4:4",
+      "role": "footer",
+      "size": 12,
+      "bold": false,
+      "text": "UNIVERSITY BLUE PILOT  /  分析记录试点"
+    },
+    {
+      "key": "4:5",
+      "role": "footer",
+      "size": 12,
+      "bold": false,
+      "text": "04  /  04"
+    },
+    {
+      "key": "4:6",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "试点范围"
+    },
+    {
+      "key": "4:7",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "一个课题方向  ·  两名自愿成员  ·  仅记录新增实验"
+    },
+    {
+      "key": "4:13",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "第 1 周"
+    },
+    {
+      "key": "4:14",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "确认最少字段，试填一个结果"
+    },
+    {
+      "key": "4:15",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "第 2–3 周"
+    },
+    {
+      "key": "4:16",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "记录缺项和填写负担"
+    },
+    {
+      "key": "4:17",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "第 4 周"
+    },
+    {
+      "key": "4:18",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "决定保留、修改或停止"
+    },
+    {
+      "key": "4:19",
+      "role": "note",
+      "size": 16,
+      "bold": false,
+      "text": "过程反馈作决定；不设统一分数。"
+    },
+    {
+      "key": "4:20",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "评估什么"
+    },
+    {
+      "key": "4:21",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "来源能否定位\n处理与排除依据能否理解\n负担是否愿意长期承担"
+    },
+    {
+      "key": "4:25",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "何时缩小要求或停止"
+    },
+    {
+      "key": "4:26",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "持续挤占实验时间\n权限不明\n只有重复抄写，不帮助解释结果"
+    },
+    {
+      "key": "4:28",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "第四周决定：保留、修改或停止"
+    },
+    {
+      "key": "4:29",
+      "role": "note",
+      "size": 16,
+      "bold": false,
+      "text": "范围为拟定；没有实测效率或完成率。"
+    }
+  ]
+}
