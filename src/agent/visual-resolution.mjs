@@ -1331,7 +1331,14 @@ function validateCompositionPage({ content, candidate, compositionPage, layouts,
       itemCount: projectCandidateContent(content, candidate).items.length,
     });
   } catch (error) {
-    issues.push({ code: "spatial-contract-failed", message: error.message });
+    issues.push({
+      code: "spatial-contract-failed",
+      errorCode: error.code ?? null,
+      message: error.message,
+      targetFrame: error.targetFrame ?? error.details?.actualFrame ?? null,
+      requiredFrame: error.requiredFrame ?? error.details?.requiredFrame ?? null,
+      reason: error.reason ?? error.details?.reason ?? null,
+    });
   }
 
   const sourceIds = idsForPage(content);

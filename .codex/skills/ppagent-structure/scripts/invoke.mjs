@@ -14,14 +14,27 @@ export async function invokeStructure({root,slide,skin,assetId,parameters,target
     const p=await loadCoreAssetPackage(assetId,root);
     const f=targetFrame, b=skin.bodyFrame;
     if (!f || ![f.left,f.top,f.width,f.height].every(Number.isFinite) || f.width<=0 || f.height<=0 || f.left<b.left-.5 || f.top<b.top-.5 || f.left+f.width>b.left+b.width+.5 || f.top+f.height>b.top+b.height+.5) throw new Error("targetFrame 必须在 Skin 正文区内");
-    const count=parameters.items?.length ?? parameters.causes?.length ?? parameters.layers?.length ?? parameters.sides?.[0]?.items?.length;
-    const minimum=p.asset.spatialContract?.stateFootprints?.[String(count)] ?? p.asset.spatialContract?.minimumFrame;
-    if (minimum && (f.width+.5<minimum.width || f.height+.5<minimum.height)) throw new Error(`区域不足：${assetId} 当前状态至少需要 ${minimum.width}×${minimum.height}，实际 ${f.width}×${f.height}`);
     const before=slide.shapes.items.length;
     usedRuntime=true;
     const result=await renderStructureAsset(slide,{assetId,parameters},skin,targetFrame,root);
-    await log({event:"success",nativeShapeDelta:slide.shapes.items.length-before,manifestPath:path.relative(root,p.manifestPath)});
+    await log({
+      event:"success",
+      nativeShapeDelta:slide.shapes.items.length-before,
+      manifestPath:path.relative(root,p.manifestPath),
+      adaptationStatus:p.runtime.contract?.adaptationStatus ?? "natural",
+    });
     return result;
-  } catch(error) { await log({event:"failure",message:error.message}); throw error; }
+  } catch(error) {
+    await log({
+      event:"failure",
+      code:error.code ?? null,
+      message:error.message,
+      details:error.details ?? null,
+      requiredFrame:error.requiredFrame ?? null,
+      targetFrame:error.targetFrame ?? null,
+      reason:error.reason ?? null,
+    });
+    throw error;
+  }
 }
 export async function closeStructureRuntime() { if (usedRuntime) { await closeHtmlComponentRuntime(); usedRuntime=false; } }

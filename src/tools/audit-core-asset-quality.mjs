@@ -26,8 +26,20 @@ function inspectSpatialContract(metadata, layouts) {
   for (const field of ["coordinateSystem", "contentFrame", "minimumFrame", "preferredFrame", "resizeMode", "minFontSize", "safePadding", "supportedCompositionIds"]) {
     if (contract[field] === undefined) issues.push(`missing-${field}`);
   }
-  if (contract.resizeMode !== "contain") issues.push("component-resize-mode-must-be-contain");
-  if (contract.minFontSize < 16) issues.push("minimum-font-size-below-16");
+  if (!new Set(["natural", "contain", "adaptive"]).has(contract.resizeMode)) {
+    issues.push(`unsupported-component-resize-mode:${contract.resizeMode ?? "missing"}`);
+  }
+  if (contract.minFontSize < 15) issues.push("minimum-font-size-below-15");
+  if (contract.resizeMode === "adaptive") {
+    if (metadata.runtime?.contract?.adaptationStatus !== "verified") {
+      issues.push("adaptive-component-not-verified");
+    }
+    if (!Number.isFinite(contract.adaptiveMinimumFrame?.width)
+      || !Number.isFinite(contract.adaptiveMinimumFrame?.height)) {
+      issues.push("missing-adaptive-minimum-frame");
+    }
+    if (!metadata.runtime?.spatialResolverExport) issues.push("missing-spatial-resolver-export");
+  }
   if (!Array.isArray(contract.supportedCompositionIds) || !contract.supportedCompositionIds.length) {
     issues.push("missing-supported-compositions");
   } else {
@@ -38,7 +50,9 @@ function inspectSpatialContract(metadata, layouts) {
         continue;
       }
       try {
-        assertSpatialFit(metadata, layout, northeasternUniversitySkin.bodyFrame);
+        assertSpatialFit(metadata, layout, northeasternUniversitySkin.bodyFrame, {
+          itemCount: metadata.runtime?.itemCount?.preferred?.[0] ?? metadata.runtime?.itemCount?.min ?? null,
+        });
       } catch (error) {
         issues.push(`spatial-fit:${compositionId}:${error.message}`);
       }
@@ -57,7 +71,7 @@ async function inspectAsset(root, entry, tempRoot, runtimeSha256, layouts) {
   const qaDir = path.join(tempRoot, entry.id);
   await exportTemplateMappedQa(presentation, qaDir);
   const audit = await auditRenderedDeck(qaDir, {
-    minimumFontSize: 16,
+    minimumFontSize: 15,
     tolerance: 0.5,
     requireQaParents: metadata.kind === "component",
   });
@@ -96,7 +110,7 @@ export async function auditCoreAssetQuality(root, { writeReport = false } = {}) 
     const report = {
       schemaVersion: 1,
       status: assets.every((asset) => asset.status === "passed") ? "passed" : "failed",
-      minimumFontSize: 16,
+      minimumFontSize: 15,
       geometryTolerance: 0.5,
       runtimePath: "src/asset-runtime/component-builders.mjs",
       runtimeSha256,

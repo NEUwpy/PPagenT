@@ -1,0 +1,71 @@
+{
+  "status": "baseline_toolchain_verified",
+  "adaptationStatus": "not_assessed",
+  "input": "C:\\PPagenT\\experiments\\structure-size-adaptation\\luna-validation\\fixture\\neutral-core-convergence-06-baseline.pptx",
+  "output": "C:\\PPagenT\\experiments\\structure-size-adaptation\\luna-validation\\pipeline-output",
+  "evidence": "C:\\PPagenT\\experiments\\structure-size-adaptation\\luna-validation\\pipeline-evidence",
+  "slideCount": 3,
+  "slides": [
+    {
+      "slide": 1,
+      "frame": {
+        "left": 0,
+        "top": 0,
+        "width": 1280,
+        "height": 720
+      },
+      "elementCount": 21,
+      "textShapes": 13,
+      "pictures": 0,
+      "renderedLineCount": 13,
+      "outsideSlide": [],
+      "source": "baseline_fixture",
+      "layoutPath": "C:\\PPagenT\\experiments\\structure-size-adaptation\\luna-validation\\pipeline-output\\slide-01.layout.json",
+      "pngPath": "C:\\PPagenT\\experiments\\structure-size-adaptation\\luna-validation\\pipeline-output\\slide-01.png"
+    },
+    {
+      "slide": 2,
+      "frame": {
+        "left": 0,
+        "top": 0,
+        "width": 1280,
+        "height": 720
+      },
+      "elementCount": 35,
+      "textShapes": 23,
+      "pictures": 0,
+      "renderedLineCount": 24,
+      "outsideSlide": [],
+      "source": "baseline_fixture",
+      "layoutPath": "C:\\PPagenT\\experiments\\structure-size-adaptation\\luna-validation\\pipeline-output\\slide-02.layout.json",
+      "pngPath": "C:\\PPagenT\\experiments\\structure-size-adaptation\\luna-validation\\pipeline-output\\slide-02.png"
+    },
+    {
+      "slide": 3,
+      "frame": {
+        "left": 0,
+        "top": 0,
+        "width": 1280,
+        "height": 720
+      },
+      "elementCount": 31,
+      "textShapes": 20,
+      "pictures": 0,
+      "renderedLineCount": 27,
+      "outsideSlide": [],
+      "source": "baseline_fixture",
+      "layoutPath": "C:\\PPagenT\\experiments\\structure-size-adaptation\\luna-validation\\pipeline-output\\slide-03.layout.json",
+      "pngPath": "C:\\PPagenT\\experiments\\structure-size-adaptation\\luna-validation\\pipeline-output\\slide-03.png"
+    }
+  ],
+  "montagePath": "C:\\PPagenT\\experiments\\structure-size-adaptation\\luna-validation\\pipeline-output\\deck-montage.webp",
+  "checks": {
+    "artifactToolImport": true,
+    "artifactToolLayoutExport": true,
+    "artifactToolPngExport": true,
+    "artifactToolMontageExport": true,
+    "outsideSlideCount": 0,
+    "pictureCount": 0
+  },
+  "interpretation": "仅证明旧 baseline PPTX 可以被 Artifact Tool 导入、导出布局/PNG/montage；不证明新结构适配、正式调用或页面 QA。"
+}

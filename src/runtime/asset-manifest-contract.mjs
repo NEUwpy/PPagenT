@@ -1,5 +1,6 @@
 const RENDERERS = new Set(["skin", "html-component", "legacy-builder"]);
 const POINT_POLICIES = new Set(["forbidden", "optional", "required"]);
+const STRUCTURE_RESIZE_MODES = new Set(["natural", "contain", "adaptive"]);
 
 function push(issues, condition, message) {
   if (!condition) issues.push(message);
@@ -71,6 +72,29 @@ export function inspectAssetManifestContract(asset, manifestLabel = asset?.id ??
     push(issues, runtime.slotContract.maxDepth === 1, `${asset.id} 的 slotContract.maxDepth 当前只允许 1`);
     push(issues, runtime.slotContract.childPolicy === "registered-core-only", `${asset.id} 的 slotContract.childPolicy 必须是 registered-core-only`);
     push(issues, runtime.slotContract.fallback === "plain-text", `${asset.id} 的 slotContract.fallback 必须是 plain-text`);
+  }
+
+  if (asset.kind === "component" && renderer !== "skin") {
+    const spatial = asset.spatialContract;
+    push(issues, Boolean(spatial), `${asset.id} 缺少 spatialContract`);
+    if (spatial) {
+      push(issues, STRUCTURE_RESIZE_MODES.has(spatial.resizeMode), `${asset.id} 的 spatialContract.resizeMode 非法`);
+      if (spatial.resizeMode === "adaptive") {
+        const minimum = spatial.adaptiveMinimumFrame;
+        push(issues, Number.isFinite(minimum?.width) && minimum.width > 0
+          && Number.isFinite(minimum?.height) && minimum.height > 0,
+        `${asset.id} 缺少合法 adaptiveMinimumFrame`);
+        push(issues, typeof runtime.spatialResolverExport === "string" && Boolean(runtime.spatialResolverExport),
+          `${asset.id} 的 adaptive 契约缺少 spatialResolverExport`);
+        push(issues, runtime.contract?.adaptationStatus === "verified",
+          `${asset.id} 只有 adaptationStatus=verified 才能声明 adaptive`);
+        push(issues, spatial.adaptation?.mode === "profiled-reflow",
+          `${asset.id} 的 adaptive 契约缺少 profiled-reflow 模式`);
+        push(issues, Array.isArray(spatial.supportedCompositionIds)
+          && spatial.supportedCompositionIds.includes("component-full"),
+        `${asset.id} 的 adaptive 契约必须保留 component-full`);
+      }
+    }
   }
 
   return { valid: issues.length === 0, issues };

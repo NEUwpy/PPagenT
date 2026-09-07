@@ -67,7 +67,7 @@ function componentDocument(markup, css, frame, theme) {
   </style></head><body>${markup}</body></html>`;
 }
 
-export async function resolveHtmlComponent({ component, parameters, assetDir, targetFrame = null, theme = {} }) {
+export async function resolveHtmlComponent({ component, parameters, assetDir, targetFrame = null, theme = {}, adaptation = null }) {
   requireValue(component && typeof component.renderMarkup === "function", "HTML Component 缺少 renderMarkup");
   const hasInlineCss = typeof component.cssText === "string" && component.cssText.trim().length > 0;
   const hasCssFile = typeof component.cssFile === "string" && component.cssFile;
@@ -79,10 +79,24 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
     height: component.designFrame?.height,
   }, "component.designFrame");
   const normalizedTargetFrame = targetFrame ? normalizeFrame(targetFrame, "targetFrame") : null;
-  if (normalizedTargetFrame) {
+  const adaptive = adaptation?.status === "verified";
+  if (adaptive && typeof component.renderAdaptiveMarkup !== "function") {
+    const error = new Error(`${component.id ?? "HTML Component"} 声明动态适配但没有 renderAdaptiveMarkup`);
+    error.code = "STRUCTURE_ADAPTATION_CAPABILITY_MISSING";
+    throw error;
+  }
+  if (!adaptive && normalizedTargetFrame) {
     const scale = Math.min(normalizedTargetFrame.width / designFrame.width, normalizedTargetFrame.height / designFrame.height);
     requireValue(Math.abs(scale - 1) < 0.001, `${component.id ?? "HTML Component"} 必须按自然字号渲染；目标区域不能缩放组件`);
   }
+  const renderFrame = adaptive
+    ? normalizeFrame({
+      left: 0,
+      top: 0,
+      width: normalizedTargetFrame?.width,
+      height: normalizedTargetFrame?.height,
+    }, "adaptiveFrame")
+    : designFrame;
   let css = component.cssText ?? "";
   if (!hasInlineCss) {
     const cssPath = path.resolve(assetDir, component.cssFile);
@@ -90,13 +104,22 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
     requireValue(relativeCssPath && !relativeCssPath.startsWith("..") && !path.isAbsolute(relativeCssPath), "cssFile 必须位于资产目录内");
     css = await fs.readFile(cssPath, "utf8");
   }
-  const compiledTheme = compileHtmlComponentTheme({ markup: component.renderMarkup(parameters), css, theme });
+  const sourceMarkup = adaptive
+    ? component.renderAdaptiveMarkup(parameters, {
+      frame: { ...renderFrame },
+      targetFrame: { ...normalizedTargetFrame },
+      theme,
+      adaptation: structuredClone(adaptation),
+    })
+    : component.renderMarkup(parameters);
+  requireValue(typeof sourceMarkup === "string" && sourceMarkup.trim(), `${component.id ?? "HTML Component"} 没有返回可渲染 HTML`);
+  const compiledTheme = compileHtmlComponentTheme({ markup: sourceMarkup, css, theme });
   const markup = compiledTheme.markup;
   css = compiledTheme.css;
   const browser = await getBrowser();
-  const page = await browser.newPage({ viewport: { width: Math.ceil(designFrame.width), height: Math.ceil(designFrame.height) } });
+  const page = await browser.newPage({ viewport: { width: Math.ceil(renderFrame.width), height: Math.ceil(renderFrame.height) } });
   try {
-    await page.setContent(componentDocument(markup, css, designFrame, theme), { waitUntil: "load" });
+    await page.setContent(componentDocument(markup, css, renderFrame, theme), { waitUntil: "load" });
     const tree = await page.evaluate(async (typographyContract) => {
       await document.fonts.ready;
       const root = document.querySelector("[data-ppt-root]");
@@ -1089,6 +1112,12 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
       }));
     requireValue(!tree.textLayoutOverflows.length, `${component.id ?? "HTML Component"} 的组合排版无法在安全 box 内完整呈现：${tree.textLayoutOverflows.join(", ")} ${JSON.stringify(textLayoutOverflowDetails)}`);
     requireValue(tree.nodes.length > 0, `${component.id ?? "HTML Component"} 没有 data-ppt-kind 可编译对象`);
+    if (adaptive) {
+      requireValue(
+        Math.abs(tree.frame.width - renderFrame.width) < 1 && Math.abs(tree.frame.height - renderFrame.height) < 1,
+        `${component.id ?? "HTML Component"} 的动态根区域 ${tree.frame.width}×${tree.frame.height} 与目标 ${renderFrame.width}×${renderFrame.height} 不一致`,
+      );
+    }
     assertResolvedTextContainerSlots(tree.slots, component.textCapacity ?? {}, component.id);
     return {
       ...tree,

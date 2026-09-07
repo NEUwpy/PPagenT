@@ -27,6 +27,7 @@
       "id": "component-full",
       "silhouette": "full-width-visual",
       "requiresComponent": true,
+      "componentResizeModes": ["natural", "adaptive"],
       "allowedAssetKinds": ["component"],
       "slots": [
         { "id": "component", "role": "component", "frame": { "left": 0, "top": 0, "width": 1, "height": 1 } }
@@ -36,6 +37,7 @@
       "id": "component-aside-right",
       "silhouette": "visual-left-editorial-right",
       "requiresComponent": true,
+      "componentResizeModes": ["adaptive"],
       "allowedAssetKinds": ["component"],
       "slots": [
         { "id": "component", "role": "component", "frame": { "left": 0, "top": 0.04, "width": 0.68, "height": 0.92 } },
@@ -47,6 +49,7 @@
       "silhouette": "editorial-lead-over-visual",
       "requiresComponent": true,
       "componentResizeMode": "natural-crop",
+      "componentResizeModes": ["natural-crop", "adaptive"],
       "allowedAssetKinds": ["component"],
       "slots": [
         { "id": "lead", "role": "text", "frame": { "left": 0, "top": 0, "width": 1, "height": 0.13 } },

@@ -9,7 +9,23 @@ const packages = (await discoverCoreAssetPackages(root)).filter(p => p.runtime.r
 if (command === "list") {
   const logic = args[args.indexOf("--logic") + 1];
   const filtered = args.includes("--logic") ? packages.filter(p => p.runtime.logicId === logic) : packages;
-  const summary = p => ({ id:p.assetId, name:p.asset.name, logic:p.runtime.logicId, semantic:p.asset.semanticContract, avoid:p.asset.doNotUseWhen, capacity:p.asset.capacity, mediaFields:p.asset.fieldContract?.editable?.filter(f => /image|media|photo/i.test(f.field)) ?? [] });
+  const summary = p => ({
+    id:p.assetId,
+    name:p.asset.name,
+    logic:p.runtime.logicId,
+    semantic:p.asset.semanticContract,
+    avoid:p.asset.doNotUseWhen,
+    capacity:p.asset.capacity,
+    spatial:{
+      resizeMode:p.asset.spatialContract?.resizeMode ?? null,
+      adaptationStatus:p.runtime.contract?.adaptationStatus ?? null,
+      minimumFrame:p.asset.spatialContract?.resizeMode === "adaptive"
+        ? p.asset.spatialContract?.adaptiveMinimumFrame ?? null
+        : p.asset.spatialContract?.minimumFrame ?? null,
+      supportedCompositionIds:p.asset.spatialContract?.supportedCompositionIds ?? [],
+    },
+    mediaFields:p.asset.fieldContract?.editable?.filter(f => /image|media|photo/i.test(f.field)) ?? [],
+  });
   console.log(JSON.stringify(args.includes("--logic") ? filtered.map(summary) : { total:packages.length, logics:Object.fromEntries([...new Set(packages.map(p=>p.runtime.logicId))].sort().map(l=>[l,packages.filter(p=>p.runtime.logicId===l).length])), next:"list --logic <logicId>; inspect <assetId>" },null,2));
 } else if (command === "reference") {
   const p = await loadCoreAssetPackage(args[0],root);

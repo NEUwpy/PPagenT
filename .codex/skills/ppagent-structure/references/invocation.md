@@ -30,9 +30,11 @@ catalog.mjs inspect sequence-flow-001
 
 `inspect` 返回的 `previewParameters` 是参数形状示例、不是稿件；原始 manifest 与实现路径保留用于更深入核查。参数中的 `items` 不适用于所有结构；有些使用 `sides / layers / pros / cons / structuredData`，按选中资产实际接口处理。不得把所有结构统一塞进 items。
 
-执行器：`src/runtime/assets.mjs` 的 `renderStructureAsset`；资产发现：`src/runtime/core-asset-packages.mjs`。当前包装器自动检查正文区边界与声明自然尺寸；语义及全部可变字段仍需依据 inspect 和组件返回的实际错误核查。
+执行器：`src/runtime/assets.mjs` 的 `renderStructureAsset`；资产发现：`src/runtime/core-asset-packages.mjs`。包装器检查正文区边界；自然尺寸、已验证动态适配的内容相关下界和真实 HTML 文字容量由同一运行链核查，避免 Skill 与 production 维护两套尺寸判断。语义及全部可变字段仍需依据 inspect 和组件返回的实际错误核查。
 
-资产 `spatialContract.contentFrame` 描述其源设计坐标，不要求新页面沿用源模板的 top=166。`targetFrame` 的位置由本页编排决定，并位于本次 Skin 的 bodyFrame 内；宽高仍满足 minimumFrame 或该状态 footprint。按本页实际标题高度与留白确定 bodyFrame，不把源坐标当作新页面强制槽位。
+资产 `spatialContract.contentFrame` 描述其源设计坐标，不要求新页面沿用源模板的 top=166。`targetFrame` 的位置由本页编排决定，并位于本次 Skin 的 bodyFrame 内；自然尺寸资产仍满足 minimumFrame 或该状态 footprint；`resizeMode=adaptive` 且 `adaptationStatus=verified` 的资产还必须满足 adaptiveMinimumFrame、内容相关 resolver 和最终 DOM/文字检查。按本页实际标题高度与留白确定 bodyFrame，不把源坐标当作新页面强制槽位。
+
+动态空间不足会以 `STRUCTURE_FRAME_UNSUPPORTED` 或 `STRUCTURE_CONTENT_OVERFLOW` 失败，并在调用日志保存 `requiredFrame / targetFrame / reason`。失败后由页面编排换区域、换 Composition、拆页或换表达；不能吞错，也不能把 fallback 成功写成该结构已经适配成功。
 
 可参考 `experiments/penguin-harness-v2/grid-native.mjs` 复用模板页、写备注、导出与保留主题的方法，但不要继承它的固定 27/20 字号、等高槽位或每个区域都必须 skillId 的限制。
 

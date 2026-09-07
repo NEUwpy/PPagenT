@@ -1,0 +1,153 @@
+{
+  "status": "prepared_only",
+  "implementationReadyRequired": true,
+  "actualInvocationCompleted": false,
+  "skin": {
+    "name": "待实现 ready 后由页面 builder 明确指定的本次 Skin",
+    "bodyFrame": {"left": 55, "top": 166, "width": 1170, "height": 492},
+    "note": "不能把旧模板槽位当作新规则；普通文字和结构都要按同一页面的语义样式编排。"
+  },
+  "cases": [
+    {
+      "caseId": "LUNA-LARGE-CONVERGENCE-01",
+      "pageId": "large-convergence",
+      "title": "五路输入汇聚为可编辑交付",
+      "assetId": "convergence-many-to-one-003",
+      "relation": "convergence",
+      "target": "large_region",
+      "initialTargetFrame": {"left": 55, "top": 200, "width": 1170, "height": 420},
+      "content": {
+        "items": [
+          {"title": "稿件拆解", "body": "识别页面主张、事实与证据边界"},
+          {"title": "关系识别", "body": "区分顺序、因果、比较与共同结果"},
+          {"title": "结构检索", "body": "按关系查询正式结构并核对契约"},
+          {"title": "Native编译", "body": "把结构与普通文字编排为可编辑对象"},
+          {"title": "渲染复核", "body": "重新导入检查换行、边界和视觉关系"}
+        ],
+        "result": {"title": "可编辑且可追溯的页面", "body": "关系、事实和调用证据保持一致"}
+      },
+      "acceptance": [
+        "五路输入直接汇入唯一结果，不出现中间筛选层或独立结果。",
+        "曲线平滑汇聚形态仍可辨认，输入归属和结果方向不被页面样式抹去。",
+        "最终 PPTX 中结构为原生可编辑对象，图片数为 0 或有明确非结构图片来源。"
+      ]
+    },
+    {
+      "caseId": "LUNA-LOCAL-SEQUENCE-02",
+      "pageId": "local-sequence-sidebar",
+      "title": "三步检索流程与判定说明共存",
+      "assetId": "sequence-flow-001",
+      "relation": "sequence",
+      "target": "local_with_other_content",
+      "initialTargetFrame": {"left": 55, "top": 225, "width": 650, "height": 300},
+      "companionRegion": {"left": 755, "top": 225, "width": 470, "height": 300, "role": "判定依据说明"},
+      "content": {
+        "items": [
+          {"title": "识别关系", "body": "从稿件判断真实的先后关系"},
+          {"title": "查询契约", "body": "检查数量、文字容量与最小空间"},
+          {"title": "选择调用", "body": "保留方向、归属和结构核心"}
+        ],
+        "companion": {
+          "title": "判定依据",
+          "body": "只有内容确有顺序才用流程结构；正文放不下时先调整区域或 State，再决定拆页。",
+          "points": ["不把并列清单伪装成流程", "不以缩小字号解决空间不足", "普通说明仍须按 Skin 编排"]
+        }
+      },
+      "acceptance": [
+        "三步状态重新计算并居中，不保留四步布局留下的空洞。",
+        "流程与右侧说明有清晰边界，文字无裁切、异常孤行或遮挡。",
+        "记录结构调用与页面编排的真实分工；不能用手动画线替代调用。"
+      ]
+    },
+    {
+      "caseId": "LUNA-LONG-CYCLE-03",
+      "pageId": "long-cycle-manuscript",
+      "title": "长稿中的闭环复盘",
+      "assetId": "cycle-loop-001",
+      "relation": "cycle",
+      "target": "long_manuscript",
+      "initialTargetFrame": {"left": 55, "top": 190, "width": 1170, "height": 450},
+      "content": {
+        "title": "一轮验证如何进入下一轮改进",
+        "center": "验证—改进闭环",
+        "steps": [
+          {"title": "设定问题", "body": "先界定本轮需要回答的关键问题、适用边界与最小证据标准，避免把展示目标误当成研究结论。"},
+          {"title": "组织证据", "body": "按同一稿件关系记录结构选择、参数契约和失败原因，让页面结果可以回溯到真实输入。"},
+          {"title": "检查结果", "body": "重新导入最终文件，核对文字行、结构方向、对象边界和与旁栏说明的空间关系。"},
+          {"title": "沉淀反馈", "body": "把用户视觉反馈、空间不足原因和必要重排写入下一轮输入，推动结构与页面共同改进。"}
+        ]
+      },
+      "acceptance": [
+        "环形闭合和顺时针归属仍然清楚，不能退化为四张并列卡片。",
+        "长正文在结构声明的容量内完整呈现；不能依赖不受约束的自动缩字。",
+        "对实际导出行数和异常短行做复核；估算换行不能替代导入渲染检查。"
+      ]
+    },
+    {
+      "caseId": "LUNA-LOCAL-CAUSAL-04",
+      "pageId": "local-causal-context",
+      "title": "局部因果机制与外部结论共存",
+      "assetId": "causal-mediator-chain-003",
+      "relation": "causal",
+      "target": "local_with_other_content",
+      "initialTargetFrame": {"left": 55, "top": 230, "width": 760, "height": 300},
+      "companionRegion": {"left": 850, "top": 230, "width": 375, "height": 300, "role": "结论边界说明"},
+      "content": {
+        "trigger": {"title": "结构适配", "body": "允许核心形态随区域参数重算"},
+        "mediators": [
+          {"title": "空间重算", "body": "按可用宽高重新定位连接锚点"},
+          {"title": "文本适配", "body": "按实际容器换行并保持字号可读"},
+          {"title": "关系保留", "body": "让方向、归属和结果位置继续可见"}
+        ],
+        "outcome": {"title": "页面共存", "body": "结构与说明共同服务同一主张"},
+        "companion": {"title": "证据边界", "body": "这次验证只判断给定稿件和区域下的编排表现，不把单页成功推广为全库保证。"}
+      },
+      "acceptance": [
+        "因果方向从条件经中介机制指向结果，不能被局部布局变成并列说明。",
+        "结果位置、机制归属和说明文字不因缩小区域而丢失。",
+        "若当前契约拒绝局部区域，保留失败原因，再由页面重排或改用合适表达；不得假装调用成功。"
+      ]
+    },
+    {
+      "caseId": "LUNA-SPACE-RELAY-MATRIX-05",
+      "pageId": "matrix-space-relay",
+      "title": "四行四列矩阵的空间不足与重排",
+      "assetId": "matrix-cross-grid-003",
+      "relation": "matrix",
+      "target": "insufficient_then_rearrange",
+      "initialTargetFrame": {"left": 55, "top": 260, "width": 540, "height": 260},
+      "companionRegion": {"left": 625, "top": 260, "width": 600, "height": 260, "role": "矩阵读法说明"},
+      "content": {
+        "cornerLabel": "页面阶段 × 负责角色",
+        "cellMode": "标记",
+        "rows": ["拆稿", "检索", "编排", "复核"],
+        "columns": ["内容", "视觉", "运行时", "质量"],
+        "cells": "使用同一套 4×4 责任标记矩阵；每格最多一个短标记和一个短说明。"
+      },
+      "attempts": [
+        {
+          "attempt": 1,
+          "frame": {"left": 55, "top": 260, "width": 540, "height": 260},
+          "expected": "若正式运行器按基线 minimumFrame 拒绝，记录 space-insufficient 及所需宽高；不得缩小字号强塞。"
+        },
+        {
+          "attempt": 2,
+          "frame": {"left": 55, "top": 205, "width": 860, "height": 360},
+          "rearrangement": "把说明移到标题下方或页脚，把矩阵扩大到主内容区；保持完整 4×4 行列事实。",
+          "expected": "重新以真实 slide 调用同一资产，追加新 attempt，不覆盖第一次失败。"
+        }
+      ],
+      "acceptance": [
+        "失败回执具体说明是契约空间不足、语义不合适还是运行环境故障。",
+        "重排改变的是区域和伴随内容位置，不删除矩阵行列或把矩阵重画成普通卡片。",
+        "若第二次仍失败，交付失败原因和最小可行替代方案，不声称尺寸适配完成。"
+      ]
+    }
+  ],
+  "crossCaseChecks": [
+    "每一类结构都来自正式 catalog 发现与 inspect；实际调用时保存 assetId、parameters、targetFrame 和 reason。",
+    "所有页面同时检查内容完整、结构核心特征、字号可读、无裁切、无不合理重叠和原生可编辑性。",
+    "最终检查以重新导入渲染为准，并保留可浏览对照页和每轮反馈。"
+  ]
+}
+
