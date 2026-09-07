@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "skills": [
+    {
+      "id": "ppagent-structure",
+      "name": "PPT 通用结构",
+      "description": "按内容关系检索并调用项目结构库，或在不适配时参考重组，产出原生可编辑结构。",
+      "entry": ".codex/skills/ppagent-structure/SKILL.md",
+      "root": ".codex/skills/ppagent-structure",
+      "origin": "project",
+      "stage": "existing",
+      "integration": "skills/references/harness-binding.md",
+      "selectionPriority": 1
+    },
+    {
+      "id": "archify",
+      "name": "技术图示",
+      "description": "根据文字或代码证据生成架构、流程、时序、数据流及生命周期图，输出可检查的 HTML/SVG。",
+      "entry": "skills/vendor/archify/SKILL.md",
+      "root": "skills/vendor/archify",
+      "origin": "https://github.com/tt-a1i/archify",
+      "revision": "c826e6c3a7abad19c0f3cd1ca57207d54b1ad8de",
+      "version": "2.16.0",
+      "license": "MIT",
+      "licenseFile": "skills/vendor/archify/LICENSE",
+      "integrityFile": "skills/archify-integrity.json",
+      "runtime": {
+        "executable": "node",
+        "minimumVersion": 18,
+        "cli": "skills/vendor/archify/bin/archify.mjs"
+      },
+      "outputs": [
+        "html",
+        "svg",
+        "png",
+        "jpeg",
+        "webp",
+        "webm"
+      ],
+      "nativeEditablePptx": false,
+      "stage": "pilot",
+      "integration": "skills/references/archify-integration.md",
+      "selectionPriority": 2,
+      "capability": "relationship-diagram"
+    },
+    {
+      "id": "lieflat-charts",
+      "name": "数据图表",
+      "description": "依据数据契约选择真实图表模板，在当前 Skin 与页面区域中适配数据编码；PPT 任务继续完成可编辑图形与最终渲染。",
+      "entry": "skills/vendor/lieflat-charts/SKILL.md",
+      "root": "skills/vendor/lieflat-charts",
+      "origin": "https://github.com/larashero3-dotcom/lieflat-charts",
+      "revision": "eace082a317b696c5570c25826a53a7fa113e984",
+      "license": "PolyForm-Noncommercial-1.0.0",
+      "licenseFile": "skills/vendor/lieflat-charts/LICENSE",
+      "integrityFile": "skills/lieflat-charts-integrity.json",
+      "outputs": ["html", "svg"],
+      "nativeEditablePptx": false,
+      "stage": "noncommercial-pilot",
+      "integration": "skills/references/lieflat-charts-integration.md",
+      "selectionPriority": 2,
+      "capability": "data-chart",
+      "commercialUse": "Separate upstream permission required; no commercial authorization recorded."
+    }
+  ],
+  "selectionPolicy": "skills/references/selection.md"
+}

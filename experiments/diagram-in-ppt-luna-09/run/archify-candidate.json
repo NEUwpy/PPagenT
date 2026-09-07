@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "共享仪器预约消息流",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "column_fit": "spread",
+    "viewBox": [1080, 600]
+  },
+  "participants": [
+    {"id":"applicant","type":"external","label":"申请人","sublabel":"提交与接收"},
+    {"id":"platform","type":"frontend","label":"平台","sublabel":"记录与传递"},
+    {"id":"admin","type":"backend","label":"管理员","sublabel":"核对与确认"},
+    {"id":"owner","type":"external","label":"设备负责人","sublabel":"时段与条件"}
+  ],
+  "messages": [
+    {"id":"submit","from":"applicant","to":"platform","y":180,"label":"预约信息 + 培训证明","variant":"default"},
+    {"id":"received","from":"platform","to":"applicant","y":230,"label":"已收到","variant":"emphasis","note":"只代表平台已记录申请"},
+    {"id":"handoff","from":"platform","to":"admin","y":280,"label":"申请记录与材料","variant":"default"},
+    {"id":"ask","from":"admin","to":"owner","y":330,"label":"询问时段与使用条件","variant":"default"},
+    {"id":"reply","from":"owner","to":"admin","y":380,"label":"可用时段 + 使用条件","variant":"return"},
+    {"id":"confirm","from":"admin","to":"platform","y":430,"label":"预约确认","variant":"emphasis"},
+    {"id":"confirmed","from":"platform","to":"applicant","y":500,"label":"已确认 + 注意事项","variant":"emphasis","note":"确认前不能自行使用仪器"}
+  ]
+}

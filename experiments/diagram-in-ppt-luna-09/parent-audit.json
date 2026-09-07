@@ -1,0 +1,98 @@
+{
+  "status": "passed",
+  "deck": "C:\\PPagenT\\experiments\\diagram-in-ppt-luna-09\\run\\deliverables\\预约服务改进方案-luna09-v2.pptx",
+  "sha256": "b608f543c4aa3fd6010582f910e04db9474d7b7759d9c98f151ae06220d21624",
+  "nativeObjects": [
+    {
+      "slide": 1,
+      "shapes": 46,
+      "connectors": 7,
+      "pictures": 0
+    },
+    {
+      "slide": 2,
+      "shapes": 28,
+      "connectors": 0,
+      "pictures": 0
+    },
+    {
+      "slide": 3,
+      "shapes": 34,
+      "connectors": 0,
+      "pictures": 3
+    }
+  ],
+  "messageMapping": [
+    {
+      "message": "submit",
+      "from": "applicant",
+      "to": "platform",
+      "objects": [
+        "message-line-submit",
+        "message-label-submit"
+      ]
+    },
+    {
+      "message": "received",
+      "from": "platform",
+      "to": "applicant",
+      "objects": [
+        "message-line-received",
+        "message-label-received"
+      ]
+    },
+    {
+      "message": "handoff",
+      "from": "platform",
+      "to": "admin",
+      "objects": [
+        "message-line-handoff",
+        "message-label-handoff"
+      ]
+    },
+    {
+      "message": "ask",
+      "from": "admin",
+      "to": "owner",
+      "objects": [
+        "message-line-ask",
+        "message-label-ask"
+      ]
+    },
+    {
+      "message": "reply",
+      "from": "owner",
+      "to": "admin",
+      "objects": [
+        "message-line-reply",
+        "message-label-reply"
+      ]
+    },
+    {
+      "message": "confirm",
+      "from": "admin",
+      "to": "platform",
+      "objects": [
+        "message-line-confirm",
+        "message-label-confirm"
+      ]
+    },
+    {
+      "message": "confirmed",
+      "from": "platform",
+      "to": "applicant",
+      "objects": [
+        "message-line-confirmed",
+        "message-label-confirmed"
+      ]
+    }
+  ],
+  "arrowCount": 7,
+  "visualReview": "Parent inspected all 3 final PPTX import renders; no visible clipping or text overlap; message arrow directions checked.",
+  "limits": [
+    "Single supervised Luna High trial, not an autonomous stability benchmark.",
+    "Slide 3 contains three small icon images; diagram shapes and text remain native editable objects.",
+    "Type-specific adapted-native reconstruction, not a universal Archify converter.",
+    "No native PowerPoint or WPS application rendering performed."
+  ]
+}

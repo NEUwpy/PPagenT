@@ -1,0 +1,57 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "PPT 工作流：从稿件到交付",
+    "locale": "zh-CN",
+    "output": "experiments/archify-luna-07/archify-luna-07.html",
+    "quality_profile": "showcase"
+  },
+  "lanes": [
+    { "id": "orchestration", "label": "编排与决策" },
+    { "id": "structure", "label": "结构能力" },
+    { "id": "production", "label": "生成与检查" },
+    { "id": "exception", "label": "回流处理", "variant": "exception" }
+  ],
+  "phases": [
+    { "id": "intake", "label": "输入与编排", "fromCol": 0, "toCol": 1 },
+    { "id": "fit", "label": "适配与调用", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
+    { "id": "delivery", "label": "生成与验收", "fromCol": 4, "toCol": 5, "variant": "dashed" }
+  ],
+  "mainPath": ["orchestrator", "library", "fit", "core", "ppt", "render", "handoff"],
+  "semanticChecks": {
+    "allowedRoots": ["orchestrator"],
+    "allowedTerminals": ["handoff"],
+    "requiredEdges": [
+      { "from": "fit", "to": "core" },
+      { "from": "fit", "to": "adjust" },
+      { "from": "adjust", "to": "fit" },
+      { "from": "render", "to": "orchestrator" },
+      { "from": "render", "to": "handoff" }
+    ]
+  },
+  "nodes": [
+    { "id": "orchestrator", "lane": "orchestration", "col": 0, "type": "backend", "label": "稿件进入编排器", "sublabel": "读取内容与页面约束" },
+    { "id": "library", "lane": "structure", "col": 1, "type": "database", "label": "查询结构库", "sublabel": "检索可复用结构" },
+    { "id": "fit", "lane": "orchestration", "col": 2, "type": "security", "label": "当前空间适配？", "sublabel": "检查版式容量与关系" },
+    { "id": "core", "lane": "structure", "col": 3, "type": "backend", "label": "调用结构核心", "sublabel": "输出结构化页面方案" },
+    { "id": "ppt", "lane": "production", "col": 4, "type": "frontend", "label": "生成可编辑 PPT", "sublabel": "保留可编辑对象" },
+    { "id": "render", "lane": "production", "col": 5, "type": "backend", "label": "渲染检查", "sublabel": "检查几何与逐页画面" },
+    { "id": "handoff", "lane": "production", "col": 5, "yOffset": 76, "type": "external", "label": "检查通过，交付", "sublabel": "交付可编辑文件" },
+    { "id": "adjust", "lane": "exception", "col": 3, "type": "security", "label": "调整页面区域", "sublabel": "重排容量与空间" }
+  ],
+  "edges": [
+    { "id": "e-intake-library", "from": "orchestrator", "to": "library", "label": "编排请求", "role": "main", "variant": "emphasis" },
+    { "id": "e-library-fit", "from": "library", "to": "fit", "label": "候选结构", "role": "main" },
+    { "id": "e-fit-core", "from": "fit", "to": "core", "label": "适配", "role": "main", "variant": "emphasis" },
+    { "id": "e-fit-adjust", "from": "fit", "to": "adjust", "label": "不适配", "role": "branch", "variant": "security", "route": "bottom-channel" },
+    { "id": "e-adjust-fit", "from": "adjust", "to": "fit", "label": "重新判断", "role": "return", "variant": "dashed" },
+    { "id": "e-core-ppt", "from": "core", "to": "ppt", "label": "结构方案", "role": "main" },
+    { "id": "e-ppt-render", "from": "ppt", "to": "render", "label": "渲染预览", "role": "main", "variant": "emphasis" },
+    { "id": "e-render-handoff", "from": "render", "to": "handoff", "label": "检查通过", "role": "main", "variant": "emphasis" },
+    { "id": "e-render-orchestrator", "from": "render", "to": "orchestrator", "label": "检查失败，回到编排器", "role": "error", "variant": "security" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "流程边界", "items": ["这是未来目标流程示意，不代表现有项目已全部实现", "结构库查询与结构核心调用保留为可验证接口", "交付前必须经过渲染检查"] }
+  ]
+}

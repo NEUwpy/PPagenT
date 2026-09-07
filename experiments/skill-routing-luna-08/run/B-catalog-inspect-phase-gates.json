@@ -1,0 +1,287 @@
+{
+  "assetId": "sequence-phase-gates-004",
+  "manifestPath": "assets\\结构图\\阶段门禁流程-004\\asset.json",
+  "entryPath": "assets\\结构图\\阶段门禁流程-004\\runtime.mjs",
+  "asset": {
+    "id": "sequence-phase-gates-004",
+    "name": "阶段门禁流程",
+    "kind": "component",
+    "category": "结构图",
+    "creationMethod": "distillation",
+    "status": "core",
+    "generator": "generate.mjs",
+    "showcase": "example.pptx",
+    "source": {
+      "file": "PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
+      "slides": [
+        127
+      ]
+    },
+    "runtime": {
+      "renderer": "html-component",
+      "entry": "runtime.mjs",
+      "componentExport": "visualComponent",
+      "previewParametersExport": "previewParameters",
+      "previewResolverExport": "resolvePreviewParameters",
+      "mapperExport": "mapPageContent",
+      "logicId": "sequence",
+      "structureGroupId": "sequence-phase-gates",
+      "familyId": "sequence",
+      "variantId": "ordered-phases-with-gates",
+      "silhouette": "winding-arrow-river-with-sluice-gates",
+      "supportedBaseRelations": [
+        "sequence"
+      ],
+      "supportedPurposeKeys": [
+        "explain_process",
+        "present_steps"
+      ],
+      "itemCount": {
+        "min": 3,
+        "preferred": [
+          4
+        ],
+        "max": 5
+      },
+      "stateContract": {
+        "resolver": "phaseCount",
+        "states": [
+          3,
+          4,
+          5
+        ],
+        "previewDefault": 4
+      },
+      "contentContract": {
+        "itemRole": "semantic-node",
+        "points": "required",
+        "pointCount": {
+          "min": 1,
+          "max": 3
+        },
+        "ordered": true
+      },
+      "contract": {
+        "abstractionLevel": "foundation",
+        "adaptationStatus": "adaptive",
+        "constraints": {
+          "semantic": {
+            "ordered": true
+          },
+          "relationTraits": {
+            "sequence": true
+          },
+          "density": [
+            "medium"
+          ]
+        }
+      },
+      "review": {
+        "entry": "review.mjs",
+        "visualIntent": "visual-intent.md",
+        "componentExport": "visualComponent",
+        "previewParametersExport": "previewParameters",
+        "previewResolverExport": "resolvePreviewParameters",
+        "implementation": "asset-specific-html",
+        "goldenState": {
+          "selection": {
+            "phaseCount": 4
+          }
+        },
+        "controls": [
+          {
+            "key": "phaseCount",
+            "label": "阶段数",
+            "values": [
+              3,
+              4,
+              5
+            ],
+            "default": 4
+          }
+        ]
+      }
+    },
+    "coverageDelta": "补齐普通顺序流程不能表达阶段之间必须通过验收或决策门槛才能继续的缺口；阶段与门禁拥有独立语义字段。",
+    "layoutExpansion": {
+      "mode": "responsive",
+      "range": "3–5 个阶段，门禁数恒为阶段数减一",
+      "rule": "河道分段、箭头、门闸和门禁条件按阶段数从同一曲线与局部法线统一重算，不维护逐项数独立代码"
+    },
+    "componentModel": {
+      "fixed": [
+        "蜿蜒收窄的箭形河道与阅读方向",
+        "横跨河道的阶段门闸拓扑",
+        "失败边界"
+      ],
+      "variable": [
+        "3–5 个阶段",
+        "阶段文字",
+        "阶段数减一的门禁条件"
+      ]
+    },
+    "fieldContract": {
+      "editable": [
+        {
+          "field": "PageContent.items[].title|body",
+          "meaning": "阶段标题与阶段说明"
+        },
+        {
+          "field": "PageContent.items[0..n-2].points[0]",
+          "meaning": "进入下一阶段前必须满足的明确门禁条件"
+        },
+        {
+          "field": "PageContent.items[].points[1..]",
+          "meaning": "阶段内可选补充说明；最终阶段保留全部分点"
+        }
+      ],
+      "generated": [
+        {
+          "field": "layout",
+          "meaning": "由 HTML 组件按阶段数统一求解"
+        },
+        {
+          "field": "phaseIndex|gateIndex",
+          "meaning": "由程序按顺序生成"
+        }
+      ],
+      "fixed": [
+        "连续推进方向",
+        "门闸横跨相邻阶段边界并与河道共享几何"
+      ],
+      "unavailable": [
+        "只是连续动作、没有阶段门槛、时间日期才是核心信息"
+      ]
+    },
+    "textFlow": {
+      "profile": "text-region-layout-library",
+      "scope": "per-contiguous-region",
+      "regions": {
+        "phase-content": {
+          "compatibleLayoutIds": [
+            "heading-content-flow",
+            "statement-flow",
+            "structured-list-flow"
+          ]
+        },
+        "gate-criterion": {
+          "compatibleLayoutIds": [
+            "heading-content-flow",
+            "statement-flow"
+          ]
+        }
+      }
+    },
+    "spatialContract": {
+      "coordinateSystem": {
+        "width": 1280,
+        "height": 720
+      },
+      "contentFrame": {
+        "left": 55,
+        "top": 166,
+        "width": 1170,
+        "height": 492
+      },
+      "aspectRatio": 2.378,
+      "minimumFrame": {
+        "width": 1170,
+        "height": 492
+      },
+      "preferredFrame": {
+        "width": 1170,
+        "height": 492
+      },
+      "resizeMode": "natural",
+      "minFontSize": 12,
+      "safePadding": 10,
+      "supportedCompositionIds": [
+        "component-full"
+      ]
+    },
+    "capacity": "3–5 个阶段；每两个相邻阶段之间一个门禁",
+    "semanticContract": "流程按阶段推进，每个相邻阶段之间存在必须通过的检查或决策门槛",
+    "doNotUseWhen": "只是连续动作、没有阶段门槛、时间日期才是核心信息",
+    "review": "用户确认蜿蜒箭形河道、抽象门闸及 3–5 阶段扩散；已进入 Native/PPT 与正式生成落地阶段"
+  },
+  "previewParameters": {
+    "phases": [
+      {
+        "key": "define",
+        "title": "目标定义",
+        "body": "明确范围、对象与预期成果"
+      },
+      {
+        "key": "design",
+        "title": "方案设计",
+        "body": "形成路径并完成关键论证"
+      },
+      {
+        "key": "pilot",
+        "title": "试点验证",
+        "body": "在真实场景中检验可行性"
+      },
+      {
+        "key": "deliver",
+        "title": "推广交付",
+        "body": "按统一标准扩大应用范围"
+      },
+      {
+        "key": "operate",
+        "title": "持续运营",
+        "body": "跟踪效果并迭代优化机制"
+      }
+    ],
+    "gates": [
+      {
+        "key": "scope-review",
+        "title": "范围评审",
+        "body": "目标与边界已确认"
+      },
+      {
+        "key": "plan-review",
+        "title": "方案评审",
+        "body": "资源与路径可执行"
+      },
+      {
+        "key": "pilot-review",
+        "title": "试点评审",
+        "body": "结果达到推广门槛"
+      },
+      {
+        "key": "release-review",
+        "title": "交付评审",
+        "body": "质量与责任已闭环"
+      }
+    ]
+  },
+  "textCapacity": {
+    "maxItemTitleChars": 8,
+    "maxItemBodyChars": {
+      "3": 38,
+      "4": 30,
+      "5": 24
+    },
+    "maxPointsPerItem": 3,
+    "maxPointChars": 12,
+    "phaseTitleChars": 8,
+    "phaseBodyCharsByState": {
+      "3": 38,
+      "4": 30,
+      "5": 24
+    },
+    "phasePoints": "3 条，每条 12 字",
+    "gateTitleChars": 6,
+    "gateBodyChars": 16
+  },
+  "textFlow": {
+    "profile": "text-region-layout-library",
+    "scope": "per-contiguous-region"
+  },
+  "component": {
+    "designFrame": {
+      "width": 1170,
+      "height": 492
+    }
+  }
+}

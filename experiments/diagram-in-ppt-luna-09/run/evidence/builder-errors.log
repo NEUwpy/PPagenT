@@ -1,0 +1,17 @@
+2026-09-06T23:04:46.107Z Error: 区域不足：hub-directed-outcomes-002 当前状态至少需要 1170×492，实际 1170×445
+    at invokeStructure (file:///C:/PPagenT/.codex/skills/ppagent-structure/scripts/invoke.mjs:19:84)
+    at async main (file:///C:/PPagenT/experiments/diagram-in-ppt-luna-09/run/builder.mjs:43:5)
+2026-09-06T23:05:21.918Z Error: Private validation receipt must stay inside the task workspace and outside final output
+    at finalizePresentation (file:///C:/Users/ilove/.codex/plugins/cache/openai-primary-runtime/presentations/26.904.11930/skills/presentations/container_tools/artifact_tool_utils.mjs:999:11)
+    at async main (file:///C:/PPagenT/experiments/diagram-in-ppt-luna-09/run/builder.mjs:52:18)
+2026-09-06T23:05:44.722Z Error: Final presentation must remain inside the real task workspace
+    at finalizePresentation (file:///C:/Users/ilove/.codex/plugins/cache/openai-primary-runtime/presentations/26.904.11930/skills/presentations/container_tools/artifact_tool_utils.mjs:830:11)
+    at async main (file:///C:/PPagenT/experiments/diagram-in-ppt-luna-09/run/builder.mjs:52:18)
+2026-09-06T23:10:05.704Z Error: Final presentation must remain inside the real task workspace
+    at finalizePresentation (file:///C:/Users/ilove/.codex/plugins/cache/openai-primary-runtime/presentations/26.904.11930/skills/presentations/container_tools/artifact_tool_utils.mjs:830:11)
+    at async main (file:///C:/PPagenT/experiments/diagram-in-ppt-luna-09/run/builder.mjs:55:18)
+2026-09-06T23:12:14.119Z Error: EEXIST: file already exists, open 'C:\PPagenT\experiments\diagram-in-ppt-luna-09\run\.finalizer\receipt.json'
+    at async open (node:internal/fs/promises:697:25)
+    at async Object.writeFile (node:internal/fs/promises:1317:14)
+    at async finalizePresentation (file:///C:/Users/ilove/.codex/plugins/cache/openai-primary-runtime/presentations/26.904.11930/skills/presentations/container_tools/artifact_tool_utils.mjs:1058:5)
+    at async main (file:///C:/PPagenT/experiments/diagram-in-ppt-luna-09/run/builder.mjs:55:18)

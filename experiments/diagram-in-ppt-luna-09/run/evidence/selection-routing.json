@@ -1,0 +1,39 @@
+{
+  "task": "diagram-in-ppt-luna-09",
+  "skin": "neutral-editorial-001",
+  "pages": [
+    {
+      "page": 1,
+      "contentRelation": "sequence and directed messages across four roles",
+      "projectCandidates": ["sequence-flow-001", "hub-directed-outcomes-002", "parallel-equal-cards-001", "comparison-dual-verdict-001"],
+      "fitReason": "No project asset represents multi-participant message flow with return states and role ownership.",
+      "selectedSkill": "archify sequence, second priority after project structure lookup",
+      "actualInvocation": "run/archify-candidate.json; validate and deliver succeeded",
+      "outputKind": "adapted-native",
+      "nativeEditablePptx": true,
+      "unresolved": "Archify viewer visual-check was accidentally invoked and reported overflow; HTML is intermediate only."
+    },
+    {
+      "page": 2,
+      "contentRelation": "three same-level records converge on one traceable record",
+      "projectCandidates": ["hub-directed-outcomes-002"],
+      "fitReason": "Inward hub expresses common contribution without implying staged filtering.",
+      "selectedSkill": "ppagent-structure",
+      "actualInvocation": "invokeStructure success recorded in structure-invocations.ndjson",
+      "outputKind": "direct native structure with Skin theme",
+      "nativeEditablePptx": true,
+      "unresolved": "None beyond parent visual acceptance."
+    },
+    {
+      "page": 3,
+      "contentRelation": "three same-level pilot observations",
+      "projectCandidates": ["parallel-equal-cards-001", "sequence-flow-001"],
+      "fitReason": "Parallel cards match observations; human channel is a boundary condition, so sequence-flow-001 was rejected for this page.",
+      "selectedSkill": "ppagent-structure",
+      "actualInvocation": "invokeStructure success recorded in structure-invocations.ndjson",
+      "outputKind": "direct native structure with Skin theme",
+      "nativeEditablePptx": true,
+      "unresolved": "None beyond parent visual acceptance."
+    }
+  ]
+}

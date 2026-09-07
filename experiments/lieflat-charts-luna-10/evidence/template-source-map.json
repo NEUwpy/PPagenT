@@ -1,0 +1,28 @@
+{
+  "revision": "eace082a317b696c5570c25826a53a7fa113e984",
+  "upstreamSkill": "skills/vendor/lieflat-charts",
+  "license": "PolyForm Noncommercial License 1.0.0",
+  "template": {
+    "system": "Basics",
+    "number": "F5",
+    "name": "Tick Rows",
+    "gallery": "skills/vendor/lieflat-charts/templates/basics-gallery.html",
+    "cardTitle": "Six teams, shipped and counted",
+    "sourceComment": "C1 · tick rows",
+    "coreEncoding": "horizontal rows; one tick = one unit; row end carries total; bottom note defines unit"
+  },
+  "dataMapping": [
+    {"category":"预约状态","count":24,"row":"category-0","ticks":"tick-0-0..23","value":"value-0"},
+    {"category":"时段询问","count":18,"row":"category-1","ticks":"tick-1-0..17","value":"value-1"},
+    {"category":"培训材料","count":12,"row":"category-2","ticks":"tick-2-0..11","value":"value-2"},
+    {"category":"使用条件","count":9,"row":"category-3","ticks":"tick-3-0..8","value":"value-3"},
+    {"category":"取消改期","count":6,"row":"category-4","ticks":"tick-4-0..5","value":"value-4"}
+  ],
+  "ratioCheck": {
+    "total": 69,
+    "topTwo": 42,
+    "formula": "24 + 18 = 42; 42 / 69 = 0.608695...",
+    "display": "约 61%"
+  },
+  "nativeRebuild": "Native editable line segments and text boxes in PPTX; no HTML/SVG/image embedded."
+}

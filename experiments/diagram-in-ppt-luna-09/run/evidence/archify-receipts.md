@@ -1,0 +1,20 @@
+# Archify receipts and mapping
+- bind: node skills/library.mjs bind archify
+- upstream revision: c826e6c3a7abad19c0f3cd1ca57207d54b1ad8de
+- candidate: run/archify-candidate.json
+- first validate issue: removed unsupported root $schema
+- second validate issue: final y=640 outside readable timeline; moved confirmed to y=500 in the frozen candidate
+- final validate command: node skills/vendor/archify/bin/archify.mjs validate sequence run/archify-candidate.json --quality showcase --json
+- final validate result: ok=true, checks=9/9, composition status=pass, errors=0, warnings=0, minLabelRouteClearance=30, relationship crossings=0
+- deliver command: node skills/vendor/archify/bin/archify.mjs deliver sequence run/archify-candidate.json run/archify-sequence-v2.html --quality showcase --json
+- deliver result: ok=true, specification sha256=4e5f2d7634860e8b347c0dea5585bb12b5b0572b40e8e079504445a484fae383, artifact sha256=501dbbb5077c6838008a6a7eb7ad1b6212b14e68f64e7b761477e862a53fbebe
+- visual-check: accidentally invoked once after deliver. It reported viewport overflow in the Archify viewer at 1440x900, 1600x1000, and 1920x1080. Per task instruction, these browser screenshots are not used as PPT acceptance evidence; the HTML remains an intermediate only.
+- native conversion: builder reads candidate participants/messages and maps each Archify message id to a native connector and label. Native object mapping:
+  - submit -> message-line-submit + message-label-submit
+  - received -> message-line-received + message-label-received + received-note
+  - handoff -> message-line-handoff + message-label-handoff
+  - ask -> message-line-ask + message-label-ask
+  - reply -> message-line-reply + message-label-reply
+  - confirm -> message-line-confirm + message-label-confirm
+  - confirmed -> message-line-confirmed + message-label-confirmed + confirmation-warning
+- arrow direction: native connect uses fromSide/toSide and target-end tail triangle; final rendered PNG confirms arrows point to the target participant.

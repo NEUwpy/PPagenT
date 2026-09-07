@@ -1,6 +1,6 @@
 ---
 name: ppagent-structure
-description: 在 PPagenT 制作 PPT 时按内容关系检索通用结构，优先调用适配的现成组件；不能直接套用时参考重组，没有合适结构时自主绘制。结构跨 Skin 复用，只承担局部关系，不负责核心资产入库。
+description: 在 PPagenT 制作 PPT 时按内容关系检索通用结构，优先调用适配的现成组件；不能直接套用时参考重组，项目库不适合时按项目技能顺序转用外部图示或自主编排。结构跨 Skin 复用，只承担局部关系，不负责核心资产入库。
 ---
 
 # PPagenT 结构表达
@@ -14,7 +14,7 @@ description: 在 PPagenT 制作 PPT 时按内容关系检索通用结构，优�
 1. 查询实际可用逻辑与数量：`node .codex/skills/ppagent-structure/scripts/catalog.mjs list`。
 2. 流程先读 [顺序结构 Skill](skills/ppagent-structure-sequence/SKILL.md)；比较先读 [比较结构 Skill](skills/ppagent-structure-comparison/SKILL.md)。其他逻辑可以直接用 `list --logic <logicId>` 查询当前目录。
 3. 从候选摘要筛选后，用 `inspect <assetId>` 核对内容关系、字段、数量、文字容量与自然尺寸。能在本页空间和 Skin 中适配的，优先直接调用现成组件，保留已有造型与关系表达；换色、换字体及调整整组件的页面位置属于适配，不是放弃调用的理由。
-4. 库中有相关结构但不能直接套用时，读取 `reference <assetId>` 和所需实现或预览，按浅约束、多参考方式重组。没有合适结构或参考时，按稿件关系自主绘制原生可编辑表达。可从契约判断不适配，无需先制造一次调用失败。
+4. 库中有相关结构但不能直接套用时，读取 `reference <assetId>` 和所需实现或预览，按浅约束、多参考方式重组。项目库不适合时，按[技能选择顺序](../../../skills/references/selection.md)判断是否转用 Archify；两者都不适合再自主编排。可从契约判断不适配，无需先制造一次调用失败。
 5. 示例只用于理解方法，不能把示例事实带进稿件。简记最终采用方式；转为参考或自主绘制时说明具体不适配或未命中原因，不为使用结构删减事实、条件或强行缩小字号。
 
 `inspect` 读取当前资产真源，不维护平行静态清单。结构是否支持图片以其字段契约为准；一般图文排版不必进入结构检索。

@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "异步导出任务消息时序",
+    "locale": "zh-CN",
+    "viewBox": [920, 780],
+    "quality_profile": "showcase",
+    "column_fit": "spread"
+  },
+  "participants": [
+    { "id": "client", "type": "external", "label": "用户端", "sublabel": "提交与查询" },
+    { "id": "api", "type": "backend", "label": "导出 API", "sublabel": "请求入口" },
+    { "id": "queue", "type": "messagebus", "label": "任务队列", "sublabel": "异步任务" },
+    { "id": "worker", "type": "backend", "label": "导出 Worker", "sublabel": "生成文件" }
+  ],
+  "segments": [
+    { "from": 160, "to": 292, "label": "提交与入队" },
+    { "from": 328, "to": 414, "label": "后台生成" },
+    { "from": 458, "to": 730, "label": "查询与返回" }
+  ],
+  "messages": [
+    { "id": "submit-export", "from": "client", "to": "api", "y": 180, "label": "提交导出请求", "variant": "emphasis" },
+    { "id": "enqueue-export", "from": "api", "to": "queue", "y": 220, "label": "任务入队", "variant": "emphasis" },
+    { "id": "return-task-id", "from": "api", "to": "client", "y": 260, "label": "返回任务编号（未完成）", "variant": "return" },
+    { "id": "claim-export", "from": "worker", "to": "queue", "y": 340, "label": "领取导出任务", "variant": "emphasis" },
+    { "id": "deliver-export", "from": "queue", "to": "worker", "y": 386, "label": "返回任务数据", "variant": "return", "note": "Worker 领取后生成导出文件" },
+    { "id": "query-export", "from": "client", "to": "api", "y": 480, "label": "按任务编号查询", "variant": "default" },
+    { "id": "query-worker", "from": "api", "to": "worker", "y": 530, "label": "查询任务状态", "variant": "emphasis" },
+    { "id": "return-file", "from": "worker", "to": "api", "y": 580, "label": "已完成 + 文件地址", "variant": "return" },
+    { "id": "return-result", "from": "api", "to": "client", "y": 640, "label": "返回文件地址", "variant": "return" }
+  ],
+  "activations": [
+    { "participant": "api", "from": 178, "to": 270, "type": "backend" },
+    { "participant": "queue", "from": 214, "to": 356, "type": "messagebus" },
+    { "participant": "worker", "from": 342, "to": 594, "type": "backend" },
+    { "participant": "api", "from": 478, "to": 648, "type": "backend" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "先返回任务编号",
+      "items": [
+        "API 入队后立即向用户端返回任务编号",
+        "任务编号返回不表示导出已经完成",
+        "后台生成与原始提交请求分开进行"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "查询后返回文件",
+      "items": [
+        "用户端稍后按任务编号向 API 查询",
+        "API 向 Worker 查询状态并接收文件地址",
+        "API 最后把文件地址返回用户端"
+      ]
+    }
+  ]
+}
