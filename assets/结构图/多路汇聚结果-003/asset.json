@@ -9,7 +9,9 @@
   "showcase": "example.pptx",
   "source": {
     "file": "PPT源/【蓝色版】150页逻辑框架汇报PPT模板.pptx",
-    "slides": [125]
+    "slides": [
+      125
+    ]
   },
   "runtime": {
     "renderer": "html-component",
@@ -23,15 +25,33 @@
     "familyId": "convergence",
     "variantId": "multiple-lanes-merge-to-output",
     "silhouette": "stacked-input-lanes-merging-to-right-output",
-    "supportedBaseRelations": ["convergence"],
-    "supportedPurposeKeys": ["explain_conversion"],
-    "itemCount": { "min": 3, "preferred": [4, 5], "max": 6 },
+    "supportedBaseRelations": [
+      "convergence"
+    ],
+    "supportedPurposeKeys": [
+      "explain_conversion"
+    ],
+    "itemCount": {
+      "min": 3,
+      "preferred": [
+        4,
+        5
+      ],
+      "max": 6
+    },
     "stateContract": {
       "resolver": "inputCount",
-      "states": [3, 4, 5, 6],
+      "states": [
+        3,
+        4,
+        5,
+        6
+      ],
       "previewDefault": 5
     },
-    "mediaContract": { "mode": "no-image" },
+    "mediaContract": {
+      "mode": "no-image"
+    },
     "contentContract": {
       "itemRole": "semantic-node",
       "points": "optional",
@@ -43,11 +63,18 @@
     },
     "contract": {
       "abstractionLevel": "foundation",
-      "adaptationStatus": "adaptive",
+      "adaptationStatus": "partial",
       "constraints": {
-        "semantic": { "ordered": false, "sameLevel": true },
-        "relationTraits": { "converging": true },
-        "density": ["medium"]
+        "semantic": {
+          "ordered": false,
+          "sameLevel": true
+        },
+        "relationTraits": {
+          "converging": true
+        },
+        "density": [
+          "medium"
+        ]
       },
       "fallback": {
         "semanticMismatch": "reject",
@@ -63,11 +90,26 @@
       "previewParametersExport": "previewParameters",
       "previewResolverExport": "resolvePreviewParameters",
       "implementation": "asset-specific-html",
-      "goldenState": { "selection": { "inputCount": 5 } },
+      "goldenState": {
+        "selection": {
+          "inputCount": 5
+        }
+      },
       "controls": [
-        { "key": "inputCount", "label": "汇聚输入数", "values": [3, 4, 5, 6], "default": 5 }
+        {
+          "key": "inputCount",
+          "label": "汇聚输入数",
+          "values": [
+            3,
+            4,
+            5,
+            6
+          ],
+          "default": 5
+        }
       ]
-    }
+    },
+    "spatialResolverExport": "resolveSpatialRequirement"
   },
   "coverageDelta": "补齐现有汇聚组都以漏斗表现逐级筛选、尚无多个独立输入直接合并为一个结果的结构；本组不表示筛选层级，只表示多路合一。",
   "layoutExpansion": {
@@ -76,30 +118,101 @@
     "rule": "按输入数重算左侧输入块、渐变路径高度与平滑汇聚曲线；右侧共同结果保持稳定。"
   },
   "componentModel": {
-    "fixed": ["左侧多路输入", "中部多条渐变粗路径", "右侧唯一共同结果", "路径由分离状态平滑汇入同一点"],
-    "variable": ["3–6 个输入", "输入名称和说明", "共同结果标题和可选说明"]
+    "fixed": [
+      "左侧多路输入",
+      "中部多条渐变粗路径",
+      "右侧唯一共同结果",
+      "路径由分离状态平滑汇入同一点"
+    ],
+    "variable": [
+      "3–6 个输入",
+      "输入名称和说明",
+      "共同结果标题和可选说明"
+    ]
   },
   "fieldContract": {
     "editable": [
-      { "field": "inputs[].title", "source": "PageContent.items[].title", "meaning": "输入名称" },
-      { "field": "inputs[].body", "source": "PageContent.items[].body/points", "meaning": "输入说明，可为空" },
-      { "field": "result.title", "source": "PageContent.title", "meaning": "共同结果" },
-      { "field": "result.body", "source": "CompositionPlan.componentText[result-body]", "meaning": "共同结果的可选短说明" }
+      {
+        "field": "inputs[].title",
+        "source": "PageContent.items[].title",
+        "meaning": "输入名称"
+      },
+      {
+        "field": "inputs[].body",
+        "source": "PageContent.items[].body/points",
+        "meaning": "输入说明，可为空"
+      },
+      {
+        "field": "result.title",
+        "source": "PageContent.title",
+        "meaning": "共同结果"
+      },
+      {
+        "field": "result.body",
+        "source": "CompositionPlan.componentText[result-body]",
+        "meaning": "共同结果的可选短说明"
+      }
     ],
-    "generated": ["输入块与路径位置由当前输入数量响应计算"],
-    "fixed": ["所有输入直接汇入同一结果", "多条路径的蓝色明暗渐变与几何秩序"],
-    "unavailable": ["逐级筛选", "中间归纳层", "独立结果", "中心主题", "条件分支"]
+    "generated": [
+      "输入块与路径位置由当前输入数量响应计算"
+    ],
+    "fixed": [
+      "所有输入直接汇入同一结果",
+      "多条路径的蓝色明暗渐变与几何秩序"
+    ],
+    "unavailable": [
+      "逐级筛选",
+      "中间归纳层",
+      "独立结果",
+      "中心主题",
+      "条件分支"
+    ]
   },
   "spatialContract": {
-    "coordinateSystem": { "width": 1280, "height": 720 },
-    "contentFrame": { "left": 55, "top": 166, "width": 1170, "height": 492 },
+    "coordinateSystem": {
+      "width": 1280,
+      "height": 720
+    },
+    "contentFrame": {
+      "left": 55,
+      "top": 166,
+      "width": 1170,
+      "height": 492
+    },
     "aspectRatio": 2.378,
-    "minimumFrame": { "width": 1170, "height": 492 },
-    "preferredFrame": { "width": 1170, "height": 492 },
+    "minimumFrame": {
+      "width": 1170,
+      "height": 492
+    },
+    "preferredFrame": {
+      "width": 1170,
+      "height": 492
+    },
     "resizeMode": "natural",
     "minFontSize": 12,
     "safePadding": 10,
-    "supportedCompositionIds": ["component-full"]
+    "supportedCompositionIds": [
+      "component-full"
+    ],
+    "adaptiveMinimumFrame": {
+      "width": 560,
+      "height": 260
+    },
+    "adaptation": {
+      "mode": "planned",
+      "profile": "convergence",
+      "axis": "horizontal",
+      "preserves": [
+        "fan-in",
+        "single-result",
+        "smooth-paths",
+        "direction"
+      ],
+      "textPolicy": "discrete-font-tier-with-space-feedback",
+      "fallback": "STRUCTURE_SPACE_INSUFFICIENT",
+      "evidence": "profile-contract-unverified",
+      "enabled": false
+    }
   },
   "capacity": "3–6 路输入；标题不超过 8 字，说明不超过 22 字；结果标题不超过 10 字，说明不超过 28 字。",
   "semanticContract": "3–6 个相对独立且同级的输入、资源、规范或工作流，不经中间筛选或归纳层，直接合并为一个共同结果。",

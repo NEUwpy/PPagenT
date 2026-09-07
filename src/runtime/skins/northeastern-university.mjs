@@ -38,13 +38,24 @@ function fitSkinText(value, frame, roleName, { preferSemanticBreaks = false } = 
   return result;
 }
 
-function tagComponentRuntimeOverflow(error, page) {
+const STRUCTURE_OVERFLOW_CODES = new Set([
+  "STRUCTURE_FRAME_UNSUPPORTED",
+  "STRUCTURE_CONTENT_OVERFLOW",
+]);
+
+export function tagComponentRuntimeOverflow(error, page) {
   const message = String(error?.message ?? "");
-  if (message.includes("组合排版无法在安全 box 内完整呈现")
+  const structureErrorCode = STRUCTURE_OVERFLOW_CODES.has(error?.code) ? error.code : null;
+  if (structureErrorCode
+    || message.includes("组合排版无法在安全 box 内完整呈现")
     || (/超出\s*\d+\s*项状态容量/.test(message))) {
+    if (structureErrorCode) error.structureErrorCode = structureErrorCode;
     error.code = "COMPONENT_RUNTIME_OVERFLOW";
     error.pageId = page.content.pageId;
     error.assetId = page.payload.assetId;
+    error.targetFrame ??= error.details?.actualFrame ?? null;
+    error.requiredFrame ??= error.details?.requiredFrame ?? null;
+    error.reason ??= error.details?.reason ?? null;
   }
   return error;
 }
@@ -283,6 +294,10 @@ export async function renderNortheasternUniversityDeck({
         pageId: item.pageId,
         assetId: item.assetId,
         message: item.message,
+        structureErrorCode: item.structureErrorCode ?? null,
+        targetFrame: item.targetFrame ?? null,
+        requiredFrame: item.requiredFrame ?? null,
+        reason: item.reason ?? null,
       }));
       throw error;
     }

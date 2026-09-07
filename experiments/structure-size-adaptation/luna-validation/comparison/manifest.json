@@ -1,0 +1,17 @@
+{
+  "status": "baseline_only",
+  "baseline": {
+    "fixture": "../fixture/neutral-core-convergence-06-baseline.pptx",
+    "reimportRender": "../reimport-render/",
+    "montage": "baseline-montage.png",
+    "sha256": "7bcf0a203ae78b1b08f2c97433489896d1f0001741b98da63256520d0e69eb39"
+  },
+  "futureComparisons": [
+    {"caseId": "LUNA-LARGE-CONVERGENCE-01", "status": "pending"},
+    {"caseId": "LUNA-LOCAL-SEQUENCE-02", "status": "pending"},
+    {"caseId": "LUNA-LONG-CYCLE-03", "status": "pending"},
+    {"caseId": "LUNA-SPACE-RELAY-MATRIX-05", "status": "pending"}
+  ],
+  "interpretation": "baseline-only; no new structure invocation or size-adaptation pass is asserted"
+}
+

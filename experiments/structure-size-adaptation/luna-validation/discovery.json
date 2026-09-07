@@ -1,0 +1,107 @@
+{
+  "status": "read_only_discovery_complete",
+  "asOf": "2026-09-06",
+  "baseline": {
+    "branch": "codex/structure-size-adaptation",
+    "head": "fa1f4f305efd3797c804c75c14a7032071082802"
+  },
+  "commands": [
+    "node .codex/skills/ppagent-structure/scripts/catalog.mjs list",
+    "node .codex/skills/ppagent-structure/scripts/catalog.mjs list --logic <logicId>",
+    "node .codex/skills/ppagent-structure/scripts/catalog.mjs inspect <assetId>"
+  ],
+  "catalogSnapshot": {
+    "total": 35,
+    "logicCounts": {
+      "argument-evidence": 1,
+      "branching": 2,
+      "causal": 2,
+      "comparison": 2,
+      "containment": 2,
+      "convergence": 3,
+      "cycle": 3,
+      "goal-alignment": 1,
+      "hierarchy": 1,
+      "hub": 3,
+      "layered": 2,
+      "matrix": 2,
+      "network": 1,
+      "parallel": 2,
+      "problem-solution": 2,
+      "progression": 3,
+      "role-stage": 1,
+      "sequence": 2
+    }
+  },
+  "selectedCandidates": [
+    {
+      "assetId": "convergence-many-to-one-003",
+      "logic": "convergence",
+      "reason": "五路同级输入直接合并为一个共同结果，能检验大区域和汇聚核心辨识度。",
+      "contractSnapshot": {
+        "count": "3-6 inputs",
+        "titleChars": 8,
+        "bodyChars": 22,
+        "resultTitleChars": 10,
+        "resultBodyChars": 28,
+        "minimumFrame": "1170x492",
+        "resizeMode": "natural",
+        "supportedCompositionIds": ["component-full"]
+      }
+    },
+    {
+      "assetId": "sequence-flow-001",
+      "logic": "sequence",
+      "reason": "三步局部流程与右侧说明共存，检验数量 State、局部区域和普通文字的关系。",
+      "contractSnapshot": {
+        "count": "3-6 steps",
+        "bodyCharsByState": {"3": 56, "4": 44, "5": 34, "6": 26},
+        "minimumFrame": "1170x492",
+        "stateFootprints": {"3": "930x382", "4": "1060x382", "5": "1130x382", "6": "1150x382"},
+        "resizeMode": "natural",
+        "supportedCompositionIds": ["component-full"]
+      }
+    },
+    {
+      "assetId": "cycle-loop-001",
+      "logic": "cycle",
+      "reason": "四步闭环配较长支持正文，检验环形核心、长稿换行和固定字号容量。",
+      "contractSnapshot": {
+        "count": "3-6 steps",
+        "bodyCapacity": "每项最多5行、合计不超过64字，原稿分点进入同一正文容器",
+        "minimumFrame": "1170x492",
+        "resizeMode": "natural",
+        "supportedCompositionIds": ["component-full"]
+      }
+    },
+    {
+      "assetId": "causal-mediator-chain-003",
+      "logic": "causal",
+      "reason": "条件—机制—结果的因果链，检验不同结构形态下的局部化和方向保留。",
+      "contractSnapshot": {
+        "mediators": "2-4",
+        "mediatorTitleChars": 8,
+        "mediatorBodyChars": 24,
+        "minimumFrame": "1170x492",
+        "resizeMode": "natural",
+        "supportedCompositionIds": ["component-full"]
+      }
+    },
+    {
+      "assetId": "matrix-cross-grid-003",
+      "logic": "matrix",
+      "reason": "四行四列离散交叉，安排首轮故意不足、读取反馈、页面重排后再试。",
+      "contractSnapshot": {
+        "rows": "2-5",
+        "columns": "2-5",
+        "cellModes": ["条目", "标记", "强度"],
+        "minimumFrame": "1170x492",
+        "minFontSize": 15,
+        "resizeMode": "natural",
+        "supportedCompositionIds": ["component-full"]
+      }
+    }
+  ],
+  "interpretationBoundary": "这些是目录发现和 inspect 的基线快照，不是 invokeStructure 成功回执，也不是已完成的尺寸适配验收。实现 ready 后需重新发现并重新 inspect。"
+}
+

@@ -138,6 +138,7 @@ export async function loadCoreAssetPackage(assetId, root = defaultRoot) {
       const component = runtime.componentExport ? module[runtime.componentExport] : null;
       const mapper = module[runtime.mapperExport];
       const slotResolver = runtime.slotContract?.resolverExport ? module[runtime.slotContract.resolverExport] : null;
+      const spatialResolver = runtime.spatialResolverExport ? module[runtime.spatialResolverExport] : null;
       if (runtime.renderer === "legacy-builder") {
         requireValue(typeof runtime.builderExport === "string" && runtime.builderExport, `${assetId} 缺少 builderExport`);
         requireValue(typeof builder === "function", `${assetId} 没有导出 ${runtime.builderExport}`);
@@ -147,6 +148,9 @@ export async function loadCoreAssetPackage(assetId, root = defaultRoot) {
       }
       requireValue(typeof mapper === "function", `${assetId} 没有导出 ${runtime.mapperExport}`);
       if (runtime.slotContract) requireValue(typeof slotResolver === "function", `${assetId} 没有导出 ${runtime.slotContract.resolverExport}`);
+      if (runtime.spatialResolverExport) {
+        requireValue(typeof spatialResolver === "function", `${assetId} 没有导出 ${runtime.spatialResolverExport}`);
+      }
       return {
         ...descriptor,
         textCapacity: component?.textCapacity ?? runtime.textCapacity ?? null,
@@ -155,6 +159,7 @@ export async function loadCoreAssetPackage(assetId, root = defaultRoot) {
         component,
         mapper,
         slotResolver,
+        spatialResolver,
         generatedSlotContract: await loadGeneratedSlotContract(descriptor.assetDir),
       };
     })());

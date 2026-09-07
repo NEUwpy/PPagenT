@@ -27,15 +27,67 @@ function normalize(parameters) {
   return { inputs, result };
 }
 
-function pathMarkup(index, count) {
-  const y = 32 + index * (392 / Math.max(1, count - 1));
-  return `<path d="M 318 ${y + 38} C 500 ${y + 38}, 645 246, 862 246" fill="none" stroke="${COLORS[index]}" stroke-width="16" stroke-linecap="round" data-ppt-kind="path" data-ppt-name="merge-lane-${index + 1}"></path>`;
+function clamp(value, minimum, maximum) {
+  return Math.max(minimum, Math.min(maximum, value));
 }
 
-function inputMarkup(input, index, count) {
-  const top = 22 + index * (392 / Math.max(1, count - 1));
+export function resolveConvergenceLayout(frame = DESIGN_FRAME, count = 5) {
+  const width = Number(frame?.width ?? DESIGN_FRAME.width);
+  const height = Number(frame?.height ?? DESIGN_FRAME.height);
+  if (width === DESIGN_FRAME.width && height === DESIGN_FRAME.height) {
+    return {
+      frame: { width, height },
+      inputLeft: 8,
+      inputWidth: 310,
+      inputHeight: count === 6 ? 66 : 78,
+      inputTop: 22,
+      inputArea: 392,
+      resultRight: 8,
+      resultTop: 116,
+      resultWidth: 300,
+      resultHeight: 260,
+      pathWidth: 16,
+      adaptive: false,
+    };
+  }
+  const resultWidth = clamp(width * 0.26, 210, 300);
+  const inputWidth = clamp(width * 0.265, 190, 310);
+  const inputHeight = clamp(height * (count >= 6 ? 0.135 : 0.16), 58, 78);
+  const inputTop = clamp(height * 0.05, 12, 22);
+  const resultHeight = clamp(height * 0.52, 180, 260);
+  const resultTop = (height - resultHeight) / 2;
+  return {
+    frame: { width, height },
+    inputLeft: Math.max(6, width * 0.012),
+    inputWidth,
+    inputHeight,
+    inputTop,
+    inputArea: Math.max(inputHeight, height - inputTop * 2 - inputHeight),
+    resultRight: Math.max(6, width * 0.012),
+    resultTop,
+    resultWidth,
+    resultHeight,
+    pathWidth: clamp(width * 0.014, 10, 16),
+    adaptive: true,
+  };
+}
+
+function pathMarkup(index, count, layout) {
+  const y = layout.inputTop + index * (layout.inputArea / Math.max(1, count - 1));
+  const startX = layout.inputLeft + layout.inputWidth;
+  const startY = y + layout.inputHeight / 2;
+  const endX = layout.frame.width - layout.resultRight - layout.resultWidth;
+  const endY = layout.resultTop + layout.resultHeight / 2;
+  const span = Math.max(20, endX - startX);
+  const controlOne = startX + span * 0.4;
+  const controlTwo = endX - span * 0.32;
+  return `<path d="M ${startX.toFixed(2)} ${startY.toFixed(2)} C ${controlOne.toFixed(2)} ${startY.toFixed(2)}, ${controlTwo.toFixed(2)} ${endY.toFixed(2)}, ${endX.toFixed(2)} ${endY.toFixed(2)}" fill="none" stroke="${COLORS[index]}" stroke-width="${layout.pathWidth}" stroke-linecap="round" data-ppt-kind="path" data-ppt-name="merge-lane-${index + 1}"></path>`;
+}
+
+function inputMarkup(input, index, count, layout) {
+  const top = layout.inputTop + index * (layout.inputArea / Math.max(1, count - 1));
   const slotId = `${input.key}-content`;
-  return `<article class="input" style="--top:${top}px;--color:${COLORS[index]}" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="merge-input-${index + 1}">
+  return `<article class="input" style="--top:${top}px;--input-left:${layout.inputLeft}px;--input-width:${layout.inputWidth}px;--input-height:${layout.inputHeight}px;--color:${COLORS[index]}" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="merge-input-${index + 1}">
     ${textRegionMarkup({
       id: slotId,
       field: `inputs[${index}]`,
@@ -54,8 +106,8 @@ function inputMarkup(input, index, count) {
   </article>`;
 }
 
-function resultMarkup(result) {
-  return `<article class="result" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-md" data-ppt-name="merge-result">
+function resultMarkup(result, layout = resolveConvergenceLayout()) {
+  return `<article class="result" style="--result-right:${layout.resultRight}px;--result-top:${layout.resultTop}px;--result-width:${layout.resultWidth}px;--result-height:${layout.resultHeight}px" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-md" data-ppt-name="merge-result">
     ${textRegionMarkup({
       id: "merge-result-content",
       field: "result",
@@ -83,12 +135,29 @@ export const visualComponent = Object.freeze({
   renderMarkup(parameters) {
     const model = normalize(parameters);
     return `<section class="merge" data-ppt-root data-input-count="${model.inputs.length}">
-      <svg viewBox="0 0 1170 492" aria-hidden="true">${model.inputs.map((_, index) => pathMarkup(index, model.inputs.length)).join("")}</svg>
-      ${model.inputs.map((input, index) => inputMarkup(input, index, model.inputs.length)).join("")}
+      <svg viewBox="0 0 1170 492" aria-hidden="true">${model.inputs.map((_, index) => pathMarkup(index, model.inputs.length, resolveConvergenceLayout())).join("")}</svg>
+      ${model.inputs.map((input, index) => inputMarkup(input, index, model.inputs.length, resolveConvergenceLayout())).join("")}
       ${resultMarkup(model.result)}
     </section>`;
   },
 });
+
+export function renderAdaptiveMarkup(parameters, { frame } = {}) {
+  const model = normalize(parameters);
+  const layout = resolveConvergenceLayout(frame ?? DESIGN_FRAME, model.inputs.length);
+  const style = [
+    `width:${layout.frame.width}px`,
+    `height:${layout.frame.height}px`,
+    `--merge-frame-width:${layout.frame.width}px`,
+    `--merge-frame-height:${layout.frame.height}px`,
+    `--merge-font-scale:${layout.adaptive ? Math.max(0.86, Math.min(1, layout.frame.width / DESIGN_FRAME.width)) : 1}`,
+  ].join(";");
+  return `<section class="merge" style="${style}" data-ppt-root data-input-count="${model.inputs.length}" data-adaptive-profile="convergence">
+    <svg viewBox="0 0 ${layout.frame.width} ${layout.frame.height}" aria-hidden="true">${model.inputs.map((_, index) => pathMarkup(index, model.inputs.length, layout)).join("")}</svg>
+    ${model.inputs.map((input, index) => inputMarkup(input, index, model.inputs.length, layout)).join("")}
+    ${resultMarkup(model.result, layout)}
+  </section>`;
+}
 
 export const previewParameters = Object.freeze({
   inputs: Object.freeze([

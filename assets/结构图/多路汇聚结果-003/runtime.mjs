@@ -1,4 +1,9 @@
 import { mapping, renderPayload } from "../../../src/render/payload-helpers.mjs";
+import { resolveStructureSpatialRequirement } from "../../../src/runtime/structure-adaptation.mjs";
+
+export function resolveSpatialRequirement(parameters, targetFrame, options = {}) {
+  return resolveStructureSpatialRequirement("convergence-many-to-one-003", parameters, targetFrame, options);
+}
 import {
   previewParameters,
   resolvePreviewParameters,

@@ -1,11 +1,17 @@
 import { mapping, renderPayload } from "../../../src/render/payload-helpers.mjs";
+import { resolveStructureSpatialRequirement } from "../../../src/runtime/structure-adaptation.mjs";
+
+export function resolveSpatialRequirement(parameters, targetFrame, options = {}) {
+  return resolveStructureSpatialRequirement("sequence-flow-001", parameters, targetFrame, options);
+}
 import {
   previewParameters,
+  renderAdaptiveMarkup,
   resolvePreviewParameters,
   visualComponent,
 } from "./review.mjs";
 
-export { previewParameters, resolvePreviewParameters, visualComponent };
+export { previewParameters, renderAdaptiveMarkup, resolvePreviewParameters, visualComponent };
 
 function bodyOf(item) {
   return [

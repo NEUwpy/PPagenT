@@ -1,0 +1,7 @@
+{"event":"discovery","caseId":"<caseId>","attempt":0,"assetId":"<assetId>","logic":"<logic>","command":"catalog list/inspect","status":"pending","note":"重新发现后的契约快照"}
+{"event":"invocation","caseId":"<caseId>","attempt":1,"pageId":"<pageId>","regionId":"<regionId>","assetId":"<assetId>","targetFrame":{"left":0,"top":0,"width":0,"height":0},"parameters":{},"reason":"<稿件关系与选择理由>","status":"pending","failureClass":null,"failureReason":null}
+{"event":"feedback","caseId":"<caseId>","attempt":1,"source":"runtime|layout|visual-review|user","kind":"<space-insufficient|overflow|semantic|style|other>","message":"<原始或准确转述反馈>","action":"<保留|重排|重试|换结构|结束>","status":"pending"}
+{"event":"invocation","caseId":"<caseId>","attempt":2,"pageId":"<pageId>","regionId":"<regionId>","assetId":"<assetId>","targetFrame":{"left":0,"top":0,"width":0,"height":0},"parameters":{},"reason":"<根据反馈调整后的理由>","status":"pending","failureClass":null,"failureReason":null}
+{"event":"render","caseId":"<caseId>","attempt":2,"pptx":"<deliverables/deck.pptx>","importedRender":"<final-render/>","montage":"<comparison/montage.png>","status":"pending"}
+{"event":"review","caseId":"<caseId>","status":"pending","contentComplete":null,"coreShapeRecognizable":null,"readable":null,"noCrop":null,"noBadOverlap":null,"nativeEditable":null,"notes":"<证据边界>"}
+

@@ -5,6 +5,7 @@ import {
   RING_FRAME,
   normalizeCycleParameters,
   panelItems,
+  resolveCycleLayout,
   ringItems,
   svgBandPath,
 } from "./layout.mjs";
@@ -38,19 +39,21 @@ function panelMarkup(item, density, textLayoutBindings) {
   </article>`;
 }
 
-function ringMarkup(model) {
-  const items = ringItems(model.steps);
-  const bands = items.map((item) => `<path class="cycle-arc" data-ppt-kind="path" data-ppt-name="cycle-band-${item.index}" fill="${item.color}" d="${svgBandPath(item)}"/>`).join("");
+function ringMarkup(model, layout = resolveCycleLayout()) {
+  const { ring, ringFrame } = layout;
+  const items = ringItems(model.steps, ring);
+  const bands = items.map((item) => `<path class="cycle-arc" data-ppt-kind="path" data-ppt-name="cycle-band-${item.index}" fill="${item.color}" d="${svgBandPath(item, ring)}"/>`).join("");
   const arrows = items.map((item) => `<path class="cycle-arrow" data-ppt-kind="path" data-ppt-name="cycle-arrow-${item.index}" fill="${item.color}" d="M ${item.arrow.outer.x.toFixed(2)} ${item.arrow.outer.y.toFixed(2)} L ${item.arrow.tip.x.toFixed(2)} ${item.arrow.tip.y.toFixed(2)} L ${item.arrow.inner.x.toFixed(2)} ${item.arrow.inner.y.toFixed(2)} Z"/>`).join("");
+  const centerStart = ring.center - (model.centerLabel.length - 1) * 17.5;
   const labels = items.map((item) => `<text class="cycle-number" data-ppt-kind="text" data-ppt-name="cycle-number-${item.index}" x="${item.number.x.toFixed(2)}" y="${item.number.y.toFixed(2)}">${String(item.index + 1).padStart(2, "0")}</text>
     <text class="cycle-title" data-slot-id="step-${escapeHtml(item.step.key)}-title" data-slot-role="item-title" data-slot-field="steps[${item.index}].title" data-slot-item-id="${escapeHtml(item.step.key)}" data-slot-content-type="text" data-slot-required="false" data-slot-text-mode="single-line" data-slot-list-policy="none" data-slot-max-chars="${CYCLE_TEXT_LIMITS.title.maxChars}" data-slot-max-lines="${CYCLE_TEXT_LIMITS.title.maxLines}" data-ppt-kind="text" data-ppt-name="cycle-title-${item.index}" x="${item.title.x.toFixed(2)}" y="${item.title.y.toFixed(2)}" transform="rotate(${item.title.rotation} ${item.title.x.toFixed(2)} ${item.title.y.toFixed(2)})">${escapeHtml(item.step.title)}</text>
     ${item.step.english ? `<text class="cycle-english" data-ppt-kind="text" data-ppt-name="cycle-english-${item.index}" x="${item.english.x.toFixed(2)}" y="${item.english.y.toFixed(2)}" transform="rotate(${item.english.rotation} ${item.english.x.toFixed(2)} ${item.english.y.toFixed(2)})">${escapeHtml(item.step.english)}</text>` : ""}`).join("");
-  return `<svg class="cycle-diagram" viewBox="0 0 ${RING_FRAME.width} ${RING_FRAME.height}" role="img" aria-label="${model.steps.length} 步循环闭环">
-    <circle class="cycle-breath" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="cycle-breath" cx="${RING.center}" cy="${RING.center}" r="${RING.outer + RING.breath}"/>
+  return `<svg class="cycle-diagram" viewBox="0 0 ${ringFrame.width} ${ringFrame.height}" role="img" aria-label="${model.steps.length} 步循环闭环">
+    <circle class="cycle-breath" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="cycle-breath" cx="${ring.center}" cy="${ring.center}" r="${ring.outer + ring.breath}"/>
     ${bands}${arrows}${labels}
-    <circle class="cycle-core" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="cycle-core" cx="${RING.center}" cy="${RING.center}" r="${RING.core}"/>
+    <circle class="cycle-core" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="cycle-core" cx="${ring.center}" cy="${ring.center}" r="${ring.core}"/>
     <g data-slot-id="cycle-center" data-slot-role="center-title" data-slot-field="center" data-slot-content-type="text" data-slot-required="true" data-slot-text-mode="flow" data-slot-list-policy="none" data-slot-max-chars="${CYCLE_TEXT_LIMITS.center.maxChars}" data-slot-max-lines="${CYCLE_TEXT_LIMITS.center.maxLines}">
-      ${model.centerLabel.map((line, index) => `<text class="cycle-core-text" data-ppt-kind="text" data-ppt-name="cycle-core-text-${index}" x="${RING.center}" y="${229 + index * 35}">${escapeHtml(line)}</text>`).join("")}
+      ${model.centerLabel.map((line, index) => `<text class="cycle-core-text" data-ppt-kind="text" data-ppt-name="cycle-core-text-${index}" x="${ring.center}" y="${centerStart + index * 35}">${escapeHtml(line)}</text>`).join("")}
     </g>
   </svg>`;
 }
@@ -70,6 +73,28 @@ export const visualComponent = Object.freeze({
     </section>`;
   },
 });
+
+export function renderAdaptiveMarkup(parameters, { frame } = {}) {
+  const model = normalizeCycleParameters(parameters);
+  const layout = resolveCycleLayout(frame ?? DESIGN_FRAME);
+  const ringFrame = layout.ringFrame;
+  const ring = layout.ring;
+  const style = [
+    `width:${layout.frame.width}px`,
+    `height:${layout.frame.height}px`,
+    `--ring-left:${ringFrame.left}px`,
+    `--ring-top:${ringFrame.top}px`,
+    `--ring-size:${ringFrame.width}px`,
+    `--panel-width:${layout.supportPanel.width}px`,
+    `--panel-inner-padding:${Math.max(36, Math.min(layout.supportPanel.dense.innerPadding, layout.supportPanel.width * 0.42))}px`,
+    `--cycle-font-scale:${layout.adaptive ? Math.max(0.86, Math.min(1, layout.frame.width / DESIGN_FRAME.width)) : 1}`,
+  ].join(";");
+  return `<section class="cycle-review" style="${style}" data-ppt-root data-step-count="${model.steps.length}" data-density="${model.density}" data-adaptive-profile="cycle">
+    <div class="cycle-support-layer">${panelItems(model.steps, layout.frame).map((item) => panelMarkup(item, model.density, model.textLayoutBindings)).join("")}</div>
+    <div class="cycle-mask" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="cycle-mask" aria-hidden="true"></div>
+    ${ringMarkup(model, layout)}
+  </section>`;
+}
 
 export function resolveContentSlots(parameters) {
   const model = normalizeCycleParameters(parameters);

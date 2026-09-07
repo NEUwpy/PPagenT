@@ -2,6 +2,7 @@ import {
   discoverCoreAssetPackages,
   loadCoreAssetPackage,
 } from "./core-asset-packages.mjs";
+import { countStructureItems } from "./structure-adaptation.mjs";
 
 let htmlRuntimePromise = null;
 
@@ -33,14 +34,9 @@ export async function renderStructureAsset(slide, renderPayload, skin, targetFra
   return compileResolvedStructureAsset(slide, resolved);
 }
 
-function payloadStateCount(parameters = {}) {
-  if (Array.isArray(parameters.items)) return parameters.items.length;
-  if (Array.isArray(parameters.causes)) return parameters.causes.length;
-  if (Array.isArray(parameters.sides) && Array.isArray(parameters.sides[0]?.items)) {
-    return parameters.sides[0].items.length;
-  }
-  if (Array.isArray(parameters.layers)) return parameters.layers.length;
-  return null;
+function verifiedAdaptivePackage(assetPackage) {
+  return assetPackage.asset?.spatialContract?.resizeMode === "adaptive"
+    && assetPackage.runtime?.contract?.adaptationStatus === "verified";
 }
 
 export async function resolveStructureAsset(renderPayload, skin, targetFrame = skin.bodyFrame, root = process.cwd()) {
@@ -48,7 +44,35 @@ export async function resolveStructureAsset(renderPayload, skin, targetFrame = s
   if (assetPackage.runtime.renderer === "html-component") {
     const { resolveHtmlComponent } = await loadHtmlRuntime();
     const designFrame = assetPackage.component.designFrame;
-    const stateCount = payloadStateCount(renderPayload.parameters);
+    if (verifiedAdaptivePackage(assetPackage)) {
+      if (typeof assetPackage.spatialResolver !== "function") {
+        const error = new Error(`${assetPackage.assetId} 声明动态适配但没有可用空间 resolver`);
+        error.code = "STRUCTURE_ADAPTATION_CAPABILITY_MISSING";
+        throw error;
+      }
+      const requirement = await assetPackage.spatialResolver(
+        renderPayload.parameters,
+        targetFrame,
+        { asset: assetPackage.asset, component: assetPackage.component, theme: skin.componentTheme },
+      );
+      if (!requirement?.ok) {
+        const error = new Error(`${assetPackage.assetId} 的空间 resolver 没有返回可用结果`);
+        error.code = "STRUCTURE_ADAPTATION_CAPABILITY_INVALID";
+        error.assetId = assetPackage.assetId;
+        throw error;
+      }
+      const tree = await resolveHtmlComponent({
+        component: assetPackage.component,
+        assetDir: assetPackage.assetDir,
+        variantId: assetPackage.runtime.variantId,
+        parameters: renderPayload.parameters,
+        targetFrame,
+        theme: skin.componentTheme,
+        adaptation: { ...requirement, status: "verified" },
+      });
+      return { renderer: "html-component", tree, targetFrame, adaptation: requirement };
+    }
+    const stateCount = countStructureItems(renderPayload.parameters);
     const footprint = Number.isInteger(stateCount)
       ? assetPackage.asset?.spatialContract?.stateFootprints?.[String(stateCount)]
       : null;

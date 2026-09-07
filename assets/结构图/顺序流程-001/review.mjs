@@ -61,16 +61,75 @@ function normalizeParameters(parameters) {
   };
 }
 
+export function resolveSequenceLayout(frame = DESIGN_FRAME, itemCount = 4) {
+  const width = Number(frame?.width ?? DESIGN_FRAME.width);
+  const height = Number(frame?.height ?? DESIGN_FRAME.height);
+  if (width === DESIGN_FRAME.width && height === DESIGN_FRAME.height) {
+    return {
+      frame: { width, height },
+      left: LAYOUTS[itemCount].left,
+      width: LAYOUTS[itemCount].width,
+      titleTop: 66,
+      titleHeight: 40,
+      haloTop: 134,
+      haloSize: 88,
+      nodeTop: 146,
+      nodeSize: 64,
+      connectorTop: 216,
+      connectorHeight: 32,
+      bodyTop: 246,
+      bodyHeight: 150,
+      bodyTextTop: 277,
+      bodyTextHeight: 88,
+      railTop: 160,
+      railHeight: 36,
+      highlightTop: 177,
+      adaptive: false,
+    };
+  }
+  const left = Math.max(12, width * 0.025);
+  const innerWidth = width - left * 2;
+  const nodeSize = Math.max(48, Math.min(64, height * 0.16));
+  const haloSize = nodeSize + Math.max(14, nodeSize * 0.28);
+  const titleTop = Math.max(20, height * 0.1);
+  const haloTop = Math.max(titleTop + 34, height * 0.27);
+  const nodeTop = haloTop + (haloSize - nodeSize) / 2;
+  const connectorTop = nodeTop + nodeSize + 8;
+  const bodyTop = Math.min(height - 112, connectorTop + Math.max(22, height * 0.085));
+  const bodyHeight = Math.max(92, height - bodyTop - 18);
+  return {
+    frame: { width, height },
+    left,
+    width: innerWidth,
+    titleTop,
+    titleHeight: Math.max(28, Math.min(40, height * 0.1)),
+    haloTop,
+    haloSize,
+    nodeTop,
+    nodeSize,
+    connectorTop,
+    connectorHeight: Math.max(16, bodyTop - connectorTop - 8),
+    bodyTop,
+    bodyHeight,
+    bodyTextTop: bodyTop + Math.max(22, bodyHeight * 0.18),
+    bodyTextHeight: Math.max(58, bodyHeight - Math.max(30, bodyHeight * 0.3)),
+    railTop: nodeTop + nodeSize / 2 - 18,
+    railHeight: 36,
+    highlightTop: nodeTop + nodeSize / 2 - 1,
+    adaptive: true,
+  };
+}
+
 function railMarkup(layout, itemCount) {
   const cellWidth = layout.width / itemCount;
   const left = layout.left + cellWidth / 2 - 44;
   const width = cellWidth * (itemCount - 1) + 114;
   const tip = Math.max(36, Math.min(46, width * 0.055));
   const path = `M 0 8 Q 0 4 4 4 L ${width - tip} 4 L ${width - tip} 0 L ${width} 18 L ${width - tip} 36 L ${width - tip} 32 L 4 32 Q 0 32 0 28 Z`;
-  return `<svg class="sequence-rail" style="left:${left}px;width:${width}px" viewBox="0 0 ${width} 36" preserveAspectRatio="none" aria-hidden="true">
+  return `<svg class="sequence-rail" style="left:${left}px;width:${width}px;top:${layout.railTop}px;height:${layout.railHeight}px" viewBox="0 0 ${width} 36" preserveAspectRatio="none" aria-hidden="true">
     <path data-ppt-kind="path" data-ppt-name="sequence-direction-rail" fill="#dcecff" d="${path}"/>
   </svg>
-  <div class="sequence-rail-highlight" style="left:${left + 10}px;width:${width - tip - 18}px" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="sequence-direction-highlight"></div>`;
+  <div class="sequence-rail-highlight" style="left:${left + 10}px;width:${width - tip - 18}px;top:${layout.highlightTop}px" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="sequence-direction-highlight"></div>`;
 }
 
 function stepMarkup(item, index, itemCount) {
@@ -111,6 +170,36 @@ export const visualComponent = Object.freeze({
     </section>`;
   },
 });
+
+export function renderAdaptiveMarkup(parameters, { frame } = {}) {
+  const model = normalizeParameters(parameters);
+  const layout = resolveSequenceLayout(frame ?? DESIGN_FRAME, model.itemCount);
+  const style = [
+    `width:${layout.frame.width}px`,
+    `height:${layout.frame.height}px`,
+    `--sequence-frame-width:${layout.frame.width}px`,
+    `--sequence-frame-height:${layout.frame.height}px`,
+    `--sequence-title-top:${layout.titleTop}px`,
+    `--sequence-title-height:${layout.titleHeight}px`,
+    `--sequence-halo-top:${layout.haloTop}px`,
+    `--sequence-halo-size:${layout.haloSize}px`,
+    `--sequence-node-top:${layout.nodeTop}px`,
+    `--sequence-node-size:${layout.nodeSize}px`,
+    `--sequence-connector-top:${layout.connectorTop}px`,
+    `--sequence-connector-height:${layout.connectorHeight}px`,
+    `--sequence-body-top:${layout.bodyTop}px`,
+    `--sequence-body-height:${layout.bodyHeight}px`,
+    `--sequence-body-text-top:${layout.bodyTextTop}px`,
+    `--sequence-body-text-height:${layout.bodyTextHeight}px`,
+    `--sequence-font-scale:${layout.adaptive ? Math.max(0.86, Math.min(1, layout.frame.width / DESIGN_FRAME.width)) : 1}`,
+  ].join(";");
+  return `<section class="sequence-review" style="${style}" data-ppt-root data-item-count="${model.itemCount}" data-adaptive-profile="rail">
+    ${railMarkup(layout, model.itemCount)}
+    <div class="sequence-grid" style="left:${layout.left}px;width:${layout.width}px;grid-template-columns:repeat(${model.itemCount},1fr)">
+      ${model.items.map((item, index) => stepMarkup(item, index, model.itemCount)).join("")}
+    </div>
+  </section>`;
+}
 
 export const previewParameters = Object.freeze({
   items: [

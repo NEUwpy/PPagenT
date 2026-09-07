@@ -1,20 +1,20 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
 body { color: #3f4f63; background: transparent; font-family: var(--ppagent-font-body, "Microsoft YaHei"), sans-serif; }
-.sequence-review { position: relative; width: 1170px; height: 492px; overflow: hidden; background: transparent; }
-.sequence-grid { position: absolute; top: 0; height: 492px; display: grid; z-index: 2; }
-.sequence-rail { position: absolute; top: 160px; height: 36px; z-index: 1; overflow: visible; }
-.sequence-rail-highlight { position: absolute; top: 177px; height: 2px; z-index: 1; border: 0; border-radius: 99px; background: #8bbaf2; }
-.sequence-step { position: relative; height: 492px; min-width: 0; }
-.sequence-title { position: absolute; left: 12px; right: 12px; top: 66px; height: 40px; margin: 0; overflow: hidden; color: #254b7c; font-size: var(--ppagent-component-item-title-size, 21px); font-weight: 700; line-height: 40px; text-align: center; white-space: nowrap; }
-.sequence-node-halo { position: absolute; left: 50%; top: 134px; width: 88px; height: 88px; margin-left: -44px; border: 1px solid #d6e7fb; border-radius: 50%; background: #eef6ff; }
-.sequence-node { position: absolute; left: 50%; top: 146px; width: 64px; height: 64px; margin-left: -32px; border: 0; border-radius: 50%; background: #2f5ea8; box-shadow: 0 8px 18px rgba(47, 94, 168, .24); }
-.sequence-order { position: absolute; left: 50%; top: 146px; width: 64px; height: 64px; margin-left: -32px; overflow: hidden; color: #fff; font-family: var(--ppagent-font-body, "Microsoft YaHei"), sans-serif; font-size: var(--ppagent-component-item-title-size, 21pt); font-weight: 700; line-height: 64px; text-align: center; }
-.sequence-connector { position: absolute; left: 50%; top: 216px; width: 3px; height: 32px; margin-left: -1.5px; border: 0; border-radius: 99px; background: #8bbaf2; }
-.sequence-body-underlay { position: absolute; left: 17px; right: 17px; top: 255px; height: 150px; border: 1px solid #dce8f7; border-radius: 20px; background: #dfeafa; }
-.sequence-body-surface { position: absolute; left: 10px; right: 10px; top: 246px; height: 150px; border: 1px solid #d5e4f5; border-radius: 20px; background: #f2f7fd; }
-.sequence-body-accent { position: absolute; left: 50%; top: 246px; width: 48px; height: 5px; margin-left: -24px; border: 0; border-radius: 8px; background: #78aeef; }
-.sequence-body { position: absolute; left: 30px; right: 30px; top: 277px; height: 88px; margin: 0; overflow: hidden; color: #46566a; font-size: var(--ppagent-component-body-size, 19px); font-weight: 400; line-height: 1.55; text-align: center; white-space: pre-line; }
+.sequence-review { position: relative; width: var(--sequence-frame-width, 1170px); height: var(--sequence-frame-height, 492px); overflow: hidden; background: transparent; }
+.sequence-grid { position: absolute; top: 0; height: var(--sequence-frame-height, 492px); display: grid; z-index: 2; }
+.sequence-rail { position: absolute; top: var(--sequence-rail-top, 160px); height: var(--sequence-rail-height, 36px); z-index: 1; overflow: visible; }
+.sequence-rail-highlight { position: absolute; top: var(--sequence-highlight-top, 177px); height: 2px; z-index: 1; border: 0; border-radius: 99px; background: #8bbaf2; }
+.sequence-step { position: relative; height: var(--sequence-frame-height, 492px); min-width: 0; }
+.sequence-title { position: absolute; left: 12px; right: 12px; top: var(--sequence-title-top, 66px); height: var(--sequence-title-height, 40px); margin: 0; overflow: hidden; color: #254b7c; font-size: max(15px, calc(var(--sequence-font-scale, 1) * var(--ppagent-component-item-title-size, 21px))); font-weight: 700; line-height: var(--sequence-title-height, 40px); text-align: center; white-space: nowrap; }
+.sequence-node-halo { position: absolute; left: 50%; top: var(--sequence-halo-top, 134px); width: var(--sequence-halo-size, 88px); height: var(--sequence-halo-size, 88px); margin-left: calc(var(--sequence-halo-size, 88px) / -2); border: 1px solid #d6e7fb; border-radius: 50%; background: #eef6ff; }
+.sequence-node { position: absolute; left: 50%; top: var(--sequence-node-top, 146px); width: var(--sequence-node-size, 64px); height: var(--sequence-node-size, 64px); margin-left: calc(var(--sequence-node-size, 64px) / -2); border: 0; border-radius: 50%; background: #2f5ea8; box-shadow: 0 8px 18px rgba(47, 94, 168, .24); }
+.sequence-order { position: absolute; left: 50%; top: var(--sequence-node-top, 146px); width: var(--sequence-node-size, 64px); height: var(--sequence-node-size, 64px); margin-left: calc(var(--sequence-node-size, 64px) / -2); overflow: hidden; color: #fff; font-family: var(--ppagent-font-body, "Microsoft YaHei"), sans-serif; font-size: max(15px, calc(var(--sequence-font-scale, 1) * var(--ppagent-component-item-title-size, 21pt))); font-weight: 700; line-height: var(--sequence-node-size, 64px); text-align: center; }
+.sequence-connector { position: absolute; left: 50%; top: var(--sequence-connector-top, 216px); width: 3px; height: var(--sequence-connector-height, 32px); margin-left: -1.5px; border: 0; border-radius: 99px; background: #8bbaf2; }
+.sequence-body-underlay { position: absolute; left: 17px; right: 17px; top: calc(var(--sequence-body-top, 246px) + 9px); height: var(--sequence-body-height, 150px); border: 1px solid #dce8f7; border-radius: 20px; background: #dfeafa; }
+.sequence-body-surface { position: absolute; left: 10px; right: 10px; top: var(--sequence-body-top, 246px); height: var(--sequence-body-height, 150px); border: 1px solid #d5e4f5; border-radius: 20px; background: #f2f7fd; }
+.sequence-body-accent { position: absolute; left: 50%; top: var(--sequence-body-top, 246px); width: 48px; height: 5px; margin-left: -24px; border: 0; border-radius: 8px; background: #78aeef; }
+.sequence-body { position: absolute; left: 30px; right: 30px; top: var(--sequence-body-text-top, 277px); height: var(--sequence-body-text-height, 88px); margin: 0; overflow: hidden; color: #46566a; font-size: max(15px, calc(var(--sequence-font-scale, 1) * var(--ppagent-component-body-size, 19px))); font-weight: 400; line-height: 1.45; text-align: center; white-space: pre-line; }
 .sequence-review[data-item-count="5"] .sequence-title,
 .sequence-review[data-item-count="6"] .sequence-title { left: 6px; right: 6px; }
 .sequence-review[data-item-count="5"] .sequence-body-surface { left: 7px; right: 7px; }
