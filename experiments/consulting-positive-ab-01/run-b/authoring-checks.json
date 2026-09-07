@@ -1,0 +1,446 @@
+{
+  "slideCount": 4,
+  "canvas": {
+    "width": 1280,
+    "height": 720,
+    "outOfBounds": []
+  },
+  "text": {
+    "totalTextObjects": 83,
+    "below16px": [
+      {
+        "name": "slide-1-kicker",
+        "text": "问题 01  ·  结果记录",
+        "position": {
+          "left": 64,
+          "top": 34,
+          "width": 420,
+          "height": 24
+        },
+        "fontSize": 15
+      },
+      {
+        "name": "s1-thesis-label",
+        "text": "核心判断",
+        "position": {
+          "left": 86,
+          "top": 208,
+          "width": 110,
+          "height": 22
+        },
+        "fontSize": 15
+      },
+      {
+        "name": "s1-data-num.text",
+        "text": "01",
+        "position": {
+          "left": 404,
+          "top": 232,
+          "width": 34,
+          "height": 34
+        },
+        "fontSize": 14
+      },
+      {
+        "name": "s1-sample-num.text",
+        "text": "02",
+        "position": {
+          "left": 404,
+          "top": 371,
+          "width": 34,
+          "height": 34
+        },
+        "fontSize": 14
+      },
+      {
+        "name": "s1-script-num.text",
+        "text": "03",
+        "position": {
+          "left": 404,
+          "top": 510,
+          "width": 34,
+          "height": 34
+        },
+        "fontSize": 14
+      },
+      {
+        "name": "s1-result-num.text",
+        "text": "04",
+        "position": {
+          "left": 934,
+          "top": 232,
+          "width": 34,
+          "height": 34
+        },
+        "fontSize": 14
+      },
+      {
+        "name": "s1-exception-num.text",
+        "text": "05",
+        "position": {
+          "left": 934,
+          "top": 510,
+          "width": 34,
+          "height": 34
+        },
+        "fontSize": 14
+      },
+      {
+        "name": "s1-access-pill.text",
+        "text": "访问边界",
+        "position": {
+          "left": 84,
+          "top": 412,
+          "width": 92,
+          "height": 30
+        },
+        "fontSize": 14
+      },
+      {
+        "name": "slide-2-kicker",
+        "text": "问题 02  ·  范围选择",
+        "position": {
+          "left": 64,
+          "top": 34,
+          "width": 420,
+          "height": 24
+        },
+        "fontSize": 15
+      },
+      {
+        "name": "s2-left-tag.text",
+        "text": "短期可见",
+        "position": {
+          "left": 408,
+          "top": 210,
+          "width": 96,
+          "height": 30
+        },
+        "fontSize": 14
+      },
+      {
+        "name": "s2-right-tag.text",
+        "text": "推荐起点",
+        "position": {
+          "left": 1098,
+          "top": 210,
+          "width": 96,
+          "height": 30
+        },
+        "fontSize": 14
+      },
+      {
+        "name": "s2-recommend-label",
+        "text": "建议顺序",
+        "position": {
+          "left": 562,
+          "top": 306,
+          "width": 156,
+          "height": 22
+        },
+        "fontSize": 15
+      },
+      {
+        "name": "slide-3-kicker",
+        "text": "问题 03  ·  受控复核",
+        "position": {
+          "left": 64,
+          "top": 34,
+          "width": 420,
+          "height": 24
+        },
+        "fontSize": 15
+      },
+      {
+        "name": "s3-num-1.text",
+        "text": "01",
+        "position": {
+          "left": 94,
+          "top": 310,
+          "width": 38,
+          "height": 38
+        },
+        "fontSize": 14
+      },
+      {
+        "name": "s3-num-2.text",
+        "text": "02",
+        "position": {
+          "left": 356,
+          "top": 310,
+          "width": 38,
+          "height": 38
+        },
+        "fontSize": 14
+      },
+      {
+        "name": "s3-num-3.text",
+        "text": "03",
+        "position": {
+          "left": 618,
+          "top": 310,
+          "width": 38,
+          "height": 38
+        },
+        "fontSize": 14
+      },
+      {
+        "name": "s3-num-4.text",
+        "text": "04",
+        "position": {
+          "left": 880,
+          "top": 310,
+          "width": 38,
+          "height": 38
+        },
+        "fontSize": 14
+      },
+      {
+        "name": "s3-gate-pill.text",
+        "text": "授权变化时",
+        "position": {
+          "left": 554,
+          "top": 524,
+          "width": 116,
+          "height": 30
+        },
+        "fontSize": 14
+      },
+      {
+        "name": "slide-4-kicker",
+        "text": "问题 04  ·  四周试点",
+        "position": {
+          "left": 64,
+          "top": 34,
+          "width": 420,
+          "height": 24
+        },
+        "fontSize": 15
+      }
+    ]
+  },
+  "overlapCheck": {
+    "method": "Authoring ledger records each intended box; final PPTX is additionally checked with slides_test.py.",
+    "intentionallyOverlapping": [
+      "s1-center with five radial connector lines",
+      "s2-center-line and arrows around recommendation node",
+      "s3-branch line leading to authorization gate",
+      "s4-timeline rail behind numbered nodes"
+    ]
+  },
+  "connectorCheck": {
+    "connectorObjects": 15,
+    "entries": [
+      {
+        "name": "slide-1-header-line",
+        "from": [
+          64,
+          158
+        ],
+        "to": [
+          1216,
+          158
+        ],
+        "color": "#B8C9D9",
+        "width": 1,
+        "dashed": false
+      },
+      {
+        "name": "s1-link-data",
+        "from": [
+          540,
+          277
+        ],
+        "to": [
+          730,
+          386
+        ],
+        "color": "#9DB9D3",
+        "width": 2,
+        "dashed": false
+      },
+      {
+        "name": "s1-link-sample",
+        "from": [
+          540,
+          376
+        ],
+        "to": [
+          730,
+          410
+        ],
+        "color": "#9DB9D3",
+        "width": 2,
+        "dashed": false
+      },
+      {
+        "name": "s1-link-script",
+        "from": [
+          540,
+          475
+        ],
+        "to": [
+          730,
+          430
+        ],
+        "color": "#9DB9D3",
+        "width": 2,
+        "dashed": false
+      },
+      {
+        "name": "s1-link-result",
+        "from": [
+          1000,
+          277
+        ],
+        "to": [
+          836,
+          386
+        ],
+        "color": "#9DB9D3",
+        "width": 2,
+        "dashed": false
+      },
+      {
+        "name": "s1-link-exception",
+        "from": [
+          1000,
+          475
+        ],
+        "to": [
+          836,
+          430
+        ],
+        "color": "#9DB9D3",
+        "width": 2,
+        "dashed": false
+      },
+      {
+        "name": "slide-2-header-line",
+        "from": [
+          64,
+          158
+        ],
+        "to": [
+          1216,
+          158
+        ],
+        "color": "#B8C9D9",
+        "width": 1,
+        "dashed": false
+      },
+      {
+        "name": "s2-center-line",
+        "from": [
+          530,
+          350
+        ],
+        "to": [
+          750,
+          350
+        ],
+        "color": "#9DB9D3",
+        "width": 2,
+        "dashed": false
+      },
+      {
+        "name": "slide-3-header-line",
+        "from": [
+          64,
+          158
+        ],
+        "to": [
+          1216,
+          158
+        ],
+        "color": "#B8C9D9",
+        "width": 1,
+        "dashed": false
+      },
+      {
+        "name": "s3-rail-1",
+        "from": [
+          276,
+          370
+        ],
+        "to": [
+          338,
+          370
+        ],
+        "color": "#9DB9D3",
+        "width": 3,
+        "dashed": false
+      },
+      {
+        "name": "s3-rail-2",
+        "from": [
+          538,
+          370
+        ],
+        "to": [
+          600,
+          370
+        ],
+        "color": "#9DB9D3",
+        "width": 3,
+        "dashed": false
+      },
+      {
+        "name": "s3-rail-3",
+        "from": [
+          800,
+          370
+        ],
+        "to": [
+          862,
+          370
+        ],
+        "color": "#9DB9D3",
+        "width": 3,
+        "dashed": false
+      },
+      {
+        "name": "s3-branch",
+        "from": [
+          700,
+          448
+        ],
+        "to": [
+          700,
+          500
+        ],
+        "color": "#735A2C",
+        "width": 2,
+        "dashed": true
+      },
+      {
+        "name": "slide-4-header-line",
+        "from": [
+          64,
+          158
+        ],
+        "to": [
+          1216,
+          158
+        ],
+        "color": "#B8C9D9",
+        "width": 1,
+        "dashed": false
+      },
+      {
+        "name": "s4-timeline",
+        "from": [
+          130,
+          342
+        ],
+        "to": [
+          1090,
+          342
+        ],
+        "color": "#9DB9D3",
+        "width": 4,
+        "dashed": false
+      }
+    ]
+  }
+}
