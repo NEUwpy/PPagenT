@@ -398,7 +398,7 @@ async function skinStateArtifactsFor(library, assetId, searchParams) {
   const htmlRuntimePath = path.join(projectRoot, "src", "visual-runtime", "html-component-runtime.mjs");
   const htmlThemePath = path.join(projectRoot, "src", "visual-runtime", "html-component-theme.mjs");
   const textFlowPath = path.join(projectRoot, "src", "visual-runtime", "text-flow.mjs");
-  const assetRuntimePath = path.join(projectRoot, "src", "runtime", "assets.mjs");
+  const assetRuntimePath = path.join(projectRoot, "src", "runtime", "legacy-structure-assets.mjs");
   const themePath = path.join(projectRoot, "src", "runtime", "skins", "northeastern-university-theme.mjs");
   const inputStats = await Promise.all([
     fs.stat(resolved.entryPath),

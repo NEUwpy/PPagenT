@@ -1,38 +1,37 @@
 ---
 name: ppagent-structure
-description: 在 PPagenT 制作 PPT 时按内容关系检索通用结构，优先调用适配的现成组件；不能直接套用时参考重组，项目库不适合时按项目技能顺序转用外部图示或自主编排。结构跨 Skin 复用，只承担局部关系，不负责核心资产入库。
+description: 为 PPT 关系表达检索项目结构 Skill，提取已有结构的视觉特征与关系语法，按内容、区域及 Skin 适配重建，复用设计方法并执行本页原生构建。保留结构辨识度，支持多参考组合。
 ---
 
-# PPagenT 结构表达
+# PPagenT 自适应结构 Skill 库
 
-在本仓库根目录运行以下命令。`node` 使用 `load_workspace_dependencies` 返回的运行时；资源路径均相对项目根，便于以后移植 Harness。
+结构库提供可迁移的表达方法、视觉特征、来源和可复用实现。按本页内容选择结构，再按本页区域构建原生图形和文字；不再填入旧槽位。结构跨 Skin 复用，Layout 组织本页文字、媒体和结构。
 
-## 按需查找
+## 渐进检索
 
-先根据稿件识别本组内容的关系，不以“结构多”作为目标。结构跨 Skin 复用，主题和整页排版取自本次 Skin 及绑定体系。普通文字直接排版，不需要文字 Skill。
+在仓库根运行 `node .codex/skills/ppagent-structure/scripts/catalog.mjs list`，再用 `list --logic <logicId>` 筛选。流程可读[顺序结构](skills/ppagent-structure-sequence/SKILL.md)，比较可读[比较结构](skills/ppagent-structure-comparison/SKILL.md)。普通文字无需强行图示。
 
-1. 查询实际可用逻辑与数量：`node .codex/skills/ppagent-structure/scripts/catalog.mjs list`。
-2. 流程先读 [顺序结构 Skill](skills/ppagent-structure-sequence/SKILL.md)；比较先读 [比较结构 Skill](skills/ppagent-structure-comparison/SKILL.md)。其他逻辑可以直接用 `list --logic <logicId>` 查询当前目录。
-3. 从候选摘要筛选后，用 `inspect <assetId>` 核对内容关系、字段、数量、文字容量、尺寸模式和已验证的组合范围。只有 `resizeMode=adaptive` 且 `adaptationStatus=verified` 的资产才能按已登记局部区域动态重排；其余资产仍按自然尺寸判断。能在本页空间和 Skin 中适配的，优先直接调用现成组件，保留已有造型与关系表达；换色、换字体及调整整组件的页面位置属于适配，不是放弃调用的理由。
-4. 库中有相关结构但不能直接套用时，读取 `reference <assetId>` 和所需实现或预览，按浅约束、多参考方式重组。项目库不适合时，按[技能选择顺序](../../../skills/references/selection.md)判断是否转用 Archify；两者都不适合再自主编排。可从契约判断不适配，无需先制造一次调用失败。
-5. 示例只用于理解方法，不能把示例事实带进稿件。简记最终采用方式；转为参考或自主绘制时说明具体不适配或未命中原因，不为使用结构删减事实、条件或强行缩小字号。
+对候选执行 `guide <assetId>`（`reference` 为兼容别名），获取真实语义、视觉意图、固定／可变项和实现路径。按需要查看源码与预览，不一次读取全库。说明缺失时查看原实现和来源，不凭名称猜造型，也不把未提炼项说成已确认特征。
 
-`inspect` 读取当前资产真源，不维护平行静态清单。结构是否支持图片以其字段契约为准；一般图文排版不必进入结构检索。
+## 先保留特征，再适配
 
-## 参考重组
+从来源证据识别两类边界：
 
-原组件不适配而库中仍有可借鉴结构时，读[浅约束与多参考使用](references/reference-use.md)。参考提供表达方法，允许择取多个参考中有用的部分；不规定参考数量，也不要求拼入完整结构。事实、来源、顺序、归属、极性和条件是必须保留的内容边界；源坐标、尺寸、造型、配色和装饰是可调整的设计选择。新表达按本次 Skin 和区域自行验证，记录实际采用的参考。没有执行 `invokeStructure` 就不报告直接调用成功。
+- 内容关系：顺序、归属、极性、条件与事实；不为套图更改。
+- 视觉识别特征：使该结构区别于普通框图的轮廓、层次、连接、对齐和节奏。挑明本次采用哪些特征；不能只引用名称却将所有设计抹平成普通卡片。
 
-## 直接调用
+原 visual-intent 和 componentModel 是设计证据，可能同时包含旧 Skin 颜色和原实现数量限制；不要将这些统统升级为新表达的硬约束。色彩、字号、尺寸、间距、文字内外分工按本次 Skin 和区域调整。数量、朝向和布局可变化，但要重算几何并保持所采用的特征可辨识。具体见[适配与多参考组合](references/reference-use.md)。
 
-先读取 [调用接口](references/invocation.md)。在自己的 JavaScript PPT 构建脚本中导入 `scripts/invoke.mjs` 的 `invokeStructure`。它调用已有 HTML/Native 执行器，将结构加入当前 slide，并在成功或失败后向指定的运行记录文件追加事件。它不会生成整页截图来代替图示。
+## 原生执行
 
-正文区、主题与对齐使用本次明确指定的 Skin 设计指南；未指定时读取 `docs/工作流/正式生成/Agent排版规则.md` 确认入口。`src/runtime/skins/northeastern-university-contract.mjs` 是旧大学接口参考，不覆盖本次 Skin。仅任务要求继承旧模板时复用其 Shell，不把旧 grid 文字槽位当作新规则。
+按[构建接口](references/invocation.md)，给 invokeStructure 传入采用的 references、稿件 content、本页 targetFrame 和 build 函数。build 直接创建可编辑形状、文字与连接；执行器不加载原 Mapper、固定文字框、数量上限或缩放契约。
 
-## 直接调用的适配与反馈
+沿用一个参考的特征属于 adapted；组合多个参考的局部方法属于 composed。源码只作造型与几何参考，按本次内容重算位置和文字尺寸。项目结构缺少合适表达方法时，按[技能选择顺序](../../../skills/references/selection.md)转用图示／图表技能或自主编排。
 
-数量、关系、极性、字段与空间契约必须符合所选资产。先读取契约再选区域，不能整体缩小后把字号补回来。动态适配必须由资产自己的已验证 capability 重新求解内部布局；仅有 profile 或 manifest 声明不算已实现。节点与连线的位置、方向及归属保留；本次 Skin 明确要求样式统一时，可以对调用产生的原生对象做样式适配，按[调用接口](references/invocation.md#原生样式适配)核对文本和几何不变。关系或语义依赖的样式不能抹去，无法兼容时换表达。
+## 输出和检查
 
-发生错误先分清：参数/语义不合适、区域不足、Skill 说明缺失、运行环境故障。只修改有证据的问题后重试。禁止吞错后改成假结构并声称调用成功。保存失败与成功事件，报告实际采用的表达。新的页面组合不自动晋升核心资产。
+简记来源资产、保留特征、适配变化、执行方式和未解决问题。原生构建事件由 invokeStructure 记录；success 只表示构建产生了对象，不代表视觉验收通过。新组合只写入本次产物，不自动晋升核心。
 
-本 Skill 在当前任务可通过显式读取使用；新建文件是否已被应用自动发现，需要另行验证，不能把手动加载说成自动触发。
+在最终 PPTX 中检查可编辑性、语义字号、文字边界、连线端点、重叠和关系方向；渲染实际页面，对照参考检查保留特征及整页效果。适配后的结果单独验证，样例预览及原资产审批不代表新表达已通过。发现问题后修正并重新渲染。
+
+本 Skill 供独立制作入口显式加载；正式生产线及 Harness 的自动适配迁移需另行验证。

@@ -8,7 +8,7 @@
 
 | 技能 / 项目入口 | 用途 | 顺位与触发 | PPT 使用方式 | 来源、许可与状态 |
 | --- | --- | --- | --- | --- |
-| [ppagent-structure](../.codex/skills/ppagent-structure/SKILL.md) | 汇聚、比较、顺序、并列等内容关系 | 第一顺位，适配现成结构优先调用，否则参考核心重排 | 现有原生组件或明确标记的参考重建 | 项目自建，已有调用能力 |
+| [ppagent-structure](../.codex/skills/ppagent-structure/SKILL.md) | 汇聚、比较、顺序、并列等内容关系 | 第一顺位，保留视觉特征后原生适配构建或组合 | 按本页内容构建的可编辑原生对象 | 项目自建，已有调用能力 |
 | [ppagent-structure-sequence](../.codex/skills/ppagent-structure/skills/ppagent-structure-sequence/SKILL.md) / [ppagent-structure-comparison](../.codex/skills/ppagent-structure/skills/ppagent-structure-comparison/SKILL.md) | 顺序与比较的专项契约检查 | 结构技能内部按关系按需读取，不是额外顺位 | 沿用结构调用接口 | 项目自建子技能 |
 | Archify / [ppagent-diagrams](../.codex/skills/ppagent-diagrams/SKILL.md) | 架构、流程、时序、数据流、状态图 | 项目结构不覆盖的关系图，第二顺位 | 结构化图示经适配重建为原生对象，HTML 仅为中间结果 | [tt-a1i/archify](https://github.com/tt-a1i/archify)，MIT，pilot；三页监督试验09完成 |
 | Lieflat Charts / [ppagent-charts](../.codex/skills/ppagent-charts/SKILL.md) | 数值比较、趋势、构成、分布等数据编码 | 项目结构缺少合适图表时，第二顺位；与 Archify 按类型分工 | 从真实 gallery 模板保留核心编码，按 Skin 与区域原生重建；不冒充 Office chart | [larashero3-dotcom/lieflat-charts](https://github.com/larashero3-dotcom/lieflat-charts)，PolyForm Noncommercial 1.0.0；非商业试用，商业许可未取得 |

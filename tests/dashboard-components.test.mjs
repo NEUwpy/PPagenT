@@ -165,12 +165,11 @@ test("预览使用版本化长期缓存，主数据仍保持实时", async () =>
   assert.doesNotMatch(template, /preloadAssetEvidence/);
 });
 
-test("看板字号缺失时显示未读取而不是 NaN", async () => {
+test("结构看板不再展示原执行器字号契约", async () => {
   const template = await fs.readFile(path.join(root, "src/tools/templates/logic-dashboard.html"), "utf8");
-  assert.match(template, /Number\.isFinite\(designSize\)/);
-  assert.match(template, /<code>未读取<\/code>/);
+  assert.doesNotMatch(template, /const typographyContract/);
+  assert.match(template, /数量、比例和文字位置由本次内容决定/);
 });
-
 test("看板 EXE 每次启动都会重启旧服务并使用新地址打开", async () => {
   const launcher = await fs.readFile(path.join(root, "src/launcher/ppa-dashboard-main.cjs"), "utf8");
   assert.match(launcher, /await stopExistingDashboards\(root\)/);
@@ -591,30 +590,12 @@ test("循环闭环由同一 HTML 组件解析 3–6 步状态", () => {
   }
 });
 
-test("看板从当前 HTML State 自动生成容器表并复用到 Native 和 Skin", async () => {
-  const server = await fs.readFile(path.join(root, "src/tools/serve-logic-dashboard.mjs"), "utf8");
+test("结构看板展示代表样例和特征，不再创建文字框或 State 控件", async () => {
   const template = await fs.readFile(path.join(root, "src/tools/templates/logic-dashboard.html"), "utf8");
-  assert.match(template, /readComponentSlotMap/);
-  assert.match(template, /frozenComponentSlotMap/);
-  assert.match(template, /intakeSlotContract/);
-  assert.match(template, /intakeSlotContractUrl/);
-  assert.match(template, /按需读取完整契约/);
-  assert.match(template, /data-slot-map-list/);
-  assert.match(template, /data-slot-overlay/);
-  assert.match(template, /fontSizePt/);
-  assert.match(template, /入库时固化的字体—容器契约/);
-  assert.match(template, /slotProvider/);
-  assert.match(template, /悬停查看可编辑容器/);
-  assert.match(server, /统一动态文字区/);
-  assert.match(server, /动态文字大区/);
-  assert.match(server, /标题区（本次排版）/);
-  assert.match(server, /正文区（本次排版）/);
-  assert.match(template, /最外层深蓝框表示连续的动态文字大区/);
-  assert.match(template, /连续复合文字区域/);
-  assert.match(template, /text-flow-part/);
-  assert.match(template, /slot\.textFlow\?\.parts/);
+  assert.match(template, /representativeMarkup/);
+  assert.match(template, /skill\.features/);
+  assert.doesNotMatch(template, /readComponentSlotMap|frozenComponentSlotMap|data-slot-map-list|data-slot-overlay|data-component-control/);
 });
-
 test("多集合共同交集只在原稿明确集合与共同部分时映射正式载荷", () => {
   const content = {
     pageId: "intersection-page",

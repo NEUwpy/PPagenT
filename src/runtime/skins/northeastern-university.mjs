@@ -11,7 +11,7 @@ import {
   closeHtmlComponentRuntime,
   isSkinOnlyAsset,
   renderStructureAsset,
-} from "../assets.mjs";
+} from "../legacy-structure-assets.mjs";
 import { fitChineseTextToFrame } from "../../render/chinese-typography.mjs";
 import { loadCompositionLayouts } from "../../composition/layouts.mjs";
 import { renderPageComposition } from "../../render/page-composition.mjs";

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="icon" href="data:,">
-  <title>PPagenT 正式生成工作台</title>
+  <title>PPagenT 旧版 API 生成工作台</title>
   <style>
     :root{--ink:#172338;--muted:#6b778a;--line:#dbe3ee;--panel:#fff;--wash:#f3f6fa;--blue:#285c9f;--blue-soft:#edf4fb;--green:#258064;--red:#c14852;--amber:#b27a28;--shadow:0 18px 48px rgba(31,50,76,.10)}
     *{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:"Microsoft YaHei","Segoe UI",sans-serif;color:var(--ink);background:#edf2f7}button,input,textarea,select{font:inherit}button{cursor:pointer}
@@ -31,7 +31,7 @@
   <div class="app">
     <aside class="side"><div class="brand"><div class="mark"></div><div><strong>PPagenT</strong><small>正式生成工作台</small></div></div><button id="new-task" class="new-task-button" type="button">＋ 新建任务</button><h3>最近运行</h3><div class="run-tools"><label class="select-all-runs"><input id="select-all-runs" type="checkbox"><span>全选当前列表</span></label><button id="delete-selected-runs" type="button" disabled>删除所选</button><button id="delete-all-runs" class="danger" type="button" disabled>清空全部可删记录</button></div><div id="run-list" class="run-list"></div></aside>
     <main>
-      <header class="topbar"><div><h1>稿件怎样变成 PPT</h1><p>沿正式生成线查看每一步的输入、提示词、导演输出和确定性程序。</p></div><div id="env" class="env"></div></header>
+      <header class="topbar"><div><h1>旧版 API 生成工作台</h1><p>此入口仍使用固定候选与参数执行器。新的结构 Skill 采用原生构建；本入口尚未迁移。</p></div><div id="env" class="env"></div></header>
       <section class="new-run">
         <label id="drop" class="drop"><input id="file" type="file" accept=".docx,.md,.markdown,.txt"><div class="drop-icon">＋</div><div><b id="file-name">选择或拖入稿件</b><span>DOCX、Markdown 或 TXT</span></div></label>
         <label class="checkpoint-option"><input id="manual-checkpoint" type="checkbox"><span><b>调试时暂停表单</b><span>可选查看或修改视觉模型填写的页面职责、节奏和资产方案；正式生成默认自动继续。</span></span></label>

@@ -1,68 +1,25 @@
-# 原生调用接口
+# 原生构建接口
 
-本文件相对于 Skill 入口；所有示例仓库路径从项目根解析。
+从项目根运行 catalog.mjs guide <assetId> 读取设计。资产参数、数量范围与 TextRegion 是历史样例实现细节，不再作为生产构建接口。
 
 ```javascript
-import { invokeStructure, closeStructureRuntime } from "<到本 Skill>/scripts/invoke.mjs";
-// slide 来自 @oai/artifact-tool；skin 使用仓库现有轻量 Skin contract。
+import { invokeStructure } from '<到本 Skill>/scripts/invoke.mjs';
 await invokeStructure({
-  root, slide, skin,
-  assetId,                 // catalog inspect 返回的真实 ID
-  parameters,              // 根据所选 runtime 的实际参数接口绑定稿件
-  targetFrame,             // {left, top, width, height}，1280×720 设计单位
-  evidencePath,            // 本次运行的 .ndjson；调用前后自动追加事件
-  pageId, regionId,
-  reason,                  // 内容关系为什么需要这个结构
+  root, slide, skin, targetFrame, content,
+  references: [{ assetId, preservedFeatures: ['本次保留的轮廓或层次'], changes: ['本次布局变化'] }],
+  evidencePath, pageId, regionId, reason,
+  async build({ slide, frame, skin, content, references }) {
+    // 按本页内容计算几何，再通过 slide.shapes.add / connect 创建原生元素。
+    // references 含设计原文及示例路径，不会自动执行原资产。
+    // 文字正常排版：按语义字号、可用宽度和实际换行计算位置与高度。
+  },
 });
-// 整份构建脚本的 finally 中调用（释放 HTML 浏览器）。
-await closeStructureRuntime();
 ```
 
-不要传 slide JSON 代替实际 slide 对象。`invokeStructure` 加入元素，整套 PPTX 的导出、文字/区域检查仍由构建脚本完成。事件 `success` 只证明渲染调用完成，不等于整页 QA 通过。
+build 是当前构建脚本中的函数，不是字符串代码。使用实际 slide，不传 slide JSON；没有新增原生对象会报错。成功回执 validation=rendered-unreviewed，只证明执行产生对象，最终 PPTX 仍需检查与渲染。失败时 slide 可能包含局部对象，重试应使用新的 slide 或由调用方清理该次对象；日志保留失败。
 
-目录命令：
+执行器只检查参考存在、特征记录和本页区域边界，不使用资产旧字号、minimumFrame、stateFootprints、TextRegion、Slot Contract。实际文本需要有当前页的几何边界以便绘制和检查，这不等于恢复固定文字排版框。不要缩小文字来凑样例；可移动说明到图旁、调整比例或拆分页面。
 
-```text
-catalog.mjs list
-catalog.mjs list --logic sequence
-catalog.mjs inspect sequence-flow-001
-```
+初次编写 Native 构建方法时读取 presentations 的 API 文档。Shape 的 text.style.fontSize 使用设计 px；最终按 PPTX 的实际字号与行框检查。字体、颜色与文字角色来自当前 Skin 和绑定排版规则，不继承历史组件默认值。
 
-`inspect` 返回的 `previewParameters` 是参数形状示例、不是稿件；原始 manifest 与实现路径保留用于更深入核查。参数中的 `items` 不适用于所有结构；有些使用 `sides / layers / pros / cons / structuredData`，按选中资产实际接口处理。不得把所有结构统一塞进 items。
-
-执行器：`src/runtime/assets.mjs` 的 `renderStructureAsset`；资产发现：`src/runtime/core-asset-packages.mjs`。包装器检查正文区边界；自然尺寸、已验证动态适配的内容相关下界和真实 HTML 文字容量由同一运行链核查，避免 Skill 与 production 维护两套尺寸判断。语义及全部可变字段仍需依据 inspect 和组件返回的实际错误核查。
-
-资产 `spatialContract.contentFrame` 描述其源设计坐标，不要求新页面沿用源模板的 top=166。`targetFrame` 的位置由本页编排决定，并位于本次 Skin 的 bodyFrame 内；自然尺寸资产仍满足 minimumFrame 或该状态 footprint；`resizeMode=adaptive` 且 `adaptationStatus=verified` 的资产还必须满足 adaptiveMinimumFrame、内容相关 resolver 和最终 DOM/文字检查。按本页实际标题高度与留白确定 bodyFrame，不把源坐标当作新页面强制槽位。
-
-动态空间不足会以 `STRUCTURE_FRAME_UNSUPPORTED` 或 `STRUCTURE_CONTENT_OVERFLOW` 失败，并在调用日志保存 `requiredFrame / targetFrame / reason`。失败后由页面编排换区域、换 Composition、拆页或换表达；不能吞错，也不能把 fallback 成功写成该结构已经适配成功。
-
-可参考 `experiments/penguin-harness-v2/grid-native.mjs` 复用模板页、写备注、导出与保留主题的方法，但不要继承它的固定 27/20 字号、等高槽位或每个区域都必须 skillId 的限制。
-
-文字可直接使用 `src/asset-runtime/component-builders.mjs` 的 `addText(slide,text,frame,style)`；不设置 shrinkText。`fontSize / typeface / alignment / verticalAlignment / autoFit` 显式指定，之后检查实际导出文字行和包围盒。图片、线条和形状使用原生 API。首次编写构建脚本前按 presentations 技能加载运行时与 API 文档。
-
-## 当前 Codex 试做发现的调用要点
-
-- `theme.typography` 由 `htmlComponentThemeCss` 写成 CSS pt，原生 `shape.text.style.fontSize` 则使用设计 px。例如要输出 20 px 正文，结构主题传 15，原生文字传 20；最终检查实际字号，不把两个接口当成同一单位。
-
-- Skin 旧契约仍有 `singleTitle / dualBody / bandBody` 等版式槽位。新排版不要继续按这些槽位选字号；读取本次指定版本的 Skin 设计提示词，按核心判断、组标题、正文、辅助说明和注释建立语义样式配置。结构外的普通文字同样需要正向编排指导，不能成为调用结构后的剩余填空；不同时加载旧候选字号，不擅自增加更小字号。
-- 结构外的说明也属于本页正文。例如结构居中时，其贯穿规则说明应遵守本次同页对齐要求；编号标记与正文的区别须明确，不能把普通句子排除出检查。
-- 预估换行只用于排放。导出后读取 `slide-XX.layout.json` 的 `elements[].bbox / resolvedTextStyle / textLayout.lines`，并核对原生文本行；实际换行可能比预估多一行。检查最终文字框之间的遮挡、行高容量及异常短行，不能只断言自己写入的 frame 合法就报告 QA 通过。
-- `presentation.inspect` 可提供对象与文字概要，但对文本容量的检查还需结合字号、实际行数和区域；源模板的有意叠放与正文碰撞分开处理，检查未覆盖的部分如实报告。
-- 每次构建使用独立 attempt 标记或追加日志，不在重跑开头清空 `structure-invocations.ndjson`。历史 attempt 与最终采用版本分开记录。
-- Windows 下用 `fileURLToPath(import.meta.url)` 解析脚本路径，不能直接用 URL.pathname。将脚本从临时目录归档到 evidence 后，重新检查相对导入和项目根定位，并实际从归档路径运行。
-
-### 独立实验的路径与交付
-
-`root` 是包含 `assets/` 与 `.codex/skills/ppagent-structure/` 的仓库根，不是实验目录。按 builder 所在目录解析后先检查这两个路径；结构包装器和最终交付工具所需的工作区不是同一个概念。
-
-使用 presentations 的 `finalizePresentation` 时，以工具当版接口为准。当前已验证的目录组织是在本次工作区下预先创建 `build/`、`evidence/`、`deliverables/` 三个同级目录：候选在 build，校验回执在 evidence，最终文件在 deliverables。回执不能位于最终文件的父目录或其子目录，最终父目录须已存在；重跑为最终文件和回执使用新的路径，避免覆盖冲突。交付后可复制已校验文件到本次公开链接位置，并核对哈希一致。
-
-最终化器的子进程导入需要 `RUNTIME_NODE_MODULES` 时，使用 `load_workspace_dependencies` 返回的 Node.js packages 路径传入；不要改用猜测的全局依赖。结构成功后的依赖或最终化失败属于交付阶段，保留候选后修复该阶段，不必反复重调结构。这些检查不代替最终 PPTX 的独立渲染与视觉复核。
-
-## 原生样式适配
-
-仅本次 Skin 要求与现有组件样式不一致时使用。`invokeStructure` 的成功仍只表示原生生成完成；在当前 builder 中识别该次新增的对象，保留对象 ID、数量、文本、位置、路径与方向，再用 artifact-tool 已支持的文字样式、fill、line、shadow 属性对齐本次 Skin。`shape.shadow = "shadow-none"` 可去掉阴影。字体、颜色与对齐变化后重新读回实际行和边界。
-
-不修改核心资产文件，不删节点、连线或带含义的标记；不得把位图或重画的结构冒充原调用。带正负、强弱、分类等含义的视觉编码需原样保留语义。保存适配前后 ID/文本/几何对照及实际输出样式。遇到不能用样式属性解决的结构问题，换表达或报告限制，不通过偷偷移动节点绕过契约。
-
-实际 API 要点：结构对象的可见名称可从调用后 `slide.export({format:"layout"})` 的 `elements[].id/name` 取得，不能假定 `shape.name` 直接可读。先建立实际 id → name 映射，再按本次资产中已确认的对象职责适配。只设置字体不能替代颜色和对齐设置；完成后以导出的 resolvedTextStyle 为准。此路径已在 sequence-flow-001 上运行，其他资产仍需按其真实对象与语义检查。
+旧调用参数 assetId + parameters 不会再触发旧执行器，需迁移为 references + content + build。closeStructureRuntime 为旧 finally 语句保留空操作；新执行器不启动 HTML 浏览器。导出、原生性、文字溢出、线条归属和视觉特征验证由本次构建负责。

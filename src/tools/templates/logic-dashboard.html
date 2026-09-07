@@ -430,7 +430,7 @@
     <div class="mode-notice" id="mode-notice"></div>
 
     <section class="section" id="capabilities">
-      <div class="section-head"><div><h2>01 · 结构库</h2><p>结构按 Logic 组织；每个 Logic 内列出真正可独立调用的 Structure Group 与 State。这里不再按“基础、常用、补充”人为分层。</p></div><span class="pill pending" id="logic-count"></span></div>
+      <div class="section-head"><div><h2>01 · 结构 Skill 库</h2><p>按内容关系发现结构，保留造型与表达特征，按本页内容重新编排。每个样例展示一种效果，不限定数量、尺寸或文字框。</p></div><span class="pill pending" id="logic-count"></span></div>
       <div class="coverage-grid" id="coverage-grid"></div>
       <details class="technical-details approval-details" id="asset-approval">
         <summary>结构资产审批队列（默认收起）</summary>
@@ -533,7 +533,12 @@
       return pill(LABELS[status] || status, status === "user-approved" ? "core" : "pending");
     }
 
+    function selectionQuery(selection) {
+      return new URLSearchParams(Object.entries(selection).map(([key, value]) => [key, String(value)])).toString();
+    }
+
     function previewMarkup(asset, drawer = false) {
+      if (asset.structureSkill && asset.componentPreviewAvailable) return pendingApprovalPreviewMarkup(asset);
       const className = drawer ? "drawer-preview" : "logic-preview";
       if (!liveMode) return '<div class="' + className + '"><span>静态快照不加载 PPT 图像<br>双击 PPA看板.exe 查看真实示例</span></div>';
       const nativeUrl = asset.nativeStatePreviewUrl
@@ -555,285 +560,23 @@
       return '<div class="logic-preview"><iframe loading="lazy" tabindex="-1" src="' + esc(previewUrl) + '" title="' + esc(asset.name) + ' 的纯净 HTML 黄金状态"></iframe></div>';
     }
 
-    function selectionQuery(selection) {
-      return Object.entries(selection ?? {}).map(([key, value]) => encodeURIComponent(key) + '=' + encodeURIComponent(value)).join('&');
-    }
-
-    const slotRoleLabels = {
-      icon: '图标', 'center-title': '中心主题', 'item-title': '节点标题',
-      'item-body': '正文', 'item-point': '分点', 'item-content': '动态文字区', 'text-region': '动态文字大区', content: '内容',
-    };
-
-    function currentComponentSelection(flow) {
-      return Object.fromEntries([...flow.querySelectorAll('.state-control[data-control-key]')].map((row) => [
-        row.dataset.controlKey,
-        row.querySelector('.state-button.active')?.dataset.componentValue ?? '',
-      ]));
-    }
-
-    function frozenComponentSlotMap(flow) {
-      const asset = byKey.get(flow?.dataset.assetKey || '');
-      const contract = asset?.intakeSlotContract;
-      if (!contract) return null;
-      if (contract.deferred) {
-        return {
-          width: Number(asset.spatialContract?.contentFrame?.width) || 1170,
-          height: Number(asset.spatialContract?.contentFrame?.height) || 492,
-          source: 'deferred-intake-contract',
-          status: contract.status,
-          error: '实时看板打开详情后按需读取完整契约',
-          slots: [],
-        };
-      }
-      if (!contract.states?.length || !contract.variants?.length) {
-        return {
-          width: Number(asset.spatialContract?.contentFrame?.width) || 1170,
-          height: Number(asset.spatialContract?.contentFrame?.height) || 492,
-          source: 'frozen-intake-contract',
-          status: contract.status,
-          error: contract.error || '',
-          slots: [],
-        };
-      }
-      const selection = currentComponentSelection(flow);
-      const state = contract.states.find((entry) => Object.entries(entry.selection ?? {}).every(([key, value]) => String(selection[key]) === String(value)));
-      const variant = state ? contract.variants.find((entry) => entry.id === state.variantId) : null;
-      if (!variant) return null;
-      return {
-        width: Number(asset.spatialContract?.contentFrame?.width) || 1170,
-        height: Number(asset.spatialContract?.contentFrame?.height) || 492,
-        source: 'frozen-intake-contract',
-        status: contract.status,
-        slots: variant.slots.map((slot) => ({
-          ...slot,
-          left: slot.frame.left,
-          top: slot.frame.top,
-          width: slot.frame.width,
-          height: slot.frame.height,
-          provider: slot.media?.provider || '',
-          issues: variant.issues.filter((issue) => issue.slotId === slot.id).map((issue) => issue.code),
-        })),
-      };
-    }
-
-    function readComponentSlotMap(frame, flow) {
-      const frozen = frozenComponentSlotMap(flow);
-      if (frozen) return frozen;
-      try {
-        const doc = frame.contentDocument;
-        const root = doc?.querySelector('[data-ppt-root]');
-        if (!root) return null;
-        const rootBox = root.getBoundingClientRect();
-        if (!rootBox.width || !rootBox.height) return null;
-        const width = Number(frame.dataset.slotWidth) || Number(DATA.activeSkin?.slots?.contentFrame?.width) || 1170;
-        const height = Number(frame.dataset.slotHeight) || Number(DATA.activeSkin?.slots?.contentFrame?.height) || 492;
-        const slots = [...root.querySelectorAll('[data-slot-id]')].map((element) => {
-          const box = element.getBoundingClientRect();
-          return {
-            id: element.dataset.slotId,
-            role: element.dataset.slotRole || 'content',
-            field: element.dataset.slotField || '',
-            contentType: element.dataset.slotContentType || (element.dataset.slotRole === 'icon' ? 'icon' : 'text'),
-            maxChars: Number(element.dataset.slotMaxChars) || null,
-            maxLines: Number(element.dataset.slotMaxLines) || null,
-            provider: element.dataset.slotProvider || '',
-            required: element.dataset.slotRequired === 'true',
-            textMode: element.dataset.slotTextMode || (element.dataset.slotRole === 'item-body' ? 'flow' : 'single-line'),
-            listPolicy: element.dataset.slotListPolicy || (element.dataset.slotRole === 'item-body' ? 'inline' : 'none'),
-            textFlow: element.dataset.slotContentType === 'text-flow' ? {
-              parts: [...element.querySelectorAll('[data-text-flow-part="title"],[data-text-flow-part="body"]')].map((part) => {
-                const partBox = part.getBoundingClientRect();
-                return {
-                  part: part.dataset.textFlowPart,
-                  frame: {
-                    left: Math.round((partBox.left - rootBox.left) / rootBox.width * width * 10) / 10,
-                    top: Math.round((partBox.top - rootBox.top) / rootBox.height * height * 10) / 10,
-                    width: Math.round(partBox.width / rootBox.width * width * 10) / 10,
-                    height: Math.round(partBox.height / rootBox.height * height * 10) / 10,
-                  },
-                };
-              }),
-            } : null,
-            textLayout: element.dataset.slotContentType === 'text-region' ? {
-              id: element.dataset.textLayoutId || '',
-              contentRoles: (element.dataset.textLayoutContentRoles || '').split(',').filter(Boolean),
-              parts: [...element.querySelectorAll('[data-text-flow-part],[data-text-layout-part]')].map((part) => {
-                const partBox = part.getBoundingClientRect();
-                return {
-                  part: part.dataset.textLayoutPart || part.dataset.textFlowPart,
-                  frame: {
-                    left: Math.round((partBox.left - rootBox.left) / rootBox.width * width * 10) / 10,
-                    top: Math.round((partBox.top - rootBox.top) / rootBox.height * height * 10) / 10,
-                    width: Math.round(partBox.width / rootBox.width * width * 10) / 10,
-                    height: Math.round(partBox.height / rootBox.height * height * 10) / 10,
-                  },
-                };
-              }),
-            } : null,
-            left: Math.round((box.left - rootBox.left) / rootBox.width * width * 10) / 10,
-            top: Math.round((box.top - rootBox.top) / rootBox.height * height * 10) / 10,
-            width: Math.round(box.width / rootBox.width * width * 10) / 10,
-            height: Math.round(box.height / rootBox.height * height * 10) / 10,
-          };
-        }).filter((slot) => slot.id && slot.width > 0 && slot.height > 0);
-        return { width, height, source: 'live-dom-unfrozen', status: 'missing', slots };
-      } catch {
-        return null;
-      }
-    }
-
-    function renderComponentSlotMap(flow) {
-      const frame = flow?.querySelector('[data-component-slot-source]');
-      const map = frame ? readComponentSlotMap(frame, flow) : null;
-      if (!map) return;
-      const list = flow.querySelector('[data-slot-map-list]');
-      if (list) list.innerHTML = map.slots.length ? map.slots.map((slot) => {
-        const role = slotRoleLabels[slot.role] || slot.role;
-        const issueNote = slot.issues?.includes('text-slot-needs-explicit-rectangular-container')
-          ? ' · 容器待明确'
-          : slot.issues?.includes('declared-capacity-exceeds-geometry')
-            ? ' · 原登记超出实际容量'
-            : '';
-        const ability = slot.contentType === 'icon'
-          ? '图标 · ' + esc(slot.provider || '未指定') + (slot.required ? ' · 必填' : ' · 可选')
-          : slot.contentType === 'text-region'
-            ? '文字区域 · 当前：' + esc(slot.textLayout?.id || '未绑定') + (slot.textLayout?.compatible?.length ? ' · 可换：' + esc(slot.textLayout.compatible.join('、')) : '')
-          : slot.contentType === 'text-flow'
-            ? '标题／正文动态排版 · 容量由几何与字号派生'
-            : (slot.textMode === 'flow' ? '整块正文' : '单行文字')
-            + (slot.listPolicy === 'inline' ? ' · 段落/分点共用' : '')
-            + (slot.capacity?.maxChars || slot.maxChars ? ' · ≤ ' + (slot.capacity?.maxChars || slot.maxChars) + ' 字' : ' · 字数待计算')
-            + (slot.capacity?.maxLines || slot.maxLines ? ' · ' + (slot.capacity?.maxLines || slot.maxLines) + ' 行' : '')
-            + (slot.required ? ' · 必填' : ' · 可选')
-            + issueNote;
-        const typography = slot.textFlow?.parts?.length
-          ? slot.textFlow.parts.map((part) => part.part + ' ' + part.typography.fontSizePt + ' pt').join(' · ')
-          : slot.typography
-          ? slot.typography.fontSizePt + ' pt · ' + esc(slot.typography.typeface) + ' · ' + esc(slot.typography.alignment)
-          : '字号待固化';
-        const capacity = slot.contentType === 'text' && slot.capacity?.charsPerLine
-          ? slot.capacity.charsPerLine + ' 字/行 · ' + slot.capacity.maxLines + ' 行'
-          : ability;
-        return '<div class="slot-map-row' + (slot.issues?.length ? ' issue' : '') + '"><b>' + esc(role) + '</b><code>' + esc(slot.field || slot.id) + '</code><span>' + ability + '</span><span>' + typography + '</span><span>' + capacity + '</span><span>' + slot.width + ' × ' + slot.height + '</span></div>';
-      }).join('') : '<div class="slot-map-empty">' + (map.status === 'build-error' ? '契约生成失败：' + esc(map.error || '请先修复当前 HTML 编译问题') : '当前组件没有暴露可编辑容器；不能仅凭 fieldContract 推测位置。') + '</div>';
-
-      const slide = DATA.activeSkin?.slideSize ?? { width: 1280, height: 720 };
-      const content = DATA.activeSkin?.slots?.contentFrame ?? { left: 55, top: 166, width: 1170, height: 492 };
-      for (const layer of flow.querySelectorAll('[data-slot-overlay]')) {
-        layer.innerHTML = map.slots.flatMap((slot) => {
-          const role = slotRoleLabels[slot.role] || slot.role;
-          const ability = slot.contentType === 'icon'
-            ? (slot.required ? '必填图标' : '可选图标')
-            : slot.contentType === 'text-region'
-              ? '动态文字大区'
-            : slot.contentType === 'text-flow'
-              ? '动态文字区'
-              : (slot.typography?.fontSizePt ? slot.typography.fontSizePt + 'pt · ' : '')
-              + (slot.textMode === 'flow' ? '整块正文' : (slot.capacity?.maxChars || slot.maxChars ? '≤' + (slot.capacity?.maxChars || slot.maxChars) + '字' : '文字'));
-          const left = (content.left + slot.left / map.width * content.width) / slide.width * 100;
-          const top = (content.top + slot.top / map.height * content.height) / slide.height * 100;
-          const width = slot.width / map.width * content.width / slide.width * 100;
-          const height = slot.height / map.height * content.height / slide.height * 100;
-          const outer = '<i class="native-slot-box' + (slot.role === 'icon' ? ' icon' : '') + (slot.contentType === 'text-region' ? ' text-region' : '') + (slot.contentType === 'text-flow' ? ' text-flow' : '') + '" data-slot-label="' + esc(role + ' · ' + (slot.contentType === 'text-region' ? '连续复合文字区域' : (slot.contentType === 'text-flow' ? '统一动态文字区' : ability))) + '" style="left:' + left + '%;top:' + top + '%;width:' + width + '%;height:' + height + '%"></i>';
-          const parts = [...(slot.textFlow?.parts ?? []), ...(slot.textLayout?.parts ?? [])].filter((part) => ['title','body','value','label'].includes(part.part)).map((part) => {
-            const partLeft = (content.left + part.frame.left / map.width * content.width) / slide.width * 100;
-            const partTop = (content.top + part.frame.top / map.height * content.height) / slide.height * 100;
-            const partWidth = part.frame.width / map.width * content.width / slide.width * 100;
-            const partHeight = part.frame.height / map.height * content.height / slide.height * 100;
-            const partLabel = ({ title:'内部标题排版区', body:'内部正文排版区', value:'内部强调值排版区', label:'内部说明排版区' }[part.part] || '内部文字排版区') + ' · 本次求解';
-            return '<i class="native-slot-box text-flow-part ' + esc(part.part) + '" data-slot-label="' + esc(partLabel) + '" style="left:' + partLeft + '%;top:' + partTop + '%;width:' + partWidth + '%;height:' + partHeight + '%"></i>';
-          });
-          return [outer, ...parts];
-        }).join('');
-      }
-    }
-
-    function connectComponentSlotMap(scope) {
-      const frame = scope?.querySelector('[data-component-slot-source]');
-      if (!frame) return;
-      const flow = frame.closest('.review-flow');
-      frame.addEventListener('load', () => renderComponentSlotMap(flow));
-      if (frame.contentDocument?.readyState === 'complete') renderComponentSlotMap(flow);
-    }
-
-    function reviewWorkflowMarkup(asset) {
-      if (!liveMode) return '<div class="review-flow"><h3>建设链证据</h3><p>静态快照不加载来源页和实时 HTML。请双击 PPA看板.exe。</p></div>';
-      const htmlRoute = asset.renderer === 'html-component';
-      const awaitingHtmlApproval = htmlRoute && !asset.userApprovedHtml;
-      const sourcePreviews = asset.sourcePreviewUrls ?? [];
-      const sourceButtons = sourcePreviews.length > 1 ? '<div class="state-switcher"><div class="state-control"><b>来源参考</b>' + sourcePreviews.map((item, index) => '<button type="button" class="state-button' + (index === 0 ? ' active' : '') + '" data-source-preview="' + esc(item.url) + '" data-source-slide="' + item.slide + '">来源 ' + (index + 1) + '</button>').join('') + '</div></div>' : '';
-      const sourceMedia = asset.sourcePreviewAvailable && asset.sourcePreviewUrl
-        ? '<button type="button" class="review-media source preview-open" data-source-image data-preview-open="' + esc(asset.sourcePreviewUrl) + '" data-preview-caption="' + esc(asset.name) + ' · 来源参考"><img src="' + esc(asset.sourcePreviewUrl) + '" alt="' + esc(asset.name) + ' 的来源 PPT 页面"></button>'
-        : '<div class="review-media source"><span>没有可读取的 PPT源/ 文件与页码</span></div>';
-      const intentMedia = asset.visualIntentText ? '<div class="intent-panel">' + esc(asset.visualIntentText) + '</div>' : '<div class="intent-panel">尚未形成 visual-intent.md。</div>';
-      const fixedItems = asset.componentModel?.fixed ?? [];
-      const variableItems = asset.componentModel?.variable ?? [];
-      const componentProfile = fixedItems.length || variableItems.length
-        ? '<div class="component-profile"><div><b>固定结构与视觉语言</b><ul>' + fixedItems.map((item) => '<li>' + esc(item) + '</li>').join('') + '</ul></div><div><b>可变内容与扩散范围</b><ul>' + variableItems.map((item) => '<li>' + esc(item) + '</li>').join('') + '</ul></div></div>'
-        : '';
-      const fields = asset.fieldContract ?? {};
-      const fieldItems = (items, includeSource = false) => (items ?? []).map((item) => {
-        if (typeof item === 'string') return '<li>' + esc(item) + '</li>';
-        const binding = includeSource && item.source ? ' ← <code>' + esc(item.source) + '</code>' : '';
-        return '<li><code>' + esc(item.field) + '</code>' + binding + '：' + esc(item.meaning) + '</li>';
-      }).join('');
-      const fieldContract = fields.editable?.length
-        ? '<div class="component-profile"><div><b>真实应用时可改</b><ul>' + fieldItems(fields.editable, true) + '</ul></div><div><b>程序生成／保持固定</b><ul>' + fieldItems(fields.generated) + fieldItems(fields.fixed) + '</ul></div>' + (fields.unavailable?.length ? '<div><b>当前未开放</b><ul>' + fieldItems(fields.unavailable) + '</ul></div>' : '') + '</div>'
-        : '';
-      const skinTypography = DATA.activeSkin?.componentTheme?.typography ?? {};
-      const typeNames = { componentHeading: '编号／强调', componentTitle: '中心主题', componentItemTitle: '节点标题', componentBody: '正文', componentLabel: '标签', componentMeta: '辅助信息' };
-      const typographyContract = '<div class="component-profile"><div><b>当前 Skin 的统一字号</b><ul>' + Object.entries(typeNames).map(([key, label]) => {
-        const designSize = Number(skinTypography[key]);
-        const pointScale = Number(DATA.activeSkin?.pptPointScale);
-        if (!Number.isFinite(designSize) || !Number.isFinite(pointScale)) return '<li>' + esc(label) + '：<code>未读取</code></li>';
-        const pointSize = Math.round(designSize * pointScale * 100) / 100;
-        return '<li>' + esc(label) + '：<code>' + esc(pointSize) + ' pt</code></li>';
-      }).join('') + '</ul></div><div><b>执行规则</b><ul><li>组件只引用 Skin 字号角色，不按 State 发明字号</li><li>编译器按固定容器选择能完整容纳的最大规范档位</li><li>15 pt 仍放不下时调整容器、压缩、拆页、换组或拒绝</li></ul></div></div>';
-      let componentMedia = htmlRoute
-        ? '<div class="review-media component"><span>此资产尚未迁移为专属 HTML 组件</span></div>'
-        : '<div class="review-media component"><span>当前使用原有组件代码</span></div>';
-      let stateButtons = '';
-      let footprint = '';
-      let nativeMedia = awaitingHtmlApproval
-        ? '<div class="drawer-preview"><span>HTML 确认后再生成 Native/PPT</span></div>'
+    function representativeMarkup(asset) {
+      const media = liveMode && asset.componentPreviewAvailable && asset.componentPreviewUrl
+        ? '<div class="review-media component"><iframe src="' + esc(asset.componentPreviewUrl) + '" title="' + esc(asset.name) + ' · 代表样例"></iframe></div>'
         : previewMarkup(asset, true);
-      let nativeDownload = '';
-      const slotMapPanel = htmlRoute ? '<div class="slot-map-panel"><b>入库时固化的字体—容器契约</b><p>最外层深蓝框表示连续的动态文字大区；其中可再包含简单 TextFlow 或指标等排版块。橙色标题区和绿色正文区是本次内容的内部求解结果，不是新的固定容器。</p><div class="slot-map-legend"><span><i></i>动态文字区</span><span><i class="title"></i>内部标题排版区</span><span><i class="body"></i>内部正文排版区</span></div><div class="slot-map-list" data-slot-map-list><div class="slot-map-empty">正在读取当前 State 的固化契约…</div></div></div>' : '';
-      let skinMedia = awaitingHtmlApproval
-        ? '<div class="drawer-preview"><span>HTML 确认后再进入 Skin 核对</span></div>'
-        : '<div class="drawer-preview"><span>当前资产没有 Skin State 预览</span></div>';
-      if (asset.componentControls?.length) {
-        const initialSelection = asset.componentInitialSelection ?? {};
-        stateButtons = '<div class="state-switcher" aria-label="审查参数">' + asset.componentControls.map((control) => {
-          const when = control.when ?? {};
-          const visible = Object.entries(when).every(([key, values]) => (values ?? []).map(String).includes(String(initialSelection[key])));
-          return '<div class="state-control" data-control-key="' + esc(control.key) + '" data-control-when="' + esc(JSON.stringify(when)) + '"' + (visible ? '' : ' hidden') + '><b>' + esc(control.label) + '</b>' + control.values.map((value) => {
-          const active = value === initialSelection[control.key];
-          const label = control.valueLabels?.[value] ?? value;
-          return '<button type="button" class="state-button' + (active ? ' active' : '') + '" aria-pressed="' + active + '" data-component-control="' + esc(control.key) + '" data-component-value="' + esc(value) + '">' + esc(label) + '</button>';
-          }).join('') + '</div>';
-        }).join('') + '</div>';
-        const initialQuery = selectionQuery(initialSelection);
-        const initialStateKey = String(Object.values(initialSelection)[0] ?? '');
-        const initialFootprint = asset.stateFootprints?.[initialStateKey];
-        footprint = '<div class="footprint" data-state-footprint data-footprints="' + esc(JSON.stringify(asset.stateFootprints ?? {})) + '">' + (initialFootprint ? '自然占用：' + esc(initialFootprint.width) + ' × ' + esc(initialFootprint.height) + '（统一 Content Frame 坐标）' : '当前 State 尚未登记自然占用尺寸') + '</div>';
-        if (asset.componentPreviewAvailable && asset.componentPreviewUrl) componentMedia = '<div class="review-media component"><iframe data-component-slot-source data-slot-width="' + esc(asset.spatialContract?.contentFrame?.width ?? 1170) + '" data-slot-height="' + esc(asset.spatialContract?.contentFrame?.height ?? 492) + '" src="' + esc(asset.componentPreviewUrl) + '&' + initialQuery + '" title="' + esc(asset.name) + ' 的实时 HTML 组件"></iframe></div>';
-        if (asset.nativeStatePreviewUrl) {
-          const nativeUrl = asset.nativeStatePreviewUrl + '&' + initialQuery;
-          nativeMedia = '<button type="button" class="drawer-preview preview-open" data-native-preview data-native-base="' + esc(asset.nativeStatePreviewUrl) + '" data-preview-open="' + esc(nativeUrl) + '" data-preview-caption="' + esc(asset.name) + ' · Native 编译结果"><img src="' + esc(nativeUrl) + '" alt="' + esc(asset.name) + ' 的 Native 编译结果"><div class="native-slot-layer" data-slot-overlay></div><span hidden>组件 PPT 预览生成失败</span></button>';
-          if (asset.nativeStatePptxUrl) nativeDownload = '<a class="native-download" data-native-download data-native-base="' + esc(asset.nativeStatePptxUrl) + '" href="' + esc(asset.nativeStatePptxUrl + '&' + initialQuery) + '">下载当前 State 的组件 PPTX</a>';
-        }
-        if (asset.skinStatePreviewUrl) {
-          const skinUrl = asset.skinStatePreviewUrl + '&' + initialQuery;
-          skinMedia = '<button type="button" class="drawer-preview preview-open" data-skin-preview data-skin-base="' + esc(asset.skinStatePreviewUrl) + '" data-preview-open="' + esc(skinUrl) + '" data-preview-caption="' + esc(asset.name) + ' · 东北大学 Skin"><img src="' + esc(skinUrl) + '" alt="' + esc(asset.name) + ' 放入东北大学 Skin 后的结果"><div class="native-slot-layer" data-slot-overlay></div><span hidden>Skin 预览生成失败</span></button>';
-        }
-      }
-      return '<div class="review-flow" data-asset-key="' + esc(asset.library + ':' + asset.id) + '"><h3>' + (htmlRoute ? '参考 → 视觉意图 → HTML → Native → Skin' : '来源 → 组件代码 → 可编辑 PPT') + '</h3><p>' + (htmlRoute ? 'HTML 只看提炼后的逻辑与审美意图；Native PPT 只做机械编译。' : '这是旧流程资产；State 直接由现有组件代码生成。') + '</p>'
-        + '<div class="review-stage"><div class="review-stage-head"><b>1 · 来源参考</b><span>用于提炼，不作为 HTML 的直接输入</span></div>' + sourceButtons + sourceMedia + '</div>'
-        + '<div class="review-stage"><div class="review-stage-head"><b>2 · 视觉意图</b><span>逻辑表达方式与审美语言</span></div>' + intentMedia + '</div>'
-        + '<div class="review-stage" data-component-stage data-component-base="' + esc(asset.componentPreviewUrl ?? '') + '"><div class="review-stage-head"><b>3 · ' + (htmlRoute ? 'HTML Structure Group' : '可选 State') + '</b><span>同一组件按数量重新编排</span></div>' + componentProfile + fieldContract + stateButtons + footprint + componentMedia + slotMapPanel + '</div>'
-        + '<div class="review-stage"><div class="review-stage-head"><b>4 · Native 编译结果</b><span>与 HTML 使用同一 State；悬停查看可编辑容器</span></div>' + nativeMedia + nativeDownload + '</div>'
-        + '<div class="review-stage"><div class="review-stage-head"><b>5 · 东北大学 Skin</b><span>仅用于核对组件进入统一 Shell 后的效果，不作为下载交付物</span></div>' + typographyContract + skinMedia + '</div></div>';
+      return '<section class="review-flow"><h3>代表样例</h3><p>这一种样子用于理解设计特征；数量、比例和文字位置由本次内容决定。</p>' + media + '</section>';
+    }
+    function structureSkillMarkup(asset) {
+      const skill = asset.structureSkill;
+      if (!skill) return '';
+      const evidence = skill.identityEvidence || skill.fixedEvidence.join('\n') || '特征说明待提炼：先查看来源、实现和预览。';
+      return '<section class="review-flow"><h3>结构 Skill · 保留特征后适配</h3>'
+        + '<p>' + esc(skill.semantic || '关系用途请结合原始说明核对。') + '</p>'
+        + '<div class="component-profile"><div><b>看这个样例时，注意这些特征</b><ol>' + (skill.features?.length ? skill.features.map(feature => '<li style="margin:8px 0">' + esc(feature) + '</li>').join('') : '<li>特征待提炼，查看来源原文与样例。</li>') + '</ol></div>'
+        + '<div><b>如何适配</b><p>' + esc(skill.adaptation) + '</p><p>' + esc(skill.identityReview) + '</p>'
+        + '<b>实现方式</b><p>原生适配构建 / 多参考组合</p><p>' + esc(skill.executorBoundary) + '</p>'
+        + '</div></div>'
+        + '<details><summary>Skill 读取入口与证据状态</summary><p>' + esc(skill.evidenceStatus === 'source-declared' ? '已有源文件说明；仍需针对本次适配检查特征。' : '源说明不足，尚未提炼特征。') + '</p><code>node .codex/skills/ppagent-structure/scripts/catalog.mjs guide ' + esc(asset.id) + '</code></details></section>';
     }
 
     function activatePreviewImages() {
@@ -903,7 +646,7 @@
         const isHtml = stage === 'html';
         const preview = isHtml ? pendingApprovalPreviewMarkup(asset) : previewMarkup(asset);
         const badge = isHtml ? 'HTML 一审' : 'PPT 二审';
-        return '<article class="coverage-card available" role="button" tabindex="0" data-asset-key="' + esc(asset.library + ':' + asset.id) + '"><div class="coverage-card-head"><div><strong>' + esc(logicName) + '</strong><span class="coverage-description">' + esc(logicDescription) + '</span></div><span class="coverage-count">' + badge + '</span></div>' + preview + '<span class="coverage-asset-name">' + esc(asset.name) + '</span><span class="coverage-asset-meta">' + esc(asset.structureGroupId) + '</span><span class="coverage-status">' + esc(range(asset)) + ' · 点击查看详情</span></article>';
+        return '<article class="coverage-card available" role="button" tabindex="0" data-asset-key="' + esc(asset.library + ':' + asset.id) + '"><div class="coverage-card-head"><div><strong>' + esc(logicName) + '</strong><span class="coverage-description">' + esc(logicDescription) + '</span></div><span class="coverage-count">' + badge + '</span></div>' + preview + '<span class="coverage-asset-name">' + esc(asset.name) + '</span><span class="coverage-asset-meta">' + esc(asset.structureGroupId) + '</span><span class="coverage-status">' + '代表样例 · 点击查看特征</span></article>';
       }).join("");
     }
 
@@ -937,7 +680,7 @@
       const carousel = assets.length > 1
         ? '<div class="coverage-asset-tabs" aria-label="该 Logic 的 Structure Group">' + assets.map((candidate, tabIndex) => '<button type="button" class="coverage-asset-tab ' + (tabIndex === index ? 'active' : '') + '" data-carousel-select="' + tabIndex + '" data-logic-id="' + esc(topic.id) + '" aria-pressed="' + (tabIndex === index ? 'true' : 'false') + '">' + esc(candidate.name) + '</button>').join('') + '</div>'
         : '';
-      return '<article class="coverage-card available" role="button" tabindex="0" data-logic-card="' + esc(topic.id) + '" data-asset-key="' + esc(asset.library + ':' + asset.id) + '"><div class="coverage-card-head"><div><strong>' + esc(topic.name) + '</strong><span class="coverage-description">' + esc(topic.description) + '</span></div><span class="coverage-count">' + (index + 1) + ' / ' + assets.length + '</span></div>' + previewMarkup(asset) + carousel + '<span class="coverage-asset-name">当前预览 · ' + esc(asset.name) + '</span><span class="coverage-asset-meta">' + esc(asset.structureGroupId) + '</span><span class="coverage-status">' + esc(genericCoverage) + ' · ' + esc(range(asset)) + ' · 点击查看详情</span></article>';
+      return '<article class="coverage-card available" role="button" tabindex="0" data-logic-card="' + esc(topic.id) + '" data-asset-key="' + esc(asset.library + ':' + asset.id) + '"><div class="coverage-card-head"><div><strong>' + esc(topic.name) + '</strong><span class="coverage-description">' + esc(topic.description) + '</span></div><span class="coverage-count">' + (index + 1) + ' / ' + assets.length + '</span></div>' + previewMarkup(asset) + carousel + '<span class="coverage-asset-name">当前预览 · ' + esc(asset.name) + '</span><span class="coverage-asset-meta">' + esc(asset.structureGroupId) + '</span><span class="coverage-status">' + esc(genericCoverage) + ' · ' + '代表样例 · 点击查看特征</span></article>';
     }
 
     function selectLogicCarousel(logicId, index) {
@@ -990,26 +733,16 @@
 
     async function openAsset(asset) {
       if (!asset) return;
-      if (liveMode && asset.intakeSlotContract?.deferred && asset.intakeSlotContractUrl) {
-        asset.intakeSlotContract = await fetch(asset.intakeSlotContractUrl).then((response) => {
-          if (!response.ok) throw new Error('字体—容器契约读取失败：' + response.status);
-          return response.json();
-        });
-      }
       const source = asset.source ? esc(asset.source.file || "—") + (asset.source.slides?.length ? " · 第 " + esc(asset.source.slides.join("、")) + " 页" : "") : "—";
       const purposeDetails = asset.purposes?.length ? asset.purposes.map((item) => '<div><code>' + esc(item.key) + '</code> · ' + esc(item.description) + '</div>').join("") : "—";
-      const stateDetails = asset.stateContract ? '<code>' + esc(JSON.stringify(asset.stateContract)) + '</code>' : "—";
-      const mediaDetails = asset.mediaContract ? '<code>' + esc(JSON.stringify(asset.mediaContract)) + '</code>' : "—";
-      const textCapacity = asset.textCapacity ? '<code>' + esc(JSON.stringify(asset.textCapacity)) + '</code>' : "—";
-      const textSystem = asset.textFlow ? '<code>TextFlow · ' + esc(JSON.stringify(asset.textFlow)) + '</code>' : textCapacity;
-      const slotContract = asset.slotContract ? '<code>' + esc(JSON.stringify(asset.slotContract)) + '</code>' : "—";
-      document.getElementById("drawer-content").innerHTML = '<div class="drawer-id">' + esc(asset.id) + '</div><h2 id="drawer-title">' + esc(asset.name) + '</h2><div class="drawer-badges">' + pill(LABELS[asset.library], asset.library) + intakeStatusPill(asset) + pill(asset.autoCallable ? "正式生成可调用" : "不进入正式生成线", asset.autoCallable ? "core" : "pending") + '</div>' + reviewWorkflowMarkup(asset)
-        + '<div class="detail-group"><h3>Logic 颗粒度</h3>' + detailRows([["Logic", esc(asset.logicId)], ["Structure Group", esc(asset.structureGroupId)], ["Family / Variant", esc(text(asset.familyId)) + " / " + esc(text(asset.variantId))], ["轮廓", esc(text(asset.silhouette))], ["逻辑能力槽位", esc(list(asset.coverageTags))]]) + '</div>'
-        + '<div class="detail-group"><h3>触发条件</h3>' + detailRows([["基础关系", esc(relationText(asset))], ["页面目的", purposeDetails], ["数量范围", esc(range(asset))], ["文字系统", textSystem], ["State 规则", stateDetails], ["Content Slots", slotContract], ["媒体约束", mediaDetails], ["允许 Composition", esc(list(asset.compositionIds))]]) + '</div>'
-        + '<div class="detail-group"><h3>语义与边界</h3>' + (asset.semanticContract ? '<div class="detail-note">' + esc(asset.semanticContract) + '</div>' : '<div class="detail-note">当前声明未写语义说明。</div>') + (asset.doNotUseWhen ? '<div class="detail-note" style="margin-top:9px;border-color:#d96c4a;background:#fff6f3"><strong>不要使用：</strong>' + esc(asset.doNotUseWhen) + '</div>' : '') + '</div>'
-        + '<div class="detail-group"><h3>来源与自动化入口</h3>' + detailRows([["来源", source], ["HTML 审查实现", esc(asset.componentPreviewAvailable ? "资产专属 · " + text(asset.componentFidelityStatus) : "尚未迁移")], ["生成入口", esc(text(asset.runtimeEntry || asset.generator))], ["Mapper", esc(text(asset.mapperExport))], ["Component / Builder", esc(text(asset.componentExport || asset.builderExport))], ["示例", esc(text(asset.showcase))], ["Manifest", '<code>' + esc(asset.manifestPath) + '</code>'], ["资产目录", '<code>' + esc(asset.assetDir) + '</code>'], ["审核记录", esc(text(asset.review))]]) + '</div>';
+      document.getElementById("drawer-content").innerHTML = '<div class="drawer-id">' + esc(asset.id) + '</div><h2 id="drawer-title">' + esc(asset.name) + '</h2>'
+        + '<div class="drawer-badges">' + pill(asset.structureSkill ? '结构 Skill' : LABELS[asset.library], 'core') + '</div>'
+        + representativeMarkup(asset) + structureSkillMarkup(asset)
+        + '<details class="detail-group"><summary>来源与设计原文</summary>'
+        + detailRows([["来源", source], ["关系", esc(relationText(asset))], ["页面目的", purposeDetails]])
+        + '<div class="intent-panel">' + esc(asset.visualIntentText || '暂无独立设计原文') + '</div></details>';
       document.getElementById("drawer-backdrop").classList.add("open");
-      connectComponentSlotMap(document.getElementById("drawer-content"));
+
       document.body.style.overflow = "hidden";
       document.getElementById("drawer-close").focus();
     }
@@ -1347,62 +1080,6 @@
       const previewTarget = event.target.closest("[data-preview-open]");
       if (previewTarget) {
         openPreview(previewTarget);
-        return;
-      }
-      const stateTarget = event.target.closest("[data-component-control]");
-      if (stateTarget) {
-        const stage = stateTarget.closest("[data-component-stage]");
-        const flow = stateTarget.closest(".review-flow");
-        const frame = stage?.querySelector("iframe");
-        const status = stage?.querySelector(".review-stage-head span");
-        const controlRow = stateTarget.closest(".state-control");
-        controlRow?.querySelectorAll(".state-button").forEach((button) => {
-          const active = button === stateTarget;
-          button.classList.toggle("active", active);
-          button.setAttribute("aria-pressed", String(active));
-        });
-        const selection = Object.fromEntries([...stage.querySelectorAll(".state-control")].map((row) => {
-          const active = row.querySelector(".state-button.active");
-          return [row.dataset.controlKey, active?.dataset.componentValue ?? ""];
-        }));
-        for (const row of stage.querySelectorAll(".state-control")) {
-          const when = JSON.parse(row.dataset.controlWhen || "{}");
-          row.hidden = !Object.entries(when).every(([key, values]) => (values ?? []).map(String).includes(String(selection[key])));
-        }
-        const summary = [...stage.querySelectorAll(".state-control:not([hidden])")].map((row) => row.querySelector(".state-button.active")?.textContent).filter(Boolean).join(" / ");
-        const query = selectionQuery(selection);
-        if (status) status.textContent = "正在显示 " + summary + "…";
-        if (frame) {
-          frame.addEventListener("load", () => { if (status) status.textContent = "当前显示 " + summary; }, { once: true });
-          frame.src = stage.dataset.componentBase + "&" + query + "&refresh=" + Date.now();
-        }
-        const nativeButton = flow?.querySelector("[data-native-preview]");
-        const nativeImage = nativeButton?.querySelector("img");
-        if (nativeButton && nativeImage) {
-          const nativeUrl = nativeButton.dataset.nativeBase + "&" + query + "&refresh=" + Date.now();
-          nativeImage.hidden = false;
-          nativeImage.src = nativeUrl;
-          nativeButton.dataset.previewOpen = nativeUrl;
-        }
-        const nativeDownload = flow?.querySelector("[data-native-download]");
-        if (nativeDownload) nativeDownload.href = nativeDownload.dataset.nativeBase + "&" + query;
-        const skinButton = flow?.querySelector("[data-skin-preview]");
-        const skinImage = skinButton?.querySelector("img");
-        if (skinButton && skinImage) {
-          const skinUrl = skinButton.dataset.skinBase + "&" + query + "&refresh=" + Date.now();
-          skinImage.hidden = false;
-          skinImage.src = skinUrl;
-          skinButton.dataset.previewOpen = skinUrl;
-        }
-        const footprint = stage?.querySelector("[data-state-footprint]");
-        if (footprint) {
-          const footprints = JSON.parse(footprint.dataset.footprints || "{}");
-          const stateKey = String(Object.values(selection)[0] ?? "");
-          const current = footprints[stateKey];
-          footprint.textContent = current
-            ? "自然占用：" + current.width + " × " + current.height + "（统一 Content Frame 坐标）"
-            : "当前 State 尚未登记自然占用尺寸";
-        }
         return;
       }
       const assetTarget = event.target.closest("[data-asset-key]");
