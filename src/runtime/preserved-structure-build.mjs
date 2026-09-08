@@ -1,7 +1,6 @@
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { resolveHtmlComponent, compileResolvedVisualTree } from '../visual-runtime/html-component-runtime.mjs';
-import { preservedNeutralSkinCss } from '../visual-runtime/preserved-neutral-skin.mjs';
 
 export function preservedComponent(component, frame, theme = {}) {
   if (typeof component.renderAdaptiveMarkup !== 'function') throw new Error('该结构尚未实现保留造型的区域适配');
@@ -10,7 +9,7 @@ export function preservedComponent(component, frame, theme = {}) {
     renderMarkup(content) {
       const markup = component.renderAdaptiveMarkup(content, { frame, theme })
         .replace('data-ppt-root', 'data-ppt-root data-ppt-preserve-font="true"');
-      return markup.replace('</section>', `${preservedNeutralSkinCss(component.id, theme)}</section>`);
+      return markup;
     },
   };
 }

@@ -1,0 +1,372 @@
+<!doctype html><meta charset="utf-8"><style>/* ppagent-theme:resolved */:root{
+    --ppagent-font-body:"Noto Sans SC";
+    --ppagent-color-background:#F5F4EF;
+    --ppagent-color-surface:#EEE8E2;
+    --ppagent-color-primary:#A35D4F;
+    --ppagent-color-primary-deep:#5F362E;
+    --ppagent-color-primary-dark:#7C473C;
+    --ppagent-color-primary-light:#C2948B;
+    --ppagent-color-primary-pale:#DFC6C1;
+    --ppagent-color-primary-wash:#F4ECEA;
+    --ppagent-color-accent:#A35D4F;
+    --ppagent-color-accent-alt:#B47A6F;
+    --ppagent-color-accent-soft:#EEE2DF;
+    --ppagent-color-cyan:#C4978E;
+    --ppagent-color-dark:#20201D;
+    --ppagent-color-body:#4B4A45;
+    --ppagent-color-muted:#C4998F;
+    --ppagent-color-line:#E3D3CC;
+    --ppagent-component-heading-size:15.75pt;
+    --ppagent-component-title-size:15.75pt;
+    --ppagent-component-item-title-size:12.75pt;
+    --ppagent-component-lead-size:12.75pt;
+    --ppagent-component-body-size:12.75pt;
+    --ppagent-component-label-size:12.75pt;
+    --ppagent-component-meta-size:11.25pt;
+  }
+    .ppagent-text-region{
+      box-sizing:border-box;
+      min-width:0;
+      min-height:0;
+    }
+    .ppagent-text-region > .ppagent-text-flow,
+    .ppagent-text-region > .ppagent-text-layout{
+      width:100%;
+      height:100%;
+    }
+    .ppagent-text-layout{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-layout-gap,10px);
+      width:100%;
+      height:100%;
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,"Microsoft YaHei"),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-align="center"]{text-align:center}
+    .ppagent-text-layout[data-text-layout-align="right"]{text-align:right}
+    .ppagent-text-layout[data-text-layout-valign="top"]{justify-content:flex-start}
+    .ppagent-text-layout[data-text-layout-valign="bottom"]{justify-content:flex-end}
+    .ppagent-text-layout[data-text-layout-density="compact"]{--ppagent-text-layout-gap:6px;--ppagent-text-layout-item-gap:5px}
+    .ppagent-text-layout[data-text-layout-density="standard"]{--ppagent-text-layout-gap:10px;--ppagent-text-layout-item-gap:8px}
+    .ppagent-text-layout[data-text-layout-density="loose"]{--ppagent-text-layout-gap:15px;--ppagent-text-layout-item-gap:12px}
+    .ppagent-text-primitive{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      color:var(--ppagent-text-color,#46566a);
+      text-align:inherit;
+      white-space:pre-line;
+      overflow-wrap:break-word;
+    }
+    .ppagent-text-primitive--heading{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-text-primitive--body{font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.45}
+    .ppagent-text-primitive--list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px)}
+    .ppagent-text-list__item{box-sizing:border-box;min-width:0;margin:0;padding:0;overflow:visible;color:var(--ppagent-text-color,#46566a);font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.38;text-align:inherit;white-space:pre-line;overflow-wrap:break-word}
+    .ppagent-text-primitive--metric{color:var(--ppagent-value-color,#2f5ea8);font-size:var(--ppagent-component-heading-size,25pt);font-weight:700;line-height:1.08}
+    .ppagent-text-primitive--label{color:var(--ppagent-label-color,#60758d);font-size:var(--ppagent-component-label-size,17pt);font-weight:600;line-height:1.2}
+    .ppagent-text-primitive--annotation{color:var(--ppagent-annotation-color,#748495);font-size:var(--ppagent-component-meta-size,15pt);font-weight:400;line-height:1.3}
+    .ppagent-text-primitive--quote{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:500;line-height:1.35}
+    .ppagent-text-primitive--emphasis{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-title-size,23pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-structured-list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-structured-list__item{display:flex;flex-direction:column;gap:4px;min-width:0}
+    .ppagent-structured-list__item .ppagent-text-primitive--heading{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-metric-set{display:grid;grid-template-columns:repeat(var(--ppagent-metric-columns,2),minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0;align-items:start}
+    .ppagent-metric-set[data-metric-count="3"]{--ppagent-metric-columns:3}
+    .ppagent-metric-set[data-metric-count="4"]{--ppagent-metric-columns:4}
+    .ppagent-metric-set__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-key-value{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-key-value__row{display:grid;grid-template-columns:minmax(64px,.42fr) minmax(0,1fr);gap:10px;align-items:start;min-width:0}
+    .ppagent-key-value__row .ppagent-text-primitive--metric{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label,
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--annotation{text-align:right}
+    .ppagent-summary-information{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0}
+    .ppagent-summary-information__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-summary-information__item .ppagent-text-primitive--emphasis{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"]{
+      justify-content:flex-start;
+      gap:12px;
+      padding:18px;
+      color:var(--ppagent-color-body);
+      background:transparent;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive{color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--emphasis,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--quote{color:var(--ppagent-color-dark);font-weight:700;letter-spacing:-.25px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--body,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-list__item{font-size:max(15pt,var(--ppagent-component-body-size))}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--label{color:var(--ppagent-color-accent);font-size:max(15pt,var(--ppagent-component-label-size));font-weight:700;letter-spacing:.7px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--annotation{color:var(--ppagent-color-muted);font-size:max(15pt,var(--ppagent-component-meta-size))}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--metric{color:var(--ppagent-color-accent);font-weight:700;letter-spacing:-.5px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-list__item{position:relative;padding-left:17px;color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-list__item::before{content:"";position:absolute;left:0;top:.68em;width:8px;height:2px;background:var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--heading-content-flow > .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--label-content-flow > .ppagent-text-primitive--label,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--heading-metric-content-flow > .ppagent-text-primitive--heading{padding-bottom:10px;border-bottom:2px solid var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-structured-list{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-structured-list__item{display:grid;grid-template-columns:minmax(82px,.42fr) minmax(0,1fr);gap:14px;padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-structured-list__item .ppagent-text-primitive--body{margin:0}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-metric-set{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-metric-set__item{padding:12px 14px 4px 0}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-metric-set__item + .ppagent-metric-set__item{padding-left:14px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-key-value{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-key-value__row{padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--quote-attribution-flow{position:relative;padding-left:52px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--quote-attribution-flow::before{content:"“";position:absolute;left:16px;top:8px;color:var(--ppagent-color-accent);font-family:Georgia,serif;font-size:42pt;font-weight:700;line-height:1}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label{margin-top:auto;padding-top:10px;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-summary-information{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-summary-information__item{padding:10px 12px 8px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-summary-information__item:nth-child(even){padding-left:12px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout--value-label{
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-value-label-gap,5px);
+      padding:var(--ppagent-value-label-padding,5px);
+      text-align:center;
+    }
+    .ppagent-text-layout__value,
+    .ppagent-text-layout__label{
+      box-sizing:border-box;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:hidden;
+      text-align:inherit;
+    }
+    .ppagent-text-layout__value{
+      color:var(--ppagent-value-color,#2f5ea8);
+      font-size:var(--ppagent-component-lead-size,19pt);
+      font-weight:700;
+      line-height:1.15;
+    }
+    .ppagent-text-layout__label{
+      color:var(--ppagent-label-color,#60758d);
+      font-size:var(--ppagent-component-meta-size,15pt);
+      font-weight:400;
+      line-height:1.2;
+    }
+    .ppagent-text-flow{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-flow-gap,10px);
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,"Microsoft YaHei"),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-flow[data-text-flow-align="center"]{text-align:center}
+    .ppagent-text-flow[data-text-flow-align="right"]{text-align:right}
+    .ppagent-text-flow[data-text-flow-valign="top"]{justify-content:flex-start}
+    .ppagent-text-flow[data-text-flow-valign="bottom"]{justify-content:flex-end}
+    .ppagent-text-flow__title,
+    .ppagent-text-flow__body{
+      position:relative;
+      box-sizing:border-box;
+      flex:0 0 auto;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      text-align:inherit;
+    }
+    .ppagent-text-flow__title{
+      font-size:var(--ppagent-component-item-title-size,21pt);
+      font-weight:700;
+      line-height:1.2;
+      white-space:normal;
+      text-wrap:balance;
+    }
+    .ppagent-text-flow__body{
+      font-size:var(--ppagent-component-body-size,17pt);
+      font-weight:400;
+      line-height:1.45;
+      white-space:pre-line;
+    }
+    .ppagent-text-flow__separator{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      align-self:center;
+      width:var(--ppagent-text-flow-separator-width,54px);
+      height:var(--ppagent-text-flow-separator-height,4px);
+      border:0;
+      border-radius:99px;
+      background:var(--ppagent-text-flow-separator-color,#78aeef);
+    }
+  * { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { color: #7C473C; background: transparent; font-family: var(--ppagent-font-body, "Microsoft YaHei"), sans-serif; }
+.simple-funnel { position: relative; width: 1170px; height: 492px; overflow: hidden; background: transparent; }
+.simple-funnel-orbit { position: absolute; inset: 0; z-index: 1; width: 1170px; height: 492px; overflow: visible; }
+.simple-funnel-orbit ellipse { fill: none; stroke: rgba(163, 93, 79,.12); stroke-width: 1; }
+.simple-funnel-diagram { position: absolute; inset: 0; z-index: 2; width: 1170px; height: 492px; overflow: visible; }
+.simple-funnel-step-body { stroke: rgba(255, 255, 255,.14); stroke-width: 1; }
+.simple-funnel-step-cap { stroke: #DFC6C1; stroke-width: 2; }
+.simple-flow-arrow { pointer-events: none; }
+.simple-step-title { position: absolute; left: 585px; top: var(--top); z-index: 5; width: var(--width); height: 28px; margin: 0; overflow: hidden; color: #fff; font-size: var(--ppagent-funnel-step-title-size, 15pt); font-weight: 700; line-height: 28px; text-align: center; white-space: nowrap; transform: translateX(-50%); }
+.simple-input-layer { position: absolute; inset: 0; z-index: 6; pointer-events: none; }
+.simple-input { position: absolute; left: var(--x); top: var(--y); width: var(--size); height: var(--size); transform: translateX(-50%); text-align: center; }
+.simple-input-core { position: relative; display: grid; place-items: center; width: var(--size); height: var(--size); margin: 0 auto; padding: 10px; border: 3px solid #fff; border-radius: 50%; color: #fff; background: #A35D4F; box-shadow: 0 5px 14px rgba(163, 93, 79,.2); }
+.simple-input-marker { display: grid; place-items: center; width: 100%; height: 100%; overflow: hidden; }
+.simple-input-marker-text { padding: 0 2px; color: #fff; font-size: var(--ppagent-component-meta-size, 17pt); font-weight: 700; line-height: 1; text-align: center; white-space: nowrap; }
+.simple-icon-svg { width: 100%; height: 100%; color: currentColor; stroke: currentColor; }
+.simple-icon-fallback { display: block; width: 10px; height: 10px; border: 2px solid currentColor; border-radius: 50%; }
+html,body{margin:0!important;width:1170px!important;height:492px!important;background:#F5F4EF!important;overflow:hidden}</style><section class="simple-funnel simple-funnel-adapted" data-ppt-root data-ppt-preserve-font="true" data-step-count="6" style="width:1170px;height:492px;--ppagent-component-heading-size:15.75pt;--ppagent-component-title-size:15.75pt;--ppagent-component-item-title-size:12.75pt;--ppagent-component-lead-size:12.75pt;--ppagent-component-body-size:12.75pt;--ppagent-component-label-size:12.75pt;--ppagent-component-meta-size:11.25pt;--ppagent-funnel-step-title-size:12.75pt">
+    <style>.simple-funnel-adapted .simple-input-core{padding:10px;border-width:3px}</style>
+    <svg class="simple-funnel-orbit" style="width:100%;height:100%" viewBox="0 0 1170 492"><ellipse cx="585" cy="244.5" rx="285" ry="202.5" transform="rotate(-7 585 244.5)" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="simple-funnel-orbit"/></svg>
+    <div class="simple-input-layer"><div class="simple-input" style="--x:427.5px;--y:31px;--size:46px">
+    <div class="simple-input-core" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="simple-input-core-0"><span class="simple-input-marker simple-input-marker-icon" data-slot-id="audience-marker" data-slot-role="input-marker" data-slot-field="inputs[0].iconQuery" data-slot-item-id="audience" data-slot-content-type="icon" data-slot-provider="tabler-icons" data-slot-required="false"><svg data-ppt-kind="image" data-ppt-name="simple-input-icon-0" data-icon-key="users"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="simple-icon-svg"
+>
+  
+  <path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+  <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+  <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
+</svg></span></div>
+  </div><div class="simple-input" style="--x:480px;--y:15px;--size:40px">
+    <div class="simple-input-core" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="simple-input-core-1"><span class="simple-input-marker simple-input-marker-icon" data-slot-id="content-marker" data-slot-role="input-marker" data-slot-field="inputs[1].iconQuery" data-slot-item-id="content" data-slot-content-type="icon" data-slot-provider="tabler-icons" data-slot-required="false"><svg data-ppt-kind="image" data-ppt-name="simple-input-icon-1" data-icon-key="file"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="simple-icon-svg"
+>
+  
+  <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+  <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" />
+</svg></span></div>
+  </div><div class="simple-input" style="--x:532.5px;--y:5px;--size:46px">
+    <div class="simple-input-core" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="simple-input-core-2"><span class="simple-input-marker simple-input-marker-icon" data-slot-id="channel-marker" data-slot-role="input-marker" data-slot-field="inputs[2].iconQuery" data-slot-item-id="channel" data-slot-content-type="icon" data-slot-provider="tabler-icons" data-slot-required="false"><svg data-ppt-kind="image" data-ppt-name="simple-input-icon-2" data-icon-key="speakerphone"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="simple-icon-svg"
+>
+  
+  <path d="M18 8a3 3 0 0 1 0 6" />
+  <path d="M10 8v11a1 1 0 0 1 -1 1h-1a1 1 0 0 1 -1 -1v-5" />
+  <path d="M12 8l4.524 -3.77a.9 .9 0 0 1 1.476 .692v12.156a.9 .9 0 0 1 -1.476 .692l-4.524 -3.77h-8a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h8" />
+</svg></span></div>
+  </div><div class="simple-input" style="--x:585px;--y:2px;--size:40px">
+    <div class="simple-input-core" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="simple-input-core-3"><span class="simple-input-marker simple-input-marker-icon" data-slot-id="event-marker" data-slot-role="input-marker" data-slot-field="inputs[3].iconQuery" data-slot-item-id="event" data-slot-content-type="icon" data-slot-provider="tabler-icons" data-slot-required="false"><svg data-ppt-kind="image" data-ppt-name="simple-input-icon-3" data-icon-key="calendar-event"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="simple-icon-svg"
+>
+  
+  <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2l0 -12" />
+  <path d="M16 3l0 4" />
+  <path d="M8 3l0 4" />
+  <path d="M4 11l16 0" />
+  <path d="M8 15h2v2h-2l0 -2" />
+</svg></span></div>
+  </div><div class="simple-input" style="--x:637.5px;--y:8px;--size:46px">
+    <div class="simple-input-core" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="simple-input-core-4"><span class="simple-input-marker simple-input-marker-icon" data-slot-id="search-marker" data-slot-role="input-marker" data-slot-field="inputs[4].iconQuery" data-slot-item-id="search" data-slot-content-type="icon" data-slot-provider="tabler-icons" data-slot-required="false"><svg data-ppt-kind="image" data-ppt-name="simple-input-icon-4" data-icon-key="search"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="simple-icon-svg"
+>
+  
+  <path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+  <path d="M21 21l-6 -6" />
+</svg></span></div>
+  </div><div class="simple-input" style="--x:690px;--y:22px;--size:40px">
+    <div class="simple-input-core" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="simple-input-core-5"><span class="simple-input-marker simple-input-marker-icon" data-slot-id="feedback-marker" data-slot-role="input-marker" data-slot-field="inputs[5].iconQuery" data-slot-item-id="feedback" data-slot-content-type="icon" data-slot-provider="tabler-icons" data-slot-required="false"><svg data-ppt-kind="image" data-ppt-name="simple-input-icon-5" data-icon-key="message"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="simple-icon-svg"
+>
+  
+  <path d="M8 9h8" />
+  <path d="M8 13h6" />
+  <path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12" />
+</svg></span></div>
+  </div><div class="simple-input" style="--x:742.5px;--y:31px;--size:46px">
+    <div class="simple-input-core" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="simple-input-core-6"><span class="simple-input-marker simple-input-marker-icon" data-slot-id="signal-marker" data-slot-role="input-marker" data-slot-field="inputs[6].iconQuery" data-slot-item-id="signal" data-slot-content-type="icon" data-slot-provider="tabler-icons" data-slot-required="false"><svg data-ppt-kind="image" data-ppt-name="simple-input-icon-6" data-icon-key="activity"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="simple-icon-svg"
+>
+  
+  <path d="M3 12h4l3 8l4 -16l3 8h4" />
+</svg></span></div>
+  </div></div>
+    <svg class="simple-funnel-diagram" style="width:100%;height:100%" viewBox="0 0 1170 492"><g><path class="simple-funnel-step-body" fill="#A35D4F" d="M 400.00 105.00 L 432.44 146.37 C 432.44 153.67 737.56 153.67 737.56 146.37 L 770.00 105.00 C 770.00 112.30 400.00 112.30 400.00 105.00 Z" data-ppt-kind="path" data-ppt-name="simple-step-body-0"/><ellipse class="simple-funnel-step-cap" fill="#A35D4F" cx="585" cy="105" rx="185" ry="7.786666666666666" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="simple-step-cap-0"/></g><g><path class="simple-funnel-step-body" fill="#A35D4F" d="M 432.44 158.67 L 457.28 200.03 C 457.28 207.33 712.72 207.33 712.72 200.03 L 737.56 158.67 C 737.56 165.97 432.44 165.97 432.44 158.67 Z" data-ppt-kind="path" data-ppt-name="simple-step-body-1"/><ellipse class="simple-funnel-step-cap" fill="#A35D4F" cx="585" cy="158.66666666666666" rx="152.55594810892546" ry="7.786666666666666" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="simple-step-cap-1"/></g><g><path class="simple-funnel-step-body" fill="#A35D4F" d="M 457.28 212.33 L 479.87 253.70 C 479.87 261.00 690.13 261.00 690.13 253.70 L 712.72 212.33 C 712.72 219.63 457.28 219.63 457.28 212.33 Z" data-ppt-kind="path" data-ppt-name="simple-step-body-2"/><ellipse class="simple-funnel-step-cap" fill="#A35D4F" cx="585" cy="212.33333333333331" rx="127.72307636787804" ry="7.786666666666666" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="simple-step-cap-2"/></g><g><path class="simple-funnel-step-body" fill="#A35D4F" d="M 479.87 266.00 L 501.12 307.37 C 501.12 314.67 668.88 314.67 668.88 307.37 L 690.13 266.00 C 690.13 273.30 479.87 273.30 479.87 266.00 Z" data-ppt-kind="path" data-ppt-name="simple-step-body-3"/><ellipse class="simple-funnel-step-cap" fill="#A35D4F" cx="585" cy="266" rx="105.13168608664618" ry="7.786666666666666" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="simple-step-cap-3"/></g><g><path class="simple-funnel-step-body" fill="#C2948B" d="M 501.12 319.67 L 521.42 361.03 C 521.42 368.33 648.58 368.33 648.58 361.03 L 668.88 319.67 C 668.88 326.97 501.12 326.97 501.12 319.67 Z" data-ppt-kind="path" data-ppt-name="simple-step-body-4"/><ellipse class="simple-funnel-step-cap" fill="#C2948B" cx="585" cy="319.66666666666663" rx="83.88297578322985" ry="7.786666666666666" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="simple-step-cap-4"/></g><g><path class="simple-funnel-step-body" fill="#C2948B" d="M 521.42 373.33 L 541.00 414.70 C 541.00 422.00 629.00 422.00 629.00 414.70 L 648.58 373.33 C 648.58 380.63 521.42 380.63 521.42 373.33 Z" data-ppt-kind="path" data-ppt-name="simple-step-body-5"/><ellipse class="simple-funnel-step-cap" fill="#C2948B" cx="585" cy="373.3333333333333" rx="63.57992664956848" ry="7.786666666666666" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="simple-step-cap-5"/></g><defs><linearGradient id="simple-flow-gradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F4ECEA" stop-opacity="0"/><stop offset="42%" stop-color="#DFC6C1" stop-opacity=".16"/><stop offset="76%" stop-color="#DFC6C1" stop-opacity=".32"/><stop offset="100%" stop-color="#C2948B" stop-opacity=".52"/></linearGradient></defs><path class="simple-flow-arrow" fill="url(#simple-flow-gradient)" d="M 488.80 101.00 L 488.80 105.00 L 504.57 153.67 L 505.89 158.67 L 517.81 207.33 L 518.97 212.33 L 529.79 261.00 L 530.87 266.00 L 541.04 314.67 L 542.06 319.67 L 550.33 361.00 L 519.33 361.00 L 585.00 426.00 L 650.67 361.00 L 619.67 361.00 L 627.94 319.67 L 628.96 314.67 L 639.13 266.00 L 640.21 261.00 L 651.03 212.33 L 652.19 207.33 L 664.11 158.67 L 665.43 153.67 L 681.20 105.00 L 681.20 101.00 Z" data-ppt-kind="path" data-ppt-name="simple-flow-arrow"/></svg>
+    <h3 class="simple-step-title" style="left:585px;--top:116px;--width:289.1118962178509px;height:28px;line-height:28px;display:flex;align-items:center;justify-content:center;white-space:normal" data-ppt-kind="text" data-ppt-name="simple-step-title-0">广泛触达</h3><h3 class="simple-step-title" style="left:585px;--top:169.66666666666666px;--width:239.44615273575607px;height:28px;line-height:28px;display:flex;align-items:center;justify-content:center;white-space:normal" data-ppt-kind="text" data-ppt-name="simple-step-title-1">兴趣识别</h3><h3 class="simple-step-title" style="left:585px;--top:223.33333333333331px;--width:194.26337217329237px;height:28px;line-height:28px;display:flex;align-items:center;justify-content:center;white-space:normal" data-ppt-kind="text" data-ppt-name="simple-step-title-2">意向培育</h3><h3 class="simple-step-title" style="left:585px;--top:277px;--width:151.7659515664597px;height:28px;line-height:28px;display:flex;align-items:center;justify-content:center;white-space:normal" data-ppt-kind="text" data-ppt-name="simple-step-title-3">行动转化</h3><h3 class="simple-step-title" style="left:585px;--top:330.66666666666663px;--width:111.15985329913696px;height:28px;line-height:28px;display:flex;align-items:center;justify-content:center;white-space:normal" data-ppt-kind="text" data-ppt-name="simple-step-title-4">持续留存</h3><h3 class="simple-step-title" style="left:585px;--top:384.3333333333333px;--width:88px;height:28px;line-height:28px;display:flex;align-items:center;justify-content:center;white-space:normal" data-ppt-kind="text" data-ppt-name="simple-step-title-5">价值增长</h3>
+  <style>[data-ppt-root] .ppagent-text-primitive--heading,[data-ppt-root] .simple-step-title{font-family:"Noto Serif SC"}
+  [data-ppt-root] [data-ppt-shadow]{box-shadow:none}
+  [data-ppt-root] .ppagent-text-primitive--body,[data-ppt-root] .ppagent-text-list__item{color:var(--ppagent-color-body)}
+      .simple-funnel-adapted .simple-funnel-step-body{fill:var(--ppagent-color-surface);stroke:var(--ppagent-color-muted);stroke-width:1}
+      .simple-funnel-adapted .simple-funnel-step-cap{fill:var(--ppagent-color-background);stroke:var(--ppagent-color-muted);stroke-width:1}
+      .simple-funnel-adapted .simple-step-title{color:var(--ppagent-color-dark)}
+      .simple-funnel-adapted .simple-input-core{background:var(--ppagent-color-background);border-color:var(--ppagent-color-line);color:var(--ppagent-color-primary);box-shadow:none}
+      .simple-funnel-adapted .simple-input-marker-text{color:var(--ppagent-color-dark)}
+      .simple-funnel-adapted .simple-funnel-orbit ellipse{stroke:var(--ppagent-color-line)}
+      .simple-funnel-adapted .simple-flow-arrow{opacity:.6}</style></section>

@@ -1,3 +1,4 @@
+import {neutralPaint} from '../src/visual-runtime/neutral-structure-theme.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
@@ -70,8 +71,8 @@ test('neutral Skin preserves design-pixel typography and semantic surfaces in th
   assert.ok(texts.length>=8);
   assert.ok(texts.every(n=>Math.abs(n.style.fontSize-17)<.05));
   const serialized=JSON.stringify(tree);
-  assert.ok(serialized.includes('#F5F4EF'));
-  assert.ok(serialized.includes('#EEECE5'));
+  assert.ok(serialized.includes(neutralPaint('#FFFFFF','surface',theme)));
+
   assert.ok(serialized.includes('Noto Serif SC'));
  }finally{await closeHtmlComponentRuntime();}
 });

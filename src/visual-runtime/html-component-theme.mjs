@@ -1,5 +1,6 @@
 import { adaptNeutralStructure } from './neutral-structure-theme.mjs';
 import { supportsNeutralStructure } from './neutral-structure-profiles.mjs';
+import { cycleStageColors } from './cycle-stage-colors.mjs';
 const DEFAULT_PRIMARY_COLOR = "#315F91";
 
 function cssString(value, fallback) {
@@ -410,11 +411,11 @@ export function compileStructureThemeSource(source, theme = {}) {
 }
 
 export function compileHtmlComponentTheme({ markup = "", css = "", theme = {} } = {}) {
-  if (theme.id === 'neutral-editorial-001' && supportsNeutralStructure(markup) && !/(?:notes-adapted|simple-funnel-adapted|maturity-ladder)/.test(markup)) {
-    return Object.freeze(adaptNeutralStructure({markup:String(markup),css:String(css),theme:resolveStructureTheme(theme)}));
+  if (theme.id === 'neutral-editorial-001' && supportsNeutralStructure(markup)) {
+    return Object.freeze(adaptNeutralStructure({markup:String(markup),css:String(css),theme:resolveStructureTheme(theme),sourceTheme:resolveStructureTheme({})}));
   }
   return Object.freeze({
     markup: normalizeHex(theme?.primaryColor) ? compileMarkupColors(String(markup ?? ""), resolveStructureTheme(theme)) : String(markup ?? ""),
-    css: compileStructureThemeSource(css, theme),
+    css: compileStructureThemeSource(css, theme)+cycleStageColors(String(markup),resolveStructureTheme(theme)),
   });
 }
