@@ -1,8 +1,9 @@
 import { invokeStructure, closeStructureRuntime } from '../../.codex/skills/ppagent-structure/scripts/invoke.mjs';
 import { loadStructureSkill } from './structure-skills.mjs';
-import { universityMckinseySkin } from './skins/university-mckinsey.mjs';
+import { universityMckinseySkin, universityMckinseyTypography } from './skins/university-mckinsey.mjs';
 
-export { universityMckinseySkin, closeStructureRuntime };
+// Page copy and structure content share the configured roles through one entry.
+export { universityMckinseySkin, universityMckinseyTypography, closeStructureRuntime };
 
 // The page chooses content and a region; the library owns the drawing.
 export async function invokeUniversityStructure(options) {

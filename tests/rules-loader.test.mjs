@@ -22,7 +22,8 @@ test("大学与中性 Skin 分别加载绑定排版，大学配置来自运行�
   assert.ok(!neutral.files.some((file) => file.path === "排版体系/麦肯锡式.md"));
   assert.equal(university.configurationSources[0].value.fonts.display, northeasternUniversitySkin.typographyRoles.displayTypeface);
   assert.deepEqual(university.configurationSources[0].value.theme, northeasternUniversitySkin.componentTheme);
-  for (const field of ["风格", "页面", "分析表达", "解释", "编排", "视觉层级"]) assert.ok(university.text.includes(`${field}:`));
+  const currentLayout = await fs.readFile(path.join(root, "rules/排版体系/麦肯锡式.md"), "utf8");
+  assert.ok(university.text.includes(currentLayout.trim()), "generation bundle must include the complete current layout guidance");
   const cli = await run(process.execPath, ["src/tools/load-rules.mjs", "--profile", "generation", "--skin", northeasternUniversitySkin.id], { cwd: root });
   assert.ok(cli.stdout.includes(university.text));
 });

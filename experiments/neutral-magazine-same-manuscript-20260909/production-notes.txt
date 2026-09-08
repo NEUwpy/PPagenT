@@ -1,0 +1,20 @@
+制作记录｜neutral-editorial-001 / magazine
+
+输入：input-manuscript-snapshot.txt。受众为校内服务中心负责人；4张正文页，无封面和目录。所有单位、数据及情境按原稿标注为模拟数据。
+
+内容组织：
+1. 历史观察：1—4月请求量、首次响应数、中位时间、4月三类请求构成、统计口径与因果边界。
+2. 原因复核：4月96个未达标请求的互斥完整分类，给出材料与权限类72/96（75.0%），保留分类不等于措施可消除数量的限定。
+3. 方案比较：A/B/C完整保留作用环节、投入、周期、维护、依赖和限制；结论为先试行B，A作短期高峰应急，C待规则稳定后评估。
+4. 未来计划：六周试点的阶段依赖、回退条件、扩围决策与评估口径；明确B尚未实施且不设未经论证的百分比目标。
+
+设计来源：字体读取 assets/主题/中性编辑排版-001/asset.json；颜色读取 src/runtime/skins/neutral-editorial-theme.mjs；使用现行杂志风文字角色与中性 Skin 派生色。无外部图片或外部事实素材。
+
+已执行检查：
+- 以最终 deck.pptx 执行 render_slides.py，最终 PNG 为 rendered-final/slide-1.png 至 slide-4.png。
+- 以最终 deck.pptx 执行 slides_test.py：Test passed. No overflow detected.
+- 已逐页查看最终 PNG：标题单行；表格、堆叠条、阶段文字无裁切；第2页右栏底部留有净距；第4页第三阶段标签改为“评估口径”；标题横线避开右上模拟数据标识。
+- 文字角色记录见 text-role-check.csv；最终 PPTX 文本使用 Noto Serif SC / Noto Sans SC 与杂志风角色字号，未自配字体或颜色。
+- 可编辑性：正文、数字、表格、线条、分区面均为 PPTX 原生对象；speaker notes 含 [Sources] 块。
+
+未解决问题：无。资产仍按项目规则保持 candidate，不改变正式规则与资产状态。

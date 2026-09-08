@@ -1,0 +1,27 @@
+Route B notes
+
+Communication job
+By the end, the service-center负责人 should understand what the four-month observation supports, why the main blockage evidence points to a unified application entrance, and which six-week gates must be met before expansion.
+
+Adopted from deck-design-ppt
+- Shared grid discipline: one fixed body zone, stable left alignment, consistent row/column anchors, and a deliberate sidebar for interpretation.
+- c01 multi-evidence: exhibit plus metric strip plus drivers/boundary sidebar. Applied to page 1.
+- c01-like evidence decomposition: one mutually exclusive complete bar plus count/definition rows and a meaning/boundary sidebar. Applied to page 2.
+- c03 evaluation grid: criteria as rows, options as columns, short cell budgets, highlighted recommendation column and decision sidebar. Applied to page 3.
+- c06 workplan: time-period columns, activity spans, deliverables and explicit transition gates. Applied to page 4.
+- Slot budgets were re-estimated in Chinese before authoring; long Chinese explanations moved to adjacent rows or sidebars instead of shrinking the type.
+
+Deliberately discarded
+- External palettes, fonts, header/footer chrome and 10 x 5.625 inch page shell: the current Northeast University Skin owns those decisions.
+- External runtime and pptxgenjs calls: this route is built with local @oai/artifact-tool and createNortheasternUniversityStarter.
+- Fixed module counts and chart rotation: each page uses the method only when its evidence shape benefits from it.
+- English score vocabulary: comparison cells use concise Chinese labels and exact operational values so the local audience can read the page.
+
+Actual QA performed
+- Built a four-slide native PPTX from the final build.mjs.
+- Exported artifact previews during build and re-rendered the final deck with route-b/render_slides.py into route-b/rendered-final/.
+- Checked each final PNG for title wrapping, table/grid collisions, sidebar separation, body-frame bounds, and visible simulation-data labeling.
+- Ran slides_test.py and inspected slide layout JSON for out-of-canvas objects.
+
+Evidence boundary
+All business data, plans, and estimates are explicitly simulated. The deck preserves the manuscript's caveats: the observation has no control experiment; the blockage classification is not an intervention effect estimate; B is not implemented and has no claimed outcome; target percentages are not pre-set.

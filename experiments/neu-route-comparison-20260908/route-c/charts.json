@@ -1,0 +1,54 @@
+[
+  {
+    "chart_id": "CH01",
+    "slide_id": "S01",
+    "question": "响应压力如何变化？",
+    "conclusion": "两日内响应比例从80%降至60%",
+    "family": "time",
+    "subtype": "line",
+    "unit": "%",
+    "period": "1—4月",
+    "sample": "每月当月收到请求",
+    "encoding": {
+      "x": "month",
+      "y": "response_rate",
+      "color": "focal"
+    },
+    "focal_marks": [
+      "4月"
+    ],
+    "annotations": [
+      "120→240件/月",
+      "1.3→2.4个工作日"
+    ],
+    "renderer": "native-pptx",
+    "editability": "native-chart",
+    "reconciliation": "passed"
+  },
+  {
+    "chart_id": "CH02",
+    "slide_id": "S02",
+    "question": "未达标请求主要卡在哪里？",
+    "conclusion": "材料与权限阻塞占75%",
+    "family": "part-to-whole",
+    "subtype": "100%-stacked-bar",
+    "unit": "requests",
+    "period": "4月",
+    "sample": "96个未达标请求",
+    "encoding": {
+      "x": "cause",
+      "y": "count",
+      "color": "cause"
+    },
+    "focal_marks": [
+      "材料不全",
+      "权限确认"
+    ],
+    "annotations": [
+      "75%"
+    ],
+    "renderer": "native-shapes",
+    "editability": "native-shapes",
+    "reconciliation": "42+30+16+8=96"
+  }
+]
