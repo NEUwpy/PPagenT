@@ -9,6 +9,8 @@ description: 为 PPT 关系表达检索项目结构 Skill，提取已有结构�
 
 建设以该文档的“建设目标”为准：实际排版时容易正确调用，在 Skin 与页面布局中稳定协调；对外少量输入，对内受约束联动，不以最大自由度为目标。缩放测试通过不等于实际使用验收完成。
 
+一个结构只维护一份源设计，各 Skin 共用。中性 Skin 的 35 个已审批结构由共享程序统一换色；不要为单个结构加 Skin 配色补丁或复制一套几何。改库内源设计会影响该结构的各 Skin 渲染，任务副本不回写库；原稿色阶不同不要求换色后完全相同。当前能力和变更影响见[产品定义](../../../docs/产品定义.md#结构源设计与-skin-的共享方式2026-09-08)。这不扩大下面三个结构的保真尺寸执行范围。
+
 ## 渐进检索
 
 在仓库根运行 `node .codex/skills/ppagent-structure/scripts/catalog.mjs list`，再用 `list --logic <logicId>` 筛选。流程可读[顺序结构](skills/ppagent-structure-sequence/SKILL.md)，比较可读[比较结构](skills/ppagent-structure-comparison/SKILL.md)。普通文字无需强行图示。

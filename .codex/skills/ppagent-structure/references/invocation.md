@@ -39,6 +39,6 @@ Agent 先用内容、区域与 Skin 正常调用。需要统一字号时，在 s
 
 最新样例：experiments/structure-size-pilot/index.html。原 preserved-pilot 保留上一阶段字号锁定的结果用于比较。
 
-中性 Skin 的整页压力实验见 experiments/structure-neutral-luna-20260908/README.md。中性角色规则中的数字是设计 px，传给结构 typography 前乘 0.75 转为 CSS pt（17px→12.75pt，15px→11.25pt）；显式 Skin 合法字号优先于默认结构阶梯下限，不能混用单位。id 为 neutral-editorial-001 时，首批三结构启用纸色／浅承载／深文字的语义样式适配。
+中性 Skin 的整页压力实验见 experiments/structure-neutral-luna-20260908/README.md。中性角色规则中的数字是设计 px，传给结构 typography 前乘 0.75 转为 CSS pt（17px→12.75pt，15px→11.25pt）；显式 Skin 合法字号优先于默认结构阶梯下限，不能混用单位。id 为 neutral-editorial-001 时，35 个已审批结构（包含这三个尺寸样板）统一经过 neutral-structure-theme.mjs 转换；没有样板专用的颜色分支。保留原稿色阶与透明度，卡片与背景区分。颜色转换不能替代尺寸、容量或整页排版检查。
 
 恢复失败前先核对结构区域与页面其余内容是否相交；若改短正文或将说明移到图外，要明确记录内容分工变化，不能声称“同稿仅扩区”。筛选收敛不能仅因有多个阶段而改画成能力成熟度。
