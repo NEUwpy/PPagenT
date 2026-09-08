@@ -16,6 +16,7 @@ import { fitChineseTextToFrame } from "../../render/chinese-typography.mjs";
 import { loadCompositionLayouts } from "../../composition/layouts.mjs";
 import { renderPageComposition } from "../../render/page-composition.mjs";
 import { northeasternUniversitySkin } from "./northeastern-university-contract.mjs";
+import { renderUniversityAgenda } from './university-agenda.mjs';
 
 export { northeasternUniversitySkin } from "./northeastern-university-contract.mjs";
 
@@ -142,9 +143,7 @@ function pageRecipe(page, index, manuscriptSource, templateSourceKind) {
 
   if (assetId === "northeastern-university-agenda-001") {
     const agendaFrame = { left: 135, top: 205, width: 1010, height: 350 };
-    const agendaText = (page.payload.parameters.items ?? [])
-      .map((item, itemIndex) => `${itemIndex + 1}. ${item}`)
-      .join("\n");
+    const agendaText = '';
     const agenda = fitSkinText(agendaText, agendaFrame, "agendaItems");
     return {
       sourceSlideNumber: 2,
@@ -222,6 +221,23 @@ function pageRecipe(page, index, manuscriptSource, templateSourceKind) {
   };
 }
 
+/** Reuse the current template recipes; callers only author inside bodyFrame. */
+export async function createNortheasternUniversityStarter({
+  sourcePptx = path.join(projectRoot, 'assets/主题/东北大学-001/runtime-template.pptx'),
+  starterPptx, pages, manuscriptSource = '用户稿件',
+}) {
+  let bodyNumber = 0;
+  const recipes = pages.map(page => {
+    const fixed = ['northeastern-university-cover-001', 'northeastern-university-agenda-001', 'northeastern-university-closing-001'].includes(page.payload.assetId);
+    return pageRecipe(page, fixed ? 0 : ++bodyNumber, manuscriptSource, 'bundled-runtime');
+  });
+  await prepareTemplateMappedStarter({ sourcePptx, sourceSlideNumbers: recipes.map(r => r.sourceSlideNumber), starterPptx });
+  const presentation = await PresentationFile.importPptx(await FileBlob.load(starterPptx));
+  const slides = await applyTemplateMappedRecipes(presentation, recipes);
+  pages.forEach((page,i)=>{if(page.payload.assetId==='northeastern-university-agenda-001') renderUniversityAgenda(slides[i],page.payload.parameters.items??[]);});
+  return { presentation, slides, bodyFrame: northeasternUniversitySkin.bodyFrame };
+}
+
 export async function renderNortheasternUniversityDeck({
   root = projectRoot,
   pages,
@@ -250,6 +266,7 @@ export async function renderNortheasternUniversityDeck({
   });
   const presentation = await PresentationFile.importPptx(await FileBlob.load(starterPptx));
   const slides = await applyTemplateMappedRecipes(presentation, recipes);
+  pages.forEach((page,i)=>{if(page.payload.assetId==='northeastern-university-agenda-001') renderUniversityAgenda(slides[i],page.payload.parameters.items??[]);});
   const layouts = await loadCompositionLayouts(root);
   const componentOverflows = [];
   try {

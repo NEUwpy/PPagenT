@@ -1,0 +1,13 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {PresentationFile,FileBlob} from '@oai/artifact-tool';
+import {createNortheasternUniversityStarter} from '../../src/runtime/skins/northeastern-university.mjs';
+const out=import.meta.dirname;
+const titles=['记录规范','试点筛选','能力建设','实施路径','资源配置','效果评估','风险管理','下一步计划'];
+const descriptions=['明确需要留下哪些基本信息','确定入选条件与试点边界','从可记录走向可追溯、可复用','明确各阶段任务与责任','统筹人员、经费与平台','建立过程与结果评价指标','识别关键风险并制定预案','安排后续行动与交付节点'];
+const pages=Array.from({length:6},(_,i)=>({payload:{assetId:'northeastern-university-agenda-001',parameters:{title:'目录',items:titles.slice(0,i+3).map((title,j)=>({title,description:descriptions[j]}))}},content:{pageId:`agenda-${i+3}`,title:'目录'},meta:{},intent:{intentId:'agenda'},decision:{selectedAssetId:'northeastern-university-agenda-001'}}));
+const {presentation}=await createNortheasternUniversityStarter({starterPptx:path.join(out,'template-starter.pptx'),pages,manuscriptSource:'目录容量演示稿件'});
+await(await PresentationFile.exportPptx(presentation)).save(path.join(out,'agenda-3-8.pptx'));
+const final=await PresentationFile.importPptx(await FileBlob.load(path.join(out,'agenda-3-8.pptx')));
+for(const [i,s]of final.slides.items.entries())await fs.writeFile(path.join(out,`agenda-${i+3}.png`),new Uint8Array(await(await final.export({slide:s,format:'png',scale:1})).arrayBuffer()));
+await fs.writeFile(path.join(out,'index.html'),`<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>东北大学目录 · 3–8 章适配</title><style>body{margin:32px;background:#edf2f7;color:#26384c;font-family:'Microsoft YaHei',sans-serif}main{display:grid;grid-template-columns:1fr 1fr;gap:24px}article{background:white;padding:16px}img{width:100%}h1{font-size:26px}h2{font-size:19px}a{color:#315f91}p{line-height:1.8}@media(max-width:900px){main{grid-template-columns:1fr}}</style><h1>东北大学 Skin · 蓝带分栏目录</h1><p>3–4 章单排；5–6 章三列两排；7–8 章四列两排。按从左到右、从上到下阅读。短标题与一至两行说明；长标题需精炼，超过 8 章拆页。</p><p><a href="agenda-3-8.pptx">下载六页可编辑 PPTX</a></p><main>${pages.map((_,i)=>`<article><h2>${i+3} 章 · ${i<2?'单排':i<4?'三列两排':'四列两排'}</h2><a href="agenda-${i+3}.png"><img src="agenda-${i+3}.png"></a></article>`).join('')}</main></html>`);

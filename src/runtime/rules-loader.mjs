@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { northeasternUniversitySkin } from "./skins/northeastern-university-contract.mjs";
+import { universityMckinseySkin, universityMckinseyTypography } from "./skins/university-mckinsey.mjs";
 
 const PROFILES = new Set(["generation", "content-director", "visual-selector"]);
 const ID = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/;
@@ -96,6 +97,8 @@ export async function loadRules(root, { profile, skin, layout } = {}) {
             body: northeasternUniversitySkin.typographyRoles.bodyTypeface,
           },
           theme: northeasternUniversitySkin.componentTheme,
+          pageTypographyPx: universityMckinseyTypography,
+          structureSkin: universityMckinseySkin,
         },
       });
     }

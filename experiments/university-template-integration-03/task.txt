@@ -1,0 +1,5 @@
+Luna High 独立制作大学真模板+麦肯锡正文排版案例。读取本目录manuscript.txt与当前大学rules:load，结构Skill和Presentations必要资料。不得读取旧实验成品。只写run/，不改库和Git。
+制作6页：封面、目录、三页正文、尾页。封面题目“共享实验平台试点方案”，副标题“记录、筛选与能力建设”，汇报人“方案讨论”，不编造姓名日期机构。原稿为虚构教学讨论材料。
+必须通过src/runtime/skins/northeastern-university.mjs的createNortheasternUniversityStarter复用现行模板和目录更新配方，禁止空白页重画大学页面壳。函数参数pages使用该模块pageRecipe现有page结构，阅读实现构造；正文assetId用northeastern-university-body-001，meta.sectionName与content.title等按实际稿件填写。sourcePptx使用默认随库runtime-template。只替换模板文字，正文内容放55,166,1170,492安全区。模板白色标题、渐变带、校徽、底线必须保留。封面尾页原身份固定素材保留，勿自行重画。
+三页正文使用invokeUniversityStructure分别调用原蓝色折角便签、简明漏斗、成熟度阶梯，不传自写build，不自行覆盖库内表面颜色；图外说明与证据结合麦肯锡六字段编排，不一页只放结构，重要事实和边界不删。正文角色使用21/18/14设计px，长标题按模板合法档位忠实精炼，不越出标题带。
+交付deck.pptx、builder.mjs、全部6页最终PPT重导入PNG、真实调用日志、规则快照和report.txt。保留失败尝试。检查模板外观与正文边界、实际字体字号、原稿关系、结构蓝色与造型、连线和换行，执行slides_test。调用成功不代表审美通过。每分钟简报进度，遇工具阻碍及时报告。独立自修后冻结，勿等待父任务逐页指导。

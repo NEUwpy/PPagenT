@@ -87,7 +87,7 @@ export function adaptNeutralStructure({markup, css, theme, sourceTheme}) {
   css = stylesheet(css,theme) + `
   [data-ppt-root]{color:${theme.body};font-family:var(--ppagent-font-body)}
   [data-ppt-root] svg text{fill:${theme.dark}}
-  [data-ppt-root] .ppagent-text-primitive--heading{font-family:${JSON.stringify(theme.fonts?.display??theme.font)}}
+  [data-ppt-root] .ppagent-text-primitive--heading{font-family:${JSON.stringify(theme.structureHeadingFont??theme.fonts?.display??theme.font)}}
   [data-ppt-root] .ppagent-text-flow__title,[data-ppt-root] .ppagent-text-primitive--heading{color:${theme.dark};--title-color:${theme.dark}}
   [data-ppt-root] .ppagent-text-flow__body,[data-ppt-root] .ppagent-text-primitive--body,[data-ppt-root] .ppagent-text-list__item{color:${theme.body};--body-color:${theme.body}}
   /* Noto's glyph box exceeds the legacy one-em clipping boxes. Keep font sizes

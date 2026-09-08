@@ -1,5 +1,7 @@
 # 结构构建接口
 
+大学 Skin＋麦肯锡式独立制作使用 `src/runtime/invoke-university-structure.mjs` 的 `invokeUniversityStructure`，由该入口绑定 Skin、字号单位及保留原造型模式；见[大学调用说明](../../../../docs/工作流/正式生成/大学结构调用.md)。以下通用接口供其他 Skin 与结构迁移使用，不绕过大学入口传自写 build。
+
 运行 catalog.mjs guide <assetId> 查看当前实现。优先使用 skill.implementation.mode = preserved-design 的登记实现：直接复用原造型，按本页区域计算图形和文字。
 
 ```javascript
