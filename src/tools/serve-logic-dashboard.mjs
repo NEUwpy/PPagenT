@@ -1,3 +1,4 @@
+import {listStructureSkins} from '../runtime/skins/structure-skin-registry.mjs';
 import { neutralEditorialTheme } from '../runtime/skins/neutral-editorial-theme.mjs';
 import { preservedComponent } from '../runtime/preserved-structure-build.mjs';
 import { preservedSizeExamples } from '../visual-runtime/preserved-design-layout.mjs';
@@ -253,11 +254,13 @@ async function componentPreviewHtml(library, assetId, searchParams) {
   }
   const skinKey = searchParams.get('skin') ?? 'university';
   const sizeKey = searchParams.get('size') ?? 'large';
-  const theme = skinKey === 'neutral' ? neutralEditorialTheme : northeasternUniversityTheme;
+  const selectedSkin=(await listStructureSkins(projectRoot)).find(s=>s.id===skinKey);
+  if(!selectedSkin)return null;
+  const theme=selectedSkin.theme;
   const ratio = preservedSizeExamples[sizeKey];
   const supported = typeof component.renderAdaptiveMarkup === 'function';
-  if (!['neutral', 'university'].includes(skinKey) || !ratio) return null;
-  if (skinKey === 'neutral' && !(resolved.record.status === 'core' && resolved.record.userApprovedHtmlNative)) {
+  if (!ratio) return null;
+  if (skinKey !== 'university' && !(resolved.record.status === 'core' && resolved.record.userApprovedHtmlNative)) {
     return '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><body style="display:grid;place-content:center;height:90vh;font:16px sans-serif;color:#4b4a45;background:#f5f4ef">本轮只适配已审批结构；该结构不在范围内。</body></html>';
   }
   if (!supported && sizeKey !== 'large') {

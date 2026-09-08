@@ -18,6 +18,13 @@ export function derivePrimaryTheme(skin, mainColor) {
  const accent=color(hue-40,sat*1.52,l*.50);
  // Preserve the seed's warm hue as lightness falls, instead of mixing only black.
  const warm=(saturationRatio,lightnessRatio)=>color(hue-3,sat*saturationRatio,l*lightnessRatio);
+ // A dark brand seed is an ink/accent, not a page background. Use a light
+ // surface scale for all such seeds; no school- or structure-specific branch.
+ if(l<.7)return {id:skin.id,fonts:skin.fonts,font:skin.font,typography:skin.typography,
+   mainColor,background:'#FFFFFF',surface:color(hue,sat*.25,.965),
+   line:color(hue,sat*.32,.82),intensity3:color(hue,sat*.42,.68),
+   intensity4:color(hue,sat*.50,.52),muted:color(hue,sat*.18,.46),
+   dark:color(hue,sat*.25,.14),body:color(hue,sat*.18,.28),primaryColor:mainColor.toUpperCase()};
  // Copy typography and identity only: no colors are inherited from the old Skin.
  return {id:skin.id,fonts:skin.fonts,font:skin.font,typography:skin.typography,
    mainColor,background:shade(0),surface:warm(.93,.963),line:warm(.60,.86),

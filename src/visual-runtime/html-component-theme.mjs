@@ -411,7 +411,7 @@ export function compileStructureThemeSource(source, theme = {}) {
 }
 
 export function compileHtmlComponentTheme({ markup = "", css = "", theme = {} } = {}) {
-  if (theme.id === 'neutral-editorial-001' && supportsNeutralStructure(markup)) {
+  if ((theme.structureColorMode === 'continuous-tone-v1' || theme.id === 'neutral-editorial-001') && supportsNeutralStructure(markup)) {
     return Object.freeze(adaptNeutralStructure({markup:String(markup),css:String(css),theme:resolveStructureTheme(theme),sourceTheme:resolveStructureTheme({})}));
   }
   return Object.freeze({

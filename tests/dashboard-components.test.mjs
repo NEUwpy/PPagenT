@@ -148,8 +148,8 @@ test("预览使用版本化长期缓存，主数据仍保持实时", async () =>
   const dataCollector = await fs.readFile(path.join(root, "src/tools/logic-dashboard-data.mjs"), "utf8");
   const template = await fs.readFile(path.join(root, "src/tools/templates/logic-dashboard.html"), "utf8");
   assert.match(server, /max-age=31536000, immutable/);
-  assert.match(server, /\.ppagent-slot-visual-layer\{[^}]*opacity:0/);
-  assert.match(server, /\.ppagent-component-scale:hover \.ppagent-slot-visual-layer/);
+  assert.doesNotMatch(server, /\.ppagent-slot-visual-layer\{[^}]*opacity:0/);
+  assert.doesNotMatch(server, /\.ppagent-component-scale:hover \.ppagent-slot-visual-layer/);
   assert.match(dataCollector, /src", "tools", "serve-logic-dashboard\.mjs/);
   assert.match(server, /fetch\("\/api\/dashboard-data", \{ cache: "no-store" \}\)/);
   assert.match(server, /reviewModule\[resolved\.record\.componentExport\] \?\? runtimeModule\[resolved\.record\.componentExport\]/);
@@ -168,7 +168,8 @@ test("预览使用版本化长期缓存，主数据仍保持实时", async () =>
 test("结构看板不再展示原执行器字号契约", async () => {
   const template = await fs.readFile(path.join(root, "src/tools/templates/logic-dashboard.html"), "utf8");
   assert.doesNotMatch(template, /const typographyContract/);
-  assert.match(template, /数量、比例和文字位置由本次内容决定/);
+  assert.match(template, /样例不是任意数量与尺寸的保证/);
+  assert.match(template, /structureStatusMarkup/);
 });
 test("看板 EXE 每次启动都会重启旧服务并使用新地址打开", async () => {
   const launcher = await fs.readFile(path.join(root, "src/launcher/ppa-dashboard-main.cjs"), "utf8");

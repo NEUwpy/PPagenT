@@ -68,7 +68,7 @@ export function adaptNeutralStructure({markup, css, theme, sourceTheme}) {
   const rootTag=markup.match(/<[^>]*\sdata-ppt-root(?:\s|=|>)[^>]*>/)?.[0]??'';
   const rootClasses=(rootTag.match(/class="([^"]*)"/)?.[1]??'').split(/\s+/).filter(Boolean);
   theme={...theme,sourceTheme,rootSelectors:new Set([...rootClasses.map(c=>'.'+c),'[data-ppt-root]',rootClasses.map(c=>'.'+c).join('')])};
-  if (theme.id !== 'neutral-editorial-001') return {markup,css};
+  if (theme.structureColorMode !== 'continuous-tone-v1' && theme.id !== 'neutral-editorial-001') return {markup,css};
   markup = markup.replace(/<style\b[^>]*>([\s\S]*?)<\/style>/gi, (_,content)=>`<style>${stylesheet(content,theme)}</style>`);
   markup = markup.replace(/<[a-z][^>]*>/gi, tag => {
     // Images, URLs, paths and labels are never recolored as raw strings.

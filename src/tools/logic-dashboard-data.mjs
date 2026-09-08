@@ -1,3 +1,5 @@
+import {listStructureSkins} from '../runtime/skins/structure-skin-registry.mjs';
+import {structureCapabilityStatus} from './structure-capability-status.mjs';
 import fs from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
@@ -327,6 +329,7 @@ function uniqueById(records) {
 }
 
 export async function collectLogicDashboardData(root = defaultProjectRoot) {
+  const structureSkins=(await listStructureSkins(root)).map(({theme,...item})=>item);
   const coreEntries = await findManifests(path.join(root, "assets"), "core");
   const logicMap = await readJson(path.join(root, "catalog", "logic-map.json"));
   const purposes = await readJson(path.join(root, "catalog", "purpose-vocabulary.json"));
@@ -406,6 +409,8 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
   }, {})).map(([name, count]) => ({ name, count })).sort((left, right) => right.count - left.count);
 
   return {
+    structureSkins,
+    structureCapabilities:Object.fromEntries(primaryAssets.filter(a=>a.structureSkill).map(a=>[a.id,Object.fromEntries(structureSkins.map(s=>[s.id,structureCapabilityStatus(a,s.id,s.status)]))])),
     generatedAt: new Date().toISOString(),
     mode: "live-repository-api",
     activeSkin: {

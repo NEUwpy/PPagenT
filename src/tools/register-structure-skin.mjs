@@ -1,0 +1,11 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {validateStructureSkin} from '../runtime/skins/structure-skin-registry.mjs';
+const option=(name,fallback)=>{const i=process.argv.indexOf(name);return i<0?fallback:process.argv[i+1];};
+const config=validateStructureSkin({id:option('--id'),name:option('--name'),mainColor:option('--main-color'),mode:'continuous-tone-v1',status:'candidate',fonts:{body:option('--body-font','Noto Sans SC'),display:option('--display-font','Noto Serif SC')}});
+const root=path.resolve(option('--root',process.cwd()));
+const directory=path.join(root,'catalog','structure-skins');
+await fs.mkdir(directory,{recursive:true});
+const target=path.join(directory,config.id+'.json');
+await fs.writeFile(target,JSON.stringify(config,null,2)+'\n',{flag:'wx'});
+console.log(`已登记待审结构 Skin：${target}\n看板刷新后选择 ${config.name}；接着执行 check-structure-skin.mjs --skin ${config.id}。正式生产与排版规则绑定需另行接入。`);
