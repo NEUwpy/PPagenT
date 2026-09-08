@@ -1,0 +1,4 @@
+验证当前大学Skin独立制作入口。读取本目录manuscript.txt，运行并完整读取 npm run rules:load -- --profile generation --skin northeastern-university-001，把输出保存为run/rules-snapshot.txt。
+用 gpt-5.6-luna high 独立制作3页原生可编辑PPTX。使用现行规则及按需结构Skill、Presentations必要工具资料，不读此前实验、参考图或评审，不自行更改规则。用户要验证结构图与证据/说明共同成页，不能三页都仅放满幅结构。
+按 .codex/skills/ppagent-structure/SKILL.md 渐进检索真实候选，选择合适关系，执行 invokeStructure 原生构建并保留实际事件；不要只登记名字或伪造日志。保留视觉识别特征与全部关键关系。若候选不适合或工具阻碍，如实报告，不强套。
+只写本目录run/。交付deck.pptx、builder.mjs、从最终PPT重新渲染的slide-01.png到slide-03.png、调用证据与report.txt。先逐页自检修正并执行技术检查，再冻结提交；报告实际采用的来源特征、结构区域、迭代次数、未解决项。不得提交Git。先报告进度，遇阻立即报告。

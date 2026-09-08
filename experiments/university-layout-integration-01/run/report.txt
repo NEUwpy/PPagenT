@@ -1,0 +1,32 @@
+大学 Skin 独立接入实测报告
+
+执行口径
+- 任务指定模型与强度：gpt-5.6-luna high。
+- 输入仅使用本实验目录的 task.txt 与 manuscript.txt；未读取此前实验、参考图或父任务历史反馈。
+- 规则入口：npm run rules:load -- --profile generation --skin northeastern-university-001。
+- 当前规则：northeastern-university-001 / mckinsey；页面基准 1280×720，正文区 55,166,1170,492。
+- 运行时字体：标题 HYWenRunSongYun U；正文 Microsoft YaHei；主题色 #315F91，白底、深色正文与灰蓝分区。
+
+结构 Skill 真实执行
+- slide-01 / sequence-phase-gates-004 / targetFrame {left:72,top:252,width:790,height:292} / nativeShapeDelta=16 / validation=rendered-unreviewed。
+  保留蜿蜒收窄的箭形河道、横跨河道的阶段门闸与失败后补齐再复核；结构外放置 7/5 记录缺口、重叠限制和授权暂停边界。
+- slide-02 / causal-mediator-chain-003 / targetFrame {left:72,top:268,width:750,height:260} / nativeShapeDelta=15 / validation=rendered-unreviewed。
+  保留单条上升箭带、圆形机制节点和阶梯说明；结构外单列设备时段不足路径，并在页底保留台账验证链条。
+- slide-03 / comparison-dual-verdict-001 / targetFrame {left:82,top:255,width:1115,height:350} / nativeShapeDelta=21 / validation=rendered-unreviewed。
+  保留镜像比较舱、中央 VS、三行共线比较、底部共同椭圆平台和正负语义联动；建议、历史代价与职责放在结构外说明区。
+- 完整真实调用记录：invoke-evidence.ndjson。每页均有 attempt 与 success 事件，来源 assetId、preservedFeatures、targetFrame 和对象增量均在记录中。
+
+逐页自检
+- 第 1 页：标题与引导句单行；阶段顺序为准备→小范围试行→复盘；两个门禁明确写出“补责任/补记录后复核”；7 与 5 未相加；授权只暂停相关预约。河道、门闸和外侧证据区之间无可见穿字或越界。
+- 第 2 页：申请字段不全→反复追问→材料补齐→等待增加被明确标为机制假设；设备时段不足作为独立路径；4/6 与 3/6 被限定为观察线索；台账区分提交、补齐、审批、执行与设备等待。斜向机制带、节点说明和右侧独立路径可分辨。
+- 第 3 页：全面补历史记录与先规范新增记录按投入方式、可追溯性、启动条件三维逐行对齐；底部建议保留历史覆盖代价；职责行明确研究人员、管理员、平台负责人分工，不构成三级审批流程。补齐并复核了底部共同椭圆承托平台。
+
+技术检查与迭代
+- 最终 deck.pptx 共 3 页；最终重新渲染文件为 slide-01.png、slide-02.png、slide-03.png。
+- slides_test.py：Test passed. No overflow detected.
+- inspect.ndjson：每页均有完整页标题、正文、结构文字和 speaker notes；对象统计为 slide-01 9 shape + 25 textbox，slide-02 11 shape + 20 textbox，slide-03 11 shape + 21 textbox。
+- 首轮导出曾因因果链说明线负高度触发 artifact-tool 几何错误；已改为非负几何并重新导出、渲染、检查。随后补充第三页共同椭圆平台并再次导出、渲染、检查；当前冻结结果为第二次成功导出。
+
+未解决项
+- 未发现标题断行、正文越界、结构线穿字、比较行失配或语义缺失。
+- invokeStructure 的 validation 仍按执行器约定为 rendered-unreviewed；视觉通过结论来自最终 PPTX 的 PNG 逐页检查，不能把该字段单独理解为审美验收。

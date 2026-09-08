@@ -7,9 +7,34 @@ import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import test from "node:test";
 import { loadRules } from "../src/runtime/rules-loader.mjs";
+import { northeasternUniversitySkin } from "../src/runtime/skins/northeastern-university-contract.mjs";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const run = promisify(execFile);
+
+test("大学与中性 Skin 分别加载绑定排版，大学配置来自运行时契约", async () => {
+  const university = await loadRules(root, { profile: "generation", skin: northeasternUniversitySkin.id });
+  const neutral = await loadRules(root, { profile: "generation", skin: "neutral-editorial-001" });
+  assert.equal(university.layout, "mckinsey");
+  assert.equal(neutral.layout, "magazine");
+  assert.ok(university.files.some((file) => file.path === "排版体系/麦肯锡式.md"));
+  assert.ok(!university.files.some((file) => file.path === "排版体系/杂志风.md"));
+  assert.ok(!neutral.files.some((file) => file.path === "排版体系/麦肯锡式.md"));
+  assert.equal(university.configurationSources[0].value.fonts.display, northeasternUniversitySkin.typographyRoles.displayTypeface);
+  assert.deepEqual(university.configurationSources[0].value.theme, northeasternUniversitySkin.componentTheme);
+  for (const field of ["风格", "页面", "分析表达", "解释", "编排", "视觉层级"]) assert.ok(university.text.includes(`${field}:`));
+  const cli = await run(process.execPath, ["src/tools/load-rules.mjs", "--profile", "generation", "--skin", northeasternUniversitySkin.id], { cwd: root });
+  assert.ok(cli.stdout.includes(university.text));
+});
+
+test("运行时 Skin 引用不能跨 Skin 或泄漏到选择器", async (t) => {
+  const { dir } = await fixture(t);
+  const marker = "<!-- runtime-skin: northeastern-university-001 -->";
+  await fs.writeFile(path.join(dir, "rules/skin.md"), marker);
+  await assert.rejects(loadRules(dir, { profile: "generation", skin: "test-skin" }), /当前规则范围/);
+  await fs.writeFile(path.join(dir, "rules/visual.md"), marker);
+  await assert.rejects(loadRules(dir, { profile: "visual-selector" }), /当前规则范围/);
+});
 
 async function fixture(t) {
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), "ppagent-rules-"));
