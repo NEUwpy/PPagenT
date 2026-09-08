@@ -1,0 +1,185 @@
+{
+  "decisionOrder": [
+    "稿件关系与主张",
+    "页面区域与文字层级",
+    "普通色块表达",
+    "在相同区域应用折角便签设计",
+    "实际PPT复核"
+  ],
+  "plans": [
+    {
+      "id": "short",
+      "title": "交接验收的四项条件",
+      "content": {
+        "items": [
+          {
+            "key": "complete",
+            "title": "资料齐全",
+            "body": "关键文件集中归档",
+            "iconQuery": "folder"
+          },
+          {
+            "key": "version",
+            "title": "版本清楚",
+            "body": "当前版本标记明确",
+            "iconQuery": "versions"
+          },
+          {
+            "key": "owner",
+            "title": "责任明确",
+            "body": "后续负责人可查",
+            "iconQuery": "user-check"
+          },
+          {
+            "key": "exception",
+            "title": "例外有据",
+            "body": "特殊处理附上依据",
+            "iconQuery": "file-search"
+          }
+        ]
+      },
+      "frame": {
+        "left": 490,
+        "top": 200,
+        "width": 700,
+        "height": 386
+      },
+      "itemRegions": [
+        {
+          "left": 0,
+          "top": 0,
+          "width": 330,
+          "height": 166
+        },
+        {
+          "left": 370,
+          "top": 0,
+          "width": 330,
+          "height": 166
+        },
+        {
+          "left": 0,
+          "top": 220,
+          "width": 330,
+          "height": 166
+        },
+        {
+          "left": 370,
+          "top": 220,
+          "width": 330,
+          "height": 166
+        }
+      ],
+      "blocks": [
+        {
+          "role": "module",
+          "text": "接手者能独立继续工作",
+          "frame": {
+            "left": 56,
+            "top": 235,
+            "width": 380,
+            "height": 46
+          }
+        },
+        {
+          "role": "body",
+          "text": "以工作能否接续，判断交接是否完成。\n发送文件只是交接动作。",
+          "frame": {
+            "left": 56,
+            "top": 299,
+            "width": 365,
+            "height": 90
+          }
+        }
+      ],
+      "intention": "短稿：左侧主张占三分之一，右侧四项等权条件占三分之二。页面从左侧主张读向右侧条件，四项不表达顺序。"
+    },
+    {
+      "id": "normal",
+      "title": "交接验收：从文件交付到工作接续",
+      "content": {
+        "items": [
+          {
+            "key": "complete",
+            "title": "资料齐全",
+            "body": "关键文件集中归档，\n接手者能找到继续工作所需的资料。",
+            "iconQuery": "folder"
+          },
+          {
+            "key": "version",
+            "title": "版本清楚",
+            "body": "当前版本标记明确，\n接手者能辨认应使用哪一份文件。",
+            "iconQuery": "versions"
+          },
+          {
+            "key": "owner",
+            "title": "责任明确",
+            "body": "后续负责人可查，\n接手者能确认工作由谁继续负责。",
+            "iconQuery": "user-check"
+          },
+          {
+            "key": "exception",
+            "title": "例外有据",
+            "body": "特殊处理附上依据，\n接手者能理解例外情况及其处理理由。",
+            "iconQuery": "file-search"
+          }
+        ]
+      },
+      "frame": {
+        "left": 56,
+        "top": 240,
+        "width": 1168,
+        "height": 370
+      },
+      "itemRegions": [
+        {
+          "left": 0,
+          "top": 0,
+          "width": 554,
+          "height": 166
+        },
+        {
+          "left": 614,
+          "top": 0,
+          "width": 554,
+          "height": 166
+        },
+        {
+          "left": 0,
+          "top": 204,
+          "width": 554,
+          "height": 166
+        },
+        {
+          "left": 614,
+          "top": 204,
+          "width": 554,
+          "height": 166
+        }
+      ],
+      "blocks": [
+        {
+          "role": "module",
+          "text": "接手者能独立继续工作，才算交接完成",
+          "frame": {
+            "left": 56,
+            "top": 135,
+            "width": 700,
+            "height": 44
+          }
+        },
+        {
+          "role": "body",
+          "text": "发送文件只是交接动作，验收还要核对以下四项。",
+          "frame": {
+            "left": 56,
+            "top": 184,
+            "width": 720,
+            "height": 38
+          }
+        }
+      ],
+      "intention": "常规稿：上方主张引领两列两行解释；内容区域横向利用正文宽度，按信息量确定行高，保持同级项目一致。"
+    }
+  ]
+}

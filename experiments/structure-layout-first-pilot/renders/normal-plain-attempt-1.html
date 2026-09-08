@@ -1,0 +1,331 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>/* ppagent-theme:resolved */:root{
+    --ppagent-font-body:"Noto Sans SC";
+    --ppagent-color-background:#F5F4EF;
+    --ppagent-color-surface:#EEECE5;
+    --ppagent-color-primary:#A35D4F;
+    --ppagent-color-primary-deep:#5F362E;
+    --ppagent-color-primary-dark:#7C473C;
+    --ppagent-color-primary-light:#C2948B;
+    --ppagent-color-primary-pale:#DFC6C1;
+    --ppagent-color-primary-wash:#F4ECEA;
+    --ppagent-color-accent:#A35D4F;
+    --ppagent-color-accent-alt:#B47A6F;
+    --ppagent-color-accent-soft:#EEE2DF;
+    --ppagent-color-cyan:#C4978E;
+    --ppagent-color-dark:#20201D;
+    --ppagent-color-body:#4B4A45;
+    --ppagent-color-muted:#85837B;
+    --ppagent-color-line:#D8D5CC;
+    --ppagent-component-heading-size:15.75pt;
+    --ppagent-component-title-size:15.75pt;
+    --ppagent-component-item-title-size:12.75pt;
+    --ppagent-component-lead-size:12.75pt;
+    --ppagent-component-body-size:12.75pt;
+    --ppagent-component-label-size:12.75pt;
+    --ppagent-component-meta-size:11.25pt;
+  }
+    .ppagent-text-region{
+      box-sizing:border-box;
+      min-width:0;
+      min-height:0;
+    }
+    .ppagent-text-region > .ppagent-text-flow,
+    .ppagent-text-region > .ppagent-text-layout{
+      width:100%;
+      height:100%;
+    }
+    .ppagent-text-layout{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-layout-gap,10px);
+      width:100%;
+      height:100%;
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,"Microsoft YaHei"),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-align="center"]{text-align:center}
+    .ppagent-text-layout[data-text-layout-align="right"]{text-align:right}
+    .ppagent-text-layout[data-text-layout-valign="top"]{justify-content:flex-start}
+    .ppagent-text-layout[data-text-layout-valign="bottom"]{justify-content:flex-end}
+    .ppagent-text-layout[data-text-layout-density="compact"]{--ppagent-text-layout-gap:6px;--ppagent-text-layout-item-gap:5px}
+    .ppagent-text-layout[data-text-layout-density="standard"]{--ppagent-text-layout-gap:10px;--ppagent-text-layout-item-gap:8px}
+    .ppagent-text-layout[data-text-layout-density="loose"]{--ppagent-text-layout-gap:15px;--ppagent-text-layout-item-gap:12px}
+    .ppagent-text-primitive{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      color:var(--ppagent-text-color,#46566a);
+      text-align:inherit;
+      white-space:pre-line;
+      overflow-wrap:break-word;
+    }
+    .ppagent-text-primitive--heading{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-text-primitive--body{font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.45}
+    .ppagent-text-primitive--list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px)}
+    .ppagent-text-list__item{box-sizing:border-box;min-width:0;margin:0;padding:0;overflow:visible;color:var(--ppagent-text-color,#46566a);font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.38;text-align:inherit;white-space:pre-line;overflow-wrap:break-word}
+    .ppagent-text-primitive--metric{color:var(--ppagent-value-color,#2f5ea8);font-size:var(--ppagent-component-heading-size,25pt);font-weight:700;line-height:1.08}
+    .ppagent-text-primitive--label{color:var(--ppagent-label-color,#60758d);font-size:var(--ppagent-component-label-size,17pt);font-weight:600;line-height:1.2}
+    .ppagent-text-primitive--annotation{color:var(--ppagent-annotation-color,#748495);font-size:var(--ppagent-component-meta-size,15pt);font-weight:400;line-height:1.3}
+    .ppagent-text-primitive--quote{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:500;line-height:1.35}
+    .ppagent-text-primitive--emphasis{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-title-size,23pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-structured-list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-structured-list__item{display:flex;flex-direction:column;gap:4px;min-width:0}
+    .ppagent-structured-list__item .ppagent-text-primitive--heading{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-metric-set{display:grid;grid-template-columns:repeat(var(--ppagent-metric-columns,2),minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0;align-items:start}
+    .ppagent-metric-set[data-metric-count="3"]{--ppagent-metric-columns:3}
+    .ppagent-metric-set[data-metric-count="4"]{--ppagent-metric-columns:4}
+    .ppagent-metric-set__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-key-value{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-key-value__row{display:grid;grid-template-columns:minmax(64px,.42fr) minmax(0,1fr);gap:10px;align-items:start;min-width:0}
+    .ppagent-key-value__row .ppagent-text-primitive--metric{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label,
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--annotation{text-align:right}
+    .ppagent-summary-information{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0}
+    .ppagent-summary-information__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-summary-information__item .ppagent-text-primitive--emphasis{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"]{
+      justify-content:flex-start;
+      gap:12px;
+      padding:18px;
+      color:var(--ppagent-color-body);
+      background:transparent;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive{color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--emphasis,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--quote{color:var(--ppagent-color-dark);font-weight:700;letter-spacing:-.25px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--body,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-list__item{font-size:max(15pt,var(--ppagent-component-body-size))}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--label{color:var(--ppagent-color-accent);font-size:max(15pt,var(--ppagent-component-label-size));font-weight:700;letter-spacing:.7px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--annotation{color:var(--ppagent-color-muted);font-size:max(15pt,var(--ppagent-component-meta-size))}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--metric{color:var(--ppagent-color-accent);font-weight:700;letter-spacing:-.5px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-list__item{position:relative;padding-left:17px;color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-list__item::before{content:"";position:absolute;left:0;top:.68em;width:8px;height:2px;background:var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--heading-content-flow > .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--label-content-flow > .ppagent-text-primitive--label,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--heading-metric-content-flow > .ppagent-text-primitive--heading{padding-bottom:10px;border-bottom:2px solid var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-structured-list{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-structured-list__item{display:grid;grid-template-columns:minmax(82px,.42fr) minmax(0,1fr);gap:14px;padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-structured-list__item .ppagent-text-primitive--body{margin:0}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-metric-set{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-metric-set__item{padding:12px 14px 4px 0}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-metric-set__item + .ppagent-metric-set__item{padding-left:14px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-key-value{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-key-value__row{padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--quote-attribution-flow{position:relative;padding-left:52px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--quote-attribution-flow::before{content:"“";position:absolute;left:16px;top:8px;color:var(--ppagent-color-accent);font-family:Georgia,serif;font-size:42pt;font-weight:700;line-height:1}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label{margin-top:auto;padding-top:10px;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-summary-information{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-summary-information__item{padding:10px 12px 8px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-summary-information__item:nth-child(even){padding-left:12px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout--value-label{
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-value-label-gap,5px);
+      padding:var(--ppagent-value-label-padding,5px);
+      text-align:center;
+    }
+    .ppagent-text-layout__value,
+    .ppagent-text-layout__label{
+      box-sizing:border-box;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:hidden;
+      text-align:inherit;
+    }
+    .ppagent-text-layout__value{
+      color:var(--ppagent-value-color,#2f5ea8);
+      font-size:var(--ppagent-component-lead-size,19pt);
+      font-weight:700;
+      line-height:1.15;
+    }
+    .ppagent-text-layout__label{
+      color:var(--ppagent-label-color,#60758d);
+      font-size:var(--ppagent-component-meta-size,15pt);
+      font-weight:400;
+      line-height:1.2;
+    }
+    .ppagent-text-flow{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-flow-gap,10px);
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,"Microsoft YaHei"),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-flow[data-text-flow-align="center"]{text-align:center}
+    .ppagent-text-flow[data-text-flow-align="right"]{text-align:right}
+    .ppagent-text-flow[data-text-flow-valign="top"]{justify-content:flex-start}
+    .ppagent-text-flow[data-text-flow-valign="bottom"]{justify-content:flex-end}
+    .ppagent-text-flow__title,
+    .ppagent-text-flow__body{
+      position:relative;
+      box-sizing:border-box;
+      flex:0 0 auto;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      text-align:inherit;
+    }
+    .ppagent-text-flow__title{
+      font-size:var(--ppagent-component-item-title-size,21pt);
+      font-weight:700;
+      line-height:1.2;
+      white-space:normal;
+      text-wrap:balance;
+    }
+    .ppagent-text-flow__body{
+      font-size:var(--ppagent-component-body-size,17pt);
+      font-weight:400;
+      line-height:1.45;
+      white-space:pre-line;
+    }
+    .ppagent-text-flow__separator{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      align-self:center;
+      width:var(--ppagent-text-flow-separator-width,54px);
+      height:var(--ppagent-text-flow-separator-height,4px);
+      border:0;
+      border-radius:99px;
+      background:var(--ppagent-text-flow-separator-color,#78aeef);
+    }
+  * { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { color: #7C473C; background: transparent; font-family: var(--ppagent-font-body, "Microsoft YaHei"), sans-serif; }
+
+.notes-review { position: relative; width: 1170px; height: 492px; overflow: hidden; background: transparent; }
+.notes-grid { position: absolute; inset: 26px 16px; display: flex; flex-wrap: wrap; align-content: center; justify-content: center; }
+.notes-review[data-item-count="4"] .notes-grid { inset: 26px 200px; gap: 20px 48px; padding: 0; }
+.notes-review[data-item-count="5"] .notes-grid,
+.notes-review[data-item-count="6"] .notes-grid { gap: 20px 32px; padding: 0; }
+.notes-review[data-item-count="7"] .notes-grid,
+.notes-review[data-item-count="8"] .notes-grid { gap: 18px 14px; padding: 0; }
+
+.note-card { position: relative; height: 208px; }
+.notes-review[data-item-count="4"] .note-card { flex: 0 0 330px; }
+.notes-review[data-item-count="5"] .note-card,
+.notes-review[data-item-count="6"] .note-card { flex: 0 0 300px; }
+.notes-review[data-item-count="7"] .note-card,
+.notes-review[data-item-count="8"] .note-card { flex: 0 0 274px; }
+
+.note-sheet { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; overflow: visible; }
+.note-sheet-shadow { fill: #A35D4F; opacity: .30; }
+.note-sheet-paper { fill: #FFFFFF; stroke: #F4ECEA; stroke-width: 2; stroke-linejoin: round; }
+.note-sheet-header { fill: #A35D4F; }
+.note-card:nth-child(3n+2) .note-sheet-header { fill: #A35D4F; }
+.note-card:nth-child(3n+3) .note-sheet-header { fill: #A35D4F; }
+.note-sheet-fold { fill: #F4ECEA; stroke: #DFC6C1; stroke-width: 2.4; stroke-linejoin: round; }
+
+.note-icon-area { position: absolute; z-index: 4; left: 0; top: 0; width: 44px; height: 35px; }
+.note-icon-panel { position: absolute; inset: 0; background: rgba(95, 54, 46, .24); }
+.note-icon-slot { position: absolute; left: 10px; top: 6px; display: grid; width: 22px; height: 22px; place-items: center; color: #FFFFFF; }
+.note-icon-svg { display: block; width: 20px; height: 20px; }
+
+.note-text-region { position: absolute; z-index: 3; left: 0; right: 12%; top: 0; bottom: 24.5%; }
+.note-text-region .ppagent-text-layout { --ppagent-text-layout-gap: 0; }
+.note-card[data-has-title="true"] .note-text-region .ppagent-text-layout { justify-content: flex-start; }
+.note-card[data-has-title="true"] .note-text-region .ppagent-text-primitive--heading { display: flex; flex: 0 0 35px; align-items: center; min-height: 35px; margin-left: 44px; padding: 0 16px 0 10px; color: #FFFFFF; line-height: 1.1; }
+.note-card[data-has-title="true"] .note-text-region .ppagent-text-primitive--body,
+.note-card[data-has-title="true"] .note-text-region .ppagent-text-primitive--list { margin: 14px 16px 0; }
+.note-card[data-has-title="false"] .note-text-region { left: 16px; top: 16px; }
+.note-text-region .ppagent-text-primitive--body,
+.note-text-region .ppagent-text-list__item { color: #A35D4F; line-height: 1.38; }
+html,body{width:1280px;height:720px;margin:0;background:#F5F4EF!important}#chapter,#title{position:absolute;top:49px;font:700 25px 'Noto Serif SC';white-space:nowrap}#chapter{left:56px;color:#A35D4F}#title{left:112px;color:#20201D}</style></head><body><div id="chapter">01</div><div id="title">交接验收：从文件交付到工作接续</div><div data-plain="0" style="position:absolute;left:56px;top:135px;width:700px;height:44px;font-family:'Noto Serif SC';font-size:21px;font-weight:700;line-height:1.55;color:#20201D;white-space:pre-wrap">接手者能独立继续工作，才算交接完成</div><div data-plain="1" style="position:absolute;left:56px;top:184px;width:720px;height:42px;font-family:'Noto Sans SC';font-size:17px;font-weight:400;line-height:1.55;color:#4B4A45;white-space:pre-wrap">发送文件只是交接动作，验收还要核对以下四项。</div><div style="position:absolute;left:56px;top:240px"><section class="notes-review notes-adapted" data-ppt-root="" data-ppt-preserve-font="true" data-item-count="4" style="width:1168px;height:370px;--ppagent-component-heading-size:15.75pt;--ppagent-component-title-size:15.75pt;--ppagent-component-item-title-size:12.75pt;--ppagent-component-lead-size:12.75pt;--ppagent-component-body-size:12.75pt;--ppagent-component-label-size:12.75pt;--ppagent-component-meta-size:11.25pt;--ppagent-funnel-step-title-size:12.75pt;--note-header:26.321138211382117px;--note-icon-panel:44px;--note-icon:20px;--note-inset:12.032520325203253px">
+    <style>.notes-adapted .note-icon-area{width:var(--note-icon-panel);height:var(--note-header)}.notes-adapted .note-icon-slot{left:10px;top:1.7845528455284567px;width:22px;height:22px}.notes-adapted .note-icon-svg{width:var(--note-icon);height:var(--note-icon)}.notes-adapted .note-card[data-has-title="true"] .note-text-region .ppagent-text-primitive--heading{flex-basis:var(--note-header);min-height:var(--note-header);margin-left:var(--note-icon-panel);padding:0 var(--note-inset) 0 7.520325203252033px}.notes-adapted .note-card[data-has-title="true"] .note-text-region .ppagent-text-primitive--body,.notes-adapted .note-card[data-has-title="true"] .note-text-region .ppagent-text-primitive--list{margin:10.528455284552846px var(--note-inset) 0}</style>
+    <div class="notes-grid" style="inset:auto;left:317.780487804878px;top:21.056910569105668px;width:532.439024390244px;height:327.88617886178866px;gap:15.040650406504065px 36.09756097560976px"><article class="note-card" data-has-title="true" data-slot-item-id="complete">
+    <div class="plain-surface" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="plain-surface-1" style="position:absolute;inset:0;background:#F4ECEA"></div>
+    <div class="note-icon-area">
+    <div class="note-icon-panel" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="note-icon-panel-0"></div>
+    <div class="note-icon-slot" data-slot-id="complete-icon" data-slot-role="icon" data-slot-field="items[0].iconKey" data-slot-item-id="complete" data-slot-content-type="icon" data-slot-provider="tabler-icons" data-slot-required="true"><svg data-ppt-kind="image" data-ppt-name="note-icon-0" data-icon-key="folder" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="note-icon-svg">
+  
+  <path d="M5 4h4l3 3h7a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2"></path>
+</svg></div>
+  </div>
+    <div class="ppagent-text-region note-text-region" data-ppagent-text-region="" data-slot-id="complete-content-region" data-slot-role="text-region" data-slot-field="items[0]" data-slot-item-id="complete" data-slot-region-id="content" data-slot-content-type="text-region" data-slot-safe-box="true" data-slot-required="true" data-slot-text-mode="structured" data-slot-list-policy="structured" data-text-layout-id="heading-content-flow" data-text-layout-default-id="heading-content-flow" data-text-layout-compatible="heading-content-flow,statement-flow,structured-list-flow,metric-content-flow" data-text-layout-content-roles="heading,body">
+    <div class="ppagent-text-layout ppagent-text-layout--heading-content-flow" data-ppagent-text-layout="" data-text-layout-id="heading-content-flow" data-text-layout-align="left" data-text-layout-valign="middle" data-text-layout-density="compact" data-text-layout-tone="light" data-text-layout-style="default"><div class="ppagent-text-primitive ppagent-text-primitive--heading" data-text-primitive="heading" data-text-layout-part="heading" data-text-layout-field="title" data-text-primitive-font-tiers="22,20,18,16,14" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="note-heading-0">资料齐全</div><div class="ppagent-text-primitive ppagent-text-primitive--body" data-text-primitive="body" data-text-layout-part="body" data-text-layout-field="body" data-text-primitive-font-tiers="16,14,12" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="note-body-0">关键文件集中归档，接手者能找到继续工作所需的资料。</div></div>
+  </div>
+  </article><article class="note-card" data-has-title="true" data-slot-item-id="version">
+    <div class="plain-surface" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="plain-surface-2" style="position:absolute;inset:0;background:#F4ECEA"></div>
+    <div class="note-icon-area">
+    <div class="note-icon-panel" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="note-icon-panel-1"></div>
+    <div class="note-icon-slot" data-slot-id="version-icon" data-slot-role="icon" data-slot-field="items[1].iconKey" data-slot-item-id="version" data-slot-content-type="icon" data-slot-provider="tabler-icons" data-slot-required="true"><svg data-ppt-kind="image" data-ppt-name="note-icon-1" data-icon-key="versions" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="note-icon-svg">
+  
+  <path d="M10 7a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2l0 -10"></path>
+  <path d="M7 7l0 10"></path>
+  <path d="M4 8l0 8"></path>
+</svg></div>
+  </div>
+    <div class="ppagent-text-region note-text-region" data-ppagent-text-region="" data-slot-id="version-content-region" data-slot-role="text-region" data-slot-field="items[1]" data-slot-item-id="version" data-slot-region-id="content" data-slot-content-type="text-region" data-slot-safe-box="true" data-slot-required="true" data-slot-text-mode="structured" data-slot-list-policy="structured" data-text-layout-id="heading-content-flow" data-text-layout-default-id="heading-content-flow" data-text-layout-compatible="heading-content-flow,statement-flow,structured-list-flow,metric-content-flow" data-text-layout-content-roles="heading,body">
+    <div class="ppagent-text-layout ppagent-text-layout--heading-content-flow" data-ppagent-text-layout="" data-text-layout-id="heading-content-flow" data-text-layout-align="left" data-text-layout-valign="middle" data-text-layout-density="compact" data-text-layout-tone="light" data-text-layout-style="default"><div class="ppagent-text-primitive ppagent-text-primitive--heading" data-text-primitive="heading" data-text-layout-part="heading" data-text-layout-field="title" data-text-primitive-font-tiers="22,20,18,16,14" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="note-heading-1">版本清楚</div><div class="ppagent-text-primitive ppagent-text-primitive--body" data-text-primitive="body" data-text-layout-part="body" data-text-layout-field="body" data-text-primitive-font-tiers="16,14,12" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="note-body-1">当前版本标记明确，接手者能辨认应使用哪一份文件。</div></div>
+  </div>
+  </article><article class="note-card" data-has-title="true" data-slot-item-id="owner">
+    <div class="plain-surface" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="plain-surface-3" style="position:absolute;inset:0;background:#F4ECEA"></div>
+    <div class="note-icon-area">
+    <div class="note-icon-panel" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="note-icon-panel-2"></div>
+    <div class="note-icon-slot" data-slot-id="owner-icon" data-slot-role="icon" data-slot-field="items[2].iconKey" data-slot-item-id="owner" data-slot-content-type="icon" data-slot-provider="tabler-icons" data-slot-required="true"><svg data-ppt-kind="image" data-ppt-name="note-icon-2" data-icon-key="user-check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="note-icon-svg">
+  
+  <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4"></path>
+  <path d="M15 19l2 2l4 -4"></path>
+</svg></div>
+  </div>
+    <div class="ppagent-text-region note-text-region" data-ppagent-text-region="" data-slot-id="owner-content-region" data-slot-role="text-region" data-slot-field="items[2]" data-slot-item-id="owner" data-slot-region-id="content" data-slot-content-type="text-region" data-slot-safe-box="true" data-slot-required="true" data-slot-text-mode="structured" data-slot-list-policy="structured" data-text-layout-id="heading-content-flow" data-text-layout-default-id="heading-content-flow" data-text-layout-compatible="heading-content-flow,statement-flow,structured-list-flow,metric-content-flow" data-text-layout-content-roles="heading,body">
+    <div class="ppagent-text-layout ppagent-text-layout--heading-content-flow" data-ppagent-text-layout="" data-text-layout-id="heading-content-flow" data-text-layout-align="left" data-text-layout-valign="middle" data-text-layout-density="compact" data-text-layout-tone="light" data-text-layout-style="default"><div class="ppagent-text-primitive ppagent-text-primitive--heading" data-text-primitive="heading" data-text-layout-part="heading" data-text-layout-field="title" data-text-primitive-font-tiers="22,20,18,16,14" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="note-heading-2">责任明确</div><div class="ppagent-text-primitive ppagent-text-primitive--body" data-text-primitive="body" data-text-layout-part="body" data-text-layout-field="body" data-text-primitive-font-tiers="16,14,12" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="note-body-2">后续负责人可查，接手者能确认工作由谁继续负责。</div></div>
+  </div>
+  </article><article class="note-card" data-has-title="true" data-slot-item-id="exception">
+    <div class="plain-surface" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="plain-surface-4" style="position:absolute;inset:0;background:#F4ECEA"></div>
+    <div class="note-icon-area">
+    <div class="note-icon-panel" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="note-icon-panel-3"></div>
+    <div class="note-icon-slot" data-slot-id="exception-icon" data-slot-role="icon" data-slot-field="items[3].iconKey" data-slot-item-id="exception" data-slot-content-type="icon" data-slot-provider="tabler-icons" data-slot-required="true"><svg data-ppt-kind="image" data-ppt-name="note-icon-3" data-icon-key="file-search" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="note-icon-svg">
+  
+  <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+  <path d="M12 21h-5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v4.5"></path>
+  <path d="M14 17.5a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0"></path>
+  <path d="M18.5 19.5l2.5 2.5"></path>
+</svg></div>
+  </div>
+    <div class="ppagent-text-region note-text-region" data-ppagent-text-region="" data-slot-id="exception-content-region" data-slot-role="text-region" data-slot-field="items[3]" data-slot-item-id="exception" data-slot-region-id="content" data-slot-content-type="text-region" data-slot-safe-box="true" data-slot-required="true" data-slot-text-mode="structured" data-slot-list-policy="structured" data-text-layout-id="heading-content-flow" data-text-layout-default-id="heading-content-flow" data-text-layout-compatible="heading-content-flow,statement-flow,structured-list-flow,metric-content-flow" data-text-layout-content-roles="heading,body">
+    <div class="ppagent-text-layout ppagent-text-layout--heading-content-flow" data-ppagent-text-layout="" data-text-layout-id="heading-content-flow" data-text-layout-align="left" data-text-layout-valign="middle" data-text-layout-density="compact" data-text-layout-tone="light" data-text-layout-style="default"><div class="ppagent-text-primitive ppagent-text-primitive--heading" data-text-primitive="heading" data-text-layout-part="heading" data-text-layout-field="title" data-text-primitive-font-tiers="22,20,18,16,14" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="note-heading-3">例外有据</div><div class="ppagent-text-primitive ppagent-text-primitive--body" data-text-primitive="body" data-text-layout-part="body" data-text-layout-field="body" data-text-primitive-font-tiers="16,14,12" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="note-body-3">特殊处理附上依据，接手者能理解例外情况及其处理理由。</div></div>
+  </div>
+  </article></div>
+  <style>[data-ppt-root] .ppagent-text-primitive--heading,[data-ppt-root] .simple-step-title{font-family:"Noto Serif SC"}
+  [data-ppt-root] [data-ppt-shadow]{box-shadow:none}
+  [data-ppt-root] .ppagent-text-primitive--body,[data-ppt-root] .ppagent-text-list__item{color:var(--ppagent-color-body)}
+      .notes-adapted .note-sheet-paper{fill:var(--ppagent-color-background);stroke:var(--ppagent-color-line)}
+      .notes-adapted .note-card .note-sheet-header{fill:var(--ppagent-color-surface)}
+      .notes-adapted .note-sheet-fold{fill:var(--ppagent-color-surface);stroke:var(--ppagent-color-muted)}
+      .notes-adapted .note-sheet-shadow{fill:var(--ppagent-color-line);opacity:.35}
+      .notes-adapted .note-icon-panel{background:transparent}
+      .notes-adapted .note-icon-slot{color:var(--ppagent-color-primary)}
+      .notes-adapted .note-card[data-has-title="true"] .note-text-region .ppagent-text-primitive--heading{color:var(--ppagent-color-dark)}</style><style>.notes-adapted .notes-grid{display:contents!important}
+   .notes-adapted .note-card:nth-child(1){position:absolute;left:0px;top:0px;width:554px;height:166px;}.notes-adapted .note-card:nth-child(2){position:absolute;left:614px;top:0px;width:554px;height:166px;}.notes-adapted .note-card:nth-child(3){position:absolute;left:0px;top:204px;width:554px;height:166px;}.notes-adapted .note-card:nth-child(4){position:absolute;left:614px;top:204px;width:554px;height:166px;}
+   .notes-adapted .note-sheet{overflow:visible}
+   .notes-adapted .note-text-region{right:22px;bottom:54px}
+   .notes-adapted .note-card[data-has-title="true"] .note-text-region .ppagent-text-primitive--heading{flex-basis:36px;min-height:36px;margin-left:44px;padding:0 16px 0 10px}
+   .notes-adapted .note-card[data-has-title="true"] .note-text-region .ppagent-text-primitive--body{margin:16px 20px 0;line-height:1.55}
+   .notes-adapted .note-icon-area{width:44px;height:36px}
+   .notes-adapted .note-icon-slot{left:12px;top:8px;width:20px;height:20px}
+   .notes-adapted .note-icon-svg{width:20px;height:20px}
+   .notes-adapted .note-sheet-paper{stroke-width:1}.notes-adapted .note-sheet-fold{stroke-width:1.2}</style></section></div><svg width="1280" height="720" style="position:absolute;inset:0;pointer-events:none"></svg><div style="position: absolute; left: 509px; top: 68px; width: 715px; border-top: 1px solid rgb(216, 213, 204);"></div><div style="position: absolute; left: 1190px; top: 680px; font: 15px &quot;Noto Sans SC&quot;; color: rgb(133, 131, 123);">01</div></body></html>

@@ -8,7 +8,7 @@ const browser=await chromium.launch({headless:true,executablePath:'C:/Program Fi
 try{
  const page=await browser.newPage({viewport:{width:1360,height:1100}});
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
- await page.goto(pathToFileURL(path.join(dir,'index.html')).href);
+ await page.goto(pathToFileURL(path.join(dir,'luna-audit.html')).href);
  await page.locator('article').last().scrollIntoViewIfNeeded();
  await page.waitForFunction(()=>[...document.querySelectorAll('.stage img')].every(i=>i.complete&&i.naturalWidth===1280));
  assert.equal(await page.locator('article').count(),4);
@@ -24,3 +24,4 @@ try{
  assert.deepEqual(errors,[]);
  console.log('Gallery: four PNGs, three rejected records, links and four overlay toggles verified');
 }finally{await browser.close();}
+
