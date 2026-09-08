@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { northeasternUniversitySkin } from "./skins/northeastern-university-contract.mjs";
 
 const PROFILES = new Set(["generation", "content-director", "visual-selector"]);
 const ID = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/;
@@ -80,6 +81,24 @@ export async function loadRules(root, { profile, skin, layout } = {}) {
     const body = await fs.readFile(absolute, "utf8");
     if (!body.trim()) throw new Error(`规则正文为空: ${relative}`);
     files.push({ path: relative, body });
+    for (const match of body.matchAll(/<!--\s*runtime-skin:\s*(.*?)\s*-->/g)) {
+      if (profile !== "generation" || skin !== northeasternUniversitySkin.id || match[1] !== skin) {
+        throw new Error(`运行时 Skin 配置引用不适用于当前规则范围: ${match[1]}`);
+      }
+      const source = "src/runtime/skins/northeastern-university-contract.mjs";
+      if (configurationSources.some((entry) => entry.path === source)) continue;
+      configurationSources.push({
+        path: source,
+        field: "fonts/theme",
+        value: {
+          fonts: {
+            display: northeasternUniversitySkin.typographyRoles.displayTypeface,
+            body: northeasternUniversitySkin.typographyRoles.bodyTypeface,
+          },
+          theme: northeasternUniversitySkin.componentTheme,
+        },
+      });
+    }
     for (const match of body.matchAll(/<!--\s*asset-fonts:\s*(.*?)\s*-->/g)) {
       const source = relativeFile(match[1]);
       if (profile !== "generation" || !skin || !/^assets\/主题\/[^/]+\/asset\.json$/.test(source)) {
@@ -102,7 +121,7 @@ export async function loadRules(root, { profile, skin, layout } = {}) {
   }
   const text = [
     ...files.map((file) => `<!-- rules/${file.path} -->\n${file.body.trim()}`),
-    ...configurationSources.map((source) => `## Skin 字体配置（${source.path}#${source.field}）\n\n\`\`\`json\n${JSON.stringify(source.value, null, 2)}\n\`\`\``),
+    ...configurationSources.map((source) => `## Skin 配置（${source.path}#${source.field}）\n\n\`\`\`json\n${JSON.stringify(source.value, null, 2)}\n\`\`\``),
   ].join("\n\n");
   return { profile, ...(skinConfig ? { skin, layout: skinConfig.layout } : {}), files, configurationSources, text };
 }

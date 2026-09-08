@@ -6,9 +6,9 @@ PPagenT 面向工作型演示，把用户内容整理为表达清楚、视觉合
 
 现行生产线仍是内容导演编排、程序筛选候选、视觉导演选择、Native 生成与检查。它已支持已披露的文字加结构混合页，尚不是自主工具循环的 Agent Harness；正式 CLI 仍使用东北大学 Skin。
 
-现行设计与角色规则集中到根目录 [rules/](rules/README.md)，通过索引按用途读取。暂定每个 Skin 一个颜色体系、绑定一个排版体系；多个 Skin 可复用同一排版体系。当前中性 Skin 自动加载「杂志风」，可用于独立制作任务，其资产仍为 candidate，未接入正式 renderer。规则拆分不等于已经实现通用图文、复合页或四类输入自动处理。
+现行设计与角色规则集中到根目录 [rules/](rules/README.md)，通过索引按用途读取。暂定每个 Skin 一个颜色体系、绑定一个排版体系；多个 Skin 可复用同一排版体系。当前中性 Skin 自动加载「杂志风」，东北大学 Skin 自动加载「麦肯锡式」六字段排版，可用于独立制作任务，其资产仍为 candidate，未接入正式 renderer。规则拆分不等于已经实现通用图文、复合页或四类输入自动处理。
 
-当前优先验证中性 Skin 与杂志风的 Luna high 制作，暂缓东北大学 Skin 排版建设。独立制作入口已按需连接结构 Skill：通用组件跨 Skin 复用，适配则优先直接调用，不能直接套用则参考适配；项目库不适合时，关系图以 Archify 补充，数据图表以 Lieflat Charts 非商业试用补充；适用技能均不适合再自主编排；不强制每页使用结构，尚未证明跨稿稳定性。
+中性 Skin 与杂志风、东北大学 Skin 与麦肯锡式均已登记独立制作规则绑定，继续以 Luna high 验证实际效果。独立制作入口已按需连接结构 Skill：通用组件跨 Skin 复用，适配则优先直接调用，不能直接套用则参考适配；项目库不适合时，关系图以 Archify 补充，数据图表以 Lieflat Charts 非商业试用补充；适用技能均不适合再自主编排；不强制每页使用结构，尚未证明跨稿稳定性。
 
 ## 入口
 
@@ -25,7 +25,7 @@ PPagenT 面向工作型演示，把用户内容整理为表达清楚、视觉合
 
 ## 已合并的大学咨询式排版实验
 
-`codex/penguin-harness-v2` 的提示词、结构主题适配、Harness 原型与完整生成证据已纳入 main。三篇 29 页精选稿及独立首轮对照见[整稿展示](experiments/university-skin-pilot/stability-01/index.html)，实际通过数与限制见[测试记录](experiments/university-skin-pilot/stability-01/RESULTS.md)。这些是实验成果；当前规则索引不因此自动新增大学咨询式绑定，也不代表正式 Harness 已迁移。
+`codex/penguin-harness-v2` 的提示词、结构主题适配、Harness 原型与完整生成证据已纳入 main。三篇 29 页精选稿及独立首轮对照见[整稿展示](experiments/university-skin-pilot/stability-01/index.html)，实际通过数与限制见[测试记录](experiments/university-skin-pilot/stability-01/RESULTS.md)。这些是实验成果；大学现行绑定采用六字段规则，不加载这些历史长指南；规则接入不代表正式 Harness 已迁移。
 
 ## 使用与验证
 
