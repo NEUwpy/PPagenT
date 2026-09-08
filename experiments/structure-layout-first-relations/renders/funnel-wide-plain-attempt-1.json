@@ -1,0 +1,698 @@
+{
+  "key": "funnel-wide-plain-attempt-1",
+  "caseId": "funnel-wide-plain",
+  "attempt": 1,
+  "execution": "parent-revision",
+  "spec": {
+    "id": "funnel-wide",
+    "title": "反馈筛选：每一层都有准入依据",
+    "assetId": "convergence-simple-funnel-001",
+    "content": {
+      "inputs": [
+        {
+          "key": "interview",
+          "label": "访谈",
+          "iconQuery": "message-circle"
+        },
+        {
+          "key": "ticket",
+          "label": "工单",
+          "iconQuery": "ticket"
+        },
+        {
+          "key": "record",
+          "label": "使用记录",
+          "iconQuery": "clipboard-text"
+        }
+      ],
+      "steps": [
+        {
+          "key": "s0",
+          "title": "收集线索"
+        },
+        {
+          "key": "s1",
+          "title": "核对问题"
+        },
+        {
+          "key": "s2",
+          "title": "验证方案"
+        },
+        {
+          "key": "s3",
+          "title": "纳入发布"
+        }
+      ]
+    },
+    "frame": {
+      "left": 56,
+      "top": 190,
+      "width": 560,
+      "height": 450
+    },
+    "layout": {
+      "axis": 280,
+      "topWidth": 300,
+      "centers": [
+        145,
+        223,
+        301,
+        379
+      ]
+    },
+    "blocks": [
+      {
+        "role": "body",
+        "text": "反馈来源：访谈、工单、使用记录",
+        "frame": {
+          "left": 120,
+          "top": 138,
+          "width": 580,
+          "height": 44
+        }
+      },
+      {
+        "role": "module",
+        "text": "准入依据",
+        "frame": {
+          "left": 692,
+          "top": 236,
+          "width": 420,
+          "height": 40
+        }
+      },
+      {
+        "role": "body",
+        "text": "保留原始反馈",
+        "frame": {
+          "left": 692,
+          "top": 322,
+          "width": 490,
+          "height": 46
+        }
+      },
+      {
+        "role": "body",
+        "text": "问题可重复观察",
+        "frame": {
+          "left": 692,
+          "top": 400,
+          "width": 490,
+          "height": 46
+        }
+      },
+      {
+        "role": "body",
+        "text": "小样验证有效",
+        "frame": {
+          "left": 692,
+          "top": 478,
+          "width": 490,
+          "height": 46
+        }
+      },
+      {
+        "role": "body",
+        "text": "责任人与交付范围明确",
+        "frame": {
+          "left": 692,
+          "top": 556,
+          "width": 490,
+          "height": 46
+        }
+      }
+    ],
+    "reason": "布局先确定入口说明、左侧四层收敛、右侧四行依据。层级位置由页面行节奏决定，结构保持共同轴和渐窄轮廓。",
+    "caseId": "funnel-wide-plain",
+    "appearance": "plain",
+    "parentReplay": true,
+    "chapter": "02",
+    "pageNumber": 1,
+    "relationshipLines": [
+      {
+        "frame": {
+          "left": 498,
+          "top": 335,
+          "width": 180,
+          "height": 0
+        },
+        "reason": "收集线索 对应的准入依据"
+      },
+      {
+        "frame": {
+          "left": 461.3183003601954,
+          "top": 413,
+          "width": 216.6816996398046,
+          "height": 0
+        },
+        "reason": "核对问题 对应的准入依据"
+      },
+      {
+        "frame": {
+          "left": 433.2419076378212,
+          "top": 491,
+          "width": 244.7580923621788,
+          "height": 0
+        },
+        "reason": "验证方案 对应的准入依据"
+      },
+      {
+        "frame": {
+          "left": 407.69976525918315,
+          "top": 569,
+          "width": 270.30023474081685,
+          "height": 0
+        },
+        "reason": "纳入发布 对应的准入依据"
+      }
+    ]
+  },
+  "skin": {
+    "id": "neutral-editorial-001",
+    "fonts": {
+      "display": "Noto Serif SC",
+      "body": "Noto Sans SC"
+    },
+    "font": "Noto Sans SC",
+    "primaryColor": "#A35D4F",
+    "background": "#F5F4EF",
+    "surface": "#EEECE5",
+    "dark": "#20201D",
+    "body": "#4B4A45",
+    "muted": "#85837B",
+    "line": "#D8D5CC",
+    "bodyFrame": {
+      "left": 56,
+      "top": 135,
+      "width": 1168,
+      "height": 525
+    },
+    "typography": {
+      "componentHeading": 15.75,
+      "componentTitle": 15.75,
+      "componentItemTitle": 12.75,
+      "componentLead": 12.75,
+      "componentBody": 12.75,
+      "componentLabel": 12.75,
+      "componentMeta": 11.25
+    }
+  },
+  "status": "rendered-unreviewed",
+  "remainingPage": {
+    "page": {
+      "left": 56,
+      "top": 135,
+      "width": 1168,
+      "height": 525
+    },
+    "bands": [
+      {
+        "top": 135,
+        "height": 54.297,
+        "free": [
+          {
+            "left": 56,
+            "width": 1168
+          }
+        ]
+      },
+      {
+        "top": 189.297,
+        "height": 14.5,
+        "free": [
+          {
+            "left": 56,
+            "width": 244.5
+          },
+          {
+            "left": 371.5,
+            "width": 852.5
+          }
+        ]
+      },
+      {
+        "top": 203.797,
+        "height": 2.781000000000006,
+        "free": [
+          {
+            "left": 56,
+            "width": 244.5
+          },
+          {
+            "left": 371.5,
+            "width": 852.5
+          }
+        ]
+      },
+      {
+        "top": 206.578,
+        "height": 3.828000000000003,
+        "free": [
+          {
+            "left": 56,
+            "width": 244.5
+          },
+          {
+            "left": 371.5,
+            "width": 15.187999999999988
+          },
+          {
+            "left": 463.688,
+            "width": 760.312
+          }
+        ]
+      },
+      {
+        "top": 210.406,
+        "height": 10.671999999999997,
+        "free": [
+          {
+            "left": 56,
+            "width": 152.297
+          },
+          {
+            "left": 285.297,
+            "width": 15.202999999999975
+          },
+          {
+            "left": 371.5,
+            "width": 15.187999999999988
+          },
+          {
+            "left": 463.688,
+            "width": 760.312
+          }
+        ]
+      },
+      {
+        "top": 221.078,
+        "height": 3.828000000000003,
+        "free": [
+          {
+            "left": 56,
+            "width": 152.297
+          },
+          {
+            "left": 285.297,
+            "width": 15.202999999999975
+          },
+          {
+            "left": 371.5,
+            "width": 15.187999999999988
+          },
+          {
+            "left": 463.688,
+            "width": 760.312
+          }
+        ]
+      },
+      {
+        "top": 224.906,
+        "height": 20.89099999999999,
+        "free": [
+          {
+            "left": 56,
+            "width": 152.297
+          },
+          {
+            "left": 285.297,
+            "width": 15.202999999999975
+          },
+          {
+            "left": 371.5,
+            "width": 15.187999999999988
+          },
+          {
+            "left": 463.688,
+            "width": 760.312
+          }
+        ]
+      },
+      {
+        "top": 245.797,
+        "height": 14.500000000000028,
+        "free": [
+          {
+            "left": 56,
+            "width": 152.297
+          },
+          {
+            "left": 285.297,
+            "width": 15.202999999999975
+          },
+          {
+            "left": 371.5,
+            "width": 15.187999999999988
+          },
+          {
+            "left": 463.688,
+            "width": 760.312
+          }
+        ]
+      },
+      {
+        "top": 260.297,
+        "height": 8.780999999999949,
+        "free": [
+          {
+            "left": 56,
+            "width": 152.297
+          },
+          {
+            "left": 285.297,
+            "width": 101.39099999999996
+          },
+          {
+            "left": 463.688,
+            "width": 760.312
+          }
+        ]
+      },
+      {
+        "top": 269.078,
+        "height": 3.8280000000000314,
+        "free": [
+          {
+            "left": 56,
+            "width": 152.297
+          },
+          {
+            "left": 285.297,
+            "width": 101.39099999999996
+          },
+          {
+            "left": 463.688,
+            "width": 760.312
+          }
+        ]
+      },
+      {
+        "top": 272.906,
+        "height": 10.671999999999969,
+        "free": [
+          {
+            "left": 56,
+            "width": 152.297
+          },
+          {
+            "left": 285.297,
+            "width": 101.39099999999996
+          },
+          {
+            "left": 463.688,
+            "width": 760.312
+          }
+        ]
+      },
+      {
+        "top": 283.578,
+        "height": 1.7620000000000573,
+        "free": [
+          {
+            "left": 56,
+            "width": 152.297
+          },
+          {
+            "left": 285.297,
+            "width": 938.703
+          }
+        ]
+      },
+      {
+        "top": 285.34000000000003,
+        "height": 2.065999999999974,
+        "free": [
+          {
+            "left": 56,
+            "width": 115.5
+          },
+          {
+            "left": 500.5,
+            "width": 723.5
+          }
+        ]
+      },
+      {
+        "top": 287.406,
+        "height": 18.593999999999994,
+        "free": [
+          {
+            "left": 56,
+            "width": 115.5
+          },
+          {
+            "left": 500.5,
+            "width": 723.5
+          }
+        ]
+      },
+      {
+        "top": 306,
+        "height": 57.34000000000003,
+        "free": [
+          {
+            "left": 56,
+            "width": 115.5
+          },
+          {
+            "left": 500.5,
+            "width": 723.5
+          }
+        ]
+      },
+      {
+        "top": 363.34000000000003,
+        "height": 0.6599999999999682,
+        "free": [
+          {
+            "left": 56,
+            "width": 115.5
+          },
+          {
+            "left": 500.5,
+            "width": 723.5
+          }
+        ]
+      },
+      {
+        "top": 364,
+        "height": 20,
+        "free": [
+          {
+            "left": 56,
+            "width": 115.5
+          },
+          {
+            "left": 500.5,
+            "width": 723.5
+          }
+        ]
+      },
+      {
+        "top": 384,
+        "height": 0.660000000000025,
+        "free": [
+          {
+            "left": 56,
+            "width": 115.5
+          },
+          {
+            "left": 500.5,
+            "width": 723.5
+          }
+        ]
+      },
+      {
+        "top": 384.66,
+        "height": 56.67999999999995,
+        "free": [
+          {
+            "left": 56,
+            "width": 152.182
+          },
+          {
+            "left": 463.81899999999996,
+            "width": 760.181
+          }
+        ]
+      },
+      {
+        "top": 441.34,
+        "height": 0.660000000000025,
+        "free": [
+          {
+            "left": 56,
+            "width": 152.182
+          },
+          {
+            "left": 463.81899999999996,
+            "width": 760.181
+          }
+        ]
+      },
+      {
+        "top": 442,
+        "height": 20,
+        "free": [
+          {
+            "left": 56,
+            "width": 152.182
+          },
+          {
+            "left": 463.81899999999996,
+            "width": 760.181
+          }
+        ]
+      },
+      {
+        "top": 462,
+        "height": 0.660000000000025,
+        "free": [
+          {
+            "left": 56,
+            "width": 152.182
+          },
+          {
+            "left": 463.81899999999996,
+            "width": 760.181
+          }
+        ]
+      },
+      {
+        "top": 462.66,
+        "height": 56.67999999999989,
+        "free": [
+          {
+            "left": 56,
+            "width": 180.258
+          },
+          {
+            "left": 435.742,
+            "width": 788.258
+          }
+        ]
+      },
+      {
+        "top": 519.3399999999999,
+        "height": 0.6600000000000819,
+        "free": [
+          {
+            "left": 56,
+            "width": 180.258
+          },
+          {
+            "left": 435.742,
+            "width": 788.258
+          }
+        ]
+      },
+      {
+        "top": 520,
+        "height": 20,
+        "free": [
+          {
+            "left": 56,
+            "width": 180.258
+          },
+          {
+            "left": 435.742,
+            "width": 788.258
+          }
+        ]
+      },
+      {
+        "top": 540,
+        "height": 0.6599999999999682,
+        "free": [
+          {
+            "left": 56,
+            "width": 180.258
+          },
+          {
+            "left": 435.742,
+            "width": 788.258
+          }
+        ]
+      },
+      {
+        "top": 540.66,
+        "height": 57.34000000000003,
+        "free": [
+          {
+            "left": 56,
+            "width": 205.8
+          },
+          {
+            "left": 410.20000000000005,
+            "width": 813.8
+          }
+        ]
+      },
+      {
+        "top": 598,
+        "height": 20.659999999999854,
+        "free": [
+          {
+            "left": 56,
+            "width": 205.8
+          },
+          {
+            "left": 410.20000000000005,
+            "width": 813.8
+          }
+        ]
+      },
+      {
+        "top": 618.6599999999999,
+        "height": 41.340000000000146,
+        "free": [
+          {
+            "left": 56,
+            "width": 1168
+          }
+        ]
+      }
+    ],
+    "freeArea": 516709.16400000016,
+    "note": "自由区域按横向带表示，尚未选择文字框或文字角色；段落由排版决定。"
+  },
+  "occupancy": {
+    "mode": "measured",
+    "areas": 14,
+    "collisions": 0
+  },
+  "invocation": {
+    "mode": "plain-layout-control"
+  },
+  "measurements": {
+    "titleRight": 462,
+    "overflow": [],
+    "fontReady": true
+  },
+  "fonts": [
+    {
+      "name": "simple-step-title-0",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "收集线索"
+    },
+    {
+      "name": "simple-step-title-1",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "核对问题"
+    },
+    {
+      "name": "simple-step-title-2",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "验证方案"
+    },
+    {
+      "name": "simple-step-title-3",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "纳入发布"
+    }
+  ]
+}

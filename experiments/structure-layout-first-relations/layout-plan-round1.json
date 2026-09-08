@@ -1,0 +1,442 @@
+{
+  "origin": "Parent-planned tests; not an independent Luna run",
+  "order": [
+    "页面语义分工",
+    "等级/阶段锚点",
+    "同位置简洁版",
+    "结构承接锚点",
+    "整页复核"
+  ],
+  "plans": [
+    {
+      "id": "funnel-wide",
+      "title": "反馈筛选：每一层都有准入依据",
+      "assetId": "convergence-simple-funnel-001",
+      "content": {
+        "inputs": [
+          {
+            "key": "interview",
+            "label": "访谈",
+            "iconQuery": "message-circle"
+          },
+          {
+            "key": "ticket",
+            "label": "工单",
+            "iconQuery": "ticket"
+          },
+          {
+            "key": "record",
+            "label": "使用记录",
+            "iconQuery": "clipboard-text"
+          }
+        ],
+        "steps": [
+          {
+            "key": "s0",
+            "title": "收集线索"
+          },
+          {
+            "key": "s1",
+            "title": "核对问题"
+          },
+          {
+            "key": "s2",
+            "title": "验证方案"
+          },
+          {
+            "key": "s3",
+            "title": "纳入发布"
+          }
+        ]
+      },
+      "frame": {
+        "left": 56,
+        "top": 190,
+        "width": 560,
+        "height": 450
+      },
+      "layout": {
+        "axis": 280,
+        "topWidth": 300,
+        "centers": [
+          145,
+          223,
+          301,
+          379
+        ]
+      },
+      "blocks": [
+        {
+          "role": "body",
+          "text": "反馈来源：访谈、工单、使用记录",
+          "frame": {
+            "left": 120,
+            "top": 138,
+            "width": 580,
+            "height": 44
+          }
+        },
+        {
+          "role": "module",
+          "text": "准入依据",
+          "frame": {
+            "left": 692,
+            "top": 236,
+            "width": 420,
+            "height": 40
+          }
+        },
+        {
+          "role": "body",
+          "text": "保留原始反馈",
+          "frame": {
+            "left": 692,
+            "top": 322,
+            "width": 490,
+            "height": 46
+          }
+        },
+        {
+          "role": "body",
+          "text": "问题可重复观察",
+          "frame": {
+            "left": 692,
+            "top": 400,
+            "width": 490,
+            "height": 46
+          }
+        },
+        {
+          "role": "body",
+          "text": "小样验证有效",
+          "frame": {
+            "left": 692,
+            "top": 478,
+            "width": 490,
+            "height": 46
+          }
+        },
+        {
+          "role": "body",
+          "text": "责任人与交付范围明确",
+          "frame": {
+            "left": 692,
+            "top": 556,
+            "width": 490,
+            "height": 46
+          }
+        }
+      ],
+      "reason": "布局先确定入口说明、左侧四层收敛、右侧四行依据。层级位置由页面行节奏决定，结构保持共同轴和渐窄轮廓。"
+    },
+    {
+      "id": "funnel-compact",
+      "title": "需求收敛：先验证，再承诺交付",
+      "assetId": "convergence-simple-funnel-001",
+      "content": {
+        "inputs": [
+          {
+            "key": "interview",
+            "label": "访谈",
+            "iconQuery": "message-circle"
+          },
+          {
+            "key": "ticket",
+            "label": "工单",
+            "iconQuery": "ticket"
+          },
+          {
+            "key": "record",
+            "label": "使用记录",
+            "iconQuery": "clipboard-text"
+          }
+        ],
+        "steps": [
+          {
+            "key": "s0",
+            "title": "收集反馈"
+          },
+          {
+            "key": "s1",
+            "title": "确认问题"
+          },
+          {
+            "key": "s2",
+            "title": "验证价值"
+          },
+          {
+            "key": "s3",
+            "title": "核对投入"
+          },
+          {
+            "key": "s4",
+            "title": "明确交付"
+          }
+        ]
+      },
+      "frame": {
+        "left": 402,
+        "top": 200,
+        "width": 400,
+        "height": 440
+      },
+      "layout": {
+        "axis": 200,
+        "topWidth": 232,
+        "centers": [
+          125,
+          188,
+          251,
+          314,
+          377
+        ]
+      },
+      "blocks": [
+        {
+          "role": "module",
+          "text": "交付承诺应建立在\n验证与投入确认之后",
+          "frame": {
+            "left": 56,
+            "top": 212,
+            "width": 320,
+            "height": 90
+          }
+        },
+        {
+          "role": "body",
+          "text": "来自访谈、工单和使用记录的反馈，\n先说明问题，再逐层核对。",
+          "frame": {
+            "left": 56,
+            "top": 320,
+            "width": 310,
+            "height": 110
+          }
+        },
+        {
+          "role": "module",
+          "text": "进入下一层的条件",
+          "frame": {
+            "left": 868,
+            "top": 210,
+            "width": 340,
+            "height": 42
+          }
+        },
+        {
+          "role": "body",
+          "text": "原始反馈可追溯",
+          "frame": {
+            "left": 868,
+            "top": 312,
+            "width": 330,
+            "height": 43
+          }
+        },
+        {
+          "role": "body",
+          "text": "问题能够复现",
+          "frame": {
+            "left": 868,
+            "top": 375,
+            "width": 330,
+            "height": 43
+          }
+        },
+        {
+          "role": "body",
+          "text": "试验支持预期价值",
+          "frame": {
+            "left": 868,
+            "top": 438,
+            "width": 330,
+            "height": 43
+          }
+        },
+        {
+          "role": "body",
+          "text": "人员与时间可落实",
+          "frame": {
+            "left": 868,
+            "top": 501,
+            "width": 330,
+            "height": 43
+          }
+        },
+        {
+          "role": "body",
+          "text": "责任人与范围明确",
+          "frame": {
+            "left": 868,
+            "top": 564,
+            "width": 330,
+            "height": 43
+          }
+        }
+      ],
+      "reason": "新编五层稿：页面左侧讲判断原则，中间用窄区域表达收敛，右侧逐行列准入条件。层数增多时仍使用既定行距与文字档位。"
+    },
+    {
+      "id": "ladder-wide",
+      "title": "设备维护：从形成记录走向计划维护",
+      "assetId": "progression-maturity-steps-002",
+      "content": {
+        "levels": [
+          {
+            "key": "level-1",
+            "title": "被动处理",
+            "body": "故障后临时\n组织抢修"
+          },
+          {
+            "key": "level-2",
+            "title": "形成记录",
+            "body": "故障原因与\n处理过程可查"
+          },
+          {
+            "key": "level-3",
+            "title": "计划维护",
+            "body": "按周期检查\n并落实责任"
+          },
+          {
+            "key": "level-4",
+            "title": "持续改善",
+            "body": "用复盘减少\n重复故障"
+          }
+        ],
+        "showStatus": true,
+        "currentIndex": 1
+      },
+      "frame": {
+        "left": 56,
+        "top": 180,
+        "width": 1168,
+        "height": 460
+      },
+      "layout": {
+        "centers": [
+          {
+            "x": 155,
+            "y": 390
+          },
+          {
+            "x": 435,
+            "y": 335
+          },
+          {
+            "x": 715,
+            "y": 280
+          },
+          {
+            "x": 995,
+            "y": 225
+          }
+        ],
+        "copyWidth": 180
+      },
+      "blocks": [
+        {
+          "role": "module",
+          "text": "下一步：按周期检查，落实责任",
+          "frame": {
+            "left": 56,
+            "top": 183,
+            "width": 540,
+            "height": 46
+          }
+        },
+        {
+          "role": "body",
+          "text": "在故障原因与处理过程可查的基础上，\n将维护工作推进到计划维护。",
+          "frame": {
+            "left": 56,
+            "top": 247,
+            "width": 500,
+            "height": 85
+          }
+        }
+      ],
+      "reason": "先确定上升阅读路线与左上行动主张。阶梯将同一组等级锚点连成有共同透视的形状，文本与状态不随图形拉伸。"
+    },
+    {
+      "id": "ladder-compact",
+      "title": "交付能力：从个人经验走向团队复用",
+      "assetId": "progression-maturity-steps-002",
+      "content": {
+        "levels": [
+          {
+            "key": "level-1",
+            "title": "个人完成",
+            "body": "依靠个人经验\n完成交付"
+          },
+          {
+            "key": "level-2",
+            "title": "过程可查",
+            "body": "记录关键步骤\n与交付依据"
+          },
+          {
+            "key": "level-3",
+            "title": "团队复用",
+            "body": "共享方法与案例\n支持团队协作"
+          }
+        ],
+        "showStatus": true,
+        "currentIndex": 0
+      },
+      "frame": {
+        "left": 390,
+        "top": 280,
+        "width": 800,
+        "height": 350
+      },
+      "layout": {
+        "centers": [
+          {
+            "x": 130,
+            "y": 290
+          },
+          {
+            "x": 410,
+            "y": 245
+          },
+          {
+            "x": 690,
+            "y": 200
+          }
+        ],
+        "copyWidth": 184
+      },
+      "blocks": [
+        {
+          "role": "module",
+          "text": "先把个人经验\n变成可查的过程",
+          "frame": {
+            "left": 56,
+            "top": 196,
+            "width": 325,
+            "height": 90
+          }
+        },
+        {
+          "role": "body",
+          "text": "记录关键步骤与交付依据，\n让团队能够理解并复用。",
+          "frame": {
+            "left": 56,
+            "top": 305,
+            "width": 295,
+            "height": 95
+          }
+        },
+        {
+          "role": "aux",
+          "text": "当前第 1 级，目标第 3 级",
+          "frame": {
+            "left": 56,
+            "top": 429,
+            "width": 310,
+            "height": 42
+          }
+        }
+      ],
+      "reason": "新编三等级稿：左侧展开行动解释，右下安排三等级递进。结构服从右下区域与等级位置，保留可见的上升关系和透视。"
+    }
+  ]
+}

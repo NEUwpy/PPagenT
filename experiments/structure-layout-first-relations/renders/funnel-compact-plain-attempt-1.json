@@ -1,0 +1,758 @@
+{
+  "key": "funnel-compact-plain-attempt-1",
+  "caseId": "funnel-compact-plain",
+  "attempt": 1,
+  "execution": "parent-revision",
+  "spec": {
+    "id": "funnel-compact",
+    "title": "需求收敛：先验证，再承诺交付",
+    "assetId": "convergence-simple-funnel-001",
+    "content": {
+      "inputs": [
+        {
+          "key": "interview",
+          "label": "访谈",
+          "iconQuery": "message-circle"
+        },
+        {
+          "key": "ticket",
+          "label": "工单",
+          "iconQuery": "ticket"
+        },
+        {
+          "key": "record",
+          "label": "使用记录",
+          "iconQuery": "clipboard-text"
+        }
+      ],
+      "steps": [
+        {
+          "key": "s0",
+          "title": "收集反馈"
+        },
+        {
+          "key": "s1",
+          "title": "确认问题"
+        },
+        {
+          "key": "s2",
+          "title": "验证价值"
+        },
+        {
+          "key": "s3",
+          "title": "核对投入"
+        },
+        {
+          "key": "s4",
+          "title": "明确交付"
+        }
+      ]
+    },
+    "frame": {
+      "left": 402,
+      "top": 200,
+      "width": 400,
+      "height": 440
+    },
+    "layout": {
+      "axis": 200,
+      "topWidth": 232,
+      "centers": [
+        125,
+        188,
+        251,
+        314,
+        377
+      ]
+    },
+    "blocks": [
+      {
+        "role": "module",
+        "text": "交付承诺应建立在\n验证与投入确认之后",
+        "frame": {
+          "left": 56,
+          "top": 212,
+          "width": 320,
+          "height": 90
+        }
+      },
+      {
+        "role": "body",
+        "text": "来自访谈、工单和使用记录的反馈，\n先说明问题，再逐层核对。",
+        "frame": {
+          "left": 56,
+          "top": 320,
+          "width": 310,
+          "height": 110
+        }
+      },
+      {
+        "role": "module",
+        "text": "进入下一层的条件",
+        "frame": {
+          "left": 868,
+          "top": 210,
+          "width": 340,
+          "height": 42
+        }
+      },
+      {
+        "role": "body",
+        "text": "原始反馈可追溯",
+        "frame": {
+          "left": 868,
+          "top": 312,
+          "width": 330,
+          "height": 43
+        }
+      },
+      {
+        "role": "body",
+        "text": "问题能够复现",
+        "frame": {
+          "left": 868,
+          "top": 375,
+          "width": 330,
+          "height": 43
+        }
+      },
+      {
+        "role": "body",
+        "text": "试验支持预期价值",
+        "frame": {
+          "left": 868,
+          "top": 438,
+          "width": 330,
+          "height": 43
+        }
+      },
+      {
+        "role": "body",
+        "text": "人员与时间可落实",
+        "frame": {
+          "left": 868,
+          "top": 501,
+          "width": 330,
+          "height": 43
+        }
+      },
+      {
+        "role": "body",
+        "text": "责任人与范围明确",
+        "frame": {
+          "left": 868,
+          "top": 564,
+          "width": 330,
+          "height": 43
+        }
+      }
+    ],
+    "reason": "新编五层稿：页面左侧讲判断原则，中间用窄区域表达收敛，右侧逐行列准入条件。层数增多时仍使用既定行距与文字档位。",
+    "caseId": "funnel-compact-plain",
+    "appearance": "plain",
+    "parentReplay": true,
+    "chapter": "02",
+    "pageNumber": 2,
+    "relationshipLines": [
+      {
+        "frame": {
+          "left": 730,
+          "top": 325,
+          "width": 124,
+          "height": 0
+        },
+        "reason": "收集反馈 对应的准入依据"
+      },
+      {
+        "frame": {
+          "left": 706.3761884297386,
+          "top": 388,
+          "width": 147.6238115702614,
+          "height": 0
+        },
+        "reason": "确认问题 对应的准入依据"
+      },
+      {
+        "frame": {
+          "left": 688.2943814862488,
+          "top": 451,
+          "width": 165.70561851375123,
+          "height": 0
+        },
+        "reason": "验证价值 对应的准入依据"
+      },
+      {
+        "frame": {
+          "left": 671.8446868270906,
+          "top": 514,
+          "width": 182.15531317290936,
+          "height": 0
+        },
+        "reason": "核对投入 对应的准入依据"
+      },
+      {
+        "frame": {
+          "left": 656.3726511515135,
+          "top": 577,
+          "width": 197.62734884848646,
+          "height": 0
+        },
+        "reason": "明确交付 对应的准入依据"
+      }
+    ]
+  },
+  "skin": {
+    "id": "neutral-editorial-001",
+    "fonts": {
+      "display": "Noto Serif SC",
+      "body": "Noto Sans SC"
+    },
+    "font": "Noto Sans SC",
+    "primaryColor": "#A35D4F",
+    "background": "#F5F4EF",
+    "surface": "#EEECE5",
+    "dark": "#20201D",
+    "body": "#4B4A45",
+    "muted": "#85837B",
+    "line": "#D8D5CC",
+    "bodyFrame": {
+      "left": 56,
+      "top": 135,
+      "width": 1168,
+      "height": 525
+    },
+    "typography": {
+      "componentHeading": 15.75,
+      "componentTitle": 15.75,
+      "componentItemTitle": 12.75,
+      "componentLead": 12.75,
+      "componentBody": 12.75,
+      "componentLabel": 12.75,
+      "componentMeta": 11.25
+    }
+  },
+  "status": "rendered-unreviewed",
+  "remainingPage": {
+    "page": {
+      "left": 56,
+      "top": 135,
+      "width": 1168,
+      "height": 525
+    },
+    "bands": [
+      {
+        "top": 135,
+        "height": 50.922,
+        "free": [
+          {
+            "left": 56,
+            "width": 1168
+          }
+        ]
+      },
+      {
+        "top": 185.922,
+        "height": 14.5,
+        "free": [
+          {
+            "left": 56,
+            "width": 510.5
+          },
+          {
+            "left": 637.5,
+            "width": 586.5
+          }
+        ]
+      },
+      {
+        "top": 200.422,
+        "height": 2.937000000000012,
+        "free": [
+          {
+            "left": 56,
+            "width": 510.5
+          },
+          {
+            "left": 637.5,
+            "width": 586.5
+          }
+        ]
+      },
+      {
+        "top": 203.359,
+        "height": 3.875,
+        "free": [
+          {
+            "left": 56,
+            "width": 510.5
+          },
+          {
+            "left": 709.469,
+            "width": 514.531
+          }
+        ]
+      },
+      {
+        "top": 207.234,
+        "height": 10.625,
+        "free": [
+          {
+            "left": 56,
+            "width": 438.516
+          },
+          {
+            "left": 709.469,
+            "width": 514.531
+          }
+        ]
+      },
+      {
+        "top": 217.859,
+        "height": 3.875,
+        "free": [
+          {
+            "left": 56,
+            "width": 438.516
+          },
+          {
+            "left": 709.469,
+            "width": 514.531
+          }
+        ]
+      },
+      {
+        "top": 221.734,
+        "height": 20.687999999999988,
+        "free": [
+          {
+            "left": 56,
+            "width": 438.516
+          },
+          {
+            "left": 709.469,
+            "width": 514.531
+          }
+        ]
+      },
+      {
+        "top": 242.422,
+        "height": 14.500000000000028,
+        "free": [
+          {
+            "left": 56,
+            "width": 438.516
+          },
+          {
+            "left": 709.469,
+            "width": 514.531
+          }
+        ]
+      },
+      {
+        "top": 256.922,
+        "height": 8.937000000000012,
+        "free": [
+          {
+            "left": 56,
+            "width": 438.516
+          },
+          {
+            "left": 571.5160000000001,
+            "width": 60.952999999999975
+          },
+          {
+            "left": 709.469,
+            "width": 514.531
+          }
+        ]
+      },
+      {
+        "top": 265.85900000000004,
+        "height": 3.875,
+        "free": [
+          {
+            "left": 56,
+            "width": 438.516
+          },
+          {
+            "left": 571.5160000000001,
+            "width": 60.952999999999975
+          },
+          {
+            "left": 709.469,
+            "width": 514.531
+          }
+        ]
+      },
+      {
+        "top": 269.73400000000004,
+        "height": 10.625,
+        "free": [
+          {
+            "left": 56,
+            "width": 438.516
+          },
+          {
+            "left": 571.5160000000001,
+            "width": 60.952999999999975
+          },
+          {
+            "left": 709.469,
+            "width": 514.531
+          }
+        ]
+      },
+      {
+        "top": 280.35900000000004,
+        "height": 2.5179999999999723,
+        "free": [
+          {
+            "left": 56,
+            "width": 438.516
+          },
+          {
+            "left": 571.5160000000001,
+            "width": 652.4839999999999
+          }
+        ]
+      },
+      {
+        "top": 282.877,
+        "height": 1.3570000000000277,
+        "free": [
+          {
+            "left": 56,
+            "width": 415.5
+          },
+          {
+            "left": 732.5,
+            "width": 491.5
+          }
+        ]
+      },
+      {
+        "top": 284.23400000000004,
+        "height": 11.765999999999963,
+        "free": [
+          {
+            "left": 56,
+            "width": 415.5
+          },
+          {
+            "left": 732.5,
+            "width": 491.5
+          }
+        ]
+      },
+      {
+        "top": 296,
+        "height": 49.87700000000001,
+        "free": [
+          {
+            "left": 56,
+            "width": 415.5
+          },
+          {
+            "left": 732.5,
+            "width": 491.5
+          }
+        ]
+      },
+      {
+        "top": 345.877,
+        "height": 8.12299999999999,
+        "free": [
+          {
+            "left": 56,
+            "width": 415.5
+          },
+          {
+            "left": 732.5,
+            "width": 491.5
+          }
+        ]
+      },
+      {
+        "top": 354,
+        "height": 5,
+        "free": [
+          {
+            "left": 56,
+            "width": 415.5
+          },
+          {
+            "left": 732.5,
+            "width": 491.5
+          }
+        ]
+      },
+      {
+        "top": 359,
+        "height": 8.123000000000047,
+        "free": [
+          {
+            "left": 56,
+            "width": 415.5
+          },
+          {
+            "left": 732.5,
+            "width": 491.5
+          }
+        ]
+      },
+      {
+        "top": 367.12300000000005,
+        "height": 41.75399999999996,
+        "free": [
+          {
+            "left": 56,
+            "width": 439.124
+          },
+          {
+            "left": 708.876,
+            "width": 515.124
+          }
+        ]
+      },
+      {
+        "top": 408.877,
+        "height": 8.12299999999999,
+        "free": [
+          {
+            "left": 56,
+            "width": 439.124
+          },
+          {
+            "left": 708.876,
+            "width": 515.124
+          }
+        ]
+      },
+      {
+        "top": 417,
+        "height": 5,
+        "free": [
+          {
+            "left": 56,
+            "width": 439.124
+          },
+          {
+            "left": 708.876,
+            "width": 515.124
+          }
+        ]
+      },
+      {
+        "top": 422,
+        "height": 8.123000000000047,
+        "free": [
+          {
+            "left": 56,
+            "width": 439.124
+          },
+          {
+            "left": 708.876,
+            "width": 515.124
+          }
+        ]
+      },
+      {
+        "top": 430.12300000000005,
+        "height": 41.75399999999996,
+        "free": [
+          {
+            "left": 56,
+            "width": 457.206
+          },
+          {
+            "left": 690.7950000000001,
+            "width": 533.2049999999999
+          }
+        ]
+      },
+      {
+        "top": 471.877,
+        "height": 8.12299999999999,
+        "free": [
+          {
+            "left": 56,
+            "width": 457.206
+          },
+          {
+            "left": 690.7950000000001,
+            "width": 533.2049999999999
+          }
+        ]
+      },
+      {
+        "top": 480,
+        "height": 5,
+        "free": [
+          {
+            "left": 56,
+            "width": 457.206
+          },
+          {
+            "left": 690.7950000000001,
+            "width": 533.2049999999999
+          }
+        ]
+      },
+      {
+        "top": 485,
+        "height": 8.123000000000047,
+        "free": [
+          {
+            "left": 56,
+            "width": 457.206
+          },
+          {
+            "left": 690.7950000000001,
+            "width": 533.2049999999999
+          }
+        ]
+      },
+      {
+        "top": 493.12300000000005,
+        "height": 41.753999999999905,
+        "free": [
+          {
+            "left": 56,
+            "width": 473.655
+          },
+          {
+            "left": 674.3439999999999,
+            "width": 549.6560000000001
+          }
+        ]
+      },
+      {
+        "top": 534.877,
+        "height": 8.123000000000047,
+        "free": [
+          {
+            "left": 56,
+            "width": 473.655
+          },
+          {
+            "left": 674.3439999999999,
+            "width": 549.6560000000001
+          }
+        ]
+      },
+      {
+        "top": 543,
+        "height": 5,
+        "free": [
+          {
+            "left": 56,
+            "width": 473.655
+          },
+          {
+            "left": 674.3439999999999,
+            "width": 549.6560000000001
+          }
+        ]
+      },
+      {
+        "top": 548,
+        "height": 8.123000000000047,
+        "free": [
+          {
+            "left": 56,
+            "width": 473.655
+          },
+          {
+            "left": 674.3439999999999,
+            "width": 549.6560000000001
+          }
+        ]
+      },
+      {
+        "top": 556.123,
+        "height": 49.87699999999995,
+        "free": [
+          {
+            "left": 56,
+            "width": 488
+          },
+          {
+            "left": 660,
+            "width": 564
+          }
+        ]
+      },
+      {
+        "top": 606,
+        "height": 13.122999999999934,
+        "free": [
+          {
+            "left": 56,
+            "width": 489.12699999999995
+          },
+          {
+            "left": 658.872,
+            "width": 565.128
+          }
+        ]
+      },
+      {
+        "top": 619.1229999999999,
+        "height": 40.877000000000066,
+        "free": [
+          {
+            "left": 56,
+            "width": 1168
+          }
+        ]
+      }
+    ],
+    "freeArea": 533887.6958259998,
+    "note": "自由区域按横向带表示，尚未选择文字框或文字角色；段落由排版决定。"
+  },
+  "occupancy": {
+    "mode": "measured",
+    "areas": 16,
+    "collisions": 0
+  },
+  "invocation": {
+    "mode": "plain-layout-control"
+  },
+  "measurements": {
+    "titleRight": 462,
+    "overflow": [],
+    "fontReady": true
+  },
+  "fonts": [
+    {
+      "name": "simple-step-title-0",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "收集反馈"
+    },
+    {
+      "name": "simple-step-title-1",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "确认问题"
+    },
+    {
+      "name": "simple-step-title-2",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "验证价值"
+    },
+    {
+      "name": "simple-step-title-3",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "核对投入"
+    },
+    {
+      "name": "simple-step-title-4",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "明确交付"
+    }
+  ]
+}

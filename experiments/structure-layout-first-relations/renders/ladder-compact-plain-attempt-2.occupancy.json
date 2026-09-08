@@ -1,0 +1,255 @@
+{
+  "schemaVersion": 1,
+  "method": "measured-object-boxes-with-protected-groups",
+  "positionFrame": {
+    "left": 390,
+    "top": 280,
+    "width": 800,
+    "height": 350
+  },
+  "padding": 14,
+  "actualBounds": {
+    "left": 487.5,
+    "top": 334.5,
+    "width": 645,
+    "height": 288.5
+  },
+  "nodes": [
+    {
+      "name": "plain-progression",
+      "frame": {
+        "left": 579,
+        "top": 479,
+        "width": 462,
+        "height": 92
+      }
+    },
+    {
+      "name": "plain-level-0",
+      "frame": {
+        "left": 487.5,
+        "top": 424.5,
+        "width": 185,
+        "height": 113
+      }
+    },
+    {
+      "name": "plain-level-1",
+      "frame": {
+        "left": 717.5,
+        "top": 379.5,
+        "width": 185,
+        "height": 113
+      }
+    },
+    {
+      "name": "plain-level-2",
+      "frame": {
+        "left": 947.5,
+        "top": 334.5,
+        "width": 185,
+        "height": 113
+      }
+    },
+    {
+      "name": "level-1-text-heading",
+      "frame": {
+        "left": 501,
+        "top": 463.578,
+        "width": 158,
+        "height": 20.047
+      }
+    },
+    {
+      "name": "level-1-text-body",
+      "frame": {
+        "left": 501,
+        "top": 489.625,
+        "width": 158,
+        "height": 38.375
+      }
+    },
+    {
+      "name": "maturity-level-index-1",
+      "frame": {
+        "left": 559,
+        "top": 549,
+        "width": 42,
+        "height": 42
+      }
+    },
+    {
+      "name": "level-2-text-heading",
+      "frame": {
+        "left": 731,
+        "top": 418.578,
+        "width": 158,
+        "height": 20.047
+      }
+    },
+    {
+      "name": "level-2-text-body",
+      "frame": {
+        "left": 731,
+        "top": 444.625,
+        "width": 158,
+        "height": 38.375
+      }
+    },
+    {
+      "name": "maturity-level-index-2",
+      "frame": {
+        "left": 789,
+        "top": 504,
+        "width": 42,
+        "height": 42
+      }
+    },
+    {
+      "name": "level-3-text-heading",
+      "frame": {
+        "left": 961,
+        "top": 373.578,
+        "width": 158,
+        "height": 20.047
+      }
+    },
+    {
+      "name": "level-3-text-body",
+      "frame": {
+        "left": 961,
+        "top": 399.625,
+        "width": 158,
+        "height": 38.375
+      }
+    },
+    {
+      "name": "maturity-level-index-3",
+      "frame": {
+        "left": 1019,
+        "top": 459,
+        "width": 42,
+        "height": 42
+      }
+    },
+    {
+      "name": "maturity-current-status",
+      "frame": {
+        "left": 551,
+        "top": 598,
+        "width": 48,
+        "height": 25
+      }
+    },
+    {
+      "name": "maturity-target-status",
+      "frame": {
+        "left": 1011,
+        "top": 508,
+        "width": 48,
+        "height": 25
+      }
+    }
+  ],
+  "areas": [
+    {
+      "name": "level-1",
+      "kind": "protected-group",
+      "members": [
+        "level-1-text-heading",
+        "level-1-text-body",
+        "maturity-level-index-1",
+        "maturity-current-status"
+      ],
+      "frame": {
+        "left": 487,
+        "top": 449.578,
+        "width": 186,
+        "height": 187.42200000000003
+      }
+    },
+    {
+      "name": "level-2",
+      "kind": "protected-group",
+      "members": [
+        "level-2-text-heading",
+        "level-2-text-body",
+        "maturity-level-index-2"
+      ],
+      "frame": {
+        "left": 717,
+        "top": 404.578,
+        "width": 186,
+        "height": 155.42200000000003
+      }
+    },
+    {
+      "name": "level-3",
+      "kind": "protected-group",
+      "members": [
+        "level-3-text-heading",
+        "level-3-text-body",
+        "maturity-level-index-3",
+        "maturity-target-status"
+      ],
+      "frame": {
+        "left": 947,
+        "top": 359.578,
+        "width": 186,
+        "height": 187.42200000000003
+      }
+    },
+    {
+      "name": "plain-progression",
+      "kind": "object",
+      "members": [
+        "plain-progression"
+      ],
+      "frame": {
+        "left": 565,
+        "top": 465,
+        "width": 490,
+        "height": 120
+      }
+    },
+    {
+      "name": "plain-level-0",
+      "kind": "object",
+      "members": [
+        "plain-level-0"
+      ],
+      "frame": {
+        "left": 473.5,
+        "top": 410.5,
+        "width": 213,
+        "height": 141
+      }
+    },
+    {
+      "name": "plain-level-1",
+      "kind": "object",
+      "members": [
+        "plain-level-1"
+      ],
+      "frame": {
+        "left": 703.5,
+        "top": 365.5,
+        "width": 213,
+        "height": 141
+      }
+    },
+    {
+      "name": "plain-level-2",
+      "kind": "object",
+      "members": [
+        "plain-level-2"
+      ],
+      "frame": {
+        "left": 933.5,
+        "top": 320.5,
+        "width": 213,
+        "height": 141
+      }
+    }
+  ]
+}

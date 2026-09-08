@@ -1,0 +1,319 @@
+{
+  "schemaVersion": 1,
+  "method": "measured-object-boxes-with-protected-groups",
+  "positionFrame": {
+    "left": 56,
+    "top": 180,
+    "width": 1168,
+    "height": 460
+  },
+  "padding": 14,
+  "actualBounds": {
+    "left": 160.5,
+    "top": 259.5,
+    "width": 931,
+    "height": 331.5
+  },
+  "nodes": [
+    {
+      "name": "plain-progression",
+      "frame": {
+        "left": 250,
+        "top": 404,
+        "width": 752,
+        "height": 167
+      }
+    },
+    {
+      "name": "plain-level-0",
+      "frame": {
+        "left": 160.5,
+        "top": 424.5,
+        "width": 181,
+        "height": 113
+      }
+    },
+    {
+      "name": "plain-level-1",
+      "frame": {
+        "left": 410.5,
+        "top": 369.5,
+        "width": 181,
+        "height": 113
+      }
+    },
+    {
+      "name": "plain-level-2",
+      "frame": {
+        "left": 660.5,
+        "top": 314.5,
+        "width": 181,
+        "height": 113
+      }
+    },
+    {
+      "name": "plain-level-3",
+      "frame": {
+        "left": 910.5,
+        "top": 259.5,
+        "width": 181,
+        "height": 113
+      }
+    },
+    {
+      "name": "level-1-text-heading",
+      "frame": {
+        "left": 174,
+        "top": 463.578,
+        "width": 154,
+        "height": 20.047
+      }
+    },
+    {
+      "name": "level-1-text-body",
+      "frame": {
+        "left": 174,
+        "top": 489.625,
+        "width": 154,
+        "height": 38.375
+      }
+    },
+    {
+      "name": "maturity-level-index-1",
+      "frame": {
+        "left": 230,
+        "top": 549,
+        "width": 42,
+        "height": 42
+      }
+    },
+    {
+      "name": "level-2-text-heading",
+      "frame": {
+        "left": 424,
+        "top": 408.578,
+        "width": 154,
+        "height": 20.047
+      }
+    },
+    {
+      "name": "level-2-text-body",
+      "frame": {
+        "left": 424,
+        "top": 434.625,
+        "width": 154,
+        "height": 38.375
+      }
+    },
+    {
+      "name": "maturity-level-index-2",
+      "frame": {
+        "left": 480,
+        "top": 494,
+        "width": 42,
+        "height": 42
+      }
+    },
+    {
+      "name": "level-3-text-heading",
+      "frame": {
+        "left": 674,
+        "top": 353.578,
+        "width": 154,
+        "height": 20.047
+      }
+    },
+    {
+      "name": "level-3-text-body",
+      "frame": {
+        "left": 674,
+        "top": 379.625,
+        "width": 154,
+        "height": 38.375
+      }
+    },
+    {
+      "name": "maturity-level-index-3",
+      "frame": {
+        "left": 730,
+        "top": 439,
+        "width": 42,
+        "height": 42
+      }
+    },
+    {
+      "name": "level-4-text-heading",
+      "frame": {
+        "left": 924,
+        "top": 298.578,
+        "width": 154,
+        "height": 20.047
+      }
+    },
+    {
+      "name": "level-4-text-body",
+      "frame": {
+        "left": 924,
+        "top": 324.625,
+        "width": 154,
+        "height": 38.375
+      }
+    },
+    {
+      "name": "maturity-level-index-4",
+      "frame": {
+        "left": 980,
+        "top": 384,
+        "width": 42,
+        "height": 42
+      }
+    },
+    {
+      "name": "maturity-current-status",
+      "frame": {
+        "left": 472,
+        "top": 543,
+        "width": 58,
+        "height": 25
+      }
+    },
+    {
+      "name": "maturity-target-status",
+      "frame": {
+        "left": 972,
+        "top": 433,
+        "width": 58,
+        "height": 25
+      }
+    }
+  ],
+  "areas": [
+    {
+      "name": "level-1",
+      "kind": "protected-group",
+      "members": [
+        "level-1-text-heading",
+        "level-1-text-body",
+        "maturity-level-index-1"
+      ],
+      "frame": {
+        "left": 160,
+        "top": 449.578,
+        "width": 182,
+        "height": 155.42200000000003
+      }
+    },
+    {
+      "name": "level-2",
+      "kind": "protected-group",
+      "members": [
+        "level-2-text-heading",
+        "level-2-text-body",
+        "maturity-level-index-2",
+        "maturity-current-status"
+      ],
+      "frame": {
+        "left": 410,
+        "top": 394.578,
+        "width": 182,
+        "height": 187.42200000000003
+      }
+    },
+    {
+      "name": "level-3",
+      "kind": "protected-group",
+      "members": [
+        "level-3-text-heading",
+        "level-3-text-body",
+        "maturity-level-index-3"
+      ],
+      "frame": {
+        "left": 660,
+        "top": 339.578,
+        "width": 182,
+        "height": 155.42200000000003
+      }
+    },
+    {
+      "name": "level-4",
+      "kind": "protected-group",
+      "members": [
+        "level-4-text-heading",
+        "level-4-text-body",
+        "maturity-level-index-4",
+        "maturity-target-status"
+      ],
+      "frame": {
+        "left": 910,
+        "top": 284.578,
+        "width": 182,
+        "height": 187.42200000000003
+      }
+    },
+    {
+      "name": "plain-progression",
+      "kind": "object",
+      "members": [
+        "plain-progression"
+      ],
+      "frame": {
+        "left": 236,
+        "top": 390,
+        "width": 780,
+        "height": 195
+      }
+    },
+    {
+      "name": "plain-level-0",
+      "kind": "object",
+      "members": [
+        "plain-level-0"
+      ],
+      "frame": {
+        "left": 146.5,
+        "top": 410.5,
+        "width": 209,
+        "height": 141
+      }
+    },
+    {
+      "name": "plain-level-1",
+      "kind": "object",
+      "members": [
+        "plain-level-1"
+      ],
+      "frame": {
+        "left": 396.5,
+        "top": 355.5,
+        "width": 209,
+        "height": 141
+      }
+    },
+    {
+      "name": "plain-level-2",
+      "kind": "object",
+      "members": [
+        "plain-level-2"
+      ],
+      "frame": {
+        "left": 646.5,
+        "top": 300.5,
+        "width": 209,
+        "height": 141
+      }
+    },
+    {
+      "name": "plain-level-3",
+      "kind": "object",
+      "members": [
+        "plain-level-3"
+      ],
+      "frame": {
+        "left": 896.5,
+        "top": 245.5,
+        "width": 209,
+        "height": 141
+      }
+    }
+  ]
+}

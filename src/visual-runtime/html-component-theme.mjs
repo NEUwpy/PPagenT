@@ -1,3 +1,5 @@
+import { adaptNeutralStructure } from './neutral-structure-theme.mjs';
+import { supportsNeutralStructure } from './neutral-structure-profiles.mjs';
 const DEFAULT_PRIMARY_COLOR = "#315F91";
 
 function cssString(value, fallback) {
@@ -408,6 +410,9 @@ export function compileStructureThemeSource(source, theme = {}) {
 }
 
 export function compileHtmlComponentTheme({ markup = "", css = "", theme = {} } = {}) {
+  if (theme.id === 'neutral-editorial-001' && supportsNeutralStructure(markup) && !/(?:notes-adapted|simple-funnel-adapted|maturity-ladder)/.test(markup)) {
+    return Object.freeze(adaptNeutralStructure({markup:String(markup),css:String(css),theme:resolveStructureTheme(theme)}));
+  }
   return Object.freeze({
     markup: normalizeHex(theme?.primaryColor) ? compileMarkupColors(String(markup ?? ""), resolveStructureTheme(theme)) : String(markup ?? ""),
     css: compileStructureThemeSource(css, theme),

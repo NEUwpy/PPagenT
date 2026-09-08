@@ -430,6 +430,11 @@
     <div class="mode-notice" id="mode-notice"></div>
 
     <section class="section" id="capabilities">
+      <div id="structure-preview-controls" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:16px 0">
+        <label>Skin <select id="structure-preview-skin"><option value="university">东北大学 Skin</option><option value="neutral">中性 Skin</option></select></label>
+        <label>尺寸 <select id="structure-preview-size"><option value="large">大 · 100%</option><option value="medium">中 · 85%</option><option value="small">小 · 70%</option></select></label>
+        <small>已审批的 35 个结构支持中性 Skin。尺寸适配仍为折角便签、简明漏斗、成熟度阶梯三个；其他结构请选择「大」。</small>
+      </div>
       <div class="section-head"><div><h2>01 · 结构 Skill 库</h2><p>按内容关系发现结构，保留造型与表达特征，按本页内容重新编排。每个样例展示一种效果，不限定数量、尺寸或文字框。</p></div><span class="pill pending" id="logic-count"></span></div>
       <div class="coverage-grid" id="coverage-grid"></div>
       <details class="technical-details approval-details" id="asset-approval">
@@ -520,6 +525,8 @@
     const relationText = (asset) => list(asset.baseRelations);
     const purposeText = (asset) => asset.purposes?.length ? asset.purposes.map((item) => item.key).join("、") : "—";
     const liveMode = DATA.mode === "live-repository-api" && location.protocol.startsWith("http");
+    const previewSkin = new URLSearchParams(location.search).get('skin');
+    if (['neutral', 'university'].includes(previewSkin)) document.getElementById('structure-preview-skin').value = previewSkin;
 
     function runtimeCapabilityPills(asset) {
       const capabilities = asset.runtimeCapabilities?.length ? asset.runtimeCapabilities : [asset.renderer];
@@ -552,19 +559,27 @@
       return '<div class="' + className + '"><img ' + sourceAttribute + '="' + esc(previewUrl) + '" alt="' + esc(asset.name) + ' 的 ' + previewLabel + '"><span hidden>PPT 预览生成失败</span></div>';
     }
 
+    function structurePreviewUrl(asset) {
+      const url = new URL(asset.componentPreviewUrl, location.href);
+      if (asset.structureSkill) {
+        url.searchParams.set('skin', document.getElementById('structure-preview-skin').value);
+        url.searchParams.set('size', document.getElementById('structure-preview-size').value);
+      }
+      return url.href;
+    }
     function pendingApprovalPreviewMarkup(asset) {
       if (!liveMode) return '<div class="logic-preview"><span>静态快照不加载实时 HTML<br>双击 PPA看板.exe 查看资产设计</span></div>';
       if (!asset.componentPreviewAvailable || !asset.componentPreviewUrl) return '<div class="logic-preview"><span>该资产尚未形成可查看的 HTML 黄金状态</span></div>';
       const query = selectionQuery(asset.componentInitialSelection ?? {});
-      const previewUrl = asset.componentPreviewUrl + (query ? '&' + query : '');
+      const previewUrl = structurePreviewUrl(asset) + (query ? '&' + query : '');
       return '<div class="logic-preview"><iframe loading="lazy" tabindex="-1" src="' + esc(previewUrl) + '" title="' + esc(asset.name) + ' 的纯净 HTML 黄金状态"></iframe></div>';
     }
 
     function representativeMarkup(asset) {
       const media = liveMode && asset.componentPreviewAvailable && asset.componentPreviewUrl
-        ? '<div class="review-media component"><iframe src="' + esc(asset.componentPreviewUrl) + '" title="' + esc(asset.name) + ' · 代表样例"></iframe></div>'
+        ? '<div class="review-media component"><iframe src="' + esc(structurePreviewUrl(asset)) + '" title="' + esc(asset.name) + ' · 代表样例"></iframe></div>'
         : previewMarkup(asset, true);
-      return '<section class="review-flow"><h3>代表样例</h3><p>这一种样子用于理解设计特征；数量、比例和文字位置由本次内容决定。</p>' + media + '</section>';
+      return '<section class="review-flow"><h3>代表样例</h3>' + (asset.structureSkill ? '<div class="structure-detail-controls" style="display:flex;gap:16px;margin:12px 0"><label>Skin <select data-mirror-control="structure-preview-skin">' + document.getElementById('structure-preview-skin').innerHTML + '</select></label><label>尺寸 <select data-mirror-control="structure-preview-size">' + document.getElementById('structure-preview-size').innerHTML + '</select></label></div>' : '') + '<p>此处跟随看板的 Skin 和尺寸选择。尺寸改变实际占位，字体按 Skin 规则保留；样例预览不等于整页排版已验证。</p>' + media + '</section>';
     }
     function structureSkillMarkup(asset) {
       const skill = asset.structureSkill;
@@ -741,6 +756,7 @@
         + '<details class="detail-group"><summary>来源与设计原文</summary>'
         + detailRows([["来源", source], ["关系", esc(relationText(asset))], ["页面目的", purposeDetails]])
         + '<div class="intent-panel">' + esc(asset.visualIntentText || '暂无独立设计原文') + '</div></details>';
+      for (const mirror of document.querySelectorAll('[data-mirror-control]')) mirror.value = document.getElementById(mirror.dataset.mirrorControl).value;
       document.getElementById("drawer-backdrop").classList.add("open");
 
       document.body.style.overflow = "hidden";
@@ -1127,6 +1143,27 @@
         openAsset(byKey.get(event.target.dataset.assetKey));
       }
     });
+    document.addEventListener('change', (event) => {
+      const id = event.target.dataset.mirrorControl;
+      if (!id) return;
+      const control = document.getElementById(id);
+      control.value = event.target.value;
+      control.dispatchEvent(new Event('change'));
+    });
+    for (const id of ['structure-preview-skin', 'structure-preview-size']) {
+      document.getElementById(id).addEventListener('change', () => {
+        for (const mirror of document.querySelectorAll('[data-mirror-control="' + id + '"]')) mirror.value = document.getElementById(id).value;
+        for (const iframe of document.querySelectorAll('iframe')) {
+          const url = new URL(iframe.src, location.href);
+          if (url.pathname !== '/api/component-preview') continue;
+          const asset = DATA.records.find(a => a.id === url.searchParams.get('id') && a.library === url.searchParams.get('library'));
+          if (!asset?.structureSkill) continue;
+          url.searchParams.set('skin', document.getElementById('structure-preview-skin').value);
+          url.searchParams.set('size', document.getElementById('structure-preview-size').value);
+          iframe.src = url.href;
+        }
+      });
+    }
     document.getElementById("refresh-dashboard").addEventListener("click", () => {
       if (!liveMode) return;
       document.getElementById("refresh-dashboard").textContent = "正在刷新…";

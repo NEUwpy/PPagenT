@@ -1,3 +1,6 @@
+import { neutralEditorialTheme } from '../runtime/skins/neutral-editorial-theme.mjs';
+import { preservedComponent } from '../runtime/preserved-structure-build.mjs';
+import { preservedSizeExamples } from '../visual-runtime/preserved-design-layout.mjs';
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import http from "node:http";
@@ -248,10 +251,27 @@ async function componentPreviewHtml(library, assetId, searchParams) {
     if (relativeCssPath.startsWith("..") || path.isAbsolute(relativeCssPath)) return null;
     css = await fs.readFile(cssPath, "utf8");
   }
+  const skinKey = searchParams.get('skin') ?? 'university';
+  const sizeKey = searchParams.get('size') ?? 'large';
+  const theme = skinKey === 'neutral' ? neutralEditorialTheme : northeasternUniversityTheme;
+  const ratio = preservedSizeExamples[sizeKey];
+  const supported = typeof component.renderAdaptiveMarkup === 'function';
+  if (!['neutral', 'university'].includes(skinKey) || !ratio) return null;
+  if (skinKey === 'neutral' && !(resolved.record.status === 'core' && resolved.record.userApprovedHtmlNative)) {
+    return '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><body style="display:grid;place-content:center;height:90vh;font:16px sans-serif;color:#4b4a45;background:#f5f4ef">本轮只适配已审批结构；该结构不在范围内。</body></html>';
+  }
+  if (!supported && sizeKey !== 'large') {
+    return '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><body style="margin:0;display:grid;place-content:center;height:100vh;background:#f5f4ef;color:#4b4a45;font:16px sans-serif;text-align:center"><strong>此尺寸尚未适配</strong><p>当前可查看：两种 Skin · 大</p><small>不会用图片缩放代替真实尺寸适配</small></body></html>';
+  }
+  const canvasWidth = Number(component.designFrame?.width);
+  const canvasHeight = Number(component.designFrame?.height);
+  const previewComponent = supported ? preservedComponent(component, {
+    left: 0, top: 0, width: canvasWidth * ratio, height: canvasHeight * ratio,
+  }, theme) : component;
   const compiledTheme = compileHtmlComponentTheme({
-    markup: component.renderMarkup(previewParameters),
+    markup: previewComponent.renderMarkup(previewParameters),
     css,
-    theme: northeasternUniversityTheme,
+    theme,
   });
   const markup = compiledTheme.markup;
   css = compiledTheme.css;
@@ -259,35 +279,12 @@ async function componentPreviewHtml(library, assetId, searchParams) {
   const designWidth = Number(component.designFrame?.width);
   const designHeight = Number(component.designFrame?.height);
   if (!Number.isFinite(designWidth) || !Number.isFinite(designHeight) || designWidth <= 0 || designHeight <= 0) return null;
-  return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(resolved.record.name)} · ${escapeHtml(stateLabel)}</title><style>${htmlComponentThemeCss(northeasternUniversityTheme)}${htmlTextFlowCss()}${css}
+  return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(resolved.record.name)} · ${escapeHtml(stateLabel)}</title><style>${htmlComponentThemeCss(theme)}${htmlTextFlowCss()}${css}
 html,body{margin:0!important;width:100%!important;height:100%!important;overflow:hidden!important}
-body{position:relative!important;background:#fff!important}
-.ppagent-component-viewport{position:absolute;inset:0;overflow:hidden;background:#fff}
+body{position:relative!important;background:${theme.background}!important}
+.ppagent-component-viewport{position:absolute;inset:0;overflow:hidden;background:${theme.background}}
 .ppagent-component-scale{--ppagent-preview-scale:min(calc((100vw - 4px) / ${designWidth}px),calc((100vh - 4px) / ${designHeight}px));position:absolute;left:50%;top:50%;width:${designWidth}px;height:${designHeight}px;margin-left:${-designWidth / 2}px;margin-top:${-designHeight / 2}px;transform:scale(var(--ppagent-preview-scale));transform-origin:center center}
-[data-slot-id]{outline:0 solid transparent;outline-offset:2px;transition:outline-color .12s ease,background-color .12s ease}
-[data-slot-id]:hover{z-index:50!important;outline:2px dashed rgba(35,117,220,.9);background-color:rgba(61,145,238,.12)!important}
-[data-slot-role="icon"]:hover{outline-color:rgba(255,255,255,.98);background-color:rgba(255,255,255,.22)!important}
-[data-slot-id]::after{content:attr(data-slot-role) " · " attr(data-slot-field);position:absolute;left:3px;bottom:3px;z-index:100;display:none;max-width:calc(100% - 6px);padding:3px 6px;overflow:hidden;border-radius:4px;color:#fff;background:rgba(23,32,51,.86);font:12px/1.25 "Microsoft YaHei",sans-serif;white-space:nowrap;text-overflow:ellipsis;pointer-events:none}
-[data-slot-id]:hover::after{display:block}
-.ppagent-slot-visual-layer{position:absolute;inset:0;z-index:999;opacity:0;pointer-events:none;transition:opacity .15s ease}
-.ppagent-component-scale:hover .ppagent-slot-visual-layer,.ppagent-component-scale:focus-within .ppagent-slot-visual-layer{opacity:1}
-.ppagent-slot-visual-box{position:absolute;pointer-events:auto;border:1px dashed rgba(35,117,220,.22);background:rgba(61,145,238,.025);transition:border-color .12s ease,background-color .12s ease}
-.ppagent-slot-visual-box.icon{border-color:rgba(118,80,189,.28)}
-.ppagent-slot-visual-box.text-flow{border:3px dashed rgba(35,117,220,.96);background:rgba(61,145,238,.09);box-shadow:0 0 0 2px rgba(255,255,255,.86)}
-.ppagent-slot-visual-box.text-flow-part{z-index:2;border:2px dashed rgba(13,139,121,.92);background:rgba(34,181,155,.10)}
-.ppagent-slot-visual-box.text-flow-part.title{border-color:rgba(222,139,24,.96);background:rgba(242,174,60,.13)}
-.ppagent-slot-visual-box:hover{border:2px dashed rgba(35,117,220,.92);background:rgba(61,145,238,.16)}
-.ppagent-slot-visual-box::after{content:attr(data-slot-label);position:absolute;left:3px;bottom:3px;display:none;max-width:calc(100% - 6px);padding:3px 6px;overflow:hidden;border-radius:4px;color:#fff;background:rgba(23,32,51,.86);font:12px/1.25 "Microsoft YaHei",sans-serif;white-space:nowrap;text-overflow:ellipsis}
-.ppagent-slot-visual-box:hover::after{display:block}
-.ppagent-slot-visual-box.text-region{border-width:3px;border-color:rgba(38,91,180,.96);background:rgba(61,145,238,.07)}
-.ppagent-slot-visual-box.text-flow::after,.ppagent-slot-visual-box.text-region::after,.ppagent-slot-visual-box.text-flow-part::after{display:block;z-index:5;font-weight:700}
-.ppagent-slot-visual-box.text-region::after{left:4px;top:4px;bottom:auto;background:rgba(28,74,151,.96)}
-.ppagent-slot-visual-box.text-flow::after{left:4px;top:4px;bottom:auto;background:rgba(35,117,220,.94)}
-.ppagent-slot-visual-box.text-flow-part.title::after{background:rgba(190,111,12,.94)}
-.ppagent-slot-visual-box.text-flow-part.body::after{background:rgba(8,116,101,.94)}
-</style></head><body><div class="ppagent-component-viewport"><div class="ppagent-component-scale">${markup}</div></div><script>
-addEventListener("load",async()=>{await document.fonts.ready;const scale=document.querySelector(".ppagent-component-scale");const root=document.querySelector("[data-ppt-root]");if(!scale||!root)return;const rootBox=root.getBoundingClientRect();if(!rootBox.width||!rootBox.height)return;const layer=document.createElement("div");layer.className="ppagent-slot-visual-layer";const addMarker=(box,className,label)=>{if(!box.width||!box.height)return;const marker=document.createElement("i");marker.className="ppagent-slot-visual-box"+className;marker.dataset.slotLabel=label;marker.style.left=(box.left-rootBox.left)/rootBox.width*100+"%";marker.style.top=(box.top-rootBox.top)/rootBox.height*100+"%";marker.style.width=box.width/rootBox.width*100+"%";marker.style.height=box.height/rootBox.height*100+"%";layer.append(marker)};for(const element of root.querySelectorAll("[data-slot-id]")){const box=element.getBoundingClientRect();const icon=element.dataset.slotContentType==="icon"||element.dataset.slotRole==="icon";const textFlow=element.dataset.slotContentType==="text-flow";const textRegion=element.dataset.slotContentType==="text-region";const flow=element.dataset.slotTextMode==="flow"||(!element.dataset.slotTextMode&&element.dataset.slotRole==="item-body");const ability=icon?(element.dataset.slotRequired==="true"?"必填图标":"可选图标"):(textRegion?"复合动态文字区":(textFlow?"统一动态文字区":(flow?"整块正文":(element.dataset.slotMaxChars?"≤"+element.dataset.slotMaxChars+"字":"文字"))));const label=textRegion?"动态文字大区 · "+(element.dataset.slotField||element.dataset.slotId):(textFlow?"动态文字区 · "+(element.dataset.slotField||element.dataset.slotId):(element.dataset.slotRole||"content")+" · "+ability+" · "+(element.dataset.slotField||element.dataset.slotId));addMarker(box,(icon?" icon":"")+(textRegion?" text-region":"")+(textFlow?" text-flow":""),label);if(textFlow){for(const part of element.querySelectorAll('[data-text-flow-part="title"],[data-text-flow-part="body"]')){const kind=part.dataset.textFlowPart;addMarker(part.getBoundingClientRect()," text-flow-part "+kind,kind==="title"?"标题区（本次排版）":"正文区（本次排版）")}}}scale.append(layer)});
-</script></body></html>`;
+</style></head><body><div class="ppagent-component-viewport"><div class="ppagent-component-scale"><div data-preview-size="${sizeKey}" data-preview-skin="${skinKey}" style="position:absolute;left:${canvasWidth * (1-ratio)/2}px;top:${canvasHeight * (1-ratio)/2}px;width:${canvasWidth*ratio}px;height:${canvasHeight*ratio}px">${markup}</div></div></div></body></html>`;
 }
 
 async function intakeSlotContractFor(library, assetId) {
