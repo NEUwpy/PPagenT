@@ -1,0 +1,64 @@
+{
+  "experimentId": "structure-remaining-page-luna-20260908-luna",
+  "model": "gpt-5.6-luna",
+  "skin": "neutral-editorial-001",
+  "scope": "仅记录 luna 子目录中的三页排版实验；不覆盖首稿、不将结构调用成功视为整页通过。",
+  "workflow": {
+    "requiredOrder": ["规划信息分工与结构区域", "preparePage 输出真实占用/剩余带/锚点", "读取 prepare 输出", "按语义排版写 blocks", "renderCase 导出 PPTX 并重导 PNG", "view_image 检查"],
+    "prepareEvidence": {
+      "P1": "P1/prepare.json",
+      "P2": "P2/prepare.json",
+      "P3": ["P3/prepare.json", "P3/prepare-attempt-2.json", "P3/prepare-attempt-3.json"]
+    },
+    "readBeforeRender": {
+      "P1": {"confirmed": true, "order": ["运行 prepare-p1.mjs", "读取工具输出中的 actualBounds/bands/textAnchors", "写 run-p1.mjs", "运行 renderCase"]},
+      "P2": {"confirmed": true, "order": ["运行 prepare-p2.mjs", "读取工具输出中的 actualBounds/bands/textAnchors", "写 run-p2.mjs", "运行 renderCase"]},
+      "P3": {"confirmed": "attempt-3", "order": ["运行 prepare-p3-attempt3.mjs", "读取工具输出中的 bands/textAnchors", "根据左上自由带选择文字框", "写 run-p3-attempt3.mjs", "运行 renderCase"], "earlierAttempts": "P3 attempt-1 的 prepare 与 render 在同一 run-p3.mjs 内；attempt-2 在同一脚本内读取 prepare 文件后渲染，未作为严格分离流程证据。"}
+    }
+  },
+  "pages": [
+    {
+      "pageId": "P1",
+      "purpose": "四项无序并列条件说明交接验收应以接手者能独立继续工作为准。",
+      "assetId": "parallel-folded-notes-grid-002",
+      "initialPlan": {
+        "structureFrame": {"left": 205, "top": 250, "width": 870, "height": 300},
+        "textAssignment": ["上方模块标题与解释表达验收口径", "便签承载四项事实", "底部辅助句说明发送文件只是交接动作"],
+        "evidenceRead": "P1/prepare.json：实际占用约 left=423..857、top=266..534；上方与底部有连续自由带。"
+      },
+      "render": "P1/P1-attempt-1.json",
+      "png": "P1/P1-attempt-1.png",
+      "pptx": "P1/P1-attempt-1.pptx"
+    },
+    {
+      "pageId": "P2",
+      "purpose": "访谈、工单、使用记录经过四层筛选阶段逐步收敛到纳入发布。",
+      "assetId": "convergence-simple-funnel-001",
+      "initialPlan": {
+        "structureFrame": {"left": 650, "top": 185, "width": 520, "height": 420},
+        "textAssignment": ["左侧入口来源", "左侧四层准入依据及四条事实", "右侧漏斗承载四阶段和入口图标"],
+        "evidenceRead": "P2/prepare.json：实际占用约 left=651..1168、top=193..592；左侧 x=56..638 为连续可排文字区。"
+      },
+      "render": "P2/P2-attempt-1.json",
+      "png": "P2/P2-attempt-1.png",
+      "pptx": "P2/P2-attempt-1.pptx"
+    },
+    {
+      "pageId": "P3",
+      "purpose": "四级维护能力保留全貌，结构标出当前第2级与目标第4级，页外文字尝试解释下一步。",
+      "assetId": "progression-maturity-steps-002",
+      "initialPlan": {
+        "structureFrame": {"left": 70, "top": 235, "width": 820, "height": 320},
+        "textAssignment": ["首稿右侧放下一步/当前/目标状态说明", "attempt-2 改为右侧行动焦点解释", "attempt-3 根据左上斜线外自由带放完整行动模块标题与两行解释"],
+        "evidenceRead": "P3/prepare-attempt-3.json：左上自由带 y=264..343 约 519→356 px，y=343..383 约 193 px；据此选择 x=56..246 的模块正文安全区。"
+      },
+      "renderCalls": [
+        {"attemptLabel": "attempt-1", "record": "P3/P3-attempt-1.json", "status": "rendered-unreviewed", "png": "P3/P3-attempt-1.png", "pptx": "P3/P3-attempt-1.pptx"},
+        {"attemptLabel": "attempt-2", "record": "P3/P3-attempt-2.json", "status": "rendered-unreviewed", "png": "P3/P3-attempt-2.png", "pptx": "P3/P3-attempt-2.pptx"},
+        {"attemptLabel": "attempt-3", "record": "P3/P3-attempt-3-rejected.json", "status": "rejected", "reason": "正文块侵入 level-2 保护组及安全留白"},
+        {"attemptLabel": "attempt-3", "record": "P3/P3-attempt-3-overflow-rejected.json", "status": "rejected", "reason": "缩窄后正文发生页外文字溢出"},
+        {"attemptLabel": "attempt-3", "record": "P3/P3-attempt-3.json", "status": "rejected", "reason": "再次缩短后仍发生页外文字溢出"}
+      ]
+    }
+  ]
+}

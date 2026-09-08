@@ -1,0 +1,101 @@
+{
+  "key": "b3-attempt-2",
+  "caseId": "b3",
+  "attempt": 2,
+  "model": "gpt-5.6-luna",
+  "reasoning": "high",
+  "spec": {
+    "caseId": "b3",
+    "title": "六层筛选把建议收束为可执行计划",
+    "assetId": "progression-maturity-steps-002",
+    "content": {
+      "levels": [
+        {
+          "key": "collect-suggestions",
+          "title": "征集建议",
+          "body": "从四类入口收集待处理线索"
+        },
+        {
+          "key": "clarify-problem",
+          "title": "明确问题",
+          "body": "把模糊意见改写为可核对问题"
+        },
+        {
+          "key": "check-basis",
+          "title": "核对依据",
+          "body": "补齐现场材料与既有记录"
+        },
+        {
+          "key": "small-validation",
+          "title": "小步验证",
+          "body": "用小范围动作观察是否成立"
+        },
+        {
+          "key": "assess-impact",
+          "title": "评估影响",
+          "body": "判断对交付与责任边界的影响"
+        },
+        {
+          "key": "include-plan",
+          "title": "纳入计划",
+          "body": "形成可执行的排期与责任安排"
+        }
+      ],
+      "showStatus": false,
+      "currentIndex": 0
+    },
+    "frame": {
+      "left": 145,
+      "top": 155,
+      "width": 990,
+      "height": 430
+    },
+    "blocks": [
+      {
+        "role": "aux",
+        "text": "入口：用户访谈、现场记录、客服工单、内部复盘。四类入口先汇总，再沿六层逐步收束。",
+        "frame": {
+          "left": 56,
+          "top": 600,
+          "width": 1100,
+          "height": 35
+        }
+      }
+    ],
+    "reason": "六个有明确门槛的筛选层级沿共同能力维度递进，保留连续阶台与随形承托面。",
+    "chapter": "02",
+    "pageNumber": 7
+  },
+  "skin": {
+    "id": "neutral-editorial-001",
+    "fonts": {
+      "display": "Noto Serif SC",
+      "body": "Noto Sans SC"
+    },
+    "font": "Noto Sans SC",
+    "primaryColor": "#A35D4F",
+    "background": "#F5F4EF",
+    "surface": "#EEECE5",
+    "dark": "#20201D",
+    "body": "#4B4A45",
+    "muted": "#85837B",
+    "line": "#D8D5CC",
+    "bodyFrame": {
+      "left": 56,
+      "top": 135,
+      "width": 1168,
+      "height": 525
+    },
+    "typography": {
+      "componentHeading": 15.75,
+      "componentTitle": 15.75,
+      "componentItemTitle": 12.75,
+      "componentLead": 12.75,
+      "componentBody": 12.75,
+      "componentLabel": 12.75,
+      "componentMeta": 11.25
+    }
+  },
+  "status": "rejected",
+  "error": "progression-maturity-steps 的组合排版无法在安全 box 内完整呈现：clarify-problem-text, assess-impact-text, include-plan-text [{\"slotId\":\"clarify-problem-text\",\"frame\":{\"left\":221,\"top\":204.781,\"width\":122.406,\"height\":96.453,\"rotation\":0},\"innerFrame\":{\"width\":100.406,\"height\":72.761,\"padding\":{\"top\":8.46154,\"right\":11,\"bottom\":15.2308,\"left\":11}},\"layout\":{\"id\":\"heading-content-flow\",\"defaultId\":\"heading-content-flow\",\"compatible\":[\"statement-flow\",\"heading-content-flow\"],\"contentRoles\":[\"heading\",\"body\"],\"status\":\"overflow\",\"align\":\"left\",\"valign\":\"bottom\",\"density\":\"compact\",\"parts\":[{\"part\":\"heading\",\"field\":\"title\",\"primitive\":\"heading\",\"frame\":{\"left\":232,\"top\":202.406,\"width\":100.406,\"height\":20.047,\"rotation\":0},\"text\":\"明确问题\",\"lineCount\":1,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Serif SC\",\"fontSizePt\":12.75,\"fontWeight\":\"700\",\"alignment\":\"left\",\"lineHeightPt\":15.045},\"capacity\":{\"recommendedMaxChars\":4,\"hardMaxChars\":5,\"hardMaxLines\":1}},{\"part\":\"body\",\"field\":\"body\",\"primitive\":\"body\",\"frame\":{\"left\":232,\"top\":228.453,\"width\":100.406,\"height\":57.563,\"rotation\":0},\"text\":\"把模糊意见改\\n写为可核对问\\n题\",\"lineCount\":3,\"typography\":{\"role\":\"componentMeta\",\"typeface\":\"Noto Sans SC\",\"fontSizePt\":11.25,\"fontWeight\":\"400\",\"alignment\":\"left\",\"lineHeightPt\":14.4},\"capacity\":{\"recommendedMaxChars\":14,\"hardMaxChars\":18,\"hardMaxLines\":3}}]}},{\"slotId\":\"assess-impact-text\",\"frame\":{\"left\":626.031,\"top\":94.094,\"width\":122.406,\"height\":96.453,\"rotation\":0},\"innerFrame\":{\"width\":100.406,\"height\":72.761,\"padding\":{\"top\":8.46154,\"right\":11,\"bottom\":15.2308,\"left\":11}},\"layout\":{\"id\":\"heading-content-flow\",\"defaultId\":\"heading-content-flow\",\"compatible\":[\"statement-flow\",\"heading-content-flow\"],\"contentRoles\":[\"heading\",\"body\"],\"status\":\"overflow\",\"align\":\"left\",\"valign\":\"bottom\",\"density\":\"compact\",\"parts\":[{\"part\":\"heading\",\"field\":\"title\",\"primitive\":\"heading\",\"frame\":{\"left\":637.031,\"top\":91.719,\"width\":100.406,\"height\":20.047,\"rotation\":0},\"text\":\"评估影响\",\"lineCount\":1,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Serif SC\",\"fontSizePt\":12.75,\"fontWeight\":\"700\",\"alignment\":\"left\",\"lineHeightPt\":15.045},\"capacity\":{\"recommendedMaxChars\":4,\"hardMaxChars\":5,\"hardMaxLines\":1}},{\"part\":\"body\",\"field\":\"body\",\"primitive\":\"body\",\"frame\":{\"left\":637.031,\"top\":117.766,\"width\":100.406,\"height\":57.563,\"rotation\":0},\"text\":\"判断对交付与\\n责任边界的影\\n响\",\"lineCount\":3,\"typography\":{\"role\":\"componentMeta\",\"typeface\":\"Noto Sans SC\",\"fontSizePt\":11.25,\"fontWeight\":\"400\",\"alignment\":\"left\",\"lineHeightPt\":14.4},\"capacity\":{\"recommendedMaxChars\":14,\"hardMaxChars\":18,\"hardMaxLines\":3}}]}},{\"slotId\":\"include-plan-text\",\"frame\":{\"left\":761.047,\"top\":57.203,\"width\":122.406,\"height\":96.453,\"rotation\":0},\"innerFrame\":{\"width\":100.406,\"height\":72.761,\"padding\":{\"top\":8.46154,\"right\":11,\"bottom\":15.2308,\"left\":11}},\"layout\":{\"id\":\"heading-content-flow\",\"defaultId\":\"heading-content-flow\",\"compatible\":[\"statement-flow\",\"heading-content-flow\"],\"contentRoles\":[\"heading\",\"body\"],\"status\":\"overflow\",\"align\":\"left\",\"valign\":\"bottom\",\"density\":\"compact\",\"parts\":[{\"part\":\"heading\",\"field\":\"title\",\"primitive\":\"heading\",\"frame\":{\"left\":772.047,\"top\":54.828,\"width\":100.406,\"height\":20.047,\"rotation\":0},\"text\":\"纳入计划\",\"lineCount\":1,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Serif SC\",\"fontSizePt\":12.75,\"fontWeight\":\"700\",\"alignment\":\"left\",\"lineHeightPt\":15.045},\"capacity\":{\"recommendedMaxChars\":4,\"hardMaxChars\":5,\"hardMaxLines\":1}},{\"part\":\"body\",\"field\":\"body\",\"primitive\":\"body\",\"frame\":{\"left\":772.047,\"top\":80.875,\"width\":100.406,\"height\":57.563,\"rotation\":0},\"text\":\"形成可执行的\\n排期与责任安\\n排\",\"lineCount\":3,\"typography\":{\"role\":\"componentMeta\",\"typeface\":\"Noto Sans SC\",\"fontSizePt\":11.25,\"fontWeight\":\"400\",\"alignment\":\"left\",\"lineHeightPt\":14.4},\"capacity\":{\"recommendedMaxChars\":14,\"hardMaxChars\":18,\"hardMaxLines\":3}}]}}]"
+}

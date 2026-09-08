@@ -1,0 +1,94 @@
+{
+  "experimentId": "structure-wholepage-luna-20260908-luna",
+  "model": "gpt-5.6-luna",
+  "skin": "neutral-editorial-001",
+  "attemptPolicy": {"maxAttemptsPerPage": 3, "attemptsProducedPerPage": 3},
+  "preflightNote": "A discarded P1-invalid-input-attempt-1 record contains the initial schema rejection for missing iconQuery; it produced no PPTX/PNG and is retained as technical evidence, not counted as a design attempt.",
+  "technicalBoundary": {
+    "allStructureCalls": "rendered-unreviewed",
+    "execution": "preserved-design",
+    "reimportedPng": true,
+    "overflowMeasurements": "none",
+    "fontReady": true,
+    "editablePptx": [
+      "P1/P1-attempt-3.pptx",
+      "P2/P2-attempt-3.pptx",
+      "P3/P3-attempt-3.pptx"
+    ]
+  },
+  "pages": [
+    {
+      "pageId": "P1",
+      "attempts": [
+        {"attempt": 1, "status": "rendered-unreviewed", "png": "P1/P1-attempt-1.png", "visualNote": "首稿四项并列关系成立，但结构悬在中部，底部结论与结构距离偏远。"},
+        {"attempt": 2, "status": "rendered-unreviewed", "png": "P1/P1-attempt-2.png", "visualNote": "独立修订稿保留发送文件边界并扩大阵列，但仍保留较多上下留白。"},
+        {"attempt": 3, "status": "rendered-unreviewed", "png": "P1/P1-attempt-3.png", "visualNote": "父任务反馈驱动修订：主张置于四项阵列上方，说明发送文件只是交接动作；四项事实完整、同级、无顺序误读。"}
+      ],
+      "selfReview": {
+        "status": "needs-parent-review",
+        "purposeMet": true,
+        "readingOrderClear": true,
+        "contentComplete": true,
+        "structureFit": "parallel-folded-notes-grid-002 preserves the folded paper, three-layer shadow, title band and centered 2x2 array.",
+        "parentFeedback": "需修订：主张文本 left=140 与便签阵列实际可见左缘约387没有共同对齐轴，阵列内部留白仍多，整组仍有悬空感。",
+        "revisionOrigin": "attempt-3 is a parent-feedback-driven revision, but it is not accepted as a whole-page pass.",
+        "finalPng": "P1/P1-attempt-3.png",
+        "finalPptx": "P1/P1-attempt-3.pptx",
+        "layout": "P1/P1-attempt-3.layout.json"
+      }
+    },
+    {
+      "pageId": "P2",
+      "attempts": [
+        {"attempt": 1, "status": "rendered-unreviewed", "png": "P2/P2-attempt-1.png", "visualNote": "入口与四阶段可读，但左侧准入依据颜色偏弱且没有逐层对应。"},
+        {"attempt": 2, "status": "rendered-unreviewed", "png": "P2/P2-attempt-2.png", "visualNote": "独立修订稿提高文字对比度并保留入口名称，但依据仍是汇总说明。"},
+        {"attempt": 3, "status": "rendered-unreviewed", "png": "P2/P2-attempt-3.png", "visualNote": "父任务反馈驱动修订：入口名称显式写出，四条准入依据按漏斗四层的实际垂直位置排列。"}
+      ],
+      "selfReview": {
+        "status": "needs-parent-review",
+        "purposeMet": true,
+        "readingOrderClear": true,
+        "contentComplete": true,
+        "semanticChecks": ["three named inputs visible", "four stages preserved", "four admission criteria preserved", "no conversion rate or invented quantity"],
+        "structureFit": "convergence-simple-funnel-001 preserves the shared-axis curved funnel, layer gaps and shaped flow arrow.",
+        "parentFeedback": "需修订：四条依据虽按阶段垂直拆分，但左侧正文与漏斗左缘间隔很大，末行也没有精确贴合最窄层，图文仍显割裂。",
+        "revisionOrigin": "attempt-3 is a parent-feedback-driven revision, but it is not accepted as a whole-page pass.",
+        "finalPng": "P2/P2-attempt-3.png",
+        "finalPptx": "P2/P2-attempt-3.pptx",
+        "layout": "P2/P2-attempt-3.layout.json"
+      }
+    },
+    {
+      "pageId": "P3",
+      "attempts": [
+        {"attempt": 1, "status": "rendered-unreviewed", "png": "P3/P3-attempt-1.png", "visualNote": "四级全貌与状态可读，但下一步说明远离当前/目标相关级别。"},
+        {"attempt": 2, "status": "rendered-unreviewed", "png": "P3/P3-attempt-2.png", "visualNote": "独立修订稿扩大阶梯区域，但行动说明仍属于底部收束。"},
+        {"attempt": 3, "status": "rendered-unreviewed", "png": "P3/P3-attempt-3.png", "visualNote": "父任务反馈驱动修订：结构左置，右侧行动说明靠近第2级到第3级，四级正文、当前2级和目标4级均保留。"}
+      ],
+      "selfReview": {
+        "status": "pass-candidate",
+        "purposeMet": true,
+        "readingOrderClear": true,
+        "contentComplete": true,
+        "semanticChecks": ["level 1 passive handling", "level 2 record formation", "level 3 periodic maintenance", "level 4 continuous improvement", "currentIndex=1", "targetIndex=3"],
+        "structureFit": "progression-maturity-steps-002 preserves the continuous treads, risers, shared projection and perspective text supports.",
+        "parentFeedback": "整页通过候选（需用户看版），右侧当前2级到3级行动重点已比首稿清楚；仍有精简余地。",
+        "revisionOrigin": "attempt-3 is a parent-feedback-driven revision and remains a candidate pending parent/user viewing.",
+        "finalPng": "P3/P3-attempt-3.png",
+        "finalPptx": "P3/P3-attempt-3.pptx",
+        "layout": "P3/P3-attempt-3.layout.json"
+      }
+    }
+  ],
+  "parentReviewBoundary": "This file records Luna's evidence-bound self-review. It does not claim 3/3 whole-page acceptance; the parent task remains the final acceptance authority.",
+  "limitations": [
+    "The existing harness validates disjoint rectangular text blocks and structure frames, so it cannot place a criterion directly on a funnel edge or draw a lightweight visual leader between a stage and an external note without a custom page builder.",
+    "The preserved folded-note and funnel implementations adapt their internal geometry and padding as a group; the agent can choose the outer frame but cannot independently tighten each internal card or layer.",
+    "The remaining P1/P2 issues are page-organization issues in the agent-chosen external text placement, not missing facts or failed structure invocation."
+  ],
+  "factCompleteness": {
+    "P1": ["资料齐全=关键文件集中归档", "版本清楚=当前版本标记明确", "责任明确=后续负责人可查", "例外有据=特殊处理附上依据", "主张包含接手者能独立继续工作且发送文件不等于验收"],
+    "P2": ["入口=访谈/工单/使用记录", "收集线索", "核对问题", "验证方案", "纳入发布", "准入依据=保留原始反馈/问题可重复观察/小样验证有效/责任人与交付范围明确", "未加入转化率或数量"],
+    "P3": ["1 被动处理=故障后临时组织抢修", "2 形成记录=故障原因与处理过程可查", "3 计划维护=按周期检查并落实责任", "4 持续改善=用复盘减少重复故障", "当前2级", "目标4级", "下一步突出2级到3级"]
+  }
+}

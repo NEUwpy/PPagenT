@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { structureSkillProfile } from './structure-skill-profile.mjs';
+import { structureSkillProfile, readStructureGuide } from './structure-skill-profile.mjs';
 const defaultRoot = path.resolve(import.meta.dirname, '../..');
 
 // Design discovery does not import mappers or require frozen Slot Contracts.
@@ -33,10 +33,15 @@ export async function loadStructureSkill(assetId, root = defaultRoot) {
   let visualIntent = '';
   try { visualIntent = await fs.readFile(intentPath, 'utf8'); }
   catch (error) { if (error.code !== 'ENOENT') throw error; }
-  return { ...descriptor, visualIntent, skill: structureSkillProfile(descriptor.asset, visualIntent) };
+  const guide = await readStructureGuide(descriptor.assetDir);
+  return { ...descriptor, visualIntent, guide, skill: structureSkillProfile(descriptor.asset, visualIntent, guide) };
 }
-export async function executeStructureSkill({ slide, skin, targetFrame, references, build, content, root = defaultRoot }) {
-  if (typeof build !== 'function') throw new Error('结构 Skill 需要 build 原生构建方法；旧 parameters／固定槽位调用已退出此入口');
+export async function executeStructureSkill({ slide, skin, targetFrame, references, build, content, execution, root = defaultRoot }) {
+  if (execution === 'preserved-design') {
+    if (build) throw new Error('保留造型模式使用已登记实现，不接受额外 build');
+    ({ buildPreservedStructure: build } = await import('./preserved-structure-build.mjs'));
+  }
+  if (typeof build !== 'function') throw new Error('结构 Skill 需要 build 原生构建方法，或指定 execution: preserved-design 使用已登记实现');
   if (!Array.isArray(references) || !references.length) throw new Error('需要记录采用的结构参考与 preservedFeatures');
   for (const reference of references) {
     if (!reference.assetId || !Array.isArray(reference.preservedFeatures) || !reference.preservedFeatures.length

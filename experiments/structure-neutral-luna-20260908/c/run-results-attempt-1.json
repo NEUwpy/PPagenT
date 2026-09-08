@@ -1,0 +1,613 @@
+{
+  "skin": "neutral-editorial-001",
+  "results": [
+    {
+      "caseId": "c1",
+      "attempt": 1,
+      "result": {
+        "key": "c1-attempt-1",
+        "caseId": "c1",
+        "attempt": 1,
+        "model": "gpt-5.6-luna",
+        "reasoning": "high",
+        "spec": {
+          "caseId": "c1",
+          "title": "设备维护能力成熟度",
+          "assetId": "progression-maturity-steps-002",
+          "content": {
+            "levels": [
+              {
+                "key": "level-1",
+                "title": "被动处理",
+                "body": "故障后临时组织抢修"
+              },
+              {
+                "key": "level-2",
+                "title": "形成记录",
+                "body": "故障原因与处理过程可查"
+              },
+              {
+                "key": "level-3",
+                "title": "计划维护",
+                "body": "按周期检查并落实责任"
+              },
+              {
+                "key": "level-4",
+                "title": "持续改善",
+                "body": "用复盘减少重复故障"
+              }
+            ],
+            "showStatus": true,
+            "currentIndex": 1
+          },
+          "frame": {
+            "left": 70,
+            "top": 176,
+            "width": 1140,
+            "height": 410
+          },
+          "blocks": [
+            {
+              "text": "当前在形成记录阶段，需经过计划维护达到持续改善。",
+              "role": "aux",
+              "frame": {
+                "left": 290,
+                "top": 607,
+                "width": 700,
+                "height": 28
+              }
+            }
+          ],
+          "reason": "四个明确能力门槛沿共同维度递进，采用已登记成熟度能力阶梯；宽结构区保留连续阶台、同一消失点与随透视文字承托面。",
+          "chapter": "03",
+          "pageNumber": 9
+        },
+        "skin": {
+          "id": "neutral-editorial-001",
+          "fonts": {
+            "display": "Noto Serif SC",
+            "body": "Noto Sans SC"
+          },
+          "font": "Noto Sans SC",
+          "primaryColor": "#A35D4F",
+          "background": "#F5F4EF",
+          "surface": "#EEECE5",
+          "dark": "#20201D",
+          "body": "#4B4A45",
+          "muted": "#85837B",
+          "line": "#D8D5CC",
+          "bodyFrame": {
+            "left": 56,
+            "top": 135,
+            "width": 1168,
+            "height": 525
+          },
+          "typography": {
+            "componentHeading": 15.75,
+            "componentTitle": 15.75,
+            "componentItemTitle": 12.75,
+            "componentLead": 12.75,
+            "componentBody": 12.75,
+            "componentLabel": 12.75,
+            "componentMeta": 11.25
+          }
+        },
+        "status": "rendered-unreviewed",
+        "invocation": {
+          "result": {
+            "mode": "preserved-design",
+            "componentId": "progression-maturity-steps",
+            "nodeCount": 34
+          },
+          "nativeShapeDelta": 34,
+          "validation": "rendered-unreviewed"
+        },
+        "measurements": {
+          "titleRight": 337,
+          "overflow": [],
+          "fontReady": true
+        },
+        "fonts": [
+          {
+            "name": "level-1-text-heading",
+            "sizePx": 17,
+            "typeface": "Noto Serif SC",
+            "text": "被动处理"
+          },
+          {
+            "name": "level-1-text-body",
+            "sizePx": 15,
+            "typeface": "Noto Sans SC",
+            "text": "故障后临时组织\n抢修"
+          },
+          {
+            "name": "maturity-level-index-1",
+            "sizePx": 15,
+            "typeface": "Noto Sans SC",
+            "text": "01"
+          },
+          {
+            "name": "level-2-text-heading",
+            "sizePx": 17,
+            "typeface": "Noto Serif SC",
+            "text": "形成记录"
+          },
+          {
+            "name": "level-2-text-body",
+            "sizePx": 15,
+            "typeface": "Noto Sans SC",
+            "text": "故障原因与处理\n过程可查"
+          },
+          {
+            "name": "maturity-level-index-2",
+            "sizePx": 15,
+            "typeface": "Noto Sans SC",
+            "text": "02"
+          },
+          {
+            "name": "level-3-text-heading",
+            "sizePx": 17,
+            "typeface": "Noto Serif SC",
+            "text": "计划维护"
+          },
+          {
+            "name": "level-3-text-body",
+            "sizePx": 15,
+            "typeface": "Noto Sans SC",
+            "text": "按周期检查并落\n实责任"
+          },
+          {
+            "name": "maturity-level-index-3",
+            "sizePx": 15,
+            "typeface": "Noto Sans SC",
+            "text": "03"
+          },
+          {
+            "name": "level-4-text-heading",
+            "sizePx": 17,
+            "typeface": "Noto Serif SC",
+            "text": "持续改善"
+          },
+          {
+            "name": "level-4-text-body",
+            "sizePx": 15,
+            "typeface": "Noto Sans SC",
+            "text": "用复盘减少重复\n故障"
+          },
+          {
+            "name": "maturity-level-index-4",
+            "sizePx": 15,
+            "typeface": "Noto Sans SC",
+            "text": "04"
+          },
+          {
+            "name": "maturity-current-status",
+            "sizePx": 15,
+            "typeface": "Noto Sans SC",
+            "text": "当前"
+          },
+          {
+            "name": "maturity-target-status",
+            "sizePx": 15,
+            "typeface": "Noto Sans SC",
+            "text": "目标"
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "c2",
+      "attempt": 1,
+      "result": {
+        "key": "c2-attempt-1",
+        "caseId": "c2",
+        "attempt": 1,
+        "model": "gpt-5.6-luna",
+        "reasoning": "high",
+        "spec": {
+          "caseId": "c2",
+          "title": "设备维护能力成熟度",
+          "assetId": "progression-maturity-steps-002",
+          "content": {
+            "levels": [
+              {
+                "key": "level-1",
+                "title": "被动处理",
+                "body": "故障后临时组织抢修"
+              },
+              {
+                "key": "level-2",
+                "title": "形成记录",
+                "body": "故障原因与处理过程可查"
+              },
+              {
+                "key": "level-3",
+                "title": "计划维护",
+                "body": "按周期检查并落实责任"
+              },
+              {
+                "key": "level-4",
+                "title": "持续改善",
+                "body": "用复盘减少重复故障"
+              }
+            ],
+            "showStatus": true,
+            "currentIndex": 1
+          },
+          "frame": {
+            "left": 70,
+            "top": 176,
+            "width": 1140,
+            "height": 258
+          },
+          "blocks": [
+            {
+              "text": "当前 · 第2级：形成记录\n故障原因与处理过程可查",
+              "role": "body",
+              "frame": {
+                "left": 70,
+                "top": 462,
+                "width": 545,
+                "height": 118
+              }
+            },
+            {
+              "text": "目标 · 第4级：持续改善\n用复盘减少重复故障",
+              "role": "body",
+              "frame": {
+                "left": 665,
+                "top": 462,
+                "width": 545,
+                "height": 118
+              }
+            }
+          ],
+          "reason": "与c1同稿、同级顺序及状态，改用上半区结构与下方左右两列说明，验证高度缩减仍能保留阶台关系与文字承托面。",
+          "chapter": "03",
+          "pageNumber": 10
+        },
+        "skin": {
+          "id": "neutral-editorial-001",
+          "fonts": {
+            "display": "Noto Serif SC",
+            "body": "Noto Sans SC"
+          },
+          "font": "Noto Sans SC",
+          "primaryColor": "#A35D4F",
+          "background": "#F5F4EF",
+          "surface": "#EEECE5",
+          "dark": "#20201D",
+          "body": "#4B4A45",
+          "muted": "#85837B",
+          "line": "#D8D5CC",
+          "bodyFrame": {
+            "left": 56,
+            "top": 135,
+            "width": 1168,
+            "height": 525
+          },
+          "typography": {
+            "componentHeading": 15.75,
+            "componentTitle": 15.75,
+            "componentItemTitle": 12.75,
+            "componentLead": 12.75,
+            "componentBody": 12.75,
+            "componentLabel": 12.75,
+            "componentMeta": 11.25
+          }
+        },
+        "status": "rendered-unreviewed",
+        "invocation": {
+          "result": {
+            "mode": "preserved-design",
+            "componentId": "progression-maturity-steps",
+            "nodeCount": 34
+          },
+          "nativeShapeDelta": 34,
+          "validation": "rendered-unreviewed"
+        },
+        "measurements": {
+          "titleRight": 337,
+          "overflow": [],
+          "fontReady": true
+        },
+        "fonts": [
+          {
+            "name": "level-1-text-heading",
+            "sizePx": 17,
+            "typeface": "Noto Serif SC",
+            "text": "被动处理"
+          },
+          {
+            "name": "level-1-text-body",
+            "sizePx": 15,
+            "typeface": "Noto Sans SC",
+            "text": "故障后临时组\n织抢修"
+          },
+          {
+            "name": "maturity-level-index-1",
+            "sizePx": 15,
+            "typeface": "Noto Sans SC",
+            "text": "01"
+          },
+          {
+            "name": "level-2-text-heading",
+            "sizePx": 17,
+            "typeface": "Noto Serif SC",
+            "text": "形成记录"
+          },
+          {
+            "name": "level-2-text-body",
+            "sizePx": 15,
+            "typeface": "Noto Sans SC",
+            "text": "故障原因与处\n理过程可查"
+          },
+          {
+            "name": "maturity-level-index-2",
+            "sizePx": 15,
+            "typeface": "Noto Sans SC",
+            "text": "02"
+          },
+          {
+            "name": "level-3-text-heading",
+            "sizePx": 17,
+            "typeface": "Noto Serif SC",
+            "text": "计划维护"
+          },
+          {
+            "name": "level-3-text-body",
+            "sizePx": 15,
+            "typeface": "Noto Sans SC",
+            "text": "按周期检查并\n落实责任"
+          },
+          {
+            "name": "maturity-level-index-3",
+            "sizePx": 15,
+            "typeface": "Noto Sans SC",
+            "text": "03"
+          },
+          {
+            "name": "level-4-text-heading",
+            "sizePx": 17,
+            "typeface": "Noto Serif SC",
+            "text": "持续改善"
+          },
+          {
+            "name": "level-4-text-body",
+            "sizePx": 15,
+            "typeface": "Noto Sans SC",
+            "text": "用复盘减少重\n复故障"
+          },
+          {
+            "name": "maturity-level-index-4",
+            "sizePx": 15,
+            "typeface": "Noto Sans SC",
+            "text": "04"
+          },
+          {
+            "name": "maturity-current-status",
+            "sizePx": 15,
+            "typeface": "Noto Sans SC",
+            "text": "当前"
+          },
+          {
+            "name": "maturity-target-status",
+            "sizePx": 15,
+            "typeface": "Noto Sans SC",
+            "text": "目标"
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "c3",
+      "attempt": 1,
+      "result": {
+        "key": "c3-attempt-1",
+        "caseId": "c3",
+        "attempt": 1,
+        "model": "gpt-5.6-luna",
+        "reasoning": "high",
+        "spec": {
+          "caseId": "c3",
+          "title": "知识管理成熟度",
+          "assetId": "progression-maturity-steps-002",
+          "content": {
+            "levels": [
+              {
+                "key": "level-1",
+                "title": "个人保存",
+                "body": "个人留存经验，依赖个人记忆"
+              },
+              {
+                "key": "level-2",
+                "title": "集中归档",
+                "body": "资料集中归档，入口逐步统一"
+              },
+              {
+                "key": "level-3",
+                "title": "统一分类",
+                "body": "按统一分类整理，便于查找"
+              },
+              {
+                "key": "level-4",
+                "title": "团队复用",
+                "body": "团队成员可复用既有方法"
+              },
+              {
+                "key": "level-5",
+                "title": "持续更新",
+                "body": "持续补充内容，保持知识有效"
+              },
+              {
+                "key": "level-6",
+                "title": "反馈优化",
+                "body": "根据使用反馈持续优化"
+              }
+            ],
+            "showStatus": true,
+            "currentIndex": 2
+          },
+          "frame": {
+            "left": 70,
+            "top": 176,
+            "width": 1140,
+            "height": 410
+          },
+          "blocks": [
+            {
+              "text": "当前在统一分类阶段，后续需走向团队复用、持续更新与反馈优化。",
+              "role": "aux",
+              "frame": {
+                "left": 235,
+                "top": 607,
+                "width": 810,
+                "height": 28
+              }
+            }
+          ],
+          "reason": "六个知识管理等级是同一能力维度的离散门槛，采用已登记成熟度能力阶梯；保留六级顺序、当前第3级和目标第6级。",
+          "chapter": "03",
+          "pageNumber": 11
+        },
+        "skin": {
+          "id": "neutral-editorial-001",
+          "fonts": {
+            "display": "Noto Serif SC",
+            "body": "Noto Sans SC"
+          },
+          "font": "Noto Sans SC",
+          "primaryColor": "#A35D4F",
+          "background": "#F5F4EF",
+          "surface": "#EEECE5",
+          "dark": "#20201D",
+          "body": "#4B4A45",
+          "muted": "#85837B",
+          "line": "#D8D5CC",
+          "bodyFrame": {
+            "left": 56,
+            "top": 135,
+            "width": 1168,
+            "height": 525
+          },
+          "typography": {
+            "componentHeading": 15.75,
+            "componentTitle": 15.75,
+            "componentItemTitle": 12.75,
+            "componentLead": 12.75,
+            "componentBody": 12.75,
+            "componentLabel": 12.75,
+            "componentMeta": 11.25
+          }
+        },
+        "status": "rejected",
+        "error": "progression-maturity-steps 的组合排版无法在安全 box 内完整呈现：level-1-text, level-2-text, level-5-text [{\"slotId\":\"level-1-text\",\"frame\":{\"left\":167.172,\"top\":231.281,\"width\":120.547,\"height\":95,\"rotation\":0},\"innerFrame\":{\"width\":98.88,\"height\":71.667,\"padding\":{\"top\":8.33333,\"right\":10.8333,\"bottom\":15,\"left\":10.8333}},\"layout\":{\"id\":\"heading-content-flow\",\"defaultId\":\"heading-content-flow\",\"compatible\":[\"statement-flow\",\"heading-content-flow\"],\"contentRoles\":[\"heading\",\"body\"],\"status\":\"overflow\",\"align\":\"left\",\"valign\":\"bottom\",\"density\":\"compact\",\"parts\":[{\"part\":\"heading\",\"field\":\"title\",\"primitive\":\"heading\",\"frame\":{\"left\":178,\"top\":227.672,\"width\":98.891,\"height\":20.047,\"rotation\":0},\"text\":\"个人保存\",\"lineCount\":1,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Serif SC\",\"fontSizePt\":12.75,\"fontWeight\":\"700\",\"alignment\":\"left\",\"lineHeightPt\":15.045},\"capacity\":{\"recommendedMaxChars\":4,\"hardMaxChars\":5,\"hardMaxLines\":1}},{\"part\":\"body\",\"field\":\"body\",\"primitive\":\"body\",\"frame\":{\"left\":178,\"top\":253.719,\"width\":98.891,\"height\":57.563,\"rotation\":0},\"text\":\"个人留存经\\n验，依赖个人\\n记忆\",\"lineCount\":3,\"typography\":{\"role\":\"componentMeta\",\"typeface\":\"Noto Sans SC\",\"fontSizePt\":11.25,\"fontWeight\":\"400\",\"alignment\":\"left\",\"lineHeightPt\":14.4},\"capacity\":{\"recommendedMaxChars\":14,\"hardMaxChars\":18,\"hardMaxLines\":3}}]}},{\"slotId\":\"level-2-text\",\"frame\":{\"left\":300.141,\"top\":194.938,\"width\":120.547,\"height\":95,\"rotation\":0},\"innerFrame\":{\"width\":98.88,\"height\":71.667,\"padding\":{\"top\":8.33333,\"right\":10.8333,\"bottom\":15,\"left\":10.8333}},\"layout\":{\"id\":\"heading-content-flow\",\"defaultId\":\"heading-content-flow\",\"compatible\":[\"statement-flow\",\"heading-content-flow\"],\"contentRoles\":[\"heading\",\"body\"],\"status\":\"overflow\",\"align\":\"left\",\"valign\":\"bottom\",\"density\":\"compact\",\"parts\":[{\"part\":\"heading\",\"field\":\"title\",\"primitive\":\"heading\",\"frame\":{\"left\":310.969,\"top\":191.328,\"width\":98.891,\"height\":20.047,\"rotation\":0},\"text\":\"集中归档\",\"lineCount\":1,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Serif SC\",\"fontSizePt\":12.75,\"fontWeight\":\"700\",\"alignment\":\"left\",\"lineHeightPt\":15.045},\"capacity\":{\"recommendedMaxChars\":4,\"hardMaxChars\":5,\"hardMaxLines\":1}},{\"part\":\"body\",\"field\":\"body\",\"primitive\":\"body\",\"frame\":{\"left\":310.969,\"top\":217.375,\"width\":98.891,\"height\":57.563,\"rotation\":0},\"text\":\"资料集中归\\n档，入口逐步\\n统一\",\"lineCount\":3,\"typography\":{\"role\":\"componentMeta\",\"typeface\":\"Noto Sans SC\",\"fontSizePt\":11.25,\"fontWeight\":\"400\",\"alignment\":\"left\",\"lineHeightPt\":14.4},\"capacity\":{\"recommendedMaxChars\":14,\"hardMaxChars\":18,\"hardMaxLines\":3}}]}},{\"slotId\":\"level-5-text\",\"frame\":{\"left\":699.047,\"top\":85.922,\"width\":120.547,\"height\":95,\"rotation\":0},\"innerFrame\":{\"width\":98.88,\"height\":71.667,\"padding\":{\"top\":8.33333,\"right\":10.8333,\"bottom\":15,\"left\":10.8333}},\"layout\":{\"id\":\"heading-content-flow\",\"defaultId\":\"heading-content-flow\",\"compatible\":[\"statement-flow\",\"heading-content-flow\"],\"contentRoles\":[\"heading\",\"body\"],\"status\":\"overflow\",\"align\":\"left\",\"valign\":\"bottom\",\"density\":\"compact\",\"parts\":[{\"part\":\"heading\",\"field\":\"title\",\"primitive\":\"heading\",\"frame\":{\"left\":709.875,\"top\":82.313,\"width\":98.891,\"height\":20.047,\"rotation\":0},\"text\":\"持续更新\",\"lineCount\":1,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Serif SC\",\"fontSizePt\":12.75,\"fontWeight\":\"700\",\"alignment\":\"left\",\"lineHeightPt\":15.045},\"capacity\":{\"recommendedMaxChars\":4,\"hardMaxChars\":5,\"hardMaxLines\":1}},{\"part\":\"body\",\"field\":\"body\",\"primitive\":\"body\",\"frame\":{\"left\":709.875,\"top\":108.359,\"width\":98.891,\"height\":57.563,\"rotation\":0},\"text\":\"持续补充内\\n容，保持知识\\n有效\",\"lineCount\":3,\"typography\":{\"role\":\"componentMeta\",\"typeface\":\"Noto Sans SC\",\"fontSizePt\":11.25,\"fontWeight\":\"400\",\"alignment\":\"left\",\"lineHeightPt\":14.4},\"capacity\":{\"recommendedMaxChars\":14,\"hardMaxChars\":18,\"hardMaxLines\":3}}]}}]"
+      }
+    },
+    {
+      "caseId": "c4",
+      "attempt": 1,
+      "result": {
+        "key": "c4-attempt-1",
+        "caseId": "c4",
+        "attempt": 1,
+        "model": "gpt-5.6-luna",
+        "reasoning": "high",
+        "spec": {
+          "caseId": "c4",
+          "title": "知识管理成熟度",
+          "assetId": "progression-maturity-steps-002",
+          "content": {
+            "levels": [
+              {
+                "key": "level-1",
+                "title": "个人保存",
+                "body": "个人留存经验，依赖个人记忆"
+              },
+              {
+                "key": "level-2",
+                "title": "集中归档",
+                "body": "资料集中归档，入口逐步统一"
+              },
+              {
+                "key": "level-3",
+                "title": "统一分类",
+                "body": "按统一分类整理，便于查找"
+              },
+              {
+                "key": "level-4",
+                "title": "团队复用",
+                "body": "团队成员可复用既有方法"
+              },
+              {
+                "key": "level-5",
+                "title": "持续更新",
+                "body": "持续补充内容，保持知识有效"
+              },
+              {
+                "key": "level-6",
+                "title": "反馈优化",
+                "body": "根据使用反馈持续优化"
+              }
+            ],
+            "showStatus": true,
+            "currentIndex": 2
+          },
+          "frame": {
+            "left": 340,
+            "top": 280,
+            "width": 600,
+            "height": 240
+          },
+          "blocks": [
+            {
+              "text": "首试：600×240；六级稿件与当前/目标状态完整保留。",
+              "role": "aux",
+              "frame": {
+                "left": 245,
+                "top": 548,
+                "width": 790,
+                "height": 28
+              }
+            }
+          ],
+          "reason": "复用c3同稿六级成熟度阶梯，在600×240区域进行真实容量压力测试；不删除等级、事实或降低字号。",
+          "chapter": "03",
+          "pageNumber": 12
+        },
+        "skin": {
+          "id": "neutral-editorial-001",
+          "fonts": {
+            "display": "Noto Serif SC",
+            "body": "Noto Sans SC"
+          },
+          "font": "Noto Sans SC",
+          "primaryColor": "#A35D4F",
+          "background": "#F5F4EF",
+          "surface": "#EEECE5",
+          "dark": "#20201D",
+          "body": "#4B4A45",
+          "muted": "#85837B",
+          "line": "#D8D5CC",
+          "bodyFrame": {
+            "left": 56,
+            "top": 135,
+            "width": 1168,
+            "height": 525
+          },
+          "typography": {
+            "componentHeading": 15.75,
+            "componentTitle": 15.75,
+            "componentItemTitle": 12.75,
+            "componentLead": 12.75,
+            "componentBody": 12.75,
+            "componentLabel": 12.75,
+            "componentMeta": 11.25
+          }
+        },
+        "status": "rejected",
+        "error": "progression-maturity-steps 的组合排版无法在安全 box 内完整呈现：level-1-text, level-2-text, level-3-text, level-4-text, level-5-text, level-6-text [{\"slotId\":\"level-1-text\",\"frame\":{\"left\":67.328,\"top\":99.781,\"width\":64.313,\"height\":91.188,\"rotation\":0},\"innerFrame\":{\"width\":43.513,\"height\":68.788,\"padding\":{\"top\":8,\"right\":10.4,\"bottom\":14.4,\"left\":10.4}},\"layout\":{\"id\":\"heading-content-flow\",\"defaultId\":\"heading-content-flow\",\"compatible\":[\"statement-flow\",\"heading-content-flow\"],\"contentRoles\":[\"heading\",\"body\"],\"status\":\"overflow\",\"align\":\"left\",\"valign\":\"bottom\",\"density\":\"compact\",\"parts\":[{\"part\":\"heading\",\"field\":\"title\",\"primitive\":\"heading\",\"frame\":{\"left\":77.719,\"top\":-3.828,\"width\":43.531,\"height\":40.094,\"rotation\":0},\"text\":\"个人\\n保存\",\"lineCount\":2,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Serif SC\",\"fontSizePt\":12.75,\"fontWeight\":\"700\",\"alignment\":\"left\",\"lineHeightPt\":15.045},\"capacity\":{\"recommendedMaxChars\":3,\"hardMaxChars\":4,\"hardMaxLines\":2}},{\"part\":\"body\",\"field\":\"body\",\"primitive\":\"body\",\"frame\":{\"left\":77.719,\"top\":42.266,\"width\":43.531,\"height\":134.313,\"rotation\":0},\"text\":\"个人\\n留存\\n经\\n验，\\n依赖\\n个人\\n记忆\",\"lineCount\":7,\"typography\":{\"role\":\"componentMeta\",\"typeface\":\"Noto Sans SC\",\"fontSizePt\":11.25,\"fontWeight\":\"400\",\"alignment\":\"left\",\"lineHeightPt\":14.4},\"capacity\":{\"recommendedMaxChars\":11,\"hardMaxChars\":14,\"hardMaxLines\":7}}]}},{\"slotId\":\"level-2-text\",\"frame\":{\"left\":145.156,\"top\":78.516,\"width\":64.313,\"height\":91.188,\"rotation\":0},\"innerFrame\":{\"width\":43.513,\"height\":68.788,\"padding\":{\"top\":8,\"right\":10.4,\"bottom\":14.4,\"left\":10.4}},\"layout\":{\"id\":\"heading-content-flow\",\"defaultId\":\"heading-content-flow\",\"compatible\":[\"statement-flow\",\"heading-content-flow\"],\"contentRoles\":[\"heading\",\"body\"],\"status\":\"overflow\",\"align\":\"left\",\"valign\":\"bottom\",\"density\":\"compact\",\"parts\":[{\"part\":\"heading\",\"field\":\"title\",\"primitive\":\"heading\",\"frame\":{\"left\":155.547,\"top\":-25.094,\"width\":43.531,\"height\":40.094,\"rotation\":0},\"text\":\"集中\\n归档\",\"lineCount\":2,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Serif SC\",\"fontSizePt\":12.75,\"fontWeight\":\"700\",\"alignment\":\"left\",\"lineHeightPt\":15.045},\"capacity\":{\"recommendedMaxChars\":3,\"hardMaxChars\":4,\"hardMaxLines\":2}},{\"part\":\"body\",\"field\":\"body\",\"primitive\":\"body\",\"frame\":{\"left\":155.547,\"top\":21,\"width\":43.531,\"height\":134.313,\"rotation\":0},\"text\":\"资料\\n集中\\n归\\n档，\\n入口\\n逐步\\n统一\",\"lineCount\":7,\"typography\":{\"role\":\"componentMeta\",\"typeface\":\"Noto Sans SC\",\"fontSizePt\":11.25,\"fontWeight\":\"400\",\"alignment\":\"left\",\"lineHeightPt\":14.4},\"capacity\":{\"recommendedMaxChars\":11,\"hardMaxChars\":14,\"hardMaxLines\":7}}]}},{\"slotId\":\"level-3-text\",\"frame\":{\"left\":222.984,\"top\":57.25,\"width\":64.313,\"height\":91.188,\"rotation\":0},\"innerFrame\":{\"width\":43.513,\"height\":68.788,\"padding\":{\"top\":8,\"right\":10.4,\"bottom\":14.4,\"left\":10.4}},\"layout\":{\"id\":\"heading-content-flow\",\"defaultId\":\"heading-content-flow\",\"compatible\":[\"statement-flow\",\"heading-content-flow\"],\"contentRoles\":[\"heading\",\"body\"],\"status\":\"overflow\",\"align\":\"left\",\"valign\":\"bottom\",\"density\":\"compact\",\"parts\":[{\"part\":\"heading\",\"field\":\"title\",\"primitive\":\"heading\",\"frame\":{\"left\":233.375,\"top\":-27.172,\"width\":43.531,\"height\":40.094,\"rotation\":0},\"text\":\"统一\\n分类\",\"lineCount\":2,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Serif SC\",\"fontSizePt\":12.75,\"fontWeight\":\"700\",\"alignment\":\"left\",\"lineHeightPt\":15.045},\"capacity\":{\"recommendedMaxChars\":3,\"hardMaxChars\":4,\"hardMaxLines\":2}},{\"part\":\"body\",\"field\":\"body\",\"primitive\":\"body\",\"frame\":{\"left\":233.375,\"top\":18.922,\"width\":43.531,\"height\":115.125,\"rotation\":0},\"text\":\"按统\\n一分\\n类整\\n理，\\n便于\\n查找\",\"lineCount\":6,\"typography\":{\"role\":\"componentMeta\",\"typeface\":\"Noto Sans SC\",\"fontSizePt\":11.25,\"fontWeight\":\"400\",\"alignment\":\"left\",\"lineHeightPt\":14.4},\"capacity\":{\"recommendedMaxChars\":9,\"hardMaxChars\":12,\"hardMaxLines\":6}}]}},{\"slotId\":\"level-4-text\",\"frame\":{\"left\":300.828,\"top\":35.969,\"width\":64.313,\"height\":91.188,\"rotation\":0},\"innerFrame\":{\"width\":43.513,\"height\":68.788,\"padding\":{\"top\":8,\"right\":10.4,\"bottom\":14.4,\"left\":10.4}},\"layout\":{\"id\":\"heading-content-flow\",\"defaultId\":\"heading-content-flow\",\"compatible\":[\"statement-flow\",\"heading-content-flow\"],\"contentRoles\":[\"heading\",\"body\"],\"status\":\"overflow\",\"align\":\"left\",\"valign\":\"bottom\",\"density\":\"compact\",\"parts\":[{\"part\":\"heading\",\"field\":\"title\",\"primitive\":\"heading\",\"frame\":{\"left\":311.219,\"top\":-48.453,\"width\":43.531,\"height\":40.094,\"rotation\":0},\"text\":\"团队\\n复用\",\"lineCount\":2,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Serif SC\",\"fontSizePt\":12.75,\"fontWeight\":\"700\",\"alignment\":\"left\",\"lineHeightPt\":15.045},\"capacity\":{\"recommendedMaxChars\":3,\"hardMaxChars\":4,\"hardMaxLines\":2}},{\"part\":\"body\",\"field\":\"body\",\"primitive\":\"body\",\"frame\":{\"left\":311.219,\"top\":-2.359,\"width\":43.531,\"height\":115.125,\"rotation\":0},\"text\":\"团队\\n成员\\n可复\\n用既\\n有方\\n法\",\"lineCount\":6,\"typography\":{\"role\":\"componentMeta\",\"typeface\":\"Noto Sans SC\",\"fontSizePt\":11.25,\"fontWeight\":\"400\",\"alignment\":\"left\",\"lineHeightPt\":14.4},\"capacity\":{\"recommendedMaxChars\":9,\"hardMaxChars\":12,\"hardMaxLines\":6}}]}},{\"slotId\":\"level-5-text\",\"frame\":{\"left\":378.656,\"top\":14.703,\"width\":64.313,\"height\":91.188,\"rotation\":0},\"innerFrame\":{\"width\":43.513,\"height\":68.788,\"padding\":{\"top\":8,\"right\":10.4,\"bottom\":14.4,\"left\":10.4}},\"layout\":{\"id\":\"heading-content-flow\",\"defaultId\":\"heading-content-flow\",\"compatible\":[\"statement-flow\",\"heading-content-flow\"],\"contentRoles\":[\"heading\",\"body\"],\"status\":\"overflow\",\"align\":\"left\",\"valign\":\"bottom\",\"density\":\"compact\",\"parts\":[{\"part\":\"heading\",\"field\":\"title\",\"primitive\":\"heading\",\"frame\":{\"left\":389.047,\"top\":-88.906,\"width\":43.531,\"height\":40.094,\"rotation\":0},\"text\":\"持续\\n更新\",\"lineCount\":2,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Serif SC\",\"fontSizePt\":12.75,\"fontWeight\":\"700\",\"alignment\":\"left\",\"lineHeightPt\":15.045},\"capacity\":{\"recommendedMaxChars\":3,\"hardMaxChars\":4,\"hardMaxLines\":2}},{\"part\":\"body\",\"field\":\"body\",\"primitive\":\"body\",\"frame\":{\"left\":389.047,\"top\":-42.812,\"width\":43.531,\"height\":134.313,\"rotation\":0},\"text\":\"持续\\n补充\\n内\\n容，\\n保持\\n知识\\n有效\",\"lineCount\":7,\"typography\":{\"role\":\"componentMeta\",\"typeface\":\"Noto Sans SC\",\"fontSizePt\":11.25,\"fontWeight\":\"400\",\"alignment\":\"left\",\"lineHeightPt\":14.4},\"capacity\":{\"recommendedMaxChars\":11,\"hardMaxChars\":14,\"hardMaxLines\":7}}]}},{\"slotId\":\"level-6-text\",\"frame\":{\"left\":456.5,\"top\":-6.547,\"width\":64.313,\"height\":91.188,\"rotation\":0},\"innerFrame\":{\"width\":43.513,\"height\":68.788,\"padding\":{\"top\":8,\"right\":10.4,\"bottom\":14.4,\"left\":10.4}},\"layout\":{\"id\":\"heading-content-flow\",\"defaultId\":\"heading-content-flow\",\"compatible\":[\"statement-flow\",\"heading-content-flow\"],\"contentRoles\":[\"heading\",\"body\"],\"status\":\"overflow\",\"align\":\"left\",\"valign\":\"bottom\",\"density\":\"compact\",\"parts\":[{\"part\":\"heading\",\"field\":\"title\",\"primitive\":\"heading\",\"frame\":{\"left\":466.891,\"top\":-71.781,\"width\":43.531,\"height\":40.094,\"rotation\":0},\"text\":\"反馈\\n优化\",\"lineCount\":2,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Serif SC\",\"fontSizePt\":12.75,\"fontWeight\":\"700\",\"alignment\":\"left\",\"lineHeightPt\":15.045},\"capacity\":{\"recommendedMaxChars\":3,\"hardMaxChars\":4,\"hardMaxLines\":2}},{\"part\":\"body\",\"field\":\"body\",\"primitive\":\"body\",\"frame\":{\"left\":466.891,\"top\":-25.687,\"width\":43.531,\"height\":95.938,\"rotation\":0},\"text\":\"根据\\n使用\\n反馈\\n持续\\n优化\",\"lineCount\":5,\"typography\":{\"role\":\"componentMeta\",\"typeface\":\"Noto Sans SC\",\"fontSizePt\":11.25,\"fontWeight\":\"400\",\"alignment\":\"left\",\"lineHeightPt\":14.4},\"capacity\":{\"recommendedMaxChars\":8,\"hardMaxChars\":10,\"hardMaxLines\":5}}]}}]"
+      }
+    }
+  ]
+}

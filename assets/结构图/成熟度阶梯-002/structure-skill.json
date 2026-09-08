@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "assetId": "progression-maturity-steps-002",
+  "features": [
+    "连续阶台从低处向高处递进",
+    "踏面和立面共享一个投影体系",
+    "每级说明由随形承托面组织"
+  ],
+  "adaptation": "按级数重新计算踏面、立面和说明位置；内容决定阶段，不用固定框高限制正文。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "sample-verified-candidate",
+    "note": "已保留原造型完成8组尺寸、数量与换稿样本的构建和父任务复核；候选待用户查看，不代表任意内容、Skin或区域均已验证。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "连续阶台的踏面、立面和接缝",
+      "同一消失点",
+      "随透视文字承托面"
+    ],
+    "variables": [
+      "等级数",
+      "台阶宽高和深度",
+      "文案",
+      "可选当前与目标状态层"
+    ],
+    "coupledChanges": "所有面及深度边用同一投影生成；标签承托面随阶台变化，状态绑定真实等级",
+    "avoid": "不能退化成分离柱块或另贴卡片；连续成长不能硬解释为离散等级",
+    "status": "implemented-in-three-structure-pilot",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  },
+  "implementation": {
+    "mode": "preserved-design",
+    "status": "sample-verified-candidate",
+    "entry": "review.mjs",
+    "counts": "沿用原实现范围；区域变化按真实文字测量拒绝溢出",
+    "evidence": "experiments/structure-size-pilot/README.md",
+    "sizeExamples": {
+      "L": 1,
+      "M": 0.85,
+      "S": 0.7
+    },
+    "typography": "既有允许档位；显式 Skin 字号优先；图标与小配件联动；容纳不下则拒绝"
+  }
+}

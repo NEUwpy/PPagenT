@@ -1,4 +1,5 @@
 import { resolveTablerIcon, tablerIconSvgMarkup } from "../../../src/icons/tabler-icon-resolver.mjs";
+import { fitPreservedDesign, preservedTypography } from "../../../src/visual-runtime/preserved-design-layout.mjs";
 
 const DESIGN_FRAME = Object.freeze({ width: 1170, height: 492 });
 const COLORS = Object.freeze(["#2F5EA8", "#3F70A9", "#4F82B5", "#6697C5", "#78A8D5", "#8BB9E0"]);
@@ -23,7 +24,7 @@ function inputMarkerModel(item, index) {
   return { label, query, icon, mode: icon ? "icon" : "text" };
 }
 
-function normalizeParameters(parameters) {
+function normalizeParameters(parameters, adaptive = false) {
   if (!parameters || !Array.isArray(parameters.inputs) || !Array.isArray(parameters.steps)) throw new Error("简明转化漏斗需要 inputs 与 steps");
   if (parameters.inputs.length > 7) throw new Error("inputs 需要 0–7 项");
   if (parameters.steps.length < 3 || parameters.steps.length > 6) throw new Error("steps 需要 3–6 项");
@@ -34,7 +35,7 @@ function normalizeParameters(parameters) {
     })),
     steps: parameters.steps.map((step, index) => ({
       key: clean(step?.key) || `step-${index + 1}`,
-      title: assertText(step?.title, `steps[${index}].title`, LIMITS.stepTitle),
+      title: assertText(step?.title, `steps[${index}].title`, adaptive ? Infinity : LIMITS.stepTitle),
     })),
   };
 }
@@ -124,6 +125,7 @@ export const visualComponent = Object.freeze({
   designFrame: DESIGN_FRAME,
   cssFile: "component.css",
   textCapacity: Object.freeze({ maxInputLabelChars: LIMITS.inputLabel, maxItemTitleChars: LIMITS.stepTitle }),
+  renderAdaptiveMarkup,
   renderMarkup(parameters) {
     const model = normalizeParameters(parameters);
     const geometry = funnelGeometry(model.steps.length);
@@ -138,6 +140,30 @@ export const visualComponent = Object.freeze({
     </section>`;
   },
 });
+
+export function renderAdaptiveMarkup(parameters, { frame = DESIGN_FRAME, theme = {} } = {}) {
+  const model = normalizeParameters(parameters, true);
+  // The original orbit and input cloud occupy the central 620 px, not the full slide.
+  const fit = fitPreservedDesign(frame, { left: 275, top: 0, width: 620, height: 492 });
+  const geometry = funnelGeometry(model.steps.length);
+  const s = fit.scale;
+  const type = preservedTypography(s, theme);
+  const a = type.accessoryScale;
+  const titleMarkup = geometry.steps.map((step,index)=>{
+    const compact=s<1;
+    const point=fit.point({x:geometry.cx,y:compact?step.y0+4:step.textTop});
+    const width=(compact?Math.max(88,(step.w0+step.w1)/2-8):Math.max(88,step.w1-16))*s;
+    const height=compact?(step.y1-step.y0-16)*s:28*s;
+    return `<h3 class="simple-step-title" style="left:${point.x}px;--top:${point.y}px;--width:${width}px;height:${height}px;line-height:${compact?type.sizes.funnelStepTitle*1.6:28*s}px;display:flex;align-items:center;justify-content:center;white-space:normal" data-ppt-kind="text" data-ppt-name="simple-step-title-${index}">${escapeHtml(model.steps[index].title)}</h3>`;
+  }).join('');
+  return `<section class="simple-funnel simple-funnel-adapted" data-ppt-root data-step-count="${model.steps.length}" style="width:${frame.width}px;height:${frame.height}px;${type.css}">
+    <style>.simple-funnel-adapted .simple-input-core{padding:${10*a}px;border-width:${3*a}px}</style>
+    <svg class="simple-funnel-orbit" style="width:100%;height:100%" viewBox="${fit.viewBox}"><ellipse cx="585" cy="244.5" rx="285" ry="202.5" transform="rotate(-7 585 244.5)" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="simple-funnel-orbit"/></svg>
+    <div class="simple-input-layer">${model.inputs.map((input,index)=>inputMarkup(input,index,model.inputs.length).replace(/--x:([\d.]+)px;--y:([\d.]+)px;--size:([\d.]+)px/,(_,x,y,size)=>`--x:${fit.left+Number(x)*s}px;--y:${fit.top+Number(y)*s}px;--size:${Number(size)*a}px`)).join('')}</div>
+    <svg class="simple-funnel-diagram" style="width:100%;height:100%" viewBox="${fit.viewBox}">${geometry.steps.map(step=>`<g><path class="simple-funnel-step-body" fill="${COLORS[step.index]}" d="${step.path}" data-ppt-kind="path" data-ppt-name="simple-step-body-${step.index}"/><ellipse class="simple-funnel-step-cap" fill="${COLORS[step.index]}" cx="${step.cap.cx}" cy="${step.cap.cy}" rx="${step.cap.rx}" ry="${step.cap.ry}" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="simple-step-cap-${step.index}"/></g>`).join('')}${flowArrowMarkup(geometry)}</svg>
+    ${titleMarkup}
+  </section>`;
+}
 
 export const previewParameters = Object.freeze({
   inputs: [

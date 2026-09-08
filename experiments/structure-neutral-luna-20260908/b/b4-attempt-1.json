@@ -1,0 +1,71 @@
+{
+  "key": "b4-attempt-1",
+  "caseId": "b4",
+  "attempt": 1,
+  "model": "gpt-5.6-luna",
+  "reasoning": "high",
+  "spec": {
+    "caseId": "b4",
+    "title": "三层收敛：从原始反馈到实施方案",
+    "assetId": "convergence-simple-funnel-001",
+    "content": {
+      "inputs": [],
+      "steps": [
+        {
+          "key": "raw-feedback",
+          "title": "汇总各渠道尚未核实的原始反馈"
+        },
+        {
+          "key": "supported-problem",
+          "title": "保留能够重复观察并有材料支持的问题"
+        },
+        {
+          "key": "clear-plan",
+          "title": "形成责任人与交付范围均明确的实施方案"
+        }
+      ]
+    },
+    "frame": {
+      "left": 480,
+      "top": 230,
+      "width": 320,
+      "height": 300
+    },
+    "blocks": [],
+    "reason": "三层收敛先严格记录 320×300 首试，再在必要时扩区；不以模板自由重画。",
+    "chapter": "02",
+    "pageNumber": 8
+  },
+  "skin": {
+    "id": "neutral-editorial-001",
+    "fonts": {
+      "display": "Noto Serif SC",
+      "body": "Noto Sans SC"
+    },
+    "font": "Noto Sans SC",
+    "primaryColor": "#A35D4F",
+    "background": "#F5F4EF",
+    "surface": "#EEECE5",
+    "dark": "#20201D",
+    "body": "#4B4A45",
+    "muted": "#85837B",
+    "line": "#D8D5CC",
+    "bodyFrame": {
+      "left": 56,
+      "top": 135,
+      "width": 1168,
+      "height": 525
+    },
+    "typography": {
+      "componentHeading": 15.75,
+      "componentTitle": 15.75,
+      "componentItemTitle": 12.75,
+      "componentLead": 12.75,
+      "componentBody": 12.75,
+      "componentLabel": 12.75,
+      "componentMeta": 11.25
+    }
+  },
+  "status": "rejected",
+  "error": "convergence-simple-funnel 当前区域无法以选定的允许字号容纳文字：simple-step-title-1, simple-step-title-2。请扩大区域、减少本区域内容密度或换用结构；不继续降低字号。"
+}

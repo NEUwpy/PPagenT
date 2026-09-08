@@ -1,0 +1,151 @@
+{
+  "key": "b2-attempt-1",
+  "caseId": "b2",
+  "attempt": 1,
+  "model": "gpt-5.6-luna",
+  "reasoning": "high",
+  "spec": {
+    "caseId": "b2",
+    "title": "客户反馈持续收敛成发布范围",
+    "assetId": "convergence-simple-funnel-001",
+    "content": {
+      "inputs": [
+        {
+          "id": "interview",
+          "label": "访谈",
+          "iconQuery": "message-circle"
+        },
+        {
+          "id": "ticket",
+          "label": "工单",
+          "iconQuery": "ticket"
+        },
+        {
+          "id": "usage-record",
+          "label": "使用记录",
+          "iconQuery": "clipboard-text"
+        }
+      ],
+      "steps": [
+        {
+          "key": "collect",
+          "title": "收集线索"
+        },
+        {
+          "key": "verify-problem",
+          "title": "核对问题"
+        },
+        {
+          "key": "validate-solution",
+          "title": "验证方案"
+        },
+        {
+          "key": "release-scope",
+          "title": "纳入发布"
+        }
+      ]
+    },
+    "frame": {
+      "left": 360,
+      "top": 176,
+      "width": 560,
+      "height": 442
+    },
+    "blocks": [
+      {
+        "role": "aux",
+        "text": "入口\n访谈 · 工单 · 使用记录",
+        "frame": {
+          "left": 56,
+          "top": 215,
+          "width": 250,
+          "height": 80
+        }
+      },
+      {
+        "role": "aux",
+        "text": "从原始反馈\n走向明确交付范围",
+        "frame": {
+          "left": 950,
+          "top": 215,
+          "width": 240,
+          "height": 80
+        }
+      }
+    ],
+    "reason": "连续输入经过逐层收窄进入发布范围，保留曲面圆台、分层留白与随形导流箭头。",
+    "chapter": "02",
+    "pageNumber": 6
+  },
+  "skin": {
+    "id": "neutral-editorial-001",
+    "fonts": {
+      "display": "Noto Serif SC",
+      "body": "Noto Sans SC"
+    },
+    "font": "Noto Sans SC",
+    "primaryColor": "#A35D4F",
+    "background": "#F5F4EF",
+    "surface": "#EEECE5",
+    "dark": "#20201D",
+    "body": "#4B4A45",
+    "muted": "#85837B",
+    "line": "#D8D5CC",
+    "bodyFrame": {
+      "left": 56,
+      "top": 135,
+      "width": 1168,
+      "height": 525
+    },
+    "typography": {
+      "componentHeading": 15.75,
+      "componentTitle": 15.75,
+      "componentItemTitle": 12.75,
+      "componentLead": 12.75,
+      "componentBody": 12.75,
+      "componentLabel": 12.75,
+      "componentMeta": 11.25
+    }
+  },
+  "status": "rendered-unreviewed",
+  "invocation": {
+    "result": {
+      "mode": "preserved-design",
+      "componentId": "convergence-simple-funnel",
+      "nodeCount": 20
+    },
+    "nativeShapeDelta": 17,
+    "validation": "rendered-unreviewed"
+  },
+  "measurements": {
+    "titleRight": 437,
+    "overflow": [],
+    "fontReady": true
+  },
+  "fonts": [
+    {
+      "name": "simple-step-title-0",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "收集线索"
+    },
+    {
+      "name": "simple-step-title-1",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "核对问题"
+    },
+    {
+      "name": "simple-step-title-2",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "验证方案"
+    },
+    {
+      "name": "simple-step-title-3",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "纳入发布"
+    }
+  ]
+}

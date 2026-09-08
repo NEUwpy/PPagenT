@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "assetId": "comparison-pros-cons-balance-005",
+  "features": [
+    "连续天平骨架围绕共同支点组织",
+    "收益与代价分别位于两侧",
+    "同一主题与综合判断构成比较依据"
+  ],
+  "adaptation": "两侧解释可独立排放；只有稿件给出偏向时才表现倾斜，不能从字数推断优劣。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "共同支点、连续横梁、悬挂与两侧托盘组成天平",
+      "收益与代价分属两侧"
+    ],
+    "variables": [
+      "两侧内容量",
+      "梁长、盘宽、支点高度",
+      "说明位置",
+      "有依据的倾斜角"
+    ],
+    "coupledChanges": "倾斜时梁端、悬挂线与托盘连接同步计算；文本按可读空间另排，不随梁旋转",
+    "avoid": "无胜负依据时保持平衡，不能用字数决定倾斜",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

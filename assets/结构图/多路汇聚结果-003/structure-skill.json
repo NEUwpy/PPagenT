@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "assetId": "convergence-many-to-one-003",
+  "features": [
+    "多路输入起点彼此分离",
+    "粗路径平滑汇聚到同一点",
+    "唯一共同结果承接所有输入"
+  ],
+  "adaptation": "按输入数重算路径间距与汇合点；说明可在路径外，避免把输入串成顺序。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "分离输入、平滑粗汇聚路径和唯一结果",
+      "所有路径真正接入结果"
+    ],
+    "variables": [
+      "输入数",
+      "路径展开宽高",
+      "曲率",
+      "汇合点",
+      "输入和结果文案"
+    ],
+    "coupledChanges": "输入锚点、曲线路径及结果边界联动；线宽层级保持一致",
+    "avoid": "不得变成输入之间串联，也不能留下未接结果的线头",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

@@ -1,0 +1,110 @@
+[
+  {
+    "caseId": "b1",
+    "selectionMode": "preserved-design",
+    "selectedAssetIds": ["convergence-simple-funnel-001"],
+    "reason": "稿件表达三类输入经四个连续收敛阶段进入发布范围；简明输入转化漏斗保留共享中轴曲面圆台、逐层收窄和随形导流箭头。",
+    "preservedFeatures": [
+      "共享中轴的曲面圆台",
+      "分层留白",
+      "随轮廓收窄并渐显的导流箭头",
+      "入口锚点与漏斗层级分离"
+    ],
+    "changes": [
+      "按左侧解释、右侧较窄结构的两栏区域重算漏斗",
+      "入口只使用访谈、工单、使用记录，不添加数量信息",
+      "按 neutral-editorial-001 语义颜色与显式 Skin 字号适配"
+    ],
+    "attemptHistory": [
+      { "attempt": 1, "status": "rendered-unreviewed", "visual": "首稿可读，但图外说明含制作说明口吻。" },
+      { "attempt": 2, "status": "rendered-unreviewed", "visual": "改成读者说明后出现孤立标点换行。" },
+      { "attempt": 3, "status": "rendered-unreviewed", "visual": "入口、四层标题和准入依据清楚，无孤立标点。" }
+    ],
+    "invocationStatus": "rendered-unreviewed",
+    "visualStatus": "locally-reviewed-attempt-3",
+    "unresolved": ["harness 回执仍是 rendered-unreviewed，不能写成正式视觉验收完成"]
+  },
+  {
+    "caseId": "b2",
+    "selectionMode": "preserved-design",
+    "selectedAssetIds": ["convergence-simple-funnel-001"],
+    "reason": "与 b1 使用完全相同的稿件、入口和四层漏斗，只改变结构居中及两侧少量说明，用于比较区域组织影响。",
+    "preservedFeatures": [
+      "共享中轴的曲面圆台",
+      "分层留白",
+      "随轮廓收窄并渐显的导流箭头",
+      "入口锚点与漏斗层级分离"
+    ],
+    "changes": [
+      "结构移到页面中央，两侧仅保留少量说明",
+      "四层标题与三类入口和 b1 完全一致",
+      "按 neutral-editorial-001 语义颜色与显式 Skin 字号适配"
+    ],
+    "attemptHistory": [
+      { "attempt": 1, "status": "rendered-unreviewed", "visual": "居中结构，两侧少量说明，漏斗层级与 b1 相同且可读。" }
+    ],
+    "invocationStatus": "rendered-unreviewed",
+    "visualStatus": "locally-reviewed-attempt-1",
+    "unresolved": ["harness 回执仍是 rendered-unreviewed，不能写成正式视觉验收完成"]
+  },
+  {
+    "caseId": "b3",
+    "selectionMode": "preserved-design",
+    "selectedAssetIds": ["progression-maturity-steps-002"],
+    "reason": "六层内容是有明确门槛的离散筛选层级；成熟度能力阶梯保留连续踏面、立面、共同消失点和随形文字承托面。",
+    "preservedFeatures": [
+      "连续阶台的踏面、立面和接缝",
+      "同一消失点",
+      "随透视变化的文字承托面",
+      "六层完整呈现"
+    ],
+    "changes": [
+      "按宽正文区重算六级台阶与正文位置",
+      "四种入口放在图外说明，不把入口误当成阶梯层级",
+      "按 neutral-editorial-001 语义颜色与显式 Skin 字号适配"
+    ],
+    "attemptHistory": [
+      { "attempt": 1, "status": "rejected", "visual": "图外入口说明与结构区相交。" },
+      { "attempt": 2, "status": "rejected", "visual": "三条较长说明超出承托面安全 box。" },
+      { "attempt": 3, "status": "rendered-unreviewed", "visual": "六层完整、短说明可读，入口与图分离。" }
+    ],
+    "invocationStatus": "rendered-unreviewed-after-3-attempts",
+    "visualStatus": "locally-reviewed-attempt-3",
+    "unresolved": ["第三次成功不能回写为首次成功", "harness 回执仍是 rendered-unreviewed"]
+  },
+  {
+    "caseId": "b4",
+    "selectionMode": "preserved-design-with-bounded-retry",
+    "selectedAssetIds": ["convergence-simple-funnel-001"],
+    "reason": "三层收敛仍由连续筛选和范围收窄主导，先调用已登记简明输入转化漏斗；首试严格使用 320×300，再按记录结果决定是否扩区。",
+    "preservedFeatures": [
+      "共享中轴的曲面圆台",
+      "分层留白",
+      "随轮廓收窄并渐显的导流箭头",
+      "三层顺序关系不变"
+    ],
+    "changes": [
+      "首次尝试必须把三条故意较长标题放入 320×300 结构区并记录结果",
+      "后续仅在首试记录后允许扩区，长说明移到图旁",
+      "图内可改用语义等价短标题：汇总反馈、保留问题、明确方案",
+      "全程最多三次尝试且不降低 neutral-editorial-001 Skin 字号"
+    ],
+    "attemptPolicy": {
+      "maxAttempts": 3,
+      "firstAttemptMustBeRecorded": true,
+      "laterSuccessCannotBeCalledFirstAttemptSuccess": true,
+      "attempts": [
+        { "attempt": 1, "frame": { "width": 320, "height": 300 }, "titleMode": "long", "status": "pending" },
+        { "attempt": 2, "frame": { "width": 680, "height": 385 }, "titleMode": "semantic-short", "status": "pending-after-attempt-1" },
+        { "attempt": 3, "frame": { "width": 810, "height": 405 }, "titleMode": "semantic-short", "status": "pending-after-attempt-2" }
+      ]
+    },
+    "attemptHistory": [
+      { "attempt": 1, "status": "rejected", "visual": "320×300 首试因前两条长标题无法以允许字号容纳而拒绝。" },
+      { "attempt": 2, "status": "rendered-unreviewed", "visual": "扩区后短标题与图外三条事实说明清楚。" }
+    ],
+    "invocationStatus": "rendered-unreviewed-after-bounded-retry",
+    "visualStatus": "locally-reviewed-attempt-2",
+    "unresolved": ["首试拒绝与后续成功必须分开记录", "harness 回执仍是 rendered-unreviewed"]
+  }
+]

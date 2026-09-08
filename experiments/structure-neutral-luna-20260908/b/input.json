@@ -1,0 +1,166 @@
+[
+  {
+    "caseId": "b1",
+    "title": "客户反馈持续收敛成发布范围",
+    "manuscript": "客户反馈持续收敛成发布范围。输入入口为访谈、工单、使用记录；阶段分别强调原始反馈、可复现问题、小样验证、明确交付范围。图内只保留四个短标题，说明放在图外。本页没有数值、转化率或数量信息。",
+    "layout": {
+      "variant": "left-explanation-right-narrower-structure",
+      "explanationSide": "left",
+      "structureSide": "right",
+      "explanationWidthRatio": 0.42,
+      "structureWidthRatio": 0.46,
+      "structureFrame": { "left": 610, "top": 178, "width": 540, "height": 440 },
+      "notes": [
+        "说明放在图外：访谈、工单、使用记录是入口；四阶段分别解释原始反馈、可复现问题、小样验证、明确交付范围。",
+        "不添加数值、转化率、样本量或未经稿件给出的比例。"
+      ]
+    },
+    "structure": {
+      "assetId": "convergence-simple-funnel-001",
+      "content": {
+        "structuredData": {
+          "type": "convergence",
+          "inputs": [
+            { "id": "interview", "label": "访谈", "iconQuery": "message-circle" },
+            { "id": "ticket", "label": "工单", "iconQuery": "ticket" },
+            { "id": "usage-record", "label": "使用记录", "iconQuery": "clipboard-text" }
+          ]
+        },
+        "items": [
+          { "id": "collect", "title": "收集线索" },
+          { "id": "verify-problem", "title": "核对问题" },
+          { "id": "validate-solution", "title": "验证方案" },
+          { "id": "release-scope", "title": "纳入发布" }
+        ]
+      }
+    }
+  },
+  {
+    "caseId": "b2",
+    "title": "客户反馈持续收敛成发布范围",
+    "manuscript": "客户反馈持续收敛成发布范围。输入入口为访谈、工单、使用记录；阶段分别强调原始反馈、可复现问题、小样验证、明确交付范围。图内只保留四个短标题，说明放在图外。本页没有数值、转化率或数量信息。",
+    "layout": {
+      "variant": "centered-structure-with-light-side-notes",
+      "explanationSide": "both",
+      "structureSide": "center",
+      "leftNoteWidth": 0.19,
+      "structureWidthRatio": 0.53,
+      "rightNoteWidth": 0.19,
+      "structureFrame": { "left": 360, "top": 176, "width": 560, "height": 442 },
+      "notes": [
+        "左侧少量说明：入口来自访谈、工单、使用记录。",
+        "右侧少量说明：从原始反馈走到明确交付范围。",
+        "与 b1 保持完全相同的漏斗层级、入口和稿件，仅改变对比区域。"
+      ]
+    },
+    "structure": {
+      "assetId": "convergence-simple-funnel-001",
+      "content": {
+        "structuredData": {
+          "type": "convergence",
+          "inputs": [
+            { "id": "interview", "label": "访谈", "iconQuery": "message-circle" },
+            { "id": "ticket", "label": "工单", "iconQuery": "ticket" },
+            { "id": "usage-record", "label": "使用记录", "iconQuery": "clipboard-text" }
+          ]
+        },
+        "items": [
+          { "id": "collect", "title": "收集线索" },
+          { "id": "verify-problem", "title": "核对问题" },
+          { "id": "validate-solution", "title": "验证方案" },
+          { "id": "release-scope", "title": "纳入发布" }
+        ]
+      }
+    }
+  },
+  {
+    "caseId": "b3",
+    "title": "六层筛选把建议收束为可执行计划",
+    "manuscript": "六层筛选：征集建议、明确问题、核对依据、小步验证、评估影响、纳入计划。入口四种：用户访谈、现场记录、客服工单、内部复盘。四类入口先汇总，再沿六层逐步收束；六层必须完整保留。",
+    "layout": {
+      "variant": "wide-body-region",
+      "explanationSide": "left",
+      "structureSide": "center",
+      "structureFrame": { "left": 145, "top": 155, "width": 990, "height": 430 },
+      "notes": [
+        "图外入口说明：用户访谈、现场记录、客服工单、内部复盘。",
+        "图内六层完整保留，每层配一条短说明；不把入口误画成六层中的阶段。"
+      ]
+    },
+    "structure": {
+      "assetId": "progression-maturity-steps-002",
+      "content": {
+        "structuredData": {
+          "type": "convergence",
+          "inputs": [
+            { "id": "user-interview", "label": "用户访谈" },
+            { "id": "field-record", "label": "现场记录" },
+            { "id": "service-ticket", "label": "客服工单" },
+            { "id": "internal-review", "label": "内部复盘" }
+          ]
+        },
+        "items": [
+          { "id": "collect-suggestions", "title": "征集建议", "body": "从四类入口收集线索" },
+          { "id": "clarify-problem", "title": "明确问题", "body": "模糊意见改成可核对问题" },
+          { "id": "check-basis", "title": "核对依据", "body": "补齐现场与既有记录" },
+          { "id": "small-validation", "title": "小步验证", "body": "小范围动作观察是否成立" },
+          { "id": "assess-impact", "title": "评估影响", "body": "判断交付与责任边界影响" },
+          { "id": "include-plan", "title": "纳入计划", "body": "明确排期与责任安排" }
+        ]
+      }
+    }
+  },
+  {
+    "caseId": "b4",
+    "title": "三层收敛：从原始反馈到实施方案",
+    "manuscript": "三层收敛：汇总各渠道尚未核实的原始反馈；保留能够重复观察并有材料支持的问题；形成责任人与交付范围均明确的实施方案。标题故意较长，事实必须保留。首试区域固定为 320×300，首试结果先记录；若容量不足，再允许扩区并把长说明移到图旁，图内改用语义等价短标题，不降低 Skin 字号。最多三次尝试。",
+    "layout": {
+      "variant": "small-first-then-expand-with-side-explanations",
+      "structureSide": "center",
+      "initialStructureFrame": { "left": 480, "top": 230, "width": 320, "height": 300 },
+      "expandedStructureFrame": { "left": 300, "top": 185, "width": 680, "height": 385 },
+      "maxAttempts": 3,
+      "notes": [
+        "首试把三条完整长标题放入结构区域，必须记录首次结果，不能用后续成功覆盖首试事实。",
+        "扩区后长说明移到图旁，图内仅改成语义等价短标题：汇总反馈、保留问题、明确方案。",
+        "Skin 正文字号沿用显式 typography，不通过缩小字号换取容量。"
+      ]
+    },
+    "structure": {
+      "assetId": "convergence-simple-funnel-001",
+      "content": {
+        "structuredData": { "type": "convergence", "inputs": [] },
+        "items": [
+          { "id": "raw-feedback", "title": "汇总各渠道尚未核实的原始反馈", "shortTitle": "汇总反馈", "body": "各渠道原始反馈尚未核实" },
+          { "id": "supported-problem", "title": "保留能够重复观察并有材料支持的问题", "shortTitle": "保留问题", "body": "问题可重复观察且有材料支持" },
+          { "id": "clear-plan", "title": "形成责任人与交付范围均明确的实施方案", "shortTitle": "明确方案", "body": "责任人与交付范围均已明确" }
+        ]
+      },
+      "attemptPlan": [
+        {
+          "attempt": 1,
+          "targetFrame": { "left": 480, "top": 230, "width": 320, "height": 300 },
+          "titleMode": "long",
+          "descriptionPlacement": "inside-structure",
+          "recordAs": "first-result"
+        },
+        {
+          "attempt": 2,
+          "targetFrame": { "left": 300, "top": 185, "width": 680, "height": 385 },
+          "titleMode": "semantic-short",
+          "descriptionPlacement": "outside-structure",
+          "preserveFacts": true,
+          "onlyAfter": "attempt-1-recorded"
+        },
+        {
+          "attempt": 3,
+          "targetFrame": { "left": 235, "top": 170, "width": 810, "height": 405 },
+          "titleMode": "semantic-short",
+          "descriptionPlacement": "outside-structure",
+          "preserveFacts": true,
+          "onlyAfter": "attempt-2-fails-or-needs-correction"
+        }
+      ]
+    }
+  }
+]

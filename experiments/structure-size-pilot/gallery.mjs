@@ -1,0 +1,12 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+const out=import.meta.dirname;
+const report=JSON.parse(await fs.readFile(path.join(out,'report.json'),'utf8'));
+const groups=[['notes','双排折角便签'],['funnel','简明转化漏斗'],['stairs','成熟度阶梯']];
+const esc=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
+const rows=groups.map(([slug,title])=>`<section id="${slug}"><h2>${title}</h2>${['L','M','S','skin-M'].map(name=>{
+ const r=report.find(r=>r.key===`${slug}-${name}`);if(!r)return '';
+ const sizes=[...new Set(r.fonts.map(f=>Math.round(parseFloat(f.font)*.75*100)/100))];
+ return `<article><header><b>${name==='skin-M'?'指定 Skin · 中':name}</b><p>${r.width} × ${r.height}</p><p>实际字号：${sizes.join(' / ')} pt</p><a href="renders/${r.key}.html">HTML</a> · <a href="renders/${r.key}.pptx">可编辑 PPTX</a><p>${name==='skin-M'?'指定 17 / 15 pt；便签和阶梯使用另备的短稿。':'同一份稿件；主体 '+({L:'100%',M:'85%',S:'70%'}[name])+'。'}</p></header><div class="canvas">${r.status==='rejected'?`<pre>${esc(r.error)}</pre>`:`<a href="renders/${r.key}-pptx.png" style="width:${r.width/1170*100}%"><img src="renders/${r.key}-pptx.png" alt="${title} ${name}"></a>`}</div></article>`;
+ }).join('')}</section>`).join('');
+await fs.writeFile(path.join(out,'index.html'),`<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>结构尺寸与字号匹配 · 3 个试点</title><style>body{margin:24px auto;padding:0 20px;max-width:1300px;font:15px/1.6 system-ui;color:#233b45;background:#f1f3f4}nav{position:sticky;top:0;background:#f1f3f4;padding:12px;z-index:1}a{color:#28667a}nav a{margin-right:24px}h1{font-size:26px}h2{margin-top:40px}article{display:grid;grid-template-columns:180px 1fr;gap:20px;padding:20px;margin:16px 0;background:white;border:1px solid #dce2e4;border-radius:8px}header p{margin:6px 0;color:#576970}.canvas{aspect-ratio:1170/492;background:repeating-linear-gradient(0deg,#f6f8f9 0px,#f6f8f9 39px,#e9edef 40px);display:flex;align-items:center;justify-content:center;overflow:hidden}.canvas a{display:block;flex:none}.canvas img{display:block;width:100%}pre{white-space:pre-wrap}@media(max-width:720px){article{grid-template-columns:1fr}header{font-size:13px}}</style><h1>保留造型，缩小占区，匹配字号与小配件</h1><p>每行背景画布相同，图片按实际尺寸比例居中。L / M / S 是 100% / 85% / 70% 三个代表样本，复用同一绘制方法。字体只取允许档位；指定 Skin 字号优先。以下图片来自实际导出 PPTX 后重导入。</p><nav>${groups.map(([slug,title])=>`<a href="#${slug}">${title}</a>`).join('')}</nav>${rows}<p>本页为首批三个结构的候选验证，未宣称全库迁移或任意区域、任意稿件均可用。</p></html>`);

@@ -1,0 +1,40 @@
+[
+  {
+    "caseId": "case-02",
+    "selectionMode": "targeted-manual",
+    "selectedAssetIds": [
+      "branching-decision-routes-001"
+    ],
+    "reason": "用户指定定向实测 branching-decision-routes-001，不是自然候选选择。",
+    "preservedFeatures": [
+      "单入口连接菱形判断，再由共同总线扇出",
+      "条件标签贴近各自分支线，动作分支等权",
+      "可选结果与所属动作直接相连"
+    ],
+    "changes": [
+      "按真实稿件重算为五路并保留全部互斥条件",
+      "沿用真实 review.mjs 的 1170×492 几何锚点并用中性杂志 Skin 适配"
+    ],
+    "invocationStatus": "rendered-unreviewed",
+    "boundary": "该稿件有 5 个互斥条件，按当前 branching 结构说明重算为 5 路等权分支；五个条件均可见并独立连至动作，历史样例限制不作为当前 Skill 边界。"
+  },
+  {
+    "caseId": "case-08",
+    "selectionMode": "targeted-manual",
+    "selectedAssetIds": [
+      "containment-consensus-field-005"
+    ],
+    "reason": "用户指定定向实测 containment-consensus-field-005，不是自然候选选择。",
+    "preservedFeatures": [
+      "独立主体围绕中央共识场分布",
+      "共同内容位于中央，外围图标立于圆台",
+      "椭圆轨道无方向，名称位于圆台之外"
+    ],
+    "changes": [
+      "将五方关注点完整放入外围圆台与外侧文字",
+      "中央共识场保留三条共同约定并适配中性杂志 Skin"
+    ],
+    "invocationStatus": "rendered-unreviewed",
+    "boundary": "五方在资产支持的 2–5 个主体范围内；轨道不加箭头，不表达进度或汇报关系。"
+  }
+]

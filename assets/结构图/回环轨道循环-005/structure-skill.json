@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "assetId": "cycle-racetrack-loop-005",
+  "features": [
+    "闭合回环轨道形成明确循环方向",
+    "节点沿轨道组织",
+    "上下说明带与节点一一对应"
+  ],
+  "adaptation": "按节点数量重算轨道位置及说明宽度，确保连接方向与节点顺序一致。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "上轨左到右、下轨右到左的连续回环",
+      "两端圆弧",
+      "节点和上下说明一一对应"
+    ],
+    "variables": [
+      "步骤数",
+      "直轨长度与转弯半径",
+      "节点间距",
+      "可选中心主题"
+    ],
+    "coupledChanges": "分配上下节点后重算轨道、方向与说明位置；两侧弧线仍连续接轨",
+    "avoid": "不能把跑道改为折线多边形，也不能破坏上下阅读方向",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "assetId": "convergence-funnel-001",
+  "features": [
+    "分离曲面圆台沿共同中轴逐层收窄",
+    "随形半透明导流箭头贯穿漏斗",
+    "侧面阶段带以平顶、V 形咬合和尖尾连续推进",
+    "阶段背景把摘要、漏斗层和说明横向对齐"
+  ],
+  "adaptation": "输入数量与漏斗层数独立；按阶段内容重算层高与说明位置，保持同阶段横向对应。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "分离曲面圆台、随形半透明导流箭头、左阶段带的 V 形咬合与尖尾、右说明及横向阶段背景"
+    ],
+    "variables": [
+      "层数与入口数分别变化",
+      "层宽高",
+      "左右说明宽度",
+      "整组占区"
+    ],
+    "coupledChanges": "圆台上下沿、导流轮廓、阶段带分段和说明行高共同重算，保持同阶段横向对应",
+    "avoid": "不能仅保留梯形漏斗而删掉阶段带；文字不压导流路径",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

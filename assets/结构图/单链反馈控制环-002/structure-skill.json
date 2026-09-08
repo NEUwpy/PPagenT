@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "assetId": "cycle-single-chain-feedback-002",
+  "features": [
+    "前向主链从输入推进至末端",
+    "反馈路径由末端返回上游",
+    "反馈校准区与前向动作区别明确"
+  ],
+  "adaptation": "按真实反馈对象重算返回路径，长说明放在线外；不要把反馈误画成另一条前向分支。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "前向主链、方向箭头、末端回流和独立反馈校准区"
+    ],
+    "variables": [
+      "阶段数",
+      "前向间距",
+      "反馈目标",
+      "回流高度",
+      "说明长度"
+    ],
+    "coupledChanges": "主链端点与反馈起止对象同步计算；回流绕开节点正文",
+    "avoid": "不得把反馈方向画反或默认回到第一个节点",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

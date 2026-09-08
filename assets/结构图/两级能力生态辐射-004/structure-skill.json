@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "assetId": "hub-two-tier-capabilities-004",
+  "features": [
+    "唯一核心与环绕能力轨道",
+    "内外圈形成行星式层次",
+    "外圈不暗示对某个内圈节点的单独归属"
+  ],
+  "adaptation": "按实际能力数重算轨道锚点、环间距及文字；无外圈内容可省去外圈。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "唯一核心、内外行星轨道、同一投影的节点",
+      "外圈不单独归属某个内圈节点"
+    ],
+    "variables": [
+      "两圈节点数分别变化",
+      "轨道半径与间距",
+      "节点大小",
+      "外圈有无"
+    ],
+    "coupledChanges": "按投影重算轨道、节点角度、标签和遮挡；省略外圈时省掉对应整套图形",
+    "avoid": "不得凭最近距离补上下级连线",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

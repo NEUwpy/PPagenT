@@ -1,0 +1,80 @@
+{
+  "experimentId": "structure-remaining-page-luna-20260908-luna",
+  "model": "gpt-5.6-luna",
+  "skin": "neutral-editorial-001",
+  "attemptPolicy": {"maxAttemptsPerPage": 3, "effectiveRenderedAttempts": {"P1": 2, "P2": 2, "P3": 2}},
+  "technicalBoundary": {
+    "execution": "preserved-design",
+    "prepareEvidence": ["P1/prepare.json", "P2/prepare.json", "P3/prepare.json"],
+    "reimportedPng": true,
+    "overflowMeasurements": "none for all rendered attempts",
+    "fontReady": true,
+    "renderedCalls": [
+      "P1/P1-attempt-1.json", "P1/P1-attempt-2.json",
+      "P2/P2-attempt-2.json", "P2/P2-attempt-3.json",
+      "P3/P3-attempt-1.json", "P3/P3-attempt-2.json"
+    ],
+    "rejectedEvidence": "P2/P2-attempt-1.json records a text-block adjacency rejection and is retained; it produced no PPTX or PNG."
+  },
+  "pages": [
+    {
+      "pageId": "P1",
+      "attempts": [
+        {"attempt": 1, "status": "rendered-unreviewed", "png": "P1/P1-attempt-1.png", "visualNote": "主张位于上方，四项折角便签形成居中的2×2同级阵列，底部完成标准与真实占用后的自由带相连；首轮留白略多。"},
+        {"attempt": 2, "status": "rendered-unreviewed", "png": "P1/P1-attempt-2.png", "visualNote": "阵列略上移并扩大，主张、结构和底部收束的垂直节奏更紧；四项内容清楚，无顺序误读。"}
+      ],
+      "final": {
+        "attempt": 2,
+        "status": "needs-parent-review",
+        "purposeMet": true,
+        "readingOrderClear": true,
+        "factsCovered": ["资料齐全：关键文件集中归档", "版本清楚：当前版本标记明确", "责任明确：后续负责人可查", "例外有据：特殊处理附上依据", "接手者能独立继续工作", "发送文件只是交接动作"],
+        "structureFit": "保留连续折页、三层投影、通栏标题带、锚点和居中同级阵列。",
+        "visualIssues": ["页面上下仍有克制留白，但文字和结构的阅读关系已清楚。"],
+        "pptx": "P1/P1-attempt-2.pptx",
+        "png": "P1/P1-attempt-2.png",
+        "layout": "P1/P1-attempt-2.layout.json"
+      }
+    },
+    {
+      "pageId": "P2",
+      "attempts": [
+        {"attempt": 1, "status": "rejected", "error": "文字块3与文字块4相邻重叠；保留为技术证据，未计入有效设计轮次。"},
+        {"attempt": 2, "status": "rendered-unreviewed", "png": "P2/P2-attempt-2.png", "visualNote": "左侧来源与四条依据按漏斗层级纵向排列，右侧结构保留入口锚点、共享中轴和四层收敛。"},
+        {"attempt": 3, "status": "rendered-unreviewed", "png": "P2/P2-attempt-3.png", "visualNote": "漏斗略向右收紧，左侧标题改为四层准入依据，入口来源和四条事实更容易与四层阶段对应。"}
+      ],
+      "final": {
+        "attempt": 3,
+        "status": "needs-parent-review",
+        "purposeMet": true,
+        "readingOrderClear": true,
+        "factsCovered": ["入口：访谈", "入口：工单", "入口：使用记录", "收集线索", "核对问题", "验证方案", "纳入发布", "保留原始反馈", "问题可重复观察", "小样验证有效", "责任人与交付范围明确"],
+        "structureFit": "保留共享中轴的曲面圆台、分层留白、收窄轮廓和随形导流箭头；入口图标仍与结构相邻。",
+        "visualIssues": ["左右栏之间保留较宽空白以避免文字侵入真实漏斗占用；阶段与准入依据的对应靠垂直节奏表达，未添加引线。"],
+        "pptx": "P2/P2-attempt-3.pptx",
+        "png": "P2/P2-attempt-3.png",
+        "layout": "P2/P2-attempt-3.layout.json"
+      }
+    },
+    {
+      "pageId": "P3",
+      "attempts": [
+        {"attempt": 1, "status": "rendered-unreviewed", "png": "P3/P3-attempt-1.png", "visualNote": "四级阶梯从左下向右上递进，当前与目标状态随结构显示，右侧行动说明靠近第2级到第3级。"},
+        {"attempt": 2, "status": "rendered-unreviewed", "png": "P3/P3-attempt-2.png", "visualNote": "阶梯略向左上扩展，右侧行动栏保持独立宽度；当前2级、下一步3级和目标4级形成同一阅读组。"}
+      ],
+      "final": {
+        "attempt": 2,
+        "status": "needs-parent-review",
+        "purposeMet": true,
+        "readingOrderClear": true,
+        "factsCovered": ["1 被动处理：故障后临时组织抢修", "2 形成记录：故障原因与处理过程可查", "3 计划维护：按周期检查并落实责任", "4 持续改善：用复盘减少重复故障", "当前第2级", "目标第4级", "下一步维护责任"],
+        "structureFit": "保留连续踏面、立面、接缝、统一消失点和随透视承托面；currentIndex=1，目标状态仍绑定第4级。",
+        "visualIssues": ["右侧行动栏与阶梯之间留有明确空隙，当前到下一步关系清楚；尚需父任务整页确认。"],
+        "pptx": "P3/P3-attempt-2.pptx",
+        "png": "P3/P3-attempt-2.png",
+        "layout": "P3/P3-attempt-2.layout.json"
+      }
+    }
+  ],
+  "parentReviewBoundary": "本文件记录真实 prepare、invokeStructure、PPTX 重导 PNG 和逐页 PNG 检查结果；rendered-unreviewed 只表示调用和导出成功，不宣称整页最终通过。"
+}

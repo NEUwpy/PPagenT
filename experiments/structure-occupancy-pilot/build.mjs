@@ -1,0 +1,36 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import { renderCase } from './harness.mjs';
+import { occupancyFromTree,maturityGroups,freePlacements,collisions,intersects } from './occupancy.mjs';
+const out=import.meta.dirname;
+const original=JSON.parse(await fs.readFile(path.join(out,'../structure-wholepage-luna-20260908/luna/P3/P3-attempt-3.json'),'utf8')).spec;
+const originalTree=JSON.parse(await fs.readFile(path.join(out,'../structure-wholepage-luna-20260908/luna/P3/P3-attempt-3.tree.json'),'utf8'));
+const occupancy=occupancyFromTree(originalTree,original.frame,{groups:maturityGroups(originalTree)});
+const placements=freePlacements(occupancy,original.frame,{width:290,height:140});
+await fs.writeFile(path.join(out,'available-placements.json'),JSON.stringify({blockSize:{width:290,height:140},positions:placements},null,2));
+// Layout chooses among measured safe candidates. Occupancy does not decide the
+// reading order; prefer the free upper-left region for this page's next-step note.
+const preferred={left:100,top:185};
+const selected=[...placements].sort((a,b)=>Math.hypot(a.left-preferred.left,a.top-preferred.top)-Math.hypot(b.left-preferred.left,b.top-preferred.top))[0];
+assert.ok(selected,'Expected a useful free region inside the position frame');
+const blocks=[{role:'body',text:original.blocks[0].text,frame:selected}];
+const shared={...original,parentReplay:true,caseId:'P3',blocks,reason:'同稿同阶梯同定位框，仅把行动说明放入测量得到的左上空白区'};
+const results=[];
+results.push(await renderCase({...original,caseId:'baseline',occupancyMode:'rectangle'},out));
+results.push(await renderCase({...shared,caseId:'rectangle-control',occupancyMode:'rectangle'},out));
+results.push(await renderCase({...shared,caseId:'occupied-fit',occupancyMode:'measured'},out));
+const first=occupancy.areas[0].frame;
+results.push(await renderCase({...shared,caseId:'collision-control',blocks:[{...blocks[0],frame:{left:first.left+20,top:first.top+20,width:100,height:55}}]},out));
+assert.equal(results[0].status,'rendered-unreviewed');
+assert.equal(results[1].status,'rejected');
+assert.equal(results[2].status,'rendered-unreviewed');
+assert.equal(results[3].status,'rejected');
+const finalTree=JSON.parse(await fs.readFile(path.join(out,'occupied-fit-attempt-1.tree.json'),'utf8'));
+assert.deepEqual(finalTree.nodes,originalTree.nodes,'No geometry, type or color change in the structure');
+assert.deepEqual(shared.content,original.content);
+assert.equal(shared.blocks[0].text,original.blocks[0].text);
+assert.ok(intersects(selected,original.frame));
+assert.deepEqual(collisions(selected,occupancy),[]);
+await fs.writeFile(path.join(out,'checks.json'),JSON.stringify({selected,availablePlacements:placements.length,structureNodesUnchanged:true,sourceTextUnchanged:true,insidePositionFrame:true,actualCollisionCount:0,results:results.map(r=>({key:r.key,status:r.status,error:r.error}))},null,2));
+console.log('Occupancy comparison complete:',selected,placements.length);

@@ -1,0 +1,101 @@
+{
+  "key": "c3-attempt-1",
+  "caseId": "c3",
+  "attempt": 1,
+  "model": "gpt-5.6-luna",
+  "reasoning": "high",
+  "spec": {
+    "caseId": "c3",
+    "title": "知识管理成熟度",
+    "assetId": "progression-maturity-steps-002",
+    "content": {
+      "levels": [
+        {
+          "key": "level-1",
+          "title": "个人保存",
+          "body": "个人留存经验，依赖个人记忆"
+        },
+        {
+          "key": "level-2",
+          "title": "集中归档",
+          "body": "资料集中归档，入口逐步统一"
+        },
+        {
+          "key": "level-3",
+          "title": "统一分类",
+          "body": "按统一分类整理，便于查找"
+        },
+        {
+          "key": "level-4",
+          "title": "团队复用",
+          "body": "团队成员可复用既有方法"
+        },
+        {
+          "key": "level-5",
+          "title": "持续更新",
+          "body": "持续补充内容，保持知识有效"
+        },
+        {
+          "key": "level-6",
+          "title": "反馈优化",
+          "body": "根据使用反馈持续优化"
+        }
+      ],
+      "showStatus": true,
+      "currentIndex": 2
+    },
+    "frame": {
+      "left": 70,
+      "top": 176,
+      "width": 1140,
+      "height": 410
+    },
+    "blocks": [
+      {
+        "text": "当前在统一分类阶段，后续需走向团队复用、持续更新与反馈优化。",
+        "role": "aux",
+        "frame": {
+          "left": 235,
+          "top": 607,
+          "width": 810,
+          "height": 28
+        }
+      }
+    ],
+    "reason": "六个知识管理等级是同一能力维度的离散门槛，采用已登记成熟度能力阶梯；保留六级顺序、当前第3级和目标第6级。",
+    "chapter": "03",
+    "pageNumber": 11
+  },
+  "skin": {
+    "id": "neutral-editorial-001",
+    "fonts": {
+      "display": "Noto Serif SC",
+      "body": "Noto Sans SC"
+    },
+    "font": "Noto Sans SC",
+    "primaryColor": "#A35D4F",
+    "background": "#F5F4EF",
+    "surface": "#EEECE5",
+    "dark": "#20201D",
+    "body": "#4B4A45",
+    "muted": "#85837B",
+    "line": "#D8D5CC",
+    "bodyFrame": {
+      "left": 56,
+      "top": 135,
+      "width": 1168,
+      "height": 525
+    },
+    "typography": {
+      "componentHeading": 15.75,
+      "componentTitle": 15.75,
+      "componentItemTitle": 12.75,
+      "componentLead": 12.75,
+      "componentBody": 12.75,
+      "componentLabel": 12.75,
+      "componentMeta": 11.25
+    }
+  },
+  "status": "rejected",
+  "error": "progression-maturity-steps 的组合排版无法在安全 box 内完整呈现：level-1-text, level-2-text, level-5-text [{\"slotId\":\"level-1-text\",\"frame\":{\"left\":167.172,\"top\":231.281,\"width\":120.547,\"height\":95,\"rotation\":0},\"innerFrame\":{\"width\":98.88,\"height\":71.667,\"padding\":{\"top\":8.33333,\"right\":10.8333,\"bottom\":15,\"left\":10.8333}},\"layout\":{\"id\":\"heading-content-flow\",\"defaultId\":\"heading-content-flow\",\"compatible\":[\"statement-flow\",\"heading-content-flow\"],\"contentRoles\":[\"heading\",\"body\"],\"status\":\"overflow\",\"align\":\"left\",\"valign\":\"bottom\",\"density\":\"compact\",\"parts\":[{\"part\":\"heading\",\"field\":\"title\",\"primitive\":\"heading\",\"frame\":{\"left\":178,\"top\":227.672,\"width\":98.891,\"height\":20.047,\"rotation\":0},\"text\":\"个人保存\",\"lineCount\":1,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Serif SC\",\"fontSizePt\":12.75,\"fontWeight\":\"700\",\"alignment\":\"left\",\"lineHeightPt\":15.045},\"capacity\":{\"recommendedMaxChars\":4,\"hardMaxChars\":5,\"hardMaxLines\":1}},{\"part\":\"body\",\"field\":\"body\",\"primitive\":\"body\",\"frame\":{\"left\":178,\"top\":253.719,\"width\":98.891,\"height\":57.563,\"rotation\":0},\"text\":\"个人留存经\\n验，依赖个人\\n记忆\",\"lineCount\":3,\"typography\":{\"role\":\"componentMeta\",\"typeface\":\"Noto Sans SC\",\"fontSizePt\":11.25,\"fontWeight\":\"400\",\"alignment\":\"left\",\"lineHeightPt\":14.4},\"capacity\":{\"recommendedMaxChars\":14,\"hardMaxChars\":18,\"hardMaxLines\":3}}]}},{\"slotId\":\"level-2-text\",\"frame\":{\"left\":300.141,\"top\":194.938,\"width\":120.547,\"height\":95,\"rotation\":0},\"innerFrame\":{\"width\":98.88,\"height\":71.667,\"padding\":{\"top\":8.33333,\"right\":10.8333,\"bottom\":15,\"left\":10.8333}},\"layout\":{\"id\":\"heading-content-flow\",\"defaultId\":\"heading-content-flow\",\"compatible\":[\"statement-flow\",\"heading-content-flow\"],\"contentRoles\":[\"heading\",\"body\"],\"status\":\"overflow\",\"align\":\"left\",\"valign\":\"bottom\",\"density\":\"compact\",\"parts\":[{\"part\":\"heading\",\"field\":\"title\",\"primitive\":\"heading\",\"frame\":{\"left\":310.969,\"top\":191.328,\"width\":98.891,\"height\":20.047,\"rotation\":0},\"text\":\"集中归档\",\"lineCount\":1,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Serif SC\",\"fontSizePt\":12.75,\"fontWeight\":\"700\",\"alignment\":\"left\",\"lineHeightPt\":15.045},\"capacity\":{\"recommendedMaxChars\":4,\"hardMaxChars\":5,\"hardMaxLines\":1}},{\"part\":\"body\",\"field\":\"body\",\"primitive\":\"body\",\"frame\":{\"left\":310.969,\"top\":217.375,\"width\":98.891,\"height\":57.563,\"rotation\":0},\"text\":\"资料集中归\\n档，入口逐步\\n统一\",\"lineCount\":3,\"typography\":{\"role\":\"componentMeta\",\"typeface\":\"Noto Sans SC\",\"fontSizePt\":11.25,\"fontWeight\":\"400\",\"alignment\":\"left\",\"lineHeightPt\":14.4},\"capacity\":{\"recommendedMaxChars\":14,\"hardMaxChars\":18,\"hardMaxLines\":3}}]}},{\"slotId\":\"level-5-text\",\"frame\":{\"left\":699.047,\"top\":85.922,\"width\":120.547,\"height\":95,\"rotation\":0},\"innerFrame\":{\"width\":98.88,\"height\":71.667,\"padding\":{\"top\":8.33333,\"right\":10.8333,\"bottom\":15,\"left\":10.8333}},\"layout\":{\"id\":\"heading-content-flow\",\"defaultId\":\"heading-content-flow\",\"compatible\":[\"statement-flow\",\"heading-content-flow\"],\"contentRoles\":[\"heading\",\"body\"],\"status\":\"overflow\",\"align\":\"left\",\"valign\":\"bottom\",\"density\":\"compact\",\"parts\":[{\"part\":\"heading\",\"field\":\"title\",\"primitive\":\"heading\",\"frame\":{\"left\":709.875,\"top\":82.313,\"width\":98.891,\"height\":20.047,\"rotation\":0},\"text\":\"持续更新\",\"lineCount\":1,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Serif SC\",\"fontSizePt\":12.75,\"fontWeight\":\"700\",\"alignment\":\"left\",\"lineHeightPt\":15.045},\"capacity\":{\"recommendedMaxChars\":4,\"hardMaxChars\":5,\"hardMaxLines\":1}},{\"part\":\"body\",\"field\":\"body\",\"primitive\":\"body\",\"frame\":{\"left\":709.875,\"top\":108.359,\"width\":98.891,\"height\":57.563,\"rotation\":0},\"text\":\"持续补充内\\n容，保持知识\\n有效\",\"lineCount\":3,\"typography\":{\"role\":\"componentMeta\",\"typeface\":\"Noto Sans SC\",\"fontSizePt\":11.25,\"fontWeight\":\"400\",\"alignment\":\"left\",\"lineHeightPt\":14.4},\"capacity\":{\"recommendedMaxChars\":14,\"hardMaxChars\":18,\"hardMaxLines\":3}}]}}]"
+}

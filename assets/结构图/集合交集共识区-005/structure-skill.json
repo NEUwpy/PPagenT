@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "assetId": "containment-consensus-field-005",
+  "features": [
+    "独立主体围绕中央共识场分布",
+    "共同内容位于中央，外围图标立于圆台",
+    "椭圆轨道无方向，名称位于圆台之外"
+  ],
+  "adaptation": "根据主体数量重排轨道锚点与外侧标签；轨道不添加表示时间的箭头。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "外围独立圆台及其图标",
+      "无向椭圆轨道",
+      "中央共享场",
+      "名称在圆台外"
+    ],
+    "variables": [
+      "参与方数",
+      "轨道长短轴",
+      "圆台大小和位置",
+      "独立关注及共识文案"
+    ],
+    "coupledChanges": "用同一场景投影计算圆台、图标脚部和轨道；前后遮挡与外侧标签同步处理",
+    "avoid": "不把独立关注删成角色名，不加表示先后的箭头",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

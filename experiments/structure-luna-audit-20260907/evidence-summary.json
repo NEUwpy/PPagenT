@@ -1,0 +1,5222 @@
+{
+  "generatedAt": "2026-09-07T05:31:52.289Z",
+  "coverage": {
+    "natural": 27,
+    "combined": 35,
+    "total": 35
+  },
+  "batches": [
+    {
+      "batch": 1,
+      "cases": [
+        {
+          "caseId": "case-01",
+          "title": "先试点再扩展能降低上线风险",
+          "expectedAssetId": "argument-evidence-conclusion-001",
+          "selectedAssetIds": [
+            "sequence-phase-gates-004"
+          ],
+          "expectedSelected": false,
+          "choicePresent": true,
+          "visualReview": "失败：论点和六项依据改成门禁流程，删掉论据并增加门槛。"
+        },
+        {
+          "caseId": "case-04",
+          "title": "返工来自多类原因共同影响",
+          "expectedAssetId": "causal-fishbone-attribution-001",
+          "selectedAssetIds": [
+            "parallel-folded-notes-grid-002"
+          ],
+          "expectedSelected": false,
+          "choicePresent": true,
+          "visualReview": "失败：折角便签无独立卷页，右侧越界；文字只表达分类，原因汇入结果关系未表现。"
+        },
+        {
+          "caseId": "case-07",
+          "title": "是否集中建设共享测试环境",
+          "expectedAssetId": "comparison-pros-cons-balance-005",
+          "selectedAssetIds": [
+            "comparison-pros-cons-balance-005"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "失败：无结论依据却倾斜天平；文字穿出托盘。"
+        },
+        {
+          "caseId": "case-10",
+          "title": "从候选需求逐层收敛到发布范围",
+          "expectedAssetId": "convergence-funnel-001",
+          "selectedAssetIds": [
+            "convergence-funnel-001"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "失败：漏斗只剩梯形，缺曲面、随形导流和侧阶段带，竖线穿字。"
+        },
+        {
+          "caseId": "case-13",
+          "title": "质量改进形成持续闭环",
+          "expectedAssetId": "cycle-loop-001",
+          "selectedAssetIds": [
+            "cycle-loop-001"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "失败：厚环与切线箭头丢失，变成无方向五边形连接。"
+        },
+        {
+          "caseId": "case-16",
+          "title": "三个策略共同服务交付可预测",
+          "expectedAssetId": "goal-alignment-strategy-metrics-001",
+          "selectedAssetIds": [
+            "goal-alignment-strategy-metrics-001"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "失败：连续策略承载面和指标带丢失，退化为独立卡片。"
+        },
+        {
+          "caseId": "case-19",
+          "title": "服务能力由多个同级方面构成",
+          "expectedAssetId": "hub-radial-001",
+          "selectedAssetIds": [
+            "hub-radial-001"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "失败：双圆环光晕丢失，添加不应出现的径向线并穿过标题。"
+        },
+        {
+          "caseId": "case-22",
+          "title": "可见交付依赖隐性基础",
+          "expectedAssetId": "layered-iceberg-depth-006",
+          "selectedAssetIds": [
+            "layered-iceberg-depth-006"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "待修：显隐关系成立；下方说明超出冰山，缺多边形切面。"
+        },
+        {
+          "caseId": "case-25",
+          "title": "内外团队围绕共同交付协同",
+          "expectedAssetId": "network-internal-external-ecosystem-001",
+          "selectedAssetIds": [
+            "network-internal-external-ecosystem-001"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "失败：椭圆交叠域改成矩形分区，连线穿过节点与核心文字。"
+        },
+        {
+          "caseId": "case-28",
+          "title": "三项做法共同改善资料交接",
+          "expectedAssetId": "problem-method-result-001",
+          "selectedAssetIds": [
+            "parallel-equal-cards-001"
+          ],
+          "expectedSelected": false,
+          "choicePresent": true,
+          "visualReview": "待修：并列卡可辨，但原问题丢失，编号增加了顺序暗示。"
+        },
+        {
+          "caseId": "case-31",
+          "title": "管理能力按级提升",
+          "expectedAssetId": "progression-maturity-steps-002",
+          "selectedAssetIds": [
+            "progression-maturity-steps-002"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "失败：共同投影的踏面立面丢失，只是高度递增矩形。"
+        },
+        {
+          "caseId": "case-34",
+          "title": "七步完成一次交接",
+          "expectedAssetId": "sequence-flow-001",
+          "selectedAssetIds": [
+            "sequence-flow-001"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "失败：节点未处于轨道，换行轨道不连通。"
+        }
+      ],
+      "logs": [
+        {
+          "at": "2026-09-07T05:04:26.029Z",
+          "pageId": "case-01",
+          "regionId": "body",
+          "reason": "稿件明确给出由试点到复盘再扩大的阶段推进，且每个相邻阶段有必须通过的验证门槛。",
+          "references": [
+            {
+              "assetId": "sequence-phase-gates-004",
+              "preservedFeatures": [
+                "蜿蜒收窄的推进河道",
+                "横跨河道的阶段门闸",
+                "条件标签关联门闸"
+              ],
+              "changes": [
+                "改为三段适配当前稿件",
+                "用真实检查条件替换来源示例"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-1\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:26.072Z",
+          "pageId": "case-01",
+          "regionId": "body",
+          "reason": "稿件明确给出由试点到复盘再扩大的阶段推进，且每个相邻阶段有必须通过的验证门槛。",
+          "references": [
+            {
+              "assetId": "sequence-phase-gates-004",
+              "preservedFeatures": [
+                "蜿蜒收窄的推进河道",
+                "横跨河道的阶段门闸",
+                "条件标签关联门闸"
+              ],
+              "changes": [
+                "改为三段适配当前稿件",
+                "用真实检查条件替换来源示例"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "success",
+          "nativeShapeDelta": 20,
+          "validation": "rendered-unreviewed",
+          "file": "batch-1\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:26.077Z",
+          "pageId": "case-04",
+          "regionId": "body",
+          "reason": "稿件明确将七类原因并列且要求不能视为时间步骤，适合高密度双排折角便签。",
+          "references": [
+            {
+              "assetId": "parallel-folded-notes-grid-002",
+              "preservedFeatures": [
+                "两排居中的等权阵列",
+                "纸面—底影—独立卷页三层",
+                "通栏标题带与语义锚点"
+              ],
+              "changes": [
+                "七项改为4+3两排",
+                "颜色只表达同级归属，不编码类别"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-1\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:26.116Z",
+          "pageId": "case-04",
+          "regionId": "body",
+          "reason": "稿件明确将七类原因并列且要求不能视为时间步骤，适合高密度双排折角便签。",
+          "references": [
+            {
+              "assetId": "parallel-folded-notes-grid-002",
+              "preservedFeatures": [
+                "两排居中的等权阵列",
+                "纸面—底影—独立卷页三层",
+                "通栏标题带与语义锚点"
+              ],
+              "changes": [
+                "七项改为4+3两排",
+                "颜色只表达同级归属，不编码类别"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "success",
+          "nativeShapeDelta": 49,
+          "validation": "rendered-unreviewed",
+          "file": "batch-1\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:26.119Z",
+          "pageId": "case-07",
+          "regionId": "body",
+          "reason": "稿件围绕同一决策同时列出收益、代价并给出先试用的综合判断，符合优劣权衡语义。",
+          "references": [
+            {
+              "assetId": "comparison-pros-cons-balance-005",
+              "preservedFeatures": [
+                "连续天平骨架与支点",
+                "收益与代价两侧秤盘",
+                "独立综合判断区域"
+              ],
+              "changes": [
+                "收益侧略低、代价侧略高表示谨慎判断",
+                "综合判断写在支点下方"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-1\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:26.155Z",
+          "pageId": "case-07",
+          "regionId": "body",
+          "reason": "稿件围绕同一决策同时列出收益、代价并给出先试用的综合判断，符合优劣权衡语义。",
+          "references": [
+            {
+              "assetId": "comparison-pros-cons-balance-005",
+              "preservedFeatures": [
+                "连续天平骨架与支点",
+                "收益与代价两侧秤盘",
+                "独立综合判断区域"
+              ],
+              "changes": [
+                "收益侧略低、代价侧略高表示谨慎判断",
+                "综合判断写在支点下方"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "success",
+          "nativeShapeDelta": 17,
+          "validation": "rendered-unreviewed",
+          "file": "batch-1\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:26.159Z",
+          "pageId": "case-10",
+          "regionId": "body",
+          "reason": "稿件给出三个入口对象与四个连续收敛阶段，入口数量和阶段数明确独立，适合阶段化输入转化漏斗。",
+          "references": [
+            {
+              "assetId": "convergence-funnel-001",
+              "preservedFeatures": [
+                "阶段带与漏斗同步分段",
+                "中央漏斗的逐级收窄",
+                "入口对象到共同发布范围的导流关系"
+              ],
+              "changes": [
+                "三个文字入口替代图标",
+                "四阶段按当前稿件重算高度"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-1\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:26.192Z",
+          "pageId": "case-10",
+          "regionId": "body",
+          "reason": "稿件给出三个入口对象与四个连续收敛阶段，入口数量和阶段数明确独立，适合阶段化输入转化漏斗。",
+          "references": [
+            {
+              "assetId": "convergence-funnel-001",
+              "preservedFeatures": [
+                "阶段带与漏斗同步分段",
+                "中央漏斗的逐级收窄",
+                "入口对象到共同发布范围的导流关系"
+              ],
+              "changes": [
+                "三个文字入口替代图标",
+                "四阶段按当前稿件重算高度"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "success",
+          "nativeShapeDelta": 21,
+          "validation": "rendered-unreviewed",
+          "file": "batch-1\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:26.194Z",
+          "pageId": "case-13",
+          "regionId": "body",
+          "reason": "稿件明确五个同级环节组成循环，检查后回到观察，并把记录与协作列为旁侧支持条件。",
+          "references": [
+            {
+              "assetId": "cycle-loop-001",
+              "preservedFeatures": [
+                "环形闭环方向",
+                "五个阶段节点沿环排列",
+                "旁侧条件与主环分离"
+              ],
+              "changes": [
+                "中心主题替换为持续改进",
+                "记录与协作改为旁注，不成为第六步"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-1\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:26.224Z",
+          "pageId": "case-13",
+          "regionId": "body",
+          "reason": "稿件明确五个同级环节组成循环，检查后回到观察，并把记录与协作列为旁侧支持条件。",
+          "references": [
+            {
+              "assetId": "cycle-loop-001",
+              "preservedFeatures": [
+                "环形闭环方向",
+                "五个阶段节点沿环排列",
+                "旁侧条件与主环分离"
+              ],
+              "changes": [
+                "中心主题替换为持续改进",
+                "记录与协作改为旁注，不成为第六步"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "success",
+          "nativeShapeDelta": 23,
+          "validation": "rendered-unreviewed",
+          "file": "batch-1\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:26.227Z",
+          "pageId": "case-16",
+          "regionId": "body",
+          "reason": "稿件明确一个总目标分解为三项同级策略，每项绑定行动与可核验观察指标。",
+          "references": [
+            {
+              "assetId": "goal-alignment-strategy-metrics-001",
+              "preservedFeatures": [
+                "总目标到策略的纵向对齐",
+                "每项策略绑定行动与指标带",
+                "三列同级节奏"
+              ],
+              "changes": [
+                "指标以记录字段表达，不虚构数值",
+                "收窄为三项当前策略"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-1\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:26.269Z",
+          "pageId": "case-16",
+          "regionId": "body",
+          "reason": "稿件明确一个总目标分解为三项同级策略，每项绑定行动与可核验观察指标。",
+          "references": [
+            {
+              "assetId": "goal-alignment-strategy-metrics-001",
+              "preservedFeatures": [
+                "总目标到策略的纵向对齐",
+                "每项策略绑定行动与指标带",
+                "三列同级节奏"
+              ],
+              "changes": [
+                "指标以记录字段表达，不虚构数值",
+                "收窄为三项当前策略"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "success",
+          "nativeShapeDelta": 29,
+          "validation": "rendered-unreviewed",
+          "file": "batch-1\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:26.272Z",
+          "pageId": "case-19",
+          "regionId": "body",
+          "reason": "稿件明确中心主题由五个同级方面共同构成，不表达因果、分级或箭头方向，适合中心锚点辐射。",
+          "references": [
+            {
+              "assetId": "hub-radial-001",
+              "preservedFeatures": [
+                "中心主题与外围同级节点",
+                "围绕中心的均衡辐射",
+                "无方向的关联关系"
+              ],
+              "changes": [
+                "外围节点加入短说明",
+                "使用细线关联而不加箭头"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-1\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:26.313Z",
+          "pageId": "case-19",
+          "regionId": "body",
+          "reason": "稿件明确中心主题由五个同级方面共同构成，不表达因果、分级或箭头方向，适合中心锚点辐射。",
+          "references": [
+            {
+              "assetId": "hub-radial-001",
+              "preservedFeatures": [
+                "中心主题与外围同级节点",
+                "围绕中心的均衡辐射",
+                "无方向的关联关系"
+              ],
+              "changes": [
+                "外围节点加入短说明",
+                "使用细线关联而不加箭头"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "success",
+          "nativeShapeDelta": 22,
+          "validation": "rendered-unreviewed",
+          "file": "batch-1\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:26.316Z",
+          "pageId": "case-22",
+          "regionId": "body",
+          "reason": "稿件明确水面上少量可见成果由水面下更多隐性基础共同支撑，且不把面积解释为比例，符合冰山显隐层。",
+          "references": [
+            {
+              "assetId": "layered-iceberg-depth-006",
+              "preservedFeatures": [
+                "水面分界与上下显隐层",
+                "水下更深的基础层",
+                "显性成果与隐性工作分区"
+              ],
+              "changes": [
+                "水面下分六项文字基础",
+                "水面上三项成果保持紧凑"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-1\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:26.344Z",
+          "pageId": "case-22",
+          "regionId": "body",
+          "reason": "稿件明确水面上少量可见成果由水面下更多隐性基础共同支撑，且不把面积解释为比例，符合冰山显隐层。",
+          "references": [
+            {
+              "assetId": "layered-iceberg-depth-006",
+              "preservedFeatures": [
+                "水面分界与上下显隐层",
+                "水下更深的基础层",
+                "显性成果与隐性工作分区"
+              ],
+              "changes": [
+                "水面下分六项文字基础",
+                "水面上三项成果保持紧凑"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "success",
+          "nativeShapeDelta": 15,
+          "validation": "rendered-unreviewed",
+          "file": "batch-1\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:26.347Z",
+          "pageId": "case-25",
+          "regionId": "body",
+          "reason": "稿件明确内部与外部两域、共同核心及六条真实协作边，适合内外协同生态网络。",
+          "references": [
+            {
+              "assetId": "network-internal-external-ecosystem-001",
+              "preservedFeatures": [
+                "内部与外部重叠轨道",
+                "共同核心",
+                "同域与跨域真实连接"
+              ],
+              "changes": [
+                "只画稿件列出的六条边",
+                "通过颜色区分域而不增加虚假连接"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-1\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:26.377Z",
+          "pageId": "case-25",
+          "regionId": "body",
+          "reason": "稿件明确内部与外部两域、共同核心及六条真实协作边，适合内外协同生态网络。",
+          "references": [
+            {
+              "assetId": "network-internal-external-ecosystem-001",
+              "preservedFeatures": [
+                "内部与外部重叠轨道",
+                "共同核心",
+                "同域与跨域真实连接"
+              ],
+              "changes": [
+                "只画稿件列出的六条边",
+                "通过颜色区分域而不增加虚假连接"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "success",
+          "nativeShapeDelta": 24,
+          "validation": "rendered-unreviewed",
+          "file": "batch-1\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:26.380Z",
+          "pageId": "case-28",
+          "regionId": "body",
+          "reason": "稿件将三项做法明确列为并列措施，并给出共同预期结果，不能表现为连续步骤。",
+          "references": [
+            {
+              "assetId": "parallel-equal-cards-001",
+              "preservedFeatures": [
+                "三张等权卡片共用水平中轴",
+                "统一圆形视觉锚点—标题—正文层级",
+                "共同结果作为卡组外收束"
+              ],
+              "changes": [
+                "采用3项重算宽度并居中",
+                "预期结果放在卡组下方而非第四张卡片"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-1\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:26.415Z",
+          "pageId": "case-28",
+          "regionId": "body",
+          "reason": "稿件将三项做法明确列为并列措施，并给出共同预期结果，不能表现为连续步骤。",
+          "references": [
+            {
+              "assetId": "parallel-equal-cards-001",
+              "preservedFeatures": [
+                "三张等权卡片共用水平中轴",
+                "统一圆形视觉锚点—标题—正文层级",
+                "共同结果作为卡组外收束"
+              ],
+              "changes": [
+                "采用3项重算宽度并居中",
+                "预期结果放在卡组下方而非第四张卡片"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "success",
+          "nativeShapeDelta": 17,
+          "validation": "rendered-unreviewed",
+          "file": "batch-1\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:26.417Z",
+          "pageId": "case-31",
+          "regionId": "body",
+          "reason": "稿件明确六个依次提升且每级依赖前级基础，属于有门槛的离散成熟度等级。",
+          "references": [
+            {
+              "assetId": "progression-maturity-steps-002",
+              "preservedFeatures": [
+                "左下到右上的连续几何阶台",
+                "踏面和立面共享投影体系",
+                "每级随形说明承托面"
+              ],
+              "changes": [
+                "六级重算阶梯宽度",
+                "不添加当前级或目标级状态标记"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-1\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:26.449Z",
+          "pageId": "case-31",
+          "regionId": "body",
+          "reason": "稿件明确六个依次提升且每级依赖前级基础，属于有门槛的离散成熟度等级。",
+          "references": [
+            {
+              "assetId": "progression-maturity-steps-002",
+              "preservedFeatures": [
+                "左下到右上的连续几何阶台",
+                "踏面和立面共享投影体系",
+                "每级随形说明承托面"
+              ],
+              "changes": [
+                "六级重算阶梯宽度",
+                "不添加当前级或目标级状态标记"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "success",
+          "nativeShapeDelta": 20,
+          "validation": "rendered-unreviewed",
+          "file": "batch-1\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:26.451Z",
+          "pageId": "case-34",
+          "regionId": "body",
+          "reason": "稿件明确七步严格先后且无分支、反馈或门禁，使用顺序流程的方向轨道语法。",
+          "references": [
+            {
+              "assetId": "sequence-flow-001",
+              "preservedFeatures": [
+                "从左向右的连续方向轨道",
+                "编号节点共线并保持节奏",
+                "标题与说明绑定节点"
+              ],
+              "changes": [
+                "七步改为两行连续轨道以保留字号",
+                "保持每步短说明与严格先后"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-1\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:26.484Z",
+          "pageId": "case-34",
+          "regionId": "body",
+          "reason": "稿件明确七步严格先后且无分支、反馈或门禁，使用顺序流程的方向轨道语法。",
+          "references": [
+            {
+              "assetId": "sequence-flow-001",
+              "preservedFeatures": [
+                "从左向右的连续方向轨道",
+                "编号节点共线并保持节奏",
+                "标题与说明绑定节点"
+              ],
+              "changes": [
+                "七步改为两行连续轨道以保留字号",
+                "保持每步短说明与严格先后"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "success",
+          "nativeShapeDelta": 31,
+          "validation": "rendered-unreviewed",
+          "file": "batch-1\\structure-invocations.ndjson"
+        }
+      ],
+      "decks": [
+        {
+          "file": "batch-1\\candidate.pptx",
+          "slides": [
+            {
+              "slide": 1,
+              "shapes": 24,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "01",
+                "先试点再扩展能降低上线风险",
+                "01",
+                "试点",
+                "验证业务适配",
+                "复盘",
+                "用反馈校正文案并积累案例",
+                "扩展",
+                "按角色培训后扩大范围",
+                "故障可定位",
+                "复盘结论可用",
+                "门闸条件通过后才进入下一阶段"
+              ]
+            },
+            {
+              "slide": 2,
+              "shapes": 53,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "02",
+                "返工来自多类原因共同影响",
+                "02",
+                "人员",
+                "交接遗漏、培训不足",
+                "方法",
+                "作业说明更新滞后",
+                "设备",
+                "夹具定位漂移",
+                "材料",
+                "来料尺寸波动",
+                "环境",
+                "照明影响目检",
+                "测量",
+                "量具校准遗漏",
+                "协作",
+                "变更通知不及时"
+              ]
+            },
+            {
+              "slide": 3,
+              "shapes": 21,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "03",
+                "是否集中建设共享测试环境",
+                "03",
+                "收益",
+                "· 减少重复维护",
+                "· 统一数据版本",
+                "· 方便协作排查",
+                "代价",
+                "· 迁移需要时间",
+                "· 公共资源可能排队",
+                "· 需要明确责任人",
+                "先在两个项目试用，暂不全面切换"
+              ]
+            },
+            {
+              "slide": 4,
+              "shapes": 25,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "04",
+                "从候选需求逐层收敛到发布范围",
+                "04",
+                "用户反馈",
+                "业务规划",
+                "运维问题",
+                "收集",
+                "整理背景和受众",
+                "澄清",
+                "确认目标与约束",
+                "评估",
+                "检查价值、工作量和依赖",
+                "承诺",
+                "确定本期发布范围",
+                "发布范围",
+                "入口对象独立进入同一收敛路径"
+              ]
+            },
+            {
+              "slide": 5,
+              "shapes": 27,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "05",
+                "质量改进形成持续闭环",
+                "05",
+                "持续改进",
+                "观察现象",
+                "记录可见变化",
+                "界定问题",
+                "描述问题边界",
+                "提出假设",
+                "说明可能原因",
+                "实施调整",
+                "执行小范围改变",
+                "检查效果",
+                "比较调整前后",
+                "支持条件：记录与协作"
+              ]
+            },
+            {
+              "slide": 6,
+              "shapes": 33,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "06",
+                "三个策略共同服务交付可预测",
+                "06",
+                "让交付可预测",
+                "1",
+                "提前澄清",
+                "行动",
+                "评审需求边界",
+                "观察指标",
+                "返工原因记录",
+                "2",
+                "拆小批次",
+                "行动",
+                "逐批验收",
+                "观察指标",
+                "批次延误记录",
+                "3",
+                "明确责任",
+                "行动",
+                "指定接口人",
+                "观察指标",
+                "待确认问题停留时间"
+              ]
+            },
+            {
+              "slide": 7,
+              "shapes": 26,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "07",
+                "服务能力由多个同级方面构成",
+                "07",
+                "服务能力",
+                "理解问题",
+                "问清背景",
+                "定位证据",
+                "查明事实",
+                "解释方案",
+                "讲明依据",
+                "推进协作",
+                "对齐责任",
+                "跟踪效果",
+                "记录变化"
+              ]
+            },
+            {
+              "slide": 8,
+              "shapes": 19,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "08",
+                "可见交付依赖隐性基础",
+                "08",
+                "水面",
+                "演示页面",
+                "操作流程",
+                "交付文件",
+                "事实核查",
+                "结构设计",
+                "接口验证",
+                "版本管理",
+                "异常处理",
+                "复盘积累",
+                "可见成果",
+                "隐性基础"
+              ]
+            },
+            {
+              "slide": 9,
+              "shapes": 28,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "09",
+                "内外团队围绕共同交付协同",
+                "09",
+                "交付目标",
+                "研发",
+                "质量",
+                "运营",
+                "客户",
+                "供应商",
+                "实施伙伴",
+                "内部",
+                "外部"
+              ]
+            },
+            {
+              "slide": 10,
+              "shapes": 21,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "10",
+                "三项做法共同改善资料交接",
+                "10",
+                "1",
+                "统一命名",
+                "保留版本",
+                "2",
+                "组织目录",
+                "按实际流程",
+                "3",
+                "补充依据",
+                "为关键决定说明理由",
+                "预期结果  接手者能找到材料并理解使用方式"
+              ]
+            },
+            {
+              "slide": 11,
+              "shapes": 24,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "11",
+                "管理能力按级提升",
+                "11",
+                "被动响应",
+                "遇到问题才处理",
+                "建立记录",
+                "留下可追溯信息",
+                "形成规范",
+                "形成共同做法",
+                "稳定执行",
+                "按规范持续交付",
+                "反馈修正",
+                "根据结果调整",
+                "持续优化",
+                "把改进变成日常",
+                "能力门槛逐级提升"
+              ]
+            },
+            {
+              "slide": 12,
+              "shapes": 35,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "12",
+                "七步完成一次交接",
+                "12",
+                "01",
+                "确认范围",
+                "明确本次交接边界",
+                "02",
+                "收集资料",
+                "汇总交付材料",
+                "03",
+                "整理版本",
+                "保留当前版本",
+                "04",
+                "走查流程",
+                "按流程逐项核对",
+                "05",
+                "解释例外",
+                "说明特殊情况",
+                "06",
+                "确认责任",
+                "对齐后续负责人",
+                "07",
+                "记录签收",
+                "留下确认记录",
+                "严格先后，沿轨道完成一次交接"
+              ]
+            }
+          ]
+        },
+        {
+          "file": "batch-1\\round-1\\candidate.pptx",
+          "slides": [
+            {
+              "slide": 1,
+              "shapes": 24,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "01",
+                "先试点再扩展能降低上线风险",
+                "01",
+                "试点",
+                "验证业务适配",
+                "复盘",
+                "用反馈校正文案并积累案例",
+                "扩展",
+                "按角色培训后扩大范围",
+                "故障可定位",
+                "复盘结论可用",
+                "门闸条件通过后才进入下一阶段"
+              ]
+            },
+            {
+              "slide": 2,
+              "shapes": 53,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "02",
+                "返工来自多类原因共同影响",
+                "02",
+                "人员",
+                "交接遗漏、培训不足",
+                "方法",
+                "作业说明更新滞后",
+                "设备",
+                "夹具定位漂移",
+                "材料",
+                "来料尺寸波动",
+                "环境",
+                "照明影响目检",
+                "测量",
+                "量具校准遗漏",
+                "协作",
+                "变更通知不及时"
+              ]
+            },
+            {
+              "slide": 3,
+              "shapes": 21,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "03",
+                "是否集中建设共享测试环境",
+                "03",
+                "收益",
+                "· 减少重复维护",
+                "· 统一数据版本",
+                "· 方便协作排查",
+                "代价",
+                "· 迁移需要时间",
+                "· 公共资源可能排队",
+                "· 需要明确责任人",
+                "先在两个项目试用，暂不全面切换"
+              ]
+            },
+            {
+              "slide": 4,
+              "shapes": 25,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "04",
+                "从候选需求逐层收敛到发布范围",
+                "04",
+                "用户反馈",
+                "业务规划",
+                "运维问题",
+                "收集",
+                "整理背景和受众",
+                "澄清",
+                "确认目标与约束",
+                "评估",
+                "检查价值、工作量和依赖",
+                "承诺",
+                "确定本期发布范围",
+                "发布范围",
+                "入口对象独立进入同一收敛路径"
+              ]
+            },
+            {
+              "slide": 5,
+              "shapes": 27,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "05",
+                "质量改进形成持续闭环",
+                "05",
+                "持续改进",
+                "观察现象",
+                "记录可见变化",
+                "界定问题",
+                "描述问题边界",
+                "提出假设",
+                "说明可能原因",
+                "实施调整",
+                "执行小范围改变",
+                "检查效果",
+                "比较调整前后",
+                "支持条件：记录与协作"
+              ]
+            },
+            {
+              "slide": 6,
+              "shapes": 33,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "06",
+                "三个策略共同服务交付可预测",
+                "06",
+                "让交付可预测",
+                "1",
+                "提前澄清",
+                "行动",
+                "评审需求边界",
+                "观察指标",
+                "返工原因记录",
+                "2",
+                "拆小批次",
+                "行动",
+                "逐批验收",
+                "观察指标",
+                "批次延误记录",
+                "3",
+                "明确责任",
+                "行动",
+                "指定接口人",
+                "观察指标",
+                "待确认问题停留时间"
+              ]
+            },
+            {
+              "slide": 7,
+              "shapes": 26,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "07",
+                "服务能力由多个同级方面构成",
+                "07",
+                "服务能力",
+                "理解问题",
+                "问清背景",
+                "定位证据",
+                "查明事实",
+                "解释方案",
+                "讲明依据",
+                "推进协作",
+                "对齐责任",
+                "跟踪效果",
+                "记录变化"
+              ]
+            },
+            {
+              "slide": 8,
+              "shapes": 19,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "08",
+                "可见交付依赖隐性基础",
+                "08",
+                "水面",
+                "演示页面",
+                "操作流程",
+                "交付文件",
+                "事实核查",
+                "结构设计",
+                "接口验证",
+                "版本管理",
+                "异常处理",
+                "复盘积累",
+                "可见成果",
+                "隐性基础"
+              ]
+            },
+            {
+              "slide": 9,
+              "shapes": 28,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "09",
+                "内外团队围绕共同交付协同",
+                "09",
+                "交付目标",
+                "研发",
+                "质量",
+                "运营",
+                "客户",
+                "供应商",
+                "实施伙伴",
+                "内部",
+                "外部"
+              ]
+            },
+            {
+              "slide": 10,
+              "shapes": 21,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "10",
+                "三项做法共同改善资料交接",
+                "10",
+                "1",
+                "统一命名",
+                "保留版本",
+                "2",
+                "组织目录",
+                "按实际流程",
+                "3",
+                "补充依据",
+                "为关键决定说明理由",
+                "预期结果  接手者能找到材料并理解使用方式"
+              ]
+            },
+            {
+              "slide": 11,
+              "shapes": 24,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "11",
+                "管理能力按级提升",
+                "11",
+                "被动响应",
+                "遇到问题才处理",
+                "建立记录",
+                "留下可追溯信息",
+                "形成规范",
+                "形成共同做法",
+                "稳定执行",
+                "按规范持续交付",
+                "反馈修正",
+                "根据结果调整",
+                "持续优化",
+                "把改进变成日常",
+                "能力门槛逐级提升"
+              ]
+            },
+            {
+              "slide": 12,
+              "shapes": 35,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "12",
+                "七步完成一次交接",
+                "12",
+                "01",
+                "确认范围",
+                "明确本次交接边界",
+                "02",
+                "收集资料",
+                "汇总交付材料",
+                "03",
+                "整理版本",
+                "保留当前版本",
+                "04",
+                "走查流程",
+                "按流程逐项核对",
+                "05",
+                "解释例外",
+                "说明特殊情况",
+                "06",
+                "确认责任",
+                "对齐后续负责人",
+                "07",
+                "记录签收",
+                "留下确认记录",
+                "严格先后，沿轨道完成一次交接"
+              ]
+            }
+          ]
+        }
+      ],
+      "pngs": [
+        "batch-1\\authoring-slide-01.png",
+        "batch-1\\authoring-slide-02.png",
+        "batch-1\\authoring-slide-03.png",
+        "batch-1\\authoring-slide-04.png",
+        "batch-1\\authoring-slide-05.png",
+        "batch-1\\authoring-slide-06.png",
+        "batch-1\\authoring-slide-07.png",
+        "batch-1\\authoring-slide-08.png",
+        "batch-1\\authoring-slide-09.png",
+        "batch-1\\authoring-slide-10.png",
+        "batch-1\\authoring-slide-11.png",
+        "batch-1\\authoring-slide-12.png",
+        "batch-1\\round-1\\authoring-slide-01.png",
+        "batch-1\\round-1\\authoring-slide-02.png",
+        "batch-1\\round-1\\authoring-slide-03.png",
+        "batch-1\\round-1\\authoring-slide-04.png",
+        "batch-1\\round-1\\authoring-slide-05.png",
+        "batch-1\\round-1\\authoring-slide-06.png",
+        "batch-1\\round-1\\authoring-slide-07.png",
+        "batch-1\\round-1\\authoring-slide-08.png",
+        "batch-1\\round-1\\authoring-slide-09.png",
+        "batch-1\\round-1\\authoring-slide-10.png",
+        "batch-1\\round-1\\authoring-slide-11.png",
+        "batch-1\\round-1\\authoring-slide-12.png",
+        "batch-1\\round-1\\slide-01.png",
+        "batch-1\\round-1\\slide-02.png",
+        "batch-1\\round-1\\slide-03.png",
+        "batch-1\\round-1\\slide-04.png",
+        "batch-1\\round-1\\slide-05.png",
+        "batch-1\\round-1\\slide-06.png",
+        "batch-1\\round-1\\slide-07.png",
+        "batch-1\\round-1\\slide-08.png",
+        "batch-1\\round-1\\slide-09.png",
+        "batch-1\\round-1\\slide-10.png",
+        "batch-1\\round-1\\slide-11.png",
+        "batch-1\\round-1\\slide-12.png",
+        "batch-1\\slide-01.png",
+        "batch-1\\slide-02.png",
+        "batch-1\\slide-03.png",
+        "batch-1\\slide-04.png",
+        "batch-1\\slide-05.png",
+        "batch-1\\slide-06.png",
+        "batch-1\\slide-07.png",
+        "batch-1\\slide-08.png",
+        "batch-1\\slide-09.png",
+        "batch-1\\slide-10.png",
+        "batch-1\\slide-11.png",
+        "batch-1\\slide-12.png"
+      ]
+    },
+    {
+      "batch": 2,
+      "cases": [
+        {
+          "caseId": "case-02",
+          "title": "材料完整性决定下一步处理",
+          "expectedAssetId": "branching-decision-routes-001",
+          "selectedAssetIds": [
+            "branching-scenario-fan-004"
+          ],
+          "expectedSelected": false,
+          "choicePresent": true,
+          "visualReview": "失败：左侧卡片越界；情景扇面被普通判断树替代。"
+        },
+        {
+          "caseId": "case-05",
+          "title": "信息延迟怎样扩大交付偏差",
+          "expectedAssetId": "causal-mediator-chain-003",
+          "selectedAssetIds": [
+            "causal-mediator-chain-003"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "失败：因果带没有顶面侧面，圆盘不落锚点，无说明连接。"
+        },
+        {
+          "caseId": "case-08",
+          "title": "不同参与方形成共同交付约定",
+          "expectedAssetId": "containment-consensus-field-005",
+          "selectedAssetIds": [
+            "convergence-many-to-one-003"
+          ],
+          "expectedSelected": false,
+          "choicePresent": true,
+          "visualReview": "失败：五方各自关注内容全部遗漏，保留角色名字不足。"
+        },
+        {
+          "caseId": "case-11",
+          "title": "多种输入共同形成一份实施建议",
+          "expectedAssetId": "convergence-many-to-one-003",
+          "selectedAssetIds": [
+            "convergence-many-to-one-003"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "待修：内容完整，但路径未连接结果且缺平滑粗路径。"
+        },
+        {
+          "caseId": "case-14",
+          "title": "例行运维按周循环",
+          "expectedAssetId": "cycle-racetrack-loop-005",
+          "selectedAssetIds": [
+            "cycle-racetrack-loop-005"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "失败：跑道闭环变六边形，无方向，上下说明带丢失。"
+        },
+        {
+          "caseId": "case-17",
+          "title": "项目保障分成三组职责",
+          "expectedAssetId": "hierarchy-grouped-breakdown-005",
+          "selectedAssetIds": [
+            "hierarchy-grouped-breakdown-005"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "初审可读：根、组、组内职责完整，需记录阅读方向变化。"
+        },
+        {
+          "caseId": "case-20",
+          "title": "平台核心连接直接能力与外围生态",
+          "expectedAssetId": "hub-two-tier-capabilities-004",
+          "selectedAssetIds": [
+            "hub-two-tier-capabilities-004"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "待修：两圈轨道可辨，十字线穿过核心文字。"
+        },
+        {
+          "caseId": "case-23",
+          "title": "按角色和阶段分配检查重点",
+          "expectedAssetId": "matrix-cross-grid-003",
+          "selectedAssetIds": [
+            "matrix-cross-grid-003"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "初审可读：行列对应和全部检查内容完整。"
+        },
+        {
+          "caseId": "case-26",
+          "title": "上线前需要完成三个同级准备",
+          "expectedAssetId": "parallel-equal-cards-001",
+          "selectedAssetIds": [
+            "parallel-equal-cards-001"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "失败：最右卡越界，中间无依据强调，数字引入先后。"
+        },
+        {
+          "caseId": "case-29",
+          "title": "针对三类问题形成配对方案",
+          "expectedAssetId": "problem-solution-outcome-001",
+          "selectedAssetIds": [
+            "problem-solution-outcome-001"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "待修：问题方案配对可读；汇聚未接结果，需标预期。"
+        },
+        {
+          "caseId": "case-32",
+          "title": "本轮优先关注从规范到执行的区间",
+          "expectedAssetId": "progression-spectrum-focus-001",
+          "selectedAssetIds": [
+            "progression-spectrum-focus-001"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "初审可读：连续轴、区间和重点可辨。"
+        },
+        {
+          "caseId": "case-35",
+          "title": "四阶段推进必须通过三个门槛",
+          "expectedAssetId": "sequence-phase-gates-004",
+          "selectedAssetIds": [
+            "sequence-phase-gates-004"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "失败：阶段门禁仅普通卡片，无河道、闸板，三个真实条件全部遗漏。"
+        }
+      ],
+      "logs": [
+        {
+          "at": "2026-09-07T05:04:50.998Z",
+          "pageId": "case-02",
+          "regionId": "native-structure",
+          "reason": "按稿件语义选择 branching-scenario-fan-004，保留结构识别特征并以 Luna high 中性编辑 Skin 重算几何。",
+          "references": [
+            {
+              "assetId": "branching-scenario-fan-004",
+              "preservedFeatures": [
+                "共同假设位于扇面起点",
+                "向下扇出的五条情景路径",
+                "每条路径把触发条件与预期结果配对"
+              ],
+              "changes": [
+                "将情景卡改为材料状态与处理动作",
+                "保留五路扇面并用中性编辑 Skin 适配"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 78,
+            "top": 188,
+            "width": 1122,
+            "height": 420
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-2\\round-1\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:51.039Z",
+          "pageId": "case-02",
+          "regionId": "native-structure",
+          "reason": "按稿件语义选择 branching-scenario-fan-004，保留结构识别特征并以 Luna high 中性编辑 Skin 重算几何。",
+          "references": [
+            {
+              "assetId": "branching-scenario-fan-004",
+              "preservedFeatures": [
+                "共同假设位于扇面起点",
+                "向下扇出的五条情景路径",
+                "每条路径把触发条件与预期结果配对"
+              ],
+              "changes": [
+                "将情景卡改为材料状态与处理动作",
+                "保留五路扇面并用中性编辑 Skin 适配"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 78,
+            "top": 188,
+            "width": 1122,
+            "height": 420
+          },
+          "event": "success",
+          "nativeShapeDelta": 33,
+          "validation": "rendered-unreviewed",
+          "file": "batch-2\\round-1\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:51.041Z",
+          "pageId": "case-05",
+          "regionId": "native-structure",
+          "reason": "按稿件语义选择 causal-mediator-chain-003，保留结构识别特征并以 Luna high 中性编辑 Skin 重算几何。",
+          "references": [
+            {
+              "assetId": "causal-mediator-chain-003",
+              "preservedFeatures": [
+                "连续上升箭带",
+                "节点沿共同因果脊线收缩",
+                "阶梯说明块与圆盘节点成对连接"
+              ],
+              "changes": [
+                "使用四个中介机制与一个明确结果",
+                "弱化透视装饰以保持文字可读"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 78,
+            "top": 188,
+            "width": 1122,
+            "height": 420
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-2\\round-1\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:51.065Z",
+          "pageId": "case-05",
+          "regionId": "native-structure",
+          "reason": "按稿件语义选择 causal-mediator-chain-003，保留结构识别特征并以 Luna high 中性编辑 Skin 重算几何。",
+          "references": [
+            {
+              "assetId": "causal-mediator-chain-003",
+              "preservedFeatures": [
+                "连续上升箭带",
+                "节点沿共同因果脊线收缩",
+                "阶梯说明块与圆盘节点成对连接"
+              ],
+              "changes": [
+                "使用四个中介机制与一个明确结果",
+                "弱化透视装饰以保持文字可读"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 78,
+            "top": 188,
+            "width": 1122,
+            "height": 420
+          },
+          "event": "success",
+          "nativeShapeDelta": 22,
+          "validation": "rendered-unreviewed",
+          "file": "batch-2\\round-1\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:51.067Z",
+          "pageId": "case-08",
+          "regionId": "native-structure",
+          "reason": "按稿件语义选择 convergence-many-to-one-003，保留结构识别特征并以 Luna high 中性编辑 Skin 重算几何。",
+          "references": [
+            {
+              "assetId": "convergence-many-to-one-003",
+              "preservedFeatures": [
+                "五路独立输入",
+                "多条路径平滑汇聚",
+                "唯一共同结果承接所有输入"
+              ],
+              "changes": [
+                "共同结果拆为三条并列约定",
+                "保留输入与结果的单向汇聚"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 78,
+            "top": 188,
+            "width": 1122,
+            "height": 420
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-2\\round-1\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:51.090Z",
+          "pageId": "case-08",
+          "regionId": "native-structure",
+          "reason": "按稿件语义选择 convergence-many-to-one-003，保留结构识别特征并以 Luna high 中性编辑 Skin 重算几何。",
+          "references": [
+            {
+              "assetId": "convergence-many-to-one-003",
+              "preservedFeatures": [
+                "五路独立输入",
+                "多条路径平滑汇聚",
+                "唯一共同结果承接所有输入"
+              ],
+              "changes": [
+                "共同结果拆为三条并列约定",
+                "保留输入与结果的单向汇聚"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 78,
+            "top": 188,
+            "width": 1122,
+            "height": 420
+          },
+          "event": "success",
+          "nativeShapeDelta": 18,
+          "validation": "rendered-unreviewed",
+          "file": "batch-2\\round-1\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:51.093Z",
+          "pageId": "case-11",
+          "regionId": "native-structure",
+          "reason": "按稿件语义选择 convergence-many-to-one-003，保留结构识别特征并以 Luna high 中性编辑 Skin 重算几何。",
+          "references": [
+            {
+              "assetId": "convergence-many-to-one-003",
+              "preservedFeatures": [
+                "多路输入起点彼此分离",
+                "粗路径平滑汇聚到同一点",
+                "唯一共同结果承接所有输入"
+              ],
+              "changes": [
+                "扩展为六路输入",
+                "结果内部标注范围、优先级、行动安排"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 78,
+            "top": 188,
+            "width": 1122,
+            "height": 420
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-2\\round-1\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:51.118Z",
+          "pageId": "case-11",
+          "regionId": "native-structure",
+          "reason": "按稿件语义选择 convergence-many-to-one-003，保留结构识别特征并以 Luna high 中性编辑 Skin 重算几何。",
+          "references": [
+            {
+              "assetId": "convergence-many-to-one-003",
+              "preservedFeatures": [
+                "多路输入起点彼此分离",
+                "粗路径平滑汇聚到同一点",
+                "唯一共同结果承接所有输入"
+              ],
+              "changes": [
+                "扩展为六路输入",
+                "结果内部标注范围、优先级、行动安排"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 78,
+            "top": 188,
+            "width": 1122,
+            "height": 420
+          },
+          "event": "success",
+          "nativeShapeDelta": 21,
+          "validation": "rendered-unreviewed",
+          "file": "batch-2\\round-1\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:51.120Z",
+          "pageId": "case-14",
+          "regionId": "native-structure",
+          "reason": "按稿件语义选择 cycle-racetrack-loop-005，保留结构识别特征并以 Luna high 中性编辑 Skin 重算几何。",
+          "references": [
+            {
+              "assetId": "cycle-racetrack-loop-005",
+              "preservedFeatures": [
+                "阶段按顺序排列在回环轨道上",
+                "末端返回起点",
+                "阶段说明与路线同步对齐"
+              ],
+              "changes": [
+                "改为六步周循环",
+                "在每个阶段下方放置动作说明"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 78,
+            "top": 188,
+            "width": 1122,
+            "height": 420
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-2\\round-1\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:51.148Z",
+          "pageId": "case-14",
+          "regionId": "native-structure",
+          "reason": "按稿件语义选择 cycle-racetrack-loop-005，保留结构识别特征并以 Luna high 中性编辑 Skin 重算几何。",
+          "references": [
+            {
+              "assetId": "cycle-racetrack-loop-005",
+              "preservedFeatures": [
+                "阶段按顺序排列在回环轨道上",
+                "末端返回起点",
+                "阶段说明与路线同步对齐"
+              ],
+              "changes": [
+                "改为六步周循环",
+                "在每个阶段下方放置动作说明"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 78,
+            "top": 188,
+            "width": 1122,
+            "height": 420
+          },
+          "event": "success",
+          "nativeShapeDelta": 33,
+          "validation": "rendered-unreviewed",
+          "file": "batch-2\\round-1\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:51.150Z",
+          "pageId": "case-17",
+          "regionId": "native-structure",
+          "reason": "按稿件语义选择 hierarchy-grouped-breakdown-005，保留结构识别特征并以 Luna high 中性编辑 Skin 重算几何。",
+          "references": [
+            {
+              "assetId": "hierarchy-grouped-breakdown-005",
+              "preservedFeatures": [
+                "总主题到具名分组的层级",
+                "分组包含连续子项区域",
+                "子项单一归属"
+              ],
+              "changes": [
+                "使用三组职责并重算分组宽度",
+                "取消负责人层级"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 78,
+            "top": 188,
+            "width": 1122,
+            "height": 420
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-2\\round-1\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:51.178Z",
+          "pageId": "case-17",
+          "regionId": "native-structure",
+          "reason": "按稿件语义选择 hierarchy-grouped-breakdown-005，保留结构识别特征并以 Luna high 中性编辑 Skin 重算几何。",
+          "references": [
+            {
+              "assetId": "hierarchy-grouped-breakdown-005",
+              "preservedFeatures": [
+                "总主题到具名分组的层级",
+                "分组包含连续子项区域",
+                "子项单一归属"
+              ],
+              "changes": [
+                "使用三组职责并重算分组宽度",
+                "取消负责人层级"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 78,
+            "top": 188,
+            "width": 1122,
+            "height": 420
+          },
+          "event": "success",
+          "nativeShapeDelta": 32,
+          "validation": "rendered-unreviewed",
+          "file": "batch-2\\round-1\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:51.180Z",
+          "pageId": "case-20",
+          "regionId": "native-structure",
+          "reason": "按稿件语义选择 hub-two-tier-capabilities-004，保留结构识别特征并以 Luna high 中性编辑 Skin 重算几何。",
+          "references": [
+            {
+              "assetId": "hub-two-tier-capabilities-004",
+              "preservedFeatures": [
+                "核心与直接能力的内圈",
+                "外围生态形成共同外圈",
+                "两层轨道共享平台中心"
+              ],
+              "changes": [
+                "以项目平台为中心",
+                "外围生态不归属于单一能力"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 78,
+            "top": 188,
+            "width": 1122,
+            "height": 420
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-2\\round-1\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:51.207Z",
+          "pageId": "case-20",
+          "regionId": "native-structure",
+          "reason": "按稿件语义选择 hub-two-tier-capabilities-004，保留结构识别特征并以 Luna high 中性编辑 Skin 重算几何。",
+          "references": [
+            {
+              "assetId": "hub-two-tier-capabilities-004",
+              "preservedFeatures": [
+                "核心与直接能力的内圈",
+                "外围生态形成共同外圈",
+                "两层轨道共享平台中心"
+              ],
+              "changes": [
+                "以项目平台为中心",
+                "外围生态不归属于单一能力"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 78,
+            "top": 188,
+            "width": 1122,
+            "height": 420
+          },
+          "event": "success",
+          "nativeShapeDelta": 26,
+          "validation": "rendered-unreviewed",
+          "file": "batch-2\\round-1\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:51.209Z",
+          "pageId": "case-23",
+          "regionId": "native-structure",
+          "reason": "按稿件语义选择 matrix-cross-grid-003，保留结构识别特征并以 Luna high 中性编辑 Skin 重算几何。",
+          "references": [
+            {
+              "assetId": "matrix-cross-grid-003",
+              "preservedFeatures": [
+                "离散行列两个维度",
+                "完整单元格交叉",
+                "行列标题与单元格严格对齐"
+              ],
+              "changes": [
+                "采用三行四列",
+                "每格只保留一组检查重点"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 78,
+            "top": 188,
+            "width": 1122,
+            "height": 420
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-2\\round-1\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:51.232Z",
+          "pageId": "case-23",
+          "regionId": "native-structure",
+          "reason": "按稿件语义选择 matrix-cross-grid-003，保留结构识别特征并以 Luna high 中性编辑 Skin 重算几何。",
+          "references": [
+            {
+              "assetId": "matrix-cross-grid-003",
+              "preservedFeatures": [
+                "离散行列两个维度",
+                "完整单元格交叉",
+                "行列标题与单元格严格对齐"
+              ],
+              "changes": [
+                "采用三行四列",
+                "每格只保留一组检查重点"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 78,
+            "top": 188,
+            "width": 1122,
+            "height": 420
+          },
+          "event": "success",
+          "nativeShapeDelta": 38,
+          "validation": "rendered-unreviewed",
+          "file": "batch-2\\round-1\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:51.233Z",
+          "pageId": "case-26",
+          "regionId": "native-structure",
+          "reason": "按稿件语义选择 parallel-equal-cards-001，保留结构识别特征并以 Luna high 中性编辑 Skin 重算几何。",
+          "references": [
+            {
+              "assetId": "parallel-equal-cards-001",
+              "preservedFeatures": [
+                "同级对象等权并列",
+                "统一锚点与等距节奏",
+                "无先后连接"
+              ],
+              "changes": [
+                "使用三个准备项",
+                "将长说明放入卡片下半部"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 78,
+            "top": 188,
+            "width": 1122,
+            "height": 420
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-2\\round-1\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:51.253Z",
+          "pageId": "case-26",
+          "regionId": "native-structure",
+          "reason": "按稿件语义选择 parallel-equal-cards-001，保留结构识别特征并以 Luna high 中性编辑 Skin 重算几何。",
+          "references": [
+            {
+              "assetId": "parallel-equal-cards-001",
+              "preservedFeatures": [
+                "同级对象等权并列",
+                "统一锚点与等距节奏",
+                "无先后连接"
+              ],
+              "changes": [
+                "使用三个准备项",
+                "将长说明放入卡片下半部"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 78,
+            "top": 188,
+            "width": 1122,
+            "height": 420
+          },
+          "event": "success",
+          "nativeShapeDelta": 15,
+          "validation": "rendered-unreviewed",
+          "file": "batch-2\\round-1\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:51.254Z",
+          "pageId": "case-29",
+          "regionId": "native-structure",
+          "reason": "按稿件语义选择 problem-solution-outcome-001，保留结构识别特征并以 Luna high 中性编辑 Skin 重算几何。",
+          "references": [
+            {
+              "assetId": "problem-solution-outcome-001",
+              "preservedFeatures": [
+                "问题与方案逐组对应",
+                "从左向右阅读",
+                "所有方案汇入唯一结果"
+              ],
+              "changes": [
+                "使用三组问题方案",
+                "结果以可陈述的预期方向表达"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 78,
+            "top": 188,
+            "width": 1122,
+            "height": 420
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-2\\round-1\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:51.276Z",
+          "pageId": "case-29",
+          "regionId": "native-structure",
+          "reason": "按稿件语义选择 problem-solution-outcome-001，保留结构识别特征并以 Luna high 中性编辑 Skin 重算几何。",
+          "references": [
+            {
+              "assetId": "problem-solution-outcome-001",
+              "preservedFeatures": [
+                "问题与方案逐组对应",
+                "从左向右阅读",
+                "所有方案汇入唯一结果"
+              ],
+              "changes": [
+                "使用三组问题方案",
+                "结果以可陈述的预期方向表达"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 78,
+            "top": 188,
+            "width": 1122,
+            "height": 420
+          },
+          "event": "success",
+          "nativeShapeDelta": 25,
+          "validation": "rendered-unreviewed",
+          "file": "batch-2\\round-1\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:51.278Z",
+          "pageId": "case-32",
+          "regionId": "native-structure",
+          "reason": "按稿件语义选择 progression-spectrum-focus-001，保留结构识别特征并以 Luna high 中性编辑 Skin 重算几何。",
+          "references": [
+            {
+              "assetId": "progression-spectrum-focus-001",
+              "preservedFeatures": [
+                "单一横轴承载连续顺序",
+                "唯一重点区域视觉抬升",
+                "没有对象间连线"
+              ],
+              "changes": [
+                "保留六个区间以完整呈现原稿",
+                "将规范到执行作为连续重点带"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 78,
+            "top": 188,
+            "width": 1122,
+            "height": 420
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-2\\round-1\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:51.311Z",
+          "pageId": "case-32",
+          "regionId": "native-structure",
+          "reason": "按稿件语义选择 progression-spectrum-focus-001，保留结构识别特征并以 Luna high 中性编辑 Skin 重算几何。",
+          "references": [
+            {
+              "assetId": "progression-spectrum-focus-001",
+              "preservedFeatures": [
+                "单一横轴承载连续顺序",
+                "唯一重点区域视觉抬升",
+                "没有对象间连线"
+              ],
+              "changes": [
+                "保留六个区间以完整呈现原稿",
+                "将规范到执行作为连续重点带"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 78,
+            "top": 188,
+            "width": 1122,
+            "height": 420
+          },
+          "event": "success",
+          "nativeShapeDelta": 25,
+          "validation": "rendered-unreviewed",
+          "file": "batch-2\\round-1\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:51.314Z",
+          "pageId": "case-35",
+          "regionId": "native-structure",
+          "reason": "按稿件语义选择 sequence-phase-gates-004，保留结构识别特征并以 Luna high 中性编辑 Skin 重算几何。",
+          "references": [
+            {
+              "assetId": "sequence-phase-gates-004",
+              "preservedFeatures": [
+                "蜿蜒收窄的箭形河道",
+                "横跨河道的阶段门闸",
+                "阶段、河道和门闸共享阅读方向"
+              ],
+              "changes": [
+                "使用四阶段三门槛",
+                "条件标签紧邻对应门闸"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 78,
+            "top": 188,
+            "width": 1122,
+            "height": 420
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-2\\round-1\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:04:51.341Z",
+          "pageId": "case-35",
+          "regionId": "native-structure",
+          "reason": "按稿件语义选择 sequence-phase-gates-004，保留结构识别特征并以 Luna high 中性编辑 Skin 重算几何。",
+          "references": [
+            {
+              "assetId": "sequence-phase-gates-004",
+              "preservedFeatures": [
+                "蜿蜒收窄的箭形河道",
+                "横跨河道的阶段门闸",
+                "阶段、河道和门闸共享阅读方向"
+              ],
+              "changes": [
+                "使用四阶段三门槛",
+                "条件标签紧邻对应门闸"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 78,
+            "top": 188,
+            "width": 1122,
+            "height": 420
+          },
+          "event": "success",
+          "nativeShapeDelta": 33,
+          "validation": "rendered-unreviewed",
+          "file": "batch-2\\round-1\\evidence\\structure-invocations.ndjson"
+        }
+      ],
+      "decks": [
+        {
+          "file": "batch-2\\candidate.pptx",
+          "slides": [
+            {
+              "slide": 1,
+              "shapes": 38,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "01",
+                "材料完整性决定下一步处理",
+                "五种材料状态各自对应一条互斥路径",
+                "01",
+                "当前材料状态",
+                "判定",
+                "齐全且有效",
+                "进入评审",
+                "缺证明",
+                "通知补交",
+                "文件过期",
+                "要求更新",
+                "特殊权限",
+                "转专人确认",
+                "主动撤回",
+                "终止处理"
+              ]
+            },
+            {
+              "slide": 2,
+              "shapes": 27,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "02",
+                "信息延迟怎样扩大交付偏差",
+                "滞后的变更沿一条因果机制链逐级放大",
+                "02",
+                "1",
+                "变更传递滞后",
+                "计划仍使用旧版本",
+                "2",
+                "旧计划延续",
+                "采购按旧规格下单",
+                "3",
+                "规格不符",
+                "到货与需求不一致",
+                "4",
+                "现场等待补料",
+                "装配窗口被挤占",
+                "交付偏差扩大"
+              ]
+            },
+            {
+              "slide": 3,
+              "shapes": 23,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "03",
+                "不同参与方形成共同交付约定",
+                "五方独立关注共同汇入三条交付约定",
+                "03",
+                "研发",
+                "业务",
+                "运营",
+                "质量",
+                "客户",
+                "共同交付约定",
+                "验收依据 · 问题记录 · 反馈责任"
+              ]
+            },
+            {
+              "slide": 4,
+              "shapes": 26,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "04",
+                "多种输入共同形成一份实施建议",
+                "六路独立证据共同进入一份实施建议",
+                "04",
+                "现场访谈",
+                "运行日志",
+                "用户反馈",
+                "历史故障",
+                "资源清单",
+                "测试结果",
+                "实施建议",
+                "问题范围 · 优先级 · 行动安排"
+              ]
+            },
+            {
+              "slide": 5,
+              "shapes": 38,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "05",
+                "例行运维按周循环",
+                "六个动作沿闭合路线循环，并保留每步说明",
+                "05",
+                "检查",
+                "看状态",
+                "记录",
+                "写异常",
+                "判断",
+                "定优先",
+                "处理",
+                "做修复",
+                "复核",
+                "验效果",
+                "交接",
+                "交责任",
+                "下一周继续从检查开始"
+              ]
+            },
+            {
+              "slide": 6,
+              "shapes": 37,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "06",
+                "项目保障分成三组职责",
+                "项目保障拆为三组，每项职责只属于一个组",
+                "06",
+                "项目保障",
+                "内容组",
+                "材料收集",
+                "事实核对",
+                "版本管理",
+                "技术组",
+                "接口验证",
+                "构建发布",
+                "运营组",
+                "培训",
+                "答疑",
+                "问题登记",
+                "移交确认"
+              ]
+            },
+            {
+              "slide": 7,
+              "shapes": 31,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "07",
+                "平台核心连接直接能力与外围生态",
+                "直接能力组成核心，外围生态整体围绕平台",
+                "07",
+                "项目平台",
+                "权限",
+                "文档",
+                "任务",
+                "检索",
+                "培训",
+                "咨询",
+                "社区",
+                "第三方工具",
+                "支持服务"
+              ]
+            },
+            {
+              "slide": 8,
+              "shapes": 43,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "08",
+                "按角色和阶段分配检查重点",
+                "三个角色与四个阶段形成完整交叉矩阵",
+                "08",
+                "准备",
+                "执行",
+                "移交",
+                "复盘",
+                "研发",
+                "接口",
+                "错误",
+                "部署",
+                "技术债",
+                "业务",
+                "目标",
+                "适用",
+                "培训",
+                "需求变化",
+                "质量",
+                "依据",
+                "记录",
+                "验收",
+                "改进"
+              ]
+            },
+            {
+              "slide": 9,
+              "shapes": 20,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "09",
+                "上线前需要完成三个同级准备",
+                "范围、责任、回退三项准备同等重要",
+                "09",
+                "1",
+                "确认范围",
+                "列清包含与不包含的事项",
+                "2",
+                "明确责任",
+                "确认支持和升级联系人",
+                "3",
+                "验证回退",
+                "实际走通恢复步骤"
+              ]
+            },
+            {
+              "slide": 10,
+              "shapes": 30,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "10",
+                "针对三类问题形成配对方案",
+                "三个问题分别配对方案，共同指向交接清晰度",
+                "10",
+                "问题",
+                "对应方案",
+                "资料难找",
+                "统一入口",
+                "版本混乱",
+                "保留版本标识",
+                "责任不清",
+                "明确接口人",
+                "提高交接清晰度"
+              ]
+            },
+            {
+              "slide": 11,
+              "shapes": 30,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "11",
+                "本轮优先关注从规范到执行的区间",
+                "六个成熟度区间沿一条连续轴排列，重点落在局部区间",
+                "11",
+                "认识",
+                "01",
+                "记录",
+                "02",
+                "规范",
+                "本轮重点",
+                "03",
+                "执行",
+                "本轮重点",
+                "04",
+                "反馈",
+                "05",
+                "优化",
+                "06",
+                "低成熟度",
+                "高成熟度",
+                "规范到执行"
+              ]
+            },
+            {
+              "slide": 12,
+              "shapes": 38,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "12",
+                "四阶段推进必须通过三个门槛",
+                "每个相邻阶段边界都设置必须通过的检查门槛",
+                "12",
+                "调研",
+                "阶段工作",
+                "门槛",
+                "确认范围",
+                "设计",
+                "阶段工作",
+                "门槛",
+                "方案评审",
+                "试制",
+                "阶段工作",
+                "门槛",
+                "完成验收",
+                "交付",
+                "交付结果"
+              ]
+            }
+          ]
+        },
+        {
+          "file": "batch-2\\round-1\\candidate.pptx",
+          "slides": [
+            {
+              "slide": 1,
+              "shapes": 38,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "01",
+                "材料完整性决定下一步处理",
+                "五种材料状态各自对应一条互斥路径",
+                "01",
+                "当前材料状态",
+                "判定",
+                "齐全且有效",
+                "进入评审",
+                "缺证明",
+                "通知补交",
+                "文件过期",
+                "要求更新",
+                "特殊权限",
+                "转专人确认",
+                "主动撤回",
+                "终止处理"
+              ]
+            },
+            {
+              "slide": 2,
+              "shapes": 27,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "02",
+                "信息延迟怎样扩大交付偏差",
+                "滞后的变更沿一条因果机制链逐级放大",
+                "02",
+                "1",
+                "变更传递滞后",
+                "计划仍使用旧版本",
+                "2",
+                "旧计划延续",
+                "采购按旧规格下单",
+                "3",
+                "规格不符",
+                "到货与需求不一致",
+                "4",
+                "现场等待补料",
+                "装配窗口被挤占",
+                "交付偏差扩大"
+              ]
+            },
+            {
+              "slide": 3,
+              "shapes": 23,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "03",
+                "不同参与方形成共同交付约定",
+                "五方独立关注共同汇入三条交付约定",
+                "03",
+                "研发",
+                "业务",
+                "运营",
+                "质量",
+                "客户",
+                "共同交付约定",
+                "验收依据 · 问题记录 · 反馈责任"
+              ]
+            },
+            {
+              "slide": 4,
+              "shapes": 26,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "04",
+                "多种输入共同形成一份实施建议",
+                "六路独立证据共同进入一份实施建议",
+                "04",
+                "现场访谈",
+                "运行日志",
+                "用户反馈",
+                "历史故障",
+                "资源清单",
+                "测试结果",
+                "实施建议",
+                "问题范围 · 优先级 · 行动安排"
+              ]
+            },
+            {
+              "slide": 5,
+              "shapes": 38,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "05",
+                "例行运维按周循环",
+                "六个动作沿闭合路线循环，并保留每步说明",
+                "05",
+                "检查",
+                "看状态",
+                "记录",
+                "写异常",
+                "判断",
+                "定优先",
+                "处理",
+                "做修复",
+                "复核",
+                "验效果",
+                "交接",
+                "交责任",
+                "下一周继续从检查开始"
+              ]
+            },
+            {
+              "slide": 6,
+              "shapes": 37,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "06",
+                "项目保障分成三组职责",
+                "项目保障拆为三组，每项职责只属于一个组",
+                "06",
+                "项目保障",
+                "内容组",
+                "材料收集",
+                "事实核对",
+                "版本管理",
+                "技术组",
+                "接口验证",
+                "构建发布",
+                "运营组",
+                "培训",
+                "答疑",
+                "问题登记",
+                "移交确认"
+              ]
+            },
+            {
+              "slide": 7,
+              "shapes": 31,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "07",
+                "平台核心连接直接能力与外围生态",
+                "直接能力组成核心，外围生态整体围绕平台",
+                "07",
+                "项目平台",
+                "权限",
+                "文档",
+                "任务",
+                "检索",
+                "培训",
+                "咨询",
+                "社区",
+                "第三方工具",
+                "支持服务"
+              ]
+            },
+            {
+              "slide": 8,
+              "shapes": 43,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "08",
+                "按角色和阶段分配检查重点",
+                "三个角色与四个阶段形成完整交叉矩阵",
+                "08",
+                "准备",
+                "执行",
+                "移交",
+                "复盘",
+                "研发",
+                "接口",
+                "错误",
+                "部署",
+                "技术债",
+                "业务",
+                "目标",
+                "适用",
+                "培训",
+                "需求变化",
+                "质量",
+                "依据",
+                "记录",
+                "验收",
+                "改进"
+              ]
+            },
+            {
+              "slide": 9,
+              "shapes": 20,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "09",
+                "上线前需要完成三个同级准备",
+                "范围、责任、回退三项准备同等重要",
+                "09",
+                "1",
+                "确认范围",
+                "列清包含与不包含的事项",
+                "2",
+                "明确责任",
+                "确认支持和升级联系人",
+                "3",
+                "验证回退",
+                "实际走通恢复步骤"
+              ]
+            },
+            {
+              "slide": 10,
+              "shapes": 30,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "10",
+                "针对三类问题形成配对方案",
+                "三个问题分别配对方案，共同指向交接清晰度",
+                "10",
+                "问题",
+                "对应方案",
+                "资料难找",
+                "统一入口",
+                "版本混乱",
+                "保留版本标识",
+                "责任不清",
+                "明确接口人",
+                "提高交接清晰度"
+              ]
+            },
+            {
+              "slide": 11,
+              "shapes": 30,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "11",
+                "本轮优先关注从规范到执行的区间",
+                "六个成熟度区间沿一条连续轴排列，重点落在局部区间",
+                "11",
+                "认识",
+                "01",
+                "记录",
+                "02",
+                "规范",
+                "本轮重点",
+                "03",
+                "执行",
+                "本轮重点",
+                "04",
+                "反馈",
+                "05",
+                "优化",
+                "06",
+                "低成熟度",
+                "高成熟度",
+                "规范到执行"
+              ]
+            },
+            {
+              "slide": 12,
+              "shapes": 38,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "12",
+                "四阶段推进必须通过三个门槛",
+                "每个相邻阶段边界都设置必须通过的检查门槛",
+                "12",
+                "调研",
+                "阶段工作",
+                "门槛",
+                "确认范围",
+                "设计",
+                "阶段工作",
+                "门槛",
+                "方案评审",
+                "试制",
+                "阶段工作",
+                "门槛",
+                "完成验收",
+                "交付",
+                "交付结果"
+              ]
+            }
+          ]
+        }
+      ],
+      "pngs": [
+        "batch-2\\rendered\\slide-01.png",
+        "batch-2\\rendered\\slide-02.png",
+        "batch-2\\rendered\\slide-03.png",
+        "batch-2\\rendered\\slide-04.png",
+        "batch-2\\rendered\\slide-05.png",
+        "batch-2\\rendered\\slide-06.png",
+        "batch-2\\rendered\\slide-07.png",
+        "batch-2\\rendered\\slide-08.png",
+        "batch-2\\rendered\\slide-09.png",
+        "batch-2\\rendered\\slide-10.png",
+        "batch-2\\rendered\\slide-11.png",
+        "batch-2\\rendered\\slide-12.png",
+        "batch-2\\round-1\\rendered\\slide-01.png",
+        "batch-2\\round-1\\rendered\\slide-02.png",
+        "batch-2\\round-1\\rendered\\slide-03.png",
+        "batch-2\\round-1\\rendered\\slide-04.png",
+        "batch-2\\round-1\\rendered\\slide-05.png",
+        "batch-2\\round-1\\rendered\\slide-06.png",
+        "batch-2\\round-1\\rendered\\slide-07.png",
+        "batch-2\\round-1\\rendered\\slide-08.png",
+        "batch-2\\round-1\\rendered\\slide-09.png",
+        "batch-2\\round-1\\rendered\\slide-10.png",
+        "batch-2\\round-1\\rendered\\slide-11.png",
+        "batch-2\\round-1\\rendered\\slide-12.png"
+      ]
+    },
+    {
+      "batch": 3,
+      "cases": [
+        {
+          "caseId": "case-03",
+          "title": "交付计划需要覆盖三种需求情景",
+          "expectedAssetId": "branching-scenario-fan-004",
+          "selectedAssetIds": [
+            "branching-scenario-fan-004"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "失败：三情景内容完整，但箭头从情景指回假设，反转展开方向；中间情景被无依据突出。"
+        },
+        {
+          "caseId": "case-06",
+          "title": "正式发布选择方案甲",
+          "expectedAssetId": "comparison-dual-verdict-001",
+          "selectedAssetIds": [
+            "comparison-dual-verdict-001"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "初审可读：同口径四项比较、推荐结论、镜像舱和椭圆承台可辨。"
+        },
+        {
+          "caseId": "case-09",
+          "title": "可交付方案必须同时满足三类要求",
+          "expectedAssetId": "containment-multi-set-intersection-001",
+          "selectedAssetIds": [
+            "containment-multi-set-intersection-001"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "失败：交集核心黑底深灰字难读，遮住组织可承担；三个椭圆交叠与核心位置不一致。"
+        },
+        {
+          "caseId": "case-12",
+          "title": "把初步想法逐层筛成可验证假设",
+          "expectedAssetId": "convergence-simple-funnel-001",
+          "selectedAssetIds": [
+            "sequence-phase-gates-004"
+          ],
+          "expectedSelected": false,
+          "choicePresent": true,
+          "visualReview": "失败：选择门禁却画成收窄箭头条，既无门禁特征也非连续漏斗；连接穿字。"
+        },
+        {
+          "caseId": "case-15",
+          "title": "测试结果反馈校准输入",
+          "expectedAssetId": "cycle-single-chain-feedback-002",
+          "selectedAssetIds": [
+            "cycle-single-chain-feedback-002"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "失败：所有前向箭头向左，反馈又从参数指向结果，关系与稿件相反。"
+        },
+        {
+          "caseId": "case-18",
+          "title": "统一知识入口支持多项工作",
+          "expectedAssetId": "hub-directed-outcomes-002",
+          "selectedAssetIds": [
+            "hub-radial-001"
+          ],
+          "expectedSelected": false,
+          "choicePresent": true,
+          "visualReview": "失败：双圆环光晕丢失，中心辐射变通用连线图；无依据突出合规检查。"
+        },
+        {
+          "caseId": "case-21",
+          "title": "系统能力由基础向应用层层支撑",
+          "expectedAssetId": "layered-architecture-001",
+          "selectedAssetIds": [
+            "layered-architecture-001"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "失败：资源层放顶部、应用层放底部，与自下而上支撑相反；曲面层带退化为平行四边形。"
+        },
+        {
+          "caseId": "case-24",
+          "title": "用紧迫性和影响范围分组处理问题",
+          "expectedAssetId": "matrix-quadrant-priority-001",
+          "selectedAssetIds": [
+            "matrix-quadrant-priority-001"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "初审可读：四象限、维度方向及四项处置对应完整。"
+        },
+        {
+          "caseId": "case-27",
+          "title": "一次评审需要核对九个同级要点",
+          "expectedAssetId": "parallel-folded-notes-grid-002",
+          "selectedAssetIds": [
+            "parallel-folded-notes-grid-002"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "待修：九要点和标题带完整；折角只有三角线，缺独立卷页及连续纸面层次。"
+        },
+        {
+          "caseId": "case-30",
+          "title": "能力成长经历持续攀升的里程点",
+          "expectedAssetId": "progression-growth-curve-004",
+          "selectedAssetIds": [
+            "progression-maturity-steps-002"
+          ],
+          "expectedSelected": false,
+          "choicePresent": true,
+          "visualReview": "失败：阶台分离、箭头朝向低级，首级说明超出承载面；连续成长没有体现。"
+        },
+        {
+          "caseId": "case-33",
+          "title": "需求变更要看清角色与阶段交接",
+          "expectedAssetId": "role-stage-collaboration-001",
+          "selectedAssetIds": [
+            "role-stage-collaboration-001"
+          ],
+          "expectedSelected": true,
+          "choicePresent": true,
+          "visualReview": "失败：角色与任务可读，但所有交接箭头反向；将最后确认另设第五阶段需解释稿件映射。"
+        }
+      ],
+      "logs": [
+        {
+          "at": "2026-09-07T05:07:21.605Z",
+          "pageId": "case-03-page-01",
+          "regionId": "case-03-structure",
+          "reason": "同一团队规模假设下并列推演三种需求情景，触发条件与预期结果成对表达。",
+          "references": [
+            {
+              "assetId": "branching-scenario-fan-004",
+              "preservedFeatures": [
+                "共同假设位于扇面起点",
+                "情景路径从共同起点向外展开",
+                "触发条件与预期结果配对"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-3\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:07:21.651Z",
+          "pageId": "case-03-page-01",
+          "regionId": "case-03-structure",
+          "reason": "同一团队规模假设下并列推演三种需求情景，触发条件与预期结果成对表达。",
+          "references": [
+            {
+              "assetId": "branching-scenario-fan-004",
+              "preservedFeatures": [
+                "共同假设位于扇面起点",
+                "情景路径从共同起点向外展开",
+                "触发条件与预期结果配对"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "success",
+          "nativeShapeDelta": 22,
+          "validation": "rendered-unreviewed",
+          "file": "batch-3\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:07:21.658Z",
+          "pageId": "case-06-page-01",
+          "regionId": "case-06-structure",
+          "reason": "方案甲乙按四个共同维度逐行对应，且稿件给出明确推荐方向。",
+          "references": [
+            {
+              "assetId": "comparison-dual-verdict-001",
+              "preservedFeatures": [
+                "两个比较舱镜像平衡",
+                "对应要点横向共线",
+                "中央比较节点位于真实留白",
+                "底部椭圆平台收束两侧"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-3\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:07:21.685Z",
+          "pageId": "case-06-page-01",
+          "regionId": "case-06-structure",
+          "reason": "方案甲乙按四个共同维度逐行对应，且稿件给出明确推荐方向。",
+          "references": [
+            {
+              "assetId": "comparison-dual-verdict-001",
+              "preservedFeatures": [
+                "两个比较舱镜像平衡",
+                "对应要点横向共线",
+                "中央比较节点位于真实留白",
+                "底部椭圆平台收束两侧"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "success",
+          "nativeShapeDelta": 42,
+          "validation": "rendered-unreviewed",
+          "file": "batch-3\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:07:21.687Z",
+          "pageId": "case-09-page-01",
+          "regionId": "case-09-structure",
+          "reason": "三个等权集合的共同部分决定可交付范围，交集是本页核心结论。",
+          "references": [
+            {
+              "assetId": "containment-multi-set-intersection-001",
+              "preservedFeatures": [
+                "三个同级集合围绕共同核心",
+                "圆形场域保持等权",
+                "共同部分明确强调为中心"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-3\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:07:21.710Z",
+          "pageId": "case-09-page-01",
+          "regionId": "case-09-structure",
+          "reason": "三个等权集合的共同部分决定可交付范围，交集是本页核心结论。",
+          "references": [
+            {
+              "assetId": "containment-multi-set-intersection-001",
+              "preservedFeatures": [
+                "三个同级集合围绕共同核心",
+                "圆形场域保持等权",
+                "共同部分明确强调为中心"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "success",
+          "nativeShapeDelta": 10,
+          "validation": "rendered-unreviewed",
+          "file": "batch-3\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:07:21.713Z",
+          "pageId": "case-12-page-01",
+          "regionId": "case-12-structure",
+          "reason": "五道筛选按连续先后收窄范围，阶段门禁表达每次筛选的必要门槛。",
+          "references": [
+            {
+              "assetId": "sequence-phase-gates-004",
+              "preservedFeatures": [
+                "连续向下收窄的几何路径",
+                "每一级对应一个筛选门槛",
+                "末端保留可验证假设"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-3\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:07:21.738Z",
+          "pageId": "case-12-page-01",
+          "regionId": "case-12-structure",
+          "reason": "五道筛选按连续先后收窄范围，阶段门禁表达每次筛选的必要门槛。",
+          "references": [
+            {
+              "assetId": "sequence-phase-gates-004",
+              "preservedFeatures": [
+                "连续向下收窄的几何路径",
+                "每一级对应一个筛选门槛",
+                "末端保留可验证假设"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "success",
+          "nativeShapeDelta": 22,
+          "validation": "rendered-unreviewed",
+          "file": "batch-3\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:07:21.740Z",
+          "pageId": "case-15-page-01",
+          "regionId": "case-15-structure",
+          "reason": "前向主链明确，结果不满足目标时仅回到参数配置校准。",
+          "references": [
+            {
+              "assetId": "cycle-single-chain-feedback-002",
+              "preservedFeatures": [
+                "前向主链从左向右推进",
+                "结果节点向上游参数配置回流",
+                "反馈路径独立于目标设定"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-3\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:07:21.764Z",
+          "pageId": "case-15-page-01",
+          "regionId": "case-15-structure",
+          "reason": "前向主链明确，结果不满足目标时仅回到参数配置校准。",
+          "references": [
+            {
+              "assetId": "cycle-single-chain-feedback-002",
+              "preservedFeatures": [
+                "前向主链从左向右推进",
+                "结果节点向上游参数配置回流",
+                "反馈路径独立于目标设定"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "success",
+          "nativeShapeDelta": 23,
+          "validation": "rendered-unreviewed",
+          "file": "batch-3\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:07:21.766Z",
+          "pageId": "case-18-page-01",
+          "regionId": "case-18-structure",
+          "reason": "唯一知识入口向七项并列工作提供支持，外围之间没有流程。",
+          "references": [
+            {
+              "assetId": "hub-radial-001",
+              "preservedFeatures": [
+                "中心锚点与七个同级外围节点",
+                "径向关系表达中心支持",
+                "外围之间没有先后连接"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-3\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:07:21.793Z",
+          "pageId": "case-18-page-01",
+          "regionId": "case-18-structure",
+          "reason": "唯一知识入口向七项并列工作提供支持，外围之间没有流程。",
+          "references": [
+            {
+              "assetId": "hub-radial-001",
+              "preservedFeatures": [
+                "中心锚点与七个同级外围节点",
+                "径向关系表达中心支持",
+                "外围之间没有先后连接"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "success",
+          "nativeShapeDelta": 25,
+          "validation": "rendered-unreviewed",
+          "file": "batch-3\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:07:21.795Z",
+          "pageId": "case-21-page-01",
+          "regionId": "case-21-structure",
+          "reason": "六层系统能力自下而上支撑，层内两项能力同级，层间无跨层网络线。",
+          "references": [
+            {
+              "assetId": "layered-architecture-001",
+              "preservedFeatures": [
+                "六层自下而上递进",
+                "每层两个同级能力",
+                "层间只有纵向支撑线"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-3\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:07:21.828Z",
+          "pageId": "case-21-page-01",
+          "regionId": "case-21-structure",
+          "reason": "六层系统能力自下而上支撑，层内两项能力同级，层间无跨层网络线。",
+          "references": [
+            {
+              "assetId": "layered-architecture-001",
+              "preservedFeatures": [
+                "六层自下而上递进",
+                "每层两个同级能力",
+                "层间只有纵向支撑线"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "success",
+          "nativeShapeDelta": 24,
+          "validation": "rendered-unreviewed",
+          "file": "batch-3\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:07:21.830Z",
+          "pageId": "case-24-page-01",
+          "regionId": "case-24-structure",
+          "reason": "影响范围与紧迫性构成两个独立维度，四象限直接承载处置策略。",
+          "references": [
+            {
+              "assetId": "matrix-quadrant-priority-001",
+              "preservedFeatures": [
+                "横纵轴真实交叉形成四象限",
+                "轴端明确表达维度方向",
+                "四象限分别承载处置策略"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-3\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:07:21.854Z",
+          "pageId": "case-24-page-01",
+          "regionId": "case-24-structure",
+          "reason": "影响范围与紧迫性构成两个独立维度，四象限直接承载处置策略。",
+          "references": [
+            {
+              "assetId": "matrix-quadrant-priority-001",
+              "preservedFeatures": [
+                "横纵轴真实交叉形成四象限",
+                "轴端明确表达维度方向",
+                "四象限分别承载处置策略"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "success",
+          "nativeShapeDelta": 18,
+          "validation": "rendered-unreviewed",
+          "file": "batch-3\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:07:21.857Z",
+          "pageId": "case-27-page-01",
+          "regionId": "case-27-structure",
+          "reason": "九个等权要点需要密集枚举，折角便签保留纸面层次与两排阵列语法并扩展为三行。",
+          "references": [
+            {
+              "assetId": "parallel-folded-notes-grid-002",
+              "preservedFeatures": [
+                "纸面折角轮廓",
+                "标题色带和独立视觉锚点",
+                "等权阵列的居中节奏"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-3\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:07:21.880Z",
+          "pageId": "case-27-page-01",
+          "regionId": "case-27-structure",
+          "reason": "九个等权要点需要密集枚举，折角便签保留纸面层次与两排阵列语法并扩展为三行。",
+          "references": [
+            {
+              "assetId": "parallel-folded-notes-grid-002",
+              "preservedFeatures": [
+                "纸面折角轮廓",
+                "标题色带和独立视觉锚点",
+                "等权阵列的居中节奏"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "success",
+          "nativeShapeDelta": 82,
+          "validation": "rendered-unreviewed",
+          "file": "batch-3\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:07:21.882Z",
+          "pageId": "case-30-page-01",
+          "regionId": "case-30-structure",
+          "reason": "五个能力阶段具有离散门槛并逐级提高，阶梯比连续曲线更忠实。",
+          "references": [
+            {
+              "assetId": "progression-maturity-steps-002",
+              "preservedFeatures": [
+                "从左下向右上的连续阶台",
+                "踏面和立面共享投影",
+                "每级由随形承托面组织文字"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-3\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:07:21.906Z",
+          "pageId": "case-30-page-01",
+          "regionId": "case-30-structure",
+          "reason": "五个能力阶段具有离散门槛并逐级提高，阶梯比连续曲线更忠实。",
+          "references": [
+            {
+              "assetId": "progression-maturity-steps-002",
+              "preservedFeatures": [
+                "从左下向右上的连续阶台",
+                "踏面和立面共享投影",
+                "每级由随形承托面组织文字"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "success",
+          "nativeShapeDelta": 35,
+          "validation": "rendered-unreviewed",
+          "file": "batch-3\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:07:21.908Z",
+          "pageId": "case-33-page-01",
+          "regionId": "case-33-structure",
+          "reason": "阶段横向推进、角色纵向分工，五个真实交接任务需要泳道表达。",
+          "references": [
+            {
+              "assetId": "role-stage-collaboration-001",
+              "preservedFeatures": [
+                "横向阶段与纵向角色形成泳道",
+                "任务归属明确到角色和阶段",
+                "交接路径连接真实任务"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "batch-3\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:07:21.932Z",
+          "pageId": "case-33-page-01",
+          "regionId": "case-33-structure",
+          "reason": "阶段横向推进、角色纵向分工，五个真实交接任务需要泳道表达。",
+          "references": [
+            {
+              "assetId": "role-stage-collaboration-001",
+              "preservedFeatures": [
+                "横向阶段与纵向角色形成泳道",
+                "任务归属明确到角色和阶段",
+                "交接路径连接真实任务"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "success",
+          "nativeShapeDelta": 30,
+          "validation": "rendered-unreviewed",
+          "file": "batch-3\\evidence\\structure-invocations.ndjson"
+        }
+      ],
+      "decks": [
+        {
+          "file": "batch-3\\.build\\draft.pptx",
+          "slides": [
+            {
+              "slide": 1,
+              "shapes": 26,
+              "pictures": 0,
+              "connectors": 3,
+              "texts": [
+                "01",
+                "交付计划需要覆盖三种需求情景",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "共同假设",
+                "现有团队规模不变",
+                "01",
+                "需求平稳",
+                "触发：需求平稳",
+                "预期：双周交付，排期稳定",
+                "02",
+                "短期激增",
+                "触发：短期需求激增",
+                "预期：先做核心，次要延后",
+                "03",
+                "持续下降",
+                "触发：需求持续下降",
+                "预期：技术整理，积压减少",
+                "三种情景是备选假设，不是连续阶段",
+                "01"
+              ]
+            },
+            {
+              "slide": 2,
+              "shapes": 49,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "02",
+                "正式发布选择方案甲",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "方案甲",
+                "✓",
+                "可独立回滚",
+                "✓",
+                "按角色区分权限",
+                "✓",
+                "保留审计记录",
+                "✓",
+                "模块独立维护",
+                "方案乙",
+                "–",
+                "必须整体回退",
+                "–",
+                "权限共用",
+                "–",
+                "依赖人工笔记",
+                "–",
+                "模块相互耦合",
+                "VS",
+                "推荐甲 · 乙仅适合临时验证",
+                "02"
+              ]
+            },
+            {
+              "slide": 3,
+              "shapes": 17,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "03",
+                "可交付方案必须同时满足三类要求",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "真实需求",
+                "技术可行",
+                "组织可承担",
+                "本期可交付",
+                "三者共同部分",
+                "只满足需求和技术、无人维护的方案不在共同部分",
+                "03"
+              ]
+            },
+            {
+              "slide": 4,
+              "shapes": 29,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "04",
+                "把初步想法逐层筛成可验证假设",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "01",
+                "相关性",
+                "02",
+                "可解释性",
+                "03",
+                "可观察性",
+                "04",
+                "可验证性",
+                "05",
+                "成本可承担",
+                "想法",
+                "可验证假设",
+                "连续筛选，范围持续收窄",
+                "04"
+              ]
+            },
+            {
+              "slide": 5,
+              "shapes": 26,
+              "pictures": 0,
+              "connectors": 4,
+              "texts": [
+                "05",
+                "测试结果反馈校准输入",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "01",
+                "目标设定",
+                "定义成功标准",
+                "02",
+                "参数配置",
+                "调整输入参数",
+                "03",
+                "执行测试",
+                "运行一次测试",
+                "04",
+                "结果评估",
+                "判断是否满足目标",
+                "不满足目标时",
+                "反馈回到参数配置进行校准",
+                "满足目标时保留当前配置",
+                "05"
+              ]
+            },
+            {
+              "slide": 6,
+              "shapes": 25,
+              "pictures": 0,
+              "connectors": 7,
+              "texts": [
+                "06",
+                "统一知识入口支持多项工作",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "统一知识入口",
+                "唯一中心",
+                "新人培训",
+                "问题定位",
+                "方案复用",
+                "变更查询",
+                "经验检索",
+                "责任查找",
+                "合规检查",
+                "中心提供支持，外围之间没有流程",
+                "06"
+              ]
+            },
+            {
+              "slide": 7,
+              "shapes": 26,
+              "pictures": 0,
+              "connectors": 5,
+              "texts": [
+                "07",
+                "系统能力由基础向应用层层支撑",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "资源层",
+                "计算  ·  存储",
+                "数据层",
+                "采集  ·  版本",
+                "服务层",
+                "接口  ·  事件",
+                "能力层",
+                "搜索  ·  分析",
+                "流程层",
+                "任务  ·  审批",
+                "应用层",
+                "工作台  ·  报表",
+                "层间支撑关系 · 自下而上从基础走向应用",
+                "07"
+              ]
+            },
+            {
+              "slide": 8,
+              "shapes": 25,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "08",
+                "用紧迫性和影响范围分组处理问题",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "影响范围：小",
+                "影响范围：大",
+                "紧迫性：高",
+                "紧迫性：低",
+                "高紧迫 · 小影响",
+                "现场快速处置",
+                "高紧迫 · 大影响",
+                "立即组织处理",
+                "低紧迫 · 小影响",
+                "进入常规清单",
+                "低紧迫 · 大影响",
+                "纳入专项计划",
+                "08"
+              ]
+            },
+            {
+              "slide": 9,
+              "shapes": 89,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "09",
+                "一次评审需要核对九个同级要点",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "01",
+                "目标明确",
+                "让评审先对齐要达成什么",
+                "02",
+                "范围清楚",
+                "避免评审对象不断扩张",
+                "03",
+                "事实可查",
+                "每个判断都有来源依据",
+                "04",
+                "责任到人",
+                "出现疑问时知道找谁",
+                "05",
+                "接口可用",
+                "确认协作边界能够衔接",
+                "06",
+                "错误可定位",
+                "出现偏差时能找到位置",
+                "07",
+                "版本可追踪",
+                "知道当前依据是哪一版",
+                "08",
+                "结果可编辑",
+                "交付后仍能继续修改",
+                "09",
+                "交接有记录",
+                "让下一位接手不丢上下文",
+                "九个要点等权呈现，按三行三列扫描",
+                "09"
+              ]
+            },
+            {
+              "slide": 10,
+              "shapes": 38,
+              "pictures": 0,
+              "connectors": 4,
+              "texts": [
+                "10",
+                "能力成长经历持续攀升的里程点",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "01",
+                "基础操作",
+                "熟悉基本工具",
+                "02",
+                "独立处理",
+                "可独立完成任务",
+                "03",
+                "跨组协作",
+                "能在接口处协同",
+                "04",
+                "系统优化",
+                "主动改善系统",
+                "05",
+                "带教复用",
+                "把能力传给他人",
+                "能力要求逐级提高，阶段连续且有里程点",
+                "10"
+              ]
+            },
+            {
+              "slide": 11,
+              "shapes": 33,
+              "pictures": 0,
+              "connectors": 4,
+              "texts": [
+                "11",
+                "需求变更要看清角色与阶段交接",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "1  提出",
+                "2  评估",
+                "3  实现",
+                "4  验收",
+                "5  确认",
+                "业务",
+                "研发",
+                "质量",
+                "说明诉求",
+                "检查影响",
+                "修改方案",
+                "验证结果",
+                "最后确认",
+                "交接沿阶段向右推进：诉求 → 评估 → 修改 → 验证 → 确认",
+                "11"
+              ]
+            }
+          ]
+        },
+        {
+          "file": "batch-3\\candidate.pptx",
+          "slides": [
+            {
+              "slide": 1,
+              "shapes": 26,
+              "pictures": 0,
+              "connectors": 3,
+              "texts": [
+                "01",
+                "交付计划需要覆盖三种需求情景",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "共同假设",
+                "现有团队规模不变",
+                "01",
+                "需求平稳",
+                "触发：需求平稳",
+                "预期：双周交付，排期稳定",
+                "02",
+                "短期激增",
+                "触发：短期需求激增",
+                "预期：先做核心，次要延后",
+                "03",
+                "持续下降",
+                "触发：需求持续下降",
+                "预期：技术整理，积压减少",
+                "三种情景是备选假设，不是连续阶段",
+                "01"
+              ]
+            },
+            {
+              "slide": 2,
+              "shapes": 49,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "02",
+                "正式发布选择方案甲",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "方案甲",
+                "✓",
+                "可独立回滚",
+                "✓",
+                "按角色区分权限",
+                "✓",
+                "保留审计记录",
+                "✓",
+                "模块独立维护",
+                "方案乙",
+                "–",
+                "必须整体回退",
+                "–",
+                "权限共用",
+                "–",
+                "依赖人工笔记",
+                "–",
+                "模块相互耦合",
+                "VS",
+                "推荐甲 · 乙仅适合临时验证",
+                "02"
+              ]
+            },
+            {
+              "slide": 3,
+              "shapes": 17,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "03",
+                "可交付方案必须同时满足三类要求",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "真实需求",
+                "技术可行",
+                "组织可承担",
+                "本期可交付",
+                "三者共同部分",
+                "只满足需求和技术、无人维护的方案不在共同部分",
+                "03"
+              ]
+            },
+            {
+              "slide": 4,
+              "shapes": 29,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "04",
+                "把初步想法逐层筛成可验证假设",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "01",
+                "相关性",
+                "02",
+                "可解释性",
+                "03",
+                "可观察性",
+                "04",
+                "可验证性",
+                "05",
+                "成本可承担",
+                "想法",
+                "可验证假设",
+                "连续筛选，范围持续收窄",
+                "04"
+              ]
+            },
+            {
+              "slide": 5,
+              "shapes": 26,
+              "pictures": 0,
+              "connectors": 4,
+              "texts": [
+                "05",
+                "测试结果反馈校准输入",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "01",
+                "目标设定",
+                "定义成功标准",
+                "02",
+                "参数配置",
+                "调整输入参数",
+                "03",
+                "执行测试",
+                "运行一次测试",
+                "04",
+                "结果评估",
+                "判断是否满足目标",
+                "不满足目标时",
+                "反馈回到参数配置进行校准",
+                "满足目标时保留当前配置",
+                "05"
+              ]
+            },
+            {
+              "slide": 6,
+              "shapes": 25,
+              "pictures": 0,
+              "connectors": 7,
+              "texts": [
+                "06",
+                "统一知识入口支持多项工作",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "统一知识入口",
+                "唯一中心",
+                "新人培训",
+                "问题定位",
+                "方案复用",
+                "变更查询",
+                "经验检索",
+                "责任查找",
+                "合规检查",
+                "中心提供支持，外围之间没有流程",
+                "06"
+              ]
+            },
+            {
+              "slide": 7,
+              "shapes": 26,
+              "pictures": 0,
+              "connectors": 5,
+              "texts": [
+                "07",
+                "系统能力由基础向应用层层支撑",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "资源层",
+                "计算  ·  存储",
+                "数据层",
+                "采集  ·  版本",
+                "服务层",
+                "接口  ·  事件",
+                "能力层",
+                "搜索  ·  分析",
+                "流程层",
+                "任务  ·  审批",
+                "应用层",
+                "工作台  ·  报表",
+                "层间支撑关系 · 自下而上从基础走向应用",
+                "07"
+              ]
+            },
+            {
+              "slide": 8,
+              "shapes": 25,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "08",
+                "用紧迫性和影响范围分组处理问题",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "影响范围：小",
+                "影响范围：大",
+                "紧迫性：高",
+                "紧迫性：低",
+                "高紧迫 · 小影响",
+                "现场快速处置",
+                "高紧迫 · 大影响",
+                "立即组织处理",
+                "低紧迫 · 小影响",
+                "进入常规清单",
+                "低紧迫 · 大影响",
+                "纳入专项计划",
+                "08"
+              ]
+            },
+            {
+              "slide": 9,
+              "shapes": 89,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "09",
+                "一次评审需要核对九个同级要点",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "01",
+                "目标明确",
+                "让评审先对齐要达成什么",
+                "02",
+                "范围清楚",
+                "避免评审对象不断扩张",
+                "03",
+                "事实可查",
+                "每个判断都有来源依据",
+                "04",
+                "责任到人",
+                "出现疑问时知道找谁",
+                "05",
+                "接口可用",
+                "确认协作边界能够衔接",
+                "06",
+                "错误可定位",
+                "出现偏差时能找到位置",
+                "07",
+                "版本可追踪",
+                "知道当前依据是哪一版",
+                "08",
+                "结果可编辑",
+                "交付后仍能继续修改",
+                "09",
+                "交接有记录",
+                "让下一位接手不丢上下文",
+                "九个要点等权呈现，按三行三列扫描",
+                "09"
+              ]
+            },
+            {
+              "slide": 10,
+              "shapes": 38,
+              "pictures": 0,
+              "connectors": 4,
+              "texts": [
+                "10",
+                "能力成长经历持续攀升的里程点",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "01",
+                "基础操作",
+                "熟悉基本工具",
+                "02",
+                "独立处理",
+                "可独立完成任务",
+                "03",
+                "跨组协作",
+                "能在接口处协同",
+                "04",
+                "系统优化",
+                "主动改善系统",
+                "05",
+                "带教复用",
+                "把能力传给他人",
+                "能力要求逐级提高，阶段连续且有里程点",
+                "10"
+              ]
+            },
+            {
+              "slide": 11,
+              "shapes": 33,
+              "pictures": 0,
+              "connectors": 4,
+              "texts": [
+                "11",
+                "需求变更要看清角色与阶段交接",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "1  提出",
+                "2  评估",
+                "3  实现",
+                "4  验收",
+                "5  确认",
+                "业务",
+                "研发",
+                "质量",
+                "说明诉求",
+                "检查影响",
+                "修改方案",
+                "验证结果",
+                "最后确认",
+                "交接沿阶段向右推进：诉求 → 评估 → 修改 → 验证 → 确认",
+                "11"
+              ]
+            }
+          ]
+        },
+        {
+          "file": "batch-3\\final\\candidate.pptx",
+          "slides": [
+            {
+              "slide": 1,
+              "shapes": 26,
+              "pictures": 0,
+              "connectors": 3,
+              "texts": [
+                "01",
+                "交付计划需要覆盖三种需求情景",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "共同假设",
+                "现有团队规模不变",
+                "01",
+                "需求平稳",
+                "触发：需求平稳",
+                "预期：双周交付，排期稳定",
+                "02",
+                "短期激增",
+                "触发：短期需求激增",
+                "预期：先做核心，次要延后",
+                "03",
+                "持续下降",
+                "触发：需求持续下降",
+                "预期：技术整理，积压减少",
+                "三种情景是备选假设，不是连续阶段",
+                "01"
+              ]
+            },
+            {
+              "slide": 2,
+              "shapes": 49,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "02",
+                "正式发布选择方案甲",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "方案甲",
+                "✓",
+                "可独立回滚",
+                "✓",
+                "按角色区分权限",
+                "✓",
+                "保留审计记录",
+                "✓",
+                "模块独立维护",
+                "方案乙",
+                "–",
+                "必须整体回退",
+                "–",
+                "权限共用",
+                "–",
+                "依赖人工笔记",
+                "–",
+                "模块相互耦合",
+                "VS",
+                "推荐甲 · 乙仅适合临时验证",
+                "02"
+              ]
+            },
+            {
+              "slide": 3,
+              "shapes": 17,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "03",
+                "可交付方案必须同时满足三类要求",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "真实需求",
+                "技术可行",
+                "组织可承担",
+                "本期可交付",
+                "三者共同部分",
+                "只满足需求和技术、无人维护的方案不在共同部分",
+                "03"
+              ]
+            },
+            {
+              "slide": 4,
+              "shapes": 29,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "04",
+                "把初步想法逐层筛成可验证假设",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "01",
+                "相关性",
+                "02",
+                "可解释性",
+                "03",
+                "可观察性",
+                "04",
+                "可验证性",
+                "05",
+                "成本可承担",
+                "想法",
+                "可验证假设",
+                "连续筛选，范围持续收窄",
+                "04"
+              ]
+            },
+            {
+              "slide": 5,
+              "shapes": 26,
+              "pictures": 0,
+              "connectors": 4,
+              "texts": [
+                "05",
+                "测试结果反馈校准输入",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "01",
+                "目标设定",
+                "定义成功标准",
+                "02",
+                "参数配置",
+                "调整输入参数",
+                "03",
+                "执行测试",
+                "运行一次测试",
+                "04",
+                "结果评估",
+                "判断是否满足目标",
+                "不满足目标时",
+                "反馈回到参数配置进行校准",
+                "满足目标时保留当前配置",
+                "05"
+              ]
+            },
+            {
+              "slide": 6,
+              "shapes": 25,
+              "pictures": 0,
+              "connectors": 7,
+              "texts": [
+                "06",
+                "统一知识入口支持多项工作",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "统一知识入口",
+                "唯一中心",
+                "新人培训",
+                "问题定位",
+                "方案复用",
+                "变更查询",
+                "经验检索",
+                "责任查找",
+                "合规检查",
+                "中心提供支持，外围之间没有流程",
+                "06"
+              ]
+            },
+            {
+              "slide": 7,
+              "shapes": 26,
+              "pictures": 0,
+              "connectors": 5,
+              "texts": [
+                "07",
+                "系统能力由基础向应用层层支撑",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "资源层",
+                "计算  ·  存储",
+                "数据层",
+                "采集  ·  版本",
+                "服务层",
+                "接口  ·  事件",
+                "能力层",
+                "搜索  ·  分析",
+                "流程层",
+                "任务  ·  审批",
+                "应用层",
+                "工作台  ·  报表",
+                "层间支撑关系 · 自下而上从基础走向应用",
+                "07"
+              ]
+            },
+            {
+              "slide": 8,
+              "shapes": 25,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "08",
+                "用紧迫性和影响范围分组处理问题",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "影响范围：小",
+                "影响范围：大",
+                "紧迫性：高",
+                "紧迫性：低",
+                "高紧迫 · 小影响",
+                "现场快速处置",
+                "高紧迫 · 大影响",
+                "立即组织处理",
+                "低紧迫 · 小影响",
+                "进入常规清单",
+                "低紧迫 · 大影响",
+                "纳入专项计划",
+                "08"
+              ]
+            },
+            {
+              "slide": 9,
+              "shapes": 89,
+              "pictures": 0,
+              "connectors": 0,
+              "texts": [
+                "09",
+                "一次评审需要核对九个同级要点",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "01",
+                "目标明确",
+                "让评审先对齐要达成什么",
+                "02",
+                "范围清楚",
+                "避免评审对象不断扩张",
+                "03",
+                "事实可查",
+                "每个判断都有来源依据",
+                "04",
+                "责任到人",
+                "出现疑问时知道找谁",
+                "05",
+                "接口可用",
+                "确认协作边界能够衔接",
+                "06",
+                "错误可定位",
+                "出现偏差时能找到位置",
+                "07",
+                "版本可追踪",
+                "知道当前依据是哪一版",
+                "08",
+                "结果可编辑",
+                "交付后仍能继续修改",
+                "09",
+                "交接有记录",
+                "让下一位接手不丢上下文",
+                "九个要点等权呈现，按三行三列扫描",
+                "09"
+              ]
+            },
+            {
+              "slide": 10,
+              "shapes": 38,
+              "pictures": 0,
+              "connectors": 4,
+              "texts": [
+                "10",
+                "能力成长经历持续攀升的里程点",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "01",
+                "基础操作",
+                "熟悉基本工具",
+                "02",
+                "独立处理",
+                "可独立完成任务",
+                "03",
+                "跨组协作",
+                "能在接口处协同",
+                "04",
+                "系统优化",
+                "主动改善系统",
+                "05",
+                "带教复用",
+                "把能力传给他人",
+                "能力要求逐级提高，阶段连续且有里程点",
+                "10"
+              ]
+            },
+            {
+              "slide": 11,
+              "shapes": 33,
+              "pictures": 0,
+              "connectors": 4,
+              "texts": [
+                "11",
+                "需求变更要看清角色与阶段交接",
+                "LUNA HIGH · 结构 Skill 逐稿验证",
+                "中性编辑排版 · 结构保留后按正文重算",
+                "1  提出",
+                "2  评估",
+                "3  实现",
+                "4  验收",
+                "5  确认",
+                "业务",
+                "研发",
+                "质量",
+                "说明诉求",
+                "检查影响",
+                "修改方案",
+                "验证结果",
+                "最后确认",
+                "交接沿阶段向右推进：诉求 → 评估 → 修改 → 验证 → 确认",
+                "11"
+              ]
+            }
+          ]
+        }
+      ],
+      "pngs": [
+        "batch-3\\rendered-01.png",
+        "batch-3\\rendered-02.png",
+        "batch-3\\rendered-03.png",
+        "batch-3\\rendered-04.png",
+        "batch-3\\rendered-05.png",
+        "batch-3\\rendered-06.png",
+        "batch-3\\rendered-07.png",
+        "batch-3\\rendered-08.png",
+        "batch-3\\rendered-09.png",
+        "batch-3\\rendered-10.png",
+        "batch-3\\rendered-11.png"
+      ]
+    }
+  ],
+  "targeted": [
+    {
+      "group": "a",
+      "choices": [
+        {
+          "caseId": "case-01",
+          "selectedAssetIds": [
+            "argument-evidence-conclusion-001"
+          ],
+          "selectionMode": "specified-targeted-test",
+          "reason": "稿件给出一个明确论点、六条共同支持依据和一个收束结论；本次逐项保留六条依据。",
+          "preservedFeatures": [
+            "上方唯一论点主梁",
+            "并列证据通过上锚点接入共同推理总线",
+            "底部唯一结论带与左侧1–N–1节奏"
+          ],
+          "changes": [
+            "六条依据各自占用独立承载面",
+            "按中性杂志风重算六卡宽度与连接锚点"
+          ],
+          "invocationStatus": "rendered-unreviewed",
+          "unresolved": []
+        },
+        {
+          "caseId": "case-04",
+          "selectedAssetIds": [
+            "causal-fishbone-attribution-001"
+          ],
+          "selectionMode": "specified-targeted-test",
+          "reason": "稿件明确七类原因并列指向装配返工，不能视为时间步骤；本次沿用鱼骨的原因类别—因素层级并扩展为七个原因组。",
+          "preservedFeatures": [
+            "从左向右汇入唯一结果的连续主骨",
+            "原因类别在主骨上下分布并用斜枝连接",
+            "每类原因以标题条和完整因素容器承载"
+          ],
+          "changes": [
+            "七类原因全部保留，按4上3下重新计算枝条位置",
+            "不补充来源未给出的因素，不用编号表达顺序"
+          ],
+          "invocationStatus": "rendered-unreviewed",
+          "unresolved": []
+        },
+        {
+          "caseId": "case-28",
+          "selectedAssetIds": [
+            "problem-method-result-001"
+          ],
+          "selectionMode": "specified-targeted-test",
+          "reason": "稿件提出一个资料交接问题、三项并列做法和一个共同预期结果；方法之间没有连续先后。",
+          "preservedFeatures": [
+            "上方问题主梁与下方唯一结果带",
+            "三张等宽方法卡接入共同作用总线",
+            "左侧1–N–1节奏标识和对称中轴"
+          ],
+          "changes": [
+            "按三项方法重算卡片宽度并保持均匀留白",
+            "结果置于卡组外收束，不把结果当作第四项措施"
+          ],
+          "invocationStatus": "rendered-unreviewed",
+          "unresolved": []
+        }
+      ],
+      "logs": [
+        {
+          "at": "2026-09-07T05:25:13.294Z",
+          "pageId": "case-01",
+          "regionId": "body",
+          "reason": "稿件给出一个明确论点、六条共同支持依据和一个收束结论；本次逐项保留六条依据。",
+          "references": [
+            {
+              "assetId": "argument-evidence-conclusion-001",
+              "preservedFeatures": [
+                "上方唯一论点主梁",
+                "并列证据通过上锚点接入共同推理总线",
+                "底部唯一结论带与左侧1–N–1节奏"
+              ],
+              "changes": [
+                "六条依据各自占用独立承载面",
+                "按中性杂志风重算六卡宽度与连接锚点"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "targeted-a\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:25:13.405Z",
+          "pageId": "case-01",
+          "regionId": "body",
+          "reason": "稿件给出一个明确论点、六条共同支持依据和一个收束结论；本次逐项保留六条依据。",
+          "references": [
+            {
+              "assetId": "argument-evidence-conclusion-001",
+              "preservedFeatures": [
+                "上方唯一论点主梁",
+                "并列证据通过上锚点接入共同推理总线",
+                "底部唯一结论带与左侧1–N–1节奏"
+              ],
+              "changes": [
+                "六条依据各自占用独立承载面",
+                "按中性杂志风重算六卡宽度与连接锚点"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "success",
+          "nativeShapeDelta": 76,
+          "validation": "rendered-unreviewed",
+          "file": "targeted-a\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:25:13.408Z",
+          "pageId": "case-04",
+          "regionId": "body",
+          "reason": "稿件明确七类原因并列指向装配返工，不能视为时间步骤；本次沿用鱼骨的原因类别—因素层级并扩展为七个原因组。",
+          "references": [
+            {
+              "assetId": "causal-fishbone-attribution-001",
+              "preservedFeatures": [
+                "从左向右汇入唯一结果的连续主骨",
+                "原因类别在主骨上下分布并用斜枝连接",
+                "每类原因以标题条和完整因素容器承载"
+              ],
+              "changes": [
+                "七类原因全部保留，按4上3下重新计算枝条位置",
+                "不补充来源未给出的因素，不用编号表达顺序"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "targeted-a\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:25:13.471Z",
+          "pageId": "case-04",
+          "regionId": "body",
+          "reason": "稿件明确七类原因并列指向装配返工，不能视为时间步骤；本次沿用鱼骨的原因类别—因素层级并扩展为七个原因组。",
+          "references": [
+            {
+              "assetId": "causal-fishbone-attribution-001",
+              "preservedFeatures": [
+                "从左向右汇入唯一结果的连续主骨",
+                "原因类别在主骨上下分布并用斜枝连接",
+                "每类原因以标题条和完整因素容器承载"
+              ],
+              "changes": [
+                "七类原因全部保留，按4上3下重新计算枝条位置",
+                "不补充来源未给出的因素，不用编号表达顺序"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "success",
+          "nativeShapeDelta": 62,
+          "validation": "rendered-unreviewed",
+          "file": "targeted-a\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:25:13.474Z",
+          "pageId": "case-28",
+          "regionId": "body",
+          "reason": "稿件提出一个资料交接问题、三项并列做法和一个共同预期结果；方法之间没有连续先后。",
+          "references": [
+            {
+              "assetId": "problem-method-result-001",
+              "preservedFeatures": [
+                "上方问题主梁与下方唯一结果带",
+                "三张等宽方法卡接入共同作用总线",
+                "左侧1–N–1节奏标识和对称中轴"
+              ],
+              "changes": [
+                "按三项方法重算卡片宽度并保持均匀留白",
+                "结果置于卡组外收束，不把结果当作第四项措施"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "targeted-a\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:25:13.546Z",
+          "pageId": "case-28",
+          "regionId": "body",
+          "reason": "稿件提出一个资料交接问题、三项并列做法和一个共同预期结果；方法之间没有连续先后。",
+          "references": [
+            {
+              "assetId": "problem-method-result-001",
+              "preservedFeatures": [
+                "上方问题主梁与下方唯一结果带",
+                "三张等宽方法卡接入共同作用总线",
+                "左侧1–N–1节奏标识和对称中轴"
+              ],
+              "changes": [
+                "按三项方法重算卡片宽度并保持均匀留白",
+                "结果置于卡组外收束，不把结果当作第四项措施"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 145,
+            "width": 1168,
+            "height": 510
+          },
+          "event": "success",
+          "nativeShapeDelta": 51,
+          "validation": "rendered-unreviewed",
+          "file": "targeted-a\\structure-invocations.ndjson"
+        }
+      ],
+      "deck": "targeted-a/candidate.pptx",
+      "visualReview": "See parent-targeted.json; self-review is not parent acceptance."
+    },
+    {
+      "group": "b",
+      "choices": [
+        {
+          "caseId": "case-02",
+          "selectionMode": "targeted-manual",
+          "selectedAssetIds": [
+            "branching-decision-routes-001"
+          ],
+          "reason": "用户指定定向实测 branching-decision-routes-001，不是自然候选选择。",
+          "preservedFeatures": [
+            "单入口连接菱形判断，再由共同总线扇出",
+            "条件标签贴近各自分支线，动作分支等权",
+            "可选结果与所属动作直接相连"
+          ],
+          "changes": [
+            "按真实稿件重算为五路并保留全部互斥条件",
+            "沿用真实 review.mjs 的 1170×492 几何锚点并用中性杂志 Skin 适配"
+          ],
+          "invocationStatus": "rendered-unreviewed",
+          "boundary": "该稿件有 5 个互斥条件，按当前 branching 结构说明重算为 5 路等权分支；五个条件均可见并独立连至动作，历史样例限制不作为当前 Skill 边界。"
+        },
+        {
+          "caseId": "case-08",
+          "selectionMode": "targeted-manual",
+          "selectedAssetIds": [
+            "containment-consensus-field-005"
+          ],
+          "reason": "用户指定定向实测 containment-consensus-field-005，不是自然候选选择。",
+          "preservedFeatures": [
+            "独立主体围绕中央共识场分布",
+            "共同内容位于中央，外围图标立于圆台",
+            "椭圆轨道无方向，名称位于圆台之外"
+          ],
+          "changes": [
+            "将五方关注点完整放入外围圆台与外侧文字",
+            "中央共识场保留三条共同约定并适配中性杂志 Skin"
+          ],
+          "invocationStatus": "rendered-unreviewed",
+          "boundary": "五方在资产支持的 2–5 个主体范围内；轨道不加箭头，不表达进度或汇报关系。"
+        }
+      ],
+      "logs": [
+        {
+          "at": "2026-09-07T05:23:59.329Z",
+          "pageId": "case-02",
+          "regionId": "native-structure",
+          "reason": "定向实测指定使用 branching-decision-routes-001，稿件语义要求保留互斥条件或共同共识场。",
+          "references": [
+            {
+              "assetId": "branching-decision-routes-001",
+              "preservedFeatures": [
+                "单入口连接菱形判断，再由共同总线扇出",
+                "条件标签贴近各自分支线，动作分支等权",
+                "可选结果与所属动作直接相连"
+              ],
+              "changes": [
+                "按真实稿件重算为五路并保留全部互斥条件",
+                "沿用真实 review.mjs 的 1170×492 几何锚点并用中性杂志 Skin 适配"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 150,
+            "width": 1168,
+            "height": 500
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "targeted-b\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:23:59.367Z",
+          "pageId": "case-02",
+          "regionId": "native-structure",
+          "reason": "定向实测指定使用 branching-decision-routes-001，稿件语义要求保留互斥条件或共同共识场。",
+          "references": [
+            {
+              "assetId": "branching-decision-routes-001",
+              "preservedFeatures": [
+                "单入口连接菱形判断，再由共同总线扇出",
+                "条件标签贴近各自分支线，动作分支等权",
+                "可选结果与所属动作直接相连"
+              ],
+              "changes": [
+                "按真实稿件重算为五路并保留全部互斥条件",
+                "沿用真实 review.mjs 的 1170×492 几何锚点并用中性杂志 Skin 适配"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 150,
+            "width": 1168,
+            "height": 500
+          },
+          "event": "success",
+          "nativeShapeDelta": 63,
+          "validation": "rendered-unreviewed",
+          "file": "targeted-b\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:23:59.369Z",
+          "pageId": "case-08",
+          "regionId": "native-structure",
+          "reason": "定向实测指定使用 containment-consensus-field-005，稿件语义要求保留互斥条件或共同共识场。",
+          "references": [
+            {
+              "assetId": "containment-consensus-field-005",
+              "preservedFeatures": [
+                "独立主体围绕中央共识场分布",
+                "共同内容位于中央，外围图标立于圆台",
+                "椭圆轨道无方向，名称位于圆台之外"
+              ],
+              "changes": [
+                "将五方关注点完整放入外围圆台与外侧文字",
+                "中央共识场保留三条共同约定并适配中性杂志 Skin"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 150,
+            "width": 1168,
+            "height": 500
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "targeted-b\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:23:59.396Z",
+          "pageId": "case-08",
+          "regionId": "native-structure",
+          "reason": "定向实测指定使用 containment-consensus-field-005，稿件语义要求保留互斥条件或共同共识场。",
+          "references": [
+            {
+              "assetId": "containment-consensus-field-005",
+              "preservedFeatures": [
+                "独立主体围绕中央共识场分布",
+                "共同内容位于中央，外围图标立于圆台",
+                "椭圆轨道无方向，名称位于圆台之外"
+              ],
+              "changes": [
+                "将五方关注点完整放入外围圆台与外侧文字",
+                "中央共识场保留三条共同约定并适配中性杂志 Skin"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 56,
+            "top": 150,
+            "width": 1168,
+            "height": 500
+          },
+          "event": "success",
+          "nativeShapeDelta": 52,
+          "validation": "rendered-unreviewed",
+          "file": "targeted-b\\evidence\\structure-invocations.ndjson"
+        }
+      ],
+      "deck": "targeted-b/candidate.pptx",
+      "visualReview": "See parent-targeted.json; self-review is not parent acceptance."
+    },
+    {
+      "group": "c",
+      "choices": [
+        {
+          "caseId": "case-12",
+          "selectedAssetIds": [
+            "convergence-simple-funnel-001"
+          ],
+          "reason": "五道筛选连续收窄，漏斗比阶段门禁更贴合稿件的范围收敛语义。",
+          "preservedFeatures": [
+            "独立曲面层共享中轴并逐层收窄",
+            "由上到下渐强的随形导流箭头",
+            "入口想法与末端可验证假设保持清楚留白"
+          ],
+          "changes": [
+            "按 neutral-editorial-001 中性杂志风适配",
+            "按稿件数量与角色重新求解原生几何",
+            "保留参考资产的轮廓、层次和关系语法"
+          ],
+          "invocationStatus": "rendered-unreviewed",
+          "unresolved": [
+            "guide validation 状态仍为 not-validated，已完成本次独立重导入与视觉复核"
+          ]
+        },
+        {
+          "caseId": "case-18",
+          "selectedAssetIds": [
+            "hub-directed-outcomes-002"
+          ],
+          "reason": "唯一知识入口向七项并列工作提供支持，外围之间没有流程。",
+          "preservedFeatures": [
+            "唯一中心连接同级外围节点",
+            "中心向外的连续径向箭头承担支持语义",
+            "七项外围工作不形成先后流程"
+          ],
+          "changes": [
+            "按 neutral-editorial-001 中性杂志风适配",
+            "按稿件数量与角色重新求解原生几何",
+            "保留参考资产的轮廓、层次和关系语法"
+          ],
+          "invocationStatus": "rendered-unreviewed",
+          "unresolved": [
+            "guide validation 状态仍为 not-validated，已完成本次独立重导入与视觉复核"
+          ]
+        },
+        {
+          "caseId": "case-30",
+          "selectedAssetIds": [
+            "progression-growth-curve-004"
+          ],
+          "reason": "稿件强调连续攀升和里程点，采用共享山脊与上山路径，而非离散矩形阶梯。",
+          "preservedFeatures": [
+            "同色阶多边形构成共享山脉",
+            "上山路径连接五个关键峰顶",
+            "里程点与局部峰节点对应并持续抬升"
+          ],
+          "changes": [
+            "按 neutral-editorial-001 中性杂志风适配",
+            "按稿件数量与角色重新求解原生几何",
+            "保留参考资产的轮廓、层次和关系语法"
+          ],
+          "invocationStatus": "rendered-unreviewed",
+          "unresolved": [
+            "guide validation 状态仍为 not-validated，已完成本次独立重导入与视觉复核"
+          ]
+        }
+      ],
+      "logs": [
+        {
+          "at": "2026-09-07T05:31:03.837Z",
+          "pageId": "case-12-targeted-c-page-01",
+          "regionId": "case-12-targeted-c-structure",
+          "reason": "五道筛选连续收窄，漏斗比阶段门禁更贴合稿件的范围收敛语义。",
+          "references": [
+            {
+              "assetId": "convergence-simple-funnel-001",
+              "preservedFeatures": [
+                "独立曲面层共享中轴并逐层收窄",
+                "由上到下渐强的随形导流箭头",
+                "入口想法与末端可验证假设保持清楚留白"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "targeted-c\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:31:03.862Z",
+          "pageId": "case-12-targeted-c-page-01",
+          "regionId": "case-12-targeted-c-structure",
+          "reason": "五道筛选连续收窄，漏斗比阶段门禁更贴合稿件的范围收敛语义。",
+          "references": [
+            {
+              "assetId": "convergence-simple-funnel-001",
+              "preservedFeatures": [
+                "独立曲面层共享中轴并逐层收窄",
+                "由上到下渐强的随形导流箭头",
+                "入口想法与末端可验证假设保持清楚留白"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "success",
+          "nativeShapeDelta": 34,
+          "validation": "rendered-unreviewed",
+          "file": "targeted-c\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:31:03.864Z",
+          "pageId": "case-18-targeted-c-page-01",
+          "regionId": "case-18-targeted-c-structure",
+          "reason": "唯一知识入口向七项并列工作提供支持，外围之间没有流程。",
+          "references": [
+            {
+              "assetId": "hub-directed-outcomes-002",
+              "preservedFeatures": [
+                "唯一中心连接同级外围节点",
+                "中心向外的连续径向箭头承担支持语义",
+                "七项外围工作不形成先后流程"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "targeted-c\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:31:03.880Z",
+          "pageId": "case-18-targeted-c-page-01",
+          "regionId": "case-18-targeted-c-structure",
+          "reason": "唯一知识入口向七项并列工作提供支持，外围之间没有流程。",
+          "references": [
+            {
+              "assetId": "hub-directed-outcomes-002",
+              "preservedFeatures": [
+                "唯一中心连接同级外围节点",
+                "中心向外的连续径向箭头承担支持语义",
+                "七项外围工作不形成先后流程"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "success",
+          "nativeShapeDelta": 32,
+          "validation": "rendered-unreviewed",
+          "file": "targeted-c\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:31:03.882Z",
+          "pageId": "case-30-targeted-c-page-01",
+          "regionId": "case-30-targeted-c-structure",
+          "reason": "稿件强调连续攀升和里程点，采用共享山脊与上山路径，而非离散矩形阶梯。",
+          "references": [
+            {
+              "assetId": "progression-growth-curve-004",
+              "preservedFeatures": [
+                "同色阶多边形构成共享山脉",
+                "上山路径连接五个关键峰顶",
+                "里程点与局部峰节点对应并持续抬升"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "attempt",
+          "executor": "structure-skill-native",
+          "file": "targeted-c\\evidence\\structure-invocations.ndjson"
+        },
+        {
+          "at": "2026-09-07T05:31:03.898Z",
+          "pageId": "case-30-targeted-c-page-01",
+          "regionId": "case-30-targeted-c-structure",
+          "reason": "稿件强调连续攀升和里程点，采用共享山脊与上山路径，而非离散矩形阶梯。",
+          "references": [
+            {
+              "assetId": "progression-growth-curve-004",
+              "preservedFeatures": [
+                "同色阶多边形构成共享山脉",
+                "上山路径连接五个关键峰顶",
+                "里程点与局部峰节点对应并持续抬升"
+              ]
+            }
+          ],
+          "targetFrame": {
+            "left": 70,
+            "top": 166,
+            "width": 1140,
+            "height": 474
+          },
+          "event": "success",
+          "nativeShapeDelta": 38,
+          "validation": "rendered-unreviewed",
+          "file": "targeted-c\\evidence\\structure-invocations.ndjson"
+        }
+      ],
+      "deck": "targeted-c/candidate.pptx",
+      "visualReview": "See parent-targeted.json; self-review is not parent acceptance."
+    }
+  ],
+  "notice": "Invocation success, candidate existence and native shape counts are not visual acceptance."
+}

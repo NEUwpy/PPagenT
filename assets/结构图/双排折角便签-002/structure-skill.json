@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "assetId": "parallel-folded-notes-grid-002",
+  "features": [
+    "纸面右下角向上卷起，保持连续折页轮廓",
+    "独立卷页与横跨底部的投影形成三层纸面",
+    "通栏标题带与标题前的视觉锚点",
+    "等权便签围绕共同中轴排列，末行居中"
+  ],
+  "adaptation": "按内容重算列宽、行数与文字位置；允许改变两排样例，但保持折页层次及居中节奏。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "sample-verified-candidate",
+    "note": "已保留原造型完成8组尺寸、数量与换稿样本的构建和父任务复核；候选待用户查看，不代表任意内容、Skin或区域均已验证。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "右下向上卷起的连续纸面、独立卷页、横跨底部投影三层",
+      "通栏标题带、标题锚点和居中阵列"
+    ],
+    "variables": [
+      "便签数",
+      "纸面宽高",
+      "列宽、行距",
+      "正文长度",
+      "在保持折页形态下的卷角尺寸"
+    ],
+    "coupledChanges": "纸面轮廓、卷页曲线、底影和标题带按同一便签尺寸重算；末行重新居中",
+    "avoid": "不能改成矩形加三角线或直角硬阴影；超出原排布的行列变化需对照验证",
+    "status": "implemented-in-three-structure-pilot",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  },
+  "implementation": {
+    "mode": "preserved-design",
+    "status": "sample-verified-candidate",
+    "entry": "review.mjs",
+    "counts": "沿用原实现范围；区域变化按真实文字测量拒绝溢出",
+    "evidence": "experiments/structure-size-pilot/README.md",
+    "sizeExamples": {
+      "L": 1,
+      "M": 0.85,
+      "S": 0.7
+    },
+    "typography": "既有允许档位；显式 Skin 字号优先；图标与小配件联动；容纳不下则拒绝"
+  }
+}

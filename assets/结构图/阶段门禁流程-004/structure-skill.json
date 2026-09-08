@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "assetId": "sequence-phase-gates-004",
+  "features": [
+    "蜿蜒收窄的箭形河道表达推进",
+    "横跨河道的门闸表示阶段门槛",
+    "河道、分段和门闸共享曲线及局部法线",
+    "条件标签与对应门闸关联"
+  ],
+  "adaptation": "按真实阶段重切曲线并重算门闸位置；说明可放在河道外，不能把没有门槛的步骤虚构成门禁。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "蜿蜒收窄箭形河道、阶段分段、横跨河道的门闸、真实条件与门闸对应"
+    ],
+    "variables": [
+      "阶段数",
+      "曲线占区",
+      "河道宽度",
+      "门闸位置",
+      "阶段与条件文案"
+    ],
+    "coupledChanges": "沿同一曲线切分阶段，用局部切线和法线计算分段与门闸；门禁数与真实阶段交界一致",
+    "avoid": "不能把无条件的步骤套成门禁，也不能退化为普通流程卡片",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

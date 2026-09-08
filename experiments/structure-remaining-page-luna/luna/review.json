@@ -1,0 +1,53 @@
+{
+  "experimentId": "structure-remaining-page-luna-20260908-luna",
+  "model": "gpt-5.6-luna",
+  "attemptLimit": 3,
+  "callCounts": {
+    "preparePage": 5,
+    "renderCase": 7,
+    "renderCaseByPage": {"P1": 1, "P2": 1, "P3": 5},
+    "renderedPptxToPng": {"P1": 1, "P2": 1, "P3": 2},
+    "rejectedRenderCases": {"P1": 0, "P2": 0, "P3": 3}
+  },
+  "attemptNumberLimitation": {
+    "P3": "attempt-3 被调用三次：第一次碰撞拒绝，第二次 overflow 拒绝，第三次仍 overflow 拒绝。为保留每次证据，文件分别命名为 P3-attempt-3-rejected.json、P3-attempt-3-overflow-rejected.json、P3-attempt-3.json；因此 attemptLabel 不是唯一调用编号，不能把三次 attempt-3 误读成三个设计轮次。",
+    "visualAcceptance": "P3 没有有效 attempt-3 PNG；P1/P2 虽有渲染 PNG，也全部保留为 needs-parent-review。"
+  },
+  "pages": [
+    {
+      "pageId": "P1",
+      "status": "needs-parent-review",
+      "factsCovered": ["资料齐全：关键文件集中归档", "版本清楚：当前版本标记明确", "责任明确：后续负责人可查", "例外有据：特殊处理附上依据", "接手者能独立继续工作", "发送文件只是交接动作"],
+      "structureCall": "parallel-folded-notes-grid-002，P1/P1-attempt-1.json，preserved-design，rendered-unreviewed。",
+      "visualReview": {
+        "png": "P1/P1-attempt-1.png",
+        "issues": ["父任务复核认为主张 left=180 与便签实际可见左缘约423没有共同对齐轴。", "底部“发送文件只是交接动作。”成为孤立句。", "因此不标视觉通过。"]
+      },
+      "editableEvidence": "P1/P1-attempt-1.pptx，含结构原生对象和文字对象；技术成功不等于整页通过。"
+    },
+    {
+      "pageId": "P2",
+      "status": "needs-parent-review",
+      "factsCovered": ["访谈", "工单", "使用记录", "收集线索", "核对问题", "验证方案", "纳入发布", "保留原始反馈", "问题可重复观察", "小样验证有效", "责任人与交付范围明确"],
+      "structureCall": "convergence-simple-funnel-001，P2/P2-attempt-1.json，preserved-design，rendered-unreviewed。",
+      "visualReview": {
+        "png": "P2/P2-attempt-1.png",
+        "issues": ["父任务复核认为左侧准入依据与右侧漏斗距离过远。", "四条依据与四个漏斗阶段缺少直接对应关系。", "因此不标视觉通过。"]
+      },
+      "editableEvidence": "P2/P2-attempt-1.pptx；未添加转化率或额外数量。"
+    },
+    {
+      "pageId": "P3",
+      "status": "blocked-by-visual-and-capacity-failures",
+      "factsCovered": ["被动处理：故障后临时组织抢修", "形成记录：故障原因与处理过程可查", "计划维护：按周期检查并落实责任", "持续改善：用复盘减少重复故障", "currentIndex=1（当前第2级）", "target=第4级"],
+      "structureCall": "progression-maturity-steps-002；attempt-1 和 attempt-2 调用成功并导出 PNG，attempt-3 三次均被 harness 拒绝。",
+      "visualReview": {
+        "attempt1Png": "P3/P3-attempt-1.png",
+        "attempt2Png": "P3/P3-attempt-2.png",
+        "issues": ["首稿存在孤立顶部长句、左侧小阶梯和右侧重复状态清单。", "attempt-2 去掉部分重复状态但仍有顶部重复主张，且解释句出现句号孤行。", "attempt-3 已按真实左上自由带改排，但先后触发保护组碰撞和两次文字溢出，未形成可审 PNG。", "不标视觉通过。"]
+      },
+      "rejectedEvidence": ["P3/P3-attempt-3-rejected.json", "P3/P3-attempt-3-overflow-rejected.json", "P3/P3-attempt-3.json"]
+    }
+  ],
+  "overallConclusion": "三页均保留了真实 prepare、结构调用、PPTX 重导 PNG 和视觉检查证据，但当前没有任何一页达到整页视觉通过；P1/P2 的问题是页面文字组织与结构对齐，P3 还暴露了真实占用安全区和文字容量的连续拒绝。"
+}

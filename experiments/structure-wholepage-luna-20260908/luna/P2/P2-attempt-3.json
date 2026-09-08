@@ -1,0 +1,204 @@
+{
+  "key": "P2-attempt-3",
+  "caseId": "P2",
+  "attempt": 3,
+  "model": "gpt-5.6-luna",
+  "reasoning": "high",
+  "execution": "luna-executed",
+  "spec": {
+    "caseId": "P2",
+    "title": "反馈筛选：从线索收敛到纳入发布",
+    "assetId": "convergence-simple-funnel-001",
+    "content": {
+      "inputs": [
+        {
+          "key": "interview",
+          "label": "访谈",
+          "iconQuery": "message-circle"
+        },
+        {
+          "key": "ticket",
+          "label": "工单",
+          "iconQuery": "ticket"
+        },
+        {
+          "key": "usage-record",
+          "label": "使用记录",
+          "iconQuery": "clipboard-text"
+        }
+      ],
+      "steps": [
+        {
+          "key": "collect",
+          "title": "收集线索"
+        },
+        {
+          "key": "verify-problem",
+          "title": "核对问题"
+        },
+        {
+          "key": "validate-solution",
+          "title": "验证方案"
+        },
+        {
+          "key": "release-scope",
+          "title": "纳入发布"
+        }
+      ]
+    },
+    "frame": {
+      "left": 640,
+      "top": 170,
+      "width": 555,
+      "height": 425
+    },
+    "blocks": [
+      {
+        "role": "body",
+        "text": "入口：访谈 · 工单 · 使用记录",
+        "frame": {
+          "left": 56,
+          "top": 190,
+          "width": 520,
+          "height": 42
+        }
+      },
+      {
+        "role": "body",
+        "text": "保留原始反馈",
+        "frame": {
+          "left": 56,
+          "top": 268,
+          "width": 520,
+          "height": 36
+        }
+      },
+      {
+        "role": "body",
+        "text": "问题可重复观察",
+        "frame": {
+          "left": 56,
+          "top": 345,
+          "width": 520,
+          "height": 36
+        }
+      },
+      {
+        "role": "body",
+        "text": "小样验证有效",
+        "frame": {
+          "left": 56,
+          "top": 422,
+          "width": 520,
+          "height": 36
+        }
+      },
+      {
+        "role": "body",
+        "text": "责任人与交付范围明确",
+        "frame": {
+          "left": 56,
+          "top": 499,
+          "width": 520,
+          "height": 36
+        }
+      }
+    ],
+    "reason": "三个入口经过四个连续收敛阶段进入发布范围，调用简明输入转化漏斗；结构承载入口与阶段，图外说明保留四条准入依据，不添加数字化转化率。",
+    "purpose": "把访谈、工单、使用记录三个入口表达为连续收敛过程，四道准入依据逐层对应四个阶段，页面不出现转化率或数量。",
+    "readingOrder": [
+      "页首主张",
+      "左侧入口与准入说明",
+      "右侧四层漏斗"
+    ],
+    "contentAssignments": {
+      "structure": [
+        "输入：访谈、工单、使用记录",
+        "收集线索",
+        "核对问题",
+        "验证方案",
+        "纳入发布"
+      ],
+      "outside": [
+        "保留原始反馈",
+        "问题可重复观察",
+        "小样验证有效",
+        "责任人与交付范围明确"
+      ]
+    },
+    "chapter": "02",
+    "pageNumber": 2,
+    "attemptNote": "父任务反馈驱动修订：入口名称置于左上，四条准入依据按漏斗层级垂直对齐。"
+  },
+  "skin": {
+    "id": "neutral-editorial-001",
+    "fonts": {
+      "display": "Noto Serif SC",
+      "body": "Noto Sans SC"
+    },
+    "font": "Noto Sans SC",
+    "primaryColor": "#A35D4F",
+    "background": "#F5F4EF",
+    "surface": "#EEECE5",
+    "dark": "#20201D",
+    "body": "#4B4A45",
+    "muted": "#85837B",
+    "line": "#D8D5CC",
+    "bodyFrame": {
+      "left": 56,
+      "top": 135,
+      "width": 1168,
+      "height": 525
+    },
+    "typography": {
+      "componentHeading": 15.75,
+      "componentTitle": 15.75,
+      "componentItemTitle": 12.75,
+      "componentLead": 12.75,
+      "componentBody": 12.75,
+      "componentLabel": 12.75,
+      "componentMeta": 11.25
+    }
+  },
+  "status": "rendered-unreviewed",
+  "invocation": {
+    "result": {
+      "mode": "preserved-design",
+      "componentId": "convergence-simple-funnel",
+      "nodeCount": 20
+    },
+    "nativeShapeDelta": 17,
+    "validation": "rendered-unreviewed"
+  },
+  "measurements": {
+    "titleRight": 487,
+    "overflow": [],
+    "fontReady": true
+  },
+  "fonts": [
+    {
+      "name": "simple-step-title-0",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "收集线索"
+    },
+    {
+      "name": "simple-step-title-1",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "核对问题"
+    },
+    {
+      "name": "simple-step-title-2",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "验证方案"
+    },
+    {
+      "name": "simple-step-title-3",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "纳入发布"
+    }
+  ]
+}

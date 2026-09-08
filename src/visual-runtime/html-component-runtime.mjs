@@ -124,6 +124,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
       await document.fonts.ready;
       const root = document.querySelector("[data-ppt-root]");
       if (!root) throw new Error("HTML Component 缺少 data-ppt-root");
+      const preserveFont = root.dataset.pptPreserveFont === 'true';
       const number = (value) => Number.parseFloat(value) || 0;
       const standardizedFontSizesPt = [...new Set(Object.values(typographyContract)
         .map(Number)
@@ -323,7 +324,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
           .map(Number)
           .filter((size) => Number.isFinite(size) && size >= 12)
           .sort((left, right) => right - left);
-        const candidates = (primitiveTiers.length ? primitiveTiers : standardizedFontSizesPt)
+        const candidates = (preserveFont ? [] : primitiveTiers.length ? primitiveTiers : standardizedFontSizesPt)
           .filter((size) => size <= currentFontSizePt + 0.05);
         const originalFontSizePt = currentFontSizePt;
         let selectedFontSizePt = currentFontSizePt;
@@ -399,7 +400,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         // Each primitive may fit on its own while the combined stack does not.
         // Resolve that at the TextLayout level by stepping through the same
         // approved font tiers, never by arbitrary scaling or Builder changes.
-        for (const primitiveId of collectiveFitOrder) {
+        for (const primitiveId of preserveFont ? [] : collectiveFitOrder) {
           const group = parts.filter((part) => part.dataset.textPrimitive === primitiveId);
           while (!fits && group.length) {
             let changed = false;
@@ -522,14 +523,18 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
           return raw.endsWith("%") ? Number.parseFloat(raw) / 100 : Number.parseFloat(raw);
         };
         const x1 = coordinate("x1", "0"), y1 = coordinate("y1", "0"), x2 = coordinate("x2", "1"), y2 = coordinate("y2", "0");
-        const angleDeg = rounded((Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI + 90 + 360) % 360);
+        // Native gradient angles start on the positive x axis (SVG convention).
+        const angleDeg = rounded((Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI + 360) % 360);
         const stops = [...gradient.querySelectorAll("stop")].map((stop) => {
           const stopStyle = getComputedStyle(stop);
           const rawOffset = stop.getAttribute("offset") ?? "0";
           const offset = rawOffset.endsWith("%") ? Number.parseFloat(rawOffset) : Number.parseFloat(rawOffset) * 100;
+          const stopOpacity = opacity * Number.parseFloat(stopStyle.stopOpacity || "1");
+          const resolvedColor = color(stopStyle.stopColor, stopOpacity, stop, "stop-color");
           return {
-            offset: rounded(offset),
-            color: color(stopStyle.stopColor, opacity * Number.parseFloat(stopStyle.stopOpacity || "1"), stop, "stop-color"),
+            offset: rounded(offset * 1000),
+            // A transparent gradient stop is a color with zero alpha, not no fill.
+            color: resolvedColor === 'none' ? `${color(stopStyle.stopColor, 1, stop, 'stop-color')}/0` : resolvedColor,
           };
         });
         if (stops.length < 2) fidelityError("INVALID_SVG_GRADIENT", element, "fill", style.fill);
@@ -1094,6 +1099,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         overflow: root.scrollWidth > root.clientWidth + 1 || root.scrollHeight > root.clientHeight + 1,
         textFlowOverflows,
         textLayoutOverflows,
+        fontOverflows: preserveFont ? [...root.querySelectorAll('[data-ppt-font-fit="overflow"]')].map(el=>el.dataset.pptName || el.textContent) : [],
         textFlows: resolvedTextFlows,
         textLayouts: resolvedTextLayouts,
         nodes,
@@ -1101,6 +1107,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
       };
     }, resolveComponentTypography(theme));
     requireValue(!tree.overflow, `${component.id ?? "HTML Component"} 超出设计区域`);
+    requireValue(!tree.fontOverflows.length, `${component.id} 当前区域无法以选定的允许字号容纳文字：${tree.fontOverflows.join(', ')}。请扩大区域、减少本区域内容密度或换用结构；不继续降低字号。`);
     requireValue(!tree.textFlowOverflows.length, `${component.id ?? "HTML Component"} 的文字容器无法在规范字号内排版：${tree.textFlowOverflows.join(", ")}`);
     const textLayoutOverflowDetails = tree.slots
       .filter((slot) => tree.textLayoutOverflows.includes(slot.id))

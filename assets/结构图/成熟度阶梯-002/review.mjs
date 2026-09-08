@@ -1,4 +1,5 @@
 import { textRegionMarkup } from "../../../src/visual-runtime/text-layout-library.mjs";
+import { fitPreservedDesign, preservedTypography } from "../../../src/visual-runtime/preserved-design-layout.mjs";
 
 const FRAME = Object.freeze({ width: 1170, height: 492 });
 const MIN_LEVELS = 3;
@@ -62,15 +63,17 @@ function solveLayout(count) {
 
 function staircaseMarkup(layout) {
   const { steps } = layout;
+  const scale = layout.scale ?? 1;
+  const project = layout.projectDepth ?? projectDepth;
   return steps.map((step, index) => {
     const next = steps[index + 1];
     const riser = next
       ? [step.frontRight, next.frontLeft, next.backLeft, step.backRight]
-      : [step.frontRight, { x: step.frontRight.x, y: step.frontRight.y + 18 }, { x: step.backRight.x, y: step.backRight.y + 18 }, step.backRight];
-    const insetFrontLeft = { x: step.frontLeft.x + 13, y: step.frontLeft.y };
-    const insetFrontRight = { x: step.frontRight.x - 13, y: step.frontRight.y };
-    const insetBackLeft = projectDepth(insetFrontLeft);
-    const insetBackRight = projectDepth(insetFrontRight);
+      : [step.frontRight, { x: step.frontRight.x, y: step.frontRight.y + 18*scale }, { x: step.backRight.x, y: step.backRight.y + 18*scale }, step.backRight];
+    const insetFrontLeft = { x: step.frontLeft.x + 13*scale, y: step.frontLeft.y };
+    const insetFrontRight = { x: step.frontRight.x - 13*scale, y: step.frontRight.y };
+    const insetBackLeft = project(insetFrontLeft);
+    const insetBackRight = project(insetFrontRight);
     return `<g class="perspective-step perspective-step--${index}">
       <polygon class="step-riser" style="--riser:${RISER_COLORS[index]}" points="${pointsAttribute(riser)}" data-ppt-kind="path" data-ppt-name="maturity-step-riser-${index + 1}"/>
       <polygon class="step-top" style="--top:${TOP_COLORS[index]}" points="${pointsAttribute(step.top)}" data-ppt-kind="path" data-ppt-name="maturity-step-top-${index + 1}"/>
@@ -81,6 +84,7 @@ function staircaseMarkup(layout) {
 }
 
 function levelFrame(index, layout) {
+  if (layout.copyFrames) return { step: layout.steps[index], ...layout.copyFrames[index] };
   const step = layout.steps[index];
   const copyWidth = layout.steps.length === 6 ? 148 : 158;
   const left = Math.max(10, Math.min(FRAME.width - copyWidth - 10, step.center.x - copyWidth / 2));
@@ -100,32 +104,54 @@ function levelSupportMarkup(index, layout) {
 }
 
 function levelMarkup(level, index, layout) {
-  const { step, copyWidth, left, top } = levelFrame(index, layout);
+  const { step, copyWidth, left, top, height } = levelFrame(index, layout);
+  const a = layout.accessoryScale ?? 1;
   return `${textRegionMarkup({
     id: `${level.key}-text`, field: `levels[${index}]`, itemId: level.key, regionId: `level-${index + 1}`,
     layoutId: "heading-content-flow",
     compatibleLayoutIds: ["statement-flow", "heading-content-flow"],
     content: { heading: level.title, body: level.body }, className: "level-copy",
     align: "left", valign: "bottom", density: "compact",
-  }).replace('class="ppagent-text-region level-copy"', `class="ppagent-text-region level-copy" style="left:${left}px;top:${top}px;width:${copyWidth}px"`)}
-  <div class="level-index" data-ppt-kind="shape-text" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="maturity-level-index-${index + 1}" style="left:${step.center.x - 21}px;top:${step.center.y - 21}px">${String(index + 1).padStart(2, "0")}</div>`;
+  }).replace('class="ppagent-text-region level-copy"', `class="ppagent-text-region level-copy" style="left:${left}px;top:${top}px;width:${copyWidth}px;height:${height}px"`)}
+  <div class="level-index" data-ppt-kind="shape-text" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="maturity-level-index-${index + 1}" style="left:${step.center.x - 21*a}px;top:${step.center.y - 21*a}px;width:${42*a}px;height:${42*a}px;border-width:${3*a}px">${String(index + 1).padStart(2, "0")}</div>`;
 }
 
 function statusMarkup(layout, currentIndex, targetIndex) {
   const current = layout.steps[currentIndex].center;
   const target = layout.steps[targetIndex].center;
-  return `<div class="status-tag current" data-ppt-kind="shape-text" data-ppt-shape="roundRect" data-ppt-name="maturity-current-status" style="left:${current.x - 29}px;top:${current.y + 27}px">当前</div><div class="status-tag target" data-ppt-kind="shape-text" data-ppt-shape="roundRect" data-ppt-name="maturity-target-status" style="left:${target.x - 29}px;top:${target.y + 27}px">目标</div>`;
+  const a = layout.accessoryScale ?? 1;
+  const offset = layout.statusWidth ? layout.statusWidth / 2 : 29;
+  return `<div class="status-tag current" data-ppt-kind="shape-text" data-ppt-shape="roundRect" data-ppt-name="maturity-current-status" style="left:${current.x - offset}px;top:${current.y + 27*a}px">当前</div><div class="status-tag target" data-ppt-kind="shape-text" data-ppt-shape="roundRect" data-ppt-name="maturity-target-status" style="left:${target.x - offset}px;top:${target.y + 27*a}px">目标</div>`;
 }
 
 export const visualComponent = Object.freeze({
   id: "progression-maturity-steps", schemaVersion: 6, designFrame: FRAME, cssFile: "component.css",
   textCapacity: { maxHeadingChars: 10, maxBodyChars: 24, maxBodyLines: 2 },
+  renderAdaptiveMarkup,
   renderMarkup(parameters) {
     const { levels, showStatus, currentIndex, targetIndex } = normalize(parameters);
     const layout = solveLayout(levels.length);
     return `<section class="maturity-ladder" data-ppt-root data-level-count="${levels.length}" data-show-status="${showStatus}"><svg class="ladder-art" viewBox="0 0 1170 492" aria-hidden="true">${levels.map((_, index) => levelSupportMarkup(index, layout)).join("")}${staircaseMarkup(layout)}</svg>${levels.map((level, index) => levelMarkup(level, index, layout)).join("")}${showStatus ? statusMarkup(layout, currentIndex, targetIndex) : ""}</section>`;
   },
 });
+
+export function renderAdaptiveMarkup(parameters, { frame = FRAME, theme = {} } = {}) {
+  const {levels,showStatus,currentIndex,targetIndex}=normalize(parameters);
+  const original=solveLayout(levels.length);
+  const fit=fitPreservedDesign(frame);
+  const s=fit.scale;
+  const type=preservedTypography(s,theme),a=type.accessoryScale;
+  const layout={...original,scale:s,accessoryScale:a,statusWidth:s<1?type.sizes.componentMeta*4/3*2+18*a:undefined,rise:original.rise*s,treadWidth:original.treadWidth*s,
+    projectDepth:p=>fit.point(projectDepth({x:(p.x-fit.left)/s,y:(p.y-fit.top)/s})),
+    copyFrames:levels.map((_,index)=>{
+      const f=levelFrame(index,original),center=fit.point(original.steps[index].center);
+      const copyWidth=Math.min(f.copyWidth*Math.max(s,a),original.treadWidth*s-20*a);
+      const height=f.height*Math.max(s,a);
+      return {copyWidth,left:center.x-copyWidth/2,top:center.y-(140-f.height)*s-height,height};
+    }),
+    steps:original.steps.map(step=>({...step,frontLeft:fit.point(step.frontLeft),frontRight:fit.point(step.frontRight),backLeft:fit.point(step.backLeft),backRight:fit.point(step.backRight),center:fit.point(step.center),top:step.top.map(fit.point)}))};
+  return `<section class="maturity-ladder" data-ppt-root data-level-count="${levels.length}" data-show-status="${showStatus}" style="width:${frame.width}px;height:${frame.height}px;${type.css}"><style>.maturity-ladder .level-copy{padding:${10*a}px ${13*a}px ${(s<1?18:9)*a}px}.maturity-ladder .status-tag{padding:${2*a}px ${9*a}px;border-radius:${13*a}px}</style><svg class="ladder-art" viewBox="0 0 ${frame.width} ${frame.height}">${levels.map((_,index)=>levelSupportMarkup(index,layout)).join('')}${staircaseMarkup(layout)}</svg>${levels.map((level,index)=>levelMarkup(level,index,layout)).join('')}${showStatus?statusMarkup(layout,currentIndex,targetIndex):''}</section>`;
+}
 
 export const previewParameters = Object.freeze({ levels: [
   { key: "l1", title: "起步", body: "形成可重复的基础动作" }, { key: "l2", title: "规范", body: "建立统一标准与职责边界" },

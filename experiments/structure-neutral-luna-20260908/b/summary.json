@@ -1,0 +1,59 @@
+{
+  "group": "b",
+  "model": "gpt-5.6-luna",
+  "reasoning": "high",
+  "skin": "neutral-editorial-001",
+  "status": "completed-with-preserved-attempt-history",
+  "cases": [
+    {
+      "caseId": "b1",
+      "assetId": "convergence-simple-funnel-001",
+      "attempts": [
+        { "attempt": 1, "status": "rendered-unreviewed", "artifact": "b1-attempt-1", "visual": "首稿可读，但图外说明含制作说明口吻。" },
+        { "attempt": 2, "status": "rendered-unreviewed", "artifact": "b1-attempt-2", "visual": "说明改为读者口吻，但出现孤立标点换行，未接受。" },
+        { "attempt": 3, "status": "rendered-unreviewed", "artifact": "b1-attempt-3", "visual": "通过局部视觉复核；入口、四层标题和准入依据清楚，无孤立标点。" }
+      ],
+      "firstResult": "rendered-unreviewed",
+      "finalResult": "rendered-unreviewed",
+      "visualFindings": ["左说明右窄漏斗的区域关系成立", "中性纸色、深色文字、细线和砖红输入图标可辨", "最终说明面向读者且无孤立字符"]
+    },
+    {
+      "caseId": "b2",
+      "assetId": "convergence-simple-funnel-001",
+      "attempts": [
+        { "attempt": 1, "status": "rendered-unreviewed", "artifact": "b2-attempt-1", "visual": "结构居中，两侧少量说明，漏斗层级与 b1 相同且可读。" }
+      ],
+      "firstResult": "rendered-unreviewed",
+      "finalResult": "rendered-unreviewed",
+      "visualFindings": ["居中结构形成清楚主阅读对象", "左右说明未与漏斗或彼此重叠", "与 b1 的对比变量主要是区域组织"]
+    },
+    {
+      "caseId": "b3",
+      "assetId": "progression-maturity-steps-002",
+      "attempts": [
+        { "attempt": 1, "status": "rejected", "artifact": "b3-attempt-1", "visual": "前次布局的图外入口说明与结构区相交；调用未作为成功。" },
+        { "attempt": 2, "status": "rejected", "artifact": "b3-attempt-2", "visual": "六层中三条较长说明超出承托面安全 box；保持字号并拒绝。" },
+        { "attempt": 3, "status": "rendered-unreviewed", "artifact": "b3-attempt-3", "visual": "六层完整、短说明可读、宽正文区与图外四类入口清楚分离。" }
+      ],
+      "firstResult": "rejected",
+      "finalResult": "rendered-unreviewed",
+      "visualFindings": ["阶梯的踏面、立面、接缝和编号节奏保留", "六层标题均在图内", "入口四种在图外完整保留", "第三次成功不回写为首次成功"]
+    },
+    {
+      "caseId": "b4",
+      "assetId": "convergence-simple-funnel-001",
+      "attempts": [
+        { "attempt": 1, "status": "rejected", "artifact": "b4-attempt-1", "visual": "320×300 首试因前两条长标题无法以允许字号容纳而拒绝，首试结果已记录。" },
+        { "attempt": 2, "status": "rendered-unreviewed", "artifact": "b4-attempt-2", "visual": "扩区后用语义等价短标题，长事实说明移到图旁，PNG 可读。" }
+      ],
+      "firstResult": "rejected",
+      "finalResult": "rendered-unreviewed",
+      "visualFindings": ["三层收敛关系保持", "三条事实分别在图外保留", "没有降低 Skin 字号", "只使用两次尝试，第三次未被需要"]
+    }
+  ],
+  "conclusion": {
+    "invocation": "四页均调用登记的 preserved-design 实现；b1/b2 为四层简明漏斗，b3 为六级成熟度阶梯，b4 为三层简明漏斗并执行受限扩区策略。",
+    "visual": "b1 attempt 3、b2 attempt 1、b3 attempt 3、b4 attempt 2 达到当前 PNG 局部视觉复核通过；其状态仍是 harness 的 rendered-unreviewed，不能写成正式视觉验收完成。",
+    "boundary": "所有尝试文件、失败回执和后续成功均保留；b4 首试拒绝与后续成功分开记录。"
+  }
+}

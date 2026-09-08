@@ -14,11 +14,21 @@ if (command === 'list') {
   }, null, 2));
 } else if (['guide', 'reference', 'inspect'].includes(command)) {
   const p = await loadStructureSkill(args[0], root);
+  const { identityEvidence, fixedEvidence, variableEvidence, ...currentSkill } = p.skill;
   console.log(JSON.stringify({
     mode: 'structure-skill', referenceAssetId: p.assetId, name: p.asset.name,
     logic: p.runtime.logicId, semantic: p.asset.semanticContract, source: p.asset.source,
-    visualIntent: p.visualIntent, skill: p.skill,
-    referenceImplementation: { manifest: path.relative(root, p.manifestPath), exampleCode: path.relative(root, p.entryPath) },
-    execution: 'scripts/invoke.mjs: references + content + targetFrame + build。示例代码仅用于提取造型，原参数、数量、文字框不约束本次构建。',
+    skill: currentSkill,
+    referenceImplementation: {
+      manifest: path.relative(root, p.manifestPath),
+      exampleCode: path.relative(root, path.resolve(path.dirname(p.manifestPath), p.guide?.exampleImplementation ?? path.basename(p.entryPath))),
+      historicalRuntime: path.relative(root, p.entryPath),
+    },
+    execution: p.guide?.implementation?.mode === 'preserved-design'
+      ? 'scripts/invoke.mjs: references + content + targetFrame + execution: preserved-design。直接执行登记的原造型适配实现，无需传 build。当前数量范围仍由该实现校验；文字按目标区域测量。'
+      : 'scripts/invoke.mjs: references + content + targetFrame + build。此结构尚未接入保留造型适配实现，不可声称仅凭特征摘要重绘已完成迁移。',
+    provenance: command === 'inspect'
+      ? { notice: '历史设计证据，包含旧样例容量、颜色和文字框；不是当前构建约束。', visualIntent: p.visualIntent, identityEvidence, fixedEvidence, variableEvidence }
+      : { next: `inspect ${p.assetId}`, notice: '需要核对来源时读取历史证据；数量与文字位置按当前稿件重算。' },
   }, null, 2));
 } else throw new Error('Use list [--logic <id>] or guide <assetId> (reference/inspect are aliases)');

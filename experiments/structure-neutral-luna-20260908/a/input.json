@@ -1,0 +1,72 @@
+{
+  "experimentId": "structure-neutral-luna-20260908-a",
+  "skin": "neutral-editorial-001",
+  "layoutSystem": "杂志风",
+  "cases": [
+    {
+      "caseId": "a1",
+      "title": "交接质量的四个底线",
+      "manuscript": "并列四项交接质量：资料齐全=关键文件集中归档；版本清楚=当前版本标记明确；责任明确=后续负责人可查；例外有据=特殊处理附上依据。另有结论“交接完成要能让接手者独立继续工作”，宽区布局。",
+      "content": {
+        "items": [
+          { "key": "complete", "title": "资料齐全", "body": "关键文件集中归档", "iconKey": "folder" },
+          { "key": "version", "title": "版本清楚", "body": "当前版本标记明确", "iconKey": "versions" },
+          { "key": "owner", "title": "责任明确", "body": "后续负责人可查", "iconKey": "user-check" },
+          { "key": "exception", "title": "例外有据", "body": "特殊处理附上依据", "iconKey": "note" }
+        ],
+        "conclusion": "交接完成要能让接手者独立继续工作"
+      },
+      "layoutRequest": "四项并列，使用宽区布局；结论作为结构外的收束说明。"
+    },
+    {
+      "caseId": "a2",
+      "title": "交接质量需要可查的依据",
+      "manuscript": "同一四项同一文字：资料齐全=关键文件集中归档；版本清楚=当前版本标记明确；责任明确=后续负责人可查；例外有据=特殊处理附上依据。对照左侧结构、右侧180-260px结论/说明栏，自行分区且不重叠。",
+      "content": {
+        "items": [
+          { "key": "complete", "title": "资料齐全", "body": "关键文件集中归档", "iconKey": "folder" },
+          { "key": "version", "title": "版本清楚", "body": "当前版本标记明确", "iconKey": "versions" },
+          { "key": "owner", "title": "责任明确", "body": "后续负责人可查", "iconKey": "user-check" },
+          { "key": "exception", "title": "例外有据", "body": "特殊处理附上依据", "iconKey": "note" }
+        ],
+        "sideNote": "交接完成要能让接手者独立继续工作",
+        "sideNoteWidth": { "min": 180, "max": 260 }
+      },
+      "layoutRequest": "左侧为结构区，右侧为180-260px结论/说明栏；四项文字与a1完全相同，结构与说明不得重叠。"
+    },
+    {
+      "caseId": "a3",
+      "title": "发布准备的六项检查",
+      "manuscript": "并列六项发布准备：范围确认、环境就绪、权限开通、回退预案、操作说明、问题窗口。各项采用10-18字短说明；上方有简短引导，下方采用宽结构。",
+      "content": {
+        "items": [
+          { "key": "scope", "title": "范围确认", "body": "确认本期交付边界与优先顺序", "iconKey": "target" },
+          { "key": "environment", "title": "环境就绪", "body": "检查运行环境并完成必要配置", "iconKey": "server" },
+          { "key": "access", "title": "权限开通", "body": "开通最小必要权限并验证可用", "iconKey": "key" },
+          { "key": "rollback", "title": "回退预案", "body": "明确回退条件步骤与责任人", "iconKey": "history" },
+          { "key": "guide", "title": "操作说明", "body": "整理关键操作步骤与注意事项", "iconKey": "book" },
+          { "key": "window", "title": "问题窗口", "body": "约定反馈入口与响应时间范围", "iconKey": "message-circle" }
+        ],
+        "intro": "发布前逐项确认，确保交付具备可执行条件。"
+      },
+      "layoutRequest": "上方放简短引导，下方使用宽区双排并列结构；六项同级，不表达先后。"
+    },
+    {
+      "caseId": "a4",
+      "title": "发布准备需要完整的执行依据",
+      "manuscript": "同a3六项，把每项说明扩成35-50字真实完整内容，首次必须用宽650高300区域，记录实际拒绝；可再自行扩区或改页面安排重试，不删事实、不降Skin字号、不无限重试。三次上限，无法放下可清楚报告需要拆页，不伪造成功。最终保留所有尝试、首次结果与恢复原因。",
+      "content": {
+        "items": [
+          { "key": "scope", "title": "范围确认", "body": "逐项核对本期要交付的功能边界、目标对象与暂不纳入事项，并让业务负责人确认优先顺序后留下可追溯记录。", "iconKey": "target" },
+          { "key": "environment", "title": "环境就绪", "body": "检查运行环境、依赖版本和配置项是否满足发布要求，先在目标环境完成一次可重复的启动与基本功能验证。", "iconKey": "server" },
+          { "key": "access", "title": "权限开通", "body": "按最小必要原则开通执行、查看和回退所需权限，逐项验证实际账号可以完成对应操作并记录授权责任人。", "iconKey": "key" },
+          { "key": "rollback", "title": "回退预案", "body": "写明什么情况触发回退、由谁执行、恢复到哪个版本以及如何通知相关人员，并在可行范围内预演关键步骤。", "iconKey": "history" },
+          { "key": "guide", "title": "操作说明", "body": "将发布前检查、正式操作、异常处理和完成确认写成接手者可以照着执行的步骤，并标注每一步的输入输出。", "iconKey": "book" },
+          { "key": "window", "title": "问题窗口", "body": "明确发布期间的问题入口、值守人员、响应时限与升级路径，安排一个可被团队共同查看的记录位置持续更新。", "iconKey": "message-circle" }
+        ],
+        "intro": "发布前逐项确认，确保交付具备可执行条件。"
+      },
+      "layoutRequest": "首次调用强制使用650x300宽区域并保留拒绝证据；随后最多两次重试，只能扩区或改页，不删事实、不降Skin字号。"
+    }
+  ]
+}

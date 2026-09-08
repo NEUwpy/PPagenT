@@ -1,0 +1,225 @@
+{
+  "key": "b3-attempt-1",
+  "caseId": "b3",
+  "attempt": 1,
+  "model": "gpt-5.6-luna",
+  "reasoning": "high",
+  "execution": "parent-replay-of-luna-plan",
+  "spec": {
+    "caseId": "b3",
+    "title": "六层筛选把建议收束为可执行计划",
+    "assetId": "convergence-simple-funnel-001",
+    "content": {
+      "inputs": [
+        {
+          "label": "访谈",
+          "iconQuery": "users"
+        },
+        {
+          "label": "记录",
+          "iconQuery": "file"
+        },
+        {
+          "label": "工单",
+          "iconQuery": "ticket"
+        },
+        {
+          "label": "复盘",
+          "iconQuery": "refresh"
+        }
+      ],
+      "steps": [
+        {
+          "key": "collect-suggestions",
+          "title": "征集建议"
+        },
+        {
+          "key": "clarify-problem",
+          "title": "明确问题"
+        },
+        {
+          "key": "check-basis",
+          "title": "核对依据"
+        },
+        {
+          "key": "small-validation",
+          "title": "小步验证"
+        },
+        {
+          "key": "assess-impact",
+          "title": "评估影响"
+        },
+        {
+          "key": "include-plan",
+          "title": "纳入计划"
+        }
+      ]
+    },
+    "frame": {
+      "left": 670,
+      "top": 160,
+      "width": 520,
+      "height": 492
+    },
+    "blocks": [
+      {
+        "role": "body",
+        "text": "入口：用户访谈、现场记录、客服工单、内部复盘。",
+        "frame": {
+          "left": 56,
+          "top": 150,
+          "width": 560,
+          "height": 52
+        }
+      },
+      {
+        "role": "body",
+        "text": "征集建议：从四类入口收集待处理线索",
+        "frame": {
+          "left": 56,
+          "top": 230,
+          "width": 560,
+          "height": 48
+        }
+      },
+      {
+        "role": "body",
+        "text": "明确问题：把模糊意见改写为可核对问题",
+        "frame": {
+          "left": 56,
+          "top": 290,
+          "width": 560,
+          "height": 48
+        }
+      },
+      {
+        "role": "body",
+        "text": "核对依据：补齐现场材料与既有记录",
+        "frame": {
+          "left": 56,
+          "top": 350,
+          "width": 560,
+          "height": 48
+        }
+      },
+      {
+        "role": "body",
+        "text": "小步验证：用小范围动作观察是否成立",
+        "frame": {
+          "left": 56,
+          "top": 410,
+          "width": 560,
+          "height": 48
+        }
+      },
+      {
+        "role": "body",
+        "text": "评估影响：判断对交付与责任边界的影响",
+        "frame": {
+          "left": 56,
+          "top": 470,
+          "width": 560,
+          "height": 48
+        }
+      },
+      {
+        "role": "body",
+        "text": "纳入计划：形成可执行的排期与责任安排",
+        "frame": {
+          "left": 56,
+          "top": 530,
+          "width": 560,
+          "height": 48
+        }
+      }
+    ],
+    "reason": "六层筛选逐步收敛；保留全部原说明在左列，右侧漏斗保留六层短标题",
+    "chapter": "02",
+    "pageNumber": 7,
+    "parentReplay": true,
+    "auditNote": "Parent corrected selection: screening is convergence, not maturity"
+  },
+  "skin": {
+    "id": "neutral-editorial-001",
+    "fonts": {
+      "display": "Noto Serif SC",
+      "body": "Noto Sans SC"
+    },
+    "font": "Noto Sans SC",
+    "primaryColor": "#A35D4F",
+    "background": "#F5F4EF",
+    "surface": "#EEECE5",
+    "dark": "#20201D",
+    "body": "#4B4A45",
+    "muted": "#85837B",
+    "line": "#D8D5CC",
+    "bodyFrame": {
+      "left": 56,
+      "top": 135,
+      "width": 1168,
+      "height": 525
+    },
+    "typography": {
+      "componentHeading": 15.75,
+      "componentTitle": 15.75,
+      "componentItemTitle": 12.75,
+      "componentLead": 12.75,
+      "componentBody": 12.75,
+      "componentLabel": 12.75,
+      "componentMeta": 11.25
+    }
+  },
+  "status": "rendered-unreviewed",
+  "invocation": {
+    "result": {
+      "mode": "preserved-design",
+      "componentId": "convergence-simple-funnel",
+      "nodeCount": 28
+    },
+    "nativeShapeDelta": 24,
+    "validation": "rendered-unreviewed"
+  },
+  "measurements": {
+    "titleRight": 487,
+    "overflow": [],
+    "fontReady": true
+  },
+  "fonts": [
+    {
+      "name": "simple-step-title-0",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "征集建议"
+    },
+    {
+      "name": "simple-step-title-1",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "明确问题"
+    },
+    {
+      "name": "simple-step-title-2",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "核对依据"
+    },
+    {
+      "name": "simple-step-title-3",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "小步验证"
+    },
+    {
+      "name": "simple-step-title-4",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "评估影响"
+    },
+    {
+      "name": "simple-step-title-5",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "纳入计划"
+    }
+  ]
+}

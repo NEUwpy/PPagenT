@@ -576,7 +576,7 @@
         + '<div><b>如何适配</b><p>' + esc(skill.adaptation) + '</p><p>' + esc(skill.identityReview) + '</p>'
         + '<b>实现方式</b><p>原生适配构建 / 多参考组合</p><p>' + esc(skill.executorBoundary) + '</p>'
         + '</div></div>'
-        + '<details><summary>Skill 读取入口与证据状态</summary><p>' + esc(skill.evidenceStatus === 'source-declared' ? '已有源文件说明；仍需针对本次适配检查特征。' : '源说明不足，尚未提炼特征。') + '</p><code>node .codex/skills/ppagent-structure/scripts/catalog.mjs guide ' + esc(asset.id) + '</code></details></section>';
+        + '<details><summary>Skill 读取入口与证据状态</summary><p>' + esc(skill.evidenceStatus === 'authored-guide' ? '已整理本结构的特征与适配说明；不等于适配效果已验收。' : skill.evidenceStatus === 'source-declared' ? '已有源文件说明；仍需针对本次适配检查特征。' : '源说明不足，尚未提炼特征。') + '</p><p>' + esc(skill.validation?.note || '本结构的适配效果尚未逐项验证。') + '</p><code>node .codex/skills/ppagent-structure/scripts/catalog.mjs guide ' + esc(asset.id) + '</code></details></section>';
     }
 
     function activatePreviewImages() {

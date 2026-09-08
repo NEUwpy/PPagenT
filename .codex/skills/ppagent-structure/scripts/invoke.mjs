@@ -6,7 +6,7 @@ export async function invokeStructure(options) {
   if (!evidencePath || !pageId || !regionId || !reason) throw new Error('调用需 evidencePath/pageId/regionId/reason');
   await fs.mkdir(path.dirname(evidencePath), { recursive: true });
   const log = event => fs.appendFile(evidencePath, JSON.stringify({ at: new Date().toISOString(), pageId, regionId, reason, references, targetFrame, ...event }) + '\n');
-  await log({ event: 'attempt', executor: 'structure-skill-native' });
+  await log({ event: 'attempt', executor: options.execution === 'preserved-design' ? 'structure-skill-preserved' : 'structure-skill-native' });
   try {
     const result = await executeStructureSkill(options);
     await log({ event: 'success', nativeShapeDelta: result.nativeShapeDelta, validation: result.validation });
@@ -16,5 +16,7 @@ export async function invokeStructure(options) {
     throw error;
   }
 }
-// Compatibility for existing finally blocks; this executor owns no browser.
-export async function closeStructureRuntime() {}
+export async function closeStructureRuntime() {
+  const { closeHtmlComponentRuntime } = await import('../../../../src/visual-runtime/html-component-runtime.mjs');
+  await closeHtmlComponentRuntime();
+}

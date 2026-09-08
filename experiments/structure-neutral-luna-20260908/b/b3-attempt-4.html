@@ -1,0 +1,255 @@
+<!doctype html><meta charset="utf-8"><style>/* ppagent-theme:resolved */:root{
+    --ppagent-font-body:"Noto Sans SC";
+    --ppagent-color-background:#F5F4EF;
+    --ppagent-color-surface:#EEECE5;
+    --ppagent-color-primary:#A35D4F;
+    --ppagent-color-primary-deep:#5F362E;
+    --ppagent-color-primary-dark:#7C473C;
+    --ppagent-color-primary-light:#C2948B;
+    --ppagent-color-primary-pale:#DFC6C1;
+    --ppagent-color-primary-wash:#F4ECEA;
+    --ppagent-color-accent:#A35D4F;
+    --ppagent-color-accent-alt:#B47A6F;
+    --ppagent-color-accent-soft:#EEE2DF;
+    --ppagent-color-cyan:#C4978E;
+    --ppagent-color-dark:#20201D;
+    --ppagent-color-body:#4B4A45;
+    --ppagent-color-muted:#85837B;
+    --ppagent-color-line:#D8D5CC;
+    --ppagent-component-heading-size:15.75pt;
+    --ppagent-component-title-size:15.75pt;
+    --ppagent-component-item-title-size:12.75pt;
+    --ppagent-component-lead-size:12.75pt;
+    --ppagent-component-body-size:12.75pt;
+    --ppagent-component-label-size:12.75pt;
+    --ppagent-component-meta-size:11.25pt;
+  }
+    .ppagent-text-region{
+      box-sizing:border-box;
+      min-width:0;
+      min-height:0;
+    }
+    .ppagent-text-region > .ppagent-text-flow,
+    .ppagent-text-region > .ppagent-text-layout{
+      width:100%;
+      height:100%;
+    }
+    .ppagent-text-layout{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-layout-gap,10px);
+      width:100%;
+      height:100%;
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,"Microsoft YaHei"),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-align="center"]{text-align:center}
+    .ppagent-text-layout[data-text-layout-align="right"]{text-align:right}
+    .ppagent-text-layout[data-text-layout-valign="top"]{justify-content:flex-start}
+    .ppagent-text-layout[data-text-layout-valign="bottom"]{justify-content:flex-end}
+    .ppagent-text-layout[data-text-layout-density="compact"]{--ppagent-text-layout-gap:6px;--ppagent-text-layout-item-gap:5px}
+    .ppagent-text-layout[data-text-layout-density="standard"]{--ppagent-text-layout-gap:10px;--ppagent-text-layout-item-gap:8px}
+    .ppagent-text-layout[data-text-layout-density="loose"]{--ppagent-text-layout-gap:15px;--ppagent-text-layout-item-gap:12px}
+    .ppagent-text-primitive{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      color:var(--ppagent-text-color,#46566a);
+      text-align:inherit;
+      white-space:pre-line;
+      overflow-wrap:break-word;
+    }
+    .ppagent-text-primitive--heading{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-text-primitive--body{font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.45}
+    .ppagent-text-primitive--list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px)}
+    .ppagent-text-list__item{box-sizing:border-box;min-width:0;margin:0;padding:0;overflow:visible;color:var(--ppagent-text-color,#46566a);font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.38;text-align:inherit;white-space:pre-line;overflow-wrap:break-word}
+    .ppagent-text-primitive--metric{color:var(--ppagent-value-color,#2f5ea8);font-size:var(--ppagent-component-heading-size,25pt);font-weight:700;line-height:1.08}
+    .ppagent-text-primitive--label{color:var(--ppagent-label-color,#60758d);font-size:var(--ppagent-component-label-size,17pt);font-weight:600;line-height:1.2}
+    .ppagent-text-primitive--annotation{color:var(--ppagent-annotation-color,#748495);font-size:var(--ppagent-component-meta-size,15pt);font-weight:400;line-height:1.3}
+    .ppagent-text-primitive--quote{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:500;line-height:1.35}
+    .ppagent-text-primitive--emphasis{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-title-size,23pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-structured-list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-structured-list__item{display:flex;flex-direction:column;gap:4px;min-width:0}
+    .ppagent-structured-list__item .ppagent-text-primitive--heading{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-metric-set{display:grid;grid-template-columns:repeat(var(--ppagent-metric-columns,2),minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0;align-items:start}
+    .ppagent-metric-set[data-metric-count="3"]{--ppagent-metric-columns:3}
+    .ppagent-metric-set[data-metric-count="4"]{--ppagent-metric-columns:4}
+    .ppagent-metric-set__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-key-value{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-key-value__row{display:grid;grid-template-columns:minmax(64px,.42fr) minmax(0,1fr);gap:10px;align-items:start;min-width:0}
+    .ppagent-key-value__row .ppagent-text-primitive--metric{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label,
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--annotation{text-align:right}
+    .ppagent-summary-information{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0}
+    .ppagent-summary-information__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-summary-information__item .ppagent-text-primitive--emphasis{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"]{
+      justify-content:flex-start;
+      gap:12px;
+      padding:18px;
+      color:var(--ppagent-color-body);
+      background:transparent;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive{color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--emphasis,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--quote{color:var(--ppagent-color-dark);font-weight:700;letter-spacing:-.25px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--body,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-list__item{font-size:max(15pt,var(--ppagent-component-body-size))}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--label{color:var(--ppagent-color-accent);font-size:max(15pt,var(--ppagent-component-label-size));font-weight:700;letter-spacing:.7px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--annotation{color:var(--ppagent-color-muted);font-size:max(15pt,var(--ppagent-component-meta-size))}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--metric{color:var(--ppagent-color-accent);font-weight:700;letter-spacing:-.5px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-list__item{position:relative;padding-left:17px;color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-list__item::before{content:"";position:absolute;left:0;top:.68em;width:8px;height:2px;background:var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--heading-content-flow > .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--label-content-flow > .ppagent-text-primitive--label,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--heading-metric-content-flow > .ppagent-text-primitive--heading{padding-bottom:10px;border-bottom:2px solid var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-structured-list{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-structured-list__item{display:grid;grid-template-columns:minmax(82px,.42fr) minmax(0,1fr);gap:14px;padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-structured-list__item .ppagent-text-primitive--body{margin:0}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-metric-set{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-metric-set__item{padding:12px 14px 4px 0}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-metric-set__item + .ppagent-metric-set__item{padding-left:14px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-key-value{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-key-value__row{padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--quote-attribution-flow{position:relative;padding-left:52px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--quote-attribution-flow::before{content:"“";position:absolute;left:16px;top:8px;color:var(--ppagent-color-accent);font-family:Georgia,serif;font-size:42pt;font-weight:700;line-height:1}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label{margin-top:auto;padding-top:10px;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-summary-information{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-summary-information__item{padding:10px 12px 8px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-summary-information__item:nth-child(even){padding-left:12px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout--value-label{
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-value-label-gap,5px);
+      padding:var(--ppagent-value-label-padding,5px);
+      text-align:center;
+    }
+    .ppagent-text-layout__value,
+    .ppagent-text-layout__label{
+      box-sizing:border-box;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:hidden;
+      text-align:inherit;
+    }
+    .ppagent-text-layout__value{
+      color:var(--ppagent-value-color,#2f5ea8);
+      font-size:var(--ppagent-component-lead-size,19pt);
+      font-weight:700;
+      line-height:1.15;
+    }
+    .ppagent-text-layout__label{
+      color:var(--ppagent-label-color,#60758d);
+      font-size:var(--ppagent-component-meta-size,15pt);
+      font-weight:400;
+      line-height:1.2;
+    }
+    .ppagent-text-flow{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-flow-gap,10px);
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,"Microsoft YaHei"),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-flow[data-text-flow-align="center"]{text-align:center}
+    .ppagent-text-flow[data-text-flow-align="right"]{text-align:right}
+    .ppagent-text-flow[data-text-flow-valign="top"]{justify-content:flex-start}
+    .ppagent-text-flow[data-text-flow-valign="bottom"]{justify-content:flex-end}
+    .ppagent-text-flow__title,
+    .ppagent-text-flow__body{
+      position:relative;
+      box-sizing:border-box;
+      flex:0 0 auto;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      text-align:inherit;
+    }
+    .ppagent-text-flow__title{
+      font-size:var(--ppagent-component-item-title-size,21pt);
+      font-weight:700;
+      line-height:1.2;
+      white-space:normal;
+      text-wrap:balance;
+    }
+    .ppagent-text-flow__body{
+      font-size:var(--ppagent-component-body-size,17pt);
+      font-weight:400;
+      line-height:1.45;
+      white-space:pre-line;
+    }
+    .ppagent-text-flow__separator{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      align-self:center;
+      width:var(--ppagent-text-flow-separator-width,54px);
+      height:var(--ppagent-text-flow-separator-height,4px);
+      border:0;
+      border-radius:99px;
+      background:var(--ppagent-text-flow-separator-color,#78aeef);
+    }
+  * { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { color: #7C473C; background: transparent; font-family: var(--ppagent-font-body, "Microsoft YaHei"), sans-serif; }
+.simple-funnel { position: relative; width: 1170px; height: 492px; overflow: hidden; background: transparent; }
+.simple-funnel-orbit { position: absolute; inset: 0; z-index: 1; width: 1170px; height: 492px; overflow: visible; }
+.simple-funnel-orbit ellipse { fill: none; stroke: rgba(163, 93, 79,.12); stroke-width: 1; }
+.simple-funnel-diagram { position: absolute; inset: 0; z-index: 2; width: 1170px; height: 492px; overflow: visible; }
+.simple-funnel-step-body { stroke: rgba(255, 255, 255,.14); stroke-width: 1; }
+.simple-funnel-step-cap { stroke: #DFC6C1; stroke-width: 2; }
+.simple-flow-arrow { pointer-events: none; }
+.simple-step-title { position: absolute; left: 585px; top: var(--top); z-index: 5; width: var(--width); height: 28px; margin: 0; overflow: hidden; color: #fff; font-size: var(--ppagent-funnel-step-title-size, 15pt); font-weight: 700; line-height: 28px; text-align: center; white-space: nowrap; transform: translateX(-50%); }
+.simple-input-layer { position: absolute; inset: 0; z-index: 6; pointer-events: none; }
+.simple-input { position: absolute; left: var(--x); top: var(--y); width: var(--size); height: var(--size); transform: translateX(-50%); text-align: center; }
+.simple-input-core { position: relative; display: grid; place-items: center; width: var(--size); height: var(--size); margin: 0 auto; padding: 10px; border: 3px solid #fff; border-radius: 50%; color: #fff; background: #A35D4F; box-shadow: 0 5px 14px rgba(163, 93, 79,.2); }
+.simple-input-marker { display: grid; place-items: center; width: 100%; height: 100%; overflow: hidden; }
+.simple-input-marker-text { padding: 0 2px; color: #fff; font-size: var(--ppagent-component-meta-size, 17pt); font-weight: 700; line-height: 1; text-align: center; white-space: nowrap; }
+.simple-icon-svg { width: 100%; height: 100%; color: currentColor; stroke: currentColor; }
+.simple-icon-fallback { display: block; width: 10px; height: 10px; border: 2px solid currentColor; border-radius: 50%; }
+html,body{width:1280px;height:720px;margin:0;background:#F5F4EF!important}#chapter,#title{position:absolute;top:49px;font:700 25px 'Noto Serif SC';white-space:nowrap}#chapter{left:56px;color:#A35D4F}#title{left:112px;color:#20201D}</style><div id="chapter">02</div><div id="title">六层筛选把建议收束为可执行计划</div><div data-plain="0" style="position:absolute;left:56px;top:600px;width:1100px;height:35px;font-family:'Noto Sans SC';font-size:15px;font-weight:400;line-height:1.55;color:#85837B;white-space:pre-wrap">入口：用户访谈、现场记录、客服工单、内部复盘。四类入口先汇总，再沿六层逐步收束。</div><div style="position:absolute;left:180px;top:155px"><section class="simple-funnel simple-funnel-adapted" data-ppt-root data-ppt-preserve-font="true" data-step-count="6" style="width:920px;height:430px;--ppagent-component-heading-size:15.75pt;--ppagent-component-title-size:15.75pt;--ppagent-component-item-title-size:12.75pt;--ppagent-component-lead-size:12.75pt;--ppagent-component-body-size:12.75pt;--ppagent-component-label-size:12.75pt;--ppagent-component-meta-size:11.25pt;--ppagent-funnel-step-title-size:12.75pt">
+    <style>.simple-funnel-adapted .simple-input-core{padding:8.739837398373984px;border-width:2.6219512195121952px}</style>
+    <svg class="simple-funnel-orbit" style="width:100%;height:100%" viewBox="58.67441860465116 0 1052.6511627906975 492"><ellipse cx="585" cy="244.5" rx="285" ry="202.5" transform="rotate(-7 585 244.5)" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="simple-funnel-orbit"/></svg>
+    <div class="simple-input-layer"><div class="simple-input" style="--x:350.7520325203252px;--y:27.09349593495935px;--size:40.203252032520325px">
+    <div class="simple-input-core" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="simple-input-core-0"><span class="simple-input-marker simple-input-marker-text" data-slot-id="input-1-marker" data-slot-role="input-marker" data-slot-field="inputs[0].label" data-slot-item-id="input-1" data-slot-content-type="text" data-slot-required="false" data-slot-text-mode="single-line" data-slot-list-policy="none" data-slot-max-chars="4" data-slot-max-lines="1" data-ppt-kind="text" data-ppt-name="simple-input-text-0">用户访谈</span></div>
+  </div><div class="simple-input" style="--x:423.5840108401085px;--y:8.739837398373984px;--size:34.959349593495936px">
+    <div class="simple-input-core" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="simple-input-core-1"><span class="simple-input-marker simple-input-marker-text" data-slot-id="input-2-marker" data-slot-role="input-marker" data-slot-field="inputs[1].label" data-slot-item-id="input-2" data-slot-content-type="text" data-slot-required="false" data-slot-text-mode="single-line" data-slot-list-policy="none" data-slot-max-chars="4" data-slot-max-lines="1" data-ppt-kind="text" data-ppt-name="simple-input-text-1">现场记录</span></div>
+  </div><div class="simple-input" style="--x:496.41598915989164px;--y:4.369918699186992px;--size:40.203252032520325px">
+    <div class="simple-input-core" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="simple-input-core-2"><span class="simple-input-marker simple-input-marker-text" data-slot-id="input-3-marker" data-slot-role="input-marker" data-slot-field="inputs[2].label" data-slot-item-id="input-3" data-slot-content-type="text" data-slot-required="false" data-slot-text-mode="single-line" data-slot-list-policy="none" data-slot-max-chars="4" data-slot-max-lines="1" data-ppt-kind="text" data-ppt-name="simple-input-text-2">客服工单</span></div>
+  </div><div class="simple-input" style="--x:569.2479674796748px;--y:22.72357723577236px;--size:34.959349593495936px">
+    <div class="simple-input-core" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="simple-input-core-3"><span class="simple-input-marker simple-input-marker-text" data-slot-id="input-4-marker" data-slot-role="input-marker" data-slot-field="inputs[3].label" data-slot-item-id="input-4" data-slot-content-type="text" data-slot-required="false" data-slot-text-mode="single-line" data-slot-list-policy="none" data-slot-max-chars="4" data-slot-max-lines="1" data-ppt-kind="text" data-ppt-name="simple-input-text-3">内部复盘</span></div>
+  </div></div>
+    <svg class="simple-funnel-diagram" style="width:100%;height:100%" viewBox="58.67441860465116 0 1052.6511627906975 492"><g><path class="simple-funnel-step-body" fill="#A35D4F" d="M 400.00 105.00 L 432.44 146.37 C 432.44 153.67 737.56 153.67 737.56 146.37 L 770.00 105.00 C 770.00 112.30 400.00 112.30 400.00 105.00 Z" data-ppt-kind="path" data-ppt-name="simple-step-body-0"/><ellipse class="simple-funnel-step-cap" fill="#A35D4F" cx="585" cy="105" rx="185" ry="7.786666666666666" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="simple-step-cap-0"/></g><g><path class="simple-funnel-step-body" fill="#A35D4F" d="M 432.44 158.67 L 457.28 200.03 C 457.28 207.33 712.72 207.33 712.72 200.03 L 737.56 158.67 C 737.56 165.97 432.44 165.97 432.44 158.67 Z" data-ppt-kind="path" data-ppt-name="simple-step-body-1"/><ellipse class="simple-funnel-step-cap" fill="#A35D4F" cx="585" cy="158.66666666666666" rx="152.55594810892546" ry="7.786666666666666" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="simple-step-cap-1"/></g><g><path class="simple-funnel-step-body" fill="#A35D4F" d="M 457.28 212.33 L 479.87 253.70 C 479.87 261.00 690.13 261.00 690.13 253.70 L 712.72 212.33 C 712.72 219.63 457.28 219.63 457.28 212.33 Z" data-ppt-kind="path" data-ppt-name="simple-step-body-2"/><ellipse class="simple-funnel-step-cap" fill="#A35D4F" cx="585" cy="212.33333333333331" rx="127.72307636787804" ry="7.786666666666666" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="simple-step-cap-2"/></g><g><path class="simple-funnel-step-body" fill="#A35D4F" d="M 479.87 266.00 L 501.12 307.37 C 501.12 314.67 668.88 314.67 668.88 307.37 L 690.13 266.00 C 690.13 273.30 479.87 273.30 479.87 266.00 Z" data-ppt-kind="path" data-ppt-name="simple-step-body-3"/><ellipse class="simple-funnel-step-cap" fill="#A35D4F" cx="585" cy="266" rx="105.13168608664618" ry="7.786666666666666" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="simple-step-cap-3"/></g><g><path class="simple-funnel-step-body" fill="#C2948B" d="M 501.12 319.67 L 521.42 361.03 C 521.42 368.33 648.58 368.33 648.58 361.03 L 668.88 319.67 C 668.88 326.97 501.12 326.97 501.12 319.67 Z" data-ppt-kind="path" data-ppt-name="simple-step-body-4"/><ellipse class="simple-funnel-step-cap" fill="#C2948B" cx="585" cy="319.66666666666663" rx="83.88297578322985" ry="7.786666666666666" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="simple-step-cap-4"/></g><g><path class="simple-funnel-step-body" fill="#C2948B" d="M 521.42 373.33 L 541.00 414.70 C 541.00 422.00 629.00 422.00 629.00 414.70 L 648.58 373.33 C 648.58 380.63 521.42 380.63 521.42 373.33 Z" data-ppt-kind="path" data-ppt-name="simple-step-body-5"/><ellipse class="simple-funnel-step-cap" fill="#C2948B" cx="585" cy="373.3333333333333" rx="63.57992664956848" ry="7.786666666666666" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="simple-step-cap-5"/></g><defs><linearGradient id="simple-flow-gradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F4ECEA" stop-opacity="0"/><stop offset="42%" stop-color="#DFC6C1" stop-opacity=".16"/><stop offset="76%" stop-color="#DFC6C1" stop-opacity=".32"/><stop offset="100%" stop-color="#C2948B" stop-opacity=".52"/></linearGradient></defs><path class="simple-flow-arrow" fill="url(#simple-flow-gradient)" d="M 488.80 101.00 L 488.80 105.00 L 504.57 153.67 L 505.89 158.67 L 517.81 207.33 L 518.97 212.33 L 529.79 261.00 L 530.87 266.00 L 541.04 314.67 L 542.06 319.67 L 550.33 361.00 L 519.33 361.00 L 585.00 426.00 L 650.67 361.00 L 619.67 361.00 L 627.94 319.67 L 628.96 314.67 L 639.13 266.00 L 640.21 261.00 L 651.03 212.33 L 652.19 207.33 L 664.11 158.67 L 665.43 153.67 L 681.20 105.00 L 681.20 101.00 Z" data-ppt-kind="path" data-ppt-name="simple-flow-arrow"/></svg>
+    <h3 class="simple-step-title" style="left:460px;--top:95.26422764227642px;--width:288.0265400138983px;height:28.550135501355008px;line-height:20.400000000000002px;display:flex;align-items:center;justify-content:center;white-space:normal" data-ppt-kind="text" data-ppt-name="simple-step-title-0">征集建议</h3><h3 class="simple-step-title" style="left:460px;--top:142.1680216802168px;--width:237.96744009151527px;height:28.550135501355008px;line-height:20.400000000000002px;display:flex;align-items:center;justify-content:center;white-space:normal" data-ppt-kind="text" data-ppt-name="simple-step-title-1">明确问题</h3><h3 class="simple-step-title" style="left:460px;--top:189.07181571815718px;--width:196.51940621025494px;height:28.55013550135503px;line-height:20.400000000000002px;display:flex;align-items:center;justify-content:center;white-space:normal" data-ppt-kind="text" data-ppt-name="simple-step-title-2">核对依据</h3><h3 class="simple-step-title" style="left:460px;--top:235.97560975609758px;--width:158.20387114643637px;height:28.55013550135503px;line-height:20.400000000000002px;display:flex;align-items:center;justify-content:center;white-space:normal" data-ppt-kind="text" data-ppt-name="simple-step-title-3">小步验证</h3><h3 class="simple-step-title" style="left:460px;--top:282.8794037940379px;--width:121.88830903679529px;height:28.55013550135503px;line-height:20.400000000000002px;display:flex;align-items:center;justify-content:center;white-space:normal" data-ppt-kind="text" data-ppt-name="simple-step-title-4">评估影响</h3><h3 class="simple-step-title" style="left:460px;--top:329.7831978319783px;--width:87.03123670592367px;height:28.55013550135503px;line-height:20.400000000000002px;display:flex;align-items:center;justify-content:center;white-space:normal" data-ppt-kind="text" data-ppt-name="simple-step-title-5">纳入计划</h3>
+  <style>[data-ppt-root] .ppagent-text-primitive--heading,[data-ppt-root] .simple-step-title{font-family:"Noto Serif SC"}
+  [data-ppt-root] [data-ppt-shadow]{box-shadow:none}
+  [data-ppt-root] .ppagent-text-primitive--body,[data-ppt-root] .ppagent-text-list__item{color:var(--ppagent-color-body)}
+      .simple-funnel-adapted .simple-funnel-step-body{fill:var(--ppagent-color-surface);stroke:var(--ppagent-color-muted);stroke-width:1}
+      .simple-funnel-adapted .simple-funnel-step-cap{fill:var(--ppagent-color-background);stroke:var(--ppagent-color-muted);stroke-width:1}
+      .simple-funnel-adapted .simple-step-title{color:var(--ppagent-color-dark)}
+      .simple-funnel-adapted .simple-input-core{background:var(--ppagent-color-background);border-color:var(--ppagent-color-line);color:var(--ppagent-color-primary);box-shadow:none}
+      .simple-funnel-adapted .simple-input-marker-text{color:var(--ppagent-color-dark)}
+      .simple-funnel-adapted .simple-funnel-orbit ellipse{stroke:var(--ppagent-color-line)}
+      .simple-funnel-adapted .simple-flow-arrow{opacity:.6}</style></section></div>

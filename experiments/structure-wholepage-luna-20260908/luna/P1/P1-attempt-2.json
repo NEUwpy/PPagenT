@@ -1,0 +1,175 @@
+{
+  "key": "P1-attempt-2",
+  "caseId": "P1",
+  "attempt": 2,
+  "model": "gpt-5.6-luna",
+  "reasoning": "high",
+  "execution": "luna-executed",
+  "spec": {
+    "caseId": "P1",
+    "title": "交接验收：接手者能独立继续工作",
+    "assetId": "parallel-folded-notes-grid-002",
+    "content": {
+      "items": [
+        {
+          "key": "complete",
+          "title": "资料齐全",
+          "body": "关键文件集中归档",
+          "iconQuery": "folder"
+        },
+        {
+          "key": "version",
+          "title": "版本清楚",
+          "body": "当前版本标记明确",
+          "iconQuery": "versions"
+        },
+        {
+          "key": "owner",
+          "title": "责任明确",
+          "body": "后续负责人可查",
+          "iconQuery": "user-check"
+        },
+        {
+          "key": "exception",
+          "title": "例外有据",
+          "body": "特殊处理附上依据",
+          "iconQuery": "file-search"
+        }
+      ]
+    },
+    "frame": {
+      "left": 130,
+      "top": 190,
+      "width": 1020,
+      "height": 345
+    },
+    "blocks": [
+      {
+        "role": "body",
+        "text": "验收看接手者能独立继续工作，而不是以发送文件为准。",
+        "frame": {
+          "left": 240,
+          "top": 575,
+          "width": 800,
+          "height": 38
+        }
+      }
+    ],
+    "reason": "四项交接条件是无顺序关系的同级验收依据，调用双排折角便签阵列；保留连续折页三层、通栏标题带、同级阵列与末行居中。",
+    "purpose": "说明交接验收的标准是接手者能独立继续工作，四项条件是同级并列的验收依据。",
+    "readingOrder": [
+      "页首主张",
+      "四项并列条件",
+      "底部验收结论"
+    ],
+    "contentAssignments": {
+      "structure": [
+        "资料齐全：关键文件集中归档",
+        "版本清楚：当前版本标记明确",
+        "责任明确：后续负责人可查",
+        "例外有据：特殊处理附上依据"
+      ],
+      "outside": [
+        "交接验收应以接手者能独立继续工作为准，而不是以发送文件为准"
+      ]
+    },
+    "chapter": "01",
+    "pageNumber": 1,
+    "attemptNote": "独立修订稿：扩大阵列并上移，给结论留出更清晰的底部收束区。"
+  },
+  "skin": {
+    "id": "neutral-editorial-001",
+    "fonts": {
+      "display": "Noto Serif SC",
+      "body": "Noto Sans SC"
+    },
+    "font": "Noto Sans SC",
+    "primaryColor": "#A35D4F",
+    "background": "#F5F4EF",
+    "surface": "#EEECE5",
+    "dark": "#20201D",
+    "body": "#4B4A45",
+    "muted": "#85837B",
+    "line": "#D8D5CC",
+    "bodyFrame": {
+      "left": 56,
+      "top": 135,
+      "width": 1168,
+      "height": 525
+    },
+    "typography": {
+      "componentHeading": 15.75,
+      "componentTitle": 15.75,
+      "componentItemTitle": 12.75,
+      "componentLead": 12.75,
+      "componentBody": 12.75,
+      "componentLabel": 12.75,
+      "componentMeta": 11.25
+    }
+  },
+  "status": "rendered-unreviewed",
+  "invocation": {
+    "result": {
+      "mode": "preserved-design",
+      "componentId": "parallel-folded-notes-grid",
+      "nodeCount": 32
+    },
+    "nativeShapeDelta": 28,
+    "validation": "rendered-unreviewed"
+  },
+  "measurements": {
+    "titleRight": 487,
+    "overflow": [],
+    "fontReady": true
+  },
+  "fonts": [
+    {
+      "name": "note-heading-0",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "资料齐全"
+    },
+    {
+      "name": "note-body-0",
+      "sizePx": 17,
+      "typeface": "Noto Sans SC",
+      "text": "关键文件集中归档"
+    },
+    {
+      "name": "note-heading-1",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "版本清楚"
+    },
+    {
+      "name": "note-body-1",
+      "sizePx": 17,
+      "typeface": "Noto Sans SC",
+      "text": "当前版本标记明确"
+    },
+    {
+      "name": "note-heading-2",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "责任明确"
+    },
+    {
+      "name": "note-body-2",
+      "sizePx": 17,
+      "typeface": "Noto Sans SC",
+      "text": "后续负责人可查"
+    },
+    {
+      "name": "note-heading-3",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "例外有据"
+    },
+    {
+      "name": "note-body-3",
+      "sizePx": 17,
+      "typeface": "Noto Sans SC",
+      "text": "特殊处理附上依据"
+    }
+  ]
+}

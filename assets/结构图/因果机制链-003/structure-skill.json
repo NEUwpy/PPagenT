@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "assetId": "causal-mediator-chain-003",
+  "features": [
+    "连续上升箭带具有共同透视的顶面与侧面",
+    "圆盘节点及椭圆托底沿透视中轴由近到远收缩",
+    "中性说明块阶梯排列，并连接对应圆盘"
+  ],
+  "adaptation": "按可解释的中介数量重算节点锚点、间距与比例；说明高度由文本决定，避免逐个手调投影。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "上升透视箭带的顶面和侧面",
+      "近大远小圆盘与椭圆托底",
+      "中性说明阶梯及连接"
+    ],
+    "variables": [
+      "中介数",
+      "箭带占区",
+      "透视深度参数",
+      "圆盘间隔",
+      "说明宽高"
+    ],
+    "coupledChanges": "箭带截面、圆盘大小、托底、说明阶梯和连接锚点由同一投影重算",
+    "avoid": "不得把圆盘、说明框分别缩放到失去共同透视，也不补独立结果卡",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

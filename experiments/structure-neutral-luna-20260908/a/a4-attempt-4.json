@@ -1,0 +1,195 @@
+{
+  "key": "a4-attempt-4",
+  "caseId": "a4",
+  "attempt": 4,
+  "model": "gpt-5.6-luna",
+  "reasoning": "high",
+  "execution": "luna-executed",
+  "spec": {
+    "caseId": "a4",
+    "title": "发布准备需要完整的执行依据",
+    "assetId": "parallel-folded-notes-grid-002",
+    "content": {
+      "items": [
+        {
+          "key": "scope",
+          "title": "范围确认",
+          "body": "逐项核对本期要交付的功能边界、目标对象与暂不纳入事项，并让业务负责人确认优先顺序后留下可追溯记录。",
+          "iconKey": "target"
+        },
+        {
+          "key": "environment",
+          "title": "环境就绪",
+          "body": "检查运行环境、依赖版本和配置项是否满足发布要求，先在目标环境完成一次可重复的启动与基本功能验证。",
+          "iconKey": "server"
+        },
+        {
+          "key": "access",
+          "title": "权限开通",
+          "body": "按最小必要原则开通执行、查看和回退所需权限，逐项验证实际账号可以完成对应操作并记录授权责任人。",
+          "iconKey": "key"
+        },
+        {
+          "key": "rollback",
+          "title": "回退预案",
+          "body": "写明什么情况触发回退、由谁执行、恢复到哪个版本以及如何通知相关人员，并在可行范围内预演关键步骤。",
+          "iconKey": "history"
+        },
+        {
+          "key": "guide",
+          "title": "操作说明",
+          "body": "将发布前检查、正式操作、异常处理和完成确认写成接手者可以照着执行的步骤，并标注每一步的输入输出。",
+          "iconKey": "book"
+        },
+        {
+          "key": "window",
+          "title": "问题窗口",
+          "body": "明确发布期间的问题入口、值守人员、响应时限与升级路径，安排一个可被团队共同查看的记录位置持续更新。",
+          "iconKey": "message-circle"
+        }
+      ],
+      "intro": "发布前逐项确认，确保交付具备可执行条件。"
+    },
+    "frame": {
+      "left": 56,
+      "top": 175,
+      "width": 1168,
+      "height": 480
+    },
+    "blocks": [
+      {
+        "text": "发布前逐项确认，确保交付具备可执行条件。",
+        "role": "body",
+        "frame": {
+          "left": 72,
+          "top": 135,
+          "width": 1080,
+          "height": 30
+        }
+      }
+    ],
+    "reason": "父任务指导修正前三次中的intro重叠，仅修正页面安排，保留原content与字号。",
+    "auditNote": "parent-guided overlap correction",
+    "chapter": "01",
+    "pageNumber": 4
+  },
+  "skin": {
+    "id": "neutral-editorial-001",
+    "fonts": {
+      "display": "Noto Serif SC",
+      "body": "Noto Sans SC"
+    },
+    "font": "Noto Sans SC",
+    "primaryColor": "#A35D4F",
+    "background": "#F5F4EF",
+    "surface": "#EEECE5",
+    "dark": "#20201D",
+    "body": "#4B4A45",
+    "muted": "#85837B",
+    "line": "#D8D5CC",
+    "bodyFrame": {
+      "left": 56,
+      "top": 135,
+      "width": 1168,
+      "height": 525
+    },
+    "typography": {
+      "componentHeading": 15.75,
+      "componentTitle": 15.75,
+      "componentItemTitle": 12.75,
+      "componentLead": 12.75,
+      "componentBody": 12.75,
+      "componentLabel": 12.75,
+      "componentMeta": 11.25
+    }
+  },
+  "status": "rendered-unreviewed",
+  "invocation": {
+    "result": {
+      "mode": "preserved-design",
+      "componentId": "parallel-folded-notes-grid",
+      "nodeCount": 48
+    },
+    "nativeShapeDelta": 42,
+    "validation": "rendered-unreviewed"
+  },
+  "measurements": {
+    "titleRight": 437,
+    "overflow": [],
+    "fontReady": true
+  },
+  "fonts": [
+    {
+      "name": "note-heading-0",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "范围确认"
+    },
+    {
+      "name": "note-body-0",
+      "sizePx": 17,
+      "typeface": "Noto Sans SC",
+      "text": "逐项核对本期要交付的功能边\n界、目标对象与暂不纳入事\n项，并让业务负责人确认优先\n顺序后留下可追溯记录。"
+    },
+    {
+      "name": "note-heading-1",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "环境就绪"
+    },
+    {
+      "name": "note-body-1",
+      "sizePx": 17,
+      "typeface": "Noto Sans SC",
+      "text": "检查运行环境、依赖版本和配\n置项是否满足发布要求，先在\n目标环境完成一次可重复的启\n动与基本功能验证。"
+    },
+    {
+      "name": "note-heading-2",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "权限开通"
+    },
+    {
+      "name": "note-body-2",
+      "sizePx": 17,
+      "typeface": "Noto Sans SC",
+      "text": "按最小必要原则开通执行、查\n看和回退所需权限，逐项验证\n实际账号可以完成对应操作并\n记录授权责任人。"
+    },
+    {
+      "name": "note-heading-3",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "回退预案"
+    },
+    {
+      "name": "note-body-3",
+      "sizePx": 17,
+      "typeface": "Noto Sans SC",
+      "text": "写明什么情况触发回退、由谁\n执行、恢复到哪个版本以及如\n何通知相关人员，并在可行范\n围内预演关键步骤。"
+    },
+    {
+      "name": "note-heading-4",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "操作说明"
+    },
+    {
+      "name": "note-body-4",
+      "sizePx": 17,
+      "typeface": "Noto Sans SC",
+      "text": "将发布前检查、正式操作、异\n常处理和完成确认写成接手者\n可以照着执行的步骤，并标注\n每一步的输入输出。"
+    },
+    {
+      "name": "note-heading-5",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "问题窗口"
+    },
+    {
+      "name": "note-body-5",
+      "sizePx": 17,
+      "typeface": "Noto Sans SC",
+      "text": "明确发布期间的问题入口、值\n守人员、响应时限与升级路\n径，安排一个可被团队共同查\n看的记录位置持续更新。"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+[
+  {
+    "caseId": "c1",
+    "selectedAssetIds": ["progression-maturity-steps-002"],
+    "reason": "四个明确能力门槛沿共同维度递进，当前级与目标级属于成熟度阶梯的真实状态标记。",
+    "execution": "preserved-design",
+    "preservedFeatures": [
+      "连续阶台的踏面、立面和接缝",
+      "同一消失点",
+      "随透视文字承托面"
+    ],
+    "changes": ["按中性编辑排版适配颜色与文字角色", "按四级稿件和宽结构区重算踏面、立面及说明位置"],
+    "status": "rendered-unreviewed",
+    "attempts": [1],
+    "unresolved": ["invokeStructure 返回 rendered-unreviewed；已完成 PPTX 重导入与 PNG 检查，未将此状态升级为正式视觉通过"]
+  },
+  {
+    "caseId": "c2",
+    "selectedAssetIds": ["progression-maturity-steps-002"],
+    "reason": "与c1同一成熟度稿件及状态，只改变页面布局为上半区结构、下方左右两列说明以验证高度缩减。",
+    "execution": "preserved-design",
+    "preservedFeatures": [
+      "连续阶台的踏面、立面和接缝",
+      "同一消失点",
+      "随透视文字承托面"
+    ],
+    "changes": ["结构移入上半区", "下方新增两列说明区域", "保留c1全部等级、顺序、当前级和目标级"],
+    "status": "rendered-unreviewed",
+    "attempts": [1],
+    "unresolved": ["invokeStructure 返回 rendered-unreviewed；已完成上半区结构与下方两列的 PNG 检查，未将此状态升级为正式视觉通过"]
+  },
+  {
+    "caseId": "c3",
+    "selectedAssetIds": ["progression-maturity-steps-002"],
+    "reason": "六个知识管理等级是同一能力维度的离散门槛，适合连续阶台表达并标出当前第3级与目标第6级。",
+    "execution": "preserved-design",
+    "preservedFeatures": [
+      "连续阶台的踏面、立面和接缝",
+      "同一消失点",
+      "随透视文字承托面"
+    ],
+    "status": "rendered-unreviewed",
+    "attempts": [1, 2],
+    "changes": ["首轮1140×410因容量拒绝", "第二轮扩大到1168×430并将说明压缩为8至14字", "六级、当前第3级和目标第6级均保留"],
+    "unresolved": ["首轮拒绝证据保留；第二轮 rendered-unreviewed 已重导入并检查 PNG，未将此状态升级为正式视觉通过"]
+  },
+  {
+    "caseId": "c4",
+    "selectedAssetIds": ["progression-maturity-steps-002"],
+    "reason": "复用c3同稿六级阶梯，在600×240真实小区域测试实现容量；最多允许两次扩区或调整页面区域。",
+    "execution": "preserved-design",
+    "preservedFeatures": [
+      "连续阶台的踏面、立面和接缝",
+      "同一消失点",
+      "随透视文字承托面"
+    ],
+    "changes": ["首试区域为600×240", "失败后最多再试两次扩区或调整页面区域"],
+    "status": "rendered-unreviewed",
+    "attempts": [1, 2],
+    "attemptPolicy": { "maxAdditionalAttempts": 2, "noDeleteLevels": true, "noDeleteFacts": true, "noLowerFont": true },
+    "unresolved": ["首试600×240拒绝，第二次900×320 rendered-unreviewed；已保留首试与后续证据并完成 PNG 检查，仍保留正式视觉复核边界"]
+  }
+]

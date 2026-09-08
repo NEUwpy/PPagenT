@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "assetId": "containment-multi-set-intersection-001",
+  "features": [
+    "等权集合围绕中轴组织",
+    "共同部分位于全部集合交叠的中心",
+    "圆形轮廓及交叠关系可辨认"
+  ],
+  "adaptation": "重算集合圆的位置与重叠面积；只有真实共同内容才进入中心，多集合时优先保证交集可读。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "等权圆形集合、真实交叠轮廓、全部集合的共同核心和独立说明分工"
+    ],
+    "variables": [
+      "集合数",
+      "圆半径与圆心",
+      "交叠面积",
+      "说明区有无及文案长度"
+    ],
+    "coupledChanges": "圆心与半径改变后重算交叠、遮罩和核心可读范围；说明不得遮住集合名",
+    "avoid": "不能把无交叠的圆硬标成共同部分；新增集合需核实共同交集几何",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

@@ -1,0 +1,209 @@
+{
+  "key": "P3-attempt-2",
+  "caseId": "P3",
+  "attempt": 2,
+  "model": "gpt-5.6-luna",
+  "reasoning": "high",
+  "execution": "luna-executed",
+  "spec": {
+    "caseId": "P3",
+    "title": "设备维护能力：从可查记录走向周期责任",
+    "assetId": "progression-maturity-steps-002",
+    "content": {
+      "levels": [
+        {
+          "key": "level-1",
+          "title": "被动处理",
+          "body": "故障后临时组织抢修"
+        },
+        {
+          "key": "level-2",
+          "title": "形成记录",
+          "body": "故障原因与处理过程可查"
+        },
+        {
+          "key": "level-3",
+          "title": "计划维护",
+          "body": "按周期检查并落实责任"
+        },
+        {
+          "key": "level-4",
+          "title": "持续改善",
+          "body": "用复盘减少重复故障"
+        }
+      ],
+      "showStatus": true,
+      "currentIndex": 1
+    },
+    "frame": {
+      "left": 70,
+      "top": 150,
+      "width": 1140,
+      "height": 420
+    },
+    "blocks": [
+      {
+        "role": "body",
+        "text": "下一步：从“故障原因与处理过程可查”走向“按周期检查并落实责任”。",
+        "frame": {
+          "left": 160,
+          "top": 600,
+          "width": 960,
+          "height": 38
+        }
+      }
+    ],
+    "reason": "四级内容是同一维护能力维度上的离散门槛，调用成熟度能力阶梯；保留连续阶台、踏面与立面投影、随透视承托面，并标出当前第2级与目标第4级。",
+    "purpose": "保留设备维护能力四级全貌，突出从当前第2级形成记录走向第3级计划维护的下一步，并标出目标第4级持续改善。",
+    "readingOrder": [
+      "页首主张",
+      "四级能力阶梯",
+      "底部下一步说明"
+    ],
+    "contentAssignments": {
+      "structure": [
+        "1 被动处理：故障后临时组织抢修",
+        "2 形成记录：故障原因与处理过程可查",
+        "3 计划维护：按周期检查并落实责任",
+        "4 持续改善：用复盘减少重复故障"
+      ],
+      "outside": [
+        "下一步：从可查记录走向按周期落实责任"
+      ]
+    },
+    "chapter": "03",
+    "pageNumber": 3,
+    "attemptNote": "独立修订稿：略增阶梯高度并上移，增强从第2级到第3级的阅读空间。"
+  },
+  "skin": {
+    "id": "neutral-editorial-001",
+    "fonts": {
+      "display": "Noto Serif SC",
+      "body": "Noto Sans SC"
+    },
+    "font": "Noto Sans SC",
+    "primaryColor": "#A35D4F",
+    "background": "#F5F4EF",
+    "surface": "#EEECE5",
+    "dark": "#20201D",
+    "body": "#4B4A45",
+    "muted": "#85837B",
+    "line": "#D8D5CC",
+    "bodyFrame": {
+      "left": 56,
+      "top": 135,
+      "width": 1168,
+      "height": 525
+    },
+    "typography": {
+      "componentHeading": 15.75,
+      "componentTitle": 15.75,
+      "componentItemTitle": 12.75,
+      "componentLead": 12.75,
+      "componentBody": 12.75,
+      "componentLabel": 12.75,
+      "componentMeta": 11.25
+    }
+  },
+  "status": "rendered-unreviewed",
+  "invocation": {
+    "result": {
+      "mode": "preserved-design",
+      "componentId": "progression-maturity-steps",
+      "nodeCount": 34
+    },
+    "nativeShapeDelta": 34,
+    "validation": "rendered-unreviewed"
+  },
+  "measurements": {
+    "titleRight": 562,
+    "overflow": [],
+    "fontReady": true
+  },
+  "fonts": [
+    {
+      "name": "level-1-text-heading",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "被动处理"
+    },
+    {
+      "name": "level-1-text-body",
+      "sizePx": 15,
+      "typeface": "Noto Sans SC",
+      "text": "故障后临时组织\n抢修"
+    },
+    {
+      "name": "maturity-level-index-1",
+      "sizePx": 15,
+      "typeface": "Noto Sans SC",
+      "text": "01"
+    },
+    {
+      "name": "level-2-text-heading",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "形成记录"
+    },
+    {
+      "name": "level-2-text-body",
+      "sizePx": 15,
+      "typeface": "Noto Sans SC",
+      "text": "故障原因与处理\n过程可查"
+    },
+    {
+      "name": "maturity-level-index-2",
+      "sizePx": 15,
+      "typeface": "Noto Sans SC",
+      "text": "02"
+    },
+    {
+      "name": "level-3-text-heading",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "计划维护"
+    },
+    {
+      "name": "level-3-text-body",
+      "sizePx": 15,
+      "typeface": "Noto Sans SC",
+      "text": "按周期检查并落\n实责任"
+    },
+    {
+      "name": "maturity-level-index-3",
+      "sizePx": 15,
+      "typeface": "Noto Sans SC",
+      "text": "03"
+    },
+    {
+      "name": "level-4-text-heading",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "持续改善"
+    },
+    {
+      "name": "level-4-text-body",
+      "sizePx": 15,
+      "typeface": "Noto Sans SC",
+      "text": "用复盘减少重复\n故障"
+    },
+    {
+      "name": "maturity-level-index-4",
+      "sizePx": 15,
+      "typeface": "Noto Sans SC",
+      "text": "04"
+    },
+    {
+      "name": "maturity-current-status",
+      "sizePx": 15,
+      "typeface": "Noto Sans SC",
+      "text": "当前"
+    },
+    {
+      "name": "maturity-target-status",
+      "sizePx": 15,
+      "typeface": "Noto Sans SC",
+      "text": "目标"
+    }
+  ]
+}

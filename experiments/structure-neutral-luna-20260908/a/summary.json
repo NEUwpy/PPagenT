@@ -1,0 +1,103 @@
+{
+  "experimentId": "structure-neutral-luna-20260908-a",
+  "model": "gpt-5.6-luna",
+  "reasoning": "high",
+  "skin": "neutral-editorial-001",
+  "assetId": "parallel-folded-notes-grid-002",
+  "selection": "四例均为同级并列项目，保留双排折角便签的连续折页三层、标题带、语义锚点和居中阵列。",
+  "cases": [
+    {
+      "caseId": "a1",
+      "assetId": "parallel-folded-notes-grid-002",
+      "attempts": [
+        { "attempt": 1, "result": "rendered-unreviewed", "artifact": "a1-attempt-1.pptx", "png": "a1-attempt-1.png" },
+        { "attempt": 2, "result": "rendered-unreviewed", "reason": "父任务修复共享 Skin 标题带样式优先级后原 spec 重跑", "artifact": "a1-attempt-2.pptx", "png": "a1-attempt-2.png" }
+      ],
+      "firstResult": "原生调用成功；已生成可编辑PPTX、重导入PNG和结构树。",
+      "finalResult": "保留 attempt-1，并采用父任务共享样式修复后的 attempt-2 作为最终检查结果。",
+      "visualFindings": [
+        "四张便签保持两行两列等权阵列，末行居中。",
+        "右下连续卷页、独立卷页与底影三层可见；标题带与图标锚点完整。",
+        "结论位于结构下方且不重叠；正文和便签文字均保持17px角色字号。"
+      ]
+    },
+    {
+      "caseId": "a2",
+      "assetId": "parallel-folded-notes-grid-002",
+      "attempts": [
+        { "attempt": 1, "result": "rendered-unreviewed", "artifact": "a2-attempt-1.pptx", "png": "a2-attempt-1.png" },
+        { "attempt": 2, "result": "rendered-unreviewed", "reason": "父任务修复共享 Skin 标题带样式优先级后原 spec 重跑", "artifact": "a2-attempt-2.pptx", "png": "a2-attempt-2.png" }
+      ],
+      "firstResult": "原生调用成功；左侧结构与220px右侧说明栏均通过边界和不重叠检查。",
+      "finalResult": "采用父任务共享样式修复后的 attempt-2；四项文字与a1一致，未改变稿件。",
+      "visualFindings": [
+        "左侧四张便签维持折角轮廓与两行阵列。",
+        "右侧说明栏宽220px，结论分两行，和结构区保持清晰留白。",
+        "修复后四个标题带均使用纸色承载，砖红只保留在图标强调；无结构或文字重叠。"
+      ]
+    },
+    {
+      "caseId": "a3",
+      "assetId": "parallel-folded-notes-grid-002",
+      "attempts": [
+        { "attempt": 1, "result": "rendered-unreviewed", "artifact": "a3-attempt-1.pptx", "png": "a3-attempt-1.png" },
+        { "attempt": 2, "result": "rendered-unreviewed", "reason": "父任务修复共享 Skin 标题带样式优先级后原 spec 重跑", "artifact": "a3-attempt-2.pptx", "png": "a3-attempt-2.png" }
+      ],
+      "firstResult": "原生调用成功；上方引导与下方六项宽区结构通过边界检查。",
+      "finalResult": "采用父任务共享样式修复后的 attempt-2；六项短说明均保留，未改变稿件。",
+      "visualFindings": [
+        "六张便签形成三列两行宽区阵列，六项保持同级。",
+        "上方引导与结构之间有明确留白；便签折角、底影和标题带均可辨。",
+        "短说明在便签内自然换行，PNG中未见裁切、越界或与其他块重叠。"
+      ]
+    },
+    {
+      "caseId": "a4",
+      "assetId": "parallel-folded-notes-grid-002",
+      "attempts": [
+        {
+          "attempt": 1,
+          "result": "rejected",
+          "frame": { "width": 650, "height": 300 },
+          "reason": "首次压力调用按要求执行；invokeStructure报告六个content-region均overflow，安全box无法容纳35-50字说明。"
+        },
+        {
+          "attempt": 2,
+          "result": "rejected",
+          "frame": { "width": 1130, "height": 390 },
+          "reason": "保留首次拒绝后扩区重试；六个content-region仍overflow，完整长说明仍无法在双排便签安全box内呈现。"
+        },
+        {
+          "attempt": 3,
+          "result": "rejected",
+          "frame": { "width": 1168, "height": 525 },
+          "reason": "尝试占满正文区验证改页面安排，但intro文字块与结构frame发生重叠，被harness边界守卫拒绝；此前两次容量拒绝证据已保留。"
+        },
+        {
+          "attempt": 4,
+          "result": "rendered-unreviewed",
+          "frame": { "left": 56, "top": 175, "width": 1168, "height": 480 },
+          "reason": "父任务指导修正前三次中的intro重叠，仅修正页面安排，保留原content与字号。",
+          "auditNote": "parent-guided overlap correction",
+          "artifact": "a4-attempt-4.pptx",
+          "png": "a4-attempt-4.png"
+        }
+      ],
+      "firstResult": "真实拒绝：650x300区域下六项长说明均触发安全box overflow，未删稿、未降字号。",
+      "finalResult": "父任务指导修正intro与结构重叠后，attempt-4成功生成可编辑PPTX和重导入PNG；这说明前三次中既有容量问题，也有页面安排问题，不能把前三次直接归结为必须拆页。",
+      "visualFindings": [
+        "attempt-4的六张便签形成三列两行，35-50字说明完整呈现，PNG中未见裁切、页外溢出或块间重叠。",
+        "父任务指导将intro放在top=135,height=30，结构从top=175开始；结构区和引导之间保留清晰间距。",
+        "attempt-1/2的真实overflow和attempt-3的边界拒绝仍完整保留，attempt-4标记为parent-guided overlap correction，不回写成自主成功。"
+      ]
+    }
+  ],
+  "evidence": {
+    "invocations": "invocations.ndjson",
+    "firstRun": "run-results.json",
+    "skinRerun": "rerun-fixed-skin-results.json",
+    "editablePptx": ["a1-attempt-2.pptx", "a2-attempt-2.pptx", "a3-attempt-2.pptx", "a4-attempt-4.pptx"],
+    "renderedPng": ["a1-attempt-2.png", "a2-attempt-2.png", "a3-attempt-2.png", "a4-attempt-4.png"],
+    "rejectionRecords": ["a4-attempt-1.json", "a4-attempt-2.json", "a4-attempt-3.json"]
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "key": "b3-attempt-4",
+  "caseId": "b3",
+  "attempt": 4,
+  "model": "gpt-5.6-luna",
+  "reasoning": "high",
+  "execution": "luna-executed",
+  "spec": {
+    "caseId": "b3",
+    "title": "六层筛选把建议收束为可执行计划",
+    "assetId": "convergence-simple-funnel-001",
+    "content": {
+      "inputs": [
+        {
+          "id": "user-interview",
+          "label": "用户访谈"
+        },
+        {
+          "id": "field-record",
+          "label": "现场记录"
+        },
+        {
+          "id": "service-ticket",
+          "label": "客服工单"
+        },
+        {
+          "id": "internal-review",
+          "label": "内部复盘"
+        }
+      ],
+      "steps": [
+        {
+          "key": "collect-suggestions",
+          "title": "征集建议"
+        },
+        {
+          "key": "clarify-problem",
+          "title": "明确问题"
+        },
+        {
+          "key": "check-basis",
+          "title": "核对依据"
+        },
+        {
+          "key": "small-validation",
+          "title": "小步验证"
+        },
+        {
+          "key": "assess-impact",
+          "title": "评估影响"
+        },
+        {
+          "key": "include-plan",
+          "title": "纳入计划"
+        }
+      ]
+    },
+    "frame": {
+      "left": 180,
+      "top": 155,
+      "width": 920,
+      "height": 430
+    },
+    "blocks": [
+      {
+        "role": "aux",
+        "text": "入口：用户访谈、现场记录、客服工单、内部复盘。四类入口先汇总，再沿六层逐步收束。",
+        "frame": {
+          "left": 56,
+          "top": 600,
+          "width": 1100,
+          "height": 35
+        }
+      }
+    ],
+    "reason": "父任务语义纠正：六层筛选是连续收敛过程，使用简明输入转化漏斗保留逐层收窄与入口汇总。",
+    "auditNote": "parent-guided semantic correction",
+    "chapter": "02",
+    "pageNumber": 7
+  },
+  "skin": {
+    "id": "neutral-editorial-001",
+    "fonts": {
+      "display": "Noto Serif SC",
+      "body": "Noto Sans SC"
+    },
+    "font": "Noto Sans SC",
+    "primaryColor": "#A35D4F",
+    "background": "#F5F4EF",
+    "surface": "#EEECE5",
+    "dark": "#20201D",
+    "body": "#4B4A45",
+    "muted": "#85837B",
+    "line": "#D8D5CC",
+    "bodyFrame": {
+      "left": 56,
+      "top": 135,
+      "width": 1168,
+      "height": 525
+    },
+    "typography": {
+      "componentHeading": 15.75,
+      "componentTitle": 15.75,
+      "componentItemTitle": 12.75,
+      "componentLead": 12.75,
+      "componentBody": 12.75,
+      "componentLabel": 12.75,
+      "componentMeta": 11.25
+    }
+  },
+  "status": "rejected",
+  "error": "convergence-simple-funnel 当前区域无法以选定的允许字号容纳文字：simple-input-text-0, simple-input-text-1, simple-input-text-2, simple-input-text-3。请扩大区域、减少本区域内容密度或换用结构；不继续降低字号。"
+}

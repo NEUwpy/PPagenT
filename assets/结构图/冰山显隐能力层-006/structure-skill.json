@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "assetId": "layered-iceberg-depth-006",
+  "features": [
+    "连续冰山剪影区分水上与水下",
+    "水面分隔显性成果和隐性支撑",
+    "同色阶多边形切面表现体量"
+  ],
+  "adaptation": "按内容决定水线与说明位置；切面可简化，保留连续剪影与显隐关系。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "连续冰山剪影、水面显隐分界、同色阶多边形切面",
+      "水下支撑水上"
+    ],
+    "variables": [
+      "整组尺度",
+      "水线位置",
+      "上下内容量",
+      "说明和引线位置"
+    ],
+    "coupledChanges": "水线、上下剪影与内部切面共同重算；切面受山体轮廓裁限",
+    "avoid": "不能删光切面变平面三角形；水线变化不能颠倒显隐语义",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

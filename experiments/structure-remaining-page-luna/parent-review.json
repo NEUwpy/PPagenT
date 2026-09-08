@@ -1,0 +1,68 @@
+{
+  "status": "experiment-complete-goal-not-met",
+  "model": "gpt-5.6-luna",
+  "reasoningEffort": "high",
+  "summary": "3 页测试，整页排版验收 0/3。7 次 renderCase 记录，4 次产生可编辑 PPTX，3 次在碰撞或文字溢出检查中拒绝。空间扫描成立，但本轮未证明 Luna 能用它恢复正常文字排版水准。",
+  "counting": {
+    "pages": 3,
+    "renderCaseRecords": 7,
+    "exportedPptx": 4,
+    "rejected": 3,
+    "wholePageAccepted": 0,
+    "note": "P3 第三稿重用了 attempt-3 编号；碰撞拒绝、第一次溢出拒绝和最终溢出拒绝保存在三个不同 JSON 中，全部计入，未只算最终记录。"
+  },
+  "pages": [
+    {
+      "page": "P1",
+      "verdict": "未通过",
+      "notes": "四项并列条件、交接主张及发送文件边界均保留，字体层级存在。但主张左缘 180 与便签实际左缘约 423 缺少共同轴，阵列悬在中部，底部说明孤立。读取了剩余空间仍未形成整页图文组织。",
+      "pngReviewed": "luna/P1/P1-attempt-1.png",
+      "contentCoverage": true,
+      "visualPass": false
+    },
+    {
+      "page": "P2",
+      "verdict": "未通过",
+      "notes": "三个来源、四层筛选和四条依据均保留，无虚构数量。依据文字从页面左边排起，漏斗在右侧，中间距离过大。上下顺序可推断，但阅读者仍需跨页幅自行匹配，扫描未转化为更好的图文归属。",
+      "pngReviewed": "luna/P2/P2-attempt-1.png",
+      "contentCoverage": true,
+      "visualPass": false
+    },
+    {
+      "page": "P3 首稿",
+      "verdict": "未通过",
+      "notes": "顶部孤立长句、左侧小阶梯、右侧重复状态列表。扫描在同一脚本中产生，文字块已预写，不能证明模型读取扫描后再编排。",
+      "pngReviewed": "luna/P3/P3-attempt-1.png",
+      "processPass": false,
+      "contentCoverage": true,
+      "visualPass": false
+    },
+    {
+      "page": "P3 第二稿",
+      "verdict": "未通过",
+      "notes": "父任务反馈驱动。减少了状态清单，但实际 PPT 正文句号单独占一行；顶部主张和右侧解释重复。脚本内 fs.readFile 后打印不等于模型分阶段读取后编排。",
+      "pngReviewed": "luna/P3/P3-attempt-2.png",
+      "processPass": false,
+      "contentCoverage": true,
+      "visualPass": false
+    },
+    {
+      "page": "P3 第三稿",
+      "verdict": "构建前检查拒绝",
+      "notes": "父任务要求分开准备和排版后，开始使用阶梯左上方自由区域，但先后发生一次侵入 level-2 占位、两次外部正文溢出。未生成可供视觉验收的最终 PPTX。",
+      "records": [
+        "luna/P3/P3-attempt-3-rejected.json",
+        "luna/P3/P3-attempt-3-overflow-rejected.json",
+        "luna/P3/P3-attempt-3.json"
+      ],
+      "visualPass": false
+    }
+  ],
+  "interpretation": [
+    "扫描给出几何约束，不提供段落组织、图文对应和视觉判断。当前问题已不只是整块矩形禁区。",
+    "两阶段执行需要模型真正读取准备结果；在一个预写脚本里打印扫描不能作为流程验证通过。",
+    "段落应先按语义组合，再测量需要的宽高，与图形位置进行有限调整；空白存在不等于给定段落能放下。",
+    "不应以扩大可调参数或自由重画结构来处理这轮排版失败。"
+  ],
+  "limits": "仅三页且存在父任务反馈，没有随机对照或稳定性统计。未改正式 Layout、未推广全库。P1/P2 在 P3 流程纠正后执行，不能称为全新独立条件。"
+}

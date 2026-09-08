@@ -1,0 +1,59 @@
+[
+  {
+    "caseId": "case-01",
+    "selectedAssetIds": [
+      "argument-evidence-conclusion-001"
+    ],
+    "selectionMode": "specified-targeted-test",
+    "reason": "稿件给出一个明确论点、六条共同支持依据和一个收束结论；本次逐项保留六条依据。",
+    "preservedFeatures": [
+      "上方唯一论点主梁",
+      "并列证据通过上锚点接入共同推理总线",
+      "底部唯一结论带与左侧1–N–1节奏"
+    ],
+    "changes": [
+      "六条依据各自占用独立承载面",
+      "按中性杂志风重算六卡宽度与连接锚点"
+    ],
+    "invocationStatus": "rendered-unreviewed",
+    "unresolved": []
+  },
+  {
+    "caseId": "case-04",
+    "selectedAssetIds": [
+      "causal-fishbone-attribution-001"
+    ],
+    "selectionMode": "specified-targeted-test",
+    "reason": "稿件明确七类原因并列指向装配返工，不能视为时间步骤；本次沿用鱼骨的原因类别—因素层级并扩展为七个原因组。",
+    "preservedFeatures": [
+      "从左向右汇入唯一结果的连续主骨",
+      "原因类别在主骨上下分布并用斜枝连接",
+      "每类原因以标题条和完整因素容器承载"
+    ],
+    "changes": [
+      "七类原因全部保留，按4上3下重新计算枝条位置",
+      "不补充来源未给出的因素，不用编号表达顺序"
+    ],
+    "invocationStatus": "rendered-unreviewed",
+    "unresolved": []
+  },
+  {
+    "caseId": "case-28",
+    "selectedAssetIds": [
+      "problem-method-result-001"
+    ],
+    "selectionMode": "specified-targeted-test",
+    "reason": "稿件提出一个资料交接问题、三项并列做法和一个共同预期结果；方法之间没有连续先后。",
+    "preservedFeatures": [
+      "上方问题主梁与下方唯一结果带",
+      "三张等宽方法卡接入共同作用总线",
+      "左侧1–N–1节奏标识和对称中轴"
+    ],
+    "changes": [
+      "按三项方法重算卡片宽度并保持均匀留白",
+      "结果置于卡组外收束，不把结果当作第四项措施"
+    ],
+    "invocationStatus": "rendered-unreviewed",
+    "unresolved": []
+  }
+]

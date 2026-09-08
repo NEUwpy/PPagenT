@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "assetId": "problem-solution-outcome-001",
+  "features": [
+    "问题、方案、结果形成连续阅读方向",
+    "问题与方案逐组对应",
+    "方案共同汇入唯一结果"
+  ],
+  "adaptation": "按配对内容调整每组高度与汇聚线；不能为了排满页面增加问题或结果。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "问题与方案逐组配对、方案汇入唯一结果的连续阅读关系"
+    ],
+    "variables": [
+      "配对组数",
+      "各组高度",
+      "问题和方案列宽",
+      "结果内容形式"
+    ],
+    "coupledChanges": "同组行高同时适配问题与方案；汇聚线跟随各方案和结果边界",
+    "avoid": "不能丢失原问题，不能为了排版新增方案或结果",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

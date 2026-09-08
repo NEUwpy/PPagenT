@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "assetId": "convergence-simple-funnel-001",
+  "features": [
+    "独立曲面圆台共享中轴并逐层收窄",
+    "随形导流箭头由上到下逐渐显现",
+    "输入锚点可选，层间保持清楚留白"
+  ],
+  "adaptation": "层数与输入数独立；根据目标区域重算圆台宽高，不照搬整页比例或附加结果节点。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "sample-verified-candidate",
+    "note": "已保留原造型完成8组尺寸、数量与换稿样本的构建和父任务复核；候选待用户查看，不代表任意内容、Skin或区域均已验证。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "共享中轴的曲面圆台、分层留白、随轮廓收窄并渐显的导流箭头"
+    ],
+    "variables": [
+      "层数",
+      "入口锚点有无与数量",
+      "圆台宽高",
+      "整组位置",
+      "层内文字"
+    ],
+    "coupledChanges": "圆台上下沿及侧曲面、导流宽度和文字可用区一起重算；最窄层决定文字避让",
+    "avoid": "不能用平底梯形替换圆台，不能用固定直杆或顶部小箭头替代随形导流",
+    "status": "implemented-in-three-structure-pilot",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  },
+  "implementation": {
+    "mode": "preserved-design",
+    "status": "sample-verified-candidate",
+    "entry": "review.mjs",
+    "counts": "沿用原实现范围；区域变化按真实文字测量拒绝溢出",
+    "evidence": "experiments/structure-size-pilot/README.md",
+    "sizeExamples": {
+      "L": 1,
+      "M": 0.85,
+      "S": 0.7
+    },
+    "typography": "既有允许档位；显式 Skin 字号优先；图标与小配件联动；容纳不下则拒绝"
+  }
+}

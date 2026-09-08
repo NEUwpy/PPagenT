@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "assetId": "causal-fishbone-attribution-001",
+  "features": [
+    "连续主骨汇向唯一结果",
+    "原因类别在主骨两侧交错分布",
+    "斜枝从真实主骨连接到相应原因组"
+  ],
+  "adaptation": "按原因组数量重算斜枝落点；长解释可移至对应图旁区域，保留类别归属。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "连续主骨与唯一鱼头结果",
+      "上下原因组、斜枝及原因—因素层级"
+    ],
+    "variables": [
+      "原因组数",
+      "各组因素数",
+      "主骨长度",
+      "上下说明区宽高"
+    ],
+    "coupledChanges": "重算主骨锚点、斜枝落点、原因区间距；主骨始终接鱼头，斜枝始终接原因组",
+    "avoid": "不能改成并列便签；类别与因素不能因缩小被删掉",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

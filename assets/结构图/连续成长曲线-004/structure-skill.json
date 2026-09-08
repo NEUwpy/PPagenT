@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "assetId": "progression-growth-curve-004",
+  "features": [
+    "同色阶多边形构成连续山脉",
+    "上升路径从山脚通向峰顶",
+    "里程点与关键局部峰顶对应"
+  ],
+  "adaptation": "按真实递进层次重算山形与路径；无数值依据时高度仅表达层级，不伪造量化增长。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "连续山脉剪影、同色阶多边形分面、上山路径和局部峰顶里程点"
+    ],
+    "variables": [
+      "里程点数",
+      "山体宽高",
+      "峰谷间距",
+      "标签和说明位置"
+    ],
+    "coupledChanges": "峰谷、分面、路径和里程点一起生成；分面始终在山体内",
+    "avoid": "不得换成矩形阶梯或柱状图；高度无数值时只表达递进",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

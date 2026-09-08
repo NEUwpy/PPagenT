@@ -8,9 +8,11 @@ PPA 看板是本地设计参考与资产审查入口。结构区按「内容关�
 
 结构详情不再展示 State 切换、固定文字框、Slot Contract、字号契约、自然尺寸门槛及文字框叠层。普通文字由本次构建按内容与页面区域排版；文字区的实际边界仍需在最终输出中检查。
 
-Skill CLI 的 guide 与看板共用 `src/runtime/structure-skill-profile.mjs`，从资产语义、componentModel 和 visual-intent.md 派生说明。缺少说明时显示待提炼，不凭名称编造特征。提取结果是来源摘要，仍需结合样例判断。
+Skill CLI 的 guide 与看板共用 `src/runtime/structure-skill-profile.mjs`，优先读取资产目录中的 structure-skill.json，保存人工整理的特征、适配说明及验证状态；visual-intent.md 保留来源证据。缺少新说明时才回退旧说明摘要，并明确状态。说明已整理与实际适配已验收分别展示。
 
-样例 HTML 继续复用已有资产的默认设计代码，以保留原设计。该代码仅负责代表样例；新的结构执行器 `src/runtime/structure-skills.mjs` 接收当前构建函数，不执行旧 Mapper、数量契约或文字模板。看板本身不替用户生成适配版本，样例审批不等于适配结果通过。
+CLI 的 `guide` 默认仅披露当前特征、适配说明和样例代码路径；`inspect` 另行披露完整历史意图及固定／可变项，并标明旧数量和文字框不约束本次构建。逐结构 Luna high 实测记录位于 `experiments/structure-luna-audit-20260907/`，其中自然触发、指定补测、原生调用成功和父级视觉审查分别记录。
+
+样例 HTML 继续复用已有资产的默认设计代码，以保留原设计。折角便签、简明漏斗、成熟度阶梯已在原 review.mjs 中增加区域适配方法，新执行器通过 execution: preserved-design 调用，保留当前数量范围并按实际文字测量。首批对照见 `experiments/structure-preserved-pilot/index.html`。其余结构尚未迁移该入口。看板本身不替用户生成适配版本，样例审批不等于适配结果通过。
 
 ## 其他能力与历史数据
 

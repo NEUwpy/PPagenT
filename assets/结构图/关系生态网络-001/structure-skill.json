@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "assetId": "network-internal-external-ecosystem-001",
+  "features": [
+    "两个重叠椭圆环界定内外生态",
+    "共同核心位于交叠处，普通节点沿两侧分布",
+    "多对多连线先绘制，节点与核心覆盖在线上",
+    "真实边界锚点与核心外环使密集关系可辨"
+  ],
+  "adaptation": "按真实关系重算节点和线，不自动补全边；保证两域视觉平衡与核心留白。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "两个重叠椭圆域、交叠核心、两侧节点",
+      "连线在节点下方、边界锚点接实"
+    ],
+    "variables": [
+      "每域节点数",
+      "真实边集合",
+      "椭圆大小与交叠量",
+      "节点和标签空间"
+    ],
+    "coupledChanges": "域轮廓、交叠核心、节点分布、边界锚点与线层次同时更新",
+    "avoid": "不改矩形分区，不自动补全网络边或让线穿核心文字",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

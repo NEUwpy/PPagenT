@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "assetId": "role-stage-collaboration-001",
+  "features": [
+    "横向阶段与纵向角色形成泳道",
+    "任务归属明确到角色和阶段",
+    "交接路径连接真实任务"
+  ],
+  "adaptation": "根据任务密度调整泳道高度和阶段宽度，交接线绕开正文；不为满格填充虚构任务。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "横向阶段、纵向角色泳道、任务真实归属和真实交接线"
+    ],
+    "variables": [
+      "阶段数、角色数、任务数分别变化",
+      "行高列宽",
+      "空单元",
+      "任务文案"
+    ],
+    "coupledChanges": "任务跟随所属交叉单元；泳道表头、任务边界和交接路由一起更新",
+    "avoid": "不得平均填满单元或反转交接；最后确认不自动虚构新阶段",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

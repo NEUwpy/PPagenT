@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "assetId": "cycle-loop-001",
+  "features": [
+    "连续厚环与同色切线箭头构成闭环",
+    "中心圆核、相交遮罩凹弧及独立灰色支持区形成层次",
+    "环外留白和左右文字镜像对齐",
+    "编号、标题与辅助文字保留不同姿态"
+  ],
+  "adaptation": "按闭环节点重新分配角度与标签位置；文字姿态按阅读方向调整，不能把箭头变成独立径向图标。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "连续厚环、同色切线箭头、中心圆核、相交凹弧遮罩与灰色支持区"
+    ],
+    "variables": [
+      "节点数",
+      "环半径与厚度",
+      "支持区大小",
+      "标签宽度与位置"
+    ],
+    "coupledChanges": "按节点角度共同求切线箭头、遮罩、节点与支持区；左右文字保持对齐节奏",
+    "avoid": "不能改成多边形线圈或独立径向箭头；必须实际闭合",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

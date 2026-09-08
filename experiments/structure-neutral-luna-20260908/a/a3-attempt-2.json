@@ -1,0 +1,193 @@
+{
+  "key": "a3-attempt-2",
+  "caseId": "a3",
+  "attempt": 2,
+  "model": "gpt-5.6-luna",
+  "reasoning": "high",
+  "spec": {
+    "caseId": "a3",
+    "title": "发布准备的六项检查",
+    "assetId": "parallel-folded-notes-grid-002",
+    "content": {
+      "items": [
+        {
+          "key": "scope",
+          "title": "范围确认",
+          "body": "确认本期交付边界与优先顺序",
+          "iconKey": "target"
+        },
+        {
+          "key": "environment",
+          "title": "环境就绪",
+          "body": "检查运行环境并完成必要配置",
+          "iconKey": "server"
+        },
+        {
+          "key": "access",
+          "title": "权限开通",
+          "body": "开通最小必要权限并验证可用",
+          "iconKey": "key"
+        },
+        {
+          "key": "rollback",
+          "title": "回退预案",
+          "body": "明确回退条件步骤与责任人",
+          "iconKey": "history"
+        },
+        {
+          "key": "guide",
+          "title": "操作说明",
+          "body": "整理关键操作步骤与注意事项",
+          "iconKey": "book"
+        },
+        {
+          "key": "window",
+          "title": "问题窗口",
+          "body": "约定反馈入口与响应时间范围",
+          "iconKey": "message-circle"
+        }
+      ],
+      "intro": "发布前逐项确认，确保交付具备可执行条件。"
+    },
+    "frame": {
+      "left": 72,
+      "top": 210,
+      "width": 1130,
+      "height": 390
+    },
+    "blocks": [
+      {
+        "text": "发布前逐项确认，确保交付具备可执行条件。",
+        "role": "body",
+        "frame": {
+          "left": 72,
+          "top": 155,
+          "width": 1080,
+          "height": 32
+        }
+      }
+    ],
+    "reason": "父任务修复共享 Skin 标题带样式优先级后，使用原首轮 spec 重跑；保留原结构、稿件、区域与文字。",
+    "chapter": "01",
+    "pageNumber": 3
+  },
+  "skin": {
+    "id": "neutral-editorial-001",
+    "fonts": {
+      "display": "Noto Serif SC",
+      "body": "Noto Sans SC"
+    },
+    "font": "Noto Sans SC",
+    "primaryColor": "#A35D4F",
+    "background": "#F5F4EF",
+    "surface": "#EEECE5",
+    "dark": "#20201D",
+    "body": "#4B4A45",
+    "muted": "#85837B",
+    "line": "#D8D5CC",
+    "bodyFrame": {
+      "left": 56,
+      "top": 135,
+      "width": 1168,
+      "height": 525
+    },
+    "typography": {
+      "componentHeading": 15.75,
+      "componentTitle": 15.75,
+      "componentItemTitle": 12.75,
+      "componentLead": 12.75,
+      "componentBody": 12.75,
+      "componentLabel": 12.75,
+      "componentMeta": 11.25
+    }
+  },
+  "status": "rendered-unreviewed",
+  "invocation": {
+    "result": {
+      "mode": "preserved-design",
+      "componentId": "parallel-folded-notes-grid",
+      "nodeCount": 48
+    },
+    "nativeShapeDelta": 42,
+    "validation": "rendered-unreviewed"
+  },
+  "measurements": {
+    "titleRight": 337,
+    "overflow": [],
+    "fontReady": true
+  },
+  "fonts": [
+    {
+      "name": "note-heading-0",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "范围确认"
+    },
+    {
+      "name": "note-body-0",
+      "sizePx": 17,
+      "typeface": "Noto Sans SC",
+      "text": "确认本期交付边界与优\n先顺序"
+    },
+    {
+      "name": "note-heading-1",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "环境就绪"
+    },
+    {
+      "name": "note-body-1",
+      "sizePx": 17,
+      "typeface": "Noto Sans SC",
+      "text": "检查运行环境并完成必\n要配置"
+    },
+    {
+      "name": "note-heading-2",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "权限开通"
+    },
+    {
+      "name": "note-body-2",
+      "sizePx": 17,
+      "typeface": "Noto Sans SC",
+      "text": "开通最小必要权限并验\n证可用"
+    },
+    {
+      "name": "note-heading-3",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "回退预案"
+    },
+    {
+      "name": "note-body-3",
+      "sizePx": 17,
+      "typeface": "Noto Sans SC",
+      "text": "明确回退条件步骤与责\n任人"
+    },
+    {
+      "name": "note-heading-4",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "操作说明"
+    },
+    {
+      "name": "note-body-4",
+      "sizePx": 17,
+      "typeface": "Noto Sans SC",
+      "text": "整理关键操作步骤与注\n意事项"
+    },
+    {
+      "name": "note-heading-5",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "问题窗口"
+    },
+    {
+      "name": "note-body-5",
+      "sizePx": 17,
+      "typeface": "Noto Sans SC",
+      "text": "约定反馈入口与响应时\n间范围"
+    }
+  ]
+}

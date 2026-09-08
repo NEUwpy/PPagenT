@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "assetId": "comparison-dual-verdict-001",
+  "features": [
+    "两个比较舱镜像平衡，身份帽与要点行层级一致",
+    "对应要点横向共线，中间比较节点位于真实留白",
+    "底部低矮椭圆平台共同承托两舱",
+    "推荐与非推荐的颜色、标记和承载面语义一致"
+  ],
+  "adaptation": "左右对象可以交换，逐项比较仍共享口径；根据文案重算行高与中缝，保持平台和比较舱层次。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "镜像双舱、身份帽、逐行对应、中央比较节点、低矮椭圆承台",
+      "推荐标记与事实一致"
+    ],
+    "variables": [
+      "左右对象与文案",
+      "比较项数",
+      "行高",
+      "舱宽",
+      "中缝",
+      "整体占区"
+    ],
+    "coupledChanges": "同一比较行共同取所需高度；双舱等权框架、帽与承台同步变化",
+    "avoid": "不能左右独立排成不同口径；长说明不能占中央比较留白",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

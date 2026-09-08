@@ -1,0 +1,239 @@
+{
+  "key": "c4-attempt-1",
+  "caseId": "c4",
+  "attempt": 1,
+  "model": "gpt-5.6-luna",
+  "reasoning": "high",
+  "execution": "parent-replay-of-luna-plan",
+  "spec": {
+    "caseId": "c4",
+    "title": "知识管理成熟度",
+    "assetId": "progression-maturity-steps-002",
+    "content": {
+      "levels": [
+        {
+          "key": "level-1",
+          "title": "个人保存",
+          "body": "个人留存经验，依赖个人记忆"
+        },
+        {
+          "key": "level-2",
+          "title": "集中归档",
+          "body": "资料集中归档，入口逐步统一"
+        },
+        {
+          "key": "level-3",
+          "title": "统一分类",
+          "body": "按统一分类整理，便于查找"
+        },
+        {
+          "key": "level-4",
+          "title": "团队复用",
+          "body": "团队成员可复用既有方法"
+        },
+        {
+          "key": "level-5",
+          "title": "持续更新",
+          "body": "持续补充内容，保持知识有效"
+        },
+        {
+          "key": "level-6",
+          "title": "反馈优化",
+          "body": "根据使用反馈持续优化"
+        }
+      ],
+      "showStatus": true,
+      "currentIndex": 2
+    },
+    "frame": {
+      "left": 56,
+      "top": 175,
+      "width": 1168,
+      "height": 480
+    },
+    "blocks": [
+      {
+        "role": "body",
+        "text": "当前处于统一分类阶段，目标是根据使用反馈持续优化。",
+        "frame": {
+          "left": 56,
+          "top": 135,
+          "width": 1168,
+          "height": 30
+        }
+      }
+    ],
+    "reason": "复用c3同稿六级成熟度阶梯，在600×240区域进行真实容量压力测试；不删除等级、事实或降低字号。",
+    "chapter": "03",
+    "pageNumber": 12,
+    "parentReplay": true,
+    "auditNote": "Parent exact-content control; only region and outside blocks changed"
+  },
+  "skin": {
+    "id": "neutral-editorial-001",
+    "fonts": {
+      "display": "Noto Serif SC",
+      "body": "Noto Sans SC"
+    },
+    "font": "Noto Sans SC",
+    "primaryColor": "#A35D4F",
+    "background": "#F5F4EF",
+    "surface": "#EEECE5",
+    "dark": "#20201D",
+    "body": "#4B4A45",
+    "muted": "#85837B",
+    "line": "#D8D5CC",
+    "bodyFrame": {
+      "left": 56,
+      "top": 135,
+      "width": 1168,
+      "height": 525
+    },
+    "typography": {
+      "componentHeading": 15.75,
+      "componentTitle": 15.75,
+      "componentItemTitle": 12.75,
+      "componentLead": 12.75,
+      "componentBody": 12.75,
+      "componentLabel": 12.75,
+      "componentMeta": 11.25
+    }
+  },
+  "status": "rendered-unreviewed",
+  "invocation": {
+    "result": {
+      "mode": "preserved-design",
+      "componentId": "progression-maturity-steps",
+      "nodeCount": 50
+    },
+    "nativeShapeDelta": 50,
+    "validation": "rendered-unreviewed"
+  },
+  "measurements": {
+    "titleRight": 287,
+    "overflow": [],
+    "fontReady": true
+  },
+  "fonts": [
+    {
+      "name": "level-1-text-heading",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "个人保存"
+    },
+    {
+      "name": "level-1-text-body",
+      "sizePx": 15,
+      "typeface": "Noto Sans SC",
+      "text": "个人留存经验，\n依赖个人记忆"
+    },
+    {
+      "name": "maturity-level-index-1",
+      "sizePx": 15,
+      "typeface": "Noto Sans SC",
+      "text": "01"
+    },
+    {
+      "name": "level-2-text-heading",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "集中归档"
+    },
+    {
+      "name": "level-2-text-body",
+      "sizePx": 15,
+      "typeface": "Noto Sans SC",
+      "text": "资料集中归档，\n入口逐步统一"
+    },
+    {
+      "name": "maturity-level-index-2",
+      "sizePx": 15,
+      "typeface": "Noto Sans SC",
+      "text": "02"
+    },
+    {
+      "name": "level-3-text-heading",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "统一分类"
+    },
+    {
+      "name": "level-3-text-body",
+      "sizePx": 15,
+      "typeface": "Noto Sans SC",
+      "text": "按统一分类整\n理，便于查找"
+    },
+    {
+      "name": "maturity-level-index-3",
+      "sizePx": 15,
+      "typeface": "Noto Sans SC",
+      "text": "03"
+    },
+    {
+      "name": "level-4-text-heading",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "团队复用"
+    },
+    {
+      "name": "level-4-text-body",
+      "sizePx": 15,
+      "typeface": "Noto Sans SC",
+      "text": "团队成员可复用\n既有方法"
+    },
+    {
+      "name": "maturity-level-index-4",
+      "sizePx": 15,
+      "typeface": "Noto Sans SC",
+      "text": "04"
+    },
+    {
+      "name": "level-5-text-heading",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "持续更新"
+    },
+    {
+      "name": "level-5-text-body",
+      "sizePx": 15,
+      "typeface": "Noto Sans SC",
+      "text": "持续补充内容，\n保持知识有效"
+    },
+    {
+      "name": "maturity-level-index-5",
+      "sizePx": 15,
+      "typeface": "Noto Sans SC",
+      "text": "05"
+    },
+    {
+      "name": "level-6-text-heading",
+      "sizePx": 17,
+      "typeface": "Noto Serif SC",
+      "text": "反馈优化"
+    },
+    {
+      "name": "level-6-text-body",
+      "sizePx": 15,
+      "typeface": "Noto Sans SC",
+      "text": "根据使用反馈持\n续优化"
+    },
+    {
+      "name": "maturity-level-index-6",
+      "sizePx": 15,
+      "typeface": "Noto Sans SC",
+      "text": "06"
+    },
+    {
+      "name": "maturity-current-status",
+      "sizePx": 15,
+      "typeface": "Noto Sans SC",
+      "text": "当前"
+    },
+    {
+      "name": "maturity-target-status",
+      "sizePx": 15,
+      "typeface": "Noto Sans SC",
+      "text": "目标"
+    }
+  ]
+}

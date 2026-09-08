@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "assetId": "parallel-equal-cards-001",
+  "features": [
+    "等权卡片共享边界与间距",
+    "圆形视觉锚点、标题、正文形成共同层级",
+    "卡片边界完整可辨",
+    "同级项目不使用表示顺序的连接"
+  ],
+  "adaptation": "按项目数量与空间重排单行或多行，保持等权；长说明可独立排放，不复制旧数量上限。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "等权完整卡片、圆形视觉锚点、统一标题正文层级、共同边界和间距"
+    ],
+    "variables": [
+      "卡片数",
+      "卡宽高",
+      "间距",
+      "标题、正文或真实分点",
+      "可选图标"
+    ],
+    "coupledChanges": "按数量重新计算整组宽度和居中位置；同级卡共享尺寸规则，文字另算行高",
+    "avoid": "不能仅隐藏多余卡留下空位；多行扩展须另验，不默认自由折行",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "assetId": "branching-scenario-fan-004",
+  "features": [
+    "共同假设位于扇面起点",
+    "情景路径从共同起点向外展开",
+    "每条路径把触发条件与预期结果配对"
+  ],
+  "adaptation": "重算扇面跨度与标签位置，情景数量由稿件决定；不把互斥情景改成先后步骤。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "共同假设起点、由深到浅展开的扇形路径、轻量情景卡和条件—预期结果配对"
+    ],
+    "variables": [
+      "情景数",
+      "扇面跨度、路径角度和长度",
+      "卡片宽高及说明长度"
+    ],
+    "coupledChanges": "起点、扇面间隔、路径终点和卡片随同一组几何变化；色阶仍表达展开而非优劣",
+    "avoid": "不得换成普通判断树、时间流程或反向汇聚",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

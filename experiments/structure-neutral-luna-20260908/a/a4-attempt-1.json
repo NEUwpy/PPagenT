@@ -1,0 +1,106 @@
+{
+  "key": "a4-attempt-1",
+  "caseId": "a4",
+  "attempt": 1,
+  "model": "gpt-5.6-luna",
+  "reasoning": "high",
+  "spec": {
+    "caseId": "a4",
+    "title": "发布准备需要完整的执行依据",
+    "assetId": "parallel-folded-notes-grid-002",
+    "content": {
+      "items": [
+        {
+          "key": "scope",
+          "title": "范围确认",
+          "body": "逐项核对本期要交付的功能边界、目标对象与暂不纳入事项，并让业务负责人确认优先顺序后留下可追溯记录。",
+          "iconKey": "target"
+        },
+        {
+          "key": "environment",
+          "title": "环境就绪",
+          "body": "检查运行环境、依赖版本和配置项是否满足发布要求，先在目标环境完成一次可重复的启动与基本功能验证。",
+          "iconKey": "server"
+        },
+        {
+          "key": "access",
+          "title": "权限开通",
+          "body": "按最小必要原则开通执行、查看和回退所需权限，逐项验证实际账号可以完成对应操作并记录授权责任人。",
+          "iconKey": "key"
+        },
+        {
+          "key": "rollback",
+          "title": "回退预案",
+          "body": "写明什么情况触发回退、由谁执行、恢复到哪个版本以及如何通知相关人员，并在可行范围内预演关键步骤。",
+          "iconKey": "history"
+        },
+        {
+          "key": "guide",
+          "title": "操作说明",
+          "body": "将发布前检查、正式操作、异常处理和完成确认写成接手者可以照着执行的步骤，并标注每一步的输入输出。",
+          "iconKey": "book"
+        },
+        {
+          "key": "window",
+          "title": "问题窗口",
+          "body": "明确发布期间的问题入口、值守人员、响应时限与升级路径，安排一个可被团队共同查看的记录位置持续更新。",
+          "iconKey": "message-circle"
+        }
+      ],
+      "intro": "发布前逐项确认，确保交付具备可执行条件。"
+    },
+    "frame": {
+      "left": 315,
+      "top": 240,
+      "width": 650,
+      "height": 300
+    },
+    "blocks": [
+      {
+        "text": "发布前逐项确认，确保交付具备可执行条件。",
+        "role": "body",
+        "frame": {
+          "left": 72,
+          "top": 155,
+          "width": 1080,
+          "height": 32
+        }
+      }
+    ],
+    "reason": "四项或六项均为同级并列检查项，选择双排折角便签阵列以保留等权阵列、连续折页三层、标题带与居中节奏。首次按要求使用650x300区域做容量压力测试，完整保留六项长说明。",
+    "chapter": "01",
+    "pageNumber": 4
+  },
+  "skin": {
+    "id": "neutral-editorial-001",
+    "fonts": {
+      "display": "Noto Serif SC",
+      "body": "Noto Sans SC"
+    },
+    "font": "Noto Sans SC",
+    "primaryColor": "#A35D4F",
+    "background": "#F5F4EF",
+    "surface": "#EEECE5",
+    "dark": "#20201D",
+    "body": "#4B4A45",
+    "muted": "#85837B",
+    "line": "#D8D5CC",
+    "bodyFrame": {
+      "left": 56,
+      "top": 135,
+      "width": 1168,
+      "height": 525
+    },
+    "typography": {
+      "componentHeading": 15.75,
+      "componentTitle": 15.75,
+      "componentItemTitle": 12.75,
+      "componentLead": 12.75,
+      "componentBody": 12.75,
+      "componentLabel": 12.75,
+      "componentMeta": 11.25
+    }
+  },
+  "status": "rejected",
+  "error": "parallel-folded-notes-grid 的组合排版无法在安全 box 内完整呈现：scope-content-region, environment-content-region, access-content-region, rollback-content-region, guide-content-region, window-content-region [{\"slotId\":\"scope-content-region\",\"frame\":{\"left\":57.234,\"top\":28.875,\"width\":146.672,\"height\":87.25,\"rotation\":0},\"innerFrame\":{\"width\":146.672,\"height\":87.25,\"padding\":{\"top\":0,\"right\":0,\"bottom\":0,\"left\":0}},\"layout\":{\"id\":\"heading-content-flow\",\"defaultId\":\"heading-content-flow\",\"compatible\":[\"heading-content-flow\",\"statement-flow\",\"structured-list-flow\",\"metric-content-flow\"],\"contentRoles\":[\"heading\",\"body\"],\"status\":\"overflow\",\"align\":\"left\",\"valign\":\"middle\",\"density\":\"compact\",\"parts\":[{\"part\":\"heading\",\"field\":\"title\",\"primitive\":\"heading\",\"frame\":{\"left\":101.234,\"top\":28.875,\"width\":102.672,\"height\":19.438,\"rotation\":0},\"text\":\"范围确认\",\"lineCount\":1,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Serif SC\",\"fontSizePt\":12.75,\"fontWeight\":\"700\",\"alignment\":\"left\",\"lineHeightPt\":14.025},\"capacity\":{\"recommendedMaxChars\":4,\"hardMaxChars\":6,\"hardMaxLines\":1}},{\"part\":\"body\",\"field\":\"body\",\"primitive\":\"body\",\"frame\":{\"left\":66.109,\"top\":56.078,\"width\":128.922,\"height\":187.625,\"rotation\":0},\"text\":\"逐项核对本期要\\n交付的功能边\\n界、目标对象与\\n暂不纳入事项，\\n并让业务负责人\\n确认优先顺序后\\n留下可追溯记\\n录。\",\"lineCount\":8,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Sans SC\",\"fontSizePt\":12.75,\"fontWeight\":\"400\",\"alignment\":\"left\",\"lineHeightPt\":17.595},\"capacity\":{\"recommendedMaxChars\":44,\"hardMaxChars\":56,\"hardMaxLines\":8}}]}},{\"slotId\":\"environment-content-region\",\"frame\":{\"left\":241.656,\"top\":28.875,\"width\":146.672,\"height\":87.25,\"rotation\":0},\"innerFrame\":{\"width\":146.672,\"height\":87.25,\"padding\":{\"top\":0,\"right\":0,\"bottom\":0,\"left\":0}},\"layout\":{\"id\":\"heading-content-flow\",\"defaultId\":\"heading-content-flow\",\"compatible\":[\"heading-content-flow\",\"statement-flow\",\"structured-list-flow\",\"metric-content-flow\"],\"contentRoles\":[\"heading\",\"body\"],\"status\":\"overflow\",\"align\":\"left\",\"valign\":\"middle\",\"density\":\"compact\",\"parts\":[{\"part\":\"heading\",\"field\":\"title\",\"primitive\":\"heading\",\"frame\":{\"left\":285.656,\"top\":28.875,\"width\":102.672,\"height\":19.438,\"rotation\":0},\"text\":\"环境就绪\",\"lineCount\":1,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Serif SC\",\"fontSizePt\":12.75,\"fontWeight\":\"700\",\"alignment\":\"left\",\"lineHeightPt\":14.025},\"capacity\":{\"recommendedMaxChars\":4,\"hardMaxChars\":6,\"hardMaxLines\":1}},{\"part\":\"body\",\"field\":\"body\",\"primitive\":\"body\",\"frame\":{\"left\":250.531,\"top\":56.078,\"width\":128.922,\"height\":164.172,\"rotation\":0},\"text\":\"检查运行环境、\\n依赖版本和配置\\n项是否满足发布\\n要求，先在目标\\n环境完成一次可\\n重复的启动与基\\n本功能验证。\",\"lineCount\":7,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Sans SC\",\"fontSizePt\":12.75,\"fontWeight\":\"400\",\"alignment\":\"left\",\"lineHeightPt\":17.595},\"capacity\":{\"recommendedMaxChars\":39,\"hardMaxChars\":49,\"hardMaxLines\":7}}]}},{\"slotId\":\"access-content-region\",\"frame\":{\"left\":426.078,\"top\":28.875,\"width\":146.672,\"height\":87.25,\"rotation\":0},\"innerFrame\":{\"width\":146.672,\"height\":87.25,\"padding\":{\"top\":0,\"right\":0,\"bottom\":0,\"left\":0}},\"layout\":{\"id\":\"heading-content-flow\",\"defaultId\":\"heading-content-flow\",\"compatible\":[\"heading-content-flow\",\"statement-flow\",\"structured-list-flow\",\"metric-content-flow\"],\"contentRoles\":[\"heading\",\"body\"],\"status\":\"overflow\",\"align\":\"left\",\"valign\":\"middle\",\"density\":\"compact\",\"parts\":[{\"part\":\"heading\",\"field\":\"title\",\"primitive\":\"heading\",\"frame\":{\"left\":470.078,\"top\":28.875,\"width\":102.672,\"height\":19.438,\"rotation\":0},\"text\":\"权限开通\",\"lineCount\":1,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Serif SC\",\"fontSizePt\":12.75,\"fontWeight\":\"700\",\"alignment\":\"left\",\"lineHeightPt\":14.025},\"capacity\":{\"recommendedMaxChars\":4,\"hardMaxChars\":6,\"hardMaxLines\":1}},{\"part\":\"body\",\"field\":\"body\",\"primitive\":\"body\",\"frame\":{\"left\":434.953,\"top\":56.078,\"width\":128.922,\"height\":164.172,\"rotation\":0},\"text\":\"按最小必要原则\\n开通执行、查看\\n和回退所需权\\n限，逐项验证实\\n际账号可以完成\\n对应操作并记录\\n授权责任人。\",\"lineCount\":7,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Sans SC\",\"fontSizePt\":12.75,\"fontWeight\":\"400\",\"alignment\":\"left\",\"lineHeightPt\":17.595},\"capacity\":{\"recommendedMaxChars\":39,\"hardMaxChars\":49,\"hardMaxLines\":7}}]}},{\"slotId\":\"rollback-content-region\",\"frame\":{\"left\":57.234,\"top\":155.531,\"width\":146.672,\"height\":87.25,\"rotation\":0},\"innerFrame\":{\"width\":146.672,\"height\":87.25,\"padding\":{\"top\":0,\"right\":0,\"bottom\":0,\"left\":0}},\"layout\":{\"id\":\"heading-content-flow\",\"defaultId\":\"heading-content-flow\",\"compatible\":[\"heading-content-flow\",\"statement-flow\",\"structured-list-flow\",\"metric-content-flow\"],\"contentRoles\":[\"heading\",\"body\"],\"status\":\"overflow\",\"align\":\"left\",\"valign\":\"middle\",\"density\":\"compact\",\"parts\":[{\"part\":\"heading\",\"field\":\"title\",\"primitive\":\"heading\",\"frame\":{\"left\":101.234,\"top\":155.531,\"width\":102.672,\"height\":19.438,\"rotation\":0},\"text\":\"回退预案\",\"lineCount\":1,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Serif SC\",\"fontSizePt\":12.75,\"fontWeight\":\"700\",\"alignment\":\"left\",\"lineHeightPt\":14.025},\"capacity\":{\"recommendedMaxChars\":4,\"hardMaxChars\":6,\"hardMaxLines\":1}},{\"part\":\"body\",\"field\":\"body\",\"primitive\":\"body\",\"frame\":{\"left\":66.109,\"top\":182.734,\"width\":128.922,\"height\":164.172,\"rotation\":0},\"text\":\"写明什么情况触\\n发回退、由谁执\\n行、恢复到哪个\\n版本以及如何通\\n知相关人员，并\\n在可行范围内预\\n演关键步骤。\",\"lineCount\":7,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Sans SC\",\"fontSizePt\":12.75,\"fontWeight\":\"400\",\"alignment\":\"left\",\"lineHeightPt\":17.595},\"capacity\":{\"recommendedMaxChars\":39,\"hardMaxChars\":49,\"hardMaxLines\":7}}]}},{\"slotId\":\"guide-content-region\",\"frame\":{\"left\":241.656,\"top\":155.531,\"width\":146.672,\"height\":87.25,\"rotation\":0},\"innerFrame\":{\"width\":146.672,\"height\":87.25,\"padding\":{\"top\":0,\"right\":0,\"bottom\":0,\"left\":0}},\"layout\":{\"id\":\"heading-content-flow\",\"defaultId\":\"heading-content-flow\",\"compatible\":[\"heading-content-flow\",\"statement-flow\",\"structured-list-flow\",\"metric-content-flow\"],\"contentRoles\":[\"heading\",\"body\"],\"status\":\"overflow\",\"align\":\"left\",\"valign\":\"middle\",\"density\":\"compact\",\"parts\":[{\"part\":\"heading\",\"field\":\"title\",\"primitive\":\"heading\",\"frame\":{\"left\":285.656,\"top\":155.531,\"width\":102.672,\"height\":19.438,\"rotation\":0},\"text\":\"操作说明\",\"lineCount\":1,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Serif SC\",\"fontSizePt\":12.75,\"fontWeight\":\"700\",\"alignment\":\"left\",\"lineHeightPt\":14.025},\"capacity\":{\"recommendedMaxChars\":4,\"hardMaxChars\":6,\"hardMaxLines\":1}},{\"part\":\"body\",\"field\":\"body\",\"primitive\":\"body\",\"frame\":{\"left\":250.531,\"top\":182.734,\"width\":128.922,\"height\":164.172,\"rotation\":0},\"text\":\"将发布前检查、\\n正式操作、异常\\n处理和完成确认\\n写成接手者可以\\n照着执行的步\\n骤，并标注每一\\n步的输入输出。\",\"lineCount\":7,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Sans SC\",\"fontSizePt\":12.75,\"fontWeight\":\"400\",\"alignment\":\"left\",\"lineHeightPt\":17.595},\"capacity\":{\"recommendedMaxChars\":39,\"hardMaxChars\":49,\"hardMaxLines\":7}}]}},{\"slotId\":\"window-content-region\",\"frame\":{\"left\":426.078,\"top\":155.531,\"width\":146.672,\"height\":87.25,\"rotation\":0},\"innerFrame\":{\"width\":146.672,\"height\":87.25,\"padding\":{\"top\":0,\"right\":0,\"bottom\":0,\"left\":0}},\"layout\":{\"id\":\"heading-content-flow\",\"defaultId\":\"heading-content-flow\",\"compatible\":[\"heading-content-flow\",\"statement-flow\",\"structured-list-flow\",\"metric-content-flow\"],\"contentRoles\":[\"heading\",\"body\"],\"status\":\"overflow\",\"align\":\"left\",\"valign\":\"middle\",\"density\":\"compact\",\"parts\":[{\"part\":\"heading\",\"field\":\"title\",\"primitive\":\"heading\",\"frame\":{\"left\":470.078,\"top\":155.531,\"width\":102.672,\"height\":19.438,\"rotation\":0},\"text\":\"问题窗口\",\"lineCount\":1,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Serif SC\",\"fontSizePt\":12.75,\"fontWeight\":\"700\",\"alignment\":\"left\",\"lineHeightPt\":14.025},\"capacity\":{\"recommendedMaxChars\":4,\"hardMaxChars\":6,\"hardMaxLines\":1}},{\"part\":\"body\",\"field\":\"body\",\"primitive\":\"body\",\"frame\":{\"left\":434.953,\"top\":182.734,\"width\":128.922,\"height\":164.172,\"rotation\":0},\"text\":\"明确发布期间的\\n问题入口、值守\\n人员、响应时限\\n与升级路径，安\\n排一个可被团队\\n共同查看的记录\\n位置持续更新。\",\"lineCount\":7,\"typography\":{\"role\":\"componentItemTitle\",\"typeface\":\"Noto Sans SC\",\"fontSizePt\":12.75,\"fontWeight\":\"400\",\"alignment\":\"left\",\"lineHeightPt\":17.595},\"capacity\":{\"recommendedMaxChars\":39,\"hardMaxChars\":49,\"hardMaxLines\":7}}]}}]"
+}

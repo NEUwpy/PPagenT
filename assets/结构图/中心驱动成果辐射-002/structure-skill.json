@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "assetId": "hub-directed-outcomes-002",
+  "features": [
+    "唯一中心连接外围同级节点",
+    "径向连接清楚表达中心与外围关系",
+    "外围节点彼此不形成先后"
+  ],
+  "adaptation": "依据输入或输出语义决定箭头方向，按节点数重新分配角度与文字位置。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "唯一中心、真实边界处的径向连接、同级外围节点",
+      "方向由输入或输出语义决定"
+    ],
+    "variables": [
+      "外围数",
+      "中心尺寸",
+      "径向展开半径",
+      "标签宽高"
+    ],
+    "coupledChanges": "按外围节点角度及轮廓重算中心出口和外围端点，箭头指向真实目标",
+    "avoid": "不得用位置或颜色无依据突出某项，外围不构成流程",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "assetId": "matrix-quadrant-priority-001",
+  "features": [
+    "横纵轴真实交叉形成四象限",
+    "轴端明确表达维度方向",
+    "对象归属与外围说明对应象限"
+  ],
+  "adaptation": "按标签长度分配外围说明空间；对象坐标只在内容有依据时编码数值。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "真实交叉双轴、四象限、轴向意义、象限与外围说明对应"
+    ],
+    "variables": [
+      "象限内对象数与文案",
+      "轴区大小",
+      "外围说明宽度",
+      "有数据依据的位置"
+    ],
+    "coupledChanges": "轴交点、四区边界和说明归属共同重算；同一维度方向不变",
+    "avoid": "四象限不是可变数量；无数值时不伪造坐标精度",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

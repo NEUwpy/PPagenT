@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "assetId": "argument-evidence-conclusion-001",
+  "features": [
+    "论点主梁、并列证据、共同推理总线、唯一结论形成 1–N–1 关系",
+    "证据围绕中轴均衡排布，底部宽带收束",
+    "总线表达证据综合，不表达时间先后"
+  ],
+  "adaptation": "按证据数量重排中间组；论点与结论可独立安排说明文字，保留共同收束。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "论点主梁、左侧 1–N–1 节奏、证据上锚点、共同推理总线和结论宽带作为一个整体保留"
+    ],
+    "variables": [
+      "证据数量",
+      "主梁和结论带宽高",
+      "证据列宽、间距",
+      "各处标题和说明长度"
+    ],
+    "coupledChanges": "证据数量或宽度改变时，同时重算整组居中、锚点、总线跨度和左轨 N；保留每条独立依据，不为旧上限合并",
+    "avoid": "不得变成阶段门禁或互不相连的卡片",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

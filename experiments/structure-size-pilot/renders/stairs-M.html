@@ -1,0 +1,247 @@
+<!doctype html><meta charset="utf-8"><style>/* ppagent-theme:resolved */:root{
+    --ppagent-font-body:"Microsoft YaHei";
+    --ppagent-color-background:#FFFFFF;
+    --ppagent-color-surface:#FFFFFF;
+    --ppagent-color-primary:#315F91;
+    --ppagent-color-primary-deep:#1C3754;
+    --ppagent-color-primary-dark:#25486E;
+    --ppagent-color-primary-light:#7795B6;
+    --ppagent-color-primary-pale:#B7C7D9;
+    --ppagent-color-primary-wash:#E6ECF2;
+    --ppagent-color-accent:#315F91;
+    --ppagent-color-accent-alt:#567CA5;
+    --ppagent-color-accent-soft:#DAE2EB;
+    --ppagent-color-cyan:#7B99B9;
+    --ppagent-color-dark:#2B2B2B;
+    --ppagent-color-body:#404040;
+    --ppagent-color-muted:#6F6F6F;
+    --ppagent-color-line:#B5C5D7;
+    --ppagent-component-heading-size:22pt;
+    --ppagent-component-title-size:20pt;
+    --ppagent-component-item-title-size:18pt;
+    --ppagent-component-lead-size:16pt;
+    --ppagent-component-body-size:14pt;
+    --ppagent-component-label-size:14pt;
+    --ppagent-component-meta-size:12pt;
+  }
+    .ppagent-text-region{
+      box-sizing:border-box;
+      min-width:0;
+      min-height:0;
+    }
+    .ppagent-text-region > .ppagent-text-flow,
+    .ppagent-text-region > .ppagent-text-layout{
+      width:100%;
+      height:100%;
+    }
+    .ppagent-text-layout{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-layout-gap,10px);
+      width:100%;
+      height:100%;
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,"Microsoft YaHei"),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-align="center"]{text-align:center}
+    .ppagent-text-layout[data-text-layout-align="right"]{text-align:right}
+    .ppagent-text-layout[data-text-layout-valign="top"]{justify-content:flex-start}
+    .ppagent-text-layout[data-text-layout-valign="bottom"]{justify-content:flex-end}
+    .ppagent-text-layout[data-text-layout-density="compact"]{--ppagent-text-layout-gap:6px;--ppagent-text-layout-item-gap:5px}
+    .ppagent-text-layout[data-text-layout-density="standard"]{--ppagent-text-layout-gap:10px;--ppagent-text-layout-item-gap:8px}
+    .ppagent-text-layout[data-text-layout-density="loose"]{--ppagent-text-layout-gap:15px;--ppagent-text-layout-item-gap:12px}
+    .ppagent-text-primitive{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      color:var(--ppagent-text-color,#46566a);
+      text-align:inherit;
+      white-space:pre-line;
+      overflow-wrap:break-word;
+    }
+    .ppagent-text-primitive--heading{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-text-primitive--body{font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.45}
+    .ppagent-text-primitive--list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px)}
+    .ppagent-text-list__item{box-sizing:border-box;min-width:0;margin:0;padding:0;overflow:visible;color:var(--ppagent-text-color,#46566a);font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.38;text-align:inherit;white-space:pre-line;overflow-wrap:break-word}
+    .ppagent-text-primitive--metric{color:var(--ppagent-value-color,#2f5ea8);font-size:var(--ppagent-component-heading-size,25pt);font-weight:700;line-height:1.08}
+    .ppagent-text-primitive--label{color:var(--ppagent-label-color,#60758d);font-size:var(--ppagent-component-label-size,17pt);font-weight:600;line-height:1.2}
+    .ppagent-text-primitive--annotation{color:var(--ppagent-annotation-color,#748495);font-size:var(--ppagent-component-meta-size,15pt);font-weight:400;line-height:1.3}
+    .ppagent-text-primitive--quote{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:500;line-height:1.35}
+    .ppagent-text-primitive--emphasis{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-title-size,23pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-structured-list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-structured-list__item{display:flex;flex-direction:column;gap:4px;min-width:0}
+    .ppagent-structured-list__item .ppagent-text-primitive--heading{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-metric-set{display:grid;grid-template-columns:repeat(var(--ppagent-metric-columns,2),minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0;align-items:start}
+    .ppagent-metric-set[data-metric-count="3"]{--ppagent-metric-columns:3}
+    .ppagent-metric-set[data-metric-count="4"]{--ppagent-metric-columns:4}
+    .ppagent-metric-set__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-key-value{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-key-value__row{display:grid;grid-template-columns:minmax(64px,.42fr) minmax(0,1fr);gap:10px;align-items:start;min-width:0}
+    .ppagent-key-value__row .ppagent-text-primitive--metric{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label,
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--annotation{text-align:right}
+    .ppagent-summary-information{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0}
+    .ppagent-summary-information__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-summary-information__item .ppagent-text-primitive--emphasis{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"]{
+      justify-content:flex-start;
+      gap:12px;
+      padding:18px;
+      color:var(--ppagent-color-body);
+      background:transparent;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive{color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--emphasis,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--quote{color:var(--ppagent-color-dark);font-weight:700;letter-spacing:-.25px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--body,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-list__item{font-size:max(15pt,var(--ppagent-component-body-size))}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--label{color:var(--ppagent-color-accent);font-size:max(15pt,var(--ppagent-component-label-size));font-weight:700;letter-spacing:.7px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--annotation{color:var(--ppagent-color-muted);font-size:max(15pt,var(--ppagent-component-meta-size))}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--metric{color:var(--ppagent-color-accent);font-weight:700;letter-spacing:-.5px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-list__item{position:relative;padding-left:17px;color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-list__item::before{content:"";position:absolute;left:0;top:.68em;width:8px;height:2px;background:var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--heading-content-flow > .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--label-content-flow > .ppagent-text-primitive--label,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--heading-metric-content-flow > .ppagent-text-primitive--heading{padding-bottom:10px;border-bottom:2px solid var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-structured-list{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-structured-list__item{display:grid;grid-template-columns:minmax(82px,.42fr) minmax(0,1fr);gap:14px;padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-structured-list__item .ppagent-text-primitive--body{margin:0}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-metric-set{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-metric-set__item{padding:12px 14px 4px 0}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-metric-set__item + .ppagent-metric-set__item{padding-left:14px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-key-value{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-key-value__row{padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--quote-attribution-flow{position:relative;padding-left:52px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--quote-attribution-flow::before{content:"“";position:absolute;left:16px;top:8px;color:var(--ppagent-color-accent);font-family:Georgia,serif;font-size:42pt;font-weight:700;line-height:1}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label{margin-top:auto;padding-top:10px;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-summary-information{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-summary-information__item{padding:10px 12px 8px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-summary-information__item:nth-child(even){padding-left:12px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout--value-label{
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-value-label-gap,5px);
+      padding:var(--ppagent-value-label-padding,5px);
+      text-align:center;
+    }
+    .ppagent-text-layout__value,
+    .ppagent-text-layout__label{
+      box-sizing:border-box;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:hidden;
+      text-align:inherit;
+    }
+    .ppagent-text-layout__value{
+      color:var(--ppagent-value-color,#2f5ea8);
+      font-size:var(--ppagent-component-lead-size,19pt);
+      font-weight:700;
+      line-height:1.15;
+    }
+    .ppagent-text-layout__label{
+      color:var(--ppagent-label-color,#60758d);
+      font-size:var(--ppagent-component-meta-size,15pt);
+      font-weight:400;
+      line-height:1.2;
+    }
+    .ppagent-text-flow{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-flow-gap,10px);
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,"Microsoft YaHei"),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-flow[data-text-flow-align="center"]{text-align:center}
+    .ppagent-text-flow[data-text-flow-align="right"]{text-align:right}
+    .ppagent-text-flow[data-text-flow-valign="top"]{justify-content:flex-start}
+    .ppagent-text-flow[data-text-flow-valign="bottom"]{justify-content:flex-end}
+    .ppagent-text-flow__title,
+    .ppagent-text-flow__body{
+      position:relative;
+      box-sizing:border-box;
+      flex:0 0 auto;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      text-align:inherit;
+    }
+    .ppagent-text-flow__title{
+      font-size:var(--ppagent-component-item-title-size,21pt);
+      font-weight:700;
+      line-height:1.2;
+      white-space:normal;
+      text-wrap:balance;
+    }
+    .ppagent-text-flow__body{
+      font-size:var(--ppagent-component-body-size,17pt);
+      font-weight:400;
+      line-height:1.45;
+      white-space:pre-line;
+    }
+    .ppagent-text-flow__separator{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      align-self:center;
+      width:var(--ppagent-text-flow-separator-width,54px);
+      height:var(--ppagent-text-flow-separator-height,4px);
+      border:0;
+      border-radius:99px;
+      background:var(--ppagent-text-flow-separator-color,#78aeef);
+    }
+  *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}body{font-family:var(--ppagent-font-body,"Microsoft YaHei"),sans-serif;background:transparent;color:#29465e}.maturity-ladder{position:relative;width:1170px;height:492px;overflow:hidden}.ladder-art{position:absolute;inset:0;width:100%;height:100%}.level-support{fill:#e9eef1}.step-top,.step-riser{stroke:rgba(255,255,255,.9);stroke-width:2.6;stroke-linejoin:round}.step-top{fill:var(--top)}.step-riser{fill:var(--riser)}.step-inset,.projection-edge{fill:none;stroke:rgba(255,255,255,.55);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.level-copy{position:absolute;height:114px;padding:10px 13px 9px}.level-copy .ppagent-text-layout{height:100%;justify-content:flex-end;position:relative}.level-copy .ppagent-text-primitive--heading{font-size:var(--ppagent-component-label-size,17pt);font-weight:700;line-height:1.18;color:#29465e}.level-copy .ppagent-text-primitive--body{font-size:var(--ppagent-component-meta-size,15pt);line-height:1.28;color:#657b8d}.level-index{position:absolute;display:flex;align-items:center;justify-content:center;width:42px;height:42px;border:3px solid #fff;border-radius:50%;background:#315f82;color:#fff;font-size:var(--ppagent-component-meta-size,15pt);font-weight:700;box-shadow:0 3px 8px rgba(36,72,98,.12)}.status-tag{position:absolute;white-space:nowrap;padding:2px 9px;border-radius:13px;background:#315f82;color:#fff;font-size:var(--ppagent-component-meta-size,15pt);font-weight:700}.status-tag.current{background:#7899af}.maturity-ladder[data-level-count="6"] .level-copy .ppagent-text-primitive--heading{font-size:var(--ppagent-component-label-size,17pt)}.maturity-ladder[data-level-count="6"] .level-copy .ppagent-text-primitive--body{font-size:var(--ppagent-component-meta-size,15pt)}
+</style><section class="maturity-ladder" data-ppt-root data-ppt-preserve-font="true" data-level-count="4" data-show-status="true" style="width:994.5px;height:418.2px;--ppagent-component-heading-size:18pt;--ppagent-component-title-size:18pt;--ppagent-component-item-title-size:16pt;--ppagent-component-lead-size:14pt;--ppagent-component-body-size:12pt;--ppagent-component-label-size:12pt;--ppagent-component-meta-size:12pt;--ppagent-funnel-step-title-size:12pt"><style>.maturity-ladder .level-copy{padding:8.5px 11.049999999999999px 15.299999999999999px}.maturity-ladder .status-tag{padding:1.7px 7.6499999999999995px;border-radius:11.049999999999999px}</style><svg class="ladder-art" viewBox="0 0 994.5 418.2"><polygon class="level-support" points="122.7,249.5 248.9,235.9 240.9,319.2 114.6,332.8" data-ppt-kind="path" data-ppt-name="maturity-level-support-1"/><polygon class="level-support" points="326.1,198.4 452.4,184.8 444.3,268.2 318.1,281.7" data-ppt-kind="path" data-ppt-name="maturity-level-support-2"/><polygon class="level-support" points="529.6,147.3 655.8,133.8 647.7,217.1 521.5,230.7" data-ppt-kind="path" data-ppt-name="maturity-level-support-3"/><polygon class="level-support" points="733.0,96.3 859.2,82.7 851.2,166.0 724.9,179.6" data-ppt-kind="path" data-ppt-name="maturity-level-support-4"/><g class="perspective-step perspective-step--0">
+      <polygon class="step-riser" style="--riser:#9db7c7" points="255.8,365.5 255.8,312.8 311.1,294.9 311.1,344.3" data-ppt-kind="path" data-ppt-name="maturity-step-riser-1"/>
+      <polygon class="step-top" style="--top:#c8d9e3" points="45.9,365.5 255.8,365.5 311.1,344.3 114.2,344.3" data-ppt-kind="path" data-ppt-name="maturity-step-top-1"/>
+      <polyline class="step-inset" points="56.9,365.5 244.8,365.5 300.8,344.3" data-ppt-kind="path" data-ppt-name="maturity-step-inset-1"/>
+      <line class="projection-edge" x1="124.6" y1="344.3" x2="300.8" y2="344.3" data-ppt-kind="shape" data-ppt-shape="line" data-ppt-name="maturity-step-projection-1"/>
+    </g><g class="perspective-step perspective-step--1">
+      <polygon class="step-riser" style="--riser:#84a5b9" points="465.8,312.8 465.8,260.1 508.1,245.4 508.1,294.9" data-ppt-kind="path" data-ppt-name="maturity-step-riser-2"/>
+      <polygon class="step-top" style="--top:#adc6d5" points="255.8,312.8 465.8,312.8 508.1,294.9 311.1,294.9" data-ppt-kind="path" data-ppt-name="maturity-step-top-2"/>
+      <polyline class="step-inset" points="266.9,312.8 454.8,312.8 497.7,294.9" data-ppt-kind="path" data-ppt-name="maturity-step-inset-2"/>
+      <line class="projection-edge" x1="321.5" y1="294.9" x2="497.7" y2="294.9" data-ppt-kind="shape" data-ppt-shape="line" data-ppt-name="maturity-step-projection-2"/>
+    </g><g class="perspective-step perspective-step--2">
+      <polygon class="step-riser" style="--riser:#6b91aa" points="675.8,260.1 675.8,207.4 705.0,196.0 705.0,245.4" data-ppt-kind="path" data-ppt-name="maturity-step-riser-3"/>
+      <polygon class="step-top" style="--top:#91b1c5" points="465.8,260.1 675.8,260.1 705.0,245.4 508.1,245.4" data-ppt-kind="path" data-ppt-name="maturity-step-top-3"/>
+      <polyline class="step-inset" points="476.9,260.1 664.7,260.1 694.6,245.4" data-ppt-kind="path" data-ppt-name="maturity-step-inset-3"/>
+      <line class="projection-edge" x1="518.4" y1="245.4" x2="694.6" y2="245.4" data-ppt-kind="shape" data-ppt-shape="line" data-ppt-name="maturity-step-projection-3"/>
+    </g><g class="perspective-step perspective-step--3">
+      <polygon class="step-riser" style="--riser:#537b99" points="885.7,207.4 885.7,222.7 901.9,211.3 901.9,196.0" data-ppt-kind="path" data-ppt-name="maturity-step-riser-4"/>
+      <polygon class="step-top" style="--top:#7398b1" points="675.8,207.4 885.7,207.4 901.9,196.0 705.0,196.0" data-ppt-kind="path" data-ppt-name="maturity-step-top-4"/>
+      <polyline class="step-inset" points="686.8,207.4 874.6,207.4 891.6,196.0" data-ppt-kind="path" data-ppt-name="maturity-step-inset-4"/>
+      <line class="projection-edge" x1="715.4" y1="196.0" x2="891.6" y2="196.0" data-ppt-kind="shape" data-ppt-shape="line" data-ppt-name="maturity-step-projection-4"/>
+    </g></svg><div class="ppagent-text-region level-copy" style="left:114.62037500000001px;top:235.90730000000002px;width:134.29999999999998px;height:96.89999999999999px" data-ppagent-text-region data-slot-id="l1-text" data-slot-role="text-region" data-slot-field="levels[0]" data-slot-item-id="l1" data-slot-region-id="level-1" data-slot-content-type="text-region" data-slot-safe-box="true" data-slot-required="true" data-slot-text-mode="structured" data-slot-list-policy="structured" data-text-layout-id="heading-content-flow" data-text-layout-default-id="heading-content-flow" data-text-layout-compatible="statement-flow,heading-content-flow" data-text-layout-content-roles="heading,body">
+    <div class="ppagent-text-layout ppagent-text-layout--heading-content-flow" data-ppagent-text-layout data-text-layout-id="heading-content-flow" data-text-layout-align="left" data-text-layout-valign="bottom" data-text-layout-density="compact" data-text-layout-tone="light" data-text-layout-style="default"><div class="ppagent-text-primitive ppagent-text-primitive--heading" data-text-primitive="heading" data-text-layout-part="heading" data-text-layout-field="title" data-text-primitive-font-tiers="22,20,18,16,14" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="l1-text-heading">起步</div><div class="ppagent-text-primitive ppagent-text-primitive--body" data-text-primitive="body" data-text-layout-part="body" data-text-layout-field="body" data-text-primitive-font-tiers="16,14,12" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="l1-text-body">形成可重复的基础动作</div></div>
+  </div>
+  <div class="level-index" data-ppt-kind="shape-text" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="maturity-level-index-1" style="left:163.920375px;top:337.0573px;width:35.699999999999996px;height:35.699999999999996px;border-width:2.55px">01</div><div class="ppagent-text-region level-copy" style="left:318.06192500000003px;top:184.841px;width:134.29999999999998px;height:96.89999999999999px" data-ppagent-text-region data-slot-id="l2-text" data-slot-role="text-region" data-slot-field="levels[1]" data-slot-item-id="l2" data-slot-region-id="level-2" data-slot-content-type="text-region" data-slot-safe-box="true" data-slot-required="true" data-slot-text-mode="structured" data-slot-list-policy="structured" data-text-layout-id="heading-content-flow" data-text-layout-default-id="heading-content-flow" data-text-layout-compatible="statement-flow,heading-content-flow" data-text-layout-content-roles="heading,body">
+    <div class="ppagent-text-layout ppagent-text-layout--heading-content-flow" data-ppagent-text-layout data-text-layout-id="heading-content-flow" data-text-layout-align="left" data-text-layout-valign="bottom" data-text-layout-density="compact" data-text-layout-tone="light" data-text-layout-style="default"><div class="ppagent-text-primitive ppagent-text-primitive--heading" data-text-primitive="heading" data-text-layout-part="heading" data-text-layout-field="title" data-text-primitive-font-tiers="22,20,18,16,14" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="l2-text-heading">规范</div><div class="ppagent-text-primitive ppagent-text-primitive--body" data-text-primitive="body" data-text-layout-part="body" data-text-layout-field="body" data-text-primitive-font-tiers="16,14,12" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="l2-text-body">建立统一标准与职责边界</div></div>
+  </div>
+  <div class="level-index" data-ppt-kind="shape-text" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="maturity-level-index-2" style="left:367.361925px;top:285.991px;width:35.699999999999996px;height:35.699999999999996px;border-width:2.55px">02</div><div class="ppagent-text-region level-copy" style="left:521.503475px;top:133.7747px;width:134.29999999999998px;height:96.89999999999999px" data-ppagent-text-region data-slot-id="l3-text" data-slot-role="text-region" data-slot-field="levels[2]" data-slot-item-id="l3" data-slot-region-id="level-3" data-slot-content-type="text-region" data-slot-safe-box="true" data-slot-required="true" data-slot-text-mode="structured" data-slot-list-policy="structured" data-text-layout-id="heading-content-flow" data-text-layout-default-id="heading-content-flow" data-text-layout-compatible="statement-flow,heading-content-flow" data-text-layout-content-roles="heading,body">
+    <div class="ppagent-text-layout ppagent-text-layout--heading-content-flow" data-ppagent-text-layout data-text-layout-id="heading-content-flow" data-text-layout-align="left" data-text-layout-valign="bottom" data-text-layout-density="compact" data-text-layout-tone="light" data-text-layout-style="default"><div class="ppagent-text-primitive ppagent-text-primitive--heading" data-text-primitive="heading" data-text-layout-part="heading" data-text-layout-field="title" data-text-primitive-font-tiers="22,20,18,16,14" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="l3-text-heading">复用</div><div class="ppagent-text-primitive ppagent-text-primitive--body" data-text-primitive="body" data-text-layout-part="body" data-text-layout-field="body" data-text-primitive-font-tiers="16,14,12" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="l3-text-body">把成熟方法沉淀为共享能力</div></div>
+  </div>
+  <div class="level-index" data-ppt-kind="shape-text" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="maturity-level-index-3" style="left:570.8034749999999px;top:234.9247px;width:35.699999999999996px;height:35.699999999999996px;border-width:2.55px">03</div><div class="ppagent-text-region level-copy" style="left:724.945025px;top:82.7084px;width:134.29999999999998px;height:96.89999999999999px" data-ppagent-text-region data-slot-id="l4-text" data-slot-role="text-region" data-slot-field="levels[3]" data-slot-item-id="l4" data-slot-region-id="level-4" data-slot-content-type="text-region" data-slot-safe-box="true" data-slot-required="true" data-slot-text-mode="structured" data-slot-list-policy="structured" data-text-layout-id="heading-content-flow" data-text-layout-default-id="heading-content-flow" data-text-layout-compatible="statement-flow,heading-content-flow" data-text-layout-content-roles="heading,body">
+    <div class="ppagent-text-layout ppagent-text-layout--heading-content-flow" data-ppagent-text-layout data-text-layout-id="heading-content-flow" data-text-layout-align="left" data-text-layout-valign="bottom" data-text-layout-density="compact" data-text-layout-tone="light" data-text-layout-style="default"><div class="ppagent-text-primitive ppagent-text-primitive--heading" data-text-primitive="heading" data-text-layout-part="heading" data-text-layout-field="title" data-text-primitive-font-tiers="22,20,18,16,14" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="l4-text-heading">协同</div><div class="ppagent-text-primitive ppagent-text-primitive--body" data-text-primitive="body" data-text-layout-part="body" data-text-layout-field="body" data-text-primitive-font-tiers="16,14,12" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="l4-text-body">跨角色形成稳定配合机制</div></div>
+  </div>
+  <div class="level-index" data-ppt-kind="shape-text" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="maturity-level-index-4" style="left:774.2450249999999px;top:183.8584px;width:35.699999999999996px;height:35.699999999999996px;border-width:2.55px">04</div><div class="status-tag current" data-ppt-kind="shape-text" data-ppt-shape="roundRect" data-ppt-name="maturity-current-status" style="left:361.56192500000003px;top:326.791px">当前</div><div class="status-tag target" data-ppt-kind="shape-text" data-ppt-shape="roundRect" data-ppt-name="maturity-target-status" style="left:768.445025px;top:224.65839999999997px">目标</div></section>

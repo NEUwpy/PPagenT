@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { inspectAssetIntakeState } from "../runtime/asset-intake-state.mjs";
-import { structureSkillProfile } from "../runtime/structure-skill-profile.mjs";
+import { structureSkillProfile, readStructureGuide } from "../runtime/structure-skill-profile.mjs";
 import { academicReportShell } from "../runtime/shells/academic-report.mjs";
 import { northeasternUniversityTheme } from "../runtime/skins/northeastern-university-theme.mjs";
 import {
@@ -277,7 +277,7 @@ async function normalizeRecord(entry, coverageTags, purposeMap, logicMap, root) 
     hasVisualIntent: htmlEligibility?.hasVisualIntent ?? false,
     visualIntentText,
     structureSkill: manifest.runtime?.renderer !== "skin" && manifest.runtime?.logicId
-      ? structureSkillProfile(manifest, visualIntentText) : null,
+      ? structureSkillProfile(manifest, visualIntentText, await readStructureGuide(assetDir)) : null,
     userApprovedHtml: htmlEligibility?.htmlApproved ?? false,
     userApprovedHtmlNative: htmlEligibility?.userApproved ?? false,
     componentGoldenState: reviewRuntime?.goldenState ?? null,

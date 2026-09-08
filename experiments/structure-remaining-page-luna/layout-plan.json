@@ -1,0 +1,55 @@
+{
+  "experimentId": "structure-remaining-page-luna-20260908-luna",
+  "model": "gpt-5.6-luna",
+  "skin": "neutral-editorial-001",
+  "planningRule": "先规划信息分工和结构区域，再由 preparePage 测量真实占用；文字框依据语义排版、阅读轴和自由横向带决定。",
+  "pages": [
+    {
+      "pageId": "P1",
+      "purpose": "让读者先读到独立续接工作的验收主张，再看到四项同级条件，最后以发送文件只是交接动作完成收束。",
+      "readingOrder": ["页首主张", "四项并列条件", "验收收束句"],
+      "assetId": "parallel-folded-notes-grid-002",
+      "initialPlan": {
+        "structureFrame": {"left": 205, "top": 250, "width": 870, "height": 300},
+        "structureRole": "四项并列验收依据，保留折页、标题带、同级阵列和末行居中。",
+        "textPlan": [
+          "主张置于结构上方，以完整句子建立验收口径。",
+          "四项便签内部已承载条件及解释，外围不复述。",
+          "收束句放在结构下方的真实自由带，短句强调发送文件只是交接动作。"
+        ]
+      },
+      "prepareFile": "P1/prepare.json"
+    },
+    {
+      "pageId": "P2",
+      "purpose": "左侧先交代访谈、工单、使用记录三个入口及四条准入依据，右侧漏斗按四阶段表达逐步收敛。",
+      "readingOrder": ["页首主张", "入口来源", "四层筛选阶段及逐层依据", "纳入发布"],
+      "assetId": "convergence-simple-funnel-001",
+      "initialPlan": {
+        "structureFrame": {"left": 650, "top": 185, "width": 520, "height": 420},
+        "structureRole": "入口锚点与四层筛选漏斗；不把漏斗矩形当成文字容器。",
+        "textPlan": [
+          "左上放页内主张和入口来源，入口来源明确标出访谈、工单、使用记录。",
+          "左侧四条依据按漏斗四层的垂直节奏排列，分别对应保留原始反馈、问题可重复观察、小样验证有效、责任人与交付范围明确。",
+          "不额外制造转化率、数量或结果卡片。"
+        ]
+      },
+      "prepareFile": "P2/prepare.json"
+    },
+    {
+      "pageId": "P3",
+      "purpose": "用四级阶梯保留维护能力全貌，突出当前第2级形成记录到第3级计划维护的行动，并明确目标第4级。",
+      "readingOrder": ["页首主张", "四级能力阶梯", "当前到下一步", "目标第4级"],
+      "initialPlan": {
+        "structureFrame": {"left": 70, "top": 235, "width": 820, "height": 320},
+        "structureRole": "四级离散能力门槛，保留连续踏面、立面、统一投影和随形承托面；状态由 content 标记。",
+        "textPlan": [
+          "页首主张跨页宽度放在结构上方，明确从可查记录走向周期责任。",
+          "阶梯右侧的真实自由带承载行动说明，靠近第2级到第3级的高度。",
+          "目标4级作为行动说明中的明确终点，不复制阶梯内部正文。"
+        ]
+      },
+      "prepareFile": "P3/prepare.json"
+    }
+  ]
+}

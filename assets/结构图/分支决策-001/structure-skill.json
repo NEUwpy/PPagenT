@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "assetId": "branching-decision-routes-001",
+  "features": [
+    "单入口连接菱形判断，再由共同总线扇出",
+    "条件标签贴近各自分支线，动作分支等权",
+    "可选结果与所属动作直接相连"
+  ],
+  "adaptation": "根据真实条件决定分支数量；缺少结果时同时省略终点和该段连线，不补空节点。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "单入口、菱形判断、一次扇出总线、贴线条件、等权动作分支",
+      "有结果时与本分支相接"
+    ],
+    "variables": [
+      "分支数",
+      "总线宽度",
+      "菱形和动作区尺寸",
+      "说明与结果的有无"
+    ],
+    "coupledChanges": "分支列宽、条件位置、动作与结果端点一同变化；删除可选结果时同时删除对应连线",
+    "avoid": "不得把五个条件挤成是/否二分；增加多级判断属于另一种拓扑",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

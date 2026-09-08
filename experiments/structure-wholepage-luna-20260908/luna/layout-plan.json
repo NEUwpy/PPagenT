@@ -1,0 +1,62 @@
+{
+  "experimentId": "structure-wholepage-luna-20260908-luna",
+  "model": "gpt-5.6-luna",
+  "skin": "neutral-editorial-001",
+  "pages": [
+    {
+      "pageId": "P1",
+      "purpose": "说明交接验收的标准是接手者能独立继续工作，四项条件是同级并列的验收依据。",
+      "readingOrder": ["页首主张", "四项并列条件", "底部验收结论"],
+      "contentAssignments": {
+        "structure": [
+          "资料齐全：关键文件集中归档",
+          "版本清楚：当前版本标记明确",
+          "责任明确：后续负责人可查",
+          "例外有据：特殊处理附上依据"
+        ],
+        "outside": ["交接验收应以接手者能独立继续工作为准，而不是以发送文件为准"]
+      },
+      "assetId": "parallel-folded-notes-grid-002",
+      "attempts": [
+        {"attempt": 1, "frame": {"left": 150, "top": 218, "width": 980, "height": 305}, "note": "首稿：四项便签居中，主张置顶，验收结论置底。"},
+        {"attempt": 2, "frame": {"left": 130, "top": 190, "width": 1020, "height": 345}, "note": "独立修订稿：扩大阵列并上移，给结论留出更清晰的底部收束区。"},
+        {"attempt": 3, "frame": {"left": 100, "top": 215, "width": 1080, "height": 350}, "note": "父任务反馈驱动修订：主张移到结构上方，明确发送文件不等于验收，删除远距离复述结论。"}
+      ]
+    },
+    {
+      "pageId": "P2",
+      "purpose": "把访谈、工单、使用记录三个入口表达为连续收敛过程，四道准入依据逐层对应四个阶段，页面不出现转化率或数量。",
+      "readingOrder": ["页首主张", "左侧入口与准入说明", "右侧四层漏斗"],
+      "contentAssignments": {
+        "structure": ["输入：访谈、工单、使用记录", "收集线索", "核对问题", "验证方案", "纳入发布"],
+        "outside": ["保留原始反馈", "问题可重复观察", "小样验证有效", "责任人与交付范围明确"]
+      },
+      "assetId": "convergence-simple-funnel-001",
+      "attempts": [
+        {"attempt": 1, "frame": {"left": 640, "top": 175, "width": 555, "height": 420}, "note": "首稿：左侧四条准入依据，右侧结构承担入口与四层连续收敛。"},
+        {"attempt": 2, "frame": {"left": 620, "top": 165, "width": 575, "height": 435}, "note": "独立修订稿：扩大漏斗高度并提高左侧准入依据对比度，改善阶段与依据的整页对应。"},
+        {"attempt": 3, "frame": {"left": 640, "top": 170, "width": 555, "height": 425}, "note": "父任务反馈驱动修订：入口名称置于左上，四条准入依据按漏斗层级垂直对齐。"}
+      ]
+    },
+    {
+      "pageId": "P3",
+      "purpose": "保留设备维护能力四级全貌，突出从当前第2级形成记录走向第3级计划维护的下一步，并标出目标第4级持续改善。",
+      "readingOrder": ["页首主张", "四级能力阶梯", "底部下一步说明"],
+      "contentAssignments": {
+        "structure": [
+          "1 被动处理：故障后临时组织抢修",
+          "2 形成记录：故障原因与处理过程可查",
+          "3 计划维护：按周期检查并落实责任",
+          "4 持续改善：用复盘减少重复故障"
+        ],
+        "outside": ["下一步：从可查记录走向按周期落实责任"]
+      },
+      "assetId": "progression-maturity-steps-002",
+      "attempts": [
+        {"attempt": 1, "frame": {"left": 70, "top": 176, "width": 1140, "height": 390}, "note": "首稿：四级阶梯完整呈现，当前/目标状态由结构标记，底部说明强调下一步。"},
+        {"attempt": 2, "frame": {"left": 70, "top": 150, "width": 1140, "height": 420}, "note": "独立修订稿：略增阶梯高度并上移，增强从第2级到第3级的阅读空间。"},
+        {"attempt": 3, "frame": {"left": 56, "top": 165, "width": 800, "height": 390}, "note": "父任务反馈驱动修订：标题收束为四级能力，结构左置，行动重点靠近第2级到第3级并保留第4级目标。"}
+      ]
+    }
+  ]
+}

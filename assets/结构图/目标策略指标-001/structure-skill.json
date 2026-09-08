@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "assetId": "goal-alignment-strategy-metrics-001",
+  "features": [
+    "无容器的总目标统领策略",
+    "策略共享连续承载面",
+    "策略、行动与指标按列对应",
+    "连续指标带在底部收束"
+  ],
+  "adaptation": "按策略数与文案长度调整列宽；目标说明自由排放，保留策略到指标的纵向对应。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "无独立容器的总目标",
+      "连续策略承载面",
+      "策略—行动—指标逐列对应",
+      "底部连续指标带"
+    ],
+    "variables": [
+      "策略数",
+      "每项指标数",
+      "列宽",
+      "目标说明",
+      "承载面高度"
+    ],
+    "coupledChanges": "按同列行动与指标需求分配宽高，策略面和指标带边界随列网格调整",
+    "avoid": "不得拆成互不相连的独立卡片，也不能把指标错接其他策略",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

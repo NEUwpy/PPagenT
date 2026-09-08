@@ -1,0 +1,50 @@
+{
+  "experimentId": "structure-neutral-luna-20260908-a",
+  "status": "prepared-awaiting-harness",
+  "selectionMethod": "catalog list -> guide for the three structure-pilot candidates; semantic fit first, then preserved-design availability and requested region.",
+  "selectedStructure": {
+    "assetId": "parallel-folded-notes-grid-002",
+    "cases": ["a1", "a2", "a3", "a4"],
+    "reason": "四个稿件都明确要求同级并列项目，不表达先后、因果或层级。双排折角便签的等权阵列、纸面右下连续折页、独立卷页与底影三层，以及通栏标题带和居中节奏，能承载四项与六项并列信息；a2的右侧说明栏由页面分区承担，不改变结构语义。",
+    "preservedFeatures": [
+      "右下向上卷起的连续纸面、独立卷页、横跨底部投影三层",
+      "通栏标题带与标题锚点",
+      "同级便签围绕共同中轴排列，末行保持居中",
+      "纸面轮廓、卷页曲线、底影和标题带按同一便签尺寸联动重算"
+    ],
+    "adaptationByCase": {
+      "a1": "四项宽区并列；结论放结构外收束区。",
+      "a2": "四项文字与a1完全相同；结构占左侧，右侧说明栏控制在180-260px并做不重叠检查。",
+      "a3": "六项按双排并列；上方保留简短引导，下方使用宽结构；说明保持10-18字。",
+      "a4": "六项保留35-50字完整说明；首次用650x300区域做容量压力测试，失败后只扩区或改页重试。"
+    },
+    "alternativesRejected": [
+      {
+        "assetId": "progression-maturity-steps-002",
+        "reason": "四项和六项均为并列检查项，没有明确的离散等级、门槛依赖或能力递进，使用阶梯会改变稿件关系。"
+      },
+      {
+        "assetId": "convergence-funnel-001",
+        "reason": "稿件没有输入到阶段的收敛关系；当前guide还标记为documented-not-implemented，不能把它当作已登记的preserved-design调用。"
+      }
+    ]
+  },
+  "executionPlan": {
+    "common": [
+      "每页使用neutral-editorial-001与杂志风文字角色；结构调用必须走invokeStructure的preserved-design入口。",
+      "保留原稿文字，记录attempt/success/failure、拒绝原因、PPTX可编辑对象、导入检查与PNG渲染结果。",
+      "a1-a3完成后检查折页三层、标题带、居中节奏、文字边界与页面分区，不把success等同于视觉通过。"
+    ],
+    "a4Attempts": [
+      { "attempt": 1, "targetFrame": { "width": 650, "height": 300 }, "purpose": "按要求首次压力调用，必须记录实际容量拒绝或成功；不删文字、不降Skin字号。" },
+      { "attempt": 2, "condition": "仅在首次拒绝后执行", "purpose": "扩大结构区域或调整本页区域安排，保留首次失败证据。" },
+      { "attempt": 3, "condition": "仅在第二次仍需验证且仍在三次上限内执行", "purpose": "再次扩区或改为拆页安排；若仍无法容纳，报告需要拆页，不伪造成功。" }
+    ],
+    "evidenceToPreserve": [
+      "input.json与choice.json",
+      "每次调用的原始拒绝/成功回执与运行日志",
+      "首次650x300结果、后续恢复原因、最终尝试数量",
+      "最终可编辑PPTX、重新导入检查、PNG与结构视觉复核"
+    ]
+  }
+}

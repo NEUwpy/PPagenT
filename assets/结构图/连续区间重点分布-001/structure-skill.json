@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "assetId": "progression-spectrum-focus-001",
+  "features": [
+    "连续语义轴承载由低到高的区间",
+    "普通区域连续排列，重点区域具有更强视觉重量",
+    "重点与其余区间保持同一坐标关系"
+  ],
+  "adaptation": "根据真实范围与重点调整分段宽度；不用颜色或位置虚构等级。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "单一横轴、真实顺序、唯一抬升放大重点、淡分布轮廓",
+      "对象之间无线"
+    ],
+    "variables": [
+      "区域数",
+      "各区文案",
+      "轴端标签",
+      "真实重点位置",
+      "区域宽高"
+    ],
+    "coupledChanges": "等宽栅格、整体居中、重点抬升和背景分布轮廓共同调整",
+    "avoid": "不把背景分布当真实统计曲线；无依据时不能随意强调一区",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "key": "b3-attempt-1",
+  "caseId": "b3",
+  "attempt": 1,
+  "model": "gpt-5.6-luna",
+  "reasoning": "high",
+  "spec": {
+    "caseId": "b3",
+    "title": "六层筛选把建议收束为可执行计划",
+    "assetId": "progression-maturity-steps-002",
+    "content": {
+      "levels": [
+        {
+          "key": "collect-suggestions",
+          "title": "征集建议",
+          "body": "从四类入口收集待处理线索"
+        },
+        {
+          "key": "clarify-problem",
+          "title": "明确问题",
+          "body": "把模糊意见改写为可核对问题"
+        },
+        {
+          "key": "check-basis",
+          "title": "核对依据",
+          "body": "补齐现场材料与既有记录"
+        },
+        {
+          "key": "small-validation",
+          "title": "小步验证",
+          "body": "用小范围动作观察是否成立"
+        },
+        {
+          "key": "assess-impact",
+          "title": "评估影响",
+          "body": "判断对交付与责任边界的影响"
+        },
+        {
+          "key": "include-plan",
+          "title": "纳入计划",
+          "body": "形成可执行的排期与责任安排"
+        }
+      ],
+      "showStatus": false,
+      "currentIndex": 0
+    },
+    "frame": {
+      "left": 145,
+      "top": 170,
+      "width": 990,
+      "height": 455
+    },
+    "blocks": [
+      {
+        "role": "aux",
+        "text": "入口：用户访谈、现场记录、客服工单、内部复盘。四类入口先汇总，再沿六层逐步收束。",
+        "frame": {
+          "left": 56,
+          "top": 612,
+          "width": 1100,
+          "height": 30
+        }
+      }
+    ],
+    "reason": "六个有明确门槛的筛选层级沿共同能力维度递进，保留连续阶台与随形承托面。",
+    "chapter": "02",
+    "pageNumber": 7
+  },
+  "skin": {
+    "id": "neutral-editorial-001",
+    "fonts": {
+      "display": "Noto Serif SC",
+      "body": "Noto Sans SC"
+    },
+    "font": "Noto Sans SC",
+    "primaryColor": "#A35D4F",
+    "background": "#F5F4EF",
+    "surface": "#EEECE5",
+    "dark": "#20201D",
+    "body": "#4B4A45",
+    "muted": "#85837B",
+    "line": "#D8D5CC",
+    "bodyFrame": {
+      "left": 56,
+      "top": 135,
+      "width": 1168,
+      "height": 525
+    },
+    "typography": {
+      "componentHeading": 15.75,
+      "componentTitle": 15.75,
+      "componentItemTitle": 12.75,
+      "componentLead": 12.75,
+      "componentBody": 12.75,
+      "componentLabel": 12.75,
+      "componentMeta": 11.25
+    }
+  },
+  "status": "rejected",
+  "error": "文字块 0 与结构占区重叠"
+}

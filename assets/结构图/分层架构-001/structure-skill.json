@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "assetId": "layered-architecture-001",
+  "features": [
+    "共同中轴上的曲面层体由下到上收拢",
+    "每层完整椭圆层带与浅色主体组成整体",
+    "层间留白，层内项目等权",
+    "宽阔底层表达向上支撑"
+  ],
+  "adaptation": "按真实层级和文案重算层高与宽度；层内普通文字随内容排放，不补网络连线或卡片格。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "由下而上收拢的曲面层体",
+      "每层完整椭圆带与浅色主体",
+      "共同中轴和向上支撑"
+    ],
+    "variables": [
+      "层数",
+      "每层能力数",
+      "层高、层间距、底宽",
+      "说明长度"
+    ],
+    "coupledChanges": "层宽递进、椭圆上下沿、主体面和文本空间同算；基础在下、应用在上",
+    "avoid": "不能用平行四边形条或矩形卡替代曲面层体",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

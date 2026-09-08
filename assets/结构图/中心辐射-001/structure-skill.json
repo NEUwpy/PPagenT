@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "assetId": "hub-radial-001",
+  "features": [
+    "双层圆环和点阵光晕形成强中心",
+    "外围采用圆形锚点、标题和说明的共同层级",
+    "左右镜像平衡，奇数余项可位于中轴",
+    "中心与外围依靠位置归属，不靠密集辐射线"
+  ],
+  "adaptation": "按区域重排外围角度与文字，保持中心视觉重量；不把无方向归属改成驱动箭头。",
+  "source": "visual-intent.md",
+  "exampleImplementation": "review.mjs",
+  "validation": {
+    "status": "not-validated",
+    "note": "设计说明已整理；本结构在不同内容与区域下的原生适配尚未逐项验收。"
+  },
+  "designBoundary": {
+    "basis": "preserve-existing-design",
+    "invariants": [
+      "双圆环、点阵光晕、圆形外围锚点",
+      "左右镜像、奇数余项位于中轴顶部",
+      "依位置表达归属"
+    ],
+    "variables": [
+      "外围数",
+      "中心环半径",
+      "光晕范围",
+      "左右展开距离",
+      "标题和说明空间"
+    ],
+    "coupledChanges": "双环与点阵共同调整；外围节点和文字按成对位置重排，保留中心重量",
+    "avoid": "不添加密集径向线，不将圆环中心换成普通实心框",
+    "status": "documented-not-implemented",
+    "sources": [
+      "visual-intent.md",
+      "review.mjs"
+    ]
+  }
+}

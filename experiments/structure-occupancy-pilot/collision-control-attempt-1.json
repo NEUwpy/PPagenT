@@ -1,0 +1,109 @@
+{
+  "key": "collision-control-attempt-1",
+  "caseId": "collision-control",
+  "attempt": 1,
+  "execution": "parent-occupancy-prototype",
+  "spec": {
+    "caseId": "collision-control",
+    "title": "设备维护能力：从可查记录走向周期责任",
+    "assetId": "progression-maturity-steps-002",
+    "content": {
+      "levels": [
+        {
+          "key": "level-1",
+          "title": "被动处理",
+          "body": "故障后临时组织抢修"
+        },
+        {
+          "key": "level-2",
+          "title": "形成记录",
+          "body": "故障原因与处理过程可查"
+        },
+        {
+          "key": "level-3",
+          "title": "计划维护",
+          "body": "按周期检查并落实责任"
+        },
+        {
+          "key": "level-4",
+          "title": "持续改善",
+          "body": "用复盘减少重复故障"
+        }
+      ],
+      "showStatus": true,
+      "currentIndex": 1
+    },
+    "frame": {
+      "left": 56,
+      "top": 165,
+      "width": 800,
+      "height": 390
+    },
+    "blocks": [
+      {
+        "role": "body",
+        "text": "下一步\n当前 2级：形成记录\n→ 3级：计划维护\n按周期检查并落实责任",
+        "frame": {
+          "left": 98.4,
+          "top": 373.863,
+          "width": 100,
+          "height": 55
+        }
+      }
+    ],
+    "reason": "同稿同阶梯同定位框，仅把行动说明放入测量得到的左上空白区",
+    "purpose": "保留设备维护能力四级全貌，突出从当前第2级形成记录走向第3级计划维护的下一步，并标出目标第4级持续改善。",
+    "readingOrder": [
+      "页首主张",
+      "四级能力阶梯",
+      "底部下一步说明"
+    ],
+    "contentAssignments": {
+      "structure": [
+        "1 被动处理：故障后临时组织抢修",
+        "2 形成记录：故障原因与处理过程可查",
+        "3 计划维护：按周期检查并落实责任",
+        "4 持续改善：用复盘减少重复故障"
+      ],
+      "outside": [
+        "下一步：从可查记录走向按周期落实责任"
+      ]
+    },
+    "chapter": "03",
+    "pageNumber": 3,
+    "attemptNote": "父任务反馈驱动修订：标题收束为四级能力，结构左置，行动重点靠近第2级到第3级并保留第4级目标。",
+    "parentReplay": true
+  },
+  "skin": {
+    "id": "neutral-editorial-001",
+    "fonts": {
+      "display": "Noto Serif SC",
+      "body": "Noto Sans SC"
+    },
+    "font": "Noto Sans SC",
+    "primaryColor": "#A35D4F",
+    "background": "#F5F4EF",
+    "surface": "#EEECE5",
+    "dark": "#20201D",
+    "body": "#4B4A45",
+    "muted": "#85837B",
+    "line": "#D8D5CC",
+    "bodyFrame": {
+      "left": 56,
+      "top": 135,
+      "width": 1168,
+      "height": 525
+    },
+    "typography": {
+      "componentHeading": 15.75,
+      "componentTitle": 15.75,
+      "componentItemTitle": 12.75,
+      "componentLead": 12.75,
+      "componentBody": 12.75,
+      "componentLabel": 12.75,
+      "componentMeta": 11.25
+    }
+  },
+  "status": "rejected",
+  "error": "文字块 0 侵入实际占位及安全留白：level-1"
+}
