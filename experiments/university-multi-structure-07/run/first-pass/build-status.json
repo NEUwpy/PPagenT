@@ -1,0 +1,32 @@
+{
+  "taskId": "university-multi-structure-07",
+  "model": "gpt-5.6-luna",
+  "reasoning": "high",
+  "outputPptx": "C:\\PPagenT\\experiments\\university-multi-structure-07\\run\\deck.pptx",
+  "failures": [
+    {
+      "pageId": "body-02",
+      "regionId": "record-set",
+      "assetId": "parallel-folded-notes-grid-002",
+      "targetFrame": {
+        "left": 55,
+        "top": 180,
+        "width": 560,
+        "height": 300
+      },
+      "message": "parallel-folded-notes-grid 当前区域无法以选定的允许字号容纳文字：note-heading-0, note-heading-1, note-heading-2, note-heading-3。请扩大区域、减少本区域内容密度或换用结构；不继续降低字号。"
+    },
+    {
+      "pageId": "body-03",
+      "regionId": "expansion-boundaries",
+      "assetId": "parallel-folded-notes-grid-002",
+      "targetFrame": {
+        "left": 665,
+        "top": 180,
+        "width": 560,
+        "height": 300
+      },
+      "message": "parallel-folded-notes-grid 当前区域无法以选定的允许字号容纳文字：note-heading-0, note-heading-1, note-heading-2, note-heading-3。请扩大区域、减少本区域内容密度或换用结构；不继续降低字号。"
+    }
+  ]
+}
