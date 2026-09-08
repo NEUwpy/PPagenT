@@ -1,0 +1,14 @@
+大学模板试点规则快照（2026-09-08）
+
+加载命令：npm run rules:load -- --profile generation --skin northeastern-university-001
+绑定排版：mckinsey
+Skin：northeastern-university-001
+项目模板入口：src/runtime/skins/northeastern-university.mjs#createNortheasternUniversityStarter
+正文安全区：left=55, top=166, width=1170, height=492（设计像素）
+模板固定项：校徽、页眉、蓝色渐变标题带、白色主旨句、分隔线、底线、封面与尾页身份素材
+字体：标题 HYWenRunSongYun U；正文/结构/辅助文字 Microsoft YaHei
+正文角色：标题 21、正文 18、辅助 14（设计像素）
+结构入口：src/runtime/invoke-university-structure.mjs#invokeUniversityStructure
+结构约束：固定大学 Skin 与 preserved-design；不传自写 build/skin/execution/references
+本轮结构：parallel-folded-notes-grid-002、convergence-simple-funnel-001、progression-maturity-steps-002
+模板优先边界：麦肯锡六字段只组织正文安全区，不覆盖大学蓝带白标题或结构库原蓝色表面

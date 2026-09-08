@@ -1,0 +1,32 @@
+大学真模板整稿试点报告
+
+输入
+- task.txt 与 manuscript.txt：experiments/university-template-integration-03/
+- 规则快照：rules-snapshot.txt
+
+输出
+- deck.pptx：6 页，封面、目录、三页正文、尾页
+- builder.mjs：仅本任务 run/ 内的独立 Luna High 构建器
+- deck/slide-1.png 至 slide-6.png：最终 PPTX 重导入渲染
+- structure-call-log.jsonl：三次大学 Skin preserved-design 真实调用
+- deck-montage.png：最终全稿缩略图
+- deck-v1-pre-feedback.pptx：父任务反馈前快照
+
+页面分工
+- 第1页复用现行大学封面配方：共享实验平台试点方案；副标题记录、筛选与能力建设；汇报人方案讨论；清除旧姓名、日期与机构占位。
+- 第2页复用现行目录配方：记录规范、试点筛选、能力建设。
+- 第3页用原蓝色双排折角便签表达四项并列记录要求；图外保留20笔抽查、7笔缺审批时间、5笔缺执行记录、重叠不可相加、两间自愿实验室与效率判断边界。
+- 第4页用原蓝色简明漏斗表达三个候选来源进入三轮收敛；图外补齐实验室自荐、平台推荐、既有合作，以及设备与任务适配、审批与执行负责人、最小清单登记条件；保留拟议规则和无人数/比例证据边界。
+- 第5页用原蓝色成熟度阶梯表达可记录、可追溯、可复用；关闭当前/目标状态以避免无调查的达成暗示；图外保留首轮目标、三方验收分工与实际重做边界。
+- 第6页复用现行大学尾页身份素材，保留敬请老师批评指正。
+
+验证
+- builder 成功导出 deck.pptx，页数 6。
+- 三项结构调用均写入 attempt/success，validation=rendered-unreviewed；nativeShapeDelta 分别为 28、14、24。
+- 使用 presentations/render_slides.py 重导入渲染全部 6 页。
+- slides_test.py：Test passed. No overflow detected.
+- 逐页视觉检查：封面无旧姓名日期机构；目录页保留大学壳；第3页无“结/论”孤字；第4页候选来源与三轮条件可见；第5页右栏内容位于正文安全区内；尾页身份素材保留。
+- 父任务反馈已纳入本轮修订；本报告不把反馈前版本冒充为独立首轮全通过。
+
+限制
+- 结构日志的 rendered-unreviewed 只代表原生对象成功生成；本轮已补充最终 PPTX PNG 的逐页人工视觉检查。

@@ -1,8 +1,8 @@
-// Explicit semantic adaptation for the three preserved pilots only.
+// Neutral-only adaptation. University preserves the original blue surfaces.
 // Shapes, paths, topology and type sizes remain owned by their original builds.
 export function preservedNeutralSkinCss(componentId, theme) {
   if (theme.id !== 'neutral-editorial-001') return '';
-  const display = JSON.stringify(theme.fonts?.display ?? theme.font ?? 'Noto Serif SC');
+  const display = JSON.stringify(theme.structureHeadingFont ?? theme.fonts?.display ?? theme.font ?? 'Noto Serif SC');
   const common = `[data-ppt-root] .ppagent-text-primitive--heading,[data-ppt-root] .simple-step-title{font-family:${display}}
   [data-ppt-root] [data-ppt-shadow]{box-shadow:none}
   [data-ppt-root] .ppagent-text-primitive--body,[data-ppt-root] .ppagent-text-list__item{color:var(--ppagent-color-body)}`;

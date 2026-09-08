@@ -5,8 +5,40 @@ import { pathToFileURL } from 'node:url';
 import { resolveHtmlComponent, closeHtmlComponentRuntime } from '../src/visual-runtime/html-component-runtime.mjs';
 import { preservedComponent } from '../src/runtime/preserved-structure-build.mjs';
 import { preservedTypography } from '../src/visual-runtime/preserved-design-layout.mjs';
+import { universityMckinseySkin, invokeUniversityStructure } from '../src/runtime/invoke-university-structure.mjs';
+import { preservedNeutralSkinCss } from '../src/visual-runtime/preserved-neutral-skin.mjs';
 const root=path.resolve(import.meta.dirname,'..');
 const frame={left:0,top:0,width:1170,height:492};
+
+test('university entry rejects free redraw and unregistered designs', async()=>{
+ assert.equal(preservedNeutralSkinCss('parallel-folded-notes-grid', universityMckinseySkin), '');
+ await assert.rejects(invokeUniversityStructure({build(){}}), /不接受自定义/);
+ await assert.rejects(invokeUniversityStructure({root,assetId:'sequence-phase-gates-004'}), /尚未登记/);
+});
+
+test('university preserved designs render with McKinsey roles and university theme',async()=>{
+ const skin=universityMckinseySkin;
+ assert.equal(skin.layout,'mckinsey');
+ assert.equal(skin.typography.componentBody,13.5);
+ try{
+  for(const dir of ['双排折角便签-002','简明转化漏斗-001','成熟度阶梯-002']){
+   const assetDir=path.join(root,'assets/结构图',dir);
+   const m=await import(pathToFileURL(path.join(assetDir,'review.mjs')).href);
+   const parameters=structuredClone(m.previewParameters);
+   if(parameters.items)parameters.items=parameters.items.slice(0,4);
+   if(parameters.steps){parameters.steps=parameters.steps.slice(0,3);parameters.inputs=parameters.inputs.slice(0,3);}
+   if(parameters.levels)parameters.levels=parameters.levels.slice(0,3);
+   const tree=await resolveHtmlComponent({component:preservedComponent(m.visualComponent,skin.bodyFrame,skin),parameters,assetDir,theme:skin,targetFrame:skin.bodyFrame});
+   const texts=tree.nodes.filter(n=>n.kind==='text');
+   assert.ok(texts.length>0);
+   for(const node of texts){
+    assert.ok([21,18,14].some(size=>Math.abs(node.style.fontSize-size)<.05),`${dir}: ${node.style.fontSize}`);
+   }
+   assert.ok(JSON.stringify(tree).includes('Microsoft YaHei'));
+   assert.ok(!JSON.stringify(tree).includes('HYWenRunSongYun U'));
+  }
+ }finally{await closeHtmlComponentRuntime();}
+});
 
 test('three preserved builds keep original geometry and use bounded typography when shrinking',async()=>{
  try{

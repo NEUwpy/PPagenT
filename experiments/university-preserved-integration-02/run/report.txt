@@ -1,0 +1,8 @@
+大学 Skin + 麦肯锡式独立实测
+输入：本目录 manuscript.txt；规则：rules:load generation / northeastern-university-001；结构：三份 guide 核对后调用大学入口。
+输出：deck.pptx；final-render/slide-01.png..slide-03.png；invoke-structure.jsonl；final-inspection.ndjson。
+结构调用：page-01 折角便签（4项并列）；page-02 简明漏斗（3来源、3轮收敛）；page-03 成熟度阶梯（3级递进，无状态标记）。
+内容保留：抽查20笔、7笔缺审批时间、5笔缺执行记录及两类可重叠；试点条件与两间自愿实验室边界；可记录/可追溯/可复用的基础关系与验收分工。
+视觉检查：最终 PPTX 已重新导入并逐页导出 PNG；逐页看过最终渲染，另保存每页 layout JSON 与整稿 montage。geometry-check.txt 记录三页对象越界为 0，并记录标题、结构关系、文字换行、线条净距与结构外说明的人工判断；slides_test.py 通过。font-check.txt 核对到 HYWenRunSongYun U（页首）与 Microsoft YaHei（正文/结构），导出字号为 24、15.75、13.5、12、10.5 pt 档位。
+失败保留：首次 page-02 漏斗调用因入口标签超过 4 字被拒，failure 事件保留在 invoke-structure.jsonl；随后压缩入口标签并在结构外恢复三个来源的完整名称，最终三页调用成功。
+未解决问题：结构调用成功回执的 validation 仍为 rendered-unreviewed；本次已结合最终 PNG 完成逐页人工语义复核，但结构库自身的历史候选状态不因本次实测自动晋升。
