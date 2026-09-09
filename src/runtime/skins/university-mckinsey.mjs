@@ -1,7 +1,7 @@
 import { northeasternUniversitySkin } from './northeastern-university-contract.mjs';
 
 // Independent page authoring uses design px; preserved HTML typography uses pt.
-export const universityMckinseyTypography = Object.freeze({ title: 32, heading: 21, body: 18, meta: 14 });
+export const universityMckinseyTypography = Object.freeze({ title: 32, heading: 21, body: 18, meta: 14, metric: 36 });
 const t = universityMckinseyTypography;
 export const universityMckinseySkin = Object.freeze({
   ...northeasternUniversitySkin.componentTheme,

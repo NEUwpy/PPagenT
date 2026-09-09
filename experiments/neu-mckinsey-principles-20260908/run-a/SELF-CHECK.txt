@@ -1,0 +1,37 @@
+实验 A 最终自检报告
+
+输入与规则
+- 唯一原稿：experiments/neu-mckinsey-principles-20260908/inputs/manuscript.txt
+- 初始原稿快照：manuscript.snapshot.txt
+- 规则快照：rules.snapshot.txt
+- Skin：northeastern-university-001；绑定排版：mckinsey
+- 规则快照 SHA256：8E75DFFBFBFEFCA4DCDD41E0249042796064481EFE509F2F5F4A35EAF30FDC2A
+- 原稿快照 SHA256：5D94B57F45C6489EF18976831502D8E16ABF2B5312C0FA244CC7F1024173CC38
+
+最终文件
+- 可编辑 PPTX：neu-mckinsey-principles-run-a.pptx
+- PPTX SHA256：2F55BD34473653D91114938659D3777BA46FE4534048AAC0A241E3B9C4E458D2
+- 逐页重渲染目录：neu-mckinsey-principles-run-a/
+- 构建脚本：build.mjs
+- 结构调用记录：structure-calls.jsonl
+- 技术 QA 目录：artifact-qa/
+
+页级判断与视觉检查
+1. “请求量翻倍后，按时首次响应比例降至60%”。左侧原生柱形图保留120/150/180/240请求数，右侧原生折线图保留80%/76%/70%/60%比例，底部保留1.3→2.4工作日中位时间及指标口径。标题、图题、标签无截断；图表与说明分区清楚；未把同步变化表达为唯一因果。
+2. “4月超时主要集中在材料与权限阻塞，入口规则是先手”。调用parallel-folded-notes-grid-002保留四类互斥阻塞：材料不全42、权限确认30、需求反复16、其他8。结构内折页、卷角、投影和居中阵列可见；说明与便签没有碰撞；页脚明确分类不等于可消除数量。
+3. “B统一申请入口与阻塞类型最直接对应，适合先试行”。可编辑比较表逐行保留直接作用、投入周期、维护、依赖和限制；B列以大学主色强调。条件句保留“方案估计、未验证效果”和“B尚未实施”。表格边界、行列文字和底部决策条件均在安全区内。
+4. “六周试点先验证规则可用性，再决定是否扩大范围”。三阶段流程保留1—2周、3—4周、5—6周及进入/扩大条件；箭头从左向右，回退条件单独放入底部说明框。最终重渲染已确认阶段说明可见、箭头不压字、说明框不越界。
+
+文字角色与几何
+- 模板页眉、校徽、蓝色标题带、分隔线和底线来自现行东北大学 starter；sectionName 调整为单行“服务观察”以避免模板页眉换行。
+- 自编页级标题实际 typeface 为 HYWenRunSongYun U、32px；正文/图题/标签使用 Microsoft YaHei，实际字号落在 13–21px 的绑定角色及结构允许档位内；结构调用按大学入口继承现行主题。
+- 四个 layout JSON 均执行页面边界检查，元素越界数：0/0/0/0。
+- `slides_test.py` 最终结果：Test passed. No overflow detected.
+- 最终 PPTX 已用 bundled render_slides.py 重新渲染 4 页，并逐页查看 PNG；未发现标题截断、短标签拆字、正文裁切、图表标签错误、非预期线字相交或页间模板不一致。
+
+工具失败与自主重试记录
+- 首次 preflight 因 Windows URL pathname 形成 C:\C:... 路径失败，修正为 fileURLToPath/path.join 后重试成功。
+- 首次外部渲染调用因未设置 RUNTIME_NODE 环境变量失败；按 presentations 技能要求设置 RUNTIME_NODE、RUNTIME_NODE_MODULES、RUNTIME_BIN_DIR 后重试成功。
+- 第一次最终重渲染命令在修正流程箭头位置后被父任务暂停中断；该中断不属于视觉失败。恢复后重新构建、导出、重渲染和 slides_test 均成功。
+
+未解决项：无。

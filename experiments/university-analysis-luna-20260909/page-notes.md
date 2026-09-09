@@ -1,8 +1,8 @@
 # 大学分析报告 Luna high 试做说明
 
-输入稿件：`experiments/university-multi-structure-07/manuscript.md`  
-模板：`assets/主题/东北大学-001/runtime-template.pptx`  
-正文安全区：`(55,166) 1170×492`  
+输入稿件：`experiments/university-multi-structure-07/manuscript.md`
+模板：`assets/主题/东北大学-001/runtime-template.pptx`
+正文安全区：`(55,166) 1170×492`
 构建方式：`createNortheasternUniversityStarter` + 正文原生可编辑对象；P3 调用 `progression-maturity-steps-002`。
 
 ## P1 准入与推进

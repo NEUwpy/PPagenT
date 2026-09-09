@@ -1,0 +1,145 @@
+{"kind":"slide","id":"sl/y90nupkv","slide":1,"title":"请求量翻倍后，按时首次响应比例降至60%","textShapes":13}
+{"kind":"textbox","id":"sh/65g3298r","slide":1,"name":"文本框 4","text":"请求量翻倍后，按时首次响应比例降至60%","textPreview":"请求量翻倍后，按时首次响应比例降至60%","textChars":20,"textLines":1,"bbox":[9.04,88.85,1250.55,48.47]}
+{"kind":"textbox","id":"sh/sryl4zqx","slide":1,"name":"文本框 6","text":"服务观察","textPreview":"服务观察","textChars":4,"textLines":1,"bbox":[98.87,31.9,177.93,45.24]}
+{"kind":"shape","id":"sh/fu94fe98","slide":1,"name":"直接连接符 7","bbox":[97.13,42.02,0,28.1]}
+{"kind":"textbox","id":"sh/utg3698n","slide":1,"name":"文本框 8","text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[44.45,31.9,71.23,48.47]}
+{"kind":"shape","id":"sh/4r6dg7et","slide":1,"name":"文本框 13","bbox":[46.78,232.16,404.25,38.78]}
+{"kind":"textbox","id":"sh/5sfepcfe","slide":1,"name":"p1-lead","text":"历史观察：工作量与响应压力同步上升，但观察本身不识别唯一原因。","textPreview":"历史观察：工作量与响应压力同步上升，但观察本身不识别唯一原因。","textChars":31,"textLines":1,"bbox":[55,181,820,30]}
+{"kind":"textbox","id":"sh/ipovexwn","slide":1,"name":"p1-sim","text":"模拟数据","textPreview":"模拟数据","textChars":4,"textLines":1,"bbox":[1060,180,110,28]}
+{"kind":"textbox","id":"sh/3qxwn2x8","slide":1,"name":"p1-chart-label-1","text":"收到请求数","textPreview":"收到请求数","textChars":5,"textLines":1,"bbox":[75,226,260,25]}
+{"kind":"textbox","id":"sh/dgzetcfa","slide":1,"name":"p1-chart-label-2","text":"两个工作日内首次可执行答复比例","textPreview":"两个工作日内首次可执行答复比例","textChars":15,"textLines":1,"bbox":[678,226,430,25]}
+{"kind":"textbox","id":"sh/0bmd476t","slide":1,"name":"p1-rate-0","text":"80%","textPreview":"80%","textChars":3,"textLines":1,"bbox":[726,264,52,20]}
+{"kind":"textbox","id":"sh/zadcv2p8","slide":1,"name":"p1-rate-1","text":"76%","textPreview":"76%","textChars":3,"textLines":1,"bbox":[847,290,52,20]}
+{"kind":"textbox","id":"sh/e94v2hon","slide":1,"name":"p1-rate-2","text":"70%","textPreview":"70%","textChars":3,"textLines":1,"bbox":[968,330,52,20]}
+{"kind":"textbox","id":"sh/90ve1w7q","slide":1,"name":"p1-rate-3","text":"60%","textPreview":"60%","textChars":3,"textLines":1,"bbox":[1089,376,52,20]}
+{"kind":"shape","id":"sh/ozmd8r65","slide":1,"name":"p1-bottom","bbox":[665,525,520,90]}
+{"kind":"textbox","id":"sh/nydczmpk","slide":1,"name":"p1-bottom-main","text":"首次响应中位时间：1.3 → 2.4 个工作日","textPreview":"首次响应中位时间：1.3 → 2.4 个工作日","textChars":23,"textLines":1,"bbox":[685,542,480,28]}
+{"kind":"textbox","id":"sh/mx4v6hoz","slide":1,"name":"p1-bottom-sub","text":"指标口径：当月收到的请求，观察结案后是否在两日内首次给出可执行答复；不是结案时长。","textPreview":"指标口径：当月收到的请求，观察结案后是否在两日内首次给出可执行答复；不是结案时长。","textChars":41,"textLines":1,"bbox":[685,578,480,28]}
+{"kind":"chart","id":"ch/07itg3q9","slide":1,"name":"","chartType":"bar","bbox":[60,250,560,260]}
+{"kind":"chart","id":"ch/9ona9ozy","slide":1,"name":"","chartType":"line","bbox":[665,250,520,250]}
+{"kind":"notes","id":"nt/y90nupkv","slide":1,"text":"[Sources]\n- 内容：experiments/neu-mckinsey-principles-20260908/inputs/manuscript.txt\n- 视觉：assets/主题/东北大学-001/runtime-template.pptx（随仓库发布的运行模板）\n- PPagenT：run-a-intent-1 → run-a-layout-1\n[/Sources]"}
+{"kind":"slide","id":"sl/hwbqtkby","slide":2,"title":"4月超时主要集中在材料与权限阻塞，入口规则是先手","textShapes":14}
+{"kind":"textbox","id":"sh/a10jqpsj","slide":2,"name":"文本框 4","text":"4月超时主要集中在材料与权限阻塞，入口规则是先手","textPreview":"4月超时主要集中在材料与权限阻塞，入口规则是先手","textChars":24,"textLines":1,"bbox":[9.04,88.85,1250.55,48.47]}
+{"kind":"textbox","id":"sh/w3i1sfa9","slide":2,"name":"文本框 6","text":"服务观察","textPreview":"服务观察","textChars":4,"textLines":1,"bbox":[98.87,31.9,177.93,45.24]}
+{"kind":"shape","id":"sh/r65knqtk","slide":2,"name":"直接连接符 7","bbox":[97.13,42.02,0,28.1]}
+{"kind":"textbox","id":"sh/q5wjelsz","slide":2,"name":"文本框 8","text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[44.45,31.9,71.23,48.47]}
+{"kind":"shape","id":"sh/wjy9sry9","slide":2,"name":"文本框 13","bbox":[46.78,232.16,404.25,38.78]}
+{"kind":"textbox","id":"sh/xk7qlczu","slide":2,"name":"p2-lead","text":"96个未达标准请求逐一复核，四类主要阻塞彼此互斥且合计完整。","textPreview":"96个未达标准请求逐一复核，四类主要阻塞彼此互斥且合计完整。","textChars":30,"textLines":1,"bbox":[55,181,840,30]}
+{"kind":"textbox","id":"sh/ahwrqhgj","slide":2,"name":"p2-sim","text":"模拟数据｜4月","textPreview":"模拟数据｜4月","textChars":7,"textLines":1,"bbox":[1025,180,145,28]}
+{"kind":"shape","id":"sh/bip8jmho","slide":2,"name":"note-sheet-shadow-0","bbox":[398.97,353.16,224.74,37.66]}
+{"kind":"shape","id":"sh/cnupgny5","slide":2,"name":"note-sheet-paper-0","bbox":[398.95,249.06,224.69,141.62]}
+{"kind":"shape","id":"sh/do3q9szq","slide":2,"name":"note-sheet-header-0","bbox":[398.95,249.06,224.69,24.36]}
+{"kind":"shape","id":"sh/t8byxkn2","slide":2,"name":"note-sheet-fold-0","bbox":[540.86,356.41,82.78,34.3]}
+{"kind":"shape","id":"sh/s72xofmh","slide":2,"name":"note-sheet-shadow-1","bbox":[656.33,353.16,224.74,37.66]}
+{"kind":"shape","id":"sh/76twva5c","slide":2,"name":"note-sheet-paper-1","bbox":[656.31,249.06,224.69,141.62]}
+{"kind":"shape","id":"sh/65kfmpor","slide":2,"name":"note-sheet-header-1","bbox":[656.31,249.06,224.69,24.36]}
+{"kind":"shape","id":"sh/hcvy14ne","slide":2,"name":"note-sheet-fold-1","bbox":[798.22,356.41,82.78,34.3]}
+{"kind":"shape","id":"sh/gbmxszmt","slide":2,"name":"note-sheet-shadow-2","bbox":[398.97,508.39,224.74,37.66]}
+{"kind":"shape","id":"sh/fadgzu58","slide":2,"name":"note-sheet-paper-2","bbox":[398.95,404.3,224.69,141.62]}
+{"kind":"shape","id":"sh/u94fqp4n","slide":2,"name":"note-sheet-header-2","bbox":[398.95,404.3,224.69,24.36]}
+{"kind":"shape","id":"sh/p0vy54na","slide":2,"name":"note-sheet-fold-2","bbox":[540.86,511.65,82.78,34.3]}
+{"kind":"shape","id":"sh/4zmxwzmp","slide":2,"name":"note-sheet-shadow-3","bbox":[656.33,508.39,224.74,37.66]}
+{"kind":"shape","id":"sh/mlgvq147","slide":2,"name":"note-sheet-paper-3","bbox":[656.31,404.3,224.69,141.62]}
+{"kind":"shape","id":"sh/nmpcj6ls","slide":2,"name":"note-sheet-header-3","bbox":[656.31,404.3,224.69,24.36]}
+{"kind":"shape","id":"sh/onydsbmd","slide":2,"name":"note-sheet-fold-3","bbox":[798.22,511.65,82.78,34.3]}
+{"kind":"textbox","id":"sh/9o7ulg3y","slide":2,"name":"note-heading-0","text":"材料不全｜42","textPreview":"材料不全｜42","textChars":7,"textLines":1,"bbox":[442.95,249.06,153.73,23.83]}
+{"kind":"textbox","id":"sh/a9gvulkj","slide":2,"name":"note-body-0","text":"字段缺失或样本文件\n未附","textPreview":"字段缺失或样本文件 | 未附","textChars":12,"textLines":2,"bbox":[409.84,282.42,175.95,49.66]}
+{"kind":"textbox","id":"sh/ba9cn6l4","slide":2,"name":"note-heading-1","text":"权限确认｜30","textPreview":"权限确认｜30","textChars":7,"textLines":1,"bbox":[700.31,249.06,153.73,23.83]}
+{"kind":"textbox","id":"sh/wbidwb29","slide":2,"name":"note-body-1","text":"授权人不明确或范围\n未确认","textPreview":"授权人不明确或范围 | 未确认","textChars":13,"textLines":2,"bbox":[667.2,282.42,175.95,49.66]}
+{"kind":"textbox","id":"sh/xcrupg3u","slide":2,"name":"note-heading-2","text":"需求反复｜16","textPreview":"需求反复｜16","textChars":7,"textLines":1,"bbox":[442.95,404.3,153.73,23.83]}
+{"kind":"textbox","id":"sh/id0vylkf","slide":2,"name":"note-body-2","text":"需求说明多次变化","textPreview":"需求说明多次变化","textChars":8,"textLines":1,"bbox":[409.84,437.66,175.95,24.83]}
+{"kind":"textbox","id":"sh/je9crql0","slide":2,"name":"note-heading-3","text":"其他｜8","textPreview":"其他｜8","textChars":4,"textLines":1,"bbox":[700.31,404.3,153.73,23.83]}
+{"kind":"textbox","id":"sh/ru5cbqd4","slide":2,"name":"note-body-3","text":"未归入以上三类","textPreview":"未归入以上三类","textChars":7,"textLines":1,"bbox":[667.2,437.66,175.95,24.83]}
+{"kind":"shape","id":"sh/69wbilcj","slide":2,"name":"note-icon-panel-0","bbox":[398.95,249.06,44,23.83]}
+{"kind":"shape","id":"sh/svedkvup","slide":2,"name":"note-icon-panel-1","bbox":[656.31,249.06,44,23.83]}
+{"kind":"shape","id":"sh/exgvmlcv","slide":2,"name":"note-icon-panel-2","bbox":[398.95,404.3,44,23.83]}
+{"kind":"shape","id":"sh/gzydovul","slide":2,"name":"note-icon-panel-3","bbox":[656.31,404.3,44,23.83]}
+{"kind":"textbox","id":"sh/a1cba1wb","slide":2,"name":"p2-foot","text":"对应边界：阻塞分类用于定位问题，不等于某项干预可消除的数量，也不能直接预测节省工时。","textPreview":"对应边界：阻塞分类用于定位问题，不等于某项干预可消除的数量，也不能直接预测节省工时。","textChars":42,"textLines":1,"bbox":[70,590,1110,28]}
+{"kind":"notes","id":"nt/hwbqtkby","slide":2,"text":"[Sources]\n- 内容：experiments/neu-mckinsey-principles-20260908/inputs/manuscript.txt\n- 视觉：assets/主题/东北大学-001/runtime-template.pptx（随仓库发布的运行模板）\n- PPagenT：run-a-intent-2 → run-a-layout-2\n[/Sources]"}
+{"kind":"slide","id":"sl/ofy9wn61","slide":3,"title":"B统一申请入口与阻塞类型最直接对应，适合先试行","textShapes":30}
+{"kind":"textbox","id":"sh/3ah8rqlg","slide":3,"name":"文本框 4","text":"B统一申请入口与阻塞类型最直接对应，适合先试行","textPreview":"B统一申请入口与阻塞类型最直接对应，适合先试行","textChars":23,"textLines":1,"bbox":[9.04,88.85,1250.55,48.47]}
+{"kind":"textbox","id":"sh/pcjqtg36","slide":3,"name":"文本框 6","text":"服务观察","textPreview":"服务观察","textChars":4,"textLines":1,"bbox":[98.87,31.9,177.93,45.24]}
+{"kind":"shape","id":"sh/m5cra54z","slide":3,"name":"直接连接符 7","bbox":[97.13,42.02,0,28.1]}
+{"kind":"textbox","id":"sh/n6ls3alk","slide":3,"name":"文本框 8","text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[44.45,31.9,71.23,48.47]}
+{"kind":"shape","id":"sh/v6l4jq94","slide":3,"name":"文本框 13","bbox":[46.78,232.16,404.25,38.78]}
+{"kind":"textbox","id":"sh/a5c3ql8z","slide":3,"name":"p3-lead","text":"方案投入与周期是内部估计；建议先验证与主要阻塞环节直接相连的B。","textPreview":"方案投入与周期是内部估计；建议先验证与主要阻塞环节直接相连的B。","textChars":32,"textLines":1,"bbox":[55,181,900,30]}
+{"kind":"textbox","id":"sh/x8nml0ra","slide":3,"name":"p3-sim","text":"方案估计｜未验证效果","textPreview":"方案估计｜未验证效果","textChars":10,"textLines":1,"bbox":[985,180,185,28]}
+{"kind":"shape","id":"sh/w7ulsvqp","slide":3,"name":"p3-head-label","bbox":[55,235,190,56]}
+{"kind":"textbox","id":"sh/ja54na9g","slide":3,"name":"p3-head-label-t","text":"比较维度","textPreview":"比较维度","textChars":4,"textLines":1,"bbox":[71,251,170,24]}
+{"kind":"shape","id":"sh/i9w3u58v","slide":3,"name":"p3-head-A","bbox":[245,235,326.67,56]}
+{"kind":"textbox","id":"sh/e10f2twf","slide":3,"name":"p3-head-A-t","text":"A 临时增加值班","textPreview":"A 临时增加值班","textChars":8,"textLines":1,"bbox":[259,248,298.67,30]}
+{"kind":"shape","id":"sh/f29gbyx0","slide":3,"name":"p3-head-B","bbox":[571.67,235,326.67,56]}
+{"kind":"textbox","id":"sh/03ix43e5","slide":3,"name":"p3-head-B-t","text":"B 统一申请入口","textPreview":"B 统一申请入口","textChars":8,"textLines":1,"bbox":[585.67,248,298.67,30]}
+{"kind":"shape","id":"sh/14ryd8fq","slide":3,"name":"p3-head-C","bbox":[898.33,235,326.67,56]}
+{"kind":"textbox","id":"sh/6d0fytg3","slide":3,"name":"p3-head-C-t","text":"C 批量自动预检","textPreview":"C 批量自动预检","textChars":8,"textLines":1,"bbox":[912.33,248,298.67,30]}
+{"kind":"shape","id":"sh/re9g7yxo","slide":3,"name":"p3-label-0","bbox":[55,291,190,62]}
+{"kind":"textbox","id":"sh/sfix03y9","slide":3,"name":"p3-label-0-t","text":"直接作用环节","textPreview":"直接作用环节","textChars":6,"textLines":1,"bbox":[71,309,165,25]}
+{"kind":"shape","id":"sh/tgry9ofu","slide":3,"name":"p3-cell-0-0","bbox":[245,291,326.67,62]}
+{"kind":"textbox","id":"sh/a9kfadwn","slide":3,"name":"p3-cell-0-0-t","text":"人工响应排队","textPreview":"人工响应排队","textChars":6,"textLines":1,"bbox":[259,306,298.67,42]}
+{"kind":"shape","id":"sh/batgjixs","slide":3,"name":"p3-cell-0-1","bbox":[571.67,291,326.67,62]}
+{"kind":"textbox","id":"sh/l4fi9cza","slide":3,"name":"p3-cell-0-1-t","text":"提交时字段与授权校验","textPreview":"提交时字段与授权校验","textChars":10,"textLines":1,"bbox":[585.67,306,298.67,42]}
+{"kind":"shape","id":"sh/k3m1g7yp","slide":3,"name":"p3-cell-0-2","bbox":[898.33,291,326.67,62]}
+{"kind":"textbox","id":"sh/z2d07mh4","slide":3,"name":"p3-cell-0-2-t","text":"重复性材料格式检查","textPreview":"重复性材料格式检查","textChars":9,"textLines":1,"bbox":[912.33,306,298.67,42]}
+{"kind":"shape","id":"sh/y14jehgj","slide":3,"name":"p3-label-1","bbox":[55,353,190,62]}
+{"kind":"textbox","id":"sh/x0vi5czy","slide":3,"name":"p3-label-1-t","text":"初期投入 / 周期","textPreview":"初期投入 / 周期","textChars":9,"textLines":1,"bbox":[71,371,165,25]}
+{"kind":"shape","id":"sh/czmhc7id","slide":3,"name":"p3-cell-1-0","bbox":[245,353,326.67,62]}
+{"kind":"textbox","id":"sh/byd032h8","slide":3,"name":"p3-cell-1-0-t","text":"8人日｜1周","textPreview":"8人日｜1周","textChars":6,"textLines":1,"bbox":[259,368,298.67,42]}
+{"kind":"shape","id":"sh/ax4zax0n","slide":3,"name":"p3-cell-1-1","bbox":[571.67,353,326.67,62]}
+{"kind":"textbox","id":"sh/hwzihwzi","slide":3,"name":"p3-cell-1-1-t","text":"12人日｜2周","textPreview":"12人日｜2周","textChars":7,"textLines":1,"bbox":[585.67,368,298.67,42]}
+{"kind":"shape","id":"sh/wv61obyx","slide":3,"name":"p3-cell-1-2","bbox":[898.33,353,326.67,62]}
+{"kind":"textbox","id":"sh/4nuhs7uh","slide":3,"name":"p3-cell-1-2-t","text":"30人日｜6周","textPreview":"30人日｜6周","textChars":7,"textLines":1,"bbox":[912.33,368,298.67,42]}
+{"kind":"shape","id":"sh/po3ilcvm","slide":3,"name":"p3-label-2","bbox":[55,415,190,62]}
+{"kind":"textbox","id":"sh/21szqxcb","slide":3,"name":"p3-label-2-t","text":"持续维护","textPreview":"持续维护","textChars":4,"textLines":1,"bbox":[71,433,165,25]}
+{"kind":"shape","id":"sh/32l0j2dw","slide":3,"name":"p3-cell-2-0","bbox":[245,415,326.67,62]}
+{"kind":"textbox","id":"sh/cruhwrud","slide":3,"name":"p3-cell-2-0-t","text":"每周2人日值班","textPreview":"每周2人日值班","textChars":7,"textLines":1,"bbox":[259,430,298.67,42]}
+{"kind":"shape","id":"sh/ds3ipcvy","slide":3,"name":"p3-cell-2-1","bbox":[571.67,415,326.67,62]}
+{"kind":"textbox","id":"sh/qpczuhc7","slide":3,"name":"p3-cell-2-1-t","text":"每周0.5人日规则维护","textPreview":"每周0.5人日规则维护","textChars":11,"textLines":1,"bbox":[585.67,430,298.67,42]}
+{"kind":"shape","id":"sh/rql0nmds","slide":3,"name":"p3-cell-2-2","bbox":[898.33,415,326.67,62]}
+{"kind":"textbox","id":"sh/0ve10ru9","slide":3,"name":"p3-cell-2-2-t","text":"每周1人日规则维护","textPreview":"每周1人日规则维护","textChars":9,"textLines":1,"bbox":[912.33,430,298.67,42]}
+{"kind":"shape","id":"sh/1wnitwvu","slide":3,"name":"p3-label-3","bbox":[55,477,190,62]}
+{"kind":"textbox","id":"sh/v29cfu18","slide":3,"name":"p3-label-3-t","text":"当前依赖","textPreview":"当前依赖","textChars":4,"textLines":1,"bbox":[71,495,165,25]}
+{"kind":"shape","id":"sh/a10b6p03","slide":3,"name":"p3-cell-3-0","bbox":[245,477,326.67,62]}
+{"kind":"textbox","id":"sh/xoruhkje","slide":3,"name":"p3-cell-3-0-t","text":"可调配值班人员","textPreview":"可调配值班人员","textChars":7,"textLines":1,"bbox":[259,492,298.67,42]}
+{"kind":"shape","id":"sh/w3it8zit","slide":3,"name":"p3-cell-3-1","bbox":[571.67,477,326.67,62]}
+{"kind":"textbox","id":"sh/nypcba1c","slide":3,"name":"p3-cell-3-1-t","text":"三类请求字段达成一致","textPreview":"三类请求字段达成一致","textChars":10,"textLines":1,"bbox":[585.67,492,298.67,42]}
+{"kind":"shape","id":"sh/mxgb250r","slide":3,"name":"p3-cell-3-2","bbox":[898.33,477,326.67,62]}
+{"kind":"textbox","id":"sh/90rudkji","slide":3,"name":"p3-cell-3-2-t","text":"稳定字段及可机器判断规则","textPreview":"稳定字段及可机器判断规则","textChars":12,"textLines":1,"bbox":[912.33,492,298.67,42]}
+{"kind":"shape","id":"sh/8zit4fix","slide":3,"name":"p3-label-4","bbox":[55,539,190,62]}
+{"kind":"textbox","id":"sh/7utcne1g","slide":3,"name":"p3-label-4-t","text":"主要限制","textPreview":"主要限制","textChars":4,"textLines":1,"bbox":[71,557,165,25]}
+{"kind":"shape","id":"sh/6tkve90v","slide":3,"name":"p3-cell-4-0","bbox":[245,539,326.67,62]}
+{"kind":"textbox","id":"sh/2p4f6dk3","slide":3,"name":"p3-cell-4-0-t","text":"不直接解决材料缺失","textPreview":"不直接解决材料缺失","textChars":9,"textLines":1,"bbox":[259,554,298.67,42]}
+{"kind":"shape","id":"sh/3qxwfilo","slide":3,"name":"p3-cell-4-1","bbox":[571.67,539,326.67,62]}
+{"kind":"textbox","id":"sh/or6x8329","slide":3,"name":"p3-cell-4-1-t","text":"不消除复杂需求沟通","textPreview":"不消除复杂需求沟通","textChars":9,"textLines":1,"bbox":[585.67,554,298.67,42]}
+{"kind":"shape","id":"sh/psfeh83u","slide":3,"name":"p3-cell-4-2","bbox":[898.33,539,326.67,62]}
+{"kind":"textbox","id":"sh/qtofadkf","slide":3,"name":"p3-cell-4-2-t","text":"不替代人工授权判断","textPreview":"不替代人工授权判断","textChars":9,"textLines":1,"bbox":[912.33,554,298.67,42]}
+{"kind":"textbox","id":"sh/bexwjil0","slide":3,"name":"p3-recommend","text":"决策条件：先试行B；保留A应对短期高峰；C待入口字段和规则稳定后再评估。B尚未实施，不能宣称已改善。","textPreview":"决策条件：先试行B；保留A应对短期高峰；C待入口字段和规则稳定后再评估。B尚未实施，不能宣称已改善。","textChars":50,"textLines":1,"bbox":[70,620,1110,30]}
+{"kind":"notes","id":"nt/ofy9wn61","slide":3,"text":"[Sources]\n- 内容：experiments/neu-mckinsey-principles-20260908/inputs/manuscript.txt\n- 视觉：assets/主题/东北大学-001/runtime-template.pptx（随仓库发布的运行模板）\n- PPagenT：run-a-intent-3 → run-a-layout-3\n[/Sources]"}
+{"kind":"slide","id":"sl/jyx0ra1s","slide":4,"title":"六周试点先验证规则可用性，再决定是否扩大范围","textShapes":21}
+{"kind":"textbox","id":"sh/ql8jytsj","slide":4,"name":"文本框 4","text":"六周试点先验证规则可用性，再决定是否扩大范围","textPreview":"六周试点先验证规则可用性，再决定是否扩大范围","textChars":22,"textLines":1,"bbox":[9.04,88.85,1250.55,48.47]}
+{"kind":"textbox","id":"sh/sna103ap","slide":4,"name":"文本框 6","text":"服务观察","textPreview":"服务观察","textChars":4,"textLines":1,"bbox":[98.87,31.9,177.93,45.24]}
+{"kind":"shape","id":"sh/3ihk3et8","slide":4,"name":"直接连接符 7","bbox":[97.13,42.02,0,28.1]}
+{"kind":"textbox","id":"sh/ih8ju9sn","slide":4,"name":"文本框 8","text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[44.45,31.9,71.23,48.47]}
+{"kind":"shape","id":"sh/w72947yt","slide":4,"name":"文本框 13","bbox":[46.78,232.16,404.25,38.78]}
+{"kind":"textbox","id":"sh/x8vaxsfe","slide":4,"name":"p4-lead","text":"试点先限定在数据提取请求，先验证记录完整与规则可用，再决定是否扩展。","textPreview":"试点先限定在数据提取请求，先验证记录完整与规则可用，再决定是否扩展。","textChars":34,"textLines":1,"bbox":[55,181,900,30]}
+{"kind":"textbox","id":"sh/a5kr2xg3","slide":4,"name":"p4-sim","text":"计划｜目标值待基线确定","textPreview":"计划｜目标值待基线确定","textChars":11,"textLines":1,"bbox":[950,180,220,28]}
+{"kind":"shape","id":"sh/v6tsv2xo","slide":4,"name":"p4-node-0","bbox":[70,265,330,170]}
+{"kind":"textbox","id":"sh/g36tgryd","slide":4,"name":"p4-node-0-title","text":"第1—2周｜统一规则","textPreview":"第1—2周｜统一规则","textChars":10,"textLines":1,"bbox":[88,283,294,30]}
+{"kind":"textbox","id":"sh/h4fa9wfy","slide":4,"name":"p4-node-0-body-0","text":"负责人＋三类经办人","textPreview":"负责人＋三类经办人","textChars":9,"textLines":1,"bbox":[88,325,294,22]}
+{"kind":"textbox","id":"sh/p0batw72","slide":4,"name":"p4-node-0-body-1","text":"字段字典、授权清单、统一入口","textPreview":"字段字典、授权清单、统一入口","textChars":14,"textLines":1,"bbox":[88,353,294,22]}
+{"kind":"textbox","id":"sh/oz29krqh","slide":4,"name":"p4-node-0-body-2","text":"进入条件：三类请求各完成一轮样本检查","textPreview":"进入条件：三类请求各完成一轮样本检查","textChars":18,"textLines":1,"bbox":[88,381,294,22]}
+{"kind":"shape","id":"sh/3ytsrmpw","slide":4,"name":"p4-node-1","bbox":[426,265,330,170]}
+{"kind":"textbox","id":"sh/2xkrih8b","slide":4,"name":"p4-node-1-title","text":"第3—4周｜限定试用","textPreview":"第3—4周｜限定试用","textChars":10,"textLines":1,"bbox":[444,283,294,30]}
+{"kind":"textbox","id":"sh/1wbapc7q","slide":4,"name":"p4-node-1-body-0","text":"仅数据提取请求","textPreview":"仅数据提取请求","textChars":7,"textLines":1,"bbox":[444,325,294,22]}
+{"kind":"textbox","id":"sh/gv29g7q5","slide":4,"name":"p4-node-1-body-1","text":"保存缺失字段、退回原因、首次响应","textPreview":"保存缺失字段、退回原因、首次响应","textChars":16,"textLines":1,"bbox":[444,353,294,22]}
+{"kind":"textbox","id":"sh/fu9sn2p0","slide":4,"name":"p4-node-1-body-2","text":"扩大条件：记录完整且无高频规则错误","textPreview":"扩大条件：记录完整且无高频规则错误","textChars":17,"textLines":1,"bbox":[444,381,294,22]}
+{"kind":"shape","id":"sh/et0reh8f","slide":4,"name":"p4-node-2","bbox":[782,265,330,170]}
+{"kind":"textbox","id":"sh/tsrqlc7u","slide":4,"name":"p4-node-2-title","text":"第5—6周｜复核扩展","textPreview":"第5—6周｜复核扩展","textChars":10,"textLines":1,"bbox":[800,283,294,30]}
+{"kind":"textbox","id":"sh/sri9s7q9","slide":4,"name":"p4-node-2-body-0","text":"负责人复核试点数据","textPreview":"负责人复核试点数据","textChars":9,"textLines":1,"bbox":[800,325,294,22]}
+{"kind":"textbox","id":"sh/ilwf69kv","slide":4,"name":"p4-node-2-body-1","text":"再决定是否覆盖清洗与权限开通","textPreview":"再决定是否覆盖清洗与权限开通","textChars":14,"textLines":1,"bbox":[800,353,294,22]}
+{"kind":"textbox","id":"sh/jm5gze1g","slide":4,"name":"p4-node-2-body-2","text":"同步看响应、退回、维护时间","textPreview":"同步看响应、退回、维护时间","textChars":13,"textLines":1,"bbox":[800,381,294,22]}
+{"kind":"textbox","id":"sh/knex8j21","slide":4,"name":"p4-arrow-1","text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[401,321,22,40]}
+{"kind":"textbox","id":"sh/5ony1oj6","slide":4,"name":"p4-arrow-2","text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[757,321,22,40]}
+{"kind":"shape","id":"sh/axcf29kj","slide":4,"name":"p4-gate","bbox":[95,480,1090,125]}
+{"kind":"textbox","id":"sh/vy5gbe14","slide":4,"name":"p4-gate-title","text":"若第3—4周出现会阻断提交的高频规则错误 → 回到字段与规则修订","textPreview":"若第3—4周出现会阻断提交的高频规则错误 → 回到字段与规则修订","textChars":32,"textLines":1,"bbox":[120,502,1030,28]}
+{"kind":"textbox","id":"sh/wzex4z2p","slide":4,"name":"p4-gate-body","text":"评估指标：两个工作日内首次响应比例、材料退回比例、经办人维护时间。目标值根据试点基线确定；本稿不预设未经论证的百分比目标。","textPreview":"评估指标：两个工作日内首次响应比例、材料退回比例、经办人维护时间。目标值根据试点基线确定；本稿不预设未经论证的百分比目标。","textChars":61,"textLines":1,"bbox":[120,544,1030,42]}
+{"kind":"notes","id":"nt/jyx0ra1s","slide":4,"text":"[Sources]\n- 内容：experiments/neu-mckinsey-principles-20260908/inputs/manuscript.txt\n- 视觉：assets/主题/东北大学-001/runtime-template.pptx（随仓库发布的运行模板）\n- PPagenT：run-a-intent-4 → run-a-layout-4\n[/Sources]"}
