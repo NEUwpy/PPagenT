@@ -16,7 +16,7 @@ npm run rules:load -- --profile generation --skin neutral-editorial-001
 
 命令输出实际规则正文及加载清单，不启动 PPT 生成。正式独立任务入口见 [生成任务提示词](../docs/工作流/正式生成/生成任务提示词.md)，架构见 [产品定义](../docs/产品定义.md)。
 
-暂定每个 Skin 在索引声明一组 `rules` 与一个 `layout` ID；`layouts` 将该 ID 映射到唯一现行规则清单。中性 Skin（保留资产 ID `neutral-editorial-001`）绑定「杂志风」（`magazine`）。不同 Skin 可共享同一体系，不能从 CLI 单独覆盖排版。东北大学 Skin（`northeastern-university-001`）绑定「麦肯锡式」（`mckinsey`），加载现行六字段；字体与主题直接来自既有运行时契约。此处是独立制作规则绑定，不改正式 renderer。独立制作的共享排版规则提供结构 Skill 入口，Agent 按需读取通用结构或参考方法，加载器不预读全库。
+暂定每个 Skin 在索引声明一组 `rules` 与一个 `layout` ID；`layouts` 将该 ID 映射到唯一现行规则清单。中性 Skin（保留资产 ID `neutral-editorial-001`）绑定「杂志风」（`magazine`）。不同 Skin 可共享同一体系，不能从 CLI 单独覆盖排版。东北大学 Skin（`northeastern-university-001`）绑定「麦肯锡式」（`mckinsey`），加载现行分析排版规则；字体与主题直接来自既有运行时契约。此处是独立制作规则绑定，不改正式 renderer。独立制作的共享排版规则提供结构 Skill 入口，Agent 按需读取通用结构或参考方法，加载器不预读全库。
 
 ## 维护方法
 
