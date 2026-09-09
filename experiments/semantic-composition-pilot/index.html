@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=1280,height=720,initial-scale=1" />
+  <title>语义组合试点｜校级计算资源共享平台开放试点</title>
+  <style>
+    :root{--blue:#2f5ea8;--blue2:#4c88e8;--pale:#dce9fa;--wash:#f4f7fb;--ink:#2b2b2b;--body:#404040;--muted:#6f7d91;--line:#afc6e8;--white:#fff}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:#eef1f6;color:var(--body);font-family:"Microsoft YaHei",Arial,sans-serif}
+    body{padding:24px 0 60px}
+    .slide{position:relative;width:1280px;height:720px;margin:0 auto 28px;background:#fff;overflow:hidden;box-shadow:0 8px 28px rgba(35,54,84,.15)}
+    .shell-top{position:absolute;left:0;right:0;top:0;height:166px;background:#fff}
+    .section{position:absolute;left:46px;top:28px;color:var(--blue);font-size:17px;font-weight:700;letter-spacing:.2px}
+    .section::after{content:"";display:inline-block;width:30px;height:2px;margin:0 0 4px 10px;background:var(--blue2)}
+    .page{position:absolute;right:48px;top:28px;color:var(--muted);font-size:14px}
+    .mark{position:absolute;right:52px;top:52px;color:var(--blue);font-size:18px;font-weight:700;letter-spacing:1px}
+    .titleband{position:absolute;left:35px;right:35px;top:88px;height:52px;background:linear-gradient(90deg,#2f5ea8 0%,#4c88e8 72%,#78aeef 100%);padding:8px 20px;color:#fff;font-family:"HYWenRunSongYun U","Microsoft YaHei",serif;font-size:27px;line-height:36px;font-weight:600;white-space:nowrap}
+    .sim{position:absolute;right:66px;top:149px;color:var(--muted);font-size:14px}
+    .body{position:absolute;left:55px;top:166px;width:1170px;height:492px}
+    .group{position:absolute;overflow:hidden}
+    .eyebrow{color:var(--blue);font-size:15px;font-weight:700;letter-spacing:.2px;margin-bottom:8px}
+    .h2{color:var(--ink);font-size:21px;font-weight:700;line-height:1.22;margin:0 0 10px}
+    .bodycopy{font-size:18px;line-height:1.42;color:var(--body)}
+    .meta{font-size:14px;line-height:1.35;color:var(--muted)}
+    .surface{background:var(--wash);border:1px solid var(--line);padding:16px 18px}
+    .plain{padding:8px 0}
+    table{border-collapse:collapse;width:100%;font-size:16px;line-height:1.22;color:var(--body)}
+    th{height:42px;background:var(--pale);color:var(--ink);font-weight:700;text-align:left;border-bottom:2px solid var(--blue)}
+    td,th{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+    td:first-child,th:first-child{width:19%;font-weight:700;color:var(--ink)}
+    .decisionline{border-left:5px solid var(--blue);padding:4px 0 4px 14px;color:var(--ink);font-size:19px;line-height:1.35;font-weight:700}
+    .rule{height:1px;background:var(--line);margin:10px 0 12px}
+    .bars{display:grid;gap:12px;margin-top:12px}
+    .bar-row{display:grid;grid-template-columns:104px 1fr 110px;align-items:center;gap:10px;font-size:16px}
+    .bar-row b{color:var(--ink)}
+    .track{height:20px;background:#e9eef6;border-left:1px solid var(--line)}
+    .fill{height:20px;background:var(--blue)}
+    .fill.dark{background:var(--ink)}
+    .staircase{position:relative;height:168px;margin-top:12px;border-bottom:1px solid var(--line)}
+    .step{position:absolute;bottom:12px;width:190px;background:var(--pale);border:1px solid var(--blue);padding:12px 12px 10px;color:var(--ink)}
+    .step::after{content:"";position:absolute;right:-18px;top:50%;width:18px;height:2px;background:var(--blue)}
+    .step:last-child::after{display:none}
+    .step.s1{left:8px;height:62px}.step.s2{left:210px;height:96px}.step.s3{left:412px;height:132px}
+    .step small{display:block;color:var(--blue);font-size:14px;font-weight:700;margin-bottom:6px}.step strong{font-size:20px}.step em{display:block;font-style:normal;color:var(--muted);font-size:14px;margin-top:4px}
+    .condition-list{margin:7px 0 0;padding:0;list-style:none;font-size:17px;line-height:1.44}.condition-list li{margin:0 0 12px;padding-left:18px;position:relative}.condition-list li::before{content:"";position:absolute;left:0;top:10px;width:7px;height:7px;background:var(--blue);border-radius:50%}
+    .gate-row{display:grid;grid-template-columns:44px 110px 1fr;gap:12px;align-items:start;margin:7px 0 12px}.gate-no{color:var(--blue);font-size:18px;font-weight:700}.gate-name{color:var(--ink);font-size:18px;font-weight:700}.gate-desc{font-size:16px;line-height:1.35}
+    .evidence{height:100%;padding:14px 15px;background:var(--wash);border-top:5px solid var(--blue);border-left:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+    .evidence .big{font-size:31px;line-height:1.05;color:var(--blue);font-weight:700;margin:8px 0 10px}.evidence .big span{font-size:17px;color:var(--muted);font-weight:400}.evidence p{font-size:16px;line-height:1.38;margin:0}.mini-bars{display:grid;gap:7px;margin:10px 0 12px}.mini-row{display:grid;grid-template-columns:85px 1fr 45px;gap:6px;align-items:center;font-size:14px}.mini-track{height:12px;background:#e6edf8}.mini-fill{height:12px;background:var(--blue2)}.mini-fill.dark{background:var(--ink)}
+    .footer-note{position:absolute;left:55px;bottom:38px;color:var(--muted);font-size:14px}
+    .slide-no{position:absolute;right:55px;bottom:38px;color:var(--muted);font-size:14px}
+  </style>
+</head>
+<body>
+  <section class="slide" id="P1">
+    <div class="shell-top"><div class="section">开放试点</div><div class="page">P1 / 03</div><div class="mark">NORTHEASTERN UNIVERSITY</div><div class="titleband">分级准入在模拟条件下兼顾速度、记录与可回退性</div><div class="sim">模拟材料｜方案比较</div></div>
+    <div class="body">
+      <div class="group surface" data-group-id="p1-comparison" style="left:0;top:0;width:1170px;height:322px">
+        <div class="eyebrow">同口径比较｜模拟估计</div>
+        <table><thead><tr><th>维度</th><th>A 直接开放</th><th>B 分级准入</th><th>C 全预约制</th></tr></thead><tbody>
+          <tr><td>进入方式</td><td>提交后自动获得环境</td><td><b>资格核对后限量试点，再按门槛扩围</b></td><td>每次运行先预约、人工确认</td></tr>
+          <tr><td>首次可用时间</td><td>约 1 个工作日</td><td>约 3 个工作日，名单固定后约 1 个工作日</td><td>约 4 个工作日，取决于预约空档</td></tr>
+          <tr><td>初期人工投入</td><td>1.5 个管理员工作日/周</td><td><b>试点期 2.6 个，稳定后估计 1.4 个/周</b></td><td>5.0 个/周</td></tr>
+          <tr><td>记录与回溯</td><td>低：缺少入场和异常字段</td><td><b>中高：按阶段补齐申请、参数、输出与异常</b></td><td>高：每次由管理员登记</td></tr>
+          <tr><td>失败时动作</td><td>难以回收已开放权限</td><td><b>暂停新申请，保留当前试点并修补规则</b></td><td>缩减预约时段并重新排队</td></tr>
+        </tbody></table>
+      </div>
+      <div class="group plain" data-group-id="p1-decision" style="left:0;top:350px;width:598px;height:142px">
+        <div class="eyebrow">支持的选择</div><div class="decisionline">先试行 B。A 只作高峰期临时应急入口，C 保留给高风险项目。</div>
+        <div class="meta" style="margin-top:10px">比较牺牲少量速度，换取可检查记录和可逆暂停动作。</div>
+      </div>
+      <div class="group plain" data-group-id="p1-assumptions" style="left:618px;top:350px;width:552px;height:142px">
+        <div class="eyebrow">前提与边界</div><div class="bodycopy">三种模型共享模拟需求和管理员容量假设。估计尚未由真实运行验证，需求结构变化或高风险申请增加都可能改变排序。</div>
+      </div>
+    </div>
+    <div class="footer-note">口径：数字均为模拟估计，不等于实施成效。</div><div class="slide-no">01</div>
+  </section>
+
+  <section class="slide" id="P2">
+    <div class="shell-top"><div class="section">开放试点</div><div class="page">P2 / 03</div><div class="mark">NORTHEASTERN UNIVERSITY</div><div class="titleband">每一步都产生下一道关口需要的证据，未达标时暂停扩围</div><div class="sim">模拟材料｜过程与门槛</div></div>
+    <div class="body">
+      <div class="group surface" data-group-id="p2-stages" style="left:0;top:0;width:731px;height:282px">
+        <div class="eyebrow">三阶段成熟度阶梯｜结构组只承载短阶段名</div>
+        <div class="staircase"><div class="step s1"><small>阶段一</small><strong>登记</strong><em>资格核对</em></div><div class="step s2"><small>阶段二</small><strong>限量运行</strong><em>异常记录</em></div><div class="step s3"><small>阶段三</small><strong>有限扩围</strong><em>复核门槛</em></div></div>
+        <div class="meta">推进顺序：登记 → 限量运行 → 复核扩围。结构之外保留完整条件和交付物。</div>
+      </div>
+      <div class="group plain" data-group-id="p2-conditions" style="left:759px;top:0;width:411px;height:282px">
+        <div class="eyebrow">阶段证据与进入条件</div>
+        <ul class="condition-list"><li>阶段一收集项目名称、申请来源、数据分类、预计环境、责任人和联系人六项信息。</li><li>责任人确认数据使用范围，项目属于低风险试点范围。</li><li>阶段二最多纳入 5 个项目，记录参数、输出位置和异常处理人。</li><li>阶段三复核两周记录、异常闭环和管理员工作量。</li></ul>
+      </div>
+      <div class="group surface" data-group-id="p2-gates" style="left:0;top:310px;width:723px;height:182px">
+        <div class="eyebrow">三个关口｜目标门槛，不是已取得结果</div>
+        <div class="gate-row"><div class="gate-no">01</div><div class="gate-name">可进入</div><div class="gate-desc">六项登记信息齐全，责任人与低风险范围确认。</div></div>
+        <div class="gate-row"><div class="gate-no">02</div><div class="gate-name">可追溯</div><div class="gate-desc">记录完整率 ≥90%，高风险异常在 1 个工作日内有责任人和结论。</div></div>
+        <div class="gate-row"><div class="gate-no">03</div><div class="gate-name">可扩围</div><div class="gate-desc">连续两周完整率 ≥95%，无未关闭高风险异常，负荷 ≤3 个工作日/周。</div></div>
+      </div>
+      <div class="group plain" data-group-id="p2-fallback" style="left:743px;top:310px;width:427px;height:182px">
+        <div class="eyebrow">关口失败后的动作</div><div class="decisionline">暂停新申请，保留当前规模，修订字段、模板或异常规则。</div><div class="meta" style="margin-top:14px">已有记录保留，不把失败项目静默删除；修订后再决定是否重启评审。</div>
+      </div>
+    </div>
+    <div class="footer-note">六项登记信息与五项记录字段分别属于不同口径。</div><div class="slide-no">02</div>
+  </section>
+
+  <section class="slide" id="P3">
+    <div class="shell-top"><div class="section">开放试点</div><div class="page">P3 / 03</div><div class="mark">NORTHEASTERN UNIVERSITY</div><div class="titleband">三类模拟证据支持限量试点，但不能证明成效已经发生</div><div class="sim">模拟材料｜多证据论证</div></div>
+    <div class="body">
+      <div class="group evidence" data-group-id="p3-demand" style="left:0;top:0;width:377px;height:242px"><div class="eyebrow">证据一｜需求集中</div><div class="big">74 / 120 <span>份申请</span></div><div class="mini-bars"><div class="mini-row"><span>三集群</span><div class="mini-track"><div class="mini-fill" style="width:62%"></div></div><b>61.7%</b></div><div class="mini-row"><span>相同 GPU</span><div class="mini-track"><div class="mini-fill" style="width:43%"></div></div><b>52 份</b></div></div><p>集中度提示统一模板可能复用，但不等于权限范围可以直接合并。</p></div>
+      <div class="group evidence" data-group-id="p3-incidents" style="left:397px;top:0;width:377px;height:242px"><div class="eyebrow">证据二｜记录缺口</div><div class="big">14 / 78 <span>份完成运行</span></div><div class="mini-bars"><div class="mini-row"><span>缺口率</span><div class="mini-track"><div class="mini-fill dark" style="width:18%"></div></div><b>17.9%</b></div><div class="mini-row"><span>来自两集群</span><div class="mini-track"><div class="mini-fill dark" style="width:64%"></div></div><b>9 份</b></div></div><p>缺口集中支持先补字段与责任人，不能归因于单一申请人。</p></div>
+      <div class="group evidence" data-group-id="p3-capacity" style="left:793px;top:0;width:377px;height:242px"><div class="eyebrow">证据三｜管理员容量</div><div class="big">5.0 vs 3.5 <span>工作日 / 周</span></div><div class="mini-bars"><div class="mini-row"><span>全量审核</span><div class="mini-track"><div class="mini-fill dark" style="width:100%"></div></div><b>5.0</b></div><div class="mini-row"><span>限量试点</span><div class="mini-track"><div class="mini-fill" style="width:52%"></div></div><b>2.6</b></div><div class="mini-row"><span>可支配</span><div class="mini-track"><div class="mini-fill" style="width:70%"></div></div><b>3.5</b></div></div><p>人日为模拟工作量估计，需用阶段二记录校准。</p></div>
+      <div class="group plain" data-group-id="p3-conclusion" style="left:0;top:270px;width:725px;height:222px"><div class="eyebrow">综合判断｜三证据共同支撑</div><div class="decisionline">先做 B 的限量试点，再用三周评审决定是否扩大范围。</div><div class="bodycopy" style="margin-top:14px">需求回答入口是否可能复用，记录缺口回答哪里需要先补证据，容量约束回答为什么不能一次全量开放。三类证据的交集支持行动方案，但不支持宣称已经提升效率。</div></div>
+      <div class="group plain" data-group-id="p3-limit" style="left:753px;top:270px;width:417px;height:222px"><div class="eyebrow">证据边界与验证</div><div class="bodycopy">观察没有随机对照，8 周窗口可能受课程周期影响。阶段二需记录字段完整率、首次可用时间、实际工时和异常闭环时间，再按预先写明的门槛复核。</div><div class="rule"></div><div class="meta">若记录不完整或工作量超过容量，暂停扩围并保留当前规模。</div></div>
+    </div>
+    <div class="footer-note">观察支持一个可检验方案，不等于预测试点成效。</div><div class="slide-no">03</div>
+  </section>
+</body>
+</html>

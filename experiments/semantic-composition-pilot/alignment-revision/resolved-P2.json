@@ -1,0 +1,204 @@
+{
+  "pageId": "P2",
+  "intent": {
+    "topic": "分级准入把每个阶段的证据绑定到下一道关口，未达标时暂停扩围并回到规则修订",
+    "topicPlacement": "大学 Skin 正文页标题下方蓝色主题句条带",
+    "groups": [
+      {
+        "id": "p2-stages",
+        "role": "analysis",
+        "message": "登记、限量运行、有限扩围三个短阶段名称构成成熟度阶梯；阶段定义、进入条件、交付物和推进门槛由相邻正文组完整承载",
+        "sourceRefs": [
+          "manuscript.md:P2.三阶段过程（拟议流程）",
+          "manuscript.md:P2.模拟过程的容量依据"
+        ],
+        "emphasis": "primary",
+        "medium": "structure"
+      },
+      {
+        "id": "p2-conditions",
+        "role": "analysis",
+        "message": "阶段一进入阶段二需项目名称、申请来源、数据分类、预计运行环境、责任人和联系人六项信息齐全，并确认范围与风险；阶段二进入阶段三需完整记录和异常责任可追溯",
+        "sourceRefs": [
+          "manuscript.md:P2.阶段一：登记与资格核对",
+          "manuscript.md:P2.阶段二：限量运行与异常记录"
+        ],
+        "emphasis": "secondary",
+        "medium": "text",
+        "relatesTo": [
+          "p2-stages"
+        ]
+      },
+      {
+        "id": "p2-gates",
+        "role": "interpretation",
+        "message": "三个关口分别检查可进入、可追溯、可扩围；目标门槛是记录完整率 90%/95%、高风险异常及时闭环以及管理员负荷不超过每周 3 个工作日",
+        "sourceRefs": [
+          "manuscript.md:P2.关口与回退",
+          "manuscript.md:P2.阶段二：限量运行与异常记录",
+          "manuscript.md:P2.阶段三：复核与有限扩围"
+        ],
+        "emphasis": "secondary",
+        "medium": "text",
+        "relatesTo": [
+          "p2-stages",
+          "p2-conditions"
+        ]
+      },
+      {
+        "id": "p2-fallback",
+        "role": "context",
+        "message": "任一门槛未达标则保留当前规模、暂停新申请并修订字段、模板或异常规则，已有记录不得静默删除",
+        "sourceRefs": [
+          "manuscript.md:P2.关口与回退",
+          "manuscript.md:P2.阶段三：复核与有限扩围"
+        ],
+        "emphasis": "supporting",
+        "medium": "text",
+        "relatesTo": [
+          "p2-gates"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "type": "sequence",
+        "from": [
+          "p2-stages"
+        ],
+        "to": "p2-conditions",
+        "meaning": "三阶段依次推进，前一阶段交付物成为下一阶段进入条件"
+      },
+      {
+        "type": "condition",
+        "from": [
+          "p2-conditions"
+        ],
+        "to": "p2-gates",
+        "meaning": "资料和责任条件决定申请能否通过对应关口"
+      },
+      {
+        "type": "support",
+        "from": [
+          "p2-stages",
+          "p2-conditions"
+        ],
+        "to": "p2-gates",
+        "meaning": "阶段结构与阶段条件共同给出可检查的门槛，而不是只有流程名称"
+      },
+      {
+        "type": "condition",
+        "from": [
+          "p2-gates"
+        ],
+        "to": "p2-fallback",
+        "meaning": "关口未达标时触发暂停、保留规模和规则修订动作"
+      },
+      {
+        "type": "decomposition",
+        "from": [
+          "p2-conditions"
+        ],
+        "to": "p2-fallback",
+        "meaning": "回退动作分别对应字段、模板和异常规则三类可修订对象"
+      }
+    ],
+    "composition": {
+      "op": "row",
+      "gap": 28,
+      "weights": [
+        1,
+        1
+      ],
+      "children": [
+        {
+          "op": "column",
+          "gap": 28,
+          "children": [
+            {
+              "groupId": "p2-stages"
+            },
+            {
+              "groupId": "p2-conditions"
+            }
+          ]
+        },
+        {
+          "op": "column",
+          "gap": 28,
+          "children": [
+            {
+              "groupId": "p2-gates"
+            },
+            {
+              "groupId": "p2-fallback"
+            }
+          ]
+        }
+      ]
+    },
+    "readingOrder": [
+      "p2-stages",
+      "p2-conditions",
+      "p2-gates",
+      "p2-fallback"
+    ],
+    "alignment": "左右两列共享同一条竖向边界：左列由成熟度阶梯连接阶段条件，右列由关口连接失败动作；右上关口面内文字与右下失败动作正文同以面内 16 像素起线。",
+    "fitStrategy": "成熟度阶梯与阶段条件共用左列 620 像素，关口与失败动作共用右列 520 像素，中间间距 28 像素，总宽 1168 像素。阶段定义、阶段时间、六项登记信息、进入条件和交付物在左列 620 像素内自然断行，保持正文 18，不删条件；右列保留三个关口、百分比、时间、负荷与暂停规则。"
+  },
+  "bodyFrame": {
+    "left": 55,
+    "top": 166,
+    "width": 1170,
+    "height": 492
+  },
+  "regions": {
+    "p2-stages": {
+      "left": 55,
+      "top": 166,
+      "width": 621,
+      "height": 232
+    },
+    "p2-conditions": {
+      "left": 55,
+      "top": 426,
+      "width": 621,
+      "height": 232
+    },
+    "p2-gates": {
+      "left": 704,
+      "top": 166,
+      "width": 521,
+      "height": 242
+    },
+    "p2-fallback": {
+      "left": 704,
+      "top": 436,
+      "width": 521,
+      "height": 222
+    }
+  },
+  "contracts": {
+    "p2-stages": {
+      "minWidth": 620,
+      "minHeight": 220
+    },
+    "p2-conditions": {
+      "minWidth": 620,
+      "minHeight": 220
+    },
+    "p2-gates": {
+      "minWidth": 520,
+      "minHeight": 160
+    },
+    "p2-fallback": {
+      "minWidth": 420,
+      "minHeight": 140
+    }
+  },
+  "style": {
+    "gap": 28,
+    "innerGap": 20
+  },
+  "visualStatus": "not-evaluated"
+}

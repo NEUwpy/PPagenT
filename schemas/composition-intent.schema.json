@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/NEUwpy/PPagenT/schemas/composition-intent.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["topic", "topicPlacement", "groups", "composition", "readingOrder", "alignment", "fitStrategy"],
+  "properties": {
+    "topic": { "type": "string", "minLength": 1 },
+    "topicPlacement": { "type": "string", "minLength": 1 },
+    "groups": { "type": "array", "minItems": 1, "items": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "role", "message", "sourceRefs", "emphasis", "medium"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "role": { "enum": ["analysis", "interpretation", "context", "annotation"] },
+        "message": { "type": "string", "minLength": 1 },
+        "sourceRefs": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "emphasis": { "enum": ["primary", "secondary", "supporting"] },
+        "medium": { "enum": ["text", "table", "chart", "structure", "image"] },
+        "relatesTo": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+      }
+    } },
+    "relations": { "type": "array", "items": {
+      "type": "object", "additionalProperties": false,
+      "required": ["type", "from", "to", "meaning"],
+      "properties": {
+        "type": { "enum": ["comparison", "sequence", "conjunction", "support", "cause", "decomposition", "condition"] },
+        "from": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "to": { "type": "string", "minLength": 1 },
+        "meaning": { "type": "string", "minLength": 1 }
+      }
+    } },
+    "composition": { "$ref": "#/$defs/node" },
+    "readingOrder": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+    "alignment": { "type": "string", "minLength": 1 },
+    "fitStrategy": { "type": "string", "minLength": 1 }
+  },
+  "$defs": {
+    "node": { "oneOf": [
+      { "type": "object", "additionalProperties": false, "required": ["groupId"], "properties": { "groupId": { "type": "string", "minLength": 1 } } },
+      { "type": "object", "additionalProperties": false, "required": ["op", "children"], "properties": {
+        "op": { "enum": ["row", "column", "grid", "annotate"] },
+        "weights": { "type": "array", "minItems": 2, "items": { "type": "number", "exclusiveMinimum": 0 } },
+        "gap": { "type": "number", "minimum": 0 },
+        "columns": { "type": "integer", "minimum": 1 },
+        "children": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/node" } }
+      } }
+    ] }
+  }
+}

@@ -1,0 +1,206 @@
+{
+  "runs": {
+    "first-draft-validated": [
+      {
+        "arrangement": "visual-left",
+        "slide": 1,
+        "ladderElements": 18,
+        "ladderInsideVisual": true,
+        "narrativeHeadings": 2,
+        "narrativeInside": true,
+        "narrativeBodyBoxes": 2,
+        "narrativeBodyInside": true,
+        "bodyFontSizes": [
+          18
+        ],
+        "narrativeBodyFontSizes": [
+          18
+        ],
+        "narrativeHeadingFontSizes": [
+          21
+        ],
+        "narrativeStatus": "unknown",
+        "allTextBoxesWithinSlide": true
+      },
+      {
+        "arrangement": "visual-right",
+        "slide": 2,
+        "ladderElements": 18,
+        "ladderInsideVisual": true,
+        "narrativeHeadings": 2,
+        "narrativeInside": true,
+        "narrativeBodyBoxes": 2,
+        "narrativeBodyInside": true,
+        "bodyFontSizes": [
+          18
+        ],
+        "narrativeBodyFontSizes": [
+          18
+        ],
+        "narrativeHeadingFontSizes": [
+          21
+        ],
+        "narrativeStatus": "unknown",
+        "allTextBoxesWithinSlide": true
+      },
+      {
+        "arrangement": "visual-top",
+        "slide": 3,
+        "ladderElements": 18,
+        "ladderInsideVisual": true,
+        "narrativeHeadings": 2,
+        "narrativeInside": true,
+        "narrativeBodyBoxes": 2,
+        "narrativeBodyInside": true,
+        "bodyFontSizes": [
+          18
+        ],
+        "narrativeBodyFontSizes": [
+          18
+        ],
+        "narrativeHeadingFontSizes": [
+          21
+        ],
+        "narrativeStatus": "unknown",
+        "allTextBoxesWithinSlide": true
+      }
+    ],
+    "revision-01-validated": [
+      {
+        "arrangement": "visual-left",
+        "slide": 1,
+        "ladderElements": 18,
+        "ladderInsideVisual": true,
+        "narrativeHeadings": 2,
+        "narrativeInside": true,
+        "narrativeBodyBoxes": 2,
+        "narrativeBodyInside": true,
+        "bodyFontSizes": [
+          18
+        ],
+        "narrativeBodyFontSizes": [
+          18
+        ],
+        "narrativeHeadingFontSizes": [
+          21
+        ],
+        "narrativeStatus": "unknown",
+        "allTextBoxesWithinSlide": true
+      },
+      {
+        "arrangement": "visual-right",
+        "slide": 2,
+        "ladderElements": 18,
+        "ladderInsideVisual": true,
+        "narrativeHeadings": 2,
+        "narrativeInside": true,
+        "narrativeBodyBoxes": 2,
+        "narrativeBodyInside": true,
+        "bodyFontSizes": [
+          18
+        ],
+        "narrativeBodyFontSizes": [
+          18
+        ],
+        "narrativeHeadingFontSizes": [
+          21
+        ],
+        "narrativeStatus": "unknown",
+        "allTextBoxesWithinSlide": true
+      },
+      {
+        "arrangement": "visual-top",
+        "slide": 3,
+        "ladderElements": 18,
+        "ladderInsideVisual": true,
+        "narrativeHeadings": 2,
+        "narrativeInside": true,
+        "narrativeBodyBoxes": 2,
+        "narrativeBodyInside": true,
+        "bodyFontSizes": [
+          18
+        ],
+        "narrativeBodyFontSizes": [
+          18
+        ],
+        "narrativeHeadingFontSizes": [
+          21
+        ],
+        "narrativeStatus": "unknown",
+        "allTextBoxesWithinSlide": true
+      }
+    ],
+    "revision-02-validated": [
+      {
+        "arrangement": "visual-left",
+        "slide": 1,
+        "ladderElements": 18,
+        "ladderInsideVisual": true,
+        "narrativeHeadings": 2,
+        "narrativeInside": true,
+        "narrativeBodyBoxes": 9,
+        "narrativeBodyInside": true,
+        "bodyFontSizes": [
+          18
+        ],
+        "narrativeBodyFontSizes": [
+          18
+        ],
+        "narrativeHeadingFontSizes": [
+          21
+        ],
+        "narrativeStatus": "success",
+        "allTextBoxesWithinSlide": true
+      },
+      {
+        "arrangement": "visual-right",
+        "slide": 2,
+        "ladderElements": 18,
+        "ladderInsideVisual": true,
+        "narrativeHeadings": 2,
+        "narrativeInside": true,
+        "narrativeBodyBoxes": 9,
+        "narrativeBodyInside": true,
+        "bodyFontSizes": [
+          18
+        ],
+        "narrativeBodyFontSizes": [
+          18
+        ],
+        "narrativeHeadingFontSizes": [
+          21
+        ],
+        "narrativeStatus": "success",
+        "allTextBoxesWithinSlide": true
+      },
+      {
+        "arrangement": "visual-top",
+        "slide": 3,
+        "ladderElements": 18,
+        "ladderInsideVisual": true,
+        "narrativeHeadings": 1,
+        "narrativeInside": true,
+        "narrativeBodyBoxes": 1,
+        "narrativeBodyInside": true,
+        "bodyFontSizes": [
+          18
+        ],
+        "narrativeBodyFontSizes": [
+          18
+        ],
+        "narrativeHeadingFontSizes": [
+          21
+        ],
+        "narrativeStatus": "failure",
+        "allTextBoxesWithinSlide": true
+      }
+    ]
+  },
+  "checks": [
+    "结构对象实际落在 reserveRegions 返回的 visual 区域内",
+    "narrative 标题实际落在 reserveRegions 返回的 narrative 区域内",
+    "narrative 正文实际落在 reserveRegions 返回的 narrative 区域内",
+    "页外正文请求字号为 18，局部标题请求字号为 21",
+    "所有导出对象边界位于 1280×720 页面内"
+  ]
+}

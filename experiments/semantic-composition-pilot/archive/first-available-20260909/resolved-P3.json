@@ -1,0 +1,212 @@
+{
+  "pageId": "P3",
+  "intent": {
+    "topic": "需求集中、记录缺口集中与管理员容量约束共同支持先做限量试点，但不证明成效已经发生",
+    "topicPlacement": "大学 Skin 正文页标题下方蓝色主题句条带",
+    "groups": [
+      {
+        "id": "p3-demand",
+        "role": "analysis",
+        "message": "8 周 120 份申请中，74 份来自三个课程项目集群，占 61.7%；52 份申请相同 GPU 环境模板，提示入口具有复用机会",
+        "sourceRefs": [
+          "manuscript.md:P3.证据一：需求集中（模拟观察）"
+        ],
+        "emphasis": "primary",
+        "medium": "chart"
+      },
+      {
+        "id": "p3-incidents",
+        "role": "analysis",
+        "message": "78 份完成运行记录中有 14 份缺少实际参数或输出位置，缺口率 17.9%；其中 9 份来自两个项目集群",
+        "sourceRefs": [
+          "manuscript.md:P3.证据二：记录缺口集中（模拟复核）"
+        ],
+        "emphasis": "primary",
+        "medium": "table"
+      },
+      {
+        "id": "p3-capacity",
+        "role": "analysis",
+        "message": "峰值周全量人工审核预计需要 5.0 个管理员工作日，高于 3.5 个可支配工作日；限量试点估计为 2.6 个，模板稳定后为 1.4 个",
+        "sourceRefs": [
+          "manuscript.md:P3.证据三：管理员容量受限（模拟估算）",
+          "manuscript.md:模拟基线与口径"
+        ],
+        "emphasis": "primary",
+        "medium": "chart"
+      },
+      {
+        "id": "p3-conclusion",
+        "role": "interpretation",
+        "message": "三类证据分别回答入口是否可复用、哪里需要补证据以及为什么不能全量人工审核，共同支持 B 的限量试点和三周评审节奏",
+        "sourceRefs": [
+          "manuscript.md:P3.综合判断"
+        ],
+        "emphasis": "secondary",
+        "medium": "text",
+        "relatesTo": [
+          "p3-demand",
+          "p3-incidents",
+          "p3-capacity"
+        ]
+      },
+      {
+        "id": "p3-limit",
+        "role": "context",
+        "message": "观察没有随机对照，8 周窗口可能受课程周期影响；阶段二需记录字段完整率、首次可用时间、实际工时和异常闭环时间",
+        "sourceRefs": [
+          "manuscript.md:P3.证据边界与验证办法"
+        ],
+        "emphasis": "supporting",
+        "medium": "text",
+        "relatesTo": [
+          "p3-demand",
+          "p3-incidents",
+          "p3-capacity",
+          "p3-conclusion"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "type": "support",
+        "from": [
+          "p3-demand",
+          "p3-incidents",
+          "p3-capacity"
+        ],
+        "to": "p3-conclusion",
+        "meaning": "需求、记录和容量三条证据线共同支持限量试点判断"
+      },
+      {
+        "type": "conjunction",
+        "from": [
+          "p3-incidents",
+          "p3-capacity"
+        ],
+        "to": "p3-conclusion",
+        "meaning": "记录缺口与人工容量必须同时考虑，单独一条证据不足以决定开放模型"
+      },
+      {
+        "type": "condition",
+        "from": [
+          "p3-limit"
+        ],
+        "to": "p3-conclusion",
+        "meaning": "只有把观察局限和验证指标写入试点，综合判断才可转为可检验行动"
+      }
+    ],
+    "composition": {
+      "op": "column",
+      "gap": 28,
+      "children": [
+        {
+          "op": "grid",
+          "columns": 3,
+          "gap": 20,
+          "children": [
+            {
+              "groupId": "p3-demand"
+            },
+            {
+              "groupId": "p3-incidents"
+            },
+            {
+              "groupId": "p3-capacity"
+            }
+          ]
+        },
+        {
+          "op": "row",
+          "gap": 28,
+          "weights": [
+            1.2,
+            0.8
+          ],
+          "children": [
+            {
+              "groupId": "p3-conclusion"
+            },
+            {
+              "groupId": "p3-limit"
+            }
+          ]
+        }
+      ]
+    },
+    "readingOrder": [
+      "p3-demand",
+      "p3-incidents",
+      "p3-capacity",
+      "p3-conclusion",
+      "p3-limit"
+    ],
+    "alignment": "上方三组证据共享列宽、数字基线和单位，下方综合判断与证据区左起线对齐，证据边界贴近结论但保留独立阅读层",
+    "fitStrategy": "三类证据使用 3 列网格，每组最小 350×210 以保留分子、分母、单位和限定；下方综合判断至少 700×190，边界与验证至少 400×190。不要把三类证据合并成一个大结论框，也不要让模拟数字失去分母和时间窗。"
+  },
+  "bodyFrame": {
+    "left": 55,
+    "top": 166,
+    "width": 1170,
+    "height": 492
+  },
+  "regions": {
+    "p3-demand": {
+      "left": 55,
+      "top": 166,
+      "width": 376.6666666666667,
+      "height": 242
+    },
+    "p3-incidents": {
+      "left": 451.6666666666667,
+      "top": 166,
+      "width": 376.6666666666667,
+      "height": 242
+    },
+    "p3-capacity": {
+      "left": 848.3333333333334,
+      "top": 166,
+      "width": 376.6666666666667,
+      "height": 242
+    },
+    "p3-conclusion": {
+      "left": 55,
+      "top": 436,
+      "width": 725.2,
+      "height": 222
+    },
+    "p3-limit": {
+      "left": 808.2,
+      "top": 436,
+      "width": 416.8,
+      "height": 222
+    }
+  },
+  "contracts": {
+    "p3-demand": {
+      "minWidth": 350,
+      "minHeight": 210
+    },
+    "p3-incidents": {
+      "minWidth": 350,
+      "minHeight": 210
+    },
+    "p3-capacity": {
+      "minWidth": 350,
+      "minHeight": 210
+    },
+    "p3-conclusion": {
+      "minWidth": 700,
+      "minHeight": 190
+    },
+    "p3-limit": {
+      "minWidth": 400,
+      "minHeight": 190
+    }
+  },
+  "style": {
+    "gap": 28,
+    "innerGap": 20
+  },
+  "visualStatus": "not-evaluated"
+}

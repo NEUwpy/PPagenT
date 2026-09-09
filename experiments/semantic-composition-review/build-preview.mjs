@@ -1,0 +1,10 @@
+import fs from 'node:fs/promises';
+const source = new URL('../semantic-composition-pilot/', import.meta.url);
+const plan = JSON.parse(await fs.readFile(new URL('composition-intent.json', source), 'utf8'));
+const escape = s => String(s).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
+const tree = node => node.groupId ? `<li>${escape(node.groupId)}</li>` : `<li><strong>${escape(node.op)}</strong><ul>${node.children.map(tree).join('')}</ul></li>`;
+const sections = plan.pages.map((page, index) => {
+  const intent = page.compositionIntent;
+  return `<section><h2>${escape(page.pageId)} · ${escape(intent.topic)}</h2><img src="../semantic-composition-pilot/renders-validated-20260909/slide-${index + 1}.png" alt="${escape(page.pageId)} 实际PPTX渲染"><details><summary>查看驱动本页的逻辑关系与嵌套组合</summary><div class="plan"><div><ul>${tree(intent.composition)}</ul></div><div>${intent.relations.map(r => `<p><b>${escape(r.type)}</b> ${escape(r.from.join(' + '))} → ${escape(r.to)}<br>${escape(r.meaning)}</p>`).join('')}</div></div></details></section>`;
+}).join('');
+await fs.writeFile(new URL('index.html', import.meta.url), `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>逻辑组合执行验证</title><style>body{max-width:1280px;margin:30px auto;padding:0 20px;background:#f3f5f8;color:#26374a;font:16px system-ui}h1{font-size:28px}h2{font-size:20px}p{line-height:1.7}section{margin:36px 0}img{width:100%;display:block;background:white}details{padding:18px;background:white}.plan{display:grid;grid-template-columns:1fr 2fr;gap:24px}li{margin:8px 0}a{color:#285dab}</style><h1>逻辑关系 → 嵌套组合 → 实际页面</h1><p>三种不同逻辑的模拟稿件。图片来自现有大学模板生成的可编辑 PPTX；展开每页查看其组合树和关联。当前是有反馈的接入验证，质量与未解决项见复核记录。</p><p><a href="复核记录.md">主任务复核</a> · <a href="../semantic-composition-pilot/final/semantic-composition-pilot-validated-20260909.pptx">可编辑 PPTX</a> · <a href="../semantic-composition-pilot/manuscript.md">模拟稿件</a></p>${sections}</html>`);

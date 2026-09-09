@@ -1,0 +1,184 @@
+{
+  "pages": [
+    {
+      "pageId": "P1",
+      "compositionIntent": {
+        "topic": "分级准入在模拟条件下兼顾访问速度、记录完整性与可回退性，适合作为第一轮试点",
+        "topicPlacement": "大学 Skin 正文页标题下方蓝色主题句条带",
+        "groups": [
+          {
+            "id": "p1-comparison",
+            "role": "analysis",
+            "message": "A 直接开放、B 分级准入、C 全预约制按进入方式、首次可用时间、人工投入、记录回溯、未闭环申请和失败动作六项同口径比较",
+            "sourceRefs": ["manuscript.md:P1.三种模型同口径比较（模拟估计）", "manuscript.md:模拟基线与口径"],
+            "emphasis": "primary",
+            "medium": "table"
+          },
+          {
+            "id": "p1-decision",
+            "role": "interpretation",
+            "message": "先试行 B，A 仅作高峰期临时应急入口，C 保留给高风险项目",
+            "sourceRefs": ["manuscript.md:P1.决策含义"],
+            "emphasis": "secondary",
+            "medium": "text",
+            "relatesTo": ["p1-comparison"]
+          },
+          {
+            "id": "p1-assumptions",
+            "role": "context",
+            "message": "三种模型共享模拟需求与管理员容量假设，估计尚未由真实运行验证",
+            "sourceRefs": ["manuscript.md:P1.模拟前提与风险"],
+            "emphasis": "supporting",
+            "medium": "text",
+            "relatesTo": ["p1-comparison", "p1-decision"]
+          }
+        ],
+        "relations": [
+          {"type": "support", "from": ["p1-comparison"], "to": "p1-decision", "meaning": "同一组比较维度为试行选择提供依据"},
+          {"type": "condition", "from": ["p1-assumptions"], "to": "p1-comparison", "meaning": "比较成立的前提是三种模型使用同一模拟需求与容量假设"}
+        ],
+        "composition": {
+          "op": "column",
+          "gap": 28,
+          "children": [
+            {"groupId": "p1-comparison"},
+            {"op": "row", "gap": 20, "weights": [1.2, 1], "children": [{"groupId": "p1-decision"}, {"groupId": "p1-assumptions"}]}
+          ]
+        },
+        "readingOrder": ["p1-comparison", "p1-decision", "p1-assumptions"],
+        "alignment": "比较组先占连续的全宽起线；下方判断与前提共享基线，决策依据和估计边界相邻但不互相覆盖",
+            "fitStrategy": "比较表按正文 18 设计像素完整保留六项维度、三种模型和未闭环申请季度估计，最小区域 760×340；下方两组各保留正文 18 的选择依据与模拟边界，最小宽度 320、高度 120。不要把表格拆成三个无共同表头的卡片，也不要为了塞入估计数字删除单位和模拟限定。"
+      }
+    },
+    {
+      "pageId": "P2",
+      "compositionIntent": {
+        "topic": "分级准入把每个阶段的证据绑定到下一道关口，未达标时暂停扩围并回到规则修订",
+        "topicPlacement": "大学 Skin 正文页标题下方蓝色主题句条带",
+        "groups": [
+          {
+            "id": "p2-stages",
+            "role": "analysis",
+            "message": "登记、限量运行、有限扩围三个短阶段名称构成成熟度阶梯；阶段定义、进入条件、交付物和推进门槛由相邻正文组完整承载",
+            "sourceRefs": ["manuscript.md:P2.三阶段过程（拟议流程）", "manuscript.md:P2.模拟过程的容量依据"],
+            "emphasis": "primary",
+            "medium": "structure"
+          },
+          {
+            "id": "p2-conditions",
+            "role": "analysis",
+            "message": "阶段一进入阶段二需项目名称、申请来源、数据分类、预计运行环境、责任人和联系人六项信息齐全，并确认范围与风险；阶段二进入阶段三需完整记录和异常责任可追溯",
+            "sourceRefs": ["manuscript.md:P2.阶段一：登记与资格核对", "manuscript.md:P2.阶段二：限量运行与异常记录"],
+            "emphasis": "secondary",
+            "medium": "text",
+            "relatesTo": ["p2-stages"]
+          },
+          {
+            "id": "p2-gates",
+            "role": "interpretation",
+            "message": "三个关口分别检查可进入、可追溯、可扩围；目标门槛是记录完整率 90%/95%、高风险异常及时闭环以及管理员负荷不超过每周 3 个工作日",
+            "sourceRefs": ["manuscript.md:P2.关口与回退", "manuscript.md:P2.阶段二：限量运行与异常记录", "manuscript.md:P2.阶段三：复核与有限扩围"],
+            "emphasis": "secondary",
+            "medium": "text",
+            "relatesTo": ["p2-stages", "p2-conditions"]
+          },
+          {
+            "id": "p2-fallback",
+            "role": "context",
+            "message": "任一门槛未达标则保留当前规模、暂停新申请并修订字段、模板或异常规则，已有记录不得静默删除",
+            "sourceRefs": ["manuscript.md:P2.关口与回退", "manuscript.md:P2.阶段三：复核与有限扩围"],
+            "emphasis": "supporting",
+            "medium": "text",
+            "relatesTo": ["p2-gates"]
+          }
+        ],
+        "relations": [
+          {"type": "sequence", "from": ["p2-stages"], "to": "p2-conditions", "meaning": "三阶段依次推进，前一阶段交付物成为下一阶段进入条件"},
+          {"type": "condition", "from": ["p2-conditions"], "to": "p2-gates", "meaning": "资料和责任条件决定申请能否通过对应关口"},
+          {"type": "support", "from": ["p2-stages", "p2-conditions"], "to": "p2-gates", "meaning": "阶段结构与阶段条件共同给出可检查的门槛，而不是只有流程名称"},
+          {"type": "condition", "from": ["p2-gates"], "to": "p2-fallback", "meaning": "关口未达标时触发暂停、保留规模和规则修订动作"},
+          {"type": "decomposition", "from": ["p2-conditions"], "to": "p2-fallback", "meaning": "回退动作分别对应字段、模板和异常规则三类可修订对象"}
+        ],
+        "composition": {
+          "op": "row",
+          "gap": 28,
+          "weights": [1, 1],
+          "children": [
+            {"op": "column", "gap": 28, "children": [{"groupId": "p2-stages"}, {"groupId": "p2-conditions"}]},
+            {"op": "column", "gap": 28, "children": [{"groupId": "p2-gates"}, {"groupId": "p2-fallback"}]}
+          ]
+        },
+        "readingOrder": ["p2-stages", "p2-conditions", "p2-gates", "p2-fallback"],
+        "alignment": "左右两列共享同一条竖向边界：左列由成熟度阶梯连接阶段条件，右列由关口连接失败动作；右上关口面内文字与右下失败动作正文同以面内 16 像素起线。",
+            "fitStrategy": "成熟度阶梯与阶段条件共用左列 620 像素，关口与失败动作共用右列 520 像素，中间间距 28 像素，总宽 1168 像素。阶段定义、阶段时间、六项登记信息、进入条件和交付物在左列 620 像素内自然断行，保持正文 18，不删条件；右列保留三个关口、百分比、时间、负荷与暂停规则。"
+      }
+    },
+    {
+      "pageId": "P3",
+      "compositionIntent": {
+        "topic": "需求集中、记录缺口集中与管理员容量约束共同支持先做限量试点，但不证明成效已经发生",
+        "topicPlacement": "大学 Skin 正文页标题下方蓝色主题句条带",
+        "groups": [
+          {
+            "id": "p3-demand",
+            "role": "analysis",
+            "message": "8 周 120 份申请中，74 份来自三个课程项目集群，占 61.7%；52 份申请相同 GPU 环境模板，提示入口具有复用机会",
+            "sourceRefs": ["manuscript.md:P3.证据一：需求集中（模拟观察）"],
+            "emphasis": "primary",
+            "medium": "chart"
+          },
+          {
+            "id": "p3-incidents",
+            "role": "analysis",
+            "message": "78 份完成运行记录中有 14 份缺少实际参数或输出位置，缺口率 17.9%；其中 9 份来自两个项目集群",
+            "sourceRefs": ["manuscript.md:P3.证据二：记录缺口集中（模拟复核）"],
+            "emphasis": "primary",
+            "medium": "table"
+          },
+          {
+            "id": "p3-capacity",
+            "role": "analysis",
+            "message": "峰值周全量人工审核预计需要 5.0 个管理员工作日，高于 3.5 个可支配工作日；限量试点估计为 2.6 个，模板稳定后为 1.4 个",
+            "sourceRefs": ["manuscript.md:P3.证据三：管理员容量受限（模拟估算）", "manuscript.md:模拟基线与口径"],
+            "emphasis": "primary",
+            "medium": "chart"
+          },
+          {
+            "id": "p3-conclusion",
+            "role": "interpretation",
+            "message": "三类证据分别回答入口是否可复用、哪里需要补证据以及为什么不能全量人工审核，共同支持 B 的限量试点和三周评审节奏",
+            "sourceRefs": ["manuscript.md:P3.综合判断"],
+            "emphasis": "secondary",
+            "medium": "text",
+            "relatesTo": ["p3-demand", "p3-incidents", "p3-capacity"]
+          },
+          {
+            "id": "p3-limit",
+            "role": "context",
+            "message": "观察没有随机对照，8 周窗口可能受课程周期影响；阶段二需记录字段完整率、首次可用时间、实际工时和异常闭环时间",
+            "sourceRefs": ["manuscript.md:P3.证据边界与验证办法"],
+            "emphasis": "supporting",
+            "medium": "text",
+            "relatesTo": ["p3-demand", "p3-incidents", "p3-capacity", "p3-conclusion"]
+          }
+        ],
+        "relations": [
+          {"type": "support", "from": ["p3-demand", "p3-incidents", "p3-capacity"], "to": "p3-conclusion", "meaning": "需求、记录和容量三条证据线共同支持限量试点判断"},
+          {"type": "conjunction", "from": ["p3-incidents", "p3-capacity"], "to": "p3-conclusion", "meaning": "记录缺口与人工容量必须同时考虑，单独一条证据不足以决定开放模型"},
+          {"type": "condition", "from": ["p3-limit"], "to": "p3-conclusion", "meaning": "只有把观察局限和验证指标写入试点，综合判断才可转为可检验行动"}
+        ],
+        "composition": {
+          "op": "column",
+          "gap": 28,
+          "children": [
+            {"op": "grid", "columns": 3, "gap": 20, "children": [{"groupId": "p3-demand"}, {"groupId": "p3-incidents"}, {"groupId": "p3-capacity"}]},
+            {"op": "row", "gap": 28, "weights": [1.2, 0.8], "children": [{"groupId": "p3-conclusion"}, {"groupId": "p3-limit"}]}
+          ]
+        },
+        "readingOrder": ["p3-demand", "p3-incidents", "p3-capacity", "p3-conclusion", "p3-limit"],
+        "alignment": "上方三组证据共享列宽、数字基线和单位，下方综合判断与证据区左起线对齐，证据边界贴近结论但保留独立阅读层",
+            "fitStrategy": "三类证据使用 3 列网格，每组最小 350×210 以保留分子、分母、单位和限定；下方综合判断至少 700×190，边界与验证至少 400×190。不要把三类证据合并成一个大结论框，也不要让模拟数字失去分母和时间窗。"
+      }
+    }
+  ]
+}

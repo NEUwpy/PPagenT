@@ -1,0 +1,25 @@
+{
+  "task": "visual-balance-cold-run",
+  "manuscript": "experiments/visual-balance-cold-run/manuscript.md",
+  "rulesCommand": "npm run rules:load -- --profile generation --skin northeastern-university-001",
+  "rulesSnapshot": {
+    "path": "experiments/visual-balance-cold-run/run/input-rules.txt",
+    "sha256": "A98F1112E3FBA88CAF951DC19CDA8C9C2794B9EB5E51282644AD55611B427CD1"
+  },
+  "readPublicInputs": [
+    "C:/Users/ilove/.codex/plugins/cache/openai-primary-runtime/presentations/26.905.11957/skills/presentations/SKILL.md",
+    "C:/Users/ilove/.codex/plugins/cache/openai-primary-runtime/presentations/26.905.11957/skills/presentations/references/implementation.md",
+    "C:/Users/ilove/.codex/plugins/cache/openai-primary-runtime/presentations/26.905.11957/skills/presentations/artifact_tool_docs/API_QUICK_START.md",
+    "docs/工作流/正式生成/大学结构调用.md",
+    "src/composition/resolve.mjs",
+    "src/runtime/invoke-university-structure.mjs",
+    "src/runtime/skins/northeastern-university.mjs",
+    "src/runtime/skins/university-mckinsey.mjs",
+    "src/runtime/skins/northeastern-university-contract.mjs",
+    "src/tools/render-pptx-evidence.mjs"
+  ],
+  "excludedInputs": [
+    "experiments 下其他旧脚本、图片、PPTX、计划与 review",
+    "experiments/visual-balance-cold-run/实验协议.md"
+  ]
+}

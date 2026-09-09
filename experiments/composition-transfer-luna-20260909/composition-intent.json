@@ -1,0 +1,52 @@
+{
+  "pages": [
+    {
+      "pageId": "P1",
+      "compositionIntent": {
+        "topic": "试点准入先看可追溯性，开放范围再按证据逐级扩大",
+        "topicPlacement": "大学 Skin 正文页蓝色主题句条带",
+        "groups": [
+          {"id":"screening","role":"analysis","message":"申请来源经资格、责任人与记录准备逐项筛选，缺一项则暂缓","sourceRefs":["先筛出可追溯项目，再小步扩大开放：课题自荐、平台推荐与合作项目；资格、责任人与记录准备缺一项则暂缓"],"emphasis":"primary","medium":"structure"},
+          {"id":"evidence-ladder","role":"analysis","message":"通过筛选后按可记录、可追溯、可复用逐级发展","sourceRefs":["先筛出可追溯项目，再小步扩大开放：先留台账，再关联来源参数输出，最后经复核沉淀方法"],"emphasis":"primary","medium":"text","relatesTo":["screening"]},
+          {"id":"scope-boundary","role":"interpretation","message":"筛选回答谁能进入，阶梯回答进入后如何推进，两者共同服务稳妥扩围","sourceRefs":["先筛出可追溯项目，再小步扩大开放：只有前一阶段证据具备，才进入下一阶段"],"emphasis":"supporting","medium":"text","relatesTo":["screening","evidence-ladder"]}
+        ],
+        "composition":{"op":"row","children":[{"groupId":"screening"},{"op":"column","children":[{"groupId":"evidence-ladder"},{"groupId":"scope-boundary"}]}]},
+        "readingOrder":["screening","evidence-ladder","scope-boundary"],
+        "alignment":"漏斗与右侧解释共享正文起线；入口对象在上，逐级能力在下，解释紧邻其后",
+        "fitStrategy":"漏斗实际占用正文中部子区 left=320,top=220,width=680,height=360；左侧子区逐行保留课题自荐、平台推荐、合作项目及资格、责任、记录条件，右侧子区逐级写出可记录、可追溯、可复用与前阶段凭证要求，完整文字与结构共同完成判断"
+      }
+    },
+    {
+      "pageId": "P2",
+      "compositionIntent": {
+        "topic": "责任链必须与完整记录绑定，异常先补证据再关闭",
+        "topicPlacement": "大学 Skin 正文页蓝色主题句条带",
+        "groups": [
+          {"id":"record-fields","role":"analysis","message":"申请来源、审批依据、执行结果、异常处置四类记录并列且不能互相替代","sourceRefs":["完整记录与分级处置共同防止异常失去责任归属：记录应覆盖四类并列信息"],"emphasis":"primary","medium":"text"},
+          {"id":"exception-gates","role":"analysis","message":"异常按记录完整、责任明确、复核通过三道关口逐层收敛","sourceRefs":["完整记录与分级处置共同防止异常失去责任归属：先核对记录是否完整，再确认责任是否明确，最后检查复核是否通过"],"emphasis":"primary","medium":"text"},
+          {"id":"role-handling","role":"interpretation","message":"课题负责人确认事实，平台管理者复核结论；意见不一致时保留异常并协调","sourceRefs":["完整记录与分级处置共同防止异常失去责任归属：意见不一致时保留异常状态，提交协调"],"emphasis":"supporting","medium":"text","relatesTo":["record-fields","exception-gates"]}
+        ],
+        "composition":{"op":"row","children":[{"groupId":"record-fields"},{"op":"column","children":[{"groupId":"exception-gates"},{"groupId":"role-handling"}]}]},
+        "readingOrder":["record-fields","exception-gates","role-handling"],
+        "alignment":"左侧四类记录共享编号轴，右侧三道关口共享垂直中线；角色处置放在关口之后并保持横向就近",
+        "fitStrategy":"左侧采用自然行高的四行并列记录，右侧采用三段递进文字；底部仅保留角色分工与意见不一致的处置，避免把证据压成页脚"
+      }
+    },
+    {
+      "pageId": "P3",
+      "compositionIntent": {
+        "topic": "扩围以能力达标为门槛，并保留清晰的暂停条件",
+        "topicPlacement": "大学 Skin 正文页蓝色主题句条带",
+        "groups": [
+          {"id":"capability-levels","role":"analysis","message":"能力沿可记录、可追溯、可复用三个离散门槛递进","sourceRefs":["扩围应以能力达标为门槛，并保留明确的暂停条件：可记录、可追溯、可复用三阶能力"],"emphasis":"primary","medium":"structure"},
+          {"id":"expansion-boundaries","role":"analysis","message":"扩围评审同时核对人员、资源、方法三项边界条件","sourceRefs":["扩围应以能力达标为门槛，并保留明确的暂停条件：人员可持续履职、设备与支持能力可覆盖、适用范围与例外清楚"],"emphasis":"secondary","medium":"text","relatesTo":["capability-levels"]},
+          {"id":"pause-rule","role":"interpretation","message":"任一边界无法满足则暂停扩围，保留当前规模并明确补齐任务","sourceRefs":["扩围应以能力达标为门槛，并保留明确的暂停条件：未达到可复用前不宣称跨项目可推广；任一边界失败则暂停并补齐任务"],"emphasis":"supporting","medium":"text","relatesTo":["expansion-boundaries"]}
+        ],
+        "composition":{"op":"column","children":[{"groupId":"capability-levels"},{"op":"row","children":[{"groupId":"expansion-boundaries"},{"groupId":"pause-rule"}]}]},
+        "readingOrder":["capability-levels","expansion-boundaries","pause-rule"],
+        "alignment":"阶梯沿同一消失点递进；下方横向说明与最高门槛对齐，暂停条件贴近边界条件",
+        "fitStrategy":"阶梯实际占用正文左侧子区 left=75,top=238,width=820,height=330；阶内保留可记录、可追溯、可复用及各自能力定义，右侧子区逐项保留人员持续履职、设备支持覆盖、适用范围与例外、未可复用不宣称跨项目推广及任一失败暂停后的规模与补齐任务"
+      }
+    }
+  ]
+}

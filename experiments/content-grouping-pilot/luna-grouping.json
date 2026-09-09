@@ -1,0 +1,208 @@
+{
+  "id": "luna-p3-content-grouping-pilot",
+  "source": "experiments/visual-balance-cold-run/manuscript.md",
+  "sourceSection": "P3｜多证据论证：为什么值得先做小规模试点",
+  "topic": {
+    "title": "为什么值得先做小规模试点",
+    "sourceText": "三类模拟证据共同支持“先做 B 的限量试点”：需求确有集中，记录缺口集中在少数项目，管理员容量又不足以支撑全量人工审核；但这些观察仍不能证明试点一定改善结果，必须把验证指标写进阶段三的复核。",
+    "relatesTo": [
+      "evidence-demand-fact",
+      "evidence-record-fact",
+      "evidence-capacity-fact",
+      "synthesis-trial-case",
+      "boundary-evidence",
+      "validation-plan",
+      "conditional-action"
+    ]
+  },
+  "groups": [
+    {
+      "id": "evidence-demand-fact",
+      "title": "证据一：需求集中（事实）",
+      "role": "evidence-fact",
+      "sourceText": "8 周 120 份申请中，74 份来自三个课程项目集群，占 61.7%；其中 52 份申请了相同的 GPU 环境模板。",
+      "relatesTo": [
+        "evidence-demand-interpretation",
+        "synthesis-trial-case"
+      ]
+    },
+    {
+      "id": "evidence-demand-interpretation",
+      "title": "证据一：统一模板的含义与权限限制",
+      "role": "interpretation-limit",
+      "sourceText": "需求集中意味着统一模板可能减少重复确认，但不代表这些项目一定适合放在同一权限范围内。",
+      "relatesTo": [
+        "evidence-demand-fact",
+        "synthesis-trial-case",
+        "boundary-evidence"
+      ]
+    },
+    {
+      "id": "evidence-record-fact",
+      "title": "证据二：记录缺口集中（事实）",
+      "role": "evidence-fact",
+      "sourceText": "78 份完成运行的记录中，14 份缺少实际参数或输出位置，缺口率为 17.9%；14 份中有 9 份来自两个项目集群。",
+      "relatesTo": [
+        "evidence-record-interpretation",
+        "synthesis-trial-case"
+      ]
+    },
+    {
+      "id": "evidence-record-interpretation",
+      "title": "证据二：先补字段与责任人的范围判断",
+      "role": "interpretation-limit",
+      "sourceText": "这个分布支持先针对少量项目补齐字段和责任人，而不是直接把入口扩大到全部申请；它没有证明缺口由某一个申请人或某一字段单独造成。",
+      "relatesTo": [
+        "evidence-record-fact",
+        "synthesis-trial-case",
+        "boundary-evidence",
+        "validation-plan"
+      ]
+    },
+    {
+      "id": "evidence-capacity-fact",
+      "title": "证据三：管理员容量受限（事实）",
+      "role": "evidence-fact",
+      "sourceText": "峰值周全量人工审核预计需要 5.0 个管理员工作日，高于每周 3.5 个可支配工作日；限量 5 个项目的试点预计需要 2.6 个工作日，模板稳定后预计降到 1.4 个。",
+      "relatesTo": [
+        "evidence-capacity-interpretation",
+        "synthesis-trial-case"
+      ]
+    },
+    {
+      "id": "evidence-capacity-interpretation",
+      "title": "证据三：工作量估计需要校准",
+      "role": "interpretation-limit",
+      "sourceText": "两组数字都是工作量估计，实际负荷需用阶段二的运行记录校准。",
+      "relatesTo": [
+        "evidence-capacity-fact",
+        "synthesis-trial-case",
+        "validation-plan",
+        "boundary-evidence"
+      ]
+    },
+    {
+      "id": "synthesis-trial-case",
+      "title": "综合判断：三类证据交集支持限量试点",
+      "role": "synthesis",
+      "sourceText": "需求集中、记录缺口集中和人工容量约束分别回答“是否有可重复的入口”“哪里需要先补证据”“为什么不能一次全量开放”。三类证据的交集支持 B 的试点范围和三周评审节奏；它们只支持提出一个可检验的行动方案，不支持宣称已经提升效率。",
+      "relatesTo": [
+        "evidence-demand-fact",
+        "evidence-demand-interpretation",
+        "evidence-record-fact",
+        "evidence-record-interpretation",
+        "evidence-capacity-fact",
+        "evidence-capacity-interpretation",
+        "boundary-evidence",
+        "validation-plan",
+        "conditional-action"
+      ]
+    },
+    {
+      "id": "boundary-evidence",
+      "title": "证据边界：当前观察不能外推为稳定需求",
+      "role": "boundary",
+      "sourceText": "模拟观察没有随机对照，8 周窗口也可能受课程周期影响；“集中”可能只是活跃项目较多，不等于未来需求稳定。",
+      "relatesTo": [
+        "evidence-demand-interpretation",
+        "evidence-record-interpretation",
+        "evidence-capacity-interpretation",
+        "synthesis-trial-case",
+        "validation-plan",
+        "conditional-action"
+      ]
+    },
+    {
+      "id": "validation-plan",
+      "title": "验证办法：记录运行指标并按扩围条件复核",
+      "role": "validation",
+      "sourceText": "阶段二应记录每次申请的完整字段、首次可用时间、管理员实际工时和异常闭环时间；阶段三按预先写明的三个扩围条件复核。",
+      "relatesTo": [
+        "evidence-record-interpretation",
+        "evidence-capacity-interpretation",
+        "synthesis-trial-case",
+        "boundary-evidence",
+        "conditional-action"
+      ]
+    },
+    {
+      "id": "conditional-action",
+      "title": "条件行动：不满足条件时暂停扩围",
+      "role": "conditional-action",
+      "sourceText": "若记录不完整或工作量超过容量，暂停扩围并保留当前规模。",
+      "relatesTo": [
+        "synthesis-trial-case",
+        "boundary-evidence",
+        "validation-plan"
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "type": "interprets",
+      "from": "evidence-demand-fact",
+      "to": "evidence-demand-interpretation",
+      "meaning": "需求的集中分布被解释为统一模板可能减少重复确认，同时保留权限范围限制。"
+    },
+    {
+      "type": "interprets",
+      "from": "evidence-record-fact",
+      "to": "evidence-record-interpretation",
+      "meaning": "记录缺口的集中分布导向少量项目先补字段和责任人，并限定不能归因于单一申请人或字段。"
+    },
+    {
+      "type": "qualifies",
+      "from": "evidence-capacity-fact",
+      "to": "evidence-capacity-interpretation",
+      "meaning": "管理员工作日对比支持容量约束判断，但数字仍属于估计，需要运行记录校准。"
+    },
+    {
+      "type": "supports-synthesis",
+      "from": "evidence-demand-interpretation",
+      "to": "synthesis-trial-case",
+      "meaning": "需求集中提供可重复入口的线索。"
+    },
+    {
+      "type": "supports-synthesis",
+      "from": "evidence-record-interpretation",
+      "to": "synthesis-trial-case",
+      "meaning": "记录缺口集中指向先补证据的范围。"
+    },
+    {
+      "type": "supports-synthesis",
+      "from": "evidence-capacity-interpretation",
+      "to": "synthesis-trial-case",
+      "meaning": "容量约束解释了不能一次全量开放。"
+    },
+    {
+      "type": "bounds",
+      "from": "boundary-evidence",
+      "to": "synthesis-trial-case",
+      "meaning": "证据边界把综合判断限定为可检验的试点行动方案，不允许外推为已提升效率或未来需求稳定。"
+    },
+    {
+      "type": "requires-validation",
+      "from": "synthesis-trial-case",
+      "to": "validation-plan",
+      "meaning": "综合判断明确要求通过阶段二记录和阶段三预设条件复核。"
+    },
+    {
+      "type": "calibrates",
+      "from": "validation-plan",
+      "to": "evidence-capacity-interpretation",
+      "meaning": "阶段二实际工时记录用于校准当前工作量估计。"
+    },
+    {
+      "type": "conditions",
+      "from": "validation-plan",
+      "to": "conditional-action",
+      "meaning": "验证结果若显示记录不完整或工作量超过容量，则触发暂停扩围并保留当前规模。"
+    },
+    {
+      "type": "guards",
+      "from": "boundary-evidence",
+      "to": "conditional-action",
+      "meaning": "证据边界要求行动保持可逆和受条件约束。"
+    }
+  ]
+}

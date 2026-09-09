@@ -1,0 +1,533 @@
+[
+  {
+    "pageId": "P2",
+    "intent": {
+      "topic": "分级准入让每个阶段产生下一阶段需要的证据",
+      "topicPlacement": "Skin正文页观点标题",
+      "groups": [
+        {
+          "id": "process",
+          "role": "analysis",
+          "message": "三个阶段及其交付形成递进流程",
+          "sourceRefs": [
+            "P2/三阶段过程"
+          ],
+          "emphasis": "primary",
+          "medium": "text"
+        },
+        {
+          "id": "gates",
+          "role": "interpretation",
+          "message": "进入与扩围门槛决定是否推进",
+          "sourceRefs": [
+            "P2/关口与回退"
+          ],
+          "emphasis": "secondary",
+          "medium": "text",
+          "relatesTo": [
+            "process"
+          ]
+        },
+        {
+          "id": "fallback",
+          "role": "context",
+          "message": "不满足条件时回到规则修订并保留记录",
+          "sourceRefs": [
+            "P2/关口与回退"
+          ],
+          "emphasis": "supporting",
+          "medium": "text",
+          "relatesTo": [
+            "gates"
+          ]
+        }
+      ],
+      "relations": [
+        {
+          "type": "condition",
+          "from": [
+            "process"
+          ],
+          "to": "gates",
+          "meaning": "每一阶段的证据决定能否进入下一阶段"
+        },
+        {
+          "type": "condition",
+          "from": [
+            "gates"
+          ],
+          "to": "fallback",
+          "meaning": "任一门槛不满足时暂停扩围并修订规则"
+        }
+      ],
+      "composition": {
+        "op": "column",
+        "children": [
+          {
+            "op": "row",
+            "weights": [
+              1.7,
+              1
+            ],
+            "children": [
+              {
+                "groupId": "process"
+              },
+              {
+                "groupId": "gates"
+              }
+            ]
+          },
+          {
+            "groupId": "fallback"
+          }
+        ]
+      },
+      "readingOrder": [
+        "process",
+        "gates",
+        "fallback"
+      ],
+      "alignment": "阶段与门槛共享上边缘；回退说明与上方两组共享左起线",
+      "fitStrategy": "过程组承担主体阅读量，门槛组保留完整数字和条件；底部回退只放行动与记录边界，正文保持18px。"
+    },
+    "bodyFrame": {
+      "left": 55,
+      "top": 166,
+      "width": 1170,
+      "height": 492
+    },
+    "regions": {
+      "process": {
+        "left": 55,
+        "top": 166,
+        "width": 736.6666666666666,
+        "height": 332
+      },
+      "gates": {
+        "left": 811.6666666666666,
+        "top": 166,
+        "width": 413.3333333333333,
+        "height": 332
+      },
+      "fallback": {
+        "left": 55,
+        "top": 526,
+        "width": 1170,
+        "height": 132
+      }
+    },
+    "contracts": {
+      "process": {
+        "minWidth": 680,
+        "minHeight": 300
+      },
+      "gates": {
+        "minWidth": 380,
+        "minHeight": 300
+      },
+      "fallback": {
+        "minWidth": 1080,
+        "minHeight": 100
+      }
+    },
+    "style": {
+      "gap": 28,
+      "innerGap": 20
+    },
+    "visualStatus": "not-evaluated"
+  },
+  {
+    "pageId": "P3",
+    "intent": {
+      "topic": "三类模拟证据共同支持先做B的限量试点",
+      "topicPlacement": "Skin正文页观点标题",
+      "groups": [
+        {
+          "id": "evidence",
+          "role": "analysis",
+          "message": "需求、记录缺口与管理员容量共同支撑试点范围",
+          "sourceRefs": [
+            "P3/证据一",
+            "P3/证据二",
+            "P3/证据三",
+            "P3/综合判断",
+            "P3/证据边界与验证办法"
+          ],
+          "emphasis": "primary",
+          "medium": "structure"
+        }
+      ],
+      "composition": {
+        "groupId": "evidence"
+      },
+      "readingOrder": [
+        "evidence"
+      ],
+      "alignment": "五项证据沿共同中轴排列，综合判断与边界保持同等可读性",
+      "fitStrategy": "使用已登记折角便签结构承载五项证据；每项保留数值口径与验证边界，结构占正文安全区。"
+    },
+    "bodyFrame": {
+      "left": 55,
+      "top": 166,
+      "width": 1170,
+      "height": 492
+    },
+    "regions": {
+      "evidence": {
+        "left": 55,
+        "top": 166,
+        "width": 1170,
+        "height": 492
+      }
+    },
+    "contracts": {
+      "evidence": {
+        "minWidth": 1170,
+        "minHeight": 492
+      }
+    },
+    "style": {
+      "gap": 28,
+      "innerGap": 20
+    },
+    "visualStatus": "not-evaluated"
+  },
+  {
+    "pageId": "N1",
+    "intent": {
+      "topic": "统一镜像适合先做通用课程试点，特殊依赖保留定制决策",
+      "topicPlacement": "Skin正文页观点标题",
+      "groups": [
+        {
+          "id": "unified",
+          "role": "analysis",
+          "message": "统一镜像的工作量、优势与限制",
+          "sourceRefs": [
+            "N1/统一镜像"
+          ],
+          "emphasis": "primary",
+          "medium": "table"
+        },
+        {
+          "id": "custom",
+          "role": "analysis",
+          "message": "每课定制的工作量、优势与限制",
+          "sourceRefs": [
+            "N1/每课定制"
+          ],
+          "emphasis": "primary",
+          "medium": "table"
+        },
+        {
+          "id": "decision",
+          "role": "interpretation",
+          "message": "试点范围、观测指标与回退条件",
+          "sourceRefs": [
+            "N1/建议"
+          ],
+          "emphasis": "secondary",
+          "medium": "text",
+          "relatesTo": [
+            "unified",
+            "custom"
+          ]
+        }
+      ],
+      "relations": [
+        {
+          "type": "comparison",
+          "from": [
+            "unified",
+            "custom"
+          ],
+          "to": "decision",
+          "meaning": "同一12门课程范围下比较准备与维护成本，再给出有条件的试点动作"
+        }
+      ],
+      "composition": {
+        "op": "column",
+        "children": [
+          {
+            "op": "row",
+            "weights": [
+              1,
+              1
+            ],
+            "children": [
+              {
+                "groupId": "unified"
+              },
+              {
+                "groupId": "custom"
+              }
+            ]
+          },
+          {
+            "groupId": "decision"
+          }
+        ]
+      },
+      "readingOrder": [
+        "unified",
+        "custom",
+        "decision"
+      ],
+      "alignment": "两方案共享标题、成本与优劣字段；底部建议与两方案共同左起线",
+      "fitStrategy": "上部保留同口径四行比较，底部放试点动作、观测指标和回退条件；不承诺节省比例。"
+    },
+    "bodyFrame": {
+      "left": 55,
+      "top": 166,
+      "width": 1170,
+      "height": 492
+    },
+    "regions": {
+      "unified": {
+        "left": 55,
+        "top": 166,
+        "width": 575,
+        "height": 302
+      },
+      "custom": {
+        "left": 650,
+        "top": 166,
+        "width": 575,
+        "height": 302
+      },
+      "decision": {
+        "left": 55,
+        "top": 496,
+        "width": 1170,
+        "height": 162
+      }
+    },
+    "contracts": {
+      "unified": {
+        "minWidth": 520,
+        "minHeight": 290
+      },
+      "custom": {
+        "minWidth": 520,
+        "minHeight": 290
+      },
+      "decision": {
+        "minWidth": 1080,
+        "minHeight": 150
+      }
+    },
+    "style": {
+      "gap": 28,
+      "innerGap": 20
+    },
+    "visualStatus": "not-evaluated"
+  },
+  {
+    "pageId": "N2",
+    "intent": {
+      "topic": "晚间预约与未使用率同时上升，先核对需求与履约再评估容量",
+      "topicPlacement": "Skin正文页观点标题",
+      "groups": [
+        {
+          "id": "signals",
+          "role": "analysis",
+          "message": "四周预约、晚间预约和未使用记录形成两类信号",
+          "sourceRefs": [
+            "N2/连续四周预约记录"
+          ],
+          "emphasis": "primary",
+          "medium": "structure"
+        }
+      ],
+      "composition": {
+        "groupId": "signals"
+      },
+      "readingOrder": [
+        "signals"
+      ],
+      "alignment": "四项信号沿共同中轴排列，数据、口径、解释与动作连续阅读",
+      "fitStrategy": "使用四项折角便签分别承载完整序列、分母口径、因果边界和抽查动作；不把两类记录相加。"
+    },
+    "bodyFrame": {
+      "left": 55,
+      "top": 166,
+      "width": 1170,
+      "height": 492
+    },
+    "regions": {
+      "signals": {
+        "left": 55,
+        "top": 166,
+        "width": 1170,
+        "height": 492
+      }
+    },
+    "contracts": {
+      "signals": {
+        "minWidth": 1170,
+        "minHeight": 492
+      }
+    },
+    "style": {
+      "gap": 28,
+      "innerGap": 20
+    },
+    "visualStatus": "not-evaluated"
+  },
+  {
+    "pageId": "N3",
+    "intent": {
+      "topic": "开放共享数据集须同时满足授权、去标识与维护责任",
+      "topicPlacement": "Skin正文页观点标题",
+      "groups": [
+        {
+          "id": "auth",
+          "role": "analysis",
+          "message": "授权范围可追溯且覆盖用途与再分发",
+          "sourceRefs": [
+            "N3/授权条件"
+          ],
+          "emphasis": "primary",
+          "medium": "text"
+        },
+        {
+          "id": "deid",
+          "role": "analysis",
+          "message": "去除直接标识并复核组合字段风险",
+          "sourceRefs": [
+            "N3/去标识条件"
+          ],
+          "emphasis": "primary",
+          "medium": "text"
+        },
+        {
+          "id": "maint",
+          "role": "analysis",
+          "message": "发布后有版本、反馈与撤回责任",
+          "sourceRefs": [
+            "N3/维护条件"
+          ],
+          "emphasis": "primary",
+          "medium": "text"
+        },
+        {
+          "id": "decision",
+          "role": "interpretation",
+          "message": "三项同时满足才进入小范围试用",
+          "sourceRefs": [
+            "N3/行动与边界"
+          ],
+          "emphasis": "secondary",
+          "medium": "text",
+          "relatesTo": [
+            "auth",
+            "deid",
+            "maint"
+          ]
+        }
+      ],
+      "relations": [
+        {
+          "type": "conjunction",
+          "from": [
+            "auth",
+            "deid",
+            "maint"
+          ],
+          "to": "decision",
+          "meaning": "三项并列条件必须同时成立，任一缺失则保留内部版本并补齐证据"
+        }
+      ],
+      "composition": {
+        "op": "column",
+        "children": [
+          {
+            "op": "row",
+            "weights": [
+              1,
+              1,
+              1
+            ],
+            "children": [
+              {
+                "groupId": "auth"
+              },
+              {
+                "groupId": "deid"
+              },
+              {
+                "groupId": "maint"
+              }
+            ]
+          },
+          {
+            "groupId": "decision"
+          }
+        ]
+      },
+      "readingOrder": [
+        "auth",
+        "deid",
+        "maint",
+        "decision"
+      ],
+      "alignment": "三个条件共享列宽、标题和正文起线；底部行动与边界横跨全宽",
+      "fitStrategy": "并列条件各占一列并保持正文18px；底部只承担共同行动与模拟材料边界，避免把条件误画成先后阶段。"
+    },
+    "bodyFrame": {
+      "left": 55,
+      "top": 166,
+      "width": 1170,
+      "height": 492
+    },
+    "regions": {
+      "auth": {
+        "left": 55,
+        "top": 166,
+        "width": 376.6666666666667,
+        "height": 307
+      },
+      "deid": {
+        "left": 451.6666666666667,
+        "top": 166,
+        "width": 376.6666666666667,
+        "height": 307
+      },
+      "maint": {
+        "left": 848.3333333333334,
+        "top": 166,
+        "width": 376.6666666666667,
+        "height": 307
+      },
+      "decision": {
+        "left": 55,
+        "top": 501,
+        "width": 1170,
+        "height": 157
+      }
+    },
+    "contracts": {
+      "auth": {
+        "minWidth": 350,
+        "minHeight": 300
+      },
+      "deid": {
+        "minWidth": 350,
+        "minHeight": 300
+      },
+      "maint": {
+        "minWidth": 350,
+        "minHeight": 300
+      },
+      "decision": {
+        "minWidth": 1080,
+        "minHeight": 150
+      }
+    },
+    "style": {
+      "gap": 28,
+      "innerGap": 20
+    },
+    "visualStatus": "not-evaluated"
+  }
+]

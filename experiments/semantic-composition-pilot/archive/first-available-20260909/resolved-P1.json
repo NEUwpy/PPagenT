@@ -1,0 +1,142 @@
+{
+  "pageId": "P1",
+  "intent": {
+    "topic": "分级准入在模拟条件下兼顾访问速度、记录完整性与可回退性，适合作为第一轮试点",
+    "topicPlacement": "大学 Skin 正文页标题下方蓝色主题句条带",
+    "groups": [
+      {
+        "id": "p1-comparison",
+        "role": "analysis",
+        "message": "A 直接开放、B 分级准入、C 全预约制按进入方式、首次可用时间、人工投入、记录回溯、未闭环申请和失败动作六项同口径比较",
+        "sourceRefs": [
+          "manuscript.md:P1.三种模型同口径比较（模拟估计）",
+          "manuscript.md:模拟基线与口径"
+        ],
+        "emphasis": "primary",
+        "medium": "table"
+      },
+      {
+        "id": "p1-decision",
+        "role": "interpretation",
+        "message": "先试行 B，A 仅作高峰期临时应急入口，C 保留给高风险项目",
+        "sourceRefs": [
+          "manuscript.md:P1.决策含义"
+        ],
+        "emphasis": "secondary",
+        "medium": "text",
+        "relatesTo": [
+          "p1-comparison"
+        ]
+      },
+      {
+        "id": "p1-assumptions",
+        "role": "context",
+        "message": "三种模型共享模拟需求与管理员容量假设，估计尚未由真实运行验证",
+        "sourceRefs": [
+          "manuscript.md:P1.模拟前提与风险"
+        ],
+        "emphasis": "supporting",
+        "medium": "text",
+        "relatesTo": [
+          "p1-comparison",
+          "p1-decision"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "type": "support",
+        "from": [
+          "p1-comparison"
+        ],
+        "to": "p1-decision",
+        "meaning": "同一组比较维度为试行选择提供依据"
+      },
+      {
+        "type": "condition",
+        "from": [
+          "p1-assumptions"
+        ],
+        "to": "p1-comparison",
+        "meaning": "比较成立的前提是三种模型使用同一模拟需求与容量假设"
+      }
+    ],
+    "composition": {
+      "op": "column",
+      "gap": 28,
+      "children": [
+        {
+          "groupId": "p1-comparison"
+        },
+        {
+          "op": "row",
+          "gap": 20,
+          "weights": [
+            1.2,
+            1
+          ],
+          "children": [
+            {
+              "groupId": "p1-decision"
+            },
+            {
+              "groupId": "p1-assumptions"
+            }
+          ]
+        }
+      ]
+    },
+    "readingOrder": [
+      "p1-comparison",
+      "p1-decision",
+      "p1-assumptions"
+    ],
+    "alignment": "比较组先占连续的全宽起线；下方判断与前提共享基线，决策依据和估计边界相邻但不互相覆盖",
+    "fitStrategy": "比较表按正文 18 设计像素完整保留六项维度、三种模型和未闭环申请季度估计，最小区域 760×340；下方两组各保留正文 18 的选择依据与模拟边界，最小宽度 320、高度 120。不要把表格拆成三个无共同表头的卡片，也不要为了塞入估计数字删除单位和模拟限定。"
+  },
+  "bodyFrame": {
+    "left": 55,
+    "top": 166,
+    "width": 1170,
+    "height": 492
+  },
+  "regions": {
+    "p1-comparison": {
+      "left": 55,
+      "top": 166,
+      "width": 1170,
+      "height": 342
+    },
+    "p1-decision": {
+      "left": 55,
+      "top": 536,
+      "width": 598.1818181818182,
+      "height": 122
+    },
+    "p1-assumptions": {
+      "left": 673.1818181818182,
+      "top": 536,
+      "width": 551.8181818181818,
+      "height": 122
+    }
+  },
+  "contracts": {
+    "p1-comparison": {
+      "minWidth": 760,
+      "minHeight": 340
+    },
+    "p1-decision": {
+      "minWidth": 320,
+      "minHeight": 120
+    },
+    "p1-assumptions": {
+      "minWidth": 320,
+      "minHeight": 120
+    }
+  },
+  "style": {
+    "gap": 28,
+    "innerGap": 20
+  },
+  "visualStatus": "not-evaluated"
+}

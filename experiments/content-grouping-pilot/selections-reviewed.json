@@ -1,0 +1,52 @@
+[
+  {
+    "groupId": "evidence-demand-fact",
+    "medium": "text",
+    "reason": "本轮保留完整原文，表格试排超过证据区并侵入解读区。先保留文字；后续若重组为表格，须另做字段映射与容量复核。"
+  },
+  {
+    "groupId": "evidence-demand-interpretation",
+    "medium": "text",
+    "reason": "这是对需求集中事实的含义和权限边界的完整判断，连续原文比单独图形更直接，也能避免把“可能”误读成确定结论。"
+  },
+  {
+    "groupId": "evidence-record-fact",
+    "medium": "text",
+    "reason": "本轮保留完整原文，表格试排超过证据区并侵入解读区。先保留文字；后续若重组为表格，须另做字段映射与容量复核。"
+  },
+  {
+    "groupId": "evidence-record-interpretation",
+    "medium": "text",
+    "reason": "该组既提出先补字段与责任人的行动含义，又明确否定单一申请人或字段归因，需保留原句的限定关系，文本最直接。"
+  },
+  {
+    "groupId": "evidence-capacity-fact",
+    "medium": "text",
+    "reason": "本轮保留完整原文，表格试排超过证据区并侵入解读区。先保留文字；后续若重组为表格，须另做字段映射与容量复核。"
+  },
+  {
+    "groupId": "evidence-capacity-interpretation",
+    "medium": "text",
+    "reason": "这是对工作量数字性质和校准要求的限定，不能从中补造比例或趋势，保留为文本最准确。"
+  },
+  {
+    "groupId": "synthesis-trial-case",
+    "medium": "text",
+    "reason": "该组把三类证据分别回答的问题合并为可检验的试点判断，并明确不宣称效率已提升；连续文本能保持这条综合论证的完整顺序。"
+  },
+  {
+    "groupId": "boundary-evidence",
+    "medium": "text",
+    "reason": "该组是对随机对照、时间窗口和需求稳定性的证据边界说明，属于限定性论证，文本比图形或表格更不易制造外推暗示。"
+  },
+  {
+    "groupId": "validation-plan",
+    "medium": "text",
+    "reason": "该组给出阶段二记录项和阶段三复核要求，保留原句可同时呈现记录指标与复核阶段，不需要额外结构组件。"
+  },
+  {
+    "groupId": "conditional-action",
+    "medium": "text",
+    "reason": "该组只有一个条件与对应行动，直接用文本呈现“若……则……”关系最清楚，无需便签或图形组件。"
+  }
+]
