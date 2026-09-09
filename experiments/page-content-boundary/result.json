@@ -1,0 +1,102 @@
+{
+  "generatedAt": "2026-09-09T15:42:54.832Z",
+  "sourceFile": "experiments/visual-balance-cold-run/manuscript.md",
+  "sourceSha256": "d70d0174c4ff78e2fd2dfbc5d9d055a8ebb5fcd7551225d5a609b8c5899004df",
+  "section": "N1",
+  "source": [
+    {
+      "id": "N1.p1",
+      "text": "主题：先试点统一环境镜像，定制方案保留给确有特殊依赖的课程。"
+    },
+    {
+      "id": "N1.p2",
+      "text": "模拟下学期有12门课程：8门使用相同Python依赖，4门存在特殊版本要求。比较两方案：统一镜像预计准备6个管理员工作日，后续每周维护0.5个工作日；每课定制预计准备18个管理员工作日，每周维护2个工作日。均为同一12门课程范围的估计，不含教师开发教学内容的时间。"
+    },
+    {
+      "id": "N1.p3",
+      "text": "统一镜像优势是同一版本便于复现，限制是特殊依赖不能直接覆盖；每课定制适配能力更强，但版本追踪与更新责任分散。建议先在3门通用课程试点两周，记录启动失败次数、恢复时间、教师反馈。特殊课程先确认依赖再决定复用或定制。试点未结束前不承诺节省比例；若出现影响授课的兼容问题，回到原环境并保留日志。"
+    }
+  ],
+  "results": [
+    {
+      "name": "complete",
+      "assignments": [
+        [
+          "N1.p1",
+          "N1.p2",
+          "N1.p3"
+        ]
+      ],
+      "pageResults": [
+        {
+          "pageId": "P1",
+          "coverage": "complete-verbatim"
+        }
+      ],
+      "manuscriptAudit": {
+        "missing": [],
+        "repeated": []
+      },
+      "expectedObservationConfirmed": true
+    },
+    {
+      "name": "omit-condition-before-grouping",
+      "assignments": [
+        [
+          "N1.p1",
+          "N1.p2"
+        ]
+      ],
+      "pageResults": [
+        {
+          "pageId": "P1",
+          "coverage": "complete-verbatim"
+        }
+      ],
+      "manuscriptAudit": {
+        "missing": [
+          "N1.p3"
+        ],
+        "repeated": []
+      },
+      "expectedObservationConfirmed": true
+    },
+    {
+      "name": "duplicate-across-pages",
+      "assignments": [
+        [
+          "N1.p1",
+          "N1.p2",
+          "N1.p3"
+        ],
+        [
+          "N1.p1",
+          "N1.p2",
+          "N1.p3"
+        ]
+      ],
+      "pageResults": [
+        {
+          "pageId": "P1",
+          "coverage": "complete-verbatim"
+        },
+        {
+          "pageId": "P2",
+          "coverage": "complete-verbatim"
+        }
+      ],
+      "manuscriptAudit": {
+        "missing": [],
+        "repeated": [
+          "N1.p1",
+          "N1.p2",
+          "N1.p3"
+        ]
+      },
+      "expectedObservationConfirmed": true
+    }
+  ],
+  "omissionWithinPageRejected": true,
+  "evidenceType": "mechanism-only",
+  "conclusion": "页内完整覆盖不能证明整稿覆盖；分页前遗漏和跨页重复均不会被单页入口发现。重复主题可能合理，本实验只暴露重复，不把所有重复判为语义错误。"
+}
