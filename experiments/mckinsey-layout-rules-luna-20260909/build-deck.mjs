@@ -2,25 +2,29 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { FileBlob, PresentationFile } from "@oai/artifact-tool";
 import { createNortheasternUniversityStarter } from "../../src/runtime/skins/northeastern-university.mjs";
+import { invokeUniversityStructure, closeStructureRuntime, universityMckinseySkin, universityMckinseyTypography } from "../../src/runtime/invoke-university-structure.mjs";
+import { resolveStructureTheme } from "../../src/visual-runtime/html-component-theme.mjs";
 
 const root = path.resolve(import.meta.dirname, "../..");
 const outDir = path.resolve(root, "experiments/mckinsey-layout-rules-luna-20260909");
 const firstPass = process.argv.includes("--first");
-const outPptx = path.join(outDir, firstPass ? "mckinsey-luna-first-success.pptx" : "mckinsey-luna-final-v2.pptx");
+const outPptx = path.join(outDir, firstPass ? "mckinsey-luna-first-success.pptx" : "mckinsey-luna-reviewed.pptx");
 
+const T = universityMckinseyTypography;
+const THEME = resolveStructureTheme(universityMckinseySkin);
 const C = {
-  blue: "#315F91",
-  blueLight: "#EAF1F7",
-  blueMid: "#9CB7D0",
-  ink: "#2B2B2B",
-  body: "#404040",
-  muted: "#6F6F6F",
-  line: "#C8D2DC",
-  pale: "#F4F7FA",
-  white: "#FFFFFF",
+  blue: THEME.primaryColor,
+  blueLight: THEME.primaryWash,
+  blueMid: THEME.line,
+  ink: THEME.dark,
+  body: THEME.body,
+  muted: THEME.muted,
+  line: THEME.line,
+  pale: THEME.primaryPale,
+  white: THEME.background,
 };
-const FONT_DISPLAY = "HYWenRunSongYun U";
-const FONT_BODY = "Microsoft YaHei";
+const FONT_DISPLAY = universityMckinseySkin.fonts.display;
+const FONT_BODY = universityMckinseySkin.fonts.body;
 
 function addShape(slide, geometry, position, fill = "none", line = { fill: "none", width: 0 }) {
   return slide.shapes.add({ geometry, position, fill, line });
@@ -30,7 +34,7 @@ function addText(slide, text, position, style = {}) {
   shape.text = text;
   shape.text.style = {
     typeface: style.typeface ?? FONT_BODY,
-    fontSize: style.fontSize ?? 18,
+    fontSize: style.fontSize ?? T.body,
     bold: style.bold ?? false,
     color: style.color ?? C.body,
     alignment: style.alignment ?? "left",
@@ -49,57 +53,59 @@ function line(slide, x, y, w, h, color = C.line, width = 1) {
 function pill(slide, text, x, y, w, fill = C.blueLight, color = C.blue) {
   const s = addShape(slide, "roundRect", { left: x, top: y, width: w, height: 28 }, fill, { fill: "none", width: 0 });
   s.text = text;
-  s.text.style = { typeface: FONT_BODY, fontSize: 14, bold: true, color, alignment: "center", verticalAlignment: "middle", autoFit: "none" };
+  s.text.style = { typeface: FONT_BODY, fontSize: T.meta, bold: true, color, alignment: "center", verticalAlignment: "middle", autoFit: "none" };
   return s;
 }
 function addNotes(slide, text) { slide.speakerNotes.textFrame.setText(text); }
 
 function drawPage1(slide) {
-  const x = 55, y = 178, w = 1170;
-  addText(slide, "先过准入关口，再按证据逐级推进", { left: x, top: y, width: w, height: 30 }, { fontSize: 21, bold: true, color: C.ink });
-  line(slide, x, y + 42, w, 0, C.line, 1);
+  const x = 55, y = 182, w = 1170;
+  line(slide, x, y + 32, w, 0, C.line, 1);
 
-  addText(slide, "准入关口", { left: 55, top: 238, width: 260, height: 30 }, { fontSize: 21, bold: true, color: C.blue });
-  addText(slide, "申请来源、责任人与记录准备缺一项则暂缓", { left: 55, top: 270, width: 310, height: 40 }, { fontSize: 16, color: C.muted });
+  addText(slide, "准入", { left: 55, top: 230, width: 220, height: 30 }, { fontSize: T.heading, bold: true, color: C.blue });
+  addText(slide, "申请来源", { left: 55, top: 274, width: 130, height: 26 }, { fontSize: T.body, bold: true, color: C.ink });
+  const sources = ["课题自荐", "平台推荐", "合作项目"];
+  sources.forEach((item, i) => {
+    addText(slide, item, { left: 55 + i * 105, top: 306, width: 95, height: 26 }, { fontSize: T.body, color: C.body, alignment: "center" });
+    if (i < sources.length - 1) line(slide, 154 + i * 105, 318, 10, 0, C.blueMid, 1);
+  });
+  addText(slide, "三项条件逐项核对，缺一项则暂缓", { left: 55, top: 352, width: 360, height: 28 }, { fontSize: T.body, color: C.muted });
   const gateRows = [
     ["01", "资格核对", "明确设备使用条件"],
     ["02", "责任确认", "落实一位明确负责人"],
-    ["03", "记录准备", "能保存来源、参数与输出"],
+    ["03", "记录准备", "能保存任务来源与\n执行参数和输出"],
   ];
   gateRows.forEach((row, i) => {
-    const yy = 326 + i * 78;
-    rect(slide, 55, yy, 300, 60, i === 2 ? C.blueLight : C.pale, { fill: C.line, width: 1 });
-    addText(slide, row[0], { left: 70, top: yy + 13, width: 50, height: 28 }, { fontSize: 18, bold: true, color: C.blue });
-    addText(slide, row[1], { left: 118, top: yy + 9, width: 210, height: 24 }, { fontSize: 18, bold: true, color: C.ink });
-    addText(slide, row[2], { left: 118, top: yy + 34, width: 220, height: 20 }, { fontSize: 14, color: C.body });
+    const yy = 394 + i * 67;
+    line(slide, 55, yy + 56, 430, 0, C.line, 1);
+    addText(slide, row[0], { left: 55, top: yy, width: 42, height: 28 }, { fontSize: T.body, bold: true, color: C.blue });
+    addText(slide, row[1], { left: 108, top: yy, width: 125, height: 28 }, { fontSize: T.body, bold: true, color: C.ink });
+    addText(slide, row[2], { left: 245, top: yy, width: 225, height: 54 }, { fontSize: T.body, color: C.body });
   });
-  addText(slide, "通过筛选不等于全面开放", { left: 55, top: 574, width: 300, height: 24 }, { fontSize: 16, bold: true, color: C.blue });
 
-  addText(slide, "进入后的推进", { left: 430, top: 238, width: 300, height: 30 }, { fontSize: 21, bold: true, color: C.blue });
-  addText(slide, "每一阶段都以可复核证据换取下一阶段", { left: 430, top: 270, width: 360, height: 40 }, { fontSize: 16, color: C.muted });
+  addText(slide, "推进", { left: 500, top: 230, width: 220, height: 30 }, { fontSize: T.heading, bold: true, color: C.blue });
+  addText(slide, "进入试点后，前一阶段证据具备才进入下一阶段", { left: 500, top: 274, width: 620, height: 28 }, { fontSize: T.body, color: C.muted });
   const stages = [
-    { x: 430, y: 450, w: 245, title: "可记录", body: "先留台账\n保留来源与事实" },
-    { x: 675, y: 370, w: 245, title: "可追溯", body: "关联来源、参数和输出\n保留复核路径" },
-    { x: 920, y: 290, w: 245, title: "可复用", body: "复核后沉淀可复用方法\n明确适用边界" },
+    ["可记录", "先留台账，记录任务来源与基本事实"],
+    ["可追溯", "关联来源、参数与输出，保留复核路径"],
+    ["可复用", "复核后沉淀方法，明确适用边界"],
   ];
   stages.forEach((s, i) => {
-    rect(slide, s.x, s.y, s.w, 116, i === 2 ? C.blue : C.blueLight, { fill: i === 2 ? C.blue : C.blueMid, width: 1 });
-    addText(slide, s.title, { left: s.x + 18, top: s.y + 14, width: s.w - 36, height: 28 }, { fontSize: 21, bold: true, color: i === 2 ? C.white : C.blue });
-    addText(slide, s.body, { left: s.x + 18, top: s.y + 49, width: s.w - 34, height: 54 }, { fontSize: 16, color: i === 2 ? C.white : C.body, lineSpacing: 1.12 });
-    if (i < stages.length - 1) {
-      line(slide, s.x + s.w, s.y + 58, 20, 0, C.blue, 2);
-    }
+    const yy = 330 + i * 86;
+    line(slide, 500, yy + 56, 660, 0, C.line, 1);
+    addText(slide, String(i + 1).padStart(2, "0"), { left: 500, top: yy, width: 42, height: 28 }, { fontSize: T.body, bold: true, color: C.blue });
+    addText(slide, s[0], { left: 566, top: yy, width: 140, height: 28 }, { fontSize: T.body, bold: true, color: C.ink });
+    addText(slide, s[1], { left: 735, top: yy, width: 390, height: 54 }, { fontSize: T.body, color: C.body });
   });
-  addText(slide, "筛选解决谁能进入，阶梯解决进入后如何推进", { left: 430, top: 590, width: 690, height: 30 }, { fontSize: 18, bold: true, color: C.ink });
+  addText(slide, "通过筛选不等于立即全面开放", { left: 500, top: 600, width: 360, height: 28 }, { fontSize: T.body, bold: true, color: C.blue });
   addNotes(slide, "[Sources]\n- 内容：experiments/university-multi-structure-07/manuscript.md\n- 规则：rules/排版体系/麦肯锡式.md；rules/skins/东北大学.md\n[/Sources]");
 }
 
 function drawPage2(slide) {
-  const x = 55, y = 178, w = 1170;
-  addText(slide, "记录保证有据可查，处置关口保证有据才关闭", { left: x, top: y, width: w, height: 30 }, { fontSize: 21, bold: true, color: C.ink });
-  line(slide, x, y + 42, w, 0, C.line, 1);
-  addText(slide, "四类并列记录", { left: 55, top: 238, width: 310, height: 30 }, { fontSize: 21, bold: true, color: C.blue });
-  addText(slide, "不是先后步骤，不能互相替代", { left: 55, top: 270, width: 300, height: 24 }, { fontSize: 16, color: C.muted });
+  const x = 55, y = 182, w = 1170;
+  line(slide, x, y + 32, w, 0, C.line, 1);
+  addText(slide, "四类并列记录", { left: 55, top: 230, width: 310, height: 30 }, { fontSize: T.heading, bold: true, color: C.blue });
+  addText(slide, "不是先后步骤，不能互相替代", { left: 55, top: 270, width: 330, height: 26 }, { fontSize: 18, color: C.muted });
   const cols = [
     ["申请来源", "申请人与任务"],
     ["审批依据", "责任人与时间"],
@@ -107,76 +113,76 @@ function drawPage2(slide) {
     ["异常处置", "原因与结论"],
   ];
   cols.forEach((c, i) => {
-    const xx = 55 + i * 82;
-    rect(slide, xx, 326, 72, 190, i === 3 ? C.blueLight : C.pale, { fill: C.line, width: 1 });
-    rect(slide, xx, 326, 72, 8, i === 3 ? C.blue : C.blueMid);
-    addText(slide, c[0], { left: xx + 10, top: 350, width: 52, height: 66 }, { fontSize: 17, bold: true, color: C.ink, alignment: "center", verticalAlignment: "middle", lineSpacing: 1.1 });
-    line(slide, xx + 13, 425, 46, 0, C.line, 1);
-    addText(slide, c[1], { left: xx + 10, top: 446, width: 52, height: 50 }, { fontSize: 14, color: C.body, alignment: "center", lineSpacing: 1.12 });
+    const xx = 55 + i * 158;
+    line(slide, xx, 326, 142, 0, i === 3 ? C.blue : C.blueMid, 3);
+    addText(slide, c[0], { left: xx, top: 346, width: 142, height: 28 }, { fontSize: 18, bold: true, color: C.ink });
+    addText(slide, c[1], { left: xx, top: 386, width: 142, height: 54 }, { fontSize: 18, color: C.body });
+    line(slide, xx, 458, 142, 0, C.line, 1);
   });
-  addText(slide, "课题负责人确认事实；平台管理者复核处理结论", { left: 55, top: 548, width: 350, height: 46 }, { fontSize: 16, color: C.body, lineSpacing: 1.1 });
+  addText(slide, "课题负责人确认事实；平台管理者复核处理结论", { left: 55, top: 490, width: 610, height: 28 }, { fontSize: 18, color: C.body });
 
-  addText(slide, "异常分级处置", { left: 430, top: 238, width: 300, height: 30 }, { fontSize: 21, bold: true, color: C.blue });
-  addText(slide, "任一关口不满足，补齐后再提交", { left: 430, top: 270, width: 330, height: 24 }, { fontSize: 16, color: C.muted });
+  addText(slide, "异常分级处置", { left: 730, top: 230, width: 300, height: 30 }, { fontSize: T.heading, bold: true, color: C.blue });
+  addText(slide, "任一关口不满足，补齐后再提交", { left: 730, top: 270, width: 390, height: 26 }, { fontSize: 18, color: C.muted });
   const gates = [
     ["01", "记录完整", "核对四类信息是否齐全"],
     ["02", "责任明确", "确认谁对事实负责"],
     ["03", "复核通过", "确认处理结论可关闭"],
   ];
   gates.forEach((g, i) => {
-    const yy = 334 + i * 84;
-    line(slide, 458, yy + 26, 0, 58, C.blueMid, 2);
-    addShape(slide, "ellipse", { left: 441, top: yy, width: 36, height: 36 }, i === 2 ? C.blue : C.blueLight, { fill: C.blue, width: 1 });
-    addText(slide, g[0], { left: 441, top: yy + 9, width: 36, height: 20 }, { fontSize: 13, bold: true, color: i === 2 ? C.white : C.blue, alignment: "center" });
-    addText(slide, g[1], { left: 500, top: yy - 2, width: 170, height: 26 }, { fontSize: 18, bold: true, color: C.ink });
-    addText(slide, g[2], { left: 500, top: yy + 26, width: 300, height: 26 }, { fontSize: 15, color: C.body });
+    const yy = 330 + i * 66;
+    line(slide, 730, yy + 48, 400, 0, C.line, 1);
+    addText(slide, g[0], { left: 730, top: yy, width: 42, height: 28 }, { fontSize: 18, bold: true, color: C.blue });
+    addText(slide, g[1], { left: 790, top: yy, width: 150, height: 28 }, { fontSize: 18, bold: true, color: C.ink });
+    addText(slide, g[2], { left: 950, top: yy, width: 220, height: 54 }, { fontSize: T.body, color: C.body });
   });
-  rect(slide, 820, 334, 325, 202, C.pale, { fill: C.line, width: 1 });
-  pill(slide, "分歧处理", 846, 354, 96);
-  addText(slide, "两者意见不一致时", { left: 846, top: 402, width: 240, height: 26 }, { fontSize: 18, bold: true, color: C.ink });
-  addText(slide, "保留异常状态，提交协调。\n“已记录”不等于“已解决”。", { left: 846, top: 438, width: 260, height: 54 }, { fontSize: 17, color: C.body, lineSpacing: 1.12 });
-  addText(slide, "关闭异常的依据必须同时满足三道关口", { left: 430, top: 574, width: 690, height: 30 }, { fontSize: 18, bold: true, color: C.ink });
+  line(slide, 730, 532, 400, 0, C.blueMid, 2);
+  addText(slide, "意见不一致时", { left: 730, top: 548, width: 180, height: 28 }, { fontSize: 18, bold: true, color: C.blue });
+  addText(slide, "保留异常状态，\n提交协调。\n“已记录”不等于\n“已解决”", { left: 930, top: 540, width: 250, height: 106 }, { fontSize: T.body, color: C.body, lineSpacing: 1.02 });
   addNotes(slide, "[Sources]\n- 内容：experiments/university-multi-structure-07/manuscript.md\n- 规则：rules/排版体系/麦肯锡式.md；rules/skins/东北大学.md\n[/Sources]");
 }
 
-function drawPage3(slide) {
-  const x = 55, y = 178, w = 1170;
-  addText(slide, "达到能力门槛才考虑扩围，条件不足则暂停", { left: x, top: y, width: w, height: 30 }, { fontSize: 21, bold: true, color: C.ink });
-  line(slide, x, y + 42, w, 0, C.line, 1);
-  addText(slide, "能力阶梯", { left: 55, top: 238, width: 300, height: 30 }, { fontSize: 21, bold: true, color: C.blue });
-  addText(slide, "先把能力说清楚，再讨论增加多少项目", { left: 55, top: 270, width: 340, height: 24 }, { fontSize: 16, color: C.muted });
-  const levels = [
-    ["可记录", "基本台账齐全\n允许保留在当前试点"],
-    ["可追溯", "来源、参数、输出相互关联\n形成可复核证据"],
-    ["可复用", "关键步骤经复核且边界明确\n具备跨项目推广基础"],
-  ];
-  levels.forEach((v, i) => {
-    const xx = 55 + i * 65;
-    const yy = 488 - i * 82;
-    rect(slide, xx, yy, 300, 82, i === 2 ? C.blue : C.blueLight, { fill: i === 2 ? C.blue : C.blueMid, width: 1 });
-    addText(slide, v[0], { left: xx + 18, top: yy + 12, width: 240, height: 26 }, { fontSize: 20, bold: true, color: i === 2 ? C.white : C.blue });
-    addText(slide, v[1], { left: xx + 18, top: yy + 43, width: 255, height: 32 }, { fontSize: 15, color: i === 2 ? C.white : C.body, lineSpacing: 1.1 });
-  });
-  addText(slide, "达到可复用前，不宣称跨项目可推广", { left: 55, top: 590, width: 400, height: 24 }, { fontSize: 16, bold: true, color: C.blue });
-
-  addText(slide, "扩围评审的并列边界", { left: 490, top: 238, width: 360, height: 30 }, { fontSize: 21, bold: true, color: C.blue });
-  addText(slide, "三项条件同时满足，才进入扩围讨论", { left: 490, top: 270, width: 360, height: 24 }, { fontSize: 16, color: C.muted });
+async function drawPage3(slide) {
+  const x = 55, y = 182, w = 1170;
+  line(slide, x, y + 32, w, 0, C.line, 1);
+  addText(slide, "扩围评审", { left: 55, top: 230, width: 300, height: 30 }, { fontSize: T.heading, bold: true, color: C.blue });
+  addText(slide, "三项边界需同时具备，任一缺失则暂停", { left: 55, top: 270, width: 430, height: 26 }, { fontSize: 18, color: C.muted });
   const boundaries = [
     ["人员条件", "责任人可持续履职"],
     ["资源条件", "设备与支持能力可覆盖"],
     ["方法条件", "适用范围与例外清楚"],
   ];
   boundaries.forEach((b, i) => {
-    const yy = 330 + i * 70;
-    line(slide, 490, yy + 48, 650, 0, C.line, 1);
-    addText(slide, b[0], { left: 490, top: yy, width: 160, height: 28 }, { fontSize: 18, bold: true, color: C.ink });
-    addText(slide, b[1], { left: 700, top: yy, width: 330, height: 28 }, { fontSize: 17, color: C.body });
-    addShape(slide, "ellipse", { left: 1090, top: yy + 2, width: 24, height: 24 }, C.blueLight, { fill: C.blue, width: 1 });
-    addText(slide, "✓", { left: 1090, top: yy + 1, width: 24, height: 24 }, { fontSize: 17, bold: true, color: C.blue, alignment: "center" });
+    const xx = 55 + i * 385;
+    line(slide, xx, 316, 350, 0, C.blueMid, 2);
+    addText(slide, b[0], { left: xx, top: 332, width: 150, height: 28 }, { fontSize: 18, bold: true, color: C.ink });
+    addText(slide, b[1], { left: xx, top: 370, width: 330, height: 30 }, { fontSize: 18, color: C.body });
   });
-  rect(slide, 490, 556, 650, 62, C.pale, { fill: C.line, width: 1 });
-  addText(slide, "暂停条件", { left: 510, top: 574, width: 110, height: 24 }, { fontSize: 17, bold: true, color: C.blue });
-  addText(slide, "任何边界无法满足，保留当前试点规模并明确补齐任务", { left: 635, top: 574, width: 475, height: 24 }, { fontSize: 16, color: C.body });
+  addText(slide, "能力阶梯", { left: 55, top: 420, width: 180, height: 28 }, { fontSize: T.heading, bold: true, color: C.blue });
+  await invokeUniversityStructure({
+    root,
+    slide,
+    assetId: "progression-maturity-steps-002",
+    content: {
+      levels: [
+        { key: "recordable", title: "可记录", body: "基本台账齐全" },
+        { key: "traceable", title: "可追溯", body: "来源参数输出相互关联" },
+        { key: "reusable", title: "可复用", body: "关键步骤复核且边界明确" },
+      ],
+      showStatus: false,
+    },
+    targetFrame: { left: 55, top: 448, width: 700, height: 190 },
+    evidencePath: path.join(outDir, "structure-calls.jsonl"),
+    pageId: "body-3",
+    regionId: "capability-ladder",
+    reason: "原稿明确表达三阶能力门槛，匹配已登记成熟度能力阶梯；保留连续阶台、共同消失点和随形承托面。",
+  });
+  await closeStructureRuntime();
+  addText(slide, "达到可复用前，不宣称跨项目可推广", { left: 805, top: 420, width: 370, height: 28 }, { fontSize: T.body, bold: true, color: C.blue, alignment: "right" });
+  addText(slide, "可记录：基本台账齐全", { left: 805, top: 458, width: 370, height: 28 }, { fontSize: T.body, color: C.body });
+  addText(slide, "可追溯：来源、参数、输出相互关联", { left: 805, top: 492, width: 370, height: 28 }, { fontSize: T.body, color: C.body });
+  addText(slide, "可复用：关键步骤经复核且边界明确", { left: 805, top: 526, width: 370, height: 28 }, { fontSize: T.body, color: C.body });
+  addText(slide, "暂停扩围", { left: 805, top: 568, width: 160, height: 28 }, { fontSize: T.body, bold: true, color: C.blue });
+  addText(slide, "任何边界无法满足，保留当前试点规模并明确补齐任务。", { left: 805, top: 602, width: 370, height: 58 }, { fontSize: T.body, color: C.body });
   addNotes(slide, "[Sources]\n- 内容：experiments/university-multi-structure-07/manuscript.md\n- 规则：rules/排版体系/麦肯锡式.md；rules/skins/东北大学.md\n[/Sources]");
 }
 
@@ -192,7 +198,9 @@ async function main() {
     pages,
     manuscriptSource: "experiments/university-multi-structure-07/manuscript.md",
   });
-  slides.forEach((slide, i) => [drawPage1, drawPage2, drawPage3][i](slide));
+  drawPage1(slides[0]);
+  drawPage2(slides[1]);
+  await drawPage3(slides[2]);
   await (await PresentationFile.exportPptx(presentation)).save(outPptx);
   console.log(JSON.stringify({ outPptx, firstPass, pages: slides.length }, null, 2));
 }
