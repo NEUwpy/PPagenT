@@ -1,0 +1,127 @@
+{
+  "reviewer": "E",
+  "reviewRound": "revision-01",
+  "decision": "REVISE",
+  "scope": {
+    "candidate": "revision-01/output/magazine-E-revision-01.pptx",
+    "rendered": "revision-01/rendered-final/slide-1.png..slide-13.png",
+    "manuscript": "input/manuscript.md",
+    "rules": "input/rules",
+    "theme": "input/assets/主题/中性编辑排版-001/asset.json",
+    "slidesReviewed": 13,
+    "independentRescreen": true,
+    "readOtherReviewGroups": false
+  },
+  "checks": {
+    "renderedVisualReview": true,
+    "nativeObjectInspection": true,
+    "nativePictures": 0,
+    "nativeGraphicFrames": 0,
+    "visibleTextClipping": false,
+    "visiblePageOverflow": false,
+    "fonts": ["Noto Serif SC", "Noto Sans SC"],
+    "registeredRoleSizesPresent": [11.25, 12.75, 15.75, 18.75, 36, 43.5],
+    "unregisteredRoleSizesFound": [14.25, 23.25],
+    "style": "neutral editorial palette, chapter numbering and page numbering remain coherent"
+  },
+  "closedOrHeld": [
+    {
+      "issue": "equal-level judgment chain emphasis",
+      "slides": [2],
+      "status": "CLOSED",
+      "evidence": "Items 1-5 are now rendered with matching outline circles."
+    },
+    {
+      "issue": "conceptual 80/95 visual misread",
+      "slides": [4],
+      "status": "CLOSED_WITH_LOCAL_TYPOGRAPHY",
+      "evidence": "Slide 4 explicitly says 概念示意 and 不是实测数据; the chart-like strokes are gone."
+    },
+    {
+      "issue": "missing core capability selection and fallback",
+      "slides": [8],
+      "status": "CLOSED",
+      "evidence": "Slide 8 includes 从核心库选择合法能力 and the no-suitable-structure fallback line."
+    },
+    {
+      "issue": "organization set rendered as sequence",
+      "slides": [11],
+      "status": "CLOSED",
+      "evidence": "Slide 11 now uses 学校、企业、实验室 with commas and no directional arrows."
+    },
+    {
+      "issue": "loop direction and unsupported task-state claim",
+      "slides": [12],
+      "status": "CLOSED_WITH_SOURCE_BOUNDARY_NOTE",
+      "evidence": "Slide 12 has explicit stage arrows and no task-state sentence; the specific return-to-理解 wording remains a source-boundary check."
+    },
+    {
+      "issue": "deck-wide English filler labels",
+      "slides": [1,2,3,4,5,6,8,9,10,11,12,13],
+      "status": "MOSTLY_CLOSED",
+      "evidence": "Decorative English headers were removed across the deck; cover still retains reliability."
+    }
+  ],
+  "findings": [
+    {
+      "id": "F-04-01",
+      "severity": "P2",
+      "slides": [4],
+      "layer": "local-typography/layout",
+      "kind": "local",
+      "evidence": "Formula breaks after the conditional bar, and the explanatory line breaks the unit 95 分 across two lines in slide-4.png.",
+      "source": "input/rules/排版.md and input/rules/质量检查.md",
+      "repairChoice": "Re-fit or semantically re-break the formula and explanation while keeping the conditional segment and 80/95 units intact.",
+      "passCondition": "Formula parses continuously; 80 分 and 95 分 remain intact reading units with natural surrounding clearance."
+    },
+    {
+      "id": "F-04-02",
+      "severity": "P2",
+      "slides": [4,8],
+      "layer": "typography-role-mapping",
+      "kind": "local",
+      "evidence": "Slide 4 uses 23.25 pt for 稳定跨过可用线; slide 8 uses 14.25 pt for the five formal-generation route labels. These sizes are absent from the magazine layout role table.",
+      "source": "input/rules/排版体系/杂志风.md",
+      "repairChoice": "Return both uses to registered roles and solve capacity through region/composition changes rather than ad hoc intermediate sizes.",
+      "passCondition": "Every text object on slides 4 and 8 maps to an existing role and remains readable after re-fit."
+    },
+    {
+      "id": "F-01-01",
+      "severity": "P2",
+      "slides": [1],
+      "layer": "content/typography",
+      "kind": "local",
+      "evidence": "The cover retains the English caption reliability beneath the R symbol; the manuscript contains no such caption and the Chinese title already supplies the meaning.",
+      "source": "input/rules/内容组织.md",
+      "repairChoice": "Remove the redundant caption or establish a specific source-backed audience role for it.",
+      "passCondition": "All cover text has a content role and no filler caption remains."
+    },
+    {
+      "id": "F-12-01",
+      "severity": "P2",
+      "slides": [12],
+      "layer": "content/source-fidelity",
+      "kind": "local",
+      "evidence": "The revision specifies 修正 ↩ 回到理解, while the manuscript supports 回到上游/持续校准 but does not designate 理解 as the unique return node.",
+      "source": "input/manuscript.md:120 and input/rules/质量检查.md",
+      "repairChoice": "Keep the explicit loop direction but avoid presenting an unsupported unique return target, unless the content source is updated.",
+      "passCondition": "The return path is visually explicit and remains within the manuscript's evidence boundary."
+    }
+  ],
+  "slideStatus": {
+    "1": "REVISE_LOCAL",
+    "2": "PASS",
+    "3": "PASS",
+    "4": "REVISE_LOCAL",
+    "5": "PASS",
+    "6": "PASS",
+    "7": "PASS",
+    "8": "REVISE_LOCAL",
+    "9": "PASS",
+    "10": "PASS",
+    "11": "PASS",
+    "12": "REVISE_SOURCE_BOUNDARY",
+    "13": "PASS"
+  },
+  "rescreenGate": "Re-render all 13 slides; inspect the full montage and slides 1, 4, 8 and 12 for source fidelity, registered text roles, semantic line breaks, net clearance and direction."
+}
