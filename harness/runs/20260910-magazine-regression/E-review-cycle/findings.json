@@ -1,0 +1,121 @@
+{
+  "reviewer": "E",
+  "decision": "REVISE",
+  "scope": {
+    "manuscript": "input/manuscript.md",
+    "candidate": "input/candidate.pptx",
+    "rendered": "input/rendered/slide-1.png..slide-13.png",
+    "rules": "input/rules",
+    "theme": "input/assets/主题/中性编辑排版-001/asset.json",
+    "slidesReviewed": 13,
+    "readOtherExperimentGroups": false
+  },
+  "checks": {
+    "renderedVisualReview": true,
+    "nativeTextAndShapeInspection": true,
+    "nativePicturesOrGraphicFrames": 0,
+    "visibleTextClippingObserved": false,
+    "visiblePageOverflowObserved": false,
+    "fontRoles": "Noto Serif SC / Noto Sans SC present",
+    "fontSizes": "Most sizes map to registered roles; slide 4 formula is 28.5 pt, an unregistered intermediate size",
+    "overallStyle": "neutral editorial palette and chapter/page numbering are consistent"
+  },
+  "findings": [
+    {
+      "id": "E-08-01",
+      "severity": "P1",
+      "slides": [8],
+      "layer": "content/composition",
+      "kind": "recompose",
+      "evidence": "Slide 8 omits manuscript.md:97-105's '从核心库选择合法能力' and the '没有合适结构 -> 简单排版 / 拆页 -> 确定性排版与编译' fallback. Intake arrows also break between the two rows.",
+      "repairChoice": "Restore the missing node, core-library call, fallback branch and readable direction in the route composition.",
+      "passCondition": "All manuscript route nodes, the core-library read-only call and fallback path are visible and directionally unambiguous."
+    },
+    {
+      "id": "E-11-01",
+      "severity": "P1",
+      "slides": [11],
+      "layer": "content/composition",
+      "kind": "recompose",
+      "evidence": "Slide 11 renders '学校 -> 企业 -> 实验室', while manuscript.md:130-136 lists organization types as a reusable scope rather than a migration sequence.",
+      "repairChoice": "Use a parallel set or non-directional scope expression while keeping replaceable identity and reusable capability paired.",
+      "passCondition": "The slide cannot be read as a prescribed expansion order."
+    },
+    {
+      "id": "E-12-01",
+      "severity": "P1",
+      "slides": [12],
+      "layer": "composition/structure",
+      "kind": "recompose",
+      "evidence": "The five loop nodes on slide 12 have no visible arrowheads or directional connectors; '回到上游' has no identifiable return target.",
+      "repairChoice": "Add endpointed direction connectors or an equally explicit numbered reading path and return point.",
+      "passCondition": "理解 -> 编排 -> 构建 -> 审查 -> 修正 -> 回到上游 is immediately readable at thumbnail and normal size."
+    },
+    {
+      "id": "E-12-02",
+      "severity": "P1",
+      "slides": [12],
+      "layer": "content/source-fidelity",
+      "kind": "local",
+      "evidence": "Slide 12 adds '每一轮的输入、判断、工具结果和未解决项都写回任务状态', which has no support in input/manuscript.md.",
+      "repairChoice": "Remove the unsupported operational claim or return to a source-grounded wording before re-layout.",
+      "passCondition": "Every outward-facing statement on slide 12 is traceable to the manuscript or a faithful compression of it."
+    },
+    {
+      "id": "E-04-01",
+      "severity": "P1",
+      "slides": [4],
+      "layer": "content/visual-encoding",
+      "kind": "local_or_recompose",
+      "evidence": "Slide 4 uses a threshold line, multiple slashes and 80/95 labels without marking them as conceptual; manuscript.md:47-49 calls 80 points an illustrative name for a stable usable state.",
+      "repairChoice": "Make the conceptual status explicit or replace the chart-like marks with a non-quantitative relationship.",
+      "passCondition": "80/95 and the strokes cannot be mistaken for measured data, while the stable-usable-over-peak message remains."
+    },
+    {
+      "id": "E-ALL-01",
+      "severity": "P2",
+      "slides": [1,2,3,4,5,6,8,9,10,11,12,13],
+      "layer": "content/typography",
+      "kind": "local",
+      "evidence": "Repeated English labels such as PRODUCT NARRATIVE, THE JUDGMENT CHAIN, CONTROLLED FREEDOM and A PRODUCTION LOOP are not present in the manuscript and mostly repeat nearby Chinese content.",
+      "repairChoice": "Remove decorative labels or retain only source-backed English with a clear audience function; keep PPagenT intact.",
+      "passCondition": "No retained English label is filler or a duplicate without a content role."
+    },
+    {
+      "id": "E-02-01",
+      "severity": "P2",
+      "slides": [2],
+      "layer": "local-visual-hierarchy",
+      "kind": "local",
+      "evidence": "Slide 2 fills the circle for item 5 while peer items 1-4 remain outline circles, although the manuscript describes one equal judgment chain.",
+      "repairChoice": "Equalize the five items or make the emphasis source-supported.",
+      "passCondition": "Equal-level judgments read as equal unless the emphasis has a stated semantic reason."
+    },
+    {
+      "id": "E-04-02",
+      "severity": "P2",
+      "slides": [4],
+      "layer": "local-typography",
+      "kind": "local",
+      "evidence": "The formula on slide 4 is 2850 XML units = 28.5 pt, while input/rules/排版体系/杂志风.md registers formula emphasis at 48 design px = 36 pt and forbids ad hoc near-sizes.",
+      "repairChoice": "Use the registered formula emphasis role and re-fit adjacent explanation.",
+      "passCondition": "The formula uses an existing role size with full expression and adequate surrounding clearance."
+    }
+  ],
+  "slideStatus": {
+    "1": "PASS_WITH_DECK_WIDE_NOTE",
+    "2": "REVISE_LOCAL",
+    "3": "PASS_WITH_DECK_WIDE_NOTE",
+    "4": "REVISE",
+    "5": "PASS",
+    "6": "PASS",
+    "7": "PASS",
+    "8": "REVISE",
+    "9": "PASS",
+    "10": "PASS",
+    "11": "REVISE",
+    "12": "REVISE",
+    "13": "PASS_WITH_SOURCE_COMPRESSION_NOTE"
+  },
+  "rescreenGate": "Re-render all 13 slides after revision; recheck full montage and slides 2, 4, 8, 11 and 12 for source fidelity, direction, roles, line clearance, natural height and density."
+}
