@@ -1,6 +1,6 @@
 # PPT Harness 使用入口
 
-PPagenT 的目标产品是专为 PPT 策划与制作服务的 Harness：Penguin Harness 与 DeepSeek V4 Flash（`deepseek-v4-flash`）模型 API，加上持久任务状态、上下文组织、工具执行、产物反馈、诊断返工及交付机制，共同完成真实 PPT。提示词是系统的一部分，单次模型响应不是产品完成单位。
+PPagenT 的目标产品是专为 PPT 策划与制作服务的 Harness：当前的 Codex 宿主与 Luna high（`gpt-5.6-luna` / `high`），加上持久任务状态、上下文组织、工具执行、产物反馈、诊断返工及交付机制，共同完成真实 PPT。提示词是系统的一部分，单次模型响应不是产品完成单位。
 
 ## 从这里使用与维护
 
@@ -16,10 +16,10 @@ PPagenT 的目标产品是专为 PPT 策划与制作服务的 Harness：Penguin 
 
 ## 当前状态与验证对象
 
-当前用户已选定 **Penguin Harness＋DeepSeek V4 Flash**，取代此前 Luna high / Codex 制作实验配置。仓库已有 [Penguin v2 接入实验](../experiments/penguin-harness-v2/README.md)，锁定过 `@prismshadow/penguin-core@0.2.9`，包含双上下文、持久项目、工具事件与恢复入口；旧实验的能力限制不自动成为新产品要求。
+当前阶段使用 **Codex 项目＋Luna high**，项目目录为 `C:\PPagenT\harness`。先整理并使用项目资料驱动新对话，不安装 Penguin。Penguin＋DeepSeek V4 Flash 保留为后续可迁移方向，当前不要求接入。
 
-用户提到远端可能已安装 Penguin，具体主机、路径和实际版本待核实。本地该实验目录的 node_modules 中未发现 Penguin 包，不能据此推断远端状态。当前先复用并核对既有接入，不另造 Harness，也不声称已切换生产运行。此前 Luna PPT 保留为历史证据，不能充当新组合验收。
+Codex 提供工具循环和对话运行环境，本项目提供 PPT 专用流程、角色约定、规则入口及任务状态；两者共同构成本阶段的 Harness。文件可供按需读取，不意味着所有文件自动装入每轮上下文，也不意味着项目已有可脱离 Codex 的独立运行时。
 
-每轮核对实际 Harness 版本、Provider、模型 ID、工具能力与状态保存方式；不依赖主任务隐含历史或逐页代做。是否完成，以新组合实际运行和 PPT 证据为准。
+新对话先遵守 [AGENTS.md](AGENTS.md)，再按 [上下文地图](上下文地图.md) 读取资料，使用 [新任务入口](任务/新任务入口.md) 启动。默认在当前目录直接运行，任务产物写到 `runs/<任务名>/`。本目录属于父仓库 PPagenT，不建立嵌套 Git 仓库；规则和资产按现有真源引用，可从项目入口按需访问。项目登记状态以 Codex 实际项目列表为准。
 
 自主多轮是正常执行方式；不要求一次响应出成品，也不要求每一步由用户批准。用户审核的是 PPT 产物。任务失败后既检查提示与规则，也检查状态交接、工具可用性、反馈质量、审查执行和恢复机制，不能默认通过增加禁令解决一切。
