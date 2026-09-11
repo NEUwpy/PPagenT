@@ -1,0 +1,91 @@
+{
+  "reviewer": "E",
+  "reviewRound": "revision-02",
+  "decision": "APPROVE",
+  "scope": {
+    "candidate": "revision-02/output/magazine-E-revision-02-v2.pptx",
+    "rendered": "revision-02/rendered-final-v2/slide-1.png..slide-13.png",
+    "manuscript": "input/manuscript.md",
+    "rules": "input/rules",
+    "theme": "input/assets/主题/中性编辑排版-001/asset.json",
+    "slidesReviewed": 13,
+    "independentRescreen": true,
+    "readOtherReviewGroups": false
+  },
+  "checks": {
+    "renderedVisualReview": true,
+    "nativeObjectInspection": true,
+    "nativePictures": 0,
+    "nativeGraphicFrames": 0,
+    "visibleTextClipping": false,
+    "visiblePageOverflow": false,
+    "visibleTextLineOrConnectorCollision": false,
+    "fonts": ["Noto Serif SC", "Noto Sans SC"],
+    "registeredRoleSizesPt": [11.25, 12.75, 15.75, 18.75, 36, 43.5],
+    "allowedSymbolSizePt": 23.25,
+    "unregisteredRoleSizesFound": [],
+    "slideCount": 13,
+    "aspectRatio": "16:9",
+    "style": "neutral editorial palette and chapter/page numbering are coherent"
+  },
+  "findings": [],
+  "closedIssues": [
+    {
+      "id": "conceptual-score-encoding",
+      "slides": [4],
+      "evidence": "概念示意 plus explicit 不是实测数据; 80 分 and 95 分 remain intact reading units."
+    },
+    {
+      "id": "core-selection-and-fallback",
+      "slides": [8],
+      "evidence": "从核心库选择合法能力 and 没有合适结构 -> 简单排版 / 拆页 -> 确定性排版与编译 are visible."
+    },
+    {
+      "id": "organization-set-ordering",
+      "slides": [11],
+      "evidence": "学校、企业、实验室 is presented as a comma-separated set."
+    },
+    {
+      "id": "production-loop-direction",
+      "slides": [12],
+      "evidence": "Horizontal stage arrows, numbered phases and 修正 ↩ 回到上游 make direction and return legible."
+    },
+    {
+      "id": "unsupported-task-state-claim",
+      "slides": [12],
+      "evidence": "The unsupported task-state sentence is absent; the remaining sentence is source-grounded continuous calibration."
+    },
+    {
+      "id": "deck-wide-filler-english",
+      "slides": [1,2,3,4,5,6,8,9,10,11,12,13],
+      "evidence": "Decorative English headers and cover reliability caption are absent."
+    },
+    {
+      "id": "intermediate-font-roles",
+      "slides": [4,8],
+      "evidence": "The former 14.25 pt route labels and 23.25 pt module title are gone; 23.25 pt remains only for allowed relation symbols."
+    }
+  ],
+  "hashes": {
+    "candidatePptx": "867971298E489832B2DCC5799F828190A8E0330D7F25A1937C35C5AF000B6BF3",
+    "manuscript": "7B97AA070CC6E2CED362D6A31C0E9BD6BD334850A858C142F2512D7743A6A288",
+    "rulesIndex": "F7D2BE54B47563771FA7E6DBAE5D955CF9F68334F1BDDEC7F39013830E62AE7F",
+    "themeAsset": "222EE763FF86C920671E262EF440C22D3ACD40BDB8C5333B3DB2A8B262A46CFC",
+    "renderedPng": {
+      "slide-1.png": "6A9A81AE6524EBE2DBE950F71683FF026D32FBCFCF02270283BA320F60DBDF9E",
+      "slide-2.png": "C458730A9A89BF46A12525727D8B530EAD097DBDD4D04172A1053B650488DC9C",
+      "slide-3.png": "074946CAED59CF6FCBD1865C3FBE89147942B277FDDD60098A2D29F0F6C5DCE6",
+      "slide-4.png": "61F3F6CF8BC514CBD548D4E04673F09A0AB297074CB43D1FA525544B6001FF50",
+      "slide-5.png": "FFBD88D6E724C8FDD8FB9CDF4A517EC67AC9081D397A61A660E847A6345B53FD",
+      "slide-6.png": "7BA7B9D07A891721F8C515A3C5476CDD56AC7515C487E80E8ACD0C9A72EFD526",
+      "slide-7.png": "37074B9CF936EE1DA22860B6BCB24C51E089DBE58293DC271D125589D48B1810",
+      "slide-8.png": "4A6935CE12B8EFD9AD38760A96B4FD4764C2C2B640BC076FAF8F9E10357BA187",
+      "slide-9.png": "08C7463B8F0841A3BF2E8A9C6C6A580BDFF7FD198891F62EB905EFD3988115F7",
+      "slide-10.png": "DEFA4D46838A7125EFCB2A905A83064FA83AE54481A4B376B7FEF253155AAA06",
+      "slide-11.png": "6E791E2F88CFD358F8912A5F60C2F7A1596C64D8FFC4E957AD6767C9A0A5D5DB",
+      "slide-12.png": "7C93C51CAA1CEFD7E824C143806A3F8DCCD9651FC5A7900B99E08119A25A9691",
+      "slide-13.png": "D1875A949EFEEE1444334C39F2688C068D53E84498E45A9701850BB41E59F07B"
+    }
+  },
+  "rescreenGate": "APPROVED on the exact candidate and PNG hashes above; if any artifact changes, recompute hashes and repeat visual review."
+}
