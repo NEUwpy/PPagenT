@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { MINIMUM_READABLE_FONT_SIZE_PT } from "../runtime/typography-standards.mjs";
 
 async function layoutFiles(qaDir) {
   const files = (await fs.readdir(qaDir))
@@ -79,7 +80,7 @@ function pointDistance(first, second) {
   return Math.hypot(first.x - second.x, first.y - second.y);
 }
 
-export async function auditRenderedTypography(qaDir, { minimumFontSize = 16 } = {}) {
+export async function auditRenderedTypography(qaDir, { minimumFontSize = MINIMUM_READABLE_FONT_SIZE_PT } = {}) {
   const files = await layoutFiles(qaDir);
 
   const violations = [];

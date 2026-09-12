@@ -3,6 +3,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 import { northeasternUniversityTheme } from "../runtime/skins/northeastern-university-theme.mjs";
+import { MINIMUM_READABLE_FONT_SIZE_PT } from "../runtime/typography-standards.mjs";
 import { closeHtmlComponentRuntime, resolveHtmlComponent } from "../visual-runtime/html-component-runtime.mjs";
 import { estimateTextFlowPlanningCapacity } from "../visual-runtime/text-flow.mjs";
 import {
@@ -228,7 +229,7 @@ try {
       if (!component?.renderMarkup || !preview) throw new Error(`${manifest.id} 缺少 HTML 审查入口`);
 
       const targetFrame = manifest.spatialContract?.contentFrame ?? { left: 55, top: 166, width: 1170, height: 492 };
-      const minimumFontSize = Number(manifest.spatialContract?.minFontSize ?? 16);
+      const minimumFontSize = Number(manifest.spatialContract?.minFontSize ?? MINIMUM_READABLE_FONT_SIZE_PT);
       const states = [];
       const variants = [];
       const variantBySlots = new Map();

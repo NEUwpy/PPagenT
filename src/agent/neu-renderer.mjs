@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { renderNortheasternUniversityDeck } from "../runtime/skins/northeastern-university.mjs";
 import { auditRenderedDeck } from "../tools/audit-rendered-typography.mjs";
+import { MINIMUM_READABLE_FONT_SIZE_PT } from "../runtime/typography-standards.mjs";
 
 function compactSectionName(intent, job) {
   const actionLabels = [
@@ -82,7 +83,7 @@ export function createNortheasternUniversityRenderer({
       ].includes(decision.selectedAssetId) ? null : `slide-${String(index + 1).padStart(2, "0")}`)
       .filter(Boolean);
     const qualityAudit = await auditRenderedDeck(qaDir, {
-      minimumFontSize: 12,
+      minimumFontSize: MINIMUM_READABLE_FONT_SIZE_PT,
       tolerance: 0.5,
       requiredQaSlides,
     });

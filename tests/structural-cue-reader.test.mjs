@@ -114,8 +114,13 @@ test("转场对照与独立行动不会被压成正文或误判为流程", () =>
 });
 
 test("产品叙事的十节正文均能提取结构技能线索且不把结论误当单节点页", async () => {
+  // 真源：冻结稿件 稿件/为什么做PPagenT-v1.md（10 节，提取出 10 个线索，与下方断言一致）。
+  // docs/更新日志.md 已记录原则——"回归测试另用 workbench/manuscripts/为什么做PPagenT-v1.md
+  // 冻结稿件，避免对外叙事修改破坏历史回放"（该目录后来落到 稿件/）。
+  // 活文档 docs/产品叙事.md 是持续演进稿，现为 9 节、只能提取出 5 个线索，不能再当黄金夹具。
+  // 本测试锁定的十节正文与末节结论以冻结稿为准。
   const fs = await import("node:fs/promises");
-  const markdown = await fs.readFile(new URL("../docs/产品叙事.md", import.meta.url), "utf8");
+  const markdown = await fs.readFile(new URL("../稿件/为什么做PPagenT-v1.md", import.meta.url), "utf8");
   const cues = detectStructuralCues(markdown);
   assert.equal(cues.length, 10);
   assert.deepEqual(cues.map((cue) => cue.relation), [

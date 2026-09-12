@@ -21,7 +21,7 @@ npm run rules:load -- --profile generation --skin neutral-editorial-001
 
 ## 维护方法
 
-- 独立制作采用 Skin＋共享页面组合＋绑定排版体系：`页面组合.md` 只维护信息组织，`排版.md` 维护组内文字与几何，风格文件维护密度和视觉表达。`composition-intent.json` 是制作前的语义计划，格式检查入口为 `src/tools/check-composition-intent.mjs`；`src/composition/resolve.mjs` 解析嵌套组合并驱动各组构建器；不等同于正式候选协议中的 CompositionPlan。正式选择器尚未加载此自由编排规则，迁移需单独验证。
+- 独立制作采用 Skin＋共享页面组合＋绑定排版体系：`页面组合.md` 只维护信息组织，`排版.md` 维护组内文字与几何，风格文件维护密度和视觉表达。新 Harness 以引用 content.md 的 blueprint.json 为轻量计划；`composition-intent.json` 及 `src/tools/check-composition-intent.mjs`、`src/composition/resolve.mjs` 是可选执行工具，选用时由蓝图派生输入并遵守其契约，不强制新增一套计划；不等同于正式候选协议中的 CompositionPlan。正式选择器尚未加载此自由编排规则，迁移需单独验证。
 
 - 共享逻辑组织维护于 `页面组合.md`，麦肯锡视觉表达唯一维护于 `排版体系/麦肯锡式.md`；任务入口只要求加载和核对，不复制原则正文。聊天记忆不参与运行时加载，实验快照也不是现行规则。大学独立生成读取该文件；`content-director`、`visual-selector` 当前不读取 Skin 绑定规则，不能把前者加载成功宣称为后两者已生效。加载证据与成品遵守证据分别报告。
 

@@ -61,8 +61,13 @@ test("双组对比的组数和每组条目数由 PageContent 确定性补齐", (
 test("普通顺序过程至少包含基础顺序语法，密度不作为硬拒绝条件", async () => {
   const intent = await readFixture("sequence.intent.json");
   const result = matchPageIntent(intent, contracts);
-  assert.ok(["single-match", "needs-ranking"].includes(result.decision));
+  // 断言的是「有可用结构、且基础顺序语法没有被密度规则拒掉」，不是某个决策标签：
+  // 两个候选的 adaptationStatus 不同（已登记契约的 partial 对仅有声明的 adaptive），
+  // 因此 sameFit 为假，决策必然是 ranked-match 而非 needs-ranking。
+  assert.notEqual(result.decision, "fallback");
   assert.ok(result.candidates.some((item) => item.assetId === "sequence-flow-001"));
+  // 排序把已登记空间契约的 partial 排在只有声明的 adaptive 之前，见 ADAPTATION_ORDER。
+  assert.equal(result.selectedAssetId, "sequence-flow-001");
 });
 
 test("purposeText 可自由变化，执行只依赖受控 purposeKey", async () => {

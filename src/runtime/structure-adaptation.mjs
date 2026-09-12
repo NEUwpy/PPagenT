@@ -7,6 +7,7 @@
  * Keeping the profile beside the runtime contract lets discovery, composition
  * planning and the actual compiler agree on the same failure boundary.
  */
+import { MINIMUM_READABLE_FONT_SIZE_PT } from "./typography-standards.mjs";
 
 const PROFILE_DEFAULTS = Object.freeze({
   rail: Object.freeze({
@@ -159,10 +160,16 @@ export function getStructureAdaptationProfile(assetOrId) {
   });
 }
 
+// 「可适配」的判据是清单里真的登记了 adaptation 契约，而不是 runtime.contract.adaptationStatus
+// 这个裸声明。旧判据写的是 adaptationStatus === "adaptive"，于是对 32 个只有裸声明、连
+// adaptation 字段都没有的资产返回 true，对 3 个真正登记了契约的资产（adaptationStatus 已被
+// 收紧为 "partial"）返回 false —— 与实际能力正好相反。
+// 真源：assets/结构图/*/asset.json 的落盘值；迁移台账见
+// tests/structure-adaptation-contract.test.mjs 的 MIGRATED_ASSET_IDS。
 export function isAdaptiveStructureAsset(asset) {
   return asset?.kind === "component"
     && asset?.runtime?.renderer === "html-component"
-    && asset?.runtime?.contract?.adaptationStatus === "adaptive";
+    && Boolean(asset?.spatialContract?.adaptation);
 }
 
 export function countStructureItems(parameters = {}) {
@@ -335,8 +342,12 @@ export function resolveStructureAdaptation(asset, targetFrame, designFrame) {
     sourceFrame: normalizedSource,
     targetFrame: normalizedTarget,
     minimumFrame: adaptiveMinimumFrame(asset, { itemCount }),
-    minFontSize: Number(asset.spatialContract?.minFontSize ?? 15),
+    minFontSize: Number(asset.spatialContract?.minFontSize ?? MINIMUM_READABLE_FONT_SIZE_PT),
     status: asset.runtime.contract.adaptationStatus,
+    // 「登记了契约」和「启用了适配」是两件事：现存 3 份契约都是 enabled:false 的
+    // planned 契约（evidence: profile-contract-unverified），这里如实带出来，
+    // 免得调用方只看 mode: "adaptive" 就当它已经可以重排。
+    enabled: asset.spatialContract.adaptation.enabled === true,
   };
 }
 
@@ -352,6 +363,7 @@ export function describeStructureAdaptation(asset) {
     minimumFrame: { width: minimum.width, height: minimum.height },
     minimumBasis: minimum.basis,
     verified: minimum.verified,
+    enabled: asset.spatialContract.adaptation.enabled === true,
   };
 }
 

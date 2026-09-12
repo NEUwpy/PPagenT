@@ -78,7 +78,11 @@ function evaluateContract(intent, contract) {
 }
 
 const LEVEL_ORDER = { foundation: 0, composite: 1, deferred: 2 };
-const ADAPTATION_ORDER = { adaptive: 0, partial: 1, fixed: 2, unknown: 3 };
+// 升序优先。verified 是最高档（asset-manifest-contract 要求只有 verified 才能声明
+// resizeMode=adaptive），必须入表，否则索引得 undefined、相减得 NaN，比较器失效。
+// partial（已登记空间契约）排在 adaptive（仅声明、无实现）之前：全库 32 个核心资产
+// 挂着 adaptive 却没有任何 adaptation 契约，让裸声明压过已登记契约会奖励不可核实的标注。
+const ADAPTATION_ORDER = { verified: 0, partial: 1, adaptive: 2, fixed: 3, unknown: 4 };
 
 function fitSignals(intent, contract) {
   const metricDistance = contract.constraints.metrics.reduce((total, metric) => {

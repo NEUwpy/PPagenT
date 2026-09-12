@@ -6,6 +6,7 @@ import {
   resolveTextLayoutDefinition,
   textLayoutAcceptsContentRoles,
 } from "./text-layout-library.mjs";
+import { MINIMUM_READABLE_FONT_SIZE_PT } from "../runtime/typography-standards.mjs";
 
 function text(value) {
   return String(value ?? "").trim();
@@ -114,7 +115,7 @@ export function summarizeTextRegionContract(slotContract) {
   const selectionByVariant = new Map((slotContract?.states ?? []).map((state) => (
     [state.variantId, state.selection ?? {}]
   )));
-  const minimumFontSize = Number(slotContract?.minimumFontSize) || 12;
+  const minimumFontSize = Number(slotContract?.minimumFontSize) || MINIMUM_READABLE_FONT_SIZE_PT;
   const groups = new Map();
   for (const variant of slotContract?.variants ?? []) {
     for (const slot of textRegionSlots(variant)) {

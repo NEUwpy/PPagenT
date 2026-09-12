@@ -966,9 +966,14 @@ test("候选日志说明同一 Logic 下结构为何未成为合法候选", asyn
 });
 
 test("阶段门禁流程的分点超过 12 字时在视觉导演前形成容量缺口", async () => {
+  // 真源：assets/结构图/阶段门禁流程-004/review.mjs 的 POINT_LIMIT = 12，且
+  // src/agent/visual-resolution.mjs 的硬拒绝与 recoverablePointCapacityIssue 都用
+  // `maxPointChars > 12`（严格大于）；计数口径是 Array.from(...) 的码点，
+  // 与 src/content/page-content.mjs 的 countChars 一致，中文每字算 1。
+  // 夹具里的"长"分点必须真正超过 12 字，否则永远不满足本测试名称描述的前提。
   const page = content("phase-gate-capacity", [
-    { id: "phase-1", title: "马灯守候", body: "点灯守望", points: ["门禁一", "口头请假条打完胜仗就回来"] },
-    { id: "phase-2", title: "青春点灯", body: "接力支教", points: ["门禁二", "十年后学生成长为支教校友"] },
+    { id: "phase-1", title: "马灯守候", body: "点灯守望", points: ["门禁一", "口头请假条写下打完胜仗就回来"] },
+    { id: "phase-2", title: "青春点灯", body: "接力支教", points: ["门禁二", "十年后学生成长为她那样的支教校友"] },
     { id: "phase-3", title: "青春归来", body: "投身西部", points: ["青年投身西部建设", "孩子梦想被持续点亮"] },
   ]);
   page.logicIntent = { logicId: "sequence", reason: "三个阶段之间存在明确门禁" };

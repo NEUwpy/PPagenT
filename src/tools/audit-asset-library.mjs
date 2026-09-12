@@ -55,6 +55,7 @@ const pendingReviewIds = new Set();
 for (const entry of coreAssets) {
   if (assetIds.has(entry.id)) issues.push(`重复资产 ID: ${entry.id}`);
   assetIds.add(entry.id);
+  const isSkin = entry.metadata.kind === "skin";
   const isCore = entry.status === "core";
   const isPendingReview = entry.status === "pending-review";
   const isWithdrawn = entry.status === "withdrawn";
@@ -66,6 +67,11 @@ for (const entry of coreAssets) {
   }
   else if (isSuperseded) {
     // 已被新资产替代，仅保留历史实现。
+  }
+  // Skin 用 candidate/reviewed 表达主题成熟度（validateStructureSkin 强制），
+  // 与结构组件的 core/pending-review 不是同一套词汇，不能共用一个白名单。
+  else if (isSkin && new Set(["candidate", "reviewed"]).has(entry.status)) {
+    // 未经审阅的 Skin 不进入正式调用目录，但状态本身合法。
   }
   else issues.push(`资产状态错误: ${entry.id}/${entry.status ?? "未声明"}`);
   if (isCore) {
@@ -85,11 +91,14 @@ for (const entry of coreAssets) {
       for (const issue of reachability.issues) issues.push(`核心资产正式不可达: ${entry.id}/${issue}`);
     }
   }
-  if (!isWithdrawn && !isSuperseded && (!entry.layoutExpansion || !new Set(["fixed", "responsive"]).has(entry.layoutExpansion.mode))) {
-    issues.push(`核心资产缺少版式扩散模式: ${entry.id}`);
+  // 版式扩散只约束结构组件。Skin 是换标换色的主题来源，不扩散版式，
+  // 缺 kind 守卫会把它误判成三个缺失字段。
+  const needsLayoutExpansion = !isWithdrawn && !isSuperseded && entry.metadata.kind === "component";
+  if (needsLayoutExpansion && (!entry.layoutExpansion || !new Set(["fixed", "responsive"]).has(entry.layoutExpansion.mode))) {
+    issues.push(`结构组件缺少版式扩散模式: ${entry.id}`);
   }
-  if (!isWithdrawn && !isSuperseded && !entry.layoutExpansion?.range?.trim()) issues.push(`核心资产缺少版式扩散范围: ${entry.id}`);
-  if (!isWithdrawn && !isSuperseded && !entry.layoutExpansion?.rule?.trim()) issues.push(`核心资产缺少版式扩散规则: ${entry.id}`);
+  if (needsLayoutExpansion && !entry.layoutExpansion?.range?.trim()) issues.push(`结构组件缺少版式扩散范围: ${entry.id}`);
+  if (needsLayoutExpansion && !entry.layoutExpansion?.rule?.trim()) issues.push(`结构组件缺少版式扩散规则: ${entry.id}`);
   const directory = entry.directory;
   const metadata = entry.metadata;
   for (const name of isCore ? ["generate.mjs"] : isPendingReview ? ["review.mjs", "component.css", "visual-intent.md"] : []) {

@@ -1,5 +1,6 @@
 import { resolveComponentTypography } from './html-component-theme.mjs';
 import { listTextPrimitives } from './text-primitives.mjs';
+import { MINIMUM_READABLE_FONT_SIZE_PT } from '../runtime/typography-standards.mjs';
 
 // Representative sizes, not three different drawings. Intermediate frames still fit.
 export const preservedSizeExamples = Object.freeze({ large: 1, medium: 0.85, small: 0.7 });
@@ -18,9 +19,12 @@ export function preservedTypography(scale, theme = {}) {
     const skinRole = role === 'funnelStepTitle' ? 'componentLabel' : role;
     // An explicitly assigned Skin size stays fixed unless Skin also supplies its allowed tiers.
     const tiers = theme.typographyTiers?.[skinRole] ?? (theme.typography?.[skinRole] != null ? [base[role]] : [...primitives[primitive], base[role]]);
-    const skinAssigned = theme.typography?.[skinRole] != null;
-    if (!Array.isArray(tiers) || !tiers.length || tiers.some(n => !Number.isFinite(n) || (skinAssigned ? n <= 0 : n < 12))) {
-      throw new Error(`${skinRole} 字号档位必须是至少 12 pt 的非空数值数组`);
+    // 下限对 Skin 自己指定的字号同样成立。旧实现在 skinAssigned 时只查 n > 0，等于给
+    // Skin 开了一个后门：neutral-editorial 的 componentMeta 11.25 与 mckinsey 的 10.5
+    // 都是从这个口子过去的，门禁一次也没拦过。可读性下限不区分字号从哪来。
+    // 真源：src/runtime/typography-standards.mjs 的 MINIMUM_READABLE_FONT_SIZE_PT。
+    if (!Array.isArray(tiers) || !tiers.length || tiers.some(n => !Number.isFinite(n) || n < MINIMUM_READABLE_FONT_SIZE_PT)) {
+      throw new Error(`${skinRole} 字号档位必须是至少 ${MINIMUM_READABLE_FONT_SIZE_PT} pt 的非空数值数组`);
     }
     const allowed = [...new Set(tiers)].filter(n => n <= base[role]).sort((a,b) => b-a);
     if (!allowed.length) throw new Error(`${skinRole} 没有不超过 Skin 设定字号的可用档位`);

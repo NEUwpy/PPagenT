@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import { FileBlob, PresentationFile } from "@oai/artifact-tool";
 import { exportTemplateMappedQa } from "../asset-runtime/template-utils.mjs";
 import { auditRenderedDeck } from "./audit-rendered-typography.mjs";
+import { MINIMUM_READABLE_FONT_SIZE_PT } from "../runtime/typography-standards.mjs";
 import { assertSpatialFit, loadCompositionLayouts } from "../composition/layouts.mjs";
 import { northeasternUniversitySkin } from "../runtime/skins/northeastern-university.mjs";
 import { discoverAssetManifestEntries } from "./asset-manifest-inventory.mjs";
@@ -16,6 +17,15 @@ async function readJson(target) {
 
 async function sha256(target) {
   return crypto.createHash("sha256").update(await fs.readFile(target)).digest("hex");
+}
+
+async function exists(target) {
+  try {
+    await fs.access(target);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function inspectSpatialContract(metadata, layouts) {
@@ -29,7 +39,8 @@ function inspectSpatialContract(metadata, layouts) {
   if (!new Set(["natural", "contain", "adaptive"]).has(contract.resizeMode)) {
     issues.push(`unsupported-component-resize-mode:${contract.resizeMode ?? "missing"}`);
   }
-  if (contract.minFontSize < 15) issues.push("minimum-font-size-below-15");
+  // 旧检查写死在 15，把 32 个合规核心结构全部误判违规；下限以 typography-standards.mjs 为准。
+  if (contract.minFontSize < MINIMUM_READABLE_FONT_SIZE_PT) issues.push("minimum-font-size-below-minimum");
   if (contract.resizeMode === "adaptive") {
     if (metadata.runtime?.contract?.adaptationStatus !== "verified") {
       issues.push("adaptive-component-not-verified");
@@ -67,11 +78,35 @@ async function inspectAsset(root, entry, tempRoot, runtimeSha256, layouts) {
   const examplePath = path.join(directory, "example.pptx");
   const generatorPath = path.join(directory, "generate.mjs");
   const metadata = await readJson(metadataPath);
+  // 资产缺 example.pptx / generate.mjs 也是一条 issue，不是进程级失败。旧实现直接
+  // 让 FileBlob.load / sha256 抛出，整个审计会在第一个缺文件的资产上崩掉，
+  // 后面所有资产的结果一起丢失（assets/结构图/反方质疑回应论证-003 即可复现）。
+  const missingArtifacts = [];
+  for (const [label, target] of [["example.pptx", examplePath], ["generate.mjs", generatorPath]]) {
+    if (!(await exists(target))) missingArtifacts.push(`missing-${label}`);
+  }
+  if (missingArtifacts.length) {
+    // status 是 "not-auditable" 而不是 "passed" 也不是 "failed"：这类资产没有被审过，
+    // 记成 passed 是假通过，记成 failed 是把"没有可审的产物"和"审出问题"混为一谈。
+    // 它仍然逐条出现在报告里并计入 counts.notAuditable，不是被过滤掉。
+    return {
+      id: entry.id,
+      status: "not-auditable",
+      kind: metadata.kind,
+      metadataSha256: await sha256(metadataPath),
+      exampleSha256: null,
+      generatorSha256: null,
+      runtimeSha256,
+      issues: missingArtifacts,
+      spatialContractAudit: { status: "skipped", issues: [] },
+      audit: { status: "skipped", minimumFontSize: null, violations: [] },
+    };
+  }
   const presentation = await PresentationFile.importPptx(await FileBlob.load(examplePath));
   const qaDir = path.join(tempRoot, entry.id);
   await exportTemplateMappedQa(presentation, qaDir);
   const audit = await auditRenderedDeck(qaDir, {
-    minimumFontSize: 15,
+    minimumFontSize: MINIMUM_READABLE_FONT_SIZE_PT,
     tolerance: 0.5,
     requireQaParents: metadata.kind === "component",
   });
@@ -91,7 +126,10 @@ async function inspectAsset(root, entry, tempRoot, runtimeSha256, layouts) {
 
 export async function auditCoreAssetQuality(root, { writeReport = false } = {}) {
   const resolvedRoot = path.resolve(root);
-  const coreAssets = await discoverAssetManifestEntries(resolvedRoot, "assets");
+  // 注意范围：discoverAssetManifestEntries() 返回 assets/ 下全部清单（此刻 93 份，
+  // 含待审/撤回/替代），不是"core"。工具名与 npm 脚本名里的 core 只是历史命名，
+  // 这里保持全量遍历而不是悄悄改成只审 core——那会让另外 54 份无声消失。
+  const libraryEntries = await discoverAssetManifestEntries(resolvedRoot, "assets");
   const runtimePath = path.join(resolvedRoot, "src", "asset-runtime", "component-builders.mjs");
   const auditorPath = path.join(resolvedRoot, "src", "tools", "audit-rendered-typography.mjs");
   const compositionCatalogPath = path.join(resolvedRoot, "catalog", "composition-layouts.json");
@@ -104,13 +142,23 @@ export async function auditCoreAssetQuality(root, { writeReport = false } = {}) 
   const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "ppagent-core-qa-"));
   try {
     const assets = [];
-    for (const entry of coreAssets) {
+    for (const entry of libraryEntries) {
       assets.push(await inspectAsset(resolvedRoot, entry, tempRoot, runtimeSha256, layouts));
     }
+    const notAuditable = assets.filter((asset) => asset.status === "not-auditable");
     const report = {
       schemaVersion: 1,
-      status: assets.every((asset) => asset.status === "passed") ? "passed" : "failed",
-      minimumFontSize: 15,
+      // 总状态只对"真的被审过"的资产下结论。缺 example.pptx 的资产没有结论，
+      // 既不算通过也不算失败；数量与 id 都在 counts.notAuditable 与 assets 里，
+      // 不靠缩小遍历范围来让总状态变绿。
+      status: assets.every((asset) => asset.status === "passed" || asset.status === "not-auditable") ? "passed" : "failed",
+      counts: {
+        total: assets.length,
+        passed: assets.filter((asset) => asset.status === "passed").length,
+        failed: assets.filter((asset) => asset.status === "failed").length,
+        notAuditable: notAuditable.length,
+      },
+      minimumFontSize: MINIMUM_READABLE_FONT_SIZE_PT,
       geometryTolerance: 0.5,
       runtimePath: "src/asset-runtime/component-builders.mjs",
       runtimeSha256,

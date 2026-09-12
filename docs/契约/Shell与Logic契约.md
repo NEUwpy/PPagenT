@@ -82,7 +82,7 @@ Logic 只有在现有语义无法保留关键关系时才新增。时间、单�
 
 结构只声明真实连续 TextRegion，不在结构代码中为了标题、正文、数字或标签的组合建立大量页面分支。受控 Markdown 解析为稳定 Token，再由 Renderer 在真实区域中排版；空间分离或形状不连续的承载面保留不同 `regionId`。
 
-字号由 Skin 语义角色提供，当前组件档位为 `25 / 23 / 21 / 19 / 17 / 15 pt`，普通正文默认 17 pt。Renderer 只能在离散档位中选择能完整容纳的最大一级；15 pt 仍放不下时，必须调整区域、换 Composition、拆页、换 Macro 或拒绝，不能连续缩字硬塞。
+字号由 Skin 语义角色提供，档位不写在本文件里——真源是 `src/runtime/typography-standards.mjs`（全项目可读性下限 `MINIMUM_READABLE_FONT_SIZE_PT`，当前 12 pt）与当前 Skin 的 `typography` / `typographyTiers` 声明。Renderer 只能在离散档位中选择能完整容纳的最大一级；到下限为止仍放不下时，必须调整区域、换 Composition、拆页、换 Macro 或拒绝，不能连续缩字硬塞。
 
 Slot Map 从 HTML 的 `data-slot-*` 和浏览器计算样式派生，不能手写第二份坐标表。正式运行只读取已固化契约，不展开全状态笛卡尔积。
 

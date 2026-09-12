@@ -187,12 +187,19 @@ test("Typography Matcher 只在已登记候选中按内容角色展开 Region �
       }],
     }],
   };
+  // 真源：src/visual-runtime/typography-matcher.mjs 的 summarizeTextRegionContract 产出结构。
+  // 除 Region/Layout/Frame 外还会披露 minimumFontSize（未声明时按 12 兜底）与 stateCapacities
+  // （按 Region 几何与 minimumFontSize 估算的每个状态容量）。本契约未声明 minimumFontSize，
+  // 故取 12；fontPx = 12 * 4/3 = 16，estimate = floor(floor(280/16) * floor(160/(16*1.2)) * 0.8)
+  // = floor(17 * 8 * 0.8) = 108。这里填真实计算值，不用宽松断言。
   assert.deepEqual(summarizeTextRegionContract(slotContract), [{
     regionKey: "items[]",
     contentRoles: ["body", "heading"],
     defaultLayoutId: "heading-content-flow",
     compatibleLayoutIds: ["heading-content-flow"],
     frameRange: { minWidth: 280, maxWidth: 280, minHeight: 160, maxHeight: 160 },
+    minimumFontSize: 12,
+    stateCapacities: [{ selection: {}, width: 280, height: 160, estimatedMaxChars: 108 }],
   }]);
   const matched = matchTextLayoutsForPayload({
     slotContract,

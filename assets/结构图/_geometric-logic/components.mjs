@@ -25,7 +25,7 @@ const BASE_STYLE = `
 .geo .soft{fill:#f3f6f8;stroke:#dce5eb;stroke-width:1.2}
 .geo .paper{background:#fff;border:1px solid #dfe7ec;border-radius:14px;box-shadow:0 8px 20px rgba(35,72,103,.08)}
 .geo .anchor{display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;font-weight:700;line-height:1.35;background:linear-gradient(135deg,#285f89,#4f86ac);box-shadow:0 12px 25px rgba(40,91,130,.18)}
-.geo h3,.geo p{margin:0}.geo small{font-size:10.5pt;letter-spacing:.08em;color:#7890a2}
+.geo h3,.geo p{margin:0}.geo small{font-size:var(--ppagent-component-meta-size,12pt);letter-spacing:.08em;color:#7890a2}
 `;
 
 function component(id, extraCss, render, preview, resolve) {

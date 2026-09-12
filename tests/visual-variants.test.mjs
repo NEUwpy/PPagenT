@@ -5,6 +5,7 @@ import test from "node:test";
 import { computeContainedFrame } from "../src/asset-runtime/contained-frame.mjs";
 import { northeasternUniversitySkin } from "../src/runtime/skins/northeastern-university-contract.mjs";
 import { listStructureAssetBuilders } from "../src/runtime/assets.mjs";
+import { discoverCoreAssetPackages } from "../src/runtime/core-asset-packages.mjs";
 import {
   mapPageContent as mapSimpleFunnelPageContent,
   visualComponent as simpleFunnelComponent,
@@ -39,39 +40,18 @@ test("东北大学主题以等比例 contain 承载正文组件", () => {
 test("正式结构候选来自当前核心 HTML 资产包", async () => {
   const variants = await listRenderableVisualVariants({ root });
   const structural = variants.filter((variant) => variant.renderer !== "skin");
-  assert.deepEqual(structural.map((variant) => variant.assetId), [
-    "argument-evidence-conclusion-001",
-    "branching-decision-routes-001",
-    "branching-scenario-fan-004",
-    "causal-fishbone-attribution-001",
-    "comparison-pros-cons-balance-005",
-    "comparison-dual-verdict-001",
-    "containment-consensus-field-005",
-    "containment-multi-set-intersection-001",
-    "convergence-many-to-one-003",
-    "convergence-funnel-001",
-    "convergence-simple-funnel-001",
-    "cycle-racetrack-loop-005",
-    "cycle-single-chain-feedback-002",
-    "cycle-loop-001",
-    "goal-alignment-strategy-metrics-001",
-    "hierarchy-grouped-breakdown-005",
-    "hierarchy-people-tree-001",
-    "hub-directed-outcomes-002",
-    "hub-two-tier-capabilities-004",
-    "hub-radial-001",
-    "layered-iceberg-depth-006",
-    "layered-architecture-001",
-    "matrix-quadrant-priority-001",
-    "network-internal-external-ecosystem-001",
-    "parallel-equal-cards-001",
-    "problem-method-result-001",
-    "problem-solution-outcome-001",
-    "progression-spectrum-focus-001",
-    "role-stage-collaboration-001",
-    "sequence-phase-gates-004",
-    "sequence-flow-001",
-  ]);
+  // 期望集合真源：discoverCoreAssetPackages 从 catalog/logic-map.json 与各资产 asset.json
+  // 推导出的核心资产包（同理见 src/selection/visual-variants.mjs 的 loadCoreAssetIds），
+  // 剔除 skin 渲染器——皮肤是页面外壳，不是结构候选。这里只固化「集合」，
+  // 不固化展示顺序：顺序由 loadVisualVariantCatalog 的 familyId 排序负责。
+  const coreStructureAssetIds = (await discoverCoreAssetPackages(root))
+    .filter((item) => item.runtime.renderer !== "skin")
+    .map((item) => item.assetId);
+  const byAssetId = (left, right) => left.localeCompare(right);
+  assert.deepEqual(
+    structural.map((variant) => variant.assetId).sort(byAssetId),
+    coreStructureAssetIds.sort(byAssetId),
+  );
   assert.deepEqual(
     queryVisualVariants(structural, {
       logicId: "branching",
@@ -86,7 +66,9 @@ test("正式结构候选来自当前核心 HTML 资产包", async () => {
     queryVisualVariants(structural, {
       logicId: "cycle",
       structureGroupId: "cycle-pdca-ring-p57",
-      baseRelation: "sequence",
+      // 真源：assets/结构图/循环闭环-001/asset.json 的 runtime.supportedBaseRelations = ["cycle"]，
+      // 且 catalog/logic-map.json 把 cycle-loop-001 归在 logicId "cycle" 下（sequence 另有自己的资产）。
+      baseRelation: "cycle",
       itemCount: 4,
     }).map((variant) => variant.variantId),
     ["default"],
@@ -187,72 +169,22 @@ test("正式结构候选来自当前核心 HTML 资产包", async () => {
 
 test("运行时登记当前核心结构资产", async () => {
   const builders = await listStructureAssetBuilders();
-  assert.deepEqual(builders.defaultAssetIds, [
-    "argument-evidence-conclusion-001",
-    "branching-decision-routes-001",
-    "branching-scenario-fan-004",
-    "causal-fishbone-attribution-001",
-    "comparison-dual-verdict-001",
-    "comparison-pros-cons-balance-005",
-    "containment-consensus-field-005",
-    "containment-multi-set-intersection-001",
-    "convergence-funnel-001",
-    "convergence-many-to-one-003",
-    "convergence-simple-funnel-001",
-    "cycle-loop-001",
-    "cycle-racetrack-loop-005",
-    "cycle-single-chain-feedback-002",
-    "goal-alignment-strategy-metrics-001",
-    "hierarchy-grouped-breakdown-005",
-    "hierarchy-people-tree-001",
-    "hub-directed-outcomes-002",
-    "hub-radial-001",
-    "hub-two-tier-capabilities-004",
-    "layered-architecture-001",
-    "layered-iceberg-depth-006",
-    "matrix-quadrant-priority-001",
-    "network-internal-external-ecosystem-001",
-    "parallel-equal-cards-001",
-    "problem-method-result-001",
-    "problem-solution-outcome-001",
-    "progression-spectrum-focus-001",
-    "role-stage-collaboration-001",
-    "sequence-flow-001",
-    "sequence-phase-gates-004",
-  ]);
-  assert.deepEqual(builders.variantBuilderKeys, [
-    "argument-evidence-conclusion-001:proof-stack-1n1",
-    "branching-decision-routes-001:single-decision-fanout",
-    "branching-scenario-fan-004:assumption-to-scenarios-and-outcomes",
-    "causal-fishbone-attribution-001:fishbone-attribution",
-    "comparison-dual-verdict-001:dual-verdict-mirror",
-    "comparison-pros-cons-balance-005:geometric-balance-with-verdict",
-    "containment-consensus-field-005:consensus-field",
-    "containment-multi-set-intersection-001:multi-set-common-core",
-    "convergence-funnel-001:staged-input-content-funnel",
-    "convergence-many-to-one-003:multiple-lanes-merge-to-output",
-    "convergence-simple-funnel-001:input-steps-only",
-    "cycle-loop-001:default",
-    "cycle-racetrack-loop-005:racetrack-loop",
-    "cycle-single-chain-feedback-002:single-chain-return-control",
-    "goal-alignment-strategy-metrics-001:typographic-goal-strategy-field-with-metric-band",
-    "hierarchy-grouped-breakdown-005:grouped-breakdown-with-points",
-    "hierarchy-people-tree-001:three-level-portraits",
-    "hub-directed-outcomes-002:center-periphery-radial-connections",
-    "hub-radial-001:balanced-orbit-anchor",
-    "hub-two-tier-capabilities-004:core-orbital-capabilities-shared-outcomes",
-    "layered-architecture-001:curved-frustum-stack",
-    "layered-iceberg-depth-006:faceted-geometric-iceberg",
-    "matrix-quadrant-priority-001:axis-bubble-quadrant",
-    "network-internal-external-ecosystem-001:dual-domain-network-with-shared-core",
-    "parallel-equal-cards-001:equal-floating-cards",
-    "problem-method-result-001:research-1n1",
-    "problem-solution-outcome-001:paired-convergence",
-    "progression-spectrum-focus-001:ordered-regions-with-focus",
-    "role-stage-collaboration-001:continuous-stage-role-swimlane",
-    "sequence-flow-001:continuous-numbered-rail",
-    "sequence-phase-gates-004:ordered-phases-with-gates",
-  ]);
+  // 期望集合真源：discoverCoreAssetPackages（catalog/logic-map.json + 各资产 asset.json）。
+  // listStructureSkills 的筛选口径是 status==="core" 且 runtime.logicId 存在且 renderer!=="skin"；
+  // 当前全部非 skin 核心包都带 logicId，故两者等价，这里以更严格的发现结果为准。
+  // listStructureSkills 自身按 assetId 升序返回，故此处同时校验顺序。
+  // （原断言重复硬编码了 35 项清单，既有已撤回的 hierarchy-people-tree-001，
+  //   又缺 5 个已晋升资产，资产增减时不会自动跟上。）
+  const coreStructurePackages = (await discoverCoreAssetPackages(root))
+    .filter((item) => item.runtime.renderer !== "skin");
+  assert.deepEqual(
+    builders.defaultAssetIds,
+    coreStructurePackages.map((item) => item.assetId),
+  );
+  assert.deepEqual(
+    builders.variantBuilderKeys,
+    coreStructurePackages.map((item) => `${item.assetId}:${item.runtime.variantId}`),
+  );
 });
 
 test("漏斗输入使用单一圆内标记槽，图标可选且文字可回退", () => {
@@ -323,16 +255,23 @@ test("两个漏斗的同级阶段标题使用统一字号", async () => {
 test("视觉导演仍需明确选择循环闭环 Structure Group", async () => {
   const variants = (await listRenderableVisualVariants({ root }))
     .filter((variant) => variant.renderer !== "skin");
+  // 真源：assets/结构图/循环闭环-001/asset.json 声明 runtime.supportedBaseRelations = ["cycle"]
+  // （commit e614a742 于 2026-08-29 由 "sequence" 显式迁移而来），catalog/logic-map.json 亦把
+  // 三个循环资产归在 logicId "cycle" 下、与 "sequence" 分立。旧的 "sequence" 是迁移前遗留。
   const missing = planVisualVariants([
-    { pageId: "p1", logicId: "cycle", baseRelation: "sequence", itemCount: 4 },
+    { pageId: "p1", logicId: "cycle", baseRelation: "cycle", itemCount: 4 },
   ], { variants });
   assert.equal(missing.status, "needs-director-revision");
+  // 缺的是导演选择本身，而不是候选：若此处退化成 no-renderable-variant，
+  // 上面的 needs-director-revision 会因「没有候选」而假通过。
+  assert.equal(missing.results[0].status, "needs-director-decision");
+  assert.deepEqual(missing.feedback.map((item) => item.code), ["missing-visual-variant"]);
 
   const accepted = planVisualVariants([
     {
       pageId: "p1",
       logicId: "cycle",
-      baseRelation: "sequence",
+      baseRelation: "cycle",
       itemCount: 4,
       visualStructureGroupId: "cycle-pdca-ring-p57",
     },

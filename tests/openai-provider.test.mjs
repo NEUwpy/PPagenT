@@ -200,6 +200,21 @@ test("API 运行时从根目录 rules 读取两位导演对应的规则 profile"
     logic.logicId === "parallel" && logic.availableStructureGroupCount > 0
   )));
   assert.ok(guidelines.logicSkillIndex.every((logic) => !("structureGroups" in logic)));
+  // 这份索引逐条进 model-director-provider 的 logicId.enum，等于"模型能选的逻辑全集"。
+  // 把没有候选结构的逻辑挡在外面，是这一层唯一要做的事：放进去就等于允许模型选一个
+  // 必然落回兜底 defaults 的逻辑，而页面看不出异常。真源是 catalog/logic-map.json 的 assetIds。
+  assert.ok(
+    guidelines.logicSkillIndex.every((logic) => logic.availableStructureGroupCount > 0),
+    "零候选的逻辑不该进模型可见的选择集",
+  );
+  // 挡住的必须是"路线图占位"，不是误伤：这两条仍留在 logic-map 里（看板仍断言 20 条）。
+  const logicMap = JSON.parse(await fs.readFile(path.join(root, "catalog", "logic-map.json"), "utf8"));
+  const roadmapOnly = logicMap.logics.filter((logic) => logic.assetIds.length === 0).map((logic) => logic.id);
+  assert.deepEqual(roadmapOnly.sort(), ["journey", "spatial"]);
+  assert.deepEqual(
+    guidelines.logicSkillIndex.map((logic) => logic.logicId).filter((id) => roadmapOnly.includes(id)),
+    [],
+  );
   assert.ok(guidelines.structureCapabilities.length >= 12);
   assert.ok(guidelines.structureCapabilities.some((capability) => (
     capability.logicId === "sequence"

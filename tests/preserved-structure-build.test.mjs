@@ -19,6 +19,8 @@ test('university preserved designs render with McKinsey roles and university the
  const skin=universityMckinseySkin;
  assert.equal(skin.layout,'mckinsey');
  assert.equal(skin.typography.componentBody,13.5);
+ // componentMeta 原来是 t.meta*0.75 = 10.5 pt，低于全项目可读性下限，现在托到 12。
+ assert.equal(skin.typography.componentMeta,12);
  try{
   for(const dir of ['双排折角便签-002','简明转化漏斗-001','成熟度阶梯-002']){
    const assetDir=path.join(root,'assets/结构图',dir);
@@ -31,7 +33,9 @@ test('university preserved designs render with McKinsey roles and university the
    const texts=tree.nodes.filter(n=>n.kind==='text');
    assert.ok(texts.length>0);
    for(const node of texts){
-    assert.ok([21,18,14].some(size=>Math.abs(node.style.fontSize-size)<.05),`${dir}: ${node.style.fontSize}`);
+    // 这些是 px（pt × 4/3）：21↔15.75、18↔13.5、16↔12。第三个原来写 14（=10.5 pt），
+    // 也就是把低于下限的 meta 钉在这里当期望值；现在跟着 Skin 的修正值一起变成 16。
+    assert.ok([21,18,16].some(size=>Math.abs(node.style.fontSize-size)<.05),`${dir}: ${node.style.fontSize}`);
    }
    assert.ok(JSON.stringify(tree).includes('Microsoft YaHei'));
    assert.ok(!JSON.stringify(tree).includes('HYWenRunSongYun U'));
@@ -87,14 +91,17 @@ test('size policy keeps approved tiers and obeys explicit Skin typography',()=>{
  assert.equal(small.sizes.componentMeta,12);
  assert.equal(preservedTypography(.7,{typography:{componentBody:17}}).sizes.componentBody,17);
  assert.equal(preservedTypography(.7,{typography:{componentBody:17},typographyTiers:{componentBody:[17,15]}}).sizes.componentBody,15);
- assert.equal(preservedTypography(.7,{typography:{componentMeta:15*.75}}).sizes.componentMeta,11.25);
+ // 规则变了，这条断言跟着变：以前 Skin 指定的字号低于下限也照单全收（返回 11.25），
+ // 门禁对 Skin 形同虚设；现在可读性下限对所有来源一视同仁。上面第 88 行仍成立——
+ // Skin 指定的 17 高于下限，照样按 Skin 走。
+ assert.throws(()=>preservedTypography(.7,{typography:{componentMeta:15*.75}}),/至少 12/);
  assert.throws(()=>preservedTypography(.7,{typographyTiers:{componentBody:[10]}}),/至少 12/);
 });
 
 test('neutral Skin preserves design-pixel typography and semantic surfaces in the actual renderer',async()=>{
  const assetDir=path.join(root,'assets/结构图/双排折角便签-002');
  const m=await import(pathToFileURL(path.join(assetDir,'review.mjs')).href);
- const theme={id:'neutral-editorial-001',font:'Noto Sans SC',fonts:{display:'Noto Serif SC',body:'Noto Sans SC'},primaryColor:'#A35D4F',background:'#F5F4EF',surface:'#EEECE5',dark:'#20201D',body:'#4B4A45',line:'#D8D5CC',muted:'#85837B',typography:{componentItemTitle:12.75,componentBody:12.75,componentMeta:11.25}};
+ const theme={id:'neutral-editorial-001',font:'Noto Sans SC',fonts:{display:'Noto Serif SC',body:'Noto Sans SC'},primaryColor:'#A35D4F',background:'#F5F4EF',surface:'#EEECE5',dark:'#20201D',body:'#4B4A45',line:'#D8D5CC',muted:'#85837B',typography:{componentItemTitle:12.75,componentBody:12.75,componentMeta:12}};
  try{
   const tree=await resolveHtmlComponent({component:preservedComponent(m.visualComponent,frame,theme),parameters:{items:m.previewParameters.items.slice(0,4)},assetDir,theme,targetFrame:frame});
   const texts=tree.nodes.filter(n=>n.kind==='text');

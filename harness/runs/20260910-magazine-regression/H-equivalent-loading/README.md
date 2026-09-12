@@ -1,5 +1,7 @@
 # A等价加载复验
 
+> 2026-09-12 状态补记：从 `d5efa449` 起，项目主线已转为轻量 Harness 的 R0–R3 重构；本目录 A–H 保留为历史效果参考与失败证据，不再是唯一主验证。下文“当前/下一步”均指本次历史回归，不自动继续执行。旧候选与验收结论不变。
+
 用户最新目标是达到第一轮A组效果，评价顺序A>C>B。此实验先排除维护文件结构与执行输入内容被混淆的问题，不扩展B系修订。
 
 control/input/prompt.md直接复制A；assembled/source-parts保存C的六段原文，按序无损拼接成assembled/input/prompt.md。两个输入的SHA256均为40e516ef029cab81c041fd91add28d03cfac36af2c8e10cfc663618236b51ad2。两份稿件也完全相同。证明见equivalence.json；原文保留不改字。

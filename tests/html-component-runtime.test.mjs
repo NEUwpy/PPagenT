@@ -42,6 +42,7 @@ import {
   visualComponent as intersectionVisualComponent,
 } from "../assets/结构图/多集合交集-001/review.mjs";
 import { northeasternUniversityTheme } from "../src/runtime/skins/northeastern-university-theme.mjs";
+import { resolveStructureTheme } from "../src/visual-runtime/html-component-theme.mjs";
 
 const assetDir = path.resolve(import.meta.dirname, "../assets/结构图/循环闭环-001");
 const parallelAssetDir = path.resolve(import.meta.dirname, "../assets/结构图/等权并列卡片-001");
@@ -133,6 +134,10 @@ test("Native 编译把浏览器 computed px 原样交给 Artifact Tool，避免�
 
 test("循环 HTML 由通用 DOM 编译器直接生成可编辑 Native 形状", async () => {
   const targetFrame = { left: 55, top: 166, width: 1170, height: 492 };
+  const theme = {
+    font: "Microsoft YaHei",
+    typography: { componentHeading: 25, componentTitle: 23, componentItemTitle: 21, componentLead: 19, componentBody: 17, componentLabel: 17, componentMeta: 15 },
+  };
   try {
     let tree;
     for (const stepCount of [3, 4, 5, 6]) {
@@ -141,10 +146,7 @@ test("循环 HTML 由通用 DOM 编译器直接生成可编辑 Native 形状", a
         parameters: resolvePreviewParameters(previewParameters, { stepCount }),
         assetDir,
         targetFrame,
-        theme: {
-          font: "Microsoft YaHei",
-          typography: { componentHeading: 25, componentTitle: 23, componentItemTitle: 21, componentLead: 19, componentBody: 17, componentLabel: 17, componentMeta: 15 },
-        },
+        theme,
       });
       assert.equal(tree.nodes.filter((node) => node.kind === "path").length, stepCount * 2);
       assert.equal(tree.nodes.filter((node) => node.name.startsWith("cycle-panel-")).length, stepCount);
@@ -155,12 +157,16 @@ test("循环 HTML 由通用 DOM 编译器直接生成可编辑 Native 形状", a
       parameters: resolvePreviewParameters(previewParameters, { stepCount: 4 }),
       assetDir,
       targetFrame,
-      theme: {
-        font: "Microsoft YaHei",
-        typography: { componentHeading: 25, componentTitle: 23, componentItemTitle: 21, componentLead: 19, componentBody: 17, componentLabel: 17, componentMeta: 15 },
-      },
+      theme,
     });
-    assert.equal(tree.nodes.find((node) => node.name === "cycle-title-0")?.style.color, "#FFD176");
+    // 颜色真源：主题令牌，而不是资产 CSS 里的字面量。
+    // src/visual-runtime/cycle-stage-colors.mjs 在组件 CSS 之后追加
+    // `.cycle-title{fill:${theme.dark}}`，覆盖 component.css 里的遗留值；
+    // 那里的 #FFD176 是颜色令牌统一前写死的旧值，已不再生效。
+    assert.equal(
+      tree.nodes.find((node) => node.name === "cycle-title-0")?.style.color,
+      resolveStructureTheme(theme).dark,
+    );
     assert.equal(tree.nodes.find((node) => node.name === "cycle-number-0")?.style.fontSizePt, 25);
     assert.equal(tree.nodes.find((node) => node.name === "cycle-title-0")?.style.fontSizePt, 21);
     assert.equal(tree.nodes.find((node) => node.name === "cycle-core-text-0")?.style.fontSizePt, 23);

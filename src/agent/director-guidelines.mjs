@@ -9,8 +9,14 @@ async function loadLogicSkillIndex(root) {
     discoverCoreAssetPackages(root),
   ]);
   const packageById = new Map(packages.map((item) => [item.assetId, item]));
+  // 这份索引会逐条进 model-director-provider 的 logicId.enum，所以它就是"模型能选的逻辑全集"。
+  // catalog/logic-map.json 里的 journey / spatial 是路线图占位（tier: "补充"、assetIds 为空），
+  // 一个候选结构都没有；以前它们照样进 enum，模型选中后 page-content.mjs 只能静默落到兜底
+  // defaults，页面上看不出任何异常。没有候选的逻辑不参与选择——要开放，先补结构再放开。
+  // 覆盖情况仍完整显示在 assets:dashboard 的看板上（那里直接读 logic-map，断言 20 条）。
+  const selectable = logicMap.logics.filter((logic) => Array.isArray(logic.assetIds) && logic.assetIds.length > 0);
   return [
-    ...logicMap.logics.map((logic) => ({
+    ...selectable.map((logic) => ({
     logicId: logic.id,
     name: logic.name,
     tier: logic.tier,

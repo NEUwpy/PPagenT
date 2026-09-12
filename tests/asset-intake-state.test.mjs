@@ -44,6 +44,22 @@ function manifest(status = "pending-review") {
         constraints: { relationTraits: {}, density: ["medium"] },
       },
     },
+    // 真源：src/runtime/asset-manifest-contract.mjs:77-98 —— kind==="component"
+    // 且 renderer!=="skin" 的资产必须声明 spatialContract，且 resizeMode ∈
+    // {natural, contain, adaptive}。字段形态对齐真实核心资产
+    // assets/结构图/鱼骨归因-001/asset.json 的 spatialContract（同为
+    // adaptationStatus:"adaptive" + resizeMode:"natural"）。
+    spatialContract: {
+      coordinateSystem: { width: 1280, height: 720 },
+      contentFrame: { left: 55, top: 166, width: 1170, height: 492 },
+      aspectRatio: 2.378,
+      minimumFrame: { width: 1170, height: 492 },
+      preferredFrame: { width: 1170, height: 492 },
+      resizeMode: "natural",
+      minFontSize: 12,
+      safePadding: 10,
+      supportedCompositionIds: ["component-full"],
+    },
   };
 }
 
