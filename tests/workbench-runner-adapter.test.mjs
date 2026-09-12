@@ -79,6 +79,25 @@ test("历史运行从 state.json 合成只读记录，状态按真实阶段判�
   assert.equal(summary.pipelineNote, RUNNER_PIPELINE_NOTE);
 });
 
+test("有逐页预览时页数按幻灯片数算，正文页数另记", async (t) => {
+  const runDir = await tempDir(t);
+  await write(path.join(runDir, "state.json"), `${JSON.stringify({
+    phase: "ready",
+    sources: [{ id: "s1" }, { id: "s2" }],
+    // 三页正文：牌组实际是 1 张封面 + 3 张正文 = 4 张。
+    pages: [{ pageId: "p1" }, { pageId: "p2" }, { pageId: "p3" }],
+  })}\n`);
+  for (const name of ["slide-01.png", "slide-02.png", "slide-03.png", "slide-04.png"]) {
+    await write(path.join(runDir, "qa", name), "x");
+  }
+
+  const summary = await archiveRunSummary({ runId: "样例", runDir });
+  // 同一次运行在工作台入口与历史入口必须报同一个页数，否则同一份稿子会显示成两个数。
+  assert.equal(summary.pageCount, 4);
+  assert.equal(summary.bodyPageCount, 3);
+  assert.equal(summary.sourceCount, 2);
+});
+
 test("未到 ready 的历史运行记为已停止，宿主失败记为失败", async (t) => {
   const root = await tempDir(t);
   const stopped = path.join(root, "stopped");

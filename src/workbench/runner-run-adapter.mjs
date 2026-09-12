@@ -118,6 +118,10 @@ export async function archiveRunSummary({ runId, runDir }) {
   const stat = await fs.stat(statePath);
   const timestamp = stat.mtime.toISOString();
   const sourceName = state.sourcePath ? path.basename(state.sourcePath) : "";
+  const artifacts = await runnerArtifacts(runDir);
+  // 页数按**实际存在**的逐页预览数，不按 state.pages.length 猜：牌组是 1 张封面 + 全部正文页，
+  // 少算封面会让同一次运行在工作台入口显示 5 页、在历史入口显示 4 页。
+  const slideCount = artifacts.filter((item) => item.label.startsWith("第 ")).length;
   return {
     schemaVersion: "1.0",
     runId,
@@ -133,11 +137,12 @@ export async function archiveRunSummary({ runId, runDir }) {
     // 既不是 manual 也不是 auto：模板据此显示"历史运行"，不伪称当时有检查点。
     visualCheckpointMode: null,
     nativePreviewCheckpointMode: null,
-    pageCount: state.pages?.length ?? 0,
+    pageCount: slideCount || (state.pages?.length ?? 0),
+    bodyPageCount: state.pages?.length ?? 0,
     sourceCount: state.sources?.length ?? 0,
     model: null,
     provider: null,
-    artifacts: await runnerArtifacts(runDir),
+    artifacts,
     stages: RUNNER_STAGES,
     handoffs: RUNNER_HANDOFFS,
     pipelineNote: RUNNER_PIPELINE_NOTE,
