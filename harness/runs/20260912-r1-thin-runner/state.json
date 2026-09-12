@@ -1,0 +1,332 @@
+{
+  "schemaVersion": "ppagent-run-1",
+  "sourcePath": "harness/runs/20260912-r1-thin-runner/原稿.md",
+  "sources": [
+    {
+      "id": "s1",
+      "heading": "从设备清单走向明确交接",
+      "text": "试点目标：让申请人知道何时可以使用，让管理员知道由谁交接，让负责人能够核对异常处理。本稿讨论一个拟议试点，没有提供已实现的成效统计。"
+    },
+    {
+      "id": "s2",
+      "heading": "从设备清单走向明确交接",
+      "text": "边界原则：先使用现有设备和人员安排，不新增自动审批承诺；涉及安全条件的申请仍须由责任人确认。"
+    },
+    {
+      "id": "s3",
+      "heading": "两种协调方式的差别",
+      "text": "临时协调：申请人在群里描述需求，管理员逐次确认设备和时间。入口简单，但调整记录分散，换班时需要重新解释。"
+    },
+    {
+      "id": "s4",
+      "heading": "两种协调方式的差别",
+      "text": "统一登记：申请先进入同一份登记表，管理员确认后再通知使用时间。记录便于交接，但需要有人持续维护状态。"
+    },
+    {
+      "id": "s5",
+      "heading": "两种协调方式的差别",
+      "text": "选择依据：试点优先验证交接是否清楚，再决定是否增加系统功能；统一登记并不意味着自动批准。"
+    },
+    {
+      "id": "s6",
+      "heading": "一次预约怎样完成",
+      "text": "登记需求：第一步由申请人写明设备、时间和使用目的，提交后等待管理员确认。"
+    },
+    {
+      "id": "s7",
+      "heading": "一次预约怎样完成",
+      "text": "确认安排：第二步由管理员核对设备状态与值班安排，明确是否接收申请，再通知申请人。"
+    },
+    {
+      "id": "s8",
+      "heading": "一次预约怎样完成",
+      "text": "使用归还：第三步由使用人完成现场交接，使用结束后归还设备并登记异常情况。"
+    },
+    {
+      "id": "s9",
+      "heading": "一次预约怎样完成",
+      "text": "异常处理：出现设备故障或时间冲突时暂停原安排，由管理员联系责任人处理；这项规则适用于整个预约过程。"
+    },
+    {
+      "id": "s10",
+      "heading": "首轮只检查三件事",
+      "text": "记录完整：检查登记信息、确认结果和归还记录是否能够对应，缺少任一环节就补齐交接信息。"
+    },
+    {
+      "id": "s11",
+      "heading": "首轮只检查三件事",
+      "text": "责任明确：检查申请人、管理员和责任人的分工是否清楚；有争议时先澄清责任，再讨论自动化。"
+    },
+    {
+      "id": "s12",
+      "heading": "首轮只检查三件事",
+      "text": "调整有据：记录取消、改期和故障的具体原因，以实际问题决定下一轮改进，不用页面里的示意流程冒充运行结果。"
+    }
+  ],
+  "deckBrief": {
+    "title": "从设备清单走向明确交接：一次试点提案",
+    "audience": "试点相关方：申请人、设备管理员与试点负责人",
+    "objective": "说明这是一项拟议试点而非已实现成效，讲清两种协调方式的差别与选择依据、一次预约的完整步骤，以及首轮只检查的三件事，推动各方认可试点边界与检查口径。"
+  },
+  "pages": [
+    {
+      "pageId": "p1",
+      "title": "试点目标与边界",
+      "claim": "这是一项拟议试点，目标是让交接与异常处理的责任清楚，且不新增自动审批承诺。",
+      "relation": "none",
+      "items": [
+        {
+          "id": "p1-goal",
+          "sourceIds": [
+            "s1"
+          ],
+          "sourceText": "试点目标：让申请人知道何时可以使用，让管理员知道由谁交接，让负责人能够核对异常处理。本稿讨论一个拟议试点，没有提供已实现的成效统计。"
+        },
+        {
+          "id": "p1-boundary",
+          "sourceIds": [
+            "s2"
+          ],
+          "sourceText": "边界原则：先使用现有设备和人员安排，不新增自动审批承诺；涉及安全条件的申请仍须由责任人确认。"
+        }
+      ],
+      "revision": 1,
+      "composition": {
+        "compositionId": "editorial-focus",
+        "textSlots": [
+          {
+            "slotId": "primary",
+            "sourceItemIds": [
+              "p1-goal"
+            ],
+            "contentMode": "all"
+          },
+          {
+            "slotId": "support",
+            "sourceItemIds": [
+              "p1-boundary"
+            ],
+            "contentMode": "all"
+          }
+        ],
+        "itemLabels": {
+          "p1-goal": "试点目标",
+          "p1-boundary": "边界原则"
+        }
+      },
+      "compositionRevision": 1
+    },
+    {
+      "pageId": "p2",
+      "title": "两种协调方式的差别",
+      "claim": "临时协调入口简单但记录分散，统一登记便于交接但需持续维护，试点优先验证交接是否清楚。",
+      "relation": "comparison",
+      "items": [
+        {
+          "id": "p2-temp",
+          "sourceIds": [
+            "s3"
+          ],
+          "sourceText": "临时协调：申请人在群里描述需求，管理员逐次确认设备和时间。入口简单，但调整记录分散，换班时需要重新解释。"
+        },
+        {
+          "id": "p2-unified",
+          "sourceIds": [
+            "s4"
+          ],
+          "sourceText": "统一登记：申请先进入同一份登记表，管理员确认后再通知使用时间。记录便于交接，但需要有人持续维护状态。"
+        },
+        {
+          "id": "p2-basis",
+          "sourceIds": [
+            "s5"
+          ],
+          "sourceText": "选择依据：试点优先验证交接是否清楚，再决定是否增加系统功能；统一登记并不意味着自动批准。"
+        }
+      ],
+      "revision": 1,
+      "composition": {
+        "compositionId": "editorial-grid",
+        "textSlots": [
+          {
+            "slotId": "body",
+            "sourceItemIds": [
+              "p2-temp",
+              "p2-unified",
+              "p2-basis"
+            ],
+            "contentMode": "all"
+          }
+        ],
+        "itemLabels": {
+          "p2-temp": "临时协调",
+          "p2-unified": "统一登记",
+          "p2-basis": "选择依据"
+        }
+      },
+      "compositionRevision": 1
+    },
+    {
+      "pageId": "p3",
+      "title": "一次预约怎样完成",
+      "claim": "预约由登记需求、确认安排、使用归还三步完成，异常处理规则适用于整个过程。",
+      "relation": "sequence",
+      "items": [
+        {
+          "id": "p3-step1",
+          "sourceIds": [
+            "s6"
+          ],
+          "sourceText": "登记需求：第一步由申请人写明设备、时间和使用目的，提交后等待管理员确认。"
+        },
+        {
+          "id": "p3-step2",
+          "sourceIds": [
+            "s7"
+          ],
+          "sourceText": "确认安排：第二步由管理员核对设备状态与值班安排，明确是否接收申请，再通知申请人。"
+        },
+        {
+          "id": "p3-step3",
+          "sourceIds": [
+            "s8"
+          ],
+          "sourceText": "使用归还：第三步由使用人完成现场交接，使用结束后归还设备并登记异常情况。"
+        },
+        {
+          "id": "p3-exception",
+          "sourceIds": [
+            "s9"
+          ],
+          "sourceText": "异常处理：出现设备故障或时间冲突时暂停原安排，由管理员联系责任人处理；这项规则适用于整个预约过程。"
+        }
+      ],
+      "revision": 1,
+      "composition": {
+        "compositionId": "editorial-grid",
+        "textSlots": [
+          {
+            "slotId": "body",
+            "sourceItemIds": [
+              "p3-step1",
+              "p3-step2",
+              "p3-step3",
+              "p3-exception"
+            ],
+            "contentMode": "all"
+          }
+        ],
+        "itemLabels": {
+          "p3-step1": "登记需求",
+          "p3-step2": "确认安排",
+          "p3-step3": "使用归还",
+          "p3-exception": "异常处理"
+        }
+      },
+      "compositionRevision": 1
+    },
+    {
+      "pageId": "p4",
+      "title": "首轮只检查三件事",
+      "claim": "首轮只检查记录完整、责任明确、调整有据三件事，不用示意流程冒充运行结果。",
+      "relation": "none",
+      "items": [
+        {
+          "id": "p4-record",
+          "sourceIds": [
+            "s10"
+          ],
+          "sourceText": "记录完整：检查登记信息、确认结果和归还记录是否能够对应，缺少任一环节就补齐交接信息。"
+        },
+        {
+          "id": "p4-role",
+          "sourceIds": [
+            "s11"
+          ],
+          "sourceText": "责任明确：检查申请人、管理员和责任人的分工是否清楚；有争议时先澄清责任，再讨论自动化。"
+        },
+        {
+          "id": "p4-adjust",
+          "sourceIds": [
+            "s12"
+          ],
+          "sourceText": "调整有据：记录取消、改期和故障的具体原因，以实际问题决定下一轮改进，不用页面里的示意流程冒充运行结果。"
+        }
+      ],
+      "revision": 1,
+      "composition": {
+        "compositionId": "editorial-grid",
+        "textSlots": [
+          {
+            "slotId": "body",
+            "sourceItemIds": [
+              "p4-record",
+              "p4-role",
+              "p4-adjust"
+            ],
+            "contentMode": "all"
+          }
+        ],
+        "itemLabels": {
+          "p4-record": "记录完整",
+          "p4-role": "责任明确",
+          "p4-adjust": "调整有据"
+        }
+      },
+      "compositionRevision": 1
+    }
+  ],
+  "artifactState": {
+    "p1": {
+      "status": "passed",
+      "revision": 1,
+      "feedback": {
+        "issues": [],
+        "warnings": []
+      },
+      "pptxPath": "C:\\PPagenT\\harness\\runs\\20260912-r1-thin-runner\\deck.pptx"
+    },
+    "p2": {
+      "status": "passed",
+      "revision": 1,
+      "feedback": {
+        "issues": [],
+        "warnings": []
+      },
+      "pptxPath": "C:\\PPagenT\\harness\\runs\\20260912-r1-thin-runner\\deck.pptx"
+    },
+    "p3": {
+      "status": "passed",
+      "revision": 1,
+      "feedback": {
+        "issues": [],
+        "warnings": []
+      },
+      "pptxPath": "C:\\PPagenT\\harness\\runs\\20260912-r1-thin-runner\\deck.pptx"
+    },
+    "p4": {
+      "status": "passed",
+      "revision": 1,
+      "feedback": {
+        "issues": [],
+        "warnings": []
+      },
+      "pptxPath": "C:\\PPagenT\\harness\\runs\\20260912-r1-thin-runner\\deck.pptx"
+    }
+  },
+  "phase": "ready",
+  "contentRevision": null,
+  "runtimeFailure": null,
+  "warningDecisions": [],
+  "contentValidation": {
+    "accepted": true,
+    "issues": [],
+    "pageCount": 4,
+    "sourceCoverage": {
+      "used": 12,
+      "total": 12
+    },
+    "semanticLimit": "来源覆盖不自动证明分页、标题或结论正确，仍需人工核对。"
+  },
+  "lastStop": null
+}

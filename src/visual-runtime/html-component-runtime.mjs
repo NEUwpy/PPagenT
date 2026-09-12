@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { chromium } from "playwright-core";
-import { Presentation, PresentationFile } from "@oai/artifact-tool";
+import { Presentation, PresentationFile } from "../ppt-engine/index.mjs";
 import { assertResolvedTextContainerSlots } from "./text-container-contract.mjs";
 import {
   compileHtmlComponentTheme,

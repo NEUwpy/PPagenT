@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { PresentationFile } from "@oai/artifact-tool";
+import { PresentationFile } from "../ppt-engine/index.mjs";
 import { createPresentation } from "../asset-runtime/component-builders.mjs";
 import {
   closeHtmlComponentRuntime,

@@ -2,9 +2,14 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { PPT_ENGINE_PACKAGE } from "../ppt-engine/probe.mjs";
+
+// 只从 probe.mjs 取包名，不 import index.mjs：本脚本的职责正是"让引擎变得可解析"，
+// 而 index.mjs 静态 import 引擎——在联接建立之前 import 它必然失败。probe.mjs 只用 node 内置模块。
+const ENGINE_PACKAGE_SEGMENTS = PPT_ENGINE_PACKAGE.split("/");
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
-const localPackage = path.join(projectRoot, "node_modules", "@oai", "artifact-tool");
+const localPackage = path.join(projectRoot, "node_modules", ...ENGINE_PACKAGE_SEGMENTS);
 
 function isDirectory(target) {
   try {
@@ -45,7 +50,7 @@ const candidates = isDirectory(runtimesRoot)
     .map((entry) => ({
       runtimeName: entry.name,
       runtimePath: path.join(runtimesRoot, entry.name),
-      packagePath: path.join(runtimesRoot, entry.name, "dependencies", "node", "node_modules", "@oai", "artifact-tool"),
+      packagePath: path.join(runtimesRoot, entry.name, "dependencies", "node", "node_modules", ...ENGINE_PACKAGE_SEGMENTS),
     }))
     .filter((candidate) => isDirectory(candidate.packagePath) && packageEntrypoint(candidate.packagePath))
     .sort((left, right) => {
@@ -57,7 +62,7 @@ const candidates = isDirectory(runtimesRoot)
   : [];
 
 if (candidates.length === 0) {
-  throw new Error("未找到 Codex 工作区内置的 @oai/artifact-tool；请先在 Codex 中加载工作区依赖");
+  throw new Error(`未找到 Codex 工作区内置的 ${PPT_ENGINE_PACKAGE}；请先在 Codex 中加载工作区依赖`);
 }
 
 fs.mkdirSync(path.dirname(localPackage), { recursive: true });

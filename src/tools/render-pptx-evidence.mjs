@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { FileBlob, PresentationFile } from "@oai/artifact-tool";
+import { FileBlob, PresentationFile } from "../ppt-engine/index.mjs";
 
 const [input, outputDir] = process.argv.slice(2);
 if (!input || !outputDir) {

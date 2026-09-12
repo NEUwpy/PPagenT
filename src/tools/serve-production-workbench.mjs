@@ -9,6 +9,10 @@ import { createVisualDirectorCheckpoint, withVisualDirectorCheckpoint } from "..
 import { readJsonState, writeJsonState } from "../workbench/json-state-file.mjs";
 import { createNativePptCheckpoint, readNativePptCheckpoint } from "../workbench/native-ppt-checkpoint.mjs";
 import { candidateSetsForVisualDirector } from "../agent/model-director-provider.mjs";
+import {
+  RUNNER_STAGES, RUNNER_HANDOFFS, RUNNER_PIPELINE_NOTE, STAGE_OF_PHASE,
+  archiveRunSummary, runnerArtifacts, readRunnerDeckTitle, exists,
+} from "../workbench/runner-run-adapter.mjs";
 
 function option(name, fallback) {
   const index = process.argv.indexOf(name);
@@ -22,11 +26,16 @@ const host = "127.0.0.1";
 const templatePath = path.join(import.meta.dirname, "templates", "production-workbench.html");
 const workbenchRoot = path.join(projectRoot, ".tmp", "production-workbench");
 const runsRoot = path.join(workbenchRoot, "runs");
+// 仓库内的运行证据目录。工作台**只读**这里：它是 Git 里的运行记录（harness/runs/README.md 的约定），
+// 不是工作台的临时产物，因此不在这里创建、不在这里删除。列出来是为了让"生成的东西在哪看"只有一个答案。
+const archiveRoot = path.join(projectRoot, "harness", "runs");
 const currentRunPath = path.join(workbenchRoot, "current-run.json");
 const maxUploadBytes = 30 * 1024 * 1024;
 const runtimeRevision = process.env.PPAGENT_RUNTIME_REVISION || "source-direct";
 const serverStartedAt = new Date().toISOString();
 let activeRunId = null;
+/** 仓库证据目录里出现的运行编号。由 listAllRuns 刷新；这些记录在工作台里只读。 */
+let archiveRunIds = new Set();
 const activeVisualCheckpoints = new Map();
 const activeNativePptCheckpoints = new Map();
 const activeRunTasks = new Map();
@@ -40,6 +49,8 @@ function awaitingCheckpoint(runId) {
 }
 
 function runIsDeletable(runId) {
+  // 仓库证据目录（harness/runs）里的记录不属于工作台，工作台不删它。
+  if (archiveRunIds.has(runId)) return false;
   if (awaitingCheckpoint(runId)) return true;
   return activeRunId !== runId
     && !activeVisualCheckpoints.has(runId)
@@ -73,6 +84,18 @@ function safeFilename(value) {
 function runDir(runId) {
   if (!/^[a-z0-9-]+$/i.test(runId)) throw new Error("非法运行编号");
   return path.join(runsRoot, runId);
+}
+
+/**
+ * 读到一次运行的目录。两个来源：工作台自己的 runsRoot（可写），或仓库证据目录 archiveRoot（只读）。
+ * 同名时以工作台自己的为准——本次运行的事实优先于历史证据。
+ */
+async function resolveRunDir(runId) {
+  const primary = runDir(runId);
+  if (await exists(path.join(primary, "summary.json"))) return primary;
+  const archived = path.join(archiveRoot, runId);
+  if (await exists(path.join(archived, "state.json"))) return archived;
+  return primary;
 }
 
 async function readBody(request) {
@@ -117,7 +140,26 @@ async function writeCurrentRunPointer(targetRunDir, summary) {
 }
 
 async function readSummary(targetRunDir) {
-  return readJsonState(path.join(targetRunDir, "summary.json"));
+  const summaryPath = path.join(targetRunDir, "summary.json");
+  if (await exists(summaryPath)) return readJsonState(summaryPath);
+  // harness/runs 的历史运行没有工作台的 summary.json：从唯一真源 state.json 合成一份只读记录。
+  return archiveRunSummary({ runId: path.basename(targetRunDir), runDir: targetRunDir });
+}
+
+/**
+ * 仓库证据目录里的历史运行。**只列不写**：没有 summary.json 的目录才算历史证据；
+ * 已经有 summary.json 的说明它是工作台运行被搬进来的，按工作台记录读取，不重复列。
+ */
+async function listArchiveRuns() {
+  const entries = await fs.readdir(archiveRoot, { withFileTypes: true }).catch(() => []);
+  const summaries = [];
+  for (const entry of entries) {
+    if (!entry.isDirectory() || !/^[a-z0-9-]+$/i.test(entry.name)) continue;
+    const targetRunDir = path.join(archiveRoot, entry.name);
+    if (await exists(path.join(targetRunDir, "summary.json"))) continue;
+    try { summaries.push(await archiveRunSummary({ runId: entry.name, runDir: targetRunDir })); } catch {}
+  }
+  return summaries;
 }
 
 async function listAllRuns() {
@@ -128,7 +170,9 @@ async function listAllRuns() {
     if (!entry.isDirectory()) continue;
     try { summaries.push(await readSummary(path.join(runsRoot, entry.name))); } catch {}
   }
-  return summaries.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+  const archived = await listArchiveRuns();
+  archiveRunIds = new Set(archived.map((run) => run.runId));
+  return [...summaries, ...archived].sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
 }
 
 async function listRuns() {
@@ -163,6 +207,19 @@ async function deleteRuns(runIds) {
     error.statusCode = 400;
     throw error;
   }
+  const targets = uniqueRunIds.map((runId) => ({ runId, targetRunDir: checkedRunDir(runId) }));
+  // 判据是"这次运行实际落在哪"：解析结果不在 runsRoot 里的，就是仓库证据目录的历史运行，工作台不删它。
+  // 这一步必须排在活动检查之前——runIsDeletable 对它们也返回 false，否则会被误报成"仍在计算"。
+  const archived = [];
+  for (const { runId, targetRunDir } of targets) {
+    const resolved = await resolveRunDir(runId);
+    if (path.resolve(resolved) !== path.resolve(targetRunDir)) archived.push(runId);
+  }
+  if (archived.length) {
+    const error = new Error(`仓库内运行证据（harness/runs）在工作台里只读：${archived.join("、")}。要删除请直接在文件系统里处理。`);
+    error.statusCode = 403;
+    throw error;
+  }
   const activeTargets = uniqueRunIds.filter((runId) => !runIsDeletable(runId));
   if (activeTargets.length) {
     const error = new Error("仍在计算或交付的记录不能删除；等待确认的记录可以直接取消并删除");
@@ -171,7 +228,6 @@ async function deleteRuns(runIds) {
     throw error;
   }
   for (const runId of uniqueRunIds) await cancelAwaitingRun(runId);
-  const targets = uniqueRunIds.map((runId) => ({ runId, targetRunDir: checkedRunDir(runId) }));
   await Promise.all(targets.map(({ targetRunDir }) => readSummary(targetRunDir)));
   let currentPointer = null;
   try { currentPointer = JSON.parse(await fs.readFile(currentRunPath, "utf8")); } catch {}
@@ -180,14 +236,18 @@ async function deleteRuns(runIds) {
   }
   const remainingRuns = await listAllRuns();
   const deletedCurrent = uniqueRunIds.includes(currentPointer?.runId);
+  let nextCurrentRunId = currentPointer?.runId ?? null;
   if (deletedCurrent) {
-    if (remainingRuns[0]) await writeCurrentRunPointer(runDir(remainingRuns[0].runId), remainingRuns[0]);
+    // 只在工作台自己的运行里挑下一个指针目标：仓库证据目录的记录不是"当前运行"，
+    // 指向它会得到一个 runsRoot 下不存在的路径。
+    const next = remainingRuns.find((run) => !archiveRunIds.has(run.runId));
+    nextCurrentRunId = next?.runId ?? null;
+    if (next) await writeCurrentRunPointer(runDir(next.runId), next);
     else await fs.rm(currentRunPath, { force: true });
   }
-  return {
-    deletedRunIds: uniqueRunIds,
-    currentRunId: deletedCurrent ? (remainingRuns[0]?.runId ?? null) : currentPointer?.runId ?? null,
-  };
+  // 报告的必须就是真正写下去的那一个：曾经这里用 remainingRuns[0] 另算一遍，
+  // 结果指针已经清空、回复里却说"当前运行是某个仓库证据目录里的运行"。
+  return { deletedRunIds: uniqueRunIds, currentRunId: nextCurrentRunId };
 }
 
 async function deleteRun(response, runId) {
@@ -382,8 +442,111 @@ async function executeRun(targetRunDir, summary, normalizedPath, recorder) {
   }
 }
 
+/**
+ * 模型端点的主机名。事件里显示"哪家的模型"，比显示一个固定的产品名诚实（端点可换）。
+ * 拿不到端点就返回 null——编一个 "chat-completions" 之类的名字出来，等于让看板显示
+ * 一个谁也没见过的服务商名。
+ */
+function endpointHost(endpoint) {
+  try { return new URL(endpoint).host; } catch { return null; }
+}
+
+/**
+ * 走薄运行器（`src/runner/`）。**进程内调用**，理由与旧生产线一致：SEA 版 .exe 里没有可用的 node
+ * 子进程——`process.execPath` 就是 .exe 自己，再 spawn 一次只会重新启动工作台。所以这里 await main()。
+ *
+ * 代价如实记在这里，不粉饰：
+ *   ① 运行器**没有取消钩子**。任务开始后不能像表单暂停那样取消，只能等它结束或结束进程。
+ *   ② 运行器不暂停等待批准，所以本入口没有人工检查点（上游已拒绝"又要暂停又走运行器"的组合）。
+ *   ③ 好处是状态落在 state.json 里：进程中断后用 `--resume` 可以续跑，不像旧线那样只能重来。
+ */
+async function executeRunnerRun(targetRunDir, summary, normalizedPath, recorder) {
+  const startedAt = Date.now();
+  try {
+    const { main } = await import("../runner/run.mjs");
+    // 模型名不写在 summary 里靠猜：从实际发出的 api-call 事件里取，取到的就是真正上线的那一个。
+    let observedModel = null;
+    const observe = async (event) => {
+      if (event.type === "api-call" && event.model) observedModel = event.model;
+      // 运行器报的是它自己的 phase 名；工作台的流水线用另一套阶段 id，翻译在这里做。
+      const stage = event.stage ? (STAGE_OF_PHASE[event.stage] ?? event.stage) : "delivery";
+      await recorder.observe({
+        ...event,
+        stage,
+        // 运行器的模型事件自报 source:"runner"；工作台流水线按 source==="model" 统计 API 次数。
+        ...(event.type === "api-call" ? { source: "model", provider: endpointHost(event.endpoint) } : {}),
+      });
+    };
+    // 这里**不发**"任务启动"事件。曾经发过一条挂在 delivery 阶段的启动事件，代价是：
+    // 整场运行期间看板都把"交付"显示成正在进行的阶段（实际进行的是内容/视觉）。
+    // 运行器自己会如实报每个阶段，工作台不替它宣布阶段；启动信息（生成线、运行目录、能力边界）
+    // 都在 summary 里，不靠事件重复一遍。
+    const result = await main(["--input", normalizedPath, "--run-dir", targetRunDir], { observer: observe });
+    const artifacts = await runnerArtifacts(targetRunDir);
+    const slideCount = artifacts.filter((item) => item.label.startsWith("第 ")).length;
+    summary.artifacts = artifacts;
+    summary.runner = {
+      status: result.status,
+      phase: result.phase,
+      stopReason: result.stopReason ?? null,
+      phases: result.phases ?? [],
+    };
+    summary.pageCount = slideCount;
+    summary.bodyPageCount = result.bodyPageCount ?? null;
+    summary.deckTitle = await readRunnerDeckTitle(targetRunDir);
+    summary.model = observedModel;
+    summary.finishedAt = new Date().toISOString();
+    summary.durationMs = Date.now() - startedAt;
+    if (result.status === "delivered") {
+      // 不再补一条交付阶段事件：运行器在循环结束时已经发过 delivery/succeeded。
+      // 补一条只会让同一件事在记录里出现两次。
+      summary.status = "succeeded";
+      summary.deliveryStatus = "delivered";
+    } else {
+      // 停在原地就是没交付。不写成"失败"也不写成"成功"：运行器是**主动停止**的，
+      // 状态还在 state.json 里，修好原因可以续跑。交付阶段事件同样由运行器发出。
+      summary.status = "stopped";
+      summary.error = {
+        stage: result.phase,
+        code: "RUNNER_STOPPED",
+        message: `${result.note ?? "运行器停止且未交付"}（停止原因 ${result.stopReason ?? "未记录"}）`,
+        details: { stopReason: result.stopReason, phases: result.phases },
+      };
+    }
+  } catch (error) {
+    // 运行器根本没跑起来或中途抛出时，它自己一条事件都发不出来，只能由工作台记账。
+    // 沿用旧生产线的记法（type/status/stage 与 executeRun 的 catch 一致），不发明新事件类型：
+    // 新类型在筛选按阶段进行的看板上会直接看不见。
+    await recorder.observe({
+      source: "workbench", type: "delivery", status: "failed", stage: error?.stage ?? "delivery",
+      durationMs: Date.now() - startedAt,
+      error: { name: error?.name, code: error?.code, message: error?.message ?? String(error) },
+    });
+    summary.status = "failed";
+    summary.finishedAt = new Date().toISOString();
+    summary.durationMs = Date.now() - startedAt;
+    summary.error = { name: error?.name, code: error?.code, stage: "runner", message: error?.message ?? String(error) };
+    // 抛出的错误同样要留下产物清单：失败时更该看得见运行器已经写到哪一步。
+    summary.artifacts = await runnerArtifacts(targetRunDir).catch(() => []);
+  } finally {
+    await recorder.flush();
+    await writeSummary(targetRunDir, summary);
+    if (activeRunId === summary.runId) activeRunId = null;
+  }
+}
+
 async function createRun(request, response, url) {
   if (activeRunId) return sendJson(response, 409, { error: "已有生成任务正在运行", activeRunId });
+  const pipeline = url.searchParams.get("pipeline") === "legacy" ? "legacy" : "runner";
+  // 薄运行器没有人工检查点（harness/运行流程.md：阶段不要求用户逐步批准）。
+  // 用户明确勾了暂停时不能静默忽略——那等于把一次显式请求丢掉。
+  const wantsManualCheckpoint = url.searchParams.get("visualCheckpoint") === "manual"
+    || url.searchParams.get("nativePreviewCheckpoint") === "manual";
+  if (pipeline === "runner" && wantsManualCheckpoint) {
+    return sendJson(response, 409, {
+      error: "薄运行器不暂停等待人工确认，因此没有表单检查点。请取消勾选“调试时暂停表单”，或把生成线切换为旧 API 生产线。",
+    });
+  }
   const originalName = safeFilename(url.searchParams.get("filename"));
   const extension = path.extname(originalName).toLowerCase();
   if (!supportedManuscriptExtensions.includes(extension)) {
@@ -403,6 +566,11 @@ async function createRun(request, response, url) {
     skin: { id: "northeastern-university-001", name: "东北大学" },
     visualCheckpointMode: url.searchParams.get("visualCheckpoint") === "manual" ? "manual" : "auto",
     nativePreviewCheckpointMode: url.searchParams.get("nativePreviewCheckpoint") === "auto" ? "auto" : "manual",
+    pipeline,
+    // 阶段表随生成线走：两条线的阶段不是同一套，看板照实显示当前这条线的阶段。
+    ...(pipeline === "runner"
+      ? { stages: RUNNER_STAGES, handoffs: RUNNER_HANDOFFS, pipelineNote: RUNNER_PIPELINE_NOTE }
+      : {}),
     artifacts: [],
   };
   await writeSummary(targetRunDir, summary);
@@ -424,7 +592,9 @@ async function createRun(request, response, url) {
     summary.status = "running";
     summary.normalizedFormat = normalized.format;
     await writeSummary(targetRunDir, summary);
-    const task = executeRun(targetRunDir, summary, normalizedPath, recorder);
+    const task = pipeline === "runner"
+      ? executeRunnerRun(targetRunDir, summary, normalizedPath, recorder)
+      : executeRun(targetRunDir, summary, normalizedPath, recorder);
     activeRunTasks.set(runId, task);
     task.finally(() => activeRunTasks.delete(runId)).catch(() => {});
     return sendJson(response, 202, summary);
@@ -445,7 +615,8 @@ async function createRun(request, response, url) {
 function contentTypeFor(target) {
   const extension = path.extname(target).toLowerCase();
   return ({
-    ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".json": "application/json; charset=utf-8",
+    ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp",
+    ".json": "application/json; charset=utf-8", ".ndjson": "application/x-ndjson; charset=utf-8",
     ".md": "text/markdown; charset=utf-8", ".html": "text/html; charset=utf-8", ".pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
   })[extension] ?? "application/octet-stream";
 }
@@ -484,6 +655,15 @@ async function publicConfig() {
     formats: supportedManuscriptExtensions,
     maxUploadBytes,
     activeRunId,
+    pipelines: {
+      default: "runner",
+      runner: { label: "薄运行器", note: RUNNER_PIPELINE_NOTE, checkpoint: false },
+      legacy: {
+        label: "旧 API 生产线",
+        note: "旧 API 生产线：固定候选与参数执行器，支持结构组件页与人工表单检查点，但不再作为新架构主线。",
+        checkpoint: true,
+      },
+    },
     runtime: { revision: runtimeRevision, startedAt: serverStartedAt },
   };
 }
@@ -540,7 +720,11 @@ const server = http.createServer(async (request, response) => {
     }
     if (request.method === "GET" && url.pathname === "/api/workbench/config") return sendJson(response, 200, await publicConfig());
     if (request.method === "GET" && url.pathname === "/api/workbench/current") {
-      return sendJson(response, 200, await readJsonState(currentRunPath));
+      // 指针文件可能本来就不存在（从未跑过任务，或最后一个任务被删掉后指针被清除）。
+      // 那不是错误，是"没有当前运行"。
+      let pointer = null;
+      try { pointer = await readJsonState(currentRunPath); } catch (error) { if (error?.code !== "ENOENT") throw error; }
+      return sendJson(response, 200, pointer);
     }
     if (request.method === "GET" && url.pathname === "/api/workbench/runs") {
       const [runs, allRuns] = await Promise.all([listRuns(), listAllRuns()]);
@@ -559,7 +743,7 @@ const server = http.createServer(async (request, response) => {
     if (nativeCheckpointMatch && request.method === "POST") return await submitNativePptCheckpoint(response, nativeCheckpointMatch[1]);
     const match = url.pathname.match(/^\/api\/workbench\/runs\/([a-z0-9-]+)(?:\/(events|trace|artifact))?(?:\/([a-z0-9-]+))?$/i);
     if (match) {
-      const targetRunDir = runDir(match[1]);
+      const targetRunDir = await resolveRunDir(match[1]);
       if (!match[2]) return sendJson(response, 200, await readSummary(targetRunDir));
       if (match[2] === "events") return sendJson(response, 200, { events: await readTraceEvents(targetRunDir, Number(url.searchParams.get("after") || 0)) });
       if (match[2] === "trace") return send(response, 200, await fs.readFile(path.join(targetRunDir, "trace", `${match[3]}.json`)), "application/json; charset=utf-8", { "cache-control": "no-store" });
@@ -579,7 +763,11 @@ const interruptedStatuses = new Set([
 ]);
 for (const existingRun of existingRuns) {
   if (!interruptedStatuses.has(existingRun.status)) continue;
-  await writeSummary(runDir(existingRun.runId), {
+  // 仓库证据目录里的记录不在 runsRoot 里，也不可能处于"进行中"；只处理工作台自己的运行。
+  const targetRunDir = path.join(runsRoot, existingRun.runId);
+  if (!(await exists(path.join(targetRunDir, "summary.json")))) continue;
+  const resumable = existingRun.pipeline === "runner";
+  await writeSummary(targetRunDir, {
     ...existingRun,
     status: "failed",
     finishedAt: new Date().toISOString(),
@@ -587,8 +775,12 @@ for (const existingRun of existingRuns) {
       name: "WorkbenchProcessInterrupted",
       code: "WORKBENCH_PROCESS_INTERRUPTED",
       stage: existingRun.status,
-      message: "工作台进程在任务完成前中断；该任务不能从内存检查点恢复，请新建任务重试",
+      // 运行器的状态在 state.json 里，和旧线的内存检查点不是一回事：前者能续跑，后者只能重来。
+      message: resumable
+        ? "工作台进程在任务完成前中断。这次运行的状态在 state.json 里没有丢，可用 node src/runner/run.mjs --run-dir <该运行目录> --resume 续跑"
+        : "工作台进程在任务完成前中断；该任务不能从内存检查点恢复，请新建任务重试",
     },
+    ...(resumable ? { resumable: true } : {}),
   });
 }
 server.listen(port, host, () => process.stdout.write(`http://${host}:${port}/\n`));

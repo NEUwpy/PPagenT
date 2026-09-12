@@ -16,7 +16,7 @@
 | [外部依赖](外部依赖.md) | 宿主、PPT 工具、字体与可选外挂能力 |
 | [项目执行进度](../docs/方向讨论/页面编排能力计划.md) | R0–R3 里程碑；仓库维护资料，不是远端运行前提 |
 
-当前用 Codex 项目中的 `gpt-5.6-luna / high` 执行，配置由宿主实际设置；当前不安装 Penguin。包内规则读取示例：
+多轮工具调用循环现由仓库自建运行器 `src/runner/` 提供（见下节），不再依赖 Codex 宿主；R1 实测模型为 DeepSeek，密钥走 `config/deepseek.local.json` 且不入库。当前不安装 Penguin。包内规则读取示例：
 
 ```powershell
 node src/tools/load-rules.mjs --profile generation --skin neutral-editorial-001
@@ -24,8 +24,34 @@ node src/tools/load-rules.mjs --profile generation --skin neutral-editorial-001
 
 上述命令只加载规则。执行者可完整读取适用设计上下文，再按需要调用工具和补充资料；模块化维护不要求分阶段截断上下文。首个闭环选择一种已有风格，具体输入与风格在 R1 任务启动时记录，不默认同时验证两套。
 
+## 运行器
+
+`src/runner/` 只拥有四件事：循环、状态落盘、工具派发、恢复。构建、字号/几何审计、规则加载、
+来源核对、结构调用一律调既有模块——这条边界写在代码注释里，别让它长成第二个 `workflow.mjs`。
+
+```powershell
+# 首次运行：读原稿建 state，跑完内容阶段与视觉阶段
+node src/runner/run.mjs --input harness/runs/<任务名>/原稿.md --run-dir harness/runs/<任务名>
+
+# 中断续跑：不重做已冻结的页面
+node src/runner/run.mjs --run-dir harness/runs/<任务名> --resume
+
+# 零模型重编译交付物（用于验证确定性，不调用模型）
+node src/runner/run.mjs --run-dir harness/runs/<任务名> --replay
+```
+
+阶段闸门由**工具写下的状态字段**驱动，不由模型自述完成：内容阶段以 `finish_content` 冻结
+（来源有遗漏即拒绝），视觉阶段以 `finish_visual` 收尾（每页必须是当前版本已通过）。
+宿主依赖失败（缺引擎、缺浏览器）会记 `runtimeFailure` 并立即停止，不交给模型去补偿环境故障。
+
+产物落在运行目录：`state.json`（唯一机器真源）、`state.md` / `content.md`（由它渲染）、
+`blueprint.json`（实际被构建的蓝图）、`deck.pptx`、`qa/slide-NN.png` 与 `qa/montage.webp`（逐页预览）、
+`tool-events.ndjson` 与各阶段 transcript（运行证据）。
+
 ## 内容包维护与部署边界
 
 rules、部分 docs、配置及轻量工具由父仓库维护源同步；Harness 自有流程在本目录维护。`同步内容包.py` 重建包，`内容包清单.json` 记录镜像 SHA256；修改共享正文后同步，禁止两处分别维护。镜像正文里的相对链接会指向未随包搬运的证据（`assets/`、`experiments/` 等），这类链接逐字节保持源文、不改写，已逐条登记在清单的 `boundaryLinks` 里——包是给远端执行用的，不是导航用的。最初归拢是原字节复制，当前内容已随重构更新，不再将首次哈希当作永远冻结版本。
 
 部署可复制本目录并排除旧 runs、缓存和 node_modules；执行不需要访问父仓库说明正文。大型结构资产、大学模板/执行器、PPT SDK 与字体仍是外部依赖，先核对实际接入。content/blueprint/state 是轻量文件约定，尚无强制状态机或通用新 Schema。目录完整不代表完整生产环境部署成功。
+
+镜像项里原先有两处过时表述（`生成任务提示词.md` 仍写「当前为 Codex 项目＋Luna high」、`产品定义.md` 只写总控「可先由宿主承担」）。两处都已回维护源改完并重建本包，清单位点的源哈希与镜像哈希一致，因此不再并列在这里。

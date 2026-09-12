@@ -246,15 +246,64 @@ export async function auditRenderedGeometry(qaDir, {
   };
 }
 
+/** 去掉 U+FEFF 词连接符后的可见字数；空白行不算"孤立"。 */
+function visibleLength(lineText) {
+  return [...String(lineText ?? "").replace(/\uFEFF/g, "").trim()].length;
+}
+
+/**
+ * 断行质量审计：比对"拟合出的换行"与"引擎实际排出的行盒"。
+ *
+ * 容量预检（fitChineseTextToFrame）算出的是**它以为**能排几行，引擎排出来的是另一回事。
+ * 拟合偏乐观时引擎会多分出一行，多出来的那个字或标点就独占一行。
+ * `qa/*.layout.json` 里 element.textLayout.lines 记录的是引擎排完之后的真实行盒，
+ * 所以这件事有机器判据，不必靠人眼看图。
+ *
+ * 2026-09-12 实测：修 glyphWidthFactor 之前 R1 有 2 处 engine-rewrapped（孤立「理」「，」），
+ * 修复后归零。
+ */
+export async function auditRenderedLineBreaks(qaDir) {
+  const files = await layoutFiles(qaDir);
+  const violations = [];
+  for (const file of files) {
+    const slide = file.replace(".layout.json", "");
+    const layout = JSON.parse(await fs.readFile(path.join(qaDir, file), "utf8"));
+    for (const element of layout.elements ?? []) {
+      const lines = element.textLayout?.lines;
+      if (!Array.isArray(lines) || !lines.length || typeof element.text !== "string") continue;
+      const fittedLines = element.text.split("\n").length;
+      const engineLines = Number(element.textLayout.lineCount ?? lines.length);
+      const evidence = {
+        slide, element: element.name, text: element.textPreview ?? element.text,
+        fittedLines, engineLines, bbox: element.bbox, fontSize: element.resolvedFontSize,
+      };
+      // 引擎排出的行数多于拟合行数 —— 拟合低估了实际占用，交付物上必然多出一行。
+      if (engineLines > fittedLines) violations.push({ type: "engine-rewrapped", ...evidence });
+      // 拟合自己就断出了孤立字（如「……管\n理」）。框本来只容得下一格时不算缺陷：
+      // 竖排标签（阶/段/一）与单字母框天生一格一行，用容量把它们排除掉。
+      const width = Number(element.bbox?.[2]);
+      const capacity = Number.isFinite(width) && Number.isFinite(evidence.fontSize) && evidence.fontSize > 0
+        ? width / evidence.fontSize : null;
+      if (fittedLines > 1 && capacity !== null && capacity >= 2 && lines.some((line) => visibleLength(line.text) === 1)) {
+        violations.push({ type: "stranded-glyph", capacity, ...evidence });
+      }
+    }
+  }
+  return { status: violations.length ? "failed" : "passed", violations };
+}
+
 export async function auditRenderedDeck(qaDir, options = {}) {
-  const [typography, geometry] = await Promise.all([
+  const [typography, geometry, lineBreaks] = await Promise.all([
     auditRenderedTypography(qaDir, options),
     auditRenderedGeometry(qaDir, options),
+    auditRenderedLineBreaks(qaDir),
   ]);
   return {
-    status: typography.status === "passed" && geometry.status === "passed" ? "passed" : "failed",
+    status: typography.status === "passed" && geometry.status === "passed" && lineBreaks.status === "passed"
+      ? "passed" : "failed",
     typography,
     geometry,
+    lineBreaks,
   };
 }
 

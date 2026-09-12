@@ -353,7 +353,7 @@ async function nativeStateArtifactsFor(library, assetId, searchParams) {
           });
         }
         await fs.mkdir(outputDir, { recursive: true });
-        const { PresentationFile } = await import("@oai/artifact-tool");
+        const { PresentationFile } = await import("../ppt-engine/index.mjs");
         const pptx = await PresentationFile.exportPptx(presentation);
         await pptx.save(pptxPath);
         // 缩略图、详情预览和下载必须来自同一份最终 PPTX，避免内存渲染与落盘文件分叉。

@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { FileBlob, PresentationFile } from "@oai/artifact-tool";
+import { FileBlob, PresentationFile } from "../../ppt-engine/index.mjs";
 import {
   applyTemplateMappedRecipes,
   exportTemplateMappedQa,

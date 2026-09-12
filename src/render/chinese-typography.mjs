@@ -68,7 +68,12 @@ export function fitChineseTextToFrame(value, {
   fontSizes,
   maxLines,
   lineHeight = 1.15,
-  glyphWidthFactor = 0.95,
+  // 一个全角汉字在 CJK 字体里的进位宽度就是 1 em，所以容量按 width / fontSize 算。
+  // 这里曾经是 0.95，等于把容量高估 5.26%：拟合出的换行位比引擎实际能排下的更靠后，
+  // 引擎于是把多出来的那个字/标点挤到下一行，出现"孤立单字独占一行"。
+  // 2026-09-12 R1 实测：某个恰好被拟合到 18 单位的行，引擎只排得下 17 个单位。
+  // 字体确实更宽的角色（如东北大学 closingTitle 的展示字体）各自显式覆盖本值。
+  glyphWidthFactor = 1,
   preferSemanticBreaks = false,
 } = {}) {
   const source = String(value ?? "");

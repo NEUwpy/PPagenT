@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { FileBlob, PresentationFile } from "@oai/artifact-tool";
+import { FileBlob, PresentationFile } from "../ppt-engine/index.mjs";
 import { exportTemplateMappedQa } from "../asset-runtime/template-utils.mjs";
 import { auditRenderedDeck } from "./audit-rendered-typography.mjs";
 import { MINIMUM_READABLE_FONT_SIZE_PT } from "../runtime/typography-standards.mjs";

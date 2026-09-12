@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
-import { Presentation, PresentationFile } from "@oai/artifact-tool";
+import { Presentation, PresentationFile } from "../../../src/ppt-engine/index.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(here, "../../..");
