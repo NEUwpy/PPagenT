@@ -363,9 +363,10 @@ export function renderContentMarkdown(state) {
   if (!state.pages.length) lines.push("（尚无页面）", "");
   for (const page of state.pages) {
     lines.push(`# ${page.pageId} ${page.title}`, "");
-    lines.push(`> 主张：${page.claim} ｜ 关系：${page.relation} ｜ 版本：${page.revision}`, "");
+    lines.push(`> 主张：${page.claim} ｜ 关系：${page.semantics?.narrative ?? page.relation} ｜ 版本：${page.revision}`, "");
     for (const item of page.items) {
-      const role = item.role && item.role !== "object" ? ` ｜ 角色：${item.role}` : "";
+      const contentRole = item.semanticRole ?? item.role;
+      const role = contentRole && contentRole !== "object" ? ` ｜ 角色：${contentRole}` : "";
       lines.push(`## ${item.id}`, "", `<!-- 来源：${item.sourceIds.join("、")}${role} -->`, "");
       lines.push(`**上屏**：${item.text ?? "（未提炼，回退逐字来源）"}`, "");
       lines.push(`**逐字来源**：`, "", item.sourceText, "");
@@ -408,7 +409,7 @@ export function renderStateMarkdown(state) {
       `### ${page.pageId} ${page.title}`,
       "",
       `- 主张：${page.claim}`,
-      `- 关系：${page.relation}`,
+      `- 关系：${page.semantics?.narrative ?? page.relation}`,
       `- 内容项：${page.items.length}；来源：${page.items.flatMap((item) => item.sourceIds).join("、")}`,
       `- 方案版本：${page.compositionRevision ?? 0}；${status}`,
     );

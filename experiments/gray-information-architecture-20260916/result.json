@@ -1,0 +1,52 @@
+{
+  "scope": "局部模拟片段试验；非旧四页稿全量验证",
+  "baseline": "6ce424053b1742ee53664313ca135c3eec22454d",
+  "userAcceptance": "pending",
+  "runs": [
+    {
+      "name": "wide",
+      "area": {
+        "width": 1170,
+        "height": 492,
+        "label": "宽内容区"
+      },
+      "status": "awaiting-user-review",
+      "revisionCount": 12,
+      "statePath": "C:\\PPagenT\\outputs\\gray-information-architecture-wide-20260916\\state.json",
+      "artifactDirectory": "C:\\PPagenT\\outputs\\gray-information-architecture-wide-20260916\\revision-11\\artifacts",
+      "artifactIsCurrentCandidate": true,
+      "pageCount": 1,
+      "provider": "chat-completions:deepseek-v4-flash",
+      "humanReview": "pending",
+      "pptxSha256": "dafdb6445addd01405cd690de7fdd931c0e8fbd1cfe140dd43996d372ffcac04",
+      "editableCheck": {
+        "accepted": true,
+        "pages": [
+          {
+            "pageId": "p1",
+            "textShapes": 19,
+            "missingText": []
+          }
+        ],
+        "coverage": "PPTX OOXML 原生文字包含每项实际文本及主题句；不等于视觉验收"
+      },
+      "visualReview": "Latest revision 11 PNG inspected: all copy visible; two regions distinguish recommendation/timeline and criteria; long claim and repeated labels remain refinement opportunities."
+    },
+    {
+      "name": "small",
+      "area": {
+        "width": 780,
+        "height": 328,
+        "label": "小内容区"
+      },
+      "status": "blocked",
+      "revisionCount": 18,
+      "statePath": "C:\\PPagenT\\outputs\\gray-information-architecture-small-20260916\\state.json",
+      "artifactDirectory": "C:\\PPagenT\\outputs\\gray-information-architecture-small-20260916",
+      "artifactIsCurrentCandidate": false,
+      "pageCount": 3,
+      "provider": "chat-completions:deepseek-v4-flash",
+      "humanReview": "rejected-earlier-three-page-candidate; latest-planning-blocked"
+    }
+  ]
+}

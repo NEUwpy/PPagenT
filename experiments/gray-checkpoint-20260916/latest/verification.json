@@ -1,0 +1,204 @@
+{
+  "scope": "Layout-only revision; identical content and expression plans, shared renderer and solver. Not an autonomous planning benchmark or M1 acceptance.",
+  "checks": {
+    "targetedTests": 28,
+    "overflow": "Both exported PPTX files passed slides_test.py",
+    "visual": "Both exported/reimported slide images inspected by the current agent; user review pending"
+  },
+  "results": [
+    {
+      "case": "reference",
+      "name": "范本原稿-分区修订灰稿",
+      "sourceDirectory": "C:\\PPagenT\\outputs\\gray-block-layout-20260916\\reference",
+      "previousContent": "C:\\PPagenT\\outputs\\gray-primary-agent-delivery-20260916\\reference",
+      "contentUnchanged": true,
+      "pptxSha256": "11fd00c95d5f159691daa2a566c463d7e0c0271febaa6554f86bcfc3d7f02330",
+      "planner": "current-codex-agent",
+      "status": "awaiting-user-review",
+      "humanReview": "pending",
+      "editable": {
+        "accepted": true,
+        "pages": [
+          {
+            "pageId": "p1",
+            "textShapes": 23,
+            "missingText": []
+          }
+        ],
+        "coverage": "PPTX OOXML 原生文字包含每项实际文本及主题句；不等于视觉验收"
+      },
+      "branches": [
+        {
+          "id": "issues",
+          "region": {
+            "itemId": "issues",
+            "x": 0,
+            "y": 0,
+            "width": 593.6363636363636,
+            "height": 600,
+            "fontSize": 22
+          },
+          "minimumBodyHeight": 409,
+          "sections": [
+            {
+              "left": 0,
+              "top": 0,
+              "width": 561.6363636363636,
+              "height": 336.6347607052897,
+              "kind": "diagram",
+              "id": "section-0",
+              "minHeight": 258
+            },
+            {
+              "left": 0,
+              "top": 348.6347607052897,
+              "width": 561.6363636363636,
+              "height": 181.36523929471034,
+              "kind": "text",
+              "id": "section-1",
+              "minHeight": 139
+            }
+          ]
+        },
+        {
+          "id": "insights",
+          "region": {
+            "itemId": "insights",
+            "x": 617.6363636363636,
+            "y": 0,
+            "width": 712.3636363636364,
+            "height": 600,
+            "fontSize": 22
+          },
+          "minimumBodyHeight": 446,
+          "sections": [
+            {
+              "left": 0,
+              "top": 0,
+              "width": 680.3636363636364,
+              "height": 132.53658536585365,
+              "kind": "text",
+              "id": "section-0",
+              "minHeight": 110
+            },
+            {
+              "left": 0,
+              "top": 144.53658536585365,
+              "width": 680.3636363636364,
+              "height": 96.39024390243902,
+              "kind": "text",
+              "id": "section-1",
+              "minHeight": 80
+            },
+            {
+              "left": 0,
+              "top": 252.9268292682927,
+              "width": 680.3636363636364,
+              "height": 132.53658536585365,
+              "kind": "text",
+              "id": "section-2",
+              "minHeight": 110
+            },
+            {
+              "left": 0,
+              "top": 397.4634146341464,
+              "width": 680.3636363636364,
+              "height": 132.53658536585365,
+              "kind": "text",
+              "id": "section-3",
+              "minHeight": 110
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case": "trial",
+      "name": "八周试点-分区修订灰稿",
+      "sourceDirectory": "C:\\PPagenT\\outputs\\gray-block-layout-20260916\\trial",
+      "previousContent": "C:\\PPagenT\\outputs\\gray-primary-agent-refinement-20260916\\trial",
+      "contentUnchanged": true,
+      "pptxSha256": "b9bc87efddd016df355da102e5703f08a36728b53ad1a7ea906e8a9a571b5ab0",
+      "planner": "current-codex-agent",
+      "status": "awaiting-user-review",
+      "humanReview": "pending",
+      "editable": {
+        "accepted": true,
+        "pages": [
+          {
+            "pageId": "p1",
+            "textShapes": 13,
+            "missingText": []
+          }
+        ],
+        "coverage": "PPTX OOXML 原生文字包含每项实际文本及主题句；不等于视觉验收"
+      },
+      "branches": [
+        {
+          "id": "proposal",
+          "region": {
+            "itemId": "proposal",
+            "x": 0,
+            "y": 0,
+            "width": 705.2307692307693,
+            "height": 492,
+            "fontSize": 22
+          },
+          "minimumBodyHeight": 224,
+          "sections": [
+            {
+              "left": 0,
+              "top": 0,
+              "width": 673.2307692307693,
+              "height": 422,
+              "kind": "flow",
+              "id": "section-0",
+              "minHeight": 224
+            }
+          ]
+        },
+        {
+          "id": "criteria",
+          "region": {
+            "itemId": "criteria",
+            "x": 729.2307692307693,
+            "y": 0,
+            "width": 440.7692307692308,
+            "height": 492,
+            "fontSize": 22
+          },
+          "minimumBodyHeight": 162,
+          "sections": [
+            {
+              "left": 0,
+              "top": 0,
+              "width": 408.7692307692308,
+              "height": 132.66666666666669,
+              "kind": "text",
+              "id": "section-0",
+              "minHeight": 46
+            },
+            {
+              "left": 0,
+              "top": 144.66666666666669,
+              "width": 408.7692307692308,
+              "height": 132.66666666666669,
+              "kind": "text",
+              "id": "section-1",
+              "minHeight": 46
+            },
+            {
+              "left": 0,
+              "top": 289.33333333333337,
+              "width": 408.7692307692308,
+              "height": 132.66666666666669,
+              "kind": "text",
+              "id": "section-2",
+              "minHeight": 46
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

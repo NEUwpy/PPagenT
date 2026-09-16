@@ -51,21 +51,36 @@ export function prepareContentDraft({ pageId, sourceParagraphs, grouping }) {
   return freeze({ ...content, contentHash: digest(content), coverage: 'complete-verbatim', semanticStatus: 'unreviewed' });
 }
 
+/** Bind whole content groups exactly once. Media adapters own selection fields, never the copy. */
+export function bindExpressionGroups(groups, selections) {
+  const byId = new Map(groups.map(group=>[group.id,group])), seen = new Set();
+  if (byId.size !== groups.length || !Array.isArray(selections) || !selections.length) throw new Error('表达绑定缺少内容或选择');
+  const bound = selections.map(selection=>{
+    if (!Array.isArray(selection.groupIds) || !selection.groupIds.length) throw new Error('表达缺少内容组引用');
+    const content = selection.groupIds.map(id=>{
+      if (!byId.has(id) || seen.has(id)) throw new Error(`未知或重复表达组: ${id}`);
+      seen.add(id);return structuredClone(byId.get(id));
+    });
+    return {selection:structuredClone(selection),groups:content};
+  });
+  if (seen.size !== byId.size) throw new Error('表达选择遗漏内容组');
+  return freeze(bound);
+}
+
 /** Selection only binds media to existing groups; it cannot replace their text. */
 export function bindExpressions({ draft, review, selections }) {
   const { pageId, sourceParagraphs, grouping } = draft;
   if (draft.contentHash !== digest({ pageId, sourceParagraphs, grouping })) throw new Error('分组稿已变化，需要重新检查');
   if (review?.contentHash !== draft.contentHash || review?.status !== 'passed' || !review?.reason) throw new Error('需先完成当前分组与实文草稿的复核');
-  const groups = new Map(grouping.groups.map(group => [group.id, group]));
-  const seen = new Set();
-  const expressions = selections.map(selection => {
+  for (const selection of selections ?? []) {
     if (Object.keys(selection).some(key => !['groupId', 'medium', 'assetId', 'reason'].includes(key))) throw new Error('表达阶段不得携带替换正文或重新分组');
-    if (!groups.has(selection.groupId) || seen.has(selection.groupId)) throw new Error(`未知或重复表达组: ${selection.groupId}`);
     if (!['text', 'table', 'chart', 'structure', 'image'].includes(selection.medium) || !selection.reason) throw new Error('表达需声明媒介与理由');
     if (selection.medium === 'structure' && !selection.assetId) throw new Error('结构表达需指定资产');
-    seen.add(selection.groupId);
-    return { ...structuredClone(selection), group: structuredClone(groups.get(selection.groupId)) };
+  }
+  const bound = bindExpressionGroups(grouping.groups, selections?.map(selection=>({...selection,groupIds:[selection.groupId]})));
+  const expressions = bound.map(({selection,groups}) => {
+    const {groupIds,...choice}=selection;
+    return {...choice,group:groups[0]};
   });
-  if (seen.size !== groups.size) throw new Error('表达选择遗漏内容组');
   return freeze({ pageId, contentHash: draft.contentHash, topic: grouping.topic, expressions, relations: grouping.relations, visualStatus: 'unreviewed' });
 }

@@ -1,0 +1,130 @@
+{
+  "schemaVersion": "gray-basic-layout-experiment-1",
+  "scope": "same short excerpt, two content areas, supervised iterations, user acceptance pending",
+  "source": "experiments/gray-information-architecture-20260916/source.txt",
+  "tests": {
+    "passed": 62,
+    "failed": 0
+  },
+  "runs": [
+    {
+      "variant": "wide",
+      "area": {
+        "width": 1170,
+        "height": 492,
+        "label": "宽内容区"
+      },
+      "status": "revision-requested",
+      "humanReview": "rejected",
+      "planningRounds": 8,
+      "history": [
+        {
+          "revision": 0,
+          "program": false,
+          "semantic": true,
+          "directory": "revision-0"
+        },
+        {
+          "revision": 1,
+          "program": true,
+          "semantic": true,
+          "directory": "revision-1"
+        },
+        {
+          "revision": 2,
+          "program": false,
+          "semantic": true,
+          "directory": "revision-2"
+        },
+        {
+          "revision": 3,
+          "program": true,
+          "semantic": true,
+          "directory": "revision-3"
+        },
+        {
+          "revision": 4,
+          "program": true,
+          "semantic": false,
+          "directory": "revision-4"
+        },
+        {
+          "revision": 5,
+          "program": true,
+          "semantic": false,
+          "directory": "revision-5"
+        },
+        {
+          "revision": 6,
+          "program": false,
+          "semantic": null,
+          "directory": "revision-6"
+        },
+        {
+          "revision": 7,
+          "program": true,
+          "semantic": true,
+          "directory": "revision-7"
+        }
+      ],
+      "pages": 1,
+      "provider": "chat-completions:deepseek-v4-flash",
+      "sourceHash": "4617d80af5eb42efbbb3f62920c2e9c7519d44904abd645f7c563fc3dbacad33",
+      "artifactDirectory": "outputs/gray-basic-layout-wide-20260916/revision-7/artifacts",
+      "actualPngReview": "all-final-pages-inspected",
+      "editableText": "passed",
+      "slidesTest": "Test passed. No overflow detected.",
+      "userReview": "experiments/gray-basic-layout-20260916/user-review.txt"
+    },
+    {
+      "variant": "small",
+      "area": {
+        "width": 780,
+        "height": 328,
+        "label": "小内容区"
+      },
+      "status": "awaiting-user-review",
+      "humanReview": "pending",
+      "planningRounds": 5,
+      "history": [
+        {
+          "revision": 0,
+          "program": false,
+          "semantic": true,
+          "directory": "revision-0"
+        },
+        {
+          "revision": 1,
+          "program": false,
+          "semantic": true,
+          "directory": "revision-1"
+        },
+        {
+          "revision": 2,
+          "program": true,
+          "semantic": true,
+          "directory": "revision-2"
+        },
+        {
+          "revision": 3,
+          "program": true,
+          "semantic": true,
+          "directory": "revision-3"
+        },
+        {
+          "revision": 4,
+          "program": true,
+          "semantic": true,
+          "directory": "revision-4"
+        }
+      ],
+      "pages": 2,
+      "provider": "chat-completions:deepseek-v4-flash",
+      "sourceHash": "4617d80af5eb42efbbb3f62920c2e9c7519d44904abd645f7c563fc3dbacad33",
+      "artifactDirectory": "outputs/gray-basic-layout-small-20260916/revision-4/artifacts",
+      "actualPngReview": "all-final-pages-inspected",
+      "editableText": "passed",
+      "slidesTest": "Test passed. No overflow detected."
+    }
+  ]
+}

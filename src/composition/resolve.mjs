@@ -23,11 +23,6 @@ export class CompositionFitError extends Error {
 export function resolveComposition({ pageId, intent, bodyFrame, contracts, style = {} }) {
   const checked = checkCompositionIntents({ pages: [{ pageId, compositionIntent: intent }] });
   if (checked.status !== 'passed') throw new Error(checked.issues.join('\n'));
-  const body = structuredClone(bodyFrame);
-  if (!body || !nonnegative(body.left) || !nonnegative(body.top) || !positive(body.width) || !positive(body.height)) throw new Error('Invalid bodyFrame');
-  const gap = style.gap ?? 28;
-  const innerGap = style.innerGap ?? gap;
-  if (!nonnegative(gap) || !nonnegative(innerGap)) throw new Error('Invalid composition spacing');
   const groups = new Map(intent.groups.map(group => [group.id, group]));
   if (groups.size > 1 && !intent.relations?.length) throw new Error('执行组合需要显式 relations；不能仅声明图文区域');
   const connected = new Set((intent.relations ?? []).flatMap(r => [...r.from, r.to]));
@@ -36,6 +31,33 @@ export function resolveComposition({ pageId, intent, bodyFrame, contracts, style
     const contract = contracts?.[group.id];
     if (!positive(contract?.minWidth) || !positive(contract?.minHeight)) throw new Error(`缺少可读容量契约: ${group.id}`);
   }
+  const geometry = resolveLayoutTree({ composition:intent.composition, bodyFrame, contracts, style });
+  return freeze(structuredClone({ pageId, intent, ...geometry, visualStatus:'not-evaluated' }));
+}
+
+/** Geometry only: callers own content meaning; never invent semantic edges to use a layout. */
+export function resolveLayoutTree({ composition, bodyFrame, contracts, style = {} }) {
+  const body = structuredClone(bodyFrame);
+  if (!body || !nonnegative(body.left) || !nonnegative(body.top) || !positive(body.width) || !positive(body.height)) throw new Error('Invalid bodyFrame');
+  const gap = style.gap ?? 28;
+  const innerGap = style.innerGap ?? gap;
+  if (!nonnegative(gap) || !nonnegative(innerGap)) throw new Error('Invalid composition spacing');
+  const seen = new Set();
+  const check = (node, depth = 0) => {
+    if (!node || depth > 12) throw new Error('Invalid or excessively nested layout tree');
+    if (node.groupId) {
+      if (seen.has(node.groupId) || !positive(contracts?.[node.groupId]?.minWidth) || !positive(contracts?.[node.groupId]?.minHeight)) throw new Error('Duplicate group or invalid capacity contract');
+      seen.add(node.groupId);
+      return;
+    }
+    if (!['row','column','grid','annotate'].includes(node.op) || !Array.isArray(node.children) || !node.children.length) throw new Error('Invalid layout operator');
+    if (node.gap !== undefined && !nonnegative(node.gap)) throw new Error('Invalid layout gap');
+    if (node.weights && (!['row','column'].includes(node.op) || node.weights.length !== node.children.length || node.weights.some(w=>!positive(w)))) throw new Error('Invalid layout weights');
+    if (node.columns !== undefined && (node.op !== 'grid' || !Number.isInteger(node.columns) || node.columns < 1 || node.columns > node.children.length)) throw new Error('Invalid grid columns');
+    node.children.forEach(child=>check(child,depth+1));
+  };
+  check(composition);
+  if (Object.keys(contracts).some(id=>!seen.has(id))) throw new Error('Unused layout capacity contract');
   const measurements = new Map();
   const measure = (node, depth = 0) => {
     if (depth > 12) throw new Error('组合嵌套超过 12 层，请简化分组');
@@ -59,7 +81,7 @@ export function resolveComposition({ pageId, intent, bodyFrame, contracts, style
     measurements.set(node, result);
     return result;
   };
-  const minimum = measure(intent.composition);
+  const minimum = measure(composition);
   if (minimum.width > body.width + 1e-6 || minimum.height > body.height + 1e-6) throw new CompositionFitError('组合最小可读容量超过正文区，需要重组', { minimum, available: body });
   const regions = {};
   const allocate = (node, frame, depth = 0) => {
@@ -87,8 +109,8 @@ export function resolveComposition({ pageId, intent, bodyFrame, contracts, style
       cursor += size + g;
     });
   };
-  allocate(intent.composition, body);
-  return freeze(structuredClone({ pageId, intent, bodyFrame: body, regions, contracts, style: { gap, innerGap }, visualStatus: 'not-evaluated' }));
+  allocate(composition, body);
+  return freeze(structuredClone({ bodyFrame: body, regions, contracts, style: { gap, innerGap } }));
 }
 
 /** Builders must use the supplied frame for the complete group, including labels. */

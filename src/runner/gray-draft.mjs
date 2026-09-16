@@ -6,6 +6,11 @@ import { createHash } from 'node:crypto';
 import { buildChatProviderFromEnv } from './chat-provider.mjs';
 import { newRunState, upsertPageBriefs, validateContent, writeState, renderContentMarkdown, renderStateMarkdown } from './state.mjs';
 import { fitChineseTextToFrame } from '../render/chinese-typography.mjs';
+import { SEMANTIC_CONTRACT, SEMANTIC_REVIEW_CONTRACT, EXPRESSION_CONTRACT, LAYOUT_CONTRACT, validateSemanticPlan, bindSemanticLayout, bindGrayExpressions, semanticPlanFromPages, blockText, regionBody, grayDisplayBlocks, semanticReviewInput } from './gray-semantics.mjs';
+import { resolveGrayLayout } from './gray-layout.mjs';
+import { resolveLayoutTree } from '../composition/resolve.mjs';
+
+export { regionBody } from './gray-semantics.mjs';
 
 const KINDS = ['text', 'diagram', 'flow', 'chart', 'table', 'image'];
 const sha = text => createHash('sha256').update(text).digest('hex');
@@ -24,10 +29,6 @@ export function validateGrayArea(area) {
   return { width: area.width, height: area.height, label: String(area.label || '自定义内容区') };
 }
 
-export function regionBody(item) {
-  return item.kind === 'text' ? item.text : `表达作用：${item.expression}\n承载内容：${item.text}\n基本关系：${item.relationship}\n制作要求：${item.production}`;
-}
-
 export function fitGrayText(text, width, height, fontSize) {
   let result;
   // The shared balanced wrapper can leave a long token over its target width.
@@ -39,6 +40,42 @@ export function fitGrayText(text, width, height, fontSize) {
   return result;
 }
 
+// Capacity checking and rendering share this exact internal text layout.
+export function grayBodyLayout(item, width, fontSize, availableHeight) {
+  const padding=8, gap=12, labelGap=4;
+  const sections=item.kind==='text' && item.blocks
+    ? item.blocks.map(block=>({kind:block.kind ?? 'text',parts:grayDisplayBlocks({kind:'text',blocks:[block]})}))
+    : [{kind:item.kind,parts:grayDisplayBlocks(item)}];
+  const contracts={};
+  const measured=sections.map((section,index)=>{
+    const parts=section.parts.map(part=>{
+      const fit=fitGrayText(part.text,width-2*padding,100000,fontSize);
+      return {...part,text:fit.text,height:fit.lineCount*fontSize*1.35,fits:fit.fits};
+    });
+    const id=`section-${index}`;
+    const minHeight=Math.ceil(parts.reduce((sum,part)=>sum+part.height,0)+labelGap*(parts.length-1)+2*padding);
+    contracts[id]={minWidth:width,minHeight};
+    return {id,kind:section.kind,parts,minHeight};
+  });
+  const minimum=measured.reduce((sum,section)=>sum+section.minHeight,0)+gap*(measured.length-1);
+  const children=measured.map(section=>({groupId:section.id}));
+  const solved=resolveLayoutTree({
+    composition:children.length===1?children[0]:{op:'column',children,weights:measured.map(section=>section.minHeight)},
+    bodyFrame:{left:0,top:0,width,height:availableHeight ?? minimum},contracts,style:{gap},
+  });
+  const runs=[];
+  const frames=measured.map(section=>{
+    const frame=solved.regions[section.id];
+    let y=frame.top+padding+(frame.height-section.minHeight)/2;
+    for(const part of section.parts){
+      runs.push({text:part.text,x:padding,y,width:width-2*padding,height:part.height,bold:part.bold,fits:part.fits,...(part.kind?{kind:part.kind}:{})});
+      y+=part.height+labelGap;
+    }
+    return {...frame,kind:section.kind,id:section.id,minHeight:section.minHeight};
+  });
+  return {runs,sections:frames,height:availableHeight ?? minimum,minimumHeight:minimum,fits:runs.every(r=>r.fits)};
+}
+
 /** Extends existing page briefs: sources/text stay in items; composition binds item IDs. */
 export function validateGrayPlan(base, plan, area) {
   const issues = [];
@@ -46,6 +83,10 @@ export function validateGrayPlan(base, plan, area) {
   try {
     if (!plan?.deckBrief || !Array.isArray(plan.pages) || !plan.pages.length || plan.pages.length > 100) throw new Error('缺少 deckBrief/pages 或页数超出 1..100');
     if (new Set(plan.pages.map(p => p.pageId)).size !== plan.pages.length) throw new Error('pageId 重复');
+    if (plan.pages.some(p=>p.semantics) || ['gray-draft-2','gray-draft-3'].includes(base.grayDraft?.version)) {
+      issues.push(...validateSemanticPlan(base,semanticPlanFromPages(plan)).issues);
+      for (const page of plan.pages) if (JSON.stringify(page.composition?.regions?.map(r=>r.itemId)) !== JSON.stringify(page.semantics?.readingOrder)) throw new Error(`${page.pageId} 区域顺序与语义阅读顺序不同`);
+    }
     state = { ...base, pages: [], phase: 'content', deckBrief: plan.deckBrief };
     for (const page of plan.pages) {
       try { state = upsertPageBriefs(state, [structuredClone(page)]); }
@@ -54,7 +95,7 @@ export function validateGrayPlan(base, plan, area) {
     issues.push(...validateContent(state).issues);
     for (const page of state.pages) {
       if (!requiredText(page.title) || !requiredText(page.claim)) throw new Error(`${page.pageId} 缺少主题句`);
-      const topic = fitGrayText(page.claim, area.width * 0.88, 80, 28);
+      const topic = fitGrayText(page.claim, area.width * 0.88, 40, 28);
       if (!topic.fits) issues.push({ code: 'topic-overflow', pageId: page.pageId });
       const regions = page.composition?.regions;
       if (!Array.isArray(regions) || !regions.length) throw new Error(`${page.pageId} 缺少 regions`);
@@ -69,8 +110,9 @@ export function validateGrayPlan(base, plan, area) {
         if (![x, y, width, height, fontSize].every(Number.isFinite) || width < 100 || height < 80 || fontSize < 22 || fontSize > 28) throw new Error(`${item.id} 几何/字号非法，正文必须 22..28px`);
         if (x < 0 || y < 0 || x + width > area.width + .1 || y + height > area.height + .1) issues.push({ code: 'region-outside', pageId: page.pageId, itemId: item.id });
         const heading = fitGrayText(item.heading, width - 32, 40, 26);
-        const body = fitGrayText(regionBody(item), width - 32, height - 70, fontSize);
-        if (!heading.fits || !body.fits) issues.push({ headingFits:heading.fits, headingLines:heading.lineCount, headingMaxLines:1, bodyFits:body.fits, code: 'text-capacity', pageId: page.pageId, itemId: item.id, requiredBodyHeight: Math.ceil(body.lineCount * fontSize * 1.35 + 70), actualHeight: height });
+        if (item.blocks && item.text !== item.blocks.map(blockText).join('\n')) throw new Error(`${item.id} 正文与内部结构不一致`);
+        const body = grayBodyLayout(item, width - 32, fontSize);
+        if (!heading.fits || !body.fits || body.height > height-70) issues.push({ headingFits:heading.fits, headingLines:heading.lineCount, headingMaxLines:1, bodyFits:body.fits && body.height<=height-70, code: 'text-capacity', pageId: page.pageId, itemId: item.id, requiredBodyHeight: Math.ceil(body.height + 70), actualHeight: height });
       }
       if (seen.size !== page.items.length) issues.push({ code: 'unrendered-items', pageId: page.pageId });
       for (let i = 0; i < regions.length; i++) for (let j = i + 1; j < regions.length; j++) {
@@ -82,14 +124,6 @@ export function validateGrayPlan(base, plan, area) {
   return { accepted: issues.length === 0, issues, state, coverage: '来源引用、数字/引号保真、区域边界/重叠、固定字号保守容量；不证明语义忠实或视觉美观。' };
 }
 
-const CONTRACT = `你是 PPT 内容规划模型。只输出 JSON，不写 Markdown。原稿→内容规划是永久生产环节，本轮输出可编辑灰稿，禁止正式美化。
-一页讲清一件事，一块讲清一件小事；按传入内容区域独立规划，可提炼、改写、重组和拆页，但必须覆盖所有来源的重要事实、条件、否定及逻辑。同一论点的数据、依据与必要口径宜集中在一页，区域能容纳时避免碎页。原稿制作说明（原稿篇幅、章节不是布局答案）只保留后台，不上屏，模拟性质免责声明仍保留。不能把同一正文重复放到不同区，不能把次要信息与主信息等权化。禁止凭固定页数切稿。不要给封面或目录凑页数。
-Skin 规则提供区域基础约束；通用排版规则负责分页分区层次留白；风格规则后续美化，涉及分组主次关系拆页必须返回规划。
-JSON 格式：{deckBrief:{title,audience,objective},pages:[{pageId:"p1",title:"短标题",claim:"实际上屏的简短主题句（结论或动机）",relation:"none|parallel|comparison|sequence",items:[{id:"p1-a",sourceIds:["s1"],heading:"实际上屏的分级标题",text:"真实上屏正文，最多400字",role:"object|criterion|step|global",kind:"text|diagram|flow|chart|table|image",expression:"非text必填：表达作用",relationship:"非text必填：基本关系",production:"非text必填：制作要求"}],composition:{regions:[{itemId:"p1-a",x:0,y:0,width:500,height:300,fontSize:22}]}}],planningNotes:"后台分页分区理由与拆页说明，绝不上屏"}。
-几何单位设计px，相对内容区左上角。主题句在内容区外以28px呈现，80px高最多两行，避免长段落，不扣除传入内容区高度；各region必须 y>=0。不允许溢出重叠。正文22..28px，区标题26px，不缩字。每区固定16px内边距，标题占40px，仅容一行，标题必须足够短（建议6至10字），正文可用高=region.height-70。估算每行字数=(width-32)/(fontSize*1.06)，每行高=fontSize*1.35。需要更多高度就增区域/拆页，不要压低字号。
-纯文字区灰色，text就是实际上屏的文字。其他种类浅蓝，不画具体结构，正文将同时显示「表达作用、承载内容(text)、基本关系、制作要求」，因此四者合计要纳入容量。
-每个region恰好对应一个item，每个item都恰好被一个region承载。可用不等宽列、主区+辅助区、上下分区，网格对齐一致、留白合理。不是每页都必须有非文字区，只有内容需要关系/数据/图片表达时才用。
-保留原稿数字书写方式（汉字数字不改阿拉伯数字）。原稿数字/引号必须有来源证据，不能编造。来源id可跨页引用但内容应分工。完整原稿标注的模拟性质必须在页面内容中保留。禁止把页面主张分析/选择理由等后台思考放上屏。`;
 
 async function askJson(provider, messages, file) {
   const response = await provider.complete({ messages });
@@ -110,13 +144,19 @@ export async function renderGrayDraft(state, output) {
   const draw = (slide, text, position, size, bold = false) => addText(slide, text, position, {fontSize:size,bold,color:'#20262D',verticalAlignment:'top',autoFit:'none'});
   for (const [index, page] of state.pages.entries()) {
     const slide = presentation.slides.add();
-    draw(slide, fitGrayText(page.claim, area.width * 0.88, 80, 28).text, {left:40,top:20,width:area.width,height:80},28,true);
+    draw(slide, fitGrayText(page.claim, area.width * 0.88, 40, 28).text, {left:40,top:20,width:area.width,height:40},28,true);
     for (const region of page.composition.regions) {
       const item = page.items.find(i=>i.id===region.itemId);
       const left=region.x+40, top=region.y+110;
-      slide.shapes.add({geometry:'rect',name:`region:${item.id}`,position:{left,top,width:region.width,height:region.height},fill:item.kind==='text'?'#ECEEEF':'#E1EFF9',line:{fill:'none',width:0}});
+      slide.shapes.add({geometry:'rect',name:`region:${item.id}`,position:{left,top,width:region.width,height:region.height},fill:'#F7F8F9',line:{fill:'#D4D8DC',width:1}});
       draw(slide,fitGrayText(item.heading,region.width-32,40,26).text,{left:left+16,top:top+12,width:region.width-32,height:40},26,true);
-      draw(slide,fitGrayText(regionBody(item),region.width-32,region.height-70,region.fontSize).text,{left:left+16,top:top+54,width:region.width-32,height:region.height-70},region.fontSize);
+      const body=grayBodyLayout(item,region.width-32,region.fontSize,region.height-70);
+      for(const section of body.sections){
+        slide.shapes.add({geometry:'rect',name:`block:${item.id}:${section.id}`,position:{left:left+16+section.left,top:top+54+section.top,width:section.width,height:section.height},fill:section.kind==='text'?'#ECEEEF':'#E1EFF9',line:{fill:'none',width:0}});
+      }
+      for (const run of body.runs) {
+        draw(slide,run.text,{left:left+16+run.x,top:top+54+run.y,width:run.width,height:run.height},region.fontSize,run.bold);
+      }
     }
 
     const stem=`slide-${String(index+1).padStart(2,'0')}`;
@@ -152,12 +192,13 @@ export async function renderGrayDraft(state, output) {
     await fs.writeFile(path.join(preview,`${stem}.layout.json`),await (await slide.export({format:'layout'})).text());
   }
   await fs.writeFile(path.join(output,'preview-index.json'),json(inspection));
-  await fs.writeFile(path.join(output,'preview.html'),`<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>灰稿逐页预览</title><style>body{margin:32px auto;max-width:1280px;padding:0 24px;background:#f3f4f5;color:#20262d;font-family:system-ui}header{position:sticky;top:0;background:#f3f4f5;padding:12px 0}a{color:#17689a}figure{margin:32px 0}img{max-width:100%;height:auto;background:white;border:1px solid #ccd1d5}figcaption{margin:8px 0}</style><header><b>${htmlEscape(area.label)} · ${area.width} × ${area.height} · ${state.pages.length}页</b>　<a href="gray-draft.pptx">下载可编辑 PPT</a><p>模拟内容 · 灰稿候选，等待用户审阅。灰区为实文，浅蓝区为制作说明。</p></header>${inspection.map((p,i)=>`<figure id="page-${i+1}"><figcaption>${i+1} / ${state.pages.length}　${htmlEscape(state.pages[i].title)}</figcaption><img src="${p.preview}" alt="第${i+1}页" loading="lazy"></figure>`).join('')}</html>`);
+  await fs.writeFile(path.join(output,'preview.html'),`<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>灰稿逐页预览</title><style>body{margin:32px auto;max-width:1280px;padding:0 24px;background:#f3f4f5;color:#20262d;font-family:system-ui}header{position:sticky;top:0;background:#f3f4f5;padding:12px 0}a{color:#17689a}figure{margin:32px 0}img{max-width:100%;height:auto;background:white;border:1px solid #ccd1d5}figcaption{margin:8px 0}</style><header><b>${htmlEscape(area.label)} · ${area.width} × ${area.height} · ${state.pages.length}页</b>　<a href="gray-draft.pptx">下载可编辑 PPT</a><p>灰稿候选，等待用户审阅。灰区为实文，浅蓝区为制作说明。</p></header>${inspection.map((p,i)=>`<figure id="page-${i+1}"><figcaption>${i+1} / ${state.pages.length}　${htmlEscape(state.pages[i].title)}</figcaption><img src="${p.preview}" alt="第${i+1}页" loading="lazy"></figure>`).join('')}</html>`);
   return inspection;
 }
 
 export async function runGrayDraft({source, output, area, root=process.cwd(), provider, maxRevisions=3, resume=false, feedback=null, freshPlan=false}) {
   area=validateGrayArea(area);
+  const contentArea={width:area.width,height:area.height};
   if (!Number.isInteger(maxRevisions) || maxRevisions < 0 || maxRevisions > 20) throw new Error('max-revisions 必须为0..20整数');
   // Refuse accidental reuse: previous failures and other work are evidence.
   if (!resume) await fs.mkdir(output,{recursive:false});
@@ -165,28 +206,29 @@ export async function runGrayDraft({source, output, area, root=process.cwd(), pr
   let state=resume?JSON.parse(await fs.readFile(path.join(output,'state.json'),'utf8')):newRunState(raw,path.resolve(source));
   if(resume && (state.grayDraft.sourceHash!==sha(raw)||state.grayDraft.area.width!==area.width||state.grayDraft.area.height!==area.height)) throw new Error('续跑原稿或尺寸不匹配');
   if(!resume) await fs.writeFile(path.join(output,'source.md'),raw);
-  if(!resume) state.grayDraft={version:'gray-draft-1',area,sourceHash:sha(raw),status:'planning',humanReview:'pending',history:[]};
+  if(!resume) state.grayDraft={version:'gray-draft-3',area,sourceHash:sha(raw),status:'planning',humanReview:'pending',history:[]};
   state.grayDraft.status='planning';
   const statePath=path.join(output,'state.json');
   await saveGrayState(statePath,state);
   try {
     provider ??= await buildChatProviderFromEnv({root,maxTokens:24000,observer:event=>fs.appendFile(path.join(output,'events.ndjson'),JSON.stringify(event)+'\n')});
     state.grayDraft.provider=provider.identity;
-    const sharedRules=await fs.readFile(path.join(root,'rules','排版.md'),'utf8');
+    state.grayDraft.providerSettings={model:provider.model,thinking:provider.extraBody?.thinking?.type,maxTokens:provider.maxTokens};
+    const sharedRules=(await Promise.all(['内容结构.md','页面组合.md','排版.md'].map(name=>fs.readFile(path.join(root,'rules',name),'utf8')))).join('\n\n');
     await fs.writeFile(path.join(output,'rules-snapshot.md'),sharedRules,{flag:'wx'}).catch(error=>{if(error.code!=='EEXIST')throw error;});
-    const messages=[{role:'system',content:CONTRACT+'\n以下为本项目共用规则真源：\n'+sharedRules},{role:'user',content:json({area,sources:state.sources,fullManuscript:raw})}];
+    const messages=[{role:'system',content:SEMANTIC_CONTRACT+'\n以下为本项目共用规则真源：\n'+sharedRules},{role:'user',content:json({area:contentArea,sources:state.sources,fullManuscript:raw})}];
     const start=state.grayDraft.history.length;
-    if(feedback) {
-      await fs.writeFile(path.join(output,`human-feedback-${start}.md`),feedback);
-      messages.push({role:'user',content:'人工实际灰稿审阅反馈，依据此修订完整规划：\n'+feedback});
-    }
     if(resume && start && !freshPlan) {
       const previous=path.join(output,`revision-${start-1}`);
-      const previousPlan=await fs.readFile(path.join(previous,'plan.json'),'utf8').catch(()=>null);
+      const previousPlan=await fs.readFile(path.join(previous,'semantic-plan.json'),'utf8').catch(()=>null);
       const previousReport=await fs.readFile(path.join(previous,'program-check.json'),'utf8');
       const previousSemantic=await fs.readFile(path.join(previous,'semantic-check.json'),'utf8').catch(()=>null);
       if(previousPlan) messages.push({role:'assistant',content:previousPlan});
       messages.push({role:'user',content:'依据当前规则与以下之前的检查反馈重新修订完整规划：'+previousReport+'\n'+(previousSemantic||'')});
+    }
+    if(feedback) {
+      await fs.writeFile(path.join(output,`human-feedback-${start}.md`),feedback);
+      messages.push({role:'user',content:'人工实际灰稿审阅反馈，依据此修订完整规划：\n'+feedback});
     }
     state.runtimeFailure=null;
     for(let revision=start;revision<=start+maxRevisions;revision++) {
@@ -194,21 +236,54 @@ export async function runGrayDraft({source, output, area, root=process.cwd(), pr
       await fs.mkdir(dir);
       await fs.writeFile(path.join(dir,'system-prompt.txt'),messages[0].content);
       await fs.writeFile(path.join(dir,'runner.sha256'),sha(await fs.readFile(new URL(import.meta.url))));
-      let plan,report;
-      try { plan=await askJson(provider,messages,path.join(dir,'model-response.json')); report=validateGrayPlan(state,plan,area); }
-      catch(error) {report={accepted:false,issues:[{code:'model-output',message:error.message}]};}
+      let plan,architecture,report,semantic=null;
+      try {
+        architecture=await askJson(provider,messages,path.join(dir,'model-response.json'));
+        await fs.writeFile(path.join(dir,'content-plan.json'),json(architecture));
+        await fs.writeFile(path.join(dir,'semantic-plan.json'),json(architecture));
+        report=validateSemanticPlan(state,architecture);
+        if(report.accepted && architecture.schemaVersion==='gray-plan-3') {
+          await fs.writeFile(path.join(dir,'expression-prompt.txt'),EXPRESSION_CONTRACT);
+          const selection=await askJson(provider,[{role:'system',content:EXPRESSION_CONTRACT},{role:'user',content:json({source:raw,area:contentArea,plan:architecture})}],path.join(dir,'expression-response.json'));
+          architecture=bindGrayExpressions(architecture,selection);
+          await fs.writeFile(path.join(dir,'semantic-plan.json'),json(architecture));
+          report=validateSemanticPlan(state,architecture);
+        }
+        await fs.writeFile(path.join(dir,'structure-check.json'),json(report));
+        if(report.accepted) {
+          await fs.writeFile(path.join(dir,'semantic-prompt.txt'),SEMANTIC_REVIEW_CONTRACT);
+          const reviewInput=semanticReviewInput({source:raw,area,plan:architecture,reviewFeedback:feedback});
+          await fs.writeFile(path.join(dir,'visible-plan.json'),json(reviewInput.visiblePages));
+          semantic=await askJson(provider,[{role:'system',content:SEMANTIC_REVIEW_CONTRACT},{role:'user',content:json(reviewInput)}],path.join(dir,'semantic-response.json'));
+          if(typeof semantic.accepted!=='boolean'||!Array.isArray(semantic.issues)) throw new Error('语义审稿响应格式无效');
+          await fs.writeFile(path.join(dir,'semantic-check.json'),json(semantic));
+          if(semantic.accepted && !semantic.issues.length) {
+            await fs.writeFile(path.join(dir,'layout-prompt.txt'),LAYOUT_CONTRACT);
+            const layoutMessages=[{role:'system',content:LAYOUT_CONTRACT},{role:'user',content:json({area:contentArea,plan:architecture})}];
+            // Geometry failures first repair geometry, without regenerating approved copy.
+            for(let attempt=0;attempt<3;attempt++) {
+              const layout=await askJson(provider,layoutMessages,path.join(dir,`layout-response-${attempt}.json`));
+              try {
+                if (architecture.schemaVersion === 'gray-plan-3') {
+                  const built=resolveGrayLayout(architecture,layout,area,{measureBody:grayBodyLayout,fitText:fitGrayText});
+                  plan=built.plan;
+                  await fs.writeFile(path.join(dir,`layout-resolved-${attempt}.json`),json(built.receipts));
+                } else plan=bindSemanticLayout(architecture,layout);
+                report=validateGrayPlan(state,plan,area);
+              } catch(error) {report={accepted:false,issues:[{code:error.code || 'layout-binding',message:error.message,details:error.details}]};}
+              await fs.writeFile(path.join(dir,`layout-check-${attempt}.json`),json({...report,state:undefined}));
+              if(report.accepted || layout.needsReplan || report.issues.some(issue=>issue.code==='topic-overflow')) break;
+              layoutMessages.push({role:'assistant',content:json(layout)},{role:'user',content:json({instruction:'只调整基础组合或横向比例，不改内容。details给出实际测量容量；可尝试其他组合，确实无法容纳时返回needsReplan，不写坐标。',issues:report.issues})});
+            }
+          }
+        }
+      } catch(error) {report={accepted:false,issues:[{code:'model-output',message:error.message}]};}
       if(plan) await fs.writeFile(path.join(dir,'plan.json'),json(plan));
       await fs.writeFile(path.join(dir,'program-check.json'),json({...report,state:undefined}));
-      let semantic=null;
-      if(report.accepted) {
-        semantic=await askJson(provider,[{role:'system',content:'你是独立一轮的内容审稿人。比较完整原稿和灰稿规划。逐一检查事实/数字/条件/因果/模拟边界是否忠实，重要信息是否遗漏，每页一事和区域职责是否成立，层次主次是否明确，非文字区四要素是否可执行。不得仅看sourceIds覆盖。检查正文和图示是否重复承载相同数据而没有分工；是否把一个论点碎片化拆页；制作元信息不应上屏，但模拟声明应保留；不得把担忧升级为事实或凭空增加因果链。每个图表/指标的关键口径必须随本页图表/指标出现，跨页不等于满足限定。不评价未看到的像素图。先区分真实缺陷与可选建议：必须结合area尺寸与22px以上字号判断容量，不规定合并页数；小区域拆分完整子主题合理，不以大区域标准强迫合并。蓝区text就是图示将承载的数据，不是额外绘制的一份正文，production是该数据的制作要求，二者关联不算重复。主题句与主体呼应不算无意义重复。只有确认的重要遗漏、事实矛盾、无据因果、关键限定丢失或明确重复才拒绝；仅可能、更好、更紧凑的建议放recommendations而非issues。只输出JSON：{accepted:boolean,issues:[{pageId,sourceIds,problem,requiredRevision}],coverage:"本轮实际查了什么",limits:"未看渲染图，不能确认实际视觉"}。只有存在实质问题才拒绝。'}, {role:'user',content:json({source:raw,area,plan})}],path.join(dir,'semantic-response.json'));
-        if(typeof semantic.accepted!=='boolean'||!Array.isArray(semantic.issues)) throw new Error('语义审稿响应格式无效');
-        await fs.writeFile(path.join(dir,'semantic-check.json'),json(semantic));
-      }
-      state.grayDraft.history.push({revision,program:report.accepted,semantic:semantic?.accepted??null,directory:`revision-${revision}`});
+      state.grayDraft.history.push({revision,program:report.accepted,semantic:semantic ? semantic.accepted && !semantic.issues.length : null,directory:`revision-${revision}`});
       await saveGrayState(statePath,state);
-      if(report.accepted && semantic.accepted && !semantic.issues.length) {
-        state={...report.state,grayDraft:{...state.grayDraft,status:'rendering',planningNotes:plan.planningNotes,programCheck:{...report,state:undefined},semanticCheck:semantic}};
+      if(plan && report.accepted && semantic?.accepted && !semantic.issues.length) {
+        state={...report.state,grayDraft:{...state.grayDraft,version:architecture.schemaVersion==='gray-plan-3'?'gray-draft-3':'gray-draft-2',status:'rendering',semanticPlan:architecture,planningNotes:plan.planningNotes,programCheck:{...report,state:undefined},semanticCheck:semantic}};
         await saveGrayState(statePath,state);
         const artifactOutput=await fs.access(path.join(output,'gray-draft.pptx')).then(()=>path.join(dir,'artifacts')).catch(()=>output);
         await fs.mkdir(artifactOutput,{recursive:true});
@@ -221,7 +296,7 @@ export async function runGrayDraft({source, output, area, root=process.cwd(), pr
         await fs.writeFile(path.join(output,'content.md'),renderContentMarkdown(state));
         return state;
       }
-      messages.push({role:'assistant',content:plan?json(plan):'上次未能返回合法完整JSON。'}, {role:'user',content:json({instruction:'根据检查修订完整规划，保留所有事实条件，重新返回完整 JSON。需要拆页就拆，不缩小字号。',program:report.issues,semantic})});
+      messages.push({role:'assistant',content:architecture?json(architecture):'上次未能返回合法完整JSON。'}, {role:'user',content:json({instruction:'根据检查修订完整语义规划（不含坐标），保留所有事实条件。容量不足先调整表达组织再分页，不缩小字号。',program:report.issues,semantic})});
     }
     throw new Error('规划修订预算耗尽，保留全部失败记录；不能静默交付失败灰稿');
   } catch(error) {

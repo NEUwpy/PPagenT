@@ -1,0 +1,15 @@
+GitHub 参考（2026-09-16 实时查看；仅借鉴方法，未复制代码或安装依赖）
+
+AntV Infographic
+https://github.com/antvis/Infographic
+https://github.com/antvis/Infographic/blob/main/skills/infographic-syntax-creator/references/prompt.md
+可复用经验：信息结构与主题、几何分离；按内容关系选表达，所选表达的数据组织应与它的语义相容。没有移植其DSL、模板枚举或SVG渲染器。
+
+PPTAgent
+https://github.com/icip-cas/PPTAgent
+可复用经验：页面职能与内容组织先于具体编辑；内容、设计和连贯性分别评价。没有引入其多Agent架构，也没有采用缩字适配方式。
+
+DeepSeek 官方接口
+https://api-docs.deepseek.com/guides/thinking_mode/
+https://api-docs.deepseek.com/api/create-response/
+核对了thinking开关及deepseek-v4-pro模型标识。当前试验通过现有环境变量选择模型与thinking；不修改本地密钥或全局模型配置。模型变化与代码变化同时发生时，不能把改善单独归因于某一个因素。
