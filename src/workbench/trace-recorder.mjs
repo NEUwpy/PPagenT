@@ -33,15 +33,28 @@ function eventSummary(event, sequence, detailPath) {
 export function createTraceRecorder(runDir) {
   const eventsPath = path.join(runDir, "events.jsonl");
   const traceDir = path.join(runDir, "trace");
-  let sequence = 0;
+  /** null = 还没从既有事件里读出起点；读出后就是本次记录器已用到的最大序号。 */
+  let sequence = null;
   let queue = Promise.resolve();
 
-  async function write(event) {
+  /**
+   * 续跑会在**同一个运行目录**上再开一个记录器。序号必须接着既有的往下排：
+   * 前端是按 `sequence > after` 增量取事件的，新记录器若从 1 重新数，
+   * 新事件的序号会落在前端已经拿到的 after 之下，于是永远拉不到——续跑在看板上看起来毫无动静。
+   * 同一个记录器内只读一次，之后自增。
+   */
+  async function nextSequence() {
+    if (sequence === null) sequence = (await readTraceEvents(runDir, 0)).at(-1)?.sequence ?? 0;
     sequence += 1;
-    const eventId = `event-${String(sequence).padStart(4, "0")}`;
+    return sequence;
+  }
+
+  async function write(event) {
+    const current = await nextSequence();
+    const eventId = `event-${String(current).padStart(4, "0")}`;
     const detailPath = `trace/${eventId}.json`;
-    const detail = safeValue({ ...event, eventId, sequence, timestamp: new Date().toISOString() });
-    const summary = eventSummary(detail, sequence, detailPath);
+    const detail = safeValue({ ...event, eventId, sequence: current, timestamp: new Date().toISOString() });
+    const summary = eventSummary(detail, current, detailPath);
     await fs.mkdir(traceDir, { recursive: true });
     await fs.writeFile(path.join(runDir, detailPath), `${JSON.stringify(detail, null, 2)}\n`, "utf8");
     await fs.appendFile(eventsPath, `${JSON.stringify(summary)}\n`, "utf8");

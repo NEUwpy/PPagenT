@@ -19,6 +19,14 @@ npm run rules:load -- --profile generation --skin neutral-editorial-001
 
 暂定每个 Skin 在索引声明一组 `rules` 与一个 `layout` ID；`layouts` 将该 ID 映射到唯一现行规则清单。中性 Skin（保留资产 ID `neutral-editorial-001`）绑定「杂志风」（`magazine`）。不同 Skin 可共享同一体系，不能从 CLI 单独覆盖排版。东北大学 Skin（`northeastern-university-001`）绑定「麦肯锡式」（`mckinsey`），加载现行分析排版规则；字体与主题直接来自既有运行时契约。此处是独立制作规则绑定，不改正式 renderer。独立制作的共享排版规则提供结构 Skill 入口，Agent 按需读取通用结构或参考方法，加载器不预读全库。
 
+## 分层与加载原则
+
+规则按职责组织为：**内容规则 → 页面规划规则 → 视觉风格规则 → 结构选择规则 → Skill 调用规则 → 制作约束 → 检查规则**。这是责任划分，不要求新建七套文件或七个 Agent；优先维护已有真源。
+
+内容与规划分别由 `内容组织.md`、`页面组合.md` 承担；身份与风格由 `skins/`、`排版体系/` 承担；结构和 Skill 选择复用 [选择规则](../skills/references/selection.md) 与对应能力说明；制作约束和检查使用已有排版、执行及质量文件。
+
+按阶段和本页需要加载：规划读取内容原则、相关风格条件与能力概览；确定表达需求后再读取具体结构或 Skill；构建与检查读取对应约束。保留必要上下文，不默认把全库装入一个提示词。当前 `generation` 等 profile 的实际加载范围仍由 index.json 与运行器决定，本次说明不代表已实现新的自动路由。
+
 ## 维护方法
 
 - 独立制作采用 Skin＋共享页面组合＋绑定排版体系：`页面组合.md` 只维护信息组织，`排版.md` 维护组内文字与几何，风格文件维护密度和视觉表达。新 Harness 以引用 content.md 的 blueprint.json 为轻量计划；`composition-intent.json` 及 `src/tools/check-composition-intent.mjs`、`src/composition/resolve.mjs` 是可选执行工具，选用时由蓝图派生输入并遵守其契约，不强制新增一套计划；不等同于正式候选协议中的 CompositionPlan。正式选择器尚未加载此自由编排规则，迁移需单独验证。

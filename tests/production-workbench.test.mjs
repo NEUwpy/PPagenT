@@ -54,6 +54,27 @@ test("运行追踪把大对象外置并屏蔽 API Key", async (t) => {
   assert.deepEqual(detail.context, { source: "稿件" });
 });
 
+test("续跑在同一个运行目录上接着既有序号排，不从头数", async (t) => {
+  const root = await tempDir(t);
+  const first = createTraceRecorder(root);
+  await first.observe({ type: "stage-call", status: "running", stage: "content-director" });
+  await first.observe({ type: "stage-call", status: "failed", stage: "content-director" });
+  await first.flush();
+
+  // 续跑会在同一个运行目录上再开一个记录器。前端按 `sequence > after` 增量取事件，
+  // 新记录器若又从 1 数起，新事件的序号落在前端已拿到的 after 之下，就永远拉不到——
+  // 续跑在看板上会看起来毫无动静，所以这里必须接着 2 往下排。
+  const second = createTraceRecorder(root);
+  await second.observe({ type: "stage-call", status: "running", stage: "visual-director" });
+  await second.flush();
+
+  const events = await readTraceEvents(root, 0);
+  assert.deepEqual(events.map((event) => event.sequence), [1, 2, 3]);
+  assert.equal(events[2].detailPath, "trace/event-0003.json");
+  // 续跑后按增量取，拿到的正是新那次尝试的事件，一条都不漏。
+  assert.deepEqual((await readTraceEvents(root, 2)).map((event) => event.stage), ["visual-director"]);
+});
+
 test("DeepSeek 观察口区分真实 HTTP 尝试并保留 usage", async () => {
   const events = [];
   const model = new DeepSeekJsonModel({

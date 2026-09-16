@@ -7,8 +7,9 @@
 import path from "node:path";
 import {
   readState, writeState, writeText, renderStateMarkdown, renderContentMarkdown,
-  setDeckBrief, upsertPageBriefs, replacePageBriefs, freezeContent, validateContent,
+  setDeckBrief, upsertPageBriefs, replacePageBriefs, freezeContent, validateContent, ROLES,
 } from "../state.mjs";
+import { ITEM_TEXT_MAX_LENGTH, fidelityLimitsText } from "../../content/source-fidelity.mjs";
 import { defineTool } from "./index.mjs";
 
 /**
@@ -49,6 +50,19 @@ const pageSchema = {
         properties: {
           id: { type: "string", pattern: "^[A-Za-z0-9-]{1,48}$" },
           sourceIds: { type: "array", minItems: 1, maxItems: 6, items: { type: "string" } },
+          text: {
+            type: "string", minLength: 1, maxLength: ITEM_TEXT_MAX_LENGTH,
+            description: "上屏正文：在被引用来源的基础上提炼撰写。不写则退化为整段逐字来源。"
+              + "里面的每一个数字与每一处引号内容都必须在被引用的来源里逐字存在，否则整批被拒。",
+          },
+          role: {
+            type: "string", enum: ROLES,
+            description: "内容项在页面里的层级角色，必须忠于原稿：object=被讨论的对象（默认）；"
+              + "criterion=选择依据/判断准则；它可以是准则清单页的主体，也可以是比较页的辅助依据，不能仅凭语义标签决定位置；"
+              + "step=流程中的一步，按先后顺序编号；"
+              + "global=贯穿整个过程、作用于全部步骤的规则，不得被编号成其中一步。"
+              + "拿不准就用 object，不要为了排版好看硬套角色。",
+          },
         },
         required: ["id", "sourceIds"],
         additionalProperties: false,
@@ -73,7 +87,12 @@ export function contentTools({ committer }) {
           sourcePath: state.sourcePath,
           deckBrief: state.deckBrief,
           sources: state.sources.map((source) => ({ id: source.id, heading: source.heading, text: source.text })),
-          note: "sourceIds 只能引用上面列出的 ID；正文由程序从原稿逐字回填，你不要自己改写或缩写正文。",
+          note: "sourceIds 只能引用上面列出的 ID。可以在来源基础上提炼撰写条目的 text，但不得改变原意"
+            + "（rules/内容组织.md 允许改写文字、调整顺序、合并拆分，不允许改变原意）："
+            + "每个数字与每处引号内容都必须在被引用的来源里逐字存在，写错整批会被拒；"
+            + "不写 text 则上屏正文退化为整段逐字来源。",
+          // 能力边界必须如实说：过了保真检查 ≠ 原意没被改。逐字照抄没有这个问题，改写有。
+          fidelityLimits: fidelityLimitsText(),
         };
       },
     }),
@@ -97,7 +116,10 @@ export function contentTools({ committer }) {
     }),
     defineTool({
       name: "upsert_page_briefs",
-      description: "增量写入正文页。每项用 sourceIds 引用来源，所有来源必须被覆盖。关系只有存在真实先后步骤才是 sequence。",
+      description: "增量写入正文页。每项用 sourceIds 引用来源，所有来源必须被覆盖。关系只有存在真实先后步骤才是 sequence。"
+        + "可以写条目的 text 作为上屏正文，但必须忠于被引用的来源（数字与引号内容要逐字有据）；"
+        + "用 role 如实标注该项在原稿里的层级（准则不是对象、全程规则不是某一步）。"
+        + `保真检查查不出来的：${fidelityLimitsText()}。`,
       inputSchema: {
         type: "object",
         properties: { pages: { type: "array", minItems: 1, maxItems: 4, items: pageSchema } },

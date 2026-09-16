@@ -13,6 +13,164 @@ const COLORS = {
   white: "#FFFFFF",
 };
 
+/**
+ * 旧方案回放的角色分带兼容表；新方案由 bandItemIds 显式指定位置。
+ *   criterion 选择依据/判断准则——它是**判断的尺子**，不是被比较的第 N 个对象
+ *   global    贯穿整个过程、作用于全部步骤的规则——它不是"第 N 步"
+ * R1 首版把准则画成第三张并列卡片、把 global 编号成第四步，就是这两条没被表达出来。
+ */
+export const BAND_ROLES = Object.freeze(["criterion", "global"]);
+
+/**
+ * 按页面位置分带；无位置字段时兼容历史角色分带。历史 state 没有 role 字段，
+ * 因此它们的 `--replay` 渲染结果逐字不变，这是这次改动的硬边界。
+ */
+export function splitByRole(items) {
+  // placement 来自页面方案；只有旧方案没有显式位置时才沿用历史 role 行为。
+  const isBand = (item) => item.placement === undefined
+    ? BAND_ROLES.includes(item?.role) : item.placement === "band";
+  const band = items.filter(isBand);
+  const main = items.filter((item) => !isBand(item));
+  return { main, band };
+}
+
+export function applySlotPlacement(item, slotPlan) {
+  if (!Array.isArray(slotPlan.bandItemIds)) return item;
+  return { ...item, placement: slotPlan.bandItemIds.includes(item.id) ? "band" : "main" };
+}
+
+// 新方案中标题已经独立显示时，正文不重复同一个精确标签；不改变来源正文。
+export function withoutRepeatedLabel(item, slotPlan) {
+  if (!Array.isArray(slotPlan.bandItemIds) || slotPlan.contentMode === "body" || !item.title) return item;
+  for (const colon of ["：", ":"]) {
+    const prefix = item.title + colon;
+    if (item.body?.startsWith(prefix)) return { ...item, body: item.body.slice(prefix.length).trimStart() };
+  }
+  return item;
+}
+
+export function supportsBand(layoutId, slotId) {
+  return (layoutId === "editorial-grid" && slotId === "body")
+    || (layoutId === "editorial-list" && slotId === "body")
+    || (["editorial-focus", "editorial-focus-reverse"].includes(layoutId) && slotId === "support");
+}
+
+/**
+ * 区域帧按角色切开：主区（编号项）在上，独立带（准则/全程规则）在下。
+ * 没有被抽出的条目时**原样返回 frame**，一个像素都不动。
+ */
+export function splitRegionFrame(frame, bandCount) {
+  if (!bandCount) return { mainFrame: frame, bandFrame: null };
+  const height = Math.min(132, Math.max(84, frame.height * 0.3));
+  const gap = 12;
+  return {
+    mainFrame: { ...frame, height: Math.max(0, frame.height - height - gap) },
+    bandFrame: { left: frame.left + 58, top: frame.top + frame.height - height, width: frame.width - 116, height },
+  };
+}
+
+/** 独立带的正文：各条「短标签：正文」逐行拼接，**不编号**。形状照抄 editorial-single-focus 的 support 带。 */
+export function roleBandText(band) {
+  return band.map((item) => [item.title, item.body].filter(Boolean).join("：")).join("\n");
+}
+
+/** 底部独立带：各条「短标签：正文」，从头到尾没有序号。真值函数，返回是否画了东西。 */
+export function renderRoleBand(slide, within, bandFrame, band, typographyRoles) {
+  if (!band.length || !bandFrame) return false;
+  zone(slide, within, bandFrame);
+  const fitted = fittedCompositionText(roleBandText(band), bandFrame, "singleSupport", typographyRoles);
+  addText(slide, fitted.text, bandFrame, {
+    name: qaElementName({ within, role: "band" }),
+    typeface: typographyRoles.bodyTypeface, fontSize: fitted.fontSize, color: COLORS.muted,
+    verticalAlignment: "middle", autoFit: "none",
+  });
+  return true;
+}
+
+/**
+ * 只画得出**一条**的区域。凡是渲染器里用 `slotItems(...)[0]` 取条目的区都在这里：
+ *   lead    renderEditorialList / renderComponentLeadBand
+ *   aside   内容版式的旁栏（renderAside 也取 items[0]）
+ *   left/right  editorial-dual-statement 的左右两栏
+ * 多绑的条目会被**静默丢掉**——页面上找不到，蓝图上却写着，而门禁全过（2026-09-13 R1 重跑实证）。
+ * `primary` 只在 focus 系是单条：editorial-single-focus 的 primary 是"主条 + 底部支持行"，吃得下多条。
+ */
+const ALWAYS_SINGLE_ITEM_SLOTS = Object.freeze(["lead", "aside", "left", "right"]);
+const SINGLE_PRIMARY_LAYOUTS = Object.freeze(["editorial-focus", "editorial-focus-reverse"]);
+
+/** 某个版式下只画得出第一条的区域 id。渲染器与两份预检孪生体共用这一份，避免各写一套再漂移。 */
+export function singleItemSlotIds(layoutId) {
+  return SINGLE_PRIMARY_LAYOUTS.includes(layoutId)
+    ? [...ALWAYS_SINGLE_ITEM_SLOTS, "primary"]
+    : [...ALWAYS_SINGLE_ITEM_SLOTS];
+}
+
+/**
+ * 方案结构本身合不合法——**不需要构建就能判**，所以它是一条硬闸门，不是"预检提示"。
+ * 两条边界都源自同一类缺陷：渲染器只认第一条，多出来的条目静默消失。
+ *
+ *   ① duplicate-slot          同一个 slotId 在 textSlots 里出现两次；渲染器用 `.find()` 只认第一次，
+ *                             后写的那条整条作废（R1 重跑就是这么丢掉「选择依据」的）。
+ *   ② slot-capacity-exceeded  只画一条的区域绑了多条；渲染器取 `[0]`，其余作废。
+ *
+ * 返回空数组 = 合法。消息里带区域名与条数，模型照着改就行。
+ */
+export function planStructureIssues(layoutId, planPage) {
+  const issues = [];
+  const slots = planPage?.textSlots ?? [];
+  for (const slot of slots) {
+    const band = slot.bandItemIds;
+    if (band === undefined) continue; // 历史方案不迁移。
+    if (!Array.isArray(band) || new Set(band).size !== band.length
+      || band.some((id) => !slot.sourceItemIds?.includes(id))) {
+      issues.push({ code: "invalid-band-items", slotId: slot.slotId, message: "辅助带必须引用本区域内不重复的内容项。" });
+    } else if (band.length && !supportsBand(layoutId, slot.slotId)) {
+      issues.push({ code: "unsupported-band", slotId: slot.slotId, message: "此区域不支持独立辅助带，请换区域或版式。" });
+    } else if (band.length && band.length === slot.sourceItemIds.length) {
+      issues.push({ code: "empty-main-region", slotId: slot.slotId, message: "所有内容都被放进辅助带，主区为空。若这些条目就是本页主题，请保留在主区；语义为准则不代表次要内容。" });
+    }
+  }
+  const seen = new Map();
+  for (const slot of slots) {
+    const slotId = slot?.slotId;
+    seen.set(slotId, (seen.get(slotId) ?? 0) + 1);
+  }
+  for (const [slotId, count] of seen) {
+    if (count > 1) {
+      issues.push({
+        code: "duplicate-slot",
+        slotId,
+        count,
+        message: `区域 ${slotId} 在方案里出现了 ${count} 次；渲染器只认第一次，后写的那些条目不会出现在页面上。请把该区域的条目合并到同一条里，或换一个版式。`,
+      });
+    }
+  }
+  const single = singleItemSlotIds(layoutId);
+  for (const slot of slots) {
+    if (!single.includes(slot?.slotId)) continue;
+    const count = (slot.sourceItemIds ?? []).length;
+    if (count > 1) {
+      issues.push({
+        code: "slot-capacity-exceeded",
+        slotId: slot.slotId,
+        count,
+        capacity: 1,
+        message: `区域 ${slot.slotId} 只画 1 条，方案却绑了 ${count} 条；多出来的不会出现在页面上。请该区域只绑一条，或换用支持多条内容的版式；辅助内容的位置用 bandItemIds 显式指定。`,
+      });
+    }
+  }
+  return issues;
+}
+
+/**
+ * 抬头的短标签（renderLead 上方那行小字）。默认沿用原有文案；
+ * 方案可以给 `leadLabel` 覆盖它——首版硬编码的「核心能力」在原稿里没有出处，是编造。
+ */
+function leadLabel(planPage, fallback) {
+  const label = typeof planPage?.leadLabel === "string" ? planPage.leadLabel.trim() : "";
+  return label || fallback;
+}
+
 function itemMap(content) {
   return new Map(content.items.map((item) => [item.id, item]));
 }
@@ -36,7 +194,7 @@ function editorialItem(item) {
 
 function slotItems(content, slotPlan) {
   const byId = itemMap(content);
-  return slotPlan.sourceItemIds.map((id) => byId.get(id)).filter(Boolean).map(editorialItem).map((item) => {
+  return slotPlan.sourceItemIds.map((id) => byId.get(id)).filter(Boolean).map(editorialItem).map((item) => withoutRepeatedLabel(applySlotPlacement(item, slotPlan), slotPlan)).map((item) => {
     if (slotPlan.contentMode === "title") return { ...item, body: "" };
     if (slotPlan.contentMode === "body") return { ...item, title: "" };
     return item;
@@ -108,9 +266,11 @@ function gridItemFrames(frame, itemCount) {
 function renderEditorialGrid(slide, content, layout, planPage, bodyFrame, typographyRoles) {
   const plan = planPage.textSlots.find((slot) => slot.slotId === "body");
   const frame = slotFrame(layout, "body", bodyFrame);
-  const items = plan ? slotItems(content, plan) : [];
-  gridItemFrames(frame, items.length).forEach((itemFrame, index) => {
-    const item = items[index];
+  const { main, band } = splitByRole(plan ? slotItems(content, plan) : []);
+  const { mainFrame, bandFrame } = splitRegionFrame(frame, band.length);
+  // 编号只发给方案指定的主区项，辅助项不占序号。
+  gridItemFrames(mainFrame, main.length).forEach((itemFrame, index) => {
+    const item = main[index];
     const within = `composition-grid-${index}`;
     zone(slide, within, itemFrame);
     addBox(slide, itemFrame, {
@@ -151,6 +311,7 @@ function renderEditorialGrid(slide, content, layout, planPage, bodyFrame, typogr
       fontSize: body.fontSize, color: COLORS.body, verticalAlignment: "top", autoFit: "none",
     });
   });
+  renderRoleBand(slide, "composition-grid-band", bandFrame, band, typographyRoles);
 }
 
 function renderComponentLeadBand(slide, content, layout, planPage, bodyFrame, typographyRoles) {
@@ -325,22 +486,28 @@ function renderEditorialList(slide, content, layout, planPage, bodyFrame, typogr
   const leadPlan = planPage.textSlots.find((slot) => slot.slotId === "lead");
   const bodyPlan = planPage.textSlots.find((slot) => slot.slotId === "body");
   const leadFrame = slotFrame(layout, "lead", bodyFrame);
-  const body = slotFrame(layout, "body", bodyFrame);
+  const region = slotFrame(layout, "body", bodyFrame);
+  const { main, band } = splitByRole(slotItems(content, bodyPlan));
+  const { mainFrame, bandFrame } = splitRegionFrame(region, band.length);
   zone(slide, "composition-lead", leadFrame);
-  zone(slide, "composition-body", body);
-  renderLead(slide, leadFrame, slotItems(content, leadPlan)[0], "composition-lead", "关键追问", typographyRoles);
-  renderEditorialRows(slide, body, slotItems(content, bodyPlan), "composition-body", typographyRoles);
+  zone(slide, "composition-body", mainFrame);
+  renderLead(slide, leadFrame, slotItems(content, leadPlan)[0], "composition-lead", leadLabel(planPage, "关键追问"), typographyRoles);
+  renderEditorialRows(slide, mainFrame, main, "composition-body", typographyRoles);
+  renderRoleBand(slide, "composition-band", bandFrame, band, typographyRoles);
 }
 
 function renderEditorialFocus(slide, content, layout, planPage, bodyFrame, typographyRoles) {
   const primaryPlan = planPage.textSlots.find((slot) => slot.slotId === "primary");
   const supportPlan = planPage.textSlots.find((slot) => slot.slotId === "support");
   const primaryFrame = slotFrame(layout, "primary", bodyFrame);
-  const supportFrame = slotFrame(layout, "support", bodyFrame);
+  const region = slotFrame(layout, "support", bodyFrame);
+  const { main, band } = splitByRole(slotItems(content, supportPlan));
+  const { mainFrame, bandFrame } = splitRegionFrame(region, band.length);
   zone(slide, "composition-primary", primaryFrame);
-  zone(slide, "composition-support", supportFrame);
-  renderLead(slide, primaryFrame, slotItems(content, primaryPlan)[0], "composition-primary", "核心能力", typographyRoles);
-  renderEditorialRows(slide, supportFrame, slotItems(content, supportPlan), "composition-support", typographyRoles);
+  zone(slide, "composition-support", mainFrame);
+  renderLead(slide, primaryFrame, slotItems(content, primaryPlan)[0], "composition-primary", leadLabel(planPage, "核心能力"), typographyRoles);
+  renderEditorialRows(slide, mainFrame, main, "composition-support", typographyRoles);
+  renderRoleBand(slide, "composition-band", bandFrame, band, typographyRoles);
 }
 
 function renderSingleFocus(slide, content, layout, planPage, bodyFrame, typographyRoles) {
@@ -483,7 +650,8 @@ function renderDualStatement(slide, content, layout, planPage, bodyFrame, typogr
 
 export function validatePageCompositionTextFit(content, layout, planPage, bodyFrame, typographyRoles) {
   if (["fixed-cover", "fixed-agenda", "fixed-closing"].includes(layout.id)) return [];
-  const issues = [];
+  // 方案结构先判：渲染器画不出来的条目，容量检查也看不见（它同样只取第一条）。
+  const issues = [...planStructureIssues(layout.id, planPage)];
   const check = (value, frame, role, slotId) => {
     if (!value) return;
     try {
@@ -514,11 +682,17 @@ export function validatePageCompositionTextFit(content, layout, planPage, bodyFr
       }, "leadBody", slotId);
     }
   };
+  // 独立带的预检。帧必须与 renderRoleBand 用同一个 splitRegionFrame，否则会冒出假的 divergence 警告。
+  const checkBand = (frame, band, slotId) => {
+    if (!band.length) return;
+    check(roleBandText(band), splitRegionFrame(frame, band.length).bandFrame, "singleSupport", slotId);
+  };
   const checkRows = (slotId) => {
     const plan = planPage.textSlots.find((slot) => slot.slotId === slotId);
     if (!plan) return;
-    const frame = slotFrame(layout, slotId, bodyFrame);
-    const items = slotItems(content, plan);
+    const region = slotFrame(layout, slotId, bodyFrame);
+    const { main: items, band } = splitByRole(slotItems(content, plan));
+    const frame = splitRegionFrame(region, band.length).mainFrame;
     const gap = 16;
     const rowHeight = (frame.height - gap * Math.max(0, items.length - 1)) / Math.max(1, items.length);
     items.forEach((item, index) => {
@@ -536,6 +710,7 @@ export function validatePageCompositionTextFit(content, layout, planPage, bodyFr
         height: compact ? rowHeight : (item.title ? Math.max(0, rowHeight - 44) : rowHeight),
       }, "rowBody", slotId);
     });
+    checkBand(region, band, slotId);
   };
 
   if (layout.id === "editorial-list") {
@@ -558,8 +733,9 @@ export function validatePageCompositionTextFit(content, layout, planPage, bodyFr
     }
   } else if (layout.id === "editorial-grid") {
     const plan = planPage.textSlots.find((slot) => slot.slotId === "body");
-    const frame = slotFrame(layout, "body", bodyFrame);
-    const items = plan ? slotItems(content, plan) : [];
+    const region = slotFrame(layout, "body", bodyFrame);
+    const { main: items, band } = splitByRole(plan ? slotItems(content, plan) : []);
+    const frame = splitRegionFrame(region, band.length).mainFrame;
     gridItemFrames(frame, items.length).forEach((itemFrame, index) => {
       const item = items[index];
       check(item?.title, {
@@ -569,6 +745,7 @@ export function validatePageCompositionTextFit(content, layout, planPage, bodyFr
         left: itemFrame.left + 28, top: itemFrame.top + 78, width: itemFrame.width - 48, height: itemFrame.height - 96,
       }, "rowBody", "body");
     });
+    checkBand(region, band, "body");
   } else if (layout.id === "editorial-dual-statement") {
     ["left", "right"].forEach((slotId) => {
       const plan = planPage.textSlots.find((slot) => slot.slotId === slotId);
@@ -596,6 +773,12 @@ export function validatePageCompositionTextFit(content, layout, planPage, bodyFr
 
 export function renderPageComposition(slide, content, layout, planPage, bodyFrame, typographyRoles) {
   if (["fixed-cover", "fixed-agenda", "fixed-closing"].includes(layout.id)) return { componentFrame: null };
+  // 失败关闭：方案结构不合法就**不画**，而不是画一半再把剩下的静静丢掉。
+  // check_pages 会在构建前就拦下这种方案，所以正常路径到不了这里；留这一手是防有人绕过预检直接调渲染器。
+  const structural = planStructureIssues(layout.id, planPage);
+  if (structural.length) {
+    throw new Error(`页面方案结构不合法：${structural.map((issue) => issue.message).join(" ")}`);
+  }
   if (layout.id === "editorial-list") {
     renderEditorialList(slide, content, layout, planPage, bodyFrame, typographyRoles);
     return { componentFrame: null };

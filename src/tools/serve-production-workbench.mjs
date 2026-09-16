@@ -12,6 +12,7 @@ import { candidateSetsForVisualDirector } from "../agent/model-director-provider
 import {
   RUNNER_STAGES, RUNNER_HANDOFFS, RUNNER_PIPELINE_NOTE, STAGE_OF_PHASE,
   archiveRunSummary, runnerArtifacts, readRunnerDeckTitle, exists,
+  continuability, readAttempts, mergeAttemptOutcome, stageProvenance, interruptedStageCalls,
 } from "../workbench/runner-run-adapter.mjs";
 
 function option(name, fallback) {
@@ -112,6 +113,23 @@ async function readBody(request) {
   }
   if (!bytes) throw new Error("没有收到稿件内容");
   return Buffer.concat(chunks);
+}
+
+/**
+ * 可选的 JSON 体。续跑路由不带 body 也要能用（默认按 resume 走），
+ * 所以空体不是错误；体存在但不是合法 JSON 才是。
+ */
+async function readJsonBody(request) {
+  const chunks = [];
+  for await (const chunk of request) chunks.push(chunk);
+  if (!chunks.length) return null;
+  try {
+    return JSON.parse(Buffer.concat(chunks).toString("utf8"));
+  } catch {
+    const error = new Error("请求体不是合法 JSON");
+    error.statusCode = 400;
+    throw error;
+  }
 }
 
 async function writeSummary(targetRunDir, summary) {
@@ -460,8 +478,23 @@ function endpointHost(endpoint) {
  *   ② 运行器不暂停等待批准，所以本入口没有人工检查点（上游已拒绝"又要暂停又走运行器"的组合）。
  *   ③ 好处是状态落在 state.json 里：进程中断后用 `--resume` 可以续跑，不像旧线那样只能重来。
  */
-async function executeRunnerRun(targetRunDir, summary, normalizedPath, recorder) {
+async function executeRunnerRun(targetRunDir, summary, recorder, { argv, mode = "first" }) {
   const startedAt = Date.now();
+  // `--replay` 是零模型重编译，它在 run.mjs 里**提前 return**，一条事件都不发，
+  // 于是对看板完全不可见——加了按钮也看不出发生过什么。工作台替它记一对交付阶段事件。
+  // 类型（stage-call）与阶段（delivery）都用**已有**的值，不发明新事件类型：
+  // 新类型在按阶段筛选的看板上会直接看不见。
+  const packaging = mode === "recompile" ? { stage: "delivery", startedAt } : null;
+  const closePackaging = async (status, detail) => {
+    if (!packaging) return;
+    await recorder.observe({
+      source: "workbench", type: "stage-call", status, stage: packaging.stage,
+      durationMs: Date.now() - packaging.startedAt, ...detail,
+    });
+  };
+  if (packaging) {
+    await recorder.observe({ source: "workbench", type: "stage-call", status: "running", stage: packaging.stage, input: { mode } });
+  }
   try {
     const { main } = await import("../runner/run.mjs");
     // 模型名不写在 summary 里靠猜：从实际发出的 api-call 事件里取，取到的就是真正上线的那一个。
@@ -481,7 +514,34 @@ async function executeRunnerRun(targetRunDir, summary, normalizedPath, recorder)
     // 整场运行期间看板都把"交付"显示成正在进行的阶段（实际进行的是内容/视觉）。
     // 运行器自己会如实报每个阶段，工作台不替它宣布阶段；启动信息（生成线、运行目录、能力边界）
     // 都在 summary 里，不靠事件重复一遍。
-    const result = await main(["--input", normalizedPath, "--run-dir", targetRunDir], { observer: observe });
+    const result = await main(argv, { observer: observe });
+    if (packaging) {
+      const missing = result.replay?.missingComposition ?? [];
+      await closePackaging(result.status === "delivered" ? "succeeded" : "failed", {
+        output: {
+          replay: true,
+          deckSlideCount: result.deckSlideCount ?? null,
+          qualityAuditStatus: result.qualityAuditStatus ?? null,
+        },
+        ...(result.status === "delivered" ? {} : {
+          error: {
+            code: "REPLAY_NOT_DELIVERED",
+            message: missing.length ? `有页面缺少冻结的方案，无法重编译：${missing.join("、")}` : (result.note ?? "重编译未产出交付物"),
+          },
+        }),
+      });
+    }
+    Object.assign(summary, mergeAttemptOutcome(summary, {
+      toPhase: result.phase ?? null,
+      outcome: result.status,
+      durationMs: Date.now() - startedAt,
+    }));
+    // 取不到模型就**保持原值**：续跑与零模型重编译可能一次模型调用都不发，
+    // 这时候把 model 抹成 null，等于删掉上次记下的"这份 deck 是哪家的模型做的"。
+    if (observedModel) {
+      summary.model = observedModel;
+      Object.assign(summary, mergeAttemptOutcome(summary, { model: observedModel }));
+    }
     const artifacts = await runnerArtifacts(targetRunDir);
     const slideCount = artifacts.filter((item) => item.label.startsWith("第 ")).length;
     summary.artifacts = artifacts;
@@ -494,7 +554,6 @@ async function executeRunnerRun(targetRunDir, summary, normalizedPath, recorder)
     summary.pageCount = slideCount;
     summary.bodyPageCount = result.bodyPageCount ?? null;
     summary.deckTitle = await readRunnerDeckTitle(targetRunDir);
-    summary.model = observedModel;
     summary.finishedAt = new Date().toISOString();
     summary.durationMs = Date.now() - startedAt;
     if (result.status === "delivered") {
@@ -502,6 +561,7 @@ async function executeRunnerRun(targetRunDir, summary, normalizedPath, recorder)
       // 补一条只会让同一件事在记录里出现两次。
       summary.status = "succeeded";
       summary.deliveryStatus = "delivered";
+      delete summary.error;
     } else {
       // 停在原地就是没交付。不写成"失败"也不写成"成功"：运行器是**主动停止**的，
       // 状态还在 state.json 里，修好原因可以续跑。交付阶段事件同样由运行器发出。
@@ -514,6 +574,9 @@ async function executeRunnerRun(targetRunDir, summary, normalizedPath, recorder)
       };
     }
   } catch (error) {
+    await closePackaging("failed", {
+      error: { name: error?.name, code: error?.code, message: error?.message ?? String(error) },
+    });
     // 运行器根本没跑起来或中途抛出时，它自己一条事件都发不出来，只能由工作台记账。
     // 沿用旧生产线的记法（type/status/stage 与 executeRun 的 catch 一致），不发明新事件类型：
     // 新类型在筛选按阶段进行的看板上会直接看不见。
@@ -526,6 +589,7 @@ async function executeRunnerRun(targetRunDir, summary, normalizedPath, recorder)
     summary.finishedAt = new Date().toISOString();
     summary.durationMs = Date.now() - startedAt;
     summary.error = { name: error?.name, code: error?.code, stage: "runner", message: error?.message ?? String(error) };
+    Object.assign(summary, mergeAttemptOutcome(summary, { outcome: "failed", durationMs: Date.now() - startedAt }));
     // 抛出的错误同样要留下产物清单：失败时更该看得见运行器已经写到哪一步。
     summary.artifacts = await runnerArtifacts(targetRunDir).catch(() => []);
   } finally {
@@ -533,6 +597,80 @@ async function executeRunnerRun(targetRunDir, summary, normalizedPath, recorder)
     await writeSummary(targetRunDir, summary);
     if (activeRunId === summary.runId) activeRunId = null;
   }
+}
+
+/**
+ * 运行详情的载荷。`continuable`、`attempts`、`stageProvenance` 都**不落盘**，每次读时现算：
+ * 续跑资格取决于磁盘上 state.json 的当前阶段，存进 summary 早晚会和它不一致。
+ * 阶段沿用也放在这里算，不在模板里重写一遍——同一件事只该有一份实现。
+ */
+async function describeRun(targetRunDir, runId) {
+  const summary = await readSummary(targetRunDir);
+  const state = await readJsonState(path.join(targetRunDir, "state.json")).catch(() => null);
+  return {
+    ...summary,
+    continuable: continuability({ summary, state, isArchive: archiveRunIds.has(runId) }),
+    attempts: readAttempts(summary),
+    stageProvenance: stageProvenance(summary),
+  };
+}
+
+/**
+ * 在既有运行上继续跑。**看板从中间某步接着跑的唯一入口**：
+ * resume 从 state.json 里真实的阶段接续，recompile 做零模型重编译。两者都不重做已冻结的页。
+ *
+ * 记账方式（用户本轮拍板）：**同一条运行记录 + 尝试快照**。上一次停在哪个阶段、为什么停，
+ * 先原样存进 attempts 再覆盖 summary.status，所以续跑不会把上一次的失败原因抹掉。
+ * 起点不提供人工指定——那等于绕开运行器的阶段闸门。
+ */
+async function continueRun(request, response, runId) {
+  if (activeRunId) return sendJson(response, 409, { error: "已有生成任务正在运行", activeRunId });
+  const isArchive = archiveRunIds.has(runId);
+  const targetRunDir = await resolveRunDir(runId);
+  // 两条都没有就是没有这条运行。不把它混进"不能续跑"的 409 里——那是两件事。
+  if (!(await exists(path.join(targetRunDir, "summary.json"))) && !(await exists(path.join(targetRunDir, "state.json")))) {
+    return sendJson(response, 404, { error: "找不到这条运行" });
+  }
+  const summary = await readSummary(targetRunDir);
+  const state = await readJsonState(path.join(targetRunDir, "state.json")).catch(() => null);
+  const verdict = continuability({ summary, state, isArchive });
+  if (!verdict.allowed) return sendJson(response, isArchive ? 403 : 409, { error: verdict.reason, continuable: verdict });
+
+  const body = await readJsonBody(request);
+  const mode = body?.mode === "recompile" ? "recompile" : "resume";
+  if (mode !== verdict.mode) {
+    return sendJson(response, 409, {
+      error: `这条运行当前只能做${verdict.mode === "resume" ? "续跑" : "零模型重编译"}。${verdict.reason}`,
+      continuable: verdict,
+    });
+  }
+
+  const previous = readAttempts(summary);
+  summary.attempts = [...previous, {
+    attempt: previous.length + 1,
+    mode,
+    at: new Date().toISOString(),
+    fromPhase: verdict.fromPhase,
+    // 阶段翻译（phase → 流水线阶段 id）只有服务端知道；一起记下来，模板就不必再抄一份映射表。
+    fromStage: STAGE_OF_PHASE[verdict.fromPhase] ?? verdict.fromPhase,
+    // 上一次的终态与错误原样留档：续跑的终态会覆盖 summary.status，
+    // 不留快照的话，这条运行"上一次为什么停"就查不到了。
+    previousStatus: summary.status ?? null,
+    previousError: summary.error ?? null,
+  }];
+  summary.status = "running";
+  delete summary.error;
+  await writeSummary(targetRunDir, summary);
+  activeRunId = runId;
+
+  const recorder = createTraceRecorder(targetRunDir);
+  const argv = mode === "recompile"
+    ? ["--run-dir", targetRunDir, "--replay"]
+    : ["--run-dir", targetRunDir, "--resume"];
+  const task = executeRunnerRun(targetRunDir, summary, recorder, { argv, mode });
+  activeRunTasks.set(runId, task);
+  task.finally(() => activeRunTasks.delete(runId)).catch(() => {});
+  return sendJson(response, 202, summary);
 }
 
 async function createRun(request, response, url) {
@@ -547,6 +685,9 @@ async function createRun(request, response, url) {
       error: "薄运行器不暂停等待人工确认，因此没有表单检查点。请取消勾选“调试时暂停表单”，或把生成线切换为旧 API 生产线。",
     });
   }
+  // 用途标注：验证跑和正式稿一样要留在看板上，但两者不该长得一模一样——
+  // 否则"这条到底是验接口还是真交付"只能靠文件名猜。
+  const purpose = url.searchParams.get("purpose") === "verification" ? "verification" : "production";
   const originalName = safeFilename(url.searchParams.get("filename"));
   const extension = path.extname(originalName).toLowerCase();
   if (!supportedManuscriptExtensions.includes(extension)) {
@@ -567,9 +708,15 @@ async function createRun(request, response, url) {
     visualCheckpointMode: url.searchParams.get("visualCheckpoint") === "manual" ? "manual" : "auto",
     nativePreviewCheckpointMode: url.searchParams.get("nativePreviewCheckpoint") === "auto" ? "auto" : "manual",
     pipeline,
+    purpose,
     // 阶段表随生成线走：两条线的阶段不是同一套，看板照实显示当前这条线的阶段。
     ...(pipeline === "runner"
-      ? { stages: RUNNER_STAGES, handoffs: RUNNER_HANDOFFS, pipelineNote: RUNNER_PIPELINE_NOTE }
+      ? {
+        stages: RUNNER_STAGES, handoffs: RUNNER_HANDOFFS, pipelineNote: RUNNER_PIPELINE_NOTE,
+        // 尝试记录从第一次就存在，续跑才有"上一次"可写。第一次没有起点阶段（从头跑），
+        // 所以 fromPhase 记 null——不编一个假起点。
+        attempts: [{ attempt: 1, mode: "first", at: createdAt, fromPhase: null, fromStage: null }],
+      }
       : {}),
     artifacts: [],
   };
@@ -593,7 +740,9 @@ async function createRun(request, response, url) {
     summary.normalizedFormat = normalized.format;
     await writeSummary(targetRunDir, summary);
     const task = pipeline === "runner"
-      ? executeRunnerRun(targetRunDir, summary, normalizedPath, recorder)
+      ? executeRunnerRun(targetRunDir, summary, recorder, {
+        argv: ["--input", normalizedPath, "--run-dir", targetRunDir], mode: "first",
+      })
       : executeRun(targetRunDir, summary, normalizedPath, recorder);
     activeRunTasks.set(runId, task);
     task.finally(() => activeRunTasks.delete(runId)).catch(() => {});
@@ -741,10 +890,12 @@ const server = http.createServer(async (request, response) => {
     const nativeCheckpointMatch = url.pathname.match(/^\/api\/workbench\/runs\/([a-z0-9-]+)\/checkpoint\/native-ppt$/i);
     if (nativeCheckpointMatch && request.method === "GET") return sendJson(response, 200, await readNativePptCheckpoint(runDir(nativeCheckpointMatch[1])));
     if (nativeCheckpointMatch && request.method === "POST") return await submitNativePptCheckpoint(response, nativeCheckpointMatch[1]);
+    const continueMatch = url.pathname.match(/^\/api\/workbench\/runs\/([a-z0-9-]+)\/continue$/i);
+    if (continueMatch && request.method === "POST") return await continueRun(request, response, continueMatch[1]);
     const match = url.pathname.match(/^\/api\/workbench\/runs\/([a-z0-9-]+)(?:\/(events|trace|artifact))?(?:\/([a-z0-9-]+))?$/i);
     if (match) {
       const targetRunDir = await resolveRunDir(match[1]);
-      if (!match[2]) return sendJson(response, 200, await readSummary(targetRunDir));
+      if (!match[2]) return sendJson(response, 200, await describeRun(targetRunDir, match[1]));
       if (match[2] === "events") return sendJson(response, 200, { events: await readTraceEvents(targetRunDir, Number(url.searchParams.get("after") || 0)) });
       if (match[2] === "trace") return send(response, 200, await fs.readFile(path.join(targetRunDir, "trace", `${match[3]}.json`)), "application/json; charset=utf-8", { "cache-control": "no-store" });
       if (match[2] === "artifact") return await sendArtifact(response, targetRunDir, url.searchParams.get("path") || "");
@@ -757,6 +908,35 @@ const server = http.createServer(async (request, response) => {
 
 if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error(`invalid --port: ${port}`);
 await fs.mkdir(runsRoot, { recursive: true });
+
+/**
+ * 进程被杀时，当时正在进行的那个阶段调用**永远收不到终态**。
+ * `stageInfo`（模板）判定 running 的条件是"该阶段**最近一次** stage-call 还是 running"，
+ * 而对账此前只改 summary、不碰事件——于是被杀掉的运行在看板上永远显示「生成中」，看起来还在跑。
+ *
+ * 判据本身（`interruptedStageCalls`）在 src/workbench/runner-run-adapter.mjs：同一个文件里
+ * 还有那段给看板用的 stageInfo 判据，两处必须一致；而那个文件能被测试直接调用，这里不能（import
+ * 即监听端口）。这里**只留 IO**。
+ *
+ * 补记是**追加**一条"该次阶段调用没能完成"，不是改写历史。
+ * 原来那条 running 事件原样保留，谁都能看到它当时确实起来了、以及它始终没有终态。
+ */
+async function closeInterruptedStageCalls(targetRunDir) {
+  const orphans = interruptedStageCalls(await readTraceEvents(targetRunDir, 0));
+  if (!orphans.length) return;
+  const recorder = createTraceRecorder(targetRunDir);
+  for (const stage of orphans) {
+    await recorder.observe({
+      source: "workbench", type: "stage-call", status: "failed", stage,
+      error: {
+        code: "WORKBENCH_PROCESS_INTERRUPTED",
+        message: "工作台进程在这次阶段调用结束前退出，该次调用没有收到终态。",
+      },
+    });
+  }
+  await recorder.flush();
+}
+
 const existingRuns = await listAllRuns();
 const interruptedStatuses = new Set([
   "normalizing", "running", "awaiting-visual-approval", "awaiting-native-preview-approval",
@@ -777,11 +957,13 @@ for (const existingRun of existingRuns) {
       stage: existingRun.status,
       // 运行器的状态在 state.json 里，和旧线的内存检查点不是一回事：前者能续跑，后者只能重来。
       message: resumable
-        ? "工作台进程在任务完成前中断。这次运行的状态在 state.json 里没有丢，可用 node src/runner/run.mjs --run-dir <该运行目录> --resume 续跑"
+        ? "工作台进程在任务完成前中断。这次运行的状态在 state.json 里没有丢，可在本页点「继续跑」，从停下的那个阶段接着跑"
         : "工作台进程在任务完成前中断；该任务不能从内存检查点恢复，请新建任务重试",
     },
     ...(resumable ? { resumable: true } : {}),
   });
+  // summary 只是记录；事件不补这一笔，看板上那个阶段会一直显示"生成中"。
+  await closeInterruptedStageCalls(targetRunDir);
 }
 server.listen(port, host, () => process.stdout.write(`http://${host}:${port}/\n`));
 

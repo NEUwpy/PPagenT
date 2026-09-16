@@ -134,6 +134,15 @@ test("2+3候选运行时独立保留，具体稿件的人工检查进入生产�
   assert.match(productionTemplate, /确认并交付这份 PPT/);
   assert.match(productionTemplate, /不会再次排版或编译/);
   assert.doesNotMatch(productionTemplate, /id="manual-checkpoint" type="checkbox" checked/);
+  // 续跑入口与"沿用"角标必须在**模板**里真的存在：适配层判定得再对，看板没有按钮也等于没做。
+  assert.match(productionTemplate, /data-run="\$\{run\.runId\}"/);
+  assert.match(productionTemplate, /badge verification">验证/);
+  assert.match(productionTemplate, /badge reused">沿用/);
+  assert.match(productionTemplate, /id="continue-run"/);
+  assert.match(productionTemplate, /\/continue`,?\{method:"POST"/);
+  assert.match(productionTemplate, /id="purpose"><option value="production">正式<\/option><option value="verification">验证/);
+  // 验证运行也是运行：文案必须写明它和正式运行一样保留，不被单独清掉。
+  assert.match(productionTemplate, /不会被单独清掉/);
   assert.match(productionTemplate, /data-delete-run/);
   assert.match(productionTemplate, /id="select-all-runs"/);
   assert.match(productionTemplate, /id="new-task"/);

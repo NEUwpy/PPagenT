@@ -1,5 +1,9 @@
 import { resolveNormalizedFrame } from "../composition/layouts.mjs";
 import { fitChineseTextToFrame } from "./chinese-typography.mjs";
+// 分带规则只有一份：渲染器在 page-composition.mjs，这里必须用**同一套**帧。
+// 两边各写一份就会冒出假的 composition-fit-precheck-divergence 警告，把人骗去改没问题的地方。
+// 这里只导入纯几何/纯文本函数，不导入渲染器本身。
+import { splitByRole, splitRegionFrame, roleBandText, planStructureIssues, applySlotPlacement, withoutRepeatedLabel } from "./page-composition.mjs";
 
 function bindClosingPunctuation(value) {
   return String(value ?? "").replace(/([\p{Script=Han}A-Za-z0-9])([。！？；])/gu, "$1\u2060$2");
@@ -14,13 +18,13 @@ function slotItems(content, slotPlan) {
       .map((point) => `•\u2060${point}`)
       .join("\n");
     const normalized = {
-      ...item,
+      ...applySlotPlacement(item, slotPlan),
       title: bindClosingPunctuation(item.title),
       body: bindClosingPunctuation([item.body, pointText].filter(Boolean).join("\n")),
     };
     if (slotPlan.contentMode === "title") return { ...normalized, body: "" };
     if (slotPlan.contentMode === "body") return { ...normalized, title: "" };
-    return normalized;
+    return withoutRepeatedLabel(normalized, slotPlan);
   });
 }
 
@@ -60,7 +64,9 @@ function gridItemFrames(frame, itemCount) {
 
 export function validatePageCompositionTextFit(content, layout, planPage, bodyFrame, typographyRoles) {
   if (["fixed-cover", "fixed-agenda", "fixed-closing"].includes(layout.id)) return [];
-  const issues = [];
+  // 方案结构先判：渲染器画不出来的条目，容量检查也看不见（它同样只取第一条）。
+  // 判定只有一份，在 page-composition.mjs，这里导入而不是重写一份——两份帧算术漂移过，代价是假告警。
+  const issues = [...planStructureIssues(layout.id, planPage)];
   const check = (value, frame, role, slotId) => {
     if (!value) return;
     try {
@@ -86,11 +92,16 @@ export function validatePageCompositionTextFit(content, layout, planPage, bodyFr
       }, "leadBody", slotId);
     }
   };
+  const checkBand = (frame, band, slotId) => {
+    if (!band.length) return;
+    check(roleBandText(band), splitRegionFrame(frame, band.length).bandFrame, "singleSupport", slotId);
+  };
   const checkRows = (slotId) => {
     const plan = planPage.textSlots.find((slot) => slot.slotId === slotId);
     if (!plan) return;
-    const frame = slotFrame(layout, slotId, bodyFrame);
-    const items = slotItems(content, plan);
+    const region = slotFrame(layout, slotId, bodyFrame);
+    const { main: items, band } = splitByRole(slotItems(content, plan));
+    const frame = splitRegionFrame(region, band.length).mainFrame;
     const gap = 16;
     const rowHeight = (frame.height - gap * Math.max(0, items.length - 1)) / Math.max(1, items.length);
     items.forEach((item, index) => {
@@ -108,6 +119,7 @@ export function validatePageCompositionTextFit(content, layout, planPage, bodyFr
         height: compact ? rowHeight : (item.title ? Math.max(0, rowHeight - 44) : rowHeight),
       }, "rowBody", slotId);
     });
+    checkBand(region, band, slotId);
   };
 
   if (layout.id === "editorial-list") {
@@ -130,8 +142,9 @@ export function validatePageCompositionTextFit(content, layout, planPage, bodyFr
     }
   } else if (layout.id === "editorial-grid") {
     const plan = planPage.textSlots.find((slot) => slot.slotId === "body");
-    const frame = slotFrame(layout, "body", bodyFrame);
-    const items = plan ? slotItems(content, plan) : [];
+    const region = slotFrame(layout, "body", bodyFrame);
+    const { main: items, band } = splitByRole(plan ? slotItems(content, plan) : []);
+    const frame = splitRegionFrame(region, band.length).mainFrame;
     gridItemFrames(frame, items.length).forEach((itemFrame, index) => {
       const item = items[index];
       check(item?.title, {
@@ -141,6 +154,7 @@ export function validatePageCompositionTextFit(content, layout, planPage, bodyFr
         left: itemFrame.left + 28, top: itemFrame.top + 78, width: itemFrame.width - 48, height: itemFrame.height - 96,
       }, "rowBody", "body");
     });
+    checkBand(region, band, "body");
   } else if (layout.id === "editorial-dual-statement") {
     ["left", "right"].forEach((slotId) => {
       const plan = planPage.textSlots.find((slot) => slot.slotId === slotId);

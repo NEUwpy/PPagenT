@@ -7,8 +7,57 @@ import test from "node:test";
 import {
   auditRenderedDeck,
   auditRenderedGeometry,
+  auditRenderedLineBreaks,
   auditRenderedTypography,
 } from "../src/tools/audit-rendered-typography.mjs";
+
+// 拟合行数（element.text 里的 \n 个数 + 1）与引擎实际排出的行盒是两回事。
+// 引擎多排一行 = 交付物上多出一个孤立字，拟合器自己看不出来，只有 QA 行盒记得住。
+test("断行审计以引擎行盒为准：引擎多排一行就必须报出来", async (t) => {
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "ppagent-linebreaks-"));
+  t.after(() => fs.rm(dir, { recursive: true, force: true }));
+
+  // 拟合 2 行，引擎排了 3 行：多出来的那个字独占一行。
+  await fs.writeFile(path.join(dir, "slide-04.layout.json"), JSON.stringify({
+    elements: [{
+      name: "PPAGENT_QA|within=grid-0|role=body",
+      text: "管理员逐次确认设备和时间\n换班时需要重新解释",
+      textPreview: "…管理员逐次确认设备和时间…",
+      resolvedFontSize: 18,
+      bbox: [100, 100, 313, 120],
+      textLayout: { lineCount: 3, lines: [{ text: "管理员逐次确认设备和" }, { text: "时" }, { text: "间换班时需要重新解释" }] },
+    }],
+  }));
+  const failed = await auditRenderedLineBreaks(dir);
+  assert.equal(failed.status, "failed");
+  // 引擎多排出来的那一行正好是孤立单字「时」，所以两类违规同时成立、指向同一页同一元素。
+  // 这正是 R1 首版 slide-03/05 的实际形状，两条都要报。
+  assert.deepEqual([...new Set(failed.violations.map((violation) => violation.type))].sort(),
+    ["engine-rewrapped", "stranded-glyph"]);
+  const rewrapped = failed.violations.find((violation) => violation.type === "engine-rewrapped");
+  assert.deepEqual([rewrapped.slide, rewrapped.fittedLines, rewrapped.engineLines], ["slide-04", 2, 3]);
+  assert.equal(rewrapped.element, "PPAGENT_QA|within=grid-0|role=body");
+
+  // 整套审计必须跟着失败：断行一旦不进总状态，交付关口就断了。
+  const deck = await auditRenderedDeck(dir);
+  assert.equal(deck.status, "failed");
+  assert.equal(deck.lineBreaks.status, "failed");
+
+  // 拟合与引擎一致时不报。
+  await fs.writeFile(path.join(dir, "slide-04.layout.json"), JSON.stringify({
+    elements: [{
+      name: "PPAGENT_QA|within=grid-0|role=body",
+      text: "管理员逐次确认设备和时间\n换班时需要重新解释",
+      textPreview: "…",
+      resolvedFontSize: 18,
+      bbox: [100, 100, 313, 120],
+      textLayout: { lineCount: 2, lines: [{ text: "管理员逐次确认设备和时间" }, { text: "换班时需要重新解释" }] },
+    }],
+  }));
+  const passed = await auditRenderedLineBreaks(dir);
+  assert.equal(passed.status, "passed");
+  assert.deepEqual(passed.violations, []);
+});
 
 test("研发期字号审计会拒绝 Skin 组件中的不可读小字", async () => {
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), "ppagent-typography-"));

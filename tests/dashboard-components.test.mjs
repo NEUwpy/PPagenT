@@ -189,6 +189,19 @@ test("生产工作台重复打开时复用现有服务且启动后标记中断�
   assert.match(server, /activeRunId,/);
 });
 
+test("看板能发起续跑与零模型重编译，且中断的运行不会一直显示生成中", async () => {
+  const server = await fs.readFile(path.join(root, "src/tools/serve-production-workbench.mjs"), "utf8");
+  // 续跑必须真的有入口，光在适配层里判定得出没用——路由少了，按钮点下去只有 404。
+  assert.ok(
+    server.includes("\\/api\\/workbench\\/runs\\/([a-z0-9-]+)\\/continue$/i"),
+    "缺少 POST /api/workbench/runs/:runId/continue 路由",
+  );
+  assert.match(server, /async function continueRun\(request, response, runId\)/);
+  // 对账只改 summary 不改事件时，被杀掉的运行会在看板上永远显示「生成中」；必须补一条终态记账。
+  assert.match(server, /async function closeInterruptedStageCalls\(targetRunDir\)/);
+  assert.match(server, /await closeInterruptedStageCalls\(targetRunDir\)/);
+});
+
 test("作废的旧 Logic 不再出现在核心库或正式生成候选中", async () => {
   const data = await collectLogicDashboardData(root);
   const removedIds = new Set([

@@ -16,7 +16,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { loadCompositionLayouts } from "../../composition/layouts.mjs";
-import { validatePageCompositionTextFit } from "../../render/page-composition.mjs";
+import { validatePageCompositionTextFit, planStructureIssues } from "../../render/page-composition.mjs";
 import {
   renderNortheasternUniversityDeck,
   northeasternUniversitySkin,
@@ -25,7 +25,7 @@ import { auditRenderedDeck } from "../../tools/audit-rendered-typography.mjs";
 import { MINIMUM_READABLE_FONT_SIZE_PT } from "../../runtime/typography-standards.mjs";
 import {
   readState, writeText, artifactReusable, recordArtifact, recordRuntimeFailure,
-  looksLikeRuntimeFailure, upsertComposition, finishVisual,
+  looksLikeRuntimeFailure, upsertComposition, finishVisual, recordDeckAudit,
 } from "../state.mjs";
 import { defineTool } from "./index.mjs";
 
@@ -46,14 +46,31 @@ const TEXT_ONLY_LAYOUT_PREFIX = "editorial-";
  * read_catalog 给模型看的版式说明。**不是新规则层**：每条都只是把渲染器自己的槽位算术
  * （page-composition.mjs 的 renderEditorial* 系列）用一句话讲出来，让模型知道选哪个版式会得到什么形状。
  */
+// 每个版式说清两件事：它长什么样，以及**每个区吃得下几条**。
+// 后半句是硬约束：只画一条的区绑多了，多出来的条目会被静默丢掉（不在页面上，也没人报错）。
+// 方案结构闸门会拒绝这种方案（`planStructureIssues`），所以这里先说清楚，别让模型白撞一次。
 const LAYOUT_NOTES = Object.freeze({
-  "editorial-list": "左窄栏一个要点（大标题+正文），右侧一整列条目；适合一个主张带若干并列说明。",
-  "editorial-focus": "左半幅一个主张（最大字号），右侧一列支撑条目；适合先立论再给依据。",
-  "editorial-focus-reverse": "左侧一列支撑条目，右半幅一个主张；节奏与 editorial-focus 相反，用于换气。",
-  "editorial-single-focus": "整页只有一个焦点（首项），其余条目压缩成底部一行小字补充。",
-  "editorial-dual-statement": "左右两个对等声明，各一个大标题+正文；适合两项对照。",
-  "editorial-grid": "整块区域均分为网格，每格一个标题+正文；适合 2~6 条等权条目。",
+  "editorial-list": "左窄栏一个要点（大标题+正文），右侧一整列条目；适合一个主张带若干并列说明。"
+    + "lead 区只放 1 条，body 区可以放多条。",
+  "editorial-focus": "左半幅一个主张（最大字号），右侧一列支撑条目；适合先立论再给依据。"
+    + "primary 区只放 1 条，support 区可以放多条。",
+  "editorial-focus-reverse": "左侧一列支撑条目，右半幅一个主张；节奏与 editorial-focus 相反，用于换气。"
+    + "primary 区只放 1 条，support 区可以放多条。",
+  "editorial-single-focus": "整页只有一个焦点（首项），其余条目压缩成底部一行小字补充。"
+    + "primary 区可以放多条（首项是焦点，其余自动压到底部一行）。",
+  "editorial-dual-statement": "左右两个对等声明，各一个大标题+正文；适合两项对照。"
+    + "left 与 right **各只放 1 条**——两边一共只画得下两个条目，不要往同一侧塞第二条；"
+    + "若还需要辅助依据，可用 editorial-grid：比较对象留在主区，把辅助依据的 ID 写入 bandItemIds。",
+  "editorial-grid": "整块区域均分为网格，每格一个标题+正文；适合 2~6 条等权条目。"
+    + "body 区可以放多条。",
 });
+
+/** 内容语义与本页位置独立：新方案由视觉导演显式选择辅助项。 */
+const BAND_NOTE = "role 只描述语义，不决定位置。先根据页面目的判断主体及辅助内容：准则清单里的准则是主区主体，比较页的判断依据可能是辅助。"
+  + "在 grid/body、list/body、focus/support 区域，用 bandItemIds 指定本区域进入底部辅助带的内容项；空数组表示全部留在主区。不能把本区全部内容放进辅助带。"
+  + "其他区域不支持 bandItemIds 非空；single-focus 自身按首项焦点、其余补充安排。抬头短标签（leadLabel）与条目短标签都必须取自原稿的说法，"
+  + "不要用原稿没有的词（如「核心能力」）充当标签。"
+  + "同一个区不要在 textSlots 里写两遍，多写的那一遍不会生效。";
 
 const SECTION_NAME_BY_RELATION = Object.freeze({
   none: "观点",
@@ -87,18 +104,28 @@ export function buildDeckPages(state) {
     content: {
       pageId: page.pageId,
       title: page.title,
-      // 正文逐字取自内容阶段回填的 sourceText；模型只能给条目一个短标签，不能写正文。
+      // 上屏正文优先取模型提炼的 item.text，没写就回退到逐字来源 sourceText——
+      // 历史 state 没有 text 字段，回退后它们的蓝图逐字不变（--replay 因此不受影响）。
+      // sourceText 不会被顶掉：它仍是保真检查的比对基准，也在 content.md 里作为证据留档。
       items: page.items.map((item) => ({
         id: item.id,
         title: page.composition?.itemLabels?.[item.id] ?? "",
-        body: item.sourceText,
+        body: item.text ?? item.sourceText,
+        // 层级角色要交给渲染器，否则它无从知道哪条是准则、哪条作用于全程。
+        // 逐字照条件展开：历史 state 没有 role，它们的 blueprint 因此一个字节都不变。
+        ...(item.role ? { role: item.role } : {}),
       })),
     },
     intent: { intentId: page.pageId },
     decision: { selectedAssetId: BODY_ASSET_ID },
     payload: { assetId: BODY_ASSET_ID, parameters: {} },
     composition: page.composition
-      ? { compositionId: page.composition.compositionId, textSlots: page.composition.textSlots }
+      ? {
+        compositionId: page.composition.compositionId,
+        textSlots: page.composition.textSlots,
+        // 条件展开：没给 leadLabel 时连键都不存在，历史 blueprint 因此逐字不变。
+        ...(page.composition.leadLabel ? { leadLabel: page.composition.leadLabel } : {}),
+      }
       : null,
   }));
   return [cover, ...body];
@@ -144,7 +171,13 @@ export async function compileDeck({ root, runDir, state }) {
   return { pages, outputPptx, qaDir, qualityAudit };
 }
 
-/** 审计违规 → 按页归集。typography 违规无 type 字段（audit-rendered-typography.mjs:93-99），补一个语义 code。 */
+/**
+ * 审计违规 → 按页归集。typography 违规无 type 字段（audit-rendered-typography.mjs:93-99），补一个语义 code。
+ *
+ * 三路审计都要归集。**漏掉断行这一路曾经真出过事**：auditRenderedDeck 把 lineBreaks 计进总状态，
+ * 这里却只读 typography 与 geometry，于是断行违规永远变不成逐页 issues → 页面记 passed →
+ * finishVisual 放行 → ready/delivered。三路的违规对象同形（都带 slide），归集方式也必须一样。
+ */
 export function groupViolations(qualityAudit) {
   const bySlide = new Map();
   const push = (slide, issue) => {
@@ -157,7 +190,15 @@ export function groupViolations(qualityAudit) {
   for (const violation of qualityAudit.geometry?.violations ?? []) {
     push(violation.slide, { code: violation.type ?? "geometry-violation", slide: violation.slide, detail: violation });
   }
+  for (const violation of qualityAudit.lineBreaks?.violations ?? []) {
+    push(violation.slide, { code: violation.type ?? "line-break-violation", slide: violation.slide, detail: violation });
+  }
   return bySlide;
+}
+
+/** 逐页归因的列表形式：只用于回报（run.mjs 的 replay 判定），不参与记账。 */
+export function violationList(qualityAudit) {
+  return [...groupViolations(qualityAudit)].map(([slide, issues]) => ({ slide, issues }));
 }
 
 /**
@@ -222,7 +263,7 @@ export function buildTools({ root, runDir, committer, statePath }) {
   return [
     defineTool({
       name: "read_catalog",
-      description: "读取可用版式与当前页面内容。只列出纯文本版式；正文由程序回填，你只负责把内容项分配到槽位。",
+      description: "读取可用版式与当前页面内容。只列出纯文本版式；每项都给出提炼后的上屏正文（text）与其逐字来源证据（sourceText），你只负责把内容项分配到槽位。",
       inputSchema: { type: "object", properties: {}, additionalProperties: false },
       handler: async () => {
         const state = await committer.read();
@@ -236,7 +277,7 @@ export function buildTools({ root, runDir, committer, statePath }) {
               compositionId: layout.id,
               silhouette: layout.silhouette,
               slots: layout.slots.map((slot) => slot.id),
-              note: LAYOUT_NOTES[layout.id] ?? "",
+              note: [LAYOUT_NOTES[layout.id], BAND_NOTE].filter(Boolean).join(" "),
             })),
           pages: state.pages.map((page) => ({
             pageId: page.pageId,
@@ -244,10 +285,20 @@ export function buildTools({ root, runDir, committer, statePath }) {
             claim: page.claim,
             relation: page.relation,
             compositionRevision: page.compositionRevision ?? 0,
+            feedback: state.artifactState[page.pageId]?.feedback ?? null,
             currentPlan: page.composition
               ? { compositionId: page.composition.compositionId, textSlots: page.composition.textSlots, itemLabels: page.composition.itemLabels ?? {} }
               : null,
-            items: page.items.map((item) => ({ id: item.id, sourceIds: item.sourceIds, text: item.sourceText })),
+            items: page.items.map((item) => ({
+              id: item.id,
+              sourceIds: item.sourceIds,
+              // 上屏正文 = 内容阶段提炼的 text（没写则回退逐字来源）。渲染出来的就是它。
+              text: item.text ?? item.sourceText,
+              // 逐字来源证据：判断"提炼有没有改原意"的唯一依据。不参与排版。
+              sourceText: item.sourceText,
+              // 内容角色不决定主次或位置；视觉方案通过 bandItemIds 指定辅助项。
+              role: item.role ?? "object",
+            })),
           })),
           note: "每个内容项必须被某个槽位引用且只引用一次。条目短标签请用原稿里的说法，不要引入原稿没有的信息。",
         };
@@ -274,6 +325,7 @@ export function buildTools({ root, runDir, committer, statePath }) {
                       slotId: { type: "string" },
                       sourceItemIds: { type: "array", minItems: 1, maxItems: 8, items: { type: "string" } },
                       contentMode: { type: "string", enum: ["all", "title", "body"] },
+                      bandItemIds: { type: "array", maxItems: 8, uniqueItems: true, items: { type: "string" }, description: "本区域的辅助项 ID；留空表示全部为主区内容。根据页面目的选择，不按 role 自动归类。" },
                     },
                     required: ["slotId", "sourceItemIds"],
                     additionalProperties: false,
@@ -290,6 +342,12 @@ export function buildTools({ root, runDir, committer, statePath }) {
                     required: ["itemId", "label"],
                     additionalProperties: false,
                   },
+                },
+                leadLabel: {
+                  type: "string", minLength: 1, maxLength: 16,
+                  description: "主区上方那行短标签。**必须取自原稿的说法**——缺省时会用兜底文案"
+                    + "（list 版式是「关键追问」，focus 版式是「核心能力」），那两个词在多数原稿里没有出处，"
+                    + "不要让它们冒充原稿内容。",
                 },
               },
               required: ["pageId", "compositionId", "textSlots"],
@@ -339,9 +397,12 @@ export function buildTools({ root, runDir, committer, statePath }) {
                 slotId: slot.slotId,
                 sourceItemIds: slot.sourceItemIds,
                 contentMode: slot.contentMode ?? "all",
+                bandItemIds: slot.bandItemIds ?? [],
               })),
               // 条目短标签属于"这页怎么呈现"，所以跟方案存在一起；渲染器只读 compositionId 与 textSlots。
               itemLabels: labels,
+              // 抬头短标签同理。**不给就不写这个键**，保证历史 state 的蓝图逐字不变。
+              ...(plan.leadLabel ? { leadLabel: plan.leadLabel } : {}),
             },
           };
         });
@@ -379,6 +440,36 @@ export function buildTools({ root, runDir, committer, statePath }) {
           const { reusable, revision } = artifactReusable(state, pageId);
           if (reusable) reused.push({ pageId, revision });
           else pending.push(pageId);
+        }
+
+        // 方案结构闸门：**在构建之前**判，不靠"渲染出来看少了什么"。
+        // 一个区绑多条、或同一个区在方案里写了两遍，渲染器只会画第一条并把其余静默丢掉——
+        // 页面上找不到那条，蓝图里却写着它，而 auditRenderedDeck 报 passed（2026-09-13 实跑就是这样丢的）。
+        // 这类方案不能进构建：构建出来的是"少了一条"的成品，而不是一个明确的失败。
+        const structural = new Map();
+        for (const pageId of pending) {
+          const deckPage = byPageId.get(pageId);
+          const composition = deckPage?.composition;
+          structural.set(pageId, composition ? planStructureIssues(composition.compositionId, composition) : []);
+        }
+        const malformed = pending.filter((pageId) => structural.get(pageId).length);
+        if (malformed.length) {
+          let next = state;
+          for (const pageId of malformed) {
+            next = recordArtifact(next, pageId, {
+              status: "failed",
+              revision: next.pages.find((page) => page.pageId === pageId)?.compositionRevision,
+              feedback: { issues: structural.get(pageId).map((issue) => ({ ...issue, code: "build-failed" })), warnings: [] },
+            });
+          }
+          await committer.render(next);
+          const first = malformed[0];
+          return {
+            accepted: false, failedPageId: first, attribution: "plan",
+            planIssues: structural.get(first),
+            error: structural.get(first).map((issue) => issue.message).join(" "),
+            note: "这些页面还没构建就被拦下：方案结构不合法会让渲染器静默丢件。改掉上面说的地方再调 check_pages。",
+          };
         }
 
         // 预检只用于诊断与归因；真正的门禁是下面的真实构建 + auditRenderedDeck，不拿它当闸门。
@@ -439,7 +530,8 @@ export function buildTools({ root, runDir, committer, statePath }) {
         // slide-NN 是 1-based，pages[0] 是封面，所以页序即页码序。
         const slideOfPageId = new Map(compiled.pages.map((page, index) => [page.content.pageId, padSlideNumber(index)]));
         const results = [];
-        let next = state;
+        // 整套结论先落盘：即使本次没有任何待检查的页（全部复用），它也是刚编译出来的这一副的结论。
+        let next = recordDeckAudit(state, { status: compiled.qualityAudit.status, qaDir: compiled.qaDir });
         for (const pageId of pending) {
           const slide = slideOfPageId.get(pageId);
           const issues = [...(precheck.get(pageId) ?? []), ...(bySlide.get(slide) ?? [])];
@@ -457,12 +549,31 @@ export function buildTools({ root, runDir, committer, statePath }) {
           results.push({ pageId, slide, revision, status: issues.length ? "failed" : "passed", issues, warnings });
         }
         await committer.render(next);
+        const pagesPassed = results.every((result) => result.status === "passed");
+        const deckPassed = compiled.qualityAudit.status === "passed";
+        // 没被上面任何一条结果覆盖的违规：封面（state.pages 里没有它的 pageId）、
+        // 以及本次没请求到的页。不单独列出来的话，模型会看到"我请求的页全过了"
+        // 却过不了 finish_visual，无从下手。
+        const accounted = new Set([
+          ...results.map((result) => result.slide),
+          ...reused.map((entry) => slideOfPageId.get(entry.pageId)),
+        ]);
+        const deckOnly = [...bySlide]
+          .filter(([slide]) => !accounted.has(slide))
+          .map(([slide, issues]) => ({ slide, issues }));
         return {
-          accepted: results.every((result) => result.status === "passed"),
+          accepted: pagesPassed && deckPassed,
           reused,
           pages: results,
-          deck: { pptx: compiled.outputPptx, qaDir: compiled.qaDir, qualityAuditStatus: compiled.qualityAudit.status },
-          note: "审计对象是整副牌组；上面只列出本次请求的页面。全部通过后调用 finish_visual。",
+          deck: {
+            pptx: compiled.outputPptx,
+            qaDir: compiled.qaDir,
+            qualityAuditStatus: compiled.qualityAudit.status,
+            issues: deckOnly,
+          },
+          note: deckPassed
+            ? "审计对象是整副牌组；上面只列出本次请求的页面。全部通过后调用 finish_visual。"
+            : "整副牌组未通过质量审计。上面列出的是不属于本次请求页面的违规（例如封面）；先按 deck.issues 修好，再重新 check_pages。",
         };
       },
     }),

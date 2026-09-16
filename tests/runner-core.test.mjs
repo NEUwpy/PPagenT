@@ -6,11 +6,12 @@ import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   newRunState, upsertPageBriefs, validateContent, replacePageBriefs, freezeContent,
   upsertComposition, artifactReusable, recordArtifact, recordRuntimeFailure, looksLikeRuntimeFailure,
   requestContentRevision, finishVisual, renderStateMarkdown, renderContentMarkdown,
-  writeState, setDeckBrief, MAX_COMPOSITION_REVISIONS,
+  writeState, setDeckBrief, MAX_COMPOSITION_REVISIONS, recordDeckAudit, splitSources,
 } from "../src/runner/state.mjs";
 import { defineTool, createToolRegistry } from "../src/runner/tools/index.mjs";
 import { runToolLoop, transcriptSummary } from "../src/runner/loop.mjs";
@@ -33,6 +34,33 @@ function seeded(pages = 3) {
   return state;
 }
 
+// 曾经的实现按「空行分块」切，块首是 `#` 就把整块当标题吞掉——`# 标题\n正文` 这种写法
+// （标题与正文之间没有空行）是合法 Markdown，正文会**静默消失**，来源凭空少一条，
+// 而且 validateContent 只会说"来源未覆盖"，看不出是解析把正文吃了。
+test("标题行只作分组：与正文同块的标题也不得吞掉正文", () => {
+  const parsed = splitSources("# 标题\n这是不能丢的正文。\n\n第二段。");
+  assert.deepEqual(parsed, [
+    { id: "s1", heading: "标题", text: "这是不能丢的正文。" },
+    { id: "s2", heading: "标题", text: "第二段。" },
+  ]);
+
+  // 连续标题、标题在段中、多级标题都不吞正文。
+  assert.deepEqual(splitSources("## 甲\n### 乙\n正文一\n\n正文二").map((source) => source.text), ["正文一", "正文二"]);
+  assert.deepEqual(splitSources("## 甲\n### 乙\n正文一").map((source) => source.heading), ["乙"]);
+  // 正文行自己带 `#`（如「#1 优先级」）不能被当成标题行——只有行首 `#`+空白才算标题。
+  assert.deepEqual(splitSources("#1 优先级说明").map((source) => source.text), ["#1 优先级说明"]);
+});
+
+// 最强的验证：拿一份**已经跑过**的真原稿当夹具。它的每个标题行都独占一块，
+// 因此新旧两种切法必须给出逐字段完全相同的结果——否则就是把历史运行的数据改了。
+test("按行解析与历史运行记录逐字段一致，来源 ID 与顺序契约不变", async () => {
+  const runDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "harness", "runs", "20260912-r1-thin-runner");
+  const raw = await fs.readFile(path.join(runDir, "原稿.md"), "utf8");
+  const recorded = JSON.parse(await fs.readFile(path.join(runDir, "state.json"), "utf8"));
+  assert.equal(recorded.sources.length, 12);
+  assert.deepEqual(splitSources(raw), recorded.sources);
+});
+
 test("来源漏项阻断冻结；重写同页简报使该页产物失效且不动其他页", () => {
   let state = newRunState(MANUSCRIPT, "test.md");
   state = { ...state, deckBrief: { title: "试稿" } };
@@ -49,6 +77,30 @@ test("来源漏项阻断冻结；重写同页简报使该页产物失效且不�
   assert.equal(rewritten.artifactState.p1, undefined);
   assert.equal(rewritten.artifactState.p2.status, "passed");
   assert.equal(rewritten.pages.find((page) => page.pageId === "p1").revision, 2);
+});
+
+// 内容提炼原则：模型**可以**撰写条目正文（否则它只能全文照抄，编排无从谈起），
+// 但写出来的东西必须过保真检查。两条落点：sourceText 仍逐字并集（证据），item.text 是撰写稿。
+test("条目正文可撰写，但过不了保真检查就被拒，且逐字来源证据仍在", () => {
+  let state = newRunState("# 甲\n\n设备共 12 台，交接由管理员确认。", "test.md");
+  state = { ...state, deckBrief: { title: "试稿" } };
+  const page = (item) => [{ pageId: "p1", title: "页1", claim: "主张1", relation: "none", items: [{ id: "i1", sourceIds: ["s1"], ...item }] }];
+
+  // 合规撰写：数字与引号都有据 → 通过，且 sourceText 逐字保留、未被撰写稿顶掉。
+  const written = upsertPageBriefs(state, page({ text: "设备共 12 台，由管理员确认交接。" }));
+  assert.equal(written.pages[0].items[0].text, "设备共 12 台，由管理员确认交接。");
+  assert.equal(written.pages[0].items[0].sourceText, "设备共 12 台，交接由管理员确认。");
+
+  // 编造数字：原稿里没有 30。
+  assert.throws(() => upsertPageBriefs(state, page({ text: "设备共 30 台。" })), /保真|unbacked-number|30/);
+  // 编造引号内容。
+  assert.throws(() => upsertPageBriefs(state, page({ text: "原稿称之为「智能交接」。" })), /保真|unbacked-quote|智能交接/);
+  // 不写 text 仍然合法：回退逐字来源。
+  const verbatim = upsertPageBriefs(state, page({}));
+  assert.equal(verbatim.pages[0].items[0].text, undefined);
+  assert.equal(verbatim.pages[0].items[0].sourceText, "设备共 12 台，交接由管理员确认。");
+  // 拒绝时必须原样返回，不半落地：上一次的 state 对象不受影响。
+  assert.equal(state.pages.length, 0);
 });
 
 test("来源文本由程序按 sourceIds 回填，模型不能自报；未知来源被拒", () => {
@@ -89,6 +141,32 @@ test("定向内容重组守住来源集合与无关页产物", () => {
   assert.deepEqual(merged.pages.map((page) => page.pageId), ["p1", "merged"]);
   assert.deepEqual(merged.artifactState.p1, withArtifact.artifactState.p1);
   assert.equal(merged.contentRevision.applied, true);
+});
+
+// 真实存在的死胡同：replacePageBriefs 完成修订后只置 applied:true、不把 phase 拨回 content，
+// 而 freezeContent 当时只认 content 阶段，于是 finish_content 必然抛错、被工具层吞成 {accepted:false}。
+// 结果是运行一旦进入 content-revision 就再也出不来，只会耗尽轮次停在原地。
+// 参照实现 experiments/penguin-harness-v2/run-grid.mjs:70 是把 content-revision 当作 content
+// 阶段的第二趟来跑的，移植时丢了这一层。
+test("定向修订完成后能从 content-revision 冻结回 visual，不再卡死", () => {
+  const state = { ...seeded(), phase: "content-revision", contentRevision: { pageIds: ["p2", "p3"], reason: "两页内容可合并", applied: false } };
+  const merged = replacePageBriefs(state, ["p2", "p3"], [{
+    pageId: "merged", title: "合并", claim: "合并主张", relation: "none",
+    items: [{ id: "i2", sourceIds: ["s2"] }, { id: "i3", sourceIds: ["s3"] }],
+  }]);
+
+  assert.equal(merged.contentRevision.applied, true);
+  // 修订阶段不拨回 content：拨回去就等于放开了 upsertPageBriefs，
+  // 模型可以绕过 replacePageBriefs 的来源集合守恒校验。守恒必须仍然守住。
+  assert.equal(merged.phase, "content-revision");
+  assert.throws(
+    () => upsertPageBriefs(merged, [{ pageId: "p1", title: "偷改", claim: "偷改", relation: "none", items: [{ id: "i1", sourceIds: ["s1"] }] }]),
+    /content 阶段/,
+  );
+
+  const frozen = freezeContent(merged);
+  assert.equal(frozen.report.accepted, true);
+  assert.equal(frozen.state.phase, "visual");
 });
 
 test("内容修订预算只有一次，且只能指向已知页面", () => {
@@ -136,9 +214,41 @@ test("收尾闸门要求全部页面当前版本通过，经验提示必须逐�
   assert.equal(unexplained.report.accepted, false);
   assert.deepEqual(unexplained.report.warningsNeedReason, ["p1"]);
 
+  state = recordDeckAudit(state, { status: "passed", qaDir: "run/qa" });
   const done = finishVisual(state, [{ pageId: "p1", reason: "该页刻意留白以承载单个结论" }]);
   assert.equal(done.report.accepted, true);
   assert.equal(done.state.phase, "ready");
+});
+
+test("整套审计不通过时收尾闸门必须拒绝，缺审计记录同样拒绝", () => {
+  const seededState = seeded(1);
+  const base = recordArtifact(
+    { ...seededState, phase: "visual", pages: [{ ...seededState.pages[0], compositionRevision: 1 }] },
+    "p1",
+    { status: "passed", revision: 1, feedback: { accepted: true, issues: [] } },
+  );
+  // 逐页全 passed 不等于整副牌组通过：封面违规不归任何正文页，只有整套结论能拦住它。
+  const failedDeck = recordDeckAudit(base, { status: "failed", qaDir: "run/qa" });
+  const rejected = finishVisual(failedDeck);
+  assert.equal(rejected.report.accepted, false);
+  assert.equal(rejected.report.deckAudit.status, "failed");
+  assert.equal(failedDeck.phase, "visual");
+
+  // 从未做过整套审计（没调过 check_pages）时必须失败关闭，不能默认放行。
+  const missing = finishVisual(base);
+  assert.equal(missing.report.accepted, false);
+  assert.equal(missing.report.deckAudit, null);
+});
+
+test("方案一改，整套审计结论即作废", () => {
+  let state = { ...seeded(1), phase: "visual" };
+  state = upsertComposition(state, "p1", { alignment: "left", regions: [] }, { accepted: true, issues: [] }).state;
+  state = recordArtifact(state, "p1", { status: "passed", revision: 1, feedback: { accepted: true, issues: [] } });
+  state = recordDeckAudit(state, { status: "passed", qaDir: "run/qa" });
+  assert.equal(finishVisual(state).report.accepted, true);
+
+  state = upsertComposition(state, "p1", { alignment: "center", regions: [] }, { accepted: true, issues: [] }).state;
+  assert.equal(state.deckAudit, undefined);
 });
 
 test("宿主依赖失败被单独记账并要求停止，不交给模型补偿", () => {

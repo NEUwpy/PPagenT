@@ -21,9 +21,62 @@ import { createToolRegistry } from "./tools/index.mjs";
 import { runToolLoop, transcriptSummary } from "./loop.mjs";
 import { buildChatProviderFromEnv } from "./chat-provider.mjs";
 import { createCommitter, contentTools } from "./tools/generation.mjs";
-import { buildTools, compileDeck } from "./tools/build-tools.mjs";
+import { buildTools, compileDeck, violationList } from "./tools/build-tools.mjs";
+import { loadRules } from "../runtime/rules-loader.mjs";
+import { northeasternUniversitySkin } from "../runtime/skins/northeastern-university-contract.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
+
+/**
+ * 这段规则正文描述的是**仓库里另一条生产线**（旧 API 线）的流程与工具名：
+ * `pageMetadata` / `logicIntent` / `sourceBlockIds` / `relationBindings` / `composition-intent.json`
+ * 在薄运行器里根本不存在。不声明优先级的话，模型会照着规则去调不存在的工具。
+ * 声明必须排在正文**前面**——等它读到旧工具名时，这句话得已经说过了。
+ */
+const RULES_PRECEDENCE = [
+  "以下是本仓库既有的设计规则。它们描述的是另一条生产线的流程与工具名"
+  + "（如 pageMetadata、logicIntent、sourceBlockIds、relationBindings、composition-intent.json）。",
+  "你只能用**本次提供的工具**；两者冲突时一律以本次工具契约为准，不要去找规则里提到的旧工具。",
+  "规则里关于内容组织、版式选择、质量判据的部分照常适用。",
+].join("\n");
+
+/**
+ * 某个阶段该看的规则正文。**调既有模块**（runtime/rules-loader.mjs），运行器自己不做规则解析。
+ *
+ * 内容阶段 → content-director profile；视觉阶段 → generation profile + Skin（含排版体系）。
+ * skin 用 **skin 对象的 id** 而不是硬编码字符串：一旦对象与 rules/index.json 的键不一致，
+ * loadRules 会失败关闭，而不是悄悄少加载一批规则。
+ */
+export async function phaseRulesText(rootDir, phase) {
+  const bundle = phase === "visual"
+    ? await loadRules(rootDir, { profile: "generation", skin: northeasternUniversitySkin.id })
+    : await loadRules(rootDir, { profile: "content-director" });
+  return `${RULES_PRECEDENCE}\n\n${bundle.text}`;
+}
+
+/** 还没有视觉方案的页面——重编译无从下手。纯函数，便于直测（run.mjs 此前一个测试都没有）。 */
+export function replayMissingComposition(state) {
+  return state.pages.filter((page) => !page.composition).map((page) => page.pageId);
+}
+
+/**
+ * --replay 的判定。**审计没通过就不算交付**：零模型重编译出来的同样是一份交付物，
+ * 它必须和 check_pages 走同一把尺子（compileDeck 已经是共用路径，这里补上共用的判定）。
+ * 判定与回报分开：main 负责路径与落盘，这里只回答"算不算交付、为什么不算"。
+ */
+export function replayResult(state, compiled) {
+  const qualityAuditStatus = compiled.qualityAudit.status;
+  if (qualityAuditStatus !== "passed") {
+    return {
+      accepted: false,
+      reason: "quality-audit-failed",
+      qualityAuditStatus,
+      issues: violationList(compiled.qualityAudit),
+      note: "重编译出的牌组没有通过确定性质量审计（含字号、几何与断行），按失败处理，不算交付。",
+    };
+  }
+  return { accepted: true, qualityAuditStatus, issues: [] };
+}
 
 export function parseArgs(argv) {
   const args = {};
@@ -87,7 +140,7 @@ async function loadOrInitState({ statePath, inputPath, resume }) {
   return state;
 }
 
-async function runPhase({ phase, statePath, runDir, provider, maxTurns, tools, observer }) {
+async function runPhase({ phase, statePath, runDir, provider, maxTurns, tools, observer, rulesText }) {
   const registry = createToolRegistry({ tools, runDir });
   // 观察口：只把循环**已经发生的**工具调用照原样转发出去，不改变任何状态、不参与判定。
   // 工作台靠它显示实时进度；没有观察者时这一支完全不生效，运行器不因它多出能力。
@@ -107,9 +160,14 @@ async function runPhase({ phase, statePath, runDir, provider, maxTurns, tools, o
     }
     : registry;
   const startedAt = new Date().toISOString();
+  // 规则正文接在阶段提示词之后：阶段提示词是"这次要干什么"（短、准），规则正文是"这个仓库一贯怎么做"（长）。
+  // 优先级声明在规则正文里，排在正文前，所以后置追加不会让旧工具名盖过本次的工具契约。
+  const systemPrompt = rulesText
+    ? `${BASE_PROMPT}\n${PHASE_PROMPT[phase]}\n\n${rulesText}`
+    : `${BASE_PROMPT}\n${PHASE_PROMPT[phase]}`;
   const result = await runToolLoop({
     provider,
-    systemPrompt: `${BASE_PROMPT}\n${PHASE_PROMPT[phase]}`,
+    systemPrompt,
     userMessage: `开始 ${phase} 阶段。第一步调用工具读取当前状态，不要凭猜测动手。`,
     registry: observed,
     maxTurns,
@@ -120,7 +178,14 @@ async function runPhase({ phase, statePath, runDir, provider, maxTurns, tools, o
       return null;
     },
   });
-  const summary = { phase, startedAt, ...transcriptSummary(result) };
+  const summary = {
+    phase,
+    startedAt,
+    ...transcriptSummary(result),
+    // 规则正文每轮都要随 system 发一遍，是要花钱的成本。如实记进运行记录，
+    // 免得日后"怎么这一轮这么贵"只能靠猜。
+    ...(rulesText ? { rulesBytes: Buffer.byteLength(rulesText, "utf8") } : {}),
+  };
   await fs.writeFile(path.join(runDir, `${phase}-transcript.json`), `${JSON.stringify(summary, null, 2)}\n`);
   return summary;
 }
@@ -163,7 +228,7 @@ export async function main(argv = process.argv.slice(2), { observer = null } = {
   // --replay：零模型调用，按 state.json 重新编译交付物。与 check_pages 共用 compileDeck，
   // 否则"重编译出的就是交付物"这句话会因为两条路径漂移而失效。
   if (replay) {
-    const missing = state.pages.filter((page) => !page.composition).map((page) => page.pageId);
+    const missing = replayMissingComposition(state);
     if (missing.length) {
       return {
         status: "stopped", phase: state.phase, replay: { accepted: false, missingComposition: missing },
@@ -171,6 +236,18 @@ export async function main(argv = process.argv.slice(2), { observer = null } = {
       };
     }
     const compiled = await compileDeck({ root, runDir, state });
+    const verdict = replayResult(state, compiled);
+    if (!verdict.accepted) {
+      // 沿用既有三档口径：工作台把 delivered 记成功、其余记 stopped，不新增状态值。
+      return {
+        status: "stopped", phase: state.phase, replay: verdict, stopReason: verdict.reason,
+        bodyPageCount: state.pages.length,
+        deckSlideCount: compiled.pages.length,
+        qualityAuditStatus: verdict.qualityAuditStatus,
+        issues: verdict.issues,
+        note: verdict.note,
+      };
+    }
     return {
       status: "delivered", phase: state.phase, replay: true,
       // 牌组 = 1 张封面 + 全部正文页，所以页数有两个数：写稿的页数不等于幻灯片张数。
@@ -178,7 +255,7 @@ export async function main(argv = process.argv.slice(2), { observer = null } = {
       deckSlideCount: compiled.pages.length,
       pptx: path.relative(root, compiled.outputPptx).replaceAll("\\", "/"),
       qaDir: path.relative(root, compiled.qaDir).replaceAll("\\", "/"),
-      qualityAuditStatus: compiled.qualityAudit.status,
+      qualityAuditStatus: verdict.qualityAuditStatus,
     };
   }
 
@@ -205,7 +282,9 @@ export async function main(argv = process.argv.slice(2), { observer = null } = {
       });
     }
     const phaseStartedAt = Date.now();
-    const summary = await runPhase({ phase, statePath, runDir, provider, maxTurns, tools: toolsFor(phase), observer });
+    // 规则在进阶段前加载：加载失败就不该开始这一阶段（loadRules 自身失败关闭）。
+    const rulesText = await phaseRulesText(root, phase);
+    const summary = await runPhase({ phase, statePath, runDir, provider, maxTurns, tools: toolsFor(phase), observer, rulesText });
     phases.push(summary);
     state = await readState(statePath);
     const advanced = state.phase !== summary.phase;
@@ -236,15 +315,39 @@ export async function main(argv = process.argv.slice(2), { observer = null } = {
   } catch (error) {
     if (error.code !== "ENOENT") throw error;
   }
-  currentStage = "ready";
+  // 交付前提：整套审计必须通过。进 ready 时 finishVisual 已经卡过这一关，这里再判一次不是冗余——
+  // state.json 可以被手工编辑，也可能是旧版本运行目录留下的（那时还没有 deckAudit 这个字段）。
+  // 文件存在不等于可以交付：牌组没通过审计，就只是"生成了一份不合格的东西"，不是交付物。
+  const deckAudit = state.deckAudit ?? null;
+  const deckAuditPassed = deckAudit?.status === "passed";
+  if (deckAuditPassed) {
+    currentStage = "ready";
+  } else {
+    delivered = null;
+  }
   if (observer) {
     await observer({
       type: "delivery", status: delivered ? "succeeded" : "failed", stage: "ready", durationMs: Date.now() - runStartedAt,
       output: delivered
         ? { bodyPageCount: state.pages.length, pptx: delivered.pptx, qaDir: delivered.qaDir, phases: phases.map((item) => item.phase) }
-        : { bodyPageCount: state.pages.length, note: "阶段已到 ready，但运行目录里没有 deck.pptx；不能声称已交付。" },
-      ...(delivered ? {} : { error: { code: "RUNNER_DECK_MISSING", message: "状态已 ready 但 deck.pptx 不存在" } }),
+        : { bodyPageCount: state.pages.length, deckAudit, note: deckAuditPassed ? "阶段已到 ready，但运行目录里没有 deck.pptx；不能声称已交付。" : "阶段已到 ready，但整套审计没有通过；不能声称已交付。" },
+      ...(delivered
+        ? {}
+        : {
+          error: deckAuditPassed
+            ? { code: "RUNNER_DECK_MISSING", message: "状态已 ready 但 deck.pptx 不存在" }
+            : { code: "RUNNER_DECK_AUDIT_NOT_PASSED", message: deckAudit ? `状态已 ready 但整套审计为 ${deckAudit.status}` : "状态已 ready 但没有整套审计记录" },
+        }),
     });
+  }
+  if (!deckAuditPassed) {
+    return {
+      status: "stopped", phase: state.phase, stopReason: "deck-audit-not-passed", bodyPageCount: state.pages.length,
+      deckAudit, phases,
+      note: deckAudit
+        ? "整套审计未通过，运行器不返回交付物。修好后再用 --resume（或 --replay 验证）。"
+        : "本运行没有整套审计记录，运行器不返回交付物。",
+    };
   }
   return { status: "delivered", phase: state.phase, bodyPageCount: state.pages.length, delivered, phases };
 }

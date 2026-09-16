@@ -8,28 +8,54 @@
 
 import fs from "node:fs/promises";
 import path from "node:path";
+import { checkItemFidelity, describeFidelityIssues, fidelityLimitsText } from "../content/source-fidelity.mjs";
 
 export const SCHEMA_VERSION = "ppagent-run-1";
 export const PHASES = Object.freeze(["content", "content-revision", "visual", "ready"]);
 /** 单页方案版本上限。取 4 是实验里已验证够用且能收敛的值，不是随手定的。 */
 export const MAX_COMPOSITION_REVISIONS = 4;
 export const RELATIONS = Object.freeze(["none", "parallel", "comparison", "sequence"]);
+/**
+ * 内容项在页面里的**层级角色**。它回答的是"这一项在原稿里处于哪一层"，不是版式选择：
+ *   object    被讨论的对象（默认，缺省即此）
+ *   criterion 选择依据 / 判断准则——它是**判断的尺子**，不是被比较的第 N 个对象
+ *   step      流程中的一步，按先后顺序编号
+ *   global    贯穿整个过程、作用于全部步骤的规则——它不是"第 N 步"
+ * R1 首版把准则画成第三张并列卡片、把 global 编号成第四步，问题就出在这里没有表达能力。
+ */
+export const ROLES = Object.freeze(["object", "criterion", "step", "global"]);
 
-/** 稿件 → 来源项。标题行只作为分组信息，不单独成为来源，避免"章节名被当成一条内容"。 */
+/**
+ * 稿件 → 来源项。标题行只作为分组信息，不单独成为来源，避免"章节名被当成一条内容"。
+ *
+ * **按行解析，不按块解析。** 曾经按「空行分块」切、块首是 `#` 就把**整块**当标题吞掉：
+ * `# 标题\n正文`（标题与正文之间没有空行）是合法 Markdown，正文会静默消失，
+ * 来源凭空少一条，而下游只会报"来源未覆盖"——看不出是解析把正文吃了。
+ * 现在行首匹配 `#`+空白才更新 heading，其余行照常累积成段；空行分段。
+ * 产出的 `{ id: "s" + (n+1), heading, text }` 与 `s1..sN` 的 ID/顺序契约不变。
+ */
 export function splitSources(raw) {
   let heading = "";
-  return raw
-    .split(/\r?\n\s*\r?\n/)
-    .map((part) => part.trim())
-    .filter(Boolean)
-    .flatMap((part) => {
-      if (part.startsWith("#")) {
-        heading = part.replace(/^#+\s*/, "");
-        return [];
-      }
-      return [{ heading, text: part }];
-    })
-    .map((source, index) => ({ id: `s${index + 1}`, ...source }));
+  const blocks = [];
+  let lines = [];
+  const flush = () => {
+    const text = lines.join("\n").trim();
+    lines = [];
+    if (text) blocks.push({ heading, text });
+  };
+  for (const line of raw.split(/\r?\n/)) {
+    if (!line.trim()) { flush(); continue; }
+    // 照 CommonMark：`#` 后必须有空白才算标题，所以 `#1 优先级` 是正文不是标题。
+    const titleMatch = line.match(/^#{1,6}(?:[ \t]+(.*\S))?[ \t]*$/u);
+    if (titleMatch) {
+      flush();
+      heading = titleMatch[1] ?? "";
+      continue;
+    }
+    lines.push(line);
+  }
+  flush();
+  return blocks.map((source, index) => ({ id: `s${index + 1}`, ...source }));
 }
 
 export function newRunState(raw, sourcePath) {
@@ -51,14 +77,34 @@ function requirePhase(state, phase, action) {
   if (state.phase !== phase) throw new Error(`${action} 只在 ${phase} 阶段可用；当前阶段是 ${state.phase}`);
 }
 
+/**
+ * content-revision 不是一个独立阶段，它是 **content 阶段的第二趟**：定向修订改完页面简报后
+ * 仍要回到同一套冻结逻辑。参照实现就是这么分派的（`experiments/penguin-harness-v2/run-grid.mjs:70`
+ * 在 phase 为 content 或 content-revision 时都跑 content 阶段），移植时丢了这一层，
+ * 导致 freezeContent 只认 content、运行一进 content-revision 就再也出不来。
+ *
+ * 只放宽"冻结"这一处。upsertPageBriefs 仍然只认 content —— 否则模型能在修订阶段自由改写页面，
+ * 绕开 replacePageBriefs 的来源集合守恒校验。
+ */
+function requireContentStage(state, action) {
+  if (!["content", "content-revision"].includes(state.phase)) {
+    throw new Error(`${action} 只在 content 阶段可用；当前阶段是 ${state.phase}`);
+  }
+}
+
 export function setDeckBrief(state, deckBrief) {
   requirePhase(state, "content", "设置整稿任务");
   return { ...state, deckBrief };
 }
 
 /**
- * 增量写入页面简报。来源文本由程序按 sourceIds 绑定，模型不能自报来源文本——
- * 这是"来源保真"的落点：模型只能引用来源 ID，正文一律由这里从稿件回填。
+ * 增量写入页面简报。**两种正文并存**：
+ *   - `sourceText`：程序按 sourceIds 从稿件回填的逐字并集。它是**证据**，模型不能自报，永不改写。
+ *   - `text`：模型在来源基础上提炼撰写的上屏文本（可选）。缺省则渲染回退到 sourceText。
+ *
+ * 允许撰写不等于可以乱写：`text` 一律过 `checkItemFidelity`，不过就整批拒绝（与其余校验同形的失败关闭）。
+ * 只引用来源 ID 已经不够了——改写之后，"来源引对了"不再蕴含"意思没变"。
+ *
  * 页面内容一变，该页的产物状态立即失效（不是标记 dirty 后由谁记得清理，而是直接删）。
  */
 export function upsertPageBriefs(state, pages) {
@@ -72,9 +118,14 @@ export function upsertPageBriefs(state, pages) {
       if (itemIds.has(item.id)) throw new Error(`重复内容项 ${item.id}`);
       itemIds.add(item.id);
       if (!item.sourceIds?.length) throw new Error(`内容项 ${item.id} 没有来源`);
+      if (item.role !== undefined && !ROLES.includes(item.role)) throw new Error(`内容项 ${item.id} 的角色 ${item.role} 未知`);
       const unknown = item.sourceIds.filter((id) => !sourceById.has(id));
       if (unknown.length) throw new Error(`内容项 ${item.id} 引用了未知来源 ${unknown.join("、")}`);
       item.sourceText = item.sourceIds.map((id) => sourceById.get(id).text).join("\n");
+      const fidelity = checkItemFidelity({ text: item.text, sourceText: item.sourceText });
+      if (!fidelity.accepted) {
+        throw new Error(`内容项 ${item.id} 没有通过保真检查：${describeFidelityIssues(fidelity.issues)}`);
+      }
     }
     const index = next.pages.findIndex((existing) => existing.pageId === page.pageId);
     const value = { ...structuredClone(page), revision: (next.pages[index]?.revision ?? 0) + 1 };
@@ -130,7 +181,7 @@ export function replacePageBriefs(state, targetPageIds, incoming) {
 
 /** 冻结内容阶段。有遗漏来源时拒绝并原样返回诊断——不自动补齐、不降级放行。 */
 export function freezeContent(state) {
-  requirePhase(state, "content", "冻结内容");
+  requireContentStage(state, "冻结内容");
   if (state.contentRevision && !state.contentRevision.applied) {
     return { state, report: { accepted: false, issues: [{ code: "content-revision-pending" }] } };
   }
@@ -150,6 +201,8 @@ export function upsertComposition(state, pageId, composition, validation) {
   page.composition = composition;
   page.compositionRevision = revision;
   delete next.artifactState[pageId];
+  // 方案一改，上一次的整套审计就不再描述当前这副牌组了，跟着作废。
+  delete next.deckAudit;
   return { state: next, report: { ...validation, pageId, revision } };
 }
 
@@ -170,6 +223,17 @@ export function artifactReusable(state, pageId) {
 export function recordArtifact(state, pageId, { status, revision, feedback, pptxPath = null }) {
   const next = structuredClone(state);
   next.artifactState[pageId] = { status, revision, feedback, pptxPath };
+  return next;
+}
+
+/**
+ * 整套审计的结论。**逐页通过不等于整副牌组通过**：check_pages 只对请求到的页记账，
+ * 而封面（slide-01）的违规不归任何正文页——只有这一个字段能拦住它。
+ * 因此 finishVisual 要求它必须存在且为 passed（缺了就拒绝，不默认放行）。
+ */
+export function recordDeckAudit(state, { status, qaDir = null }) {
+  const next = structuredClone(state);
+  next.deckAudit = { status, qaDir, checkedAt: new Date().toISOString() };
   return next;
 }
 
@@ -204,7 +268,13 @@ export function requestContentRevision(state, { pageIds, reason }) {
   };
 }
 
-/** 收尾闸门：所有页面都必须"当前版本已通过"。经验提示（warnings）不阻断，但必须逐页给出理由。 */
+/**
+ * 收尾闸门：所有页面都必须"当前版本已通过"，**且整套审计必须存在并通过**。
+ * 经验提示（warnings）不阻断，但必须逐页给出理由。
+ *
+ * 整套那一关不可省：逐页记账只覆盖 check_pages 请求到的页，封面违规不归任何一页。
+ * 缺记录也拒绝（失败关闭）——没调过 check_pages 就进 ready，等于绕过审计。
+ */
 export function finishVisual(state, warningDecisions = []) {
   requirePhase(state, "visual", "结束视觉阶段");
   const pending = state.pages
@@ -216,6 +286,22 @@ export function finishVisual(state, warningDecisions = []) {
     .map((page) => page.pageId);
   if (pending.length || unexplained.length) {
     return { state, report: { accepted: false, pending, warningsNeedReason: unexplained } };
+  }
+  const deckAudit = state.deckAudit ?? null;
+  if (deckAudit?.status !== "passed") {
+    return {
+      state,
+      report: {
+        accepted: false,
+        pending: [],
+        warningsNeedReason: [],
+        deckAudit,
+        issues: [{ code: deckAudit ? "deck-audit-failed" : "deck-audit-missing" }],
+        note: deckAudit
+          ? "整副牌组没有通过确定性质量审计：逐页也许都过了，但封面等不计入正文页的幻灯片仍可能违规。先修好再调用 check_pages。"
+          : "本运行还没有整套审计记录（没调用过 check_pages），不能进入 ready。",
+      },
+    };
   }
   return {
     state: { ...structuredClone(state), phase: "ready", warningDecisions },
@@ -260,14 +346,18 @@ export const NEXT_STEP = Object.freeze({
 
 /**
  * content.md：一级标题为页面，内容块有稳定 ID 并标注来源（harness/runs/README.md:6 的约定）。
- * 同样由 state.json 渲染。约定里它叫"正文的当前编辑真源"，但在这套设计里模型**不撰写正文**——
- * 它只引用来源 ID，正文一律由 upsertPageBriefs 从原稿回填。所以并不存在一份模型写的正文可编辑，
- * 渲染出来既满足约定的可读性要求，又不会出现两份都能手改的真源。
+ * 同样由 state.json 渲染。
+ *
+ * 每个内容块**两份正文都列出来**，它们是两件不同的事：
+ *   - 「上屏」是模型在被引用来源基础上提炼撰写、真正会出现在幻灯片上的文本；
+ *   - 「逐字来源」是程序按 sourceIds 从原稿回填的证据，模型改不动它，保真检查就是拿它比对的。
+ * 只列上屏稿，读者无从判断提炼有没有走样；只列逐字稿，读者又看不到实际交付的文本。
+ * 两者都不是"可手改的真源"——真源始终只有 state.json。
  */
 export function renderContentMarkdown(state) {
   const lines = [
     "<!-- 本文件由运行器从 state.json 渲染，不要直接编辑。 -->",
-    "<!-- 正文逐字来自原稿；模型只引用来源 ID，不撰写正文。 -->",
+    "<!-- 每项列两份正文：上屏稿由模型提炼撰写，逐字来源由程序从原稿回填、是保真检查的比对证据。 -->",
     "",
   ];
   if (!state.pages.length) lines.push("（尚无页面）", "");
@@ -275,7 +365,10 @@ export function renderContentMarkdown(state) {
     lines.push(`# ${page.pageId} ${page.title}`, "");
     lines.push(`> 主张：${page.claim} ｜ 关系：${page.relation} ｜ 版本：${page.revision}`, "");
     for (const item of page.items) {
-      lines.push(`## ${item.id}`, "", `<!-- 来源：${item.sourceIds.join("、")} -->`, "", item.sourceText, "");
+      const role = item.role && item.role !== "object" ? ` ｜ 角色：${item.role}` : "";
+      lines.push(`## ${item.id}`, "", `<!-- 来源：${item.sourceIds.join("、")}${role} -->`, "");
+      lines.push(`**上屏**：${item.text ?? "（未提炼，回退逐字来源）"}`, "");
+      lines.push(`**逐字来源**：`, "", item.sourceText, "");
     }
   }
   return `${lines.join("\n")}\n`;
