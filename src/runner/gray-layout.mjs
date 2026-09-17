@@ -99,12 +99,18 @@ export function resolveGrayLayout(plan, selection, area, { measureBody, fitText 
     let solved;
     try {
       solved = resolveLayoutTree({ composition, bodyFrame: { left: 0, top: 0, width: area.width, height: area.height }, contracts, style: { gap: GAP } });
+      // 内容明显少于正文区时不再把各组拉到满高：满高会让空框自己声明"这里该有内容"。
+      // 只在稀疏页面收缩（自然高度 < 55% 正文区），丰实页面照旧铺满。
+      if (solved.minimum.height < area.height * 0.55) {
+        const frameHeight = Math.max(96, Math.ceil(solved.minimum.height * 1.1));
+        solved = resolveLayoutTree({ composition, bodyFrame: { left: 0, top: 0, width: area.width, height: frameHeight }, contracts, style: { gap: GAP } });
+      }
     } catch (error) {
       if (error.code === 'COMPOSITION_RECOMPOSE_REQUIRED') {
         // 容量只报"需要重组"不足以让模型收敛：给出实测最小尺寸与出路（合组/精简/分页）。
         const minimum = error.details?.minimum;
         throw new CompositionFitError(
-          `一页放不下：当前组合的最小可读尺寸约 ${Math.ceil(minimum?.width ?? 0)}×${Math.ceil(minimum?.height ?? 0)}，正文区为 ${area.width}×${area.height}。优先把内容拆到多页（pages 增加一页，每页 1–2 个组最易读）；也可以合并相关组、精简条目文字、缩短组标题，或用更省空间的组合。不要反复更换基础组合。`,
+          `一页放不下：当前组合的最小可读尺寸约 ${Math.ceil(minimum?.width ?? 0)}×${Math.ceil(minimum?.height ?? 0)}，正文区为 ${area.width}×${area.height}。优先把内容拆到多页（pages 增加一页，每页 1–2 个组最易读）；合并相关组或用更省空间的组合也可以，但不要为了塞进一页删减必要文字。修订后直接重试渲染，不要反复跑检查工具空转，也不要反复更换基础组合。`,
           { pageId: page.pageId, layout: choice, minimum, available: { width: area.width, height: area.height }, groupCapacities: contracts },
         );
       }

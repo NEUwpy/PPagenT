@@ -110,7 +110,7 @@ export function resolveLayoutTree({ composition, bodyFrame, contracts, style = {
     });
   };
   allocate(composition, body);
-  return freeze(structuredClone({ bodyFrame: body, regions, contracts, style: { gap, innerGap } }));
+  return freeze(structuredClone({ bodyFrame: body, minimum, regions, contracts, style: { gap, innerGap } }));
 }
 
 /** Builders must use the supplied frame for the complete group, including labels. */

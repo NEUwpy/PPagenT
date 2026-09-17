@@ -27,7 +27,8 @@ test('row uses supplied weights and shared outer bounds while preserving copy',(
   assert.deepEqual(result,resolveGrayLayout(p,select({type:'row',weights:[2,1]}),area,metrics));
   const [a,b]=result.plan.pages[0].composition.regions;
   assert.equal(a.width,2*b.width);assert.equal(b.x,a.width+24);
-  assert.equal(a.height,area.height);assert.equal(a.y,b.y);assert.equal(a.y+a.height,b.y+b.height);
+  assert.equal(a.height,b.height);assert.equal(a.y,b.y);assert.equal(a.y+a.height,b.y+b.height);
+  assert.ok(a.height<area.height); // 内容稀疏：不拉到满高，空框不再自己声明"这里该有内容"
   assert.equal(validateGrayPlan(base(),result.plan,area).accepted,true);
   assert.equal(result.plan.pages[0].items[0].text,'模拟：核验后开放。');
 });
@@ -40,6 +41,15 @@ test('column, grid and single use existing solver without inventing semantic rel
   const p=plan();p.pages[0].groups.pop();
   assert.equal(resolveGrayLayout(p,select({type:'single'}),area,metrics).plan.pages[0].composition.regions.length,1);
 });
+test('sparse pages stop stretching groups; rich pages still fill the frame',()=>{
+  const sparse=resolveGrayLayout(plan(),select({type:'row',weights:[2,1]}),area,metrics).plan.pages[0].composition.regions;
+  assert.ok(sparse[0].height>=96 && sparse[0].height<area.height);
+  const p=plan();
+  p.pages[0].groups.forEach(g=>{g.blocks[0].text='重要条件必须保留，异常暂停并复核记录。'.repeat(6);});
+  const rich=resolveGrayLayout(p,select({type:'row',weights:[2,1]}),area,metrics).plan.pages[0].composition.regions;
+  assert.equal(rich[0].height,area.height);
+});
+
 test('selection cannot inject coordinates, skip groups or misuse structure names',()=>{
   for(const layout of [{type:'flow'},{type:'single'},{type:'row',x:0},{type:'row',weights:[1]},{type:'column',weights:[1,1]},{type:'grid',columns:3}]) {
     assert.throws(()=>resolveGrayLayout(plan(),select(layout),area,metrics));
