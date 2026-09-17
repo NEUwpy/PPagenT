@@ -38,7 +38,15 @@ export function resolveGrayLayout(plan, selection, area, { measureBody, fitText 
     try {
       solved=resolveLayoutTree({composition,bodyFrame:{left:0,top:0,width:area.width,height:area.height},contracts,style:{gap}});
     } catch(error) {
-      if (error.code==='COMPOSITION_RECOMPOSE_REQUIRED') error.details={...error.details,pageId:page.pageId,layout:choice,requiredHeight:naturalHeight,availableHeight:area.height,groupCapacities:contracts};
+      if (error.code==='COMPOSITION_RECOMPOSE_REQUIRED') {
+        // 容量只报"需要重组"不足以让模型收敛：给出数字与出路（合组/精简/分页），
+        // 否则它会反复更换基础组合死磕同一份内容。
+        const total=Math.ceil(Object.values(contracts).reduce((sum,contract)=>sum+contract.minHeight,0)+gap*(n-1));
+        throw new CompositionFitError(
+          `一页放不下：${n} 个组的最小高度合计约 ${total}（含组间距），超过正文区高 ${area.height}。出路：把相关组合并为一组、精简条目文字、缩短组标题，或把内容拆到多页（pages 增加一页）后重新渲染——不要反复更换基础组合。`,
+          {pageId:page.pageId,layout:choice,requiredHeight:total,availableHeight:area.height,groupCapacities:contracts},
+        );
+      }
       throw error;
     }
     const regions=ids.map(id=>{
