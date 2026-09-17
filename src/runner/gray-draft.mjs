@@ -6,7 +6,7 @@ import { createHash } from 'node:crypto';
 import { buildChatProviderFromEnv } from './chat-provider.mjs';
 import { newRunState, upsertPageBriefs, validateContent, writeState, renderContentMarkdown, renderStateMarkdown } from './state.mjs';
 import { fitChineseTextToFrame } from '../render/chinese-typography.mjs';
-import { SEMANTIC_CONTRACT, SEMANTIC_REVIEW_CONTRACT, EXPRESSION_CONTRACT, LAYOUT_CONTRACT, validateSemanticPlan, bindSemanticLayout, bindGrayExpressions, semanticPlanFromPages, blockText, regionBody, grayDisplayBlocks, semanticReviewInput } from './gray-semantics.mjs';
+import { SEMANTIC_CONTRACT, SEMANTIC_REVIEW_CONTRACT, EXPRESSION_CONTRACT, LAYOUT_CONTRACT, validateSemanticPlan, bindSemanticLayout, bindGrayExpressions, semanticPlanFromPages, blockText, regionBody, grayDisplayBlocks, semanticReviewInput, SKETCH_KINDS } from './gray-semantics.mjs';
 import { resolveGrayLayout } from './gray-layout.mjs';
 import { resolveLayoutTree } from '../composition/resolve.mjs';
 
@@ -42,6 +42,9 @@ export function fitGrayText(text, width, height, fontSize) {
 
 // Capacity checking and rendering share this exact internal text layout.
 export function grayBodyLayout(item, width, fontSize, availableHeight) {
+  if (SKETCH_KINDS.has(item.kind) && Array.isArray(item.blocks) && item.blocks.length) {
+    return sketchBodyLayout(item, width, fontSize, availableHeight);
+  }
   const padding=8, gap=12, labelGap=4;
   const sections=item.kind==='text' && item.blocks
     ? item.blocks.map(block=>({kind:block.kind ?? 'text',parts:grayDisplayBlocks({kind:'text',blocks:[block]})}))
@@ -74,6 +77,79 @@ export function grayBodyLayout(item, width, fontSize, availableHeight) {
     return {...frame,kind:section.kind,id:section.id,minHeight:section.minHeight};
   });
   return {runs,sections:frames,height:availableHeight ?? minimum,minimumHeight:minimum,fits:runs.every(r=>r.fits)};
+}
+
+/**
+ * 结构草图的组内布局：diagram 并置卡片、flow 顺序节点（带箭头连接）、table 行式表格。
+ * 几何与文字测量在这里一次算好，容量检查与原生渲染共用（框内文字就是实际文案）。
+ * 宽度不足时返回 fits:false，走既有容量失败路径（回到规划或调整组合），不静默压缩。
+ */
+function sketchBodyLayout(item, width, fontSize, availableHeight) {
+  const padding=10, labelGap=4;
+  const runs=[], sections=[], connectors=[];
+  const fitPart=(text,partWidth,bold)=>{
+    const fit=fitGrayText(text,partWidth-2*padding,100000,fontSize);
+    return {text:fit.text,height:fit.lineCount*fontSize*1.35,fits:fit.fits,bold};
+  };
+  if (item.kind==='diagram' || item.kind==='flow') {
+    const isFlow=item.kind==='flow';
+    const n=item.blocks.length;
+    const between=isFlow?34:24;
+    const cardWidth=(width-between*(n-1))/n;
+    if (cardWidth<110) return {runs:[],sections:[],connectors:[],height:0,minimumHeight:Math.ceil(width/2),fits:false};
+    let contentMax=0;
+    const cards=item.blocks.map(block=>{
+      const parts=[];
+      if (block.label) parts.push(fitPart(block.label,cardWidth,true));
+      parts.push(fitPart(block.text,cardWidth,false));
+      const contentHeight=parts.reduce((sum,part)=>sum+part.height,0)+labelGap*(parts.length-1);
+      contentMax=Math.max(contentMax,contentHeight);
+      return {parts};
+    });
+    const cardHeight=Math.ceil(contentMax+2*padding);
+    const offset=availableHeight&&availableHeight>cardHeight?Math.floor((availableHeight-cardHeight)/2):0;
+    let x=0;
+    cards.forEach((card,index)=>{
+      sections.push({id:`card-${index}`,kind:isFlow?'node':'card',left:x,top:offset,width:cardWidth,height:cardHeight});
+      let y=offset+padding;
+      for (const part of card.parts) {
+        runs.push({text:part.text,x:x+padding,y,width:cardWidth-2*padding,height:part.height,bold:part.bold,fits:part.fits});
+        y+=part.height+labelGap;
+      }
+      x+=cardWidth;
+      if (index<n-1) {
+        if (isFlow) connectors.push({type:'rightArrow',left:x+7,top:offset+cardHeight/2-8,width:20,height:16});
+        x+=between;
+      }
+    });
+    return {runs,sections,connectors,height:availableHeight??cardHeight,minimumHeight:cardHeight,fits:runs.every(r=>r.fits)};
+  }
+  if (item.kind==='table') {
+    const labelBlocks=item.blocks.filter(block=>block.label);
+    let labelWidth=0;
+    if (labelBlocks.length) {
+      const widest=Math.max(...labelBlocks.map(block=>{
+        const single=fitGrayText(block.label,width,40,fontSize).lineCount>1;
+        return single?width*0.34:Math.min(width*0.34,block.label.length*fontSize*1.25+2*padding);
+      }));
+      labelWidth=Math.ceil(widest);
+    }
+    const textWidth=width-labelWidth;
+    let y=0;
+    item.blocks.forEach((block,index)=>{
+      const textFit=fitGrayText(block.text,Math.max(40,textWidth-2*padding),100000,fontSize);
+      const labelFit=block.label?fitGrayText(block.label,Math.max(40,labelWidth-2*padding),100000,fontSize):null;
+      const contentHeight=Math.max(textFit.lineCount*fontSize*1.35,labelFit?labelFit.lineCount*fontSize*1.35:0);
+      const rowHeight=Math.ceil(contentHeight+2*padding);
+      sections.push({id:`row-${index}`,kind:'row',left:0,top:y,width,height:rowHeight});
+      if (labelFit) runs.push({text:labelFit.text,x:padding,y:y+padding,width:labelWidth-2*padding,height:labelFit.lineCount*fontSize*1.35,bold:true,fits:labelFit.fits});
+      runs.push({text:textFit.text,x:labelWidth+padding,y:y+padding,width:Math.max(40,textWidth-2*padding),height:textFit.lineCount*fontSize*1.35,bold:false,fits:textFit.fits});
+      y+=rowHeight;
+    });
+    const minimumHeight=y;
+    return {runs,sections,connectors,height:availableHeight??minimumHeight,minimumHeight,fits:runs.every(r=>r.fits)};
+  }
+  return {runs,sections,connectors,height:0,minimumHeight:0,fits:true};
 }
 
 /** Extends existing page briefs: sources/text stay in items; composition binds item IDs. */
@@ -152,7 +228,17 @@ export async function renderGrayDraft(state, output) {
       draw(slide,fitGrayText(item.heading,region.width-32,40,26).text,{left:left+16,top:top+12,width:region.width-32,height:40},26,true);
       const body=grayBodyLayout(item,region.width-32,region.fontSize,region.height-70);
       for(const section of body.sections){
-        slide.shapes.add({geometry:'rect',name:`block:${item.id}:${section.id}`,position:{left:left+16+section.left,top:top+54+section.top,width:section.width,height:section.height},fill:section.kind==='text'?'#ECEEEF':'#E1EFF9',line:{fill:'none',width:0}});
+        const sketch=section.kind==='card'||section.kind==='node'||section.kind==='row';
+        slide.shapes.add({
+          geometry:section.kind==='node'?'roundRect':'rect',
+          name:`block:${item.id}:${section.id}`,
+          position:{left:left+16+section.left,top:top+54+section.top,width:section.width,height:section.height},
+          fill:section.kind==='text'?'#ECEEEF':sketch?'#FFFFFF':'#E1EFF9',
+          line:sketch?{fill:section.kind==='row'?'#D4D8DC':'#B9C4CF',width:1}:{fill:'none',width:0},
+        });
+      }
+      for(const connector of body.connectors??[]){
+        if(connector.type==='rightArrow') slide.shapes.add({geometry:'rightArrow',name:`connector:${item.id}`,position:{left:left+16+connector.left,top:top+54+connector.top,width:connector.width,height:connector.height},fill:'#9AA7B4',line:{fill:'none',width:0}});
       }
       for (const run of body.runs) {
         draw(slide,run.text,{left:left+16+run.x,top:top+54+run.y,width:run.width,height:run.height},region.fontSize,run.bold);

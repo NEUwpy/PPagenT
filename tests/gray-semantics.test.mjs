@@ -149,8 +149,11 @@ test('review display and measured renderer share actual copy and hierarchy for e
     assert.deepEqual(measured.map(r=>r.bold),displayed.map(r=>r.bold));
     assert.equal(measured.map(r=>r.text).join('').replace(/\s/gu,''),displayed.map(r=>r.text).join('').replace(/\s/gu,''));
     assert.equal(displayed.map(r=>r.text).join('').replace(/\s/gu,''),regionBody(item).replace(/\s/gu,''));
-    if(kind==='text') assert.doesNotMatch(JSON.stringify(displayed),/表达作用|制作要求/);
+    // 结构草图（diagram/flow/table）上屏的是实际文案；chart/image 仍是四项制作说明。
+    const sketch=['diagram','flow','table'].includes(kind);
+    if(kind==='text'||sketch) assert.doesNotMatch(JSON.stringify(displayed),/表达作用|制作要求/);
     else assert.match(JSON.stringify(displayed),/表达作用.*承载内容.*基本关系.*制作要求/);
+    if(sketch) assert.match(input.visiblePages[0].regions[0].surface,/结构草图/);
   }
 });
 

@@ -6,18 +6,22 @@ const nonempty = value => typeof value === 'string' && value.trim().length > 0;
 const TYPES = new Set(['support', 'criterion', 'implementation', 'sequence', 'parallel', 'condition', 'qualification', 'comparison', 'decomposition', 'context']);
 const KINDS = new Set(['text', 'diagram', 'flow', 'chart', 'table', 'image']);
 
+/** 本轮灰稿会绘制简化草图的媒介；chart 与 image 仍只有蓝区说明。 */
+export const SKETCH_KINDS = Object.freeze(new Set(['diagram', 'flow', 'table']));
+export const SKETCH_LABELS = Object.freeze({ diagram: '并置结构（对象卡片）', flow: '顺序结构（节点与箭头）', table: '行式表格' });
+
 export const SEMANTIC_CONTRACT = `你的任务是将原稿提炼、重组为适合PPT阅读的信息结构，本轮只生成灰稿内容，只输出JSON。原稿是事实依据，不是必须逐字搬入页面的正文。保留重要事实、对象、条件、否定和关系；允许合并重复信息、删去冗词与重复解释、把长句改写为短语和清楚的分项。提炼不改变事实与关系，不能为了容量删除必要条件。
 本次契约优先于共享规则中可选解析器的字段。不要生成composition-intent、逐句关系图或坐标，不按原稿标题数量分区。
 格式：{schemaVersion:"gray-plan-3",deckBrief:{title,audience,objective},pages:[{pageId:"p1",title:"短标题",claim:"简短上屏主题句，建议二十字左右，不复述全部正文",pagePurpose:"本页解决的问题",narrative:"一句话说明必要的先后、并行、判断或归属关系，无需列每条边",groups:[{id:"g1",role:"本组主要职责",heading:"上屏短标题",importance:"primary|supporting",kind:"text|diagram|flow|chart|table|image",blocks:[{id:"b1",label:"可选上屏子标题，不需要可省略",text:"真实上屏文字",sourceIds:["s1"]}],expression:"非text必填：表达作用",relationship:"非text必填：基本关系",production:"非text必填：制作要求"}]}],planningNotes:"简短后台组织说明"}。
-先明确页面职责，按内容归属形成groups，再把各分支的条目放进blocks，用label与text区分要点和展开。先形成可阅读的实文提纲，再选择局部表达；不要把分属不同观点的依据摊成同级卡片，也不要把分类、依据、准则混称为证明。这些层级按实际内容使用，不强求每页都有两个分支或固定条目数。文字组内某条需要图示时，该block可选kind及expression、relationship、production，字段含义与整组蓝区相同；其label仍是上屏条目标题。未选kind的block为普通文字，整组非text时不再嵌套蓝区。承担页面主体叙述（主流程环节、并列要点、分类依据等）的组保持text：本轮非text的组只呈现蓝区制作说明、正文不上屏，主体内容的先后与结构写在实文和蓝区说明里，不靠整组改选图示来体现。结构库按局部关系按需调用，本轮仅呈现蓝区制作说明。
+先明确页面职责，按内容归属形成groups，再把各分支的条目放进blocks，用label与text区分要点和展开。先形成可阅读的实文提纲，再选择局部表达；不要把分属不同观点的依据摊成同级卡片，也不要把分类、依据、准则混称为证明。这些层级按实际内容使用，不强求每页都有两个分支或固定条目数。文字组内某条需要图示时，该block可选kind及expression、relationship、production，字段含义与整组蓝区相同；其label仍是上屏条目标题。未选kind的block为普通文字，整组非text时不再嵌套蓝区。按内容关系选择表达：对比（两个及以上对象按共同维度并置）用diagram，每个对象一个block；步骤、流程与时间顺序（三个及以上节点）用flow，节点按顺序；明确的对照网格用table，每行一个block；数据图表与图片保留蓝区说明，并在制作要求里写明建议表达。diagram/flow/table本轮绘制简化草图，框内文字就是实际文案、必须完整可读；不要一律平铺文字，也不要给没有内部关系的内容硬套结构，更不要把该成结构的内容写成流水账。结构库按局部关系按需调用，本轮仅呈现蓝区制作说明。
 每组一个主要职责。claim概括主题或判断，正文展开对象、安排与条件，不把同一句建议分别复制到主题、组标题和正文。blocks按阅读顺序；label可省略，只有帮助读者定位职责时才用。heading保持短小。蓝区expression写表达作用，relationship写谁与谁怎样关联，production写可执行的组织要求；三者分工，避免重复复述承载内容。必要关系须在实文组织或蓝区制作说明中可见，仅保留关键词或写在narrative里不等于表达完成。
 每个block必须引用来源，所有来源至少被一个block引用。引用表示信息来自哪里，不要求每段原文单独变成一个正文块；页级主题承载的信息可随相关block引用。模拟/假设声明只要原稿给出，就必须上屏且恰好一次：最自然的位置是页面主题句，或紧邻主体的一个条目；不得省略、不得逐条重复、不得独立成组。小段共同说明就近融入主体，不因职责不同便独占大栏。真实条件与否定不能省略，准则不是已满足的证据，并行准备不是下一阶段。条件触发的处置、异常或例外是附着性内容：注明它约束哪些对象或环节，从属并紧邻所依附的内容（作为依附对象的补充说明，或从属职责的supporting组），不与主流程环节、并列要点铺成同层组；判断依据是依附关系，不是篇幅大小。
 内容区尺寸由输入给定，主题句在内容区外，以28px单行呈现，需简短。排版仅有单主体、横向、纵向、规则网格，空间不够时重新组织或分页。正文22px，组标题26px一行，组内每个可选label与text各自排字，约每行30px，块间距12px，每块四周8px内边距。每组70px标题/边距开销；按内容估计，不自己写坐标或强制页数。同组label+text合计不超过400字。保留原稿数字写法。
 页面目的、narrative和planningNotes不在灰稿上显示。正文必须能独立让读者理解必要关系，不能依赖后台说明。内部审查理由不要改写成正文：用“同时”“是否”“根据记录”等原稿已有表达保留关系，不额外解释“不是先后步骤”“不是已满足的证据”等审稿规则。原稿的模拟/假设性质属于读者需要的内容，须在实际标题或正文中明示，引用sourceIds不能代替显示。`;
 
 export const SEMANTIC_REVIEW_CONTRACT = `你是灰稿内容与表达审稿人。输入source是原稿，requirements是后台职责与必要关系，visiblePages是程序从实际渲染内容生成的上屏视图。只用visiblePages证明表达已落实；requirements不能作为上屏证据。尚未分配坐标或查看像素图。
-逐页核对：事实、条件、否定和模拟性质是否完整；主题与正文是否各有职责；组角色是否通过分项、对应、层级或蓝区制作要求落实；必要关系能否直接读出，而非由读者从两个长段落自行拼接。只有标题改名、主辅标签或并排放置，不证明关系已表达。文字本身组织清楚可以通过，不强制图示；图示/流程/图表/表格/图片在本轮都是蓝区制作说明，不要求实际绘图。
-准则是选择尺度，不能充当已验证的证据；并行不能写成先后；条件须对应被约束的行动。附着性内容（条件触发的处置、异常、例外）不能与主体步骤或并列要点铺成同层区域；主体职责的内容必须作为实际文案出现，只在制作说明中复述不算落实。不要添加原稿未给出的因果、依赖或效果。引用当前可见文案指出具体缺陷；不能仅因个人偏好、估计容量或未知坐标拒绝。主题概括后正文展开是合法分工，长句机械复述和以后台解释代替组织则须修订。
+逐页核对：事实、条件、否定和模拟性质是否完整；主题与正文是否各有职责；组角色是否通过分项、对应、层级或结构草图落实；必要关系能否直接读出，而非由读者从两个长段落自行拼接。只有标题改名、主辅标签或并排放置，不证明关系已表达。文字本身组织清楚可以通过；diagram（并置）、flow（时序）、table（网格）本轮绘制简化草图，框内文字为实际文案，chart/image 仍是蓝区说明。对比应配对、时序应有序；该成结构却写成流水账、或没有内部关系硬套结构，都要指出。
+准则是选择尺度，不能充当已验证的证据；并行不能写成先后；条件须对应被约束的行动。附着性内容（条件触发的处置、异常、例外）不能与主体步骤或并列要点铺成同层区域；主体职责的内容必须作为实际文案或结构草图文字出现，只在蓝区制作说明中复述不算落实。不要添加原稿未给出的因果、依赖或效果。引用当前可见文案指出具体缺陷；不能仅因个人偏好、估计容量或未知坐标拒绝。主题概括后正文展开是合法分工，长句机械复述和以后台解释代替组织则须修订。
 声明必须恰好出现一次且不独立成组：遗漏、重复、或把模拟/假设声明单独做成一个区域都要指出。后台审查解释不得进入灰区正文；蓝区制作要求可以说明关系组织与绘制要求。若有reviewFeedback，检查是否实质解决。
 只输出JSON：{accepted:boolean,issues:[{pageId,sourceIds,problem,requiredRevision}],coverage:"逐页引用visiblePages中的具体措辞或组织，说明它怎样承担职责和关系；不能仅复述requirements",limits:"未看灰稿像素图，不能确认视觉可读性"}。`;
 
@@ -29,7 +33,7 @@ export const LAYOUT_CONTRACT = `你是页面基础排版选择者。内容已检
 export const EXPRESSION_CONTRACT = `你负责把已有内容职责与必要关系落实为灰稿表达。读取source与plan中的role、importance、narrative和实文，选择哪些内容共同进入一个表达。尚未排版，不写坐标。
 只输出JSON：{pages:[{pageId,expressions:[{groupIds:["g1","g2"],heading:"简短区域标题",kind:"text|diagram|flow|chart|table|image",blocks:[{id:"b1",label:"可选分项标题",text:"提炼重组后的实际文案",sourceIds:["s1"]}],expression:"非text必填：表达作用",relationship:"非text必填：基本关系",production:"非text必填：制作要求"}]}]}。文字组中的block也可选kind及expression、relationship、production来承载局部图示，字段含义与整组相同，未选kind仍为文字。整组选择非text时，不再给其block选择局部媒介。
 每页原有内容组必须恰好被引用一次；不可跨页，不改变role或claim，不增加原稿事实。按表达需要提炼并重组blocks，允许合并复述、长句变短语、共同说明就近附着；保留对象、条件、否定、时间与关系，sourceIds只可引用所绑定组的来源。独立文字保持一个组，也可让关联内容共用同一表达。原有kind是初选，必须重新检查它是否真正承担内容职责；内容在这一阶段可以修订，进入几何阶段后才冻结。
-先检查组标题、条目要点、必要说明是否各有职责且归属清楚，再决定哪一部分用结构表达。同口径对象对应，条件附着于动作，整体与部分体现归属，先后与并行区别，尺度说明用于什么选择。普通文字组织清楚就保留；某条目需要结构时只选择该block的媒介，不连带吞并其所属分支的其他条目。承担主体叙述的组保持文字表达：本轮结构表达只呈现蓝区制作说明，正文仍须由灰区文字承载；附着性内容（条件触发的处置、异常、例外）跟随它所依附的内容，不单独升级成并列组。确需共同图示时可合用蓝区，说明内部关系。不要把每个角色独立变成框，也不要一律合并；不能增加原稿没有的共同完成门槛、因果或证明。
+先检查组标题、条目要点、必要说明是否各有职责且归属清楚，再决定哪一部分用结构表达。同口径对象对应，条件附着于动作，整体与部分体现归属，先后与并行区别，尺度说明用于什么选择。普通文字组织清楚就保留；某条目需要结构时只选择该block的媒介，不连带吞并其所属分支的其他条目。结构表达按内容关系选择：对比用diagram（对象各一个block）、时序用flow（节点按顺序）、对照网格用table；本轮会绘制简化草图，框内文字可读，不要为稳妥一律文字，也不要为结构而结构；附着性内容（条件触发的处置、异常、例外）跟随它所依附的内容，不单独升级成并列组。确需共同图示时可合用蓝区，说明内部关系。不要把每个角色独立变成框，也不要一律合并；不能增加原稿没有的共同完成门槛、因果或证明。
 蓝区只写制作说明，不绘图或调用结构Skill。expression、relationship、production各司其职，简洁可执行；承载内容由程序填入，不要再在三项说明中复述全文。若现有分页或实文无法成立，返回{needsReplan:true,reason:"具体内容问题"}。`;
 
 /** Bind grounded content, then allow expression-aware copy. Geometry receives only the checked result. */
@@ -61,11 +65,19 @@ export function blockText(block) { return [block.label,block.text].filter(nonemp
 
 export function regionBody(item) {
   if (item.kind === 'text' && item.blocks) return grayDisplayBlocks(item).map(block=>block.text).join('\n');
+  if (SKETCH_KINDS.has(item.kind) && item.blocks) return item.blocks.map(blockText).join('\n');
   return item.kind === 'text' ? item.text : `表达作用：${item.expression}\n承载内容：${item.text}\n基本关系：${item.relationship}\n制作要求：${item.production}`;
 }
 
 /** One display projection for review, measurement and native rendering. No backstage prose. */
 export function grayDisplayBlocks(item) {
+  if (SKETCH_KINDS.has(item.kind) && item.blocks) {
+    // 结构草图：审稿、测量与渲染看到的是同一份逐卡片/节点的实际文案（"是结构"这一事实由 surface 描述）。
+    return item.blocks.flatMap((block,index)=>[
+      ...(block.label ? [{text:block.label,bold:true,gapBefore:index ? 12 : 0}] : []),
+      {text:block.text,bold:false,gapBefore:!block.label && index ? 12 : 0},
+    ]);
+  }
   if (item.kind !== 'text' || !item.blocks) return [{text:regionBody(item),bold:false,gapBefore:0}];
   return item.blocks.flatMap((block,index) => [
     ...(block.label ? [{text:block.label,bold:true,gapBefore:index ? 12 : 0}] : []),
@@ -81,9 +93,11 @@ export function semanticReviewInput({source,area,plan,reviewFeedback=null}) {
     requirements:plan.pages.map(page=>({pageId:page.pageId,pagePurpose:page.pagePurpose,narrative:page.narrative,
       groups:page.groups.map(group=>({id:group.id,role:group.role,importance:group.importance}))})),
     visiblePages:pages.map(page=>({pageId:page.pageId,claim:page.claim,regions:page.items.map(item=>({
-      id:item.id,kind:item.kind,surface:item.kind==='text'
-        ? (item.blocks?.some(block=>block.kind && block.kind!=='text') ? '灰区为实际文案；body中非text的kind为块内浅蓝制作说明，四项均上屏' : '灰区：实际文案')
-        : '浅蓝区：制作说明，四项均须上屏',heading:item.heading,body:grayDisplayBlocks(item),
+      id:item.id,kind:item.kind,surface:SKETCH_KINDS.has(item.kind)
+        ? `结构草图：${SKETCH_LABELS[item.kind]}，框内文字为实际文案`
+        : item.kind==='text'
+          ? (item.blocks?.some(block=>block.kind && block.kind!=='text') ? '灰区为实际文案；body中非text的kind为块内浅蓝制作说明，四项均上屏' : '灰区：实际文案')
+          : '浅蓝区：制作说明，四项均须上屏',heading:item.heading,body:grayDisplayBlocks(item),
     }))})),
   };
 }
