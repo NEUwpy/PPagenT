@@ -136,10 +136,13 @@ async function planSummary(runDir) {
   return {
     title: plan.deckBrief?.title ?? null,
     pageCount: Array.isArray(plan.pages) ? plan.pages.length : null,
+    planningNotes: plan.planningNotes ?? null,
     pages: (plan.pages ?? []).map((page) => ({
       pageId: page.pageId,
       title: page.title ?? null,
       claim: page.claim ?? null,
+      purpose: page.pagePurpose ?? page.semantics?.pagePurpose ?? null,
+      narrative: page.narrative ?? page.semantics?.narrative ?? null,
       itemCount: Array.isArray(page.items) ? page.items.length : null,
       items: (page.items ?? []).map((item) => ({
         heading: item.heading ?? null,

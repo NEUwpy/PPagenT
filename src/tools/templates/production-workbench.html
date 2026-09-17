@@ -30,13 +30,18 @@
     button.artifact{width:100%;padding:0;text-align:left;cursor:zoom-in;font:inherit}.run-more{width:100%;margin-top:8px;border:1px dashed #b7c9dc;border-radius:10px;background:rgba(255,255,255,.6);color:var(--blue);font-size:11px;padding:8px}.artifact-hint{display:block;padding:0 12px 10px;color:var(--blue);font-size:11px}
     .gray-file-binary{padding:10px;border-top:1px solid #e8edf4;font-size:12px}.gray-file-binary a{color:var(--blue)}
     .page-trace{margin-top:12px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.9)}
-    .page-trace h4{margin:0 0 8px;font-size:13px;color:#53647a}.trace-claim{margin:0 0 10px;font-size:13px;color:var(--ink);line-height:1.6}
-    .trace-group{border-top:1px solid #eef1f5;padding:9px 0}.trace-group .chip{margin-right:6px;font-size:11px}
+    .page-trace h4{margin:0 0 10px;font-size:13px;color:#53647a}
+    .trace-columns{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media(max-width:1180px){.trace-columns{grid-template-columns:1fr}}
+    .trace-col h5{margin:0 0 8px;font-size:12px;color:#7b8798;font-weight:600}
+    .trace-source{border-left:3px solid #d9e2ec;padding:4px 0 4px 10px;margin-bottom:8px}
+    .trace-source b{font-size:11px;color:var(--blue)}
+    .trace-source p{margin:2px 0 0;font-size:12px;line-height:1.7;color:#3c4a5a;white-space:pre-wrap}
+    .trace-col p{margin:0 0 6px;font-size:12px;line-height:1.7;color:#3c4a5a}
+    .trace-group{border-top:1px solid #eef1f5;padding:8px 0}.trace-group .chip{margin-right:6px;font-size:11px}
     .trace-group ul{margin:6px 0 0;padding-left:18px;display:grid;gap:6px}.trace-group li{font-size:12px;line-height:1.7}
     .source-chips{margin-left:6px;display:inline-flex;gap:4px;flex-wrap:wrap;vertical-align:middle}
-    .source-chip{border:1px solid #d9e2ec;border-radius:8px;background:#f6f9fc;font-size:10px;display:inline-block;max-width:100%}
-    .source-chip[open]{display:block;margin-top:4px;width:100%}.source-chip summary{padding:2px 8px;color:var(--blue);cursor:pointer;list-style:none}
-    .source-text{margin:0;padding:8px;border-top:1px solid #e3e9f1;font-size:11px;line-height:1.65;color:#4a5868;white-space:pre-wrap}.error-box{padding:12px 14px;border-radius:11px;background:#fff0f1;color:#a2333d;font-size:12px;margin-bottom:15px}
+    .source-tag{border:1px solid #d9e2ec;border-radius:6px;background:#f6f9fc;color:var(--blue);font-size:10px;padding:1px 6px}.error-box{padding:12px 14px;border-radius:11px;background:#fff0f1;color:#a2333d;font-size:12px;margin-bottom:15px}
     @media(max-width:1180px){.new-run{grid-template-columns:1fr auto}.checkpoint-option{grid-column:1}.pipeline{grid-template-columns:repeat(4,1fr)}.stage:after{display:none}.reader-grid,.grid{grid-template-columns:1fr}.page-form{grid-template-columns:1fr 1fr}.page-form header{grid-column:1/-1}}@media(max-width:760px){.app{display:block}.side{display:none}main{padding:18px}.new-run{grid-template-columns:1fr}.run-button{height:52px}.pipeline{grid-template-columns:repeat(2,1fr)}.page-form{grid-template-columns:1fr}}
     .area-inputs{display:flex;gap:6px;align-items:center;margin-top:5px}.area-inputs input{width:100%;border:1px solid #c9d5e3;border-radius:8px;padding:7px 8px;font-size:11px}.area-inputs span{color:var(--muted);font-size:11px}
     .compare-button{border:1px solid var(--line);background:rgba(255,255,255,.72);cursor:pointer;font-weight:700;color:#3d5a7d}
@@ -314,24 +319,27 @@
       document.querySelectorAll("[data-gray-preview-page]").forEach(node=>node.onclick=()=>{grayPreviewIndex=Number(node.dataset.grayPreviewPage);apply()});
       apply();
     }
-    // 这一页怎么来的：主题句 + 组/块结构 + 每块的来源原文对照（翻页时同步）。
+    // 本页来源与规划记录：本页引用的稿件原文、规划自述与成品结构，静态对照展示。
     function renderPageTrace(){
       const slot=document.getElementById("page-trace");if(!slot)return;
       const plan=currentRun?.gray?.plan;const sourceMap={};
       for(const source of currentRun?.gray?.sources||[])sourceMap[source.id]=source;
       const page=plan?.pages?.[grayPreviewIndex];
       if(!page){slot.innerHTML="";return}
+      const usedIds=[...new Set((page.items||[]).flatMap(item=>(item.blocks||[]).flatMap(block=>block.sourceIds||[])))];
+      const sourceItems=usedIds.map(id=>{
+        const source=sourceMap[id];
+        return`<div class="trace-source"><b>${esc(id)}</b><p>${esc(source?source.text:"（来源表中找不到 "+id+"）")}</p></div>`;
+      }).join("")||'<div class="gray-empty">本页没有记录来源引用</div>';
       const groups=(page.items||[]).map(item=>{
         const blocks=(item.blocks||[]).map(block=>{
-          const chips=(block.sourceIds||[]).map(id=>{
-            const source=sourceMap[id];
-            return`<details class="source-chip"><summary>${esc(id)}</summary><div class="source-text">${esc(source?source.text:"（来源表里找不到 "+id+"）")}</div></details>`;
-          }).join("");
+          const chips=(block.sourceIds||[]).map(id=>`<span class="source-tag">${esc(id)}</span>`).join("");
           return`<li>${block.label?`<b>${esc(block.label)}</b>：`:""}${esc(block.text)}${chips?`<span class="source-chips">${chips}</span>`:""}</li>`;
         }).join("");
         return`<div class="trace-group"><span class="chip">${esc(item.heading||"（无组标题）")}</span><span class="chip">${esc(item.kind||"text")}${item.kind&&item.kind!=="text"?" · 结构草图":""}</span><ul>${blocks||'<li>（无条目）</li>'}</ul></div>`;
       }).join("");
-      slot.innerHTML=`<h4>这一页怎么来的</h4><p class="trace-claim">主题句：${esc(page.claim||"（无）")}</p>${groups||'<div class="gray-empty">计划里还没有这一页的结构</div>'}`;
+      const planning=[page.purpose?`<p><b>本页目的</b>：${esc(page.purpose)}</p>`:"",page.narrative?`<p><b>组织说明</b>：${esc(page.narrative)}</p>`:"",plan?.planningNotes?`<p><b>规划备注</b>：${esc(plan.planningNotes)}</p>`:""].filter(Boolean).join("")||'<div class="gray-empty">没有记录规划说明</div>';
+      slot.innerHTML=`<h4>本页来源与规划记录</h4><div class="trace-columns"><div class="trace-col"><h5>本页引用的稿件原文</h5>${sourceItems}</div><div class="trace-col"><h5>规划记录与成品结构</h5>${planning}${groups||'<div class="gray-empty">计划里还没有这一页的结构</div>'}</div></div>`;
     }
     const grayStepStatusText=status=>status==="succeeded"?"完成":status==="failed"?"未通过":status==="running"?"进行中":status==="skipped"?"本轮未执行":"未开始";
     function openLightbox(src,alt){closeLightbox();const overlay=document.createElement("div");overlay.id="lightbox";overlay.className="lightbox";overlay.innerHTML=`<button class="lightbox-close" type="button" aria-label="关闭">×</button><img src="${src}" alt="${esc(alt||"")}"><span class="lightbox-hint">点击空白处或按 Esc 关闭</span>`;overlay.addEventListener("click",event=>{if(event.target===overlay)closeLightbox()});overlay.querySelector(".lightbox-close").addEventListener("click",closeLightbox);document.body.appendChild(overlay);document.addEventListener("keydown",lightboxKeydown)}
