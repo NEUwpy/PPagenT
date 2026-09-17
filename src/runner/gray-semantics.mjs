@@ -138,24 +138,38 @@ export function validateSemanticPlan(base, plan) {
       for (const key of ['title', 'claim', 'pagePurpose', 'narrative']) if (!nonempty(page[key])) fail('missing-page-semantics', page.pageId, key);
       if (page.composition || !Array.isArray(page.groups) || !page.groups.length) throw new Error('语义阶段须有groups且不得有composition');
       const nodes = new Set(['$claim']);
-      for (const group of page.groups) {
-        if (!nonempty(group.id) || nodes.has(group.id)) throw new Error('组/块ID缺失或重复');
+      for (const [groupIndex, group] of page.groups.entries()) {
+        const groupLabel = nonempty(group.id) ? `组 ${group.id}` : `第 ${groupIndex + 1} 个组（缺少 id）`;
+        if (!nonempty(group.id) || nodes.has(group.id)) throw new Error(`${groupLabel}：id 缺失或与前面重复`);
         nodes.add(group.id);
-        if (![group.role, group.heading].every(nonempty) || !KINDS.has(group.kind) || !['primary','supporting'].includes(group.importance)) throw new Error('组的职责、标题、媒介或权重缺失');
-        if (group.kind !== 'text' && ![group.expression,group.relationship,group.production].every(nonempty)) throw new Error('蓝区缺少制作说明');
-        if (!Array.isArray(group.blocks) || !group.blocks.length) throw new Error('组缺少内部blocks');
+        const missingGroupFields = [
+          nonempty(group.role) ? null : 'role', nonempty(group.heading) ? null : 'heading',
+          KINDS.has(group.kind) ? null : `kind（须为 ${[...KINDS].join('|')}，当前 ${JSON.stringify(group.kind)}）`,
+          ['primary','supporting'].includes(group.importance) ? null : `importance（须为 primary|supporting，当前 ${JSON.stringify(group.importance)}）`,
+        ].filter(Boolean);
+        if (missingGroupFields.length) throw new Error(`${groupLabel} 缺少或不合法的字段：${missingGroupFields.join('、')}`);
+        if (group.kind !== 'text' && ![group.expression,group.relationship,group.production].every(nonempty)) throw new Error(`${groupLabel} 的 kind 是 ${group.kind}，必须同时提供 expression、relationship、production 三项制作说明`);
+        if (!Array.isArray(group.blocks) || !group.blocks.length) throw new Error(`${groupLabel} 缺少 blocks（每组至少一个块）`);
         const blockIds=new Set();
-        for (const block of group.blocks) {
-          if (!nonempty(block.id) || blockIds.has(block.id) || ((!simple || page.relations?.length) && nodes.has(block.id))) throw new Error('组/块ID缺失或重复');
+        for (const [blockIndex, block] of group.blocks.entries()) {
+          const blockLabel = nonempty(block.id) ? `块 ${block.id}（${groupLabel}）` : `${groupLabel} 的第 ${blockIndex + 1} 个块（缺少 id）`;
+          if (!nonempty(block.id) || blockIds.has(block.id) || ((!simple || page.relations?.length) && nodes.has(block.id))) throw new Error(`${blockLabel}：id 缺失或与前面重复`);
           blockIds.add(block.id);
           nodes.add(block.id);
-          if (!(simple ? nonempty(block.text) && (block.label === undefined || typeof block.label === 'string') : [block.role,block.label,block.text].every(nonempty)) || !Array.isArray(block.sourceIds) || !block.sourceIds.length || block.sourceIds.some(id => !sources.has(id))) throw new Error('块的角色、文案或来源缺失');
+          if (simple) {
+            if (!nonempty(block.text)) throw new Error(`${blockLabel} 缺少 text`);
+            if (block.label !== undefined && typeof block.label !== 'string') throw new Error(`${blockLabel} 的 label 必须是字符串（可省略）`);
+            if (!Array.isArray(block.sourceIds) || !block.sourceIds.length) throw new Error(`${blockLabel} 缺少 sourceIds（每个块必须引用至少一个来源）`);
+            const unknown = block.sourceIds.filter(id => !sources.has(id));
+            if (unknown.length) throw new Error(`${blockLabel} 引用了未知来源：${unknown.join('、')}；可用来源：${[...sources.keys()].join('、')}`);
+          } else if (![block.role,block.label,block.text].every(nonempty) || !Array.isArray(block.sourceIds) || !block.sourceIds.length || block.sourceIds.some(id => !sources.has(id))) throw new Error(`${blockLabel} 的 role/label/text/sourceIds 不完整或引用了未知来源`);
           const kind=block.kind ?? 'text';
-          if (!KINDS.has(kind)) throw new Error('块的媒介未知');
-          if (kind !== 'text' && (group.kind !== 'text' || ![block.expression,block.relationship,block.production].every(nonempty))) throw new Error('局部蓝区须属于文字组，并完整提供制作说明');
-          if (kind === 'text' && [block.expression,block.relationship,block.production].some(value=>value!==undefined)) throw new Error('文字块不能携带未选择媒介的制作说明');
+          if (!KINDS.has(kind)) throw new Error(`${blockLabel} 的媒介 ${JSON.stringify(block.kind)} 未知；可选：${[...KINDS].join('|')}`);
+          if (kind !== 'text' && group.kind !== 'text') throw new Error(`${blockLabel} 选择了局部媒介 ${kind}，但所属组 kind 已是 ${group.kind}；整组非 text 时不要再给块选媒介`);
+          if (kind !== 'text' && ![block.expression,block.relationship,block.production].every(nonempty)) throw new Error(`${blockLabel} 选择了局部媒介 ${kind}，必须同时提供 expression、relationship、production 三项制作说明`);
+          if (kind === 'text' && [block.expression,block.relationship,block.production].some(value=>value!==undefined)) throw new Error(`${blockLabel} 是文字块，不能携带 expression/relationship/production（只有选了非 text 媒介才提供）`);
           const fidelity = checkItemFidelity({text:blockText(block),sourceText:block.sourceIds.map(id=>sources.get(id)).join('\n')});
-          if (!fidelity.accepted) fail('block-fidelity', page.pageId, `${block.id}: ${JSON.stringify(fidelity.issues)}`);
+          if (!fidelity.accepted) fail('block-fidelity', page.pageId, `${blockLabel} 的文案与来源不一致：${JSON.stringify(fidelity.issues)}`);
         }
       }
       if (!simple || page.readingOrder !== undefined) if (!Array.isArray(page.readingOrder) || page.readingOrder.length !== page.groups.length || new Set(page.readingOrder).size !== page.groups.length || page.groups.some(g=>!page.readingOrder.includes(g.id))) throw new Error('readingOrder须恰好包含全部组');

@@ -13,8 +13,10 @@ export function resolveGrayLayout(plan, selection, area, { measureBody, fitText 
     const n = ids.length, gap = 24;
     if (!choice || !['single','row','column','grid'].includes(choice.type) || Object.keys(choice).some(k=>!['type','weights','columns'].includes(k))) throw new Error('只能选择single/row/column/grid，不能返回坐标或其他字段');
     if (choice.type === 'single' && n !== 1) throw new Error('single只能承载一个内容组');
-    if (choice.weights !== undefined && (choice.type!=='row' || !Array.isArray(choice.weights) || choice.weights.length!==n || choice.weights.some(w=>!Number.isFinite(w)||w<=0))) throw new Error('weights必须是row逐组正数权重');
-    if (choice.columns !== undefined && (choice.type!=='grid' || !Number.isInteger(choice.columns) || choice.columns<1 || choice.columns>n)) throw new Error('columns必须是grid合法列数');
+    if (choice.weights !== undefined && choice.type !== 'row') throw new Error(`weights 只能用于 row；当前 type=${choice.type}，去掉 weights 即可（${choice.type} 的空间分配由程序按实文高度自动处理）`);
+    if (choice.type === 'row' && choice.weights !== undefined && (!Array.isArray(choice.weights) || choice.weights.length !== n || choice.weights.some(w => !Number.isFinite(w) || w <= 0))) throw new Error(`row 的 weights 必须是长度 ${n}（与组数一致）的正数数组；当前收到 ${JSON.stringify(choice.weights)}。本页组数：${n}（${ids.join('、')}）`);
+    if (choice.columns !== undefined && choice.type !== 'grid') throw new Error(`columns 只能用于 grid；当前 type=${choice.type}，去掉 columns 即可`);
+    if (choice.columns !== undefined && (!Number.isInteger(choice.columns) || choice.columns < 1 || choice.columns > n)) throw new Error(`grid 的 columns 必须是 1 到 ${n} 之间的整数（本页 ${n} 个组）；当前收到 ${JSON.stringify(choice.columns)}`);
     const columns = choice.columns ?? Math.ceil(Math.sqrt(n));
     const weights = choice.weights ?? ids.map(()=>1), total = weights.reduce((a,b)=>a+b,0);
     const widths = ids.map((_,i)=> choice.type==='row' ? (area.width-gap*(n-1))*weights[i]/total : choice.type==='grid' ? (area.width-gap*(columns-1))/columns : area.width);

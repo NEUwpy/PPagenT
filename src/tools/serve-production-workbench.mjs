@@ -619,73 +619,70 @@ async function executeRunnerRun(targetRunDir, summary, recorder, { argv, mode = 
  */
 async function executeGrayRun(targetRunDir, summary, recorder, { mode = "first" } = {}) {
   const startedAt = Date.now();
-  // 模型事件按当时正在进行的步骤记账。灰稿运行器不自己发阶段事件：
-  // 步骤由磁盘产物推导（graySnapshot.currentStage 是同一处实现），推导失败就沿用上一次，不编新阶段。
-  let lastStage = "semantic-planning";
+  // Agent 闭环（src/runner/gray-agent.mjs）：模型自己编排规划、检查、审稿与渲染，程序只提供工具与闸门。
+  // 工作台在这里只负责：构造 provider、把模型与工具事件转发给记录器、把结果写进 summary。
+  const stage = "gray-agent";
   try {
-    const [{ runGrayDraft }, { buildChatProviderFromEnv }] = await Promise.all([
-      import("../runner/gray-draft.mjs"),
+    const [{ runGrayAgent }, { buildChatProviderFromEnv }] = await Promise.all([
+      import("../runner/gray-agent.mjs"),
       import("../runner/chat-provider.mjs"),
     ]);
-    const observe = async (event) => {
-      if (event.type === "api-call" && event.status === "running") {
-        const snapshot = await graySnapshot(targetRunDir).catch(() => null);
-        if (snapshot?.currentStage) lastStage = snapshot.currentStage;
-      }
-      await recorder.observe({
-        ...event,
-        source: "model",
-        stage: lastStage,
-        ...(event.type === "api-call" ? { provider: endpointHost(event.endpoint) } : {}),
-      });
-    };
-    const provider = await buildChatProviderFromEnv({ root: projectRoot, maxTokens: 24000, observer: observe });
-
-    if (mode === "resume") {
-      const prep = await prepareGrayResume(targetRunDir);
-      if (prep.moved) {
+    const provider = await buildChatProviderFromEnv({
+      root: projectRoot, maxTokens: 24000,
+      observer: async (event) => {
         await recorder.observe({
-          source: "workbench", type: "stage-call", status: "info", stage: "semantic-planning",
-          output: { interruptedRevision: prep.moved, note: `未完成的第 ${prep.revision} 轮目录已改名保留：${prep.moved}` },
+          ...event,
+          source: "model",
+          stage,
+          ...(event.type === "api-call" ? { provider: endpointHost(event.endpoint) } : {}),
         });
-      }
-    }
-
-    const state = await runGrayDraft({
+      },
+    });
+    const result = await runGrayAgent({
       source: path.join(targetRunDir, "input", "normalized.md"),
       output: targetRunDir,
       area: summary.grayArea,
       root: projectRoot,
       provider,
-      maxRevisions: 3,
-      resume: mode === "resume",
-      existingOutput: true,
+      maxTurns: 20,
+      observer: async (event) => { await recorder.observe({ ...event, source: "workbench", stage }); },
     });
-
-    // runGrayDraft 正常返回 = 已渲染完并停在等待审阅；别的终态会在 catch 里。
-    const gray = state.grayDraft;
+    const gray = result.state.grayDraft;
     summary.model = provider.model;
-    summary.status = "awaiting-user-review";
-    summary.gray = { status: gray.status, humanReview: gray.humanReview, revisions: gray.history.length, area: gray.area };
-    summary.pageCount = state.pages.length;
-    summary.deckTitle = state.deckBrief?.title ?? null;
+    summary.gray = {
+      status: gray.status, humanReview: gray.humanReview, agent: true,
+      turns: result.loop.turns.length, renders: gray.renders.length,
+    };
+    if (gray.status === "awaiting-user-review") {
+      summary.status = "awaiting-user-review";
+      summary.deckTitle = result.state.deckBrief?.title ?? null;
+      summary.pageCount = result.state.pages?.length ?? 0;
+      delete summary.error;
+      Object.assign(summary, mergeAttemptOutcome(summary, { outcome: "awaiting-user-review", durationMs: Date.now() - startedAt }));
+    } else {
+      // 循环没有在预算内交付：如实记失败，不粉饰成"停在原地"——Agent 没有可从断点续跑的状态。
+      summary.status = "failed";
+      summary.error = {
+        stage, code: "AGENT_NOT_DELIVERED",
+        message: result.state.runtimeFailure?.message ?? `Agent 循环停止：${result.loop.stopReason}（${result.loop.turns.length} 轮，${gray.renders.length} 次渲染尝试）`,
+      };
+      Object.assign(summary, mergeAttemptOutcome(summary, { outcome: "failed", durationMs: Date.now() - startedAt }));
+    }
     summary.finishedAt = new Date().toISOString();
     summary.durationMs = Date.now() - startedAt;
     summary.artifacts = await grayArtifacts(targetRunDir);
-    delete summary.error;
-    Object.assign(summary, mergeAttemptOutcome(summary, { outcome: "awaiting-user-review", durationMs: Date.now() - startedAt }));
   } catch (error) {
     await recorder.observe({
-      source: "workbench", type: "delivery", status: "failed", stage: lastStage,
+      source: "workbench", type: "delivery", status: "failed", stage,
       durationMs: Date.now() - startedAt,
       error: { name: error?.name, code: error?.code, message: error?.message ?? String(error) },
     });
     summary.status = "failed";
     summary.finishedAt = new Date().toISOString();
     summary.durationMs = Date.now() - startedAt;
-    summary.error = { name: error?.name, code: error?.code, stage: lastStage, message: error?.message ?? String(error) };
+    summary.error = { name: error?.name, code: error?.code, stage, message: error?.message ?? String(error) };
     Object.assign(summary, mergeAttemptOutcome(summary, { outcome: "failed", durationMs: Date.now() - startedAt }));
-    // 失败时更该看得见灰稿运行器已经写到哪一步：保留已产出的文件清单。
+    // 失败时更该看得见 Agent 已经写到哪一步：保留已产出的文件清单。
     summary.artifacts = await grayArtifacts(targetRunDir).catch(() => []);
   } finally {
     await recorder.flush();

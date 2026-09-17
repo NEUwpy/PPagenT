@@ -21,6 +21,7 @@ export async function runToolLoop({
   maxTurns = 16,
   maxStalls = 2,
   onTurn = null,
+  onReply = null,
 }) {
   if (!provider?.complete) throw new Error("runToolLoop 需要一个 provider");
   if (typeof shouldStop !== "function") throw new Error("runToolLoop 需要 shouldStop：停止条件必须是工具写下的状态，不能靠模型自述");
@@ -42,6 +43,9 @@ export async function runToolLoop({
     for (const [key, value] of Object.entries(reply.usage ?? {})) {
       if (Number.isFinite(value)) usage.tokens[key] = (usage.tokens[key] ?? 0) + value;
     }
+    // 模型这一轮的完整回复（正文 + 工具调用）先交给调用方。工具处理器可能需要正文里的内容
+    // （例如大对象走正文、工具只做动作），派发之前必须能看到它。
+    if (onReply) await onReply(reply);
 
     // 模型没调工具：给它有限次数的纠正机会，而不是当成"做完了"。
     if (!reply.toolCalls.length) {

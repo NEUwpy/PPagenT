@@ -125,6 +125,7 @@ export async function grayArtifacts(runDir) {
     if (await exists(path.join(runDir, name))) push(label, kind, name);
   }
   if (preview.editableCheckPath) push("可编辑性检查", "json", preview.editableCheckPath);
+  if (await exists(path.join(runDir, "agent", "transcript.json"))) push("Agent 轨迹", "json", "agent/transcript.json");
   return items;
 }
 
@@ -147,8 +148,40 @@ async function planSummary(runDir) {
 /**
  * 每步的文件清单（相对运行目录）。前端用 artifact 接口按需读取。
  * activeRevision 为 null（规划一轮都没开完）时只给稿件进入一步。
+ * Agent 运行（gray-agent-1）按轮次组织：每一步是 Agent 的一轮对话。
  */
 export async function grayStepFiles(runDir, revision) {
+  const state = await readJsonIfExists(path.join(runDir, "state.json"));
+  if (state?.grayDraft?.version === "gray-agent-1") {
+    const files = {
+      system: {
+        inputs: [],
+        prompts: [],
+        outputs: [{ label: "Agent 系统提示词与共用规则（每轮随消息发送）", path: "agent-system-prompt.txt" }],
+        checks: [],
+      },
+    };
+    for (const turn of Array.isArray(state.grayDraft.turns) ? state.grayDraft.turns : []) {
+      files[`turn-${turn.turn}`] = {
+        inputs: [],
+        prompts: [],
+        outputs: [{ label: "模型输出与工具调用（含工具结果）", path: `agent/turn-${turn.turn}/response.json` }],
+        checks: [],
+      };
+    }
+    const preview = await grayPreview(runDir);
+    files.delivered = {
+      inputs: [],
+      prompts: [],
+      outputs: [
+        ...(preview.pptxPath ? [{ label: "灰稿可编辑 PPTX", path: preview.pptxPath }] : []),
+        { label: "最终计划（含坐标）", path: "plan.json" },
+        { label: "Agent 轨迹摘要（轮数、工具序列、用量）", path: "agent/transcript.json" },
+      ],
+      checks: preview.editableCheckPath ? [{ label: "可编辑性检查（逐字回读 PPTX）", path: preview.editableCheckPath }] : [],
+    };
+    return files;
+  }
   const prefix = revision === null ? null : `revision-${revision}/`;
   const layoutFiles = { responses: [], resolved: [], checks: [] };
   if (prefix) {
@@ -264,6 +297,7 @@ function stepStatusForRevision({ files, expressionPromptReady, revisionDone, rev
 export async function graySnapshot(runDir) {
   const state = await readJsonIfExists(path.join(runDir, "state.json"));
   const gray = state?.grayDraft ?? null;
+  if (gray?.version === "gray-agent-1") return agentSnapshot(runDir, state, gray);
   const history = Array.isArray(gray?.history) ? gray.history : [];
   const revisionNumbers = [];
   try {
@@ -344,6 +378,42 @@ export async function graySnapshot(runDir) {
   };
 }
 
+/** Agent 运行（gray-agent-1）的快照：步骤是 Agent 的轮次，产物与预览在运行根目录。 */
+async function agentSnapshot(runDir, state, gray) {
+  const preview = await grayPreview(runDir);
+  const turns = Array.isArray(gray.turns) ? gray.turns : [];
+  const renders = Array.isArray(gray.renders) ? gray.renders : [];
+  const running = gray.status === "planning" || gray.status === "rendering";
+  const steps = [
+    { id: "system", status: "succeeded", tools: [] },
+    ...turns.map((turn, index) => ({
+      id: `turn-${turn.turn ?? index + 1}`,
+      status: running && index === turns.length - 1 ? "running" : "succeeded",
+      tools: Array.isArray(turn.tools) ? turn.tools : [],
+      stalled: Boolean(turn.stalled),
+    })),
+  ];
+  if (gray.status === "awaiting-user-review") steps.push({ id: "delivered", status: "succeeded", tools: [] });
+  if (gray.status === "blocked") steps.push({ id: "blocked", status: "failed", tools: [] });
+  return {
+    kind: "gray", agent: true,
+    status: gray.status,
+    humanReview: gray.humanReview ?? null,
+    area: gray.area ?? null,
+    provider: gray.provider ?? null,
+    providerSettings: gray.providerSettings ?? null,
+    sourceHash: gray.sourceHash ?? null,
+    runtimeFailure: state?.runtimeFailure ?? null,
+    revisions: [], activeRevision: null,
+    steps,
+    currentStage: steps.find((step) => step.status === "running")?.id ?? null,
+    preview,
+    plan: await planSummary(runDir),
+    agentTurns: turns,
+    agentRenders: renders,
+  };
+}
+
 /**
  * 这条灰稿运行还能不能接着跑。**只判定，不跑**。
  *
@@ -359,6 +429,7 @@ export function grayContinuability({ summary, state, isArchive = false }) {
   if (!state) return deny("运行目录里没有 state.json，取不到灰稿状态。");
   const gray = state.grayDraft;
   if (!gray) return deny("state.json 里没有灰稿状态，无法续跑。");
+  if (gray.version === "gray-agent-1") return deny("这条运行走的是灰稿 Agent 闭环：修订与续跑能力还在建设中（当前按需重跑整条线），暂不能从这里继续。");
   if (["normalizing", "running"].includes(summary.status)) return deny("这条运行正在进行中，等它结束或中断后再继续。");
 
   const revision = Array.isArray(gray.history) ? gray.history.length : 0;
