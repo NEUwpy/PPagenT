@@ -4,9 +4,9 @@ import { pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
 import { createHash } from 'node:crypto';
 import { buildChatProviderFromEnv } from './chat-provider.mjs';
-import { newRunState, upsertPageBriefs, validateContent, writeState, renderContentMarkdown, renderStateMarkdown } from './state.mjs';
+import { newRunState, upsertPageBriefs, writeState, renderContentMarkdown, renderStateMarkdown } from './state.mjs';
 import { fitChineseTextToFrame } from '../render/chinese-typography.mjs';
-import { SEMANTIC_CONTRACT, SEMANTIC_REVIEW_CONTRACT, EXPRESSION_CONTRACT, LAYOUT_CONTRACT, validateSemanticPlan, bindSemanticLayout, bindGrayExpressions, semanticPlanFromPages, blockText, regionBody, grayDisplayBlocks, semanticReviewInput, SKETCH_KINDS } from './gray-semantics.mjs';
+import { SEMANTIC_CONTRACT, SEMANTIC_REVIEW_CONTRACT, EXPRESSION_CONTRACT, LAYOUT_CONTRACT, validateSemanticPlan, bindSemanticLayout, bindGrayExpressions, semanticPlanFromPages, blockText, regionBody, grayDisplayBlocks, semanticReviewInput, SKETCH_KINDS, grayCoverageIssues } from './gray-semantics.mjs';
 import { resolveGrayLayout } from './gray-layout.mjs';
 import { resolveLayoutTree } from '../composition/resolve.mjs';
 
@@ -170,7 +170,7 @@ export function validateGrayPlan(base, plan, area) {
       try { state = upsertPageBriefs(state, [structuredClone(page)]); }
       catch (error) { issues.push({code:'page-fidelity-or-source',pageId:page.pageId,message:error.message}); state.pages.push(structuredClone(page)); }
     }
-    issues.push(...validateContent(state).issues);
+    issues.push(...grayCoverageIssues(state));
     for (const page of state.pages) {
       if (!requiredText(page.title) || !requiredText(page.claim)) throw new Error(`${page.pageId} 缺少主题句`);
       const topic = fitGrayText(page.claim, area.width * 0.88, 40, 28);
