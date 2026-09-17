@@ -315,12 +315,28 @@ export async function readState(statePath) {
   return JSON.parse(await fs.readFile(statePath, "utf8"));
 }
 
+/**
+ * rename 有界重试：Windows 上临时文件改名可能撞锁（EPERM/EBUSY/EACCES——读进程、杀软、索引服务），
+ * 有限次重试 + 短退避后仍失败才抛出；不做复杂锁机制（评审 #8 批准范围）。rename 可注入，便于测试。
+ */
+export async function renameWithRetry(temp, target, { rename = fs.rename, attempts = 5, sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms)) } = {}) {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await rename(temp, target);
+    } catch (error) {
+      const retryable = ['EPERM', 'EBUSY', 'EACCES'].includes(error?.code);
+      if (!retryable || attempt >= attempts) throw error;
+      await sleep(40 * attempt);
+    }
+  }
+}
+
 /** 原子写：先写同目录临时文件再 rename。state.json 是唯一真源，半截文件比崩溃更糟。 */
 async function writeAtomic(target, text) {
   const temp = `${target}.tmp`;
   await fs.mkdir(path.dirname(target), { recursive: true });
   await fs.writeFile(temp, text);
-  await fs.rename(temp, target);
+  await renameWithRetry(temp, target);
 }
 
 export async function writeState(statePath, state) {
