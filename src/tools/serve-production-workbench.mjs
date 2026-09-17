@@ -644,7 +644,7 @@ async function executeGrayRun(targetRunDir, summary, recorder, { mode = "first" 
       area: summary.grayArea,
       root: projectRoot,
       provider,
-      maxTurns: 20,
+      maxTurns: 24,
       observer: async (event) => { await recorder.observe({ ...event, source: "workbench", stage }); },
     });
     const gray = result.state.grayDraft;
