@@ -12,8 +12,13 @@ import { candidateSetsForVisualDirector } from "../agent/model-director-provider
 import {
   RUNNER_STAGES, RUNNER_HANDOFFS, RUNNER_PIPELINE_NOTE, STAGE_OF_PHASE,
   archiveRunSummary, runnerArtifacts, readRunnerDeckTitle, exists,
-  continuability, readAttempts, mergeAttemptOutcome, stageProvenance, interruptedStageCalls,
+  continuability, readAttempts, mergeAttemptOutcome, stageProvenance,
+  interruptedStageCalls,
 } from "../workbench/runner-run-adapter.mjs";
+import {
+  GRAY_STAGES, GRAY_HANDOFFS, GRAY_PIPELINE_NOTE,
+  grayArtifacts, graySnapshot, grayContinuability, prepareGrayResume, grayStepFiles,
+} from "../workbench/gray-run-adapter.mjs";
 
 function option(name, fallback) {
   const index = process.argv.indexOf(name);
@@ -165,10 +170,14 @@ async function readSummary(targetRunDir) {
 }
 
 /**
- * 仓库证据目录里的历史运行。**只列不写**：没有 summary.json 的目录才算历史证据；
- * 已经有 summary.json 的说明它是工作台运行被搬进来的，按工作台记录读取，不重复列。
+ * 仓库证据目录里的历史运行。**默认不再列出**：那些运行时的工作台是旧 API 生产线与薄运行器的证据，
+ * 工作台现在只服务灰稿线（2026-09-17 用户决定不兼容旧线）。文件仍留在 Git 的 harness/runs 里，
+ * 要临时恢复查看把开关改回 true 即可。相关的只读保护（resolveRunDir / archiveRunIds）保留，
+ * 防止未来恢复时误删仓库证据。
  */
+const showArchivedRuns = false;
 async function listArchiveRuns() {
+  if (!showArchivedRuns) return [];
   const entries = await fs.readdir(archiveRoot, { withFileTypes: true }).catch(() => []);
   const summaries = [];
   for (const entry of entries) {
@@ -600,19 +609,111 @@ async function executeRunnerRun(targetRunDir, summary, recorder, { argv, mode = 
 }
 
 /**
+ * 走灰稿运行器（`src/runner/gray-draft.mjs`）。**进程内调用**，理由同 executeRunnerRun。
+ *
+ * 与薄运行器的差别（照实写在这里，不粉饰）：
+ *   ① 灰稿运行器以"修订轮"为单位：每轮跑语义规划→表达选择→审稿→布局，任一检查不过就带反馈重来；
+ *   ② 终态是 awaiting-user-review——灰稿等到人看为止，工作台不代用户通过；
+ *   ③ 续跑语义是"再来一轮修订"（带上一轮检查记录），不是从崩溃点恢复中间步骤；
+ *      轮中途被杀会留下未完成的 revision-N 目录，续跑前由 prepareGrayResume 改名保留。
+ */
+async function executeGrayRun(targetRunDir, summary, recorder, { mode = "first" } = {}) {
+  const startedAt = Date.now();
+  // 模型事件按当时正在进行的步骤记账。灰稿运行器不自己发阶段事件：
+  // 步骤由磁盘产物推导（graySnapshot.currentStage 是同一处实现），推导失败就沿用上一次，不编新阶段。
+  let lastStage = "semantic-planning";
+  try {
+    const [{ runGrayDraft }, { buildChatProviderFromEnv }] = await Promise.all([
+      import("../runner/gray-draft.mjs"),
+      import("../runner/chat-provider.mjs"),
+    ]);
+    const observe = async (event) => {
+      if (event.type === "api-call" && event.status === "running") {
+        const snapshot = await graySnapshot(targetRunDir).catch(() => null);
+        if (snapshot?.currentStage) lastStage = snapshot.currentStage;
+      }
+      await recorder.observe({
+        ...event,
+        source: "model",
+        stage: lastStage,
+        ...(event.type === "api-call" ? { provider: endpointHost(event.endpoint) } : {}),
+      });
+    };
+    const provider = await buildChatProviderFromEnv({ root: projectRoot, maxTokens: 24000, observer: observe });
+
+    if (mode === "resume") {
+      const prep = await prepareGrayResume(targetRunDir);
+      if (prep.moved) {
+        await recorder.observe({
+          source: "workbench", type: "stage-call", status: "info", stage: "semantic-planning",
+          output: { interruptedRevision: prep.moved, note: `未完成的第 ${prep.revision} 轮目录已改名保留：${prep.moved}` },
+        });
+      }
+    }
+
+    const state = await runGrayDraft({
+      source: path.join(targetRunDir, "input", "normalized.md"),
+      output: targetRunDir,
+      area: summary.grayArea,
+      root: projectRoot,
+      provider,
+      maxRevisions: 3,
+      resume: mode === "resume",
+      existingOutput: true,
+    });
+
+    // runGrayDraft 正常返回 = 已渲染完并停在等待审阅；别的终态会在 catch 里。
+    const gray = state.grayDraft;
+    summary.model = provider.model;
+    summary.status = "awaiting-user-review";
+    summary.gray = { status: gray.status, humanReview: gray.humanReview, revisions: gray.history.length, area: gray.area };
+    summary.pageCount = state.pages.length;
+    summary.deckTitle = state.deckBrief?.title ?? null;
+    summary.finishedAt = new Date().toISOString();
+    summary.durationMs = Date.now() - startedAt;
+    summary.artifacts = await grayArtifacts(targetRunDir);
+    delete summary.error;
+    Object.assign(summary, mergeAttemptOutcome(summary, { outcome: "awaiting-user-review", durationMs: Date.now() - startedAt }));
+  } catch (error) {
+    await recorder.observe({
+      source: "workbench", type: "delivery", status: "failed", stage: lastStage,
+      durationMs: Date.now() - startedAt,
+      error: { name: error?.name, code: error?.code, message: error?.message ?? String(error) },
+    });
+    summary.status = "failed";
+    summary.finishedAt = new Date().toISOString();
+    summary.durationMs = Date.now() - startedAt;
+    summary.error = { name: error?.name, code: error?.code, stage: lastStage, message: error?.message ?? String(error) };
+    Object.assign(summary, mergeAttemptOutcome(summary, { outcome: "failed", durationMs: Date.now() - startedAt }));
+    // 失败时更该看得见灰稿运行器已经写到哪一步：保留已产出的文件清单。
+    summary.artifacts = await grayArtifacts(targetRunDir).catch(() => []);
+  } finally {
+    await recorder.flush();
+    await writeSummary(targetRunDir, summary);
+    if (activeRunId === summary.runId) activeRunId = null;
+  }
+}
+
+/**
  * 运行详情的载荷。`continuable`、`attempts`、`stageProvenance` 都**不落盘**，每次读时现算：
  * 续跑资格取决于磁盘上 state.json 的当前阶段，存进 summary 早晚会和它不一致。
  * 阶段沿用也放在这里算，不在模板里重写一遍——同一件事只该有一份实现。
+ * 灰稿线额外附上 graySnapshot（磁盘产物现算）：步骤阅读器、revision 切换与灰稿预览都靠它。
  */
 async function describeRun(targetRunDir, runId) {
   const summary = await readSummary(targetRunDir);
   const state = await readJsonState(path.join(targetRunDir, "state.json")).catch(() => null);
-  return {
+  const isGray = summary.pipeline === "gray";
+  const payload = {
     ...summary,
-    continuable: continuability({ summary, state, isArchive: archiveRunIds.has(runId) }),
+    continuable: isGray
+      ? grayContinuability({ summary, state, isArchive: archiveRunIds.has(runId) })
+      : continuability({ summary, state, isArchive: archiveRunIds.has(runId) }),
     attempts: readAttempts(summary),
     stageProvenance: stageProvenance(summary),
   };
+  if (isGray) payload.gray = await graySnapshot(targetRunDir).catch(() => null);
+  return payload;
 }
 
 /**
@@ -633,7 +734,10 @@ async function continueRun(request, response, runId) {
   }
   const summary = await readSummary(targetRunDir);
   const state = await readJsonState(path.join(targetRunDir, "state.json")).catch(() => null);
-  const verdict = continuability({ summary, state, isArchive });
+  const isGray = summary.pipeline === "gray";
+  const verdict = isGray
+    ? grayContinuability({ summary, state, isArchive })
+    : continuability({ summary, state, isArchive });
   if (!verdict.allowed) return sendJson(response, isArchive ? 403 : 409, { error: verdict.reason, continuable: verdict });
 
   const body = await readJsonBody(request);
@@ -652,7 +756,8 @@ async function continueRun(request, response, runId) {
     at: new Date().toISOString(),
     fromPhase: verdict.fromPhase,
     // 阶段翻译（phase → 流水线阶段 id）只有服务端知道；一起记下来，模板就不必再抄一份映射表。
-    fromStage: STAGE_OF_PHASE[verdict.fromPhase] ?? verdict.fromPhase,
+    // 灰稿线的 fromPhase 是修订状态（awaiting-user-review 等），没有阶段映射，原样记。
+    fromStage: isGray ? verdict.fromPhase : (STAGE_OF_PHASE[verdict.fromPhase] ?? verdict.fromPhase),
     // 上一次的终态与错误原样留档：续跑的终态会覆盖 summary.status，
     // 不留快照的话，这条运行"上一次为什么停"就查不到了。
     previousStatus: summary.status ?? null,
@@ -664,10 +769,13 @@ async function continueRun(request, response, runId) {
   activeRunId = runId;
 
   const recorder = createTraceRecorder(targetRunDir);
-  const argv = mode === "recompile"
-    ? ["--run-dir", targetRunDir, "--replay"]
-    : ["--run-dir", targetRunDir, "--resume"];
-  const task = executeRunnerRun(targetRunDir, summary, recorder, { argv, mode });
+  // 灰稿线没有零模型重编译：resume 只做"再来一轮修订"。
+  const task = isGray
+    ? executeGrayRun(targetRunDir, summary, recorder, { mode })
+    : executeRunnerRun(targetRunDir, summary, recorder, {
+      argv: mode === "recompile" ? ["--run-dir", targetRunDir, "--replay"] : ["--run-dir", targetRunDir, "--resume"],
+      mode,
+    });
   activeRunTasks.set(runId, task);
   task.finally(() => activeRunTasks.delete(runId)).catch(() => {});
   return sendJson(response, 202, summary);
@@ -675,14 +783,16 @@ async function continueRun(request, response, runId) {
 
 async function createRun(request, response, url) {
   if (activeRunId) return sendJson(response, 409, { error: "已有生成任务正在运行", activeRunId });
-  const pipeline = url.searchParams.get("pipeline") === "legacy" ? "legacy" : "runner";
+  // 默认灰稿线（现行 M1）：上传稿件走到可审阅的灰稿。旧线（runner/legacy）保留为显式可选项，界面上不再列出。
+  const requestedPipeline = url.searchParams.get("pipeline");
+  const pipeline = requestedPipeline === "legacy" || requestedPipeline === "runner" ? requestedPipeline : "gray";
   // 薄运行器没有人工检查点（harness/运行流程.md：阶段不要求用户逐步批准）。
   // 用户明确勾了暂停时不能静默忽略——那等于把一次显式请求丢掉。
   const wantsManualCheckpoint = url.searchParams.get("visualCheckpoint") === "manual"
     || url.searchParams.get("nativePreviewCheckpoint") === "manual";
-  if (pipeline === "runner" && wantsManualCheckpoint) {
+  if (pipeline !== "legacy" && wantsManualCheckpoint) {
     return sendJson(response, 409, {
-      error: "薄运行器不暂停等待人工确认，因此没有表单检查点。请取消勾选“调试时暂停表单”，或把生成线切换为旧 API 生产线。",
+      error: "当前生成线不暂停等待人工确认，因此没有表单检查点。请取消勾选“调试时暂停表单”，或把生成线切换为旧 API 生产线。",
     });
   }
   // 用途标注：验证跑和正式稿一样要留在看板上，但两者不该长得一模一样——
@@ -693,6 +803,12 @@ async function createRun(request, response, url) {
   if (!supportedManuscriptExtensions.includes(extension)) {
     return sendJson(response, 415, { error: extension === ".doc" ? "请先把旧版 .doc 另存为 .docx" : `不支持 ${extension || "无扩展名"}` });
   }
+  // 灰稿线的版面尺寸：调用方可以给宽高与标签，取不到就用实验常用口径（1170×492）。
+  const grayArea = pipeline === "gray" ? {
+    width: Number.parseInt(url.searchParams.get("areaWidth") ?? "", 10) || 1170,
+    height: Number.parseInt(url.searchParams.get("areaHeight") ?? "", 10) || 492,
+    label: (url.searchParams.get("areaLabel") ?? "").trim().slice(0, 60) || "内容区",
+  } : null;
   const buffer = await readBody(request);
   const runId = `${new Date().toISOString().replace(/[-:TZ.]/g, "").slice(0, 14)}-${crypto.randomBytes(3).toString("hex")}`;
   const targetRunDir = runDir(runId);
@@ -709,15 +825,21 @@ async function createRun(request, response, url) {
     nativePreviewCheckpointMode: url.searchParams.get("nativePreviewCheckpoint") === "auto" ? "auto" : "manual",
     pipeline,
     purpose,
+    ...(grayArea ? { grayArea } : {}),
     // 阶段表随生成线走：两条线的阶段不是同一套，看板照实显示当前这条线的阶段。
-    ...(pipeline === "runner"
+    // 尝试记录从第一次就存在，续跑才有"上一次"可写。第一次没有起点阶段（从头跑），
+    // 所以 fromPhase 记 null——不编一个假起点。
+    ...(pipeline === "gray"
       ? {
-        stages: RUNNER_STAGES, handoffs: RUNNER_HANDOFFS, pipelineNote: RUNNER_PIPELINE_NOTE,
-        // 尝试记录从第一次就存在，续跑才有"上一次"可写。第一次没有起点阶段（从头跑），
-        // 所以 fromPhase 记 null——不编一个假起点。
+        stages: GRAY_STAGES, handoffs: GRAY_HANDOFFS, pipelineNote: GRAY_PIPELINE_NOTE,
         attempts: [{ attempt: 1, mode: "first", at: createdAt, fromPhase: null, fromStage: null }],
       }
-      : {}),
+      : pipeline === "runner"
+        ? {
+          stages: RUNNER_STAGES, handoffs: RUNNER_HANDOFFS, pipelineNote: RUNNER_PIPELINE_NOTE,
+          attempts: [{ attempt: 1, mode: "first", at: createdAt, fromPhase: null, fromStage: null }],
+        }
+        : {}),
     artifacts: [],
   };
   await writeSummary(targetRunDir, summary);
@@ -739,11 +861,13 @@ async function createRun(request, response, url) {
     summary.status = "running";
     summary.normalizedFormat = normalized.format;
     await writeSummary(targetRunDir, summary);
-    const task = pipeline === "runner"
-      ? executeRunnerRun(targetRunDir, summary, recorder, {
-        argv: ["--input", normalizedPath, "--run-dir", targetRunDir], mode: "first",
-      })
-      : executeRun(targetRunDir, summary, normalizedPath, recorder);
+    const task = pipeline === "gray"
+      ? executeGrayRun(targetRunDir, summary, recorder, { mode: "first" })
+      : pipeline === "runner"
+        ? executeRunnerRun(targetRunDir, summary, recorder, {
+          argv: ["--input", normalizedPath, "--run-dir", targetRunDir], mode: "first",
+        })
+        : executeRun(targetRunDir, summary, normalizedPath, recorder);
     activeRunTasks.set(runId, task);
     task.finally(() => activeRunTasks.delete(runId)).catch(() => {});
     return sendJson(response, 202, summary);
@@ -805,7 +929,8 @@ async function publicConfig() {
     maxUploadBytes,
     activeRunId,
     pipelines: {
-      default: "runner",
+      default: "gray",
+      gray: { label: "灰稿线（现行 M1）", note: GRAY_PIPELINE_NOTE, checkpoint: false },
       runner: { label: "薄运行器", note: RUNNER_PIPELINE_NOTE, checkpoint: false },
       legacy: {
         label: "旧 API 生产线",
@@ -892,6 +1017,15 @@ const server = http.createServer(async (request, response) => {
     if (nativeCheckpointMatch && request.method === "POST") return await submitNativePptCheckpoint(response, nativeCheckpointMatch[1]);
     const continueMatch = url.pathname.match(/^\/api\/workbench\/runs\/([a-z0-9-]+)\/continue$/i);
     if (continueMatch && request.method === "POST") return await continueRun(request, response, continueMatch[1]);
+    // 灰稿步骤阅读器：某一步（某轮）的文件清单。内容本身走 artifact 接口按需读取，这里只给目录。
+    const grayFilesMatch = url.pathname.match(/^\/api\/workbench\/runs\/([a-z0-9-]+)\/gray-step-files$/i);
+    if (grayFilesMatch && request.method === "GET") {
+      const targetRunDir = await resolveRunDir(grayFilesMatch[1]);
+      const rawRevision = url.searchParams.get("revision");
+      const revision = rawRevision === null || rawRevision === "" ? null : Number(rawRevision);
+      if (revision !== null && !Number.isInteger(revision)) return sendJson(response, 400, { error: "revision 必须是整数" });
+      return sendJson(response, 200, { files: await grayStepFiles(targetRunDir, revision), revision });
+    }
     const match = url.pathname.match(/^\/api\/workbench\/runs\/([a-z0-9-]+)(?:\/(events|trace|artifact))?(?:\/([a-z0-9-]+))?$/i);
     if (match) {
       const targetRunDir = await resolveRunDir(match[1]);
@@ -946,7 +1080,8 @@ for (const existingRun of existingRuns) {
   // 仓库证据目录里的记录不在 runsRoot 里，也不可能处于"进行中"；只处理工作台自己的运行。
   const targetRunDir = path.join(runsRoot, existingRun.runId);
   if (!(await exists(path.join(targetRunDir, "summary.json")))) continue;
-  const resumable = existingRun.pipeline === "runner";
+  // 薄运行器与灰稿线的状态都在 state.json 里：进程中断后能续跑，不像旧线的内存检查点那样只能重来。
+  const resumable = existingRun.pipeline === "runner" || existingRun.pipeline === "gray";
   await writeSummary(targetRunDir, {
     ...existingRun,
     status: "failed",

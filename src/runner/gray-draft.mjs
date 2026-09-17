@@ -196,12 +196,14 @@ export async function renderGrayDraft(state, output) {
   return inspection;
 }
 
-export async function runGrayDraft({source, output, area, root=process.cwd(), provider, maxRevisions=3, resume=false, feedback=null, freshPlan=false}) {
+export async function runGrayDraft({source, output, area, root=process.cwd(), provider, maxRevisions=3, resume=false, feedback=null, freshPlan=false, existingOutput=false}) {
   area=validateGrayArea(area);
   const contentArea={width:area.width,height:area.height};
   if (!Number.isInteger(maxRevisions) || maxRevisions < 0 || maxRevisions > 20) throw new Error('max-revisions 必须为0..20整数');
   // Refuse accidental reuse: previous failures and other work are evidence.
-  if (!resume) await fs.mkdir(output,{recursive:false});
+  // existingOutput 只给工作台这类"输出目录在调用前已存在（含 input/ 等）且本次以全新 runId 建立"的调用方；
+  // CLI 不暴露该参数，默认仍拒绝已存在目录，防止静默复用旧实验目录。
+  if (!resume && !existingOutput) await fs.mkdir(output,{recursive:false});
   const raw=await fs.readFile(source,'utf8');
   let state=resume?JSON.parse(await fs.readFile(path.join(output,'state.json'),'utf8')):newRunState(raw,path.resolve(source));
   if(resume && (state.grayDraft.sourceHash!==sha(raw)||state.grayDraft.area.width!==area.width||state.grayDraft.area.height!==area.height)) throw new Error('续跑原稿或尺寸不匹配');
