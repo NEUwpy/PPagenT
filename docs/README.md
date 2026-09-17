@@ -29,11 +29,11 @@ Harness 运行资料已集中归入 [harness 内容包](../harness/README.md)，
 | [运行配置](契约/运行配置信息.md) | Provider、密钥与环境 |
 | [更新日志](更新日志.md) | 当前状态及历史变更 |
 
-[产品叙事](产品叙事.md)用于说明价值；[PPT 制作规则参考](PPT制作规则参考/README.md)保存学习来源与实验依据；`方向讨论/` 中的页面编排能力计划是当前项目进度台账，其余方向讨论、`外部项目学习/` 和 `archive/` 是研究或历史，不直接注入生成任务。
+[产品叙事](产品叙事.md)用于说明价值；[PPT 制作规则参考](PPT制作规则参考/README.md)保存全部外部学习来源（含原「设计手册」与「外部项目学习」）与实验依据；`方向讨论/` 中的页面编排能力计划是当前项目进度台账，其余方向讨论和 `archive/` 是研究或历史，不直接注入生成任务。
 
 ## 权威边界
 
-已合并大学咨询式实验：[三篇整稿及首轮对照](../experiments/university-skin-pilot/stability-01/index.html)、[Luna High 测试结论](../experiments/university-skin-pilot/stability-01/RESULTS.md)、[结构主题实验](../experiments/structure-theme-01/REPORT.md)。`设计手册/` 与实验内冻结提示保留为候选和复现证据，不与 `rules/` 并行维护现行规则。原分支的[方向校正](方向校正.md)和[架构决策](工作流/正式生成/生成线架构决策.md)保留历史全文。
+已合并大学咨询式实验：[三篇整稿及首轮对照](../experiments/university-skin-pilot/stability-01/index.html)、[Luna High 测试结论](../experiments/university-skin-pilot/stability-01/RESULTS.md)、[结构主题实验](../experiments/structure-theme-01/REPORT.md)。原「设计手册」的整页指南与麦肯锡素材现已归入 [PPT 制作规则参考](PPT制作规则参考/README.md)（排版/风格分类），与实验内冻结提示同为候选和复现证据，不与 `rules/` 并行维护现行规则；历史实验记录中指向旧 `设计手册/`、`外部项目学习/` 的链接未逐一追改。原分支的[方向校正](方向校正.md)和[架构决策](工作流/正式生成/生成线架构决策.md)保留历史全文。
 
 需求说明用户要什么；产品定义说明现在与以后怎样分工；`rules/` 是被选择加载的行为规则；Schema、资产声明和代码限定实际可执行能力。规则不能自行扩大程序权限。发现冲突应修正责任文件，而不是增加另一份同义说明。
 
