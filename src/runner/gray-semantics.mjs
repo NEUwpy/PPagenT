@@ -51,6 +51,25 @@ export function markFlowSources(sources) {
  * 覆盖检查的灰稿侧封装：validateContent 的缺源问题里剔除流转信息来源（文件头尾等无需覆盖）。
  * 只服务灰稿线；正式线（tools/generation.mjs）继续直调 validateContent，逐字覆盖保证不被动摇。
  */
+/**
+ * 类别成组检查（规则毕业：提示词→checker）。原稿的类别线索（"首先是两点不足""其次是四点感悟"）
+ * 必须映射为组：组标题承载类别词、条目作为组内块。判定特征确定（前缀+数词+量词+类别词），
+ * 误报面窄（不做数词裸匹配："六个月""三个街道""三个市场化"都不算线索）。
+ * fail 级：验证过 r7 形态可达（20260917232451），漂移样本为迁移 A/B 与四稿基线（条目即组）。
+ */
+const CATEGORY_CUE = /(?:首先|其次|再次|最后)是[，,]?([一二两三四五六七八九十]+)(?:点|项|条)([\u4e00-\u9fa5]{1,6})[。；]/gu;
+
+export function categoryCues(sources) {
+  const cues = new Map();
+  for (const source of sources ?? []) {
+    for (const match of String(source.text ?? '').matchAll(CATEGORY_CUE)) {
+      const noun = match[2];
+      if (noun && !cues.has(noun)) cues.set(noun, { count: match[1], noun, phrase: match[0].replace(/[。；]$/u, '') });
+    }
+  }
+  return [...cues.values()];
+}
+
 export function grayCoverageIssues(state) {
   const flowIds = new Set((state.sources ?? []).filter(source => source.flow).map(source => source.id));
   const issues = [];
@@ -264,6 +283,13 @@ export function validateSemanticPlan(base, plan) {
         if (String(block.text ?? '').replace(/\s+/gu, '').includes(needle)) {
           fail('flow-source-onscreen', page.pageId, `流转信息来源（${source.flow}）不得上屏：${source.id} 的内容出现在块 ${block.id}；正文只写实质内容，不搬文件头尾`);
         }
+      }
+    }
+    // 类别成组：原稿有类别线索时，类别词必须由组标题承载（页标题不算）。
+    for (const cue of categoryCues(base.sources)) {
+      const headings = plan.pages.flatMap(page => (page.groups ?? []).map(group => String(group.heading ?? '')));
+      if (!headings.some(heading => heading.includes(cue.noun))) {
+        fail('category-not-grouped', plan.pages[0]?.pageId, `原稿有类别线索「${cue.phrase}」：类别必须成为组——组标题承载「${cue.noun}」（跨页用「${cue.noun}＋本页条目提示」），条目作为组内块；当前没有任何组标题承载它（写在页标题不算）。请重组后再提交。`);
       }
     }
     const state = upsertPageBriefs({...base, pages:[], phase:'content', deckBrief:plan.deckBrief}, semanticPages(plan));
