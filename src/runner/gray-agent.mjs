@@ -153,7 +153,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
       handler: async () => {
         const { plan, source, note } = resolvePlan();
         const report = validateSemanticPlan(base, plan);
-        return { accepted: report.accepted, issues: report.issues.slice(0, 20), coverage: report.coverage, planSource: source, ...(note ? { note } : {}) };
+        return { accepted: report.accepted, issues: report.issues.slice(0, 20), coverage: report.coverage, planSource: source, ...(report.warnings?.length ? { warnings: report.warnings } : {}), ...(note ? { note } : {}) };
       },
     }),
     defineTool({
@@ -237,7 +237,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         agentState.grayDraft.programCheck = { ...report, state: undefined };
         await saveAgentState();
         const preview = renderState.pages.map((page, index) => `${path.relative(output, attemptDir)}/preview/slide-${String(index + 1).padStart(2, '0')}.png`);
-        return { accepted: true, preview, pptx: `${path.relative(output, attemptDir)}/gray-draft.pptx`, pages: renderState.pages.length, planSource, ...(planNote ? { note: planNote } : {}) };
+        return { accepted: true, preview, pptx: `${path.relative(output, attemptDir)}/gray-draft.pptx`, pages: renderState.pages.length, planSource, ...(report.warnings?.length ? { warnings: report.warnings } : {}), ...(planNote ? { note: planNote } : {}) };
       },
     }),
   ];

@@ -173,12 +173,15 @@ function sketchBodyLayout(item, width, fontSize, availableHeight) {
 /** Extends existing page briefs: sources/text stay in items; composition binds item IDs. */
 export function validateGrayPlan(base, plan, area) {
   const issues = [];
+  const warnings = [];
   let state;
   try {
     if (!plan?.deckBrief || !Array.isArray(plan.pages) || !plan.pages.length || plan.pages.length > 100) throw new Error('缺少 deckBrief/pages 或页数超出 1..100');
     if (new Set(plan.pages.map(p => p.pageId)).size !== plan.pages.length) throw new Error('pageId 重复');
     if (plan.pages.some(p=>p.semantics) || ['gray-draft-2','gray-draft-3'].includes(base.grayDraft?.version)) {
-      issues.push(...validateSemanticPlan(base,semanticPlanFromPages(plan)).issues);
+      const semanticReport = validateSemanticPlan(base,semanticPlanFromPages(plan));
+      issues.push(...semanticReport.issues);
+      warnings.push(...(semanticReport.warnings ?? []));
       for (const page of plan.pages) if (JSON.stringify(page.composition?.regions?.map(r=>r.itemId)) !== JSON.stringify(page.semantics?.readingOrder)) throw new Error(`${page.pageId} 区域顺序与语义阅读顺序不同`);
     }
     state = { ...base, pages: [], phase: 'content', deckBrief: plan.deckBrief };
@@ -215,7 +218,7 @@ export function validateGrayPlan(base, plan, area) {
       }
     }
   } catch (error) { issues.push({ code: 'invalid-plan', message: error.message }); }
-  return { accepted: issues.length === 0, issues, state, coverage: '来源引用、数字/引号保真、区域边界/重叠、固定字号保守容量；不证明语义忠实或视觉美观。' };
+  return { accepted: issues.length === 0, issues, warnings, state, coverage: '来源引用、数字/引号保真、区域边界/重叠、固定字号保守容量；不证明语义忠实或视觉美观。' };
 }
 
 

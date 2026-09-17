@@ -76,6 +76,37 @@ test('类别成组：条目即组或只写页标题都失败', () => {
   assert.equal(second.issues.filter(issue => issue.code === 'category-not-grouped').length, 2);
 });
 
+test('warn 通道：编号前缀承载与碎裂类别组被记录且不阻塞', () => {
+  const warned = {
+    schemaVersion: 'gray-plan-3',
+    deckBrief: { title: 'x', audience: 'y', objective: 'z' },
+    pages: [page('p1', '两类事项', [
+      group('g1', '不足一：甲问题', [block('b1', '甲问题。', ['s1', 's2'])]),
+      group('g2', '不足二：乙问题', [block('b2', '乙问题。', ['s2'])]),
+      group('g3', '感悟一：丙', [block('b3', '丙。', ['s3'])]),
+      group('g4', '感悟二：丁', [block('b4', '丁。', ['s3'])]),
+      group('g5', '感悟三：戊', [block('b5', '戊。', ['s3'])]),
+      group('g6', '感悟四：己', [block('b6', '己。', ['s3'])]),
+    ])],
+  };
+  const report = validateSemanticPlan(base(), warned);
+  assert.equal(report.accepted, true, JSON.stringify(report.issues));
+  const codes = report.warnings.map(warning => warning.code);
+  assert.ok(codes.includes('category-prefix-only'));
+  assert.ok(codes.includes('category-fragmented'));
+  const approved = {
+    schemaVersion: 'gray-plan-3',
+    deckBrief: { title: 'x', audience: 'y', objective: 'z' },
+    pages: [page('p1', '两类事项', [
+      group('g1', '两点不足', [block('b1', '甲问题。', ['s1', 's2']), block('b2', '乙问题。', ['s2'])]),
+      group('g2', '四点感悟', [block('b3', '丙丁戊己。', ['s3'])]),
+    ])],
+  };
+  const approvedReport = validateSemanticPlan(base(), approved);
+  assert.equal(approvedReport.accepted, true, JSON.stringify(approvedReport.issues));
+  assert.deepEqual(approvedReport.warnings, []);
+});
+
 test('无类别线索的稿件不受本检查影响', () => {
   const plain = newRunState('各部门于十一月完成自查。抽查比例不低于百分之二十。', 'fixture');
   const plan = {

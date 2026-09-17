@@ -70,6 +70,16 @@ export function categoryCues(sources) {
   return [...cues.values()];
 }
 
+const CHINESE_DIGITS = Object.freeze({ 一: 1, 两: 2, 二: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9, 十: 10 });
+export function chineseCount(text) {
+  const value = String(text ?? '');
+  if (/^\d+$/u.test(value)) return Number(value);
+  if (value === '十') return 10;
+  const match = value.match(/^([一二两三四五六七八九])?十([一二三四五六七八九])?$/u);
+  if (match) return (match[1] ? CHINESE_DIGITS[match[1]] : 1) * 10 + (match[2] ? CHINESE_DIGITS[match[2]] : 0);
+  return [...value].reduce((sum, char) => sum + (CHINESE_DIGITS[char] ?? 0), 0);
+}
+
 export function grayCoverageIssues(state) {
   const flowIds = new Set((state.sources ?? []).filter(source => source.flow).map(source => source.id));
   const issues = [];
@@ -213,6 +223,7 @@ export function semanticPlanFromPages(plan) {
 
 export function validateSemanticPlan(base, plan) {
   const issues = [];
+  const warnings = [];
   const simple = plan?.schemaVersion === 'gray-plan-3';
   const fail = (code, pageId, message) => issues.push({ code, pageId, message });
   try {
@@ -286,16 +297,31 @@ export function validateSemanticPlan(base, plan) {
       }
     }
     // 类别成组：原稿有类别线索时，类别词必须由组标题承载（页标题不算）。
-    for (const cue of categoryCues(base.sources)) {
+    const cueList = categoryCues(base.sources);
+    for (const cue of cueList) {
       const headings = plan.pages.flatMap(page => (page.groups ?? []).map(group => String(group.heading ?? '')));
       if (!headings.some(heading => heading.includes(cue.noun))) {
         fail('category-not-grouped', plan.pages[0]?.pageId, `原稿有类别线索「${cue.phrase}」：类别必须成为组——组标题承载「${cue.noun}」（跨页用「${cue.noun}＋本页条目提示」），条目作为组内块；当前没有任何组标题承载它（写在页标题不算）。请重组后再提交。`);
       }
     }
+    // 非阻塞 warnings（评审 #7 (b)）：只验字面会被模型走最小合规路径（"不足一/感悟一"前缀），
+    // 容器形态移交第 7 条模板化解决；此处只记录博弈样本，不阻塞交付。
+    for (const cue of cueList) {
+      const named = plan.pages.flatMap(page => (page.groups ?? []).map(group => ({ pageId: page.pageId, heading: String(group.heading ?? ''), blocks: (group.blocks ?? []).length })))
+        .filter(group => group.heading.includes(cue.noun));
+      const numbered = named.filter(group => new RegExp(`${cue.noun}[一二两三四五六七八九十\\d]`, 'u').test(group.heading));
+      if (numbered.length) {
+        warnings.push({ code: 'category-prefix-only', pageId: numbered[0].pageId, message: `「${cue.noun}」由编号前缀承载（${numbered.map(g => g.heading).join('、')}）：形式合规但类别容器缺失（see 评审 #7 字面合规博弈）` });
+      }
+      const count = chineseCount(cue.count);
+      if (count >= 2 && named.length > Math.ceil(count / 2)) {
+        warnings.push({ code: 'category-fragmented', pageId: named[0]?.pageId, message: `类别「${cue.noun}」涉及 ${named.length} 个组（线索为「${cue.phrase}」）：组数超过整页/拆页两种合法形态（${Math.ceil(count / 2)}）——记录为碎裂样本，不阻塞交付。` });
+      }
+    }
     const state = upsertPageBriefs({...base, pages:[], phase:'content', deckBrief:plan.deckBrief}, semanticPages(plan));
     issues.push(...grayCoverageIssues(state));
   } catch (error) { fail('invalid-semantic-plan', undefined, error.message); }
-  return {accepted:issues.length===0,issues,coverage:simple ? '内容字段、表达方式、来源覆盖、块级数字/引文及已提供的关系端点；必要关系与限定是否正确仍需语义和实际审阅。' : '结构、引用、块级数字/引文、关系端点及条件归属；不证明语义正确或灰稿可读。'};
+  return {accepted:issues.length===0,issues,warnings,coverage:simple ? '内容字段、表达方式、来源覆盖、块级数字/引文及已提供的关系端点；必要关系与限定是否正确仍需语义和实际审阅。' : '结构、引用、块级数字/引文、关系端点及条件归属；不证明语义正确或灰稿可读。'};
 }
 
 export function bindSemanticLayout(plan, layout) {
