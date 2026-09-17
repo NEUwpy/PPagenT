@@ -101,13 +101,14 @@ test('row separates aligned outer frames from the unequal text capacity of each 
   assert.equal(primary.height,note.height);
   assert.ok(result.receipts[0].contentMinimums.a.minHeight>result.receipts[0].contentMinimums.b.minHeight);
   const body=grayBodyLayout(result.plan.pages[0].items[1],note.width-32,22,note.height-70);
-  assert.equal(body.sections[0].height,note.height-70);
+  assert.ok(body.sections[0].height<=note.height-70);
+  assert.equal(body.sections[0].height,body.minimumHeight); // 容器富余不拉满：条目按内容高度
   // 文字块内顶格排字（块顶 + 内边距）：内容少时不再悬在块中下部、看起来像说明。
   assert.equal(body.runs[0].y,8);
   assert.equal(validateGrayPlan(base(),result.plan,area).accepted,true);
 });
 
-test('block areas fill each branch with fixed gaps and keep every text run inside its assigned block',()=>{
+test('block areas size to content and keep every text run inside its assigned block',()=>{
   const p=plan();
   p.pages[0].groups[0].blocks.push({id:'c',label:'复核',text:'确认核验记录。',sourceIds:['s1']});
   const result=resolveGrayLayout(p,select({type:'row'}),area,metrics);
@@ -115,8 +116,15 @@ test('block areas fill each branch with fixed gaps and keep every text run insid
     const item=result.plan.pages[0].items.find(item=>item.id===region.itemId);
     const body=grayBodyLayout(item,region.width-32,22,region.height-70);
     assert.equal(body.sections[0].top,0);
-    assert.ok(Math.abs(body.sections.at(-1).top+body.sections.at(-1).height-body.height)<.001);
-    for(let i=1;i<body.sections.length;i++) assert.ok(Math.abs(body.sections[i].top-body.sections[i-1].top-body.sections[i-1].height-12)<.001);
+    const spare=body.height-body.minimumHeight;
+    if(spare>80){
+      // 容器明显富余：条目按内容高度，间距被封顶，余额留在容器底部
+      assert.ok(body.sections.at(-1).top+body.sections.at(-1).height<body.height);
+      for(let i=1;i<body.sections.length;i++){const current=body.sections[i].top-(body.sections[i-1].top+body.sections[i-1].height);assert.ok(current>=12&&current<=60);}
+    }else{
+      assert.ok(Math.abs(body.sections.at(-1).top+body.sections.at(-1).height-body.height)<.001);
+      for(let i=1;i<body.sections.length;i++) assert.ok(Math.abs(body.sections[i].top-body.sections[i-1].top-body.sections[i-1].height-12)<.001);
+    }
     for(const run of body.runs) assert.ok(body.sections.some(section=>run.y>=section.top && run.y+run.height<=section.top+section.height));
   }
 });

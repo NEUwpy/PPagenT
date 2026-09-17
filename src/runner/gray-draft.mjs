@@ -62,13 +62,29 @@ export function grayBodyLayout(item, width, fontSize, availableHeight) {
   });
   const minimum=measured.reduce((sum,section)=>sum+section.minHeight,0)+gap*(measured.length-1);
   const children=measured.map(section=>({groupId:section.id}));
-  const solved=resolveLayoutTree({
-    composition:children.length===1?children[0]:{op:'column',children,weights:measured.map(section=>section.minHeight)},
-    bodyFrame:{left:0,top:0,width,height:availableHeight ?? minimum},contracts,style:{gap},
-  });
+  // 容器明显富余（>80px）时不把条目拉满：条目按内容高度、富余转成条目间距（封顶 48px），
+  // 余额留白在容器底部——满高框会自己声明"这里该有内容"；空白的分布由内容需要决定。
+  const target=availableHeight ?? minimum, spare=target-minimum;
+  const packed=spare>80;
+  const regions={};
+  if(packed){
+    const gapCount=measured.length-1;
+    const extraGap=gapCount>0?Math.max(0,Math.min(48,Math.floor(spare/gapCount))):0;
+    let cursor=0;
+    for(const section of measured){
+      regions[section.id]={left:0,top:cursor,width,height:section.minHeight};
+      cursor+=section.minHeight+gap+extraGap;
+    }
+  }else{
+    const solved=resolveLayoutTree({
+      composition:children.length===1?children[0]:{op:'column',children,weights:measured.map(section=>section.minHeight)},
+      bodyFrame:{left:0,top:0,width,height:target},contracts,style:{gap},
+    });
+    for(const section of measured) regions[section.id]=solved.regions[section.id];
+  }
   const runs=[];
   const frames=measured.map(section=>{
-    const frame=solved.regions[section.id];
+    const frame=regions[section.id];
     // 文字块内顶格排字：块高由区域分配决定，内容从顶部开始，与表格/卡片的排法一致；
     // 旧版按块内居中偏移，单块内容少时文字悬在中下部、看起来像"说明"而不是内容。
     let y=frame.top+padding;
@@ -78,7 +94,7 @@ export function grayBodyLayout(item, width, fontSize, availableHeight) {
     }
     return {...frame,kind:section.kind,id:section.id,minHeight:section.minHeight};
   });
-  return {runs,sections:frames,height:availableHeight ?? minimum,minimumHeight:minimum,fits:runs.every(r=>r.fits)};
+  return {runs,sections:frames,height:target,minimumHeight:minimum,fits:runs.every(r=>r.fits)};
 }
 
 /**
