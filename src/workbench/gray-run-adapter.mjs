@@ -129,7 +129,7 @@ export async function grayArtifacts(runDir) {
   return items;
 }
 
-/** 计划摘要：列表与详情页用标题认稿子，读不到就不编造。 */
+/** 计划摘要：列表与详情页用标题认稿子，读不到就不编造。含逐页结构供来源追溯面板使用。 */
 async function planSummary(runDir) {
   const plan = await readJsonIfExists(path.join(runDir, "plan.json"));
   if (!plan) return null;
@@ -141,6 +141,16 @@ async function planSummary(runDir) {
       title: page.title ?? null,
       claim: page.claim ?? null,
       itemCount: Array.isArray(page.items) ? page.items.length : null,
+      items: (page.items ?? []).map((item) => ({
+        heading: item.heading ?? null,
+        kind: item.kind ?? null,
+        importance: item.importance ?? null,
+        blocks: (item.blocks ?? []).map((block) => ({
+          label: block.label ?? null,
+          text: block.text ?? "",
+          sourceIds: Array.isArray(block.sourceIds) ? block.sourceIds : [],
+        })),
+      })),
     })),
   };
 }
@@ -375,6 +385,7 @@ export async function graySnapshot(runDir) {
     currentStage,
     preview,
     plan: await planSummary(runDir),
+    sources: (state?.sources ?? []).map((source) => ({ id: source.id, heading: source.heading ?? null, text: source.text })),
   };
 }
 
@@ -409,6 +420,7 @@ async function agentSnapshot(runDir, state, gray) {
     currentStage: steps.find((step) => step.status === "running")?.id ?? null,
     preview,
     plan: await planSummary(runDir),
+    sources: (state?.sources ?? []).map((source) => ({ id: source.id, heading: source.heading ?? null, text: source.text })),
     agentTurns: turns,
     agentRenders: renders,
   };
