@@ -162,7 +162,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
       handler: async () => {
         const { plan, source, note } = resolvePlan();
-        const reviewInput = semanticReviewInput({ source: raw, area, plan });
+        const reviewInput = semanticReviewInput({ source: raw, area, plan, reviewFeedback: lastReview?.issues ?? null });
         const response = await provider.complete({ messages: [{ role: 'system', content: SEMANTIC_REVIEW_CONTRACT }, { role: 'user', content: JSON.stringify(reviewInput) }] });
         const parsed = parseModelJson(response);
         if (typeof parsed.accepted !== 'boolean' || !Array.isArray(parsed.issues)) throw new Error('审稿响应格式无效');

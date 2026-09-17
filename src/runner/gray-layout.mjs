@@ -110,7 +110,7 @@ export function resolveGrayLayout(plan, selection, area, { measureBody, fitText 
         // 容量只报"需要重组"不足以让模型收敛：给出实测最小尺寸与出路（合组/精简/分页）。
         const minimum = error.details?.minimum;
         throw new CompositionFitError(
-          `一页放不下：当前组合的最小可读尺寸约 ${Math.ceil(minimum?.width ?? 0)}×${Math.ceil(minimum?.height ?? 0)}，正文区为 ${area.width}×${area.height}。优先把内容拆到多页（pages 增加一页，每页 1–2 个组最易读）；合并相关组或用更省空间的组合也可以，但不要为了塞进一页删减必要文字。修订后直接重试渲染，不要反复跑检查工具空转，也不要反复更换基础组合。`,
+          `一页放不下：该页最小可读尺寸约 ${Math.ceil(minimum?.width ?? 0)}×${Math.ceil(minimum?.height ?? 0)}，正文区 ${area.width}×${area.height}（超出约 ${Math.max(0, Math.ceil((minimum?.height ?? 0) - area.height))}px）。先在本页内解决：改更省空间的组合（同排多栏、规则网格），合并同归属的组，按原稿允许的提炼压紧冗词（不丢必要内容）。仍放不下时按真实归属边界整块分页（整个分支或整个条目组一起移动），不要按条目打散、把同一分支拆到多页。修订后直接重试渲染，不要反复跑检查工具空转。`,
           { pageId: page.pageId, layout: choice, minimum, available: { width: area.width, height: area.height }, groupCapacities: contracts },
         );
       }
