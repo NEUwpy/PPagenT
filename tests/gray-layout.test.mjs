@@ -69,7 +69,8 @@ test('row separates aligned outer frames from the unequal text capacity of each 
   assert.ok(result.receipts[0].contentMinimums.a.minHeight>result.receipts[0].contentMinimums.b.minHeight);
   const body=grayBodyLayout(result.plan.pages[0].items[1],note.width-32,22,note.height-70);
   assert.equal(body.sections[0].height,note.height-70);
-  assert.ok(body.runs[0].y>8);
+  // 文字块内顶格排字（块顶 + 内边距）：内容少时不再悬在块中下部、看起来像说明。
+  assert.equal(body.runs[0].y,8);
   assert.equal(validateGrayPlan(base(),result.plan,area).accepted,true);
 });
 

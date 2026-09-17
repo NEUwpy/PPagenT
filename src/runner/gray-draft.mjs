@@ -69,7 +69,9 @@ export function grayBodyLayout(item, width, fontSize, availableHeight) {
   const runs=[];
   const frames=measured.map(section=>{
     const frame=solved.regions[section.id];
-    let y=frame.top+padding+(frame.height-section.minHeight)/2;
+    // 文字块内顶格排字：块高由区域分配决定，内容从顶部开始，与表格/卡片的排法一致；
+    // 旧版按块内居中偏移，单块内容少时文字悬在中下部、看起来像"说明"而不是内容。
+    let y=frame.top+padding;
     for(const part of section.parts){
       runs.push({text:part.text,x:padding,y,width:width-2*padding,height:part.height,bold:part.bold,fits:part.fits,...(part.kind?{kind:part.kind}:{})});
       y+=part.height+labelGap;
