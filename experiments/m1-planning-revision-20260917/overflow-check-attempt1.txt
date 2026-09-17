@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "C:\Users\ilove\.codex\plugins\cache\openai-primary-runtime\presentations\26.826.12353\skills\presentations\container_tools\slides_test.py", line 200, in <module>
+    main()
+  File "C:\Users\ilove\.codex\plugins\cache\openai-primary-runtime\presentations\26.826.12353\skills\presentations\container_tools\slides_test.py", line 183, in main
+    img_paths = render_slides.rasterize(enlarged_pptx, img_dir, dpi)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ilove\.codex\plugins\cache\openai-primary-runtime\presentations\26.826.12353\skills\presentations\container_tools\render_slides.py", line 171, in rasterize
+    return _render_presentation_with_artifact_tool(input_path, out_dir, dpi)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ilove\.codex\plugins\cache\openai-primary-runtime\presentations\26.826.12353\skills\presentations\container_tools\render_slides.py", line 109, in _render_presentation_with_artifact_tool
+    runtime_node(),
+    ^^^^^^^^^^^^^^
+  File "C:\Users\ilove\.codex\plugins\cache\openai-primary-runtime\presentations\26.826.12353\skills\presentations\container_tools\runtime_helpers.py", line 26, in runtime_node
+    node = _required_runtime_path("RUNTIME_NODE", directory=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ilove\.codex\plugins\cache\openai-primary-runtime\presentations\26.826.12353\skills\presentations\container_tools\runtime_helpers.py", line 9, in _required_runtime_path
+    raise RuntimeError(f"{env_name} is required.")
+RuntimeError: RUNTIME_NODE is required.

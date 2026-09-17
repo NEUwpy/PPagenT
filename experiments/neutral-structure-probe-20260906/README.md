@@ -17,7 +17,7 @@
 2. 新合并的结构主题入口支持 primaryColor，历史报告验证 35 个核心结构的蓝紫代表状态。其机制按原颜色饱和度、亮度归类，不按对象的文字、填充、轮廓职责归类。
 3. 本次将中性完整配色传给 resolveStructureTheme 后，background #F5F4EF 与 surface #EEECE5 实际变为 #FFFFFF；line #D8D5CC 实际变为 #DEC5C0。前者来自严格中性色筛选，后者来自显式主色强制派生。见 audit.json 和 src/visual-runtime/html-component-theme.mjs。
 4. 现行独立制作任务提示词与工作流仍明确“不接结构库”；合并代码不意味着中性制作入口已接通。
-5. Luna high 的中性拆分规则首轮未通过；大学实验最新同条件复验为 1/2 整稿通过。它们不能证明跨稿稳定性。具体记录分别见 docs/PPT制作规则参考/中性编辑排版-提示词复现/复现记录.md 与 experiments/university-skin-pilot/stability-01/RESULTS.md。本轮未复跑或实时核验其他制作任务状态。
+5. Luna high 的中性拆分规则首轮未通过；大学实验最新同条件复验为 1/2 整稿通过。它们不能证明跨稿稳定性。具体记录分别见 docs/PPT制作规则参考/制作验证/中性编辑排版-提示词复现/复现记录.md 与 experiments/university-skin-pilot/stability-01/RESULTS.md。本轮未复跑或实时核验其他制作任务状态。
 
 ## 建议的推进范围（尚未实施）
 

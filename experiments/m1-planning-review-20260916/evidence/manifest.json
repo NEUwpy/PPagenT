@@ -1,0 +1,31 @@
+{
+  "name": "layoutOnly",
+  "case": "hierarchy",
+  "model": "deepseek-v4-flash",
+  "thinking": {
+    "type": "disabled"
+  },
+  "maxTokens": 18000,
+  "timeout": 180000,
+  "maxAttempts": 2,
+  "maxRevisions": 0,
+  "area": {
+    "width": 1170,
+    "height": 492,
+    "label": "分类与不等长条目"
+  },
+  "hashes": {
+    "src/runner/gray-draft.mjs": "d0a05ba86c2bc28eb64c94089a2f44e5ccfbb8aa171f955a7c0bcdf075fe9fa1",
+    "src/runner/gray-semantics.mjs": "5b42fa5440e06bda6a57b02b8355041b784d4b0db629dfd29049986726323006",
+    "src/runner/gray-layout.mjs": "ccf27b1222d80ab071b821f3e193566a04dd6a351536d83c5830032aebc9e715",
+    "src/composition/resolve.mjs": "07404ffe79c1296c16050f697e6f2c4388b05a324c7e46cc0f22bad82cbacb17",
+    "src/composition/content-stages.mjs": "8472794f86aea233db514793e2888ae40ffb73a21e17eae16ee8a8be86488a68",
+    "src/content/source-fidelity.mjs": "c03e6e12b18bd3b9f0ec727175b689ddbde382e5e40b1aec99399292ea373dcc",
+    "rules/内容结构.md": "9d7c6e33572aecdfce0ef2c7d42e0b4c80992f45ba8f3b534d8066925ee79e1d",
+    "rules/页面组合.md": "63ab441d6aba50a3b548e825e308bf341c60c33fea7e94d0c6717197b3f5a99c",
+    "rules/排版.md": "dcfb2c133fba4c3eba9eadbeb96b84939fab94ea4e2285b1be73b2c13b3e25cd",
+    "experiments/gray-rules-20260916/prompts.mjs": "afed84b677570a57d95bc484c8bdd73c92fe81134f4d6408ec6dbfb5aeea175e"
+  },
+  "effectivePrompts": "NN-stage.messages.json contains actual sent messages; runner prompt files retain original constants.",
+  "focusWithheld": true
+}

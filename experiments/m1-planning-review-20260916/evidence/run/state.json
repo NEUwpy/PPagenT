@@ -1,0 +1,383 @@
+{
+  "schemaVersion": "ppagent-run-1",
+  "sourcePath": "C:\\PPagenT\\outputs\\gray-rules-layoutonly-20260916\\layoutOnly--hierarchy\\source.txt",
+  "sources": [
+    {
+      "id": "s1",
+      "heading": "",
+      "text": "模拟稿件：图书馆服务复盘。面向馆务会议说明本月情况。\n读者服务有三项发现：预约取书提示不清，读者常把到馆通知理解为已完成借阅；咨询台已统一回答口径；夜间咨询尚无固定承接人，遇到跨部门问题只能留单，第二天再转交。\n馆藏维护有两项进展：完成破损书目登记；修复工作仍需按损坏程度排队，登记完成不等于修复完成。\n内部协作只有一项安排：每周集中核对未结工单，由原接单人员持续跟踪，直到接收部门确认处理结果。"
+    }
+  ],
+  "deckBrief": {
+    "title": "图书馆服务复盘",
+    "audience": "馆务会议",
+    "objective": "说明本月读者服务、馆藏维护与内部协作的情况"
+  },
+  "pages": [
+    {
+      "pageId": "p1",
+      "title": "读者服务三项发现",
+      "claim": "预约提示不清、咨询口径已统一、夜间仍无固定承接人",
+      "relation": "none",
+      "semantics": {
+        "schemaVersion": "gray-plan-3",
+        "pagePurpose": "汇总本月读者服务的三项发现",
+        "narrative": "三项发现并列：预约取书提示问题、咨询台口径统一、夜间咨询承接缺口；每项各自带出对应后果或状态。",
+        "relations": [],
+        "readingOrder": [
+          "g1"
+        ]
+      },
+      "items": [
+        {
+          "id": "g1",
+          "role": "object",
+          "semanticRole": "并列说明读者服务三项发现及其后果",
+          "importance": "primary",
+          "heading": "读者服务三项发现",
+          "kind": "text",
+          "blocks": [
+            {
+              "id": "b1",
+              "label": "预约取书提示不清",
+              "text": "读者常把到馆通知理解为已完成借阅。",
+              "sourceIds": [
+                "s1"
+              ]
+            },
+            {
+              "id": "b2",
+              "label": "咨询台",
+              "text": "已统一回答口径。",
+              "sourceIds": [
+                "s1"
+              ]
+            },
+            {
+              "id": "b3",
+              "label": "夜间咨询",
+              "text": "尚无固定承接人；遇到跨部门问题只能留单，第二天再转交。",
+              "sourceIds": [
+                "s1"
+              ]
+            }
+          ],
+          "text": "预约取书提示不清\n读者常把到馆通知理解为已完成借阅。\n咨询台\n已统一回答口径。\n夜间咨询\n尚无固定承接人；遇到跨部门问题只能留单，第二天再转交。",
+          "sourceIds": [
+            "s1"
+          ],
+          "sourceText": "模拟稿件：图书馆服务复盘。面向馆务会议说明本月情况。\n读者服务有三项发现：预约取书提示不清，读者常把到馆通知理解为已完成借阅；咨询台已统一回答口径；夜间咨询尚无固定承接人，遇到跨部门问题只能留单，第二天再转交。\n馆藏维护有两项进展：完成破损书目登记；修复工作仍需按损坏程度排队，登记完成不等于修复完成。\n内部协作只有一项安排：每周集中核对未结工单，由原接单人员持续跟踪，直到接收部门确认处理结果。"
+        }
+      ],
+      "composition": {
+        "regions": [
+          {
+            "itemId": "g1",
+            "x": 0,
+            "y": 0,
+            "width": 1170,
+            "height": 492,
+            "fontSize": 22
+          }
+        ],
+        "basicLayout": {
+          "type": "single"
+        }
+      },
+      "revision": 1
+    },
+    {
+      "pageId": "p2",
+      "title": "馆藏维护两项进展",
+      "claim": "已完成破损书目登记，修复仍需按损坏程度排队",
+      "relation": "none",
+      "semantics": {
+        "schemaVersion": "gray-plan-3",
+        "pagePurpose": "说明馆藏维护的进展与未完成条件",
+        "narrative": "登记已完成，修复受损坏程度排队约束，两者是不同进度，不可等同。",
+        "relations": [],
+        "readingOrder": [
+          "g2"
+        ]
+      },
+      "items": [
+        {
+          "id": "g2",
+          "role": "object",
+          "semanticRole": "说明馆藏维护的进展与未完成部分",
+          "importance": "primary",
+          "heading": "馆藏维护两项进展",
+          "kind": "text",
+          "blocks": [
+            {
+              "id": "b4",
+              "label": "已完成",
+              "text": "破损书目登记。",
+              "sourceIds": [
+                "s1"
+              ]
+            },
+            {
+              "id": "b5",
+              "label": "仍需排队",
+              "text": "修复工作按损坏程度排队；登记完成不等于修复完成。",
+              "sourceIds": [
+                "s1"
+              ]
+            }
+          ],
+          "text": "已完成\n破损书目登记。\n仍需排队\n修复工作按损坏程度排队；登记完成不等于修复完成。",
+          "sourceIds": [
+            "s1"
+          ],
+          "sourceText": "模拟稿件：图书馆服务复盘。面向馆务会议说明本月情况。\n读者服务有三项发现：预约取书提示不清，读者常把到馆通知理解为已完成借阅；咨询台已统一回答口径；夜间咨询尚无固定承接人，遇到跨部门问题只能留单，第二天再转交。\n馆藏维护有两项进展：完成破损书目登记；修复工作仍需按损坏程度排队，登记完成不等于修复完成。\n内部协作只有一项安排：每周集中核对未结工单，由原接单人员持续跟踪，直到接收部门确认处理结果。"
+        }
+      ],
+      "composition": {
+        "regions": [
+          {
+            "itemId": "g2",
+            "x": 0,
+            "y": 0,
+            "width": 1170,
+            "height": 492,
+            "fontSize": 22
+          }
+        ],
+        "basicLayout": {
+          "type": "single"
+        }
+      },
+      "revision": 1
+    },
+    {
+      "pageId": "p3",
+      "title": "内部协作安排",
+      "claim": "每周集中核对未结工单，由原接单人员跟踪至接收部门确认",
+      "relation": "none",
+      "semantics": {
+        "schemaVersion": "gray-plan-3",
+        "pagePurpose": "说明内部协作的一项安排",
+        "narrative": "按接收部门确认结果作为跟踪终点。",
+        "relations": [],
+        "readingOrder": [
+          "g3"
+        ]
+      },
+      "items": [
+        {
+          "id": "g3",
+          "role": "object",
+          "semanticRole": "说明内部协作安排的执行方式与终点",
+          "importance": "primary",
+          "heading": "内部协作安排",
+          "kind": "text",
+          "blocks": [
+            {
+              "id": "b6",
+              "text": "每周集中核对未结工单，由原接单人员持续跟踪，直到接收部门确认处理结果。",
+              "sourceIds": [
+                "s1"
+              ]
+            }
+          ],
+          "text": "每周集中核对未结工单，由原接单人员持续跟踪，直到接收部门确认处理结果。",
+          "sourceIds": [
+            "s1"
+          ],
+          "sourceText": "模拟稿件：图书馆服务复盘。面向馆务会议说明本月情况。\n读者服务有三项发现：预约取书提示不清，读者常把到馆通知理解为已完成借阅；咨询台已统一回答口径；夜间咨询尚无固定承接人，遇到跨部门问题只能留单，第二天再转交。\n馆藏维护有两项进展：完成破损书目登记；修复工作仍需按损坏程度排队，登记完成不等于修复完成。\n内部协作只有一项安排：每周集中核对未结工单，由原接单人员持续跟踪，直到接收部门确认处理结果。"
+        }
+      ],
+      "composition": {
+        "regions": [
+          {
+            "itemId": "g3",
+            "x": 0,
+            "y": 0,
+            "width": 1170,
+            "height": 492,
+            "fontSize": 22
+          }
+        ],
+        "basicLayout": {
+          "type": "single"
+        }
+      },
+      "revision": 1
+    }
+  ],
+  "artifactState": {
+    "p1": {
+      "status": "rendered-awaiting-review",
+      "revision": 1,
+      "pptxPath": "C:\\PPagenT\\outputs\\gray-rules-layoutonly-20260916\\layoutOnly--hierarchy\\run\\gray-draft.pptx"
+    },
+    "p2": {
+      "status": "rendered-awaiting-review",
+      "revision": 1,
+      "pptxPath": "C:\\PPagenT\\outputs\\gray-rules-layoutonly-20260916\\layoutOnly--hierarchy\\run\\gray-draft.pptx"
+    },
+    "p3": {
+      "status": "rendered-awaiting-review",
+      "revision": 1,
+      "pptxPath": "C:\\PPagenT\\outputs\\gray-rules-layoutonly-20260916\\layoutOnly--hierarchy\\run\\gray-draft.pptx"
+    }
+  },
+  "phase": "content",
+  "contentRevision": null,
+  "runtimeFailure": null,
+  "warningDecisions": [],
+  "grayDraft": {
+    "version": "gray-draft-3",
+    "area": {
+      "width": 1170,
+      "height": 492,
+      "label": "分类与不等长条目"
+    },
+    "sourceHash": "24919d06624dcc5d336b874dc3421e7deb1ef3f72396c80d9214468eb828999c",
+    "status": "awaiting-user-review",
+    "humanReview": "pending",
+    "history": [
+      {
+        "revision": 0,
+        "program": true,
+        "semantic": true,
+        "directory": "revision-0"
+      }
+    ],
+    "provider": "chat-completions:deepseek-v4-flash",
+    "providerSettings": {
+      "model": "deepseek-v4-flash",
+      "thinking": "disabled",
+      "maxTokens": 18000
+    },
+    "semanticPlan": {
+      "schemaVersion": "gray-plan-3",
+      "deckBrief": {
+        "title": "图书馆服务复盘",
+        "audience": "馆务会议",
+        "objective": "说明本月读者服务、馆藏维护与内部协作的情况"
+      },
+      "pages": [
+        {
+          "pageId": "p1",
+          "title": "读者服务三项发现",
+          "claim": "预约提示不清、咨询口径已统一、夜间仍无固定承接人",
+          "pagePurpose": "汇总本月读者服务的三项发现",
+          "narrative": "三项发现并列：预约取书提示问题、咨询台口径统一、夜间咨询承接缺口；每项各自带出对应后果或状态。",
+          "groups": [
+            {
+              "id": "g1",
+              "role": "并列说明读者服务三项发现及其后果",
+              "importance": "primary",
+              "heading": "读者服务三项发现",
+              "kind": "text",
+              "blocks": [
+                {
+                  "id": "b1",
+                  "label": "预约取书提示不清",
+                  "text": "读者常把到馆通知理解为已完成借阅。",
+                  "sourceIds": [
+                    "s1"
+                  ]
+                },
+                {
+                  "id": "b2",
+                  "label": "咨询台",
+                  "text": "已统一回答口径。",
+                  "sourceIds": [
+                    "s1"
+                  ]
+                },
+                {
+                  "id": "b3",
+                  "label": "夜间咨询",
+                  "text": "尚无固定承接人；遇到跨部门问题只能留单，第二天再转交。",
+                  "sourceIds": [
+                    "s1"
+                  ]
+                }
+              ]
+            }
+          ],
+          "planningNotes": "三项发现同属读者服务，作为并列条目展开，保留各自后果与限制条件。"
+        },
+        {
+          "pageId": "p2",
+          "title": "馆藏维护两项进展",
+          "claim": "已完成破损书目登记，修复仍需按损坏程度排队",
+          "pagePurpose": "说明馆藏维护的进展与未完成条件",
+          "narrative": "登记已完成，修复受损坏程度排队约束，两者是不同进度，不可等同。",
+          "groups": [
+            {
+              "id": "g2",
+              "role": "说明馆藏维护的进展与未完成部分",
+              "importance": "primary",
+              "heading": "馆藏维护两项进展",
+              "kind": "text",
+              "blocks": [
+                {
+                  "id": "b4",
+                  "label": "已完成",
+                  "text": "破损书目登记。",
+                  "sourceIds": [
+                    "s1"
+                  ]
+                },
+                {
+                  "id": "b5",
+                  "label": "仍需排队",
+                  "text": "修复工作按损坏程度排队；登记完成不等于修复完成。",
+                  "sourceIds": [
+                    "s1"
+                  ]
+                }
+              ]
+            }
+          ],
+          "planningNotes": "两项进展有先后与否定关系，需保留‘不等于’的限定。"
+        },
+        {
+          "pageId": "p3",
+          "title": "内部协作安排",
+          "claim": "每周集中核对未结工单，由原接单人员跟踪至接收部门确认",
+          "pagePurpose": "说明内部协作的一项安排",
+          "narrative": "按接收部门确认结果作为跟踪终点。",
+          "groups": [
+            {
+              "id": "g3",
+              "role": "说明内部协作安排的执行方式与终点",
+              "importance": "primary",
+              "heading": "内部协作安排",
+              "kind": "text",
+              "blocks": [
+                {
+                  "id": "b6",
+                  "text": "每周集中核对未结工单，由原接单人员持续跟踪，直到接收部门确认处理结果。",
+                  "sourceIds": [
+                    "s1"
+                  ]
+                }
+              ]
+            }
+          ],
+          "planningNotes": "仅一项安排，独立成页，明确责任人、频次和跟踪终点。"
+        }
+      ],
+      "planningNotes": "原稿为模拟稿件，面向馆务会议，分为读者服务、馆藏维护、内部协作三块；模拟声明在主题或正文中出现一次即可。"
+    },
+    "planningNotes": "原稿为模拟稿件，面向馆务会议，分为读者服务、馆藏维护、内部协作三块；模拟声明在主题或正文中出现一次即可。",
+    "programCheck": {
+      "accepted": true,
+      "issues": [],
+      "coverage": "来源引用、数字/引号保真、区域边界/重叠、固定字号保守容量；不证明语义忠实或视觉美观。"
+    },
+    "semanticCheck": {
+      "accepted": true,
+      "issues": [],
+      "coverage": "p1标题“读者服务三项发现”概括主题，正文以三条分项承担并列职责：首项“预约取书提示不清”对应“读者常把到馆通知理解为已完成借阅”的后果；第二项“咨询台”对应“已统一回答口径”的状态；第三项“夜间咨询”对应“尚无固定承接人；遇到跨部门问题只能留单，第二天再转交”的缺口与后果，三项发现可直接读出。p2标题“馆藏维护两项进展”概括主题，正文“已完成”对应“破损书目登记”，“仍需排队”对应“修复工作按损坏程度排队”，并以“登记完成不等于修复完成”直接表达两项进度不可等同的关系。p3标题“内部协作安排”概括主题，正文明确“每周集中核对未结工单，由原接单人员持续跟踪，直到接收部门确认处理结果”，跟踪终点由“直到接收部门确认处理结果”直接读出。各页主题概括后正文展开，未见长句机械复述或以后台解释代替组织。",
+      "limits": "未看灰稿像素图，不能确认视觉可读性。"
+    },
+    "artifactDirectory": "."
+  }
+}

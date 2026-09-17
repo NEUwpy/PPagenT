@@ -25,7 +25,7 @@
 
 - [通用灰稿验证](../../docs/工作流/正式生成/通用灰稿验证.md)：实际运行命令、状态与能力边界。
 - [架构与入口分工](../../harness/运行流程.md#当前灰稿实验与通用运行器的边界)：规划、表达、基础排版、Skin/风格、结构库职责，以及镜像未迁移的限制。
-- [范本学习笔记](../../docs/PPT制作规则参考/原稿到页面-不足与感悟-20260916/笔记.md)：用户六张图和从原稿到分支、条目、局部表达的方法。
+- [范本学习笔记](../../docs/PPT制作规则参考/内容提取/原稿到页面-不足与感悟-20260916/笔记.md)：用户六张图和从原稿到分支、条目、局部表达的方法。
 - [最新修订报告](../gray-reference-workflow-20260916/report.txt)、[主 Agent 构建脚本](../gray-reference-workflow-20260916/build-primary-candidates.mjs)、[同文案核对脚本](../gray-reference-workflow-20260916/verify-block-layout.mjs)。
 - [早期宽版退回](../gray-basic-layout-20260916/user-review.txt)：原小版仍无单独用户验收；不要混同于后续主 Agent 试点页的退回。
 
