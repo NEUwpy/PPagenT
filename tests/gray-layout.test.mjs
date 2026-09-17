@@ -47,8 +47,31 @@ test('selection cannot inject coordinates, skip groups or misuse structure names
 });
 test('capacity failure reports measured requirements, never shrinks or drops copy',()=>{
   const p=plan();p.pages[0].groups[0].blocks[0].text='重要条件必须保留。'.repeat(15);
-  assert.throws(()=>resolveGrayLayout(p,select({type:'row'}),{width:600,height:240},metrics),error=>error.code==='COMPOSITION_RECOMPOSE_REQUIRED' && error.details.requiredHeight>240);
+  assert.throws(()=>resolveGrayLayout(p,select({type:'row'}),{width:600,height:240},metrics),error=>error.code==='COMPOSITION_RECOMPOSE_REQUIRED' && error.details.minimum.height>240);
   assert.equal(p.pages[0].groups[0].blocks[0].text,'重要条件必须保留。'.repeat(15));
+});
+test('nested layout expresses layered pages: a main row above a full-width note',()=>{
+  const p=plan();
+  p.pages[0].groups.push({id:'c',role:'收尾',heading:'收尾',importance:'supporting',kind:'text',blocks:[{id:'b3',text:'核验后开放。',sourceIds:['s1']}]});
+  assert.equal(validateSemanticPlan(base(),p).accepted,true);
+  const nested={type:'column',children:[{type:'row',weights:[2,1],children:[{groupId:'a'},{groupId:'b'}]},{groupId:'c'}]};
+  const result=resolveGrayLayout(p,select(nested),area,metrics);
+  const [a,b,c]=result.plan.pages[0].composition.regions;
+  assert.equal(a.y,b.y);            // a、b 同排
+  assert.equal(a.height,b.height);
+  assert.equal(c.x,0);              // c 横贯下方
+  assert.equal(c.width,area.width);
+  assert.ok(c.y>a.y+a.height);
+  assert.equal(a.width,2*b.width);  // 嵌套 row 的 weights 生效
+  assert.equal(validateGrayPlan(base(),result.plan,area).accepted,true);
+});
+test('nested layout rejects missing, reordered or duplicated groups',()=>{
+  const p=plan();
+  p.pages[0].groups.push({id:'c',role:'收尾',heading:'收尾',importance:'supporting',kind:'text',blocks:[{id:'b3',text:'核验后开放。',sourceIds:['s1']}]});
+  assert.throws(()=>resolveGrayLayout(p,select({type:'column',children:[{type:'row',children:[{groupId:'a'},{groupId:'b'}]}]}),area,metrics),/缺失：c/);
+  assert.throws(()=>resolveGrayLayout(p,select({type:'row',children:[{groupId:'b'},{groupId:'a'},{groupId:'c'}]}),area,metrics),/按阅读顺序/);
+  assert.throws(()=>resolveGrayLayout(p,select({type:'column',children:[{type:'row',children:[{groupId:'a'},{groupId:'b'}]},{groupId:'b'}]}),area,metrics),/重复：b/);
+  assert.throws(()=>resolveGrayLayout(p,select({type:'column',children:[{type:'column',children:[{type:'column',children:[{type:'column',children:[{groupId:'a'},{groupId:'b'}]}]},{groupId:'c'}]}]}),area,metrics),/嵌套超过 3 层/);
 });
 test('non-text medium still requires four-part gray specification, not a structure invocation',()=>{
   const p=plan(),group=p.pages[0].groups[0];group.kind='flow';

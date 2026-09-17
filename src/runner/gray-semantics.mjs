@@ -26,9 +26,12 @@ export const SEMANTIC_REVIEW_CONTRACT = `你是灰稿内容与表达审稿人。
 只输出JSON：{accepted:boolean,issues:[{pageId,sourceIds,problem,requiredRevision}],coverage:"逐页引用visiblePages中的具体措辞或组织，说明它怎样承担职责和关系；不能仅复述requirements",limits:"未看灰稿像素图，不能确认视觉可读性"}。`;
 
 export const LAYOUT_CONTRACT = `你是页面基础排版选择者。内容已检查，不再判断因果或重写内容，只选择空间组合。
-只输出JSON：{pages:[{pageId,layout:{type:"single|row|column|grid",weights:[2,1],columns:2}}]}。
-每页必须出现，页序不变。single只用于一个组；row横向分栏，可用weights分配宽度（顺序对应groups），同排主体共用上下边界；column上下安排，按实文所需高度分配空间；grid用于同等角色的规则网格，columns是列数。weights只在row可用；columns只在grid可用。没有坐标、字号、正文或新分组。程序会按真实文字容量求区域，组内按已有blocks划分子区并分配高度，不绘制蓝区内部节点。
-按阅读顺序安排全部组，不按角色硬编码左右。少量内容无需拉满整页；主次通过适当的空间份额与原有标题层级体现。对同一内容选择合适基础组合，不强制结构图，不为了变化使用网格。若确实需要改写或拆页，返回{needsReplan:true,reason:"具体问题"}。`;
+只输出JSON：{pages:[{pageId,layout:…}]}。每页必须出现，页序不变。
+layout 有两种形态：
+- 简式：{type:"single|row|column|grid",weights?:[…],columns?:2}——子节点默认按阅读顺序取本页全部组；row 横向分栏（weights 分配多余宽度），column 上下安排（按实文所需高度分配），grid 用于同等角色的规则网格（columns 是列数）。weights 只在 row 可用，columns 只在 grid 可用。
+- 嵌套式：{type:"row|column|grid",weights?,columns?,children:[…]}——children 每项是 {groupId:"g1"} 或再次嵌套的组合。表达分层关系时用它，例如：主区在上、一条注记横贯下方 = {type:"column",children:[{type:"row",children:[{groupId:"g1"},{groupId:"g2"}]},{groupId:"g3"}]}。
+嵌套约束：children 必须按阅读顺序恰好覆盖本页全部组一次（不允许换位）；最多三层；weights/columns 只作用于本节点的直接子节点。没有坐标、字号、正文或新分组；程序按真实文字容量求区域。
+少量内容无需拉满整页；主次通过适当的空间份额与原有标题层级体现；不强制结构图，不为了变化使用嵌套。若确实需要改写或拆页，返回{needsReplan:true,reason:"具体问题"}。`;
 
 export const EXPRESSION_CONTRACT = `你负责把已有内容职责与必要关系落实为灰稿表达。读取source与plan中的role、importance、narrative和实文，选择哪些内容共同进入一个表达。尚未排版，不写坐标。
 只输出JSON：{pages:[{pageId,expressions:[{groupIds:["g1","g2"],heading:"简短区域标题",kind:"text|diagram|flow|chart|table|image",blocks:[{id:"b1",label:"可选分项标题",text:"提炼重组后的实际文案",sourceIds:["s1"]}],expression:"非text必填：表达作用",relationship:"非text必填：基本关系",production:"非text必填：制作要求"}]}]}。文字组中的block也可选kind及expression、relationship、production来承载局部图示，字段含义与整组相同，未选kind仍为文字。整组选择非text时，不再给其block选择局部媒介。
