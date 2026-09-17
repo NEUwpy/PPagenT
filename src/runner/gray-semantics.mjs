@@ -33,6 +33,15 @@ layout 有两种形态：
 嵌套约束：children 必须按阅读顺序恰好覆盖本页全部组一次（不允许换位）；最多三层；weights/columns 只作用于本节点的直接子节点。没有坐标、字号、正文或新分组；程序按真实文字容量求区域。
 少量内容无需拉满整页；主次通过适当的空间份额与原有标题层级体现；不强制结构图，不为了变化使用嵌套。若确实需要改写或拆页，返回{needsReplan:true,reason:"具体问题"}。`;
 
+/** 视觉质检契约：渲染完成后由视觉模型看逐页截图，只报明显缺陷，不评价审美。 */
+export const VISION_REVIEW_CONTRACT = `你是灰稿视觉审稿人。输入是程序渲染出的灰稿页面截图（灰色为实际内容区、浅蓝为制作说明区、白色带框为结构草图）。只依据图片判断，报告明显缺陷：
+- 文字被裁切、溢出框外或紧贴边框；
+- 文字互相重叠、压住框线或图形；
+- 内容区大面积异常空白（超过半页没有内容）或明显过挤到无法阅读；
+- 结构草图的卡片、节点、表格明显错位、未对齐、破形或超出区域。
+灰稿是草图：不评价美观、配色、字体与创意，不提装饰建议，不要求配图；没有明显缺陷就通过。
+输出JSON：{accepted:boolean,issues:[{page:页码,problem:"图上的直接现象",requiredRevision:"要改成什么样"}],coverage:"逐页一句话说明检查了什么"}。`;
+
 export const EXPRESSION_CONTRACT = `你负责把已有内容职责与必要关系落实为灰稿表达。读取source与plan中的role、importance、narrative和实文，选择哪些内容共同进入一个表达。尚未排版，不写坐标。
 只输出JSON：{pages:[{pageId,expressions:[{groupIds:["g1","g2"],heading:"简短区域标题",kind:"text|diagram|flow|chart|table|image",blocks:[{id:"b1",label:"可选分项标题",text:"提炼重组后的实际文案",sourceIds:["s1"]}],expression:"非text必填：表达作用",relationship:"非text必填：基本关系",production:"非text必填：制作要求"}]}]}。文字组中的block也可选kind及expression、relationship、production来承载局部图示，字段含义与整组相同，未选kind仍为文字。整组选择非text时，不再给其block选择局部媒介。
 每页原有内容组必须恰好被引用一次；不可跨页，不改变role或claim，不增加原稿事实。按表达需要提炼并重组blocks，允许合并复述、长句变短语、共同说明就近附着；保留对象、条件、否定、时间与关系，sourceIds只可引用所绑定组的来源。独立文字保持一个组，也可让关联内容共用同一表达。原有kind是初选，必须重新检查它是否真正承担内容职责；内容在这一阶段可以修订，进入几何阶段后才冻结。

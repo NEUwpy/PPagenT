@@ -13,8 +13,9 @@ import { createHash } from 'node:crypto';
 import { runToolLoop, transcriptSummary } from './loop.mjs';
 import { createToolRegistry, defineTool } from './tools/index.mjs';
 import { buildChatProviderFromEnv } from './chat-provider.mjs';
+import { loadDeepSeekLocalConfig } from '../agent/deepseek-provider-from-env.mjs';
 import { newRunState, writeState, renderContentMarkdown, renderStateMarkdown } from './state.mjs';
-import { SEMANTIC_REVIEW_CONTRACT, validateSemanticPlan, semanticReviewInput } from './gray-semantics.mjs';
+import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan, semanticReviewInput } from './gray-semantics.mjs';
 import { resolveGrayLayout } from './gray-layout.mjs';
 import { grayBodyLayout, fitGrayText, validateGrayArea, validateGrayPlan, renderGrayDraft } from './gray-draft.mjs';
 
@@ -30,7 +31,7 @@ export const GRAY_AGENT_PROMPT = `你是灰稿制作 Agent。目标：把用户�
 4. 为每页选择基础组合（single/row/column/grid，可选 weights/columns），调用 render_draft 求解并渲染；
 5. render_draft 返回失败时，按其中的 reason 与 issues 修订规划或组合后重试；渲染成功即完成。
 你可以多次调用工具。check_plan 与 semantic_review 都通过后再渲染是正常路径，但不是硬性顺序；按你判断最有效的方式推进。
-交付观：独立审稿是辅助而不是关口——程序检查通过后就可以渲染交付。审稿指出的事实性遗漏、编造、模拟声明缺失必须修复；纯粹的图形形式偏好（列对照、条件分支等本轮画不出的样式）作为遗留问题随交付记录即可，不要让轮数耗在追求审稿全绿上。
+交付观：审稿是辅助而不是关口——事实性遗漏、编造、模拟声明缺失必须修复；纯粹的形式偏好随交付记录即可。渲染成功后会先过视觉质检（视觉模型看逐页截图，查溢出、重叠、异常空白、错位），通过才算交付；质检报出的问题按它给的修改方向修正后重新渲染。
 **计划的传递方式：把你当前完整的 gray-plan-3 计划 JSON 写在每轮消息的正文里（这是唯一事实来源）；check_plan、semantic_review、render_draft 都读取你本轮正文中的计划，不要在工具参数里重复它，也不要只写差异——每次修订都重写完整计划。**
 容量与分页：渲染回执报"一页放不下"时，优先把内容拆到多页（pages 增加一页），其次才考虑合并相关组、精简文字；连续两次容量失败就改用分页，不要继续在单页上换组合死磕。
 布局选择（调用 render_draft 时给出）：简式 {type:"single|row|column|grid",weights?,columns?} 的子节点默认按阅读顺序取本页全部组；页面有分层关系时用嵌套式 {type,children:[{groupId},或嵌套]}，例如主区在上、一条注记横贯下方 = {type:"column",children:[{type:"row",children:[{groupId:"g1"},{groupId:"g2"}]},{groupId:"g3"}]}。row 横向分栏、column 纵向排列、grid 规则网格；weights（仅 row）分配多余宽度，columns（仅 grid）是列数；children 必须按阅读顺序恰好覆盖本页全部组一次；嵌套最多三层。主次通过空间份额与组标题层级体现，少量内容不必拉满一页，不要为了变化而嵌套。
@@ -66,6 +67,27 @@ function extractPlan(content) {
   throw new Error(`本轮正文里没有可解析的完整计划 JSON：${lastError?.message ?? '未找到 JSON'}`);
 }
 
+/**
+ * 视觉质检：把渲染出的逐页截图交给视觉模型，只报明显缺陷（溢出、重叠、异常空白、错位）。
+ * 只判定，不修改；不可用时由调用方 fail-open 并如实标注。
+ */
+async function visualReview(attemptDir, pages, visionProvider) {
+  const images = [];
+  for (const [index] of pages.entries()) {
+    const file = path.join(attemptDir, 'preview', `slide-${String(index + 1).padStart(2, '0')}.png`);
+    const data = await fs.readFile(file);
+    images.push({ type: 'text', text: `第 ${index + 1} 页：` });
+    images.push({ type: 'image_url', image_url: { url: `data:image/png;base64,${data.toString('base64')}` } });
+  }
+  const response = await visionProvider.complete({ messages: [
+    { role: 'system', content: VISION_REVIEW_CONTRACT },
+    { role: 'user', content: [{ type: 'text', text: `以下是本次灰稿全部 ${pages.length} 页截图（按页序）。` }, ...images] },
+  ] });
+  const parsed = parseModelJson(response);
+  if (typeof parsed.accepted !== 'boolean' || !Array.isArray(parsed.issues)) throw new Error('视觉质检响应格式无效');
+  return { accepted: parsed.accepted && !parsed.issues.length, issues: parsed.issues.slice(0, 12), coverage: parsed.coverage ?? null, unavailable: false };
+}
+
 /** 灰稿 Agent 的自主循环。除 state.json 的状态字段外不写业务数据；具体产物由工具写。 */
 export async function runGrayAgent({ source, output, area, root = process.cwd(), provider, maxTurns = 20, observer = null }) {
   area = validateGrayArea(area);
@@ -99,6 +121,14 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
   const systemPrompt = `${GRAY_AGENT_PROMPT}\n\n以下为本项目共用规则真源：\n${sharedRules}`;
   await fs.writeFile(path.join(output, 'agent-system-prompt.txt'), systemPrompt, 'utf8');
 
+  // 视觉质检（可选）：渲染完成后用视觉模型看逐页截图。缺配置时如实标注不可用并放行，不卡流程。
+  let visionProvider = null;
+  try {
+    const local = await loadDeepSeekLocalConfig(root);
+    const visionModel = process.env.PPAGENT_DEEPSEEK_VISUAL_COMPOSITION_MODEL || local?.roles?.visualComposition?.model;
+    if (visionModel) visionProvider = await buildChatProviderFromEnv({ root, model: visionModel, maxTokens: 4000, observer: observer ?? undefined });
+  } catch { visionProvider = null; }
+
   let renderCount = 0;
   let lastContent = '';
   let lastReview = null;
@@ -129,7 +159,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
     }),
     defineTool({
       name: 'render_draft',
-      description: '按你本轮正文中的计划与每页基础组合求解几何并渲染灰稿。layouts 是逐页数组 [{pageId,layout}]；layout 为简式 {type:"single|row|column|grid",weights?,columns?} 或嵌套 {type,weights?,columns?,children:[…]}（children 项为 {groupId} 或嵌套组合，按阅读顺序恰好覆盖本页全部组一次，最多三层）。这是小参数，仍走工具参数。只要程序检查通过即可渲染交付；独立审稿的遗留问题会随交付记录，不阻塞渲染。成功返回 {accepted:true, preview:[逐页图片], pptx, editable}；失败返回 {accepted:false, stage:"geometry|check", reason, issues}，据此修订后重试。',
+      description: '按你本轮正文中的计划与每页基础组合求解几何并渲染灰稿。layouts 是逐页数组 [{pageId,layout}]；layout 为简式 {type:"single|row|column|grid",weights?,columns?} 或嵌套 {type,weights?,columns?,children:[…]}（children 项为 {groupId} 或嵌套组合，按阅读顺序恰好覆盖本页全部组一次，最多三层）。这是小参数，仍走工具参数。渲染成功后会先过视觉质检（视觉模型看逐页截图，查溢出、重叠、异常空白、错位），通过才算交付；独立审稿的遗留问题随交付记录，不阻塞渲染。成功返回 {accepted:true, visual:"passed|unavailable", preview, pptx, editable}；失败返回 {accepted:false, stage:"geometry|check|visual", reason, issues}，据此修订后重试。',
       inputSchema: {
         type: 'object',
         properties: {
@@ -162,9 +192,25 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         }
         await fs.writeFile(path.join(attemptDir, 'plan.json'), json({ ...built.plan, planningNotes: plan.planningNotes }), 'utf8');
         await fs.writeFile(path.join(attemptDir, 'layout.json'), json(layouts), 'utf8');
-        // 渲染到独立尝试目录：每次尝试都留证据；成功后把交付版复制到运行根目录（与阶段链产物结构一致）。
+        // 渲染到独立尝试目录：每次尝试都留证据；视觉质检通过后才把交付版复制到运行根目录。
         const renderState = { ...report.state, grayDraft: { ...agentState.grayDraft, status: 'rendering' } };
         await renderGrayDraft(renderState, attemptDir);
+        // 交付闸门：程序检查通过后还要过视觉质检（视觉模型看逐页截图，查溢出/重叠/异常空白/错位）。
+        let visual;
+        if (visionProvider) {
+          try { visual = await visualReview(attemptDir, renderState.pages, visionProvider); }
+          catch (error) { visual = { accepted: true, unavailable: true, issues: [], note: error?.message ?? String(error) }; }
+        } else {
+          visual = { accepted: true, unavailable: true, issues: [], note: '未配置视觉模型（roles.visualComposition.model）' };
+        }
+        await fs.writeFile(path.join(attemptDir, 'visual-review.json'), json(visual), 'utf8');
+        agentState.grayDraft.visualReview = { at: new Date().toISOString(), ...visual };
+        if (!visual.accepted) {
+          const failure = { accepted: false, stage: 'visual', reason: '视觉质检未通过（看截图有可见缺陷）', issues: visual.issues, coverage: visual.coverage ?? null };
+          agentState.grayDraft.renders.push({ render: renderCount, accepted: false, stage: 'visual', issues: visual.issues.length });
+          await saveAgentState();
+          return failure;
+        }
         for (const name of ['gray-draft.pptx', 'editable-check.json', 'preview-index.json', 'plan.json']) {
           await fs.copyFile(path.join(attemptDir, name), path.join(output, name));
         }
@@ -185,7 +231,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         agentState.grayDraft.programCheck = { ...report, state: undefined };
         await saveAgentState();
         const preview = renderState.pages.map((page, index) => `${path.relative(output, attemptDir)}/preview/slide-${String(index + 1).padStart(2, '0')}.png`);
-        return { accepted: true, preview, pptx: `${path.relative(output, attemptDir)}/gray-draft.pptx`, pages: renderState.pages.length };
+        return { accepted: true, visual: visual.unavailable ? 'unavailable' : 'passed', preview, pptx: `${path.relative(output, attemptDir)}/gray-draft.pptx`, pages: renderState.pages.length };
       },
     }),
   ];
