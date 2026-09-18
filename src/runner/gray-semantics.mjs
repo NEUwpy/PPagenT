@@ -93,14 +93,13 @@ export function samePageCues(cues, plan) {
 }
 
 /**
- * 分页闸门（评审 #22 裁决二）：同页双容器目标下，按类别分页只认「两轮真压缩（每轮实测更短）」后的仍超；
+ * 分页闸门（评审 #22 裁决二；#24 收紧）：同页双容器目标下，按类别分页只认「两轮真压缩（每轮实测更短）」后的仍超；
  * 通用「两次容量失败即分页」在此目标下不生效。minimums 为该形态容量失败的逐次实测高。
- * 边界：尚未发生同页容量失败时不拦截（先按规则规划；避免对无法合并的稿件引入新死锁）。
+ * 未发生同页尝试时同样不接收分页计划（先按类别规则的同页并排规划）。
  */
 export function splitGate({ cues, plan, minimums }) {
   const rounds = (() => { let value = 0; const list = minimums ?? []; for (let i = 1; i < list.length; i += 1) if (list[i] < list[i - 1]) value += 1; return value; })();
   if ((cues ?? []).length !== 2) return { blocked: false, rounds };
-  if (!(minimums ?? []).length) return { blocked: false, rounds };
   if (samePageCues(cues, plan)) return { blocked: false, rounds };
   return { blocked: rounds < 2, rounds };
 }

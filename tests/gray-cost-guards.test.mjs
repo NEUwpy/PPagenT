@@ -93,7 +93,7 @@ test('分页闸门：同页双容器目标下，两轮真压缩前拒绝分页�
   assert.equal(samePageCues(cues, mergedPlan()), true);
   assert.equal(samePageCues(cues, splitPlan()), false);
   assert.equal(splitGate({ cues, plan: mergedPlan(), minimums: [] }).blocked, false);
-  assert.equal(splitGate({ cues, plan: splitPlan(), minimums: [] }).blocked, false); // 尚未发生同页容量失败：不引入新死锁
+  assert.equal(splitGate({ cues, plan: splitPlan(), minimums: [] }).blocked, true); // 直接分页也被拦：先按同页并排规划
   assert.equal(splitGate({ cues, plan: splitPlan(), minimums: [664] }).blocked, true);
   assert.equal(splitGate({ cues, plan: splitPlan(), minimums: [664, 634] }).blocked, true);
   assert.deepEqual(splitGate({ cues, plan: splitPlan(), minimums: [664, 634, 600] }), { blocked: false, rounds: 2 });
