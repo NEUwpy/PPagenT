@@ -16,6 +16,7 @@ import { buildChatProviderFromEnv } from './chat-provider.mjs';
 import { loadDeepSeekLocalConfig } from '../agent/deepseek-provider-from-env.mjs';
 import { newRunState, writeState, renderContentMarkdown, renderStateMarkdown } from './state.mjs';
 import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan, semanticReviewInput, markFlowSources } from './gray-semantics.mjs';
+import { applyTemplateDefaults } from './gray-templates.mjs';
 import { resolveGrayLayout } from './gray-layout.mjs';
 import { grayBodyLayout, fitGrayText, validateGrayArea, validateGrayPlan, renderGrayDraft } from './gray-draft.mjs';
 
@@ -34,7 +35,7 @@ export const GRAY_AGENT_PROMPT = `你是灰稿制作 Agent。目标：把用户�
 交付观：审稿是辅助而不是关口——事实性遗漏、编造、模拟声明缺失必须修复；纯粹的形式偏好随交付记录即可。程序检查通过后即可渲染交付。
 **计划的传递方式：把你当前完整的 gray-plan-3 计划 JSON 写在每轮消息的正文里（这是唯一事实来源）；check_plan、semantic_review、render_draft 都读取你本轮正文中的计划，不要在工具参数里重复它，也不要只写差异——每次修订都重写完整计划。**
 容量与分页：页数服从内容量——每页必须有实质展开（对象、条件、范围、动作），某页只剩一两句单薄的话（每组仅一句、无细节）时就并入相邻页，不为凑页数摊薄；全稿组数少时控制在两页内——三四个组一页即可，五六个组默认两页；一页放不下就分页，不要反复精简文字硬塞一页，也不要每两三个组单开一页把短稿摊成多页；标题给出判断，正文必须补充标题没有的细节，不整句复述标题。渲染回执报"一页放不下"时，优先把内容拆到多页（pages 增加一页），其次才考虑合并相关组、精简文字；连续两次容量失败就改用分页，不要继续在单页上换组合死磕。
-布局选择（调用 render_draft 时给出）：简式 {type:"single|row|column|grid",weights?,columns?} 的子节点默认按阅读顺序取本页全部组；页面有分层关系时用嵌套式 {type,children:[{groupId},或嵌套]}，例如主区在上、一条注记横贯下方 = {type:"column",children:[{type:"row",children:[{groupId:"g1"},{groupId:"g2"}]},{groupId:"g3"}]}。row 横向分栏、column 纵向排列、grid 规则网格；weights（仅 row）分配多余宽度，按各栏实文行数/展开需要给比例（如 3:2、5:4），不要默认等分，columns（仅 grid）是列数；children 必须按阅读顺序恰好覆盖本页全部组一次；嵌套最多三层。主次通过空间份额与组标题层级体现，少量内容不必拉满一页，不要为了变化而嵌套。
+布局选择（调用 render_draft 时给出）：简式 {type:"single|row|column|grid",weights?,columns?} 的子节点默认按阅读顺序取本页全部组；页面有分层关系时用嵌套式 {type,children:[{groupId},或嵌套]}，例如主区在上、一条注记横贯下方 = {type:"column",children:[{type:"row",children:[{groupId:"g1"},{groupId:"g2"}]},{groupId:"g3"}]}。row 横向分栏、column 纵向排列、grid 规则网格；weights（仅 row）分配多余宽度，按各栏实文行数/展开需要给比例（如 3:2、5:4），不要默认等分，columns（仅 grid）是列数；children 必须按阅读顺序恰好覆盖本页全部组一次；嵌套最多三层。主次通过空间份额与组标题层级体现，少量内容不必拉满一页，不要为了变化而嵌套。每页有程序默认版式（1 组多条=类别容器、1 组单条=单主体、2 组=双栏对照、≥3 组=行式清单）；页条目可以不写 layout 采用默认。自己选与默认不同的组合时，必须在该页加 override:{reason:"一句话理由"}，理由会入档分析；仅微调 weights 不算覆盖。
 格式：{schemaVersion:"gray-plan-3",deckBrief:{title,audience,objective},pages:[{pageId:"p1",title:"短标题",claim:"简短上屏主题句，建议二十字左右",pagePurpose:"本页解决的问题",narrative:"一句话说明必要的先后、并行、判断或归属关系",groups:[{id:"g1",role:"本组主要职责",heading:"上屏短标题",importance:"primary|supporting",kind:"text|diagram|flow|chart|table|image",blocks:[{id:"b1",label:"可选上屏子标题",text:"真实上屏文字",sourceIds:["s1"]}],expression:"非text必填：表达作用",relationship:"非text必填：基本关系",production:"非text必填：制作要求"}]}],planningNotes:"简短后台组织说明"}。
 先明确页面职责，按内容归属形成groups，再把各分支的条目放进blocks，用label与text区分要点和展开。原稿自带类别线索时（如"首先是两点不足、其次是四点感悟"、"一是…二是…"分属两类），先恢复两层归属：组是类别层——类别成为组（组标题用类别名），类别内的每个条目是该组的块（label=条目要点，text=条目展开）；条目不升级为组，不得与类别同层铺成多个组，也不得为条目单独开页。条目内部的并列细项（如四方面、三方面原因）无论出现在行文中还是冒号后，都逐项成块、一行一项（行首可用"·"），不压进一个逗号长句。类别内条目都是短条目（各 1–2 行）时，整类必须排在一页——先按整类一页规划，容量确有需要才拆页：若只超出不到一行（≤60px），按原稿允许的提炼压紧——优先删排比性复述与修饰语（删修饰不删事实），合并页用紧凑散文、不展开多行链——再试一次合并；仍超出才拆页。类别跨页时，拆出的每页仍保持类别成组：每页一个组、组标题用「类别名＋本页条目提示」的内容词（如"感悟：统一语言与检验标准"），页内条目属于该组；不得把类别拆成多个同级组，也不得沿用类别总数标题（一页只放两条时不许写"四点感悟"）。公文头尾是流转信息、不是演示内容：来源表里标为流转信息的来源一律不上屏（无需引用），也不得改写成"通知依据""背景"之类条目。不要把分属不同观点的依据摊成同级卡片，也不要把分类、依据、准则混称为证明。label可省略；要用时必须是内容词（如"正常""已修复"），不用"拆分项一""对象""状态一"这类结构占位名，也不带"（全页适用）"这类版面说明；表格行只有行头与内容两段，不要把多列文字用竖线拼进一个块。文字组内某条需要图示时，该block可选kind及expression、relationship、production；其label仍是上屏条目标题。按内容关系选择表达：两个及以上对象的共同维度对照用diagram，每个对象一个block；步骤、流程与时间顺序（三个及以上节点）用flow，节点按顺序；明确的对照网格用table，每行一个block；数据图表与图片保留蓝区说明，并在制作要求里写明建议表达。分解或构成（总量＝部分之和、对象→去向）、指标随时间变化不用平行卡片，用一条可读文字（"异常 7 台：已修复 5 台，待配件 2 台"）。行式表格只用于多个对象按共同维度互相对照（两种模式×多项指标、多个项目×进度与问题）；单个对象的一组规则、要求、背景说明用文字条目（一句一条），不做成表格。同一页不要所有组都用同一种表达；同一稿件不同页避免重复同一组合。diagram/flow/table会绘制简化草图，框内文字就是实际文案、必须完整可读；不要一律平铺文字，也不要给没有内部关系的内容硬套结构。
 每个block必须引用来源，所有正文来源至少被一个block引用；标为流转信息（文件头尾等）的来源无需引用、不得上屏。来源切分表随稿件给出（id、开头预览与流转标记），引用 sourceIds 以它为准，不要猜。模拟/假设声明只要原稿给出，就必须上屏且恰好一次：最自然的位置是页面主题句，或紧邻主体的一个条目；不得省略、不得逐条重复、不得独立成组。真实条件与否定不能省略，准则不是已满足的证据，并行准备不是下一阶段。条件触发的处置、异常或例外是附着性内容：注明它约束哪些对象或环节，从属并紧邻所依附的内容，不与主流程环节、并列要点铺成同层组。页面目的、narrative和planningNotes不在灰稿上显示；内部审查理由不要改写成正文。`;
@@ -172,7 +173,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
     }),
     defineTool({
       name: 'render_draft',
-      description: '按你本轮正文中的计划与每页基础组合求解几何并渲染灰稿。layouts 是逐页数组 [{pageId,layout}]；layout 为简式 {type:"single|row|column|grid",weights?,columns?} 或嵌套 {type,weights?,columns?,children:[…]}（children 项为 {groupId} 或嵌套组合，按阅读顺序恰好覆盖本页全部组一次，最多三层）。这是小参数，仍走工具参数。程序检查通过即可交付；独立审稿的遗留问题随交付记录，不阻塞渲染。成功返回 {accepted:true, preview, pptx, editable}；失败返回 {accepted:false, stage:"geometry|check", reason, issues}，据此修订后重试。',
+      description: '按你本轮正文中的计划与每页基础组合求解几何并渲染灰稿。layouts 是逐页数组 [{pageId,layout}]；layout 为简式 {type:"single|row|column|grid",weights?,columns?} 或嵌套 {type,weights?,columns?,children:[…]}（children 项为 {groupId} 或嵌套组合，按阅读顺序恰好覆盖本页全部组一次，最多三层）。每页有程序默认版式（按组数与实文量）；页条目可不写 layout 采用默认；改用其它组合须在该页加 override:{reason:"一句话理由"}（入档分析），仅微调 weights 不算覆盖。这是小参数，仍走工具参数。程序检查通过即可交付；独立审稿的遗留问题随交付记录，不阻塞渲染。成功返回 {accepted:true, preview, pptx, editable}；失败返回 {accepted:false, stage:"geometry|check|template", reason, issues}，据此修订后重试。',
       inputSchema: {
         type: 'object',
         properties: {
@@ -185,9 +186,24 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         renderCount += 1;
         const attemptDir = path.join(output, 'agent-renders', `render-${renderCount}`);
         await fs.mkdir(attemptDir, { recursive: true });
+        let applied;
+        try {
+          applied = applyTemplateDefaults(plan, layouts);
+        } catch (error) {
+          const failure = { accepted: false, stage: 'template', reason: error.message };
+          await fs.writeFile(path.join(attemptDir, 'failure.json'), json({ ...failure, plan, layouts }), 'utf8');
+          agentState.grayDraft.renders.push({ render: renderCount, accepted: false, stage: 'template', reason: error.message });
+          await saveAgentState();
+          return failure;
+        }
+        await fs.writeFile(path.join(attemptDir, 'templates.json'), json({
+          defaults: applied.decisions.filter(decision => decision.mode === 'default').length,
+          overrides: applied.decisions.filter(decision => decision.mode === 'override').length,
+          decisions: applied.decisions,
+        }), 'utf8');
         let built;
         try {
-          built = resolveGrayLayout(plan, { pages: layouts }, area, { measureBody: grayBodyLayout, fitText: fitGrayText });
+          built = resolveGrayLayout(plan, { pages: applied.layouts }, area, { measureBody: grayBodyLayout, fitText: fitGrayText });
         } catch (error) {
           const failure = { accepted: false, stage: 'geometry', reason: error.message, details: error.details ?? null };
           await fs.writeFile(path.join(attemptDir, 'failure.json'), json({ ...failure, plan, layouts }), 'utf8');
@@ -237,7 +253,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         agentState.grayDraft.programCheck = { ...report, state: undefined };
         await saveAgentState();
         const preview = renderState.pages.map((page, index) => `${path.relative(output, attemptDir)}/preview/slide-${String(index + 1).padStart(2, '0')}.png`);
-        return { accepted: true, preview, pptx: `${path.relative(output, attemptDir)}/gray-draft.pptx`, pages: renderState.pages.length, planSource, ...(report.warnings?.length ? { warnings: report.warnings } : {}), ...(planNote ? { note: planNote } : {}) };
+        return { accepted: true, preview, pptx: `${path.relative(output, attemptDir)}/gray-draft.pptx`, pages: renderState.pages.length, planSource, templates: { defaults: applied.decisions.filter(decision => decision.mode === 'default').length, overrides: applied.decisions.filter(decision => decision.mode === 'override').length }, ...(report.warnings?.length ? { warnings: report.warnings } : {}), ...(planNote ? { note: planNote } : {}) };
       },
     }),
   ];
