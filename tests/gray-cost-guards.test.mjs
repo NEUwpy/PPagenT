@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import { attemptFingerprint, isStalledRetry, categoryCues, samePageCues, splitGate, SEMANTIC_REVIEW_CONTRACT, regionBody, grayDisplayBlocks } from '../src/runner/gray-semantics.mjs';
+import { attemptFingerprint, isStalledRetry, categoryCues, samePageCues, splitGate, SEMANTIC_REVIEW_CONTRACT, regionBody, grayDisplayBlocks, planTextVolume, isSameMinimumRetry } from '../src/runner/gray-semantics.mjs';
 import { resolveGrayLayout, compressionMemory } from '../src/runner/gray-layout.mjs';
 import { grayBodyLayout, fitGrayText } from '../src/runner/gray-draft.mjs';
 
@@ -138,4 +138,20 @@ test('条目编号标签：按实际顺序、跳条不串号；单条目组不�
   assert.deepEqual(grayDisplayBlocks(group).filter(run => run.bold).map(run => run.text), ['一 第一条', '三 第三条']);
   const single = { id: 'g2', kind: 'text', blocks: [{ id: 'b1', label: '唯一条目', text: '甲。' }] };
   assert.deepEqual(grayDisplayBlocks(single).filter(run => run.bold).map(run => run.text), ['唯一条目']);
+});
+
+test('同最小高重试：实测高未降且文本未缩短才拒绝；缩短或降高均放行', () => {
+  assert.equal(isSameMinimumRetry({ previousMinimum: 503, currentMinimum: 503, previousTextLength: 800, currentTextLength: 800 }), true);
+  assert.equal(isSameMinimumRetry({ previousMinimum: 503, currentMinimum: 504, previousTextLength: 800, currentTextLength: 810 }), true);
+  assert.equal(isSameMinimumRetry({ previousMinimum: 503, currentMinimum: 503, previousTextLength: 800, currentTextLength: 760 }), false);
+  assert.equal(isSameMinimumRetry({ previousMinimum: 503, currentMinimum: 490, previousTextLength: 800, currentTextLength: 800 }), false);
+  assert.equal(isSameMinimumRetry({ previousMinimum: undefined, currentMinimum: 503, previousTextLength: undefined, currentTextLength: 800 }), false);
+});
+
+test('计划文本量：计入标题、标签、正文与结构位字段', () => {
+  const plan = { pages: [{ groups: [{ heading: '不足', blocks: [
+    { id: 'b1', label: '势能', text: '正文' },
+    { id: 'b2', text: '说明', kind: 'flow', expression: '作用', relationship: '关系', production: '要求' },
+  ] }] }] };
+  assert.equal(planTextVolume(plan), '不足'.length + '势能'.length + '正文'.length + '说明'.length + '作用'.length + '关系'.length + '要求'.length);
 });

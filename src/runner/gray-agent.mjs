@@ -15,7 +15,7 @@ import { createToolRegistry, defineTool } from './tools/index.mjs';
 import { buildChatProviderFromEnv } from './chat-provider.mjs';
 import { loadDeepSeekLocalConfig } from '../agent/deepseek-provider-from-env.mjs';
 import { newRunState, writeState, renderContentMarkdown, renderStateMarkdown } from './state.mjs';
-import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan, semanticReviewInput, markFlowSources, SHARED_RULES, attemptFingerprint, isStalledRetry, categoryCues, samePageCues, splitGate } from './gray-semantics.mjs';
+import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan, semanticReviewInput, markFlowSources, SHARED_RULES, attemptFingerprint, isStalledRetry, categoryCues, samePageCues, splitGate, planTextVolume, isSameMinimumRetry } from './gray-semantics.mjs';
 import { applyTemplateDefaults, describeDefaults } from './gray-templates.mjs';
 import { auditGeometry, voidWarnings, VOID_THRESHOLDS } from './gray-audit.mjs';
 import { resolveGrayLayout, compressionMemory } from './gray-layout.mjs';
@@ -253,6 +253,16 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
           const pageMinimum = Math.ceil(details?.minimum?.height ?? 0);
           const previousMinimum = details?.pageId && lastMinimums.has(details.pageId) ? lastMinimums.get(details.pageId) : undefined;
           const memory = pageMinimum > 0 ? compressionMemory({ currentMinimum: pageMinimum, areaHeight: area.height, previousMinimum }) : null;
+          // 同最小高重试检测（评审 #26 批准）：实测高未降且文本量未缩短——按停滞拒绝，逼真压缩。
+          const textVolume = planTextVolume(plan);
+          const previousGeometry = [...agentState.grayDraft.renders].reverse().find(record => record?.accepted === false && record?.stage === 'geometry');
+          if (details?.pageId && isSameMinimumRetry({ previousMinimum, currentMinimum: pageMinimum, previousTextLength: previousGeometry?.textVolume, currentTextLength: textVolume })) {
+            const reason = `本轮实测最小高 ${pageMinimum}px，未比上一版 ${previousMinimum}px 更小（文本量也未缩短）：停在同一版重试没有意义——必须真正压缩正文（删修饰语、缩短语、并短线，保事实数字），两轮压缩仍放不下才按类别分页。`;
+            agentState.grayDraft.stalls = [...(agentState.grayDraft.stalls ?? []), { at: new Date().toISOString(), fingerprint, reason }];
+            agentState.grayDraft.renders.push({ render: renderCount, accepted: false, stage: 'stall-minimum', reason, fingerprint, textVolume, ...(pageMinimum > 0 ? { pageMinimums: { [details.pageId]: pageMinimum } } : {}) });
+            await saveAgentState();
+            return { accepted: false, stage: 'stall', reason };
+          }
           if (details?.pageId && pageMinimum > 0) lastMinimums.set(details.pageId, pageMinimum);
           if (details?.pageId && pageMinimum > 0 && plan.pages.length === 1 && samePageCues(cues, plan)) mergeMinimums.push(pageMinimum);
           const failure = {
@@ -261,7 +271,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
             details: details ? { ...details, ...(memory ? { previousMinimum: memory.previousMinimum, targetDelta: memory.targetDelta, previousTargetDelta: memory.previousTargetDelta } : {}) } : null,
           };
           await fs.writeFile(path.join(attemptDir, 'failure.json'), json({ ...failure, plan, layouts }), 'utf8');
-          agentState.grayDraft.renders.push({ render: renderCount, accepted: false, stage: 'geometry', reason: error.message, fingerprint, ...(details?.pageId && pageMinimum > 0 ? { pageMinimums: { [details.pageId]: pageMinimum } } : {}) });
+          agentState.grayDraft.renders.push({ render: renderCount, accepted: false, stage: 'geometry', reason: error.message, fingerprint, textVolume, ...(details?.pageId && pageMinimum > 0 ? { pageMinimums: { [details.pageId]: pageMinimum } } : {}) });
           await saveAgentState();
           return failure;
         }

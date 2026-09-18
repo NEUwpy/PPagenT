@@ -135,6 +135,25 @@ export function isStalledRetry(previousAttempts, fingerprint) {
   return (previousAttempts ?? []).some(attempt => attempt?.accepted === false && attempt?.stage === 'geometry' && attempt?.fingerprint === fingerprint);
 }
 
+/** 计划文本量（评审 #26「同最小高重试」）：影响渲染高度的可见字段总量，用于判断重试是否真的在缩短。 */
+export function planTextVolume(plan) {
+  return (plan?.pages ?? []).reduce((total, page) => total + (page.groups ?? []).reduce((sum, group) => sum
+    + String(group.heading ?? '').length
+    + (group.blocks ?? []).reduce((blocks, block) => blocks
+      + String(block.label ?? '').length + String(block.text ?? '').length
+      + String(block.expression ?? '').length + String(block.relationship ?? '').length + String(block.production ?? '').length, 0), 0), 0);
+}
+
+/**
+ * 同最小高重试判定（评审 #26 批准）：容量失败后，本次实测最小高不低于上一版（差异 <1px 视同未降）
+ * 且文本量未缩短——属于停滞重试，按「必须真正压缩」拒绝。
+ */
+export function isSameMinimumRetry({ previousMinimum, currentMinimum, previousTextLength, currentTextLength }) {
+  if (!Number.isFinite(previousMinimum) || !Number.isFinite(currentMinimum) || currentMinimum <= 0) return false;
+  if (!Number.isFinite(previousTextLength) || !Number.isFinite(currentTextLength)) return false;
+  return currentMinimum >= previousMinimum - 1 && currentTextLength >= previousTextLength;
+}
+
 export function grayCoverageIssues(state) {
   const flowIds = new Set((state.sources ?? []).filter(source => source.flow).map(source => source.id));
   const issues = [];
