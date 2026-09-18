@@ -43,6 +43,26 @@ test("Skin 标题使用离散字号并优先在语义标点处换行", () => {
   assert.ok(closing.lineCount <= 3);
 });
 
+test("行首禁则：闭引号/闭括号/句读不得起行（含实证样本）", () => {
+  const forbidden = /^[、，。：；！？,.!?)”’」』）】》〉〕]/u;
+  const empirical = "体系变革是否成效，要以能否“解决实际问题”为唯一检验标准，力求变革落地有实效。";
+  for (let capacity = 8; capacity <= 24; capacity += 1) {
+    const wrapped = wrapChineseText(empirical, capacity);
+    assert.equal(wrapped.replaceAll("\n", ""), empirical);
+    for (const line of wrapped.split("\n")) assert.ok(!forbidden.test(line), `capacity=${capacity}: ${line}`);
+  }
+  const cases = [
+    ["指标“按期完成”并复核。", 6],
+    ["负责人（含副职）签字后归档。", 7],
+    ["“六地”红是最鲜亮的底色。", 6],
+  ];
+  for (const [source, capacity] of cases) {
+    const wrapped = wrapChineseText(source, capacity);
+    assert.equal(wrapped.replaceAll("\n", ""), source);
+    for (const line of wrapped.split("\n")) assert.ok(!forbidden.test(line), `${source} @${capacity}: ${line}`);
+  }
+});
+
 test("文字低于 Skin 最小字号仍放不下时失败关闭", () => {
   const result = fitChineseTextToFrame("这是一段明显超过单行标题容量而且不能继续缩小字号的文字", {
     width: 240,

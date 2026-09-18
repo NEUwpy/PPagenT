@@ -43,6 +43,8 @@ function semanticTwoLineWrap(value, maxUnits) {
     if (!/[，。：；！？]/u.test(char) || index >= chars.length - 1) return;
     const left = chars.slice(0, index + 1).join("");
     const right = chars.slice(index + 1).join("");
+    // 行首禁则：闭引号/闭括号/句读不得起行（右侧以禁则字符开头则不用这个断点）
+    if (LEADING_FORBIDDEN.test(right)) return;
     const leftUnits = textUnits(left);
     const rightUnits = textUnits(right);
     const shorterRatio = Math.min(leftUnits, rightUnits) / Math.max(1, leftUnits + rightUnits);
@@ -112,13 +114,26 @@ export function fitChineseTextToFrame(value, {
   return fallback;
 }
 
+/** 行首禁则字符集：闭引号、闭括号与句读不得起行（行首出现时附到上一 token 尾部）。 */
+const LINE_START_FORBIDDEN_CHARS = '、，。：；！？,.!?)”’」』）】》〉〕';
+const LEADING_FORBIDDEN = new RegExp(`^[${LINE_START_FORBIDDEN_CHARS}]+`, 'u');
+
 function lineTokens(value) {
   const tokens = [];
   for (const { segment } of ZH_WORD_SEGMENTER.segment(String(value ?? ""))) {
     if (!segment) continue;
-    if (/^\s+$/u.test(segment) || /^[、，。：；！？,.!?)]$/u.test(segment)) {
+    if (/^\s+$/u.test(segment)) {
       if (tokens.length) tokens[tokens.length - 1] += segment;
       else tokens.push(segment);
+      continue;
+    }
+    // 行首禁则：段首的闭标点整体附到上一个 token（本就以禁则字符开头则原样入列）。
+    const leading = segment.match(LEADING_FORBIDDEN);
+    if (leading) {
+      if (tokens.length) tokens[tokens.length - 1] += leading[0];
+      else tokens.push(leading[0]);
+      const rest = segment.slice(leading[0].length);
+      if (rest) tokens.push(rest);
       continue;
     }
     if (/^[字页章节项个]$/u.test(segment)
