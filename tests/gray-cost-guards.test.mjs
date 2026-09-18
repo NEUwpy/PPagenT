@@ -122,11 +122,12 @@ test('同页双容器字号降档：18–20px 候选中按测量选择，492 内
   assert.ok(regions.every(region => region.height <= 492), JSON.stringify(regions));
 });
 
-test('蓝区紧凑格式：四件套单行呈现，与 rules/排版.md 同步', async () => {
-  const block = { id: 'b1', label: '势能到动能阻力重重', text: '三因→变革落地阻力重重', kind: 'flow', expression: '把三项并列原因汇聚到一个结果', relationship: '汇聚：三项原因共同造成落地阻力', production: '三框一果箭头图', sourceIds: ['s1'] };
-  assert.equal(regionBody(block), '作:把三项并列原因汇聚到一个结果｜承:三因→变革落地阻力重重｜关:汇聚：三项原因共同造成落地阻力｜制:三框一果箭头图');
+test('蓝区平直中文：不用字段代码前缀，与 rules/排版.md 同步', async () => {
+  const block = { id: 'b1', label: '势能到动能阻力重重', text: '变革氛围尚未完全形成／信息系统支撑能力仍有差距／缺乏市场化管理机制', kind: 'flow', expression: '三个阻力原因并列、箭头汇聚指向结果框「变革落地阻力重重」', relationship: '汇聚：三项原因共同造成落地阻力', production: '三框一果箭头图，框内文字即上屏文案', sourceIds: ['s1'] };
+  assert.equal(regionBody(block), '建议画结构图：三个阻力原因并列、箭头汇聚指向结果框「变革落地阻力重重」。节点文案：变革氛围尚未完全形成／信息系统支撑能力仍有差距／缺乏市场化管理机制。汇聚：三项原因共同造成落地阻力。三框一果箭头图，框内文字即上屏文案。');
+  assert.doesNotMatch(regionBody(block), /作:|承:|关:|制:/u);
   const rules = await fs.readFile(new URL('../rules/排版.md', import.meta.url), 'utf8');
-  assert.match(rules, /作:…｜承:…｜关:…｜制:…/u);
+  assert.match(rules, /建议画结构图：…。节点文案：…/u);
 });
 
 test('条目编号标签：按实际顺序、跳条不串号；单条目组不编号', () => {
