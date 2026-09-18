@@ -160,9 +160,9 @@ function pickFormLayout(tree, page, area, metrics, fonts) {
  * 用真实测量函数扫描候选分栏，取第一个能容纳的权重。候选只改 row 的 weights（形状不变），
  * 以测量为准、不硬编码稿件特例；命中后回执标注 reweighted 供成本与覆盖分析。
  */
-function reweightedRow(tree, page, area, metrics, fontSize = 22) {
+function reweightedRow(tree, page, area, metrics, fontSize = 22, share = {}) {
   if (tree.op !== 'row' || tree.children.length !== 2 || tree.children.some(child => !child.groupId)) return null;
-  for (const candidate of weightCandidates(tree.weights)) {
+  for (const candidate of weightCandidates(tree.weights, share)) {
     const weights = candidate.weights;
     const candidateTree = { ...tree, weights };
     try {
@@ -190,7 +190,8 @@ export function resolveGrayLayout(plan, selection, area, { measureBody, fitText,
     let fontSize = 22;
     let formPick = null;
     const fontCandidates = typeof fontSizes === 'function' ? fontSizes(page, tree) : null;
-    if (isDualRow(tree) && Array.isArray(fontCandidates) && fontCandidates.length > 1) {
+    const formActive = isDualRow(tree) && Array.isArray(fontCandidates) && fontCandidates.length > 1;
+    if (formActive) {
       formPick = pickFormLayout(tree, page, area, { measureBody, fitText }, fontCandidates);
       if (formPick) { tree = formPick.tree; fontSize = formPick.fontSize; }
     }
@@ -216,7 +217,7 @@ export function resolveGrayLayout(plan, selection, area, { measureBody, fitText,
       solved = resolveLayoutTree({ composition, bodyFrame: { left: 0, top: 0, width: area.width, height: area.height }, contracts, style: { gap: GAP } });
     } catch (error) {
       if (error.code !== 'COMPOSITION_RECOMPOSE_REQUIRED') throw error;
-      const attempt = reweightedRow(tree, page, area, { measureBody, fitText }, fontSize);
+      const attempt = reweightedRow(tree, page, area, { measureBody, fitText }, fontSize, formActive ? { shareMin: FORM_SHARE_MIN, shareMax: FORM_SHARE_MAX } : {});
       if (!attempt) {
         // 容量只报"需要重组"不足以让模型收敛：给出实测最小尺寸与出路（合组/精简/分页）。
         const minimum = error.details?.minimum;
