@@ -113,6 +113,9 @@ test('同页双容器字号降档：18–20px 候选中按测量选择，492 内
   assert.ok(receipt.formPick, '应记录 formPick 选择依据');
   assert.ok([18, 20].includes(receipt.fontSize), `fontSize=${receipt.fontSize}`);
   assert.ok(receipt.formPick.maxHeight <= 492, JSON.stringify(receipt.formPick));
+  const [wa, wb] = receipt.formPick.weights;
+  const share = wa / (wa + wb);
+  assert.ok(share >= 0.30 && share <= 0.65, `单栏占比应在参照带内：${share}`);
   const regions = result.plan.pages[0].composition.regions;
   assert.ok(regions.every(region => region.fontSize === receipt.fontSize));
   assert.ok(regions.every(region => region.height <= 492), JSON.stringify(regions));

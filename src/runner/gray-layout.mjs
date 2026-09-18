@@ -89,14 +89,20 @@ export function compressionMemory({ currentMinimum, areaHeight, previousMinimum 
 }
 
 const REWEIGHT_MAX = 8;
-/** 候选权重（1..8 整数比），按与给定比例的距离排序；等价比例（如 [2,3] 对 [4,6]）保留一个即可。 */
-function weightCandidates(baseWeights) {
+/** 同页双容器单栏占比参照带（评审 #24）：内容量导向但禁止 [2,7] 式极化，范本观感约 50/50。 */
+const FORM_SHARE_MIN = 0.30;
+const FORM_SHARE_MAX = 0.65;
+
+/** 候选权重（1..8 整数比），按与给定比例的距离排序；可选占比约束（同页双容器参照带）。 */
+function weightCandidates(baseWeights, { shareMin = 0, shareMax = 1 } = {}) {
   const base = Array.isArray(baseWeights) ? baseWeights : [1, 1];
   const baseRatio = base[0] / (base[0] + base[1]);
   const candidates = [];
   for (let a = 1; a <= REWEIGHT_MAX; a += 1) for (let b = 1; b <= REWEIGHT_MAX; b += 1) {
     if (a === b) continue;
-    candidates.push({ weights: [a, b], distance: Math.abs(a / (a + b) - baseRatio) });
+    const share = a / (a + b);
+    if (share < shareMin || share > shareMax) continue;
+    candidates.push({ weights: [a, b], distance: Math.abs(share - baseRatio) });
   }
   candidates.sort((x, y) => x.distance - y.distance);
   return candidates;
@@ -129,7 +135,7 @@ const isDualRow = tree => tree.op === 'row' && tree.children.length === 2 && tre
 function pickFormLayout(tree, page, area, metrics, fonts) {
   const margin = area.height * 0.95;
   const candidates = [];
-  for (const fontSize of fonts) for (const candidate of weightCandidates(tree.weights)) {
+  for (const fontSize of fonts) for (const candidate of weightCandidates(tree.weights, { shareMin: FORM_SHARE_MIN, shareMax: FORM_SHARE_MAX })) {
     const candidateTree = { ...tree, weights: candidate.weights };
     const contracts = measureContracts(candidateTree, page, area, metrics, fontSize);
     if (!contracts) continue;
