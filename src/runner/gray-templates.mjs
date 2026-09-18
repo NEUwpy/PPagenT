@@ -124,7 +124,8 @@ export function applyTemplateDefaults(plan, layouts) {
       throw new Error(`页 ${page.pageId} 的组合与默认模板「${template.name}」（${layoutShape(template.layout)}）不同：采用默认（该页不写 layout），或在页条目加 override:{reason:"一句话理由"}（理由会入档分析）`);
     }
     decisions.push({ pageId: page.pageId, template: template.id, name: template.name, mode: 'override', reason, chosen: layoutShape(entry.layout), ...(entry.override?.template ? { picked: String(entry.override.template) } : {}) });
-    applied.push({ pageId: page.pageId, layout: entry.layout, override: { ...entry.override, reason } });
+    // 只向下游传 {pageId, layout}：override 理由已入 decisions，不能随 layouts 进求解器（否则被判为非法字段）。
+    applied.push({ pageId: page.pageId, layout: entry.layout });
   }
   return { layouts: applied, decisions };
 }

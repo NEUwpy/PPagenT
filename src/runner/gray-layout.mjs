@@ -80,7 +80,7 @@ export function resolveGrayLayout(plan, selection, area, { measureBody, fitText 
   const pages = semanticPages(plan), layouts = [], receipts = [];
   for (const [index, page] of pages.entries()) {
     const entry = selection.pages[index];
-    if (entry?.pageId !== page.pageId || Object.keys(entry).some(k => !['pageId', 'layout'].includes(k))) throw new Error('基础排版不能改正文或页序');
+    if (entry?.pageId !== page.pageId || Object.keys(entry).some(k => !['pageId', 'layout'].includes(k))) throw new Error('layouts 每项只接受 {pageId, layout} 且 pageId 必须与本页一致：不要添加其它字段、改正文或换页序；覆盖理由写在 override.reason 里由程序单独入档，不随 layouts 传入。');
     const choice = entry.layout, ids = page.semantics.readingOrder;
     if (!choice || typeof choice !== 'object') throw new Error('每页必须给出 layout');
     const tree = normalizeLayoutTree(choice, ids, page.pageId);

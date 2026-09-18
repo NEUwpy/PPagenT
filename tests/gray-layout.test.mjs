@@ -55,6 +55,9 @@ test('selection cannot inject coordinates, skip groups or misuse structure names
     assert.throws(()=>resolveGrayLayout(plan(),select(layout),area,metrics));
   }
 });
+test('layouts 条目只接受 {pageId, layout}：多余字段（如 override）给出可操作报错',()=>{
+  assert.throws(()=>resolveGrayLayout(plan(),{pages:[{pageId:'p1',layout:{type:'single'},override:{reason:'x'}}]},area,metrics),/override\.reason/);
+});
 test('capacity failure reports measured requirements, never shrinks or drops copy',()=>{
   const p=plan();p.pages[0].groups[0].blocks[0].text='重要条件必须保留。'.repeat(15);
   assert.throws(()=>resolveGrayLayout(p,select({type:'row'}),{width:600,height:240},metrics),error=>error.code==='COMPOSITION_RECOMPOSE_REQUIRED' && error.details.minimum.height>240);

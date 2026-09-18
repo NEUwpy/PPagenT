@@ -83,6 +83,8 @@ test('applyTemplateDefaults：缺省用默认、同形放行、异形须理由�
   const overridden = applyTemplateDefaults(plan, [{ pageId: 'p1' }, { pageId: 'p2', layout: { type: 'column' }, override: { reason: '双栏放不下，改顺列' } }]);
   assert.equal(overridden.decisions[1].mode, 'override');
   assert.equal(overridden.decisions[1].reason, '双栏放不下，改顺列');
+  // override 理由只入 decisions，不随 layouts 传给求解器（评审 #11 修复）
+  assert.deepEqual(Object.keys(overridden.layouts[1]).sort(), ['layout', 'pageId']);
   assert.throws(() => applyTemplateDefaults(plan, [{ pageId: 'p1' }, { pageId: 'p2', layout: { type: 'row' } }, { pageId: 'p9' }]), /未知页面/);
 
   const described = describeDefaults(plan);
