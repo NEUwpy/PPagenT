@@ -16,7 +16,7 @@ import { buildChatProviderFromEnv } from './chat-provider.mjs';
 import { loadDeepSeekLocalConfig } from '../agent/deepseek-provider-from-env.mjs';
 import { newRunState, writeState, renderContentMarkdown, renderStateMarkdown } from './state.mjs';
 import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan, semanticReviewInput, markFlowSources } from './gray-semantics.mjs';
-import { applyTemplateDefaults } from './gray-templates.mjs';
+import { applyTemplateDefaults, describeDefaults } from './gray-templates.mjs';
 import { resolveGrayLayout } from './gray-layout.mjs';
 import { grayBodyLayout, fitGrayText, validateGrayArea, validateGrayPlan, renderGrayDraft } from './gray-draft.mjs';
 
@@ -149,12 +149,12 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
   const tools = [
     defineTool({
       name: 'check_plan',
-      description: '对你本轮消息正文中的完整 gray-plan-3 计划做程序检查：结构字段、来源引用与覆盖、块级数字/引文保真。不接收计划参数——计划写在本轮正文里。返回 {accepted, issues, coverage}。任何规划改动后都应重新调用。',
+      description: '对你本轮消息正文中的完整 gray-plan-3 计划做程序检查：结构字段、来源引用与覆盖、块级数字/引文保真；并返回逐页默认版式（defaults，含特征依据）——渲染从默认出发，只有确需不同才覆盖。不接收计划参数——计划写在本轮正文里。返回 {accepted, issues, coverage, defaults}。任何规划改动后都应重新调用。',
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
       handler: async () => {
         const { plan, source, note } = resolvePlan();
         const report = validateSemanticPlan(base, plan);
-        return { accepted: report.accepted, issues: report.issues.slice(0, 20), coverage: report.coverage, planSource: source, ...(report.warnings?.length ? { warnings: report.warnings } : {}), ...(note ? { note } : {}) };
+        return { accepted: report.accepted, issues: report.issues.slice(0, 20), coverage: report.coverage, defaults: describeDefaults(plan), planSource: source, ...(report.warnings?.length ? { warnings: report.warnings } : {}), ...(note ? { note } : {}) };
       },
     }),
     defineTool({

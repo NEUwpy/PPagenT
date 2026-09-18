@@ -5,14 +5,17 @@
  */
 export const TEMPLATES = Object.freeze([
   { id: 'category-container', name: '类别容器', role: '类别或分支页：一个容器内逐条列出条目', fit: '单组且组内 ≥2 块' },
-  { id: 'single-subject', name: '单主体', role: '单一主体或单条结论整页展开', fit: '单组且单块' },
-  { id: 'dual-column', name: '双栏对照', role: '两个并列对象或分支的直接对照', fit: '两组' },
-  { id: 'row-list', name: '行式清单', role: '多个等位条目沿阅读顺序顺列', fit: '三组及以上' },
+  { id: 'single-subject', name: '单主体', role: '单一主体（可带附注）：主体在上、附注承接', fit: '单组；或两组且一组为 supporting（主辅，非对照）' },
+  { id: 'dual-column', name: '双栏对照', role: '两个并列对象或分支的直接对照', fit: '两组且均为 primary' },
+  { id: 'row-list', name: '行式清单', role: '多个等位条目沿阅读顺序顺列', fit: '三组及以上（无头带特征时）' },
+  { id: 'band-main', name: '头带主线', role: '短结论/现状并排成头带，主流程或主体全幅在下', fit: '三组、末组为唯一非 text 且前两组为短文本' },
 ]);
 
 const templateById = id => TEMPLATES.find(template => template.id === id);
 
 const textLength = group => (group.blocks ?? []).reduce((sum, block) => sum + String(block.text ?? '').length, 0);
+const importanceOf = group => group.importance ?? 'primary';
+const kindOf = group => group.kind ?? 'text';
 
 /** 内容特征：组数、各组块数与实文量、非 text 组占比（用于默认映射与台账分析）。 */
 export function pageFeatures(page) {
@@ -21,7 +24,8 @@ export function pageFeatures(page) {
     groupCount: groups.length,
     blocksPerGroup: groups.map(group => (group.blocks ?? []).length),
     textLengths: groups.map(textLength),
-    nonTextGroups: groups.filter(group => (group.kind ?? 'text') !== 'text').length,
+    nonTextGroups: groups.filter(group => kindOf(group) !== 'text').length,
+    supporting: groups.filter(group => importanceOf(group) === 'supporting').length,
   };
 }
 
@@ -32,20 +36,54 @@ const weightsFor = lengths => {
   return [first, 5 - first];
 };
 
+/** 头带主线：三组、末组为唯一非 text 主体、前两组短文本并排（B02 覆盖样本 fixture）。 */
+const bandMainLayout = groups => ({
+  type: 'column',
+  children: [
+    { type: 'row', children: [{ groupId: groups[0].id }, { groupId: groups[1].id }] },
+    { groupId: groups[2].id },
+  ],
+});
+
 /** 特征 → 默认模板。映射不出的情形给保守默认（单主体，column 堆叠）。 */
 export function defaultTemplateFor(page) {
+  const groups = page.groups ?? [];
   const features = pageFeatures(page);
   if (features.groupCount === 1) {
     const id = features.blocksPerGroup[0] >= 2 ? 'category-container' : 'single-subject';
     return { ...templateById(id), layout: { type: 'single' }, features };
   }
   if (features.groupCount === 2) {
+    if (features.supporting === 1) {
+      return { ...templateById('single-subject'), layout: { type: 'column' }, features };
+    }
     return { ...templateById('dual-column'), layout: { type: 'row', weights: weightsFor(features.textLengths) }, features };
+  }
+  if (features.groupCount === 3) {
+    const band = groups.slice(0, 2);
+    const main = groups[2];
+    const bandText = band.every(group => kindOf(group) === 'text' && group.id) && textLength(band[0]) + textLength(band[1]) <= 160;
+    if (features.nonTextGroups === 1 && kindOf(main) !== 'text' && main.id && bandText) {
+      return { ...templateById('band-main'), layout: bandMainLayout(groups), features };
+    }
   }
   if (features.groupCount >= 3) {
     return { ...templateById('row-list'), layout: { type: 'column' }, features };
   }
   return { ...templateById('single-subject'), layout: { type: 'column' }, features };
+}
+
+/** check_plan 回执用的逐页默认模板摘要（含特征依据；把默认提前暴露，避免猜一版被打回）。 */
+export function describeDefaults(plan) {
+  return (plan?.pages ?? []).map(page => {
+    const template = defaultTemplateFor(page);
+    return {
+      pageId: page.pageId,
+      template: template.id,
+      name: template.name,
+      features: { groupCount: template.features.groupCount, blocksPerGroup: template.features.blocksPerGroup, textLengths: template.features.textLengths, supporting: template.features.supporting, nonTextGroups: template.features.nonTextGroups },
+    };
+  });
 }
 
 /** 形状指纹：只看 type 与 children 结构，忽略 weights/columns（微调 weights 不算覆盖）。 */
