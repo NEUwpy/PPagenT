@@ -46,8 +46,10 @@ export function grayBodyLayout(item, width, fontSize, availableHeight) {
     return sketchBodyLayout(item, width, fontSize, availableHeight);
   }
   const padding=8, gap=12, labelGap=4;
+  // 条目编号（评审 #25）：逐块测量路径传入序号，与组级投影（grayDisplayBlocks）保持同一编号。
+  const labeledCount=item.kind==='text' && item.blocks ? item.blocks.filter(block=>block.label).length : 0;
   const sections=item.kind==='text' && item.blocks
-    ? item.blocks.map(block=>({kind:block.kind ?? 'text',parts:grayDisplayBlocks({kind:'text',blocks:[block]})}))
+    ? item.blocks.map((block,index)=>({kind:block.kind ?? 'text',parts:grayDisplayBlocks({kind:'text',blocks:[block]},labeledCount>=2?{ordinal:index+1}:{})}))
     : [{kind:item.kind,parts:grayDisplayBlocks(item)}];
   const contracts={};
   const measured=sections.map((section,index)=>{

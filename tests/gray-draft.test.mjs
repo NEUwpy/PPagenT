@@ -24,7 +24,7 @@ test('rejects dropped source, unrendered item, overlap and invented number',()=>
 });
 test('blue regions include four specification fields in capacity',()=>{
  const p=plan();Object.assign(p.pages[0].items[0],{kind:'flow',expression:'说明顺序',relationship:'核验后开放',production:'明确异常回路'});
- assert.match(regionBody(p.pages[0].items[0]),/承载内容/);
+  assert.match(regionBody(p.pages[0].items[0]),/承:/);
  p.pages[0].items[0].production='很长的制作要求'.repeat(150);
  assert.ok(validateGrayPlan(base(),p,area).issues.some(i=>i.code==='text-capacity'));
 });

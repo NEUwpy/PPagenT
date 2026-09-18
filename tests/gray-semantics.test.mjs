@@ -27,9 +27,9 @@ test('a local expression stays inside its branch and is visible to review and me
   assert.equal(item.kind,'text');
   assert.equal(item.blocks.length,2);
   const display=grayDisplayBlocks(item),body=grayBodyLayout(item,568,22);
-  assert.deepEqual(display.filter(run=>run.bold).map(run=>run.text),['核验与开放','暂停条件']);
+  assert.deepEqual(display.filter(run=>run.bold).map(run=>run.text),['一 核验与开放','二 暂停条件']);
   assert.equal(display.filter(run=>run.kind==='flow').length,1);
-  assert.match(display[1].text,/制作要求：按真实先后组织/);
+  assert.match(display[1].text,/制:按真实先后组织/);
   assert.equal(display[3].text,'不合格则暂停。');
   assert.equal(body.sections.filter(section=>section.kind==='flow').length,1);
   assert.equal(body.runs.map(run=>run.text).join('').replace(/\s/gu,''),regionBody(item).replace(/\s/gu,''));
@@ -68,7 +68,8 @@ test('nested copy measures each label/body and preserves condition in rendering 
   const item=plan.pages[0].items[0],body=grayBodyLayout(item,568,22);
   assert.equal(body.runs.length,4);
   assert.deepEqual(body.runs.map(r=>r.bold),[true,false,true,false]);
-  assert.equal(body.runs.map(r=>r.text).join('').replace(/\s/gu,''),item.text.replace(/\s/gu,''));
+  assert.equal(body.runs.map(r=>r.text).join('').replace(/\s/gu,''),grayDisplayBlocks(item).map(r=>r.text).join('').replace(/\s/gu,''));
+  assert.ok(body.runs.map(r=>r.text).join('').includes('核验与开放')&&body.runs.map(r=>r.text).join('').includes('不合格则暂停'));
   assert.equal(validateGrayPlan(base(),plan,{width:600,height:350}).accepted,true);
   plan.pages[0].composition.regions[0].height=150;
   assert.ok(validateGrayPlan(base(),plan,{width:600,height:350}).issues.some(i=>i.code==='text-capacity'));
@@ -149,10 +150,10 @@ test('review display and measured renderer share actual copy and hierarchy for e
     assert.deepEqual(measured.map(r=>r.bold),displayed.map(r=>r.bold));
     assert.equal(measured.map(r=>r.text).join('').replace(/\s/gu,''),displayed.map(r=>r.text).join('').replace(/\s/gu,''));
     assert.equal(displayed.map(r=>r.text).join('').replace(/\s/gu,''),regionBody(item).replace(/\s/gu,''));
-    // 结构草图（diagram/flow/table）上屏的是实际文案；chart/image 仍是四项制作说明。
+    // 结构草图（diagram/flow/table）上屏的是实际文案；chart/image 仍是蓝区制作说明（紧凑格式）。
     const sketch=['diagram','flow','table'].includes(kind);
-    if(kind==='text'||sketch) assert.doesNotMatch(JSON.stringify(displayed),/表达作用|制作要求/);
-    else assert.match(JSON.stringify(displayed),/表达作用.*承载内容.*基本关系.*制作要求/);
+    if(kind==='text'||sketch) assert.doesNotMatch(JSON.stringify(displayed),/作:|承:|关:|制:/);
+    else assert.match(JSON.stringify(displayed),/作:说明进入条件｜承:[\s\S]*｜关:核验通过后开放，不合格暂停｜制:条件附着于开放动作/);
     if(sketch) assert.match(input.visiblePages[0].regions[0].surface,/结构草图/);
   }
 });
@@ -220,7 +221,7 @@ test('runner commits expression choice before visible review, never geometry rew
       assert.equal(calls,3);
       const input=JSON.parse(messages[1].content);
       assert.equal(input.visiblePages[0].regions[0].kind,'diagram');
-      assert.match(input.visiblePages[0].regions[0].body[0].text,/基本关系：通过才开放，未通过暂停/);
+      assert.match(input.visiblePages[0].regions[0].body[0].text,/关:通过才开放，未通过暂停/);
       assert.equal(input.plan,undefined);
       return {content:JSON.stringify({accepted:false,issues:[{problem:'保留审阅退回'}]}),finishReason:'stop'};
     }};

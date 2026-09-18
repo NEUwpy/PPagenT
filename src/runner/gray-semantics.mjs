@@ -233,11 +233,15 @@ export function blockText(block) { return [block.label,block.text].filter(nonemp
 export function regionBody(item) {
   if (item.kind === 'text' && item.blocks) return grayDisplayBlocks(item).map(block=>block.text).join('\n');
   if (SKETCH_KINDS.has(item.kind) && item.blocks) return item.blocks.map(blockText).join('\n');
-  return item.kind === 'text' ? item.text : `表达作用：${item.expression}\n承载内容：${item.text}\n基本关系：${item.relationship}\n制作要求：${item.production}`;
+  // 蓝区紧凑格式（评审 #25）：四件套单行连续呈现省高度；字段与 rules/排版.md 同步。
+  return item.kind === 'text' ? item.text : `作:${item.expression}｜承:${item.text}｜关:${item.relationship}｜制:${item.production}`;
 }
 
+const ORDINALS = Object.freeze(['一','二','三','四','五','六','七','八','九','十']);
+const ordinalLabel = index => ORDINALS[index - 1] ?? String(index);
+
 /** One display projection for review, measurement and native rendering. No backstage prose. */
-export function grayDisplayBlocks(item) {
+export function grayDisplayBlocks(item, { ordinal = 0 } = {}) {
   if (SKETCH_KINDS.has(item.kind) && item.blocks) {
     // 结构草图：审稿、测量与渲染看到的是同一份逐卡片/节点的实际文案（"是结构"这一事实由 surface 描述）。
     return item.blocks.flatMap((block,index)=>[
@@ -246,8 +250,12 @@ export function grayDisplayBlocks(item) {
     ]);
   }
   if (item.kind !== 'text' || !item.blocks) return [{text:regionBody(item),bold:false,gapBefore:0}];
+  // 条目编号标签（评审 #25）：文字组内带标签条目按实际顺序编号（跳条不串号）；单条目组不编号。
+  // ordinal 用于逐块测量路径（grayBodyLayout 逐块投影）与组级投影保持同一编号。
+  const labeledCount = item.blocks.filter(block => nonempty(block.label)).length;
+  const numbered = ordinal > 0 || labeledCount >= 2;
   return item.blocks.flatMap((block,index) => [
-    ...(block.label ? [{text:block.label,bold:true,gapBefore:index ? 12 : 0}] : []),
+    ...(block.label ? [{text:numbered ? `${ordinalLabel(ordinal > 0 ? ordinal : index + 1)} ${block.label}` : block.label,bold:true,gapBefore:index ? 12 : 0}] : []),
     {text:block.kind && block.kind!=='text' ? regionBody(block) : block.text,bold:false,gapBefore:!block.label && index ? 12 : 0,
       ...(block.kind && block.kind!=='text' ? {kind:block.kind} : {})},
   ]);

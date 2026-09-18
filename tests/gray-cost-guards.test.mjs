@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { attemptFingerprint, isStalledRetry, categoryCues, samePageCues, splitGate, SEMANTIC_REVIEW_CONTRACT } from '../src/runner/gray-semantics.mjs';
+import fs from 'node:fs/promises';
+import { attemptFingerprint, isStalledRetry, categoryCues, samePageCues, splitGate, SEMANTIC_REVIEW_CONTRACT, regionBody, grayDisplayBlocks } from '../src/runner/gray-semantics.mjs';
 import { resolveGrayLayout, compressionMemory } from '../src/runner/gray-layout.mjs';
 import { grayBodyLayout, fitGrayText } from '../src/runner/gray-draft.mjs';
 
@@ -119,4 +120,22 @@ test('同页双容器字号降档：18–20px 候选中按测量选择，492 内
   const regions = result.plan.pages[0].composition.regions;
   assert.ok(regions.every(region => region.fontSize === receipt.fontSize));
   assert.ok(regions.every(region => region.height <= 492), JSON.stringify(regions));
+});
+
+test('蓝区紧凑格式：四件套单行呈现，与 rules/排版.md 同步', async () => {
+  const block = { id: 'b1', label: '势能到动能阻力重重', text: '三因→变革落地阻力重重', kind: 'flow', expression: '把三项并列原因汇聚到一个结果', relationship: '汇聚：三项原因共同造成落地阻力', production: '三框一果箭头图', sourceIds: ['s1'] };
+  assert.equal(regionBody(block), '作:把三项并列原因汇聚到一个结果｜承:三因→变革落地阻力重重｜关:汇聚：三项原因共同造成落地阻力｜制:三框一果箭头图');
+  const rules = await fs.readFile(new URL('../rules/排版.md', import.meta.url), 'utf8');
+  assert.match(rules, /作:…｜承:…｜关:…｜制:…/u);
+});
+
+test('条目编号标签：按实际顺序、跳条不串号；单条目组不编号', () => {
+  const group = { id: 'g1', kind: 'text', heading: '两点不足', blocks: [
+    { id: 'b1', label: '第一条', text: '甲。' },
+    { id: 'b2', text: '无标签条目。' },
+    { id: 'b3', label: '第三条', text: '丙。' },
+  ] };
+  assert.deepEqual(grayDisplayBlocks(group).filter(run => run.bold).map(run => run.text), ['一 第一条', '三 第三条']);
+  const single = { id: 'g2', kind: 'text', blocks: [{ id: 'b1', label: '唯一条目', text: '甲。' }] };
+  assert.deepEqual(grayDisplayBlocks(single).filter(run => run.bold).map(run => run.text), ['唯一条目']);
 });
