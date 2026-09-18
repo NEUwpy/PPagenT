@@ -55,7 +55,9 @@ export function grayBodyLayout(item, width, fontSize, availableHeight) {
   const measured=sections.map((section,index)=>{
     const parts=section.parts.map(part=>{
       const fit=fitGrayText(part.text,width-2*padding,100000,fontSize);
-      return {...part,text:fit.text,height:fit.lineCount*fontSize*1.35,fits:fit.fits};
+      // 结构位附注单行（评审 #29）：同页形态降档（≤20px）的块级蓝附注超过一行即判不 fits。
+      const multiline=Boolean(part.kind && part.kind!=='text' && fontSize<=20 && fit.lineCount>1);
+      return {...part,text:fit.text,height:fit.lineCount*fontSize*1.35,fits:fit.fits&&!multiline};
     });
     const id=`section-${index}`;
     const minHeight=Math.ceil(parts.reduce((sum,part)=>sum+part.height,0)+labelGap*(parts.length-1)+2*padding);
@@ -206,12 +208,18 @@ export function validateGrayPlan(base, plan, area) {
         if (!KINDS.includes(item.kind) || !requiredText(item.heading) || !requiredText(item.text)) throw new Error(`${item.id} 缺少 kind/heading/text`);
         if (item.kind !== 'text' && ['expression', 'relationship', 'production'].some(k => !requiredText(item[k]))) throw new Error(`${item.id} 缺少非文字区四要素`);
         const { x, y, width, height, fontSize } = region;
-        if (![x, y, width, height, fontSize].every(Number.isFinite) || width < 100 || height < 80 || fontSize < 18 || fontSize > 28) throw new Error(`${item.id} 几何/字号非法，正文必须 18..28px（同页双容器形态可降档 18–20px，其余形态 22px 起）`);
+        if (![x, y, width, height, fontSize].every(Number.isFinite) || width < 100 || height < 80 || fontSize < 16 || fontSize > 28) throw new Error(`${item.id} 几何/字号非法，正文必须 16..28px（同页双容器形态可降档至 16–20px，其余形态 22px 起）`);
         if (x < 0 || y < 0 || x + width > area.width + .1 || y + height > area.height + .1) issues.push({ code: 'region-outside', pageId: page.pageId, itemId: item.id });
         const heading = fitGrayText(item.heading, width - 32, 40, 26);
         if (item.blocks && item.text !== item.blocks.map(blockText).join('\n')) throw new Error(`${item.id} 正文与内部结构不一致`);
         const body = grayBodyLayout(item, width - 32, fontSize);
         if (!heading.fits || !body.fits || body.height > height-70) issues.push({ headingFits:heading.fits, headingLines:heading.lineCount, headingMaxLines:1, bodyFits:body.fits && body.height<=height-70, code: 'text-capacity', pageId: page.pageId, itemId: item.id, requiredBodyHeight: Math.ceil(body.height + 70), actualHeight: height });
+        // 结构位附注单行（评审 #29）：同页形态降档档（≤20px）的块级蓝附注超过一行给出可操作反馈。
+        if (fontSize <= 20) for (const run of body.runs) {
+          if (run.kind && run.kind !== 'text' && run.height > fontSize * 1.35 * 1.5) {
+            issues.push({ code: 'structure-note-multiline', pageId: page.pageId, itemId: item.id, requiredRevision: '结构位附注须单行：缩短关系一句与摘引短语（可省虚词，不改事实）' });
+          }
+        }
       }
       if (seen.size !== page.items.length) issues.push({ code: 'unrendered-items', pageId: page.pageId });
       for (let i = 0; i < regions.length; i++) for (let j = i + 1; j < regions.length; j++) {

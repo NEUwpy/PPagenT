@@ -188,4 +188,14 @@ test('结构位缺失检查：同页双容器下明示汇聚/扇出必须有结�
   withNote.pages[0].groups[0].blocks.push({ id: 'b1n', text: '变革氛围尚未完全形成／信息系统支撑能力仍有差距／缺乏市场化管理机制', kind: 'diagram', expression: '三个阻力原因汇聚到结果', relationship: '汇聚：三因共同造成落地阻力', production: '三框一果箭头图', sourceIds: ['s1'] });
   const accepted = validateSemanticPlan(base, withNote);
   assert.equal(accepted.accepted, true, JSON.stringify(accepted.issues));
+  const collapsed = plan();
+  collapsed.pages[0].groups[0].blocks = [{ id: 'b1', text: '现阶段公司内部人力资源变革氛围尚未完全形成，信息系统支撑能力仍存在差距，缺乏市场化的管理机制，造成变革落地阻力重重。', kind: 'diagram', expression: '汇聚', relationship: '三因一果', production: '三框一果箭头图', sourceIds: ['s1'] }];
+  assert.ok(validateSemanticPlan(base, collapsed).issues.some(issue => issue.code === 'structure-collapsed'));
+});
+
+test('条件降档：16px 下限候选在 18px 放不下时被选用（仅同页形态）', () => {
+  const result = resolveGrayLayout(fixture(), rowSelect([2, 3]), area(440), { ...metrics, fontSizes: () => [20, 18, 16] });
+  assert.equal(result.receipts[0].fontSize, 16);
+  const regions = result.plan.pages[0].composition.regions;
+  assert.ok(regions.every(region => region.height <= 440), JSON.stringify(regions));
 });
