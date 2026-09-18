@@ -22,11 +22,12 @@ test('rejects dropped source, unrendered item, overlap and invented number',()=>
  const p=plan();mutate(p);assert.equal(validateGrayPlan(base(),p,area).accepted,false);
  }
 });
-test('blue regions include four specification fields in capacity',()=>{
- const p=plan();Object.assign(p.pages[0].items[0],{kind:'flow',expression:'说明顺序',relationship:'核验后开放',production:'明确异常回路'});
-  assert.match(regionBody(p.pages[0].items[0]),/节点文案/);
- p.pages[0].items[0].production='很长的制作要求'.repeat(150);
- assert.ok(validateGrayPlan(base(),p,area).issues.some(i=>i.code==='text-capacity'));
+test('blue region capacity covers its displayed fields (expression+nodes)',()=>{
+  const p=plan();Object.assign(p.pages[0].items[0],{kind:'flow',expression:'说明顺序',relationship:'核验后开放',production:'明确异常回路'});
+  assert.match(regionBody(p.pages[0].items[0]),/节点短语（摘引）/);
+  assert.doesNotMatch(regionBody(p.pages[0].items[0]),/明确异常回路/);
+  p.pages[0].items[0].text='很长的节点短语'.repeat(150);
+  assert.ok(validateGrayPlan(base(),p,area).issues.some(i=>i.code==='text-capacity'));
 });
 
 test('rewrapping retains text and font instead of shrinking or dropping conditions',()=>{

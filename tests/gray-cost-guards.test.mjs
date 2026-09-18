@@ -108,9 +108,9 @@ test('审稿窄条款在契约中：同页并列类别不得要求配对/对应�
   assert.match(SEMANTIC_REVIEW_CONTRACT, /必须有原稿明示依据/u);
 });
 
-test('结构位口径在审稿契约中：汇聚/扇出用 diagram、承载内容逐项实际文案', () => {
+test('结构位口径在审稿契约中：汇聚/扇出用 diagram、节点短语摘引一致', () => {
   assert.match(SEMANTIC_REVIEW_CONTRACT, /并列汇聚\/扇出用 diagram/u);
-  assert.match(SEMANTIC_REVIEW_CONTRACT, /承载内容须逐项写实际细项文案/u);
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /节点短语须能在该条目散文中逐字找到/u);
   assert.match(SEMANTIC_REVIEW_CONTRACT, /flow 只用于原文有先后线索的真实时序/u);
 });
 
@@ -129,12 +129,12 @@ test('同页双容器字号降档：18–20px 候选中按测量选择，492 内
   assert.ok(regions.every(region => region.height <= 492), JSON.stringify(regions));
 });
 
-test('蓝区平直中文：不用字段代码前缀，与 rules/排版.md 同步', async () => {
-  const block = { id: 'b1', label: '势能到动能阻力重重', text: '变革氛围尚未完全形成／信息系统支撑能力仍有差距／缺乏市场化管理机制', kind: 'flow', expression: '三个阻力原因并列、箭头汇聚指向结果框「变革落地阻力重重」', relationship: '汇聚：三项原因共同造成落地阻力', production: '三框一果箭头图，框内文字即上屏文案', sourceIds: ['s1'] };
-  assert.equal(regionBody(block), '建议画结构图：三个阻力原因并列、箭头汇聚指向结果框「变革落地阻力重重」。节点文案：变革氛围尚未完全形成／信息系统支撑能力仍有差距／缺乏市场化管理机制。汇聚：三项原因共同造成落地阻力。三框一果箭头图，框内文字即上屏文案。');
+test('附注最小化：关系一句＋摘引短语，与 rules/排版.md 同步', async () => {
+  const block = { id: 'b1', label: '势能到动能阻力重重', text: '变革氛围尚未完全形成／信息系统支撑能力仍有差距／缺乏市场化管理机制', kind: 'diagram', expression: '三因并列、箭头汇聚指向结果框「变革落地阻力重重」', relationship: '汇聚：三项原因共同造成落地阻力', production: '三框一果箭头图', sourceIds: ['s1'] };
+  assert.equal(regionBody(block), '本条建议画结构图：三因并列、箭头汇聚指向结果框「变革落地阻力重重」；节点短语（摘引）：变革氛围尚未完全形成／信息系统支撑能力仍有差距／缺乏市场化管理机制。');
   assert.doesNotMatch(regionBody(block), /作:|承:|关:|制:/u);
   const rules = await fs.readFile(new URL('../rules/排版.md', import.meta.url), 'utf8');
-  assert.match(rules, /建议画结构图：…。节点文案：…/u);
+  assert.match(rules, /本条建议画结构图：关系一句；节点短语（摘引）：…/u);
 });
 
 test('条目编号标签：按实际顺序、跳条不串号；单条目组不编号', () => {

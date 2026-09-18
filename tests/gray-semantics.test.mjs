@@ -29,7 +29,7 @@ test('a local expression stays inside its branch and is visible to review and me
   const display=grayDisplayBlocks(item),body=grayBodyLayout(item,568,22);
   assert.deepEqual(display.filter(run=>run.bold).map(run=>run.text),['一 核验与开放','二 暂停条件']);
   assert.equal(display.filter(run=>run.kind==='flow').length,1);
-  assert.match(display[1].text,/按真实先后组织/);
+  assert.match(display[1].text,/本条建议画结构图：说明核验与开放；节点短语（摘引）：模拟内容/u);
   assert.equal(display[3].text,'不合格则暂停。');
   assert.equal(body.sections.filter(section=>section.kind==='flow').length,1);
   assert.equal(body.runs.map(run=>run.text).join('').replace(/\s/gu,''),regionBody(item).replace(/\s/gu,''));
@@ -152,10 +152,10 @@ test('review display and measured renderer share actual copy and hierarchy for e
     assert.equal(displayed.map(r=>r.text).join('').replace(/\s/gu,''),regionBody(item).replace(/\s/gu,''));
     // 结构草图（diagram/flow/table）上屏的是实际文案；chart/image 仍是蓝区制作说明（紧凑格式）。
     const sketch=['diagram','flow','table'].includes(kind);
-    if(kind==='text'||sketch) assert.doesNotMatch(JSON.stringify(displayed),/建议画|节点文案/);
+    if(kind==='text'||sketch) assert.doesNotMatch(JSON.stringify(displayed),/本条建议画|节点短语/);
     else {
-      const lead=kind==='chart'?'建议画数据图':'建议配图';
-      assert.match(JSON.stringify(displayed),new RegExp(`${lead}：说明进入条件。节点文案：[\\s\\S]*。核验通过后开放，不合格暂停。条件附着于开放动作。`));
+      const lead=kind==='chart'?'本条建议画数据图':'本条建议配图';
+      assert.match(JSON.stringify(displayed),new RegExp(`${lead}：说明进入条件；要点（摘引）：[\\s\\S]*。`));
     }
     if(sketch) assert.match(input.visiblePages[0].regions[0].surface,/结构草图/);
   }
@@ -224,7 +224,7 @@ test('runner commits expression choice before visible review, never geometry rew
       assert.equal(calls,3);
       const input=JSON.parse(messages[1].content);
       assert.equal(input.visiblePages[0].regions[0].kind,'diagram');
-      assert.match(input.visiblePages[0].regions[0].body[0].text,/核验通过后开放，未通过暂停/);
+      assert.match(input.visiblePages[0].regions[0].body[0].text,/核验与开放/);
       assert.equal(input.plan,undefined);
       return {content:JSON.stringify({accepted:false,issues:[{problem:'保留审阅退回'}]}),finishReason:'stop'};
     }};
