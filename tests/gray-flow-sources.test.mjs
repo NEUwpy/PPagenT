@@ -86,3 +86,52 @@ test('正文里的日期不误伤：单独日期不算上屏，引用流转来�
   const padded = validateSemanticPlan(markedBase, plan('请各部门完成自查，逐一核对资产编号。', ['s3', 's1']));
   assert.equal(padded.accepted, true, JSON.stringify(padded.issues));
 });
+
+test('节标题按窄模式打标：第X部分/章/节独立成段；句中引用与结构旁白不误标', () => {
+  assert.equal(mark(['第二部分：存在的不足与感悟'])[0].flow, '节标题');
+  assert.equal(mark(['第一章 总则'])[0].flow, '节标题');
+  assert.equal(mark(['第三节：焊接参数'])[0].flow, '节标题');
+  assert.equal(mark(['第二部分的不足与感悟仍需补充说明。'])[0].flow, undefined);
+  assert.equal(mark(['本节先讲两点不足，再讲四点感悟。'])[0].flow, undefined);
+});
+
+test('节标题来源覆盖豁免、上屏禁则覆盖标题层：组标题搬节标题失败，只引用正文通过', () => {
+  const doc = '第二部分：存在的不足与感悟\n\n首先是两点不足。一是势能到动能阻力重重。二是合规管理短板亟待提升。';
+  const state = newRunState(doc, 'fixture');
+  state.sources = markFlowSources(state.sources);
+  assert.equal(state.sources[0].flow, '节标题');
+  const onlyBody = plan('势能到动能阻力重重。合规管理短板亟待提升。', ['s2']);
+  onlyBody.pages[0].groups[0].heading = '不足：阻力与短板';
+  const report = validateSemanticPlan(state, onlyBody);
+  assert.equal(report.accepted, true, JSON.stringify(report.issues));
+  const overscreen = plan('势能到动能阻力重重。合规管理短板亟待提升。', ['s2']);
+  overscreen.pages[0].groups[0].heading = '第二部分：存在的不足与感悟';
+  const overscreenReport = validateSemanticPlan(state, overscreen);
+  assert.ok(overscreenReport.issues.some(issue => issue.code === 'flow-source-onscreen'));
+});
+
+test('结构旁白不得上屏：本部分先讲…式自造组织说明失败；正文陈述不误伤', () => {
+  const markedBase = base();
+  const narrated = validateSemanticPlan(markedBase, plan('本部分先讲两点不足，再讲四点感悟。', ['s3']));
+  assert.ok(narrated.issues.some(issue => issue.code === 'structural-narration'));
+  const selfReferential = validateSemanticPlan(markedBase, plan('本部分包括自查范围与时限。', ['s3']));
+  assert.ok(selfReferential.issues.some(issue => issue.code === 'structural-narration'));
+  const plain = validateSemanticPlan(markedBase, plan('本部分工作由资产管理处牵头，各部门配合完成。', ['s3']));
+  assert.equal(plain.accepted, true, JSON.stringify(plain.issues));
+});
+
+test('实证样本：Boss 攻坚 run6 的 g7 元信息条目两条禁则全命中；获批类别容器形态不受影响', () => {
+  const doc = '第二部分：存在的不足与感悟\n\n首先是两点不足。一是势能到动能阻力重重。二是合规管理短板亟待提升。';
+  const state = newRunState(doc, 'fixture');
+  state.sources = markFlowSources(state.sources);
+  const metaItem = plan('本部分先讲两点不足，再讲四点感悟。', ['s1']);
+  metaItem.pages[0].groups[0].heading = '第二部分：存在的不足与感悟';
+  metaItem.pages[0].title = '第二部分：存在的不足与感悟';
+  const report = validateSemanticPlan(state, metaItem);
+  assert.ok(report.issues.some(issue => issue.code === 'flow-source-onscreen'));
+  assert.ok(report.issues.some(issue => issue.code === 'structural-narration'));
+  const approvedForm = plan('势能到动能阻力重重。合规管理短板亟待提升。', ['s2']);
+  approvedForm.pages[0].groups[0].heading = '不足：落地阻力与合规短板';
+  const approvedReport = validateSemanticPlan(state, approvedForm);
+  assert.equal(approvedReport.accepted, true, JSON.stringify(approvedReport.issues));
+});

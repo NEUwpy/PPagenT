@@ -11,13 +11,14 @@ export const SKETCH_KINDS = Object.freeze(new Set(['diagram', 'flow', 'table']))
 export const SKETCH_LABELS = Object.freeze({ diagram: '并置结构（对象卡片）', flow: '顺序结构（节点与箭头）', table: '行式表格' });
 
 /**
- * 流转信息标记（来源层数据打标）：公文头尾段（文件标题、称谓、发文字号、落款）不上屏，
+ * 流转信息标记（来源层数据打标）：公文头尾段（文件标题、称谓、发文字号、落款）与节标题不上屏，
  * 却又被覆盖检查强制引用——这是结构性死结，模型只有"违禁上屏"或"引用掺假"两条错路。
  * 修法：切段后由程序打标，灰稿侧覆盖结果豁免、上屏机械禁止；正式线（validateContent 不带豁免）不受影响。
  * 只认窄模式，宁可漏标不误标；标记结果随来源表给模型（无需引用、不得上屏）。
  */
 const FLOW_PATTERNS = Object.freeze({
   serial: /^[^，。；：!？\s]{0,20}〔\d{4}〕第?\d+号$/u,
+  section: /^第[一二三四五六七八九十百千零0-9]{1,4}(?:部分|章|节)(?:[：:、，,．.\s]\S{0,40})?$/u,
   title: /^(?:关于.{2,60}的(?:通知|公告|通报|通告|报告|请示|批复|意见|函|决定|命令|纪要|方案|办法|规定|细则|规则|标准)|《[^》]{2,60}》)$/u,
   salutation: /^(?:尊敬的|亲爱的|各位|全体|同志们|朋友们|各)([^：:]{0,18})[：:]$/u,
   dateOnly: /^(?:\d{4}年\d{1,2}月\d{1,2}日|\d{4}-\d{1,2}-\d{1,2}|二[〇零一二三四五六七八九]{3}年[一二三四五六七八九十]{1,3}月[一二三四五六七八九十]{1,3}日)$/u,
@@ -25,7 +26,7 @@ const FLOW_PATTERNS = Object.freeze({
 });
 const SALUTATION_STOP = /(职责|任务|要求|安排|如下|事项|内容|分工|名单|标准|办法|规定|说明|流程|步骤|要点)/u;
 
-/** 给来源段打流转信息标记（标题/称谓/发文字号/落款）。不改原文，只加 flow 字段；已是流转载段或带标题的段不动。 */
+/** 给来源段打流转信息标记（标题/称谓/发文字号/落款/节标题）。不改原文，只加 flow 字段；已是流转载段或带标题的段不动。 */
 export function markFlowSources(sources) {
   return sources.map((source, index) => {
     if (source.flow || source.heading) return source;
@@ -34,6 +35,7 @@ export function markFlowSources(sources) {
     const single = lines.length === 1 ? lines[0] : null;
     if (single && FLOW_PATTERNS.serial.test(single)) return { ...source, flow: '发文字号' };
     if (single && FLOW_PATTERNS.title.test(single)) return { ...source, flow: '文种标题' };
+    if (single && FLOW_PATTERNS.section.test(single)) return { ...source, flow: '节标题' };
     if (single) {
       const match = single.match(FLOW_PATTERNS.salutation);
       if (match && !SALUTATION_STOP.test(match[1])) return { ...source, flow: '称谓' };
@@ -58,6 +60,13 @@ export function markFlowSources(sources) {
  * fail 级：验证过 r7 形态可达（20260917232451），漂移样本为迁移 A/B 与四稿基线（条目即组）。
  */
 const CATEGORY_CUE = /(?:首先|其次|再次|最后)是[，,]?([一二两三四五六七八九十]+)(?:点|项|条)([\u4e00-\u9fa5]{1,6})[。；]/gu;
+
+/**
+ * 结构旁白禁则（元信息上屏，客观违规）：模型自造的组织说明（"本部分先讲两点不足，再讲四点感悟"）
+ * 与原稿节标题同属不上屏的元信息。窄模式：以"本部分/本节/本篇/本页"起句且带讲述动词；
+ * 不误伤正文里的"本部分工作由……"（无讲述动词不匹配）。实证样本：Boss 攻坚 run 6 g7。
+ */
+const STRUCTURAL_NARRATION = /^本(?:部分|章节|章|节|篇|页)(?:先|将|会|拟|主要|重点)?(?:讲|说|介绍|说明|阐述|分(?:述|为|成)|包括|包含|围绕)/u;
 
 export function categoryCues(sources) {
   const cues = new Map();
@@ -100,14 +109,14 @@ export const SHARED_RULES = Object.freeze({
   category: `原稿自带类别线索时（如"首先是两点不足、其次是四点感悟"、"一是…二是…"分属两类），先恢复两层归属：组是类别层——类别成为组（组标题用类别名），类别内的每个条目是该组的块（label=条目要点，text=条目展开）；条目不升级为组，不得与类别同层铺成多个组，也不得为条目单独开页。条目内部的并列细项（如四方面、三方面原因）无论出现在行文中还是冒号后，都逐项成块、一行一项（行首可用"·"），不压进一个逗号长句。类别内条目都是短条目（各 1–2 行）时，整类必须排在一页——先按整类一页规划，容量确有需要才拆页：若只超出不到一行（≤60px），按原稿允许的提炼压紧——优先删排比性复述与修饰语（删修饰不删事实），合并页用紧凑散文、不展开多行链——再试一次合并；仍超出才拆页。类别跨页时，拆出的每页仍保持类别成组：每页一个组、组标题用「类别名＋本页条目提示」的内容词（如"感悟：统一语言与检验标准"），页内条目属于该组；不得把类别拆成多个同级组，也不得沿用类别总数标题（一页只放两条时不许写"四点感悟"）。`,
   expression: `按内容关系选择表达：两个及以上对象的共同维度对照用diagram，每个对象一个block；步骤、流程与时间顺序（三个及以上节点）用flow，节点按顺序；明确的对照网格用table，每行一个block；数据图表与图片保留蓝区说明，并在制作要求里写明建议表达。分解或构成（总量＝部分之和、对象→去向）、指标随时间变化不用平行卡片，用一条可读文字（"异常 7 台：已修复 5 台，待配件 2 台"）。行式表格只用于多个对象按共同维度互相对照（两种模式×多项指标、多个项目×进度与问题）；单个对象的一组规则、要求、背景说明用文字条目（一句一条），不做成表格。同一页不要所有组都用同一种表达；同一稿件不同页避免重复同一组合。`,
   sketch: `diagram/flow/table会绘制简化草图，框内文字就是实际文案、必须完整可读；不要一律平铺文字，也不要给没有内部关系的内容硬套结构，更不要把该成结构的内容写成流水账。`,
-  source: `每个block必须引用来源，所有正文来源至少被一个block引用；标为流转信息（文件头尾等）的来源无需引用、不得上屏。`,
+  source: `每个block必须引用来源，所有正文来源至少被一个block引用；标为流转信息（文件头尾、节标题等）的来源无需引用、不得上屏。`,
   declaration: `模拟/假设声明只要原稿给出，就必须上屏且恰好一次：最自然的位置是页面主题句，或紧邻主体的一个条目；不得省略、不得逐条重复、不得独立成组。`,
   condition: `真实条件与否定不能省略，准则不是已满足的证据，并行准备不是下一阶段。`,
   attachment: `条件触发的处置、异常或例外是附着性内容：注明它约束哪些对象或环节，从属并紧邻所依附的内容（作为依附对象的补充说明，或从属职责的supporting组），不与主流程环节、并列要点铺成同层组；判断依据是依附关系，不是篇幅大小。`,
   paging: `页数服从内容量：每页必须有实质展开（对象、条件、范围、动作），某页只剩一两句单薄内容时并入相邻页，不为凑页数摊薄；全稿组数少时控制在两页内——三四个组一页即可，五六个组默认两页；一页放不下就分页，不要反复精简文字硬塞一页，也不要每两三个组单开一页把短稿摊成多页；标题给出判断，正文必须补充标题没有的细节，不整句复述标题。`,
   label: `label可省略，只有帮助读者定位职责时才用，并且必须是内容词（"正常""已修复""待配件"），不用"拆分项一""对象""状态一"这类结构占位名，也不带"（全页适用）"这类版面说明；表格行只有行头与内容两段，不要把多列文字用竖线拼进一个块。`,
   surface: `页面目的、narrative和planningNotes不在灰稿上显示。`,
-  meta: `公文头尾是流转信息、不是演示内容：来源表里标为流转信息的来源一律不上屏（覆盖检查已豁免、无需引用），也不得改写成"通知依据""背景"之类条目。`,
+  meta: `公文头尾、节标题是流转信息、不是演示内容：来源表里标为流转信息的来源一律不上屏（覆盖检查已豁免、无需引用），也不得改写成"通知依据""背景"之类条目；"本部分先讲…"这类结构旁白同样不上屏。`,
 });
 
 export const SEMANTIC_CONTRACT = `你的任务是将原稿提炼、重组为适合PPT阅读的信息结构，本轮只生成灰稿内容，只输出JSON。原稿是事实依据，不是必须逐字搬入页面的正文。保留重要事实、对象、条件、否定和关系；允许合并重复信息、删去冗词与重复解释、把长句改写为短语和清楚的分项。提炼不改变事实与关系，不能为了容量删除必要条件。${SHARED_RULES.meta}
@@ -301,14 +310,41 @@ export function validateSemanticPlan(base, plan) {
       }
       if (!simple && !touched.has('$claim')) fail('unrelated-claim', page.pageId, 'relations数组缺少以$claim为端点的真实关系；必须补齐相应关系记录，仅改写claim正文或planningNotes不能修复此错误');
     }
-    // 流转信息来源（文件头尾等）：无需覆盖、不得上屏。死结在数据层消解，不让模型在矛盾指令里自行平衡。
+    // 流转信息来源（文件头尾、节标题等）：无需覆盖、不得上屏。死结在数据层消解，不让模型在矛盾指令里自行平衡。
+    // 扫描全部上屏字段（页标题/组标题/块标签/块正文），不只块正文——元信息可能被塞进标题层。
     for (const source of base.sources.filter(item => item.flow)) {
       const needle = String(source.text ?? '').replace(/\s+/gu, '');
       if (needle.length < 3) continue;
-      for (const page of plan.pages) for (const group of page.groups) for (const block of group.blocks) {
-        if (String(block.text ?? '').replace(/\s+/gu, '').includes(needle)) {
-          fail('flow-source-onscreen', page.pageId, `流转信息来源（${source.flow}）不得上屏：${source.id} 的内容出现在块 ${block.id}；正文只写实质内容，不搬文件头尾`);
+      for (const page of plan.pages) {
+        const fields = [
+          ['页标题', page.title],
+          ...(page.groups ?? []).flatMap(group => [
+            [`组标题 ${group.id}`, group.heading],
+            ...(group.blocks ?? []).flatMap(block => [
+              [`块 ${block.id} 标签`, block.label],
+              [`块 ${block.id} 正文`, block.text],
+            ]),
+          ]),
+        ];
+        for (const [where, value] of fields) {
+          if (String(value ?? '').replace(/\s+/gu, '').includes(needle)) {
+            fail('flow-source-onscreen', page.pageId, `流转信息来源（${source.flow}）不得上屏：${source.id} 的内容出现在${where}；正文只写实质内容，不搬文件头尾`);
+          }
         }
+      }
+    }
+    // 结构旁白（"本部分先讲…再讲…"）：模型自造的组织说明，不是原稿内容——元信息上屏，机械禁止（客观违规免证据）。
+    for (const page of plan.pages) for (const group of page.groups ?? []) {
+      const narratedFields = [
+        [`组标题 ${group.id}`, group.heading],
+        ...(group.blocks ?? []).flatMap(block => [
+          [`块 ${block.id} 标签`, block.label],
+          [`块 ${block.id} 正文`, block.text],
+        ]),
+      ];
+      for (const [where, value] of narratedFields) {
+        const narrated = String(value ?? '').split('\n').some(line => STRUCTURAL_NARRATION.test(line.trim()));
+        if (narrated) fail('structural-narration', page.pageId, `结构旁白不得上屏：${where} 出现「本部分/本节先讲…」式组织说明；页面上只放内容，组织关系由版面结构承担`);
       }
     }
     // 类别成组：原稿有类别线索时，类别词必须由组标题承载（页标题不算）。
