@@ -45,6 +45,8 @@ function semanticTwoLineWrap(value, maxUnits) {
     const right = chars.slice(index + 1).join("");
     // 行首禁则：闭引号/闭括号/句读不得起行（右侧以禁则字符开头则不用这个断点）
     if (LEADING_FORBIDDEN.test(right)) return;
+    // 行尾禁则：开引号/开括号不得收行（左侧以开标点结尾则不用这个断点）
+    if (TRAILING_OPENING.test(left)) return;
     const leftUnits = textUnits(left);
     const rightUnits = textUnits(right);
     const shorterRatio = Math.min(leftUnits, rightUnits) / Math.max(1, leftUnits + rightUnits);
@@ -118,22 +120,37 @@ export function fitChineseTextToFrame(value, {
 const LINE_START_FORBIDDEN_CHARS = '、，。：；！？,.!?)”’」』）】》〉〕';
 const LEADING_FORBIDDEN = new RegExp(`^[${LINE_START_FORBIDDEN_CHARS}]+`, 'u');
 
+/** 行尾禁则字符集：开引号、开括号不得收行（须与后续内容同 token 右附）。 */
+const LINE_END_FORBIDDEN_CHARS = '“‘（「『【《〈〔';
+const LEADING_OPENING = new RegExp(`^[${LINE_END_FORBIDDEN_CHARS}]+`, 'u');
+const TRAILING_OPENING = new RegExp(`[${LINE_END_FORBIDDEN_CHARS}]$`, 'u');
+
 function lineTokens(value) {
   const tokens = [];
+  const push = token => { if (token) tokens.push(token); };
+  let pending = '';
   for (const { segment } of ZH_WORD_SEGMENTER.segment(String(value ?? ""))) {
     if (!segment) continue;
     if (/^\s+$/u.test(segment)) {
       if (tokens.length) tokens[tokens.length - 1] += segment;
-      else tokens.push(segment);
+      else pending += segment;
       continue;
     }
-    // 行首禁则：段首的闭标点整体附到上一个 token（本就以禁则字符开头则原样入列）。
+    // 行尾禁则：段首开标点与后续内容同 token（开引号/开括号不得收行）。
+    const opening = segment.match(LEADING_OPENING);
+    if (opening) {
+      pending += opening[0];
+      const rest = segment.slice(opening[0].length);
+      if (rest) { push(pending + rest); pending = ''; }
+      continue;
+    }
+    // 行首禁则：段首闭标点整体附到上一个 token（本就以禁则字符开头则原样入列）。
     const leading = segment.match(LEADING_FORBIDDEN);
     if (leading) {
       if (tokens.length) tokens[tokens.length - 1] += leading[0];
-      else tokens.push(leading[0]);
+      else { pending += leading[0]; }
       const rest = segment.slice(leading[0].length);
-      if (rest) tokens.push(rest);
+      if (rest) { push(pending + rest); pending = ''; }
       continue;
     }
     if (/^[字页章节项个]$/u.test(segment)
@@ -142,8 +159,10 @@ function lineTokens(value) {
       tokens[tokens.length - 1] += segment;
       continue;
     }
-    tokens.push(segment);
+    push(pending + segment);
+    pending = '';
   }
+  if (pending) push(pending);
   return tokens;
 }
 

@@ -63,6 +63,26 @@ test("行首禁则：闭引号/闭括号/句读不得起行（含实证样本）
   }
 });
 
+test("行尾禁则：开引号/开括号不得收行（含实证样本）", () => {
+  const forbiddenEnd = /[“‘（「『【《〈〔]$/u;
+  const empirical = "强化“变革是硬道理，合规是硬要求，作风是硬标准”管理意识，统筹兼顾，攻守有道，以规范管理的“效率”强化变革转型的“力度”，以优良的思想作风、工作作风、战斗作风跑出变革转型的“加速度”。";
+  for (let capacity = 8; capacity <= 26; capacity += 1) {
+    const wrapped = wrapChineseText(empirical, capacity);
+    assert.equal(wrapped.replaceAll("\n", ""), empirical);
+    for (const line of wrapped.split("\n")) assert.ok(!forbiddenEnd.test(line), `capacity=${capacity}: ${line}`);
+  }
+  const cases = [
+    ["由“规划”到“落地”的转变。", 7],
+    ["参见《管理办法》第三条。", 7],
+    ["他说：“继续打磨。”", 6],
+  ];
+  for (const [source, capacity] of cases) {
+    const wrapped = wrapChineseText(source, capacity);
+    assert.equal(wrapped.replaceAll("\n", ""), source);
+    for (const line of wrapped.split("\n")) assert.ok(!forbiddenEnd.test(line), `${source} @${capacity}: ${line}`);
+  }
+});
+
 test("文字低于 Skin 最小字号仍放不下时失败关闭", () => {
   const result = fitChineseTextToFrame("这是一段明显超过单行标题容量而且不能继续缩小字号的文字", {
     width: 240,
