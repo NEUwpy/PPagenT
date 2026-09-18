@@ -90,11 +90,22 @@ async function visualReview(attemptDir, pages, visionProvider) {
 }
 
 /** 灰稿 Agent 的自主循环。除 state.json 的状态字段外不写业务数据；具体产物由工具写。 */
+/**
+ * D 类简短需求（一句话需求、无内容展开）需要先生成内容稿；本管线暂未接入该阶段，
+ * 检测到时诚实拒绝（评审 #11 授权），不产出需求复述页。阈值取 60 字：库内 D 类 16–36 字，
+ * 其余稿件均 ≥168 字，分界宽裕。
+ */
+export function requireExpandedManuscript(raw) {
+  const length = String(raw ?? '').replace(/\s+/gu, '').length;
+  if (length < 60) throw new Error('该稿件是简短需求（无内容展开）：D 类稿需先生成内容稿，灰稿管线暂未接入该阶段；请先补充内容稿或改用材料稿。');
+}
+
 export async function runGrayAgent({ source, output, area, root = process.cwd(), provider, maxTurns = 24, observer = null, visualReview = false }) {
   area = validateGrayArea(area);
   await fs.mkdir(output, { recursive: false }).catch(error => { if (error.code !== 'EEXIST') throw error; });
   if (await fs.access(path.join(output, 'state.json')).then(() => true, () => false)) throw new Error('输出目录里已有运行状态（可能属于旧运行或误复用），请使用新目录');
   const raw = await fs.readFile(source, 'utf8');
+  requireExpandedManuscript(raw);
   const sourcePath = path.resolve(source);
   const base = newRunState(raw, sourcePath);
   base.sources = markFlowSources(base.sources);
