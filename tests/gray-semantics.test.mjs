@@ -36,7 +36,8 @@ test('a local expression stays inside its branch and is visible to review and me
   const review=semanticReviewInput({source:base().sources,area:{width:600,height:600,label:'BACKSTAGE_CASE_NAME'},plan:bound});
   assert.deepEqual(review.area,{width:600,height:600});
   assert.doesNotMatch(JSON.stringify(review),/BACKSTAGE_CASE_NAME/);
-  assert.deepEqual(review.visiblePages[0].regions[0].body,display);
+  assert.deepEqual(review.visiblePages[0].regions[0].body,grayDisplayBlocks(item,{numbered:false}));
+  assert.doesNotMatch(JSON.stringify(review),/一 核验与开放|二 暂停条件/);
   assert.match(review.visiblePages[0].regions[0].surface,/块内浅蓝/);
   for(const mutate of [b=>delete b.production,b=>b.kind='unknown']) {
     const invalid=structuredClone(bound);mutate(invalid.pages[0].groups[0].blocks[0]);
@@ -146,10 +147,10 @@ test('review display and measured renderer share actual copy and hierarchy for e
     const input=semanticReviewInput({source:'原稿',area:{width:600,height:350},plan:p});
     const displayed=input.visiblePages[0].regions[0].body;
     const measured=grayBodyLayout(item,568,22).runs;
-    assert.deepEqual(displayed,grayDisplayBlocks(item));
+    assert.deepEqual(displayed,grayDisplayBlocks(item,{numbered:false}));
     assert.deepEqual(measured.map(r=>r.bold),displayed.map(r=>r.bold));
-    assert.equal(measured.map(r=>r.text).join('').replace(/\s/gu,''),displayed.map(r=>r.text).join('').replace(/\s/gu,''));
-    assert.equal(displayed.map(r=>r.text).join('').replace(/\s/gu,''),regionBody(item).replace(/\s/gu,''));
+    const stripOrdinals=text=>text.replace(/^[一二三四五六七八九十\d]+ /u,'');
+    assert.equal(measured.map(r=>stripOrdinals(r.text)).join('').replace(/\s/gu,''),displayed.map(r=>r.text).join('').replace(/\s/gu,''));
     // 结构草图（diagram/flow/table）上屏的是实际文案；chart/image 仍是蓝区制作说明（紧凑格式）。
     const sketch=['diagram','flow','table'].includes(kind);
     if(kind==='text'||sketch) assert.doesNotMatch(JSON.stringify(displayed),/本条建议画|节点短语/);

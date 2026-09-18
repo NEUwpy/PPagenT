@@ -266,7 +266,7 @@ const ORDINALS = Object.freeze(['一','二','三','四','五','六','七','八',
 const ordinalLabel = index => ORDINALS[index - 1] ?? String(index);
 
 /** One display projection for review, measurement and native rendering. No backstage prose. */
-export function grayDisplayBlocks(item, { ordinal = 0 } = {}) {
+export function grayDisplayBlocks(item, { ordinal = 0, numbered = true } = {}) {
   if (SKETCH_KINDS.has(item.kind) && item.blocks) {
     // 结构草图：审稿、测量与渲染看到的是同一份逐卡片/节点的实际文案（"是结构"这一事实由 surface 描述）。
     return item.blocks.flatMap((block,index)=>[
@@ -278,9 +278,9 @@ export function grayDisplayBlocks(item, { ordinal = 0 } = {}) {
   // 条目编号标签（评审 #25）：文字组内带标签条目按实际顺序编号（跳条不串号）；单条目组不编号。
   // ordinal 用于逐块测量路径（grayBodyLayout 逐块投影）与组级投影保持同一编号。
   const labeledCount = item.blocks.filter(block => nonempty(block.label)).length;
-  const numbered = ordinal > 0 || labeledCount >= 2;
+  const useNumbers = numbered && (ordinal > 0 || labeledCount >= 2);
   return item.blocks.flatMap((block,index) => [
-    ...(block.label ? [{text:numbered ? `${ordinalLabel(ordinal > 0 ? ordinal : index + 1)} ${block.label}` : block.label,bold:true,gapBefore:index ? 12 : 0}] : []),
+    ...(block.label ? [{text:useNumbers ? `${ordinalLabel(ordinal > 0 ? ordinal : index + 1)} ${block.label}` : block.label,bold:true,gapBefore:index ? 12 : 0}] : []),
     {text:block.kind && block.kind!=='text' ? regionBody(block) : block.text,bold:false,gapBefore:!block.label && index ? 12 : 0,
       ...(block.kind && block.kind!=='text' ? {kind:block.kind} : {})},
   ]);
@@ -297,7 +297,7 @@ export function semanticReviewInput({source,area,plan,reviewFeedback=null}) {
         ? `结构草图：${SKETCH_LABELS[item.kind]}，框内文字为实际文案`
         : item.kind==='text'
           ? (item.blocks?.some(block=>block.kind && block.kind!=='text') ? '灰区为实际文案；body中非text的kind为块内浅蓝制作说明，四项均上屏' : '灰区：实际文案')
-          : '浅蓝区：制作说明，四项均须上屏',heading:item.heading,body:grayDisplayBlocks(item),
+          : '浅蓝区：制作说明，四项均须上屏',heading:item.heading,body:grayDisplayBlocks(item,{numbered:false}),
     }))})),
   };
 }
