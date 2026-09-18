@@ -108,6 +108,12 @@ test('审稿窄条款在契约中：同页并列类别不得要求配对/对应�
   assert.match(SEMANTIC_REVIEW_CONTRACT, /必须有原稿明示依据/u);
 });
 
+test('结构位口径在审稿契约中：汇聚/扇出用 diagram、承载内容逐项实际文案', () => {
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /并列汇聚\/扇出用 diagram/u);
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /承载内容须逐项写实际细项文案/u);
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /flow 只用于原文有先后线索的真实时序/u);
+});
+
 test('同页双容器字号降档：18–20px 候选中按测量选择，492 内可容纳；未标形态仍 22px 失败', () => {
   assert.throws(() => resolveGrayLayout(fixture(), rowSelect([2, 3]), area(492), metrics), /一页放不下/u);
   const result = resolveGrayLayout(fixture(), rowSelect([2, 3]), area(492), { ...metrics, fontSizes: () => [20, 18] });
