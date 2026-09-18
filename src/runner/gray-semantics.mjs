@@ -1,6 +1,7 @@
 import { upsertPageBriefs, validateContent } from './state.mjs';
 import { checkItemFidelity } from '../content/source-fidelity.mjs';
 import { bindExpressionGroups } from '../composition/content-stages.mjs';
+import { createHash } from 'node:crypto';
 
 const nonempty = value => typeof value === 'string' && value.trim().length > 0;
 const TYPES = new Set(['support', 'criterion', 'implementation', 'sequence', 'parallel', 'condition', 'qualification', 'comparison', 'decomposition', 'context']);
@@ -87,6 +88,29 @@ export function chineseCount(text) {
   const match = value.match(/^([一二两三四五六七八九])?十([一二三四五六七八九])?$/u);
   if (match) return (match[1] ? CHINESE_DIGITS[match[1]] : 1) * 10 + (match[2] ? CHINESE_DIGITS[match[2]] : 0);
   return [...value].reduce((sum, char) => sum + (CHINESE_DIGITS[char] ?? 0), 0);
+}
+
+/**
+ * 渲染尝试指纹（方案 A 项 1，评审 #21 批准）：文案＋版式形状归一化后的 SHA-1。
+ * 用于「同版重试」检测——容量失败后若指纹未变，本轮重试没有意义（确定性结果）。
+ * 任何文案或版式变化都会改变指纹；不参与规划内容，只服务成本守卫。
+ */
+export function attemptFingerprint(plan, layouts) {
+  const parts = [];
+  for (const page of plan?.pages ?? []) {
+    parts.push(page.pageId ?? '', page.title ?? '', page.claim ?? '');
+    for (const group of page.groups ?? []) {
+      parts.push(group.id ?? '', group.heading ?? '', group.importance ?? '', group.kind ?? '');
+      for (const block of group.blocks ?? []) parts.push(block.id ?? '', block.label ?? '', block.text ?? '');
+    }
+  }
+  parts.push(JSON.stringify(layouts ?? null));
+  return createHash('sha1').update(parts.join('\u0001'), 'utf8').digest('hex');
+}
+
+/** 同版重试判定：该指纹的版本此前已因容量失败过——直接拒绝，反馈要求「比上一版更短」。 */
+export function isStalledRetry(previousAttempts, fingerprint) {
+  return (previousAttempts ?? []).some(attempt => attempt?.accepted === false && attempt?.stage === 'geometry' && attempt?.fingerprint === fingerprint);
 }
 
 export function grayCoverageIssues(state) {
