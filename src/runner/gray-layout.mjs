@@ -89,47 +89,89 @@ export function compressionMemory({ currentMinimum, areaHeight, previousMinimum 
 }
 
 const REWEIGHT_MAX = 8;
+/** 候选权重（1..8 整数比），按与给定比例的距离排序；等价比例（如 [2,3] 对 [4,6]）保留一个即可。 */
+function weightCandidates(baseWeights) {
+  const base = Array.isArray(baseWeights) ? baseWeights : [1, 1];
+  const baseRatio = base[0] / (base[0] + base[1]);
+  const candidates = [];
+  for (let a = 1; a <= REWEIGHT_MAX; a += 1) for (let b = 1; b <= REWEIGHT_MAX; b += 1) {
+    if (a === b) continue;
+    candidates.push({ weights: [a, b], distance: Math.abs(a / (a + b) - baseRatio) });
+  }
+  candidates.sort((x, y) => x.distance - y.distance);
+  return candidates;
+}
+
+/** 在给定组合下测量各组最小容量；任一条件不成立返回 null（供候选扫描使用，不抛错）。 */
+function measureContracts(tree, page, area, metrics, fontSize) {
+  const widthsById = estimateLeafWidths(tree, area.width);
+  const contracts = {};
+  for (const id of page.semantics.readingOrder) {
+    const item = page.items.find(entry => entry.id === id);
+    const width = widthsById.get(id);
+    if (!(width >= 100)) return null;
+    const heading = metrics.fitText(item.heading, width - 32, 40, 26);
+    if (!heading.fits) return null;
+    const body = metrics.measureBody(item, width - 32, fontSize);
+    if (!body.fits) return null;
+    contracts[id] = { minWidth: width, minHeight: Math.max(80, Math.ceil(70 + body.height)) };
+  }
+  return contracts;
+}
+
+const isDualRow = tree => tree.op === 'row' && tree.children.length === 2 && tree.children.every(child => child.groupId);
+
+/**
+ * 同页双容器形态的测量式选择（评审 #22 裁决三）：字号在给定候选内择优——
+ * 先取满足 ≥5% 余量的最大字号，其次取能容纳的，最后落在候选末档（底线由候选列表保证）；
+ * 权重在同一扫描里按实测最小高选择（无稿件特例）。
+ */
+function pickFormLayout(tree, page, area, metrics, fonts) {
+  const margin = area.height * 0.95;
+  const candidates = [];
+  for (const fontSize of fonts) for (const candidate of weightCandidates(tree.weights)) {
+    const candidateTree = { ...tree, weights: candidate.weights };
+    const contracts = measureContracts(candidateTree, page, area, metrics, fontSize);
+    if (!contracts) continue;
+    const maxHeight = Math.max(...Object.values(contracts).map(entry => entry.minHeight));
+    candidates.push({ fontSize, weights: candidate.weights, tree: candidateTree, maxHeight, distance: candidate.distance });
+  }
+  if (!candidates.length) return null;
+  const bestOf = fontSize => candidates.filter(entry => entry.fontSize === fontSize).sort((x, y) => x.maxHeight - y.maxHeight || x.distance - y.distance)[0];
+  for (const fontSize of fonts) {
+    const best = bestOf(fontSize);
+    if (best && best.maxHeight <= margin) return best;
+  }
+  for (const fontSize of fonts) {
+    const best = bestOf(fontSize);
+    if (best && best.maxHeight <= area.height) return best;
+  }
+  return bestOf(fonts[fonts.length - 1]) ?? null;
+}
+
 /**
  * 双栏权重回退（方案 A 项 3，评审 #21 批准）：根为 row 的两个组叶子在默认权重下容量失败时，
  * 用真实测量函数扫描候选分栏，取第一个能容纳的权重。候选只改 row 的 weights（形状不变），
  * 以测量为准、不硬编码稿件特例；命中后回执标注 reweighted 供成本与覆盖分析。
  */
-function reweightedRow(tree, page, area, metrics) {
+function reweightedRow(tree, page, area, metrics, fontSize = 22) {
   if (tree.op !== 'row' || tree.children.length !== 2 || tree.children.some(child => !child.groupId)) return null;
-  const base = Array.isArray(tree.weights) ? tree.weights : [1, 1];
-  const baseRatio = base[0] / (base[0] + base[1]);
-  const candidates = [];
-  for (let a = 1; a <= REWEIGHT_MAX; a += 1) for (let b = 1; b <= REWEIGHT_MAX; b += 1) {
-    if (a === b) continue;
-    if (Math.abs(a / (a + b) - baseRatio) < 1e-9) continue;
-    candidates.push([a, b]);
-  }
-  candidates.sort((x, y) => Math.abs(x[0] / (x[0] + x[1]) - baseRatio) - Math.abs(y[0] / (y[0] + y[1]) - baseRatio));
-  for (const weights of candidates) {
-    const candidate = { ...tree, weights };
+  for (const candidate of weightCandidates(tree.weights)) {
+    const weights = candidate.weights;
+    const candidateTree = { ...tree, weights };
     try {
-      const widthsById = estimateLeafWidths(candidate, area.width);
-      const contracts = {};
-      for (const id of page.semantics.readingOrder) {
-        const item = page.items.find(entry => entry.id === id);
-        const width = widthsById.get(id);
-        if (!(width >= 100)) throw new Error('narrow');
-        const heading = metrics.fitText(item.heading, width - 32, 40, 26);
-        if (!heading.fits) throw new Error('heading');
-        const body = metrics.measureBody(item, width - 32, 22);
-        if (!body.fits) throw new Error('body');
-        contracts[id] = { minWidth: width, minHeight: Math.max(80, Math.ceil(70 + body.height)) };
-      }
-      const composition = candidate.children.length === 1 ? candidate.children[0] : candidate;
+      const contracts = measureContracts(candidateTree, page, area, metrics, fontSize);
+      if (!contracts) continue;
+      const composition = candidateTree.children.length === 1 ? candidateTree.children[0] : candidateTree;
       const solved = resolveLayoutTree({ composition, bodyFrame: { left: 0, top: 0, width: area.width, height: area.height }, contracts, style: { gap: GAP } });
-      return { tree: candidate, contracts, solved, weights };
-    } catch { /* 该候选不成立，继续扫描 */ }
+      return { tree: candidateTree, contracts, solved, weights };
+    } catch { /* 该候选仍放不下或测量不合法，继续扫描 */ }
   }
   return null;
 }
 
 /** 布局选择：简式或嵌套组合树，程序按真实文字容量求区域。 */
-export function resolveGrayLayout(plan, selection, area, { measureBody, fitText }) {
+export function resolveGrayLayout(plan, selection, area, { measureBody, fitText, fontSizes }) {
   if (selection?.needsReplan) throw new CompositionFitError(selection.reason || '模型请求重组');
   if (!selection || Object.keys(selection).some(k => k !== 'pages') || !Array.isArray(selection.pages) || selection.pages.length !== plan.pages.length) throw new Error('排版只能返回同页数的pages');
   const pages = semanticPages(plan), layouts = [], receipts = [];
@@ -138,7 +180,14 @@ export function resolveGrayLayout(plan, selection, area, { measureBody, fitText 
     if (entry?.pageId !== page.pageId || Object.keys(entry).some(k => !['pageId', 'layout'].includes(k))) throw new Error('layouts 每项只接受 {pageId, layout} 且 pageId 必须与本页一致：不要添加其它字段、改正文或换页序；覆盖理由写在 override.reason 里由程序单独入档，不随 layouts 传入。');
     const choice = entry.layout, ids = page.semantics.readingOrder;
     if (!choice || typeof choice !== 'object') throw new Error('每页必须给出 layout');
-    const tree = normalizeLayoutTree(choice, ids, page.pageId);
+    let tree = normalizeLayoutTree(choice, ids, page.pageId);
+    let fontSize = 22;
+    let formPick = null;
+    const fontCandidates = typeof fontSizes === 'function' ? fontSizes(page, tree) : null;
+    if (isDualRow(tree) && Array.isArray(fontCandidates) && fontCandidates.length > 1) {
+      formPick = pickFormLayout(tree, page, area, { measureBody, fitText }, fontCandidates);
+      if (formPick) { tree = formPick.tree; fontSize = formPick.fontSize; }
+    }
     const widthsById = estimateLeafWidths(tree, area.width);
     let contracts = {};
     for (const id of ids) {
@@ -146,19 +195,22 @@ export function resolveGrayLayout(plan, selection, area, { measureBody, fitText 
       if (!(width >= 100)) throw new CompositionFitError('基础分栏过窄，请减少同排组数或调整比例', { pageId: page.pageId, itemId: id, width });
       const heading = fitText(item.heading, width - 32, 40, 26);
       if (!heading.fits) throw new CompositionFitError('组标题无法单行容纳，请改组合或返回规划缩短标题', { pageId: page.pageId, itemId: id, width, heading: item.heading });
-      const body = measureBody(item, width - 32, 22);
+      const body = measureBody(item, width - 32, fontSize);
       if (!body.fits) throw new CompositionFitError('该宽度不能完整容纳正文', { pageId: page.pageId, itemId: id, width });
       contracts[id] = { minWidth: width, minHeight: Math.max(80, Math.ceil(70 + body.height)) };
     }
     let composition = tree.op === 'single' ? tree.children[0] : tree;
-    let receiptLayout = choice;
-    let reweighted = null;
+    const baseWeights = Array.isArray(choice.weights) ? choice.weights : null;
+    let receiptLayout = formPick ? { ...structuredClone(choice), weights: formPick.weights } : choice;
+    let reweighted = formPick && JSON.stringify(formPick.weights) !== JSON.stringify(baseWeights)
+      ? { from: baseWeights, to: formPick.weights }
+      : null;
     let solved;
     try {
       solved = resolveLayoutTree({ composition, bodyFrame: { left: 0, top: 0, width: area.width, height: area.height }, contracts, style: { gap: GAP } });
     } catch (error) {
       if (error.code !== 'COMPOSITION_RECOMPOSE_REQUIRED') throw error;
-      const attempt = reweightedRow(tree, page, area, { measureBody, fitText });
+      const attempt = reweightedRow(tree, page, area, { measureBody, fitText }, fontSize);
       if (!attempt) {
         // 容量只报"需要重组"不足以让模型收敛：给出实测最小尺寸与出路（合组/精简/分页）。
         const minimum = error.details?.minimum;
@@ -171,7 +223,7 @@ export function resolveGrayLayout(plan, selection, area, { measureBody, fitText 
       contracts = attempt.contracts;
       solved = attempt.solved;
       receiptLayout = { ...structuredClone(choice), weights: attempt.weights };
-      reweighted = { from: Array.isArray(choice.weights) ? choice.weights : null, to: attempt.weights };
+      reweighted = { from: baseWeights, to: attempt.weights };
     }
     // 内容明显少于正文区时不再把各组拉到满高：满高会让空框自己声明"这里该有内容"。
     // 只在稀疏页面收缩（自然高度 < 55% 正文区），丰实页面照旧铺满。
@@ -181,10 +233,10 @@ export function resolveGrayLayout(plan, selection, area, { measureBody, fitText 
     }
     const regions = ids.map(id => {
       const frame = solved.regions[id];
-      return { itemId: id, x: frame.left, y: frame.top, width: frame.width, height: frame.height, fontSize: 22 };
+      return { itemId: id, x: frame.left, y: frame.top, width: frame.width, height: frame.height, fontSize };
     });
     layouts.push({ pageId: page.pageId, regions });
-    receipts.push({ pageId: page.pageId, layout: structuredClone(receiptLayout), resolved: solved, occupiedRegions: regions, contentMinimums: contracts, ...(reweighted ? { reweighted } : {}) });
+    receipts.push({ pageId: page.pageId, layout: structuredClone(receiptLayout), resolved: solved, occupiedRegions: regions, contentMinimums: contracts, fontSize, ...(reweighted ? { reweighted } : {}), ...(formPick ? { formPick: { fontSize: formPick.fontSize, weights: formPick.weights, maxHeight: formPick.maxHeight } } : {}) });
   }
   const bound = bindSemanticLayout(plan, { pages: layouts });
   bound.pages.forEach((page, i) => { page.composition.basicLayout = receipts[i].layout; });

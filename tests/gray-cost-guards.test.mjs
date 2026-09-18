@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { attemptFingerprint, isStalledRetry } from '../src/runner/gray-semantics.mjs';
+import { attemptFingerprint, isStalledRetry, categoryCues, samePageCues, splitGate, SEMANTIC_REVIEW_CONTRACT } from '../src/runner/gray-semantics.mjs';
 import { resolveGrayLayout, compressionMemory } from '../src/runner/gray-layout.mjs';
 import { grayBodyLayout, fitGrayText } from '../src/runner/gray-draft.mjs';
 
@@ -78,4 +78,42 @@ test('双栏权重回退有边界：没有任何候选能容纳时仍如实报�
 
 test('权重回退只作用于双栏 row 根：其他组合失败行为不变', () => {
   assert.throws(() => resolveGrayLayout(fixture(), { pages: [{ pageId: 'p1', layout: { type: 'column' } }] }, area(200), metrics), /一页放不下/u);
+});
+
+const cueSources = [
+  { id: 's1', text: '首先是两点不足。一是势能到动能阻力重重。二是合规管理短板亟待提升。' },
+  { id: 's2', text: '其次是四点感悟。一是统一语言才能合拍共鸣。二是解决问题才是检验变革的唯一标准。' },
+];
+const mergedPlan = () => ({ pages: [{ pageId: 'p1', groups: [{ heading: '不足：落地阻力与合规短板' }, { heading: '感悟：四条推进准则' }] }] });
+const splitPlan = () => ({ pages: [{ pageId: 'p1', groups: [{ heading: '不足：落地阻力与合规短板' }] }, { pageId: 'p2', groups: [{ heading: '感悟：四条推进准则' }] }] });
+
+test('分页闸门：同页双容器目标下，两轮真压缩前拒绝分页计划', () => {
+  const cues = categoryCues(cueSources);
+  assert.equal(cues.length, 2);
+  assert.equal(samePageCues(cues, mergedPlan()), true);
+  assert.equal(samePageCues(cues, splitPlan()), false);
+  assert.equal(splitGate({ cues, plan: mergedPlan(), minimums: [] }).blocked, false);
+  assert.equal(splitGate({ cues, plan: splitPlan(), minimums: [] }).blocked, false); // 尚未发生同页容量失败：不引入新死锁
+  assert.equal(splitGate({ cues, plan: splitPlan(), minimums: [664] }).blocked, true);
+  assert.equal(splitGate({ cues, plan: splitPlan(), minimums: [664, 634] }).blocked, true);
+  assert.deepEqual(splitGate({ cues, plan: splitPlan(), minimums: [664, 634, 600] }), { blocked: false, rounds: 2 });
+  const singleCue = categoryCues([cueSources[0]]);
+  assert.equal(splitGate({ cues: singleCue, plan: splitPlan(), minimums: [] }).blocked, false);
+});
+
+test('审稿窄条款在契约中：同页并列类别不得要求配对/对应表', () => {
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /不得要求一一配对卡片或对应表/u);
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /必须有原稿明示依据/u);
+});
+
+test('同页双容器字号降档：18–20px 候选中按测量选择，492 内可容纳；未标形态仍 22px 失败', () => {
+  assert.throws(() => resolveGrayLayout(fixture(), rowSelect([2, 3]), area(492), metrics), /一页放不下/u);
+  const result = resolveGrayLayout(fixture(), rowSelect([2, 3]), area(492), { ...metrics, fontSizes: () => [20, 18] });
+  const receipt = result.receipts[0];
+  assert.ok(receipt.formPick, '应记录 formPick 选择依据');
+  assert.ok([18, 20].includes(receipt.fontSize), `fontSize=${receipt.fontSize}`);
+  assert.ok(receipt.formPick.maxHeight <= 492, JSON.stringify(receipt.formPick));
+  const regions = result.plan.pages[0].composition.regions;
+  assert.ok(regions.every(region => region.fontSize === receipt.fontSize));
+  assert.ok(regions.every(region => region.height <= 492), JSON.stringify(regions));
 });

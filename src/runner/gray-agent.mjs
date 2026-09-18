@@ -15,7 +15,7 @@ import { createToolRegistry, defineTool } from './tools/index.mjs';
 import { buildChatProviderFromEnv } from './chat-provider.mjs';
 import { loadDeepSeekLocalConfig } from '../agent/deepseek-provider-from-env.mjs';
 import { newRunState, writeState, renderContentMarkdown, renderStateMarkdown } from './state.mjs';
-import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan, semanticReviewInput, markFlowSources, SHARED_RULES, attemptFingerprint, isStalledRetry } from './gray-semantics.mjs';
+import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan, semanticReviewInput, markFlowSources, SHARED_RULES, attemptFingerprint, isStalledRetry, categoryCues, samePageCues, splitGate } from './gray-semantics.mjs';
 import { applyTemplateDefaults, describeDefaults } from './gray-templates.mjs';
 import { auditGeometry, voidWarnings, VOID_THRESHOLDS } from './gray-audit.mjs';
 import { resolveGrayLayout, compressionMemory } from './gray-layout.mjs';
@@ -110,6 +110,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
   const sourcePath = path.resolve(source);
   const base = newRunState(raw, sourcePath);
   base.sources = markFlowSources(base.sources);
+  const cues = categoryCues(base.sources);
   const statePath = path.join(output, 'state.json');
   const agentDir = path.join(output, 'agent');
 
@@ -149,6 +150,8 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
   let lastPlan = null;
   // 压缩记忆（方案 A 项 2）：逐页记录上一版容量失败实测高，随反馈回给模型。
   const lastMinimums = new Map();
+  // 分页闸门（评审 #22 裁决二）：同页双容器形态的逐次容量失败实测高（两轮真压缩前的分页拦截依据）。
+  const mergeMinimums = [];
   // 模型偶尔忘记在正文里重写完整计划（协议失误）。兜底沿用上一轮已解析的计划并在回执标注
   // planSource，避免一次失误白烧一整轮；模型看到标注后应在下一轮正文补写完整计划。
   const resolvePlan = () => {
@@ -167,6 +170,12 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
       handler: async () => {
         const { plan, source, note } = resolvePlan();
+        // 分页闸门（评审 #22 裁决二）：同页双容器目标下，两轮真压缩前不接收按类别分页的计划。
+        const gate = splitGate({ cues, plan, minimums: mergeMinimums });
+        if (gate.blocked) {
+          const message = `同页双容器目标：按类别分页只认「两轮真压缩（每轮实测更短）」后的仍超；当前已完成 ${gate.rounds}/2 轮。请先按同页并排提交并在容量失败后压缩正文（每轮必须比上一版更短），暂不接收分页计划。`;
+          return { accepted: false, issues: [{ code: 'split-gate', pageId: plan.pages?.[0]?.pageId, message }], coverage: '分页闸门：同页双容器目标尚未完成两轮真压缩。', defaults: describeDefaults(plan), planSource: source, ...(note ? { note } : {}) };
+        }
         const report = validateSemanticPlan(base, plan);
         return { accepted: report.accepted, issues: report.issues.slice(0, 20), coverage: report.coverage, defaults: describeDefaults(plan), planSource: source, ...(report.warnings?.length ? { warnings: report.warnings } : {}), ...(note ? { note } : {}) };
       },
@@ -197,6 +206,14 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
       },
       handler: async ({ layouts }) => {
         const { plan, source: planSource, note: planNote } = resolvePlan();
+        // 分页闸门（评审 #22 裁决二）：同页双容器目标下，两轮真压缩前的分页计划直接不接收。
+        const gate = splitGate({ cues, plan, minimums: mergeMinimums });
+        if (gate.blocked) {
+          const reason = `同页双容器目标：按类别分页只认「两轮真压缩（每轮实测更短）」后的仍超；当前已完成 ${gate.rounds}/2 轮。请先按同页并排提交并在容量失败后压缩正文（每轮必须比上一版更短），暂不接收分页计划。`;
+          agentState.grayDraft.gates = [...(agentState.grayDraft.gates ?? []), { at: new Date().toISOString(), rounds: gate.rounds, reason }];
+          await saveAgentState();
+          return { accepted: false, stage: 'gate', reason };
+        }
         // 同版重试检测（方案 A 项 1）：该指纹版本已因容量失败过——确定性结果，直接拒绝并反馈压缩要求。
         const fingerprint = attemptFingerprint(plan, layouts);
         if (isStalledRetry(agentState.grayDraft.renders, fingerprint)) {
@@ -224,14 +241,20 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
           decisions: applied.decisions,
         }), 'utf8');
         let built;
+        // 同页双容器形态（评审 #22 裁决三）：正文按 18–20px 降档候选交测量层择优，其他形态维持 22px。
+        const formPage = plan.pages.length === 1 && samePageCues(cues, plan);
         try {
-          built = resolveGrayLayout(plan, { pages: applied.layouts }, area, { measureBody: grayBodyLayout, fitText: fitGrayText });
+          built = resolveGrayLayout(plan, { pages: applied.layouts }, area, {
+            measureBody: grayBodyLayout, fitText: fitGrayText,
+            fontSizes: () => (formPage ? [20, 18] : [22]),
+          });
         } catch (error) {
           const details = error.details ?? null;
           const pageMinimum = Math.ceil(details?.minimum?.height ?? 0);
           const previousMinimum = details?.pageId && lastMinimums.has(details.pageId) ? lastMinimums.get(details.pageId) : undefined;
           const memory = pageMinimum > 0 ? compressionMemory({ currentMinimum: pageMinimum, areaHeight: area.height, previousMinimum }) : null;
           if (details?.pageId && pageMinimum > 0) lastMinimums.set(details.pageId, pageMinimum);
+          if (details?.pageId && pageMinimum > 0 && plan.pages.length === 1 && samePageCues(cues, plan)) mergeMinimums.push(pageMinimum);
           const failure = {
             accepted: false, stage: 'geometry',
             reason: `${error.message}${memory ? memory.note : ''}`,
@@ -283,13 +306,14 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
           : { status: 'not-reviewed' };
         agentState.grayDraft.status = 'awaiting-user-review';
         const reweighted = (built.receipts ?? []).filter(receipt => receipt.reweighted).map(receipt => ({ pageId: receipt.pageId, ...receipt.reweighted }));
-        agentState.grayDraft.renders.push({ render: renderCount, accepted: true, artifactDirectory: path.relative(output, attemptDir), fingerprint, ...(reweighted.length ? { reweighted } : {}) });
+        const formFont = (built.receipts ?? []).filter(receipt => Number.isFinite(receipt.fontSize) && receipt.fontSize !== 22).map(receipt => ({ pageId: receipt.pageId, fontSize: receipt.fontSize }));
+        agentState.grayDraft.renders.push({ render: renderCount, accepted: true, artifactDirectory: path.relative(output, attemptDir), fingerprint, ...(reweighted.length ? { reweighted } : {}), ...(formFont.length ? { formFont } : {}) });
         agentState.grayDraft.artifactDirectory = path.relative(output, attemptDir);
         agentState.grayDraft.plan = built.plan;
         agentState.grayDraft.programCheck = { ...report, state: undefined };
         await saveAgentState();
         const preview = renderState.pages.map((page, index) => `${path.relative(output, attemptDir)}/preview/slide-${String(index + 1).padStart(2, '0')}.png`);
-        return { accepted: true, preview, pptx: `${path.relative(output, attemptDir)}/gray-draft.pptx`, pages: renderState.pages.length, planSource, templates: { defaults: applied.decisions.filter(decision => decision.mode === 'default').length, overrides: applied.decisions.filter(decision => decision.mode === 'override').length }, ...(reweighted.length ? { reweighted } : {}), ...(geometryWarnings.length ? { geometry: geometryWarnings } : {}), ...(report.warnings?.length ? { warnings: report.warnings } : {}), ...(planNote ? { note: planNote } : {}) };
+        return { accepted: true, preview, pptx: `${path.relative(output, attemptDir)}/gray-draft.pptx`, pages: renderState.pages.length, planSource, templates: { defaults: applied.decisions.filter(decision => decision.mode === 'default').length, overrides: applied.decisions.filter(decision => decision.mode === 'override').length }, ...(reweighted.length ? { reweighted } : {}), ...(formFont.length ? { formFont } : {}), ...(geometryWarnings.length ? { geometry: geometryWarnings } : {}), ...(report.warnings?.length ? { warnings: report.warnings } : {}), ...(planNote ? { note: planNote } : {}) };
       },
     }),
   ];

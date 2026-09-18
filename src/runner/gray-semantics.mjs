@@ -81,6 +81,29 @@ export function categoryCues(sources) {
 }
 
 const CHINESE_DIGITS = Object.freeze({ 一: 1, 两: 2, 二: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9, 十: 10 });
+
+/** 同页双容器目标判定：恰好两个类别线索，且两类别的组标题同页承载（评审 #22 目标形态）。 */
+export function samePageCues(cues, plan) {
+  if ((cues ?? []).length !== 2) return false;
+  const nouns = cues.map(cue => cue.noun);
+  return (plan?.pages ?? []).some(page => {
+    const headings = (page.groups ?? []).map(group => String(group.heading ?? ''));
+    return nouns.every(noun => headings.some(heading => heading.includes(noun)));
+  });
+}
+
+/**
+ * 分页闸门（评审 #22 裁决二）：同页双容器目标下，按类别分页只认「两轮真压缩（每轮实测更短）」后的仍超；
+ * 通用「两次容量失败即分页」在此目标下不生效。minimums 为该形态容量失败的逐次实测高。
+ * 边界：尚未发生同页容量失败时不拦截（先按规则规划；避免对无法合并的稿件引入新死锁）。
+ */
+export function splitGate({ cues, plan, minimums }) {
+  const rounds = (() => { let value = 0; const list = minimums ?? []; for (let i = 1; i < list.length; i += 1) if (list[i] < list[i - 1]) value += 1; return value; })();
+  if ((cues ?? []).length !== 2) return { blocked: false, rounds };
+  if (!(minimums ?? []).length) return { blocked: false, rounds };
+  if (samePageCues(cues, plan)) return { blocked: false, rounds };
+  return { blocked: rounds < 2, rounds };
+}
 export function chineseCount(text) {
   const value = String(text ?? '');
   if (/^\d+$/u.test(value)) return Number(value);
@@ -149,11 +172,11 @@ export const SEMANTIC_CONTRACT = `你的任务是将原稿提炼、重组为适�
 先明确页面职责，按内容归属形成groups，再把各分支的条目放进blocks，用label与text区分要点和展开。${SHARED_RULES.category}先形成可阅读的实文提纲，再选择局部表达；不要把分属不同观点的依据摊成同级卡片，也不要把分类、依据、准则混称为证明。这些层级按实际内容使用，不强求每页都有两个分支或固定条目数。文字组内某条需要图示时，该block可选kind及expression、relationship、production，字段含义与整组蓝区相同；其label仍是上屏条目标题。未选kind的block为普通文字，整组非text时不再嵌套蓝区。${SHARED_RULES.expression}${SHARED_RULES.sketch}结构库按局部关系按需调用，本轮仅呈现蓝区制作说明。
 每组一个主要职责。claim概括主题或判断，正文展开对象、安排与条件，不把同一句建议分别复制到主题、组标题和正文。blocks按阅读顺序；${SHARED_RULES.label}三列对照改写成一条可读文字或拆成两个块。heading保持短小。蓝区expression写表达作用，relationship写谁与谁怎样关联，production写可执行的组织要求；三者分工，避免重复复述承载内容。必要关系须在实文组织或蓝区制作说明中可见，仅保留关键词或写在narrative里不等于表达完成。
 ${SHARED_RULES.source}引用表示信息来自哪里，不要求每段原文单独变成一个正文块；页级主题承载的信息可随相关block引用。${SHARED_RULES.declaration}小段共同说明就近融入主体，不因职责不同便独占大栏。${SHARED_RULES.condition}${SHARED_RULES.attachment}
-内容区尺寸由输入给定，主题句在内容区外，以28px单行呈现，需简短。排版仅有单主体、横向、纵向、规则网格，空间不够时重新组织或分页。正文22px，组标题26px一行，组内每个可选label与text各自排字，约每行30px，块间距12px，每块四周8px内边距。每组70px标题/边距开销；按内容估计，不自己写坐标或强制页数。${SHARED_RULES.paging}同组label+text合计不超过400字。保留原稿数字写法。
+内容区尺寸由输入给定，主题句在内容区外，以28px单行呈现，需简短。排版仅有单主体、横向、纵向、规则网格，空间不够时重新组织或分页。正文22px（同页双容器形态按 18–20px 降档、容量实测选择；拆页/全宽维持 22px），组标题26px一行，组内每个可选label与text各自排字，约每行30px，块间距12px，每块四周8px内边距。每组70px标题/边距开销；按内容估计，不自己写坐标或强制页数。${SHARED_RULES.paging}同组label+text合计不超过400字。保留原稿数字写法。
 ${SHARED_RULES.surface}正文必须能独立让读者理解必要关系，不能依赖后台说明。内部审查理由不要改写成正文：用“同时”“是否”“根据记录”等原稿已有表达保留关系，不额外解释“不是先后步骤”“不是已满足的证据”等审稿规则。原稿的模拟/假设性质属于读者需要的内容，须在实际标题或正文中明示，引用sourceIds不能代替显示。`;
 
 export const SEMANTIC_REVIEW_CONTRACT = `你是灰稿内容与表达审稿人。输入source是原稿，requirements是后台职责与必要关系，visiblePages是程序从实际渲染内容生成的上屏视图。只用visiblePages证明表达已落实；requirements不能作为上屏证据。尚未分配坐标或查看像素图。
-逐页核对：事实、条件、否定和模拟性质是否完整；主题与正文是否各有职责；组角色是否通过分项、对应、层级或结构草图落实；必要关系能否直接读出，而非由读者从两个长段落自行拼接。只有标题改名、主辅标签或并排放置，不证明关系已表达。可用结构手段仅限三种：diagram（对象并置卡片）、flow（顺序节点与箭头）、table（行式表格：每行一个对象，行内用文字写各维度）；chart/image 只有蓝区说明。不要要求系统不具备的结构（列对照网格、条件分支图、字段对应表、嵌套层级图）；条件与后果、对象与时限用一行可读文字写清楚即可，在可用手段内评判是否可读，不因没有专门图形而打回。文字本身组织清楚可以通过；diagram、flow、table 本轮绘制简化草图，框内文字为实际文案，chart/image 仍是蓝区说明。对比应配对、时序应有序；该成结构却写成流水账、没有内部关系硬套结构、分解或构成被拆成平行卡片、指标随时间变化被卡片化、单对象规则或说明硬做成表格，都要指出。
+逐页核对：事实、条件、否定和模拟性质是否完整；主题与正文是否各有职责；组角色是否通过分项、对应、层级或结构草图落实；必要关系能否直接读出，而非由读者从两个长段落自行拼接。只有标题改名、主辅标签或并排放置，不证明关系已表达。可用结构手段仅限三种：diagram（对象并置卡片）、flow（顺序节点与箭头）、table（行式表格：每行一个对象，行内用文字写各维度）；chart/image 只有蓝区说明。不要要求系统不具备的结构（列对照网格、条件分支图、字段对应表、嵌套层级图）；条件与后果、对象与时限用一行可读文字写清楚即可，在可用手段内评判是否可读，不因没有专门图形而打回。文字本身组织清楚可以通过；diagram、flow、table 本轮绘制简化草图，框内文字为实际文案，chart/image 仍是蓝区说明。对比应配对、时序应有序；该成结构却写成流水账、没有内部关系硬套结构、分解或构成被拆成平行卡片、指标随时间变化被卡片化、单对象规则或说明硬做成表格，都要指出。同页并列的两个类别（如两点不足与四点感悟）是并列关系，不得要求一一配对卡片或对应表；对照、因果、依赖关系必须有原稿明示依据，否则视为制造虚假对应。
 准则是选择尺度，不能充当已验证的证据；并行不能写成先后；条件须对应被约束的行动。附着性内容（条件触发的处置、异常、例外）不能与主体步骤或并列要点铺成同层区域；主体职责的内容必须作为实际文案或结构草图文字出现，只在蓝区制作说明中复述不算落实。条目标签必须是内容词，出现"拆分项一""对象""状态一"这类结构占位名要指出；表格行里用竖线拼接多列文字也要指出；标为流转信息的来源被上屏，或正文整句复述标题，都要指出。不要添加原稿未给出的因果、依赖或效果。引用当前可见文案指出具体缺陷；不能仅因个人偏好、估计容量或未知坐标拒绝。打回时描述"哪条关系或职责不能直读"的可读性要求，不指定具体媒介；同一关系只要能通过任一可用手段（文字分项、卡片、表格、流程）直读即通过。若有reviewFeedback，只复核所提问题是否实质解决，解决即通过，不追加新的媒介偏好。主题概括后正文展开是合法分工，长句机械复述和以后台解释代替组织则须修订。
 声明必须恰好出现一次且不独立成组：遗漏、重复、或把模拟/假设声明单独做成一个区域都要指出。后台审查解释不得进入灰区正文；蓝区制作要求可以说明关系组织与绘制要求。若有reviewFeedback，检查是否实质解决。
 只输出JSON：{accepted:boolean,issues:[{pageId,sourceIds,problem,requiredRevision}],coverage:"逐页引用visiblePages中的具体措辞或组织，说明它怎样承担职责和关系；不能仅复述requirements",limits:"未看灰稿像素图，不能确认视觉可读性"}。`;
