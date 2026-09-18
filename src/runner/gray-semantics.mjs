@@ -432,6 +432,21 @@ export function validateSemanticPlan(base, plan) {
         fail('category-not-grouped', plan.pages[0]?.pageId, `原稿有类别线索「${cue.phrase}」：类别必须成为组——组标题承载「${cue.noun}」（跨页用「${cue.noun}＋本页条目提示」），条目作为组内块；当前没有任何组标题承载它（写在页标题不算）。请重组后再提交。`);
       }
     }
+    // 结构位缺失检查（评审 #59，用户拍板口径）：同页双容器形态下，条目实文出现明示的汇聚
+    // （"……、……、……，造成……"）或扇出（"反映出……"后并列 ≥3 项）却未附局部结构位——客观违规。
+    const EXPLICIT_CONVERGENCE = /[，,、][^，,、。；]{2,24}[，,、][^，,、。；]{2,24}[，,]?(?:造成|导致)/u;
+    const EXPLICIT_FANOUT = /(?:反映出|暴露出)[：:]?[^。]{0,80}、[^。]{0,24}、[^。]{0,24}、/u;
+    if (cueList.length === 2 && plan.pages.length === 1 && samePageCues(cueList, plan)) {
+      const page = plan.pages[0];
+      for (const group of page.groups ?? []) {
+        const hasNote = (group.blocks ?? []).some(block => block.kind && block.kind !== 'text');
+        const explicit = (group.blocks ?? []).some(block => (block.kind ?? 'text') === 'text'
+          && (EXPLICIT_CONVERGENCE.test(String(block.text ?? '')) || EXPLICIT_FANOUT.test(String(block.text ?? ''))));
+        if (explicit && !hasNote) {
+          fail('structure-note-missing', page.pageId, `同页双容器：组「${group.heading}」的条目实文明示了汇聚/扇出结构（"……造成……"或"反映出……"并列），却没有附结构位——请在该条目之后补一个小结构位（block kind=diagram/flow，四要素齐全、无 label）。`);
+        }
+      }
+    }
     // 非阻塞 warnings（评审 #7 (b)）：只验字面会被模型走最小合规路径（"不足一/感悟一"前缀），
     // 容器形态移交第 7 条模板化解决；此处只记录博弈样本，不阻塞交付。
     for (const cue of cueList) {

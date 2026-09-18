@@ -1,9 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import { attemptFingerprint, isStalledRetry, categoryCues, samePageCues, splitGate, SEMANTIC_REVIEW_CONTRACT, regionBody, grayDisplayBlocks, planTextVolume, isSameMinimumRetry } from '../src/runner/gray-semantics.mjs';
+import { attemptFingerprint, isStalledRetry, categoryCues, samePageCues, splitGate, SEMANTIC_REVIEW_CONTRACT, regionBody, grayDisplayBlocks, planTextVolume, isSameMinimumRetry, validateSemanticPlan } from '../src/runner/gray-semantics.mjs';
 import { resolveGrayLayout, compressionMemory } from '../src/runner/gray-layout.mjs';
 import { grayBodyLayout, fitGrayText } from '../src/runner/gray-draft.mjs';
+import { newRunState } from '../src/runner/state.mjs';
 
 const metrics = { measureBody: grayBodyLayout, fitText: fitGrayText };
 const area = (height = 560) => ({ width: 1170, height });
@@ -155,4 +156,30 @@ test('计划文本量：计入标题、标签、正文与结构位字段', () =>
     { id: 'b2', text: '说明', kind: 'flow', expression: '作用', relationship: '关系', production: '要求' },
   ] }] }] };
   assert.equal(planTextVolume(plan), '不足'.length + '势能'.length + '正文'.length + '说明'.length + '作用'.length + '关系'.length + '要求'.length);
+});
+
+test('结构位缺失检查：同页双容器下明示汇聚/扇出必须有结构位块', () => {
+  const base = newRunState('占位', 'fixture');
+  base.sources = [
+    { id: 's1', text: '首先是两点不足。一是势能到动能阻力重重。现阶段公司内部人力资源变革氛围尚未完全形成，信息系统支撑能力仍存在差距，缺乏市场化的管理机制，造成变革落地阻力重重。' },
+    { id: 's2', text: '其次是四点感悟。一是统一语言才能合拍共鸣。二是解决问题才是检验变革的唯一标准。' },
+  ];
+  const page = () => ({
+    pageId: 'p1', title: '不足与感悟', claim: '两类并列', pagePurpose: '验证结构位检查', narrative: '两类并排',
+    groups: [
+      { id: 'g1', role: '类别', heading: '不足：阻力与短板', importance: 'primary', kind: 'text', blocks: [
+        { id: 'b1', label: '势能到动能阻力重重', text: '现阶段公司内部人力资源变革氛围尚未完全形成，信息系统支撑能力仍存在差距，缺乏市场化的管理机制，造成变革落地阻力重重。', sourceIds: ['s1'] },
+      ] },
+      { id: 'g2', role: '类别', heading: '感悟：方法与标准', importance: 'primary', kind: 'text', blocks: [
+        { id: 'b2', label: '统一语言才能合拍共鸣', text: '统一语言才能合拍共鸣', sourceIds: ['s2'] },
+      ] },
+    ],
+  });
+  const plan = () => ({ schemaVersion: 'gray-plan-3', deckBrief: { title: '不足与感悟', audience: '管理层', objective: '验证' }, pages: [page()] });
+  const missing = validateSemanticPlan(base, plan());
+  assert.ok(missing.issues.some(issue => issue.code === 'structure-note-missing'), JSON.stringify(missing.issues));
+  const withNote = plan();
+  withNote.pages[0].groups[0].blocks.push({ id: 'b1n', text: '变革氛围尚未完全形成／信息系统支撑能力仍有差距／缺乏市场化管理机制', kind: 'diagram', expression: '三个阻力原因汇聚到结果', relationship: '汇聚：三因共同造成落地阻力', production: '三框一果箭头图', sourceIds: ['s1'] });
+  const accepted = validateSemanticPlan(base, withNote);
+  assert.equal(accepted.accepted, true, JSON.stringify(accepted.issues));
 });
