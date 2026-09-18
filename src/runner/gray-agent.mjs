@@ -17,6 +17,7 @@ import { loadDeepSeekLocalConfig } from '../agent/deepseek-provider-from-env.mjs
 import { newRunState, writeState, renderContentMarkdown, renderStateMarkdown } from './state.mjs';
 import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan, semanticReviewInput, markFlowSources } from './gray-semantics.mjs';
 import { applyTemplateDefaults, describeDefaults } from './gray-templates.mjs';
+import { auditGeometry, voidWarnings, VOID_THRESHOLDS } from './gray-audit.mjs';
 import { resolveGrayLayout } from './gray-layout.mjs';
 import { grayBodyLayout, fitGrayText, validateGrayArea, validateGrayPlan, renderGrayDraft } from './gray-draft.mjs';
 
@@ -235,6 +236,10 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         // 渲染到独立尝试目录：每次尝试都留证据；交付版复制到运行根目录。
         const renderState = { ...report.state, grayDraft: { ...agentState.grayDraft, status: 'rendering' } };
         await renderGrayDraft(renderState, attemptDir);
+        // 几何审计（空洞检测）：逐页留白指标与 warn 记录，不阻塞交付（评审 #3 任务合同）。
+        const audit = auditGeometry(renderState.pages, area);
+        const geometryWarnings = voidWarnings(audit);
+        await fs.writeFile(path.join(attemptDir, 'geometry-audit.json'), json({ audit, warnings: geometryWarnings, thresholds: VOID_THRESHOLDS }), 'utf8');
         // 视觉评审：**可选诊断开关**（默认关）。正常生成线不做"质检-打回"循环——那会把单次生成
         // 拖到分钟级、成本成倍；评审发现的模式性问题由开发侧改提示词解决，不放进生成路径。
         if (visionProvider && visualReview) {
@@ -264,7 +269,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         agentState.grayDraft.programCheck = { ...report, state: undefined };
         await saveAgentState();
         const preview = renderState.pages.map((page, index) => `${path.relative(output, attemptDir)}/preview/slide-${String(index + 1).padStart(2, '0')}.png`);
-        return { accepted: true, preview, pptx: `${path.relative(output, attemptDir)}/gray-draft.pptx`, pages: renderState.pages.length, planSource, templates: { defaults: applied.decisions.filter(decision => decision.mode === 'default').length, overrides: applied.decisions.filter(decision => decision.mode === 'override').length }, ...(report.warnings?.length ? { warnings: report.warnings } : {}), ...(planNote ? { note: planNote } : {}) };
+        return { accepted: true, preview, pptx: `${path.relative(output, attemptDir)}/gray-draft.pptx`, pages: renderState.pages.length, planSource, templates: { defaults: applied.decisions.filter(decision => decision.mode === 'default').length, overrides: applied.decisions.filter(decision => decision.mode === 'override').length }, ...(geometryWarnings.length ? { geometry: geometryWarnings } : {}), ...(report.warnings?.length ? { warnings: report.warnings } : {}), ...(planNote ? { note: planNote } : {}) };
       },
     }),
   ];
