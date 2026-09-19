@@ -313,14 +313,10 @@ export async function renderGrayDraft(state, output) {
           fill:embedded?'#ECEEEF':placeholder?'#E1EFF9':section.kind==='text'?'#ECEEEF':sketch?'#FFFFFF':'#E1EFF9',
           line:placeholder?{fill:'#B9C4CF',width:1}:sketch?{fill:section.kind==='row'?'#D4D8DC':'#B9C4CF',width:1}:{fill:'none',width:0},
         });
-        // 三态（任务 #77）：条目内嵌结构位＝灰底蓝纹（图形子区蓝底灰条）；纯结构图块＝蓝底。
-        if(embedded){
-          const area=section.noteArea;
-          slide.shapes.add({geometry:'rect',name:`notearea:${item.id}:${section.id}`,position:{left:left+16+section.left+2,top:top+54+section.top+area.top,width:section.width-4,height:area.height-4},fill:'#DCEBF7',line:{fill:'none',width:0}});
-          const band=10, step=20;
-          for(let y=0;y+band<=area.height-6;y+=step){
-            slide.shapes.add({geometry:'rect',name:`stripe:${item.id}:${section.id}:${y}`,position:{left:left+16+section.left+2.5,top:top+54+section.top+area.top+2+y,width:section.width-5,height:band},fill:'#ECEEEF',line:{fill:'none',width:0}});
-          }
+        // 两态半终版（任务 #82，用户拍板）：定案图形区＝蓝框（面积＝图真实占位，框内 12px 标注）；条纹态废除。
+        if(placeholder){
+          const area=embedded?section.noteArea:{top:0,height:section.height};
+          slide.shapes.add({geometry:'rect',name:`graphbox:${item.id}:${section.id}`,position:{left:left+16+section.left+2,top:top+54+section.top+area.top+2,width:section.width-4,height:area.height-4},fill:'#F2F8FD',line:{fill:'#5B8DB8',width:1}});
         }
       }
       for(const connector of body.connectors??[]){

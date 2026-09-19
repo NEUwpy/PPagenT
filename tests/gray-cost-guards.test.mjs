@@ -134,7 +134,7 @@ test('附注最小化：关系一句＋摘引短语，与 rules/排版.md 同步
   assert.equal(regionBody(block), '本条建议画结构图：三因并列、箭头汇聚指向结果框「变革落地阻力重重」；节点短语（摘引）：变革氛围尚未完全形成／信息系统支撑能力仍有差距／缺乏市场化管理机制。');
   assert.doesNotMatch(regionBody(block), /作:|承:|关:|制:/u);
   const rules = await fs.readFile(new URL('../rules/排版.md', import.meta.url), 'utf8');
-  assert.match(rules, /结构图占位说明，独立小字 12–15px、不限行数/u);
+  assert.match(rules, /定案图形区以蓝框框出、面积＝图真实占位/u);
 });
 
 test('条目编号标签：按带标签条目顺序、附注不占号；单条目组不编号', () => {
