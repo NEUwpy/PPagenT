@@ -1,0 +1,105 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {
+  planContentFingerprint, checkReviewCoverage, grayDisplayBlocks, semanticReviewInput, validateSemanticPlan,
+} from '../src/runner/gray-semantics.mjs';
+import { newRunState } from '../src/runner/state.mjs';
+
+const DOC = '先把事实说清楚。\n\n再把安排讲明白。';
+const base = () => newRunState(DOC, 'fixture');
+
+const block = (id, text, extra = {}) => ({ id, text, sourceIds: ['s1'], ...extra });
+const plan = blocks => ({
+  schemaVersion: 'gray-plan-3',
+  deckBrief: { title: '题', audience: '众', objective: '的' },
+  pages: [{
+    pageId: 'p1', title: '页面', claim: '结论先行', pagePurpose: '目的', narrative: '关系',
+    groups: [{ id: 'g1', role: '职责', heading: '组', importance: 'primary', kind: 'text', blocks }],
+  }],
+});
+
+test('内容指纹：只随可见内容变化，backstage 与来源改绑不作废', () => {
+  const a = plan([block('b1', '先把事实说清楚。', { label: '事实' })]);
+  const b = plan([block('b1', '先把事实说清楚。', { label: '事实' })]);
+  assert.equal(planContentFingerprint(a), planContentFingerprint(b));
+  const changed = plan([block('b1', '先把事实说清楚！', { label: '事实' })]);
+  assert.notEqual(planContentFingerprint(a), planContentFingerprint(changed));
+  const backstage = plan([block('b1', '先把事实说清楚。', { label: '事实' })]);
+  backstage.pages[0].narrative = '换了后台叙述';
+  backstage.planningNotes = '换了后台说明';
+  backstage.pages[0].groups[0].blocks[0].sourceIds = ['s2'];
+  assert.equal(planContentFingerprint(a), planContentFingerprint(backstage));
+  const scoped = plan([block('b1', '先把事实说清楚。', { label: '事实', scope: 'group' })]);
+  assert.notEqual(planContentFingerprint(a), planContentFingerprint(scoped));
+});
+
+test('审稿覆盖判定：未审/未通过/内容已改都不得继承通过状态', () => {
+  const p = plan([block('b1', '先把事实说清楚。', { label: '事实' })]);
+  const fp = planContentFingerprint(p);
+  assert.equal(checkReviewCoverage(null, p).status, 'not-reviewed');
+  assert.equal(checkReviewCoverage({ accepted: false, fingerprint: fp }, p).status, 'open-issues');
+  assert.equal(checkReviewCoverage({ accepted: true, fingerprint: fp.slice(0, 8) }, p).status, 'stale');
+  const covered = checkReviewCoverage({ accepted: true, fingerprint: fp }, p);
+  assert.equal(covered.status, 'covered');
+  assert.equal(covered.covered, true);
+  const changed = plan([block('b1', '先把事实说清楚。', { label: '事实二' })]);
+  const stale = checkReviewCoverage({ accepted: true, fingerprint: fp }, changed);
+  assert.equal(stale.status, 'stale');
+  assert.equal(stale.reviewedFingerprint, fp);
+  assert.notEqual(stale.fingerprint, fp);
+});
+
+test('层级机制：scope:"group" 的共同说明不编号、随组以小字呈现（评审 #119 要求 3）', () => {
+  const item = {
+    id: 'g1', kind: 'text',
+    blocks: [
+      { id: 'b1', label: '焊前', text: '清理油污', sourceIds: ['s1'] },
+      { id: 'b2', label: '焊接时', text: '双面保护', sourceIds: ['s1'] },
+      { id: 'b3', label: '共同前提', text: '两项缺一不可', sourceIds: ['s1'], scope: 'group' },
+    ],
+  };
+  const parts = grayDisplayBlocks(item);
+  const texts = parts.map(part => part.text);
+  assert.ok(texts.includes('一 焊前'));
+  assert.ok(texts.includes('二 焊接时'));
+  assert.ok(texts.includes('共同前提'));
+  assert.ok(!texts.some(text => /[一二三四五] 共同前提/u.test(text)));
+  const groupScoped = parts.filter(part => part.text === '共同前提' || part.text === '两项缺一不可');
+  assert.equal(groupScoped.length, 2);
+  assert.ok(groupScoped.every(part => part.attachment === true));
+});
+
+test('层级机制校验：scope 合法通过；未知值/结构块/整组共同说明被拒（评审 #119 要求 3）', () => {
+  const ok = plan([
+    block('b1', '先把事实说清楚。', { label: '事实' }),
+    { id: 'b2', text: '再把安排讲明白。', sourceIds: ['s2'], label: '安排' },
+    block('b3', '先把事实说清楚。', { label: '共同前提', scope: 'group' }),
+  ]);
+  const okReport = validateSemanticPlan(base(), ok);
+  assert.equal(okReport.accepted, true, JSON.stringify(okReport.issues));
+  const unknown = plan([block('b1', '先把事实说清楚。', { label: '事实', scope: 'items' })]);
+  const unknownReport = validateSemanticPlan(base(), unknown);
+  assert.ok(unknownReport.issues.some(issue => issue.code === 'invalid-semantic-plan'));
+  const onStructure = plan([block('b1', '先把事实说清楚。', { label: '事实', kind: 'flow', scope: 'group', expression: 'e', relationship: 'r', production: 'p' })]);
+  const onStructureReport = validateSemanticPlan(base(), onStructure);
+  assert.ok(onStructureReport.issues.some(issue => issue.code === 'invalid-semantic-plan'));
+  const allScoped = plan([{ id: 'b1', text: '先把事实说清楚。', sourceIds: ['s1', 's2'], label: '共同前提', scope: 'group' }]);
+  const allScopedReport = validateSemanticPlan(base(), allScoped);
+  assert.ok(allScopedReport.issues.some(issue => issue.code === 'invalid-semantic-plan'));
+});
+
+test('审稿可见范围声明组级共同说明与自动编号（评审 #119 要求 2）', () => {
+  const p = plan([
+    block('b1', '先把事实说清楚。', { label: '事实' }),
+    { id: 'b2', text: '再把安排讲明白。', sourceIds: ['s2'], label: '安排' },
+    block('b3', '先把事实说清楚。', { label: '共同前提', scope: 'group' }),
+  ]);
+  const input = semanticReviewInput({ source: DOC, area: { width: 1170, height: 492 }, plan: p });
+  const surface = input.visiblePages[0].regions[0].surface;
+  assert.ok(surface.includes('scope=group'));
+  assert.ok(surface.includes('不编号'));
+  const body = input.visiblePages[0].regions[0].body.map(part => part.text);
+  assert.ok(body.includes('一 事实'));
+  assert.ok(body.includes('二 安排'));
+  assert.ok(body.includes('共同前提'));
+});

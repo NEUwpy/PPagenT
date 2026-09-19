@@ -131,6 +131,37 @@ export function isStalledRetry(previousAttempts, fingerprint) {
   return (previousAttempts ?? []).some(attempt => attempt?.accepted === false && attempt?.stage === 'geometry' && attempt?.fingerprint === fingerprint);
 }
 
+/**
+ * 计划内容指纹（评审 #119 版本绑定）：只覆盖影响可见文案与审稿判断的字段——页标题/主题句、
+ * 组标题/主次/媒介与蓝区三项、块标签/正文/媒介/作用范围。backstage（pagePurpose/narrative/planningNotes）
+ * 与来源 id 不参与：它们不改变可见内容，补齐/改绑来源不应作废已通过的审稿。
+ */
+export function planContentFingerprint(plan) {
+  const parts = [];
+  for (const page of plan?.pages ?? []) {
+    parts.push(page.pageId ?? '', page.title ?? '', page.claim ?? '');
+    for (const group of page.groups ?? []) {
+      parts.push(group.id ?? '', group.heading ?? '', group.importance ?? '', group.kind ?? '',
+        group.expression ?? '', group.relationship ?? '', group.production ?? '');
+      for (const block of group.blocks ?? []) parts.push(block.id ?? '', block.label ?? '', block.text ?? '', block.kind ?? '', block.scope ?? '');
+    }
+  }
+  return createHash('sha1').update(parts.join('\u0001'), 'utf8').digest('hex');
+}
+
+/**
+ * 审稿覆盖判定（评审 #119 要求 1）：只有「最近一次审稿通过、且所审内容与当前计划内容一致」才算覆盖。
+ * 内容改动后上一版通过即失效（stale）；从未审稿 not-reviewed；最近一次未通过 open-issues。
+ * 通过状态不跨内容改动继承——交付版本必须由有效审稿覆盖，或如实标记未复核。
+ */
+export function checkReviewCoverage(lastReview, plan) {
+  const fingerprint = planContentFingerprint(plan);
+  if (!lastReview || !lastReview.fingerprint) return { covered: false, status: 'not-reviewed', fingerprint, reviewedFingerprint: null };
+  if (!lastReview.accepted) return { covered: false, status: 'open-issues', fingerprint, reviewedFingerprint: lastReview.fingerprint };
+  if (lastReview.fingerprint !== fingerprint) return { covered: false, status: 'stale', fingerprint, reviewedFingerprint: lastReview.fingerprint };
+  return { covered: true, status: 'covered', fingerprint, reviewedFingerprint: fingerprint };
+}
+
 /** 计划文本量（评审 #26「同最小高重试」）：影响渲染高度的可见字段总量，用于判断重试是否真的在缩短。 */
 export function planTextVolume(plan) {
   return (plan?.pages ?? []).reduce((total, page) => total + (page.groups ?? []).reduce((sum, group) => sum
@@ -173,7 +204,7 @@ export const SHARED_RULES = Object.freeze({
   source: `每个block必须引用来源；所有正文来源必须被承载：由正文条目引用，或在页面级 sourceIds 中认领（认领表示本页负责承载这段来源，不代表它必须上屏）。标为流转信息（文件头尾、节标题等）的来源无需引用、无需认领。未打标的来源若判断为文件标题、称谓一类结构性内容，不必为它单列条目：可由页面认领；确有展示价值时可让它自然出现在相称位置，没有展示价值时安静认领即可。覆盖不等于逐段复制，来源内容在页标题或主题句中自然体现同样算承载。`,
   declaration: `模拟/假设声明只要原稿给出，就必须上屏且恰好一次：最自然的位置是页面主题句，或紧邻主体的一个条目；不得省略、不得逐条重复、不得独立成组。`,
   condition: `真实条件与否定不能省略，准则不是已满足的证据，并行准备不是下一阶段。`,
-  attachment: `条件触发的处置、异常或例外是附着性内容：注明它约束哪些对象或环节，从属并紧邻所依附的内容（作为依附对象的补充说明，或从属职责的supporting组），不与主流程环节、并列要点铺成同层组；判断依据是依附关系，不是篇幅大小。共同限定、否定与前提若不构成主体条目本身，用块级附注承载：该块 kind 写 "note"，紧随所依附的条目之后，不编号、不占条目位，也不需要制作说明三项。`,
+  attachment: `条件触发的处置、异常或例外是附着性内容：注明它约束哪些对象或环节，从属并紧邻所依附的内容（作为依附对象的补充说明，或从属职责的supporting组），不与主流程环节、并列要点铺成同层组；判断依据是依附关系，不是篇幅大小。共同限定、否定与前提若不构成主体条目本身，用块级附注承载：该块 kind 写 "note"，紧随所依附的条目之后，不编号、不占条目位，也不需要制作说明三项。约束本组全部条目的共同前提/共同说明用块级 scope 写 "group"：程序不编号、以 12px 小字随组渲染，作用范围是整组而不是某一条；作用范围（一条、多条还是整组）由块级语义决定，判断依据是它约束谁，不是句子写法或篇幅。`,
   paging: `页数服从内容量、页面目的和真实关系，先确定每页讲什么，再结合实际容量决定合并、分区或分页。每页应有实质展开，短小附注就近融入主体。容量失败后可调整组合与比例、忠实精简冗词或沿语义边界分页；不能牺牲必要条件、拆散归属或持续缩字来满足固定页数。跨页仍标明条目所属类别；标题给出判断，正文补充细节，不整句复述标题。`,
   label: `label可省略，只有帮助读者定位职责时才用，并且必须是内容词（"正常""已修复""待配件"），不用"拆分项一""对象""状态一"这类结构占位名，也不带"（全页适用）"这类版面说明；序号由程序按条目顺序统一添加，label 不写序号（"一、""原因一""不足一"式前后缀都不行）；表格行只有行头与内容两段，不要把多列文字用竖线拼进一个块。`,
   surface: `页面目的、narrative和planningNotes不在灰稿上显示。`,
@@ -182,17 +213,17 @@ export const SHARED_RULES = Object.freeze({
 
 export const SEMANTIC_CONTRACT = `你的任务是将原稿提炼、重组为适合PPT阅读的信息结构，本轮只生成灰稿内容，只输出JSON。原稿是事实依据，不是必须逐字搬入页面的正文。保留重要事实、对象、条件、否定和关系；允许合并重复信息、删去冗词与重复解释、把长句改写为短语和清楚的分项。提炼不改变事实与关系，不能为了容量删除必要条件。${SHARED_RULES.meta}
 本次契约优先于共享规则中可选解析器的字段。不要生成composition-intent、逐句关系图或坐标，不按原稿标题数量分区。
-格式：{schemaVersion:"gray-plan-3",deckBrief:{title,audience,objective},pages:[{pageId:"p1",title:"短标题",claim:"简短上屏主题句，建议二十字左右，不复述全部正文",pagePurpose:"本页解决的问题",narrative:"一句话说明必要的先后、并行、判断或归属关系，无需列每条边",sourceIds:["s1"]（可选：页级认领，用于本页承载但不单列条目的结构性来源）,groups:[{id:"g1",role:"本组主要职责",heading:"上屏短标题",importance:"primary|supporting",kind:"text|diagram|flow|chart|table|image",blocks:[{id:"b1",label:"可选上屏子标题（内容词，不写序号），不需要可省略",text:"真实上屏文字",sourceIds:["s1"]}],expression:"非text必填：表达作用",relationship:"非text必填：基本关系",production:"非text必填：制作要求"}]}],planningNotes:"简短后台组织说明"}。
+格式：{schemaVersion:"gray-plan-3",deckBrief:{title,audience,objective},pages:[{pageId:"p1",title:"短标题",claim:"简短上屏主题句，建议二十字左右，不复述全部正文",pagePurpose:"本页解决的问题",narrative:"一句话说明必要的先后、并行、判断或归属关系，无需列每条边",sourceIds:["s1"]（可选：页级认领，用于本页承载但不单列条目的结构性来源）,groups:[{id:"g1",role:"本组主要职责",heading:"上屏短标题",importance:"primary|supporting",kind:"text|diagram|flow|chart|table|image",blocks:[{id:"b1",label:"可选上屏子标题（内容词，不写序号），不需要可省略",text:"真实上屏文字",sourceIds:["s1"],scope:"group"（可选：约束整组全部条目的共同说明，程序不编号）}],expression:"非text必填：表达作用",relationship:"非text必填：基本关系",production:"非text必填：制作要求"}]}],planningNotes:"简短后台组织说明"}。
 先明确页面职责，按内容归属形成groups，再把各分支的条目放进blocks，用label与text区分要点和展开。${SHARED_RULES.category}先形成可阅读的实文提纲，再选择局部表达；不要把分属不同观点的依据摊成同级卡片，也不要把分类、依据、准则混称为证明。这些层级按实际内容使用，不强求每页都有两个分支或固定条目数。文字组内某条需要图示时，该block可选kind及expression、relationship、production，字段含义与整组蓝区相同；其label仍是上屏条目标题。附着说明块 kind 写 "note"：紧随它所依附的条目之后，不编号、不占条目位，也不需要制作说明三项。未选kind的block为普通文字，整组非text时不再嵌套蓝区。${SHARED_RULES.expression}${SHARED_RULES.sketch}结构库按局部关系按需调用，本轮仅呈现蓝区制作说明。
 每组一个主要职责。claim概括主题或判断，正文展开对象、安排与条件，不把同一句建议分别复制到主题、组标题和正文。blocks按阅读顺序；${SHARED_RULES.label}三列对照改写成一条可读文字或拆成两个块。heading保持短小。蓝区expression写表达作用，relationship写谁与谁怎样关联，production写可执行的组织要求；三者分工，避免重复复述承载内容。必要关系须在实文组织或蓝区制作说明中可见，仅保留关键词或写在narrative里不等于表达完成。
 ${SHARED_RULES.source}引用表示信息来自哪里，不要求每段原文单独变成一个正文块；页级 sourceIds 是认领通道：判断为结构性、不单列条目的来源写进所在页的 sourceIds，它不上屏、不占版面。${SHARED_RULES.declaration}小段共同说明就近融入主体，不因职责不同便独占大栏。${SHARED_RULES.condition}${SHARED_RULES.attachment}
 内容区尺寸由输入给定，主题句在内容区外，以28px单行呈现，需简短。排版可用单主体、横向、纵向和网格。正文按统一的可读字号候选测量，优先大字号、12px为下限；这一测量策略适用于所有页面，不由稿件措辞或类别数量触发。块级蓝注独立12px。组标题26px一行，组内label与text各自排字，块间距12px，每块四周8px内边距；每组70px标题/边距开销。不自己写坐标或强制页数。${SHARED_RULES.paging}同组label+text合计不超过400字。保留原稿数字写法。
 ${SHARED_RULES.surface}正文必须能独立让读者理解必要关系，不能依赖后台说明。内部审查理由不要改写成正文：用“同时”“是否”“根据记录”等原稿已有表达保留关系，不额外解释“不是先后步骤”“不是已满足的证据”等审稿规则。原稿的模拟/假设性质属于读者需要的内容，须在实际标题或正文中明示，引用sourceIds不能代替显示。`;
 
-export const SEMANTIC_REVIEW_CONTRACT = `你是灰稿内容与表达审稿人。输入source是原稿，requirements是后台职责与必要关系，visiblePages是程序从实际渲染内容生成的上屏视图。只用visiblePages证明表达已落实；requirements不能作为上屏证据。尚未分配坐标或查看像素图。
+export const SEMANTIC_REVIEW_CONTRACT = `你是灰稿内容与表达审稿人。输入source是原稿，requirements是后台职责与必要关系，visiblePages是程序从实际渲染内容生成的上屏视图。审稿只看交付版本的实际可见文案：visiblePages 已含渲染器的自动编号等变换，规划意图、修改要求、块字段标注都不是已实现的事实；requirements不能作为上屏证据。尚未分配坐标或查看像素图。
 逐页核对事实、条件、否定和模拟性质是否完整，页面职责与归属是否成立，必要关系是否能从可见文案或图形规划直接理解。类别数量、某个连接词或页数不是表达正确的证据。仅有标题改名、主辅标签或并排放置不证明关系成立。对照、因果、依赖必须有原稿明示依据；只有并列关系时不得要求一一配对卡片或对应表。flow 只用于原文有先后线索的真实时序；并列汇聚/扇出用 diagram 的制作说明规划节点与方向，不能强造时序。整组diagram/flow/table会画已有简化草图；文字组内的非文字块是蓝框图形占位，检查它是否交代了放什么图、承载哪些内容及必要关系，不要求已经画出内部节点和箭头。局部节点短语须能在所属条目散文中逐字找到；不得跨条目摘引——该口径仅适用于文字条目内的蓝框占位，不适用于整组草图。整组结构草图的节点文字按来源保真核对（实际文案，允许忠实提炼）。图示明显有助于理解却没有规划相应位置时，指出具体理解困难；清楚的文字关系可以通过，不仅凭缺少某种媒介打回。
 区域合理性按内容贡献＋逻辑关系＋空间分配综合判断：为凑覆盖把标题/元信息单列成区、或区域装不下相称信息价值（"适用范围"式空壳），要不合格——按价值判断，与格式无关；即使角色识别没有触发，也要主动指出无相称信息价值的区域。识别为标题不必然单独成区，也不一律禁止上屏：标题在相称位置自然出现（页标题、署名）不算缺陷，按展示价值判断。页级认领的来源（carriedSources）必须与该页实际承载相称：认领了却有信息价值的内容在该页不体现，或把有信息价值的名称/标题/适用条件压掉，都要指出。
-准则是选择尺度，不能充当已验证的证据；并行不能写成先后；条件须对应被约束的行动。附着性内容（条件触发的处置、异常、例外）不能与主体步骤或并列要点铺成同层区域；kind:note 附注由程序以 12px 小字紧随所属条目、不编号渲染，程序保证的只是呈现形态；限定约束的对象与作用范围（一条、多条还是整页）是否正确，仍须对照内容核对，呈现不得让读者误解约束范围。计划表示与呈现方式是否再调整，由具体缺口决定，不预先统一实现。可见条目的序号（一/二…）由程序按条目顺序添加：用它核对编号与层级是否一致，限定、前提、结果、附注等依附内容不得被编号成与主体同级的条目；序号不是模型标签，不要因为没有原稿序号或签号写法不同而拒绝。主体职责的内容必须作为实际文案或结构草图文字出现，只在蓝区制作说明中复述不算落实。条目标签必须是内容词，出现"拆分项一""对象""状态一"这类结构占位名要指出；表格行里用竖线拼接多列文字也要指出；标为流转信息的来源被当作正文条目搬运（单列成区凑覆盖），或正文整句复述标题，都要指出；标题在相称位置自然出现不算缺陷。不要添加原稿未给出的因果、依赖或效果。引用当前可见文案指出具体缺陷；不能仅因个人偏好、估计容量或未知坐标拒绝。打回时描述"哪条关系或职责不能直读"的可读性要求；载体/媒介选择是规划层职责——你可以提出载体取向作为建议，但它不具约束力、不会被程序执行或删除；规划层可不采纳，且不采纳不构成拒绝理由，不得因载体建议未被采纳而拒绝已可直读的呈现。同一关系只要能通过任一可用手段（文字分项、卡片、表格、流程）直读即通过。若有reviewFeedback，只复核所提问题是否实质解决，解决即通过，不追加新的媒介偏好。主题概括后正文展开是合法分工，长句机械复述和以后台解释代替组织则须修订。
+准则是选择尺度，不能充当已验证的证据；并行不能写成先后；条件须对应被约束的行动。附着性内容（条件触发的处置、异常、例外）不能与主体步骤或并列要点铺成同层区域；kind:note 附注由程序以 12px 小字紧随所属条目、不编号渲染，程序保证的只是呈现形态；限定约束的对象与作用范围（一条、多条还是整页）是否正确，仍须对照内容核对，呈现不得让读者误解约束范围。计划表示与呈现方式是否再调整，由具体缺口决定，不预先统一实现。可见条目的序号（一/二…）由程序按条目顺序添加：用它核对编号与层级是否一致，限定、前提、结果、附注等依附内容不得被编号成与主体同级的条目；组级共同说明（scope=group）由程序不编号、以 12px 小字随组渲染，作用范围是整组——共同前提被拉平成与主体同级的编号条目，或作用范围被呈现缩小/扩大，都要指出。序号不是模型标签，不要因为没有原稿序号或签号写法不同而拒绝。复核修改时，除确认上一问题是否解决，还要检查修改是否引入新的事实、层级或归属错误；"不追加个人媒介偏好"不等于"上一条问题消失就通过"。主体职责的内容必须作为实际文案或结构草图文字出现，只在蓝区制作说明中复述不算落实。条目标签必须是内容词，出现"拆分项一""对象""状态一"这类结构占位名要指出；表格行里用竖线拼接多列文字也要指出；标为流转信息的来源被当作正文条目搬运（单列成区凑覆盖），或正文整句复述标题，都要指出；标题在相称位置自然出现不算缺陷。不要添加原稿未给出的因果、依赖或效果。引用当前可见文案指出具体缺陷；不能仅因个人偏好、估计容量或未知坐标拒绝。打回时描述"哪条关系或职责不能直读"的可读性要求；载体/媒介选择是规划层职责——你可以提出载体取向作为建议，但它不具约束力、不会被程序执行或删除；规划层可不采纳，且不采纳不构成拒绝理由，不得因载体建议未被采纳而拒绝已可直读的呈现。同一关系只要能通过任一可用手段（文字分项、卡片、表格、流程）直读即通过。若有reviewFeedback，只复核所提问题是否实质解决，解决即通过，不追加新的媒介偏好。主题概括后正文展开是合法分工，长句机械复述和以后台解释代替组织则须修订。
 声明必须恰好出现一次且不独立成组：遗漏、重复、或把模拟/假设声明单独做成一个区域都要指出。后台审查解释不得进入灰区正文；蓝区制作要求可以说明关系组织与绘制要求。若有reviewFeedback，检查是否实质解决。
 只输出JSON：{accepted:boolean,issues:[{pageId,sourceIds,problem,requiredRevision}],coverage:"逐页引用visiblePages中的具体措辞或组织，说明它怎样承担职责和关系；不能仅复述requirements",limits:"未看灰稿像素图，不能确认视觉可读性"}。`;
 
@@ -291,7 +322,10 @@ export function grayDisplayBlocks(item, { ordinal = 0, numbered = true } = {}) {
   if (item.kind !== 'text' || !item.blocks) return [{text:regionBody(item),bold:false,gapBefore:0}];
   // 条目编号标签（评审 #25/#32/#71）：仅带标签的正文条目参与编号（按条目顺序）；附注块不编号、不占号。
   // 序号由程序统一添加：label 自带序号时不再叠加（评审 #41-A，防「二 原因一」）；text 与 note 都直接上屏文案。
-  const isEntry = block => (block.kind ?? 'text') === 'text' && nonempty(block.label);
+  // scope:"group" 的块是组级共同说明（评审 #119 层级机制）：约束整组全部条目，不编号、不占条目位，
+  // 以 12px 小字随组呈现——作用范围由块级语义决定，不由句子写法或篇幅决定。
+  const isEntry = block => (block.kind ?? 'text') === 'text' && nonempty(block.label) && block.scope !== 'group';
+  const isGroupScoped = block => block.scope === 'group';
   const labeledCount = item.blocks.filter(isEntry).length;
   const useNumbers = numbered && (ordinal > 0 || labeledCount >= 2);
   let labeledIndex = 0;
@@ -303,11 +337,11 @@ export function grayDisplayBlocks(item, { ordinal = 0, numbered = true } = {}) {
         labeledIndex += 1;
         if (useNumbers && !labelHasOrdinal(label)) label = `${ordinalLabel(ordinal > 0 ? ordinal : labeledIndex)} ${label}`;
       }
-      parts.push({text:label,bold:true,gapBefore:index ? 12 : 0,...(block.kind === 'note' ? {attachment:true} : {})});
+      parts.push({text:label,bold:true,gapBefore:index ? 12 : 0,...(block.kind === 'note' || isGroupScoped(block) ? {attachment:true} : {})});
     }
     const kind = block.kind ?? 'text';
     parts.push({text:kind === 'text' || kind === 'note' ? block.text : regionBody(block),bold:false,gapBefore:!block.label && index ? 12 : 0,
-      ...(kind === 'text' ? {} : {kind}),...(kind === 'note' ? {attachment:true} : {})});
+      ...(kind === 'text' ? {} : {kind}),...(kind === 'note' || isGroupScoped(block) ? {attachment:true} : {})});
   }
   return parts;
 }
@@ -326,6 +360,7 @@ export function semanticReviewInput({source,area,plan,reviewFeedback=null}) {
           ? ['灰区：实际文案',
               item.blocks?.some(block=>block.kind && block.kind!=='text' && block.kind!=='note') ? '非text的kind为块内浅蓝制作说明，四项均上屏' : null,
               item.blocks?.some(block=>block.kind==='note') ? 'attachment=true 的块为附着说明：程序以 12px 小字紧随所属条目渲染、不编号' : null,
+              item.blocks?.some(block=>block.scope==='group') ? 'scope=group 的块为组级共同说明：程序不编号，以 12px 小字随组渲染，作用范围是本组全部条目' : null,
             ].filter(Boolean).join('；')
           : '浅蓝区：制作说明，四项均须上屏',heading:item.heading,body:grayDisplayBlocks(item),
     }))})),
@@ -402,6 +437,10 @@ export function validateSemanticPlan(base, plan) {
           } else if (![block.role,block.label,block.text].every(nonempty) || !Array.isArray(block.sourceIds) || !block.sourceIds.length || block.sourceIds.some(id => !sources.has(id))) throw new Error(`${blockLabel} 的 role/label/text/sourceIds 不完整或引用了未知来源`);
           const kind=block.kind ?? 'text';
           if (!BLOCK_KINDS.has(kind)) throw new Error(`${blockLabel} 的媒介 ${JSON.stringify(block.kind)} 未知；可选：${[...BLOCK_KINDS].join('|')}`);
+          if (block.scope !== undefined) {
+            if (block.scope !== 'group') throw new Error(`${blockLabel} 的 scope ${JSON.stringify(block.scope)} 未知；只支持 "group"（组级共同说明，不编号）`);
+            if (kind !== 'text') throw new Error(`${blockLabel} 的 scope:"group" 只能用于文字块；结构/附注块不需要它`);
+          }
           if (kind !== 'text' && group.kind !== 'text') throw new Error(`${blockLabel} 选择了局部媒介 ${kind}，但所属组 kind 已是 ${group.kind}；整组非 text 时不要再给块选媒介`);
           if (kind !== 'text' && kind !== 'note' && ![block.expression,block.relationship,block.production].every(nonempty)) throw new Error(`${blockLabel} 选择了局部媒介 ${kind}，必须同时提供 expression、relationship、production 三项制作说明`);
           if ((kind === 'text' || kind === 'note') && [block.expression,block.relationship,block.production].some(value=>value!==undefined)) throw new Error(`${blockLabel} 是${kind === 'note' ? '附着说明' : '文字'}块，不能携带 expression/relationship/production（只有选了非 text 媒介才提供）`);
@@ -413,6 +452,7 @@ export function validateSemanticPlan(base, plan) {
           const fidelity = checkItemFidelity({text:blockText(block),sourceText:block.sourceIds.map(id=>sources.get(id)).join('\n')});
           if (!fidelity.accepted) fail('block-fidelity', page.pageId, `${blockLabel} 的文案与来源不一致：${JSON.stringify(fidelity.issues)}`);
         }
+        if (group.blocks.every(block => block.scope === 'group')) throw new Error(`${groupLabel} 的块全部是组级共同说明：组内至少需要一个普通条目，共同说明才有所依附。`);
       }
       if (!simple || page.readingOrder !== undefined) if (!Array.isArray(page.readingOrder) || page.readingOrder.length !== page.groups.length || new Set(page.readingOrder).size !== page.groups.length || page.groups.some(g=>!page.readingOrder.includes(g.id))) throw new Error('readingOrder须恰好包含全部组');
       if (!simple && (!Array.isArray(page.relations) || !page.relations.length)) throw new Error('必须记录真实关系');

@@ -15,7 +15,7 @@ import { createToolRegistry, defineTool } from './tools/index.mjs';
 import { buildChatProviderFromEnv } from './chat-provider.mjs';
 import { loadDeepSeekLocalConfig } from '../agent/deepseek-provider-from-env.mjs';
 import { newRunState, writeState, renderContentMarkdown, renderStateMarkdown } from './state.mjs';
-import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan, semanticReviewInput, snapshotSemanticReview, markFlowSources, SHARED_RULES, attemptFingerprint, isStalledRetry, planTextVolume, isSameMinimumRetry } from './gray-semantics.mjs';
+import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan, semanticReviewInput, snapshotSemanticReview, markFlowSources, SHARED_RULES, attemptFingerprint, isStalledRetry, planTextVolume, isSameMinimumRetry, planContentFingerprint, checkReviewCoverage } from './gray-semantics.mjs';
 import { applyTemplateDefaults, describeDefaults } from './gray-templates.mjs';
 import { auditGeometry, voidWarnings, VOID_THRESHOLDS } from './gray-audit.mjs';
 import { resolveGrayLayout, compressionMemory } from './gray-layout.mjs';
@@ -33,11 +33,11 @@ export const GRAY_AGENT_PROMPT = `你是灰稿制作 Agent。目标：把用户�
 4. 为每页选择基础组合（single/row/column/grid，可选 weights/columns），调用 render_draft 求解并渲染；
 5. render_draft 返回失败时，按其中的 reason 与 issues 修订规划或组合后重试；渲染成功即完成。
 你可以多次调用工具。check_plan 与 semantic_review 都通过后再渲染是正常路径，但不是硬性顺序；按你判断最有效的方式推进。
-交付观：审稿是辅助而不是关口——事实性遗漏、编造、模拟声明缺失必须修复；纯粹的形式偏好随交付记录即可。程序检查通过后即可渲染交付。
+交付观：审稿是辅助而不是关口——事实性遗漏、编造、模拟声明缺失必须修复；纯粹的形式偏好随交付记录即可。审稿通过绑定当前内容版本：任何内容改动（含失败后的修订）都会让上一版通过失效——改后再次渲染前必须重新 semantic_review；程序会拒绝未复核、有遗留问题或复核已过期的版本，未复核版本不得继承通过状态。
 **计划的传递方式：把你当前完整的 gray-plan-3 计划 JSON 写在每轮消息的正文里（这是唯一事实来源）；check_plan、semantic_review、render_draft 都读取你本轮正文中的计划，不要在工具参数里重复它，也不要只写差异——每次修订都重写完整计划。**
 容量与分页：${SHARED_RULES.paging}
 布局选择（调用 render_draft 时给出）：简式 {type:"single|row|column|grid",weights?,columns?} 的子节点默认按阅读顺序取本页全部组；页面有分层关系时用嵌套式 {type,children:[{groupId},或嵌套]}，例如主区在上、一条注记横贯下方 = {type:"column",children:[{type:"row",children:[{groupId:"g1"},{groupId:"g2"}]},{groupId:"g3"}]}。row 横向分栏、column 纵向排列、grid 规则网格；weights（仅 row）分配多余宽度，按各栏实文行数/展开需要给比例（如 3:2、5:4），不要默认等分，columns（仅 grid）是列数；children 必须按阅读顺序恰好覆盖本页全部组一次；嵌套最多三层。主次通过空间份额与组标题层级体现，少量内容不必拉满一页，不要为了变化而嵌套。每页有程序默认版式（1 组多条=类别容器、1 组单条=单主体、2 组=双栏对照、≥3 组=行式清单）；页条目可以不写 layout 采用默认。自己选与默认不同的组合时，必须在该页加 override:{reason:"一句话理由"}，理由会入档分析；仅微调 weights 不算覆盖。
-格式：{schemaVersion:"gray-plan-3",deckBrief:{title,audience,objective},pages:[{pageId:"p1",title:"短标题",claim:"简短上屏主题句，建议二十字左右",pagePurpose:"本页解决的问题",narrative:"一句话说明必要的先后、并行、判断或归属关系",groups:[{id:"g1",role:"本组主要职责",heading:"上屏短标题",importance:"primary|supporting",kind:"text|diagram|flow|chart|table|image",blocks:[{id:"b1",label:"可选上屏子标题（内容词，不写序号）",text:"真实上屏文字",sourceIds:["s1"]}],expression:"非text必填：表达作用",relationship:"非text必填：基本关系",production:"非text必填：制作要求"}]}],planningNotes:"简短后台组织说明"}。
+格式：{schemaVersion:"gray-plan-3",deckBrief:{title,audience,objective},pages:[{pageId:"p1",title:"短标题",claim:"简短上屏主题句，建议二十字左右",pagePurpose:"本页解决的问题",narrative:"一句话说明必要的先后、并行、判断或归属关系",sourceIds:["s1"]（可选：页级认领，用于本页承载但不单列条目的结构性来源）,groups:[{id:"g1",role:"本组主要职责",heading:"上屏短标题",importance:"primary|supporting",kind:"text|diagram|flow|chart|table|image",blocks:[{id:"b1",label:"可选上屏子标题（内容词，不写序号）",text:"真实上屏文字",sourceIds:["s1"],scope:"group"（可选：约束整组全部条目的共同说明，程序不编号）}],expression:"非text必填：表达作用",relationship:"非text必填：基本关系",production:"非text必填：制作要求"}]}],planningNotes:"简短后台组织说明"}。
 先明确页面职责，按内容归属形成groups，再把各分支的条目放进blocks，用label与text区分要点和展开。${SHARED_RULES.category}${SHARED_RULES.meta}不要把分属不同观点的依据摊成同级卡片，也不要把分类、依据、准则混称为证明。${SHARED_RULES.label}文字组内某条需要图示时，该block可选kind及expression、relationship、production；其label仍是上屏条目标题。附着说明块 kind 写 "note"，紧随所依附条目、不编号、无需制作说明三项。${SHARED_RULES.expression}${SHARED_RULES.sketch}
 ${SHARED_RULES.source}来源切分表随稿件给出（id、开头预览与流转标记），引用 sourceIds 以它为准，不要猜。${SHARED_RULES.declaration}${SHARED_RULES.condition}${SHARED_RULES.attachment}${SHARED_RULES.surface}内部审查理由不要改写成正文。`;
 // 注：与 SEMANTIC_CONTRACT 共用的规则片段（附着性内容、模拟声明、结构选择界限等）已抽为
@@ -181,10 +181,13 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         const response = await provider.complete({ messages: [{ role: 'system', content: SEMANTIC_REVIEW_CONTRACT }, { role: 'user', content: JSON.stringify(reviewInput) }] });
         const parsed = parseModelJson(response);
         if (typeof parsed.accepted !== 'boolean' || !Array.isArray(parsed.issues)) throw new Error('审稿响应格式无效');
-        agentState.grayDraft.reviewRecord = [...(agentState.grayDraft.reviewRecord ?? []), { at: new Date().toISOString(), source: source, ...snapshotSemanticReview(parsed) }];
+        // 版本绑定（评审 #119 要求 1）：记录所审内容的内容指纹；通过状态只覆盖这一版内容。
+        const reviewedFingerprint = planContentFingerprint(plan);
+        const at = new Date().toISOString();
+        agentState.grayDraft.reviewRecord = [...(agentState.grayDraft.reviewRecord ?? []), { at, source, fingerprint: reviewedFingerprint, ...snapshotSemanticReview(parsed) }];
         await saveAgentState();
-        lastReview = { accepted: parsed.accepted && !parsed.issues.length, issues: parsed.issues.slice(0, 12), at: new Date().toISOString() };
-        return { accepted: lastReview.accepted, issues: lastReview.issues, coverage: parsed.coverage ?? null, limits: parsed.limits ?? null, planSource: source, ...(note ? { note } : {}) };
+        lastReview = { accepted: parsed.accepted && !parsed.issues.length, issues: parsed.issues.slice(0, 12), at, fingerprint: reviewedFingerprint };
+        return { accepted: lastReview.accepted, issues: lastReview.issues, reviewedFingerprint, coverage: parsed.coverage ?? null, limits: parsed.limits ?? null, planSource: source, ...(note ? { note } : {}) };
       },
     }),
     defineTool({
@@ -199,6 +202,19 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
       },
       handler: async ({ layouts }) => {
         const { plan, source: planSource, note: planNote } = resolvePlan();
+        // 版本绑定门禁（评审 #119 要求 1）：审稿通过只覆盖它所审的那一版内容；内容改动后通过即失效。
+        // 未复核（not-reviewed）、有遗留问题（open-issues）或已过期（stale）的版本不得继承通过状态，也不得渲染交付。
+        const coverage = checkReviewCoverage(lastReview, plan);
+        if (!coverage.covered) {
+          const reason = coverage.status === 'not-reviewed'
+            ? '当前计划尚未通过独立审稿：先 semantic_review 本版本，通过后再渲染；未复核版本不得交付。'
+            : coverage.status === 'open-issues'
+              ? '最近一次审稿未通过（遗留问题尚未解决）：修订后重新 semantic_review，通过后再渲染；未复核版本不得交付。'
+              : '计划内容在上次审稿通过后已改动：通过状态不跨内容改动继承——请对当前版本重新 semantic_review，通过后再渲染。';
+          agentState.grayDraft.renders.push({ render: renderCount + 1, accepted: false, stage: 'review-stale', status: coverage.status, reason, contentFingerprint: coverage.fingerprint });
+          await saveAgentState();
+          return { accepted: false, stage: 'review-stale', status: coverage.status, reason };
+        }
         // 同版重试检测（方案 A 项 1）：该指纹版本已因容量失败过——确定性结果，直接拒绝并反馈压缩要求。
         const fingerprint = attemptFingerprint(plan, layouts);
         if (isStalledRetry(agentState.grayDraft.renders, fingerprint)) {
@@ -292,10 +308,13 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
           status: 'rendered-awaiting-review', revision: page.revision,
           pptxPath: path.join(path.relative(output, attemptDir), 'gray-draft.pptx'),
         }]));
-        // 交付不依赖审稿全绿：审稿遗留随交付记录，供界面与用户知情。
-        agentState.grayDraft.reviewNotes = lastReview
-          ? (lastReview.accepted ? { status: 'clean', at: lastReview.at } : { status: 'open-issues', issues: lastReview.issues, at: lastReview.at })
-          : { status: 'not-reviewed' };
+        // 交付审稿覆盖（评审 #119）：门禁已保证交付版本由有效审稿覆盖；记录交付版与所审版的指纹对应，
+        // 供报告"有效评审是否覆盖该交付版本"直接引用。
+        agentState.grayDraft.reviewNotes = { status: 'clean', at: lastReview.at, fingerprint: coverage.fingerprint };
+        agentState.grayDraft.reviewCoverage = {
+          status: coverage.status, deliveredFingerprint: coverage.fingerprint,
+          reviewedFingerprint: coverage.reviewedFingerprint, checkedAt: new Date().toISOString(),
+        };
         agentState.grayDraft.status = 'awaiting-user-review';
         const reweighted = (built.receipts ?? []).filter(receipt => receipt.reweighted).map(receipt => ({ pageId: receipt.pageId, ...receipt.reweighted }));
         const formFont = (built.receipts ?? []).filter(receipt => Number.isFinite(receipt.fontSize) && receipt.fontSize !== 22).map(receipt => ({ pageId: receipt.pageId, fontSize: receipt.fontSize }));
