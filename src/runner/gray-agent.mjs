@@ -15,7 +15,7 @@ import { createToolRegistry, defineTool } from './tools/index.mjs';
 import { buildChatProviderFromEnv } from './chat-provider.mjs';
 import { loadDeepSeekLocalConfig } from '../agent/deepseek-provider-from-env.mjs';
 import { newRunState, writeState, renderContentMarkdown, renderStateMarkdown } from './state.mjs';
-import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan, semanticReviewInput, markFlowSources, SHARED_RULES, attemptFingerprint, isStalledRetry, planTextVolume, isSameMinimumRetry } from './gray-semantics.mjs';
+import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan, semanticReviewInput, sanitizeSemanticReview, markFlowSources, SHARED_RULES, attemptFingerprint, isStalledRetry, planTextVolume, isSameMinimumRetry } from './gray-semantics.mjs';
 import { applyTemplateDefaults, describeDefaults } from './gray-templates.mjs';
 import { auditGeometry, voidWarnings, VOID_THRESHOLDS } from './gray-audit.mjs';
 import { resolveGrayLayout, compressionMemory } from './gray-layout.mjs';
@@ -181,8 +181,16 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         const response = await provider.complete({ messages: [{ role: 'system', content: SEMANTIC_REVIEW_CONTRACT }, { role: 'user', content: JSON.stringify(reviewInput) }] });
         const parsed = parseModelJson(response);
         if (typeof parsed.accepted !== 'boolean' || !Array.isArray(parsed.issues)) throw new Error('审稿响应格式无效');
-        lastReview = { accepted: parsed.accepted && !parsed.issues.length, issues: parsed.issues.slice(0, 12), at: new Date().toISOString() };
-        return { accepted: lastReview.accepted, issues: lastReview.issues, coverage: parsed.coverage ?? null, limits: parsed.limits ?? null, planSource: source, ...(note ? { note } : {}) };
+        const { review: reviewed, filters: reviewFilters } = sanitizeSemanticReview(parsed);
+        if (reviewFilters.length) {
+          agentState.grayDraft.reviewFilters = [...(agentState.grayDraft.reviewFilters ?? []), { at: new Date().toISOString(), source: source, filters: reviewFilters }];
+          await saveAgentState();
+        }
+        lastReview = { accepted: reviewed.accepted && !reviewed.issues.length, issues: reviewed.issues.slice(0, 12), at: new Date().toISOString() };
+        const notices = [];
+        if (reviewFilters.length) notices.push('部分打回文字含载体指定，已按「打回不得指定载体」过滤为可读性要求（原文入档，见 reviewFilters）。');
+        if (note) notices.push(note);
+        return { accepted: lastReview.accepted, issues: lastReview.issues, coverage: reviewed.coverage ?? null, limits: reviewed.limits ?? null, planSource: source, ...(notices.length ? { note: notices.join(' ') } : {}) };
       },
     }),
     defineTool({
