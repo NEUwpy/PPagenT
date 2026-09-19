@@ -1,0 +1,19 @@
+✔ actual model blueprint preserves gray excerpts and bindings (7.6267ms)
+✔ losing a causal input fails rather than appearing as a successful structure (1.1384ms)
+✔ duplicate diagram bindings and omitted placeholder are rejected (0.6642ms)
+✔ changed gray text invalidates stale diagram content (0.9505ms)
+✔ unimplemented structure cannot silently use the convergence adapter (0.5712ms)
+✔ group-level diagrams are not silently rendered as prose (0.7371ms)
+✔ current model plan preserves all source blocks and binds title evidence (13.3017ms)
+✔ long section text cannot overflow inherited narrow header (0.9607ms)
+✔ missing or unknown headline evidence is rejected (0.3994ms)
+✔ multiline or long headline cannot silently shrink (0.2867ms)
+✔ new style still rejects source omissions (0.3735ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 219.0602
