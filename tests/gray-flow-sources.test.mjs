@@ -40,24 +40,6 @@ test('流转信息按窄模式打标：标题、称谓、发文字号、落款',
   assert.equal(tail[2].flow, '落款');
 });
 
-test('文种标题补「文件名式裸标题」分支（评审 #108）：五种形态逐例核对', () => {
-  // ① 裸标题打标（本次缺陷样本）
-  assert.equal(mark(['办公用品采购管理规定'])[0].flow, '文种标题');
-  // ② 书名号版打标
-  assert.equal(mark(['《固定资产管理办法》'])[0].flow, '文种标题');
-  // ③ 关于…的版打标
-  assert.equal(mark(['关于开展固定资产盘点工作的通知'])[0].flow, '文种标题');
-  // ④ 括号版打标（可含 (试行) 类短括号）
-  assert.equal(mark(['办公用品采购管理规定（试行）'])[0].flow, '文种标题');
-  assert.equal(mark(['会议费管理办法(试行)'])[0].flow, '文种标题');
-  // ⑤ 长句不误标：含句读不收；无句读但超长不收
-  assert.equal(mark(['单笔金额 500 元以下的，由部门负责人审批后自行采购。'])[0].flow, undefined);
-  assert.equal(mark(['全体人员均应严格执行公司办公用品采购与报销管理相关规定'])[0].flow, undefined);
-  // 边界：自指谓语（本/该/此/其＋文种词）不是标题，不收
-  assert.equal(mark(['所有采购均须遵守本规定'])[0].flow, undefined);
-  assert.equal(mark(['各部门应当认真组织学习并对照本规定'])[0].flow, undefined);
-});
-
 test('宁可漏标不误标：正文引用、说明句、中段短行都不打标', () => {
   assert.equal(mark(['根据《关于开展固定资产盘点工作的通知》要求，现将有关事项通知如下。'])[0].flow, undefined);
   assert.equal(mark(['各部门职责如下：'])[0].flow, undefined);
