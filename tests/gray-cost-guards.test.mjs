@@ -205,12 +205,20 @@ test('结构位缺失检查：同页双容器下明示汇聚/扇出必须有结�
   const missing = validateSemanticPlan(base, plan());
   assert.ok(missing.issues.some(issue => issue.code === 'structure-note-missing'), JSON.stringify(missing.issues));
   const withNote = plan();
-  withNote.pages[0].groups[0].blocks.push({ id: 'b1n', text: '变革氛围尚未完全形成／信息系统支撑能力仍有差距／缺乏市场化管理机制', kind: 'diagram', expression: '三个阻力原因汇聚到结果', relationship: '汇聚：三因共同造成落地阻力', production: '三框一果箭头图', sourceIds: ['s1'] });
+  withNote.pages[0].groups[0].blocks.push({ id: 'b1n', text: '变革氛围尚未完全形成／信息系统支撑能力仍存在差距／缺乏市场化的管理机制', kind: 'diagram', expression: '三个阻力原因汇聚到结果', relationship: '汇聚：三因共同造成落地阻力', production: '三框一果箭头图', sourceIds: ['s1'] });
   const accepted = validateSemanticPlan(base, withNote);
   assert.equal(accepted.accepted, true, JSON.stringify(accepted.issues));
   const collapsed = plan();
   collapsed.pages[0].groups[0].blocks = [{ id: 'b1', text: '现阶段公司内部人力资源变革氛围尚未完全形成，信息系统支撑能力仍存在差距，缺乏市场化的管理机制，造成变革落地阻力重重。', kind: 'diagram', expression: '汇聚', relationship: '三因一果', production: '三框一果箭头图', sourceIds: ['s1'] }];
   assert.ok(validateSemanticPlan(base, collapsed).issues.some(issue => issue.code === 'structure-collapsed'));
+  // 摘引一致（评审 #33）：节点短语丢限定词（完全）→ 拒
+  const looseQuote = plan();
+  looseQuote.pages[0].groups[0].blocks.push({ id: 'b1n', text: '变革氛围尚未形成／信息系统支撑能力仍存在差距', kind: 'diagram', expression: '汇聚', relationship: '三因一果', production: '三框一果箭头图', sourceIds: ['s1'] });
+  assert.ok(validateSemanticPlan(base, looseQuote).issues.some(issue => issue.code === 'structure-quote-mismatch'));
+  // 收尾标点去重（评审 #33）：连续重复闭标点 → 拒
+  const dupPunct = plan();
+  dupPunct.pages[0].groups[0].blocks[0].text = '现阶段公司内部人力资源变革氛围尚未完全形成，造成变革落地阻力重重。。';
+  assert.ok(validateSemanticPlan(base, dupPunct).issues.some(issue => issue.code === 'duplicate-punctuation'));
 });
 
 test('条件降档：16px 下限候选在 18px 放不下时被选用（仅同页形态）', () => {

@@ -255,11 +255,14 @@ const SKETCH_NODE_LABEL = Object.freeze({ diagram: '节点短语（摘引）', f
 export function regionBody(item) {
   if (item.kind === 'text' && item.blocks) return grayDisplayBlocks(item).map(block=>block.text).join('\n');
   if (SKETCH_KINDS.has(item.kind) && item.blocks) return item.blocks.map(blockText).join('\n');
-  // 附注最小化（评审 #28）：关系一句＋摘引短语，两行以内；不重写第二份全文。字段与 rules/排版.md 同步。
+  // 附注最小化（评审 #28/#32）：关系一句＋摘引短语；收尾标点去重（评审 #33，连续同一闭标点折叠）。
   if (item.kind === 'text') return item.text;
   const lead = STRUCTURE_LEAD[item.kind] ?? '制作说明';
   const nodes = SKETCH_NODE_LABEL[item.kind] ?? '要点（摘引）';
-  return `${lead}：${item.expression}；${nodes}：${item.text}。`;
+  const expression = String(item.expression ?? '').replace(/[。！？；]+$/u, '');
+  const text = String(item.text ?? '').replace(/[。！？；]+$/u, '');
+  const composed = `${lead}：${expression}；${nodes}：${text}。`;
+  return composed.replace(/([。！？；])[。！？；]+/gu, '$1');
 }
 
 const ORDINALS = Object.freeze(['一','二','三','四','五','六','七','八','九','十']);
@@ -391,6 +394,11 @@ export function validateSemanticPlan(base, plan) {
       }
       if (!simple && !touched.has('$claim')) fail('unrelated-claim', page.pageId, 'relations数组缺少以$claim为端点的真实关系；必须补齐相应关系记录，仅改写claim正文或planningNotes不能修复此错误');
     }
+    // 收尾标点去重（评审 #33）：连续同一闭标点为机械客观违例（附注模板已去重，此处守卫模型文案）。
+    for (const page of plan.pages) for (const group of page.groups ?? []) for (const block of group.blocks ?? []) {
+      if (/([。！？；])[。！？；]+/u.test(String(block.label ?? ''))) fail('duplicate-punctuation', page.pageId, `块 ${block.id} 标签出现连续重复的收尾标点：去掉多余标点。`);
+      if (/([。！？；])[。！？；]+/u.test(String(block.text ?? ''))) fail('duplicate-punctuation', page.pageId, `块 ${block.id} 正文出现连续重复的收尾标点：去掉多余标点。`);
+    }
     // 流转信息来源（文件头尾、节标题等）：无需覆盖、不得上屏。死结在数据层消解，不让模型在矛盾指令里自行平衡。
     // 扫描全部上屏字段（页标题/组标题/块标签/块正文），不只块正文——元信息可能被塞进标题层。
     for (const source of base.sources.filter(item => item.flow)) {
@@ -450,9 +458,20 @@ export function validateSemanticPlan(base, plan) {
         const hasProse = (group.blocks ?? []).some(block => (block.kind ?? 'text') === 'text');
         const hasNote = (group.blocks ?? []).some(block => block.kind && block.kind !== 'text');
         if (!hasNote) {
-          fail('structure-note-missing', page.pageId, `同页双容器：组「${group.heading}」的来源明示了汇聚/扇出结构，却没有附结构位——请在该条目之后补一个小蓝附注 block（单行：关系一句＋摘引短语，四要素齐全、无 label）。`);
+          fail('structure-note-missing', page.pageId, `同页双容器：组「${group.heading}」的来源明示了汇聚/扇出结构，却没有附结构位——请在该条目之后补一个小蓝附注 block（四要素齐全、无 label；空间足写完整描述、紧写「本条先画结构图」）。`);
         } else if (!hasProse) {
           fail('structure-collapsed', page.pageId, `同页双容器：组「${group.heading}」整条转蓝塌缩——条目必须保留灰散文 block（实文完整），蓝附注只是附注；请拆回两个块。`);
+        } else {
+          // 摘引一致（评审 #33 推荐检查器）：结构位节点短语须为散文的连续子串（仅省标点）。
+          const compact = value => String(value ?? '').replace(/[\s。，；：、！？（）()「」『』“”"'·—－-]/gu, '');
+          const prose = compact((group.blocks ?? []).filter(block => (block.kind ?? 'text') === 'text').map(block => block.text ?? '').join('\n'));
+          for (const note of (group.blocks ?? []).filter(block => block.kind && block.kind !== 'text')) {
+            const phrases = String(note.text ?? '').split(/[／/]|→|->/u).map(compact).filter(phrase => phrase.length >= 4);
+            const mismatch = phrases.find(phrase => !prose.includes(phrase));
+            if (mismatch) {
+              fail('structure-quote-mismatch', page.pageId, `同页双容器：结构位节点短语「${mismatch}」不是散文的连续子串——摘引须与散文逐字一致（仅可省标点），请改回原文短语或补全限定词。`);
+            }
+          }
         }
       }
     }
