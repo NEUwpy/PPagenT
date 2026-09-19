@@ -27,7 +27,8 @@ test('a local expression stays inside its branch and is visible to review and me
   assert.equal(item.kind,'text');
   assert.equal(item.blocks.length,2);
   const display=grayDisplayBlocks(item),body=grayBodyLayout(item,568,22);
-  assert.deepEqual(display.filter(run=>run.bold).map(run=>run.text),['一 核验与开放','二 暂停条件']);
+  // 唯一带标签正文条目只有一条，且另一块是附注——按 #71 语义不编号。
+  assert.deepEqual(display.filter(run=>run.bold).map(run=>run.text),['核验与开放','暂停条件']);
   assert.equal(display.filter(run=>run.kind==='flow').length,1);
   assert.match(display[1].text,/本条建议画结构图：说明核验与开放；节点短语（摘引）：模拟内容/u);
   assert.equal(display[3].text,'不合格则暂停。');

@@ -146,11 +146,11 @@ test('条目编号标签：按带标签条目顺序、附注不占号；单条�
   assert.deepEqual(grayDisplayBlocks(group).filter(run => run.bold).map(run => run.text), ['一 第一条', '二 第三条']);
   const withNote = { id: 'g2', kind: 'text', heading: '两点不足', blocks: [
     { id: 'b1', label: '势能', text: '甲。' },
-    { id: 'bn', text: '本条先画结构图', kind: 'diagram', expression: '汇聚', relationship: '三因一果', production: '三框一果' },
+    { id: 'bn', label: '阻力来源结构图', text: '本条先画结构图', kind: 'diagram', expression: '汇聚', relationship: '三因一果', production: '三框一果' },
     { id: 'b2', label: '合规', text: '乙。' },
-    { id: 'bn2', text: '本条先画结构图', kind: 'diagram', expression: '扇出', relationship: '一源四项', production: '一排四框' },
+    { id: 'bn2', label: '短板反映结构图', text: '本条先画结构图', kind: 'diagram', expression: '扇出', relationship: '一源四项', production: '一排四框' },
   ] };
-  assert.deepEqual(grayDisplayBlocks(withNote).filter(run => run.bold).map(run => run.text), ['一 势能', '二 合规']);
+  assert.deepEqual(grayDisplayBlocks(withNote).filter(run => run.bold).map(run => run.text), ['一 势能', '阻力来源结构图', '二 合规', '短板反映结构图']);
   const single = { id: 'g3', kind: 'text', blocks: [{ id: 'b1', label: '唯一条目', text: '甲。' }] };
   assert.deepEqual(grayDisplayBlocks(single).filter(run => run.bold).map(run => run.text), ['唯一条目']);
 });

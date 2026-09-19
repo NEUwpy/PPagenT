@@ -48,14 +48,14 @@ export function grayBodyLayout(item, width, fontSize, availableHeight) {
   const padding=8, gap=12, labelGap=4;
   // 蓝注解耦（评审 #32，用户拍板）：块级结构位附注独立小字（12px），与主文互不锁死；无行数限制。
   const NOTE_FONT=12;
-  // 条目编号（评审 #25/#32）：逐块测量路径与组级投影同序；仅带标签条目参与编号，附注块不编号。
-  const labeledCount=item.kind==='text' && item.blocks ? item.blocks.filter(block=>block.label).length : 0;
+  // 条目编号（评审 #25/#32/#71）：仅带标签的正文条目参与编号，附注块不编号、不占号。
+  const labeledCount=item.kind==='text' && item.blocks ? item.blocks.filter(block=>(block.kind ?? 'text')==='text'&&block.label).length : 0;
   let labeledIndex=0;
   const sections=item.kind==='text' && item.blocks
     ? item.blocks.map(block=>{
       const kind=block.kind ?? 'text';
       const sectionFont=kind!=='text'?Math.min(fontSize,NOTE_FONT):fontSize;
-      const ordinal=block.label&&labeledCount>=2?++labeledIndex:0;
+      const ordinal=kind==='text'&&block.label&&labeledCount>=2?++labeledIndex:0;
       return {kind,fontSize:sectionFont,parts:grayDisplayBlocks({kind:'text',blocks:[block]},ordinal?{ordinal}:{})};
     })
     : [{kind:item.kind,fontSize,parts:grayDisplayBlocks(item)}];

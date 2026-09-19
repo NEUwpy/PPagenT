@@ -275,13 +275,14 @@ export function grayDisplayBlocks(item, { ordinal = 0, numbered = true } = {}) {
     ]);
   }
   if (item.kind !== 'text' || !item.blocks) return [{text:regionBody(item),bold:false,gapBefore:0}];
-  // 条目编号标签（评审 #25/#32）：仅带标签条目参与编号（按条目顺序，附注块不编号）；单条目组不编号。
+  // 条目编号标签（评审 #25/#32/#71）：仅带标签的正文条目参与编号（按条目顺序）；附注块不编号、不占号。
   // ordinal 用于逐块测量路径（grayBodyLayout 逐块投影）与组级投影保持同一编号。
-  const labeledCount = item.blocks.filter(block => nonempty(block.label)).length;
+  const isEntry = block => (block.kind ?? 'text') === 'text' && nonempty(block.label);
+  const labeledCount = item.blocks.filter(isEntry).length;
   const useNumbers = numbered && (ordinal > 0 || labeledCount >= 2);
   let labeledIndex = 0;
   return item.blocks.flatMap((block,index) => [
-    ...(block.label ? [{text:useNumbers ? `${ordinalLabel(ordinal > 0 ? ordinal : ++labeledIndex)} ${block.label}` : block.label,bold:true,gapBefore:index ? 12 : 0}] : []),
+    ...(block.label ? [{text:useNumbers && isEntry(block) ? `${ordinalLabel(ordinal > 0 ? ordinal : ++labeledIndex)} ${block.label}` : block.label,bold:true,gapBefore:index ? 12 : 0}] : []),
     {text:block.kind && block.kind!=='text' ? regionBody(block) : block.text,bold:false,gapBefore:!block.label && index ? 12 : 0,
       ...(block.kind && block.kind!=='text' ? {kind:block.kind} : {})},
   ]);
