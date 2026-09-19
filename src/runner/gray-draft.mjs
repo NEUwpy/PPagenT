@@ -72,6 +72,12 @@ export function grayBodyLayout(item, width, fontSize, availableHeight) {
       if(kind==='text'){
         const ordinal=block.label&&labeledCount>=2?++labeledIndex:0;
         sections.push({kind,fontSize,placeholder:false,standalone:false,note:null,parts:grayDisplayBlocks({kind:'text',blocks:[block]},ordinal?{ordinal}:{})});
+      }else if(kind==='note'){
+        // 附着说明（评审 #41-D）：共享限定/前提等非图形附注，紧随所依附条目、独立 12px 小字、不编号、无占位框。
+        const note={kind,fontSize:Math.min(fontSize,NOTE_FONT),parts:grayDisplayBlocks({kind:'text',blocks:[block]}),plain:true};
+        const previous=sections[sections.length-1];
+        if(previous&&previous.kind==='text'&&!previous.note) previous.note=note;
+        else sections.push({kind:'note',fontSize:note.fontSize,placeholder:false,standalone:true,note:null,parts:note.parts});
       }else{
         // 三态修正（任务 #77，用户拍板）：条目内嵌结构位＝并入前一条目（占位归条目，灰底蓝纹）；
         // 无前置条目的纯结构图块＝独立蓝底。
@@ -96,6 +102,14 @@ export function grayBodyLayout(item, width, fontSize, availableHeight) {
     const id=`section-${index}`;
     const textParts=fitParts(section.parts,section.fontSize);
     if(section.note){
+      if(section.note.plain){
+        const noteParts=fitParts(section.note.parts,section.note.fontSize);
+        const noteHeight=Math.ceil(noteParts.reduce((sum,part)=>sum+part.height,0)+labelGap*(noteParts.length-1)+2*padding);
+        const textHeight=Math.ceil(textParts.reduce((sum,part)=>sum+part.height,0)+labelGap*(textParts.length-1)+2*padding);
+        const minHeight=textHeight+labelGap+noteHeight;
+        contracts[id]={minWidth:width,minHeight};
+        return {id,kind:section.kind,placeholder:false,standalone:false,noteArea:{top:textHeight+labelGap,height:noteHeight},textPartsCount:textParts.length,parts:[...textParts,...noteParts],minHeight};
+      }
       const placeholderH=structurePlaceholderHeight(section.note.kind,placeholderNodeCount(section.note.parts.map(part=>part.text).join('／')));
       const descParts=degrade(fitParts(section.note.parts,section.note.fontSize),placeholderH,section.note.fontSize);
       const textHeight=Math.ceil(textParts.reduce((sum,part)=>sum+part.height,0)+labelGap*(textParts.length-1)+2*padding);
@@ -104,6 +118,11 @@ export function grayBodyLayout(item, width, fontSize, availableHeight) {
       return {id,kind:section.kind,placeholder:true,standalone:false,noteArea:{top:textHeight,height:placeholderH},textPartsCount:textParts.length,parts:[...textParts,...descParts],minHeight};
     }
     if(section.standalone){
+      if(section.kind==='note'){
+        const minHeight=Math.ceil(textParts.reduce((sum,part)=>sum+part.height,0)+labelGap*(textParts.length-1)+2*padding);
+        contracts[id]={minWidth:width,minHeight};
+        return {id,kind:section.kind,placeholder:false,standalone:true,parts:textParts,minHeight};
+      }
       const placeholderH=structurePlaceholderHeight(section.kind,placeholderNodeCount(section.parts.map(part=>part.text).join('／')));
       const descParts=degrade(textParts,placeholderH,section.fontSize);
       contracts[id]={minWidth:width,minHeight:placeholderH};
@@ -311,7 +330,7 @@ export async function renderGrayDraft(state, output) {
           geometry:section.kind==='node'?'roundRect':'rect',
           name:`block:${item.id}:${section.id}`,
           position:{left:left+16+section.left,top:top+54+section.top,width:section.width,height:section.height},
-          fill:embedded?'#ECEEEF':placeholder?'#E1EFF9':section.kind==='text'?'#ECEEEF':sketch?'#FFFFFF':'#E1EFF9',
+          fill:embedded?'#ECEEEF':placeholder?'#E1EFF9':section.kind==='text'||section.kind==='note'?'#ECEEEF':sketch?'#FFFFFF':'#E1EFF9',
           line:placeholder?{fill:'#B9C4CF',width:1}:sketch?{fill:section.kind==='row'?'#D4D8DC':'#B9C4CF',width:1}:{fill:'none',width:0},
         });
         // 两态半终版（任务 #82，用户拍板）：定案图形区＝蓝框（面积＝图真实占位，框内 12px 标注）；条纹态废除。

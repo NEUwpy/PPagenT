@@ -115,11 +115,11 @@ test('附注最小化：关系一句＋摘引短语，与 rules/排版.md 同步
 
 test('条目编号标签：按带标签条目顺序、附注不占号；单条目组不编号', () => {
   const group = { id: 'g1', kind: 'text', heading: '两点不足', blocks: [
-    { id: 'b1', label: '第一条', text: '甲。' },
+    { id: 'b1', label: '核验', text: '甲。' },
     { id: 'b2', text: '无标签条目。' },
-    { id: 'b3', label: '第三条', text: '丙。' },
+    { id: 'b3', label: '复核', text: '丙。' },
   ] };
-  assert.deepEqual(grayDisplayBlocks(group).filter(run => run.bold).map(run => run.text), ['一 第一条', '二 第三条']);
+  assert.deepEqual(grayDisplayBlocks(group).filter(run => run.bold).map(run => run.text), ['一 核验', '二 复核']);
   const withNote = { id: 'g2', kind: 'text', heading: '两点不足', blocks: [
     { id: 'b1', label: '势能', text: '甲。' },
     { id: 'bn', label: '阻力来源结构图', text: '本条先画结构图', kind: 'diagram', expression: '汇聚', relationship: '三因一果', production: '三框一果' },
