@@ -56,3 +56,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File coworker/mailbox.ps1 `
 
 `mailbox.ps1` 会校验技能 `VERSION.json == 2.5.0`，防止全局副本被单独升级/降级后传输行为漂移。
 技能升级后按 `references/version-resolution.md` 核对并同步更新本文件的记录。
+
+**本地对 2.5.0 副本的补丁（2026-09-20）**：`scripts/coworker-mailbox.ps1` 的 BodyFile 读取补
+`-Encoding UTF8`（PS 5.1 对无 BOM 的 UTF-8 文件默认按 ANSI/GBK 读，曾造成正文混合双重编码、
+接收方需按 GBK 回程解码）。升级技能副本时须确认该补丁已在上游或重新套用。
