@@ -1,0 +1,11 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {renderStyled} from './render-body.mjs';
+const base=import.meta.dirname;
+const gray=JSON.parse(await fs.readFile(path.join(base,'run-06/input.json'),'utf8'));
+const bp=JSON.parse(await fs.readFile(path.join(base,'run-06/candidate-1/blueprint.json'),'utf8'));
+const result=await renderStyled(gray,bp,path.join(base,'final'));
+await fs.copyFile(result.pptx,path.join(base,'gray-to-mckinsey-refined.pptx'));
+await fs.copyFile(result.preview,path.join(base,'gray-to-mckinsey-refined.png'));
+await fs.writeFile(path.join(base,'state.json'),JSON.stringify({phase:'awaiting-human-review',selectedRun:'run-06',candidate:result,delivery:path.join(base,'gray-to-mckinsey-refined.pptx'),humanReview:'pending'},null,2));
+console.log(JSON.stringify(result));

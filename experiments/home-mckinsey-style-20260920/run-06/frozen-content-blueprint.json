@@ -1,0 +1,72 @@
+{
+  "sectionTitle": "不足感悟",
+  "headline": "变革落地仍存三项短板，合规基础管理亦待压实",
+  "headlineEvidence": [
+    "implementation",
+    "compliance",
+    "criterion"
+  ],
+  "groupWeights": [
+    1,
+    1.1
+  ],
+  "diagrams": [
+    {
+      "groupId": "issues",
+      "blockId": "implementation",
+      "assetId": "convergence-many-to-one-003",
+      "context": "顶层设计已完成",
+      "inputs": [
+        "公司内部人力资源变革氛围尚未完全形成",
+        "信息系统支撑能力仍有差距",
+        "缺乏市场化管理机制"
+      ],
+      "result": "变革落地阻力重重",
+      "reason": "原文明确三方面条件并列作用、共同造成落地阻力，属多路独立输入直接合并为唯一结果，不涉及逐级筛选或中间归纳层，与该结构的分离输入、平滑汇聚、唯一结果三特征一致。"
+    }
+  ],
+  "visual": {
+    "groupGap": 32,
+    "sectionDivider": true,
+    "groups": [
+      {
+        "id": "issues",
+        "index": "large",
+        "heading": "plain",
+        "rhythm": "natural"
+      },
+      {
+        "id": "insights",
+        "index": "rail",
+        "heading": "wash",
+        "rhythm": "natural"
+      }
+    ]
+  },
+  "detailStrips": [
+    {
+      "groupId": "issues",
+      "blockId": "compliance",
+      "intro": "2017年巡视整改取得一定成效，也暴露人力条线基础管理薄弱：",
+      "parts": [
+        {
+          "label": "认识",
+          "body": "待提升"
+        },
+        {
+          "label": "作风",
+          "body": "待转变"
+        },
+        {
+          "label": "能力",
+          "body": "待增强"
+        },
+        {
+          "label": "协同",
+          "body": "待深化"
+        }
+      ]
+    }
+  ],
+  "reason": "页面为两类并列内容：issues（两点不足，primary）与 insights（四点感悟，primary），权重按冻结稿 1:1.1。\n\nissues：index=large，两项不足是读者最先定位的并列分析条目，用清楚的列首编号即可，不设阅读轴（该组内部含汇聚图，图示组不能设 rail）。heading=plain，implementation 块由 convergence-many-to-one-003 原生适配承载（分离输入→平滑汇聚→唯一结果），结构自身已有深色结果锚，不再叠加 wash 底色以避免与结构源设计的强调冲突；compliance 块为并列文字条目，与结构组同列同起线。rhythm=natural，两项内容自然高度不同（图示高于四短项），不拉平。\ndetailStrips：compliance 原文含同口径短项“认识待提升、作风待转变、能力待增强、协同待深化”，整理成同行对象—状态；intro 为原文前半句，label 仅对象短名，body 仅余下状态，拼接后恰好覆盖整块。\n\ninsights：index=rail，四项感悟是需逐项阅读的并列论点，用无箭头细线贯穿编号表示索引连续性，不表达步骤或因果；heading=wash，条目自白向主题浅色连续过渡，延续阅读方向而非各自成卡。rhythm=natural，四条长短差异明显，保持自然行高、组间净距由 groupGap=32 承担。\n\ngroupGap=32、sectionDivider=true：两个分析域由一条轻细分隔区分。文字角色固定：正文 18、局部标题 21，编号沿用既有 small/large/rail 角色，不缩字。"
+}

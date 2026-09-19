@@ -1,0 +1,72 @@
+{
+  "sectionTitle": "不足感悟",
+  "headline": "变革落地仍存三项短板，合规基础管理亦待压实",
+  "headlineEvidence": [
+    "implementation",
+    "compliance",
+    "criterion"
+  ],
+  "groupWeights": [
+    1,
+    1.1
+  ],
+  "diagrams": [
+    {
+      "groupId": "issues",
+      "blockId": "implementation",
+      "assetId": "convergence-many-to-one-003",
+      "context": "顶层设计已完成",
+      "inputs": [
+        "公司内部人力资源变革氛围尚未完全形成",
+        "信息系统支撑能力仍有差距",
+        "缺乏市场化管理机制"
+      ],
+      "result": "变革落地阻力重重",
+      "reason": "原文明确三方面条件并列作用、共同造成落地阻力，属多路独立输入直接合并为唯一结果，不涉及逐级筛选或中间归纳层，与该结构的分离输入、平滑汇聚、唯一结果三特征一致。"
+    }
+  ],
+  "visual": {
+    "groupGap": 32,
+    "sectionDivider": true,
+    "groups": [
+      {
+        "id": "issues",
+        "index": "large",
+        "heading": "plain",
+        "rhythm": "natural"
+      },
+      {
+        "id": "insights",
+        "index": "rail",
+        "heading": "wash",
+        "rhythm": "distributed"
+      }
+    ]
+  },
+  "detailStrips": [
+    {
+      "groupId": "issues",
+      "blockId": "compliance",
+      "intro": "2017年巡视整改取得一定成效，也暴露人力条线基础管理薄弱：",
+      "parts": [
+        {
+          "label": "认识",
+          "body": "待提升"
+        },
+        {
+          "label": "作风",
+          "body": "待转变"
+        },
+        {
+          "label": "能力",
+          "body": "待增强"
+        },
+        {
+          "label": "协同",
+          "body": "待深化"
+        }
+      ]
+    }
+  ],
+  "reason": "本轮为局部视觉复核，只修正余白分配，其余全部保留。\n\n保留不变：两域权重 1:1.1、groupGap=32、sectionDivider=true、issues 为 large+plain、insights 为 rail+wash、正文 18／局部标题 21 角色、convergence-many-to-one-003 原生汇聚图（分离输入→平滑汇聚→唯一深色结果锚）、compliance 的四项同行对象—状态短项及其 intro/parts 逐字切分。\n\n唯一改动：insights 的 rhythm 由 natural 改为 distributed。四段感悟文字自然高度与条目高度保持不变，仅把该组原本积压在组尾的余量重新分配到条目之间，使该域末端接近相邻分析域（issues 域）的基线，形成共同末端。rail 只表达索引连续性，分布间距不引入步骤或因果关系；标题与编号样式均未改动。\n\n未改动项的理由：issues 域含汇聚图，其纵向高度由结构自身决定，不存在可回收的组尾空白；detailStrips 已按原文同口径短项完整覆盖，无需重切；组间距与分隔线已属正确特征，无依据不得重选。"
+}

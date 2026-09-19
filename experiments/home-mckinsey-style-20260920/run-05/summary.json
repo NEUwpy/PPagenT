@@ -1,0 +1,27 @@
+{
+  "stopReason": "awaiting-human-review",
+  "detail": null,
+  "note": null,
+  "turns": 5,
+  "usage": {
+    "requests": 5,
+    "toolCalls": 6,
+    "tokens": {
+      "prompt_tokens": 40487,
+      "completion_tokens": 1016,
+      "total_tokens": 41503,
+      "prompt_cache_hit_tokens": 31872,
+      "prompt_cache_miss_tokens": 8615
+    }
+  },
+  "toolCallCount": 6,
+  "stalledTurns": 0,
+  "toolSequence": [
+    "read_inputs",
+    "list_structures",
+    "read_guide",
+    "build_body",
+    "build_body",
+    "finish_visual"
+  ]
+}
