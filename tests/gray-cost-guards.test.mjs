@@ -181,6 +181,13 @@ test('结构位真占位：占位高按类型与节点数（范本校准），�
   const placeholder = body.sections.find(section => section.placeholder);
   assert.equal(placeholder.noteArea.height, structurePlaceholderHeight('diagram', 4));
   assert.equal(body.sections.filter(section => section.placeholder).length, 1); // 占位并入条目，不单列
+  // 蓝框标注必须在框内（评审 #37 用户反馈）
+  const descRuns = body.runs.filter(run => run.kind === 'diagram');
+  assert.ok(descRuns.length >= 1);
+  for (const run of descRuns) {
+    assert.ok(run.y >= placeholder.top + placeholder.noteArea.top, JSON.stringify({ y: run.y, boxTop: placeholder.top + placeholder.noteArea.top }));
+    assert.ok(run.y + run.height <= placeholder.top + placeholder.noteArea.top + placeholder.noteArea.height, JSON.stringify({ bottom: run.y + run.height, boxBottom: placeholder.top + placeholder.noteArea.top + placeholder.noteArea.height }));
+  }
   // 描述很长、占位较矮（flow）时降为一句
   group.blocks[1].kind = 'flow';
   group.blocks[1].expression = '把三项内部成因汇聚到同一后果的因果关系画出来，供读者直读阻力来源。'.repeat(3);

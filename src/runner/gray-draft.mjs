@@ -102,7 +102,7 @@ export function grayBodyLayout(item, width, fontSize, availableHeight) {
       const textHeight=Math.ceil(textParts.reduce((sum,part)=>sum+part.height,0)+labelGap*(textParts.length-1)+2*padding);
       const minHeight=textHeight+placeholderH;
       contracts[id]={minWidth:width,minHeight};
-      return {id,kind:section.kind,placeholder:true,standalone:false,noteArea:{top:textHeight,height:placeholderH},parts:[...textParts,...descParts],minHeight};
+      return {id,kind:section.kind,placeholder:true,standalone:false,noteArea:{top:textHeight,height:placeholderH},textPartsCount:textParts.length,parts:[...textParts,...descParts],minHeight};
     }
     if(section.standalone){
       const placeholderH=structurePlaceholderHeight(section.kind,placeholderNodeCount(section.parts.map(part=>part.text).join('／')));
@@ -142,10 +142,12 @@ export function grayBodyLayout(item, width, fontSize, availableHeight) {
     // 文字块内顶格排字：块高由区域分配决定，内容从顶部开始，与表格/卡片的排法一致；
     // 旧版按块内居中偏移，单块内容少时文字悬在中下部、看起来像"说明"而不是内容。
     let y=frame.top+padding;
-    for(const part of section.parts){
+    section.parts.forEach((part,index)=>{
+      // 蓝框标注位于框内（评审 #37/任务 #87 用户反馈）：进入标注段时把起点移到框内顶部。
+      if(section.noteArea&&index===section.textPartsCount) y=frame.top+section.noteArea.top+4;
       runs.push({text:part.text,x:padding,y,width:width-2*padding,height:part.height,bold:part.bold,fits:part.fits,fontSize:part.fontSize,...(part.kind?{kind:part.kind}:{})});
       y+=part.height+labelGap;
-    }
+    });
     return {...frame,kind:section.kind,id:section.id,minHeight:section.minHeight,...(section.placeholder?{placeholder:true}:{}),...(section.noteArea?{noteArea:section.noteArea}:{}),...(section.standalone?{standalone:true}:{})};
   });
   return {runs,sections:frames,height:target,minimumHeight:minimum,fits:runs.every(r=>r.fits)};
