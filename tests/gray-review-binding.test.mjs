@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {
   planContentFingerprint, checkReviewCoverage, grayDisplayBlocks, semanticReviewInput, validateSemanticPlan,
 } from '../src/runner/gray-semantics.mjs';
+import { grayBodyLayout } from '../src/runner/gray-draft.mjs';
 import { newRunState } from '../src/runner/state.mjs';
 
 const DOC = '先把事实说清楚。\n\n再把安排讲明白。';
@@ -67,6 +68,30 @@ test('层级机制：scope:"group" 的共同说明不编号、随组以小字呈
   const groupScoped = parts.filter(part => part.text === '共同前提' || part.text === '两项缺一不可');
   assert.equal(groupScoped.length, 2);
   assert.ok(groupScoped.every(part => part.attachment === true));
+  // 呈现形态以布局实测为准（评审 #121）：共同说明 12px，条目 22px——与契约/审稿声明一致。
+  const layout = grayBodyLayout(item, 800, 22, 2000);
+  const premiseRuns = layout.runs.filter(run => run.text === '共同前提' || run.text === '两项缺一不可');
+  assert.ok(premiseRuns.length >= 1);
+  assert.ok(premiseRuns.every(run => run.fontSize === 12), JSON.stringify(premiseRuns.map(run => run.fontSize)));
+  const entryRuns = layout.runs.filter(run => run.text === '一 焊前' || run.text === '二 焊接时');
+  assert.equal(entryRuns.length, 2);
+  assert.ok(entryRuns.every(run => run.fontSize === 22));
+});
+
+test('声明一致性：scope:"group" 的呈现声明（不编号、12px）与布局实测一致（评审 #121）', () => {
+  const blocks = [
+    { id: 'b1', label: '焊前', text: '清理油污', sourceIds: ['s1'] },
+    { id: 'b2', label: '焊接时', text: '双面保护', sourceIds: ['s1'] },
+    { id: 'b3', label: '共同前提', text: '两项缺一不可', sourceIds: ['s1'], scope: 'group' },
+  ];
+  const layout = grayBodyLayout({ id: 'g1', kind: 'text', blocks }, 800, 22, 2000);
+  const premiseRuns = layout.runs.filter(run => run.text === '共同前提' || run.text === '两项缺一不可');
+  assert.ok(premiseRuns.length >= 1);
+  assert.ok(premiseRuns.every(run => run.fontSize === 12), '布局实测须为 12px');
+  const input = semanticReviewInput({ source: DOC, area: { width: 1170, height: 492 }, plan: plan(blocks) });
+  const surface = input.visiblePages[0].regions[0].surface;
+  assert.match(surface, /12px/u, '审稿声明须与实测一致（12px）');
+  assert.match(surface, /不编号/u);
 });
 
 test('层级机制校验：scope 合法通过；未知值/结构块/整组共同说明被拒（评审 #119 要求 3）', () => {

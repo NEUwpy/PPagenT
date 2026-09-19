@@ -63,16 +63,24 @@ export function grayBodyLayout(item, width, fontSize, availableHeight) {
   // 蓝注解耦（评审 #32，用户拍板）：块级结构位附注独立小字（12px），与主文互不锁死；无行数限制。
   const NOTE_FONT=12;
   // 条目编号（评审 #25/#32/#71）：仅带标签的正文条目参与编号，附注块不编号、不占号。
-  const labeledCount=item.kind==='text' && item.blocks ? item.blocks.filter(block=>(block.kind ?? 'text')==='text'&&block.label).length : 0;
+  const labeledCount=item.kind==='text' && item.blocks ? item.blocks.filter(block=>(block.kind ?? 'text')==='text'&&block.label&&block.scope!=='group').length : 0;
   let labeledIndex=0;
   const sections=[];
   if(item.kind==='text' && item.blocks){
     for(const block of item.blocks){
       const kind=block.kind ?? 'text';
-      if(kind==='text'){
+      const groupScoped=kind==='text'&&block.scope==='group';
+      if(kind==='text'&&!groupScoped){
         const ordinal=block.label&&labeledCount>=2?++labeledIndex:0;
         sections.push({kind,fontSize,placeholder:false,standalone:false,note:null,parts:grayDisplayBlocks({kind:'text',blocks:[block]},ordinal?{ordinal}:{})});
-      }else if(kind==='note'){
+      }else if(kind==='note'||groupScoped){
+        // 组级共同说明（评审 #119/#121）：约束整组全部条目——独立 12px 小字、不编号、不依附单条，
+        // 随组按块序呈现；与 note 的差别只是不挂到前一条目。声明（契约/审稿输入）与实现须一致。
+        if(groupScoped){
+          const note={kind:'note',fontSize:Math.min(fontSize,NOTE_FONT),parts:grayDisplayBlocks({kind:'text',blocks:[block]}),plain:true};
+          sections.push({kind:'note',fontSize:note.fontSize,placeholder:false,standalone:true,note:null,parts:note.parts});
+          continue;
+        }
         // 附着说明（评审 #41-D）：共享限定/前提等非图形附注，紧随所依附条目、独立 12px 小字、不编号、无占位框。
         const note={kind,fontSize:Math.min(fontSize,NOTE_FONT),parts:grayDisplayBlocks({kind:'text',blocks:[block]}),plain:true};
         const previous=sections[sections.length-1];
