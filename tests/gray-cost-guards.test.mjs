@@ -246,6 +246,11 @@ test('结构位缺失检查：同页双容器下明示汇聚/扇出必须有结�
   const noSeparator = plan();
   noSeparator.pages[0].groups[0].blocks.push({ id: 'b1n', text: '变革氛围尚未完全形成，信息系统支撑能力仍存在差距，缺乏市场化的管理机制', kind: 'diagram', expression: '汇聚', relationship: '三因一果', production: '三框一果箭头图', sourceIds: ['s1'] });
   assert.ok(validateSemanticPlan(base, noSeparator).issues.some(issue => issue.code === 'structure-quote-mismatch'));
+  // 逐条目（评审 #37 用户反馈）：第二条目缺附注 → 拒（首条附注不能代表它）
+  const secondMissing = plan();
+  secondMissing.pages[0].groups[0].blocks.push({ id: 'b1n', text: '变革氛围尚未完全形成／信息系统支撑能力仍存在差距／缺乏市场化的管理机制', kind: 'diagram', expression: '汇聚', relationship: '三因一果', production: '三框一果', sourceIds: ['s1'] });
+  secondMissing.pages[0].groups[0].blocks.push({ id: 'b2', label: '第二条目', text: '现阶段公司内部人力资源变革氛围尚未完全形成，造成变革落地阻力重重。', sourceIds: ['s1'] });
+  assert.ok(validateSemanticPlan(base, secondMissing).issues.some(issue => issue.code === 'structure-note-missing'));
   // 收尾标点去重（评审 #33）：连续重复闭标点 → 拒
   const dupPunct = plan();
   dupPunct.pages[0].groups[0].blocks[0].text = '现阶段公司内部人力资源变革氛围尚未完全形成，造成变革落地阻力重重。。';

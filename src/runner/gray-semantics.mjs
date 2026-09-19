@@ -462,6 +462,27 @@ export function validateSemanticPlan(base, plan) {
         } else if (!hasProse) {
           fail('structure-collapsed', page.pageId, `同页双容器：组「${group.heading}」整条转蓝塌缩——条目必须保留灰散文 block（实文完整），蓝附注只是附注；请拆回两个块。`);
         } else {
+          // 逐条目检查（评审 #37 用户反馈）：每段来源明示结构的正文条目（含其多块细项）之后都必须有结构位，
+          // 不允许一个组内某条附注代表全部条目。
+          const blocks = group.blocks ?? [];
+          const isNote = block => Boolean(block.kind && block.kind !== 'text');
+          const isMatch = blocks.map(block => {
+            if ((block.kind ?? 'text') !== 'text') return false;
+            const source = (block.sourceIds ?? []).map(id => base.sources.find(item => item.id === id)?.text ?? '').join('\n');
+            return EXPLICIT_CONVERGENCE.test(source) || EXPLICIT_FANOUT.test(source);
+          });
+          let cursor = 0;
+          while (cursor < blocks.length) {
+            if (!isMatch[cursor]) { cursor += 1; continue; }
+            let end = cursor;
+            while (end + 1 < blocks.length && isMatch[end + 1]) end += 1;
+            let next = end + 1;
+            while (next < blocks.length && !isMatch[next]) next += 1;
+            if (!blocks.slice(end + 1, next).some(isNote)) {
+              fail('structure-note-missing', page.pageId, `同页双容器：条目「${blocks[cursor].label ?? blocks[cursor].id}」的来源明示了汇聚/扇出结构，其后却没有结构位——请在该条目之后补一个小蓝附注 block（四要素齐全；空间足写完整描述、紧写「本条先画结构图」）。`);
+            }
+            cursor = next;
+          }
           // 摘引一致（评审 #33/#77）：节点短语须以「／」分隔（占位高度按节点数真实计量），且为散文连续子串。
           const compact = value => String(value ?? '').replace(/[\s。，；：、！？（）()「」『』“”"'·—－-]/gu, '');
           const prose = compact((group.blocks ?? []).filter(block => (block.kind ?? 'text') === 'text').map(block => block.text ?? '').join('\n'));
