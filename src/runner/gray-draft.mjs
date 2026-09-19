@@ -6,7 +6,7 @@ import { createHash } from 'node:crypto';
 import { buildChatProviderFromEnv } from './chat-provider.mjs';
 import { newRunState, upsertPageBriefs, writeState, renderContentMarkdown, renderStateMarkdown } from './state.mjs';
 import { fitChineseTextToFrame } from '../render/chinese-typography.mjs';
-import { SEMANTIC_CONTRACT, SEMANTIC_REVIEW_CONTRACT, EXPRESSION_CONTRACT, LAYOUT_CONTRACT, validateSemanticPlan, bindSemanticLayout, bindGrayExpressions, semanticPlanFromPages, blockText, regionBody, grayDisplayBlocks, semanticReviewInput, sanitizeSemanticReview, SKETCH_KINDS, grayCoverageIssues } from './gray-semantics.mjs';
+import { SEMANTIC_CONTRACT, SEMANTIC_REVIEW_CONTRACT, EXPRESSION_CONTRACT, LAYOUT_CONTRACT, validateSemanticPlan, bindSemanticLayout, bindGrayExpressions, semanticPlanFromPages, blockText, regionBody, grayDisplayBlocks, semanticReviewInput, SKETCH_KINDS, grayCoverageIssues } from './gray-semantics.mjs';
 import { resolveGrayLayout } from './gray-layout.mjs';
 import { resolveLayoutTree } from '../composition/resolve.mjs';
 
@@ -446,9 +446,6 @@ export async function runGrayDraft({source, output, area, root=process.cwd(), pr
           await fs.writeFile(path.join(dir,'visible-plan.json'),json(reviewInput.visiblePages));
           semantic=await askJson(provider,[{role:'system',content:SEMANTIC_REVIEW_CONTRACT},{role:'user',content:json(reviewInput)}],path.join(dir,'semantic-response.json'));
           if(typeof semantic.accepted!=='boolean'||!Array.isArray(semantic.issues)) throw new Error('语义审稿响应格式无效');
-          const filteredReview=sanitizeSemanticReview(semantic);
-          if(filteredReview.filters.length) await fs.writeFile(path.join(dir,'semantic-review-filter.json'),json(filteredReview.filters));
-          semantic=filteredReview.review;
           await fs.writeFile(path.join(dir,'semantic-check.json'),json(semantic));
           if(semantic.accepted && !semantic.issues.length) {
             await fs.writeFile(path.join(dir,'layout-prompt.txt'),LAYOUT_CONTRACT);

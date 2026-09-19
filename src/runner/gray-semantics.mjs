@@ -191,66 +191,22 @@ ${SHARED_RULES.surface}正文必须能独立让读者理解必要关系，不能
 
 export const SEMANTIC_REVIEW_CONTRACT = `你是灰稿内容与表达审稿人。输入source是原稿，requirements是后台职责与必要关系，visiblePages是程序从实际渲染内容生成的上屏视图。只用visiblePages证明表达已落实；requirements不能作为上屏证据。尚未分配坐标或查看像素图。
 逐页核对事实、条件、否定和模拟性质是否完整，页面职责与归属是否成立，必要关系是否能从可见文案或图形规划直接理解。类别数量、某个连接词或页数不是表达正确的证据。仅有标题改名、主辅标签或并排放置不证明关系成立。对照、因果、依赖必须有原稿明示依据；只有并列关系时不得要求一一配对卡片或对应表。flow 只用于原文有先后线索的真实时序；并列汇聚/扇出用 diagram 的制作说明规划节点与方向，不能强造时序。整组diagram/flow/table会画已有简化草图；文字组内的非文字块是蓝框图形占位，检查它是否交代了放什么图、承载哪些内容及必要关系，不要求已经画出内部节点和箭头。局部节点短语须能在所属条目散文中逐字找到；不得跨条目摘引。图示明显有助于理解却没有规划相应位置时，指出具体理解困难；清楚的文字关系可以通过，不仅凭缺少某种媒介打回。
-准则是选择尺度，不能充当已验证的证据；并行不能写成先后；条件须对应被约束的行动。附着性内容（条件触发的处置、异常、例外）不能与主体步骤或并列要点铺成同层区域；以 kind:note 的附注块紧随所属条目、与主体条目分离层级，视为落实——该类附注由程序以 12px 小字紧随渲染（attachment=true、不编号、不占条目位），其存在即层级分离的落实，不需要文本投影另有标记；只有当附注文字本身与所属条目不符时才打回。可见条目的序号（一/二…）由程序按条目顺序添加：用它核对编号与层级是否一致，限定、前提、结果、附注等依附内容不得被编号成与主体同级的条目；序号不是模型标签，不要因为没有原稿序号或签号写法不同而拒绝。主体职责的内容必须作为实际文案或结构草图文字出现，只在蓝区制作说明中复述不算落实。条目标签必须是内容词，出现"拆分项一""对象""状态一"这类结构占位名要指出；表格行里用竖线拼接多列文字也要指出；标为流转信息的来源被上屏，或正文整句复述标题，都要指出。不要添加原稿未给出的因果、依赖或效果。引用当前可见文案指出具体缺陷；不能仅因个人偏好、估计容量或未知坐标拒绝。打回时描述"哪条关系或职责不能直读"的可读性要求，不指定具体媒介；不写 kind、attachment、表格、不编号等载体或实现指令（此类文字会被程序过滤，只留可读性描述）。同一关系只要能通过任一可用手段（文字分项、卡片、表格、流程）直读即通过。若有reviewFeedback，只复核所提问题是否实质解决，解决即通过，不追加新的媒介偏好。主题概括后正文展开是合法分工，长句机械复述和以后台解释代替组织则须修订。
+准则是选择尺度，不能充当已验证的证据；并行不能写成先后；条件须对应被约束的行动。附着性内容（条件触发的处置、异常、例外）不能与主体步骤或并列要点铺成同层区域；kind:note 附注由程序以 12px 小字紧随所属条目、不编号渲染，程序保证的只是呈现形态；限定约束的对象与作用范围（一条、多条还是整页）是否正确，仍须对照内容核对，呈现不得让读者误解约束范围。计划表示与呈现方式是否再调整，由具体缺口决定，不预先统一实现。可见条目的序号（一/二…）由程序按条目顺序添加：用它核对编号与层级是否一致，限定、前提、结果、附注等依附内容不得被编号成与主体同级的条目；序号不是模型标签，不要因为没有原稿序号或签号写法不同而拒绝。主体职责的内容必须作为实际文案或结构草图文字出现，只在蓝区制作说明中复述不算落实。条目标签必须是内容词，出现"拆分项一""对象""状态一"这类结构占位名要指出；表格行里用竖线拼接多列文字也要指出；标为流转信息的来源被上屏，或正文整句复述标题，都要指出。不要添加原稿未给出的因果、依赖或效果。引用当前可见文案指出具体缺陷；不能仅因个人偏好、估计容量或未知坐标拒绝。打回时描述"哪条关系或职责不能直读"的可读性要求；载体/媒介选择是规划层职责——你可以提出载体取向作为建议，但它不具约束力、不会被程序执行或删除；规划层可不采纳，且不采纳不构成拒绝理由，不得因载体建议未被采纳而拒绝已可直读的呈现。同一关系只要能通过任一可用手段（文字分项、卡片、表格、流程）直读即通过。若有reviewFeedback，只复核所提问题是否实质解决，解决即通过，不追加新的媒介偏好。主题概括后正文展开是合法分工，长句机械复述和以后台解释代替组织则须修订。
 声明必须恰好出现一次且不独立成组：遗漏、重复、或把模拟/假设声明单独做成一个区域都要指出。后台审查解释不得进入灰区正文；蓝区制作要求可以说明关系组织与绘制要求。若有reviewFeedback，检查是否实质解决。
 只输出JSON：{accepted:boolean,issues:[{pageId,sourceIds,problem,requiredRevision}],coverage:"逐页引用visiblePages中的具体措辞或组织，说明它怎样承担职责和关系；不能仅复述requirements",limits:"未看灰稿像素图，不能确认视觉可读性"}。`;
 
 /**
- * 审稿打回不得指定载体（评审 #44 裁决：越界指定载体计第 2 例，确定性过滤器毕业）。
- * requiredRevision 是机器可解析输出：出现具体载体/形态实现指令（kind 取值、attachment 标记、
- * note 块、表格/结构图、独立成组、不编号等）时，剥离该部分、只留可读性要求描述；
- * 关系判断（是否附着、是否同层、是否直读）保留。与内容词表无关，只判输出格式。
+ * 审稿响应记录（评审 #102 REVISE：只记不改）。审稿原文完整送达规划层并完整入档；
+ * 缺陷判断写在 problem，载体/媒介取向为建议、不具约束力，不由程序执行或删除。
  */
-const REVIEW_CARRIER_SPANS = [
-  /kind\s*[:：=＝]\s*["'“”]?(?:note|diagram|flow|chart|table|image)["'“”]?/giu,
-  /attachment\s*[:：=＝]?\s*(?:true|false)/giu,
-  /(?:note|附注)\s*块/gu,
-  /(?:蓝框|蓝区|结构图|流程图|图表|表格|卡片|媒介)/gu,
-  /(?:独立|单独)\s*(?:成组|组|区域|大栏|段落|text\s*区域)/giu,
-  /不(?:编号|占号|占条目位|占条目|参与编号)/gu,
-  /\btext\s*区域/giu,
-  /\b(?:diagram|flow|chart|table|image)\b/giu,
-];
-const REVIEW_CARRIER_TEST = new RegExp(REVIEW_CARRIER_SPANS.map(pattern => `(?:${pattern.source})`).join('|'), 'iu');
-
-/** 剥离 requiredRevision 中的载体指定；无载体时原样返回。filtered=true 时 removed 为被剥离片段。 */
-export function sanitizeRequiredRevision(value) {
-  const original = String(value ?? '');
-  if (!original || !REVIEW_CARRIER_TEST.test(original)) return { text: original, filtered: false, removed: [] };
-  const removed = [];
-  let text = original.replace(/[（(][^（）()]*[）)]/gu, match => {
-    if (!REVIEW_CARRIER_TEST.test(match)) return match;
-    removed.push(match);
-    return '';
-  });
-  for (const pattern of REVIEW_CARRIER_SPANS) {
-    text = text.replace(pattern, match => { removed.push(match); return ''; });
-  }
-  text = text
-    .replace(/以\s*的\s*/gu, '')
-    .replace(/而不是作为[^，。；]*?(?=与|并列|铺开)/gu, '而不是')
-    .replace(/(?:与|和)\s+(?=并列|铺开|同层)/gu, '与')
-    .replace(/\s{2,}/gu, ' ')
-    .replace(/([，,、；;])\s*(?=[，,、；;])/gu, '')
-    .replace(/^[\s，,、；;。]+/u, '')
-    .replace(/[\s，,、；;]+$/u, '')
-    .replace(/([，,、；;。])\s*([。])/gu, '$2');
-  if (text.replace(/[^\p{L}\p{N}]/gu, '').length < 4) return { text: original, filtered: false, removed: [] };
-  return { text, filtered: true, removed: [...new Set(removed)] };
-}
-
-/** 审稿响应级过滤：逐条保留可读性描述，original 仅供入档，不回传给模型。 */
-export function sanitizeSemanticReview(review) {
-  if (!review || typeof review !== 'object' || !Array.isArray(review.issues)) return { review, filters: [] };
-  const filters = [];
-  const issues = review.issues.map(issue => {
-    if (!issue || typeof issue.requiredRevision !== 'string') return issue;
-    const sanitized = sanitizeRequiredRevision(issue.requiredRevision);
-    if (!sanitized.filtered) return issue;
-    filters.push({ pageId: issue.pageId ?? null, original: issue.requiredRevision, filtered: sanitized.text, removed: sanitized.removed });
-    return { ...issue, requiredRevision: sanitized.text };
-  });
-  return { review: { ...review, issues }, filters };
+export function snapshotSemanticReview(review) {
+  if (!review || typeof review !== 'object') return { accepted: false, issues: [], coverage: null, limits: null };
+  return {
+    accepted: Boolean(review.accepted),
+    issues: Array.isArray(review.issues) ? review.issues : [],
+    coverage: review.coverage ?? null,
+    limits: review.limits ?? null,
+  };
 }
 
 export const LAYOUT_CONTRACT = `你是页面基础排版选择者。内容已检查，不再判断因果或重写内容，只选择空间组合。
