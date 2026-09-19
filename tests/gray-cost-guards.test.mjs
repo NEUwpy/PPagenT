@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import { attemptFingerprint, isStalledRetry, categoryCues, samePageCues, splitGate, SEMANTIC_REVIEW_CONTRACT, regionBody, grayDisplayBlocks, planTextVolume, isSameMinimumRetry, validateSemanticPlan } from '../src/runner/gray-semantics.mjs';
 import { resolveGrayLayout, compressionMemory } from '../src/runner/gray-layout.mjs';
-import { grayBodyLayout, fitGrayText } from '../src/runner/gray-draft.mjs';
+import { grayBodyLayout, fitGrayText, structurePlaceholderHeight } from '../src/runner/gray-draft.mjs';
 import { newRunState } from '../src/runner/state.mjs';
 
 const metrics = { measureBody: grayBodyLayout, fitText: fitGrayText };
@@ -166,6 +166,25 @@ test('蓝注解耦：块级附注独立 12px 小字，与主文字号互不锁�
   assert.equal(noteRuns.length, 1);
   assert.equal(noteRuns[0].fontSize, 12);
   assert.ok(textRuns.every(run => run.fontSize === 18));
+});
+
+test('结构位真占位：占位高按类型与节点数（与描述文字长度无关），装不下降一句', () => {
+  assert.equal(structurePlaceholderHeight('diagram', 3), 108);
+  assert.equal(structurePlaceholderHeight('diagram', 4), 188);
+  assert.equal(structurePlaceholderHeight('diagram', 7), 268);
+  assert.equal(structurePlaceholderHeight('flow', 4), 108);
+  const group = { id: 'g1', kind: 'text', heading: '两点不足', blocks: [
+    { id: 'b1', label: '势能到动能阻力重重', text: '完成顶层设计后，变革落地就是关键。现阶段变革氛围尚未完全形成，造成落地阻力重重。' },
+    { id: 'bn', text: '变革氛围尚未完全形成／信息系统支撑能力存在差距／缺乏市场化机制／变革落地阻力重重', kind: 'diagram', expression: '三因汇聚', relationship: '三因一果', production: '三框一果' },
+  ] };
+  const body = grayBodyLayout(group, 426, 18);
+  const placeholder = body.sections.find(section => section.placeholder);
+  assert.equal(placeholder.minHeight, structurePlaceholderHeight('diagram', 4));
+  // 描述很长、占位较矮（flow）时降为一句
+  group.blocks[1].kind = 'flow';
+  group.blocks[1].expression = '把三项内部成因汇聚到同一后果的因果关系画出来，供读者直读阻力来源。'.repeat(3);
+  const brief = grayBodyLayout(group, 426, 18);
+  assert.ok(brief.runs.some(run => run.kind === 'flow' && run.text === '本条先画结构图'), JSON.stringify(brief.runs));
 });
 
 test('同最小高重试：实测高未降且文本未缩短才拒绝；缩短或降高均放行', () => {

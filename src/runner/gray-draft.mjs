@@ -41,6 +41,20 @@ export function fitGrayText(text, width, height, fontSize) {
 }
 
 // Capacity checking and rendering share this exact internal text layout.
+// 结构位真占位（评审 #34/任务 #75，用户拍板）：占位面积＝构造图面积（按类型与节点数），不再按描述文字高度。
+const PLACEHOLDER_NODE_H = 64, PLACEHOLDER_GAP = 16, PLACEHOLDER_ARROW = 28, PLACEHOLDER_PAD = 16;
+export function structurePlaceholderHeight(kind, nodeCount) {
+  const count = Math.max(1, Math.floor(Number(nodeCount) || 1));
+  if (kind === 'flow') return PLACEHOLDER_NODE_H + PLACEHOLDER_ARROW + PLACEHOLDER_PAD;
+  if (kind === 'table') return count * 36 + PLACEHOLDER_PAD;
+  const columns = 3;
+  const rows = Math.max(1, Math.ceil(count / columns));
+  return rows * PLACEHOLDER_NODE_H + (rows - 1) * PLACEHOLDER_GAP + PLACEHOLDER_ARROW + PLACEHOLDER_PAD;
+}
+
+const placeholderNodeCount = text => Math.max(2, String(text ?? '').split(/[／/]|→|->/u).map(segment => segment.trim()).filter(Boolean).length);
+const BRIEF_NOTE = '本条先画结构图';
+
 export function grayBodyLayout(item, width, fontSize, availableHeight) {
   if (SKETCH_KINDS.has(item.kind) && Array.isArray(item.blocks) && item.blocks.length) {
     return sketchBodyLayout(item, width, fontSize, availableHeight);
@@ -56,9 +70,9 @@ export function grayBodyLayout(item, width, fontSize, availableHeight) {
       const kind=block.kind ?? 'text';
       const sectionFont=kind!=='text'?Math.min(fontSize,NOTE_FONT):fontSize;
       const ordinal=kind==='text'&&block.label&&labeledCount>=2?++labeledIndex:0;
-      return {kind,fontSize:sectionFont,parts:grayDisplayBlocks({kind:'text',blocks:[block]},ordinal?{ordinal}:{})};
+      return {kind,fontSize:sectionFont,placeholder:kind!=='text',parts:grayDisplayBlocks({kind:'text',blocks:[block]},ordinal?{ordinal}:{})};
     })
-    : [{kind:item.kind,fontSize,parts:grayDisplayBlocks(item)}];
+    : [{kind:item.kind,fontSize,placeholder:false,parts:grayDisplayBlocks(item)}];
   const contracts={};
   const measured=sections.map((section,index)=>{
     const parts=section.parts.map(part=>{
@@ -66,9 +80,19 @@ export function grayBodyLayout(item, width, fontSize, availableHeight) {
       return {...part,text:fit.text,height:fit.lineCount*section.fontSize*1.35,fits:fit.fits,fontSize:section.fontSize};
     });
     const id=`section-${index}`;
-    const minHeight=Math.ceil(parts.reduce((sum,part)=>sum+part.height,0)+labelGap*(parts.length-1)+2*padding);
+    // 结构位真占位（任务 #75）：占位高＝构造图面积；描述文字装不下时降为一句「本条先画结构图」。
+    const placeholder=section.placeholder;
+    let minHeight=Math.ceil(parts.reduce((sum,part)=>sum+part.height,0)+labelGap*(parts.length-1)+2*padding);
+    if(placeholder){
+      minHeight=structurePlaceholderHeight(section.kind,placeholderNodeCount(section.parts.map(part=>part.text).join('／')));
+      const fullFits=parts.every(part=>fitGrayText(part.text,width-2*padding,minHeight-2*padding,part.fontSize??section.fontSize).fits);
+      if(!fullFits){
+        for(const part of parts) part.text=BRIEF_NOTE;
+        parts.forEach(part=>{const fit=fitGrayText(part.text,width-2*padding,100000,part.fontSize??section.fontSize);part.text=fit.text;part.height=fit.lineCount*(part.fontSize??section.fontSize)*1.35;part.fits=fit.fits;});
+      }
+    }
     contracts[id]={minWidth:width,minHeight};
-    return {id,kind:section.kind,parts,minHeight};
+    return {id,kind:section.kind,placeholder,parts,minHeight};
   });
   const minimum=measured.reduce((sum,section)=>sum+section.minHeight,0)+gap*(measured.length-1);
   const children=measured.map(section=>({groupId:section.id}));
@@ -102,7 +126,7 @@ export function grayBodyLayout(item, width, fontSize, availableHeight) {
       runs.push({text:part.text,x:padding,y,width:width-2*padding,height:part.height,bold:part.bold,fits:part.fits,fontSize:part.fontSize,...(part.kind?{kind:part.kind}:{})});
       y+=part.height+labelGap;
     }
-    return {...frame,kind:section.kind,id:section.id,minHeight:section.minHeight};
+    return {...frame,kind:section.kind,id:section.id,minHeight:section.minHeight,...(section.placeholder?{placeholder:true}:{})};
   });
   return {runs,sections:frames,height:target,minimumHeight:minimum,fits:runs.every(r=>r.fits)};
 }
@@ -260,13 +284,21 @@ export async function renderGrayDraft(state, output) {
       const body=grayBodyLayout(item,region.width-32,region.fontSize,region.height-70);
       for(const section of body.sections){
         const sketch=section.kind==='card'||section.kind==='node'||section.kind==='row';
+        const placeholder=Boolean(section.placeholder);
         slide.shapes.add({
           geometry:section.kind==='node'?'roundRect':'rect',
           name:`block:${item.id}:${section.id}`,
           position:{left:left+16+section.left,top:top+54+section.top,width:section.width,height:section.height},
-          fill:section.kind==='text'?'#ECEEEF':sketch?'#FFFFFF':'#E1EFF9',
-          line:sketch?{fill:section.kind==='row'?'#D4D8DC':'#B9C4CF',width:1}:{fill:'none',width:0},
+          fill:placeholder?'#DCEBF7':section.kind==='text'?'#ECEEEF':sketch?'#FFFFFF':'#E1EFF9',
+          line:placeholder?{fill:'#B9C4CF',width:1}:sketch?{fill:section.kind==='row'?'#D4D8DC':'#B9C4CF',width:1}:{fill:'none',width:0},
         });
+        // 灰蓝条纹（任务 #75）：结构图真实占位状态，终稿时该区由图填充。
+        if(placeholder){
+          const band=10, step=20;
+          for(let y=0;y+band<=section.height-2;y+=step){
+            slide.shapes.add({geometry:'rect',name:`stripe:${item.id}:${section.id}:${y}`,position:{left:left+16+section.left+1.5,top:top+54+section.top+1.5+y,width:section.width-3,height:band},fill:'#ECEEEF',line:{fill:'none',width:0}});
+          }
+        }
       }
       for(const connector of body.connectors??[]){
         if(connector.type==='rightArrow') slide.shapes.add({geometry:'rightArrow',name:`connector:${item.id}`,position:{left:left+16+connector.left,top:top+54+connector.top,width:connector.width,height:connector.height},fill:'#9AA7B4',line:{fill:'none',width:0}});
