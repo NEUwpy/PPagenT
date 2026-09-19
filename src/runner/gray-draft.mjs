@@ -46,18 +46,24 @@ export function grayBodyLayout(item, width, fontSize, availableHeight) {
     return sketchBodyLayout(item, width, fontSize, availableHeight);
   }
   const padding=8, gap=12, labelGap=4;
-  // 条目编号（评审 #25）：逐块测量路径传入序号，与组级投影（grayDisplayBlocks）保持同一编号。
+  // 蓝注解耦（评审 #32，用户拍板）：块级结构位附注独立小字（12px），与主文互不锁死；无行数限制。
+  const NOTE_FONT=12;
+  // 条目编号（评审 #25/#32）：逐块测量路径与组级投影同序；仅带标签条目参与编号，附注块不编号。
   const labeledCount=item.kind==='text' && item.blocks ? item.blocks.filter(block=>block.label).length : 0;
+  let labeledIndex=0;
   const sections=item.kind==='text' && item.blocks
-    ? item.blocks.map((block,index)=>({kind:block.kind ?? 'text',parts:grayDisplayBlocks({kind:'text',blocks:[block]},labeledCount>=2?{ordinal:index+1}:{})}))
-    : [{kind:item.kind,parts:grayDisplayBlocks(item)}];
+    ? item.blocks.map(block=>{
+      const kind=block.kind ?? 'text';
+      const sectionFont=kind!=='text'?Math.min(fontSize,NOTE_FONT):fontSize;
+      const ordinal=block.label&&labeledCount>=2?++labeledIndex:0;
+      return {kind,fontSize:sectionFont,parts:grayDisplayBlocks({kind:'text',blocks:[block]},ordinal?{ordinal}:{})};
+    })
+    : [{kind:item.kind,fontSize,parts:grayDisplayBlocks(item)}];
   const contracts={};
   const measured=sections.map((section,index)=>{
     const parts=section.parts.map(part=>{
-      const fit=fitGrayText(part.text,width-2*padding,100000,fontSize);
-      // 结构位附注单行（评审 #29）：同页形态降档（≤20px）的块级蓝附注超过一行即判不 fits。
-      const multiline=Boolean(part.kind && part.kind!=='text' && fontSize<=20 && fit.lineCount>1);
-      return {...part,text:fit.text,height:fit.lineCount*fontSize*1.35,fits:fit.fits&&!multiline};
+      const fit=fitGrayText(part.text,width-2*padding,100000,section.fontSize);
+      return {...part,text:fit.text,height:fit.lineCount*section.fontSize*1.35,fits:fit.fits,fontSize:section.fontSize};
     });
     const id=`section-${index}`;
     const minHeight=Math.ceil(parts.reduce((sum,part)=>sum+part.height,0)+labelGap*(parts.length-1)+2*padding);
@@ -93,7 +99,7 @@ export function grayBodyLayout(item, width, fontSize, availableHeight) {
     // 旧版按块内居中偏移，单块内容少时文字悬在中下部、看起来像"说明"而不是内容。
     let y=frame.top+padding;
     for(const part of section.parts){
-      runs.push({text:part.text,x:padding,y,width:width-2*padding,height:part.height,bold:part.bold,fits:part.fits,...(part.kind?{kind:part.kind}:{})});
+      runs.push({text:part.text,x:padding,y,width:width-2*padding,height:part.height,bold:part.bold,fits:part.fits,fontSize:part.fontSize,...(part.kind?{kind:part.kind}:{})});
       y+=part.height+labelGap;
     }
     return {...frame,kind:section.kind,id:section.id,minHeight:section.minHeight};
@@ -208,18 +214,12 @@ export function validateGrayPlan(base, plan, area) {
         if (!KINDS.includes(item.kind) || !requiredText(item.heading) || !requiredText(item.text)) throw new Error(`${item.id} 缺少 kind/heading/text`);
         if (item.kind !== 'text' && ['expression', 'relationship', 'production'].some(k => !requiredText(item[k]))) throw new Error(`${item.id} 缺少非文字区四要素`);
         const { x, y, width, height, fontSize } = region;
-        if (![x, y, width, height, fontSize].every(Number.isFinite) || width < 100 || height < 80 || fontSize < 15 || fontSize > 28) throw new Error(`${item.id} 几何/字号非法，正文必须 15..28px（同页双容器形态可降档至 15–20px，其余形态 22px 起）`);
+        if (![x, y, width, height, fontSize].every(Number.isFinite) || width < 100 || height < 80 || fontSize < 12 || fontSize > 28) throw new Error(`${item.id} 几何/字号非法，正文必须 12..28px（同页双容器可逐档降档；蓝附注独立 12px 小字）`);
         if (x < 0 || y < 0 || x + width > area.width + .1 || y + height > area.height + .1) issues.push({ code: 'region-outside', pageId: page.pageId, itemId: item.id });
         const heading = fitGrayText(item.heading, width - 32, 40, 26);
         if (item.blocks && item.text !== item.blocks.map(blockText).join('\n')) throw new Error(`${item.id} 正文与内部结构不一致`);
         const body = grayBodyLayout(item, width - 32, fontSize);
         if (!heading.fits || !body.fits || body.height > height-70) issues.push({ headingFits:heading.fits, headingLines:heading.lineCount, headingMaxLines:1, bodyFits:body.fits && body.height<=height-70, code: 'text-capacity', pageId: page.pageId, itemId: item.id, requiredBodyHeight: Math.ceil(body.height + 70), actualHeight: height });
-        // 结构位附注单行（评审 #29）：同页形态降档档（≤20px）的块级蓝附注超过一行给出可操作反馈。
-        if (fontSize <= 20) for (const run of body.runs) {
-          if (run.kind && run.kind !== 'text' && run.height > fontSize * 1.35 * 1.5) {
-            issues.push({ code: 'structure-note-multiline', pageId: page.pageId, itemId: item.id, requiredRevision: '结构位附注须单行：缩短关系一句与摘引短语（可省虚词，不改事实）' });
-          }
-        }
       }
       if (seen.size !== page.items.length) issues.push({ code: 'unrendered-items', pageId: page.pageId });
       for (let i = 0; i < regions.length; i++) for (let j = i + 1; j < regions.length; j++) {
@@ -272,7 +272,7 @@ export async function renderGrayDraft(state, output) {
         if(connector.type==='rightArrow') slide.shapes.add({geometry:'rightArrow',name:`connector:${item.id}`,position:{left:left+16+connector.left,top:top+54+connector.top,width:connector.width,height:connector.height},fill:'#9AA7B4',line:{fill:'none',width:0}});
       }
       for (const run of body.runs) {
-        draw(slide,run.text,{left:left+16+run.x,top:top+54+run.y,width:run.width,height:run.height},region.fontSize,run.bold);
+        draw(slide,run.text,{left:left+16+run.x,top:top+54+run.y,width:run.width,height:run.height},run.fontSize??region.fontSize,run.bold);
       }
     }
 

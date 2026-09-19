@@ -134,18 +134,38 @@ test('附注最小化：关系一句＋摘引短语，与 rules/排版.md 同步
   assert.equal(regionBody(block), '本条建议画结构图：三因并列、箭头汇聚指向结果框「变革落地阻力重重」；节点短语（摘引）：变革氛围尚未完全形成／信息系统支撑能力仍有差距／缺乏市场化管理机制。');
   assert.doesNotMatch(regionBody(block), /作:|承:|关:|制:/u);
   const rules = await fs.readFile(new URL('../rules/排版.md', import.meta.url), 'utf8');
-  assert.match(rules, /本条建议画结构图：关系一句；节点短语（摘引）：…/u);
+  assert.match(rules, /结构图占位说明，独立小字 12–15px、不限行数/u);
 });
 
-test('条目编号标签：按实际顺序、跳条不串号；单条目组不编号', () => {
+test('条目编号标签：按带标签条目顺序、附注不占号；单条目组不编号', () => {
   const group = { id: 'g1', kind: 'text', heading: '两点不足', blocks: [
     { id: 'b1', label: '第一条', text: '甲。' },
     { id: 'b2', text: '无标签条目。' },
     { id: 'b3', label: '第三条', text: '丙。' },
   ] };
-  assert.deepEqual(grayDisplayBlocks(group).filter(run => run.bold).map(run => run.text), ['一 第一条', '三 第三条']);
-  const single = { id: 'g2', kind: 'text', blocks: [{ id: 'b1', label: '唯一条目', text: '甲。' }] };
+  assert.deepEqual(grayDisplayBlocks(group).filter(run => run.bold).map(run => run.text), ['一 第一条', '二 第三条']);
+  const withNote = { id: 'g2', kind: 'text', heading: '两点不足', blocks: [
+    { id: 'b1', label: '势能', text: '甲。' },
+    { id: 'bn', text: '本条先画结构图', kind: 'diagram', expression: '汇聚', relationship: '三因一果', production: '三框一果' },
+    { id: 'b2', label: '合规', text: '乙。' },
+    { id: 'bn2', text: '本条先画结构图', kind: 'diagram', expression: '扇出', relationship: '一源四项', production: '一排四框' },
+  ] };
+  assert.deepEqual(grayDisplayBlocks(withNote).filter(run => run.bold).map(run => run.text), ['一 势能', '二 合规']);
+  const single = { id: 'g3', kind: 'text', blocks: [{ id: 'b1', label: '唯一条目', text: '甲。' }] };
   assert.deepEqual(grayDisplayBlocks(single).filter(run => run.bold).map(run => run.text), ['唯一条目']);
+});
+
+test('蓝注解耦：块级附注独立 12px 小字，与主文字号互不锁死', () => {
+  const group = { id: 'g1', kind: 'text', heading: '两点不足', blocks: [
+    { id: 'b1', label: '势能到动能阻力重重', text: '完成顶层设计后，变革落地就是关键。现阶段变革氛围尚未完全形成。' },
+    { id: 'bn', text: '变革氛围尚未完全形成／信息系统支撑能力存在差距／缺乏市场化机制', kind: 'diagram', expression: '三因汇聚到结果', relationship: '三项原因共同造成落地阻力', production: '三框一果箭头图' },
+  ] };
+  const body = grayBodyLayout(group, 426, 18);
+  const noteRuns = body.runs.filter(run => run.kind === 'diagram');
+  const textRuns = body.runs.filter(run => !run.kind);
+  assert.equal(noteRuns.length, 1);
+  assert.equal(noteRuns[0].fontSize, 12);
+  assert.ok(textRuns.every(run => run.fontSize === 18));
 });
 
 test('同最小高重试：实测高未降且文本未缩短才拒绝；缩短或降高均放行', () => {
