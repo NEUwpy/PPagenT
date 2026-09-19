@@ -1,0 +1,47 @@
+{
+  "stopReason": "max-turns",
+  "detail": null,
+  "note": "已达 10 轮上限，阶段未提交。",
+  "turns": 10,
+  "usage": {
+    "requests": 10,
+    "toolCalls": 26,
+    "tokens": {
+      "prompt_tokens": 50107,
+      "completion_tokens": 873,
+      "total_tokens": 50980,
+      "prompt_cache_hit_tokens": 43392,
+      "prompt_cache_miss_tokens": 6715
+    }
+  },
+  "toolCallCount": 26,
+  "stalledTurns": 0,
+  "toolSequence": [
+    "read_gray",
+    "list_structures",
+    "list_structures",
+    "list_structures",
+    "list_structures",
+    "list_structures",
+    "list_structures",
+    "list_structures",
+    "list_structures",
+    "list_structures",
+    "list_structures",
+    "list_structures",
+    "list_structures",
+    "list_structures",
+    "list_structures",
+    "list_structures",
+    "list_structures",
+    "list_structures",
+    "list_structures",
+    "list_structures",
+    "list_structures",
+    "list_structures",
+    "list_structures",
+    "list_structures",
+    "list_structures",
+    "list_structures"
+  ]
+}
