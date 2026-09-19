@@ -41,12 +41,13 @@ export function fitGrayText(text, width, height, fontSize) {
 }
 
 // Capacity checking and rendering share this exact internal text layout.
-// 结构位真占位（评审 #34/任务 #75，用户拍板）：占位面积＝构造图面积（按类型与节点数），不再按描述文字高度。
-const PLACEHOLDER_NODE_H = 64, PLACEHOLDER_GAP = 16, PLACEHOLDER_ARROW = 28, PLACEHOLDER_PAD = 16;
+// 结构位真占位（任务 #75/#79）：占位面积＝构造图面积；参数按范本 06 真实图形校准（评审 #34：
+// 三因汇聚/扇出 各约 140px 设计像素，约为两行满高框的 0.74——不再高估）。
+const PLACEHOLDER_NODE_H = 48, PLACEHOLDER_GAP = 12, PLACEHOLDER_ARROW = 16, PLACEHOLDER_PAD = 16;
 export function structurePlaceholderHeight(kind, nodeCount) {
   const count = Math.max(1, Math.floor(Number(nodeCount) || 1));
   if (kind === 'flow') return PLACEHOLDER_NODE_H + PLACEHOLDER_ARROW + PLACEHOLDER_PAD;
-  if (kind === 'table') return count * 36 + PLACEHOLDER_PAD;
+  if (kind === 'table') return count * 28 + PLACEHOLDER_PAD;
   const columns = 3;
   const rows = Math.max(1, Math.ceil(count / columns));
   return rows * PLACEHOLDER_NODE_H + (rows - 1) * PLACEHOLDER_GAP + PLACEHOLDER_ARROW + PLACEHOLDER_PAD;

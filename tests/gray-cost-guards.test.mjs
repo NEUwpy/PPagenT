@@ -168,11 +168,11 @@ test('蓝注解耦：块级附注独立 12px 小字，与主文字号互不锁�
   assert.ok(textRuns.every(run => run.fontSize === 18));
 });
 
-test('结构位真占位：占位高按类型与节点数（与描述文字长度无关），装不下降一句', () => {
-  assert.equal(structurePlaceholderHeight('diagram', 3), 108);
-  assert.equal(structurePlaceholderHeight('diagram', 4), 188);
-  assert.equal(structurePlaceholderHeight('diagram', 7), 268);
-  assert.equal(structurePlaceholderHeight('flow', 4), 108);
+test('结构位真占位：占位高按类型与节点数（范本校准），与描述文字长度无关', () => {
+  assert.equal(structurePlaceholderHeight('diagram', 3), 80);
+  assert.equal(structurePlaceholderHeight('diagram', 4), 140);
+  assert.equal(structurePlaceholderHeight('diagram', 7), 200);
+  assert.equal(structurePlaceholderHeight('flow', 4), 80);
   const group = { id: 'g1', kind: 'text', heading: '两点不足', blocks: [
     { id: 'b1', label: '势能到动能阻力重重', text: '完成顶层设计后，变革落地就是关键。现阶段变革氛围尚未完全形成，造成落地阻力重重。' },
     { id: 'bn', text: '变革氛围尚未完全形成／信息系统支撑能力存在差距／缺乏市场化机制／变革落地阻力重重', kind: 'diagram', expression: '三因汇聚', relationship: '三因一果', production: '三框一果' },
