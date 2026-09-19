@@ -89,19 +89,13 @@ export function compressionMemory({ currentMinimum, areaHeight, previousMinimum 
 }
 
 const REWEIGHT_MAX = 8;
-/** 同页双容器单栏占比参照带（评审 #24）：内容量导向但禁止 [2,7] 式极化，范本观感约 50/50。 */
-const FORM_SHARE_MIN = 0.30;
-const FORM_SHARE_MAX = 0.65;
-
-/** 候选权重（1..8 整数比），按与给定比例的距离排序；可选占比约束（同页双容器参照带）。 */
-function weightCandidates(baseWeights, { shareMin = 0, shareMax = 1 } = {}) {
+/** 候选权重按距模型选择的比例排序；边界由标题、正文与可用区域的实际测量决定。 */
+function weightCandidates(baseWeights) {
   const base = Array.isArray(baseWeights) ? baseWeights : [1, 1];
   const baseRatio = base[0] / (base[0] + base[1]);
   const candidates = [];
   for (let a = 1; a <= REWEIGHT_MAX; a += 1) for (let b = 1; b <= REWEIGHT_MAX; b += 1) {
-    if (a === b) continue;
     const share = a / (a + b);
-    if (share < shareMin || share > shareMax) continue;
     candidates.push({ weights: [a, b], distance: Math.abs(share - baseRatio) });
   }
   candidates.sort((x, y) => x.distance - y.distance);
@@ -127,30 +121,32 @@ function measureContracts(tree, page, area, metrics, fontSize) {
 
 const isDualRow = tree => tree.op === 'row' && tree.children.length === 2 && tree.children.every(child => child.groupId);
 
-/**
- * 同页双容器形态的测量式选择（评审 #22 裁决三）：字号在给定候选内择优——
- * 先取满足 ≥5% 余量的最大字号，其次取能容纳的，最后落在候选末档（底线由候选列表保证）；
- * 权重在同一扫描里按实测最小高选择（无稿件特例）。
- */
-function pickFormLayout(tree, page, area, metrics, fonts) {
+/** 按所有页共用的候选字号测量；双栏同时尝试宽度比例，其余组合保留模型选择的形状。 */
+function pickMeasuredLayout(tree, page, area, metrics, fonts) {
   const margin = area.height * 0.95;
+  const choices = isDualRow(tree)
+    ? [{ weights: tree.weights ?? [1, 1], distance: 0 }, ...weightCandidates(tree.weights)]
+    : [{ distance: 0 }];
   const candidates = [];
-  for (const fontSize of fonts) for (const candidate of weightCandidates(tree.weights, { shareMin: FORM_SHARE_MIN, shareMax: FORM_SHARE_MAX })) {
-    const candidateTree = { ...tree, weights: candidate.weights };
+  for (const fontSize of fonts) for (const candidate of choices) {
+    const candidateTree = candidate.weights ? { ...tree, weights: candidate.weights } : tree;
     const contracts = measureContracts(candidateTree, page, area, metrics, fontSize);
     if (!contracts) continue;
-    const maxHeight = Math.max(...Object.values(contracts).map(entry => entry.minHeight));
-    candidates.push({ fontSize, weights: candidate.weights, tree: candidateTree, maxHeight, distance: candidate.distance });
+    const composition = candidateTree.op === 'single' ? candidateTree.children[0] : candidateTree;
+    let minimum;
+    try {
+      minimum = resolveLayoutTree({ composition, bodyFrame: { left: 0, top: 0, width: area.width, height: area.height }, contracts, style: { gap: GAP } }).minimum;
+    } catch (error) {
+      if (error.code !== 'COMPOSITION_RECOMPOSE_REQUIRED') throw error;
+      minimum = error.details?.minimum;
+    }
+    if (!minimum || !Number.isFinite(minimum.height)) continue;
+    candidates.push({ fontSize, weights: candidate.weights, tree: candidateTree, maxHeight: minimum.height, distance: candidate.distance });
   }
-  if (!candidates.length) return null;
   const bestOf = fontSize => candidates.filter(entry => entry.fontSize === fontSize).sort((x, y) => x.maxHeight - y.maxHeight || x.distance - y.distance)[0];
-  for (const fontSize of fonts) {
+  for (const limit of [margin, area.height]) for (const fontSize of fonts) {
     const best = bestOf(fontSize);
-    if (best && best.maxHeight <= margin) return best;
-  }
-  for (const fontSize of fonts) {
-    const best = bestOf(fontSize);
-    if (best && best.maxHeight <= area.height) return best;
+    if (best && best.maxHeight <= limit) return best;
   }
   return bestOf(fonts[fonts.length - 1]) ?? null;
 }
@@ -160,9 +156,9 @@ function pickFormLayout(tree, page, area, metrics, fonts) {
  * 用真实测量函数扫描候选分栏，取第一个能容纳的权重。候选只改 row 的 weights（形状不变），
  * 以测量为准、不硬编码稿件特例；命中后回执标注 reweighted 供成本与覆盖分析。
  */
-function reweightedRow(tree, page, area, metrics, fontSize = 22, share = {}) {
+function reweightedRow(tree, page, area, metrics, fontSize = 22) {
   if (tree.op !== 'row' || tree.children.length !== 2 || tree.children.some(child => !child.groupId)) return null;
-  for (const candidate of weightCandidates(tree.weights, share)) {
+  for (const candidate of weightCandidates(tree.weights)) {
     const weights = candidate.weights;
     const candidateTree = { ...tree, weights };
     try {
@@ -190,9 +186,10 @@ export function resolveGrayLayout(plan, selection, area, { measureBody, fitText,
     let fontSize = 22;
     let formPick = null;
     const fontCandidates = typeof fontSizes === 'function' ? fontSizes(page, tree) : null;
-    const formActive = isDualRow(tree) && Array.isArray(fontCandidates) && fontCandidates.length > 1;
+    const formActive = Array.isArray(fontCandidates) && fontCandidates.length > 0;
+    if (formActive && fontCandidates.some(size => !Number.isFinite(size) || size < 12 || size > 28)) throw new Error('字号候选必须位于 12..28px');
     if (formActive) {
-      formPick = pickFormLayout(tree, page, area, { measureBody, fitText }, fontCandidates);
+      formPick = pickMeasuredLayout(tree, page, area, { measureBody, fitText }, [...new Set(fontCandidates)].sort((a, b) => b - a));
       if (formPick) { tree = formPick.tree; fontSize = formPick.fontSize; }
     }
     const widthsById = estimateLeafWidths(tree, area.width);
@@ -208,8 +205,8 @@ export function resolveGrayLayout(plan, selection, area, { measureBody, fitText,
     }
     let composition = tree.op === 'single' ? tree.children[0] : tree;
     const baseWeights = Array.isArray(choice.weights) ? choice.weights : null;
-    let receiptLayout = formPick ? { ...structuredClone(choice), weights: formPick.weights } : choice;
-    let reweighted = formPick && JSON.stringify(formPick.weights) !== JSON.stringify(baseWeights)
+    let receiptLayout = formPick?.weights ? { ...structuredClone(choice), weights: formPick.weights } : choice;
+    let reweighted = formPick?.weights && JSON.stringify(formPick.weights) !== JSON.stringify(baseWeights)
       ? { from: baseWeights, to: formPick.weights }
       : null;
     let solved;
@@ -217,12 +214,12 @@ export function resolveGrayLayout(plan, selection, area, { measureBody, fitText,
       solved = resolveLayoutTree({ composition, bodyFrame: { left: 0, top: 0, width: area.width, height: area.height }, contracts, style: { gap: GAP } });
     } catch (error) {
       if (error.code !== 'COMPOSITION_RECOMPOSE_REQUIRED') throw error;
-      const attempt = reweightedRow(tree, page, area, { measureBody, fitText }, fontSize, formActive ? { shareMin: FORM_SHARE_MIN, shareMax: FORM_SHARE_MAX } : {});
+      const attempt = reweightedRow(tree, page, area, { measureBody, fitText }, fontSize);
       if (!attempt) {
         // 容量只报"需要重组"不足以让模型收敛：给出实测最小尺寸与出路（合组/精简/分页）。
         const minimum = error.details?.minimum;
         throw new CompositionFitError(
-          `一页放不下：该页最小可读尺寸约 ${Math.ceil(minimum?.width ?? 0)}×${Math.ceil(minimum?.height ?? 0)}，正文区 ${area.width}×${area.height}（超出约 ${Math.max(0, Math.ceil((minimum?.height ?? 0) - area.height))}px）。先在本页内解决：改更省空间的组合（同排多栏、规则网格），合并同归属的组，按原稿允许的提炼压紧冗词（不丢必要内容）。仍放不下时按真实归属边界整块分页（整个分支或整个条目组一起移动），不要按条目打散、把同一分支拆到多页。修订后直接重试渲染，不要反复跑检查工具空转。`,
+          `一页放不下：该页最小可读尺寸约 ${Math.ceil(minimum?.width ?? 0)}×${Math.ceil(minimum?.height ?? 0)}，正文区 ${area.width}×${area.height}（超出约 ${Math.max(0, Math.ceil((minimum?.height ?? 0) - area.height))}px）。先在本页内解决：改更省空间的组合（同排多栏、规则网格），合并同归属的组，按原稿允许的提炼压紧冗词（不丢必要内容）。仍放不下时按真实语义边界分页，跨页仍保留类别与条目归属、必要条件和准确的本页标题。修订后直接重试渲染，不要反复跑检查工具空转。`,
           { pageId: page.pageId, layout: choice, minimum, available: { width: area.width, height: area.height }, groupCapacities: contracts },
         );
       }

@@ -41,8 +41,7 @@ export function fitGrayText(text, width, height, fontSize) {
 }
 
 // Capacity checking and rendering share this exact internal text layout.
-// 结构位真占位（任务 #75/#79）：占位面积＝构造图面积；参数按范本 06 真实图形校准（评审 #34：
-// 三因汇聚/扇出 各约 140px 设计像素，约为两行满高框的 0.74——不再高估）。
+// 结构位按媒介和节点数估算预留高度，适用于任意条目；这是制作前容量估算，最终构图仍须复核。
 const PLACEHOLDER_NODE_H = 48, PLACEHOLDER_GAP = 12, PLACEHOLDER_ARROW = 16, PLACEHOLDER_PAD = 16;
 export function structurePlaceholderHeight(kind, nodeCount) {
   const count = Math.max(1, Math.floor(Number(nodeCount) || 1));
@@ -260,7 +259,7 @@ export function validateGrayPlan(base, plan, area) {
         if (!KINDS.includes(item.kind) || !requiredText(item.heading) || !requiredText(item.text)) throw new Error(`${item.id} 缺少 kind/heading/text`);
         if (item.kind !== 'text' && ['expression', 'relationship', 'production'].some(k => !requiredText(item[k]))) throw new Error(`${item.id} 缺少非文字区四要素`);
         const { x, y, width, height, fontSize } = region;
-        if (![x, y, width, height, fontSize].every(Number.isFinite) || width < 100 || height < 80 || fontSize < 12 || fontSize > 28) throw new Error(`${item.id} 几何/字号非法，正文必须 12..28px（同页双容器可逐档降档；蓝附注独立 12px 小字）`);
+        if (![x, y, width, height, fontSize].every(Number.isFinite) || width < 100 || height < 80 || fontSize < 12 || fontSize > 28) throw new Error(`${item.id} 几何/字号非法，正文必须 12..28px（各页共用字号候选；蓝附注独立 12px 小字）`);
         if (x < 0 || y < 0 || x + width > area.width + .1 || y + height > area.height + .1) issues.push({ code: 'region-outside', pageId: page.pageId, itemId: item.id });
         const heading = fitGrayText(item.heading, width - 32, 40, 26);
         if (item.blocks && item.text !== item.blocks.map(blockText).join('\n')) throw new Error(`${item.id} 正文与内部结构不一致`);

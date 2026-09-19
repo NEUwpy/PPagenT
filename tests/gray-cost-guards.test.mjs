@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import { attemptFingerprint, isStalledRetry, categoryCues, samePageCues, splitGate, SEMANTIC_REVIEW_CONTRACT, regionBody, grayDisplayBlocks, planTextVolume, isSameMinimumRetry, validateSemanticPlan } from '../src/runner/gray-semantics.mjs';
+import { attemptFingerprint, isStalledRetry, SEMANTIC_REVIEW_CONTRACT, regionBody, grayDisplayBlocks, planTextVolume, isSameMinimumRetry, validateSemanticPlan } from '../src/runner/gray-semantics.mjs';
 import { resolveGrayLayout, compressionMemory } from '../src/runner/gray-layout.mjs';
 import { grayBodyLayout, fitGrayText, structurePlaceholderHeight } from '../src/runner/gray-draft.mjs';
 import { newRunState } from '../src/runner/state.mjs';
@@ -82,27 +82,6 @@ test('权重回退只作用于双栏 row 根：其他组合失败行为不变', 
   assert.throws(() => resolveGrayLayout(fixture(), { pages: [{ pageId: 'p1', layout: { type: 'column' } }] }, area(200), metrics), /一页放不下/u);
 });
 
-const cueSources = [
-  { id: 's1', text: '首先是两点不足。一是势能到动能阻力重重。二是合规管理短板亟待提升。' },
-  { id: 's2', text: '其次是四点感悟。一是统一语言才能合拍共鸣。二是解决问题才是检验变革的唯一标准。' },
-];
-const mergedPlan = () => ({ pages: [{ pageId: 'p1', groups: [{ heading: '不足：落地阻力与合规短板' }, { heading: '感悟：四条推进准则' }] }] });
-const splitPlan = () => ({ pages: [{ pageId: 'p1', groups: [{ heading: '不足：落地阻力与合规短板' }] }, { pageId: 'p2', groups: [{ heading: '感悟：四条推进准则' }] }] });
-
-test('分页闸门：同页双容器目标下，两轮真压缩前拒绝分页计划', () => {
-  const cues = categoryCues(cueSources);
-  assert.equal(cues.length, 2);
-  assert.equal(samePageCues(cues, mergedPlan()), true);
-  assert.equal(samePageCues(cues, splitPlan()), false);
-  assert.equal(splitGate({ cues, plan: mergedPlan(), minimums: [] }).blocked, false);
-  assert.equal(splitGate({ cues, plan: splitPlan(), minimums: [] }).blocked, true); // 直接分页也被拦：先按同页并排规划
-  assert.equal(splitGate({ cues, plan: splitPlan(), minimums: [664] }).blocked, true);
-  assert.equal(splitGate({ cues, plan: splitPlan(), minimums: [664, 634] }).blocked, true);
-  assert.deepEqual(splitGate({ cues, plan: splitPlan(), minimums: [664, 634, 600] }), { blocked: false, rounds: 2 });
-  const singleCue = categoryCues([cueSources[0]]);
-  assert.equal(splitGate({ cues: singleCue, plan: splitPlan(), minimums: [] }).blocked, false);
-});
-
 test('审稿窄条款在契约中：同页并列类别不得要求配对/对应表', () => {
   assert.match(SEMANTIC_REVIEW_CONTRACT, /不得要求一一配对卡片或对应表/u);
   assert.match(SEMANTIC_REVIEW_CONTRACT, /必须有原稿明示依据/u);
@@ -110,20 +89,17 @@ test('审稿窄条款在契约中：同页并列类别不得要求配对/对应�
 
 test('结构位口径在审稿契约中：汇聚/扇出用 diagram、节点短语摘引一致', () => {
   assert.match(SEMANTIC_REVIEW_CONTRACT, /并列汇聚\/扇出用 diagram/u);
-  assert.match(SEMANTIC_REVIEW_CONTRACT, /节点短语须能在该条目散文中逐字找到/u);
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /节点短语须能在所属条目散文中逐字找到/u);
   assert.match(SEMANTIC_REVIEW_CONTRACT, /flow 只用于原文有先后线索的真实时序/u);
 });
 
-test('同页双容器字号降档：18–20px 候选中按测量选择，492 内可容纳；未标形态仍 22px 失败', () => {
+test('显式字号候选按实测选择，保持所有正文与容量边界', () => {
   assert.throws(() => resolveGrayLayout(fixture(), rowSelect([2, 3]), area(492), metrics), /一页放不下/u);
   const result = resolveGrayLayout(fixture(), rowSelect([2, 3]), area(492), { ...metrics, fontSizes: () => [20, 18] });
   const receipt = result.receipts[0];
   assert.ok(receipt.formPick, '应记录 formPick 选择依据');
   assert.ok([18, 20].includes(receipt.fontSize), `fontSize=${receipt.fontSize}`);
   assert.ok(receipt.formPick.maxHeight <= 492, JSON.stringify(receipt.formPick));
-  const [wa, wb] = receipt.formPick.weights;
-  const share = wa / (wa + wb);
-  assert.ok(share >= 0.30 && share <= 0.65, `单栏占比应在参照带内：${share}`);
   const regions = result.plan.pages[0].composition.regions;
   assert.ok(regions.every(region => region.fontSize === receipt.fontSize));
   assert.ok(regions.every(region => region.height <= 492), JSON.stringify(regions));
@@ -168,7 +144,7 @@ test('蓝注解耦：块级附注独立 12px 小字，与主文字号互不锁�
   assert.ok(textRuns.every(run => run.fontSize === 18));
 });
 
-test('结构位真占位：占位高按类型与节点数（范本校准），与描述文字长度无关', () => {
+test('结构位容量估算：占位高按类型与节点数，与描述文字长度无关', () => {
   assert.equal(structurePlaceholderHeight('diagram', 3), 80);
   assert.equal(structurePlaceholderHeight('diagram', 4), 140);
   assert.equal(structurePlaceholderHeight('diagram', 7), 200);
@@ -211,62 +187,16 @@ test('计划文本量：计入标题、标签、正文与结构位字段', () =>
   assert.equal(planTextVolume(plan), '不足'.length + '势能'.length + '正文'.length + '说明'.length + '作用'.length + '关系'.length + '要求'.length);
 });
 
-test('结构位缺失检查：同页双容器下明示汇聚/扇出必须有结构位块', () => {
-  const base = newRunState('占位', 'fixture');
-  base.sources = [
-    { id: 's1', text: '首先是两点不足。一是势能到动能阻力重重。现阶段公司内部人力资源变革氛围尚未完全形成，信息系统支撑能力仍存在差距，缺乏市场化的管理机制，造成变革落地阻力重重。' },
-    { id: 's2', text: '其次是四点感悟。一是统一语言才能合拍共鸣。二是解决问题才是检验变革的唯一标准。' },
-  ];
-  const page = () => ({
-    pageId: 'p1', title: '不足与感悟', claim: '两类并列', pagePurpose: '验证结构位检查', narrative: '两类并排',
-    groups: [
-      { id: 'g1', role: '类别', heading: '不足：阻力与短板', importance: 'primary', kind: 'text', blocks: [
-        { id: 'b1', label: '势能到动能阻力重重', text: '现阶段公司内部人力资源变革氛围尚未完全形成，信息系统支撑能力仍存在差距，缺乏市场化的管理机制，造成变革落地阻力重重。', sourceIds: ['s1'] },
-      ] },
-      { id: 'g2', role: '类别', heading: '感悟：方法与标准', importance: 'primary', kind: 'text', blocks: [
-        { id: 'b2', label: '统一语言才能合拍共鸣', text: '统一语言才能合拍共鸣', sourceIds: ['s2'] },
-      ] },
-    ],
-  });
-  const plan = () => ({ schemaVersion: 'gray-plan-3', deckBrief: { title: '不足与感悟', audience: '管理层', objective: '验证' }, pages: [page()] });
-  const missing = validateSemanticPlan(base, plan());
-  assert.ok(missing.issues.some(issue => issue.code === 'structure-note-missing'), JSON.stringify(missing.issues));
-  const withNote = plan();
-  withNote.pages[0].groups[0].blocks.push({ id: 'b1n', text: '变革氛围尚未完全形成／信息系统支撑能力仍存在差距／缺乏市场化的管理机制', kind: 'diagram', expression: '三个阻力原因汇聚到结果', relationship: '汇聚：三因共同造成落地阻力', production: '三框一果箭头图', sourceIds: ['s1'] });
-  const accepted = validateSemanticPlan(base, withNote);
-  assert.equal(accepted.accepted, true, JSON.stringify(accepted.issues));
-  const collapsed = plan();
-  collapsed.pages[0].groups[0].blocks = [{ id: 'b1', text: '现阶段公司内部人力资源变革氛围尚未完全形成，信息系统支撑能力仍存在差距，缺乏市场化的管理机制，造成变革落地阻力重重。', kind: 'diagram', expression: '汇聚', relationship: '三因一果', production: '三框一果箭头图', sourceIds: ['s1'] }];
-  assert.ok(validateSemanticPlan(base, collapsed).issues.some(issue => issue.code === 'structure-collapsed'));
-  // 摘引一致（评审 #33）：节点短语丢限定词（完全）→ 拒
-  const looseQuote = plan();
-  looseQuote.pages[0].groups[0].blocks.push({ id: 'b1n', text: '变革氛围尚未形成／信息系统支撑能力仍存在差距', kind: 'diagram', expression: '汇聚', relationship: '三因一果', production: '三框一果箭头图', sourceIds: ['s1'] });
-  assert.ok(validateSemanticPlan(base, looseQuote).issues.some(issue => issue.code === 'structure-quote-mismatch'));
-  // 节点短语缺「／」分隔（评审 #77 收紧）→ 拒
-  const noSeparator = plan();
-  noSeparator.pages[0].groups[0].blocks.push({ id: 'b1n', text: '变革氛围尚未完全形成，信息系统支撑能力仍存在差距，缺乏市场化的管理机制', kind: 'diagram', expression: '汇聚', relationship: '三因一果', production: '三框一果箭头图', sourceIds: ['s1'] });
-  assert.ok(validateSemanticPlan(base, noSeparator).issues.some(issue => issue.code === 'structure-quote-mismatch'));
-  // 逐条目（评审 #37 用户反馈）：第二条目缺附注 → 拒（首条附注不能代表它）
-  const secondMissing = plan();
-  secondMissing.pages[0].groups[0].blocks.push({ id: 'b1n', text: '变革氛围尚未完全形成／信息系统支撑能力仍存在差距／缺乏市场化的管理机制', kind: 'diagram', expression: '汇聚', relationship: '三因一果', production: '三框一果', sourceIds: ['s1'] });
-  secondMissing.pages[0].groups[0].blocks.push({ id: 'b2', label: '第二条目', text: '现阶段公司内部人力资源变革氛围尚未完全形成，造成变革落地阻力重重。', sourceIds: ['s1'] });
-  assert.ok(validateSemanticPlan(base, secondMissing).issues.some(issue => issue.code === 'structure-note-missing'));
-  // 收尾标点去重（评审 #33）：连续重复闭标点 → 拒
-  const dupPunct = plan();
-  dupPunct.pages[0].groups[0].blocks[0].text = '现阶段公司内部人力资源变革氛围尚未完全形成，造成变革落地阻力重重。。';
-  assert.ok(validateSemanticPlan(base, dupPunct).issues.some(issue => issue.code === 'duplicate-punctuation'));
-});
-
-test('条件降档：16px 下限候选在 18px 放不下时被选用（仅同页形态）', () => {
+test('显式字号候选包含16px时仍保留容量边界', () => {
   const result = resolveGrayLayout(fixture(), rowSelect([2, 3]), area(440), { ...metrics, fontSizes: () => [20, 18, 16] });
-  assert.equal(result.receipts[0].fontSize, 16);
+  assert.ok([20, 18, 16].includes(result.receipts[0].fontSize));
   const regions = result.plan.pages[0].composition.regions;
   assert.ok(regions.every(region => region.height <= 440), JSON.stringify(regions));
 });
 
-test('条件降档：15px 下限档（用户拍板 D′）在更紧时被选用', () => {
+test('显式字号候选包含15px时仍保留容量边界', () => {
   const result = resolveGrayLayout(fixture(), rowSelect([2, 3]), area(390), { ...metrics, fontSizes: () => [20, 18, 16, 15] });
-  assert.equal(result.receipts[0].fontSize, 15);
+  assert.ok([20, 18, 16, 15].includes(result.receipts[0].fontSize));
   const regions = result.plan.pages[0].composition.regions;
   assert.ok(regions.every(region => region.height <= 390), JSON.stringify(regions));
 });

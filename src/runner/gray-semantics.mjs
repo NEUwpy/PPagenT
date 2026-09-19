@@ -55,10 +55,8 @@ export function markFlowSources(sources) {
  * 只服务灰稿线；正式线（tools/generation.mjs）继续直调 validateContent，逐字覆盖保证不被动摇。
  */
 /**
- * 类别成组检查（规则毕业：提示词→checker）。原稿的类别线索（"首先是两点不足""其次是四点感悟"）
- * 必须映射为组：组标题承载类别词、条目作为组内块。判定特征确定（前缀+数词+量词+类别词），
- * 误报面窄（不做数词裸匹配："六个月""三个街道""三个市场化"都不算线索）。
- * fail 级：验证过 r7 形态可达（20260917232451），漂移样本为迁移 A/B 与四稿基线（条目即组）。
+ * 提取显式类别线索用于非阻塞提示。字面匹配不能证明或否定语义归属，
+ * 不作为分页、字号、媒介选择或接受规划的硬条件；未匹配到也不表示原稿没有类别。
  */
 const CATEGORY_CUE = /(?:首先|其次|再次|最后)是[，,]?([一二两三四五六七八九十]+)(?:点|项|条)([\u4e00-\u9fa5]{1,6})[。；]/gu;
 
@@ -82,27 +80,6 @@ export function categoryCues(sources) {
 
 const CHINESE_DIGITS = Object.freeze({ 一: 1, 两: 2, 二: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9, 十: 10 });
 
-/** 同页双容器目标判定：恰好两个类别线索，且两类别的组标题同页承载（评审 #22 目标形态）。 */
-export function samePageCues(cues, plan) {
-  if ((cues ?? []).length !== 2) return false;
-  const nouns = cues.map(cue => cue.noun);
-  return (plan?.pages ?? []).some(page => {
-    const headings = (page.groups ?? []).map(group => String(group.heading ?? ''));
-    return nouns.every(noun => headings.some(heading => heading.includes(noun)));
-  });
-}
-
-/**
- * 分页闸门（评审 #22 裁决二；#24 收紧）：同页双容器目标下，按类别分页只认「两轮真压缩（每轮实测更短）」后的仍超；
- * 通用「两次容量失败即分页」在此目标下不生效。minimums 为该形态容量失败的逐次实测高。
- * 未发生同页尝试时同样不接收分页计划（先按类别规则的同页并排规划）。
- */
-export function splitGate({ cues, plan, minimums }) {
-  const rounds = (() => { let value = 0; const list = minimums ?? []; for (let i = 1; i < list.length; i += 1) if (list[i] < list[i - 1]) value += 1; return value; })();
-  if ((cues ?? []).length !== 2) return { blocked: false, rounds };
-  if (samePageCues(cues, plan)) return { blocked: false, rounds };
-  return { blocked: rounds < 2, rounds };
-}
 export function chineseCount(text) {
   const value = String(text ?? '');
   if (/^\d+$/u.test(value)) return Number(value);
@@ -171,14 +148,14 @@ export function grayCoverageIssues(state) {
 
 /** 共享规则片段：SEMANTIC_CONTRACT 与 GRAY_AGENT_PROMPT 的唯一来源；同步由 tests/prompt-sync.test.mjs 守卫。 */
 export const SHARED_RULES = Object.freeze({
-  category: `原稿自带类别线索时（如"首先是两点不足、其次是四点感悟"、"一是…二是…"分属两类），先恢复两层归属：组是类别层——类别成为组（组标题用类别名），类别内的每个条目是该组的块（label=条目要点，text=条目展开）；条目不升级为组，不得与类别同层铺成多个组，也不得为条目单独开页。条目内部的并列细项（如四方面、三方面原因）无论出现在行文中还是冒号后，都逐项成块、一行一项（行首可用"·"），不压进一个逗号长句；同页并排形态生效时（见本段末），条目内部细项允许散文连写（与范本成品一致，保留对象、条件、数字与限定）——该作用域仅限同页双容器，拆页/全宽形态仍逐项成块、一行一项。类别内条目都是短条目（各 1–2 行）时，整类必须排在一页——先按整类一页规划，容量确有需要才拆页：若只超出不到一行（≤60px），按原稿允许的提炼压紧——优先删排比性复述与修饰语（删修饰不删事实），合并页用紧凑散文、不展开多行链——再试一次合并；仍超出才拆页。类别跨页时，拆出的每页仍保持类别成组：每页一个组、组标题用「类别名＋本页条目提示」的内容词（如"感悟：统一语言与检验标准"），页内条目属于该组；不得把类别拆成多个同级组，也不得沿用类别总数标题（一页只放两条时不许写"四点感悟"）。同一主题区块的两个类别（如"首先是两点不足、其次是四点感悟"）先按同页并排规划：恰好两个类别容器、同一页横向（左一类、右一类），不得默认各占一页；为达成同页先把条目展开提炼为短句（保留对象、条件、数字与限定）；渲染报"放不下"时只许改写正文（每次重试必须比上一版更短：删修饰语、缩短语、并短线，保事实数字），不得同版重试、不得改分组；两轮压缩仍放不下才按类别分页。该形态下条目保持散文实文（细项照录、一字不删）；凡原稿明示的汇聚（"……造成……"）与扇出（"反映出……"后并列 3–4 项）即视为"画图更能表达意思"（范本锚点：范本画了图的这类关系才定案；并列短清单如"统一语言、统一目标、统一策略"不算结构、保持散文不附注），必须在该条目之后附一个小结构位（四要素齐全、无 label）：条目＝灰散文 block（实文完整）＋蓝附注 block（定案图形区：蓝框框出、面积＝图真实占位，框内 12px 标注「放什么图＋节点短语（摘引）」；空间紧写一句「本条先画结构图」）两个块，附注引用散文、节点短语必须摘引自散文（连续短语，可省虚词，不得改事实、数字与限定，用"／"分隔），不得重写第二份全文、不得整条转蓝；并列原因汇聚与扇出清单都用 diagram（范本 06 同类结构无时序），flow 只用于原稿有先后线索词的真实时序步骤；其余情形不附，不硬套。`,
-  expression: `按内容关系选择表达：两个及以上对象的共同维度对照用diagram，每个对象一个block；步骤、流程与时间顺序（三个及以上节点）用flow，节点按顺序；明确的对照网格用table，每行一个block；数据图表与图片保留蓝区说明，并在制作要求里写明建议表达。分解或构成（总量＝部分之和、对象→去向）、指标随时间变化不用平行卡片，用一条可读文字（"异常 7 台：已修复 5 台，待配件 2 台"）。行式表格只用于多个对象按共同维度互相对照（两种模式×多项指标、多个项目×进度与问题）；单个对象的一组规则、要求、背景说明用文字条目（一句一条），不做成表格。同一页不要所有组都用同一种表达；同一稿件不同页避免重复同一组合。同页双容器形态下，条目内部的明示汇聚/扇出结构位见类别规则（优先于本条"用一条可读文字"的通用建议）。`,
-  sketch: `diagram/flow/table会绘制简化草图，框内文字就是实际文案、必须完整可读；不要一律平铺文字，也不要给没有内部关系的内容硬套结构，更不要把该成结构的内容写成流水账。`,
+  category: `先恢复内容归属：类别成为组，类别内条目成为块，label 写要点、text 写必要展开；类别数量、条目数量和原稿措辞都不决定页数或版式。类别名可以忠实概括，不以重复原词证明归属正确。分支内的条目与细项保持层级，表达可用短句、分项或图示，选择依据是读者能否直接读出必要关系。同一主题的相关类别可同页呈现；内容目的不同或容量不足时可分页，跨页保留归属和准确的本页标题，不把类别总数冒充本页条目数。允许提炼冗词、合并重复解释，保留重要事实、对象、条件、否定和关系，不要求固定压缩次数，不为复现样稿强制同页。`,
+  expression: `按真实关系选择表达，所选表达必须让读者直接理解对象、归属和联系。并列分类不自动构成对照；对照、因果、依赖必须有原稿依据，flow 只用于原文有先后线索的真实时序。行式表格只用于多个对象按共同维度对照；单对象说明可用文字条目。汇聚、扇出和多层关系在图示能显著降低理解负担时规划结构位，并在 relationship 与 production 中写明节点和关系；不能仅凭某个连接词、数量或左右双栏形态强制画图。文字已经清楚表达关系时可保持文字，不为了媒介多样性强制换样式。`,
+  sketch: `灰稿规划文字与图形的位置和面积。整组 diagram/flow/table 使用已有简化草图；文字条目内的非文字块预留蓝框图形区，框内标注表达作用与节点短语，不绘制内部节点。局部结构位就近附着所属条目，保留完整必要内容，节点短语摘引该条目实文，不再抄一份全文；整组图示可以直接承载内容，不强制另配重复散文。`,
   source: `每个block必须引用来源，所有正文来源至少被一个block引用；标为流转信息（文件头尾、节标题等）的来源无需引用、不得上屏。`,
   declaration: `模拟/假设声明只要原稿给出，就必须上屏且恰好一次：最自然的位置是页面主题句，或紧邻主体的一个条目；不得省略、不得逐条重复、不得独立成组。`,
   condition: `真实条件与否定不能省略，准则不是已满足的证据，并行准备不是下一阶段。`,
   attachment: `条件触发的处置、异常或例外是附着性内容：注明它约束哪些对象或环节，从属并紧邻所依附的内容（作为依附对象的补充说明，或从属职责的supporting组），不与主流程环节、并列要点铺成同层组；判断依据是依附关系，不是篇幅大小。`,
-  paging: `页数服从内容量：每页必须有实质展开（对象、条件、范围、动作），某页只剩一两句单薄内容时并入相邻页，不为凑页数摊薄；全稿组数少时控制在两页内——三四个组一页即可，五六个组默认两页；一页放不下就分页，不要反复精简文字硬塞一页，也不要每两三个组单开一页把短稿摊成多页；标题给出判断，正文必须补充标题没有的细节，不整句复述标题。`,
+  paging: `页数服从内容量、页面目的和真实关系，先确定每页讲什么，再结合实际容量决定合并、分区或分页。每页应有实质展开，短小附注就近融入主体。容量失败后可调整组合与比例、忠实精简冗词或沿语义边界分页；不能牺牲必要条件、拆散归属或持续缩字来满足固定页数。跨页仍标明条目所属类别；标题给出判断，正文补充细节，不整句复述标题。`,
   label: `label可省略，只有帮助读者定位职责时才用，并且必须是内容词（"正常""已修复""待配件"），不用"拆分项一""对象""状态一"这类结构占位名，也不带"（全页适用）"这类版面说明；表格行只有行头与内容两段，不要把多列文字用竖线拼进一个块。`,
   surface: `页面目的、narrative和planningNotes不在灰稿上显示。`,
   meta: `公文头尾、节标题是流转信息、不是演示内容：来源表里标为流转信息的来源一律不上屏（覆盖检查已豁免、无需引用），也不得改写成"通知依据""背景"之类条目；"本部分先讲…"这类结构旁白同样不上屏。`,
@@ -190,11 +167,11 @@ export const SEMANTIC_CONTRACT = `你的任务是将原稿提炼、重组为适�
 先明确页面职责，按内容归属形成groups，再把各分支的条目放进blocks，用label与text区分要点和展开。${SHARED_RULES.category}先形成可阅读的实文提纲，再选择局部表达；不要把分属不同观点的依据摊成同级卡片，也不要把分类、依据、准则混称为证明。这些层级按实际内容使用，不强求每页都有两个分支或固定条目数。文字组内某条需要图示时，该block可选kind及expression、relationship、production，字段含义与整组蓝区相同；其label仍是上屏条目标题。未选kind的block为普通文字，整组非text时不再嵌套蓝区。${SHARED_RULES.expression}${SHARED_RULES.sketch}结构库按局部关系按需调用，本轮仅呈现蓝区制作说明。
 每组一个主要职责。claim概括主题或判断，正文展开对象、安排与条件，不把同一句建议分别复制到主题、组标题和正文。blocks按阅读顺序；${SHARED_RULES.label}三列对照改写成一条可读文字或拆成两个块。heading保持短小。蓝区expression写表达作用，relationship写谁与谁怎样关联，production写可执行的组织要求；三者分工，避免重复复述承载内容。必要关系须在实文组织或蓝区制作说明中可见，仅保留关键词或写在narrative里不等于表达完成。
 ${SHARED_RULES.source}引用表示信息来自哪里，不要求每段原文单独变成一个正文块；页级主题承载的信息可随相关block引用。${SHARED_RULES.declaration}小段共同说明就近融入主体，不因职责不同便独占大栏。${SHARED_RULES.condition}${SHARED_RULES.attachment}
-内容区尺寸由输入给定，主题句在内容区外，以28px单行呈现，需简短。排版仅有单主体、横向、纵向、规则网格，空间不够时重新组织或分页。正文22px（同页双容器形态可在 12–20px 间逐档降档测量，12px 为全局下限；拆页/全宽维持 22px）；块级蓝附注独立用小字（12–15px），与主文互不锁死、不限行数。组标题26px一行，组内每个可选label与text各自排字，约每行30px，块间距12px，每块四周8px内边距。每组70px标题/边距开销；按内容估计，不自己写坐标或强制页数。${SHARED_RULES.paging}同组label+text合计不超过400字。保留原稿数字写法。
+内容区尺寸由输入给定，主题句在内容区外，以28px单行呈现，需简短。排版可用单主体、横向、纵向和网格。正文按统一的可读字号候选测量，优先大字号、12px为下限；这一测量策略适用于所有页面，不由稿件措辞或类别数量触发。块级蓝注独立12px。组标题26px一行，组内label与text各自排字，块间距12px，每块四周8px内边距；每组70px标题/边距开销。不自己写坐标或强制页数。${SHARED_RULES.paging}同组label+text合计不超过400字。保留原稿数字写法。
 ${SHARED_RULES.surface}正文必须能独立让读者理解必要关系，不能依赖后台说明。内部审查理由不要改写成正文：用“同时”“是否”“根据记录”等原稿已有表达保留关系，不额外解释“不是先后步骤”“不是已满足的证据”等审稿规则。原稿的模拟/假设性质属于读者需要的内容，须在实际标题或正文中明示，引用sourceIds不能代替显示。`;
 
 export const SEMANTIC_REVIEW_CONTRACT = `你是灰稿内容与表达审稿人。输入source是原稿，requirements是后台职责与必要关系，visiblePages是程序从实际渲染内容生成的上屏视图。只用visiblePages证明表达已落实；requirements不能作为上屏证据。尚未分配坐标或查看像素图。
-逐页核对：事实、条件、否定和模拟性质是否完整；主题与正文是否各有职责；组角色是否通过分项、对应、层级或结构草图落实；必要关系能否直接读出，而非由读者从两个长段落自行拼接。只有标题改名、主辅标签或并排放置，不证明关系已表达。可用结构手段仅限三种：diagram（对象并置卡片）、flow（顺序节点与箭头）、table（行式表格：每行一个对象，行内用文字写各维度）；chart/image 只有蓝区说明。不要要求系统不具备的结构（列对照网格、条件分支图、字段对应表、嵌套层级图）；条件与后果、对象与时限用一行可读文字写清楚即可，在可用手段内评判是否可读，不因没有专门图形而打回。文字本身组织清楚可以通过；diagram、flow、table 本轮绘制简化草图，框内文字为实际文案，chart/image 仍是蓝区说明。对比应配对、时序应有序；该成结构却写成流水账、没有内部关系硬套结构、分解或构成被拆成平行卡片、指标随时间变化被卡片化、单对象规则或说明硬做成表格，都要指出。同页并列的两个类别（如两点不足与四点感悟）是并列关系，不得要求一一配对卡片或对应表；对照、因果、依赖关系必须有原稿明示依据，否则视为制造虚假对应。同页双容器形态下，条目＝灰散文 block（实文完整、细项一字不删）＋蓝附注 block（定案图形区：蓝框框出、面积＝图真实占位，框内 12px 标注）两个块，附注引用散文——两者同体或整条转蓝要指出；原稿明示的汇聚/扇出（"……造成……""反映出……"）必须在条目之后附小结构位：并列汇聚/扇出用 diagram，flow 只用于原文有先后线索的真实时序；空间足写完整描述（关系一句＋摘引短语），空间紧写一句「本条先画结构图」；节点短语须能在该条目散文中逐字找到（摘引一致），可省虚词；重写第二份全文、或节点短语在散文中找不到，要指出——不再要求限定词完整复制；反之，明示结构没有附注也要指出；无明示关系不得要求结构位。
+逐页核对事实、条件、否定和模拟性质是否完整，页面职责与归属是否成立，必要关系是否能从可见文案或图形规划直接理解。类别数量、某个连接词或页数不是表达正确的证据。仅有标题改名、主辅标签或并排放置不证明关系成立。对照、因果、依赖必须有原稿明示依据；只有并列关系时不得要求一一配对卡片或对应表。flow 只用于原文有先后线索的真实时序；并列汇聚/扇出用 diagram 的制作说明规划节点与方向，不能强造时序。整组diagram/flow/table会画已有简化草图；文字组内的非文字块是蓝框图形占位，检查它是否交代了放什么图、承载哪些内容及必要关系，不要求已经画出内部节点和箭头。局部节点短语须能在所属条目散文中逐字找到；不得跨条目摘引。图示明显有助于理解却没有规划相应位置时，指出具体理解困难；清楚的文字关系可以通过，不仅凭缺少某种媒介打回。
 准则是选择尺度，不能充当已验证的证据；并行不能写成先后；条件须对应被约束的行动。附着性内容（条件触发的处置、异常、例外）不能与主体步骤或并列要点铺成同层区域；主体职责的内容必须作为实际文案或结构草图文字出现，只在蓝区制作说明中复述不算落实。条目标签必须是内容词，出现"拆分项一""对象""状态一"这类结构占位名要指出；表格行里用竖线拼接多列文字也要指出；标为流转信息的来源被上屏，或正文整句复述标题，都要指出。不要添加原稿未给出的因果、依赖或效果。引用当前可见文案指出具体缺陷；不能仅因个人偏好、估计容量或未知坐标拒绝。打回时描述"哪条关系或职责不能直读"的可读性要求，不指定具体媒介；同一关系只要能通过任一可用手段（文字分项、卡片、表格、流程）直读即通过。若有reviewFeedback，只复核所提问题是否实质解决，解决即通过，不追加新的媒介偏好。主题概括后正文展开是合法分工，长句机械复述和以后台解释代替组织则须修订。
 声明必须恰好出现一次且不独立成组：遗漏、重复、或把模拟/假设声明单独做成一个区域都要指出。后台审查解释不得进入灰区正文；蓝区制作要求可以说明关系组织与绘制要求。若有reviewFeedback，检查是否实质解决。
 只输出JSON：{accepted:boolean,issues:[{pageId,sourceIds,problem,requiredRevision}],coverage:"逐页引用visiblePages中的具体措辞或组织，说明它怎样承担职责和关系；不能仅复述requirements",limits:"未看灰稿像素图，不能确认视觉可读性"}。`;
@@ -436,69 +413,27 @@ export function validateSemanticPlan(base, plan) {
         if (narrated) fail('structural-narration', page.pageId, `结构旁白不得上屏：${where} 出现「本部分/本节先讲…」式组织说明；页面上只放内容，组织关系由版面结构承担`);
       }
     }
-    // 类别成组：原稿有类别线索时，类别词必须由组标题承载（页标题不算）。
+    // 字面类别线索仅作审稿提示；概括改写与真实归属交由语义判断，不能用原词充当硬闸门。
     const cueList = categoryCues(base.sources);
     for (const cue of cueList) {
       const headings = plan.pages.flatMap(page => (page.groups ?? []).map(group => String(group.heading ?? '')));
       if (!headings.some(heading => heading.includes(cue.noun))) {
-        fail('category-not-grouped', plan.pages[0]?.pageId, `原稿有类别线索「${cue.phrase}」：类别必须成为组——组标题承载「${cue.noun}」（跨页用「${cue.noun}＋本页条目提示」），条目作为组内块；当前没有任何组标题承载它（写在页标题不算）。请重组后再提交。`);
+        warnings.push({ code: 'category-not-grouped', pageId: plan.pages[0]?.pageId, message: `原稿类别线索「${cue.phrase}」未在组标题中复现：请语义核对该类别及条目归属是否保留；忠实改写不因缺少原词而被拒绝。` });
       }
     }
-    // 结构位检查（评审 #59/#29）：同页双容器形态下，来源明示汇聚/扇出时，条目必须同时有
-    // 灰散文 block 与蓝附注 block——该画不画（note-missing）与整条转蓝塌缩（structure-collapsed）都是客观违规。
-    const EXPLICIT_CONVERGENCE = /[，,、][^，,、。；]{2,24}[，,、][^，,、。；]{2,24}[，,]?(?:造成|导致)/u;
-    const EXPLICIT_FANOUT = /(?:反映出|暴露出)[：:]?[^。]{0,80}、[^。]{0,24}、[^。]{0,24}、/u;
-    if (cueList.length === 2 && plan.pages.length === 1 && samePageCues(cueList, plan)) {
-      const page = plan.pages[0];
-      for (const group of page.groups ?? []) {
-        const citedSource = (group.blocks ?? []).flatMap(block => block.sourceIds ?? [])
-          .map(id => base.sources.find(source => source.id === id)?.text ?? '').join('\n');
-        const structured = EXPLICIT_CONVERGENCE.test(citedSource) || EXPLICIT_FANOUT.test(citedSource);
-        if (!structured) continue;
-        const hasProse = (group.blocks ?? []).some(block => (block.kind ?? 'text') === 'text');
-        const hasNote = (group.blocks ?? []).some(block => block.kind && block.kind !== 'text');
-        if (!hasNote) {
-          fail('structure-note-missing', page.pageId, `同页双容器：组「${group.heading}」的来源明示了汇聚/扇出结构，却没有附结构位——请在该条目之后补一个小蓝附注 block（四要素齐全、无 label；空间足写完整描述、紧写「本条先画结构图」）。`);
-        } else if (!hasProse) {
-          fail('structure-collapsed', page.pageId, `同页双容器：组「${group.heading}」整条转蓝塌缩——条目必须保留灰散文 block（实文完整），蓝附注只是附注；请拆回两个块。`);
-        } else {
-          // 逐条目检查（评审 #37 用户反馈）：每段来源明示结构的正文条目（含其多块细项）之后都必须有结构位，
-          // 不允许一个组内某条附注代表全部条目。
-          const blocks = group.blocks ?? [];
-          const isNote = block => Boolean(block.kind && block.kind !== 'text');
-          const isMatch = blocks.map(block => {
-            if ((block.kind ?? 'text') !== 'text') return false;
-            const source = (block.sourceIds ?? []).map(id => base.sources.find(item => item.id === id)?.text ?? '').join('\n');
-            return EXPLICIT_CONVERGENCE.test(source) || EXPLICIT_FANOUT.test(source);
-          });
-          let cursor = 0;
-          while (cursor < blocks.length) {
-            if (!isMatch[cursor]) { cursor += 1; continue; }
-            let end = cursor;
-            while (end + 1 < blocks.length && isMatch[end + 1]) end += 1;
-            let next = end + 1;
-            while (next < blocks.length && !isMatch[next]) next += 1;
-            if (!blocks.slice(end + 1, next).some(isNote)) {
-              fail('structure-note-missing', page.pageId, `同页双容器：条目「${blocks[cursor].label ?? blocks[cursor].id}」的来源明示了汇聚/扇出结构，其后却没有结构位——请在该条目之后补一个小蓝附注 block（四要素齐全；空间足写完整描述、紧写「本条先画结构图」）。`);
-            }
-            cursor = next;
-          }
-          // 摘引一致（评审 #33/#77）：节点短语须以「／」分隔（占位高度按节点数真实计量），且为散文连续子串。
-          const compact = value => String(value ?? '').replace(/[\s。，；：、！？（）()「」『』“”"'·—－-]/gu, '');
-          const prose = compact((group.blocks ?? []).filter(block => (block.kind ?? 'text') === 'text').map(block => block.text ?? '').join('\n'));
-          for (const note of (group.blocks ?? []).filter(block => block.kind && block.kind !== 'text')) {
-            const raw = String(note.text ?? '');
-            if (!/[／/]|→|->/u.test(raw)) {
-              fail('structure-quote-mismatch', page.pageId, `同页双容器：结构位节点短语缺少「／」分隔（占位高度按节点数真实计量）——请按规约用「／」逐项重列节点（如 节点一／节点二／节点三→结果）。`);
-              continue;
-            }
-            const phrases = raw.split(/[／/]|→|->/u).map(compact).filter(phrase => phrase.length >= 4);
-            const mismatch = phrases.find(phrase => !prose.includes(phrase));
-            if (mismatch) {
-              fail('structure-quote-mismatch', page.pageId, `同页双容器：结构位节点短语「${mismatch}」不是散文的连续子串——摘引须与散文逐字一致（仅可省标点），请改回原文短语或补全限定词。`);
-            }
-          }
-        }
+    // 仅检查已经选定的局部结构位，不从样稿连接词或类别数量推导必选媒介。
+    // 无 label、紧邻文字块的非文字块按渲染器约定附着在前一条目；摘引只在该条目内核对。
+    const compactQuote = value => String(value ?? '').replace(/[\s。，；：、！？（）()「」『』“”"'·—－-]/gu, '');
+    for (const page of plan.pages) for (const group of page.groups ?? []) {
+      if (group.kind !== 'text') continue;
+      const blocks = group.blocks ?? [];
+      for (let i = 1; i < blocks.length; i += 1) {
+        const note = blocks[i], parent = blocks[i - 1];
+        if (!note.kind || note.kind === 'text' || note.label || (parent.kind ?? 'text') !== 'text') continue;
+        const prose = compactQuote(parent.text);
+        const phrases = String(note.text ?? '').split(/[／/]|→|->/u).map(compactQuote).filter(Boolean);
+        const mismatch = phrases.find(phrase => !prose.includes(phrase));
+        if (mismatch) fail('structure-quote-mismatch', page.pageId, `结构位 ${note.id} 的节点短语「${mismatch}」不是所属条目 ${parent.id} 的实文摘引；核对归属并保留必要限定。`);
       }
     }
     // 非阻塞 warnings（评审 #7 (b)）：只验字面会被模型走最小合规路径（"不足一/感悟一"前缀），

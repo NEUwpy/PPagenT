@@ -56,7 +56,7 @@ test('类别成组：组标题承载类别词时通过（含跨页复合标题�
   assert.equal(splitReport.accepted, true, JSON.stringify(splitReport.issues));
 });
 
-test('类别成组：条目即组或只写页标题都失败', () => {
+test('字面类别缺失仅警告，避免把忠实概括或分页当作程序错误', () => {
   const itemAsGroup = {
     schemaVersion: 'gray-plan-3',
     deckBrief: { title: 'x', audience: 'y', objective: 'z' },
@@ -67,13 +67,13 @@ test('类别成组：条目即组或只写页标题都失败', () => {
     ])],
   };
   const report = validateSemanticPlan(base(), itemAsGroup);
-  assert.equal(report.accepted, false);
-  const problems = report.issues.filter(issue => issue.code === 'category-not-grouped');
+  assert.equal(report.accepted, true);
+  const problems = report.warnings.filter(issue => issue.code === 'category-not-grouped');
   assert.equal(problems.length, 2); // 不足、感悟都未由组标题承载
   const onlyTitle = structuredClone(itemAsGroup);
   onlyTitle.pages[0].title = '两点不足与四点感悟';
   const second = validateSemanticPlan(base(), onlyTitle);
-  assert.equal(second.issues.filter(issue => issue.code === 'category-not-grouped').length, 2);
+  assert.equal(second.warnings.filter(issue => issue.code === 'category-not-grouped').length, 2);
 });
 
 test('warn 通道：编号前缀承载与碎裂类别组被记录且不阻塞', () => {
@@ -118,5 +118,5 @@ test('无类别线索的稿件不受本检查影响', () => {
     ])],
   };
   const report = validateSemanticPlan(plain, plan);
-  assert.equal(report.issues.filter(issue => issue.code === 'category-not-grouped').length, 0);
+  assert.equal(report.warnings.filter(issue => issue.code === 'category-not-grouped').length, 0);
 });

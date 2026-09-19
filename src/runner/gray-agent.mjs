@@ -15,7 +15,7 @@ import { createToolRegistry, defineTool } from './tools/index.mjs';
 import { buildChatProviderFromEnv } from './chat-provider.mjs';
 import { loadDeepSeekLocalConfig } from '../agent/deepseek-provider-from-env.mjs';
 import { newRunState, writeState, renderContentMarkdown, renderStateMarkdown } from './state.mjs';
-import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan, semanticReviewInput, markFlowSources, SHARED_RULES, attemptFingerprint, isStalledRetry, categoryCues, samePageCues, splitGate, planTextVolume, isSameMinimumRetry } from './gray-semantics.mjs';
+import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan, semanticReviewInput, markFlowSources, SHARED_RULES, attemptFingerprint, isStalledRetry, planTextVolume, isSameMinimumRetry } from './gray-semantics.mjs';
 import { applyTemplateDefaults, describeDefaults } from './gray-templates.mjs';
 import { auditGeometry, voidWarnings, VOID_THRESHOLDS } from './gray-audit.mjs';
 import { resolveGrayLayout, compressionMemory } from './gray-layout.mjs';
@@ -35,11 +35,11 @@ export const GRAY_AGENT_PROMPT = `你是灰稿制作 Agent。目标：把用户�
 你可以多次调用工具。check_plan 与 semantic_review 都通过后再渲染是正常路径，但不是硬性顺序；按你判断最有效的方式推进。
 交付观：审稿是辅助而不是关口——事实性遗漏、编造、模拟声明缺失必须修复；纯粹的形式偏好随交付记录即可。程序检查通过后即可渲染交付。
 **计划的传递方式：把你当前完整的 gray-plan-3 计划 JSON 写在每轮消息的正文里（这是唯一事实来源）；check_plan、semantic_review、render_draft 都读取你本轮正文中的计划，不要在工具参数里重复它，也不要只写差异——每次修订都重写完整计划。**
-容量与分页：${SHARED_RULES.paging}渲染回执报"一页放不下"时，优先把内容拆到多页（pages 增加一页），其次才考虑合并相关组、精简文字；连续两次容量失败就改用分页，不要继续在单页上换组合死磕。
+容量与分页：${SHARED_RULES.paging}
 布局选择（调用 render_draft 时给出）：简式 {type:"single|row|column|grid",weights?,columns?} 的子节点默认按阅读顺序取本页全部组；页面有分层关系时用嵌套式 {type,children:[{groupId},或嵌套]}，例如主区在上、一条注记横贯下方 = {type:"column",children:[{type:"row",children:[{groupId:"g1"},{groupId:"g2"}]},{groupId:"g3"}]}。row 横向分栏、column 纵向排列、grid 规则网格；weights（仅 row）分配多余宽度，按各栏实文行数/展开需要给比例（如 3:2、5:4），不要默认等分，columns（仅 grid）是列数；children 必须按阅读顺序恰好覆盖本页全部组一次；嵌套最多三层。主次通过空间份额与组标题层级体现，少量内容不必拉满一页，不要为了变化而嵌套。每页有程序默认版式（1 组多条=类别容器、1 组单条=单主体、2 组=双栏对照、≥3 组=行式清单）；页条目可以不写 layout 采用默认。自己选与默认不同的组合时，必须在该页加 override:{reason:"一句话理由"}，理由会入档分析；仅微调 weights 不算覆盖。
 格式：{schemaVersion:"gray-plan-3",deckBrief:{title,audience,objective},pages:[{pageId:"p1",title:"短标题",claim:"简短上屏主题句，建议二十字左右",pagePurpose:"本页解决的问题",narrative:"一句话说明必要的先后、并行、判断或归属关系",groups:[{id:"g1",role:"本组主要职责",heading:"上屏短标题",importance:"primary|supporting",kind:"text|diagram|flow|chart|table|image",blocks:[{id:"b1",label:"可选上屏子标题",text:"真实上屏文字",sourceIds:["s1"]}],expression:"非text必填：表达作用",relationship:"非text必填：基本关系",production:"非text必填：制作要求"}]}],planningNotes:"简短后台组织说明"}。
 先明确页面职责，按内容归属形成groups，再把各分支的条目放进blocks，用label与text区分要点和展开。${SHARED_RULES.category}${SHARED_RULES.meta}不要把分属不同观点的依据摊成同级卡片，也不要把分类、依据、准则混称为证明。${SHARED_RULES.label}文字组内某条需要图示时，该block可选kind及expression、relationship、production；其label仍是上屏条目标题。${SHARED_RULES.expression}${SHARED_RULES.sketch}
-${SHARED_RULES.source}来源切分表随稿件给出（id、开头预览与流转标记），引用 sourceIds 以它为准，不要猜。${SHARED_RULES.declaration}${SHARED_RULES.condition}${SHARED_RULES.attachment}${SHARED_RULES.surface}内部审查理由不要改写成正文。同页双容器形态下提交前自查：原稿明示"……造成……"的汇聚与"反映出……"的扇出细项是否已挂局部结构位（block kind=flow/diagram＋表达作用、承载内容、基本关系、制作要求）？未挂即未完成，先补结构位再送检。`;
+${SHARED_RULES.source}来源切分表随稿件给出（id、开头预览与流转标记），引用 sourceIds 以它为准，不要猜。${SHARED_RULES.declaration}${SHARED_RULES.condition}${SHARED_RULES.attachment}${SHARED_RULES.surface}内部审查理由不要改写成正文。`;
 // 注：与 SEMANTIC_CONTRACT 共用的规则片段（附着性内容、模拟声明、结构选择界限等）已抽为
 // SHARED_RULES 单一来源；「改一处必须同步另一处」由 tests/prompt-sync.test.mjs 守卫（源码中恰好出现一次）。
 
@@ -110,7 +110,6 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
   const sourcePath = path.resolve(source);
   const base = newRunState(raw, sourcePath);
   base.sources = markFlowSources(base.sources);
-  const cues = categoryCues(base.sources);
   const statePath = path.join(output, 'state.json');
   const agentDir = path.join(output, 'agent');
 
@@ -150,8 +149,6 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
   let lastPlan = null;
   // 压缩记忆（方案 A 项 2）：逐页记录上一版容量失败实测高，随反馈回给模型。
   const lastMinimums = new Map();
-  // 分页闸门（评审 #22 裁决二）：同页双容器形态的逐次容量失败实测高（两轮真压缩前的分页拦截依据）。
-  const mergeMinimums = [];
   // 模型偶尔忘记在正文里重写完整计划（协议失误）。兜底沿用上一轮已解析的计划并在回执标注
   // planSource，避免一次失误白烧一整轮；模型看到标注后应在下一轮正文补写完整计划。
   const resolvePlan = () => {
@@ -170,12 +167,6 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
       handler: async () => {
         const { plan, source, note } = resolvePlan();
-        // 分页闸门（评审 #22 裁决二）：同页双容器目标下，两轮真压缩前不接收按类别分页的计划。
-        const gate = splitGate({ cues, plan, minimums: mergeMinimums });
-        if (gate.blocked) {
-          const message = `同页双容器目标：按类别分页只认「两轮真压缩（每轮实测更短）」后的仍超；当前已完成 ${gate.rounds}/2 轮。请先按同页并排提交并在容量失败后压缩正文（每轮必须比上一版更短），暂不接收分页计划。`;
-          return { accepted: false, issues: [{ code: 'split-gate', pageId: plan.pages?.[0]?.pageId, message }], coverage: '分页闸门：同页双容器目标尚未完成两轮真压缩。', defaults: describeDefaults(plan), planSource: source, ...(note ? { note } : {}) };
-        }
         const report = validateSemanticPlan(base, plan);
         return { accepted: report.accepted, issues: report.issues.slice(0, 20), coverage: report.coverage, defaults: describeDefaults(plan), planSource: source, ...(report.warnings?.length ? { warnings: report.warnings } : {}), ...(note ? { note } : {}) };
       },
@@ -206,18 +197,10 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
       },
       handler: async ({ layouts }) => {
         const { plan, source: planSource, note: planNote } = resolvePlan();
-        // 分页闸门（评审 #22 裁决二）：同页双容器目标下，两轮真压缩前的分页计划直接不接收。
-        const gate = splitGate({ cues, plan, minimums: mergeMinimums });
-        if (gate.blocked) {
-          const reason = `同页双容器目标：按类别分页只认「两轮真压缩（每轮实测更短）」后的仍超；当前已完成 ${gate.rounds}/2 轮。请先按同页并排提交并在容量失败后压缩正文（每轮必须比上一版更短），暂不接收分页计划。`;
-          agentState.grayDraft.gates = [...(agentState.grayDraft.gates ?? []), { at: new Date().toISOString(), rounds: gate.rounds, reason }];
-          await saveAgentState();
-          return { accepted: false, stage: 'gate', reason };
-        }
         // 同版重试检测（方案 A 项 1）：该指纹版本已因容量失败过——确定性结果，直接拒绝并反馈压缩要求。
         const fingerprint = attemptFingerprint(plan, layouts);
         if (isStalledRetry(agentState.grayDraft.renders, fingerprint)) {
-          const reason = '本轮文案与版式与上一版完全相同：容量失败后必须比上一版更短——删修饰语、缩短语、并短线，保事实数字；两轮压缩仍放不下才按类别分页。';
+          const reason = '本轮文案与版式与已失败版本相同，重复求解不会改变容量。请根据页面目的调整组合、比例或分页，或忠实精简冗词；保留必要内容与归属。';
           agentState.grayDraft.stalls = [...(agentState.grayDraft.stalls ?? []), { at: new Date().toISOString(), fingerprint, reason }];
           await saveAgentState();
           return { accepted: false, stage: 'stall', reason };
@@ -241,12 +224,10 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
           decisions: applied.decisions,
         }), 'utf8');
         let built;
-        // 同页双容器形态（评审 #22 裁决三）：正文按 18–20px 降档候选交测量层择优，其他形态维持 22px。
-        const formPage = plan.pages.length === 1 && samePageCues(cues, plan);
         try {
           built = resolveGrayLayout(plan, { pages: applied.layouts }, area, {
             measureBody: grayBodyLayout, fitText: fitGrayText,
-            fontSizes: () => (formPage ? [20, 18, 16, 15, 14, 13, 12] : [22]),
+            fontSizes: () => [22, 20, 18, 16, 15, 14, 13, 12],
           });
         } catch (error) {
           const details = error.details ?? null;
@@ -257,14 +238,13 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
           const textVolume = planTextVolume(plan);
           const previousGeometry = [...agentState.grayDraft.renders].reverse().find(record => record?.accepted === false && record?.stage === 'geometry');
           if (details?.pageId && isSameMinimumRetry({ previousMinimum, currentMinimum: pageMinimum, previousTextLength: previousGeometry?.textVolume, currentTextLength: textVolume })) {
-            const reason = `本轮实测最小高 ${pageMinimum}px，未比上一版 ${previousMinimum}px 更小（文本量也未缩短）：停在同一版重试没有意义——必须真正压缩正文（删修饰语、缩短语、并短线，保事实数字），两轮压缩仍放不下才按类别分页。`;
+            const reason = `本轮实测最小高 ${pageMinimum}px，未比上一版 ${previousMinimum}px 更小（文本量也未缩短）：当前改动尚未缓解容量问题，请根据语义边界调整组合或分页，也可忠实精简冗词，不能删掉必要条件。`;
             agentState.grayDraft.stalls = [...(agentState.grayDraft.stalls ?? []), { at: new Date().toISOString(), fingerprint, reason }];
             agentState.grayDraft.renders.push({ render: renderCount, accepted: false, stage: 'stall-minimum', reason, fingerprint, textVolume, ...(pageMinimum > 0 ? { pageMinimums: { [details.pageId]: pageMinimum } } : {}) });
             await saveAgentState();
             return { accepted: false, stage: 'stall', reason };
           }
           if (details?.pageId && pageMinimum > 0) lastMinimums.set(details.pageId, pageMinimum);
-          if (details?.pageId && pageMinimum > 0 && plan.pages.length === 1 && samePageCues(cues, plan)) mergeMinimums.push(pageMinimum);
           const failure = {
             accepted: false, stage: 'geometry',
             reason: `${error.message}${memory ? memory.note : ''}`,
