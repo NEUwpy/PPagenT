@@ -246,7 +246,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         try {
           built = resolveGrayLayout(plan, { pages: applied.layouts }, area, {
             measureBody: grayBodyLayout, fitText: fitGrayText,
-            fontSizes: () => (formPage ? [20, 18, 16] : [22]),
+            fontSizes: () => (formPage ? [20, 18, 16, 15] : [22]),
           });
         } catch (error) {
           const details = error.details ?? null;

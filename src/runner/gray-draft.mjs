@@ -208,7 +208,7 @@ export function validateGrayPlan(base, plan, area) {
         if (!KINDS.includes(item.kind) || !requiredText(item.heading) || !requiredText(item.text)) throw new Error(`${item.id} 缺少 kind/heading/text`);
         if (item.kind !== 'text' && ['expression', 'relationship', 'production'].some(k => !requiredText(item[k]))) throw new Error(`${item.id} 缺少非文字区四要素`);
         const { x, y, width, height, fontSize } = region;
-        if (![x, y, width, height, fontSize].every(Number.isFinite) || width < 100 || height < 80 || fontSize < 16 || fontSize > 28) throw new Error(`${item.id} 几何/字号非法，正文必须 16..28px（同页双容器形态可降档至 16–20px，其余形态 22px 起）`);
+        if (![x, y, width, height, fontSize].every(Number.isFinite) || width < 100 || height < 80 || fontSize < 15 || fontSize > 28) throw new Error(`${item.id} 几何/字号非法，正文必须 15..28px（同页双容器形态可降档至 15–20px，其余形态 22px 起）`);
         if (x < 0 || y < 0 || x + width > area.width + .1 || y + height > area.height + .1) issues.push({ code: 'region-outside', pageId: page.pageId, itemId: item.id });
         const heading = fitGrayText(item.heading, width - 32, 40, 26);
         if (item.blocks && item.text !== item.blocks.map(blockText).join('\n')) throw new Error(`${item.id} 正文与内部结构不一致`);

@@ -199,3 +199,10 @@ test('条件降档：16px 下限候选在 18px 放不下时被选用（仅同页
   const regions = result.plan.pages[0].composition.regions;
   assert.ok(regions.every(region => region.height <= 440), JSON.stringify(regions));
 });
+
+test('条件降档：15px 下限档（用户拍板 D′）在更紧时被选用', () => {
+  const result = resolveGrayLayout(fixture(), rowSelect([2, 3]), area(390), { ...metrics, fontSizes: () => [20, 18, 16, 15] });
+  assert.equal(result.receipts[0].fontSize, 15);
+  const regions = result.plan.pages[0].composition.regions;
+  assert.ok(regions.every(region => region.height <= 390), JSON.stringify(regions));
+});

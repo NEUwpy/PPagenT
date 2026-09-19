@@ -190,7 +190,7 @@ export const SEMANTIC_CONTRACT = `你的任务是将原稿提炼、重组为适�
 先明确页面职责，按内容归属形成groups，再把各分支的条目放进blocks，用label与text区分要点和展开。${SHARED_RULES.category}先形成可阅读的实文提纲，再选择局部表达；不要把分属不同观点的依据摊成同级卡片，也不要把分类、依据、准则混称为证明。这些层级按实际内容使用，不强求每页都有两个分支或固定条目数。文字组内某条需要图示时，该block可选kind及expression、relationship、production，字段含义与整组蓝区相同；其label仍是上屏条目标题。未选kind的block为普通文字，整组非text时不再嵌套蓝区。${SHARED_RULES.expression}${SHARED_RULES.sketch}结构库按局部关系按需调用，本轮仅呈现蓝区制作说明。
 每组一个主要职责。claim概括主题或判断，正文展开对象、安排与条件，不把同一句建议分别复制到主题、组标题和正文。blocks按阅读顺序；${SHARED_RULES.label}三列对照改写成一条可读文字或拆成两个块。heading保持短小。蓝区expression写表达作用，relationship写谁与谁怎样关联，production写可执行的组织要求；三者分工，避免重复复述承载内容。必要关系须在实文组织或蓝区制作说明中可见，仅保留关键词或写在narrative里不等于表达完成。
 ${SHARED_RULES.source}引用表示信息来自哪里，不要求每段原文单独变成一个正文块；页级主题承载的信息可随相关block引用。${SHARED_RULES.declaration}小段共同说明就近融入主体，不因职责不同便独占大栏。${SHARED_RULES.condition}${SHARED_RULES.attachment}
-内容区尺寸由输入给定，主题句在内容区外，以28px单行呈现，需简短。排版仅有单主体、横向、纵向、规则网格，空间不够时重新组织或分页。正文22px（同页双容器形态按 18–20px 降档，仍超可降至 16px 下限；拆页/全宽维持 22px），组标题26px一行，组内每个可选label与text各自排字，约每行30px，块间距12px，每块四周8px内边距。每组70px标题/边距开销；按内容估计，不自己写坐标或强制页数。${SHARED_RULES.paging}同组label+text合计不超过400字。保留原稿数字写法。
+内容区尺寸由输入给定，主题句在内容区外，以28px单行呈现，需简短。排版仅有单主体、横向、纵向、规则网格，空间不够时重新组织或分页。正文22px（同页双容器形态按 20–18–16–15px 逐档降档，15px 为下限；拆页/全宽维持 22px），组标题26px一行，组内每个可选label与text各自排字，约每行30px，块间距12px，每块四周8px内边距。每组70px标题/边距开销；按内容估计，不自己写坐标或强制页数。${SHARED_RULES.paging}同组label+text合计不超过400字。保留原稿数字写法。
 ${SHARED_RULES.surface}正文必须能独立让读者理解必要关系，不能依赖后台说明。内部审查理由不要改写成正文：用“同时”“是否”“根据记录”等原稿已有表达保留关系，不额外解释“不是先后步骤”“不是已满足的证据”等审稿规则。原稿的模拟/假设性质属于读者需要的内容，须在实际标题或正文中明示，引用sourceIds不能代替显示。`;
 
 export const SEMANTIC_REVIEW_CONTRACT = `你是灰稿内容与表达审稿人。输入source是原稿，requirements是后台职责与必要关系，visiblePages是程序从实际渲染内容生成的上屏视图。只用visiblePages证明表达已落实；requirements不能作为上屏证据。尚未分配坐标或查看像素图。
