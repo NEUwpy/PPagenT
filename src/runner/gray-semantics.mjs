@@ -462,11 +462,16 @@ export function validateSemanticPlan(base, plan) {
         } else if (!hasProse) {
           fail('structure-collapsed', page.pageId, `同页双容器：组「${group.heading}」整条转蓝塌缩——条目必须保留灰散文 block（实文完整），蓝附注只是附注；请拆回两个块。`);
         } else {
-          // 摘引一致（评审 #33 推荐检查器）：结构位节点短语须为散文的连续子串（仅省标点）。
+          // 摘引一致（评审 #33/#77）：节点短语须以「／」分隔（占位高度按节点数真实计量），且为散文连续子串。
           const compact = value => String(value ?? '').replace(/[\s。，；：、！？（）()「」『』“”"'·—－-]/gu, '');
           const prose = compact((group.blocks ?? []).filter(block => (block.kind ?? 'text') === 'text').map(block => block.text ?? '').join('\n'));
           for (const note of (group.blocks ?? []).filter(block => block.kind && block.kind !== 'text')) {
-            const phrases = String(note.text ?? '').split(/[／/]|→|->/u).map(compact).filter(phrase => phrase.length >= 4);
+            const raw = String(note.text ?? '');
+            if (!/[／/]|→|->/u.test(raw)) {
+              fail('structure-quote-mismatch', page.pageId, `同页双容器：结构位节点短语缺少「／」分隔（占位高度按节点数真实计量）——请按规约用「／」逐项重列节点（如 节点一／节点二／节点三→结果）。`);
+              continue;
+            }
+            const phrases = raw.split(/[／/]|→|->/u).map(compact).filter(phrase => phrase.length >= 4);
             const mismatch = phrases.find(phrase => !prose.includes(phrase));
             if (mismatch) {
               fail('structure-quote-mismatch', page.pageId, `同页双容器：结构位节点短语「${mismatch}」不是散文的连续子串——摘引须与散文逐字一致（仅可省标点），请改回原文短语或补全限定词。`);

@@ -52,7 +52,7 @@ export function structurePlaceholderHeight(kind, nodeCount) {
   return rows * PLACEHOLDER_NODE_H + (rows - 1) * PLACEHOLDER_GAP + PLACEHOLDER_ARROW + PLACEHOLDER_PAD;
 }
 
-const placeholderNodeCount = text => Math.max(2, String(text ?? '').split(/[／/]|→|->/u).map(segment => segment.trim()).filter(Boolean).length);
+const placeholderNodeCount = text => Math.max(1, String(text ?? '').split(/[／/]|→|->/u).map(segment => segment.trim()).filter(Boolean).length);
 const BRIEF_NOTE = '本条先画结构图';
 
 export function grayBodyLayout(item, width, fontSize, availableHeight) {
@@ -65,34 +65,53 @@ export function grayBodyLayout(item, width, fontSize, availableHeight) {
   // 条目编号（评审 #25/#32/#71）：仅带标签的正文条目参与编号，附注块不编号、不占号。
   const labeledCount=item.kind==='text' && item.blocks ? item.blocks.filter(block=>(block.kind ?? 'text')==='text'&&block.label).length : 0;
   let labeledIndex=0;
-  const sections=item.kind==='text' && item.blocks
-    ? item.blocks.map(block=>{
+  const sections=[];
+  if(item.kind==='text' && item.blocks){
+    for(const block of item.blocks){
       const kind=block.kind ?? 'text';
-      const sectionFont=kind!=='text'?Math.min(fontSize,NOTE_FONT):fontSize;
-      const ordinal=kind==='text'&&block.label&&labeledCount>=2?++labeledIndex:0;
-      return {kind,fontSize:sectionFont,placeholder:kind!=='text',parts:grayDisplayBlocks({kind:'text',blocks:[block]},ordinal?{ordinal}:{})};
-    })
-    : [{kind:item.kind,fontSize,placeholder:false,parts:grayDisplayBlocks(item)}];
-  const contracts={};
-  const measured=sections.map((section,index)=>{
-    const parts=section.parts.map(part=>{
-      const fit=fitGrayText(part.text,width-2*padding,100000,section.fontSize);
-      return {...part,text:fit.text,height:fit.lineCount*section.fontSize*1.35,fits:fit.fits,fontSize:section.fontSize};
-    });
-    const id=`section-${index}`;
-    // 结构位真占位（任务 #75）：占位高＝构造图面积；描述文字装不下时降为一句「本条先画结构图」。
-    const placeholder=section.placeholder;
-    let minHeight=Math.ceil(parts.reduce((sum,part)=>sum+part.height,0)+labelGap*(parts.length-1)+2*padding);
-    if(placeholder){
-      minHeight=structurePlaceholderHeight(section.kind,placeholderNodeCount(section.parts.map(part=>part.text).join('／')));
-      const fullFits=parts.every(part=>fitGrayText(part.text,width-2*padding,minHeight-2*padding,part.fontSize??section.fontSize).fits);
-      if(!fullFits){
-        for(const part of parts) part.text=BRIEF_NOTE;
-        parts.forEach(part=>{const fit=fitGrayText(part.text,width-2*padding,100000,part.fontSize??section.fontSize);part.text=fit.text;part.height=fit.lineCount*(part.fontSize??section.fontSize)*1.35;part.fits=fit.fits;});
+      if(kind==='text'){
+        const ordinal=block.label&&labeledCount>=2?++labeledIndex:0;
+        sections.push({kind,fontSize,placeholder:false,standalone:false,note:null,parts:grayDisplayBlocks({kind:'text',blocks:[block]},ordinal?{ordinal}:{})});
+      }else{
+        // 三态修正（任务 #77，用户拍板）：条目内嵌结构位＝并入前一条目（占位归条目，灰底蓝纹）；
+        // 无前置条目的纯结构图块＝独立蓝底。
+        const note={kind,fontSize:Math.min(fontSize,NOTE_FONT),parts:grayDisplayBlocks({kind:'text',blocks:[block]})};
+        const previous=sections[sections.length-1];
+        if(previous&&previous.kind==='text'&&!previous.note) previous.note=note;
+        else sections.push({kind,fontSize:note.fontSize,placeholder:true,standalone:true,note:null,parts:note.parts});
       }
     }
+  } else {
+    sections.push({kind:item.kind,fontSize,placeholder:false,standalone:false,note:null,parts:grayDisplayBlocks(item)});
+  }
+  const fitParts=(parts,font)=>parts.map(part=>{
+    const fit=fitGrayText(part.text,width-2*padding,100000,font);
+    return {...part,text:fit.text,height:fit.lineCount*font*1.35,fits:fit.fits,fontSize:font};
+  });
+  const degrade=(parts,height,font)=>parts.every(part=>fitGrayText(part.text,width-2*padding,Math.max(20,height-2*padding),font).fits)
+    ? parts
+    : fitParts(parts.map(part=>({...part,text:BRIEF_NOTE,label:undefined,bold:false})),font);
+  const contracts={};
+  const measured=sections.map((section,index)=>{
+    const id=`section-${index}`;
+    const textParts=fitParts(section.parts,section.fontSize);
+    if(section.note){
+      const placeholderH=structurePlaceholderHeight(section.note.kind,placeholderNodeCount(section.note.parts.map(part=>part.text).join('／')));
+      const descParts=degrade(fitParts(section.note.parts,section.note.fontSize),placeholderH,section.note.fontSize);
+      const textHeight=Math.ceil(textParts.reduce((sum,part)=>sum+part.height,0)+labelGap*(textParts.length-1)+2*padding);
+      const minHeight=textHeight+placeholderH;
+      contracts[id]={minWidth:width,minHeight};
+      return {id,kind:section.kind,placeholder:true,standalone:false,noteArea:{top:textHeight,height:placeholderH},parts:[...textParts,...descParts],minHeight};
+    }
+    if(section.standalone){
+      const placeholderH=structurePlaceholderHeight(section.kind,placeholderNodeCount(section.parts.map(part=>part.text).join('／')));
+      const descParts=degrade(textParts,placeholderH,section.fontSize);
+      contracts[id]={minWidth:width,minHeight:placeholderH};
+      return {id,kind:section.kind,placeholder:true,standalone:true,parts:descParts,minHeight:placeholderH};
+    }
+    const minHeight=Math.ceil(textParts.reduce((sum,part)=>sum+part.height,0)+labelGap*(textParts.length-1)+2*padding);
     contracts[id]={minWidth:width,minHeight};
-    return {id,kind:section.kind,placeholder,parts,minHeight};
+    return {id,kind:section.kind,placeholder:false,standalone:false,parts:textParts,minHeight};
   });
   const minimum=measured.reduce((sum,section)=>sum+section.minHeight,0)+gap*(measured.length-1);
   const children=measured.map(section=>({groupId:section.id}));
@@ -126,7 +145,7 @@ export function grayBodyLayout(item, width, fontSize, availableHeight) {
       runs.push({text:part.text,x:padding,y,width:width-2*padding,height:part.height,bold:part.bold,fits:part.fits,fontSize:part.fontSize,...(part.kind?{kind:part.kind}:{})});
       y+=part.height+labelGap;
     }
-    return {...frame,kind:section.kind,id:section.id,minHeight:section.minHeight,...(section.placeholder?{placeholder:true}:{})};
+    return {...frame,kind:section.kind,id:section.id,minHeight:section.minHeight,...(section.placeholder?{placeholder:true}:{}),...(section.noteArea?{noteArea:section.noteArea}:{}),...(section.standalone?{standalone:true}:{})};
   });
   return {runs,sections:frames,height:target,minimumHeight:minimum,fits:runs.every(r=>r.fits)};
 }
@@ -285,18 +304,21 @@ export async function renderGrayDraft(state, output) {
       for(const section of body.sections){
         const sketch=section.kind==='card'||section.kind==='node'||section.kind==='row';
         const placeholder=Boolean(section.placeholder);
+        const embedded=placeholder&&section.noteArea;
         slide.shapes.add({
           geometry:section.kind==='node'?'roundRect':'rect',
           name:`block:${item.id}:${section.id}`,
           position:{left:left+16+section.left,top:top+54+section.top,width:section.width,height:section.height},
-          fill:placeholder?'#DCEBF7':section.kind==='text'?'#ECEEEF':sketch?'#FFFFFF':'#E1EFF9',
+          fill:embedded?'#ECEEEF':placeholder?'#E1EFF9':section.kind==='text'?'#ECEEEF':sketch?'#FFFFFF':'#E1EFF9',
           line:placeholder?{fill:'#B9C4CF',width:1}:sketch?{fill:section.kind==='row'?'#D4D8DC':'#B9C4CF',width:1}:{fill:'none',width:0},
         });
-        // 灰蓝条纹（任务 #75）：结构图真实占位状态，终稿时该区由图填充。
-        if(placeholder){
+        // 三态（任务 #77）：条目内嵌结构位＝灰底蓝纹（图形子区蓝底灰条）；纯结构图块＝蓝底。
+        if(embedded){
+          const area=section.noteArea;
+          slide.shapes.add({geometry:'rect',name:`notearea:${item.id}:${section.id}`,position:{left:left+16+section.left+2,top:top+54+section.top+area.top,width:section.width-4,height:area.height-4},fill:'#DCEBF7',line:{fill:'none',width:0}});
           const band=10, step=20;
-          for(let y=0;y+band<=section.height-2;y+=step){
-            slide.shapes.add({geometry:'rect',name:`stripe:${item.id}:${section.id}:${y}`,position:{left:left+16+section.left+1.5,top:top+54+section.top+1.5+y,width:section.width-3,height:band},fill:'#ECEEEF',line:{fill:'none',width:0}});
+          for(let y=0;y+band<=area.height-6;y+=step){
+            slide.shapes.add({geometry:'rect',name:`stripe:${item.id}:${section.id}:${y}`,position:{left:left+16+section.left+2.5,top:top+54+section.top+area.top+2+y,width:section.width-5,height:band},fill:'#ECEEEF',line:{fill:'none',width:0}});
           }
         }
       }

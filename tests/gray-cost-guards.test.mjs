@@ -179,7 +179,8 @@ test('结构位真占位：占位高按类型与节点数（与描述文字长�
   ] };
   const body = grayBodyLayout(group, 426, 18);
   const placeholder = body.sections.find(section => section.placeholder);
-  assert.equal(placeholder.minHeight, structurePlaceholderHeight('diagram', 4));
+  assert.equal(placeholder.noteArea.height, structurePlaceholderHeight('diagram', 4));
+  assert.equal(body.sections.filter(section => section.placeholder).length, 1); // 占位并入条目，不单列
   // 描述很长、占位较矮（flow）时降为一句
   group.blocks[1].kind = 'flow';
   group.blocks[1].expression = '把三项内部成因汇聚到同一后果的因果关系画出来，供读者直读阻力来源。'.repeat(3);
@@ -234,6 +235,10 @@ test('结构位缺失检查：同页双容器下明示汇聚/扇出必须有结�
   const looseQuote = plan();
   looseQuote.pages[0].groups[0].blocks.push({ id: 'b1n', text: '变革氛围尚未形成／信息系统支撑能力仍存在差距', kind: 'diagram', expression: '汇聚', relationship: '三因一果', production: '三框一果箭头图', sourceIds: ['s1'] });
   assert.ok(validateSemanticPlan(base, looseQuote).issues.some(issue => issue.code === 'structure-quote-mismatch'));
+  // 节点短语缺「／」分隔（评审 #77 收紧）→ 拒
+  const noSeparator = plan();
+  noSeparator.pages[0].groups[0].blocks.push({ id: 'b1n', text: '变革氛围尚未完全形成，信息系统支撑能力仍存在差距，缺乏市场化的管理机制', kind: 'diagram', expression: '汇聚', relationship: '三因一果', production: '三框一果箭头图', sourceIds: ['s1'] });
+  assert.ok(validateSemanticPlan(base, noSeparator).issues.some(issue => issue.code === 'structure-quote-mismatch'));
   // 收尾标点去重（评审 #33）：连续重复闭标点 → 拒
   const dupPunct = plan();
   dupPunct.pages[0].groups[0].blocks[0].text = '现阶段公司内部人力资源变革氛围尚未完全形成，造成变革落地阻力重重。。';
