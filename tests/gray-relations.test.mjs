@@ -101,4 +101,6 @@ test('审稿契约写明程序序号口径：编号用于核对层级，kind:not
   assert.match(SEMANTIC_REVIEW_CONTRACT, /序号不是模型标签/u);
   assert.match(SEMANTIC_REVIEW_CONTRACT, /kind:note/u);
   assert.match(SEMANTIC_REVIEW_CONTRACT, /不得被编号成与主体同级的条目/u);
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /该口径仅适用于文字条目内的蓝框占位，不适用于整组草图/u);
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /整组结构草图的节点文字按来源保真核对/u);
 });
