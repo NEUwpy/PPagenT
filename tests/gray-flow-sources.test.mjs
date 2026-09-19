@@ -69,14 +69,36 @@ test('覆盖检查豁免流转来源：只引用正文即可通过，未打标�
   assert.ok(uncovered.issues.some(issue => issue.code === 'missing-source-coverage' && issue.sourceIds?.includes('s3')));
 });
 
-test('流转信息不得上屏：标题、称谓、落款整段出现在正文都失败', () => {
+test('契约三分：流转信息上屏不再硬拦，转非阻塞提示、价值判断交独立审稿（评审 #111）', () => {
   const markedBase = base();
-  const title = validateSemanticPlan(markedBase, plan('关于开展固定资产盘点工作的通知', ['s1']));
-  assert.ok(title.issues.some(issue => issue.code === 'flow-source-onscreen'));
-  const greeting = validateSemanticPlan(markedBase, plan('各部门：', ['s2']));
-  assert.ok(greeting.issues.some(issue => issue.code === 'flow-source-onscreen'));
-  const signature = validateSemanticPlan(markedBase, plan('资产管理处\n2026年9月17日', ['s4']));
-  assert.ok(signature.issues.some(issue => issue.code === 'flow-source-onscreen'));
+  const onscreen = (flowText, flowId) => {
+    const item = plan('请各部门于 2026年9月17日 前完成自查，逐一核对资产编号。', ['s3']);
+    item.pages[0].groups[0].blocks.push({ id: 'bf', text: flowText, sourceIds: [flowId] });
+    return item;
+  };
+  for (const [flowText, flowId] of [['关于开展固定资产盘点工作的通知', 's1'], ['各部门：', 's2'], ['资产管理处\n2026年9月17日', 's4']]) {
+    const report = validateSemanticPlan(markedBase, onscreen(flowText, flowId));
+    assert.equal(report.accepted, true, JSON.stringify(report.issues));
+    assert.ok(report.warnings.some(warning => warning.code === 'flow-source-onscreen'), `${flowId} 应有上屏提示`);
+  }
+});
+
+test('契约三分·页级认领：未打标的文件名式标题不必单列条目，也能完成承载（评审 #111 验证①）', () => {
+  const doc = '办公用品采购管理规定\n\n单笔金额 500 元以下的，由部门负责人审批后自行采购。';
+  const state = newRunState(doc, 'fixture');
+  state.sources = markFlowSources(state.sources);
+  assert.equal(state.sources[0].flow, undefined);
+  const carried = plan('单笔金额 500 元以下的，由部门负责人审批后自行采购。', ['s2']);
+  carried.pages[0].sourceIds = ['s1'];
+  const report = validateSemanticPlan(state, carried);
+  assert.equal(report.accepted, true, JSON.stringify(report.issues));
+  const control = plan('单笔金额 500 元以下的，由部门负责人审批后自行采购。', ['s2']);
+  const controlReport = validateSemanticPlan(state, control);
+  assert.ok(controlReport.issues.some(issue => issue.code === 'missing-source-coverage' && issue.sourceIds?.includes('s1')));
+  const unknown = plan('单笔金额 500 元以下的，由部门负责人审批后自行采购。', ['s2']);
+  unknown.pages[0].sourceIds = ['s9'];
+  const unknownReport = validateSemanticPlan(state, unknown);
+  assert.ok(unknownReport.issues.some(issue => issue.code === 'invalid-semantic-plan'));
 });
 
 test('正文里的日期不误伤：单独日期不算上屏，引用流转来源作为附加来源也不报错', () => {
@@ -95,7 +117,7 @@ test('节标题按窄模式打标：第X部分/章/节独立成段；句中引�
   assert.equal(mark(['本节先讲两点不足，再讲四点感悟。'])[0].flow, undefined);
 });
 
-test('节标题来源覆盖豁免、上屏禁则覆盖标题层：组标题搬节标题失败，只引用正文通过', () => {
+test('节标题来源覆盖豁免；上屏由审稿按价值判断，不再机械拦截（评审 #111 契约三分）', () => {
   const doc = '第二部分：存在的不足与感悟\n\n首先是两点不足。一是势能到动能阻力重重。二是合规管理短板亟待提升。';
   const state = newRunState(doc, 'fixture');
   state.sources = markFlowSources(state.sources);
@@ -107,7 +129,8 @@ test('节标题来源覆盖豁免、上屏禁则覆盖标题层：组标题搬�
   const overscreen = plan('势能到动能阻力重重。合规管理短板亟待提升。', ['s2']);
   overscreen.pages[0].groups[0].heading = '第二部分：存在的不足与感悟';
   const overscreenReport = validateSemanticPlan(state, overscreen);
-  assert.ok(overscreenReport.issues.some(issue => issue.code === 'flow-source-onscreen'));
+  assert.equal(overscreenReport.accepted, true, JSON.stringify(overscreenReport.issues));
+  assert.ok(overscreenReport.warnings.some(warning => warning.code === 'flow-source-onscreen'));
 });
 
 test('结构旁白不得上屏：本部分先讲…式自造组织说明失败；正文陈述不误伤', () => {
@@ -128,7 +151,7 @@ test('实证样本：Boss 攻坚 run6 的 g7 元信息条目两条禁则全命�
   metaItem.pages[0].groups[0].heading = '第二部分：存在的不足与感悟';
   metaItem.pages[0].title = '第二部分：存在的不足与感悟';
   const report = validateSemanticPlan(state, metaItem);
-  assert.ok(report.issues.some(issue => issue.code === 'flow-source-onscreen'));
+  assert.ok(report.warnings.some(warning => warning.code === 'flow-source-onscreen'));
   assert.ok(report.issues.some(issue => issue.code === 'structural-narration'));
   const approvedForm = plan('势能到动能阻力重重。合规管理短板亟待提升。', ['s2']);
   approvedForm.pages[0].groups[0].heading = '不足：落地阻力与合规短板';

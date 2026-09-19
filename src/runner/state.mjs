@@ -138,7 +138,8 @@ export function upsertPageBriefs(state, pages) {
 
 /** 来源覆盖检查。accepted 只证明"每条来源都被引用"，不证明分页、标题或结论正确。 */
 export function validateContent(state) {
-  const used = new Set(state.pages.flatMap((page) => page.items.flatMap((item) => item.sourceIds)));
+  // 页级认领（page.sourceIds）与条目引用同为承载通道：结构性来源可不单列条目，由所在页认领（评审 #111 契约三分）。
+  const used = new Set(state.pages.flatMap((page) => [...(page.sourceIds ?? []), ...page.items.flatMap((item) => item.sourceIds)]));
   const missing = state.sources.filter((source) => !used.has(source.id)).map((source) => source.id);
   const issues = [];
   if (!state.deckBrief || !state.pages.length) issues.push({ code: "missing-deck-or-pages" });
