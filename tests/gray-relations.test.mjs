@@ -29,7 +29,7 @@ test('附着说明块：紧随所属条目、不编号、无占位框，审稿�
   const item = semanticPages(plan([groups]))[0].items[0];
   const display = grayDisplayBlocks(item);
   assert.deepEqual(display.filter(run => run.bold).map(run => run.text), ['一 焊前清理', '二 焊接保护', '三 层间温度', '缺一不可']);
-  assert.equal(display.filter(run => run.attachment).length, 1);
+  assert.equal(display.filter(run => run.attachment).length, 2);
   assert.deepEqual(display.filter(run => run.kind === 'note').map(run => run.text), ['三条缺一条，接头质量就没有保障。']);
   const body = grayBodyLayout(item, 600, 22);
   assert.equal(body.sections.length, 3);
