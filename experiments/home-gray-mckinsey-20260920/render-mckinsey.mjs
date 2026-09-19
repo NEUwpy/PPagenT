@@ -14,11 +14,12 @@ const frame = universityMckinseySkin.bodyFrame;
 const t = universityMckinseyTypography;
 const sizes = { page:t.title, heading:t.heading, label:t.heading, body:t.body, node:t.body, meta:t.meta };
 
-export async function renderMckinsey(gray, blueprint, outputDir) {
+export async function renderMckinsey(gray, blueprint, outputDir, {primaryColor = universityMckinseySkin.primaryColor} = {}) {
+  if(!/^#[0-9a-f]{6}$/i.test(primaryColor)) throw new Error('primaryColor must be a six-digit hex color');
   const invalid = validateBlueprint(gray, blueprint);
   if (invalid.length) throw new Error(invalid.join('; '));
   await fs.mkdir(outputDir, { recursive: true });
-  const theme = resolveStructureTheme(universityMckinseySkin), fonts = universityMckinseySkin.fonts;
+  const theme = resolveStructureTheme({...universityMckinseySkin, primaryColor}), fonts = universityMckinseySkin.fonts;
   const page = gray.pages[0];
   const {presentation:p, slides:[slide]} = await createNortheasternUniversityStarter({
     starterPptx:path.join(outputDir,'template-starter.pptx'),
@@ -142,7 +143,7 @@ export async function renderMckinsey(gray, blueprint, outputDir) {
   await fs.writeFile(path.join(outputDir,'slide-01.png'),new Uint8Array(await (await final.export({slide:final.slides.items[0],format:'png',scale:1})).arrayBuffer()));
   await fs.writeFile(path.join(outputDir,'slide-01.layout.json'),await (await final.slides.items[0].export({format:'layout'})).text());
   const qa={slideCount:final.slides.items.length,nativeShapes:slide.shapes.items.length,images:slide.images.items.length,
-    coverage,textBoxes,overlaps,geometry,humanReview:'pending',semanticReview:'external-review-required',headline:blueprint.headline,headlineEvidence:blueprint.headlineEvidence,skin:'northeastern-university-001',structureExecution:'task-local migration adapter; not registered preserved-design'};
+    coverage,textBoxes,overlaps,geometry,primaryColor:theme.primaryColor,humanReview:'pending',semanticReview:'external-review-required',headline:blueprint.headline,headlineEvidence:blueprint.headlineEvidence,skin:'northeastern-university-001',structureExecution:'task-local migration adapter; not registered preserved-design'};
   await fs.writeFile(path.join(outputDir,'build-check.json'),JSON.stringify(qa,null,2));
   return {accepted:true,pptx,preview:path.join(outputDir,'slide-01.png'),coverage:coverage.map(x=>x.blockId),nativeShapes:qa.nativeShapes,
     note:'Program checks passed; actual image and causal membership still require review.'};

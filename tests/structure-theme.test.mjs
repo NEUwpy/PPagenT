@@ -10,8 +10,12 @@ import {
   resolveStructureTheme,
 } from "../src/visual-runtime/html-component-theme.mjs";
 
-test("东北大学 Theme 引用共享默认主色常量", () => {
-  assert.equal(northeasternUniversityTheme.primaryColor, defaultStructurePrimaryColor);
+test("东北大学 Theme 以自身模板蓝色为基准并进入共享色阶派生", () => {
+  assert.equal(northeasternUniversityTheme.primaryColor, "#3361AE");
+  const theme = resolveStructureTheme(northeasternUniversityTheme);
+  assert.equal(theme.accent, northeasternUniversityTheme.primaryColor);
+  assert.equal(theme.body, northeasternUniversityTheme.body);
+  assert.notEqual(theme.primaryLight, resolveStructureTheme({primaryColor:defaultStructurePrimaryColor}).primaryLight);
 });
 
 test("主色推导强调色阶，显式 Skin 文字角色独立保留", () => {

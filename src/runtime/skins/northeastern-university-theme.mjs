@@ -1,8 +1,9 @@
-import { defaultStructurePrimaryColor } from "../../visual-runtime/html-component-theme.mjs";
-
 export const northeasternUniversityTheme = Object.freeze({
-  // Source: 阶段门禁流程-004 gate-check, the structure's strongest emphasis blue.
-  primaryColor: defaultStructurePrimaryColor,
+  // Anchor to the existing university banner, not the generic structure palette.
+  // Source: runtime-template.pptx body banner, left-middle blue (#3361AE).
+  // The template currently embeds that gradient in artwork; this seed controls
+  // native body/structure accents, not a parametric recoloring of the artwork.
+  primaryColor: "#3361AE",
   background: "#FFFFFF",
   surface: "#FFFFFF",
   dark: "#2B2B2B",

@@ -1,0 +1,7 @@
+User preference: the current university Skin banner looks better; native body/structure theme should follow its blue family.
+Changed university default from #315F91 (generic structure blue) to #3361AE (sampled left-middle banner blue).
+Headings, item numbers, convergence paths, input accents, borders and result fill all use the same primary seed and existing derivation recipe.
+Source content, model blueprint, typography and all body geometry are unchanged; try-theme.mjs verifies coverage/textBoxes/geometry equality against run-02.
+The inherited banner gradient and university identity artwork remain byte-preserved by the existing template route. This does not implement parameter-driven recoloring of embedded Skin artwork.
+Final exported PPT was reimported and its full-slide PNG inspected. Color match is closer to the banner, with readable white text in the result. User review pending.
+Historical run-02 records describe the previous default. New default replays use the new blue; the old appearance can still be reproduced by renderMckinsey(...,{primaryColor:'#315F91'}).
