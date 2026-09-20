@@ -100,7 +100,8 @@ test('程序不按词表强制附注：同措辞不同真实关系与同关系�
 test('审稿契约写明程序序号口径：编号用于核对层级，kind:note 视为附着落实', () => {
   assert.match(SEMANTIC_REVIEW_CONTRACT, /序号不是模型标签/u);
   assert.match(SEMANTIC_REVIEW_CONTRACT, /kind:note/u);
-  assert.match(SEMANTIC_REVIEW_CONTRACT, /不得被编号成与主体同级的条目/u);
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /组内条目层级是规划职责/u);
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /条件触发的处置、异常、例外（组间层级）/u);
   assert.match(SEMANTIC_REVIEW_CONTRACT, /该口径仅适用于文字条目内的蓝框占位，不适用于整组草图/u);
   assert.match(SEMANTIC_REVIEW_CONTRACT, /整组结构草图的节点文字按来源保真核对/u);
 });
