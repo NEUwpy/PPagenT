@@ -6,7 +6,7 @@
     "从根到分组再到成员有连续阅读路径",
     "每个成员只属于一个分组"
   ],
-  "adaptation": "按每组实际成员量分配高度和间距；不为对齐复制成员或虚构分组。",
+  "adaptation": "保持原朝向、排布及关系；共享入口联动调整原设计几何。大中小按实际占区约为正文区 1、1/2、1/3；文字按 Skin 允许档位测量，内容过密明确拒绝。",
   "source": "visual-intent.md",
   "exampleImplementation": "review.mjs",
   "validation": {
@@ -26,10 +26,30 @@
     ],
     "coupledChanges": "根据真实成员量分配各组高度，分支端点跟随组标题与承载区",
     "avoid": "不能为了对齐均分、复制成员；换朝向或增加层级须另做对照验证",
-    "status": "documented-not-implemented",
+    "status": "implemented-unreviewed",
     "sources": [
       "visual-intent.md",
       "review.mjs"
     ]
+  },
+  "implementation": {
+    "mode": "preserved-design",
+    "adapter": "shared-css-geometry",
+    "status": "implemented-unreviewed",
+    "entry": "review.mjs",
+    "sizeExamples": {
+      "large": {
+        "areaRatio": 1
+      },
+      "medium": {
+        "areaRatio": 0.5
+      },
+      "small": {
+        "areaRatio": 0.3333333333333333
+      }
+    },
+    "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+    "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+    "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
   }
 }

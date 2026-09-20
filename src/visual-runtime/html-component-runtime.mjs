@@ -67,7 +67,32 @@ function componentDocument(markup, css, frame, theme) {
   </style></head><body>${markup}</body></html>`;
 }
 
-export async function resolveHtmlComponent({ component, parameters, assetDir, targetFrame = null, theme = {}, adaptation = null }) {
+// Read the actual visible design footprint before allocating a local region.
+// This probe does not validate or compile content; the final fitted render does.
+export async function measureHtmlComponentBounds({ component, parameters, assetDir, theme = {} }) {
+  const css = component.cssText ?? await fs.readFile(path.join(assetDir, component.cssFile), 'utf8');
+  const compiled = compileHtmlComponentTheme({ markup: component.renderMarkup(parameters), css, theme });
+  const page = await (await getBrowser()).newPage();
+  try {
+    await page.setContent(componentDocument(compiled.markup, compiled.css, component.designFrame, theme));
+    return await page.evaluate(async () => {
+      await document.fonts.ready;
+      const root = document.querySelector('[data-ppt-root]');
+      const origin = root.getBoundingClientRect();
+      const boxes = [...root.querySelectorAll('[data-ppt-kind]')]
+        .filter(el => getComputedStyle(el).display !== 'none')
+        .map(el => el.getBoundingClientRect()).filter(b => b.width > 0 || b.height > 0);
+      if (!boxes.length) throw new Error('结构没有可测量对象');
+      const left = Math.min(...boxes.map(b => b.left)) - origin.left;
+      const top = Math.min(...boxes.map(b => b.top)) - origin.top;
+      const right = Math.max(...boxes.map(b => b.right)) - origin.left;
+      const bottom = Math.max(...boxes.map(b => b.bottom)) - origin.top;
+      return { left: left - 12, top: top - 12, width: right - left + 24, height: bottom - top + 24 };
+    });
+  } finally { await page.close(); }
+}
+
+export async function resolveHtmlComponent({ component, parameters, assetDir, targetFrame = null, theme = {}, adaptation = null, screenshotPath = null, includeDocument = false }) {
   requireValue(component && typeof component.renderMarkup === "function", "HTML Component 缺少 renderMarkup");
   const hasInlineCss = typeof component.cssText === "string" && component.cssText.trim().length > 0;
   const hasCssFile = typeof component.cssFile === "string" && component.cssFile;
@@ -125,6 +150,16 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
       const root = document.querySelector("[data-ppt-root]");
       if (!root) throw new Error("HTML Component 缺少 data-ppt-root");
       const preserveFont = root.dataset.pptPreserveFont === 'true';
+      if (preserveFont && root.dataset.pptFitFootprint === 'true') {
+        // SVG viewBoxes scale text a second time. Keep the visible font above
+        // the same 12 pt floor as HTML, then extract its actual screen size.
+        for (const label of root.querySelectorAll('svg text')) {
+          const matrix = label.getScreenCTM();
+          const scale = Math.hypot(matrix.c, matrix.d);
+          const fontSize = parseFloat(getComputedStyle(label).fontSize);
+          if (scale > 0 && fontSize * scale < 16) label.style.fontSize = `${16 / scale}px`;
+        }
+      }
       const number = (value) => Number.parseFloat(value) || 0;
       const standardizedFontSizesPt = [...new Set(Object.values(typographyContract)
         .map(Number)
@@ -176,7 +211,9 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         clone.style.fontSize = `${fontSizePt}pt`;
         clone.style.webkitLineClamp = "unset";
         clone.style.whiteSpace = singleLine ? "nowrap" : sourceStyle.whiteSpace;
-        document.body.appendChild(clone);
+        // Preserve ancestor-scoped Skin fonts, line heights and local overrides
+        // while measuring. Moving the probe to body changes those selectors.
+        element.parentElement.appendChild(clone);
         const cloneStyle = getComputedStyle(clone);
         const lineHeight = number(cloneStyle.lineHeight) || number(cloneStyle.fontSize) * 1.2;
         const lines = renderedLineCount(clone);
@@ -277,7 +314,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
           ...(body ? { body: number(getComputedStyle(body).fontSize) * 0.75 } : {}),
         };
         let selected = null;
-        for (const candidate of flowProfiles(composition)) {
+        for (const candidate of preserveFont ? [original] : flowProfiles(composition)) {
           if (title && Number.isFinite(candidate.title)) title.style.fontSize = `${candidate.title}pt`;
           if (body && Number.isFinite(candidate.body)) body.style.fontSize = `${candidate.body}pt`;
           flow.getBoundingClientRect();
@@ -600,7 +637,8 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
       };
       const textStyle = (element, style, opacity) => {
         const singleLineCenter = element.dataset.pptTextLayout === "single-line-center";
-        const fontSize = rounded(parseFloat(style.fontSize));
+        const matrix = element instanceof SVGTextElement ? element.getScreenCTM() : null;
+        const fontSize = rounded(parseFloat(style.fontSize) * (matrix ? Math.hypot(matrix.c, matrix.d) : 1));
         const centeredByLayout = (
           (["grid", "inline-grid"].includes(style.display) && [style.justifyItems, style.placeItems].some((value) => value?.includes("center")))
           || (["flex", "inline-flex"].includes(style.display) && style.justifyContent === "center")
@@ -1096,7 +1134,9 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
       return {
         schemaVersion: 5,
         frame: { width: rounded(rootBox.width), height: rounded(rootBox.height) },
-        overflow: root.scrollWidth > root.clientWidth + 1 || root.scrollHeight > root.clientHeight + 1,
+        overflow: root.dataset.pptFitFootprint === 'true'
+          ? nodes.some(n => n.frame.left < -2 || n.frame.top < -2 || n.frame.left + n.frame.width > rootBox.width + 2 || n.frame.top + n.frame.height > rootBox.height + 2)
+          : root.scrollWidth > root.clientWidth + 1 || root.scrollHeight > root.clientHeight + 1,
         textFlowOverflows,
         textLayoutOverflows,
         fontOverflows: preserveFont ? [...root.querySelectorAll('[data-ppt-font-fit="overflow"]')].map(el=>el.dataset.pptName || el.textContent) : [],
@@ -1106,7 +1146,8 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         slots,
       };
     }, resolveComponentTypography(theme));
-    requireValue(!tree.overflow, `${component.id ?? "HTML Component"} 超出设计区域`);
+    if (screenshotPath) await page.screenshot({path:screenshotPath});
+    requireValue(!tree.overflow, `${component.id ?? "HTML Component"} 超出设计区域${component.footprintFit ? ': ' + tree.nodes.filter(n => n.frame.left < -2 || n.frame.top < -2 || n.frame.left+n.frame.width > tree.frame.width+2 || n.frame.top+n.frame.height > tree.frame.height+2).map(n=>n.name+' '+JSON.stringify(n.frame)).join('; ') : ''}`);
     requireValue(!tree.fontOverflows.length, `${component.id} 当前区域无法以选定的允许字号容纳文字：${tree.fontOverflows.join(', ')}。请扩大区域、减少本区域内容密度或换用结构；不继续降低字号。`);
     requireValue(!tree.textFlowOverflows.length, `${component.id ?? "HTML Component"} 的文字容器无法在规范字号内排版：${tree.textFlowOverflows.join(", ")}`);
     const textLayoutOverflowDetails = tree.slots
@@ -1128,6 +1169,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
     assertResolvedTextContainerSlots(tree.slots, component.textCapacity ?? {}, component.id);
     return {
       ...tree,
+      ...(includeDocument ? { resolvedDocument: await page.content() } : {}),
       componentId: component.id,
       targetFrame: normalizedTargetFrame,
     };

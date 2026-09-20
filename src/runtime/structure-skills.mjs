@@ -36,7 +36,7 @@ export async function loadStructureSkill(assetId, root = defaultRoot) {
   const guide = await readStructureGuide(descriptor.assetDir);
   return { ...descriptor, visualIntent, guide, skill: structureSkillProfile(descriptor.asset, visualIntent, guide) };
 }
-export async function executeStructureSkill({ slide, skin, targetFrame, references, build, content, execution, root = defaultRoot }) {
+export async function executeStructureSkill({ slide, skin, targetFrame, size, scale = 1, references, build, content, execution, root = defaultRoot }) {
   if (execution === 'preserved-design') {
     if (build) throw new Error('保留造型模式使用已登记实现，不接受额外 build');
     ({ buildPreservedStructure: build } = await import('./preserved-structure-build.mjs'));
@@ -47,14 +47,18 @@ export async function executeStructureSkill({ slide, skin, targetFrame, referenc
     if (!reference.assetId || !Array.isArray(reference.preservedFeatures) || !reference.preservedFeatures.length
       || reference.preservedFeatures.some(feature => typeof feature !== 'string' || !feature.trim())) throw new Error('每个参考需 assetId 和非空 preservedFeatures');
   }
+  const skills = await Promise.all(references.map(reference => loadStructureSkill(reference.assetId, root)));
+  if (!targetFrame && size && execution === 'preserved-design' && skills.length === 1) {
+    const {resolveStructureSizeFrame} = await import('./preserved-structure-build.mjs');
+    targetFrame = await resolveStructureSizeFrame(skills[0], size, content, skin, scale);
+  }
   const f = targetFrame, b = skin?.bodyFrame;
   if (!f || !b || ![f.left, f.top, f.width, f.height, b.left, b.top, b.width, b.height].every(Number.isFinite)
     || f.width <= 0 || f.height <= 0 || f.left < b.left || f.top < b.top
     || f.left + f.width > b.left + b.width || f.top + f.height > b.top + b.height) throw new Error('targetFrame 必须位于本页正文区域内');
-  const skills = await Promise.all(references.map(reference => loadStructureSkill(reference.assetId, root)));
   const before = slide.shapes.items.length;
   const result = await build({ slide, skin, frame: { ...f }, content, references: skills });
   const nativeShapeDelta = slide.shapes.items.length - before;
   if (nativeShapeDelta <= 0) throw new Error('构建没有生成原生形状或文字，不能报告结构执行成功');
-  return { result, nativeShapeDelta, validation: 'rendered-unreviewed' };
+  return { result, nativeShapeDelta, targetFrame: {...f}, validation: 'rendered-unreviewed' };
 }

@@ -432,8 +432,8 @@
     <section class="section" id="capabilities">
       <div id="structure-preview-controls" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:16px 0">
         <label>Skin <select id="structure-preview-skin"><option value="university">东北大学 Skin</option><option value="neutral">中性 Skin</option></select></label>
-        <label>尺寸 <select id="structure-preview-size"><option value="large">大 · 100%</option><option value="medium">中 · 85%</option><option value="small">小 · 70%</option></select></label>
-        <small>能力状态分开登记：换色、尺寸、整页与 PPT；待审 Skin 不代表已验收。中小尺寸仍仅三个样板。</small>
+        <label>尺寸 <select id="structure-preview-size"><option value="large">大 · 整页内容区</option><option value="medium">中 · 约半页</option><option value="small">小 · 约三分之一页</option></select></label>
+        <small>全部 35 个结构共用大／中／小入口，保持各自比例并适配文字。预览按实际内容检查，整页效果另行确认。</small>
       </div>
       <div class="section-head"><div><h2>01 · 结构 Skill 库</h2><p>按内容关系发现结构，保留造型与表达特征，按本页内容重新编排。样例不是任意数量与尺寸的保证；请按每个结构的能力状态选择。</p></div><span class="pill pending" id="logic-count"></span></div>
       <details style="margin:12px 0;padding:12px;border:1px solid #d8dee7;border-radius:8px"><summary>新 Skin 接入流程</summary><p>登记主色与字体 → 刷新看板预览 → 检查代表结构 → 人工确认。技术检查不自动批准 Skin；正式排版与生产入口另行绑定。</p><p>登记命令：<code>node src/tools/register-structure-skin.mjs --id your-skin --name 名称 --main-color '#EFE4D2'</code></p><p>检查命令：<code>node src/tools/check-structure-skin.mjs --skin your-skin --base 当前看板地址</code></p><p>完整说明：docs/工作流/资产积累与入库/结构Skin接入.md</p></details>
@@ -527,6 +527,8 @@
     const purposeText = (asset) => asset.purposes?.length ? asset.purposes.map((item) => item.key).join("、") : "—";
     const liveMode = DATA.mode === "live-repository-api" && location.protocol.startsWith("http");
     const previewSkin = new URLSearchParams(location.search).get('skin');
+    const previewSize = new URLSearchParams(location.search).get('size');
+    if (['large','medium','small'].includes(previewSize)) document.getElementById('structure-preview-size').value = previewSize;
     if(DATA.structureSkins?.length)document.getElementById('structure-preview-skin').innerHTML=DATA.structureSkins.map(s=>'<option value="'+esc(s.id)+'">'+esc(s.name)+(s.status==='candidate'?' · 待审':'')+'</option>').join('');
     if ((DATA.structureSkins??[{id:'neutral'},{id:'university'}]).some(s=>s.id===previewSkin)) document.getElementById('structure-preview-skin').value = previewSkin;
 
@@ -1159,6 +1161,10 @@
     });
     for (const id of ['structure-preview-skin', 'structure-preview-size']) {
       document.getElementById(id).addEventListener('change', () => {
+        const address = new URL(location.href);
+        address.searchParams.set('skin', document.getElementById('structure-preview-skin').value);
+        address.searchParams.set('size', document.getElementById('structure-preview-size').value);
+        history.replaceState(null, '', address);
         for (const mirror of document.querySelectorAll('[data-mirror-control="' + id + '"]')) mirror.value = document.getElementById(id).value;
         for(const element of document.querySelectorAll('[data-status-asset]')){const asset=DATA.records.find(a=>a.id===element.dataset.statusAsset);if(asset)element.outerHTML=structureStatusMarkup(asset);}
         for (const iframe of document.querySelectorAll('iframe')) {

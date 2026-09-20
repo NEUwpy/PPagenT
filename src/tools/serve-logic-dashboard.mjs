@@ -1,7 +1,8 @@
 import {listStructureSkins} from '../runtime/skins/structure-skin-registry.mjs';
 import { neutralEditorialTheme } from '../runtime/skins/neutral-editorial-theme.mjs';
-import { preservedComponent } from '../runtime/preserved-structure-build.mjs';
-import { preservedSizeExamples } from '../visual-runtime/preserved-design-layout.mjs';
+import { loadPreservedComponent, resolveStructureSizeFrame } from '../runtime/preserved-structure-build.mjs';
+import { loadStructureSkill } from '../runtime/structure-skills.mjs';
+import { resolveHtmlComponent } from '../visual-runtime/html-component-runtime.mjs';
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import http from "node:http";
@@ -257,27 +258,33 @@ async function componentPreviewHtml(library, assetId, searchParams) {
   const selectedSkin=(await listStructureSkins(projectRoot)).find(s=>s.id===skinKey);
   if(!selectedSkin)return null;
   const theme=selectedSkin.theme;
-  const ratio = preservedSizeExamples[sizeKey];
-  const supported = typeof component.renderAdaptiveMarkup === 'function';
-  if (!ratio) return null;
-  if (skinKey !== 'university' && !(resolved.record.status === 'core' && resolved.record.userApprovedHtmlNative)) {
+  // Core assets all use the unified large/medium/small preserved-design entry.
+  // Approval remains a visual-status field; it must not hide an available
+  // component preview from the workbench.
+  const supported = resolved.record.status === 'core';
+  if (!['large','medium','small'].includes(sizeKey)) return null;
+  if (skinKey !== 'university' && resolved.record.status !== 'core') {
     return '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><body style="display:grid;place-content:center;height:90vh;font:16px sans-serif;color:#4b4a45;background:#f5f4ef">本轮只适配已审批结构；该结构不在范围内。</body></html>';
-  }
-  if (!supported && sizeKey !== 'large') {
-    return '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><body style="margin:0;display:grid;place-content:center;height:100vh;background:#f5f4ef;color:#4b4a45;font:16px sans-serif;text-align:center"><strong>此尺寸尚未适配</strong><p>当前可查看：两种 Skin · 大</p><small>不会用图片缩放代替真实尺寸适配</small></body></html>';
   }
   const canvasWidth = Number(component.designFrame?.width);
   const canvasHeight = Number(component.designFrame?.height);
-  const previewComponent = supported ? preservedComponent(component, {
-    left: 0, top: 0, width: canvasWidth * ratio, height: canvasHeight * ratio,
-  }, theme) : component;
+  const ref = supported ? await loadStructureSkill(assetId,projectRoot) : null;
+  const frame = supported ? await resolveStructureSizeFrame(ref,sizeKey,previewParameters,theme) : {width:canvasWidth,height:canvasHeight};
+  const previewComponent = supported ? await loadPreservedComponent(ref,frame,theme,previewParameters) : component;
+  css = previewComponent.cssText ?? css;
   const compiledTheme = compileHtmlComponentTheme({
     markup: previewComponent.renderMarkup(previewParameters),
     css,
     theme,
   });
-  const markup = compiledTheme.markup;
+  let markup = compiledTheme.markup;
   css = compiledTheme.css;
+  if (supported) {
+    // Preview the same measured layout that the native builder consumes.
+    const tree = await resolveHtmlComponent({ component: previewComponent, parameters: previewParameters,
+      assetDir: resolved.assetDir, theme, targetFrame: frame, includeDocument: true });
+    markup = tree.resolvedDocument.match(/<body[^>]*>([\s\S]*)<\/body>/i)[1];
+  }
   const stateLabel = (resolved.record.componentControls ?? []).map((control) => `${control.label} ${selection[control.key]}`).join(" · ");
   const designWidth = Number(component.designFrame?.width);
   const designHeight = Number(component.designFrame?.height);
@@ -287,7 +294,7 @@ html,body{margin:0!important;width:100%!important;height:100%!important;overflow
 body{position:relative!important;background:${theme.background}!important}
 .ppagent-component-viewport{position:absolute;inset:0;overflow:hidden;background:${theme.background}}
 .ppagent-component-scale{--ppagent-preview-scale:min(calc((100vw - 4px) / ${designWidth}px),calc((100vh - 4px) / ${designHeight}px));position:absolute;left:50%;top:50%;width:${designWidth}px;height:${designHeight}px;margin-left:${-designWidth / 2}px;margin-top:${-designHeight / 2}px;transform:scale(var(--ppagent-preview-scale));transform-origin:center center}
-</style></head><body><div class="ppagent-component-viewport"><div class="ppagent-component-scale"><div data-preview-size="${sizeKey}" data-preview-skin="${skinKey}" style="position:absolute;left:${canvasWidth * (1-ratio)/2}px;top:${canvasHeight * (1-ratio)/2}px;width:${canvasWidth*ratio}px;height:${canvasHeight*ratio}px">${markup}</div></div></div></body></html>`;
+</style></head><body><div class="ppagent-component-viewport"><div class="ppagent-component-scale"><div data-preview-size="${sizeKey}" data-preview-skin="${skinKey}" style="position:absolute;left:${(canvasWidth-frame.width)/2}px;top:${(canvasHeight-frame.height)/2}px;width:${frame.width}px;height:${frame.height}px">${markup}</div></div></div></body></html>`;
 }
 
 async function intakeSlotContractFor(library, assetId) {
