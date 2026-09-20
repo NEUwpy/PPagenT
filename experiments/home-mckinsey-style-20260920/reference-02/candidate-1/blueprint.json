@@ -1,0 +1,73 @@
+{
+  "sectionTitle": "不足感悟",
+  "headline": "变革落地仍存三项短板，合规基础管理亦待压实",
+  "headlineEvidence": [
+    "implementation",
+    "compliance",
+    "criterion"
+  ],
+  "groupWeights": [
+    1,
+    1.1
+  ],
+  "diagrams": [
+    {
+      "groupId": "issues",
+      "blockId": "implementation",
+      "assetId": "convergence-many-to-one-003",
+      "context": "顶层设计已完成",
+      "inputs": [
+        "公司内部人力资源变革氛围尚未完全形成",
+        "信息系统支撑能力仍有差距",
+        "缺乏市场化管理机制"
+      ],
+      "result": "变革落地阻力重重",
+      "reason": "原文明确三方面条件并列作用、共同造成落地阻力，属多路独立输入直接合并为唯一结果，不涉及逐级筛选或中间归纳层，与该结构的分离输入、平滑汇聚、唯一结果三特征一致。"
+    }
+  ],
+  "visual": {
+    "groupGap": 32,
+    "sectionDivider": true,
+    "groups": [
+      {
+        "id": "issues",
+        "index": "large",
+        "heading": "plain",
+        "rhythm": "natural"
+      },
+      {
+        "id": "insights",
+        "index": "circle-rail",
+        "heading": "taper",
+        "rhythm": "distributed"
+      }
+    ]
+  },
+  "detailStrips": [
+    {
+      "groupId": "issues",
+      "blockId": "compliance",
+      "intro": "2017年巡视整改取得一定成效，也暴露人力条线基础管理薄弱：",
+      "lead": "manifestations",
+      "parts": [
+        {
+          "label": "认识",
+          "body": "待提升"
+        },
+        {
+          "label": "作风",
+          "body": "待转变"
+        },
+        {
+          "label": "能力",
+          "body": "待增强"
+        },
+        {
+          "label": "协同",
+          "body": "待深化"
+        }
+      ]
+    }
+  ],
+  "reason": "本轮只做提示要求的一处变化，其余视觉参数、事实、分组、主旨句与结构关系全部沿用已确认候选：groupWeights 1:1.1、groupGap=32、sectionDivider=true、issues=large+plain+natural 含汇聚图、insights=circle-rail+taper+distributed 均保持不变。\\n\\n1) lead=manifestations（本轮唯一变化）：compliance 行以「认识／作风／能力／协同」四项同口径短项列出「基础管理薄弱」的并列表现。这四项在原文中并非四个并列议题，而是同一判断之下同一层面的具体表现，因此在该行加一个共同的组织标签「主要表现」，标明后方条目的共同角色。\\n   - 它不是新增内容判断：文本仍是「2017年巡视整改取得一定成效，也暴露人力条线基础管理薄弱：认识待提升、作风待转变、能力待增强、协同待深化」，未增删任何事实、口径或顺序。\\n   - 它标识的是条目共同承担的语义角色（表现），而非步骤、因果或优先级，因而不与 issues 域「梳理当前问题」的角色冲突，也不改变该域与 insights 域的分工。\\n   - 四项目仍是「对象—状态」短项，label 只取对象短名（认识／作风／能力／协同），body 只取余下状态（待提升／待转变／待增强／待深化），两者互不重叠；intro＋四项 label＋body 依次拼接恰好覆盖整块原文，未使用时为空数组的规则同样满足。\\n\\n2) issues 其余部分不动：implementation 仍由 convergence-many-to-one-003 表达「顶层设计已完成」之外三方面并列条件直接汇聚为「变革落地阻力重重」，该结构语义（分离输入、平滑汇聚、唯一结果）与原文关系一致，无逐级筛选、无中间归纳层、无独立结果，guide 的 avoid 条件均未触发，故不替换；图示组不设 rail，保持 large+plain+natural。\\n\\n3) insights 不动：四点感悟为并列体会，circle-rail 只作逐项定位，无箭头、不表示先后或因果；taper 阅读带仍为白到主题极浅色的连续条目底面，末端斜切不指示流向；distributed 只在四条之间分配余量，不拉伸条目、不改标题与编号样式。\\n\\n4) 未在本轮重选任何其他视觉参数：编号形式、阅读轴、浅色斜切阅读带、图示组、全部文案与栏宽沿用已有候选，避免把一次成功当作全面重设的理由。"
+}
