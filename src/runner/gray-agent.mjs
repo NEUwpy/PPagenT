@@ -371,8 +371,49 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
   await fs.writeFile(path.join(agentDir, 'transcript.json'), json({ stopReason: result.stopReason, detail: result.detail ?? null, note: result.note ?? null, ...transcriptSummary(result), tools: registry.names() }), 'utf8');
   agentState.grayDraft.turnSummary = transcriptSummary(result);
   if (result.stopReason !== 'delivered') {
-    agentState.grayDraft.status = 'blocked';
-    agentState.runtimeFailure = { message: result.note ?? `Agent 循环停止：${result.stopReason}` };
+    // 止损阀（评审 #58 采纳为默认）：预算耗尽但已有完整计划时，渲染候选交付并如实标未复核——
+    // 候选仅供人审，绝不继承通过状态；渲染失败或检查未过仍按 blocked 记录。
+    let candidateRendered = false;
+    if (lastPlan) {
+      try {
+        const candidateDir = path.join(output, 'agent-renders', `candidate-${renderCount + 1}`);
+        await fs.mkdir(candidateDir, { recursive: true });
+        const applied = applyTemplateDefaults(lastPlan, []);
+        const built = resolveGrayLayout(lastPlan, { pages: applied.layouts }, area, {
+          measureBody: grayBodyLayout, fitText: fitGrayText,
+          fontSizes: () => [22, 20, 18, 16, 15, 14, 13, 12],
+        });
+        const report = validateGrayPlan(base, built.plan, area);
+        if (report.accepted) {
+          await fs.writeFile(path.join(candidateDir, 'plan.json'), json({ ...built.plan, planningNotes: lastPlan.planningNotes ?? null }), 'utf8');
+          const renderState = { ...report.state, grayDraft: { ...agentState.grayDraft, status: 'rendering' } };
+          await renderGrayDraft(renderState, candidateDir);
+          for (const name of ['gray-draft.pptx', 'editable-check.json', 'preview-index.json', 'plan.json']) {
+            await fs.copyFile(path.join(candidateDir, name), path.join(output, name));
+          }
+          await fs.cp(path.join(candidateDir, 'preview'), path.join(output, 'preview'), { recursive: true });
+          agentState.pages = renderState.pages;
+          agentState.artifactState = Object.fromEntries(renderState.pages.map(page => [page.pageId, {
+            status: 'rendered-awaiting-review', revision: page.revision,
+            pptxPath: path.join(path.relative(output, candidateDir), 'gray-draft.pptx'),
+          }]));
+          agentState.grayDraft.plan = built.plan;
+          agentState.grayDraft.programCheck = { ...report, state: undefined };
+          const coverage = checkReviewCoverage(lastReview, lastPlan);
+          agentState.grayDraft.reviewNotes = { status: coverage.status, at: lastReview?.at ?? null, issues: lastReview?.issues ?? null, fingerprint: coverage.fingerprint };
+          agentState.grayDraft.reviewCoverage = { status: coverage.status, deliveredFingerprint: coverage.fingerprint, reviewedFingerprint: coverage.reviewedFingerprint, checkedAt: new Date().toISOString(), candidate: true };
+          agentState.grayDraft.candidateDelivery = true;
+          agentState.grayDraft.status = 'awaiting-user-review';
+          candidateRendered = true;
+        }
+      } catch (error) {
+        agentState.grayDraft.candidateFailure = String(error?.message ?? error);
+      }
+    }
+    if (!candidateRendered) {
+      agentState.grayDraft.status = 'blocked';
+      agentState.runtimeFailure = { message: result.note ?? `Agent 循环停止：${result.stopReason}` };
+    }
   }
   await saveAgentState();
   if (agentState.pages?.length) await fs.writeFile(path.join(output, 'content.md'), renderContentMarkdown(agentState), 'utf8');
