@@ -347,7 +347,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
     userMessage: `稿件全文：\n${raw}\n\n来源切分（引用 sourceIds 必须以此表为准；preview 是该来源的开头，完整内容见稿件全文）：\n${JSON.stringify(base.sources.map(source => ({
       id: source.id,
       ...(source.heading ? { heading: source.heading } : {}),
-      ...(source.flow ? { flow: `流转信息（${source.flow}）：无需引用、不得上屏` } : {}),
+      ...(source.flow ? { flow: `流转信息（${source.flow}）：无需引用；默认不上屏，确有展示价值（如文档标题、署名）时可自然出现` } : {}),
       preview: source.text.length > 80 ? `${source.text.slice(0, 80)}…` : source.text,
     })), null, 1)}\n\n目标区尺寸：宽 ${area.width} × 高 ${area.height}（设计像素）。请把它做成灰稿：先规划，用工具检查与审稿，最后渲染；渲染成功即完成。`,
     registry: observed,
