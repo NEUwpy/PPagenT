@@ -87,9 +87,9 @@ test('审稿窄条款在契约中：同页并列类别不得要求配对/对应�
   assert.match(SEMANTIC_REVIEW_CONTRACT, /必须有原稿明示依据/u);
 });
 
-test('结构位口径在审稿契约中：汇聚/扇出用 diagram、节点短语摘引一致', () => {
+test('结构位口径在审稿契约中：汇聚/扇出用 diagram、节点短语顺序对应（允许压缩提炼）', () => {
   assert.match(SEMANTIC_REVIEW_CONTRACT, /并列汇聚\/扇出用 diagram/u);
-  assert.match(SEMANTIC_REVIEW_CONTRACT, /节点短语须能在所属条目散文中逐字找到/u);
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /节点短语须与所属条目实文或来源顺序对应（允许压缩提炼/u);
   assert.match(SEMANTIC_REVIEW_CONTRACT, /flow 只用于原文有先后线索的真实时序/u);
 });
 

@@ -40,6 +40,10 @@ test('已选局部结构位：单类、双类、多类和跨页共用所属条�
     group.blocks.push({ id: 'note', kind: 'diagram', text: '设备尚未到位／人员尚未到岗／材料尚未验收→试验无法启动',
       expression: '画出启动条件与结果', relationship: '汇聚', production: '条件汇聚到无法启动', sourceIds: ['s1'] });
     assert.equal(validateSemanticPlan(base, plan).accepted, true);
+    // 允许压缩提炼：节点可省修饰字，但须与所属条目实文顺序对应（评审 #128）
+    group.blocks[1].text = '设备未到位／人员未到岗／材料未验收→试验无法启动';
+    assert.equal(validateSemanticPlan(base, plan).accepted, true, JSON.stringify(validateSemanticPlan(base, plan).issues));
+    group.blocks[1].text = '设备尚未到位／人员尚未到岗／材料尚未验收→试验无法启动';
     group.blocks[1].text = '设备已经到位／人员尚未到岗';
     assert.ok(validateSemanticPlan(base, plan).issues.some(issue => issue.code === 'structure-quote-mismatch'));
   }
