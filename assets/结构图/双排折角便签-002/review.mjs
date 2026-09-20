@@ -117,13 +117,13 @@ export const visualComponent = Object.freeze({
   },
 });
 
-export function renderAdaptiveMarkup(parameters, { frame = FRAME, theme = {} } = {}) {
+export function renderAdaptiveMarkup(parameters, { frame = FRAME, theme = {}, sizeScale = 1 } = {}) {
   const model = normalizeParameters(parameters, true);
   const count = model.items.length;
   const columns = Math.ceil(count / 2);
   const baseWidth = count === 4 ? 330 : count <= 6 ? 300 : 274;
   const baseGap = count === 4 ? 48 : count <= 6 ? 32 : 14;
-  const s = Math.min(1, (frame.width - 24) / (columns * baseWidth + (columns - 1) * baseGap), (frame.height - 24) / (416 + (count <= 6 ? 20 : 18)));
+  const s = Math.min(sizeScale, (frame.width - 24) / (columns * baseWidth + (columns - 1) * baseGap), (frame.height - 24) / (416 + (count <= 6 ? 20 : 18)));
   const type = preservedTypography(s, theme);
   const iconScale = Math.min(1, Math.max(s, type.sizes.componentItemTitle / type.base.componentItemTitle));
   const cardWidth = (count === 4 ? 330 : count <= 6 ? 300 : 274) * s;
@@ -133,8 +133,8 @@ export function renderAdaptiveMarkup(parameters, { frame = FRAME, theme = {} } =
   const header = Math.max(35*s,type.sizes.componentItemTitle*4/3*1.2);
   const gridWidth = columns * cardWidth + (columns - 1) * gapX;
   const gridHeight = 2 * cardHeight + gapY;
-  return `<section class="notes-review notes-adapted" data-ppt-root data-item-count="${count}" style="width:${frame.width}px;height:${frame.height}px;${type.css};--note-header:${header}px;--note-icon-panel:${44*iconScale}px;--note-icon:${20*iconScale}px;--note-inset:${16*s}px">
-    <style>.notes-adapted .note-icon-area{width:var(--note-icon-panel);height:var(--note-header)}.notes-adapted .note-icon-slot{left:${10*iconScale}px;top:${(header-22*iconScale)/2-0.5*s}px;width:${22*iconScale}px;height:${22*iconScale}px}.notes-adapted .note-icon-svg{width:var(--note-icon);height:var(--note-icon)}.notes-adapted .note-card[data-has-title="true"] .note-text-region .ppagent-text-primitive--heading{flex-basis:var(--note-header);min-height:var(--note-header);margin-left:var(--note-icon-panel);padding:0 var(--note-inset) 0 ${10*s}px}.notes-adapted .note-card[data-has-title="true"] .note-text-region .ppagent-text-primitive--body,.notes-adapted .note-card[data-has-title="true"] .note-text-region .ppagent-text-primitive--list{margin:${14*s}px var(--note-inset) 0}</style>
+  return `<section class="notes-review notes-adapted" data-ppt-root data-ppt-size="${frame.size ?? ''}" data-item-count="${count}" style="width:${frame.width}px;height:${frame.height}px;${type.css};--note-header:${header}px;--note-icon-panel:${44*iconScale}px;--note-icon:${20*iconScale}px;--note-inset:${16*s}px">
+    <style>.notes-adapted .note-icon-area{width:var(--note-icon-panel);height:var(--note-header)}.notes-adapted .note-icon-slot{left:${10*iconScale}px;top:${(header-22*iconScale)/2-0.5*s}px;width:${22*iconScale}px;height:${22*iconScale}px}.notes-adapted .note-icon-svg{width:var(--note-icon);height:var(--note-icon)}.notes-adapted .note-card[data-has-title="true"] .note-text-region .ppagent-text-primitive--heading{flex-basis:var(--note-header);min-height:var(--note-header);margin-left:var(--note-icon-panel);padding:0 var(--note-inset) 0 ${10*s}px}.notes-adapted .note-card[data-has-title="true"] .note-text-region .ppagent-text-primitive--body,.notes-adapted .note-card[data-has-title="true"] .note-text-region .ppagent-text-primitive--list{margin:${14*s}px var(--note-inset) 0}.notes-adapted[data-ppt-size="small"] .note-text-region .ppagent-text-primitive--list{gap:2px}.notes-adapted[data-ppt-size="small"] .note-text-region{right:0;bottom:24.5%}.notes-adapted[data-ppt-size="small"] .note-text-region .ppagent-text-list__item{line-height:1.2}.notes-adapted[data-ppt-size="small"] .note-card[data-has-title="true"] .note-text-region .ppagent-text-primitive--list{margin:2px var(--note-inset) 0}</style>
     <div class="notes-grid" style="inset:auto;left:${(frame.width-gridWidth)/2}px;top:${(frame.height-gridHeight)/2}px;width:${gridWidth}px;height:${gridHeight}px;gap:${gapY}px ${gapX}px">${model.items.map((item,index)=>noteMarkup(item,index,model.textLayoutBindings).replace('height="172"', `height="${s===1?172:header/cardHeight*1000}"`).replace('class="note-card"', `class="note-card" style="flex:0 0 ${cardWidth}px;height:${cardHeight}px"`)).join('')}</div>
   </section>`;
 }

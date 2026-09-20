@@ -141,13 +141,13 @@ export const visualComponent = Object.freeze({
   },
 });
 
-export function renderAdaptiveMarkup(parameters, { frame = DESIGN_FRAME, theme = {} } = {}) {
+export function renderAdaptiveMarkup(parameters, { frame = DESIGN_FRAME, theme = {}, sizeScale = 1 } = {}) {
   const model = normalizeParameters(parameters, true);
   // The original orbit and input cloud occupy the central 620 px, not the full slide.
   const fit = fitPreservedDesign(frame, { left: 275, top: 0, width: 620, height: 492 });
   const geometry = funnelGeometry(model.steps.length);
   const s = fit.scale;
-  const type = preservedTypography(s, theme);
+  const type = preservedTypography(Math.min(s, sizeScale), theme);
   const a = type.accessoryScale;
   const titleMarkup = geometry.steps.map((step,index)=>{
     const compact=s<1;

@@ -135,12 +135,12 @@ export const visualComponent = Object.freeze({
   },
 });
 
-export function renderAdaptiveMarkup(parameters, { frame = FRAME, theme = {} } = {}) {
+export function renderAdaptiveMarkup(parameters, { frame = FRAME, theme = {}, sizeScale = 1 } = {}) {
   const {levels,showStatus,currentIndex,targetIndex}=normalize(parameters);
   const original=solveLayout(levels.length);
   const fit=fitPreservedDesign(frame.height < FRAME.height ? {...frame,height:frame.height-24} : frame);
   const s=fit.scale;
-  const type=preservedTypography(s,theme),a=type.accessoryScale;
+  const type=preservedTypography(Math.min(s,sizeScale),theme),a=type.accessoryScale;
   const layout={...original,scale:s,accessoryScale:a,statusWidth:s<1?type.sizes.componentMeta*4/3*2+18*a:undefined,rise:original.rise*s,treadWidth:original.treadWidth*s,
     projectDepth:p=>fit.point(projectDepth({x:(p.x-fit.left)/s,y:(p.y-fit.top)/s})),
     copyFrames:levels.map((_,index)=>{

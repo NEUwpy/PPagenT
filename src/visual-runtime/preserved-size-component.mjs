@@ -46,7 +46,13 @@ export async function sharedPreservedComponent(component, assetDir, frame, theme
     ? await measureHtmlComponentBounds({ component, parameters: content, assetDir, theme })
     : natural;
   const local = frame.width < natural.width || frame.height < natural.height;
-  const { scale } = fitPreservedDesign(local ? {width:Math.max(1,frame.width-16),height:Math.max(1,frame.height-24)} : frame, bounds);
+  const { scale: fittedScale } = fitPreservedDesign(local ? {width:Math.max(1,frame.width-16),height:Math.max(1,frame.height-24)} : frame, bounds);
+  // The occupied footprint can be much smaller than the source design frame.
+  // In that case a medium/small target would otherwise fit at scale 1 and keep
+  // large typography. The size tier is a minimum visual reduction; geometry
+  // still shrinks further when the actual content needs more room.
+  const tierScale = { large: 1, medium: .85, small: .7 }[frame.size] ?? 1;
+  const scale = Math.min(fittedScale, tierScale);
   const type = preservedTypography(scale, sizeTypographyTheme(theme));
   type.css += `;--ppagent-component-body-small-size:${type.sizes.componentMeta}pt;--structure-geometry-scale:${scale}`;
   const width = bounds.width * scale, height = bounds.height * scale;
