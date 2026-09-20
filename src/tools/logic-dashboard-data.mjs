@@ -275,6 +275,7 @@ async function normalizeRecord(entry, coverageTags, purposeMap, logicMap, root) 
       : [],
     componentPreviewAvailable: hasDesignComponent,
     componentImplementation,
+    componentVersion,
     componentFidelityStatus: htmlEligibility?.stage ?? "legacy-or-unreviewed",
     hasVisualIntent: htmlEligibility?.hasVisualIntent ?? false,
     visualIntentText,

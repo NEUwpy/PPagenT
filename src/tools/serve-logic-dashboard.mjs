@@ -39,10 +39,14 @@ const sourceCacheRoot = path.join(projectRoot, ".tmp", "asset-dashboard-source-p
 const nativeStateCacheRoot = path.join(projectRoot, ".tmp", "asset-dashboard-native-state-previews");
 const skinStateCacheRoot = path.join(projectRoot, ".tmp", "asset-dashboard-skin-state-previews");
 const renderJobs = new Map();
+const componentPreviewJobs = new Map();
+const componentPreviewCache = new Map();
 const renderQueue = [];
 let activeRenderCount = 0;
 const maxConcurrentRenders = 2;
 const immutablePreviewHeaders = { "cache-control": "private, max-age=31536000, immutable" };
+const componentPreviewHeaders = { "cache-control": "private, max-age=31536000, immutable" };
+const maxComponentPreviewCacheEntries = 64;
 
 if (!Number.isInteger(port) || port < 1 || port > 65535) {
   throw new Error(`invalid --port: ${port}`);
@@ -162,6 +166,13 @@ async function previewPathFor(library, assetId) {
   const outputDir = path.join(cacheRoot, cacheKey);
   const previewPath = path.join(outputDir, "slide-01.png");
   const deckStat = await fs.stat(resolved.deckPath);
+  const adjacentPreviewPath = path.join(path.dirname(resolved.deckPath), "example", "slide-01.png");
+  try {
+    const adjacentStat = await fs.stat(adjacentPreviewPath);
+    if (adjacentStat.mtimeMs >= deckStat.mtimeMs) return adjacentPreviewPath;
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
   let previewStat = null;
   try {
     previewStat = await fs.stat(previewPath);
@@ -224,6 +235,19 @@ async function loadReviewModule(resolved) {
   return import(`${pathToFileURL(resolved.entryPath).href}?dashboard=${entryStat.mtimeMs}`);
 }
 
+function rememberComponentPreview(key, html) {
+  componentPreviewCache.delete(key);
+  componentPreviewCache.set(key, html);
+  while (componentPreviewCache.size > maxComponentPreviewCacheEntries) {
+    componentPreviewCache.delete(componentPreviewCache.keys().next().value);
+  }
+}
+
+function componentPreviewCacheKey(library, assetId, searchParams, resolved, selection, skinKey, sizeKey) {
+  const version = searchParams.get("v") || String(resolved.record.componentVersion ?? "live");
+  return JSON.stringify([library, assetId, version, skinKey, sizeKey, selection]);
+}
+
 function resolveReviewParameters(resolved, module, selection) {
   const previewParameters = structuredClone(module[resolved.record.previewParametersExport]);
   if (!previewParameters) return null;
@@ -241,11 +265,25 @@ function resolveReviewParameters(resolved, module, selection) {
 async function componentPreviewHtml(library, assetId, searchParams) {
   const resolved = await resolveComponentPreview(projectRoot, library, assetId);
   if (!resolved) return null;
-  const module = await loadReviewModule(resolved);
-  const component = module[resolved.record.componentExport];
   const selection = selectedControls(resolved.record, searchParams);
-  const previewParameters = resolveReviewParameters(resolved, module, selection);
-  if (!component?.renderMarkup || !previewParameters) return null;
+  const skinKey = searchParams.get('skin') ?? 'university';
+  const sizeKey = searchParams.get('size') ?? 'large';
+  if (!['large','medium','small'].includes(sizeKey)) return null;
+  const selectedSkin=(await listStructureSkins(projectRoot)).find(s=>s.id===skinKey);
+  if(!selectedSkin)return null;
+  const cacheKey = componentPreviewCacheKey(library, assetId, searchParams, resolved, selection, skinKey, sizeKey);
+  const cached = componentPreviewCache.get(cacheKey);
+  if (cached) {
+    componentPreviewCache.delete(cacheKey);
+    componentPreviewCache.set(cacheKey, cached);
+    return cached;
+  }
+  if (componentPreviewJobs.has(cacheKey)) return componentPreviewJobs.get(cacheKey);
+  const job = (async () => {
+    const module = await loadReviewModule(resolved);
+    const component = module[resolved.record.componentExport];
+    const previewParameters = resolveReviewParameters(resolved, module, selection);
+    if (!component?.renderMarkup || !previewParameters) return null;
   let css = component.cssText ?? "";
   if (!css) {
     const cssPath = path.resolve(resolved.assetDir, component.cssFile ?? "component.css");
@@ -253,16 +291,11 @@ async function componentPreviewHtml(library, assetId, searchParams) {
     if (relativeCssPath.startsWith("..") || path.isAbsolute(relativeCssPath)) return null;
     css = await fs.readFile(cssPath, "utf8");
   }
-  const skinKey = searchParams.get('skin') ?? 'university';
-  const sizeKey = searchParams.get('size') ?? 'large';
-  const selectedSkin=(await listStructureSkins(projectRoot)).find(s=>s.id===skinKey);
-  if(!selectedSkin)return null;
   const theme=selectedSkin.theme;
   // Core assets all use the unified large/medium/small preserved-design entry.
   // Approval remains a visual-status field; it must not hide an available
   // component preview from the workbench.
   const supported = resolved.record.status === 'core';
-  if (!['large','medium','small'].includes(sizeKey)) return null;
   if (skinKey !== 'university' && resolved.record.status !== 'core') {
     return '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><body style="display:grid;place-content:center;height:90vh;font:16px sans-serif;color:#4b4a45;background:#f5f4ef">本轮只适配已审批结构；该结构不在范围内。</body></html>';
   }
@@ -295,6 +328,15 @@ body{position:relative!important;background:${theme.background}!important}
 .ppagent-component-viewport{position:absolute;inset:0;overflow:hidden;background:${theme.background}}
 .ppagent-component-scale{--ppagent-preview-scale:min(calc((100vw - 4px) / ${designWidth}px),calc((100vh - 4px) / ${designHeight}px));position:absolute;left:50%;top:50%;width:${designWidth}px;height:${designHeight}px;margin-left:${-designWidth / 2}px;margin-top:${-designHeight / 2}px;transform:scale(var(--ppagent-preview-scale));transform-origin:center center}
 </style></head><body><div class="ppagent-component-viewport"><div class="ppagent-component-scale"><div data-preview-size="${sizeKey}" data-preview-skin="${skinKey}" style="position:absolute;left:${(canvasWidth-frame.width)/2}px;top:${(canvasHeight-frame.height)/2}px;width:${frame.width}px;height:${frame.height}px">${markup}</div></div></div></body></html>`;
+  })();
+  componentPreviewJobs.set(cacheKey, job);
+  try {
+    const html = await job;
+    if (html) rememberComponentPreview(cacheKey, html);
+    return html;
+  } finally {
+    componentPreviewJobs.delete(cacheKey);
+  }
 }
 
 async function intakeSlotContractFor(library, assetId) {
@@ -539,7 +581,7 @@ const server = http.createServer(async (request, response) => {
         return;
       }
       send(response, 200, html, "text/html; charset=utf-8", {
-        "cache-control": "no-store",
+        ...(url.searchParams.has("v") ? componentPreviewHeaders : { "cache-control": "private, max-age=60" }),
         "content-security-policy": "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:",
       });
       return;
