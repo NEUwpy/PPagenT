@@ -19,7 +19,7 @@ import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan,
 import { applyTemplateDefaults, describeDefaults } from './gray-templates.mjs';
 import { auditGeometry, voidWarnings, VOID_THRESHOLDS } from './gray-audit.mjs';
 import { resolveGrayLayout, compressionMemory } from './gray-layout.mjs';
-import { grayBodyLayout, fitGrayText, validateGrayArea, validateGrayPlan, renderGrayDraft } from './gray-draft.mjs';
+import { grayBodyLayout, fitGrayText, validateGrayArea, validateGrayPlan, renderGrayDraft, topicFits } from './gray-draft.mjs';
 
 const sha = text => createHash('sha256').update(text).digest('hex');
 const json = value => JSON.stringify(value, null, 2);
@@ -38,7 +38,7 @@ export const GRAY_AGENT_PROMPT = `你是灰稿制作 Agent。目标：把用户�
 容量与分页：${SHARED_RULES.paging}
 布局选择（调用 render_draft 时给出）：简式 {type:"single|row|column|grid",weights?,columns?} 的子节点默认按阅读顺序取本页全部组；页面有分层关系时用嵌套式 {type,children:[{groupId},或嵌套]}，例如主区在上、一条注记横贯下方 = {type:"column",children:[{type:"row",children:[{groupId:"g1"},{groupId:"g2"}]},{groupId:"g3"}]}。row 横向分栏、column 纵向排列、grid 规则网格；weights（仅 row）分配多余宽度，按各栏实文行数/展开需要给比例（如 3:2、5:4），不要默认等分，columns（仅 grid）是列数；children 必须按阅读顺序恰好覆盖本页全部组一次；嵌套最多三层。主次通过空间份额与组标题层级体现，少量内容不必拉满一页，不要为了变化而嵌套。每页有程序默认版式（1 组多条=类别容器、1 组单条=单主体、2 组=双栏对照、≥3 组=行式清单）；页条目可以不写 layout 采用默认。自己选与默认不同的组合时，必须在该页加 override:{reason:"一句话理由"}，理由会入档分析；仅微调 weights 不算覆盖。
 格式：{schemaVersion:"gray-plan-3",deckBrief:{title,audience,objective},pages:[{pageId:"p1",title:"短标题",claim:"简短上屏主题句，建议二十字左右",pagePurpose:"本页解决的问题",narrative:"一句话说明必要的先后、并行、判断或归属关系",sourceIds:["s1"]（可选：页级认领，用于本页承载但不单列条目的结构性来源）,groups:[{id:"g1",role:"本组主要职责",heading:"上屏短标题",importance:"primary|supporting",kind:"text|diagram|flow|chart|table|image",blocks:[{id:"b1",label:"可选上屏子标题（内容词，不写序号）",text:"真实上屏文字",sourceIds:["s1"],scope:"group"（可选：约束整组全部条目的共同说明，程序不编号）}],expression:"非text必填：表达作用",relationship:"非text必填：基本关系",production:"非text必填：制作要求"}]}],planningNotes:"简短后台组织说明"}。
-先明确页面职责，按内容归属形成groups，再把各分支的条目放进blocks，用label与text区分要点和展开。${SHARED_RULES.category}${SHARED_RULES.hierarchy}${SHARED_RULES.meta}不要把分属不同观点的依据摊成同级卡片，也不要把分类、依据、准则混称为证明。${SHARED_RULES.label}文字组内某条需要图示时，该block可选kind及expression、relationship、production；其label仍是上屏条目标题。附着说明块 kind 写 "note"，紧随所依附条目、不编号、无需制作说明三项。${SHARED_RULES.expression}${SHARED_RULES.sketch}
+先明确页面职责，按内容归属形成groups，再把各分支的条目放进blocks，用label与text区分要点和展开。${SHARED_RULES.category}${SHARED_RULES.hierarchy}${SHARED_RULES.meta}${SHARED_RULES.claim}不要把分属不同观点的依据摊成同级卡片，也不要把分类、依据、准则混称为证明。${SHARED_RULES.label}文字组内某条需要图示时，该block可选kind及expression、relationship、production；其label仍是上屏条目标题。附着说明块 kind 写 "note"，紧随所依附条目、不编号、无需制作说明三项。${SHARED_RULES.expression}${SHARED_RULES.sketch}
 ${SHARED_RULES.source}来源切分表随稿件给出（id、开头预览与流转标记），引用 sourceIds 以它为准，不要猜。${SHARED_RULES.fidelity}${SHARED_RULES.declaration}${SHARED_RULES.condition}${SHARED_RULES.attachment}${SHARED_RULES.surface}内部审查理由不要改写成正文。`;
 // 注：与 SEMANTIC_CONTRACT 共用的规则片段（附着性内容、模拟声明、结构选择界限等）已抽为
 // SHARED_RULES 单一来源；「改一处必须同步另一处」由 tests/prompt-sync.test.mjs 守卫（源码中恰好出现一次）。
@@ -99,6 +99,40 @@ async function visualReview(attemptDir, pages, visionProvider) {
 export function requireExpandedManuscript(raw) {
   const length = String(raw ?? '').replace(/\s+/gu, '').length;
   if (length < 60) throw new Error('该稿件是简短需求（无内容展开）：D 类稿需先生成内容稿，灰稿管线暂未接入该阶段；请先补充内容稿或改用材料稿。');
+}
+
+/**
+ * 规划期前移信号（任务 #151）：复用渲染期同一测量，把主题句单行预算与容量问题
+ * 在规划尚可调整时暴露。主题句超预算与渲染门禁同一判定（确定性），按 issue 返回；
+ * 容量按默认组合预估、组合仍可改，按 warning 返回，不阻塞规划。
+ */
+export function planFitIssues(plan, area) {
+  const issues = [];
+  const warnings = [];
+  for (const page of plan?.pages ?? []) {
+    if (topicFits(page.claim, area)) continue;
+    const budget = Math.max(1, Math.floor((area.width * 0.88) / 28));
+    issues.push({
+      code: 'topic-overflow', pageId: page.pageId,
+      message: `主题句超 28px 单行预算（本版面约 ${budget} 字内）：claim 只承担本页主要判断；范围、时间、条件、数字等限定改放正文、组标题或附注。`,
+    });
+  }
+  try {
+    const applied = applyTemplateDefaults(plan, []);
+    resolveGrayLayout(plan, { pages: applied.layouts }, area, {
+      measureBody: grayBodyLayout, fitText: fitGrayText,
+      fontSizes: () => [22, 20, 18, 16, 15, 14, 13, 12],
+    });
+  } catch (error) {
+    const details = error?.details;
+    if (details?.pageId && Number.isFinite(details?.minimum?.height) && details.minimum.height > area.height) {
+      warnings.push({
+        code: 'plan-capacity', pageId: details.pageId,
+        message: `按默认组合预估放不下：该页最小可读尺寸约 ${Math.ceil(details.minimum.width ?? 0)}×${Math.ceil(details.minimum.height)}，正文区 ${area.width}×${area.height}（超出约 ${Math.ceil(details.minimum.height - area.height)}px）。先按语义边界分页、合并同归属组或忠实压词；也可改用更省空间的组合后重试。`,
+      });
+    }
+  }
+  return { issues, warnings };
 }
 
 export async function runGrayAgent({ source, output, area, root = process.cwd(), provider, maxTurns = 24, observer = null, visualReview = false }) {
@@ -163,12 +197,15 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
   const tools = [
     defineTool({
       name: 'check_plan',
-      description: '对你本轮消息正文中的完整 gray-plan-3 计划做程序检查：结构字段、来源引用与覆盖、块级数字/引文保真；并返回逐页默认版式（defaults，含特征依据）——渲染从默认出发，只有确需不同才覆盖。不接收计划参数——计划写在本轮正文里。返回 {accepted, issues, coverage, defaults}。任何规划改动后都应重新调用。',
+      description: '对你本轮消息正文中的完整 gray-plan-3 计划做程序检查：结构字段、来源引用与覆盖、块级数字/引文保真；并返回逐页默认版式（defaults，含特征依据）与规划期预估（主题句单行预算、按默认组合的容量最小高）——渲染从默认出发，只有确需不同才覆盖。不接收计划参数——计划写在本轮正文里。返回 {accepted, issues, coverage, defaults}。任何规划改动后都应重新调用。',
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
       handler: async () => {
         const { plan, source, note } = resolvePlan();
         const report = validateSemanticPlan(base, plan);
-        return { accepted: report.accepted, issues: report.issues.slice(0, 20), coverage: report.coverage, defaults: describeDefaults(plan), planSource: source, ...(report.warnings?.length ? { warnings: report.warnings } : {}), ...(note ? { note } : {}) };
+        const fit = planFitIssues(plan, area);
+        const issues = [...report.issues, ...fit.issues].slice(0, 20);
+        const warnings = [...(report.warnings ?? []), ...fit.warnings];
+        return { accepted: report.accepted && !fit.issues.length, issues, coverage: report.coverage, defaults: describeDefaults(plan), planSource: source, ...(warnings.length ? { warnings } : {}), ...(note ? { note } : {}) };
       },
     }),
     defineTool({

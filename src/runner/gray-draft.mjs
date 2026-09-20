@@ -40,6 +40,11 @@ export function fitGrayText(text, width, height, fontSize) {
   return result;
 }
 
+/** 主题句单行预算：与渲染门禁同一测量（28px 单行、宽度按内容区 0.88）。 */
+export function topicFits(claim, area) {
+  return fitGrayText(String(claim ?? ''), area.width * 0.88, 40, 28).fits;
+}
+
 // Capacity checking and rendering share this exact internal text layout.
 // 结构位按媒介和节点数估算预留高度，适用于任意条目；这是制作前容量估算，最终构图仍须复核。
 const PLACEHOLDER_NODE_H = 48, PLACEHOLDER_GAP = 12, PLACEHOLDER_ARROW = 16, PLACEHOLDER_PAD = 16;
@@ -274,8 +279,7 @@ export function validateGrayPlan(base, plan, area) {
     issues.push(...grayCoverageIssues(state));
     for (const page of state.pages) {
       if (!requiredText(page.title) || !requiredText(page.claim)) throw new Error(`${page.pageId} 缺少主题句`);
-      const topic = fitGrayText(page.claim, area.width * 0.88, 40, 28);
-      if (!topic.fits) issues.push({ code: 'topic-overflow', pageId: page.pageId });
+      if (!topicFits(page.claim, area)) issues.push({ code: 'topic-overflow', pageId: page.pageId });
       const regions = page.composition?.regions;
       if (!Array.isArray(regions) || !regions.length) throw new Error(`${page.pageId} 缺少 regions`);
       const seen = new Set();
