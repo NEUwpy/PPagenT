@@ -70,6 +70,12 @@ test('label 序号检测：覆盖最小合规形态，不误伤常用词与惯�
   assert.equal(labelHasOrdinal('统一'), false);
   assert.equal(labelHasOrdinal('安全第一'), false);
   assert.equal(labelHasOrdinal('核验与开放'), false);
+  assert.equal(labelHasOrdinal('500 元以下'), false);
+  assert.equal(labelHasOrdinal('500 元至 5000 元'), false);
+  assert.equal(labelHasOrdinal('5000 元以上'), false);
+  assert.equal(labelHasOrdinal('单笔 500 元以下'), false);
+  assert.equal(labelHasOrdinal('2017年的整改'), false);
+  assert.equal(labelHasOrdinal('1'), true);
   const groups = group();
   groups.blocks[0].label = '原因一';
   const report = validateSemanticPlan(base(), plan([groups]));

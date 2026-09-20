@@ -147,14 +147,14 @@ export function grayBodyLayout(item, width, fontSize, availableHeight) {
   });
   const minimum=measured.reduce((sum,section)=>sum+section.minHeight,0)+gap*(measured.length-1);
   const children=measured.map(section=>({groupId:section.id}));
-  // 容器明显富余（>80px）时不把条目拉满：条目按内容高度、富余转成条目间距（封顶 48px），
-  // 余额留白在容器底部——满高框会自己声明"这里该有内容"；空白的分布由内容需要决定。
+  // 容器明显富余（>80px）时不把条目拉满：条目按内容高度、富余只补少量条目间距（封顶 12px），
+  // 余额留白在容器底部——满高框会自己声明"这里该有内容"；间距拉到 60px 会让一行文字读成"大空框"。
   const target=availableHeight ?? minimum, spare=target-minimum;
   const packed=spare>80;
   const regions={};
   if(packed){
     const gapCount=measured.length-1;
-    const extraGap=gapCount>0?Math.max(0,Math.min(48,Math.floor(spare/gapCount))):0;
+    const extraGap=gapCount>0?Math.max(0,Math.min(12,Math.floor(spare/gapCount))):0;
     let cursor=0;
     for(const section of measured){
       regions[section.id]={left:0,top:cursor,width,height:section.minHeight};

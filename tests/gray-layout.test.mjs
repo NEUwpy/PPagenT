@@ -123,7 +123,7 @@ test('block areas size to content and keep every text run inside its assigned bl
     if(spare>80){
       // 容器明显富余：条目按内容高度，间距被封顶，余额留在容器底部
       assert.ok(body.sections.at(-1).top+body.sections.at(-1).height<body.height);
-      for(let i=1;i<body.sections.length;i++){const current=body.sections[i].top-(body.sections[i-1].top+body.sections[i-1].height);assert.ok(current>=12&&current<=60);}
+      for(let i=1;i<body.sections.length;i++){const current=body.sections[i].top-(body.sections[i-1].top+body.sections[i-1].height);assert.ok(current>=12&&current<=24);}
     }else{
       assert.ok(Math.abs(body.sections.at(-1).top+body.sections.at(-1).height-body.height)<.001);
       for(let i=1;i<body.sections.length;i++) assert.ok(Math.abs(body.sections[i].top-body.sections[i-1].top-body.sections[i-1].height-12)<.001);
