@@ -426,6 +426,11 @@ async function agentSnapshot(runDir, state, gray) {
     sources: (state?.sources ?? []).map((source) => ({ id: source.id, heading: source.heading ?? null, text: source.text })),
     agentTurns: turns,
     agentRenders: renders,
+    // 评审状态透出（评审 #60 可见性要求）：covered／未复核／遗留问题条目数／候选交付标记
+    reviewCoverage: gray.reviewCoverage ?? null,
+    reviewNotes: gray.reviewNotes ?? null,
+    candidateDelivery: Boolean(gray.candidateDelivery),
+    reviewIssueCount: Array.isArray(gray.reviewNotes?.issues) ? gray.reviewNotes.issues.length : 0,
   };
 }
 
