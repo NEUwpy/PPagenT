@@ -92,10 +92,11 @@ async function findExisting(root) {
   }
   return null;
 }
-async function waitFor(port, root) {
+async function waitFor(port, root, onWait = null) {
   for (let attempt = 0; attempt < 120; attempt += 1) {
     const health = await getHealth(port, 500);
     if (health?.status === "ok" && health.app === "ppagent-production-workbench" && normalize(health.root) === normalize(root)) return;
+    if (onWait) onWait();
     await new Promise(resolve => setTimeout(resolve, 250));
   }
   throw new Error("正式生成工作台未能在 30 秒内启动。");
@@ -117,8 +118,22 @@ async function launch() {
   let selectedPort = null;
   for (let port = 4212; port <= 4222; port += 1) if (await isPortFree(port)) { selectedPort = port; break; }
   if (!selectedPort) throw new Error("4212–4222 端口均被占用。");
-  const child = spawn(process.execPath, ["--serve", "--root", root, "--port", String(selectedPort)], { cwd: root, detached: true, windowsHide: true, stdio: "ignore", env: { ...process.env } });
-  child.unref(); await waitFor(selectedPort, root);
+  // 子进程参数必须以入口脚本开头（SEA 包下 argv[1] 即本 EXE；node 启动时是本 .cjs）：
+  // 否则 node.exe 把 "--serve" 当成 Node 选项，子进程报 bad option 立即退出，健康检查空等 30 秒。
+  const childEntry = process.argv[1] || __filename;
+  const child = spawn(process.execPath, [childEntry, "--serve", "--root", root, "--port", String(selectedPort)], { cwd: root, detached: true, windowsHide: true, stdio: ["ignore", "ignore", "pipe"], env: { ...process.env } });
+  let childStderr = "";
+  child.stderr.on("data", chunk => { childStderr += chunk; });
+  child.unref();
+  try {
+    await waitFor(selectedPort, root, () => {
+      if (Number.isInteger(child.exitCode) && child.exitCode !== 0) {
+        throw new Error(`工作台服务进程启动失败（exitCode ${child.exitCode}）：${childStderr.trim().slice(0, 400)}`);
+      }
+    });
+  } finally {
+    child.stderr.destroy();
+  }
   const url = `http://${host}:${selectedPort}/?launch=${Date.now()}`;
   if (!args.includes("--no-open")) openBrowser(url); else console.log(url);
 }

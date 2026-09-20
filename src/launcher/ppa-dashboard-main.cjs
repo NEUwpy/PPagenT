@@ -138,10 +138,11 @@ function dashboardUrl(port) {
   return `http://${host}:${port}/?launch=${Date.now()}#approval`;
 }
 
-async function waitForDashboard(port, root) {
+async function waitForDashboard(port, root, onWait = null) {
   for (let attempt = 0; attempt < 120; attempt += 1) {
     const health = await getHealth(port, 500);
     if (health?.status === "ok" && normalize(health.root) === normalize(root)) return health;
+    if (onWait) onWait();
     await new Promise((resolve) => setTimeout(resolve, 250));
   }
   throw new Error("实时看板服务未能在 30 秒内启动。");
@@ -163,15 +164,28 @@ async function launch() {
   }
   if (!selectedPort) throw new Error("4192–4202 端口均被占用，无法启动本地看板。");
 
-  const child = spawn(process.execPath, ["--serve", "--root", root, "--port", String(selectedPort)], {
+  // 子进程参数必须以入口脚本开头（SEA 包下 argv[1] 即本 EXE；node 启动时是本 .cjs）：
+  // 否则 node.exe 把 "--serve" 当成 Node 选项，子进程报 bad option 立即退出，健康检查空等 30 秒。
+  const childEntry = process.argv[1] || __filename;
+  const child = spawn(process.execPath, [childEntry, "--serve", "--root", root, "--port", String(selectedPort)], {
     cwd: root,
     detached: true,
     windowsHide: true,
-    stdio: "ignore",
+    stdio: ["ignore", "ignore", "pipe"],
     env: { ...process.env, PPAGENT_DASHBOARD_EXE: process.execPath },
   });
+  let childStderr = "";
+  child.stderr.on("data", chunk => { childStderr += chunk; });
   child.unref();
-  await waitForDashboard(selectedPort, root);
+  try {
+    await waitForDashboard(selectedPort, root, () => {
+      if (Number.isInteger(child.exitCode) && child.exitCode !== 0) {
+        throw new Error(`看板服务进程启动失败（exitCode ${child.exitCode}）：${childStderr.trim().slice(0, 400)}`);
+      }
+    });
+  } finally {
+    child.stderr.destroy();
+  }
 
   const url = dashboardUrl(selectedPort);
   if (!args.includes("--no-open")) openDashboard(url);
