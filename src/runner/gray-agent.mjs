@@ -25,15 +25,16 @@ const sha = text => createHash('sha256').update(text).digest('hex');
 const json = value => JSON.stringify(value, null, 2);
 
 /** Agent 的角色、工作方式与规划规则。规则正文（共用规则）由调用方附加在后。 */
-export const GRAY_AGENT_PROMPT = `你是灰稿制作 Agent。目标：把用户给的原稿做成可审阅的灰稿——把内容提炼、重组为适合 PPT 阅读的信息结构，选好每块的表达方式，通过程序检查与独立审稿后渲染成灰稿候选。渲染成功即完成，不要在没有获得通过前放弃。
+export const GRAY_AGENT_PROMPT = `你是灰稿制作 Agent。目标：把用户给的原稿做成可审阅的灰稿——把内容提炼、重组为适合 PPT 阅读的信息结构，选好每块的表达方式，通过程序检查与独立审稿后渲染成灰稿候选。渲染成功只是候选：复核程序回执里的文字/几何诊断并调用 finish_draft 才算完成；没有 finish 就停下会被如实标为未完成复核的候选。不要在没有获得通过前放弃。
 工作方式（按自己的判断安排顺序；每步做完都要用工具验证，不要凭想象宣布完成）：
 1. 先读懂原稿，判断各部分的关系类型（对比、流程/时序、分类、数据、纯说明等）与主次；
 2. 写出完整规划（gray-plan-3，格式见下），调用 check_plan 做程序检查；有 issues 先自己修，别把坏规划交出去；
 3. 调用 semantic_review 对照原稿复核（模拟声明、条件、否定、结构选择与关系表达）；有实质问题就修订；
 4. 为每页选择基础组合（single/row/column/grid，可选 weights/columns），调用 render_draft 求解并渲染；
-5. render_draft 返回失败时，按其中的 reason 与 issues 修订规划或组合后重试；渲染成功即完成。
+5. render_draft 返回失败时，按其中的 reason 与 issues 修订规划或组合后重试；渲染成功是候选，先复核诊断再 finish_draft 或做一次有界修订。
 你可以多次调用工具。check_plan 与 semantic_review 都通过后再渲染是正常路径，但不是硬性顺序；按你判断最有效的方式推进。
-交付观：审稿是辅助而不是关口——审稿回执的 issues 是阻塞项（实质改变理解的失真、遗漏、层级/归属/关系错误），必须修复；notes 是建议/已解决说明，不阻塞渲染。审稿通过绑定当前内容版本：任何内容改动（含失败后的修订）都会让上一版通过失效——改后再次渲染前必须重新 semantic_review；程序会拒绝未复核、有阻塞项或复核已过期的版本，未复核版本不得继承通过状态。
+交付观：审稿是辅助而不是关口——审稿回执的 issues 是阻塞项（实质改变理解的失真、遗漏、层级/归属/关系错误），必须修复；notes 是建议/已解决说明，不阻塞渲染。审稿通过绑定当前内容版本：任何内容改动（含失败后的修订）都会让上一版通过失效——改后再次渲染前必须重新 semantic_review；程序会拒绝未复核、有阻塞项或复核已过期的版本，未复核版本不得继承通过状态。交付只由 finish_draft 触发：它必须在该候选的 render 回执进入后续回合之后调用（同一轮 render+finish 不算看过诊断），并附复核结论；选定候选与当前计划内容不一致时，要写明退回该候选/未采用修订的原因。首次成功渲染后最多一次修订周期；修订失败（模板/几何/坏提交）不计入，但预算耗尽仍以第一次成功候选如实交付并标注未完成复核。
+渲染后复核（只有文字与几何，没有像素图）：render_draft 成功回执带逐页/区域的实际宽高、字号、内容最小高与占用、权重来源（请求/回退）和既有几何警告。这些是选择依据，不是稀疏阈值门禁；据此判断短栏是否被拉成等高、内容是否被拆断、字号是否相称。需要看图的能力不在本线内，不要声称看过像素图。
 **计划的传递方式：提交或修订计划时，把完整的 gray-plan-3 计划 JSON 写进本轮消息正文——提交新内容会让旧审稿失效、需重新审稿；没有写新 JSON 时，三个工具对当前已提交版本继续（同版审稿复用结论，不重复运行）。正文想提交计划但 JSON 损坏＝本次提交失败（不会被当作已修订），请重发完整合法 JSON；工具回执的 planSource 标明本轮计划来源（message=新提交 / current-plan=沿用 / submission-failed=坏提交）。不要在工具参数里重复计划，也不要只写差异。**
 容量与分页：${SHARED_RULES.paging}
 布局选择（调用 render_draft 时给出）：简式 {type:"single|row|column|grid",weights?,columns?} 的子节点默认按阅读顺序取本页全部组；页面有分层关系时用嵌套式 {type,children:[{groupId},或嵌套]}，例如主区在上、一条注记横贯下方 = {type:"column",children:[{type:"row",children:[{groupId:"g1"},{groupId:"g2"}]},{groupId:"g3"}]}。row 横向分栏、column 纵向排列、grid 规则网格；weights（仅 row）分配多余宽度，按各栏实文行数/展开需要给比例（如 3:2、5:4），不要默认等分，columns（仅 grid）是列数；children 必须按阅读顺序恰好覆盖本页全部组一次；嵌套最多三层。主次通过空间份额与组标题层级体现，少量内容不必拉满一页，不要为了变化而嵌套。每页有程序默认版式（1 组多条=类别容器、1 组单条=单主体、2 组=双栏对照、≥3 组=行式清单）；页条目可以不写 layout 采用默认。自己选与默认不同的组合时，必须在该页加 override:{reason:"一句话理由"}，理由会入档分析；仅微调 weights 不算覆盖。
@@ -189,7 +190,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
     ...base,
     grayDraft: {
       version: 'gray-agent-1', area, sourceHash: sha(raw), status: 'planning', humanReview: 'pending',
-      turns: [], renders: [], startedAt: new Date().toISOString(),
+      turns: [], renders: [], candidates: [], startedAt: new Date().toISOString(),
     },
   };
   const saveAgentState = async () => {
@@ -216,6 +217,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
   } catch { visionProvider = null; }
 
   let renderCount = 0;
+  let completedTurns = 0;
   let lastContent = '';
   let lastReview = null;
   let lastPlan = null;
@@ -237,6 +239,64 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
       }
       return { plan: lastPlan, source: 'current-plan', note: '本轮正文没有新计划 JSON：按当前已提交计划（内容指纹不变）继续；如已修订，请把完整 gray-plan-3 计划写进正文，修订才会生效并需重新审稿。' };
     }
+  };
+  // 任务 #198：渲染成功后进入有界复核。首次成功存候选（firstGood），模型在后续回合消费文字/几何诊断，
+  // 只能 finish_draft（保持，可退回更早候选）或做一次修订周期；交付只由 finish 触发，预算耗尽时按
+  // 第一次成功候选如实标注未完成复核交付（candidateDelivery），不冒充已复核。
+  const candidates = agentState.grayDraft.candidates;
+  const currentTurnNumber = () => completedTurns + 1;
+  const buildDiagnostics = (built, plan) => built.plan.pages.map((page, index) => {
+    const receipt = built.receipts[index];
+    const groupsById = new Map((plan.pages[index]?.groups ?? []).map(group => [group.id, group]));
+    const regions = page.composition.regions.map(region => {
+      const group = groupsById.get(region.itemId);
+      const textChars = (group?.blocks ?? []).reduce((sum, block) => sum + String(block.label ?? '').length + String(block.text ?? '').length, 0);
+      const minimum = receipt?.contentMinimums?.[region.itemId]?.minHeight ?? null;
+      const available = Math.max(1, Math.round(region.height) - 70);
+      return {
+        itemId: region.itemId, width: Math.round(region.width), height: Math.round(region.height), fontSize: region.fontSize,
+        textChars, contentMinHeight: minimum, occupancy: Number.isFinite(minimum) ? Number((minimum / available).toFixed(2)) : null,
+      };
+    });
+    const bottom = Math.max(0, ...page.composition.regions.map(region => region.y + region.height));
+    return {
+      pageId: page.pageId, title: page.title, fontSize: receipt?.fontSize ?? null,
+      weights: receipt?.layout?.weights ?? null,
+      weightsSource: receipt?.formPick ? (receipt.formPick.requested ? 'requested' : 'fallback') : null,
+      reweighted: receipt?.reweighted ?? null,
+      frameHeight: Math.round(bottom), areaHeight: area.height, bottomVoid: Number((1 - bottom / area.height).toFixed(2)),
+      regions,
+    };
+  });
+  /** 把选定候选的产物、计划、审稿覆盖与状态发布到运行根目录（交付或候选交付）；同一版本成套复制。 */
+  const publishCandidate = async (candidate, { mode, delivery = null, stopReason = null, note = null }) => {
+    const candidatePlan = JSON.parse(await fs.readFile(path.join(output, candidate.directory, 'plan.json'), 'utf8'));
+    const report = validateGrayPlan(base, candidatePlan, area);
+    if (!report.accepted) throw new Error(`选定候选的计划复检未通过：${JSON.stringify(report.issues.slice(0, 3))}`);
+    for (const name of ['gray-draft.pptx', 'editable-check.json', 'preview-index.json', 'plan.json']) {
+      await fs.copyFile(path.join(output, candidate.directory, name), path.join(output, name));
+    }
+    await fs.cp(path.join(output, candidate.directory, 'preview'), path.join(output, 'preview'), { recursive: true });
+    agentState.pages = report.state?.pages ?? agentState.pages;
+    agentState.artifactState = Object.fromEntries((report.state?.pages ?? []).map(page => [page.pageId, {
+      status: 'rendered-awaiting-review', revision: page.revision,
+      pptxPath: path.join(candidate.directory, 'gray-draft.pptx'),
+    }]));
+    agentState.grayDraft.plan = candidatePlan;
+    agentState.grayDraft.reviewNotes = { status: 'clean', at: candidate.at, fingerprint: candidate.reviewedFingerprint };
+    agentState.grayDraft.reviewCoverage = {
+      status: 'covered', deliveredFingerprint: candidate.contentFingerprint, reviewedFingerprint: candidate.reviewedFingerprint,
+      checkedAt: new Date().toISOString(), ...(mode === 'candidate' ? { candidate: true } : {}),
+    };
+    const post = agentState.grayDraft.postRender;
+    post.completed = mode === 'finish';
+    post.stopReason = stopReason;
+    if (mode === 'finish') post.delivery = delivery;
+    else post.candidate = { renderId: candidate.renderId, directory: candidate.directory, contentFingerprint: candidate.contentFingerprint, note };
+    agentState.grayDraft.candidateDelivery = mode === 'candidate';
+    if (mode === 'candidate') agentState.grayDraft.candidateNote = note;
+    agentState.grayDraft.status = 'awaiting-user-review';
+    await saveAgentState();
   };
   const tools = [
     defineTool({
@@ -305,7 +365,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
     }),
     defineTool({
       name: 'render_draft',
-      description: '按你当前已提交的计划与每页基础组合求解几何并渲染灰稿。layouts 是逐页数组 [{pageId,layout}]；layout 为简式 {type:"single|row|column|grid",weights?,columns?} 或嵌套 {type,weights?,columns?,children:[…]}（children 项为 {groupId} 或嵌套组合，按阅读顺序恰好覆盖本页全部组一次，最多三层）。每页有程序默认版式（按组数与实文量）；页条目可不写 layout 采用默认；改用其它组合须在该页加 override:{reason:"一句话理由"}（入档分析），仅微调 weights 不算覆盖。这是小参数，仍走工具参数。程序检查通过且审稿覆盖当前内容指纹即可交付；审稿的阻塞项（issues）未通过前不得渲染，notes 随交付记录、不阻塞。正文里想提交但 JSON 损坏＝本次提交失败，本工具只回报失败、不渲染旧版。成功返回 {accepted:true, preview, pptx, editable}；失败返回 {accepted:false, stage:"template|geometry|check|submission-failed|…", reason, issues}，据此修订后重试。',
+      description: '按你当前已提交的计划与每页基础组合求解几何并渲染灰稿候选。layouts 是逐页数组 [{pageId,layout}]；layout 为简式 {type:"single|row|column|grid",weights?,columns?} 或嵌套 {type,weights?,columns?,children:[…]}（children 项为 {groupId} 或嵌套组合，按阅读顺序恰好覆盖本页全部组一次，最多三层）。每页有程序默认版式（按组数与实文量）；页条目可不写 layout 采用默认；改用其它组合须在该页加 override:{reason:"一句话理由"}（入档分析），仅微调 weights 不算覆盖。这是小参数，仍走工具参数。程序检查通过且审稿覆盖当前内容指纹即可渲染；成功返回候选 {accepted:true, candidate:true, renderId, diagnostics, preview, pptx}——本轮尚未交付，复核 diagnostics 后调用 finish_draft。审稿的阻塞项（issues）未通过前不得渲染；正文里想提交但 JSON 损坏＝本次提交失败，本工具只回报失败、不渲染旧版。失败返回 {accepted:false, stage:"template|geometry|check|submission-failed|revision-budget|…", reason, issues}，据此修订后重试；首次成功后的修订周期上限为一次，失败尝试不计入。',
       inputSchema: {
         type: 'object',
         properties: {
@@ -321,6 +381,13 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
           agentState.grayDraft.renders.push({ render: renderCount + 1, accepted: false, stage: 'submission-failed', reason: '本次提交失败：计划 JSON 无法解析' });
           await saveAgentState();
           return { accepted: false, stage: 'submission-failed', reason: '本次提交失败：正文中的计划 JSON 无法解析，未渲染（不得用旧版冒充本次提交）。请重发完整合法 JSON；下一轮明确沿用上一版可继续。' };
+        }
+        // 任务 #198：首次成功后的修订周期上限——成功渲染只计一次修订；坏提交/模板/几何失败不计入，
+        // 避免"失败反复重开周期"，同时保住已有候选。
+        const postRender = agentState.grayDraft.postRender;
+        if (postRender && postRender.revisions >= postRender.maxRevisions) {
+          const reason = `首次成功后的修订周期已用完（成功渲染 ${1 + postRender.revisions} 次）：请用 finish_draft 保持候选（可用 renderId 退回更早候选并写明原因），不要再渲染。`;
+          return { accepted: false, stage: 'revision-budget', reason };
         }
         // 版本绑定门禁（评审 #119 要求 1）：审稿通过只覆盖它所审的那一版内容；内容改动后通过即失效。
         // 未复核（not-reviewed）、有遗留问题（open-issues）或已过期（stale）的版本不得继承通过状态，也不得渲染交付。
@@ -419,32 +486,81 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
           await fs.writeFile(path.join(attemptDir, 'visual-review.json'), json(visual), 'utf8');
           agentState.grayDraft.visualReview = { at: new Date().toISOString(), ...visual };
         }
-        for (const name of ['gray-draft.pptx', 'editable-check.json', 'preview-index.json', 'plan.json']) {
-          await fs.copyFile(path.join(attemptDir, name), path.join(output, name));
-        }
-        await fs.cp(path.join(attemptDir, 'preview'), path.join(output, 'preview'), { recursive: true });
-        agentState.pages = renderState.pages;
-        agentState.artifactState = Object.fromEntries(renderState.pages.map(page => [page.pageId, {
-          status: 'rendered-awaiting-review', revision: page.revision,
-          pptxPath: path.join(path.relative(output, attemptDir), 'gray-draft.pptx'),
-        }]));
-        // 交付审稿覆盖（评审 #119）：门禁已保证交付版本由有效审稿覆盖；记录交付版与所审版的指纹对应，
-        // 供报告"有效评审是否覆盖该交付版本"直接引用。
-        agentState.grayDraft.reviewNotes = { status: 'clean', at: lastReview.at, fingerprint: coverage.fingerprint };
-        agentState.grayDraft.reviewCoverage = {
-          status: coverage.status, deliveredFingerprint: coverage.fingerprint,
-          reviewedFingerprint: coverage.reviewedFingerprint, checkedAt: new Date().toISOString(),
-        };
-        agentState.grayDraft.status = 'awaiting-user-review';
         const reweighted = (built.receipts ?? []).filter(receipt => receipt.reweighted).map(receipt => ({ pageId: receipt.pageId, ...receipt.reweighted }));
         const formFont = (built.receipts ?? []).filter(receipt => Number.isFinite(receipt.fontSize) && receipt.fontSize !== 22).map(receipt => ({ pageId: receipt.pageId, fontSize: receipt.fontSize }));
-        agentState.grayDraft.renders.push({ render: renderCount, accepted: true, artifactDirectory: path.relative(output, attemptDir), fingerprint, ...(reweighted.length ? { reweighted } : {}), ...(formFont.length ? { formFont } : {}) });
-        agentState.grayDraft.artifactDirectory = path.relative(output, attemptDir);
+        // 任务 #198：成功渲染只登记候选，不交付——模型须在后续回合复核诊断后 finish_draft。
+        const candidate = {
+          renderId: renderCount, directory: path.relative(output, attemptDir), at: new Date().toISOString(),
+          contentFingerprint: coverage.fingerprint, reviewedFingerprint: coverage.reviewedFingerprint,
+          reviewCovered: coverage.covered, turn: currentTurnNumber(),
+          fonts: built.receipts.map(receipt => ({ pageId: receipt.pageId, fontSize: receipt.fontSize })),
+          ...(reweighted.length ? { reweighted } : {}), ...(formFont.length ? { formFont } : {}),
+        };
+        candidates.push(candidate);
+        agentState.grayDraft.renders.push({ render: renderCount, accepted: true, artifactDirectory: candidate.directory, fingerprint, ...(reweighted.length ? { reweighted } : {}), ...(formFont.length ? { formFont } : {}) });
+        agentState.grayDraft.artifactDirectory = candidate.directory;
         agentState.grayDraft.plan = built.plan;
         agentState.grayDraft.programCheck = { ...report, state: undefined };
+        const post = agentState.grayDraft.postRender ?? { startedAt: new Date().toISOString(), firstRenderId: renderCount, revisions: 0, maxRevisions: 1, completed: false };
+        if (post.firstRenderId !== renderCount) post.revisions += 1;
+        agentState.grayDraft.postRender = post;
+        agentState.grayDraft.status = 'rendered-review';
         await saveAgentState();
+        const diagnostics = buildDiagnostics(built, plan);
         const preview = renderState.pages.map((page, index) => `${path.relative(output, attemptDir)}/preview/slide-${String(index + 1).padStart(2, '0')}.png`);
-        return { accepted: true, preview, pptx: `${path.relative(output, attemptDir)}/gray-draft.pptx`, pages: renderState.pages.length, planSource, templates: { defaults: applied.decisions.filter(decision => decision.mode === 'default').length, overrides: applied.decisions.filter(decision => decision.mode === 'override').length }, ...(reweighted.length ? { reweighted } : {}), ...(formFont.length ? { formFont } : {}), ...(geometryWarnings.length ? { geometry: geometryWarnings } : {}), ...(report.warnings?.length ? { warnings: report.warnings } : {}), ...(planNote ? { note: planNote } : {}) };
+        return { accepted: true, candidate: true, renderId: renderCount, preview, pptx: `${path.relative(output, attemptDir)}/gray-draft.pptx`, pages: renderState.pages.length, planSource, templates: { defaults: applied.decisions.filter(decision => decision.mode === 'default').length, overrides: applied.decisions.filter(decision => decision.mode === 'override').length }, ...(reweighted.length ? { reweighted } : {}), ...(formFont.length ? { formFont } : {}), ...(geometryWarnings.length ? { geometry: geometryWarnings } : {}),           ...(report.warnings?.length ? { warnings: report.warnings } : {}), diagnostics, note: '本轮渲染成功但尚未交付：复核 diagnostics（只有文字与几何，无像素图）后 finish_draft 保持，或在正文提交一次修订后重渲染再 finish。' };
+      },
+    }),
+    defineTool({
+      name: 'finish_draft',
+      description: '明确结束并交付审阅：保持某个已渲染候选。必须在该候选的 render 回执进入后续回合之后调用（同一轮 render+finish 不算看过诊断）。参数：review（必填，一句复核结论或剩余问题，须对照原稿与当前页首/区域内容检查因果对象、条件范围、编辑口吻等实际语义）；renderId（可选，默认最新候选；可显式退回更早候选）；reason（选定候选与当前计划内容不一致、或退回旧候选/未采用修订时必须写明原因）。程序核对所选候选的计划、审稿覆盖、布局与产物属于同一版本；本线复核只有文字与几何，未看像素图。成功返回 {accepted:true, delivered:true, renderId, contentFingerprint, revisionNotAdopted}；失败返回 {accepted:false, stage:"finish-before-render|finish-same-turn|finish-version-mismatch|finish-needs-review|finish-unknown-render|finish-invalid", reason}。',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          review: { type: 'string' },
+          renderId: { type: 'number' },
+          reason: { type: 'string' },
+        },
+        required: ['review'], additionalProperties: false,
+      },
+      handler: async ({ review, renderId, reason }) => {
+        const { plan } = resolvePlan();
+        const post = agentState.grayDraft.postRender;
+        if (!post || !candidates.length) {
+          return { accepted: false, stage: 'finish-before-render', reason: '还没有成功渲染的候选：先 render_draft，再在后续回合 finish_draft。' };
+        }
+        if (typeof review !== 'string' || !review.trim()) {
+          return { accepted: false, stage: 'finish-needs-review', reason: 'finish_draft 需要 review：写一句复核结论或剩余问题（对照原稿与当前页首/区域内容）。' };
+        }
+        const chosen = renderId !== undefined
+          ? candidates.find(candidate => candidate.renderId === renderId)
+          : candidates[candidates.length - 1];
+        if (!chosen) {
+          return { accepted: false, stage: 'finish-unknown-render', reason: `renderId ${renderId} 不是本 run 的成功候选：${candidates.map(candidate => candidate.renderId).join('、')}。` };
+        }
+        if (chosen.turn >= currentTurnNumber()) {
+          return { accepted: false, stage: 'finish-same-turn', reason: '该渲染发生在本轮：请在后续回合复核诊断后再 finish_draft（同一轮的 render+finish 不算看过诊断）。' };
+        }
+        const currentFingerprint = planContentFingerprint(plan);
+        const versionMatches = Boolean(currentFingerprint) && currentFingerprint === chosen.contentFingerprint;
+        if (!versionMatches && (typeof reason !== 'string' || !reason.trim())) {
+          return { accepted: false, stage: 'finish-version-mismatch', reason: '选定候选与当前计划内容不一致（有未渲染或未采用的修订）：如确要交付该候选，请在 reason 里写明退回原因。' };
+        }
+        if (!chosen.reviewCovered) {
+          return { accepted: false, stage: 'finish-uncovered', reason: '该候选没有有效审稿覆盖：先 semantic_review 该版本，再渲染并 finish。' };
+        }
+        const delivery = {
+          renderId: chosen.renderId, directory: chosen.directory, contentFingerprint: chosen.contentFingerprint,
+          reviewedFingerprint: chosen.reviewedFingerprint, review: review.trim(),
+          reason: typeof reason === 'string' && reason.trim() ? reason.trim() : null,
+          revisionNotAdopted: !versionMatches, currentPlanFingerprint: currentFingerprint, at: new Date().toISOString(),
+        };
+        try {
+          await publishCandidate(chosen, { mode: 'finish', delivery });
+        } catch (error) {
+          return { accepted: false, stage: 'finish-invalid', reason: error.message };
+        }
+        return { accepted: true, delivered: true, renderId: chosen.renderId, contentFingerprint: chosen.contentFingerprint, revisionNotAdopted: !versionMatches, note: '已交付审阅（候选，等待用户验收）；复核只有文字与几何，未看像素图。' };
       },
     }),
   ];
@@ -469,7 +585,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
       ...(source.heading ? { heading: source.heading } : {}),
       ...(source.flow ? { flow: `流转信息（${source.flow}）：无需引用；默认不上屏，确有展示价值（如文档标题、署名）时可自然出现` } : {}),
       preview: source.text.length > 80 ? `${source.text.slice(0, 80)}…` : source.text,
-    })), null, 1)}\n\n目标区尺寸：宽 ${area.width} × 高 ${area.height}（设计像素）。请把它做成灰稿：先规划，用工具检查与审稿，最后渲染；渲染成功即完成。`,
+    })), null, 1)}\n\n目标区尺寸：宽 ${area.width} × 高 ${area.height}（设计像素）。请把它做成灰稿：先规划，用工具检查与审稿，渲染成功后在后续回合复核诊断并 finish_draft 交付；没有 finish 就停下会被如实标为未完成复核的候选。`,
     registry: observed,
     maxTurns,
     onTurn: async record => {
@@ -477,6 +593,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
       await fs.mkdir(turnDir, { recursive: true });
       await fs.writeFile(path.join(turnDir, 'response.json'), json({ content: record.content, toolCalls: record.toolCalls.map(call => ({ name: call.name, args: call.args })), stalled: record.stalled }), 'utf8');
       agentState.grayDraft.turns.push({ turn: record.turn, stalled: record.stalled, tools: record.toolCalls.map(call => call.name) });
+      completedTurns = record.turn;
       await saveAgentState();
     },
     onReply: async reply => { lastContent = reply.content ?? ''; },
@@ -491,10 +608,33 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
   await fs.writeFile(path.join(agentDir, 'transcript.json'), json({ stopReason: result.stopReason, detail: result.detail ?? null, note: result.note ?? null, ...transcriptSummary(result), tools: registry.names() }), 'utf8');
   agentState.grayDraft.turnSummary = transcriptSummary(result);
   if (result.stopReason !== 'delivered') {
-    // 止损阀（评审 #58 采纳为默认）：预算耗尽但已有完整计划时，渲染候选交付并如实标未复核——
-    // 候选仅供人审，绝不继承通过状态；渲染失败或检查未过仍按 blocked 记录。
+    // 任务 #198：预算耗尽/未 finish 时，把**第一次成功渲染**作为"未完成复核的候选"如实交付：
+    // 不设正常交付记录（postRender.delivery 只由 finish 写）、不冒充已复核；记录真实 stopReason、
+    // 首次成功后的失败尝试与未渲染/未采用的计划改动。没有成功候选时才退回确定性兜底渲染。
     let candidateRendered = false;
-    if (lastPlan) {
+    if (candidates.length) {
+      try {
+        const first = candidates[0];
+        const currentFingerprint = lastPlan ? planContentFingerprint(lastPlan) : null;
+        const unapplied = currentFingerprint && currentFingerprint !== first.contentFingerprint
+          ? { planFingerprint: currentFingerprint, note: '当前计划有未渲染或未采用的改动；交付的是第一次成功候选。' }
+          : null;
+        const lastFailed = [...agentState.grayDraft.renders].reverse().find(record => record?.accepted === false);
+        const note = `未完成复核的候选：模型未调用 finish_draft（stopReason=${result.stopReason}${result.note ? `；${result.note}` : ''}）；交付的是第一次成功候选（renderId ${first.renderId}）。`
+          + (unapplied ? ` ${unapplied.note}` : '')
+          + (lastFailed ? ` 首次成功后另有失败尝试：${lastFailed.stage}。` : '');
+        await publishCandidate(first, { mode: 'candidate', stopReason: result.stopReason, note });
+        agentState.grayDraft.postRender.failure = lastFailed ? { stage: lastFailed.stage, reason: lastFailed.reason ?? null } : null;
+        agentState.grayDraft.postRender.unappliedPlan = unapplied;
+        await saveAgentState();
+        candidateRendered = true;
+      } catch (error) {
+        agentState.grayDraft.candidateFailure = String(error?.message ?? error);
+      }
+    }
+    if (!candidateRendered && lastPlan) {
+      // 确定性兜底（评审 #58）：从未成功渲染时按默认组合渲染候选并如实标未复核——候选仅供人审，
+      // 绝不继承通过状态；渲染失败或检查未过仍按 blocked 记录。
       try {
         const candidateDir = path.join(output, 'agent-renders', `candidate-${renderCount + 1}`);
         await fs.mkdir(candidateDir, { recursive: true });

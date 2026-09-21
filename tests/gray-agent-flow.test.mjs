@@ -48,6 +48,167 @@ function mockProvider(chatScript, reviewPayloads = []) {
   };
 }
 
+async function runProtocol(chatScript, reviewPayloads = [], turns = 8) {
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'gray-agent-protocol-'));
+  const source = path.join(dir, 'source.md');
+  const output = path.join(dir, 'run');
+  await fs.writeFile(source, SOURCE, 'utf8');
+  const provider = mockProvider(chatScript, reviewPayloads);
+  await runGrayAgent({
+    source, output, area: { width: 1170, height: 492 },
+    root: path.resolve(import.meta.dirname, '..'), provider, maxTurns: turns,
+  });
+  const events = (await fs.readFile(path.join(output, 'agent', 'tool-events.ndjson'), 'utf8'))
+    .trim().split(/\r?\n/).map(line => JSON.parse(line));
+  const state = JSON.parse(await fs.readFile(path.join(output, 'state.json'), 'utf8'));
+  const readFile = name => fs.readFile(path.join(output, name), 'utf8');
+  const exists = async name => { try { await fs.access(path.join(output, name)); return true; } catch { return false; } };
+  return { dir, output, events, provider, state, readFile, exists, rm: () => fs.rm(dir, { recursive: true, force: true }) };
+}
+
+const renderSingle = { name: 'render_draft', arguments: { layouts: [{ pageId: 'p1', layout: { type: 'single' } }] } };
+const renderColumn = { name: 'render_draft', arguments: { layouts: [{ pageId: 'p1', layout: { type: 'column' }, override: { reason: '纵向排列验证布局复核' } }] } };
+
+test('渲染后复核协议：成功渲染是候选（带诊断），后续回合 finish 才交付', async () => {
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '审稿。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: '复核诊断后保持。', tools: [{ name: 'finish_draft', arguments: { review: '对照原稿复核：内容保真、区域职责清楚；保持当前候选。' } }] },
+    { content: '收工。', tools: [] },
+  ]);
+  try {
+    const renders = run.events.filter(event => event.tool === 'render_draft');
+    const finishes = run.events.filter(event => event.tool === 'finish_draft');
+    assert.equal(renders[0].result.accepted, true);
+    assert.equal(renders[0].result.candidate, true);
+    assert.equal(renders[0].result.renderId, 1);
+    assert.match(renders[0].result.note ?? '', /尚未交付/);
+    assert.equal(renders[0].result.diagnostics.length, 1);
+    assert.equal(renders[0].result.diagnostics[0].regions.length, 1);
+    assert.ok(Number.isFinite(renders[0].result.diagnostics[0].regions[0].occupancy));
+    assert.equal(finishes[0].result.accepted, true);
+    assert.equal(finishes[0].result.delivered, true);
+    const gray = run.state.grayDraft;
+    assert.equal(gray.status, 'awaiting-user-review');
+    assert.equal(gray.postRender.completed, true);
+    assert.equal(gray.postRender.delivery.renderId, 1);
+    assert.ok(gray.postRender.delivery.review.length > 0);
+    assert.equal(gray.postRender.delivery.revisionNotAdopted, false);
+    assert.equal(gray.reviewCoverage.deliveredFingerprint, gray.postRender.delivery.contentFingerprint);
+    assert.equal(gray.reviewCoverage.reviewedFingerprint, gray.postRender.delivery.reviewedFingerprint);
+    assert.equal(await run.exists('gray-draft.pptx'), true);
+    assert.equal(await run.exists('preview/slide-01.png'), true);
+  } finally { await run.rm(); }
+});
+
+test('同轮 render+finish 不算看过诊断：被拒后下一轮 finish 才接受', async () => {
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '审稿。', tools: ['semantic_review'] },
+    { content: '渲染并直接保持。', tools: [renderSingle, { name: 'finish_draft', arguments: { review: '直接保持。' } }] },
+    { content: '下一轮再保持。', tools: [{ name: 'finish_draft', arguments: { review: '复核后保持。' } }] },
+    { content: '收工。', tools: [] },
+  ]);
+  try {
+    const finishes = run.events.filter(event => event.tool === 'finish_draft');
+    assert.equal(finishes[0].result.accepted, false);
+    assert.equal(finishes[0].result.stage, 'finish-same-turn');
+    assert.equal(finishes[1].result.accepted, true);
+    assert.equal(run.state.grayDraft.postRender.completed, true);
+  } finally { await run.rm(); }
+});
+
+test('首次成功后最多一次修订周期：内容修订重审、再次渲染被预算拒绝、finish 交付修订版', async () => {
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '审稿。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: planJson('，并留痕'), tools: ['semantic_review'] },
+    { content: '重渲染修订版。', tools: [renderSingle] },
+    { content: '还想再改。', tools: [renderSingle] },
+    { content: '保持修订版。', tools: [{ name: 'finish_draft', arguments: { review: '修订版复核后保持。' } }] },
+    { content: '收工。', tools: [] },
+  ]);
+  try {
+    const renders = run.events.filter(event => event.tool === 'render_draft');
+    assert.equal(renders[0].result.accepted, true);
+    assert.equal(renders[1].result.accepted, true);
+    assert.equal(renders[2].result.accepted, false);
+    assert.equal(renders[2].result.stage, 'revision-budget');
+    assert.equal(run.provider.reviewCalls.length, 2, '内容修订触发重新审稿');
+    const finishes = run.events.filter(event => event.tool === 'finish_draft');
+    assert.equal(finishes[0].result.accepted, true);
+    assert.equal(finishes[0].result.renderId, 2);
+    assert.equal(run.state.grayDraft.postRender.revisions, 1);
+  } finally { await run.rm(); }
+});
+
+test('布局-only 修订沿用内容审稿：不重复调用审稿模型', async () => {
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '审稿。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: '只改组合。', tools: [renderColumn] },
+    { content: '保持。', tools: [{ name: 'finish_draft', arguments: { review: '布局修订后保持。' } }] },
+    { content: '收工。', tools: [] },
+  ]);
+  try {
+    const renders = run.events.filter(event => event.tool === 'render_draft');
+    assert.equal(renders[1].result.accepted, true);
+    assert.equal(run.provider.reviewCalls.length, 1, '布局-only 不新增审稿调用');
+    assert.equal(run.state.grayDraft.postRender.revisions, 1);
+  } finally { await run.rm(); }
+});
+
+test('未 finish 的预算耗尽：交付第一次成功候选并标未完成复核，不写正常交付记录', async () => {
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '审稿。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: '只改组合。', tools: [renderColumn] },
+    { content: '……', tools: [] },
+    { content: '……', tools: [] },
+    { content: '……', tools: [] },
+  ]);
+  try {
+    const gray = run.state.grayDraft;
+    assert.equal(gray.status, 'awaiting-user-review');
+    assert.equal(gray.candidateDelivery, true);
+    assert.equal(gray.postRender.completed, false);
+    assert.equal(gray.postRender.stopReason, 'model-stalled');
+    assert.equal(gray.postRender.delivery, undefined);
+    assert.equal(gray.postRender.candidate.renderId, 1, '交付第一次成功候选，防止回归');
+    assert.match(gray.candidateNote, /未完成复核/);
+    assert.equal(gray.reviewCoverage.candidate, true);
+    assert.equal(await run.exists('gray-draft.pptx'), true);
+    const renders = run.events.filter(event => event.tool === 'render_draft');
+    assert.equal(renders.filter(event => event.result.accepted).length, 2);
+  } finally { await run.rm(); }
+});
+
+test('候选与当前计划不一致：finish 无 reason 被拒，写明退回原因后记录未采用修订', async () => {
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '审稿。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: planJson('，并留痕'), tools: [{ name: 'finish_draft', arguments: { review: '保持。' } }] },
+    { content: '退回旧候选。', tools: [{ name: 'finish_draft', arguments: { renderId: 1, review: '修订未采用：保持旧候选。', reason: '修订版未渲染，内容变更不采用' } }] },
+    { content: '收工。', tools: [] },
+  ]);
+  try {
+    const finishes = run.events.filter(event => event.tool === 'finish_draft');
+    assert.equal(finishes[0].result.accepted, false);
+    assert.equal(finishes[0].result.stage, 'finish-version-mismatch');
+    assert.equal(finishes[1].result.accepted, true);
+    assert.equal(finishes[1].result.revisionNotAdopted, true);
+    const delivery = run.state.grayDraft.postRender.delivery;
+    assert.equal(delivery.renderId, 1);
+    assert.equal(delivery.revisionNotAdopted, true);
+    assert.match(delivery.reason, /不采用/);
+  } finally { await run.rm(); }
+});
+
 async function runFlow(chatScript, reviewPayloads, turns = 5) {
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'gray-agent-flow-'));
   const source = path.join(dir, 'source.md');
