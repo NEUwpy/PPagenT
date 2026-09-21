@@ -5,7 +5,7 @@ PPagenT 项目自有的协作技能：**planner/reviewer（规划与评审）** 
 
 - 项目技能（唯一权威协议入口）：[`.agents/skills/ppagent-coworker/SKILL.md`](../.agents/skills/ppagent-coworker/SKILL.md)
 - Codex 发现入口（薄入口，无协议正文）：[`.codex/skills/ppagent-coworker/SKILL.md`](../.codex/skills/ppagent-coworker/SKILL.md)
-- 版本与上游基座：`.agents/skills/ppagent-coworker/VERSION.json`（基座 coworker 2.5.0，传输脚本同哈希副本）
+- 版本与上游基座：`.agents/skills/ppagent-coworker/VERSION.json`（基座 coworker 2.5.0；传输脚本为含两处本地补丁的副本，哈希记录在该文件）
 - 上游技能仓库：`https://github.com/NEUwpy/coworker`（v2.5.0，全局副本位于 `~/.agents/skills/coworker`）
 
 ## 快速开始
@@ -48,9 +48,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File coworker/mailbox.ps1 `
   已补 `-Encoding UTF8`；② `Release-Lock` 仅锁持有者释放——锁被他人持有时不得删除他人锁文件、也不掩盖原始冲突报错。
   升级技能副本时须确认两处补丁已在上游或重新套用，并同步 `VERSION.json` 的 `transport_sha256`）。
 
-## 本项目纪律（与全局技能规则叠加）
+## 本项目纪律（项目自包含）
 
-- 评审判定只有 `APPROVE / REVISE / BLOCK`，REVISE 必须带具体文件级修法；执行方永不自评。
+- 评审判定只有 `APPROVE / REVISE / BLOCK`；REVISE 须给出可核验的问题、影响与修订目标，
+  具体实现路径归执行方（规划者不承担实现细节）；执行方永不自评。
 - 意见收敛采用**增量评审**：首轮全量，后续只看上次评审 tip 到当前 tip 的差异（findings 用稳定 ID）。
 - 断言带证据：凡"已完成/已提交/测试通过"，消息里必须附 commit hash 或测试输出原文；
   引用对方论据前先独立复核。
@@ -75,7 +76,10 @@ manual/cancel 控制事件、runtime 被忽略且工作树干净、技能元数�
 
 ## 版本守护
 
-`coworker/mailbox.ps1` 校验 `.agents/skills/ppagent-coworker/VERSION.json` 的上游基座版本（2.5.0）与
-传输脚本哈希；功能变更须同步递增 `VERSION.json` 与 `SKILL.md` 的 `version` / `updated_at`。
+`coworker/mailbox.ps1` 校验 `.agents/skills/ppagent-coworker/VERSION.json` 的上游基座版本（2.5.0）；
+传输脚本哈希由 `tests/duplex-e2e.ps1` 核对（不新增运行时 hash 检查）。功能变更须同步递增
+`VERSION.json` 与 `SKILL.md` 的 `version` / `updated_at`。
 
-**变更记录**：2026-09-21 协作能力项目化——新增项目技能与中性角色入口（执行侧实现）；旧别名与旧邮箱槽位保持兼容。
+**变更记录**：2026-09-21 协作能力项目化——新增项目技能与中性角色入口（执行侧实现）；
+2026-09-21 0.1.1——适配层保留底层非零退出语义；补生命周期正文（一步启动/单 watcher/收敛结束）；
+E2E 补评审→执行方向、reply_to 与锁冲突回归；旧别名与旧邮箱槽位保持兼容。

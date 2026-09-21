@@ -66,3 +66,4 @@ if ($Type)     { $forwardArgs.Type = $Type }
 if ($Mode)     { $forwardArgs.Mode = $Mode }
 
 & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $transportScript @forwardArgs
+exit $LASTEXITCODE

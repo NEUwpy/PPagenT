@@ -2,8 +2,8 @@
 name: ppagent-coworker
 description: PPagenT 项目自有的双角色协作技能（planner/reviewer 与 executor）：Markdown 邮箱排队、消费与归档，中性角色入口与旧别名兼容，供 Codex / OpenCode 等宿主以同一套协议使用。当用户要求规划、评审、执行协作，监听邮箱、收发任务或报告，或提及 coworker / mailbox / 协作邮箱时使用。
 metadata:
-  version: 0.1.0
-  updated_at: 2026-09-21T09:05:50+08:00
+  version: 0.1.1
+  updated_at: 2026-09-21T09:21:43+08:00
   base: coworker 2.5.0
 ---
 
@@ -31,6 +31,17 @@ metadata:
 - 队列语义：先发先到；消费即归档（原子移动，防重复处理）。
 - 不使用当前正式会话做传输测试；测试用临时 Git 仓库与独立 task-id。
 - 不建控制平台、调度器或模型启动器；邮箱脚本只传输文件，不启动 agent 进程。
+
+## 生命周期（一步启动 / 收敛 / 控制）
+
+- **分配**：两个可见窗口各取一个角色（宿主不限），共用唯一 `task-id`；规划/评审方用 `-Role reviewer`（或 `planner`），执行方用 `-Role executor`。
+- **一步启动**：规划方 `init` 后先排队一条 `task`，随即进入等待；另一窗口粘贴一次 bootstrap（读本技能＋用执行角色 `wait`）即接入。
+  若对方已在监听，直接 `send` 派发，不需要握手或确认往返。
+- **单 watcher**：每角色每任务只允许一个等待者（角色锁强制）；启动失败或锁冲突以非零退出呈现，调用方不得当成功处理。
+- **控制事件**：收到 `manual`/`cancel` 时停止消费并保留队列与状态——`manual` 可用 `auto` 恢复；`cancel` 表示协作终止，进程是否退出由用户/控制方决定。
+- **收敛与结束**：`APPROVE` 必须注明对象与证据范围；阶段批准若已约定明确的下一阶段则继续监听，无后续任务则结束（归档保留）；
+  `BLOCK` 仅在有明确有界修复时继续，否则交回用户。
+- **用户始终可改目标、暂停或接管**；任何一方不得自行扩大范围或代替用户验收。
 
 ## 调用（项目适配层）
 
@@ -65,7 +76,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File coworker/mailbox.ps1 `
 ## 目录
 
 - 传输脚本（项目内置，不依赖用户全局路径）：`.agents/skills/ppagent-coworker/scripts/coworker-mailbox.ps1`
-  （上游 `coworker 2.5.0` 同哈希副本，含本地 UTF-8 补丁）。
+  （上游 `coworker 2.5.0` 的副本，含两处本地补丁：BodyFile 按 UTF-8 读取；`Release-Lock` 仅锁持有者释放）。
 - 适配层：`coworker/mailbox.ps1`（中性角色 + 旧别名 + 版本守护）。
 - 运行时：`coworker/runtime/<task-id>/`（本地传输状态，不入 Git；`archive/` + `TRANSCRIPT.md` 为持久记录）。
 - 阶段共识：`coworker/decisions/<日期>-<主题>.md`（入 Git 的协议记录）。

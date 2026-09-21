@@ -133,7 +133,64 @@ Assert-True ($r.ExitCode -ne 0) "unknown role rejected"
 $status = git -C $repo status --porcelain
 Assert-True ([string]::IsNullOrWhiteSpace(($status | Out-String))) "runtime ignored, worktree clean"
 
-# ---- 8. skill metadata validation --------------------------------------------------
+# ---- 8. reviewer -> executor direction + full task/report loop ---------------------
+$taskBody = Join-Path $TempRoot "task.md"
+Set-Content -LiteralPath $taskBody -Value "task: implement X" -Encoding ascii
+$r = Invoke-Adapter -Action send -Role reviewer -Type task -BodyFile $taskBody
+Assert-True ($r.ExitCode -eq 0 -and $r.Json.event -eq "sent" -and $r.Json.recipient -eq "codex") "reviewer send lands in executor inbox"
+$taskMessageId = $r.Json.message_id
+$r = Invoke-Adapter -Action wait -Role executor -TimeoutSeconds 30
+Assert-True ($r.ExitCode -eq 0 -and $r.Json.event -eq "message") "executor wait receives planner task"
+$taskArchived = Get-Content -LiteralPath $r.Json.archive_path -Raw -Encoding UTF8
+Assert-True ($taskArchived -match "(?m)^from: opencode\s*$" -and $taskArchived -match "(?m)^to: codex\s*$") "task header records opencode -> codex"
+Assert-True ($taskArchived -match "(?m)^type: task\s*$") "task type recorded"
+$reportBody = Join-Path $TempRoot "report.md"
+Set-Content -LiteralPath $reportBody -Value "report: done" -Encoding ascii
+$r = Invoke-Adapter -Action send -Role executor -Type report -BodyFile $reportBody
+Assert-True ($r.ExitCode -eq 0 -and $r.Json.event -eq "sent") "executor report send"
+$r = Invoke-Adapter -Action wait -Role reviewer -TimeoutSeconds 30
+Assert-True ($r.ExitCode -eq 0 -and $r.Json.event -eq "message") "reviewer wait receives report"
+$reportArchived = Get-Content -LiteralPath $r.Json.archive_path -Raw -Encoding UTF8
+Assert-True ($reportArchived -match "(?m)^reply_to: $taskMessageId\s*$") "report reply_to links the task message"
+$r = Invoke-Adapter -Action wait -Role reviewer -TimeoutSeconds 3
+Assert-True ($r.Json.event -eq "timeout") "consumed messages are not redelivered"
+
+# ---- 9. lock conflict: failed waiter must not break the holder --------------------
+$bgOut = Join-Path $TempRoot "bg-out.txt"
+$bgErr = Join-Path $TempRoot "bg-err.txt"
+$bg = Start-Process -FilePath $script:PowerShellExe -ArgumentList @(
+    "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $script:Adapter,
+    "-Action", "wait", "-TaskId", $script:TaskId, "-Role", "reviewer", "-TimeoutSeconds", "25"
+) -RedirectStandardOutput $bgOut -RedirectStandardError $bgErr -PassThru -WindowStyle Hidden
+$lockPath = Join-Path $runtime "opencode.lock"
+$lockSeen = $false
+for ($i = 0; $i -lt 50; $i++) {
+    if (Test-Path -LiteralPath $lockPath) { $lockSeen = $true; break }
+    Start-Sleep -Milliseconds 100
+}
+Assert-True $lockSeen "background watcher holds the reviewer lock"
+$r = Invoke-Adapter -Action wait -Role reviewer -TimeoutSeconds 2
+Assert-True ($r.ExitCode -ne 0) "second watcher fails with nonzero exit"
+Assert-True (Test-Path -LiteralPath $lockPath) "failed waiter does not remove the holder lock"
+$bodyC = Join-Path $TempRoot "c.md"
+Set-Content -LiteralPath $bodyC -Value "lock-holder-message" -Encoding ascii
+Invoke-Adapter -Action send -Role executor -Type note -BodyFile $bodyC | Out-Null
+$exited = $bg.WaitForExit(30000)
+if (-not $exited) { $bg.Kill() }
+Assert-True $exited "background watcher exits after receiving"
+$bgOutText = Get-Content -LiteralPath $bgOut -Raw -Encoding UTF8 -ErrorAction SilentlyContinue
+Assert-True ($bgOutText -match '"event"\s*:\s*"message"') "holder still receives while others were rejected"
+Assert-True (-not (Test-Path -LiteralPath $lockPath)) "holder releases the lock after receiving"
+$r = Invoke-Adapter -Action wait -Role reviewer -TimeoutSeconds 3
+Assert-True ($r.Json.event -eq "timeout") "lock-holder message consumed exactly once"
+
+$previousEap = $ErrorActionPreference
+$ErrorActionPreference = "Continue"
+& $script:PowerShellExe -NoProfile -ExecutionPolicy Bypass -File $script:Adapter -Action wait -TaskId "e2e-missing-xyz" -Role reviewer -TimeoutSeconds 2 2>&1 | Out-Null
+$ErrorActionPreference = $previousEap
+Assert-True ($LASTEXITCODE -ne 0) "missing mailbox fails with nonzero exit"
+
+# ---- 10. skill metadata validation -------------------------------------------------
 $skillMd = Get-Content -LiteralPath (Join-Path $repo ".agents\skills\ppagent-coworker\SKILL.md") -Raw -Encoding UTF8
 $versionJson = Get-Content -LiteralPath (Join-Path $repo ".agents\skills\ppagent-coworker\VERSION.json") -Raw -Encoding UTF8 | ConvertFrom-Json
 $descMatch = [regex]::Match($skillMd, "(?ms)^description:\s*(.+?)\r?\nmetadata:")
