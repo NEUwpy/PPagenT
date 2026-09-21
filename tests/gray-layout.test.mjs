@@ -87,7 +87,9 @@ test('nested layout rejects missing, reordered or duplicated groups',()=>{
   assert.throws(()=>resolveGrayLayout(p,select({type:'column',children:[{type:'column',children:[{type:'column',children:[{type:'column',children:[{groupId:'a'},{groupId:'b'}]}]},{groupId:'c'}]}]}),area,metrics),/嵌套超过 3 层/);
 });
 test('non-text medium still requires four-part gray specification, not a structure invocation',()=>{
-  const p=plan(),group=p.pages[0].groups[0];group.kind='flow';
+  const p=plan(),group=p.pages[0].groups[0];
+  group.kind='flow';
+  group.blocks=[{id:'b1',text:'核验后开放。',sourceIds:['s1']},{id:'b2',text:'异常暂停。',sourceIds:['s1']}];
   assert.equal(validateSemanticPlan(base(),p).accepted,false);
   Object.assign(group,{expression:'说明开放条件',relationship:'核验后开放，异常暂停',production:'区分前提与例外，不编造步骤'});
   assert.equal(validateSemanticPlan(base(),p).accepted,true);

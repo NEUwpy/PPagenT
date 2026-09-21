@@ -60,6 +60,24 @@ test('附着说明必须紧跟文字条目：首块、紧跟另一附注都拒�
   assert.equal(validateSemanticPlan(base(), plan([withProduction])).accepted, false);
 });
 
+test('退化草图检查：整组草图仅 1 个块被拦（渲染按块出卡，单块不构成节点结构），≥2 块通过', () => {
+  const single = {
+    id: 'g1', role: '汇聚', heading: '三因汇聚为落地阻力', importance: 'primary', kind: 'diagram',
+    expression: '三项条件汇聚为同一结果', relationship: '并列成因共同造成结果', production: '三框一果',
+    blocks: [{ id: 'b1', text: '氛围尚未完全形成／信息系统支撑能力仍存在差距／缺乏市场化的管理机制——共同造成变革落地阻力重重。', sourceIds: ['s1'] }],
+  };
+  const blocked = validateSemanticPlan(base(), plan([single]));
+  assert.equal(blocked.accepted, false);
+  assert.ok(blocked.issues.some(issue => issue.code === 'degenerate-sketch'));
+  const split = structuredClone(single);
+  split.blocks = [
+    { id: 'b1', text: '变革氛围尚未完全形成。', sourceIds: ['s1'] },
+    { id: 'b2', text: '信息系统支撑能力仍存在差距。', sourceIds: ['s1'] },
+    { id: 'b3', text: '缺乏市场化的管理机制。', sourceIds: ['s1'] },
+  ];
+  assert.equal(validateSemanticPlan(base(), plan([split])).accepted, true);
+});
+
 test('label 序号检测：覆盖最小合规形态，不误伤常用词与惯用语', () => {
   assert.equal(labelHasOrdinal('原因一'), true);
   assert.equal(labelHasOrdinal('不足一'), true);

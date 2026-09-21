@@ -427,6 +427,7 @@ export function validateSemanticPlan(base, plan) {
         if (missingGroupFields.length) throw new Error(`${groupLabel} 缺少或不合法的字段：${missingGroupFields.join('、')}`);
         if (group.kind !== 'text' && ![group.expression,group.relationship,group.production].every(nonempty)) throw new Error(`${groupLabel} 的 kind 是 ${group.kind}，必须同时提供 expression、relationship、production 三项制作说明`);
         if (!Array.isArray(group.blocks) || !group.blocks.length) throw new Error(`${groupLabel} 缺少 blocks（每组至少一个块）`);
+        if (SKETCH_KINDS.has(group.kind) && group.blocks.length < 2) fail('degenerate-sketch', page.pageId, `${groupLabel} 选择整组草图（${group.kind}）但只有 1 个块：渲染按块出卡，单块＝单框整段文字，不构成节点结构。出路：改回 text 直排；或按真实成员/结果拆块（节点用实文短语、关系陈述放可见文字或附注）。`);
         const blockIds=new Set();
         for (const [blockIndex, block] of group.blocks.entries()) {
           const blockLabel = nonempty(block.id) ? `块 ${block.id}（${groupLabel}）` : `${groupLabel} 的第 ${blockIndex + 1} 个块（缺少 id）`;

@@ -18,10 +18,15 @@ test('主题句超单行预算在规划期以 issue 暴露（与渲染门禁同�
   assert.equal(report.warnings.length, 0);
 });
 
-test('短主题句通过；容量按默认组合预估以 warning 暴露、不阻塞', () => {
-  const ok = planFitIssues(plan('核验通过后开放', '模拟：核验后开放。'), area);
-  assert.equal(ok.issues.length, 0);
-  assert.equal(ok.warnings.length, 0);
+test('稀疏页在规划期以 issue 阻断；内容充实的页不阻断、不警告', () => {
+  const sparse = planFitIssues(plan('核验通过后开放', '模拟：核验后开放。'), area);
+  assert.ok(sparse.issues.some(issue => issue.code === 'page-too-sparse' && issue.pageId === 'p1'));
+  const full = planFitIssues(plan('核验通过后开放', '重要条件必须保留，异常暂停并复核记录，逐项确认后再开放，复核记录按季度归档备查。'.repeat(12)), area);
+  assert.equal(full.issues.length, 0, JSON.stringify(full.issues));
+  assert.equal(full.warnings.length, 0);
+});
+
+test('容量按默认组合预估以 warning 暴露、不阻塞', () => {
   const heavy = planFitIssues(plan('核验通过后开放', '重要条件必须保留，异常暂停并复核记录。'.repeat(30)), { width: 560, height: 240 });
   assert.equal(heavy.issues.length, 0);
   assert.ok(heavy.warnings.some(warning => warning.code === 'plan-capacity' && warning.pageId === 'p1'));

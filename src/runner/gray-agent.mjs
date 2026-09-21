@@ -105,7 +105,10 @@ export function requireExpandedManuscript(raw) {
  * 规划期前移信号（任务 #151）：复用渲染期同一测量，把主题句单行预算与容量问题
  * 在规划尚可调整时暴露。主题句超预算与渲染门禁同一判定（确定性），按 issue 返回；
  * 容量按默认组合预估、组合仍可改，按 warning 返回，不阻塞规划。
+ * 充实度（任务 #71-F1）：估填低于 SPARSE_PAGE_FLOOR 的稀疏页按 issue 阻断，
+ * 反馈组织级出路；阈值 0.6 与页底留白 40% 告警线（归档 p75–p90 定阈）对齐。
  */
+const SPARSE_PAGE_FLOOR = 0.6;
 export function planFitIssues(plan, area) {
   const issues = [];
   const warnings = [];
@@ -119,10 +122,18 @@ export function planFitIssues(plan, area) {
   }
   try {
     const applied = applyTemplateDefaults(plan, []);
-    resolveGrayLayout(plan, { pages: applied.layouts }, area, {
+    const built = resolveGrayLayout(plan, { pages: applied.layouts }, area, {
       measureBody: grayBodyLayout, fitText: fitGrayText,
       fontSizes: () => [22, 20, 18, 16, 15, 14, 13, 12],
     });
+    for (const receipt of built.receipts ?? []) {
+      const minimum = receipt.resolved?.minimum?.height;
+      if (!Number.isFinite(minimum) || minimum >= area.height * SPARSE_PAGE_FLOOR) continue;
+      issues.push({
+        code: 'page-too-sparse', pageId: receipt.pageId,
+        message: `该页内容自然高约 ${Math.ceil(minimum)}px，不足正文区 ${area.height}px 的 ${Math.round(SPARSE_PAGE_FLOOR * 100)}%（预估页底留白将超 40%）：按组织级解决——并入相邻页、在本页承载原稿其余实质内容，或重新组织分页；不得用填充物或缩框/缩字号搪塞。`,
+      });
+    }
   } catch (error) {
     const details = error?.details;
     if (details?.pageId && Number.isFinite(details?.minimum?.height) && details.minimum.height > area.height) {
