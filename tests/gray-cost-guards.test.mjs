@@ -127,6 +127,33 @@ test('请求权重确实放不下时按测量回退，并记录回退原因（�
   for (const region of result.plan.pages[0].composition.regions) assert.ok(region.height <= 492, JSON.stringify(region));
 });
 
+test('缺省 row 的有效请求是 [1,1]：保留不虚报回退，比例等价不算改选（任务 #196）', () => {
+  const fixture = {
+    schemaVersion: 'gray-plan-3',
+    deckBrief: { title: '建议', audience: '管理层', objective: '建议与依据' },
+    pages: [{
+      pageId: 'p1', title: '两方面的改进建议', claim: '建议加强源头分类并试点纸类单独收集', pagePurpose: '两条建议', narrative: '两条建议并列，各自就近附依据',
+      groups: [
+        { id: 'g5', role: '建议', heading: '加强厨余垃圾源头分类', importance: 'primary', kind: 'text', blocks: [
+          { id: 'b12', label: '建议内容', text: '加强厨余垃圾源头分类', sourceIds: ['s4'] },
+          { id: 'b13', label: '提出依据', text: '厨余垃圾占比 52%，是四类中最高，且较三年前上升 4 个百分点', sourceIds: ['s3', 's4'] }] },
+        { id: 'g6', role: '建议', heading: '试点纸类单独收集', importance: 'primary', kind: 'text', blocks: [
+          { id: 'b14', label: '建议内容', text: '在三个街道试点纸类单独收集', sourceIds: ['s4'] },
+          { id: 'b15', label: '试点安排', text: '试点周期六个月', sourceIds: ['s4'] },
+          { id: 'b16', label: '提出依据', text: '可回收物中纸类占比最高，但污染率超过 30%，显著影响回收价值', sourceIds: ['s3', 's4'] }] },
+      ],
+    }],
+  };
+  const fonts = () => [22, 20, 18, 16, 15, 14, 13, 12];
+  const implied = resolveGrayLayout(fixture, { pages: [{ pageId: 'p1', layout: { type: 'row' } }] }, area(492), { ...metrics, fontSizes: fonts });
+  assert.ok(!implied.receipts[0].reweighted, JSON.stringify(implied.receipts[0].reweighted));
+  assert.deepEqual(implied.receipts[0].layout.weights, [1, 1]);
+  assert.equal(implied.receipts[0].formPick.requested, true);
+  const equivalent = resolveGrayLayout(fixture, rowSelect([2, 2]), area(492), { ...metrics, fontSizes: fonts });
+  assert.ok(!equivalent.receipts[0].reweighted, JSON.stringify(equivalent.receipts[0].reweighted));
+  assert.deepEqual(equivalent.receipts[0].layout.weights, [2, 2]);
+});
+
 test('审稿窄条款在契约中：同页并列类别不得要求配对/对应表', () => {
   assert.match(SEMANTIC_REVIEW_CONTRACT, /不得要求一一配对卡片或对应表/u);
   assert.match(SEMANTIC_REVIEW_CONTRACT, /必须有原稿明示依据/u);

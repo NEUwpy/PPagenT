@@ -121,6 +121,10 @@ function measureContracts(tree, page, area, metrics, fontSize) {
 
 const isDualRow = tree => tree.op === 'row' && tree.children.length === 2 && tree.children.every(child => child.groupId);
 
+/** 权重只比比例：显式 [1,1] 与 [2,2] 语义相同，不算改选（任务 #196）。 */
+const sameWeightRatio = (left, right) => Array.isArray(left) && Array.isArray(right)
+  && left.length === 2 && right.length === 2 && left[0] * right[1] === right[0] * left[1];
+
 /**
  * 按所有页共用的候选字号测量；双栏同时尝试宽度比例，其余组合保留模型选择的形状。
  * 任务 #188-B：请求/默认权重（显式 weights，或模板按实文量算出的比例）先评——它能在候选字体里
@@ -195,6 +199,8 @@ export function resolveGrayLayout(plan, selection, area, { measureBody, fitText,
     const choice = entry.layout, ids = page.semantics.readingOrder;
     if (!choice || typeof choice !== 'object') throw new Error('每页必须给出 layout');
     let tree = normalizeLayoutTree(choice, ids, page.pageId);
+    // 任务 #196：有效请求权重——缺省 row 的有效请求是 [1,1]；非双栏没有权重请求。
+    const requestedWeights = isDualRow(tree) ? (tree.weights ?? [1, 1]) : null;
     let fontSize = 22;
     let formPick = null;
     const fontCandidates = typeof fontSizes === 'function' ? fontSizes(page, tree) : null;
@@ -216,10 +222,10 @@ export function resolveGrayLayout(plan, selection, area, { measureBody, fitText,
       contracts[id] = { minWidth: width, minHeight: Math.max(80, Math.ceil(70 + body.height)) };
     }
     let composition = tree.op === 'single' ? tree.children[0] : tree;
-    const baseWeights = Array.isArray(choice.weights) ? choice.weights : null;
     let receiptLayout = formPick?.weights ? { ...structuredClone(choice), weights: formPick.weights } : choice;
-    let reweighted = formPick?.weights && JSON.stringify(formPick.weights) !== JSON.stringify(baseWeights)
-      ? { from: baseWeights, to: formPick.weights, reason: 'requested-weights-overflow' }
+    // 任务 #196：只有实际改选了不同比例才记回退；缺省 [1,1]→[1,1] 与比例等价（[1,1]→[2,2]）都不虚报。
+    let reweighted = formPick?.weights && requestedWeights && !sameWeightRatio(formPick.weights, requestedWeights)
+      ? { from: requestedWeights, to: formPick.weights, reason: 'requested-weights-overflow' }
       : null;
     let solved;
     try {
@@ -239,7 +245,9 @@ export function resolveGrayLayout(plan, selection, area, { measureBody, fitText,
       contracts = attempt.contracts;
       solved = attempt.solved;
       receiptLayout = { ...structuredClone(choice), weights: attempt.weights };
-      reweighted = { from: baseWeights, to: attempt.weights, reason: 'requested-weights-overflow' };
+      reweighted = requestedWeights && !sameWeightRatio(attempt.weights, requestedWeights)
+        ? { from: requestedWeights, to: attempt.weights, reason: 'requested-weights-overflow' }
+        : null;
     }
     // 内容明显少于正文区时不再把各组拉到满高：满高会让空框自己声明"这里该有内容"。
     // 任务 #175-G02：帧高只贴合内容（min×1.1，最小 96px），不设页高下限——空白留在页面上（空白本身不是错误），
@@ -253,7 +261,7 @@ export function resolveGrayLayout(plan, selection, area, { measureBody, fitText,
       return { itemId: id, x: frame.left, y: frame.top, width: frame.width, height: frame.height, fontSize };
     });
     layouts.push({ pageId: page.pageId, regions });
-    receipts.push({ pageId: page.pageId, layout: structuredClone(receiptLayout), resolved: solved, occupiedRegions: regions, contentMinimums: contracts, fontSize, ...(reweighted ? { reweighted } : {}), ...(formPick ? { formPick: { fontSize: formPick.fontSize, weights: formPick.weights, maxHeight: formPick.maxHeight } } : {}) });
+    receipts.push({ pageId: page.pageId, layout: structuredClone(receiptLayout), resolved: solved, occupiedRegions: regions, contentMinimums: contracts, fontSize, ...(reweighted ? { reweighted } : {}), ...(formPick ? { formPick: { fontSize: formPick.fontSize, weights: formPick.weights, maxHeight: formPick.maxHeight, requested: Boolean(formPick.requested) } } : {}) });
   }
   const bound = bindSemanticLayout(plan, { pages: layouts });
   bound.pages.forEach((page, i) => { page.composition.basicLayout = receipts[i].layout; });
