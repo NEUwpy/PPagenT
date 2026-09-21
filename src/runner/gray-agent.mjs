@@ -104,9 +104,9 @@ export function requireExpandedManuscript(raw) {
 /**
  * 规划期前移信号（任务 #151）：复用渲染期同一测量，把主题句单行预算与容量问题
  * 在规划尚可调整时暴露。主题句超预算与渲染门禁同一判定（确定性），按 issue 返回；
- * 容量按默认组合预估、组合仍可改，按 warning 返回，不阻塞规划。
- * 充实度（任务 #71-F1）：逐页独立预估（与几何审计同一口径：region 内容底 ÷ 正文区高），
- * 预估页底留白 ≥40% 的稀疏页按 issue 阻断，反馈组织级出路；阈值 0.4 即空洞告警线。
+ * 容量、充实度均为「按默认组合」的预估，按 warning 返回、不阻断——单一留白比例不得阻止
+ * 有实质内容的候选进入布局与预览（任务 #169-G02）；是否合理由实际页面判断。
+ * 充实度阈值 0.4（页底）与 0.7/160px（区域）沿用几何审计的归档线。
  * 逐页独立：某页超容量只影响该页（warning），不得中断其余页的充实度检查。
  */
 const SPARSE_VOID_LIMIT = 0.4;
@@ -137,13 +137,12 @@ export function planFitIssues(plan, area) {
         const available = region.height - 70;
         const body = grayBodyLayout(item, region.width - 32, region.fontSize ?? 22, Math.max(0, available));
         maxBottom = Math.max(maxBottom, region.y + 54 + Math.max(0, ...body.sections.map(section => section.top + section.height)));
-        // 区域级充实度（任务 #167-G02）：区域大小与内容不匹配时同样在规划期暴露。
-        // 阈值沿用几何审计的归档线（容器 ≥160px 且空洞 ≥70%）。
+        // 区域级充实度（任务 #167-G02，按 #169 降为非阻断）：阈值沿用几何审计归档线（容器 ≥160px 且空洞 ≥70%）。
         const voidRatio = 1 - body.minimumHeight / Math.max(1, available);
         if (available >= 160 && voidRatio >= 0.7) {
-          issues.push({
+          warnings.push({
             code: 'region-too-sparse', pageId: page.pageId, itemId: region.itemId,
-            message: `该页组 ${region.itemId} 内容只占容器约 ${Math.round((1 - voidRatio) * 100)}%（按默认组合预估，与空洞告警线同口径）：区域大小与内容不匹配——并组、改归属、换分区或改用相称的组合，让区域贴合实际内容；不得用填充物或放大字号搪塞。`,
+            message: `该页组 ${region.itemId} 内容只占容器约 ${Math.round((1 - voidRatio) * 100)}%（按默认组合预估）：可考虑并组、改归属、换分区或改用相称的组合；由实际页面判断，不阻断。`,
           });
         }
       }
@@ -158,9 +157,9 @@ export function planFitIssues(plan, area) {
       }
     }
     if (Number.isFinite(estimatedVoid) && estimatedVoid >= SPARSE_VOID_LIMIT) {
-      issues.push({
+      warnings.push({
         code: 'page-too-sparse', pageId: page.pageId,
-        message: `该页预估页底留白 ${Math.round(estimatedVoid * 100)}%（按默认组合，与空洞告警线同口径）：按组织级解决——并入相邻页、在本页承载原稿其余实质内容，或重新组织分页；不得用填充物或缩框/缩字号搪塞。`,
+        message: `该页预估页底留白 ${Math.round(estimatedVoid * 100)}%（按默认组合预估）：可考虑并入相邻页、在本页承载原稿其余实质内容，或重新组织分页；由实际页面判断，不阻断。`,
       });
     }
   }
@@ -233,6 +232,11 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
       handler: async () => {
         const { plan, source, note } = resolvePlan();
+        // 修订未提交（任务 #169-G03）：本轮正文没有完整计划 JSON 时不重跑检查——同一失败计划的重复检查
+        // 只会消耗预算并制造"已修订"的假象；给出可执行的诚实回执，等模型把完整计划写回正文。
+        if (source === 'fallback-previous-turn') {
+          return { accepted: false, planSource: source, issues: [], coverage: null, note: '本轮正文没有完整计划 JSON：未运行检查。请把当前完整 gray-plan-3 计划写进本轮正文后重试。' };
+        }
         const report = validateSemanticPlan(base, plan);
         const fit = planFitIssues(plan, area);
         const issues = [...report.issues, ...fit.issues].slice(0, 20);
@@ -246,6 +250,10 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
       handler: async () => {
         const { plan, source, note } = resolvePlan();
+        // 修订未提交（任务 #169-G03）：不重跑审稿、不写审稿记录——旧计划的审稿结论对新内容无效。
+        if (source === 'fallback-previous-turn') {
+          return { accepted: false, planSource: source, issues: [], reviewedFingerprint: null, coverage: null, limits: null, note: '本轮正文没有完整计划 JSON：未运行审稿。请把当前完整 gray-plan-3 计划写进本轮正文后重试。' };
+        }
         const reviewInput = semanticReviewInput({ source: raw, area, plan, reviewFeedback: lastReview?.issues ?? null, flowSources: base.sources.filter(item => item.flow).map(item => ({ id: item.id, flow: item.flow, preview: String(item.text).slice(0, 60) })) });
         const response = await provider.complete({ messages: [{ role: 'system', content: SEMANTIC_REVIEW_CONTRACT }, { role: 'user', content: JSON.stringify(reviewInput) }] });
         const parsed = parseModelJson(response);
@@ -271,6 +279,10 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
       },
       handler: async ({ layouts }) => {
         const { plan, source: planSource, note: planNote } = resolvePlan();
+        // 修订未提交（任务 #169-G03）：不进入门禁/几何求解——把"计划没写回来"如实反馈，避免重复消耗渲染预算。
+        if (planSource === 'fallback-previous-turn') {
+          return { accepted: false, stage: 'no-plan', reason: '本轮正文没有完整计划 JSON：未渲染。请把修订后的完整 gray-plan-3 计划写进本轮正文，重新 semantic_review 通过后再渲染。' };
+        }
         // 版本绑定门禁（评审 #119 要求 1）：审稿通过只覆盖它所审的那一版内容；内容改动后通过即失效。
         // 未复核（not-reviewed）、有遗留问题（open-issues）或已过期（stale）的版本不得继承通过状态，也不得渲染交付。
         const coverage = checkReviewCoverage(lastReview, plan);

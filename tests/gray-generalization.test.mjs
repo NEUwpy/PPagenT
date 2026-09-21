@@ -49,12 +49,21 @@ test('已选局部结构位：单类、双类、多类和跨页共用所属条�
   }
 });
 
-test('条目图形位不能从同组其他条目借用节点来冒充所属内容', () => {
+test('节点分隔符与证据范围：｜ 分隔与来源内节点通过，条目实文压缩不构成失配', () => {
   const { base, plan } = fixture();
-  base.sources[0].text += '另有安全条件：防护装置尚未安装。';
   const group = plan.pages[0].groups[0];
-  group.blocks.push({ id: 'other', label: '安全条件', text: '防护装置尚未安装。', sourceIds: ['s1'] });
-  group.blocks.push({ id: 'note', kind: 'diagram', text: '设备尚未到位／人员尚未到岗',
+  group.blocks.push({ id: 'note', kind: 'diagram', text: '设备尚未到位｜人员尚未到岗｜材料尚未验收→试验无法启动',
+    expression: '条件图', relationship: '汇聚', production: '汇聚图', sourceIds: ['s1'] });
+  assert.equal(validateSemanticPlan(base, plan).accepted, true, JSON.stringify(validateSemanticPlan(base, plan).issues));
+  // 条目实文压缩后，节点仍可由该块所引来源支撑（任务 #169-G03：证据范围与承诺一致）
+  group.blocks.find(block => block.id === 'g1-text').text = '风险见来源。';
+  assert.equal(validateSemanticPlan(base, plan).accepted, true, JSON.stringify(validateSemanticPlan(base, plan).issues));
+});
+
+test('节点短语超出所属条目与所引来源时仍被拒绝（来源内节点按声明来源放行）', () => {
+  const { base, plan } = fixture();
+  const group = plan.pages[0].groups[0];
+  group.blocks.push({ id: 'note', kind: 'diagram', text: '设备已经到位／人员尚未到岗',
     expression: '条件图', relationship: '并列', production: '并列条件', sourceIds: ['s1'] });
   assert.ok(validateSemanticPlan(base, plan).issues.some(issue => issue.code === 'structure-quote-mismatch'));
 });
