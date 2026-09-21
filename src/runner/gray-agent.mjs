@@ -212,16 +212,20 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
   let lastContent = '';
   let lastReview = null;
   let lastPlan = null;
+  let lastCheckedFingerprint = null;
   // 压缩记忆（方案 A 项 2）：逐页记录上一版容量失败实测高，随反馈回给模型。
   const lastMinimums = new Map();
-  // 模型偶尔忘记在正文里重写完整计划（协议失误）。兜底沿用上一轮已解析的计划并在回执标注
-  // planSource，避免一次失误白烧一整轮；模型看到标注后应在下一轮正文补写完整计划。
+  // 计划版本流（任务 #171-G03a）：提交计划（正文含完整 JSON）与对已提交版本执行检查/审稿/渲染是两件事。
+  // 正文没有新计划 JSON 时按当前已提交计划继续推进（内容指纹不变）；空响应/坏 JSON 不覆盖计划，
+  // 也不能被当作"已修订"——真正修订必须提交新内容，审稿通过状态随内容指纹变化自动失效（评审 #119）。
   const resolvePlan = () => {
     try {
       lastPlan = extractPlan(lastContent);
       return { plan: lastPlan, source: 'message' };
     } catch (error) {
-      if (lastPlan) return { plan: lastPlan, source: 'fallback-previous-turn', note: '本轮正文没有完整计划 JSON，已按上一轮计划执行；请在下一轮正文重写完整计划。' };
+      if (lastPlan) {
+        return { plan: lastPlan, source: 'current-plan', note: '本轮正文没有新计划 JSON：按当前已提交计划（内容指纹不变）继续；如已修订，请把完整 gray-plan-3 计划写进正文，修订才会生效并需重新审稿。' };
+      }
       throw error;
     }
   };
@@ -232,16 +236,15 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
       handler: async () => {
         const { plan, source, note } = resolvePlan();
-        // 修订未提交（任务 #169-G03）：本轮正文没有完整计划 JSON 时不重跑检查——同一失败计划的重复检查
-        // 只会消耗预算并制造"已修订"的假象；给出可执行的诚实回执，等模型把完整计划写回正文。
-        if (source === 'fallback-previous-turn') {
-          return { accepted: false, planSource: source, issues: [], coverage: null, note: '本轮正文没有完整计划 JSON：未运行检查。请把当前完整 gray-plan-3 计划写进本轮正文后重试。' };
-        }
+        const fingerprint = planContentFingerprint(plan);
+        const repeated = lastCheckedFingerprint === fingerprint;
+        lastCheckedFingerprint = fingerprint;
         const report = validateSemanticPlan(base, plan);
         const fit = planFitIssues(plan, area);
         const issues = [...report.issues, ...fit.issues].slice(0, 20);
         const warnings = [...(report.warnings ?? []), ...fit.warnings];
-        return { accepted: report.accepted && !fit.issues.length, issues, coverage: report.coverage, defaults: describeDefaults(plan), planSource: source, ...(warnings.length ? { warnings } : {}), ...(note ? { note } : {}) };
+        const notes = [note, repeated ? '该版本自上次检查后未变化：结论同上；有修订请提交新计划。' : null].filter(Boolean);
+        return { accepted: report.accepted && !fit.issues.length, issues, coverage: report.coverage, defaults: describeDefaults(plan), planSource: source, ...(warnings.length ? { warnings } : {}), ...(notes.length ? { note: notes.join(' ') } : {}) };
       },
     }),
     defineTool({
@@ -250,21 +253,30 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
       handler: async () => {
         const { plan, source, note } = resolvePlan();
-        // 修订未提交（任务 #169-G03）：不重跑审稿、不写审稿记录——旧计划的审稿结论对新内容无效。
-        if (source === 'fallback-previous-turn') {
-          return { accepted: false, planSource: source, issues: [], reviewedFingerprint: null, coverage: null, limits: null, note: '本轮正文没有完整计划 JSON：未运行审稿。请把当前完整 gray-plan-3 计划写进本轮正文后重试。' };
+        const fingerprint = planContentFingerprint(plan);
+        // 同版复用（任务 #171-G03a）：同一内容指纹已审过且未修订时不重复付费调用审稿，直接复用结论；
+        // 修订内容后指纹变化，审稿会重新运行（通过状态也随之失效，评审 #119）。
+        if (lastReview && lastReview.fingerprint === fingerprint) {
+          return { accepted: lastReview.accepted, issues: lastReview.issues, reviewedFingerprint: fingerprint, coverage: lastReview.coverage ?? null, limits: lastReview.limits ?? null, planSource: source, note: '该版本与最近一次审稿的内容一致：结论复用（未重复调用审稿）；修订内容后会自动重新审稿。' };
         }
-        const reviewInput = semanticReviewInput({ source: raw, area, plan, reviewFeedback: lastReview?.issues ?? null, flowSources: base.sources.filter(item => item.flow).map(item => ({ id: item.id, flow: item.flow, preview: String(item.text).slice(0, 60) })) });
+        const reviewFeedback = Array.isArray(lastReview?.issues) && lastReview.issues.length
+          ? lastReview.issues.map(issue => ({
+            ...(issue.pageId ? { pageId: issue.pageId } : {}),
+            ...(Array.isArray(issue.sourceIds) ? { sourceIds: issue.sourceIds } : {}),
+            problem: issue.problem,
+            verify: '上轮发现是否仍存在：按当前可见内容与原稿复核；已用其他呈现解决即算解决，不要求采用上轮建议的措辞、载体或位置。',
+          }))
+          : null;
+        const reviewInput = semanticReviewInput({ source: raw, area, plan, reviewFeedback, flowSources: base.sources.filter(item => item.flow).map(item => ({ id: item.id, flow: item.flow, preview: String(item.text).slice(0, 60) })) });
         const response = await provider.complete({ messages: [{ role: 'system', content: SEMANTIC_REVIEW_CONTRACT }, { role: 'user', content: JSON.stringify(reviewInput) }] });
         const parsed = parseModelJson(response);
         if (typeof parsed.accepted !== 'boolean' || !Array.isArray(parsed.issues)) throw new Error('审稿响应格式无效');
         // 版本绑定（评审 #119 要求 1）：记录所审内容的内容指纹；通过状态只覆盖这一版内容。
-        const reviewedFingerprint = planContentFingerprint(plan);
         const at = new Date().toISOString();
-        agentState.grayDraft.reviewRecord = [...(agentState.grayDraft.reviewRecord ?? []), { at, source, fingerprint: reviewedFingerprint, ...snapshotSemanticReview(parsed) }];
+        agentState.grayDraft.reviewRecord = [...(agentState.grayDraft.reviewRecord ?? []), { at, source, fingerprint, ...snapshotSemanticReview(parsed) }];
         await saveAgentState();
-        lastReview = { accepted: parsed.accepted && !parsed.issues.length, issues: parsed.issues.slice(0, 12), at, fingerprint: reviewedFingerprint };
-        return { accepted: lastReview.accepted, issues: lastReview.issues, reviewedFingerprint, coverage: parsed.coverage ?? null, limits: parsed.limits ?? null, planSource: source, ...(note ? { note } : {}) };
+        lastReview = { accepted: parsed.accepted && !parsed.issues.length, issues: parsed.issues.slice(0, 12), at, fingerprint, coverage: parsed.coverage ?? null, limits: parsed.limits ?? null };
+        return { accepted: lastReview.accepted, issues: lastReview.issues, reviewedFingerprint: fingerprint, coverage: lastReview.coverage, limits: lastReview.limits, planSource: source, ...(note ? { note } : {}) };
       },
     }),
     defineTool({
@@ -279,10 +291,6 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
       },
       handler: async ({ layouts }) => {
         const { plan, source: planSource, note: planNote } = resolvePlan();
-        // 修订未提交（任务 #169-G03）：不进入门禁/几何求解——把"计划没写回来"如实反馈，避免重复消耗渲染预算。
-        if (planSource === 'fallback-previous-turn') {
-          return { accepted: false, stage: 'no-plan', reason: '本轮正文没有完整计划 JSON：未渲染。请把修订后的完整 gray-plan-3 计划写进本轮正文，重新 semantic_review 通过后再渲染。' };
-        }
         // 版本绑定门禁（评审 #119 要求 1）：审稿通过只覆盖它所审的那一版内容；内容改动后通过即失效。
         // 未复核（not-reviewed）、有遗留问题（open-issues）或已过期（stale）的版本不得继承通过状态，也不得渲染交付。
         const coverage = checkReviewCoverage(lastReview, plan);
