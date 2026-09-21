@@ -230,10 +230,9 @@ export function resolveGrayLayout(plan, selection, area, { measureBody, fitText,
       reweighted = { from: baseWeights, to: attempt.weights };
     }
     // 内容明显少于正文区时不再把各组拉到满高：满高会让空框自己声明"这里该有内容"。
-    // 任务 #71-F2 下限 60%（与页底留白 40% 告警线对齐）；任务 #167-G02 起改为连续贴合：
-    // 帧高 = clamp(min×1.1, 0.6×正文区, 正文区)，让区域大小与实际内容匹配；
-    // 内容达到约 91% 正文区的丰实页 1.1×min ≥ 正文区，保持满高不变。
-    const frameHeight = Math.max(Math.ceil(area.height * 0.6), 96, Math.ceil(solved.minimum.height * 1.1));
+    // 任务 #175-G02：帧高只贴合内容（min×1.1，最小 96px），不设页高下限——空白留在页面上（空白本身不是错误），
+    // 消除"外框为等高或页高下限被盲目拉伸"；内容接近整区的丰实页仍为整区。
+    const frameHeight = Math.max(96, Math.ceil(solved.minimum.height * 1.1));
     if (frameHeight < area.height) {
       solved = resolveLayoutTree({ composition, bodyFrame: { left: 0, top: 0, width: area.width, height: frameHeight }, contracts, style: { gap: GAP } });
     }

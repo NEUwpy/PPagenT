@@ -59,16 +59,20 @@ function extractPlan(content) {
   const last = text.lastIndexOf('}');
   if (first >= 0 && last > first) candidates.push(text.slice(first, last + 1));
   let lastError = null;
+  let parsedWithoutPages = false;
   for (const candidate of candidates) {
     try {
       const parsed = JSON.parse(candidate);
       if (parsed && typeof parsed === 'object' && Array.isArray(parsed.pages)) return parsed;
+      if (parsed && typeof parsed === 'object') parsedWithoutPages = true;
       lastError = new Error('JSON 里缺少 pages 数组');
     } catch (error) { lastError = error; }
   }
-  // 任务 #173：区分"想提交但坏"（有 JSON 片段却解析不了）与"没写计划"——前者必须显式报提交失败。
+  // 任务 #173/#175：区分"想提交但坏"（截断/缺 pages/围栏未闭合）与"没写计划"——
+  // 前者必须显式报提交失败；普通散文里的花括号不算提交。
+  const planLikeMarkers = /"\s*(?:schemaVersion|deckBrief|pages)\s*"\s*:/u.test(text);
   const error = new Error(`本轮正文里没有可解析的完整计划 JSON：${lastError?.message ?? '未找到 JSON'}。修复：把当前完整 gray-plan-3 计划 JSON 写进本轮消息正文（工具参数只放 layouts），再重试本工具。`);
-  error.code = candidates.length ? 'PLAN_INVALID' : 'PLAN_MISSING';
+  error.code = parsedWithoutPages || planLikeMarkers ? 'PLAN_INVALID' : 'PLAN_MISSING';
   throw error;
 }
 
@@ -237,10 +241,14 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
   const tools = [
     defineTool({
       name: 'check_plan',
-      description: '对你本轮消息正文中的完整 gray-plan-3 计划做程序检查：结构字段、来源引用与覆盖、块级数字/引文保真；并返回逐页默认版式（defaults，含特征依据）与规划期预估（主题句单行预算、按默认组合的容量最小高）——渲染从默认出发，只有确需不同才覆盖。不接收计划参数——计划写在本轮正文里。返回 {accepted, issues, coverage, defaults}。任何规划改动后都应重新调用。',
+      description: '对你当前已提交的完整 gray-plan-3 计划做程序检查：结构字段、来源引用与覆盖、块级数字/引文保真；并返回逐页默认版式（defaults，含特征依据）与规划期预估（主题句单行预算、按默认组合的容量与充实度，均为非阻断提示）。计划通过"提交"更新：把完整计划 JSON 写进本轮正文即提交新版本（旧审稿失效）；未写新 JSON 时对当前已提交版本继续（结论同上会标注）；正文里想提交但 JSON 损坏＝本次提交失败，本工具只回报失败、不检查。不接收计划参数——计划写在本轮正文里。返回 {accepted, issues, coverage, defaults, planSource}。任何规划改动后都应重新调用。',
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
       handler: async () => {
         const { plan, source, note } = resolvePlan();
+        // 任务 #175：坏提交是失败控制流——不检查、不更新计划、不冒充已修订。
+        if (source === 'submission-failed') {
+          return { accepted: false, planSource: source, issues: [], coverage: null, note: '本次提交失败：正文中的计划 JSON 无法解析，未运行检查。请重发完整合法 JSON；下一轮明确沿用上一版（不写新计划）可继续。' };
+        }
         const fingerprint = planContentFingerprint(plan);
         const repeated = lastCheckedFingerprint === fingerprint;
         lastCheckedFingerprint = fingerprint;
@@ -254,15 +262,21 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
     }),
     defineTool({
       name: 'semantic_review',
-      description: '用独立审稿调用对照原稿复核你本轮正文中的计划：事实/条件/否定与模拟声明完整性、页面职责、关系表达与结构选择。不接收计划参数。返回 {accepted, issues, coverage, limits}。渲染前应通过。',
+      description: '用独立审稿调用对照原稿复核你当前已提交的计划：事实/条件/否定与模拟声明完整性、页面职责、关系表达与结构选择。issues 是阻塞项（实质改变理解的失真、遗漏、层级/归属/关系错误），notes 是建议/已解决说明（不阻塞渲染）。同一内容指纹已审过时复用结论、不重复调用；提交新计划后自动重新审稿。正文里想提交但 JSON 损坏＝本次提交失败，本工具只回报失败、不审稿。渲染前须有覆盖当前内容指纹的有效通过。',
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
       handler: async () => {
         const { plan, source, note } = resolvePlan();
+        // 任务 #175：坏提交时先于缓存判定——不审稿、不覆盖失败信息、不写审稿记录。
+        if (source === 'submission-failed') {
+          agentState.grayDraft.submissionFailures = (agentState.grayDraft.submissionFailures ?? 0) + 1;
+          await saveAgentState();
+          return { accepted: false, planSource: source, issues: [], notes: [], reviewedFingerprint: null, coverage: null, limits: null, note: '本次提交失败：正文中的计划 JSON 无法解析，未运行审稿（不得用旧版结论冒充通过）。请重发完整合法 JSON；下一轮明确沿用上一版可继续。' };
+        }
         const fingerprint = planContentFingerprint(plan);
         // 同版复用（任务 #171-G03a）：同一内容指纹已审过且未修订时不重复付费调用审稿，直接复用结论；
         // 修订内容后指纹变化，审稿会重新运行（通过状态也随之失效，评审 #119）。
         if (lastReview && lastReview.fingerprint === fingerprint) {
-          return { accepted: lastReview.accepted, issues: lastReview.issues, reviewedFingerprint: fingerprint, coverage: lastReview.coverage ?? null, limits: lastReview.limits ?? null, planSource: source, note: '该版本与最近一次审稿的内容一致：结论复用（未重复调用审稿）；修订内容后会自动重新审稿。' };
+          return { accepted: lastReview.accepted, issues: lastReview.issues, notes: lastReview.notes ?? [], reviewedFingerprint: fingerprint, coverage: lastReview.coverage ?? null, limits: lastReview.limits ?? null, planSource: source, note: '该版本与最近一次审稿的内容一致：结论复用（未重复调用审稿）；修订内容后会自动重新审稿。' };
         }
         const reviewFeedback = Array.isArray(lastReview?.issues) && lastReview.issues.length
           ? lastReview.issues.map(issue => ({
@@ -291,7 +305,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
     }),
     defineTool({
       name: 'render_draft',
-      description: '按你本轮正文中的计划与每页基础组合求解几何并渲染灰稿。layouts 是逐页数组 [{pageId,layout}]；layout 为简式 {type:"single|row|column|grid",weights?,columns?} 或嵌套 {type,weights?,columns?,children:[…]}（children 项为 {groupId} 或嵌套组合，按阅读顺序恰好覆盖本页全部组一次，最多三层）。每页有程序默认版式（按组数与实文量）；页条目可不写 layout 采用默认；改用其它组合须在该页加 override:{reason:"一句话理由"}（入档分析），仅微调 weights 不算覆盖。这是小参数，仍走工具参数。程序检查通过即可交付；独立审稿的遗留问题随交付记录，不阻塞渲染。成功返回 {accepted:true, preview, pptx, editable}；失败返回 {accepted:false, stage:"geometry|check|template", reason, issues}，据此修订后重试。',
+      description: '按你当前已提交的计划与每页基础组合求解几何并渲染灰稿。layouts 是逐页数组 [{pageId,layout}]；layout 为简式 {type:"single|row|column|grid",weights?,columns?} 或嵌套 {type,weights?,columns?,children:[…]}（children 项为 {groupId} 或嵌套组合，按阅读顺序恰好覆盖本页全部组一次，最多三层）。每页有程序默认版式（按组数与实文量）；页条目可不写 layout 采用默认；改用其它组合须在该页加 override:{reason:"一句话理由"}（入档分析），仅微调 weights 不算覆盖。这是小参数，仍走工具参数。程序检查通过且审稿覆盖当前内容指纹即可交付；审稿的阻塞项（issues）未通过前不得渲染，notes 随交付记录、不阻塞。正文里想提交但 JSON 损坏＝本次提交失败，本工具只回报失败、不渲染旧版。成功返回 {accepted:true, preview, pptx, editable}；失败返回 {accepted:false, stage:"template|geometry|check|submission-failed|…", reason, issues}，据此修订后重试。',
       inputSchema: {
         type: 'object',
         properties: {
@@ -301,6 +315,13 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
       },
       handler: async ({ layouts }) => {
         const { plan, source: planSource, note: planNote } = resolvePlan();
+        // 任务 #175：坏提交不得渲染旧版冒充本次提交（失败控制流）。
+        if (planSource === 'submission-failed') {
+          agentState.grayDraft.submissionFailures = (agentState.grayDraft.submissionFailures ?? 0) + 1;
+          agentState.grayDraft.renders.push({ render: renderCount + 1, accepted: false, stage: 'submission-failed', reason: '本次提交失败：计划 JSON 无法解析' });
+          await saveAgentState();
+          return { accepted: false, stage: 'submission-failed', reason: '本次提交失败：正文中的计划 JSON 无法解析，未渲染（不得用旧版冒充本次提交）。请重发完整合法 JSON；下一轮明确沿用上一版可继续。' };
+        }
         // 版本绑定门禁（评审 #119 要求 1）：审稿通过只覆盖它所审的那一版内容；内容改动后通过即失效。
         // 未复核（not-reviewed）、有遗留问题（open-issues）或已过期（stale）的版本不得继承通过状态，也不得渲染交付。
         const coverage = checkReviewCoverage(lastReview, plan);
@@ -502,6 +523,10 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
           agentState.grayDraft.reviewNotes = { status: coverage.status, at: lastReview?.at ?? null, issues: lastReview?.issues ?? null, fingerprint: coverage.fingerprint };
           agentState.grayDraft.reviewCoverage = { status: coverage.status, deliveredFingerprint: coverage.fingerprint, reviewedFingerprint: coverage.reviewedFingerprint, checkedAt: new Date().toISOString(), candidate: true };
           agentState.grayDraft.candidateDelivery = true;
+          // 任务 #175：候选如实标明未应用修订（坏提交发生在候选计划之后时）。
+          if ((agentState.grayDraft.submissionFailures ?? 0) > 0) {
+            agentState.grayDraft.candidateNote = `候选基于上一有效版本；本轮另有 ${agentState.grayDraft.submissionFailures} 次提交失败（修订未应用，候选不代表这些修订）。`;
+          }
           agentState.grayDraft.status = 'awaiting-user-review';
           candidateRendered = true;
         }

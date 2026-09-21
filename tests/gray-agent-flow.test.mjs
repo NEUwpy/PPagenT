@@ -36,7 +36,11 @@ function mockProvider(chatScript, reviewPayloads = []) {
       const step = chatScript[chatIndex++] ?? { content: '收工。', toolCalls: [] };
       return {
         content: step.content ?? '',
-        toolCalls: (step.tools ?? []).map((name, index) => ({ id: `c${chatIndex}-${index}`, name, arguments: '{}' })),
+        toolCalls: (step.tools ?? []).map((tool, index) => {
+          const name = typeof tool === 'string' ? tool : tool.name;
+          const args = typeof tool === 'string' ? '{}' : JSON.stringify(tool.arguments ?? {});
+          return { id: `c${chatIndex}-${index}`, name, arguments: args };
+        }),
         usage: {},
         finishReason: 'stop',
       };
@@ -62,6 +66,44 @@ async function runFlow(chatScript, reviewPayloads, turns = 5) {
     await fs.rm(dir, { recursive: true, force: true });
   }
 }
+
+test('坏提交是失败控制流：已审过的旧版不被坏修订冒充交付；截断计划也算失败；沿用可继续', async () => {
+  const truncated = '```json\n{ "schemaVersion": "gray-plan-3", "deckBrief": { "title": "开放安排"';
+  const { events, provider } = await runFlow([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '审稿。', tools: ['semantic_review'] },
+    { content: truncated, tools: [{ name: 'render_draft', arguments: { layouts: [{ pageId: 'p1', layout: { type: 'single' } }] } }] },
+    { content: truncated, tools: ['semantic_review'] },
+    { content: '明确沿用上一版。', tools: ['semantic_review'] },
+    { content: '收工。', tools: [] },
+  ]);
+  const renders = events.filter(event => event.tool === 'render_draft');
+  const reviews = events.filter(event => event.tool === 'semantic_review');
+  // 坏修订＋render：即使上一版已审过，也不得产生正常成功交付
+  assert.equal(renders.length, 1);
+  assert.equal(renders[0].result.accepted, false);
+  assert.equal(renders[0].result.stage, 'submission-failed');
+  // 坏提交不审稿、不写审稿结果
+  assert.equal(reviews.length, 3);
+  assert.equal(reviews[1].result.planSource, 'submission-failed');
+  assert.equal(reviews[1].result.reviewedFingerprint, null);
+  assert.match(reviews[1].result.note ?? '', /提交失败/);
+  // 下一轮明确沿用旧版：同版缓存复用，正常推进（不要求重抄全文）
+  assert.equal(reviews[2].result.planSource, 'current-plan');
+  assert.match(reviews[2].result.note ?? '', /结论复用/);
+  assert.equal(provider.reviewCalls.length, 1, '只有合法计划那一次真正审稿');
+});
+
+test('散文里的花括号不是提交：按沿用推进，不误判提交失败', async () => {
+  const { events } = await runFlow([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '说明：排版可用 {栏} 或 {带} 两种读法。', tools: ['check_plan'] },
+    { content: '收工。', tools: [] },
+  ]);
+  const checks = events.filter(event => event.tool === 'check_plan');
+  assert.equal(checks[1].result.planSource, 'current-plan');
+  assert.ok(!/提交失败/.test(checks[1].result.note ?? ''));
+});
 
 test('计划版本流：未写新 JSON 可推进审稿；同版复用不重复调用；修订后重新审稿', async () => {
   const { events, provider } = await runFlow([
