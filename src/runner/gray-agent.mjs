@@ -105,10 +105,11 @@ export function requireExpandedManuscript(raw) {
  * 规划期前移信号（任务 #151）：复用渲染期同一测量，把主题句单行预算与容量问题
  * 在规划尚可调整时暴露。主题句超预算与渲染门禁同一判定（确定性），按 issue 返回；
  * 容量按默认组合预估、组合仍可改，按 warning 返回，不阻塞规划。
- * 充实度（任务 #71-F1）：估填低于 SPARSE_PAGE_FLOOR 的稀疏页按 issue 阻断，
- * 反馈组织级出路；阈值 0.6 与页底留白 40% 告警线（归档 p75–p90 定阈）对齐。
+ * 充实度（任务 #71-F1）：逐页独立预估（与几何审计同一口径：region 内容底 ÷ 正文区高），
+ * 预估页底留白 ≥40% 的稀疏页按 issue 阻断，反馈组织级出路；阈值 0.4 即空洞告警线。
+ * 逐页独立：某页超容量只影响该页（warning），不得中断其余页的充实度检查。
  */
-const SPARSE_PAGE_FLOOR = 0.6;
+const SPARSE_VOID_LIMIT = 0.4;
 export function planFitIssues(plan, area) {
   const issues = [];
   const warnings = [];
@@ -120,26 +121,36 @@ export function planFitIssues(plan, area) {
       message: `主题句超 28px 单行预算（本版面约 ${budget} 字内）：claim 只承担本页主要判断；范围、时间、条件、数字等限定改放正文、组标题或附注。`,
     });
   }
-  try {
-    const applied = applyTemplateDefaults(plan, []);
-    const built = resolveGrayLayout(plan, { pages: applied.layouts }, area, {
-      measureBody: grayBodyLayout, fitText: fitGrayText,
-      fontSizes: () => [22, 20, 18, 16, 15, 14, 13, 12],
-    });
-    for (const receipt of built.receipts ?? []) {
-      const minimum = receipt.resolved?.minimum?.height;
-      if (!Number.isFinite(minimum) || minimum >= area.height * SPARSE_PAGE_FLOOR) continue;
-      issues.push({
-        code: 'page-too-sparse', pageId: receipt.pageId,
-        message: `该页内容自然高约 ${Math.ceil(minimum)}px，不足正文区 ${area.height}px 的 ${Math.round(SPARSE_PAGE_FLOOR * 100)}%（预估页底留白将超 40%）：按组织级解决——并入相邻页、在本页承载原稿其余实质内容，或重新组织分页；不得用填充物或缩框/缩字号搪塞。`,
+  for (const page of plan?.pages ?? []) {
+    let estimatedVoid = null;
+    try {
+      const single = { ...plan, pages: [page] };
+      const applied = applyTemplateDefaults(single, []);
+      const built = resolveGrayLayout(single, { pages: applied.layouts }, area, {
+        measureBody: grayBodyLayout, fitText: fitGrayText,
+        fontSizes: () => [22, 20, 18, 16, 15, 14, 13, 12],
       });
+      const bound = built.plan.pages[0];
+      let maxBottom = 0;
+      for (const region of bound.composition.regions) {
+        const item = bound.items.find(candidate => candidate.id === region.itemId);
+        const body = grayBodyLayout(item, region.width - 32, region.fontSize ?? 22, Math.max(0, region.height - 70));
+        maxBottom = Math.max(maxBottom, region.y + 54 + Math.max(0, ...body.sections.map(section => section.top + section.height)));
+      }
+      estimatedVoid = 1 - maxBottom / area.height;
+    } catch (error) {
+      const details = error?.details;
+      if (details?.pageId && Number.isFinite(details?.minimum?.height) && details.minimum.height > area.height) {
+        warnings.push({
+          code: 'plan-capacity', pageId: details.pageId,
+          message: `按默认组合预估放不下：该页最小可读尺寸约 ${Math.ceil(details.minimum.width ?? 0)}×${Math.ceil(details.minimum.height)}，正文区 ${area.width}×${area.height}（超出约 ${Math.ceil(details.minimum.height - area.height)}px）。先按语义边界分页、合并同归属组或忠实压词；也可改用更省空间的组合后重试。`,
+        });
+      }
     }
-  } catch (error) {
-    const details = error?.details;
-    if (details?.pageId && Number.isFinite(details?.minimum?.height) && details.minimum.height > area.height) {
-      warnings.push({
-        code: 'plan-capacity', pageId: details.pageId,
-        message: `按默认组合预估放不下：该页最小可读尺寸约 ${Math.ceil(details.minimum.width ?? 0)}×${Math.ceil(details.minimum.height)}，正文区 ${area.width}×${area.height}（超出约 ${Math.ceil(details.minimum.height - area.height)}px）。先按语义边界分页、合并同归属组或忠实压词；也可改用更省空间的组合后重试。`,
+    if (Number.isFinite(estimatedVoid) && estimatedVoid >= SPARSE_VOID_LIMIT) {
+      issues.push({
+        code: 'page-too-sparse', pageId: page.pageId,
+        message: `该页预估页底留白 ${Math.round(estimatedVoid * 100)}%（按默认组合，与空洞告警线同口径）：按组织级解决——并入相邻页、在本页承载原稿其余实质内容，或重新组织分页；不得用填充物或缩框/缩字号搪塞。`,
       });
     }
   }

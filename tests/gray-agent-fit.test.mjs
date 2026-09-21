@@ -31,3 +31,20 @@ test('容量按默认组合预估以 warning 暴露、不阻塞', () => {
   assert.equal(heavy.issues.length, 0);
   assert.ok(heavy.warnings.some(warning => warning.code === 'plan-capacity' && warning.pageId === 'p1'));
 });
+
+test('逐页独立：某页超容量不中断其余页的充实度检查', () => {
+  const heavyText = '重要条件必须保留，异常暂停并复核记录。'.repeat(30);
+  const twoPage = {
+    schemaVersion: 'gray-plan-3',
+    deckBrief: { title: '开放安排', audience: '管理员', objective: '理解条件' },
+    pages: [
+      { pageId: 'p1', title: '开放安排', claim: '核验通过后开放', pagePurpose: '说明安排', narrative: '异常附属于规则',
+        groups: [{ id: 'a', role: '行动', heading: '开放安排', importance: 'primary', kind: 'text', blocks: [{ id: 'b1', text: heavyText, sourceIds: ['s1'] }] }] },
+      { pageId: 'p2', title: '补充说明', claim: '其余事项随后安排', pagePurpose: '补充', narrative: '并列',
+        groups: [{ id: 'c', role: '说明', heading: '补充说明', importance: 'primary', kind: 'text', blocks: [{ id: 'c1', text: '模拟：核验后开放。', sourceIds: ['s1'] }] }] },
+    ],
+  };
+  const report = planFitIssues(twoPage, { width: 560, height: 240 });
+  assert.ok(report.warnings.some(warning => warning.code === 'plan-capacity' && warning.pageId === 'p1'));
+  assert.ok(report.issues.some(issue => issue.code === 'page-too-sparse' && issue.pageId === 'p2'));
+});
