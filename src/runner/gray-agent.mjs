@@ -33,8 +33,8 @@ export const GRAY_AGENT_PROMPT = `你是灰稿制作 Agent。目标：把用户�
 4. 为每页选择基础组合（single/row/column/grid，可选 weights/columns），调用 render_draft 求解并渲染；
 5. render_draft 返回失败时，按其中的 reason 与 issues 修订规划或组合后重试；渲染成功即完成。
 你可以多次调用工具。check_plan 与 semantic_review 都通过后再渲染是正常路径，但不是硬性顺序；按你判断最有效的方式推进。
-交付观：审稿是辅助而不是关口——事实性遗漏、编造、模拟声明缺失必须修复；纯粹的形式偏好随交付记录即可。审稿通过绑定当前内容版本：任何内容改动（含失败后的修订）都会让上一版通过失效——改后再次渲染前必须重新 semantic_review；程序会拒绝未复核、有遗留问题或复核已过期的版本，未复核版本不得继承通过状态。
-**计划的传递方式：把你当前完整的 gray-plan-3 计划 JSON 写在每轮消息的正文里（这是唯一事实来源）；check_plan、semantic_review、render_draft 都读取你本轮正文中的计划，不要在工具参数里重复它，也不要只写差异——每次修订都重写完整计划。**
+交付观：审稿是辅助而不是关口——审稿回执的 issues 是阻塞项（实质改变理解的失真、遗漏、层级/归属/关系错误），必须修复；notes 是建议/已解决说明，不阻塞渲染。审稿通过绑定当前内容版本：任何内容改动（含失败后的修订）都会让上一版通过失效——改后再次渲染前必须重新 semantic_review；程序会拒绝未复核、有阻塞项或复核已过期的版本，未复核版本不得继承通过状态。
+**计划的传递方式：提交或修订计划时，把完整的 gray-plan-3 计划 JSON 写进本轮消息正文——提交新内容会让旧审稿失效、需重新审稿；没有写新 JSON 时，三个工具对当前已提交版本继续（同版审稿复用结论，不重复运行）。正文想提交计划但 JSON 损坏＝本次提交失败（不会被当作已修订），请重发完整合法 JSON；工具回执的 planSource 标明本轮计划来源（message=新提交 / current-plan=沿用 / submission-failed=坏提交）。不要在工具参数里重复计划，也不要只写差异。**
 容量与分页：${SHARED_RULES.paging}
 布局选择（调用 render_draft 时给出）：简式 {type:"single|row|column|grid",weights?,columns?} 的子节点默认按阅读顺序取本页全部组；页面有分层关系时用嵌套式 {type,children:[{groupId},或嵌套]}，例如主区在上、一条注记横贯下方 = {type:"column",children:[{type:"row",children:[{groupId:"g1"},{groupId:"g2"}]},{groupId:"g3"}]}。row 横向分栏、column 纵向排列、grid 规则网格；weights（仅 row）分配多余宽度，按各栏实文行数/展开需要给比例（如 3:2、5:4），不要默认等分，columns（仅 grid）是列数；children 必须按阅读顺序恰好覆盖本页全部组一次；嵌套最多三层。主次通过空间份额与组标题层级体现，少量内容不必拉满一页，不要为了变化而嵌套。每页有程序默认版式（1 组多条=类别容器、1 组单条=单主体、2 组=双栏对照、≥3 组=行式清单）；页条目可以不写 layout 采用默认。自己选与默认不同的组合时，必须在该页加 override:{reason:"一句话理由"}，理由会入档分析；仅微调 weights 不算覆盖。
 格式：{schemaVersion:"gray-plan-3",deckBrief:{title,audience,objective},pages:[{pageId:"p1",title:"短标题",claim:"简短上屏主题句，建议二十字左右",pagePurpose:"本页解决的问题",narrative:"一句话说明必要的先后、并行、判断或归属关系",sourceIds:["s1"]（可选：页级认领，用于本页承载但不单列条目的结构性来源）,groups:[{id:"g1",role:"本组主要职责",heading:"上屏短标题",importance:"primary|supporting",kind:"text|diagram|flow|chart|table|image",blocks:[{id:"b1",label:"可选上屏子标题（内容词，不写序号）",text:"真实上屏文字",sourceIds:["s1"],scope:"group"（可选：约束整组全部条目的共同说明，程序不编号）}],expression:"非text必填：表达作用",relationship:"非text必填：基本关系",production:"非text必填：制作要求"}]}],planningNotes:"简短后台组织说明"}。
@@ -66,7 +66,10 @@ function extractPlan(content) {
       lastError = new Error('JSON 里缺少 pages 数组');
     } catch (error) { lastError = error; }
   }
-  throw new Error(`本轮正文里没有可解析的完整计划 JSON：${lastError?.message ?? '未找到 JSON'}。修复：把当前完整 gray-plan-3 计划 JSON 写进本轮消息正文（工具参数只放 layouts），再重试本工具。`);
+  // 任务 #173：区分"想提交但坏"（有 JSON 片段却解析不了）与"没写计划"——前者必须显式报提交失败。
+  const error = new Error(`本轮正文里没有可解析的完整计划 JSON：${lastError?.message ?? '未找到 JSON'}。修复：把当前完整 gray-plan-3 计划 JSON 写进本轮消息正文（工具参数只放 layouts），再重试本工具。`);
+  error.code = candidates.length ? 'PLAN_INVALID' : 'PLAN_MISSING';
+  throw error;
 }
 
 /**
@@ -215,18 +218,20 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
   let lastCheckedFingerprint = null;
   // 压缩记忆（方案 A 项 2）：逐页记录上一版容量失败实测高，随反馈回给模型。
   const lastMinimums = new Map();
-  // 计划版本流（任务 #171-G03a）：提交计划（正文含完整 JSON）与对已提交版本执行检查/审稿/渲染是两件事。
-  // 正文没有新计划 JSON 时按当前已提交计划继续推进（内容指纹不变）；空响应/坏 JSON 不覆盖计划，
-  // 也不能被当作"已修订"——真正修订必须提交新内容，审稿通过状态随内容指纹变化自动失效（评审 #119）。
+  // 计划版本流（任务 #171-G03a，口径统一见 #173）：提交计划（正文含完整 JSON）与对已提交版本执行
+  // 检查/审稿/渲染是两件事。正文没有新计划 JSON 时按当前已提交计划继续（内容指纹不变，审稿同版复用）；
+  // 正文想提交但 JSON 损坏＝本次提交失败：计划不更新、显式报失败，继续用上一有效版本；审稿通过状态
+  // 只随内容指纹变化失效（评审 #119），坏提交不会被静默当作已修订。
   const resolvePlan = () => {
     try {
       lastPlan = extractPlan(lastContent);
       return { plan: lastPlan, source: 'message' };
     } catch (error) {
-      if (lastPlan) {
-        return { plan: lastPlan, source: 'current-plan', note: '本轮正文没有新计划 JSON：按当前已提交计划（内容指纹不变）继续；如已修订，请把完整 gray-plan-3 计划写进正文，修订才会生效并需重新审稿。' };
+      if (!lastPlan) throw error;
+      if (error.code === 'PLAN_INVALID') {
+        return { plan: lastPlan, source: 'submission-failed', note: '本次提交失败：正文里的计划 JSON 无法解析，未更新计划（仍按上一有效版本继续）。如需修订，请把完整的 gray-plan-3 计划重新写进正文。' };
       }
-      throw error;
+      return { plan: lastPlan, source: 'current-plan', note: '本轮正文没有新计划 JSON：按当前已提交计划（内容指纹不变）继续；如已修订，请把完整 gray-plan-3 计划写进正文，修订才会生效并需重新审稿。' };
     }
   };
   const tools = [
@@ -271,12 +276,17 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         const response = await provider.complete({ messages: [{ role: 'system', content: SEMANTIC_REVIEW_CONTRACT }, { role: 'user', content: JSON.stringify(reviewInput) }] });
         const parsed = parseModelJson(response);
         if (typeof parsed.accepted !== 'boolean' || !Array.isArray(parsed.issues)) throw new Error('审稿响应格式无效');
+        if (parsed.notes !== undefined && !Array.isArray(parsed.notes)) throw new Error('审稿响应格式无效（notes 必须是数组）');
+        // 任务 #173：issues 只承载阻塞项——非空即阻塞（accepted 不得绕过门禁）；notes 为建议/已解决说明，不阻塞。
+        const blocking = parsed.issues;
+        const notes = Array.isArray(parsed.notes) ? parsed.notes.slice(0, 12) : [];
+        const accepted = parsed.accepted === true && blocking.length === 0;
         // 版本绑定（评审 #119 要求 1）：记录所审内容的内容指纹；通过状态只覆盖这一版内容。
         const at = new Date().toISOString();
         agentState.grayDraft.reviewRecord = [...(agentState.grayDraft.reviewRecord ?? []), { at, source, fingerprint, ...snapshotSemanticReview(parsed) }];
         await saveAgentState();
-        lastReview = { accepted: parsed.accepted && !parsed.issues.length, issues: parsed.issues.slice(0, 12), at, fingerprint, coverage: parsed.coverage ?? null, limits: parsed.limits ?? null };
-        return { accepted: lastReview.accepted, issues: lastReview.issues, reviewedFingerprint: fingerprint, coverage: lastReview.coverage, limits: lastReview.limits, planSource: source, ...(note ? { note } : {}) };
+        lastReview = { accepted, issues: blocking.slice(0, 12), notes, at, fingerprint, coverage: parsed.coverage ?? null, limits: parsed.limits ?? null };
+        return { accepted: lastReview.accepted, issues: lastReview.issues, notes: lastReview.notes, reviewedFingerprint: fingerprint, coverage: lastReview.coverage, limits: lastReview.limits, planSource: source, ...(note ? { note } : {}) };
       },
     }),
     defineTool({

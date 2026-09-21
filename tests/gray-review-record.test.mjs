@@ -24,14 +24,25 @@ test('审稿记录只记不改：原文、判定、覆盖与边界完整入档',
   const review = {
     accepted: false,
     issues: [{ pageId: 'p2', sourceIds: ['g1'], problem: '共同约束被读成只约束第三条', requiredRevision: HARM_TRUNCATED }],
+    notes: ['建议：标题可再短；上一问题已用附注解决。'],
     coverage: '逐页说明', limits: '未看像素图',
   };
   const snapshot = snapshotSemanticReview(review);
   assert.equal(snapshot.accepted, false);
   assert.deepEqual(snapshot.issues, review.issues);
+  assert.deepEqual(snapshot.notes, review.notes);
   assert.equal(snapshot.coverage, '逐页说明');
   assert.equal(snapshot.limits, '未看像素图');
-  assert.deepEqual(snapshotSemanticReview(null), { accepted: false, issues: [], coverage: null, limits: null });
+  assert.deepEqual(snapshotSemanticReview(null), { accepted: false, issues: [], notes: [], coverage: null, limits: null });
+});
+
+test('审稿协议口径：issues 只承载阻塞项，notes 为建议不阻塞；accepted 不得绕过阻塞', () => {
+  const notesOnly = snapshotSemanticReview({ accepted: true, issues: [], notes: ['建议：标签可再简。'] });
+  assert.equal(notesOnly.accepted, true);
+  const blockingWins = snapshotSemanticReview({ accepted: true, issues: [{ pageId: 'p1', problem: '正文与主题句冲突' }] });
+  assert.equal(blockingWins.accepted, false);
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /issues 只放足以阻塞的实质错误/u);
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /notes 不阻塞渲染/u);
 });
 
 test('契约口径：载体建议不具约束力、不被程序过滤；note 保证仅为呈现形态', () => {
