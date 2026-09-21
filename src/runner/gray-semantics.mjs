@@ -203,7 +203,7 @@ export const SHARED_RULES = Object.freeze({
   category: `先恢复内容归属：类别成为组，类别内条目成为块，label 写要点、text 写必要展开；类别数量、条目数量和原稿措辞都不决定页数或版式。类别名可以忠实概括，不以重复原词证明归属正确。原稿以类别总起统辖多条目时，组结构体现"类别→条目"两级：组标题概括类别与条目的共同性质，条目在组内编号展开；类别与条目的层级关系要有可见载体，不只留在主题句前缀、条目标签前缀或后台说明里。分支内的条目与细项保持层级，表达可用短句、分项或图示，选择依据是读者能否直接读出必要关系。同一主题的相关类别可同页呈现；内容目的不同或容量不足时可分页，跨页保留归属和准确的本页标题，不把类别总数冒充本页条目数。允许提炼冗词、合并重复解释，保留重要事实、对象、条件、否定和关系，不要求固定压缩次数，不为复现样稿强制同页。`,
   hierarchy: `多因素、多子项、多环节的内容，先让成员可辨认、归属不丢失：可以拆成带内容词标签的条目，也可以保留连续文字——选择依据是读者能否直接读出成员与结果、总述与分项的关系，以及版面是否更清楚。拆开时不得删去连接总述与分项的归属、成因语（"反映出""表现为"是内容关系本身，删掉即归因不可读），下级内容要以归属可读的标签或就近从属呈现；同一信息不要正文条目与结构位重复承载，择一种主要承载，信息留在灰稿本体。共同导出的结果或目标如何收束（编号条目、注文、独立区域）不作为对错标准——判据是会不会被误读成并列原因，会被误读就要改。拆层依据是内容里真实的并列与导出关系，不是特定词句或数量；单纯罗列同类名词不构成拆层理由。顺序框架词（"起点/收尾/随后"）可用；非原稿的修饰词删除后关系读法仍清楚就不保留。`,
   expression: `按真实关系选择表达，所选表达必须让读者直接理解对象、归属和联系。并列分类不自动构成对照；对照、因果、依赖必须有原稿依据，flow 只用于原文有先后线索的真实时序。行式表格只用于多个对象按共同维度对照；单对象说明可用文字条目。原稿在一个条目内明示"多项并列成员共同导向一个结果"（聚合）或"一个总述分出多项并列方面"（扇出）时，让关系可直接读出：拆条、连续文字、条目内结构位都是可选手段，选择依据是读者能否直读成员与结果、总述与分项的关系；散文把连接埋进长句、需要读者自行拆句才能看出关系时，配条目内结构位让关系可扫读（页内富余容量可由它承载）；不为恢复某种参考形态强制拆条或强制配结构位。若用条目内结构位：散文按需保留（不必全文复述），结构位 kind 写在该 block（不用整组图示替代散文、不把整段散文吞进图卡），节点用成员与结果的实文短语（不整句入卡），relationship 与 production 写明节点和方向。聚合与扇出按内容关系判定；共同约束（任一成员单独缺失即不成立的并列要求）不是聚合，按范围呈现、不画汇聚图；单纯并列不加结构位，不凭某个连接词、数量或左右双栏形态画图。`,
-  sketch: `灰稿规划文字与图形的位置和面积。整组 diagram/flow/table 使用已有简化草图；文字条目内的非文字块预留蓝框图形区，框内标注表达作用与节点短语，不绘制内部节点。局部结构位是独立块：它的 text 是蓝框内的节点短语，条目的实际文案仍由组内文字块承载（可压缩，不必全文复述），两者并存、不得互相替代；就近附着所属条目，保留完整必要内容，节点短语按条目实文与来源忠实提炼（允许压缩，不得引入来源没有的对象或改变顺序），不再抄一份全文；整组图示可以直接承载内容，不强制另配重复散文。`,
+  sketch: `灰稿规划文字与图形的位置和面积。整组 diagram/flow/table 使用已有简化草图；文字条目内的非文字块预留蓝框图形区，框内标注表达作用与节点短语，不绘制内部节点。局部结构位是独立块：它的 text 是蓝框内的节点短语，条目的实际文案仍由组内文字块承载（可压缩，不必全文复述），两者并存、不得互相替代；就近附着所属条目，保留完整必要内容，节点短语按条目实文与来源忠实提炼（允许压缩，不得引入来源没有的对象或改变顺序），不再抄一份全文；整组图示可以直接承载内容，不强制另配重复散文。整组 chart/image 本轮只有蓝区制作说明、不绘制灰区实文：它承载的数字事实必须同时出现在本页灰区实文里（条目、组标题或主题句），只写在制作说明里不算落实。`,
   source: `每个block必须引用来源；所有正文来源必须被承载：由正文条目引用，或在页面级 sourceIds 中认领（认领表示本页负责承载这段来源，不代表它必须上屏）。标为流转信息（文件头尾、节标题等）的来源无需引用、无需认领。未打标的来源若判断为文件标题、称谓一类结构性内容，不必为它单列条目：可由页面认领；确有展示价值时可让它自然出现在相称位置，没有展示价值时安静认领即可。覆盖不等于逐段复制，来源内容在页标题或主题句中自然体现同样算承载。`,
   fidelity: `提炼不改变事实、关系、程度、条件、时态、确定性、提议效力与证据范围：原稿的限定与范围表述（程度、条件、时态、确定性、建议/拟/已定等效力、比较对象与时间证据边界等任何限定）在概括中不得升格、弱化、删除或扩大——不得把「建议/拟」写成已定规则，也不得由「与某时点相比增加」推出原稿未给出的「仍在上升/持续上升」之类趋势；保留效力只需按原稿呈现（建议就写建议），不得为说明效力添加原稿未给出的审批/决策状态，也不得把「与…有关」一类关联写成「来自」一类来源性归因；概括可压缩换词，但适用范围（对象集合、触发条件、比较基准、时点/时段）必须与原稿一致——不得用更宽的集合、更宽的触发条件或不同的比较基准替换原稿的具体表述，仅在正文保留原条件不能抵消页首/标题/标签处的扩大概括；主题句、页面标题与条目标签对照原稿逐处核对；claim 的主题句概括以"不改变限定"为界。`,
   declaration: `模拟/假设声明只要原稿给出，就必须上屏且恰好一次：最自然的位置是页面主题句，或紧邻主体的一个条目；不得省略、不得逐条重复、不得独立成组。`,
@@ -362,6 +362,42 @@ export function grayDisplayBlocks(item, { ordinal = 0, numbered = true } = {}) {
   return parts;
 }
 
+/**
+ * 任务 #188-A：蓝区制作说明不能冒充主体事实。整组 chart/image 在本轮只产出蓝区注记、不绘制灰区实文；
+ * 文字组内的非 text block（块内结构位）同理。它们携带的数字事实必须同时出现在本页灰区实文里
+ * （页标题、claim、组标题、text/note/scope 文案、整组 diagram/flow/table 的实文）。
+ * 归一化全角数字/百分号与空白后按 token 比较；不扫描 expression/relationship/production，不改内容。
+ */
+const normalizeFactText = value => String(value ?? '')
+  .replace(/[０-９]/gu, char => String.fromCharCode(char.charCodeAt(0) - 0xfee0))
+  .replace(/％/gu, '%')
+  .replace(/\s+/gu, '');
+const factTokens = value => [...new Set(normalizeFactText(value).match(/\d+(?:\.\d+)?%?/gu) ?? [])];
+function pageBlueOnlyFacts(page) {
+  const visible = new Set([
+    page.title, page.claim,
+    ...(page.groups ?? []).flatMap(group => [
+      group.heading,
+      ...(group.kind === 'text'
+        ? (group.blocks ?? []).filter(block => (block.kind ?? 'text') === 'text' || block.kind === 'note').flatMap(block => [block.label, block.text])
+        : SKETCH_KINDS.has(group.kind) ? (group.blocks ?? []).flatMap(block => [block.label, block.text]) : []),
+    ]),
+  ].flatMap(factTokens));
+  const missing = [];
+  const collect = (groupId, fields) => {
+    for (const token of factTokens(fields.join('\n'))) if (!visible.has(token)) missing.push({ groupId, token });
+  };
+  for (const group of page.groups ?? []) {
+    if (group.kind === 'chart' || group.kind === 'image') collect(group.id, (group.blocks ?? []).flatMap(block => [block.label, block.text]));
+    else if (group.kind === 'text') for (const block of group.blocks ?? []) {
+      const kind = block.kind ?? 'text';
+      if (kind === 'text' || kind === 'note') continue;
+      collect(group.id, [block.label, block.text]);
+    }
+  }
+  return missing;
+}
+
 export function semanticReviewInput({source,area,plan,reviewFeedback=null,flowSources=[]}) {
   const pages = semanticPages(plan);
   return {
@@ -471,6 +507,12 @@ export function validateSemanticPlan(base, plan) {
           if (!fidelity.accepted) fail('block-fidelity', page.pageId, `${blockLabel} 的文案与来源不一致：${JSON.stringify(fidelity.issues)}`);
         }
         if (group.blocks.every(block => block.scope === 'group')) throw new Error(`${groupLabel} 的块全部是组级共同说明：组内至少需要一个普通条目，共同说明才有所依附。`);
+      }
+      // 任务 #188-A：蓝色制作说明不能冒充主体事实——chart/image 与块内结构位的数字事实须有本页灰区实文承载。
+      const blueOnly = pageBlueOnlyFacts(page);
+      if (blueOnly.length) {
+        const detail = blueOnly.map(({ groupId, token }) => `${groupId}「${token}」`).join('、');
+        fail('fact-only-in-blue-note', page.pageId, `数字事实只出现在蓝区制作说明/后台字段，未成为本页灰区实文：${detail}。主体职责内容不能只靠制作说明落实：把数值写进本页灰区实文（条目、组标题或主题句），或改用 table/diagram/flow 这类在灰区绘制实文的形态，或调整本页职责后再检查。`);
       }
       if (!simple || page.readingOrder !== undefined) if (!Array.isArray(page.readingOrder) || page.readingOrder.length !== page.groups.length || new Set(page.readingOrder).size !== page.groups.length || page.groups.some(g=>!page.readingOrder.includes(g.id))) throw new Error('readingOrder须恰好包含全部组');
       if (!simple && (!Array.isArray(page.relations) || !page.relations.length)) throw new Error('必须记录真实关系');

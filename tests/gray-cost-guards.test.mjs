@@ -68,7 +68,7 @@ test('压缩记忆：附上一版实测高、目标差值与缩减量', () => {
 test('双栏权重回退：默认权重放不下时按测量改选分栏（回执标注 reweighted）', () => {
   const result = resolveGrayLayout(fixture(), rowSelect([2, 3]), area(560), metrics);
   const receipt = result.receipts[0];
-  assert.deepEqual(receipt.reweighted, { from: [2, 3], to: [2, 5] });
+  assert.deepEqual(receipt.reweighted, { from: [2, 3], to: [2, 5], reason: 'requested-weights-overflow' });
   assert.deepEqual(receipt.layout.weights, [2, 5]);
   const regions = result.plan.pages[0].composition.regions;
   assert.ok(regions.every(region => region.height <= 560), JSON.stringify(regions));
@@ -80,6 +80,51 @@ test('双栏权重回退有边界：没有任何候选能容纳时仍如实报�
 
 test('权重回退只作用于双栏 row 根：其他组合失败行为不变', () => {
   assert.throws(() => resolveGrayLayout(fixture(), { pages: [{ pageId: 'p1', layout: { type: 'column' } }] }, area(200), metrics), /一页放不下/u);
+});
+
+// 任务 #188-B：显式权重可容纳时保留请求比例；只有放不下才进入测量回退，并记录回退原因。
+test('测量布局先评请求权重：可容纳时不被最小高候选覆盖（任务 #188-B）', () => {
+  const fixture = {
+    schemaVersion: 'gray-plan-3',
+    deckBrief: { title: '建议', audience: '管理层', objective: '建议与依据' },
+    pages: [{
+      pageId: 'p1', title: '两方面的改进建议', claim: '建议加强源头分类并试点纸类单独收集', pagePurpose: '两条建议', narrative: '两条建议并列，各自就近附依据',
+      groups: [
+        { id: 'g5', role: '建议', heading: '加强厨余垃圾源头分类', importance: 'primary', kind: 'text', blocks: [
+          { id: 'b12', label: '建议内容', text: '加强厨余垃圾源头分类', sourceIds: ['s4'] },
+          { id: 'b13', label: '提出依据', text: '厨余垃圾占比 52%，是四类中最高，且较三年前上升 4 个百分点', sourceIds: ['s3', 's4'] }] },
+        { id: 'g6', role: '建议', heading: '试点纸类单独收集', importance: 'primary', kind: 'text', blocks: [
+          { id: 'b14', label: '建议内容', text: '在三个街道试点纸类单独收集', sourceIds: ['s4'] },
+          { id: 'b15', label: '试点安排', text: '试点周期六个月', sourceIds: ['s4'] },
+          { id: 'b16', label: '提出依据', text: '可回收物中纸类占比最高，但污染率超过 30%，显著影响回收价值', sourceIds: ['s3', 's4'] }] },
+      ],
+    }],
+  };
+  const result = resolveGrayLayout(fixture, rowSelect([1, 1]), area(492), { ...metrics, fontSizes: () => [22, 20, 18, 16, 15, 14, 13, 12] });
+  const receipt = result.receipts[0];
+  assert.deepEqual(receipt.layout.weights, [1, 1]);
+  assert.ok(!receipt.reweighted);
+  assert.equal(receipt.fontSize, 22);
+  for (const region of result.plan.pages[0].composition.regions) assert.ok(region.height <= 492, JSON.stringify(region));
+});
+
+test('请求权重确实放不下时按测量回退，并记录回退原因（任务 #188-B）', () => {
+  const heavy = {
+    schemaVersion: 'gray-plan-3',
+    deckBrief: { title: '开放安排', audience: '管理员', objective: '条件' },
+    pages: [{
+      pageId: 'p1', title: '开放安排', claim: '核验后开放', pagePurpose: '条件', narrative: '条件与例外',
+      groups: [
+        { id: 'a', role: '行动', heading: '开放安排', importance: 'primary', kind: 'text', blocks: [{ id: 'b1', text: '重要条件必须保留，异常暂停并复核记录，逐项确认后再开放。'.repeat(12), sourceIds: ['s1'] }] },
+        { id: 'b', role: '例外', heading: '异常处理', importance: 'primary', kind: 'text', blocks: [{ id: 'b2', text: '异常暂停。', sourceIds: ['s1'] }] },
+      ],
+    }],
+  };
+  const result = resolveGrayLayout(heavy, rowSelect([1, 1]), area(492), { ...metrics, fontSizes: () => [22] });
+  const receipt = result.receipts[0];
+  assert.notDeepEqual(receipt.layout.weights, [1, 1]);
+  assert.deepEqual(receipt.reweighted, { from: [1, 1], to: receipt.layout.weights, reason: 'requested-weights-overflow' });
+  for (const region of result.plan.pages[0].composition.regions) assert.ok(region.height <= 492, JSON.stringify(region));
 });
 
 test('审稿窄条款在契约中：同页并列类别不得要求配对/对应表', () => {

@@ -121,12 +121,19 @@ function measureContracts(tree, page, area, metrics, fontSize) {
 
 const isDualRow = tree => tree.op === 'row' && tree.children.length === 2 && tree.children.every(child => child.groupId);
 
-/** 按所有页共用的候选字号测量；双栏同时尝试宽度比例，其余组合保留模型选择的形状。 */
+/**
+ * 按所有页共用的候选字号测量；双栏同时尝试宽度比例，其余组合保留模型选择的形状。
+ * 任务 #188-B：请求/默认权重（显式 weights，或模板按实文量算出的比例）先评——它能在候选字体里
+ * 放下就保留该比例，只有确实放不下才进入候选扫描（回退）。不再常态以"最小最高区域"为目标覆盖
+ * 显式布局语义：行高按行数量化，纯最小高的最优解可能把更宽的栏给更轻的内容（长文窄栏、短文宽栏）。
+ */
 function pickMeasuredLayout(tree, page, area, metrics, fonts) {
   const margin = area.height * 0.95;
+  const requestedWeights = isDualRow(tree) ? (tree.weights ?? [1, 1]) : null;
+  const duplicate = candidate => requestedWeights && candidate.weights[0] === requestedWeights[0] && candidate.weights[1] === requestedWeights[1];
   const choices = isDualRow(tree)
-    ? [{ weights: tree.weights ?? [1, 1], distance: 0 }, ...weightCandidates(tree.weights)]
-    : [{ distance: 0 }];
+    ? [{ weights: requestedWeights, distance: 0, requested: true }, ...weightCandidates(tree.weights).filter(candidate => !duplicate(candidate))]
+    : [{ distance: 0, requested: true }];
   const candidates = [];
   for (const fontSize of fonts) for (const candidate of choices) {
     const candidateTree = candidate.weights ? { ...tree, weights: candidate.weights } : tree;
@@ -141,9 +148,14 @@ function pickMeasuredLayout(tree, page, area, metrics, fonts) {
       minimum = error.details?.minimum;
     }
     if (!minimum || !Number.isFinite(minimum.height)) continue;
-    candidates.push({ fontSize, weights: candidate.weights, tree: candidateTree, maxHeight: minimum.height, distance: candidate.distance });
+    candidates.push({ fontSize, weights: candidate.weights, tree: candidateTree, maxHeight: minimum.height, distance: candidate.distance, requested: Boolean(candidate.requested) });
   }
   const bestOf = fontSize => candidates.filter(entry => entry.fontSize === fontSize).sort((x, y) => x.maxHeight - y.maxHeight || x.distance - y.distance)[0];
+  const requestedOf = fontSize => candidates.find(entry => entry.fontSize === fontSize && entry.requested);
+  for (const limit of [margin, area.height]) for (const fontSize of fonts) {
+    const requested = requestedOf(fontSize);
+    if (requested && requested.maxHeight <= limit) return requested;
+  }
   for (const limit of [margin, area.height]) for (const fontSize of fonts) {
     const best = bestOf(fontSize);
     if (best && best.maxHeight <= limit) return best;
@@ -207,7 +219,7 @@ export function resolveGrayLayout(plan, selection, area, { measureBody, fitText,
     const baseWeights = Array.isArray(choice.weights) ? choice.weights : null;
     let receiptLayout = formPick?.weights ? { ...structuredClone(choice), weights: formPick.weights } : choice;
     let reweighted = formPick?.weights && JSON.stringify(formPick.weights) !== JSON.stringify(baseWeights)
-      ? { from: baseWeights, to: formPick.weights }
+      ? { from: baseWeights, to: formPick.weights, reason: 'requested-weights-overflow' }
       : null;
     let solved;
     try {
@@ -227,7 +239,7 @@ export function resolveGrayLayout(plan, selection, area, { measureBody, fitText,
       contracts = attempt.contracts;
       solved = attempt.solved;
       receiptLayout = { ...structuredClone(choice), weights: attempt.weights };
-      reweighted = { from: baseWeights, to: attempt.weights };
+      reweighted = { from: baseWeights, to: attempt.weights, reason: 'requested-weights-overflow' };
     }
     // 内容明显少于正文区时不再把各组拉到满高：满高会让空框自己声明"这里该有内容"。
     // 任务 #175-G02：帧高只贴合内容（min×1.1，最小 96px），不设页高下限——空白留在页面上（空白本身不是错误），

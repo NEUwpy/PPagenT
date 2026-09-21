@@ -378,9 +378,12 @@ export async function renderGrayDraft(state, output) {
     const actual=normalize([...xml.matchAll(/<a:t(?:\s[^>]*)?>([\s\S]*?)<\/a:t>/g)].map(m=>decode(m[1])).join(''));
     const expected=[page.claim,...page.items.flatMap(item=>[item.heading,regionBody(item)])];
     const missing=expected.filter(text=>!actual.includes(normalize(text)));
-    editable.push({pageId:page.pageId,textShapes:(xml.match(/<p:sp>/g)||[]).length,missingText:missing});
+    // 边界说明（任务 #188-A）：chart/image 组本轮只有蓝区制作说明、不产出灰区实文；其数字事实由同页
+    // 灰区实文承载的要求在 validateSemanticPlan（fact-only-in-blue-note）检查，不由本导出检查冒充通过。
+    const noteOnlyItems=page.items.filter(item=>item.kind==='chart'||item.kind==='image').map(item=>item.id);
+    editable.push({pageId:page.pageId,textShapes:(xml.match(/<p:sp>/g)||[]).length,missingText:missing,...(noteOnlyItems.length?{noteOnlyItems}:{})});
   }
-  await fs.writeFile(path.join(output,'editable-check.json'),json({accepted:editable.every(p=>!p.missingText.length),pages:editable,coverage:'PPTX OOXML 原生文字包含每项实际文本及主题句；不等于视觉验收'}));
+  await fs.writeFile(path.join(output,'editable-check.json'),json({accepted:editable.every(p=>!p.missingText.length),pages:editable,coverage:'PPTX OOXML 原生文字包含每项实际文本及主题句（含 chart/image 的蓝区制作说明）；chart/image 组当前只有蓝区制作说明、不产出灰区实文——其数字事实须由同页灰区实文承载，由规划检查拦截；不等于视觉验收'}));
   if(editable.some(p=>p.missingText.length)) throw new Error('导出 PPTX 原生文字缺失，见 editable-check.json');
   // Final previews come from the exported PPTX, not a separate HTML approximation.
   const reimported=await PresentationFile.importPptx(await FileBlob.load(path.join(output,'gray-draft.pptx')));

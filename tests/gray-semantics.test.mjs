@@ -249,6 +249,57 @@ test('replay validation cannot accept a disconnected condition or stripped v2 se
   assert.equal(validateGrayPlan({...base(),grayDraft:{version:'gray-draft-2'}},plan,{width:600,height:350}).accepted,false);
 });
 
+// 任务 #188-A：蓝区制作说明不能冒充主体事实——chart/image 与块内结构位的数字事实须有本页灰区实文承载。
+const factBase=()=>newRunState('主城区 12 个采样点、连续采样 7 天；厨余垃圾占比 52%，其他垃圾占比 26%，可回收物占比 18%，有害垃圾占比不足 1%。','fixture');
+const factPlan=groups=>({schemaVersion:'gray-plan-3',deckBrief:{title:'组分',audience:'决策',objective:'占比'},pages:[{
+  pageId:'p1',title:'四类垃圾占比构成',claim:'厨余垃圾占比过半',pagePurpose:'给出构成',narrative:'四类并列',groups,
+}]});
+const chartGroup=()=>({id:'g2',role:'构成',heading:'四类垃圾占比',importance:'primary',kind:'chart',blocks:[
+  {id:'b1',label:'厨余垃圾',text:'占比 52%',sourceIds:['s1']},
+  {id:'b2',label:'其他垃圾',text:'占比 26%',sourceIds:['s1']},
+],expression:'用份额图呈现占比分布',relationship:'四类互斥并列',production:'画份额图'});
+const textCarry=text=>({id:'g1',role:'数据',heading:'关键数值',importance:'supporting',kind:'text',blocks:[{id:'b0',text,sourceIds:['s1']}]});
+
+test('fact visibility: chart numbers only in the blue production note are blocked; same-page gray copy carries them',()=>{
+  const blocked=validateSemanticPlan(factBase(),factPlan([chartGroup()]));
+  assert.equal(blocked.accepted,false);
+  const issue=blocked.issues.find(i=>i.code==='fact-only-in-blue-note');
+  assert.ok(issue,JSON.stringify(blocked.issues));
+  assert.equal(issue.pageId,'p1');
+  assert.match(issue.message,/52%/u);assert.match(issue.message,/26%/u);
+  const carried=validateSemanticPlan(factBase(),factPlan([chartGroup(),textCarry('厨余垃圾占比 52%，其他垃圾占比 26%。')]));
+  assert.equal(carried.accepted,true,JSON.stringify(carried.issues));
+});
+
+test('fact visibility is page-local and normalizes full-width digits/percent and whitespace',()=>{
+  const twoPages=factPlan([chartGroup()]);
+  twoPages.pages.push({pageId:'p2',title:'占比明细',claim:'占比明细',pagePurpose:'明细',narrative:'并列',
+    groups:[textCarry('厨余垃圾占比 52%，其他垃圾占比 26%。')]});
+  assert.equal(validateSemanticPlan(factBase(),twoPages).accepted,false);
+  const chart=chartGroup();chart.blocks=[{id:'b1',label:'厨余垃圾',text:'占比 ５２ ％',sourceIds:['s1']}];
+  const blocked=validateSemanticPlan(factBase(),factPlan([chart]));
+  assert.equal(blocked.accepted,false);
+  assert.match(blocked.issues.find(i=>i.code==='fact-only-in-blue-note').message,/52%/u);
+  assert.equal(validateSemanticPlan(factBase(),factPlan([chart,textCarry('厨余垃圾占比 52%。')])).accepted,true);
+});
+
+test('fact check covers block-level structure slots and ignores backstage/production fields',()=>{
+  const slotGroup={id:'g1',role:'安排',heading:'采样安排',importance:'primary',kind:'text',blocks:[
+    {id:'b1',label:'范围',text:'主城区采样点',sourceIds:['s1']},
+    {id:'n1',text:'12 个采样点／7 天',kind:'diagram',expression:'范围与频次',relationship:'并列',production:'并置卡片',sourceIds:['s1']},
+  ]};
+  const blocked=validateSemanticPlan(factBase(),factPlan([slotGroup]));
+  assert.ok(blocked.issues.some(i=>i.code==='fact-only-in-blue-note'),JSON.stringify(blocked.issues));
+  const carried=structuredClone(slotGroup);
+  carried.blocks[0].text='主城区 12 个采样点、连续采样 7 天';
+  assert.equal(validateSemanticPlan(factBase(),factPlan([carried])).accepted,true,JSON.stringify(validateSemanticPlan(factBase(),factPlan([carried])).issues));
+  const qualitative=chartGroup();
+  qualitative.blocks=[{id:'b1',label:'厨余垃圾',text:'占比最高',sourceIds:['s1']}];
+  qualitative.production='标注 3 项数值';
+  qualitative.expression='份额图呈现 4 类差异';
+  assert.equal(validateSemanticPlan(factBase(),factPlan([qualitative])).accepted,true,JSON.stringify(validateSemanticPlan(factBase(),factPlan([qualitative])).issues));
+});
+
 test('topic overflow returns to semantic planning without wasting geometry repairs',async()=>{
   const dir=await fs.mkdtemp(path.join(os.tmpdir(),'gray-topic-gate-'));
   try {
