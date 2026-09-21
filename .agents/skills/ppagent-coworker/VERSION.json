@@ -1,12 +1,12 @@
 {
   "name": "ppagent-coworker",
-  "version": "0.1.1",
-  "updated_at": "2026-09-21T09:21:43+08:00",
+  "version": "0.1.2",
+  "updated_at": "2026-09-21T18:24:09+08:00",
   "base": {
     "skill": "coworker",
     "version": "2.5.0",
     "updated_at": "2026-08-02T22:37:40+08:00",
-    "transport_sha256": "95E9785F4E70CC4B0BA5638F16EC8D42C0B676A589FC24903D9576086A9F6677"
+    "transport_sha256": "990E8CF3BA799CDA245C5D1949805F9EB5D507E44960DF4C04A9F42A6AC03CA3"
   },
-  "notes": "PPagenT 项目自有协作技能：中性角色（planner/reviewer 与 executor）＋旧别名兼容；传输脚本为上游 coworker 2.5.0 副本，含两处本地补丁（BodyFile 按 UTF-8 读取；Release-Lock 仅锁持有者释放，避免锁冲突时误删他人锁文件并掩盖报错）。"
+  "notes": "PPagenT 项目自有协作技能：中性角色（planner/reviewer 与 executor）＋旧别名兼容；传输脚本为上游 coworker 2.5.0 副本，含三处本地补丁（BodyFile 按 UTF-8 读取；Release-Lock 仅锁持有者释放；共享运行时文件写入有界重试——send/wait 竞态不得丢失消费事件）。"
 }

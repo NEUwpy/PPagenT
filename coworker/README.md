@@ -44,9 +44,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File coworker/mailbox.ps1 `
 - 运行时目录：`coworker/runtime/<task-id>/`（本地传输状态，不入 Git；`archive/` + `TRANSCRIPT.md` 为持久记录）。
 - 阶段共识：`coworker/decisions/<日期>-<主题>.md`（唯一希望长期留在仓库里的协议记录）。
 - 传输脚本：`.agents/skills/ppagent-coworker/scripts/coworker-mailbox.ps1`（项目内置，不依赖用户全局路径；
-  为上游 coworker 2.5.0 的副本，含两处本地补丁：① PS 5.1 对无 BOM 的 UTF-8 BodyFile 默认按 ANSI/GBK 读，
-  已补 `-Encoding UTF8`；② `Release-Lock` 仅锁持有者释放——锁被他人持有时不得删除他人锁文件、也不掩盖原始冲突报错。
-  升级技能副本时须确认两处补丁已在上游或重新套用，并同步 `VERSION.json` 的 `transport_sha256`）。
+  为上游 coworker 2.5.0 的副本，含三处本地补丁：① PS 5.1 对无 BOM 的 UTF-8 BodyFile 默认按 ANSI/GBK 读，
+  已补 `-Encoding UTF8`；② `Release-Lock` 仅锁持有者释放——锁被他人持有时不得删除他人锁文件、也不掩盖原始冲突报错；
+  ③ 共享运行时文件（TRANSCRIPT/STATUS/state）写入有界重试，send/wait 并发时消费事件不丢失、最终失败以 warning 明示。
+  升级技能副本时须确认三处补丁已在上游或重新套用，并同步 `VERSION.json` 的 `transport_sha256`）。
 
 ## 本项目纪律（项目自包含）
 

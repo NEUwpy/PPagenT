@@ -37,7 +37,8 @@ function Invoke-Adapter {
     $ErrorActionPreference = $previousEap
     $code = $LASTEXITCODE
     $json = $null
-    try { $json = $raw.Trim() | ConvertFrom-Json } catch { }
+    $lastLine = ($raw.Trim() -split "\r?\n" | Where-Object { $_.Trim() } | Select-Object -Last 1)
+    try { $json = $lastLine | ConvertFrom-Json } catch { }
     return [pscustomobject]@{ ExitCode = $code; Raw = $raw; Json = $json }
 }
 
@@ -190,7 +191,53 @@ $ErrorActionPreference = "Continue"
 $ErrorActionPreference = $previousEap
 Assert-True ($LASTEXITCODE -ne 0) "missing mailbox fails with nonzero exit"
 
-# ---- 10. skill metadata validation -------------------------------------------------
+# ---- 10. concurrent bookkeeping (CW-04): shared files must not lose events ---------
+$transcriptPath = Join-Path $runtime "TRANSCRIPT.md"
+$bodyE = Join-Path $TempRoot "e.md"
+Set-Content -LiteralPath $bodyE -Value "held-send" -Encoding ascii
+$hold = [System.IO.File]::Open($transcriptPath, 'Open', 'ReadWrite', 'None')
+try { $r = Invoke-Adapter -Action send -Role executor -Type note -BodyFile $bodyE } finally { $hold.Dispose() }
+Assert-True ($r.ExitCode -eq 0 -and $r.Json.event -eq "sent") "send survives held transcript"
+Assert-True ($r.Json.warning -eq "transcript-append-failed") "held transcript surfaced as warning on send"
+$hold = [System.IO.File]::Open($transcriptPath, 'Open', 'ReadWrite', 'None')
+try { $r = Invoke-Adapter -Action wait -Role reviewer -TimeoutSeconds 10 } finally { $hold.Dispose() }
+Assert-True ($r.ExitCode -eq 0 -and $r.Json.event -eq "message") "consume event survives held transcript"
+Assert-True ($r.Json.warning -eq "transcript-append-failed") "held transcript surfaced as warning on wait"
+Assert-True (Test-Path -LiteralPath $r.Json.archive_path) "message archived despite bookkeeping contention"
+
+$bodyF = Join-Path $TempRoot "f.md"
+Set-Content -LiteralPath $bodyF -Value "transient-hold" -Encoding ascii
+Invoke-Adapter -Action send -Role executor -Type note -BodyFile $bodyF | Out-Null
+$hold = [System.IO.File]::Open($transcriptPath, 'Open', 'ReadWrite', 'None')
+$bgOut3 = Join-Path $TempRoot "bg3.txt"
+$bg3 = Start-Process -FilePath $script:PowerShellExe -ArgumentList @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $script:Adapter, "-Action", "wait", "-TaskId", $script:TaskId, "-Role", "reviewer", "-TimeoutSeconds", "15") -RedirectStandardOutput $bgOut3 -RedirectStandardError (Join-Path $TempRoot "bg3.err.txt") -PassThru -WindowStyle Hidden
+Start-Sleep -Milliseconds 800
+$hold.Dispose()
+$exited3 = $bg3.WaitForExit(20000)
+if (-not $exited3) { $bg3.Kill() }
+$out3 = Get-Content -LiteralPath $bgOut3 -Raw -Encoding UTF8 -ErrorAction SilentlyContinue
+Assert-True ($exited3 -and $out3 -match '"event"\s*:\s*"message"' -and $out3 -notmatch '"warning"') "transient hold: retry recovers without warning"
+Assert-True ((Get-Content -LiteralPath $transcriptPath -Raw -Encoding UTF8) -match "consumed") "transcript written after retry"
+
+for ($i = 0; $i -lt 3; $i++) {
+    $bgOut4 = Join-Path $TempRoot "bg4-$i.txt"
+    $bg4 = Start-Process -FilePath $script:PowerShellExe -ArgumentList @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $script:Adapter, "-Action", "wait", "-TaskId", $script:TaskId, "-Role", "reviewer", "-TimeoutSeconds", "20") -RedirectStandardOutput $bgOut4 -RedirectStandardError (Join-Path $TempRoot "bg4-$i.err.txt") -PassThru -WindowStyle Hidden
+    Start-Sleep -Milliseconds 300
+    $bodyG = Join-Path $TempRoot "g-$i.md"
+    Set-Content -LiteralPath $bodyG -Value "overlap-$i" -Encoding ascii
+    Invoke-Adapter -Action send -Role executor -Type note -BodyFile $bodyG | Out-Null
+    $ok = $bg4.WaitForExit(20000)
+    if (-not $ok) { $bg4.Kill() }
+    $out4 = Get-Content -LiteralPath $bgOut4 -Raw -Encoding UTF8 -ErrorAction SilentlyContinue
+    Assert-True ($ok -and $out4 -match '"event"\s*:\s*"message"') "overlap round ${i}: waiter returns its message"
+}
+$archiveCount = @(Get-ChildItem -LiteralPath (Join-Path $runtime "archive\to-opencode") -Filter "*.ready.md").Count
+$consumedLines = @(Select-String -LiteralPath $transcriptPath -Pattern "consumed").Count
+Assert-True ($archiveCount -eq $consumedLines) "overlap: archive count matches transcript consumed lines"
+$stateFinal = Get-Content -LiteralPath (Join-Path $runtime "state.json") -Raw -Encoding UTF8 | ConvertFrom-Json
+Assert-True ($stateFinal.queued_to_opencode -eq 0 -and $stateFinal.queued_to_codex -eq 0) "overlap: state shows empty queues"
+
+# ---- 11. skill metadata validation -------------------------------------------------
 $skillMd = Get-Content -LiteralPath (Join-Path $repo ".agents\skills\ppagent-coworker\SKILL.md") -Raw -Encoding UTF8
 $versionJson = Get-Content -LiteralPath (Join-Path $repo ".agents\skills\ppagent-coworker\VERSION.json") -Raw -Encoding UTF8 | ConvertFrom-Json
 $descMatch = [regex]::Match($skillMd, "(?ms)^description:\s*(.+?)\r?\nmetadata:")

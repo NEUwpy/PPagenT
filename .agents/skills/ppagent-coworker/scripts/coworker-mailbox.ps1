@@ -33,16 +33,36 @@ $ErrorActionPreference = "Stop"
 
 function Write-JsonAtomic {
     param([Parameter(Mandatory)]$Value, [Parameter(Mandatory)][string]$Path)
-    $tmp = "$Path.tmp.$PID"
-    $Value | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $tmp -Encoding utf8
-    Move-Item -LiteralPath $tmp -Destination $Path -Force
+    Invoke-WithRetry {
+        $tmp = "$Path.tmp.$PID"
+        $Value | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $tmp -Encoding utf8
+        Move-Item -LiteralPath $tmp -Destination $Path -Force
+    }
 }
 
 function Write-TextAtomic {
     param([Parameter(Mandatory)][string]$Value, [Parameter(Mandatory)][string]$Path)
-    $tmp = "$Path.tmp.$PID"
-    Set-Content -LiteralPath $tmp -Value $Value -Encoding utf8
-    Move-Item -LiteralPath $tmp -Destination $Path -Force
+    Invoke-WithRetry {
+        $tmp = "$Path.tmp.$PID"
+        Set-Content -LiteralPath $tmp -Value $Value -Encoding utf8
+        Move-Item -LiteralPath $tmp -Destination $Path -Force
+    }
+}
+
+# Local patch (2026-09-21, CW-04): TRANSCRIPT.md / STATUS.md / state.json are written by both roles
+# concurrently; a transient sharing violation must neither kill the transport nor lose a consume event.
+# Bounded retry with backoff; callers decide whether a final failure is fatal (wait/send surface it as a warning).
+function Invoke-WithRetry {
+    param([Parameter(Mandatory)][scriptblock]$Action)
+    $attempt = 0
+    while ($true) {
+        try { & $Action; return }
+        catch [System.IO.IOException] {
+            $attempt += 1
+            if ($attempt -ge 6) { throw }
+            Start-Sleep -Milliseconds (120 * $attempt)
+        }
+    }
 }
 
 function Read-Control {
@@ -251,16 +271,29 @@ $body
 "@
         $fileName = "{0:D6}-{1}-{2}.ready.md" -f $messageId, $Role, $Type
         Write-TextAtomic $message (Join-Path $destination $fileName)
-        Add-Content -LiteralPath (Join-Path $runtimeRoot "TRANSCRIPT.md") `
-            -Value "- $timestamp [$messageId] $Role -> $recipient ($Type): $fileName" `
-            -Encoding utf8
-        Update-Status $runtimeRoot "message_sent" $fileName
-        [pscustomobject]@{
+        $bookkeepingWarning = $null
+        try {
+            Invoke-WithRetry {
+                Add-Content -LiteralPath (Join-Path $runtimeRoot "TRANSCRIPT.md") `
+                    -Value "- $timestamp [$messageId] $Role -> $recipient ($Type): $fileName" `
+                    -Encoding utf8
+            }
+        } catch {
+            $bookkeepingWarning = "transcript-append-failed"
+            [Console]::Error.WriteLine("warning: transcript append failed: $($_.Exception.Message)")
+        }
+        try { Update-Status $runtimeRoot "message_sent" $fileName } catch {
+            if (-not $bookkeepingWarning) { $bookkeepingWarning = "status-write-failed" }
+            [Console]::Error.WriteLine("warning: status write failed: $($_.Exception.Message)")
+        }
+        $sent = [ordered]@{
             event = "sent"
             message_id = $messageId
             recipient = $recipient
             path = (Join-Path $destination $fileName)
-        } | ConvertTo-Json -Compress
+        }
+        if ($bookkeepingWarning) { $sent.warning = $bookkeepingWarning }
+        [pscustomobject]$sent | ConvertTo-Json -Compress
     }
     finally {
         Release-Lock $transportLock $transportLockPath
@@ -293,16 +326,30 @@ if ($Action -eq "wait") {
                 $archivePath = Join-Path $archive $message.Name
                 Move-Item -LiteralPath $message.FullName -Destination $archivePath
                 $timestamp = [DateTimeOffset]::Now.ToString("o")
-                Add-Content -LiteralPath (Join-Path $runtimeRoot "TRANSCRIPT.md") `
-                    -Value "- $timestamp $Role consumed $($message.Name)" `
-                    -Encoding utf8
-                Update-Status $runtimeRoot "message_received" $message.Name
-                [pscustomobject]@{
+                # CW-04: consumption already happened above; shared bookkeeping writes must not lose the event.
+                $bookkeepingWarning = $null
+                try {
+                    Invoke-WithRetry {
+                        Add-Content -LiteralPath (Join-Path $runtimeRoot "TRANSCRIPT.md") `
+                            -Value "- $timestamp $Role consumed $($message.Name)" `
+                            -Encoding utf8
+                    }
+                } catch {
+                    $bookkeepingWarning = "transcript-append-failed"
+                    [Console]::Error.WriteLine("warning: transcript append failed: $($_.Exception.Message)")
+                }
+                try { Update-Status $runtimeRoot "message_received" $message.Name } catch {
+                    if (-not $bookkeepingWarning) { $bookkeepingWarning = "status-write-failed" }
+                    [Console]::Error.WriteLine("warning: status write failed: $($_.Exception.Message)")
+                }
+                $received = [ordered]@{
                     event = "message"
                     role = $Role
                     archive_path = $archivePath
                     file_name = $message.Name
-                } | ConvertTo-Json -Compress
+                }
+                if ($bookkeepingWarning) { $received.warning = $bookkeepingWarning }
+                [pscustomobject]$received | ConvertTo-Json -Compress
                 exit 0
             }
             Start-Sleep -Milliseconds $PollMilliseconds

@@ -2,8 +2,8 @@
 name: ppagent-coworker
 description: PPagenT 项目自有的双角色协作技能（planner/reviewer 与 executor）：Markdown 邮箱排队、消费与归档，中性角色入口与旧别名兼容，供 Codex / OpenCode 等宿主以同一套协议使用。当用户要求规划、评审、执行协作，监听邮箱、收发任务或报告，或提及 coworker / mailbox / 协作邮箱时使用。
 metadata:
-  version: 0.1.1
-  updated_at: 2026-09-21T09:21:43+08:00
+  version: 0.1.2
+  updated_at: 2026-09-21T18:24:09+08:00
   base: coworker 2.5.0
 ---
 
@@ -76,7 +76,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File coworker/mailbox.ps1 `
 ## 目录
 
 - 传输脚本（项目内置，不依赖用户全局路径）：`.agents/skills/ppagent-coworker/scripts/coworker-mailbox.ps1`
-  （上游 `coworker 2.5.0` 的副本，含两处本地补丁：BodyFile 按 UTF-8 读取；`Release-Lock` 仅锁持有者释放）。
+  （上游 `coworker 2.5.0` 的副本，含三处本地补丁：BodyFile 按 UTF-8 读取；`Release-Lock` 仅锁持有者释放；
+  共享运行时文件写入有界重试——send/wait 并发不丢失消费事件）。
 - 适配层：`coworker/mailbox.ps1`（中性角色 + 旧别名 + 版本守护）。
 - 运行时：`coworker/runtime/<task-id>/`（本地传输状态，不入 Git；`archive/` + `TRANSCRIPT.md` 为持久记录）。
 - 阶段共识：`coworker/decisions/<日期>-<主题>.md`（入 Git 的协议记录）。
