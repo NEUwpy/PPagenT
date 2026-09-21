@@ -32,6 +32,23 @@ test('容量按默认组合预估以 warning 暴露、不阻塞', () => {
   assert.ok(heavy.warnings.some(warning => warning.code === 'plan-capacity' && warning.pageId === 'p1'));
 });
 
+test('区域大小与内容不匹配在规划期阻断：短组陪大容器按 issue 暴露', () => {
+  const longText = '重要条件必须保留，异常暂停并复核记录，逐项确认后再开放，复核记录按季度归档备查。'.repeat(7);
+  const regionPlan = {
+    schemaVersion: 'gray-plan-3',
+    deckBrief: { title: '开放安排', audience: '管理员', objective: '理解条件' },
+    pages: [{
+      pageId: 'p1', title: '开放安排', claim: '核验通过后开放', pagePurpose: '说明安排', narrative: '并列',
+      groups: [
+        { id: 'a', role: '行动', heading: '开放安排', importance: 'primary', kind: 'text', blocks: [{ id: 'b1', text: longText, sourceIds: ['s1'] }] },
+        { id: 'b', role: '补充', heading: '补充说明', importance: 'primary', kind: 'text', blocks: [{ id: 'b2', text: '模拟：核验后开放。', sourceIds: ['s1'] }] },
+      ],
+    }],
+  };
+  const report = planFitIssues(regionPlan, area);
+  assert.ok(report.issues.some(issue => issue.code === 'region-too-sparse' && issue.itemId === 'b'), JSON.stringify(report.issues));
+});
+
 test('逐页独立：某页超容量不中断其余页的充实度检查', () => {
   const heavyText = '重要条件必须保留，异常暂停并复核记录。'.repeat(30);
   const twoPage = {

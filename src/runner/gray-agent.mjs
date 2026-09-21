@@ -134,8 +134,18 @@ export function planFitIssues(plan, area) {
       let maxBottom = 0;
       for (const region of bound.composition.regions) {
         const item = bound.items.find(candidate => candidate.id === region.itemId);
-        const body = grayBodyLayout(item, region.width - 32, region.fontSize ?? 22, Math.max(0, region.height - 70));
+        const available = region.height - 70;
+        const body = grayBodyLayout(item, region.width - 32, region.fontSize ?? 22, Math.max(0, available));
         maxBottom = Math.max(maxBottom, region.y + 54 + Math.max(0, ...body.sections.map(section => section.top + section.height)));
+        // 区域级充实度（任务 #167-G02）：区域大小与内容不匹配时同样在规划期暴露。
+        // 阈值沿用几何审计的归档线（容器 ≥160px 且空洞 ≥70%）。
+        const voidRatio = 1 - body.minimumHeight / Math.max(1, available);
+        if (available >= 160 && voidRatio >= 0.7) {
+          issues.push({
+            code: 'region-too-sparse', pageId: page.pageId, itemId: region.itemId,
+            message: `该页组 ${region.itemId} 内容只占容器约 ${Math.round((1 - voidRatio) * 100)}%（按默认组合预估，与空洞告警线同口径）：区域大小与内容不匹配——并组、改归属、换分区或改用相称的组合，让区域贴合实际内容；不得用填充物或放大字号搪塞。`,
+          });
+        }
       }
       estimatedVoid = 1 - maxBottom / area.height;
     } catch (error) {

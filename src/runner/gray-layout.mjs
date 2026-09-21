@@ -230,10 +230,11 @@ export function resolveGrayLayout(plan, selection, area, { measureBody, fitText,
       reweighted = { from: baseWeights, to: attempt.weights };
     }
     // 内容明显少于正文区时不再把各组拉到满高：满高会让空框自己声明"这里该有内容"。
-    // 只在稀疏页面收缩（自然高度 < 55% 正文区），丰实页面照旧铺满。
-    // 收缩有底（任务 #71-F2）：帧高不低于正文区 60%（与页底留白 40% 告警线对齐），防止缩成小框、余额全沉页底。
-    if (solved.minimum.height < area.height * 0.55) {
-      const frameHeight = Math.max(Math.ceil(area.height * 0.6), 96, Math.ceil(solved.minimum.height * 1.1));
+    // 任务 #71-F2 下限 60%（与页底留白 40% 告警线对齐）；任务 #167-G02 起改为连续贴合：
+    // 帧高 = clamp(min×1.1, 0.6×正文区, 正文区)，让区域大小与实际内容匹配；
+    // 内容达到约 91% 正文区的丰实页 1.1×min ≥ 正文区，保持满高不变。
+    const frameHeight = Math.max(Math.ceil(area.height * 0.6), 96, Math.ceil(solved.minimum.height * 1.1));
+    if (frameHeight < area.height) {
       solved = resolveLayoutTree({ composition, bodyFrame: { left: 0, top: 0, width: area.width, height: frameHeight }, contracts, style: { gap: GAP } });
     }
     const regions = ids.map(id => {

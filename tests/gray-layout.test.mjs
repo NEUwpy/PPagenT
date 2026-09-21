@@ -44,8 +44,14 @@ test('column, grid and single use existing solver without inventing semantic rel
 test('sparse pages stop stretching groups; rich pages still fill the frame',()=>{
   const sparse=resolveGrayLayout(plan(),select({type:'row',weights:[2,1]}),area,metrics).plan.pages[0].composition.regions;
   assert.ok(sparse[0].height>=96 && sparse[0].height<area.height);
+  // 任务 #167-G02：中档内容（约 72%）不再拉满，帧高贴合 min×1.1 且不低于 60% 正文区。
+  const mid=plan();
+  mid.pages[0].groups.forEach(g=>{g.blocks[0].text='重要条件必须保留，异常暂停并复核记录。'.repeat(6);});
+  const midRegions=resolveGrayLayout(mid,select({type:'row',weights:[2,1]}),area,metrics).plan.pages[0].composition.regions;
+  assert.ok(midRegions[0].height>=area.height*0.6 && midRegions[0].height<area.height);
+  // 丰实内容（约 96%）保持满高。
   const p=plan();
-  p.pages[0].groups.forEach(g=>{g.blocks[0].text='重要条件必须保留，异常暂停并复核记录。'.repeat(6);});
+  p.pages[0].groups.forEach(g=>{g.blocks[0].text='重要条件必须保留，异常暂停并复核记录。'.repeat(10);});
   const rich=resolveGrayLayout(p,select({type:'row',weights:[2,1]}),area,metrics).plan.pages[0].composition.regions;
   assert.equal(rich[0].height,area.height);
 });
