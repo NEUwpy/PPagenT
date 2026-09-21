@@ -8,9 +8,9 @@ param(
     [ValidatePattern("^[A-Za-z0-9._-]+$")]
     [string]$TaskId,
 
-    # Project role mapping: glm = executor, deepseek = reviewer.
-    # The transport script only accepts codex/opencode; this wrapper translates.
-    [ValidateSet("glm", "deepseek")][string]$Role,
+    # Neutral roles: executor / planner / reviewer. Legacy aliases: deepseek (=executor), glm (=reviewer).
+    # The transport script only accepts the codex/opencode slots; this wrapper translates.
+    [ValidateSet("executor", "planner", "reviewer", "deepseek", "glm")][string]$Role,
 
     [ValidateSet("task", "report", "revise", "approve", "block", "note")]
     [string]$Type = "note",
@@ -29,28 +29,33 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-$transportScript = Join-Path $env:USERPROFILE ".agents\skills\coworker\scripts\coworker-mailbox.ps1"
+$projectRoot = Split-Path $PSScriptRoot
+$skillRoot = Join-Path $projectRoot ".agents\skills\ppagent-coworker"
+$transportScript = Join-Path $skillRoot "scripts\coworker-mailbox.ps1"
 if (-not (Test-Path -LiteralPath $transportScript)) {
-    throw "coworker skill not found: $transportScript (expected junction at ~/.agents/skills/coworker)"
+    throw "ppagent-coworker transport not found: $transportScript (project-owned copy; see .agents/skills/ppagent-coworker/SKILL.md)"
 }
 
-# Version guard: fail loudly if the global skill copy drifts from the tested version.
-$versionPath = Join-Path (Split-Path (Split-Path $transportScript)) "VERSION.json"
+# Version guard: fail loudly if the project transport base drifts from the tested upstream version.
+$versionPath = Join-Path $skillRoot "VERSION.json"
 if (Test-Path -LiteralPath $versionPath) {
-    $version = (Get-Content -LiteralPath $versionPath -Raw | ConvertFrom-Json).version
-    if ($version -ne "2.5.0") {
-        throw "coworker skill version changed to $version (this wrapper is tested against 2.5.0). Verify via references/version-resolution.md, then update this guard."
+    $version = (Get-Content -LiteralPath $versionPath -Raw -Encoding UTF8 | ConvertFrom-Json)
+    if ($version.base.version -ne "2.5.0") {
+        throw "coworker base version changed to $($version.base.version) (this wrapper is tested against 2.5.0). Verify hashes and rerun tests/duplex-e2e.ps1, then update this guard."
     }
 }
 
 $transportRole = switch ($Role) {
-    "deepseek" { "codex" }    # executor uses the codex slot
-    "glm" { "opencode" }      # reviewer uses the opencode slot
+    "executor" { "codex" }    # executor uses the codex slot
+    "planner"  { "opencode" } # planner uses the reviewer slot
+    "reviewer" { "opencode" } # reviewer uses the opencode slot
+    "deepseek" { "codex" }    # legacy alias: executor
+    "glm"      { "opencode" } # legacy alias: reviewer
 }
 
 $forwardArgs = @{
     Action           = $Action
-    Repo             = (Split-Path $PSScriptRoot)
+    Repo             = $projectRoot
     TaskId           = $TaskId
     TimeoutSeconds   = $TimeoutSeconds
     PollMilliseconds = $PollMilliseconds
