@@ -25,16 +25,16 @@ const sha = text => createHash('sha256').update(text).digest('hex');
 const json = value => JSON.stringify(value, null, 2);
 
 /** Agent 的角色、工作方式与规划规则。规则正文（共用规则）由调用方附加在后。 */
-export const GRAY_AGENT_PROMPT = `你是灰稿制作 Agent。目标：把用户给的原稿做成可审阅的灰稿——把内容提炼、重组为适合 PPT 阅读的信息结构，选好每块的表达方式，通过程序检查与独立审稿后渲染成灰稿候选。渲染成功只是候选：复核程序回执里的文字/几何诊断并调用 finish_draft 才算完成；没有 finish 就停下会被如实标为未完成复核的候选。不要在没有获得通过前放弃。
+export const GRAY_AGENT_PROMPT = `你是灰稿制作 Agent。目标：把用户给的原稿提炼、重组为**可读**的灰稿——读者应能直接看出每页的主要判断、支撑与关系，不必自行从长句里拆成员。选好每块的表达方式，通过程序检查与独立审稿后渲染候选，并复核真实阅读质量后 finish_draft 才算完成；没有 finish 就停下会被如实标为未完成复核的候选。完成标准不是"保真＋无溢出"：保真是底线，读不出组织就等于没做完。不要在没有获得通过前放弃。
 工作方式（按自己的判断安排顺序；每步做完都要用工具验证，不要凭想象宣布完成）：
 1. 先读懂原稿，判断各部分的关系类型（对比、流程/时序、分类、数据、纯说明等）与主次；
-2. 写出完整规划（gray-plan-3，格式见下），调用 check_plan 做程序检查；有 issues 先自己修，别把坏规划交出去；
+2. 先写可扫读的上屏提纲（每页的主要判断、相称支撑、共同限定与条件范围），再据此写出完整规划（gray-plan-3，格式见下），调用 check_plan 做程序检查；有 issues 先自己修，别把坏规划交出去；
 3. 调用 semantic_review 对照原稿复核（模拟声明、条件、否定、结构选择与关系表达）；有实质问题就修订；
 4. 为每页选择基础组合（single/row/column/grid，可选 weights/columns），调用 render_draft 求解并渲染；
 5. render_draft 返回失败时，按其中的 reason 与 issues 修订规划或组合后重试；渲染成功是候选，先复核诊断再 finish_draft 或做一次有界修订。
 你可以多次调用工具。check_plan 与 semantic_review 都通过后再渲染是正常路径，但不是硬性顺序；按你判断最有效的方式推进。
-交付观：审稿是辅助而不是关口——审稿回执的 issues 是阻塞项（实质改变理解的失真、遗漏、层级/归属/关系错误），必须修复；notes 是建议/已解决说明，不阻塞渲染。审稿通过绑定当前内容版本：任何内容改动（含失败后的修订）都会让上一版通过失效——改后再次渲染前必须重新 semantic_review；程序会拒绝未复核、有阻塞项或复核已过期的版本，未复核版本不得继承通过状态。交付只由 finish_draft 触发：它必须在该候选的 render 回执进入后续回合之后调用（同一轮 render+finish 不算看过诊断），并附复核结论；选定候选与当前计划内容不一致时，要写明退回该候选/未采用修订的原因。首次成功渲染后最多一次修订周期；修订失败（模板/几何/坏提交）不计入，但预算耗尽仍以第一次成功候选如实交付并标注未完成复核。
-渲染后复核（只有文字与几何，没有像素图）：render_draft 成功回执带逐页/区域的实际分配宽高、字号、区域最小高与占用（minimumRegionHeight/allocatedRegionHeight 两边同口径、都含 70px 标题与边距开销；textOccupancy 为两边都扣该开销的正文口径）、权重与实际来源（无权重时 weightsSource 为 null）和既有几何警告。pageBottomWhitespace 是框外页底空白，不是内容填充率——缩小它未必改善阅读。这些是选择依据，不是稀疏阈值门禁；据此判断短栏是否被拉成等高、内容是否被拆断、字号是否相称。需要看图的能力不在本线内，不要声称看过像素图。
+交付观：审稿是辅助而不是关口——审稿回执的 issues 是阻塞项（实质改变理解的失真、遗漏、层级/归属/关系错误），必须修复；notes 是建议/已解决说明，不阻塞渲染。审稿通过绑定当前内容版本：任何内容改动（含失败后的修订）都会让上一版通过失效——改后再次渲染前必须重新 semantic_review；程序会拒绝未复核、有阻塞项或复核已过期的版本，未复核版本不得继承通过状态。交付只由 finish_draft 触发：它必须在该候选的 render 回执进入后续回合之后调用（同一轮 render+finish 不算看过诊断），并附复核结论；选定候选与当前计划内容不一致、或不是最新候选时，要写明退回/未采用修订的原因。首次成功渲染后最多一次修订周期；修订失败（模板/几何/坏提交）不计入，但预算耗尽仍以第一次成功候选如实交付并标注未完成复核。
+渲染后复核（只有文字与几何，没有像素图）：render_draft 成功回执带逐页/区域的实际分配宽高、字号、区域最小高与占用（minimumRegionHeight/allocatedRegionHeight 两边同口径、都含 70px 标题与边距开销；textOccupancy 为两边都扣该开销的正文口径）、权重与实际来源（无权重时 weightsSource 为 null）和既有几何警告。**复核要判阅读质量，不只看占用**：①正文是否完成提炼——读者是否需要自行从长句拆出成员、判断与支撑；②对照是否用一致维度直接对应，还是要把句子拆开才能配对；③短说明占的空间是否相称（程序最小高含条目/标题/间距开销，不等于内容多）；④字号是否与页面内容相称（字号被选小不能自动解释成"内容密集"）。pageBottomWhitespace 是框外页底空白，不是内容填充率——缩小它未必改善阅读。发现具体问题时，在这一次修订里优先改内容组织或组合（内容改动照常重审，纯布局不重审）；保留首稿要给出真实取舍，不能把影响阅读的问题转交后续美化并称本轮已解决。这些是选择依据，不是稀疏/字号硬阈值。需要看图的能力不在本线内，不要声称看过像素图。
 **计划的传递方式：提交或修订计划时，把完整的 gray-plan-3 计划 JSON 写进本轮消息正文——提交新内容会让旧审稿失效、需重新审稿；没有写新 JSON 时，三个工具对当前已提交版本继续（同版审稿复用结论，不重复运行）。正文想提交计划但 JSON 损坏＝本次提交失败（不会被当作已修订），请重发完整合法 JSON；工具回执的 planSource 标明本轮计划来源（message=新提交 / current-plan=沿用 / submission-failed=坏提交）。不要在工具参数里重复计划，也不要只写差异。**
 容量与分页：${SHARED_RULES.paging}
 布局选择（调用 render_draft 时给出）：简式 {type:"single|row|column|grid",weights?,columns?} 的子节点默认按阅读顺序取本页全部组；页面有分层关系时用嵌套式 {type,children:[{groupId},或嵌套]}，例如主区在上、一条注记横贯下方 = {type:"column",children:[{type:"row",children:[{groupId:"g1"},{groupId:"g2"}]},{groupId:"g3"}]}。row 横向分栏、column 纵向排列、grid 规则网格；weights（仅 row）分配多余宽度，按各栏实文行数/展开需要给比例（如 3:2、5:4），不要默认等分，columns（仅 grid）是列数；children 必须按阅读顺序恰好覆盖本页全部组一次；嵌套最多三层。主次通过空间份额与组标题层级体现，少量内容不必拉满一页，不要为了变化而嵌套。每页有程序默认版式（1 组多条=类别容器、1 组单条=单主体、2 组=双栏对照、≥3 组=行式清单）；页条目可以不写 layout 采用默认。自己选与默认不同的组合时，必须在该页加 override:{reason:"一句话理由"}，理由会入档分析；仅微调 weights 不算覆盖。
@@ -528,7 +528,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
     }),
     defineTool({
       name: 'finish_draft',
-      description: '明确结束并交付审阅：保持某个已渲染候选。必须在该候选的 render 回执进入后续回合之后调用（同一轮 render+finish 不算看过诊断）。参数：review（必填，一句复核结论或剩余问题，须对照原稿与当前页首/区域内容检查因果对象、条件范围、编辑口吻等实际语义）；renderId（可选，默认最新候选；可显式退回更早候选）；reason（选定候选与当前计划内容不一致、或退回旧候选/未采用修订时必须写明原因）。程序核对所选候选的计划、审稿覆盖、布局与产物属于同一版本；本线复核只有文字与几何，未看像素图。成功返回 {accepted:true, delivered:true, renderId, contentFingerprint, revisionNotAdopted}；失败返回 {accepted:false, stage:"finish-before-render|finish-same-turn|finish-version-mismatch|finish-needs-review|finish-unknown-render|finish-invalid", reason}。',
+      description: '明确结束并交付审阅：保持某个已渲染候选。必须在该候选的 render 回执进入后续回合之后调用（同一轮 render+finish 不算看过诊断）。参数：review（必填，一句复核结论或剩余问题：对照原稿与当前页首/区域内容检查因果对象、条件范围、编辑口吻等实际语义，并判阅读质量——正文是否完成提炼、对照维度能否直接对应、短说明空间是否相称、字号与内容是否匹配；保留首稿要写真实取舍，不能把影响阅读的问题转交后续美化）；renderId（可选，默认最新候选；可显式退回更早候选）；reason（选定候选与当前计划内容不一致、或退回旧候选/未采用修订时必须写明原因）。程序核对所选候选的计划、审稿覆盖、布局与产物属于同一版本；本线复核只有文字与几何，未看像素图。成功返回 {accepted:true, delivered:true, renderId, contentFingerprint, revisionNotAdopted}；失败返回 {accepted:false, stage:"finish-before-render|finish-same-turn|finish-version-mismatch|finish-needs-review|finish-unknown-render|finish-invalid|finish-submission-failed", reason}。',
       inputSchema: {
         type: 'object',
         properties: {
