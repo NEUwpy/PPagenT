@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { SHARED_RULES, SEMANTIC_REVIEW_CONTRACT, validateSemanticPlan } from '../src/runner/gray-semantics.mjs';
+import { SHARED_RULES, SEMANTIC_CONTRACT, SEMANTIC_REVIEW_CONTRACT, validateSemanticPlan } from '../src/runner/gray-semantics.mjs';
 import { GRAY_AGENT_PROMPT } from '../src/runner/gray-agent.mjs';
 import { newRunState } from '../src/runner/state.mjs';
 import { resolveGrayLayout } from '../src/runner/gray-layout.mjs';
@@ -109,4 +109,25 @@ test('通用生成与审稿入口不包含样稿答案，审稿承认局部蓝�
     assert.doesNotMatch(text, /范本|不足与感悟|统一语言、统一目标、统一策略|同页双容器|两轮压缩/u);
   }
   assert.match(SEMANTIC_REVIEW_CONTRACT, /不要求已经画出内部节点和箭头/u);
+});
+
+test('带时间锚点的序列＋当前观察分支：通用判定进生成与审稿契约且不含样本词（任务 #216）', () => {
+  // 抽象 fixture：一段有时代锚点的演进序列 ＋ 一条“现在/新方向/越来越多”的当下观察分支。
+  const fixture = '早期阶段（某年代）…；中期阶段（某年代）…；现在有一个新方向值得关注，应用正在增加。';
+  assert.match(fixture, /新方向/u);
+  const fragment = SHARED_RULES.timeline;
+  assert.ok(fragment.length >= 20, 'timeline 片段过短');
+  assert.match(fragment, /历史\/演进序列/u);
+  assert.match(fragment, /当下分支/u);
+  assert.match(fragment, /不因数量或顺序把它并为历史节点/u);
+  assert.match(fragment, /程度与作用范围/u);
+  assert.match(fragment, /flow 只承载真实先后序列/u);
+  assert.ok(GRAY_AGENT_PROMPT.includes(fragment), 'GRAY_AGENT_PROMPT 缺少 timeline 片段');
+  assert.ok(SEMANTIC_CONTRACT.includes(fragment), 'SEMANTIC_CONTRACT 缺少 timeline 片段');
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /把当下分支读成历史阶段/u);
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /把趋势弱化成静态事实/u);
+  // 通用规则不得写死任何样稿词句。
+  for (const sample of ['搅拌摩擦焊', '焊接', '铝合金', '新能源汽车', '锻焊', '垃圾', '厨余', '备件']) {
+    assert.doesNotMatch(fragment, new RegExp(sample, 'u'), `timeline 片段不应包含样本词：${sample}`);
+  }
 });
