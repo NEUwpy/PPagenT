@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { planFitIssues } from '../src/runner/gray-agent.mjs';
+import Ajv2020 from 'ajv/dist/2020.js';
+import { planFitIssues, RENDER_LAYOUTS_SCHEMA } from '../src/runner/gray-agent.mjs';
 
 const area = { width: 1170, height: 492 };
 const plan = (claim, text) => ({
@@ -67,4 +68,15 @@ test('逐页独立：某页超容量不中断其余页的充实度检查', () =>
   assert.equal(report.issues.length, 0);
   assert.ok(report.warnings.some(warning => warning.code === 'plan-capacity' && warning.pageId === 'p1'));
   assert.ok(report.warnings.some(warning => warning.code === 'page-too-sparse' && warning.pageId === 'p2'));
+});
+
+test('render_draft layouts schema：{pageId} 走默认、{pageId,layout,override} 合法、缺 pageId/reason 被拒（任务 #222）', () => {
+  const ajv = new Ajv2020({ strict: false, allErrors: true });
+  const validate = ajv.compile(RENDER_LAYOUTS_SCHEMA);
+  assert.equal(validate({ layouts: [{ pageId: 'p1' }] }), true, JSON.stringify(validate.errors));
+  assert.equal(validate({ layouts: [{ pageId: 'p1', layout: { type: 'row' }, override: { reason: '并列顺列' } }] }), true, JSON.stringify(validate.errors));
+  assert.equal(validate({ layouts: [{ layout: { type: 'row' } }] }), false);
+  assert.equal(validate({ layouts: [{ pageId: 'p1', layout: { type: 'row' }, override: {} }] }), false);
+  assert.equal(validate({ layouts: [{ pageId: 'p1', extra: 1 }] }), false);
+  assert.equal(validate({ layouts: 'nope' }), false);
 });

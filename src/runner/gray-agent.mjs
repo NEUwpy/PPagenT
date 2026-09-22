@@ -24,6 +24,37 @@ import { grayBodyLayout, fitGrayText, validateGrayArea, validateGrayPlan, render
 const sha = text => createHash('sha256').update(text).digest('hex');
 const json = value => JSON.stringify(value, null, 2);
 
+/**
+ * render_draft 的 layouts 入参形状（任务 #222 单一来源：工具 schema 与定向测试共用）。
+ * 每项为 {pageId, layout?, override?}：pageId 必填；省略 layout 采用该页默认版式；
+ * 使用非默认组合时 override 与 layout 同级，override.reason 由模板层入档。
+ */
+export const RENDER_LAYOUTS_SCHEMA = {
+  type: 'object',
+  properties: {
+    layouts: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          pageId: { type: 'string' },
+          layout: { type: 'object' },
+          override: {
+            type: 'object',
+            properties: { reason: { type: 'string' }, template: { type: 'string' } },
+            required: ['reason'],
+            additionalProperties: false,
+          },
+        },
+        required: ['pageId'],
+        additionalProperties: false,
+      },
+    },
+  },
+  required: ['layouts'],
+  additionalProperties: false,
+};
+
 /** Agent 的角色、工作方式与规划规则。规则正文（共用规则）由调用方附加在后。 */
 export const GRAY_AGENT_PROMPT = `你是灰稿制作 Agent。目标：把用户给的原稿提炼、重组为**可读**的灰稿——读者应能直接看出每页的主要判断、支撑与关系，不必自行从长句里拆成员。选好每块的表达方式，通过程序检查与独立审稿后渲染候选，并复核真实阅读质量后 finish_draft 才算完成；没有 finish 就停下会被如实标为未完成复核的候选。完成标准不是"保真＋无溢出"：保真是底线，读不出组织就等于没做完。不要在没有获得通过前放弃。
 工作方式（按自己的判断安排顺序；每步做完都要用工具验证，不要凭想象宣布完成）：
@@ -380,14 +411,8 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
     }),
     defineTool({
       name: 'render_draft',
-      description: '按你当前已提交的计划与每页基础组合求解几何并渲染灰稿候选。layouts 是逐页数组 [{pageId,layout}]；layout 为简式 {type:"single|row|column|grid",weights?,columns?} 或嵌套 {type,weights?,columns?,children:[…]}（children 项为 {groupId} 或嵌套组合，按阅读顺序恰好覆盖本页全部组一次，最多三层）。每页有程序默认版式（按组数与实文量）；页条目可不写 layout 采用默认；改用其它组合时，override 必须写在**页面计划的页条目**上、与 layout 同级：pages:[{pageId:"p2", layout:{...}, override:{reason:"一句话理由"}}]——override 不能放进 layout 对象里，理由入档分析；仅微调 weights 不算覆盖。这是小参数，仍走工具参数。程序检查通过且审稿覆盖当前内容指纹即可渲染；成功返回候选 {accepted:true, candidate:true, renderId, diagnostics, preview, pptx}——本轮尚未交付，复核 diagnostics 后调用 finish_draft。审稿的阻塞项（issues）未通过前不得渲染；正文里想提交但 JSON 损坏＝本次提交失败，本工具只回报失败、不渲染旧版。失败返回 {accepted:false, stage:"template|geometry|check|submission-failed|revision-budget|stall|…", reason, issues}，据此修订后重试；首次成功后的修订周期上限为一次，失败尝试不计入。',
-      inputSchema: {
-        type: 'object',
-        properties: {
-          layouts: { type: 'array', items: { type: 'object', properties: { pageId: { type: 'string' }, layout: { type: 'object' } }, required: ['pageId', 'layout'] } },
-        },
-        required: ['layouts'], additionalProperties: false,
-      },
+      description: '按你当前已提交的计划与每页基础组合求解几何并渲染灰稿候选。layouts 是逐页数组 [{pageId, layout?, override?}]：pageId 必填；layout 可省略（省略即采用该页默认版式）；layout 为简式 {type:"single|row|column|grid",weights?,columns?} 或嵌套 {type,weights?,columns?,children:[…]}（children 项为 {groupId} 或嵌套组合，按阅读顺序恰好覆盖本页全部组一次，最多三层）。每页有程序默认版式（按组数与实文量）；改用其它组合时，在 layouts 的该页条目里把 override 与 layout 同级写：{pageId:"p2", layout:{...}, override:{reason:"一句话理由"}}——override 不能放进 layout 对象里，理由入档分析；仅微调 weights 不算覆盖。这是小参数，仍走工具参数。程序检查通过且审稿覆盖当前内容指纹即可渲染；成功返回候选 {accepted:true, candidate:true, renderId, diagnostics, preview, pptx}——本轮尚未交付，复核 diagnostics 后调用 finish_draft。审稿的阻塞项（issues）未通过前不得渲染；正文里想提交但 JSON 损坏＝本次提交失败，本工具只回报失败、不渲染旧版。失败返回 {accepted:false, stage:"template|geometry|check|submission-failed|revision-budget|stall|…", reason, issues}，据此修订后重试；首次成功后的修订周期上限为一次，失败尝试不计入。',
+      inputSchema: RENDER_LAYOUTS_SCHEMA,
       handler: async ({ layouts }) => {
         const { plan, source: planSource, note: planNote } = resolvePlan();
         // 任务 #175：坏提交不得渲染旧版冒充本次提交（失败控制流）。

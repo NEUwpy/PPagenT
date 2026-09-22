@@ -80,6 +80,14 @@ test('applyTemplateDefaults：缺省用默认、同形放行、异形须理由�
   assert.deepEqual(viaDefault.layouts[1].layout.weights, [1, 4]);
 
   assert.throws(() => applyTemplateDefaults(plan, [{ pageId: 'p1' }, { pageId: 'p2', layout: { type: 'column' } }]), /默认模板「双栏对照」/);
+  // 任务 #222：失败回执必须给出真实的请求形状（override 与 layout 同级、在 layouts 页条目里），
+  // 不再出现与代码相反的 pages[] / "不随 layouts 传入" 表述。
+  const missingReason = (() => { try { applyTemplateDefaults(plan, [{ pageId: 'p1' }, { pageId: 'p2', layout: { type: 'column' } }]); return null; } catch (error) { return error.message; } })();
+  assert.ok(missingReason, '非默认组合缺 override.reason 必须失败');
+  assert.match(missingReason, /\{pageId:"p2", layout:\{\.\.\.\}, override:\{reason:/u);
+  assert.doesNotMatch(missingReason, /pages:\[/u);
+  assert.doesNotMatch(missingReason, /不随.*传入/u);
+  assert.throws(() => applyTemplateDefaults(plan, [{ pageId: 'p2', layout: { type: 'column' }, override: {} }]), /override/u);
   const overridden = applyTemplateDefaults(plan, [{ pageId: 'p1' }, { pageId: 'p2', layout: { type: 'column' }, override: { reason: '双栏放不下，改顺列' } }]);
   assert.equal(overridden.decisions[1].mode, 'override');
   assert.equal(overridden.decisions[1].reason, '双栏放不下，改顺列');

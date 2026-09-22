@@ -70,6 +70,22 @@ async function runProtocol(chatScript, reviewPayloads = [], turns = 8, beforeCal
 const renderSingle = { name: 'render_draft', arguments: { layouts: [{ pageId: 'p1', layout: { type: 'single' } }] } };
 const renderColumn = { name: 'render_draft', arguments: { layouts: [{ pageId: 'p1', layout: { type: 'column' }, override: { reason: '纵向排列验证布局复核' } }] } };
 
+test('render_draft 接口契约：{pageId} 只传页号即走默认并成功（任务 #222）', async () => {
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '审稿。', tools: ['semantic_review'] },
+    { content: '用默认版式渲染。', tools: [{ name: 'render_draft', arguments: { layouts: [{ pageId: 'p1' }] } }] },
+    { content: '保持。', tools: [{ name: 'finish_draft', arguments: { review: '默认版式保持。' } }] },
+    { content: '收工。', tools: [] },
+  ]);
+  try {
+    const renders = run.events.filter(event => event.tool === 'render_draft');
+    assert.equal(renders[0].result.accepted, true, JSON.stringify(renders[0].result));
+    assert.equal(renders[0].result.candidate, true);
+    assert.equal(run.state.grayDraft.postRender.completed, true);
+  } finally { await run.rm(); }
+});
+
 test('模板门重复请求保护：同一无效布局第二次按停滞拒绝，改用默认后继续（任务 #208）', async () => {
   const badLayout = { name: 'render_draft', arguments: { layouts: [{ pageId: 'p1', layout: { type: 'row' } }] } };
   const run = await runProtocol([

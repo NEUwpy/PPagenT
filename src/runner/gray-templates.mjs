@@ -121,7 +121,7 @@ export function applyTemplateDefaults(plan, layouts) {
     }
     const reason = typeof entry.override?.reason === 'string' ? entry.override.reason.trim() : '';
     if (!reason) {
-      throw new Error(`页 ${page.pageId} 的组合与默认模板「${template.name}」（${layoutShape(template.layout)}）不同：采用默认（该页不写 layout），或在页面计划里把 override 与 layout 同级写：pages:[{pageId:"${page.pageId}", layout:{...}, override:{reason:"一句话理由"}}]（override 不能放进 layout 对象里；理由会入档分析）。render_draft 的 layouts 参数只放 {pageId, layout}，override 不随它传入。`);
+      throw new Error(`页 ${page.pageId} 的组合与默认模板「${template.name}」（${layoutShape(template.layout)}）不同：采用默认（该页只写 {pageId}、省略 layout），或在 render_draft 的 layouts 页条目里把 override 与 layout 同级写：{pageId:"${page.pageId}", layout:{...}, override:{reason:"一句话理由"}}（override 不能放进 layout 对象；理由会入档分析）。`);
     }
     decisions.push({ pageId: page.pageId, template: template.id, name: template.name, mode: 'override', reason, chosen: layoutShape(entry.layout), ...(entry.override?.template ? { picked: String(entry.override.template) } : {}) });
     // 只向下游传 {pageId, layout}：override 理由已入 decisions，不能随 layouts 进求解器（否则被判为非法字段）。

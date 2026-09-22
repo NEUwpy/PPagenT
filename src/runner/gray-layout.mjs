@@ -195,7 +195,7 @@ export function resolveGrayLayout(plan, selection, area, { measureBody, fitText,
   const pages = semanticPages(plan), layouts = [], receipts = [];
   for (const [index, page] of pages.entries()) {
     const entry = selection.pages[index];
-    if (entry?.pageId !== page.pageId || Object.keys(entry).some(k => !['pageId', 'layout'].includes(k))) throw new Error('layouts 每项只接受 {pageId, layout} 且 pageId 必须与本页一致：不要添加其它字段、改正文或换页序；覆盖理由写在 override.reason 里由程序单独入档，不随 layouts 传入。');
+    if (entry?.pageId !== page.pageId || Object.keys(entry).some(k => !['pageId', 'layout'].includes(k))) throw new Error('布局条目只接受 {pageId, layout}：override（含 override.reason）属于 render_draft 请求的页条目、与 layout 同级，已在模板层单独入档、不进入求解器；不要添加其它字段、改正文或换页序。');
     const choice = entry.layout, ids = page.semantics.readingOrder;
     if (!choice || typeof choice !== 'object') throw new Error('每页必须给出 layout');
     let tree = normalizeLayoutTree(choice, ids, page.pageId);
