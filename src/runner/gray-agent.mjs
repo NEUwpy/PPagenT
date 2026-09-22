@@ -380,7 +380,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
     }),
     defineTool({
       name: 'render_draft',
-      description: '按你当前已提交的计划与每页基础组合求解几何并渲染灰稿候选。layouts 是逐页数组 [{pageId,layout}]；layout 为简式 {type:"single|row|column|grid",weights?,columns?} 或嵌套 {type,weights?,columns?,children:[…]}（children 项为 {groupId} 或嵌套组合，按阅读顺序恰好覆盖本页全部组一次，最多三层）。每页有程序默认版式（按组数与实文量）；页条目可不写 layout 采用默认；改用其它组合须在该页加 override:{reason:"一句话理由"}（入档分析），仅微调 weights 不算覆盖。这是小参数，仍走工具参数。程序检查通过且审稿覆盖当前内容指纹即可渲染；成功返回候选 {accepted:true, candidate:true, renderId, diagnostics, preview, pptx}——本轮尚未交付，复核 diagnostics 后调用 finish_draft。审稿的阻塞项（issues）未通过前不得渲染；正文里想提交但 JSON 损坏＝本次提交失败，本工具只回报失败、不渲染旧版。失败返回 {accepted:false, stage:"template|geometry|check|submission-failed|revision-budget|…", reason, issues}，据此修订后重试；首次成功后的修订周期上限为一次，失败尝试不计入。',
+      description: '按你当前已提交的计划与每页基础组合求解几何并渲染灰稿候选。layouts 是逐页数组 [{pageId,layout}]；layout 为简式 {type:"single|row|column|grid",weights?,columns?} 或嵌套 {type,weights?,columns?,children:[…]}（children 项为 {groupId} 或嵌套组合，按阅读顺序恰好覆盖本页全部组一次，最多三层）。每页有程序默认版式（按组数与实文量）；页条目可不写 layout 采用默认；改用其它组合时，override 必须写在**页面计划的页条目**上、与 layout 同级：pages:[{pageId:"p2", layout:{...}, override:{reason:"一句话理由"}}]——override 不能放进 layout 对象里，理由入档分析；仅微调 weights 不算覆盖。这是小参数，仍走工具参数。程序检查通过且审稿覆盖当前内容指纹即可渲染；成功返回候选 {accepted:true, candidate:true, renderId, diagnostics, preview, pptx}——本轮尚未交付，复核 diagnostics 后调用 finish_draft。审稿的阻塞项（issues）未通过前不得渲染；正文里想提交但 JSON 损坏＝本次提交失败，本工具只回报失败、不渲染旧版。失败返回 {accepted:false, stage:"template|geometry|check|submission-failed|revision-budget|stall|…", reason, issues}，据此修订后重试；首次成功后的修订周期上限为一次，失败尝试不计入。',
       inputSchema: {
         type: 'object',
         properties: {

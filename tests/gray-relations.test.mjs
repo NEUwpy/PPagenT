@@ -125,6 +125,9 @@ test('审稿契约写明程序序号口径：编号用于核对层级，kind:not
   assert.match(SEMANTIC_REVIEW_CONTRACT, /序号不是模型标签/u);
   assert.match(SEMANTIC_REVIEW_CONTRACT, /kind:note/u);
   assert.match(SEMANTIC_REVIEW_CONTRACT, /组内条目层级是规划职责/u);
+  // 任务 #210：关系类型不只看正文句子——标题/组标题/label/附注同样是可见命题，标签不得把关联命名成原因。
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /页面标题、组标题、条目 label 与附注同样是可见命题/u);
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /命名成「原因／归因」一类升格/u);
   assert.match(SEMANTIC_REVIEW_CONTRACT, /条件触发的处置、异常、例外（组间层级）/u);
   assert.match(SEMANTIC_REVIEW_CONTRACT, /该口径仅适用于文字条目内的蓝框占位，不适用于整组草图/u);
   assert.match(SEMANTIC_REVIEW_CONTRACT, /整组结构草图的节点文字按来源保真核对/u);
