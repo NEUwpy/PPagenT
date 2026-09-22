@@ -78,7 +78,7 @@ export async function sharedPreservedComponent(component, assetDir, frame, theme
       const left = (frame.width-width)/2-bounds.left*scale;
       const top = (frame.height-height)/2-bounds.top*scale;
       markup = markup.replace(/<([^>]*\bdata-ppt-root\b[^>]*)>/, (_, tag) => {
-        const style = `position:absolute;left:${left}px;top:${top}px;width:${natural.width*scale}px;height:${natural.height*scale}px;overflow:visible;background:transparent;${type.css}`;
+        const style = `position:absolute;left:${left}px;top:${top}px;width:${natural.width*scale}px;height:${natural.height*scale}px;overflow:visible;background:transparent;--structure-safe-top:${Math.max(0, 12-top)}px;${type.css}`;
         const updated = /style="/.test(tag)
           ? tag.replace(/style="([^"]*)"/, (_, original) => `style="${original};${style}"`)
           : `${tag} style="${style}"`;

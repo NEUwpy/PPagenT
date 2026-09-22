@@ -244,7 +244,7 @@ function rememberComponentPreview(key, html) {
 }
 
 function componentPreviewCacheKey(library, assetId, searchParams, resolved, selection, skinKey, sizeKey) {
-  const version = searchParams.get("v") || String(resolved.record.componentVersion ?? "live");
+  const version = String(resolved.record.componentVersion ?? searchParams.get("v") ?? "live");
   return JSON.stringify([library, assetId, version, skinKey, sizeKey, selection]);
 }
 

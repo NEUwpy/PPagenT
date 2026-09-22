@@ -174,18 +174,73 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         };
       };
       const renderedLineCount = (element) => {
-        const range = document.createRange();
-        range.selectNodeContents(element);
-        const tops = [...range.getClientRects()]
-          .filter((rect) => rect.width > 0.1 && rect.height > 0.1)
-          .map((rect) => Math.round(rect.top * 2) / 2);
+        // A range over an element also returns its child element boxes. Lists
+        // and vertically written labels can then count one painted line twice.
+        const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+        const tops = [];
+        for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+          if (!node.textContent.trim()) continue;
+          const vertical = getComputedStyle(node.parentElement).writingMode !== "horizontal-tb";
+          const range = document.createRange();
+          range.selectNodeContents(node);
+          for (const rect of range.getClientRects()) {
+            if (rect.width > 0.1 && rect.height > 0.1) {
+              tops.push(`${vertical ? "v" : "h"}:${Math.round((vertical ? rect.left : rect.top) * 2) / 2}`);
+            }
+          }
+        }
         return new Set(tops).size || 1;
+      };
+      // Range rects include a font's ascent/descent reserve, which can exceed
+      // tight CJK line boxes without clipping any painted glyph. Check actual
+      // glyph ink as well as line count, rather than treating scrollHeight as
+      // proof of missing space. Keep width and real clipping checks intact.
+      const inkCanvas = document.createElement("canvas").getContext("2d");
+      const textInkFits = (element, bounds = element.getBoundingClientRect()) => {
+        const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+        for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+          if (!node.textContent.trim()) continue;
+          const style = getComputedStyle(node.parentElement);
+          if (style.writingMode !== "horizontal-tb") {
+            const clipped = /hidden|clip/.test(style.overflowX + style.overflowY);
+            const allowed = clipped ? element.getBoundingClientRect()
+              : element.parentElement.getBoundingClientRect();
+            const range = document.createRange();
+            range.selectNodeContents(node);
+            if (![...range.getClientRects()].every(rect => (
+              rect.left >= allowed.left - 2 && rect.right <= allowed.right + 2
+              && rect.top >= Math.max(bounds.top, allowed.top) - 2
+              && rect.bottom <= Math.min(bounds.bottom, allowed.bottom) + 2
+            ))) return false;
+            continue;
+          }
+          inkCanvas.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+          const metrics = inkCanvas.measureText(node.textContent);
+          const range = document.createRange();
+          range.selectNodeContents(node);
+          const ownerBox = node.parentElement.getBoundingClientRect();
+          const top = /hidden|clip/.test(style.overflowY) ? Math.max(bounds.top,ownerBox.top) : bounds.top;
+          const bottom = /hidden|clip/.test(style.overflowY) ? Math.min(bounds.bottom,ownerBox.bottom) : bounds.bottom;
+          for (const rect of range.getClientRects()) {
+            if (rect.width < 0.1) continue;
+            const baseline = rect.top + metrics.fontBoundingBoxAscent;
+            if (rect.left < bounds.left - 2 || rect.right > bounds.right + 2
+              || baseline - metrics.actualBoundingBoxAscent < top - 2
+              || baseline + metrics.actualBoundingBoxDescent > bottom + 2) return false;
+          }
+        }
+        return true;
       };
       const textFits = (element, fontSizePt, singleLine) => {
         const source = element.textContent.replace(/\r/g, "").trim();
         if (!source) return true;
         const available = innerSize(element);
         const sourceStyle = getComputedStyle(element);
+        if (sourceStyle.writingMode !== "horizontal-tb") {
+          const declaredMaxLines = Number(element.dataset.slotMaxLines);
+          return (!(declaredMaxLines > 0) || renderedLineCount(element) <= declaredMaxLines)
+            && textInkFits(element);
+        }
         if (singleLine) {
           const fontSizePx = fontSizePt / 0.75;
           const canvas = document.createElement("canvas");
@@ -217,7 +272,10 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         const cloneStyle = getComputedStyle(clone);
         const lineHeight = number(cloneStyle.lineHeight) || number(cloneStyle.fontSize) * 1.2;
         const lines = renderedLineCount(clone);
-        const requiredHeight = Math.max(lineHeight * lines, clone.scrollHeight);
+        const requiredHeight = lineHeight * lines;
+        const cloneBox = clone.getBoundingClientRect();
+        const inkFits = textInkFits(clone, {left:cloneBox.left, right:cloneBox.right,
+          top:cloneBox.top, bottom:cloneBox.top + element.getBoundingClientRect().height});
         clone.remove();
         const declaredMaxLines = Number(element.dataset.slotMaxLines);
         const maxLines = Number.isFinite(declaredMaxLines) && declaredMaxLines > 0
@@ -228,7 +286,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         // two-line block can therefore report ~1-2 px more scrollHeight even
         // though its geometry is fully inside the parent layout. Use the same
         // 2 px tolerance as the collective TextLayout containment check.
-        return lines <= maxLines && requiredHeight <= available.height + 2;
+        return lines <= maxLines && requiredHeight <= available.height + 2 && inkFits;
       };
 
       const renderedTextLines = (element) => {
@@ -300,7 +358,8 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         for (const element of [title, body].filter(Boolean)) {
           if (element.scrollWidth > element.clientWidth + 1) return false;
         }
-        return flow.scrollWidth <= flow.clientWidth + 1 && flow.scrollHeight <= flow.clientHeight + 1;
+        return flow.scrollWidth <= flow.clientWidth + 1
+          && content.every(element => textInkFits(element, flowBox));
       };
 
       const resolvedTextFlows = [];
@@ -379,7 +438,10 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
           }
         }
         if (!fits) {
-          const domFits = element.scrollWidth <= element.clientWidth + 2 && element.scrollHeight <= element.clientHeight + 2;
+          const declaredMaxLines = Number(element.dataset.slotMaxLines);
+          const linesFit = !(declaredMaxLines > 0) || renderedLineCount(element) <= declaredMaxLines;
+          const domFits = linesFit && textInkFits(element)
+            && element.scrollWidth <= element.clientWidth + 2 && element.scrollHeight <= element.clientHeight + 2;
           if (domFits) fits = true;
         }
         element.dataset.pptResolvedWrap = singleLine ? "none" : "square";
@@ -426,7 +488,7 @@ export async function resolveHtmlComponent({ component, parameters, assetDir, ta
         });
         return inside
           && layout.scrollWidth <= layout.clientWidth + tolerance
-          && layout.scrollHeight <= layout.clientHeight + tolerance
+          && parts.every(part => textInkFits(part, layoutBox))
           && primitiveFits;
       };
       const collectiveFitOrder = ["body", "list", "annotation", "label", "heading", "quote", "emphasis", "metric"];
