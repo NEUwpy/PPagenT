@@ -15,7 +15,7 @@ import { createToolRegistry, defineTool } from './tools/index.mjs';
 import { buildChatProviderFromEnv } from './chat-provider.mjs';
 import { loadDeepSeekLocalConfig } from '../agent/deepseek-provider-from-env.mjs';
 import { newRunState, writeState, renderContentMarkdown, renderStateMarkdown } from './state.mjs';
-import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan, semanticReviewInput, snapshotSemanticReview, markFlowSources, SHARED_RULES, attemptFingerprint, isStalledRetry, planTextVolume, isSameMinimumRetry, planContentFingerprint, checkReviewCoverage } from './gray-semantics.mjs';
+import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan, semanticReviewInput, snapshotSemanticReview, markFlowSources, SHARED_RULES, attemptFingerprint, isStalledRetry, planTextVolume, isSameMinimumRetry, planContentFingerprint, checkReviewCoverage, semanticPlanFromPages } from './gray-semantics.mjs';
 import { applyTemplateDefaults, describeDefaults } from './gray-templates.mjs';
 import { auditGeometry, voidWarnings, VOID_THRESHOLDS } from './gray-audit.mjs';
 import { resolveGrayLayout, compressionMemory } from './gray-layout.mjs';
@@ -34,7 +34,7 @@ export const GRAY_AGENT_PROMPT = `你是灰稿制作 Agent。目标：把用户�
 5. render_draft 返回失败时，按其中的 reason 与 issues 修订规划或组合后重试；渲染成功是候选，先复核诊断再 finish_draft 或做一次有界修订。
 你可以多次调用工具。check_plan 与 semantic_review 都通过后再渲染是正常路径，但不是硬性顺序；按你判断最有效的方式推进。
 交付观：审稿是辅助而不是关口——审稿回执的 issues 是阻塞项（实质改变理解的失真、遗漏、层级/归属/关系错误），必须修复；notes 是建议/已解决说明，不阻塞渲染。审稿通过绑定当前内容版本：任何内容改动（含失败后的修订）都会让上一版通过失效——改后再次渲染前必须重新 semantic_review；程序会拒绝未复核、有阻塞项或复核已过期的版本，未复核版本不得继承通过状态。交付只由 finish_draft 触发：它必须在该候选的 render 回执进入后续回合之后调用（同一轮 render+finish 不算看过诊断），并附复核结论；选定候选与当前计划内容不一致时，要写明退回该候选/未采用修订的原因。首次成功渲染后最多一次修订周期；修订失败（模板/几何/坏提交）不计入，但预算耗尽仍以第一次成功候选如实交付并标注未完成复核。
-渲染后复核（只有文字与几何，没有像素图）：render_draft 成功回执带逐页/区域的实际宽高、字号、内容最小高与占用、权重来源（请求/回退）和既有几何警告。这些是选择依据，不是稀疏阈值门禁；据此判断短栏是否被拉成等高、内容是否被拆断、字号是否相称。需要看图的能力不在本线内，不要声称看过像素图。
+渲染后复核（只有文字与几何，没有像素图）：render_draft 成功回执带逐页/区域的实际分配宽高、字号、区域最小高与占用（minimumRegionHeight/allocatedRegionHeight 两边同口径、都含 70px 标题与边距开销；textOccupancy 为两边都扣该开销的正文口径）、权重与实际来源（无权重时 weightsSource 为 null）和既有几何警告。pageBottomWhitespace 是框外页底空白，不是内容填充率——缩小它未必改善阅读。这些是选择依据，不是稀疏阈值门禁；据此判断短栏是否被拉成等高、内容是否被拆断、字号是否相称。需要看图的能力不在本线内，不要声称看过像素图。
 **计划的传递方式：提交或修订计划时，把完整的 gray-plan-3 计划 JSON 写进本轮消息正文——提交新内容会让旧审稿失效、需重新审稿；没有写新 JSON 时，三个工具对当前已提交版本继续（同版审稿复用结论，不重复运行）。正文想提交计划但 JSON 损坏＝本次提交失败（不会被当作已修订），请重发完整合法 JSON；工具回执的 planSource 标明本轮计划来源（message=新提交 / current-plan=沿用 / submission-failed=坏提交）。不要在工具参数里重复计划，也不要只写差异。**
 容量与分页：${SHARED_RULES.paging}
 布局选择（调用 render_draft 时给出）：简式 {type:"single|row|column|grid",weights?,columns?} 的子节点默认按阅读顺序取本页全部组；页面有分层关系时用嵌套式 {type,children:[{groupId},或嵌套]}，例如主区在上、一条注记横贯下方 = {type:"column",children:[{type:"row",children:[{groupId:"g1"},{groupId:"g2"}]},{groupId:"g3"}]}。row 横向分栏、column 纵向排列、grid 规则网格；weights（仅 row）分配多余宽度，按各栏实文行数/展开需要给比例（如 3:2、5:4），不要默认等分，columns（仅 grid）是列数；children 必须按阅读顺序恰好覆盖本页全部组一次；嵌套最多三层。主次通过空间份额与组标题层级体现，少量内容不必拉满一页，不要为了变化而嵌套。每页有程序默认版式（1 组多条=类别容器、1 组单条=单主体、2 组=双栏对照、≥3 组=行式清单）；页条目可以不写 layout 采用默认。自己选与默认不同的组合时，必须在该页加 override:{reason:"一句话理由"}，理由会入档分析；仅微调 weights 不算覆盖。
@@ -252,25 +252,40 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
       const group = groupsById.get(region.itemId);
       const textChars = (group?.blocks ?? []).reduce((sum, block) => sum + String(block.label ?? '').length + String(block.text ?? '').length, 0);
       const minimum = receipt?.contentMinimums?.[region.itemId]?.minHeight ?? null;
-      const available = Math.max(1, Math.round(region.height) - 70);
+      const allocated = Math.round(region.height);
+      const bodyOverhead = 70;
+      const textMinimum = Number.isFinite(minimum) ? Math.max(0, minimum - bodyOverhead) : null;
+      const textAllocated = Math.max(1, allocated - bodyOverhead);
       return {
-        itemId: region.itemId, width: Math.round(region.width), height: Math.round(region.height), fontSize: region.fontSize,
-        textChars, contentMinHeight: minimum, occupancy: Number.isFinite(minimum) ? Number((minimum / available).toFixed(2)) : null,
+        itemId: region.itemId, width: Math.round(region.width), allocatedRegionHeight: allocated, fontSize: region.fontSize,
+        textChars,
+        // 同一口径：两边都含 70px 标题/边距开销；不 clamp，真溢出就 >1。
+        minimumRegionHeight: minimum,
+        occupancy: Number.isFinite(minimum) ? Number((minimum / Math.max(1, allocated)).toFixed(2)) : null,
+        // 正文口径：两边都扣同一开销，看实际文字占用与外框占用的差别。
+        textOccupancy: Number.isFinite(textMinimum) ? Number((textMinimum / textAllocated).toFixed(2)) : null,
       };
     });
     const bottom = Math.max(0, ...page.composition.regions.map(region => region.y + region.height));
+    const weights = receipt?.layout?.weights ?? null;
     return {
       pageId: page.pageId, title: page.title, fontSize: receipt?.fontSize ?? null,
-      weights: receipt?.layout?.weights ?? null,
-      weightsSource: receipt?.formPick ? (receipt.formPick.requested ? 'requested' : 'fallback') : null,
+      weights,
+      weightsSource: weights ? (receipt?.formPick ? (receipt.formPick.requested ? 'requested' : 'fallback') : null) : null,
       reweighted: receipt?.reweighted ?? null,
-      frameHeight: Math.round(bottom), areaHeight: area.height, bottomVoid: Number((1 - bottom / area.height).toFixed(2)),
+      // 框外页底空白（按最下方区域框计），不是内容填充率：缩小它未必改善阅读。
+      pageBottomWhitespace: Number((1 - bottom / area.height).toFixed(2)),
+      frameHeight: Math.round(bottom), areaHeight: area.height,
       regions,
     };
   });
   /** 把选定候选的产物、计划、审稿覆盖与状态发布到运行根目录（交付或候选交付）；同一版本成套复制。 */
   const publishCandidate = async (candidate, { mode, delivery = null, stopReason = null, note = null }) => {
     const candidatePlan = JSON.parse(await fs.readFile(path.join(output, candidate.directory, 'plan.json'), 'utf8'));
+    // 任务 #200：发布前断言磁盘计划与登记指纹同版，且审稿覆盖的就是该版本；不一致就报缺口，不冒充成功。
+    const diskFingerprint = planContentFingerprint(semanticPlanFromPages(candidatePlan));
+    if (diskFingerprint !== candidate.contentFingerprint) throw new Error(`候选计划指纹与登记不一致：磁盘 ${diskFingerprint} vs 登记 ${candidate.contentFingerprint}`);
+    if (candidate.reviewedFingerprint !== candidate.contentFingerprint) throw new Error(`候选审稿指纹与内容指纹不一致：${candidate.reviewedFingerprint} vs ${candidate.contentFingerprint}`);
     const report = validateGrayPlan(base, candidatePlan, area);
     if (!report.accepted) throw new Error(`选定候选的计划复检未通过：${JSON.stringify(report.issues.slice(0, 3))}`);
     for (const name of ['gray-draft.pptx', 'editable-check.json', 'preview-index.json', 'plan.json']) {
@@ -524,7 +539,13 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         required: ['review'], additionalProperties: false,
       },
       handler: async ({ review, renderId, reason }) => {
-        const { plan } = resolvePlan();
+        const { plan, source: planSource } = resolvePlan();
+        // 任务 #200：坏提交＋finish 不得用旧计划宣布成功——与另外三工具同口径显式报提交失败。
+        if (planSource === 'submission-failed') {
+          agentState.grayDraft.submissionFailures = (agentState.grayDraft.submissionFailures ?? 0) + 1;
+          await saveAgentState();
+          return { accepted: false, stage: 'finish-submission-failed', reason: '本次提交失败：正文里的计划 JSON 无法解析，本轮不 finish（不得用旧计划冒充已复核的修订）。请重发完整合法 JSON；下一轮明确沿用旧候选再 finish。' };
+        }
         const post = agentState.grayDraft.postRender;
         if (!post || !candidates.length) {
           return { accepted: false, stage: 'finish-before-render', reason: '还没有成功渲染的候选：先 render_draft，再在后续回合 finish_draft。' };
@@ -542,9 +563,12 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
           return { accepted: false, stage: 'finish-same-turn', reason: '该渲染发生在本轮：请在后续回合复核诊断后再 finish_draft（同一轮的 render+finish 不算看过诊断）。' };
         }
         const currentFingerprint = planContentFingerprint(plan);
-        const versionMatches = Boolean(currentFingerprint) && currentFingerprint === chosen.contentFingerprint;
-        if (!versionMatches && (typeof reason !== 'string' || !reason.trim())) {
-          return { accepted: false, stage: 'finish-version-mismatch', reason: '选定候选与当前计划内容不一致（有未渲染或未采用的修订）：如确要交付该候选，请在 reason 里写明退回原因。' };
+        const contentChanged = currentFingerprint !== chosen.contentFingerprint;
+        // 任务 #200：选择非最新候选（即使内容指纹相同、只是布局不同）也要说明退回原因，并记录未采用的修订。
+        const superseded = chosen !== candidates[candidates.length - 1];
+        const revisionNotAdopted = contentChanged || superseded;
+        if (revisionNotAdopted && (typeof reason !== 'string' || !reason.trim())) {
+          return { accepted: false, stage: 'finish-version-mismatch', reason: `选定候选${contentChanged ? '与当前计划内容不一致' : '不是最新候选（有未采用的布局修订）'}：请在 reason 里写明退回原因。` };
         }
         if (!chosen.reviewCovered) {
           return { accepted: false, stage: 'finish-uncovered', reason: '该候选没有有效审稿覆盖：先 semantic_review 该版本，再渲染并 finish。' };
@@ -553,14 +577,16 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
           renderId: chosen.renderId, directory: chosen.directory, contentFingerprint: chosen.contentFingerprint,
           reviewedFingerprint: chosen.reviewedFingerprint, review: review.trim(),
           reason: typeof reason === 'string' && reason.trim() ? reason.trim() : null,
-          revisionNotAdopted: !versionMatches, currentPlanFingerprint: currentFingerprint, at: new Date().toISOString(),
+          contentChanged, superseded,
+          ...(superseded ? { supersededRenderId: candidates[candidates.length - 1].renderId } : {}),
+          revisionNotAdopted, currentPlanFingerprint: currentFingerprint, at: new Date().toISOString(),
         };
         try {
           await publishCandidate(chosen, { mode: 'finish', delivery });
         } catch (error) {
           return { accepted: false, stage: 'finish-invalid', reason: error.message };
         }
-        return { accepted: true, delivered: true, renderId: chosen.renderId, contentFingerprint: chosen.contentFingerprint, revisionNotAdopted: !versionMatches, note: '已交付审阅（候选，等待用户验收）；复核只有文字与几何，未看像素图。' };
+        return { accepted: true, delivered: true, renderId: chosen.renderId, contentFingerprint: chosen.contentFingerprint, revisionNotAdopted, contentChanged, superseded, note: '已交付审阅（候选，等待用户验收）；复核只有文字与几何，未看像素图。' };
       },
     }),
   ];

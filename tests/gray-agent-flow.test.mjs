@@ -19,7 +19,7 @@ const planJson = suffix => JSON.stringify({
   }],
 });
 
-function mockProvider(chatScript, reviewPayloads = []) {
+function mockProvider(chatScript, reviewPayloads = [], beforeCall = null) {
   let chatIndex = 0;
   let reviewIndex = 0;
   const reviewCalls = [];
@@ -33,6 +33,7 @@ function mockProvider(chatScript, reviewPayloads = []) {
         const payload = reviewPayloads[reviewIndex++] ?? { accepted: true, issues: [], notes: [], coverage: 'mock 覆盖', limits: 'mock' };
         return { content: JSON.stringify(payload), toolCalls: [], usage: {}, finishReason: 'stop' };
       }
+      if (beforeCall) await beforeCall({ chatIndex });
       const step = chatScript[chatIndex++] ?? { content: '收工。', toolCalls: [] };
       return {
         content: step.content ?? '',
@@ -48,12 +49,12 @@ function mockProvider(chatScript, reviewPayloads = []) {
   };
 }
 
-async function runProtocol(chatScript, reviewPayloads = [], turns = 8) {
+async function runProtocol(chatScript, reviewPayloads = [], turns = 8, beforeCall = null) {
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'gray-agent-protocol-'));
   const source = path.join(dir, 'source.md');
   const output = path.join(dir, 'run');
   await fs.writeFile(source, SOURCE, 'utf8');
-  const provider = mockProvider(chatScript, reviewPayloads);
+  const provider = mockProvider(chatScript, reviewPayloads, beforeCall ? (context) => beforeCall({ ...context, output }) : null);
   await runGrayAgent({
     source, output, area: { width: 1170, height: 492 },
     root: path.resolve(import.meta.dirname, '..'), provider, maxTurns: turns,
@@ -86,7 +87,14 @@ test('渲染后复核协议：成功渲染是候选（带诊断），后续回�
     assert.match(renders[0].result.note ?? '', /尚未交付/);
     assert.equal(renders[0].result.diagnostics.length, 1);
     assert.equal(renders[0].result.diagnostics[0].regions.length, 1);
-    assert.ok(Number.isFinite(renders[0].result.diagnostics[0].regions[0].occupancy));
+    const diag = renders[0].result.diagnostics[0];
+    const region = diag.regions[0];
+    assert.ok(Number.isFinite(region.minimumRegionHeight) && Number.isFinite(region.allocatedRegionHeight));
+    assert.ok(region.allocatedRegionHeight > 0);
+    assert.ok(region.occupancy <= 1.01, `同口径占用不应>1：${region.occupancy}`);
+    assert.ok(Number.isFinite(region.textOccupancy));
+    assert.ok(Number.isFinite(diag.pageBottomWhitespace));
+    assert.equal(diag.weightsSource, null, '无权重布局的 weightsSource 应为 null');
     assert.equal(finishes[0].result.accepted, true);
     assert.equal(finishes[0].result.delivered, true);
     const gray = run.state.grayDraft;
@@ -206,6 +214,77 @@ test('候选与当前计划不一致：finish 无 reason 被拒，写明退回�
     assert.equal(delivery.renderId, 1);
     assert.equal(delivery.revisionNotAdopted, true);
     assert.match(delivery.reason, /不采用/);
+  } finally { await run.rm(); }
+});
+
+test('坏提交＋finish 不得用旧计划宣布成功：显式报提交失败，下一轮沿用旧候选才可完成', async () => {
+  const badJson = '```json\n{ "schemaVersion": "gray-plan-3", "deckBrief": { "title": "开放安排"';
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '审稿。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: badJson, tools: [{ name: 'finish_draft', arguments: { review: '坏提交同轮保持。' } }] },
+    { content: '沿用旧候选。', tools: [{ name: 'finish_draft', arguments: { review: '沿用旧候选并保持。' } }] },
+    { content: '收工。', tools: [] },
+  ]);
+  try {
+    const finishes = run.events.filter(event => event.tool === 'finish_draft');
+    assert.equal(finishes[0].result.accepted, false);
+    assert.equal(finishes[0].result.stage, 'finish-submission-failed');
+    assert.equal(finishes[1].result.accepted, true);
+    assert.equal(run.state.grayDraft.postRender.completed, true);
+    assert.equal(run.state.grayDraft.submissionFailures, 1);
+  } finally { await run.rm(); }
+});
+
+test('选择非最新候选需说明退回原因：记录未采用的布局修订', async () => {
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '审稿。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: '只改组合。', tools: [renderColumn] },
+    { content: '退回初版布局。', tools: [{ name: 'finish_draft', arguments: { renderId: 1, review: '退回初版。' } }] },
+    { content: '写明原因。', tools: [{ name: 'finish_draft', arguments: { renderId: 1, review: '退回初版。', reason: '布局修订未采用：通栏使阅读顺序变差' } }] },
+    { content: '收工。', tools: [] },
+  ]);
+  try {
+    const finishes = run.events.filter(event => event.tool === 'finish_draft');
+    assert.equal(finishes[0].result.accepted, false);
+    assert.equal(finishes[0].result.stage, 'finish-version-mismatch');
+    assert.equal(finishes[1].result.accepted, true);
+    assert.equal(finishes[1].result.superseded, true);
+    assert.equal(finishes[1].result.revisionNotAdopted, true);
+    const delivery = run.state.grayDraft.postRender.delivery;
+    assert.equal(delivery.renderId, 1);
+    assert.equal(delivery.supersededRenderId, 2);
+    assert.equal(delivery.contentChanged, false);
+    assert.match(delivery.reason, /未采用/);
+  } finally { await run.rm(); }
+});
+
+test('发布前同版断言：磁盘候选计划与登记指纹不一致时 finish 拒绝', async () => {
+  let tampered = false;
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '审稿。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: '保持。', tools: [{ name: 'finish_draft', arguments: { review: '保持。' } }] },
+    { content: '收工。', tools: [] },
+  ], [], 8, async ({ chatIndex, output }) => {
+    if (chatIndex !== 3 || tampered) return;
+    tampered = true;
+    const planPath = path.join(output, 'agent-renders', 'render-1', 'plan.json');
+    const plan = JSON.parse(await fs.readFile(planPath, 'utf8'));
+    plan.pages[0].items[0].blocks[0].text = `${plan.pages[0].items[0].blocks[0].text}（磁盘篡改）`;
+    await fs.writeFile(planPath, JSON.stringify(plan, null, 2), 'utf8');
+  });
+  try {
+    assert.equal(tampered, true);
+    const finishes = run.events.filter(event => event.tool === 'finish_draft');
+    assert.equal(finishes[0].result.accepted, false);
+    assert.equal(finishes[0].result.stage, 'finish-invalid');
+    assert.match(finishes[0].result.reason, /指纹与登记不一致/);
+    assert.equal(run.state.grayDraft.postRender.completed, false);
   } finally { await run.rm(); }
 });
 
