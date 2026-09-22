@@ -425,6 +425,16 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
           await saveAgentState();
           return { accepted: false, stage: 'stall', reason };
         }
+        // 任务 #208：同一计划＋同一布局请求的模板门失败不允许原样重发——第二次就按停滞拒绝并给出可行动出路。
+        // 指纹沿用 attemptFingerprint（含计划内容指纹与 layouts 的稳定序列化，覆盖嵌套/weights/columns/页序）。
+        const priorTemplateFailure = [...(agentState.grayDraft.renders ?? [])].reverse()
+          .some(record => record?.accepted === false && record?.stage === 'template' && record?.fingerprint === fingerprint);
+        if (priorTemplateFailure) {
+          const reason = '同一计划与同一布局请求已因模板门失败过（重复模板请求）：采用模板默认（该页不写 layout），或在页条目加 override:{reason:"一句话理由"} 后重试；不要原样重发同一请求。';
+          agentState.grayDraft.stalls = [...(agentState.grayDraft.stalls ?? []), { at: new Date().toISOString(), stage: 'template', fingerprint, reason }];
+          await saveAgentState();
+          return { accepted: false, stage: 'stall', reason };
+        }
         renderCount += 1;
         const attemptDir = path.join(output, 'agent-renders', `render-${renderCount}`);
         await fs.mkdir(attemptDir, { recursive: true });
@@ -435,6 +445,8 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
           const failure = { accepted: false, stage: 'template', reason: error.message };
           await fs.writeFile(path.join(attemptDir, 'failure.json'), json({ ...failure, plan, layouts }), 'utf8');
           agentState.grayDraft.renders.push({ render: renderCount, accepted: false, stage: 'template', reason: error.message, fingerprint });
+          // 任务 #208：模板失败的稳定指纹/原因也入 stalls，供重复请求检测与审计。
+          agentState.grayDraft.stalls = [...(agentState.grayDraft.stalls ?? []), { at: new Date().toISOString(), stage: 'template', fingerprint, reason: error.message }];
           await saveAgentState();
           return failure;
         }

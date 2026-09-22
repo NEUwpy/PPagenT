@@ -70,6 +70,32 @@ async function runProtocol(chatScript, reviewPayloads = [], turns = 8, beforeCal
 const renderSingle = { name: 'render_draft', arguments: { layouts: [{ pageId: 'p1', layout: { type: 'single' } }] } };
 const renderColumn = { name: 'render_draft', arguments: { layouts: [{ pageId: 'p1', layout: { type: 'column' }, override: { reason: '纵向排列验证布局复核' } }] } };
 
+test('模板门重复请求保护：同一无效布局第二次按停滞拒绝，改用默认后继续（任务 #208）', async () => {
+  const badLayout = { name: 'render_draft', arguments: { layouts: [{ pageId: 'p1', layout: { type: 'row' } }] } };
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '审稿。', tools: ['semantic_review'] },
+    { content: '渲染（无效组合）。', tools: [badLayout] },
+    { content: '原样重试。', tools: [badLayout] },
+    { content: '改用默认。', tools: [renderSingle] },
+    { content: '保持。', tools: [{ name: 'finish_draft', arguments: { review: '保持。' } }] },
+    { content: '收工。', tools: [] },
+  ]);
+  try {
+    const renders = run.events.filter(event => event.tool === 'render_draft');
+    assert.equal(renders[0].result.accepted, false);
+    assert.equal(renders[0].result.stage, 'template');
+    assert.equal(renders[1].result.accepted, false);
+    assert.equal(renders[1].result.stage, 'stall');
+    assert.match(renders[1].result.reason, /模板门失败过/);
+    assert.match(renders[1].result.reason, /override/);
+    assert.equal(renders[2].result.accepted, true);
+    assert.equal(run.state.grayDraft.postRender.completed, true);
+    const stalls = run.state.grayDraft.stalls ?? [];
+    assert.ok(stalls.some(stall => stall.stage === 'template' && stall.fingerprint), JSON.stringify(stalls));
+  } finally { await run.rm(); }
+});
+
 test('渲染后复核协议：成功渲染是候选（带诊断），后续回合 finish 才交付', async () => {
   const run = await runProtocol([
     { content: planJson(''), tools: ['check_plan'] },
