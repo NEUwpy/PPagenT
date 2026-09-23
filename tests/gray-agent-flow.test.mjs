@@ -490,7 +490,7 @@ test('坏提交显式失败：计划不更新、不冒充已修订，旧有效�
   assert.equal(reviews[0].result.accepted, true);
 });
 
-test('缺失 claimAudit 不得通过：同版一次证据修复收到原输入与错误，且不改计划', async () => {
+test('缺失 claimAudit 不得通过：同版证据修复收到原输入与错误，且不改计划', async () => {
   const run = await runProtocol([
     { content: planJson(''), tools: ['check_plan'] },
     { content: '先给出不完整审稿。', tools: ['semantic_review'] },
@@ -512,7 +512,7 @@ test('缺失 claimAudit 不得通过：同版一次证据修复收到原输入�
     assert.deepEqual(run.provider.reviewInputs[1].originalReviewInput, run.provider.reviewInputs[0], '修复输入必须绑定原始审稿输入');
     assert.equal(run.provider.reviewInputs[1].previousRawAudit, null);
     assert.ok(run.provider.reviewInputs[1].previousValidationErrors.includes('缺少 claimAudit 对照证据对象'));
-    assert.deepEqual(run.provider.reviewInputs[1].repairAttempt, { attempt: 1, maxAttempts: 1 });
+    assert.deepEqual(run.provider.reviewInputs[1].repairAttempt, { attempt: 1, maxAttempts: 2 });
     assert.match(run.provider.reviewPrompts[1], /不得修改、重写或要求规划者修改被审计划/u);
     assert.match(run.provider.reviewPrompts[1], /不得删掉错误 claim 来造通过/u);
     assert.match(run.provider.reviewPrompts[1], /不得把不匹配的引文自动改判 equivalent/u);
@@ -528,25 +528,53 @@ test('缺失 claimAudit 不得通过：同版一次证据修复收到原输入�
   } finally { await run.rm(); }
 });
 
-test('同一审稿输入的证据修复失败后明确停止，第三次不再调用审稿模型', async () => {
+test('同一审稿输入最多两次修复：第二次收到最新audit/errors，之后明确停止', async () => {
   const run = await runProtocol([
     { content: planJson(''), tools: ['check_plan'] },
     { content: '初审。', tools: ['semantic_review'] },
-    { content: '修复审稿证据。', tools: ['semantic_review'] },
+    { content: '第一次修复审稿证据。', tools: ['semantic_review'] },
+    { content: '第二次修复审稿证据。', tools: ['semantic_review'] },
     { content: '再次请求同版审稿。', tools: ['semantic_review'] },
     { content: '停止。', tools: [] },
-  ], [{ notes: [], claimAudit: null }, { notes: [], claimAudit: null }]);
+  ], [
+    input => {
+      const invalid = addMockClaimAudit({ notes: [] }, input);
+      invalid.claimAudit.claims[0].sourceEvidence[0].quote = '不存在的来源引文';
+      return invalid;
+    },
+    input => {
+      const invalid = addMockClaimAudit({ notes: [] }, input);
+      invalid.claimAudit.claims[0].visibleEvidence[0].quote = '不存在的上屏引文';
+      return invalid;
+    },
+    { notes: [], claimAudit: null },
+  ]);
   try {
     const reviews = run.events.filter(event => event.tool === 'semantic_review');
-    assert.equal(reviews.length, 3);
-    assert.equal(run.provider.reviewCalls.length, 2, '一次初审加至多一次证据修复');
+    assert.equal(reviews.length, 4);
+    assert.equal(run.provider.reviewCalls.length, 3, '一次初审加至多两次证据修复，之后不再调用');
     assert.equal(reviews[0].result.evidenceRepair.status, 'pending');
     assert.equal(reviews[1].result.outcome, 'audit-invalid');
-    assert.equal(reviews[1].result.evidenceRepair.status, 'exhausted');
+    assert.equal(reviews[1].result.evidenceRepair.status, 'pending');
+    assert.equal(reviews[1].result.evidenceRepair.attemptsUsed, 1);
+    assert.deepEqual(run.provider.reviewInputs[1].repairAttempt, { attempt: 1, maxAttempts: 2 });
+    assert.deepEqual(run.provider.reviewInputs[1].previousRawAudit, reviews[0].result.claimAudit);
+    assert.deepEqual(run.provider.reviewInputs[1].previousValidationErrors, reviews[0].result.auditValidation.errors);
     assert.equal(reviews[2].result.outcome, 'audit-invalid');
     assert.equal(reviews[2].result.evidenceRepair.status, 'exhausted');
-    assert.match(reviews[2].result.note, /不要改正文或继续重试/u);
+    assert.equal(reviews[2].result.evidenceRepair.attemptsUsed, 2);
+    assert.deepEqual(run.provider.reviewInputs[2].repairAttempt, { attempt: 2, maxAttempts: 2 });
+    assert.deepEqual(run.provider.reviewInputs[2].previousRawAudit, reviews[1].result.claimAudit);
+    assert.deepEqual(run.provider.reviewInputs[2].previousValidationErrors, reviews[1].result.auditValidation.errors);
+    assert.equal(reviews[3].result.outcome, 'audit-invalid');
+    assert.equal(reviews[3].result.evidenceRepair.status, 'exhausted');
+    assert.match(reviews[3].result.note, /不要改正文或继续重试/u);
     assert.deepEqual(run.provider.reviewInputs[1].originalReviewInput, run.provider.reviewInputs[0]);
+    assert.deepEqual(run.provider.reviewInputs[2].originalReviewInput, run.provider.reviewInputs[0]);
+    assert.equal(reviews[0].result.reviewedFingerprint, reviews[1].result.reviewedFingerprint);
+    assert.equal(reviews[1].result.reviewedFingerprint, reviews[2].result.reviewedFingerprint);
+    assert.equal(reviews[0].result.reviewInputHash, reviews[1].result.reviewInputHash);
+    assert.equal(reviews[1].result.reviewInputHash, reviews[2].result.reviewInputHash);
   } finally { await run.rm(); }
 });
 
@@ -573,7 +601,7 @@ test('证据修复收到原始无效 claimAudit 和对应校验错误', async ()
   } finally { await run.rm(); }
 });
 
-test('计划内容改变后，旧版 invalidAudit 反馈不进入新版审稿输入', async () => {
+test('计划内容改变不能重置修复次数，旧版反馈不进入新版输入', async () => {
   const changedPlan = planJson('，新增内容版本');
   const run = await runProtocol([
     { content: planJson(''), tools: ['check_plan'] },
@@ -585,11 +613,16 @@ test('计划内容改变后，旧版 invalidAudit 反馈不进入新版审稿输
   try {
     const reviews = run.events.filter(event => event.tool === 'semantic_review');
     assert.equal(reviews[0].result.outcome, 'audit-invalid');
-    assert.equal(reviews[1].result.outcome, 'accepted');
-    assert.notEqual(reviews[0].result.reviewedFingerprint, reviews[1].result.reviewedFingerprint);
-    assert.equal(run.provider.reviewCalls.length, 2);
-    assert.equal(Object.hasOwn(run.provider.reviewInputs[1], 'originalReviewInput'), false, '新版收到自己的原始输入，不接收旧 audit 修复包');
-    assert.doesNotMatch(run.provider.reviewPrompts[1], /本次是同一审稿输入的唯一一次证据修复/u);
+    assert.equal(reviews[1].result.outcome, 'audit-invalid');
+    assert.equal(reviews[1].result.planReviewed, false);
+    assert.equal(reviews[1].result.evidenceRepair.status, 'pending');
+    assert.equal(reviews[1].result.evidenceRepair.attemptsUsed, 0);
+    assert.equal(reviews[1].result.reviewedFingerprint, reviews[0].result.reviewedFingerprint, '回执标识仍待修复的原版本');
+    assert.notEqual(reviews[1].result.requestedFingerprint, reviews[1].result.reviewedFingerprint, '请求的新内容版本与待修复版本不同');
+    assert.equal(reviews[1].result.requestedFingerprint, planContentFingerprint(JSON.parse(changedPlan)));
+    assert.equal(run.provider.reviewCalls.length, 1, '内容改变不能开启新版审稿来重置同版修复预算');
+    assert.equal(run.provider.reviewInputs.length, 1, '旧audit/errors没有送入新版审稿');
+    assert.match(reviews[1].result.note, /不要通过改稿重置修复次数/u);
   } finally { await run.rm(); }
 });
 
