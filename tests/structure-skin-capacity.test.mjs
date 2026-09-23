@@ -158,3 +158,26 @@ test('compact matrix axis labels and growth endpoint leave adjacent text clear',
     }
   }finally{await closeHtmlComponentRuntime();}
 });
+
+test('small matrix keeps three objects per quadrant and all metrics legible',async()=>{
+  const ref=await loadStructureSkill('matrix-quadrant-priority-001',root);
+  const module=await import(pathToFileURL(path.join(ref.assetDir,ref.guide.exampleImplementation)).href);
+  const skins=(await listStructureSkins(root)).filter(s=>['university','neutral'].includes(s.id));
+  const content=module.resolvePreviewParameters(structuredClone(module.previewParameters),{itemsPerQuadrant:3});
+  const overlap=(a,b)=>Math.max(0,Math.min(a.left+a.width,b.left+b.width)-Math.max(a.left,b.left))
+    *Math.max(0,Math.min(a.top+a.height,b.top+b.height)-Math.max(a.top,b.top));
+  try{
+    for(const skin of skins){
+      const frame=await resolveStructureSizeFrame(ref,'small',content,skin.theme);
+      const component=await loadPreservedComponent(ref,frame,skin.theme,content);
+      const tree=await resolveHtmlComponent({component,parameters:content,assetDir:ref.assetDir,theme:skin.theme});
+      const labels=tree.nodes.filter(n=>/^matrix-item-title-\d-\d$/.test(n.name));
+      const metrics=tree.nodes.filter(n=>/^quadrant-\d-detail-region-metric-\d$/.test(n.name));
+      assert.equal(labels.length,12);
+      assert.equal(metrics.length,8);
+      for(let i=0;i<labels.length;i++) for(let j=i+1;j<labels.length;j++){
+        assert.ok(overlap(labels[i].frame,labels[j].frame)<1,`${skin.id}: ${labels[i].name} overlaps ${labels[j].name}`);
+      }
+    }
+  }finally{await closeHtmlComponentRuntime();}
+});
