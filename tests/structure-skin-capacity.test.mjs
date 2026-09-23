@@ -65,3 +65,19 @@ test('list factors and vertical phase labels retain their painted text across si
     }
   }finally{await closeHtmlComponentRuntime();}
 });
+
+test('phase gates keep three and five stage small variants within their text regions',async()=>{
+  const ref=await loadStructureSkill('sequence-phase-gates-004',root);
+  const module=await import(pathToFileURL(path.join(ref.assetDir,ref.guide.exampleImplementation)).href);
+  const skins=(await listStructureSkins(root)).filter(s=>['university','neutral'].includes(s.id));
+  try{
+    for(const count of [3,5]) for(const skin of skins){
+      const content=module.resolvePreviewParameters(structuredClone(module.previewParameters),{phaseCount:count});
+      const frame=await resolveStructureSizeFrame(ref,'small',content,skin.theme);
+      const component=await loadPreservedComponent(ref,frame,skin.theme,content);
+      const tree=await resolveHtmlComponent({component,parameters:content,assetDir:ref.assetDir,theme:skin.theme});
+      assert.equal(tree.nodes.filter(n=>/^phase-\d+-index$/.test(n.name)).length,count);
+      assert.equal(tree.nodes.filter(n=>/^gate-\d+-tag$/.test(n.name)).length,count-1);
+    }
+  }finally{await closeHtmlComponentRuntime();}
+});
