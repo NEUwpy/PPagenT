@@ -158,6 +158,40 @@ test('organization 与事实 rulings 独立：revise 阻塞且必须引用真实
   assert.equal(validateSemanticReviewEvidence(input, emptyRevise).valid, false);
 });
 
+test('标题或标签改变正文关系时须合并命题引用，不能以 non-claim 豁免', () => {
+  const source = '设备稳定性与维护频率有关。';
+  const p = plan([block('b1', source, { label: '原因' })]);
+  const input = semanticReviewInput({ source, sourceSegments: [{ id: 's1', text: source }], area: { width: 1170, height: 492 }, plan: p });
+  const labelLocation = input.auditLocations.find(location => location.field === 'body' && location.text === '原因');
+  const textLocation = input.auditLocations.find(location => location.field === 'body' && location.text.includes(source));
+  assert.ok(labelLocation);
+  assert.ok(textLocation);
+  const response = {
+    notes: [],
+    claimAudit: canonicalAudit(input, [{
+      id: 'c1',
+      sourceEvidence: [{ sourceId: 's1', quote: source }],
+      visibleEvidence: [
+        { locationId: labelLocation.id, quote: '原因' },
+        { locationId: textLocation.id, quote: source },
+      ],
+      ruling: 'strengthened',
+      rationale: '上屏标签“原因”与正文合并后，把“有关”的关联升格为因果。',
+    }]),
+    organization: { verdict: 'pass', findings: [] },
+  };
+  assert.equal(validateSemanticReviewEvidence(input, response).valid, true);
+  const findings = semanticReviewFindings(response, input);
+  assert.equal(findings.issues.length, 1);
+  assert.equal(findings.issues[0].pageId, 'p1');
+  assert.match(findings.issues[0].problem, /原因.*有关.*因果/u);
+  assert.doesNotMatch(response.claimAudit.unreferencedLocations.map(item => item.locationId).join(','), new RegExp(labelLocation.id));
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /标题、组标题、条目标签不得仅因其呈现类型而直接归为 non-claim/u);
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /visibleEvidence 必须同时引用该标题\/标签和正文位置/u);
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /sourceEvidence 必须引用能实际支撑该完整命题的原稿内容/u);
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /不能证明其下的数值排序或概括结论/u);
+});
+
 test('引用真实性与 ruling 派生阻塞/uncertain 备注', () => {
   const source = '每份申请都必须在30日内完成复核。延迟会导致权限无法开放。';
   const visible = '申请须30日内完成复核；延迟致权限无法开放。';
