@@ -4,6 +4,7 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { runGrayAgent } from '../src/runner/gray-agent.mjs';
+import { planContentFingerprint } from '../src/runner/gray-semantics.mjs';
 
 const SOURCE = '模拟：核验之后才能开放，异常情况立即暂停并复核记录，复核结果按季度归档备查，责任落实到人；未按要求执行或漏报的，纳入部门年度考核。';
 
@@ -444,4 +445,115 @@ test('坏提交显式失败：计划不更新、不冒充已修订，旧有效�
   // 坏提交之后，旧有效版本仍按 current-plan 正常推进审稿（未被当作已修订，也未阻断）
   assert.equal(reviews[0].result.planSource, 'current-plan');
   assert.equal(reviews[0].result.accepted, true);
+});
+
+test('无工具轮完整计划暂存：下一轮空正文 check_plan 消费原提交并记录来源', async () => {
+  const run = await runProtocol([
+    { content: planJson(''), tools: [] },
+    { content: '', tools: ['check_plan'] },
+    { content: '审稿。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: '保持。', tools: [{ name: 'finish_draft', arguments: { review: '对照原稿复核后保持。' } }] },
+  ]);
+  try {
+    const check = run.events.find(event => event.tool === 'check_plan');
+    assert.equal(check.result.accepted, true, JSON.stringify(check.result));
+    assert.equal(check.result.planSource, 'previous-turn');
+    assert.equal(check.result.planEvidence.submittedTurn, 1);
+    assert.equal(check.result.planEvidence.consumedTurn, 2);
+    assert.equal(check.result.planEvidence.consumptionSource, 'previous-no-tool-reply');
+    assert.equal(check.result.planEvidence.fingerprint, planContentFingerprint(JSON.parse(planJson(''))));
+    assert.equal(check.result.planEvidence.contentUpdated, true);
+    assert.equal(run.state.grayDraft.turns[0].planFlow.submission.status, 'staged');
+    assert.equal(run.state.grayDraft.turns[0].planFlow.submission.fingerprint, check.result.planEvidence.fingerprint);
+    assert.equal(run.state.grayDraft.turns[1].planFlow.consumptions[0].planSource, 'previous-turn');
+  } finally { await run.rm(); }
+});
+
+test('旧计划已提交时，无工具轮的新计划优先于旧版且内容变更触发重审', async () => {
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '审稿旧版。', tools: ['semantic_review'] },
+    { content: planJson('，并留痕'), tools: [] },
+    { content: '', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: '保持。', tools: [{ name: 'finish_draft', arguments: { review: '复核修订版后保持。' } }] },
+  ]);
+  try {
+    const check = run.events.find(event => event.tool === 'check_plan');
+    const reviews = run.events.filter(event => event.tool === 'semantic_review');
+    const review = reviews[1];
+    assert.equal(review.result.planSource, 'previous-turn');
+    assert.equal(review.result.planEvidence.submittedTurn, 3);
+    assert.notEqual(review.result.planEvidence.fingerprint, reviews[0].result.planEvidence.fingerprint);
+    assert.equal(review.result.planEvidence.contentUpdated, true);
+    assert.equal(run.provider.reviewCalls.length, 2, '内容变更后必须重新调用审稿');
+    assert.equal(review.result.reviewedFingerprint, review.result.planEvidence.fingerprint);
+  } finally { await run.rm(); }
+});
+
+test('当前工具轮有效计划优先于更早暂存计划', async () => {
+  const currentPlan = planJson('，当前轮新计划');
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: planJson('，先前轮暂存'), tools: [] },
+    { content: currentPlan, tools: ['check_plan'] },
+    { content: '审稿。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: '保持。', tools: [{ name: 'finish_draft', arguments: { review: '复核当前版后保持。' } }] },
+  ]);
+  try {
+    const checks = run.events.filter(event => event.tool === 'check_plan');
+    assert.equal(checks[1].result.planSource, 'message');
+    assert.equal(checks[1].result.planEvidence.submittedTurn, 3);
+    assert.equal(checks[1].result.planEvidence.fingerprint, planContentFingerprint(JSON.parse(currentPlan)));
+    assert.notEqual(checks[1].result.planEvidence.fingerprint, run.state.grayDraft.turns[1].planFlow.submission.fingerprint);
+    assert.equal(checks[1].result.planEvidence.contentUpdated, true);
+  } finally { await run.rm(); }
+});
+
+test('无工具轮坏提交跨轮保留失败状态：空正文工具不能静默沿用旧计划', async () => {
+  const truncated = '```json\n{ "schemaVersion": "gray-plan-3", "deckBrief": { "title": "开放安排"';
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: truncated, tools: [] },
+    { content: '', tools: ['check_plan'] },
+    { content: planJson('，并留痕'), tools: ['check_plan'] },
+    { content: '审稿。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: '保持。', tools: [{ name: 'finish_draft', arguments: { review: '复核修订版后保持。' } }] },
+  ]);
+  try {
+    const checks = run.events.filter(event => event.tool === 'check_plan');
+    assert.equal(checks[1].result.planSource, 'submission-failed');
+    assert.equal(checks[1].result.planEvidence.submittedTurn, 2);
+    assert.equal(checks[2].result.planSource, 'message');
+    assert.equal(checks[2].result.planEvidence.submittedTurn, 4);
+    assert.notEqual(checks[2].result.planEvidence.fingerprint, checks[0].result.planEvidence.fingerprint);
+    assert.equal(run.state.grayDraft.turns[1].planFlow.submission.status, 'failed');
+  } finally { await run.rm(); }
+});
+
+test('已暂存有效计划后遇到坏提交：不回退暂存版或旧版，显式恢复才沿用', async () => {
+  const truncated = '```json\n{ "schemaVersion": "gray-plan-3", "deckBrief": { "title": "开放安排"';
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: planJson('，并留痕'), tools: [] },
+    { content: truncated, tools: ['check_plan'] },
+    { content: '', tools: ['check_plan'] },
+    { content: '明确沿用上一版。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: '保持。', tools: [{ name: 'finish_draft', arguments: { review: '复核后保持旧版。' } }] },
+  ]);
+  try {
+    const checks = run.events.filter(event => event.tool === 'check_plan');
+    const review = run.events.find(event => event.tool === 'semantic_review');
+    assert.equal(checks[1].result.planSource, 'submission-failed');
+    assert.equal(checks[1].result.planEvidence.submittedTurn, 3);
+    assert.equal(checks[2].result.planSource, 'submission-failed', '后续空正文仍须阻断，不能消费暂存或旧版');
+    assert.equal(review.result.planSource, 'current-plan');
+    assert.equal(review.result.planEvidence.consumptionSource, 'explicit-reuse');
+    assert.equal(review.result.planEvidence.recoveredFromTurn, 3);
+    assert.equal(review.result.planEvidence.fingerprint, checks[0].result.planEvidence.fingerprint);
+  } finally { await run.rm(); }
 });
