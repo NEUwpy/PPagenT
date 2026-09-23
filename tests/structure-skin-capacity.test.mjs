@@ -84,6 +84,8 @@ test('small staged funnel keeps phase and action titles while omitting optional 
         assert.equal(shortLabel.text.replace(/\s/g,''),content.phases[1].label);
         assert.ok(shortLabel.frame.width>=32,`${skin.id}: short phase label is too narrow`);
         assert.equal(shortLabel.text.trim().split('\n').length,2);
+        assert.ok(tree.nodes.find(n=>n.name==='phase-title-0').style.fontSizePt<=12);
+        assert.ok(tree.nodes.find(n=>n.name==='action-title-0-0').style.fontSizePt<=12);
       }
     }
     const skin=skins.find(s=>s.id==='neutral');
