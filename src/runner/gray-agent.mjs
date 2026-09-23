@@ -23,6 +23,12 @@ import { grayBodyLayout, fitGrayText, validateGrayArea, validateGrayPlan, render
 
 const sha = text => createHash('sha256').update(text).digest('hex');
 const json = value => JSON.stringify(value, null, 2);
+const canonicalize = value => Array.isArray(value)
+  ? value.map(canonicalize)
+  : value && typeof value === 'object'
+    ? Object.fromEntries(Object.keys(value).sort().map(key => [key, canonicalize(value[key])]))
+    : value;
+const planSubmissionFingerprint = plan => sha(JSON.stringify(canonicalize(plan)));
 
 /**
  * render_draft 的 layouts 入参形状（任务 #222 单一来源：工具 schema 与定向测试共用）。
@@ -66,7 +72,7 @@ export const GRAY_AGENT_PROMPT = `你是灰稿制作 Agent。目标：把用户�
 你可以多次调用工具。check_plan 与 semantic_review 都通过后再渲染是正常路径，但不是硬性顺序；按你判断最有效的方式推进。
 交付观：审稿是辅助而不是关口——审稿回执的 issues 是阻塞项（实质改变理解的失真、遗漏、层级/归属/关系错误），必须修复；notes 是建议/已解决说明，不阻塞渲染。审稿通过绑定当前内容版本：任何内容改动（含失败后的修订）都会让上一版通过失效——改后再次渲染前必须重新 semantic_review；程序会拒绝未复核、有阻塞项或复核已过期的版本，未复核版本不得继承通过状态。交付只由 finish_draft 触发：它必须在该候选的 render 回执进入后续回合之后调用（同一轮 render+finish 不算看过诊断），并附复核结论；选定候选与当前计划内容不一致、或不是最新候选时，要写明退回/未采用修订的原因。首次成功渲染后最多一次修订周期；修订失败（模板/几何/坏提交）不计入，但预算耗尽仍以第一次成功候选如实交付并标注未完成复核。
 渲染后复核（只有文字与几何，没有像素图）：render_draft 成功回执带逐页/区域的实际分配宽高、字号、区域最小高与占用（minimumRegionHeight/allocatedRegionHeight 两边同口径、都含 70px 标题与边距开销；textOccupancy 为两边都扣该开销的正文口径）、权重与实际来源（无权重时 weightsSource 为 null）和既有几何警告。**复核要判阅读质量，不只看占用**：①正文是否完成提炼——读者是否需要自行从长句拆出成员、判断与支撑；②对照是否用一致维度直接对应，还是要把句子拆开才能配对；③短说明占的空间是否相称（程序最小高含条目/标题/间距开销，不等于内容多）；④字号是否与页面内容相称（字号被选小不能自动解释成"内容密集"）。pageBottomWhitespace 是框外页底空白，不是内容填充率——缩小它未必改善阅读。发现具体问题时，在这一次修订里优先改内容组织或组合（内容改动照常重审，纯布局不重审）；保留首稿要给出真实取舍，不能把影响阅读的问题转交后续美化并称本轮已解决。这些是选择依据，不是稀疏/字号硬阈值。需要看图的能力不在本线内，不要声称看过像素图。
-**计划的传递方式：提交或修订时，把完整 gray-plan-3 计划 JSON 写进消息正文；可以和工具调用同轮提交，也可以在无工具轮先提交，运行器会暂存并让下一轮工具消费。当前工具轮里的有效新计划优先于暂存；暂存计划优先于旧版，同一内容指纹只更新一次。无新 JSON 时对已提交版本继续；提交新内容会让旧审稿失效、需重新审稿。正文想提交计划但 JSON 损坏＝submission-failed，不能静默回退到暂存或旧版；请重发完整合法 JSON，或明确写“明确沿用上一版”/“明确沿用当前已提交计划”后再调用工具。回执的 planSource 标明实际来源（message=当前工具轮 / previous-turn=前一无工具轮暂存 / current-plan=沿用已提交版 / submission-failed=提交失败），并记录提交轮号与内容指纹。不要在工具参数里重复计划，也不要只写差异。**
+**计划的传递方式：提交或修订时，把完整 gray-plan-3 计划 JSON 写进消息正文；可以和工具调用同轮提交，也可以在无工具轮先提交，运行器会暂存并让下一轮工具消费。当前工具轮里的有效新计划优先于暂存；暂存计划优先于旧版。只有完整提交指纹完全一致才幂等去重；计划对象始终更新为最新的完整提交，而可见内容指纹只决定语义审稿是否失效。无新 JSON 时对已提交版本继续；可见内容变更会让旧审稿失效、需重新审稿。正文想提交计划但 JSON 损坏＝submission-failed，不能静默回退到暂存或旧版；请重发完整合法 JSON。若确需放弃失败提交，只能单独回复精确指令“确认恢复并沿用当前已提交计划。”，附加说明、引述或否定语句都不构成恢复。回执的 planSource 标明实际来源（message=当前工具轮 / previous-turn=前一轮暂存 / current-plan=沿用已提交版 / submission-failed=提交失败），并记录可见指纹、完整提交指纹、提交轮号与消费轮号。不要在工具参数里重复计划，也不要只写差异。**
 容量与分页：${SHARED_RULES.paging}
 布局选择（调用 render_draft 时给出）：简式 {type:"single|row|column|grid",weights?,columns?} 的子节点默认按阅读顺序取本页全部组；页面有分层关系时用嵌套式 {type,children:[{groupId},或嵌套]}，例如主区在上、一条注记横贯下方 = {type:"column",children:[{type:"row",children:[{groupId:"g1"},{groupId:"g2"}]},{groupId:"g3"}]}。row 横向分栏、column 纵向排列、grid 规则网格；weights（仅 row）分配多余宽度，按各栏实文行数/展开需要给比例（如 3:2、5:4），不要默认等分，columns（仅 grid）是列数；children 必须按阅读顺序恰好覆盖本页全部组一次；嵌套最多三层。主次通过空间份额与组标题层级体现，少量内容不必拉满一页，不要为了变化而嵌套。每页有程序默认版式（1 组多条=类别容器、1 组单条=单主体、2 组=双栏对照、≥3 组=行式清单）；layouts 的页条目只写 {pageId} 即采用默认。自己选与默认不同的组合时，在 layouts 的该页条目里把 override 与 layout 同级写：{pageId:"p2", layout:{...}, override:{reason:"一句话理由"}}（override 不能放进 layout 对象；理由会入档分析）；仅微调 weights 不算覆盖。
 格式：{schemaVersion:"gray-plan-3",deckBrief:{title,audience,objective},pages:[{pageId:"p1",title:"短标题",claim:"简短上屏主题句，建议二十字左右",pagePurpose:"本页解决的问题",narrative:"一句话说明必要的先后、并行、判断或归属关系",sourceIds:["s1"]（可选：页级认领，用于本页承载但不单列条目的结构性来源）,groups:[{id:"g1",role:"本组主要职责",heading:"上屏短标题",importance:"primary|supporting",kind:"text|diagram|flow|chart|table|image",blocks:[{id:"b1",label:"可选上屏子标题（内容词，不写序号）",text:"真实上屏文字",sourceIds:["s1"],scope:"group"（可选：约束整组全部条目的共同说明，程序不编号）}],expression:"非text必填：表达作用",relationship:"非text必填：基本关系",production:"非text必填：制作要求"}]}],planningNotes:"简短后台组织说明"}。
@@ -109,7 +115,7 @@ function extractPlan(content) {
 }
 
 function explicitlyReusesPlan(content) {
-  return /(?:明确\s*)?(?:沿用|继续沿用|继续按|按|保持)\s*(?:当前(?:已提交的?)?(?:计划|版本|候选)|上(?:一版|一个版本)(?:计划|候选)?|旧(?:版|版本|候选))|当前计划(?:不变|继续使用)/u.test(content ?? '');
+  return /^确认恢复并沿用当前已提交计划[。.!！]?$/u.test(String(content ?? '').trim());
 }
 
 /**
@@ -256,6 +262,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
   let lastReview = null;
   let lastPlan = null;
   let lastPlanFingerprint = null;
+  let lastPlanSubmissionFingerprint = null;
   let lastPlanOriginTurn = null;
   let lastCheckedFingerprint = null;
   let currentReply = { turn: 0, status: 'missing', hasToolCalls: false, explicitReuse: false };
@@ -274,6 +281,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
       submittedTurn: submission.turn,
       originTurn: lastPlanOriginTurn ?? submission.turn,
       fingerprint: submission.fingerprint ?? null,
+      submissionFingerprint: submission.submissionFingerprint ?? null,
       consumedTurn: currentTurnNumber(),
       consumptionSource,
       contentUpdated,
@@ -281,13 +289,16 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
     });
     const consume = (plan, source, submission, consumptionSource, note = null, extras = {}) => {
       const fingerprint = submission.fingerprint ?? planContentFingerprint(plan);
+      const submissionFingerprint = submission.submissionFingerprint ?? planSubmissionFingerprint(plan);
       const contentUpdated = lastPlanFingerprint !== fingerprint;
-      if (contentUpdated) {
+      const submissionUpdated = lastPlanSubmissionFingerprint !== submissionFingerprint;
+      if (submissionUpdated) {
         lastPlan = plan;
-        lastPlanFingerprint = fingerprint;
+        lastPlanSubmissionFingerprint = submissionFingerprint;
         lastPlanOriginTurn = submission.turn;
       }
-      const evidence = makeEvidence(source, { ...submission, fingerprint }, consumptionSource, contentUpdated, extras);
+      lastPlanFingerprint = fingerprint;
+      const evidence = makeEvidence(source, { ...submission, fingerprint, submissionFingerprint }, consumptionSource, contentUpdated, { submissionUpdated, ...extras });
       activePlanEvidence = evidence;
       currentTurnPlanUses.push(evidence);
       return { plan: lastPlan, source, note, evidence };
@@ -299,7 +310,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
       return {
         plan: null,
         source: 'submission-failed',
-        note: '第 ' + failure.turn + ' 轮计划提交失败：未检查、审稿、渲染或交付暂存/旧版。请重发完整合法计划；若要放弃失败提交，需明确写“明确沿用上一版”或“明确沿用当前已提交计划”。',
+        note: '第 ' + failure.turn + ' 轮计划提交失败：未检查、审稿、渲染或交付暂存/旧版。请重发完整合法计划；若要放弃失败提交，只能单独回复精确指令“确认恢复并沿用当前已提交计划。”。',
         evidence,
       };
     };
@@ -329,13 +340,13 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         const failedTurn = pendingSubmissionFailure.turn;
         pendingSubmissionFailure = null;
         pendingPlan = null;
-        return consume(lastPlan, 'current-plan', { turn: lastPlanOriginTurn, fingerprint: lastPlanFingerprint }, 'explicit-reuse', '已明确放弃第 ' + failedTurn + ' 轮失败提交，沿用此前已提交版本。', { recoveredFromTurn: failedTurn });
+        return consume(lastPlan, 'current-plan', { turn: lastPlanOriginTurn, fingerprint: lastPlanFingerprint, submissionFingerprint: lastPlanSubmissionFingerprint }, 'explicit-reuse', '已明确放弃第 ' + failedTurn + ' 轮失败提交，沿用此前已提交版本。', { recoveredFromTurn: failedTurn });
       }
       return reject(pendingSubmissionFailure);
     }
 
     if (lastPlan) {
-      return consume(lastPlan, 'current-plan', { turn: lastPlanOriginTurn, fingerprint: lastPlanFingerprint }, 'current-plan', '本轮没有新计划：按当前已提交内容版本继续。');
+      return consume(lastPlan, 'current-plan', { turn: lastPlanOriginTurn, fingerprint: lastPlanFingerprint, submissionFingerprint: lastPlanSubmissionFingerprint }, 'current-plan', '本轮没有新计划：按当前已提交内容版本继续。');
     }
     throw new Error('没有可用的完整 gray-plan-3 计划：请在正文提交完整计划 JSON，再调用工具。');
   };
@@ -734,7 +745,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
       const planFlow = {
         submission: currentReply.turn === record.turn
           ? currentReply.status === 'valid'
-            ? { status: currentReply.hasToolCalls ? 'submitted' : 'staged', submittedTurn: currentReply.submission.turn, fingerprint: currentReply.submission.fingerprint, ...(currentReply.submission.stagedAtTurn ? { stagedAtTurn: currentReply.submission.stagedAtTurn } : {}) }
+            ? { status: currentReply.hasToolCalls ? 'submitted' : 'staged', submittedTurn: currentReply.submission.turn, fingerprint: currentReply.submission.fingerprint, submissionFingerprint: currentReply.submission.submissionFingerprint, ...(currentReply.submission.stagedAtTurn ? { stagedAtTurn: currentReply.submission.stagedAtTurn } : {}) }
             : currentReply.status === 'invalid'
               ? { status: 'failed', submittedTurn: currentReply.failure.turn, fingerprint: currentReply.failure.fingerprint ?? null, errorCode: currentReply.failure.errorCode }
               : { status: 'none', turn: record.turn, explicitReuse: currentReply.explicitReuse }
@@ -756,14 +767,15 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
       try {
         const plan = extractPlan(content);
         const fingerprint = planContentFingerprint(plan);
-        const submission = { plan, turn, fingerprint, replyHadTools: hasToolCalls };
+        const submissionFingerprint = planSubmissionFingerprint(plan);
+        const submission = { plan, turn, fingerprint, submissionFingerprint, replyHadTools: hasToolCalls };
         currentReply = { ...currentReply, status: 'valid', plan, submission };
         if (hasToolCalls) {
           pendingPlan = submission;
           pendingSubmissionFailure = null;
         } else {
           pendingSubmissionFailure = null;
-          if (pendingPlan?.fingerprint === fingerprint) submission.stagedAtTurn = pendingPlan.turn;
+          if (pendingPlan?.submissionFingerprint === submissionFingerprint) submission.stagedAtTurn = pendingPlan.turn;
           else pendingPlan = submission;
         }
       } catch (error) {

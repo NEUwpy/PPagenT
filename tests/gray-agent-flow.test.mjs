@@ -267,7 +267,7 @@ test('坏提交＋finish 不得用旧计划宣布成功：显式报提交失败�
     { content: '审稿。', tools: ['semantic_review'] },
     { content: '渲染。', tools: [renderSingle] },
     { content: badJson, tools: [{ name: 'finish_draft', arguments: { review: '坏提交同轮保持。' } }] },
-    { content: '沿用旧候选。', tools: [{ name: 'finish_draft', arguments: { review: '沿用旧候选并保持。' } }] },
+    { content: '确认恢复并沿用当前已提交计划。', tools: [{ name: 'finish_draft', arguments: { review: '沿用旧候选并保持。' } }] },
     { content: '收工。', tools: [] },
   ]);
   try {
@@ -357,7 +357,7 @@ test('坏提交是失败控制流：已审过的旧版不被坏修订冒充交�
     { content: '审稿。', tools: ['semantic_review'] },
     { content: truncated, tools: [{ name: 'render_draft', arguments: { layouts: [{ pageId: 'p1', layout: { type: 'single' } }] } }] },
     { content: truncated, tools: ['semantic_review'] },
-    { content: '明确沿用上一版。', tools: ['semantic_review'] },
+    { content: '确认恢复并沿用当前已提交计划。', tools: ['semantic_review'] },
     { content: '收工。', tools: [] },
   ]);
   const renders = events.filter(event => event.tool === 'render_draft');
@@ -435,7 +435,7 @@ test('坏提交显式失败：计划不更新、不冒充已修订，旧有效�
   const { events } = await runFlow([
     { content: planJson(''), tools: ['check_plan'] },
     { content: '```json\n{ "schemaVersion": "gray-plan-3", "pages": [ { "pageId": "p1" \n```', tools: ['check_plan'] },
-    { content: '继续按上一版审稿。', tools: ['semantic_review'] },
+    { content: '确认恢复并沿用当前已提交计划。', tools: ['semantic_review'] },
     { content: '收工。', tools: [] },
   ]);
   const checks = events.filter(event => event.tool === 'check_plan');
@@ -467,6 +467,62 @@ test('无工具轮完整计划暂存：下一轮空正文 check_plan 消费原�
     assert.equal(run.state.grayDraft.turns[0].planFlow.submission.status, 'staged');
     assert.equal(run.state.grayDraft.turns[0].planFlow.submission.fingerprint, check.result.planEvidence.fingerprint);
     assert.equal(run.state.grayDraft.turns[1].planFlow.consumptions[0].planSource, 'previous-turn');
+  } finally { await run.rm(); }
+});
+
+test('可见指纹不变时仍更新完整计划：修正页级 sourceIds 后检查从失败变通过', async () => {
+  const invalid = JSON.parse(planJson(''));
+  invalid.pages[0].sourceIds = ['missing-source'];
+  const corrected = structuredClone(invalid);
+  corrected.pages[0].sourceIds = ['s1'];
+  const run = await runProtocol([
+    { content: JSON.stringify(invalid), tools: ['check_plan'] },
+    { content: JSON.stringify(corrected), tools: [] },
+    { content: '', tools: ['check_plan'] },
+    { content: '审稿修正来源。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: '保持。', tools: [{ name: 'finish_draft', arguments: { review: '按修正后的来源认领复核并保持。' } }] },
+  ]);
+  try {
+    const checks = run.events.filter(event => event.tool === 'check_plan');
+    const review = run.events.find(event => event.tool === 'semantic_review');
+    assert.equal(checks[0].result.accepted, false, JSON.stringify(checks[0].result));
+    assert.equal(checks[1].result.accepted, true, JSON.stringify(checks[1].result));
+    assert.equal(checks[1].result.planSource, 'previous-turn');
+    assert.equal(checks[0].result.planEvidence.fingerprint, checks[1].result.planEvidence.fingerprint, '页级 sourceIds 不参与可见内容指纹');
+    assert.notEqual(checks[0].result.planEvidence.submissionFingerprint, checks[1].result.planEvidence.submissionFingerprint, '完整计划提交指纹捕获后台 sourceIds 修正');
+    assert.equal(checks[1].result.planEvidence.contentUpdated, false, 'sourceIds 修正本身不作废可见内容审稿');
+    assert.equal(checks[1].result.planEvidence.submissionUpdated, true);
+    assert.equal(review.result.accepted, true, JSON.stringify(review.result));
+    assert.equal(review.result.planEvidence.submissionFingerprint, checks[1].result.planEvidence.submissionFingerprint);
+    assert.equal(run.provider.reviewCalls.length, 1);
+    assert.equal(run.events.find(event => event.tool === 'render_draft').result.accepted, true);
+    assert.equal(run.events.find(event => event.tool === 'finish_draft').result.delivered, true);
+  } finally { await run.rm(); }
+});
+
+test('失败提交只接受精确的独立恢复指令：否定、引述和解释均持续阻断至合法恢复', async () => {
+  const badJson = '```json\n{ "schemaVersion": "gray-plan-3", "deckBrief": { "title": "开放安排"';
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '审稿。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: badJson, tools: [] },
+    { content: '不要沿用上一版。', tools: ['check_plan'] },
+    { content: '不能保持旧版。', tools: [renderSingle] },
+    { content: '说明：“沿用上一版”只是引述，不代表我要恢复。', tools: [{ name: 'finish_draft', arguments: { review: '尝试交付。' } }] },
+    { content: '确认恢复并沿用当前已提交计划。', tools: [{ name: 'finish_draft', arguments: { review: '明确放弃失败提交，复核此前候选后保持。' } }] },
+  ]);
+  try {
+    const checks = run.events.filter(event => event.tool === 'check_plan');
+    const renders = run.events.filter(event => event.tool === 'render_draft');
+    const finishes = run.events.filter(event => event.tool === 'finish_draft');
+    assert.equal(checks[1].result.accepted, false);
+    assert.equal(checks[1].result.planSource, 'submission-failed');
+    assert.equal(renders[1].result.stage, 'submission-failed');
+    assert.equal(finishes[0].result.stage, 'finish-submission-failed');
+    assert.equal(finishes[1].result.accepted, true, JSON.stringify(finishes[1].result));
+    assert.equal(run.state.grayDraft.postRender.completed, true);
   } finally { await run.rm(); }
 });
 
@@ -541,7 +597,7 @@ test('已暂存有效计划后遇到坏提交：不回退暂存版或旧版，�
     { content: planJson('，并留痕'), tools: [] },
     { content: truncated, tools: ['check_plan'] },
     { content: '', tools: ['check_plan'] },
-    { content: '明确沿用上一版。', tools: ['semantic_review'] },
+    { content: '确认恢复并沿用当前已提交计划。', tools: ['semantic_review'] },
     { content: '渲染。', tools: [renderSingle] },
     { content: '保持。', tools: [{ name: 'finish_draft', arguments: { review: '复核后保持旧版。' } }] },
   ]);
