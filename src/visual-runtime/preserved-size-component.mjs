@@ -71,7 +71,7 @@ export async function sharedPreservedComponent(component, assetDir, frame, theme
     designFrame: { width: frame.width, height: frame.height },
     cssText: resizeDesignCss(htmlTextFlowCss()+css, scale, type) + (scale < 1 ? '\n[data-ppt-fit-footprint] [data-ppt-kind="text"]{min-height:1.2em}' : ''),
     renderMarkup(content) {
-      let markup = component.renderMarkup(content);
+      let markup = component.renderMarkup(content, { size: frame.size });
       markup = markup.replace(/<style\b[^>]*>([\s\S]*?)<\/style>/gi, (_,css)=>`<style>${resizeDesignCss(css,scale,type)}</style>`);
       markup = markup.replace(/style="([^"]*)"/g, (_, style) => `style="${resizeDesignCss(`${style};`, scale,type)}"`);
       // Keep SVG paths, arc radii and viewBoxes intact. Only inline CSS is rebased.
