@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { runGrayAgent } from '../src/runner/gray-agent.mjs';
+import { GRAY_AGENT_PROMPT, runGrayAgent } from '../src/runner/gray-agent.mjs';
 import { planContentFingerprint } from '../src/runner/gray-semantics.mjs';
 
 const SOURCE = '模拟：核验之后才能开放，异常情况立即暂停并复核记录，复核结果按季度归档备查，责任落实到人；未按要求执行或漏报的，纳入部门年度考核。';
@@ -20,6 +20,45 @@ const planJson = suffix => JSON.stringify({
   }],
 });
 
+function addMockClaimAudit(payload, input) {
+  if (Object.hasOwn(payload, 'claimAudit')) return payload;
+  const source = input.sourceSegments?.find(segment => segment.text?.length);
+  const location = input.auditLocations?.find(item => item.field === 'body') ?? input.auditLocations?.[0];
+  const page = input.visiblePages?.find(item => item.pageId === location?.pageId);
+  const region = page?.regions?.find(item => item.id === location?.regionId) ?? page?.regions?.[location?.regionIndex];
+  const text = location?.field === 'title' ? page?.title
+    : location?.field === 'claim' ? page?.claim
+      : location?.field === 'heading' ? region?.heading
+        : region?.body?.[location?.bodyIndex]?.text;
+  if (!source || !location || !text) return { ...payload, claimAudit: null };
+  const sourceQuote = source.text.slice(0, Math.min(source.text.length, 18));
+  const visibleQuote = String(text).slice(0, Math.min(String(text).length, 18));
+  const issuePayload = (payload.issues ?? []).map(issue => ({
+    ...issue,
+    pageId: issue.pageId ?? location.pageId,
+    sourceIds: issue.sourceIds ?? [source.id],
+    claimIds: issue.claimIds ?? ['mock-claim-1'],
+  }));
+  const claimAudit = {
+    schemaVersion: 'gray-claim-audit-1',
+    sourceCoverage: (input.sourceSegments ?? []).map(segment => segment.id === source.id
+      ? { sourceId: segment.id, quote: sourceQuote, classification: 'material-claim', claimIds: ['mock-claim-1'] }
+      : { sourceId: segment.id, quote: segment.text.slice(0, Math.min(segment.text.length, 18)), classification: 'non-claim', claimIds: [], reason: 'mock fixture source segment' }),
+    locationCoverage: (input.auditLocations ?? []).map(item => item.id === location.id
+      ? { locationId: item.id, classification: 'material-claim', claimIds: ['mock-claim-1'] }
+      : { locationId: item.id, classification: 'non-claim', claimIds: [], reason: 'mock fixture visible position' }),
+    claims: [{
+      id: 'mock-claim-1', pageId: location.pageId,
+      sourceEvidence: [{ sourceId: source.id, quote: sourceQuote }],
+      visibleEvidence: [{ locationId: location.id, quote: visibleQuote }],
+      sourceForce: 'mock source force', visibleForce: 'mock visible force',
+      addedImplications: { causality: false, certainty: false, obligation: false, scope: false },
+      ruling: issuePayload.length ? 'strengthened' : 'equivalent', rationale: 'mock structural fixture',
+    }],
+  };
+  return { ...payload, issues: issuePayload, claimAudit };
+}
+
 function mockProvider(chatScript, reviewPayloads = [], beforeCall = null) {
   let chatIndex = 0;
   let reviewIndex = 0;
@@ -31,7 +70,9 @@ function mockProvider(chatScript, reviewPayloads = [], beforeCall = null) {
       const system = messages[0]?.content ?? '';
       if (system.includes('灰稿内容与表达审稿人')) {
         reviewCalls.push(Date.now());
-        const payload = reviewPayloads[reviewIndex++] ?? { accepted: true, issues: [], notes: [], coverage: 'mock 覆盖', limits: 'mock' };
+        const rawPayload = reviewPayloads[reviewIndex++] ?? { accepted: true, issues: [], notes: [], coverage: 'mock 覆盖', limits: 'mock' };
+        const reviewInput = JSON.parse(messages.at(-1)?.content ?? '{}');
+        const payload = addMockClaimAudit(rawPayload, reviewInput);
         return { content: JSON.stringify(payload), toolCalls: [], usage: {}, finishReason: 'stop' };
       }
       if (beforeCall) await beforeCall({ chatIndex });
@@ -83,6 +124,7 @@ test('render_draft 接口契约：{pageId} 只传页号即走默认并成功（�
     const renders = run.events.filter(event => event.tool === 'render_draft');
     assert.equal(renders[0].result.accepted, true, JSON.stringify(renders[0].result));
     assert.equal(renders[0].result.candidate, true);
+    assert.deepEqual(renders[0].result.revisionBudget, { maxSuccessfulRevisions: 1, successfulRevisionsUsed: 0, remainingSuccessfulRevisions: 1 });
     assert.equal(run.state.grayDraft.postRender.completed, true);
   } finally { await run.rm(); }
 });
@@ -187,6 +229,11 @@ test('首次成功后最多一次修订周期：内容修订重审、再次渲�
     assert.equal(renders[1].result.accepted, true);
     assert.equal(renders[2].result.accepted, false);
     assert.equal(renders[2].result.stage, 'revision-budget');
+    assert.deepEqual(renders.map(event => event.result.revisionBudget), [
+      { maxSuccessfulRevisions: 1, successfulRevisionsUsed: 0, remainingSuccessfulRevisions: 1 },
+      { maxSuccessfulRevisions: 1, successfulRevisionsUsed: 1, remainingSuccessfulRevisions: 0 },
+      { maxSuccessfulRevisions: 1, successfulRevisionsUsed: 1, remainingSuccessfulRevisions: 0 },
+    ]);
     assert.equal(run.provider.reviewCalls.length, 2, '内容修订触发重新审稿');
     const finishes = run.events.filter(event => event.tool === 'finish_draft');
     assert.equal(finishes[0].result.accepted, true);
@@ -445,6 +492,34 @@ test('坏提交显式失败：计划不更新、不冒充已修订，旧有效�
   // 坏提交之后，旧有效版本仍按 current-plan 正常推进审稿（未被当作已修订，也未阻断）
   assert.equal(reviews[0].result.planSource, 'current-plan');
   assert.equal(reviews[0].result.accepted, true);
+});
+
+test('缺失 claimAudit 不得通过：无效审计可在同一内容版本重试补齐', async () => {
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '先给出不完整审稿。', tools: ['semantic_review'] },
+    { content: '补齐审稿证据。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: '保持。', tools: [{ name: 'finish_draft', arguments: { review: '对照来源与上屏内容复核后保持。' } }] },
+    { content: '收工。', tools: [] },
+  ], [{ accepted: true, issues: [], claimAudit: null }]);
+  try {
+    const reviews = run.events.filter(event => event.tool === 'semantic_review');
+    assert.equal(reviews[0].result.accepted, false);
+    assert.equal(reviews[0].result.auditValidation.valid, false);
+    assert.ok(reviews[0].result.auditValidation.errors.includes('缺少 claimAudit 对照证据对象'));
+    assert.equal(reviews[1].result.accepted, true, JSON.stringify(reviews[1].result.auditValidation));
+    assert.equal(run.events.find(event => event.tool === 'render_draft').result.accepted, true);
+    assert.equal(run.events.find(event => event.tool === 'finish_draft').result.delivered, true);
+    assert.equal(run.state.grayDraft.reviewRecord[0].accepted, false);
+    assert.equal(run.state.grayDraft.reviewRecord[0].auditValidation.valid, false);
+  } finally { await run.rm(); }
+});
+
+test('灰稿 Agent 提示要求先合并全稿诊断，保真与可读性优先于留白', () => {
+  assert.match(GRAY_AGENT_PROMPT, /合并全稿诊断/u);
+  assert.match(GRAY_AGENT_PROMPT, /保真、关系辨认和实际可读性/u);
+  assert.match(GRAY_AGENT_PROMPT, /单凭某页字号最小不能自动/u);
 });
 
 test('无工具轮完整计划暂存：下一轮空正文 check_plan 消费原提交并记录来源', async () => {

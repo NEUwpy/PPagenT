@@ -15,7 +15,7 @@ import { createToolRegistry, defineTool } from './tools/index.mjs';
 import { buildChatProviderFromEnv } from './chat-provider.mjs';
 import { loadDeepSeekLocalConfig } from '../agent/deepseek-provider-from-env.mjs';
 import { newRunState, writeState, renderContentMarkdown, renderStateMarkdown } from './state.mjs';
-import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan, semanticReviewInput, snapshotSemanticReview, markFlowSources, SHARED_RULES, attemptFingerprint, isStalledRetry, planTextVolume, isSameMinimumRetry, planContentFingerprint, checkReviewCoverage, semanticPlanFromPages } from './gray-semantics.mjs';
+import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan, validateSemanticReviewEvidence, semanticReviewInput, snapshotSemanticReview, markFlowSources, SHARED_RULES, attemptFingerprint, isStalledRetry, planTextVolume, isSameMinimumRetry, planContentFingerprint, checkReviewCoverage, semanticPlanFromPages } from './gray-semantics.mjs';
 import { applyTemplateDefaults, describeDefaults } from './gray-templates.mjs';
 import { auditGeometry, voidWarnings, VOID_THRESHOLDS } from './gray-audit.mjs';
 import { resolveGrayLayout, compressionMemory } from './gray-layout.mjs';
@@ -71,6 +71,7 @@ export const GRAY_AGENT_PROMPT = `你是灰稿制作 Agent。目标：把用户�
 5. render_draft 返回失败时，按其中的 reason 与 issues 修订规划或组合后重试；渲染成功是候选，先复核诊断再 finish_draft 或做一次有界修订。
 你可以多次调用工具。check_plan 与 semantic_review 都通过后再渲染是正常路径，但不是硬性顺序；按你判断最有效的方式推进。
 交付观：审稿是辅助而不是关口——审稿回执的 issues 是阻塞项（实质改变理解的失真、遗漏、层级/归属/关系错误），必须修复；notes 是建议/已解决说明，不阻塞渲染。审稿通过绑定当前内容版本：任何内容改动（含失败后的修订）都会让上一版通过失效——改后再次渲染前必须重新 semantic_review；程序会拒绝未复核、有阻塞项或复核已过期的版本，未复核版本不得继承通过状态。交付只由 finish_draft 触发：它必须在该候选的 render 回执进入后续回合之后调用（同一轮 render+finish 不算看过诊断），并附复核结论；选定候选与当前计划内容不一致、或不是最新候选时，要写明退回/未采用修订的原因。首次成功渲染后最多一次修订周期；修订失败（模板/几何/坏提交）不计入，但预算耗尽仍以第一次成功候选如实交付并标注未完成复核。
+首次成功渲染后，在唯一一次修订机会前先合并全稿诊断：找出影响原意保真、关系辨认和实际可读性的主要问题，优先修这些，再考虑留白微调；单凭某页字号最小不能自动把它判成最高优先级。render_draft 回执会显示成功修订额度已用数和剩余数；额度为零时转为 finish_draft。
 渲染后复核（只有文字与几何，没有像素图）：render_draft 成功回执带逐页/区域的实际分配宽高、字号、区域最小高与占用（minimumRegionHeight/allocatedRegionHeight 两边同口径、都含 70px 标题与边距开销；textOccupancy 为两边都扣该开销的正文口径）、权重与实际来源（无权重时 weightsSource 为 null）和既有几何警告。**复核要判阅读质量，不只看占用**：①正文是否完成提炼——读者是否需要自行从长句拆出成员、判断与支撑；②对照是否用一致维度直接对应，还是要把句子拆开才能配对；③短说明占的空间是否相称（程序最小高含条目/标题/间距开销，不等于内容多）；④字号是否与页面内容相称（字号被选小不能自动解释成"内容密集"）。pageBottomWhitespace 是框外页底空白，不是内容填充率——缩小它未必改善阅读。发现具体问题时，在这一次修订里优先改内容组织或组合（内容改动照常重审，纯布局不重审）；保留首稿要给出真实取舍，不能把影响阅读的问题转交后续美化并称本轮已解决。这些是选择依据，不是稀疏/字号硬阈值。需要看图的能力不在本线内，不要声称看过像素图。
 **计划的传递方式：提交或修订时，把完整 gray-plan-3 计划 JSON 写进消息正文；可以和工具调用同轮提交，也可以在无工具轮先提交，运行器会暂存并让下一轮工具消费。当前工具轮里的有效新计划优先于暂存；暂存计划优先于旧版。只有完整提交指纹完全一致才幂等去重；计划对象始终更新为最新的完整提交，而可见内容指纹只决定语义审稿是否失效。无新 JSON 时对已提交版本继续；可见内容变更会让旧审稿失效、需重新审稿。正文想提交计划但 JSON 损坏＝submission-failed，不能静默回退到暂存或旧版；请重发完整合法 JSON。若确需放弃失败提交，只能单独回复精确指令“确认恢复并沿用当前已提交计划。”，附加说明、引述或否定语句都不构成恢复。回执的 planSource 标明实际来源（message=当前工具轮 / previous-turn=前一轮暂存 / current-plan=沿用已提交版 / submission-failed=提交失败），并记录可见指纹、完整提交指纹、提交轮号与消费轮号。不要在工具参数里重复计划，也不要只写差异。**
 容量与分页：${SHARED_RULES.paging}
@@ -447,7 +448,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
     }),
     defineTool({
       name: 'semantic_review',
-      description: '用独立审稿调用对照原稿复核你当前已提交的计划：事实/条件/否定与模拟声明完整性、页面职责、关系表达与结构选择。issues 是阻塞项（实质改变理解的失真、遗漏、层级/归属/关系错误），notes 是建议/已解决说明（不阻塞渲染）。同一内容指纹已审过时复用结论、不重复调用；提交新计划后自动重新审稿，完整计划也可先在无工具轮提交、下一轮工具消费。正文里想提交但 JSON 损坏＝本次提交失败并持久标记，不回退暂存或旧版；本工具只回报失败、不审稿。渲染前须有覆盖当前内容指纹的有效通过。',
+      description: '用一次独立审稿调用对照原稿复核当前计划，并输出 sourceCoverage、locationCoverage 与逐命题 claimAudit；程序核验 ID、逐字引文、位置、覆盖及 ruling/issues 一致性。issues 是阻塞项（实质改变理解的失真、遗漏、层级/归属/关系错误），notes 是建议/已解决说明（不阻塞渲染）。结构证据无效时回执会拒绝通过并给出 auditValidation，可对同一版本重审。有效审稿的同一内容指纹会复用结论；提交新计划后自动重新审稿。正文里想提交但 JSON 损坏＝本次提交失败并持久标记，不回退暂存或旧版；渲染前须有覆盖当前内容指纹的有效通过。',
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
       handler: async () => {
         const { plan, source, note } = resolvePlan('semantic_review');
@@ -461,7 +462,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         // 同版复用（任务 #171-G03a）：同一内容指纹已审过且未修订时不重复付费调用审稿，直接复用结论；
         // 修订内容后指纹变化，审稿会重新运行（通过状态也随之失效，评审 #119）。
         if (lastReview && lastReview.fingerprint === fingerprint) {
-          return { accepted: lastReview.accepted, issues: lastReview.issues, notes: lastReview.notes ?? [], reviewedFingerprint: fingerprint, coverage: lastReview.coverage ?? null, limits: lastReview.limits ?? null, planSource: source, note: [note, '该版本与最近一次审稿的内容一致：结论复用（未重复调用审稿）；修订内容后会自动重新审稿。'].filter(Boolean).join(' ') };
+          return { accepted: lastReview.accepted, issues: lastReview.issues, notes: lastReview.notes ?? [], reviewedFingerprint: fingerprint, coverage: lastReview.coverage ?? null, limits: lastReview.limits ?? null, claimAudit: lastReview.claimAudit, auditValidation: lastReview.auditValidation, planSource: source, note: [note, '该版本与最近一次有效审稿的内容一致：结论复用（未重复调用审稿）；修订内容后会自动重新审稿。'].filter(Boolean).join(' ') };
         }
         const reviewFeedback = Array.isArray(lastReview?.issues) && lastReview.issues.length
           ? lastReview.issues.map(issue => ({
@@ -471,26 +472,29 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
             verify: '上轮发现是否仍存在：按当前可见内容与原稿复核；已用其他呈现解决即算解决，不要求采用上轮建议的措辞、载体或位置。',
           }))
           : null;
-        const reviewInput = semanticReviewInput({ source: raw, area, plan, reviewFeedback, flowSources: base.sources.filter(item => item.flow).map(item => ({ id: item.id, flow: item.flow, preview: String(item.text).slice(0, 60) })) });
+        const reviewInput = semanticReviewInput({ source: raw, sourceSegments: base.sources, area, plan, reviewFeedback, flowSources: base.sources.filter(item => item.flow).map(item => ({ id: item.id, flow: item.flow, preview: String(item.text).slice(0, 60) })) });
         const response = await provider.complete({ messages: [{ role: 'system', content: SEMANTIC_REVIEW_CONTRACT }, { role: 'user', content: JSON.stringify(reviewInput) }] });
         const parsed = parseModelJson(response);
         if (typeof parsed.accepted !== 'boolean' || !Array.isArray(parsed.issues)) throw new Error('审稿响应格式无效');
         if (parsed.notes !== undefined && !Array.isArray(parsed.notes)) throw new Error('审稿响应格式无效（notes 必须是数组）');
+        const auditValidation = validateSemanticReviewEvidence(reviewInput, parsed);
         // 任务 #173：issues 只承载阻塞项——非空即阻塞（accepted 不得绕过门禁）；notes 为建议/已解决说明，不阻塞。
         const blocking = parsed.issues;
         const notes = Array.isArray(parsed.notes) ? parsed.notes.slice(0, 12) : [];
-        const accepted = parsed.accepted === true && blocking.length === 0;
+        const accepted = auditValidation.valid && parsed.accepted === true && blocking.length === 0;
         // 版本绑定（评审 #119 要求 1）：记录所审内容的内容指纹；通过状态只覆盖这一版内容。
         const at = new Date().toISOString();
-        agentState.grayDraft.reviewRecord = [...(agentState.grayDraft.reviewRecord ?? []), { at, source, fingerprint, ...snapshotSemanticReview(parsed) }];
+        const snapshot = snapshotSemanticReview({ ...parsed, accepted });
+        agentState.grayDraft.reviewRecord = [...(agentState.grayDraft.reviewRecord ?? []), { at, source, fingerprint, ...snapshot, auditValidation }];
         await saveAgentState();
-        lastReview = { accepted, issues: blocking.slice(0, 12), notes, at, fingerprint, coverage: parsed.coverage ?? null, limits: parsed.limits ?? null };
-        return { accepted: lastReview.accepted, issues: lastReview.issues, notes: lastReview.notes, reviewedFingerprint: fingerprint, coverage: lastReview.coverage, limits: lastReview.limits, planSource: source, ...(note ? { note } : {}) };
+        // 无效审计不能缓存成该内容版本的审稿结论；允许同版重试补齐证据，渲染门禁仍视为未审。
+        if (auditValidation.valid) lastReview = { accepted, issues: blocking.slice(0, 12), notes, at, fingerprint, coverage: parsed.coverage ?? null, limits: parsed.limits ?? null, claimAudit: parsed.claimAudit, auditValidation };
+        return { accepted, issues: blocking.slice(0, 12), notes, reviewedFingerprint: fingerprint, coverage: parsed.coverage ?? null, limits: parsed.limits ?? null, claimAudit: parsed.claimAudit ?? null, auditValidation, planSource: source, ...(note ? { note } : {}) };
       },
     }),
     defineTool({
       name: 'render_draft',
-      description: '按你当前已提交的计划与每页基础组合求解几何并渲染灰稿候选。layouts 是逐页数组 [{pageId, layout?, override?}]：pageId 必填；layout 可省略（省略即采用该页默认版式）；layout 为简式 {type:"single|row|column|grid",weights?,columns?} 或嵌套 {type,weights?,columns?,children:[…]}（children 项为 {groupId} 或嵌套组合，按阅读顺序恰好覆盖本页全部组一次，最多三层）。每页有程序默认版式（按组数与实文量）；改用其它组合时，在 layouts 的该页条目里把 override 与 layout 同级写：{pageId:"p2", layout:{...}, override:{reason:"一句话理由"}}——override 不能放进 layout 对象里，理由入档分析；仅微调 weights 不算覆盖。这是小参数，仍走工具参数。程序检查通过且审稿覆盖当前内容指纹即可渲染；成功返回候选 {accepted:true, candidate:true, renderId, diagnostics, preview, pptx}——本轮尚未交付，复核 diagnostics 后调用 finish_draft。审稿的阻塞项（issues）未通过前不得渲染；正文里想提交但 JSON 损坏＝本次提交失败，本工具只回报失败、不渲染旧版。失败返回 {accepted:false, stage:"template|geometry|check|submission-failed|revision-budget|stall|…", reason, issues}，据此修订后重试；计划可同轮提交，也可先在无工具轮提交并由下一轮工具消费；坏提交不得静默回退。首次成功后的修订周期上限为一次，失败尝试不计入。',
+      description: '按你当前已提交的计划与每页基础组合求解几何并渲染灰稿候选。layouts 是逐页数组 [{pageId, layout?, override?}]：pageId 必填；layout 可省略（省略即采用该页默认版式）；layout 为简式 {type:"single|row|column|grid",weights?,columns?} 或嵌套 {type,weights?,columns?,children:[…]}（children 项为 {groupId} 或嵌套组合，按阅读顺序恰好覆盖本页全部组一次，最多三层）。每页有程序默认版式（按组数与实文量）；改用其它组合时，在 layouts 的该页条目里把 override 与 layout 同级写：{pageId:"p2", layout:{...}, override:{reason:"一句话理由"}}——override 不能放进 layout 对象里，理由入档分析；仅微调 weights 不算覆盖。这是小参数，仍走工具参数。程序检查通过且审稿覆盖当前内容指纹即可渲染；成功返回候选 {accepted:true, candidate:true, renderId, diagnostics, preview, pptx}——本轮尚未交付，复核 diagnostics 后调用 finish_draft。审稿的阻塞项（issues）未通过前不得渲染；正文里想提交但 JSON 损坏＝本次提交失败，本工具只回报失败、不渲染旧版。失败返回 {accepted:false, stage:"template|geometry|check|submission-failed|revision-budget|stall|…", reason, issues}；每次回执另含 revisionBudget:{maxSuccessfulRevisions,successfulRevisionsUsed,remainingSuccessfulRevisions}，展示首次成功候选后的修订额度。计划可同轮提交，也可先在无工具轮提交并由下一轮工具消费；坏提交不得静默回退。上限为一次成功修订，失败尝试不计入。',
       inputSchema: RENDER_LAYOUTS_SCHEMA,
       handler: async ({ layouts }) => {
         const { plan, source: planSource, note: planNote } = resolvePlan('render_draft');
@@ -712,8 +716,20 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
     handler: async args => {
       activePlanEvidence = null;
       const result = await tool.handler(args);
-      if (!activePlanEvidence || !result || typeof result !== 'object' || Array.isArray(result)) return result;
-      return { ...result, planEvidence: activePlanEvidence };
+      if (!result || typeof result !== 'object' || Array.isArray(result)) return result;
+      const enriched = { ...result };
+      if (tool.name === 'render_draft') {
+        const post = agentState.grayDraft.postRender;
+        const maxSuccessfulRevisions = post?.maxRevisions ?? 1;
+        const successfulRevisionsUsed = post?.revisions ?? 0;
+        enriched.revisionBudget = {
+          maxSuccessfulRevisions,
+          successfulRevisionsUsed,
+          remainingSuccessfulRevisions: Math.max(0, maxSuccessfulRevisions - successfulRevisionsUsed),
+        };
+      }
+      if (activePlanEvidence) enriched.planEvidence = activePlanEvidence;
+      return enriched;
     },
   }));
   const registry = createToolRegistry({ tools: toolsWithPlanEvidence, runDir: agentDir });

@@ -238,7 +238,11 @@ export const SEMANTIC_REVIEW_CONTRACT = `
 职责四·组织尺度与呈现判断：准则是选择尺度，不能充当已验证的证据；并行不能写成先后；条件须对应被约束的行动。组内条目层级是规划职责：原稿的总起句、并列因素、推进方式、目标、做法等可以成为带标签条目，也可以保留连续文字，只要关系可直读就不算缺陷；不得以"依附性标签不得与主体同级"为由打回这类组内分解；多因素共同导出的结果收束条编号与否不是缺陷判据，但被读者读成同级并列原因时要指出。组级共同说明（scope=group）作用范围是整组——范围一眼可读、不被误读成只管某一条或并列项即可（形态不限）；把内容要点误标为组级共同说明要指出。序号不是模型标签：可见条目的序号（一/二…）由程序按条目顺序添加，用它核对编号与层级是否一致，不因缺少原稿序号或签号写法不同而拒绝。条目标签必须是内容词，出现"拆分项一""对象""状态一"这类结构占位名、把承接或递进类连接词当作标签或把一句拆成"连接词标签＋正文"、表格行里用竖线拼接多列文字、正文整句复述标题，都要指出。顺序框架词（"起点/收尾/随后/完成后进入"等由"依次推进"类枚举蕴含）不属于添加，不因它拒绝；非原稿的修饰词若删除后关系读法仍清楚，则不保留。主题概括后正文展开是合法分工，长句机械复述和以后台解释代替组织则须修订。载体/媒介选择是规划层职责——你可以提出载体取向作为建议，但它不具约束力、不会被程序执行或删除；规划层可不采纳，且不采纳不构成拒绝理由，不得因载体建议未被采纳而拒绝已可直读的呈现；程序保证的只是呈现形态，依附对象与范围仍须对照内容核对。同一关系只要能通过任一可用手段（文字分项、卡片、表格、流程）直读即通过。复核修改时，除确认上一问题是否解决，还要检查修改是否引入新的事实、层级或归属错误。声明必须恰好出现一次且不独立成组：遗漏、重复、或把模拟/假设声明单独做成一个区域都要指出。后台审查解释不得进入灰区正文；蓝区制作要求可以说明关系组织与绘制要求。计划表示与呈现方式是否再调整，由具体缺口决定，不预先统一实现。
 
 职责五·反馈、证据与返回：每个 issue 只放仍然存在、证据成立且需要实际修订的实质错误，并简短写明当前具体位置/文字、原稿依据、语义改变与所需修订；已解决、无需修订、纯偏好一律放 notes，不能在同一 problem 内长篇自我推翻后仍阻塞。reviewFeedback 是上轮发现的问题（待核实项），不是新规范、不指定答案：按当前可见文案与原稿重新判定是否仍存在，已用其他呈现解决即算解决，不要求采用上轮建议的措辞、载体或位置。仅凭预计读者可能误读、未见坐标却断言视觉层级，作为 notes 待看图建议，不阻塞；类别数量、某个连接词或页数不是表达正确的证据；仅有标题改名、主辅标签或并排放置不证明关系成立；纯措辞、非必要连接词、载体类型或位置偏好、审美、字号猜测、已解决项都不能进入强制修订队列；不能仅因个人偏好、估计容量或未知坐标拒绝。
-只输出JSON：{accepted:boolean,issues:[{pageId,sourceIds,problem,requiredRevision}],notes:[string],coverage:"逐页引用visiblePages中的具体措辞或组织，说明它怎样承担职责和关系；不能仅复述requirements",limits:"未看灰稿像素图，不能确认视觉可读性"}。
+每次审稿仍只调用本模型一次；必须给出 claimAudit。先按有实际含义的完整命题对照，不做逐词/逐句机械比对。sourceCoverage 把每个来源段中有实质意义的命题列成原句片段；无关标题、重复语、背景或流转内容可标 non-claim 并说明原因。locationCoverage 必须覆盖每个 auditLocations 上屏位置，说明它是 material-claim 还是非命题文字。合法概括、压缩、换序本身不构成问题。
+每个命题 claim 连接 sourceEvidence（sourceId 与原文中逐字存在的短引文）和 visibleEvidence（locationId 与该位置逐字存在的短引文）；未上屏命题的 visibleEvidence 为空并判 omitted。sourceForce、visibleForce 分别说明原稿与上屏表达的效力/强度；addedImplications 逐项判断上屏是否新增因果、确定性、义务或适用范围；ruling 只能为 equivalent、strengthened、weakened、unsupported、misassigned、omitted、uncertain，并写清 rationale。原文确有因果时，即使不用“导致”等词，也要按完整命题关系判断；不得把真实因果误判为新增因果。上屏是合法摘要时，只比较实际命题，不因未逐字覆盖背景细节而打回。
+claimAudit 结构：{schemaVersion:"gray-claim-audit-1",sourceCoverage:[{sourceId,quote,classification:"material-claim|non-claim",claimIds:[...],reason?}],locationCoverage:[{locationId,classification:"material-claim|non-claim",claimIds:[...],reason?}],claims:[{id,pageId,sourceEvidence:[{sourceId,quote}],visibleEvidence:[{locationId,quote}],sourceForce,visibleForce,addedImplications:{causality:boolean,certainty:boolean,obligation:boolean,scope:boolean},ruling,rationale}]}。所有 sourceId、locationId 和 claimId 必须相互对应；每个 source 段都须经 sourceCoverage 考虑。sourceCoverage 的 material-claim 应关联 claim；省略项也要建 claim 并判 omitted。每个 material-claim 上屏位置须有 claim；结构标题/制作说明等非命题位置可标 non-claim 并说明理由。issues 每项用 {pageId,sourceIds,claimIds,problem,requiredRevision}，只列 ruling 非 equivalent 的阻塞命题；equivalent 不得阻塞。notes 记录已解决项与不阻塞观察。
+这份结构化记录是可追溯审阅证据，不是语义正确性的程序证明；程序只核验 schema、引用、位置覆盖及 issues 与 ruling 的一致性，不以词面启发式判定因果、确定性或合法概括。
+只输出JSON：{accepted:boolean,issues:[{pageId,sourceIds,claimIds,problem,requiredRevision}],notes:[string],coverage:"逐页引用visiblePages中的具体措辞或组织，说明它怎样承担职责和关系；不能仅复述requirements",limits:"未看灰稿像素图，不能确认视觉可读性",claimAudit:{schemaVersion:"gray-claim-audit-1",sourceCoverage:[...],locationCoverage:[...],claims:[...]}}。
 issues 只放足以阻塞的实质错误（实际改变理解的失真、遗漏、层级/归属/关系错误，且能在原稿与当前可见内容间定位实际丢失/相反/更强/错误归属）；没有就空数组。建议、可选措辞、已解决说明、非阻塞观察一律放 notes，不得混入 issues；issues 非空时 accepted 必须为 false，notes 不阻塞渲染。
 `;
 
@@ -255,6 +259,7 @@ export function snapshotSemanticReview(review) {
     notes: Array.isArray(review.notes) ? review.notes : [],
     coverage: review.coverage ?? null,
     limits: review.limits ?? null,
+    ...(review.claimAudit && typeof review.claimAudit === 'object' ? { claimAudit: review.claimAudit } : {}),
   };
 }
 
@@ -399,25 +404,240 @@ function pageBlueOnlyFacts(page) {
   return missing;
 }
 
-export function semanticReviewInput({source,area,plan,reviewFeedback=null,flowSources=[]}) {
+function collectReviewLocations(visiblePages) {
+  const locations = [];
+  const add = (pageId, field, text, regionId = null, regionIndex = null, bodyIndex = null) => {
+    if (!nonempty(text)) return;
+    locations.push({
+      id: `loc-${String(locations.length + 1).padStart(4, '0')}`,
+      pageId, field, regionId, regionIndex, bodyIndex, text: String(text),
+    });
+  };
+  for (const page of visiblePages ?? []) {
+    add(page.pageId, 'title', page.title);
+    add(page.pageId, 'claim', page.claim);
+    for (const [regionIndex, region] of (page.regions ?? []).entries()) {
+      add(page.pageId, 'heading', region.heading, region.id, regionIndex);
+      for (const [bodyIndex, part] of (region.body ?? []).entries()) {
+        add(page.pageId, 'body', part.text, region.id, regionIndex, bodyIndex);
+      }
+    }
+  }
+  return locations;
+}
+
+function publicReviewLocations(locations) {
+  return locations.map(({ text: _text, ...location }) => location);
+}
+
+/** Validate citations and structural coverage for a single semantic review response. */
+export function validateSemanticReviewEvidence(input, response) {
+  const errors = [];
+  const fail = message => errors.push(message);
+  const locations = collectReviewLocations(input?.visiblePages);
+  const locationById = new Map(locations.map(location => [location.id, location]));
+  const sources = new Map((input?.sourceSegments ?? []).map(segment => [segment.id, String(segment.text ?? '')]));
+  const audit = response?.claimAudit;
+  if (!audit || typeof audit !== 'object' || Array.isArray(audit)) {
+    return { valid: false, errors: ['缺少 claimAudit 对照证据对象'] };
+  }
+  if (audit.schemaVersion !== 'gray-claim-audit-1') fail('claimAudit.schemaVersion 必须是 gray-claim-audit-1');
+  if (!Array.isArray(audit.sourceCoverage)) fail('claimAudit.sourceCoverage 必须是数组');
+  if (!Array.isArray(audit.locationCoverage)) fail('claimAudit.locationCoverage 必须是数组');
+  if (!Array.isArray(audit.claims)) fail('claimAudit.claims 必须是数组');
+  if (!sources.size) fail('审稿输入缺少带来源 id 的 sourceSegments');
+  if (!Array.isArray(response?.issues)) fail('审稿 issues 必须是数组');
+  if (typeof response?.accepted !== 'boolean') fail('审稿 accepted 必须是布尔值');
+  if (!Array.isArray(audit.sourceCoverage) || !Array.isArray(audit.locationCoverage) || !Array.isArray(audit.claims) || !Array.isArray(response?.issues)) {
+    return { valid: false, errors: errors.slice(0, 40) };
+  }
+
+  const sourceCoverageByKey = new Map();
+  const sourceSegmentsCovered = new Set();
+  for (const item of audit.sourceCoverage) {
+    if (!item || typeof item !== 'object' || !nonempty(item.sourceId)) {
+      fail('sourceCoverage 项缺少 sourceId');
+      continue;
+    }
+    const sourceText = sources.get(item.sourceId);
+    if (sourceText === undefined) fail(`sourceCoverage 引用了不存在的 sourceId ${item.sourceId}`);
+    else {
+      sourceSegmentsCovered.add(item.sourceId);
+      if (!nonempty(item.quote) || !sourceText.includes(item.quote)) fail(`sourceCoverage 引文不在 ${item.sourceId} 原句中`);
+    }
+    const key = `${item.sourceId}\u0000${item.quote ?? ''}`;
+    if (sourceCoverageByKey.has(key)) fail(`sourceCoverage 重复记录 ${item.sourceId}`);
+    sourceCoverageByKey.set(key, item);
+    if (!['material-claim', 'non-claim'].includes(item.classification)) fail(`${item.sourceId} sourceCoverage classification 无效`);
+    if (!Array.isArray(item.claimIds)) fail(`${item.sourceId} sourceCoverage claimIds 必须是数组`);
+    else if (item.classification === 'material-claim' && item.claimIds.length === 0) fail(`${item.sourceId} material-claim 必须关联 claimIds`);
+    else if (item.classification === 'non-claim' && item.claimIds.length > 0) fail(`${item.sourceId} non-claim 的 claimIds 必须为空`);
+    if (item.classification === 'non-claim' && !nonempty(item.reason)) fail(`${item.sourceId} sourceCoverage 标为 non-claim 时必须说明理由`);
+  }
+  for (const sourceId of sources.keys()) {
+    if (!sourceSegmentsCovered.has(sourceId)) fail(`sourceCoverage 未考虑来源段 ${sourceId}`);
+  }
+
+  const coverageByLocation = new Map();
+  for (const item of audit.locationCoverage) {
+    if (!item || typeof item !== 'object' || typeof item.locationId !== 'string') {
+      fail('locationCoverage 项缺少 locationId');
+      continue;
+    }
+    if (!locationById.has(item.locationId)) fail(`locationCoverage 引用了不存在的上屏位置 ${item.locationId}`);
+    if (coverageByLocation.has(item.locationId)) fail(`locationCoverage 重复覆盖 ${item.locationId}`);
+    coverageByLocation.set(item.locationId, item);
+    if (!['material-claim', 'non-claim'].includes(item.classification)) fail(`${item.locationId} classification 必须是 material-claim 或 non-claim`);
+    if (!Array.isArray(item.claimIds)) fail(`${item.locationId} claimIds 必须是数组`);
+    else if (item.classification === 'material-claim' && item.claimIds.length === 0) fail(`${item.locationId} 是 material-claim，必须引用 claimIds`);
+    else if (item.classification === 'non-claim' && item.claimIds.length > 0) fail(`${item.locationId} 是 non-claim，claimIds 必须为空`);
+    if (item.classification === 'non-claim' && !nonempty(item.reason)) fail(`${item.locationId} 标为 non-claim 时必须说明理由`);
+  }
+  for (const location of locations) {
+    if (!coverageByLocation.has(location.id)) fail(`缺少对上屏位置 ${location.id} 的覆盖裁定`);
+  }
+
+  const claimsById = new Map();
+  const claimSources = new Map();
+  const pageIds = new Set((input.visiblePages ?? []).map(page => page.pageId));
+  const allowedRulings = new Set(['equivalent', 'strengthened', 'weakened', 'unsupported', 'misassigned', 'omitted', 'uncertain']);
+  for (const claim of audit.claims) {
+    if (!claim || typeof claim !== 'object' || !nonempty(claim.id)) {
+      fail('claimAudit.claims 项缺少唯一 id');
+      continue;
+    }
+    if (claimsById.has(claim.id)) fail(`claimAudit 重复 claim id ${claim.id}`);
+    claimsById.set(claim.id, claim);
+    if (!pageIds.has(claim.pageId)) fail(`${claim.id} pageId 不存在于 visiblePages`);
+    if (!allowedRulings.has(claim.ruling)) fail(`${claim.id} ruling 无效`);
+    if (!nonempty(claim.sourceForce) || !nonempty(claim.visibleForce)) fail(`${claim.id} 必须分别说明 sourceForce 与 visibleForce`);
+    if (!nonempty(claim.rationale)) fail(`${claim.id} rationale 不能为空`);
+    const shifts = claim.addedImplications;
+    for (const key of ['causality', 'certainty', 'obligation', 'scope']) {
+      if (typeof shifts?.[key] !== 'boolean') fail(`${claim.id} addedImplications.${key} 必须是布尔值`);
+    }
+    if (claim.ruling === 'equivalent' && shifts && Object.values(shifts).some(value => value === true)) fail(`${claim.id} ruling=equivalent 与新增含义标记不一致`);
+
+    const visibleEvidence = claim.visibleEvidence;
+    if (!Array.isArray(visibleEvidence)) fail(`${claim.id} visibleEvidence 必须是数组`);
+    else if (claim.ruling === 'omitted' && visibleEvidence.length) fail(`${claim.id} ruling=omitted 时 visibleEvidence 必须为空`);
+    else if (claim.ruling !== 'omitted' && visibleEvidence.length === 0) fail(`${claim.id} 缺少上屏位置证据`);
+    for (const evidence of Array.isArray(visibleEvidence) ? visibleEvidence : []) {
+      const location = locationById.get(evidence?.locationId);
+      if (!location) {
+        fail(`${claim.id} 引用了不存在的上屏位置 ${evidence?.locationId ?? ''}`);
+        continue;
+      }
+      if (location.pageId !== claim.pageId) fail(`${claim.id} 的 pageId 与引用位置不一致`);
+      if (!nonempty(evidence.quote) || !location.text.includes(evidence.quote)) fail(`${claim.id} 的上屏引文不在 ${evidence.locationId} 对应原文中`);
+    }
+
+    const sourceIds = new Set();
+    if (!Array.isArray(claim.sourceEvidence) || claim.sourceEvidence.length === 0) fail(`${claim.id} 缺少来源原句证据`);
+    for (const evidence of Array.isArray(claim.sourceEvidence) ? claim.sourceEvidence : []) {
+      const sourceText = sources.get(evidence?.sourceId);
+      if (sourceText === undefined) {
+        fail(`${claim.id} 引用了不存在的 sourceId ${evidence?.sourceId ?? ''}`);
+        continue;
+      }
+      sourceIds.add(evidence.sourceId);
+      if (!nonempty(evidence.quote) || !sourceText.includes(evidence.quote)) fail(`${claim.id} 的来源引文不在 ${evidence.sourceId} 原句中`);
+      const covered = [...sourceCoverageByKey.values()].some(item => item.sourceId === evidence.sourceId
+        && item.classification === 'material-claim'
+        && Array.isArray(item.claimIds) && item.claimIds.includes(claim.id)
+        && typeof item.quote === 'string' && item.quote.includes(evidence.quote));
+      if (!covered) fail(`${claim.id} 的来源引文未被 sourceCoverage 作为同一命题关联`);
+    }
+    claimSources.set(claim.id, sourceIds);
+  }
+
+  for (const item of audit.locationCoverage) {
+    if (!Array.isArray(item?.claimIds)) continue;
+    for (const claimId of item.claimIds) {
+      const claim = claimsById.get(claimId);
+      if (!claim) fail(`${item.locationId} 引用了不存在的 claimId ${claimId}`);
+      else if (!(claim.visibleEvidence ?? []).some(evidence => evidence.locationId === item.locationId)) fail(`${item.locationId} 与 ${claimId} 的 visibleEvidence 对照不一致`);
+    }
+    if (item.classification === 'material-claim' && item.claimIds.length === 0) fail(`${item.locationId} 的 material-claim 没有 claim 证据`);
+  }
+  for (const item of audit.sourceCoverage) {
+    if (!Array.isArray(item?.claimIds)) continue;
+    for (const claimId of item.claimIds) {
+      const claim = claimsById.get(claimId);
+      if (!claim) fail(`${item.sourceId} sourceCoverage 引用了不存在的 claimId ${claimId}`);
+      else if (item.classification !== 'material-claim' || typeof item.quote !== 'string' || !(claim.sourceEvidence ?? []).some(evidence => evidence.sourceId === item.sourceId && item.quote.includes(evidence.quote))) {
+        fail(`${item.sourceId} 与 ${claimId} 的 sourceCoverage 对照不一致`);
+      }
+    }
+  }
+  for (const claim of audit.claims) {
+    for (const evidence of claim.visibleEvidence ?? []) {
+      const coverage = coverageByLocation.get(evidence.locationId);
+      if (!coverage || coverage.classification !== 'material-claim' || !coverage.claimIds?.includes(claim.id)) fail(`${claim.id} 与 ${evidence.locationId} 的 locationCoverage 对照不一致`);
+    }
+  }
+
+  const issueClaimIds = new Set();
+  for (const issue of response.issues) {
+    if (!Array.isArray(issue?.claimIds) || issue.claimIds.length === 0) {
+      fail('每个 semantic issue 必须用 claimIds 指向审计证据');
+      continue;
+    }
+    if (!Array.isArray(issue.sourceIds) || issue.sourceIds.length === 0) fail('每个 semantic issue 必须列出来源 sourceIds');
+    if (!nonempty(issue.problem) || !nonempty(issue.requiredRevision)) fail('每个 semantic issue 必须包含 problem 与 requiredRevision');
+    if (!pageIds.has(issue.pageId)) fail(`issue pageId ${issue.pageId ?? ''} 不存在于 visiblePages`);
+    const referencedSources = new Set();
+    if (new Set(issue.claimIds).size !== issue.claimIds.length) fail('semantic issue claimIds 不得重复');
+    for (const claimId of issue.claimIds) {
+      const claim = claimsById.get(claimId);
+      if (!claim) {
+        fail(`issue 引用了不存在的 claimId ${claimId}`);
+        continue;
+      }
+      issueClaimIds.add(claimId);
+      if (claim.ruling === 'equivalent') fail(`issue 将 ${claimId} 标为阻塞，但审计 ruling 是 equivalent`);
+      if (issue.pageId !== claim.pageId) fail(`issue pageId 与 ${claimId} 的审计位置不一致`);
+      for (const sourceId of claimSources.get(claimId) ?? []) referencedSources.add(sourceId);
+    }
+    for (const sourceId of issue.sourceIds ?? []) {
+      if (!referencedSources.has(sourceId)) fail(`issue sourceId ${sourceId} 没有对应的 claim 原句证据`);
+    }
+    for (const sourceId of referencedSources) {
+      if (!(issue.sourceIds ?? []).includes(sourceId)) fail(`issue claimIds ${issue.claimIds.join(', ')} 缺少来源 ${sourceId}`);
+    }
+  }
+  for (const claim of audit.claims) {
+    if (claim.ruling !== 'equivalent' && !issueClaimIds.has(claim.id)) fail(`${claim.id} ruling=${claim.ruling}，但没有对应阻塞 issue`);
+    if (claim.ruling === 'equivalent' && issueClaimIds.has(claim.id)) fail(`${claim.id} ruling=equivalent，却被列为阻塞 issue`);
+  }
+  if (response.accepted === true && response.issues.length > 0) fail('accepted=true 与非空阻塞 issues 不一致');
+  if (response.accepted === false && response.issues.length === 0) fail('accepted=false 必须对应至少一个阻塞 issue');
+  return { valid: errors.length === 0, errors: errors.slice(0, 40), locationCount: locations.length, claimCount: claimsById.size };
+}
+
+export function semanticReviewInput({source,sourceSegments=[],area,plan,reviewFeedback=null,flowSources=[]}) {
   const pages = semanticPages(plan);
+  const visiblePages = pages.map(page=>({pageId:page.pageId,title:page.title,claim:page.claim,regions:page.items.map(item=>({
+    id:item.id,kind:item.kind,surface:SKETCH_KINDS.has(item.kind)
+      ? `结构草图：${SKETCH_LABELS[item.kind]}，框内文字为实际文案`
+      : item.kind==='text'
+        ? ['灰区：实际文案',
+            item.blocks?.some(block=>block.kind && block.kind!=='text' && block.kind!=='note') ? '非text的kind为块内浅蓝制作说明，四项均上屏' : null,
+            item.blocks?.some(block=>block.kind==='note') ? 'attachment=true 的块为附着说明：程序以 12px 小字紧随所属条目渲染、不编号' : null,
+            item.blocks?.some(block=>block.scope==='group') ? 'scope=group 的块为组级共同说明：程序不编号，以 12px 小字随组渲染，作用范围是本组全部条目' : null,
+          ].filter(Boolean).join('；')
+        : '浅蓝区：制作说明，四项均须上屏',heading:item.heading,body:grayDisplayBlocks(item),
+  }))}));
+  const reviewLocations = collectReviewLocations(visiblePages);
   return {
     source, area:{width:area.width,height:area.height}, reviewFeedback,
+    ...(sourceSegments.length ? { sourceSegments: sourceSegments.map(segment=>({id:segment.id,text:segment.text})) } : {}),
     ...(flowSources.length ? { flowSources } : {}),
     requirements:plan.pages.map(page=>({pageId:page.pageId,pagePurpose:page.pagePurpose,narrative:page.narrative,
       carriedSources:page.sourceIds??[],
       groups:page.groups.map(group=>({id:group.id,role:group.role,importance:group.importance}))})),
-    visiblePages:pages.map(page=>({pageId:page.pageId,claim:page.claim,regions:page.items.map(item=>({
-      id:item.id,kind:item.kind,surface:SKETCH_KINDS.has(item.kind)
-        ? `结构草图：${SKETCH_LABELS[item.kind]}，框内文字为实际文案`
-        : item.kind==='text'
-          ? ['灰区：实际文案',
-              item.blocks?.some(block=>block.kind && block.kind!=='text' && block.kind!=='note') ? '非text的kind为块内浅蓝制作说明，四项均上屏' : null,
-              item.blocks?.some(block=>block.kind==='note') ? 'attachment=true 的块为附着说明：程序以 12px 小字紧随所属条目渲染、不编号' : null,
-              item.blocks?.some(block=>block.scope==='group') ? 'scope=group 的块为组级共同说明：程序不编号，以 12px 小字随组渲染，作用范围是本组全部条目' : null,
-            ].filter(Boolean).join('；')
-          : '浅蓝区：制作说明，四项均须上屏',heading:item.heading,body:grayDisplayBlocks(item),
-    }))})),
+    visiblePages,
+    auditLocations: publicReviewLocations(reviewLocations),
   };
 }
 

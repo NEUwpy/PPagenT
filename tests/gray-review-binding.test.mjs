@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  planContentFingerprint, checkReviewCoverage, grayDisplayBlocks, semanticReviewInput, validateSemanticPlan,
+  planContentFingerprint, checkReviewCoverage, grayDisplayBlocks, semanticReviewInput, validateSemanticPlan, validateSemanticReviewEvidence,
 } from '../src/runner/gray-semantics.mjs';
 import { grayBodyLayout } from '../src/runner/gray-draft.mjs';
 import { newRunState } from '../src/runner/state.mjs';
@@ -48,6 +48,80 @@ test('审稿覆盖判定：未审/未通过/内容已改都不得继承通过状
   assert.equal(stale.status, 'stale');
   assert.equal(stale.reviewedFingerprint, fp);
   assert.notEqual(stale.fingerprint, fp);
+});
+
+test('结构化审稿证据允许忠实摘要与原文确有的因果关系', () => {
+  const source = '每份申请都必须在30日内完成复核。延迟会导致权限无法开放。';
+  const visible = '申请须30日内完成复核；延迟致权限无法开放。';
+  const p = plan([block('b1', visible)]);
+  const input = semanticReviewInput({ source, sourceSegments: [{ id: 's1', text: source }], area: { width: 1170, height: 492 }, plan: p });
+  const bodyLocation = input.auditLocations.find(location => location.field === 'body');
+  const audit = {
+    schemaVersion: 'gray-claim-audit-1',
+    sourceCoverage: [
+      { sourceId: 's1', quote: '每份申请都必须在30日内完成复核。', classification: 'material-claim', claimIds: ['c1'] },
+      { sourceId: 's1', quote: '延迟会导致权限无法开放。', classification: 'material-claim', claimIds: ['c2'] },
+    ],
+    locationCoverage: input.auditLocations.map(location => location.id === bodyLocation.id
+      ? { locationId: location.id, classification: 'material-claim', claimIds: ['c1', 'c2'] }
+      : { locationId: location.id, classification: 'non-claim', claimIds: [], reason: '标题或结构定位文字' }),
+    claims: [
+      {
+        id: 'c1', pageId: 'p1', sourceEvidence: [{ sourceId: 's1', quote: '每份申请都必须在30日内完成复核。' }],
+        visibleEvidence: [{ locationId: bodyLocation.id, quote: '申请须30日内完成复核' }],
+        sourceForce: '对每份申请设定30日内完成复核的义务', visibleForce: '摘要仍对申请表达30日内完成复核的义务',
+        addedImplications: { causality: false, certainty: false, obligation: false, scope: false }, ruling: 'equivalent', rationale: '压缩措辞但保留对象、期限与义务',
+      },
+      {
+        id: 'c2', pageId: 'p1', sourceEvidence: [{ sourceId: 's1', quote: '延迟会导致权限无法开放。' }],
+        visibleEvidence: [{ locationId: bodyLocation.id, quote: '延迟致权限无法开放' }],
+        sourceForce: '原稿明确陈述延迟导致无法开放权限', visibleForce: '摘要继续表达延迟导致无法开放权限',
+        addedImplications: { causality: false, certainty: false, obligation: false, scope: false }, ruling: 'equivalent', rationale: '原稿已有因果关系，摘要没有新加因果',
+      },
+    ],
+  };
+  const response = { accepted: true, issues: [], claimAudit: audit };
+  const validation = validateSemanticReviewEvidence(input, response);
+  assert.equal(validation.valid, true, JSON.stringify(validation.errors));
+  assert.equal(audit.claims[1].addedImplications.causality, false);
+  assert.equal(audit.claims[1].ruling, 'equivalent');
+});
+
+test('结构化审稿证据核验精确来源、上屏位置和 issue-ruling 一致性', () => {
+  const source = '每份申请都必须在30日内完成复核。延迟会导致权限无法开放。';
+  const visible = '申请须30日内完成复核；延迟致权限无法开放。';
+  const p = plan([block('b1', visible)]);
+  const input = semanticReviewInput({ source, sourceSegments: [{ id: 's1', text: source }], area: { width: 1170, height: 492 }, plan: p });
+  const bodyLocation = input.auditLocations.find(location => location.field === 'body');
+  const claim = {
+    id: 'c1', pageId: 'p1', sourceEvidence: [{ sourceId: 's1', quote: '每份申请都必须在30日内完成复核。' }],
+    visibleEvidence: [{ locationId: bodyLocation.id, quote: '申请须30日内完成复核' }],
+    sourceForce: '原稿有明确期限义务', visibleForce: '正文省略了必须义务',
+    addedImplications: { causality: false, certainty: false, obligation: false, scope: false }, ruling: 'weakened', rationale: '文字改写削弱原稿义务强度',
+  };
+  const audit = {
+    schemaVersion: 'gray-claim-audit-1',
+    sourceCoverage: [{ sourceId: 's1', quote: claim.sourceEvidence[0].quote, classification: 'material-claim', claimIds: ['c1'] }],
+    locationCoverage: input.auditLocations.map(location => location.id === bodyLocation.id
+      ? { locationId: location.id, classification: 'material-claim', claimIds: ['c1'] }
+      : { locationId: location.id, classification: 'non-claim', claimIds: [], reason: '非命题文字' }),
+    claims: [claim],
+  };
+  const response = {
+    accepted: false,
+    issues: [{ pageId: 'p1', sourceIds: ['s1'], claimIds: ['c1'], problem: '义务强度变弱', requiredRevision: '保留必须复核' }],
+    claimAudit: audit,
+  };
+  assert.equal(validateSemanticReviewEvidence(input, response).valid, true);
+  const badSource = structuredClone(response);
+  badSource.claimAudit.claims[0].sourceEvidence[0].sourceId = 'unknown';
+  assert.equal(validateSemanticReviewEvidence(input, badSource).valid, false);
+  const badPosition = structuredClone(response);
+  badPosition.claimAudit.claims[0].visibleEvidence[0].locationId = 'loc-9999';
+  assert.equal(validateSemanticReviewEvidence(input, badPosition).valid, false);
+  const badRuling = structuredClone(response);
+  badRuling.claimAudit.claims[0].ruling = 'equivalent';
+  assert.equal(validateSemanticReviewEvidence(input, badRuling).valid, false);
 });
 
 test('层级机制：scope:"group" 的共同说明不编号、随组以小字呈现（评审 #119 要求 3）', () => {
