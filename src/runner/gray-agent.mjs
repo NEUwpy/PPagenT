@@ -295,6 +295,36 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
     const consume = (plan, source, submission, consumptionSource, note = null, extras = {}) => {
       const fingerprint = submission.fingerprint ?? planContentFingerprint(plan);
       const submissionFingerprint = submission.submissionFingerprint ?? planSubmissionFingerprint(plan);
+      const activeInvalidFeedback = activeInvalidAuditKey ? invalidAuditFeedbackByInput.get(activeInvalidAuditKey) : null;
+      const contentDiffersFromPendingAudit = activeInvalidFeedback && fingerprint !== activeInvalidFeedback.fingerprint;
+      if (activeInvalidFeedback && (contentDiffersFromPendingAudit || consumer === 'semantic_review')) {
+        const originalEvidence = activeInvalidFeedback.planEvidence ?? {};
+        if (pendingPlan?.fingerprint === fingerprint) pendingPlan = null;
+        const lockedSource = contentDiffersFromPendingAudit ? 'audit-repair-pending' : 'audit-repair-original';
+        const evidence = {
+          ...originalEvidence,
+          consumer,
+          planSource: lockedSource,
+          fingerprint: activeInvalidFeedback.fingerprint,
+          submissionFingerprint: originalEvidence.submissionFingerprint ?? activeInvalidFeedback.planSubmission?.submissionFingerprint ?? null,
+          consumedTurn: currentTurnNumber(),
+          consumptionSource: 'audit-repair-lock',
+          contentUpdated: false,
+          submissionUpdated: false,
+          attemptedFingerprint: fingerprint,
+          auditRepairAttemptsUsed: activeInvalidFeedback.repairAttemptsUsed ?? 0,
+        };
+        activePlanEvidence = evidence;
+        currentTurnPlanUses.push(evidence);
+        return {
+          plan: structuredClone(activeInvalidFeedback.plan),
+          source: lockedSource,
+          note: contentDiffersFromPendingAudit
+            ? '新计划内容指纹与待修复审稿版本不同：本次提交未采纳、未覆盖原计划；先对已保存的原计划完成证据修复，再提交新计划。'
+            : '本次 semantic_review 使用首次审稿时保存的原计划与审稿输入，不采用其他待提交版本。',
+          evidence,
+        };
+      }
       const contentUpdated = lastPlanFingerprint !== fingerprint;
       const submissionUpdated = lastPlanSubmissionFingerprint !== submissionFingerprint;
       if (submissionUpdated) {
@@ -433,13 +463,21 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
   const tools = [
     defineTool({
       name: 'check_plan',
-      description: '对你当前已提交的完整 gray-plan-3 计划做程序检查：结构字段、来源引用与覆盖、块级数字/引文保真；并返回逐页默认版式（defaults，含特征依据）与规划期预估（主题句单行预算、按默认组合的容量与充实度，均为非阻断提示）。完整计划 JSON 写入任一轮消息正文即提交；若该轮无工具调用，暂存供下一轮工具消费。当前工具轮有效提交优先于暂存；无新 JSON 时依次使用暂存版或已提交版。内容变更使旧审稿失效；坏提交返回 submission-failed，不静默回退。计划不接收工具参数。返回 {accepted, issues, coverage, defaults, planSource}。任何规划改动后都应重新调用。',
+      description: '对你当前已提交的完整 gray-plan-3 计划做程序检查：结构字段、来源引用与覆盖、块级数字/引文保真；并返回逐页默认版式（defaults，含特征依据）与规划期预估（主题句单行预算、按默认组合的容量与充实度，均为非阻断提示）。完整计划 JSON 写入任一轮消息正文即提交；若该轮无工具调用，暂存供下一轮工具消费。当前工具轮有效提交优先于暂存；无新 JSON 时依次使用暂存版或已提交版。内容变更使旧审稿失效；坏提交返回 submission-failed，不静默回退。若回执 stage=audit-repair-pending，当前新计划未被接受，原待修复计划仍是当前计划；先对它完成 semantic_review 证据修复，成功后再重新提交新计划。计划不接收工具参数。返回 {accepted, issues, coverage, defaults, planSource}。任何规划改动后都应重新调用。',
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
       handler: async () => {
         const { plan, source, note } = resolvePlan('check_plan');
         // 任务 #175：坏提交是失败控制流——不检查、不更新计划、不冒充已修订。
         if (source === 'submission-failed') {
           return { accepted: false, planSource: source, issues: [], coverage: null, note: `${note ?? '计划提交失败。'} 本工具未运行检查。` };
+        }
+        if (source === 'audit-repair-pending') {
+          const feedback = invalidAuditFeedbackByInput.get(activeInvalidAuditKey);
+          return {
+            accepted: false, stage: 'audit-repair-pending', planSource: source, issues: [], coverage: null,
+            pendingAuditRepair: { fingerprint: activePlanEvidence.fingerprint, planSource: feedback?.planSource ?? null, attemptsUsed: feedback?.repairAttemptsUsed ?? 0, maxAttempts: maxInvalidAuditRepairs },
+            note: note ?? '新计划未采纳或覆盖原计划；请先对保存的原计划修复审稿证据，成功后再提交修订版。',
+          };
         }
         const fingerprint = planContentFingerprint(plan);
         const repeated = lastCheckedFingerprint === fingerprint;
@@ -454,7 +492,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
     }),
     defineTool({
       name: 'semantic_review',
-      description: '用一次独立审稿对照原稿与实际上屏文案。审稿只维护逐命题 claimAudit；程序核验原句/上屏引文、位置，以及未引用来源段和未审查位置的说明，并从 ruling 派生阻塞 issues 与 uncertain notes。回执 outcome=audit-invalid 表示审稿证据结构无效，不代表正文被判退：保持计划不变，只对同一审稿输入修复证据；仅当 outcome=content-rejected 时才按 issues 修改正文。每个确切审稿输入最多两次证据修复；期间不得改正文来重置次数，修复仍无效则停止并报告。有效结论按内容指纹复用，新计划重新审稿。正文中提交损坏 JSON 时本次提交失败，不回退暂存或旧版；渲染前须有覆盖当前内容指纹的有效通过。',
+      description: '用一次独立审稿对照原稿与实际上屏文案。审稿只维护逐命题 claimAudit；程序核验原句/上屏引文、位置，以及未引用来源段和未审查位置的说明，并从 ruling 派生阻塞 issues 与 uncertain notes。回执 outcome=audit-invalid 表示审稿证据结构无效，不代表正文被判退：保持计划不变，只对同一审稿输入修复证据；仅当 outcome=content-rejected 时才按 issues 修改正文。每个确切审稿输入最多两次证据修复；期间不得改正文来重置次数，修复仍无效则停止并报告。待修复期间，程序冻结原计划；不同内容指纹的新提交会被拒绝，semantic_review 继续审保存的原计划。证据修复成功后才可提交新计划。有效结论按内容指纹复用。正文中提交损坏 JSON 时本次提交失败，不回退暂存或旧版；渲染前须有覆盖当前内容指纹的有效通过。',
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
       handler: async () => {
         const { plan, source, note } = resolvePlan('semantic_review');
@@ -500,6 +538,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
             claimAudit: feedback.rawAudit ?? null,
             auditValidation: { valid: false, errors: feedback.validationErrors ?? [] },
             evidenceRepair: { status: exhausted ? 'exhausted' : 'pending', attemptsUsed, maxAttempts: maxInvalidAuditRepairs, reason },
+            planDisposition: sameInput ? 'saved-original-reviewed' : 'audit-repair-pending',
             planSource: source,
             note: [note, reason, sameInput
               ? exhausted ? '报告审稿证据修复失败，不要改正文或继续重试。' : '不要修改正文。'
@@ -577,6 +616,9 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
           } else {
             invalidAuditFeedbackByInput.set(invalidFeedbackKey, {
               fingerprint, reviewInputHash, reviewInput: structuredClone(reviewInput),
+              plan: structuredClone(plan), planSource: source,
+              planEvidence: structuredClone(activePlanEvidence),
+              planSubmission: { turn: activePlanEvidence?.submittedTurn ?? null, fingerprint, submissionFingerprint: activePlanEvidence?.submissionFingerprint ?? null },
               rawAudit: parsed.claimAudit ?? null, validationErrors: auditValidation.errors.slice(),
               repairAttemptsUsed: 0, status: 'pending',
             });
@@ -608,6 +650,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
           ...(reviewOutcome !== 'accepted' ? { stage: reviewOutcome } : {}),
           issues: blocking.slice(0, 12), notes, reviewedFingerprint: fingerprint, reviewInputHash,
           coverage: null, limits, claimAudit: parsed.claimAudit ?? null, auditValidation, planSource: source,
+          ...(source === 'audit-repair-pending' ? { planDisposition: 'audit-repair-pending', rejectedPlanFingerprint: activePlanEvidence?.attemptedFingerprint ?? null } : {}),
           ...(evidenceRepair ? { evidenceRepair } : {}),
           ...(note || repairNote ? { note: [note, repairNote].filter(Boolean).join(' ') } : {}),
         };
@@ -625,6 +668,9 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
           agentState.grayDraft.renders.push({ render: renderCount + 1, accepted: false, stage: 'submission-failed', reason: planNote ?? '计划提交失败' });
           await saveAgentState();
           return { accepted: false, stage: 'submission-failed', planSource, reason: `${planNote ?? '计划提交失败。'} 本工具未渲染任何计划版本。` };
+        }
+        if (planSource === 'audit-repair-pending') {
+          return { accepted: false, stage: 'audit-repair-pending', planSource, pendingFingerprint: activePlanEvidence.fingerprint, requestedFingerprint: activePlanEvidence.attemptedFingerprint, reason: planNote ?? '先对保存的原计划完成同版审稿证据修复；本次未渲染新计划。' };
         }
         // 任务 #198：首次成功后的修订周期上限——成功渲染只计一次修订；坏提交/模板/几何失败不计入，
         // 避免"失败反复重开周期"，同时保住已有候选。
@@ -786,6 +832,9 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
           agentState.grayDraft.submissionFailures = (agentState.grayDraft.submissionFailures ?? 0) + 1;
           await saveAgentState();
           return { accepted: false, stage: 'finish-submission-failed', planSource, reason: `${planNote ?? '计划提交失败。'} 本轮不 finish，也不交付旧候选。` };
+        }
+        if (planSource === 'audit-repair-pending') {
+          return { accepted: false, stage: 'audit-repair-pending', planSource, pendingFingerprint: activePlanEvidence.fingerprint, requestedFingerprint: activePlanEvidence.attemptedFingerprint, reason: planNote ?? '先对保存的原计划完成同版审稿证据修复；本次未 finish 或交付。' };
         }
         const post = agentState.grayDraft.postRender;
         if (!post || !candidates.length) {

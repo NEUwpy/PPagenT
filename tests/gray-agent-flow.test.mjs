@@ -601,7 +601,7 @@ test('证据修复收到原始无效 claimAudit 和对应校验错误', async ()
   } finally { await run.rm(); }
 });
 
-test('计划内容改变不能重置修复次数，旧版反馈不进入新版输入', async () => {
+test('计划内容改变会被拒绝并清除暂存，新审稿继续修复原版本', async () => {
   const changedPlan = planJson('，新增内容版本');
   const run = await runProtocol([
     { content: planJson(''), tools: ['check_plan'] },
@@ -611,18 +611,58 @@ test('计划内容改变不能重置修复次数，旧版反馈不进入新版�
     { content: '停止。', tools: [] },
   ], [{ notes: [], claimAudit: null }]);
   try {
+    const checks = run.events.filter(event => event.tool === 'check_plan');
     const reviews = run.events.filter(event => event.tool === 'semantic_review');
     assert.equal(reviews[0].result.outcome, 'audit-invalid');
-    assert.equal(reviews[1].result.outcome, 'audit-invalid');
-    assert.equal(reviews[1].result.planReviewed, false);
-    assert.equal(reviews[1].result.evidenceRepair.status, 'pending');
-    assert.equal(reviews[1].result.evidenceRepair.attemptsUsed, 0);
+    assert.equal(checks[1].result.stage, 'audit-repair-pending');
+    assert.equal(checks[1].result.accepted, false);
+    assert.equal(reviews[1].result.outcome, 'accepted');
+    assert.equal(reviews[1].result.evidenceRepair.status, 'succeeded');
+    assert.equal(reviews[1].result.planSource, 'audit-repair-original');
     assert.equal(reviews[1].result.reviewedFingerprint, reviews[0].result.reviewedFingerprint, '回执标识仍待修复的原版本');
-    assert.notEqual(reviews[1].result.requestedFingerprint, reviews[1].result.reviewedFingerprint, '请求的新内容版本与待修复版本不同');
-    assert.equal(reviews[1].result.requestedFingerprint, planContentFingerprint(JSON.parse(changedPlan)));
-    assert.equal(run.provider.reviewCalls.length, 1, '内容改变不能开启新版审稿来重置同版修复预算');
-    assert.equal(run.provider.reviewInputs.length, 1, '旧audit/errors没有送入新版审稿');
-    assert.match(reviews[1].result.note, /不要通过改稿重置修复次数/u);
+    assert.equal(checks[1].result.pendingAuditRepair.fingerprint, planContentFingerprint(JSON.parse(planJson(''))));
+    assert.equal(checks[1].result.planEvidence.attemptedFingerprint, planContentFingerprint(JSON.parse(changedPlan)));
+    assert.equal(run.provider.reviewCalls.length, 2, '新内容没有启动审稿；只对保存的原版本进行了证据修复');
+    assert.deepEqual(run.provider.reviewInputs[1].originalReviewInput, run.provider.reviewInputs[0]);
+  } finally { await run.rm(); }
+});
+
+test('待修复原计划会拒绝换版并保存快照；同版修复成功后新计划可进入审稿', async () => {
+  const originalPlan = planJson('');
+  const revisedPlan = planJson('，修订版');
+  const run = await runProtocol([
+    { content: originalPlan, tools: ['check_plan'] },
+    { content: '审查原计划。', tools: ['semantic_review'] },
+    { content: revisedPlan, tools: ['check_plan'] },
+    { content: '先修复原计划的审稿证据。', tools: ['semantic_review'] },
+    { content: revisedPlan, tools: ['check_plan'] },
+    { content: '审查修订版。', tools: ['semantic_review'] },
+    { content: '停止。', tools: [] },
+  ], [{ notes: [], claimAudit: null }]);
+  try {
+    const checks = run.events.filter(event => event.tool === 'check_plan');
+    const reviews = run.events.filter(event => event.tool === 'semantic_review');
+    const originalFingerprint = planContentFingerprint(JSON.parse(originalPlan));
+    const revisedFingerprint = planContentFingerprint(JSON.parse(revisedPlan));
+
+    assert.equal(reviews[0].result.outcome, 'audit-invalid');
+    assert.equal(checks[1].result.accepted, false);
+    assert.equal(checks[1].result.stage, 'audit-repair-pending');
+    assert.equal(checks[1].result.planSource, 'audit-repair-pending');
+    assert.equal(checks[1].result.pendingAuditRepair.fingerprint, originalFingerprint);
+    assert.equal(checks[1].result.planEvidence.fingerprint, originalFingerprint);
+    assert.equal(checks[1].result.planEvidence.attemptedFingerprint, revisedFingerprint);
+    assert.equal(checks[1].result.planEvidence.planSource, 'audit-repair-pending');
+
+    assert.equal(reviews[1].result.outcome, 'accepted', JSON.stringify(reviews[1].result.auditValidation));
+    assert.equal(reviews[1].result.planSource, 'audit-repair-original');
+    assert.equal(reviews[1].result.reviewedFingerprint, originalFingerprint);
+    assert.deepEqual(run.provider.reviewInputs[1].originalReviewInput, run.provider.reviewInputs[0]);
+    assert.equal(checks[2].result.accepted, true, JSON.stringify(checks[2].result));
+    assert.equal(checks[2].result.planEvidence.fingerprint, revisedFingerprint);
+    assert.equal(reviews[2].result.outcome, 'accepted', JSON.stringify(reviews[2].result.auditValidation));
+    assert.equal(reviews[2].result.reviewedFingerprint, revisedFingerprint);
+    assert.equal(run.provider.reviewCalls.length, 3);
   } finally { await run.rm(); }
 });
 
