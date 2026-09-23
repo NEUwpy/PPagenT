@@ -84,7 +84,7 @@ export async function sharedPreservedComponent(component, assetDir, frame, theme
           : `${tag} style="${style}"`;
         return `<${updated.replace(/\bdata-ppt-root\b/, 'data-preserved-source')}>`;
       });
-      return `<section data-ppt-root data-ppt-fit-footprint="true" data-ppt-preserve-font="true" style="position:relative;width:${frame.width}px;height:${frame.height}px;${type.css}">${markup}${compactCss ? `<style>${compactCss}</style>` : ''}</section>`;
+      return `<section data-ppt-root data-ppt-fit-footprint="true" data-ppt-preserve-font="true" data-preserved-size="${frame.size}" style="position:relative;width:${frame.width}px;height:${frame.height}px;${type.css}">${markup}${compactCss ? `<style>${compactCss}</style>` : ''}</section>`;
     },
   };
 }
