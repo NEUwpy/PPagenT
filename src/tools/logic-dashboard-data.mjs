@@ -162,6 +162,7 @@ async function normalizeRecord(entry, coverageTags, purposeMap, logicMap, root) 
     reviewRuntime?.entry ? path.resolve(assetDir, reviewRuntime.entry) : null,
     path.resolve(assetDir, "component.css"),
     path.resolve(assetDir, "compact.css"),
+    path.resolve(assetDir, "structure-skill.json"),
     path.join(root, "src", "visual-runtime", "preserved-size-component.mjs"),
     path.join(root, "src", "runtime", "preserved-structure-build.mjs"),
     path.join(root, "src", "visual-runtime", "html-component-runtime.mjs"),
