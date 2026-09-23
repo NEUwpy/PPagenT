@@ -269,6 +269,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
   let currentReply = { turn: 0, status: 'missing', hasToolCalls: false, explicitReuse: false };
   let pendingPlan = null;
   let pendingSubmissionFailure = null;
+  let pendingExplicitReuse = null;
   let activePlanEvidence = null;
   let currentTurnPlanUses = [];
   // 压缩记忆（方案 A 项 2）：逐页记录上一版容量失败实测高，随反馈回给模型。
@@ -311,7 +312,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
       return {
         plan: null,
         source: 'submission-failed',
-        note: '第 ' + failure.turn + ' 轮计划提交失败：未检查、审稿、渲染或交付暂存/旧版。请重发完整合法计划；若要放弃失败提交，只能单独回复精确指令“确认恢复并沿用当前已提交计划。”。',
+        note: '第 ' + failure.turn + ' 轮计划提交失败：未检查、审稿、渲染或交付暂存/旧版。请重发完整合法计划；若要放弃失败提交，只能单独回复精确指令“确认恢复并沿用当前已提交计划。”并同轮调用工具。若该指令单独出现在无工具轮，授权会留痕并由下一工具轮消费。',
         evidence,
       };
     };
@@ -337,11 +338,13 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
     }
 
     if (pendingSubmissionFailure) {
-      if (currentReply.explicitReuse && lastPlan) {
+      const recoveryAuthorizedTurn = currentReply.explicitReuse ? currentReply.turn : pendingExplicitReuse?.turn ?? null;
+      if (recoveryAuthorizedTurn !== null && lastPlan) {
         const failedTurn = pendingSubmissionFailure.turn;
         pendingSubmissionFailure = null;
         pendingPlan = null;
-        return consume(lastPlan, 'current-plan', { turn: lastPlanOriginTurn, fingerprint: lastPlanFingerprint, submissionFingerprint: lastPlanSubmissionFingerprint }, 'explicit-reuse', '已明确放弃第 ' + failedTurn + ' 轮失败提交，沿用此前已提交版本。', { recoveredFromTurn: failedTurn });
+        pendingExplicitReuse = null;
+        return consume(lastPlan, 'current-plan', { turn: lastPlanOriginTurn, fingerprint: lastPlanFingerprint, submissionFingerprint: lastPlanSubmissionFingerprint }, 'explicit-reuse', '第 ' + recoveryAuthorizedTurn + ' 轮已明确放弃第 ' + failedTurn + ' 轮失败提交，沿用此前已提交版本。', { recoveredFromTurn: failedTurn, recoveryAuthorizedTurn });
       }
       return reject(pendingSubmissionFailure);
     }
@@ -758,6 +761,14 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
     onTurn: async record => {
       const turnDir = path.join(agentDir, `turn-${record.turn}`);
       await fs.mkdir(turnDir, { recursive: true });
+      const recoveryUse = currentTurnPlanUses.find(use => use.consumptionSource === 'explicit-reuse');
+      const recoveryAuthorization = recoveryUse
+        ? { status: 'consumed', authorizedTurn: recoveryUse.recoveryAuthorizedTurn, consumedTurn: record.turn, exactInstruction: true }
+        : currentReply.explicitReuse
+          ? { status: currentReply.hasToolCalls ? 'same-turn' : 'pending-next-tool', authorizedTurn: currentReply.turn, exactInstruction: true }
+          : pendingExplicitReuse
+            ? { status: 'pending-next-tool', authorizedTurn: pendingExplicitReuse.turn, exactInstruction: true }
+            : null;
       const planFlow = {
         submission: currentReply.turn === record.turn
           ? currentReply.status === 'valid'
@@ -767,6 +778,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
               : { status: 'none', turn: record.turn, explicitReuse: currentReply.explicitReuse }
           : { status: 'unknown', turn: record.turn },
         consumptions: currentTurnPlanUses,
+        ...(recoveryAuthorization ? { recoveryAuthorization } : {}),
       };
       await fs.writeFile(path.join(turnDir, 'response.json'), json({ content: record.content, toolCalls: record.toolCalls.map(call => ({ name: call.name, args: call.args })), stalled: record.stalled, planFlow }), 'utf8');
       agentState.grayDraft.turns.push({ turn: record.turn, stalled: record.stalled, tools: record.toolCalls.map(call => call.name), planFlow });
@@ -778,6 +790,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
       const hasToolCalls = (reply.toolCalls?.length ?? 0) > 0;
       const content = reply.content ?? '';
       currentReply = { turn, status: 'missing', hasToolCalls, explicitReuse: explicitlyReusesPlan(content) };
+      if (!hasToolCalls && pendingSubmissionFailure && currentReply.explicitReuse) pendingExplicitReuse = { turn };
       currentTurnPlanUses = [];
       activePlanEvidence = null;
       try {
@@ -786,6 +799,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         const submissionFingerprint = planSubmissionFingerprint(plan);
         const submission = { plan, turn, fingerprint, submissionFingerprint, replyHadTools: hasToolCalls };
         currentReply = { ...currentReply, status: 'valid', plan, submission };
+        pendingExplicitReuse = null;
         if (hasToolCalls) {
           pendingPlan = submission;
           pendingSubmissionFailure = null;
@@ -800,6 +814,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         currentReply = { ...currentReply, status: 'invalid', failure };
         pendingPlan = null;
         pendingSubmissionFailure = failure;
+        pendingExplicitReuse = null;
       }
     },
     shouldStop: async () => {

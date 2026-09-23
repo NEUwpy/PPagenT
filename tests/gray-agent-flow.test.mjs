@@ -601,6 +601,34 @@ test('失败提交只接受精确的独立恢复指令：否定、引述和解�
   } finally { await run.rm(); }
 });
 
+test('无工具轮的精确恢复授权留痕，并由下一工具轮消费', async () => {
+  const badJson = '```json\n{ "schemaVersion": "gray-plan-3", "deckBrief": { "title": "开放安排"';
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '审稿。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: badJson, tools: [] },
+    { content: '确认恢复并沿用当前已提交计划。', tools: [] },
+    { content: '现在检查。', tools: ['check_plan'] },
+    { content: '保持候选。', tools: [{ name: 'finish_draft', arguments: { review: '沿用前版复核后保持。' } }] },
+  ]);
+  try {
+    const check = run.events.filter(event => event.tool === 'check_plan')[1];
+    assert.equal(check.result.accepted, true, JSON.stringify(check.result));
+    assert.equal(check.result.planEvidence.consumptionSource, 'explicit-reuse');
+    assert.equal(check.result.planEvidence.recoveredFromTurn, 4);
+    assert.equal(check.result.planEvidence.recoveryAuthorizedTurn, 5);
+    const turns = run.state.grayDraft.turns;
+    assert.deepEqual(turns.find(turn => turn.turn === 5).planFlow.recoveryAuthorization, {
+      status: 'pending-next-tool', authorizedTurn: 5, exactInstruction: true,
+    });
+    assert.deepEqual(turns.find(turn => turn.turn === 6).planFlow.recoveryAuthorization, {
+      status: 'consumed', authorizedTurn: 5, consumedTurn: 6, exactInstruction: true,
+    });
+    assert.equal(run.events.find(event => event.tool === 'finish_draft').result.accepted, true);
+  } finally { await run.rm(); }
+});
+
 test('旧计划已提交时，无工具轮的新计划优先于旧版且内容变更触发重审', async () => {
   const run = await runProtocol([
     { content: planJson(''), tools: ['check_plan'] },
