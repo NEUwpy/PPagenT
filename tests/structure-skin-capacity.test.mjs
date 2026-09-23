@@ -48,6 +48,30 @@ test('problem solution result keeps both Skin fonts and complete text at all thr
   }finally{await closeHtmlComponentRuntime();}
 });
 
+test('four compact problem-solution pairs retain each pairing and the outcome',async()=>{
+  const ref=await loadStructureSkill('problem-solution-outcome-001',root);
+  const module=await import(pathToFileURL(path.join(ref.assetDir,ref.guide.exampleImplementation)).href);
+  const content=module.resolvePreviewParameters(structuredClone(module.previewParameters),{pairCount:4,resultMode:'结论型'});
+  const skins=(await listStructureSkins(root)).filter(s=>['university','neutral'].includes(s.id));
+  try{
+    for(const skin of skins){
+      const frame=await resolveStructureSizeFrame(ref,'small',content,skin.theme);
+      const component=await loadPreservedComponent(ref,frame,skin.theme,content);
+      const tree=await resolveHtmlComponent({component,parameters:content,assetDir:ref.assetDir,theme:skin.theme});
+      for(let i=0;i<4;i++){
+        assert.equal(tree.nodes.find(n=>n.name===`problem-label-${i}`)?.text,`问${i+1}`);
+        assert.equal(tree.nodes.find(n=>n.name===`solution-label-${i}`)?.text,`案${i+1}`);
+        for(const name of [`problem-title-${i}`,`problem-body-${i}`,`solution-title-${i}`,`solution-body-${i}`]){
+          assert.ok(tree.nodes.some(n=>n.name===name),`${skin.id}: missing ${name}`);
+        }
+      }
+      assert.ok(tree.nodes.some(n=>n.name==='outcome-title'));
+      assert.ok(!tree.nodes.some(n=>n.name==='outcome-body'));
+    }
+    assert.match(module.visualComponent.renderMarkup(content),/data-ppt-name="outcome-body"/);
+  }finally{await closeHtmlComponentRuntime();}
+});
+
 test('list factors and vertical phase labels retain their painted text across sizes',async()=>{
   const skins=(await listStructureSkins(root)).filter(s=>['university','neutral'].includes(s.id));
   try{

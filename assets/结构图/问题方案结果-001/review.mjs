@@ -96,13 +96,15 @@ function slotAttributes({ id, role, field, itemId, maxChars, maxLines, required 
   return `data-slot-id="${id}" data-slot-role="${role}" data-slot-field="${field}" data-slot-item-id="${itemId}" data-slot-content-type="text" data-slot-required="${required}" data-slot-text-mode="flow" data-slot-list-policy="none" data-slot-max-chars="${maxChars}" data-slot-max-lines="${maxLines}"`;
 }
 
-function pairMarkup(pair, index, geometry) {
+function pairMarkup(pair, index, geometry, compactFour = false) {
   const top = geometry.top + (index * (geometry.height + geometry.gap));
   const number = String(index + 1).padStart(2, "0");
+  const problemTag = compactFour ? `问${index + 1}` : `问题 ${number}`;
+  const solutionTag = compactFour ? `案${index + 1}` : `方案 ${number}`;
   return `<article class="pair-row" data-key="${escapeHtml(pair.key)}" style="top:${top}px;height:${geometry.height}px">
     <section class="problem-card" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="problem-card-${index}">
       <div class="card-heading">
-        <span class="problem-tag" data-ppt-kind="text" data-ppt-name="problem-label-${index}">问题 ${number}</span>
+        <span class="problem-tag" data-ppt-kind="text" data-ppt-name="problem-label-${index}">${problemTag}</span>
         <h3 ${slotAttributes({ id: `${pair.key}-problem-title`, role: "item-title", field: `pairs[${index}].problem.title`, itemId: pair.key, maxChars: LIMITS.title, maxLines: 1 })} data-ppt-kind="text" data-ppt-name="problem-title-${index}">${escapeHtml(pair.problem.title)}</h3>
       </div>
       <p ${slotAttributes({ id: `${pair.key}-problem-body`, role: "item-body", field: `pairs[${index}].problem.body`, itemId: pair.key, maxChars: LIMITS.body, maxLines: 2, required: false })} data-ppt-kind="text" data-ppt-name="problem-body-${index}">${escapeHtml(pair.problem.body)}</p>
@@ -111,7 +113,7 @@ function pairMarkup(pair, index, geometry) {
     <section class="solution-card" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="solution-card-${index}">
       <span class="solution-stripe" aria-hidden="true"></span>
       <div class="card-heading">
-        <span class="solution-tag" data-ppt-kind="text" data-ppt-name="solution-label-${index}">方案 ${number}</span>
+        <span class="solution-tag" data-ppt-kind="text" data-ppt-name="solution-label-${index}">${solutionTag}</span>
         <h3 ${slotAttributes({ id: `${pair.key}-solution-title`, role: "solution-title", field: `pairs[${index}].solution.title`, itemId: `${pair.key}-solution`, maxChars: LIMITS.title, maxLines: 1 })} data-ppt-kind="text" data-ppt-name="solution-title-${index}">${escapeHtml(pair.solution.title)}</h3>
       </div>
       <p ${slotAttributes({ id: `${pair.key}-solution-body`, role: "solution-body", field: `pairs[${index}].solution.body`, itemId: `${pair.key}-solution`, maxChars: LIMITS.body, maxLines: 2, required: false })} data-ppt-kind="text" data-ppt-name="solution-body-${index}">${escapeHtml(pair.solution.body)}</p>
@@ -119,10 +121,11 @@ function pairMarkup(pair, index, geometry) {
   </article>`;
 }
 
-function outcomeMarkup(outcome) {
-  const mode = outcome.highlight && outcome.body ? "full"
+function outcomeMarkup(outcome, omitBody = false) {
+  const body = omitBody ? "" : outcome.body;
+  const mode = outcome.highlight && body ? "full"
     : outcome.highlight ? "highlight"
-      : outcome.body ? "conclusion"
+      : body ? "conclusion"
         : "title-only";
   return `<article class="outcome-wrap" data-outcome-mode="${mode}">
     <div class="outcome-halo" aria-hidden="true" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="outcome-halo"></div>
@@ -131,7 +134,7 @@ function outcomeMarkup(outcome) {
       <span class="outcome-label" data-ppt-kind="text" data-ppt-name="outcome-label">结果</span>
       <h2 ${slotAttributes({ id: "outcome-title", role: "center-title", field: "outcome.title", itemId: "outcome", maxChars: LIMITS.outcomeTitle, maxLines: 2 })} data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="outcome-title">${escapeHtml(balanceTwoLines(outcome.title))}</h2>
       ${outcome.highlight ? `<strong ${slotAttributes({ id: "outcome-highlight", role: "center-highlight", field: "outcome.highlight", itemId: "outcome", maxChars: LIMITS.outcomeHighlight, maxLines: 2, required: false })} data-ppt-kind="text" data-ppt-name="outcome-highlight">${escapeHtml(outcome.highlight)}</strong>` : ""}
-      ${outcome.body ? `<p ${slotAttributes({ id: "outcome-body", role: "center-body", field: "outcome.body", itemId: "outcome", maxChars: LIMITS.outcomeBody, maxLines: 2, required: false })} data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="outcome-body">${escapeHtml(outcome.body)}</p>` : ""}
+      ${body ? `<p ${slotAttributes({ id: "outcome-body", role: "center-body", field: "outcome.body", itemId: "outcome", maxChars: LIMITS.outcomeBody, maxLines: 2, required: false })} data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="outcome-body">${escapeHtml(body)}</p>` : ""}
     </section>
   </article>`;
 }
@@ -151,17 +154,18 @@ export const visualComponent = Object.freeze({
     maxHighlightChars: LIMITS.outcomeHighlight,
     maxHighlightLines: 2,
   }),
-  renderMarkup(parameters) {
+  renderMarkup(parameters, { size } = {}) {
     const model = normalizeParameters(parameters);
     const geometry = geometryFor(model.pairCount);
+    const compactFour = size === "small" && model.pairCount === 4;
     const outcomeMode = model.outcome.highlight && model.outcome.body ? "full"
       : model.outcome.highlight ? "highlight"
         : model.outcome.body ? "conclusion"
           : "title-only";
     return `<section class="problem-solution-review" data-ppt-root data-pair-count="${model.pairCount}" data-outcome-mode="${outcomeMode}">
       ${connectorMarkup(geometry.centers)}
-      <div class="pair-layer">${model.pairs.map((pair, index) => pairMarkup(pair, index, geometry)).join("")}</div>
-      ${outcomeMarkup(model.outcome)}
+      <div class="pair-layer">${model.pairs.map((pair, index) => pairMarkup(pair, index, geometry, compactFour)).join("")}</div>
+      ${outcomeMarkup(model.outcome, compactFour)}
     </section>`;
   },
 });
