@@ -24,39 +24,25 @@ function addMockClaimAudit(payload, input) {
   if (Object.hasOwn(payload, 'claimAudit')) return payload;
   const source = input.sourceSegments?.find(segment => segment.text?.length);
   const location = input.auditLocations?.find(item => item.field === 'body') ?? input.auditLocations?.[0];
-  const page = input.visiblePages?.find(item => item.pageId === location?.pageId);
-  const region = page?.regions?.find(item => item.id === location?.regionId) ?? page?.regions?.[location?.regionIndex];
-  const text = location?.field === 'title' ? page?.title
-    : location?.field === 'claim' ? page?.claim
-      : location?.field === 'heading' ? region?.heading
-        : region?.body?.[location?.bodyIndex]?.text;
+  const text = location?.text;
   if (!source || !location || !text) return { ...payload, claimAudit: null };
   const sourceQuote = source.text.slice(0, Math.min(source.text.length, 18));
   const visibleQuote = String(text).slice(0, Math.min(String(text).length, 18));
-  const issuePayload = (payload.issues ?? []).map(issue => ({
-    ...issue,
-    pageId: issue.pageId ?? location.pageId,
-    sourceIds: issue.sourceIds ?? [source.id],
-    claimIds: issue.claimIds ?? ['mock-claim-1'],
-  }));
   const claimAudit = {
-    schemaVersion: 'gray-claim-audit-1',
-    sourceCoverage: (input.sourceSegments ?? []).map(segment => segment.id === source.id
-      ? { sourceId: segment.id, quote: sourceQuote, classification: 'material-claim', claimIds: ['mock-claim-1'] }
-      : { sourceId: segment.id, quote: segment.text.slice(0, Math.min(segment.text.length, 18)), classification: 'non-claim', claimIds: [], reason: 'mock fixture source segment' }),
-    locationCoverage: (input.auditLocations ?? []).map(item => item.id === location.id
-      ? { locationId: item.id, classification: 'material-claim', claimIds: ['mock-claim-1'] }
-      : { locationId: item.id, classification: 'non-claim', claimIds: [], reason: 'mock fixture visible position' }),
+    schemaVersion: 'gray-claim-audit-2',
     claims: [{
-      id: 'mock-claim-1', pageId: location.pageId,
+      id: 'mock-claim-1',
       sourceEvidence: [{ sourceId: source.id, quote: sourceQuote }],
       visibleEvidence: [{ locationId: location.id, quote: visibleQuote }],
-      sourceForce: 'mock source force', visibleForce: 'mock visible force',
-      addedImplications: { causality: false, certainty: false, obligation: false, scope: false },
-      ruling: issuePayload.length ? 'strengthened' : 'equivalent', rationale: 'mock structural fixture',
+      ruling: payload.ruling ?? 'equivalent',
+      rationale: payload.rationale ?? 'mock structural fixture',
     }],
+    unreferencedSources: (input.sourceSegments ?? []).filter(segment => segment.id !== source.id)
+      .map(segment => ({ sourceId: segment.id, disposition: 'non-claim', reason: 'mock fixture source segment' })),
+    unreferencedLocations: (input.auditLocations ?? []).filter(item => item.id !== location.id)
+      .map(item => ({ locationId: item.id, disposition: 'non-claim', reason: 'mock fixture visible position' })),
   };
-  return { ...payload, issues: issuePayload, claimAudit };
+  return { notes: payload.notes ?? [], claimAudit };
 }
 
 function mockProvider(chatScript, reviewPayloads = [], beforeCall = null) {
@@ -72,7 +58,7 @@ function mockProvider(chatScript, reviewPayloads = [], beforeCall = null) {
       const system = messages[0]?.content ?? '';
       if (system.includes('灰稿内容与表达审稿人')) {
         reviewCalls.push(Date.now());
-        const rawPayload = reviewPayloads[reviewIndex++] ?? { accepted: true, issues: [], notes: [], coverage: 'mock 覆盖', limits: 'mock' };
+        const rawPayload = reviewPayloads[reviewIndex++] ?? { notes: [] };
         const reviewInput = JSON.parse(messages.at(-1)?.content ?? '{}');
         reviewInputs.push(reviewInput);
         const payload = addMockClaimAudit(rawPayload, reviewInput);
@@ -468,8 +454,8 @@ test('审稿协议：建议/已解决项不阻塞；真实阻塞项仍拦截（�
     { content: planJson('，并留痕'), tools: ['semantic_review'] },
     { content: '收工。', tools: [] },
   ], [
-    { accepted: true, issues: [], notes: ['建议：标签可再简；上一问题已用其他呈现解决，不再阻塞。'], coverage: '逐页核对', limits: 'mock' },
-    { accepted: true, issues: [{ pageId: 'p1', problem: '正文与主题句冲突', requiredRevision: '改回原稿限定' }], notes: [], coverage: '逐页核对', limits: 'mock' },
+    { notes: ['建议：标签可再简；上一问题已用其他呈现解决，不再阻塞。'] },
+    { ruling: 'strengthened', rationale: '正文与主题句冲突', notes: [] },
   ]);
   const reviews = events.filter(event => event.tool === 'semantic_review');
   assert.equal(reviews.length, 2);
@@ -505,7 +491,7 @@ test('缺失 claimAudit 不得通过：无效审计可在同一内容版本重�
     { content: '渲染。', tools: [renderSingle] },
     { content: '保持。', tools: [{ name: 'finish_draft', arguments: { review: '对照来源与上屏内容复核后保持。' } }] },
     { content: '收工。', tools: [] },
-  ], [{ accepted: true, issues: [], claimAudit: null }]);
+  ], [{ notes: [], claimAudit: null }]);
   try {
     const reviews = run.events.filter(event => event.tool === 'semantic_review');
     assert.equal(reviews[0].result.accepted, false);

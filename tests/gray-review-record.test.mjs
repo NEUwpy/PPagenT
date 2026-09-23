@@ -36,13 +36,14 @@ test('审稿记录只记不改：原文、判定、覆盖与边界完整入档',
   assert.deepEqual(snapshotSemanticReview(null), { accepted: false, issues: [], notes: [], coverage: null, limits: null });
 });
 
-test('审稿协议口径：issues 只承载阻塞项，notes 为建议不阻塞；accepted 不得绕过阻塞', () => {
+test('审稿协议口径：阻塞项由单一 ruling 派生，uncertain 留作备注', () => {
   const notesOnly = snapshotSemanticReview({ accepted: true, issues: [], notes: ['建议：标签可再简。'] });
   assert.equal(notesOnly.accepted, true);
   const blockingWins = snapshotSemanticReview({ accepted: true, issues: [{ pageId: 'p1', problem: '正文与主题句冲突' }] });
   assert.equal(blockingWins.accepted, false);
-  assert.match(SEMANTIC_REVIEW_CONTRACT, /issues 只放足以阻塞的实质错误/u);
-  assert.match(SEMANTIC_REVIEW_CONTRACT, /notes 不阻塞渲染/u);
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /程序从中派生索引与阻塞项/u);
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /uncertain 不等于已证实错误/u);
+  assert.doesNotMatch(SEMANTIC_REVIEW_CONTRACT, /只输出 JSON：\{accepted:boolean,issues:/u);
 });
 
 test('契约口径：载体建议不具约束力、不被程序过滤；note 保证仅为呈现形态', () => {

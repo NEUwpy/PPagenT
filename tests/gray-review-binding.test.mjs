@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  planContentFingerprint, checkReviewCoverage, grayDisplayBlocks, semanticReviewInput, validateSemanticPlan, validateSemanticReviewEvidence,
+  planContentFingerprint, checkReviewCoverage, grayDisplayBlocks, semanticReviewInput, semanticReviewFindings, validateSemanticPlan, validateSemanticReviewEvidence, SEMANTIC_REVIEW_CONTRACT,
 } from '../src/runner/gray-semantics.mjs';
 import { grayBodyLayout } from '../src/runner/gray-draft.mjs';
 import { newRunState } from '../src/runner/state.mjs';
@@ -50,94 +50,155 @@ test('审稿覆盖判定：未审/未通过/内容已改都不得继承通过状
   assert.notEqual(stale.fingerprint, fp);
 });
 
-test('结构化审稿证据允许忠实摘要与原文确有的因果关系', () => {
+function canonicalAudit(input, claims) {
+  const linkedSources = new Set(claims.flatMap(claim => claim.sourceEvidence.map(item => item.sourceId)));
+  const linkedLocations = new Set(claims.flatMap(claim => claim.visibleEvidence.map(item => item.locationId)));
+  return {
+    schemaVersion: 'gray-claim-audit-2',
+    claims,
+    unreferencedSources: input.sourceSegments
+      .filter(segment => !linkedSources.has(segment.id))
+      .map(segment => ({ sourceId: segment.id, disposition: 'non-claim', reason: '该来源段没有实质命题' })),
+    unreferencedLocations: input.auditLocations
+      .filter(location => !linkedLocations.has(location.id))
+      .map(location => ({ locationId: location.id, disposition: 'non-claim', reason: '该位置仅为非命题文字' })),
+  };
+}
+
+test('审稿只维护命题证据：位置直接带实文，引用派生不宣称语义完整', () => {
   const source = '每份申请都必须在30日内完成复核。延迟会导致权限无法开放。';
   const visible = '申请须30日内完成复核；延迟致权限无法开放。';
   const p = plan([block('b1', visible)]);
   const input = semanticReviewInput({ source, sourceSegments: [{ id: 's1', text: source }], area: { width: 1170, height: 492 }, plan: p });
   const bodyLocation = input.auditLocations.find(location => location.field === 'body');
-  const audit = {
-    schemaVersion: 'gray-claim-audit-1',
-    sourceCoverage: [
-      { sourceId: 's1', quote: '每份申请都必须在30日内完成复核。', classification: 'material-claim', claimIds: ['c1'] },
-      { sourceId: 's1', quote: '延迟会导致权限无法开放。', classification: 'material-claim', claimIds: ['c2'] },
-    ],
-    locationCoverage: input.auditLocations.map(location => location.id === bodyLocation.id
-      ? { locationId: location.id, classification: 'material-claim', claimIds: ['c1', 'c2'] }
-      : { locationId: location.id, classification: 'non-claim', claimIds: [], reason: '标题或结构定位文字' }),
-    claims: [
-      {
-        id: 'c1', pageId: 'p1', sourceEvidence: [{ sourceId: 's1', quote: '每份申请都必须在30日内完成复核。' }],
-        visibleEvidence: [{ locationId: bodyLocation.id, quote: '申请须30日内完成复核' }],
-        sourceForce: '对每份申请设定30日内完成复核的义务', visibleForce: '摘要仍对申请表达30日内完成复核的义务',
-        addedImplications: { causality: false, certainty: false, obligation: false, scope: false }, ruling: 'equivalent', rationale: '压缩措辞但保留对象、期限与义务',
-      },
-      {
-        id: 'c2', pageId: 'p1', sourceEvidence: [{ sourceId: 's1', quote: '延迟会导致权限无法开放。' }],
-        visibleEvidence: [{ locationId: bodyLocation.id, quote: '延迟致权限无法开放' }],
-        sourceForce: '原稿明确陈述延迟导致无法开放权限', visibleForce: '摘要继续表达延迟导致无法开放权限',
-        addedImplications: { causality: false, certainty: false, obligation: false, scope: false }, ruling: 'equivalent', rationale: '原稿已有因果关系，摘要没有新加因果',
-      },
-    ],
-  };
-  const response = { accepted: true, issues: [], claimAudit: audit };
+  assert.equal(bodyLocation.text, visible, '审稿输入直接附上可见原文');
+
+  const audit = canonicalAudit(input, [
+    {
+      id: 'c1',
+      sourceEvidence: [{ sourceId: 's1', quote: '每份申请都必须在30日内完成复核。' }],
+      visibleEvidence: [{ locationId: bodyLocation.id, quote: '申请须30日内完成复核' }],
+      ruling: 'equivalent',
+      rationale: '压缩措辞但保留对象、期限与义务。',
+    },
+    {
+      id: 'c2',
+      sourceEvidence: [{ sourceId: 's1', quote: '延迟会导致权限无法开放。' }],
+      visibleEvidence: [{ locationId: bodyLocation.id, quote: '延迟致权限无法开放' }],
+      ruling: 'equivalent',
+      rationale: '来源与上屏都表达延迟导致权限无法开放。',
+    },
+  ]);
+  const response = { notes: [], claimAudit: audit };
   const validation = validateSemanticReviewEvidence(input, response);
   assert.equal(validation.valid, true, JSON.stringify(validation.errors));
-  assert.equal(audit.claims[1].addedImplications.causality, false);
-  assert.equal(audit.claims[1].ruling, 'equivalent');
+  assert.equal(Object.hasOwn(audit, 'sourceCoverage'), false);
+  assert.equal(Object.hasOwn(audit, 'locationCoverage'), false);
+  assert.equal(Object.hasOwn(audit.claims[0], 'addedImplications'), false);
+  assert.equal(Object.hasOwn(audit.claims[0], 'sourceForce'), false);
+  assert.deepEqual(semanticReviewFindings(response, input).issues, []);
+  const duplicatedDecision = { ...response, accepted: true, issues: [] };
+  assert.equal(validateSemanticReviewEvidence(input, duplicatedDecision).valid, false, '模型不能重复维护程序派生的通过与阻塞字段');
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /同一来源段已有一个引用，不表示该段其余命题已审完/u);
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /概括性页面主题或分类标题的 sourceEvidence 必须引用能支持其判断的实质内容/u);
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /不证明语义完整或判断正确/u);
 });
 
-test('结构化审稿证据核验精确来源、上屏位置和 issue-ruling 一致性', () => {
+test('引用真实性与 ruling 派生阻塞/uncertain 备注', () => {
   const source = '每份申请都必须在30日内完成复核。延迟会导致权限无法开放。';
   const visible = '申请须30日内完成复核；延迟致权限无法开放。';
   const p = plan([block('b1', visible)]);
   const input = semanticReviewInput({ source, sourceSegments: [{ id: 's1', text: source }], area: { width: 1170, height: 492 }, plan: p });
   const bodyLocation = input.auditLocations.find(location => location.field === 'body');
   const claim = {
-    id: 'c1', pageId: 'p1', sourceEvidence: [{ sourceId: 's1', quote: '每份申请都必须在30日内完成复核。' }],
+    id: 'c1',
+    sourceEvidence: [{ sourceId: 's1', quote: '每份申请都必须在30日内完成复核。' }],
     visibleEvidence: [{ locationId: bodyLocation.id, quote: '申请须30日内完成复核' }],
-    sourceForce: '原稿有明确期限义务', visibleForce: '正文省略了必须义务',
-    addedImplications: { causality: false, certainty: false, obligation: false, scope: false }, ruling: 'weakened', rationale: '文字改写削弱原稿义务强度',
+    ruling: 'weakened',
+    rationale: '上屏省略了原稿的明确义务。',
   };
-  const audit = {
-    schemaVersion: 'gray-claim-audit-1',
-    sourceCoverage: [{ sourceId: 's1', quote: claim.sourceEvidence[0].quote, classification: 'material-claim', claimIds: ['c1'] }],
-    locationCoverage: input.auditLocations.map(location => location.id === bodyLocation.id
-      ? { locationId: location.id, classification: 'material-claim', claimIds: ['c1'] }
-      : { locationId: location.id, classification: 'non-claim', claimIds: [], reason: '非命题文字' }),
-    claims: [claim],
-  };
-  const response = {
-    accepted: false,
-    issues: [{ pageId: 'p1', sourceIds: ['s1'], claimIds: ['c1'], problem: '义务强度变弱', requiredRevision: '保留必须复核' }],
-    claimAudit: audit,
-  };
+  const response = { notes: [], claimAudit: canonicalAudit(input, [claim, {
+    id: 'c2',
+    sourceEvidence: [{ sourceId: 's1', quote: '延迟会导致权限无法开放。' }],
+    visibleEvidence: [{ locationId: bodyLocation.id, quote: '延迟致权限无法开放' }],
+    ruling: 'equivalent', rationale: '因果关系与来源一致。',
+  }]) };
   assert.equal(validateSemanticReviewEvidence(input, response).valid, true);
+  const derived = semanticReviewFindings(response, input);
+  assert.equal(derived.issues.length, 1);
+  assert.equal(derived.issues[0].pageId, 'p1');
+  assert.deepEqual(derived.issues[0].sourceIds, ['s1']);
+  assert.deepEqual(derived.issues[0].claimIds, ['c1']);
+
+  const unsupported = structuredClone(response);
+  unsupported.claimAudit.claims[0].sourceEvidence = [];
+  unsupported.claimAudit.claims[0].ruling = 'unsupported';
+  assert.equal(validateSemanticReviewEvidence(input, unsupported).valid, true);
+  assert.match(semanticReviewFindings(unsupported, input).issues[0].requiredRevision, /删除无来源支持/u);
+
   const badSource = structuredClone(response);
-  badSource.claimAudit.claims[0].sourceEvidence[0].sourceId = 'unknown';
+  badSource.claimAudit.claims[0].sourceEvidence[0].quote = '不存在的来源引文';
   assert.equal(validateSemanticReviewEvidence(input, badSource).valid, false);
   const badPosition = structuredClone(response);
-  badPosition.claimAudit.claims[0].visibleEvidence[0].locationId = 'loc-9999';
+  badPosition.claimAudit.claims[0].visibleEvidence[0].quote = '不存在的上屏引文';
   assert.equal(validateSemanticReviewEvidence(input, badPosition).valid, false);
-  const badRuling = structuredClone(response);
-  badRuling.claimAudit.claims[0].ruling = 'equivalent';
-  assert.equal(validateSemanticReviewEvidence(input, badRuling).valid, false);
+  const badLocationText = structuredClone(input);
+  badLocationText.auditLocations.find(location => location.id === bodyLocation.id).text = '替换过的审稿文本';
+  assert.equal(validateSemanticReviewEvidence(badLocationText, response).valid, false);
 
   const uncertain = structuredClone(response);
-  const uncertainReason = '仅凭当前文字无法确认义务强度是否被削弱';
-  uncertain.accepted = true;
-  uncertain.issues = [];
-  uncertain.notes = [`c1：未证实，${uncertainReason}`];
   uncertain.claimAudit.claims[0].ruling = 'uncertain';
-  uncertain.claimAudit.claims[0].uncertainReason = uncertainReason;
-  assert.equal(validateSemanticReviewEvidence(input, uncertain).valid, true, '未证实的疑点可留在 notes，不强制修订');
-  const uncertainAsIssue = structuredClone(uncertain);
-  uncertainAsIssue.accepted = false;
-  uncertainAsIssue.issues = response.issues;
-  assert.equal(validateSemanticReviewEvidence(input, uncertainAsIssue).valid, false, '未证实裁定不得进入阻塞队列');
-  const uncertainWithoutNote = structuredClone(uncertain);
-  uncertainWithoutNote.notes = [];
-  assert.equal(validateSemanticReviewEvidence(input, uncertainWithoutNote).valid, false, '未证实原因必须出现在 notes');
+  uncertain.claimAudit.claims[0].rationale = '当前文字不足以确认义务强度是否改变。';
+  const uncertainValidation = validateSemanticReviewEvidence(input, uncertain);
+  const uncertainFindings = semanticReviewFindings(uncertain, input);
+  assert.equal(uncertainValidation.valid, true, JSON.stringify(uncertainValidation.errors));
+  assert.deepEqual(uncertainFindings.issues, []);
+  assert.match(uncertainFindings.notes[0], /c1：未证实/u);
+
+  const omitted = structuredClone(response);
+  omitted.claimAudit.claims[0].ruling = 'omitted';
+  omitted.claimAudit.claims[0].visibleEvidence = [];
+  const omittedValidation = validateSemanticReviewEvidence(input, omitted);
+  assert.equal(omittedValidation.valid, true, JSON.stringify(omittedValidation.errors));
+  assert.equal(semanticReviewFindings(omitted, input).issues[0].pageId, undefined);
+});
+
+test('未引用来源与上屏位置必须逐项说明；unreviewed 或空命题审计不能通过', () => {
+  const source = '来源段一。来源段二。';
+  const p = plan([block('b1', '实际上屏命题。')]);
+  const input = semanticReviewInput({
+    source,
+    sourceSegments: [{ id: 's1', text: '来源段一。' }, { id: 's2', text: '来源段二。' }],
+    area: { width: 1170, height: 492 },
+    plan: p,
+  });
+  const bodyLocation = input.auditLocations.find(location => location.field === 'body');
+  const claim = {
+    id: 'c1', sourceEvidence: [{ sourceId: 's1', quote: '来源段一。' }],
+    visibleEvidence: [{ locationId: bodyLocation.id, quote: '实际上屏命题。' }],
+    ruling: 'equivalent', rationale: '来源与上屏命题等价。',
+  };
+  const response = { notes: [], claimAudit: canonicalAudit(input, [claim]) };
+  assert.equal(response.claimAudit.unreferencedSources[0].sourceId, 's2');
+  assert.ok(response.claimAudit.unreferencedLocations.some(item => item.locationId !== bodyLocation.id));
+  assert.equal(validateSemanticReviewEvidence(input, response).valid, true);
+
+  const missingDisposition = structuredClone(response);
+  missingDisposition.claimAudit.unreferencedSources = [];
+  assert.equal(validateSemanticReviewEvidence(input, missingDisposition).valid, false);
+  const unreviewed = structuredClone(response);
+  unreviewed.claimAudit.unreferencedSources[0].disposition = 'unreviewed';
+  assert.equal(validateSemanticReviewEvidence(input, unreviewed).valid, false);
+
+  const empty = structuredClone(response);
+  empty.claimAudit.claims = [];
+  empty.claimAudit.unreferencedSources = input.sourceSegments.map(item => ({
+    sourceId: item.id, disposition: 'non-claim', reason: '无需审查',
+  }));
+  empty.claimAudit.unreferencedLocations = input.auditLocations.map(item => ({
+    locationId: item.id, disposition: 'non-claim', reason: '无需审查',
+  }));
+  assert.equal(validateSemanticReviewEvidence(input, empty).valid, false);
 });
 
 test('层级机制：scope:"group" 的共同说明不编号、随组以小字呈现（评审 #119 要求 3）', () => {

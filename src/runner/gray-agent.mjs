@@ -15,7 +15,7 @@ import { createToolRegistry, defineTool } from './tools/index.mjs';
 import { buildChatProviderFromEnv } from './chat-provider.mjs';
 import { loadDeepSeekLocalConfig } from '../agent/deepseek-provider-from-env.mjs';
 import { newRunState, writeState, renderContentMarkdown, renderStateMarkdown } from './state.mjs';
-import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan, validateSemanticReviewEvidence, semanticReviewInput, snapshotSemanticReview, markFlowSources, SHARED_RULES, attemptFingerprint, isStalledRetry, planTextVolume, isSameMinimumRetry, planContentFingerprint, checkReviewCoverage, semanticPlanFromPages } from './gray-semantics.mjs';
+import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan, validateSemanticReviewEvidence, semanticReviewFindings, semanticReviewInput, snapshotSemanticReview, markFlowSources, SHARED_RULES, attemptFingerprint, isStalledRetry, planTextVolume, isSameMinimumRetry, planContentFingerprint, checkReviewCoverage, semanticPlanFromPages } from './gray-semantics.mjs';
 import { applyTemplateDefaults, describeDefaults } from './gray-templates.mjs';
 import { auditGeometry, voidWarnings, VOID_THRESHOLDS } from './gray-audit.mjs';
 import { resolveGrayLayout, compressionMemory } from './gray-layout.mjs';
@@ -451,7 +451,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
     }),
     defineTool({
       name: 'semantic_review',
-      description: '用一次独立审稿调用对照原稿复核当前计划，并输出 sourceCoverage、locationCoverage 与逐命题 claimAudit；程序核验 ID、逐字引文、位置、覆盖及 ruling/issues 一致性。issues 是阻塞项（实质改变理解的失真、遗漏、层级/归属/关系错误），notes 是建议/已解决说明（不阻塞渲染）。结构证据无效时回执会拒绝通过并给出 auditValidation，可对同一版本重审。有效审稿的同一内容指纹会复用结论；提交新计划后自动重新审稿。正文里想提交但 JSON 损坏＝本次提交失败并持久标记，不回退暂存或旧版；渲染前须有覆盖当前内容指纹的有效通过。',
+      description: '用一次独立审稿对照原稿与实际上屏文案。审稿只维护逐命题 claimAudit；程序核验原句/上屏引文、位置，以及未引用来源段和未审查位置的说明，并从 ruling 派生阻塞 issues 与 uncertain notes。结构证据无效或存在实质阻塞项时拒绝通过；同一内容指纹复用有效结论，新计划会重新审稿。正文中提交损坏 JSON 时本次提交失败，不回退暂存或旧版；渲染前须有覆盖当前内容指纹的有效通过。',
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
       handler: async () => {
         const { plan, source, note } = resolvePlan('semantic_review');
@@ -469,7 +469,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         }
         const reviewFeedback = Array.isArray(lastReview?.issues) && lastReview.issues.length
           ? lastReview.issues.map(issue => ({
-            ...(issue.pageId ? { pageId: issue.pageId } : {}),
+            ...(issue.pageId ? { pageId: issue.pageId } : issue.pageIds ? { pageIds: issue.pageIds } : {}),
             ...(Array.isArray(issue.sourceIds) ? { sourceIds: issue.sourceIds } : {}),
             problem: issue.problem,
             verify: '上轮发现是否仍存在：按当前可见内容与原稿复核；已用其他呈现解决即算解决，不要求采用上轮建议的措辞、载体或位置。',
@@ -478,21 +478,24 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         const reviewInput = semanticReviewInput({ source: raw, sourceSegments: base.sources, area, plan, reviewFeedback, flowSources: base.sources.filter(item => item.flow).map(item => ({ id: item.id, flow: item.flow, preview: String(item.text).slice(0, 60) })) });
         const response = await provider.complete({ messages: [{ role: 'system', content: SEMANTIC_REVIEW_CONTRACT }, { role: 'user', content: JSON.stringify(reviewInput) }] });
         const parsed = parseModelJson(response);
-        if (typeof parsed.accepted !== 'boolean' || !Array.isArray(parsed.issues)) throw new Error('审稿响应格式无效');
         if (parsed.notes !== undefined && !Array.isArray(parsed.notes)) throw new Error('审稿响应格式无效（notes 必须是数组）');
         const auditValidation = validateSemanticReviewEvidence(reviewInput, parsed);
-        // 任务 #173：issues 只承载阻塞项——非空即阻塞（accepted 不得绕过门禁）；notes 为建议/已解决说明，不阻塞。
-        const blocking = parsed.issues;
-        const notes = Array.isArray(parsed.notes) ? parsed.notes.slice(0, 12) : [];
-        const accepted = auditValidation.valid && parsed.accepted === true && blocking.length === 0;
+        const findings = auditValidation.valid
+          ? semanticReviewFindings(parsed, reviewInput)
+          : { issues: [], notes: Array.isArray(parsed.notes) ? parsed.notes.filter(item => typeof item === 'string' && item.trim()).slice(0, 12) : [] };
+        // ruling 是模型维护的唯一判断；阻塞项和 uncertain 备注由程序派生。
+        const blocking = auditValidation.valid ? findings.issues : [];
+        const notes = findings.notes;
+        const accepted = auditValidation.valid && blocking.length === 0;
         // 版本绑定（评审 #119 要求 1）：记录所审内容的内容指纹；通过状态只覆盖这一版内容。
         const at = new Date().toISOString();
-        const snapshot = snapshotSemanticReview({ ...parsed, accepted });
+        const limits = '未看灰稿像素图，不能确认视觉可读性。';
+        const snapshot = snapshotSemanticReview({ accepted, issues: blocking, notes, limits, claimAudit: parsed.claimAudit });
         agentState.grayDraft.reviewRecord = [...(agentState.grayDraft.reviewRecord ?? []), { at, source, fingerprint, ...snapshot, auditValidation }];
         await saveAgentState();
         // 无效审计不能缓存成该内容版本的审稿结论；允许同版重试补齐证据，渲染门禁仍视为未审。
-        if (auditValidation.valid) lastReview = { accepted, issues: blocking.slice(0, 12), notes, at, fingerprint, coverage: parsed.coverage ?? null, limits: parsed.limits ?? null, claimAudit: parsed.claimAudit, auditValidation };
-        return { accepted, issues: blocking.slice(0, 12), notes, reviewedFingerprint: fingerprint, coverage: parsed.coverage ?? null, limits: parsed.limits ?? null, claimAudit: parsed.claimAudit ?? null, auditValidation, planSource: source, ...(note ? { note } : {}) };
+        if (auditValidation.valid) lastReview = { accepted, issues: blocking.slice(0, 12), notes, at, fingerprint, coverage: null, limits, claimAudit: parsed.claimAudit, auditValidation };
+        return { accepted, issues: blocking.slice(0, 12), notes, reviewedFingerprint: fingerprint, coverage: null, limits, claimAudit: parsed.claimAudit ?? null, auditValidation, planSource: source, ...(note ? { note } : {}) };
       },
     }),
     defineTool({
