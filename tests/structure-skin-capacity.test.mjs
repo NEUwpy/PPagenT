@@ -81,3 +81,31 @@ test('phase gates keep three and five stage small variants within their text reg
     }
   }finally{await closeHtmlComponentRuntime();}
 });
+
+test('compact matrix axis labels and growth endpoint leave adjacent text clear',async()=>{
+  const skins=(await listStructureSkins(root)).filter(s=>['university','neutral'].includes(s.id));
+  const cases=[
+    {id:'matrix-quadrant-priority-001',selection:{itemsPerQuadrant:2},pairs:[['axis-x-low','matrix-detail-title-2'],['axis-x-high','matrix-detail-title-3']]},
+    {id:'progression-growth-curve-004',selection:{pointCount:5},pairs:[['p5-text-body','mountain-milestone-5']]},
+  ];
+  const overlap=(a,b)=>Math.max(0,Math.min(a.left+a.width,b.left+b.width)-Math.max(a.left,b.left))
+    *Math.max(0,Math.min(a.top+a.height,b.top+b.height)-Math.max(a.top,b.top));
+  try{
+    for(const {id,selection,pairs} of cases){
+      const ref=await loadStructureSkill(id,root);
+      const module=await import(pathToFileURL(path.join(ref.assetDir,ref.guide.exampleImplementation)).href);
+      const content=module.resolvePreviewParameters(structuredClone(module.previewParameters),selection);
+      for(const skin of skins) for(const size of ['medium','small']){
+        const frame=await resolveStructureSizeFrame(ref,size,content,skin.theme);
+        const component=await loadPreservedComponent(ref,frame,skin.theme,content);
+        const tree=await resolveHtmlComponent({component,parameters:content,assetDir:ref.assetDir,theme:skin.theme});
+        for(const [first,second] of pairs){
+          const a=tree.nodes.find(n=>n.name===first);
+          const b=tree.nodes.find(n=>n.name===second);
+          assert.ok(a&&b,`${id} ${size} ${skin.id}: missing ${first} or ${second}`);
+          assert.ok(overlap(a.frame,b.frame)<1,`${id} ${size} ${skin.id}: ${first} overlaps ${second}`);
+        }
+      }
+    }
+  }finally{await closeHtmlComponentRuntime();}
+});
