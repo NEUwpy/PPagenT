@@ -20,6 +20,7 @@ import {
 import { northeasternUniversityTheme } from "../runtime/skins/northeastern-university-theme.mjs";
 import { compileHtmlComponentTheme, htmlComponentThemeCss } from "../visual-runtime/html-component-theme.mjs";
 import { htmlTextFlowCss } from "../visual-runtime/text-flow.mjs";
+import { grayPreviewParameters, grayPreviewTitle, isGrayPreview, renderGrayPreview } from "./structure-gray-preview.mjs";
 
 function option(name, fallback) {
   const index = process.argv.indexOf(name);
@@ -437,6 +438,9 @@ async function skinStateArtifactsFor(library, assetId, searchParams) {
   const size = searchParams.get("size") ?? "large";
   const skinId = searchParams.get("skin") ?? "university";
   if (!['large', 'medium', 'small'].includes(size) || skinId !== 'university') return null;
+  const composition = searchParams.get('composition');
+  const grayPreview = isGrayPreview(assetId, size, composition);
+  if (composition && !grayPreview) return null;
   const selection = selectedControls(resolved.record, searchParams);
   const selectionKey = JSON.stringify(selection);
   const sourcePptx = path.join(projectRoot, "assets", "主题", "东北大学-001", "runtime-template.pptx");
@@ -447,6 +451,7 @@ async function skinStateArtifactsFor(library, assetId, searchParams) {
   const textFlowPath = path.join(projectRoot, "src", "visual-runtime", "text-flow.mjs");
   const assetRuntimePath = path.join(projectRoot, "src", "runtime", "legacy-structure-assets.mjs");
   const themePath = path.join(projectRoot, "src", "runtime", "skins", "northeastern-university-theme.mjs");
+  const grayPreviewPath = path.join(projectRoot, 'src', 'tools', 'structure-gray-preview.mjs');
   const dependencyPaths = [
     fs.stat(resolved.entryPath),
     fs.stat(resolved.runtimeEntryPath),
@@ -463,9 +468,10 @@ async function skinStateArtifactsFor(library, assetId, searchParams) {
   const guideStat = resolved.record.status === 'core'
     ? await fs.stat(path.join(resolved.assetDir, 'structure-skill.json'))
     : null;
+  const grayStat = grayPreview ? await fs.stat(grayPreviewPath) : null;
   const inputMtime = Math.max(...inputStats.map((item) => item.mtimeMs));
-  const version = JSON.stringify([resolved.record.componentVersion, ...inputStats.map((item) => [item.mtimeMs, item.size]), guideStat && [guideStat.mtimeMs, guideStat.size]]);
-  const cacheKey = crypto.createHash("sha256").update(JSON.stringify(['northeastern-university', library, assetId, size, selectionKey, version])).digest("hex").slice(0, 20);
+  const version = JSON.stringify([resolved.record.componentVersion, ...inputStats.map((item) => [item.mtimeMs, item.size]), guideStat && [guideStat.mtimeMs, guideStat.size], grayStat && [grayStat.mtimeMs, grayStat.size]]);
+  const cacheKey = crypto.createHash("sha256").update(JSON.stringify(['northeastern-university', library, assetId, size, selectionKey, composition, version])).digest("hex").slice(0, 20);
   const outputDir = path.join(skinStateCacheRoot, cacheKey);
   const previewPath = path.join(outputDir, "slide-01.png");
   const pptxPath = path.join(outputDir, `${assetId}.pptx`);
@@ -481,8 +487,9 @@ async function skinStateArtifactsFor(library, assetId, searchParams) {
         await fs.mkdir(outputDir, { recursive: true });
         if (needsPptx) {
           const reviewModule = await loadReviewModule(resolved);
-          const parameters = resolveReviewParameters(resolved, reviewModule, selection);
-          if (!parameters) throw new Error("Skin 审查参数不完整");
+          const resolvedParameters = resolveReviewParameters(resolved, reviewModule, selection);
+          if (!resolvedParameters) throw new Error("Skin 审查参数不完整");
+          const parameters = grayPreview ? grayPreviewParameters(resolvedParameters) : resolvedParameters;
           const skinStat = await fs.stat(skinEntryPath);
           const { renderNortheasternUniversityDeck } = await import(`${pathToFileURL(skinEntryPath).href}?dashboard=${skinStat.mtimeMs}`);
           const runtimeModule = await import(`${pathToFileURL(resolved.runtimeEntryPath).href}?dashboard=${inputMtime}`);
@@ -498,11 +505,11 @@ async function skinStateArtifactsFor(library, assetId, searchParams) {
                   const sizeFrame = await resolveStructureSizeFrame(ref, size, payload.parameters, {
                     ...skin.componentTheme, bodyFrame: targetFrame,
                   });
-                  fittedFrame = {
-                    ...sizeFrame,
-                    left: targetFrame.left + (targetFrame.width - sizeFrame.width) / 2,
-                    top: targetFrame.top + (targetFrame.height - sizeFrame.height) / 2,
-                  };
+                  fittedFrame = grayPreview
+                    ? renderGrayPreview(slide, skin, size, sizeFrame)
+                    : { ...sizeFrame,
+                      left: targetFrame.left + (targetFrame.width - sizeFrame.width) / 2,
+                      top: targetFrame.top + (targetFrame.height - sizeFrame.height) / 2 };
                   fittedComponent = await loadPreservedComponent(ref, fittedFrame, skin.componentTheme, payload.parameters);
                 }
                 const tree = await resolveHtmlComponent({
@@ -517,7 +524,7 @@ async function skinStateArtifactsFor(library, assetId, searchParams) {
             : undefined;
           await renderNortheasternUniversityDeck({
             pages: [{
-              content: { pageId: `dashboard-${assetId}`, title: parameters.title || resolved.record.name, items: [] },
+              content: { pageId: `dashboard-${assetId}`, title: grayPreview ? grayPreviewTitle() : parameters.title || resolved.record.name, items: [] },
               meta: { sectionName: "结构图" },
               payload: { assetId, parameters },
               composition: null,

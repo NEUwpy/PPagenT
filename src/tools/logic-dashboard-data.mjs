@@ -163,6 +163,8 @@ async function normalizeRecord(entry, coverageTags, purposeMap, logicMap, root) 
     path.resolve(assetDir, "component.css"),
     path.resolve(assetDir, "compact.css"),
     path.resolve(assetDir, "structure-skill.json"),
+    manifest.id === 'matrix-quadrant-priority-001'
+      ? path.join(root, 'src', 'tools', 'structure-gray-preview.mjs') : null,
     path.join(root, "src", "visual-runtime", "preserved-size-component.mjs"),
     path.join(root, "src", "runtime", "preserved-structure-build.mjs"),
     path.join(root, "src", "visual-runtime", "html-component-runtime.mjs"),
