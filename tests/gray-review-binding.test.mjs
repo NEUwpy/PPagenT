@@ -122,6 +122,22 @@ test('结构化审稿证据核验精确来源、上屏位置和 issue-ruling 一
   const badRuling = structuredClone(response);
   badRuling.claimAudit.claims[0].ruling = 'equivalent';
   assert.equal(validateSemanticReviewEvidence(input, badRuling).valid, false);
+
+  const uncertain = structuredClone(response);
+  const uncertainReason = '仅凭当前文字无法确认义务强度是否被削弱';
+  uncertain.accepted = true;
+  uncertain.issues = [];
+  uncertain.notes = [`c1：未证实，${uncertainReason}`];
+  uncertain.claimAudit.claims[0].ruling = 'uncertain';
+  uncertain.claimAudit.claims[0].uncertainReason = uncertainReason;
+  assert.equal(validateSemanticReviewEvidence(input, uncertain).valid, true, '未证实的疑点可留在 notes，不强制修订');
+  const uncertainAsIssue = structuredClone(uncertain);
+  uncertainAsIssue.accepted = false;
+  uncertainAsIssue.issues = response.issues;
+  assert.equal(validateSemanticReviewEvidence(input, uncertainAsIssue).valid, false, '未证实裁定不得进入阻塞队列');
+  const uncertainWithoutNote = structuredClone(uncertain);
+  uncertainWithoutNote.notes = [];
+  assert.equal(validateSemanticReviewEvidence(input, uncertainWithoutNote).valid, false, '未证实原因必须出现在 notes');
 });
 
 test('层级机制：scope:"group" 的共同说明不编号、随组以小字呈现（评审 #119 要求 3）', () => {

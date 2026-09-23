@@ -240,7 +240,7 @@ export const SEMANTIC_REVIEW_CONTRACT = `
 职责五·反馈、证据与返回：每个 issue 只放仍然存在、证据成立且需要实际修订的实质错误，并简短写明当前具体位置/文字、原稿依据、语义改变与所需修订；已解决、无需修订、纯偏好一律放 notes，不能在同一 problem 内长篇自我推翻后仍阻塞。reviewFeedback 是上轮发现的问题（待核实项），不是新规范、不指定答案：按当前可见文案与原稿重新判定是否仍存在，已用其他呈现解决即算解决，不要求采用上轮建议的措辞、载体或位置。仅凭预计读者可能误读、未见坐标却断言视觉层级，作为 notes 待看图建议，不阻塞；类别数量、某个连接词或页数不是表达正确的证据；仅有标题改名、主辅标签或并排放置不证明关系成立；纯措辞、非必要连接词、载体类型或位置偏好、审美、字号猜测、已解决项都不能进入强制修订队列；不能仅因个人偏好、估计容量或未知坐标拒绝。
 每次审稿仍只调用本模型一次；必须给出 claimAudit。先按有实际含义的完整命题对照，不做逐词/逐句机械比对。sourceCoverage 把每个来源段中有实质意义的命题列成原句片段；无关标题、重复语、背景或流转内容可标 non-claim 并说明原因。locationCoverage 必须覆盖每个 auditLocations 上屏位置，说明它是 material-claim 还是非命题文字。合法概括、压缩、换序本身不构成问题。
 每个命题 claim 连接 sourceEvidence（sourceId 与原文中逐字存在的短引文）和 visibleEvidence（locationId 与该位置逐字存在的短引文）；未上屏命题的 visibleEvidence 为空并判 omitted。sourceForce、visibleForce 分别说明原稿与上屏表达的效力/强度；addedImplications 逐项判断上屏是否新增因果、确定性、义务或适用范围；ruling 只能为 equivalent、strengthened、weakened、unsupported、misassigned、omitted、uncertain，并写清 rationale。原文确有因果时，即使不用“导致”等词，也要按完整命题关系判断；不得把真实因果误判为新增因果。上屏是合法摘要时，只比较实际命题，不因未逐字覆盖背景细节而打回。
-claimAudit 结构：{schemaVersion:"gray-claim-audit-1",sourceCoverage:[{sourceId,quote,classification:"material-claim|non-claim",claimIds:[...],reason?}],locationCoverage:[{locationId,classification:"material-claim|non-claim",claimIds:[...],reason?}],claims:[{id,pageId,sourceEvidence:[{sourceId,quote}],visibleEvidence:[{locationId,quote}],sourceForce,visibleForce,addedImplications:{causality:boolean,certainty:boolean,obligation:boolean,scope:boolean},ruling,rationale}]}。所有 sourceId、locationId 和 claimId 必须相互对应；每个 source 段都须经 sourceCoverage 考虑。sourceCoverage 的 material-claim 应关联 claim；省略项也要建 claim 并判 omitted。每个 material-claim 上屏位置须有 claim；结构标题/制作说明等非命题位置可标 non-claim 并说明理由。issues 每项用 {pageId,sourceIds,claimIds,problem,requiredRevision}，只列 ruling 非 equivalent 的阻塞命题；equivalent 不得阻塞。notes 记录已解决项与不阻塞观察。
+claimAudit 结构：{schemaVersion:"gray-claim-audit-1",sourceCoverage:[{sourceId,quote,classification:"material-claim|non-claim",claimIds:[...],reason?}],locationCoverage:[{locationId,classification:"material-claim|non-claim",claimIds:[...],reason?}],claims:[{id,pageId,sourceEvidence:[{sourceId,quote}],visibleEvidence:[{locationId,quote}],sourceForce,visibleForce,addedImplications:{causality:boolean,certainty:boolean,obligation:boolean,scope:boolean},ruling,rationale,uncertainReason?}]}。所有 sourceId、locationId 和 claimId 必须相互对应；每个 source 段都须经 sourceCoverage 考虑。sourceCoverage 的 material-claim 应关联 claim；省略项也要建 claim 并判 omitted。每个 material-claim 上屏位置须有 claim；结构标题/制作说明等非命题位置可标 non-claim 并说明理由。issues 每项用 {pageId,sourceIds,claimIds,problem,requiredRevision}，只列 ruling 为 strengthened、weakened、unsupported、misassigned 或 omitted 的阻塞命题；equivalent 不得阻塞。uncertain 是未证实而非缺陷：必须写 uncertainReason，并在 notes 中用 claim id 与该理由明确记录为未证实；不得为它生成 issue。若证据足以证明实质错误，改用相应阻塞 ruling。notes 记录已解决项与不阻塞观察。
 这份结构化记录是可追溯审阅证据，不是语义正确性的程序证明；程序只核验 schema、引用、位置覆盖及 issues 与 ruling 的一致性，不以词面启发式判定因果、确定性或合法概括。
 只输出JSON：{accepted:boolean,issues:[{pageId,sourceIds,claimIds,problem,requiredRevision}],notes:[string],coverage:"逐页引用visiblePages中的具体措辞或组织，说明它怎样承担职责和关系；不能仅复述requirements",limits:"未看灰稿像素图，不能确认视觉可读性",claimAudit:{schemaVersion:"gray-claim-audit-1",sourceCoverage:[...],locationCoverage:[...],claims:[...]}}。
 issues 只放足以阻塞的实质错误（实际改变理解的失真、遗漏、层级/归属/关系错误，且能在原稿与当前可见内容间定位实际丢失/相反/更强/错误归属）；没有就空数组。建议、可选措辞、已解决说明、非阻塞观察一律放 notes，不得混入 issues；issues 非空时 accepted 必须为 false，notes 不阻塞渲染。
@@ -414,7 +414,6 @@ function collectReviewLocations(visiblePages) {
     });
   };
   for (const page of visiblePages ?? []) {
-    add(page.pageId, 'title', page.title);
     add(page.pageId, 'claim', page.claim);
     for (const [regionIndex, region] of (page.regions ?? []).entries()) {
       add(page.pageId, 'heading', region.heading, region.id, regionIndex);
@@ -607,8 +606,15 @@ export function validateSemanticReviewEvidence(input, response) {
     }
   }
   for (const claim of audit.claims) {
-    if (claim.ruling !== 'equivalent' && !issueClaimIds.has(claim.id)) fail(`${claim.id} ruling=${claim.ruling}，但没有对应阻塞 issue`);
+    if (['strengthened', 'weakened', 'unsupported', 'misassigned', 'omitted'].includes(claim.ruling) && !issueClaimIds.has(claim.id)) fail(`${claim.id} ruling=${claim.ruling}，但没有对应阻塞 issue`);
     if (claim.ruling === 'equivalent' && issueClaimIds.has(claim.id)) fail(`${claim.id} ruling=equivalent，却被列为阻塞 issue`);
+    if (claim.ruling === 'uncertain') {
+      if (issueClaimIds.has(claim.id)) fail(`${claim.id} ruling=uncertain 不得进入阻塞 issues`);
+      if (!nonempty(claim.uncertainReason)) fail(`${claim.id} ruling=uncertain 必须说明未证实原因`);
+      const matchingNote = (response.notes ?? []).some(note => typeof note === 'string'
+        && note.includes(claim.id) && note.includes(claim.uncertainReason));
+      if (!matchingNote) fail(`${claim.id} ruling=uncertain 必须在 notes 中以 claim id 和未证实原因为非阻塞记录`);
+    }
   }
   if (response.accepted === true && response.issues.length > 0) fail('accepted=true 与非空阻塞 issues 不一致');
   if (response.accepted === false && response.issues.length === 0) fail('accepted=false 必须对应至少一个阻塞 issue');
@@ -617,7 +623,7 @@ export function validateSemanticReviewEvidence(input, response) {
 
 export function semanticReviewInput({source,sourceSegments=[],area,plan,reviewFeedback=null,flowSources=[]}) {
   const pages = semanticPages(plan);
-  const visiblePages = pages.map(page=>({pageId:page.pageId,title:page.title,claim:page.claim,regions:page.items.map(item=>({
+  const visiblePages = pages.map(page=>({pageId:page.pageId,claim:page.claim,regions:page.items.map(item=>({
     id:item.id,kind:item.kind,surface:SKETCH_KINDS.has(item.kind)
       ? `结构草图：${SKETCH_LABELS[item.kind]}，框内文字为实际文案`
       : item.kind==='text'

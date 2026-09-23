@@ -63,15 +63,18 @@ function mockProvider(chatScript, reviewPayloads = [], beforeCall = null) {
   let chatIndex = 0;
   let reviewIndex = 0;
   const reviewCalls = [];
+  const reviewInputs = [];
   return {
     model: 'mock',
     reviewCalls,
+    reviewInputs,
     complete: async ({ messages }) => {
       const system = messages[0]?.content ?? '';
       if (system.includes('灰稿内容与表达审稿人')) {
         reviewCalls.push(Date.now());
         const rawPayload = reviewPayloads[reviewIndex++] ?? { accepted: true, issues: [], notes: [], coverage: 'mock 覆盖', limits: 'mock' };
         const reviewInput = JSON.parse(messages.at(-1)?.content ?? '{}');
+        reviewInputs.push(reviewInput);
         const payload = addMockClaimAudit(rawPayload, reviewInput);
         return { content: JSON.stringify(payload), toolCalls: [], usage: {}, finishReason: 'stop' };
       }
@@ -513,6 +516,30 @@ test('缺失 claimAudit 不得通过：无效审计可在同一内容版本重�
     assert.equal(run.events.find(event => event.tool === 'finish_draft').result.delivered, true);
     assert.equal(run.state.grayDraft.reviewRecord[0].accepted, false);
     assert.equal(run.state.grayDraft.reviewRecord[0].auditValidation.valid, false);
+  } finally { await run.rm(); }
+});
+
+test('审稿可见视图与实际渲染一致：page.title 留在后台，claim 才上屏', async () => {
+  const plan = JSON.parse(planJson(''));
+  plan.pages[0].title = 'BACKEND_TITLE_SHOULD_NOT_RENDER';
+  plan.pages[0].claim = 'VISIBLE_CLAIM_SHOULD_RENDER';
+  plan.pages[0].groups[0].heading = 'VISIBLE_REGION_HEADING';
+  const run = await runProtocol([
+    { content: JSON.stringify(plan), tools: ['check_plan'] },
+    { content: '审稿。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: '保持。', tools: [{ name: 'finish_draft', arguments: { review: '按实际上屏主题句与区域复核后保持。' } }] },
+  ]);
+  try {
+    const reviewInput = run.provider.reviewInputs[0];
+    assert.equal(reviewInput.visiblePages[0].claim, 'VISIBLE_CLAIM_SHOULD_RENDER');
+    assert.equal(Object.hasOwn(reviewInput.visiblePages[0], 'title'), false);
+    assert.ok(reviewInput.auditLocations.every(location => location.field !== 'title'));
+    const JSZip = (await import('jszip')).default;
+    const zip = await JSZip.loadAsync(await fs.readFile(path.join(run.output, 'gray-draft.pptx')));
+    const slideXml = await zip.file('ppt/slides/slide1.xml').async('string');
+    assert.match(slideXml, /VISIBLE_CLAIM_SHOULD_RENDER/u);
+    assert.doesNotMatch(slideXml, /BACKEND_TITLE_SHOULD_NOT_RENDER/u);
   } finally { await run.rm(); }
 });
 
