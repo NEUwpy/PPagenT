@@ -79,6 +79,12 @@ test('small staged funnel keeps phase and action titles while omitting optional 
       const names=new Set(tree.nodes.map(n=>n.name));
       for(const name of ['phase-label-0','phase-title-0','funnel-step-title-0','action-title-0-0']) assert.ok(names.has(name),`${size} ${skin.id}: missing ${name}`);
       for(const name of ['phase-body-0','action-body-0-0']) assert.equal(names.has(name),size!=='small',`${size} ${skin.id}: ${name}`);
+      if(size==='small'){
+        const shortLabel=tree.nodes.find(n=>n.name==='phase-label-1');
+        assert.equal(shortLabel.text.replace(/\s/g,''),content.phases[1].label);
+        assert.ok(shortLabel.frame.width>=32,`${skin.id}: short phase label is too narrow`);
+        assert.equal(shortLabel.text.trim().split('\n').length,2);
+      }
     }
     const skin=skins.find(s=>s.id==='neutral');
     const noInput=module.resolvePreviewParameters(structuredClone(module.previewParameters),{stepCount:4,phaseCount:3,inputCount:0});
@@ -86,6 +92,24 @@ test('small staged funnel keeps phase and action titles while omitting optional 
     const component=await loadPreservedComponent(ref,frame,skin.theme,noInput);
     const tree=await resolveHtmlComponent({component,parameters:noInput,assetDir:ref.assetDir,theme:skin.theme});
     assert.ok(tree.nodes.some(n=>n.name==='phase-content-body-0'));
+  }finally{await closeHtmlComponentRuntime();}
+});
+
+test('small directed hub keeps node titles and center copy without optional node notes',async()=>{
+  const ref=await loadStructureSkill('hub-directed-outcomes-002',root);
+  const module=await import(pathToFileURL(path.join(ref.assetDir,ref.guide.exampleImplementation)).href);
+  const skins=(await listStructureSkins(root)).filter(s=>['university','neutral'].includes(s.id));
+  try{
+    for(const skin of skins) for(const size of ['large','medium','small']){
+      const content=module.resolvePreviewParameters(structuredClone(module.previewParameters),{nodeCount:6,connectionMode:'向外'});
+      const frame=await resolveStructureSizeFrame(ref,size,content,skin.theme);
+      const component=await loadPreservedComponent(ref,frame,skin.theme,content);
+      const tree=await resolveHtmlComponent({component,parameters:content,assetDir:ref.assetDir,theme:skin.theme});
+      const names=new Set(tree.nodes.map(n=>n.name));
+      assert.ok(names.has('radial-center-body'));
+      assert.ok(names.has('radial-node-0-title'));
+      assert.equal(names.has('radial-node-0-body'),size!=='small');
+    }
   }finally{await closeHtmlComponentRuntime();}
 });
 
