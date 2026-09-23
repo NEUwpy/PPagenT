@@ -89,7 +89,7 @@ test('审稿只维护命题证据：位置直接带实文，引用派生不宣�
       rationale: '来源与上屏都表达延迟导致权限无法开放。',
     },
   ]);
-  const response = { notes: [], claimAudit: audit };
+  const response = { notes: [], claimAudit: audit, organization: { verdict: 'pass', findings: [] } };
   const validation = validateSemanticReviewEvidence(input, response);
   assert.equal(validation.valid, true, JSON.stringify(validation.errors));
   assert.equal(Object.hasOwn(audit, 'sourceCoverage'), false);
@@ -102,6 +102,60 @@ test('审稿只维护命题证据：位置直接带实文，引用派生不宣�
   assert.match(SEMANTIC_REVIEW_CONTRACT, /同一来源段已有一个引用，不表示该段其余命题已审完/u);
   assert.match(SEMANTIC_REVIEW_CONTRACT, /概括性页面主题或分类标题的 sourceEvidence 必须引用能支持其判断的实质内容/u);
   assert.match(SEMANTIC_REVIEW_CONTRACT, /不证明语义完整或判断正确/u);
+  assert.match(SEMANTIC_REVIEW_CONTRACT, /organization:\{verdict:"pass\|revise",findings:/u);
+});
+
+test('organization 与事实 rulings 独立：revise 阻塞且必须引用真实上屏位置与文字', () => {
+  const source = 'BLM方法推进指标与团队流程对齐，借此形成端到端数据路径并实现组织转型。';
+  const visible = source;
+  const p = plan([block('b1', visible)]);
+  const input = semanticReviewInput({ source, sourceSegments: [{ id: 's1', text: source }], area: { width: 1170, height: 492 }, plan: p });
+  const bodyLocation = input.auditLocations.find(location => location.field === 'body');
+  const claim = {
+    id: 'c1',
+    sourceEvidence: [{ sourceId: 's1', quote: source }],
+    visibleEvidence: [{ locationId: bodyLocation.id, quote: visible }],
+    ruling: 'equivalent',
+    rationale: '事实与关系忠实于来源。',
+  };
+  const response = {
+    notes: [],
+    claimAudit: canonicalAudit(input, [claim]),
+    organization: { verdict: 'revise', findings: [{
+      locationId: bodyLocation.id,
+      quote: 'BLM方法推进指标与团队流程对齐，借此形成端到端数据路径并实现组织转型。',
+      problem: '读者仍需从同一连续文字中自行拆出方法、条件、路径与目标之间的关系。',
+      requiredRevision: '按来源中的实际关系组织成员，明确方法、对齐、路径与目标的对应。',
+    }] },
+  };
+  assert.equal(response.claimAudit.claims.every(item => item.ruling === 'equivalent'), true);
+  assert.equal(validateSemanticReviewEvidence(input, response).valid, true);
+  const derived = semanticReviewFindings(response, input);
+  assert.equal(derived.issues.length, 1);
+  assert.equal(derived.issues[0].pageId, 'p1');
+  assert.equal(derived.issues[0].locationId, bodyLocation.id);
+  assert.equal(derived.issues[0].quote, response.organization.findings[0].quote);
+
+  const pass = structuredClone(response);
+  pass.organization = { verdict: 'pass', findings: [] };
+  assert.equal(validateSemanticReviewEvidence(input, pass).valid, true);
+  assert.deepEqual(semanticReviewFindings(pass, input).issues, []);
+
+  const missing = structuredClone(response);
+  delete missing.organization;
+  assert.equal(validateSemanticReviewEvidence(input, missing).valid, false);
+  const forgedLocation = structuredClone(response);
+  forgedLocation.organization.findings[0].locationId = 'loc-9999';
+  assert.equal(validateSemanticReviewEvidence(input, forgedLocation).valid, false);
+  const forgedQuote = structuredClone(response);
+  forgedQuote.organization.findings[0].quote = '并不存在的上屏文字';
+  assert.equal(validateSemanticReviewEvidence(input, forgedQuote).valid, false);
+  const invalidPass = structuredClone(response);
+  invalidPass.organization.verdict = 'pass';
+  assert.equal(validateSemanticReviewEvidence(input, invalidPass).valid, false);
+  const emptyRevise = structuredClone(response);
+  emptyRevise.organization.findings = [];
+  assert.equal(validateSemanticReviewEvidence(input, emptyRevise).valid, false);
 });
 
 test('引用真实性与 ruling 派生阻塞/uncertain 备注', () => {
@@ -122,7 +176,7 @@ test('引用真实性与 ruling 派生阻塞/uncertain 备注', () => {
     sourceEvidence: [{ sourceId: 's1', quote: '延迟会导致权限无法开放。' }],
     visibleEvidence: [{ locationId: bodyLocation.id, quote: '延迟致权限无法开放' }],
     ruling: 'equivalent', rationale: '因果关系与来源一致。',
-  }]) };
+  }]), organization: { verdict: 'pass', findings: [] } };
   assert.equal(validateSemanticReviewEvidence(input, response).valid, true);
   const derived = semanticReviewFindings(response, input);
   assert.equal(derived.issues.length, 1);
@@ -178,7 +232,7 @@ test('未引用来源与上屏位置必须逐项说明；unreviewed 或空命题
     visibleEvidence: [{ locationId: bodyLocation.id, quote: '实际上屏命题。' }],
     ruling: 'equivalent', rationale: '来源与上屏命题等价。',
   };
-  const response = { notes: [], claimAudit: canonicalAudit(input, [claim]) };
+  const response = { notes: [], claimAudit: canonicalAudit(input, [claim]), organization: { verdict: 'pass', findings: [] } };
   assert.equal(response.claimAudit.unreferencedSources[0].sourceId, 's2');
   assert.ok(response.claimAudit.unreferencedLocations.some(item => item.locationId !== bodyLocation.id));
   assert.equal(validateSemanticReviewEvidence(input, response).valid, true);

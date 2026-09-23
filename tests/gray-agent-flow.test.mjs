@@ -21,11 +21,14 @@ const planJson = suffix => JSON.stringify({
 });
 
 function addMockClaimAudit(payload, input) {
-  if (Object.hasOwn(payload, 'claimAudit')) return payload;
+  const response = Object.hasOwn(payload, 'organization')
+    ? payload
+    : { ...payload, organization: { verdict: 'pass', findings: [] } };
+  if (Object.hasOwn(response, 'claimAudit')) return response;
   const source = input.sourceSegments?.find(segment => segment.text?.length);
   const location = input.auditLocations?.find(item => item.field === 'body') ?? input.auditLocations?.[0];
   const text = location?.text;
-  if (!source || !location || !text) return { ...payload, claimAudit: null };
+  if (!source || !location || !text) return { ...response, claimAudit: null };
   const sourceQuote = source.text.slice(0, Math.min(source.text.length, 18));
   const visibleQuote = String(text).slice(0, Math.min(String(text).length, 18));
   const claimAudit = {
@@ -34,15 +37,15 @@ function addMockClaimAudit(payload, input) {
       id: 'mock-claim-1',
       sourceEvidence: [{ sourceId: source.id, quote: sourceQuote }],
       visibleEvidence: [{ locationId: location.id, quote: visibleQuote }],
-      ruling: payload.ruling ?? 'equivalent',
-      rationale: payload.rationale ?? 'mock structural fixture',
+      ruling: response.ruling ?? 'equivalent',
+      rationale: response.rationale ?? 'mock structural fixture',
     }],
     unreferencedSources: (input.sourceSegments ?? []).filter(segment => segment.id !== source.id)
       .map(segment => ({ sourceId: segment.id, disposition: 'non-claim', reason: 'mock fixture source segment' })),
     unreferencedLocations: (input.auditLocations ?? []).filter(item => item.id !== location.id)
       .map(item => ({ locationId: item.id, disposition: 'non-claim', reason: 'mock fixture visible position' })),
   };
-  return { notes: payload.notes ?? [], claimAudit };
+  return { ...response, notes: response.notes ?? [], claimAudit };
 }
 
 function mockProvider(chatScript, reviewPayloads = [], beforeCall = null) {
@@ -490,6 +493,115 @@ test('坏提交显式失败：计划不更新、不冒充已修订，旧有效�
   assert.equal(reviews[0].result.accepted, true);
 });
 
+test('organization revise 独立阻塞渲染与旧候选交付；组织通过复审后才恢复', async () => {
+  const revisedPlan = planJson('，修订版一');
+  const acceptedPlan = planJson('，修订版二');
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '初审通过。', tools: ['semantic_review'] },
+    { content: '渲染首个候选。', tools: [renderSingle] },
+    { content: revisedPlan, tools: ['check_plan'] },
+    { content: '组织审查需修订。', tools: ['semantic_review'] },
+    { content: '尝试渲染组织未通过版本。', tools: [renderSingle] },
+    { content: '尝试交付此前候选。', tools: [{ name: 'finish_draft', arguments: { renderId: 1, review: '尝试沿用旧候选。' } }] },
+    { content: acceptedPlan, tools: ['check_plan'] },
+    { content: '复审组织通过。', tools: ['semantic_review'] },
+    { content: '渲染通过版本。', tools: [renderSingle] },
+    { content: '交付新候选。', tools: [{ name: 'finish_draft', arguments: { renderId: 2, review: '复核改版内容后保持。' } }] },
+    { content: '收工。', tools: [] },
+  ], [
+    { notes: [] },
+    input => {
+      const location = input.auditLocations.find(item => item.field === 'body') ?? input.auditLocations[0];
+      return {
+        notes: [],
+        organization: { verdict: 'revise', findings: [{
+          locationId: location.id,
+          quote: location.text.slice(0, Math.min(18, location.text.length)),
+          problem: '读者仍需从同一块连续文字中自行拆出并列成员与它们的关系。',
+          requiredRevision: '沿真实关系重新组织已识别的成员，保留原有条件与指向。',
+        }] },
+      };
+    },
+    { notes: [], organization: { verdict: 'pass', findings: [] } },
+  ], 12);
+  try {
+    const reviews = run.events.filter(event => event.tool === 'semantic_review');
+    const renders = run.events.filter(event => event.tool === 'render_draft');
+    const finishes = run.events.filter(event => event.tool === 'finish_draft');
+    assert.equal(reviews[0].result.accepted, true);
+    assert.equal(reviews[1].result.accepted, false);
+    assert.equal(reviews[1].result.outcome, 'content-rejected');
+    assert.ok(reviews[1].result.claimAudit.claims.every(claim => claim.ruling === 'equivalent'));
+    assert.equal(reviews[1].result.organization.verdict, 'revise');
+    assert.equal(reviews[1].result.issues[0].locationId, reviews[1].result.organization.findings[0].locationId);
+    assert.equal(renders[1].result.accepted, false);
+    assert.equal(renders[1].result.stage, 'review-stale');
+    assert.equal(finishes[0].result.accepted, false);
+    assert.equal(finishes[0].result.stage, 'finish-needs-review');
+    assert.equal(reviews[2].result.accepted, true);
+    assert.equal(reviews[2].result.organization.verdict, 'pass');
+    assert.equal(renders[2].result.accepted, true);
+    assert.equal(finishes[1].result.delivered, true);
+    assert.equal(run.provider.reviewInputs[2].reviewFeedback[0].locationId, reviews[1].result.organization.findings[0].locationId);
+    assert.equal(run.provider.reviewInputs[2].reviewFeedback[0].quote, reviews[1].result.organization.findings[0].quote);
+  } finally { await run.rm(); }
+});
+
+test('organization 格式修复保留完整响应并受同一审稿输入的两次额度约束', async () => {
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '组织结果引文无效。', tools: ['semantic_review'] },
+    { content: '第一次修复组织结果。', tools: ['semantic_review'] },
+    { content: '第二次修复组织结果。', tools: ['semantic_review'] },
+    { content: '额度用尽后再请求。', tools: ['semantic_review'] },
+    { content: '收工。', tools: [] },
+  ], [
+    input => {
+      const response = addMockClaimAudit({ notes: [] }, input);
+      const location = input.auditLocations.find(item => item.field === 'body') ?? input.auditLocations[0];
+      response.organization = { verdict: 'revise', findings: [{
+        locationId: location.id, quote: '不是实际文案', problem: '位置中没有这段引文。', requiredRevision: '引用实际可见文字。',
+      }] };
+      return response;
+    },
+    input => {
+      const response = addMockClaimAudit({ notes: [] }, input);
+      response.organization = { verdict: 'revise', findings: [{
+        locationId: 'loc-9999', quote: '伪造位置', problem: '找不到该位置。', requiredRevision: '引用真实位置。',
+      }] };
+      return response;
+    },
+    input => {
+      const response = addMockClaimAudit({ notes: [] }, input);
+      response.organization = { verdict: 'revise', findings: [] };
+      return response;
+    },
+  ], 8);
+  try {
+    const reviews = run.events.filter(event => event.tool === 'semantic_review');
+    assert.equal(reviews.length, 4);
+    assert.equal(run.provider.reviewCalls.length, 3);
+    assert.equal(reviews[0].result.outcome, 'audit-invalid');
+    assert.equal(reviews[0].result.organization.verdict, 'revise');
+    assert.ok(reviews[0].result.claimAudit.claims.every(claim => claim.ruling === 'equivalent'));
+    assert.deepEqual(run.provider.reviewInputs[1].previousReviewResponse, {
+      notes: [], claimAudit: reviews[0].result.claimAudit, organization: reviews[0].result.organization,
+    });
+    assert.deepEqual(run.provider.reviewInputs[2].previousReviewResponse, {
+      notes: [], claimAudit: reviews[1].result.claimAudit, organization: reviews[1].result.organization,
+    });
+    assert.equal(reviews[1].result.evidenceRepair.attemptsUsed, 1);
+    assert.equal(reviews[2].result.evidenceRepair.attemptsUsed, 2);
+    assert.equal(reviews[2].result.evidenceRepair.status, 'exhausted');
+    assert.equal(reviews[3].result.evidenceRepair.status, 'exhausted');
+    assert.equal(reviews[0].result.reviewInputHash, reviews[1].result.reviewInputHash);
+    assert.equal(reviews[1].result.reviewInputHash, reviews[2].result.reviewInputHash);
+    assert.equal(run.provider.reviewInputs[1].repairAttempt.attempt, 1);
+    assert.equal(run.provider.reviewInputs[2].repairAttempt.attempt, 2);
+  } finally { await run.rm(); }
+});
+
 test('缺失 claimAudit 不得通过：同版证据修复收到原输入与错误，且不改计划', async () => {
   const run = await runProtocol([
     { content: planJson(''), tools: ['check_plan'] },
@@ -510,12 +622,14 @@ test('缺失 claimAudit 不得通过：同版证据修复收到原输入与错�
     assert.equal(reviews[1].result.accepted, true, JSON.stringify(reviews[1].result.auditValidation));
     assert.equal(reviews[1].result.outcome, 'accepted');
     assert.deepEqual(run.provider.reviewInputs[1].originalReviewInput, run.provider.reviewInputs[0], '修复输入必须绑定原始审稿输入');
-    assert.equal(run.provider.reviewInputs[1].previousRawAudit, null);
+    assert.deepEqual(run.provider.reviewInputs[1].previousReviewResponse, {
+      notes: [], claimAudit: null, organization: { verdict: 'pass', findings: [] },
+    });
     assert.ok(run.provider.reviewInputs[1].previousValidationErrors.includes('缺少 claimAudit 对照证据对象'));
     assert.deepEqual(run.provider.reviewInputs[1].repairAttempt, { attempt: 1, maxAttempts: 2 });
     assert.match(run.provider.reviewPrompts[1], /不得修改、重写或要求规划者修改被审计划/u);
     assert.match(run.provider.reviewPrompts[1], /不得删掉错误 claim 来造通过/u);
-    assert.match(run.provider.reviewPrompts[1], /不得把不匹配的引文自动改判 equivalent/u);
+    assert.match(run.provider.reviewPrompts[1], /不得把不匹配的事实引文自动改判 equivalent/u);
     assert.equal(reviews[1].result.evidenceRepair.status, 'succeeded');
     assert.equal(run.provider.reviewCalls.length, 2, '每次 semantic_review 工具调用至多一次 provider 调用');
     assert.equal(reviews[0].result.reviewedFingerprint, reviews[1].result.reviewedFingerprint, '修复仍审同一内容版本');
@@ -558,13 +672,17 @@ test('同一审稿输入最多两次修复：第二次收到最新audit/errors�
     assert.equal(reviews[1].result.evidenceRepair.status, 'pending');
     assert.equal(reviews[1].result.evidenceRepair.attemptsUsed, 1);
     assert.deepEqual(run.provider.reviewInputs[1].repairAttempt, { attempt: 1, maxAttempts: 2 });
-    assert.deepEqual(run.provider.reviewInputs[1].previousRawAudit, reviews[0].result.claimAudit);
+    assert.deepEqual(run.provider.reviewInputs[1].previousReviewResponse, {
+      notes: [], claimAudit: reviews[0].result.claimAudit, organization: reviews[0].result.organization,
+    });
     assert.deepEqual(run.provider.reviewInputs[1].previousValidationErrors, reviews[0].result.auditValidation.errors);
     assert.equal(reviews[2].result.outcome, 'audit-invalid');
     assert.equal(reviews[2].result.evidenceRepair.status, 'exhausted');
     assert.equal(reviews[2].result.evidenceRepair.attemptsUsed, 2);
     assert.deepEqual(run.provider.reviewInputs[2].repairAttempt, { attempt: 2, maxAttempts: 2 });
-    assert.deepEqual(run.provider.reviewInputs[2].previousRawAudit, reviews[1].result.claimAudit);
+    assert.deepEqual(run.provider.reviewInputs[2].previousReviewResponse, {
+      notes: [], claimAudit: reviews[1].result.claimAudit, organization: reviews[1].result.organization,
+    });
     assert.deepEqual(run.provider.reviewInputs[2].previousValidationErrors, reviews[1].result.auditValidation.errors);
     assert.equal(reviews[3].result.outcome, 'audit-invalid');
     assert.equal(reviews[3].result.evidenceRepair.status, 'exhausted');
@@ -593,7 +711,9 @@ test('证据修复收到原始无效 claimAudit 和对应校验错误', async ()
     const reviews = run.events.filter(event => event.tool === 'semantic_review');
     assert.equal(reviews[0].result.outcome, 'audit-invalid');
     assert.ok(reviews[0].result.auditValidation.errors.some(error => /来源引文不在/u.test(error)));
-    assert.deepEqual(run.provider.reviewInputs[1].previousRawAudit, reviews[0].result.claimAudit);
+    assert.deepEqual(run.provider.reviewInputs[1].previousReviewResponse, {
+      notes: [], claimAudit: reviews[0].result.claimAudit, organization: reviews[0].result.organization,
+    });
     assert.deepEqual(run.provider.reviewInputs[1].previousValidationErrors, reviews[0].result.auditValidation.errors);
     assert.deepEqual(run.provider.reviewInputs[1].originalReviewInput, run.provider.reviewInputs[0]);
     assert.equal(reviews[1].result.evidenceRepair.status, 'succeeded');
@@ -694,6 +814,8 @@ test('灰稿 Agent 提示要求先合并全稿诊断，保真与可读性优先�
   assert.match(GRAY_AGENT_PROMPT, /合并全稿诊断/u);
   assert.match(GRAY_AGENT_PROMPT, /保真、关系辨认和实际可读性/u);
   assert.match(GRAY_AGENT_PROMPT, /单凭某页字号最小不能自动/u);
+  assert.match(GRAY_AGENT_PROMPT, /已经识别出的成员或关系不能为了满足单页容量又合回长段/u);
+  assert.match(GRAY_AGENT_PROMPT, /不固定页数、布局或要求全文拆分，也不套用范本词汇/u);
 });
 
 test('无工具轮完整计划暂存：下一轮空正文 check_plan 消费原提交并记录来源', async () => {

@@ -210,7 +210,7 @@ export const SHARED_RULES = Object.freeze({
   declaration: `模拟/假设声明只要原稿给出，就必须上屏且恰好一次：最自然的位置是页面主题句，或紧邻主体的一个条目；不得省略、不得逐条重复、不得独立成组。`,
   condition: `真实条件与否定不能省略，准则不是已满足的证据，并行准备不是下一阶段。`,
   attachment: `条件触发的处置、异常或例外是附着性内容：注明它约束哪些对象或环节，从属并紧邻所依附的内容（作为依附对象的补充说明，或从属职责的supporting组），不与主流程环节、并列要点铺成同层组；判断依据是依附关系，不是篇幅大小。共同限定、否定与前提若不构成主体条目本身，用块级附注承载：该块 kind 写 "note"，紧随所依附的条目之后，不编号、不占条目位，也不需要制作说明三项。约束本组全部条目的共同前提/共同说明用块级 scope 写 "group"：程序不编号、以 12px 小字随组渲染，作用范围是整组而不是某一条；作用范围（一条、多条还是整组）由块级语义决定，判断依据是它约束谁，不是句子写法或篇幅。共同约束的呈现以范围为判据：范围要一眼可读、不被误读成只管某一条——可用 scope:"group"，也可让注文自己写明范围（"以上三项"式），形态不限；做成独立区域或同级条目而范围仍清楚也可，被读成并列项或只管单条就要改。内容要点不是共同说明，不要标 scope:"group"。`,
-  paging: `页数服从内容量、页面目的和真实关系，先确定每页讲什么，再结合实际容量决定合并、分区或分页。每页应有实质展开，短小附注就近融入主体。容量失败后可调整组合与比例、忠实精简冗词或沿语义边界分页；不能牺牲必要条件、拆散归属或持续缩字来满足固定页数。跨页仍标明条目所属类别；标题给出判断，正文补充细节，不整句复述标题。分页不切断逻辑：跨页时让读者能从后页标题、主题句或条目读出它与前页内容的关系（承接、回应或导出），关系在屏上可见、不靠后台说明。`,
+  paging: `页数服从内容量、页面目的和真实关系，先确定每页讲什么，再结合实际容量决定合并、分区或分页。每页应有实质展开，短小附注就近融入主体。容量失败后可调整组合与比例、忠实精简冗词或沿语义边界重新分组、分页；已经识别出的成员或关系不能为了满足单页容量又合回长段，压平结构不算解决容量。不能牺牲必要条件、拆散归属或持续缩字来满足固定页数；不固定页数、布局或要求全文拆分，也不套用范本词汇。跨页仍标明条目所属类别；标题给出判断，正文补充细节，不整句复述标题。分页不切断逻辑：跨页时让读者能从后页标题、主题句或条目读出它与前页内容的关系（承接、回应或导出），关系在屏上可见、不靠后台说明。`,
   claim: `主题句只承担本页主要判断（一句话，不把同一判断前后重复），以实际版面单行（28px）为限，不复述全部正文；范围、时间、条件、数字等限定按作用对象放在读者能正确理解其作用范围的位置（正文条目、组标题或附注），不塞进主题句。`,
   label: `label可省略，只有帮助读者定位职责时才用，并且必须是内容词（"正常""已修复""待配件"），不用"拆分项一""对象""状态一"这类结构占位名，也不带"（全页适用）"这类版面说明；承接、递进类连接词（"在此基础上""随后"一类）不能单独成为标签或独立要点——承接关系由位置与顺序承担，把一句拆成"连接词标签＋正文"的要合并回内容表述；标签与正文近复述（正文只比标签多一两个字）时省标签或合并，不要「一 要点／要点加一两字」式重复；序号由程序按条目顺序统一添加，label 不写序号（"一、""原因一""不足一"式前后缀都不行）；表格行只有行头与内容两段，不要把多列文字用竖线拼进一个块。`,
   surface: `页面目的、narrative和planningNotes不在灰稿上显示。`,
@@ -237,13 +237,15 @@ export const SEMANTIC_REVIEW_CONTRACT = `
 
 职责四·组织尺度与呈现判断：准则是选择尺度，不能充当已验证的证据；并行不能写成先后；条件须对应被约束的行动。组内条目层级是规划职责：逐页、逐组、逐块检查上屏实文与块序，实质并列成员、主要判断与支撑，以及方法、条件、路径、目标之间的关系是否直接可见；页或组已分区、块已有标签，不能替代块内检查。若读者仍须从同一块连续文字中自行拆出成员、配对关系或推断指向，指出具体需要自行拆解的关系，作为组织/层次问题；除非原稿证据表明命题或关系被改变，不要把可读性缺口称为事实失真。连续文字在读者无需自行拆解时可以通过；不因句长、关键词或形式偏好要求拆分或每点独立成块。不得以"依附性标签不得与主体同级"为由打回合法的组内分解；多因素共同导出的结果收束条编号与否不是缺陷判据，但被读者读成同级并列原因时要指出。组级共同说明（scope=group）作用范围是整组——范围一眼可读、不被误读成只管某一条或并列项即可（形态不限）；把内容要点误标为组级共同说明要指出。序号不是模型标签：可见条目的序号（一/二…）由程序按条目顺序添加，用它核对编号与层级是否一致，不因缺少原稿序号或签号写法不同而拒绝。条目标签必须是内容词，出现"拆分项一""对象""状态一"这类结构占位名、把承接或递进类连接词当作标签或把一句拆成"连接词标签＋正文"、表格行里用竖线拼接多列文字、正文整句复述标题，都要指出。顺序框架词（"起点/收尾/随后/完成后进入"等由"依次推进"类枚举蕴含）不属于添加，不因它拒绝；非原稿的修饰词若删除后关系读法仍清楚，则不保留。主题概括后正文展开是合法分工，长句机械复述和以后台解释代替组织则须修订。载体/媒介选择是规划层职责——你可以提出载体取向作为建议，但它不具约束力、不会被程序执行或删除；规划层可不采纳，且不采纳不构成拒绝理由，不得因载体建议未被采纳而拒绝已可直读的呈现；程序保证的只是呈现形态，依附对象与范围仍须对照内容核对。同一关系只要能通过任一可用手段（文字分项、卡片、表格、流程）直读即通过。复核修改时，除确认上一问题是否解决，还要检查修改是否引入新的事实、层级或归属错误。声明必须恰好出现一次且不独立成组：遗漏、重复、或把模拟/假设声明单独做成一个区域都要指出。后台审查解释不得进入灰区正文；蓝区制作要求可以说明关系组织与绘制要求。计划表示与呈现方式是否再调整，由具体缺口决定，不预先统一实现。
 
+同一次审稿还要独立给出 organization 结果，不能从 claimAudit 推导组织可读性：{verdict:"pass|revise",findings:[{locationId,quote,problem,requiredRevision}]}。只检查实际可见文字；pass 时 findings 必须为空，revise 时每条 finding 必须用 auditLocations 中该位置的逐字短引文定位，并具体说明读者仍要自行拆解的成员、配对或指向，以及所需修订。组织问题只有在确有这种推断负担时才 revise；不要求每段拆分，不因句长或风格偏好要求拆分，也不把组织问题写成事实失真。组织 findings 与事实 ruling 分开判断；事实 equivalent 不抵消 organization revise。
+
 职责五·反馈、证据与返回：每个命题的 ruling 与 rationale 应简明说明来源、实际上屏表达及差异；只有需要修改的实质问题才用阻塞 ruling。建议、已解决项和未证实疑点可放 notes，uncertain 不等于已证实错误。reviewFeedback 是上轮待核实项，必须按当前原稿与可见文案重新判断，已用其他呈现解决即算解决，不要求采用上轮建议。未看像素图的视觉疑点只作备注。
 每次审稿只调用本模型一次。按有实际含义的完整命题核对，不机械逐句比对。claimAudit 仅维护 claims 一份证据关系；程序从中派生索引与阻塞项，不要输出 sourceCoverage、locationCoverage、claimIds 镜像、accepted 或 issues。
 claims 中每项为 {id,sourceEvidence:[{sourceId,quote}],visibleEvidence:[{locationId,quote}],ruling,rationale}。sourceEvidence 与 visibleEvidence 都须给出来源/位置内逐字存在的短引文；auditLocations 已直接提供每个 locationId 对应的实际上屏 text。未上屏的原稿命题以 ruling=omitted 表达，sourceEvidence 有据、visibleEvidence 为空。ruling 仅可为 equivalent、strengthened、weakened、unsupported、misassigned、omitted、uncertain。rationale 比较完整命题、限定与关系；不再用 sourceForce、visibleForce 或 addedImplications 布尔字段。
 逐段通读 sourceSegments，拆出每个实质命题；同一来源段已有一个引用，不表示该段其余命题已审完，遗漏的命题仍须单列 omitted claim。若来源段没有 claim 引用，必须在 unreferencedSources 中写 sourceId、disposition 和 reason。若某个上屏位置没有 claim 引用，必须在 unreferencedLocations 中写 locationId、disposition 和 reason。disposition 只能为 non-claim 或 unreviewed；unreviewed 会阻止通过。无实质内容时可用 non-claim 并说明原因。
 概括性页面主题或分类标题的 sourceEvidence 必须引用能支持其判断的实质内容；只引用章节名、分类词或流转标题，不能证明概括正确。合法概括、压缩、换序本身不构成问题；仍须逐项指出可证明的遗漏、失真、归属错置或力度升级。
-程序按 ruling 派生阻塞项：strengthened、weakened、unsupported、misassigned、omitted 阻塞；equivalent 不阻塞。uncertain 通过 rationale 生成未证实备注，不作为阻塞项。结构校验只证明引用、位置与输入格式有效，不证明语义完整或判断正确。
-只输出 JSON：{notes:[string],claimAudit:{schemaVersion:"gray-claim-audit-2",claims:[...],unreferencedSources:[{sourceId,disposition:"non-claim|unreviewed",reason}],unreferencedLocations:[{locationId,disposition:"non-claim|unreviewed",reason}]}}。无未引用项时两个列表都为空数组。`;
+程序按 ruling 派生事实阻塞项：strengthened、weakened、unsupported、misassigned、omitted 阻塞；equivalent 不阻塞。uncertain 通过 rationale 生成未证实备注，不作为阻塞项。organization.verdict=revise 也独立阻塞并进入修订反馈；organization.verdict=pass 且 findings 为空才算组织检查通过。任一事实或组织阻塞都会令审稿不通过。结构校验只证明引用、位置与输入格式有效，不证明语义完整或判断正确。
+只输出 JSON：{notes:[string],claimAudit:{schemaVersion:"gray-claim-audit-2",claims:[...],unreferencedSources:[{sourceId,disposition:"non-claim|unreviewed",reason}],unreferencedLocations:[{locationId,disposition:"non-claim|unreviewed",reason}]},organization:{verdict:"pass|revise",findings:[{locationId,quote,problem,requiredRevision}]}}。无未引用项时两个列表都为空数组。`;
 
 /**
  * 审稿响应记录（评审 #102 REVISE：只记不改）。审稿原文完整送达规划层并完整入档；
@@ -259,6 +261,7 @@ export function snapshotSemanticReview(review) {
     coverage: review.coverage ?? null,
     limits: review.limits ?? null,
     ...(review.claimAudit && typeof review.claimAudit === 'object' ? { claimAudit: review.claimAudit } : {}),
+    ...(Object.hasOwn(review, 'organization') ? { organization: review.organization } : {}),
   };
 }
 
@@ -453,6 +456,16 @@ export function semanticReviewFindings(response, input) {
       requiredRevision,
     });
   }
+  for (const finding of response?.organization?.findings ?? []) {
+    const location = locationById.get(finding?.locationId);
+    issues.push({
+      ...(location?.pageId ? { pageId: location.pageId } : {}),
+      locationId: finding.locationId,
+      quote: finding.quote,
+      problem: finding.problem,
+      requiredRevision: finding.requiredRevision,
+    });
+  }
   return { issues, notes: [...new Set(notes)].slice(0, 20) };
 }
 
@@ -475,6 +488,30 @@ export function validateSemanticReviewEvidence(input, response) {
   if (!Array.isArray(audit.unreferencedSources)) fail('claimAudit.unreferencedSources 必须是数组');
   if (!Array.isArray(audit.unreferencedLocations)) fail('claimAudit.unreferencedLocations 必须是数组');
   if (!Array.isArray(response?.notes)) fail('审稿 notes 必须是数组');
+  const organization = response?.organization;
+  if (!organization || typeof organization !== 'object' || Array.isArray(organization)) {
+    fail('缺少 organization 组织可读性结果对象');
+  } else {
+    if (!['pass', 'revise'].includes(organization.verdict)) fail('organization.verdict 必须是 pass 或 revise');
+    if (!Array.isArray(organization.findings)) fail('organization.findings 必须是数组');
+    else {
+      if (organization.verdict === 'pass' && organization.findings.length) fail('organization.verdict=pass 时 findings 必须为空');
+      if (organization.verdict === 'revise' && !organization.findings.length) fail('organization.verdict=revise 时 findings 不能为空');
+      for (const finding of organization.findings) {
+        if (!finding || typeof finding !== 'object' || Array.isArray(finding)) {
+          fail('organization.findings 每项必须是对象');
+          continue;
+        }
+        if (!nonempty(finding.locationId)) fail('organization finding 缺少 locationId');
+        if (!nonempty(finding.quote)) fail('organization finding 缺少 quote');
+        if (!nonempty(finding.problem)) fail('organization finding 缺少 problem');
+        if (!nonempty(finding.requiredRevision)) fail('organization finding 缺少 requiredRevision');
+        const location = (input?.auditLocations ?? []).find(item => item?.id === finding.locationId);
+        if (!location) fail('organization finding 引用了不存在的上屏位置 ' + (finding.locationId ?? ''));
+        else if (!nonempty(finding.quote) || !String(location.text ?? '').includes(finding.quote)) fail('organization finding 引文不在 ' + finding.locationId + ' 实际文案中');
+      }
+    }
+  }
 
   const sources = new Map();
   for (const segment of input?.sourceSegments ?? []) {
