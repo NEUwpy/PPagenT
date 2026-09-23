@@ -11,6 +11,10 @@
 /* The half-width quadrants need a shorter detail stack and a clear axis lane. */
 [data-preserved-size="small"] .quadrant-detail{height:auto;overflow:visible}
 [data-preserved-size="small"] .quadrant-detail .ppagent-text-primitive--body{display:none}
+[data-preserved-size="small"] .quadrant-detail .ppagent-text-primitive--heading{display:none}
+[data-preserved-size="small"] .band-definitions{display:none}
+[data-preserved-size="small"] .quadrant-detail.detail-0,[data-preserved-size="small"] .quadrant-detail.detail-2{left:calc(44px * var(--structure-geometry-scale));width:calc(280px * var(--structure-geometry-scale))}
+[data-preserved-size="small"] .quadrant-detail.detail-0,[data-preserved-size="small"] .quadrant-detail.detail-1{top:calc(74px * var(--structure-geometry-scale))}
 [data-preserved-size="small"] .quadrant-detail .ppagent-text-layout{gap:1px}
 [data-preserved-size="small"] .quadrant-detail .ppagent-metric-set{margin-top:2px;gap:1px}
 [data-preserved-size="small"] .quadrant-detail .ppagent-metric-set__item{gap:2px}
@@ -19,5 +23,5 @@
 [data-preserved-size="small"] .matrix-review[data-items-q1="3"] .q1 .matrix-item h4,
 [data-preserved-size="small"] .matrix-review[data-items-q2="3"] .q2 .matrix-item h4,
 [data-preserved-size="small"] .matrix-review[data-items-q3="3"] .q3 .matrix-item h4{font-size:10pt;line-height:1.12}
-[data-preserved-size="small"] .quadrant-detail.detail-2,[data-preserved-size="small"] .quadrant-detail.detail-3{top:calc(294px * var(--structure-geometry-scale));bottom:auto}
+[data-preserved-size="small"] .quadrant-detail.detail-2,[data-preserved-size="small"] .quadrant-detail.detail-3{top:calc(334px * var(--structure-geometry-scale));bottom:auto}
 [data-preserved-size="small"] .axis-label.x-low,[data-preserved-size="small"] .axis-label.x-high{margin-top:0}

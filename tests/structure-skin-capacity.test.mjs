@@ -173,8 +173,11 @@ test('small matrix keeps three objects per quadrant and all metrics legible',asy
       const tree=await resolveHtmlComponent({component,parameters:content,assetDir:ref.assetDir,theme:skin.theme});
       const labels=tree.nodes.filter(n=>/^matrix-item-title-\d-\d$/.test(n.name));
       const metrics=tree.nodes.filter(n=>/^quadrant-\d-detail-region-metric-\d$/.test(n.name));
+      const metricLabels=tree.nodes.filter(n=>/^quadrant-\d-detail-region-metric-\d-label$/.test(n.name));
       assert.equal(labels.length,12);
       assert.equal(metrics.length,8);
+      assert.equal(metricLabels.length,8);
+      for(const axis of ['axis-x-low','axis-x-high','axis-y-low','axis-y-high']) assert.ok(tree.nodes.some(n=>n.name===axis));
       for(let i=0;i<labels.length;i++) for(let j=i+1;j<labels.length;j++){
         assert.ok(overlap(labels[i].frame,labels[j].frame)<1,`${skin.id}: ${labels[i].name} overlaps ${labels[j].name}`);
       }
