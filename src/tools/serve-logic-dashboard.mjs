@@ -4,6 +4,7 @@ import { preservedComponent } from '../runtime/preserved-structure-build.mjs';
 import { preservedSizeExamples } from '../visual-runtime/preserved-design-layout.mjs';
 import crypto from "node:crypto";
 import { composePageLayout, pageLayoutPreview } from '../visual-runtime/page-layout-library.mjs';
+import { layoutRunEvidence, layoutRunPreview } from './layout-run-evidence.mjs';
 import fs from "node:fs/promises";
 import http from "node:http";
 import path from "node:path";
@@ -493,6 +494,17 @@ const server = http.createServer(async (request, response) => {
     }
     if (url.pathname === "/health") {
       sendJson(response, 200, { status: "ok", root: projectRoot, pid: process.pid });
+      return;
+    }
+    if (url.pathname === '/api/layout-run-evidence') {
+      sendJson(response, 200, { runs: await layoutRunEvidence(projectRoot) });
+      return;
+    }
+    if (url.pathname === '/api/layout-run-preview') {
+      try {
+        const bytes = await layoutRunPreview(projectRoot, Object.fromEntries(url.searchParams));
+        send(response, 200, bytes, 'image/png', { 'cache-control': 'no-store' });
+      } catch { sendJson(response, 404, { error: '预览不存在' }); }
       return;
     }
     if (url.pathname === "/api/page-layout-preview") {

@@ -19,6 +19,7 @@ import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan,
 import { applyTemplateDefaults, describeDefaults } from './gray-templates.mjs';
 import { auditGeometry, voidWarnings, VOID_THRESHOLDS } from './gray-audit.mjs';
 import { resolveGrayLayout, compressionMemory } from './gray-layout.mjs';
+import { selectMeasuredLayouts } from './gray-layout-selection.mjs';
 import { grayBodyLayout, fitGrayText, validateGrayArea, validateGrayPlan, renderGrayDraft, topicFits } from './gray-draft.mjs';
 
 const sha = text => createHash('sha256').update(text).digest('hex');
@@ -149,7 +150,7 @@ export function requireExpandedManuscript(raw) {
  * 逐页独立：某页超容量只影响该页（warning），不得中断其余页的充实度检查。
  */
 const SPARSE_VOID_LIMIT = 0.4;
-export function planFitIssues(plan, area) {
+export function planFitIssues(plan, area, { legacyEstimates = true } = {}) {
   const issues = [];
   const warnings = [];
   for (const page of plan?.pages ?? []) {
@@ -160,7 +161,7 @@ export function planFitIssues(plan, area) {
       message: `主题句超 28px 单行预算（本版面约 ${budget} 字内）：claim 只承担本页主要判断；范围、时间、条件、数字等限定改放正文、组标题或附注。`,
     });
   }
-  for (const page of plan?.pages ?? []) {
+  for (const page of legacyEstimates ? plan?.pages ?? [] : []) {
     let estimatedVoid = null;
     try {
       const single = { ...plan, pages: [page] };
@@ -205,7 +206,7 @@ export function planFitIssues(plan, area) {
   return { issues, warnings };
 }
 
-export async function runGrayAgent({ source, output, area, root = process.cwd(), provider, maxTurns = 24, observer = null, visualReview = false }) {
+export async function runGrayAgent({ source, output, area, root = process.cwd(), provider, maxTurns = 24, observer = null, visualReview = false, useLayoutRules = false }) {
   area = validateGrayArea(area);
   await fs.mkdir(output, { recursive: false }).catch(error => { if (error.code !== 'EEXIST') throw error; });
   if (await fs.access(path.join(output, 'state.json')).then(() => true, () => false)) throw new Error('输出目录里已有运行状态（可能属于旧运行或误复用），请使用新目录');
@@ -221,6 +222,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
     ...base,
     grayDraft: {
       version: 'gray-agent-1', area, sourceHash: sha(raw), status: 'planning', humanReview: 'pending',
+      layoutMode: useLayoutRules ? 'measured-rule-selection' : 'legacy-defaults',
       turns: [], renders: [], candidates: [], startedAt: new Date().toISOString(),
     },
   };
@@ -236,7 +238,8 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
   await fs.writeFile(path.join(output, 'source.md'), raw, 'utf8');
   const sharedRules = (await Promise.all(['内容结构.md', '页面组合.md', '排版.md'].map(name => fs.readFile(path.join(root, 'rules', name), 'utf8')))).join('\n\n');
   await fs.writeFile(path.join(output, 'rules-snapshot.md'), sharedRules, { flag: 'wx' }).catch(error => { if (error.code !== 'EEXIST') throw error; });
-  const systemPrompt = `${GRAY_AGENT_PROMPT}\n\n以下为本项目共用规则真源：\n${sharedRules}`;
+  const selectionInstruction = useLayoutRules ? `\n本次正式工作台启用已建布局规范选择：render_draft 内先测量候选，再调用独立选择器对照原稿判断关系、选择看板同源卡片式或相册式。以上旧默认模板/override说明不适用于本次布局执行，layouts 每页只需 {pageId}。不得按块数推断关系；跨组对照、因果、先后或主辅超出目前两类规范能力时会明确退回，不能改错关系凑布局。可以保留真实关系重组为共同阅读的组，或据实说明能力缺口，不能为布局修改事实。主题句可引出、概括或总结。选择结果和理由会入运行记录，不代表视觉验收。` : '';
+  const systemPrompt = `${GRAY_AGENT_PROMPT}\n\n以下为本项目共用规则真源：\n${sharedRules}${selectionInstruction}`;
   await fs.writeFile(path.join(output, 'agent-system-prompt.txt'), systemPrompt, 'utf8');
 
   // 视觉质检（可选）：渲染完成后用视觉模型看逐页截图。缺配置时如实标注不可用并放行，不卡流程。
@@ -302,6 +305,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
     return {
       pageId: page.pageId, title: page.title, fontSize: receipt?.fontSize ?? null,
       weights,
+      ...(receipt?.selection ? { layoutSelection: receipt.selection, family: receipt.layout.family } : {}),
       weightsSource: weights ? (receipt?.formPick ? (receipt.formPick.requested ? 'requested' : 'fallback') : null) : null,
       reweighted: receipt?.reweighted ?? null,
       // 框外页底空白（按最下方区域框计），不是内容填充率：缩小它未必改善阅读。
@@ -359,11 +363,11 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         const repeated = lastCheckedFingerprint === fingerprint;
         lastCheckedFingerprint = fingerprint;
         const report = validateSemanticPlan(base, plan);
-        const fit = planFitIssues(plan, area);
+        const fit = planFitIssues(plan, area, { legacyEstimates: !useLayoutRules });
         const issues = [...report.issues, ...fit.issues].slice(0, 20);
         const warnings = [...(report.warnings ?? []), ...fit.warnings];
         const notes = [note, repeated ? '该版本自上次检查后未变化：结论同上；有修订请提交新计划。' : null].filter(Boolean);
-        return { accepted: report.accepted && !fit.issues.length, issues, coverage: report.coverage, defaults: describeDefaults(plan), planSource: source, ...(warnings.length ? { warnings } : {}), ...(notes.length ? { note: notes.join(' ') } : {}) };
+        return { accepted: report.accepted && !fit.issues.length, issues, coverage: report.coverage, defaults: useLayoutRules ? [] : describeDefaults(plan), layoutMode: useLayoutRules ? 'measured-rule-selection' : 'legacy-defaults', planSource: source, ...(warnings.length ? { warnings } : {}), ...(notes.length ? { note: notes.join(' ') } : {}) };
       },
     }),
     defineTool({
@@ -465,7 +469,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         await fs.mkdir(attemptDir, { recursive: true });
         let applied;
         try {
-          applied = applyTemplateDefaults(plan, layouts);
+          applied = useLayoutRules ? { layouts: [], decisions: [] } : applyTemplateDefaults(plan, layouts);
         } catch (error) {
           const failure = { accepted: false, stage: 'template', reason: error.message };
           await fs.writeFile(path.join(attemptDir, 'failure.json'), json({ ...failure, plan, layouts }), 'utf8');
@@ -482,7 +486,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         }), 'utf8');
         let built;
         try {
-          built = resolveGrayLayout(plan, { pages: applied.layouts }, area, {
+          built = useLayoutRules ? await selectMeasuredLayouts({ plan, area, source: raw, provider, directory: attemptDir, metrics: { measureBody: grayBodyLayout, fitText: fitGrayText } }) : resolveGrayLayout(plan, { pages: applied.layouts }, area, {
             measureBody: grayBodyLayout, fitText: fitGrayText,
             fontSizes: () => [22, 20, 18, 16, 15, 14, 13, 12],
           });
@@ -695,7 +699,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         agentState.grayDraft.candidateFailure = String(error?.message ?? error);
       }
     }
-    if (!candidateRendered && lastPlan) {
+    if (!candidateRendered && lastPlan && !useLayoutRules) {
       // 确定性兜底（评审 #58）：从未成功渲染时按默认组合渲染候选并如实标未复核——候选仅供人审，
       // 绝不继承通过状态；渲染失败或检查未过仍按 blocked 记录。
       try {

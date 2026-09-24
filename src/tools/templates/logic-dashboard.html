@@ -496,6 +496,13 @@
       <div class="section-head"><div><h2>02 · 布局库</h2><p>先判断内容是否适用，再按规则分区。下面的组合是示例，不是模板清单；数量、面积和横竖倾向都可以变化。</p></div><span class="pill pending">2 类规范 · 示例可变</span></div>
       <div class="page-layout-families" id="page-layout-families" aria-label="布局类型"></div>
       <div class="page-layout-detail" id="page-layout-detail"></div>
+      <div class="page-layout-rules" style="margin-top:24px;border-radius:12px">
+        <h3>正式稿件：识别与布局选择记录</h3>
+        <p>查看真实运行中的页面内容、识别关系、候选和选择理由。渲染候选仍需核对完整预览；此处不会把程序选择当作用户验收。</p>
+        <button type="button" id="refresh-layout-evidence">刷新生成记录</button>
+        <a href="http://127.0.0.1:4212/" target="_blank" rel="noreferrer">进入生产工作台</a>
+        <div id="layout-run-evidence" aria-live="polite">正在读取正式运行记录…</div>
+      </div>
     </section>
 
     <section class="section" id="text-layouts">
@@ -1259,6 +1266,23 @@
         document.getElementById('page-layout-status').textContent='已按当前输入重新分区；请检查下方示意。';
       }catch(error){if(requestId===layoutRequest)document.getElementById('page-layout-status').textContent=error.message+' 下方仍为上次成功示意。'}
     });
+    async function renderLayoutEvidence(){
+      const target=document.getElementById('layout-run-evidence');
+      try{
+        const response=await fetch('/api/layout-run-evidence',{cache:'no-store'});
+        if(!response.ok)throw new Error('读取生成记录失败');
+        const {runs}=await response.json();
+        if(!runs.length){target.textContent='尚无正式稿件的布局选择记录。上方规范和参数试排已经可用，自动识别与选型效果尚待真实运行验证。';return;}
+        const visibleRuns=runs.filter(run=>run.rendered || run.status==='selected-awaiting-render');
+        target.innerHTML=visibleRuns.map(run=>'<details style="margin-top:16px;border-top:1px solid #d7e0e7;padding-top:12px"><summary>'+esc(run.runId)+' / '+esc(run.renderId)+' · '+esc(run.rendered?'已有灰稿，待审阅':run.status==='rejected'?'选型未通过':run.status==='no-capacity-candidate'?'无可承载候选':'已选择，尚未形成灰稿')+'</summary><p>'+esc(run.reason??'选择成功不等于逻辑与审美合格。')+'</p>'+(Array.isArray(run.pages)?run.pages:[]).map(page=>{
+          const choice=run.selection?.pages?.find(x=>x.pageId===page.pageId);
+          const candidates=(Array.isArray(run.candidates)?run.candidates:[]).find(x=>x.pageId===page.pageId);
+          return '<h4>'+esc(page.pageId)+' · '+esc(page.title)+'</h4><p>'+esc(page.claim)+'</p><p>本页职责：'+esc(page.pagePurpose)+'</p><p>识别关系：'+esc(choice?.relation??'尚未选择')+' · 候选：'+esc(choice?.candidateId??'无')+'</p><p>选择依据：'+esc(choice?.reason??'尚无模型选择回执')+'</p><ul>'+page.groups.map(g=>'<li><strong>'+esc(g.heading)+'</strong>：'+esc(g.blocks.map(b=>[b.label,b.text].filter(Boolean).join('：')).join('；'))+'</li>').join('')+'</ul><details><summary>可行候选及被排除的候选</summary><pre style="white-space:pre-wrap">'+esc(JSON.stringify({candidates:candidates?.candidates?.map(c=>({id:c.id,regions:c.regions})),rejected:candidates?.rejected},null,2))+'</pre></details>';
+          }).join('')+'<details><summary>完整原稿</summary><pre style="white-space:pre-wrap">'+esc(run.source)+'</pre></details>'+ (Array.isArray(run.previews)?run.previews:[]).map((url,i)=>'<figure><img style="width:100%;height:auto" loading="lazy" src="'+esc(url)+'" alt="正式灰稿第'+(i+1)+'页"><figcaption>实际渲染 · 第 '+(i+1)+' 页</figcaption></figure>').join('')+'</details>').join('');
+      }catch(error){target.textContent=error.message;}
+    }
+    document.getElementById('refresh-layout-evidence').addEventListener('click',renderLayoutEvidence);
+    renderLayoutEvidence();
     renderPageLayouts();
     renderSummary();
     renderStores();
