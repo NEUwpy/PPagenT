@@ -1,53 +1,9 @@
 {
   "format": 1,
+  "lastSyncScope": "documentation-only",
   "policy": "镜像文件由本脚本从仓库维护源同步；远端执行只读取包内文件，不访问维护源。共享修改回写维护源后重建，禁止手工维护两份。",
   "boundaryLinksNote": "这些是镜像正文里指向包外的相对链接（多为 assets/、experiments/ 证据）。链接与正文逐字节保持源文，不做改写；inRepository 为 true 表示目标在维护源里存在、只是没进包，false 表示源里也已失效。",
   "boundaryLinks": [
-    {
-      "source": "rules/README.md",
-      "link": "../docs/PPT制作规则参考/README.md",
-      "inRepository": true
-    },
-    {
-      "source": "docs/工作流/正式生成/Agent排版规则.md",
-      "link": "../../设计手册/科研咨询式排版-v8.md",
-      "inRepository": true
-    },
-    {
-      "source": "docs/工作流/正式生成/Agent排版规则.md",
-      "link": "../../设计手册/科研咨询式排版-v8.md",
-      "inRepository": true
-    },
-    {
-      "source": "docs/工作流/正式生成/Agent排版规则.md",
-      "link": "../../设计手册/咨询式分析-v1.md",
-      "inRepository": true
-    },
-    {
-      "source": "docs/工作流/正式生成/Agent排版规则.md",
-      "link": "../../../experiments/university-skin-pilot/README.md",
-      "inRepository": true
-    },
-    {
-      "source": "docs/工作流/正式生成/大学Skin设计提示词-v5.md",
-      "link": "../../设计手册/咨询式分析-v1.md",
-      "inRepository": true
-    },
-    {
-      "source": "docs/工作流/正式生成/大学结构调用.md",
-      "link": "../../../experiments/neu-shared-entry-20260908/SELF-CHECK.md",
-      "inRepository": true
-    },
-    {
-      "source": "docs/工作流/正式生成/工作流.md",
-      "link": "../../契约/运行配置信息.md",
-      "inRepository": true
-    },
-    {
-      "source": "docs/工作流/正式生成/生成线架构决策.md",
-      "link": "../../分支分工.md",
-      "inRepository": true
-    },
     {
       "source": "docs/产品定义.md",
       "link": "../harness/运行流程.md",
@@ -96,6 +52,86 @@
     {
       "source": "docs/产品定义.md",
       "link": "../experiments/tsinghua-purple-demo/index.html",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/Agent排版规则.md",
+      "link": "../../../harness/运行流程.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/Agent排版规则.md",
+      "link": "../../设计手册/科研咨询式排版-v8.md",
+      "inRepository": false
+    },
+    {
+      "source": "docs/工作流/正式生成/Agent排版规则.md",
+      "link": "../../设计手册/科研咨询式排版-v8.md",
+      "inRepository": false
+    },
+    {
+      "source": "docs/工作流/正式生成/Agent排版规则.md",
+      "link": "../../设计手册/咨询式分析-v1.md",
+      "inRepository": false
+    },
+    {
+      "source": "docs/工作流/正式生成/Agent排版规则.md",
+      "link": "../../../experiments/university-skin-pilot/README.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/Skin主题与排版分离.md",
+      "link": "../../../harness/运行流程.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/大学Skin设计提示词-v5.md",
+      "link": "../../设计手册/咨询式分析-v1.md",
+      "inRepository": false
+    },
+    {
+      "source": "docs/工作流/正式生成/大学结构调用.md",
+      "link": "../../../experiments/neu-shared-entry-20260908/SELF-CHECK.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/工作流.md",
+      "link": "../../契约/运行配置信息.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/生成线架构决策.md",
+      "link": "../../../harness/运行流程.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/生成线架构决策.md",
+      "link": "../../../harness/运行流程.md#当前灰稿实验与通用运行器的边界",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/生成线架构决策.md",
+      "link": "../../分支分工.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/通用灰稿验证.md",
+      "link": "../../PPT制作规则参考/内容提取/原稿到页面-不足与感悟-20260916/笔记.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/通用灰稿验证.md",
+      "link": "../../../experiments/gray-checkpoint-20260916/README.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/通用灰稿验证.md",
+      "link": "../../PPT制作规则参考/内容提取/小红书-670890aa000000001b020005-内容提取及可视化/内容的提取.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/通用灰稿验证.md",
+      "link": "../../../稿件/模拟稿库/README.md",
       "inRepository": true
     },
     {
@@ -462,18 +498,148 @@
       "source": "docs/架构/结构库-变与不变.md",
       "link": "../../assets/结构图/阶段门禁流程-004/visual-intent.md",
       "inRepository": true
+    },
+    {
+      "source": "docs/架构/页面构成与布局规范.md",
+      "link": "../../harness/运行流程.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/页面构成与布局规范.md",
+      "link": "../方向讨论/页面编排能力计划.md",
+      "inRepository": true
+    },
+    {
+      "source": "rules/README.md",
+      "link": "../docs/PPT制作规则参考/README.md",
+      "inRepository": true
     }
   ],
   "files": [
     {
-      "path": "rules/index.json",
-      "sha256": "f7d2be54b47563771fa7e6dbae5d955cf9f68334f1bddec7f39013830e62ae7f",
-      "source_sha256": "f7d2be54b47563771fa7e6dbae5d955cf9f68334f1bddec7f39013830e62ae7f"
+      "path": "assets/主题/中性编辑排版-001/asset.json",
+      "sha256": "222ee763ff86c920671e262ef440c22d3acd40bdb8c5333b3db2a8b262a46cfc",
+      "source_sha256": "222ee763ff86c920671e262ef440c22d3acd40bdb8c5333b3db2a8b262a46cfc"
+    },
+    {
+      "path": "docs/产品定义.md",
+      "sha256": "5569ed98b53d27574fed60854c5584fd5f7ab4835c51d9dec670766d1e19d34e",
+      "source_sha256": "5569ed98b53d27574fed60854c5584fd5f7ab4835c51d9dec670766d1e19d34e"
+    },
+    {
+      "path": "docs/产品需求.md",
+      "sha256": "027fba67e406c38c4060517e75401e39bc02f9195ac49348cf5da30dda453588",
+      "source_sha256": "027fba67e406c38c4060517e75401e39bc02f9195ac49348cf5da30dda453588"
+    },
+    {
+      "path": "docs/工作流/正式生成/Agent排版规则.md",
+      "sha256": "809141747b24e5f35cdb6a776086e8b3d1e866d387043faedfcd46006d0f6374",
+      "source_sha256": "809141747b24e5f35cdb6a776086e8b3d1e866d387043faedfcd46006d0f6374"
+    },
+    {
+      "path": "docs/工作流/正式生成/Skin主题与排版分离.md",
+      "sha256": "92af5ed4c9185e8c1da9a8389dea63b3ac63392b55dbafe3a877996cd320e420",
+      "source_sha256": "92af5ed4c9185e8c1da9a8389dea63b3ac63392b55dbafe3a877996cd320e420"
+    },
+    {
+      "path": "docs/工作流/正式生成/几何审计-20260918.md",
+      "sha256": "3c966d1d0e30b31e17ec419c3222499e707549c522f840a002bb07060e9b9bb8",
+      "source_sha256": "3c966d1d0e30b31e17ec419c3222499e707549c522f840a002bb07060e9b9bb8"
+    },
+    {
+      "path": "docs/工作流/正式生成/回归冒烟基线-20260918.md",
+      "sha256": "16e78fb5faa104ac48c35f1c45574681c93d49cab43d8778fe0e7aa56f0b7357",
+      "source_sha256": "16e78fb5faa104ac48c35f1c45574681c93d49cab43d8778fe0e7aa56f0b7357"
+    },
+    {
+      "path": "docs/工作流/正式生成/大学Skin参数历史提案.md",
+      "sha256": "8f536831ab0445160db6ea7ea8312105a41139d48a3fcca7c087a675c3b210c0",
+      "source_sha256": "8f536831ab0445160db6ea7ea8312105a41139d48a3fcca7c087a675c3b210c0"
+    },
+    {
+      "path": "docs/工作流/正式生成/大学Skin设计提示词-v1.md",
+      "sha256": "8e3f0a408676b96a653d75c31579378e2f2346c0d785cfad31e8462a223a2c95",
+      "source_sha256": "8e3f0a408676b96a653d75c31579378e2f2346c0d785cfad31e8462a223a2c95"
+    },
+    {
+      "path": "docs/工作流/正式生成/大学Skin设计提示词-v2.md",
+      "sha256": "c164a0255fe4bb31b8ca78ba3d2232b54bb18cdf4867108a6a503edba64f3bc6",
+      "source_sha256": "c164a0255fe4bb31b8ca78ba3d2232b54bb18cdf4867108a6a503edba64f3bc6"
+    },
+    {
+      "path": "docs/工作流/正式生成/大学Skin设计提示词-v3.md",
+      "sha256": "5e3960ff95ac437d4011176780d5ea4a6f2d6348b0fe26c4c1efd402cc6b1e95",
+      "source_sha256": "5e3960ff95ac437d4011176780d5ea4a6f2d6348b0fe26c4c1efd402cc6b1e95"
+    },
+    {
+      "path": "docs/工作流/正式生成/大学Skin设计提示词-v4.md",
+      "sha256": "2a10250db370a526ee7bba3f36c6ca549ee07ec35d4ab3e399fb6ef772811aef",
+      "source_sha256": "2a10250db370a526ee7bba3f36c6ca549ee07ec35d4ab3e399fb6ef772811aef"
+    },
+    {
+      "path": "docs/工作流/正式生成/大学Skin设计提示词-v5.md",
+      "sha256": "3ff304240e3582c09ec370600acf0116874b8991fa915b0eb160ab108c7bb9a5",
+      "source_sha256": "3ff304240e3582c09ec370600acf0116874b8991fa915b0eb160ab108c7bb9a5"
+    },
+    {
+      "path": "docs/工作流/正式生成/大学结构调用.md",
+      "sha256": "a0bc225aab6e359f3ea65b8be6195861e37eb02332f7e3457d5e3fba67688719",
+      "source_sha256": "a0bc225aab6e359f3ea65b8be6195861e37eb02332f7e3457d5e3fba67688719"
+    },
+    {
+      "path": "docs/工作流/正式生成/工作流.md",
+      "sha256": "8353a1c3685d5b8e765868810c764db91d4d32b33e60dbbbcbee9154640cfc19",
+      "source_sha256": "8353a1c3685d5b8e765868810c764db91d4d32b33e60dbbbcbee9154640cfc19"
+    },
+    {
+      "path": "docs/工作流/正式生成/泛化考试-20260918.md",
+      "sha256": "a3cd55c80afb55423809da50cd83dd7067baee550270651146959eb661a42cd9",
+      "source_sha256": "a3cd55c80afb55423809da50cd83dd7067baee550270651146959eb661a42cd9"
+    },
+    {
+      "path": "docs/工作流/正式生成/生产工作台.md",
+      "sha256": "0d1d5f492df081745ef9d51dc0a14146ea7ef7b4acee33cb67c61c9af071f18a",
+      "source_sha256": "0d1d5f492df081745ef9d51dc0a14146ea7ef7b4acee33cb67c61c9af071f18a"
+    },
+    {
+      "path": "docs/工作流/正式生成/生成任务提示词.md",
+      "sha256": "a59196930ca63820dbd6e4899c24a1ddd98adb3901e40af043f588e6fbd62b6f",
+      "source_sha256": "a59196930ca63820dbd6e4899c24a1ddd98adb3901e40af043f588e6fbd62b6f"
+    },
+    {
+      "path": "docs/工作流/正式生成/生成线架构决策.md",
+      "sha256": "9baa25005d53374143da05dab8fe4eea4af2a34cd9ea57e06c2fac8a14278fa7",
+      "source_sha256": "9baa25005d53374143da05dab8fe4eea4af2a34cd9ea57e06c2fac8a14278fa7"
+    },
+    {
+      "path": "docs/工作流/正式生成/评审共识-20260917.md",
+      "sha256": "bdf5743a44cd0143b834f1c04c76e21575ace6c5e7a247d49ce5580ce05ba723",
+      "source_sha256": "bdf5743a44cd0143b834f1c04c76e21575ace6c5e7a247d49ce5580ce05ba723"
+    },
+    {
+      "path": "docs/工作流/正式生成/通用灰稿验证.md",
+      "sha256": "03a69dad4912205a8b533de3578d30d0c4bdff2b8f80f5edb30a3e2429eca117",
+      "source_sha256": "03a69dad4912205a8b533de3578d30d0c4bdff2b8f80f5edb30a3e2429eca117"
+    },
+    {
+      "path": "docs/架构/结构库-变与不变.md",
+      "sha256": "62518735fa047894c52c5f16c884f4d7a9763114d88ba2c23f9695d87c4166c0",
+      "source_sha256": "62518735fa047894c52c5f16c884f4d7a9763114d88ba2c23f9695d87c4166c0"
+    },
+    {
+      "path": "docs/架构/页面构成与布局规范.md",
+      "sha256": "44999bb687d2d14bc9c8dde10df463a90c69bc85ec240bc7ff6445cb1a074adc",
+      "source_sha256": "44999bb687d2d14bc9c8dde10df463a90c69bc85ec240bc7ff6445cb1a074adc"
     },
     {
       "path": "rules/README.md",
-      "sha256": "9c405d485da60161e75faf09fa655cbefa5ca58efc73499d8c505b947576066f",
-      "source_sha256": "9c405d485da60161e75faf09fa655cbefa5ca58efc73499d8c505b947576066f"
+      "sha256": "11439ca3a3f7c40d66d24faa82b781d3bc3a732db620731e886a61aef78d4c42",
+      "source_sha256": "11439ca3a3f7c40d66d24faa82b781d3bc3a732db620731e886a61aef78d4c42"
+    },
+    {
+      "path": "rules/index.json",
+      "sha256": "f7d2be54b47563771fa7e6dbae5d955cf9f68334f1bddec7f39013830e62ae7f",
+      "source_sha256": "f7d2be54b47563771fa7e6dbae5d955cf9f68334f1bddec7f39013830e62ae7f"
     },
     {
       "path": "rules/skins/东北大学.md",
@@ -526,6 +692,11 @@
       "source_sha256": "85674f02e7e90916b73f6e962383988862e52e131cb2fa0077536239a60ef85a"
     },
     {
+      "path": "schemas/composition-intent.schema.json",
+      "sha256": "9b53713d65698eac979b2f3f163dcab0da5c07ac2956d9828d503c8c54127e69",
+      "source_sha256": "9b53713d65698eac979b2f3f163dcab0da5c07ac2956d9828d503c8c54127e69"
+    },
+    {
       "path": "skills/references/archify-integration.md",
       "sha256": "bf0743edceca9785806bc4f34f0cdb4c618b6055298b6e6d8adfbb72bb73e741",
       "source_sha256": "bf0743edceca9785806bc4f34f0cdb4c618b6055298b6e6d8adfbb72bb73e741"
@@ -546,104 +717,14 @@
       "source_sha256": "f055e57754797daa9d6ac689c01ab84c049a958866cd7cc83d34a289ba9bcd12"
     },
     {
-      "path": "docs/工作流/正式生成/Agent排版规则.md",
-      "sha256": "ee15e5591dfe650748f7d0aa4193a79fdd4f577f7a36c5d9871fc184088f9c50",
-      "source_sha256": "ee15e5591dfe650748f7d0aa4193a79fdd4f577f7a36c5d9871fc184088f9c50"
+      "path": "src/composition/intent.mjs",
+      "sha256": "b2a89c3f8e0765caba8b27811915d27a8134fccc0876baf832362cdc845ad685",
+      "source_sha256": "b2a89c3f8e0765caba8b27811915d27a8134fccc0876baf832362cdc845ad685"
     },
     {
-      "path": "docs/工作流/正式生成/Skin主题与排版分离.md",
-      "sha256": "254b087231173e58461939cd953a274b653591263aad3a24e0f22d96ae56ea88",
-      "source_sha256": "254b087231173e58461939cd953a274b653591263aad3a24e0f22d96ae56ea88"
-    },
-    {
-      "path": "docs/工作流/正式生成/大学Skin参数历史提案.md",
-      "sha256": "8f536831ab0445160db6ea7ea8312105a41139d48a3fcca7c087a675c3b210c0",
-      "source_sha256": "8f536831ab0445160db6ea7ea8312105a41139d48a3fcca7c087a675c3b210c0"
-    },
-    {
-      "path": "docs/工作流/正式生成/大学Skin设计提示词-v1.md",
-      "sha256": "8e3f0a408676b96a653d75c31579378e2f2346c0d785cfad31e8462a223a2c95",
-      "source_sha256": "8e3f0a408676b96a653d75c31579378e2f2346c0d785cfad31e8462a223a2c95"
-    },
-    {
-      "path": "docs/工作流/正式生成/大学Skin设计提示词-v2.md",
-      "sha256": "c164a0255fe4bb31b8ca78ba3d2232b54bb18cdf4867108a6a503edba64f3bc6",
-      "source_sha256": "c164a0255fe4bb31b8ca78ba3d2232b54bb18cdf4867108a6a503edba64f3bc6"
-    },
-    {
-      "path": "docs/工作流/正式生成/大学Skin设计提示词-v3.md",
-      "sha256": "5e3960ff95ac437d4011176780d5ea4a6f2d6348b0fe26c4c1efd402cc6b1e95",
-      "source_sha256": "5e3960ff95ac437d4011176780d5ea4a6f2d6348b0fe26c4c1efd402cc6b1e95"
-    },
-    {
-      "path": "docs/工作流/正式生成/大学Skin设计提示词-v4.md",
-      "sha256": "2a10250db370a526ee7bba3f36c6ca549ee07ec35d4ab3e399fb6ef772811aef",
-      "source_sha256": "2a10250db370a526ee7bba3f36c6ca549ee07ec35d4ab3e399fb6ef772811aef"
-    },
-    {
-      "path": "docs/工作流/正式生成/大学Skin设计提示词-v5.md",
-      "sha256": "3ff304240e3582c09ec370600acf0116874b8991fa915b0eb160ab108c7bb9a5",
-      "source_sha256": "3ff304240e3582c09ec370600acf0116874b8991fa915b0eb160ab108c7bb9a5"
-    },
-    {
-      "path": "docs/工作流/正式生成/大学结构调用.md",
-      "sha256": "a0bc225aab6e359f3ea65b8be6195861e37eb02332f7e3457d5e3fba67688719",
-      "source_sha256": "a0bc225aab6e359f3ea65b8be6195861e37eb02332f7e3457d5e3fba67688719"
-    },
-    {
-      "path": "docs/工作流/正式生成/工作流.md",
-      "sha256": "37130777a4d1d575c7036506408c1aa09c20e001e871461ea128dddc3bed0b11",
-      "source_sha256": "37130777a4d1d575c7036506408c1aa09c20e001e871461ea128dddc3bed0b11"
-    },
-    {
-      "path": "docs/工作流/正式生成/生产工作台.md",
-      "sha256": "0c48148153e53e7feaf66f64b01b12dbe46830657ef003628636c5227bef87ac",
-      "source_sha256": "0c48148153e53e7feaf66f64b01b12dbe46830657ef003628636c5227bef87ac"
-    },
-    {
-      "path": "docs/工作流/正式生成/生成任务提示词.md",
-      "sha256": "63e359aec5865995e47b5974b1a7fee09cac24d7bc57b195fb97777e304d531d",
-      "source_sha256": "63e359aec5865995e47b5974b1a7fee09cac24d7bc57b195fb97777e304d531d"
-    },
-    {
-      "path": "docs/工作流/正式生成/生成线架构决策.md",
-      "sha256": "0faf17d30c7abaa3fd5c6cbd05d8b91f5dbdccfcdf6722257d6d41139263beea",
-      "source_sha256": "0faf17d30c7abaa3fd5c6cbd05d8b91f5dbdccfcdf6722257d6d41139263beea"
-    },
-    {
-      "path": "docs/工作流/正式生成/通用灰稿验证.md",
-      "sha256": "f2a30022bb2ac0f87962e2329338ac37c0fbff984c32f0671d0fa77c36e6ceba",
-      "source_sha256": "f2a30022bb2ac0f87962e2329338ac37c0fbff984c32f0671d0fa77c36e6ceba"
-    },
-    {
-      "path": "docs/产品定义.md",
-      "sha256": "33014adc9f476062a8fbe823f9177cc7ebe53a7e36a3817d6f308a32a64fe050",
-      "source_sha256": "33014adc9f476062a8fbe823f9177cc7ebe53a7e36a3817d6f308a32a64fe050"
-    },
-    {
-      "path": "docs/产品需求.md",
-      "sha256": "4a4f98cc76070cfa5a07def9e989c0e383682aa03bff2e0673f2edb33d8189cf",
-      "source_sha256": "4a4f98cc76070cfa5a07def9e989c0e383682aa03bff2e0673f2edb33d8189cf"
-    },
-    {
-      "path": "docs/架构/结构库-变与不变.md",
-      "sha256": "7ea1aea9d7708aaec0571197ba279a5f419c60fb9e00a06f40d32ec941ae05b7",
-      "source_sha256": "7ea1aea9d7708aaec0571197ba279a5f419c60fb9e00a06f40d32ec941ae05b7"
-    },
-    {
-      "path": "assets/主题/中性编辑排版-001/asset.json",
-      "sha256": "222ee763ff86c920671e262ef440c22d3acd40bdb8c5333b3db2a8b262a46cfc",
-      "source_sha256": "222ee763ff86c920671e262ef440c22d3acd40bdb8c5333b3db2a8b262a46cfc"
-    },
-    {
-      "path": "schemas/composition-intent.schema.json",
-      "sha256": "9b53713d65698eac979b2f3f163dcab0da5c07ac2956d9828d503c8c54127e69",
-      "source_sha256": "9b53713d65698eac979b2f3f163dcab0da5c07ac2956d9828d503c8c54127e69"
-    },
-    {
-      "path": "src/tools/load-rules.mjs",
-      "sha256": "9f2d777045b66c5324dfc73f816883eead08d5732ba0abebfd844670798a7bcc",
-      "source_sha256": "9f2d777045b66c5324dfc73f816883eead08d5732ba0abebfd844670798a7bcc"
+      "path": "src/composition/resolve.mjs",
+      "sha256": "1a8b1e9110a1123df2162d3f4fb6866e706edf9cf06b9bf2cb8b67fe6baba556",
+      "source_sha256": "1a8b1e9110a1123df2162d3f4fb6866e706edf9cf06b9bf2cb8b67fe6baba556"
     },
     {
       "path": "src/runtime/rules-loader.mjs",
@@ -651,39 +732,19 @@
       "source_sha256": "72f3ad15dd7da2e2738356c33d690e2dce4eaeb46cfcec17d8d32357f2639958"
     },
     {
-      "path": "src/runtime/skins/northeastern-university-contract.mjs",
-      "sha256": "74da58bae4095071900fea5ae951f30398e159da7e46e34b3674efaa5a00ad32",
-      "source_sha256": "74da58bae4095071900fea5ae951f30398e159da7e46e34b3674efaa5a00ad32"
-    },
-    {
       "path": "src/runtime/shells/academic-report.mjs",
       "sha256": "c9031af2c75941f1432f850393ae698c06480f5dc0881a1cf8d4c7f6b42506d6",
       "source_sha256": "c9031af2c75941f1432f850393ae698c06480f5dc0881a1cf8d4c7f6b42506d6"
     },
     {
+      "path": "src/runtime/skins/northeastern-university-contract.mjs",
+      "sha256": "74da58bae4095071900fea5ae951f30398e159da7e46e34b3674efaa5a00ad32",
+      "source_sha256": "74da58bae4095071900fea5ae951f30398e159da7e46e34b3674efaa5a00ad32"
+    },
+    {
       "path": "src/runtime/skins/northeastern-university-theme.mjs",
       "sha256": "9924a3d51a644145908d47080f28188da5c6ed627549f484d479529e6b2c8226",
       "source_sha256": "9924a3d51a644145908d47080f28188da5c6ed627549f484d479529e6b2c8226"
-    },
-    {
-      "path": "src/visual-runtime/html-component-theme.mjs",
-      "sha256": "4014cb8bdeeef268ec9bc3e957593e28641b5caa8f3028b173acf4bb61cb3447",
-      "source_sha256": "4014cb8bdeeef268ec9bc3e957593e28641b5caa8f3028b173acf4bb61cb3447"
-    },
-    {
-      "path": "src/visual-runtime/neutral-structure-theme.mjs",
-      "sha256": "f9095e795d04d1322f5797eb1d5aa1667546a00e0fee87973cd1efdf17041169",
-      "source_sha256": "f9095e795d04d1322f5797eb1d5aa1667546a00e0fee87973cd1efdf17041169"
-    },
-    {
-      "path": "src/visual-runtime/neutral-structure-profiles.mjs",
-      "sha256": "2e6b0d6d47cfd6da90e5fa5464d2d9acd0a7bb403f516024085910d855868f88",
-      "source_sha256": "2e6b0d6d47cfd6da90e5fa5464d2d9acd0a7bb403f516024085910d855868f88"
-    },
-    {
-      "path": "src/visual-runtime/cycle-stage-colors.mjs",
-      "sha256": "f0c86acce68b16e598471179b119c0ca645925bf3b784be091fb4f0fff738270",
-      "source_sha256": "f0c86acce68b16e598471179b119c0ca645925bf3b784be091fb4f0fff738270"
     },
     {
       "path": "src/runtime/skins/university-mckinsey.mjs",
@@ -701,14 +762,29 @@
       "source_sha256": "f9fd08bab3085442a419b7020bddb9d22b4c318e0ab4c94013a80313d42c82fa"
     },
     {
-      "path": "src/composition/intent.mjs",
-      "sha256": "b2a89c3f8e0765caba8b27811915d27a8134fccc0876baf832362cdc845ad685",
-      "source_sha256": "b2a89c3f8e0765caba8b27811915d27a8134fccc0876baf832362cdc845ad685"
+      "path": "src/tools/load-rules.mjs",
+      "sha256": "9f2d777045b66c5324dfc73f816883eead08d5732ba0abebfd844670798a7bcc",
+      "source_sha256": "9f2d777045b66c5324dfc73f816883eead08d5732ba0abebfd844670798a7bcc"
     },
     {
-      "path": "src/composition/resolve.mjs",
-      "sha256": "1a8b1e9110a1123df2162d3f4fb6866e706edf9cf06b9bf2cb8b67fe6baba556",
-      "source_sha256": "1a8b1e9110a1123df2162d3f4fb6866e706edf9cf06b9bf2cb8b67fe6baba556"
+      "path": "src/visual-runtime/cycle-stage-colors.mjs",
+      "sha256": "f0c86acce68b16e598471179b119c0ca645925bf3b784be091fb4f0fff738270",
+      "source_sha256": "f0c86acce68b16e598471179b119c0ca645925bf3b784be091fb4f0fff738270"
+    },
+    {
+      "path": "src/visual-runtime/html-component-theme.mjs",
+      "sha256": "4014cb8bdeeef268ec9bc3e957593e28641b5caa8f3028b173acf4bb61cb3447",
+      "source_sha256": "4014cb8bdeeef268ec9bc3e957593e28641b5caa8f3028b173acf4bb61cb3447"
+    },
+    {
+      "path": "src/visual-runtime/neutral-structure-profiles.mjs",
+      "sha256": "2e6b0d6d47cfd6da90e5fa5464d2d9acd0a7bb403f516024085910d855868f88",
+      "source_sha256": "2e6b0d6d47cfd6da90e5fa5464d2d9acd0a7bb403f516024085910d855868f88"
+    },
+    {
+      "path": "src/visual-runtime/neutral-structure-theme.mjs",
+      "sha256": "f9095e795d04d1322f5797eb1d5aa1667546a00e0fee87973cd1efdf17041169",
+      "source_sha256": "f9095e795d04d1322f5797eb1d5aa1667546a00e0fee87973cd1efdf17041169"
     }
   ]
 }
