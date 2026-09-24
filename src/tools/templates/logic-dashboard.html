@@ -404,13 +404,34 @@
       .technical-grid { grid-template-columns:1fr; }
       .composition-lab-stage { grid-template-columns:1fr; }
     }
+
+    .domain-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
+    .page-layout-rules{padding:20px 26px;background:#f7f9fb;line-height:1.8;color:#435a6e}.page-layout-rules p{margin:6px 0}
+    .page-layout-form{padding:20px 26px;display:flex;flex-wrap:wrap;align-items:end;gap:14px;border-bottom:1px solid #e7ebef}.page-layout-form label{display:flex;flex-direction:column;gap:6px;font-size:13px;color:#435a6e}.page-layout-form input,.page-layout-form select{font:inherit;padding:9px;border:1px solid #ccd7e1;border-radius:6px;max-width:100%;box-sizing:border-box}.page-layout-form p{flex-basis:100%;font-size:12px;color:#637589;margin:0}.page-layout-form [role=status]{color:#9b3e28}
+    #page-layouts{scroll-margin-top:100px}
+    .page-layout-families{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px}
+    .page-layout-family{font:inherit;text-align:left;background:#fff;border:1px solid #d8e0e9;border-radius:12px;padding:20px 24px;cursor:pointer;color:#24384a;transition:border-color .15s,background .15s}
+    .page-layout-family strong{display:block;font-size:19px;margin-bottom:7px}.page-layout-family span{font-size:13px;color:#677786}
+    .page-layout-family[aria-pressed=true]{background:#edf4fa;border-color:#597f9e;box-shadow:inset 4px 0 #456e90}
+    .page-layout-detail{background:#fff;border:1px solid #dce3ea;border-radius:16px;overflow:hidden}
+    .page-layout-toolbar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:20px 24px;border-bottom:1px solid #e7ebef}
+    .page-layout-variants,.page-layout-modes{display:flex;gap:8px;flex-wrap:wrap}
+    .page-layout-detail button{font:inherit;font-size:13px;border:1px solid #d7e0e7;border-radius:7px;background:#fff;color:#4d6070;padding:9px 13px;cursor:pointer}
+    .page-layout-detail button[aria-pressed=true]{background:#304f68;color:white;border-color:#304f68}
+    .page-layout-info{padding:20px 26px 0;display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .page-layout-info h3{margin:0;font-size:21px;color:#263e52}.page-layout-info span{font-size:12px;color:#73818f}
+    .page-layout-canvas{padding:24px 26px}.page-layout-canvas svg{width:100%;height:auto}
+    .page-layout-caption{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;padding:0 26px 22px;color:#6b7a87;font-size:13px;line-height:1.7}
+    .page-layout-family:focus-visible,.page-layout-detail button:focus-visible{outline:3px solid #7ca9ce;outline-offset:3px}
+    @media(max-width:900px){.domain-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.page-layout-canvas{padding:18px 14px}.page-layout-toolbar{padding:16px}.page-layout-info{padding:16px 16px 0}}
+    @media(max-width:600px){.domain-grid{grid-template-columns:1fr 1fr}.page-layout-families{grid-template-columns:1fr}.page-layout-family{padding:16px}.page-layout-info span{display:block}}
   </style>
 </head>
 <body>
   <header class="topbar">
     <div class="brand"><strong>PPA 资产看板</strong><span>Structure / Text / Media / Layout</span></div>
     <nav class="nav" aria-label="页面导航">
-      <a href="#capabilities">结构</a><a href="#text-layouts">文字</a><a href="#media-library">图像</a><a href="#skin">排版</a><a class="production-link" href="http://127.0.0.1:4212/" target="_blank" rel="noreferrer">生产工作台 ↗</a>
+      <a href="#capabilities">结构</a><a href="#page-layouts">布局</a><a href="#text-layouts">文字</a><a href="#media-library">图像</a><a href="#skin">排版</a><a class="production-link" href="http://127.0.0.1:4212/" target="_blank" rel="noreferrer">生产工作台 ↗</a>
     </nav>
     <div class="top-status"><span id="generated-at"></span><br><span id="data-mode"></span></div>
     <button class="refresh-button" id="refresh-dashboard" type="button">刷新仓库</button>
@@ -418,12 +439,13 @@
 
   <main>
     <section class="asset-home" id="overview">
-      <div class="asset-home-copy"><span class="eyebrow">PPA / ASSET SYSTEM</span><h1>四个能力域，共同组成一页 PPT</h1><p>PPA 只负责建设、查看和审批可复用能力。正式生成、API 调用、运行日志和交付结果统一进入 PPA 生产工作台。</p></div>
-      <nav class="domain-grid" aria-label="四个能力域">
+      <div class="asset-home-copy"><span class="eyebrow">PPA / ASSET SYSTEM</span><h1>五个能力域，共同组成一页 PPT</h1><p>PPA 只负责建设、查看和审批可复用能力。正式生成、API 调用、运行日志和交付结果统一进入 PPA 生产工作台。</p></div>
+      <nav class="domain-grid" aria-label="五个能力域">
         <a href="#capabilities"><span>01</span><strong>结构</strong><small>Logic → Structure Group → State</small></a>
-        <a href="#text-layouts"><span>02</span><strong>文字</strong><small>Markdown → Renderer / Zone Template</small></a>
-        <a href="#media-library"><span>03</span><strong>图像</strong><small>Media / Background / Illustration</small></a>
-        <a href="#skin"><span>04</span><strong>排版</strong><small>Skin / Shell / Container / Surface</small></a>
+        <a href="#page-layouts"><span>02</span><strong>布局</strong><small>卡片式 / 相册式 / 内容区分配</small></a>
+        <a href="#text-layouts"><span>03</span><strong>文字</strong><small>Markdown → Renderer / Zone Template</small></a>
+        <a href="#media-library"><span>04</span><strong>图像</strong><small>Media / Background / Illustration</small></a>
+        <a href="#skin"><span>05</span><strong>排版</strong><small>Skin / Shell / Container / Surface</small></a>
       </nav>
     </section>
 
@@ -470,19 +492,25 @@
       </details>
     </section>
 
+    <section class="section" id="page-layouts">
+      <div class="section-head"><div><h2>02 · 布局库</h2><p>先判断内容是否适用，再按规则分区。下面的组合是示例，不是模板清单；数量、面积和横竖倾向都可以变化。</p></div><span class="pill pending">2 类规范 · 示例可变</span></div>
+      <div class="page-layout-families" id="page-layout-families" aria-label="布局类型"></div>
+      <div class="page-layout-detail" id="page-layout-detail"></div>
+    </section>
+
     <section class="section" id="text-layouts">
-      <div class="section-head"><div><h2>02 · 文字库</h2><p>Markdown 保存文字与局部层级；统一 Renderer 负责传统流式排版，也允许用少量命名区域模板形成更有设计感的复杂排版。页面直接文字与 Structure 内文字共用同一套能力。</p></div><span class="pill core" id="text-layout-count"></span></div>
+      <div class="section-head"><div><h2>03 · 文字库</h2><p>Markdown 保存文字与局部层级；统一 Renderer 负责传统流式排版，也允许用少量命名区域模板形成更有设计感的复杂排版。页面直接文字与 Structure 内文字共用同一套能力。</p></div><span class="pill core" id="text-layout-count"></span></div>
       <div class="text-primitive-grid" id="text-primitive-grid"></div>
       <div class="text-layout-grid" id="text-layout-grid"></div>
     </section>
 
     <section class="section" id="media-library">
-      <div class="section-head"><div><h2>03 · 图像库</h2><p>未来集中管理图片、背景图、插画、截图和其他 Media 的来源、裁切与安全区域。</p></div><span class="pill pending">尚未建设</span></div>
+      <div class="section-head"><div><h2>04 · 图像库</h2><p>未来集中管理图片、背景图、插画、截图和其他 Media 的来源、裁切与安全区域。</p></div><span class="pill pending">尚未建设</span></div>
       <div class="media-empty"><div><strong>当前为空，保持真实</strong><p>本阶段不把 Tabler 图标或结构中的装饰图形冒充图像资产。等 Media 契约和真实使用需求确认后，再从这里建设。</p></div><div class="media-canvas">Media library placeholder<br>source / fit / crop / safe region</div></div>
     </section>
 
     <section class="section" id="skin">
-      <div class="section-head"><div><h2>04 · 排版系统</h2><p>Skin 提供主题身份，Shell 与 Content Frame 提供页面容器，Composition 和 Surface 负责把结构、文字与图像组织成一页。</p></div><span class="pill skin" id="skin-id"></span></div>
+      <div class="section-head"><div><h2>05 · 排版系统</h2><p>Skin 提供主题身份，Shell 与 Content Frame 提供页面容器，Composition 和 Surface 负责把结构、文字与图像组织成一页。</p></div><span class="pill skin" id="skin-id"></span></div>
       <div class="layout-grid">
         <div class="layout-panel"><h3>Skin / Shell / Content Frame</h3><p>直接读取当前 Skin 与 Shell 真源；结构和文字只在合法容器内组合。</p><div class="shell-map-wrap"><div class="shell-map" id="shell-map"></div><div class="shell-map-notes"><strong>容器来源</strong><br>Shell 源代码是唯一真源。绿色区域是 Content Frame，灰色区域由 Skin / Shell 管理。</div></div></div>
         <div class="layout-panel"><h3>Composition · 页面容器</h3><p>现有确定性页面槽位；未来组合实验台继续复用这些容器，而不是自由画坐标。</p><div class="catalog-list" id="composition-list"></div></div>
@@ -1182,6 +1210,56 @@
     document.getElementById("category-filter").addEventListener("change", (event) => { state.category = event.target.value; renderTable(); });
     document.getElementById("renderer-filter").addEventListener("change", (event) => { state.renderer = event.target.value; renderTable(); });
 
+
+    let pageLayoutFamily='cards', pageLayoutVariant='cards-horizontal-2', pageLayoutMode='preview', customPageLayout=null, customPageSpec=null, layoutRequest=0;
+    function renderPageLayouts(){
+      const families=DATA.pageLayouts??[];
+      const family=families.find(x=>x.id===pageLayoutFamily)??families[0];
+      if(!family){document.getElementById('page-layout-detail').textContent='暂无布局';return}
+      const variant=customPageLayout??family.variants.find(x=>x.id===pageLayoutVariant)??family.variants[0];
+      pageLayoutFamily=family.id;pageLayoutVariant=variant.id;
+      document.getElementById('page-layout-families').innerHTML=families.map(x=>'<button type="button" class="page-layout-family" data-page-layout-family="'+esc(x.id)+'" aria-pressed="'+(x.id===family.id)+'"><strong>'+esc(x.name)+'</strong><span>'+esc(x.description)+'</span></button>').join('');
+      const variants=family.variants.map(x=>'<button type="button" data-page-layout-variant="'+esc(x.id)+'" aria-pressed="'+(x.id===variant.id)+'">'+esc(x.name)+'</button>').join('');
+      const spec=customPageSpec??{weights:variant.weights.join(', '),direction:variant.direction??'horizontal',aspectRatio:1.6,minWidth:140,minHeight:80};
+      const rules='<div class="page-layout-rules"><strong>适用与布局规则</strong>'+family.rules.map(rule=>'<p>'+esc(rule)+'</p>').join('')+'</div>';
+      const form='<form class="page-layout-form" id="page-layout-form"><label>各块面积需求（逗号分隔，一项一块）<input name="weights" aria-label="各块面积需求" value="'+esc(spec.weights)+'" required></label><label>'+(family.id==='cards'?'排列方向':'优先切分由空间决定')+'<select name="direction" aria-label="排列方向" '+(family.id==='album'?'disabled':'')+'><option value="horizontal" '+(spec.direction==='horizontal'?'selected':'')+'>横向</option><option value="vertical" '+(spec.direction==='vertical'?'selected':'')+'>纵向</option></select></label><label>各块宽高倾向（单值或逐块填写）<input name="aspectRatio" aria-label="宽高倾向" value="'+esc(spec.aspectRatio)+'" required></label><label>最小宽度<input name="minWidth" type="number" min="80" value="'+esc(spec.minWidth)+'" required style="width:90px"></label><label>最小高度<input name="minHeight" type="number" min="60" value="'+esc(spec.minHeight)+'" required style="width:90px"></label><button type="submit">按规则试排</button><p>面积需求是相对值，如 3, 1, 2, 1, 1, 2 可试排六块。宽高比大于 1 偏横向，小于 1 偏纵向。卡片式由排列方向决定形状。</p><p>这里演示区域分配；内容适用性、文字测量与正式生成接入仍待验证。当前矩形切分实现不穷举所有相册构图。</p><p role="status" id="page-layout-status"></p></form>';
+      const modes=[['preview','布局示意'],['skeleton','区域骨架']].map(([id,label])=>'<button type="button" data-page-layout-mode="'+id+'" aria-pressed="'+(id===pageLayoutMode)+'">'+label+'</button>').join('');
+      document.getElementById('page-layout-detail').innerHTML=rules+form+'<div class="page-layout-toolbar"><div class="page-layout-variants" aria-label="规则示例">'+variants+'</div><div class="page-layout-modes" aria-label="预览模式">'+modes+'</div></div><div class="page-layout-info"><h3>'+esc(variant.name)+'</h3><span>内容区 '+variant.geometry.width+' × '+variant.geometry.height+' · 间距 '+variant.geometry.gap+' · '+variant.count+' 个区域</span></div><div class="page-layout-canvas">'+variant[pageLayoutMode]+'</div><div class="page-layout-caption"><span>'+esc(family.advice)+'</span><span>规则试排 · 内容尚未填入</span></div>';
+    }
+    document.getElementById('page-layouts').addEventListener('click',event=>{
+      const family=event.target.closest('[data-page-layout-family]');
+      const variant=event.target.closest('[data-page-layout-variant]');
+      const mode=event.target.closest('[data-page-layout-mode]');
+      if(family){pageLayoutFamily=family.dataset.pageLayoutFamily;pageLayoutVariant='';customPageLayout=null;customPageSpec=null;layoutRequest++}
+      else if(variant){pageLayoutVariant=variant.dataset.pageLayoutVariant;customPageLayout=null;customPageSpec=null;layoutRequest++}
+      else if(mode)pageLayoutMode=mode.dataset.pageLayoutMode;
+      else return;
+      const key=family?'data-page-layout-family':variant?'data-page-layout-variant':'data-page-layout-mode';
+      const value=(family??variant??mode).getAttribute(key);renderPageLayouts();
+      document.querySelector('['+key+'="'+value+'"]')?.focus({preventScroll:true});
+    });
+
+    document.getElementById('page-layouts').addEventListener('submit',async event=>{
+      if(event.target.id!=='page-layout-form')return;
+      event.preventDefault();
+      const fields=new FormData(event.target), requestId=++layoutRequest;
+      const parse=value=>String(value).trim().split(/[,，\s]+/).map(Number);
+      const weights=parse(fields.get('weights')), aspects=parse(fields.get('aspectRatio'));
+      try{
+        if(aspects.length!==1&&aspects.length!==weights.length)throw new Error('宽高倾向请填写一个通用值，或与内容块数量相同的一组值');
+        document.getElementById('page-layout-status').textContent='正在按规则分配区域…';
+        const direction=fields.get('direction')??'horizontal';
+        const spec={family:pageLayoutFamily,direction,blocks:weights.map((weight,i)=>({weight,aspectRatio:aspects.length===1?aspects[0]:aspects[i],minWidth:Number(fields.get('minWidth')),minHeight:Number(fields.get('minHeight'))}))};
+        const response=await fetch('/api/page-layout-preview?spec='+encodeURIComponent(JSON.stringify(spec)));
+        const result=await response.json();
+        if(requestId!==layoutRequest)return;
+        if(!response.ok)throw new Error(result.error??'试排失败');
+        customPageLayout=result;customPageSpec={weights:fields.get('weights'),direction,aspectRatio:fields.get('aspectRatio'),minWidth:fields.get('minWidth'),minHeight:fields.get('minHeight')};
+        renderPageLayouts();
+        document.getElementById('page-layout-status').textContent='已按当前输入重新分区；请检查下方示意。';
+      }catch(error){if(requestId===layoutRequest)document.getElementById('page-layout-status').textContent=error.message+' 下方仍为上次成功示意。'}
+    });
+    renderPageLayouts();
     renderSummary();
     renderStores();
     renderTextLayouts();

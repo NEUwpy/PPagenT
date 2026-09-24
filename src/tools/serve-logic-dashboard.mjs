@@ -3,6 +3,7 @@ import { neutralEditorialTheme } from '../runtime/skins/neutral-editorial-theme.
 import { preservedComponent } from '../runtime/preserved-structure-build.mjs';
 import { preservedSizeExamples } from '../visual-runtime/preserved-design-layout.mjs';
 import crypto from "node:crypto";
+import { composePageLayout, pageLayoutPreview } from '../visual-runtime/page-layout-library.mjs';
 import fs from "node:fs/promises";
 import http from "node:http";
 import path from "node:path";
@@ -492,6 +493,15 @@ const server = http.createServer(async (request, response) => {
     }
     if (url.pathname === "/health") {
       sendJson(response, 200, { status: "ok", root: projectRoot, pid: process.pid });
+      return;
+    }
+    if (url.pathname === "/api/page-layout-preview") {
+      try {
+        const raw = url.searchParams.get('spec') ?? '{}';
+        if (raw.length > 10000) throw new Error('试排参数过长');
+        const geometry = composePageLayout(JSON.parse(raw));
+        sendJson(response, 200, { id: 'custom', name: geometry.name, count: geometry.slots.length, geometry, preview: pageLayoutPreview(geometry), skeleton: pageLayoutPreview(geometry, {mode:'skeleton'}) });
+      } catch (error) { sendJson(response, 400, { error: error.message }); }
       return;
     }
     if (url.pathname === "/api/dashboard-data") {

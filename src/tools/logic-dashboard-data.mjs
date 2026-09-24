@@ -15,6 +15,7 @@ import {
 } from "../visual-runtime/text-layout-library.mjs";
 import { htmlComponentThemeCss } from "../visual-runtime/html-component-theme.mjs";
 import { markdownTextCss } from "../visual-runtime/markdown-text.mjs";
+import { listPageLayouts } from "../visual-runtime/page-layout-library.mjs";
 import { htmlTextFlowCss } from "../visual-runtime/text-flow.mjs";
 
 export const defaultProjectRoot = path.resolve(import.meta.dirname, "../..");
@@ -483,6 +484,7 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
     failureCases: failures.cases ?? [],
     sourceFiles,
     textLayouts,
+    pageLayouts: listPageLayouts(),
     textPrimitives,
     textSurfaces,
     textLayoutCss: `${htmlComponentThemeCss(northeasternUniversityTheme)}${htmlTextFlowCss()}${markdownTextCss()}`,
