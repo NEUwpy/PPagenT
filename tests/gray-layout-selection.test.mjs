@@ -43,3 +43,37 @@ test('oversized body does not produce candidate by shrinking font',()=>{
   assert(measured[0].rejected.length>0);
 });
 
+test('single region has one geometric candidate and explicit measured width-height requirements',()=>{
+  const single=structuredClone(plan);
+  single.pages[0].groups=single.pages[0].groups.slice(0,1);
+  const result=measuredLayoutCandidates(single,area,metrics)[0];
+  assert.equal(result.candidates.length,1);
+  assert.equal(result.requirements.length,1);
+  for(const sample of result.requirements[0].samples){
+    const item={...single.pages[0].groups[0]};
+    const body=grayBodyLayout(item,sample.width-32,22);
+    assert.equal(sample.height,Math.ceil(70+body.height));
+  }
+});
+
+test('support band keeps source order, gives primary more height, and binds support explicitly',()=>{
+  const mixed=structuredClone(plan);
+  mixed.pages[0].groups[2].importance='supporting';
+  const measured=measuredLayoutCandidates(mixed,area,metrics);
+  const c=measured[0].candidates.find(c=>c.id==='cards-support-band');
+  assert(c);
+  assert(c.regions[0].height>c.regions[2].height);
+  assert.deepEqual(c.regions.map(r=>r.itemId),mixed.pages[0].groups.map(g=>g.id));
+  assert(c.regions[2].y>=c.regions[0].height+24);
+  const built=bindLayoutSelection(mixed,measured,{pages:[{pageId:'p1',relation:'support',candidateId:c.id,reason:'共同说明置于主体下方'}]});
+  assert.equal(built.plan.pages[0].items.length,3);
+});
+
+test('parallel label cannot bypass explicit primary-supporting area balance',()=>{
+  const mixed=structuredClone(plan);
+  mixed.pages[0].groups=mixed.pages[0].groups.slice(0,2);
+  mixed.pages[0].groups[1].importance='supporting';
+  const measured=measuredLayoutCandidates(mixed,area,metrics);
+  assert.throws(()=>bindLayoutSelection(mixed,measured,{pages:[{pageId:'p1',relation:'parallel',candidateId:'cards-horizontal-equal',reason:'伪装为并列'}]}),/共同说明面积/);
+});
+

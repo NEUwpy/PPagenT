@@ -19,7 +19,7 @@ import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan,
 import { applyTemplateDefaults, describeDefaults } from './gray-templates.mjs';
 import { auditGeometry, voidWarnings, VOID_THRESHOLDS } from './gray-audit.mjs';
 import { resolveGrayLayout, compressionMemory } from './gray-layout.mjs';
-import { selectMeasuredLayouts } from './gray-layout-selection.mjs';
+import { selectMeasuredLayouts, measuredLayoutCandidates } from './gray-layout-selection.mjs';
 import { grayBodyLayout, fitGrayText, validateGrayArea, validateGrayPlan, renderGrayDraft, topicFits } from './gray-draft.mjs';
 
 const sha = text => createHash('sha256').update(text).digest('hex');
@@ -238,7 +238,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
   await fs.writeFile(path.join(output, 'source.md'), raw, 'utf8');
   const sharedRules = (await Promise.all(['内容结构.md', '页面组合.md', '排版.md'].map(name => fs.readFile(path.join(root, 'rules', name), 'utf8')))).join('\n\n');
   await fs.writeFile(path.join(output, 'rules-snapshot.md'), sharedRules, { flag: 'wx' }).catch(error => { if (error.code !== 'EEXIST') throw error; });
-  const selectionInstruction = useLayoutRules ? `\n本次正式工作台启用已建布局规范选择：render_draft 内先测量候选，再调用独立选择器对照原稿判断关系、选择看板同源卡片式或相册式。以上旧默认模板/override说明不适用于本次布局执行，layouts 每页只需 {pageId}。不得按块数推断关系；跨组对照、因果、先后或主辅超出目前两类规范能力时会明确退回，不能改错关系凑布局。可以保留真实关系重组为共同阅读的组，或据实说明能力缺口，不能为布局修改事实。主题句可引出、概括或总结。选择结果和理由会入运行记录，不代表视觉验收。` : '';
+  const selectionInstruction = useLayoutRules ? `\n本次正式工作台启用已建布局规范选择：render_draft 内先测量候选，再调用独立选择器对照原稿判断关系、选择看板同源卡片式或相册式。以上旧默认模板/override说明不适用于本次布局执行，layouts 每页只需 {pageId}。不得按块数推断关系；跨组对照、因果、先后超出目前两类规范能力时会明确退回；主体与共同说明可保留为 primary / supporting 组并按主辅横带尝试，说明必须连续且正确限定主体，不能改错关系凑布局。可以保留真实关系重组为共同阅读的组，或据实说明能力缺口，不能为布局修改事实。主题句可引出、概括或总结。选择结果和理由会入运行记录，不代表视觉验收。` : '';
   const systemPrompt = `${GRAY_AGENT_PROMPT}\n\n以下为本项目共用规则真源：\n${sharedRules}${selectionInstruction}`;
   await fs.writeFile(path.join(output, 'agent-system-prompt.txt'), systemPrompt, 'utf8');
 
@@ -366,8 +366,16 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         const fit = planFitIssues(plan, area, { legacyEstimates: !useLayoutRules });
         const issues = [...report.issues, ...fit.issues].slice(0, 20);
         const warnings = [...(report.warnings ?? []), ...fit.warnings];
+        let spatialRequirements;
+        if (useLayoutRules && report.accepted) {
+          spatialRequirements = measuredLayoutCandidates(plan, area, { measureBody: grayBodyLayout, fitText: fitGrayText });
+          for (const page of spatialRequirements) {
+            if (!page.candidates.length) issues.push({ code: 'layout-capacity', pageId: page.pageId, message: '当前分组没有可承载布局，请在语义不变的前提下重新组织；宽度与高度测量见 spatialRequirements。' });
+            if (page.requirements.length === 1) warnings.push({ code: 'single-layout-region', pageId: page.pageId, message: '整页只有一个布局块，组内条目不会被布局库分配到不同卡片。核对是否确属一个共同阅读单元；独立并列对象应在规划层分组，不能为了放下而机械拆页或把全文并成一组。' });
+          }
+        }
         const notes = [note, repeated ? '该版本自上次检查后未变化：结论同上；有修订请提交新计划。' : null].filter(Boolean);
-        return { accepted: report.accepted && !fit.issues.length, issues, coverage: report.coverage, defaults: useLayoutRules ? [] : describeDefaults(plan), layoutMode: useLayoutRules ? 'measured-rule-selection' : 'legacy-defaults', planSource: source, ...(warnings.length ? { warnings } : {}), ...(notes.length ? { note: notes.join(' ') } : {}) };
+        return { accepted: report.accepted && !issues.length, issues, coverage: report.coverage, defaults: useLayoutRules ? [] : describeDefaults(plan), layoutMode: useLayoutRules ? 'measured-rule-selection' : 'legacy-defaults', ...(spatialRequirements ? { spatialRequirements } : {}), planSource: source, ...(warnings.length ? { warnings } : {}), ...(notes.length ? { note: notes.join(' ') } : {}) };
       },
     }),
     defineTool({
