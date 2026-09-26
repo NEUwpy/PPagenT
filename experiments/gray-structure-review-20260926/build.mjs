@@ -81,7 +81,7 @@ if(!process.argv.includes('--check-only')) {
   await write('state.json',state);
   await write('layout-check.json',{accepted:check.accepted,issues:check.issues,coverage:check.coverage,receipts:resolved.receipts});
   await fs.writeFile(path.join(output,'source.md'),'# 人工编写的模拟素材\n\n'+sources.map(s=>`## ${s.id} ${s.heading}\n${s.text}`).join('\n\n'));
-  await fs.writeFile(path.join(output,'content.md'),renderContentMarkdown(state));
+  await fs.writeFile(path.join(output,'content.md'),renderContentMarkdown(state).trimEnd()+'\n');
   await renderGrayDraft(state,output);
   console.log(`生成完成：${output}`);
 }
