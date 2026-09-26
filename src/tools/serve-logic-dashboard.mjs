@@ -5,6 +5,7 @@ import { preservedSizeExamples } from '../visual-runtime/preserved-design-layout
 import crypto from "node:crypto";
 import { composePageLayout, pageLayoutPreview } from '../visual-runtime/page-layout-library.mjs';
 import { layoutRunEvidence, layoutRunPreview } from './layout-run-evidence.mjs';
+import { calibrationPage } from './layout-calibration-page.mjs';
 import fs from "node:fs/promises";
 import http from "node:http";
 import path from "node:path";
@@ -494,6 +495,10 @@ const server = http.createServer(async (request, response) => {
     }
     if (url.pathname === "/health") {
       sendJson(response, 200, { status: "ok", root: projectRoot, pid: process.pid });
+      return;
+    }
+    if (url.pathname === '/layout-calibration') {
+      send(response, 200, await calibrationPage(projectRoot,url), 'text/html; charset=utf-8', {'cache-control':'no-store'});
       return;
     }
     if (url.pathname === '/api/layout-run-evidence') {

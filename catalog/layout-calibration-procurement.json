@@ -1,0 +1,19 @@
+{
+  "sourcePath": "稿件/模拟稿库/行政信息/A03-办公用品采购规定.md",
+  "units": [
+    {"id":"title","quote":"办公用品采购管理规定"},
+    {"id":"low","quote":"单笔金额 500 元以下的，由部门负责人审批后自行采购。"},
+    {"id":"middle","quote":"单笔 500 元至 5000 元的，报综合部汇总，每月集中采购一次。"},
+    {"id":"high","quote":"单笔 5000 元以上的，须经分管领导审批，并执行比价程序。"},
+    {"id":"emergency","quote":"应急采购可先执行、后补办手续，补办时限为 3 个工作日，逾期视为违规采购。"},
+    {"id":"archive","quote":"所有采购均需留存发票和验收记录，按季度归档备查。"}
+  ],
+  "blocks": [
+    {"id":"heading","role":"title","unitIds":["title"],"reason":"保留原稿标题，不生成额外结论"},
+    {"id":"band1","role":"object","semanticGroup":"常规采购分档","unitIds":["low"],"reason":"一个金额条件与对应办理要求共同阅读"},
+    {"id":"band2","role":"object","semanticGroup":"常规采购分档","unitIds":["middle"],"reason":"与其他金额档并列，保持完整条件与办理要求"},
+    {"id":"band3","role":"object","semanticGroup":"常规采购分档","unitIds":["high"],"reason":"同一语义组可以有多个视觉块，顺序按原稿保留"},
+    {"id":"exception","role":"shared","unitIds":["emergency"],"scopeIds":["band1","band2","band3"],"reason":"应急情形单独说明；不作为第四档金额，不降成小字"},
+    {"id":"common","role":"shared","unitIds":["archive"],"scopeIds":["band1","band2","band3","exception"],"reason":"覆盖全部采购，单独横带明示共同作用范围"}
+  ]
+}
