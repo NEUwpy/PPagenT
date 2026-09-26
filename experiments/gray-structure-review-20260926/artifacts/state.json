@@ -1,0 +1,1932 @@
+{
+  "schemaVersion": "ppagent-run-1",
+  "sourcePath": "C:\\PPagenT\\experiments\\gray-structure-review-20260926\\artifacts\\source.md",
+  "sources": [
+    {
+      "id": "s1",
+      "heading": "项目优先级",
+      "text": "统一入口：高价值、低难度；数据平台：高价值、高难度；报表美化：低价值、低难度；全量迁移：低价值、高难度。"
+    },
+    {
+      "id": "s2",
+      "heading": "项目优先级",
+      "text": "先做统一入口\n模拟评估中，统一入口的业务价值高、实施难度低，可先在单个服务场景试用。"
+    },
+    {
+      "id": "s3",
+      "heading": "项目优先级",
+      "text": "保留评估条件\n数据平台需先核对数据权限；全量迁移须完成回退方案。两项均暂不进入实施。"
+    },
+    {
+      "id": "s4",
+      "heading": "阶段准入",
+      "text": "业务验收\n服务负责人逐项核对办理结果；异常记录必须有对应处理人。"
+    },
+    {
+      "id": "s5",
+      "heading": "阶段准入",
+      "text": "扩大范围\n试点达到验收要求后再纳入更多部门。未通过的事项返回整改，不能带缺陷直接推广。"
+    },
+    {
+      "id": "s6",
+      "heading": "阶段准入",
+      "text": "准备 → 试点 → 验收 → 推广。"
+    },
+    {
+      "id": "s7",
+      "heading": "需求筛选",
+      "text": "保留的问题\n用户能描述具体受阻环节，且服务记录中能找到对应案例。只有工具偏好、没有业务问题的建议先补充调研。"
+    },
+    {
+      "id": "s8",
+      "heading": "需求筛选",
+      "text": "需求收集 → 场景核实 → 方案试点。"
+    },
+    {
+      "id": "s9",
+      "heading": "服务改进",
+      "text": "入口分散 → 统一受理；流转不明 → 明确分派。"
+    },
+    {
+      "id": "s10",
+      "heading": "服务改进",
+      "text": "观察办理过程\n试点记录从受理到分派的等待时间，并核对跨部门事项是否有明确接收人。"
+    },
+    {
+      "id": "s11",
+      "heading": "服务改进",
+      "text": "确认反馈闭合\n用户能够看到当前进度和办理结果。试点结束后再判断措施是否有效，目前没有实际成效数据。"
+    },
+    {
+      "id": "s12",
+      "heading": "职责协同",
+      "text": "业务侧负责确认\n需求进入开发前，由业务负责人确认范围、办理规则和验收方式。"
+    },
+    {
+      "id": "s13",
+      "heading": "职责协同",
+      "text": "技术侧负责回传\n联调完成后回传测试记录与遗留问题；业务侧确认接收后再安排上线验收。"
+    },
+    {
+      "id": "s14",
+      "heading": "职责协同",
+      "text": "业务组确认需求；技术组开发联调；业务组验收上线。"
+    },
+    {
+      "id": "s15",
+      "heading": "异常闭环",
+      "text": "先恢复服务\n受理人记录异常场景和影响范围，责任人采取临时措施，并向用户说明当前进展。"
+    },
+    {
+      "id": "s16",
+      "heading": "异常闭环",
+      "text": "再修订规则\n复盘时区分偶发操作与重复缺陷。重复缺陷进入规则修订，下一次抽查检查是否仍然出现。"
+    },
+    {
+      "id": "s17",
+      "heading": "异常闭环",
+      "text": "发现、处理、复查、修订。"
+    },
+    {
+      "id": "s18",
+      "heading": "推广安排",
+      "text": "单点试用 → 部门扩展 → 跨部门推广。"
+    },
+    {
+      "id": "s19",
+      "heading": "推广安排",
+      "text": "本轮只验证单点\n选择业务边界清楚的服务事项，记录入口、处理人和反馈方式，完成一轮完整办理。"
+    },
+    {
+      "id": "s20",
+      "heading": "推广安排",
+      "text": "验收后再复制\n部门扩展前补齐培训与支持渠道；跨部门推广前确认交接规则。各阶段由对应负责人确认后启动。"
+    },
+    {
+      "id": "s21",
+      "heading": "能力建设",
+      "text": "先统一口径\n明确事项编码、状态含义和责任部门，抽查实际记录是否一致。"
+    },
+    {
+      "id": "s22",
+      "heading": "能力建设",
+      "text": "再补齐记录\n缺失信息由业务侧确认，不能用推测值填补。"
+    },
+    {
+      "id": "s23",
+      "heading": "能力建设",
+      "text": "数据基础 → 过程可见 → 分析辅助。"
+    },
+    {
+      "id": "s24",
+      "heading": "能力建设",
+      "text": "过程可见\n先展示在办状态和积压位置，帮助定位需要处理的环节。"
+    },
+    {
+      "id": "s25",
+      "heading": "能力建设",
+      "text": "辅助分析\n口径稳定后再分析趋势；分析提示需结合业务核查。"
+    },
+    {
+      "id": "s26",
+      "heading": "方案权衡",
+      "text": "当前选择轻量接入\n当试点范围较小、现有系统能提供必要接口时，先验证业务流程，降低初期改造负担。"
+    },
+    {
+      "id": "s27",
+      "heading": "方案权衡",
+      "text": "何时升级平台\n若试点出现持续的跨系统协作需求，再评估统一平台。需同时核算迁移工作、维护责任与长期投入。"
+    },
+    {
+      "id": "s28",
+      "heading": "方案权衡",
+      "text": "轻量：投入低、扩展受限；平台：投入高、扩展较强。"
+    },
+    {
+      "id": "s29",
+      "heading": "成效观察",
+      "text": "办理是否改善\n比较办理时长与退回情况，并注明观察范围和样本口径。"
+    },
+    {
+      "id": "s30",
+      "heading": "成效观察",
+      "text": "解释变化\n业务类型变化可能影响结果，分析时需分场景核对。"
+    },
+    {
+      "id": "s31",
+      "heading": "成效观察",
+      "text": "服务改善：办理时长、退回情况、流转记录。"
+    },
+    {
+      "id": "s32",
+      "heading": "成效观察",
+      "text": "定位等待环节\n记录受理、分派、处理与反馈的时间，检查交接是否停滞。"
+    },
+    {
+      "id": "s33",
+      "heading": "成效观察",
+      "text": "结合结果解释\n过程变化用于解释结果；完成一次培训本身不能证明服务改善。"
+    }
+  ],
+  "deckBrief": {
+    "title": "服务改进模拟灰稿",
+    "audience": "灰稿审阅人",
+    "objective": "验收信息组织与局部结构区域，随后再套用结构"
+  },
+  "pages": [
+    {
+      "pageId": "p1",
+      "title": "项目优先级",
+      "claim": "模拟｜优先推进价值高、实施难度低的事项",
+      "relation": "none",
+      "semantics": {
+        "schemaVersion": "gray-plan-3",
+        "pagePurpose": "在资源有限时确定先做哪些事项",
+        "narrative": "先依据价值和难度定位，再说明推进边界。",
+        "relations": [],
+        "readingOrder": [
+          "p1-g1",
+          "p1-g2"
+        ]
+      },
+      "items": [
+        {
+          "id": "p1-g1",
+          "role": "object",
+          "semanticRole": "承载局部信息关系",
+          "importance": "supporting",
+          "heading": "组合定位",
+          "kind": "diagram",
+          "blocks": [
+            {
+              "text": "统一入口：高价值、低难度；数据平台：高价值、高难度；报表美化：低价值、低难度；全量迁移：低价值、高难度。",
+              "id": "b1",
+              "sourceIds": [
+                "s1"
+              ]
+            }
+          ],
+          "text": "统一入口：高价值、低难度；数据平台：高价值、高难度；报表美化：低价值、低难度；全量迁移：低价值、高难度。",
+          "sourceIds": [
+            "s1"
+          ],
+          "expression": "定位优先级。",
+          "relationship": "业务价值与实施难度交叉。",
+          "production": "四象限各放一项，轴向明确。",
+          "sourceText": "统一入口：高价值、低难度；数据平台：高价值、高难度；报表美化：低价值、低难度；全量迁移：低价值、高难度。"
+        },
+        {
+          "id": "p1-g2",
+          "role": "object",
+          "semanticRole": "展开条件与行动",
+          "importance": "primary",
+          "heading": "推进边界",
+          "kind": "text",
+          "blocks": [
+            {
+              "label": "先做统一入口",
+              "text": "模拟评估中，统一入口的业务价值高、实施难度低，可先在单个服务场景试用。",
+              "id": "b1",
+              "sourceIds": [
+                "s2"
+              ]
+            },
+            {
+              "label": "保留评估条件",
+              "text": "数据平台需先核对数据权限；全量迁移须完成回退方案。两项均暂不进入实施。",
+              "id": "b2",
+              "sourceIds": [
+                "s3"
+              ]
+            }
+          ],
+          "text": "先做统一入口\n模拟评估中，统一入口的业务价值高、实施难度低，可先在单个服务场景试用。\n保留评估条件\n数据平台需先核对数据权限；全量迁移须完成回退方案。两项均暂不进入实施。",
+          "sourceIds": [
+            "s2",
+            "s3"
+          ],
+          "sourceText": "先做统一入口\n模拟评估中，统一入口的业务价值高、实施难度低，可先在单个服务场景试用。\n保留评估条件\n数据平台需先核对数据权限；全量迁移须完成回退方案。两项均暂不进入实施。"
+        }
+      ],
+      "composition": {
+        "regions": [
+          {
+            "itemId": "p1-g1",
+            "x": 0,
+            "y": 0,
+            "width": 687.6,
+            "height": 492,
+            "fontSize": 22
+          },
+          {
+            "itemId": "p1-g2",
+            "x": 711.6,
+            "y": 0,
+            "width": 458.4,
+            "height": 492,
+            "fontSize": 22
+          }
+        ],
+        "basicLayout": {
+          "type": "row",
+          "weights": [
+            3,
+            2
+          ]
+        }
+      },
+      "revision": 1
+    },
+    {
+      "pageId": "p2",
+      "title": "阶段准入",
+      "claim": "模拟｜试点通过验收后再扩大覆盖范围",
+      "relation": "none",
+      "semantics": {
+        "schemaVersion": "gray-plan-3",
+        "pagePurpose": "区分试点步骤和扩大覆盖的条件",
+        "narrative": "左侧说明验收规则，右侧呈现步骤与未通过的回流。",
+        "relations": [],
+        "readingOrder": [
+          "p2-g1",
+          "p2-g2"
+        ]
+      },
+      "items": [
+        {
+          "id": "p2-g1",
+          "role": "object",
+          "semanticRole": "展开条件与行动",
+          "importance": "primary",
+          "heading": "验收与责任",
+          "kind": "text",
+          "blocks": [
+            {
+              "label": "业务验收",
+              "text": "服务负责人逐项核对办理结果；异常记录必须有对应处理人。",
+              "id": "b1",
+              "sourceIds": [
+                "s4"
+              ]
+            },
+            {
+              "label": "扩大范围",
+              "text": "试点达到验收要求后再纳入更多部门。未通过的事项返回整改，不能带缺陷直接推广。",
+              "id": "b2",
+              "sourceIds": [
+                "s5"
+              ]
+            }
+          ],
+          "text": "业务验收\n服务负责人逐项核对办理结果；异常记录必须有对应处理人。\n扩大范围\n试点达到验收要求后再纳入更多部门。未通过的事项返回整改，不能带缺陷直接推广。",
+          "sourceIds": [
+            "s4",
+            "s5"
+          ],
+          "sourceText": "业务验收\n服务负责人逐项核对办理结果；异常记录必须有对应处理人。\n扩大范围\n试点达到验收要求后再纳入更多部门。未通过的事项返回整改，不能带缺陷直接推广。"
+        },
+        {
+          "id": "p2-g2",
+          "role": "object",
+          "semanticRole": "承载局部信息关系",
+          "importance": "supporting",
+          "heading": "推进与回流",
+          "kind": "flow",
+          "blocks": [
+            {
+              "text": "准备 → 试点 → 验收 → 推广。",
+              "id": "b1",
+              "sourceIds": [
+                "s6"
+              ]
+            }
+          ],
+          "text": "准备 → 试点 → 验收 → 推广。",
+          "sourceIds": [
+            "s6"
+          ],
+          "expression": "说明准入路径。",
+          "relationship": "验收未通过则返回试点。",
+          "production": "门禁条件靠近验收，回流单独标识。",
+          "sourceText": "准备 → 试点 → 验收 → 推广。"
+        }
+      ],
+      "composition": {
+        "regions": [
+          {
+            "itemId": "p2-g1",
+            "x": 0,
+            "y": 0,
+            "width": 458.4,
+            "height": 492,
+            "fontSize": 22
+          },
+          {
+            "itemId": "p2-g2",
+            "x": 482.4,
+            "y": 0,
+            "width": 687.6,
+            "height": 492,
+            "fontSize": 22
+          }
+        ],
+        "basicLayout": {
+          "type": "row",
+          "weights": [
+            2,
+            3
+          ]
+        }
+      },
+      "revision": 1
+    },
+    {
+      "pageId": "p3",
+      "title": "需求筛选",
+      "claim": "模拟｜先确认真实需求，再投入方案设计",
+      "relation": "none",
+      "semantics": {
+        "schemaVersion": "gray-plan-3",
+        "pagePurpose": "展示需求逐步筛选而非无差别立项",
+        "narrative": "上方给筛选依据，下方呈现从需求到试点的转化。",
+        "relations": [],
+        "readingOrder": [
+          "p3-g1",
+          "p3-g2"
+        ]
+      },
+      "items": [
+        {
+          "id": "p3-g1",
+          "role": "object",
+          "semanticRole": "展开条件与行动",
+          "importance": "primary",
+          "heading": "筛选依据",
+          "kind": "text",
+          "blocks": [
+            {
+              "label": "保留的问题",
+              "text": "用户能描述具体受阻环节，且服务记录中能找到对应案例。只有工具偏好、没有业务问题的建议先补充调研。",
+              "id": "b1",
+              "sourceIds": [
+                "s7"
+              ]
+            }
+          ],
+          "text": "保留的问题\n用户能描述具体受阻环节，且服务记录中能找到对应案例。只有工具偏好、没有业务问题的建议先补充调研。",
+          "sourceIds": [
+            "s7"
+          ],
+          "sourceText": "保留的问题\n用户能描述具体受阻环节，且服务记录中能找到对应案例。只有工具偏好、没有业务问题的建议先补充调研。"
+        },
+        {
+          "id": "p3-g2",
+          "role": "object",
+          "semanticRole": "承载局部信息关系",
+          "importance": "supporting",
+          "heading": "需求到试点",
+          "kind": "flow",
+          "blocks": [
+            {
+              "text": "需求收集 → 场景核实 → 方案试点。",
+              "id": "b1",
+              "sourceIds": [
+                "s8"
+              ]
+            }
+          ],
+          "text": "需求收集 → 场景核实 → 方案试点。",
+          "sourceIds": [
+            "s8"
+          ],
+          "expression": "呈现逐阶段筛选。",
+          "relationship": "前一阶段通过后才进入下一阶段。",
+          "production": "保留阶段名称，筛选条件贴近转换处。",
+          "sourceText": "需求收集 → 场景核实 → 方案试点。"
+        }
+      ],
+      "composition": {
+        "regions": [
+          {
+            "itemId": "p3-g1",
+            "x": 0,
+            "y": 0,
+            "width": 1170,
+            "height": 197.74647887323943,
+            "fontSize": 22
+          },
+          {
+            "itemId": "p3-g2",
+            "x": 0,
+            "y": 221.74647887323943,
+            "width": 1170,
+            "height": 270.2535211267606,
+            "fontSize": 22
+          }
+        ],
+        "basicLayout": {
+          "type": "column"
+        }
+      },
+      "revision": 1
+    },
+    {
+      "pageId": "p4",
+      "title": "服务改进",
+      "claim": "模拟｜统一入口需要同时打通分派和反馈",
+      "relation": "none",
+      "semantics": {
+        "schemaVersion": "gray-plan-3",
+        "pagePurpose": "将问题、对应措施和预期结果串起来",
+        "narrative": "对应关系在图区，结果验证方式在文字区。",
+        "relations": [],
+        "readingOrder": [
+          "p4-g1",
+          "p4-g2"
+        ]
+      },
+      "items": [
+        {
+          "id": "p4-g1",
+          "role": "object",
+          "semanticRole": "承载局部信息关系",
+          "importance": "supporting",
+          "heading": "问题与措施",
+          "kind": "diagram",
+          "blocks": [
+            {
+              "text": "入口分散 → 统一受理；流转不明 → 明确分派。",
+              "id": "b1",
+              "sourceIds": [
+                "s9"
+              ]
+            }
+          ],
+          "text": "入口分散 → 统一受理；流转不明 → 明确分派。",
+          "sourceIds": [
+            "s9"
+          ],
+          "expression": "说明改进逻辑。",
+          "relationship": "措施分别对应问题，结果为预期。",
+          "production": "按对应关系排布，不写成已实现成效。",
+          "sourceText": "入口分散 → 统一受理；流转不明 → 明确分派。"
+        },
+        {
+          "id": "p4-g2",
+          "role": "object",
+          "semanticRole": "展开条件与行动",
+          "importance": "primary",
+          "heading": "如何验证",
+          "kind": "text",
+          "blocks": [
+            {
+              "label": "观察办理过程",
+              "text": "试点记录从受理到分派的等待时间，并核对跨部门事项是否有明确接收人。",
+              "id": "b1",
+              "sourceIds": [
+                "s10"
+              ]
+            },
+            {
+              "label": "确认反馈闭合",
+              "text": "用户能够看到当前进度和办理结果。试点结束后再判断措施是否有效，目前没有实际成效数据。",
+              "id": "b2",
+              "sourceIds": [
+                "s11"
+              ]
+            }
+          ],
+          "text": "观察办理过程\n试点记录从受理到分派的等待时间，并核对跨部门事项是否有明确接收人。\n确认反馈闭合\n用户能够看到当前进度和办理结果。试点结束后再判断措施是否有效，目前没有实际成效数据。",
+          "sourceIds": [
+            "s10",
+            "s11"
+          ],
+          "sourceText": "观察办理过程\n试点记录从受理到分派的等待时间，并核对跨部门事项是否有明确接收人。\n确认反馈闭合\n用户能够看到当前进度和办理结果。试点结束后再判断措施是否有效，目前没有实际成效数据。"
+        }
+      ],
+      "composition": {
+        "regions": [
+          {
+            "itemId": "p4-g1",
+            "x": 0,
+            "y": 0,
+            "width": 687.6,
+            "height": 492,
+            "fontSize": 22
+          },
+          {
+            "itemId": "p4-g2",
+            "x": 711.6,
+            "y": 0,
+            "width": 458.4,
+            "height": 492,
+            "fontSize": 22
+          }
+        ],
+        "basicLayout": {
+          "type": "row",
+          "weights": [
+            3,
+            2
+          ]
+        }
+      },
+      "revision": 1
+    },
+    {
+      "pageId": "p5",
+      "title": "职责协同",
+      "claim": "模拟｜每个交接点都要有明确的接收人",
+      "relation": "none",
+      "semantics": {
+        "schemaVersion": "gray-plan-3",
+        "pagePurpose": "说明业务与技术团队的交接责任",
+        "narrative": "文字约定交接标准，图区表达角色和阶段的对应。",
+        "relations": [],
+        "readingOrder": [
+          "p5-g1",
+          "p5-g2"
+        ]
+      },
+      "items": [
+        {
+          "id": "p5-g1",
+          "role": "object",
+          "semanticRole": "展开条件与行动",
+          "importance": "primary",
+          "heading": "交接约定",
+          "kind": "text",
+          "blocks": [
+            {
+              "label": "业务侧负责确认",
+              "text": "需求进入开发前，由业务负责人确认范围、办理规则和验收方式。",
+              "id": "b1",
+              "sourceIds": [
+                "s12"
+              ]
+            },
+            {
+              "label": "技术侧负责回传",
+              "text": "联调完成后回传测试记录与遗留问题；业务侧确认接收后再安排上线验收。",
+              "id": "b2",
+              "sourceIds": [
+                "s13"
+              ]
+            }
+          ],
+          "text": "业务侧负责确认\n需求进入开发前，由业务负责人确认范围、办理规则和验收方式。\n技术侧负责回传\n联调完成后回传测试记录与遗留问题；业务侧确认接收后再安排上线验收。",
+          "sourceIds": [
+            "s12",
+            "s13"
+          ],
+          "sourceText": "业务侧负责确认\n需求进入开发前，由业务负责人确认范围、办理规则和验收方式。\n技术侧负责回传\n联调完成后回传测试记录与遗留问题；业务侧确认接收后再安排上线验收。"
+        },
+        {
+          "id": "p5-g2",
+          "role": "object",
+          "semanticRole": "承载局部信息关系",
+          "importance": "supporting",
+          "heading": "阶段与角色",
+          "kind": "diagram",
+          "blocks": [
+            {
+              "text": "业务组确认需求；技术组开发联调；业务组验收上线。",
+              "id": "b1",
+              "sourceIds": [
+                "s14"
+              ]
+            }
+          ],
+          "text": "业务组确认需求；技术组开发联调；业务组验收上线。",
+          "sourceIds": [
+            "s14"
+          ],
+          "expression": "展示分工与交接。",
+          "relationship": "技术回传测试记录，由业务组接收。",
+          "production": "阶段横排、角色分行，突出交接点。",
+          "sourceText": "业务组确认需求；技术组开发联调；业务组验收上线。"
+        }
+      ],
+      "composition": {
+        "regions": [
+          {
+            "itemId": "p5-g1",
+            "x": 0,
+            "y": 0,
+            "width": 458.4,
+            "height": 492,
+            "fontSize": 22
+          },
+          {
+            "itemId": "p5-g2",
+            "x": 482.4,
+            "y": 0,
+            "width": 687.6,
+            "height": 492,
+            "fontSize": 22
+          }
+        ],
+        "basicLayout": {
+          "type": "row",
+          "weights": [
+            2,
+            3
+          ]
+        }
+      },
+      "revision": 1
+    },
+    {
+      "pageId": "p6",
+      "title": "异常闭环",
+      "claim": "模拟｜异常必须回到规则修订才算闭环",
+      "relation": "none",
+      "semantics": {
+        "schemaVersion": "gray-plan-3",
+        "pagePurpose": "补足异常处理之后的规则改进",
+        "narrative": "主体说明处理和复查，局部图示呈现闭环。",
+        "relations": [],
+        "readingOrder": [
+          "p6-g1",
+          "p6-g2"
+        ]
+      },
+      "items": [
+        {
+          "id": "p6-g1",
+          "role": "object",
+          "semanticRole": "展开条件与行动",
+          "importance": "primary",
+          "heading": "从处理到预防",
+          "kind": "text",
+          "blocks": [
+            {
+              "label": "先恢复服务",
+              "text": "受理人记录异常场景和影响范围，责任人采取临时措施，并向用户说明当前进展。",
+              "id": "b1",
+              "sourceIds": [
+                "s15"
+              ]
+            },
+            {
+              "label": "再修订规则",
+              "text": "复盘时区分偶发操作与重复缺陷。重复缺陷进入规则修订，下一次抽查检查是否仍然出现。",
+              "id": "b2",
+              "sourceIds": [
+                "s16"
+              ]
+            }
+          ],
+          "text": "先恢复服务\n受理人记录异常场景和影响范围，责任人采取临时措施，并向用户说明当前进展。\n再修订规则\n复盘时区分偶发操作与重复缺陷。重复缺陷进入规则修订，下一次抽查检查是否仍然出现。",
+          "sourceIds": [
+            "s15",
+            "s16"
+          ],
+          "sourceText": "先恢复服务\n受理人记录异常场景和影响范围，责任人采取临时措施，并向用户说明当前进展。\n再修订规则\n复盘时区分偶发操作与重复缺陷。重复缺陷进入规则修订，下一次抽查检查是否仍然出现。"
+        },
+        {
+          "id": "p6-g2",
+          "role": "object",
+          "semanticRole": "承载局部信息关系",
+          "importance": "supporting",
+          "heading": "反馈闭环",
+          "kind": "flow",
+          "blocks": [
+            {
+              "text": "发现、处理、复查、修订。",
+              "id": "b1",
+              "sourceIds": [
+                "s17"
+              ]
+            }
+          ],
+          "text": "发现、处理、复查、修订。",
+          "sourceIds": [
+            "s17"
+          ],
+          "expression": "追踪闭合。",
+          "relationship": "修订反馈至后续执行。",
+          "production": "闭环保留方向，节点仅短标题。",
+          "sourceText": "发现、处理、复查、修订。"
+        }
+      ],
+      "composition": {
+        "regions": [
+          {
+            "itemId": "p6-g1",
+            "x": 0,
+            "y": 0,
+            "width": 764,
+            "height": 492,
+            "fontSize": 22
+          },
+          {
+            "itemId": "p6-g2",
+            "x": 788,
+            "y": 0,
+            "width": 382,
+            "height": 492,
+            "fontSize": 22
+          }
+        ],
+        "basicLayout": {
+          "type": "row",
+          "weights": [
+            2,
+            1
+          ]
+        }
+      },
+      "revision": 1
+    },
+    {
+      "pageId": "p7",
+      "title": "推广安排",
+      "claim": "模拟｜先验证一个场景，再逐步复制经验",
+      "relation": "none",
+      "semantics": {
+        "schemaVersion": "gray-plan-3",
+        "pagePurpose": "将近期动作与长期扩展区别开",
+        "narrative": "局部路线图给先后，主体解释当下任务与后续条件。",
+        "relations": [],
+        "readingOrder": [
+          "p7-g1",
+          "p7-g2"
+        ]
+      },
+      "items": [
+        {
+          "id": "p7-g1",
+          "role": "object",
+          "semanticRole": "承载局部信息关系",
+          "importance": "supporting",
+          "heading": "推广节奏",
+          "kind": "flow",
+          "blocks": [
+            {
+              "text": "单点试用 → 部门扩展 → 跨部门推广。",
+              "id": "b1",
+              "sourceIds": [
+                "s18"
+              ]
+            }
+          ],
+          "text": "单点试用 → 部门扩展 → 跨部门推广。",
+          "sourceIds": [
+            "s18"
+          ],
+          "expression": "呈现先后。",
+          "relationship": "后一阶段依赖前期验收。",
+          "production": "每阶段一个短标题，条件外置。",
+          "sourceText": "单点试用 → 部门扩展 → 跨部门推广。"
+        },
+        {
+          "id": "p7-g2",
+          "role": "object",
+          "semanticRole": "展开条件与行动",
+          "importance": "primary",
+          "heading": "当前工作与后续条件",
+          "kind": "text",
+          "blocks": [
+            {
+              "label": "本轮只验证单点",
+              "text": "选择业务边界清楚的服务事项，记录入口、处理人和反馈方式，完成一轮完整办理。",
+              "id": "b1",
+              "sourceIds": [
+                "s19"
+              ]
+            },
+            {
+              "label": "验收后再复制",
+              "text": "部门扩展前补齐培训与支持渠道；跨部门推广前确认交接规则。各阶段由对应负责人确认后启动。",
+              "id": "b2",
+              "sourceIds": [
+                "s20"
+              ]
+            }
+          ],
+          "text": "本轮只验证单点\n选择业务边界清楚的服务事项，记录入口、处理人和反馈方式，完成一轮完整办理。\n验收后再复制\n部门扩展前补齐培训与支持渠道；跨部门推广前确认交接规则。各阶段由对应负责人确认后启动。",
+          "sourceIds": [
+            "s19",
+            "s20"
+          ],
+          "sourceText": "本轮只验证单点\n选择业务边界清楚的服务事项，记录入口、处理人和反馈方式，完成一轮完整办理。\n验收后再复制\n部门扩展前补齐培训与支持渠道；跨部门推广前确认交接规则。各阶段由对应负责人确认后启动。"
+        }
+      ],
+      "composition": {
+        "regions": [
+          {
+            "itemId": "p7-g1",
+            "x": 0,
+            "y": 0,
+            "width": 382,
+            "height": 492,
+            "fontSize": 22
+          },
+          {
+            "itemId": "p7-g2",
+            "x": 406,
+            "y": 0,
+            "width": 764,
+            "height": 492,
+            "fontSize": 22
+          }
+        ],
+        "basicLayout": {
+          "type": "row",
+          "weights": [
+            1,
+            2
+          ]
+        }
+      },
+      "revision": 1
+    },
+    {
+      "pageId": "p8",
+      "title": "能力建设",
+      "claim": "模拟｜基础数据可靠后，分析能力才有用",
+      "relation": "none",
+      "semantics": {
+        "schemaVersion": "gray-plan-3",
+        "pagePurpose": "区分当前基础任务和后续分析场景",
+        "narrative": "左侧基础任务支撑中间层级，右侧给应用范围。",
+        "relations": [],
+        "readingOrder": [
+          "p8-g1",
+          "p8-g2",
+          "p8-g3"
+        ]
+      },
+      "items": [
+        {
+          "id": "p8-g1",
+          "role": "object",
+          "semanticRole": "展开条件与行动",
+          "importance": "primary",
+          "heading": "当前基础",
+          "kind": "text",
+          "blocks": [
+            {
+              "label": "先统一口径",
+              "text": "明确事项编码、状态含义和责任部门，抽查实际记录是否一致。",
+              "id": "b1",
+              "sourceIds": [
+                "s21"
+              ]
+            },
+            {
+              "label": "再补齐记录",
+              "text": "缺失信息由业务侧确认，不能用推测值填补。",
+              "id": "b2",
+              "sourceIds": [
+                "s22"
+              ]
+            }
+          ],
+          "text": "先统一口径\n明确事项编码、状态含义和责任部门，抽查实际记录是否一致。\n再补齐记录\n缺失信息由业务侧确认，不能用推测值填补。",
+          "sourceIds": [
+            "s21",
+            "s22"
+          ],
+          "sourceText": "先统一口径\n明确事项编码、状态含义和责任部门，抽查实际记录是否一致。\n再补齐记录\n缺失信息由业务侧确认，不能用推测值填补。"
+        },
+        {
+          "id": "p8-g2",
+          "role": "object",
+          "semanticRole": "承载局部信息关系",
+          "importance": "supporting",
+          "heading": "能力层级",
+          "kind": "diagram",
+          "blocks": [
+            {
+              "text": "数据基础 → 过程可见 → 分析辅助。",
+              "id": "b1",
+              "sourceIds": [
+                "s23"
+              ]
+            }
+          ],
+          "text": "数据基础 → 过程可见 → 分析辅助。",
+          "sourceIds": [
+            "s23"
+          ],
+          "expression": "表达支撑。",
+          "relationship": "上层依赖下层。",
+          "production": "三层短标题，底层作为基础。",
+          "sourceText": "数据基础 → 过程可见 → 分析辅助。"
+        },
+        {
+          "id": "p8-g3",
+          "role": "object",
+          "semanticRole": "展开条件与行动",
+          "importance": "primary",
+          "heading": "应用范围",
+          "kind": "text",
+          "blocks": [
+            {
+              "label": "过程可见",
+              "text": "先展示在办状态和积压位置，帮助定位需要处理的环节。",
+              "id": "b1",
+              "sourceIds": [
+                "s24"
+              ]
+            },
+            {
+              "label": "辅助分析",
+              "text": "口径稳定后再分析趋势；分析提示需结合业务核查。",
+              "id": "b2",
+              "sourceIds": [
+                "s25"
+              ]
+            }
+          ],
+          "text": "过程可见\n先展示在办状态和积压位置，帮助定位需要处理的环节。\n辅助分析\n口径稳定后再分析趋势；分析提示需结合业务核查。",
+          "sourceIds": [
+            "s24",
+            "s25"
+          ],
+          "sourceText": "过程可见\n先展示在办状态和积压位置，帮助定位需要处理的环节。\n辅助分析\n口径稳定后再分析趋势；分析提示需结合业务核查。"
+        }
+      ],
+      "composition": {
+        "regions": [
+          {
+            "itemId": "p8-g1",
+            "x": 0,
+            "y": 0,
+            "width": 374,
+            "height": 492,
+            "fontSize": 22
+          },
+          {
+            "itemId": "p8-g2",
+            "x": 398,
+            "y": 0,
+            "width": 374,
+            "height": 492,
+            "fontSize": 22
+          },
+          {
+            "itemId": "p8-g3",
+            "x": 796,
+            "y": 0,
+            "width": 374,
+            "height": 492,
+            "fontSize": 22
+          }
+        ],
+        "basicLayout": {
+          "type": "row",
+          "weights": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "revision": 1
+    },
+    {
+      "pageId": "p9",
+      "title": "方案权衡",
+      "claim": "模拟｜先用轻量方案验证，保留升级条件",
+      "relation": "none",
+      "semantics": {
+        "schemaVersion": "gray-plan-3",
+        "pagePurpose": "表达两种方案的取舍及结论成立条件",
+        "narrative": "左侧展开适用边界，右侧用相同口径比较。",
+        "relations": [],
+        "readingOrder": [
+          "p9-g1",
+          "p9-g2"
+        ]
+      },
+      "items": [
+        {
+          "id": "p9-g1",
+          "role": "object",
+          "semanticRole": "展开条件与行动",
+          "importance": "primary",
+          "heading": "选择及适用条件",
+          "kind": "text",
+          "blocks": [
+            {
+              "label": "当前选择轻量接入",
+              "text": "当试点范围较小、现有系统能提供必要接口时，先验证业务流程，降低初期改造负担。",
+              "id": "b1",
+              "sourceIds": [
+                "s26"
+              ]
+            },
+            {
+              "label": "何时升级平台",
+              "text": "若试点出现持续的跨系统协作需求，再评估统一平台。需同时核算迁移工作、维护责任与长期投入。",
+              "id": "b2",
+              "sourceIds": [
+                "s27"
+              ]
+            }
+          ],
+          "text": "当前选择轻量接入\n当试点范围较小、现有系统能提供必要接口时，先验证业务流程，降低初期改造负担。\n何时升级平台\n若试点出现持续的跨系统协作需求，再评估统一平台。需同时核算迁移工作、维护责任与长期投入。",
+          "sourceIds": [
+            "s26",
+            "s27"
+          ],
+          "sourceText": "当前选择轻量接入\n当试点范围较小、现有系统能提供必要接口时，先验证业务流程，降低初期改造负担。\n何时升级平台\n若试点出现持续的跨系统协作需求，再评估统一平台。需同时核算迁移工作、维护责任与长期投入。"
+        },
+        {
+          "id": "p9-g2",
+          "role": "object",
+          "semanticRole": "承载局部信息关系",
+          "importance": "supporting",
+          "heading": "两方案对照",
+          "kind": "diagram",
+          "blocks": [
+            {
+              "text": "轻量：投入低、扩展受限；平台：投入高、扩展较强。",
+              "id": "b1",
+              "sourceIds": [
+                "s28"
+              ]
+            }
+          ],
+          "text": "轻量：投入低、扩展受限；平台：投入高、扩展较强。",
+          "sourceIds": [
+            "s28"
+          ],
+          "expression": "辅助权衡。",
+          "relationship": "比较启动投入与扩展能力。",
+          "production": "同口径对齐，适用条件见正文。",
+          "sourceText": "轻量：投入低、扩展受限；平台：投入高、扩展较强。"
+        }
+      ],
+      "composition": {
+        "regions": [
+          {
+            "itemId": "p9-g1",
+            "x": 0,
+            "y": 0,
+            "width": 764,
+            "height": 492,
+            "fontSize": 22
+          },
+          {
+            "itemId": "p9-g2",
+            "x": 788,
+            "y": 0,
+            "width": 382,
+            "height": 492,
+            "fontSize": 22
+          }
+        ],
+        "basicLayout": {
+          "type": "row",
+          "weights": [
+            2,
+            1
+          ]
+        }
+      },
+      "revision": 1
+    },
+    {
+      "pageId": "p10",
+      "title": "成效观察",
+      "claim": "模拟｜结果指标与过程记录需要一起看",
+      "relation": "none",
+      "semantics": {
+        "schemaVersion": "gray-plan-3",
+        "pagePurpose": "避免把过程动作直接当作最终成效",
+        "narrative": "目标关联观察维度，左右分别展开结果和过程。",
+        "relations": [],
+        "readingOrder": [
+          "p10-g1",
+          "p10-g2",
+          "p10-g3"
+        ]
+      },
+      "items": [
+        {
+          "id": "p10-g1",
+          "role": "object",
+          "semanticRole": "展开条件与行动",
+          "importance": "primary",
+          "heading": "结果观察",
+          "kind": "text",
+          "blocks": [
+            {
+              "label": "办理是否改善",
+              "text": "比较办理时长与退回情况，并注明观察范围和样本口径。",
+              "id": "b1",
+              "sourceIds": [
+                "s29"
+              ]
+            },
+            {
+              "label": "解释变化",
+              "text": "业务类型变化可能影响结果，分析时需分场景核对。",
+              "id": "b2",
+              "sourceIds": [
+                "s30"
+              ]
+            }
+          ],
+          "text": "办理是否改善\n比较办理时长与退回情况，并注明观察范围和样本口径。\n解释变化\n业务类型变化可能影响结果，分析时需分场景核对。",
+          "sourceIds": [
+            "s29",
+            "s30"
+          ],
+          "sourceText": "办理是否改善\n比较办理时长与退回情况，并注明观察范围和样本口径。\n解释变化\n业务类型变化可能影响结果，分析时需分场景核对。"
+        },
+        {
+          "id": "p10-g2",
+          "role": "object",
+          "semanticRole": "承载局部信息关系",
+          "importance": "supporting",
+          "heading": "观察框架",
+          "kind": "diagram",
+          "blocks": [
+            {
+              "text": "服务改善：办理时长、退回情况、流转记录。",
+              "id": "b1",
+              "sourceIds": [
+                "s31"
+              ]
+            }
+          ],
+          "text": "服务改善：办理时长、退回情况、流转记录。",
+          "sourceIds": [
+            "s31"
+          ],
+          "expression": "组织观察项。",
+          "relationship": "结果与过程共同围绕目标。",
+          "production": "区分两类指标，不画虚假因果。",
+          "sourceText": "服务改善：办理时长、退回情况、流转记录。"
+        },
+        {
+          "id": "p10-g3",
+          "role": "object",
+          "semanticRole": "展开条件与行动",
+          "importance": "primary",
+          "heading": "过程记录",
+          "kind": "text",
+          "blocks": [
+            {
+              "label": "定位等待环节",
+              "text": "记录受理、分派、处理与反馈的时间，检查交接是否停滞。",
+              "id": "b1",
+              "sourceIds": [
+                "s32"
+              ]
+            },
+            {
+              "label": "结合结果解释",
+              "text": "过程变化用于解释结果；完成一次培训本身不能证明服务改善。",
+              "id": "b2",
+              "sourceIds": [
+                "s33"
+              ]
+            }
+          ],
+          "text": "定位等待环节\n记录受理、分派、处理与反馈的时间，检查交接是否停滞。\n结合结果解释\n过程变化用于解释结果；完成一次培训本身不能证明服务改善。",
+          "sourceIds": [
+            "s32",
+            "s33"
+          ],
+          "sourceText": "定位等待环节\n记录受理、分派、处理与反馈的时间，检查交接是否停滞。\n结合结果解释\n过程变化用于解释结果；完成一次培训本身不能证明服务改善。"
+        }
+      ],
+      "composition": {
+        "regions": [
+          {
+            "itemId": "p10-g1",
+            "x": 0,
+            "y": 0,
+            "width": 374,
+            "height": 492,
+            "fontSize": 22
+          },
+          {
+            "itemId": "p10-g2",
+            "x": 398,
+            "y": 0,
+            "width": 374,
+            "height": 492,
+            "fontSize": 22
+          },
+          {
+            "itemId": "p10-g3",
+            "x": 796,
+            "y": 0,
+            "width": 374,
+            "height": 492,
+            "fontSize": 22
+          }
+        ],
+        "basicLayout": {
+          "type": "row",
+          "weights": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "revision": 1
+    }
+  ],
+  "artifactState": {},
+  "phase": "content",
+  "contentRevision": null,
+  "runtimeFailure": null,
+  "warningDecisions": [],
+  "grayDraft": {
+    "version": "gray-draft-3",
+    "area": {
+      "width": 1170,
+      "height": 492,
+      "label": "10 页模拟灰稿 · 等待用户验收"
+    },
+    "status": "awaiting-user-review",
+    "humanReview": "pending",
+    "artifactDirectory": "C:\\PPagenT\\experiments\\gray-structure-review-20260926\\artifacts",
+    "authoredSimulation": true,
+    "semanticPlan": {
+      "schemaVersion": "gray-plan-3",
+      "deckBrief": {
+        "title": "服务改进模拟灰稿",
+        "audience": "灰稿审阅人",
+        "objective": "验收信息组织与局部结构区域，随后再套用结构"
+      },
+      "planningNotes": "人工编写的十页模拟样例；未调用自动规划模型，未套用结构。",
+      "pages": [
+        {
+          "pageId": "p1",
+          "title": "项目优先级",
+          "claim": "模拟｜优先推进价值高、实施难度低的事项",
+          "pagePurpose": "在资源有限时确定先做哪些事项",
+          "narrative": "先依据价值和难度定位，再说明推进边界。",
+          "groups": [
+            {
+              "heading": "组合定位",
+              "kind": "diagram",
+              "blocks": [
+                {
+                  "text": "统一入口：高价值、低难度；数据平台：高价值、高难度；报表美化：低价值、低难度；全量迁移：低价值、高难度。",
+                  "id": "b1",
+                  "sourceIds": [
+                    "s1"
+                  ]
+                }
+              ],
+              "expression": "定位优先级。",
+              "relationship": "业务价值与实施难度交叉。",
+              "production": "四象限各放一项，轴向明确。",
+              "id": "p1-g1",
+              "role": "承载局部信息关系",
+              "importance": "supporting"
+            },
+            {
+              "heading": "推进边界",
+              "kind": "text",
+              "blocks": [
+                {
+                  "label": "先做统一入口",
+                  "text": "模拟评估中，统一入口的业务价值高、实施难度低，可先在单个服务场景试用。",
+                  "id": "b1",
+                  "sourceIds": [
+                    "s2"
+                  ]
+                },
+                {
+                  "label": "保留评估条件",
+                  "text": "数据平台需先核对数据权限；全量迁移须完成回退方案。两项均暂不进入实施。",
+                  "id": "b2",
+                  "sourceIds": [
+                    "s3"
+                  ]
+                }
+              ],
+              "id": "p1-g2",
+              "role": "展开条件与行动",
+              "importance": "primary"
+            }
+          ]
+        },
+        {
+          "pageId": "p2",
+          "title": "阶段准入",
+          "claim": "模拟｜试点通过验收后再扩大覆盖范围",
+          "pagePurpose": "区分试点步骤和扩大覆盖的条件",
+          "narrative": "左侧说明验收规则，右侧呈现步骤与未通过的回流。",
+          "groups": [
+            {
+              "heading": "验收与责任",
+              "kind": "text",
+              "blocks": [
+                {
+                  "label": "业务验收",
+                  "text": "服务负责人逐项核对办理结果；异常记录必须有对应处理人。",
+                  "id": "b1",
+                  "sourceIds": [
+                    "s4"
+                  ]
+                },
+                {
+                  "label": "扩大范围",
+                  "text": "试点达到验收要求后再纳入更多部门。未通过的事项返回整改，不能带缺陷直接推广。",
+                  "id": "b2",
+                  "sourceIds": [
+                    "s5"
+                  ]
+                }
+              ],
+              "id": "p2-g1",
+              "role": "展开条件与行动",
+              "importance": "primary"
+            },
+            {
+              "heading": "推进与回流",
+              "kind": "flow",
+              "blocks": [
+                {
+                  "text": "准备 → 试点 → 验收 → 推广。",
+                  "id": "b1",
+                  "sourceIds": [
+                    "s6"
+                  ]
+                }
+              ],
+              "expression": "说明准入路径。",
+              "relationship": "验收未通过则返回试点。",
+              "production": "门禁条件靠近验收，回流单独标识。",
+              "id": "p2-g2",
+              "role": "承载局部信息关系",
+              "importance": "supporting"
+            }
+          ]
+        },
+        {
+          "pageId": "p3",
+          "title": "需求筛选",
+          "claim": "模拟｜先确认真实需求，再投入方案设计",
+          "pagePurpose": "展示需求逐步筛选而非无差别立项",
+          "narrative": "上方给筛选依据，下方呈现从需求到试点的转化。",
+          "groups": [
+            {
+              "heading": "筛选依据",
+              "kind": "text",
+              "blocks": [
+                {
+                  "label": "保留的问题",
+                  "text": "用户能描述具体受阻环节，且服务记录中能找到对应案例。只有工具偏好、没有业务问题的建议先补充调研。",
+                  "id": "b1",
+                  "sourceIds": [
+                    "s7"
+                  ]
+                }
+              ],
+              "id": "p3-g1",
+              "role": "展开条件与行动",
+              "importance": "primary"
+            },
+            {
+              "heading": "需求到试点",
+              "kind": "flow",
+              "blocks": [
+                {
+                  "text": "需求收集 → 场景核实 → 方案试点。",
+                  "id": "b1",
+                  "sourceIds": [
+                    "s8"
+                  ]
+                }
+              ],
+              "expression": "呈现逐阶段筛选。",
+              "relationship": "前一阶段通过后才进入下一阶段。",
+              "production": "保留阶段名称，筛选条件贴近转换处。",
+              "id": "p3-g2",
+              "role": "承载局部信息关系",
+              "importance": "supporting"
+            }
+          ]
+        },
+        {
+          "pageId": "p4",
+          "title": "服务改进",
+          "claim": "模拟｜统一入口需要同时打通分派和反馈",
+          "pagePurpose": "将问题、对应措施和预期结果串起来",
+          "narrative": "对应关系在图区，结果验证方式在文字区。",
+          "groups": [
+            {
+              "heading": "问题与措施",
+              "kind": "diagram",
+              "blocks": [
+                {
+                  "text": "入口分散 → 统一受理；流转不明 → 明确分派。",
+                  "id": "b1",
+                  "sourceIds": [
+                    "s9"
+                  ]
+                }
+              ],
+              "expression": "说明改进逻辑。",
+              "relationship": "措施分别对应问题，结果为预期。",
+              "production": "按对应关系排布，不写成已实现成效。",
+              "id": "p4-g1",
+              "role": "承载局部信息关系",
+              "importance": "supporting"
+            },
+            {
+              "heading": "如何验证",
+              "kind": "text",
+              "blocks": [
+                {
+                  "label": "观察办理过程",
+                  "text": "试点记录从受理到分派的等待时间，并核对跨部门事项是否有明确接收人。",
+                  "id": "b1",
+                  "sourceIds": [
+                    "s10"
+                  ]
+                },
+                {
+                  "label": "确认反馈闭合",
+                  "text": "用户能够看到当前进度和办理结果。试点结束后再判断措施是否有效，目前没有实际成效数据。",
+                  "id": "b2",
+                  "sourceIds": [
+                    "s11"
+                  ]
+                }
+              ],
+              "id": "p4-g2",
+              "role": "展开条件与行动",
+              "importance": "primary"
+            }
+          ]
+        },
+        {
+          "pageId": "p5",
+          "title": "职责协同",
+          "claim": "模拟｜每个交接点都要有明确的接收人",
+          "pagePurpose": "说明业务与技术团队的交接责任",
+          "narrative": "文字约定交接标准，图区表达角色和阶段的对应。",
+          "groups": [
+            {
+              "heading": "交接约定",
+              "kind": "text",
+              "blocks": [
+                {
+                  "label": "业务侧负责确认",
+                  "text": "需求进入开发前，由业务负责人确认范围、办理规则和验收方式。",
+                  "id": "b1",
+                  "sourceIds": [
+                    "s12"
+                  ]
+                },
+                {
+                  "label": "技术侧负责回传",
+                  "text": "联调完成后回传测试记录与遗留问题；业务侧确认接收后再安排上线验收。",
+                  "id": "b2",
+                  "sourceIds": [
+                    "s13"
+                  ]
+                }
+              ],
+              "id": "p5-g1",
+              "role": "展开条件与行动",
+              "importance": "primary"
+            },
+            {
+              "heading": "阶段与角色",
+              "kind": "diagram",
+              "blocks": [
+                {
+                  "text": "业务组确认需求；技术组开发联调；业务组验收上线。",
+                  "id": "b1",
+                  "sourceIds": [
+                    "s14"
+                  ]
+                }
+              ],
+              "expression": "展示分工与交接。",
+              "relationship": "技术回传测试记录，由业务组接收。",
+              "production": "阶段横排、角色分行，突出交接点。",
+              "id": "p5-g2",
+              "role": "承载局部信息关系",
+              "importance": "supporting"
+            }
+          ]
+        },
+        {
+          "pageId": "p6",
+          "title": "异常闭环",
+          "claim": "模拟｜异常必须回到规则修订才算闭环",
+          "pagePurpose": "补足异常处理之后的规则改进",
+          "narrative": "主体说明处理和复查，局部图示呈现闭环。",
+          "groups": [
+            {
+              "heading": "从处理到预防",
+              "kind": "text",
+              "blocks": [
+                {
+                  "label": "先恢复服务",
+                  "text": "受理人记录异常场景和影响范围，责任人采取临时措施，并向用户说明当前进展。",
+                  "id": "b1",
+                  "sourceIds": [
+                    "s15"
+                  ]
+                },
+                {
+                  "label": "再修订规则",
+                  "text": "复盘时区分偶发操作与重复缺陷。重复缺陷进入规则修订，下一次抽查检查是否仍然出现。",
+                  "id": "b2",
+                  "sourceIds": [
+                    "s16"
+                  ]
+                }
+              ],
+              "id": "p6-g1",
+              "role": "展开条件与行动",
+              "importance": "primary"
+            },
+            {
+              "heading": "反馈闭环",
+              "kind": "flow",
+              "blocks": [
+                {
+                  "text": "发现、处理、复查、修订。",
+                  "id": "b1",
+                  "sourceIds": [
+                    "s17"
+                  ]
+                }
+              ],
+              "expression": "追踪闭合。",
+              "relationship": "修订反馈至后续执行。",
+              "production": "闭环保留方向，节点仅短标题。",
+              "id": "p6-g2",
+              "role": "承载局部信息关系",
+              "importance": "supporting"
+            }
+          ]
+        },
+        {
+          "pageId": "p7",
+          "title": "推广安排",
+          "claim": "模拟｜先验证一个场景，再逐步复制经验",
+          "pagePurpose": "将近期动作与长期扩展区别开",
+          "narrative": "局部路线图给先后，主体解释当下任务与后续条件。",
+          "groups": [
+            {
+              "heading": "推广节奏",
+              "kind": "flow",
+              "blocks": [
+                {
+                  "text": "单点试用 → 部门扩展 → 跨部门推广。",
+                  "id": "b1",
+                  "sourceIds": [
+                    "s18"
+                  ]
+                }
+              ],
+              "expression": "呈现先后。",
+              "relationship": "后一阶段依赖前期验收。",
+              "production": "每阶段一个短标题，条件外置。",
+              "id": "p7-g1",
+              "role": "承载局部信息关系",
+              "importance": "supporting"
+            },
+            {
+              "heading": "当前工作与后续条件",
+              "kind": "text",
+              "blocks": [
+                {
+                  "label": "本轮只验证单点",
+                  "text": "选择业务边界清楚的服务事项，记录入口、处理人和反馈方式，完成一轮完整办理。",
+                  "id": "b1",
+                  "sourceIds": [
+                    "s19"
+                  ]
+                },
+                {
+                  "label": "验收后再复制",
+                  "text": "部门扩展前补齐培训与支持渠道；跨部门推广前确认交接规则。各阶段由对应负责人确认后启动。",
+                  "id": "b2",
+                  "sourceIds": [
+                    "s20"
+                  ]
+                }
+              ],
+              "id": "p7-g2",
+              "role": "展开条件与行动",
+              "importance": "primary"
+            }
+          ]
+        },
+        {
+          "pageId": "p8",
+          "title": "能力建设",
+          "claim": "模拟｜基础数据可靠后，分析能力才有用",
+          "pagePurpose": "区分当前基础任务和后续分析场景",
+          "narrative": "左侧基础任务支撑中间层级，右侧给应用范围。",
+          "groups": [
+            {
+              "heading": "当前基础",
+              "kind": "text",
+              "blocks": [
+                {
+                  "label": "先统一口径",
+                  "text": "明确事项编码、状态含义和责任部门，抽查实际记录是否一致。",
+                  "id": "b1",
+                  "sourceIds": [
+                    "s21"
+                  ]
+                },
+                {
+                  "label": "再补齐记录",
+                  "text": "缺失信息由业务侧确认，不能用推测值填补。",
+                  "id": "b2",
+                  "sourceIds": [
+                    "s22"
+                  ]
+                }
+              ],
+              "id": "p8-g1",
+              "role": "展开条件与行动",
+              "importance": "primary"
+            },
+            {
+              "heading": "能力层级",
+              "kind": "diagram",
+              "blocks": [
+                {
+                  "text": "数据基础 → 过程可见 → 分析辅助。",
+                  "id": "b1",
+                  "sourceIds": [
+                    "s23"
+                  ]
+                }
+              ],
+              "expression": "表达支撑。",
+              "relationship": "上层依赖下层。",
+              "production": "三层短标题，底层作为基础。",
+              "id": "p8-g2",
+              "role": "承载局部信息关系",
+              "importance": "supporting"
+            },
+            {
+              "heading": "应用范围",
+              "kind": "text",
+              "blocks": [
+                {
+                  "label": "过程可见",
+                  "text": "先展示在办状态和积压位置，帮助定位需要处理的环节。",
+                  "id": "b1",
+                  "sourceIds": [
+                    "s24"
+                  ]
+                },
+                {
+                  "label": "辅助分析",
+                  "text": "口径稳定后再分析趋势；分析提示需结合业务核查。",
+                  "id": "b2",
+                  "sourceIds": [
+                    "s25"
+                  ]
+                }
+              ],
+              "id": "p8-g3",
+              "role": "展开条件与行动",
+              "importance": "primary"
+            }
+          ]
+        },
+        {
+          "pageId": "p9",
+          "title": "方案权衡",
+          "claim": "模拟｜先用轻量方案验证，保留升级条件",
+          "pagePurpose": "表达两种方案的取舍及结论成立条件",
+          "narrative": "左侧展开适用边界，右侧用相同口径比较。",
+          "groups": [
+            {
+              "heading": "选择及适用条件",
+              "kind": "text",
+              "blocks": [
+                {
+                  "label": "当前选择轻量接入",
+                  "text": "当试点范围较小、现有系统能提供必要接口时，先验证业务流程，降低初期改造负担。",
+                  "id": "b1",
+                  "sourceIds": [
+                    "s26"
+                  ]
+                },
+                {
+                  "label": "何时升级平台",
+                  "text": "若试点出现持续的跨系统协作需求，再评估统一平台。需同时核算迁移工作、维护责任与长期投入。",
+                  "id": "b2",
+                  "sourceIds": [
+                    "s27"
+                  ]
+                }
+              ],
+              "id": "p9-g1",
+              "role": "展开条件与行动",
+              "importance": "primary"
+            },
+            {
+              "heading": "两方案对照",
+              "kind": "diagram",
+              "blocks": [
+                {
+                  "text": "轻量：投入低、扩展受限；平台：投入高、扩展较强。",
+                  "id": "b1",
+                  "sourceIds": [
+                    "s28"
+                  ]
+                }
+              ],
+              "expression": "辅助权衡。",
+              "relationship": "比较启动投入与扩展能力。",
+              "production": "同口径对齐，适用条件见正文。",
+              "id": "p9-g2",
+              "role": "承载局部信息关系",
+              "importance": "supporting"
+            }
+          ]
+        },
+        {
+          "pageId": "p10",
+          "title": "成效观察",
+          "claim": "模拟｜结果指标与过程记录需要一起看",
+          "pagePurpose": "避免把过程动作直接当作最终成效",
+          "narrative": "目标关联观察维度，左右分别展开结果和过程。",
+          "groups": [
+            {
+              "heading": "结果观察",
+              "kind": "text",
+              "blocks": [
+                {
+                  "label": "办理是否改善",
+                  "text": "比较办理时长与退回情况，并注明观察范围和样本口径。",
+                  "id": "b1",
+                  "sourceIds": [
+                    "s29"
+                  ]
+                },
+                {
+                  "label": "解释变化",
+                  "text": "业务类型变化可能影响结果，分析时需分场景核对。",
+                  "id": "b2",
+                  "sourceIds": [
+                    "s30"
+                  ]
+                }
+              ],
+              "id": "p10-g1",
+              "role": "展开条件与行动",
+              "importance": "primary"
+            },
+            {
+              "heading": "观察框架",
+              "kind": "diagram",
+              "blocks": [
+                {
+                  "text": "服务改善：办理时长、退回情况、流转记录。",
+                  "id": "b1",
+                  "sourceIds": [
+                    "s31"
+                  ]
+                }
+              ],
+              "expression": "组织观察项。",
+              "relationship": "结果与过程共同围绕目标。",
+              "production": "区分两类指标，不画虚假因果。",
+              "id": "p10-g2",
+              "role": "承载局部信息关系",
+              "importance": "supporting"
+            },
+            {
+              "heading": "过程记录",
+              "kind": "text",
+              "blocks": [
+                {
+                  "label": "定位等待环节",
+                  "text": "记录受理、分派、处理与反馈的时间，检查交接是否停滞。",
+                  "id": "b1",
+                  "sourceIds": [
+                    "s32"
+                  ]
+                },
+                {
+                  "label": "结合结果解释",
+                  "text": "过程变化用于解释结果；完成一次培训本身不能证明服务改善。",
+                  "id": "b2",
+                  "sourceIds": [
+                    "s33"
+                  ]
+                }
+              ],
+              "id": "p10-g3",
+              "role": "展开条件与行动",
+              "importance": "primary"
+            }
+          ]
+        }
+      ]
+    },
+    "reviewCases": [
+      {
+        "pageId": "p1",
+        "targetSize": "medium",
+        "title": "项目优先级"
+      },
+      {
+        "pageId": "p2",
+        "targetSize": "medium",
+        "title": "阶段准入"
+      },
+      {
+        "pageId": "p3",
+        "targetSize": "medium",
+        "title": "需求筛选"
+      },
+      {
+        "pageId": "p4",
+        "targetSize": "medium",
+        "title": "服务改进"
+      },
+      {
+        "pageId": "p5",
+        "targetSize": "medium",
+        "title": "职责协同"
+      },
+      {
+        "pageId": "p6",
+        "targetSize": "small",
+        "title": "异常闭环"
+      },
+      {
+        "pageId": "p7",
+        "targetSize": "small",
+        "title": "推广安排"
+      },
+      {
+        "pageId": "p8",
+        "targetSize": "small",
+        "title": "能力建设"
+      },
+      {
+        "pageId": "p9",
+        "targetSize": "small",
+        "title": "方案权衡"
+      },
+      {
+        "pageId": "p10",
+        "targetSize": "small",
+        "title": "成效观察"
+      }
+    ],
+    "structureApplied": false
+  }
+}
