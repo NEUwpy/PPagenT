@@ -6,6 +6,9 @@ export const layoutRules = [
   { id: 'album', name: '相册式', description: '按内容需求切分空间，形成大小错落的图文区域。',
     advice: '适合相对独立的图文块。权重表达面积需求，不自动代表内容重要性。',
     rules: ['适用：可分块的图文内容，允许大小不同；不能把必须连续阅读的论证任意切碎。', '规则：按面积需求、横竖倾向和最小承载尺寸分区；统一间距，铺满内容区，避免狭窄碎块。', '阅读：保持输入顺序；每次切分按左→右或上→下阅读。内容分组与主次由规划阶段决定。', '调整：空间不足时重组内容、换布局或拆页；几何可放下不等于文字和语义已通过验收。'] },
+  { id: 'hybrid', name: '横纵组合', description: '分区可嵌套，每层独立选择横排或竖排。',
+    advice: '适合并列主体加共同说明、主区加注记或主体加支撑带；每个方向都必须有内容关系依据。',
+    rules: ['适用：页面同时存在主体并列关系与跨主体的共同说明或支撑关系。', '规则：主体区和说明带分别求解，可横纵结合；共同说明必须登记作用范围，不能伪装成并列对象。', '调整：主体方向、说明带位置和面积可变化；任一部分放不下时返回空间需求或分页，不缩字硬塞。'] },
 ];
 const examples = [
   { id:'cards-horizontal-2', name:'横向 · 2 卡片', family:'cards', direction:'horizontal', weights:[1,1] },
@@ -13,6 +16,8 @@ const examples = [
   { id:'cards-vertical-2', name:'纵向 · 2 卡片', family:'cards', direction:'vertical', weights:[1,1] },
   { id:'cards-vertical-3', name:'纵向 · 3 卡片', family:'cards', direction:'vertical', weights:[1,1,1] },
   { id:'cards-vertical-4', name:'纵向 · 4 卡片', family:'cards', direction:'vertical', weights:[1,1,1,1] },
+  { id:'hybrid-row-band', name:'横排主体＋下方横带', family:'hybrid', weights:[1,1,1,1], tree:{direction:'vertical',weights:[3,1],children:[{direction:'horizontal',children:[{block:0},{block:1},{block:2}]},{block:3}]} },
+  { id:'hybrid-column-aside', name:'纵排主体＋右侧区域', family:'hybrid', weights:[1,1,1,1], tree:{direction:'horizontal',weights:[3,2],children:[{direction:'vertical',children:[{block:0},{block:1},{block:2}]},{block:3}]} },
   { id:'album-focus-3', name:'示例 · 3 块有主次', family:'album', weights:[3,1,1] },
   { id:'album-mosaic-4', name:'示例 · 4 块不同体量', family:'album', weights:[2,1,1,2] },
   { id:'album-focus-5', name:'示例 · 5 块图文', family:'album', weights:[4,1,2,1,2] },
@@ -22,7 +27,7 @@ const examples = [
  * blocks: weight 面积需求，aspectRatio 横竖倾向，minWidth/minHeight 承载下限。
  * 下限应由后续内容测量提供；默认下限仅用于示意，不保证正文可读。
  */
-export function composePageLayout({ family='album', blocks, direction='horizontal', width=1170, height=492, gap=20 } = {}) {
+export function composePageLayout({ family='album', blocks, tree, direction='horizontal', width=1170, height=492, gap=20 } = {}) {
   if (!layoutRules.some(r=>r.id===family)) throw new Error('未知布局规范');
   if (![width,height,gap].every(Number.isFinite) || width<240 || height<240 || gap<0 || gap>48) throw new Error('布局尺寸或间距无效');
   if (!['horizontal','vertical'].includes(direction)) throw new Error('排列方向无效');
@@ -34,7 +39,34 @@ export function composePageLayout({ family='album', blocks, direction='horizonta
   if(!Number.isFinite(sum(items))) throw new Error('面积需求数值过大');
   const fits=(b,w,h)=>w+1e-7>=b.minWidth && h+1e-7>=b.minHeight;
   let slots;
-  if(family==='cards'){
+  if(family==='hybrid'){
+    const used=new Set();
+    let nodes=0;
+    function walk(node,x,y,w,h,depth=0){
+      if(!node || ++nodes>96 || depth>12) throw new Error('混合分区树缺失或过深');
+      if(Number.isInteger(node.block)){
+        const b=items[node.block];
+        if(!b || used.has(node.block)) throw new Error('混合分区引用重复或无效');
+        used.add(node.block);
+        if(!fits(b,w,h)) throw new Error('混合分区不能满足内容最小尺寸');
+        return [{...b,x,y,width:w,height:h}];
+      }
+      if(!['horizontal','vertical'].includes(node.direction)||!Array.isArray(node.children)||node.children.length<2) throw new Error('混合分区需要方向和至少两个子区');
+      const weights=node.weights??node.children.map(()=>1);
+      if(weights.length!==node.children.length||weights.some(v=>!Number.isFinite(v)||v<=0)) throw new Error('混合分区比例无效');
+      const total=weights.reduce((a,b)=>a+b,0), horizontal=node.direction==='horizontal';
+      const available=(horizontal?w:h)-gap*(weights.length-1);
+      if(available<=0||!Number.isFinite(total)) throw new Error('混合分区空间不足');
+      let cursor=0;
+      return node.children.flatMap((child,i)=>{
+        const extent=available*weights[i]/total;
+        const out=walk(child,x+(horizontal?cursor:0),y+(horizontal?0:cursor),horizontal?extent:w,horizontal?h:extent,depth+1);
+        cursor+=extent+gap;return out;
+      });
+    }
+    slots=walk(tree,0,0,width,height);
+    if(used.size!==items.length) throw new Error('混合分区遗漏内容块');
+  }else if(family==='cards'){
     const horizontal=direction==='horizontal', available=(horizontal?width:height)-gap*(items.length-1), total=sum(items);
     let cursor=0;
     slots=items.map(b=>{
@@ -74,7 +106,7 @@ export function composePageLayout({ family='album', blocks, direction='horizonta
     slots=split(items,0,0,width,height);
   }
   if(!slots) throw new Error('本次规则试排未找到满足最小尺寸的分区；请调整面积需求、排列方向或拆页。不会自动缩小内容。');
-  return { id:family+'-composed', name:family==='album'?'相册式 · 按规则试排':'卡片式 · 按规则试排', family,width,height,gap,slots };
+  return { id:family+'-composed', name:family==='album'?'相册式 · 按规则试排':family==='hybrid'?'混合式 · 按规则试排':'卡片式 · 按规则试排', family,width,height,gap,slots };
 }
 export function resolvePageLayout(id, options={}) {
   const e=examples.find(x=>x.id===id);

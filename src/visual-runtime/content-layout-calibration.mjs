@@ -35,13 +35,15 @@ export function bindContentMapping(source, mapping) {
 
 export function composeContentCalibration(source, mapping, {family='cards',direction='horizontal'}={}) {
   const blocks=bindContentMapping(source,mapping), width=1170,height=492,gap=18;
+  const objectFamily=family==='hybrid'?'cards':family;
+  const objectDirection=direction;
   const title=blocks.filter(b=>b.role==='title'), shared=blocks.filter(b=>b.role==='shared');
   const objects=blocks.filter(b=>b.role==='object');
   if(title.length!==1 || !objects.length || blocks.some(b=>!['title','shared','object'].includes(b.role))) throw new Error('需要一个标题、主体块及可选共同说明');
   const measure=(text,w)=>fitGrayText(text,w,2000,22);
   const sharedHeights=shared.map(b=>Math.ceil(measure(b.text,width-32).lineCount*22*1.35)+36);
   const bodyHeight=height-sharedHeights.reduce((a,b)=>a+b,0)-gap*shared.length;
-  const geometry=composePageLayout({family,direction,width,height:bodyHeight,gap,blocks:objects.map(b=>{
+  const geometry=composePageLayout({family:objectFamily,direction:objectDirection,width,height:bodyHeight,gap,blocks:objects.map(b=>{
     const m=measure(b.text,(width-gap*(objects.length-1))/objects.length-32);
     const full=measure(b.text,width-49);
     return {weight:family==='cards'?1:Math.max(1,m.lineCount),aspectRatio:1.3,minWidth:180,minHeight:Math.ceil(full.lineCount*22*1.35)+36};
@@ -49,11 +51,19 @@ export function composeContentCalibration(source, mapping, {family='cards',direc
   const placed=geometry.slots.map((r,i)=>({...objects[i],...r,id:objects[i].id}));
   let y=bodyHeight+gap;
   shared.forEach((b,i)=>{placed.push({...b,x:0,y,width,height:sharedHeights[i]});y+=sharedHeights[i]+gap;});
+  let composition;
+  if(family==='hybrid'){
+    if(!shared.length || objects.length<2) throw new Error('此实文组合需要主体分组与共同说明');
+    composition={direction:'vertical',weights:[bodyHeight,...sharedHeights],children:[{direction:objectDirection,children:objects.map((_,i)=>({block:i}))},...shared.map((_,i)=>({block:objects.length+i}))]};
+    const hybrid=composePageLayout({family:'hybrid',width,height,gap,tree:composition,blocks:placed.map(b=>({minWidth:1,minHeight:1}))});
+    const bound=[...objects,...shared];
+    placed.splice(0,placed.length,...hybrid.slots.map(r=>({...bound[r.order-1],...r,id:bound[r.order-1].id})));
+  }
   const regions=placed.map(b=>{
     const fit=fitGrayText(b.text,b.width-(b.role==='object'?49:32),b.height-36,22);
     if(!fit.fits) throw new Error(`布局块 ${b.id} 不能完整容纳；需调整空间，不能缩字或删文`);
     return {...b,measuredLines:fit.lineCount};
   });
-  return {mode:'manual-calibration',title:title[0].text,width,height,regions,blocks,
+  return {mode:'manual-calibration',composition,title:title[0].text,width,height,regions,blocks,
     note:'人工内容映射＋人工指定布局。用于校准布局能力，不代表自动识别、自动选型或 PPT 交付通过。'};
 }

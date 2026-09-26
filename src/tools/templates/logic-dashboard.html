@@ -493,7 +493,7 @@
     </section>
 
     <section class="section" id="page-layouts">
-      <div class="section-head"><div><h2>02 · 布局库</h2><p>先判断内容是否适用，再按规则分区。下面的组合是示例，不是模板清单；数量、面积和横竖倾向都可以变化。</p></div><span class="pill pending">2 类规范 · 示例可变</span></div>
+      <div class="section-head"><div><h2>02 · 布局库</h2><p>先判断内容是否适用，再按规则分区。下面的组合是示例，不是模板清单；数量、面积和横竖倾向都可以变化。</p></div><span class="pill pending">3 类规范 · 示例可变</span></div>
       <div class="page-layout-families" id="page-layout-families" aria-label="布局类型"></div>
       <div class="page-layout-detail" id="page-layout-detail"></div>
       <h3>真实内容布局校准</h3>
@@ -1235,8 +1235,9 @@
       const spec=customPageSpec??{weights:variant.weights.join(', '),direction:variant.direction??'horizontal',aspectRatio:1.6,minWidth:140,minHeight:80};
       const rules='<div class="page-layout-rules"><strong>适用与布局规则</strong>'+family.rules.map(rule=>'<p>'+esc(rule)+'</p>').join('')+'</div>';
       const form='<form class="page-layout-form" id="page-layout-form"><label>各块面积需求（逗号分隔，一项一块）<input name="weights" aria-label="各块面积需求" value="'+esc(spec.weights)+'" required></label><label>'+(family.id==='cards'?'排列方向':'优先切分由空间决定')+'<select name="direction" aria-label="排列方向" '+(family.id==='album'?'disabled':'')+'><option value="horizontal" '+(spec.direction==='horizontal'?'selected':'')+'>横向</option><option value="vertical" '+(spec.direction==='vertical'?'selected':'')+'>纵向</option></select></label><label>各块宽高倾向（单值或逐块填写）<input name="aspectRatio" aria-label="宽高倾向" value="'+esc(spec.aspectRatio)+'" required></label><label>最小宽度<input name="minWidth" type="number" min="80" value="'+esc(spec.minWidth)+'" required style="width:90px"></label><label>最小高度<input name="minHeight" type="number" min="60" value="'+esc(spec.minHeight)+'" required style="width:90px"></label><button type="submit">按规则试排</button><p>面积需求是相对值，如 3, 1, 2, 1, 1, 2 可试排六块。宽高比大于 1 偏横向，小于 1 偏纵向。卡片式由排列方向决定形状。</p><p>这里演示区域分配；正式线已接入实文测量与候选选择，效果仍须逐稿审阅。当前矩形切分实现不穷举所有相册构图。</p><p role="status" id="page-layout-status"></p></form>';
+      const hybridForm=family.id==='hybrid'?'<label>横纵分区树（block 从 0 开始引用内容块）<textarea form="page-layout-form" name="tree" rows="6" style="width:100%">'+esc(customPageSpec?.tree??JSON.stringify(variant.tree,null,2))+'</textarea></label>':'';
       const modes=[['preview','布局示意'],['skeleton','区域骨架']].map(([id,label])=>'<button type="button" data-page-layout-mode="'+id+'" aria-pressed="'+(id===pageLayoutMode)+'">'+label+'</button>').join('');
-      document.getElementById('page-layout-detail').innerHTML=rules+form+'<div class="page-layout-toolbar"><div class="page-layout-variants" aria-label="规则示例">'+variants+'</div><div class="page-layout-modes" aria-label="预览模式">'+modes+'</div></div><div class="page-layout-info"><h3>'+esc(variant.name)+'</h3><span>内容区 '+variant.geometry.width+' × '+variant.geometry.height+' · 间距 '+variant.geometry.gap+' · '+variant.count+' 个区域</span></div><div class="page-layout-canvas">'+variant[pageLayoutMode]+'</div><div class="page-layout-caption"><span>'+esc(family.advice)+'</span><span>规则试排 · 内容尚未填入</span></div>';
+      document.getElementById('page-layout-detail').innerHTML=rules+form+hybridForm+'<div class="page-layout-toolbar"><div class="page-layout-variants" aria-label="规则示例">'+variants+'</div><div class="page-layout-modes" aria-label="预览模式">'+modes+'</div></div><div class="page-layout-info"><h3>'+esc(variant.name)+'</h3><span>内容区 '+variant.geometry.width+' × '+variant.geometry.height+' · 间距 '+variant.geometry.gap+' · '+variant.count+' 个区域</span></div><div class="page-layout-canvas">'+variant[pageLayoutMode]+'</div><div class="page-layout-caption"><span>'+esc(family.advice)+'</span><span>规则试排 · 内容尚未填入</span></div>';
     }
     document.getElementById('page-layouts').addEventListener('click',event=>{
       const family=event.target.closest('[data-page-layout-family]');
@@ -1262,11 +1263,12 @@
         document.getElementById('page-layout-status').textContent='正在按规则分配区域…';
         const direction=fields.get('direction')??'horizontal';
         const spec={family:pageLayoutFamily,direction,blocks:weights.map((weight,i)=>({weight,aspectRatio:aspects.length===1?aspects[0]:aspects[i],minWidth:Number(fields.get('minWidth')),minHeight:Number(fields.get('minHeight'))}))};
+        if(pageLayoutFamily==='hybrid')spec.tree=JSON.parse(fields.get('tree'));
         const response=await fetch('/api/page-layout-preview?spec='+encodeURIComponent(JSON.stringify(spec)));
         const result=await response.json();
         if(requestId!==layoutRequest)return;
         if(!response.ok)throw new Error(result.error??'试排失败');
-        customPageLayout=result;customPageSpec={weights:fields.get('weights'),direction,aspectRatio:fields.get('aspectRatio'),minWidth:fields.get('minWidth'),minHeight:fields.get('minHeight')};
+        customPageLayout=result;customPageSpec={tree:fields.get('tree'),weights:fields.get('weights'),direction,aspectRatio:fields.get('aspectRatio'),minWidth:fields.get('minWidth'),minHeight:fields.get('minHeight')};
         renderPageLayouts();
         document.getElementById('page-layout-status').textContent='已按当前输入重新分区；请检查下方示意。';
       }catch(error){if(requestId===layoutRequest)document.getElementById('page-layout-status').textContent=error.message+' 下方仍为上次成功示意。'}
