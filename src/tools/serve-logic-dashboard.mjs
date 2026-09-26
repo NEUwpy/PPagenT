@@ -6,6 +6,7 @@ import crypto from "node:crypto";
 import { composePageLayout, pageLayoutPreview } from '../visual-runtime/page-layout-library.mjs';
 import { layoutRunEvidence, layoutRunPreview } from './layout-run-evidence.mjs';
 import { calibrationPage } from './layout-calibration-page.mjs';
+import { layoutPipelineDemoPage } from './layout-pipeline-demo-page.mjs';
 import fs from "node:fs/promises";
 import http from "node:http";
 import path from "node:path";
@@ -499,6 +500,10 @@ const server = http.createServer(async (request, response) => {
     }
     if (url.pathname === '/layout-calibration') {
       send(response, 200, await calibrationPage(projectRoot,url), 'text/html; charset=utf-8', {'cache-control':'no-store'});
+      return;
+    }
+    if (url.pathname === '/layout-pipeline-demo') {
+      send(response, 200, await layoutPipelineDemoPage(projectRoot), 'text/html; charset=utf-8', {'cache-control':'no-store'});
       return;
     }
     if (url.pathname === '/api/layout-run-evidence') {
