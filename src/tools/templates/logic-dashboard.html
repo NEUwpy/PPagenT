@@ -459,6 +459,7 @@
       <div class="gray-viewer" id="gray-draft-viewer" hidden>
         <h3 id="gray-draft-title"></h3><p id="gray-draft-status"></p>
         <div class="gray-links" id="gray-draft-links"></div>
+        <div id="gray-draft-beautification" hidden></div>
         <div class="gray-filter"><label>布局 <select id="gray-draft-family" aria-label="灰稿布局筛选"><option value="">全部布局</option></select></label><label>结构参考 <select id="gray-draft-size" aria-label="灰稿结构尺度筛选"><option value="">全部尺度</option></select></label><span id="gray-page-count" aria-live="polite"></span></div>
         <div class="gray-page-grid" id="gray-draft-pages"></div>
       </div>
@@ -574,6 +575,12 @@
       document.getElementById('gray-draft-title').textContent=draft.title+' · '+draft.pageCount+' 页';
       document.getElementById('gray-draft-status').textContent=grayReviewLabel(draft)+' · '+draft.sourceLabel+' · '+(draft.structureApplied||draft.skinApplied?'已记录适配操作，最终效果另验':'美化尚未开始');
       document.getElementById('gray-draft-links').innerHTML=[['pptx','下载可编辑 PPT'],['state','下载交接数据'],['content','下载内容提纲']].map(([key,label])=>draft.files[key]?'<a href="'+esc(draft.files[key])+'">'+label+'</a>':'<span>'+label+'暂缺</span>').join('');
+      const beauty=draft.beautification;
+      const beautyHost=document.getElementById('gray-draft-beautification');
+      if(beauty&&Object.keys(beauty.skins??{}).length){
+        beautyHost.hidden=false;
+        beautyHost.innerHTML='<section style="margin:18px 0 22px;padding:16px;border:1px solid #d8dee7;border-radius:10px;background:#fbfcfe"><div style="display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap"><div><strong>灰稿 → 美化稿试验 · '+esc(beauty.title||('第 '+beauty.page+' 页'))+'</strong><p style="margin:5px 0 0;color:#687589">同一页灰稿分别套用两个 Skin，先看整页关系和视觉气质；当前仅为待验收候选。</p></div><span class="pill pending">待验收</span></div><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px">'+Object.entries(beauty.skins).map(([id,item])=>'<article style="border:1px solid #e1e6ee;border-radius:8px;background:white;padding:10px"><strong>'+esc(item.label)+'</strong>'+(item.previewUrl?'<button type="button" class="preview-open" data-preview-open="'+esc(item.previewUrl)+'" data-preview-caption="'+esc((beauty.title||'灰稿')+' · '+item.label)+'" style="display:block;width:100%;margin-top:8px;border:0;padding:0;background:#f1f4f8;cursor:zoom-in"><img loading="lazy" src="'+esc(item.previewUrl)+'" alt="'+esc(item.label)+' 美化预览" style="display:block;width:100%;height:auto"></button>':'<p>预览暂缺</p>')+(item.pptxUrl?'<p style="margin:8px 0 0"><a href="'+esc(item.pptxUrl)+'">下载可编辑 PPTX</a></p>':'')+'</article>').join('')+'</div></section>';
+      }else{beautyHost.hidden=true;beautyHost.innerHTML='';}
       for(const [field,id,label] of [['family','gray-draft-family','全部布局'],['size','gray-draft-size','全部尺度']])document.getElementById(id).innerHTML='<option value="">'+label+'</option>'+[...new Set(draft.pages.map(p=>p[field]).filter(Boolean))].map(value=>'<option value="'+esc(value)+'">'+esc(value==='无'?'纯文字':value)+'</option>').join('');
       renderGrayPages();
     }

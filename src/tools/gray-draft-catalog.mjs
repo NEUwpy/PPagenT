@@ -37,6 +37,22 @@ async function fileInfo(root,file) {
   catch(e){if(e.code==='ENOENT')return null;throw e;}
 }
 const fileUrl=(id,kind,version)=>`/api/gray-draft-file?id=${encodeURIComponent(id)}&kind=${kind}&v=${version}`;
+const skinFileUrl=(id,skin,kind,version)=>`/api/gray-skin-file?id=${encodeURIComponent(id)}&skin=${encodeURIComponent(skin)}&kind=${kind}&v=${version}`;
+
+async function beautificationInfo(root,entry) {
+  const spec=entry.beautification;
+  if(!spec||!spec.artifactsDirectory||!spec.skins||typeof spec.skins!=='object')return null;
+  const directory=path.resolve(root,spec.artifactsDirectory);
+  if(!inside(root,directory))throw new Error('美化试验产物目录必须位于项目内');
+  const skins={};
+  for(const [skin,item] of Object.entries(spec.skins)) {
+    if(!/^[a-z][a-z0-9-]*$/.test(skin)||!item||typeof item.preview!=='string'||typeof item.pptx!=='string')continue;
+    const preview=await fileInfo(root,path.join(directory,item.preview));
+    const pptx=await fileInfo(root,path.join(directory,item.pptx));
+    skins[skin]={label:item.label??skin,previewUrl:preview?skinFileUrl(entry.id,skin,'preview',preview.version):null,pptxUrl:pptx?skinFileUrl(entry.id,skin,'pptx',pptx.version):null};
+  }
+  return {page:Number.isInteger(spec.page)?spec.page:1,title:spec.title??'',status:spec.status??'awaiting-user-review',skins};
+}
 
 export async function collectGrayDrafts(projectRoot) {
   const root=path.resolve(projectRoot);
@@ -57,7 +73,7 @@ export async function collectGrayDrafts(projectRoot) {
         const info=await fileInfo(root,kind==='state'?file:path.join(directory,file));
         return [kind,info?fileUrl(entry.id,kind,info.version):null];
       })));
-      return {...summary,available:true,pageCount:pages.length,pages,files,humanReview:state.grayDraft.humanReview??'pending',status:state.grayDraft.status??'awaiting-user-review',
+      return {...summary,available:true,pageCount:pages.length,pages,files,beautification:await beautificationInfo(root,entry),humanReview:state.grayDraft.humanReview??'pending',status:state.grayDraft.status??'awaiting-user-review',
         structureApplied:state.grayDraft.structureApplied===true,skinApplied:state.grayDraft.skinApplied===true};
     }catch(error){return {...summary,available:false,pageCount:0,pages:[],files:{},humanReview:'pending',error:error.message};}
   }));
@@ -85,4 +101,19 @@ export async function resolveGrayDraftFile(projectRoot,{id,kind,page}) {
   if(!info)return null;
   const types={preview:'image/png',pptx:'application/vnd.openxmlformats-officedocument.presentationml.presentation',state:'application/json; charset=utf-8',content:'text/markdown; charset=utf-8'};
   return {...info,contentType:types[kind],fileName:kind==='pptx'?`${entry.title}.pptx`:path.basename(target)};
+}
+
+export async function resolveGraySkinFile(projectRoot,{id,skin,kind}) {
+  const root=path.resolve(projectRoot);
+  if(!['preview','pptx'].includes(kind)||!/^[a-z][a-z0-9-]*$/.test(String(skin??'')))return null;
+  const entry=(await entries(root)).find(entry=>entry.id===id);
+  if(!entry?.beautification?.artifactsDirectory)return null;
+  const item=entry.beautification.skins?.[skin];
+  if(!item)return null;
+  const relative=kind==='preview'?item.preview:item.pptx;
+  if(typeof relative!=='string')return null;
+  const target=path.resolve(root,entry.beautification.artifactsDirectory,relative);
+  const info=await fileInfo(root,target);
+  if(!info)return null;
+  return {...info,contentType:kind==='preview'?'image/png':'application/vnd.openxmlformats-officedocument.presentationml.presentation',fileName:path.basename(target)};
 }

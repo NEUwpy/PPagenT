@@ -21,7 +21,7 @@ import { northeasternUniversityTheme } from "../runtime/skins/northeastern-unive
 import { compileHtmlComponentTheme, htmlComponentThemeCss } from "../visual-runtime/html-component-theme.mjs";
 import { htmlTextFlowCss } from "../visual-runtime/text-flow.mjs";
 import { grayPreviewParameters, grayPreviewTitle, isGrayPreview, renderGrayPreview } from "./structure-gray-preview.mjs";
-import { resolveGrayDraftFile } from './gray-draft-catalog.mjs';
+import { resolveGrayDraftFile, resolveGraySkinFile } from './gray-draft-catalog.mjs';
 
 function option(name, fallback) {
   const index = process.argv.indexOf(name);
@@ -672,6 +672,17 @@ const server = http.createServer(async (request, response) => {
       const headers={'cache-control':'private, no-cache',etag};
       if(request.headers['if-none-match']===etag){response.writeHead(304,headers);response.end();return;}
       if(kind!=='preview')headers['content-disposition']=`attachment; filename*=UTF-8''${encodeURIComponent(artifact.fileName)}`;
+      send(response,200,await fs.readFile(artifact.filePath),artifact.contentType,headers);
+      return;
+    }
+    if (url.pathname === '/api/gray-skin-file') {
+      const kind=url.searchParams.get('kind');
+      const artifact=await resolveGraySkinFile(projectRoot,{id:url.searchParams.get('id'),skin:url.searchParams.get('skin'),kind});
+      if(!artifact){sendJson(response,404,{error:'gray_skin_artifact_not_found'});return;}
+      const etag=`"${artifact.version}"`;
+      const headers={'cache-control':'private, no-cache',etag};
+      if(request.headers['if-none-match']===etag){response.writeHead(304,headers);response.end();return;}
+      if(kind==='pptx')headers['content-disposition']=`attachment; filename*=UTF-8''${encodeURIComponent(artifact.fileName)}`;
       send(response,200,await fs.readFile(artifact.filePath),artifact.contentType,headers);
       return;
     }
