@@ -21,6 +21,7 @@ import { northeasternUniversityTheme } from "../runtime/skins/northeastern-unive
 import { compileHtmlComponentTheme, htmlComponentThemeCss } from "../visual-runtime/html-component-theme.mjs";
 import { htmlTextFlowCss } from "../visual-runtime/text-flow.mjs";
 import { grayPreviewParameters, grayPreviewTitle, isGrayPreview, renderGrayPreview } from "./structure-gray-preview.mjs";
+import { resolveGrayDraftFile } from './gray-draft-catalog.mjs';
 
 function option(name, fallback) {
   const index = process.argv.indexOf(name);
@@ -661,6 +662,17 @@ const server = http.createServer(async (request, response) => {
         return;
       }
       send(response, 200, await fs.readFile(artifacts.previewPath), "image/png", immutablePreviewHeaders);
+      return;
+    }
+    if (url.pathname === '/api/gray-draft-preview' || url.pathname === '/api/gray-draft-file') {
+      const kind=url.pathname.endsWith('-preview')?'preview':url.searchParams.get('kind');
+      const artifact=await resolveGrayDraftFile(projectRoot,{id:url.searchParams.get('id'),kind,page:url.searchParams.get('page')});
+      if(!artifact){sendJson(response,404,{error:'gray_draft_artifact_not_found'});return;}
+      const etag=`"${artifact.version}"`;
+      const headers={'cache-control':'private, no-cache',etag};
+      if(request.headers['if-none-match']===etag){response.writeHead(304,headers);response.end();return;}
+      if(kind!=='preview')headers['content-disposition']=`attachment; filename*=UTF-8''${encodeURIComponent(artifact.fileName)}`;
+      send(response,200,await fs.readFile(artifact.filePath),artifact.contentType,headers);
       return;
     }
     if (url.pathname === "/api/skin-state-pptx") {

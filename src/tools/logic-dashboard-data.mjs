@@ -1,5 +1,6 @@
 import {listStructureSkins} from '../runtime/skins/structure-skin-registry.mjs';
 import {structureCapabilityStatus} from './structure-capability-status.mjs';
+import {collectGrayDrafts} from './gray-draft-catalog.mjs';
 import fs from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
@@ -417,6 +418,7 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
 
   return {
     structureSkins,
+    grayDrafts: await collectGrayDrafts(root),
     structureCapabilities:Object.fromEntries(primaryAssets.filter(a=>a.structureSkill).map(a=>[a.id,Object.fromEntries(structureSkins.map(s=>[s.id,structureCapabilityStatus(a,s.id,s.status)]))])),
     generatedAt: new Date().toISOString(),
     mode: "live-repository-api",
