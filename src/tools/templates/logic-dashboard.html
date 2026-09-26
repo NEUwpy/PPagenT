@@ -429,7 +429,7 @@
   <header class="topbar">
     <div class="brand"><strong>PPA 资产看板</strong><span>Structure / Text / Media / Layout</span></div>
     <nav class="nav" aria-label="页面导航">
-      <a href="#gray-drafts">灰稿 · 中间产物</a><a href="#capabilities">结构</a><a href="#text-layouts">文字</a><a href="#media-library">图像</a><a href="#skin">排版</a><a class="production-link" href="http://127.0.0.1:4212/" target="_blank" rel="noreferrer">生产工作台 ↗</a>
+      <a href="#gray-drafts">灰稿版式</a><a href="#capabilities">结构</a><a href="#text-layouts">文字</a><a href="#media-library">图像</a><a href="#skin">排版</a><a class="production-link" href="http://127.0.0.1:4212/" target="_blank" rel="noreferrer">生产工作台 ↗</a>
     </nav>
     <div class="top-status"><span id="generated-at"></span><br><span id="data-mode"></span></div>
     <button class="refresh-button" id="refresh-dashboard" type="button">刷新仓库</button>
@@ -437,7 +437,7 @@
 
   <main>
     <section class="asset-home" id="overview">
-      <div class="asset-home-copy"><span class="eyebrow">PPA / ASSET SYSTEM</span><h1>四个能力域，共同组成一页 PPT</h1><p>在这里查看可复用能力和两条线之间的灰稿。main 线将原稿整理成灰稿，当前线以灰稿为输入完成美化。正式运行与交付记录进入 PPA 生产工作台。</p><p style="margin-top:16px"><a href="#gray-drafts">查看灰稿中间产物 ↓</a></p></div>
+      <div class="asset-home-copy"><span class="eyebrow">PPA / ASSET SYSTEM</span><h1>四个能力域，共同组成一页 PPT</h1><p>在这里查看可复用能力和两条线之间的灰稿。main 线将原稿整理成灰稿，当前线以灰稿为输入完成美化。正式运行和交付记录进入 PPA 生产工作台。</p><p style="margin-top:16px"><a href="#gray-drafts">查看灰稿版式 ↓</a></p></div>
       <nav class="domain-grid" aria-label="四个能力域">
         <a href="#capabilities"><span>01</span><strong>结构</strong><small>Logic → Structure Group → State</small></a>
         <a href="#text-layouts"><span>02</span><strong>文字</strong><small>Markdown → Renderer / Zone Template</small></a>
@@ -449,7 +449,7 @@
     <div class="mode-notice" id="mode-notice"></div>
 
     <section class="section" id="gray-drafts">
-      <div class="section-head"><div><h2>灰稿 · 中间产物</h2><p>灰稿连接内容整理与页面美化。先验收内容、分区和关系，再套用结构与 Skin；查看快照不会重新生成 PPT。</p></div><span class="pill pending" id="gray-draft-count"></span></div>
+      <div class="section-head"><div><h2>灰稿版式</h2><p>这里是一个用于当前线实验的灰稿中间产物入口。先从稿子形成可交接灰稿，再以它为输入实验灰稿到成稿的结构与 Skin 美化；查看快照不会重新生成 PPT。</p></div><span class="pill pending" id="gray-draft-count"></span></div>
       <div class="gray-pipeline" aria-label="两条线的分工">
         <div><strong>原稿 → 灰稿</strong><small>main 线：整理内容、关系与页面分区。</small></div><span aria-hidden="true">→</span>
         <div class="handoff"><strong>灰稿交接与验收</strong><small>保留实文、内容归属、局部制作说明与页面快照。</small></div><span aria-hidden="true">→</span>
@@ -586,7 +586,7 @@
     }
     function renderGrayDrafts() {
       const count=grayDrafts.filter(d=>d.available).length;
-      document.getElementById('gray-draft-count').textContent=count+' 份灰稿';
+      document.getElementById('gray-draft-count').textContent=count+' 个入口';
       if(!liveMode){document.getElementById('gray-draft-batches').innerHTML='<p>灰稿快照请在实时 PPA 看板中查看。</p>';return;}
       document.getElementById('gray-draft-batches').innerHTML=grayDrafts.map(d=>'<article class="gray-batch">'+(d.pages[0]?.previewUrl?'<img loading="lazy" src="'+esc(d.pages[0].previewUrl)+'" alt="'+esc(d.title)+'封面">':'<div>快照暂不可用</div>')+'<div><h3>'+esc(d.title)+'</h3>'+pill(d.versionLabel)+' '+pill(grayReviewLabel(d),'pending')+'<p>'+esc(d.description)+'</p>'+(d.available?'<button type="button" data-gray-draft="'+esc(d.id)+'" aria-pressed="false">查看 '+d.pageCount+' 页</button>':'<p>产物不可用：'+esc(d.error)+'</p>')+'</div></article>').join('')||'<p>尚未登记灰稿中间产物。</p>';
       const requested=new URLSearchParams(location.search).get('draft');
