@@ -8,15 +8,15 @@ function buildSimulatedPagination(mapping, blocks) {
   return {
     kind: 'simulated-pagination-draft', pageNumber: 1,
     pageTitle: blocks.find((b) => b.role === 'title')?.text ?? '未命名页面',
-    pagePurpose: '说明采购金额分档、例外处理与归档要求，读者能据此判断办理路径。',
-    themeSentence: '采购金额决定常规审批路径，但应急和归档要求贯穿执行。',
+    pagePurpose: mapping.pagePurpose ?? '呈现本页各项内容及其适用条件。',
+    themeSentence: mapping.themeSentence ?? blocks.find(b=>b.role==='title')?.text,
     readingUnits: blocks.filter((b) => b.role === 'object').map((b, i) => ({ id: b.id, sourceUnitIds: b.unitIds, semanticGroup: b.semanticGroup ?? null, order: i + 1 })),
     sharedUnits: blocks.filter((b) => b.role === 'shared').map((b) => ({ id: b.id, sourceUnitIds: b.unitIds, appliesTo: b.scopeIds ?? [] })),
     sourcePath: mapping.sourcePath, note: '模拟分页稿：页面目的、主题句、阅读单元和来源归属已确定；尚未写入坐标。',
   };
 }
 
-function chooseLayout(source, mapping) {
+export function chooseLayout(source, mapping) {
   const blocks = bindContentMapping(source, mapping);
   const objectBlocks = blocks.filter((b) => b.role === 'object');
   const parallelGroup = objectBlocks.length > 1 && new Set(objectBlocks.map((b) => b.semanticGroup ?? b.id)).size === 1;
@@ -27,29 +27,29 @@ function chooseLayout(source, mapping) {
       const result = composeContentCalibration(source, mapping, { family, direction });
       const objects = result.regions.filter((r) => r.role === 'object');
       const min = Math.min(...objects.map((r) => Math.min(r.width, r.height)));
-      const score = 0
-        + 0
-        + 0
-        + 0
-        + Math.min(10, min / 60);
+      const score = Math.min(10, min / 60);
       return { family, direction, label, status: '可承载', score: Number(score.toFixed(2)), result };
     } catch (error) { return { family, direction, label, status: '不可承载', score: -Infinity, error: error.message }; }
   });
   const selected = candidates.filter((c) => c.result).sort((a,b) => b.score - a.score)[0];
-  if (!selected) throw new Error('没有布局规则能够完整承载这份分页稿');
+
   return { blocks, candidates, selected, pattern: parallelGroup && hasScopedSharedBands ? 'parallel-with-scoped-bands' : 'content-blocks' };
 }
 
-export async function layoutPipelineDemoPage(root) {
-  const mapping = JSON.parse(await fs.readFile(path.join(root, 'catalog/layout-calibration-procurement.json'), 'utf8'));
+export async function layoutPipelineDemoPage(root, url=new URL('http://localhost/')) {
+  const samples={procurement:'采购规定',safety:'安全通报',services:'四类园区服务',options:'两种上线方案',dense:'超容量反例'};
+  const sample=Object.hasOwn(samples,url.searchParams.get('sample'))?url.searchParams.get('sample'):'procurement';
+  const nav='<nav>'+Object.entries(samples).map(([k,v])=>`<a style="display:inline-block;padding:12px" href="?sample=${k}">${v}</a>`).join('')+'</nav>';
+  const mapping = JSON.parse(await fs.readFile(path.join(root, 'catalog/layout-calibration-'+sample+'.json'), 'utf8'));
   const source = await fs.readFile(path.join(root, mapping.sourcePath), 'utf8');
   const chosen = chooseLayout(source, mapping); const { selected } = chosen;
   const pagination = buildSimulatedPagination(mapping, chosen.blocks);
+  if(!selected) return `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>布局试排失败记录</title>${nav}<h1>没有可承载候选</h1><p>保留本次失败，不缩字、不删文。需要调整分页或表达。</p><pre style="white-space:pre-wrap">${esc(source)}</pre><h2>候选拒绝原因</h2><ul>${chosen.candidates.map(c=>`<li>${esc(c.label)}：${esc(c.error)}</li>`).join('')}</ul></html>`;
   const regions = selected.result.regions.map((r) => `<section class="region ${esc(r.role)}" style="left:${r.x}px;top:${r.y}px;width:${r.width}px;height:${r.height}px"><div>${esc(r.text)}</div></section>`).join('');
   const candidateRows = chosen.candidates.map((c) => `<tr><td>${esc(c.label)}</td><td>${esc(c.family)} · ${esc(c.direction)}</td><td>${esc(c.status)}</td><td>${Number.isFinite(c.score) ? c.score : '—'}</td><td>${esc(c.error ?? '完整文字可容纳')}</td></tr>`).join('');
   return `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>分页稿到灰稿链条演示</title><style>
   *{box-sizing:border-box}body{font-family:'Microsoft YaHei',sans-serif;margin:0;padding:24px;color:#263343;background:#f5f7fa}h1{margin:0 0 8px}h2{font-size:20px;margin:0 0 12px}.intro{color:#536477;line-height:1.7}.pipeline{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:20px 0}.step{padding:12px;border:1px solid #cbd7e3;border-radius:9px;background:#fff}.step strong{display:block;color:#214e76}.step.selected{border-color:#32658c;background:#edf5fb}.panel{background:#fff;border:1px solid #d8e1eb;border-radius:12px;padding:18px;margin:14px 0}pre{white-space:pre-wrap;background:#f6f8fa;padding:12px;border-radius:8px;line-height:1.5}table{width:100%;border-collapse:collapse}th,td{border:1px solid #d8e0e9;padding:9px;text-align:left;vertical-align:top}.notice{padding:10px 12px;background:#fff4d6;border-left:4px solid #d49a22}.viewport{overflow:auto;border:1px solid #dce3eb;border-radius:10px}.stage{width:1218px;padding:24px}.canvas{width:1170px;height:492px;position:relative}.region{position:absolute;padding:16px;background:#e9eef4;border-top:3px solid #91a4b8;font-size:22px;line-height:1.35;white-space:pre-wrap;overflow-wrap:anywhere}.region.object{display:flex;align-items:center}.region.object>div{border-left:3px solid #91a4b8;padding-left:14px}.shared{background:#f0f3f6;border-top:1px solid #c2cdd8}.muted{color:#63758a}</style>
-  <h1>从分页稿到灰稿：布局规则选择链</h1><p class="intro">这是一条可检查的模拟链：布局规则库 → 模拟分页稿 → 空间需求 → 规则候选与自动选择 → 真实文字灰稿。当前输入是模拟分页稿，选择器是确定性规则，尚不等于正式线跨稿验收。</p>
+  ${nav}<h1>从分页稿到灰稿：布局规则选择链</h1><p class="intro">这是一条可检查的模拟链：布局规则库 → 模拟分页稿 → 空间需求 → 规则候选与自动选择 → 真实文字灰稿。模拟分页稿与内容关系由人工编写，程序尝试各候选并排序，尚不等于正式线跨稿验收。</p>
   <div class="pipeline"><div class="step"><strong>1 · 布局建设</strong><span>卡片 / 相册规则</span></div><div class="step"><strong>2 · 模拟分页稿</strong><span>一页一事、主题句、来源</span></div><div class="step"><strong>3 · 空间需求</strong><span>视觉块、共同作用范围</span></div><div class="step selected"><strong>4 · 规则选择</strong><span>${esc(selected.label)} · 得分 ${selected.score}</span></div><div class="step selected"><strong>5 · 灰稿实例</strong><span>真实文字填入并检查</span></div></div>
   <section class="panel"><h2>1. 已建设的布局规则</h2><p>规则定义可变的方向、块数、面积权重、最小承载尺寸和失败条件；不是固定页面坐标。</p><pre>${esc(JSON.stringify({families:['cards','album','hybrid'],pattern:chosen.pattern,selectedRule:{family:selected.family,direction:selected.direction,reason:'本演示使用人工标注的主体与说明关系构造分区树；候选均须通过实文测量，再按区域最短边比较。这只是启发式排序，尚未验证通用选型质量'}},null,2))}</pre></section>
   <section class="panel"><h2>2. 模拟分页稿</h2><pre>${esc(JSON.stringify(pagination,null,2))}</pre></section>

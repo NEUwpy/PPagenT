@@ -503,7 +503,7 @@ const server = http.createServer(async (request, response) => {
       return;
     }
     if (url.pathname === '/layout-pipeline-demo') {
-      send(response, 200, await layoutPipelineDemoPage(projectRoot), 'text/html; charset=utf-8', {'cache-control':'no-store'});
+      send(response, 200, await layoutPipelineDemoPage(projectRoot,url), 'text/html; charset=utf-8', {'cache-control':'no-store'});
       return;
     }
     if (url.pathname === '/api/layout-run-evidence') {

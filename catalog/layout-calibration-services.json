@@ -1,0 +1,91 @@
+{
+  "sourcePath": "稿件/模拟稿库/布局试排-services.md",
+  "pagePurpose": "四类服务各有办理内容，统一通过服务台登记。",
+  "themeSentence": "四类服务各有办理内容，统一通过服务台登记。",
+  "units": [
+    {
+      "id": "title",
+      "quote": "园区服务支持"
+    },
+    {
+      "id": "item0",
+      "quote": "设备支持：提供会议设备借用和故障报修，借用前确认设备状态，归还时完成清点。"
+    },
+    {
+      "id": "item1",
+      "quote": "场地支持：受理会议室预约，使用部门需提前说明人数、时段和布置需求。"
+    },
+    {
+      "id": "item2",
+      "quote": "资料支持：提供制度查询、材料打印和文件归档指引。"
+    },
+    {
+      "id": "item3",
+      "quote": "访客支持：协助外来人员登记、路线说明和接待联系，访问受限区域需事先获得授权。"
+    },
+    {
+      "id": "note",
+      "quote": "以上服务统一通过服务台登记，紧急事项需同时电话联系值班人员。"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "heading",
+      "role": "title",
+      "unitIds": [
+        "title"
+      ],
+      "reason": "页面标题"
+    },
+    {
+      "id": "item0",
+      "role": "object",
+      "unitIds": [
+        "item0"
+      ],
+      "semanticGroup": "主体项目",
+      "reason": "同级独立对象，保留本项条件"
+    },
+    {
+      "id": "item1",
+      "role": "object",
+      "unitIds": [
+        "item1"
+      ],
+      "semanticGroup": "主体项目",
+      "reason": "同级独立对象，保留本项条件"
+    },
+    {
+      "id": "item2",
+      "role": "object",
+      "unitIds": [
+        "item2"
+      ],
+      "semanticGroup": "主体项目",
+      "reason": "同级独立对象，保留本项条件"
+    },
+    {
+      "id": "item3",
+      "role": "object",
+      "unitIds": [
+        "item3"
+      ],
+      "semanticGroup": "主体项目",
+      "reason": "同级独立对象，保留本项条件"
+    },
+    {
+      "id": "note",
+      "role": "shared",
+      "unitIds": [
+        "note"
+      ],
+      "scopeIds": [
+        "item0",
+        "item1",
+        "item2",
+        "item3"
+      ],
+      "reason": "共同适用要求"
+    }
+  ]
+}

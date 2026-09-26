@@ -1,0 +1,63 @@
+{
+  "sourcePath": "稿件/模拟稿库/布局试排-options.md",
+  "pagePurpose": "两个方案的投入和风险不同，上线前均需完成回退演练。",
+  "themeSentence": "两个方案的投入和风险不同，上线前均需完成回退演练。",
+  "units": [
+    {
+      "id": "title",
+      "quote": "两种上线方案"
+    },
+    {
+      "id": "item0",
+      "quote": "集中上线方案：在一个周末完成全部部门切换，培训与支持资源集中投入。优势是过渡期短；风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。"
+    },
+    {
+      "id": "item1",
+      "quote": "分批上线方案：先选择一个部门试用，再按反馈逐批推广。优点是能及时修正规则；代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。"
+    },
+    {
+      "id": "note",
+      "quote": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "heading",
+      "role": "title",
+      "unitIds": [
+        "title"
+      ],
+      "reason": "页面标题"
+    },
+    {
+      "id": "item0",
+      "role": "object",
+      "unitIds": [
+        "item0"
+      ],
+      "semanticGroup": "主体项目",
+      "reason": "同级独立对象，保留本项条件"
+    },
+    {
+      "id": "item1",
+      "role": "object",
+      "unitIds": [
+        "item1"
+      ],
+      "semanticGroup": "主体项目",
+      "reason": "同级独立对象，保留本项条件"
+    },
+    {
+      "id": "note",
+      "role": "shared",
+      "unitIds": [
+        "note"
+      ],
+      "scopeIds": [
+        "item0",
+        "item1"
+      ],
+      "reason": "共同适用要求"
+    }
+  ]
+}
