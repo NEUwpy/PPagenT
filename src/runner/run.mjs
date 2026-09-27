@@ -145,6 +145,7 @@ const PHASE_PROMPT = {
   ].join("\n"),
   visual: [
     "视觉阶段：先 read_catalog 读取可用版式与能力，再逐页决定区域与上屏表达。",
+    "expressionRequirements 包括文字组内部的图示要求；外层 kind=text 不代表整组只能排文字。必须保留内部图示的关系、来源标签、范围和条件。现有工具无法表达时报告能力缺口，不得用纯文字替代。",
     "check_pages 会真的构建 PPT 并回报真实几何与字号问题；只对改过的页重复检查。",
     "全部页面当前版本通过后调用 finish_visual；存在经验提示时必须逐页给出理由。",
   ].join("\n"),
@@ -237,6 +238,12 @@ export async function main(argv = process.argv.slice(2), { observer = null } = {
     }
     if (args["gray-state"]) {
       const imported = await loadGrayState({ grayStatePath: args["gray-state"], rootDir: root, skinId: args.skin ?? "northeastern-university-001" });
+      if (args.pages) {
+        const selected = String(args.pages).split(',');
+        if (selected.some(id => !imported.pages.some(page => page.pageId === id))) throw new Error('--pages 包含未知灰稿 pageId');
+        imported.pages = imported.pages.filter(page => selected.includes(page.pageId));
+        imported.grayInput.selectedPageIds = imported.pages.map(page => page.pageId);
+      }
       await fs.mkdir(path.dirname(statePath), { recursive: true });
       await writeState(statePath, imported);
       await writeText(path.join(runDir, "state.md"), renderStateMarkdown(imported));

@@ -29,6 +29,7 @@ import {
   looksLikeRuntimeFailure, upsertComposition, finishVisual, recordDeckAudit,
 } from "../state.mjs";
 import { defineTool } from "./index.mjs";
+import { expressionRequirements, missingExpressions } from "../gray-expressions.mjs";
 import { discoverCoreAssetPackages, loadCoreAssetPackage } from "../../runtime/core-asset-packages.mjs";
 import { loadStructureSkill } from "../../runtime/structure-skills.mjs";
 
@@ -169,6 +170,14 @@ async function renderDeck({ root, pages, outputPptx, qaDir, manuscriptSource, sk
  * "--replay 重编译出的就是交付物"这句话就不成立了。
  */
 export async function compileDeck({ root, runDir, state }) {
+  for (const page of state.pages) {
+    const missing = missingExpressions(page, page.composition);
+    if (missing.length) {
+      const error = new Error(`灰稿表达未落实：${missing.map(r => `${r.location} (${r.kind})`).join('、')}`);
+      error.pageId = page.pageId;
+      throw error;
+    }
+  }
   const pages = buildDeckPages(state);
   const outputPptx = path.join(runDir, "deck.pptx");
   const qaDir = path.join(runDir, "qa");
@@ -318,7 +327,9 @@ export function buildTools({ root, runDir, committer, statePath }) {
             claim: page.claim,
             relation: page.relation,
             regions: page.grayComposition?.regions ?? page.composition?.regions ?? page.regions ?? page.grayLayout?.regions ?? [],
-            expressionKinds: [...new Set(page.items.map((item) => item.kind ?? "text"))],
+            expressionKinds: [...new Set([...page.items.map(item => item.kind ?? "text"), ...expressionRequirements(page).map(r => r.kind)])],
+            expressionRequirements: expressionRequirements(page),
+            semantics: page.semantics,
             compositionRevision: page.compositionRevision ?? 0,
             feedback: state.artifactState?.[page.pageId]?.feedback ?? null,
             currentPlan: page.composition
@@ -425,8 +436,8 @@ export function buildTools({ root, runDir, committer, statePath }) {
           const itemIds = new Set(page.items.map((item) => item.id));
           const used = [...(plan.structure?.sourceItemIds ?? [])];
           if (used.some(id => !itemIds.has(id)) || new Set(used).size !== used.length) throw new Error("结构引用未知或重复内容项");
-          const unboundMedia = page.items.filter(item => item.kind && item.kind !== "text" && !used.includes(item.id));
-          if (unboundMedia.length) throw new Error(`灰稿非文字内容未绑定结构：${unboundMedia.map(i => i.id).join("、")}；不能降级为文字`);
+          const unboundMedia = missingExpressions(page, plan);
+          if (unboundMedia.length) throw new Error(`灰稿非文字内容未绑定结构：${unboundMedia.map(i => i.location).join("、")}；不能降级为文字`);
           for (const slot of plan.textSlots) {
             if (!layout.slots.some((candidate) => candidate.id === slot.slotId && candidate.role !== "component")) {
               throw new Error(`${plan.compositionId} 没有槽位 ${slot.slotId}`);
