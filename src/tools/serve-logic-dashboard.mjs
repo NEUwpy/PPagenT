@@ -677,7 +677,7 @@ const server = http.createServer(async (request, response) => {
     }
     if (url.pathname === '/api/gray-skin-file') {
       const kind=url.searchParams.get('kind');
-      const artifact=await resolveGraySkinFile(projectRoot,{id:url.searchParams.get('id'),skin:url.searchParams.get('skin'),kind});
+      const artifact=await resolveGraySkinFile(projectRoot,{id:url.searchParams.get('id'),skin:url.searchParams.get('skin'),kind,page:url.searchParams.get('page')??undefined});
       if(!artifact){sendJson(response,404,{error:'gray_skin_artifact_not_found'});return;}
       const etag=`"${artifact.version}"`;
       const headers={'cache-control':'private, no-cache',etag};

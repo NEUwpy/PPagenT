@@ -37,21 +37,26 @@ async function fileInfo(root,file) {
   catch(e){if(e.code==='ENOENT')return null;throw e;}
 }
 const fileUrl=(id,kind,version)=>`/api/gray-draft-file?id=${encodeURIComponent(id)}&kind=${kind}&v=${version}`;
-const skinFileUrl=(id,skin,kind,version)=>`/api/gray-skin-file?id=${encodeURIComponent(id)}&skin=${encodeURIComponent(skin)}&kind=${kind}&v=${version}`;
+const skinFileUrl=(id,skin,kind,version,page)=>`/api/gray-skin-file?id=${encodeURIComponent(id)}&skin=${encodeURIComponent(skin)}&kind=${kind}${page?`&page=${page}`:''}&v=${version}`;
 
 async function beautificationInfo(root,entry) {
   const spec=entry.beautification;
-  if(!spec||!spec.artifactsDirectory||!spec.skins||typeof spec.skins!=='object')return null;
+  if(!spec||!spec.artifactsDirectory)return null;
   const directory=path.resolve(root,spec.artifactsDirectory);
   if(!inside(root,directory))throw new Error('美化试验产物目录必须位于项目内');
+  const pages=[];
+  for(const pageSpec of spec.pages??[spec]) {
+  if(!Number.isInteger(pageSpec.page)||pageSpec.page<1)continue;
   const skins={};
-  for(const [skin,item] of Object.entries(spec.skins)) {
+  for(const [skin,item] of Object.entries(pageSpec.skins??{})) {
     if(!/^[a-z][a-z0-9-]*$/.test(skin)||!item||typeof item.preview!=='string'||typeof item.pptx!=='string')continue;
     const preview=await fileInfo(root,path.join(directory,item.preview));
     const pptx=await fileInfo(root,path.join(directory,item.pptx));
-    skins[skin]={label:item.label??skin,previewUrl:preview?skinFileUrl(entry.id,skin,'preview',preview.version):null,pptxUrl:pptx?skinFileUrl(entry.id,skin,'pptx',pptx.version):null};
+    skins[skin]={label:item.label??skin,previewUrl:preview?skinFileUrl(entry.id,skin,'preview',preview.version,pageSpec.page):null,pptxUrl:pptx?skinFileUrl(entry.id,skin,'pptx',pptx.version,pageSpec.page):null};
   }
-  return {page:Number.isInteger(spec.page)?spec.page:1,title:spec.title??'',status:spec.status??'awaiting-user-review',skins};
+  pages.push({page:pageSpec.page,title:pageSpec.title??'',skins});
+  }
+  return {...pages[0],pages,status:spec.status??'awaiting-user-review'};
 }
 
 export async function collectGrayDrafts(projectRoot) {
@@ -103,12 +108,15 @@ export async function resolveGrayDraftFile(projectRoot,{id,kind,page}) {
   return {...info,contentType:types[kind],fileName:kind==='pptx'?`${entry.title}.pptx`:path.basename(target)};
 }
 
-export async function resolveGraySkinFile(projectRoot,{id,skin,kind}) {
+export async function resolveGraySkinFile(projectRoot,{id,skin,kind,page}) {
   const root=path.resolve(projectRoot);
   if(!['preview','pptx'].includes(kind)||!/^[a-z][a-z0-9-]*$/.test(String(skin??'')))return null;
   const entry=(await entries(root)).find(entry=>entry.id===id);
   if(!entry?.beautification?.artifactsDirectory)return null;
-  const item=entry.beautification.skins?.[skin];
+  const spec=entry.beautification;
+  if(page!==undefined&&(!/^\d+$/.test(String(page))||Number(page)<1||!Number.isSafeInteger(Number(page))))return null;
+  const pageSpec=spec.pages?.find(p=>p.page===Number(page))??(!spec.pages&&(page===undefined||Number(page)===spec.page)?spec:null);
+  const item=pageSpec?.skins?.[skin];
   if(!item)return null;
   const relative=kind==='preview'?item.preview:item.pptx;
   if(typeof relative!=='string')return null;

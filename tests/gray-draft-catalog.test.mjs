@@ -28,7 +28,7 @@ test('读取状态指向的当前 revision，保留待验收而非自动批准',
   assert.equal(draft.pageCount,1);assert.equal(draft.available,true);assert.equal(draft.humanReview,'pending');
   assert.equal(draft.structureApplied,false);assert.equal(draft.files.content,null);
   assert.equal(draft.beautification.skins.neutral.label,'中性 Skin');
-  assert.match(draft.beautification.skins.neutral.previewUrl,/gray-skin-file\?id=sample&skin=neutral&kind=preview&v=/);
+  assert.match(draft.beautification.skins.neutral.previewUrl,/gray-skin-file\?id=sample&skin=neutral&kind=preview&page=1&v=/);
   assert.match(draft.pages[0].previewUrl,/page=1&v=/);
   const deck=await resolveGrayDraftFile(root,{id:'sample',kind:'pptx'});
   assert.equal(await fs.readFile(deck.filePath,'utf8'),'current deck');
@@ -57,4 +57,18 @@ test('越出项目的产物指针被拒绝',async t=>{
   const [draft]=await collectGrayDrafts(root);
   assert.equal(draft.available,false);assert.match(draft.error,/项目内/);
   await assert.rejects(resolveGrayDraftFile(root,{id:'sample',kind:'pptx'}),/项目内/);
+});
+
+test('双 Skin 按页关联，缺页不能冒用其他页结果',async t=>{
+ const root=await fixture(t),registryPath=path.join(root,'catalog/gray-drafts.json');
+ const registry=JSON.parse(await fs.readFile(registryPath,'utf8')),spec=registry.drafts[0].beautification;
+ spec.pages=[{page:1,title:'页面一',skins:spec.skins},{page:2,title:'页面二',skins:{neutral:{label:'中性 Skin',preview:'neutral/page-02.png',pptx:'neutral/page-01.pptx'}}}];delete spec.skins;
+ await fs.writeFile(path.join(root,'run/beautified/neutral/page-02.png'),'second preview');
+ await fs.writeFile(registryPath,JSON.stringify(registry));
+ const [draft]=await collectGrayDrafts(root);
+ assert.equal(draft.beautification.pages.length,2);
+ assert.match(draft.beautification.pages[1].skins.neutral.previewUrl,/page=2/);
+ const file=await resolveGraySkinFile(root,{id:'sample',skin:'neutral',kind:'preview',page:'2'});
+ assert.equal(await fs.readFile(file.filePath,'utf8'),'second preview');
+ for(const page of [undefined,'0','3','1.5','../1'])assert.equal(await resolveGraySkinFile(root,{id:'sample',skin:'neutral',kind:'preview',page}),null);
 });
