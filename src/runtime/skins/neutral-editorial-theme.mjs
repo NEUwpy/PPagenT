@@ -12,4 +12,4 @@ export const neutralEditorialTheme = Object.freeze({ ...derivePrimaryTheme({
   typography: { componentHeading: 15.75, componentTitle: 15.75,
     componentItemTitle: 12.75, componentLead: 12.75, componentBody: 12.75,
     componentLabel: 12.75, componentMeta: 12 },
-}, asset.mainColor), regionSurface: '#EFEEE8', headingSurface: '#E5E0D8', line: '#D4CEC3' });
+}, asset.mainColor), regionSurface: '#EFEEE8', headingSurface: '#E5E0D8', line: '#D4CEC3', layoutStyle: 'magazine' });

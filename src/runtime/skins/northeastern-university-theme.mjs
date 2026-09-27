@@ -9,6 +9,7 @@ export const northeasternUniversityTheme = Object.freeze({
   regionSurface: "#F1F5FB",
   headingSurface: "#E7EEF9",
   line: "#C9D7ED",
+  layoutStyle: "mckinsey",
   dark: "#2B2B2B",
   body: "#404040",
   muted: "#6F6F6F",
