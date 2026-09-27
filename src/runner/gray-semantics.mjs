@@ -201,7 +201,7 @@ export function grayCoverageIssues(state) {
 export const SHARED_RULES = Object.freeze({
   organize: `先形成上屏提纲：每页先定主要判断与相称支撑，标出共同限定与条件的作用范围，再按真实关系把内容组织成可扫读的要点；对象比较用一致维度并列，因果、时序、并列按原稿真实关系表达。保留事实与限定不等于保留原句句法：原段需要读者自行拆句才能看出成员、判断与支撑关系时，用 blocks、label、整组草图或局部结构位重新组织；短句已经清楚就保留。不强制短语化、图示化或统一条数，不预设页数；不以照抄原句代替组织。`,
   category: `先恢复内容归属：类别成为组，类别内条目成为块，label 写要点、text 写必要展开；类别数量、条目数量和原稿措辞都不决定页数或版式。原稿以类别总起统辖多条目时，组结构体现"类别→条目"两级：组标题概括类别与条目的共同性质，条目在组内编号展开；层级关系要有可见载体，不只留在主题句前缀、标签前缀或后台说明里。同一主题的相关类别可同页；内容目的不同或容量不足时可分页，跨页保留归属和准确的本页标题，不把类别总数冒充本页条目数。允许提炼冗词、合并重复解释，保留重要事实、对象、条件、否定和关系，不要求固定压缩次数，不为复现样稿强制同页。`,
-  hierarchy: `多因素、多子项、多环节的内容，先让成员可辨认、归属不丢失：可以拆成带内容词标签的条目，也可以保留连续文字，选择依据是读者能否直接读出成员与结果、总述与分项的关系。拆开时不得删去连接总述与分项的归属、成因语（"反映出""表现为"是内容关系本身，删掉即归因不可读）；下级内容以归属可读的标签或就近从属呈现；同一信息不要正文与结构位重复承载。共同导出的结果或目标如何收束（编号条目、注文、独立区域）不作为对错标准，判据是会不会被误读成并列原因；拆层依据是内容里真实的并列与导出关系，不是特定词句或数量；顺序框架词（"起点/收尾/随后"）可用。`,
+  hierarchy: `多因素、多子项、多环节的内容，规划时逐组检查成员、归属及层次。实质并列成员、主要判断与支撑，以及方法、条件、路径、目标之间的真实关系，须从上屏块序、标签或其他已选表达直接看出；页或组已分区、块已有标签，不足以证明块内关系已经组织。若读者仍须从同一连续文本中自行拆出成员、配对关系或推断指向，组织就未完成。可用已有 blocks、label 或局部结构显出成员与关系；连续文字仍适用于内容确实连贯、读者无需自行拆解的叙述。不因句长、词语或风格偏好要求拆分，也不要求每点独立成块；拆层依据是真实内容关系，不按固定条数或形式。拆开时不得删去连接总述与分项的归属、成因语（"反映出""表现为"是内容关系本身，删掉即归因不可读）；下级内容以归属可读的标签或就近从属呈现；同一信息不要正文与结构位重复承载。共同导出的结果或目标如何收束（编号条目、注文、独立区域）不作为对错标准，判据是会不会被读者误读成并列原因。顺序框架词（"起点/收尾/随后"）可用。`,
   expression: `按真实关系选择表达：并列分类不自动构成对照；对照、因果、依赖必须有原稿依据；flow 只用于原文有先后线索的真实时序；行式表格只用于多个对象按共同维度对照，单对象说明用文字条目。原稿在一个条目内明示"多项并列成员共同导向一个结果"（聚合）或"一个总述分出多项并列方面"（扇出）时，让关系可直接读出：拆条、连续文字、条目内结构位都是可选手段，判据是读者能否直读成员与结果、总述与分项的关系；散文把连接埋进长句、需要读者自行拆句才能看出关系时，配条目内结构位让关系可扫读。若用条目内结构位：结构位 kind 写在该 block，节点用成员与结果的实文短语（不整句入卡），relationship 与 production 写明节点和方向；不为恢复某种参考形态强制拆条或强制配结构位。共同约束（任一成员单独缺失即不成立的并列要求）不是聚合，按范围呈现、不画汇聚图；单纯并列不加结构位。`,
   timeline: `原稿同时包含带时间锚点的历史/演进序列与"现在/当前/新方向/值得关注/正在增加"一类当下状态或趋势时，先把它们识别为不同层级：历史序列按真实先后呈现，当下分支或观察作为与序列相称的独立分支，不因数量或顺序把它并为历史节点；当下分支的时间定位、程度与作用范围要在可见标题、标签或正文里保留。flow 只承载真实先后序列；并列或分支用文字层级或结构分区表达。`,
   sketch: `灰稿规划文字与图形的位置和面积。整组 diagram/flow/table 使用已有简化草图；文字条目内的非文字块预留蓝框图形区，框内标注表达作用与节点短语，不绘制内部节点。局部结构位是独立块：它的 text 是蓝框内的节点短语，条目的实际文案仍由组内文字块承载（可压缩，不必全文复述），两者并存、不得互相替代；就近附着所属条目，保留完整必要内容，节点短语按条目实文与来源忠实提炼（允许压缩，不得引入来源没有的对象或改变顺序），不再抄一份全文；整组图示可以直接承载内容，不强制另配重复散文。整组 chart/image 本轮只有蓝区制作说明、不绘制灰区实文：它承载的数字事实必须同时出现在本页灰区实文里（条目、组标题或主题句），只写在制作说明里不算落实。`,
@@ -210,7 +210,7 @@ export const SHARED_RULES = Object.freeze({
   declaration: `模拟/假设声明只要原稿给出，就必须上屏且恰好一次：最自然的位置是页面主题句，或紧邻主体的一个条目；不得省略、不得逐条重复、不得独立成组。`,
   condition: `真实条件与否定不能省略，准则不是已满足的证据，并行准备不是下一阶段。`,
   attachment: `条件触发的处置、异常或例外是附着性内容：注明它约束哪些对象或环节，从属并紧邻所依附的内容（作为依附对象的补充说明，或从属职责的supporting组），不与主流程环节、并列要点铺成同层组；判断依据是依附关系，不是篇幅大小。共同限定、否定与前提若不构成主体条目本身，用块级附注承载：该块 kind 写 "note"，紧随所依附的条目之后，不编号、不占条目位，也不需要制作说明三项。约束本组全部条目的共同前提/共同说明用块级 scope 写 "group"：程序不编号、以本页正文字号随组渲染，作用范围是整组而不是某一条；作用范围（一条、多条还是整组）由块级语义决定，判断依据是它约束谁，不是句子写法或篇幅。共同约束的呈现以范围为判据：范围要一眼可读、不被误读成只管某一条——可用 scope:"group"，也可让注文自己写明范围（"以上三项"式），形态不限；做成独立区域或同级条目而范围仍清楚也可，被读成并列项或只管单条就要改。内容要点不是共同说明，不要标 scope:"group"。`,
-  paging: `页数服从内容量、页面目的和真实关系。一页一事不等于一页一类：共同回答一个页面问题的类别先保留各自分组，形成同页候选并经 check_plan 实测后确认分页；类别或关系类型不同本身不是拆页依据，回答不同页面问题时仍应分页。再结合实际容量决定合并、分区或分页。每页应有实质展开，短小附注就近融入主体。容量失败后可调整组合与比例、忠实精简冗词或沿语义边界分页；不能牺牲必要条件、拆散归属或持续缩字来满足固定页数。跨页仍标明条目所属类别；标题给出判断，正文补充细节，不整句复述标题。分页不切断逻辑：跨页时让读者能从后页标题、主题句或条目读出它与前页内容的关系（承接、回应或导出），关系在屏上可见、不靠后台说明。`,
+  paging: `页数服从内容量、页面目的和真实关系。一页一事不等于一页一类：共同回答一个页面问题的类别先保留各自分组，形成同页候选并经 check_plan 实测后确认分页；类别或关系类型不同本身不是拆页依据，回答不同页面问题时仍应分页。再结合实际容量决定合并、分区或分页。每页应有实质展开，短小附注就近融入主体。容量失败后可调整组合与比例、忠实精简冗词或沿语义边界重新分组、分页；已经识别出的成员或关系不能为了满足单页容量又合回长段，压平结构不算解决容量。不固定页数、布局或要求全文拆分，也不套用范本词汇。不能牺牲必要条件、拆散归属或持续缩字来满足固定页数。跨页仍标明条目所属类别；标题给出判断，正文补充细节，不整句复述标题。分页不切断逻辑：跨页时让读者能从后页标题、主题句或条目读出它与前页内容的关系（承接、回应或导出），关系在屏上可见、不靠后台说明。`,
   claim: `主题句只承担本页主要判断（一句话，不把同一判断前后重复），以实际版面单行（28px）为限，不复述全部正文；范围、时间、条件、数字等限定按作用对象放在读者能正确理解其作用范围的位置（正文条目、组标题或附注），不塞进主题句。`,
   label: `label可省略，只有帮助读者定位职责时才用，并且必须是内容词（"正常""已修复""待配件"），不用"拆分项一""对象""状态一"这类结构占位名，也不带"（全页适用）"这类版面说明；承接、递进类连接词（"在此基础上""随后"一类）不能单独成为标签或独立要点——承接关系由位置与顺序承担，把一句拆成"连接词标签＋正文"的要合并回内容表述；标签与正文近复述（正文只比标签多一两个字）时省标签或合并，不要「一 要点／要点加一两字」式重复；序号由程序按条目顺序统一添加，label 不写序号（"一、""原因一""不足一"式前后缀都不行）；表格行只有行头与内容两段，不要把多列文字用竖线拼进一个块。`,
   surface: `页面目的、narrative和planningNotes不在灰稿上显示。`,
@@ -235,12 +235,17 @@ export const SEMANTIC_REVIEW_CONTRACT = `
 
 职责三·蓝区制作说明与实文的边界：主体职责的内容必须作为实际文案或结构草图文字出现，只在蓝区制作说明中复述不算落实；附注与组级共同说明同样是程序保证的可见文案（kind:note 12px、紧随条目、不编号；scope=group 不编号、随组使用本页正文字号），由它们承载且依附与范围正确时不算未落实。条件触发的处置、异常、例外（组间层级）不能与主体步骤或并列要点铺成同层区域；限定约束的对象与作用范围（一条、多条还是整页）须对照内容核对，呈现不得让读者误解范围；附注的依附对象与位置也要按内容核对。为凑覆盖把标题/元信息单列成区、或区域装不下相称信息价值（"适用范围"式空壳），要不合格——按价值判断，与格式无关；识别为标题不必然单独成区，也不一律禁止上屏：标题在相称位置自然出现（页标题、署名）不算缺陷。页级认领的来源（carriedSources）必须与该页实际承载相称。流转信息（flowSources：文件头尾、节标题）默认不上屏，按展示价值判断，也不要求为归属补组级标识。
 
-职责四·组织尺度与呈现判断：准则是选择尺度，不能充当已验证的证据；并行不能写成先后；条件须对应被约束的行动。组内条目层级是规划职责：原稿的总起句、并列因素、推进方式、目标、做法等可以成为带标签条目，也可以保留连续文字，只要关系可直读就不算缺陷；不得以"依附性标签不得与主体同级"为由打回这类组内分解；多因素共同导出的结果收束条编号与否不是缺陷判据，但被读者读成同级并列原因时要指出。组级共同说明（scope=group）作用范围是整组——范围一眼可读、不被误读成只管某一条或并列项即可（形态不限）；把内容要点误标为组级共同说明要指出。序号不是模型标签：可见条目的序号（一/二…）由程序按条目顺序添加，用它核对编号与层级是否一致，不因缺少原稿序号或签号写法不同而拒绝。${SHARED_RULES.label}标签与正文近复述、空壳标签等只构成组织修订问题时，在notes明确指出具体重复及省标签/合并的建议，不冒充事实失真；修订保留必要限定与归属，不要求恢复长原句，也不因拆行或编号自行推断时序。顺序框架词（"起点/收尾/随后/完成后进入"等由"依次推进"类枚举蕴含）不属于添加，不因它拒绝；非原稿的修饰词若删除后关系读法仍清楚，则不保留。主题概括后正文展开是合法分工，长句机械复述和以后台解释代替组织则须修订。载体/媒介选择是规划层职责——你可以提出载体取向作为建议，但它不具约束力、不会被程序执行或删除；规划层可不采纳，且不采纳不构成拒绝理由，不得因载体建议未被采纳而拒绝已可直读的呈现；程序保证的只是呈现形态，依附对象与范围仍须对照内容核对。同一关系只要能通过任一可用手段（文字分项、卡片、表格、流程）直读即通过。复核修改时，除确认上一问题是否解决，还要检查修改是否引入新的事实、层级或归属错误。声明必须恰好出现一次且不独立成组：遗漏、重复、或把模拟/假设声明单独做成一个区域都要指出。后台审查解释不得进入灰区正文；蓝区制作要求可以说明关系组织与绘制要求。计划表示与呈现方式是否再调整，由具体缺口决定，不预先统一实现。
+职责四·组织尺度与呈现判断：准则是选择尺度，不能充当已验证的证据；并行不能写成先后；条件须对应被约束的行动。组内条目层级是规划职责：逐页、逐组、逐块检查上屏实文与块序，实质并列成员、主要判断与支撑，以及方法、条件、路径、目标之间的关系是否直接可见；页或组已分区、块已有标签，不能替代块内检查。若读者仍须从同一块连续文字中自行拆出成员、配对关系或推断指向，指出具体需要自行拆解的关系，作为组织/层次问题；除非原稿证据表明命题或关系被改变，不要把可读性缺口称为事实失真。连续文字在读者无需自行拆解时可以通过；不因句长、关键词或形式偏好要求拆分或每点独立成块。不得以"依附性标签不得与主体同级"为由打回合法的组内分解；多因素共同导出的结果收束条编号与否不是缺陷判据，但被读者读成同级并列原因时要指出。组级共同说明（scope=group）作用范围是整组——范围一眼可读、不被误读成只管某一条或并列项即可（形态不限）；把内容要点误标为组级共同说明要指出。序号不是模型标签：可见条目的序号（一/二…）由程序按条目顺序添加，用它核对编号与层级是否一致，不因缺少原稿序号或签号写法不同而拒绝。条目标签必须是内容词，出现"拆分项一""对象""状态一"这类结构占位名、把承接或递进类连接词当作标签或把一句拆成"连接词标签＋正文"、表格行里用竖线拼接多列文字、正文整句复述标题，都要指出。顺序框架词（"起点/收尾/随后/完成后进入"等由"依次推进"类枚举蕴含）不属于添加，不因它拒绝；非原稿的修饰词若删除后关系读法仍清楚，则不保留。主题概括后正文展开是合法分工，长句机械复述和以后台解释代替组织则须修订。载体/媒介选择是规划层职责——你可以提出载体取向作为建议，但它不具约束力、不会被程序执行或删除；规划层可不采纳，且不采纳不构成拒绝理由，不得因载体建议未被采纳而拒绝已可直读的呈现；程序保证的只是呈现形态，依附对象与范围仍须对照内容核对。同一关系只要能通过任一可用手段（文字分项、卡片、表格、流程）直读即通过。复核修改时，除确认上一问题是否解决，还要检查修改是否引入新的事实、层级或归属错误。声明必须恰好出现一次且不独立成组：遗漏、重复、或把模拟/假设声明单独做成一个区域都要指出。后台审查解释不得进入灰区正文；蓝区制作要求可以说明关系组织与绘制要求。计划表示与呈现方式是否再调整，由具体缺口决定，不预先统一实现。
 
-职责五·反馈、证据与返回：每个 issue 只放仍然存在、证据成立且需要实际修订的实质错误，并简短写明当前具体位置/文字、原稿依据、语义改变与所需修订；已解决、无需修订、纯偏好一律放 notes，不能在同一 problem 内长篇自我推翻后仍阻塞。reviewFeedback 是上轮发现的问题（待核实项），不是新规范、不指定答案：按当前可见文案与原稿重新判定是否仍存在，已用其他呈现解决即算解决，不要求采用上轮建议的措辞、载体或位置。仅凭预计读者可能误读、未见坐标却断言视觉层级，作为 notes 待看图建议，不阻塞；类别数量、某个连接词或页数不是表达正确的证据；仅有标题改名、主辅标签或并排放置不证明关系成立；纯措辞、非必要连接词、载体类型或位置偏好、审美、字号猜测、已解决项都不能进入强制修订队列；不能仅因个人偏好、估计容量或未知坐标拒绝。
-只输出JSON：{accepted:boolean,issues:[{pageId,sourceIds,problem,requiredRevision}],notes:[string],coverage:"逐页引用visiblePages中的具体措辞或组织，说明它怎样承担职责和关系；不能仅复述requirements",limits:"未看灰稿像素图，不能确认视觉可读性"}。
-issues 只放足以阻塞的实质错误（实际改变理解的失真、遗漏、层级/归属/关系错误，且能在原稿与当前可见内容间定位实际丢失/相反/更强/错误归属）；没有就空数组。建议、可选措辞、已解决说明、非阻塞观察一律放 notes，不得混入 issues；issues 非空时 accepted 必须为 false，notes 不阻塞渲染。
-`;
+同一次审稿还要独立给出 organization 结果，不能从 claimAudit 推导组织可读性：{verdict:"pass|revise",findings:[{locationId,quote,problem,requiredRevision}]}。只检查实际可见文字；pass 时 findings 必须为空，revise 时每条 finding 必须用 auditLocations 中该位置的逐字短引文定位，并具体说明读者仍要自行拆解的成员、配对或指向，以及所需修订。组织问题只有在确有这种推断负担时才 revise；不要求每段拆分，不因句长或风格偏好要求拆分，也不把组织问题写成事实失真。组织 findings 与事实 ruling 分开判断；事实 equivalent 不抵消 organization revise。
+
+职责五·反馈、证据与返回：每个命题的 ruling 与 rationale 应简明说明来源、实际上屏表达及差异；只有需要修改的实质问题才用阻塞 ruling。建议、已解决项和未证实疑点可放 notes，uncertain 不等于已证实错误。reviewFeedback 是上轮待核实项，必须按当前原稿与可见文案重新判断，已用其他呈现解决即算解决，不要求采用上轮建议。未看像素图的视觉疑点只作备注。
+每次审稿只调用本模型一次。按有实际含义的完整命题核对，不机械逐句比对。claimAudit 仅维护 claims 一份证据关系；程序从中派生索引与阻塞项，不要输出 sourceCoverage、locationCoverage、claimIds 镜像、accepted 或 issues。
+claims 中每项为 {id,sourceEvidence:[{sourceId,quote}],visibleEvidence:[{locationId,quote}],ruling,rationale}。sourceEvidence 与 visibleEvidence 都须给出来源/位置内逐字存在的短引文；auditLocations 已直接提供每个 locationId 对应的实际上屏 text。未上屏的原稿命题以 ruling=omitted 表达，sourceEvidence 有据、visibleEvidence 为空。ruling 仅可为 equivalent、strengthened、weakened、unsupported、misassigned、omitted、uncertain。rationale 比较完整命题、限定与关系；不再用 sourceForce、visibleForce 或 addedImplications 布尔字段。
+逐段通读 sourceSegments，拆出每个实质命题；同一来源段已有一个引用，不表示该段其余命题已审完，遗漏的命题仍须单列 omitted claim。若来源段没有 claim 引用，必须在 unreferencedSources 中写 sourceId、disposition 和 reason。若某个上屏位置没有 claim 引用，必须在 unreferencedLocations 中写 locationId、disposition 和 reason。disposition 只能为 non-claim 或 unreviewed；unreviewed 会阻止通过。标题、组标题、条目标签不得仅因其呈现类型而直接归为 non-claim：先与其统领或限定的正文合并判断；若组合引入因果、确定性、程度或范围等语义，相关 claim 的 visibleEvidence 必须同时引用该标题/标签和正文位置，并按合并后的命题判定，不得把该位置作为 non-claim。只有确认它不改变合并读法时，才可将其标为 non-claim。无实质内容时可用 non-claim 并说明原因。
+ 每项 sourceEvidence 必须引用能实际支撑该完整命题的原稿内容，覆盖命题中的对象、数值、顺序/比较关系及限定；只引用能标识主题的标题、分类词或流转标题，不能证明其下的数值排序或概括结论。合法概括、压缩、换序本身不构成问题；仍须逐项指出可证明的遗漏、失真、归属错置或力度升级。
+程序按 ruling 派生事实阻塞项：strengthened、weakened、unsupported、misassigned、omitted 阻塞；equivalent 不阻塞。uncertain 通过 rationale 生成未证实备注，不作为阻塞项。organization.verdict=revise 也独立阻塞并进入修订反馈；organization.verdict=pass 且 findings 为空才算组织检查通过。任一事实或组织阻塞都会令审稿不通过。结构校验只证明引用、位置与输入格式有效，不证明语义完整或判断正确。
+只输出 JSON：{notes:[string],claimAudit:{schemaVersion:"gray-claim-audit-2",claims:[...],unreferencedSources:[{sourceId,disposition:"non-claim|unreviewed",reason}],unreferencedLocations:[{locationId,disposition:"non-claim|unreviewed",reason}]},organization:{verdict:"pass|revise",findings:[{locationId,quote,problem,requiredRevision}]}}。无未引用项时两个列表都为空数组。`;
 
 /**
  * 审稿响应记录（评审 #102 REVISE：只记不改）。审稿原文完整送达规划层并完整入档；
@@ -255,6 +260,8 @@ export function snapshotSemanticReview(review) {
     notes: Array.isArray(review.notes) ? review.notes : [],
     coverage: review.coverage ?? null,
     limits: review.limits ?? null,
+    ...(review.claimAudit && typeof review.claimAudit === 'object' ? { claimAudit: review.claimAudit } : {}),
+    ...(Object.hasOwn(review, 'organization') ? { organization: review.organization } : {}),
   };
 }
 
@@ -399,25 +406,254 @@ function pageBlueOnlyFacts(page) {
   return missing;
 }
 
-export function semanticReviewInput({source,area,plan,reviewFeedback=null,flowSources=[]}) {
+function collectReviewLocations(visiblePages) {
+  const locations = [];
+  const add = (pageId, field, text, regionId = null, regionIndex = null, bodyIndex = null) => {
+    if (!nonempty(text)) return;
+    locations.push({
+      id: `loc-${String(locations.length + 1).padStart(4, '0')}`,
+      pageId, field, regionId, regionIndex, bodyIndex, text: String(text),
+    });
+  };
+  for (const page of visiblePages ?? []) {
+    add(page.pageId, 'claim', page.claim);
+    for (const [regionIndex, region] of (page.regions ?? []).entries()) {
+      add(page.pageId, 'heading', region.heading, region.id, regionIndex);
+      for (const [bodyIndex, part] of (region.body ?? []).entries()) {
+        add(page.pageId, 'body', part.text, region.id, regionIndex, bodyIndex);
+      }
+    }
+  }
+  return locations;
+}
+
+/** Derive tool-facing blockers and uncertain notes from each claim's single ruling. */
+export function semanticReviewFindings(response, input) {
+  const claims = response?.claimAudit?.claims ?? [];
+  const locationById = new Map((input?.auditLocations ?? []).map(location => [location.id, location]));
+  const blockingRulings = new Set(['strengthened', 'weakened', 'unsupported', 'misassigned', 'omitted']);
+  const issues = [];
+  const notes = Array.isArray(response?.notes) ? response.notes.filter(nonempty).slice(0, 12) : [];
+  for (const claim of claims) {
+    if (claim?.ruling === 'uncertain' && nonempty(claim.rationale)) {
+      notes.push(claim.id + '：未证实；' + claim.rationale);
+    }
+    if (!blockingRulings.has(claim?.ruling)) continue;
+    const sourceIds = [...new Set((claim.sourceEvidence ?? []).map(item => item.sourceId).filter(nonempty))];
+    const pageIds = [...new Set((claim.visibleEvidence ?? []).map(item => locationById.get(item.locationId)?.pageId).filter(nonempty))];
+    const requiredRevision = claim.ruling === 'unsupported'
+      ? '删除无来源支持的上屏命题，或依据可核实的原稿证据重新表述。'
+      : claim.ruling === 'omitted'
+        ? '补入遗漏的原稿命题，或重新规划其承载位置。'
+        : claim.ruling === 'misassigned'
+          ? '将该命题归回正确的来源与页面位置。'
+          : '依据来源证据修订该命题，并重新核对相关限定与关系。';
+    issues.push({
+      ...(pageIds.length === 1 ? { pageId: pageIds[0] } : pageIds.length ? { pageIds } : {}),
+      sourceIds,
+      claimIds: [claim.id],
+      problem: claim.rationale,
+      requiredRevision,
+    });
+  }
+  for (const finding of response?.organization?.findings ?? []) {
+    const location = locationById.get(finding?.locationId);
+    issues.push({
+      ...(location?.pageId ? { pageId: location.pageId } : {}),
+      locationId: finding.locationId,
+      quote: finding.quote,
+      problem: finding.problem,
+      requiredRevision: finding.requiredRevision,
+    });
+  }
+  return { issues, notes: [...new Set(notes)].slice(0, 20) };
+}
+
+/** Validate canonical claim evidence without requiring mirrored claim-ID tables. */
+export function validateSemanticReviewEvidence(input, response) {
+  const errors = [];
+  const fail = message => errors.push(message);
+  const audit = response?.claimAudit;
+  if (!audit || typeof audit !== 'object' || Array.isArray(audit)) {
+    return { valid: false, errors: ['缺少 claimAudit 对照证据对象'] };
+  }
+  for (const derivedKey of ['accepted', 'issues', 'coverage', 'limits']) {
+    if (Object.hasOwn(response, derivedKey)) fail('审稿 ' + derivedKey + ' 由程序派生，不应由模型重复提交');
+  }
+  if (audit.schemaVersion !== 'gray-claim-audit-2') fail('claimAudit.schemaVersion 必须是 gray-claim-audit-2');
+  for (const legacyKey of ['sourceCoverage', 'locationCoverage']) {
+    if (Object.hasOwn(audit, legacyKey)) fail('claimAudit.' + legacyKey + ' 已由 claims 派生，不应重复提交');
+  }
+  if (!Array.isArray(audit.claims)) fail('claimAudit.claims 必须是数组');
+  if (!Array.isArray(audit.unreferencedSources)) fail('claimAudit.unreferencedSources 必须是数组');
+  if (!Array.isArray(audit.unreferencedLocations)) fail('claimAudit.unreferencedLocations 必须是数组');
+  if (!Array.isArray(response?.notes)) fail('审稿 notes 必须是数组');
+  const organization = response?.organization;
+  if (!organization || typeof organization !== 'object' || Array.isArray(organization)) {
+    fail('缺少 organization 组织可读性结果对象');
+  } else {
+    if (!['pass', 'revise'].includes(organization.verdict)) fail('organization.verdict 必须是 pass 或 revise');
+    if (!Array.isArray(organization.findings)) fail('organization.findings 必须是数组');
+    else {
+      if (organization.verdict === 'pass' && organization.findings.length) fail('organization.verdict=pass 时 findings 必须为空');
+      if (organization.verdict === 'revise' && !organization.findings.length) fail('organization.verdict=revise 时 findings 不能为空');
+      for (const finding of organization.findings) {
+        if (!finding || typeof finding !== 'object' || Array.isArray(finding)) {
+          fail('organization.findings 每项必须是对象');
+          continue;
+        }
+        if (!nonempty(finding.locationId)) fail('organization finding 缺少 locationId');
+        if (!nonempty(finding.quote)) fail('organization finding 缺少 quote');
+        if (!nonempty(finding.problem)) fail('organization finding 缺少 problem');
+        if (!nonempty(finding.requiredRevision)) fail('organization finding 缺少 requiredRevision');
+        const location = (input?.auditLocations ?? []).find(item => item?.id === finding.locationId);
+        if (!location) fail('organization finding 引用了不存在的上屏位置 ' + (finding.locationId ?? ''));
+        else if (!nonempty(finding.quote) || !String(location.text ?? '').includes(finding.quote)) fail('organization finding 引文不在 ' + finding.locationId + ' 实际文案中');
+      }
+    }
+  }
+
+  const sources = new Map();
+  for (const segment of input?.sourceSegments ?? []) {
+    if (!nonempty(segment?.id)) {
+      fail('审稿输入 sourceSegments 缺少 id');
+      continue;
+    }
+    if (sources.has(segment.id)) fail('审稿输入 sourceSegments 重复 id ' + segment.id);
+    sources.set(segment.id, String(segment.text ?? ''));
+  }
+  if (!sources.size) fail('审稿输入缺少带来源 id 的 sourceSegments');
+
+  const expectedLocations = collectReviewLocations(input?.visiblePages);
+  const expectedById = new Map(expectedLocations.map(location => [location.id, location]));
+  if (!Array.isArray(input?.auditLocations)) fail('审稿输入 auditLocations 必须直接提供上屏文字');
+  const locations = new Map();
+  for (const location of input?.auditLocations ?? []) {
+    if (!nonempty(location?.id) || !nonempty(location?.text) || !nonempty(location?.pageId)) {
+      fail('auditLocations 每项必须包含 locationId、pageId 和实际上屏 text');
+      continue;
+    }
+    if (locations.has(location.id)) fail('审稿输入 auditLocations 重复 id ' + location.id);
+    const expected = expectedById.get(location.id);
+    if (!expected || expected.pageId !== location.pageId || expected.text !== location.text) {
+      fail(location.id + ' 的 auditLocations.text 与 visiblePages 实际文案不一致');
+    }
+    locations.set(location.id, location);
+  }
+  for (const location of expectedLocations) {
+    if (!locations.has(location.id)) fail('审稿输入缺少带实际文案的上屏位置 ' + location.id);
+  }
+
+  if (!Array.isArray(audit.claims) || !Array.isArray(audit.unreferencedSources) || !Array.isArray(audit.unreferencedLocations)) {
+    return { valid: false, errors: errors.slice(0, 40), sourceCount: sources.size, locationCount: locations.size, claimCount: 0 };
+  }
+  if (!audit.claims.length) fail('审稿未提供任何命题证据');
+
+  const claimIds = new Set();
+  const linkedSources = new Set();
+  const linkedLocations = new Set();
+  const allowedRulings = new Set(['equivalent', 'strengthened', 'weakened', 'unsupported', 'misassigned', 'omitted', 'uncertain']);
+  for (const claim of audit.claims) {
+    if (!claim || typeof claim !== 'object' || !nonempty(claim.id)) {
+      fail('claimAudit.claims 项缺少唯一 id');
+      continue;
+    }
+    if (claimIds.has(claim.id)) fail('claimAudit 重复 claim id ' + claim.id);
+    claimIds.add(claim.id);
+    if (!allowedRulings.has(claim.ruling)) fail(claim.id + ' ruling 无效');
+    if (!nonempty(claim.rationale)) fail(claim.id + ' rationale 不能为空');
+    if (!Array.isArray(claim.sourceEvidence)) fail(claim.id + ' sourceEvidence 必须是数组');
+    else if (!claim.sourceEvidence.length && claim.ruling !== 'unsupported') fail(claim.id + ' 缺少来源原句证据');
+    if (!Array.isArray(claim.visibleEvidence)) fail(claim.id + ' visibleEvidence 必须是数组');
+    else if (claim.ruling === 'omitted' && claim.visibleEvidence.length) fail(claim.id + ' ruling=omitted 时 visibleEvidence 必须为空');
+    else if (claim.ruling !== 'omitted' && claim.visibleEvidence.length === 0) fail(claim.id + ' 缺少上屏位置证据');
+
+    for (const evidence of Array.isArray(claim.sourceEvidence) ? claim.sourceEvidence : []) {
+      const sourceText = sources.get(evidence?.sourceId);
+      if (sourceText === undefined) {
+        fail(claim.id + ' 引用了不存在的 sourceId ' + (evidence?.sourceId ?? ''));
+        continue;
+      }
+      linkedSources.add(evidence.sourceId);
+      if (!nonempty(evidence.quote) || !sourceText.includes(evidence.quote)) {
+        fail(claim.id + ' 的来源引文不在 ' + evidence.sourceId + ' 原句中');
+      }
+    }
+    for (const evidence of Array.isArray(claim.visibleEvidence) ? claim.visibleEvidence : []) {
+      const location = locations.get(evidence?.locationId);
+      if (!location) {
+        fail(claim.id + ' 引用了不存在的上屏位置 ' + (evidence?.locationId ?? ''));
+        continue;
+      }
+      linkedLocations.add(evidence.locationId);
+      if (!nonempty(evidence.quote) || !location.text.includes(evidence.quote)) {
+        fail(claim.id + ' 的上屏引文不在 ' + evidence.locationId + ' 实际文案中');
+      }
+    }
+  }
+
+  const validateUnreferenced = ({items, idKey, known, linked, label}) => {
+    const dispositions = new Map();
+    for (const item of items) {
+      if (!item || !nonempty(item[idKey])) {
+        fail(label + ' 每项必须包含 ' + idKey);
+        continue;
+      }
+      const id = item[idKey];
+      if (!known.has(id)) fail(label + ' 引用了不存在的 ' + idKey + ' ' + id);
+      if (dispositions.has(id)) fail(label + ' 重复记录 ' + id);
+      dispositions.set(id, item);
+      if (!['non-claim', 'unreviewed'].includes(item.disposition)) fail(id + ' disposition 必须是 non-claim 或 unreviewed');
+      if (!nonempty(item.reason)) fail(id + ' disposition 必须说明理由');
+      if (linked.has(id)) fail(id + ' 已有命题证据，不应列入 ' + label);
+      if (item.disposition === 'unreviewed') fail(id + ' 尚未审查，不能作为有效审稿通过');
+    }
+    for (const id of known.keys()) {
+      if (!linked.has(id) && !dispositions.has(id)) fail(label + ' 未说明未被命题引用的 ' + id);
+    }
+    return dispositions.size;
+  };
+  const unreferencedSourceCount = validateUnreferenced({
+    items: audit.unreferencedSources, idKey: 'sourceId', known: sources, linked: linkedSources, label: 'unreferencedSources',
+  });
+  const unreferencedLocationCount = validateUnreferenced({
+    items: audit.unreferencedLocations, idKey: 'locationId', known: locations, linked: linkedLocations, label: 'unreferencedLocations',
+  });
+
+  return {
+    valid: errors.length === 0,
+    errors: errors.slice(0, 40),
+    sourceCount: sources.size,
+    locationCount: locations.size,
+    claimCount: claimIds.size,
+    unreferencedSourceCount,
+    unreferencedLocationCount,
+  };
+}
+
+export function semanticReviewInput({source,sourceSegments=[],area,plan,reviewFeedback=null,flowSources=[]}) {
   const pages = semanticPages(plan);
+  const visiblePages = pages.map(page=>({pageId:page.pageId,claim:page.claim,regions:page.items.map(item=>({
+    id:item.id,kind:item.kind,surface:SKETCH_KINDS.has(item.kind)
+      ? `结构草图：${SKETCH_LABELS[item.kind]}，框内文字为实际文案`
+      : item.kind==='text'
+        ? ['灰区：实际文案',
+            item.blocks?.some(block=>block.kind && block.kind!=='text' && block.kind!=='note') ? '非text的kind为块内浅蓝制作说明，四项均上屏' : null,
+            item.blocks?.some(block=>block.kind==='note') ? 'attachment=true 的块为附着说明：程序以 12px 小字紧随所属条目渲染、不编号' : null,
+            item.blocks?.some(block=>block.scope==='group') ? 'scope=group 的块为组级共同说明：程序不编号，以本页正文字号随组渲染，作用范围是本组全部条目' : null,
+          ].filter(Boolean).join('；')
+        : '浅蓝区：制作说明，四项均须上屏',heading:item.heading,body:grayDisplayBlocks(item),
+  }))}));
+  const reviewLocations = collectReviewLocations(visiblePages);
   return {
     source, area:{width:area.width,height:area.height}, reviewFeedback,
+    ...(sourceSegments.length ? { sourceSegments: sourceSegments.map(segment=>({id:segment.id,text:segment.text})) } : {}),
     ...(flowSources.length ? { flowSources } : {}),
     requirements:plan.pages.map(page=>({pageId:page.pageId,pagePurpose:page.pagePurpose,narrative:page.narrative,
       carriedSources:page.sourceIds??[],
       groups:page.groups.map(group=>({id:group.id,role:group.role,importance:group.importance}))})),
-    visiblePages:pages.map(page=>({pageId:page.pageId,claim:page.claim,regions:page.items.map(item=>({
-      id:item.id,kind:item.kind,surface:SKETCH_KINDS.has(item.kind)
-        ? `结构草图：${SKETCH_LABELS[item.kind]}，框内文字为实际文案`
-        : item.kind==='text'
-          ? ['灰区：实际文案',
-              item.blocks?.some(block=>block.kind && block.kind!=='text' && block.kind!=='note') ? '非text的kind为块内浅蓝制作说明，四项均上屏' : null,
-              item.blocks?.some(block=>block.kind==='note') ? 'attachment=true 的块为附着说明：程序以 12px 小字紧随所属条目渲染、不编号' : null,
-              item.blocks?.some(block=>block.scope==='group') ? 'scope=group 的块为组级共同说明：程序不编号，以本页正文字号随组渲染，作用范围是本组全部条目' : null,
-            ].filter(Boolean).join('；')
-          : '浅蓝区：制作说明，四项均须上屏',heading:item.heading,body:grayDisplayBlocks(item),
-    }))})),
+    visiblePages,
+    auditLocations: reviewLocations,
   };
 }
 

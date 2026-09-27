@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { runGrayAgent } from '../src/runner/gray-agent.mjs';
+import { GRAY_AGENT_PROMPT, runGrayAgent } from '../src/runner/gray-agent.mjs';
+import { planContentFingerprint } from '../src/runner/gray-semantics.mjs';
 
 const SOURCE = '模拟：核验之后才能开放，异常情况立即暂停并复核记录，复核结果按季度归档备查，责任落实到人；未按要求执行或漏报的，纳入部门年度考核。';
 
@@ -19,18 +20,56 @@ const planJson = suffix => JSON.stringify({
   }],
 });
 
+function addMockClaimAudit(payload, input) {
+  const response = Object.hasOwn(payload, 'organization')
+    ? payload
+    : { ...payload, organization: { verdict: 'pass', findings: [] } };
+  if (Object.hasOwn(response, 'claimAudit')) return response;
+  const source = input.sourceSegments?.find(segment => segment.text?.length);
+  const location = input.auditLocations?.find(item => item.field === 'body') ?? input.auditLocations?.[0];
+  const text = location?.text;
+  if (!source || !location || !text) return { ...response, claimAudit: null };
+  const sourceQuote = source.text.slice(0, Math.min(source.text.length, 18));
+  const visibleQuote = String(text).slice(0, Math.min(String(text).length, 18));
+  const claimAudit = {
+    schemaVersion: 'gray-claim-audit-2',
+    claims: [{
+      id: 'mock-claim-1',
+      sourceEvidence: [{ sourceId: source.id, quote: sourceQuote }],
+      visibleEvidence: [{ locationId: location.id, quote: visibleQuote }],
+      ruling: response.ruling ?? 'equivalent',
+      rationale: response.rationale ?? 'mock structural fixture',
+    }],
+    unreferencedSources: (input.sourceSegments ?? []).filter(segment => segment.id !== source.id)
+      .map(segment => ({ sourceId: segment.id, disposition: 'non-claim', reason: 'mock fixture source segment' })),
+    unreferencedLocations: (input.auditLocations ?? []).filter(item => item.id !== location.id)
+      .map(item => ({ locationId: item.id, disposition: 'non-claim', reason: 'mock fixture visible position' })),
+  };
+  return { ...response, notes: response.notes ?? [], claimAudit };
+}
+
 function mockProvider(chatScript, reviewPayloads = [], beforeCall = null) {
   let chatIndex = 0;
   let reviewIndex = 0;
   const reviewCalls = [];
+  const reviewInputs = [];
+  const reviewPrompts = [];
   return {
     model: 'mock',
     reviewCalls,
+    reviewInputs,
+    reviewPrompts,
     complete: async ({ messages }) => {
       const system = messages[0]?.content ?? '';
       if (system.includes('灰稿内容与表达审稿人')) {
         reviewCalls.push(Date.now());
-        const payload = reviewPayloads[reviewIndex++] ?? { accepted: true, issues: [], notes: [], coverage: 'mock 覆盖', limits: 'mock' };
+        const reviewRequest = JSON.parse(messages.at(-1)?.content ?? '{}');
+        const reviewInput = reviewRequest.originalReviewInput ?? reviewRequest;
+        const configuredPayload = reviewPayloads[reviewIndex++] ?? { notes: [] };
+        const rawPayload = typeof configuredPayload === 'function' ? configuredPayload(reviewInput) : configuredPayload;
+        reviewInputs.push(reviewRequest);
+        reviewPrompts.push(system);
+        const payload = addMockClaimAudit(rawPayload, reviewInput);
         return { content: JSON.stringify(payload), toolCalls: [], usage: {}, finishReason: 'stop' };
       }
       if (beforeCall) await beforeCall({ chatIndex });
@@ -82,6 +121,7 @@ test('render_draft 接口契约：{pageId} 只传页号即走默认并成功（�
     const renders = run.events.filter(event => event.tool === 'render_draft');
     assert.equal(renders[0].result.accepted, true, JSON.stringify(renders[0].result));
     assert.equal(renders[0].result.candidate, true);
+    assert.deepEqual(renders[0].result.revisionBudget, { maxSuccessfulRevisions: 1, successfulRevisionsUsed: 0, remainingSuccessfulRevisions: 1 });
     assert.equal(run.state.grayDraft.postRender.completed, true);
   } finally { await run.rm(); }
 });
@@ -186,6 +226,11 @@ test('首次成功后最多一次修订周期：内容修订重审、再次渲�
     assert.equal(renders[1].result.accepted, true);
     assert.equal(renders[2].result.accepted, false);
     assert.equal(renders[2].result.stage, 'revision-budget');
+    assert.deepEqual(renders.map(event => event.result.revisionBudget), [
+      { maxSuccessfulRevisions: 1, successfulRevisionsUsed: 0, remainingSuccessfulRevisions: 1 },
+      { maxSuccessfulRevisions: 1, successfulRevisionsUsed: 1, remainingSuccessfulRevisions: 0 },
+      { maxSuccessfulRevisions: 1, successfulRevisionsUsed: 1, remainingSuccessfulRevisions: 0 },
+    ]);
     assert.equal(run.provider.reviewCalls.length, 2, '内容修订触发重新审稿');
     const finishes = run.events.filter(event => event.tool === 'finish_draft');
     assert.equal(finishes[0].result.accepted, true);
@@ -266,7 +311,7 @@ test('坏提交＋finish 不得用旧计划宣布成功：显式报提交失败�
     { content: '审稿。', tools: ['semantic_review'] },
     { content: '渲染。', tools: [renderSingle] },
     { content: badJson, tools: [{ name: 'finish_draft', arguments: { review: '坏提交同轮保持。' } }] },
-    { content: '沿用旧候选。', tools: [{ name: 'finish_draft', arguments: { review: '沿用旧候选并保持。' } }] },
+    { content: '确认恢复并沿用当前已提交计划。', tools: [{ name: 'finish_draft', arguments: { review: '沿用旧候选并保持。' } }] },
     { content: '收工。', tools: [] },
   ]);
   try {
@@ -356,7 +401,7 @@ test('坏提交是失败控制流：已审过的旧版不被坏修订冒充交�
     { content: '审稿。', tools: ['semantic_review'] },
     { content: truncated, tools: [{ name: 'render_draft', arguments: { layouts: [{ pageId: 'p1', layout: { type: 'single' } }] } }] },
     { content: truncated, tools: ['semantic_review'] },
-    { content: '明确沿用上一版。', tools: ['semantic_review'] },
+    { content: '确认恢复并沿用当前已提交计划。', tools: ['semantic_review'] },
     { content: '收工。', tools: [] },
   ]);
   const renders = events.filter(event => event.tool === 'render_draft');
@@ -417,8 +462,8 @@ test('审稿协议：建议/已解决项不阻塞；真实阻塞项仍拦截（�
     { content: planJson('，并留痕'), tools: ['semantic_review'] },
     { content: '收工。', tools: [] },
   ], [
-    { accepted: true, issues: [], notes: ['建议：标签可再简；上一问题已用其他呈现解决，不再阻塞。'], coverage: '逐页核对', limits: 'mock' },
-    { accepted: true, issues: [{ pageId: 'p1', problem: '正文与主题句冲突', requiredRevision: '改回原稿限定' }], notes: [], coverage: '逐页核对', limits: 'mock' },
+    { notes: ['建议：标签可再简；上一问题已用其他呈现解决，不再阻塞。'] },
+    { ruling: 'strengthened', rationale: '正文与主题句冲突', notes: [] },
   ]);
   const reviews = events.filter(event => event.tool === 'semantic_review');
   assert.equal(reviews.length, 2);
@@ -428,13 +473,15 @@ test('审稿协议：建议/已解决项不阻塞；真实阻塞项仍拦截（�
   // 第二轮有真实阻塞项：即使 accepted=true 也按阻塞处理
   assert.equal(reviews[1].result.accepted, false);
   assert.equal(reviews[1].result.issues.length, 1);
+  assert.equal(reviews[1].result.outcome, 'content-rejected');
+  assert.equal(reviews[1].result.contentRejected, true);
 });
 
 test('坏提交显式失败：计划不更新、不冒充已修订，旧有效版本仍可推进', async () => {
   const { events } = await runFlow([
     { content: planJson(''), tools: ['check_plan'] },
     { content: '```json\n{ "schemaVersion": "gray-plan-3", "pages": [ { "pageId": "p1" \n```', tools: ['check_plan'] },
-    { content: '继续按上一版审稿。', tools: ['semantic_review'] },
+    { content: '确认恢复并沿用当前已提交计划。', tools: ['semantic_review'] },
     { content: '收工。', tools: [] },
   ]);
   const checks = events.filter(event => event.tool === 'check_plan');
@@ -453,7 +500,7 @@ test('controlled initial plan rejects source or pagination edits and retains ori
  const initialPlan=JSON.parse(planJson(''));
  const changed=structuredClone(initialPlan);changed.pages[0].groups[0].blocks[0].sourceIds=['invented'];
  const repaged=structuredClone(initialPlan);repaged.pages.push({...structuredClone(repaged.pages[0]),pageId:'p2'});
- const provider=mockProvider([{content:JSON.stringify(changed),tools:['check_plan']},{content:JSON.stringify(repaged),tools:['check_plan']},{content:'沿用固定计划',tools:['semantic_review']}],[{accepted:false,issues:[{problem:'mock review intentionally blocks render'}],notes:[]}]);
+ const provider=mockProvider([{content:JSON.stringify(changed),tools:['check_plan']},{content:JSON.stringify(repaged),tools:['check_plan']},{content:'沿用固定计划',tools:['semantic_review']}],[{ruling:'strengthened',rationale:'mock review intentionally blocks render',notes:[]}]);
  await runGrayAgent({source,output,area:{width:1170,height:492},root:path.resolve(import.meta.dirname,'..'),provider,maxTurns:3,initialPlan,useLayoutRules:true});
  const events=(await fs.readFile(path.join(output,'agent/tool-events.ndjson'),'utf8')).trim().split(/\r?\n/).map(JSON.parse);
  assert.equal(events[0].result.planSource,'submission-failed');
@@ -462,4 +509,524 @@ test('controlled initial plan rejects source or pagination edits and retains ori
  assert.equal(events[2].result.planSource,'current-plan');
  assert.equal(provider.reviewCalls.length,1);
  assert.deepEqual(JSON.parse(await fs.readFile(path.join(output,'controlled-plan.json'),'utf8')),initialPlan);
+});
+
+test('organization revise 独立阻塞渲染与旧候选交付；组织通过复审后才恢复', async () => {
+  const revisedPlan = planJson('，修订版一');
+  const acceptedPlan = planJson('，修订版二');
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '初审通过。', tools: ['semantic_review'] },
+    { content: '渲染首个候选。', tools: [renderSingle] },
+    { content: revisedPlan, tools: ['check_plan'] },
+    { content: '组织审查需修订。', tools: ['semantic_review'] },
+    { content: '尝试渲染组织未通过版本。', tools: [renderSingle] },
+    { content: '尝试交付此前候选。', tools: [{ name: 'finish_draft', arguments: { renderId: 1, review: '尝试沿用旧候选。' } }] },
+    { content: acceptedPlan, tools: ['check_plan'] },
+    { content: '复审组织通过。', tools: ['semantic_review'] },
+    { content: '渲染通过版本。', tools: [renderSingle] },
+    { content: '交付新候选。', tools: [{ name: 'finish_draft', arguments: { renderId: 2, review: '复核改版内容后保持。' } }] },
+    { content: '收工。', tools: [] },
+  ], [
+    { notes: [] },
+    input => {
+      const location = input.auditLocations.find(item => item.field === 'body') ?? input.auditLocations[0];
+      return {
+        notes: [],
+        organization: { verdict: 'revise', findings: [{
+          locationId: location.id,
+          quote: location.text.slice(0, Math.min(18, location.text.length)),
+          problem: '读者仍需从同一块连续文字中自行拆出并列成员与它们的关系。',
+          requiredRevision: '沿真实关系重新组织已识别的成员，保留原有条件与指向。',
+        }] },
+      };
+    },
+    { notes: [], organization: { verdict: 'pass', findings: [] } },
+  ], 12);
+  try {
+    const reviews = run.events.filter(event => event.tool === 'semantic_review');
+    const renders = run.events.filter(event => event.tool === 'render_draft');
+    const finishes = run.events.filter(event => event.tool === 'finish_draft');
+    assert.equal(reviews[0].result.accepted, true);
+    assert.equal(reviews[1].result.accepted, false);
+    assert.equal(reviews[1].result.outcome, 'content-rejected');
+    assert.ok(reviews[1].result.claimAudit.claims.every(claim => claim.ruling === 'equivalent'));
+    assert.equal(reviews[1].result.organization.verdict, 'revise');
+    assert.equal(reviews[1].result.issues[0].locationId, reviews[1].result.organization.findings[0].locationId);
+    assert.equal(renders[1].result.accepted, false);
+    assert.equal(renders[1].result.stage, 'review-stale');
+    assert.equal(finishes[0].result.accepted, false);
+    assert.equal(finishes[0].result.stage, 'finish-needs-review');
+    assert.equal(reviews[2].result.accepted, true);
+    assert.equal(reviews[2].result.organization.verdict, 'pass');
+    assert.equal(renders[2].result.accepted, true);
+    assert.equal(finishes[1].result.delivered, true);
+    assert.equal(run.provider.reviewInputs[2].reviewFeedback[0].locationId, reviews[1].result.organization.findings[0].locationId);
+    assert.equal(run.provider.reviewInputs[2].reviewFeedback[0].quote, reviews[1].result.organization.findings[0].quote);
+  } finally { await run.rm(); }
+});
+
+test('organization 格式修复保留完整响应并受同一审稿输入的两次额度约束', async () => {
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '组织结果引文无效。', tools: ['semantic_review'] },
+    { content: '第一次修复组织结果。', tools: ['semantic_review'] },
+    { content: '第二次修复组织结果。', tools: ['semantic_review'] },
+    { content: '额度用尽后再请求。', tools: ['semantic_review'] },
+    { content: '收工。', tools: [] },
+  ], [
+    input => {
+      const response = addMockClaimAudit({ notes: [] }, input);
+      const location = input.auditLocations.find(item => item.field === 'body') ?? input.auditLocations[0];
+      response.organization = { verdict: 'revise', findings: [{
+        locationId: location.id, quote: '不是实际文案', problem: '位置中没有这段引文。', requiredRevision: '引用实际可见文字。',
+      }] };
+      return response;
+    },
+    input => {
+      const response = addMockClaimAudit({ notes: [] }, input);
+      response.organization = { verdict: 'revise', findings: [{
+        locationId: 'loc-9999', quote: '伪造位置', problem: '找不到该位置。', requiredRevision: '引用真实位置。',
+      }] };
+      return response;
+    },
+    input => {
+      const response = addMockClaimAudit({ notes: [] }, input);
+      response.organization = { verdict: 'revise', findings: [] };
+      return response;
+    },
+  ], 8);
+  try {
+    const reviews = run.events.filter(event => event.tool === 'semantic_review');
+    assert.equal(reviews.length, 4);
+    assert.equal(run.provider.reviewCalls.length, 3);
+    assert.equal(reviews[0].result.outcome, 'audit-invalid');
+    assert.equal(reviews[0].result.organization.verdict, 'revise');
+    assert.ok(reviews[0].result.claimAudit.claims.every(claim => claim.ruling === 'equivalent'));
+    assert.deepEqual(run.provider.reviewInputs[1].previousReviewResponse, {
+      notes: [], claimAudit: reviews[0].result.claimAudit, organization: reviews[0].result.organization,
+    });
+    assert.deepEqual(run.provider.reviewInputs[2].previousReviewResponse, {
+      notes: [], claimAudit: reviews[1].result.claimAudit, organization: reviews[1].result.organization,
+    });
+    assert.equal(reviews[1].result.evidenceRepair.attemptsUsed, 1);
+    assert.equal(reviews[2].result.evidenceRepair.attemptsUsed, 2);
+    assert.equal(reviews[2].result.evidenceRepair.status, 'exhausted');
+    assert.equal(reviews[3].result.evidenceRepair.status, 'exhausted');
+    assert.equal(reviews[0].result.reviewInputHash, reviews[1].result.reviewInputHash);
+    assert.equal(reviews[1].result.reviewInputHash, reviews[2].result.reviewInputHash);
+    assert.equal(run.provider.reviewInputs[1].repairAttempt.attempt, 1);
+    assert.equal(run.provider.reviewInputs[2].repairAttempt.attempt, 2);
+  } finally { await run.rm(); }
+});
+
+test('缺失 claimAudit 不得通过：同版证据修复收到原输入与错误，且不改计划', async () => {
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '先给出不完整审稿。', tools: ['semantic_review'] },
+    { content: '补齐审稿证据。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: '保持。', tools: [{ name: 'finish_draft', arguments: { review: '对照来源与上屏内容复核后保持。' } }] },
+    { content: '收工。', tools: [] },
+  ], [{ notes: [], claimAudit: null }]);
+  try {
+    const reviews = run.events.filter(event => event.tool === 'semantic_review');
+    assert.equal(reviews[0].result.accepted, false);
+    assert.equal(reviews[0].result.auditValidation.valid, false);
+    assert.equal(reviews[0].result.outcome, 'audit-invalid');
+    assert.equal(reviews[0].result.contentRejected, false);
+    assert.equal(reviews[0].result.evidenceRepair.status, 'pending');
+    assert.ok(reviews[0].result.auditValidation.errors.includes('缺少 claimAudit 对照证据对象'));
+    assert.equal(reviews[1].result.accepted, true, JSON.stringify(reviews[1].result.auditValidation));
+    assert.equal(reviews[1].result.outcome, 'accepted');
+    assert.deepEqual(run.provider.reviewInputs[1].originalReviewInput, run.provider.reviewInputs[0], '修复输入必须绑定原始审稿输入');
+    assert.deepEqual(run.provider.reviewInputs[1].previousReviewResponse, {
+      notes: [], claimAudit: null, organization: { verdict: 'pass', findings: [] },
+    });
+    assert.ok(run.provider.reviewInputs[1].previousValidationErrors.includes('缺少 claimAudit 对照证据对象'));
+    assert.deepEqual(run.provider.reviewInputs[1].repairAttempt, { attempt: 1, maxAttempts: 2 });
+    assert.match(run.provider.reviewPrompts[1], /不得修改、重写或要求规划者修改被审计划/u);
+    assert.match(run.provider.reviewPrompts[1], /不得删掉错误 claim 来造通过/u);
+    assert.match(run.provider.reviewPrompts[1], /不得把不匹配的事实引文自动改判 equivalent/u);
+    assert.equal(reviews[1].result.evidenceRepair.status, 'succeeded');
+    assert.equal(run.provider.reviewCalls.length, 2, '每次 semantic_review 工具调用至多一次 provider 调用');
+    assert.equal(reviews[0].result.reviewedFingerprint, reviews[1].result.reviewedFingerprint, '修复仍审同一内容版本');
+    assert.equal(run.state.grayDraft.reviewRecord[0].reviewInputHash, run.state.grayDraft.reviewRecord[1].reviewInputHash);
+    assert.equal(run.state.grayDraft.reviewRecord[1].evidenceRepairAttempt, 1);
+    assert.equal(run.events.find(event => event.tool === 'render_draft').result.accepted, true);
+    assert.equal(run.events.find(event => event.tool === 'finish_draft').result.delivered, true);
+    assert.equal(run.state.grayDraft.reviewRecord[0].accepted, false);
+    assert.equal(run.state.grayDraft.reviewRecord[0].auditValidation.valid, false);
+  } finally { await run.rm(); }
+});
+
+test('同一审稿输入最多两次修复：第二次收到最新audit/errors，之后明确停止', async () => {
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '初审。', tools: ['semantic_review'] },
+    { content: '第一次修复审稿证据。', tools: ['semantic_review'] },
+    { content: '第二次修复审稿证据。', tools: ['semantic_review'] },
+    { content: '再次请求同版审稿。', tools: ['semantic_review'] },
+    { content: '停止。', tools: [] },
+  ], [
+    input => {
+      const invalid = addMockClaimAudit({ notes: [] }, input);
+      invalid.claimAudit.claims[0].sourceEvidence[0].quote = '不存在的来源引文';
+      return invalid;
+    },
+    input => {
+      const invalid = addMockClaimAudit({ notes: [] }, input);
+      invalid.claimAudit.claims[0].visibleEvidence[0].quote = '不存在的上屏引文';
+      return invalid;
+    },
+    { notes: [], claimAudit: null },
+  ]);
+  try {
+    const reviews = run.events.filter(event => event.tool === 'semantic_review');
+    assert.equal(reviews.length, 4);
+    assert.equal(run.provider.reviewCalls.length, 3, '一次初审加至多两次证据修复，之后不再调用');
+    assert.equal(reviews[0].result.evidenceRepair.status, 'pending');
+    assert.equal(reviews[1].result.outcome, 'audit-invalid');
+    assert.equal(reviews[1].result.evidenceRepair.status, 'pending');
+    assert.equal(reviews[1].result.evidenceRepair.attemptsUsed, 1);
+    assert.deepEqual(run.provider.reviewInputs[1].repairAttempt, { attempt: 1, maxAttempts: 2 });
+    assert.deepEqual(run.provider.reviewInputs[1].previousReviewResponse, {
+      notes: [], claimAudit: reviews[0].result.claimAudit, organization: reviews[0].result.organization,
+    });
+    assert.deepEqual(run.provider.reviewInputs[1].previousValidationErrors, reviews[0].result.auditValidation.errors);
+    assert.equal(reviews[2].result.outcome, 'audit-invalid');
+    assert.equal(reviews[2].result.evidenceRepair.status, 'exhausted');
+    assert.equal(reviews[2].result.evidenceRepair.attemptsUsed, 2);
+    assert.deepEqual(run.provider.reviewInputs[2].repairAttempt, { attempt: 2, maxAttempts: 2 });
+    assert.deepEqual(run.provider.reviewInputs[2].previousReviewResponse, {
+      notes: [], claimAudit: reviews[1].result.claimAudit, organization: reviews[1].result.organization,
+    });
+    assert.deepEqual(run.provider.reviewInputs[2].previousValidationErrors, reviews[1].result.auditValidation.errors);
+    assert.equal(reviews[3].result.outcome, 'audit-invalid');
+    assert.equal(reviews[3].result.evidenceRepair.status, 'exhausted');
+    assert.match(reviews[3].result.note, /不要改正文或继续重试/u);
+    assert.deepEqual(run.provider.reviewInputs[1].originalReviewInput, run.provider.reviewInputs[0]);
+    assert.deepEqual(run.provider.reviewInputs[2].originalReviewInput, run.provider.reviewInputs[0]);
+    assert.equal(reviews[0].result.reviewedFingerprint, reviews[1].result.reviewedFingerprint);
+    assert.equal(reviews[1].result.reviewedFingerprint, reviews[2].result.reviewedFingerprint);
+    assert.equal(reviews[0].result.reviewInputHash, reviews[1].result.reviewInputHash);
+    assert.equal(reviews[1].result.reviewInputHash, reviews[2].result.reviewInputHash);
+  } finally { await run.rm(); }
+});
+
+test('证据修复收到原始无效 claimAudit 和对应校验错误', async () => {
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '初审。', tools: ['semantic_review'] },
+    { content: '只修复审稿证据。', tools: ['semantic_review'] },
+    { content: '停止。', tools: [] },
+  ], [input => {
+    const invalid = addMockClaimAudit({ notes: [] }, input);
+    invalid.claimAudit.claims[0].sourceEvidence[0].quote = '不存在的原句引文';
+    return invalid;
+  }]);
+  try {
+    const reviews = run.events.filter(event => event.tool === 'semantic_review');
+    assert.equal(reviews[0].result.outcome, 'audit-invalid');
+    assert.ok(reviews[0].result.auditValidation.errors.some(error => /来源引文不在/u.test(error)));
+    assert.deepEqual(run.provider.reviewInputs[1].previousReviewResponse, {
+      notes: [], claimAudit: reviews[0].result.claimAudit, organization: reviews[0].result.organization,
+    });
+    assert.deepEqual(run.provider.reviewInputs[1].previousValidationErrors, reviews[0].result.auditValidation.errors);
+    assert.deepEqual(run.provider.reviewInputs[1].originalReviewInput, run.provider.reviewInputs[0]);
+    assert.equal(reviews[1].result.evidenceRepair.status, 'succeeded');
+    assert.equal(run.provider.reviewCalls.length, 2);
+  } finally { await run.rm(); }
+});
+
+test('计划内容改变会被拒绝并清除暂存，新审稿继续修复原版本', async () => {
+  const changedPlan = planJson('，新增内容版本');
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '初审旧版。', tools: ['semantic_review'] },
+    { content: changedPlan, tools: ['check_plan'] },
+    { content: '审查新版。', tools: ['semantic_review'] },
+    { content: '停止。', tools: [] },
+  ], [{ notes: [], claimAudit: null }]);
+  try {
+    const checks = run.events.filter(event => event.tool === 'check_plan');
+    const reviews = run.events.filter(event => event.tool === 'semantic_review');
+    assert.equal(reviews[0].result.outcome, 'audit-invalid');
+    assert.equal(checks[1].result.stage, 'audit-repair-pending');
+    assert.equal(checks[1].result.accepted, false);
+    assert.equal(reviews[1].result.outcome, 'accepted');
+    assert.equal(reviews[1].result.evidenceRepair.status, 'succeeded');
+    assert.equal(reviews[1].result.planSource, 'audit-repair-original');
+    assert.equal(reviews[1].result.reviewedFingerprint, reviews[0].result.reviewedFingerprint, '回执标识仍待修复的原版本');
+    assert.equal(checks[1].result.pendingAuditRepair.fingerprint, planContentFingerprint(JSON.parse(planJson(''))));
+    assert.equal(checks[1].result.planEvidence.attemptedFingerprint, planContentFingerprint(JSON.parse(changedPlan)));
+    assert.equal(run.provider.reviewCalls.length, 2, '新内容没有启动审稿；只对保存的原版本进行了证据修复');
+    assert.deepEqual(run.provider.reviewInputs[1].originalReviewInput, run.provider.reviewInputs[0]);
+  } finally { await run.rm(); }
+});
+
+test('待修复原计划会拒绝换版并保存快照；同版修复成功后新计划可进入审稿', async () => {
+  const originalPlan = planJson('');
+  const revisedPlan = planJson('，修订版');
+  const run = await runProtocol([
+    { content: originalPlan, tools: ['check_plan'] },
+    { content: '审查原计划。', tools: ['semantic_review'] },
+    { content: revisedPlan, tools: ['check_plan'] },
+    { content: '先修复原计划的审稿证据。', tools: ['semantic_review'] },
+    { content: revisedPlan, tools: ['check_plan'] },
+    { content: '审查修订版。', tools: ['semantic_review'] },
+    { content: '停止。', tools: [] },
+  ], [{ notes: [], claimAudit: null }]);
+  try {
+    const checks = run.events.filter(event => event.tool === 'check_plan');
+    const reviews = run.events.filter(event => event.tool === 'semantic_review');
+    const originalFingerprint = planContentFingerprint(JSON.parse(originalPlan));
+    const revisedFingerprint = planContentFingerprint(JSON.parse(revisedPlan));
+
+    assert.equal(reviews[0].result.outcome, 'audit-invalid');
+    assert.equal(checks[1].result.accepted, false);
+    assert.equal(checks[1].result.stage, 'audit-repair-pending');
+    assert.equal(checks[1].result.planSource, 'audit-repair-pending');
+    assert.equal(checks[1].result.pendingAuditRepair.fingerprint, originalFingerprint);
+    assert.equal(checks[1].result.planEvidence.fingerprint, originalFingerprint);
+    assert.equal(checks[1].result.planEvidence.attemptedFingerprint, revisedFingerprint);
+    assert.equal(checks[1].result.planEvidence.planSource, 'audit-repair-pending');
+
+    assert.equal(reviews[1].result.outcome, 'accepted', JSON.stringify(reviews[1].result.auditValidation));
+    assert.equal(reviews[1].result.planSource, 'audit-repair-original');
+    assert.equal(reviews[1].result.reviewedFingerprint, originalFingerprint);
+    assert.deepEqual(run.provider.reviewInputs[1].originalReviewInput, run.provider.reviewInputs[0]);
+    assert.equal(checks[2].result.accepted, true, JSON.stringify(checks[2].result));
+    assert.equal(checks[2].result.planEvidence.fingerprint, revisedFingerprint);
+    assert.equal(reviews[2].result.outcome, 'accepted', JSON.stringify(reviews[2].result.auditValidation));
+    assert.equal(reviews[2].result.reviewedFingerprint, revisedFingerprint);
+    assert.equal(run.provider.reviewCalls.length, 3);
+  } finally { await run.rm(); }
+});
+
+test('审稿可见视图与实际渲染一致：page.title 留在后台，claim 才上屏', async () => {
+  const plan = JSON.parse(planJson(''));
+  plan.pages[0].title = 'BACKEND_TITLE_SHOULD_NOT_RENDER';
+  plan.pages[0].claim = 'VISIBLE_CLAIM_SHOULD_RENDER';
+  plan.pages[0].groups[0].heading = 'VISIBLE_REGION_HEADING';
+  const run = await runProtocol([
+    { content: JSON.stringify(plan), tools: ['check_plan'] },
+    { content: '审稿。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: '保持。', tools: [{ name: 'finish_draft', arguments: { review: '按实际上屏主题句与区域复核后保持。' } }] },
+  ]);
+  try {
+    const reviewInput = run.provider.reviewInputs[0];
+    assert.equal(reviewInput.visiblePages[0].claim, 'VISIBLE_CLAIM_SHOULD_RENDER');
+    assert.equal(Object.hasOwn(reviewInput.visiblePages[0], 'title'), false);
+    assert.ok(reviewInput.auditLocations.every(location => location.field !== 'title'));
+    const JSZip = (await import('jszip')).default;
+    const zip = await JSZip.loadAsync(await fs.readFile(path.join(run.output, 'gray-draft.pptx')));
+    const slideXml = await zip.file('ppt/slides/slide1.xml').async('string');
+    assert.match(slideXml, /VISIBLE_CLAIM_SHOULD_RENDER/u);
+    assert.doesNotMatch(slideXml, /BACKEND_TITLE_SHOULD_NOT_RENDER/u);
+  } finally { await run.rm(); }
+});
+
+test('灰稿 Agent 提示要求先合并全稿诊断，保真与可读性优先于留白', () => {
+  assert.match(GRAY_AGENT_PROMPT, /合并全稿诊断/u);
+  assert.match(GRAY_AGENT_PROMPT, /保真、关系辨认和实际可读性/u);
+  assert.match(GRAY_AGENT_PROMPT, /单凭某页字号最小不能自动/u);
+  assert.match(GRAY_AGENT_PROMPT, /已经识别出的成员或关系不能为了满足单页容量又合回长段/u);
+  assert.match(GRAY_AGENT_PROMPT, /不固定页数、布局或要求全文拆分，也不套用范本词汇/u);
+});
+
+test('无工具轮完整计划暂存：下一轮空正文 check_plan 消费原提交并记录来源', async () => {
+  const run = await runProtocol([
+    { content: planJson(''), tools: [] },
+    { content: '', tools: ['check_plan'] },
+    { content: '审稿。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: '保持。', tools: [{ name: 'finish_draft', arguments: { review: '对照原稿复核后保持。' } }] },
+  ]);
+  try {
+    const check = run.events.find(event => event.tool === 'check_plan');
+    assert.equal(check.result.accepted, true, JSON.stringify(check.result));
+    assert.equal(check.result.planSource, 'previous-turn');
+    assert.equal(check.result.planEvidence.submittedTurn, 1);
+    assert.equal(check.result.planEvidence.consumedTurn, 2);
+    assert.equal(check.result.planEvidence.consumptionSource, 'previous-no-tool-reply');
+    assert.equal(check.result.planEvidence.fingerprint, planContentFingerprint(JSON.parse(planJson(''))));
+    assert.equal(check.result.planEvidence.contentUpdated, true);
+    assert.equal(run.state.grayDraft.turns[0].planFlow.submission.status, 'staged');
+    assert.equal(run.state.grayDraft.turns[0].planFlow.submission.fingerprint, check.result.planEvidence.fingerprint);
+    assert.equal(run.state.grayDraft.turns[1].planFlow.consumptions[0].planSource, 'previous-turn');
+  } finally { await run.rm(); }
+});
+
+test('可见指纹不变时仍更新完整计划：修正页级 sourceIds 后检查从失败变通过', async () => {
+  const invalid = JSON.parse(planJson(''));
+  invalid.pages[0].sourceIds = ['missing-source'];
+  const corrected = structuredClone(invalid);
+  corrected.pages[0].sourceIds = ['s1'];
+  const run = await runProtocol([
+    { content: JSON.stringify(invalid), tools: ['check_plan'] },
+    { content: JSON.stringify(corrected), tools: [] },
+    { content: '', tools: ['check_plan'] },
+    { content: '审稿修正来源。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: '保持。', tools: [{ name: 'finish_draft', arguments: { review: '按修正后的来源认领复核并保持。' } }] },
+  ]);
+  try {
+    const checks = run.events.filter(event => event.tool === 'check_plan');
+    const review = run.events.find(event => event.tool === 'semantic_review');
+    assert.equal(checks[0].result.accepted, false, JSON.stringify(checks[0].result));
+    assert.equal(checks[1].result.accepted, true, JSON.stringify(checks[1].result));
+    assert.equal(checks[1].result.planSource, 'previous-turn');
+    assert.equal(checks[0].result.planEvidence.fingerprint, checks[1].result.planEvidence.fingerprint, '页级 sourceIds 不参与可见内容指纹');
+    assert.notEqual(checks[0].result.planEvidence.submissionFingerprint, checks[1].result.planEvidence.submissionFingerprint, '完整计划提交指纹捕获后台 sourceIds 修正');
+    assert.equal(checks[1].result.planEvidence.contentUpdated, false, 'sourceIds 修正本身不作废可见内容审稿');
+    assert.equal(checks[1].result.planEvidence.submissionUpdated, true);
+    assert.equal(review.result.accepted, true, JSON.stringify(review.result));
+    assert.equal(review.result.planEvidence.submissionFingerprint, checks[1].result.planEvidence.submissionFingerprint);
+    assert.equal(run.provider.reviewCalls.length, 1);
+    assert.equal(run.events.find(event => event.tool === 'render_draft').result.accepted, true);
+    assert.equal(run.events.find(event => event.tool === 'finish_draft').result.delivered, true);
+  } finally { await run.rm(); }
+});
+
+test('失败提交只接受精确的独立恢复指令：否定、引述和解释均持续阻断至合法恢复', async () => {
+  const badJson = '```json\n{ "schemaVersion": "gray-plan-3", "deckBrief": { "title": "开放安排"';
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '审稿。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: badJson, tools: [] },
+    { content: '不要沿用上一版。', tools: ['check_plan'] },
+    { content: '不能保持旧版。', tools: [renderSingle] },
+    { content: '说明：“沿用上一版”只是引述，不代表我要恢复。', tools: [{ name: 'finish_draft', arguments: { review: '尝试交付。' } }] },
+    { content: '确认恢复并沿用当前已提交计划。', tools: [{ name: 'finish_draft', arguments: { review: '明确放弃失败提交，复核此前候选后保持。' } }] },
+  ]);
+  try {
+    const checks = run.events.filter(event => event.tool === 'check_plan');
+    const renders = run.events.filter(event => event.tool === 'render_draft');
+    const finishes = run.events.filter(event => event.tool === 'finish_draft');
+    assert.equal(checks[1].result.accepted, false);
+    assert.equal(checks[1].result.planSource, 'submission-failed');
+    assert.equal(renders[1].result.stage, 'submission-failed');
+    assert.equal(finishes[0].result.stage, 'finish-submission-failed');
+    assert.equal(finishes[1].result.accepted, true, JSON.stringify(finishes[1].result));
+    assert.equal(run.state.grayDraft.postRender.completed, true);
+  } finally { await run.rm(); }
+});
+
+test('无工具轮的精确恢复授权留痕，并由下一工具轮消费', async () => {
+  const badJson = '```json\n{ "schemaVersion": "gray-plan-3", "deckBrief": { "title": "开放安排"';
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '审稿。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: badJson, tools: [] },
+    { content: '确认恢复并沿用当前已提交计划。', tools: [] },
+    { content: '现在检查。', tools: ['check_plan'] },
+    { content: '保持候选。', tools: [{ name: 'finish_draft', arguments: { review: '沿用前版复核后保持。' } }] },
+  ]);
+  try {
+    const check = run.events.filter(event => event.tool === 'check_plan')[1];
+    assert.equal(check.result.accepted, true, JSON.stringify(check.result));
+    assert.equal(check.result.planEvidence.consumptionSource, 'explicit-reuse');
+    assert.equal(check.result.planEvidence.recoveredFromTurn, 4);
+    assert.equal(check.result.planEvidence.recoveryAuthorizedTurn, 5);
+    const turns = run.state.grayDraft.turns;
+    assert.deepEqual(turns.find(turn => turn.turn === 5).planFlow.recoveryAuthorization, {
+      status: 'pending-next-tool', authorizedTurn: 5, exactInstruction: true,
+    });
+    assert.deepEqual(turns.find(turn => turn.turn === 6).planFlow.recoveryAuthorization, {
+      status: 'consumed', authorizedTurn: 5, consumedTurn: 6, exactInstruction: true,
+    });
+    assert.equal(run.events.find(event => event.tool === 'finish_draft').result.accepted, true);
+  } finally { await run.rm(); }
+});
+
+test('旧计划已提交时，无工具轮的新计划优先于旧版且内容变更触发重审', async () => {
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: '审稿旧版。', tools: ['semantic_review'] },
+    { content: planJson('，并留痕'), tools: [] },
+    { content: '', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: '保持。', tools: [{ name: 'finish_draft', arguments: { review: '复核修订版后保持。' } }] },
+  ]);
+  try {
+    const check = run.events.find(event => event.tool === 'check_plan');
+    const reviews = run.events.filter(event => event.tool === 'semantic_review');
+    const review = reviews[1];
+    assert.equal(review.result.planSource, 'previous-turn');
+    assert.equal(review.result.planEvidence.submittedTurn, 3);
+    assert.notEqual(review.result.planEvidence.fingerprint, reviews[0].result.planEvidence.fingerprint);
+    assert.equal(review.result.planEvidence.contentUpdated, true);
+    assert.equal(run.provider.reviewCalls.length, 2, '内容变更后必须重新调用审稿');
+    assert.equal(review.result.reviewedFingerprint, review.result.planEvidence.fingerprint);
+  } finally { await run.rm(); }
+});
+
+test('当前工具轮有效计划优先于更早暂存计划', async () => {
+  const currentPlan = planJson('，当前轮新计划');
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: planJson('，先前轮暂存'), tools: [] },
+    { content: currentPlan, tools: ['check_plan'] },
+    { content: '审稿。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: '保持。', tools: [{ name: 'finish_draft', arguments: { review: '复核当前版后保持。' } }] },
+  ]);
+  try {
+    const checks = run.events.filter(event => event.tool === 'check_plan');
+    assert.equal(checks[1].result.planSource, 'message');
+    assert.equal(checks[1].result.planEvidence.submittedTurn, 3);
+    assert.equal(checks[1].result.planEvidence.fingerprint, planContentFingerprint(JSON.parse(currentPlan)));
+    assert.notEqual(checks[1].result.planEvidence.fingerprint, run.state.grayDraft.turns[1].planFlow.submission.fingerprint);
+    assert.equal(checks[1].result.planEvidence.contentUpdated, true);
+  } finally { await run.rm(); }
+});
+
+test('无工具轮坏提交跨轮保留失败状态：空正文工具不能静默沿用旧计划', async () => {
+  const truncated = '```json\n{ "schemaVersion": "gray-plan-3", "deckBrief": { "title": "开放安排"';
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: truncated, tools: [] },
+    { content: '', tools: ['check_plan'] },
+    { content: planJson('，并留痕'), tools: ['check_plan'] },
+    { content: '审稿。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: '保持。', tools: [{ name: 'finish_draft', arguments: { review: '复核修订版后保持。' } }] },
+  ]);
+  try {
+    const checks = run.events.filter(event => event.tool === 'check_plan');
+    assert.equal(checks[1].result.planSource, 'submission-failed');
+    assert.equal(checks[1].result.planEvidence.submittedTurn, 2);
+    assert.equal(checks[2].result.planSource, 'message');
+    assert.equal(checks[2].result.planEvidence.submittedTurn, 4);
+    assert.notEqual(checks[2].result.planEvidence.fingerprint, checks[0].result.planEvidence.fingerprint);
+    assert.equal(run.state.grayDraft.turns[1].planFlow.submission.status, 'failed');
+  } finally { await run.rm(); }
+});
+
+test('已暂存有效计划后遇到坏提交：不回退暂存版或旧版，显式恢复才沿用', async () => {
+  const truncated = '```json\n{ "schemaVersion": "gray-plan-3", "deckBrief": { "title": "开放安排"';
+  const run = await runProtocol([
+    { content: planJson(''), tools: ['check_plan'] },
+    { content: planJson('，并留痕'), tools: [] },
+    { content: truncated, tools: ['check_plan'] },
+    { content: '', tools: ['check_plan'] },
+    { content: '确认恢复并沿用当前已提交计划。', tools: ['semantic_review'] },
+    { content: '渲染。', tools: [renderSingle] },
+    { content: '保持。', tools: [{ name: 'finish_draft', arguments: { review: '复核后保持旧版。' } }] },
+  ]);
+  try {
+    const checks = run.events.filter(event => event.tool === 'check_plan');
+    const review = run.events.find(event => event.tool === 'semantic_review');
+    assert.equal(checks[1].result.planSource, 'submission-failed');
+    assert.equal(checks[1].result.planEvidence.submittedTurn, 3);
+    assert.equal(checks[2].result.planSource, 'submission-failed', '后续空正文仍须阻断，不能消费暂存或旧版');
+    assert.equal(review.result.planSource, 'current-plan');
+    assert.equal(review.result.planEvidence.consumptionSource, 'explicit-reuse');
+    assert.equal(review.result.planEvidence.recoveredFromTurn, 3);
+    assert.equal(review.result.planEvidence.fingerprint, checks[0].result.planEvidence.fingerprint);
+  } finally { await run.rm(); }
 });
