@@ -91,6 +91,31 @@ export function parseArgs(argv) {
   return args;
 }
 
+/**
+ * 灰稿交接入口：把已生成的灰稿状态直接交给 visual 阶段。
+ * 不重新跑 content director，也不修改灰稿的页面、文字、关系或区域。
+ */
+export async function loadGrayState({ grayStatePath, rootDir = root }) {
+  const absolute = path.resolve(rootDir, grayStatePath);
+  const raw = await fs.readFile(absolute, "utf8");
+  const gray = JSON.parse(raw);
+  if (!Array.isArray(gray.pages) || gray.pages.length === 0) throw new Error("灰稿状态没有可交接的页面");
+  if (!gray.grayDraft) throw new Error("输入不是灰稿状态：缺少 grayDraft 交接信息");
+  return {
+    ...gray,
+    sourcePath: path.relative(rootDir, absolute).replaceAll("\\", "/"),
+    phase: "visual",
+    runtimeFailure: null,
+    lastStop: null,
+    grayInput: {
+      sourcePath: path.relative(rootDir, absolute).replaceAll("\\", "/"),
+      sha256: (await import("node:crypto")).createHash("sha256").update(raw).digest("hex"),
+      revision: gray.grayDraft.revision ?? gray.revision ?? null,
+      handedOffAt: new Date().toISOString(),
+    },
+  };
+}
+
 /** 阶段提示词。只描述当前阶段与停止条件，不写任何页级答案——那属于任务目录，不属于通用规则。 */
 const BASE_PROMPT = [
   "你是 PPagenT 生成线的一个编排 Agent。所有持久状态由工具保存，你只通过调用工具改变状态。",
@@ -200,24 +225,32 @@ export async function main(argv = process.argv.slice(2), { observer = null } = {
   const maxTurns = Number.parseInt(args["max-turns"] ?? "12", 10);
 
   if (!resume && !replay) {
-    if (!args.input) throw new Error("必须指定 --input（或使用 --resume / --replay）");
     try {
       await fs.access(statePath);
       throw new Error(`运行目录已有 state.json：${runDir}。请换新目录，或用 --resume 续跑。`);
     } catch (error) {
       if (error.code !== "ENOENT") throw error;
     }
+    if (args["gray-state"]) {
+      const imported = await loadGrayState({ grayStatePath: args["gray-state"], rootDir: root });
+      await fs.mkdir(path.dirname(statePath), { recursive: true });
+      await writeState(statePath, imported);
+      await writeText(path.join(runDir, "state.md"), renderStateMarkdown(imported));
+      await writeText(path.join(runDir, "content.md"), renderContentMarkdown(imported));
+    } else if (!args.input) throw new Error("必须指定 --input（或使用 --gray-state / --resume / --replay）");
   }
   await fs.mkdir(runDir, { recursive: true });
   // replay 直接读，不走 loadOrInitState：那条路会清掉 runtimeFailure / lastStop，
   // 而重编译只该重编译，不该改写运行记录。
   let state = replay
     ? await readState(statePath)
-    : await loadOrInitState({
+    : (args["gray-state"]
+      ? await readState(statePath)
+      : await loadOrInitState({
       statePath,
       inputPath: args.input ? path.resolve(root, args.input) : null,
       resume,
-    });
+    }));
 
   const committer = createCommitter({ statePath });
   // 每次启动都从 state.json 重渲染 state.md / content.md：它们是派生产物，可能与 state.json 漂移
