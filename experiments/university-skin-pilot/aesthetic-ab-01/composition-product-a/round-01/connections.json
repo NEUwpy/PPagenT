@@ -1,0 +1,85 @@
+{
+  "edges": [
+    {
+      "page": 5,
+      "sourceName": "p5-node-0-title",
+      "targetName": "p5-node-1-title",
+      "arrowAt": "target",
+      "reason": "自由度增加导致状态空间扩大",
+      "sourceId": "7",
+      "targetId": "10"
+    },
+    {
+      "page": 5,
+      "sourceName": "p5-node-1-title",
+      "targetName": "p5-node-2-title",
+      "arrowAt": "target",
+      "reason": "状态空间扩大带来更多失败模式",
+      "sourceId": "10",
+      "targetId": "13"
+    },
+    {
+      "page": 7,
+      "sourceName": "p7-b1",
+      "targetName": "p7-b2",
+      "arrowAt": "target",
+      "reason": "资产入库阶段先后",
+      "sourceId": "9",
+      "targetId": "11"
+    },
+    {
+      "page": 7,
+      "sourceName": "p7-b2",
+      "targetName": "p7-b3",
+      "arrowAt": "target",
+      "reason": "资产入库阶段先后",
+      "sourceId": "11",
+      "targetId": "13"
+    },
+    {
+      "page": 7,
+      "sourceName": "p7-b3",
+      "targetName": "p7-core",
+      "arrowAt": "target",
+      "reason": "用户确认后进入核心资产库",
+      "sourceId": "13",
+      "targetId": "17"
+    },
+    {
+      "page": 7,
+      "sourceName": "p7-r1",
+      "targetName": "p7-r2",
+      "arrowAt": "target",
+      "reason": "正式生成阶段先后",
+      "sourceId": "20",
+      "targetId": "22"
+    },
+    {
+      "page": 7,
+      "sourceName": "p7-r2",
+      "targetName": "p7-r3",
+      "arrowAt": "target",
+      "reason": "正式生成阶段先后",
+      "sourceId": "22",
+      "targetId": "24"
+    },
+    {
+      "page": 7,
+      "sourceName": "p7-r3",
+      "targetName": "p7-core",
+      "arrowAt": "target",
+      "reason": "正式生成只读取核心库",
+      "sourceId": "24",
+      "targetId": "17"
+    },
+    {
+      "page": 7,
+      "sourceName": "p7-core",
+      "targetName": "p7-out",
+      "arrowAt": "target",
+      "reason": "核心能力进入确定性编译",
+      "sourceId": "17",
+      "targetId": "28"
+    }
+  ]
+}

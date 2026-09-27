@@ -1,0 +1,10 @@
+最终文字核对依据：由 artifact-tool 从最终 deck.pptx 导出的 deck.pptx.inspect.ndjson；对 source-map.json 中每页 plannedText 逐项做空白归一化匹配。
+
+结果：15 / 15 plannedText anchors found；4 / 4 source paragraphs assigned to the requested four pages。
+
+页 1：五类记录共同解释同一个结果；原始数据保持原貌；清洗处理另存；记录完整，不等于全部文件开放。
+页 2：集中补历史；先记新增；先记录新增，再对真正需要复核的历史结果逐项补充。
+页 3：结果记录及受控引用；数据、脚本、条件提出缺项；执行者补齐记录；负责人确认进入可讨论版本。
+页 4：一个课题方向、两名自愿成员、只记录新增实验；第一周试填；第二三周记录缺项与填写负担；第四周决定保留/修改/停止。
+
+source-map 同时保留了四段原文、关键事实、条件、方案与代价，并按页分配。完整事实覆盖以 source-map.json 为核对表，实际页中文字通过最终 PPTX 导出结果反查。

@@ -1,0 +1,14 @@
+父审反馈修订且恢复任务；本轮不计独立首稿。
+最终导出：deck.pptx
+页数：9（含封面与收束）
+写入范围：仅 experiments/university-skin-pilot/aesthetic-ab-01/composition-archive/round-02。
+内容核对：source-map.json 在编排前建立，覆盖 archive.txt 的事实段落；P3 明确原始数据保持原貌、清洗与处理另存为派生文件，并保留“字段填满但脚本无法定位仍未解决”的反例。
+修订核对：P2 去除重复与空泛收束；P3/P9 将斜线式装饰改为直角色条；P6 节点标题与说明更紧且边框增强；P7 计划页让第二、三周都记录缺项与填写负担；P8 将三项评估问题逐行组织并把数字范围标签置于数字下方的可读位置；保留 P5 共同维度比较。
+结构：已检索 sequence-flow-001、sequence-phase-gates-004、comparison-dual-verdict-001、comparison-pros-cons-balance-005；本轮未调用 invokeStructure。
+源稿最终 PPTX 解包核对：unpacked/ppt/slides/slide1.xml 至 slide9.xml 共 9 页；pptx-text-audit.json 的 9 页必要事实核对全部通过。
+文字角色：audit-text-roles.json，128/128 声明角色已对照最终 layout，0 个字号、字重或字体不一致。
+确定性检查：audit-text-overlaps.json 文本交叠 0、容量警告 0、文字规则直接交叠 0；audit-visible-contract.json 颜色问题 0、绘制穿越问题 0；audit-wrap-tails.json 候选 0；audit-node-labels.json 4 对节点、0 问题；audit-connectors.json 3/3 连接绑定，方向均为 source-to-target，文字交叠 0、不支持几何 0；slides_test.py 通过，未发现画布溢出。页脚规则的近距候选均为已知页脚布局，未判作交叠。
+最终渲染：render_slides.py 已重新读取最终 deck.pptx，生成 deck/；生成者按任务要求不读取渲染图片，不自称视觉通过。
+未检查范围：未读其他运行、指南、旧样稿、图片或记忆；未做视觉审美结论。
+完成后冻结 round-02。
+SHA-256：a76caeeba6f412a159036e8935864fda6976896c45e4e9df74edd398e0a90dd9

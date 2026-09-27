@@ -1,0 +1,16 @@
+实验：university-skin-pilot / aesthetic-ab-01 / focus-b / round-01
+输入：inputs/composition-v2/study.txt；inputs/composition-v2/layout-guide.txt；inputs/theme.json；inputs/execution-contract.txt
+输出：四张内容分析页，无封面、无目录、无额外收束页。
+
+确定性检查（最终 deck.pptx）：
+- slides_test.py：passed，No overflow detected。
+- audit-text-overlaps.mjs：文本交叠 0；文本容量估计警告 0；文字与普通线交叠 0。
+- audit-node-labels.mjs：4 个节点配对，issueCount 0；标题与说明 labels 均纳入，居中与安全框检查通过；glyph bounds 未验证。
+- audit-visible-contract.mjs：颜色问题 0；绘制层交叠问题 0。
+- audit-wrap-tails.mjs：候选 0。
+- audit-connectors.py：5 条原生连接器，5 条绑定；arrowAt=target 5；反向箭头 0；不支持几何 0；文字穿线 0；声明失败 0。
+- coverage.txt：最终 PPTX 导出文字与 source-map plannedText 15/15 匹配。
+
+可编辑性：文字、矩形、线条和连接器均由 @oai/artifact-tool 原生创建；未以截图替代整页。
+结构使用：已检索 comparison、sequence、progression 目录；未调用结构资产，理由见 structure-usage.txt。
+审查边界：本轮未读取渲染图片，未执行审美验收；父任务负责独立视觉审查。

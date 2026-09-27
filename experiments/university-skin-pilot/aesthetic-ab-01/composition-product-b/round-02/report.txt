@@ -1,0 +1,10 @@
+这是父审反馈修订后的 composition-product-b round-02，不计独立首稿。
+输出：11 页原生可编辑 PPTX；已导出每页 layout、source-map、source-map-check、deck-text-export、reasoning、text-roles、connections、line-paths、node-label-pairs。
+结构采用 reference-recompose，未调用 invokeStructure；实际来源与改动见 structure-usage.txt。
+文字角色记录数：138，全部找到实际 shapeId；有向连接记录数：4；线段记录数：16。
+P6/P7 连接均绑定实际可见语义对象：AI→规则→代码；用户确认→核心资产库→选择合法能力。P3/P4 已补齐反馈指出的两端需求、Q/Q可用/R 解释、增量定制成本与内部汇报代价边界。
+内容反查：source-map 71 个源段落，11 页；source-map-check 指定术语缺失数 0。
+确定性检查：slides_test 通过；text-overlaps intersectionCount 0、textCapacityWarningCount 0；node-labels P6/P7 issueCount 均 0；visible-contract color/paint issue 均 0；wrap-tails findings 0；connectors connectorCount 4、boundCount 4、reverseArrowCount 0、unsupportedGeometryCount 0、textIntersectionCount 0、declarationFailureCount 0。
+渲染目录：deck/，由最终 deck.pptx 重新生成 11 张 slide PNG。
+最终 SHA-256：0556E122A001B70575CA07C242173892DBFB4DA1C81133C71D9D54CA578FACC5。
+冻结状态：本报告写入后不再修改。视觉审查由父任务独立完成，本报告不声明审美验收通过。

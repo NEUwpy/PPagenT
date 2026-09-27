@@ -1,0 +1,131 @@
+{
+  "verifiedAt": "2026-09-06T09:17:40.541Z",
+  "run": "../aesthetic-ab-01/focus-b/round-01",
+  "sha256": "d14fdd6c66c9d96552136c9e84f08e5b8ca65a590cacac82ff8a23915f6af035",
+  "pageCount": 4,
+  "layoutCount": 4,
+  "layoutCoverageComplete": true,
+  "native": [
+    {
+      "page": 1,
+      "entry": "ppt/slides/slide1.xml",
+      "shapes": 28,
+      "connectors": 0,
+      "pictures": 0,
+      "graphicFrames": 0,
+      "textRuns": 24
+    },
+    {
+      "page": 2,
+      "entry": "ppt/slides/slide2.xml",
+      "shapes": 27,
+      "connectors": 0,
+      "pictures": 0,
+      "graphicFrames": 0,
+      "textRuns": 21
+    },
+    {
+      "page": 3,
+      "entry": "ppt/slides/slide3.xml",
+      "shapes": 27,
+      "connectors": 3,
+      "pictures": 0,
+      "graphicFrames": 0,
+      "textRuns": 29
+    },
+    {
+      "page": 4,
+      "entry": "ppt/slides/slide4.xml",
+      "shapes": 28,
+      "connectors": 2,
+      "pictures": 0,
+      "graphicFrames": 0,
+      "textRuns": 27
+    }
+  ],
+  "auditSummary": [
+    {
+      "page": 1,
+      "capacity": 0,
+      "intersections": 0,
+      "ruleIntersections": 0,
+      "ruleClearance": 4,
+      "nodeStatus": "not-declared",
+      "colorIssues": 0,
+      "paintFindings": 0,
+      "wrapTailCandidates": 0
+    },
+    {
+      "page": 2,
+      "capacity": 0,
+      "intersections": 0,
+      "ruleIntersections": 0,
+      "ruleClearance": 3,
+      "nodeStatus": "not-declared",
+      "colorIssues": 0,
+      "paintFindings": 0,
+      "wrapTailCandidates": 0
+    },
+    {
+      "page": 3,
+      "capacity": 0,
+      "intersections": 0,
+      "ruleIntersections": 0,
+      "ruleClearance": 0,
+      "nodeStatus": "not-declared",
+      "colorIssues": 0,
+      "paintFindings": 0,
+      "wrapTailCandidates": 0
+    },
+    {
+      "page": 4,
+      "capacity": 0,
+      "intersections": 0,
+      "ruleIntersections": 0,
+      "ruleClearance": 0,
+      "nodeStatus": "not-declared",
+      "colorIssues": 0,
+      "paintFindings": 0,
+      "wrapTailCandidates": 0
+    }
+  ],
+  "connectorSummary": {
+    "slideCount": 4,
+    "connectorCount": 5,
+    "boundCount": 5,
+    "unknownBindingCount": 0,
+    "reverseArrowCount": 0,
+    "unsupportedGeometryCount": 0,
+    "unsupportedTransformCount": 0,
+    "uninspectedGroupedConnectors": 0,
+    "uninspectedRouteCount": 0,
+    "textIntersectionCount": 0,
+    "declarationFailureCount": 0
+  },
+  "connectorScope": "Top-level native p:cxnSp only. Ordinary line shapes and grouped connectors are not route-audited; non-straight or rotated paths are explicitly unsupported.",
+  "renderExitCode": 0,
+  "canvasTestExitCode": 0,
+  "renders": [
+    {
+      "page": 1,
+      "path": "../aesthetic-ab-01/reviews/focus-b-round-01/render/slide-1.png",
+      "sha256": "0642ce876dc248fc26de1c0eed0dd90faeeef5ca7dd1d24c7af92478673bebbb"
+    },
+    {
+      "page": 2,
+      "path": "../aesthetic-ab-01/reviews/focus-b-round-01/render/slide-2.png",
+      "sha256": "81513dd2d5ef61f1416f2c5424ac420154c46f2b8bd61e7eb669c648e812fde3"
+    },
+    {
+      "page": 3,
+      "path": "../aesthetic-ab-01/reviews/focus-b-round-01/render/slide-3.png",
+      "sha256": "1477fa81c602d7d4466fd07c5813f20833f3282575953e7f63f3fd2195a0f5f5"
+    },
+    {
+      "page": 4,
+      "path": "../aesthetic-ab-01/reviews/focus-b-round-01/render/slide-4.png",
+      "sha256": "56ec979f3c48fddeede72eafd2571547f6f6d3faf9843924de72886d7e6f925b"
+    }
+  ],
+  "visualAcceptance": "Pending independent per-page review; numeric checks do not imply style acceptance."
+}

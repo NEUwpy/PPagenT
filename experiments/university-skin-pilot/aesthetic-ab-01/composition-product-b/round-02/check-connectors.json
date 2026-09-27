@@ -1,0 +1,286 @@
+{
+  "schema": "ppagent.connector-contract/v1",
+  "source": "experiments\\university-skin-pilot\\aesthetic-ab-01\\composition-product-b\\round-02\\deck.pptx",
+  "layoutDir": "experiments\\university-skin-pilot\\aesthetic-ab-01\\composition-product-b\\round-02",
+  "scope": "Top-level native p:cxnSp only. Ordinary line shapes and grouped connectors are not route-audited; non-straight or rotated paths are explicitly unsupported.",
+  "slides": [
+    {
+      "slide": 1,
+      "layout": "experiments\\university-skin-pilot\\aesthetic-ab-01\\composition-product-b\\round-02\\slide-01.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 2,
+      "layout": "experiments\\university-skin-pilot\\aesthetic-ab-01\\composition-product-b\\round-02\\slide-02.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 3,
+      "layout": "experiments\\university-skin-pilot\\aesthetic-ab-01\\composition-product-b\\round-02\\slide-03.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 4,
+      "layout": "experiments\\university-skin-pilot\\aesthetic-ab-01\\composition-product-b\\round-02\\slide-04.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 5,
+      "layout": "experiments\\university-skin-pilot\\aesthetic-ab-01\\composition-product-b\\round-02\\slide-05.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 6,
+      "layout": "experiments\\university-skin-pilot\\aesthetic-ab-01\\composition-product-b\\round-02\\slide-06.layout.json",
+      "connectors": [
+        {
+          "lineId": {
+            "xml": "37",
+            "layout": "15"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "12",
+            "name": "node-0"
+          },
+          "target": {
+            "id": "13",
+            "name": "node-1"
+          },
+          "sourceBinding": {
+            "id": "12",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "13",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            680,
+            392,
+            40,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "38",
+            "layout": "16"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "13",
+            "name": "node-1"
+          },
+          "target": {
+            "id": "14",
+            "name": "node-2"
+          },
+          "sourceBinding": {
+            "id": "13",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "14",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            930,
+            392,
+            40,
+            0
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": false
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        }
+      ],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 7,
+      "layout": "experiments\\university-skin-pilot\\aesthetic-ab-01\\composition-product-b\\round-02\\slide-07.layout.json",
+      "connectors": [
+        {
+          "lineId": {
+            "xml": "38",
+            "layout": "17"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "11",
+            "name": "7-ls3"
+          },
+          "target": {
+            "id": "16",
+            "name": "core"
+          },
+          "sourceBinding": {
+            "id": "11",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "16",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            485,
+            470,
+            70,
+            8
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": true
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        },
+        {
+          "lineId": {
+            "xml": "39",
+            "layout": "18"
+          },
+          "geometry": "straightConnector1",
+          "rotationUnsupported": false,
+          "layoutAssociation": "matched",
+          "bindingStatus": "bound",
+          "source": {
+            "id": "16",
+            "name": "core"
+          },
+          "target": {
+            "id": "14",
+            "name": "7-rs2"
+          },
+          "sourceBinding": {
+            "id": "16",
+            "idx": "3"
+          },
+          "targetBinding": {
+            "id": "14",
+            "idx": "1"
+          },
+          "head": null,
+          "tail": {
+            "type": "arrow",
+            "w": "sm",
+            "len": "sm"
+          },
+          "arrowAt": "target",
+          "actualArrowDirection": "source-to-target",
+          "bbox": [
+            725,
+            426,
+            35,
+            44
+          ],
+          "flip": {
+            "horizontal": false,
+            "vertical": true
+          },
+          "textIntersection": {
+            "status": "clear",
+            "geometry": "straightConnector1",
+            "candidates": []
+          }
+        }
+      ],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 8,
+      "layout": "experiments\\university-skin-pilot\\aesthetic-ab-01\\composition-product-b\\round-02\\slide-08.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 9,
+      "layout": "experiments\\university-skin-pilot\\aesthetic-ab-01\\composition-product-b\\round-02\\slide-09.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 10,
+      "layout": "experiments\\university-skin-pilot\\aesthetic-ab-01\\composition-product-b\\round-02\\slide-10.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    },
+    {
+      "slide": 11,
+      "layout": "experiments\\university-skin-pilot\\aesthetic-ab-01\\composition-product-b\\round-02\\slide-11.layout.json",
+      "connectors": [],
+      "uninspectedGroupedConnectors": 0
+    }
+  ],
+  "summary": {
+    "slideCount": 11,
+    "connectorCount": 4,
+    "boundCount": 4,
+    "unknownBindingCount": 0,
+    "reverseArrowCount": 0,
+    "unsupportedGeometryCount": 0,
+    "unsupportedTransformCount": 0,
+    "uninspectedGroupedConnectors": 0,
+    "uninspectedRouteCount": 0,
+    "textIntersectionCount": 0,
+    "declarationFailureCount": 0
+  },
+  "declarationChecks": []
+}

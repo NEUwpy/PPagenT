@@ -1,0 +1,29 @@
+首轮独立提交报告（editorial / round-01）
+
+范围与输入
+- 仅读取并使用本任务指定的 inputs/task.txt、inputs/product.txt、inputs/editorial/layout-guide.txt、inputs/theme.json、inputs/execution-contract.txt、Presentations Skill/API 文档及运行时依赖。
+- 本轮在额度中断后从已有 editorial/round-01 产物恢复，输入与页级要求未改变；恢复不是新的独立实验。
+- 未读取其他实验、旧 builder、历史样稿、参考图片或父审记录；未调用图片工具、视觉工具、结构 invokeStructure 或 Git。
+
+交付
+- 11 页中文原生可编辑 PPTX，含封面与收束；每页均有 slide-N.layout.json。
+- builder.mjs、source-map.json、reasoning.txt、structure-usage.txt、coverage.txt、actual-text-export.txt、coverage-check.json。
+- connections.json、line-paths.json、node-label-pairs.json，以及按适用页拆分的 node-label-pairs-slide-6.json / node-label-pairs-slide-7.json。
+- builder.log、render.log、slides-test.log、overlap-audit.json、visible-contract.json、wrap-audit.json、labels-slide-6.json、labels-slide-7.json、connectors-audit.json、check-summary.json、hashes.txt。
+
+内容覆盖
+- source-map 11/11 段落组均分配页码；实际最终 layout 文字按页回读，coverage-check 对每页关键事实词 11/11 命中，缺失词 0。
+- 保留两位导演、只读核心库、用户确认、无合适结构时的简单文字排版/拆页、可靠度 R、80/95 比喻、建设期与正式生成期成本、东北大学起点及组织扩展。
+
+确定性检查结果
+- slides_test.py：Test passed. No overflow detected.
+- audit-text-overlaps：11 页，intersectionCount 0，textRuleIntersectionCount 0，capacityWarnings 0。
+- audit-visible-contract：colorIssueCount 0，paintIssueCount 0（范围为声明颜色与框体几何，不是视觉验收）。
+- audit-wrap-tails：0 个候选。
+- audit-node-labels：slide 6 与 slide 7 的全部节点标题/说明配对，issueCount 均为 0。
+- audit-connectors.py：12 条 native connector，12/12 bound，reverseArrowCount 0，textIntersectionCount 0，unsupportedGeometryCount 0，declarationFailureCount 0。manifest 以 source/target/arrowAt 记录，普通分隔线与迁移线另列 line-paths.json。
+
+边界与未覆盖项
+- render_slides.py 已重新读取最终 PPTX 生成 render/；本执行者没有读取或分析渲染图片，故不声称视觉通过。父任务负责独立视觉审查。
+- 程序审计不能证明字体 glyph 边界、圆角轮廓、阅读节奏、审美平衡或所有中文断行自然；报告保留这些限制。
+- source-map 逐段保留了原稿，页面为面向读者的压缩编排；coverage-check 是关键事实词核对，不宣称逐字覆盖。

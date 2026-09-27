@@ -1,0 +1,6 @@
+首轮 composition-product-b 已生成并冻结。
+输出：11 页原生可编辑 PPTX；已导出每页 layout、source-map、reasoning、text-roles、connections、line-paths 与 deck-text-export。
+结构采用 reference-recompose，未调用 invokeStructure；实际来源与改动见 structure-usage.txt。
+最终确定性审计：文本框相交 0、文本穿线 0、容量警告 0、主题色问题 0、背景覆盖问题 0、换行尾行候选 0；节点标签 slide-06/07 均为 0 issue；连接器 4 条，均绑定、目标端箭头、无反向、无未覆盖路径；slides_test 无溢出。
+最终文字反查：source-map 71 个源段落，11 页关键事实词核对全部命中；实际文字导出见 deck-text-export.json，逐页分配见 source-map-check.json。
+本轮不声明视觉通过；PNG 已渲染但按任务要求未读取图片，由父任务独立审查。

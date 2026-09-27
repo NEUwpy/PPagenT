@@ -1,0 +1,758 @@
+[
+  {
+    "slide": 1,
+    "shape": "1",
+    "name": "s1-kicker",
+    "role": "note",
+    "fontSize": 16,
+    "bold": false,
+    "text": "01 记录单元"
+  },
+  {
+    "slide": 1,
+    "shape": "2",
+    "name": "s1-title",
+    "role": "claim",
+    "fontSize": 30,
+    "bold": true,
+    "text": "一次结果应由一组依据共同解释"
+  },
+  {
+    "slide": 1,
+    "shape": "6",
+    "name": "s1-analysis-heading",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "五类记录共同解释同一个结果"
+  },
+  {
+    "slide": 1,
+    "shape": "7",
+    "name": "s1-analysis-caption",
+    "role": "note",
+    "fontSize": 16,
+    "bold": false,
+    "text": "并列依据，不是五个先后步骤"
+  },
+  {
+    "slide": 1,
+    "shape": "8",
+    "name": "s1-row-label-0",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "原始数据位置"
+  },
+  {
+    "slide": 1,
+    "shape": "9",
+    "name": "s1-row-body-0",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "让结果可回到来源；原始数据保持原貌。"
+  },
+  {
+    "slide": 1,
+    "shape": "11",
+    "name": "s1-row-label-1",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "样本与采集条件"
+  },
+  {
+    "slide": 1,
+    "shape": "12",
+    "name": "s1-row-body-1",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "说明样本处在什么采集条件下，便于理解结果上下文。"
+  },
+  {
+    "slide": 1,
+    "shape": "14",
+    "name": "s1-row-label-2",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "处理脚本版本"
+  },
+  {
+    "slide": 1,
+    "shape": "15",
+    "name": "s1-row-body-2",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "定位实际运行代码；清洗处理另存。"
+  },
+  {
+    "slide": 1,
+    "shape": "17",
+    "name": "s1-row-label-3",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "结果文件"
+  },
+  {
+    "slide": 1,
+    "shape": "18",
+    "name": "s1-row-body-3",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "保留讨论所依据的图表或结果文件。"
+  },
+  {
+    "slide": 1,
+    "shape": "20",
+    "name": "s1-row-label-4",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "异常及排除说明"
+  },
+  {
+    "slide": 1,
+    "shape": "21",
+    "name": "s1-row-body-4",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "未纳入结果的样本也保留排除依据。"
+  },
+  {
+    "slide": 1,
+    "shape": "24",
+    "name": "s1-boundary-heading",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "权限边界"
+  },
+  {
+    "slide": 1,
+    "shape": "25",
+    "name": "s1-boundary-body",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "记录完整，不等于全部文件开放。\n受限数据保留原授权位置。\n记录只含受控引用与访问条件；路径不代表访问权。\n讨论材料含结果图与可公开解释。"
+  },
+  {
+    "slide": 1,
+    "shape": "26",
+    "name": "s1-footer-left",
+    "role": "footer",
+    "fontSize": 12,
+    "bold": false,
+    "text": "大学课题组试点提案 · 内容分析页"
+  },
+  {
+    "slide": 1,
+    "shape": "27",
+    "name": "s1-footer-right",
+    "role": "footer",
+    "fontSize": 12,
+    "bold": false,
+    "text": "01 / 04 · 拟定范围"
+  },
+  {
+    "slide": 2,
+    "shape": "1",
+    "name": "s2-kicker",
+    "role": "note",
+    "fontSize": 16,
+    "bold": false,
+    "text": "02 范围取舍"
+  },
+  {
+    "slide": 2,
+    "shape": "2",
+    "name": "s2-title",
+    "role": "claim",
+    "fontSize": 30,
+    "bold": true,
+    "text": "新增记录优先，历史结果按需补回"
+  },
+  {
+    "slide": 2,
+    "shape": "6",
+    "name": "s2-table-heading",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "两种范围选择，代价落在不同位置"
+  },
+  {
+    "slide": 2,
+    "shape": "7",
+    "name": "s2-col-option",
+    "role": "note",
+    "fontSize": 16,
+    "bold": false,
+    "text": "选择"
+  },
+  {
+    "slide": 2,
+    "shape": "8",
+    "name": "s2-col-gain",
+    "role": "note",
+    "fontSize": 16,
+    "bold": false,
+    "text": "能得到什么"
+  },
+  {
+    "slide": 2,
+    "shape": "9",
+    "name": "s2-col-cost",
+    "role": "note",
+    "fontSize": 16,
+    "bold": false,
+    "text": "需要付出什么"
+  },
+  {
+    "slide": 2,
+    "shape": "12",
+    "name": "s2-history-label",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "集中补历史"
+  },
+  {
+    "slide": 2,
+    "shape": "13",
+    "name": "s2-history-gain",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "可一次形成较大目录。"
+  },
+  {
+    "slide": 2,
+    "shape": "14",
+    "name": "s2-history-cost",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "追查遗失上下文耗时；也可能把不确定记忆写成确定说明。"
+  },
+  {
+    "slide": 2,
+    "shape": "17",
+    "name": "s2-new-label",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "先记新增"
+  },
+  {
+    "slide": 2,
+    "shape": "18",
+    "name": "s2-new-gain",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "新增实验在上下文清楚时即可记录。"
+  },
+  {
+    "slide": 2,
+    "shape": "19",
+    "name": "s2-new-cost",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "短期无法解决全部历史材料追溯。"
+  },
+  {
+    "slide": 2,
+    "shape": "20",
+    "name": "s2-recommend-mark",
+    "role": "note",
+    "fontSize": 16,
+    "bold": false,
+    "text": "提案建议"
+  },
+  {
+    "slide": 2,
+    "shape": "22",
+    "name": "s2-note-heading",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "建议的动作顺序"
+  },
+  {
+    "slide": 2,
+    "shape": "23",
+    "name": "s2-note-main",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "先记录新增，\n再对真正需要复核的历史结果逐项补充。"
+  },
+  {
+    "slide": 2,
+    "shape": "25",
+    "name": "s2-note-boundary",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "这是范围选择。\n目前没有证明效率提升。"
+  },
+  {
+    "slide": 2,
+    "shape": "26",
+    "name": "s2-footer-left",
+    "role": "footer",
+    "fontSize": 12,
+    "bold": false,
+    "text": "大学课题组试点提案 · 内容分析页"
+  },
+  {
+    "slide": 2,
+    "shape": "27",
+    "name": "s2-footer-right",
+    "role": "footer",
+    "fontSize": 12,
+    "bold": false,
+    "text": "02 / 04 · 拟定范围"
+  },
+  {
+    "slide": 3,
+    "shape": "1",
+    "name": "s3-kicker",
+    "role": "note",
+    "fontSize": 16,
+    "bold": false,
+    "text": "03 复核路径"
+  },
+  {
+    "slide": 3,
+    "shape": "2",
+    "name": "s3-title",
+    "role": "claim",
+    "fontSize": 30,
+    "bold": true,
+    "text": "复核把结果产生过程变成可讨论记录"
+  },
+  {
+    "slide": 3,
+    "shape": "4",
+    "name": "s3-flow-heading",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "四个阶段共享同一份记录"
+  },
+  {
+    "slide": 3,
+    "shape": "5",
+    "name": "s3-flow-caption",
+    "role": "note",
+    "fontSize": 16,
+    "bold": false,
+    "text": "定位依据与补充缺项，直到负责人确认。"
+  },
+  {
+    "slide": 3,
+    "shape": "13",
+    "name": "s3-submit-title",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "提交"
+  },
+  {
+    "slide": 3,
+    "shape": "14",
+    "name": "s3-submit-role",
+    "role": "note",
+    "fontSize": 16,
+    "bold": false,
+    "text": "执行者"
+  },
+  {
+    "slide": 3,
+    "shape": "15",
+    "name": "s3-submit-explanation",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "结果记录及受控引用"
+  },
+  {
+    "slide": 3,
+    "shape": "16",
+    "name": "s3-locate-title",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "定位"
+  },
+  {
+    "slide": 3,
+    "shape": "17",
+    "name": "s3-locate-role",
+    "role": "note",
+    "fontSize": 16,
+    "bold": false,
+    "text": "另一位成员"
+  },
+  {
+    "slide": 3,
+    "shape": "18",
+    "name": "s3-locate-explanation",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "定位数据与脚本，\n核对条件并提出缺项"
+  },
+  {
+    "slide": 3,
+    "shape": "19",
+    "name": "s3-supplement-title",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "补充"
+  },
+  {
+    "slide": 3,
+    "shape": "20",
+    "name": "s3-supplement-role",
+    "role": "note",
+    "fontSize": 16,
+    "bold": false,
+    "text": "执行者"
+  },
+  {
+    "slide": 3,
+    "shape": "21",
+    "name": "s3-supplement-explanation",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "补齐缺项"
+  },
+  {
+    "slide": 3,
+    "shape": "22",
+    "name": "s3-confirm-title",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "确认"
+  },
+  {
+    "slide": 3,
+    "shape": "23",
+    "name": "s3-confirm-role",
+    "role": "note",
+    "fontSize": 16,
+    "bold": false,
+    "text": "负责人"
+  },
+  {
+    "slide": 3,
+    "shape": "24",
+    "name": "s3-confirm-explanation",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "确认后进入可讨论\n版本"
+  },
+  {
+    "slide": 3,
+    "shape": "26",
+    "name": "s3-auth-heading",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "新增访问授权"
+  },
+  {
+    "slide": 3,
+    "shape": "27",
+    "name": "s3-auth-body",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "暂停共享\n负责人处理授权\n处理后继续"
+  },
+  {
+    "slide": 3,
+    "shape": "28",
+    "name": "s3-auth-note",
+    "role": "note",
+    "fontSize": 16,
+    "bold": false,
+    "text": "授权是继续共享的条件。"
+  },
+  {
+    "slide": 3,
+    "shape": "29",
+    "name": "s3-boundary-heading",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "复核边界"
+  },
+  {
+    "slide": 3,
+    "shape": "30",
+    "name": "s3-boundary-body",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "检查结果如何产生；不要求复做实验，也不代替科学结论审查。"
+  },
+  {
+    "slide": 3,
+    "shape": "31",
+    "name": "s3-footer-left",
+    "role": "footer",
+    "fontSize": 12,
+    "bold": false,
+    "text": "大学课题组试点提案 · 内容分析页"
+  },
+  {
+    "slide": 3,
+    "shape": "32",
+    "name": "s3-footer-right",
+    "role": "footer",
+    "fontSize": 12,
+    "bold": false,
+    "text": "03 / 04 · 拟定范围"
+  },
+  {
+    "slide": 4,
+    "shape": "1",
+    "name": "s4-kicker",
+    "role": "note",
+    "fontSize": 16,
+    "bold": false,
+    "text": "04 去留条件"
+  },
+  {
+    "slide": 4,
+    "shape": "2",
+    "name": "s4-title",
+    "role": "claim",
+    "fontSize": 30,
+    "bold": true,
+    "text": "四周试点以过程反馈决定去留"
+  },
+  {
+    "slide": 4,
+    "shape": "5",
+    "name": "s4-scope-heading",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "拟定范围"
+  },
+  {
+    "slide": 4,
+    "shape": "6",
+    "name": "s4-scope-body",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "一个课题方向  ·  两名自愿成员  ·  只记录新增实验"
+  },
+  {
+    "slide": 4,
+    "shape": "7",
+    "name": "s4-scope-note",
+    "role": "note",
+    "fontSize": 16,
+    "bold": false,
+    "text": "不是全量历史归档"
+  },
+  {
+    "slide": 4,
+    "shape": "8",
+    "name": "s4-timeline-heading",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "四周安排先验证记录负担，再决定范围"
+  },
+  {
+    "slide": 4,
+    "shape": "14",
+    "name": "s4-w1-title",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "第1周"
+  },
+  {
+    "slide": 4,
+    "shape": "15",
+    "name": "s4-w1-desc",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "确认最少字段\n试填一个结果"
+  },
+  {
+    "slide": 4,
+    "shape": "16",
+    "name": "s4-w23-title",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "第2–3周"
+  },
+  {
+    "slide": 4,
+    "shape": "17",
+    "name": "s4-w23-desc",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "记录缺项\n填写负担"
+  },
+  {
+    "slide": 4,
+    "shape": "18",
+    "name": "s4-w4-title",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "第4周"
+  },
+  {
+    "slide": 4,
+    "shape": "19",
+    "name": "s4-w4-desc",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "决定：保留 / 修改 / 停止"
+  },
+  {
+    "slide": 4,
+    "shape": "22",
+    "name": "s4-eval-heading",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "评估与停止条件"
+  },
+  {
+    "slide": 4,
+    "shape": "23",
+    "name": "s4-q1-label",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "来源定位"
+  },
+  {
+    "slide": 4,
+    "shape": "24",
+    "name": "s4-q1-body",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "能否定位"
+  },
+  {
+    "slide": 4,
+    "shape": "25",
+    "name": "s4-q2-label",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "依据理解"
+  },
+  {
+    "slide": 4,
+    "shape": "26",
+    "name": "s4-q2-body",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "处理与排除依据\n能否理解"
+  },
+  {
+    "slide": 4,
+    "shape": "27",
+    "name": "s4-q3-label",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "长期负担"
+  },
+  {
+    "slide": 4,
+    "shape": "28",
+    "name": "s4-q3-body",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "是否愿意长期承担"
+  },
+  {
+    "slide": 4,
+    "shape": "30",
+    "name": "s4-eval-method",
+    "role": "note",
+    "fontSize": 16,
+    "bold": false,
+    "text": "依据具体复核过程及成员反馈；不设统一分数。"
+  },
+  {
+    "slide": 4,
+    "shape": "31",
+    "name": "s4-stop-heading",
+    "role": "group",
+    "fontSize": 21,
+    "bold": true,
+    "text": "何时收缩"
+  },
+  {
+    "slide": 4,
+    "shape": "32",
+    "name": "s4-stop-body",
+    "role": "body",
+    "fontSize": 18,
+    "bold": false,
+    "text": "持续挤占实验时间、权限不明，或只有重复抄写而不帮助解释结果时：缩小要求或停止。"
+  },
+  {
+    "slide": 4,
+    "shape": "33",
+    "name": "s4-scope-footnote",
+    "role": "note",
+    "fontSize": 16,
+    "bold": false,
+    "text": "范围为拟定；没有实测效率或完成率。"
+  },
+  {
+    "slide": 4,
+    "shape": "34",
+    "name": "s4-footer-left",
+    "role": "footer",
+    "fontSize": 12,
+    "bold": false,
+    "text": "大学课题组试点提案 · 内容分析页"
+  },
+  {
+    "slide": 4,
+    "shape": "35",
+    "name": "s4-footer-right",
+    "role": "footer",
+    "fontSize": 12,
+    "bold": false,
+    "text": "04 / 04 · 拟定范围"
+  }
+]

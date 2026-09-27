@@ -1,0 +1,24 @@
+实验：aesthetic-ab-01 / focus-a / round-03
+输出：四页内容分析页，无封面、目录或额外收束页；保留 round-02，修订另存本目录。
+
+本轮修改
+- 第 1 页主表首行恢复“原始数据保持原貌”。
+- 清洗处理另存与排除依据继续贴在对应记录项。
+- 权限侧区缩短为自然高度，并将访问授权信息拆成有停顿的段落；不再承载保存纪律文字。
+- 第 2–4 页沿用 round-02，未重设计。
+
+检查
+- render_slides.py：最终 deck.pptx 的 4 页已渲染；副本位于 render/slides/。
+- slides_test.py：Test passed. No overflow detected.
+- audit-text-overlaps.mjs：4 页 intersectionCount=0；textRuleIntersectionCount=0；textCapacityWarningCount=0。
+- audit-visible-contract.mjs：4 页 colorIssueCount=0；paintIssueCount=0。
+- audit-wrap-tails.mjs：4 页 count=0。
+- audit-node-labels.mjs：slide-3 5/5 配对、issueCount=0；slide-4 3/3 配对、issueCount=0。
+- audit-connectors.py：6/6 连接器绑定，reverseArrowCount=0，unsupportedGeometryCount=0，uninspectedRouteCount=0，textIntersectionCount=0，declarationFailureCount=0。
+- aesthetic-ab-01/audit-text-roles.mjs：声明 81、实际 81、检查 81、issueCount=0。
+- audit-source-coverage.mjs：从最终 deck.pptx 导出文本并保存 extracted-text.ndjson / extracted-text.json；内容核对记录于 coverage.txt。
+
+边界
+- 检查结果是确定性对象证据，不是审美验收；生成代理没有读取渲染图片，也没有宣称视觉通过。
+- 原稿中的建议、范围与未测量边界按原稿口径保留，未改写成测量结果。
+- 所有可见线条已记录于 line-paths.json；有向关系的源、目标、arrowAt 与依据已记录于 connections.json。

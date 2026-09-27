@@ -1,0 +1,23 @@
+独立生成任务。唯一原稿、唯一设计指南与输出目录由派发消息指定。请将完整原稿制作成 派发指定页数的中文原生可编辑 PPTX（含封面与收束，不强制目录）。这是同稿提示对照的页数控制条件，不是通用排版规则。分页、页序、内容组织和具体布局由你决定。
+
+完整读取分配的 layout-guide.txt，以及本目录 theme.json 和 execution-contract.txt。设计指南优先于通用视觉默认值。原稿是唯一事实来源；产品稿按其历史叙事保留，不以现行仓库架构改写。试点提案保留试点范围、条件、两方案取舍、停止条件，不把建议写成测量结果。
+
+隔离：只读分配原稿、分配指南、上述共用文件、工具/技能文档、按需检索的结构目录与实际资产。禁止读其他实验、其他指南版本、旧 builder、旧样稿、参考图片、父审记录或记忆；不要调用图片读取/截图/视觉分析，不转交其他模型。不查看本文所在目录的其他输出。执行者只写分配 run 目录，不修改规则/代码/核心库，不 Git 操作。首轮提交前没有父任务逐页反馈，你可以自己根据文字和确定性检查修正。
+
+使用 presentations Skill、style_guidelines.md 和 artifact-tool API 文档；用 @oai/artifact-tool 原生文字、形状、线条与连接器生成，不以截图替代整页。先调用 load_workspace_dependencies，按文档设置运行时；node_modules 用分配目录下的 junction，不复制依赖，不安装包。创建前按 presentations 文档运行 marker。结构按需阅读 C:/PPagenT/.codex/skills/ppagent-structure/SKILL.md，可 direct-call 或 reference-recompose；实际没有调用就如实记录。
+
+编排前把原稿逐段保存为 source-map.json，保留各段原文、关键事实、条件、方案和代价；每项再分配页码。reasoning.txt 逐页记录主张、阅读路径、分组和关系依据，不写逐页模板答案。最终从 deck.pptx 导出实际文字，与 source-map 每项核对，补齐实质遗漏；不能从已经做好的页倒写覆盖表。
+
+几何工具可只读其实现并运行，不能改检查器：
+node C:/PPagenT/experiments/university-skin-pilot/audit-text-overlaps.mjs <layout files>
+node C:/PPagenT/experiments/university-skin-pilot/audit-node-labels.mjs <layout> <pairs>
+node C:/PPagenT/experiments/university-skin-pilot/stability-01/audit-visible-contract.mjs <theme.json> <layout files>
+node C:/PPagenT/experiments/university-skin-pilot/stability-01/audit-wrap-tails.mjs <layout files>
+python C:/PPagenT/experiments/university-skin-pilot/stability-01/audit-connectors.py <deck.pptx> --layout-dir <run> --manifest <connections.json>
+
+节点配对必须包含同一节点的全部标题与说明 labels，不只检查标题。有背景的普通段落不强迫居中，但需要实际内距/容量核对。全部可见线条均需清单：原生 connector 记录 source/target/arrowAt；普通 line 或细长矩形在 line-paths.json 记录真实端点、关系对象、是否只是分隔线。逐条检查终点是否抵达目标、路径是否避开所有非目标文字；不是所有线都在 connector 工具范围内，未覆盖项如实写明，不把普通线遗漏解释为 0 问题。页首分隔线只分组，无需伪造节点绑定。
+
+最终提交 builder.mjs、deck.pptx、每页 slide-N.layout.json、适用页 node-label-pairs.json、connections.json、line-paths.json、source-map.json、coverage.txt、reasoning.txt、structure-usage.txt、report.txt、检查输出、最终文件 hash。用 presentations 的 render_slides.py 重新读取最终 PPTX 到 render/，并运行 slides_test.py；生成代理不读渲染图片，父任务独立审查。不要为生成图片做 AI 图像调用。
+
+最后一次 builder 改动后重跑检查并重新导出最终文件，保存最新实际日志；不能手写“检查 0”代替执行。确定性问题在提交前局部修正，无法覆盖的项目写明。不要自行声明审美验收通过。完整提交后停止修改，父任务先保留并评审首轮；若需要反馈修订，另存新目录。
+

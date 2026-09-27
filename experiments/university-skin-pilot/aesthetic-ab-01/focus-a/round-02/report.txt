@@ -1,0 +1,26 @@
+实验：aesthetic-ab-01 / focus-a / round-02
+输出：四页内容分析页，无封面、目录或额外收束页；保留 round-01，修订另存本目录。
+
+实现
+- 使用 presentations skill、style_guidelines.md、artifact-tool API 文档与 @oai/artifact-tool ES module。
+- 去除所有可见英文眉题；保留主题字体与颜色契约。
+- 第 1 页将清洗/排除条件贴回对应记录项，侧区只保留访问授权边界。
+- 第 2 页压缩为两条真实比较维度，建议与“范围选择、没有证明效率提升”就近一次呈现。
+- 第 3 页以五节点正常复核为唯一主分析，访问授权缩为紧邻旁注，恢复执行者与另一成员角色。
+- 第 4 页保留顶部时间链，第二三周形成反馈并供第四周依据具体复核过程及成员反馈作决定；删除底部深色总结条，评估与停止条件改为短标签加说明。
+
+检查
+- render_slides.py：最终 deck.pptx 的 4 页已渲染；副本位于 render/slides/。
+- slides_test.py：Test passed. No overflow detected.
+- audit-text-overlaps.mjs：4 页 intersectionCount=0；textRuleIntersectionCount=0；textCapacityWarningCount=0。
+- audit-visible-contract.mjs：4 页 colorIssueCount=0；paintIssueCount=0。
+- audit-wrap-tails.mjs：4 页 count=0。
+- audit-node-labels.mjs：slide-3 5/5 配对、issueCount=0；slide-4 3/3 配对、issueCount=0。
+- audit-connectors.py：6/6 连接器绑定，reverseArrowCount=0，unsupportedGeometryCount=0，uninspectedRouteCount=0，textIntersectionCount=0，declarationFailureCount=0。
+- aesthetic-ab-01/audit-text-roles.mjs：声明 78、实际 78、检查 78、issueCount=0。
+- audit-source-coverage.mjs：从最终 deck.pptx 导出文本并保存 extracted-text.ndjson / extracted-text.json；内容核对记录于 coverage.txt。
+
+边界
+- 检查结果是确定性对象证据，不是审美验收；生成代理没有读取渲染图片，也没有宣称视觉通过。
+- 原稿中的建议、范围与未测量边界按原稿口径保留，未改写成测量结果。
+- 所有可见线条已记录于 line-paths.json；有向关系的源、目标、arrowAt 与依据已记录于 connections.json。

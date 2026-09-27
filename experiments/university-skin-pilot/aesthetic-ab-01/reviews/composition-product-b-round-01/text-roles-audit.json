@@ -1,0 +1,862 @@
+{
+  "scope": "Declared base typography against exported layout. Partial rich-text spans and semantic role suitability require separate review; this is not style acceptance.",
+  "actualTextCount": 117,
+  "declarationCount": 125,
+  "checkedCount": 117,
+  "issueCount": 8,
+  "issues": [
+    {
+      "key": "6:15",
+      "issue": "missing-actual-text"
+    },
+    {
+      "key": "6:16",
+      "issue": "missing-actual-text"
+    },
+    {
+      "key": "6:18",
+      "issue": "missing-actual-text"
+    },
+    {
+      "key": "6:19",
+      "issue": "missing-actual-text"
+    },
+    {
+      "key": "7:27",
+      "issue": "missing-actual-text"
+    },
+    {
+      "key": "7:28",
+      "issue": "missing-actual-text"
+    },
+    {
+      "key": "7:30",
+      "issue": "missing-actual-text"
+    },
+    {
+      "key": "7:31",
+      "issue": "missing-actual-text"
+    }
+  ],
+  "checked": [
+    {
+      "key": "1:2",
+      "role": "cover",
+      "size": 44,
+      "bold": true,
+      "text": "把 PPT 生成变成可靠的生产过程"
+    },
+    {
+      "key": "1:3",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "PPagenT 产品叙事"
+    },
+    {
+      "key": "1:4",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "让 AI 帮我们读稿子，让规则帮我们做判断，让代码完成重复劳动。"
+    },
+    {
+      "key": "1:6",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "目标：在目标工作场景中，稳定跨过“可以直接拿去讲”的可用线。"
+    },
+    {
+      "key": "1:7",
+      "role": "footer",
+      "size": 12,
+      "bold": false,
+      "text": "PPagenT 产品叙事  ·  01"
+    },
+    {
+      "key": "2:1",
+      "role": "note",
+      "size": 16,
+      "bold": false,
+      "text": "问题定义"
+    },
+    {
+      "key": "2:2",
+      "role": "claim",
+      "size": 30,
+      "bold": true,
+      "text": "真正昂贵的不是画，而是一连串判断"
+    },
+    {
+      "key": "2:4",
+      "role": "footer",
+      "size": 12,
+      "bold": false,
+      "text": "PPagenT 产品叙事  ·  02"
+    },
+    {
+      "key": "2:5",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "做 PPT"
+    },
+    {
+      "key": "2:6",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "即使熟练完成答辩、汇报或讲课用的演示，仍然需要很长时间。"
+    },
+    {
+      "key": "2:8",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "时间消耗集中在决定“怎么讲”"
+    },
+    {
+      "key": "2:9",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "拆页"
+    },
+    {
+      "key": "2:10",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "一篇长稿应该拆成多少页，每一页只承担什么职责"
+    },
+    {
+      "key": "2:12",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "判关系"
+    },
+    {
+      "key": "2:13",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "观点是并列、递进、因果还是流程，哪里应该突出"
+    },
+    {
+      "key": "2:15",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "选表达"
+    },
+    {
+      "key": "2:16",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "什么时候应该用图，什么时候一句话反而更有力量"
+    },
+    {
+      "key": "2:18",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "统一"
+    },
+    {
+      "key": "2:19",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "翻找旧 PPT、替换内容，再统一字体、字号、颜色和间距"
+    },
+    {
+      "key": "2:20",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "既然高手已经知道怎样做是好的，为什么每次还要重新做一遍？"
+    },
+    {
+      "key": "3:1",
+      "role": "note",
+      "size": 16,
+      "bold": false,
+      "text": "需求与目标"
+    },
+    {
+      "key": "3:2",
+      "role": "claim",
+      "size": 30,
+      "bold": true,
+      "text": "PPagenT 先选择概率密度最大的工作型 PPT"
+    },
+    {
+      "key": "3:4",
+      "role": "footer",
+      "size": 12,
+      "bold": false,
+      "text": "PPagenT 产品叙事  ·  03"
+    },
+    {
+      "key": "3:5",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "两端需求都存在，但更多需求位于中间：学校、科研院所、事业单位、央国企和普通企业，需要快速得到结构清楚、视觉体面、符合组织规范的 PPT。"
+    },
+    {
+      "key": "3:6",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "底线：不能乱，不能丑，不能掉价，不能生成以后无法修改。"
+    },
+    {
+      "key": "3:8",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "产品可靠度"
+    },
+    {
+      "key": "3:9",
+      "role": "metric",
+      "size": 36,
+      "bold": true,
+      "text": "R = P(Q ≥ Q可用 | 目标工作场景)"
+    },
+    {
+      "key": "3:10",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "追求的是随机工作稿达到可用标准的概率，而不是某一次生成的最高分。"
+    },
+    {
+      "key": "3:11",
+      "role": "note",
+      "size": 16,
+      "bold": false,
+      "text": "这里的 R 是产品目标的概念表达，不是现成测量结果。"
+    },
+    {
+      "key": "4:1",
+      "role": "note",
+      "size": 16,
+      "bold": false,
+      "text": "可靠度"
+    },
+    {
+      "key": "4:2",
+      "role": "claim",
+      "size": 30,
+      "bold": true,
+      "text": "稳定跨过可用线，比偶然惊艳更重要"
+    },
+    {
+      "key": "4:4",
+      "role": "footer",
+      "size": 12,
+      "bold": false,
+      "text": "PPagenT 产品叙事  ·  04"
+    },
+    {
+      "key": "4:5",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "明天上午九点要汇报，晚上交给系统的工作稿，首先需要逻辑清楚、版式规范、符合单位风格，而且第二天仍然可以继续修改。"
+    },
+    {
+      "key": "4:7",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "随机的 95 分"
+    },
+    {
+      "key": "4:8",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "偶尔高度定制、让人惊叹，但结果落点和修改基础不稳定。"
+    },
+    {
+      "key": "4:10",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "稳定的 80 分"
+    },
+    {
+      "key": "4:11",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "直接使用不失专业，继续修改有可靠基础，投入与收益相匹配。"
+    },
+    {
+      "key": "4:12",
+      "role": "note",
+      "size": 16,
+      "bold": false,
+      "text": "“80 分”是稳定可用状态的形象称呼，不是产品的质量上限。"
+    },
+    {
+      "key": "5:1",
+      "role": "note",
+      "size": 16,
+      "bold": false,
+      "text": "产品选择"
+    },
+    {
+      "key": "5:2",
+      "role": "claim",
+      "size": 30,
+      "bold": true,
+      "text": "用限制一部分自由，换取可预测的结果"
+    },
+    {
+      "key": "5:4",
+      "role": "footer",
+      "size": 12,
+      "bold": false,
+      "text": "PPagenT 产品叙事  ·  05"
+    },
+    {
+      "key": "5:5",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "自由度越高，理论上限越高；状态空间越大，失败模式也越多。正式工作的 PPT 更需要可预测。"
+    },
+    {
+      "key": "5:7",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "视觉规范"
+    },
+    {
+      "key": "5:8",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "学校或企业已有的颜色、字体、Logo、页眉页脚"
+    },
+    {
+      "key": "5:9",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "表达能力"
+    },
+    {
+      "key": "5:10",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "经过验证的并列、顺序、对比、层级、循环等结构"
+    },
+    {
+      "key": "5:11",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "容量边界"
+    },
+    {
+      "key": "5:12",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "明确数量和文字容量，超过边界就换样式或拆页"
+    },
+    {
+      "key": "5:13",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "退化方式"
+    },
+    {
+      "key": "5:14",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "没有合适结构时退回已登记的简单文字排版"
+    },
+    {
+      "key": "5:15",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "每次都不一样，有时候才是缺点。"
+    },
+    {
+      "key": "6:1",
+      "role": "note",
+      "size": 16,
+      "bold": false,
+      "text": "控制器"
+    },
+    {
+      "key": "6:2",
+      "role": "claim",
+      "size": 30,
+      "bold": true,
+      "text": "AI 负责理解和路由，规则负责约束和选择，代码负责稳定生成"
+    },
+    {
+      "key": "6:4",
+      "role": "footer",
+      "size": 12,
+      "bold": false,
+      "text": "PPagenT 产品叙事  ·  06"
+    },
+    {
+      "key": "6:5",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "AI 不直接自由绘制整份 PPT，而是把稿件变成页面内容，再从已确认的能力中选择合适结构。"
+    },
+    {
+      "key": "6:7",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "AI"
+    },
+    {
+      "key": "6:8",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "理解稿件、组织叙事、拆页、形成页面内容"
+    },
+    {
+      "key": "6:10",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "规则"
+    },
+    {
+      "key": "6:11",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "使用主题规范、能力选择、数量与容量边界"
+    },
+    {
+      "key": "6:13",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "代码"
+    },
+    {
+      "key": "6:14",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "把决策编译成原生可编辑 PowerPoint，并完成检查"
+    },
+    {
+      "key": "6:21",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "AI 是控制器，不是画师；真正视觉结果由提前确认的能力和确定性代码完成。"
+    },
+    {
+      "key": "7:1",
+      "role": "note",
+      "size": 16,
+      "bold": false,
+      "text": "核心架构"
+    },
+    {
+      "key": "7:2",
+      "role": "claim",
+      "size": 30,
+      "bold": true,
+      "text": "两条路线只在经过确认的核心资产库交汇"
+    },
+    {
+      "key": "7:4",
+      "role": "footer",
+      "size": 12,
+      "bold": false,
+      "text": "PPagenT 产品叙事  ·  07"
+    },
+    {
+      "key": "7:5",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "能力建设发生在运行前；正式生成只读取核心库，必要时退回简单排版。"
+    },
+    {
+      "key": "7:8",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "资产入库线"
+    },
+    {
+      "key": "7:9",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "正式生成线"
+    },
+    {
+      "key": "7:10",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "01  优秀参考"
+    },
+    {
+      "key": "7:12",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "02  提炼逻辑与设计规律"
+    },
+    {
+      "key": "7:14",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "03  扩展为可复用能力"
+    },
+    {
+      "key": "7:16",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "04  用户确认"
+    },
+    {
+      "key": "7:17",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "01  原始稿件 + 组织主题"
+    },
+    {
+      "key": "7:19",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "02  AI 理解与编排"
+    },
+    {
+      "key": "7:21",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "03  选择合法能力"
+    },
+    {
+      "key": "7:23",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "04  确定性排版与编译"
+    },
+    {
+      "key": "7:25",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "核心资产库"
+    },
+    {
+      "key": "7:26",
+      "role": "note",
+      "size": 16,
+      "bold": false,
+      "text": "只读调用"
+    },
+    {
+      "key": "7:33",
+      "role": "note",
+      "size": 16,
+      "bold": false,
+      "text": "没有合适结构 → 简单排版 / 拆页"
+    },
+    {
+      "key": "8:1",
+      "role": "note",
+      "size": 16,
+      "bold": false,
+      "text": "建设期与运行时"
+    },
+    {
+      "key": "8:2",
+      "role": "claim",
+      "size": 30,
+      "bold": true,
+      "text": "把昂贵的计算前移，让运行时主要负责理解、选择和填参"
+    },
+    {
+      "key": "8:4",
+      "role": "footer",
+      "size": 12,
+      "bold": false,
+      "text": "PPagenT 产品叙事  ·  08"
+    },
+    {
+      "key": "8:5",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "传统路线把理解、设计和失败风险集中在每次交付；PPagenT 把视觉理解前移为一次建设、多次复用的离线资产。"
+    },
+    {
+      "key": "8:8",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "建设期"
+    },
+    {
+      "key": "8:9",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "筛选优秀页面 → 理解规律 → 参数化内容、图片和数量 → 验证状态 → 用户确认"
+    },
+    {
+      "key": "8:10",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "正式生成期"
+    },
+    {
+      "key": "8:11",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "模型完成理解、分类、路由和填参；代码负责绘制与检查，纯文字模型承担主要在线任务。"
+    },
+    {
+      "key": "8:12",
+      "role": "note",
+      "size": 16,
+      "bold": false,
+      "text": "视觉模型可以用于建设期的资产理解与审查，但不成为每次交付的必要成本。"
+    },
+    {
+      "key": "9:1",
+      "role": "note",
+      "size": 16,
+      "bold": false,
+      "text": "能力壁垒"
+    },
+    {
+      "key": "9:2",
+      "role": "claim",
+      "size": 30,
+      "bold": true,
+      "text": "真正积累的不是一万个模板，而是表达经验"
+    },
+    {
+      "key": "9:4",
+      "role": "footer",
+      "size": 12,
+      "bold": false,
+      "text": "PPagenT 产品叙事  ·  09"
+    },
+    {
+      "key": "9:5",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "内容数量、字数和关系会变化；只有把规律提炼为可复用能力，漂亮页面才从一件作品变成一种能力。"
+    },
+    {
+      "key": "9:7",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "表达匹配"
+    },
+    {
+      "key": "9:8",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "什么内容适合怎样表达"
+    },
+    {
+      "key": "9:9",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "容量边界"
+    },
+    {
+      "key": "9:10",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "一个版式能够处理多少内容"
+    },
+    {
+      "key": "9:11",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "变化方式"
+    },
+    {
+      "key": "9:12",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "数量变化时怎样重新排布"
+    },
+    {
+      "key": "9:13",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "失败边界"
+    },
+    {
+      "key": "9:14",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "超出边界时换样式、拆页还是退化"
+    },
+    {
+      "key": "9:15",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "真正的壁垒 = 有效表达能力 + 正确路由 + 容量与失败边界 + 稳定生成"
+    },
+    {
+      "key": "10:1",
+      "role": "note",
+      "size": 16,
+      "bold": false,
+      "text": "扩展边界"
+    },
+    {
+      "key": "10:2",
+      "role": "claim",
+      "size": 30,
+      "bold": true,
+      "text": "从一个学校走向更多组织，复用的是能力，替换的是主题"
+    },
+    {
+      "key": "10:4",
+      "role": "footer",
+      "size": 12,
+      "bold": false,
+      "text": "PPagenT 产品叙事  ·  10"
+    },
+    {
+      "key": "10:5",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "东北大学是第一个正式落地场景，因为它有明确的视觉规范、持续发生的汇报需求和真实可检验的使用边界。"
+    },
+    {
+      "key": "10:7",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "可以替换与继续复用的两层"
+    },
+    {
+      "key": "10:8",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "主题"
+    },
+    {
+      "key": "10:9",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "颜色、Logo、字体、页眉页脚"
+    },
+    {
+      "key": "10:11",
+      "role": "group",
+      "size": 21,
+      "bold": true,
+      "text": "能力"
+    },
+    {
+      "key": "10:12",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "内容理解规则与表达能力继续复用"
+    },
+    {
+      "key": "10:13",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "其他学校、科研院所、实验室、企业和团队，都可以获得一套可低成本获得的生产能力。"
+    },
+    {
+      "key": "10:14",
+      "role": "note",
+      "size": 16,
+      "bold": false,
+      "text": "组织不用要求每名成员都成为设计师，也能让日常输出稳定达到基本标准。"
+    },
+    {
+      "key": "11:2",
+      "role": "claim",
+      "size": 30,
+      "bold": true,
+      "text": "最后，它仍然只想解决一件普通的事"
+    },
+    {
+      "key": "11:3",
+      "role": "body",
+      "size": 18,
+      "bold": false,
+      "text": "做一套好 PPT 太费时间了，而其中很多时间花在以前已经有人解决过的问题上。"
+    },
+    {
+      "key": "11:5",
+      "role": "claim",
+      "size": 30,
+      "bold": true,
+      "text": "不一定惊艳，但靠谱；不一定独一无二，但真的好用；可以立刻拿去讲，也可以继续修改。"
+    },
+    {
+      "key": "11:6",
+      "role": "note",
+      "size": 16,
+      "bold": false,
+      "text": "如果持续做到这一点，普通问题就能成为可靠的产品能力，也有机会形成一门真正的生意。"
+    },
+    {
+      "key": "11:7",
+      "role": "footer",
+      "size": 12,
+      "bold": false,
+      "text": "PPagenT 产品叙事  ·  11"
+    }
+  ]
+}
