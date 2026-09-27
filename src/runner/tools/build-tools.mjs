@@ -112,6 +112,9 @@ export function buildDeckPages(state) {
         id: item.id,
         title: page.composition?.itemLabels?.[item.id] ?? "",
         body: item.text ?? item.sourceText,
+        kind: item.kind ?? "text",
+        blocks: item.blocks ?? [],
+        production: item.production ?? null,
         // 层级角色要交给渲染器，否则它无从知道哪条是准则、哪条作用于全程。
         // 逐字照条件展开：历史 state 没有 role，它们的 blueprint 因此一个字节都不变。
         ...(item.role ? { role: item.role } : {}),
@@ -292,6 +295,8 @@ export function buildTools({ root, runDir, committer, statePath }) {
             title: page.title,
             claim: page.claim,
             relation: page.relation,
+            regions: page.composition?.regions ?? page.regions ?? page.grayLayout?.regions ?? [],
+            expressionKinds: [...new Set(page.items.map((item) => item.kind ?? "text"))],
             compositionRevision: page.compositionRevision ?? 0,
             feedback: state.artifactState[page.pageId]?.feedback ?? null,
             currentPlan: page.composition
@@ -304,6 +309,9 @@ export function buildTools({ root, runDir, committer, statePath }) {
               text: item.text ?? item.sourceText,
               // 逐字来源证据：判断"提炼有没有改原意"的唯一依据。不参与排版。
               sourceText: item.sourceText,
+              kind: item.kind ?? "text",
+              blocks: item.blocks ?? [],
+              production: item.production ?? null,
               // 内容角色不决定主次或位置；视觉方案通过 bandItemIds 指定辅助项。
               role: item.role ?? "object",
             })),
