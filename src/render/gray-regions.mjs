@@ -29,12 +29,19 @@ export function grayRegionElements(content, plan, bodyFrame) {
 
 export function renderGrayRegions(slide,content,plan,bodyFrame,typography,theme = {}) {
   const result = grayRegionElements(content,plan,bodyFrame);
-  const magazine = theme.layoutStyle === 'magazine';
+  const treatment = theme.grayRegionTreatment ?? {
+    heading: theme.layoutStyle === 'magazine' ? 'editorial-marker-line' : 'academic-group-bar',
+    body: theme.layoutStyle === 'magazine' ? 'flat-text' : 'side-rule-text',
+    surface: theme.layoutStyle === 'magazine' ? 'none' : 'local-group',
+    bodyInset: 20,
+    headingInset: theme.layoutStyle === 'magazine' ? 20 : 16,
+  };
+  const magazine = treatment.heading === 'editorial-marker-line';
   for (const [index,entry] of result.text.entries()) {
     const surface = entry.heading ? (theme.headingSurface ?? theme.surface ?? '#FFFFFF') : (theme.regionSurface ?? theme.surface ?? '#FFFFFF');
     if (!magazine) {
-      addBox(slide,entry.frame,{name:`gray-region-surface-${index}`,geometry:'rect',fill:entry.heading ? surface : 'none',line:{fill:entry.heading ? (theme.line ?? '#D5DFEC') : 'none',width:entry.heading ? 1 : 0},shadow:'shadow-none'});
-      if (!entry.heading) addBox(slide,{left:entry.frame.left,top:entry.frame.top,width:3,height:entry.frame.height},{name:`gray-region-rule-${index}`,geometry:'rect',fill:theme.primaryColor ?? '#3361AE',line:{fill:'none',width:0},shadow:'shadow-none'});
+      addBox(slide,entry.frame,{name:`gray-region-surface-${index}`,geometry:'rect',fill:entry.heading || treatment.surface === 'local-group' ? surface : 'none',line:{fill:entry.heading ? (theme.line ?? '#D5DFEC') : 'none',width:entry.heading ? 1 : 0},shadow:'shadow-none'});
+      if (!entry.heading && treatment.body === 'side-rule-text') addBox(slide,{left:entry.frame.left,top:entry.frame.top,width:3,height:entry.frame.height},{name:`gray-region-rule-${index}`,geometry:'rect',fill:theme.primaryColor ?? '#3361AE',line:{fill:'none',width:0},shadow:'shadow-none'});
     } else if (entry.heading) {
       addBox(slide,{left:entry.frame.left,top:entry.frame.top+entry.frame.height-3,width:entry.frame.width,height:2},{name:`gray-region-editorial-rule-${index}`,geometry:'rect',fill:theme.primaryColor ?? '#A35D4F',line:{fill:'none',width:0},shadow:'shadow-none'});
       addBox(slide,{left:entry.frame.left,top:entry.frame.top+5,width:10,height:10},{name:`gray-region-editorial-marker-${index}`,geometry:'ellipse',fill:theme.primaryColor ?? '#A35D4F',line:{fill:'none',width:0},shadow:'shadow-none'});
@@ -42,7 +49,8 @@ export function renderGrayRegions(slide,content,plan,bodyFrame,typography,theme 
     const role = entry.heading ? typography.composition?.rowTitle : typography.composition?.rowBody;
     const fit = fitChineseTextToFrame(entry.value,{...entry.frame,fontSizes:role?.fontSizes ?? (entry.heading?[24,22]:[18,16,14]),maxLines:role?.maxLines ?? (entry.heading?1:12),lineHeight:role?.lineHeight ?? 1.35});
     if (!fit.fits) throw new Error(`灰稿文字区无法容纳：${entry.value}`);
-    addText(slide,fit.text,{...entry.frame,left:entry.frame.left+(magazine && entry.heading ? 20 : 12),top:entry.frame.top+8,width:entry.frame.width-(magazine && entry.heading ? 28 : 24),height:entry.frame.height-16},{name:`gray-region-text-${index}`,fontSize:fit.fontSize,typeface:entry.heading ? (theme.displayFont ?? typography.displayTypeface ?? typography.bodyTypeface) : typography.bodyTypeface,color:entry.heading ? (theme.primaryColor ?? theme.dark ?? '#303238') : (theme.body ?? theme.dark ?? '#303238'),bold:Boolean(entry.heading),verticalAlignment:'top',autoFit:'none'});
+    const inset = entry.heading ? (treatment.headingInset ?? 16) : (treatment.bodyInset ?? 12);
+    addText(slide,fit.text,{...entry.frame,left:entry.frame.left+inset,top:entry.frame.top+8,width:entry.frame.width-(inset+8),height:entry.frame.height-16},{name:`gray-region-text-${index}`,fontSize:fit.fontSize,typeface:entry.heading ? (theme.displayFont ?? typography.displayTypeface ?? typography.bodyTypeface) : typography.bodyTypeface,color:entry.heading ? (theme.primaryColor ?? theme.dark ?? '#303238') : (theme.body ?? theme.dark ?? '#303238'),bold:Boolean(entry.heading),verticalAlignment:'top',autoFit:'none'});
   }
   addBox(slide,result.componentFrame,{name:qaElementName({parent:'composition-component',domains:['page-composition-zones']}),geometry:'rect',fill:'none',line:{fill:'none',width:0},shadow:'shadow-none'});
   return {componentFrame:result.componentFrame};

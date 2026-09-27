@@ -12,4 +12,14 @@ export const neutralEditorialTheme = Object.freeze({ ...derivePrimaryTheme({
   typography: { componentHeading: 15.75, componentTitle: 15.75,
     componentItemTitle: 12.75, componentLead: 12.75, componentBody: 12.75,
     componentLabel: 12.75, componentMeta: 12 },
-}, asset.mainColor), regionSurface: '#EFEEE8', headingSurface: '#E5E0D8', line: '#D4CEC3', layoutStyle: 'magazine' });
+}, asset.mainColor), regionSurface: '#EFEEE8', headingSurface: '#E5E0D8', line: '#D4CEC3', layoutStyle: 'magazine',
+  // Compiled from rules/排版体系/杂志风.md for the gray-to-PPT adapter.
+  // This is a treatment contract, not a second layout system: gray geometry
+  // remains authoritative while the Skin chooses how each owned region reads.
+  grayRegionTreatment: Object.freeze({
+    heading: 'editorial-marker-line',
+    body: 'flat-text',
+    surface: 'none',
+    bodyInset: 20,
+    headingInset: 20,
+  }) });
