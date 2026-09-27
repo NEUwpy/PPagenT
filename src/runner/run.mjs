@@ -148,6 +148,7 @@ const PHASE_PROMPT = {
     "expressionRequirements 包括文字组内部的图示要求；外层 kind=text 不代表整组只能排文字。必须保留内部图示的关系、来源标签、范围和条件。现有工具无法表达时报告能力缺口，不得用纯文字替代。",
     "灰稿交接必须使用 component-gray-regions，保留全部既定分区；textSlots 为空，文字自动按原文原区渲染。structure.sourceLocation 精确引用一个 expressionRequirements.location，sourceItemIds 仅包含该区所属 itemId。不能吞并其他文字区。当前接口只支持一个图示区，多图示页报告能力缺口。",
     "check_pages 会真的构建 PPT 并回报真实几何与字号问题；只对改过的页重复检查。",
+    "灰稿的 regions 是内容边界，不是成稿皮肤。大学 Skin 灰稿必须用 regionVisuals 覆盖全部区域，按风格规则选择 plain、outline 或 dashed-gradient，给出理由与短英文标题翻译；禁止所有标题统一做成色条。英文只作弱衬字，不替代实文。其他 Skin 不照搬大学橙色与衬字。",
     "全部页面当前版本通过后调用 finish_visual；存在经验提示时必须逐页给出理由。",
   ].join("\n"),
 };

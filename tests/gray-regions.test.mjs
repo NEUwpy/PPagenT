@@ -20,3 +20,11 @@ test('structure stays in blue subregion, original text retains its separate regi
   assert.ok(body.frame.top>result.componentFrame.top+result.componentFrame.height);
   assert.ok(result.text.some(t=>t.value==='核验'));
 });
+
+test('visual decisions must cover every original region exactly once',()=>{
+  const regionVisuals=page.items.map(i=>({itemId:i.id,surface:'dashed-gradient',headingEnglish:'CHECK',reason:'完整阅读组'}));
+  assert.doesNotThrow(()=>validateGrayRegionPlan(page,{...plan,regionVisuals}));
+  assert.throws(()=>validateGrayRegionPlan(page,{...plan,regionVisuals:regionVisuals.slice(1)}),/完整/);
+  assert.throws(()=>validateGrayRegionPlan(page,{...plan,regionVisuals:[regionVisuals[0],regionVisuals[0]]}),/唯一/);
+  assert.throws(()=>validateGrayRegionPlan(page,{...plan,regionVisuals:regionVisuals.map(v=>({...v,surface:'unknown'}))}),/非法/);
+});

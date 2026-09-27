@@ -10,10 +10,14 @@ export const northeasternUniversityTheme = Object.freeze({
   headingSurface: "#E7EEF9",
   line: "#C9D7ED",
   layoutStyle: "mckinsey",
+  regionAccent: "#C45B13",
+  regionEnglish: "#DDDFE3",
+  regionOutline: "#B4C9E8",
+  regionGradientStart: "#F0F5FC",
   // Compiled from 大学Skin设计提示词-v1.md: hierarchy first, light-blue
   // local grouping, and a restrained side rule instead of card walls.
   grayRegionTreatment: Object.freeze({
-    heading: 'academic-group-bar',
+    heading: 'academic-reference',
     body: 'side-rule-text',
     surface: 'local-group',
     bodyInset: 20,

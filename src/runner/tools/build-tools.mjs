@@ -132,7 +132,7 @@ export function buildDeckPages(state) {
     composition: page.composition
       ? {
         compositionId: page.composition.compositionId,
-        ...(page.composition.compositionId === "component-gray-regions" ? { grayRegions: page.grayComposition.regions, grayArea: state.grayDraft.area, structure: page.composition.structure } : {}),
+        ...(page.composition.compositionId === "component-gray-regions" ? { grayRegions: page.grayComposition.regions, grayArea: state.grayDraft.area, structure: page.composition.structure, regionVisuals: page.composition.regionVisuals } : {}),
         textSlots: page.composition.textSlots,
         ...(page.composition.structure ? { componentItemIds: page.composition.structure.sourceItemIds } : {}),
         // 条件展开：没给 leadLabel 时连键都不存在，历史 blueprint 因此逐字不变。
@@ -336,10 +336,11 @@ export function buildTools({ root, runDir, committer, statePath }) {
             compositionRevision: page.compositionRevision ?? 0,
             feedback: state.artifactState?.[page.pageId]?.feedback ?? null,
             currentPlan: page.composition
-              ? { compositionId: page.composition.compositionId, textSlots: page.composition.textSlots, itemLabels: page.composition.itemLabels ?? {}, structure: page.composition.structure }
+              ? { compositionId: page.composition.compositionId, textSlots: page.composition.textSlots, itemLabels: page.composition.itemLabels ?? {}, structure: page.composition.structure, regionVisuals: page.composition.regionVisuals }
               : null,
             items: page.items.map((item) => ({
               id: item.id,
+              heading: item.heading,
               sourceIds: item.sourceIds,
               // 上屏正文 = 内容阶段提炼的 text（没写则回退逐字来源）。渲染出来的就是它。
               text: item.text ?? item.sourceText,
@@ -369,6 +370,16 @@ export function buildTools({ root, runDir, committer, statePath }) {
               properties: {
                 pageId: { type: "string" },
                 compositionId: { type: "string" },
+                regionVisuals: {
+                  type: "array", description: "按已加载 Skin 风格逐区编排。覆盖全部灰稿 itemId；plain 为开放排字，outline 为轻边框，dashed-gradient 为虚线浅渐变归组。英文仅翻译区域标题，不增加事实。",
+                  items: { type: "object", additionalProperties: false,
+                    properties: {
+                      itemId: { type: "string" },
+                      surface: { type: "string", enum: ["plain", "outline", "dashed-gradient"] },
+                      headingEnglish: { type: "string", maxLength: 36 },
+                      reason: { type: "string", minLength: 1 },
+                    }, required: ["itemId", "surface", "headingEnglish", "reason"] },
+                },
                 structure: {
                   type: "object", additionalProperties: false,
                   properties: {
@@ -439,6 +450,7 @@ export function buildTools({ root, runDir, committer, statePath }) {
             if (pkg.runtime.renderer === "skin") throw new Error("不能把 Skin 当结构");
           }
           if (current.grayInput) {
+            if (current.skinId === 'northeastern-university-001' && !plan.regionVisuals) throw new Error('大学灰稿必须提交逐区 regionVisuals，不能只换字体颜色');
             validateGrayRegionPlan(page, plan);
             return { pageId: plan.pageId, composition: structuredClone(plan) };
           }

@@ -11,7 +11,7 @@ export function grayRegionElements(content, plan, bodyFrame) {
   for (const region of plan.grayRegions) {
     const item = content.items.find(i=>i.id===region.itemId)?.grayItem;
     if (!item) throw new Error(`Missing gray region owner ${region.itemId}`);
-    text.push({value:item.heading, frame:frame(region.x+16,region.y+12,region.width-32,40), heading:true});
+    text.push({itemId:item.id,value:item.heading, frame:frame(region.x+16,region.y+12,region.width-32,40), heading:true});
     const body = grayBodyLayout(item,region.width-32,region.fontSize,region.height-70);
     for (const [index,section] of body.sections.entries()) {
       const node = item.kind==='text' ? item.blocks[index] : item;
@@ -20,7 +20,7 @@ export function grayRegionElements(content, plan, bodyFrame) {
       if (section.kind !== 'text') {
         if (location !== plan.structure.sourceLocation || componentFrame) throw new Error(`Unbound gray expression ${location}`);
         componentFrame = target;
-      } else text.push({value:node.text ?? node.sourceText ?? '',frame:{...target,left:target.left+8,top:target.top+8,width:target.width-16,height:target.height-16}});
+      } else text.push({itemId:item.id,value:node.text ?? node.sourceText ?? '',frame:{...target,left:target.left+8,top:target.top+8,width:target.width-16,height:target.height-16}});
     }
   }
   if (!componentFrame) throw new Error('Missing gray expression frame');
@@ -37,6 +37,11 @@ export function renderGrayRegions(slide,content,plan,bodyFrame,typography,theme 
     headingInset: theme.layoutStyle === 'magazine' ? 20 : 16,
   };
   const magazine = treatment.heading === 'editorial-marker-line';
+  if (treatment.heading === 'academic-reference') {
+    renderAcademicRegions(slide,result,plan,bodyFrame,typography,theme);
+    addBox(slide,result.componentFrame,{name:qaElementName({parent:'composition-component',domains:['page-composition-zones']}),geometry:'rect',fill:'none',line:{fill:'none',width:0},shadow:'shadow-none'});
+    return {componentFrame:result.componentFrame};
+  }
   for (const [index,entry] of result.text.entries()) {
     const surface = entry.heading ? (theme.headingSurface ?? theme.surface ?? '#FFFFFF') : (theme.regionSurface ?? theme.surface ?? '#FFFFFF');
     if (!magazine) {
@@ -54,4 +59,38 @@ export function renderGrayRegions(slide,content,plan,bodyFrame,typography,theme 
   }
   addBox(slide,result.componentFrame,{name:qaElementName({parent:'composition-component',domains:['page-composition-zones']}),geometry:'rect',fill:'none',line:{fill:'none',width:0},shadow:'shadow-none'});
   return {componentFrame:result.componentFrame};
+}
+
+// The visual director selects a treatment for each owned region. The compiler
+// supplies Skin colors and native primitives, never page-specific coordinates.
+function renderAcademicRegions(slide,result,plan,bodyFrame,typography,theme) {
+  const sx=bodyFrame.width/plan.grayArea.width, sy=bodyFrame.height/plan.grayArea.height;
+  for (const region of plan.grayRegions) {
+    const visual=plan.regionVisuals?.find(v=>v.itemId===region.itemId) ?? {surface:'plain',headingEnglish:''};
+    const f={left:bodyFrame.left+(region.x+16)*sx,top:bodyFrame.top+(region.y+28)*sy,width:(region.width-32)*sx,height:(region.height-36)*sy};
+    if (visual.surface !== 'plain') addBox(slide,f,{
+      name:`academic-region-${region.itemId}`,geometry:'roundRect',borderRadius:6,shadow:'shadow-none',
+      fill:visual.surface==='dashed-gradient' ? {type:'gradient',gradientKind:'linear',angleDeg:90,stops:[{offset:0,color:'#FFFFFF'},{offset:100000,color:theme.regionGradientStart}]} : '#FFFFFF',
+      line:{style:visual.surface==='dashed-gradient'?'dashed':'solid',fill:theme.regionOutline,width:1},
+    });
+    for (const [index,entry] of result.text.filter(t=>t.itemId===region.itemId).entries()) {
+      const fontSizes=entry.heading?[24]:[22,20,18];
+      const box={...entry.frame,left:entry.frame.left+16,width:entry.frame.width-32,top:entry.frame.top+(entry.heading?0:8),height:entry.frame.height-(entry.heading?0:16)};
+      const fit=fitChineseTextToFrame(entry.value,{...box,fontSizes,maxLines:entry.heading?1:12,lineHeight:1.35});
+      if(!fit.fits) throw new Error(`灰稿文字区无法容纳：${entry.value}`);
+      if(entry.heading) {
+        const titleWidth=Math.min(box.width,entry.value.length*fit.fontSize+12);
+        const english=visual.headingEnglish.toUpperCase();
+        const englishWidth=english ? Math.min(box.width-titleWidth-8,english.length*11+12) : 0;
+        addBox(slide,{left:box.left-6,top:box.top,width:titleWidth+Math.max(0,englishWidth)+14,height:34},{geometry:'rect',borderRadius:0,fill:'#FFFFFF',line:{fill:'none',width:0},shadow:'shadow-none'});
+        if(english && englishWidth>0) {
+          const ebox={left:box.left+titleWidth+8,top:box.top+9,width:englishWidth,height:25};
+          const ef=fitChineseTextToFrame(english,{...ebox,fontSizes:[18,16,14],maxLines:1,lineHeight:1.1});
+          if(!ef.fits) throw new Error(`英文衬字过长，请缩短：${english}`);
+          addText(slide,english,ebox,{name:`academic-English-${region.itemId}`,fontSize:ef.fontSize,typeface:'Georgia',color:theme.regionEnglish,autoFit:'none'});
+        }
+      }
+      addText(slide,fit.text,box,{name:`academic-text-${region.itemId}-${index}`,fontSize:fit.fontSize,typeface:typography.bodyTypeface,color:entry.heading?theme.regionAccent:theme.body,bold:entry.heading,verticalAlignment:'top',autoFit:'none'});
+    }
+  }
 }

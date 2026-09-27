@@ -29,5 +29,12 @@ export function validateGrayRegionPlan(page, plan) {
   if (plan.structure?.sourceLocation !== req.location || JSON.stringify(plan.structure?.sourceItemIds) !== JSON.stringify([req.itemId])) throw new Error('结构只能绑定精确图示区及其所属内容项，不能吞并文字区');
   if (plan.textSlots?.length) throw new Error('灰稿文字区由原文自动渲染，textSlots 必须为空');
   const regions = page.grayComposition?.regions ?? [];
+  if (plan.regionVisuals !== undefined) {
+    const styles = plan.regionVisuals;
+    if (!Array.isArray(styles) || styles.length !== page.items.length || new Set(styles.map(s=>s.itemId)).size !== styles.length || page.items.some(i=>!styles.some(s=>s.itemId===i.id))) throw new Error('regionVisuals 必须逐区完整且唯一对应灰稿内容');
+    for (const style of styles) {
+      if (!['plain','outline','dashed-gradient'].includes(style.surface) || typeof style.reason !== 'string' || !style.reason.trim() || typeof style.headingEnglish !== 'string' || !/^[A-Za-z0-9 &/()–-]{0,36}$/.test(style.headingEnglish)) throw new Error('灰稿区域视觉方案非法');
+    }
+  }
   if (regions.length !== page.items.length || new Set(regions.map(r=>r.itemId)).size !== regions.length || page.items.some(i=>!regions.some(r=>r.itemId===i.id))) throw new Error('灰稿区域与内容归属不完整');
 }
