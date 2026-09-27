@@ -1,4 +1,5 @@
 // Preserve nested expression requirements; a text group may own a diagram block.
+import {validateRegionLayouts} from '../render/gray-visual-plan.mjs';
 export function expressionRequirements(page) {
   return page.items.flatMap(item => {
     const requirements = [];
@@ -21,7 +22,7 @@ export function missingExpressions(page, plan) {
   return expressionRequirements(page).filter(r => !bound.has(r.itemId));
 }
 
-export function validateGrayRegionPlan(page, plan) {
+export function validateGrayRegionPlan(page, plan, area) {
   if (plan?.compositionId !== 'component-gray-regions') throw new Error('灰稿必须保留原分区，使用 component-gray-regions，不能重选整页结构版式');
   const requirements = expressionRequirements(page);
   if (requirements.length !== 1) throw new Error('当前灰稿局部结构接口要求恰好一个图示区；多图示/纯文字支持尚未验证');
@@ -33,8 +34,9 @@ export function validateGrayRegionPlan(page, plan) {
     const styles = plan.regionVisuals;
     if (!Array.isArray(styles) || styles.length !== page.items.length || new Set(styles.map(s=>s.itemId)).size !== styles.length || page.items.some(i=>!styles.some(s=>s.itemId===i.id))) throw new Error('regionVisuals 必须逐区完整且唯一对应灰稿内容');
     for (const style of styles) {
-      if (!['plain','outline','dashed-gradient'].includes(style.surface) || typeof style.reason !== 'string' || !style.reason.trim() || typeof style.headingEnglish !== 'string' || !/^[A-Za-z0-9 &/()–-]{0,36}$/.test(style.headingEnglish)) throw new Error('灰稿区域视觉方案非法');
+      if (!style.layout && (!['plain','outline','dashed-gradient'].includes(style.surface) || typeof style.reason !== 'string' || !style.reason.trim() || typeof style.headingEnglish !== 'string' || !/^[A-Za-z0-9 &/()–-]{0,36}$/.test(style.headingEnglish))) throw new Error('灰稿区域视觉方案非法');
     }
   }
   if (regions.length !== page.items.length || new Set(regions.map(r=>r.itemId)).size !== regions.length || page.items.some(i=>!regions.some(r=>r.itemId===i.id))) throw new Error('灰稿区域与内容归属不完整');
+  validateRegionLayouts(page,plan,area);
 }

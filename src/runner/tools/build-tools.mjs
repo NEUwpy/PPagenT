@@ -30,6 +30,7 @@ import {
 } from "../state.mjs";
 import { defineTool } from "./index.mjs";
 import { expressionRequirements, missingExpressions, validateGrayRegionPlan } from "../gray-expressions.mjs";
+import {regionVisualSchema,grayVisualTokens,grayTextSources} from '../../render/gray-visual-plan.mjs';
 import { discoverCoreAssetPackages, loadCoreAssetPackage } from "../../runtime/core-asset-packages.mjs";
 import { loadStructureSkill } from "../../runtime/structure-skills.mjs";
 
@@ -173,7 +174,7 @@ async function renderDeck({ root, pages, outputPptx, qaDir, manuscriptSource, sk
  */
 export async function compileDeck({ root, runDir, state }) {
   for (const page of state.pages) {
-    if (state.grayInput) validateGrayRegionPlan(page, page.composition);
+    if (state.grayInput) validateGrayRegionPlan(page, page.composition, state.grayDraft.area);
     const missing = missingExpressions(page, page.composition);
     if (missing.length) {
       const error = new Error(`灰稿表达未落实：${missing.map(r => `${r.location} (${r.kind})`).join('、')}`);
@@ -313,6 +314,11 @@ export function buildTools({ root, runDir, committer, statePath }) {
         return {
           accepted: true,
           phase: state.phase,
+          ...(state.grayInput ? {grayVisualDesign:{
+            area:state.grayDraft.area,
+            tokens:grayVisualTokens((state.skinId==='neutral-editorial-001'?neutralEditorialSkin:northeasternUniversitySkin).componentTheme,(state.skinId==='neutral-editorial-001'?neutralEditorialSkin:northeasternUniversitySkin).typographyRoles),
+            coordinates:'layout.frame 相对正文区 0..1；组内 frame 相对本组 0..1。字号为画布 px，16 px=12 pt。模型决定位置、大小、对齐、间距和装饰，渲染器不补默认卡片。',
+          }}:{}),
           structures: (await discoverCoreAssetPackages(root)).filter(p => p.runtime.renderer !== "skin")
             .map(p => ({ assetId: p.assetId, name: p.asset.name, logicId: p.runtime.logicId })),
           layouts: [...layouts.values()]
@@ -334,6 +340,7 @@ export function buildTools({ root, runDir, committer, statePath }) {
             expressionRequirements: expressionRequirements(page),
             semantics: page.semantics,
             compositionRevision: page.compositionRevision ?? 0,
+            artifact: artifactReusable(state,page.pageId),
             feedback: state.artifactState?.[page.pageId]?.feedback ?? null,
             currentPlan: page.composition
               ? { compositionId: page.composition.compositionId, textSlots: page.composition.textSlots, itemLabels: page.composition.itemLabels ?? {}, structure: page.composition.structure, regionVisuals: page.composition.regionVisuals }
@@ -348,6 +355,7 @@ export function buildTools({ root, runDir, committer, statePath }) {
               sourceText: item.sourceText,
               kind: item.kind ?? "text",
               blocks: item.blocks ?? [],
+              textSources: state.grayInput ? grayTextSources(item) : undefined,
               production: item.production ?? null,
               // 内容角色不决定主次或位置；视觉方案通过 bandItemIds 指定辅助项。
               role: item.role ?? "object",
@@ -371,14 +379,8 @@ export function buildTools({ root, runDir, committer, statePath }) {
                 pageId: { type: "string" },
                 compositionId: { type: "string" },
                 regionVisuals: {
-                  type: "array", description: "按已加载 Skin 风格逐区编排。覆盖全部灰稿 itemId；plain 为开放排字，outline 为轻边框，dashed-gradient 为虚线浅渐变归组。英文仅翻译区域标题，不增加事实。",
-                  items: { type: "object", additionalProperties: false,
-                    properties: {
-                      itemId: { type: "string" },
-                      surface: { type: "string", enum: ["plain", "outline", "dashed-gradient"] },
-                      headingEnglish: { type: "string", maxLength: 36 },
-                      reason: { type: "string", minLength: 1 },
-                    }, required: ["itemId", "surface", "headingEnglish", "reason"] },
+                  type: "array", description: "每组提交模型局部排版 layout。标题和全部原文块的 frame、字体角色、字号、颜色、对齐可选；英文可省略；结构在所属组内分配 frame；装饰由原生形状、填色和独立线条渐变组合。来源文字不可改写。",
+                  items: regionVisualSchema,
                 },
                 structure: {
                   type: "object", additionalProperties: false,
@@ -450,8 +452,8 @@ export function buildTools({ root, runDir, committer, statePath }) {
             if (pkg.runtime.renderer === "skin") throw new Error("不能把 Skin 当结构");
           }
           if (current.grayInput) {
-            if (current.skinId === 'northeastern-university-001' && !plan.regionVisuals) throw new Error('大学灰稿必须提交逐区 regionVisuals，不能只换字体颜色');
-            validateGrayRegionPlan(page, plan);
+            if (!plan.regionVisuals?.every(v=>v.layout) || !plan.regionVisuals.length) throw new Error('灰稿必须提交逐区 layout，让模型决定排版，不能只换字体颜色');
+            validateGrayRegionPlan(page, plan, current.grayDraft.area);
             return { pageId: plan.pageId, composition: structuredClone(plan) };
           }
           const itemIds = new Set(page.items.map((item) => item.id));

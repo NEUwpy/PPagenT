@@ -1,6 +1,7 @@
 import { grayBodyLayout } from '../runner/gray-draft.mjs';
 import { addText, addBox, qaElementName } from '../asset-runtime/component-builders.mjs';
 import { fitChineseTextToFrame } from './chinese-typography.mjs';
+import {renderGrayVisualPlan} from './gray-visual-plan.mjs';
 
 // Reuse the gray renderer's section solver so production notes and final
 // structures occupy the same region. Geometry is never model-authored here.
@@ -28,6 +29,11 @@ export function grayRegionElements(content, plan, bodyFrame) {
 }
 
 export function renderGrayRegions(slide,content,plan,bodyFrame,typography,theme = {}) {
+  if(plan.regionVisuals?.every(s=>s.layout) && plan.regionVisuals.length) {
+    const result=renderGrayVisualPlan(slide,content,plan,bodyFrame,typography,theme);
+    addBox(slide,result.componentFrame,{name:qaElementName({parent:'composition-component',domains:['page-composition-zones']}),geometry:'rect',fill:'none',line:{fill:'none',width:0},shadow:'shadow-none'});
+    return result;
+  }
   const result = grayRegionElements(content,plan,bodyFrame);
   const treatment = theme.grayRegionTreatment ?? {
     heading: theme.layoutStyle === 'magazine' ? 'editorial-marker-line' : 'academic-group-bar',

@@ -16,6 +16,32 @@ import { buildDeckPages, compileDeck, buildTools, groupViolations } from "../src
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
+test('model gray layouts pass the public tool and compile native positions and independent gradient strokes',async()=>{
+ const state=visualState();state.grayInput={sourcePath:'test-gray'};state.grayDraft={area:{width:1170,height:492}};
+ const p=state.pages[0];p.items[0].kind='diagram';p.items[0].heading='关系';
+ for(const i of p.items.slice(1)){i.kind='text';i.heading='检查';i.blocks=[{id:'b1',text:i.text??i.sourceText}];}
+ p.grayComposition={regions:[{itemId:'i1',x:0,y:0,width:1170,height:280},{itemId:'i2',x:0,y:300,width:1170,height:85},{itemId:'i3',x:0,y:400,width:1170,height:90}]};
+ const frame=(x,y,width,height)=>({x,y,width,height});
+ const text=(f)=>({frame:f,fontRole:'body',fontSize:18,colorRole:'ink',lineHeight:1.1});
+ const regionVisuals=p.items.map((i,k)=>({itemId:i.id,reason:'测试来源绑定与真实排版',layout:{heading:{...text(frame(.02,0,.18,k? .4:.14)),fontRole:'heading',colorRole:'accent'},
+ blocks:k?[{sourceLocation:`${i.id}/b1`,...text(frame(.23,0,.74,.9))}]:[],
+ ...(k?{}:{structureFrame:frame(.02,.18,.95,.8)}),
+ decorations:[{frame:frame(0,.01,.999,.98),geometry:'rect',fill:{kind:'none'},line:{width:1,dash:'dashed',fill:{kind:'linear',colorRole:'outline',endColorRole:'primary',angleDeg:90}}}],
+ }}));
+ const plan={pageId:p.pageId,compositionId:'component-gray-regions',textSlots:[],regionVisuals,structure:{assetId:'problem-solution-outcome-001',sourceItemIds:['i1'],sourceLocation:'i1',parameters:{pairs:[{order:1,problem:{title:'记录分散',body:''},solution:{title:'统一登记',body:''}},{order:2,problem:{title:'交接不清',body:''},solution:{title:'明确责任',body:''}}],outcome:{title:'验证交接',highlight:'待核对',body:''}}}};
+ const runDir=await runDirFor('model-gray-layout'),statePath=path.join(runDir,'state.json');await writeState(statePath,state);
+ const committer=createCommitter({statePath});const registry=createToolRegistry({tools:buildTools({root,runDir,committer,statePath}),runDir});
+ const read=await registry.dispatch('read_catalog',{});assert.equal(read.result.grayVisualDesign.tokens.fonts.english,'Times New Roman');
+ const written=await registry.dispatch('upsert_page_plan',{pages:[plan]});assert.equal(written.result.accepted,true,JSON.stringify(written.result));
+ for(const skinId of ['northeastern-university-001','neutral-editorial-001']){
+  const result=await compileDeck({root,runDir:path.join(runDir,skinId),state:{...await committer.read(),skinId}});
+  assert.equal(result.qualityAudit.status,'passed',JSON.stringify(result.qualityAudit));
+  const layout=JSON.parse(await fs.readFile(path.join(result.qaDir,'slide-02.layout.json'),'utf8'));
+  assert.ok(layout.elements.some(e=>e.name==='region-i2-body-0'));
+  assert.ok(layout.elements.some(e=>e.name==='region-i1-decoration-0'));
+ }
+});
+
 test("结构计划经正式工具绑定来源并构建双 Skin；非文字内容不能降级", async () => {
   let state = visualState();
   state.pages[0].items.forEach(item => { item.kind = "diagram"; });

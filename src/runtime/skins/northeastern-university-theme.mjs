@@ -11,9 +11,10 @@ export const northeasternUniversityTheme = Object.freeze({
   line: "#C9D7ED",
   layoutStyle: "mckinsey",
   regionAccent: "#C45B13",
-  regionHeadingFont: "SimSun",
+  regionHeadingFont: "汉仪粗宋简",
+  regionEnglishFont: "Times New Roman",
   structureFinish: "academic-flat",
-  regionEnglish: "#DDDFE3",
+  regionEnglish: "#E7E6E6",
   regionOutline: "#B4C9E8",
   regionGradientStart: "#F0F5FC",
   // Compiled from 大学Skin设计提示词-v1.md: hierarchy first, light-blue
