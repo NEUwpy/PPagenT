@@ -21,6 +21,7 @@ import {
   renderNortheasternUniversityDeck,
   northeasternUniversitySkin,
 } from "../../runtime/skins/northeastern-university.mjs";
+import { renderNeutralEditorialDeck, neutralEditorialSkin } from "../../runtime/skins/neutral-editorial.mjs";
 import { auditRenderedDeck } from "../../tools/audit-rendered-typography.mjs";
 import { MINIMUM_READABLE_FONT_SIZE_PT } from "../../runtime/typography-standards.mjs";
 import {
@@ -136,7 +137,14 @@ function templatePath(root) {
   return path.join(root, "assets", "主题", "东北大学-001", "runtime-template.pptx");
 }
 
-async function renderDeck({ root, pages, outputPptx, qaDir, manuscriptSource }) {
+async function renderDeck({ root, pages, outputPptx, qaDir, manuscriptSource, skinId = "northeastern-university-001" }) {
+  if (skinId === neutralEditorialSkin.id) {
+    const layouts = await loadCompositionLayouts(root);
+    const prepared = pages.map(page => ({ ...page, _layout: page.composition ? layouts.get(page.composition.compositionId) : null }));
+    await renderNeutralEditorialDeck({ root, pages: prepared, outputPptx, qaDir, manuscriptSource });
+    return;
+  }
+  if (skinId !== northeasternUniversitySkin.id) throw new Error(`不支持的 Skin：${skinId}`);
   await renderNortheasternUniversityDeck({
     root,
     pages,
@@ -156,7 +164,7 @@ export async function compileDeck({ root, runDir, state }) {
   const pages = buildDeckPages(state);
   const outputPptx = path.join(runDir, "deck.pptx");
   const qaDir = path.join(runDir, "qa");
-  await renderDeck({ root, pages, outputPptx, qaDir, manuscriptSource: state.sourcePath });
+  await renderDeck({ root, pages, outputPptx, qaDir, manuscriptSource: state.sourcePath, skinId: state.skinId ?? "northeastern-university-001" });
   // requiredQaSlides 的算法照抄 neu-renderer.mjs:78-84：封面类页不要求 QA 几何契约。
   const requiredQaSlides = pages
     .map((page, index) => (HEADER_ASSET_IDS.has(page.payload.assetId) ? null : padSlideNumber(index)))

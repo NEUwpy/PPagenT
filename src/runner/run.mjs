@@ -47,9 +47,9 @@ const RULES_PRECEDENCE = [
  * skin 用 **skin 对象的 id** 而不是硬编码字符串：一旦对象与 rules/index.json 的键不一致，
  * loadRules 会失败关闭，而不是悄悄少加载一批规则。
  */
-export async function phaseRulesText(rootDir, phase) {
+export async function phaseRulesText(rootDir, phase, skinId = northeasternUniversitySkin.id) {
   const bundle = phase === "visual"
-    ? await loadRules(rootDir, { profile: "generation", skin: northeasternUniversitySkin.id })
+    ? await loadRules(rootDir, { profile: "generation", skin: skinId })
     : await loadRules(rootDir, { profile: "content-director" });
   return `${RULES_PRECEDENCE}\n\n${bundle.text}`;
 }
@@ -95,7 +95,7 @@ export function parseArgs(argv) {
  * 灰稿交接入口：把已生成的灰稿状态直接交给 visual 阶段。
  * 不重新跑 content director，也不修改灰稿的页面、文字、关系或区域。
  */
-export async function loadGrayState({ grayStatePath, rootDir = root }) {
+export async function loadGrayState({ grayStatePath, rootDir = root, skinId = "northeastern-university-001" }) {
   const absolute = path.resolve(rootDir, grayStatePath);
   const raw = await fs.readFile(absolute, "utf8");
   const gray = JSON.parse(raw);
@@ -105,6 +105,7 @@ export async function loadGrayState({ grayStatePath, rootDir = root }) {
     ...gray,
     sourcePath: path.relative(rootDir, absolute).replaceAll("\\", "/"),
     phase: "visual",
+    skinId,
     runtimeFailure: null,
     lastStop: null,
     grayInput: {
@@ -232,7 +233,7 @@ export async function main(argv = process.argv.slice(2), { observer = null } = {
       if (error.code !== "ENOENT") throw error;
     }
     if (args["gray-state"]) {
-      const imported = await loadGrayState({ grayStatePath: args["gray-state"], rootDir: root });
+      const imported = await loadGrayState({ grayStatePath: args["gray-state"], rootDir: root, skinId: args.skin ?? "northeastern-university-001" });
       await fs.mkdir(path.dirname(statePath), { recursive: true });
       await writeState(statePath, imported);
       await writeText(path.join(runDir, "state.md"), renderStateMarkdown(imported));
@@ -316,7 +317,7 @@ export async function main(argv = process.argv.slice(2), { observer = null } = {
     }
     const phaseStartedAt = Date.now();
     // 规则在进阶段前加载：加载失败就不该开始这一阶段（loadRules 自身失败关闭）。
-    const rulesText = await phaseRulesText(root, phase);
+    const rulesText = await phaseRulesText(root, phase, state.skinId ?? northeasternUniversitySkin.id);
     const summary = await runPhase({ phase, statePath, runDir, provider, maxTurns, tools: toolsFor(phase), observer, rulesText });
     phases.push(summary);
     state = await readState(statePath);
