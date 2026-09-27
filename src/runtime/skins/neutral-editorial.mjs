@@ -45,7 +45,7 @@ export async function renderNeutralEditorialDeck({ root, pages, outputPptx, qaDi
       shell(slide, page, index);
       const skinOnly = await isSkinOnlyAsset(page.payload.assetId, root);
       if (page.composition) {
-        const { componentFrame } = renderPageComposition(slide, page.content, page._layout, page.composition, neutralEditorialSkin.bodyFrame, neutralEditorialSkin.typographyRoles);
+        const { componentFrame } = renderPageComposition(slide, page.content, page._layout, page.composition, neutralEditorialSkin.bodyFrame, neutralEditorialSkin.typographyRoles, { ...neutralEditorialSkin.componentTheme, displayFont: neutralEditorialTheme.fonts?.display });
         if (!skinOnly && page.payload && componentFrame) await structureRenderer(slide, page.payload, neutralEditorialSkin, componentFrame, root);
       } else if (!skinOnly && page.payload) {
         await structureRenderer(slide, page.payload, neutralEditorialSkin, neutralEditorialSkin.bodyFrame, root);

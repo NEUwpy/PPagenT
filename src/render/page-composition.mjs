@@ -773,8 +773,8 @@ export function validatePageCompositionTextFit(content, layout, planPage, bodyFr
   return issues;
 }
 
-export function renderPageComposition(slide, content, layout, planPage, bodyFrame, typographyRoles) {
-  if (layout.id === "component-gray-regions") return renderGrayRegions(slide,content,planPage,bodyFrame,typographyRoles);
+export function renderPageComposition(slide, content, layout, planPage, bodyFrame, typographyRoles, theme = {}) {
+  if (layout.id === "component-gray-regions") return renderGrayRegions(slide,content,planPage,bodyFrame,typographyRoles,theme);
   if (["fixed-cover", "fixed-agenda", "fixed-closing"].includes(layout.id)) return { componentFrame: null };
   // 失败关闭：方案结构不合法就**不画**，而不是画一半再把剩下的静静丢掉。
   // check_pages 会在构建前就拦下这种方案，所以正常路径到不了这里；留这一手是防有人绕过预检直接调渲染器。

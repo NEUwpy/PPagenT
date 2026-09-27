@@ -27,12 +27,15 @@ export function grayRegionElements(content, plan, bodyFrame) {
   return {text,componentFrame};
 }
 
-export function renderGrayRegions(slide,content,plan,bodyFrame,typography) {
+export function renderGrayRegions(slide,content,plan,bodyFrame,typography,theme = {}) {
   const result = grayRegionElements(content,plan,bodyFrame);
   for (const [index,entry] of result.text.entries()) {
-    const fit = fitChineseTextToFrame(entry.value,{...entry.frame,fontSizes:entry.heading?[24,22]:[22,20,18],maxLines:entry.heading?1:12,lineHeight:1.35});
+    const surface = entry.heading ? (theme.headingSurface ?? theme.surface ?? '#FFFFFF') : (theme.regionSurface ?? theme.surface ?? '#FFFFFF');
+    addBox(slide,entry.frame,{name:`gray-region-surface-${index}`,geometry:'roundRect',fill:surface,line:{fill:theme.line ?? '#D5DFEC',width:1},shadow:'shadow-none'});
+    const role = entry.heading ? typography.composition?.rowTitle : typography.composition?.rowBody;
+    const fit = fitChineseTextToFrame(entry.value,{...entry.frame,fontSizes:role?.fontSizes ?? (entry.heading?[24,22]:[18,16,14]),maxLines:role?.maxLines ?? (entry.heading?1:12),lineHeight:role?.lineHeight ?? 1.35});
     if (!fit.fits) throw new Error(`灰稿文字区无法容纳：${entry.value}`);
-    addText(slide,fit.text,entry.frame,{name:`gray-region-text-${index}`,fontSize:fit.fontSize,typeface:typography.bodyTypeface,color:'#303238',bold:Boolean(entry.heading),verticalAlignment:'top',autoFit:'none'});
+    addText(slide,fit.text,{...entry.frame,left:entry.frame.left+12,top:entry.frame.top+8,width:entry.frame.width-24,height:entry.frame.height-16},{name:`gray-region-text-${index}`,fontSize:fit.fontSize,typeface:entry.heading ? (theme.displayFont ?? typography.displayTypeface ?? typography.bodyTypeface) : typography.bodyTypeface,color:entry.heading ? (theme.primaryColor ?? theme.dark ?? '#303238') : (theme.body ?? theme.dark ?? '#303238'),bold:Boolean(entry.heading),verticalAlignment:'top',autoFit:'none'});
   }
   addBox(slide,result.componentFrame,{name:qaElementName({parent:'composition-component',domains:['page-composition-zones']}),geometry:'rect',fill:'none',line:{fill:'none',width:0},shadow:'shadow-none'});
   return {componentFrame:result.componentFrame};
