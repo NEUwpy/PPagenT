@@ -146,6 +146,7 @@ const PHASE_PROMPT = {
   visual: [
     "视觉阶段：先 read_catalog 读取可用版式与能力，再逐页决定区域与上屏表达。",
     "expressionRequirements 包括文字组内部的图示要求；外层 kind=text 不代表整组只能排文字。必须保留内部图示的关系、来源标签、范围和条件。现有工具无法表达时报告能力缺口，不得用纯文字替代。",
+    "灰稿交接必须使用 component-gray-regions，保留全部既定分区；textSlots 为空，文字自动按原文原区渲染。structure.sourceLocation 精确引用一个 expressionRequirements.location，sourceItemIds 仅包含该区所属 itemId。不能吞并其他文字区。当前接口只支持一个图示区，多图示页报告能力缺口。",
     "check_pages 会真的构建 PPT 并回报真实几何与字号问题；只对改过的页重复检查。",
     "全部页面当前版本通过后调用 finish_visual；存在经验提示时必须逐页给出理由。",
   ].join("\n"),

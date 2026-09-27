@@ -29,7 +29,7 @@ import {
   looksLikeRuntimeFailure, upsertComposition, finishVisual, recordDeckAudit,
 } from "../state.mjs";
 import { defineTool } from "./index.mjs";
-import { expressionRequirements, missingExpressions } from "../gray-expressions.mjs";
+import { expressionRequirements, missingExpressions, validateGrayRegionPlan } from "../gray-expressions.mjs";
 import { discoverCoreAssetPackages, loadCoreAssetPackage } from "../../runtime/core-asset-packages.mjs";
 import { loadStructureSkill } from "../../runtime/structure-skills.mjs";
 
@@ -107,13 +107,14 @@ export function buildDeckPages(state) {
     meta: { sectionName: SECTION_NAME_BY_RELATION[page.relation] ?? "观点" },
     content: {
       pageId: page.pageId,
-      title: page.title,
+      title: state.grayInput ? page.claim : page.title,
       // 上屏正文优先取模型提炼的 item.text，没写就回退到逐字来源 sourceText——
       // 历史 state 没有 text 字段，回退后它们的蓝图逐字不变（--replay 因此不受影响）。
       // sourceText 不会被顶掉：它仍是保真检查的比对基准，也在 content.md 里作为证据留档。
       items: page.items.map((item) => ({
         id: item.id,
-        title: page.composition?.itemLabels?.[item.id] ?? "",
+        title: state.grayInput ? item.heading : page.composition?.itemLabels?.[item.id] ?? "",
+        ...(state.grayInput ? { grayItem: item } : {}),
         body: item.text ?? item.sourceText,
         kind: item.kind ?? "text",
         blocks: item.blocks ?? [],
@@ -126,11 +127,12 @@ export function buildDeckPages(state) {
     intent: { intentId: page.pageId },
     decision: { selectedAssetId: page.composition?.structure?.assetId ?? BODY_ASSET_ID },
     payload: page.composition?.structure
-      ? { assetId: page.composition.structure.assetId, parameters: page.composition.structure.parameters }
+      ? { assetId: page.composition.structure.assetId, parameters: page.composition.structure.parameters, ...(page.composition.compositionId === "component-gray-regions" ? { execution: "preserved-design" } : {}) }
       : { assetId: BODY_ASSET_ID, parameters: {} },
     composition: page.composition
       ? {
         compositionId: page.composition.compositionId,
+        ...(page.composition.compositionId === "component-gray-regions" ? { grayRegions: page.grayComposition.regions, grayArea: state.grayDraft.area, structure: page.composition.structure } : {}),
         textSlots: page.composition.textSlots,
         ...(page.composition.structure ? { componentItemIds: page.composition.structure.sourceItemIds } : {}),
         // 条件展开：没给 leadLabel 时连键都不存在，历史 blueprint 因此逐字不变。
@@ -171,6 +173,7 @@ async function renderDeck({ root, pages, outputPptx, qaDir, manuscriptSource, sk
  */
 export async function compileDeck({ root, runDir, state }) {
   for (const page of state.pages) {
+    if (state.grayInput) validateGrayRegionPlan(page, page.composition);
     const missing = missingExpressions(page, page.composition);
     if (missing.length) {
       const error = new Error(`灰稿表达未落实：${missing.map(r => `${r.location} (${r.kind})`).join('、')}`);
@@ -370,6 +373,7 @@ export function buildTools({ root, runDir, committer, statePath }) {
                   type: "object", additionalProperties: false,
                   properties: {
                     assetId: { type: "string" }, parameters: { type: "object" },
+                    sourceLocation: { type: "string", description: "灰稿 expressionRequirements 的精确 location，只在该蓝色子区绘图" },
                     sourceItemIds: { type: "array", minItems: 1, uniqueItems: true, items: { type: "string" } },
                   },
                   required: ["assetId", "parameters", "sourceItemIds"],
@@ -424,6 +428,7 @@ export function buildTools({ root, runDir, committer, statePath }) {
           if (!page) throw new Error(`未知页面 ${plan.pageId}`);
           const layout = layouts.get(plan.compositionId);
           if (!layout) throw new Error(`未知版式 ${plan.compositionId}`);
+          if (layout.id === "component-gray-regions" && !current.grayInput) throw new Error("保留灰稿版式仅用于灰稿交接输入");
           const componentLayout = layout.id.startsWith("component-");
           if (!layout.id.startsWith(TEXT_ONLY_LAYOUT_PREFIX) && !componentLayout) {
             throw new Error(`${plan.compositionId} 尚未接入正式视觉工具`);
@@ -432,6 +437,10 @@ export function buildTools({ root, runDir, committer, statePath }) {
           if (plan.structure) {
             const pkg = await loadCoreAssetPackage(plan.structure.assetId, root);
             if (pkg.runtime.renderer === "skin") throw new Error("不能把 Skin 当结构");
+          }
+          if (current.grayInput) {
+            validateGrayRegionPlan(page, plan);
+            return { pageId: plan.pageId, composition: structuredClone(plan) };
           }
           const itemIds = new Set(page.items.map((item) => item.id));
           const used = [...(plan.structure?.sourceItemIds ?? [])];

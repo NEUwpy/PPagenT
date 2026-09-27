@@ -23,15 +23,16 @@ export const neutralEditorialSkin = Object.freeze({
   },
 });
 
-function rule(slide) {
-  slide.shapes.add({ geometry: "line", position: { left: 338, top: 60.5, width: 882, height: 0 }, fill: "none", line: { style: "solid", fill: "#D7D4CA", width: 1 } });
+function rule(slide, gray = false) {
+  slide.shapes.add({ geometry: "line", position: { left: gray ? 56 : 338, top: gray ? 108 : 60.5, width: gray ? 1164 : 882, height: 0 }, fill: "none", line: { style: "solid", fill: "#D7D4CA", width: 1 } });
 }
 
 function shell(slide, page, index) {
+  const gray = page.composition?.compositionId === "component-gray-regions";
   slide.background.fill = "#F5F4EF";
   addText(slide, String(index + 1).padStart(2, "0"), { left: 56, top: 48, width: 24, height: 24 }, { name: "neutral-section-number", typeface: "Noto Sans SC", fontSize: 18, color: "#A35D4F", verticalAlignment: "middle" });
-  addText(slide, page.content.title, { left: 91, top: 44, width: 230, height: 36 }, { name: "neutral-page-title", typeface: "Noto Serif SC", fontSize: 25, bold: true, color: "#201F1D", verticalAlignment: "middle" });
-  rule(slide);
+  addText(slide, page.content.title, { left: 91, top: 44, width: gray ? 1129 : 230, height: 36 }, { name: "neutral-page-title", typeface: "Noto Serif SC", fontSize: 25, bold: true, color: "#201F1D", verticalAlignment: "middle" });
+  rule(slide, gray);
   addText(slide, "灰稿交接 · 正式生成", { left: 56, top: 679, width: 240, height: 18 }, { name: "neutral-footer-label", typeface: "Noto Sans SC", fontSize: 12, color: "#85837B", verticalAlignment: "middle" });
   addText(slide, String(index + 1).padStart(2, "0"), { left: 1198, top: 679, width: 26, height: 18 }, { name: "neutral-folio", typeface: "Noto Sans SC", fontSize: 12, color: "#85837B", alignment: "right", verticalAlignment: "middle" });
 }

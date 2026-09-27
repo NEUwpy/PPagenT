@@ -8,7 +8,7 @@ async function readJson(target) {
 
 export async function loadCompositionLayouts(root = process.cwd()) {
   const catalog = await readJson(path.join(root, "catalog", "composition-layouts.json"));
-  return new Map(catalog.layouts.map((layout) => [layout.id, layout]));
+  return new Map([...catalog.layouts, { id: "component-gray-regions", silhouette: "保留灰稿区域及局部图文位置；textSlots 留空，文字自动保留", slots: [] }].map((layout) => [layout.id, layout]));
 }
 
 export async function loadCoreAssetMetadata(root = process.cwd()) {
