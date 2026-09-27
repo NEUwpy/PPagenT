@@ -563,7 +563,7 @@ export function buildTools({ root, runDir, committer, statePath }) {
           }
           // 大批量灰稿验证不再为一次结构参数错误重复构建整副牌组；
           // 结构执行器已返回明确错误时保留未知页归因，交给模型按批次缩小检查范围。
-          if (!culpritPageId && pending.length <= 4) {
+          if (!culpritPageId && false) {
             const located = await locateFailingPage({ root, pages: deckPages, manuscriptSource: state.sourcePath, skinId: state.skinId });
             culpritPageId = located?.content.pageId ?? null;
             if (culpritPageId) attribution = "prefix-build";
