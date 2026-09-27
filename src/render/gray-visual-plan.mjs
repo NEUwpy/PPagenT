@@ -15,11 +15,12 @@ const paint=object({kind:choice('none','solid','linear'),colorRole:color,endColo
 export const regionVisualSchema=object({itemId:{type:'string'},reason:{type:'string',minLength:1},layout:object({
   frame:{...frame,description:'可选：正文区归一化坐标，微调本组范围；缺省沿用灰稿。组内 frame 均相对此组，不是整页。保留原有上下/左右归属。'},
   heading:object(textProperties,textRequired),
+  titlePair: {type:'string',enum:['skin-overlap'],description:'使用 Skin 的统一中英文叠合样式；英文位置与字号从中文统一派生，仍由模型指定标题起点。'},
   english:object({text:{type:'string',maxLength:36,pattern:'^[A-Za-z0-9 &/()–-]*$'},...textProperties},['text',...textRequired]),
   blocks:{type:'array',items:object({sourceLocation:{type:'string'},...textProperties},['sourceLocation',...textRequired])},
   structureFrame:{...frame,description:'仅图示所属组提供；本组内的结构占用区域。'},
   decorations:{type:'array',maxItems:8,items:object({frame,geometry:choice('rect','roundRect','ellipse'),fill:paint,
-    line:object({width:number(0,3),dash:choice('solid','dashed'),fill:paint}),radius:number(0,16)},['frame','geometry','fill','line'])},
+    line:object({width:number(0,3),dash:choice('solid','dashed'),fill:paint}),radius:number(0,16),titleGap:{type:'boolean',description:'上边线在标题处留空，不绘制任何标题底板。用于 rect 分区框。'}},['frame','geometry','fill','line'])},
 },['heading','blocks','decorations'])});
 const validateSchema=new Ajv2020({strict:false,allErrors:true}).compile(regionVisualSchema);
 
@@ -85,8 +86,22 @@ export function renderGrayVisualPlan(slide,content,plan,bodyFrame,typography,the
     const item=content.items.find(i=>i.id===s.itemId).grayItem,l=s.layout;
     const region=plan.grayRegions.find(r=>r.itemId===s.itemId);
     const group=absolute(regionBounds(region,l,plan.grayArea),bodyFrame);
-    for(const [i,d] of l.decorations.entries()) addBox(slide,absolute(d.frame,group),{name:`region-${s.itemId}-decoration-${i}`,geometry:d.geometry,borderRadius:d.radius??0,
-      fill:nativePaint(d.fill,tokens),line:{width:d.line.width,style:d.line.dash,fill:nativePaint(d.line.fill,tokens)},shadow:'shadow-none'});
+    const pair=theme.regionTitlePair;
+    const heading=l.titlePair==='skin-overlap' && pair ? {...l.heading,fontSize:pair.fontSize,bold:true,verticalAlign:'top',lineHeight:pair.lineHeight} : l.heading;
+    const english=l.titlePair==='skin-overlap' && pair && l.english ? {...l.english,fontSize:pair.fontSize,bold:false,align:heading.align??'left',verticalAlign:'top',lineHeight:pair.lineHeight,frame:{...l.english.frame,x:heading.frame.x,y:heading.frame.y+pair.englishOffsetY/group.height},text:l.english.text.toUpperCase()} : l.english;
+    if(english){contained(english.frame,s.itemId);if([...l.blocks.map(b=>b.frame),...(l.structureFrame?[l.structureFrame]:[])].some(f=>overlaps(f,english.frame)))throw new Error(`${s.itemId} 统一标题衬字侵入正文或结构，请留出标题区`);}
+    for(const [i,d] of l.decorations.entries()) {
+      const f=absolute(d.frame,group),line={width:d.line.width,style:d.line.dash,fill:nativePaint(d.line.fill,tokens)};
+      const name=`region-${s.itemId}-decoration-${i}`;
+      addBox(slide,f,{name,geometry:d.geometry,borderRadius:d.radius??0,fill:nativePaint(d.fill,tokens),line:d.titleGap?{width:0,fill:'none'}:line,shadow:'shadow-none'});
+      if(d.titleGap) {
+        const h=absolute(heading.frame,group);
+        const inkWidth=Math.max([...item.heading].length*heading.fontSize,english?english.text.length*english.fontSize*.67:0);
+        const start=Math.max(f.left,h.left-5),end=Math.min(f.left+f.width,h.left+inkWidth+5);
+        const segments=[[f.left,f.top,start-f.left,0],[end,f.top,f.left+f.width-end,0],[f.left,f.top,0,f.height],[f.left+f.width,f.top,0,f.height],[f.left,f.top+f.height,f.width,0]];
+        segments.forEach(([left,top,width,height],j)=>{if(width||height)addBox(slide,{left,top,width,height},{name:`${name}-edge-${j}`,geometry:'line',fill:'none',line,shadow:'shadow-none'});});
+      }
+    }
     const text=(value,spec,name)=>{
       const f=absolute(spec.frame,group),lineHeight=spec.lineHeight??1.25;
       const fit=fitChineseTextToFrame(value,{...f,fontSizes:[spec.fontSize],lineHeight,maxLines:Math.max(1,Math.floor(f.height/(spec.fontSize*lineHeight)))});
@@ -94,8 +109,8 @@ export function renderGrayVisualPlan(slide,content,plan,bodyFrame,typography,the
       addText(slide,fit.text,f,{name,fontSize:spec.fontSize,typeface:tokens.fonts[spec.fontRole],color:tokens.colors[spec.colorRole],bold:spec.bold??false,
         alignment:spec.align??'left',verticalAlignment:spec.verticalAlign??'top',lineHeight,autoFit:'none'});
     };
-    if(l.english?.text) text(l.english.text,l.english,`region-${s.itemId}-english`);
-    text(item.heading,l.heading,`region-${s.itemId}-heading`);
+    if(english?.text) text(english.text,english,`region-${s.itemId}-english`);
+    text(item.heading,heading,`region-${s.itemId}-heading`);
     const sources=grayTextSources(item);
     for(const [i,b] of l.blocks.entries()) text(sources.find(n=>n.sourceLocation===b.sourceLocation).text,b,`region-${s.itemId}-body-${i}`);
     if(l.structureFrame) componentFrame=absolute(l.structureFrame,group);

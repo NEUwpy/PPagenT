@@ -13,6 +13,7 @@ export const northeasternUniversityTheme = Object.freeze({
   regionAccent: "#244A73",
   regionHeadingFont: "汉仪粗宋简",
   regionEnglishFont: "Times New Roman",
+  regionTitlePair: Object.freeze({fontSize:24,lineHeight:1.1,englishOffsetY:6}),
   structureFinish: "academic-flat",
   regionEnglish: "#E7E6E6",
   regionOutline: "#B4C9E8",

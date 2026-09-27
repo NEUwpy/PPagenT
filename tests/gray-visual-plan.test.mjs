@@ -46,3 +46,15 @@ test('Skin roles stay Skin-specific and insufficient frames fail instead of sile
  const {page,plan}=fixture();plan.regionVisuals[1].layout.blocks[0].frame=f(0,.3,.02,.1);
  assert.throws(()=>renderGrayVisualPlan(capture().slide,{items:page.items.map(i=>({id:i.id,grayItem:i}))},plan,{left:0,top:0,width:1170,height:492},{},northeasternUniversityTheme),/空间不足/);
 });
+
+test('shared title pair fixes English offset and leaves a native border gap without masking blocks',()=>{
+ const {page,plan}=fixture();const l=plan.regionVisuals[0].layout;
+ l.titlePair='skin-overlap';l.heading={...box(f(.02,0,.6,.16)),fontRole:'heading'};
+ l.english={...box(f(.4,0,.5,.16)),fontRole:'english',text:'relation'};
+ l.decorations=[{frame:f(0,.05,1,.9),geometry:'rect',titleGap:true,fill:{kind:'solid',colorRole:'paper'},line:{width:1,dash:'dashed',fill:{kind:'solid',colorRole:'outline'}}}];
+ const c=capture();renderGrayVisualPlan(c.slide,{items:page.items.map(i=>({id:i.id,grayItem:i}))},plan,{left:0,top:0,width:1170,height:492},{},northeasternUniversityTheme);
+ const h=c.shapes.find(s=>s.name==='region-a-heading'),e=c.shapes.find(s=>s.name==='region-a-english');
+ assert.equal(e.position.left,h.position.left);assert.equal(e.position.top-h.position.top,6);assert.equal(e.text.style.fontSize,h.text.style.fontSize);
+ assert.equal(c.shapes.filter(s=>s.name?.startsWith('region-a-decoration')).length,6);
+ assert.equal(c.shapes.filter(s=>s.name?.includes('-edge-')).length,5);
+});
