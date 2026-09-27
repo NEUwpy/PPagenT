@@ -411,11 +411,18 @@ export function compileStructureThemeSource(source, theme = {}) {
 }
 
 export function compileHtmlComponentTheme({ markup = "", css = "", theme = {} } = {}) {
+  // Authored native shadow metadata must follow the Skin finish as well as CSS.
+  if (theme.structureFinish==='academic-flat') markup=String(markup).replace(/data-ppt-shadow=("[^"]*"|'[^']*')/g,'data-ppt-shadow="shadow-none"');
   if ((theme.structureColorMode === 'continuous-tone-v1' || theme.id === 'neutral-editorial-001') && supportsNeutralStructure(markup)) {
     return Object.freeze(adaptNeutralStructure({markup:String(markup),css:String(css),theme:resolveStructureTheme(theme),sourceTheme:resolveStructureTheme({})}));
   }
   return Object.freeze({
     markup: normalizeHex(theme?.primaryColor) ? compileMarkupColors(String(markup ?? ""), resolveStructureTheme(theme)) : String(markup ?? ""),
-    css: compileStructureThemeSource(css, theme)+cycleStageColors(String(markup),resolveStructureTheme(theme)),
+    css: compileStructureThemeSource(css, theme)+cycleStageColors(String(markup),resolveStructureTheme(theme))+(theme.structureFinish==='academic-flat' ? `
+      [data-ppt-root] * {box-shadow:none!important;text-shadow:none!important}
+      [data-ppt-root] [class*="-card"] {background:#FFFFFF!important;border-color:${theme.primaryColor}!important}
+      [data-ppt-root] [class*="-underlay"], [data-ppt-root] [class*="-halo"] {background:transparent!important;border-color:transparent!important}
+      [data-ppt-root] .outcome-ring {border-color:${theme.regionAccent}!important;background:#FFFFFF!important}
+    ` : ''),
   });
 }

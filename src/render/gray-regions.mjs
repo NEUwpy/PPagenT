@@ -68,12 +68,21 @@ function renderAcademicRegions(slide,result,plan,bodyFrame,typography,theme) {
   for (const region of plan.grayRegions) {
     const visual=plan.regionVisuals?.find(v=>v.itemId===region.itemId) ?? {surface:'plain',headingEnglish:''};
     const f={left:bodyFrame.left+(region.x+16)*sx,top:bodyFrame.top+(region.y+28)*sy,width:(region.width-32)*sx,height:(region.height-36)*sy};
+    const entries=result.text.filter(t=>t.itemId===region.itemId);
+    const containsStructure=result.componentFrame.left>=f.left-16 && result.componentFrame.left<f.left+f.width && result.componentFrame.top>=f.top && result.componentFrame.top<f.top+f.height;
+    if (!containsStructure) {
+      const bottom=Math.max(f.top+64,...entries.filter(t=>!t.heading).map(t=>{
+        const fit=fitChineseTextToFrame(t.value,{...t.frame,width:t.frame.width-32,fontSizes:[22,20,18],maxLines:12,lineHeight:1.35});
+        return t.frame.top+8+(fit.text.split('\n').length*fit.fontSize*1.35)+24;
+      }));
+      f.height=Math.min(f.height,bottom-f.top);
+    }
     if (visual.surface !== 'plain') addBox(slide,f,{
       name:`academic-region-${region.itemId}`,geometry:'roundRect',borderRadius:6,shadow:'shadow-none',
       fill:visual.surface==='dashed-gradient' ? {type:'gradient',gradientKind:'linear',angleDeg:90,stops:[{offset:0,color:'#FFFFFF'},{offset:100000,color:theme.regionGradientStart}]} : '#FFFFFF',
       line:{style:visual.surface==='dashed-gradient'?'dashed':'solid',fill:theme.regionOutline,width:1},
     });
-    for (const [index,entry] of result.text.filter(t=>t.itemId===region.itemId).entries()) {
+    for (const [index,entry] of entries.entries()) {
       const fontSizes=entry.heading?[24]:[22,20,18];
       const box={...entry.frame,left:entry.frame.left+16,width:entry.frame.width-32,top:entry.frame.top+(entry.heading?0:8),height:entry.frame.height-(entry.heading?0:16)};
       const fit=fitChineseTextToFrame(entry.value,{...box,fontSizes,maxLines:entry.heading?1:12,lineHeight:1.35});
@@ -81,16 +90,16 @@ function renderAcademicRegions(slide,result,plan,bodyFrame,typography,theme) {
       if(entry.heading) {
         const titleWidth=Math.min(box.width,entry.value.length*fit.fontSize+12);
         const english=visual.headingEnglish.toUpperCase();
-        const englishWidth=english ? Math.min(box.width-titleWidth-8,english.length*11+12) : 0;
-        addBox(slide,{left:box.left-6,top:box.top,width:titleWidth+Math.max(0,englishWidth)+14,height:34},{geometry:'rect',borderRadius:0,fill:'#FFFFFF',line:{fill:'none',width:0},shadow:'shadow-none'});
+        const englishWidth=english ? Math.min(box.width,Math.max(titleWidth,english.length*14+12)) : 0;
+        addBox(slide,{left:box.left-6,top:box.top,width:Math.max(titleWidth,englishWidth)+14,height:36},{geometry:'rect',borderRadius:0,fill:'#FFFFFF',line:{fill:'none',width:0},shadow:'shadow-none'});
         if(english && englishWidth>0) {
-          const ebox={left:box.left+titleWidth+8,top:box.top+9,width:englishWidth,height:25};
+          const ebox={left:box.left+2,top:box.top+13,width:englishWidth,height:25};
           const ef=fitChineseTextToFrame(english,{...ebox,fontSizes:[18,16,14],maxLines:1,lineHeight:1.1});
           if(!ef.fits) throw new Error(`英文衬字过长，请缩短：${english}`);
           addText(slide,english,ebox,{name:`academic-English-${region.itemId}`,fontSize:ef.fontSize,typeface:'Georgia',color:theme.regionEnglish,autoFit:'none'});
         }
       }
-      addText(slide,fit.text,box,{name:`academic-text-${region.itemId}-${index}`,fontSize:fit.fontSize,typeface:typography.bodyTypeface,color:entry.heading?theme.regionAccent:theme.body,bold:entry.heading,verticalAlignment:'top',autoFit:'none'});
+      addText(slide,fit.text,box,{name:`academic-text-${region.itemId}-${index}`,fontSize:fit.fontSize,typeface:entry.heading?theme.regionHeadingFont:typography.bodyTypeface,color:entry.heading?theme.regionAccent:theme.body,bold:entry.heading,verticalAlignment:'top',autoFit:'none'});
     }
   }
 }

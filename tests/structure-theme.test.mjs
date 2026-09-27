@@ -1,6 +1,14 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
+test('academic finish clears native shadow metadata without changing other Skin sources',()=>{
+  const markup='<div data-ppt-root><div data-ppt-shadow="shadow-lg">原文</div></div>';
+  const academic=compileHtmlComponentTheme({markup,theme:northeasternUniversityTheme});
+  assert.match(academic.markup,/data-ppt-shadow="shadow-none"/);
+  assert.match(academic.markup,/原文/);
+  assert.match(compileHtmlComponentTheme({markup,theme:{primaryColor:'#3361AE'}}).markup,/data-ppt-shadow="shadow-lg"/);
+});
+
 import { northeasternUniversityTheme } from "../src/runtime/skins/northeastern-university-theme.mjs";
 import {
   compileHtmlComponentTheme,
