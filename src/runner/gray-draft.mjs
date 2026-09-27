@@ -79,10 +79,10 @@ export function grayBodyLayout(item, width, fontSize, availableHeight) {
         const ordinal=block.label&&labeledCount>=2?++labeledIndex:0;
         sections.push({kind,fontSize,placeholder:false,standalone:false,note:null,parts:grayDisplayBlocks({kind:'text',blocks:[block]},ordinal?{ordinal}:{})});
       }else if(kind==='note'||groupScoped){
-        // 组级共同说明（评审 #119/#121）：约束整组全部条目——独立 12px 小字、不编号、不依附单条，
+        // 组级共同说明（评审 #119/#121）：约束整组全部条目——本页正文字号、不编号、不依附单条，
         // 随组按块序呈现；与 note 的差别只是不挂到前一条目。声明（契约/审稿输入）与实现须一致。
         if(groupScoped){
-          const note={kind:'note',fontSize:Math.min(fontSize,NOTE_FONT),parts:grayDisplayBlocks({kind:'text',blocks:[block]}),plain:true};
+          const note={kind:'note',fontSize,parts:grayDisplayBlocks({kind:'text',blocks:[block]}),plain:true};
           sections.push({kind:'note',fontSize:note.fontSize,placeholder:false,standalone:true,note:null,parts:note.parts});
           continue;
         }

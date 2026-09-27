@@ -646,6 +646,7 @@ async function executeGrayRun(targetRunDir, summary, recorder, { mode = "first" 
       provider,
       maxTurns: 24,
       useLayoutRules: true,
+      initialPlan: summary.controlledOrganization ? JSON.parse(await fs.readFile(path.join(targetRunDir, "input", "initial-plan.json"), "utf8")) : null,
       observer: async (event) => { await recorder.observe({ ...event, source: "workbench", stage }); },
     });
     const gray = result.state.grayDraft;
@@ -807,13 +808,22 @@ async function createRun(request, response, url) {
     height: Number.parseInt(url.searchParams.get("areaHeight") ?? "", 10) || 492,
     label: (url.searchParams.get("areaLabel") ?? "").trim().slice(0, 60) || "内容区",
   } : null;
-  const buffer = await readBody(request);
+  let buffer = await readBody(request), initialPlan = null;
+  if (String(request.headers['content-type'] ?? '').includes('application/json')) {
+    if (pipeline !== 'gray' || purpose !== 'verification' || extension !== '.md') return sendJson(response, 400, { error: '固定计划JSON仅限gray verification及md稿件' });
+    let input;
+    try { input = JSON.parse(buffer.toString('utf8')); } catch { return sendJson(response, 400, { error: '无效JSON' }); }
+    if (!input || Object.keys(input).some(key => !['source','initialPlan'].includes(key)) || typeof input.source !== 'string' || !input.source.trim() || input.initialPlan?.schemaVersion !== 'gray-plan-3' || !Array.isArray(input.initialPlan.pages)) return sendJson(response, 400, { error: '需要source正文与合法initialPlan；不接受服务器路径' });
+    initialPlan = input.initialPlan;
+    buffer = Buffer.from(input.source, 'utf8');
+  }
   const runId = `${new Date().toISOString().replace(/[-:TZ.]/g, "").slice(0, 14)}-${crypto.randomBytes(3).toString("hex")}`;
   const targetRunDir = runDir(runId);
   const inputDir = path.join(targetRunDir, "input");
   await fs.mkdir(inputDir, { recursive: true });
   const originalPath = path.join(inputDir, originalName);
   await fs.writeFile(originalPath, buffer);
+  if (initialPlan) await fs.writeFile(path.join(inputDir, "initial-plan.json"), JSON.stringify(initialPlan, null, 2));
   const recorder = createTraceRecorder(targetRunDir);
   const createdAt = new Date().toISOString();
   const summary = {
@@ -823,6 +833,7 @@ async function createRun(request, response, url) {
     nativePreviewCheckpointMode: url.searchParams.get("nativePreviewCheckpoint") === "auto" ? "auto" : "manual",
     pipeline,
     purpose,
+    ...(initialPlan ? { controlledOrganization: true, controlNote: "人工固定组织对照；不代表自动分页或自动内容规划能力" } : {}),
     ...(grayArea ? { grayArea } : {}),
     // 阶段表随生成线走：两条线的阶段不是同一套，看板照实显示当前这条线的阶段。
     // 尝试记录从第一次就存在，续跑才有"上一次"可写。第一次没有起点阶段（从头跑），

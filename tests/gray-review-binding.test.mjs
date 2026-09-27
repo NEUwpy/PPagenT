@@ -50,7 +50,7 @@ test('审稿覆盖判定：未审/未通过/内容已改都不得继承通过状
   assert.notEqual(stale.fingerprint, fp);
 });
 
-test('层级机制：scope:"group" 的共同说明不编号、随组以小字呈现（评审 #119 要求 3）', () => {
+test('层级机制：scope:"group" 的共同说明不编号、随组以正文字号呈现（评审 #119 要求 3）', () => {
   const item = {
     id: 'g1', kind: 'text',
     blocks: [
@@ -68,17 +68,17 @@ test('层级机制：scope:"group" 的共同说明不编号、随组以小字呈
   const groupScoped = parts.filter(part => part.text === '共同前提' || part.text === '两项缺一不可');
   assert.equal(groupScoped.length, 2);
   assert.ok(groupScoped.every(part => part.attachment === true));
-  // 呈现形态以布局实测为准（评审 #121）：共同说明 12px，条目 22px——与契约/审稿声明一致。
+  // 呈现形态以布局实测为准（评审 #121）：共同说明 22px，条目 22px——与契约/审稿声明一致。
   const layout = grayBodyLayout(item, 800, 22, 2000);
   const premiseRuns = layout.runs.filter(run => run.text === '共同前提' || run.text === '两项缺一不可');
   assert.ok(premiseRuns.length >= 1);
-  assert.ok(premiseRuns.every(run => run.fontSize === 12), JSON.stringify(premiseRuns.map(run => run.fontSize)));
+  assert.ok(premiseRuns.every(run => run.fontSize === 22), JSON.stringify(premiseRuns.map(run => run.fontSize)));
   const entryRuns = layout.runs.filter(run => run.text === '一 焊前' || run.text === '二 焊接时');
   assert.equal(entryRuns.length, 2);
   assert.ok(entryRuns.every(run => run.fontSize === 22));
 });
 
-test('声明一致性：scope:"group" 的呈现声明（不编号、12px）与布局实测一致（评审 #121）', () => {
+test('声明一致性：scope:"group" 的呈现声明（不编号、正文字号）与布局实测一致（评审 #121）', () => {
   const blocks = [
     { id: 'b1', label: '焊前', text: '清理油污', sourceIds: ['s1'] },
     { id: 'b2', label: '焊接时', text: '双面保护', sourceIds: ['s1'] },
@@ -87,10 +87,10 @@ test('声明一致性：scope:"group" 的呈现声明（不编号、12px）与�
   const layout = grayBodyLayout({ id: 'g1', kind: 'text', blocks }, 800, 22, 2000);
   const premiseRuns = layout.runs.filter(run => run.text === '共同前提' || run.text === '两项缺一不可');
   assert.ok(premiseRuns.length >= 1);
-  assert.ok(premiseRuns.every(run => run.fontSize === 12), '布局实测须为 12px');
+  assert.ok(premiseRuns.every(run => run.fontSize === 22), '布局实测须为本页22px正文');
   const input = semanticReviewInput({ source: DOC, area: { width: 1170, height: 492 }, plan: plan(blocks) });
   const surface = input.visiblePages[0].regions[0].surface;
-  assert.match(surface, /12px/u, '审稿声明须与实测一致（12px）');
+  assert.match(surface, /本页正文字号/u, '审稿声明须与实测一致');
   assert.match(surface, /不编号/u);
 });
 
@@ -127,4 +127,33 @@ test('审稿可见范围声明组级共同说明与自动编号（评审 #119 �
   assert.ok(body.includes('一 事实'));
   assert.ok(body.includes('二 安排'));
   assert.ok(body.includes('共同前提'));
+});
+
+test('text-only backstage expression metadata survives render fingerprint round trip', () => {
+  const a=plan([block('b1','正文',{label:'要点'})]);
+  const b=structuredClone(a);
+  Object.assign(b.pages[0].groups[0],{expression:'后台表达',relationship:'后台关系',production:'后台要求'});
+  assert.equal(planContentFingerprint(a),planContentFingerprint(b));
+  b.pages[0].groups[0].blocks[0].label='另一个要点';
+  assert.notEqual(planContentFingerprint(a),planContentFingerprint(b));
+  a.pages[0].groups[0].kind='diagram';
+  const diagram=structuredClone(a);diagram.pages[0].groups[0].production='图形制作要求';
+  assert.notEqual(planContentFingerprint(a),planContentFingerprint(diagram));
+});
+
+test('visible block production change invalidates semantic review', () => {
+  const a=plan([block('b1','节点',{kind:'diagram',expression:'说明',relationship:'关联',production:'左向右'})]);
+  const b=structuredClone(a);b.pages[0].groups[0].blocks[0].production='上向下';
+  assert.notEqual(planContentFingerprint(a),planContentFingerprint(b));
+  assert.equal(checkReviewCoverage({accepted:true,fingerprint:planContentFingerprint(a)},b).status,'stale');
+});
+
+test('group scope inherits every body tier while notes stay 12px',()=>{
+ const item={kind:'text',blocks:[block('a','主要条目',{label:'要点'}),block('b','局部附注',{kind:'note'}),block('c','整组条件',{scope:'group'})]};
+ for(const font of [22,20,18]){
+  const body=grayBodyLayout(item,300,font);
+  assert.equal(body.runs.find(r=>r.text==='整组条件').fontSize,font);
+  assert.equal(body.runs.find(r=>r.text==='局部附注').fontSize,12);
+  assert(body.runs.findIndex(r=>r.text==='整组条件')>body.runs.findIndex(r=>r.text==='局部附注'));
+ }
 });

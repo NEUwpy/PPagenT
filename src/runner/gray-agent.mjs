@@ -19,7 +19,7 @@ import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan,
 import { applyTemplateDefaults, describeDefaults } from './gray-templates.mjs';
 import { auditGeometry, voidWarnings, VOID_THRESHOLDS } from './gray-audit.mjs';
 import { resolveGrayLayout, compressionMemory } from './gray-layout.mjs';
-import { selectMeasuredLayouts, measuredLayoutCandidates } from './gray-layout-selection.mjs';
+import { selectMeasuredLayouts, measuredLayoutCandidates, adjacentPageLayoutAdvice } from './gray-layout-selection.mjs';
 import { grayBodyLayout, fitGrayText, validateGrayArea, validateGrayPlan, renderGrayDraft, topicFits } from './gray-draft.mjs';
 
 const sha = text => createHash('sha256').update(text).digest('hex');
@@ -68,7 +68,7 @@ export const GRAY_AGENT_PROMPT = `你是灰稿制作 Agent。目标：把用户�
 交付观：审稿是辅助而不是关口——审稿回执的 issues 是阻塞项（实质改变理解的失真、遗漏、层级/归属/关系错误），必须修复；notes 是建议/已解决说明，不阻塞渲染。审稿通过绑定当前内容版本：任何内容改动（含失败后的修订）都会让上一版通过失效——改后再次渲染前必须重新 semantic_review；程序会拒绝未复核、有阻塞项或复核已过期的版本，未复核版本不得继承通过状态。交付只由 finish_draft 触发：它必须在该候选的 render 回执进入后续回合之后调用（同一轮 render+finish 不算看过诊断），并附复核结论；选定候选与当前计划内容不一致、或不是最新候选时，要写明退回/未采用修订的原因。首次成功渲染后最多一次修订周期；修订失败（模板/几何/坏提交）不计入，但预算耗尽仍以第一次成功候选如实交付并标注未完成复核。
 渲染后复核（只有文字与几何，没有像素图）：render_draft 成功回执带逐页/区域的实际分配宽高、字号、区域最小高与占用（minimumRegionHeight/allocatedRegionHeight 两边同口径、都含 70px 标题与边距开销；textOccupancy 为两边都扣该开销的正文口径）、权重与实际来源（无权重时 weightsSource 为 null）和既有几何警告。**复核要判阅读质量，不只看占用**：①正文是否完成提炼——读者是否需要自行从长句拆出成员、判断与支撑；②对照是否用一致维度直接对应，还是要把句子拆开才能配对；③短说明占的空间是否相称（程序最小高含条目/标题/间距开销，不等于内容多）；④字号是否与页面内容相称（字号被选小不能自动解释成"内容密集"）。pageBottomWhitespace 是框外页底空白，不是内容填充率——缩小它未必改善阅读。发现具体问题时，在这一次修订里优先改内容组织或组合（内容改动照常重审，纯布局不重审）；保留首稿要给出真实取舍，不能把影响阅读的问题转交后续美化并称本轮已解决。这些是选择依据，不是稀疏/字号硬阈值。需要看图的能力不在本线内，不要声称看过像素图。
 **计划的传递方式：提交或修订计划时，把完整的 gray-plan-3 计划 JSON 写进本轮消息正文——提交新内容会让旧审稿失效、需重新审稿；没有写新 JSON 时，三个工具对当前已提交版本继续（同版审稿复用结论，不重复运行）。正文想提交计划但 JSON 损坏＝本次提交失败（不会被当作已修订），请重发完整合法 JSON；工具回执的 planSource 标明本轮计划来源（message=新提交 / current-plan=沿用 / submission-failed=坏提交）。不要在工具参数里重复计划，也不要只写差异。**
-容量与分页：${SHARED_RULES.paging}
+容量与分页：${SHARED_RULES.paging} 布局规则模式正文只用22/20/18px三档，程序逐页选择最大可承载档，18px以下仍须重新规划；组标题保持26px，不以缩字代替内容组织。
 布局选择（调用 render_draft 时给出）：简式 {type:"single|row|column|grid",weights?,columns?} 的子节点默认按阅读顺序取本页全部组；页面有分层关系时用嵌套式 {type,children:[{groupId},或嵌套]}，例如主区在上、一条注记横贯下方 = {type:"column",children:[{type:"row",children:[{groupId:"g1"},{groupId:"g2"}]},{groupId:"g3"}]}。row 横向分栏、column 纵向排列、grid 规则网格；weights（仅 row）分配多余宽度，按各栏实文行数/展开需要给比例（如 3:2、5:4），不要默认等分，columns（仅 grid）是列数；children 必须按阅读顺序恰好覆盖本页全部组一次；嵌套最多三层。主次通过空间份额与组标题层级体现，少量内容不必拉满一页，不要为了变化而嵌套。每页有程序默认版式（1 组多条=类别容器、1 组单条=单主体、2 组=双栏对照、≥3 组=行式清单）；layouts 的页条目只写 {pageId} 即采用默认。自己选与默认不同的组合时，在 layouts 的该页条目里把 override 与 layout 同级写：{pageId:"p2", layout:{...}, override:{reason:"一句话理由"}}（override 不能放进 layout 对象；理由会入档分析）；仅微调 weights 不算覆盖。
 格式：{schemaVersion:"gray-plan-3",deckBrief:{title,audience,objective},pages:[{pageId:"p1",title:"短标题",claim:"简短上屏主题句，建议二十字左右",pagePurpose:"本页解决的问题",narrative:"一句话说明必要的先后、并行、判断或归属关系",sourceIds:["s1"]（可选：页级认领，用于本页承载但不单列条目的结构性来源）,groups:[{id:"g1",role:"本组主要职责",heading:"上屏短标题",importance:"primary|supporting",kind:"text|diagram|flow|chart|table|image",blocks:[{id:"b1",label:"可选上屏子标题（内容词，不写序号）",text:"真实上屏文字",sourceIds:["s1"],scope:"group"（可选：约束整组全部条目的共同说明，程序不编号）}],expression:"非text必填：表达作用",relationship:"非text必填：基本关系",production:"非text必填：制作要求"}]}],planningNotes:"简短后台组织说明"}。
 先明确页面职责，按内容归属形成groups，再把各分支的条目放进blocks，用label与text区分要点和展开。${SHARED_RULES.organize}${SHARED_RULES.category}${SHARED_RULES.hierarchy}${SHARED_RULES.meta}${SHARED_RULES.claim}不要把分属不同观点的依据摊成同级卡片，也不要把分类、依据、准则混称为证明。${SHARED_RULES.label}文字组内某条需要图示时，该block可选kind及expression、relationship、production；其label仍是上屏条目标题。附着说明块 kind 写 "note"，紧随所依附条目、不编号、无需制作说明三项。${SHARED_RULES.expression}${SHARED_RULES.timeline}${SHARED_RULES.sketch}
@@ -206,7 +206,7 @@ export function planFitIssues(plan, area, { legacyEstimates = true } = {}) {
   return { issues, warnings };
 }
 
-export async function runGrayAgent({ source, output, area, root = process.cwd(), provider, maxTurns = 24, observer = null, visualReview = false, useLayoutRules = false }) {
+export async function runGrayAgent({ source, output, area, root = process.cwd(), provider, maxTurns = 24, observer = null, visualReview = false, useLayoutRules = false, initialPlan = null }) {
   area = validateGrayArea(area);
   await fs.mkdir(output, { recursive: false }).catch(error => { if (error.code !== 'EEXIST') throw error; });
   if (await fs.access(path.join(output, 'state.json')).then(() => true, () => false)) throw new Error('输出目录里已有运行状态（可能属于旧运行或误复用），请使用新目录');
@@ -215,6 +215,11 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
   const sourcePath = path.resolve(source);
   const base = newRunState(raw, sourcePath);
   base.sources = markFlowSources(base.sources);
+  if (initialPlan) {
+    const checked = validateSemanticPlan(base, initialPlan);
+    if (!checked.accepted) throw new Error(`人工固定计划无效：${JSON.stringify(checked.issues)}`);
+    await fs.writeFile(path.join(output, 'controlled-plan.json'), json(initialPlan));
+  }
   const statePath = path.join(output, 'state.json');
   const agentDir = path.join(output, 'agent');
 
@@ -254,7 +259,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
   let completedTurns = 0;
   let lastContent = '';
   let lastReview = null;
-  let lastPlan = null;
+  let lastPlan = initialPlan ? structuredClone(initialPlan) : null;
   let lastCheckedFingerprint = null;
   // 压缩记忆（方案 A 项 2）：逐页记录上一版容量失败实测高，随反馈回给模型。
   const lastMinimums = new Map();
@@ -264,7 +269,11 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
   // 只随内容指纹变化失效（评审 #119），坏提交不会被静默当作已修订。
   const resolvePlan = () => {
     try {
-      lastPlan = extractPlan(lastContent);
+      const submitted = extractPlan(lastContent);
+      if (initialPlan && JSON.stringify(submitted) !== JSON.stringify(initialPlan)) {
+        return { plan: lastPlan, source: 'submission-failed', note: '人工固定组织对照禁止更改计划：请不提交新JSON，沿用固定计划检查、审稿、选版与渲染；无法承载或语义审稿失败应如实报告。' };
+      }
+      lastPlan = submitted;
       return { plan: lastPlan, source: 'message' };
     } catch (error) {
       if (!lastPlan) throw error;
@@ -366,16 +375,16 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         const fit = planFitIssues(plan, area, { legacyEstimates: !useLayoutRules });
         const issues = [...report.issues, ...fit.issues].slice(0, 20);
         const warnings = [...(report.warnings ?? []), ...fit.warnings];
-        let spatialRequirements;
+        let spatialRequirements, paginationAdvice;
         if (useLayoutRules && report.accepted) {
           spatialRequirements = measuredLayoutCandidates(plan, area, { measureBody: grayBodyLayout, fitText: fitGrayText });
+          paginationAdvice = adjacentPageLayoutAdvice(plan, area, { measureBody: grayBodyLayout, fitText: fitGrayText });
           for (const page of spatialRequirements) {
             if (!page.candidates.length) issues.push({ code: 'layout-capacity', pageId: page.pageId, message: '当前分组没有可承载布局，请在语义不变的前提下重新组织；宽度与高度测量见 spatialRequirements。' });
-            if (page.requirements.length === 1) warnings.push({ code: 'single-layout-region', pageId: page.pageId, message: '整页只有一个布局块，组内条目不会被布局库分配到不同卡片。核对是否确属一个共同阅读单元；独立并列对象应在规划层分组，不能为了放下而机械拆页或把全文并成一组。' });
           }
         }
         const notes = [note, repeated ? '该版本自上次检查后未变化：结论同上；有修订请提交新计划。' : null].filter(Boolean);
-        return { accepted: report.accepted && !issues.length, issues, coverage: report.coverage, defaults: useLayoutRules ? [] : describeDefaults(plan), layoutMode: useLayoutRules ? 'measured-rule-selection' : 'legacy-defaults', ...(spatialRequirements ? { spatialRequirements } : {}), planSource: source, ...(warnings.length ? { warnings } : {}), ...(notes.length ? { note: notes.join(' ') } : {}) };
+        return { accepted: report.accepted && !issues.length, issues, coverage: report.coverage, defaults: useLayoutRules ? [] : describeDefaults(plan), layoutMode: useLayoutRules ? 'measured-rule-selection' : 'legacy-defaults', ...(spatialRequirements ? { spatialRequirements, paginationAdvice } : {}), planSource: source, ...(warnings.length ? { warnings } : {}), ...(notes.length ? { note: notes.join(' ') } : {}) };
       },
     }),
     defineTool({
@@ -655,7 +664,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
   const result = await runToolLoop({
     provider,
     systemPrompt,
-    userMessage: `稿件全文：\n${raw}\n\n来源切分（引用 sourceIds 必须以此表为准；preview 是该来源的开头，完整内容见稿件全文）：\n${JSON.stringify(base.sources.map(source => ({
+    userMessage: `${initialPlan ? `人工固定组织受控对照（不代表自动分页能力）：以下计划已加载，禁止改动页面、分组、文案、来源与关系；不要重新提交JSON，直接check_plan与semantic_review，之后照常render_draft、finish_draft。审稿失败或容量不足则如实报告，不绕过。布局不固定，由正式选择器选择。\n固定计划：${JSON.stringify(initialPlan)}\n\n` : ''}稿件全文：\n${raw}\n\n来源切分（引用 sourceIds 必须以此表为准；preview 是该来源的开头，完整内容见稿件全文）：\n${JSON.stringify(base.sources.map(source => ({
       id: source.id,
       ...(source.heading ? { heading: source.heading } : {}),
       ...(source.flow ? { flow: `流转信息（${source.flow}）：无需引用；默认不上屏，确有展示价值（如文档标题、署名）时可自然出现` } : {}),

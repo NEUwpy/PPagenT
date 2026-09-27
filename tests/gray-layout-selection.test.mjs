@@ -77,3 +77,34 @@ test('parallel label cannot bypass explicit primary-supporting area balance',()=
   assert.throws(()=>bindLayoutSelection(mixed,measured,{pages:[{pageId:'p1',relation:'parallel',candidateId:'cards-horizontal-equal',reason:'伪装为并列'}]}),/共同说明面积/);
 });
 
+
+test('bounded font fallback is uniform and never goes below 18',()=>{
+  const single=structuredClone(plan);single.pages[0].groups=single.pages[0].groups.slice(0,1);
+  const sizes=[];
+  const measured=measuredLayoutCandidates(single,area,{
+    measureBody:(_item,_width,font)=>{sizes.push(font);return {fits:true,height:font===18?400:500};},
+    fitText:()=>({fits:true}),
+  });
+  assert.equal(measured[0].fontSize,18);
+  assert.deepEqual([...new Set(sizes)],[22,20,18]);
+  const candidate=measured[0].candidates[0];
+  const bound=bindLayoutSelection(single,measured,{pages:[{pageId:'p1',relation:'independent',candidateId:candidate.id,reason:'可读档承载'}]});
+  assert.equal(bound.receipts[0].fontSize,18);
+  assert(bound.plan.pages[0].composition.regions.every(r=>r.fontSize===18));
+  const none=measuredLayoutCandidates(single,area,{measureBody:()=>({fits:true,height:500}),fitText:()=>({fits:true})});
+  assert.equal(none[0].candidates.length,0);
+});
+import { adjacentPageLayoutAdvice } from '../src/runner/gray-layout-selection.mjs';
+test('adjacent advice preserves source order and duplicate ids without mutating content',()=>{
+ const p=structuredClone(plan);p.pages[0].groups=p.pages[0].groups.slice(0,1);
+ p.pages.push({...structuredClone(p.pages[0]),pageId:'p2',pagePurpose:'另一职责'});
+ const before=structuredClone(p), seen=[];
+ const advice=adjacentPageLayoutAdvice(p,area,{measureBody:(item)=>{seen.push(item);return {height:40,fits:true};},fitText:()=>({fits:true})});
+ assert.deepEqual(p,before);assert.equal(advice.length,1);
+ assert.deepEqual(advice[0].pageIds,['p1','p2']);
+ const regions=advice[0].candidates[0].regions;
+ assert.equal(new Set(regions.map(r=>r.itemId)).size,2);
+ assert.deepEqual(regions.map(r=>r.groupId),['g0','g0']);
+ assert(seen.every(g=>g.blocks[0].text===p.pages[0].groups[0].blocks[0].text));
+ assert.deepEqual(adjacentPageLayoutAdvice(p,area,{measureBody:()=>({height:1000,fits:false}),fitText:()=>({fits:true})}),[]);
+});

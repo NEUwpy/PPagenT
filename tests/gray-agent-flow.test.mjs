@@ -445,3 +445,21 @@ test('坏提交显式失败：计划不更新、不冒充已修订，旧有效�
   assert.equal(reviews[0].result.planSource, 'current-plan');
   assert.equal(reviews[0].result.accepted, true);
 });
+
+test('controlled initial plan rejects source or pagination edits and retains original for review', async()=>{
+ const dir=await fs.mkdtemp(path.join(os.tmpdir(),'gray-controlled-protocol-'));
+ const source=path.join(dir,'source.md'),output=path.join(dir,'run');
+ await fs.writeFile(source,SOURCE);
+ const initialPlan=JSON.parse(planJson(''));
+ const changed=structuredClone(initialPlan);changed.pages[0].groups[0].blocks[0].sourceIds=['invented'];
+ const repaged=structuredClone(initialPlan);repaged.pages.push({...structuredClone(repaged.pages[0]),pageId:'p2'});
+ const provider=mockProvider([{content:JSON.stringify(changed),tools:['check_plan']},{content:JSON.stringify(repaged),tools:['check_plan']},{content:'沿用固定计划',tools:['semantic_review']}],[{accepted:false,issues:[{problem:'mock review intentionally blocks render'}],notes:[]}]);
+ await runGrayAgent({source,output,area:{width:1170,height:492},root:path.resolve(import.meta.dirname,'..'),provider,maxTurns:3,initialPlan,useLayoutRules:true});
+ const events=(await fs.readFile(path.join(output,'agent/tool-events.ndjson'),'utf8')).trim().split(/\r?\n/).map(JSON.parse);
+ assert.equal(events[0].result.planSource,'submission-failed');
+ assert.equal(events[1].result.planSource,'submission-failed');
+ assert.equal(events[2].result.accepted,false);
+ assert.equal(events[2].result.planSource,'current-plan');
+ assert.equal(provider.reviewCalls.length,1);
+ assert.deepEqual(JSON.parse(await fs.readFile(path.join(output,'controlled-plan.json'),'utf8')),initialPlan);
+});

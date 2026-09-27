@@ -10,17 +10,50 @@ cards 卡片式适合平级、可独立阅读的内容；album 相册式适合�
 只判断跨组的必要空间约束。组内已经就近写明的限定、附注和解释不构成跨组约束，不因卡片没有重排这些组内文字而拒绝；正文多少不同也不是拒绝理由，应比较实测区域与内容是否相称。
 只有一组时，组内关系由实文/结构说明表达，可以选择单区域 cards。
 候选只分配组之间的空间，不会替你重排组内条目。单区域候选的 equal/measured、横向/纵向若坐标相同，不得声称其中一种给条目分配更多面积。单区域结果不能证明多块布局选型有效。
-页面主题句可引出、概括或总结。必须检查候选是否使重要内容过弱、阅读顺序是否明确，容量通过不等于好看。
+页面主题句可引出、概括或总结。必须检查候选是否使重要内容过弱、阅读顺序是否明确，容量通过不等于好看。none用于实际必要关系、作用范围或阅读顺序无法满足；宽度不等或比例不常见本身不是硬拒绝理由。存在无具体约束违例的可承载候选时，按实文需要选其中最合适者，视觉风险写入reason供人审阅。
 返回纯JSON：{"pages":[{"pageId":"...","relation":"parallel|independent|comparison|sequence|causal|support|mixed","candidateId":"候选id或none","reason":"根据本页实际内容说明选择依据或缺口"}]}。严格保持页序，每页恰好一项。`;
 
-/** 候选来自看板同源布局规范；默认字号固定，不能靠试小字号掩盖容量失败。 */
-export function measuredLayoutCandidates(plan, area, { measureBody, fitText }) {
+/** 逐页选择最大可承载的正文档；18px 以下必须退回内容规划。 */
+export function measuredLayoutCandidates(plan, area, metrics) {
+  return plan.pages.map(page => {
+    let measured;
+    for (const fontSize of [22, 20, 18]) {
+      measured = measuredAtFont({ ...plan, pages: [page] }, area, metrics, fontSize)[0];
+      measured.fontSize = fontSize;
+      if (measured.candidates.length) return measured;
+    }
+    return measured;
+  });
+}
+/** Advisory only: measurement preserves groups and content; planner decides page purpose. */
+export function adjacentPageLayoutAdvice(plan, area, metrics) {
+  const advice = [];
+  for (let i = 0; i + 1 < plan.pages.length; i++) {
+    const pages = plan.pages.slice(i, i + 2), origins = {};
+    const groups = pages.flatMap((page, pi) => (page.readingOrder ?? page.groups.map(g => g.id)).map((id, gi) => {
+      const group = structuredClone(page.groups.find(g => g.id === id));
+      group.id = `merge-${pi}-${gi}`;
+      origins[group.id] = { pageId: page.pageId, groupId: id };
+      group.blocks.forEach((block, bi) => { block.id = `${group.id}-block-${bi}`; });
+      return group;
+    }));
+    const page = { ...pages[0], groups, readingOrder: groups.map(g => g.id) };
+    const measured = measuredLayoutCandidates({ ...plan, pages: [page] }, area, metrics)[0];
+    if (!measured.candidates.length) continue;
+    advice.push({ pageIds: pages.map(p => p.pageId), pagePurposes: pages.map(p => p.pagePurpose),
+      fontSize: measured.fontSize, candidates: measured.candidates.map(c => ({ id: c.id,
+        regions: c.regions.map(r => ({ ...r, ...origins[r.itemId] })), contentMinimums: c.contentMinimums })),
+      message: '仅为保留原组和原文的几何容量证据，尚未验证两页的relations、跨组关系约束或共同页面目的，不是语义可合页结论或合页指令。判断这两页能否共同回答一个页面问题；若能，重提完整计划并审稿；若不能，按内容目的保留分页。最小高度已含内边距和条目间距，接近区域高度不等于没有阅读间距，不能仅据此判断拥挤。' });
+  }
+  return advice;
+}
+function measuredAtFont(plan, area, { measureBody, fitText }, fontSize) {
   return semanticPages(plan).map(page => {
     const items = page.semantics.readingOrder.map(id => page.items.find(item => item.id === id));
     const cache = new Map();
     const measure = (item, width) => {
       const key = `${item.id}:${width}`;
-      if (!cache.has(key)) cache.set(key, measureBody(item, width, 22));
+      if (!cache.has(key)) cache.set(key, measureBody(item, width, fontSize));
       return cache.get(key);
     };
     // 记录宽度改变时的真实高度需求，而不是把每组压成一个面积数字。
@@ -63,8 +96,8 @@ export function measuredLayoutCandidates(plan, area, { measureBody, fitText }) {
               // 面积需求根据候选宽度下的真实测量更新，不用字符数当容量。
               blocks = geometry.slots.map((slot, i) => ({ ...blocks[i], weight: slot.width * Math.max(80, 70 + measure(items[i], slot.width - 32).height) }));
             }
-            if (!fits) throw new Error('当前字号下标题或正文无法完整容纳');
-            const regions = geometry.slots.map((slot, i) => ({ itemId: items[i].id, x: slot.x, y: slot.y, width: slot.width, height: slot.height, fontSize: 22 }));
+            if (!fits) throw new Error('当前正文档下标题或正文无法完整容纳');
+            const regions = geometry.slots.map((slot, i) => ({ itemId: items[i].id, x: slot.x, y: slot.y, width: slot.width, height: slot.height, fontSize }));
             if (!candidates.some(c => JSON.stringify(c.regions) === JSON.stringify(regions))) {
               candidates.push({ id, family, direction, allocation, geometry, regions, contentMinimums: minimums });
             }
@@ -96,7 +129,7 @@ export function measuredLayoutCandidates(plan, area, { measureBody, fitText }) {
             const body = measure(item, width - 32), minHeight = Math.ceil(70 + body.height);
             if (width < 140 || !body.fits || !fitText(item.heading, width - 32, 40, 26).fits || minHeight > height) throw new Error('主辅分带后实文无法完整容纳');
             minimums[item.id] = { minWidth: width, minHeight };
-            regions.push({ itemId: item.id, x: i * (width + 24), y, width, height, fontSize: 22 });
+            regions.push({ itemId: item.id, x: i * (width + 24), y, width, height, fontSize });
           }
         }
         regions.sort((a,b) => items.findIndex(i=>i.id===a.itemId)-items.findIndex(i=>i.id===b.itemId));
@@ -123,7 +156,8 @@ export function bindLayoutSelection(plan, measured, selection) {
     }
     if (page.groups.length > 1 && !['parallel','independent',...(candidate.supportsRelation ?? [])].includes(choice.relation)) throw new Error(`页 ${page.pageId} 的 ${choice.relation} 跨组关系尚无已建约束布局；不能硬套 ${candidate.family}`);
     layouts.push({ pageId: page.pageId, regions: candidate.regions });
-    receipts.push({ pageId: page.pageId, layout: { family: candidate.family, direction: candidate.direction, allocation: candidate.allocation }, fontSize: 22, contentMinimums: candidate.contentMinimums, occupiedRegions: candidate.regions, selection: choice });
+    const fontSize = candidate.regions[0].fontSize;
+    receipts.push({ pageId: page.pageId, layout: { family: candidate.family, direction: candidate.direction, allocation: candidate.allocation }, fontSize, contentMinimums: candidate.contentMinimums, occupiedRegions: candidate.regions, selection: choice });
   }
   const bound = bindSemanticLayout(plan, { pages: layouts });
   bound.pages.forEach((page, i) => { page.composition.basicLayout = receipts[i].layout; });
