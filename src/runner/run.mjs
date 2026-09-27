@@ -145,12 +145,13 @@ const PHASE_PROMPT = {
   ].join("\n"),
   visual: [
     "视觉阶段：先 read_catalog 读取可用版式与能力，再逐页决定区域与上屏表达。",
+    "read_catalog.visualFeedback 是本轮用户视觉修订要求，优先按它修订 currentPlan；不得为通过技术检查删除用户明确要求的视觉特征。",
     "续跑先看 artifact.reusable：所有页为 true 时立即 finish_visual。已有完整 currentPlan（灰稿各组都有 layout）且未通过构建时，先 check_pages 获取具体问题；不要无故重写方案和检索结构。仅按具体失败修订受影响部分。",
     "expressionRequirements 包括文字组内部的图示要求；外层 kind=text 不代表整组只能排文字。必须保留内部图示的关系、来源标签、范围和条件。现有工具无法表达时报告能力缺口，不得用纯文字替代。",
     "灰稿交接必须使用 component-gray-regions，保留全部既定分区；textSlots 为空，文字自动按原文原区渲染。structure.sourceLocation 精确引用一个 expressionRequirements.location，sourceItemIds 仅包含该区所属 itemId。不能吞并其他文字区。当前接口只支持一个图示区，多图示页报告能力缺口。",
     "check_pages 会真的构建 PPT 并回报真实几何与字号问题；只对改过的页重复检查。",
     "灰稿的 regions 是内容归属与大致区域，不是成稿皮肤。每组必须提交 regionVisuals.layout：按 Skin 风格决定标题和正文块的 frame、字体角色、字号、颜色、对齐、行距，英文衬字可选，自主组合 decorations 的原生形状与填色/线条渐变；不得只选择框预设。可微调 layout.frame 但保留上下/左右归属。所有 textSources 逐块绑定，原文自动回填。字号单位为画布 px，不是 pt，16 px=12 pt。",
-    "structureFrame 是图示所属组的局部占位，不得侵占正文，按内容和容量分配足够空间。已有 currentPlan.structure 可复用；没有关系/容量问题无需更换结构。英文仅翻译标题，大学偏好粗宋橙色标题、Times New Roman 淡衬字和轻渐变框线；其他 Skin 遵循自身提示而非照搬。标题英文可有意叠合，正文和结构不得重叠。",
+    "structureFrame 是图示所属组的局部占位，不得侵占正文，按内容和容量分配足够空间。已有 currentPlan.structure 可复用；没有关系/容量问题无需更换结构。英文仅翻译标题，大学偏好粗宋深蓝标题、Times New Roman 淡衬字和轻渐变框线；其他 Skin 遵循自身提示而非照搬。标题英文可有意叠合，正文和结构不得重叠。",
     "全部页面当前版本通过后立即调用 finish_visual；没有 warnings 时 warningDecisions=[]，不要再次检索结构或改写已通过方案。有 warnings 时逐页给出不超过200字的简短理由。",
   ].join("\n"),
 };

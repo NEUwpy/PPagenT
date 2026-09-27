@@ -314,6 +314,7 @@ export function buildTools({ root, runDir, committer, statePath }) {
         return {
           accepted: true,
           phase: state.phase,
+          visualFeedback: state.visualFeedback ?? null,
           ...(state.grayInput ? {grayVisualDesign:{
             area:state.grayDraft.area,
             tokens:grayVisualTokens((state.skinId==='neutral-editorial-001'?neutralEditorialSkin:northeasternUniversitySkin).componentTheme,(state.skinId==='neutral-editorial-001'?neutralEditorialSkin:northeasternUniversitySkin).typographyRoles),

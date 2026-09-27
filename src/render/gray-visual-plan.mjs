@@ -90,7 +90,7 @@ export function renderGrayVisualPlan(slide,content,plan,bodyFrame,typography,the
     const text=(value,spec,name)=>{
       const f=absolute(spec.frame,group),lineHeight=spec.lineHeight??1.25;
       const fit=fitChineseTextToFrame(value,{...f,fontSizes:[spec.fontSize],lineHeight,maxLines:Math.max(1,Math.floor(f.height/(spec.fontSize*lineHeight)))});
-      if(!fit.fits) throw new Error(`${name} 空间不足，调整本组排版，不得删字或暗中缩小字号`);
+      if(!fit.fits) throw new Error(`${name} 空间不足：当前 frame 宽 ${Math.round(f.width)}px、高 ${Math.round(f.height)}px；按当前宽度排 ${fit.lineCount} 行，需高 ${Math.ceil(fit.lineCount*spec.fontSize*lineHeight)}px。请调整本元素 frame 或模型选择的字号，不得删字、删框或撤掉英文`);
       addText(slide,fit.text,f,{name,fontSize:spec.fontSize,typeface:tokens.fonts[spec.fontRole],color:tokens.colors[spec.colorRole],bold:spec.bold??false,
         alignment:spec.align??'left',verticalAlignment:spec.verticalAlign??'top',lineHeight,autoFit:'none'});
     };

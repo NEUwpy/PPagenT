@@ -18,6 +18,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 test('model gray layouts pass the public tool and compile native positions and independent gradient strokes',async()=>{
  const state=visualState();state.grayInput={sourcePath:'test-gray'};state.grayDraft={area:{width:1170,height:492}};
+ state.visualFeedback='保留虚线与标题叠合';
  const p=state.pages[0];p.items[0].kind='diagram';p.items[0].heading='关系';
  for(const i of p.items.slice(1)){i.kind='text';i.heading='检查';i.blocks=[{id:'b1',text:i.text??i.sourceText}];}
  p.grayComposition={regions:[{itemId:'i1',x:0,y:0,width:1170,height:280},{itemId:'i2',x:0,y:300,width:1170,height:85},{itemId:'i3',x:0,y:400,width:1170,height:90}]};
@@ -32,6 +33,7 @@ test('model gray layouts pass the public tool and compile native positions and i
  const runDir=await runDirFor('model-gray-layout'),statePath=path.join(runDir,'state.json');await writeState(statePath,state);
  const committer=createCommitter({statePath});const registry=createToolRegistry({tools:buildTools({root,runDir,committer,statePath}),runDir});
  const read=await registry.dispatch('read_catalog',{});assert.equal(read.result.grayVisualDesign.tokens.fonts.english,'Times New Roman');
+ assert.equal(read.result.visualFeedback,state.visualFeedback);
  const written=await registry.dispatch('upsert_page_plan',{pages:[plan]});assert.equal(written.result.accepted,true,JSON.stringify(written.result));
  for(const skinId of ['northeastern-university-001','neutral-editorial-001']){
   const result=await compileDeck({root,runDir:path.join(runDir,skinId),state:{...await committer.read(),skinId}});

@@ -10,7 +10,7 @@ export const northeasternUniversityTheme = Object.freeze({
   headingSurface: "#E7EEF9",
   line: "#C9D7ED",
   layoutStyle: "mckinsey",
-  regionAccent: "#C45B13",
+  regionAccent: "#244A73",
   regionHeadingFont: "汉仪粗宋简",
   regionEnglishFont: "Times New Roman",
   structureFinish: "academic-flat",
