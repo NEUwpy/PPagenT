@@ -677,6 +677,7 @@ export function buildTools({ root, runDir, committer, statePath }) {
       },
       handler: async ({ pageIds, reason }) => {
         const current = await committer.read();
+        if (current.grayInput) return { accepted: false, error: "灰稿交接运行禁止退回内容阶段；内容、关系和分页必须回到 main 灰稿线修订。" };
         const { requestContentRevision } = await import("../state.mjs");
         const outcome = requestContentRevision(current, { pageIds, reason });
         await committer.render(outcome.state);
