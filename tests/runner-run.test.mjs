@@ -5,7 +5,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { parseArgs, replayMissingComposition, replayResult, phaseRulesText } from "../src/runner/run.mjs";
+import { loadGrayState, parseArgs, replayMissingComposition, replayResult, phaseRulesText } from "../src/runner/run.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -53,6 +53,17 @@ test("parseArgs 把带值的开关与裸开关分开，值不会被当成下一�
   });
   // 值缺失时按裸开关处理，不会把 undefined 塞进参数表。
   assert.deepEqual(parseArgs(["--resume", "--run-dir"]), { resume: true, "run-dir": true });
+});
+
+test("灰稿交接直接进入 visual 并记录源版本", async () => {
+  const state = await loadGrayState({
+    grayStatePath: "experiments/gray-structure-coverage-20260926/artifacts/state.json",
+    rootDir: ROOT,
+  });
+  assert.equal(state.phase, "visual");
+  assert.equal(state.pages.length, 24);
+  assert.equal(state.grayInput.sourcePath, "experiments/gray-structure-coverage-20260926/artifacts/state.json");
+  assert.match(state.grayInput.sha256, /^[a-f0-9]{64}$/);
 });
 
 // 视觉阶段此前看到的 system 只有 run.mjs 里两段硬编码短文本，仓库里既有的设计规则一条都没进去。

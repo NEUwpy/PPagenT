@@ -6,7 +6,7 @@
     "共同部分位于全部集合交叠的中心",
     "圆形轮廓及交叠关系可辨认"
   ],
-  "adaptation": "重算集合圆的位置与重叠面积；只有真实共同内容才进入中心，多集合时优先保证交集可读。",
+  "adaptation": "保持原朝向、排布及关系；共享入口联动调整原设计几何。大中小按实际占区约为正文区 1、1/2、1/3；文字按 Skin 允许档位测量，内容过密明确拒绝。",
   "source": "visual-intent.md",
   "exampleImplementation": "review.mjs",
   "validation": {
@@ -26,10 +26,30 @@
     ],
     "coupledChanges": "圆心与半径改变后重算交叠、遮罩和核心可读范围；说明不得遮住集合名",
     "avoid": "不能把无交叠的圆硬标成共同部分；新增集合需核实共同交集几何",
-    "status": "documented-not-implemented",
+    "status": "implemented-unreviewed",
     "sources": [
       "visual-intent.md",
       "review.mjs"
     ]
+  },
+  "implementation": {
+    "mode": "preserved-design",
+    "adapter": "shared-css-geometry",
+    "status": "implemented-unreviewed",
+    "entry": "review.mjs",
+    "sizeExamples": {
+      "large": {
+        "areaRatio": 1
+      },
+      "medium": {
+        "areaRatio": 0.5
+      },
+      "small": {
+        "areaRatio": 0.3333333333333333
+      }
+    },
+    "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+    "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+    "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
   }
 }

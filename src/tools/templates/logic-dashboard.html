@@ -34,6 +34,39 @@
     .brand strong { display: block; font-size: 19px; letter-spacing: .02em; }
     .brand span { display: block; margin-top: 3px; color: #aebbd0; font-size: 12px; }
     .nav { display: flex; gap: 8px; flex-wrap: wrap; }
+    #gray-drafts { scroll-margin-top:96px; }
+    .gray-pipeline { display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:16px;padding:22px;margin-bottom:20px;border:1px solid var(--line);border-radius:14px;background:#f5f8fc; }
+    .gray-pipeline div { display:grid;gap:7px; }.gray-pipeline small { color:var(--muted);line-height:1.6; }.gray-pipeline .handoff { padding:16px;background:#e5eefb;border-radius:10px; }
+    .gray-batches { display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px; }
+    .gray-batch { display:grid;grid-template-columns:150px 1fr;gap:16px;padding:18px;border:1px solid var(--line);border-radius:12px;background:white;cursor:pointer;transition:border-color .15s ease,box-shadow .15s ease; }
+    .gray-batch:hover { border-color:#8ea8c7;box-shadow:0 2px 10px rgba(36,70,111,.08); }
+    .gray-batch.active { border-color:var(--blue);box-shadow:0 0 0 1px var(--blue); }
+    .gray-batch img { width:150px;border:1px solid var(--line); }.gray-batch h3 { margin:0 0 8px;font-size:17px; }.gray-batch p { font-size:12px;line-height:1.6;color:var(--muted); }
+    .gray-batch button,.gray-filter select { padding:8px 12px;border:1px solid #b5c7e0;border-radius:7px;background:#fff;color:#24466f;font:inherit;cursor:pointer; }
+    .gray-viewer { margin-top:24px;padding:20px;border:1px solid var(--line);border-radius:14px;background:#f8fafc; }.gray-viewer h3 { margin:0 0 10px; }
+    .gray-links { display:flex;gap:18px;flex-wrap:wrap;font-size:13px; }.gray-links a { color:var(--blue); }
+    .gray-filter { display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:16px 0;font-size:13px; }
+    .gray-page-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;max-height:780px;overflow:auto;padding:2px; }
+    .gray-page { min-width:0;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:white; }.gray-page .preview-open,.gray-page .gray-page-select { display:block;border:0;background:#edf1f5; }.gray-page img { display:block;width:100%;aspect-ratio:1250/642;object-fit:contain; }
+    #gray-draft-beautification {scroll-margin-top:90px;}
+    .gray-comparison {margin:18px 0 24px;background:white;border:1px solid var(--line);border-radius:10px;padding:16px;touch-action:pan-y;}
+    .gray-comparison-toolbar {display:flex;align-items:center;justify-content:space-between;gap:14px;}
+    .gray-comparison-toolbar button {padding:8px 14px;background:white;border:1px solid var(--line);border-radius:6px;cursor:pointer;}
+    .gray-comparison-toolbar button:disabled {opacity:.4;cursor:default;}
+    .gray-page-slider {display:flex;align-items:center;gap:14px;margin:18px 0;color:var(--muted);font-size:13px;}
+    .gray-page-slider input {flex:1;accent-color:var(--blue);}
+    .gray-comparison-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;}
+    .gray-comparison-grid article {min-width:0;}.gray-comparison-grid h4 {margin:0 0 9px;font-size:16px;}
+    .gray-comparison-grid .preview-open {display:block;width:100%;padding:0;border:1px solid var(--line);background:#f5f6f7;cursor:zoom-in;}
+    .gray-comparison-grid img {display:block;width:100%;aspect-ratio:16/9;object-fit:contain;}
+    .gray-comparison-grid a {display:block;margin:10px 0;font-size:12px;}
+    .gray-comparison-note {color:var(--muted);font-size:12px;margin:12px 0 0;}
+    .gray-no-render {aspect-ratio:16/9;display:grid;place-content:center;background:#f1f3f6;color:var(--muted);}
+    .gray-page-select {width:100%;padding:0;cursor:pointer;}.gray-page-select[aria-pressed="true"] {outline:3px solid var(--blue);outline-offset:-3px;}
+    @media(max-width:800px){.gray-comparison-grid{grid-template-columns:1fr}.gray-comparison-toolbar strong{font-size:14px}}
+    .gray-page h4 { font-size:14px;margin:12px 12px 7px; }.gray-page p { margin:0 12px 12px;color:var(--muted);font-size:12px;line-height:1.6; }
+    @media(max-width:900px){.gray-page-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.gray-batch{grid-template-columns:1fr}.gray-pipeline{gap:8px;padding:12px}}
+    @media(max-width:600px){.gray-page-grid{grid-template-columns:1fr}.gray-pipeline{grid-template-columns:1fr}.gray-pipeline>span{display:none}}
     .nav a { padding: 8px 12px; color: #cbd6e7; text-decoration: none; border-radius: 8px; font-size: 13px; }
     .nav a:hover { color: #fff; background: rgba(255,255,255,.09); }
     .nav a.production-link { margin-left: 8px; color: #fff; border: 1px solid rgba(255,255,255,.26); }
@@ -246,6 +279,9 @@
     .logic-preview img, .logic-preview iframe { display: block; width: 100%; height: 100%; border: 0; object-fit: contain; background: #eef2f7; }
     .logic-preview iframe { pointer-events: none; }
     .logic-preview span { padding: 12px; text-align: center; }
+    .logic-preview, .drawer-preview { position: relative; }
+    .preview-loading { position: absolute; inset: 0; display: grid; place-items: center; background: #eef2f7; color: #60738d; }
+    .preview-loading[hidden] { display: none; }
     .tags { display: flex; flex-wrap: wrap; gap: 6px; }
     .coverage-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
     .coverage-tier { grid-column: 1 / -1; margin-top: 12px; padding: 18px; border: 1px solid var(--line); border-radius: 16px; background: #f8fafc; }
@@ -431,7 +467,7 @@
   <header class="topbar">
     <div class="brand"><strong>PPA 资产看板</strong><span>Structure / Text / Media / Layout</span></div>
     <nav class="nav" aria-label="页面导航">
-      <a href="#capabilities">结构</a><a href="#page-layouts">布局</a><a href="#text-layouts">文字</a><a href="#media-library">图像</a><a href="#skin">排版</a><a class="production-link" href="http://127.0.0.1:4212/" target="_blank" rel="noreferrer">生产工作台 ↗</a>
+      <a href="#gray-drafts">灰稿版式</a><a href="#capabilities">结构</a><a href="#page-layouts">布局</a><a href="#text-layouts">文字</a><a href="#media-library">图像</a><a href="#skin">排版</a><a class="production-link" href="http://127.0.0.1:4212/" target="_blank" rel="noreferrer">生产工作台 ↗</a>
     </nav>
     <div class="top-status"><span id="generated-at"></span><br><span id="data-mode"></span></div>
     <button class="refresh-button" id="refresh-dashboard" type="button">刷新仓库</button>
@@ -439,7 +475,7 @@
 
   <main>
     <section class="asset-home" id="overview">
-      <div class="asset-home-copy"><span class="eyebrow">PPA / ASSET SYSTEM</span><h1>五个能力域，共同组成一页 PPT</h1><p>PPA 只负责建设、查看和审批可复用能力。正式生成、API 调用、运行日志和交付结果统一进入 PPA 生产工作台。</p></div>
+      <div class="asset-home-copy"><span class="eyebrow">PPA / ASSET SYSTEM</span><h1>五个能力域，共同组成一页 PPT</h1><p>在这里查看可复用能力和两条线之间的灰稿。内容规划将原稿整理成灰稿，美化流程以灰稿为输入完成制作。正式运行和交付记录进入 PPA 生产工作台。</p><p style="margin-top:16px"><a href="#gray-drafts">查看灰稿版式 ↓</a></p></div>
       <nav class="domain-grid" aria-label="五个能力域">
         <a href="#capabilities"><span>01</span><strong>结构</strong><small>Logic → Structure Group → State</small></a>
         <a href="#page-layouts"><span>02</span><strong>布局</strong><small>卡片式 / 相册式 / 内容区分配</small></a>
@@ -451,11 +487,29 @@
 
     <div class="mode-notice" id="mode-notice"></div>
 
+    <section class="section" id="gray-drafts">
+      <div class="section-head"><div><h2>灰稿版式</h2><p>这里是一个用于当前线实验的灰稿中间产物入口。先从稿子形成可交接灰稿，再以它为输入实验灰稿到成稿的结构与 Skin 美化；查看快照不会重新生成 PPT。</p></div><span class="pill pending" id="gray-draft-count"></span></div>
+      <div class="gray-pipeline" aria-label="两条线的分工">
+        <div><strong>原稿 → 灰稿</strong><small>main 线：整理内容、关系与页面分区。</small></div><span aria-hidden="true">→</span>
+        <div class="handoff"><strong>灰稿交接与验收</strong><small>保留实文、内容归属、局部制作说明与页面快照。</small></div><span aria-hidden="true">→</span>
+        <div><strong>灰稿 → 美化稿</strong><small>当前线：按已认可灰稿适配结构、文字和 Skin，生成整页 PPT。</small></div>
+      </div>
+      <div class="gray-batches" id="gray-draft-batches"></div>
+      <div class="gray-viewer" id="gray-draft-viewer" hidden>
+        <h3 id="gray-draft-title"></h3><p id="gray-draft-status"></p>
+        <div class="gray-links" id="gray-draft-links"></div>
+        <div id="gray-draft-beautification" hidden></div>
+        <div class="gray-filter"><label>布局 <select id="gray-draft-family" aria-label="灰稿布局筛选"><option value="">全部布局</option></select></label><label>结构参考 <select id="gray-draft-size" aria-label="灰稿结构尺度筛选"><option value="">全部尺度</option></select></label><span id="gray-page-count" aria-live="polite"></span></div>
+        <div class="gray-page-grid" id="gray-draft-pages"></div>
+      </div>
+    </section>
+
     <section class="section" id="capabilities">
       <div id="structure-preview-controls" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:16px 0">
         <label>Skin <select id="structure-preview-skin"><option value="university">东北大学 Skin</option><option value="neutral">中性 Skin</option></select></label>
-        <label>尺寸 <select id="structure-preview-size"><option value="large">大 · 100%</option><option value="medium">中 · 85%</option><option value="small">小 · 70%</option></select></label>
-        <small>能力状态分开登记：换色、尺寸、整页与 PPT；待审 Skin 不代表已验收。中小尺寸仍仅三个样板。</small>
+        <label>尺寸 <select id="structure-preview-size"><option value="large">大 · 整页内容区</option><option value="medium">中 · 约半页</option><option value="small">小 · 约三分之一页</option></select></label>
+        <label>视图 <select id="structure-preview-view"><option value="content">内容白板</option><option value="page">Skin 整页 PPT</option></select></label>
+        <small id="structure-preview-note">整页视图呈现真实 PPT 渲染；按结构、Skin、尺寸和状态保存快照，相关源文件变化后重新生成。</small>
       </div>
       <div class="section-head"><div><h2>01 · 结构 Skill 库</h2><p>按内容关系发现结构，保留造型与表达特征，按本页内容重新编排。样例不是任意数量与尺寸的保证；请按每个结构的能力状态选择。</p></div><span class="pill pending" id="logic-count"></span></div>
       <details style="margin:12px 0;padding:12px;border:1px solid #d8dee7;border-radius:8px"><summary>新 Skin 接入流程</summary><p>登记主色与字体 → 刷新看板预览 → 检查代表结构 → 人工确认。技术检查不自动批准 Skin；正式排版与生产入口另行绑定。</p><p>登记命令：<code>node src/tools/register-structure-skin.mjs --id your-skin --name 名称 --main-color '#EFE4D2'</code></p><p>检查命令：<code>node src/tools/check-structure-skin.mjs --skin your-skin --base 当前看板地址</code></p><p>完整说明：docs/工作流/资产积累与入库/结构Skin接入.md</p></details>
@@ -566,9 +620,86 @@
     const relationText = (asset) => list(asset.baseRelations);
     const purposeText = (asset) => asset.purposes?.length ? asset.purposes.map((item) => item.key).join("、") : "—";
     const liveMode = DATA.mode === "live-repository-api" && location.protocol.startsWith("http");
+    const grayDrafts=DATA.grayDrafts??[];
+    let selectedGrayDraft=null,selectedGrayPage=1;
+    const grayReviewLabel=draft=>draft.humanReview==='approved'?'已验收':draft.humanReview==='rejected'?'待修订':'待验收';
+    function selectGrayDraft(id,focus=false) {
+      selectedGrayDraft=grayDrafts.find(d=>d.id===id&&d.available);
+      const draft=selectedGrayDraft;
+      document.getElementById('gray-draft-viewer').hidden=!draft;
+      if(!draft)return;
+      document.querySelectorAll('[data-gray-draft][aria-pressed]').forEach(button=>{const active=button.dataset.grayDraft===id;button.setAttribute('aria-pressed',String(active));button.closest('.gray-batch').classList.toggle('active',active);});
+      document.getElementById('gray-draft-title').textContent=draft.title+' · '+draft.pageCount+' 页';
+      document.getElementById('gray-draft-status').textContent=grayReviewLabel(draft)+' · '+draft.sourceLabel+' · '+(draft.beautification?'已生成 Skin 渲染候选，点击下方预览查看':'正式工作流美化尚未完成（手工样例已撤下）');
+      document.getElementById('gray-draft-links').innerHTML=[['pptx','下载可编辑 PPT'],['state','下载交接数据'],['content','下载内容提纲']].map(([key,label])=>draft.files[key]?'<a href="'+esc(draft.files[key])+'">'+label+'</a>':'<span>'+label+'暂缺</span>').join('');
+      selectedGrayPage=1;
+      renderGrayComparison();
+      const beautyHost=document.getElementById('gray-draft-beautification');
+      for(const [field,id,label] of [['family','gray-draft-family','全部布局'],['size','gray-draft-size','全部尺度']])document.getElementById(id).innerHTML='<option value="">'+label+'</option>'+[...new Set(draft.pages.map(p=>p[field]).filter(Boolean))].map(value=>'<option value="'+esc(value)+'">'+esc(value==='无'?'纯文字':value)+'</option>').join('');
+      renderGrayPages();
+      if(focus)requestAnimationFrame(()=>{(beautyHost.hidden?document.getElementById('gray-draft-viewer'):beautyHost).scrollIntoView({behavior:'smooth',block:'start'});});
+    }
+    function renderGrayComparison() {
+      const draft=selectedGrayDraft,host=document.getElementById('gray-draft-beautification');
+      if(!draft)return;
+      const page=draft.pages.find(p=>p.page===selectedGrayPage);
+      if(!page)return;
+      const beauty=(draft.beautification?.pages??[draft.beautification]).find(p=>p?.page===page.page);
+      const entries=[{label:'灰稿',previewUrl:page.previewUrl},...['neutral','university'].map(id=>({label:id==='neutral'?'中性 Skin':'东北大学 Skin',...beauty?.skins?.[id]}))];
+      host.hidden=false;
+      host.innerHTML='<section class="gray-comparison" aria-label="逐页灰稿与 Skin 对照"><div class="gray-comparison-toolbar"><button type="button" data-gray-step="-1" '+(page.page===1?'disabled':'')+'>← 上一页</button><strong>'+String(page.page).padStart(2,'0')+' / '+draft.pageCount+' · '+esc(page.title)+'</strong><button type="button" data-gray-step="1" '+(page.page===draft.pageCount?'disabled':'')+'>下一页 →</button></div><label class="gray-page-slider">滑动切页 <input type="range" min="1" max="'+draft.pageCount+'" value="'+page.page+'" aria-label="对照页码"></label><div class="gray-comparison-grid">'+entries.map(item=>'<article><h4>'+esc(item.label)+'</h4>'+(item.previewUrl?'<button type="button" class="preview-open" data-preview-open="'+esc(item.previewUrl)+'" data-preview-caption="'+esc(String(page.page).padStart(2,'0')+' · '+page.title+' · '+item.label)+'"><img src="'+esc(item.previewUrl)+'" alt="'+esc('第 '+page.page+' 页 · '+item.label)+'"></button>':'<div class="gray-no-render">本页暂未生成此 Skin</div>')+(item.pptxUrl?'<a href="'+esc(item.pptxUrl)+'">下载 '+esc(item.label)+' PPTX</a>':'')+'</article>').join('')+'</div><p class="gray-comparison-note">左右滑动或拖动页码切换 · 点击图片放大 · 候选待验收</p></section>';
+      document.querySelectorAll('[data-gray-page]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.grayPage)===page.page)));
+    }
+    function selectGrayPage(page,focus=false) {
+      if(!selectedGrayDraft)return;
+      selectedGrayPage=Math.max(1,Math.min(selectedGrayDraft.pageCount,Number(page)));
+      renderGrayComparison();
+      if(focus)document.getElementById('gray-draft-beautification').scrollIntoView({behavior:'smooth',block:'start'});
+    }
+    const grayCompareHost=document.getElementById('gray-draft-beautification');
+    grayCompareHost.addEventListener('click',event=>{const button=event.target.closest('[data-gray-step]');if(button)selectGrayPage(selectedGrayPage+Number(button.dataset.grayStep));});
+    grayCompareHost.addEventListener('input',event=>{if(event.target.matches('input[type=range]')){selectedGrayPage=Number(event.target.value);}});
+    grayCompareHost.addEventListener('change',event=>{if(event.target.matches('input[type=range]'))selectGrayPage(event.target.value);});
+    grayCompareHost.addEventListener('keydown',event=>{if(event.target.matches('input'))return;if(['ArrowLeft','ArrowRight'].includes(event.key)){event.preventDefault();selectGrayPage(selectedGrayPage+(event.key==='ArrowRight'?1:-1));}});
+    let grayTouchStart=null;
+    grayCompareHost.addEventListener('touchstart',event=>{if(event.target.matches('input'))return;grayTouchStart={x:event.touches[0].clientX,y:event.touches[0].clientY};},{passive:true});
+    grayCompareHost.addEventListener('touchend',event=>{if(!grayTouchStart)return;const dx=event.changedTouches[0].clientX-grayTouchStart.x,dy=event.changedTouches[0].clientY-grayTouchStart.y;grayTouchStart=null;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)selectGrayPage(selectedGrayPage+(dx<0?1:-1));},{passive:true});
+    document.getElementById('gray-draft-pages').addEventListener('click',event=>{const button=event.target.closest('[data-gray-page]');if(button)selectGrayPage(button.dataset.grayPage,true);});
+    function renderGrayPages() {
+      if(!selectedGrayDraft)return;
+      const family=document.getElementById('gray-draft-family').value,size=document.getElementById('gray-draft-size').value;
+      const pages=selectedGrayDraft.pages.filter(p=>(!family||p.family===family)&&(!size||p.size===size));
+      document.getElementById('gray-page-count').textContent=pages.length+' / '+selectedGrayDraft.pageCount+' 页 · 点击灰稿查看本页三方对照';
+      document.getElementById('gray-draft-pages').innerHTML=pages.map(p=>'<article class="gray-page">'+(p.previewUrl?'<button type="button" class="gray-page-select" data-gray-page="'+p.page+'" aria-pressed="'+(p.page===selectedGrayPage)+'" aria-label="查看第 '+p.page+' 页：'+esc(p.title)+'"><img loading="lazy" decoding="async" src="'+esc(p.previewUrl)+'" alt="'+esc(p.claim)+'"></button>':'<p>此页快照缺失，请补齐灰稿产物。</p>')+'<h4>'+String(p.page).padStart(2,'0')+' · '+esc(p.title)+'</h4><p>'+esc([p.pattern||p.family,p.size?(p.size==='无'?'纯文字':'参考'+p.size+'版'):''].filter(Boolean).join(' · '))+'</p></article>').join('')||'<p>此筛选条件下没有页面。</p>';
+    }
+    function renderGrayDrafts() {
+      const count=grayDrafts.filter(d=>d.available).length;
+      document.getElementById('gray-draft-count').textContent=count+' 个入口';
+      if(!liveMode){document.getElementById('gray-draft-batches').innerHTML='<p>灰稿快照请在实时 PPA 看板中查看。</p>';return;}
+      document.getElementById('gray-draft-batches').innerHTML=grayDrafts.map(d=>'<article class="gray-batch" data-gray-draft="'+esc(d.id)+'" tabindex="0" aria-label="打开 '+esc(d.title)+' 灰稿渲染结果">'+(d.pages[0]?.previewUrl?'<img loading="lazy" src="'+esc(d.pages[0].previewUrl)+'" alt="'+esc(d.title)+'封面">':'<div>快照暂不可用</div>')+'<div><h3>'+esc(d.title)+'</h3>'+pill(d.versionLabel)+' '+pill(grayReviewLabel(d),'pending')+'<p>'+esc(d.description)+'</p>'+(d.available?'<button type="button" data-gray-draft="'+esc(d.id)+'" aria-pressed="false">查看 '+d.pageCount+' 页与渲染结果</button>':'<p>产物不可用：'+esc(d.error)+'</p>')+'</div></article>').join('')||'<p>尚未登记灰稿中间产物。</p>';
+      const requested=new URLSearchParams(location.search).get('draft');
+      selectGrayDraft(grayDrafts.find(d=>d.id===requested&&d.available)?.id??grayDrafts.find(d=>d.available)?.id);
+    }
+    document.getElementById('gray-draft-batches').addEventListener('click',event=>{const button=event.target.closest('[data-gray-draft]');if(button)selectGrayDraft(button.dataset.grayDraft,true);});
+    document.getElementById('gray-draft-batches').addEventListener('keydown',event=>{if(event.key!=='Enter'&&event.key!==' ')return;const card=event.target.closest('.gray-batch[data-gray-draft]');if(card){event.preventDefault();selectGrayDraft(card.dataset.grayDraft,true);}});
+    for(const id of ['gray-draft-family','gray-draft-size'])document.getElementById(id).addEventListener('change',renderGrayPages);
     const previewSkin = new URLSearchParams(location.search).get('skin');
+    const previewSize = new URLSearchParams(location.search).get('size');
+    const previewView = new URLSearchParams(location.search).get('view');
+    if (['large','medium','small'].includes(previewSize)) document.getElementById('structure-preview-size').value = previewSize;
     if(DATA.structureSkins?.length)document.getElementById('structure-preview-skin').innerHTML=DATA.structureSkins.map(s=>'<option value="'+esc(s.id)+'">'+esc(s.name)+(s.status==='candidate'?' · 待审':'')+'</option>').join('');
     if ((DATA.structureSkins??[{id:'neutral'},{id:'university'}]).some(s=>s.id===previewSkin)) document.getElementById('structure-preview-skin').value = previewSkin;
+    if (['content', 'page'].includes(previewView)) document.getElementById('structure-preview-view').value = previewView;
+    function syncStructurePreviewView() {
+      const university = document.getElementById('structure-preview-skin').value === 'university';
+      const view = document.getElementById('structure-preview-view');
+      view.querySelector('option[value="page"]').disabled = !university;
+      if (!university && view.value === 'page') view.value = 'content';
+      document.getElementById('structure-preview-note').textContent = university
+        ? '整页视图呈现真实 PPT 渲染；按结构、Skin、尺寸和状态保存快照，相关源文件变化后重新生成。'
+        : '此 Skin 目前只有结构配色与字体，没有原标题、Logo 的整页 PPT 模板。';
+    }
+    syncStructurePreviewView();
 
     function structureStatusMarkup(asset) {
       const status=DATA.structureCapabilities?.[asset.id]?.[document.getElementById('structure-preview-skin').value];
@@ -590,8 +721,34 @@
     function selectionQuery(selection) {
       return new URLSearchParams(Object.entries(selection).map(([key, value]) => [key, String(value)])).toString();
     }
+    function grayPreviewPilot(asset) {
+      return asset.id === 'matrix-quadrant-priority-001'
+        && ['medium', 'small'].includes(document.getElementById('structure-preview-size').value);
+    }
+    function skinPagePreviewUrl(asset, pptx = false) {
+      if (!asset.skinStatePreviewUrl) return '';
+      const url = new URL(asset.skinStatePreviewUrl, location.href);
+      if (pptx) url.pathname = '/api/skin-state-pptx';
+      url.searchParams.set('skin', document.getElementById('structure-preview-skin').value);
+      url.searchParams.set('size', document.getElementById('structure-preview-size').value);
+      for (const [key, value] of Object.entries(asset.componentInitialSelection ?? {})) url.searchParams.set(key, String(value));
+      if (grayPreviewPilot(asset)) {
+        url.searchParams.set('composition', 'gray');
+        for (let index = 0; index < 4; index += 1) url.searchParams.set('q' + index + 'Count', '1');
+        url.searchParams.set('definitionRail', '无');
+      }
+      return url.href;
+    }
 
     function previewMarkup(asset, drawer = false) {
+      if (liveMode && asset.structureSkill && document.getElementById('structure-preview-view').value === 'page' && asset.skinStatePreviewUrl) {
+        const url = skinPagePreviewUrl(asset);
+        const className = drawer ? 'drawer-preview' : 'logic-preview';
+        const sourceAttribute = drawer ? 'src' : 'data-preview-src';
+        const image = '<img ' + sourceAttribute + '="' + esc(url) + '" alt="' + esc(asset.name) + ' 的 Skin 整页 PPT">';
+        if (drawer) return '<button type="button" class="' + className + ' preview-open" data-preview-open="' + esc(url) + '" data-preview-caption="' + esc(asset.name) + ' · Skin 整页 PPT' + (grayPreviewPilot(asset) ? ' · 模拟灰稿' : '') + '">' + image + '<span class="preview-loading">正在生成整页 PPT 快照…</span></button>';
+        return '<div class="' + className + '">' + image + '<span class="preview-loading">正在生成整页 PPT 快照…</span></div>';
+      }
       if (asset.structureSkill && asset.componentPreviewAvailable) return pendingApprovalPreviewMarkup(asset);
       const className = drawer ? "drawer-preview" : "logic-preview";
       if (!liveMode) return '<div class="' + className + '"><span>静态快照不加载 PPT 图像<br>双击 PPA看板.exe 查看真实示例</span></div>';
@@ -623,10 +780,16 @@
     }
 
     function representativeMarkup(asset) {
-      const media = liveMode && asset.componentPreviewAvailable && asset.componentPreviewUrl
+      const media = asset.structureSkill && document.getElementById('structure-preview-view').value === 'page'
+        ? previewMarkup(asset, true)
+        : liveMode && asset.componentPreviewAvailable && asset.componentPreviewUrl
         ? '<div class="review-media component"><iframe src="' + esc(structurePreviewUrl(asset)) + '" title="' + esc(asset.name) + ' · 代表样例"></iframe></div>'
         : previewMarkup(asset, true);
-      return '<section class="review-flow"><h3>代表样例</h3>' + (asset.structureSkill ? '<div class="structure-detail-controls" style="display:flex;gap:16px;margin:12px 0"><label>Skin <select data-mirror-control="structure-preview-skin">' + document.getElementById('structure-preview-skin').innerHTML + '</select></label><label>尺寸 <select data-mirror-control="structure-preview-size">' + document.getElementById('structure-preview-size').innerHTML + '</select></label></div>' : '') + '<p>此处跟随看板的 Skin 和尺寸选择。尺寸改变实际占位，字体按 Skin 规则保留；样例预览不等于整页排版已验证。</p>' + media + '</section>';
+      const download = liveMode && asset.structureSkill && document.getElementById('structure-preview-view').value === 'page'
+        ? '<p><a href="' + esc(skinPagePreviewUrl(asset, true)) + '">下载当前预览 PPTX</a></p>' : '';
+      const pilotNote = grayPreviewPilot(asset) && document.getElementById('structure-preview-view').value === 'page'
+        ? '<p>试验样张：二维定位象限与右侧模拟灰稿共同排版；仅用于检查中／小版整页关系。</p>' : '';
+      return '<section class="review-flow"><h3>代表样例</h3>' + (asset.structureSkill ? '<div class="structure-detail-controls" style="display:flex;gap:16px;margin:12px 0"><label>Skin <select data-mirror-control="structure-preview-skin">' + document.getElementById('structure-preview-skin').innerHTML + '</select></label><label>尺寸 <select data-mirror-control="structure-preview-size">' + document.getElementById('structure-preview-size').innerHTML + '</select></label><label>视图 <select data-mirror-control="structure-preview-view">' + document.getElementById('structure-preview-view').innerHTML + '</select></label></div>' : '') + '<p>内容白板检查结构细节；Skin 整页查看真实 PPT 中的原标题样式、Logo 和占位。整页样例不等于正式内容已排版验收。</p>' + pilotNote + media + download + '</section>';
     }
     function structureSkillMarkup(asset) {
       const skill = asset.structureSkill;
@@ -742,7 +905,7 @@
       const carousel = assets.length > 1
         ? '<div class="coverage-asset-tabs" aria-label="该 Logic 的 Structure Group">' + assets.map((candidate, tabIndex) => '<button type="button" class="coverage-asset-tab ' + (tabIndex === index ? 'active' : '') + '" data-carousel-select="' + tabIndex + '" data-logic-id="' + esc(topic.id) + '" aria-pressed="' + (tabIndex === index ? 'true' : 'false') + '">' + esc(candidate.name) + '</button>').join('') + '</div>'
         : '';
-      return '<article class="coverage-card available" role="button" tabindex="0" data-logic-card="' + esc(topic.id) + '" data-asset-key="' + esc(asset.library + ':' + asset.id) + '"><div class="coverage-card-head"><div><strong>' + esc(topic.name) + '</strong><span class="coverage-description">' + esc(topic.description) + '</span></div><span class="coverage-count">' + (index + 1) + ' / ' + assets.length + '</span></div>' + previewMarkup(asset) + structureStatusMarkup(asset) + carousel + '<span class="coverage-asset-name">当前预览 · ' + esc(asset.name) + '</span><span class="coverage-asset-meta">' + esc(asset.structureGroupId) + '</span><span class="coverage-status">' + esc(genericCoverage) + ' · ' + '代表样例 · 点击查看特征</span></article>';
+      return '<article class="coverage-card available" role="button" tabindex="0" data-logic-card="' + esc(topic.id) + '" data-asset-key="' + esc(asset.library + ':' + asset.id) + '"><div class="coverage-card-head"><div><strong>' + esc(topic.name) + '</strong><span class="coverage-description">' + esc(topic.description) + '</span></div><span class="coverage-count">' + (index + 1) + ' / ' + assets.length + '</span></div>' + previewMarkup(asset) + structureStatusMarkup(asset) + carousel + '<span class="coverage-asset-name">当前预览 · ' + esc(asset.name) + (grayPreviewPilot(asset) && document.getElementById('structure-preview-view').value === 'page' ? ' · 模拟灰稿试验' : '') + '</span><span class="coverage-asset-meta">' + esc(asset.structureGroupId) + '</span><span class="coverage-status">' + esc(genericCoverage) + ' · ' + '代表样例 · 点击查看特征</span></article>';
     }
 
     function selectLogicCarousel(logicId, index) {
@@ -1169,12 +1332,16 @@
       if (event.target.matches(".logic-preview img, .drawer-preview img, .review-media img")) {
         event.target.hidden = true;
         if (event.target.nextElementSibling) {
-          event.target.nextElementSibling.textContent = event.target.closest("[data-source-image]") ? "来源页预览生成失败" : event.target.nextElementSibling.textContent;
+          event.target.nextElementSibling.textContent = event.target.closest("[data-source-image]") ? "来源页预览生成失败" : event.target.nextElementSibling.classList.contains('preview-loading') ? '整页 PPT 快照生成失败' : event.target.nextElementSibling.textContent;
           event.target.nextElementSibling.hidden = false;
         }
       }
     }, true);
     document.addEventListener("load", (event) => {
+      if (event.target.matches('.logic-preview img, .drawer-preview img')) {
+        const status = event.target.nextElementSibling;
+        if (status?.classList.contains('preview-loading')) status.hidden = true;
+      }
       if (!event.target.matches("[data-source-image] img")) return;
       const status = event.target.nextElementSibling;
       if (status) status.hidden = true;
@@ -1197,18 +1364,20 @@
       control.value = event.target.value;
       control.dispatchEvent(new Event('change'));
     });
-    for (const id of ['structure-preview-skin', 'structure-preview-size']) {
+    for (const id of ['structure-preview-skin', 'structure-preview-size', 'structure-preview-view']) {
       document.getElementById(id).addEventListener('change', () => {
-        for (const mirror of document.querySelectorAll('[data-mirror-control="' + id + '"]')) mirror.value = document.getElementById(id).value;
-        for(const element of document.querySelectorAll('[data-status-asset]')){const asset=DATA.records.find(a=>a.id===element.dataset.statusAsset);if(asset)element.outerHTML=structureStatusMarkup(asset);}
-        for (const iframe of document.querySelectorAll('iframe')) {
-          const url = new URL(iframe.src, location.href);
-          if (url.pathname !== '/api/component-preview') continue;
-          const asset = DATA.records.find(a => a.id === url.searchParams.get('id') && a.library === url.searchParams.get('library'));
-          if (!asset?.structureSkill) continue;
-          url.searchParams.set('skin', document.getElementById('structure-preview-skin').value);
-          url.searchParams.set('size', document.getElementById('structure-preview-size').value);
-          iframe.src = url.href;
+        syncStructurePreviewView();
+        const address = new URL(location.href);
+        address.searchParams.set('skin', document.getElementById('structure-preview-skin').value);
+        address.searchParams.set('size', document.getElementById('structure-preview-size').value);
+        address.searchParams.set('view', document.getElementById('structure-preview-view').value);
+        history.replaceState(null, '', address);
+        renderCoverage();
+        const drawer = document.getElementById('drawer-backdrop');
+        if (drawer.classList.contains('open')) {
+          const drawerId = document.querySelector('#drawer-content .drawer-id')?.textContent;
+          const asset = DATA.records.find(a => a.id === drawerId);
+          if (asset) void openAsset(asset);
         }
       });
     }
@@ -1292,6 +1461,7 @@
     renderLayoutEvidence();
     renderPageLayouts();
     renderSummary();
+    renderGrayDrafts();
     renderStores();
     renderTextLayouts();
     renderShellMap();

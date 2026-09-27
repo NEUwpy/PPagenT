@@ -1,0 +1,48 @@
+{
+  "sectionTitle": "不足感悟",
+  "headline": "变革落地仍存三项短板，合规基础管理亦待压实",
+  "headlineEvidence": [
+    "implementation",
+    "compliance",
+    "criterion"
+  ],
+  "groupWeights": [
+    1,
+    1.1
+  ],
+  "diagrams": [
+    {
+      "groupId": "issues",
+      "blockId": "implementation",
+      "assetId": "convergence-many-to-one-003",
+      "context": "顶层设计已完成",
+      "inputs": [
+        "公司内部人力资源变革氛围尚未完全形成",
+        "信息系统支撑能力仍有差距",
+        "缺乏市场化管理机制"
+      ],
+      "result": "变革落地阻力重重",
+      "reason": "原文明确三方面条件并列作用、共同造成落地阻力，属多路独立输入直接合并为唯一结果，不涉及逐级筛选或中间归纳层，与该结构的分离输入、平滑汇聚、唯一结果三特征一致。"
+    }
+  ],
+  "detailStrips": [],
+  "reason": "合规项的四个短项（认识待提升、作风待转变、能力待增强、协同待深化）在同一条正文段落内，该块与另一文本块同属一个条目，无法作为唯一独立文本块被detailStrips引用，故本次不使用detailStrips；四个短项保持原文连续表述，自然行高呈现，不另造字段、不改变归属。主体按冻结稿两组等权展开。不足组：两项问题各自独立，用large编号作列首锚点，plain标题保持文字层，条目自然高度、余量留组尾，容纳汇聚图与合规长段。感悟组：四点感悟为并列体会而非步骤，用rail以无箭头细线贯穿作索引编号；distributed仅把余量分配到条目之间，保持文字自然高度，使末项与不足组末端接近共同基线。组间40px拉开“问题—体会”两个分析域，并由一条轻细分隔线区分，不暗示因果。全部事实、归属与主旨句保持冻结稿原样。",
+  "visual": {
+    "groupGap": 40,
+    "groups": [
+      {
+        "heading": "plain",
+        "id": "issues",
+        "index": "large",
+        "rhythm": "natural"
+      },
+      {
+        "heading": "plain",
+        "id": "insights",
+        "index": "rail",
+        "rhythm": "distributed"
+      }
+    ],
+    "sectionDivider": true
+  }
+}

@@ -1,5 +1,6 @@
 import {listStructureSkins} from '../runtime/skins/structure-skin-registry.mjs';
 import {structureCapabilityStatus} from './structure-capability-status.mjs';
+import {collectGrayDrafts} from './gray-draft-catalog.mjs';
 import fs from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
@@ -162,6 +163,12 @@ async function normalizeRecord(entry, coverageTags, purposeMap, logicMap, root) 
     runtime.entry ? path.resolve(assetDir, runtime.entry) : null,
     reviewRuntime?.entry ? path.resolve(assetDir, reviewRuntime.entry) : null,
     path.resolve(assetDir, "component.css"),
+    path.resolve(assetDir, "compact.css"),
+    path.resolve(assetDir, "structure-skill.json"),
+    manifest.id === 'matrix-quadrant-priority-001'
+      ? path.join(root, 'src', 'tools', 'structure-gray-preview.mjs') : null,
+    path.join(root, "src", "visual-runtime", "preserved-size-component.mjs"),
+    path.join(root, "src", "runtime", "preserved-structure-build.mjs"),
     path.join(root, "src", "visual-runtime", "html-component-runtime.mjs"),
     path.join(root, "src", "visual-runtime", "html-component-theme.mjs"),
     path.join(root, "src", "runtime", "skins", "northeastern-university-theme.mjs"),
@@ -276,6 +283,7 @@ async function normalizeRecord(entry, coverageTags, purposeMap, logicMap, root) 
       : [],
     componentPreviewAvailable: hasDesignComponent,
     componentImplementation,
+    componentVersion,
     componentFidelityStatus: htmlEligibility?.stage ?? "legacy-or-unreviewed",
     hasVisualIntent: htmlEligibility?.hasVisualIntent ?? false,
     visualIntentText,
@@ -411,6 +419,7 @@ export async function collectLogicDashboardData(root = defaultProjectRoot) {
 
   return {
     structureSkins,
+    grayDrafts: await collectGrayDrafts(root),
     structureCapabilities:Object.fromEntries(primaryAssets.filter(a=>a.structureSkill).map(a=>[a.id,Object.fromEntries(structureSkins.map(s=>[s.id,structureCapabilityStatus(a,s.id,s.status)]))])),
     generatedAt: new Date().toISOString(),
     mode: "live-repository-api",

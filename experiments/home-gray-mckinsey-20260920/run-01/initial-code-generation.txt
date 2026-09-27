@@ -1,0 +1,58 @@
+"""Seed the bounded second Skin experiment without altering the magazine evidence."""
+from pathlib import Path
+
+base = Path(__file__).resolve().parent
+previous = base.parent / 'home-gray-magazine-20260919'
+renderer = (previous / 'render-magazine.mjs').read_text(encoding='utf-8')
+renderer = renderer.replace("import { derivePrimaryTheme } from '../../src/runtime/skins/primary-tone-palette.mjs';", "import { createNortheasternUniversityStarter } from '../../src/runtime/skins/northeastern-university.mjs';\nimport { universityMckinseySkin, universityMckinseyTypography } from '../../src/runtime/skins/university-mckinsey.mjs';\nimport { resolveStructureTheme } from '../../src/visual-runtime/html-component-theme.mjs';")
+renderer = renderer.replace("import { neutralPaint } from '../../src/visual-runtime/neutral-structure-theme.mjs';", "import { execFileSync } from 'node:child_process';")
+renderer = renderer.replace('const frame = { left: 56, top: 112, width: 1168, height: 536 };', 'const frame = universityMckinseySkin.bodyFrame;')
+renderer = renderer.replace('const sizes = { page: 25, heading: 21, label: 21, body: 17, node: 17, meta: 15 };', 'const t = universityMckinseyTypography;\nconst sizes = { page:t.title, heading:t.heading, label:t.heading, body:t.body, node:t.body, meta:t.meta };')
+renderer = renderer.replace('renderMagazine', 'renderMckinsey')
+start = renderer.index('  const asset = JSON.parse(')
+end = renderer.index('  const textBoxes', start)
+renderer = renderer[:start] + '''  const theme = resolveStructureTheme(universityMckinseySkin), fonts = universityMckinseySkin.fonts;
+  const page = gray.pages[0];
+  const {presentation:p, slides:[slide]} = await createNortheasternUniversityStarter({
+    starterPptx:path.join(outputDir,'template-starter.pptx'),
+    manuscriptSource:'experiments/home-gray-magazine-20260919/input/gray-state.json',
+    pages:[{content:{title:blueprint.headline},meta:{sectionName:page.title},
+      payload:{assetId:'northeastern-university-body-001',parameters:{}},
+      intent:{intentId:'gray-to-mckinsey'},decision:{selectedAssetId:'northeastern-university-body-001'}}],
+  });
+  await fs.writeFile(path.join(outputDir,'shell-before.layout.json'), await (await slide.export({format:'layout'})).text());
+''' + renderer[end:]
+renderer = renderer.replace("role === 'body' ? 27", "role === 'body' ? 26")
+renderer = renderer.replace("['page','heading','label','node'].includes(role) ? fonts.display : fonts.body", "role === 'page' ? fonts.display : fonts.body")
+start = renderer.index('  const page = gray.pages[0];', renderer.index('  function box('))
+end = renderer.index('  const gap =', start)
+renderer = renderer[:start] + renderer[end:]
+renderer = renderer.replace('const gap = 38', 'const gap = 32').replace('top+38','top+34').replace('top+60','top+48')
+renderer = renderer.replace(" + 9;", " + 7;").replace(" + 12;", " + 8;")
+renderer = renderer.replace('Math.max(196,d.inputs.length*66)', 'Math.max(186,d.inputs.length*62)')
+renderer = renderer.replace("const outH=104", "const outH=100")
+renderer = renderer.replace("const sourceColors=['#abc8da','#8bb2ca','#699abb','#4d80a7','#35688f','#28557a'];", "const sourceColors=[theme.primaryPale,theme.primaryLight,theme.accentAlt,theme.primaryColor,theme.primaryDark,theme.primaryDeep];")
+renderer = renderer.replace("neutralPaint(sourceColors[i],'relation',theme)", "sourceColors[i]")
+renderer = renderer.replace("box(n.x,n.y,n.w,n.h,theme.surface,`${block.id}-input-${i}`);", "box(n.x,n.y,n.w,n.h,theme.surface,`${block.id}-input-${i}`);\n              slide.shapes.add({geometry:'rect',name:`${block.id}-input-accent-${i}`,position:{left:n.x,top:n.y+6,width:5,height:n.h-12},fill:sourceColors[i],line:{fill:'none',width:0}});")
+renderer = renderer.replace("neutralPaint('#2a5a82','surface',theme)", "theme.primaryColor")
+renderer = renderer.replace("`${block.id}-result`,theme.dark,true", "`${block.id}-result`,theme.background,true")
+renderer = renderer.replace("rule(x,y+15,width);y+=34", "rule(x,y+12,width);y+=27")
+renderer = renderer.replace('rules/排版体系/杂志风.md and assets/主题/中性编辑排版-001/asset.json', 'rules/排版体系/麦肯锡式.md and original Northeastern University template')
+renderer = renderer.replace('Frozen gray input: ../input/gray-state.json and gray.pptx', 'Frozen gray input: experiments/home-gray-magazine-20260919/input/gray-state.json and gray.pptx')
+renderer = renderer.replace('  // Inspect final exported package', "  execFileSync(process.env.MCKINSEY_PYTHON, [path.join(import.meta.dirname,'preserve-theme.py'), pptx], {stdio:'inherit'});\n  // Inspect final exported package")
+renderer = renderer.replace("semanticReview:'external-review-required'", "semanticReview:'external-review-required',headline:blueprint.headline,headlineEvidence:blueprint.headlineEvidence,skin:'northeastern-university-001',structureExecution:'task-local migration adapter; not registered preserved-design'")
+(base / 'render-mckinsey.mjs').write_text(renderer,encoding='utf-8')
+
+runner = (previous / 'run-harness.mjs').read_text(encoding='utf-8')
+runner = runner.replace('renderMagazine','renderMckinsey').replace('./render-magazine.mjs','./render-mckinsey.mjs')
+runner = runner.replace("path.join(import.meta.dirname,'input/gray-state.json')", "path.join(import.meta.dirname,'../home-gray-magazine-20260919/input/gray-state.json')")
+runner = runner.replace('neutral-editorial-001', 'northeastern-university-001').replace('中性编辑排版.md', '东北大学.md').replace('杂志风','麦肯锡式')
+runner = runner.replace("'skills/references/selection.md'", "'rules/页面组合.md','skills/references/selection.md'")
+runner = runner.replace('正文17px，标题21px，页首25px，结构标签17px', '正文18px，局部标题21px，固定模板主旨32px，结构标签18px')
+runner = runner.replace('首次从原灰稿1:1.2附近试排', '首次从1:1.1附近试排')
+runner = runner.replace('默认不要增加照片/图表', '先给结论、一页一事、标题即观点：headline用一句不超过32字的判断概括本页，保留待提升、需改进语气，不能把目标写成已达成成果。headlineEvidence填写提供依据的现有block id；不要强造四点感悟和两点不足的一对一映射。headline仅用于模板蓝条，灰稿页标题保留于章节位。结构入口本轮仍是任务局部迁移适配，并非大学专用preserved-design登记能力。默认不要增加照片/图表')
+runner = runner.replace("const schema={type:'object',properties:{groupWeights:", "const schema={type:'object',properties:{headline:{type:'string',minLength:8,maxLength:32},headlineEvidence:{type:'array',items:{type:'string'},minItems:2},groupWeights:")
+runner = runner.replace("required:['groupWeights','diagrams']", "required:['headline','headlineEvidence','groupWeights','diagrams']")
+runner = runner.replace("frame:{width:1168,height:536}", "frame:{width:1170,height:492}")
+runner = runner.replace('same shared neutral palette','shared university theme and type roles')
+(base / 'run-harness.mjs').write_text(runner,encoding='utf-8')

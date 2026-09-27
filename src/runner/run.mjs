@@ -47,9 +47,9 @@ const RULES_PRECEDENCE = [
  * skin 用 **skin 对象的 id** 而不是硬编码字符串：一旦对象与 rules/index.json 的键不一致，
  * loadRules 会失败关闭，而不是悄悄少加载一批规则。
  */
-export async function phaseRulesText(rootDir, phase) {
+export async function phaseRulesText(rootDir, phase, skinId = northeasternUniversitySkin.id) {
   const bundle = phase === "visual"
-    ? await loadRules(rootDir, { profile: "generation", skin: northeasternUniversitySkin.id })
+    ? await loadRules(rootDir, { profile: "generation", skin: skinId })
     : await loadRules(rootDir, { profile: "content-director" });
   return `${RULES_PRECEDENCE}\n\n${bundle.text}`;
 }
@@ -91,6 +91,35 @@ export function parseArgs(argv) {
   return args;
 }
 
+/**
+ * 灰稿交接入口：把已生成的灰稿状态直接交给 visual 阶段。
+ * 不重新跑 content director，也不修改灰稿的页面、文字、关系或区域。
+ */
+export async function loadGrayState({ grayStatePath, rootDir = root, skinId = "northeastern-university-001" }) {
+  const absolute = path.resolve(rootDir, grayStatePath);
+  const raw = await fs.readFile(absolute, "utf8");
+  const gray = JSON.parse(raw);
+  if (!Array.isArray(gray.pages) || gray.pages.length === 0) throw new Error("灰稿状态没有可交接的页面");
+  if (!gray.grayDraft) throw new Error("输入不是灰稿状态：缺少 grayDraft 交接信息");
+  return {
+    ...gray,
+    pages: gray.pages.map(page => ({ ...page, grayComposition: structuredClone(page.composition ?? null), composition: null, compositionRevision: 0 })),
+    artifactState: {},
+    deckAudit: null,
+    sourcePath: path.relative(rootDir, absolute).replaceAll("\\", "/"),
+    phase: "visual",
+    skinId,
+    runtimeFailure: null,
+    lastStop: null,
+    grayInput: {
+      sourcePath: path.relative(rootDir, absolute).replaceAll("\\", "/"),
+      sha256: (await import("node:crypto")).createHash("sha256").update(raw).digest("hex"),
+      revision: gray.grayDraft.revision ?? gray.revision ?? null,
+      handedOffAt: new Date().toISOString(),
+    },
+  };
+}
+
 /** 阶段提示词。只描述当前阶段与停止条件，不写任何页级答案——那属于任务目录，不属于通用规则。 */
 const BASE_PROMPT = [
   "你是 PPagenT 生成线的一个编排 Agent。所有持久状态由工具保存，你只通过调用工具改变状态。",
@@ -116,8 +145,14 @@ const PHASE_PROMPT = {
   ].join("\n"),
   visual: [
     "视觉阶段：先 read_catalog 读取可用版式与能力，再逐页决定区域与上屏表达。",
+    "read_catalog.visualFeedback 是本轮用户视觉修订要求，优先按它修订 currentPlan；不得为通过技术检查删除用户明确要求的视觉特征。",
+    "续跑先看 artifact.reusable：所有页为 true 时立即 finish_visual。已有完整 currentPlan（灰稿各组都有 layout）且未通过构建时，先 check_pages 获取具体问题；不要无故重写方案和检索结构。仅按具体失败修订受影响部分。",
+    "expressionRequirements 包括文字组内部的图示要求；外层 kind=text 不代表整组只能排文字。必须保留内部图示的关系、来源标签、范围和条件。现有工具无法表达时报告能力缺口，不得用纯文字替代。",
+    "灰稿交接必须使用 component-gray-regions，保留全部既定分区；textSlots 为空，文字自动按原文原区渲染。structure.sourceLocation 精确引用一个 expressionRequirements.location，sourceItemIds 仅包含该区所属 itemId。不能吞并其他文字区。当前接口只支持一个图示区，多图示页报告能力缺口。",
     "check_pages 会真的构建 PPT 并回报真实几何与字号问题；只对改过的页重复检查。",
-    "全部页面当前版本通过后调用 finish_visual；存在经验提示时必须逐页给出理由。",
+    "灰稿的 regions 是内容归属与大致区域，不是成稿皮肤。每组必须提交 regionVisuals.layout：按 Skin 风格决定标题和正文块的 frame、字体角色、字号、颜色、对齐、行距，英文衬字可选，自主组合 decorations 的原生形状与填色/线条渐变；不得只选择框预设。可微调 layout.frame 但保留上下/左右归属。所有 textSources 逐块绑定，原文自动回填。字号单位为画布 px，不是 pt，16 px=12 pt。",
+    "structureFrame 是图示所属组的局部占位，不得侵占正文，按内容和容量分配足够空间。已有 currentPlan.structure 可复用；没有关系/容量问题无需更换结构。英文仅翻译标题，大学偏好粗宋深蓝标题、Times New Roman 淡衬字和轻渐变框线；其他 Skin 遵循自身提示而非照搬。标题英文可有意叠合，正文和结构不得重叠。",
+    "全部页面当前版本通过后立即调用 finish_visual；没有 warnings 时 warningDecisions=[]，不要再次检索结构或改写已通过方案。有 warnings 时逐页给出不超过200字的简短理由。",
   ].join("\n"),
 };
 
@@ -200,24 +235,38 @@ export async function main(argv = process.argv.slice(2), { observer = null } = {
   const maxTurns = Number.parseInt(args["max-turns"] ?? "12", 10);
 
   if (!resume && !replay) {
-    if (!args.input) throw new Error("必须指定 --input（或使用 --resume / --replay）");
     try {
       await fs.access(statePath);
       throw new Error(`运行目录已有 state.json：${runDir}。请换新目录，或用 --resume 续跑。`);
     } catch (error) {
       if (error.code !== "ENOENT") throw error;
     }
+    if (args["gray-state"]) {
+      const imported = await loadGrayState({ grayStatePath: args["gray-state"], rootDir: root, skinId: args.skin ?? "northeastern-university-001" });
+      if (args.pages) {
+        const selected = String(args.pages).split(',');
+        if (selected.some(id => !imported.pages.some(page => page.pageId === id))) throw new Error('--pages 包含未知灰稿 pageId');
+        imported.pages = imported.pages.filter(page => selected.includes(page.pageId));
+        imported.grayInput.selectedPageIds = imported.pages.map(page => page.pageId);
+      }
+      await fs.mkdir(path.dirname(statePath), { recursive: true });
+      await writeState(statePath, imported);
+      await writeText(path.join(runDir, "state.md"), renderStateMarkdown(imported));
+      await writeText(path.join(runDir, "content.md"), renderContentMarkdown(imported));
+    } else if (!args.input) throw new Error("必须指定 --input（或使用 --gray-state / --resume / --replay）");
   }
   await fs.mkdir(runDir, { recursive: true });
   // replay 直接读，不走 loadOrInitState：那条路会清掉 runtimeFailure / lastStop，
   // 而重编译只该重编译，不该改写运行记录。
   let state = replay
     ? await readState(statePath)
-    : await loadOrInitState({
+    : (args["gray-state"]
+      ? await readState(statePath)
+      : await loadOrInitState({
       statePath,
       inputPath: args.input ? path.resolve(root, args.input) : null,
       resume,
-    });
+    }));
 
   const committer = createCommitter({ statePath });
   // 每次启动都从 state.json 重渲染 state.md / content.md：它们是派生产物，可能与 state.json 漂移
@@ -283,7 +332,7 @@ export async function main(argv = process.argv.slice(2), { observer = null } = {
     }
     const phaseStartedAt = Date.now();
     // 规则在进阶段前加载：加载失败就不该开始这一阶段（loadRules 自身失败关闭）。
-    const rulesText = await phaseRulesText(root, phase);
+    const rulesText = await phaseRulesText(root, phase, state.skinId ?? northeasternUniversitySkin.id);
     const summary = await runPhase({ phase, statePath, runDir, provider, maxTurns, tools: toolsFor(phase), observer, rulesText });
     phases.push(summary);
     state = await readState(statePath);

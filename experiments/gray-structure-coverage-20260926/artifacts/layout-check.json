@@ -1,0 +1,1383 @@
+{
+  "accepted": true,
+  "issues": [],
+  "coverage": "来源引用、数字/引号保真、区域边界/重叠、固定字号保守容量；不证明语义忠实或视觉美观。",
+  "receipts": [
+    {
+      "pageId": "p1",
+      "composition": {
+        "groupId": "p1-g1"
+      },
+      "bodyFrame": {
+        "left": 0,
+        "top": 0,
+        "width": 1170,
+        "height": 492
+      },
+      "regions": {
+        "p1-g1": {
+          "left": 0,
+          "top": 0,
+          "width": 1170,
+          "height": 492
+        }
+      },
+      "contracts": {
+        "p1-g1": {
+          "minWidth": 1170,
+          "minHeight": 321
+        }
+      },
+      "style": {
+        "gap": 24,
+        "innerGap": 24
+      }
+    },
+    {
+      "pageId": "p2",
+      "composition": {
+        "op": "row",
+        "children": [
+          {
+            "groupId": "p2-g1"
+          },
+          {
+            "groupId": "p2-g2"
+          }
+        ]
+      },
+      "bodyFrame": {
+        "left": 0,
+        "top": 0,
+        "width": 1170,
+        "height": 492
+      },
+      "regions": {
+        "p2-g1": {
+          "left": 0,
+          "top": 0,
+          "width": 573,
+          "height": 492
+        },
+        "p2-g2": {
+          "left": 597,
+          "top": 0,
+          "width": 573,
+          "height": 492
+        }
+      },
+      "contracts": {
+        "p2-g1": {
+          "minWidth": 573,
+          "minHeight": 235
+        },
+        "p2-g2": {
+          "minWidth": 573,
+          "minHeight": 235
+        }
+      },
+      "style": {
+        "gap": 24,
+        "innerGap": 24
+      }
+    },
+    {
+      "pageId": "p3",
+      "composition": {
+        "op": "column",
+        "children": [
+          {
+            "groupId": "p3-g1"
+          },
+          {
+            "groupId": "p3-g2"
+          }
+        ]
+      },
+      "bodyFrame": {
+        "left": 0,
+        "top": 0,
+        "width": 1170,
+        "height": 492
+      },
+      "regions": {
+        "p3-g1": {
+          "left": 0,
+          "top": 0,
+          "width": 1170,
+          "height": 263.5
+        },
+        "p3-g2": {
+          "left": 0,
+          "top": 287.5,
+          "width": 1170,
+          "height": 204.5
+        }
+      },
+      "contracts": {
+        "p3-g1": {
+          "minWidth": 1170,
+          "minHeight": 205
+        },
+        "p3-g2": {
+          "minWidth": 1170,
+          "minHeight": 146
+        }
+      },
+      "style": {
+        "gap": 24,
+        "innerGap": 24
+      }
+    },
+    {
+      "pageId": "p4",
+      "composition": {
+        "op": "column",
+        "children": [
+          {
+            "groupId": "p4-g1"
+          },
+          {
+            "groupId": "p4-g2"
+          }
+        ]
+      },
+      "bodyFrame": {
+        "left": 0,
+        "top": 0,
+        "width": 1170,
+        "height": 492
+      },
+      "regions": {
+        "p4-g1": {
+          "left": 0,
+          "top": 0,
+          "width": 1170,
+          "height": 189.5
+        },
+        "p4-g2": {
+          "left": 0,
+          "top": 213.5,
+          "width": 1170,
+          "height": 278.5
+        }
+      },
+      "contracts": {
+        "p4-g1": {
+          "minWidth": 1170,
+          "minHeight": 116
+        },
+        "p4-g2": {
+          "minWidth": 1170,
+          "minHeight": 205
+        }
+      },
+      "style": {
+        "gap": 24,
+        "innerGap": 24
+      }
+    },
+    {
+      "pageId": "p5",
+      "composition": {
+        "op": "row",
+        "children": [
+          {
+            "groupId": "p5-g1"
+          },
+          {
+            "op": "column",
+            "children": [
+              {
+                "groupId": "p5-g2"
+              },
+              {
+                "groupId": "p5-g3"
+              }
+            ]
+          }
+        ],
+        "weights": [
+          3,
+          2
+        ]
+      },
+      "bodyFrame": {
+        "left": 0,
+        "top": 0,
+        "width": 1170,
+        "height": 492
+      },
+      "regions": {
+        "p5-g1": {
+          "left": 0,
+          "top": 0,
+          "width": 687.4,
+          "height": 492
+        },
+        "p5-g2": {
+          "left": 711.4,
+          "top": 0,
+          "width": 458.6,
+          "height": 293.5
+        },
+        "p5-g3": {
+          "left": 711.4,
+          "top": 317.5,
+          "width": 458.6,
+          "height": 174.5
+        }
+      },
+      "contracts": {
+        "p5-g1": {
+          "minWidth": 687.4,
+          "minHeight": 272
+        },
+        "p5-g2": {
+          "minWidth": 458.6,
+          "minHeight": 265
+        },
+        "p5-g3": {
+          "minWidth": 458.6,
+          "minHeight": 146
+        }
+      },
+      "style": {
+        "gap": 24,
+        "innerGap": 24
+      }
+    },
+    {
+      "pageId": "p6",
+      "composition": {
+        "op": "row",
+        "children": [
+          {
+            "op": "column",
+            "children": [
+              {
+                "groupId": "p6-g1"
+              },
+              {
+                "groupId": "p6-g2"
+              }
+            ]
+          },
+          {
+            "groupId": "p6-g3"
+          }
+        ],
+        "weights": [
+          2,
+          3
+        ]
+      },
+      "bodyFrame": {
+        "left": 0,
+        "top": 0,
+        "width": 1170,
+        "height": 492
+      },
+      "regions": {
+        "p6-g1": {
+          "left": 0,
+          "top": 0,
+          "width": 458.6,
+          "height": 174.5
+        },
+        "p6-g2": {
+          "left": 0,
+          "top": 198.5,
+          "width": 458.6,
+          "height": 293.5
+        },
+        "p6-g3": {
+          "left": 482.6,
+          "top": 0,
+          "width": 687.4,
+          "height": 492
+        }
+      },
+      "contracts": {
+        "p6-g1": {
+          "minWidth": 458.6,
+          "minHeight": 146
+        },
+        "p6-g2": {
+          "minWidth": 458.6,
+          "minHeight": 265
+        },
+        "p6-g3": {
+          "minWidth": 687.4,
+          "minHeight": 272
+        }
+      },
+      "style": {
+        "gap": 24,
+        "innerGap": 24
+      }
+    },
+    {
+      "pageId": "p7",
+      "composition": {
+        "op": "column",
+        "children": [
+          {
+            "op": "row",
+            "children": [
+              {
+                "groupId": "p7-g1"
+              },
+              {
+                "groupId": "p7-g2"
+              }
+            ]
+          },
+          {
+            "groupId": "p7-g3"
+          }
+        ]
+      },
+      "bodyFrame": {
+        "left": 0,
+        "top": 0,
+        "width": 1170,
+        "height": 492
+      },
+      "regions": {
+        "p7-g1": {
+          "left": 0,
+          "top": 0,
+          "width": 573,
+          "height": 189.5
+        },
+        "p7-g2": {
+          "left": 597,
+          "top": 0,
+          "width": 573,
+          "height": 189.5
+        },
+        "p7-g3": {
+          "left": 0,
+          "top": 213.5,
+          "width": 1170,
+          "height": 278.5
+        }
+      },
+      "contracts": {
+        "p7-g1": {
+          "minWidth": 573,
+          "minHeight": 116
+        },
+        "p7-g2": {
+          "minWidth": 573,
+          "minHeight": 116
+        },
+        "p7-g3": {
+          "minWidth": 1170,
+          "minHeight": 205
+        }
+      },
+      "style": {
+        "gap": 24,
+        "innerGap": 24
+      }
+    },
+    {
+      "pageId": "p8",
+      "composition": {
+        "op": "column",
+        "children": [
+          {
+            "groupId": "p8-g1"
+          },
+          {
+            "op": "row",
+            "children": [
+              {
+                "groupId": "p8-g2"
+              },
+              {
+                "groupId": "p8-g3"
+              }
+            ]
+          }
+        ]
+      },
+      "bodyFrame": {
+        "left": 0,
+        "top": 0,
+        "width": 1170,
+        "height": 492
+      },
+      "regions": {
+        "p8-g1": {
+          "left": 0,
+          "top": 0,
+          "width": 1170,
+          "height": 278.5
+        },
+        "p8-g2": {
+          "left": 0,
+          "top": 302.5,
+          "width": 573,
+          "height": 189.5
+        },
+        "p8-g3": {
+          "left": 597,
+          "top": 302.5,
+          "width": 573,
+          "height": 189.5
+        }
+      },
+      "contracts": {
+        "p8-g1": {
+          "minWidth": 1170,
+          "minHeight": 205
+        },
+        "p8-g2": {
+          "minWidth": 573,
+          "minHeight": 116
+        },
+        "p8-g3": {
+          "minWidth": 573,
+          "minHeight": 116
+        }
+      },
+      "style": {
+        "gap": 24,
+        "innerGap": 24
+      }
+    },
+    {
+      "pageId": "p9",
+      "composition": {
+        "op": "row",
+        "children": [
+          {
+            "groupId": "p9-g1"
+          },
+          {
+            "groupId": "p9-g2"
+          },
+          {
+            "groupId": "p9-g3"
+          }
+        ]
+      },
+      "bodyFrame": {
+        "left": 0,
+        "top": 0,
+        "width": 1170,
+        "height": 492
+      },
+      "regions": {
+        "p9-g1": {
+          "left": 0,
+          "top": 0,
+          "width": 374,
+          "height": 492
+        },
+        "p9-g2": {
+          "left": 398,
+          "top": 0,
+          "width": 374,
+          "height": 492
+        },
+        "p9-g3": {
+          "left": 796,
+          "top": 0,
+          "width": 374,
+          "height": 492
+        }
+      },
+      "contracts": {
+        "p9-g1": {
+          "minWidth": 374,
+          "minHeight": 302
+        },
+        "p9-g2": {
+          "minWidth": 374,
+          "minHeight": 265
+        },
+        "p9-g3": {
+          "minWidth": 374,
+          "minHeight": 272
+        }
+      },
+      "style": {
+        "gap": 24,
+        "innerGap": 24
+      }
+    },
+    {
+      "pageId": "p10",
+      "composition": {
+        "op": "row",
+        "children": [
+          {
+            "groupId": "p10-g1"
+          },
+          {
+            "groupId": "p10-g2"
+          },
+          {
+            "groupId": "p10-g3"
+          }
+        ]
+      },
+      "bodyFrame": {
+        "left": 0,
+        "top": 0,
+        "width": 1170,
+        "height": 492
+      },
+      "regions": {
+        "p10-g1": {
+          "left": 0,
+          "top": 0,
+          "width": 374,
+          "height": 492
+        },
+        "p10-g2": {
+          "left": 398,
+          "top": 0,
+          "width": 374,
+          "height": 492
+        },
+        "p10-g3": {
+          "left": 796,
+          "top": 0,
+          "width": 374,
+          "height": 492
+        }
+      },
+      "contracts": {
+        "p10-g1": {
+          "minWidth": 374,
+          "minHeight": 294
+        },
+        "p10-g2": {
+          "minWidth": 374,
+          "minHeight": 302
+        },
+        "p10-g3": {
+          "minWidth": 374,
+          "minHeight": 302
+        }
+      },
+      "style": {
+        "gap": 24,
+        "innerGap": 24
+      }
+    },
+    {
+      "pageId": "p11",
+      "composition": {
+        "op": "row",
+        "children": [
+          {
+            "groupId": "p11-g1"
+          },
+          {
+            "groupId": "p11-g2"
+          },
+          {
+            "groupId": "p11-g3"
+          }
+        ]
+      },
+      "bodyFrame": {
+        "left": 0,
+        "top": 0,
+        "width": 1170,
+        "height": 492
+      },
+      "regions": {
+        "p11-g1": {
+          "left": 0,
+          "top": 0,
+          "width": 374,
+          "height": 492
+        },
+        "p11-g2": {
+          "left": 398,
+          "top": 0,
+          "width": 374,
+          "height": 492
+        },
+        "p11-g3": {
+          "left": 796,
+          "top": 0,
+          "width": 374,
+          "height": 492
+        }
+      },
+      "contracts": {
+        "p11-g1": {
+          "minWidth": 374,
+          "minHeight": 272
+        },
+        "p11-g2": {
+          "minWidth": 374,
+          "minHeight": 272
+        },
+        "p11-g3": {
+          "minWidth": 374,
+          "minHeight": 294
+        }
+      },
+      "style": {
+        "gap": 24,
+        "innerGap": 24
+      }
+    },
+    {
+      "pageId": "p12",
+      "composition": {
+        "op": "grid",
+        "columns": 2,
+        "children": [
+          {
+            "groupId": "p12-g1"
+          },
+          {
+            "groupId": "p12-g2"
+          },
+          {
+            "groupId": "p12-g3"
+          },
+          {
+            "groupId": "p12-g4"
+          }
+        ]
+      },
+      "bodyFrame": {
+        "left": 0,
+        "top": 0,
+        "width": 1170,
+        "height": 492
+      },
+      "regions": {
+        "p12-g1": {
+          "left": 0,
+          "top": 0,
+          "width": 573,
+          "height": 234
+        },
+        "p12-g2": {
+          "left": 597,
+          "top": 0,
+          "width": 573,
+          "height": 234
+        },
+        "p12-g3": {
+          "left": 0,
+          "top": 258,
+          "width": 573,
+          "height": 234
+        },
+        "p12-g4": {
+          "left": 597,
+          "top": 258,
+          "width": 573,
+          "height": 234
+        }
+      },
+      "contracts": {
+        "p12-g1": {
+          "minWidth": 573,
+          "minHeight": 116
+        },
+        "p12-g2": {
+          "minWidth": 573,
+          "minHeight": 116
+        },
+        "p12-g3": {
+          "minWidth": 573,
+          "minHeight": 116
+        },
+        "p12-g4": {
+          "minWidth": 573,
+          "minHeight": 116
+        }
+      },
+      "style": {
+        "gap": 24,
+        "innerGap": 24
+      }
+    },
+    {
+      "pageId": "p13",
+      "composition": {
+        "op": "grid",
+        "columns": 2,
+        "children": [
+          {
+            "groupId": "p13-g1"
+          },
+          {
+            "groupId": "p13-g2"
+          },
+          {
+            "groupId": "p13-g3"
+          },
+          {
+            "groupId": "p13-g4"
+          }
+        ]
+      },
+      "bodyFrame": {
+        "left": 0,
+        "top": 0,
+        "width": 1170,
+        "height": 492
+      },
+      "regions": {
+        "p13-g1": {
+          "left": 0,
+          "top": 0,
+          "width": 573,
+          "height": 234
+        },
+        "p13-g2": {
+          "left": 597,
+          "top": 0,
+          "width": 573,
+          "height": 234
+        },
+        "p13-g3": {
+          "left": 0,
+          "top": 258,
+          "width": 573,
+          "height": 234
+        },
+        "p13-g4": {
+          "left": 597,
+          "top": 258,
+          "width": 573,
+          "height": 234
+        }
+      },
+      "contracts": {
+        "p13-g1": {
+          "minWidth": 573,
+          "minHeight": 205
+        },
+        "p13-g2": {
+          "minWidth": 573,
+          "minHeight": 146
+        },
+        "p13-g3": {
+          "minWidth": 573,
+          "minHeight": 146
+        },
+        "p13-g4": {
+          "minWidth": 573,
+          "minHeight": 146
+        }
+      },
+      "style": {
+        "gap": 24,
+        "innerGap": 24
+      }
+    },
+    {
+      "pageId": "p14",
+      "composition": {
+        "op": "grid",
+        "columns": 2,
+        "children": [
+          {
+            "groupId": "p14-g1"
+          },
+          {
+            "groupId": "p14-g2"
+          },
+          {
+            "groupId": "p14-g3"
+          },
+          {
+            "groupId": "p14-g4"
+          }
+        ]
+      },
+      "bodyFrame": {
+        "left": 0,
+        "top": 0,
+        "width": 1170,
+        "height": 492
+      },
+      "regions": {
+        "p14-g1": {
+          "left": 0,
+          "top": 0,
+          "width": 573,
+          "height": 234
+        },
+        "p14-g2": {
+          "left": 597,
+          "top": 0,
+          "width": 573,
+          "height": 234
+        },
+        "p14-g3": {
+          "left": 0,
+          "top": 258,
+          "width": 573,
+          "height": 234
+        },
+        "p14-g4": {
+          "left": 597,
+          "top": 258,
+          "width": 573,
+          "height": 234
+        }
+      },
+      "contracts": {
+        "p14-g1": {
+          "minWidth": 573,
+          "minHeight": 205
+        },
+        "p14-g2": {
+          "minWidth": 573,
+          "minHeight": 205
+        },
+        "p14-g3": {
+          "minWidth": 573,
+          "minHeight": 146
+        },
+        "p14-g4": {
+          "minWidth": 573,
+          "minHeight": 146
+        }
+      },
+      "style": {
+        "gap": 24,
+        "innerGap": 24
+      }
+    },
+    {
+      "pageId": "p15",
+      "composition": {
+        "op": "grid",
+        "columns": 3,
+        "children": [
+          {
+            "groupId": "p15-g1"
+          },
+          {
+            "groupId": "p15-g2"
+          },
+          {
+            "groupId": "p15-g3"
+          },
+          {
+            "groupId": "p15-g4"
+          },
+          {
+            "groupId": "p15-g5"
+          },
+          {
+            "groupId": "p15-g6"
+          }
+        ]
+      },
+      "bodyFrame": {
+        "left": 0,
+        "top": 0,
+        "width": 1170,
+        "height": 492
+      },
+      "regions": {
+        "p15-g1": {
+          "left": 0,
+          "top": 0,
+          "width": 374,
+          "height": 234
+        },
+        "p15-g2": {
+          "left": 398,
+          "top": 0,
+          "width": 374,
+          "height": 234
+        },
+        "p15-g3": {
+          "left": 796,
+          "top": 0,
+          "width": 374,
+          "height": 234
+        },
+        "p15-g4": {
+          "left": 0,
+          "top": 258,
+          "width": 374,
+          "height": 234
+        },
+        "p15-g5": {
+          "left": 398,
+          "top": 258,
+          "width": 374,
+          "height": 234
+        },
+        "p15-g6": {
+          "left": 796,
+          "top": 258,
+          "width": 374,
+          "height": 234
+        }
+      },
+      "contracts": {
+        "p15-g1": {
+          "minWidth": 374,
+          "minHeight": 116
+        },
+        "p15-g2": {
+          "minWidth": 374,
+          "minHeight": 116
+        },
+        "p15-g3": {
+          "minWidth": 374,
+          "minHeight": 116
+        },
+        "p15-g4": {
+          "minWidth": 374,
+          "minHeight": 146
+        },
+        "p15-g5": {
+          "minWidth": 374,
+          "minHeight": 116
+        },
+        "p15-g6": {
+          "minWidth": 374,
+          "minHeight": 146
+        }
+      },
+      "style": {
+        "gap": 24,
+        "innerGap": 24
+      }
+    },
+    {
+      "pageId": "p16",
+      "composition": {
+        "groupId": "p16-g1"
+      },
+      "bodyFrame": {
+        "left": 0,
+        "top": 0,
+        "width": 1170,
+        "height": 492
+      },
+      "regions": {
+        "p16-g1": {
+          "left": 0,
+          "top": 0,
+          "width": 1170,
+          "height": 492
+        }
+      },
+      "contracts": {
+        "p16-g1": {
+          "minWidth": 1170,
+          "minHeight": 321
+        }
+      },
+      "style": {
+        "gap": 24,
+        "innerGap": 24
+      }
+    },
+    {
+      "pageId": "p17",
+      "composition": {
+        "op": "row",
+        "children": [
+          {
+            "groupId": "p17-g1"
+          },
+          {
+            "groupId": "p17-g2"
+          }
+        ]
+      },
+      "bodyFrame": {
+        "left": 0,
+        "top": 0,
+        "width": 1170,
+        "height": 492
+      },
+      "regions": {
+        "p17-g1": {
+          "left": 0,
+          "top": 0,
+          "width": 573,
+          "height": 492
+        },
+        "p17-g2": {
+          "left": 597,
+          "top": 0,
+          "width": 573,
+          "height": 492
+        }
+      },
+      "contracts": {
+        "p17-g1": {
+          "minWidth": 573,
+          "minHeight": 263
+        },
+        "p17-g2": {
+          "minWidth": 573,
+          "minHeight": 302
+        }
+      },
+      "style": {
+        "gap": 24,
+        "innerGap": 24
+      }
+    },
+    {
+      "pageId": "p18",
+      "composition": {
+        "op": "row",
+        "children": [
+          {
+            "groupId": "p18-g1"
+          },
+          {
+            "groupId": "p18-g2"
+          }
+        ]
+      },
+      "bodyFrame": {
+        "left": 0,
+        "top": 0,
+        "width": 1170,
+        "height": 492
+      },
+      "regions": {
+        "p18-g1": {
+          "left": 0,
+          "top": 0,
+          "width": 573,
+          "height": 492
+        },
+        "p18-g2": {
+          "left": 597,
+          "top": 0,
+          "width": 573,
+          "height": 492
+        }
+      },
+      "contracts": {
+        "p18-g1": {
+          "minWidth": 573,
+          "minHeight": 293
+        },
+        "p18-g2": {
+          "minWidth": 573,
+          "minHeight": 263
+        }
+      },
+      "style": {
+        "gap": 24,
+        "innerGap": 24
+      }
+    },
+    {
+      "pageId": "p19",
+      "composition": {
+        "groupId": "p19-g1"
+      },
+      "bodyFrame": {
+        "left": 0,
+        "top": 0,
+        "width": 1170,
+        "height": 492
+      },
+      "regions": {
+        "p19-g1": {
+          "left": 0,
+          "top": 0,
+          "width": 1170,
+          "height": 492
+        }
+      },
+      "contracts": {
+        "p19-g1": {
+          "minWidth": 1170,
+          "minHeight": 235
+        }
+      },
+      "style": {
+        "gap": 24,
+        "innerGap": 24
+      }
+    },
+    {
+      "pageId": "p20",
+      "composition": {
+        "groupId": "p20-g1"
+      },
+      "bodyFrame": {
+        "left": 0,
+        "top": 0,
+        "width": 1170,
+        "height": 492
+      },
+      "regions": {
+        "p20-g1": {
+          "left": 0,
+          "top": 0,
+          "width": 1170,
+          "height": 492
+        }
+      },
+      "contracts": {
+        "p20-g1": {
+          "minWidth": 1170,
+          "minHeight": 235
+        }
+      },
+      "style": {
+        "gap": 24,
+        "innerGap": 24
+      }
+    },
+    {
+      "pageId": "p21",
+      "composition": {
+        "op": "column",
+        "children": [
+          {
+            "groupId": "p21-g1"
+          },
+          {
+            "groupId": "p21-g2"
+          },
+          {
+            "groupId": "p21-g3"
+          }
+        ]
+      },
+      "bodyFrame": {
+        "left": 0,
+        "top": 0,
+        "width": 1170,
+        "height": 492
+      },
+      "regions": {
+        "p21-g1": {
+          "left": 0,
+          "top": 0,
+          "width": 1170,
+          "height": 148
+        },
+        "p21-g2": {
+          "left": 0,
+          "top": 172,
+          "width": 1170,
+          "height": 148
+        },
+        "p21-g3": {
+          "left": 0,
+          "top": 344,
+          "width": 1170,
+          "height": 148
+        }
+      },
+      "contracts": {
+        "p21-g1": {
+          "minWidth": 1170,
+          "minHeight": 116
+        },
+        "p21-g2": {
+          "minWidth": 1170,
+          "minHeight": 116
+        },
+        "p21-g3": {
+          "minWidth": 1170,
+          "minHeight": 116
+        }
+      },
+      "style": {
+        "gap": 24,
+        "innerGap": 24
+      }
+    },
+    {
+      "pageId": "p22",
+      "composition": {
+        "op": "row",
+        "children": [
+          {
+            "groupId": "p22-g1"
+          },
+          {
+            "groupId": "p22-g2"
+          }
+        ],
+        "weights": [
+          3,
+          2
+        ]
+      },
+      "bodyFrame": {
+        "left": 0,
+        "top": 0,
+        "width": 1170,
+        "height": 492
+      },
+      "regions": {
+        "p22-g1": {
+          "left": 0,
+          "top": 0,
+          "width": 687.4,
+          "height": 492
+        },
+        "p22-g2": {
+          "left": 711.4,
+          "top": 0,
+          "width": 458.6,
+          "height": 492
+        }
+      },
+      "contracts": {
+        "p22-g1": {
+          "minWidth": 687.4,
+          "minHeight": 265
+        },
+        "p22-g2": {
+          "minWidth": 458.6,
+          "minHeight": 302
+        }
+      },
+      "style": {
+        "gap": 24,
+        "innerGap": 24
+      }
+    },
+    {
+      "pageId": "p23",
+      "composition": {
+        "op": "row",
+        "children": [
+          {
+            "groupId": "p23-g1"
+          },
+          {
+            "groupId": "p23-g2"
+          }
+        ],
+        "weights": [
+          2,
+          3
+        ]
+      },
+      "bodyFrame": {
+        "left": 0,
+        "top": 0,
+        "width": 1170,
+        "height": 492
+      },
+      "regions": {
+        "p23-g1": {
+          "left": 0,
+          "top": 0,
+          "width": 458.6,
+          "height": 492
+        },
+        "p23-g2": {
+          "left": 482.6,
+          "top": 0,
+          "width": 687.4,
+          "height": 492
+        }
+      },
+      "contracts": {
+        "p23-g1": {
+          "minWidth": 458.6,
+          "minHeight": 272
+        },
+        "p23-g2": {
+          "minWidth": 687.4,
+          "minHeight": 265
+        }
+      },
+      "style": {
+        "gap": 24,
+        "innerGap": 24
+      }
+    },
+    {
+      "pageId": "p24",
+      "composition": {
+        "op": "row",
+        "children": [
+          {
+            "groupId": "p24-g1"
+          },
+          {
+            "op": "column",
+            "children": [
+              {
+                "groupId": "p24-g2"
+              },
+              {
+                "groupId": "p24-g3"
+              }
+            ]
+          }
+        ],
+        "weights": [
+          3,
+          2
+        ]
+      },
+      "bodyFrame": {
+        "left": 0,
+        "top": 0,
+        "width": 1170,
+        "height": 492
+      },
+      "regions": {
+        "p24-g1": {
+          "left": 0,
+          "top": 0,
+          "width": 687.4,
+          "height": 492
+        },
+        "p24-g2": {
+          "left": 711.4,
+          "top": 0,
+          "width": 458.6,
+          "height": 234
+        },
+        "p24-g3": {
+          "left": 711.4,
+          "top": 258,
+          "width": 458.6,
+          "height": 234
+        }
+      },
+      "contracts": {
+        "p24-g1": {
+          "minWidth": 687.4,
+          "minHeight": 205
+        },
+        "p24-g2": {
+          "minWidth": 458.6,
+          "minHeight": 146
+        },
+        "p24-g3": {
+          "minWidth": 458.6,
+          "minHeight": 146
+        }
+      },
+      "style": {
+        "gap": 24,
+        "innerGap": 24
+      }
+    }
+  ]
+}

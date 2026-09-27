@@ -7,7 +7,7 @@
     "河道、分段和门闸共享曲线及局部法线",
     "条件标签与对应门闸关联"
   ],
-  "adaptation": "按真实阶段重切曲线并重算门闸位置；说明可放在河道外，不能把没有门槛的步骤虚构成门禁。",
+  "adaptation": "保持原朝向、排布及关系；共享入口联动调整原设计几何。大中小按实际占区约为正文区 1、1/2、1/3；文字按 Skin 允许档位测量，内容过密明确拒绝。",
   "source": "visual-intent.md",
   "exampleImplementation": "review.mjs",
   "validation": {
@@ -28,10 +28,30 @@
     ],
     "coupledChanges": "沿同一曲线切分阶段，用局部切线和法线计算分段与门闸；门禁数与真实阶段交界一致",
     "avoid": "不能把无条件的步骤套成门禁，也不能退化为普通流程卡片",
-    "status": "documented-not-implemented",
+    "status": "implemented-unreviewed",
     "sources": [
       "visual-intent.md",
       "review.mjs"
     ]
+  },
+  "implementation": {
+    "mode": "preserved-design",
+    "adapter": "shared-css-geometry",
+    "status": "implemented-unreviewed",
+    "entry": "review.mjs",
+    "sizeExamples": {
+      "large": {
+        "areaRatio": 1
+      },
+      "medium": {
+        "areaRatio": 0.5
+      },
+      "small": {
+        "areaRatio": 0.3333333333333333
+      }
+    },
+    "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+    "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+    "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
   }
 }

@@ -5,6 +5,7 @@ body { color: #344f63; background: transparent; font-family: var(--ppagent-font-
 .balance-geometry { position: absolute; inset: 0; width: 1170px; height: 492px; overflow: visible; }
 .balance-topic-kicker { position: absolute; left: 445px; top: 2px; width: 280px; height: 24px; overflow: hidden; color: #7a91a2; font-size: var(--ppagent-component-meta-size, 15pt); font-weight: 600; line-height: 24px; letter-spacing: 3px; text-align: center; }
 .balance-topic-region { position: absolute; left: 330px; top: 27px; width: 510px; height: 72px; padding: 0 12px; }
+.balance-topic-flow .ppagent-text-flow__title { min-height:1.5em; }
 .balance-topic-flow .ppagent-text-flow__title { color: #294f6b; font-size: var(--ppagent-component-title-size, 23pt); font-weight: 700; line-height: 1.2; }
 .balance-side-region { position: absolute; top: calc(var(--pan-top) + 24px); width: 328px; height: 158px; overflow: hidden; }
 .balance-side-region--left { left: 69px; }

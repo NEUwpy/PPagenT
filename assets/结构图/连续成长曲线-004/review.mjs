@@ -150,7 +150,7 @@ function labelMarkup(point, index, count, position) {
     layoutId: "heading-content-flow",
     compatibleLayoutIds: ["statement-flow", "heading-content-flow"], content: { heading: point.title, body: point.body },
     className: `milestone-copy${isLast ? " milestone-copy--last" : ""}`, align: "left", valign: "bottom", density: "compact", tone: "dark",
-  }).replace(`class="ppagent-text-region milestone-copy${isLast ? " milestone-copy--last" : ""}"`, `class="ppagent-text-region milestone-copy${isLast ? " milestone-copy--last" : ""}" style="left:${left}px;top:${top}px"`)}
+  }).replace(`class="ppagent-text-region milestone-copy${isLast ? " milestone-copy--last" : ""}"`, `class="ppagent-text-region milestone-copy${isLast ? " milestone-copy--last" : ""}" style="left:${left}px;top:${top}px;--milestone-x:${position.x}px;--milestone-y:${position.y}px"`)}
   <div class="milestone-node" style="left:${position.x - 20}px;top:${position.y - 20}px" data-ppt-kind="shape-text" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="mountain-milestone-${index + 1}">${String(index + 1).padStart(2, "0")}</div>`;
 }
 

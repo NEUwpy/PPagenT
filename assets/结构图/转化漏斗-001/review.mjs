@@ -199,24 +199,25 @@ function phaseRailPath(frame, index) {
     : `M 0 0 L ${width / 2} ${notch} L ${width} 0 L ${width} ${height - notch} L ${width / 2} ${height} L 0 ${height - notch} Z`;
 }
 
-function actionMarkup(action, phaseIndex, actionIndex) {
+function actionMarkup(action, phaseIndex, actionIndex, omitNotes = false) {
   return `<div class="funnel-action" data-action-index="${actionIndex}">
     <div class="funnel-action-icon" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="action-icon-shell-${phaseIndex}-${actionIndex}">
       ${iconSvg(action, `action-icon-${phaseIndex}-${actionIndex}`)}
     </div>
     <div class="funnel-action-copy">
       <h4 data-ppt-kind="text" data-ppt-name="action-title-${phaseIndex}-${actionIndex}">${escapeHtml(action.title)}</h4>
-      <p data-ppt-kind="text" data-ppt-name="action-body-${phaseIndex}-${actionIndex}">${escapeHtml(action.body)}</p>
+      ${omitNotes ? "" : `<p data-ppt-kind="text" data-ppt-name="action-body-${phaseIndex}-${actionIndex}">${escapeHtml(action.body)}</p>`}
     </div>
   </div>`;
 }
 
-function phaseMarkup(phase, frame, phaseIndex, hasInputs) {
+function phaseMarkup(phase, frame, phaseIndex, hasInputs, omitNotes = false, small = false) {
   const color = COLORS[Math.min(phaseIndex, COLORS.length - 1)];
   const indexLabel = String(phaseIndex + 1).padStart(2, "0");
-  const summaryMarkup = hasInputs ? textFlowMarkup({ id: `${phase.key}-summary`, field: `phases[${phaseIndex}]`, itemId: phase.key, regionId: "summary", title: phase.title, body: phase.body, className: "funnel-phase-summary", align: "left", valign: "middle", names: { title: `phase-title-${phaseIndex}`, body: `phase-body-${phaseIndex}` } }).replace('class="ppagent-text-flow funnel-phase-summary"', `class="ppagent-text-flow funnel-phase-summary" style="--top:${frame.top}px;--height:${frame.height}px"`) : "";
+  const shortLabel = small && phase.steps.length === 1;
+  const summaryMarkup = hasInputs ? textFlowMarkup({ id: `${phase.key}-summary`, field: `phases[${phaseIndex}]`, itemId: phase.key, regionId: "summary", title: phase.title, body: omitNotes ? "" : phase.body, className: "funnel-phase-summary", align: "left", valign: "middle", names: { title: `phase-title-${phaseIndex}`, body: `phase-body-${phaseIndex}` } }).replace('class="ppagent-text-flow funnel-phase-summary"', `class="ppagent-text-flow funnel-phase-summary" style="--top:${frame.top}px;--height:${frame.height}px"`) : "";
   const contentMarkup = hasInputs ? `<div class="funnel-actions" style="--top:${frame.top}px;--height:${frame.height}px" data-action-count="${phase.content.items.length}" data-slot-id="${escapeHtml(phase.key)}-content" data-slot-role="phase-content" data-slot-field="phases[${phaseIndex}].content" data-slot-item-id="${escapeHtml(phase.key)}" data-slot-content-type="text" data-slot-required="false" data-slot-text-mode="flow" data-slot-list-policy="inline" data-slot-max-chars="${LIMITS.phaseContent}" data-slot-max-lines="6">
-      ${phase.content.items.map((action, actionIndex) => actionMarkup(action, phaseIndex, actionIndex)).join("")}
+      ${phase.content.items.map((action, actionIndex) => actionMarkup(action, phaseIndex, actionIndex, omitNotes)).join("")}
     </div>` : `<div class="funnel-no-input-content" style="--top:${frame.top}px;--height:${frame.height}px;--color:${color}" data-slot-id="${escapeHtml(phase.key)}-content" data-slot-role="phase-content" data-slot-field="phases[${phaseIndex}].content" data-slot-item-id="${escapeHtml(phase.key)}" data-slot-content-type="text" data-slot-required="true" data-slot-text-mode="flow" data-slot-list-policy="inline" data-slot-max-chars="${LIMITS.phaseTitle + LIMITS.phaseBody}" data-slot-max-lines="3">
       <span class="funnel-no-input-guide" aria-hidden="true" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="phase-guide-${phaseIndex}"></span>
       <span class="funnel-no-input-divider" aria-hidden="true" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="phase-divider-${phaseIndex}"></span>
@@ -224,10 +225,10 @@ function phaseMarkup(phase, frame, phaseIndex, hasInputs) {
       <div class="funnel-no-input-copy"><h3 data-ppt-kind="text" data-ppt-name="phase-content-title-${phaseIndex}">${escapeHtml(phase.title)}</h3><p data-ppt-kind="text" data-ppt-name="phase-content-body-${phaseIndex}">${escapeHtml(phase.body)}</p></div>
     </div>`;
   return `<div class="funnel-phase-band" style="--top:${frame.top}px;--height:${frame.height}px" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="phase-band-${phaseIndex}"></div>
-    <svg class="funnel-phase-rail" style="--top:${frame.top}px;--height:${frame.height}px" viewBox="0 0 54 ${frame.height}" preserveAspectRatio="none" aria-hidden="true">
+    <svg class="funnel-phase-rail" data-phase-step-count="${phase.steps.length}" style="--top:${frame.top}px;--height:${frame.height}px" viewBox="0 0 54 ${frame.height}" preserveAspectRatio="none" aria-hidden="true">
       <path fill="${color}" d="${phaseRailPath(frame, phaseIndex)}" data-ppt-kind="path" data-ppt-name="phase-rail-${phaseIndex}"/>
     </svg>
-    <span class="funnel-phase-label" style="--top:${frame.top}px;--height:${frame.height}px" data-slot-id="${escapeHtml(phase.key)}-label" data-slot-role="phase-label" data-slot-field="phases[${phaseIndex}].label" data-slot-item-id="${escapeHtml(phase.key)}" data-slot-content-type="text" data-slot-required="true" data-slot-text-mode="single-line" data-slot-list-policy="none" data-slot-max-chars="${LIMITS.phaseLabel}" data-slot-max-lines="1" data-ppt-kind="text" data-ppt-name="phase-label-${phaseIndex}">${escapeHtml(phase.label)}</span>
+    <span class="funnel-phase-label" style="--top:${frame.top}px;--height:${frame.height}px" data-phase-step-count="${phase.steps.length}" data-slot-id="${escapeHtml(phase.key)}-label" data-slot-role="phase-label" data-slot-field="phases[${phaseIndex}].label" data-slot-item-id="${escapeHtml(phase.key)}" data-slot-content-type="text" data-slot-required="true" data-slot-text-mode="${shortLabel ? "flow" : "single-line"}" data-slot-list-policy="none" data-slot-max-chars="${LIMITS.phaseLabel}" data-slot-max-lines="${shortLabel ? 2 : 1}" data-ppt-kind="text" data-ppt-name="phase-label-${phaseIndex}">${escapeHtml(phase.label)}</span>
     ${summaryMarkup}
     ${contentMarkup}`;
 }
@@ -245,11 +246,12 @@ export const visualComponent = Object.freeze({
     maxPhaseBodyChars: LIMITS.phaseBody,
     maxPhaseContentChars: LIMITS.phaseContent,
   }),
-  renderMarkup(parameters) {
+  renderMarkup(parameters, { size } = {}) {
     const model = normalizeParameters(parameters);
     const geometry = funnelGeometry(model);
+    const omitNotes = size === "small" && model.inputs.length > 0;
     return `<section class="funnel-review" data-ppt-root data-step-count="${model.totalSteps}" data-phase-count="${model.phases.length}">
-      ${model.phases.map((phase, index) => phaseMarkup(phase, geometry.phaseFrames[index], index, model.inputs.length > 0)).join("")}
+      ${model.phases.map((phase, index) => phaseMarkup(phase, geometry.phaseFrames[index], index, model.inputs.length > 0, omitNotes, size === "small")).join("")}
       <div class="funnel-input-layer">${model.inputs.map((input, index) => inputMarkup(input, index, model.inputs.length)).join("")}</div>
       <svg class="funnel-diagram" viewBox="0 0 ${DESIGN_FRAME.width} ${DESIGN_FRAME.height}" preserveAspectRatio="none" aria-hidden="true">
         ${geometry.steps.map(stepShapeMarkup).join("")}

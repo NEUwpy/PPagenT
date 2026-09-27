@@ -1,0 +1,9 @@
+.cause-index{min-width:22px;min-height:22px}
+
+/* Keep every factor, but give the compact text the space used by the wide
+   arrow gutter in the large drawing. The dotted guides remain visible. */
+[data-preserved-size="small"] .cause-factors{right:-12px}
+[data-preserved-size="small"] .cause-factors li{padding:1px 0 0 6px;text-overflow:clip}
+[data-preserved-size="small"] .cause-index{display:none}
+[data-preserved-size="small"] .cause-heading{grid-template-columns:1fr;padding-left:8px}
+[data-preserved-size="small"] .factor-guide-line{stroke-opacity:.65}

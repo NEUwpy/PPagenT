@@ -10,9 +10,9 @@ import { universityMckinseySkin, invokeUniversityStructure } from '../src/runtim
 const root=path.resolve(import.meta.dirname,'..');
 const frame={left:0,top:0,width:1170,height:492};
 
-test('university entry rejects free redraw and unregistered designs', async()=>{
+test('university entry rejects free redraw and requires invocation evidence', async()=>{
  await assert.rejects(invokeUniversityStructure({build(){}}), /不接受自定义/);
- await assert.rejects(invokeUniversityStructure({root,assetId:'sequence-phase-gates-004'}), /尚未登记/);
+ await assert.rejects(invokeUniversityStructure({root,assetId:'sequence-phase-gates-004'}), /evidencePath/);
 });
 
 test('university preserved designs render with McKinsey roles and university theme',async()=>{

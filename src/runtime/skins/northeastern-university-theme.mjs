@@ -1,10 +1,32 @@
-import { defaultStructurePrimaryColor } from "../../visual-runtime/html-component-theme.mjs";
-
 export const northeasternUniversityTheme = Object.freeze({
-  // Source: 阶段门禁流程-004 gate-check, the structure's strongest emphasis blue.
-  primaryColor: defaultStructurePrimaryColor,
+  // Anchor to the existing university banner, not the generic structure palette.
+  // Source: runtime-template.pptx body banner, left-middle blue (#3361AE).
+  // The template currently embeds that gradient in artwork; this seed controls
+  // native body/structure accents, not a parametric recoloring of the artwork.
+  primaryColor: "#3361AE",
   background: "#FFFFFF",
   surface: "#FFFFFF",
+  regionSurface: "#F1F5FB",
+  headingSurface: "#E7EEF9",
+  line: "#C9D7ED",
+  layoutStyle: "mckinsey",
+  regionAccent: "#244A73",
+  regionHeadingFont: "汉仪粗宋简",
+  regionEnglishFont: "Times New Roman",
+  regionTitlePair: Object.freeze({fontSize:24,lineHeight:1.1,englishOffsetY:6}),
+  structureFinish: "academic-flat",
+  regionEnglish: "#E7E6E6",
+  regionOutline: "#B4C9E8",
+  regionGradientStart: "#F0F5FC",
+  // Compiled from 大学Skin设计提示词-v1.md: hierarchy first, light-blue
+  // local grouping, and a restrained side rule instead of card walls.
+  grayRegionTreatment: Object.freeze({
+    heading: 'academic-reference',
+    body: 'side-rule-text',
+    surface: 'local-group',
+    bodyInset: 20,
+    headingInset: 16,
+  }),
   dark: "#2B2B2B",
   body: "#404040",
   muted: "#6F6F6F",

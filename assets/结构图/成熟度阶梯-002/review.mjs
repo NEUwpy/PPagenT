@@ -135,12 +135,12 @@ export const visualComponent = Object.freeze({
   },
 });
 
-export function renderAdaptiveMarkup(parameters, { frame = FRAME, theme = {} } = {}) {
+export function renderAdaptiveMarkup(parameters, { frame = FRAME, theme = {}, sizeScale = 1 } = {}) {
   const {levels,showStatus,currentIndex,targetIndex}=normalize(parameters);
   const original=solveLayout(levels.length);
-  const fit=fitPreservedDesign(frame);
+  const fit=fitPreservedDesign(frame.height < FRAME.height ? {...frame,height:frame.height-24} : frame);
   const s=fit.scale;
-  const type=preservedTypography(s,theme),a=type.accessoryScale;
+  const type=preservedTypography(Math.min(s,sizeScale),theme),a=type.accessoryScale;
   const layout={...original,scale:s,accessoryScale:a,statusWidth:s<1?type.sizes.componentMeta*4/3*2+18*a:undefined,rise:original.rise*s,treadWidth:original.treadWidth*s,
     projectDepth:p=>fit.point(projectDepth({x:(p.x-fit.left)/s,y:(p.y-fit.top)/s})),
     copyFrames:levels.map((_,index)=>{
@@ -150,7 +150,7 @@ export function renderAdaptiveMarkup(parameters, { frame = FRAME, theme = {} } =
       return {copyWidth,left:center.x-copyWidth/2,top:center.y-(140-f.height)*s-height,height};
     }),
     steps:original.steps.map(step=>({...step,frontLeft:fit.point(step.frontLeft),frontRight:fit.point(step.frontRight),backLeft:fit.point(step.backLeft),backRight:fit.point(step.backRight),center:fit.point(step.center),top:step.top.map(fit.point)}))};
-  return `<section class="maturity-ladder" data-ppt-root data-level-count="${levels.length}" data-show-status="${showStatus}" style="width:${frame.width}px;height:${frame.height}px;${type.css}"><style>.maturity-ladder .level-copy{padding:${10*a}px ${13*a}px ${(s<1?18:9)*a}px}.maturity-ladder .status-tag{padding:${2*a}px ${9*a}px;border-radius:${13*a}px}</style><svg class="ladder-art" viewBox="0 0 ${frame.width} ${frame.height}">${levels.map((_,index)=>levelSupportMarkup(index,layout)).join('')}${staircaseMarkup(layout)}</svg>${levels.map((level,index)=>levelMarkup(level,index,layout)).join('')}${showStatus?statusMarkup(layout,currentIndex,targetIndex):''}</section>`;
+  return `<section class="maturity-ladder" data-ppt-root data-level-count="${levels.length}" data-show-status="${showStatus}" style="width:${frame.width}px;height:${frame.height}px;${type.css}"><style>${s<1?'.maturity-ladder .level-copy .ppagent-text-layout{gap:2px}.maturity-ladder .level-copy .ppagent-text-primitive--body{line-height:1.1;text-wrap:balance}':''}.maturity-ladder .level-copy{padding:${(s<1?6:10)*a}px ${(s<1?4:13)*a}px ${(s<1?5:9)*a}px}.maturity-ladder .status-tag{padding:${2*a}px ${9*a}px;border-radius:${13*a}px}</style><svg class="ladder-art" viewBox="0 0 ${frame.width} ${frame.height}">${levels.map((_,index)=>levelSupportMarkup(index,layout)).join('')}${staircaseMarkup(layout)}</svg>${levels.map((level,index)=>levelMarkup(level,index,layout)).join('')}${showStatus?statusMarkup(layout,currentIndex,targetIndex):''}</section>`;
 }
 
 export const previewParameters = Object.freeze({ levels: [

@@ -35,12 +35,17 @@ node src/tools/load-rules.mjs --profile generation --skin neutral-editorial-001
 # 首次运行：读原稿建 state，跑完内容阶段与视觉阶段
 node src/runner/run.mjs --input harness/runs/<任务名>/原稿.md --run-dir harness/runs/<任务名>
 
+# 灰稿交接：复制既有灰稿状态，直接进入 visual 阶段
+node src/runner/run.mjs --gray-state experiments/<灰稿运行>/artifacts/state.json --run-dir harness/runs/<任务名>
+
 # 中断续跑：不重做已冻结的页面
 node src/runner/run.mjs --run-dir harness/runs/<任务名> --resume
 
 # 零模型重编译交付物（用于验证确定性，不调用模型）
 node src/runner/run.mjs --run-dir harness/runs/<任务名> --replay
 ```
+
+`--gray-state` 会记录灰稿源文件的 SHA-256，并保留原页面、关系、区域与人工审阅状态；它不会重新执行内容阶段，也不会把灰稿待验收改成通过。当前结构能力与中性 Skin 仍在接入中，未接通前不得用纯文本降级冒充完整美化。
 
 阶段闸门由**工具写下的状态字段**驱动，不由模型自述完成：内容阶段以 `finish_content` 冻结
 （来源有遗漏即拒绝），视觉阶段以 `finish_visual` 收尾（每页必须是当前版本已通过）。

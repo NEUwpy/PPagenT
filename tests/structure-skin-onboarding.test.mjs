@@ -15,7 +15,7 @@ test('candidate Skin uses the shared converter without a neutral id',()=>{
 test('capabilities do not promote full page or all sizes from preview approval',()=>{
  const asset={id:'convergence-many-to-one-003',status:'core',userApprovedHtmlNative:true};
  const s=structureCapabilityStatus(asset,'new-skin');
- assert.equal(s.color,'换色待审阅');assert.deepEqual(s.sizes,['large']);assert.match(s.wholePage,/未逐项登记/);
+ assert.equal(s.color,'换色待审阅');assert.deepEqual(s.sizes,['large','medium','small']);assert.match(s.wholePage,/未逐项登记/);
  assert.deepEqual(structureCapabilityStatus({...asset,id:'convergence-simple-funnel-001'},'neutral').sizes,['large','medium','small']);
 });
 test('dark brand seeds derive a light canvas without changing the paper palette',()=>{

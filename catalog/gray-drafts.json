@@ -1,0 +1,432 @@
+{
+  "schemaVersion": "ppa-gray-draft-catalog-1",
+  "drafts": [
+    {
+      "id": "gray-coverage-20260926",
+      "title": "灰稿版式",
+      "description": "一个可交接的模拟灰稿中间产物；内部覆盖上下分区、复合分区、网格、局部嵌入等版式和 18 类结构关系。",
+      "sourceLabel": "模拟中间产物 · 当前线实验",
+      "versionLabel": "当前模拟版",
+      "statePath": "experiments/gray-structure-coverage-20260926/artifacts/state.json",
+      "beautification": {
+        "title": "正式灰稿到双 Skin 生成结果",
+        "status": "awaiting-user-review",
+        "artifactsDirectory": "harness",
+        "workflowEvidence": true,
+        "sourceRun": "harness/runs/20260927-gray-to-skin-formal-university-v2",
+        "pages": [
+          {
+            "page": 1,
+            "pageId": "p1",
+            "title": "证据支撑判断",
+            "skins": {
+              "neutral": {
+                "label": "中性 Skin · 01 新版",
+                "preview": "runs/20260927-p1-nested-expression-v1/neutral/qa/slide-02.png",
+                "pptx": "runs/20260927-p1-nested-expression-v1/neutral/deck.pptx"
+              },
+              "university": {
+                "label": "东北大学 Skin · 01 新版",
+                "preview": "runs/20260927-p1-nested-expression-v1/qa/slide-02.png",
+                "pptx": "runs/20260927-p1-nested-expression-v1/deck.pptx"
+              }
+            },
+            "sourceRun": "harness/runs/20260927-p1-nested-expression-v1"
+          },
+          {
+            "page": 2,
+            "pageId": "p2",
+            "title": "同口径比较",
+            "skins": {
+              "neutral": {
+                "label": "中性 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-neutral-v2/qa/slide-03.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-neutral-v2/deck.pptx"
+              },
+              "university": {
+                "label": "东北大学 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-university-v2/qa/slide-03.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-university-v2/deck.pptx"
+              }
+            }
+          },
+          {
+            "page": 3,
+            "pageId": "p3",
+            "title": "完整办理顺序",
+            "skins": {
+              "neutral": {
+                "label": "中性 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-neutral-v2/qa/slide-04.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-neutral-v2/deck.pptx"
+              },
+              "university": {
+                "label": "东北大学 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-university-v2/qa/slide-04.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-university-v2/deck.pptx"
+              }
+            }
+          },
+          {
+            "page": 4,
+            "pageId": "p4",
+            "title": "能力逐级提升",
+            "skins": {
+              "neutral": {
+                "label": "中性 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-neutral-v2/qa/slide-05.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-neutral-v2/deck.pptx"
+              },
+              "university": {
+                "label": "东北大学 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-university-v2/qa/slide-05.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-university-v2/deck.pptx"
+              }
+            }
+          },
+          {
+            "page": 5,
+            "pageId": "p5",
+            "title": "按条件分流",
+            "skins": {
+              "neutral": {
+                "label": "中性 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-neutral-v2/qa/slide-06.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-neutral-v2/deck.pptx"
+              },
+              "university": {
+                "label": "东北大学 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-university-v2/qa/slide-06.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-university-v2/deck.pptx"
+              }
+            }
+          },
+          {
+            "page": 6,
+            "pageId": "p6",
+            "title": "改进闭环",
+            "skins": {
+              "neutral": {
+                "label": "中性 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-neutral-v2/qa/slide-07.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-neutral-v2/deck.pptx"
+              },
+              "university": {
+                "label": "东北大学 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-university-v2/qa/slide-07.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-university-v2/deck.pptx"
+              }
+            }
+          },
+          {
+            "page": 7,
+            "pageId": "p7",
+            "title": "多源汇聚",
+            "skins": {
+              "neutral": {
+                "label": "中性 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-neutral-v2/qa/slide-08.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-neutral-v2/deck.pptx"
+              },
+              "university": {
+                "label": "东北大学 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-university-v2/qa/slide-08.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-university-v2/deck.pptx"
+              }
+            }
+          },
+          {
+            "page": 8,
+            "pageId": "p8",
+            "title": "问题措施结果",
+            "skins": {
+              "neutral": {
+                "label": "中性 Skin · 08 风格适配版",
+                "preview": "runs/20260927-p8-preserved-regions-v1/rerender-style-v2-neutral/qa/slide-02.png",
+                "pptx": "runs/20260927-p8-preserved-regions-v1/rerender-style-v2-neutral/deck.pptx"
+              },
+              "university": {
+                "label": "东北大学 Skin · 08 统一标题·分区底色",
+                "preview": "runs/20260928-p8-unified-titles-v1/qa/slide-02.png",
+                "pptx": "runs/20260928-p8-unified-titles-v1/deck.pptx"
+              }
+            },
+            "sourceRun": "harness/runs/20260928-p8-unified-titles-v1"
+          },
+          {
+            "page": 9,
+            "pageId": "p9",
+            "title": "基础与应用",
+            "skins": {
+              "neutral": {
+                "label": "中性 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-neutral-v2/qa/slide-10.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-neutral-v2/deck.pptx"
+              },
+              "university": {
+                "label": "东北大学 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-university-v2/qa/slide-10.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-university-v2/deck.pptx"
+              }
+            }
+          },
+          {
+            "page": 10,
+            "pageId": "p10",
+            "title": "责任逐层展开",
+            "skins": {
+              "neutral": {
+                "label": "中性 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-neutral-v2/qa/slide-11.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-neutral-v2/deck.pptx"
+              },
+              "university": {
+                "label": "东北大学 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-university-v2/qa/slide-11.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-university-v2/deck.pptx"
+              }
+            }
+          },
+          {
+            "page": 11,
+            "pageId": "p11",
+            "title": "中心协调",
+            "skins": {
+              "neutral": {
+                "label": "中性 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-neutral-v2/qa/slide-12.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-neutral-v2/deck.pptx"
+              },
+              "university": {
+                "label": "东北大学 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-university-v2/qa/slide-12.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-university-v2/deck.pptx"
+              }
+            }
+          },
+          {
+            "page": 12,
+            "pageId": "p12",
+            "title": "四项并行准备",
+            "skins": {
+              "neutral": {
+                "label": "中性 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-neutral-v2/qa/slide-13.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-neutral-v2/deck.pptx"
+              },
+              "university": {
+                "label": "东北大学 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-university-v2/qa/slide-13.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-university-v2/deck.pptx"
+              }
+            }
+          },
+          {
+            "page": 13,
+            "pageId": "p13",
+            "title": "事项优先级",
+            "skins": {
+              "neutral": {
+                "label": "中性 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-neutral-v2/qa/slide-14.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-neutral-v2/deck.pptx"
+              },
+              "university": {
+                "label": "东北大学 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-university-v2/qa/slide-14.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-university-v2/deck.pptx"
+              }
+            }
+          },
+          {
+            "page": 14,
+            "pageId": "p14",
+            "title": "区分两条原因链",
+            "skins": {
+              "neutral": {
+                "label": "中性 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-neutral-v2/qa/slide-15.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-neutral-v2/deck.pptx"
+              },
+              "university": {
+                "label": "东北大学 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-university-v2/qa/slide-15.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-university-v2/deck.pptx"
+              }
+            }
+          },
+          {
+            "page": 15,
+            "pageId": "p15",
+            "title": "目标与行动",
+            "skins": {
+              "neutral": {
+                "label": "中性 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-neutral-v2/qa/slide-16.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-neutral-v2/deck.pptx"
+              },
+              "university": {
+                "label": "东北大学 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-university-v2/qa/slide-16.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-university-v2/deck.pptx"
+              }
+            }
+          },
+          {
+            "page": 16,
+            "pageId": "p16",
+            "title": "试点范围边界",
+            "skins": {
+              "neutral": {
+                "label": "中性 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-neutral-v2/qa/slide-17.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-neutral-v2/deck.pptx"
+              },
+              "university": {
+                "label": "东北大学 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-university-v2/qa/slide-17.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-university-v2/deck.pptx"
+              }
+            }
+          },
+          {
+            "page": 17,
+            "pageId": "p17",
+            "title": "一个分支内使用结构",
+            "skins": {
+              "neutral": {
+                "label": "中性 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-neutral-v2/qa/slide-18.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-neutral-v2/deck.pptx"
+              },
+              "university": {
+                "label": "东北大学 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-university-v2/qa/slide-18.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-university-v2/deck.pptx"
+              }
+            }
+          },
+          {
+            "page": 18,
+            "pageId": "p18",
+            "title": "两个分支分别图示",
+            "skins": {
+              "neutral": {
+                "label": "中性 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-neutral-v2/qa/slide-19.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-neutral-v2/deck.pptx"
+              },
+              "university": {
+                "label": "东北大学 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-university-v2/qa/slide-19.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-university-v2/deck.pptx"
+              }
+            }
+          },
+          {
+            "page": 19,
+            "pageId": "p19",
+            "title": "多角色跨阶段协作",
+            "skins": {
+              "neutral": {
+                "label": "中性 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-neutral-v2/qa/slide-20.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-neutral-v2/deck.pptx"
+              },
+              "university": {
+                "label": "东北大学 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-university-v2/qa/slide-20.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-university-v2/deck.pptx"
+              }
+            }
+          },
+          {
+            "page": 20,
+            "pageId": "p20",
+            "title": "协作网络",
+            "skins": {
+              "neutral": {
+                "label": "中性 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-neutral-v2/qa/slide-21.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-neutral-v2/deck.pptx"
+              },
+              "university": {
+                "label": "东北大学 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-university-v2/qa/slide-21.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-university-v2/deck.pptx"
+              }
+            }
+          },
+          {
+            "page": 21,
+            "pageId": "p21",
+            "title": "三层保障",
+            "skins": {
+              "neutral": {
+                "label": "中性 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-neutral-v2/qa/slide-22.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-neutral-v2/deck.pptx"
+              },
+              "university": {
+                "label": "东北大学 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-university-v2/qa/slide-22.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-university-v2/deck.pptx"
+              }
+            }
+          },
+          {
+            "page": 22,
+            "pageId": "p22",
+            "title": "趋势与解释",
+            "skins": {
+              "neutral": {
+                "label": "中性 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-neutral-v2/qa/slide-23.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-neutral-v2/deck.pptx"
+              },
+              "university": {
+                "label": "东北大学 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-university-v2/qa/slide-23.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-university-v2/deck.pptx"
+              }
+            }
+          },
+          {
+            "page": 23,
+            "pageId": "p23",
+            "title": "表格型对应",
+            "skins": {
+              "neutral": {
+                "label": "中性 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-neutral-v2/qa/slide-24.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-neutral-v2/deck.pptx"
+              },
+              "university": {
+                "label": "东北大学 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-university-v2/qa/slide-24.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-university-v2/deck.pptx"
+              }
+            }
+          },
+          {
+            "page": 24,
+            "pageId": "p24",
+            "title": "图像与说明",
+            "skins": {
+              "neutral": {
+                "label": "中性 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-neutral-v2/qa/slide-25.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-neutral-v2/deck.pptx"
+              },
+              "university": {
+                "label": "东北大学 Skin",
+                "preview": "runs/20260927-gray-to-skin-formal-university-v2/qa/slide-25.png",
+                "pptx": "runs/20260927-gray-to-skin-formal-university-v2/deck.pptx"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

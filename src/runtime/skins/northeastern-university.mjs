@@ -284,6 +284,7 @@ export async function renderNortheasternUniversityDeck({
         page.composition,
         northeasternUniversitySkin.bodyFrame,
         northeasternUniversitySkin.typographyRoles,
+        northeasternUniversitySkin.componentTheme,
       );
       if (!await isSkinOnlyAsset(page.payload.assetId, root)) {
         if (!componentFrame) throw new Error(`${page.composition.compositionId} is missing a component slot`);

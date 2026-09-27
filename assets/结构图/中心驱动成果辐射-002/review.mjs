@@ -103,14 +103,14 @@ export const visualComponent = Object.freeze({
     maxPointsPerItem: 0,
   }),
   textFlow: Object.freeze({ profile: "text-region-layout-library", scope: "per-contiguous-region" }),
-  renderMarkup(parameters) {
+  renderMarkup(parameters, { size } = {}) {
     const model = normalize(parameters);
     const geometries = model.nodes.map((_, index) => spokeGeometry(index, model.nodes.length));
     return `<section class="radial-review" data-ppt-root data-connection-mode="${model.connectionMode}" data-node-count="${model.nodes.length}">
       <svg viewBox="0 0 1170 492" aria-hidden="true"><ellipse class="radial-guide" cx="585" cy="246" rx="342" ry="158" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="radial-guide"></ellipse>${geometries.map((geometry, index) => spokeMarkup(geometry, index, model.connectionMode)).join("")}</svg>
       <div class="core-halo" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="radial-core-halo"></div><div class="core-ring" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="radial-core-ring"></div><div class="core-disc" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="radial-core-disc"></div>
       ${region({ id: "radial-center", field: "center", itemId: "center", content: model.center, className: "core-region", align: "center", names: { heading: "radial-center-title", body: "radial-center-body" } })}
-      ${model.nodes.map((node, index) => { const geometry = geometries[index]; const align = geometry.side === "left" ? "right" : geometry.side === "right" ? "left" : "center"; return `<article class="radial-node" data-side="${geometry.side}" style="left:${geometry.node.left.toFixed(1)}px;top:${geometry.node.top.toFixed(1)}px;--tone:${TONES[index]};--wash:${HALOS[index]}"><div class="node-surface" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="radial-node-surface-${index + 1}"></div><div class="node-accent" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="radial-node-accent-${index + 1}"></div>${region({ id: `radial-node-${index}`, field: `nodes[${index}]`, itemId: `node-${index}`, content: node, className: "node-region", align, names: { heading: `radial-node-${index}-title`, body: `radial-node-${index}-body` } })}</article>`; }).join("")}
+      ${model.nodes.map((node, index) => { const geometry = geometries[index]; const align = geometry.side === "left" ? "right" : geometry.side === "right" ? "left" : "center"; return `<article class="radial-node" data-side="${geometry.side}" style="left:${geometry.node.left.toFixed(1)}px;top:${geometry.node.top.toFixed(1)}px;--tone:${TONES[index]};--wash:${HALOS[index]}"><div class="node-surface" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="radial-node-surface-${index + 1}"></div><div class="node-accent" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="radial-node-accent-${index + 1}"></div>${region({ id: `radial-node-${index}`, field: `nodes[${index}]`, itemId: `node-${index}`, content: size === "small" ? { ...node, body: "" } : node, className: "node-region", align, names: { heading: `radial-node-${index}-title`, body: `radial-node-${index}-body` } })}</article>`; }).join("")}
     </section>`;
   },
 });

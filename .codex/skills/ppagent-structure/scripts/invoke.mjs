@@ -9,7 +9,7 @@ export async function invokeStructure(options) {
   await log({ event: 'attempt', executor: options.execution === 'preserved-design' ? 'structure-skill-preserved' : 'structure-skill-native' });
   try {
     const result = await executeStructureSkill(options);
-    await log({ event: 'success', nativeShapeDelta: result.nativeShapeDelta, validation: result.validation });
+    await log({ event: 'success', nativeShapeDelta: result.nativeShapeDelta, targetFrame:result.targetFrame, size:options.size, scale:options.scale, validation: result.validation });
     return result;
   } catch (error) {
     await log({ event: 'failure', message: error.message, partialOutputPossible: true });

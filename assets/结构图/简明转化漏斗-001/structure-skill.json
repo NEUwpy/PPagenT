@@ -40,10 +40,17 @@
     "counts": "沿用原实现范围；区域变化按真实文字测量拒绝溢出",
     "evidence": "experiments/structure-size-pilot/README.md",
     "sizeExamples": {
-      "L": 1,
-      "M": 0.85,
-      "S": 0.7
+      "large": {
+        "areaRatio": 1
+      },
+      "medium": {
+        "areaRatio": 0.5
+      },
+      "small": {
+        "areaRatio": 0.3333333333333333
+      }
     },
-    "typography": "既有允许档位；显式 Skin 字号优先；图标与小配件联动；容纳不下则拒绝"
+    "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+    "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
   }
 }

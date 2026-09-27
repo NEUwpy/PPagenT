@@ -34,6 +34,7 @@ body { color: #1f344f; background: transparent; font-family: var(--ppagent-font-
 .outcome-card { inset: 18px; display: grid; align-content: center; justify-items: center; padding: 14px 16px; overflow: hidden; color: #254b7c; text-align: center; background: #f4f8fd; box-shadow: 0 10px 24px rgba(47,94,168,.13); }
 .outcome-label { display: block; color: #5d83bb; font-size: var(--ppagent-component-label-size, 17pt); font-weight: 700; line-height: 1; letter-spacing: .08em; }
 .outcome-card h2 { width: 190px; max-width: 190px; margin: 9px 0 0; overflow: hidden; color: #254b7c; font-size: var(--ppagent-component-item-title-size, 21pt); font-weight: 800; line-height: 1.13; white-space: pre-line; }
+.outcome-card h2{overflow-wrap:anywhere}
 .outcome-card strong { display: block; width: 190px; max-width: 190px; margin: 7px 0 0; overflow: hidden; color: var(--ppagent-color-accent, #2f5ea8); font-size: var(--ppagent-component-heading-size, 25pt); font-weight: 800; line-height: 1.04; }
 .outcome-card p { width: 188px; max-width: 188px; max-height: 54px; margin: 8px 0 0; overflow: hidden; color: #52647a; font-size: var(--ppagent-component-label-size, 17pt); font-weight: 400; line-height: 1.25; white-space: pre-line; }
 .outcome-wrap[data-outcome-mode="title-only"] .outcome-card h2 { max-width: 168px; margin-top: 13px; font-size: var(--ppagent-component-heading-size, 29px); line-height: 1.16; }

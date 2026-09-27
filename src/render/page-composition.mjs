@@ -1,3 +1,4 @@
+import { renderGrayRegions } from "./gray-regions.mjs";
 import { addBox, addText, qaElementName } from "../asset-runtime/component-builders.mjs";
 import { resolveNormalizedFrame } from "../composition/layouts.mjs";
 import { fitChineseTextToFrame } from "./chinese-typography.mjs";
@@ -649,6 +650,7 @@ function renderDualStatement(slide, content, layout, planPage, bodyFrame, typogr
 }
 
 export function validatePageCompositionTextFit(content, layout, planPage, bodyFrame, typographyRoles) {
+  if (layout.id === "component-gray-regions") return []; // Exact section fit is checked during native rendering.
   if (["fixed-cover", "fixed-agenda", "fixed-closing"].includes(layout.id)) return [];
   // 方案结构先判：渲染器画不出来的条目，容量检查也看不见（它同样只取第一条）。
   const issues = [...planStructureIssues(layout.id, planPage)];
@@ -771,7 +773,8 @@ export function validatePageCompositionTextFit(content, layout, planPage, bodyFr
   return issues;
 }
 
-export function renderPageComposition(slide, content, layout, planPage, bodyFrame, typographyRoles) {
+export function renderPageComposition(slide, content, layout, planPage, bodyFrame, typographyRoles, theme = {}) {
+  if (layout.id === "component-gray-regions") return renderGrayRegions(slide,content,planPage,bodyFrame,typographyRoles,theme);
   if (["fixed-cover", "fixed-agenda", "fixed-closing"].includes(layout.id)) return { componentFrame: null };
   // 失败关闭：方案结构不合法就**不画**，而不是画一半再把剩下的静静丢掉。
   // check_pages 会在构建前就拦下这种方案，所以正常路径到不了这里；留这一手是防有人绕过预检直接调渲染器。

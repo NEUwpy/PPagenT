@@ -1,0 +1,48 @@
+{
+  "sectionTitle": "不足感悟",
+  "headline": "变革落地仍存三项短板，合规基础管理亦待压实",
+  "headlineEvidence": [
+    "implementation",
+    "compliance",
+    "criterion"
+  ],
+  "groupWeights": [
+    1,
+    1.1
+  ],
+  "diagrams": [
+    {
+      "groupId": "issues",
+      "blockId": "implementation",
+      "assetId": "convergence-many-to-one-003",
+      "context": "顶层设计已完成",
+      "inputs": [
+        "公司内部人力资源变革氛围尚未完全形成",
+        "信息系统支撑能力仍有差距",
+        "缺乏市场化管理机制"
+      ],
+      "result": "变革落地阻力重重",
+      "reason": "原文明确三方面条件并列作用、共同造成落地阻力，属多路独立输入直接合并为唯一结果，不涉及逐级筛选或中间归纳层，与该结构的分离输入、平滑汇聚、唯一结果三特征一致。"
+    }
+  ],
+  "detailStrips": [],
+  "reason": "三轮构建后仍被拒的只有 compliance 的同行短项，因此本版撤回 detailStrips（置空数组），不再为调用而添加内容。理由：validator 三次要求 strip 逐字保持原文顺序且不得有额外 claim，而 compliance 的四个短项嵌在「2017年巡视整改取得一定成效，也暴露人力条线基础管理薄弱：」这一完整句子之后，其对象—状态口径与该句绑定，拆成同行对象—状态必然或重复引介句、或改变归属；原文四项与引介句本就是一整段论述，拆条反而不忠实，故按「确有共同口径时整理成紧凑同行，普通长论述保持段落」的规则，让它以原段落形态呈现，四项短项一字不改地保留在正文里。其余选择保持已确认的意图与关系：issues 内嵌 convergence-many-to-one-003 汇聚图，故不使用 rail（rail 仅服务纯文字列表，不能穿过图示），由 large 列首编号承担「两点不足」两个条目的视觉锚点；insights 四点感悟为纯文字条目组，使用 rail 无箭头细阅读轴表达索引连续性，不暗示步骤或因果，图示组不设 rail。两组标题统一 wash 浅底，形成低对比连续节奏，避免与固定模板蓝色标题带重复堆叠视觉强度；rhythm 按内容量区分：issues 含汇聚结构取 natural 保持自然高度，insights 四条并列体会取 distributed，把余量还给条目之间的呼吸而非机械等高。groupGap 32 分开问题梳理与经验体会两类；sectionDivider=false，浅底标题行已提供分组边界，无需重复分隔线。事实、归属、主旨句与汇聚结构关系均未改动，正文18px、局部标题21px。",
+  "visual": {
+    "groupGap": 32,
+    "groups": [
+      {
+        "heading": "wash",
+        "id": "issues",
+        "index": "large",
+        "rhythm": "natural"
+      },
+      {
+        "heading": "wash",
+        "id": "insights",
+        "index": "rail",
+        "rhythm": "distributed"
+      }
+    ],
+    "sectionDivider": false
+  }
+}

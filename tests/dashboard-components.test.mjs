@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import test from "node:test";
 import path from "node:path";
+import { northeasternUniversityTheme } from '../src/runtime/skins/northeastern-university-theme.mjs';
 
 import {
   collectLogicDashboardData,
@@ -76,7 +77,7 @@ test("看板只把资产专属 HTML 计入迁移完成度", async () => {
   assert.equal(cycle?.nativeOutputAvailable, true);
   assert.equal(cycle?.slotContract?.resolverExport, "resolveContentSlots");
   assert.equal(data.activeSkin?.componentTheme?.typography?.componentBody, 14);
-  assert.equal(data.activeSkin?.componentTheme?.primaryColor, "#315F91");
+  assert.equal(data.activeSkin?.componentTheme?.primaryColor, northeasternUniversityTheme.primaryColor);
   assert.equal(data.activeSkin?.typographyUnit, "ppt-pt");
   assert.equal(data.activeSkin?.pptPointScale, 1);
   assert.deepEqual(data.textLayouts.map((item) => item.id), [
@@ -89,8 +90,8 @@ test("看板只把资产专属 HTML 计入迁移完成度", async () => {
   assert.equal(data.textSurfaces.length, 6);
   assert.equal(data.summary.textSurfaces, 6);
   assert.match(data.textLayoutCss, /\.ppagent-text-layout/);
-  assert.match(data.textLayoutCss, /--ppagent-color-primary:#315F91/);
-  assert.match(data.textLayoutCss, /--ppagent-color-accent:#315F91/);
+  assert.ok(data.textLayoutCss.includes(`--ppagent-color-primary:${northeasternUniversityTheme.primaryColor}`));
+  assert.ok(data.textLayoutCss.includes(`--ppagent-color-accent:${northeasternUniversityTheme.primaryColor}`));
   assert.ok(data.textLayouts.every((layout) => (
     layout.previews.length === 3
     && layout.previews[0].id === "minimum"

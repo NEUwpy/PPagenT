@@ -17,6 +17,10 @@ const POSITIONS = Object.freeze({
     right: Object.freeze([{ x: 175, y: 120, size: 82 }, { x: 115, y: 84, size: 112 }, { x: 55, y: 118, size: 88 }]),
   }),
 });
+const SMALL_THREE_POSITIONS = Object.freeze({
+  left: Object.freeze([{ x: 344, y: 130, size: 76 }, { x: 412, y: 64, size: 88 }, { x: 480, y: 130, size: 76 }]),
+  right: Object.freeze([{ x: 171, y: 130, size: 76 }, { x: 103, y: 64, size: 88 }, { x: 35, y: 130, size: 76 }]),
+});
 
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>"']/g, (character) => ({
@@ -81,20 +85,20 @@ function slotAttributes({ id, role, field, itemId, maxChars, maxLines = 1, requi
   return `data-slot-id="${id}" data-slot-role="${role}" data-slot-field="${field}" data-slot-item-id="${itemId}" data-slot-content-type="text" data-slot-required="${requiredSlot}" data-slot-text-mode="flow" data-slot-list-policy="none" data-slot-max-chars="${maxChars}" data-slot-max-lines="${maxLines}"`;
 }
 
-function itemMarkup(item, quadrantIndex, itemIndex, itemCount) {
+function itemMarkup(item, quadrantIndex, itemIndex, itemCount, size) {
   const side = quadrantIndex % 2 === 0 ? "left" : "right";
-  const position = POSITIONS[itemCount][side][itemIndex];
+  const position = (size === "small" && itemCount === 3 ? SMALL_THREE_POSITIONS : POSITIONS[itemCount])[side][itemIndex];
   const style = `--bubble-x:${position.x}px;--bubble-y:${position.y}px;--bubble-size:${position.size}px`;
   return `<article class="matrix-item item-${itemIndex}" style="${style}" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-shadow="shadow-sm" data-ppt-name="matrix-item-${quadrantIndex}-${itemIndex}">
     <h4 ${slotAttributes({ id: `${item.key}-title`, role: "item-title", field: `quadrants[${quadrantIndex}].items[${itemIndex}].title`, itemId: item.key, maxChars: LIMITS.itemTitle, maxLines: 2 })} data-ppt-kind="text" data-ppt-name="matrix-item-title-${quadrantIndex}-${itemIndex}">${escapeHtml(item.title)}</h4>
   </article>`;
 }
 
-function quadrantMarkup(quadrant, quadrantIndex, model) {
+function quadrantMarkup(quadrant, quadrantIndex, model, size) {
   return `<section class="matrix-quadrant q${quadrantIndex}${model.focusQuadrant === quadrantIndex ? " is-focus" : ""}" data-quadrant="${quadrantIndex}">
     <div class="quadrant-field" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="quadrant-field-${quadrantIndex}"></div>
     <h3 ${slotAttributes({ id: `quadrant-${quadrantIndex}-title`, role: "quadrant-title", field: `quadrants[${quadrantIndex}].title`, itemId: `quadrant-${quadrantIndex}`, maxChars: LIMITS.quadrantTitle })} data-ppt-kind="text" data-ppt-name="quadrant-title-${quadrantIndex}">${escapeHtml(quadrant.title)}</h3>
-    <div class="bubble-layer">${quadrant.items.map((item, itemIndex) => itemMarkup(item, quadrantIndex, itemIndex, quadrant.items.length)).join("")}</div>
+    <div class="bubble-layer">${quadrant.items.map((item, itemIndex) => itemMarkup(item, quadrantIndex, itemIndex, quadrant.items.length, size)).join("")}</div>
   </section>`;
 }
 
@@ -172,10 +176,10 @@ export const visualComponent = Object.freeze({
     maxItemTitleChars: LIMITS.itemTitle,
     maxItemTitleLines: 2,
   }),
-  renderMarkup(parameters) {
+  renderMarkup(parameters, options = {}) {
     const model = normalize(parameters);
     return `<section class="matrix-review" data-ppt-root data-items-per-quadrant="${model.uniformItemCount ?? "mixed"}" data-quadrant-counts="${model.itemCounts.join(",")}" data-items-q0="${model.itemCounts[0]}" data-items-q1="${model.itemCounts[1]}" data-items-q2="${model.itemCounts[2]}" data-items-q3="${model.itemCounts[3]}" data-focus-quadrant="${model.focusQuadrant}" data-definition-rail="${model.showDefinitionRail ? "on" : "off"}">
-      ${model.quadrants.map((quadrant, index) => quadrantMarkup(quadrant, index, model)).join("")}
+      ${model.quadrants.map((quadrant, index) => quadrantMarkup(quadrant, index, model, options.size)).join("")}
       ${model.quadrants.map((quadrant, index) => detailMarkup(quadrant, index, model.textLayoutBindings)).join("")}
       ${model.showDefinitionRail ? bandDefinitionsMarkup(model.axes) : ""}
       ${axesMarkup(model.axes)}

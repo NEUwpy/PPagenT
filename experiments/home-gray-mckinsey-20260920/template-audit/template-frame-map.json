@@ -1,0 +1,64 @@
+{
+  "source": "assets/主题/东北大学-001/runtime-template.pptx",
+  "outputSlides": [
+    {
+      "outputSlide": 1,
+      "sourceSlide": 3,
+      "reuseMode": "duplicate-slide",
+      "narrativeRole": "shortcomings and reflections",
+      "editTargets": [
+        {
+          "sourceText": "01",
+          "action": "replace",
+          "value": "01"
+        },
+        {
+          "sourceText": "正文页",
+          "action": "replace",
+          "field": "sectionTitle"
+        },
+        {
+          "sourceText": "主旨句",
+          "action": "replace",
+          "field": "headline"
+        },
+        {
+          "sourceText": "正文",
+          "action": "clear"
+        },
+        {
+          "name": "箭头: 下 9",
+          "action": "delete"
+        },
+        {
+          "name": "图片 10",
+          "action": "delete"
+        },
+        {
+          "action": "add",
+          "boundedZone": {
+            "left": 55,
+            "top": 166,
+            "width": 1170,
+            "height": 492
+          },
+          "reason": "Skin designated body region; original demonstration content cleared through existing recipes"
+        }
+      ]
+    }
+  ],
+  "omittedSourceSlides": [
+    {
+      "sourceSlide": 1,
+      "reason": "one representative body page only"
+    },
+    {
+      "sourceSlide": 2,
+      "reason": "one representative body page only"
+    },
+    {
+      "sourceSlide": 4,
+      "reason": "one representative body page only"
+    }
+  ]
+}

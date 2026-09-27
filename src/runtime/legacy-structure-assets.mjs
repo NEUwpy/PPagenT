@@ -29,6 +29,11 @@ export async function hasStructureAssetBuilder(assetId, variantId = null, root =
 }
 
 export async function renderStructureAsset(slide, renderPayload, skin, targetFrame = skin.bodyFrame, root = process.cwd()) {
+  if (renderPayload.execution === "preserved-design") {
+    const { loadStructureSkill, executeStructureSkill } = await import("./structure-skills.mjs");
+    const ref = await loadStructureSkill(renderPayload.assetId, root);
+    return executeStructureSkill({root, slide, targetFrame, skin: { ...skin.componentTheme, id: skin.id, bodyFrame: skin.bodyFrame }, content: renderPayload.parameters, execution: "preserved-design", references: [{assetId: ref.assetId, preservedFeatures: ref.guide.designBoundary.invariants}]});
+  }
   const resolved = await resolveStructureAsset(renderPayload, skin, targetFrame, root);
   return compileResolvedStructureAsset(slide, resolved);
 }

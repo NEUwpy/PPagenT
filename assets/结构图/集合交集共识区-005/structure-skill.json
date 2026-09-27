@@ -6,7 +6,7 @@
     "共同内容位于中央，外围图标立于圆台",
     "椭圆轨道无方向，名称位于圆台之外"
   ],
-  "adaptation": "根据主体数量重排轨道锚点与外侧标签；轨道不添加表示时间的箭头。",
+  "adaptation": "保持原朝向、排布及关系；共享入口联动调整原设计几何。大中小按实际占区约为正文区 1、1/2、1/3；文字按 Skin 允许档位测量，内容过密明确拒绝。",
   "source": "visual-intent.md",
   "exampleImplementation": "review.mjs",
   "validation": {
@@ -29,10 +29,30 @@
     ],
     "coupledChanges": "用同一场景投影计算圆台、图标脚部和轨道；前后遮挡与外侧标签同步处理",
     "avoid": "不把独立关注删成角色名，不加表示先后的箭头",
-    "status": "documented-not-implemented",
+    "status": "implemented-unreviewed",
     "sources": [
       "visual-intent.md",
       "review.mjs"
     ]
+  },
+  "implementation": {
+    "mode": "preserved-design",
+    "adapter": "shared-css-geometry",
+    "status": "implemented-unreviewed",
+    "entry": "review.mjs",
+    "sizeExamples": {
+      "large": {
+        "areaRatio": 1
+      },
+      "medium": {
+        "areaRatio": 0.5
+      },
+      "small": {
+        "areaRatio": 0.3333333333333333
+      }
+    },
+    "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+    "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+    "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
   }
 }

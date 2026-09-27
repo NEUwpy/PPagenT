@@ -15,7 +15,7 @@ body { background: #fff; color: #53657a; }
 .cycle-center-halo, .cycle-center-surface { position: absolute; border-radius: 42px; }
 .cycle-center-halo { left: 425px; top: 205px; z-index: 2; width: 320px; height: 82px; border: 2px solid #fff; background: #e9f0f8; }
 .cycle-center-surface { left: 435px; top: 215px; z-index: 3; width: 300px; height: 62px; border: 1px solid #d0deee; background: #fff; box-shadow: 0 8px 18px rgba(42, 79, 127, .10); }
-.cycle-center-content { position: absolute; left: 459px; top: 220px; z-index: 4; width: 252px; height: 52px; --ppagent-text-layout-gap: 2px; --ppagent-heading-color: #2c568c; --ppagent-text-color: #74849a; }
+.cycle-center-content { position: absolute; left: 459px; top: 220px; z-index: 4; width: 252px; height: 56px; --ppagent-text-layout-gap: 2px; --ppagent-heading-color: #2c568c; --ppagent-text-color: #74849a; }
 .cycle-center-content .ppagent-text-primitive--heading { font-size: var(--ppagent-component-title-size, 20pt); line-height: 1.08; }
 .cycle-center-content .ppagent-text-primitive--body { font-size: var(--ppagent-component-body-size, 14pt); line-height: 1.08; }
 .cycle-stage-connector { position: absolute; z-index: 2; width: 2px; border-radius: 2px; background: #b7c8dc; }

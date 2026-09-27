@@ -1,7 +1,8 @@
 import {listStructureSkins} from '../runtime/skins/structure-skin-registry.mjs';
 import { neutralEditorialTheme } from '../runtime/skins/neutral-editorial-theme.mjs';
-import { preservedComponent } from '../runtime/preserved-structure-build.mjs';
-import { preservedSizeExamples } from '../visual-runtime/preserved-design-layout.mjs';
+import { loadPreservedComponent, resolveStructureSizeFrame } from '../runtime/preserved-structure-build.mjs';
+import { loadStructureSkill } from '../runtime/structure-skills.mjs';
+import { resolveHtmlComponent } from '../visual-runtime/html-component-runtime.mjs';
 import crypto from "node:crypto";
 import { composePageLayout, pageLayoutPreview } from '../visual-runtime/page-layout-library.mjs';
 import { layoutRunEvidence, layoutRunPreview } from './layout-run-evidence.mjs';
@@ -11,7 +12,7 @@ import fs from "node:fs/promises";
 import http from "node:http";
 import path from "node:path";
 import { spawn } from "node:child_process";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { pathToFileURL } from "node:url";
 import {
   collectLogicDashboardData,
   defaultProjectRoot,
@@ -23,6 +24,8 @@ import {
 import { northeasternUniversityTheme } from "../runtime/skins/northeastern-university-theme.mjs";
 import { compileHtmlComponentTheme, htmlComponentThemeCss } from "../visual-runtime/html-component-theme.mjs";
 import { htmlTextFlowCss } from "../visual-runtime/text-flow.mjs";
+import { grayPreviewParameters, grayPreviewTitle, isGrayPreview, renderGrayPreview } from "./structure-gray-preview.mjs";
+import { resolveGrayDraftFile, resolveGraySkinFile } from './gray-draft-catalog.mjs';
 
 function option(name, fallback) {
   const index = process.argv.indexOf(name);
@@ -36,16 +39,19 @@ const templatePath = path.join(import.meta.dirname, "templates", "logic-dashboar
 const renderToolPath = path.join(import.meta.dirname, "render-pptx-evidence.mjs");
 const renderSourceToolPath = path.join(import.meta.dirname, "render-pptx-slide-evidence.mjs");
 const renderSourcePowerPointPath = path.join(import.meta.dirname, "render-pptx-slide-powerpoint.ps1");
-const dashboardServerPath = fileURLToPath(import.meta.url);
 const cacheRoot = path.join(projectRoot, ".tmp", "asset-dashboard-previews");
 const sourceCacheRoot = path.join(projectRoot, ".tmp", "asset-dashboard-source-previews");
 const nativeStateCacheRoot = path.join(projectRoot, ".tmp", "asset-dashboard-native-state-previews");
 const skinStateCacheRoot = path.join(projectRoot, ".tmp", "asset-dashboard-skin-state-previews");
 const renderJobs = new Map();
+const componentPreviewJobs = new Map();
+const componentPreviewCache = new Map();
 const renderQueue = [];
 let activeRenderCount = 0;
 const maxConcurrentRenders = 2;
 const immutablePreviewHeaders = { "cache-control": "private, max-age=31536000, immutable" };
+const componentPreviewHeaders = { "cache-control": "private, max-age=31536000, immutable" };
+const maxComponentPreviewCacheEntries = 64;
 
 if (!Number.isInteger(port) || port < 1 || port > 65535) {
   throw new Error(`invalid --port: ${port}`);
@@ -165,6 +171,13 @@ async function previewPathFor(library, assetId) {
   const outputDir = path.join(cacheRoot, cacheKey);
   const previewPath = path.join(outputDir, "slide-01.png");
   const deckStat = await fs.stat(resolved.deckPath);
+  const adjacentPreviewPath = path.join(path.dirname(resolved.deckPath), "example", "slide-01.png");
+  try {
+    const adjacentStat = await fs.stat(adjacentPreviewPath);
+    if (adjacentStat.mtimeMs >= deckStat.mtimeMs) return adjacentPreviewPath;
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
   let previewStat = null;
   try {
     previewStat = await fs.stat(previewPath);
@@ -227,6 +240,19 @@ async function loadReviewModule(resolved) {
   return import(`${pathToFileURL(resolved.entryPath).href}?dashboard=${entryStat.mtimeMs}`);
 }
 
+function rememberComponentPreview(key, html) {
+  componentPreviewCache.delete(key);
+  componentPreviewCache.set(key, html);
+  while (componentPreviewCache.size > maxComponentPreviewCacheEntries) {
+    componentPreviewCache.delete(componentPreviewCache.keys().next().value);
+  }
+}
+
+function componentPreviewCacheKey(library, assetId, searchParams, resolved, selection, skinKey, sizeKey) {
+  const version = String(resolved.record.componentVersion ?? searchParams.get("v") ?? "live");
+  return JSON.stringify([library, assetId, version, skinKey, sizeKey, selection]);
+}
+
 function resolveReviewParameters(resolved, module, selection) {
   const previewParameters = structuredClone(module[resolved.record.previewParametersExport]);
   if (!previewParameters) return null;
@@ -244,11 +270,25 @@ function resolveReviewParameters(resolved, module, selection) {
 async function componentPreviewHtml(library, assetId, searchParams) {
   const resolved = await resolveComponentPreview(projectRoot, library, assetId);
   if (!resolved) return null;
-  const module = await loadReviewModule(resolved);
-  const component = module[resolved.record.componentExport];
   const selection = selectedControls(resolved.record, searchParams);
-  const previewParameters = resolveReviewParameters(resolved, module, selection);
-  if (!component?.renderMarkup || !previewParameters) return null;
+  const skinKey = searchParams.get('skin') ?? 'university';
+  const sizeKey = searchParams.get('size') ?? 'large';
+  if (!['large','medium','small'].includes(sizeKey)) return null;
+  const selectedSkin=(await listStructureSkins(projectRoot)).find(s=>s.id===skinKey);
+  if(!selectedSkin)return null;
+  const cacheKey = componentPreviewCacheKey(library, assetId, searchParams, resolved, selection, skinKey, sizeKey);
+  const cached = componentPreviewCache.get(cacheKey);
+  if (cached) {
+    componentPreviewCache.delete(cacheKey);
+    componentPreviewCache.set(cacheKey, cached);
+    return cached;
+  }
+  if (componentPreviewJobs.has(cacheKey)) return componentPreviewJobs.get(cacheKey);
+  const job = (async () => {
+    const module = await loadReviewModule(resolved);
+    const component = module[resolved.record.componentExport];
+    const previewParameters = resolveReviewParameters(resolved, module, selection);
+    if (!component?.renderMarkup || !previewParameters) return null;
   let css = component.cssText ?? "";
   if (!css) {
     const cssPath = path.resolve(resolved.assetDir, component.cssFile ?? "component.css");
@@ -256,32 +296,33 @@ async function componentPreviewHtml(library, assetId, searchParams) {
     if (relativeCssPath.startsWith("..") || path.isAbsolute(relativeCssPath)) return null;
     css = await fs.readFile(cssPath, "utf8");
   }
-  const skinKey = searchParams.get('skin') ?? 'university';
-  const sizeKey = searchParams.get('size') ?? 'large';
-  const selectedSkin=(await listStructureSkins(projectRoot)).find(s=>s.id===skinKey);
-  if(!selectedSkin)return null;
   const theme=selectedSkin.theme;
-  const ratio = preservedSizeExamples[sizeKey];
-  const supported = typeof component.renderAdaptiveMarkup === 'function';
-  if (!ratio) return null;
-  if (skinKey !== 'university' && !(resolved.record.status === 'core' && resolved.record.userApprovedHtmlNative)) {
+  // Core assets all use the unified large/medium/small preserved-design entry.
+  // Approval remains a visual-status field; it must not hide an available
+  // component preview from the workbench.
+  const supported = resolved.record.status === 'core';
+  if (skinKey !== 'university' && resolved.record.status !== 'core') {
     return '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><body style="display:grid;place-content:center;height:90vh;font:16px sans-serif;color:#4b4a45;background:#f5f4ef">本轮只适配已审批结构；该结构不在范围内。</body></html>';
-  }
-  if (!supported && sizeKey !== 'large') {
-    return '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><body style="margin:0;display:grid;place-content:center;height:100vh;background:#f5f4ef;color:#4b4a45;font:16px sans-serif;text-align:center"><strong>此尺寸尚未适配</strong><p>当前可查看：两种 Skin · 大</p><small>不会用图片缩放代替真实尺寸适配</small></body></html>';
   }
   const canvasWidth = Number(component.designFrame?.width);
   const canvasHeight = Number(component.designFrame?.height);
-  const previewComponent = supported ? preservedComponent(component, {
-    left: 0, top: 0, width: canvasWidth * ratio, height: canvasHeight * ratio,
-  }, theme) : component;
+  const ref = supported ? await loadStructureSkill(assetId,projectRoot) : null;
+  const frame = supported ? await resolveStructureSizeFrame(ref,sizeKey,previewParameters,theme) : {width:canvasWidth,height:canvasHeight};
+  const previewComponent = supported ? await loadPreservedComponent(ref,frame,theme,previewParameters) : component;
+  css = previewComponent.cssText ?? css;
   const compiledTheme = compileHtmlComponentTheme({
     markup: previewComponent.renderMarkup(previewParameters),
     css,
     theme,
   });
-  const markup = compiledTheme.markup;
+  let markup = compiledTheme.markup;
   css = compiledTheme.css;
+  if (supported) {
+    // Preview the same measured layout that the native builder consumes.
+    const tree = await resolveHtmlComponent({ component: previewComponent, parameters: previewParameters,
+      assetDir: resolved.assetDir, theme, targetFrame: frame, includeDocument: true });
+    markup = tree.resolvedDocument.match(/<body[^>]*>([\s\S]*)<\/body>/i)[1];
+  }
   const stateLabel = (resolved.record.componentControls ?? []).map((control) => `${control.label} ${selection[control.key]}`).join(" · ");
   const designWidth = Number(component.designFrame?.width);
   const designHeight = Number(component.designFrame?.height);
@@ -291,7 +332,16 @@ html,body{margin:0!important;width:100%!important;height:100%!important;overflow
 body{position:relative!important;background:${theme.background}!important}
 .ppagent-component-viewport{position:absolute;inset:0;overflow:hidden;background:${theme.background}}
 .ppagent-component-scale{--ppagent-preview-scale:min(calc((100vw - 4px) / ${designWidth}px),calc((100vh - 4px) / ${designHeight}px));position:absolute;left:50%;top:50%;width:${designWidth}px;height:${designHeight}px;margin-left:${-designWidth / 2}px;margin-top:${-designHeight / 2}px;transform:scale(var(--ppagent-preview-scale));transform-origin:center center}
-</style></head><body><div class="ppagent-component-viewport"><div class="ppagent-component-scale"><div data-preview-size="${sizeKey}" data-preview-skin="${skinKey}" style="position:absolute;left:${canvasWidth * (1-ratio)/2}px;top:${canvasHeight * (1-ratio)/2}px;width:${canvasWidth*ratio}px;height:${canvasHeight*ratio}px">${markup}</div></div></div></body></html>`;
+</style></head><body><div class="ppagent-component-viewport"><div class="ppagent-component-scale"><div data-preview-size="${sizeKey}" data-preview-skin="${skinKey}" style="position:absolute;left:${(canvasWidth-frame.width)/2}px;top:${(canvasHeight-frame.height)/2}px;width:${frame.width}px;height:${frame.height}px">${markup}</div></div></div></body></html>`;
+  })();
+  componentPreviewJobs.set(cacheKey, job);
+  try {
+    const html = await job;
+    if (html) rememberComponentPreview(cacheKey, html);
+    return html;
+  } finally {
+    componentPreviewJobs.delete(cacheKey);
+  }
 }
 
 async function intakeSlotContractFor(library, assetId) {
@@ -390,13 +440,15 @@ async function runSkinRenderer(deckPath, outputDir) {
 async function skinStateArtifactsFor(library, assetId, searchParams) {
   const resolved = await resolveNativeStatePreview(projectRoot, library, assetId);
   if (!resolved || resolved.record.renderer === "skin") return null;
+  const size = searchParams.get("size") ?? "large";
+  const skinId = searchParams.get("skin") ?? "university";
+  if (!['large', 'medium', 'small'].includes(size) || skinId !== 'university') return null;
+  const composition = searchParams.get('composition');
+  const grayPreview = isGrayPreview(assetId, size, composition);
+  if (composition && !grayPreview) return null;
   const selection = selectedControls(resolved.record, searchParams);
   const selectionKey = JSON.stringify(selection);
-  const cacheKey = crypto.createHash("sha256").update(`northeastern-university\0${library}\0${assetId}\0${selectionKey}`).digest("hex").slice(0, 20);
-  const outputDir = path.join(skinStateCacheRoot, cacheKey);
-  const previewPath = path.join(outputDir, "slide-01.png");
-  const pptxPath = path.join(outputDir, `${assetId}.pptx`);
-  const sourcePptx = path.join(projectRoot, "PPT源", "PPT模板-封面正文尾页.pptx");
+  const sourcePptx = path.join(projectRoot, "assets", "主题", "东北大学-001", "runtime-template.pptx");
   const skinEntryPath = path.join(projectRoot, "src", "runtime", "skins", "northeastern-university.mjs");
   const cssPath = path.join(resolved.assetDir, "component.css");
   const htmlRuntimePath = path.join(projectRoot, "src", "visual-runtime", "html-component-runtime.mjs");
@@ -404,7 +456,8 @@ async function skinStateArtifactsFor(library, assetId, searchParams) {
   const textFlowPath = path.join(projectRoot, "src", "visual-runtime", "text-flow.mjs");
   const assetRuntimePath = path.join(projectRoot, "src", "runtime", "legacy-structure-assets.mjs");
   const themePath = path.join(projectRoot, "src", "runtime", "skins", "northeastern-university-theme.mjs");
-  const inputStats = await Promise.all([
+  const grayPreviewPath = path.join(projectRoot, 'src', 'tools', 'structure-gray-preview.mjs');
+  const dependencyPaths = [
     fs.stat(resolved.entryPath),
     fs.stat(resolved.runtimeEntryPath),
     fs.stat(sourcePptx),
@@ -415,15 +468,23 @@ async function skinStateArtifactsFor(library, assetId, searchParams) {
     fs.stat(textFlowPath),
     fs.stat(assetRuntimePath),
     fs.stat(themePath),
-  ]);
+  ];
+  const inputStats = await Promise.all(dependencyPaths);
+  const guideStat = resolved.record.status === 'core'
+    ? await fs.stat(path.join(resolved.assetDir, 'structure-skill.json'))
+    : null;
+  const grayStat = grayPreview ? await fs.stat(grayPreviewPath) : null;
   const inputMtime = Math.max(...inputStats.map((item) => item.mtimeMs));
-  const dashboardStat = await fs.stat(dashboardServerPath);
+  const version = JSON.stringify([resolved.record.componentVersion, ...inputStats.map((item) => [item.mtimeMs, item.size]), guideStat && [guideStat.mtimeMs, guideStat.size], grayStat && [grayStat.mtimeMs, grayStat.size]]);
+  const cacheKey = crypto.createHash("sha256").update(JSON.stringify(['northeastern-university', library, assetId, size, selectionKey, composition, version])).digest("hex").slice(0, 20);
+  const outputDir = path.join(skinStateCacheRoot, cacheKey);
+  const previewPath = path.join(outputDir, "slide-01.png");
+  const pptxPath = path.join(outputDir, `${assetId}.pptx`);
   const [previewStat, pptxStat] = await Promise.all([previewPath, pptxPath].map(async (target) => {
     try { return await fs.stat(target); } catch (error) { if (error.code === "ENOENT") return null; throw error; }
   }));
-  const needsPptx = !pptxStat || pptxStat.mtimeMs < inputMtime;
-  const needsPreview = !previewStat || needsPptx
-    || previewStat.mtimeMs < Math.max(pptxStat?.mtimeMs ?? 0, dashboardStat.mtimeMs);
+  const needsPptx = !pptxStat;
+  const needsPreview = !previewStat || needsPptx;
   if (needsPptx || needsPreview) {
     const jobKey = `skin:${cacheKey}`;
     if (!renderJobs.has(jobKey)) {
@@ -431,8 +492,9 @@ async function skinStateArtifactsFor(library, assetId, searchParams) {
         await fs.mkdir(outputDir, { recursive: true });
         if (needsPptx) {
           const reviewModule = await loadReviewModule(resolved);
-          const parameters = resolveReviewParameters(resolved, reviewModule, selection);
-          if (!parameters) throw new Error("Skin 审查参数不完整");
+          const resolvedParameters = resolveReviewParameters(resolved, reviewModule, selection);
+          if (!resolvedParameters) throw new Error("Skin 审查参数不完整");
+          const parameters = grayPreview ? grayPreviewParameters(resolvedParameters) : resolvedParameters;
           const skinStat = await fs.stat(skinEntryPath);
           const { renderNortheasternUniversityDeck } = await import(`${pathToFileURL(skinEntryPath).href}?dashboard=${skinStat.mtimeMs}`);
           const runtimeModule = await import(`${pathToFileURL(resolved.runtimeEntryPath).href}?dashboard=${inputMtime}`);
@@ -441,19 +503,33 @@ async function skinStateArtifactsFor(library, assetId, searchParams) {
                 const component = reviewModule[resolved.record.componentExport] ?? runtimeModule[resolved.record.componentExport];
                 if (!component?.renderMarkup) throw new Error("HTML Component Skin 审查入口不完整");
                 const { compileResolvedVisualTree, resolveHtmlComponent } = await import(`${pathToFileURL(htmlRuntimePath).href}?dashboard=${inputMtime}`);
+                let fittedFrame = targetFrame;
+                let fittedComponent = component;
+                if (resolved.record.status === 'core') {
+                  const ref = await loadStructureSkill(assetId, projectRoot);
+                  const sizeFrame = await resolveStructureSizeFrame(ref, size, payload.parameters, {
+                    ...skin.componentTheme, bodyFrame: targetFrame,
+                  });
+                  fittedFrame = grayPreview
+                    ? renderGrayPreview(slide, skin, size, sizeFrame)
+                    : { ...sizeFrame,
+                      left: targetFrame.left + (targetFrame.width - sizeFrame.width) / 2,
+                      top: targetFrame.top + (targetFrame.height - sizeFrame.height) / 2 };
+                  fittedComponent = await loadPreservedComponent(ref, fittedFrame, skin.componentTheme, payload.parameters);
+                }
                 const tree = await resolveHtmlComponent({
-                  component,
+                  component: fittedComponent,
                   parameters: payload.parameters,
                   assetDir: resolved.assetDir,
-                  targetFrame,
+                  targetFrame: fittedFrame,
                   theme: skin.componentTheme,
                 });
-                return compileResolvedVisualTree(slide, tree, targetFrame);
+                return compileResolvedVisualTree(slide, tree, fittedFrame);
               }
             : undefined;
           await renderNortheasternUniversityDeck({
             pages: [{
-              content: { pageId: `dashboard-${assetId}`, title: parameters.title || resolved.record.name, items: [] },
+              content: { pageId: `dashboard-${assetId}`, title: grayPreview ? grayPreviewTitle() : parameters.title || resolved.record.name, items: [] },
               meta: { sectionName: "结构图" },
               payload: { assetId, parameters },
               composition: null,
@@ -464,6 +540,7 @@ async function skinStateArtifactsFor(library, assetId, searchParams) {
             outputPptx: pptxPath,
             qaDir: null,
             manuscriptSource: "PPA 看板 State 预览",
+            templateSourceKind: "bundled-runtime",
             ...(structureRenderer ? { structureRenderer } : {}),
           });
         }
@@ -564,7 +641,7 @@ const server = http.createServer(async (request, response) => {
         return;
       }
       send(response, 200, html, "text/html; charset=utf-8", {
-        "cache-control": "no-store",
+        ...(url.searchParams.has("v") ? componentPreviewHeaders : { "cache-control": "private, max-age=60" }),
         "content-security-policy": "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:",
       });
       return;
@@ -617,6 +694,43 @@ const server = http.createServer(async (request, response) => {
         return;
       }
       send(response, 200, await fs.readFile(artifacts.previewPath), "image/png", immutablePreviewHeaders);
+      return;
+    }
+    if (url.pathname === '/api/gray-draft-preview' || url.pathname === '/api/gray-draft-file') {
+      const kind=url.pathname.endsWith('-preview')?'preview':url.searchParams.get('kind');
+      const artifact=await resolveGrayDraftFile(projectRoot,{id:url.searchParams.get('id'),kind,page:url.searchParams.get('page')});
+      if(!artifact){sendJson(response,404,{error:'gray_draft_artifact_not_found'});return;}
+      const etag=`"${artifact.version}"`;
+      const headers={'cache-control':'private, no-cache',etag};
+      if(request.headers['if-none-match']===etag){response.writeHead(304,headers);response.end();return;}
+      if(kind!=='preview')headers['content-disposition']=`attachment; filename*=UTF-8''${encodeURIComponent(artifact.fileName)}`;
+      send(response,200,await fs.readFile(artifact.filePath),artifact.contentType,headers);
+      return;
+    }
+    if (url.pathname === '/api/gray-skin-file') {
+      const kind=url.searchParams.get('kind');
+      const artifact=await resolveGraySkinFile(projectRoot,{id:url.searchParams.get('id'),skin:url.searchParams.get('skin'),kind,page:url.searchParams.get('page')??undefined});
+      if(!artifact){sendJson(response,404,{error:'gray_skin_artifact_not_found'});return;}
+      const etag=`"${artifact.version}"`;
+      const headers={'cache-control':'private, no-cache',etag};
+      if(request.headers['if-none-match']===etag){response.writeHead(304,headers);response.end();return;}
+      if(kind==='pptx')headers['content-disposition']=`attachment; filename*=UTF-8''${encodeURIComponent(artifact.fileName)}`;
+      send(response,200,await fs.readFile(artifact.filePath),artifact.contentType,headers);
+      return;
+    }
+    if (url.pathname === "/api/skin-state-pptx") {
+      const library = url.searchParams.get("library") ?? "";
+      const assetId = url.searchParams.get("id") ?? "";
+      const artifacts = await skinStateArtifactsFor(library, assetId, url.searchParams);
+      if (!artifacts) {
+        sendJson(response, 404, { error: "skin_state_pptx_not_found" });
+        return;
+      }
+      const fileName = encodeURIComponent(`${assetId}-${url.searchParams.get('size') ?? 'large'}-university.pptx`);
+      send(response, 200, await fs.readFile(artifacts.pptxPath), "application/vnd.openxmlformats-officedocument.presentationml.presentation", {
+        ...immutablePreviewHeaders,
+        "content-disposition": `attachment; filename*=UTF-8''${fileName}`,
+      });
       return;
     }
     sendJson(response, 404, { error: "not_found" });

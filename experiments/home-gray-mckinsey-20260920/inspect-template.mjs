@@ -1,0 +1,10 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {PresentationFile,FileBlob} from '../../src/ppt-engine/index.mjs';
+const root=path.resolve(import.meta.dirname,'../..');
+const out=path.join(import.meta.dirname,'template-audit');
+await fs.mkdir(out,{recursive:true});
+const p=await PresentationFile.importPptx(await FileBlob.load(path.join(root,'assets/主题/东北大学-001/runtime-template.pptx')));
+await fs.writeFile(path.join(out,'source-inspect.ndjson'),(await p.inspect({kind:'slide,textbox,shape,image,layout',maxChars:100000})).ndjson);
+for(const [i,s] of p.slides.items.entries()) await fs.writeFile(path.join(out,`source-${i+1}.layout.json`),await (await s.export({format:'layout'})).text());
+await fs.writeFile(path.join(out,'template-frame-map.json'),JSON.stringify({source:'assets/主题/东北大学-001/runtime-template.pptx',outputSlides:[{outputSlide:1,sourceSlide:3,reuseMode:'duplicate-slide',narrativeRole:'shortcomings and reflections',editTargets:[{sourceText:'01',action:'replace',value:'01'},{sourceText:'正文页',action:'replace',field:'sectionTitle'},{sourceText:'主旨句',action:'replace',field:'headline'},{sourceText:'正文',action:'clear'},{name:'箭头: 下 9',action:'delete'},{name:'图片 10',action:'delete'},{action:'add',boundedZone:{left:55,top:166,width:1170,height:492},reason:'Skin designated body region; original demonstration content cleared through existing recipes'}]}],omittedSourceSlides:[1,2,4].map(sourceSlide=>({sourceSlide,reason:'one representative body page only'}))},null,2));

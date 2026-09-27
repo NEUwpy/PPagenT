@@ -7,7 +7,7 @@
     "环外留白和左右文字镜像对齐",
     "编号、标题与辅助文字保留不同姿态"
   ],
-  "adaptation": "按闭环节点重新分配角度与标签位置；文字姿态按阅读方向调整，不能把箭头变成独立径向图标。",
+  "adaptation": "保持原朝向、排布及关系；共享入口联动调整原设计几何。大中小按实际占区约为正文区 1、1/2、1/3；文字按 Skin 允许档位测量，内容过密明确拒绝。",
   "source": "visual-intent.md",
   "exampleImplementation": "review.mjs",
   "validation": {
@@ -27,10 +27,30 @@
     ],
     "coupledChanges": "按节点角度共同求切线箭头、遮罩、节点与支持区；左右文字保持对齐节奏",
     "avoid": "不能改成多边形线圈或独立径向箭头；必须实际闭合",
-    "status": "documented-not-implemented",
+    "status": "implemented-unreviewed",
     "sources": [
       "visual-intent.md",
       "review.mjs"
     ]
+  },
+  "implementation": {
+    "mode": "preserved-design",
+    "adapter": "shared-css-geometry",
+    "status": "implemented-unreviewed",
+    "entry": "review.mjs",
+    "sizeExamples": {
+      "large": {
+        "areaRatio": 1
+      },
+      "medium": {
+        "areaRatio": 0.5
+      },
+      "small": {
+        "areaRatio": 0.3333333333333333
+      }
+    },
+    "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+    "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+    "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
   }
 }

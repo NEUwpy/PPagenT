@@ -1,0 +1,41 @@
+✔ selected candidate preserves the gray content and visual bindings (2.4097ms)
+✔ reference-only explanations cannot enter a detail strip (0.2808ms)
+✔ duplicate label and state excerpt is rejected (0.1859ms)
+✔ a detail strip cannot replace the bound diagram (0.1501ms)
+✔ list guide cannot run through a structure region (0.1941ms)
+✔ visual decisions bind by IDs instead of manuscript-specific names (0.3016ms)
+✔ wide track paint retains the halo, pale band and fine-line hierarchy and alpha (3.759ms)
+✔ approved warm palette derives every paint role from one main tone (2.2794ms)
+✔ neutral paint adaptation preserves geometry, content and media while keeping readable text (2.1391ms)
+✔ adaptation scope is the existing 35 approved structures, not pending candidates (2.753ms)
+✔ one transfer retains six source levels and separates white cards from the canvas (1.8693ms)
+✔ pilots and ordinary structures use identical mapping for identical source paints (0.7871ms)
+✔ 大学与中性 Skin 分别加载绑定排版，大学配置来自运行时契约 (111.1049ms)
+✔ 运行时 Skin 引用不能跨 Skin 或泄漏到选择器 (36.6168ms)
+✔ 规则按 profile/skin 读取正文、去重且下次调用读取修改 (31.4556ms)
+✔ 未知 profile/skin、非法 ID 和正式导演附加 skin 均失败 (7.5822ms)
+✔ 多个 Skin 共享一个排版体系，且只能通过 Skin 选择 (21.9736ms)
+✔ 排版体系缺失、非法绑定、空文件或越界均显式失败 (109.657ms)
+✔ 缺失/空规则、非法清单路径均失败且不静默降级 (102.0531ms)
+✔ 目录链接也不能让规则路径逃出 rules 根 (23.6003ms)
+✔ Skin bundle 真正读取已有 asset.fonts 并随配置变化，不创建第二真源 (53.2281ms)
+✔ CLI 输出实际规则正文及 Skin 字体配置，错误参数非零退出 (263.2328ms)
+✔ 东北大学 Theme 以自身模板蓝色为基准并进入共享色阶派生 (1.3212ms)
+✔ 主色推导强调色阶，显式 Skin 文字角色独立保留 (0.3425ms)
+✔ 纸色 Skin 的完整用途配色不被主色派生覆盖，CSS 与解析结果一致 (0.4832ms)
+✔ 缺省与非法用途色保留原有默认值，短十六进制仍可用 (0.403ms)
+✔ 历史彩色字面量进入共享角色，中性色与透明度保持 (2.7373ms)
+✔ 未声明 primaryColor 的旧调用保持历史组件颜色 (0.2706ms)
+✔ markup 只转换样式与颜色属性，不改正文、引用、选择器、data 或脚本 (2.1544ms)
+✔ 主题 CSS 不二次映射，十六进制和 rgba alpha 原样保留 (1.9684ms)
+✔ 标签属性扫描不会把 data 属性值中的伪颜色属性误改 (0.9117ms)
+✔ CSS 前置和间隔注释保持原文，注释后的真实声明继续换色 (0.5673ms)
+✔ CSS 声明值内部注释不换色，注释后的实际颜色继续换色 (0.2273ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 888.0872

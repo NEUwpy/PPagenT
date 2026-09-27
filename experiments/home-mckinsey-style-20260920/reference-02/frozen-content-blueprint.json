@@ -1,0 +1,73 @@
+{
+  "sectionTitle": "不足感悟",
+  "headline": "变革落地仍存三项短板，合规基础管理亦待压实",
+  "headlineEvidence": [
+    "implementation",
+    "compliance",
+    "criterion"
+  ],
+  "groupWeights": [
+    1,
+    1.1
+  ],
+  "diagrams": [
+    {
+      "groupId": "issues",
+      "blockId": "implementation",
+      "assetId": "convergence-many-to-one-003",
+      "context": "顶层设计已完成",
+      "inputs": [
+        "公司内部人力资源变革氛围尚未完全形成",
+        "信息系统支撑能力仍有差距",
+        "缺乏市场化管理机制"
+      ],
+      "result": "变革落地阻力重重",
+      "reason": "原文明确三方面条件并列作用、共同造成落地阻力，属多路独立输入直接合并为唯一结果，不涉及逐级筛选或中间归纳层，与该结构的分离输入、平滑汇聚、唯一结果三特征一致。"
+    }
+  ],
+  "visual": {
+    "groupGap": 32,
+    "sectionDivider": true,
+    "groups": [
+      {
+        "id": "issues",
+        "index": "large",
+        "heading": "plain",
+        "rhythm": "natural"
+      },
+      {
+        "id": "insights",
+        "index": "circle-rail",
+        "heading": "taper",
+        "rhythm": "distributed"
+      }
+    ]
+  },
+  "detailStrips": [
+    {
+      "groupId": "issues",
+      "blockId": "compliance",
+      "intro": "2017年巡视整改取得一定成效，也暴露人力条线基础管理薄弱：",
+      "lead": "none",
+      "parts": [
+        {
+          "label": "认识",
+          "body": "待提升"
+        },
+        {
+          "label": "作风",
+          "body": "待转变"
+        },
+        {
+          "label": "能力",
+          "body": "待增强"
+        },
+        {
+          "label": "协同",
+          "body": "待深化"
+        }
+      ]
+    }
+  ],
+  "reason": "本轮按通用风格提示修订视觉语言，事实、分组、主旨句、权重 1:1.1、groupGap=32、sectionDivider=true 与汇聚图 convergence-many-to-one-003 全部保留，仅把 insights 域的索引与承载面换成新能力，使「四点感悟」成为一条可逐项定位的连续阅读轴，与左侧含图示的分析域分工不变。\\n\\n1) index=circle-rail（原 rail）：本组是四点并列的工作体会，需逐项定位但不构成步骤或因果，正是 circle-rail 的适用场景——浅圆只围绕编号这一索引，深色数字作为定位锚点，无箭头细轴只连接索引位置，不穿过正文、不入图示区。文字列表本身未变，编号不新增事实，也不表示先后或递进。\\n\\n2) heading=taper（原 wash）：四点感悟各自是「局部标题＋解释」的完整阅读单元，需要轻于文字的承载面把它们托成一个连续段落，并让末端收束自然。白到主题极浅色的阅读带保证正文与 21 局部标题保持原字号、原行高，缩进与内边距落入带内；末端短斜切只是表面轮廓，不画箭头、不指示流向，因而不建立任何因果或推进含义。\\n\\n3) rhythm=distributed（原 natural）：该域四段文字自然高度不变，只把原本积在组尾的余量改分配到条目之间，使四条感悟的间距均匀、域末端接近左侧分析域基线；两条约束同时满足——条目高度不拉伸，标题与编号样式不动。\\n\\n4) issues 保持 large+plain+natural 与汇聚图不动：该域含原生结构，纵向高度由结构自身决定，没有可回收的组尾空白；图示组不设 rail，其编号形式、标题样式和节奏按提示要求原样保留。\\n\\n5) detailStrips 不改：compliance 四项仍按原文同口径短项逐字覆盖，intro＋label＋body 依次拼接恰好等于整块原文；这四类短板是「基础管理薄弱」的并列表现，但原句以冒号直接引出，无需再加组织标签，故 lead=none，不增补来源外的事实。"
+}

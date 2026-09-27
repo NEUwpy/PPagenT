@@ -1,0 +1,25 @@
+✔ wide track paint retains the halo, pale band and fine-line hierarchy and alpha (2.6029ms)
+✔ approved warm palette derives every paint role from one main tone (0.8702ms)
+✔ neutral paint adaptation preserves geometry, content and media while keeping readable text (0.9423ms)
+✔ adaptation scope is the existing 35 approved structures, not pending candidates (1.8229ms)
+✔ one transfer retains six source levels and separates white cards from the canvas (0.9344ms)
+✔ pilots and ordinary structures use identical mapping for identical source paints (0.5437ms)
+✔ 东北大学 Theme 以自身模板蓝色为基准并进入共享色阶派生 (1.192ms)
+✔ 主色推导强调色阶，显式 Skin 文字角色独立保留 (0.2678ms)
+✔ 纸色 Skin 的完整用途配色不被主色派生覆盖，CSS 与解析结果一致 (0.349ms)
+✔ 缺省与非法用途色保留原有默认值，短十六进制仍可用 (0.2288ms)
+✔ 历史彩色字面量进入共享角色，中性色与透明度保持 (1.0922ms)
+✔ 未声明 primaryColor 的旧调用保持历史组件颜色 (0.1698ms)
+✔ markup 只转换样式与颜色属性，不改正文、引用、选择器、data 或脚本 (1.3492ms)
+✔ 主题 CSS 不二次映射，十六进制和 rgba alpha 原样保留 (2.1349ms)
+✔ 标签属性扫描不会把 data 属性值中的伪颜色属性误改 (1.7811ms)
+✔ CSS 前置和间隔注释保持原文，注释后的真实声明继续换色 (0.8532ms)
+✔ CSS 声明值内部注释不换色，注释后的实际颜色继续换色 (0.1975ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 116.2431
