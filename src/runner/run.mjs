@@ -103,6 +103,9 @@ export async function loadGrayState({ grayStatePath, rootDir = root, skinId = "n
   if (!gray.grayDraft) throw new Error("输入不是灰稿状态：缺少 grayDraft 交接信息");
   return {
     ...gray,
+    pages: gray.pages.map(page => ({ ...page, grayComposition: structuredClone(page.composition ?? null), composition: null, compositionRevision: 0 })),
+    artifactState: {},
+    deckAudit: null,
     sourcePath: path.relative(rootDir, absolute).replaceAll("\\", "/"),
     phase: "visual",
     skinId,

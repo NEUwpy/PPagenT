@@ -3,7 +3,7 @@ import path from "node:path";
 import { Presentation, PresentationFile } from "../../ppt-engine/index.mjs";
 import { addText } from "../../asset-runtime/component-builders.mjs";
 import { renderPageComposition } from "../../render/page-composition.mjs";
-import { renderStructureAsset, closeHtmlComponentRuntime } from "../legacy-structure-assets.mjs";
+import { renderStructureAsset, closeHtmlComponentRuntime, isSkinOnlyAsset } from "../legacy-structure-assets.mjs";
 import { exportTemplateMappedQa } from "../../asset-runtime/template-utils.mjs";
 import { neutralEditorialTheme } from "./neutral-editorial-theme.mjs";
 import { northeasternUniversitySkin as baseSkin } from "./northeastern-university-contract.mjs";
@@ -42,7 +42,7 @@ export async function renderNeutralEditorialDeck({ root, pages, outputPptx, qaDi
     for (const [index, page] of pages.entries()) {
       const slide = presentation.slides.add();
       shell(slide, page, index);
-      const skinOnly = page._skinOnly || page.payload?.assetId === "northeastern-university-cover-001";
+      const skinOnly = await isSkinOnlyAsset(page.payload.assetId, root);
       if (page.composition) {
         const { componentFrame } = renderPageComposition(slide, page.content, page._layout, page.composition, neutralEditorialSkin.bodyFrame, neutralEditorialSkin.typographyRoles);
         if (!skinOnly && page.payload && componentFrame) await structureRenderer(slide, page.payload, neutralEditorialSkin, componentFrame, root);

@@ -16,6 +16,43 @@ import { buildDeckPages, compileDeck, buildTools, groupViolations } from "../src
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
+test("结构计划经正式工具绑定来源并构建双 Skin；非文字内容不能降级", async () => {
+  let state = visualState();
+  state.pages[0].items.forEach(item => { item.kind = "diagram"; });
+  const runDir = await runDirFor("structure-bridge");
+  const statePath = path.join(runDir, "state.json");
+  await writeState(statePath, state);
+  const committer = createCommitter({ statePath });
+  const registry = createToolRegistry({ tools: buildTools({ root, runDir, committer, statePath }), runDir });
+  const rejected = await registry.dispatch("upsert_page_plan", { pages: [{ pageId: "p1", compositionId: "editorial-list", textSlots: PLAN.textSlots, itemLabels: [] }] });
+  assert.equal(rejected.result.accepted, false);
+  assert.match(rejected.result.error, /不能降级/);
+  const details = await registry.dispatch("read_structure", { assetId: "argument-evidence-conclusion-001" });
+  assert.equal(details.result.accepted, true);
+  assert.ok(details.result.fields.editable.length);
+  const accepted = await registry.dispatch("upsert_page_plan", { pages: [{
+    pageId: "p1", compositionId: "component-full", textSlots: [],
+    structure: {
+      assetId: "argument-evidence-conclusion-001", sourceItemIds: ["i1", "i2", "i3"],
+      parameters: {
+        claim: { title: "先验证交接", body: "两种方式各有取舍" },
+        evidences: [{ title: "临时协调", body: "入口简单，记录分散" }, { title: "统一登记", body: "便于交接，需要维护" }],
+        conclusion: { title: "先试点", body: "验证交接是否清楚" },
+      },
+    },
+  }] });
+  assert.equal(accepted.result.accepted, true, JSON.stringify(accepted.result));
+  state = await committer.read();
+  assert.equal(buildDeckPages(state)[1].payload.assetId, "argument-evidence-conclusion-001");
+  for (const skinId of ["northeastern-university-001", "neutral-editorial-001"]) {
+    const rendered = await compileDeck({ root, runDir: path.join(runDir, skinId), state: { ...state, skinId } });
+    const layout = JSON.parse(await fs.readFile(path.join(rendered.qaDir, "slide-02.layout.json"), "utf8"));
+    assert.ok(JSON.stringify(layout).includes("先试点"));
+    assert.ok(JSON.stringify(layout).includes("统一登记"));
+    assert.ok((await fs.stat(rendered.outputPptx)).size > 0);
+  }
+});
+
 test("准则页主区真实构建；全辅助负例反馈后可修订并通过", async () => {
   const state = visualState({ plan: {
     compositionId: "editorial-grid",

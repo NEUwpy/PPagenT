@@ -29,6 +29,8 @@ import {
   looksLikeRuntimeFailure, upsertComposition, finishVisual, recordDeckAudit,
 } from "../state.mjs";
 import { defineTool } from "./index.mjs";
+import { discoverCoreAssetPackages, loadCoreAssetPackage } from "../../runtime/core-asset-packages.mjs";
+import { loadStructureSkill } from "../../runtime/structure-skills.mjs";
 
 export const COVER_ASSET_ID = "northeastern-university-cover-001";
 export const BODY_ASSET_ID = "northeastern-university-body-001";
@@ -121,12 +123,15 @@ export function buildDeckPages(state) {
       })),
     },
     intent: { intentId: page.pageId },
-    decision: { selectedAssetId: BODY_ASSET_ID },
-    payload: { assetId: BODY_ASSET_ID, parameters: {} },
+    decision: { selectedAssetId: page.composition?.structure?.assetId ?? BODY_ASSET_ID },
+    payload: page.composition?.structure
+      ? { assetId: page.composition.structure.assetId, parameters: page.composition.structure.parameters }
+      : { assetId: BODY_ASSET_ID, parameters: {} },
     composition: page.composition
       ? {
         compositionId: page.composition.compositionId,
         textSlots: page.composition.textSlots,
+        ...(page.composition.structure ? { componentItemIds: page.composition.structure.sourceItemIds } : {}),
         // 条件展开：没给 leadLabel 时连键都不存在，历史 blueprint 因此逐字不变。
         ...(page.composition.leadLabel ? { leadLabel: page.composition.leadLabel } : {}),
       }
@@ -217,7 +222,7 @@ export function violationList(qualityAudit) {
  * 而渲染器是按页顺序渲染、遇到问题页即抛出，所以第一个失败的前缀长度就指向第一个问题页。
  * 只在构建已经失败之后才走这里（成功时零成本），二分让代价是 log₂(页数) 次构建。
  */
-async function locateFailingPage({ root, pages, manuscriptSource }) {
+async function locateFailingPage({ root, pages, manuscriptSource, skinId }) {
   const scratch = await fs.mkdtemp(path.join(os.tmpdir(), "ppagent-attr-"));
   try {
     const buildsOk = async (count) => {
@@ -228,6 +233,7 @@ async function locateFailingPage({ root, pages, manuscriptSource }) {
           outputPptx: path.join(scratch, "prefix.pptx"),
           qaDir: null,
           manuscriptSource,
+          skinId,
         });
         return true;
       } catch {
@@ -249,7 +255,7 @@ async function locateFailingPage({ root, pages, manuscriptSource }) {
 }
 
 /** 单页的容量预检。用的是渲染器同文件的 validatePageCompositionTextFit（page-composition.mjs:484）。 */
-function precheckFit(deckPage, layouts) {
+function precheckFit(deckPage, layouts, skin = northeasternUniversitySkin) {
   if (!deckPage.composition) return [{ code: "missing-composition" }];
   const layout = layouts.get(deckPage.composition.compositionId);
   if (!layout) return [{ code: "unknown-layout", compositionId: deckPage.composition.compositionId }];
@@ -257,8 +263,8 @@ function precheckFit(deckPage, layouts) {
     deckPage.content,
     layout,
     deckPage.composition,
-    northeasternUniversitySkin.bodyFrame,
-    northeasternUniversitySkin.typographyRoles,
+    skin.bodyFrame,
+    skin.typographyRoles,
   ).map((issue) => ({ ...issue, code: "composition-text-fit-failed" }));
 }
 
@@ -273,8 +279,21 @@ export function buildTools({ root, runDir, committer, statePath }) {
 
   return [
     defineTool({
+      name: "read_structure",
+      description: "读取候选结构的真实字段契约、关系与视觉特征。先读再填写 structure.parameters；不能根据 ID 猜参数或造型。",
+      inputSchema: { type: "object", properties: { assetId: { type: "string" } }, required: ["assetId"], additionalProperties: false },
+      handler: async ({ assetId }) => {
+        const pkg = await loadCoreAssetPackage(assetId, root);
+        if (pkg.runtime.renderer === "skin") throw new Error("Skin 不是结构");
+        const skill = await loadStructureSkill(assetId, root);
+        return { accepted: true, assetId, fields: pkg.asset.fieldContract, capacity: pkg.asset.capacity,
+          semanticContract: pkg.asset.semanticContract, spatialContract: pkg.asset.spatialContract,
+          guide: skill.guide, visualIntent: skill.visualIntent };
+      },
+    }),
+    defineTool({
       name: "read_catalog",
-      description: "读取可用版式与当前页面内容。只列出纯文本版式；每项都给出提炼后的上屏正文（text）与其逐字来源证据（sourceText），你只负责把内容项分配到槽位。",
+      description: "读取页面、灰稿制作要求、可用文字/单结构版式及结构候选。结构参数契约用 read_structure 按需读取。",
       inputSchema: { type: "object", properties: {}, additionalProperties: false },
       handler: async () => {
         const state = await committer.read();
@@ -282,12 +301,15 @@ export function buildTools({ root, runDir, committer, statePath }) {
         return {
           accepted: true,
           phase: state.phase,
+          structures: (await discoverCoreAssetPackages(root)).filter(p => p.runtime.renderer !== "skin")
+            .map(p => ({ assetId: p.assetId, name: p.asset.name, logicId: p.runtime.logicId })),
           layouts: [...layouts.values()]
-            .filter((layout) => layout.id.startsWith(TEXT_ONLY_LAYOUT_PREFIX))
+            .filter((layout) => layout.id.startsWith(TEXT_ONLY_LAYOUT_PREFIX) || layout.id.startsWith("component-"))
             .map((layout) => ({
               compositionId: layout.id,
               silhouette: layout.silhouette,
               slots: layout.slots.map((slot) => slot.id),
+              slotRoles: layout.slots.map(({ id, role, frame }) => ({ id, role, frame })),
               note: [LAYOUT_NOTES[layout.id], BAND_NOTE].filter(Boolean).join(" "),
             })),
           pages: state.pages.map((page) => ({
@@ -295,12 +317,12 @@ export function buildTools({ root, runDir, committer, statePath }) {
             title: page.title,
             claim: page.claim,
             relation: page.relation,
-            regions: page.composition?.regions ?? page.regions ?? page.grayLayout?.regions ?? [],
+            regions: page.grayComposition?.regions ?? page.composition?.regions ?? page.regions ?? page.grayLayout?.regions ?? [],
             expressionKinds: [...new Set(page.items.map((item) => item.kind ?? "text"))],
             compositionRevision: page.compositionRevision ?? 0,
-            feedback: state.artifactState[page.pageId]?.feedback ?? null,
+            feedback: state.artifactState?.[page.pageId]?.feedback ?? null,
             currentPlan: page.composition
-              ? { compositionId: page.composition.compositionId, textSlots: page.composition.textSlots, itemLabels: page.composition.itemLabels ?? {} }
+              ? { compositionId: page.composition.compositionId, textSlots: page.composition.textSlots, itemLabels: page.composition.itemLabels ?? {}, structure: page.composition.structure }
               : null,
             items: page.items.map((item) => ({
               id: item.id,
@@ -322,7 +344,7 @@ export function buildTools({ root, runDir, committer, statePath }) {
     }),
     defineTool({
       name: "upsert_page_plan",
-      description: "为页面写版式方案：选一个纯文本版式，把该页每个内容项分配到槽位。每次写入消耗一次方案版本。",
+      description: "为页面写文字或单结构版式方案。每项必须唯一分配到文字槽位或 structure.sourceItemIds。结构模式必须读取真实契约；灰稿制作要求不可静默改成文字。每次写入消耗一次版本。",
       inputSchema: {
         type: "object",
         properties: {
@@ -333,8 +355,16 @@ export function buildTools({ root, runDir, committer, statePath }) {
               properties: {
                 pageId: { type: "string" },
                 compositionId: { type: "string" },
+                structure: {
+                  type: "object", additionalProperties: false,
+                  properties: {
+                    assetId: { type: "string" }, parameters: { type: "object" },
+                    sourceItemIds: { type: "array", minItems: 1, uniqueItems: true, items: { type: "string" } },
+                  },
+                  required: ["assetId", "parameters", "sourceItemIds"],
+                },
                 textSlots: {
-                  type: "array", minItems: 1, maxItems: 4,
+                  type: "array", minItems: 0, maxItems: 4,
                   items: {
                     type: "object",
                     properties: {
@@ -378,18 +408,27 @@ export function buildTools({ root, runDir, committer, statePath }) {
         const current = await committer.read();
         const layouts = await loadCompositionLayouts(root);
         // 先全部校验再写盘：一条不合法就整体拒绝，不落地半套方案。
-        const prepared = pages.map((plan) => {
+        const prepared = await Promise.all(pages.map(async (plan) => {
           const page = current.pages.find((candidate) => candidate.pageId === plan.pageId);
           if (!page) throw new Error(`未知页面 ${plan.pageId}`);
           const layout = layouts.get(plan.compositionId);
           if (!layout) throw new Error(`未知版式 ${plan.compositionId}`);
-          if (!layout.id.startsWith(TEXT_ONLY_LAYOUT_PREFIX)) {
-            throw new Error(`${plan.compositionId} 需要组件或媒体，本阶段只能使用纯文本版式`);
+          const componentLayout = layout.id.startsWith("component-");
+          if (!layout.id.startsWith(TEXT_ONLY_LAYOUT_PREFIX) && !componentLayout) {
+            throw new Error(`${plan.compositionId} 尚未接入正式视觉工具`);
+          }
+          if (componentLayout !== Boolean(plan.structure)) throw new Error("组件版式必须且只能绑定一个 structure");
+          if (plan.structure) {
+            const pkg = await loadCoreAssetPackage(plan.structure.assetId, root);
+            if (pkg.runtime.renderer === "skin") throw new Error("不能把 Skin 当结构");
           }
           const itemIds = new Set(page.items.map((item) => item.id));
-          const used = [];
+          const used = [...(plan.structure?.sourceItemIds ?? [])];
+          if (used.some(id => !itemIds.has(id)) || new Set(used).size !== used.length) throw new Error("结构引用未知或重复内容项");
+          const unboundMedia = page.items.filter(item => item.kind && item.kind !== "text" && !used.includes(item.id));
+          if (unboundMedia.length) throw new Error(`灰稿非文字内容未绑定结构：${unboundMedia.map(i => i.id).join("、")}；不能降级为文字`);
           for (const slot of plan.textSlots) {
-            if (!layout.slots.some((candidate) => candidate.id === slot.slotId)) {
+            if (!layout.slots.some((candidate) => candidate.id === slot.slotId && candidate.role !== "component")) {
               throw new Error(`${plan.compositionId} 没有槽位 ${slot.slotId}`);
             }
             for (const itemId of slot.sourceItemIds) {
@@ -409,6 +448,7 @@ export function buildTools({ root, runDir, committer, statePath }) {
             pageId: plan.pageId,
             composition: {
               compositionId: plan.compositionId,
+              ...(plan.structure ? { structure: structuredClone(plan.structure) } : {}),
               textSlots: plan.textSlots.map((slot) => ({
                 slotId: slot.slotId,
                 sourceItemIds: slot.sourceItemIds,
@@ -421,7 +461,7 @@ export function buildTools({ root, runDir, committer, statePath }) {
               ...(plan.leadLabel ? { leadLabel: plan.leadLabel } : {}),
             },
           };
-        });
+        }));
         let state = current;
         const written = [];
         for (const { pageId, composition } of prepared) {
@@ -492,7 +532,7 @@ export function buildTools({ root, runDir, committer, statePath }) {
         const precheck = new Map();
         for (const pageId of pending) {
           const deckPage = byPageId.get(pageId);
-          precheck.set(pageId, deckPage ? precheckFit(deckPage, layouts) : [{ code: "unknown-page" }]);
+          precheck.set(pageId, deckPage ? precheckFit(deckPage, layouts, state.skinId === neutralEditorialSkin.id ? neutralEditorialSkin : northeasternUniversitySkin) : [{ code: "unknown-page" }]);
         }
 
         let compiled = null;
@@ -522,7 +562,7 @@ export function buildTools({ root, runDir, committer, statePath }) {
             attribution = "precheck";
           }
           if (!culpritPageId) {
-            const located = await locateFailingPage({ root, pages: deckPages, manuscriptSource: state.sourcePath });
+            const located = await locateFailingPage({ root, pages: deckPages, manuscriptSource: state.sourcePath, skinId: state.skinId });
             culpritPageId = located?.content.pageId ?? null;
             if (culpritPageId) attribution = "prefix-build";
           }
