@@ -20,6 +20,7 @@ import {
   GRAY_STAGES, GRAY_HANDOFFS, GRAY_PIPELINE_NOTE,
   grayArtifacts, graySnapshot, grayContinuability, prepareGrayResume, grayStepFiles,
 } from "../workbench/gray-run-adapter.mjs";
+import { DEBUG_SEGMENTS, runDebugSegment, segmentArtifacts } from "../workbench/segment-runner.mjs";
 
 function option(name, fallback) {
   const index = process.argv.indexOf(name);
@@ -710,17 +711,71 @@ async function describeRun(targetRunDir, runId) {
   const summary = await readSummary(targetRunDir);
   const state = await readJsonState(path.join(targetRunDir, "state.json")).catch(() => null);
   const isGray = summary.pipeline === "gray";
+  const isSegment = summary.pipeline === "segment";
   const payload = {
     ...summary,
-    continuable: isGray
+    continuable: isSegment
+      ? { allowed: false, mode: null, fromPhase: null, reason: "分段调试运行只执行登记的这一段，不从中间续跑；需要换起点请重新运行目标分段。" }
+      : isGray
       ? grayContinuability({ summary, state, isArchive: archiveRunIds.has(runId) })
       : continuability({ summary, state, isArchive: archiveRunIds.has(runId) }),
     attempts: readAttempts(summary),
-    stageProvenance: stageProvenance(summary),
+    stageProvenance: isSegment ? {} : stageProvenance(summary),
     log: await compileRunLog(targetRunDir),
   };
   if (isGray) payload.gray = await graySnapshot(targetRunDir).catch(() => null);
   return payload;
+}
+
+async function createSegmentRun(request, response, url, segmentId) {
+  const definition = DEBUG_SEGMENTS[segmentId];
+  if (!definition) return sendJson(response, 400, { error: `未登记的调试分段：${segmentId}` });
+  const originalName = safeFilename(url.searchParams.get("filename") || "segment-input.json");
+  if (path.extname(originalName).toLowerCase() !== ".json") return sendJson(response, 415, { error: "分段调试需要上传 JSON 输入" });
+  let input;
+  try { input = JSON.parse((await readBody(request)).toString("utf8")); } catch { return sendJson(response, 400, { error: "分段输入不是合法 JSON" }); }
+  const runId = `${new Date().toISOString().replace(/[-:TZ.]/g, "").slice(0, 14)}-${crypto.randomBytes(3).toString("hex")}`;
+  const targetRunDir = runDir(runId);
+  await fs.mkdir(path.join(targetRunDir, "input"), { recursive: true });
+  await fs.writeFile(path.join(targetRunDir, "input", originalName), JSON.stringify(input, null, 2), "utf8");
+  const recorder = createTraceRecorder(targetRunDir);
+  const createdAt = new Date().toISOString();
+  const summary = {
+    schemaVersion: "1.0", runId, originalName, createdAt, status: "running", pipeline: "segment", segmentId,
+    purpose: url.searchParams.get("purpose") === "verification" ? "verification" : "production",
+    skin: { id: "northeastern-university-001", name: "建设调试" }, visualCheckpointMode: "auto",
+    stages: definition.stages, handoffs: definition.handoffs, pipelineNote: definition.note,
+    attempts: [{ attempt: 1, mode: "first", at: createdAt, fromPhase: null, fromStage: null }], artifacts: [],
+  };
+  await writeSummary(targetRunDir, summary);
+  activeRunId = runId;
+  const startedAt = Date.now();
+  const task = (async () => {
+    try {
+      const result = await runDebugSegment({ segmentId, input, output: targetRunDir, recorder });
+      summary.status = result.status;
+      summary.finishedAt = new Date().toISOString();
+      summary.durationMs = Date.now() - startedAt;
+      summary.segment = result.result;
+      summary.artifacts = await segmentArtifacts(targetRunDir);
+      await recorder.flush();
+      await writeSummary(targetRunDir, summary);
+    } catch (error) {
+      await recorder.observe({ source: "workbench", type: "delivery", status: "failed", stage: segmentId, error: { name: error?.name, code: error?.code, message: error?.message ?? String(error) } });
+      await recorder.flush();
+      summary.status = "failed";
+      summary.finishedAt = new Date().toISOString();
+      summary.durationMs = Date.now() - startedAt;
+      summary.error = { stage: segmentId, name: error?.name, code: error?.code, message: error?.message ?? String(error) };
+      summary.artifacts = await segmentArtifacts(targetRunDir).catch(() => []);
+      await writeSummary(targetRunDir, summary);
+    } finally {
+      if (activeRunId === runId) activeRunId = null;
+    }
+  })();
+  activeRunTasks.set(runId, task);
+  task.finally(() => activeRunTasks.delete(runId)).catch(() => {});
+  return sendJson(response, 202, summary);
 }
 
 /**
@@ -792,7 +847,8 @@ async function createRun(request, response, url) {
   if (activeRunId) return sendJson(response, 409, { error: "已有生成任务正在运行", activeRunId });
   // 默认灰稿线（现行 M1）：上传稿件走到可审阅的灰稿。旧线（runner/legacy）保留为显式可选项，界面上不再列出。
   const requestedPipeline = url.searchParams.get("pipeline");
-  const pipeline = requestedPipeline === "legacy" || requestedPipeline === "runner" ? requestedPipeline : "gray";
+  const pipeline = requestedPipeline === "legacy" || requestedPipeline === "runner" || requestedPipeline === "segment" ? requestedPipeline : "gray";
+  if (pipeline === "segment") return createSegmentRun(request, response, url, url.searchParams.get("segment") || "a0-layout-candidates");
   // 薄运行器没有人工检查点（harness/运行流程.md：阶段不要求用户逐步批准）。
   // 用户明确勾了暂停时不能静默忽略——那等于把一次显式请求丢掉。
   const wantsManualCheckpoint = url.searchParams.get("visualCheckpoint") === "manual"
@@ -955,6 +1011,7 @@ async function publicConfig() {
     pipelines: {
       default: "gray",
       gray: { label: "灰稿线（现行 M1）", note: GRAY_PIPELINE_NOTE, checkpoint: false },
+      segment: { label: "分段调试", note: "只运行已登记的建设分段；当前先提供 A0 候选版式测量。看板按日志显示该段输入、输出、状态与拒绝原因。", checkpoint: false },
       runner: { label: "薄运行器", note: RUNNER_PIPELINE_NOTE, checkpoint: false },
       legacy: {
         label: "旧 API 生产线",
@@ -962,6 +1019,7 @@ async function publicConfig() {
         checkpoint: true,
       },
     },
+    segments: Object.fromEntries(Object.entries(DEBUG_SEGMENTS).map(([id, value]) => [id, { id, label: value.label, note: value.note }])),
     runtime: { revision: runtimeRevision, startedAt: serverStartedAt },
   };
 }

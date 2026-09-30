@@ -1,0 +1,22 @@
+{
+  "source": "管理员说明开放时间、申领材料和服务范围。\n\n借阅人先核对书目与馆藏位置；现场领取后登记借阅信息。续借须在到期前办理，遇到预约或缺失情况，应由管理员确认处理方式。\n\n申请人填写日期和用途，管理员确认后安排使用时段。",
+  "area": { "width": 1170, "height": 492, "label": "A0 工作台验收区" },
+  "initialPlan": {
+    "schemaVersion": "gray-plan-3",
+    "deckBrief": { "title": "A0 工作台版式测量", "audience": "建设者", "objective": "检查固定内容的承载" },
+    "pages": [
+      {
+        "pageId": "p1",
+        "title": "服务范围",
+        "claim": "各项服务按规定提供",
+        "pagePurpose": "说明服务内容及适用范围",
+        "narrative": "可独立阅读的服务内容",
+        "groups": [
+          { "id": "g1", "role": "服务内容", "heading": "咨询服务", "importance": "primary", "kind": "text", "blocks": [{ "id": "b1", "text": "管理员说明开放时间、申领材料和服务范围。", "sourceIds": ["s1"] }] },
+          { "id": "g2", "role": "服务内容", "heading": "借阅服务", "importance": "primary", "kind": "text", "blocks": [{ "id": "b2", "text": "借阅人先核对书目与馆藏位置；现场领取后登记借阅信息。续借须在到期前办理，遇到预约或缺失情况，应由管理员确认处理方式。", "sourceIds": ["s2"] }] },
+          { "id": "g3", "role": "服务内容", "heading": "预约服务", "importance": "primary", "kind": "text", "blocks": [{ "id": "b3", "text": "申请人填写日期和用途，管理员确认后安排使用时段。", "sourceIds": ["s3"] }] }
+        ]
+      }
+    ]
+  }
+}
