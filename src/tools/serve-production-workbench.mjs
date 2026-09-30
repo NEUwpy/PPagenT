@@ -1011,7 +1011,7 @@ async function publicConfig() {
     pipelines: {
       default: "gray",
       gray: { label: "灰稿线（现行 M1）", note: GRAY_PIPELINE_NOTE, checkpoint: false },
-      segment: { label: "分段调试", note: "只运行已登记的建设分段；当前先提供 A0 候选版式测量。看板按日志显示该段输入、输出、状态与拒绝原因。", checkpoint: false },
+      segment: { label: "分段调试（建设侧局部）", note: "只运行已登记的建设分段；当前 A0 从已完成分页和页面表达契约开始，不代表长稿件主线。看板按日志显示该段输入、输出、状态与拒绝原因。", checkpoint: false },
       runner: { label: "薄运行器", note: RUNNER_PIPELINE_NOTE, checkpoint: false },
       legacy: {
         label: "旧 API 生产线",

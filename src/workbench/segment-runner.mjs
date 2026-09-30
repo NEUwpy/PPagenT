@@ -10,10 +10,10 @@ import { newRunState } from "../runner/state.mjs";
 export const DEBUG_SEGMENTS = Object.freeze({
   "a0-layout-candidates": {
     id: "a0-layout-candidates",
-    label: "A0 · 候选版式测量",
-    note: "输入一页 gray-plan-3，输出可承载的注册版式、实文测量、绑定回执和灰稿预览。",
-    stages: [["a0-layout-candidates", "候选测量与绑定", "按实文测量注册版式，绑定一个候选并编译可审阅灰稿"]],
-    handoffs: { "a0-layout-candidates": "输入是固定内容契约与版面尺寸；输出是候选清单、绑定回执、程序检查和灰稿产物。未承载的关系或超容量内容保留拒绝原因。" },
+    label: "A0 · 已有页面契约的版式测量",
+    note: "建设侧局部回放，不是长稿件主线；输入必须已经完成分页和页面表达契约。",
+    stages: [["a0-layout-candidates", "契约 → 候选版式 → 灰稿编译", "对已形成的页面表达契约按实文测量版式，绑定候选并编译检查灰稿"]],
+    handoffs: { "a0-layout-candidates": "这是局部建设段。输入是已完成分页与页面表达的 gray-plan-3 和版面尺寸；输出是候选清单、绑定回执、程序检查和灰稿产物。未承载的关系或超容量内容保留拒绝原因。" },
   },
 });
 
@@ -61,7 +61,7 @@ export async function runDebugSegment({ segmentId, input, output, recorder }) {
   const chosen = candidates.find(candidate => candidate.id === selectedCandidateId) ?? candidates[0];
   const refusals = refusalBoundaries(plan, measured);
   if (!chosen) {
-    const result = { segmentId, status: "refused", area, candidates, refusals, rejection: pageMeasurement.rejected ?? "没有可承载候选", coverage: "候选测量与拒绝边界；未编译灰稿" };
+    const result = { segmentId, status: "refused", inputBoundary: "已完成分页与页面表达契约", area, candidates, refusals, rejection: pageMeasurement.rejected ?? "没有可承载候选", coverage: "候选测量与拒绝边界；未编译灰稿" };
     await fs.writeFile(path.join(output, "result.json"), json(result), "utf8");
     await recorder.observe({ source: "workflow", type: "stage-call", status: "running", stage: segmentId, input: { source, plan, area } });
     await recorder.observe({ source: "workflow", type: "stage-call", status: "failed", stage: segmentId, error: { code: "NO_LAYOUT_CANDIDATE", message: result.rejection }, output: result });
@@ -79,7 +79,7 @@ export async function runDebugSegment({ segmentId, input, output, recorder }) {
   await fs.writeFile(path.join(output, "plan.json"), json(planOutput), "utf8");
   await fs.writeFile(path.join(output, "candidates.json"), json({ area, candidates, selected: selection, programVersion: chosen.programVersion ?? null }), "utf8");
   await fs.writeFile(path.join(output, "refusals.json"), json(refusals), "utf8");
-  const result = { segmentId, status: checked.accepted ? "awaiting-user-review" : "refused", area, candidates, selection, receipt: built.receipts[0], check: { accepted: checked.accepted, issues: checked.issues }, refusals, coverage: "实文测量、候选绑定、程序检查和灰稿编译；不证明自动分页、语义理解或终稿美化" };
+  const result = { segmentId, status: checked.accepted ? "awaiting-user-review" : "refused", inputBoundary: "已完成分页与页面表达契约", area, candidates, selection, receipt: built.receipts[0], check: { accepted: checked.accepted, issues: checked.issues }, refusals, coverage: "实文测量、候选绑定、程序检查和灰稿编译；不证明长稿件分页、语义理解或终稿美化" };
   await fs.writeFile(path.join(output, "result.json"), json(result), "utf8");
   if (!checked.accepted) {
     await recorder.observe({ source: "workflow", type: "stage-call", status: "failed", stage: segmentId, error: { code: "GRAY_PLAN_REJECTED", message: "绑定后的计划未通过程序检查" }, output: result });
