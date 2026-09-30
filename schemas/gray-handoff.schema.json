@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/NEUwpy/PPagenT/schemas/gray-handoff.schema.json",
+  "title": "Gray handoff v0.1 main/home proposal; production integration pending",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "contractId", "revision", "origin", "canvas", "sources", "plan", "pageBindings", "freeze"],
+  "properties": {
+    "schemaVersion": {"const": "gray-handoff-1"},
+    "contractId": {"$ref": "#/$defs/id"},
+    "revision": {"type": "integer", "minimum": 1},
+    "origin": {
+      "type": "object", "additionalProperties": false, "required": ["kind", "note"],
+      "properties": {"kind": {"enum": ["real", "simulated"]}, "note": {"$ref": "#/$defs/text"}}
+    },
+    "canvas": {
+      "type": "object", "additionalProperties": false, "required": ["width", "height", "unit", "scope"],
+      "properties": {"width": {"type": "number", "exclusiveMinimum": 0}, "height": {"type": "number", "exclusiveMinimum": 0}, "unit": {"const": "px"}, "scope": {"const": "content-area"}}
+    },
+    "sources": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["id", "text"], "properties": {"id": {"$ref": "#/$defs/id"}, "heading": {"type": "string"}, "text": {"$ref": "#/$defs/text"}}}},
+    "plan": {"$ref": "#/$defs/plan"},
+    "pageBindings": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/pageBinding"}},
+    "freeze": {
+      "type": "object", "additionalProperties": false, "required": ["status", "contentSha256", "bindingSha256"],
+      "properties": {"status": {"enum": ["draft", "frozen"]}, "contentSha256": {"$ref": "#/$defs/sha"}, "bindingSha256": {"$ref": "#/$defs/sha"}}
+    }
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "pattern": "^[^/\\s]+$"},
+    "text": {"type": "string", "minLength": 1},
+    "sha": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "sourceIds": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "plan": {
+      "type": "object", "additionalProperties": false, "required": ["schemaVersion", "deckBrief", "pages"],
+      "properties": {
+        "schemaVersion": {"const": "gray-plan-3"},
+        "deckBrief": {"type": "object", "additionalProperties": false, "required": ["title", "audience", "objective"], "properties": {"title": {"$ref": "#/$defs/text"}, "audience": {"$ref": "#/$defs/text"}, "objective": {"$ref": "#/$defs/text"}}},
+        "planningNotes": {"type": "string"},
+        "pages": {"type": "array", "minItems": 1, "maxItems": 100, "items": {"$ref": "#/$defs/page"}}
+      }
+    },
+    "page": {
+      "type": "object", "additionalProperties": false, "required": ["pageId", "title", "claim", "pagePurpose", "narrative", "groups"],
+      "properties": {
+        "pageId": {"$ref": "#/$defs/id"}, "title": {"$ref": "#/$defs/text"}, "claim": {"$ref": "#/$defs/text"}, "pagePurpose": {"$ref": "#/$defs/text"}, "narrative": {"$ref": "#/$defs/text"},
+        "sourceIds": {"$ref": "#/$defs/sourceIds"},
+        "readingOrder": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+        "visualMapping": {"type": "object", "description": "Existing reference-only visualMapping; bindVisualBlocks validates its actual supported shape."},
+        "relations": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["from", "to", "type", "meaning"], "properties": {"from": {"$ref": "#/$defs/id"}, "to": {"$ref": "#/$defs/id"}, "type": {"enum": ["support", "criterion", "implementation", "sequence", "parallel", "condition", "qualification", "comparison", "decomposition", "context"]}, "meaning": {"$ref": "#/$defs/text"}}}},
+        "groups": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/group"}}
+      }
+    },
+    "group": {
+      "type": "object", "additionalProperties": false, "required": ["id", "role", "heading", "importance", "kind", "blocks"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"}, "role": {"$ref": "#/$defs/text"}, "heading": {"$ref": "#/$defs/text"}, "importance": {"enum": ["primary", "supporting"]},
+        "kind": {"enum": ["text", "diagram", "flow", "chart", "table", "image"]},
+        "blocks": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/block"}},
+        "expression": {"$ref": "#/$defs/text"}, "relationship": {"$ref": "#/$defs/text"}, "production": {"$ref": "#/$defs/text"}
+      },
+      "allOf": [{"if": {"properties": {"kind": {"not": {"const": "text"}}}}, "then": {"required": ["expression", "relationship", "production"]}}]
+    },
+    "block": {
+      "type": "object", "additionalProperties": false, "required": ["id", "text", "sourceIds"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"}, "label": {"type": "string"}, "text": {"$ref": "#/$defs/text"},
+        "sourceIds": {"allOf": [{"$ref": "#/$defs/sourceIds"}, {"minItems": 1}]},
+        "kind": {"enum": ["text", "note", "diagram", "flow", "chart", "table", "image"]}, "scope": {"const": "group"},
+        "expression": {"$ref": "#/$defs/text"}, "relationship": {"$ref": "#/$defs/text"}, "production": {"$ref": "#/$defs/text"}
+      }
+    },
+    "layoutNode": {
+      "oneOf": [
+        {"type": "object", "additionalProperties": false, "required": ["groupId"], "properties": {"groupId": {"$ref": "#/$defs/id"}}},
+        {"type": "object", "additionalProperties": false, "required": ["type"], "properties": {
+          "type": {"enum": ["single", "row", "column", "grid"]},
+          "weights": {"type": "array", "minItems": 1, "items": {"type": "number", "exclusiveMinimum": 0}},
+          "columns": {"type": "integer", "minimum": 1},
+          "children": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/layoutNode"}}
+        }}
+      ]
+    },
+    "contentRef": {
+      "type": "object", "additionalProperties": false, "required": ["groupId", "blockId"],
+      "properties": {"groupId": {"$ref": "#/$defs/id"}, "blockId": {"$ref": "#/$defs/id"}}
+    },
+    "fieldRef": {
+      "type": "object", "additionalProperties": false, "required": ["groupId", "field"],
+      "properties": {"groupId": {"$ref": "#/$defs/id"}, "blockId": {"$ref": "#/$defs/id"}, "field": {"enum": ["id", "heading", "label", "text"]}}
+    },
+    "selection": {
+      "type": "object", "additionalProperties": false, "required": ["status", "reason"],
+      "properties": {"status": {"enum": ["selected", "missing"]}, "reason": {"$ref": "#/$defs/text"}, "programId": {"$ref": "#/$defs/id"}, "assetId": {"$ref": "#/$defs/id"}, "variantId": {"$ref": "#/$defs/id"}, "execution": {"const": "preserved-design"}}
+    },
+    "expression": {
+      "type": "object", "additionalProperties": false,
+      "required": ["expressionId", "regionId", "sourceLocation", "kind", "contentRefs", "selection", "parameters", "slotBindings"],
+      "properties": {
+        "expressionId": {"$ref": "#/$defs/id"}, "regionId": {"$ref": "#/$defs/id"}, "sourceLocation": {"type": "string", "minLength": 1},
+        "kind": {"enum": ["text", "structure", "chart", "table", "image"]},
+        "contentRefs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/contentRef"}},
+        "selection": {"$ref": "#/$defs/selection"}, "parameters": {"type": "object", "additionalProperties": {"type": ["number", "boolean", "string"]}, "description": "MVP non-copy scalar controls only; content arrays are assembled from slotBindings."},
+        "slotBindings": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["target", "contentRef"], "properties": {"target": {"type": "string", "pattern": "^[A-Za-z_][A-Za-z_0-9]*(?:\\[[0-9]+\\])?(?:\\.[A-Za-z_][A-Za-z_0-9]*(?:\\[[0-9]+\\])?)*$"}, "contentRef": {"$ref": "#/$defs/fieldRef"}}}},
+        "capacityRef": {"type": "object", "additionalProperties": false, "required": ["path", "sha256"], "properties": {"path": {"$ref": "#/$defs/text"}, "sha256": {"$ref": "#/$defs/sha"}}}
+      }
+    },
+    "pageBinding": {
+      "type": "object", "additionalProperties": false, "required": ["pageId", "layout", "regions", "expressions"],
+      "properties": {
+        "pageId": {"$ref": "#/$defs/id"},
+        "layout": {"type": "object", "additionalProperties": false, "required": ["layoutId", "parameters"], "properties": {"layoutId": {"$ref": "#/$defs/id"}, "parameters": {"$ref": "#/$defs/layoutNode"}}},
+        "regions": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["regionId", "groupId"], "properties": {"regionId": {"$ref": "#/$defs/id"}, "groupId": {"$ref": "#/$defs/id"}}}},
+        "expressions": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/expression"}}
+      }
+    }
+  }
+}

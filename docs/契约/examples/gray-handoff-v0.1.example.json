@@ -1,0 +1,297 @@
+{
+  "schemaVersion": "gray-handoff-1",
+  "contractId": "interface-example-20260930",
+  "revision": 1,
+  "origin": {
+    "kind": "simulated",
+    "note": "字段形态说明例子；用于main/home对接，不是已编译、已审阅或真实稿自动生成的灰稿。"
+  },
+  "canvas": {
+    "width": 1170,
+    "height": 492,
+    "unit": "px",
+    "scope": "content-area"
+  },
+  "sources": [
+    {
+      "id": "s1",
+      "text": "中间页面表达只维护一份内容，灰稿和成品都从同一份字段编译。"
+    },
+    {
+      "id": "s2",
+      "text": "main负责稿件到灰稿，home负责冻结灰稿契约到可编辑成品。"
+    },
+    {
+      "id": "s3",
+      "text": "基础阶段形成可重复动作，规范阶段建立统一标准，协同阶段形成稳定配合。"
+    }
+  ],
+  "plan": {
+    "schemaVersion": "gray-plan-3",
+    "deckBrief": {
+      "title": "中间契约字段例子",
+      "audience": "main与home建设者",
+      "objective": "检查字段归属和参数绑定"
+    },
+    "planningNotes": "两页分别示意文字程序与参数化结构，不代表语义质量、容量或视觉验收通过。",
+    "pages": [
+      {
+        "pageId": "p1",
+        "title": "共同内容来源",
+        "claim": "灰稿与成品消费同一份页面表达",
+        "pagePurpose": "说明中间契约的内容来源与分工",
+        "narrative": "同一内容来源下的两项实施约定",
+        "readingOrder": [
+          "g1"
+        ],
+        "groups": [
+          {
+            "id": "g1",
+            "role": "实施约定",
+            "heading": "内容与分工",
+            "importance": "primary",
+            "kind": "text",
+            "blocks": [
+              {
+                "id": "b1",
+                "label": "共同来源",
+                "text": "灰稿和成品从同一份字段编译。",
+                "sourceIds": [
+                  "s1"
+                ]
+              },
+              {
+                "id": "b2",
+                "label": "两段分工",
+                "text": "main负责稿件到灰稿，home负责冻结契约到成品。",
+                "sourceIds": [
+                  "s2"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "pageId": "p2",
+        "title": "能力等级",
+        "claim": "能力从基础动作逐级走向协同",
+        "pagePurpose": "展示已有成熟度结构的节点字段绑定",
+        "narrative": "基础、规范、协同是依次提高的能力等级",
+        "readingOrder": [
+          "g2"
+        ],
+        "groups": [
+          {
+            "id": "g2",
+            "role": "能力等级",
+            "heading": "能力成熟度",
+            "importance": "primary",
+            "kind": "diagram",
+            "expression": "用阶梯表达能力等级",
+            "relationship": "基础到规范再到协同逐级提高",
+            "production": "沿用成熟度阶梯原造型，三个等级同序绑定；不显示当前目标标记",
+            "blocks": [
+              {
+                "id": "b1",
+                "label": "基础",
+                "text": "形成可重复动作",
+                "sourceIds": [
+                  "s3"
+                ]
+              },
+              {
+                "id": "b2",
+                "label": "规范",
+                "text": "建立统一标准",
+                "sourceIds": [
+                  "s3"
+                ]
+              },
+              {
+                "id": "b3",
+                "label": "协同",
+                "text": "形成稳定配合",
+                "sourceIds": [
+                  "s3"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "pageBindings": [
+    {
+      "pageId": "p1",
+      "layout": {
+        "layoutId": "category-container",
+        "parameters": {
+          "type": "single"
+        }
+      },
+      "regions": [
+        {
+          "regionId": "r1",
+          "groupId": "g1"
+        }
+      ],
+      "expressions": [
+        {
+          "expressionId": "e1",
+          "regionId": "r1",
+          "sourceLocation": "g1",
+          "kind": "text",
+          "contentRefs": [
+            {
+              "groupId": "g1",
+              "blockId": "b1"
+            },
+            {
+              "groupId": "g1",
+              "blockId": "b2"
+            }
+          ],
+          "selection": {
+            "status": "selected",
+            "programId": "source-text-v1",
+            "reason": "纯文字组沿用原内容与归属"
+          },
+          "parameters": {},
+          "slotBindings": []
+        }
+      ]
+    },
+    {
+      "pageId": "p2",
+      "layout": {
+        "layoutId": "category-container",
+        "parameters": {
+          "type": "single"
+        }
+      },
+      "regions": [
+        {
+          "regionId": "r2",
+          "groupId": "g2"
+        }
+      ],
+      "expressions": [
+        {
+          "expressionId": "e2",
+          "regionId": "r2",
+          "sourceLocation": "g2",
+          "kind": "structure",
+          "contentRefs": [
+            {
+              "groupId": "g2",
+              "blockId": "b1"
+            },
+            {
+              "groupId": "g2",
+              "blockId": "b2"
+            },
+            {
+              "groupId": "g2",
+              "blockId": "b3"
+            }
+          ],
+          "selection": {
+            "status": "selected",
+            "assetId": "progression-maturity-steps-002",
+            "variantId": "perspective-geometric-maturity-steps",
+            "execution": "preserved-design",
+            "reason": "已有成熟度阶梯支持三个有序等级"
+          },
+          "parameters": {
+            "showStatus": false
+          },
+          "slotBindings": [
+            {
+              "target": "levels[0].key",
+              "contentRef": {
+                "groupId": "g2",
+                "blockId": "b1",
+                "field": "id"
+              }
+            },
+            {
+              "target": "levels[0].title",
+              "contentRef": {
+                "groupId": "g2",
+                "blockId": "b1",
+                "field": "label"
+              }
+            },
+            {
+              "target": "levels[0].body",
+              "contentRef": {
+                "groupId": "g2",
+                "blockId": "b1",
+                "field": "text"
+              }
+            },
+            {
+              "target": "levels[1].key",
+              "contentRef": {
+                "groupId": "g2",
+                "blockId": "b2",
+                "field": "id"
+              }
+            },
+            {
+              "target": "levels[1].title",
+              "contentRef": {
+                "groupId": "g2",
+                "blockId": "b2",
+                "field": "label"
+              }
+            },
+            {
+              "target": "levels[1].body",
+              "contentRef": {
+                "groupId": "g2",
+                "blockId": "b2",
+                "field": "text"
+              }
+            },
+            {
+              "target": "levels[2].key",
+              "contentRef": {
+                "groupId": "g2",
+                "blockId": "b3",
+                "field": "id"
+              }
+            },
+            {
+              "target": "levels[2].title",
+              "contentRef": {
+                "groupId": "g2",
+                "blockId": "b3",
+                "field": "label"
+              }
+            },
+            {
+              "target": "levels[2].body",
+              "contentRef": {
+                "groupId": "g2",
+                "blockId": "b3",
+                "field": "text"
+              }
+            }
+          ],
+          "capacityRef": {
+            "path": "assets/结构图/成熟度阶梯-002/slot-contract.json",
+            "sha256": "9c71028247f94b7ffabb21c0b0c1362cd789492b1b719397a5af8172de67ca61"
+          }
+        }
+      ]
+    }
+  ],
+  "freeze": {
+    "status": "draft",
+    "contentSha256": "1d68c0c9c7606196e4f35ed60aac28583640ce95c089f26d14aa28fa417e91b9",
+    "bindingSha256": "325934055dbca9ec18c1ad751e56b3eb6bbd10c0c89c57c3c7b7c1f0927b22d4"
+  }
+}
