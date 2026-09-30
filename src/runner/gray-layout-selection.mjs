@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { composePageLayout, layoutRules } from '../visual-runtime/page-layout-library.mjs';
 import { semanticPages, bindSemanticLayout, planContentFingerprint } from './gray-semantics.mjs';
+import { GRAY_FONT_SIZES, grayLayoutProgram, identifyGrayLayoutCandidate } from './gray-layout-catalog.mjs';
 
 export const LAYOUT_SELECTION_PROMPT = `你是页面布局选择器。只从每页程序已按真实文字测量的候选中选择；不改内容、不编坐标。
 先对照原稿和页面计划判断组间关系。区分并列、独立内容、对照、先后、因果、主辅和混合，不按组数猜关系。
@@ -17,7 +18,7 @@ cards 卡片式适合平级、可独立阅读的内容；album 相册式适合�
 export function measuredLayoutCandidates(plan, area, metrics) {
   return plan.pages.map(page => {
     let measured;
-    for (const fontSize of [22, 20, 18]) {
+    for (const fontSize of GRAY_FONT_SIZES) {
       measured = measuredAtFont({ ...plan, pages: [page] }, area, metrics, fontSize)[0];
       measured.fontSize = fontSize;
       if (measured.candidates.length) return measured;
@@ -102,7 +103,7 @@ function measuredAtFont(plan, area, { measureBody, fitText }, fontSize) {
             if (!fits) throw new Error('当前正文档下标题或正文无法完整容纳');
             const regions = geometry.slots.map((slot, i) => ({ itemId: items[i].id, x: slot.x, y: slot.y, width: slot.width, height: slot.height, fontSize }));
             if (!candidates.some(c => JSON.stringify(c.regions) === JSON.stringify(regions))) {
-              candidates.push({ id, family, direction, allocation, geometry, regions, contentMinimums: minimums });
+              candidates.push(identifyGrayLayoutCandidate({ id, family, direction, allocation, geometry, regions, contentMinimums: minimums }));
             }
           } catch (error) { rejected.push({ id, reason: error.message }); }
         }
@@ -136,7 +137,7 @@ function measuredAtFont(plan, area, { measureBody, fitText }, fontSize) {
           }
         }
         regions.sort((a,b) => items.findIndex(i=>i.id===a.itemId)-items.findIndex(i=>i.id===b.itemId));
-        candidates.push({ id, family: 'cards', direction: 'support-band', allocation: 'measured', supportsRelation: ['support'], regions, contentMinimums: minimums });
+        candidates.push(identifyGrayLayoutCandidate({ id, family: 'cards', direction: 'support-band', allocation: 'measured', supportsRelation: ['support'], regions, contentMinimums: minimums }));
       } catch (error) { rejected.push({ id, reason: error.message }); }
     }
     return { pageId: page.pageId, requirements, candidates, rejected };
@@ -152,6 +153,8 @@ export function bindLayoutSelection(plan, measured, selection) {
     if (!['parallel','independent','comparison','sequence','causal','support','mixed'].includes(choice.relation)) throw new Error('布局关系分类无效');
     const candidate = measured[i].candidates.find(c => c.id === choice.candidateId);
     if (!candidate) throw new Error(`页 ${page.pageId} 没有合适的已建布局：${choice.reason}`);
+    const program = grayLayoutProgram(candidate.id);
+    identifyGrayLayoutCandidate(candidate);
     const supportingIds = new Set(page.groups.filter(g => g.importance === 'supporting').map(g => g.id));
     if (supportingIds.size && supportingIds.size < page.groups.length) {
       const areaOf = supporting => candidate.regions.filter(r => supportingIds.has(r.itemId) === supporting).reduce((sum,r) => sum+r.width*r.height,0);
@@ -160,7 +163,7 @@ export function bindLayoutSelection(plan, measured, selection) {
     if (page.groups.length > 1 && !['parallel','independent',...(candidate.supportsRelation ?? [])].includes(choice.relation)) throw new Error(`页 ${page.pageId} 的 ${choice.relation} 跨组关系尚无已建约束布局；不能硬套 ${candidate.family}`);
     layouts.push({ pageId: page.pageId, regions: candidate.regions });
     const fontSize = candidate.regions[0].fontSize;
-    receipts.push({ pageId: page.pageId, layout: { family: candidate.family, direction: candidate.direction, allocation: candidate.allocation }, fontSize, contentMinimums: candidate.contentMinimums, occupiedRegions: candidate.regions, selection: choice });
+    receipts.push({ pageId: page.pageId, layoutId: program.id, layoutProgramVersion: program.version, layout: { family: candidate.family, direction: candidate.direction, allocation: candidate.allocation }, fontSize, contentMinimums: candidate.contentMinimums, occupiedRegions: candidate.regions, selection: choice });
   }
   const bound = bindSemanticLayout(plan, { pages: layouts });
   bound.pages.forEach((page, i) => { page.composition.basicLayout = receipts[i].layout; });
@@ -169,7 +172,7 @@ export function bindLayoutSelection(plan, measured, selection) {
 
 export async function selectMeasuredLayouts({ plan, area, source, provider, directory, metrics }) {
   const measured = measuredLayoutCandidates(plan, area, metrics);
-  const input = { source, plan, area, rules: layoutRules, pages: measured.map(p => ({ ...p, candidates: p.candidates.map(c => ({ id: c.id, family: c.family, direction: c.direction, allocation: c.allocation, supportsRelation: c.supportsRelation, regions: c.regions, contentMinimums: c.contentMinimums })) })) };
+  const input = { source, plan, area, rules: layoutRules, pages: measured.map(p => ({ ...p, candidates: p.candidates.map(c => ({ id: c.id, programVersion: c.programVersion, family: c.family, direction: c.direction, allocation: c.allocation, supportsRelation: c.supportsRelation, regions: c.regions, contentMinimums: c.contentMinimums })) })) };
   const save = (file, value) => fs.writeFile(path.join(directory, file), JSON.stringify(value, null, 2));
   await save('layout-selection-input.json', input);
   await fs.writeFile(path.join(directory, 'layout-selection-prompt.txt'), LAYOUT_SELECTION_PROMPT);
