@@ -11,6 +11,23 @@ import {
   auditRenderedTypography,
 } from "../src/tools/audit-rendered-typography.mjs";
 
+test('layout v5 positions are audited, but absent rendered font and line metrics fail closed',async(t)=>{
+ const dir=await fs.mkdtemp(path.join(os.tmpdir(),'ppagent-v5-audit-'));
+ t.after(()=>fs.rm(dir,{recursive:true,force:true}));
+ const layout={schema:'openai.presentation.layout/v5',slide:{position:{left:0,top:0,width:400,height:300}},elements:[
+  {name:'PPAGENT_QA|parent=g|domains=groups',position:{left:10,top:10,width:380,height:280}},
+  {name:'PPAGENT_QA|within=g|role=body',position:{left:20,top:20,width:200,height:50},text:'实际行盒未提供',style:{fontSize:22}},
+ ]};
+ const file=path.join(dir,'slide-01.layout.json');await fs.writeFile(file,JSON.stringify(layout));
+ const report=await auditRenderedDeck(dir,{requiredQaSlides:['slide-01']});
+ assert.equal(report.geometry.status,'passed');
+ assert.equal(report.status,'failed');
+ assert.equal(report.typography.violations[0].type,'missing-rendered-font-evidence');
+ assert.equal(report.lineBreaks.violations[0].type,'missing-rendered-line-evidence');
+ layout.elements[1].position.left=350;await fs.writeFile(file,JSON.stringify(layout));
+ assert.equal((await auditRenderedGeometry(dir)).status,'failed');
+});
+
 // 拟合行数（element.text 里的 \n 个数 + 1）与引擎实际排出的行盒是两回事。
 // 引擎多排一行 = 交付物上多出一个孤立字，拟合器自己看不出来，只有 QA 行盒记得住。
 test("断行审计以引擎行盒为准：引擎多排一行就必须报出来", async (t) => {

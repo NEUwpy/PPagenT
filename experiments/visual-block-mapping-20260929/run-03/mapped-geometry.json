@@ -1,0 +1,257 @@
+[
+  {
+    "pageId": "services",
+    "regions": [
+      {
+        "region": {
+          "itemId": "service",
+          "x": 0,
+          "y": 0,
+          "width": 1170,
+          "height": 492,
+          "fontSize": 22
+        },
+        "body": {
+          "runs": [
+            {
+              "text": "一 咨询",
+              "x": 8,
+              "y": 8,
+              "width": 545,
+              "height": 29.700000000000003,
+              "bold": true,
+              "fits": true,
+              "fontSize": 22,
+              "visualBlockId": "advice-area"
+            },
+            {
+              "text": "工作人员回答资料检索与使用方面的问题。",
+              "x": 8,
+              "y": 41.7,
+              "width": 545,
+              "height": 29.700000000000003,
+              "bold": false,
+              "fits": true,
+              "fontSize": 22,
+              "visualBlockId": "advice-area"
+            },
+            {
+              "text": "咨询需要提前预约。",
+              "x": 8,
+              "y": 88,
+              "width": 545,
+              "height": 16.200000000000003,
+              "bold": false,
+              "fits": true,
+              "fontSize": 12,
+              "kind": "note",
+              "visualBlockId": "advice-area"
+            },
+            {
+              "text": "二 资料借阅",
+              "x": 585,
+              "y": 8,
+              "width": 545,
+              "height": 29.700000000000003,
+              "bold": true,
+              "fits": true,
+              "fontSize": 22,
+              "visualBlockId": "borrow-area"
+            },
+            {
+              "text": "登记资料名称和使用人后办理\n借阅，归还时核对登记记录。",
+              "x": 585,
+              "y": 41.7,
+              "width": 545,
+              "height": 59.400000000000006,
+              "bold": false,
+              "fits": true,
+              "fontSize": 22,
+              "visualBlockId": "borrow-area"
+            },
+            {
+              "text": "两项服务均在工作日提供。",
+              "x": 8,
+              "y": 141,
+              "width": 1122,
+              "height": 29.700000000000003,
+              "bold": false,
+              "fits": true,
+              "fontSize": 22,
+              "visualBlockId": "hours-band"
+            }
+          ],
+          "sections": [
+            {
+              "left": 0,
+              "top": 0,
+              "width": 561,
+              "height": 117,
+              "kind": "text",
+              "id": "advice-area:section-0",
+              "minHeight": 117,
+              "sourceBlockIds": [
+                "advice",
+                "appointment"
+              ],
+              "noteArea": {
+                "top": 84,
+                "height": 33
+              },
+              "visualBlockId": "advice-area"
+            },
+            {
+              "left": 577,
+              "top": 0,
+              "width": 561,
+              "height": 110,
+              "kind": "text",
+              "id": "borrow-area:section-0",
+              "minHeight": 110,
+              "sourceBlockIds": [
+                "borrow"
+              ],
+              "visualBlockId": "borrow-area"
+            },
+            {
+              "left": 0,
+              "top": 133,
+              "width": 1138,
+              "height": 46,
+              "kind": "note",
+              "id": "hours-band:section-0",
+              "minHeight": 46,
+              "sourceBlockIds": [
+                "hours"
+              ],
+              "standalone": true,
+              "visualBlockId": "hours-band"
+            }
+          ],
+          "height": 422,
+          "minimumHeight": 179,
+          "fits": true
+        }
+      }
+    ]
+  },
+  {
+    "pageId": "records",
+    "regions": [
+      {
+        "region": {
+          "itemId": "record",
+          "x": 0,
+          "y": 0,
+          "width": 1170,
+          "height": 492,
+          "fontSize": 22
+        },
+        "body": {
+          "runs": [
+            {
+              "text": "两类记录均供项目成员查阅，外发前需负责人确认。",
+              "x": 8,
+              "y": 8,
+              "width": 1122,
+              "height": 29.700000000000003,
+              "bold": false,
+              "fits": true,
+              "fontSize": 22,
+              "visualBlockId": "scope-band"
+            },
+            {
+              "text": "一 版本记录",
+              "x": 8,
+              "y": 70,
+              "width": 1122,
+              "height": 29.700000000000003,
+              "bold": true,
+              "fits": true,
+              "fontSize": 22,
+              "visualBlockId": "version-area"
+            },
+            {
+              "text": "记录文档版本、修改内容和修改人，保留此前版本供追溯。",
+              "x": 8,
+              "y": 103.7,
+              "width": 1122,
+              "height": 29.700000000000003,
+              "bold": false,
+              "fits": true,
+              "fontSize": 22,
+              "visualBlockId": "version-area"
+            },
+            {
+              "text": "二 问题记录",
+              "x": 8,
+              "y": 166,
+              "width": 1122,
+              "height": 29.700000000000003,
+              "bold": true,
+              "fits": true,
+              "fontSize": 22,
+              "visualBlockId": "issue-area"
+            },
+            {
+              "text": "记录问题现象、处理意见和处理状态。尚未核实的问题应标为待核实。",
+              "x": 8,
+              "y": 199.7,
+              "width": 1122,
+              "height": 29.700000000000003,
+              "bold": false,
+              "fits": true,
+              "fontSize": 22,
+              "visualBlockId": "issue-area"
+            }
+          ],
+          "sections": [
+            {
+              "left": 0,
+              "top": 0,
+              "width": 1138,
+              "height": 46,
+              "kind": "note",
+              "id": "scope-band:section-0",
+              "minHeight": 46,
+              "sourceBlockIds": [
+                "scope"
+              ],
+              "standalone": true,
+              "visualBlockId": "scope-band"
+            },
+            {
+              "left": 0,
+              "top": 62,
+              "width": 1138,
+              "height": 80,
+              "kind": "text",
+              "id": "version-area:section-0",
+              "minHeight": 80,
+              "sourceBlockIds": [
+                "version"
+              ],
+              "visualBlockId": "version-area"
+            },
+            {
+              "left": 0,
+              "top": 158,
+              "width": 1138,
+              "height": 80,
+              "kind": "text",
+              "id": "issue-area:section-0",
+              "minHeight": 80,
+              "sourceBlockIds": [
+                "issue"
+              ],
+              "visualBlockId": "issue-area"
+            }
+          ],
+          "height": 422,
+          "minimumHeight": 238,
+          "fits": true
+        }
+      }
+    ]
+  }
+]

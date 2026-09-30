@@ -1,0 +1,178 @@
+{
+  "schemaVersion": "gray-plan-3",
+  "deckBrief": {
+    "title": "组内视觉分区建设样本",
+    "audience": "开发与评审",
+    "objective": "核对内容绑定、组内分区和共同说明"
+  },
+  "pages": [
+    {
+      "pageId": "services",
+      "title": "模拟服务安排",
+      "claim": "模拟：工作日按需提供服务",
+      "pagePurpose": "说明两项独立服务及共同适用时间",
+      "narrative": "咨询和资料借阅为独立服务；预约条件仅限定咨询，工作日限定二者",
+      "groups": [
+        {
+          "id": "service",
+          "heading": "服务项目",
+          "kind": "text",
+          "role": "主体",
+          "importance": "primary",
+          "blocks": [
+            {
+              "id": "advice",
+              "label": "咨询",
+              "text": "工作人员回答资料检索与使用方面的问题。",
+              "sourceIds": [
+                "s1"
+              ]
+            },
+            {
+              "id": "appointment",
+              "label": "",
+              "text": "咨询需要提前预约。",
+              "sourceIds": [
+                "s2"
+              ],
+              "kind": "note"
+            },
+            {
+              "id": "borrow",
+              "label": "资料借阅",
+              "text": "登记资料名称和使用人后办理借阅，归还时核对登记记录。",
+              "sourceIds": [
+                "s3"
+              ]
+            },
+            {
+              "id": "hours",
+              "label": "",
+              "text": "两项服务均在工作日提供。",
+              "sourceIds": [
+                "s4"
+              ],
+              "scope": "group"
+            }
+          ]
+        }
+      ],
+      "visualMapping": {
+        "groups": [
+          {
+            "groupId": "service",
+            "direction": "horizontal",
+            "relation": "independent"
+          }
+        ],
+        "blocks": [
+          {
+            "id": "advice-area",
+            "groupId": "service",
+            "blockIds": [
+              "advice",
+              "appointment"
+            ]
+          },
+          {
+            "id": "borrow-area",
+            "groupId": "service",
+            "blockIds": [
+              "borrow"
+            ]
+          },
+          {
+            "id": "hours-band",
+            "groupId": "service",
+            "blockIds": [
+              "hours"
+            ],
+            "role": "shared",
+            "scopeGroupIds": [
+              "service"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageId": "records",
+      "title": "模拟记录要求",
+      "claim": "模拟：两类记录分别维护",
+      "pagePurpose": "明确两类记录的用途及共同条件",
+      "narrative": "版本记录和问题记录独立，不构成办理顺序；共用访问约束",
+      "groups": [
+        {
+          "id": "record",
+          "heading": "记录管理",
+          "kind": "text",
+          "role": "主体",
+          "importance": "primary",
+          "blocks": [
+            {
+              "id": "scope",
+              "label": "",
+              "text": "两类记录均供项目成员查阅，外发前需负责人确认。",
+              "sourceIds": [
+                "s5"
+              ],
+              "scope": "group"
+            },
+            {
+              "id": "version",
+              "label": "版本记录",
+              "text": "记录文档版本、修改内容和修改人，保留此前版本供追溯。",
+              "sourceIds": [
+                "s6"
+              ]
+            },
+            {
+              "id": "issue",
+              "label": "问题记录",
+              "text": "记录问题现象、处理意见和处理状态。尚未核实的问题应标为待核实。",
+              "sourceIds": [
+                "s7"
+              ]
+            }
+          ]
+        }
+      ],
+      "visualMapping": {
+        "groups": [
+          {
+            "groupId": "record",
+            "direction": "vertical",
+            "relation": "independent"
+          }
+        ],
+        "blocks": [
+          {
+            "id": "scope-band",
+            "groupId": "record",
+            "blockIds": [
+              "scope"
+            ],
+            "role": "shared",
+            "scopeGroupIds": [
+              "record"
+            ]
+          },
+          {
+            "id": "version-area",
+            "groupId": "record",
+            "blockIds": [
+              "version"
+            ]
+          },
+          {
+            "id": "issue-area",
+            "groupId": "record",
+            "blockIds": [
+              "issue"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

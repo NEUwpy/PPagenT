@@ -1,6 +1,6 @@
 // Model-authored local layout; source text and ownership still come from gray.
 import Ajv2020 from 'ajv/dist/2020.js';
-import {addBox,addText} from '../asset-runtime/component-builders.mjs';
+import {addBox,addText,qaElementName} from '../asset-runtime/component-builders.mjs';
 import {fitChineseTextToFrame} from './chinese-typography.mjs';
 
 const object=(properties,required=Object.keys(properties))=>({type:'object',properties,required,additionalProperties:false});
@@ -12,7 +12,7 @@ const textProperties={frame,fontRole:choice('heading','body','english'),fontSize
   bold:{type:'boolean'},align:choice('left','center','right'),verticalAlign:choice('top','middle','bottom'),lineHeight:number(1,1.8)};
 const textRequired=['frame','fontRole','fontSize','colorRole'];
 const paint=object({kind:choice('none','solid','linear'),colorRole:color,endColorRole:color,angleDeg:number(0,360)},['kind']);
-export const regionVisualSchema=object({itemId:{type:'string'},reason:{type:'string',minLength:1},layout:object({
+const localLayoutSchema=object({itemId:{type:'string'},reason:{type:'string',minLength:1},layout:object({
   frame:{...frame,description:'可选：正文区归一化坐标，微调本组范围；缺省沿用灰稿。组内 frame 均相对此组，不是整页。保留原有上下/左右归属。'},
   heading:object(textProperties,textRequired),
   titlePair: {type:'string',enum:['skin-overlap'],description:'使用 Skin 的统一中英文叠合样式；英文位置与字号从中文统一派生，仍由模型指定标题起点。'},
@@ -22,13 +22,21 @@ export const regionVisualSchema=object({itemId:{type:'string'},reason:{type:'str
   decorations:{type:'array',maxItems:8,items:object({frame,geometry:choice('rect','roundRect','ellipse'),fill:paint,
     line:object({width:number(0,3),dash:choice('solid','dashed'),fill:paint}),radius:number(0,16),titleGap:{type:'boolean',description:'上边线在标题处留空，不绘制任何标题底板。用于 rect 分区框。'}},['frame','geometry','fill','line'])},
 },['heading','blocks','decorations'])});
+export const regionVisualSchema={oneOf:[localLayoutSchema,object({
+  itemId:{type:'string'},reason:{type:'string',minLength:1},program:{type:'string',const:'source-text-v1'},
+})]};
 const validateSchema=new Ajv2020({strict:false,allErrors:true}).compile(regionVisualSchema);
 
 export function grayTextSources(item) {
   if(item.kind!=='text') return [];
-  return (item.blocks?.length?item.blocks:[item]).flatMap((b,i)=>b.kind && b.kind!=='text'?[]:[{
-    sourceLocation:item.blocks?.length?`${item.id}/${b.id??i}`:item.id,text:b.text??b.sourceText??'',
-  }]);
+  return (item.blocks?.length?item.blocks:[item]).flatMap((b,i)=>{
+    const kind=b.kind ?? 'text';
+    if(kind!=='text' && kind!=='note') return [];
+    const text=b.text??b.sourceText??'';
+    const label=typeof b.label==='string' ? b.label : '';
+    return [{sourceLocation:item.blocks?.length?`${item.id}/${b.id??i}`:item.id,label,text,
+      displayText:[label,text].filter(Boolean).join('\n'),kind}];
+  });
 }
 export function grayVisualTokens(theme={},typography={}) {
   return {colors:{paper:theme.background??'#FFFFFF',ink:theme.body??'#404040',muted:theme.muted??'#777777',
@@ -56,7 +64,7 @@ export function validateRegionLayouts(page,plan,area={width:1170,height:492}) {
     const bounds=regionBounds(region,l,area); contained(bounds,s.itemId); groupFrames.push({bounds,region});
     const sources=grayTextSources(item),refs=l.blocks.map(b=>b.sourceLocation);
     if(refs.length!==sources.length || new Set(refs).size!==refs.length || sources.some(b=>!refs.includes(b.sourceLocation))) throw new Error(`${s.itemId} 必须逐块保留原文，禁止漏字、重复或引用其他组`);
-    const ownsStructure=plan.structure.sourceItemIds.includes(s.itemId);
+    const ownsStructure=Boolean(plan.structure?.sourceItemIds?.includes(s.itemId));
     if(ownsStructure!==Boolean(l.structureFrame)) throw new Error(`${s.itemId} 结构区域必须且只能属于原图示组`);
     const semantic=[l.heading.frame,...l.blocks.map(b=>b.frame),...(l.structureFrame?[l.structureFrame]:[])];
     for(const f of [...semantic,...l.decorations.map(d=>d.frame),...(l.english?[l.english.frame]:[])]) contained(f,s.itemId);
@@ -112,8 +120,19 @@ export function renderGrayVisualPlan(slide,content,plan,bodyFrame,typography,the
     if(english?.text) text(english.text,english,`region-${s.itemId}-english`);
     text(item.heading,heading,`region-${s.itemId}-heading`);
     const sources=grayTextSources(item);
-    for(const [i,b] of l.blocks.entries()) text(sources.find(n=>n.sourceLocation===b.sourceLocation).text,b,`region-${s.itemId}-body-${i}`);
+    for(const [i,b] of l.blocks.entries()) {
+      const source=sources.find(n=>n.sourceLocation===b.sourceLocation);
+      text(source.displayText ?? source.text,b,`region-${s.itemId}-body-${i}`);
+    }
     if(l.structureFrame) componentFrame=absolute(l.structureFrame,group);
+    // Audit the actual region and semantic frames even on pages without a
+    // structure. English may overlap its heading intentionally; body may not.
+    const groupId=`gray-region-${s.itemId}`;
+    const witness=(f,name)=>addBox(slide,f,{name,geometry:'rect',fill:'none',line:{fill:'none',width:0},shadow:'shadow-none'});
+    witness(group,qaElementName({parent:groupId,domains:['gray-regions']}));
+    for(const [i,f] of [heading.frame,...l.blocks.map(b=>b.frame),...(l.structureFrame?[l.structureFrame]:[])].entries()) {
+      witness(absolute(f,group),qaElementName({parent:`${groupId}-content-${i}`,within:groupId,domains:[`${groupId}-content`]}));
+    }
   }
   return {componentFrame};
 }

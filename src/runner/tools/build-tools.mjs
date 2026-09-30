@@ -31,6 +31,7 @@ import {
 import { defineTool } from "./index.mjs";
 import { expressionRequirements, missingExpressions, validateGrayRegionPlan } from "../gray-expressions.mjs";
 import {regionVisualSchema,grayVisualTokens,grayTextSources} from '../../render/gray-visual-plan.mjs';
+import {TEXT_PROGRAM_CONTRACT} from '../../render/gray-text-program.mjs';
 import { discoverCoreAssetPackages, loadCoreAssetPackage } from "../../runtime/core-asset-packages.mjs";
 import { loadStructureSkill } from "../../runtime/structure-skills.mjs";
 
@@ -133,7 +134,7 @@ export function buildDeckPages(state) {
     composition: page.composition
       ? {
         compositionId: page.composition.compositionId,
-        ...(page.composition.compositionId === "component-gray-regions" ? { grayRegions: page.grayComposition.regions, grayArea: state.grayDraft.area, structure: page.composition.structure, regionVisuals: page.composition.regionVisuals } : {}),
+        ...(page.composition.compositionId === "component-gray-regions" ? { grayRegions: page.grayComposition.regions, grayArea: state.grayDraft.area, graySemantics:page.semantics, structure: page.composition.structure, regionVisuals: page.composition.regionVisuals } : {}),
         textSlots: page.composition.textSlots,
         ...(page.composition.structure ? { componentItemIds: page.composition.structure.sourceItemIds } : {}),
         // 条件展开：没给 leadLabel 时连键都不存在，历史 blueprint 因此逐字不变。
@@ -214,7 +215,7 @@ export function groupViolations(qualityAudit) {
     bySlide.get(slide).push(issue);
   };
   for (const violation of qualityAudit.typography?.violations ?? []) {
-    push(violation.slide, { code: "tiny-font", slide: violation.slide, fontSize: violation.fontSize, text: violation.text });
+    push(violation.slide, { code: violation.type ?? "tiny-font", slide: violation.slide, fontSize: violation.fontSize, text: violation.text });
   }
   for (const violation of qualityAudit.geometry?.violations ?? []) {
     push(violation.slide, { code: violation.type ?? "geometry-violation", slide: violation.slide, detail: violation });
@@ -317,8 +318,9 @@ export function buildTools({ root, runDir, committer, statePath }) {
           visualFeedback: state.visualFeedback ?? null,
           ...(state.grayInput ? {grayVisualDesign:{
             area:state.grayDraft.area,
+            programs:[TEXT_PROGRAM_CONTRACT],
             tokens:grayVisualTokens((state.skinId==='neutral-editorial-001'?neutralEditorialSkin:northeasternUniversitySkin).componentTheme,(state.skinId==='neutral-editorial-001'?neutralEditorialSkin:northeasternUniversitySkin).typographyRoles),
-            coordinates:'layout.frame 相对正文区 0..1；组内 frame 相对本组 0..1。字号为画布 px，16 px=12 pt。模型决定位置、大小、对齐、间距和装饰，渲染器不补默认卡片。',
+            coordinates:'纯文字优先选择 source-text-v1，程序消费原区域和视觉块绑定，不接受坐标。兼容 layout.frame 相对正文区 0..1，组内 frame 相对本组 0..1，16 px=12 pt；自由排版仍需完整验证。',
           }}:{}),
           structures: (await discoverCoreAssetPackages(root)).filter(p => p.runtime.renderer !== "skin")
             .map(p => ({ assetId: p.assetId, name: p.asset.name, logicId: p.runtime.logicId })),
@@ -357,6 +359,7 @@ export function buildTools({ root, runDir, committer, statePath }) {
               kind: item.kind ?? "text",
               blocks: item.blocks ?? [],
               textSources: state.grayInput ? grayTextSources(item) : undefined,
+              visualMapping: state.grayInput ? item.visualMapping : undefined,
               production: item.production ?? null,
               // 内容角色不决定主次或位置；视觉方案通过 bandItemIds 指定辅助项。
               role: item.role ?? "object",
@@ -380,7 +383,7 @@ export function buildTools({ root, runDir, committer, statePath }) {
                 pageId: { type: "string" },
                 compositionId: { type: "string" },
                 regionVisuals: {
-                  type: "array", description: "每组提交模型局部排版 layout。标题和全部原文块的 frame、字体角色、字号、颜色、对齐可选；英文可省略；结构在所属组内分配 frame；装饰由原生形状、填色和独立线条渐变组合。来源文字不可改写。",
+                  type: "array", description: "纯文字页每组提交 {itemId,reason,program:'source-text-v1'}，由程序保持原区域和映射、使用 Skin 角色排版；全页同一程序，不传坐标或正文。旧局部 layout 保留兼容，不能混用。",
                   items: regionVisualSchema,
                 },
                 structure: {
@@ -447,13 +450,14 @@ export function buildTools({ root, runDir, committer, statePath }) {
           if (!layout.id.startsWith(TEXT_ONLY_LAYOUT_PREFIX) && !componentLayout) {
             throw new Error(`${plan.compositionId} 尚未接入正式视觉工具`);
           }
-          if (componentLayout !== Boolean(plan.structure)) throw new Error("组件版式必须且只能绑定一个 structure");
+          if (componentLayout && layout.id !== "component-gray-regions" && !plan.structure) throw new Error("组件版式必须绑定 structure");
+          if (!componentLayout && plan.structure) throw new Error("文字版式不能绑定 structure");
           if (plan.structure) {
             const pkg = await loadCoreAssetPackage(plan.structure.assetId, root);
             if (pkg.runtime.renderer === "skin") throw new Error("不能把 Skin 当结构");
           }
           if (current.grayInput) {
-            if (!plan.regionVisuals?.every(v=>v.layout) || !plan.regionVisuals.length) throw new Error('灰稿必须提交逐区 layout，让模型决定排版，不能只换字体颜色');
+            if (!plan.regionVisuals?.length || !plan.regionVisuals.every(v=>v.layout||v.program)) throw new Error('灰稿必须逐区选择已登记 program 或提交兼容 layout');
             validateGrayRegionPlan(page, plan, current.grayDraft.area);
             return { pageId: plan.pageId, composition: structuredClone(plan) };
           }

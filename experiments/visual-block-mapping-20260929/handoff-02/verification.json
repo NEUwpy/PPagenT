@@ -1,0 +1,52 @@
+{
+  "outputPptx": "C:\\PPagenT\\experiments\\visual-block-mapping-20260929\\handoff-02\\deck.pptx",
+  "qualityAudit": {
+    "status": "failed",
+    "typography": {
+      "status": "passed",
+      "minimumFontSize": 12,
+      "violations": []
+    },
+    "geometry": {
+      "status": "failed",
+      "tolerance": 0.5,
+      "qaParentCount": 0,
+      "connectorCount": 0,
+      "qaParentCountBySlide": {
+        "slide-01": 0,
+        "slide-02": 0,
+        "slide-03": 0
+      },
+      "violations": [
+        {
+          "type": "missing-qa-geometry-contract",
+          "slide": "slide-02"
+        },
+        {
+          "type": "missing-qa-geometry-contract",
+          "slide": "slide-03"
+        }
+      ]
+    },
+    "lineBreaks": {
+      "status": "failed",
+      "violations": [
+        {
+          "type": "engine-rewrapped",
+          "slide": "slide-01",
+          "element": "neutral-page-title",
+          "text": "组内视觉分区建设样本",
+          "fittedLines": 1,
+          "engineLines": 2,
+          "bbox": [
+            91,
+            44,
+            230,
+            36
+          ],
+          "fontSize": 23.09
+        }
+      ]
+    }
+  }
+}

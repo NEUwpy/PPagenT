@@ -1,0 +1,20 @@
+✔ bounded program preserves horizontal/vertical mapping and shared bands without authored coordinates (12.6099ms)
+✔ program rejects injected geometry, unsupported media, stale bindings and insufficient capacity (36.5025ms)
+✔ multiple original groups remain separate, long copy fails, and scaling remeasures instead of clipping (3398.1797ms)
+✔ native renderer uses Skin roles and emits original label/body/note as measured native runs (2.7636ms)
+✔ layout v5 positions are audited, but absent rendered font and line metrics fail closed (15.2184ms)
+✔ 断行审计以引擎行盒为准：引擎多排一行就必须报出来 (7.691ms)
+✔ 研发期字号审计会拒绝 Skin 组件中的不可读小字 (3.8007ms)
+✔ 几何审计拒绝同一碰撞域的重叠和越出容器的文字 (4.7031ms)
+✔ 几何与字号都通过时确定性交付门禁才通过 (4.175ms)
+✔ 连接线必须贴合声明的形状边缘锚点 (7.5079ms)
+✔ 资产 builder 不得绕过统一 Skin 变换直接写裸线段 (2.0812ms)
+✔ 被选中的结构组件页如果丢失几何契约必须失败 (3.9ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4990.2194

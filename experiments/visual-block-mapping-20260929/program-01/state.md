@@ -1,0 +1,33 @@
+<!-- 本文件由运行器从 state.json 渲染，不要直接编辑；要改状态请改 state.json。 -->
+
+# 运行状态：组内视觉分区建设样本
+
+- 阶段：`visual`
+- 原稿：`experiments/visual-block-mapping-20260929/run-03/state.json`
+- 来源：7 条
+- 下一步：继续编排页面并用 check_pages 做真实构建检查，全部当前版本通过后 finish_visual。
+- 受众：开发与评审
+- 目标：核对内容绑定、组内分区和共同说明
+
+## 来源覆盖
+
+全部来源已被引用。
+
+## 页面
+
+### services 模拟服务安排
+
+- 主张：模拟：工作日按需提供服务
+- 关系：咨询和资料借阅为独立服务；预约条件仅限定咨询，工作日限定二者
+- 内容项：1；来源：s1、s2、s3、s4
+- 方案版本：1；产物 failed（版本 1）
+- 未解决问题：missing-bbox、missing-bbox、missing-bbox、missing-bbox、missing-bbox、missing-bbox、missing-bbox、missing-bbox、missing-qa-geometry-contract
+
+### records 模拟记录要求
+
+- 主张：模拟：两类记录分别维护
+- 关系：版本记录和问题记录独立，不构成办理顺序；共用访问约束
+- 内容项：1；来源：s5、s6、s7
+- 方案版本：1；产物 failed（版本 1）
+- 未解决问题：missing-bbox、missing-bbox、missing-bbox、missing-bbox、missing-bbox、missing-bbox、missing-bbox、missing-qa-geometry-contract
+

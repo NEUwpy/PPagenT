@@ -1,0 +1,27 @@
+{
+  "stopReason": "delivered",
+  "detail": {
+    "renders": 1
+  },
+  "note": null,
+  "turns": 4,
+  "usage": {
+    "requests": 4,
+    "toolCalls": 4,
+    "tokens": {}
+  },
+  "toolCallCount": 4,
+  "stalledTurns": 0,
+  "toolSequence": [
+    "check_plan",
+    "semantic_review",
+    "render_draft",
+    "finish_draft"
+  ],
+  "tools": [
+    "check_plan",
+    "semantic_review",
+    "render_draft",
+    "finish_draft"
+  ]
+}

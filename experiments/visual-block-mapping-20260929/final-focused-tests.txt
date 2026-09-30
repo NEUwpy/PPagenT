@@ -1,0 +1,31 @@
+✔ gray import rejects whole-page takeover and unrelated text binding (2.8556ms)
+✔ structure stays in blue subregion, original text retains its separate region (6.5288ms)
+✔ visual decisions must cover every original region exactly once (0.697ms)
+✔ legacy handoff binds by original IDs after attached notes and uses only the nested blue area (7.5685ms)
+✔ model layout preserves all source blocks and rejects ownership, overlap and boundary violations (12.6428ms)
+✔ model positions, type, alignment and gradient stroke reach native shapes; content is source-bound (7.2519ms)
+✔ Skin roles stay Skin-specific and insufficient frames fail instead of silently shrinking (1.7767ms)
+✔ shared title pair fixes English offset and leaves a native border gap without masking blocks (3.2785ms)
+✔ beauty source binding keeps labels and attached notes as visible text sources (3.1142ms)
+✔ pure text with labels and notes validates and reaches native shapes without a structure frame (4.2148ms)
+✔ 提示词去重：共享片段在源码中恰好出现一次（单一来源），两份提示词均由它拼装 (6.2212ms)
+✔ 关键条款在两份提示词同时存在（同步测试替代人工注释纪律） (0.4914ms)
+✔ old gray deliveries recover the selected brief without fabricating missing content (17.5081ms)
+✔ --replay 只在整套审计通过时才算交付 (0.8841ms)
+✔ 没有视觉方案的页面无法重编译，且不靠猜测补齐 (0.3762ms)
+✔ parseArgs 把带值的开关与裸开关分开，值不会被当成下一个开关 (0.3051ms)
+✔ 灰稿交接直接进入 visual 并记录源版本 (21.7982ms)
+✔ 视觉阶段注入生成规则，内容阶段注入内容导演规则，两者不同 (51.2293ms)
+✔ 规则正文必须带优先级声明：它描述的是另一条生产线，冲突时以本次工具契约为准 (6.9044ms)
+✔ mapping splits and merges blocks within one semantic group while retaining source order (4.5641ms)
+✔ formal binding, review and replay preserve mapping; geometry uses measured lanes and full-width scope (42.8093ms)
+✔ mapping rejects unsupported relationships, separated notes, fabricated fields and undersized lanes (2.033ms)
+✔ mapping rejects cross-group, omitted, duplicated and out-of-scope content (0.5475ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2243.7138

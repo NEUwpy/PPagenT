@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { Presentation, PresentationFile } from "../../ppt-engine/index.mjs";
 import { addText } from "../../asset-runtime/component-builders.mjs";
+import { fitChineseTextToFrame } from "../../render/chinese-typography.mjs";
 import { renderPageComposition } from "../../render/page-composition.mjs";
 import { renderStructureAsset, closeHtmlComponentRuntime, isSkinOnlyAsset } from "../legacy-structure-assets.mjs";
 import { exportTemplateMappedQa } from "../../asset-runtime/template-utils.mjs";
@@ -28,10 +29,14 @@ function rule(slide, gray = false) {
 }
 
 function shell(slide, page, index) {
-  const gray = page.composition?.compositionId === "component-gray-regions";
+  const compactTitle=fitChineseTextToFrame(page.content.title,{width:230,height:36,fontSizes:[25],maxLines:1,lineHeight:1.2,glyphWidthFactor:1.06});
+  const gray = page.composition?.compositionId === "component-gray-regions" || !compactTitle.fits;
+  const titleFrame={left:91,top:44,width:gray?1129:230,height:36};
+  const title=fitChineseTextToFrame(page.content.title,{...titleFrame,fontSizes:[25],maxLines:1,lineHeight:1.2,glyphWidthFactor:1.06});
+  if(!title.fits) throw new Error('中性 Skin 标题超出单行容量，请返回标题规划');
   slide.background.fill = "#F5F4EF";
   addText(slide, String(index + 1).padStart(2, "0"), { left: 56, top: 48, width: 24, height: 24 }, { name: "neutral-section-number", typeface: "Noto Sans SC", fontSize: 18, color: "#A35D4F", verticalAlignment: "middle" });
-  addText(slide, page.content.title, { left: 91, top: 44, width: gray ? 1129 : 230, height: 36 }, { name: "neutral-page-title", typeface: "Noto Serif SC", fontSize: 25, bold: true, color: "#201F1D", verticalAlignment: "middle" });
+  addText(slide, title.text, titleFrame, { name: "neutral-page-title", typeface: "Noto Serif SC", fontSize: 25, bold: true, color: "#201F1D", verticalAlignment: "middle", autoFit:'none' });
   rule(slide, gray);
   addText(slide, "灰稿交接 · 正式生成", { left: 56, top: 679, width: 240, height: 18 }, { name: "neutral-footer-label", typeface: "Noto Sans SC", fontSize: 12, color: "#85837B", verticalAlignment: "middle" });
   addText(slide, String(index + 1).padStart(2, "0"), { left: 1198, top: 679, width: 26, height: 18 }, { name: "neutral-folio", typeface: "Noto Sans SC", fontSize: 12, color: "#85837B", alignment: "right", verticalAlignment: "middle" });

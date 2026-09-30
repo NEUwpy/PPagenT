@@ -1,0 +1,33 @@
+{
+  "content": "固定计划工程回放。",
+  "toolCalls": [
+    {
+      "name": "finish_draft",
+      "args": {
+        "review": "固定计划工程回放；脚本只验证调用和绑定，语义及像素由人工另行审阅，不声明模型能力。"
+      }
+    }
+  ],
+  "stalled": false,
+  "planFlow": {
+    "submission": {
+      "status": "none",
+      "turn": 4,
+      "explicitReuse": false
+    },
+    "consumptions": [
+      {
+        "consumer": "finish_draft",
+        "planSource": "current-plan",
+        "submittedTurn": 0,
+        "originTurn": 0,
+        "fingerprint": "ad41dbfadd785fb47ee6bf65293b6279d3d5c84c",
+        "submissionFingerprint": "44722c45df6bfe465d01fb50a98724ba0149403bc219ec5c0f3204137c5cba37",
+        "consumedTurn": 4,
+        "consumptionSource": "current-plan",
+        "contentUpdated": false,
+        "submissionUpdated": false
+      }
+    ]
+  }
+}

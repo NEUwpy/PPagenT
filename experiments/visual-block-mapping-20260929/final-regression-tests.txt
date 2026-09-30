@@ -1,0 +1,284 @@
+✔ 主题句超单行预算在规划期以 issue 暴露（与渲染门禁同一测量） (12.8123ms)
+✔ 稀疏页以 warning 暴露、不阻断；内容充实的页无警告 (227.6394ms)
+✔ 容量按默认组合预估以 warning 暴露、不阻塞 (595.2316ms)
+✔ 区域大小与内容不匹配以 warning 暴露、不阻断 (5991.314ms)
+✔ 逐页独立：某页超容量不中断其余页的充实度检查 (605.5271ms)
+✔ render_draft layouts schema：{pageId} 走默认、{pageId,layout,override} 合法、缺 pageId/reason 被拒（任务 #222） (14.2164ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-l219tr\run\agent-renders\render-1\gray-draft.pptx.inspect.ndjson
+✔ render_draft 接口契约：{pageId} 只传页号即走默认并成功（任务 #222） (2271.4001ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-IUCZ9j\run\agent-renders\render-2\gray-draft.pptx.inspect.ndjson
+✔ 模板门重复请求保护：同一无效布局第二次按停滞拒绝，改用默认后继续（任务 #208） (459.3787ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-HtVWLt\run\agent-renders\render-1\gray-draft.pptx.inspect.ndjson
+✔ 渲染后复核协议：成功渲染是候选（带诊断），后续回合 finish 才交付 (434.5622ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-2BvmzQ\run\agent-renders\render-1\gray-draft.pptx.inspect.ndjson
+✔ 同轮 render+finish 不算看过诊断：被拒后下一轮 finish 才接受 (386.9558ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-X5FWTk\run\agent-renders\render-1\gray-draft.pptx.inspect.ndjson
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-X5FWTk\run\agent-renders\render-2\gray-draft.pptx.inspect.ndjson
+✔ 首次成功后最多一次修订周期：内容修订重审、再次渲染被预算拒绝、finish 交付修订版 (605.9593ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-KENh9x\run\agent-renders\render-1\gray-draft.pptx.inspect.ndjson
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-KENh9x\run\agent-renders\render-2\gray-draft.pptx.inspect.ndjson
+✔ 布局-only 修订沿用内容审稿：不重复调用审稿模型 (616.3523ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-flpMqa\run\agent-renders\render-1\gray-draft.pptx.inspect.ndjson
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-flpMqa\run\agent-renders\render-2\gray-draft.pptx.inspect.ndjson
+✔ 未 finish 的预算耗尽：交付第一次成功候选并标未完成复核，不写正常交付记录 (582.8124ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-nFKV0b\run\agent-renders\render-1\gray-draft.pptx.inspect.ndjson
+✔ 候选与当前计划不一致：finish 无 reason 被拒，写明退回原因后记录未采用修订 (305.3546ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-GNG2Z5\run\agent-renders\render-1\gray-draft.pptx.inspect.ndjson
+✔ 坏提交＋finish 不得用旧计划宣布成功：显式报提交失败，下一轮沿用旧候选才可完成 (334.1875ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-kgMojl\run\agent-renders\render-1\gray-draft.pptx.inspect.ndjson
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-kgMojl\run\agent-renders\render-2\gray-draft.pptx.inspect.ndjson
+✔ 选择非最新候选需说明退回原因：记录未采用的布局修订 (675.3705ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-MUZNY0\run\agent-renders\render-1\gray-draft.pptx.inspect.ndjson
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-MUZNY0\run\agent-renders\candidate-2\gray-draft.pptx.inspect.ndjson
+✔ 发布前同版断言：磁盘候选计划与登记指纹不一致时 finish 拒绝 (720.9535ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-flow-K4kI5v\run\agent-renders\candidate-1\gray-draft.pptx.inspect.ndjson
+✔ 坏提交是失败控制流：已审过的旧版不被坏修订冒充交付；截断计划也算失败；沿用可继续 (368.1883ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-flow-XlQh2K\run\agent-renders\candidate-1\gray-draft.pptx.inspect.ndjson
+✔ 散文里的花括号不是提交：按沿用推进，不误判提交失败 (341.6732ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-flow-IzqLs1\run\agent-renders\candidate-1\gray-draft.pptx.inspect.ndjson
+✔ 计划版本流：未写新 JSON 可推进审稿；同版复用不重复调用；修订后重新审稿 (318.2923ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-flow-PoDl68\run\agent-renders\candidate-1\gray-draft.pptx.inspect.ndjson
+✔ 审稿协议：建议/已解决项不阻塞；真实阻塞项仍拦截（阻塞优先于 accepted） (380.1956ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-flow-8AXT0J\run\agent-renders\candidate-1\gray-draft.pptx.inspect.ndjson
+✔ 坏提交显式失败：计划不更新、不冒充已修订，旧有效版本仍可推进 (386.5016ms)
+✔ controlled initial plan rejects source or pagination edits and retains original for review (55.3392ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-JWacfH\run\agent-renders\render-1\gray-draft.pptx.inspect.ndjson
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-JWacfH\run\agent-renders\render-2\gray-draft.pptx.inspect.ndjson
+✔ organization revise 独立阻塞渲染与旧候选交付；组织通过复审后才恢复 (726.8169ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-a4AsMk\run\agent-renders\candidate-1\gray-draft.pptx.inspect.ndjson
+✔ organization 格式修复保留完整响应并受同一审稿输入的两次额度约束 (465.3546ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-C6QIXq\run\agent-renders\render-1\gray-draft.pptx.inspect.ndjson
+✔ 缺失 claimAudit 不得通过：同版证据修复收到原输入与错误，且不改计划 (438.5304ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-iZRTvT\run\agent-renders\candidate-1\gray-draft.pptx.inspect.ndjson
+✔ 同一审稿输入最多两次修复：第二次收到最新audit/errors，之后明确停止 (402.583ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-uzwQlB\run\agent-renders\candidate-1\gray-draft.pptx.inspect.ndjson
+✔ 证据修复收到原始无效 claimAudit 和对应校验错误 (518.623ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-eXc2UG\run\agent-renders\candidate-1\gray-draft.pptx.inspect.ndjson
+✔ 计划内容改变会被拒绝并清除暂存，新审稿继续修复原版本 (422.6882ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-YsICTs\run\agent-renders\candidate-1\gray-draft.pptx.inspect.ndjson
+✔ 待修复原计划会拒绝换版并保存快照；同版修复成功后新计划可进入审稿 (403.106ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-UutSQZ\run\agent-renders\render-1\gray-draft.pptx.inspect.ndjson
+✔ 审稿可见视图与实际渲染一致：page.title 留在后台，claim 才上屏 (369.6644ms)
+✖ 灰稿 Agent 提示要求先合并全稿诊断，保真与可读性优先于留白 (5.4665ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-QlJnwj\run\agent-renders\render-1\gray-draft.pptx.inspect.ndjson
+✔ 无工具轮完整计划暂存：下一轮空正文 check_plan 消费原提交并记录来源 (359.8507ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-AEfdol\run\agent-renders\render-1\gray-draft.pptx.inspect.ndjson
+✔ 可见指纹不变时仍更新完整计划：修正页级 sourceIds 后检查从失败变通过 (374.2655ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-pKFgIF\run\agent-renders\render-1\gray-draft.pptx.inspect.ndjson
+✔ 失败提交只接受精确的独立恢复指令：否定、引述和解释均持续阻断至合法恢复 (420.9902ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-9Jq1th\run\agent-renders\render-1\gray-draft.pptx.inspect.ndjson
+✔ 无工具轮的精确恢复授权留痕，并由下一工具轮消费 (459.3945ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-r0FMrg\run\agent-renders\render-1\gray-draft.pptx.inspect.ndjson
+✔ 旧计划已提交时，无工具轮的新计划优先于旧版且内容变更触发重审 (367.8867ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-5z8mb9\run\agent-renders\render-1\gray-draft.pptx.inspect.ndjson
+✔ 当前工具轮有效计划优先于更早暂存计划 (390.1336ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-woHNJO\run\agent-renders\render-1\gray-draft.pptx.inspect.ndjson
+✔ 无工具轮坏提交跨轮保留失败状态：空正文工具不能静默沿用旧计划 (310.8489ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\gray-agent-protocol-9iczgx\run\agent-renders\render-1\gray-draft.pptx.inspect.ndjson
+✔ 已暂存有效计划后遇到坏提交：不回退暂存版或旧版，显式恢复才沿用 (301.5351ms)
+✔ 空洞指标：稀疏页与稀疏组触发 warn（非阻塞） (6.3517ms)
+✔ 充实页不触发；小容器（available<160）即使空洞也不触发组 warn (40.032ms)
+✔ 类别线索按窄模式提取：前缀+数词+量词+类别词 (2.9577ms)
+✔ 类别成组：组标题承载类别词时通过（含跨页复合标题） (4.3586ms)
+✔ 字面类别缺失仅警告，避免把忠实概括或分页当作程序错误 (1.1845ms)
+✔ warn 通道：编号前缀承载与碎裂类别组被记录且不阻塞 (0.8479ms)
+✔ 无类别线索的稿件不受本检查影响 (0.4766ms)
+✔ 同版重试：指纹对文案与版式敏感；容量失败后的同指纹重试被拒绝 (1.735ms)
+✔ 压缩记忆：附上一版实测高、目标差值与缩减量 (0.3259ms)
+✔ 双栏权重回退：默认权重放不下时按测量改选分栏（回执标注 reweighted） (77.7438ms)
+✔ 双栏权重回退有边界：没有任何候选能容纳时仍如实报容量失败 (107.7905ms)
+✔ 权重回退只作用于双栏 row 根：其他组合失败行为不变 (1.3353ms)
+✔ 测量布局先评请求权重：可容纳时不被最小高候选覆盖（任务 #188-B） (145.2523ms)
+✔ 请求权重确实放不下时按测量回退，并记录回退原因（任务 #188-B） (2434.7689ms)
+✔ 缺省 row 的有效请求是 [1,1]：保留不虚报回退，比例等价不算改选（任务 #196） (266.3783ms)
+✔ 审稿窄条款在契约中：同页并列类别不得要求配对/对应表 (0.3192ms)
+✔ 结构位口径在审稿契约中：汇聚/扇出用 diagram、节点短语顺序对应（允许压缩提炼） (0.3186ms)
+✔ 显式字号候选按实测选择，保持所有正文与容量边界 (239.5581ms)
+✔ 附注最小化：关系一句＋摘引短语，与 rules/排版.md 同步 (8.99ms)
+✔ 条目编号标签：按带标签条目顺序、附注不占号；单条目组不编号 (0.6351ms)
+✔ 蓝注解耦：块级附注独立 12px 小字，与主文字号互不锁死 (4.3921ms)
+✔ 结构位容量估算：占位高按类型与节点数，与描述文字长度无关 (9.8164ms)
+✔ 同最小高重试：实测高未降且文本未缩短才拒绝；缩短或降高均放行 (0.3031ms)
+✔ 计划文本量：计入标题、标签、正文与结构位字段 (0.3793ms)
+✔ 显式字号候选包含16px时仍保留容量边界 (239.7047ms)
+✔ 显式字号候选包含15px时仍保留容量边界 (280.7922ms)
+✔ 读取状态指向的当前 revision，保留待验收而非自动批准 (23.3432ms)
+✔ 未知 ID、文件类型、越界页和路径输入不能选取文件 (14.3067ms)
+✔ 快照缺失时保持缺失，不回退旧 PPT 或生成新快照 (13.312ms)
+✔ 越出项目的产物指针被拒绝 (11.0197ms)
+✔ 双 Skin 按页关联，缺页不能冒用其他页结果 (14.4513ms)
+✔ retains source evidence while mapping actual text once (7.1697ms)
+✔ arbitrary area changes capacity; same geometry rejected in smaller area (1.3424ms)
+✔ rejects dropped source, unrendered item, overlap and invented number (2.5924ms)
+✔ blue region capacity covers its displayed fields (expression+nodes) (4956.4291ms)
+✔ rewrapping retains text and font instead of shrinking or dropping conditions (4.3584ms)
+✔ resume mismatch preserves saved manuscript before any provider call (24.292ms)
+✔ 文字组内的局部图示不能被外层 text 遮蔽 (0.9027ms)
+✔ 纯文字不强制图示；其他组的结构不能替代本组要求 (1.1405ms)
+✔ 附注属于文字回填，不会把灰稿交接误判为图示 (0.7731ms)
+✔ 纯文字页不能偷偷绑定结构，多图示仍明确返回能力缺口 (0.4931ms)
+✔ 流转信息按窄模式打标：标题、称谓、发文字号、落款 (1.9966ms)
+✔ 宁可漏标不误标：正文引用、说明句、中段短行都不打标 (0.2095ms)
+✔ 覆盖检查豁免流转来源：只引用正文即可通过，未打标时仍强制覆盖 (3.8423ms)
+✔ 契约三分：流转信息上屏不再硬拦，转非阻塞提示、价值判断交独立审稿（评审 #111） (1.2276ms)
+✔ 契约三分·页级认领：未打标的文件名式标题不必单列条目，也能完成承载（评审 #111 验证①） (0.7261ms)
+✔ 正文里的日期不误伤：单独日期不算上屏，引用流转来源作为附加来源也不报错 (0.5381ms)
+✔ 节标题按窄模式打标：第X部分/章/节独立成段；句中引用与结构旁白不误标 (0.1907ms)
+✔ 节标题来源覆盖豁免；上屏由审稿按价值判断，不再机械拦截（评审 #111 契约三分） (0.8497ms)
+✔ 结构旁白不得上屏：本部分先讲…式自造组织说明失败；正文陈述不误伤 (0.5022ms)
+✔ 实证样本：Boss 攻坚 run6 的 g7 元信息条目两条禁则全命中；获批类别容器形态不受影响 (0.4673ms)
+✔ 关系相同：换措辞、增加类别或分页，不凭连接词强制图形位 (7.4855ms)
+✔ 已选局部结构位：单类、双类、多类和跨页共用所属条目摘引检查 (2.8119ms)
+✔ 节点分隔符与证据范围：｜ 分隔与来源内节点通过，条目实文压缩不构成失配 (0.9138ms)
+✔ 节点短语超出所属条目与所引来源时仍被拒绝（来源内节点按声明来源放行） (0.5587ms)
+✔ 归属、否定和来源保真底线继续存在，伪造来源仍被拒绝 (0.4072ms)
+✔ 统一测量对单主体、横向、纵向、网格及嵌套页均可用，组合和正文不被改写 (84.4564ms)
+✔ 固定几何、只替换类别名称时，字号和区域结果保持相同 (117.7251ms)
+✔ 通用生成与审稿入口不包含样稿答案，审稿承认局部蓝框阶段 (0.3947ms)
+✔ 带时间锚点的序列＋当前观察分支：通用判定进生成与审稿契约且不含样本词（任务 #216） (0.2697ms)
+✔ candidate geometry uses real text measurement and preserves content on binding (9.6984ms)
+✔ unsupported cross-group logic and fabricated candidate cannot pass (1.9311ms)
+✔ oversized body does not produce candidate by shrinking font (1964.318ms)
+✔ single region has one geometric candidate and explicit measured width-height requirements (0.7524ms)
+✔ support band keeps source order, gives primary more height, and binds support explicitly (1.4169ms)
+✔ parallel label cannot bypass explicit primary-supporting area balance (0.7466ms)
+✔ bounded font fallback is uniform and never goes below 18 (1.1378ms)
+✔ adjacent advice preserves source order and duplicate ids without mutating content (2.3448ms)
+✔ simple content accepts necessary relations in prose without mandatory per-sentence edges (4.3656ms)
+✔ row uses supplied weights and shared outer bounds while preserving copy (8.7709ms)
+✔ column, grid and single use existing solver without inventing semantic relations (4.0433ms)
+✔ sparse pages stop stretching groups; rich pages still fill the frame (52.355ms)
+✔ selection cannot inject coordinates, skip groups or misuse structure names (0.953ms)
+✔ layouts 条目只接受 {pageId, layout}：多余字段（如 override）给出可操作报错 (0.7224ms)
+✔ capacity failure reports measured requirements, never shrinks or drops copy (202.3816ms)
+✔ nested layout expresses layered pages: a main row above a full-width note (2.3449ms)
+✔ nested layout rejects missing, reordered or duplicated groups (0.6702ms)
+✔ non-text medium still requires four-part gray specification, not a structure invocation (1.8755ms)
+✔ row separates aligned outer frames from the unequal text capacity of each branch (1.3159ms)
+✔ block areas size to content and keep every text run inside its assigned block (0.791ms)
+✔ unequal branch counts and a local blue block preserve membership, copy and fixed type size (4.4898ms)
+✔ D 类简短需求诚实拒绝（<60 字，不产出需求复述页） (1.7335ms)
+✔ 材料稿放行（≥60 字） (0.3047ms)
+✔ gray import rejects whole-page takeover and unrelated text binding (1.6019ms)
+✔ structure stays in blue subregion, original text retains its separate region (3.5338ms)
+✔ visual decisions must cover every original region exactly once (0.5218ms)
+✔ legacy handoff binds by original IDs after attached notes and uses only the nested blue area (1.8146ms)
+✔ 附着说明块：紧随所属条目、不编号、无占位框，审稿投影带 attachment 标记 (13.6944ms)
+✔ 附着说明必须紧跟文字条目：首块、紧跟另一附注都拒绝 (1.2782ms)
+✔ 退化草图检查：整组草图仅 1 个块被拦（渲染按块出卡，单块不构成节点结构），≥2 块通过 (0.7307ms)
+✔ label 序号检测：覆盖最小合规形态，不误伤常用词与惯用语 (0.733ms)
+✔ 程序不按词表强制附注：同措辞不同真实关系与同关系换措辞都不触发结构要求 (0.6101ms)
+✔ 审稿契约写明程序序号口径：编号用于核对层级，kind:note 视为附着落实 (0.1669ms)
+✔ 内容指纹：只随可见内容变化，backstage 与来源改绑不作废 (1.8328ms)
+✔ 审稿覆盖判定：未审/未通过/内容已改都不得继承通过状态 (0.4251ms)
+✔ 审稿只维护命题证据：位置直接带实文，引用派生不宣称语义完整 (2.7991ms)
+✔ organization 与事实 rulings 独立：revise 阻塞且必须引用真实上屏位置与文字 (0.9916ms)
+✔ 标题或标签改变正文关系时须合并命题引用，不能以 non-claim 豁免 (0.7338ms)
+✔ 引用真实性与 ruling 派生阻塞/uncertain 备注 (1.0168ms)
+✔ 未引用来源与上屏位置必须逐项说明；unreviewed 或空命题审计不能通过 (0.6268ms)
+✔ 层级机制：scope:"group" 的共同说明不编号、随组以正文字号呈现（评审 #119 要求 3） (4.2913ms)
+✔ 声明一致性：scope:"group" 的呈现声明（不编号、正文字号）与布局实测一致（评审 #121） (1.0576ms)
+✔ 层级机制校验：scope 合法通过；未知值/结构块/整组共同说明被拒（评审 #119 要求 3） (4.7454ms)
+✔ 审稿可见范围声明组级共同说明与自动编号（评审 #119 要求 2） (0.6007ms)
+✔ text-only backstage expression metadata survives render fingerprint round trip (0.5678ms)
+✔ visible block production change invalidates semantic review (0.6678ms)
+✔ group scope inherits every body tier while notes stay 12px (2.774ms)
+✔ 危害样本恒等通过：不再删字、不再产生残句 (0.6811ms)
+✔ 审稿记录只记不改：原文、判定、覆盖与边界完整入档 (0.5834ms)
+✔ 审稿协议口径：阻塞项由单一 ruling 派生，uncertain 留作备注 (0.2021ms)
+✔ 契约口径：载体建议不具约束力、不被程序过滤；note 保证仅为呈现形态 (0.1189ms)
+✔ 阶段表与步骤文件映射的键一一对应 (10.9329ms)
+✔ 步骤文件列出这一轮的真实文件，多尝试也照实列 (24.3588ms)
+✔ 全部通过的运行：每步完成，渲染完成，预览与产物按真实文件列出 (31.55ms)
+✔ 表达调用进行中：规划已过、表达标记为进行中而不是规划进行中 (8.9886ms)
+✔ 结构检查失败的一轮：规划失败、下游被跳过、轮未通过 (9.6545ms)
+✔ 续跑判定：等待审阅与中断都可续，运行中不可续 (4.1841ms)
+✔ 续跑前整理：未完成的轮目录改名保留，不删除 (12.3321ms)
+✔ 预览取最新渲染：续跑后的产物在 revision-N/artifacts/ 时按修改时间取最新 (44.5053ms)
+✔ a local expression stays inside its branch and is visible to review and measurement (10.51ms)
+✔ semantic plan requires grounded internal relations before layout (1.4844ms)
+✔ geometry cannot rewrite content, reorder or silently drop groups (0.9917ms)
+✔ nested copy measures each label/body and preserves condition in rendering data (2.953ms)
+✔ semantic rejection stops before any geometry or PPT call and preserves evidence (47.958ms)
+✔ visible review cannot use backstage narrative, roles or notes as displayed evidence (0.8837ms)
+✔ review display and measured renderer share actual copy and hierarchy for every medium (3.465ms)
+✔ expression binding joins related content and keeps the default copy without losing its origin (1.5166ms)
+✔ expression-aware copy may condense source wording while keeping conditions and cited scope (1.2767ms)
+✔ simple plans scope block IDs to their group; explicit relation plans keep unambiguous endpoints (0.6335ms)
+✔ runner commits expression choice before visible review, never geometry rewriting the content (23.3026ms)
+✔ replay validation cannot accept a disconnected condition or stripped v2 semantics (1.8652ms)
+✔ fact visibility: chart numbers only in the blue production note are blocked; same-page gray copy carries them (0.7219ms)
+✔ fact visibility is page-local and normalizes full-width digits/percent and whitespace (0.5364ms)
+✔ fact check covers block-level structure slots and ignores backstage/production fields (0.9608ms)
+✔ topic overflow returns to semantic planning without wasting geometry repairs (66.2222ms)
+✔ 模板库 3–5 个、语义角色命名（非版位名），与 rules 真源同步 (1.7631ms)
+✔ 特征→默认映射可测试：组数分界与双栏权重按实文量 (1.6542ms)
+✔ 映射边界反例（取自覆盖样本）：两组主从走纵向、三组头带走 column[row,主] (0.7919ms)
+✔ 形状指纹忽略 weights：微调权重不算覆盖，结构不同才算 (0.2708ms)
+✔ applyTemplateDefaults：缺省用默认、同形放行、异形须理由、入档可分析 (1.3068ms)
+✔ model layout preserves all source blocks and rejects ownership, overlap and boundary violations (5.3935ms)
+✔ model positions, type, alignment and gradient stroke reach native shapes; content is source-bound (2.6961ms)
+✔ Skin roles stay Skin-specific and insufficient frames fail instead of silently shrinking (0.5464ms)
+✔ shared title pair fixes English offset and leaves a native border gap without masking blocks (0.6487ms)
+✔ beauty source binding keeps labels and attached notes as visible text sources (0.7156ms)
+✔ pure text with labels and notes validates and reaches native shapes without a structure frame (0.7378ms)
+✔ 提示词去重：共享片段在源码中恰好出现一次（单一来源），两份提示词均由它拼装 (3.6332ms)
+✔ 关键条款在两份提示词同时存在（同步测试替代人工注释纪律） (0.2522ms)
+✔ old gray deliveries recover the selected brief without fabricating missing content (8.4059ms)
+✔ --replay 只在整套审计通过时才算交付 (0.4769ms)
+✔ 没有视觉方案的页面无法重编译，且不靠猜测补齐 (0.2543ms)
+✔ parseArgs 把带值的开关与裸开关分开，值不会被当成下一个开关 (0.3991ms)
+✔ 灰稿交接直接进入 visual 并记录源版本 (4.7174ms)
+✔ 视觉阶段注入生成规则，内容阶段注入内容导演规则，两者不同 (6.173ms)
+✔ 规则正文必须带优先级声明：它描述的是另一条生产线，冲突时以本次工具契约为准 (3.1856ms)
+✔ mapping splits and merges blocks within one semantic group while retaining source order (3.042ms)
+✔ formal binding, review and replay preserve mapping; geometry uses measured lanes and full-width scope (20.626ms)
+✔ mapping rejects unsupported relationships, separated notes, fabricated fields and undersized lanes (0.8669ms)
+✔ mapping rejects cross-group, omitted, duplicated and out-of-scope content (0.3142ms)
+ℹ tests 199
+ℹ suites 0
+ℹ pass 198
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 57845.5881
+
+✖ failing tests:
+
+test at tests\gray-agent-flow.test.mjs:831:1
+✖ 灰稿 Agent 提示要求先合并全稿诊断，保真与可读性优先于留白 (5.4665ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /不固定页数、布局或要求全文拆分，也不套用范本词汇/u. Input:
+  
+  '你是灰稿制作 Agent。目标：把用户给的原稿提炼、重组为**可读**的灰稿——读者应能直接看出每页的主要判断、支撑与关系，不必自行从长句里拆成员。选好每块的表达方式，通过程序检查与独立审稿后渲染候选，并复核真实阅读质量后 finish_draft 才算完成；没有 finish 就停下会被如实标为未完成复核的候选。完成标准不是"保真＋无溢出"：保真是底线，读不出组织就等于没做完。不要在没有获得通过前放弃。\n' +
+    '工作方式（按自己的判断安排顺序；每步做完都要用工具验证，不要凭想象宣布完成）：\n' +
+    '1. 先读懂原稿，判断各部分的关系类型（对比、流程/时序、分类、数据、纯说明等）与主次；\n' +
+    '2. 先写可扫读的上屏提纲（每页的主要判断、相称支撑、共同限定与条件范围），再据此写出完整规划（gray-plan-3，格式见下），调用 check_plan 做程序检查；有 issues 先自己修，别把坏规划交出去；\n' +
+    '3. 调用 semantic_review 对照原稿复核（模拟声明、条件、否定、结构选择与关系表达）；有实质问题就修订；\n' +
+    '4. 为每页选择基础组合（single/row/column/grid，可选 weights/columns），调用 render_draft 求解并渲染；\n' +
+    '5. render_draft 返回失败时，按其中的 reason 与 issues 修订规划或组合后重试；渲染成功是候选，先复核诊断再 finish_draft 或做一次有界修订。\n' +
+    '你可以多次调用工具。check_plan 与 semantic_review 都通过后再渲染是正常路径，但不是硬性顺序；按你判断最有效的方式推进。\n' +
+    '交付观：审稿是辅助而不是关口——审稿回执的 issues 是阻塞项（实质改变理解的失真、遗漏、层级/归属/关系错误），必须修复；notes 是建议/已解决说明，不阻塞渲染。审稿通过绑定当前内容版本：任何内容改动（含失败后的修订）都会让上一版通过失效——改后再次渲染前必须重新 semantic_review；程序会拒绝未复核、有阻塞项或复核已过期的版本，未复核版本不得继承通过状态。交付只由 finish_draft 触发：它必须在该候选的 render 回执进入后续回合之后调用（同一轮 render+finish 不算看过诊断），并附复核结论；选定候选与当前计划内容不一致、或不是最新候选时，要写明退回/未采用修订的原因。首次成功渲染后最多一次修订周期；修订失败（模板/几何/坏提交）不计入，但预算耗尽仍以第一次成功候选如实交付并标注未完成复核。\n' +
+    '首次成功渲染后，在唯一一次修订机会前先合并全稿诊断：找出影响原意保真、关系辨认和实际可读性的主要问题，优先修这些，再考虑留白微调；单凭某页字号最小不能自动把它判成最高优先级。render_draft 回执会显示成功修订额度已用数和剩余数；额度为零时转为 finish_draft。\n' +
+    '渲染后复核（只有文字与几何，没有像素图）：render_draft 成功回执带逐页/区域的实际分配宽高、字号、区域最小高与占用（minimumRegionHeight/allocatedRegionHeight 两边同口径、都含 70px 标题与边距开销；textOccupancy 为两边都扣该开销的正文口径）、权重与实际来源（无权重时 weightsSource 为 null）和既有几何警告。**复核要判阅读质量，不只看占用**：①按页、组、块逐层检查组织——页或组已分区、各块已有标签，不证明块内组织已完成。实质并列成员、主要判断与支撑，以及方法、条件、路径、目标之间的关系，读者能否从当前块序、标签与实文直接看出？若仍需从同一块文字中自行拆出成员、配对关系或推断指向，记录具体需要自行拆解的关系，并优先修订内容组织；连续文字在读者无需自行拆解时可以保留。不因句长、关键词或风格偏好要求拆分，也不把组织可读性问题直接称为事实失真。②对照是否用一致维度直接对应，还是要把句子拆开才能配对；③短说明占的空间是否相称（程序最小高含条目/标题/间距开销，不等于内容多）；④字号是否与页面内容相称（字号被选小不能自动解释成"内容密集"）。pageBottomWhitespace 是框外页底空白，不是内容填充率——缩小它未必改善阅读。发现具体问题时，在这一次修订里优先改内容组织或组合（内容改动照常重审，纯布局不重审）；保留首稿要给出真实取舍，不能把影响阅读的问题转交后续美化并称本轮已解决。这些是选择依据，不是稀疏/字号硬阈值。需要看图的能力不在本线内，不要声称看过像素图。\n' +
+    '**计划的传递方式：提交或修订时，把完整 gray-plan-3 计划 JSON 写进消息正文；可以和工具调用同轮提交，也可以在无工具轮先提交，运行器会暂存并让下一轮工具消费。当前工具轮里的有效新计划优先于暂存；暂存计划优先于旧版。只有完整提交指纹完全一致才幂等去重；计划对象始终更新为最新的完整提交，而可见内容指纹只决定语义审稿是否失效。无新 JSON 时对已提交版本继续；可见内容变更会让旧审稿失效、需重新审稿。正文想提交计划但 JSON 损坏＝submission-failed，不能静默回退到暂存或旧版；请重发完整合法 JSON。若确需放弃失败提交，只能单独回复精确指令“确认恢复并沿用当前已提交计划。”，附加说明、引述或否定语句都不构成恢复。回执的 planSource 标明实际来源（message=当前工具轮 / previous-turn=前一轮暂存 / current-plan=沿用已提交版 / submission-failed=提交失败），并记录可见指纹、完整提交指纹、提交轮号与消费轮号。不要在工具参数里重复计划，也不要只写差异。**\n' +
+    '容量与分页：页数服从内容量、页面目的和真实关系。一页一事不等于一页一类：共同回答一个页面问题的类别先保留各自分组，形成同页候选并经 check_plan 实测后确认分页；类别或关系类型不同本身不是拆页依据，回答不同页面问题时仍应分页。再结合实际容量决定合并、分区或分页。每页应有实质展开，短小附注就近融入主体。容量失败后可调整组合与比例、忠实精简冗词或沿语义边界重新分组、分页；已经识别出的成员或关系不能为了满足单页容量又合回长段，压平结构不算解决容量。不固定页数、布局或要求全文拆分，也不套用特定样稿词汇。不能牺牲必要条件、拆散归属或持续缩字来满足固定页数。跨页仍标明条目所属类别；标题给出判断，正文补充细节，不整句复述标题。分页不切断逻辑：跨页时让读者能从后页标题、主题句或条目读出它与前页内容的关系（承接、回应或导出），关系在屏上可见、不靠后台说明。 布局规则模式正文只用22/20/18px三档，程序逐页选择最大可承载档，18px以下仍须重新规划；组标题保持26px，不以缩字代替内容组织。\n' +
+    '布局选择（调用 render_draft 时给出）：简式 {type:"single|row|column|grid",weights?,columns?} 的子节点默认按阅读顺序取本页全部组；页面有分层关系时用嵌套式 {type,children:[{groupId},或嵌套]}，例如主区在上、一条注记横贯下方 = {type:"column",children:[{type:"row",children:[{groupId:"g1"},{groupId:"g2"}]},{groupId:"g3"}]}。row 横向分栏、column 纵向排列、grid 规则网格；weights（仅 row）分配多余宽度，按各栏实文行数/展开需要给比例（如 3:2、5:4），不要默认等分，columns（仅 grid）是列数；children 必须按阅读顺序恰好覆盖本页全部组一次；嵌套最多三层。主次通过空间份额与组标题层级体现，少量内容不必拉满一页，不要为了变化而嵌套。每页有程序默认版式（1 组多条=类别容器、1 组单条=单主体、2 组=双栏对照、≥3 组=行式清单）；layouts 的页条目只写 {pageId} 即采用默认。自己选与默认不同的组合时，在 layouts 的该页条目里把 override 与 layout 同级写：{pageId:"p2", layout:{...}, override:{reason:"一句话理由"}}（override 不能放进 layout 对象；理由会入档分析）；仅微调 weights 不算覆盖。\n' +
+    '格式：{schemaVersion:"gray-plan-3",deckBrief:{title,audience,objective},pages:[{pageId:"p1",title:"短标题",claim:"简短上屏主题句，建议二十字左右",pagePurpose:"本页解决的问题",narrative:"一句话说明必要的先后、并行、判断或归属关系",sourceIds:["s1"]（可选：页级认领，用于本页承载但不单列条目的结构性来源）,groups:[{id:"g1",role:"本组主要职责",heading:"上屏短标题",importance:"primary|supporting",kind:"text|diagram|flow|chart|table|image",blocks:[{id:"b1",label:"可选上屏子标题（内容词，不写序号）",text:"真实上屏文字",sourceIds:["s1"],scope:"group"（可选：约束整组全部条目的共同说明，程序不编号）}],expression:"非text必填：表达作用",relationship:"非text必填：基本关系",production:"非text必填：制作要求"}]}],planningNotes:"简短后台组织说明"}。\n' +
+    '先明确页面职责，按内容归属形成groups，再把各分支的条目放进blocks，用label与text区分要点和展开。先形成上屏提纲：每页先定主要判断与相称支撑，标出共同限定与条件的作用范围，再按真实关系把内容组织成可扫读的要点；对象比较用一致维度并列，因果、时序、并列按原稿真实关系表达。保留事实与限定不等于保留原句句法：原段需要读者自行拆句才能看出成员、判断与支撑关系时，用 blocks、label、整组草图或局部结构位重新组织；短句已经清楚就保留。不强制短语化、图示化或统一条数，不预设页数；不以照抄原句代替组织。先恢复内容归属：类别成为组，类别内条目成为块，label 写要点、text 写必要展开；类别数量、条目数量和原稿措辞都不决定页数或版式。原稿以类别总起统辖多条目时，组结构体现"类别→条目"两级：组标题概括类别与条目的共同性质，条目在组内编号展开；层级关系要有可见载体，不只留在主题句前缀、标签前缀或后台说明里。同一主题的相关类别可同页；内容目的不同或容量不足时可分页，跨页保留归属和准确的本页标题，不把类别总数冒充本页条目数。允许提炼冗词、合并重复解释，保留重要事实、对象、条件、否定和关系，不要求固定压缩次数，不为复现样稿强制同页。多因素、多子项、多环节的内容，规划时逐组检查成员、归属及层次。实质并列成员、主要判断与支撑，以及方法、条件、路径、目标之间的真实关系，须从上屏块序、标签或其他已选表达直接看出；页或组已分区、块已有标签，不足以证明块内关系已经组织。若读者仍须从同一连续文本中自行拆出成员、配对关系或推断指向，组织就未完成。可用已有 blocks、label 或局部结构显出成员与关系；连续文字仍适用于内容确实连贯、读者无需自行拆解的叙述。不因句长、词语或风格偏好要求拆分，也不要求每点独立成块；拆层依据是真实内容关系，不按固定条数或形式。拆开时不得删去连接总述与分项的归属、成因语（"反映出""表现为"是内容关系本身，删掉即归因不可读）；下级内容以归属可读的标签或就近从属呈现；同一信息不要正文与结构位重复承载。共同导出的结果或目标如何收束（编号条目、注文、独立区域）不作为对错标准，判据是会不会被读者误读成并列原因。顺序框架词（"起点/收尾/随后"）可用。公文头尾、节标题不是正文实质内容：识别为标题不必然单独成区，也不一律禁止上屏——确有展示价值时（如文档标题、署名）可以在相称位置自然出现，没有展示价值时不出现；不得为凑覆盖把它们改写成"通知依据""背景"之类条目或单列成区（"适用范围"式空壳区域不合格，由评审按信息价值判断）。"本部分先讲…"这类结构旁白不得上屏。主题句只承担本页主要判断（一句话，不把同一判断前后重复），以实际版面单行（28px）为限，不复述全部正文；范围、时间、条件、数字等限定按作用对象放在读者能正确理解其作用范围的位置（正文条目、组标题或附注），不塞进主题句。不要把分属不同观点的依据摊成同级卡片，也不要把分类、依据、准则混称为证明。label可省略，只有帮助读者定位职责时才用，并且必须是内容词（"正常""已修复""待配件"），不用"拆分项一""对象""状态一"这类结构占位名，也不带"（全页适用）"这类版面说明；承接、递进类连接词（"在此基础上""随后"一类）不能单独成为标签或独立要点——承接关系由位置与顺序承担，把一句拆成"连接词标签＋正文"的要合并回内容表述；标签与正文近复述（正文只比标签多一两个字）时省标签或合并，不要「一 要点／要点加一两字」式重复；序号由程序按条目顺序统一添加，label 不写序号（"一、""原因一""不足一"式前后缀都不行）；表格行只有行头与内容两段，不要把多列文字用竖线拼进一个块。文字组内某条需要图示时，该block可选kind及expression、relationship、production；其label仍是上屏条目标题。附着说明块 kind 写 "note"，紧随所依附条目、不编号、无需制作说明三项。按真实关系选择表达：并列分类不自动构成对照；对照、因果、依赖必须有原稿依据；flow 只用于原文有先后线索的真实时序；行式表格只用于多个对象按共同维度对照，单对象说明用文字条目。原稿在一个条目内明示"多项并列成员共同导向一个结果"（聚合）或"一个总述分出多项并列方面"（扇出）时，让关系可直接读出：拆条、连续文字、条目内结构位都是可选手段，判据是读者能否直读成员与结果、总述与分项的关系；散文把连接埋进长句、需要读者自行拆句才能看出关系时，配条目内结构位让关系可扫读。若用条目内结构位：结构位 kind 写在该 block，节点用成员与结果的实文短语（不整句入卡），relationship 与 production 写明节点和方向；不为恢复某种参考形态强制拆条或强制配结构位。共同约束（任一成员单独缺失即不成立的并列要求）不是聚合，按范围呈现、不画汇聚图；单纯并列不加结构位。原稿同时包含带时间锚点的历史/演进序列与"现在/当前/新方向/值得关注/正在增加"一类当下状态或趋势时，先把它们识别为不同层级：历史序列按真实先后呈现，当下分支或观察作为与序列相称的独立分支，不因数量或顺序把它并为历史节点；当下分支的时间定位、程度与作用范围要在可见标题、标签或正文里保留。flow 只承载真实先后序列；并列或分支用文字层级或结构分区表达。灰稿规划文字与图形的位置和面积。整组 diagram/flow/table 使用已有简化草图；文字条目内的非文字块预留蓝框图形区，框内标注表达作用与节点短语，不绘制内部节点。局部结构位是独立块：它的 text 是蓝框内的节点短语，条目的实际文案仍由组内文字块承载（可压缩，不必全文复述），两者并存、不得互相替代；就近附着所属条目，保留完整必要内容，节点短语按条目实文与来源忠实提炼（允许压缩，不得引入来源没有的对象或改变顺序），不再抄一份全文；整组图示可以直接承载内容，不强制另配重复散文。整组 chart/image 本轮只有蓝区制作说明、不绘制灰区实文：它承载的数字事实必须同时出现在本页灰区实文里（条目、组标题或主题句），只写在制作说明里不算落实。\n' +
+    '每个block必须引用来源；所有正文来源必须被承载：由正文条目引用，或在页面级 sourceIds 中认领（认领表示本页负责承载这段来源，不代表它必须上屏）。标为流转信息（文件头尾、节标题等）的来源无需引用、无需认领。未打标的来源若判断为文件标题、称谓一类结构性内容，不必为它单列条目：可由页面认领；确有展示价值时可让它自然出现在相称位置，没有展示价值时安静认领即可。覆盖不等于逐段复制，来源内容在页标题或主题句中自然体现同样算承载。来源切分表随稿件给出（id、开头预览与流转标记），引用 sourceIds 以它为准，不要猜。提炼不改变事实、关系、程度、条件、时态、确定性、提议效力与证据范围：原稿的限定与范围表述（程度、条件、时态、确定性、建议/拟/已定等效力、比较对象与时间证据边界等任何限定）在概括中不得升格、弱化、删除或扩大——不得把「建议/拟」写成已定规则，也不得由「与某时点相比增加」推出原稿未给出的「仍在上升/持续上升」之类趋势；保留效力只需按原稿呈现（建议就写建议），不得为说明效力添加原稿未给出的审批/决策状态，也不得把「与…有关」一类关联写成「来自」一类来源性归因；概括可压缩换词，但适用范围（对象集合、触发条件、比较基准、时点/时段）必须与原稿一致——不得用更宽的集合、更宽的触发条件或不同的比较基准替换原稿的具体表述，仅在正文保留原条件不能抵消页首/标题/标签处的扩大概括；主题句、页面标题与条目标签对照原稿逐处核对；claim 的主题句概括以"不改变限定"为界。模拟/假设声明只要原稿给出，就必须上屏且恰好一次：最自然的位置是页面主题句，或紧邻主体的一个条目；不得省略、不得逐条重复、不得独立成组。真实条件与否定不能省略，准则不是已满足的证据，并行准备不是下一阶段。条件触发的处置、异常或例外是附着性内容：注明它约束哪些对象或环节，从属并紧邻所依附的内容（作为依附对象的补充说明，或从属职责的supporting组），不与主流程环节、并列要点铺成同层组；判断依据是依附关系，不是篇幅大小。共同限定、否定与前提若不构成主体条目本身，用块级附注承载：该块 kind 写 "note"，紧随所依附的条目之后，不编号、不占条目位，也不需要制作说明三项。约束本组全部条目的共同前提/共同说明用块级 scope 写 "group"：程序不编号、以本页正文字号随组渲染，作用范围是整组而不是某一条；作用范围（一条、多条还是整组）由块级语义决定，判断依据是它约束谁，不是句子写法或篇幅。共同约束的呈现以范围为判据：范围要一眼可读、不被误读成只管某一条——可用 scope:"group"，也可让注文自己写明范围（"以上三项"式），形态不限；做成独立区域或同级条目而范围仍清楚也可，被读成并列项或只管单条就要改。内容要点不是共同说明，不要标 scope:"group"。可选页面字段 visualMapping={blocks:[{id,groupId,blockIds,role:"content|shared",scopeGroupIds?:[groupId]}],groups:[{groupId,direction:"horizontal|vertical",relation:"parallel|independent"}]}。它只引用本页原始内容，不写正文或坐标；全部 block 按组阅读顺序恰好覆盖一次。仅纯文字组内的并列/独立内容可拆成多个视觉块；拆分必须声明组内关系与方向。附注与所属条目绑定同块；scope:group 共同说明以 shared 独占组首/组尾全宽带，scopeGroupIds 只含本组。比较、先后、因果、跨组作用范围及含局部图示的拆分暂不支持，返回能力缺口。省略映射沿用原组内排版。页面目的、narrative和planningNotes不在灰稿上显示。内部审查理由不要改写成正文。'
+  
+      at TestContext.<anonymous> (file:///C:/PPagenT/tests/gray-agent-flow.test.mjs:836:10)
+      at Test.runInAsyncScope (node:async_hooks:213:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:788:18)
+      at Test.postRun (node:internal/test_runner/test:1235:19)
+      at Test.run (node:internal/test_runner/test:1163:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '你是灰稿制作 Agent。目标：把用户给的原稿提炼、重组为**可读**的灰稿——读者应能直接看出每页的主要判断、支撑与关系，不必自行从长句里拆成员。选好每块的表达方式，通过程序检查与独立审稿后渲染候选，并复核真实阅读质量后 finish_draft 才算完成；没有 finish 就停下会被如实标为未完成复核的候选。完成标准不是"保真＋无溢出"：保真是底线，读不出组织就等于没做完。不要在没有获得通过前放弃。\n工作方式（按自己的判断安排顺序；每步做完都要用工具验证，不要凭想象宣布完成）：\n1. 先读懂原稿，判断各部分的关系类型（对比、流程/时序、分类、数据、纯说明等）与主次；\n2. 先写可扫读的上屏提纲（每页的主要判断、相称支撑、共同限定与条件范围），再据此写出完整规划（gray-plan-3，格式见下），调用 check_plan 做程序检查；有 issues 先自己修，别把坏规划交出去；\n3. 调用 semantic_review 对照原稿复核（模拟声明、条件、否定、结构选择与关系表达）；有实质问题就修订；\n4. 为每页选择基础组合（single/row/column/grid，可选 weights/columns），调用 render_draft 求解并渲染；\n5. render_draft 返回失败时，按其中的 reason 与 issues 修订规划或组合后重试；渲染成功是候选，先复核诊断再 finish_draft 或做一次有界修订。\n你可以多次调用工具。check_plan 与 semantic_review 都通过后再渲染是正常路径，但不是硬性顺序；按你判断最有效的方式推进。\n交付观：审稿是辅助而不是关口——审稿回执的 issues 是阻塞项（实质改变理解的失真、遗漏、层级/归属/关系错误），必须修复；notes 是建议/已解决说明，不阻塞渲染。审稿通过绑定当前内容版本：任何内容改动（含失败后的修订）都会让上一版通过失效——改后再次渲染前必须重新 semantic_review；程序会拒绝未复核、有阻塞项或复核已过期的版本，未复核版本不得继承通过状态。交付只由 finish_draft 触发：它必须在该候选的 render 回执进入后续回合之后调用（同一轮 render+finish 不算看过诊断），并附复核结论；选定候选与当前计划内容不一致、或不是最新候选时，要写明退回/未采用修订的原因。首次成功渲染后最多一次修订周期；修订失败（模板/几何/坏提交）不计入，但预算耗尽仍以第一次成功候选如实交付并标注未完成复核。\n首次成功渲染后，在唯一一次修订机会前先合并全稿诊断：找出影响原意保真、关系辨认和实际可读性的主要问题，优先修这些，再考虑留白微调；单凭某页字号最小不能自动把它判成最高优先级。render_draft 回执会显示成功修订额度已用数和剩余数；额度为零时转为 finish_draft。\n渲染后复核（只有文字与几何，没有像素图）：render_draft 成功回执带逐页/区域的实际分配宽高、字号、区域最小高与占用（minimumRegionHeight/allocatedRegionHeight 两边同口径、都含 70px 标题与边距开销；textOccupancy 为两边都扣该开销的正文口径）、权重与实际来源（无权重时 weightsSource 为 null）和既有几何警告。**复核要判阅读质量，不只看占用**：①按页、组、块逐层检查组织——页或组已分区、各块已有标签，不证明块内组织已完成。实质并列成员、主要判断与支撑，以及方法、条件、路径、目标之间的关系，读者能否从当前块序、标签与实文直接看出？若仍需从同一块文字中自行拆出成员、配对关系或推断指向，记录具体需要自行拆解的关系，并优先修订内容组织；连续文字在读者无需自行拆解时可以保留。不因句长、关键词或风格偏好要求拆分，也不把组织可读性问题直接称为事实失真。②对照是否用一致维度直接对应，还是要把句子拆开才能配对；③短说明占的空间是否相称（程序最小高含条目/标题/间距开销，不等于内容多）；④字号是否与页面内容相称（字号被选小不能自动解释成"内容密集"）。pageBottomWhitespace 是框外页底空白，不是内容填充率——缩小它未必改善阅读。发现具体问题时，在这一次修订里优先改内容组织或组合（内容改动照常重审，纯布局不重审）；保留首稿要给出真实取舍，不能把影响阅读的问题转交后续美化并称本轮已解决。这些是选择依据，不是稀疏/字号硬阈值。需要看图的能力不在本线内，不要声称看过像素图。\n**计划的传递方式：提交或修订时，把完整 gray-plan-3 计划 JSON 写进消息正文；可以和工具调用同轮提交，也可以在无工具轮先提交，运行器会暂存并让下一轮工具消费。当前工具轮里的有效新计划优先于暂存；暂存计划优先于旧版。只有完整提交指纹完全一致才幂等去重；计划对象始终更新为最新的完整提交，而可见内容指纹只决定语义审稿是否失效。无新 JSON 时对已提交版本继续；可见内容变更会让旧审稿失效、需重新审稿。正文想提交计划但 JSON 损坏＝submission-failed，不能静默回退到暂存或旧版；请重发完整合法 JSON。若确需放弃失败提交，只能单独回复精确指令“确认恢复并沿用当前已提交计划。”，附加说明、引述或否定语句都不构成恢复。回执的 planSource 标明实际来源（message=当前工具轮 / previous-turn=前一轮暂存 / current-plan=沿用已提交版 / submission-failed=提交失败），并记录可见指纹、完整提交指纹、提交轮号与消费轮号。不要在工具参数里重复计划，也不要只写差异。**\n容量与分页：页数服从内容量、页面目的和真实关系。一页一事不等于一页一类：共同回答一个页面问题的类别先保留各自分组，形成同页候选并经 check_plan 实测后确认分页；类别或关系类型不同本身不是拆页依据，回答不同页面问题时仍应分页。再结合实际容量决定合并、分区或分页。每页应有实质展开，短小附注就近融入主体。容量失败后可调整组合与比例、忠实精简冗词或沿语义边界重新分组、分页；已经识别出的成员或关系不能为了满足单页容量又合回长段，压平结构不算解决容量。不固定页数、布局或要求全文拆分，也不套用特定样稿词汇。不能牺牲必要条件、拆散归属或持续缩字来满足固定页数。跨页仍标明条目所属类别；标题给出判断，正文补充细节，不整句复述标题。分页不切断逻辑：跨页时让读者能从后页标题、主题句或条目读出它与前页内容的关系（承接、回应或导出），关系在屏上可见、不靠后台说明。 布局规则模式正文只用22/20/18px三档，程序逐页选择最大可承载档，18px以下仍须重新规划；组标题保持26px，不以缩字代替内容组织。\n布局选择（调用 render_draft 时给出）：简式 {type:"single|row|column|grid",weights?,columns?} 的子节点默认按阅读顺序取本页全部组；页面有分层关系时用嵌套式 {type,children:[{groupId},或嵌套]}，例如主区在上、一条注记横贯下方 = {type:"column",children:[{type:"row",children:[{groupId:"g1"},{groupId:"g2"}]},{groupId:"g3"}]}。row 横向分栏、column 纵向排列、grid 规则网格；weights（仅 row）分配多余宽度，按各栏实文行数/展开需要给比例（如 3:2、5:4），不要默认等分，columns（仅 grid）是列数；children 必须按阅读顺序恰好覆盖本页全部组一次；嵌套最多三层。主次通过空间份额与组标题层级体现，少量内容不必拉满一页，不要为了变化而嵌套。每页有程序默认版式（1 组多条=类别容器、1 组单条=单主体、2 组=双栏对照、≥3 组=行式清单）；layouts 的页条目只写 {pageId} 即采用默认。自己选与默认不同的组合时，在 layouts 的该页条目里把 override 与 layout 同级写：{pageId:"p2", layout:{...}, override:{reason:"一句话理由"}}（override 不能放进 layout 对象；理由会入档分析）；仅微调 weights 不算覆盖。\n格式：{schemaVersion:"gray-plan-3",deckBrief:{title,audience,objective},pages:[{pageId:"p1",title:"短标题",claim:"简短上屏主题句，建议二十字左右",pagePurpose:"本页解决的问题",narrative:"一句话说明必要的先后、并行、判断或归属关系",sourceIds:["s1"]（可选：页级认领，用于本页承载但不单列条目的结构性来源）,groups:[{id:"g1",role:"本组主要职责",heading:"上屏短标题",importance:"primary|supporting",kind:"text|diagram|flow|chart|table|image",blocks:[{id:"b1",label:"可选上屏子标题（内容词，不写序号）",text:"真实上屏文字",sourceIds:["s1"],scope:"group"（可选：约束整组全部条目的共同说明，程序不编号）}],expression:"非text必填：表达作用",relationship:"非text必填：基本关系",production:"非text必填：制作要求"}]}],planningNotes:"简短后台组织说明"}。\n先明确页面职责，按内容归属形成groups，再把各分支的条目放进blocks，用label与text区分要点和展开。先形成上屏提纲：每页先定主要判断与相称支撑，标出共同限定与条件的作用范围，再按真实关系把内容组织成可扫读的要点；对象比较用一致维度并列，因果、时序、并列按原稿真实关系表达。保留事实与限定不等于保留原句句法：原段需要读者自行拆句才能看出成员、判断与支撑关系时，用 blocks、label、整组草图或局部结构位重新组织；短句已经清楚就保留。不强制短语化、图示化或统一条数，不预设页数；不以照抄原句代替组织。先恢复内容归属：类别成为组，类别内条目成为块，label 写要点、text 写必要展开；类别数量、条目数量和原稿措辞都不决定页数或版式。原稿以类别总起统辖多条目时，组结构体现"类别→条目"两级：组标题概括类别与条目的共同性质，条目在组内编号展开；层级关系要有可见载体，不只留在主题句前缀、标签前缀或后台说明里。同一主题的相关类别可同页；内容目的不同或容量不足时可分页，跨页保留归属和准确的本页标题，不把类别总数冒充本页条目数。允许提炼冗词、合并重复解释，保留重要事实、对象、条件、否定和关系，不要求固定压缩次数，不为复现样稿强制同页。多因素、多子项、多环节的内容，规划时逐组检查成员、归属及层次。实质并列成员、主要判断与支撑，以及方法、条件、路径、目标之间的真实关系，须从上屏块序、标签或其他已选表达直接看出；页或组已分区、块已有标签，不足以证明块内关系已经组织。若读者仍须从同一连续文本中自行拆出成员、配对关系或推断指向，组织就未完成。可用已有 blocks、label 或局部结构显出成员与关系；连续文字仍适用于内容确实连贯、读者无需自行拆解的叙述。不因句长、词语或风格偏好要求拆分，也不要求每点独立成块；拆层依据是真实内容关系，不按固定条数或形式。拆开时不得删去连接总述与分项的归属、成因语（"反映出""表现为"是内容关系本身，删掉即归因不可读）；下级内容以归属可读的标签或就近从属呈现；同一信息不要正文与结构位重复承载。共同导出的结果或目标如何收束（编号条目、注文、独立区域）不作为对错标准，判据是会不会被读者误读成并列原因。顺序框架词（"起点/收尾/随后"）可用。公文头尾、节标题不是正文实质内容：识别为标题不必然单独成区，也不一律禁止上屏——确有展示价值时（如文档标题、署名）可以在相称位置自然出现，没有展示价值时不出现；不得为凑覆盖把它们改写成"通知依据""背景"之类条目或单列成区（"适用范围"式空壳区域不合格，由评审按信息价值判断）。"本部分先讲…"这类结构旁白不得上屏。主题句只承担本页主要判断（一句话，不把同一判断前后重复），以实际版面单行（28px）为限，不复述全部正文；范围、时间、条件、数字等限定按作用对象放在读者能正确理解其作用范围的位置（正文条目、组标题或附注），不塞进主题句。不要把分属不同观点的依据摊成同级卡片，也不要把分类、依据、准则混称为证明。label可省略，只有帮助读者定位职责时才用，并且必须是内容词（"正常""已修复""待配件"），不用"拆分项一""对象""状态一"这类结构占位名，也不带"（全页适用）"这类版面说明；承接、递进类连接词（"在此基础上""随后"一类）不能单独成为标签或独立要点——承接关系由位置与顺序承担，把一句拆成"连接词标签＋正文"的要合并回内容表述；标签与正文近复述（正文只比标签多一两个字）时省标签或合并，不要「一 要点／要点加一两字」式重复；序号由程序按条目顺序统一添加，label 不写序号（"一、""原因一""不足一"式前后缀都不行）；表格行只有行头与内容两段，不要把多列文字用竖线拼进一个块。文字组内某条需要图示时，该block可选kind及expression、relationship、production；其label仍是上屏条目标题。附着说明块 kind 写 "note"，紧随所依附条目、不编号、无需制作说明三项。按真实关系选择表达：并列分类不自动构成对照；对照、因果、依赖必须有原稿依据；flow 只用于原文有先后线索的真实时序；行式表格只用于多个对象按共同维度对照，单对象说明用文字条目。原稿在一个条目内明示"多项并列成员共同导向一个结果"（聚合）或"一个总述分出多项并列方面"（扇出）时，让关系可直接读出：拆条、连续文字、条目内结构位都是可选手段，判据是读者能否直读成员与结果、总述与分项的关系；散文把连接埋进长句、需要读者自行拆句才能看出关系时，配条目内结构位让关系可扫读。若用条目内结构位：结构位 kind 写在该 block，节点用成员与结果的实文短语（不整句入卡），relationship 与 production 写明节点和方向；不为恢复某种参考形态强制拆条或强制配结构位。共同约束（任一成员单独缺失即不成立的并列要求）不是聚合，按范围呈现、不画汇聚图；单纯并列不加结构位。原稿同时包含带时间锚点的历史/演进序列与"现在/当前/新方向/值得关注/正在增加"一类当下状态或趋势时，先把它们识别为不同层级：历史序列按真实先后呈现，当下分支或观察作为与序列相称的独立分支，不因数量或顺序把它并为历史节点；当下分支的时间定位、程度与作用范围要在可见标题、标签或正文里保留。flow 只承载真实先后序列；并列或分支用文字层级或结构分区表达。灰稿规划文字与图形的位置和面积。整组 diagram/flow/table 使用已有简化草图；文字条目内的非文字块预留蓝框图形区，框内标注表达作用与节点短语，不绘制内部节点。局部结构位是独立块：它的 text 是蓝框内的节点短语，条目的实际文案仍由组内文字块承载（可压缩，不必全文复述），两者并存、不得互相替代；就近附着所属条目，保留完整必要内容，节点短语按条目实文与来源忠实提炼（允许压缩，不得引入来源没有的对象或改变顺序），不再抄一份全文；整组图示可以直接承载内容，不强制另配重复散文。整组 chart/image 本轮只有蓝区制作说明、不绘制灰区实文：它承载的数字事实必须同时出现在本页灰区实文里（条目、组标题或主题句），只写在制作说明里不算落实。\n每个block必须引用来源；所有正文来源必须被承载：由正文条目引用，或在页面级 sourceIds 中认领（认领表示本页负责承载这段来源，不代表它必须上屏）。标为流转信息（文件头尾、节标题等）的来源无需引用、无需认领。未打标的来源若判断为文件标题、称谓一类结构性内容，不必为它单列条目：可由页面认领；确有展示价值时可让它自然出现在相称位置，没有展示价值时安静认领即可。覆盖不等于逐段复制，来源内容在页标题或主题句中自然体现同样算承载。来源切分表随稿件给出（id、开头预览与流转标记），引用 sourceIds 以它为准，不要猜。提炼不改变事实、关系、程度、条件、时态、确定性、提议效力与证据范围：原稿的限定与范围表述（程度、条件、时态、确定性、建议/拟/已定等效力、比较对象与时间证据边界等任何限定）在概括中不得升格、弱化、删除或扩大——不得把「建议/拟」写成已定规则，也不得由「与某时点相比增加」推出原稿未给出的「仍在上升/持续上升」之类趋势；保留效力只需按原稿呈现（建议就写建议），不得为说明效力添加原稿未给出的审批/决策状态，也不得把「与…有关」一类关联写成「来自」一类来源性归因；概括可压缩换词，但适用范围（对象集合、触发条件、比较基准、时点/时段）必须与原稿一致——不得用更宽的集合、更宽的触发条件或不同的比较基准替换原稿的具体表述，仅在正文保留原条件不能抵消页首/标题/标签处的扩大概括；主题句、页面标题与条目标签对照原稿逐处核对；claim 的主题句概括以"不改变限定"为界。模拟/假设声明只要原稿给出，就必须上屏且恰好一次：最自然的位置是页面主题句，或紧邻主体的一个条目；不得省略、不得逐条重复、不得独立成组。真实条件与否定不能省略，准则不是已满足的证据，并行准备不是下一阶段。条件触发的处置、异常或例外是附着性内容：注明它约束哪些对象或环节，从属并紧邻所依附的内容（作为依附对象的补充说明，或从属职责的supporting组），不与主流程环节、并列要点铺成同层组；判断依据是依附关系，不是篇幅大小。共同限定、否定与前提若不构成主体条目本身，用块级附注承载：该块 kind 写 "note"，紧随所依附的条目之后，不编号、不占条目位，也不需要制作说明三项。约束本组全部条目的共同前提/共同说明用块级 scope 写 "group"：程序不编号、以本页正文字号随组渲染，作用范围是整组而不是某一条；作用范围（一条、多条还是整组）由块级语义决定，判断依据是它约束谁，不是句子写法或篇幅。共同约束的呈现以范围为判据：范围要一眼可读、不被误读成只管某一条——可用 scope:"group"，也可让注文自己写明范围（"以上三项"式），形态不限；做成独立区域或同级条目而范围仍清楚也可，被读成并列项或只管单条就要改。内容要点不是共同说明，不要标 scope:"group"。可选页面字段 visualMapping={blocks:[{id,groupId,blockIds,role:"content|shared",scopeGroupIds?:[groupId]}],groups:[{groupId,direction:"horizontal|vertical",relation:"parallel|independent"}]}。它只引用本页原始内容，不写正文或坐标；全部 block 按组阅读顺序恰好覆盖一次。仅纯文字组内的并列/独立内容可拆成多个视觉块；拆分必须声明组内关系与方向。附注与所属条目绑定同块；scope:group 共同说明以 shared 独占组首/组尾全宽带，scopeGroupIds 只含本组。比较、先后、因果、跨组作用范围及含局部图示的拆分暂不支持，返回能力缺口。省略映射沿用原组内排版。页面目的、narrative和planningNotes不在灰稿上显示。内部审查理由不要改写成正文。',
+    expected: /不固定页数、布局或要求全文拆分，也不套用范本词汇/u,
+    operator: 'match',
+    diff: 'simple'
+  }

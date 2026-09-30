@@ -1,0 +1,1503 @@
+{
+  "schemaVersion": "ppagent-run-1",
+  "sourcePath": "experiments/visual-block-mapping-20260929/run-03/state.json",
+  "sources": [
+    {
+      "id": "s1",
+      "heading": "模拟服务安排",
+      "text": "咨询：工作人员回答资料检索与使用方面的问题。"
+    },
+    {
+      "id": "s2",
+      "heading": "模拟服务安排",
+      "text": "咨询需要提前预约。"
+    },
+    {
+      "id": "s3",
+      "heading": "模拟服务安排",
+      "text": "资料借阅：登记资料名称和使用人后办理借阅，归还时核对登记记录。"
+    },
+    {
+      "id": "s4",
+      "heading": "模拟服务安排",
+      "text": "两项服务均在工作日提供。"
+    },
+    {
+      "id": "s5",
+      "heading": "模拟记录要求",
+      "text": "两类记录均供项目成员查阅，外发前需负责人确认。"
+    },
+    {
+      "id": "s6",
+      "heading": "模拟记录要求",
+      "text": "版本记录：记录文档版本、修改内容和修改人，保留此前版本供追溯。"
+    },
+    {
+      "id": "s7",
+      "heading": "模拟记录要求",
+      "text": "问题记录：记录问题现象、处理意见和处理状态。尚未核实的问题应标为待核实。"
+    }
+  ],
+  "deckBrief": {
+    "title": "组内视觉分区建设样本",
+    "audience": "开发与评审",
+    "objective": "核对内容绑定、组内分区和共同说明"
+  },
+  "pages": [
+    {
+      "pageId": "services",
+      "title": "模拟服务安排",
+      "claim": "模拟：工作日按需提供服务",
+      "relation": "none",
+      "semantics": {
+        "schemaVersion": "gray-plan-3",
+        "pagePurpose": "说明两项独立服务及共同适用时间",
+        "narrative": "咨询和资料借阅为独立服务；预约条件仅限定咨询，工作日限定二者",
+        "relations": [],
+        "readingOrder": [
+          "service"
+        ],
+        "visualMapping": {
+          "groups": [
+            {
+              "groupId": "service",
+              "direction": "horizontal",
+              "relation": "independent"
+            }
+          ],
+          "blocks": [
+            {
+              "id": "advice-area",
+              "groupId": "service",
+              "blockIds": [
+                "advice",
+                "appointment"
+              ]
+            },
+            {
+              "id": "borrow-area",
+              "groupId": "service",
+              "blockIds": [
+                "borrow"
+              ]
+            },
+            {
+              "id": "hours-band",
+              "groupId": "service",
+              "blockIds": [
+                "hours"
+              ],
+              "role": "shared",
+              "scopeGroupIds": [
+                "service"
+              ]
+            }
+          ]
+        }
+      },
+      "items": [
+        {
+          "id": "service",
+          "role": "object",
+          "semanticRole": "主体",
+          "importance": "primary",
+          "heading": "服务项目",
+          "kind": "text",
+          "blocks": [
+            {
+              "id": "advice",
+              "label": "咨询",
+              "text": "工作人员回答资料检索与使用方面的问题。",
+              "sourceIds": [
+                "s1"
+              ]
+            },
+            {
+              "id": "appointment",
+              "label": "",
+              "text": "咨询需要提前预约。",
+              "sourceIds": [
+                "s2"
+              ],
+              "kind": "note"
+            },
+            {
+              "id": "borrow",
+              "label": "资料借阅",
+              "text": "登记资料名称和使用人后办理借阅，归还时核对登记记录。",
+              "sourceIds": [
+                "s3"
+              ]
+            },
+            {
+              "id": "hours",
+              "label": "",
+              "text": "两项服务均在工作日提供。",
+              "sourceIds": [
+                "s4"
+              ],
+              "scope": "group"
+            }
+          ],
+          "visualMapping": {
+            "groupId": "service",
+            "visualBlockIds": [
+              "advice-area",
+              "borrow-area",
+              "hours-band"
+            ],
+            "direction": "horizontal",
+            "relation": "independent",
+            "blocks": [
+              {
+                "id": "advice-area",
+                "groupId": "service",
+                "role": "content",
+                "scopeGroupIds": [],
+                "sourceBlockIds": [
+                  "service/advice",
+                  "service/appointment"
+                ],
+                "sourceIds": [
+                  "s1",
+                  "s2"
+                ],
+                "blocks": [
+                  {
+                    "id": "advice",
+                    "label": "咨询",
+                    "text": "工作人员回答资料检索与使用方面的问题。",
+                    "sourceIds": [
+                      "s1"
+                    ]
+                  },
+                  {
+                    "id": "appointment",
+                    "label": "",
+                    "text": "咨询需要提前预约。",
+                    "sourceIds": [
+                      "s2"
+                    ],
+                    "kind": "note"
+                  }
+                ]
+              },
+              {
+                "id": "borrow-area",
+                "groupId": "service",
+                "role": "content",
+                "scopeGroupIds": [],
+                "sourceBlockIds": [
+                  "service/borrow"
+                ],
+                "sourceIds": [
+                  "s3"
+                ],
+                "blocks": [
+                  {
+                    "id": "borrow",
+                    "label": "资料借阅",
+                    "text": "登记资料名称和使用人后办理借阅，归还时核对登记记录。",
+                    "sourceIds": [
+                      "s3"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "hours-band",
+                "groupId": "service",
+                "role": "shared",
+                "scopeGroupIds": [
+                  "service"
+                ],
+                "sourceBlockIds": [
+                  "service/hours"
+                ],
+                "sourceIds": [
+                  "s4"
+                ],
+                "blocks": [
+                  {
+                    "id": "hours",
+                    "label": "",
+                    "text": "两项服务均在工作日提供。",
+                    "sourceIds": [
+                      "s4"
+                    ],
+                    "scope": "group"
+                  }
+                ]
+              }
+            ]
+          },
+          "text": "咨询\n工作人员回答资料检索与使用方面的问题。\n咨询需要提前预约。\n资料借阅\n登记资料名称和使用人后办理借阅，归还时核对登记记录。\n两项服务均在工作日提供。",
+          "sourceIds": [
+            "s1",
+            "s2",
+            "s3",
+            "s4"
+          ],
+          "sourceText": "咨询：工作人员回答资料检索与使用方面的问题。\n咨询需要提前预约。\n资料借阅：登记资料名称和使用人后办理借阅，归还时核对登记记录。\n两项服务均在工作日提供。"
+        }
+      ],
+      "composition": {
+        "pageId": "services",
+        "compositionId": "component-gray-regions",
+        "textSlots": [],
+        "regionVisuals": [
+          {
+            "itemId": "service",
+            "reason": "以已登记文字程序消费原区域和绑定",
+            "program": "source-text-v1"
+          }
+        ]
+      },
+      "revision": 1,
+      "grayComposition": {
+        "regions": [
+          {
+            "itemId": "service",
+            "x": 0,
+            "y": 0,
+            "width": 1170,
+            "height": 492,
+            "fontSize": 22
+          }
+        ],
+        "basicLayout": {
+          "family": "cards",
+          "direction": "horizontal",
+          "allocation": "equal"
+        }
+      },
+      "compositionRevision": 1
+    },
+    {
+      "pageId": "records",
+      "title": "模拟记录要求",
+      "claim": "模拟：两类记录分别维护",
+      "relation": "none",
+      "semantics": {
+        "schemaVersion": "gray-plan-3",
+        "pagePurpose": "明确两类记录的用途及共同条件",
+        "narrative": "版本记录和问题记录独立，不构成办理顺序；共用访问约束",
+        "relations": [],
+        "readingOrder": [
+          "record"
+        ],
+        "visualMapping": {
+          "groups": [
+            {
+              "groupId": "record",
+              "direction": "vertical",
+              "relation": "independent"
+            }
+          ],
+          "blocks": [
+            {
+              "id": "scope-band",
+              "groupId": "record",
+              "blockIds": [
+                "scope"
+              ],
+              "role": "shared",
+              "scopeGroupIds": [
+                "record"
+              ]
+            },
+            {
+              "id": "version-area",
+              "groupId": "record",
+              "blockIds": [
+                "version"
+              ]
+            },
+            {
+              "id": "issue-area",
+              "groupId": "record",
+              "blockIds": [
+                "issue"
+              ]
+            }
+          ]
+        }
+      },
+      "items": [
+        {
+          "id": "record",
+          "role": "object",
+          "semanticRole": "主体",
+          "importance": "primary",
+          "heading": "记录管理",
+          "kind": "text",
+          "blocks": [
+            {
+              "id": "scope",
+              "label": "",
+              "text": "两类记录均供项目成员查阅，外发前需负责人确认。",
+              "sourceIds": [
+                "s5"
+              ],
+              "scope": "group"
+            },
+            {
+              "id": "version",
+              "label": "版本记录",
+              "text": "记录文档版本、修改内容和修改人，保留此前版本供追溯。",
+              "sourceIds": [
+                "s6"
+              ]
+            },
+            {
+              "id": "issue",
+              "label": "问题记录",
+              "text": "记录问题现象、处理意见和处理状态。尚未核实的问题应标为待核实。",
+              "sourceIds": [
+                "s7"
+              ]
+            }
+          ],
+          "visualMapping": {
+            "groupId": "record",
+            "visualBlockIds": [
+              "scope-band",
+              "version-area",
+              "issue-area"
+            ],
+            "direction": "vertical",
+            "relation": "independent",
+            "blocks": [
+              {
+                "id": "scope-band",
+                "groupId": "record",
+                "role": "shared",
+                "scopeGroupIds": [
+                  "record"
+                ],
+                "sourceBlockIds": [
+                  "record/scope"
+                ],
+                "sourceIds": [
+                  "s5"
+                ],
+                "blocks": [
+                  {
+                    "id": "scope",
+                    "label": "",
+                    "text": "两类记录均供项目成员查阅，外发前需负责人确认。",
+                    "sourceIds": [
+                      "s5"
+                    ],
+                    "scope": "group"
+                  }
+                ]
+              },
+              {
+                "id": "version-area",
+                "groupId": "record",
+                "role": "content",
+                "scopeGroupIds": [],
+                "sourceBlockIds": [
+                  "record/version"
+                ],
+                "sourceIds": [
+                  "s6"
+                ],
+                "blocks": [
+                  {
+                    "id": "version",
+                    "label": "版本记录",
+                    "text": "记录文档版本、修改内容和修改人，保留此前版本供追溯。",
+                    "sourceIds": [
+                      "s6"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "issue-area",
+                "groupId": "record",
+                "role": "content",
+                "scopeGroupIds": [],
+                "sourceBlockIds": [
+                  "record/issue"
+                ],
+                "sourceIds": [
+                  "s7"
+                ],
+                "blocks": [
+                  {
+                    "id": "issue",
+                    "label": "问题记录",
+                    "text": "记录问题现象、处理意见和处理状态。尚未核实的问题应标为待核实。",
+                    "sourceIds": [
+                      "s7"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "text": "两类记录均供项目成员查阅，外发前需负责人确认。\n版本记录\n记录文档版本、修改内容和修改人，保留此前版本供追溯。\n问题记录\n记录问题现象、处理意见和处理状态。尚未核实的问题应标为待核实。",
+          "sourceIds": [
+            "s5",
+            "s6",
+            "s7"
+          ],
+          "sourceText": "两类记录均供项目成员查阅，外发前需负责人确认。\n版本记录：记录文档版本、修改内容和修改人，保留此前版本供追溯。\n问题记录：记录问题现象、处理意见和处理状态。尚未核实的问题应标为待核实。"
+        }
+      ],
+      "composition": {
+        "pageId": "records",
+        "compositionId": "component-gray-regions",
+        "textSlots": [],
+        "regionVisuals": [
+          {
+            "itemId": "record",
+            "reason": "以已登记文字程序消费原区域和绑定",
+            "program": "source-text-v1"
+          }
+        ]
+      },
+      "revision": 1,
+      "grayComposition": {
+        "regions": [
+          {
+            "itemId": "record",
+            "x": 0,
+            "y": 0,
+            "width": 1170,
+            "height": 492,
+            "fontSize": 22
+          }
+        ],
+        "basicLayout": {
+          "family": "cards",
+          "direction": "horizontal",
+          "allocation": "equal"
+        }
+      },
+      "compositionRevision": 1
+    }
+  ],
+  "artifactState": {
+    "services": {
+      "status": "failed",
+      "revision": 1,
+      "feedback": {
+        "issues": [
+          {
+            "code": "missing-bbox",
+            "slide": "slide-02",
+            "detail": {
+              "type": "missing-bbox",
+              "slide": "slide-02",
+              "element": "PPAGENT_QA|parent=text-program-service|domains=page-composition-zones"
+            }
+          },
+          {
+            "code": "missing-bbox",
+            "slide": "slide-02",
+            "detail": {
+              "type": "missing-bbox",
+              "slide": "slide-02",
+              "element": "PPAGENT_QA|within=text-program-service|role=heading"
+            }
+          },
+          {
+            "code": "missing-bbox",
+            "slide": "slide-02",
+            "detail": {
+              "type": "missing-bbox",
+              "slide": "slide-02",
+              "element": "PPAGENT_QA|within=text-program-service|role=body-0"
+            }
+          },
+          {
+            "code": "missing-bbox",
+            "slide": "slide-02",
+            "detail": {
+              "type": "missing-bbox",
+              "slide": "slide-02",
+              "element": "PPAGENT_QA|within=text-program-service|role=body-1"
+            }
+          },
+          {
+            "code": "missing-bbox",
+            "slide": "slide-02",
+            "detail": {
+              "type": "missing-bbox",
+              "slide": "slide-02",
+              "element": "PPAGENT_QA|within=text-program-service|role=body-2"
+            }
+          },
+          {
+            "code": "missing-bbox",
+            "slide": "slide-02",
+            "detail": {
+              "type": "missing-bbox",
+              "slide": "slide-02",
+              "element": "PPAGENT_QA|within=text-program-service|role=body-3"
+            }
+          },
+          {
+            "code": "missing-bbox",
+            "slide": "slide-02",
+            "detail": {
+              "type": "missing-bbox",
+              "slide": "slide-02",
+              "element": "PPAGENT_QA|within=text-program-service|role=body-4"
+            }
+          },
+          {
+            "code": "missing-bbox",
+            "slide": "slide-02",
+            "detail": {
+              "type": "missing-bbox",
+              "slide": "slide-02",
+              "element": "PPAGENT_QA|within=text-program-service|role=body-5"
+            }
+          },
+          {
+            "code": "missing-qa-geometry-contract",
+            "slide": "slide-02",
+            "detail": {
+              "type": "missing-qa-geometry-contract",
+              "slide": "slide-02"
+            }
+          }
+        ],
+        "warnings": []
+      },
+      "pptxPath": "C:\\PPagenT\\experiments\\visual-block-mapping-20260929\\program-01\\deck.pptx"
+    },
+    "records": {
+      "status": "failed",
+      "revision": 1,
+      "feedback": {
+        "issues": [
+          {
+            "code": "missing-bbox",
+            "slide": "slide-03",
+            "detail": {
+              "type": "missing-bbox",
+              "slide": "slide-03",
+              "element": "PPAGENT_QA|parent=text-program-record|domains=page-composition-zones"
+            }
+          },
+          {
+            "code": "missing-bbox",
+            "slide": "slide-03",
+            "detail": {
+              "type": "missing-bbox",
+              "slide": "slide-03",
+              "element": "PPAGENT_QA|within=text-program-record|role=heading"
+            }
+          },
+          {
+            "code": "missing-bbox",
+            "slide": "slide-03",
+            "detail": {
+              "type": "missing-bbox",
+              "slide": "slide-03",
+              "element": "PPAGENT_QA|within=text-program-record|role=body-0"
+            }
+          },
+          {
+            "code": "missing-bbox",
+            "slide": "slide-03",
+            "detail": {
+              "type": "missing-bbox",
+              "slide": "slide-03",
+              "element": "PPAGENT_QA|within=text-program-record|role=body-1"
+            }
+          },
+          {
+            "code": "missing-bbox",
+            "slide": "slide-03",
+            "detail": {
+              "type": "missing-bbox",
+              "slide": "slide-03",
+              "element": "PPAGENT_QA|within=text-program-record|role=body-2"
+            }
+          },
+          {
+            "code": "missing-bbox",
+            "slide": "slide-03",
+            "detail": {
+              "type": "missing-bbox",
+              "slide": "slide-03",
+              "element": "PPAGENT_QA|within=text-program-record|role=body-3"
+            }
+          },
+          {
+            "code": "missing-bbox",
+            "slide": "slide-03",
+            "detail": {
+              "type": "missing-bbox",
+              "slide": "slide-03",
+              "element": "PPAGENT_QA|within=text-program-record|role=body-4"
+            }
+          },
+          {
+            "code": "missing-qa-geometry-contract",
+            "slide": "slide-03",
+            "detail": {
+              "type": "missing-qa-geometry-contract",
+              "slide": "slide-03"
+            }
+          }
+        ],
+        "warnings": []
+      },
+      "pptxPath": "C:\\PPagenT\\experiments\\visual-block-mapping-20260929\\program-01\\deck.pptx"
+    }
+  },
+  "phase": "visual",
+  "contentRevision": null,
+  "runtimeFailure": null,
+  "warningDecisions": [],
+  "grayDraft": {
+    "version": "gray-agent-1",
+    "area": {
+      "width": 1170,
+      "height": 492,
+      "label": "自定义内容区"
+    },
+    "sourceHash": "2400dea54d9d08e9076980ae7e040d1aa2aafa3a9de4053de36d31011f1d810f",
+    "status": "awaiting-user-review",
+    "humanReview": "pending",
+    "layoutMode": "measured-rule-selection",
+    "turns": [
+      {
+        "turn": 1,
+        "stalled": false,
+        "tools": [
+          "check_plan"
+        ],
+        "planFlow": {
+          "submission": {
+            "status": "none",
+            "turn": 1,
+            "explicitReuse": false
+          },
+          "consumptions": [
+            {
+              "consumer": "check_plan",
+              "planSource": "current-plan",
+              "submittedTurn": 0,
+              "originTurn": 0,
+              "fingerprint": "ad41dbfadd785fb47ee6bf65293b6279d3d5c84c",
+              "submissionFingerprint": "44722c45df6bfe465d01fb50a98724ba0149403bc219ec5c0f3204137c5cba37",
+              "consumedTurn": 1,
+              "consumptionSource": "current-plan",
+              "contentUpdated": false,
+              "submissionUpdated": false
+            }
+          ]
+        }
+      },
+      {
+        "turn": 2,
+        "stalled": false,
+        "tools": [
+          "semantic_review"
+        ],
+        "planFlow": {
+          "submission": {
+            "status": "none",
+            "turn": 2,
+            "explicitReuse": false
+          },
+          "consumptions": [
+            {
+              "consumer": "semantic_review",
+              "planSource": "current-plan",
+              "submittedTurn": 0,
+              "originTurn": 0,
+              "fingerprint": "ad41dbfadd785fb47ee6bf65293b6279d3d5c84c",
+              "submissionFingerprint": "44722c45df6bfe465d01fb50a98724ba0149403bc219ec5c0f3204137c5cba37",
+              "consumedTurn": 2,
+              "consumptionSource": "current-plan",
+              "contentUpdated": false,
+              "submissionUpdated": false
+            }
+          ]
+        }
+      },
+      {
+        "turn": 3,
+        "stalled": false,
+        "tools": [
+          "render_draft"
+        ],
+        "planFlow": {
+          "submission": {
+            "status": "none",
+            "turn": 3,
+            "explicitReuse": false
+          },
+          "consumptions": [
+            {
+              "consumer": "render_draft",
+              "planSource": "current-plan",
+              "submittedTurn": 0,
+              "originTurn": 0,
+              "fingerprint": "ad41dbfadd785fb47ee6bf65293b6279d3d5c84c",
+              "submissionFingerprint": "44722c45df6bfe465d01fb50a98724ba0149403bc219ec5c0f3204137c5cba37",
+              "consumedTurn": 3,
+              "consumptionSource": "current-plan",
+              "contentUpdated": false,
+              "submissionUpdated": false
+            }
+          ]
+        }
+      },
+      {
+        "turn": 4,
+        "stalled": false,
+        "tools": [
+          "finish_draft"
+        ],
+        "planFlow": {
+          "submission": {
+            "status": "none",
+            "turn": 4,
+            "explicitReuse": false
+          },
+          "consumptions": [
+            {
+              "consumer": "finish_draft",
+              "planSource": "current-plan",
+              "submittedTurn": 0,
+              "originTurn": 0,
+              "fingerprint": "ad41dbfadd785fb47ee6bf65293b6279d3d5c84c",
+              "submissionFingerprint": "44722c45df6bfe465d01fb50a98724ba0149403bc219ec5c0f3204137c5cba37",
+              "consumedTurn": 4,
+              "consumptionSource": "current-plan",
+              "contentUpdated": false,
+              "submissionUpdated": false
+            }
+          ]
+        }
+      }
+    ],
+    "renders": [
+      {
+        "render": 1,
+        "accepted": true,
+        "artifactDirectory": "agent-renders\\render-1",
+        "fingerprint": "ad0185491d66ae8270c50dd911cf5c04fdce533c"
+      }
+    ],
+    "candidates": [
+      {
+        "renderId": 1,
+        "directory": "agent-renders\\render-1",
+        "at": "2026-09-28T16:51:47.078Z",
+        "contentFingerprint": "ad41dbfadd785fb47ee6bf65293b6279d3d5c84c",
+        "reviewedFingerprint": "ad41dbfadd785fb47ee6bf65293b6279d3d5c84c",
+        "reviewCovered": true,
+        "turn": 3,
+        "fonts": [
+          {
+            "pageId": "services",
+            "fontSize": 22
+          },
+          {
+            "pageId": "records",
+            "fontSize": 22
+          }
+        ]
+      }
+    ],
+    "startedAt": "2026-09-28T16:51:44.756Z",
+    "reviewRecord": [
+      {
+        "at": "2026-09-28T16:51:44.805Z",
+        "source": "current-plan",
+        "fingerprint": "ad41dbfadd785fb47ee6bf65293b6279d3d5c84c",
+        "reviewInputHash": "11b8df0f8d2aec56abc1bf8132c599794430c091f426c13314980d79a684fb19",
+        "reviewOutcome": "accepted",
+        "evidenceRepairAttempt": 0,
+        "accepted": true,
+        "issues": [],
+        "notes": [
+          "脚本回执，不属于模型语义审阅证据。"
+        ],
+        "coverage": null,
+        "limits": "未看灰稿像素图，不能确认视觉可读性。",
+        "claimAudit": {
+          "schemaVersion": "gray-claim-audit-2",
+          "claims": [
+            {
+              "id": "fixed-0",
+              "sourceEvidence": [
+                {
+                  "sourceId": "s1",
+                  "quote": "工作人员回答资料检索与使用方面的问题。"
+                }
+              ],
+              "visibleEvidence": [
+                {
+                  "locationId": "loc-0004",
+                  "quote": "工作人员回答资料检索与使用方面的问题。"
+                }
+              ],
+              "ruling": "equivalent",
+              "rationale": "人工固定工程样本逐字回填；此回执用于运行协议，不验证模型判断。"
+            },
+            {
+              "id": "fixed-1",
+              "sourceEvidence": [
+                {
+                  "sourceId": "s2",
+                  "quote": "咨询需要提前预约。"
+                }
+              ],
+              "visibleEvidence": [
+                {
+                  "locationId": "loc-0005",
+                  "quote": "咨询需要提前预约。"
+                }
+              ],
+              "ruling": "equivalent",
+              "rationale": "人工固定工程样本逐字回填；此回执用于运行协议，不验证模型判断。"
+            },
+            {
+              "id": "fixed-2",
+              "sourceEvidence": [
+                {
+                  "sourceId": "s3",
+                  "quote": "登记资料名称和使用人后办理借阅，归还时核对登记记录。"
+                }
+              ],
+              "visibleEvidence": [
+                {
+                  "locationId": "loc-0007",
+                  "quote": "登记资料名称和使用人后办理借阅，归还时核对登记记录。"
+                }
+              ],
+              "ruling": "equivalent",
+              "rationale": "人工固定工程样本逐字回填；此回执用于运行协议，不验证模型判断。"
+            },
+            {
+              "id": "fixed-3",
+              "sourceEvidence": [
+                {
+                  "sourceId": "s4",
+                  "quote": "两项服务均在工作日提供。"
+                }
+              ],
+              "visibleEvidence": [
+                {
+                  "locationId": "loc-0008",
+                  "quote": "两项服务均在工作日提供。"
+                }
+              ],
+              "ruling": "equivalent",
+              "rationale": "人工固定工程样本逐字回填；此回执用于运行协议，不验证模型判断。"
+            },
+            {
+              "id": "fixed-4",
+              "sourceEvidence": [
+                {
+                  "sourceId": "s5",
+                  "quote": "两类记录均供项目成员查阅，外发前需负责人确认。"
+                }
+              ],
+              "visibleEvidence": [
+                {
+                  "locationId": "loc-0011",
+                  "quote": "两类记录均供项目成员查阅，外发前需负责人确认。"
+                }
+              ],
+              "ruling": "equivalent",
+              "rationale": "人工固定工程样本逐字回填；此回执用于运行协议，不验证模型判断。"
+            },
+            {
+              "id": "fixed-5",
+              "sourceEvidence": [
+                {
+                  "sourceId": "s6",
+                  "quote": "记录文档版本、修改内容和修改人，保留此前版本供追溯。"
+                }
+              ],
+              "visibleEvidence": [
+                {
+                  "locationId": "loc-0013",
+                  "quote": "记录文档版本、修改内容和修改人，保留此前版本供追溯。"
+                }
+              ],
+              "ruling": "equivalent",
+              "rationale": "人工固定工程样本逐字回填；此回执用于运行协议，不验证模型判断。"
+            },
+            {
+              "id": "fixed-6",
+              "sourceEvidence": [
+                {
+                  "sourceId": "s7",
+                  "quote": "记录问题现象、处理意见和处理状态。尚未核实的问题应标为待核实。"
+                }
+              ],
+              "visibleEvidence": [
+                {
+                  "locationId": "loc-0015",
+                  "quote": "记录问题现象、处理意见和处理状态。尚未核实的问题应标为待核实。"
+                }
+              ],
+              "ruling": "equivalent",
+              "rationale": "人工固定工程样本逐字回填；此回执用于运行协议，不验证模型判断。"
+            }
+          ],
+          "unreferencedSources": [],
+          "unreferencedLocations": [
+            {
+              "locationId": "loc-0001",
+              "disposition": "non-claim",
+              "reason": "固定样本中的主题、分类或编号，不引入正文以外的结论。"
+            },
+            {
+              "locationId": "loc-0002",
+              "disposition": "non-claim",
+              "reason": "固定样本中的主题、分类或编号，不引入正文以外的结论。"
+            },
+            {
+              "locationId": "loc-0003",
+              "disposition": "non-claim",
+              "reason": "固定样本中的主题、分类或编号，不引入正文以外的结论。"
+            },
+            {
+              "locationId": "loc-0006",
+              "disposition": "non-claim",
+              "reason": "固定样本中的主题、分类或编号，不引入正文以外的结论。"
+            },
+            {
+              "locationId": "loc-0009",
+              "disposition": "non-claim",
+              "reason": "固定样本中的主题、分类或编号，不引入正文以外的结论。"
+            },
+            {
+              "locationId": "loc-0010",
+              "disposition": "non-claim",
+              "reason": "固定样本中的主题、分类或编号，不引入正文以外的结论。"
+            },
+            {
+              "locationId": "loc-0012",
+              "disposition": "non-claim",
+              "reason": "固定样本中的主题、分类或编号，不引入正文以外的结论。"
+            },
+            {
+              "locationId": "loc-0014",
+              "disposition": "non-claim",
+              "reason": "固定样本中的主题、分类或编号，不引入正文以外的结论。"
+            }
+          ]
+        },
+        "organization": {
+          "verdict": "pass",
+          "findings": []
+        },
+        "auditValidation": {
+          "valid": true,
+          "errors": [],
+          "sourceCount": 7,
+          "locationCount": 15,
+          "claimCount": 7,
+          "unreferencedSourceCount": 0,
+          "unreferencedLocationCount": 8
+        }
+      }
+    ],
+    "artifactDirectory": "agent-renders\\render-1",
+    "plan": {
+      "deckBrief": {
+        "title": "组内视觉分区建设样本",
+        "audience": "开发与评审",
+        "objective": "核对内容绑定、组内分区和共同说明"
+      },
+      "pages": [
+        {
+          "pageId": "services",
+          "title": "模拟服务安排",
+          "claim": "模拟：工作日按需提供服务",
+          "relation": "none",
+          "semantics": {
+            "schemaVersion": "gray-plan-3",
+            "pagePurpose": "说明两项独立服务及共同适用时间",
+            "narrative": "咨询和资料借阅为独立服务；预约条件仅限定咨询，工作日限定二者",
+            "relations": [],
+            "readingOrder": [
+              "service"
+            ],
+            "visualMapping": {
+              "groups": [
+                {
+                  "groupId": "service",
+                  "direction": "horizontal",
+                  "relation": "independent"
+                }
+              ],
+              "blocks": [
+                {
+                  "id": "advice-area",
+                  "groupId": "service",
+                  "blockIds": [
+                    "advice",
+                    "appointment"
+                  ]
+                },
+                {
+                  "id": "borrow-area",
+                  "groupId": "service",
+                  "blockIds": [
+                    "borrow"
+                  ]
+                },
+                {
+                  "id": "hours-band",
+                  "groupId": "service",
+                  "blockIds": [
+                    "hours"
+                  ],
+                  "role": "shared",
+                  "scopeGroupIds": [
+                    "service"
+                  ]
+                }
+              ]
+            }
+          },
+          "items": [
+            {
+              "id": "service",
+              "role": "object",
+              "semanticRole": "主体",
+              "importance": "primary",
+              "heading": "服务项目",
+              "kind": "text",
+              "blocks": [
+                {
+                  "id": "advice",
+                  "label": "咨询",
+                  "text": "工作人员回答资料检索与使用方面的问题。",
+                  "sourceIds": [
+                    "s1"
+                  ]
+                },
+                {
+                  "id": "appointment",
+                  "label": "",
+                  "text": "咨询需要提前预约。",
+                  "sourceIds": [
+                    "s2"
+                  ],
+                  "kind": "note"
+                },
+                {
+                  "id": "borrow",
+                  "label": "资料借阅",
+                  "text": "登记资料名称和使用人后办理借阅，归还时核对登记记录。",
+                  "sourceIds": [
+                    "s3"
+                  ]
+                },
+                {
+                  "id": "hours",
+                  "label": "",
+                  "text": "两项服务均在工作日提供。",
+                  "sourceIds": [
+                    "s4"
+                  ],
+                  "scope": "group"
+                }
+              ],
+              "visualMapping": {
+                "groupId": "service",
+                "visualBlockIds": [
+                  "advice-area",
+                  "borrow-area",
+                  "hours-band"
+                ],
+                "direction": "horizontal",
+                "relation": "independent",
+                "blocks": [
+                  {
+                    "id": "advice-area",
+                    "groupId": "service",
+                    "role": "content",
+                    "scopeGroupIds": [],
+                    "sourceBlockIds": [
+                      "service/advice",
+                      "service/appointment"
+                    ],
+                    "sourceIds": [
+                      "s1",
+                      "s2"
+                    ],
+                    "blocks": [
+                      {
+                        "id": "advice",
+                        "label": "咨询",
+                        "text": "工作人员回答资料检索与使用方面的问题。",
+                        "sourceIds": [
+                          "s1"
+                        ]
+                      },
+                      {
+                        "id": "appointment",
+                        "label": "",
+                        "text": "咨询需要提前预约。",
+                        "sourceIds": [
+                          "s2"
+                        ],
+                        "kind": "note"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "borrow-area",
+                    "groupId": "service",
+                    "role": "content",
+                    "scopeGroupIds": [],
+                    "sourceBlockIds": [
+                      "service/borrow"
+                    ],
+                    "sourceIds": [
+                      "s3"
+                    ],
+                    "blocks": [
+                      {
+                        "id": "borrow",
+                        "label": "资料借阅",
+                        "text": "登记资料名称和使用人后办理借阅，归还时核对登记记录。",
+                        "sourceIds": [
+                          "s3"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "hours-band",
+                    "groupId": "service",
+                    "role": "shared",
+                    "scopeGroupIds": [
+                      "service"
+                    ],
+                    "sourceBlockIds": [
+                      "service/hours"
+                    ],
+                    "sourceIds": [
+                      "s4"
+                    ],
+                    "blocks": [
+                      {
+                        "id": "hours",
+                        "label": "",
+                        "text": "两项服务均在工作日提供。",
+                        "sourceIds": [
+                          "s4"
+                        ],
+                        "scope": "group"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "text": "咨询\n工作人员回答资料检索与使用方面的问题。\n咨询需要提前预约。\n资料借阅\n登记资料名称和使用人后办理借阅，归还时核对登记记录。\n两项服务均在工作日提供。",
+              "sourceIds": [
+                "s1",
+                "s2",
+                "s3",
+                "s4"
+              ]
+            }
+          ],
+          "composition": {
+            "regions": [
+              {
+                "itemId": "service",
+                "x": 0,
+                "y": 0,
+                "width": 1170,
+                "height": 492,
+                "fontSize": 22
+              }
+            ],
+            "basicLayout": {
+              "family": "cards",
+              "direction": "horizontal",
+              "allocation": "equal"
+            }
+          }
+        },
+        {
+          "pageId": "records",
+          "title": "模拟记录要求",
+          "claim": "模拟：两类记录分别维护",
+          "relation": "none",
+          "semantics": {
+            "schemaVersion": "gray-plan-3",
+            "pagePurpose": "明确两类记录的用途及共同条件",
+            "narrative": "版本记录和问题记录独立，不构成办理顺序；共用访问约束",
+            "relations": [],
+            "readingOrder": [
+              "record"
+            ],
+            "visualMapping": {
+              "groups": [
+                {
+                  "groupId": "record",
+                  "direction": "vertical",
+                  "relation": "independent"
+                }
+              ],
+              "blocks": [
+                {
+                  "id": "scope-band",
+                  "groupId": "record",
+                  "blockIds": [
+                    "scope"
+                  ],
+                  "role": "shared",
+                  "scopeGroupIds": [
+                    "record"
+                  ]
+                },
+                {
+                  "id": "version-area",
+                  "groupId": "record",
+                  "blockIds": [
+                    "version"
+                  ]
+                },
+                {
+                  "id": "issue-area",
+                  "groupId": "record",
+                  "blockIds": [
+                    "issue"
+                  ]
+                }
+              ]
+            }
+          },
+          "items": [
+            {
+              "id": "record",
+              "role": "object",
+              "semanticRole": "主体",
+              "importance": "primary",
+              "heading": "记录管理",
+              "kind": "text",
+              "blocks": [
+                {
+                  "id": "scope",
+                  "label": "",
+                  "text": "两类记录均供项目成员查阅，外发前需负责人确认。",
+                  "sourceIds": [
+                    "s5"
+                  ],
+                  "scope": "group"
+                },
+                {
+                  "id": "version",
+                  "label": "版本记录",
+                  "text": "记录文档版本、修改内容和修改人，保留此前版本供追溯。",
+                  "sourceIds": [
+                    "s6"
+                  ]
+                },
+                {
+                  "id": "issue",
+                  "label": "问题记录",
+                  "text": "记录问题现象、处理意见和处理状态。尚未核实的问题应标为待核实。",
+                  "sourceIds": [
+                    "s7"
+                  ]
+                }
+              ],
+              "visualMapping": {
+                "groupId": "record",
+                "visualBlockIds": [
+                  "scope-band",
+                  "version-area",
+                  "issue-area"
+                ],
+                "direction": "vertical",
+                "relation": "independent",
+                "blocks": [
+                  {
+                    "id": "scope-band",
+                    "groupId": "record",
+                    "role": "shared",
+                    "scopeGroupIds": [
+                      "record"
+                    ],
+                    "sourceBlockIds": [
+                      "record/scope"
+                    ],
+                    "sourceIds": [
+                      "s5"
+                    ],
+                    "blocks": [
+                      {
+                        "id": "scope",
+                        "label": "",
+                        "text": "两类记录均供项目成员查阅，外发前需负责人确认。",
+                        "sourceIds": [
+                          "s5"
+                        ],
+                        "scope": "group"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "version-area",
+                    "groupId": "record",
+                    "role": "content",
+                    "scopeGroupIds": [],
+                    "sourceBlockIds": [
+                      "record/version"
+                    ],
+                    "sourceIds": [
+                      "s6"
+                    ],
+                    "blocks": [
+                      {
+                        "id": "version",
+                        "label": "版本记录",
+                        "text": "记录文档版本、修改内容和修改人，保留此前版本供追溯。",
+                        "sourceIds": [
+                          "s6"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "issue-area",
+                    "groupId": "record",
+                    "role": "content",
+                    "scopeGroupIds": [],
+                    "sourceBlockIds": [
+                      "record/issue"
+                    ],
+                    "sourceIds": [
+                      "s7"
+                    ],
+                    "blocks": [
+                      {
+                        "id": "issue",
+                        "label": "问题记录",
+                        "text": "记录问题现象、处理意见和处理状态。尚未核实的问题应标为待核实。",
+                        "sourceIds": [
+                          "s7"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "text": "两类记录均供项目成员查阅，外发前需负责人确认。\n版本记录\n记录文档版本、修改内容和修改人，保留此前版本供追溯。\n问题记录\n记录问题现象、处理意见和处理状态。尚未核实的问题应标为待核实。",
+              "sourceIds": [
+                "s5",
+                "s6",
+                "s7"
+              ]
+            }
+          ],
+          "composition": {
+            "regions": [
+              {
+                "itemId": "record",
+                "x": 0,
+                "y": 0,
+                "width": 1170,
+                "height": 492,
+                "fontSize": 22
+              }
+            ],
+            "basicLayout": {
+              "family": "cards",
+              "direction": "horizontal",
+              "allocation": "equal"
+            }
+          }
+        }
+      ]
+    },
+    "programCheck": {
+      "accepted": true,
+      "issues": [],
+      "warnings": [],
+      "coverage": "来源引用、数字/引号保真、区域边界/重叠、固定字号保守容量；不证明语义忠实或视觉美观。"
+    },
+    "postRender": {
+      "startedAt": "2026-09-28T16:51:47.078Z",
+      "firstRenderId": 1,
+      "revisions": 0,
+      "maxRevisions": 1,
+      "completed": true,
+      "stopReason": null,
+      "delivery": {
+        "renderId": 1,
+        "directory": "agent-renders\\render-1",
+        "contentFingerprint": "ad41dbfadd785fb47ee6bf65293b6279d3d5c84c",
+        "reviewedFingerprint": "ad41dbfadd785fb47ee6bf65293b6279d3d5c84c",
+        "review": "固定计划工程回放；脚本只验证调用和绑定，语义及像素由人工另行审阅，不声明模型能力。",
+        "reason": null,
+        "contentChanged": false,
+        "superseded": false,
+        "revisionNotAdopted": false,
+        "currentPlanFingerprint": "ad41dbfadd785fb47ee6bf65293b6279d3d5c84c",
+        "at": "2026-09-28T16:51:47.109Z"
+      }
+    },
+    "reviewNotes": {
+      "status": "clean",
+      "at": "2026-09-28T16:51:47.078Z",
+      "fingerprint": "ad41dbfadd785fb47ee6bf65293b6279d3d5c84c"
+    },
+    "reviewCoverage": {
+      "status": "covered",
+      "deliveredFingerprint": "ad41dbfadd785fb47ee6bf65293b6279d3d5c84c",
+      "reviewedFingerprint": "ad41dbfadd785fb47ee6bf65293b6279d3d5c84c",
+      "checkedAt": "2026-09-28T16:51:47.133Z"
+    },
+    "candidateDelivery": false,
+    "turnSummary": {
+      "stopReason": "delivered",
+      "detail": {
+        "renders": 1
+      },
+      "note": null,
+      "turns": 4,
+      "usage": {
+        "requests": 4,
+        "toolCalls": 4,
+        "tokens": {}
+      },
+      "toolCallCount": 4,
+      "stalledTurns": 0,
+      "toolSequence": [
+        "check_plan",
+        "semantic_review",
+        "render_draft",
+        "finish_draft"
+      ]
+    }
+  },
+  "skinId": "neutral-editorial-001",
+  "lastStop": null,
+  "grayInput": {
+    "sourcePath": "experiments/visual-block-mapping-20260929/run-03/state.json",
+    "sha256": "c2f7870df7be63a55d155758653a28481731f9392640725696a67d9ed9815682",
+    "revision": null,
+    "handedOffAt": "2026-09-28T23:23:45.975Z"
+  },
+  "deckAudit": {
+    "status": "failed",
+    "qaDir": "C:\\PPagenT\\experiments\\visual-block-mapping-20260929\\program-01\\qa",
+    "checkedAt": "2026-09-28T23:23:51.851Z"
+  }
+}

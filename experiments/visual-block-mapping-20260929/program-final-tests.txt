@@ -1,0 +1,44 @@
+✔ 文字组内的局部图示不能被外层 text 遮蔽 (1.6775ms)
+✔ 纯文字不强制图示；其他组的结构不能替代本组要求 (1.7207ms)
+✔ 附注属于文字回填，不会把灰稿交接误判为图示 (0.9805ms)
+✔ 纯文字页不能偷偷绑定结构，多图示仍明确返回能力缺口 (0.6544ms)
+file:///C:/PPagenT/src/render/gray-visual-plan.mjs:27
+  itemId:{type:'string'},reason:{type:'string',minLength:1},program:{type:'string',const:TEXT_PROGRAM},
+                                                                                         ^
+
+ReferenceError: Cannot access 'TEXT_PROGRAM' before initialization
+    at file:///C:/PPagenT/src/render/gray-visual-plan.mjs:27:90
+    at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:654:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v25.2.0
+✖ tests\gray-text-program.test.mjs (1793.6393ms)
+✔ model layout preserves all source blocks and rejects ownership, overlap and boundary violations (9.6623ms)
+✔ model positions, type, alignment and gradient stroke reach native shapes; content is source-bound (4.8321ms)
+✔ Skin roles stay Skin-specific and insufficient frames fail instead of silently shrinking (1.4145ms)
+✔ shared title pair fixes English offset and leaves a native border gap without masking blocks (1.5232ms)
+✔ beauty source binding keeps labels and attached notes as visible text sources (1.3917ms)
+✔ pure text with labels and notes validates and reaches native shapes without a structure frame (1.5435ms)
+✔ layout v5 positions are audited, but absent rendered font and line metrics fail closed (23.8368ms)
+✔ 断行审计以引擎行盒为准：引擎多排一行就必须报出来 (14.2523ms)
+✔ 研发期字号审计会拒绝 Skin 组件中的不可读小字 (8.2254ms)
+✔ 几何审计拒绝同一碰撞域的重叠和越出容器的文字 (8.6189ms)
+✔ 几何与字号都通过时确定性交付门禁才通过 (7.8957ms)
+✔ 连接线必须贴合声明的形状边缘锚点 (10.0194ms)
+✔ 资产 builder 不得绕过统一 Skin 变换直接写裸线段 (4.4187ms)
+✔ 被选中的结构组件页如果丢失几何契约必须失败 (7.156ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 18
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2300.0076
+
+✖ failing tests:
+
+test at tests\gray-text-program.test.mjs:1:1
+✖ tests\gray-text-program.test.mjs (1793.6393ms)
+  'test failed'

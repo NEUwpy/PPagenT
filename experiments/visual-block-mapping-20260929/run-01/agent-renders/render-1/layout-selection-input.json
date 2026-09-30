@@ -1,0 +1,334 @@
+{
+  "source": "# 模拟服务安排\n\n咨询：工作人员回答资料检索与使用方面的问题。\n\n咨询需要提前预约。\n\n资料借阅：登记资料名称和使用人后办理借阅，归还时核对登记记录。\n\n两项服务均在工作日提供。\n\n# 模拟记录要求\n\n两类记录均供项目成员查阅，外发前需负责人确认。\n\n版本记录：记录文档版本、修改内容和修改人，保留此前版本供追溯。\n\n问题记录：记录问题现象、处理意见和处理状态。尚未核实的问题应标为待核实。",
+  "plan": {
+    "schemaVersion": "gray-plan-3",
+    "deckBrief": {
+      "title": "组内视觉分区建设样本",
+      "audience": "开发与评审",
+      "objective": "核对内容绑定、组内分区和共同说明"
+    },
+    "pages": [
+      {
+        "pageId": "services",
+        "title": "模拟服务安排",
+        "claim": "模拟：工作日按需提供服务",
+        "pagePurpose": "说明两项独立服务及共同适用时间",
+        "narrative": "咨询和资料借阅为独立服务；预约条件仅限定咨询，工作日限定二者",
+        "groups": [
+          {
+            "id": "service",
+            "heading": "服务项目",
+            "kind": "text",
+            "role": "主体",
+            "importance": "primary",
+            "blocks": [
+              {
+                "id": "advice",
+                "label": "咨询",
+                "text": "工作人员回答资料检索与使用方面的问题。",
+                "sourceIds": [
+                  "s1"
+                ]
+              },
+              {
+                "id": "appointment",
+                "label": "",
+                "text": "咨询需要提前预约。",
+                "sourceIds": [
+                  "s2"
+                ],
+                "kind": "note"
+              },
+              {
+                "id": "borrow",
+                "label": "资料借阅",
+                "text": "登记资料名称和使用人后办理借阅，归还时核对登记记录。",
+                "sourceIds": [
+                  "s3"
+                ]
+              },
+              {
+                "id": "hours",
+                "label": "",
+                "text": "两项服务均在工作日提供。",
+                "sourceIds": [
+                  "s4"
+                ],
+                "scope": "group"
+              }
+            ]
+          }
+        ],
+        "visualMapping": {
+          "groups": [
+            {
+              "groupId": "service",
+              "direction": "horizontal",
+              "relation": "independent"
+            }
+          ],
+          "blocks": [
+            {
+              "id": "advice-area",
+              "groupId": "service",
+              "blockIds": [
+                "advice",
+                "appointment"
+              ]
+            },
+            {
+              "id": "borrow-area",
+              "groupId": "service",
+              "blockIds": [
+                "borrow"
+              ]
+            },
+            {
+              "id": "hours-band",
+              "groupId": "service",
+              "blockIds": [
+                "hours"
+              ],
+              "role": "shared",
+              "scopeGroupIds": [
+                "service"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "pageId": "records",
+        "title": "模拟记录要求",
+        "claim": "模拟：两类记录分别维护",
+        "pagePurpose": "明确两类记录的用途及共同条件",
+        "narrative": "版本记录和问题记录独立，不构成办理顺序；共用访问约束",
+        "groups": [
+          {
+            "id": "record",
+            "heading": "记录管理",
+            "kind": "text",
+            "role": "主体",
+            "importance": "primary",
+            "blocks": [
+              {
+                "id": "scope",
+                "label": "",
+                "text": "两类记录均供项目成员查阅，外发前需负责人确认。",
+                "sourceIds": [
+                  "s5"
+                ],
+                "scope": "group"
+              },
+              {
+                "id": "version",
+                "label": "版本记录",
+                "text": "记录文档版本、修改内容和修改人，保留此前版本供追溯。",
+                "sourceIds": [
+                  "s6"
+                ]
+              },
+              {
+                "id": "issue",
+                "label": "问题记录",
+                "text": "记录问题现象、处理意见和处理状态。尚未核实的问题应标为待核实。",
+                "sourceIds": [
+                  "s7"
+                ]
+              }
+            ]
+          }
+        ],
+        "visualMapping": {
+          "groups": [
+            {
+              "groupId": "record",
+              "direction": "vertical",
+              "relation": "independent"
+            }
+          ],
+          "blocks": [
+            {
+              "id": "scope-band",
+              "groupId": "record",
+              "blockIds": [
+                "scope"
+              ],
+              "role": "shared",
+              "scopeGroupIds": [
+                "record"
+              ]
+            },
+            {
+              "id": "version-area",
+              "groupId": "record",
+              "blockIds": [
+                "version"
+              ]
+            },
+            {
+              "id": "issue-area",
+              "groupId": "record",
+              "blockIds": [
+                "issue"
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "area": {
+    "width": 1170,
+    "height": 492,
+    "label": "自定义内容区"
+  },
+  "rules": [
+    {
+      "id": "cards",
+      "name": "卡片式",
+      "description": "沿同一方向排列；数量和面积随内容需求变化。",
+      "advice": "并列内容适用。选择横向或纵向，再按各块面积需求分配空间。",
+      "rules": [
+        "适用：可独立阅读的并列内容；强流程、因果、层级关系应优先使用关系结构。",
+        "规则：单行或单列，统一间距与外边界；面积可以均分，也可以按内容需求分配。正式实文选型还支持主体与共同说明分带：说明按实测高度连续放在页首或页尾，主体使用剩余区域，主体高度须大于说明。",
+        "调整：先调整方向与区域面积，仍不能承载时拆页或换布局，不缩字硬塞。"
+      ]
+    },
+    {
+      "id": "album",
+      "name": "相册式",
+      "description": "按内容需求切分空间，形成大小错落的图文区域。",
+      "advice": "适合相对独立的图文块。权重表达面积需求，不自动代表内容重要性。",
+      "rules": [
+        "适用：可分块的图文内容，允许大小不同；不能把必须连续阅读的论证任意切碎。",
+        "规则：按面积需求、横竖倾向和最小承载尺寸分区；统一间距，铺满内容区，避免狭窄碎块。",
+        "阅读：保持输入顺序；每次切分按左→右或上→下阅读。内容分组与主次由规划阶段决定。",
+        "调整：空间不足时重组内容、换布局或拆页；几何可放下不等于文字和语义已通过验收。"
+      ]
+    },
+    {
+      "id": "hybrid",
+      "name": "横纵组合",
+      "description": "分区可嵌套，每层独立选择横排或竖排。",
+      "advice": "适合并列主体加共同说明、主区加注记或主体加支撑带；每个方向都必须有内容关系依据。",
+      "rules": [
+        "适用：页面同时存在主体并列关系与跨主体的共同说明或支撑关系。",
+        "规则：主体区和说明带分别求解，可横纵结合；共同说明必须登记作用范围，不能伪装成并列对象。",
+        "调整：主体方向、说明带位置和面积可变化；任一部分放不下时返回空间需求或分页，不缩字硬塞。"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "pageId": "services",
+      "requirements": [
+        {
+          "itemId": "service",
+          "kind": "text",
+          "importance": "primary",
+          "samples": [
+            {
+              "width": 1170,
+              "height": 249,
+              "fits": true
+            },
+            {
+              "width": 573,
+              "height": 279,
+              "fits": true
+            },
+            {
+              "width": 374,
+              "height": 338,
+              "fits": true
+            }
+          ],
+          "aspectRatio": 1.106508875739645,
+          "basis": "候选宽度下的实文与当前灰稿表达测量；不是最终媒介比例或逻辑判断"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "cards-horizontal-equal",
+          "family": "cards",
+          "direction": "horizontal",
+          "allocation": "equal",
+          "regions": [
+            {
+              "itemId": "service",
+              "x": 0,
+              "y": 0,
+              "width": 1170,
+              "height": 492,
+              "fontSize": 22
+            }
+          ],
+          "contentMinimums": {
+            "service": {
+              "minWidth": 1170,
+              "minHeight": 249
+            }
+          }
+        }
+      ],
+      "rejected": [],
+      "fontSize": 22
+    },
+    {
+      "pageId": "records",
+      "requirements": [
+        {
+          "itemId": "record",
+          "kind": "text",
+          "importance": "primary",
+          "samples": [
+            {
+              "width": 1170,
+              "height": 308,
+              "fits": true
+            },
+            {
+              "width": 573,
+              "height": 398,
+              "fits": true
+            },
+            {
+              "width": 374,
+              "height": 427,
+              "fits": true
+            }
+          ],
+          "aspectRatio": 0.8758782201405152,
+          "basis": "候选宽度下的实文与当前灰稿表达测量；不是最终媒介比例或逻辑判断"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "cards-horizontal-equal",
+          "family": "cards",
+          "direction": "horizontal",
+          "allocation": "equal",
+          "regions": [
+            {
+              "itemId": "record",
+              "x": 0,
+              "y": 0,
+              "width": 1170,
+              "height": 492,
+              "fontSize": 22
+            }
+          ],
+          "contentMinimums": {
+            "record": {
+              "minWidth": 1170,
+              "minHeight": 308
+            }
+          }
+        }
+      ],
+      "rejected": [],
+      "fontSize": 22
+    }
+  ]
+}

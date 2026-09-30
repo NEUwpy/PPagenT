@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {validateGrayRegionPlan} from '../src/runner/gray-expressions.mjs';
-import {renderGrayVisualPlan,grayVisualTokens} from '../src/render/gray-visual-plan.mjs';
+import {renderGrayVisualPlan,grayVisualTokens,grayTextSources} from '../src/render/gray-visual-plan.mjs';
 import {northeasternUniversityTheme} from '../src/runtime/skins/northeastern-university-theme.mjs';
 import {neutralEditorialTheme} from '../src/runtime/skins/neutral-editorial-theme.mjs';
 
@@ -57,4 +57,30 @@ test('shared title pair fixes English offset and leaves a native border gap with
  assert.equal(e.position.left,h.position.left);assert.equal(e.position.top-h.position.top,6);assert.equal(e.text.style.fontSize,h.text.style.fontSize);
  assert.equal(c.shapes.filter(s=>s.name?.startsWith('region-a-decoration')).length,6);
  assert.equal(c.shapes.filter(s=>s.name?.includes('-edge-')).length,5);
+});
+
+test('beauty source binding keeps labels and attached notes as visible text sources',()=>{
+ const item={id:'t',kind:'text',heading:'条件',blocks:[
+  {id:'b',label:'适用范围',text:'正文'},
+  {id:'n',kind:'note',text:'共同限定'},
+  {id:'d',kind:'diagram',text:'图示说明'},
+ ]};
+ assert.deepEqual(grayTextSources(item).map(x=>({location:x.sourceLocation,text:x.displayText,kind:x.kind})),[
+  {location:'t/b',text:'适用范围\n正文',kind:'text'},
+  {location:'t/n',text:'共同限定',kind:'note'},
+ ]);
+});
+
+test('pure text with labels and notes validates and reaches native shapes without a structure frame',()=>{
+ const {page,plan}=fixture();page.items=page.items.slice(1);page.grayComposition.regions=page.grayComposition.regions.slice(1);
+ page.items[0].blocks=[{id:'b1',label:'适用范围',text:'原文必须保留。'},{id:'n',kind:'note',text:'限定条件不得丢失。'}];
+ delete plan.structure;plan.grayRegions=page.grayComposition.regions;plan.regionVisuals=plan.regionVisuals.slice(1);
+ plan.regionVisuals[0].layout.blocks=[{sourceLocation:'b/b1',...box(f(0,.28,.48,.7))},{sourceLocation:'b/n',...box(f(.52,.28,.48,.7))}];
+ assert.doesNotThrow(()=>validateGrayRegionPlan(page,plan));
+ const c=capture(),result=renderGrayVisualPlan(c.slide,{items:page.items.map(i=>({id:i.id,grayItem:i}))},plan,{left:0,top:0,width:1170,height:492},{},neutralEditorialTheme);
+ assert.equal(result.componentFrame,undefined);
+ assert(c.shapes.some(s=>s.name==='PPAGENT_QA|parent=gray-region-b|domains=gray-regions'));
+ assert(c.shapes.some(s=>s.name.includes('within=gray-region-b')));
+ assert.equal(c.shapes.find(s=>s.name==='region-b-body-0').text.value,'适用范围\n原文必须保留。');
+ assert.equal(c.shapes.find(s=>s.name==='region-b-body-1').text.value,'限定条件不得丢失。');
 });

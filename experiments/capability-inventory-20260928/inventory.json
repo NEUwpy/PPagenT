@@ -1,0 +1,2019 @@
+{
+  "date": "2026-09-28",
+  "baseCommit": "c81c6c60d569da721937bbdb9f36c2bf7878767d",
+  "scope": "Read-only implementation and evidence inventory; declarations do not certify rendering or generalization",
+  "summary": {
+    "coreStructures": 35,
+    "registeredLogics": 20,
+    "nonemptyLogics": 18,
+    "renderer": {
+      "html-component": 35
+    },
+    "guideValidation": {
+      "not-validated": 32,
+      "sample-verified-candidate": 3
+    },
+    "implementationStatus": {
+      "implemented-unreviewed": 32,
+      "sample-verified-candidate": 3
+    },
+    "implementationMode": {
+      "preserved-design": 35
+    },
+    "withFields": 35,
+    "withCapacity": 35,
+    "withSemantic": 35,
+    "withSpatial": 35,
+    "withExamplePptx": 35,
+    "withExamplePngs": 15
+  },
+  "logics": [
+    {
+      "id": "parallel",
+      "assets": [
+        "parallel-equal-cards-001",
+        "parallel-folded-notes-grid-002"
+      ]
+    },
+    {
+      "id": "sequence",
+      "assets": [
+        "sequence-flow-001",
+        "sequence-phase-gates-004"
+      ]
+    },
+    {
+      "id": "cycle",
+      "assets": [
+        "cycle-loop-001",
+        "cycle-racetrack-loop-005",
+        "cycle-single-chain-feedback-002"
+      ]
+    },
+    {
+      "id": "comparison",
+      "assets": [
+        "comparison-dual-verdict-001",
+        "comparison-pros-cons-balance-005"
+      ]
+    },
+    {
+      "id": "hierarchy",
+      "assets": [
+        "hierarchy-grouped-breakdown-005"
+      ]
+    },
+    {
+      "id": "layered",
+      "assets": [
+        "layered-architecture-001",
+        "layered-iceberg-depth-006"
+      ]
+    },
+    {
+      "id": "hub",
+      "assets": [
+        "hub-radial-001",
+        "hub-directed-outcomes-002",
+        "hub-two-tier-capabilities-004"
+      ]
+    },
+    {
+      "id": "matrix",
+      "assets": [
+        "matrix-quadrant-priority-001",
+        "matrix-cross-grid-003"
+      ]
+    },
+    {
+      "id": "convergence",
+      "assets": [
+        "convergence-simple-funnel-001",
+        "convergence-funnel-001",
+        "convergence-many-to-one-003"
+      ]
+    },
+    {
+      "id": "causal",
+      "assets": [
+        "causal-fishbone-attribution-001",
+        "causal-mediator-chain-003"
+      ]
+    },
+    {
+      "id": "problem-solution",
+      "assets": [
+        "problem-solution-outcome-001",
+        "problem-method-result-001"
+      ]
+    },
+    {
+      "id": "argument-evidence",
+      "assets": [
+        "argument-evidence-conclusion-001"
+      ]
+    },
+    {
+      "id": "branching",
+      "assets": [
+        "branching-decision-routes-001",
+        "branching-scenario-fan-004"
+      ]
+    },
+    {
+      "id": "progression",
+      "assets": [
+        "progression-spectrum-focus-001",
+        "progression-maturity-steps-002",
+        "progression-growth-curve-004"
+      ]
+    },
+    {
+      "id": "goal-alignment",
+      "assets": [
+        "goal-alignment-strategy-metrics-001"
+      ]
+    },
+    {
+      "id": "role-stage",
+      "assets": [
+        "role-stage-collaboration-001"
+      ]
+    },
+    {
+      "id": "containment",
+      "assets": [
+        "containment-multi-set-intersection-001",
+        "containment-consensus-field-005"
+      ]
+    },
+    {
+      "id": "network",
+      "assets": [
+        "network-internal-external-ecosystem-001"
+      ]
+    },
+    {
+      "id": "journey",
+      "assets": []
+    },
+    {
+      "id": "spatial",
+      "assets": []
+    }
+  ],
+  "compositionLayouts": [
+    "fixed-cover",
+    "fixed-agenda",
+    "fixed-closing",
+    "component-full",
+    "component-aside-right",
+    "component-lead-top",
+    "editorial-list",
+    "editorial-focus",
+    "editorial-focus-reverse",
+    "editorial-single-focus",
+    "editorial-dual-statement",
+    "editorial-grid",
+    "image-left-text-right",
+    "image-right-text-left"
+  ],
+  "structures": [
+    {
+      "id": "hub-two-tier-capabilities-004",
+      "path": "assets/结构图/两级能力生态辐射-004/asset.json",
+      "logic": "hub",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 3,
+        "preferred": [
+          4,
+          10
+        ],
+        "max": 13
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 1
+    },
+    {
+      "id": "hub-radial-001",
+      "path": "assets/结构图/中心辐射-001/asset.json",
+      "logic": "hub",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 3,
+        "preferred": [
+          4,
+          6,
+          8
+        ],
+        "max": 8
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 0
+    },
+    {
+      "id": "hub-directed-outcomes-002",
+      "path": "assets/结构图/中心驱动成果辐射-002/asset.json",
+      "logic": "hub",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 3,
+        "preferred": [
+          4,
+          6
+        ],
+        "max": 6
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 1
+    },
+    {
+      "id": "comparison-pros-cons-balance-005",
+      "path": "assets/结构图/优劣权衡天平-005/asset.json",
+      "logic": "comparison",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 4,
+        "preferred": [
+          6
+        ],
+        "max": 8
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 1
+    },
+    {
+      "id": "network-internal-external-ecosystem-001",
+      "path": "assets/结构图/关系生态网络-001/asset.json",
+      "logic": "network",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 4,
+        "preferred": [
+          6
+        ],
+        "max": 8
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 9
+    },
+    {
+      "id": "layered-iceberg-depth-006",
+      "path": "assets/结构图/冰山显隐能力层-006/asset.json",
+      "logic": "layered",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 3,
+        "preferred": [
+          6
+        ],
+        "max": 10
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 1
+    },
+    {
+      "id": "layered-architecture-001",
+      "path": "assets/结构图/分层架构-001/asset.json",
+      "logic": "layered",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 3,
+        "preferred": [
+          3,
+          4,
+          5
+        ],
+        "max": 5
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 0
+    },
+    {
+      "id": "branching-decision-routes-001",
+      "path": "assets/结构图/分支决策-001/asset.json",
+      "logic": "branching",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 2,
+        "preferred": [
+          2,
+          3
+        ],
+        "max": 4
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 1
+    },
+    {
+      "id": "hierarchy-grouped-breakdown-005",
+      "path": "assets/结构图/分组展开结构-005/asset.json",
+      "logic": "hierarchy",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 2,
+        "preferred": [
+          3,
+          4
+        ],
+        "max": 5
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 1
+    },
+    {
+      "id": "cycle-single-chain-feedback-002",
+      "path": "assets/结构图/单链反馈控制环-002/asset.json",
+      "logic": "cycle",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 3,
+        "preferred": [
+          4,
+          5
+        ],
+        "max": 6
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 0
+    },
+    {
+      "id": "comparison-dual-verdict-001",
+      "path": "assets/结构图/双向对比-001/asset.json",
+      "logic": "comparison",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 2,
+        "preferred": [
+          2
+        ],
+        "max": 2
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 0
+    },
+    {
+      "id": "parallel-folded-notes-grid-002",
+      "path": "assets/结构图/双排折角便签-002/asset.json",
+      "logic": "parallel",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 4,
+        "preferred": [
+          4,
+          6,
+          8
+        ],
+        "max": 8
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "sample-verified-candidate",
+      "implementation": {
+        "mode": "preserved-design",
+        "status": "sample-verified-candidate",
+        "entry": "review.mjs",
+        "counts": "沿用原实现范围；区域变化按真实文字测量拒绝溢出",
+        "evidence": "experiments/structure-size-pilot/README.md",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 1
+    },
+    {
+      "id": "cycle-racetrack-loop-005",
+      "path": "assets/结构图/回环轨道循环-005/asset.json",
+      "logic": "cycle",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 3,
+        "preferred": [
+          4,
+          5
+        ],
+        "max": 6
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 0
+    },
+    {
+      "id": "causal-mediator-chain-003",
+      "path": "assets/结构图/因果机制链-003/asset.json",
+      "logic": "causal",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 2,
+        "preferred": [
+          3,
+          4
+        ],
+        "max": 4
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 1
+    },
+    {
+      "id": "convergence-many-to-one-003",
+      "path": "assets/结构图/多路汇聚结果-003/asset.json",
+      "logic": "convergence",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 3,
+        "preferred": [
+          4,
+          5
+        ],
+        "max": 6
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 4
+    },
+    {
+      "id": "containment-multi-set-intersection-001",
+      "path": "assets/结构图/多集合交集-001/asset.json",
+      "logic": "containment",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 2,
+        "preferred": [
+          3,
+          4
+        ],
+        "max": 5
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 8
+    },
+    {
+      "id": "cycle-loop-001",
+      "path": "assets/结构图/循环闭环-001/asset.json",
+      "logic": "cycle",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 3,
+        "preferred": [
+          3,
+          4,
+          5,
+          6
+        ],
+        "max": 6
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 0
+    },
+    {
+      "id": "branching-scenario-fan-004",
+      "path": "assets/结构图/情景假设扇面-004/asset.json",
+      "logic": "branching",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 3,
+        "preferred": [
+          4
+        ],
+        "max": 5
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 0
+    },
+    {
+      "id": "progression-maturity-steps-002",
+      "path": "assets/结构图/成熟度阶梯-002/asset.json",
+      "logic": "progression",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 3,
+        "preferred": [
+          4,
+          5
+        ],
+        "max": 6
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "sample-verified-candidate",
+      "implementation": {
+        "mode": "preserved-design",
+        "status": "sample-verified-candidate",
+        "entry": "review.mjs",
+        "counts": "沿用原实现范围；区域变化按真实文字测量拒绝溢出",
+        "evidence": "experiments/structure-size-pilot/README.md",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 1
+    },
+    {
+      "id": "goal-alignment-strategy-metrics-001",
+      "path": "assets/结构图/目标策略指标-001/asset.json",
+      "logic": "goal-alignment",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 2,
+        "preferred": [
+          3,
+          4
+        ],
+        "max": 4
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 0
+    },
+    {
+      "id": "matrix-quadrant-priority-001",
+      "path": "assets/结构图/矩阵象限-001/asset.json",
+      "logic": "matrix",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 4,
+        "preferred": [
+          4,
+          8
+        ],
+        "max": 12
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 0
+    },
+    {
+      "id": "parallel-equal-cards-001",
+      "path": "assets/结构图/等权并列卡片-001/asset.json",
+      "logic": "parallel",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 2,
+        "preferred": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "max": 5
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 0
+    },
+    {
+      "id": "convergence-simple-funnel-001",
+      "path": "assets/结构图/简明转化漏斗-001/asset.json",
+      "logic": "convergence",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 3,
+        "preferred": [
+          3,
+          4,
+          5
+        ],
+        "max": 6
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "sample-verified-candidate",
+      "implementation": {
+        "mode": "preserved-design",
+        "status": "sample-verified-candidate",
+        "entry": "review.mjs",
+        "counts": "沿用原实现范围；区域变化按真实文字测量拒绝溢出",
+        "evidence": "experiments/structure-size-pilot/README.md",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 0
+    },
+    {
+      "id": "matrix-cross-grid-003",
+      "path": "assets/结构图/行列交叉矩阵-003/asset.json",
+      "logic": "matrix",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 0,
+        "preferred": [
+          4,
+          5
+        ],
+        "max": 25
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 0
+    },
+    {
+      "id": "argument-evidence-conclusion-001",
+      "path": "assets/结构图/论点证据结论-001/asset.json",
+      "logic": "argument-evidence",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 2,
+        "preferred": [
+          2,
+          3,
+          4
+        ],
+        "max": 5
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 0
+    },
+    {
+      "id": "convergence-funnel-001",
+      "path": "assets/结构图/转化漏斗-001/asset.json",
+      "logic": "convergence",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 3,
+        "preferred": [
+          3,
+          4,
+          5
+        ],
+        "max": 6
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 0
+    },
+    {
+      "id": "progression-spectrum-focus-001",
+      "path": "assets/结构图/连续区间重点分布-001/asset.json",
+      "logic": "progression",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 3,
+        "preferred": [
+          3,
+          4,
+          5
+        ],
+        "max": 5
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 0
+    },
+    {
+      "id": "progression-growth-curve-004",
+      "path": "assets/结构图/连续成长曲线-004/asset.json",
+      "logic": "progression",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 3,
+        "preferred": [
+          4,
+          5
+        ],
+        "max": 6
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 2
+    },
+    {
+      "id": "problem-solution-outcome-001",
+      "path": "assets/结构图/问题方案结果-001/asset.json",
+      "logic": "problem-solution",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 2,
+        "preferred": [
+          2,
+          3,
+          4
+        ],
+        "max": 4
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 0
+    },
+    {
+      "id": "problem-method-result-001",
+      "path": "assets/结构图/问题方法结果-001/asset.json",
+      "logic": "problem-solution",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 2,
+        "preferred": [
+          2,
+          3,
+          4
+        ],
+        "max": 5
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 0
+    },
+    {
+      "id": "role-stage-collaboration-001",
+      "path": "assets/结构图/阶段角色协同-001/asset.json",
+      "logic": "role-stage",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 3,
+        "preferred": [
+          4,
+          5,
+          6
+        ],
+        "max": 8
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 0
+    },
+    {
+      "id": "sequence-phase-gates-004",
+      "path": "assets/结构图/阶段门禁流程-004/asset.json",
+      "logic": "sequence",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 3,
+        "preferred": [
+          4
+        ],
+        "max": 5
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 2
+    },
+    {
+      "id": "containment-consensus-field-005",
+      "path": "assets/结构图/集合交集共识区-005/asset.json",
+      "logic": "containment",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 2,
+        "preferred": [
+          3,
+          4
+        ],
+        "max": 5
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 1
+    },
+    {
+      "id": "sequence-flow-001",
+      "path": "assets/结构图/顺序流程-001/asset.json",
+      "logic": "sequence",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 3,
+        "preferred": [
+          3,
+          4,
+          5
+        ],
+        "max": 6
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 0
+    },
+    {
+      "id": "causal-fishbone-attribution-001",
+      "path": "assets/结构图/鱼骨归因-001/asset.json",
+      "logic": "causal",
+      "renderer": "html-component",
+      "declaredCount": {
+        "min": 4,
+        "preferred": [
+          4,
+          5,
+          6
+        ],
+        "max": 6
+      },
+      "runtimeEntry": true,
+      "guide": true,
+      "guideValidation": "not-validated",
+      "implementation": {
+        "mode": "preserved-design",
+        "adapter": "shared-css-geometry",
+        "status": "implemented-unreviewed",
+        "entry": "review.mjs",
+        "sizeExamples": {
+          "large": {
+            "areaRatio": 1
+          },
+          "medium": {
+            "areaRatio": 0.5
+          },
+          "small": {
+            "areaRatio": 0.3333333333333333
+          }
+        },
+        "counts": "沿用源设计数量与内容关系；容量按实际字号测量",
+        "typography": "随尺寸选择允许字号档位，最低 12 pt；保留角色层级，容量不足则明确拒绝",
+        "sizePolicy": "按实际图形占区保持比例；中版约半页、小版约三分之一页；可传 targetFrame 继续微调，文字容量独立检查"
+      },
+      "reviewEntry": true,
+      "fields": true,
+      "capacity": true,
+      "semanticContract": true,
+      "spatialContract": true,
+      "examplePptx": true,
+      "examplePngs": 0
+    }
+  ],
+  "recentWorkbenchRuns": [
+    {
+      "id": "20260927222844-7d6dce",
+      "state": true,
+      "status": "awaiting-user-review",
+      "layoutMode": "measured-rule-selection",
+      "controlledOrganization": false,
+      "pages": 2,
+      "pptx": [
+        ".tmp/production-workbench/runs/20260927222844-7d6dce/agent-renders/render-1/gray-draft.pptx",
+        ".tmp/production-workbench/runs/20260927222844-7d6dce/gray-draft.pptx"
+      ],
+      "pngCount": 4,
+      "selections": [
+        {
+          "path": ".tmp/production-workbench/runs/20260927222844-7d6dce/agent-renders/render-1/layout-selection-result.json",
+          "status": "selected-awaiting-render",
+          "pages": [
+            {
+              "relation": "parallel",
+              "candidateId": "cards-horizontal-measured"
+            },
+            {
+              "relation": "parallel",
+              "candidateId": "cards-horizontal-measured"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "20260927133837-c8fc5f",
+      "state": true,
+      "status": "awaiting-user-review",
+      "layoutMode": "measured-rule-selection",
+      "controlledOrganization": true,
+      "pages": 1,
+      "pptx": [
+        ".tmp/production-workbench/runs/20260927133837-c8fc5f/agent-renders/render-1/gray-draft.pptx",
+        ".tmp/production-workbench/runs/20260927133837-c8fc5f/gray-draft.pptx"
+      ],
+      "pngCount": 2,
+      "selections": [
+        {
+          "path": ".tmp/production-workbench/runs/20260927133837-c8fc5f/agent-renders/render-1/layout-selection-result.json",
+          "status": "selected-awaiting-render",
+          "pages": [
+            {
+              "relation": "independent",
+              "candidateId": "cards-horizontal-measured"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "20260927133711-e9ffcc",
+      "state": true,
+      "status": "awaiting-user-review",
+      "layoutMode": "measured-rule-selection",
+      "controlledOrganization": true,
+      "pages": 1,
+      "pptx": [
+        ".tmp/production-workbench/runs/20260927133711-e9ffcc/agent-renders/render-2/gray-draft.pptx",
+        ".tmp/production-workbench/runs/20260927133711-e9ffcc/gray-draft.pptx"
+      ],
+      "pngCount": 2,
+      "selections": [
+        {
+          "path": ".tmp/production-workbench/runs/20260927133711-e9ffcc/agent-renders/render-1/layout-selection-result.json",
+          "status": "rejected",
+          "reason": "页 p1 没有合适的已建布局：本页两个类别（两点不足、四点感悟）在内容上相互独立，各含并列条目，不需要跨组对齐、连线或先后连接；但两组文本体量差异悬殊，g2 显著大于 g1。唯一候选 cards-horizontal-measured 虽通过容量测量，但将 g1 压缩至约 312px 宽、g2 约 834px 宽，两栏悬殊过大，阅读顺序和视觉平衡不明确，且把体量较小的“不足”放在极窄列中，使主要内容“感悟”虽宽但条目密集，整体布局不协调。相册式、横纵组合等更适合独立且体量不同的内容，但均被拒绝或未提供可用候选，故返回 none。",
+          "pages": [
+            {
+              "relation": "independent",
+              "candidateId": "none"
+            }
+          ]
+        },
+        {
+          "path": ".tmp/production-workbench/runs/20260927133711-e9ffcc/agent-renders/render-2/layout-selection-result.json",
+          "status": "selected-awaiting-render",
+          "pages": [
+            {
+              "relation": "independent",
+              "candidateId": "cards-horizontal-measured"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "20260927123110-ac83b2",
+      "state": true,
+      "status": "awaiting-user-review",
+      "layoutMode": "measured-rule-selection",
+      "controlledOrganization": false,
+      "pages": 2,
+      "pptx": [
+        ".tmp/production-workbench/runs/20260927123110-ac83b2/agent-renders/render-1/gray-draft.pptx",
+        ".tmp/production-workbench/runs/20260927123110-ac83b2/gray-draft.pptx"
+      ],
+      "pngCount": 4,
+      "selections": [
+        {
+          "path": ".tmp/production-workbench/runs/20260927123110-ac83b2/agent-renders/render-1/layout-selection-result.json",
+          "status": "selected-awaiting-render",
+          "pages": [
+            {
+              "relation": "parallel",
+              "candidateId": "cards-horizontal-measured"
+            },
+            {
+              "relation": "parallel",
+              "candidateId": "album-horizontal-measured"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "20260927115917-5a5486",
+      "state": true,
+      "status": "awaiting-user-review",
+      "layoutMode": "measured-rule-selection",
+      "controlledOrganization": false,
+      "pages": 2,
+      "pptx": [
+        ".tmp/production-workbench/runs/20260927115917-5a5486/agent-renders/render-1/gray-draft.pptx",
+        ".tmp/production-workbench/runs/20260927115917-5a5486/agent-renders/render-2/gray-draft.pptx",
+        ".tmp/production-workbench/runs/20260927115917-5a5486/gray-draft.pptx"
+      ],
+      "pngCount": 6,
+      "selections": [
+        {
+          "path": ".tmp/production-workbench/runs/20260927115917-5a5486/agent-renders/render-1/layout-selection-result.json",
+          "status": "selected-awaiting-render",
+          "pages": [
+            {
+              "relation": "parallel",
+              "candidateId": "cards-horizontal-measured"
+            },
+            {
+              "relation": "parallel",
+              "candidateId": "cards-horizontal-equal"
+            }
+          ]
+        },
+        {
+          "path": ".tmp/production-workbench/runs/20260927115917-5a5486/agent-renders/render-2/layout-selection-result.json",
+          "status": "selected-awaiting-render",
+          "pages": [
+            {
+              "relation": "parallel",
+              "candidateId": "cards-horizontal-equal"
+            },
+            {
+              "relation": "parallel",
+              "candidateId": "album-horizontal-measured"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "20260927115217-cc59a8",
+      "state": true,
+      "status": "awaiting-user-review",
+      "layoutMode": "measured-rule-selection",
+      "controlledOrganization": false,
+      "pages": 1,
+      "pptx": [
+        ".tmp/production-workbench/runs/20260927115217-cc59a8/agent-renders/render-1/gray-draft.pptx",
+        ".tmp/production-workbench/runs/20260927115217-cc59a8/gray-draft.pptx"
+      ],
+      "pngCount": 2,
+      "selections": [
+        {
+          "path": ".tmp/production-workbench/runs/20260927115217-cc59a8/agent-renders/render-1/layout-selection-result.json",
+          "status": "selected-awaiting-render",
+          "pages": [
+            {
+              "relation": "support",
+              "candidateId": "cards-support-band"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "20260927115101-785e67",
+      "state": true,
+      "status": "awaiting-user-review",
+      "layoutMode": "measured-rule-selection",
+      "controlledOrganization": false,
+      "pages": 2,
+      "pptx": [
+        ".tmp/production-workbench/runs/20260927115101-785e67/agent-renders/render-1/gray-draft.pptx",
+        ".tmp/production-workbench/runs/20260927115101-785e67/agent-renders/render-2/gray-draft.pptx",
+        ".tmp/production-workbench/runs/20260927115101-785e67/gray-draft.pptx"
+      ],
+      "pngCount": 6,
+      "selections": [
+        {
+          "path": ".tmp/production-workbench/runs/20260927115101-785e67/agent-renders/render-1/layout-selection-result.json",
+          "status": "selected-awaiting-render",
+          "pages": [
+            {
+              "relation": "parallel",
+              "candidateId": "cards-horizontal-measured"
+            },
+            {
+              "relation": "parallel",
+              "candidateId": "album-horizontal-measured"
+            }
+          ]
+        },
+        {
+          "path": ".tmp/production-workbench/runs/20260927115101-785e67/agent-renders/render-2/layout-selection-result.json",
+          "status": "selected-awaiting-render",
+          "pages": [
+            {
+              "relation": "parallel",
+              "candidateId": "cards-horizontal-measured"
+            },
+            {
+              "relation": "parallel",
+              "candidateId": "album-horizontal-measured"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "20260926235123-69b0b3",
+      "state": true,
+      "status": "awaiting-user-review",
+      "layoutMode": "measured-rule-selection",
+      "controlledOrganization": false,
+      "pages": 3,
+      "pptx": [
+        ".tmp/production-workbench/runs/20260926235123-69b0b3/agent-renders/render-1/gray-draft.pptx",
+        ".tmp/production-workbench/runs/20260926235123-69b0b3/agent-renders/render-2/gray-draft.pptx",
+        ".tmp/production-workbench/runs/20260926235123-69b0b3/gray-draft.pptx"
+      ],
+      "pngCount": 9,
+      "selections": [
+        {
+          "path": ".tmp/production-workbench/runs/20260926235123-69b0b3/agent-renders/render-1/layout-selection-result.json",
+          "status": "selected-awaiting-render",
+          "pages": [
+            {
+              "relation": "parallel",
+              "candidateId": "cards-horizontal-equal"
+            },
+            {
+              "relation": "parallel",
+              "candidateId": "cards-horizontal-equal"
+            },
+            {
+              "relation": "parallel",
+              "candidateId": "cards-horizontal-equal"
+            }
+          ]
+        },
+        {
+          "path": ".tmp/production-workbench/runs/20260926235123-69b0b3/agent-renders/render-2/layout-selection-result.json",
+          "status": "selected-awaiting-render",
+          "pages": [
+            {
+              "relation": "parallel",
+              "candidateId": "cards-horizontal-equal"
+            },
+            {
+              "relation": "parallel",
+              "candidateId": "cards-horizontal-equal"
+            },
+            {
+              "relation": "parallel",
+              "candidateId": "cards-horizontal-equal"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

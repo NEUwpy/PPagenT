@@ -2,6 +2,7 @@ import { upsertPageBriefs, validateContent } from './state.mjs';
 import { checkItemFidelity } from '../content/source-fidelity.mjs';
 import { bindExpressionGroups } from '../composition/content-stages.mjs';
 import { createHash } from 'node:crypto';
+import { bindVisualBlocks } from './visual-block-mapping.mjs';
 
 const nonempty = value => typeof value === 'string' && value.trim().length > 0;
 const TYPES = new Set(['support', 'criterion', 'implementation', 'sequence', 'parallel', 'condition', 'qualification', 'comparison', 'decomposition', 'context']);
@@ -124,6 +125,7 @@ export function attemptFingerprint(plan, layouts) {
     }
   }
   parts.push(JSON.stringify(layouts ?? null));
+  if(plan?.pages?.some(p=>p.visualMapping)) parts.push(JSON.stringify(plan.pages.map(p=>p.visualMapping ?? null)));
   return createHash('sha1').update(parts.join('\u0001'), 'utf8').digest('hex');
 }
 
@@ -147,6 +149,7 @@ export function planContentFingerprint(plan) {
       for (const block of group.blocks ?? []) parts.push(block.id ?? '', block.label ?? '', block.text ?? '', block.kind ?? '', block.scope ?? '', ...(!block.kind || ['text','note'].includes(block.kind) ? ['', '', ''] : [block.expression ?? '', block.relationship ?? '', block.production ?? '']));
     }
   }
+  if(plan.pages.some(p=>p.visualMapping)) parts.push(JSON.stringify(plan.pages.map(p=>p.visualMapping ?? null)));
   return createHash('sha1').update(parts.join('\u0001'), 'utf8').digest('hex');
 }
 
@@ -199,6 +202,7 @@ export function grayCoverageIssues(state) {
 
 /** 共享规则片段：SEMANTIC_CONTRACT 与 GRAY_AGENT_PROMPT 的唯一来源；同步由 tests/prompt-sync.test.mjs 守卫。 */
 export const SHARED_RULES = Object.freeze({
+  visualMapping: '可选页面字段 visualMapping={blocks:[{id,groupId,blockIds,role:"content|shared",scopeGroupIds?:[groupId]}],groups:[{groupId,direction:"horizontal|vertical",relation:"parallel|independent"}]}。它只引用本页原始内容，不写正文或坐标；全部 block 按组阅读顺序恰好覆盖一次。仅纯文字组内的并列/独立内容可拆成多个视觉块；拆分必须声明组内关系与方向。附注与所属条目绑定同块；scope:group 共同说明以 shared 独占组首/组尾全宽带，scopeGroupIds 只含本组。比较、先后、因果、跨组作用范围及含局部图示的拆分暂不支持，返回能力缺口。省略映射沿用原组内排版。',
   organize: `先形成上屏提纲：每页先定主要判断与相称支撑，标出共同限定与条件的作用范围，再按真实关系把内容组织成可扫读的要点；对象比较用一致维度并列，因果、时序、并列按原稿真实关系表达。保留事实与限定不等于保留原句句法：原段需要读者自行拆句才能看出成员、判断与支撑关系时，用 blocks、label、整组草图或局部结构位重新组织；短句已经清楚就保留。不强制短语化、图示化或统一条数，不预设页数；不以照抄原句代替组织。`,
   category: `先恢复内容归属：类别成为组，类别内条目成为块，label 写要点、text 写必要展开；类别数量、条目数量和原稿措辞都不决定页数或版式。原稿以类别总起统辖多条目时，组结构体现"类别→条目"两级：组标题概括类别与条目的共同性质，条目在组内编号展开；层级关系要有可见载体，不只留在主题句前缀、标签前缀或后台说明里。同一主题的相关类别可同页；内容目的不同或容量不足时可分页，跨页保留归属和准确的本页标题，不把类别总数冒充本页条目数。允许提炼冗词、合并重复解释，保留重要事实、对象、条件、否定和关系，不要求固定压缩次数，不为复现样稿强制同页。`,
   hierarchy: `多因素、多子项、多环节的内容，规划时逐组检查成员、归属及层次。实质并列成员、主要判断与支撑，以及方法、条件、路径、目标之间的真实关系，须从上屏块序、标签或其他已选表达直接看出；页或组已分区、块已有标签，不足以证明块内关系已经组织。若读者仍须从同一连续文本中自行拆出成员、配对关系或推断指向，组织就未完成。可用已有 blocks、label 或局部结构显出成员与关系；连续文字仍适用于内容确实连贯、读者无需自行拆解的叙述。不因句长、词语或风格偏好要求拆分，也不要求每点独立成块；拆层依据是真实内容关系，不按固定条数或形式。拆开时不得删去连接总述与分项的归属、成因语（"反映出""表现为"是内容关系本身，删掉即归因不可读）；下级内容以归属可读的标签或就近从属呈现；同一信息不要正文与结构位重复承载。共同导出的结果或目标如何收束（编号条目、注文、独立区域）不作为对错标准，判据是会不会被读者误读成并列原因。顺序框架词（"起点/收尾/随后"）可用。`,
@@ -224,7 +228,7 @@ export const SEMANTIC_CONTRACT = `你的任务是将原稿提炼、重组为适�
 每组一个主要职责。claim概括主题或判断，正文展开对象、安排与条件，不把同一句建议分别复制到主题、组标题和正文。${SHARED_RULES.claim}blocks按阅读顺序；${SHARED_RULES.label}三列对照改写成一条可读文字或拆成两个块。heading保持短小。蓝区expression写表达作用，relationship写谁与谁怎样关联，production写可执行的组织要求；三者分工，避免重复复述承载内容。必要关系须在实文组织或蓝区制作说明中可见，仅保留关键词或写在narrative里不等于表达完成。
 ${SHARED_RULES.source}引用表示信息来自哪里，不要求每段原文单独变成一个正文块；页级 sourceIds 是认领通道：判断为结构性、不单列条目的来源写进所在页的 sourceIds，默认不上屏、不占版面；确有展示价值（如文档标题、署名）时可自然出现。${SHARED_RULES.declaration}小段共同说明就近融入主体，不因职责不同便独占大栏。${SHARED_RULES.condition}${SHARED_RULES.attachment}
 内容区尺寸由输入给定，主题句在内容区外，以28px单行呈现，需简短。排版可用单主体、横向、纵向和网格。正文按22/20/18px三档统一测量，每页选最大可承载档，18px以下退回内容规划；这一测量策略适用于所有页面，不由稿件措辞或类别数量触发。块级蓝注独立12px。组标题26px一行，组内label与text各自排字，块间距12px，每块四周8px内边距；每组70px标题/边距开销。不自己写坐标或强制页数。${SHARED_RULES.paging}同组label+text合计不超过400字。保留原稿数字写法。
-${SHARED_RULES.surface}正文必须能独立让读者理解必要关系，不能依赖后台说明。内部审查理由不要改写成正文：用“同时”“是否”“根据记录”等原稿已有表达保留关系，不额外解释“不是先后步骤”“不是已满足的证据”等审稿规则。原稿的模拟/假设性质属于读者需要的内容，须在实际标题或正文中明示，引用sourceIds不能代替显示。`;
+${SHARED_RULES.visualMapping}${SHARED_RULES.surface}正文必须能独立让读者理解必要关系，不能依赖后台说明。内部审查理由不要改写成正文：用“同时”“是否”“根据记录”等原稿已有表达保留关系，不额外解释“不是先后步骤”“不是已满足的证据”等审稿规则。原稿的模拟/假设性质属于读者需要的内容，须在实际标题或正文中明示，引用sourceIds不能代替显示。`;
 
 export const SEMANTIC_REVIEW_CONTRACT = `
 你是灰稿内容与表达审稿人。输入source是原稿，requirements是后台职责与必要关系，visiblePages是程序从实际渲染内容生成的上屏视图，flowSources（如有）是程序标出的流转信息（文件头尾、节标题）。审稿只看交付版本的实际可见文案：visiblePages 已含渲染器的自动编号等变换，规划意图、修改要求、块字段标注都不是已实现的事实；requirements不能作为上屏证据。尚未分配坐标或查看像素图。
@@ -650,6 +654,7 @@ export function semanticReviewInput({source,sourceSegments=[],area,plan,reviewFe
     ...(sourceSegments.length ? { sourceSegments: sourceSegments.map(segment=>({id:segment.id,text:segment.text})) } : {}),
     ...(flowSources.length ? { flowSources } : {}),
     requirements:plan.pages.map(page=>({pageId:page.pageId,pagePurpose:page.pagePurpose,narrative:page.narrative,
+      ...(page.visualMapping?{visualMapping:structuredClone(page.visualMapping)}:{}),
       carriedSources:page.sourceIds??[],
       groups:page.groups.map(group=>({id:group.id,role:group.role,importance:group.importance}))})),
     visiblePages,
@@ -659,18 +664,21 @@ export function semanticReviewInput({source,sourceSegments=[],area,plan,reviewFe
 
 /** Compile once from structured copy. Layout never supplies or rewrites content. */
 export function semanticPages(plan) {
-  return plan.pages.map(page => ({
+  return plan.pages.map(page => {
+    const mapping=page.visualMapping ? bindVisualBlocks(page,page.visualMapping) : null;
+    return ({
     pageId: page.pageId, title: page.title, claim: page.claim, relation: 'none',
     ...(page.sourceIds?.length ? { sourceIds: [...page.sourceIds] } : {}),
-    semantics: { schemaVersion:plan.schemaVersion, pagePurpose: page.pagePurpose, narrative: page.narrative, relations: page.relations ?? [], readingOrder: page.readingOrder ?? page.groups.map(g=>g.id) },
+    semantics: { schemaVersion:plan.schemaVersion, pagePurpose: page.pagePurpose, narrative: page.narrative, relations: page.relations ?? [], readingOrder: page.readingOrder ?? page.groups.map(g=>g.id), ...(mapping?{visualMapping:structuredClone(page.visualMapping)}:{}) },
     items: page.groups.map(group => ({
       id: group.id, role: 'object', semanticRole: group.role, importance: group.importance,
       heading: group.heading, kind: group.kind, blocks: structuredClone(group.blocks),
+      ...(mapping && group.kind==='text' ? {visualMapping:{...mapping.groups.find(g=>g.groupId===group.id),blocks:mapping.blocks.filter(b=>b.groupId===group.id)}} : {}),
       text: group.blocks.map(blockText).join('\n'),
       sourceIds: [...new Set(group.blocks.flatMap(block => block.sourceIds))],
       ...(group.kind === 'text' ? {} : { expression: group.expression, relationship: group.relationship, production: group.production }),
     })),
-  }));
+  });});
 }
 
 export function semanticPlanFromPages(plan) {

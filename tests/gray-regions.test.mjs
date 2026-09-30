@@ -28,3 +28,19 @@ test('visual decisions must cover every original region exactly once',()=>{
   assert.throws(()=>validateGrayRegionPlan(page,{...plan,regionVisuals:[regionVisuals[0],regionVisuals[0]]}),/唯一/);
   assert.throws(()=>validateGrayRegionPlan(page,{...plan,regionVisuals:regionVisuals.map(v=>({...v,surface:'unknown'}))}),/非法/);
 });
+
+test('legacy handoff binds by original IDs after attached notes and uses only the nested blue area',()=>{
+ const item={id:'g',kind:'text',heading:'安排',blocks:[
+  {id:'a',label:'甲',text:'正文甲'},{id:'n',kind:'note',text:'仅限甲'},
+  {id:'b',label:'乙',text:'正文乙'},{id:'d',kind:'chart',text:'结构数据',expression:'关系',relationship:'对应',production:'制作'},
+  {id:'c',scope:'group',text:'共同条件'},
+ ]};
+ const p={grayRegions:[{itemId:'g',x:0,y:0,width:1170,height:600,fontSize:22}],grayArea:{width:1170,height:600},structure:{sourceLocation:'g/d'}};
+ const result=grayRegionElements({items:[{id:'g',grayItem:item}]},p,{left:0,top:0,width:1170,height:600});
+ assert.deepEqual(result.text.map(t=>t.value),['安排','甲\n正文甲\n仅限甲','乙\n正文乙','共同条件']);
+ const b=result.text.find(t=>t.value.startsWith('乙'));
+ assert.equal(result.componentFrame.top,b.frame.top+b.frame.height);
+ assert(result.componentFrame.top+result.componentFrame.height<=result.text.at(-1).frame.top);
+ delete p.structure;item.blocks.splice(3,1);
+ assert.equal(grayRegionElements({items:[{id:'g',grayItem:item}]},p,{left:0,top:0,width:1170,height:600}).componentFrame,undefined);
+});

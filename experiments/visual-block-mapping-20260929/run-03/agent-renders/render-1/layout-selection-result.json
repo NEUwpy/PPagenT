@@ -1,0 +1,85 @@
+{
+  "status": "selected-awaiting-render",
+  "contentFingerprint": "ad41dbfadd785fb47ee6bf65293b6279d3d5c84c",
+  "model": "scripted-fixed-plan-construction",
+  "selection": {
+    "pages": [
+      {
+        "pageId": "services",
+        "relation": "independent",
+        "candidateId": "cards-horizontal-equal",
+        "reason": "固定工程样本只有一个语义组；组内方向与共同说明已绑定，不代表模型选型。"
+      },
+      {
+        "pageId": "records",
+        "relation": "independent",
+        "candidateId": "cards-horizontal-equal",
+        "reason": "固定工程样本只有一个语义组；组内方向与共同说明已绑定，不代表模型选型。"
+      }
+    ]
+  },
+  "receipts": [
+    {
+      "pageId": "services",
+      "layout": {
+        "family": "cards",
+        "direction": "horizontal",
+        "allocation": "equal"
+      },
+      "fontSize": 22,
+      "contentMinimums": {
+        "service": {
+          "minWidth": 1170,
+          "minHeight": 249
+        }
+      },
+      "occupiedRegions": [
+        {
+          "itemId": "service",
+          "x": 0,
+          "y": 0,
+          "width": 1170,
+          "height": 492,
+          "fontSize": 22
+        }
+      ],
+      "selection": {
+        "pageId": "services",
+        "relation": "independent",
+        "candidateId": "cards-horizontal-equal",
+        "reason": "固定工程样本只有一个语义组；组内方向与共同说明已绑定，不代表模型选型。"
+      }
+    },
+    {
+      "pageId": "records",
+      "layout": {
+        "family": "cards",
+        "direction": "horizontal",
+        "allocation": "equal"
+      },
+      "fontSize": 22,
+      "contentMinimums": {
+        "record": {
+          "minWidth": 1170,
+          "minHeight": 308
+        }
+      },
+      "occupiedRegions": [
+        {
+          "itemId": "record",
+          "x": 0,
+          "y": 0,
+          "width": 1170,
+          "height": 492,
+          "fontSize": 22
+        }
+      ],
+      "selection": {
+        "pageId": "records",
+        "relation": "independent",
+        "candidateId": "cards-horizontal-equal",
+        "reason": "固定工程样本只有一个语义组；组内方向与共同说明已绑定，不代表模型选型。"
+      }
+    }
+  ]
+}

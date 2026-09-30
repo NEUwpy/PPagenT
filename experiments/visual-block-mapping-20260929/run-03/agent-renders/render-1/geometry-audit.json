@@ -1,0 +1,49 @@
+{
+  "audit": [
+    {
+      "pageId": "services",
+      "bottomVoid": 0.5264227642276422,
+      "regions": [
+        {
+          "itemId": "service",
+          "available": 422,
+          "contentMin": 179,
+          "voidRatio": 0.5758293838862559
+        }
+      ]
+    },
+    {
+      "pageId": "records",
+      "bottomVoid": 0.4065040650406504,
+      "regions": [
+        {
+          "itemId": "record",
+          "available": 422,
+          "contentMin": 238,
+          "voidRatio": 0.4360189573459715
+        }
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "code": "page-bottom-void",
+      "pageId": "services",
+      "value": 0.526,
+      "threshold": 0.4,
+      "message": "页 services 底部留白 53% ≥ 40%：内容明显少于页高，考虑合并/填充或改分页（记录，不阻塞）。"
+    },
+    {
+      "code": "page-bottom-void",
+      "pageId": "records",
+      "value": 0.407,
+      "threshold": 0.4,
+      "message": "页 records 底部留白 41% ≥ 40%：内容明显少于页高，考虑合并/填充或改分页（记录，不阻塞）。"
+    }
+  ],
+  "thresholds": {
+    "bottomVoid": 0.4,
+    "regionVoid": 0.7,
+    "regionMinAvailable": 160
+  }
+}

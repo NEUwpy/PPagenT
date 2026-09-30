@@ -30,6 +30,9 @@ export function adjacentPageLayoutAdvice(plan, area, metrics) {
   const advice = [];
   for (let i = 0; i + 1 < plan.pages.length; i++) {
     const pages = plan.pages.slice(i, i + 2), origins = {};
+    // This advisory renames groups/blocks; an existing visual binding must be
+    // replanned explicitly, not copied with stale IDs into a synthetic page.
+    if(pages.some(page=>page.visualMapping)) continue;
     const groups = pages.flatMap((page, pi) => (page.readingOrder ?? page.groups.map(g => g.id)).map((id, gi) => {
       const group = structuredClone(page.groups.find(g => g.id === id));
       group.id = `merge-${pi}-${gi}`;

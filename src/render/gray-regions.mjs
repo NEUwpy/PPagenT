@@ -1,7 +1,8 @@
 import { grayBodyLayout } from '../runner/gray-draft.mjs';
 import { addText, addBox, qaElementName } from '../asset-runtime/component-builders.mjs';
 import { fitChineseTextToFrame } from './chinese-typography.mjs';
-import {renderGrayVisualPlan} from './gray-visual-plan.mjs';
+import {renderGrayVisualPlan,grayTextSources,grayVisualTokens} from './gray-visual-plan.mjs';
+import {resolveTextProgram,renderTextProgram} from './gray-text-program.mjs';
 
 // Reuse the gray renderer's section solver so production notes and final
 // structures occupy the same region. Geometry is never model-authored here.
@@ -13,25 +14,37 @@ export function grayRegionElements(content, plan, bodyFrame) {
     const item = content.items.find(i=>i.id===region.itemId)?.grayItem;
     if (!item) throw new Error(`Missing gray region owner ${region.itemId}`);
     text.push({itemId:item.id,value:item.heading, frame:frame(region.x+16,region.y+12,region.width-32,40), heading:true});
+    if(item.kind!=='text') {
+      if(plan.structure?.sourceLocation!==item.id || componentFrame) throw new Error(`Unbound gray expression ${item.id}`);
+      componentFrame=frame(region.x+16,region.y+54,region.width-32,region.height-70);
+      continue;
+    }
     const body = grayBodyLayout(item,region.width-32,region.fontSize,region.height-70);
-    for (const [index,section] of body.sections.entries()) {
-      const node = item.kind==='text' ? item.blocks[index] : item;
-      const location = item.kind==='text' ? `${item.id}/${node.id ?? index}` : item.id;
+    const sources=grayTextSources(item);
+    for (const section of body.sections) {
       const target = frame(region.x+16+section.left,region.y+54+section.top,section.width,section.height);
-      if (section.kind !== 'text') {
-        if (location !== plan.structure.sourceLocation || componentFrame) throw new Error(`Unbound gray expression ${location}`);
-        componentFrame = target;
-      } else text.push({itemId:item.id,value:node.text ?? node.sourceText ?? '',frame:{...target,left:target.left+8,top:target.top+8,width:target.width-16,height:target.height-16}});
+      if(section.placeholder) {
+        const location=`${item.id}/${section.expressionBlockId}`;
+        if(location!==plan.structure?.sourceLocation || componentFrame) throw new Error(`Unbound gray expression ${location}`);
+        componentFrame={...target,top:target.top+(section.noteArea?.top??0)*sy,height:(section.noteArea?.height??section.height)*sy};
+      }
+      const selected=sources.filter(s=>(section.sourceBlockIds??[]).some(id=>s.sourceLocation===`${item.id}/${id}`));
+      if(selected.length) text.push({itemId:item.id,value:selected.map(s=>s.displayText).join('\n'),frame:{...target,height:section.placeholder&&section.noteArea?section.noteArea.top*sy:target.height}});
     }
   }
-  if (!componentFrame) throw new Error('Missing gray expression frame');
   return {text,componentFrame};
 }
 
 export function renderGrayRegions(slide,content,plan,bodyFrame,typography,theme = {}) {
+  if(plan.regionVisuals?.some(s=>s.program)) {
+    const items=content.items.map(i=>i.grayItem);
+    // The source page semantics are passed by the compiler with the gray plan.
+    const page={pageId:content.pageId,items,semantics:plan.graySemantics,grayComposition:{regions:plan.grayRegions}};
+    return renderTextProgram(slide,resolveTextProgram(page,plan,plan.grayArea,bodyFrame),grayVisualTokens(theme,typography));
+  }
   if(plan.regionVisuals?.every(s=>s.layout) && plan.regionVisuals.length) {
     const result=renderGrayVisualPlan(slide,content,plan,bodyFrame,typography,theme);
-    addBox(slide,result.componentFrame,{name:qaElementName({parent:'composition-component',domains:['page-composition-zones']}),geometry:'rect',fill:'none',line:{fill:'none',width:0},shadow:'shadow-none'});
+    if(result.componentFrame) addBox(slide,result.componentFrame,{name:qaElementName({parent:'composition-component',domains:['page-composition-zones']}),geometry:'rect',fill:'none',line:{fill:'none',width:0},shadow:'shadow-none'});
     return result;
   }
   const result = grayRegionElements(content,plan,bodyFrame);
@@ -45,7 +58,7 @@ export function renderGrayRegions(slide,content,plan,bodyFrame,typography,theme 
   const magazine = treatment.heading === 'editorial-marker-line';
   if (treatment.heading === 'academic-reference') {
     renderAcademicRegions(slide,result,plan,bodyFrame,typography,theme);
-    addBox(slide,result.componentFrame,{name:qaElementName({parent:'composition-component',domains:['page-composition-zones']}),geometry:'rect',fill:'none',line:{fill:'none',width:0},shadow:'shadow-none'});
+    if(result.componentFrame) addBox(slide,result.componentFrame,{name:qaElementName({parent:'composition-component',domains:['page-composition-zones']}),geometry:'rect',fill:'none',line:{fill:'none',width:0},shadow:'shadow-none'});
     return {componentFrame:result.componentFrame};
   }
   for (const [index,entry] of result.text.entries()) {
@@ -63,7 +76,7 @@ export function renderGrayRegions(slide,content,plan,bodyFrame,typography,theme 
     const inset = entry.heading ? (treatment.headingInset ?? 16) : (treatment.bodyInset ?? 12);
     addText(slide,fit.text,{...entry.frame,left:entry.frame.left+inset,top:entry.frame.top+8,width:entry.frame.width-(inset+8),height:entry.frame.height-16},{name:`gray-region-text-${index}`,fontSize:fit.fontSize,typeface:entry.heading ? (theme.displayFont ?? typography.displayTypeface ?? typography.bodyTypeface) : typography.bodyTypeface,color:entry.heading ? (theme.primaryColor ?? theme.dark ?? '#303238') : (theme.body ?? theme.dark ?? '#303238'),bold:Boolean(entry.heading),verticalAlignment:'top',autoFit:'none'});
   }
-  addBox(slide,result.componentFrame,{name:qaElementName({parent:'composition-component',domains:['page-composition-zones']}),geometry:'rect',fill:'none',line:{fill:'none',width:0},shadow:'shadow-none'});
+  if(result.componentFrame) addBox(slide,result.componentFrame,{name:qaElementName({parent:'composition-component',domains:['page-composition-zones']}),geometry:'rect',fill:'none',line:{fill:'none',width:0},shadow:'shadow-none'});
   return {componentFrame:result.componentFrame};
 }
 
@@ -75,7 +88,7 @@ function renderAcademicRegions(slide,result,plan,bodyFrame,typography,theme) {
     const visual=plan.regionVisuals?.find(v=>v.itemId===region.itemId) ?? {surface:'plain',headingEnglish:''};
     const f={left:bodyFrame.left+(region.x+16)*sx,top:bodyFrame.top+(region.y+28)*sy,width:(region.width-32)*sx,height:(region.height-36)*sy};
     const entries=result.text.filter(t=>t.itemId===region.itemId);
-    const containsStructure=result.componentFrame.left>=f.left-16 && result.componentFrame.left<f.left+f.width && result.componentFrame.top>=f.top && result.componentFrame.top<f.top+f.height;
+    const containsStructure=result.componentFrame && result.componentFrame.left>=f.left-16 && result.componentFrame.left<f.left+f.width && result.componentFrame.top>=f.top && result.componentFrame.top<f.top+f.height;
     if (!containsStructure) {
       const bottom=Math.max(f.top+64,...entries.filter(t=>!t.heading).map(t=>{
         const fit=fitChineseTextToFrame(t.value,{...t.frame,width:t.frame.width-32,fontSizes:[22,20,18],maxLines:12,lineHeight:1.35});

@@ -1,0 +1,190 @@
+✔ mapping preserves every source span exactly once and rejects omission or changed text (1.4685ms)
+✔ cards and album preserve content, separate same-group objects, and keep scope targets (19.8559ms)
+✔ 文字组内的局部图示不能被外层 text 遮蔽 (0.8161ms)
+✔ 纯文字不强制图示；其他组的结构不能替代本组要求 (0.6344ms)
+✔ candidate geometry uses real text measurement and preserves content on binding (10.0796ms)
+✔ unsupported cross-group logic and fabricated candidate cannot pass (1.3634ms)
+✔ oversized body does not produce candidate by shrinking font (1534.2535ms)
+✔ single region has one geometric candidate and explicit measured width-height requirements (0.7391ms)
+✔ support band keeps source order, gives primary more height, and binds support explicitly (2.304ms)
+✔ parallel label cannot bypass explicit primary-supporting area balance (1.0134ms)
+✔ bounded font fallback is uniform and never goes below 18 (0.6085ms)
+✔ adjacent advice preserves source order and duplicate ids without mutating content (0.8177ms)
+✔ gray import rejects whole-page takeover and unrelated text binding (1.5801ms)
+✖ structure stays in blue subregion, original text retains its separate region (7.4801ms)
+✔ visual decisions must cover every original region exactly once (0.385ms)
+✔ model layout preserves all source blocks and rejects ownership, overlap and boundary violations (5.7767ms)
+✔ model positions, type, alignment and gradient stroke reach native shapes; content is source-bound (5.0203ms)
+✔ Skin roles stay Skin-specific and insufficient frames fail instead of silently shrinking (0.6135ms)
+✔ shared title pair fixes English offset and leaves a native border gap without masking blocks (0.8292ms)
+✔ hybrid solves both nesting orientations and keeps leaves inside canvas (1.1225ms)
+✔ hybrid rejects duplicate or missing leaves and unsatisfied minimum size (0.4303ms)
+✔ university entry rejects free redraw and requires invocation evidence (24.4401ms)
+✖ university preserved designs render with McKinsey roles and university theme (1870.1825ms)
+✔ three preserved builds keep original geometry and use bounded typography when shrinking (3269.9896ms)
+✔ preserved text overflow is rejected and SVG opacity gradient uses native offset units (985.416ms)
+✔ size policy keeps approved tiers and obeys explicit Skin typography (0.9004ms)
+✔ neutral Skin preserves design-pixel typography and semantic surfaces in the actual renderer (880.9031ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\ppagent-model-gray-layout-A497H8\run\northeastern-university-001\.runtime\template-starter.pptx.inspect.ndjson
+✖ model gray layouts pass the public tool and compile native positions and independent gradient strokes (2662.118ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\ppagent-structure-bridge-UMpsFX\run\northeastern-university-001\.runtime\template-starter.pptx.inspect.ndjson
+✖ 结构计划经正式工具绑定来源并构建双 Skin；非文字内容不能降级 (803.1028ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\ppagent-check-kfk2VQ\run\.runtime\template-starter.pptx.inspect.ndjson
+✖ 准则页主区真实构建；全辅助负例反馈后可修订并通过 (820.7822ms)
+✔ buildDeckPages 只出封面与正文页，正文逐字取自来源、模型不能自报 (1.2354ms)
+✔ buildDeckPages 是确定性的，且不修改传入的 state (0.4141ms)
+✔ 没有方案的正文页 composition 为 null（不得凭空补版式） (0.1889ms)
+✔ groupViolations 按 slide 归集，typography 与断行违规都补出语义 code (0.291ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\ppagent-compile-UoQlfq\run\.runtime\template-starter.pptx.inspect.ndjson
+✖ compileDeck 真的产出 PPTX、逐页 PNG 与 blueprint，且 blueprint 就是被构建的那份 (796.9688ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\ppagent-check-UfGlMV\run\.runtime\template-starter.pptx.inspect.ndjson
+✖ check_pages 通过后按页记账，且已通过的版本被复用而不重复构建 (639.6575ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\ppagent-roles-awk7N7\run\.runtime\template-starter.pptx.inspect.ndjson
+✖ 全程规则被抽到底部独立带，不占主区序号（层级忠实于原稿） (614.4133ms)
+✔ 同一区域在方案里写两遍：构建前拦下，不产出少了一条的成品 (34.3477ms)
+Inspect result written to file: C:\Users\ilove\AppData\Local\Temp\ppagent-check-BGIVbl\run\.runtime\template-starter.pptx.inspect.ndjson
+✔ 正文装不下时构建失败，且归因到出问题的那一页 (766.2471ms)
+✔ --replay 只在整套审计通过时才算交付 (2.6367ms)
+✔ 没有视觉方案的页面无法重编译，且不靠猜测补齐 (0.4247ms)
+✔ parseArgs 把带值的开关与裸开关分开，值不会被当成下一个开关 (0.4591ms)
+✔ 灰稿交接直接进入 visual 并记录源版本 (17.1246ms)
+✔ 视觉阶段注入生成规则，内容阶段注入内容导演规则，两者不同 (22.1166ms)
+✔ 规则正文必须带优先级声明：它描述的是另一条生产线，冲突时以本次工具契约为准 (9.4864ms)
+✔ native execution ignores legacy counts, text slots and missing sample executors (14.1324ms)
+✔ old parameter-only calls fail explicitly instead of falling back (0.8412ms)
+✔ no-op native construction cannot claim success (44.6053ms)
+✔ missing evidence is disclosed rather than inferred from a name (1.2158ms)
+✔ dashboard and Skill guide expose the same real asset evidence (836.3805ms)
+✔ every core design has an authored guide without old text-slot requirements (744.4439ms)
+ℹ tests 51
+ℹ suites 0
+ℹ pass 43
+ℹ fail 8
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 26825.5956
+
+✖ failing tests:
+
+test at tests\gray-regions.test.mjs:16:1
+✖ structure stays in blue subregion, original text retains its separate region (7.4801ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+  +   height: 50,
+  -   height: 208.5,
+      left: 71,
+  +   top: 299,
+  -   top: 220,
+      width: 1138
+    }
+  
+      at TestContext.<anonymous> (file:///C:/PPagenT/tests/gray-regions.test.mjs:18:10)
+      at Test.runInAsyncScope (node:async_hooks:213:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:788:18)
+      at Test.postRun (node:internal/test_runner/test:1235:19)
+      at Test.run (node:internal/test_runner/test:1163:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { left: 71, top: 299, width: 1138, height: 50 },
+    expected: { left: 71, top: 220, width: 1138, height: 208.5 },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests\preserved-structure-build.test.mjs:18:1
+✖ university preserved designs render with McKinsey roles and university theme (1870.1825ms)
+  page.evaluate: Error: [HTML_PPT_FIDELITY:UNCOMPILED_VISUAL_NODE] node=note-card property=surface value=rgb(255, 255, 255)
+      at fidelityError (eval at evaluate (:311:30), <anonymous>:394:15)
+      at eval (eval at evaluate (:311:30), <anonymous>:677:27)
+      at async <anonymous>:337:30
+      at resolveHtmlComponent (C:\PPagenT\src\visual-runtime\html-component-runtime.mjs:148:29)
+      at async TestContext.<anonymous> (C:\PPagenT\tests\preserved-structure-build.test.mjs:32:15) {
+    log: []
+  }
+
+test at tests\runner-build-tools.test.mjs:19:1
+✖ model gray layouts pass the public tool and compile native positions and independent gradient strokes (2662.118ms)
+  Error: 第 1 页对象匹配失败：文本 MDM方法偏移量自适应选取，找到 0 个
+      at requireUniqueRecord (file:///C:/PPagenT/src/asset-runtime/template-utils.mjs:67:11)
+      at applyTemplateMappedRecipes (file:///C:/PPagenT/src/asset-runtime/template-utils.mjs:124:22)
+      at async renderNortheasternUniversityDeck (file:///C:/PPagenT/src/runtime/skins/northeastern-university.mjs:268:18)
+      at async renderDeck (file:///C:/PPagenT/src/runner/tools/build-tools.mjs:160:3)
+      at async compileDeck (file:///C:/PPagenT/src/runner/tools/build-tools.mjs:188:3)
+      at async TestContext.<anonymous> (file:///C:/PPagenT/tests/runner-build-tools.test.mjs:39:16)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3)
+
+test at tests\runner-build-tools.test.mjs:47:1
+✖ 结构计划经正式工具绑定来源并构建双 Skin；非文字内容不能降级 (803.1028ms)
+  Error: 第 1 页对象匹配失败：文本 MDM方法偏移量自适应选取，找到 0 个
+      at requireUniqueRecord (file:///C:/PPagenT/src/asset-runtime/template-utils.mjs:67:11)
+      at applyTemplateMappedRecipes (file:///C:/PPagenT/src/asset-runtime/template-utils.mjs:124:22)
+      at async renderNortheasternUniversityDeck (file:///C:/PPagenT/src/runtime/skins/northeastern-university.mjs:268:18)
+      at async renderDeck (file:///C:/PPagenT/src/runner/tools/build-tools.mjs:160:3)
+      at async compileDeck (file:///C:/PPagenT/src/runner/tools/build-tools.mjs:188:3)
+      at async TestContext.<anonymous> (file:///C:/PPagenT/tests/runner-build-tools.test.mjs:76:22)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7)
+
+test at tests\runner-build-tools.test.mjs:84:1
+✖ 准则页主区真实构建；全辅助负例反馈后可修订并通过 (820.7822ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///C:/PPagenT/tests/runner-build-tools.test.mjs:103:10)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\runner-build-tools.test.mjs:199:1
+✖ compileDeck 真的产出 PPTX、逐页 PNG 与 blueprint，且 blueprint 就是被构建的那份 (796.9688ms)
+  Error: 第 1 页对象匹配失败：文本 MDM方法偏移量自适应选取，找到 0 个
+      at requireUniqueRecord (file:///C:/PPagenT/src/asset-runtime/template-utils.mjs:67:11)
+      at applyTemplateMappedRecipes (file:///C:/PPagenT/src/asset-runtime/template-utils.mjs:124:22)
+      at async renderNortheasternUniversityDeck (file:///C:/PPagenT/src/runtime/skins/northeastern-university.mjs:268:18)
+      at async renderDeck (file:///C:/PPagenT/src/runner/tools/build-tools.mjs:160:3)
+      at async compileDeck (file:///C:/PPagenT/src/runner/tools/build-tools.mjs:188:3)
+      at async TestContext.<anonymous> (file:///C:/PPagenT/tests/runner-build-tools.test.mjs:202:20)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7)
+
+test at tests\runner-build-tools.test.mjs:222:1
+✖ check_pages 通过后按页记账，且已通过的版本被复用而不重复构建 (639.6575ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///C:/PPagenT/tests/runner-build-tools.test.mjs:225:10)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\runner-build-tools.test.mjs:238:1
+✖ 全程规则被抽到底部独立带，不占主区序号（层级忠实于原稿） (614.4133ms)
+  Error: 第 1 页对象匹配失败：文本 MDM方法偏移量自适应选取，找到 0 个
+      at requireUniqueRecord (file:///C:/PPagenT/src/asset-runtime/template-utils.mjs:67:11)
+      at applyTemplateMappedRecipes (file:///C:/PPagenT/src/asset-runtime/template-utils.mjs:124:22)
+      at async renderNortheasternUniversityDeck (file:///C:/PPagenT/src/runtime/skins/northeastern-university.mjs:268:18)
+      at async renderDeck (file:///C:/PPagenT/src/runner/tools/build-tools.mjs:160:3)
+      at async compileDeck (file:///C:/PPagenT/src/runner/tools/build-tools.mjs:188:3)
+      at async TestContext.<anonymous> (file:///C:/PPagenT/tests/runner-build-tools.test.mjs:266:20)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7)

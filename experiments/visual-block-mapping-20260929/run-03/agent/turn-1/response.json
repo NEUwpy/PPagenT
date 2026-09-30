@@ -1,0 +1,31 @@
+{
+  "content": "固定计划工程回放。",
+  "toolCalls": [
+    {
+      "name": "check_plan",
+      "args": {}
+    }
+  ],
+  "stalled": false,
+  "planFlow": {
+    "submission": {
+      "status": "none",
+      "turn": 1,
+      "explicitReuse": false
+    },
+    "consumptions": [
+      {
+        "consumer": "check_plan",
+        "planSource": "current-plan",
+        "submittedTurn": 0,
+        "originTurn": 0,
+        "fingerprint": "ad41dbfadd785fb47ee6bf65293b6279d3d5c84c",
+        "submissionFingerprint": "44722c45df6bfe465d01fb50a98724ba0149403bc219ec5c0f3204137c5cba37",
+        "consumedTurn": 1,
+        "consumptionSource": "current-plan",
+        "contentUpdated": false,
+        "submissionUpdated": false
+      }
+    ]
+  }
+}

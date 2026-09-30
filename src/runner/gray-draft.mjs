@@ -6,7 +6,7 @@ import { createHash } from 'node:crypto';
 import { buildChatProviderFromEnv } from './chat-provider.mjs';
 import { newRunState, upsertPageBriefs, writeState, renderContentMarkdown, renderStateMarkdown } from './state.mjs';
 import { fitChineseTextToFrame } from '../render/chinese-typography.mjs';
-import { SEMANTIC_CONTRACT, SEMANTIC_REVIEW_CONTRACT, EXPRESSION_CONTRACT, LAYOUT_CONTRACT, validateSemanticPlan, bindSemanticLayout, bindGrayExpressions, semanticPlanFromPages, blockText, regionBody, grayDisplayBlocks, semanticReviewInput, SKETCH_KINDS, grayCoverageIssues } from './gray-semantics.mjs';
+import { SEMANTIC_CONTRACT, SEMANTIC_REVIEW_CONTRACT, EXPRESSION_CONTRACT, LAYOUT_CONTRACT, validateSemanticPlan, bindSemanticLayout, bindGrayExpressions, semanticPages, semanticPlanFromPages, blockText, regionBody, grayDisplayBlocks, semanticReviewInput, SKETCH_KINDS, grayCoverageIssues } from './gray-semantics.mjs';
 import { resolveGrayLayout } from './gray-layout.mjs';
 import { resolveLayoutTree } from '../composition/resolve.mjs';
 
@@ -60,44 +60,46 @@ export function structurePlaceholderHeight(kind, nodeCount) {
 const placeholderNodeCount = text => Math.max(1, String(text ?? '').split(/[／/]|→|->/u).map(segment => segment.trim()).filter(Boolean).length);
 const BRIEF_NOTE = '本条先画结构图';
 
-export function grayBodyLayout(item, width, fontSize, availableHeight) {
+export function grayBodyLayout(item, width, fontSize, availableHeight, options = {}) {
+  if(item.visualMapping?.blocks?.length>1) return mappedBodyLayout(item,width,fontSize,availableHeight,options);
   if (SKETCH_KINDS.has(item.kind) && Array.isArray(item.blocks) && item.blocks.length) {
     return sketchBodyLayout(item, width, fontSize, availableHeight);
   }
   const padding=8, gap=12, labelGap=4;
   // 蓝注解耦（评审 #32，用户拍板）：块级结构位附注独立小字（12px），与主文互不锁死；无行数限制。
-  const NOTE_FONT=12;
+  const NOTE_FONT=options.noteFontSize ?? 12;
   // 条目编号（评审 #25/#32/#71）：仅带标签的正文条目参与编号，附注块不编号、不占号。
   const labeledCount=item.kind==='text' && item.blocks ? item.blocks.filter(block=>(block.kind ?? 'text')==='text'&&block.label&&block.scope!=='group').length : 0;
   let labeledIndex=0;
   const sections=[];
   if(item.kind==='text' && item.blocks){
-    for(const block of item.blocks){
+    for(const [blockIndex,block] of item.blocks.entries()){
+      const sourceBlockId=block.id??blockIndex;
       const kind=block.kind ?? 'text';
       const groupScoped=kind==='text'&&block.scope==='group';
       if(kind==='text'&&!groupScoped){
-        const ordinal=block.label&&labeledCount>=2?++labeledIndex:0;
-        sections.push({kind,fontSize,placeholder:false,standalone:false,note:null,parts:grayDisplayBlocks({kind:'text',blocks:[block]},ordinal?{ordinal}:{})});
+        const ordinal=item.labelOrdinals?.[block.id] ?? (block.label&&labeledCount>=2?++labeledIndex:0);
+        sections.push({kind,fontSize,sourceBlockIds:[sourceBlockId],placeholder:false,standalone:false,note:null,parts:grayDisplayBlocks({kind:'text',blocks:[block]},ordinal?{ordinal}:{})});
       }else if(kind==='note'||groupScoped){
         // 组级共同说明（评审 #119/#121）：约束整组全部条目——本页正文字号、不编号、不依附单条，
         // 随组按块序呈现；与 note 的差别只是不挂到前一条目。声明（契约/审稿输入）与实现须一致。
         if(groupScoped){
           const note={kind:'note',fontSize,parts:grayDisplayBlocks({kind:'text',blocks:[block]}),plain:true};
-          sections.push({kind:'note',fontSize:note.fontSize,placeholder:false,standalone:true,note:null,parts:note.parts});
+          sections.push({kind:'note',fontSize:note.fontSize,sourceBlockIds:[sourceBlockId],placeholder:false,standalone:true,note:null,parts:note.parts});
           continue;
         }
         // 附着说明（评审 #41-D）：共享限定/前提等非图形附注，紧随所依附条目、独立 12px 小字、不编号、无占位框。
         const note={kind,fontSize:Math.min(fontSize,NOTE_FONT),parts:grayDisplayBlocks({kind:'text',blocks:[block]}),plain:true};
         const previous=sections[sections.length-1];
-        if(previous&&previous.kind==='text'&&!previous.note) previous.note=note;
-        else sections.push({kind:'note',fontSize:note.fontSize,placeholder:false,standalone:true,note:null,parts:note.parts});
+        if(previous&&previous.kind==='text'&&!previous.note) { previous.note=note; previous.sourceBlockIds.push(sourceBlockId); }
+        else sections.push({kind:'note',fontSize:note.fontSize,sourceBlockIds:[sourceBlockId],placeholder:false,standalone:true,note:null,parts:note.parts});
       }else{
         // 三态修正（任务 #77，用户拍板）：条目内嵌结构位＝并入前一条目（占位归条目，灰底蓝纹）；
         // 无前置条目的纯结构图块＝独立蓝底。
         const note={kind,fontSize:Math.min(fontSize,NOTE_FONT),parts:grayDisplayBlocks({kind:'text',blocks:[block]})};
         const previous=sections[sections.length-1];
-        if(previous&&previous.kind==='text'&&!previous.note) previous.note=note;
-        else sections.push({kind,fontSize:note.fontSize,placeholder:true,standalone:true,note:null,parts:note.parts});
+        if(previous&&previous.kind==='text'&&!previous.note) { previous.note=note; previous.expressionBlockId=sourceBlockId; }
+        else sections.push({kind,fontSize:note.fontSize,sourceBlockIds:[],expressionBlockId:sourceBlockId,placeholder:true,standalone:true,note:null,parts:note.parts});
       }
     }
   } else {
@@ -179,9 +181,41 @@ export function grayBodyLayout(item, width, fontSize, availableHeight) {
       runs.push({text:part.text,x:padding,y,width:width-2*padding,height:part.height,bold:part.bold,fits:part.fits,fontSize:part.fontSize,...(part.kind?{kind:part.kind}:{})});
       y+=part.height+labelGap;
     });
-    return {...frame,kind:section.kind,id:section.id,minHeight:section.minHeight,...(section.placeholder?{placeholder:true}:{}),...(section.noteArea?{noteArea:section.noteArea}:{}),...(section.standalone?{standalone:true}:{})};
+    const original=sections[Number(section.id.slice('section-'.length))];
+    return {...frame,kind:section.kind,id:section.id,minHeight:section.minHeight,sourceBlockIds:original.sourceBlockIds,expressionBlockId:original.expressionBlockId,...(section.placeholder?{placeholder:true}:{}),...(section.noteArea?{noteArea:section.noteArea}:{}),...(section.standalone?{standalone:true}:{})};
   });
   return {runs,sections:frames,height:target,minimumHeight:minimum,fits:runs.every(r=>r.fits)};
+}
+
+/** Group ownership stays visible once; visual blocks share its interior and measured typography. */
+function mappedBodyLayout(item,width,fontSize,availableHeight,options) {
+  const mapping=item.visualMapping, gap=16;
+  const content=mapping.blocks.filter(b=>b.role!=='shared'),shared=mapping.blocks.find(b=>b.role==='shared');
+  if(!content.length) throw new Error('视觉块映射缺少主体内容');
+  const horizontal=mapping.direction==='horizontal';
+  const laneWidth=horizontal ? (width-gap*(content.length-1))/content.length : width;
+  if(laneWidth<100) return {runs:[],sections:[],height:Infinity,minimumHeight:Infinity,fits:false};
+  const labeled=item.blocks.filter(b=>(b.kind??'text')==='text' && b.label && b.scope!=='group');
+  const labelOrdinals=Object.fromEntries(labeled.map((b,i)=>[b.id,labeled.length>=2?i+1:0]));
+  const bodyFor=(b,w)=>grayBodyLayout({...item,visualMapping:undefined,blocks:b.blocks,labelOrdinals},w,fontSize,undefined,options);
+  const bodies=content.map(b=>bodyFor(b,laneWidth));
+  const contentHeight=horizontal?Math.max(...bodies.map(b=>b.height)):bodies.reduce((s,b)=>s+b.height,0)+gap*(bodies.length-1);
+  const sharedBody=shared?bodyFor(shared,width):null;
+  const minimum=contentHeight+(sharedBody?gap+sharedBody.height:0);
+  const firstShared=shared && mapping.blocks[0].id===shared.id;
+  const runs=[],sections=[];let cursor=firstShared?sharedBody.height+gap:0;
+  const place=(body,b,x,y)=>{
+    body.runs.forEach(r=>runs.push({...r,x:r.x+x,y:r.y+y,visualBlockId:b.id}));
+    body.sections.forEach(s=>sections.push({...s,id:`${b.id}:${s.id}`,left:s.left+x,top:s.top+y,visualBlockId:b.id}));
+  };
+  if(firstShared) place(sharedBody,shared,0,0);
+  content.forEach((b,i)=>{
+    place(bodies[i],b,horizontal?i*(laneWidth+gap):0,cursor);
+    if(!horizontal) cursor+=bodies[i].height+gap;
+  });
+  if(sharedBody && !firstShared) place(sharedBody,shared,0,contentHeight+gap);
+  return {runs,sections,height:availableHeight??minimum,minimumHeight:minimum,
+    fits:bodies.every(b=>b.fits)&&(!sharedBody||sharedBody.fits)&&(availableHeight===undefined||minimum<=availableHeight)};
 }
 
 /**
@@ -269,6 +303,11 @@ export function validateGrayPlan(base, plan, area) {
       const semanticReport = validateSemanticPlan(base,semanticPlanFromPages(plan));
       issues.push(...semanticReport.issues);
       warnings.push(...(semanticReport.warnings ?? []));
+      const expectedPages=semanticPages(semanticPlanFromPages(plan));
+      for(const [index,page] of plan.pages.entries()) for(const item of page.items) {
+        const expected=expectedPages[index].items.find(i=>i.id===item.id)?.visualMapping;
+        if(JSON.stringify(item.visualMapping)!==JSON.stringify(expected)) throw new Error(`${page.pageId}/${item.id} 视觉块绑定与原始内容不一致`);
+      }
       for (const page of plan.pages) if (JSON.stringify(page.composition?.regions?.map(r=>r.itemId)) !== JSON.stringify(page.semantics?.readingOrder)) throw new Error(`${page.pageId} 区域顺序与语义阅读顺序不同`);
     }
     state = { ...base, pages: [], phase: 'content', deckBrief: plan.deckBrief };

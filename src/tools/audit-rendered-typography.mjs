@@ -36,7 +36,8 @@ function parseConnectorName(name) {
 }
 
 function box(element) {
-  const [left, top, width, height] = element.bbox ?? [];
+  const p=element.position;
+  const [left, top, width, height] = element.bbox ?? (p?[p.left,p.top,p.width,p.height]:[]);
   if (![left, top, width, height].every(Number.isFinite)) return null;
   return { left, top, width, height, right: left + width, bottom: top + height };
 }
@@ -88,7 +89,11 @@ export async function auditRenderedTypography(qaDir, { minimumFontSize = MINIMUM
     const layout = JSON.parse(await fs.readFile(path.join(qaDir, file), "utf8"));
     for (const element of layout.elements ?? []) {
       const fontSize = Number(element.resolvedFontSize);
-      if (!element.text || !Number.isFinite(fontSize)) continue;
+      if (!element.text) continue;
+      if (!Number.isFinite(fontSize)) {
+        if(layout.schema==='openai.presentation.layout/v5') violations.push({type:'missing-rendered-font-evidence',slide:file.replace('.layout.json',''),element:element.name,text:element.text,declaredFontSize:element.style?.fontSize});
+        continue;
+      }
       if (fontSize + 1e-6 < minimumFontSize) {
         violations.push({
           slide: file.replace(".layout.json", ""),
@@ -116,7 +121,7 @@ export async function auditRenderedGeometry(qaDir, {
   for (const file of files) {
     const layout = JSON.parse(await fs.readFile(path.join(qaDir, file), "utf8"));
     const slideName = file.replace(".layout.json", "");
-    const frame = layout.slide?.frame ?? { left: 0, top: 0, width: 1280, height: 720 };
+    const frame = layout.slide?.frame ?? layout.slide?.position ?? { left: 0, top: 0, width: 1280, height: 720 };
     const frameBox = {
       left: frame.left, top: frame.top, width: frame.width, height: frame.height,
       right: frame.left + frame.width, bottom: frame.top + frame.height,
@@ -270,6 +275,10 @@ export async function auditRenderedLineBreaks(qaDir) {
     const layout = JSON.parse(await fs.readFile(path.join(qaDir, file), "utf8"));
     for (const element of layout.elements ?? []) {
       const lines = element.textLayout?.lines;
+      if(layout.schema==='openai.presentation.layout/v5' && element.text && (!Array.isArray(lines)||!lines.length)) {
+        violations.push({type:'missing-rendered-line-evidence',slide,element:element.name,text:element.text});
+        continue;
+      }
       if (!Array.isArray(lines) || !lines.length || typeof element.text !== "string") continue;
       const fittedLines = element.text.split("\n").length;
       const engineLines = Number(element.textLayout.lineCount ?? lines.length);

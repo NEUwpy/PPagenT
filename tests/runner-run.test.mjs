@@ -4,10 +4,25 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import path from "node:path";
+import fs from 'node:fs/promises';
+import os from 'node:os';
 import { fileURLToPath } from "node:url";
 import { loadGrayState, parseArgs, replayMissingComposition, replayResult, phaseRulesText } from "../src/runner/run.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+
+test('old gray deliveries recover the selected brief without fabricating missing content',async()=>{
+ const dir=await fs.mkdtemp(path.join(os.tmpdir(),'gray-brief-'));
+ try {
+  const file=path.join(dir,'state.json'),brief={title:'原交付标题',audience:'读者',objective:'原任务'};
+  const state={pages:[{pageId:'p',items:[],composition:{regions:[]}}],deckBrief:null,grayDraft:{plan:{deckBrief:brief}}};
+  await fs.writeFile(file,JSON.stringify(state));
+  assert.deepEqual((await loadGrayState({grayStatePath:file})).deckBrief,brief);
+  delete state.grayDraft.plan;
+  await fs.writeFile(file,JSON.stringify(state));
+  await assert.rejects(loadGrayState({grayStatePath:file}),/缺少 deckBrief.title/);
+ }finally{await fs.rm(dir,{recursive:true,force:true});}
+});
 
 const PASSING_AUDIT = {
   status: "passed",
