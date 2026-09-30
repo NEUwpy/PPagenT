@@ -5,6 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { normalizeManuscript, supportedManuscriptExtensions } from "../workbench/manuscript-normalizer.mjs";
 import { createTraceRecorder, readTraceEvents } from "../workbench/trace-recorder.mjs";
+import { compileRunLog } from "../workbench/log-view.mjs";
 import { createVisualDirectorCheckpoint, withVisualDirectorCheckpoint } from "../workbench/visual-director-checkpoint.mjs";
 import { readJsonState, writeJsonState } from "../workbench/json-state-file.mjs";
 import { createNativePptCheckpoint, readNativePptCheckpoint } from "../workbench/native-ppt-checkpoint.mjs";
@@ -623,9 +624,10 @@ async function executeGrayRun(targetRunDir, summary, recorder, { mode = "first" 
   // 工作台在这里只负责：构造 provider、把模型与工具事件转发给记录器、把结果写进 summary。
   const stage = "gray-agent";
   try {
-    const [{ runGrayAgent }, { buildChatProviderFromEnv }] = await Promise.all([
+    const [{ runGrayAgent }, { buildChatProviderFromEnv }, { buildJevProviderFromEnv }] = await Promise.all([
       import("../runner/gray-agent.mjs"),
       import("../runner/chat-provider.mjs"),
+      import("../runner/jev-provider.mjs"),
     ]);
     const provider = await buildChatProviderFromEnv({
       root: projectRoot, maxTokens: 24000,
@@ -638,12 +640,17 @@ async function executeGrayRun(targetRunDir, summary, recorder, { mode = "first" 
         });
       },
     });
+    const selectionProvider = await buildJevProviderFromEnv({
+      root: projectRoot,
+      observer: async (event) => await recorder.observe({ ...event, source: "model", stage: "layout-solving", provider: endpointHost(event.endpoint) }),
+    });
     const result = await runGrayAgent({
       source: path.join(targetRunDir, "input", "normalized.md"),
       output: targetRunDir,
       area: summary.grayArea,
       root: projectRoot,
       provider,
+      selectionProvider,
       maxTurns: 24,
       useLayoutRules: true,
       initialPlan: summary.controlledOrganization ? JSON.parse(await fs.readFile(path.join(targetRunDir, "input", "initial-plan.json"), "utf8")) : null,
@@ -710,6 +717,7 @@ async function describeRun(targetRunDir, runId) {
       : continuability({ summary, state, isArchive: archiveRunIds.has(runId) }),
     attempts: readAttempts(summary),
     stageProvenance: stageProvenance(summary),
+    log: await compileRunLog(targetRunDir),
   };
   if (isGray) payload.gray = await graySnapshot(targetRunDir).catch(() => null);
   return payload;
@@ -917,9 +925,11 @@ async function sendArtifact(response, targetRunDir, requestedPath) {
 async function publicConfig() {
   let local = {};
   try { local = JSON.parse(await fs.readFile(path.join(projectRoot, "config", "deepseek.local.json"), "utf8")); } catch {}
+  let credentials = "";
+  try { credentials = await fs.readFile(path.join(projectRoot, "config", "credentials.local.md"), "utf8"); } catch {}
   const visual = local.roles?.visualComposition ?? {};
   return {
-    app: "PPagenT 正式生成工作台",
+    app: "PPagenT 生成线调试工作台",
     skin: { id: "northeastern-university-001", name: "东北大学" },
     provider: {
       name: "DeepSeek",
@@ -933,6 +943,11 @@ async function publicConfig() {
             || process.env.DEEPSEEK_API_KEY || local.apiKey),
         },
       },
+    },
+    decisionProvider: {
+      name: "JEV via OpenRouter",
+      model: process.env.PPAGENT_JEV_MODEL || credentials.match(/^PPAGENT_JEV_MODEL=(.+)$/m)?.[1] || "~typesafe/jev-latest",
+      configured: Boolean(process.env.OPENROUTER_API_KEY || /(?:^|\n)OPENROUTER_API_KEY=\S+/.test(credentials)),
     },
     formats: supportedManuscriptExtensions,
     maxUploadBytes,

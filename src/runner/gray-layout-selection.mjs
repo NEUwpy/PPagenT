@@ -180,6 +180,30 @@ export async function selectMeasuredLayouts({ plan, area, source, provider, dire
   }
   let selection;
   try {
+    if (typeof provider.decide === 'function') {
+      const pages = [];
+      for (const page of measured) {
+        const candidateCriteria = Object.fromEntries(page.candidates.map(candidate => [candidate.id, `${candidate.family}/${candidate.direction}/${candidate.allocation}，程序已确认可承载` ]));
+        const relationCriteria = Object.fromEntries(['parallel','independent','comparison','sequence','causal','support','mixed'].map(relation => [relation, relation]));
+        const decision = await provider.decide({
+          state: { source, page: { ...plan.pages.find(item => item.pageId === page.pageId), requirements: page.requirements, candidates: page.candidates.map(candidate => ({ id: candidate.id, family: candidate.family, direction: candidate.direction, allocation: candidate.allocation, supportsRelation: candidate.supportsRelation })) } },
+          questions: {
+            candidateId: { type: 'choice', instructions: '从程序确认可承载的候选中选择一个，不重新设计布局。', criteria: candidateCriteria },
+            relation: { type: 'choice', instructions: '判断本页跨组关系。只按原稿关系选择，不因为候选方便改写关系。', criteria: relationCriteria },
+          },
+        });
+        const candidateAnswer = decision.answers?.candidateId;
+        const relationAnswer = decision.answers?.relation;
+        if (candidateAnswer?.type !== 'choice' || relationAnswer?.type !== 'choice') throw new Error('JEV 布局与关系回答必须为 choice 类型');
+        const candidateId = candidateAnswer?.choice;
+        const relation = relationAnswer?.choice;
+        pages.push({ pageId: page.pageId, candidateId, relation, reason: `JEV 选择候选 ${candidateId ?? '未知'}，关系 ${relation ?? '未知'}；程序负责容量与合法性校验。` });
+      }
+      selection = { pages };
+      const built = bindLayoutSelection(plan, measured, selection);
+      await save('layout-selection-result.json', { status: 'selected-awaiting-render', provider: 'jev-decisions', model: provider.model, contentFingerprint: planContentFingerprint(plan), selection, receipts: built.receipts });
+      return built;
+    }
     const response = await provider.complete({ messages: [{ role: 'system', content: LAYOUT_SELECTION_PROMPT }, { role: 'user', content: JSON.stringify(input) }] });
     await save('layout-selection-response.json', response);
     if (response.finishReason === 'length') throw new Error('布局选择响应截断');

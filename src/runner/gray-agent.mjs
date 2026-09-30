@@ -13,7 +13,7 @@ import { createHash } from 'node:crypto';
 import { runToolLoop, transcriptSummary } from './loop.mjs';
 import { createToolRegistry, defineTool } from './tools/index.mjs';
 import { buildChatProviderFromEnv } from './chat-provider.mjs';
-import { loadDeepSeekLocalConfig } from '../agent/deepseek-provider-from-env.mjs';
+import { loadDeepSeekLocalConfig } from '../runtime/local-credentials.mjs';
 import { newRunState, writeState, renderContentMarkdown, renderStateMarkdown } from './state.mjs';
 import { SEMANTIC_REVIEW_CONTRACT, VISION_REVIEW_CONTRACT, validateSemanticPlan, validateSemanticReviewEvidence, semanticReviewFindings, semanticReviewInput, snapshotSemanticReview, markFlowSources, SHARED_RULES, attemptFingerprint, isStalledRetry, planTextVolume, isSameMinimumRetry, planContentFingerprint, checkReviewCoverage, semanticPlanFromPages } from './gray-semantics.mjs';
 import { applyTemplateDefaults, describeDefaults } from './gray-templates.mjs';
@@ -217,7 +217,7 @@ export function planFitIssues(plan, area, { legacyEstimates = true } = {}) {
   return { issues, warnings };
 }
 
-export async function runGrayAgent({ source, output, area, root = process.cwd(), provider, maxTurns = 24, observer = null, visualReview = false, useLayoutRules = false, initialPlan = null }) {
+export async function runGrayAgent({ source, output, area, root = process.cwd(), provider, selectionProvider = null, maxTurns = 24, observer = null, visualReview = false, useLayoutRules = false, initialPlan = null }) {
   area = validateGrayArea(area);
   await fs.mkdir(output, { recursive: false }).catch(error => { if (error.code !== 'EEXIST') throw error; });
   if (await fs.access(path.join(output, 'state.json')).then(() => true, () => false)) throw new Error('输出目录里已有运行状态（可能属于旧运行或误复用），请使用新目录');
@@ -759,7 +759,7 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
         }), 'utf8');
         let built;
         try {
-          built = useLayoutRules ? await selectMeasuredLayouts({ plan, area, source: raw, provider, directory: attemptDir, metrics: { measureBody: grayBodyLayout, fitText: fitGrayText } }) : resolveGrayLayout(plan, { pages: applied.layouts }, area, {
+          built = useLayoutRules ? await selectMeasuredLayouts({ plan, area, source: raw, provider: selectionProvider ?? provider, directory: attemptDir, metrics: { measureBody: grayBodyLayout, fitText: fitGrayText } }) : resolveGrayLayout(plan, { pages: applied.layouts }, area, {
             measureBody: grayBodyLayout, fitText: fitGrayText,
             fontSizes: () => [22, 20, 18, 16, 15, 14, 13, 12],
           });
@@ -937,9 +937,16 @@ export async function runGrayAgent({ source, output, area, root = process.cwd(),
     ? {
       ...registry,
       dispatch: async (name, args) => {
-        const outcome = await registry.dispatch(name, args);
-        await observer({ type: 'tool-call', status: outcome.result?.accepted === false ? 'failed' : 'succeeded', stage: 'gray-agent', output: { tool: name, accepted: outcome.result?.accepted ?? null } });
-        return outcome;
+        const stage = ({ check_plan: 'plan-check', semantic_review: 'semantic-review', render_draft: 'gray-rendering', finish_draft: 'gray-handoff' })[name] ?? 'gray-agent';
+        await observer({ type: 'stage-call', status: 'running', stage, input: { tool: name, arguments: args, plan: agentState.grayDraft.plan ?? null } });
+        try {
+          const outcome = await registry.dispatch(name, args);
+          await observer({ type: 'stage-call', status: outcome.result?.accepted === false ? 'failed' : 'succeeded', stage, output: outcome.result });
+          return outcome;
+        } catch (error) {
+          await observer({ type: 'stage-call', status: 'failed', stage, error: { code: error.code, message: error.message } });
+          throw error;
+        }
       },
     }
     : registry;

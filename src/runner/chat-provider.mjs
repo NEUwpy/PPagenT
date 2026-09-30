@@ -8,7 +8,7 @@
 // 与厂商无关：任何 OpenAI 兼容端点都能用，配置走项目既有变量名（见 buildChatProviderFromEnv）。
 // 这刻意避免把运行器绑死在一家模型上——换模型只改配置，不改代码。
 
-import { loadDeepSeekLocalConfig } from "../agent/deepseek-provider-from-env.mjs";
+import { loadDeepSeekLocalConfig } from "../runtime/local-credentials.mjs";
 
 /** 只有这些情况值得重发：网络抖动、限流、服务端 5xx。4xx 是我们请求写错了，重发只是浪费一次调用。 */
 function isRetryable(status) {
@@ -94,7 +94,7 @@ export class ChatCompletionProvider {
     let lastError;
     for (let attempt = 1; attempt <= this.maxAttempts; attempt += 1) {
       const startedAt = Date.now();
-      await this.observe({ type: "api-call", status: "running", attempt, endpoint: this.endpoint, model: this.model, messageCount: messages.length, toolCount: tools.length });
+      await this.observe({ type: "api-call", status: "running", attempt, endpoint: this.endpoint, model: this.model, messageCount: messages.length, toolCount: tools.length, input: body });
       let response;
       try {
         response = await this.fetchImpl(this.endpoint, {
@@ -144,7 +144,7 @@ export class ChatCompletionProvider {
       };
       // endpoint/model 一并带上：只在这条"收到回复"的事件里才拿得到响应方自报的 model，
       // 不带的话下游只能拿请求事件反推，或者干脆显示一个编出来的名字。
-      await this.observe({ type: "api-call", status: "succeeded", attempt, durationMs: Date.now() - startedAt, endpoint: this.endpoint, model: result.model, usage: result.usage, finishReason: result.finishReason, toolCallNames: result.toolCalls.map((call) => call.name), contentLength: result.content?.length ?? 0 });
+      await this.observe({ type: "api-call", status: "succeeded", attempt, durationMs: Date.now() - startedAt, endpoint: this.endpoint, model: result.model, usage: result.usage, finishReason: result.finishReason, toolCallNames: result.toolCalls.map((call) => call.name), contentLength: result.content?.length ?? 0, output: result });
       return result;
     }
     throw lastError;

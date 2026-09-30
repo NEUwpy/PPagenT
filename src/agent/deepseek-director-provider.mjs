@@ -1,6 +1,5 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { createModelDirectorProvider } from "./model-director-provider.mjs";
 import { loadDirectorGuidelines } from "./director-guidelines.mjs";
 import { loadDirectorOutputSchemas } from "./director-output-schemas.mjs";
 
@@ -250,6 +249,7 @@ export async function createDeepSeekDirectorProvider({
   observer,
 }) {
   const resolvedRoot = path.resolve(root);
+  const { createModelDirectorProvider } = await import("./model-director-provider.mjs");
   const [schemas, guidelines] = await Promise.all([
     loadDirectorOutputSchemas(resolvedRoot),
     loadDirectorGuidelines(resolvedRoot),

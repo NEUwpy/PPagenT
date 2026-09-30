@@ -1,16 +1,7 @@
-import fs from "node:fs/promises";
 import path from "node:path";
 import { createDeepSeekDirectorProvider } from "./deepseek-director-provider.mjs";
-
-export async function loadDeepSeekLocalConfig(root) {
-  const configPath = path.join(path.resolve(root), "config", "deepseek.local.json");
-  try {
-    return JSON.parse(await fs.readFile(configPath, "utf8"));
-  } catch (error) {
-    if (error?.code === "ENOENT") return {};
-    throw new Error(`无法读取本地 DeepSeek 配置：${configPath}：${error.message}`);
-  }
-}
+import { loadDeepSeekLocalConfig } from "../runtime/local-credentials.mjs";
+export { loadDeepSeekLocalConfig } from "../runtime/local-credentials.mjs";
 
 function roleSettings(local, name, defaults = {}, globalMaxTokens) {
   const role = local.roles?.[name] ?? {};
