@@ -21,6 +21,7 @@ import {
   grayArtifacts, graySnapshot, grayContinuability, prepareGrayResume, grayStepFiles,
 } from "../workbench/gray-run-adapter.mjs";
 import { DEBUG_SEGMENTS, runDebugSegment, segmentArtifacts } from "../workbench/segment-runner.mjs";
+import { MAIN_FLOW_STEPS, MAIN_FLOW_STAGES, MAIN_FLOW_HANDOFFS, validateMainRange, runMainNormalization } from "../workbench/main-flow.mjs";
 
 function option(name, fallback) {
   const index = process.argv.indexOf(name);
@@ -711,11 +712,11 @@ async function describeRun(targetRunDir, runId) {
   const summary = await readSummary(targetRunDir);
   const state = await readJsonState(path.join(targetRunDir, "state.json")).catch(() => null);
   const isGray = summary.pipeline === "gray";
-  const isSegment = summary.pipeline === "segment";
+  const isSegment = summary.pipeline === "segment" || summary.pipeline === "main";
   const payload = {
     ...summary,
     continuable: isSegment
-      ? { allowed: false, mode: null, fromPhase: null, reason: "分段调试运行只执行登记的这一段，不从中间续跑；需要换起点请重新运行目标分段。" }
+      ? { allowed: false, mode: null, fromPhase: null, reason: "本运行只执行所选分段；验收后再建设或运行下一段。" }
       : isGray
       ? grayContinuability({ summary, state, isArchive: archiveRunIds.has(runId) })
       : continuability({ summary, state, isArchive: archiveRunIds.has(runId) }),
@@ -775,6 +776,44 @@ async function createSegmentRun(request, response, url, segmentId) {
   })();
   activeRunTasks.set(runId, task);
   task.finally(() => activeRunTasks.delete(runId)).catch(() => {});
+  return sendJson(response, 202, summary);
+}
+
+async function createMainRun(request, response, url) {
+  const originalName = safeFilename(url.searchParams.get("filename"));
+  const extension = path.extname(originalName).toLowerCase();
+  if (!supportedManuscriptExtensions.includes(extension)) return sendJson(response, 415, { error: extension === ".doc" ? "请先把旧版 .doc 另存为 .docx" : `不支持 ${extension || "无扩展名"}` });
+  const start = url.searchParams.get("start") || "manuscript-normalization";
+  const end = url.searchParams.get("end") || "manuscript-normalization";
+  let selected;
+  try { selected = validateMainRange(start, end); } catch (error) { return sendJson(response, 409, { error: error.message }); }
+  if (selected.length !== 1 || selected[0].id !== "manuscript-normalization") return sendJson(response, 409, { error: "当前只接入主线第一段：原稿读取与规范化；分页稿及后续步骤按顺序建设" });
+  const buffer = await readBody(request);
+  const runId = `${new Date().toISOString().replace(/[-:TZ.]/g, "").slice(0, 14)}-${crypto.randomBytes(3).toString("hex")}`;
+  const targetRunDir = runDir(runId);
+  await fs.mkdir(path.join(targetRunDir, "input"), { recursive: true });
+  const inputPath = path.join(targetRunDir, "input", originalName);
+  await fs.writeFile(inputPath, buffer);
+  const recorder = createTraceRecorder(targetRunDir);
+  const createdAt = new Date().toISOString();
+  const summary = { schemaVersion: "1.0", runId, originalName, createdAt, status: "running", pipeline: "main", startStage: start, endStage: end, purpose: url.searchParams.get("purpose") === "verification" ? "verification" : "production", skin: { id: "northeastern-university-001", name: "建设调试" }, visualCheckpointMode: "auto", stages: MAIN_FLOW_STAGES, handoffs: MAIN_FLOW_HANDOFFS, pipelineNote: "主线按生成顺序逐段建设；当前只接入原稿读取与规范化，后续分页稿及契约步骤保持待建设，不跳到灰稿。", attempts: [{ attempt: 1, mode: "first", at: createdAt, fromPhase: null, fromStage: null }], artifacts: [] };
+  await writeSummary(targetRunDir, summary);
+  activeRunId = runId;
+  const task = (async () => {
+    try {
+      const result = await runMainNormalization({ inputPath, originalName, output: targetRunDir, recorder });
+      summary.status = "awaiting-user-review";
+      summary.finishedAt = new Date().toISOString();
+      summary.durationMs = Date.now() - new Date(createdAt).getTime();
+      summary.nextStage = "pagination-draft";
+      summary.artifacts = [{ label: "原始稿件", kind: extension === ".docx" ? "docx" : "markdown", path: `input/${originalName}` }, { label: "规范化原稿", kind: "markdown", path: "input/normalized.md" }, { label: "规范化结果", kind: "json", path: "normalization-result.json" }];
+      await recorder.flush(); await writeSummary(targetRunDir, summary);
+    } catch (error) {
+      summary.status = "failed"; summary.finishedAt = new Date().toISOString(); summary.error = { stage: "manuscript-normalization", message: error.message }; summary.artifacts = [];
+      await recorder.flush(); await writeSummary(targetRunDir, summary);
+    } finally { if (activeRunId === runId) activeRunId = null; }
+  })();
+  activeRunTasks.set(runId, task); task.finally(() => activeRunTasks.delete(runId)).catch(() => {});
   return sendJson(response, 202, summary);
 }
 
@@ -845,9 +884,10 @@ async function continueRun(request, response, runId) {
 
 async function createRun(request, response, url) {
   if (activeRunId) return sendJson(response, 409, { error: "已有生成任务正在运行", activeRunId });
-  // 默认灰稿线（现行 M1）：上传稿件走到可审阅的灰稿。旧线（runner/legacy）保留为显式可选项，界面上不再列出。
+  // 新上传默认进入主线第一段；旧灰稿线只保留历史记录读取，不作为建设入口。
   const requestedPipeline = url.searchParams.get("pipeline");
-  const pipeline = requestedPipeline === "legacy" || requestedPipeline === "runner" || requestedPipeline === "segment" ? requestedPipeline : "gray";
+  const pipeline = requestedPipeline === "legacy" || requestedPipeline === "runner" || requestedPipeline === "segment" || requestedPipeline === "main" ? requestedPipeline : "main";
+  if (pipeline === "main") return createMainRun(request, response, url);
   if (pipeline === "segment") return createSegmentRun(request, response, url, url.searchParams.get("segment") || "a0-layout-candidates");
   // 薄运行器没有人工检查点（harness/运行流程.md：阶段不要求用户逐步批准）。
   // 用户明确勾了暂停时不能静默忽略——那等于把一次显式请求丢掉。
@@ -1009,8 +1049,9 @@ async function publicConfig() {
     maxUploadBytes,
     activeRunId,
     pipelines: {
-      default: "gray",
-      gray: { label: "灰稿线（现行 M1）", note: GRAY_PIPELINE_NOTE, checkpoint: false },
+      default: "main",
+      main: { label: "主线（稿件 → 灰稿，按顺序建设）", note: "按生成顺序逐段运行；当前只接入原稿读取与规范化，分页稿、页面表达契约和灰稿仍显示为待建设。", checkpoint: false },
+      gray: { label: "灰稿线（历史记录，只读）", note: "历史运行仍可打开查看；新建设不再从这里启动。", checkpoint: false },
       segment: { label: "分段调试（建设侧局部）", note: "只运行已登记的建设分段；当前 A0 从已完成分页和页面表达契约开始，不代表长稿件主线。看板按日志显示该段输入、输出、状态与拒绝原因。", checkpoint: false },
       runner: { label: "薄运行器", note: RUNNER_PIPELINE_NOTE, checkpoint: false },
       legacy: {
@@ -1020,6 +1061,7 @@ async function publicConfig() {
       },
     },
     segments: Object.fromEntries(Object.entries(DEBUG_SEGMENTS).map(([id, value]) => [id, { id, label: value.label, note: value.note }])),
+    mainFlow: MAIN_FLOW_STEPS,
     runtime: { revision: runtimeRevision, startedAt: serverStartedAt },
   };
 }
