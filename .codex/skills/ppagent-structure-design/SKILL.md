@@ -9,12 +9,12 @@ description: Design, refine, or visually review PPagenT Structure Groups using o
 
 ## 开始前
 
-按任务需要读取以下现行文档：
+先核对本轮目标与架构，再按任务需要查看既有资产资料：
 
-- [方向校正](../../../docs/方向校正.md)：确认产品目标、边界和当前方向。
+- [目标与路径](../../../docs/产品目标与路径.md)与[架构](../../../docs/架构.md)：核对本轮讨论边界；旧选型不作为当前依据。
 - [资产积累与入库工作流](../../../docs/工作流/资产积累与入库/工作流.md)：确认入库阶段、检查点和审批边界。
 - [HTML Structure Group 生成系统提示词](../../../docs/工作流/资产积累与入库/HTML%20Structure%20Group生成系统提示词.md)：确认视觉意图蒸馏与 HTML 设计要求。
-- [Shell 与 Logic 契约](../../../docs/Shell与Logic契约.md)：确认内容框、Region、Text Layout 与 Slot Contract。
+- [既有 Shell 与 Logic 契约](../../../docs/契约/Shell与Logic契约.md)：核查原实现的内容框、Region、Text Layout 与 Slot Contract。
 - 设计透视箭头、道路、带状路径、平台或其他空间主体时，读取[透视形状生成法](references/perspective-geometry.md)。其中当前只有“单消失方向的直线收缩带＋直立节点”模型完成了公式化与审计；附属节点属于该模型时运行 `scripts/audit-perspective-layout.mjs`。遇到双／三消失点、俯视平台、弯曲路径、等轴测或复杂体块时，先建立对应模型，不能强套现有脚本。
 
 以这些文档和用户当轮明确要求为准。不要复制出另一套规则，不要把历史事故逐条写成新约束，也不要擅自提高审查强度。

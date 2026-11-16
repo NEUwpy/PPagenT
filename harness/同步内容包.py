@@ -30,10 +30,13 @@ for folder in (['docs/工作流/正式生成'] if docs_only else ['rules', 'skil
             include(src.relative_to(source).as_posix())
 
 for relative in [
-    'docs/产品定义.md',
-    'docs/产品需求.md',
+    'README.md',
+    'AGENTS.md',
+    'docs/README.md',
+    'docs/产品目标与路径.md',
+    'docs/架构.md',
+    'docs/方向讨论/20261029-产品动机与价值讨论.md',
     'docs/架构/结构库-变与不变.md',
-    'docs/架构/页面构成与布局规范.md',
     'assets/主题/中性编辑排版-001/asset.json',
     'schemas/composition-intent.schema.json',
 ]:
@@ -71,6 +74,10 @@ if docs_only:
     # 未更新项保留原 source_sha256；不能假称其与当前维护源一致。
     for entry in previous['files']:
         if entry['path'] not in updated:
+            if not (source / entry['path']).exists():
+                # 已归档正文不留在活动镜像或清单中；先归档镜像，不能静默删除。
+                assert not (package / entry['path']).exists(), f"请先归档过期镜像：{entry['path']}"
+                continue
             assert hashlib.sha256((package / entry['path']).read_bytes()).hexdigest() == entry['sha256'], entry['path']
             entries.append(entry)
     entries.sort(key=lambda entry: entry['path'])
