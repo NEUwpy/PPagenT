@@ -121,22 +121,17 @@
     },
     {
       "source": "docs/架构.md",
-      "link": "../assets/结构图/",
+      "link": "../src/runner/loop.mjs",
       "inRepository": true
     },
     {
       "source": "docs/架构.md",
-      "link": "../src/runtime/structure-skills.mjs",
+      "link": "../src/runner/state.mjs",
       "inRepository": true
     },
     {
       "source": "docs/架构.md",
       "link": "../src/runner/gray-layout-catalog.mjs",
-      "inRepository": true
-    },
-    {
-      "source": "docs/架构.md",
-      "link": "../src/runner/gray-layout-selection.mjs",
       "inRepository": true
     },
     {
@@ -147,11 +142,6 @@
     {
       "source": "docs/架构.md",
       "link": "../catalog/composition-layouts.json",
-      "inRepository": true
-    },
-    {
-      "source": "docs/架构.md",
-      "link": "../src/composition/layouts.mjs",
       "inRepository": true
     },
     {
@@ -181,27 +171,27 @@
     },
     {
       "source": "docs/架构.md",
+      "link": "../src/runner/visual-block-mapping.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../assets/结构图/",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../src/runtime/structure-skills.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
       "link": "../src/content/",
       "inRepository": true
     },
     {
       "source": "docs/架构.md",
       "link": "../src/selection/",
-      "inRepository": true
-    },
-    {
-      "source": "docs/架构.md",
-      "link": "../src/runner/loop.mjs",
-      "inRepository": true
-    },
-    {
-      "source": "docs/架构.md",
-      "link": "../src/runner/state.mjs",
-      "inRepository": true
-    },
-    {
-      "source": "docs/架构.md",
-      "link": "../src/runner/tools/index.mjs",
       "inRepository": true
     },
     {
@@ -221,17 +211,32 @@
     },
     {
       "source": "docs/架构.md",
-      "link": "../src/tools/serve-production-workbench.mjs",
-      "inRepository": true
-    },
-    {
-      "source": "docs/架构.md",
       "link": "../tests/",
       "inRepository": true
     },
     {
       "source": "docs/架构.md",
       "link": "../experiments/",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../experiments/home-mckinsey-style-20260920/README.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "方向讨论/20260920.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "方向讨论/PPagenT第二次对谈GPT-260811.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "方向讨论/PPagenT第三次对谈GPT-260812.md",
       "inRepository": true
     },
     {
@@ -623,13 +628,13 @@
   "files": [
     {
       "path": "AGENTS.md",
-      "sha256": "c29b499056c4d3af740df3d58fe501eb7dc4d3f0e6ffca9b57d5eaf801f19609",
-      "source_sha256": "c29b499056c4d3af740df3d58fe501eb7dc4d3f0e6ffca9b57d5eaf801f19609"
+      "sha256": "79748ba1a91c3768faeb3d45695904207580a79bcba2293b0b556b33827ab709",
+      "source_sha256": "79748ba1a91c3768faeb3d45695904207580a79bcba2293b0b556b33827ab709"
     },
     {
       "path": "README.md",
-      "sha256": "203c5e6f741cae85a1cbd236f1796986577e6ec92eed17243841d8874c6863f3",
-      "source_sha256": "203c5e6f741cae85a1cbd236f1796986577e6ec92eed17243841d8874c6863f3"
+      "sha256": "0c14d09c763fc2642d76420e9e5a549ecfc5f1283a16eb14da9d1b51dae7b6e4",
+      "source_sha256": "0c14d09c763fc2642d76420e9e5a549ecfc5f1283a16eb14da9d1b51dae7b6e4"
     },
     {
       "path": "assets/主题/中性编辑排版-001/asset.json",
@@ -643,8 +648,8 @@
     },
     {
       "path": "docs/产品目标与路径.md",
-      "sha256": "371dee0542fd37814e51a59941d6e46f68878b2f91117c4682b300bbc1707543",
-      "source_sha256": "371dee0542fd37814e51a59941d6e46f68878b2f91117c4682b300bbc1707543"
+      "sha256": "6b8572a41d837b115c906f453e3d98d9fbe7063ff0e6a950ce566522d8eeccc6",
+      "source_sha256": "6b8572a41d837b115c906f453e3d98d9fbe7063ff0e6a950ce566522d8eeccc6"
     },
     {
       "path": "docs/工作流/正式生成/Agent排版规则.md",
@@ -748,13 +753,13 @@
     },
     {
       "path": "docs/方向讨论/20261029-产品动机与价值讨论.md",
-      "sha256": "1d05335cba30c1a6dcf885c362f35de0ef908be939e327be93b2ce3951a6d661",
-      "source_sha256": "1d05335cba30c1a6dcf885c362f35de0ef908be939e327be93b2ce3951a6d661"
+      "sha256": "7c9e9be882303188dbaafc4419fc3e2dafe56c18024a467efcaf1211263c1528",
+      "source_sha256": "7c9e9be882303188dbaafc4419fc3e2dafe56c18024a467efcaf1211263c1528"
     },
     {
       "path": "docs/架构.md",
-      "sha256": "8c277b0e2cfe6887eca66292558be92f9b12fd8d990310ccae3d0c2065a47f30",
-      "source_sha256": "8c277b0e2cfe6887eca66292558be92f9b12fd8d990310ccae3d0c2065a47f30"
+      "sha256": "f1b7eb44ecdd7df58829faf06d59dda95d109360b71900cbfc0bb1e9ba6cd1a4",
+      "source_sha256": "f1b7eb44ecdd7df58829faf06d59dda95d109360b71900cbfc0bb1e9ba6cd1a4"
     },
     {
       "path": "docs/架构/结构库-变与不变.md",
