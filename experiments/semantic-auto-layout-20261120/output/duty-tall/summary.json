@@ -1,0 +1,27 @@
+{
+  "version": "semantic-auto-layout@1",
+  "input": "experiments/content-to-expression-20261120/inputs/duty.json",
+  "canvas": {
+    "width": 720,
+    "height": 800
+  },
+  "routes": {
+    "baseline": {
+      "status": "rejected",
+      "errors": [
+        {
+          "code": "no-fitting-layout",
+          "message": "所有候选均被拒绝，具体文本与几何错误见 candidates"
+        }
+      ]
+    },
+    "bands": {
+      "status": "passed",
+      "selected": "compact-2+1-balanced-stack",
+      "errors": []
+    }
+  },
+  "errors": [],
+  "inputSha256": "0aac55e03822bb53d3b604b93ccd76149a412f6b937352ddc569cb00846788af",
+  "status": "rejected"
+}

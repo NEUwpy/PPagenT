@@ -1,0 +1,347 @@
+{
+  "mode": "one separate live review call per previous model response",
+  "browser": "157.0.8103.79",
+  "cases": [
+    {
+      "id": "options",
+      "frameName": "standard",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 1170,
+        "height": 492
+      },
+      "selected": {
+        "variant": "columns",
+        "artifact": "options-standard-columns"
+      },
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": true,
+          "usedHeight": 198.890625,
+          "issues": [],
+          "artifact": "options-standard-columns"
+        }
+      ]
+    },
+    {
+      "id": "options",
+      "frameName": "compact",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 1020,
+        "height": 450
+      },
+      "selected": {
+        "variant": "columns",
+        "artifact": "options-compact-columns"
+      },
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": true,
+          "usedHeight": 198.890625,
+          "issues": [],
+          "artifact": "options-compact-columns"
+        }
+      ]
+    },
+    {
+      "id": "options",
+      "frameName": "tight",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 770,
+        "height": 270
+      },
+      "selected": {
+        "variant": "columns",
+        "artifact": "options-tight-columns"
+      },
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": true,
+          "usedHeight": 198.890625,
+          "issues": [],
+          "artifact": "options-tight-columns"
+        }
+      ]
+    },
+    {
+      "id": "spares",
+      "frameName": "standard",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 1170,
+        "height": 492
+      },
+      "selected": {
+        "variant": "columns",
+        "artifact": "spares-standard-columns"
+      },
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": true,
+          "usedHeight": 418.640625,
+          "issues": [],
+          "artifact": "spares-standard-columns"
+        }
+      ]
+    },
+    {
+      "id": "spares",
+      "frameName": "compact",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 1020,
+        "height": 450
+      },
+      "selected": {
+        "variant": "columns",
+        "artifact": "spares-compact-columns"
+      },
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": true,
+          "usedHeight": 418.640625,
+          "issues": [],
+          "artifact": "spares-compact-columns"
+        }
+      ]
+    },
+    {
+      "id": "spares",
+      "frameName": "tight",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 770,
+        "height": 270
+      },
+      "selected": null,
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": false,
+          "usedHeight": 418.640625,
+          "issues": [
+            {
+              "id": "note-not-exclusive",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "note-value-threshold",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "note-safety-critical",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "note-effective-date",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "note-precedence",
+              "code": "text-outside-region"
+            }
+          ],
+          "artifact": "spares-tight-columns"
+        }
+      ]
+    },
+    {
+      "id": "duty",
+      "frameName": "standard",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 1170,
+        "height": 492
+      },
+      "selected": {
+        "variant": "columns",
+        "artifact": "duty-standard-columns"
+      },
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": true,
+          "usedHeight": 277.390625,
+          "issues": [],
+          "artifact": "duty-standard-columns"
+        },
+        {
+          "variant": "rows",
+          "ok": true,
+          "usedHeight": 381.625,
+          "issues": [],
+          "artifact": "duty-standard-rows"
+        }
+      ]
+    },
+    {
+      "id": "duty",
+      "frameName": "compact",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 1020,
+        "height": 450
+      },
+      "selected": {
+        "variant": "columns",
+        "artifact": "duty-compact-columns"
+      },
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": true,
+          "usedHeight": 277.390625,
+          "issues": [],
+          "artifact": "duty-compact-columns"
+        },
+        {
+          "variant": "rows",
+          "ok": true,
+          "usedHeight": 381.625,
+          "issues": [],
+          "artifact": "duty-compact-rows"
+        }
+      ]
+    },
+    {
+      "id": "duty",
+      "frameName": "tight",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 770,
+        "height": 270
+      },
+      "selected": null,
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": false,
+          "usedHeight": 373.265625,
+          "issues": [
+            {
+              "id": "handover",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "note-period",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "injury-downtime",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "duty-period",
+              "code": "component-outside-content-frame"
+            },
+            {
+              "id": "graded-response",
+              "code": "component-outside-content-frame"
+            },
+            {
+              "id": "intensive-patrol",
+              "code": "component-outside-content-frame"
+            }
+          ],
+          "artifact": "duty-tight-columns"
+        },
+        {
+          "variant": "rows",
+          "ok": false,
+          "usedHeight": 488.125,
+          "issues": [
+            {
+              "id": "piping-landslide",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "injury-downtime",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "intensive-patrol-heading",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "trigger",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "restore",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "graded-response",
+              "code": "component-outside-content-frame"
+            },
+            {
+              "id": "intensive-patrol",
+              "code": "component-outside-content-frame"
+            }
+          ],
+          "artifact": "duty-tight-rows"
+        }
+      ]
+    }
+  ],
+  "reviewIssues": {
+    "options": [
+      {
+        "sourceId": "source-002",
+        "issue": "标题引文只覆盖方案名称与执行方式，遗漏了“培训与支持资源集中投入”这一执行安排；该信息在组内条目中也未承载，导致来源段落信息漏项。"
+      },
+      {
+        "sourceId": "source-003",
+        "issue": "标题引文只覆盖方案名称与执行方式，遗漏了“先选择一个部门试用，再按反馈逐批推广”中的反馈驱动条件；组内条目未承载该条件，导致来源段落信息漏项。"
+      }
+    ],
+    "spares": [
+      {
+        "sourceId": "source-002",
+        "issue": "集中供应组缺少“由中心库统一采购、统一配送”这一执行方式信息，标题引用了该句但未作为条目承载。"
+      },
+      {
+        "sourceId": "source-002",
+        "issue": "就近供应组缺少“由各站点自行采购”这一执行方式信息，标题引用了该句但未作为条目承载。"
+      },
+      {
+        "sourceId": "source-003",
+        "issue": "“建议按备件分级确定供应方式”被并入阈值附注，但阈值本身是建议性判断，附注未保留“建议”的义务强度，且未说明500元边界（以上/以下）的归属。"
+      }
+    ],
+    "duty": [
+      {
+        "sourceId": "source-002",
+        "issue": "汛期起止日期（6月1日至9月30日）仅出现在附注中，未作为值班值守组的条目或标题信息承载；附注 note-period 的 quote 仅覆盖日期句，但 text 将其适用范围扩大到值班值守与巡查安排，属于对适用范围的补充推断，原文未明确该日期直接约束加密巡查。"
+      },
+      {
+        "sourceId": "source-003",
+        "issue": "附注 note-graded 复述了组内三条处置条目内容，与组内文字重复，且 quote 仅引用“发现险情按分级处置”，不足以支撑附注中的具体分级义务。"
+      },
+      {
+        "sourceId": "source-004",
+        "issue": "附注 note-intensive 复述了组内 trigger 与 restore 两条内容，与组内文字重复。"
+      },
+      {
+        "sourceId": "source-002",
+        "issue": "值班值守组标题 quote 为“汛期自 6 月 1 日至 9 月 30 日。”，但该组条目未包含汛期范围信息，标题引用与组内容不匹配。"
+      }
+    ]
+  }
+}

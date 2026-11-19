@@ -1,0 +1,63 @@
+[
+  {
+    "id": "marp",
+    "title": "Marp · Markdown＋主题",
+    "path": "outputs/marp.png",
+    "scope": "纯文字排版对照；双栏由作者指定。",
+    "source": "src/marp/slides.md",
+    "pdf": "outputs/marp.pdf"
+  },
+  {
+    "id": "seaslides",
+    "title": "SeaSlides HTML · 语义组件模板",
+    "path": "outputs/seaslides.png",
+    "scope": "图示完整；原模板＋原编译器，容量与结构扩展由作者补做。",
+    "source": "src/seaslides/content.html",
+    "pdf": "outputs/seaslides.pdf",
+    "pptx": "outputs/seaslides.pptx",
+    "native": "outputs/seaslides-native.png"
+  },
+  {
+    "id": "yoga",
+    "title": "Yoga · 测量＋Flexbox",
+    "path": "outputs/yoga.png",
+    "scope": "纯文字排版对照；真实中文测量与 Yoga 几何计算。",
+    "source": "src/yoga.mjs"
+  },
+  {
+    "id": "slidev",
+    "title": "Slidev · 宿主 Agent 整页设计",
+    "path": "outputs/slidev.png",
+    "scope": "图示完整；作者设计，Slidev 编译／测量／原生导出。",
+    "source": "src/slidev/slides.md",
+    "pdf": "outputs/slidev.pdf",
+    "pptx": "outputs/slidev.pptx",
+    "native": "outputs/slidev-native.png"
+  },
+  {
+    "id": "typst",
+    "title": "Typst／Touying · 原生排版",
+    "path": "outputs/typst.png",
+    "scope": "纯文字排版对照；实际 SeaSlides Typst 模板编译，不经浏览器排版。",
+    "source": "src/typst/main.typ",
+    "pdf": "outputs/typst.pdf"
+  },
+  {
+    "id": "gray",
+    "title": "原灰稿",
+    "path": "assets/gray.png",
+    "scope": "历史输入，原图保留。"
+  },
+  {
+    "id": "previous",
+    "title": "旧原生美化稿",
+    "path": "assets/previous-native.png",
+    "scope": "旧样例 reference-02；不是 README 早期74形状样例。"
+  },
+  {
+    "id": "generated",
+    "title": "用户生图参照",
+    "path": "assets/generated-reference.png",
+    "scope": "只作视觉参照；其新增事实与关系未进入正文。"
+  }
+]

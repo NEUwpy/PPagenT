@@ -1,0 +1,536 @@
+{
+  "command": [
+    "node",
+    "experiments/content-to-expression-20261120/run.mjs",
+    "experiments/content-to-expression-20261120/inputs/hr.json",
+    "--out",
+    "experiments/content-to-expression-20261120/output/hr-standard",
+    "--probe",
+    "reverse-sequence"
+  ],
+  "input": "experiments/content-to-expression-20261120/inputs/hr.json",
+  "inputSha256": "c1f1437a4be5d72e1fc0922ab9c201209541aff18af1b8bb9c9b820379407016",
+  "selectorSha256": "c41ae5d1a6ca76f00ecd9ff935502fdbcb13ee1fbf2b189d43ffa4b2cde1e8e9",
+  "compilerSha256": "21848deed46d24bd563130a4256ff3411a0c04dc4397d265332084fbb4cdc851",
+  "canvas": {
+    "width": 1280,
+    "height": 720
+  },
+  "choices": [
+    {
+      "owner": "landing",
+      "kind": "convergence",
+      "reason": "三类以上同级因素共同指向支撑页首主旨的结果",
+      "benefit": 6
+    },
+    {
+      "owner": "compliance",
+      "kind": "short-facts",
+      "reason": "字段和值短，可对照扫读，也可在一行正文内读完",
+      "benefit": 1
+    },
+    {
+      "owner": "alignment",
+      "kind": "sequence",
+      "reason": "链较短，正文用一次按先后陈述即可",
+      "benefit": 1
+    }
+  ],
+  "excluded": [],
+  "direct": {
+    "first": "landing-convergence--compliance-short-facts--alignment-sequence",
+    "winner": "landing-convergence--compliance-short-facts--alignment-sequence"
+  },
+  "enumeration": {
+    "winner": "landing-convergence",
+    "ranking": [
+      "landing-convergence",
+      "landing-convergence--alignment-sequence",
+      "landing-convergence--compliance-short-facts",
+      "text",
+      "landing-convergence--compliance-short-facts--alignment-sequence",
+      "alignment-sequence",
+      "compliance-short-facts",
+      "compliance-short-facts--alignment-sequence"
+    ]
+  },
+  "candidates": [
+    {
+      "id": "landing-convergence--compliance-short-facts--alignment-sequence",
+      "selected": [
+        {
+          "owner": "landing",
+          "kind": "convergence",
+          "benefit": 6,
+          "reason": "三类以上同级因素共同指向支撑页首主旨的结果"
+        },
+        {
+          "owner": "compliance",
+          "kind": "short-facts",
+          "benefit": 1,
+          "reason": "字段和值短，可对照扫读，也可在一行正文内读完"
+        },
+        {
+          "owner": "alignment",
+          "kind": "sequence",
+          "benefit": 1,
+          "reason": "链较短，正文用一次按先后陈述即可"
+        }
+      ],
+      "command": [
+        "node",
+        "experiments/gray-compiler-20261120/compile.mjs",
+        "experiments/content-to-expression-20261120/output/hr-standard/landing-convergence--compliance-short-facts--alignment-sequence/input-plan.json",
+        "--width",
+        "1280",
+        "--height",
+        "720",
+        "--out",
+        "experiments/content-to-expression-20261120/output/hr-standard/landing-convergence--compliance-short-facts--alignment-sequence/compile"
+      ],
+      "exitCode": 0,
+      "report": "experiments/content-to-expression-20261120/output/hr-standard/landing-convergence--compliance-short-facts--alignment-sequence/compile/report.json",
+      "compilerStatus": "passed",
+      "audit": {
+        "errors": [],
+        "expectedEdges": [
+          "component:landing:input:atmosphere → component:landing:result",
+          "component:landing:input:systems → component:landing:result",
+          "component:landing:input:management → component:landing:result",
+          "component:alignment:step:1 → component:alignment:step:2",
+          "component:alignment:step:2 → component:alignment:step:3"
+        ],
+        "actualEdges": [
+          "component:landing:input:atmosphere → component:landing:result",
+          "component:landing:input:systems → component:landing:result",
+          "component:landing:input:management → component:landing:result",
+          "component:alignment:step:1 → component:alignment:step:2",
+          "component:alignment:step:2 → component:alignment:step:3"
+        ],
+        "checkedTextFields": 34,
+        "crossCaseItems": []
+      },
+      "layout": "compact-row-content-weighted",
+      "grade": {
+        "total": 0,
+        "benefit": 8,
+        "expressionCost": 6,
+        "densityCost": 2,
+        "wrapCost": 0
+      },
+      "preview": "experiments/content-to-expression-20261120/output/hr-standard/landing-convergence--compliance-short-facts--alignment-sequence/compile/gray.html",
+      "image": "experiments/content-to-expression-20261120/output/hr-standard/landing-convergence--compliance-short-facts--alignment-sequence/compile/gray.png"
+    },
+    {
+      "id": "text",
+      "selected": [],
+      "command": [
+        "node",
+        "experiments/gray-compiler-20261120/compile.mjs",
+        "experiments/content-to-expression-20261120/output/hr-standard/text/input-plan.json",
+        "--width",
+        "1280",
+        "--height",
+        "720",
+        "--out",
+        "experiments/content-to-expression-20261120/output/hr-standard/text/compile"
+      ],
+      "exitCode": 0,
+      "report": "experiments/content-to-expression-20261120/output/hr-standard/text/compile/report.json",
+      "compilerStatus": "passed",
+      "audit": {
+        "errors": [],
+        "expectedEdges": [],
+        "actualEdges": [],
+        "checkedTextFields": 16,
+        "crossCaseItems": []
+      },
+      "layout": "standard-row-content-weighted",
+      "grade": {
+        "total": 0,
+        "benefit": 0,
+        "expressionCost": 0,
+        "densityCost": 0,
+        "wrapCost": 0
+      },
+      "preview": "experiments/content-to-expression-20261120/output/hr-standard/text/compile/gray.html",
+      "image": "experiments/content-to-expression-20261120/output/hr-standard/text/compile/gray.png"
+    },
+    {
+      "id": "landing-convergence",
+      "selected": [
+        {
+          "owner": "landing",
+          "kind": "convergence",
+          "benefit": 6,
+          "reason": "三类以上同级因素共同指向支撑页首主旨的结果"
+        }
+      ],
+      "command": [
+        "node",
+        "experiments/gray-compiler-20261120/compile.mjs",
+        "experiments/content-to-expression-20261120/output/hr-standard/landing-convergence/input-plan.json",
+        "--width",
+        "1280",
+        "--height",
+        "720",
+        "--out",
+        "experiments/content-to-expression-20261120/output/hr-standard/landing-convergence/compile"
+      ],
+      "exitCode": 0,
+      "report": "experiments/content-to-expression-20261120/output/hr-standard/landing-convergence/compile/report.json",
+      "compilerStatus": "passed",
+      "audit": {
+        "errors": [],
+        "expectedEdges": [
+          "component:landing:input:atmosphere → component:landing:result",
+          "component:landing:input:systems → component:landing:result",
+          "component:landing:input:management → component:landing:result"
+        ],
+        "actualEdges": [
+          "component:landing:input:atmosphere → component:landing:result",
+          "component:landing:input:systems → component:landing:result",
+          "component:landing:input:management → component:landing:result"
+        ],
+        "checkedTextFields": 23,
+        "crossCaseItems": []
+      },
+      "layout": "standard-row-content-weighted",
+      "grade": {
+        "total": 4,
+        "benefit": 6,
+        "expressionCost": 2,
+        "densityCost": 0,
+        "wrapCost": 0
+      },
+      "preview": "experiments/content-to-expression-20261120/output/hr-standard/landing-convergence/compile/gray.html",
+      "image": "experiments/content-to-expression-20261120/output/hr-standard/landing-convergence/compile/gray.png"
+    },
+    {
+      "id": "compliance-short-facts",
+      "selected": [
+        {
+          "owner": "compliance",
+          "kind": "short-facts",
+          "benefit": 1,
+          "reason": "字段和值短，可对照扫读，也可在一行正文内读完"
+        }
+      ],
+      "command": [
+        "node",
+        "experiments/gray-compiler-20261120/compile.mjs",
+        "experiments/content-to-expression-20261120/output/hr-standard/compliance-short-facts/input-plan.json",
+        "--width",
+        "1280",
+        "--height",
+        "720",
+        "--out",
+        "experiments/content-to-expression-20261120/output/hr-standard/compliance-short-facts/compile"
+      ],
+      "exitCode": 0,
+      "report": "experiments/content-to-expression-20261120/output/hr-standard/compliance-short-facts/compile/report.json",
+      "compilerStatus": "passed",
+      "audit": {
+        "errors": [],
+        "expectedEdges": [],
+        "actualEdges": [],
+        "checkedTextFields": 25,
+        "crossCaseItems": []
+      },
+      "layout": "standard-row-content-weighted",
+      "grade": {
+        "total": -1,
+        "benefit": 1,
+        "expressionCost": 2,
+        "densityCost": 0,
+        "wrapCost": 0
+      },
+      "preview": "experiments/content-to-expression-20261120/output/hr-standard/compliance-short-facts/compile/gray.html",
+      "image": "experiments/content-to-expression-20261120/output/hr-standard/compliance-short-facts/compile/gray.png"
+    },
+    {
+      "id": "landing-convergence--compliance-short-facts",
+      "selected": [
+        {
+          "owner": "landing",
+          "kind": "convergence",
+          "benefit": 6,
+          "reason": "三类以上同级因素共同指向支撑页首主旨的结果"
+        },
+        {
+          "owner": "compliance",
+          "kind": "short-facts",
+          "benefit": 1,
+          "reason": "字段和值短，可对照扫读，也可在一行正文内读完"
+        }
+      ],
+      "command": [
+        "node",
+        "experiments/gray-compiler-20261120/compile.mjs",
+        "experiments/content-to-expression-20261120/output/hr-standard/landing-convergence--compliance-short-facts/input-plan.json",
+        "--width",
+        "1280",
+        "--height",
+        "720",
+        "--out",
+        "experiments/content-to-expression-20261120/output/hr-standard/landing-convergence--compliance-short-facts/compile"
+      ],
+      "exitCode": 0,
+      "report": "experiments/content-to-expression-20261120/output/hr-standard/landing-convergence--compliance-short-facts/compile/report.json",
+      "compilerStatus": "passed",
+      "audit": {
+        "errors": [],
+        "expectedEdges": [
+          "component:landing:input:atmosphere → component:landing:result",
+          "component:landing:input:systems → component:landing:result",
+          "component:landing:input:management → component:landing:result"
+        ],
+        "actualEdges": [
+          "component:landing:input:atmosphere → component:landing:result",
+          "component:landing:input:systems → component:landing:result",
+          "component:landing:input:management → component:landing:result"
+        ],
+        "checkedTextFields": 32,
+        "crossCaseItems": []
+      },
+      "layout": "compact-row-content-weighted",
+      "grade": {
+        "total": 1,
+        "benefit": 7,
+        "expressionCost": 4,
+        "densityCost": 2,
+        "wrapCost": 0
+      },
+      "preview": "experiments/content-to-expression-20261120/output/hr-standard/landing-convergence--compliance-short-facts/compile/gray.html",
+      "image": "experiments/content-to-expression-20261120/output/hr-standard/landing-convergence--compliance-short-facts/compile/gray.png"
+    },
+    {
+      "id": "alignment-sequence",
+      "selected": [
+        {
+          "owner": "alignment",
+          "kind": "sequence",
+          "benefit": 1,
+          "reason": "链较短，正文用一次按先后陈述即可"
+        }
+      ],
+      "command": [
+        "node",
+        "experiments/gray-compiler-20261120/compile.mjs",
+        "experiments/content-to-expression-20261120/output/hr-standard/alignment-sequence/input-plan.json",
+        "--width",
+        "1280",
+        "--height",
+        "720",
+        "--out",
+        "experiments/content-to-expression-20261120/output/hr-standard/alignment-sequence/compile"
+      ],
+      "exitCode": 0,
+      "report": "experiments/content-to-expression-20261120/output/hr-standard/alignment-sequence/compile/report.json",
+      "compilerStatus": "passed",
+      "audit": {
+        "errors": [],
+        "expectedEdges": [
+          "component:alignment:step:1 → component:alignment:step:2",
+          "component:alignment:step:2 → component:alignment:step:3"
+        ],
+        "actualEdges": [
+          "component:alignment:step:1 → component:alignment:step:2",
+          "component:alignment:step:2 → component:alignment:step:3"
+        ],
+        "checkedTextFields": 18,
+        "crossCaseItems": []
+      },
+      "layout": "standard-row-stronger-content-weight",
+      "grade": {
+        "total": -1,
+        "benefit": 1,
+        "expressionCost": 2,
+        "densityCost": 0,
+        "wrapCost": 0
+      },
+      "preview": "experiments/content-to-expression-20261120/output/hr-standard/alignment-sequence/compile/gray.html",
+      "image": "experiments/content-to-expression-20261120/output/hr-standard/alignment-sequence/compile/gray.png"
+    },
+    {
+      "id": "landing-convergence--alignment-sequence",
+      "selected": [
+        {
+          "owner": "landing",
+          "kind": "convergence",
+          "benefit": 6,
+          "reason": "三类以上同级因素共同指向支撑页首主旨的结果"
+        },
+        {
+          "owner": "alignment",
+          "kind": "sequence",
+          "benefit": 1,
+          "reason": "链较短，正文用一次按先后陈述即可"
+        }
+      ],
+      "command": [
+        "node",
+        "experiments/gray-compiler-20261120/compile.mjs",
+        "experiments/content-to-expression-20261120/output/hr-standard/landing-convergence--alignment-sequence/input-plan.json",
+        "--width",
+        "1280",
+        "--height",
+        "720",
+        "--out",
+        "experiments/content-to-expression-20261120/output/hr-standard/landing-convergence--alignment-sequence/compile"
+      ],
+      "exitCode": 0,
+      "report": "experiments/content-to-expression-20261120/output/hr-standard/landing-convergence--alignment-sequence/compile/report.json",
+      "compilerStatus": "passed",
+      "audit": {
+        "errors": [],
+        "expectedEdges": [
+          "component:landing:input:atmosphere → component:landing:result",
+          "component:landing:input:systems → component:landing:result",
+          "component:landing:input:management → component:landing:result",
+          "component:alignment:step:1 → component:alignment:step:2",
+          "component:alignment:step:2 → component:alignment:step:3"
+        ],
+        "actualEdges": [
+          "component:landing:input:atmosphere → component:landing:result",
+          "component:landing:input:systems → component:landing:result",
+          "component:landing:input:management → component:landing:result",
+          "component:alignment:step:1 → component:alignment:step:2",
+          "component:alignment:step:2 → component:alignment:step:3"
+        ],
+        "checkedTextFields": 25,
+        "crossCaseItems": []
+      },
+      "layout": "standard-row-content-weighted",
+      "grade": {
+        "total": 3,
+        "benefit": 7,
+        "expressionCost": 4,
+        "densityCost": 0,
+        "wrapCost": 0
+      },
+      "preview": "experiments/content-to-expression-20261120/output/hr-standard/landing-convergence--alignment-sequence/compile/gray.html",
+      "image": "experiments/content-to-expression-20261120/output/hr-standard/landing-convergence--alignment-sequence/compile/gray.png"
+    },
+    {
+      "id": "compliance-short-facts--alignment-sequence",
+      "selected": [
+        {
+          "owner": "compliance",
+          "kind": "short-facts",
+          "benefit": 1,
+          "reason": "字段和值短，可对照扫读，也可在一行正文内读完"
+        },
+        {
+          "owner": "alignment",
+          "kind": "sequence",
+          "benefit": 1,
+          "reason": "链较短，正文用一次按先后陈述即可"
+        }
+      ],
+      "command": [
+        "node",
+        "experiments/gray-compiler-20261120/compile.mjs",
+        "experiments/content-to-expression-20261120/output/hr-standard/compliance-short-facts--alignment-sequence/input-plan.json",
+        "--width",
+        "1280",
+        "--height",
+        "720",
+        "--out",
+        "experiments/content-to-expression-20261120/output/hr-standard/compliance-short-facts--alignment-sequence/compile"
+      ],
+      "exitCode": 0,
+      "report": "experiments/content-to-expression-20261120/output/hr-standard/compliance-short-facts--alignment-sequence/compile/report.json",
+      "compilerStatus": "passed",
+      "audit": {
+        "errors": [],
+        "expectedEdges": [
+          "component:alignment:step:1 → component:alignment:step:2",
+          "component:alignment:step:2 → component:alignment:step:3"
+        ],
+        "actualEdges": [
+          "component:alignment:step:1 → component:alignment:step:2",
+          "component:alignment:step:2 → component:alignment:step:3"
+        ],
+        "checkedTextFields": 27,
+        "crossCaseItems": []
+      },
+      "layout": "standard-row-content-weighted",
+      "grade": {
+        "total": -2,
+        "benefit": 2,
+        "expressionCost": 4,
+        "densityCost": 0,
+        "wrapCost": 0
+      },
+      "preview": "experiments/content-to-expression-20261120/output/hr-standard/compliance-short-facts--alignment-sequence/compile/gray.html",
+      "image": "experiments/content-to-expression-20261120/output/hr-standard/compliance-short-facts--alignment-sequence/compile/gray.png"
+    },
+    {
+      "id": "probe-reverse-sequence",
+      "probe": "reverse-sequence",
+      "selected": [
+        {
+          "owner": "alignment",
+          "kind": "sequence",
+          "benefit": 1,
+          "reason": "链较短，正文用一次按先后陈述即可"
+        }
+      ],
+      "command": [
+        "node",
+        "experiments/gray-compiler-20261120/compile.mjs",
+        "experiments/content-to-expression-20261120/output/hr-standard/probe-reverse-sequence/input-plan.json",
+        "--width",
+        "1280",
+        "--height",
+        "720",
+        "--out",
+        "experiments/content-to-expression-20261120/output/hr-standard/probe-reverse-sequence/compile"
+      ],
+      "exitCode": 0,
+      "report": "experiments/content-to-expression-20261120/output/hr-standard/probe-reverse-sequence/compile/report.json",
+      "compilerStatus": "passed",
+      "audit": {
+        "errors": [
+          {
+            "code": "missing-connection",
+            "id": "component:alignment:step:3 → component:alignment:step:2"
+          },
+          {
+            "code": "missing-connection",
+            "id": "component:alignment:step:2 → component:alignment:step:1"
+          },
+          {
+            "code": "extra-connection",
+            "id": "component:alignment:step:1 → component:alignment:step:2"
+          },
+          {
+            "code": "extra-connection",
+            "id": "component:alignment:step:2 → component:alignment:step:3"
+          }
+        ],
+        "expectedEdges": [
+          "component:alignment:step:3 → component:alignment:step:2",
+          "component:alignment:step:2 → component:alignment:step:1"
+        ],
+        "actualEdges": [
+          "component:alignment:step:1 → component:alignment:step:2",
+          "component:alignment:step:2 → component:alignment:step:3"
+        ],
+        "checkedTextFields": 18,
+        "crossCaseItems": []
+      },
+      "layout": "standard-row-stronger-content-weight",
+      "grade": {
+        "total": -1,
+        "benefit": 1,
+        "expressionCost": 2,
+        "densityCost": 0,
+        "wrapCost": 0
+      },
+      "preview": "experiments/content-to-expression-20261120/output/hr-standard/probe-reverse-sequence/compile/gray.html",
+      "image": "experiments/content-to-expression-20261120/output/hr-standard/probe-reverse-sequence/compile/gray.png"
+    }
+  ]
+}

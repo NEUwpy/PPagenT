@@ -1,0 +1,597 @@
+{
+  "version": "gray-compile-report@1",
+  "status": "rejected",
+  "phase": "layout",
+  "input": "page-plan.json",
+  "canvas": {
+    "width": 720,
+    "height": 720
+  },
+  "errors": [
+    {
+      "code": "no-fitting-layout",
+      "message": "所有候选均被拒绝，具体文本与几何错误见 candidates"
+    }
+  ],
+  "candidates": [
+    {
+      "layout": {
+        "id": "standard-column",
+        "canvas": {
+          "width": 720,
+          "height": 720
+        },
+        "margin": 30,
+        "gap": 16,
+        "padding": 12,
+        "direction": "column",
+        "columns": [
+          660,
+          660,
+          660
+        ],
+        "density": "standard"
+      },
+      "valid": false,
+      "score": null,
+      "frame": {
+        "x": 30,
+        "y": 158.1875,
+        "width": 660,
+        "height": 501.8125
+      },
+      "groups": [
+        {
+          "id": "group:routine",
+          "bounds": {
+            "x": 30,
+            "y": 211.28125,
+            "width": 660,
+            "height": 257.65625
+          },
+          "visibleHeight": 237.5625
+        },
+        {
+          "id": "group:response",
+          "bounds": {
+            "x": 30,
+            "y": 484.9375,
+            "width": 660,
+            "height": 317.46875
+          },
+          "visibleHeight": 297.375
+        },
+        {
+          "id": "group:intensification",
+          "bounds": {
+            "x": 30,
+            "y": 818.40625,
+            "width": 660,
+            "height": 215.5625
+          },
+          "visibleHeight": 202.46875
+        }
+      ],
+      "errors": [
+        {
+          "code": "canvas-overflow",
+          "id": "slide",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 720,
+            "height": 720
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:response",
+          "bounds": {
+            "x": 30,
+            "y": 484.9375,
+            "width": 660,
+            "height": 317.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:danger",
+          "bounds": {
+            "x": 43,
+            "y": 628.59375,
+            "width": 634,
+            "height": 74.90625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:danger:title",
+          "bounds": {
+            "x": 53,
+            "y": 635.59375,
+            "width": 614,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:danger:title",
+          "bounds": {
+            "x": 53,
+            "y": 635.59375,
+            "width": 614,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:danger:body",
+          "bounds": {
+            "x": 53,
+            "y": 670.40625,
+            "width": 614,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:danger:body",
+          "bounds": {
+            "x": 53,
+            "y": 670.40625,
+            "width": 614,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:incident",
+          "bounds": {
+            "x": 43,
+            "y": 714.5,
+            "width": 634,
+            "height": 74.90625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:incident:title",
+          "bounds": {
+            "x": 53,
+            "y": 721.5,
+            "width": 614,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:incident:title",
+          "bounds": {
+            "x": 53,
+            "y": 721.5,
+            "width": 614,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:incident:body",
+          "bounds": {
+            "x": 53,
+            "y": 756.3125,
+            "width": 614,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:incident:body",
+          "bounds": {
+            "x": 53,
+            "y": 756.3125,
+            "width": 614,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:intensification",
+          "bounds": {
+            "x": 30,
+            "y": 818.40625,
+            "width": 660,
+            "height": 215.5625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:intensification:title",
+          "bounds": {
+            "x": 43,
+            "y": 831.40625,
+            "width": 175,
+            "height": 33.75
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "group:intensification:title",
+          "bounds": {
+            "x": 43,
+            "y": 831.40625,
+            "width": 175,
+            "height": 33.75
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:rain-threshold",
+          "bounds": {
+            "x": 43,
+            "y": 876.15625,
+            "width": 634,
+            "height": 60.90625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:rain-threshold:title",
+          "bounds": {
+            "x": 43,
+            "y": 876.15625,
+            "width": 634,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:rain-threshold:title",
+          "bounds": {
+            "x": 43,
+            "y": 876.15625,
+            "width": 634,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:rain-threshold:body",
+          "bounds": {
+            "x": 43,
+            "y": 910.96875,
+            "width": 634,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:rain-threshold:body",
+          "bounds": {
+            "x": 43,
+            "y": 910.96875,
+            "width": 634,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal",
+          "bounds": {
+            "x": 43,
+            "y": 948.0625,
+            "width": 634,
+            "height": 72.90625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal:title",
+          "bounds": {
+            "x": 43,
+            "y": 960.0625,
+            "width": 634,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:return-to-normal:title",
+          "bounds": {
+            "x": 43,
+            "y": 960.0625,
+            "width": 634,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal:body",
+          "bounds": {
+            "x": 43,
+            "y": 994.875,
+            "width": 634,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:return-to-normal:body",
+          "bounds": {
+            "x": 43,
+            "y": 994.875,
+            "width": 634,
+            "height": 26.09375
+          }
+        }
+      ]
+    },
+    {
+      "layout": {
+        "id": "compact-column",
+        "canvas": {
+          "width": 720,
+          "height": 720
+        },
+        "margin": 30,
+        "gap": 16,
+        "padding": 10,
+        "direction": "column",
+        "columns": [
+          660,
+          660,
+          660
+        ],
+        "density": "compact"
+      },
+      "valid": false,
+      "score": null,
+      "frame": {
+        "x": 30,
+        "y": 139.1875,
+        "width": 660,
+        "height": 540.8125
+      },
+      "groups": [
+        {
+          "id": "group:routine",
+          "bounds": {
+            "x": 30,
+            "y": 187.65625,
+            "width": 660,
+            "height": 242.78125
+          },
+          "visibleHeight": 225.3125
+        },
+        {
+          "id": "group:response",
+          "bounds": {
+            "x": 30,
+            "y": 446.4375,
+            "width": 660,
+            "height": 299.59375
+          },
+          "visibleHeight": 282.125
+        },
+        {
+          "id": "group:intensification",
+          "bounds": {
+            "x": 30,
+            "y": 762.03125,
+            "width": 660,
+            "height": 199.3125
+          },
+          "visibleHeight": 188.84375
+        }
+      ],
+      "errors": [
+        {
+          "code": "canvas-overflow",
+          "id": "slide",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 720,
+            "height": 720
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:response",
+          "bounds": {
+            "x": 30,
+            "y": 446.4375,
+            "width": 660,
+            "height": 299.59375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:incident",
+          "bounds": {
+            "x": 41,
+            "y": 661.75,
+            "width": 638,
+            "height": 73.28125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:incident:title",
+          "bounds": {
+            "x": 51,
+            "y": 668.75,
+            "width": 618,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:incident:title",
+          "bounds": {
+            "x": 51,
+            "y": 668.75,
+            "width": 618,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:incident:body",
+          "bounds": {
+            "x": 51,
+            "y": 703.5625,
+            "width": 618,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:incident:body",
+          "bounds": {
+            "x": 51,
+            "y": 703.5625,
+            "width": 618,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:intensification",
+          "bounds": {
+            "x": 30,
+            "y": 762.03125,
+            "width": 660,
+            "height": 199.3125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:intensification:title",
+          "bounds": {
+            "x": 41,
+            "y": 773.03125,
+            "width": 175,
+            "height": 33.75
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "group:intensification:title",
+          "bounds": {
+            "x": 41,
+            "y": 773.03125,
+            "width": 175,
+            "height": 33.75
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:rain-threshold",
+          "bounds": {
+            "x": 41,
+            "y": 814.78125,
+            "width": 638,
+            "height": 59.28125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:rain-threshold:title",
+          "bounds": {
+            "x": 41,
+            "y": 814.78125,
+            "width": 638,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:rain-threshold:title",
+          "bounds": {
+            "x": 41,
+            "y": 814.78125,
+            "width": 638,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:rain-threshold:body",
+          "bounds": {
+            "x": 41,
+            "y": 849.59375,
+            "width": 638,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:rain-threshold:body",
+          "bounds": {
+            "x": 41,
+            "y": 849.59375,
+            "width": 638,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal",
+          "bounds": {
+            "x": 41,
+            "y": 882.0625,
+            "width": 638,
+            "height": 68.28125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal:title",
+          "bounds": {
+            "x": 41,
+            "y": 891.0625,
+            "width": 638,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:return-to-normal:title",
+          "bounds": {
+            "x": 41,
+            "y": 891.0625,
+            "width": 638,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal:body",
+          "bounds": {
+            "x": 41,
+            "y": 925.875,
+            "width": 638,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:return-to-normal:body",
+          "bounds": {
+            "x": 41,
+            "y": 925.875,
+            "width": 638,
+            "height": 24.46875
+          }
+        }
+      ]
+    }
+  ],
+  "inputSha256": "fe7c4acd3571ebf944875d930524a314cbd84d21ee515a315527a7e6f35f92bb",
+  "browser": "157.0.8103.79",
+  "diagnosticPreview": {
+    "html": "rejected.html",
+    "png": "rejected.png",
+    "candidate": "compact-column"
+  }
+}

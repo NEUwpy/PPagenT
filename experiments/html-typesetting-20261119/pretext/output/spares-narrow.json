@@ -1,0 +1,972 @@
+{
+  "input": "spares",
+  "variant": "narrow",
+  "first": {
+    "title": "备件供应方式对比说明",
+    "frame": {
+      "width": 1012,
+      "height": 464
+    },
+    "sz": 23,
+    "layout": {
+      "headline": false,
+      "inline": false,
+      "rail": 116,
+      "railGap": 28,
+      "gap": 35,
+      "headingLine": 35,
+      "bodyLine": 33,
+      "itemGap": 18,
+      "subGap": 5,
+      "padding": 27
+    },
+    "groups": [
+      {
+        "id": "spares-g1",
+        "label": "两种方式",
+        "candidateCount": 6,
+        "ranking": [
+          {
+            "columns": [
+              [
+                "central"
+              ],
+              [
+                "local"
+              ]
+            ],
+            "measures": [
+              417,
+              416
+            ],
+            "height": 139,
+            "score": 162.2,
+            "widows": 1
+          },
+          {
+            "columns": [
+              [
+                "central"
+              ],
+              [
+                "local"
+              ]
+            ],
+            "measures": [
+              450,
+              383
+            ],
+            "height": 139,
+            "score": 166.4,
+            "widows": 0
+          },
+          {
+            "columns": [
+              [
+                "central"
+              ],
+              [
+                "local"
+              ]
+            ],
+            "measures": [
+              475,
+              358
+            ],
+            "height": 139,
+            "score": 180.74782608695654,
+            "widows": 0
+          },
+          {
+            "columns": [
+              [
+                "central"
+              ],
+              [
+                "local"
+              ]
+            ],
+            "measures": [
+              383,
+              450
+            ],
+            "height": 139,
+            "score": 181.25,
+            "widows": 0
+          }
+        ],
+        "chosen": [
+          {
+            "width": 417,
+            "items": [
+              "central"
+            ],
+            "predicted": [
+              [
+                "由中心库统一采购、统一配送，单件采购",
+                "成本较低，但配送周期平均 5 个工作",
+                "日，紧急需求须另走加急流程。"
+              ]
+            ]
+          },
+          {
+            "width": 416,
+            "items": [
+              "local"
+            ],
+            "predicted": [
+              [
+                "由各站点自行采购，响应时间可缩短至 1 ",
+                "个工作日以内，但单价普遍高出 8% 至 ",
+                "12%。"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "spares-g2",
+        "label": "分级建议",
+        "candidateCount": 1,
+        "ranking": [
+          {
+            "columns": [
+              [
+                "grading"
+              ]
+            ],
+            "measures": [
+              850
+            ],
+            "height": 99,
+            "score": 121.82608695652175,
+            "widows": 0
+          }
+        ],
+        "chosen": [
+          {
+            "width": 850,
+            "items": [
+              "grading"
+            ],
+            "predicted": [
+              [
+                "两种方式并非互斥。常用件适合集中供应；价值低、消耗快的易损件适合就近供",
+                "应。建议按备件分级确定供应方式：单件价值 500 元以上的集中采购，500 元以下",
+                "的由站点自行采购。"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "spares-g3",
+        "label": "执行要求",
+        "candidateCount": 6,
+        "ranking": [
+          {
+            "columns": [
+              [
+                "exception"
+              ],
+              [
+                "effective"
+              ]
+            ],
+            "measures": [
+              383,
+              450
+            ],
+            "height": 106,
+            "score": 120,
+            "widows": 0
+          },
+          {
+            "columns": [
+              [
+                "exception"
+              ],
+              [
+                "effective"
+              ]
+            ],
+            "measures": [
+              358,
+              475
+            ],
+            "height": 106,
+            "score": 124.34782608695653,
+            "widows": 0
+          },
+          {
+            "columns": [
+              [
+                "exception"
+              ],
+              [
+                "effective"
+              ]
+            ],
+            "measures": [
+              450,
+              383
+            ],
+            "height": 139,
+            "score": 167.85,
+            "widows": 0
+          },
+          {
+            "columns": [
+              [
+                "exception"
+              ],
+              [
+                "effective"
+              ]
+            ],
+            "measures": [
+              475,
+              358
+            ],
+            "height": 139,
+            "score": 172.19782608695652,
+            "widows": 0
+          }
+        ],
+        "chosen": [
+          {
+            "width": 383,
+            "items": [
+              "exception"
+            ],
+            "predicted": [
+              [
+                "涉及安全停机的关键备件，无论金额",
+                "均须报设备科备案后加急处理。"
+              ]
+            ]
+          },
+          {
+            "width": 450,
+            "items": [
+              "effective"
+            ],
+            "predicted": [
+              [
+                "本说明自下发之日起执行；原《备件领用暂",
+                "行规定》中与本文不一致的，以本文为准。"
+              ]
+            ]
+          }
+        ]
+      }
+    ],
+    "measured": {
+      "used": 461,
+      "bottom": 617,
+      "groups": [
+        {
+          "id": "spares-g1",
+          "x": 66,
+          "y": 158,
+          "width": 1012,
+          "height": 174
+        },
+        {
+          "id": "spares-g2",
+          "x": 66,
+          "y": 332,
+          "width": 1012,
+          "height": 154
+        },
+        {
+          "id": "spares-g3",
+          "x": 66,
+          "y": 486,
+          "width": 1012,
+          "height": 133
+        }
+      ],
+      "text": [
+        {
+          "id": "central",
+          "role": "heading",
+          "text": "集中供应",
+          "lines": [
+            {
+              "text": "集中供应",
+              "left": 210,
+              "right": 310,
+              "y": 166,
+              "bottom": 199
+            }
+          ],
+          "out": false
+        },
+        {
+          "id": "central",
+          "role": "body",
+          "text": "由中心库统一采购、统一配送，单件采购成本较低，但配送周期平均 5 个工作日，紧急需求须另走加急流程。",
+          "lines": [
+            {
+              "text": "由中心库统一采购、统一配送，单件采购",
+              "left": 210,
+              "right": 624,
+              "y": 206,
+              "bottom": 236
+            },
+            {
+              "text": "成本较低，但配送周期平均 5 个工作",
+              "left": 210,
+              "right": 582.109375,
+              "y": 239,
+              "bottom": 269
+            },
+            {
+              "text": "日，紧急需求须另走加急流程。",
+              "left": 210,
+              "right": 532,
+              "y": 272,
+              "bottom": 302
+            }
+          ],
+          "out": false
+        },
+        {
+          "id": "local",
+          "role": "heading",
+          "text": "就近供应",
+          "lines": [
+            {
+              "text": "就近供应",
+              "left": 662,
+              "right": 762,
+              "y": 166,
+              "bottom": 199
+            }
+          ],
+          "out": false
+        },
+        {
+          "id": "local",
+          "role": "body",
+          "text": "由各站点自行采购，响应时间可缩短至 1 个工作日以内，但单价普遍高出 8% 至 12%。",
+          "lines": [
+            {
+              "text": "由各站点自行采购，响应时间可缩短至",
+              "left": 662,
+              "right": 1053,
+              "y": 206,
+              "bottom": 236
+            },
+            {
+              "text": "1 个工作日以内，但单价普遍高出 8%",
+              "left": 662,
+              "right": 1045.0625,
+              "y": 239,
+              "bottom": 269
+            },
+            {
+              "text": "至 12%。",
+              "left": 662,
+              "right": 762.25,
+              "y": 272,
+              "bottom": 302
+            }
+          ],
+          "out": false
+        },
+        {
+          "id": "grading",
+          "role": "body",
+          "text": "两种方式并非互斥。常用件适合集中供应；价值低、消耗快的易损件适合就近供应。建议按备件分级确定供应方式：单件价值 500 元以上的集中采购，500 元以下的由站点自行采购。",
+          "lines": [
+            {
+              "text": "两种方式并非互斥。常用件适合集中供应；价值低、消耗快的易损件适合就近供",
+              "left": 210,
+              "right": 1015,
+              "y": 360,
+              "bottom": 390
+            },
+            {
+              "text": "应。建议按备件分级确定供应方式：单件价值 500 元以上的集中采购，500 元以下",
+              "left": 210,
+              "right": 1047.34375,
+              "y": 393,
+              "bottom": 423
+            },
+            {
+              "text": "的由站点自行采购。",
+              "left": 210,
+              "right": 417,
+              "y": 426,
+              "bottom": 456
+            }
+          ],
+          "out": false
+        },
+        {
+          "id": "exception",
+          "role": "heading",
+          "text": "关键备件",
+          "lines": [
+            {
+              "text": "关键备件",
+              "left": 210,
+              "right": 310,
+              "y": 514,
+              "bottom": 547
+            }
+          ],
+          "out": false
+        },
+        {
+          "id": "exception",
+          "role": "body",
+          "text": "涉及安全停机的关键备件，无论金额均须报设备科备案后加急处理。",
+          "lines": [
+            {
+              "text": "涉及安全停机的关键备件，无论金额",
+              "left": 210,
+              "right": 578,
+              "y": 554,
+              "bottom": 584
+            },
+            {
+              "text": "均须报设备科备案后加急处理。",
+              "left": 210,
+              "right": 532,
+              "y": 587,
+              "bottom": 617
+            }
+          ],
+          "out": false
+        },
+        {
+          "id": "effective",
+          "role": "heading",
+          "text": "生效与衔接",
+          "lines": [
+            {
+              "text": "生效与衔接",
+              "left": 628,
+              "right": 753,
+              "y": 514,
+              "bottom": 547
+            }
+          ],
+          "out": false
+        },
+        {
+          "id": "effective",
+          "role": "body",
+          "text": "本说明自下发之日起执行；原《备件领用暂行规定》中与本文不一致的，以本文为准。",
+          "lines": [
+            {
+              "text": "本说明自下发之日起执行；原《备件领用暂",
+              "left": 628,
+              "right": 1065,
+              "y": 554,
+              "bottom": 584
+            },
+            {
+              "text": "行规定》中与本文不一致的，以本文为准。",
+              "left": 628,
+              "right": 1065,
+              "y": 587,
+              "bottom": 617
+            }
+          ],
+          "out": false
+        }
+      ],
+      "valid": true,
+      "boundText": true
+    }
+  },
+  "trials": [
+    {
+      "title": "备件供应方式对比说明",
+      "frame": {
+        "width": 1012,
+        "height": 464
+      },
+      "sz": 22,
+      "layout": {
+        "headline": false,
+        "inline": false,
+        "rail": 116,
+        "railGap": 28,
+        "gap": 35,
+        "headingLine": 34,
+        "bodyLine": 31,
+        "itemGap": 13,
+        "subGap": 5,
+        "padding": 19
+      },
+      "groups": [
+        {
+          "id": "spares-g1",
+          "label": "两种方式",
+          "candidateCount": 6,
+          "ranking": [
+            {
+              "columns": [
+                [
+                  "central"
+                ],
+                [
+                  "local"
+                ]
+              ],
+              "measures": [
+                417,
+                416
+              ],
+              "height": 132,
+              "score": 155.2,
+              "widows": 1
+            },
+            {
+              "columns": [
+                [
+                  "central"
+                ],
+                [
+                  "local"
+                ]
+              ],
+              "measures": [
+                450,
+                383
+              ],
+              "height": 132,
+              "score": 159.4,
+              "widows": 0
+            },
+            {
+              "columns": [
+                [
+                  "central"
+                ],
+                [
+                  "local"
+                ]
+              ],
+              "measures": [
+                475,
+                358
+              ],
+              "height": 132,
+              "score": 169.4,
+              "widows": 0
+            },
+            {
+              "columns": [
+                [
+                  "central"
+                ],
+                [
+                  "local"
+                ]
+              ],
+              "measures": [
+                383,
+                450
+              ],
+              "height": 132,
+              "score": 173.35,
+              "widows": 0
+            }
+          ],
+          "chosen": [
+            {
+              "width": 417,
+              "items": [
+                "central"
+              ],
+              "predicted": [
+                [
+                  "由中心库统一采购、统一配送，单件采购",
+                  "成本较低，但配送周期平均 5 个工作日，",
+                  "紧急需求须另走加急流程。"
+                ]
+              ]
+            },
+            {
+              "width": 416,
+              "items": [
+                "local"
+              ],
+              "predicted": [
+                [
+                  "由各站点自行采购，响应时间可缩短至 1 ",
+                  "个工作日以内，但单价普遍高出 8% 至 ",
+                  "12%。"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "id": "spares-g2",
+          "label": "分级建议",
+          "candidateCount": 1,
+          "ranking": [
+            {
+              "columns": [
+                [
+                  "grading"
+                ]
+              ],
+              "measures": [
+                850
+              ],
+              "height": 93,
+              "score": 131.54545454545453,
+              "widows": 1
+            }
+          ],
+          "chosen": [
+            {
+              "width": 850,
+              "items": [
+                "grading"
+              ],
+              "predicted": [
+                [
+                  "两种方式并非互斥。常用件适合集中供应；价值低、消耗快的易损件适合就近供应。建",
+                  "议按备件分级确定供应方式：单件价值 500 元以上的集中采购，500 元以下的由站点自",
+                  "行采购。"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "id": "spares-g3",
+          "label": "执行要求",
+          "candidateCount": 6,
+          "ranking": [
+            {
+              "columns": [
+                [
+                  "exception"
+                ],
+                [
+                  "effective"
+                ]
+              ],
+              "measures": [
+                358,
+                475
+              ],
+              "height": 101,
+              "score": 115,
+              "widows": 0
+            },
+            {
+              "columns": [
+                [
+                  "exception"
+                ],
+                [
+                  "effective"
+                ]
+              ],
+              "measures": [
+                383,
+                450
+              ],
+              "height": 101,
+              "score": 115,
+              "widows": 0
+            },
+            {
+              "columns": [
+                [
+                  "exception"
+                ],
+                [
+                  "effective"
+                ]
+              ],
+              "measures": [
+                475,
+                358
+              ],
+              "height": 132,
+              "score": 159.95,
+              "widows": 0
+            },
+            {
+              "columns": [
+                [
+                  "exception"
+                ],
+                [
+                  "effective"
+                ]
+              ],
+              "measures": [
+                417,
+                416
+              ],
+              "height": 132,
+              "score": 168.95,
+              "widows": 1
+            }
+          ],
+          "chosen": [
+            {
+              "width": 358,
+              "items": [
+                "exception"
+              ],
+              "predicted": [
+                [
+                  "涉及安全停机的关键备件，无论金额",
+                  "均须报设备科备案后加急处理。"
+                ]
+              ]
+            },
+            {
+              "width": 475,
+              "items": [
+                "effective"
+              ],
+              "predicted": [
+                [
+                  "本说明自下发之日起执行；原《备件领用暂行规",
+                  "定》中与本文不一致的，以本文为准。"
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "measured": {
+        "used": 411,
+        "bottom": 568,
+        "groups": [
+          {
+            "id": "spares-g1",
+            "x": 66,
+            "y": 158,
+            "width": 1012,
+            "height": 159
+          },
+          {
+            "id": "spares-g2",
+            "x": 66,
+            "y": 317,
+            "width": 1012,
+            "height": 132
+          },
+          {
+            "id": "spares-g3",
+            "x": 66,
+            "y": 449,
+            "width": 1012,
+            "height": 120
+          }
+        ],
+        "text": [
+          {
+            "id": "central",
+            "role": "heading",
+            "text": "集中供应",
+            "lines": [
+              {
+                "text": "集中供应",
+                "left": 210,
+                "right": 306,
+                "y": 166,
+                "bottom": 197
+              }
+            ],
+            "out": false
+          },
+          {
+            "id": "central",
+            "role": "body",
+            "text": "由中心库统一采购、统一配送，单件采购成本较低，但配送周期平均 5 个工作日，紧急需求须另走加急流程。",
+            "lines": [
+              {
+                "text": "由中心库统一采购、统一配送，单件采购",
+                "left": 210,
+                "right": 606,
+                "y": 205,
+                "bottom": 234
+              },
+              {
+                "text": "成本较低，但配送周期平均 5 个工作日，",
+                "left": 210,
+                "right": 609.921875,
+                "y": 236,
+                "bottom": 265
+              },
+              {
+                "text": "紧急需求须另走加急流程。",
+                "left": 210,
+                "right": 474,
+                "y": 267,
+                "bottom": 296
+              }
+            ],
+            "out": false
+          },
+          {
+            "id": "local",
+            "role": "heading",
+            "text": "就近供应",
+            "lines": [
+              {
+                "text": "就近供应",
+                "left": 662,
+                "right": 758,
+                "y": 166,
+                "bottom": 197
+              }
+            ],
+            "out": false
+          },
+          {
+            "id": "local",
+            "role": "body",
+            "text": "由各站点自行采购，响应时间可缩短至 1 个工作日以内，但单价普遍高出 8% 至 12%。",
+            "lines": [
+              {
+                "text": "由各站点自行采购，响应时间可缩短至",
+                "left": 662,
+                "right": 1036,
+                "y": 205,
+                "bottom": 234
+              },
+              {
+                "text": "1 个工作日以内，但单价普遍高出 8%",
+                "left": 662,
+                "right": 1028.40625,
+                "y": 236,
+                "bottom": 265
+              },
+              {
+                "text": "至 12%。",
+                "left": 662,
+                "right": 757.890625,
+                "y": 267,
+                "bottom": 296
+              }
+            ],
+            "out": false
+          },
+          {
+            "id": "grading",
+            "role": "body",
+            "text": "两种方式并非互斥。常用件适合集中供应；价值低、消耗快的易损件适合就近供应。建议按备件分级确定供应方式：单件价值 500 元以上的集中采购，500 元以下的由站点自行采购。",
+            "lines": [
+              {
+                "text": "两种方式并非互斥。常用件适合集中供应；价值低、消耗快的易损件适合就近供应。建",
+                "left": 210,
+                "right": 1046,
+                "y": 337,
+                "bottom": 366
+              },
+              {
+                "text": "议按备件分级确定供应方式：单件价值 500 元以上的集中采购，500 元以下的由站点自",
+                "left": 210,
+                "right": 1054.9375,
+                "y": 368,
+                "bottom": 397
+              },
+              {
+                "text": "行采购。",
+                "left": 210,
+                "right": 298,
+                "y": 399,
+                "bottom": 428
+              }
+            ],
+            "out": false
+          },
+          {
+            "id": "exception",
+            "role": "heading",
+            "text": "关键备件",
+            "lines": [
+              {
+                "text": "关键备件",
+                "left": 210,
+                "right": 306,
+                "y": 469,
+                "bottom": 500
+              }
+            ],
+            "out": false
+          },
+          {
+            "id": "exception",
+            "role": "body",
+            "text": "涉及安全停机的关键备件，无论金额均须报设备科备案后加急处理。",
+            "lines": [
+              {
+                "text": "涉及安全停机的关键备件，无论金额",
+                "left": 210,
+                "right": 562,
+                "y": 508,
+                "bottom": 537
+              },
+              {
+                "text": "均须报设备科备案后加急处理。",
+                "left": 210,
+                "right": 518,
+                "y": 539,
+                "bottom": 568
+              }
+            ],
+            "out": false
+          },
+          {
+            "id": "effective",
+            "role": "heading",
+            "text": "生效与衔接",
+            "lines": [
+              {
+                "text": "生效与衔接",
+                "left": 603,
+                "right": 723,
+                "y": 469,
+                "bottom": 500
+              }
+            ],
+            "out": false
+          },
+          {
+            "id": "effective",
+            "role": "body",
+            "text": "本说明自下发之日起执行；原《备件领用暂行规定》中与本文不一致的，以本文为准。",
+            "lines": [
+              {
+                "text": "本说明自下发之日起执行；原《备件领用暂行规",
+                "left": 603,
+                "right": 1065,
+                "y": 508,
+                "bottom": 537
+              },
+              {
+                "text": "定》中与本文不一致的，以本文为准。",
+                "left": 603,
+                "right": 977,
+                "y": 539,
+                "bottom": 568
+              }
+            ],
+            "out": false
+          }
+        ],
+        "valid": true,
+        "boundText": true
+      }
+    }
+  ]
+}

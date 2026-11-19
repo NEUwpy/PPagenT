@@ -1,0 +1,130 @@
+{
+  "version": "semantic-band-report@1",
+  "status": "passed",
+  "canvas": {
+    "width": 1280,
+    "height": 720
+  },
+  "candidates": [
+    {
+      "layout": {
+        "id": "standard-1-balanced-stack",
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "density": "standard",
+        "margin": 54,
+        "gap": 28,
+        "padding": 12,
+        "rows": [
+          [
+            {
+              "id": "comparison",
+              "width": 1172,
+              "itemsAcross": 1
+            }
+          ]
+        ],
+        "direction": "column",
+        "columns": [
+          1172
+        ]
+      },
+      "score": {
+        "cost": 4.083466760374405,
+        "weakEnds": 0,
+        "extraLineBreaks": 0,
+        "imbalance": 0,
+        "occupancy": 0.48832380283039967,
+        "majorRows": 1,
+        "densityPenalty": 0
+      },
+      "frame": {
+        "x": 54,
+        "y": 170.890625,
+        "width": 1172,
+        "height": 489.109375
+      },
+      "groups": [
+        {
+          "id": "group:comparison",
+          "bounds": {
+            "x": 54,
+            "y": 170.890625,
+            "width": 1172,
+            "height": 238.84375
+          },
+          "visibleHeight": 217.75
+        }
+      ],
+      "errors": []
+    },
+    {
+      "layout": {
+        "id": "compact-1-balanced-stack",
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "density": "compact",
+        "margin": 54,
+        "gap": 28,
+        "padding": 10,
+        "rows": [
+          [
+            {
+              "id": "comparison",
+              "width": 1172,
+              "itemsAcross": 1
+            }
+          ]
+        ],
+        "direction": "column",
+        "columns": [
+          1172
+        ]
+      },
+      "score": {
+        "cost": 11.982664575875027,
+        "weakEnds": 0,
+        "extraLineBreaks": 0,
+        "imbalance": 0,
+        "occupancy": 0.42409538743749814,
+        "majorRows": 1,
+        "densityPenalty": 7
+      },
+      "frame": {
+        "x": 54,
+        "y": 151.890625,
+        "width": 1172,
+        "height": 528.109375
+      },
+      "groups": [
+        {
+          "id": "group:comparison",
+          "bounds": {
+            "x": 54,
+            "y": 151.890625,
+            "width": 1172,
+            "height": 223.96875
+          },
+          "visibleHeight": 205.5
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "errors": [],
+  "browser": "157.0.8103.79",
+  "selected": "standard-1-balanced-stack",
+  "metrics": {
+    "cost": 4.083466760374405,
+    "weakEnds": 0,
+    "extraLineBreaks": 0,
+    "imbalance": 0,
+    "occupancy": 0.48832380283039967,
+    "majorRows": 1,
+    "densityPenalty": 0
+  }
+}

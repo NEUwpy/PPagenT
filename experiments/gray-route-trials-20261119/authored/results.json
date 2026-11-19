@@ -1,0 +1,165 @@
+{
+  "route": "C",
+  "browser": "157.0.8103.79",
+  "node": "v25.2.0",
+  "canvas": {
+    "left": 0,
+    "top": 0,
+    "width": 1280,
+    "height": 720
+  },
+  "cases": [
+    {
+      "id": "options-free",
+      "status": "partial",
+      "html": "outputs/options-free.html",
+      "png": "outputs/options-free.png",
+      "details": {
+        "evidence": "evidence/options-free.json",
+        "input": "options",
+        "frame": {
+          "left": 55,
+          "top": 166,
+          "width": 1170,
+          "height": 492
+        },
+        "characters": 176,
+        "exactSource": true,
+        "minBodyFontPx": 19,
+        "measurementErrors": 0,
+        "handoff": "mismatch",
+        "handoffEvidence": "evidence/options-free-handoff.json"
+      }
+    },
+    {
+      "id": "options",
+      "status": "passed",
+      "html": "outputs/options.html",
+      "png": "outputs/options.png",
+      "details": {
+        "evidence": "evidence/options.json",
+        "input": "options",
+        "frame": {
+          "left": 55,
+          "top": 166,
+          "width": 1170,
+          "height": 492
+        },
+        "characters": 176,
+        "exactSource": true,
+        "minBodyFontPx": 19,
+        "measurementErrors": 0,
+        "handoff": "matched-checked-fields",
+        "handoffEvidence": "evidence/options-handoff.json"
+      }
+    },
+    {
+      "id": "services",
+      "status": "passed",
+      "html": "outputs/services.html",
+      "png": "outputs/services.png",
+      "details": {
+        "evidence": "evidence/services.json",
+        "input": "services",
+        "frame": {
+          "left": 55,
+          "top": 166,
+          "width": 1170,
+          "height": 492
+        },
+        "characters": 168,
+        "exactSource": true,
+        "minBodyFontPx": 19,
+        "measurementErrors": 0,
+        "handoff": "matched-checked-fields",
+        "handoffEvidence": "evidence/services-handoff.json"
+      }
+    },
+    {
+      "id": "services-narrow",
+      "status": "passed",
+      "html": "outputs/services-narrow.html",
+      "png": "outputs/services-narrow.png",
+      "details": {
+        "evidence": "evidence/services-narrow.json",
+        "input": "services",
+        "frame": {
+          "left": 55,
+          "top": 166,
+          "width": 1020,
+          "height": 450
+        },
+        "characters": 168,
+        "exactSource": true,
+        "minBodyFontPx": 19,
+        "measurementErrors": 0,
+        "handoff": "matched-checked-fields",
+        "handoffEvidence": "evidence/services-narrow-handoff.json"
+      }
+    },
+    {
+      "id": "dense",
+      "status": "rejected",
+      "html": "outputs/dense.html",
+      "png": "outputs/dense.png",
+      "details": {
+        "evidence": "evidence/dense.json",
+        "input": "dense",
+        "frame": {
+          "left": 55,
+          "top": 166,
+          "width": 1170,
+          "height": 492
+        },
+        "characters": 1040,
+        "exactSource": true,
+        "minBodyFontPx": 18,
+        "measurementErrors": 9,
+        "handoff": "skipped-geometry-failure"
+      }
+    },
+    {
+      "id": "hr-notes",
+      "status": "rejected",
+      "html": "outputs/hr-notes.html",
+      "png": "outputs/hr-notes.png",
+      "details": {
+        "evidence": "evidence/hr-notes.json",
+        "input": "hr",
+        "frame": {
+          "left": 55,
+          "top": 166,
+          "width": 1170,
+          "height": 492
+        },
+        "characters": 564,
+        "exactSource": true,
+        "minBodyFontPx": 18.75,
+        "measurementErrors": 19,
+        "handoff": "skipped-geometry-failure"
+      }
+    },
+    {
+      "id": "hr",
+      "status": "passed",
+      "html": "outputs/hr.html",
+      "png": "outputs/hr.png",
+      "details": {
+        "evidence": "evidence/hr.json",
+        "input": "hr",
+        "frame": {
+          "left": 55,
+          "top": 166,
+          "width": 1170,
+          "height": 492
+        },
+        "characters": 564,
+        "exactSource": true,
+        "minBodyFontPx": 18.75,
+        "measurementErrors": 0,
+        "handoff": "matched-checked-fields",
+        "handoffEvidence": "evidence/hr-handoff.json"
+      }
+    }
+  ]
+}

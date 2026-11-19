@@ -1,0 +1,326 @@
+{
+  "schema": "seaslides-html-compile/v1",
+  "status": "pass",
+  "generated_at": "2026-11-16T16:24:36.058070+00:00",
+  "entry": "content.html",
+  "format": "all",
+  "requested_formats": [
+    "svg",
+    "png",
+    "browser_png",
+    "overview",
+    "pdf",
+    "pptx"
+  ],
+  "canvas": {
+    "width": 1280,
+    "height": 720,
+    "source": "template.css:--slide-width/height",
+    "png_scale": 2.0
+  },
+  "slide_count": 1,
+  "quality": {
+    "dom_audit": {
+      "status": "pass",
+      "slideCount": 1,
+      "issueCount": 0,
+      "blockerCount": 0,
+      "reviewCount": 0
+    },
+    "render_fidelity": {
+      "status": "pass",
+      "review_slides": []
+    }
+  },
+  "inputs": [
+    {
+      "path": "assets\\neu-logo.png",
+      "bytes": 28222,
+      "sha256": "6568a764ed3e44fdff86cbed39afc9b2b0f05b5bd15b893f0702d7653d27d1aa"
+    },
+    {
+      "path": "content.html",
+      "bytes": 2912,
+      "sha256": "834d17054c7c6a5c66baa1faa80496b0a2dbe56f22fd0655f68f678d6d43cfd3"
+    },
+    {
+      "path": "index-template.html",
+      "bytes": 7213,
+      "sha256": "63a68ffab3c0fd8633955c1d059ec6e0a9d743fe6160665d34f6bae78ba295b1"
+    },
+    {
+      "path": "template.css",
+      "bytes": 22874,
+      "sha256": "862160291e73670ad24e628a25bf77ba5d7dcc5dc934d5cda549423c237d2cbf"
+    }
+  ],
+  "toolchain": [
+    {
+      "path": "requirements.txt",
+      "bytes": 3874,
+      "sha256": "4b28496bde33515fac264f9d815b61d5f1fe7a4881f5cf97e17f0da609c4d26e"
+    },
+    {
+      "path": "scripts/assemble.py",
+      "bytes": 6187,
+      "sha256": "cbd186930473e8f2bbf7bafc1c2153c6121864d6d4425c2e8df971d142c1a7d3"
+    },
+    {
+      "path": "scripts/html_compiler.py",
+      "bytes": 55224,
+      "sha256": "a5a8fdc9f9572093a394b46f12c472230d65bfbb7fc8b94b65cddde291f45b07"
+    },
+    {
+      "path": "scripts/html_to_svg/browser_dom_audit.mjs",
+      "bytes": 47408,
+      "sha256": "cfd90775fe34c36a96ca664072e3a45cc6113c8350e6bc0265ebae7db4d9bf45"
+    },
+    {
+      "path": "scripts/html_to_svg/browser_dom_to_svg.mjs",
+      "bytes": 60053,
+      "sha256": "40ddedfbcdc7f67b9f1f23a1100e3a14ea518f282c378c3501d452047ed83bea"
+    },
+    {
+      "path": "scripts/html_to_svg/browser_html_to_png.mjs",
+      "bytes": 17694,
+      "sha256": "6d5443d22f202a3c35bfd89b498cb401fd053ba811e2e9d6911d11097765b355"
+    },
+    {
+      "path": "scripts/html_to_svg/browser_svg_to_pdf.mjs",
+      "bytes": 5773,
+      "sha256": "069c063859e56d07b6616f13f628dceea91a75b642bda77f39e10556e1dc65b6"
+    },
+    {
+      "path": "scripts/html_to_svg/browser_svg_to_png.mjs",
+      "bytes": 5595,
+      "sha256": "08130b93e7a3709b7b34b493065e934106c62c74777c50c41500ff505aa87abb"
+    },
+    {
+      "path": "scripts/html_to_svg/chart_renderer.mjs",
+      "bytes": 19321,
+      "sha256": "c81084bca3c3c7e309b8b5fc395567820510155e4e863b6348441c1307424c0d"
+    },
+    {
+      "path": "scripts/html_to_svg/package-lock.json",
+      "bytes": 50907,
+      "sha256": "f9c538af81d3444a56a52caec5326baaaf7434328290c5e28784aff943d2ef8d"
+    },
+    {
+      "path": "scripts/html_to_svg/package.json",
+      "bytes": 682,
+      "sha256": "fac11e162b25b9a0bb56187673f55dedbd02228ecb3fa90e6724afad90753503"
+    },
+    {
+      "path": "scripts/runtime/deck_runtime.js",
+      "bytes": 20675,
+      "sha256": "3e9ea3904ed6ba5bce216bd695d36f66b0b6d5dab73cf92008078245b6a30e13"
+    },
+    {
+      "path": "scripts/runtime_environment.py",
+      "bytes": 3678,
+      "sha256": "3a8a3ed0e305bb60495514d85b362b370012af56d95a95fe12d4146af14fdca6"
+    },
+    {
+      "path": "scripts/svg_finalize/__init__.py",
+      "bytes": 483,
+      "sha256": "030b16da68fbc05a364020a8bd5cc055ceb929efefdd27349c7038c3ab451094"
+    },
+    {
+      "path": "scripts/svg_finalize/align_embed_images.py",
+      "bytes": 14879,
+      "sha256": "0affc528854a0151419f3ae9e3be93997c134e6f5c99d6717ce165e946c72db3"
+    },
+    {
+      "path": "scripts/svg_finalize/crop_images.py",
+      "bytes": 12113,
+      "sha256": "b4a641cf78d565a2be77fd86cd78fefc618187ecb0ff9a42c50d940ebb0bc479"
+    },
+    {
+      "path": "scripts/svg_finalize/embed_icons.py",
+      "bytes": 13465,
+      "sha256": "1e6c1b7079c72682fe2daae38fcc5f4107623e694af7a1b09fe54747936ace88"
+    },
+    {
+      "path": "scripts/svg_finalize/embed_images.py",
+      "bytes": 9964,
+      "sha256": "c0f2e1889895931fc6bdfd1bbd6b3d974138660c5a26af51d8e740ad6f48a3bc"
+    },
+    {
+      "path": "scripts/svg_finalize/fix_image_aspect.py",
+      "bytes": 14074,
+      "sha256": "46b53076353bdd1226b43e0859e0e21941da14a96533c21c9fa6a7eb821c4bc8"
+    },
+    {
+      "path": "scripts/svg_finalize/flatten_tspan.py",
+      "bytes": 17291,
+      "sha256": "961d652d9f3e8b99fd8379f1dd557d0703eeaccf5e43c02ae706a6dc1497508b"
+    },
+    {
+      "path": "scripts/svg_finalize/svg_rect_to_path.py",
+      "bytes": 11035,
+      "sha256": "32868c674e09c0d4a6f0f5478e4846157b5d6b45b8888ce634ac6890bea4752a"
+    },
+    {
+      "path": "scripts/svg_to_pptx/__init__.py",
+      "bytes": 482,
+      "sha256": "06353780c9a8290be0d0c46686cb138568e9f57f3af2afe95b6a9a2e5a694447"
+    },
+    {
+      "path": "scripts/svg_to_pptx/animation_config.py",
+      "bytes": 8609,
+      "sha256": "5b463718a37b45994a51ab9a2b7660e0f014e490fccc6df938a55ae8bc464f82"
+    },
+    {
+      "path": "scripts/svg_to_pptx/drawingml_context.py",
+      "bytes": 6660,
+      "sha256": "eac7f048acacb49e664ea8c3c5ae938262822ebb2f8110ad7bc26c65d3f515b0"
+    },
+    {
+      "path": "scripts/svg_to_pptx/drawingml_converter.py",
+      "bytes": 19380,
+      "sha256": "ce247c38299358da8b7f8bbb023fe1b0db4b218222fea65cf43c6767a822f124"
+    },
+    {
+      "path": "scripts/svg_to_pptx/drawingml_elements.py",
+      "bytes": 65344,
+      "sha256": "fca1f8e93230e71c779a354d30778e41769bf465ae93f9c6891300db4d502e6b"
+    },
+    {
+      "path": "scripts/svg_to_pptx/drawingml_paths.py",
+      "bytes": 14230,
+      "sha256": "4ccbc3267b21599e618f74d7fb3f8575abd7e1e419385d85e20f231905280fec"
+    },
+    {
+      "path": "scripts/svg_to_pptx/drawingml_styles.py",
+      "bytes": 22578,
+      "sha256": "d94f5eeec79688b67a1ba4973f163bbd81bf3215a3beef09e8d88afdd6db1197"
+    },
+    {
+      "path": "scripts/svg_to_pptx/drawingml_utils.py",
+      "bytes": 15695,
+      "sha256": "a95a44ac74d59adf2a9e624dff36994c8f4bda08668f714dffe86a3906ceddd6"
+    },
+    {
+      "path": "scripts/svg_to_pptx/pptx_builder.py",
+      "bytes": 38868,
+      "sha256": "f9d21796a30a4b333ce4cc65055aa1b1aef5b13f9c4ad91c142248f8417fef94"
+    },
+    {
+      "path": "scripts/svg_to_pptx/pptx_cli.py",
+      "bytes": 23332,
+      "sha256": "52c13985f3346e5b0faa2cab4b8c034a703dbc1c14c4ddaa2b3bc6b0b02aea48"
+    },
+    {
+      "path": "scripts/svg_to_pptx/pptx_dimensions.py",
+      "bytes": 4336,
+      "sha256": "add30b49142d007167a1e69a427cf887861f7dcaee4062e950bb31d0cf8859c1"
+    },
+    {
+      "path": "scripts/svg_to_pptx/pptx_discovery.py",
+      "bytes": 3857,
+      "sha256": "2c6842e9dee1b228c724ca74af54d15d7011f917c96b145b4defe8576d5a1086"
+    },
+    {
+      "path": "scripts/svg_to_pptx/pptx_media.py",
+      "bytes": 4695,
+      "sha256": "31c878f196946b314a2a5c4e2cfee9876e481a16a8d154776c156172287905ef"
+    },
+    {
+      "path": "scripts/svg_to_pptx/pptx_narration.py",
+      "bytes": 7592,
+      "sha256": "795fed4a365db122539a6e842cbb1a87e3bdcb80799feb415f3325743ba69281"
+    },
+    {
+      "path": "scripts/svg_to_pptx/pptx_notes.py",
+      "bytes": 4850,
+      "sha256": "450afdfb8e3150ceb2c0198f9f4e8f76019ecc9e269ebf6aba31b71a756a3585"
+    },
+    {
+      "path": "scripts/svg_to_pptx/pptx_slide_xml.py",
+      "bytes": 4872,
+      "sha256": "09af1d939184d69b6fe5e9f4459235a616b2b0332bd230fc256b904eef63036e"
+    },
+    {
+      "path": "scripts/svg_to_pptx/tspan_flattener.py",
+      "bytes": 4394,
+      "sha256": "b4bcd51c3f4616481afcee009958dd5094f97d9b386383e5a1ee308daee92db3"
+    },
+    {
+      "path": "scripts/svg_to_pptx/use_expander.py",
+      "bytes": 4528,
+      "sha256": "8cf36a979c4b53413f37b8fe84ba3256959fc6aaf2d3bd40f587461b8f5b4e1c"
+    },
+    {
+      "path": "scripts/svg_to_pptx.py",
+      "bytes": 466,
+      "sha256": "0975051ac8dc1cdb2876c3ee61bead5ae85b9af1e571c6510dfa4cdc1002d5c8"
+    }
+  ],
+  "runtime_environment": {
+    "browser": "Google Chrome 157.0.8103.52",
+    "node": "v25.2.0",
+    "python": "3.12.14",
+    "python:Pillow": "13.0.0",
+    "python:lxml": "6.1.1",
+    "python:python-pptx": "1.0.2"
+  },
+  "assembled_index_sha256": "90da7916027a476b60ea741ce4040b1d85e0c6824d2a2e6c4b90ebb197d326a8",
+  "artifacts": [
+    {
+      "path": "output\\svgs",
+      "kind": "directory",
+      "file_count": 1,
+      "sha256": "62c0f587a508074145847d78f0c64b0fe972688e8c92279d7f47f536bb3da8bd",
+      "name": "svg"
+    },
+    {
+      "path": "output\\dom-audit.json",
+      "kind": "file",
+      "bytes": 2819,
+      "sha256": "8ffdbf143ad0d940ef17a9cd827ec327b73fb3ab3aa2323fac193750e5f4eb26",
+      "name": "dom_audit"
+    },
+    {
+      "path": "output\\pngs",
+      "kind": "directory",
+      "file_count": 1,
+      "sha256": "48b6718a0dec63fd590c115e4db6bd47ec6b18fabf23b7754b5310761c5cda68",
+      "name": "png"
+    },
+    {
+      "path": "output\\browser_pngs",
+      "kind": "directory",
+      "file_count": 1,
+      "sha256": "c705266e7a52ac422b779c05e33c0b1a4691f74e3bff0fe428dc5eecf2ed8941",
+      "name": "browser_png"
+    },
+    {
+      "path": "output\\overview.png",
+      "kind": "file",
+      "bytes": 666212,
+      "sha256": "f70ed339c55a24eb4a48602de7c9e74bcd2aa3899444f6d2cf1b474211f328ec",
+      "name": "overview"
+    },
+    {
+      "path": "output\\slides.pdf",
+      "kind": "file",
+      "bytes": 149524,
+      "sha256": "31122def8dc193523f73672b85fc70fc194aab92544f474b131823012053393b",
+      "name": "pdf"
+    },
+    {
+      "path": "output\\slides.pptx",
+      "kind": "file",
+      "bytes": 60448,
+      "sha256": "d26f39c8b6b4a50e848e9b572f2d64cf7178b3763f5d9b624d065c445f939ccb",
+      "name": "pptx"
+    },
+    {
+      "path": "output\\render-fidelity.json",
+      "kind": "file",
+      "bytes": 489,
+      "sha256": "1911664b5f62f2571ca46f83c8f21ddf5a8dd78c72918e7949e56e286f3d0ef1",
+      "name": "render_fidelity"
+    }
+  ]
+}

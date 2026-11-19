@@ -1,0 +1,370 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>备件供应方式对比说明</title><style>
+    * { box-sizing: border-box }
+    html, body { margin: 0; background: white; color: #242424 }
+    .slide { position: relative; width: 1280px; height: 720px;
+      --ppagent-font-body: "Microsoft YaHei"; --ppagent-component-body-size: 18px;
+      --ppagent-component-item-title-size: 22px }
+    
+    .ppagent-text-region{
+      box-sizing:border-box;
+      min-width:0;
+      min-height:0;
+    }
+    .ppagent-text-region > .ppagent-text-flow,
+    .ppagent-text-region > .ppagent-text-layout{
+      width:100%;
+      height:100%;
+    }
+    .ppagent-text-layout{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-layout-gap,10px);
+      width:100%;
+      height:100%;
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,"Microsoft YaHei"),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-align="center"]{text-align:center}
+    .ppagent-text-layout[data-text-layout-align="right"]{text-align:right}
+    .ppagent-text-layout[data-text-layout-valign="top"]{justify-content:flex-start}
+    .ppagent-text-layout[data-text-layout-valign="bottom"]{justify-content:flex-end}
+    .ppagent-text-layout[data-text-layout-density="compact"]{--ppagent-text-layout-gap:6px;--ppagent-text-layout-item-gap:5px}
+    .ppagent-text-layout[data-text-layout-density="standard"]{--ppagent-text-layout-gap:10px;--ppagent-text-layout-item-gap:8px}
+    .ppagent-text-layout[data-text-layout-density="loose"]{--ppagent-text-layout-gap:15px;--ppagent-text-layout-item-gap:12px}
+    .ppagent-text-primitive{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      color:var(--ppagent-text-color,#46566a);
+      text-align:inherit;
+      white-space:pre-line;
+      overflow-wrap:break-word;
+    }
+    .ppagent-text-primitive--heading{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-text-primitive--body{font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.45}
+    .ppagent-text-primitive--list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px)}
+    .ppagent-text-list__item{box-sizing:border-box;min-width:0;margin:0;padding:0;overflow:visible;color:var(--ppagent-text-color,#46566a);font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.38;text-align:inherit;white-space:pre-line;overflow-wrap:break-word}
+    .ppagent-text-primitive--metric{color:var(--ppagent-value-color,#2f5ea8);font-size:var(--ppagent-component-heading-size,25pt);font-weight:700;line-height:1.08}
+    .ppagent-text-primitive--label{color:var(--ppagent-label-color,#60758d);font-size:var(--ppagent-component-label-size,17pt);font-weight:600;line-height:1.2}
+    .ppagent-text-primitive--annotation{color:var(--ppagent-annotation-color,#748495);font-size:var(--ppagent-component-meta-size,15pt);font-weight:400;line-height:1.3}
+    .ppagent-text-primitive--quote{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:500;line-height:1.35}
+    .ppagent-text-primitive--emphasis{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-title-size,23pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-structured-list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-structured-list__item{display:flex;flex-direction:column;gap:4px;min-width:0}
+    .ppagent-structured-list__item .ppagent-text-primitive--heading{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-metric-set{display:grid;grid-template-columns:repeat(var(--ppagent-metric-columns,2),minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0;align-items:start}
+    .ppagent-metric-set[data-metric-count="3"]{--ppagent-metric-columns:3}
+    .ppagent-metric-set[data-metric-count="4"]{--ppagent-metric-columns:4}
+    .ppagent-metric-set__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-key-value{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-key-value__row{display:grid;grid-template-columns:minmax(64px,.42fr) minmax(0,1fr);gap:10px;align-items:start;min-width:0}
+    .ppagent-key-value__row .ppagent-text-primitive--metric{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label,
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--annotation{text-align:right}
+    .ppagent-summary-information{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0}
+    .ppagent-summary-information__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-summary-information__item .ppagent-text-primitive--emphasis{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"]{
+      justify-content:flex-start;
+      gap:12px;
+      padding:18px;
+      color:var(--ppagent-color-body);
+      background:transparent;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive{color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--emphasis,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--quote{color:var(--ppagent-color-dark);font-weight:700;letter-spacing:-.25px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--body,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-list__item{font-size:max(15pt,var(--ppagent-component-body-size))}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--label{color:var(--ppagent-color-accent);font-size:max(15pt,var(--ppagent-component-label-size));font-weight:700;letter-spacing:.7px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--annotation{color:var(--ppagent-color-muted);font-size:max(15pt,var(--ppagent-component-meta-size))}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--metric{color:var(--ppagent-color-accent);font-weight:700;letter-spacing:-.5px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-list__item{position:relative;padding-left:17px;color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-list__item::before{content:"";position:absolute;left:0;top:.68em;width:8px;height:2px;background:var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--heading-content-flow > .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--label-content-flow > .ppagent-text-primitive--label,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--heading-metric-content-flow > .ppagent-text-primitive--heading{padding-bottom:10px;border-bottom:2px solid var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-structured-list{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-structured-list__item{display:grid;grid-template-columns:minmax(82px,.42fr) minmax(0,1fr);gap:14px;padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-structured-list__item .ppagent-text-primitive--body{margin:0}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-metric-set{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-metric-set__item{padding:12px 14px 4px 0}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-metric-set__item + .ppagent-metric-set__item{padding-left:14px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-key-value{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-key-value__row{padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--quote-attribution-flow{position:relative;padding-left:52px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--quote-attribution-flow::before{content:"“";position:absolute;left:16px;top:8px;color:var(--ppagent-color-accent);font-family:Georgia,serif;font-size:42pt;font-weight:700;line-height:1}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label{margin-top:auto;padding-top:10px;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-summary-information{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-summary-information__item{padding:10px 12px 8px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-summary-information__item:nth-child(even){padding-left:12px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout--value-label{
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-value-label-gap,5px);
+      padding:var(--ppagent-value-label-padding,5px);
+      text-align:center;
+    }
+    .ppagent-text-layout__value,
+    .ppagent-text-layout__label{
+      box-sizing:border-box;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:hidden;
+      text-align:inherit;
+    }
+    .ppagent-text-layout__value{
+      color:var(--ppagent-value-color,#2f5ea8);
+      font-size:var(--ppagent-component-lead-size,19pt);
+      font-weight:700;
+      line-height:1.15;
+    }
+    .ppagent-text-layout__label{
+      color:var(--ppagent-label-color,#60758d);
+      font-size:var(--ppagent-component-meta-size,15pt);
+      font-weight:400;
+      line-height:1.2;
+    }
+    .ppagent-text-flow{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-flow-gap,10px);
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,"Microsoft YaHei"),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-flow[data-text-flow-align="center"]{text-align:center}
+    .ppagent-text-flow[data-text-flow-align="right"]{text-align:right}
+    .ppagent-text-flow[data-text-flow-valign="top"]{justify-content:flex-start}
+    .ppagent-text-flow[data-text-flow-valign="bottom"]{justify-content:flex-end}
+    .ppagent-text-flow__title,
+    .ppagent-text-flow__body{
+      position:relative;
+      box-sizing:border-box;
+      flex:0 0 auto;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      text-align:inherit;
+    }
+    .ppagent-text-flow__title{
+      font-size:var(--ppagent-component-item-title-size,21pt);
+      font-weight:700;
+      line-height:1.2;
+      white-space:normal;
+      text-wrap:balance;
+    }
+    .ppagent-text-flow__body{
+      font-size:var(--ppagent-component-body-size,17pt);
+      font-weight:400;
+      line-height:1.45;
+      white-space:pre-line;
+    }
+    .ppagent-text-flow__separator{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      align-self:center;
+      width:var(--ppagent-text-flow-separator-width,54px);
+      height:var(--ppagent-text-flow-separator-height,4px);
+      border:0;
+      border-radius:99px;
+      background:var(--ppagent-text-flow-separator-color,#78aeef);
+    }
+  
+    .text .ppagent-text-flow { overflow: visible }
+    .text .ppagent-text-flow__body { overflow-wrap: anywhere; line-height: 1.48 }
+    .header { position: absolute; left: 55px; top: 74px; width: 770px;
+      border-bottom: 2px solid #505050; padding: 5px 0 14px; --ppagent-component-item-title-size: 35px }
+    .content { position: absolute; left: 55px; top: 166px; width: 770px;
+      height: 270px; display: flex; flex-direction: column; gap: 15px }
+    .groups { display: grid; align-items: stretch; gap: 18px; min-width: 0 }
+    .groups[data-variant="columns"] { grid-template-columns: repeat(2, minmax(0, 1fr)) }
+    .groups[data-variant="rows"] { grid-template-columns: minmax(0, 1fr); gap: 10px }
+    section { min-width: 0; padding: 12px 15px; background: #f4f4f4;
+      border-top: 2px solid #777; display: grid; align-content: start; gap: 8px }
+    section [data-role="scope-note"] { border-top: 1px solid #979797; padding-top: 7px }
+    .groups[data-variant="rows"] section { grid-template-columns: 170px minmax(0, 1fr) }
+    .groups[data-variant="rows"] section .text:not(:first-child) { grid-column: 2 }
+    .notes { border-top: 1px solid #979797; padding: 8px 0 0; display: grid; gap: 7px }
+  </style><body><article class="slide">
+    <header class="header"><div class="text" data-bind="page-title" data-source="source-001" data-role="title"><div class="ppagent-text-flow"
+    data-ppagent-text-flow
+    data-text-flow-profile="standard"
+    data-text-flow-composition="title-only"
+    data-text-flow-align="left"
+    data-text-flow-valign="top"
+    data-text-flow-tone="light"
+    data-text-layout-id="title-body-adaptive"
+    data-text-layout-instance-id="page-title-text"
+    data-text-layout-field="page-title"><div class="ppagent-text-flow__title" data-text-flow-part="title" data-text-flow-field="title" data-ppt-kind="text" data-ppt-name="page-title-text-title">备件供应方式对比说明</div></div></div></header>
+    <main class="content" data-content-frame>
+      <div class="groups" data-variant="columns"><section data-component="group" data-id="centralized-supply"><div class="text" data-bind="centralized-supply-heading" data-source="source-002" data-role="group-heading"><div class="ppagent-text-flow"
+    data-ppagent-text-flow
+    data-text-flow-profile="standard"
+    data-text-flow-composition="title-only"
+    data-text-flow-align="left"
+    data-text-flow-valign="top"
+    data-text-flow-tone="light"
+    data-text-layout-id="title-body-adaptive"
+    data-text-layout-instance-id="centralized-supply-head-text"
+    data-text-layout-field="centralized-supply-heading"><div class="ppagent-text-flow__title" data-text-flow-part="title" data-text-flow-field="title" data-ppt-kind="text" data-ppt-name="centralized-supply-head-text-title">集中供应</div></div></div><div class="text" data-bind="centralized-mode" data-source="source-002" data-role="body"><div class="ppagent-text-flow"
+    data-ppagent-text-flow
+    data-text-flow-profile="standard"
+    data-text-flow-composition="body-only"
+    data-text-flow-align="left"
+    data-text-flow-valign="top"
+    data-text-flow-tone="light"
+    data-text-layout-id="title-body-adaptive"
+    data-text-layout-instance-id="centralized-mode-text"
+    data-text-layout-field="centralized-mode"><div class="ppagent-text-flow__body" data-text-flow-part="body" data-text-flow-field="body" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="centralized-mode-text-body">由中心库统一采购、统一配送</div></div></div><div class="text" data-bind="centralized-cost" data-source="source-002" data-role="body"><div class="ppagent-text-flow"
+    data-ppagent-text-flow
+    data-text-flow-profile="standard"
+    data-text-flow-composition="body-only"
+    data-text-flow-align="left"
+    data-text-flow-valign="top"
+    data-text-flow-tone="light"
+    data-text-layout-id="title-body-adaptive"
+    data-text-layout-instance-id="centralized-cost-text"
+    data-text-layout-field="centralized-cost"><div class="ppagent-text-flow__body" data-text-flow-part="body" data-text-flow-field="body" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="centralized-cost-text-body">单件采购成本较低</div></div></div><div class="text" data-bind="centralized-lead-time" data-source="source-002" data-role="body"><div class="ppagent-text-flow"
+    data-ppagent-text-flow
+    data-text-flow-profile="standard"
+    data-text-flow-composition="body-only"
+    data-text-flow-align="left"
+    data-text-flow-valign="top"
+    data-text-flow-tone="light"
+    data-text-layout-id="title-body-adaptive"
+    data-text-layout-instance-id="centralized-lead-time-text"
+    data-text-layout-field="centralized-lead-time"><div class="ppagent-text-flow__body" data-text-flow-part="body" data-text-flow-field="body" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="centralized-lead-time-text-body">配送周期平均 5 个工作日</div></div></div><div class="text" data-bind="centralized-urgent" data-source="source-002" data-role="body"><div class="ppagent-text-flow"
+    data-ppagent-text-flow
+    data-text-flow-profile="standard"
+    data-text-flow-composition="body-only"
+    data-text-flow-align="left"
+    data-text-flow-valign="top"
+    data-text-flow-tone="light"
+    data-text-layout-id="title-body-adaptive"
+    data-text-layout-instance-id="centralized-urgent-text"
+    data-text-layout-field="centralized-urgent"><div class="ppagent-text-flow__body" data-text-flow-part="body" data-text-flow-field="body" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="centralized-urgent-text-body">紧急需求须另走加急流程</div></div></div><div class="text" data-bind="note-common-parts" data-source="source-003" data-role="scope-note"><div class="ppagent-text-flow"
+    data-ppagent-text-flow
+    data-text-flow-profile="standard"
+    data-text-flow-composition="body-only"
+    data-text-flow-align="left"
+    data-text-flow-valign="top"
+    data-text-flow-tone="light"
+    data-text-layout-id="title-body-adaptive"
+    data-text-layout-instance-id="note-common-parts-text"
+    data-text-layout-field="note-common-parts"><div class="ppagent-text-flow__body" data-text-flow-part="body" data-text-flow-field="body" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="note-common-parts-text-body">常用件适合集中供应</div></div></div></section><section data-component="group" data-id="nearby-supply"><div class="text" data-bind="nearby-supply-heading" data-source="source-002" data-role="group-heading"><div class="ppagent-text-flow"
+    data-ppagent-text-flow
+    data-text-flow-profile="standard"
+    data-text-flow-composition="title-only"
+    data-text-flow-align="left"
+    data-text-flow-valign="top"
+    data-text-flow-tone="light"
+    data-text-layout-id="title-body-adaptive"
+    data-text-layout-instance-id="nearby-supply-head-text"
+    data-text-layout-field="nearby-supply-heading"><div class="ppagent-text-flow__title" data-text-flow-part="title" data-text-flow-field="title" data-ppt-kind="text" data-ppt-name="nearby-supply-head-text-title">就近供应</div></div></div><div class="text" data-bind="nearby-mode" data-source="source-002" data-role="body"><div class="ppagent-text-flow"
+    data-ppagent-text-flow
+    data-text-flow-profile="standard"
+    data-text-flow-composition="body-only"
+    data-text-flow-align="left"
+    data-text-flow-valign="top"
+    data-text-flow-tone="light"
+    data-text-layout-id="title-body-adaptive"
+    data-text-layout-instance-id="nearby-mode-text"
+    data-text-layout-field="nearby-mode"><div class="ppagent-text-flow__body" data-text-flow-part="body" data-text-flow-field="body" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="nearby-mode-text-body">由各站点自行采购</div></div></div><div class="text" data-bind="nearby-response" data-source="source-002" data-role="body"><div class="ppagent-text-flow"
+    data-ppagent-text-flow
+    data-text-flow-profile="standard"
+    data-text-flow-composition="body-only"
+    data-text-flow-align="left"
+    data-text-flow-valign="top"
+    data-text-flow-tone="light"
+    data-text-layout-id="title-body-adaptive"
+    data-text-layout-instance-id="nearby-response-text"
+    data-text-layout-field="nearby-response"><div class="ppagent-text-flow__body" data-text-flow-part="body" data-text-flow-field="body" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="nearby-response-text-body">响应时间可缩短至 1 个工作日以内</div></div></div><div class="text" data-bind="nearby-price" data-source="source-002" data-role="body"><div class="ppagent-text-flow"
+    data-ppagent-text-flow
+    data-text-flow-profile="standard"
+    data-text-flow-composition="body-only"
+    data-text-flow-align="left"
+    data-text-flow-valign="top"
+    data-text-flow-tone="light"
+    data-text-layout-id="title-body-adaptive"
+    data-text-layout-instance-id="nearby-price-text"
+    data-text-layout-field="nearby-price"><div class="ppagent-text-flow__body" data-text-flow-part="body" data-text-flow-field="body" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="nearby-price-text-body">单价普遍高出 8% 至 12%</div></div></div><div class="text" data-bind="note-wear-parts" data-source="source-003" data-role="scope-note"><div class="ppagent-text-flow"
+    data-ppagent-text-flow
+    data-text-flow-profile="standard"
+    data-text-flow-composition="body-only"
+    data-text-flow-align="left"
+    data-text-flow-valign="top"
+    data-text-flow-tone="light"
+    data-text-layout-id="title-body-adaptive"
+    data-text-layout-instance-id="note-wear-parts-text"
+    data-text-layout-field="note-wear-parts"><div class="ppagent-text-flow__body" data-text-flow-part="body" data-text-flow-field="body" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="note-wear-parts-text-body">价值低、消耗快的易损件适合就近供应</div></div></div></section></div>
+      <aside class="notes"><div class="text" data-bind="note-not-exclusive" data-source="source-003" data-role="scope-note"><div class="ppagent-text-flow"
+    data-ppagent-text-flow
+    data-text-flow-profile="standard"
+    data-text-flow-composition="body-only"
+    data-text-flow-align="left"
+    data-text-flow-valign="top"
+    data-text-flow-tone="light"
+    data-text-layout-id="title-body-adaptive"
+    data-text-layout-instance-id="note-not-exclusive-text"
+    data-text-layout-field="note-not-exclusive"><div class="ppagent-text-flow__body" data-text-flow-part="body" data-text-flow-field="body" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="note-not-exclusive-text-body">两种方式并非互斥</div></div></div><div class="text" data-bind="note-value-threshold" data-source="source-003" data-role="scope-note"><div class="ppagent-text-flow"
+    data-ppagent-text-flow
+    data-text-flow-profile="standard"
+    data-text-flow-composition="body-only"
+    data-text-flow-align="left"
+    data-text-flow-valign="top"
+    data-text-flow-tone="light"
+    data-text-layout-id="title-body-adaptive"
+    data-text-layout-instance-id="note-value-threshold-text"
+    data-text-layout-field="note-value-threshold"><div class="ppagent-text-flow__body" data-text-flow-part="body" data-text-flow-field="body" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="note-value-threshold-text-body">建议按备件分级确定供应方式：单件价值 500 元以上的集中采购，500 元以下的由站点自行采购</div></div></div><div class="text" data-bind="note-safety-critical" data-source="source-003" data-role="scope-note"><div class="ppagent-text-flow"
+    data-ppagent-text-flow
+    data-text-flow-profile="standard"
+    data-text-flow-composition="body-only"
+    data-text-flow-align="left"
+    data-text-flow-valign="top"
+    data-text-flow-tone="light"
+    data-text-layout-id="title-body-adaptive"
+    data-text-layout-instance-id="note-safety-critical-text"
+    data-text-layout-field="note-safety-critical"><div class="ppagent-text-flow__body" data-text-flow-part="body" data-text-flow-field="body" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="note-safety-critical-text-body">涉及安全停机的关键备件，无论金额均须报设备科备案后加急处理</div></div></div><div class="text" data-bind="note-effective-date" data-source="source-004" data-role="scope-note"><div class="ppagent-text-flow"
+    data-ppagent-text-flow
+    data-text-flow-profile="standard"
+    data-text-flow-composition="body-only"
+    data-text-flow-align="left"
+    data-text-flow-valign="top"
+    data-text-flow-tone="light"
+    data-text-layout-id="title-body-adaptive"
+    data-text-layout-instance-id="note-effective-date-text"
+    data-text-layout-field="note-effective-date"><div class="ppagent-text-flow__body" data-text-flow-part="body" data-text-flow-field="body" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="note-effective-date-text-body">本说明自下发之日起执行</div></div></div><div class="text" data-bind="note-precedence" data-source="source-004" data-role="scope-note"><div class="ppagent-text-flow"
+    data-ppagent-text-flow
+    data-text-flow-profile="standard"
+    data-text-flow-composition="body-only"
+    data-text-flow-align="left"
+    data-text-flow-valign="top"
+    data-text-flow-tone="light"
+    data-text-layout-id="title-body-adaptive"
+    data-text-layout-instance-id="note-precedence-text"
+    data-text-layout-field="note-precedence"><div class="ppagent-text-flow__body" data-text-flow-part="body" data-text-flow-field="body" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="note-precedence-text-body">原《备件领用暂行规定》中与本文不一致的，以本文为准</div></div></div></aside>
+    </main>
+  </article></body></html>

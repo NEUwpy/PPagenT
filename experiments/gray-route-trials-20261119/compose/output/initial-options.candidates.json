@@ -1,0 +1,989 @@
+{
+  "schemaVersion": 1,
+  "id": "options",
+  "stage": "initial",
+  "intent": "compare-options",
+  "frame": {
+    "x": 55,
+    "y": 166,
+    "width": 1170,
+    "height": 492
+  },
+  "selected": "comparison-columns-2col-22",
+  "trials": [
+    {
+      "candidate": {
+        "id": "comparison-columns-2col-22",
+        "component": "comparison-columns",
+        "cols": 2,
+        "bodyPx": 22,
+        "priority": 60
+      },
+      "decision": "selected",
+      "reason": "Highest ranking candidate after all mandatory checks",
+      "score": 6770,
+      "issues": [],
+      "measured": {
+        "frame": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 492
+        },
+        "usedHeight": 303.47,
+        "headroom": 188.53,
+        "geometry": [
+          {
+            "id": "content-frame",
+            "component": null,
+            "rect": {
+              "x": 55,
+              "y": 166,
+              "width": 1170,
+              "height": 492
+            }
+          },
+          {
+            "id": "body",
+            "component": null,
+            "rect": {
+              "x": 55,
+              "y": 166,
+              "width": 1170,
+              "height": 303.47
+            }
+          },
+          {
+            "id": "items",
+            "component": "comparison-columns",
+            "rect": {
+              "x": 55,
+              "y": 166,
+              "width": 1170,
+              "height": 231.88
+            }
+          },
+          {
+            "id": "item-1",
+            "component": null,
+            "rect": {
+              "x": 55,
+              "y": 166,
+              "width": 572,
+              "height": 231.88
+            }
+          },
+          {
+            "id": "item-2",
+            "component": null,
+            "rect": {
+              "x": 653,
+              "y": 166,
+              "width": 572,
+              "height": 231.88
+            }
+          },
+          {
+            "id": "shared",
+            "component": "shared-note",
+            "rect": {
+              "x": 55,
+              "y": 416.88,
+              "width": 1170,
+              "height": 52.59
+            }
+          }
+        ],
+        "leafLines": [
+          {
+            "id": "title",
+            "fontPx": 38,
+            "rect": {
+              "x": 55,
+              "y": 65,
+              "width": 1170,
+              "height": 46.36
+            },
+            "lines": [
+              {
+                "x": 55,
+                "y": 63,
+                "width": 223.45,
+                "height": 50
+              }
+            ]
+          },
+          {
+            "id": "item-1-title",
+            "fontPx": 26,
+            "rect": {
+              "x": 78,
+              "y": 189,
+              "width": 526,
+              "height": 32.5
+            },
+            "lines": [
+              {
+                "x": 78,
+                "y": 187,
+                "width": 182,
+                "height": 35
+              }
+            ]
+          },
+          {
+            "id": "item-1-body-1",
+            "fontPx": 22,
+            "rect": {
+              "x": 78,
+              "y": 237.5,
+              "width": 526,
+              "height": 57.19
+            },
+            "lines": [
+              {
+                "x": 78,
+                "y": 236.5,
+                "width": 506,
+                "height": 29
+              },
+              {
+                "x": 78,
+                "y": 265.09,
+                "width": 66,
+                "height": 29
+              }
+            ]
+          },
+          {
+            "id": "item-1-body-2",
+            "fontPx": 22,
+            "rect": {
+              "x": 78,
+              "y": 306.69,
+              "width": 526,
+              "height": 70.19
+            },
+            "lines": [
+              {
+                "x": 78,
+                "y": 318.69,
+                "width": 506,
+                "height": 29
+              },
+              {
+                "x": 78,
+                "y": 347.28,
+                "width": 374,
+                "height": 29
+              }
+            ]
+          },
+          {
+            "id": "item-2-title",
+            "fontPx": 26,
+            "rect": {
+              "x": 676,
+              "y": 189,
+              "width": 526,
+              "height": 32.5
+            },
+            "lines": [
+              {
+                "x": 676,
+                "y": 187,
+                "width": 182,
+                "height": 35
+              }
+            ]
+          },
+          {
+            "id": "item-2-body-1",
+            "fontPx": 22,
+            "rect": {
+              "x": 676,
+              "y": 237.5,
+              "width": 526,
+              "height": 28.59
+            },
+            "lines": [
+              {
+                "x": 676,
+                "y": 236.5,
+                "width": 418,
+                "height": 29
+              }
+            ]
+          },
+          {
+            "id": "item-2-body-2",
+            "fontPx": 22,
+            "rect": {
+              "x": 676,
+              "y": 278.09,
+              "width": 526,
+              "height": 70.19
+            },
+            "lines": [
+              {
+                "x": 676,
+                "y": 290.09,
+                "width": 506,
+                "height": 29
+              },
+              {
+                "x": 676,
+                "y": 318.69,
+                "width": 418,
+                "height": 29
+              }
+            ]
+          },
+          {
+            "id": "shared",
+            "fontPx": 22,
+            "rect": {
+              "x": 76,
+              "y": 428.88,
+              "width": 1132,
+              "height": 28.59
+            },
+            "lines": [
+              {
+                "x": 76,
+                "y": 427.88,
+                "width": 638,
+                "height": 29
+              }
+            ]
+          }
+        ],
+        "edges": [],
+        "cardGeometry": []
+      }
+    },
+    {
+      "candidate": {
+        "id": "comparison-columns-2col-20",
+        "component": "comparison-columns",
+        "cols": 2,
+        "bodyPx": 20,
+        "priority": 60
+      },
+      "decision": "lower-ranked",
+      "reason": "Fits but ranks below comparison-columns-2col-22",
+      "score": 6710,
+      "issues": [],
+      "measured": {
+        "frame": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 492
+        },
+        "usedHeight": 264.5,
+        "headroom": 227.5,
+        "geometry": [
+          {
+            "id": "content-frame",
+            "component": null,
+            "rect": {
+              "x": 55,
+              "y": 166,
+              "width": 1170,
+              "height": 492
+            }
+          },
+          {
+            "id": "body",
+            "component": null,
+            "rect": {
+              "x": 55,
+              "y": 166,
+              "width": 1170,
+              "height": 264.5
+            }
+          },
+          {
+            "id": "items",
+            "component": "comparison-columns",
+            "rect": {
+              "x": 55,
+              "y": 166,
+              "width": 1170,
+              "height": 195.5
+            }
+          },
+          {
+            "id": "item-1",
+            "component": null,
+            "rect": {
+              "x": 55,
+              "y": 166,
+              "width": 572,
+              "height": 195.5
+            }
+          },
+          {
+            "id": "item-2",
+            "component": null,
+            "rect": {
+              "x": 653,
+              "y": 166,
+              "width": 572,
+              "height": 195.5
+            }
+          },
+          {
+            "id": "shared",
+            "component": "shared-note",
+            "rect": {
+              "x": 55,
+              "y": 380.5,
+              "width": 1170,
+              "height": 50
+            }
+          }
+        ],
+        "leafLines": [
+          {
+            "id": "title",
+            "fontPx": 38,
+            "rect": {
+              "x": 55,
+              "y": 65,
+              "width": 1170,
+              "height": 46.36
+            },
+            "lines": [
+              {
+                "x": 55,
+                "y": 63,
+                "width": 223.45,
+                "height": 50
+              }
+            ]
+          },
+          {
+            "id": "item-1-title",
+            "fontPx": 26,
+            "rect": {
+              "x": 78,
+              "y": 189,
+              "width": 526,
+              "height": 32.5
+            },
+            "lines": [
+              {
+                "x": 78,
+                "y": 187,
+                "width": 182,
+                "height": 35
+              }
+            ]
+          },
+          {
+            "id": "item-1-body-1",
+            "fontPx": 20,
+            "rect": {
+              "x": 78,
+              "y": 237.5,
+              "width": 526,
+              "height": 26
+            },
+            "lines": [
+              {
+                "x": 78,
+                "y": 237.5,
+                "width": 520,
+                "height": 26
+              }
+            ]
+          },
+          {
+            "id": "item-1-body-2",
+            "fontPx": 20,
+            "rect": {
+              "x": 78,
+              "y": 275.5,
+              "width": 526,
+              "height": 65
+            },
+            "lines": [
+              {
+                "x": 78,
+                "y": 288.5,
+                "width": 520,
+                "height": 26
+              },
+              {
+                "x": 78,
+                "y": 314.5,
+                "width": 280,
+                "height": 26
+              }
+            ]
+          },
+          {
+            "id": "item-2-title",
+            "fontPx": 26,
+            "rect": {
+              "x": 676,
+              "y": 189,
+              "width": 526,
+              "height": 32.5
+            },
+            "lines": [
+              {
+                "x": 676,
+                "y": 187,
+                "width": 182,
+                "height": 35
+              }
+            ]
+          },
+          {
+            "id": "item-2-body-1",
+            "fontPx": 20,
+            "rect": {
+              "x": 676,
+              "y": 237.5,
+              "width": 526,
+              "height": 26
+            },
+            "lines": [
+              {
+                "x": 676,
+                "y": 237.5,
+                "width": 380,
+                "height": 26
+              }
+            ]
+          },
+          {
+            "id": "item-2-body-2",
+            "fontPx": 20,
+            "rect": {
+              "x": 676,
+              "y": 275.5,
+              "width": 526,
+              "height": 65
+            },
+            "lines": [
+              {
+                "x": 676,
+                "y": 288.5,
+                "width": 520,
+                "height": 26
+              },
+              {
+                "x": 676,
+                "y": 314.5,
+                "width": 320,
+                "height": 26
+              }
+            ]
+          },
+          {
+            "id": "shared",
+            "fontPx": 20,
+            "rect": {
+              "x": 76,
+              "y": 392.5,
+              "width": 1132,
+              "height": 26
+            },
+            "lines": [
+              {
+                "x": 76,
+                "y": 392.5,
+                "width": 580,
+                "height": 26
+              }
+            ]
+          }
+        ],
+        "edges": [],
+        "cardGeometry": []
+      }
+    },
+    {
+      "candidate": {
+        "id": "comparison-columns-2col-18",
+        "component": "comparison-columns",
+        "cols": 2,
+        "bodyPx": 18,
+        "priority": 60
+      },
+      "decision": "lower-ranked",
+      "reason": "Fits but ranks below comparison-columns-2col-22",
+      "score": 6650,
+      "issues": [],
+      "measured": {
+        "frame": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 492
+        },
+        "usedHeight": 254.06,
+        "headroom": 237.94,
+        "geometry": [
+          {
+            "id": "content-frame",
+            "component": null,
+            "rect": {
+              "x": 55,
+              "y": 166,
+              "width": 1170,
+              "height": 492
+            }
+          },
+          {
+            "id": "body",
+            "component": null,
+            "rect": {
+              "x": 55,
+              "y": 166,
+              "width": 1170,
+              "height": 254.06
+            }
+          },
+          {
+            "id": "items",
+            "component": "comparison-columns",
+            "rect": {
+              "x": 55,
+              "y": 166,
+              "width": 1170,
+              "height": 187.67
+            }
+          },
+          {
+            "id": "item-1",
+            "component": null,
+            "rect": {
+              "x": 55,
+              "y": 166,
+              "width": 572,
+              "height": 187.67
+            }
+          },
+          {
+            "id": "item-2",
+            "component": null,
+            "rect": {
+              "x": 653,
+              "y": 166,
+              "width": 572,
+              "height": 187.67
+            }
+          },
+          {
+            "id": "shared",
+            "component": "shared-note",
+            "rect": {
+              "x": 55,
+              "y": 372.67,
+              "width": 1170,
+              "height": 47.39
+            }
+          }
+        ],
+        "leafLines": [
+          {
+            "id": "title",
+            "fontPx": 38,
+            "rect": {
+              "x": 55,
+              "y": 65,
+              "width": 1170,
+              "height": 46.36
+            },
+            "lines": [
+              {
+                "x": 55,
+                "y": 63,
+                "width": 223.45,
+                "height": 50
+              }
+            ]
+          },
+          {
+            "id": "item-1-title",
+            "fontPx": 26,
+            "rect": {
+              "x": 78,
+              "y": 189,
+              "width": 526,
+              "height": 32.5
+            },
+            "lines": [
+              {
+                "x": 78,
+                "y": 187,
+                "width": 182,
+                "height": 35
+              }
+            ]
+          },
+          {
+            "id": "item-1-body-1",
+            "fontPx": 18,
+            "rect": {
+              "x": 78,
+              "y": 237.5,
+              "width": 526,
+              "height": 23.39
+            },
+            "lines": [
+              {
+                "x": 78,
+                "y": 236.5,
+                "width": 468,
+                "height": 24
+              }
+            ]
+          },
+          {
+            "id": "item-1-body-2",
+            "fontPx": 18,
+            "rect": {
+              "x": 78,
+              "y": 272.89,
+              "width": 526,
+              "height": 59.78
+            },
+            "lines": [
+              {
+                "x": 78,
+                "y": 284.89,
+                "width": 522,
+                "height": 24
+              },
+              {
+                "x": 78,
+                "y": 308.28,
+                "width": 198,
+                "height": 24
+              }
+            ]
+          },
+          {
+            "id": "item-2-title",
+            "fontPx": 26,
+            "rect": {
+              "x": 676,
+              "y": 189,
+              "width": 526,
+              "height": 32.5
+            },
+            "lines": [
+              {
+                "x": 676,
+                "y": 187,
+                "width": 182,
+                "height": 35
+              }
+            ]
+          },
+          {
+            "id": "item-2-body-1",
+            "fontPx": 18,
+            "rect": {
+              "x": 676,
+              "y": 237.5,
+              "width": 526,
+              "height": 23.39
+            },
+            "lines": [
+              {
+                "x": 676,
+                "y": 236.5,
+                "width": 342,
+                "height": 24
+              }
+            ]
+          },
+          {
+            "id": "item-2-body-2",
+            "fontPx": 18,
+            "rect": {
+              "x": 676,
+              "y": 272.89,
+              "width": 526,
+              "height": 59.78
+            },
+            "lines": [
+              {
+                "x": 676,
+                "y": 284.89,
+                "width": 522,
+                "height": 24
+              },
+              {
+                "x": 676,
+                "y": 308.28,
+                "width": 234,
+                "height": 24
+              }
+            ]
+          },
+          {
+            "id": "shared",
+            "fontPx": 18,
+            "rect": {
+              "x": 76,
+              "y": 384.67,
+              "width": 1132,
+              "height": 23.39
+            },
+            "lines": [
+              {
+                "x": 76,
+                "y": 383.67,
+                "width": 522,
+                "height": 24
+              }
+            ]
+          }
+        ],
+        "edges": [],
+        "cardGeometry": []
+      }
+    },
+    {
+      "candidate": {
+        "id": "comparison-columns-1col-20",
+        "component": "comparison-columns",
+        "cols": 1,
+        "bodyPx": 20,
+        "priority": 40
+      },
+      "decision": "lower-ranked",
+      "reason": "Fits but ranks below comparison-columns-2col-22",
+      "score": 4667,
+      "issues": [],
+      "measured": {
+        "frame": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 492
+        },
+        "usedHeight": 425,
+        "headroom": 67,
+        "geometry": [
+          {
+            "id": "content-frame",
+            "component": null,
+            "rect": {
+              "x": 55,
+              "y": 166,
+              "width": 1170,
+              "height": 492
+            }
+          },
+          {
+            "id": "body",
+            "component": null,
+            "rect": {
+              "x": 55,
+              "y": 166,
+              "width": 1170,
+              "height": 425
+            }
+          },
+          {
+            "id": "items",
+            "component": "comparison-columns",
+            "rect": {
+              "x": 55,
+              "y": 166,
+              "width": 1170,
+              "height": 356
+            }
+          },
+          {
+            "id": "item-1",
+            "component": null,
+            "rect": {
+              "x": 55,
+              "y": 166,
+              "width": 1170,
+              "height": 169.5
+            }
+          },
+          {
+            "id": "item-2",
+            "component": null,
+            "rect": {
+              "x": 55,
+              "y": 352.5,
+              "width": 1170,
+              "height": 169.5
+            }
+          },
+          {
+            "id": "shared",
+            "component": "shared-note",
+            "rect": {
+              "x": 55,
+              "y": 541,
+              "width": 1170,
+              "height": 50
+            }
+          }
+        ],
+        "leafLines": [
+          {
+            "id": "title",
+            "fontPx": 38,
+            "rect": {
+              "x": 55,
+              "y": 65,
+              "width": 1170,
+              "height": 46.36
+            },
+            "lines": [
+              {
+                "x": 55,
+                "y": 63,
+                "width": 223.45,
+                "height": 50
+              }
+            ]
+          },
+          {
+            "id": "item-1-title",
+            "fontPx": 26,
+            "rect": {
+              "x": 78,
+              "y": 189,
+              "width": 1124,
+              "height": 32.5
+            },
+            "lines": [
+              {
+                "x": 78,
+                "y": 187,
+                "width": 182,
+                "height": 35
+              }
+            ]
+          },
+          {
+            "id": "item-1-body-1",
+            "fontPx": 20,
+            "rect": {
+              "x": 78,
+              "y": 237.5,
+              "width": 1124,
+              "height": 26
+            },
+            "lines": [
+              {
+                "x": 78,
+                "y": 237.5,
+                "width": 520,
+                "height": 26
+              }
+            ]
+          },
+          {
+            "id": "item-1-body-2",
+            "fontPx": 20,
+            "rect": {
+              "x": 78,
+              "y": 275.5,
+              "width": 1124,
+              "height": 39
+            },
+            "lines": [
+              {
+                "x": 78,
+                "y": 288.5,
+                "width": 800,
+                "height": 26
+              }
+            ]
+          },
+          {
+            "id": "item-2-title",
+            "fontPx": 26,
+            "rect": {
+              "x": 78,
+              "y": 375.5,
+              "width": 1124,
+              "height": 32.5
+            },
+            "lines": [
+              {
+                "x": 78,
+                "y": 373.5,
+                "width": 182,
+                "height": 35
+              }
+            ]
+          },
+          {
+            "id": "item-2-body-1",
+            "fontPx": 20,
+            "rect": {
+              "x": 78,
+              "y": 424,
+              "width": 1124,
+              "height": 26
+            },
+            "lines": [
+              {
+                "x": 78,
+                "y": 424,
+                "width": 380,
+                "height": 26
+              }
+            ]
+          },
+          {
+            "id": "item-2-body-2",
+            "fontPx": 20,
+            "rect": {
+              "x": 78,
+              "y": 462,
+              "width": 1124,
+              "height": 39
+            },
+            "lines": [
+              {
+                "x": 78,
+                "y": 475,
+                "width": 840,
+                "height": 26
+              }
+            ]
+          },
+          {
+            "id": "shared",
+            "fontPx": 20,
+            "rect": {
+              "x": 76,
+              "y": 553,
+              "width": 1132,
+              "height": 26
+            },
+            "lines": [
+              {
+                "x": 76,
+                "y": 553,
+                "width": 580,
+                "height": 26
+              }
+            ]
+          }
+        ],
+        "edges": [],
+        "cardGeometry": []
+      }
+    }
+  ]
+}

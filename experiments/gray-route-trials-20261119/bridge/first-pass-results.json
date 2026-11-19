@@ -1,0 +1,348 @@
+{
+  "mode": "frozen one-shot model responses; offline rerun",
+  "browser": "157.0.8103.79",
+  "cases": [
+    {
+      "id": "options",
+      "frameName": "standard",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 1170,
+        "height": 492
+      },
+      "selected": null,
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": false,
+          "usedHeight": 241.515625,
+          "issues": [
+            {
+              "id": "page-title",
+              "code": "text-outside-region"
+            }
+          ],
+          "artifact": "options-standard-columns"
+        }
+      ]
+    },
+    {
+      "id": "options",
+      "frameName": "compact",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 1020,
+        "height": 450
+      },
+      "selected": null,
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": false,
+          "usedHeight": 241.515625,
+          "issues": [
+            {
+              "id": "page-title",
+              "code": "text-outside-region"
+            }
+          ],
+          "artifact": "options-compact-columns"
+        }
+      ]
+    },
+    {
+      "id": "options",
+      "frameName": "tight",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 770,
+        "height": 270
+      },
+      "selected": null,
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": false,
+          "usedHeight": 294.765625,
+          "issues": [
+            {
+              "id": "page-title",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "rollout-rollback",
+              "code": "text-outside-region"
+            }
+          ],
+          "artifact": "options-tight-columns"
+        }
+      ]
+    },
+    {
+      "id": "spares",
+      "frameName": "standard",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 1170,
+        "height": 492
+      },
+      "selected": null,
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": false,
+          "usedHeight": 307.765625,
+          "issues": [
+            {
+              "id": "page-title",
+              "code": "text-outside-region"
+            }
+          ],
+          "artifact": "spares-standard-columns"
+        }
+      ]
+    },
+    {
+      "id": "spares",
+      "frameName": "compact",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 1020,
+        "height": 450
+      },
+      "selected": null,
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": false,
+          "usedHeight": 307.765625,
+          "issues": [
+            {
+              "id": "page-title",
+              "code": "text-outside-region"
+            }
+          ],
+          "artifact": "spares-compact-columns"
+        }
+      ]
+    },
+    {
+      "id": "spares",
+      "frameName": "tight",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 770,
+        "height": 270
+      },
+      "selected": null,
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": false,
+          "usedHeight": 387.640625,
+          "issues": [
+            {
+              "id": "page-title",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "spares-grading",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "spares-safety",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "spares-effect",
+              "code": "text-outside-region"
+            }
+          ],
+          "artifact": "spares-tight-columns"
+        }
+      ]
+    },
+    {
+      "id": "duty",
+      "frameName": "standard",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 1170,
+        "height": 492
+      },
+      "selected": null,
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": false,
+          "usedHeight": 320.390625,
+          "issues": [
+            {
+              "id": "page-title",
+              "code": "text-outside-region"
+            }
+          ],
+          "artifact": "duty-standard-columns"
+        },
+        {
+          "variant": "rows",
+          "ok": false,
+          "usedHeight": 400.625,
+          "issues": [
+            {
+              "id": "page-title",
+              "code": "text-outside-region"
+            }
+          ],
+          "artifact": "duty-standard-rows"
+        }
+      ]
+    },
+    {
+      "id": "duty",
+      "frameName": "compact",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 1020,
+        "height": 450
+      },
+      "selected": null,
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": false,
+          "usedHeight": 320.390625,
+          "issues": [
+            {
+              "id": "page-title",
+              "code": "text-outside-region"
+            }
+          ],
+          "artifact": "duty-compact-columns"
+        },
+        {
+          "variant": "rows",
+          "ok": false,
+          "usedHeight": 400.625,
+          "issues": [
+            {
+              "id": "page-title",
+              "code": "text-outside-region"
+            }
+          ],
+          "artifact": "duty-compact-rows"
+        }
+      ]
+    },
+    {
+      "id": "duty",
+      "frameName": "tight",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 770,
+        "height": 270
+      },
+      "selected": null,
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": false,
+          "usedHeight": 426.890625,
+          "issues": [
+            {
+              "id": "page-title",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "duty-handover-responsibility",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "flood-season",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "incident-command-report",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "duty-handover",
+              "code": "component-outside-content-frame"
+            },
+            {
+              "id": "incident-response",
+              "code": "component-outside-content-frame"
+            },
+            {
+              "id": "intensified-patrol",
+              "code": "component-outside-content-frame"
+            }
+          ],
+          "artifact": "duty-tight-columns"
+        },
+        {
+          "variant": "rows",
+          "ok": false,
+          "usedHeight": 507.125,
+          "issues": [
+            {
+              "id": "page-title",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "intensified-patrol-heading",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "patrol-trigger",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "patrol-return",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "flood-season",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "incident-command-report",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "incident-response",
+              "code": "component-outside-content-frame"
+            },
+            {
+              "id": "intensified-patrol",
+              "code": "component-outside-content-frame"
+            }
+          ],
+          "artifact": "duty-tight-rows"
+        }
+      ]
+    }
+  ],
+  "mutations": {
+    "invalidQuote": {
+      "gate": "rejected",
+      "reason": "unbound text: page-title"
+    },
+    "invalidScope": {
+      "gate": "rejected",
+      "reason": "unknown scope: rollout-rollback"
+    },
+    "semanticReversal": {
+      "gate": "accepted"
+    }
+  }
+}

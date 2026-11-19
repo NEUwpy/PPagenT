@@ -1,0 +1,189 @@
+{
+  "revision": "cba04515852af5bbd4da7f6d6a5f404d8d708162",
+  "version": "1.26.0",
+  "license": "MIT",
+  "reports": [
+    {
+      "width": 1280,
+      "height": 720,
+      "before": {
+        "total": 3,
+        "onGrid": 2,
+        "offGrid": 1,
+        "worst": 1.0625,
+        "systematic": false,
+        "distinctDrifts": 1
+      },
+      "after": {
+        "total": 3,
+        "onGrid": 3,
+        "offGrid": 0,
+        "worst": 0,
+        "systematic": false,
+        "distinctDrifts": 0
+      },
+      "rowStart": [
+        337.4375,
+        413.4375,
+        337.4375,
+        413.4375
+      ],
+      "bottom": 655.5,
+      "blocks": [
+        {
+          "path": "div.comparison > section.method > p.copy",
+          "selector": "section:nth-child(1) > p:nth-child(4)",
+          "sample": "适合常用件。",
+          "lever": "padding",
+          "paddingTop": 2.56,
+          "paddingAdded": 2.56,
+          "offset": 0,
+          "leadingFrom": 34,
+          "leadingTo": 36,
+          "driftBefore": 1.44,
+          "driftAfter": 0,
+          "partial": false,
+          "seated": true,
+          "inShadow": false
+        },
+        {
+          "path": "div.comparison > section.method > p.copy",
+          "selector": "section:nth-child(2) > p:nth-child(4)",
+          "sample": "适合价值低、消耗快的易损件。",
+          "lever": "padding",
+          "paddingTop": 2.56,
+          "paddingAdded": 2.56,
+          "offset": 0,
+          "leadingFrom": 34,
+          "leadingTo": 36,
+          "driftBefore": 1.44,
+          "driftAfter": 0,
+          "partial": false,
+          "seated": true,
+          "inShadow": false
+        },
+        {
+          "path": "h3#exception",
+          "selector": "#exception",
+          "sample": "关键备件例外",
+          "lever": "padding",
+          "paddingTop": 0.52,
+          "paddingAdded": 0.52,
+          "offset": 0,
+          "leadingFrom": 28,
+          "leadingTo": 28,
+          "driftBefore": -0.52,
+          "driftAfter": 0,
+          "partial": false,
+          "seated": true,
+          "inShadow": false
+        }
+      ],
+      "missed": 0,
+      "passes": 2,
+      "verification": {
+        "unmatched": 0,
+        "lost": [],
+        "clean": true,
+        "onGrid": 3,
+        "total": 3,
+        "seats": true
+      }
+    },
+    {
+      "width": 1020,
+      "height": 640,
+      "before": {
+        "total": 3,
+        "onGrid": 2,
+        "offGrid": 1,
+        "worst": 0.546875,
+        "systematic": false,
+        "distinctDrifts": 1
+      },
+      "after": {
+        "total": 3,
+        "onGrid": 3,
+        "offGrid": 0,
+        "worst": 0,
+        "systematic": false,
+        "distinctDrifts": 0
+      },
+      "rowStart": [
+        305.953125,
+        375.953125,
+        305.953125,
+        375.953125
+      ],
+      "bottom": 570.953125,
+      "blocks": [
+        {
+          "path": "div.comparison > section.method > p.copy",
+          "selector": "section:nth-child(1) > p:nth-child(4)",
+          "sample": "适合常用件。",
+          "lever": "padding",
+          "paddingTop": 0,
+          "paddingAdded": 0,
+          "offset": 0,
+          "leadingFrom": 31,
+          "leadingTo": 32,
+          "driftBefore": 0.45,
+          "driftAfter": 0.45,
+          "partial": false,
+          "seated": true,
+          "inShadow": false
+        },
+        {
+          "path": "div.comparison > section.method > p.copy",
+          "selector": "section:nth-child(2) > p:nth-child(4)",
+          "sample": "适合价值低、消耗快的易损件。",
+          "lever": "padding",
+          "paddingTop": 0,
+          "paddingAdded": 0,
+          "offset": 0,
+          "leadingFrom": 31,
+          "leadingTo": 32,
+          "driftBefore": 0.45,
+          "driftAfter": 0.45,
+          "partial": false,
+          "seated": true,
+          "inShadow": false
+        },
+        {
+          "path": "h3#exception",
+          "selector": null,
+          "sample": "关键备件例外",
+          "lever": "padding",
+          "paddingTop": 0,
+          "paddingAdded": 0,
+          "offset": 0,
+          "leadingFrom": 28,
+          "leadingTo": 28,
+          "driftBefore": 0.45,
+          "driftAfter": 0.45,
+          "partial": false,
+          "seated": true,
+          "inShadow": false
+        }
+      ],
+      "missed": 0,
+      "passes": 1,
+      "verification": {
+        "unmatched": 0,
+        "lost": [],
+        "clean": true,
+        "onGrid": 3,
+        "total": 3,
+        "seats": true
+      },
+      "replayedWide": {
+        "total": 3,
+        "onGrid": 0,
+        "offGrid": 3,
+        "worst": 1.0131250000000023,
+        "systematic": false,
+        "distinctDrifts": 2
+      }
+    }
+  ]
+}

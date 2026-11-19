@@ -1,0 +1,15 @@
+/* @theme neu-report */
+@import 'default';
+section { width:1280px;height:720px;padding:43px 48px 38px;background:white;color:#24364c;
+ font-family:'Microsoft YaHei',sans-serif; font-size:22px;line-height:1.52;
+ display:grid;grid-template-columns: .94fr 1.16fr;grid-template-rows:70px 1fr;gap:26px 44px;align-content:stretch }
+h1 {grid-column:1/-1;margin:0;padding:0 0 14px;border-bottom:4px solid #3361ae;color:#1b3762;font-size:36px;line-height:1.4}
+.neu-logo{position:absolute;right:48px;top:28px;width:240px;height:auto;object-fit:contain}
+.report-col{min-width:0;align-self:stretch}
+.col-0{padding-right:25px;border-right:1px solid #c8d5e7}
+h2{font-size:26px;line-height:1.2;color:#3361ae;margin:0 0 21px;padding:0 0 11px;border-bottom:1px solid #c8d5e7}
+h3{color:#1b3762;font-size:23px;line-height:1.42;margin:22px 0 9px;letter-spacing:0;font-weight:700}
+p{margin:0;font-size:22px;line-height:1.52;color:#334155}
+.col-0 h3{margin-top:26px}.col-0 p{margin-bottom:42px}
+.col-1 h3{margin-top:17px}.col-1 p{margin-bottom:13px}
+section::after{content:'';position:absolute;left:48px;right:48px;bottom:27px;height:3px;background:#3361ae}

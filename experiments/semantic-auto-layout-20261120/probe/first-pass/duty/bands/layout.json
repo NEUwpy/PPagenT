@@ -1,0 +1,1357 @@
+{
+  "version": "semantic-band-layout@1",
+  "units": "CSS px",
+  "origin": "slide top-left",
+  "canvas": {
+    "width": 1280,
+    "height": 720
+  },
+  "pageId": "duty",
+  "compilerLayout": {
+    "id": "standard-3-balanced-flow",
+    "canvas": {
+      "width": 1280,
+      "height": 720
+    },
+    "density": "standard",
+    "margin": 54,
+    "gap": 28,
+    "padding": 12,
+    "rows": [
+      [
+        {
+          "id": "routine",
+          "width": 372,
+          "importance": "equal",
+          "itemsAcross": 1
+        },
+        {
+          "id": "response",
+          "width": 372,
+          "importance": "equal",
+          "itemsAcross": 1
+        },
+        {
+          "id": "intensification",
+          "width": 372,
+          "importance": "equal",
+          "itemsAcross": 1
+        }
+      ]
+    ],
+    "direction": "column",
+    "columns": [
+      372,
+      372,
+      372
+    ]
+  },
+  "frame": {
+    "x": 54,
+    "y": 170.890625,
+    "width": 1172,
+    "height": 489.109375
+  },
+  "objects": [
+    {
+      "id": "theme-header",
+      "bounds": {
+        "x": 54,
+        "y": 43,
+        "width": 1172,
+        "height": 103.890625
+      },
+      "role": "region"
+    },
+    {
+      "id": "claim",
+      "bounds": {
+        "x": 54,
+        "y": 43,
+        "width": 1172,
+        "height": 47.25
+      },
+      "role": "claim"
+    },
+    {
+      "id": "title",
+      "bounds": {
+        "x": 54,
+        "y": 100.25,
+        "width": 1172,
+        "height": 24.640625
+      },
+      "role": "page-title"
+    },
+    {
+      "id": "content-frame",
+      "bounds": {
+        "x": 54,
+        "y": 170.890625,
+        "width": 1172,
+        "height": 489.109375
+      },
+      "role": "region"
+    },
+    {
+      "id": "note:flood-period",
+      "bounds": {
+        "x": 54,
+        "y": 170.890625,
+        "width": 1172,
+        "height": 42.09375
+      },
+      "role": "region",
+      "appliesTo": [
+        "routine",
+        "response",
+        "intensification"
+      ]
+    },
+    {
+      "id": "note:flood-period:text",
+      "bounds": {
+        "x": 68,
+        "y": 178.890625,
+        "width": 1147,
+        "height": 26.09375
+      },
+      "role": "scope-note"
+    },
+    {
+      "id": "group:routine",
+      "bounds": {
+        "x": 54,
+        "y": 223.984375,
+        "width": 372,
+        "height": 283.75
+      },
+      "role": "region"
+    },
+    {
+      "id": "group:routine:title",
+      "bounds": {
+        "x": 67,
+        "y": 236.984375,
+        "width": 125,
+        "height": 33.75
+      },
+      "role": "group-title"
+    },
+    {
+      "id": "item:patrol",
+      "bounds": {
+        "x": 67,
+        "y": 281.734375,
+        "width": 346,
+        "height": 101
+      },
+      "role": "region"
+    },
+    {
+      "id": "item:patrol:title",
+      "bounds": {
+        "x": 77,
+        "y": 288.734375,
+        "width": 326,
+        "height": 30.8125
+      },
+      "role": "item-title"
+    },
+    {
+      "id": "item:patrol:body",
+      "bounds": {
+        "x": 77,
+        "y": 323.546875,
+        "width": 326,
+        "height": 52.1875
+      },
+      "role": "body"
+    },
+    {
+      "id": "item:handover",
+      "bounds": {
+        "x": 67,
+        "y": 393.734375,
+        "width": 346,
+        "height": 101
+      },
+      "role": "region"
+    },
+    {
+      "id": "item:handover:title",
+      "bounds": {
+        "x": 77,
+        "y": 400.734375,
+        "width": 326,
+        "height": 30.8125
+      },
+      "role": "item-title"
+    },
+    {
+      "id": "item:handover:body",
+      "bounds": {
+        "x": 77,
+        "y": 435.546875,
+        "width": 326,
+        "height": 52.1875
+      },
+      "role": "body"
+    },
+    {
+      "id": "group:response",
+      "bounds": {
+        "x": 454,
+        "y": 223.984375,
+        "width": 372,
+        "height": 371.65625
+      },
+      "role": "region"
+    },
+    {
+      "id": "group:response:title",
+      "bounds": {
+        "x": 467,
+        "y": 236.984375,
+        "width": 150,
+        "height": 33.75
+      },
+      "role": "group-title"
+    },
+    {
+      "id": "item:leaks",
+      "bounds": {
+        "x": 467,
+        "y": 281.734375,
+        "width": 346,
+        "height": 74.90625
+      },
+      "role": "region"
+    },
+    {
+      "id": "item:leaks:title",
+      "bounds": {
+        "x": 477,
+        "y": 288.734375,
+        "width": 326,
+        "height": 30.8125
+      },
+      "role": "item-title"
+    },
+    {
+      "id": "item:leaks:body",
+      "bounds": {
+        "x": 477,
+        "y": 323.546875,
+        "width": 326,
+        "height": 26.09375
+      },
+      "role": "body"
+    },
+    {
+      "id": "item:danger",
+      "bounds": {
+        "x": 467,
+        "y": 367.640625,
+        "width": 346,
+        "height": 101
+      },
+      "role": "region"
+    },
+    {
+      "id": "item:danger:title",
+      "bounds": {
+        "x": 477,
+        "y": 374.640625,
+        "width": 326,
+        "height": 30.8125
+      },
+      "role": "item-title"
+    },
+    {
+      "id": "item:danger:body",
+      "bounds": {
+        "x": 477,
+        "y": 409.453125,
+        "width": 326,
+        "height": 52.1875
+      },
+      "role": "body"
+    },
+    {
+      "id": "item:incident",
+      "bounds": {
+        "x": 467,
+        "y": 479.640625,
+        "width": 346,
+        "height": 103
+      },
+      "role": "region",
+      "appliesTo": [
+        "leaks",
+        "danger"
+      ]
+    },
+    {
+      "id": "item:incident:title",
+      "bounds": {
+        "x": 477,
+        "y": 488.640625,
+        "width": 326,
+        "height": 30.8125
+      },
+      "role": "item-title"
+    },
+    {
+      "id": "item:incident:body",
+      "bounds": {
+        "x": 477,
+        "y": 523.453125,
+        "width": 326,
+        "height": 52.1875
+      },
+      "role": "body"
+    },
+    {
+      "id": "group:intensification",
+      "bounds": {
+        "x": 854,
+        "y": 223.984375,
+        "width": 372,
+        "height": 267.75
+      },
+      "role": "region"
+    },
+    {
+      "id": "group:intensification:title",
+      "bounds": {
+        "x": 867,
+        "y": 236.984375,
+        "width": 175,
+        "height": 33.75
+      },
+      "role": "group-title"
+    },
+    {
+      "id": "item:rain-threshold",
+      "bounds": {
+        "x": 867,
+        "y": 281.734375,
+        "width": 346,
+        "height": 87
+      },
+      "role": "region"
+    },
+    {
+      "id": "item:rain-threshold:title",
+      "bounds": {
+        "x": 867,
+        "y": 281.734375,
+        "width": 346,
+        "height": 30.8125
+      },
+      "role": "item-title"
+    },
+    {
+      "id": "item:rain-threshold:body",
+      "bounds": {
+        "x": 867,
+        "y": 316.546875,
+        "width": 346,
+        "height": 52.1875
+      },
+      "role": "body"
+    },
+    {
+      "id": "item:return-to-normal",
+      "bounds": {
+        "x": 867,
+        "y": 379.734375,
+        "width": 346,
+        "height": 99
+      },
+      "role": "region"
+    },
+    {
+      "id": "item:return-to-normal:title",
+      "bounds": {
+        "x": 867,
+        "y": 391.734375,
+        "width": 346,
+        "height": 30.8125
+      },
+      "role": "item-title"
+    },
+    {
+      "id": "item:return-to-normal:body",
+      "bounds": {
+        "x": 867,
+        "y": 426.546875,
+        "width": 346,
+        "height": 52.1875
+      },
+      "role": "body"
+    }
+  ],
+  "texts": [
+    {
+      "id": "claim",
+      "text": "汛期实行双人值守、分级处置，达到降雨条件时加密巡查",
+      "sourceIds": [
+        "s-duty",
+        "s-hazard",
+        "s-rain"
+      ],
+      "bounds": {
+        "x": 54,
+        "y": 43,
+        "width": 1172,
+        "height": 47.25
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 54,
+            "y": 39,
+            "width": 899.6875,
+            "height": 54
+          },
+          "start": 0,
+          "end": 25,
+          "text": "汛期实行双人值守、分级处置，达到降雨条件时加密巡查"
+        }
+      ],
+      "role": "claim",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 36.918,
+        "lineHeightPx": 47.255,
+        "weight": 735,
+        "align": "start"
+      }
+    },
+    {
+      "id": "title",
+      "text": "汛期值班与应急处置安排",
+      "sourceIds": [
+        "s-title"
+      ],
+      "bounds": {
+        "x": 54,
+        "y": 100.25,
+        "width": 1172,
+        "height": 24.640625
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 54,
+            "y": 99.25,
+            "width": 187,
+            "height": 25
+          },
+          "start": 0,
+          "end": 11,
+          "text": "汛期值班与应急处置安排"
+        }
+      ],
+      "role": "page-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 17,
+        "lineHeightPx": 24.65,
+        "weight": 500,
+        "align": "start"
+      }
+    },
+    {
+      "id": "note:flood-period:text",
+      "text": "汛期自 6 月 1 日至 9 月 30 日。",
+      "sourceIds": [
+        "s-period"
+      ],
+      "bounds": {
+        "x": 68,
+        "y": 178.890625,
+        "width": 1147,
+        "height": 26.09375
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 68,
+            "y": 178.890625,
+            "width": 245.703125,
+            "height": 26
+          },
+          "start": 0,
+          "end": 22,
+          "text": "汛期自 6 月 1 日至 9 月 30 日。"
+        }
+      ],
+      "role": "scope-note",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.1,
+        "weight": 560,
+        "align": "start"
+      }
+    },
+    {
+      "id": "group:routine:title",
+      "text": "值班与交接",
+      "sourceIds": [
+        "s-duty",
+        "s-handover"
+      ],
+      "bounds": {
+        "x": 67,
+        "y": 236.984375,
+        "width": 125,
+        "height": 33.75
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 67,
+            "y": 234.984375,
+            "width": 125,
+            "height": 36
+          },
+          "start": 0,
+          "end": 5,
+          "text": "值班与交接"
+        }
+      ],
+      "role": "group-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 25,
+        "lineHeightPx": 33.75,
+        "weight": 720,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:patrol:title",
+      "text": "双人值守与巡查",
+      "sourceIds": [
+        "s-duty"
+      ],
+      "bounds": {
+        "x": 77,
+        "y": 288.734375,
+        "width": 326,
+        "height": 30.8125
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 77,
+            "y": 286.734375,
+            "width": 161,
+            "height": 34
+          },
+          "start": 0,
+          "end": 7,
+          "text": "双人值守与巡查"
+        }
+      ],
+      "role": "item-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 23,
+        "lineHeightPx": 30.82,
+        "weight": 690,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:patrol:body",
+      "text": "24 小时双人值守。整点前后 15 分钟内完成一次巡查记录。",
+      "sourceIds": [
+        "s-duty"
+      ],
+      "bounds": {
+        "x": 77,
+        "y": 323.546875,
+        "width": 326,
+        "height": 52.1875
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 77,
+            "y": 323.546875,
+            "width": 322.0625,
+            "height": 26
+          },
+          "start": 0,
+          "end": 22,
+          "text": "24 小时双人值守。整点前后 15 分钟内完"
+        },
+        {
+          "bounds": {
+            "x": 77,
+            "y": 349.640625,
+            "width": 144,
+            "height": 26
+          },
+          "start": 22,
+          "end": 30,
+          "text": "成一次巡查记录。"
+        }
+      ],
+      "role": "body",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.1,
+        "weight": 400,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:handover:title",
+      "text": "交接责任",
+      "sourceIds": [
+        "s-handover"
+      ],
+      "bounds": {
+        "x": 77,
+        "y": 400.734375,
+        "width": 326,
+        "height": 30.8125
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 77,
+            "y": 398.734375,
+            "width": 92,
+            "height": 34
+          },
+          "start": 0,
+          "end": 4,
+          "text": "交接责任"
+        }
+      ],
+      "role": "item-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 23,
+        "lineHeightPx": 30.82,
+        "weight": 690,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:handover:body",
+      "text": "上一班须向下一班交代未处置事项与已采取措施。交接不清由交班人承担后果。",
+      "sourceIds": [
+        "s-handover"
+      ],
+      "bounds": {
+        "x": 77,
+        "y": 435.546875,
+        "width": 326,
+        "height": 52.1875
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 77,
+            "y": 435.546875,
+            "width": 324,
+            "height": 26
+          },
+          "start": 0,
+          "end": 18,
+          "text": "上一班须向下一班交代未处置事项与已采"
+        },
+        {
+          "bounds": {
+            "x": 77,
+            "y": 461.640625,
+            "width": 306,
+            "height": 26
+          },
+          "start": 18,
+          "end": 35,
+          "text": "取措施。交接不清由交班人承担后果。"
+        }
+      ],
+      "role": "body",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.1,
+        "weight": 400,
+        "align": "start"
+      }
+    },
+    {
+      "id": "group:response:title",
+      "text": "险情分级处置",
+      "sourceIds": [
+        "s-hazard"
+      ],
+      "bounds": {
+        "x": 467,
+        "y": 236.984375,
+        "width": 150,
+        "height": 33.75
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 467,
+            "y": 234.984375,
+            "width": 150,
+            "height": 36
+          },
+          "start": 0,
+          "end": 6,
+          "text": "险情分级处置"
+        }
+      ],
+      "role": "group-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 25,
+        "lineHeightPx": 33.75,
+        "weight": 720,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:leaks:title",
+      "text": "一般渗漏、积水",
+      "sourceIds": [
+        "s-leaks"
+      ],
+      "bounds": {
+        "x": 477,
+        "y": 288.734375,
+        "width": 326,
+        "height": 30.8125
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 477,
+            "y": 286.734375,
+            "width": 161,
+            "height": 34
+          },
+          "start": 0,
+          "end": 7,
+          "text": "一般渗漏、积水"
+        }
+      ],
+      "role": "item-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 23,
+        "lineHeightPx": 30.82,
+        "weight": 690,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:leaks:body",
+      "text": "由值班人员现场处理并做好记录。",
+      "sourceIds": [
+        "s-leaks"
+      ],
+      "bounds": {
+        "x": 477,
+        "y": 323.546875,
+        "width": 326,
+        "height": 26.09375
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 477,
+            "y": 323.546875,
+            "width": 270,
+            "height": 26
+          },
+          "start": 0,
+          "end": 15,
+          "text": "由值班人员现场处理并做好记录。"
+        }
+      ],
+      "role": "body",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.1,
+        "weight": 400,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:danger:title",
+      "text": "管涌、滑坡征兆",
+      "sourceIds": [
+        "s-danger"
+      ],
+      "bounds": {
+        "x": 477,
+        "y": 374.640625,
+        "width": 326,
+        "height": 30.8125
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 477,
+            "y": 372.640625,
+            "width": 161,
+            "height": 34
+          },
+          "start": 0,
+          "end": 7,
+          "text": "管涌、滑坡征兆"
+        }
+      ],
+      "role": "item-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 23,
+        "lineHeightPx": 30.82,
+        "weight": 690,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:danger:body",
+      "text": "立即报告带班领导，同时组织人员撤离危险区域，不得擅自处置。",
+      "sourceIds": [
+        "s-danger"
+      ],
+      "bounds": {
+        "x": 477,
+        "y": 409.453125,
+        "width": 326,
+        "height": 52.1875
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 477,
+            "y": 409.453125,
+            "width": 324,
+            "height": 26
+          },
+          "start": 0,
+          "end": 18,
+          "text": "立即报告带班领导，同时组织人员撤离危"
+        },
+        {
+          "bounds": {
+            "x": 477,
+            "y": 435.546875,
+            "width": 198,
+            "height": 26
+          },
+          "start": 18,
+          "end": 29,
+          "text": "险区域，不得擅自处置。"
+        }
+      ],
+      "role": "body",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.1,
+        "weight": 400,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:incident:title",
+      "text": "人员受伤或设备停机",
+      "sourceIds": [
+        "s-incident"
+      ],
+      "bounds": {
+        "x": 477,
+        "y": 488.640625,
+        "width": 326,
+        "height": 30.8125
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 477,
+            "y": 486.640625,
+            "width": 207,
+            "height": 34
+          },
+          "start": 0,
+          "end": 9,
+          "text": "人员受伤或设备停机"
+        }
+      ],
+      "role": "item-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 23,
+        "lineHeightPx": 30.82,
+        "weight": 690,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:incident:body",
+      "text": "无论级别均须立即上报指挥部，并在 30 分钟内提交书面情况说明。",
+      "sourceIds": [
+        "s-incident"
+      ],
+      "bounds": {
+        "x": 477,
+        "y": 523.453125,
+        "width": 326,
+        "height": 52.1875
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 477,
+            "y": 523.453125,
+            "width": 312.015625,
+            "height": 26
+          },
+          "start": 0,
+          "end": 19,
+          "text": "无论级别均须立即上报指挥部，并在 30"
+        },
+        {
+          "bounds": {
+            "x": 477,
+            "y": 549.546875,
+            "width": 216,
+            "height": 26
+          },
+          "start": 20,
+          "end": 32,
+          "text": "分钟内提交书面情况说明。"
+        }
+      ],
+      "role": "body",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.1,
+        "weight": 400,
+        "align": "start"
+      }
+    },
+    {
+      "id": "group:intensification:title",
+      "text": "加密巡查与恢复",
+      "sourceIds": [
+        "s-rain",
+        "s-recovery"
+      ],
+      "bounds": {
+        "x": 867,
+        "y": 236.984375,
+        "width": 175,
+        "height": 33.75
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 867,
+            "y": 234.984375,
+            "width": 175,
+            "height": 36
+          },
+          "start": 0,
+          "end": 7,
+          "text": "加密巡查与恢复"
+        }
+      ],
+      "role": "group-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 25,
+        "lineHeightPx": 33.75,
+        "weight": 720,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:rain-threshold:title",
+      "text": "启动条件",
+      "sourceIds": [
+        "s-rain"
+      ],
+      "bounds": {
+        "x": 867,
+        "y": 281.734375,
+        "width": 346,
+        "height": 30.8125
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 867,
+            "y": 279.734375,
+            "width": 92,
+            "height": 34
+          },
+          "start": 0,
+          "end": 4,
+          "text": "启动条件"
+        }
+      ],
+      "role": "item-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 23,
+        "lineHeightPx": 30.82,
+        "weight": 690,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:rain-threshold:body",
+      "text": "连续降雨超过 12 小时，或单日降雨量超过 100 毫米，巡查间隔缩短至 1 小时。",
+      "sourceIds": [
+        "s-rain"
+      ],
+      "bounds": {
+        "x": 867,
+        "y": 316.546875,
+        "width": 346,
+        "height": 52.1875
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 867,
+            "y": 316.546875,
+            "width": 334.046875,
+            "height": 26
+          },
+          "start": 0,
+          "end": 21,
+          "text": "连续降雨超过 12 小时，或单日降雨量超过"
+        },
+        {
+          "bounds": {
+            "x": 867,
+            "y": 342.640625,
+            "width": 286.0625,
+            "height": 26
+          },
+          "start": 22,
+          "end": 42,
+          "text": "100 毫米，巡查间隔缩短至 1 小时。"
+        }
+      ],
+      "role": "body",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.1,
+        "weight": 400,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:return-to-normal:title",
+      "text": "恢复条件",
+      "sourceIds": [
+        "s-recovery"
+      ],
+      "bounds": {
+        "x": 867,
+        "y": 391.734375,
+        "width": 346,
+        "height": 30.8125
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 867,
+            "y": 389.734375,
+            "width": 92,
+            "height": 34
+          },
+          "start": 0,
+          "end": 4,
+          "text": "恢复条件"
+        }
+      ],
+      "role": "item-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 23,
+        "lineHeightPx": 30.82,
+        "weight": 690,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:return-to-normal:body",
+      "text": "天气好转后，经带班领导确认方可恢复正常巡查频次。",
+      "sourceIds": [
+        "s-recovery"
+      ],
+      "bounds": {
+        "x": 867,
+        "y": 426.546875,
+        "width": 346,
+        "height": 52.1875
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 867,
+            "y": 426.546875,
+            "width": 342,
+            "height": 26
+          },
+          "start": 0,
+          "end": 19,
+          "text": "天气好转后，经带班领导确认方可恢复正常"
+        },
+        {
+          "bounds": {
+            "x": 867,
+            "y": 452.640625,
+            "width": 90,
+            "height": 26
+          },
+          "start": 19,
+          "end": 24,
+          "text": "巡查频次。"
+        }
+      ],
+      "role": "body",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.1,
+        "weight": 400,
+        "align": "start"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "id": "group:routine",
+      "bounds": {
+        "x": 54,
+        "y": 223.984375,
+        "width": 372,
+        "height": 283.75
+      },
+      "visibleHeight": 263.65625
+    },
+    {
+      "id": "group:response",
+      "bounds": {
+        "x": 454,
+        "y": 223.984375,
+        "width": 372,
+        "height": 371.65625
+      },
+      "visibleHeight": 351.5625
+    },
+    {
+      "id": "group:intensification",
+      "bounds": {
+        "x": 854,
+        "y": 223.984375,
+        "width": 372,
+        "height": 267.75
+      },
+      "visibleHeight": 254.65625
+    }
+  ],
+  "readingOrder": [
+    "claim",
+    "title",
+    "note:flood-period:text",
+    "group:routine:title",
+    "item:patrol:title",
+    "item:patrol:body",
+    "item:handover:title",
+    "item:handover:body",
+    "group:response:title",
+    "item:leaks:title",
+    "item:leaks:body",
+    "item:danger:title",
+    "item:danger:body",
+    "item:incident:title",
+    "item:incident:body",
+    "group:intensification:title",
+    "item:rain-threshold:title",
+    "item:rain-threshold:body",
+    "item:return-to-normal:title",
+    "item:return-to-normal:body"
+  ],
+  "sources": [
+    {
+      "id": "s-title",
+      "file": "稿件/模拟稿库/行政信息/A05-汛期值班与应急处置安排.md",
+      "quote": "汛期值班与应急处置安排",
+      "sha256": "ebab5d0b861490169a07b96de5be7028ec8a0ef2a2608385690d44d674aac575",
+      "span": [
+        0,
+        11
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-period",
+      "file": "稿件/模拟稿库/行政信息/A05-汛期值班与应急处置安排.md",
+      "quote": "汛期自 6 月 1 日至 9 月 30 日。",
+      "sha256": "ebab5d0b861490169a07b96de5be7028ec8a0ef2a2608385690d44d674aac575",
+      "span": [
+        15,
+        37
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-duty",
+      "file": "稿件/模拟稿库/行政信息/A05-汛期值班与应急处置安排.md",
+      "quote": "值班实行 24 小时双人值守，值班人员须在整点前后 15 分钟内完成一次巡查记录",
+      "sha256": "ebab5d0b861490169a07b96de5be7028ec8a0ef2a2608385690d44d674aac575",
+      "span": [
+        37,
+        77
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-handover",
+      "file": "稿件/模拟稿库/行政信息/A05-汛期值班与应急处置安排.md",
+      "quote": "上一班须向下一班交代未处置事项与已采取措施，交接不清的，由交班人承担后果。",
+      "sha256": "ebab5d0b861490169a07b96de5be7028ec8a0ef2a2608385690d44d674aac575",
+      "span": [
+        83,
+        120
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-hazard",
+      "file": "稿件/模拟稿库/行政信息/A05-汛期值班与应急处置安排.md",
+      "quote": "发现险情按分级处置",
+      "sha256": "ebab5d0b861490169a07b96de5be7028ec8a0ef2a2608385690d44d674aac575",
+      "span": [
+        124,
+        133
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-leaks",
+      "file": "稿件/模拟稿库/行政信息/A05-汛期值班与应急处置安排.md",
+      "quote": "一般渗漏、积水，由值班人员现场处理并做好记录",
+      "sha256": "ebab5d0b861490169a07b96de5be7028ec8a0ef2a2608385690d44d674aac575",
+      "span": [
+        134,
+        156
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-danger",
+      "file": "稿件/模拟稿库/行政信息/A05-汛期值班与应急处置安排.md",
+      "quote": "出现管涌、滑坡征兆，立即报告带班领导，同时组织人员撤离危险区域，不得擅自处置",
+      "sha256": "ebab5d0b861490169a07b96de5be7028ec8a0ef2a2608385690d44d674aac575",
+      "span": [
+        157,
+        195
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-incident",
+      "file": "稿件/模拟稿库/行政信息/A05-汛期值班与应急处置安排.md",
+      "quote": "涉及人员受伤或设备停机的，无论级别均须立即上报指挥部，并在 30 分钟内提交书面情况说明。",
+      "sha256": "ebab5d0b861490169a07b96de5be7028ec8a0ef2a2608385690d44d674aac575",
+      "span": [
+        196,
+        241
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-rain",
+      "file": "稿件/模拟稿库/行政信息/A05-汛期值班与应急处置安排.md",
+      "quote": "连续降雨超过 12 小时或单日降雨量超过 100 毫米时，启动加密巡查，巡查间隔缩短至 1 小时",
+      "sha256": "ebab5d0b861490169a07b96de5be7028ec8a0ef2a2608385690d44d674aac575",
+      "span": [
+        245,
+        293
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-recovery",
+      "file": "稿件/模拟稿库/行政信息/A05-汛期值班与应急处置安排.md",
+      "quote": "天气好转后经带班领导确认方可恢复正常巡查频次。",
+      "sha256": "ebab5d0b861490169a07b96de5be7028ec8a0ef2a2608385690d44d674aac575",
+      "span": [
+        294,
+        317
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    }
+  ],
+  "expression": [
+    {
+      "groupId": "routine",
+      "relation": "peer",
+      "expression": "parallel"
+    },
+    {
+      "groupId": "response",
+      "relation": "cases",
+      "expression": "parallel",
+      "localCases": [
+        "leaks",
+        "danger"
+      ]
+    },
+    {
+      "groupId": "intensification",
+      "relation": "independent",
+      "expression": "independent"
+    }
+  ],
+  "crossCase": [
+    {
+      "id": "incident",
+      "groupId": "response",
+      "appliesTo": [
+        "leaks",
+        "danger"
+      ],
+      "scope": "all-cases"
+    }
+  ],
+  "notes": []
+}

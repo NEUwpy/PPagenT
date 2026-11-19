@@ -1,0 +1,52 @@
+{
+  "bindings": {
+    "item:emergency-procedure:body": {
+      "target": "item:emergency-procedure:body",
+      "span": [
+        0,
+        22
+      ],
+      "sourceIds": [
+        "s-deadline"
+      ]
+    },
+    "detail:emergency-procedure:purchase:title": {
+      "target": "item:emergency-procedure:body",
+      "span": [
+        27,
+        31
+      ],
+      "sourceIds": [
+        "s-emergency-order"
+      ]
+    },
+    "detail:emergency-procedure:complete-paperwork:title": {
+      "target": "item:emergency-procedure:body",
+      "span": [
+        32,
+        36
+      ],
+      "sourceIds": [
+        "s-emergency-order"
+      ]
+    }
+  },
+  "crossCaseItems": [],
+  "relations": [
+    {
+      "owner": "emergency-procedure",
+      "links": [
+        {
+          "type": "precedes",
+          "from": [
+            "purchase"
+          ],
+          "to": "complete-paperwork",
+          "sourceIds": [
+            "s-emergency-order"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,263 @@
+{
+  "bindings": {
+    "item:landing:body": {
+      "target": "item:landing:body",
+      "span": [
+        0,
+        14
+      ],
+      "sourceIds": [
+        "s-landing-context"
+      ]
+    },
+    "detail:landing:atmosphere:title": {
+      "target": "item:landing:body",
+      "span": [
+        15,
+        19
+      ],
+      "sourceIds": [
+        "s-atmosphere"
+      ]
+    },
+    "detail:landing:atmosphere:body": {
+      "target": "item:landing:body",
+      "span": [
+        20,
+        26
+      ],
+      "sourceIds": [
+        "s-atmosphere"
+      ]
+    },
+    "detail:landing:systems:title": {
+      "target": "item:landing:body",
+      "span": [
+        27,
+        31
+      ],
+      "sourceIds": [
+        "s-systems"
+      ]
+    },
+    "detail:landing:systems:body": {
+      "target": "item:landing:body",
+      "span": [
+        32,
+        40
+      ],
+      "sourceIds": [
+        "s-systems"
+      ]
+    },
+    "detail:landing:management:title": {
+      "target": "item:landing:body",
+      "span": [
+        41,
+        45
+      ],
+      "sourceIds": [
+        "s-mechanism"
+      ]
+    },
+    "detail:landing:management:body": {
+      "target": "item:landing:body",
+      "span": [
+        46,
+        53
+      ],
+      "sourceIds": [
+        "s-mechanism"
+      ]
+    },
+    "detail:landing:landing-resistance:title": {
+      "target": "item:landing:body",
+      "span": [
+        62,
+        68
+      ],
+      "sourceIds": [
+        "s-landing-result"
+      ]
+    },
+    "item:compliance:body": {
+      "target": "item:compliance:body",
+      "span": [
+        0,
+        23
+      ],
+      "sourceIds": [
+        "s-compliance"
+      ]
+    },
+    "detail:compliance:title": {
+      "target": "item:compliance:body",
+      "span": [
+        24,
+        28
+      ],
+      "sourceIds": [
+        "s-compliance-facts"
+      ]
+    },
+    "detail:compliance:understanding:title": {
+      "target": "item:compliance:body",
+      "span": [
+        29,
+        31
+      ],
+      "sourceIds": [
+        "s-compliance-facts"
+      ]
+    },
+    "detail:compliance:understanding:body": {
+      "target": "item:compliance:body",
+      "span": [
+        32,
+        35
+      ],
+      "sourceIds": [
+        "s-compliance-facts"
+      ]
+    },
+    "detail:compliance:work-style:title": {
+      "target": "item:compliance:body",
+      "span": [
+        36,
+        38
+      ],
+      "sourceIds": [
+        "s-compliance-facts"
+      ]
+    },
+    "detail:compliance:work-style:body": {
+      "target": "item:compliance:body",
+      "span": [
+        39,
+        42
+      ],
+      "sourceIds": [
+        "s-compliance-facts"
+      ]
+    },
+    "detail:compliance:capability:title": {
+      "target": "item:compliance:body",
+      "span": [
+        43,
+        45
+      ],
+      "sourceIds": [
+        "s-compliance-facts"
+      ]
+    },
+    "detail:compliance:capability:body": {
+      "target": "item:compliance:body",
+      "span": [
+        46,
+        49
+      ],
+      "sourceIds": [
+        "s-compliance-facts"
+      ]
+    },
+    "detail:compliance:coordination:title": {
+      "target": "item:compliance:body",
+      "span": [
+        50,
+        52
+      ],
+      "sourceIds": [
+        "s-compliance-facts"
+      ]
+    },
+    "detail:compliance:coordination:body": {
+      "target": "item:compliance:body",
+      "span": [
+        53,
+        56
+      ],
+      "sourceIds": [
+        "s-compliance-facts"
+      ]
+    },
+    "detail:alignment:business-strategy:title": {
+      "target": "item:alignment:body",
+      "span": [
+        4,
+        8
+      ],
+      "sourceIds": [
+        "s-blm-flow"
+      ]
+    },
+    "detail:alignment:hr-strategy:title": {
+      "target": "item:alignment:body",
+      "span": [
+        9,
+        17
+      ],
+      "sourceIds": [
+        "s-blm-flow"
+      ]
+    },
+    "detail:alignment:implementation:title": {
+      "target": "item:alignment:body",
+      "span": [
+        18,
+        22
+      ],
+      "sourceIds": [
+        "s-blm-flow"
+      ]
+    }
+  },
+  "crossCaseItems": [],
+  "relations": [
+    {
+      "owner": "landing",
+      "links": [
+        {
+          "type": "contributes-to",
+          "from": [
+            "atmosphere",
+            "systems",
+            "management"
+          ],
+          "to": "landing-resistance",
+          "sourceIds": [
+            "s-landing-causal"
+          ]
+        }
+      ]
+    },
+    {
+      "owner": "compliance",
+      "links": []
+    },
+    {
+      "owner": "alignment",
+      "links": [
+        {
+          "type": "precedes",
+          "from": [
+            "business-strategy"
+          ],
+          "to": "hr-strategy",
+          "sourceIds": [
+            "s-blm-flow"
+          ]
+        },
+        {
+          "type": "precedes",
+          "from": [
+            "hr-strategy"
+          ],
+          "to": "implementation",
+          "sourceIds": [
+            "s-blm-flow"
+          ]
+        }
+      ]
+    }
+  ]
+}

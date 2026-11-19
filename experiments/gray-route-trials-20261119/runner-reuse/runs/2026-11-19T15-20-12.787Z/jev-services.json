@@ -1,0 +1,300 @@
+{
+  "status": "failed",
+  "name": "Error",
+  "code": "JEV_REQUEST_FAILED",
+  "httpStatus": 401,
+  "message": "JEV 调用失败：401 ",
+  "calls": [
+    {
+      "input": {
+        "state": {
+          "source": "园区服务支持\r\n\r\n设备支持：提供会议设备借用和故障报修，借用前确认设备状态，归还时完成清点。\r\n\r\n场地支持：受理会议室预约，使用部门需提前说明人数、时段和布置需求。\r\n\r\n资料支持：提供制度查询、材料打印和文件归档指引。\r\n\r\n访客支持：协助外来人员登记、路线说明和接待联系，访问受限区域需事先获得授权。\r\n\r\n以上服务统一通过服务台登记，紧急事项需同时电话联系值班人员。\r\n",
+          "page": {
+            "pageId": "p1",
+            "title": "园区服务支持",
+            "claim": "园区服务支持",
+            "pagePurpose": "说明原稿主题及共同要求",
+            "narrative": "各项服务并列，共用运转规则",
+            "sourceIds": [
+              "s1"
+            ],
+            "groups": [
+              {
+                "id": "g1",
+                "heading": "设备支持",
+                "role": "主题内容",
+                "importance": "primary",
+                "kind": "text",
+                "blocks": [
+                  {
+                    "id": "b1",
+                    "text": "提供会议设备借用和故障报修，借用前确认设备状态，归还时完成清点。",
+                    "sourceIds": [
+                      "s2"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "g2",
+                "heading": "场地支持",
+                "role": "主题内容",
+                "importance": "primary",
+                "kind": "text",
+                "blocks": [
+                  {
+                    "id": "b2",
+                    "text": "受理会议室预约，使用部门需提前说明人数、时段和布置需求。",
+                    "sourceIds": [
+                      "s3"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "g3",
+                "heading": "资料支持",
+                "role": "主题内容",
+                "importance": "primary",
+                "kind": "text",
+                "blocks": [
+                  {
+                    "id": "b3",
+                    "text": "提供制度查询、材料打印和文件归档指引。",
+                    "sourceIds": [
+                      "s4"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "g4",
+                "heading": "访客支持",
+                "role": "主题内容",
+                "importance": "primary",
+                "kind": "text",
+                "blocks": [
+                  {
+                    "id": "b4",
+                    "text": "协助外来人员登记、路线说明和接待联系，访问受限区域需事先获得授权。",
+                    "sourceIds": [
+                      "s5"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "g5",
+                "heading": "共同要求",
+                "role": "共同要求",
+                "importance": "supporting",
+                "kind": "text",
+                "blocks": [
+                  {
+                    "id": "b5",
+                    "text": "以上服务统一通过服务台登记，紧急事项需同时电话联系值班人员。",
+                    "sourceIds": [
+                      "s6"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "requirements": [
+              {
+                "itemId": "g1",
+                "kind": "text",
+                "importance": "primary",
+                "samples": [
+                  {
+                    "width": 1170,
+                    "height": 116,
+                    "fits": true
+                  },
+                  {
+                    "width": 573,
+                    "height": 146,
+                    "fits": true
+                  },
+                  {
+                    "width": 374,
+                    "height": 176,
+                    "fits": true
+                  }
+                ],
+                "aspectRatio": 2.125,
+                "basis": "候选宽度下的实文与当前灰稿表达测量；不是最终媒介比例或逻辑判断"
+              },
+              {
+                "itemId": "g2",
+                "kind": "text",
+                "importance": "primary",
+                "samples": [
+                  {
+                    "width": 1170,
+                    "height": 116,
+                    "fits": true
+                  },
+                  {
+                    "width": 573,
+                    "height": 146,
+                    "fits": true
+                  },
+                  {
+                    "width": 374,
+                    "height": 176,
+                    "fits": true
+                  }
+                ],
+                "aspectRatio": 2.125,
+                "basis": "候选宽度下的实文与当前灰稿表达测量；不是最终媒介比例或逻辑判断"
+              },
+              {
+                "itemId": "g3",
+                "kind": "text",
+                "importance": "primary",
+                "samples": [
+                  {
+                    "width": 1170,
+                    "height": 116,
+                    "fits": true
+                  },
+                  {
+                    "width": 573,
+                    "height": 116,
+                    "fits": true
+                  },
+                  {
+                    "width": 374,
+                    "height": 146,
+                    "fits": true
+                  }
+                ],
+                "aspectRatio": 2.5616438356164384,
+                "basis": "候选宽度下的实文与当前灰稿表达测量；不是最终媒介比例或逻辑判断"
+              },
+              {
+                "itemId": "g4",
+                "kind": "text",
+                "importance": "primary",
+                "samples": [
+                  {
+                    "width": 1170,
+                    "height": 116,
+                    "fits": true
+                  },
+                  {
+                    "width": 573,
+                    "height": 146,
+                    "fits": true
+                  },
+                  {
+                    "width": 374,
+                    "height": 176,
+                    "fits": true
+                  }
+                ],
+                "aspectRatio": 2.125,
+                "basis": "候选宽度下的实文与当前灰稿表达测量；不是最终媒介比例或逻辑判断"
+              },
+              {
+                "itemId": "g5",
+                "kind": "text",
+                "importance": "supporting",
+                "samples": [
+                  {
+                    "width": 1170,
+                    "height": 116,
+                    "fits": true
+                  },
+                  {
+                    "width": 573,
+                    "height": 146,
+                    "fits": true
+                  },
+                  {
+                    "width": 374,
+                    "height": 176,
+                    "fits": true
+                  }
+                ],
+                "aspectRatio": 2.125,
+                "basis": "候选宽度下的实文与当前灰稿表达测量；不是最终媒介比例或逻辑判断"
+              }
+            ],
+            "candidates": [
+              {
+                "id": "cards-horizontal-equal",
+                "family": "cards",
+                "direction": "horizontal",
+                "allocation": "equal"
+              },
+              {
+                "id": "cards-horizontal-measured",
+                "family": "cards",
+                "direction": "horizontal",
+                "allocation": "measured"
+              },
+              {
+                "id": "album-horizontal-equal",
+                "family": "album",
+                "direction": "horizontal",
+                "allocation": "equal"
+              },
+              {
+                "id": "album-horizontal-measured",
+                "family": "album",
+                "direction": "horizontal",
+                "allocation": "measured"
+              },
+              {
+                "id": "cards-support-band",
+                "family": "cards",
+                "direction": "support-band",
+                "allocation": "measured",
+                "supportsRelation": [
+                  "support"
+                ]
+              }
+            ]
+          }
+        },
+        "questions": {
+          "candidateId": {
+            "type": "choice",
+            "instructions": "从程序确认可承载的候选中选择一个，不重新设计布局。",
+            "criteria": {
+              "cards-horizontal-equal": "cards/horizontal/equal，程序已确认可承载",
+              "cards-horizontal-measured": "cards/horizontal/measured，程序已确认可承载",
+              "album-horizontal-equal": "album/horizontal/equal，程序已确认可承载",
+              "album-horizontal-measured": "album/horizontal/measured，程序已确认可承载",
+              "cards-support-band": "cards/support-band/measured，程序已确认可承载"
+            }
+          },
+          "relation": {
+            "type": "choice",
+            "instructions": "判断本页跨组关系。只按原稿关系选择，不因为候选方便改写关系。",
+            "criteria": {
+              "parallel": "parallel",
+              "independent": "independent",
+              "comparison": "comparison",
+              "sequence": "sequence",
+              "causal": "causal",
+              "support": "support",
+              "mixed": "mixed"
+            }
+          }
+        }
+      },
+      "failure": {
+        "status": "failed",
+        "name": "Error",
+        "code": "JEV_REQUEST_FAILED",
+        "httpStatus": 401,
+        "message": "JEV 调用失败：401 "
+      },
+      "durationMs": 1512
+    }
+  ],
+  "elapsedMs": 1652
+}

@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "gray-page-plan@1",
+  "page": {
+    "id": "options",
+    "title": {
+      "text": "两种上线方案",
+      "sourceIds": [
+        "s-title"
+      ]
+    },
+    "claim": {
+      "text": "集中上线过渡期短，分批上线便于及时修正规则",
+      "sourceIds": [
+        "s-central",
+        "s-phased"
+      ]
+    },
+    "groups": [
+      {
+        "id": "comparison",
+        "title": {
+          "text": "上线方式对比",
+          "sourceIds": [
+            "s-title"
+          ]
+        },
+        "relation": "independent",
+        "items": [
+          {
+            "id": "central",
+            "title": {
+              "text": "集中上线",
+              "sourceIds": [
+                "s-central"
+              ]
+            },
+            "body": {
+              "text": "在一个周末切换全部部门，集中投入培训与支持资源。过渡期短，但问题可能集中出现，需要提前核对全量数据并准备值守团队。",
+              "sourceIds": [
+                "s-central"
+              ]
+            }
+          },
+          {
+            "id": "phased",
+            "title": {
+              "text": "分批上线",
+              "sourceIds": [
+                "s-phased"
+              ]
+            },
+            "body": {
+              "text": "先选一个部门试用，再按反馈逐批推广。能及时修正规则，但新旧系统并存较久，需要维护数据同步和跨部门办理说明。",
+              "sourceIds": [
+                "s-phased"
+              ]
+            }
+          }
+        ],
+        "scopeNotes": [
+          {
+            "id": "common-rollback",
+            "text": {
+              "text": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。",
+              "sourceIds": [
+                "s-rollback"
+              ]
+            },
+            "appliesTo": [
+              "central",
+              "phased"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "s-title",
+      "file": "稿件/模拟稿库/布局试排-options.md",
+      "quote": "两种上线方案"
+    },
+    {
+      "id": "s-central",
+      "file": "稿件/模拟稿库/布局试排-options.md",
+      "quote": "集中上线方案：在一个周末完成全部部门切换，培训与支持资源集中投入。优势是过渡期短；风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。"
+    },
+    {
+      "id": "s-phased",
+      "file": "稿件/模拟稿库/布局试排-options.md",
+      "quote": "分批上线方案：先选择一个部门试用，再按反馈逐批推广。优点是能及时修正规则；代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。"
+    },
+    {
+      "id": "s-rollback",
+      "file": "稿件/模拟稿库/布局试排-options.md",
+      "quote": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。"
+    }
+  ]
+}

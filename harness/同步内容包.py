@@ -10,10 +10,13 @@ package = Path(__file__).resolve().parent
 source = package.parent
 entries = []
 parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument('--docs-only', action='store_true', help='只同步说明，保留代码、规则正文及配置的原有快照')
-docs_only = parser.parse_args().docs_only
+scope = parser.add_mutually_exclusive_group()
+scope.add_argument('--docs-only', action='store_true', help='只同步说明，保留代码、规则正文及配置的原有快照')
+scope.add_argument('--docs-and-rules', action='store_true', help='同步说明和规则，保留代码及配置的原有快照')
+args = parser.parse_args()
+partial = args.docs_only or args.docs_and_rules
 manifest_path = package / '内容包清单.json'
-previous = json.loads(manifest_path.read_text(encoding='utf-8')) if docs_only else {}
+previous = json.loads(manifest_path.read_text(encoding='utf-8')) if partial else {}
 updated = set()
 
 def include(relative):
@@ -24,7 +27,12 @@ def include(relative):
     entries.append({'path': relative, 'sha256': hashlib.sha256(dst.read_bytes()).hexdigest()})
     updated.add(relative)
 
-for folder in (['docs/工作流/正式生成'] if docs_only else ['rules', 'skills/references', 'docs/工作流/正式生成']):
+folders = ['docs/工作流/正式生成']
+if not args.docs_only:
+    folders.insert(0, 'rules')
+if not partial:
+    folders.insert(1, 'skills/references')
+for folder in folders:
     for src in sorted((source / folder).rglob('*')):
         if src.is_file() and src.suffix in ['.md', '.json']:
             include(src.relative_to(source).as_posix())
@@ -35,15 +43,16 @@ for relative in [
     'docs/README.md',
     'docs/产品目标与路径.md',
     'docs/架构.md',
+    'docs/技术选型与决策.md',
     'docs/方向讨论/20261029-产品动机与价值讨论.md',
     'docs/架构/结构库-变与不变.md',
     'assets/主题/中性编辑排版-001/asset.json',
     'schemas/composition-intent.schema.json',
 ]:
-    if not docs_only or relative.endswith('.md'):
+    if not partial or relative.endswith('.md'):
         include(relative)
 
-if docs_only:
+if args.docs_only:
     include('rules/README.md')
 
 # 轻量规则加载器、语义检查及组合解析的本地模块依赖闭包。
@@ -59,7 +68,7 @@ def module(relative):
             dep = (src.parent / spec).resolve()
             module(dep.relative_to(source).as_posix())
 
-for relative in ([] if docs_only else ['src/tools/load-rules.mjs', 'src/tools/check-composition-intent.mjs', 'src/composition/resolve.mjs']):
+for relative in ([] if partial else ['src/tools/load-rules.mjs', 'src/tools/check-composition-intent.mjs', 'src/composition/resolve.mjs']):
     module(relative)
 
 # 逐字节校验；不改正文、命令、链接、编码或换行。
@@ -70,7 +79,7 @@ for entry in entries:
     entry['source_sha256'] = hashlib.sha256(original.read_bytes()).hexdigest()
     entry['sha256'] = hashlib.sha256(copied.read_bytes()).hexdigest()
 
-if docs_only:
+if partial:
     # 未更新项保留原 source_sha256；不能假称其与当前维护源一致。
     for entry in previous['files']:
         if entry['path'] not in updated:
@@ -110,12 +119,13 @@ for entry in entries:
 
 (package / '内容包清单.json').write_text(json.dumps({
     'format': 1,
-    'lastSyncScope': 'documentation-only' if docs_only else 'full',
+    'lastSyncScope': 'documentation-only' if args.docs_only else 'documentation-and-rules' if args.docs_and_rules else 'full',
     'policy': '镜像文件由本脚本从仓库维护源同步；远端执行只读取包内文件，不访问维护源。共享修改回写维护源后重建，禁止手工维护两份。',
     'boundaryLinksNote': '这些是镜像正文里指向包外的相对链接（多为 assets/、experiments/ 证据）。链接与正文逐字节保持源文，不做改写；inRepository 为 true 表示目标在维护源里存在、只是没进包，false 表示源里也已失效。',
     'boundaryLinks': boundary_links,
     'files': entries,
 }, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 stale = sum(1 for item in boundary_links if not item['inRepository'])
-print(f'已同步 {len(updated)} 个文件；清单共 {len(entries)} 项；范围：{"仅说明" if docs_only else "完整内容包"}')
+scope_name = '仅说明' if args.docs_only else '说明与规则' if args.docs_and_rules else '完整内容包'
+print(f'已同步 {len(updated)} 个文件；清单共 {len(entries)} 项；范围：{scope_name}')
 print(f'登记已知外链 {len(boundary_links)} 条（其中 {stale} 条在维护源里也已失效）')

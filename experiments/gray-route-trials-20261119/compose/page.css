@@ -1,0 +1,60 @@
+html,body{margin:0;padding:0;background:white;font-family:'Microsoft YaHei',sans-serif;color:#292929}
+.slide{position:relative;width:1280px;height:720px;overflow:hidden;background:#fff}
+.masthead{position:absolute;left:55px;top:65px;width:1170px;padding-bottom:19px;border-bottom:2px solid #353535}
+.slide-title{font-size:38px;line-height:1.22;margin:0;letter-spacing:-.02em}
+[data-content-frame]{position:absolute;font-size:var(--body-px)}
+.copy{font-size:var(--body-px);line-height:1.30;margin:0;overflow-wrap:anywhere}
+.item-title{font-size:calc(var(--body-px) + 2px);line-height:1.25;margin:0 0 5px;font-weight:700;overflow-wrap:anywhere}
+.general-body{display:grid;gap:19px}
+.text-items{display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));gap:17px 26px}
+.text-items article{min-width:0;padding:12px 14px 10px;border-top:2px solid #858585;background:#f6f6f6}
+.text-items.options article{padding:19px 23px 21px;border-top:4px solid #555;background:#f3f3f3}
+.text-items.options .item-title{font-size:26px;margin-bottom:16px}
+.text-items.options .copy + .copy{padding-top:12px;margin-top:12px;border-top:1px solid #d5d5d5}
+.dense .text-items article{padding:6px 7px;border-top-width:1px}
+.dense .text-items{gap:10px 16px}
+.dense .copy{line-height:1.23}
+.shared{padding:12px 17px;border-left:4px solid #777;background:#ededed}
+.shared .copy{line-height:1.30}
+
+.hr-body{display:grid;gap:24px;align-items:start}
+.hr-body.side{grid-template-columns:var(--left-w) minmax(0,1fr)}
+.hr-group{min-width:0}
+.group-title{font-size:23px;line-height:1.2;margin:0 0 11px;padding:0 0 8px;border-bottom:2px solid #676767}
+.hr-items{display:grid;gap:10px 16px}
+.hr-items article{min-width:0}
+.hr-body.side .hr-items article+article{border-top:1px solid #dedede;padding-top:8px}
+.hr-body.bands{gap:16px}
+.hr-body.bands .issues .hr-items,.hr-body.bands .insights .hr-items{grid-template-columns:repeat(2,minmax(0,1fr))}
+.hr-body.bands .hr-items article{border-left:2px solid #ddd;padding-left:11px}
+.hr-body.bands-four .insights .hr-items{grid-template-columns:repeat(4,minmax(0,1fr))}
+.graph-host{margin-top:3px}
+.adapt-graph .merge>svg{width:var(--merge-frame-width);height:var(--merge-frame-height)}
+.adapt-graph .merge>.input{left:var(--input-left);width:var(--input-width);height:var(--input-height);padding:4px 10px}
+.adapt-graph .merge>.result{right:var(--result-right);top:var(--result-top);width:var(--result-width);height:var(--result-height);padding:10px 13px;border-width:7px;border-radius:24px}
+.merge .ppagent-text-layout{padding:0;gap:4px;background:transparent;justify-content:center}
+.merge .input-content .ppagent-text-primitive--body{font-size:18px;line-height:1.22;color:#303030}
+.merge .result-content .ppagent-text-primitive--label{font-size:18px;line-height:1.15;color:#eee}
+.merge .result-content .ppagent-text-primitive--heading{font-size:21px;line-height:1.22;color:white}
+
+.adapt-cards .parallel-review{width:100%;height:var(--card-h)}
+.adapt-cards .parallel-review .parallel-grid{inset:4px 12px auto;width:auto;height:calc(var(--card-h) - 11px);gap:20px}
+.adapt-cards .parallel-card{height:100%}
+.adapt-cards .parallel-card-surface,.adapt-cards .parallel-card-underlay{border-radius:17px}
+.adapt-cards .parallel-title-region{top:107px;height:31px}
+.adapt-cards .parallel-content-rule{top:143px;width:44px;margin-left:-22px;height:2px}
+.adapt-cards .parallel-body-region{top:155px;bottom:24px;height:auto}
+.cards-host .parallel-body-region .ppagent-text-primitive--body{font-size:var(--body-px);line-height:1.26;text-align:left}
+.cards-host .parallel-title-region .ppagent-text-primitive--heading{font-size:21px}
+.adapt-cards .parallel-body-region .ppagent-text-layout{justify-content:flex-start}
+
+.diagnostic [data-content-frame]{outline:2px dashed #b34242;outline-offset:4px}
+
+.final .group-title{line-height:1.41;padding-bottom:5px;margin-bottom:8px}
+.final .adapt-cards .parallel-body-region .ppagent-text-layout{padding-top:2px}
+.final .text-items.options[data-cols="2"]{grid-template-rows:repeat(3,auto);row-gap:0}
+.final .text-items.options[data-cols="2"] article{display:grid;grid-template-rows:subgrid;grid-row:span 3}
+.hr-body.dense-flow .copy{line-height:1.24}
+.hr-body.dense-flow .item-title{margin-bottom:4px}
+.hr-body.dense-flow .hr-items{gap:7px 16px}
+.hr-body.dense-flow.side .hr-items article+article{padding-top:5px}

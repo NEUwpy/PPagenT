@@ -1,0 +1,35 @@
+{
+  "stopReason": "max-turns",
+  "detail": null,
+  "note": "已达 8 轮上限，阶段未提交。",
+  "turns": 8,
+  "usage": {
+    "requests": 8,
+    "toolCalls": 8,
+    "tokens": {
+      "prompt_tokens": 128517,
+      "completion_tokens": 2499,
+      "total_tokens": 131016,
+      "prompt_cache_hit_tokens": 112512,
+      "prompt_cache_miss_tokens": 16005
+    }
+  },
+  "toolCallCount": 8,
+  "stalledTurns": 0,
+  "toolSequence": [
+    "check_plan",
+    "check_plan",
+    "check_plan",
+    "check_plan",
+    "check_plan",
+    "check_plan",
+    "check_plan",
+    "check_plan"
+  ],
+  "tools": [
+    "check_plan",
+    "semantic_review",
+    "render_draft",
+    "finish_draft"
+  ]
+}

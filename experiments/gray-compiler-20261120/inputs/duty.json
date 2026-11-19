@@ -1,0 +1,129 @@
+{
+  "schemaVersion": "gray-page-plan@1",
+  "page": {
+    "id": "duty",
+    "title": {"text": "汛期值班与应急处置安排", "sourceIds": ["s-title"]},
+    "claim": {"text": "汛期实行双人值守、分级处置，达到降雨条件时加密巡查", "sourceIds": ["s-duty", "s-hazard", "s-rain"]},
+    "groups": [
+      {
+        "id": "routine",
+        "title": {"text": "值班与交接", "sourceIds": ["s-duty", "s-handover"]},
+        "relation": "parallel",
+        "items": [
+          {
+            "id": "patrol",
+            "title": {"text": "双人值守与巡查", "sourceIds": ["s-duty"]},
+            "body": {"text": "24 小时双人值守。整点前后 15 分钟内完成一次巡查记录。", "sourceIds": ["s-duty"]}
+          },
+          {
+            "id": "handover",
+            "title": {"text": "交接责任", "sourceIds": ["s-handover"]},
+            "body": {"text": "上一班须向下一班交代未处置事项与已采取措施。交接不清由交班人承担后果。", "sourceIds": ["s-handover"]}
+          }
+        ]
+      },
+      {
+        "id": "response",
+        "title": {"text": "险情分级处置", "sourceIds": ["s-hazard"]},
+        "relation": "parallel",
+        "items": [
+          {
+            "id": "leaks",
+            "title": {"text": "一般渗漏、积水", "sourceIds": ["s-leaks"]},
+            "body": {"text": "由值班人员现场处理并做好记录。", "sourceIds": ["s-leaks"]}
+          },
+          {
+            "id": "danger",
+            "title": {"text": "管涌、滑坡征兆", "sourceIds": ["s-danger"]},
+            "body": {"text": "立即报告带班领导，同时组织人员撤离危险区域，不得擅自处置。", "sourceIds": ["s-danger"]}
+          },
+          {
+            "id": "incident",
+            "title": {"text": "人员受伤或设备停机", "sourceIds": ["s-incident"]},
+            "body": {"text": "无论级别均须立即上报指挥部，并在 30 分钟内提交书面情况说明。", "sourceIds": ["s-incident"]}
+          }
+        ]
+      },
+      {
+        "id": "intensification",
+        "title": {"text": "加密巡查与恢复", "sourceIds": ["s-rain", "s-recovery"]},
+        "relation": "independent",
+        "items": [
+          {
+            "id": "rain-threshold",
+            "title": {"text": "启动条件", "sourceIds": ["s-rain"]},
+            "body": {"text": "连续降雨超过 12 小时，或单日降雨量超过 100 毫米，巡查间隔缩短至 1 小时。", "sourceIds": ["s-rain"]}
+          },
+          {
+            "id": "return-to-normal",
+            "title": {"text": "恢复条件", "sourceIds": ["s-recovery"]},
+            "body": {"text": "天气好转后，经带班领导确认方可恢复正常巡查频次。", "sourceIds": ["s-recovery"]}
+          }
+        ]
+      }
+    ],
+    "scopeNotes": [
+      {
+        "id": "flood-period",
+        "text": {"text": "汛期自 6 月 1 日至 9 月 30 日。", "sourceIds": ["s-period"]},
+        "appliesTo": [
+          "routine",
+          "response",
+          "intensification"
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "s-title",
+      "file": "稿件/模拟稿库/行政信息/A05-汛期值班与应急处置安排.md",
+      "quote": "汛期值班与应急处置安排"
+    },
+    {
+      "id": "s-period",
+      "file": "稿件/模拟稿库/行政信息/A05-汛期值班与应急处置安排.md",
+      "quote": "汛期自 6 月 1 日至 9 月 30 日。"
+    },
+    {
+      "id": "s-duty",
+      "file": "稿件/模拟稿库/行政信息/A05-汛期值班与应急处置安排.md",
+      "quote": "值班实行 24 小时双人值守，值班人员须在整点前后 15 分钟内完成一次巡查记录"
+    },
+    {
+      "id": "s-handover",
+      "file": "稿件/模拟稿库/行政信息/A05-汛期值班与应急处置安排.md",
+      "quote": "上一班须向下一班交代未处置事项与已采取措施，交接不清的，由交班人承担后果。"
+    },
+    {
+      "id": "s-hazard",
+      "file": "稿件/模拟稿库/行政信息/A05-汛期值班与应急处置安排.md",
+      "quote": "发现险情按分级处置"
+    },
+    {
+      "id": "s-leaks",
+      "file": "稿件/模拟稿库/行政信息/A05-汛期值班与应急处置安排.md",
+      "quote": "一般渗漏、积水，由值班人员现场处理并做好记录"
+    },
+    {
+      "id": "s-danger",
+      "file": "稿件/模拟稿库/行政信息/A05-汛期值班与应急处置安排.md",
+      "quote": "出现管涌、滑坡征兆，立即报告带班领导，同时组织人员撤离危险区域，不得擅自处置"
+    },
+    {
+      "id": "s-incident",
+      "file": "稿件/模拟稿库/行政信息/A05-汛期值班与应急处置安排.md",
+      "quote": "涉及人员受伤或设备停机的，无论级别均须立即上报指挥部，并在 30 分钟内提交书面情况说明。"
+    },
+    {
+      "id": "s-rain",
+      "file": "稿件/模拟稿库/行政信息/A05-汛期值班与应急处置安排.md",
+      "quote": "连续降雨超过 12 小时或单日降雨量超过 100 毫米时，启动加密巡查，巡查间隔缩短至 1 小时"
+    },
+    {
+      "id": "s-recovery",
+      "file": "稿件/模拟稿库/行政信息/A05-汛期值班与应急处置安排.md",
+      "quote": "天气好转后经带班领导确认方可恢复正常巡查频次。"
+    }
+  ]
+}

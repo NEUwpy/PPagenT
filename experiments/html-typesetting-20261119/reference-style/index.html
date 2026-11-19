@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>不足与感悟 · 版面与样式对照</title>
+  <style>
+    :root { color: #23282e; background: #eef0f2; font: 15px/1.5 "Noto Sans SC", "Microsoft YaHei", sans-serif }
+    body { margin: 0 }
+    main { max-width: 1440px; margin: auto; padding: 26px clamp(16px, 3vw, 42px) 40px }
+    header, figcaption { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap }
+    header { border-bottom: 1px solid #ccd1d5; padding-bottom: 13px; margin-bottom: 19px }
+    h1 { font-size: 25px; margin: 0 }
+    nav { display: flex; flex-wrap: wrap; gap: 14px }
+    a { color: #284a71; text-underline-offset: 3px }
+    .pair { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px }
+    figure { margin: 0; min-width: 0; background: #fff; border: 1px solid #d3d8de }
+    figcaption { padding: 10px 12px; border-bottom: 1px solid #e0e4e8 }
+    h2 { font-size: 17px; margin: 0 }
+    img { display: block; width: 100%; height: auto }
+    @media (max-width: 680px) { .pair { grid-template-columns: 1fr } h1 { font-size: 21px } }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>不足与感悟 · 版面与样式对照</h1>
+      <nav aria-label="参照和说明">
+        <a href="../../home-gray-magazine-20260919/input/gray.png">旧灰稿</a>
+        <a href="../../html-library-reuse-20261119/assets/generated-reference.png">AI 生图</a>
+        <a href="README.md">方法与规范</a>
+      </nav>
+    </header>
+    <section class="pair" aria-label="同一版面的两个预览">
+      <figure><figcaption><h2>灰稿样张</h2><a href="gray.html">打开 HTML</a></figcaption>
+        <a href="gray.html"><img src="gray.png" width="1280" height="720" alt="不足与感悟灰稿样张"></a>
+      </figure>
+      <figure><figcaption><h2>参照样式</h2><a href="reference.html">打开 HTML</a></figcaption>
+        <a href="reference.html"><img src="reference.png" width="1280" height="720" alt="不足与感悟参照样式"></a>
+      </figure>
+    </section>
+  </main>
+</body>
+</html>

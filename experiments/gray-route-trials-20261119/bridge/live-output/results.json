@@ -1,0 +1,335 @@
+{
+  "mode": "one live DeepSeek call per manuscript",
+  "browser": "157.0.8103.79",
+  "cases": [
+    {
+      "id": "options",
+      "frameName": "standard",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 1170,
+        "height": 492
+      },
+      "selected": {
+        "variant": "columns",
+        "artifact": "options-standard-columns"
+      },
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": true,
+          "usedHeight": 198.890625,
+          "issues": [],
+          "artifact": "options-standard-columns"
+        }
+      ]
+    },
+    {
+      "id": "options",
+      "frameName": "compact",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 1020,
+        "height": 450
+      },
+      "selected": {
+        "variant": "columns",
+        "artifact": "options-compact-columns"
+      },
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": true,
+          "usedHeight": 198.890625,
+          "issues": [],
+          "artifact": "options-compact-columns"
+        }
+      ]
+    },
+    {
+      "id": "options",
+      "frameName": "tight",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 770,
+        "height": 270
+      },
+      "selected": {
+        "variant": "columns",
+        "artifact": "options-tight-columns"
+      },
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": true,
+          "usedHeight": 198.890625,
+          "issues": [],
+          "artifact": "options-tight-columns"
+        }
+      ]
+    },
+    {
+      "id": "spares",
+      "frameName": "standard",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 1170,
+        "height": 492
+      },
+      "selected": {
+        "variant": "columns",
+        "artifact": "spares-standard-columns"
+      },
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": true,
+          "usedHeight": 384.015625,
+          "issues": [],
+          "artifact": "spares-standard-columns"
+        }
+      ]
+    },
+    {
+      "id": "spares",
+      "frameName": "compact",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 1020,
+        "height": 450
+      },
+      "selected": {
+        "variant": "columns",
+        "artifact": "spares-compact-columns"
+      },
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": true,
+          "usedHeight": 384.015625,
+          "issues": [],
+          "artifact": "spares-compact-columns"
+        }
+      ]
+    },
+    {
+      "id": "spares",
+      "frameName": "tight",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 770,
+        "height": 270
+      },
+      "selected": null,
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": false,
+          "usedHeight": 384.015625,
+          "issues": [
+            {
+              "id": "note-value-threshold",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "note-safety-critical",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "note-effective-date",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "note-precedence",
+              "code": "text-outside-region"
+            }
+          ],
+          "artifact": "spares-tight-columns"
+        }
+      ]
+    },
+    {
+      "id": "duty",
+      "frameName": "standard",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 1170,
+        "height": 492
+      },
+      "selected": {
+        "variant": "columns",
+        "artifact": "duty-standard-columns"
+      },
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": true,
+          "usedHeight": 462.515625,
+          "issues": [],
+          "artifact": "duty-standard-columns"
+        },
+        {
+          "variant": "rows",
+          "ok": false,
+          "usedHeight": 513.5,
+          "issues": [
+            {
+              "id": "note-period",
+              "code": "text-outside-region"
+            }
+          ],
+          "artifact": "duty-standard-rows"
+        }
+      ]
+    },
+    {
+      "id": "duty",
+      "frameName": "compact",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 1020,
+        "height": 450
+      },
+      "selected": null,
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": false,
+          "usedHeight": 462.515625,
+          "issues": [
+            {
+              "id": "note-period",
+              "code": "text-outside-region"
+            }
+          ],
+          "artifact": "duty-compact-columns"
+        },
+        {
+          "variant": "rows",
+          "ok": false,
+          "usedHeight": 540.125,
+          "issues": [
+            {
+              "id": "note-intensive",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "note-period",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "intensive-patrol",
+              "code": "component-outside-content-frame"
+            }
+          ],
+          "artifact": "duty-compact-rows"
+        }
+      ]
+    },
+    {
+      "id": "duty",
+      "frameName": "tight",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 770,
+        "height": 270
+      },
+      "selected": null,
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": false,
+          "usedHeight": 595.640625,
+          "issues": [
+            {
+              "id": "handover",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "injury-downtime",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "note-graded",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "note-intensive",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "note-period",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "duty-period",
+              "code": "component-outside-content-frame"
+            },
+            {
+              "id": "graded-response",
+              "code": "component-outside-content-frame"
+            },
+            {
+              "id": "intensive-patrol",
+              "code": "component-outside-content-frame"
+            }
+          ],
+          "artifact": "duty-tight-columns"
+        },
+        {
+          "variant": "rows",
+          "ok": false,
+          "usedHeight": 646.625,
+          "issues": [
+            {
+              "id": "injury-downtime",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "note-graded",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "intensive-patrol-heading",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "trigger",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "restore",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "note-intensive",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "note-period",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "graded-response",
+              "code": "component-outside-content-frame"
+            },
+            {
+              "id": "intensive-patrol",
+              "code": "component-outside-content-frame"
+            }
+          ],
+          "artifact": "duty-tight-rows"
+        }
+      ]
+    }
+  ]
+}

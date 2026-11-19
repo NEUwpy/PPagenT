@@ -1,0 +1,161 @@
+{
+  "probes": {
+    "browser": "157.0.8103.79",
+    "version": "1.0.0",
+    "fixedWidthTrials": 77,
+    "greedyLineCountsMatch": 77,
+    "greedyLinesMatch": 77,
+    "prettyLineCountsMatch": 77,
+    "prettyLinesMatch": 70,
+    "variableLineTrials": 5,
+    "variableLinesMatch": 5
+  },
+  "pages": [
+    {
+      "id": "hr",
+      "variant": "standard",
+      "first": {
+        "used": 629,
+        "valid": false
+      },
+      "selected": {
+        "used": 486,
+        "size": 20,
+        "headingPlacement": "alongside",
+        "html": "output/hr-standard.html",
+        "png": "output/hr-standard.png",
+        "columns": [
+          [
+            [
+              "hr-1-1"
+            ],
+            [
+              "hr-1-2"
+            ]
+          ],
+          [
+            [
+              "hr-2-1",
+              "hr-2-2"
+            ],
+            [
+              "hr-2-3",
+              "hr-2-4"
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "hr",
+      "variant": "narrow",
+      "first": {
+        "used": 695,
+        "valid": false
+      },
+      "selected": {
+        "used": 451,
+        "size": 19.5,
+        "headingPlacement": "run-in",
+        "html": "output/hr-narrow.html",
+        "png": "output/hr-narrow.png",
+        "columns": [
+          [
+            [
+              "hr-1-1"
+            ],
+            [
+              "hr-1-2"
+            ]
+          ],
+          [
+            [
+              "hr-2-1",
+              "hr-2-2"
+            ],
+            [
+              "hr-2-3",
+              "hr-2-4"
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "spares",
+      "variant": "standard",
+      "first": {
+        "used": 461,
+        "valid": true
+      },
+      "selected": {
+        "used": 411,
+        "size": 22,
+        "headingPlacement": "alongside",
+        "html": "output/spares-standard.html",
+        "png": "output/spares-standard.png",
+        "columns": [
+          [
+            [
+              "central"
+            ],
+            [
+              "local"
+            ]
+          ],
+          [
+            [
+              "grading"
+            ]
+          ],
+          [
+            [
+              "exception"
+            ],
+            [
+              "effective"
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "id": "spares",
+      "variant": "narrow",
+      "first": {
+        "used": 461,
+        "valid": true
+      },
+      "selected": {
+        "used": 411,
+        "size": 22,
+        "headingPlacement": "alongside",
+        "html": "output/spares-narrow.html",
+        "png": "output/spares-narrow.png",
+        "columns": [
+          [
+            [
+              "central"
+            ],
+            [
+              "local"
+            ]
+          ],
+          [
+            [
+              "grading"
+            ]
+          ],
+          [
+            [
+              "exception"
+            ],
+            [
+              "effective"
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

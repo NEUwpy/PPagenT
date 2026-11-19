@@ -1,0 +1,44 @@
+/* Shared layout is declared separately. These roles determine paint only. */
+.slide {
+  --group-border: #dadada;
+  --section-divider: #c7c7c7;
+  --result-border: #e1e1e1;
+  --result-fill: #525252;
+  --short-facts-fill: #ebebeb;
+  --short-facts-rule: #d3d3d3;
+  --short-label-fill: #606060;
+  --short-label-text: #fff;
+  --index-fill: #dfdfdf;
+  --index-text: #343434;
+  --reading-axis: #c6c6c6;
+  --reading-axis-strong: #626262;
+  --reading-start: #f4f4f4;
+  --reading-end: #ececec;
+  --stage-fill: #e7e7e7;
+}
+
+.slide[data-view="gray"] {
+  --ink: #262626;
+  --accent: #434343;
+  --quiet: #535353;
+  --rule: #d2d2d2;
+}
+.slide[data-view="gray"] .theme-header { border-color: #bdbdbd }
+.slide[data-view="gray"] .page-topic span + span { border-color: #bdbdbd }
+
+.slide[data-view="reference"] {
+  --group-border: transparent;
+  --section-divider: #dce5ef;
+  --result-border: #e4ecf7;
+  --result-fill: #2e5689;
+  --short-facts-fill: #e9f2f9;
+  --short-facts-rule: #cbddec;
+  --short-label-fill: #3b6ba4;
+  --index-fill: #dceaf7;
+  --index-text: #254776;
+  --reading-axis: #bdd0e6;
+  --reading-axis-strong: #4c6d90;
+  --reading-start: #f8fbfd;
+  --reading-end: #e8f2f9;
+  --stage-fill: #e5eff8;
+}

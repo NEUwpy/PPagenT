@@ -1,0 +1,1715 @@
+{
+  "version": "gray-compile-report@1",
+  "status": "rejected",
+  "phase": "layout",
+  "input": "page-plan.json",
+  "canvas": {
+    "width": 720,
+    "height": 420
+  },
+  "errors": [
+    {
+      "code": "no-fitting-layout",
+      "message": "所有候选均被拒绝，具体文本与几何错误见 candidates"
+    }
+  ],
+  "candidates": [
+    {
+      "layout": {
+        "id": "standard-column",
+        "canvas": {
+          "width": 720,
+          "height": 420
+        },
+        "margin": 30,
+        "gap": 16,
+        "padding": 12,
+        "direction": "column",
+        "columns": [
+          660,
+          660
+        ],
+        "density": "standard"
+      },
+      "valid": false,
+      "score": null,
+      "frame": {
+        "x": 30,
+        "y": 192.734375,
+        "width": 660,
+        "height": 167.265625
+      },
+      "groups": [
+        {
+          "id": "group:issues",
+          "bounds": {
+            "x": 30,
+            "y": 192.734375,
+            "width": 660,
+            "height": 498.5
+          },
+          "visibleHeight": 482.03125
+        },
+        {
+          "id": "group:insights",
+          "bounds": {
+            "x": 30,
+            "y": 707.234375,
+            "width": 660,
+            "height": 412.75
+          },
+          "visibleHeight": 392.65625
+        }
+      ],
+      "errors": [
+        {
+          "code": "canvas-overflow",
+          "id": "slide",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 720,
+            "height": 420
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:issues",
+          "bounds": {
+            "x": 30,
+            "y": 192.734375,
+            "width": 660,
+            "height": 498.5
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:landing",
+          "bounds": {
+            "x": 43,
+            "y": 250.484375,
+            "width": 634,
+            "height": 277.90625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing",
+          "bounds": {
+            "x": 43,
+            "y": 314.390625,
+            "width": 634,
+            "height": 214
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing:edge:1",
+          "bounds": {
+            "x": 240.61000061035156,
+            "y": 355.390625,
+            "width": 218.78001403808594,
+            "height": 66
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing:edge:2",
+          "bounds": {
+            "x": 240.61000061035156,
+            "y": 421.390625,
+            "width": 218.78001403808594,
+            "height": 0
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing:edge:3",
+          "bounds": {
+            "x": 240.61000061035156,
+            "y": 421.390625,
+            "width": 218.78001403808594,
+            "height": 66
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing:input:atmosphere",
+          "bounds": {
+            "x": 50.59375,
+            "y": 326.390625,
+            "width": 190,
+            "height": 58
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing:input:atmosphere:body",
+          "bounds": {
+            "x": 67.59375,
+            "y": 359.609375,
+            "width": 163,
+            "height": 21.953125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:landing:input:atmosphere:body",
+          "bounds": {
+            "x": 67.59375,
+            "y": 359.609375,
+            "width": 163,
+            "height": 21.953125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing:input:systems",
+          "bounds": {
+            "x": 50.59375,
+            "y": 392.390625,
+            "width": 190,
+            "height": 58
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing:input:systems:title",
+          "bounds": {
+            "x": 67.59375,
+            "y": 395.21875,
+            "width": 163,
+            "height": 24.390625
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:landing:input:systems:title",
+          "bounds": {
+            "x": 67.59375,
+            "y": 395.21875,
+            "width": 163,
+            "height": 24.390625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing:input:systems:body",
+          "bounds": {
+            "x": 67.59375,
+            "y": 425.609375,
+            "width": 163,
+            "height": 21.953125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:landing:input:systems:body",
+          "bounds": {
+            "x": 67.59375,
+            "y": 425.609375,
+            "width": 163,
+            "height": 21.953125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing:input:management",
+          "bounds": {
+            "x": 50.59375,
+            "y": 458.390625,
+            "width": 190,
+            "height": 58
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing:input:management:title",
+          "bounds": {
+            "x": 67.59375,
+            "y": 461.21875,
+            "width": 163,
+            "height": 24.390625
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:landing:input:management:title",
+          "bounds": {
+            "x": 67.59375,
+            "y": 461.21875,
+            "width": 163,
+            "height": 24.390625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing:input:management:body",
+          "bounds": {
+            "x": 67.59375,
+            "y": 491.609375,
+            "width": 163,
+            "height": 21.953125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:landing:input:management:body",
+          "bounds": {
+            "x": 67.59375,
+            "y": 491.609375,
+            "width": 163,
+            "height": 21.953125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing:result",
+          "bounds": {
+            "x": 459.40625,
+            "y": 364.390625,
+            "width": 210,
+            "height": 114
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing:result:title",
+          "bounds": {
+            "x": 476.40625,
+            "y": 406.4375,
+            "width": 176,
+            "height": 29.890625
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:landing:result:title",
+          "bounds": {
+            "x": 476.40625,
+            "y": 406.4375,
+            "width": 176,
+            "height": 29.890625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:compliance",
+          "bounds": {
+            "x": 43,
+            "y": 539.390625,
+            "width": 634,
+            "height": 138.84375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:compliance:title",
+          "bounds": {
+            "x": 43,
+            "y": 551.390625,
+            "width": 634,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:compliance:title",
+          "bounds": {
+            "x": 43,
+            "y": 551.390625,
+            "width": 634,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:compliance:body",
+          "bounds": {
+            "x": 43,
+            "y": 586.203125,
+            "width": 634,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:compliance:body",
+          "bounds": {
+            "x": 43,
+            "y": 586.203125,
+            "width": 634,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance",
+          "bounds": {
+            "x": 43,
+            "y": 620.296875,
+            "width": 634,
+            "height": 57.9375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:label",
+          "bounds": {
+            "x": 43,
+            "y": 620.296875,
+            "width": 122.703125,
+            "height": 57.9375
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:compliance:label",
+          "bounds": {
+            "x": 43,
+            "y": 620.296875,
+            "width": 122.703125,
+            "height": 57.9375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:fact:1",
+          "bounds": {
+            "x": 165.703125,
+            "y": 620.296875,
+            "width": 127.8125,
+            "height": 57.9375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:fact:1:label",
+          "bounds": {
+            "x": 202.609375,
+            "y": 624.296875,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:compliance:fact:1:label",
+          "bounds": {
+            "x": 202.609375,
+            "y": 624.296875,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:fact:1:value",
+          "bounds": {
+            "x": 202.609375,
+            "y": 649.765625,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:compliance:fact:1:value",
+          "bounds": {
+            "x": 202.609375,
+            "y": 649.765625,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:fact:2",
+          "bounds": {
+            "x": 293.515625,
+            "y": 620.296875,
+            "width": 127.828125,
+            "height": 57.9375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:fact:2:label",
+          "bounds": {
+            "x": 330.921875,
+            "y": 624.296875,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:compliance:fact:2:label",
+          "bounds": {
+            "x": 330.921875,
+            "y": 624.296875,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:fact:2:value",
+          "bounds": {
+            "x": 330.921875,
+            "y": 649.765625,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:compliance:fact:2:value",
+          "bounds": {
+            "x": 330.921875,
+            "y": 649.765625,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:fact:3",
+          "bounds": {
+            "x": 421.34375,
+            "y": 620.296875,
+            "width": 127.828125,
+            "height": 57.9375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:fact:3:label",
+          "bounds": {
+            "x": 458.75,
+            "y": 624.296875,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:compliance:fact:3:label",
+          "bounds": {
+            "x": 458.75,
+            "y": 624.296875,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:fact:3:value",
+          "bounds": {
+            "x": 458.75,
+            "y": 649.765625,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:compliance:fact:3:value",
+          "bounds": {
+            "x": 458.75,
+            "y": 649.765625,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:fact:4",
+          "bounds": {
+            "x": 549.171875,
+            "y": 620.296875,
+            "width": 127.828125,
+            "height": 57.9375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:fact:4:label",
+          "bounds": {
+            "x": 586.578125,
+            "y": 624.296875,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:compliance:fact:4:label",
+          "bounds": {
+            "x": 586.578125,
+            "y": 624.296875,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:fact:4:value",
+          "bounds": {
+            "x": 586.578125,
+            "y": 649.765625,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:compliance:fact:4:value",
+          "bounds": {
+            "x": 586.578125,
+            "y": 649.765625,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:insights",
+          "bounds": {
+            "x": 30,
+            "y": 707.234375,
+            "width": 660,
+            "height": 412.75
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:insights:title",
+          "bounds": {
+            "x": 43,
+            "y": 720.234375,
+            "width": 100,
+            "height": 33.75
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "group:insights:title",
+          "bounds": {
+            "x": 43,
+            "y": 720.234375,
+            "width": 100,
+            "height": 33.75
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:alignment",
+          "bounds": {
+            "x": 43,
+            "y": 764.984375,
+            "width": 634,
+            "height": 84.28125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:alignment:title",
+          "bounds": {
+            "x": 53,
+            "y": 771.984375,
+            "width": 614,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:alignment:title",
+          "bounds": {
+            "x": 53,
+            "y": 771.984375,
+            "width": 614,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:alignment",
+          "bounds": {
+            "x": 53,
+            "y": 809.796875,
+            "width": 614,
+            "height": 32.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:alignment:step:1",
+          "bounds": {
+            "x": 53,
+            "y": 809.796875,
+            "width": 86,
+            "height": 32.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:alignment:step:1",
+          "bounds": {
+            "x": 53,
+            "y": 809.796875,
+            "width": 86,
+            "height": 32.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:alignment:link:1",
+          "bounds": {
+            "x": 145,
+            "y": 821.03125,
+            "width": 15,
+            "height": 10
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:alignment:step:2",
+          "bounds": {
+            "x": 167,
+            "y": 809.796875,
+            "width": 158,
+            "height": 32.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:alignment:step:2",
+          "bounds": {
+            "x": 167,
+            "y": 809.796875,
+            "width": 158,
+            "height": 32.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:alignment:link:2",
+          "bounds": {
+            "x": 331,
+            "y": 821.03125,
+            "width": 15,
+            "height": 10
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:alignment:step:3",
+          "bounds": {
+            "x": 353,
+            "y": 809.796875,
+            "width": 86,
+            "height": 32.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:alignment:step:3",
+          "bounds": {
+            "x": 353,
+            "y": 809.796875,
+            "width": 86,
+            "height": 32.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:outcome-test",
+          "bounds": {
+            "x": 43,
+            "y": 860.265625,
+            "width": 634,
+            "height": 74.90625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:outcome-test:title",
+          "bounds": {
+            "x": 53,
+            "y": 867.265625,
+            "width": 614,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:outcome-test:title",
+          "bounds": {
+            "x": 53,
+            "y": 867.265625,
+            "width": 614,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:outcome-test:body",
+          "bounds": {
+            "x": 53,
+            "y": 902.078125,
+            "width": 614,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:outcome-test:body",
+          "bounds": {
+            "x": 53,
+            "y": 902.078125,
+            "width": 614,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:iteration",
+          "bounds": {
+            "x": 43,
+            "y": 946.171875,
+            "width": 634,
+            "height": 74.90625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:iteration:title",
+          "bounds": {
+            "x": 53,
+            "y": 953.171875,
+            "width": 614,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:iteration:title",
+          "bounds": {
+            "x": 53,
+            "y": 953.171875,
+            "width": 614,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:iteration:body",
+          "bounds": {
+            "x": 53,
+            "y": 987.984375,
+            "width": 614,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:iteration:body",
+          "bounds": {
+            "x": 53,
+            "y": 987.984375,
+            "width": 614,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:balance",
+          "bounds": {
+            "x": 43,
+            "y": 1032.078125,
+            "width": 634,
+            "height": 74.90625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:balance:title",
+          "bounds": {
+            "x": 53,
+            "y": 1039.078125,
+            "width": 614,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:balance:title",
+          "bounds": {
+            "x": 53,
+            "y": 1039.078125,
+            "width": 614,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:balance:body",
+          "bounds": {
+            "x": 53,
+            "y": 1073.890625,
+            "width": 614,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:balance:body",
+          "bounds": {
+            "x": 53,
+            "y": 1073.890625,
+            "width": 614,
+            "height": 26.09375
+          }
+        }
+      ]
+    },
+    {
+      "layout": {
+        "id": "compact-column",
+        "canvas": {
+          "width": 720,
+          "height": 420
+        },
+        "margin": 30,
+        "gap": 16,
+        "padding": 10,
+        "direction": "column",
+        "columns": [
+          660,
+          660
+        ],
+        "density": "compact"
+      },
+      "valid": false,
+      "score": null,
+      "frame": {
+        "x": 30,
+        "y": 173.734375,
+        "width": 660,
+        "height": 206.265625
+      },
+      "groups": [
+        {
+          "id": "group:issues",
+          "bounds": {
+            "x": 30,
+            "y": 173.734375,
+            "width": 660,
+            "height": 476.25
+          },
+          "visibleHeight": 461.78125
+        },
+        {
+          "id": "group:insights",
+          "bounds": {
+            "x": 30,
+            "y": 665.984375,
+            "width": 660,
+            "height": 391.875
+          },
+          "visibleHeight": 374.40625
+        }
+      ],
+      "errors": [
+        {
+          "code": "canvas-overflow",
+          "id": "slide",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 720,
+            "height": 420
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:issues",
+          "bounds": {
+            "x": 30,
+            "y": 173.734375,
+            "width": 660,
+            "height": 476.25
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:landing",
+          "bounds": {
+            "x": 41,
+            "y": 226.484375,
+            "width": 638,
+            "height": 270.28125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing",
+          "bounds": {
+            "x": 41,
+            "y": 288.765625,
+            "width": 638,
+            "height": 208
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing:edge:1",
+          "bounds": {
+            "x": 238.66000366210938,
+            "y": 329.765625,
+            "width": 222.67999267578125,
+            "height": 63
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing:edge:2",
+          "bounds": {
+            "x": 238.66000366210938,
+            "y": 392.765625,
+            "width": 222.67999267578125,
+            "height": 0
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing:edge:3",
+          "bounds": {
+            "x": 238.66000366210938,
+            "y": 392.765625,
+            "width": 222.67999267578125,
+            "height": 63
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing:input:systems",
+          "bounds": {
+            "x": 48.640625,
+            "y": 363.765625,
+            "width": 190,
+            "height": 58
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing:input:systems:title",
+          "bounds": {
+            "x": 65.640625,
+            "y": 366.59375,
+            "width": 163,
+            "height": 24.390625
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:landing:input:systems:title",
+          "bounds": {
+            "x": 65.640625,
+            "y": 366.59375,
+            "width": 163,
+            "height": 24.390625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing:input:systems:body",
+          "bounds": {
+            "x": 65.640625,
+            "y": 396.984375,
+            "width": 163,
+            "height": 21.953125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:landing:input:systems:body",
+          "bounds": {
+            "x": 65.640625,
+            "y": 396.984375,
+            "width": 163,
+            "height": 21.953125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing:input:management",
+          "bounds": {
+            "x": 48.640625,
+            "y": 426.765625,
+            "width": 190,
+            "height": 58
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing:input:management:title",
+          "bounds": {
+            "x": 65.640625,
+            "y": 429.59375,
+            "width": 163,
+            "height": 24.390625
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:landing:input:management:title",
+          "bounds": {
+            "x": 65.640625,
+            "y": 429.59375,
+            "width": 163,
+            "height": 24.390625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing:input:management:body",
+          "bounds": {
+            "x": 65.640625,
+            "y": 459.984375,
+            "width": 163,
+            "height": 21.953125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:landing:input:management:body",
+          "bounds": {
+            "x": 65.640625,
+            "y": 459.984375,
+            "width": 163,
+            "height": 21.953125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing:result",
+          "bounds": {
+            "x": 461.359375,
+            "y": 335.765625,
+            "width": 210,
+            "height": 114
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:landing:result:title",
+          "bounds": {
+            "x": 478.359375,
+            "y": 377.8125,
+            "width": 176,
+            "height": 29.890625
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:landing:result:title",
+          "bounds": {
+            "x": 478.359375,
+            "y": 377.8125,
+            "width": 176,
+            "height": 29.890625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:compliance",
+          "bounds": {
+            "x": 41,
+            "y": 504.765625,
+            "width": 638,
+            "height": 134.21875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:compliance:title",
+          "bounds": {
+            "x": 41,
+            "y": 513.765625,
+            "width": 638,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:compliance:title",
+          "bounds": {
+            "x": 41,
+            "y": 513.765625,
+            "width": 638,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:compliance:body",
+          "bounds": {
+            "x": 41,
+            "y": 548.578125,
+            "width": 638,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:compliance:body",
+          "bounds": {
+            "x": 41,
+            "y": 548.578125,
+            "width": 638,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance",
+          "bounds": {
+            "x": 41,
+            "y": 581.046875,
+            "width": 638,
+            "height": 57.9375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:label",
+          "bounds": {
+            "x": 41,
+            "y": 581.046875,
+            "width": 123.46875,
+            "height": 57.9375
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:compliance:label",
+          "bounds": {
+            "x": 41,
+            "y": 581.046875,
+            "width": 123.46875,
+            "height": 57.9375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:fact:1",
+          "bounds": {
+            "x": 164.46875,
+            "y": 581.046875,
+            "width": 128.625,
+            "height": 57.9375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:fact:1:label",
+          "bounds": {
+            "x": 201.78125,
+            "y": 585.046875,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:compliance:fact:1:label",
+          "bounds": {
+            "x": 201.78125,
+            "y": 585.046875,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:fact:1:value",
+          "bounds": {
+            "x": 201.78125,
+            "y": 610.515625,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:compliance:fact:1:value",
+          "bounds": {
+            "x": 201.78125,
+            "y": 610.515625,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:fact:2",
+          "bounds": {
+            "x": 293.09375,
+            "y": 581.046875,
+            "width": 128.640625,
+            "height": 57.9375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:fact:2:label",
+          "bounds": {
+            "x": 330.90625,
+            "y": 585.046875,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:compliance:fact:2:label",
+          "bounds": {
+            "x": 330.90625,
+            "y": 585.046875,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:fact:2:value",
+          "bounds": {
+            "x": 330.90625,
+            "y": 610.515625,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:compliance:fact:2:value",
+          "bounds": {
+            "x": 330.90625,
+            "y": 610.515625,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:fact:3",
+          "bounds": {
+            "x": 421.734375,
+            "y": 581.046875,
+            "width": 128.625,
+            "height": 57.9375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:fact:3:label",
+          "bounds": {
+            "x": 459.546875,
+            "y": 585.046875,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:compliance:fact:3:label",
+          "bounds": {
+            "x": 459.546875,
+            "y": 585.046875,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:fact:3:value",
+          "bounds": {
+            "x": 459.546875,
+            "y": 610.515625,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:compliance:fact:3:value",
+          "bounds": {
+            "x": 459.546875,
+            "y": 610.515625,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:fact:4",
+          "bounds": {
+            "x": 550.359375,
+            "y": 581.046875,
+            "width": 128.640625,
+            "height": 57.9375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:fact:4:label",
+          "bounds": {
+            "x": 588.171875,
+            "y": 585.046875,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:compliance:fact:4:label",
+          "bounds": {
+            "x": 588.171875,
+            "y": 585.046875,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:compliance:fact:4:value",
+          "bounds": {
+            "x": 588.171875,
+            "y": 610.515625,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:compliance:fact:4:value",
+          "bounds": {
+            "x": 588.171875,
+            "y": 610.515625,
+            "width": 54,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:insights",
+          "bounds": {
+            "x": 30,
+            "y": 665.984375,
+            "width": 660,
+            "height": 391.875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:insights:title",
+          "bounds": {
+            "x": 41,
+            "y": 676.984375,
+            "width": 100,
+            "height": 33.75
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "group:insights:title",
+          "bounds": {
+            "x": 41,
+            "y": 676.984375,
+            "width": 100,
+            "height": 33.75
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:alignment",
+          "bounds": {
+            "x": 41,
+            "y": 718.734375,
+            "width": 638,
+            "height": 84.28125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:alignment:title",
+          "bounds": {
+            "x": 51,
+            "y": 725.734375,
+            "width": 618,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:alignment:title",
+          "bounds": {
+            "x": 51,
+            "y": 725.734375,
+            "width": 618,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:alignment",
+          "bounds": {
+            "x": 51,
+            "y": 763.546875,
+            "width": 618,
+            "height": 32.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:alignment:step:1",
+          "bounds": {
+            "x": 51,
+            "y": 763.546875,
+            "width": 86,
+            "height": 32.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:alignment:step:1",
+          "bounds": {
+            "x": 51,
+            "y": 763.546875,
+            "width": 86,
+            "height": 32.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:alignment:link:1",
+          "bounds": {
+            "x": 143,
+            "y": 774.78125,
+            "width": 15,
+            "height": 10
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:alignment:step:2",
+          "bounds": {
+            "x": 165,
+            "y": 763.546875,
+            "width": 158,
+            "height": 32.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:alignment:step:2",
+          "bounds": {
+            "x": 165,
+            "y": 763.546875,
+            "width": 158,
+            "height": 32.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:alignment:link:2",
+          "bounds": {
+            "x": 329,
+            "y": 774.78125,
+            "width": 15,
+            "height": 10
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "component:alignment:step:3",
+          "bounds": {
+            "x": 351,
+            "y": 763.546875,
+            "width": 86,
+            "height": 32.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "component:alignment:step:3",
+          "bounds": {
+            "x": 351,
+            "y": 763.546875,
+            "width": 86,
+            "height": 32.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:outcome-test",
+          "bounds": {
+            "x": 41,
+            "y": 811.015625,
+            "width": 638,
+            "height": 73.28125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:outcome-test:title",
+          "bounds": {
+            "x": 51,
+            "y": 818.015625,
+            "width": 618,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:outcome-test:title",
+          "bounds": {
+            "x": 51,
+            "y": 818.015625,
+            "width": 618,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:outcome-test:body",
+          "bounds": {
+            "x": 51,
+            "y": 852.828125,
+            "width": 618,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:outcome-test:body",
+          "bounds": {
+            "x": 51,
+            "y": 852.828125,
+            "width": 618,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:iteration",
+          "bounds": {
+            "x": 41,
+            "y": 892.296875,
+            "width": 638,
+            "height": 73.28125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:iteration:title",
+          "bounds": {
+            "x": 51,
+            "y": 899.296875,
+            "width": 618,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:iteration:title",
+          "bounds": {
+            "x": 51,
+            "y": 899.296875,
+            "width": 618,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:iteration:body",
+          "bounds": {
+            "x": 51,
+            "y": 934.109375,
+            "width": 618,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:iteration:body",
+          "bounds": {
+            "x": 51,
+            "y": 934.109375,
+            "width": 618,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:balance",
+          "bounds": {
+            "x": 41,
+            "y": 973.578125,
+            "width": 638,
+            "height": 73.28125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:balance:title",
+          "bounds": {
+            "x": 51,
+            "y": 980.578125,
+            "width": 618,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:balance:title",
+          "bounds": {
+            "x": 51,
+            "y": 980.578125,
+            "width": 618,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:balance:body",
+          "bounds": {
+            "x": 51,
+            "y": 1015.390625,
+            "width": 618,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:balance:body",
+          "bounds": {
+            "x": 51,
+            "y": 1015.390625,
+            "width": 618,
+            "height": 24.46875
+          }
+        }
+      ]
+    }
+  ],
+  "inputSha256": "1839bc1283cf64cc24a3b929488282358545539b6b56bda3998853cbbf243935",
+  "browser": "157.0.8103.79",
+  "diagnosticPreview": {
+    "html": "rejected.html",
+    "png": "rejected.png",
+    "candidate": "compact-column"
+  }
+}

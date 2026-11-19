@@ -1,0 +1,2912 @@
+{
+  "version": "semantic-band-report@1",
+  "status": "passed",
+  "canvas": {
+    "width": 720,
+    "height": 800
+  },
+  "candidates": [
+    {
+      "layout": {
+        "id": "standard-1+1+1-balanced-flow",
+        "canvas": {
+          "width": 720,
+          "height": 800
+        },
+        "density": "standard",
+        "margin": 30,
+        "gap": 16,
+        "padding": 12,
+        "rows": [
+          [
+            {
+              "id": "routine",
+              "width": 660,
+              "itemsAcross": 2
+            }
+          ],
+          [
+            {
+              "id": "response",
+              "width": 660,
+              "itemsAcross": 2
+            }
+          ],
+          [
+            {
+              "id": "intensification",
+              "width": 660,
+              "itemsAcross": 2
+            }
+          ]
+        ],
+        "direction": "column",
+        "columns": [
+          660,
+          660,
+          660
+        ]
+      },
+      "score": null,
+      "frame": {
+        "x": 30,
+        "y": 158.1875,
+        "width": 660,
+        "height": 581.8125
+      },
+      "groups": [
+        {
+          "id": "group:routine",
+          "bounds": {
+            "x": 30,
+            "y": 211.28125,
+            "width": 660,
+            "height": 198.84375
+          },
+          "visibleHeight": 178.75
+        },
+        {
+          "id": "group:response",
+          "bounds": {
+            "x": 30,
+            "y": 426.125,
+            "width": 660,
+            "height": 260.65625
+          },
+          "visibleHeight": 240.5625
+        },
+        {
+          "id": "group:intensification",
+          "bounds": {
+            "x": 30,
+            "y": 702.78125,
+            "width": 660,
+            "height": 198.84375
+          },
+          "visibleHeight": 178.75
+        }
+      ],
+      "errors": [
+        {
+          "code": "canvas-overflow",
+          "id": "slide",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 720,
+            "height": 800
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:intensification",
+          "bounds": {
+            "x": 30,
+            "y": 702.78125,
+            "width": 660,
+            "height": 198.84375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:intensification:title",
+          "bounds": {
+            "x": 43,
+            "y": 715.78125,
+            "width": 175,
+            "height": 33.75
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "group:intensification:title",
+          "bounds": {
+            "x": 43,
+            "y": 715.78125,
+            "width": 175,
+            "height": 33.75
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:rain-threshold",
+          "bounds": {
+            "x": 43,
+            "y": 760.53125,
+            "width": 311.5,
+            "height": 128.09375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:rain-threshold:title",
+          "bounds": {
+            "x": 51,
+            "y": 768.53125,
+            "width": 295.5,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:rain-threshold:title",
+          "bounds": {
+            "x": 51,
+            "y": 768.53125,
+            "width": 295.5,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:rain-threshold:body",
+          "bounds": {
+            "x": 51,
+            "y": 803.34375,
+            "width": 295.5,
+            "height": 78.28125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:rain-threshold:body",
+          "bounds": {
+            "x": 51,
+            "y": 803.34375,
+            "width": 295.5,
+            "height": 78.28125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal",
+          "bounds": {
+            "x": 365.5,
+            "y": 760.53125,
+            "width": 311.5,
+            "height": 106
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal:title",
+          "bounds": {
+            "x": 373.5,
+            "y": 772.53125,
+            "width": 295.5,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:return-to-normal:title",
+          "bounds": {
+            "x": 373.5,
+            "y": 772.53125,
+            "width": 295.5,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal:body",
+          "bounds": {
+            "x": 373.5,
+            "y": 807.34375,
+            "width": 295.5,
+            "height": 52.1875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:return-to-normal:body",
+          "bounds": {
+            "x": 373.5,
+            "y": 807.34375,
+            "width": 295.5,
+            "height": 52.1875
+          }
+        }
+      ]
+    },
+    {
+      "layout": {
+        "id": "standard-1+1+1-balanced-stack",
+        "canvas": {
+          "width": 720,
+          "height": 800
+        },
+        "density": "standard",
+        "margin": 30,
+        "gap": 16,
+        "padding": 12,
+        "rows": [
+          [
+            {
+              "id": "routine",
+              "width": 660,
+              "itemsAcross": 1
+            }
+          ],
+          [
+            {
+              "id": "response",
+              "width": 660,
+              "itemsAcross": 1
+            }
+          ],
+          [
+            {
+              "id": "intensification",
+              "width": 660,
+              "itemsAcross": 1
+            }
+          ]
+        ],
+        "direction": "column",
+        "columns": [
+          660,
+          660,
+          660
+        ]
+      },
+      "score": null,
+      "frame": {
+        "x": 30,
+        "y": 158.1875,
+        "width": 660,
+        "height": 581.8125
+      },
+      "groups": [
+        {
+          "id": "group:routine",
+          "bounds": {
+            "x": 30,
+            "y": 211.28125,
+            "width": 660,
+            "height": 257.65625
+          },
+          "visibleHeight": 237.5625
+        },
+        {
+          "id": "group:response",
+          "bounds": {
+            "x": 30,
+            "y": 484.9375,
+            "width": 660,
+            "height": 319.46875
+          },
+          "visibleHeight": 299.375
+        },
+        {
+          "id": "group:intensification",
+          "bounds": {
+            "x": 30,
+            "y": 820.40625,
+            "width": 660,
+            "height": 215.5625
+          },
+          "visibleHeight": 202.46875
+        }
+      ],
+      "errors": [
+        {
+          "code": "canvas-overflow",
+          "id": "slide",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 720,
+            "height": 800
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:response",
+          "bounds": {
+            "x": 30,
+            "y": 484.9375,
+            "width": 660,
+            "height": 319.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:incident",
+          "bounds": {
+            "x": 43,
+            "y": 714.5,
+            "width": 634,
+            "height": 76.90625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:incident:title",
+          "bounds": {
+            "x": 53,
+            "y": 723.5,
+            "width": 614,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:incident:title",
+          "bounds": {
+            "x": 53,
+            "y": 723.5,
+            "width": 614,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:incident:body",
+          "bounds": {
+            "x": 53,
+            "y": 758.3125,
+            "width": 614,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:incident:body",
+          "bounds": {
+            "x": 53,
+            "y": 758.3125,
+            "width": 614,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:intensification",
+          "bounds": {
+            "x": 30,
+            "y": 820.40625,
+            "width": 660,
+            "height": 215.5625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:intensification:title",
+          "bounds": {
+            "x": 43,
+            "y": 833.40625,
+            "width": 175,
+            "height": 33.75
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "group:intensification:title",
+          "bounds": {
+            "x": 43,
+            "y": 833.40625,
+            "width": 175,
+            "height": 33.75
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:rain-threshold",
+          "bounds": {
+            "x": 43,
+            "y": 878.15625,
+            "width": 634,
+            "height": 60.90625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:rain-threshold:title",
+          "bounds": {
+            "x": 43,
+            "y": 878.15625,
+            "width": 634,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:rain-threshold:title",
+          "bounds": {
+            "x": 43,
+            "y": 878.15625,
+            "width": 634,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:rain-threshold:body",
+          "bounds": {
+            "x": 43,
+            "y": 912.96875,
+            "width": 634,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:rain-threshold:body",
+          "bounds": {
+            "x": 43,
+            "y": 912.96875,
+            "width": 634,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal",
+          "bounds": {
+            "x": 43,
+            "y": 950.0625,
+            "width": 634,
+            "height": 72.90625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal:title",
+          "bounds": {
+            "x": 43,
+            "y": 962.0625,
+            "width": 634,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:return-to-normal:title",
+          "bounds": {
+            "x": 43,
+            "y": 962.0625,
+            "width": 634,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal:body",
+          "bounds": {
+            "x": 43,
+            "y": 996.875,
+            "width": 634,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:return-to-normal:body",
+          "bounds": {
+            "x": 43,
+            "y": 996.875,
+            "width": 634,
+            "height": 26.09375
+          }
+        }
+      ]
+    },
+    {
+      "layout": {
+        "id": "standard-1+2-balanced-flow",
+        "canvas": {
+          "width": 720,
+          "height": 800
+        },
+        "density": "standard",
+        "margin": 30,
+        "gap": 16,
+        "padding": 12,
+        "rows": [
+          [
+            {
+              "id": "routine",
+              "width": 660,
+              "itemsAcross": 2
+            }
+          ],
+          [
+            {
+              "id": "response",
+              "width": 322,
+              "itemsAcross": 1
+            },
+            {
+              "id": "intensification",
+              "width": 322,
+              "itemsAcross": 1
+            }
+          ]
+        ],
+        "direction": "column",
+        "columns": [
+          660,
+          322,
+          322
+        ]
+      },
+      "score": null,
+      "frame": {
+        "x": 30,
+        "y": 158.1875,
+        "width": 660,
+        "height": 581.8125
+      },
+      "groups": [
+        {
+          "id": "group:routine",
+          "bounds": {
+            "x": 30,
+            "y": 211.28125,
+            "width": 660,
+            "height": 198.84375
+          },
+          "visibleHeight": 178.75
+        },
+        {
+          "id": "group:response",
+          "bounds": {
+            "x": 30,
+            "y": 426.125,
+            "width": 322,
+            "height": 371.65625
+          },
+          "visibleHeight": 351.5625
+        },
+        {
+          "id": "group:intensification",
+          "bounds": {
+            "x": 368,
+            "y": 426.125,
+            "width": 322,
+            "height": 293.84375
+          },
+          "visibleHeight": 280.75
+        }
+      ],
+      "errors": [
+        {
+          "code": "object-outside-body",
+          "id": "group:response",
+          "bounds": {
+            "x": 30,
+            "y": 426.125,
+            "width": 322,
+            "height": 371.65625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:incident",
+          "bounds": {
+            "x": 43,
+            "y": 681.78125,
+            "width": 296,
+            "height": 103
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:incident:body",
+          "bounds": {
+            "x": 53,
+            "y": 725.59375,
+            "width": 276,
+            "height": 52.1875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:incident:body",
+          "bounds": {
+            "x": 53,
+            "y": 725.59375,
+            "width": 276,
+            "height": 52.1875
+          }
+        }
+      ]
+    },
+    {
+      "layout": {
+        "id": "standard-1+2-balanced-stack",
+        "canvas": {
+          "width": 720,
+          "height": 800
+        },
+        "density": "standard",
+        "margin": 30,
+        "gap": 16,
+        "padding": 12,
+        "rows": [
+          [
+            {
+              "id": "routine",
+              "width": 660,
+              "itemsAcross": 1
+            }
+          ],
+          [
+            {
+              "id": "response",
+              "width": 322,
+              "itemsAcross": 1
+            },
+            {
+              "id": "intensification",
+              "width": 322,
+              "itemsAcross": 1
+            }
+          ]
+        ],
+        "direction": "column",
+        "columns": [
+          660,
+          322,
+          322
+        ]
+      },
+      "score": null,
+      "frame": {
+        "x": 30,
+        "y": 158.1875,
+        "width": 660,
+        "height": 581.8125
+      },
+      "groups": [
+        {
+          "id": "group:routine",
+          "bounds": {
+            "x": 30,
+            "y": 211.28125,
+            "width": 660,
+            "height": 257.65625
+          },
+          "visibleHeight": 237.5625
+        },
+        {
+          "id": "group:response",
+          "bounds": {
+            "x": 30,
+            "y": 484.9375,
+            "width": 322,
+            "height": 371.65625
+          },
+          "visibleHeight": 351.5625
+        },
+        {
+          "id": "group:intensification",
+          "bounds": {
+            "x": 368,
+            "y": 484.9375,
+            "width": 322,
+            "height": 293.84375
+          },
+          "visibleHeight": 280.75
+        }
+      ],
+      "errors": [
+        {
+          "code": "canvas-overflow",
+          "id": "slide",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 720,
+            "height": 800
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:response",
+          "bounds": {
+            "x": 30,
+            "y": 484.9375,
+            "width": 322,
+            "height": 371.65625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:incident",
+          "bounds": {
+            "x": 43,
+            "y": 740.59375,
+            "width": 296,
+            "height": 103
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:incident:title",
+          "bounds": {
+            "x": 53,
+            "y": 749.59375,
+            "width": 276,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:incident:title",
+          "bounds": {
+            "x": 53,
+            "y": 749.59375,
+            "width": 276,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:incident:body",
+          "bounds": {
+            "x": 53,
+            "y": 784.40625,
+            "width": 276,
+            "height": 52.1875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:incident:body",
+          "bounds": {
+            "x": 53,
+            "y": 784.40625,
+            "width": 276,
+            "height": 52.1875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:intensification",
+          "bounds": {
+            "x": 368,
+            "y": 484.9375,
+            "width": 322,
+            "height": 293.84375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal",
+          "bounds": {
+            "x": 381,
+            "y": 666.78125,
+            "width": 296,
+            "height": 99
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal:body",
+          "bounds": {
+            "x": 381,
+            "y": 713.59375,
+            "width": 296,
+            "height": 52.1875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:return-to-normal:body",
+          "bounds": {
+            "x": 381,
+            "y": 713.59375,
+            "width": 296,
+            "height": 52.1875
+          }
+        }
+      ]
+    },
+    {
+      "layout": {
+        "id": "standard-1+2-content-weighted-flow",
+        "canvas": {
+          "width": 720,
+          "height": 800
+        },
+        "density": "standard",
+        "margin": 30,
+        "gap": 16,
+        "padding": 12,
+        "rows": [
+          [
+            {
+              "id": "routine",
+              "width": 660,
+              "itemsAcross": 2
+            }
+          ],
+          [
+            {
+              "id": "response",
+              "width": 347,
+              "itemsAcross": 1
+            },
+            {
+              "id": "intensification",
+              "width": 297,
+              "itemsAcross": 1
+            }
+          ]
+        ],
+        "direction": "column",
+        "columns": [
+          660,
+          347,
+          297
+        ]
+      },
+      "score": null,
+      "frame": {
+        "x": 30,
+        "y": 158.1875,
+        "width": 660,
+        "height": 581.8125
+      },
+      "groups": [
+        {
+          "id": "group:routine",
+          "bounds": {
+            "x": 30,
+            "y": 211.28125,
+            "width": 660,
+            "height": 198.84375
+          },
+          "visibleHeight": 178.75
+        },
+        {
+          "id": "group:response",
+          "bounds": {
+            "x": 30,
+            "y": 426.125,
+            "width": 347,
+            "height": 371.65625
+          },
+          "visibleHeight": 351.5625
+        },
+        {
+          "id": "group:intensification",
+          "bounds": {
+            "x": 393,
+            "y": 426.125,
+            "width": 297,
+            "height": 293.84375
+          },
+          "visibleHeight": 280.75
+        }
+      ],
+      "errors": [
+        {
+          "code": "object-outside-body",
+          "id": "group:response",
+          "bounds": {
+            "x": 30,
+            "y": 426.125,
+            "width": 347,
+            "height": 371.65625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:incident",
+          "bounds": {
+            "x": 43,
+            "y": 681.78125,
+            "width": 321,
+            "height": 103
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:incident:body",
+          "bounds": {
+            "x": 53,
+            "y": 725.59375,
+            "width": 301,
+            "height": 52.1875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:incident:body",
+          "bounds": {
+            "x": 53,
+            "y": 725.59375,
+            "width": 301,
+            "height": 52.1875
+          }
+        }
+      ]
+    },
+    {
+      "layout": {
+        "id": "standard-1+2-content-weighted-stack",
+        "canvas": {
+          "width": 720,
+          "height": 800
+        },
+        "density": "standard",
+        "margin": 30,
+        "gap": 16,
+        "padding": 12,
+        "rows": [
+          [
+            {
+              "id": "routine",
+              "width": 660,
+              "itemsAcross": 1
+            }
+          ],
+          [
+            {
+              "id": "response",
+              "width": 347,
+              "itemsAcross": 1
+            },
+            {
+              "id": "intensification",
+              "width": 297,
+              "itemsAcross": 1
+            }
+          ]
+        ],
+        "direction": "column",
+        "columns": [
+          660,
+          347,
+          297
+        ]
+      },
+      "score": null,
+      "frame": {
+        "x": 30,
+        "y": 158.1875,
+        "width": 660,
+        "height": 581.8125
+      },
+      "groups": [
+        {
+          "id": "group:routine",
+          "bounds": {
+            "x": 30,
+            "y": 211.28125,
+            "width": 660,
+            "height": 257.65625
+          },
+          "visibleHeight": 237.5625
+        },
+        {
+          "id": "group:response",
+          "bounds": {
+            "x": 30,
+            "y": 484.9375,
+            "width": 347,
+            "height": 371.65625
+          },
+          "visibleHeight": 351.5625
+        },
+        {
+          "id": "group:intensification",
+          "bounds": {
+            "x": 393,
+            "y": 484.9375,
+            "width": 297,
+            "height": 293.84375
+          },
+          "visibleHeight": 280.75
+        }
+      ],
+      "errors": [
+        {
+          "code": "canvas-overflow",
+          "id": "slide",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 720,
+            "height": 800
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:response",
+          "bounds": {
+            "x": 30,
+            "y": 484.9375,
+            "width": 347,
+            "height": 371.65625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:incident",
+          "bounds": {
+            "x": 43,
+            "y": 740.59375,
+            "width": 321,
+            "height": 103
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:incident:title",
+          "bounds": {
+            "x": 53,
+            "y": 749.59375,
+            "width": 301,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:incident:title",
+          "bounds": {
+            "x": 53,
+            "y": 749.59375,
+            "width": 301,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:incident:body",
+          "bounds": {
+            "x": 53,
+            "y": 784.40625,
+            "width": 301,
+            "height": 52.1875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:incident:body",
+          "bounds": {
+            "x": 53,
+            "y": 784.40625,
+            "width": 301,
+            "height": 52.1875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:intensification",
+          "bounds": {
+            "x": 393,
+            "y": 484.9375,
+            "width": 297,
+            "height": 293.84375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal",
+          "bounds": {
+            "x": 406,
+            "y": 666.78125,
+            "width": 271,
+            "height": 99
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal:body",
+          "bounds": {
+            "x": 406,
+            "y": 713.59375,
+            "width": 271,
+            "height": 52.1875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:return-to-normal:body",
+          "bounds": {
+            "x": 406,
+            "y": 713.59375,
+            "width": 271,
+            "height": 52.1875
+          }
+        }
+      ]
+    },
+    {
+      "layout": {
+        "id": "standard-2+1-balanced-flow",
+        "canvas": {
+          "width": 720,
+          "height": 800
+        },
+        "density": "standard",
+        "margin": 30,
+        "gap": 16,
+        "padding": 12,
+        "rows": [
+          [
+            {
+              "id": "routine",
+              "width": 322,
+              "itemsAcross": 1
+            },
+            {
+              "id": "response",
+              "width": 322,
+              "itemsAcross": 1
+            }
+          ],
+          [
+            {
+              "id": "intensification",
+              "width": 660,
+              "itemsAcross": 2
+            }
+          ]
+        ],
+        "direction": "column",
+        "columns": [
+          322,
+          322,
+          660
+        ]
+      },
+      "score": null,
+      "frame": {
+        "x": 30,
+        "y": 158.1875,
+        "width": 660,
+        "height": 581.8125
+      },
+      "groups": [
+        {
+          "id": "group:routine",
+          "bounds": {
+            "x": 30,
+            "y": 211.28125,
+            "width": 322,
+            "height": 309.84375
+          },
+          "visibleHeight": 289.75
+        },
+        {
+          "id": "group:response",
+          "bounds": {
+            "x": 368,
+            "y": 211.28125,
+            "width": 322,
+            "height": 371.65625
+          },
+          "visibleHeight": 351.5625
+        },
+        {
+          "id": "group:intensification",
+          "bounds": {
+            "x": 30,
+            "y": 598.9375,
+            "width": 660,
+            "height": 198.84375
+          },
+          "visibleHeight": 178.75
+        }
+      ],
+      "errors": [
+        {
+          "code": "object-outside-body",
+          "id": "group:intensification",
+          "bounds": {
+            "x": 30,
+            "y": 598.9375,
+            "width": 660,
+            "height": 198.84375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:rain-threshold",
+          "bounds": {
+            "x": 43,
+            "y": 656.6875,
+            "width": 311.5,
+            "height": 128.09375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:rain-threshold:body",
+          "bounds": {
+            "x": 51,
+            "y": 699.5,
+            "width": 295.5,
+            "height": 78.28125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:rain-threshold:body",
+          "bounds": {
+            "x": 51,
+            "y": 699.5,
+            "width": 295.5,
+            "height": 78.28125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal",
+          "bounds": {
+            "x": 365.5,
+            "y": 656.6875,
+            "width": 311.5,
+            "height": 106
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal:body",
+          "bounds": {
+            "x": 373.5,
+            "y": 703.5,
+            "width": 295.5,
+            "height": 52.1875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:return-to-normal:body",
+          "bounds": {
+            "x": 373.5,
+            "y": 703.5,
+            "width": 295.5,
+            "height": 52.1875
+          }
+        }
+      ]
+    },
+    {
+      "layout": {
+        "id": "standard-2+1-balanced-stack",
+        "canvas": {
+          "width": 720,
+          "height": 800
+        },
+        "density": "standard",
+        "margin": 30,
+        "gap": 16,
+        "padding": 12,
+        "rows": [
+          [
+            {
+              "id": "routine",
+              "width": 322,
+              "itemsAcross": 1
+            },
+            {
+              "id": "response",
+              "width": 322,
+              "itemsAcross": 1
+            }
+          ],
+          [
+            {
+              "id": "intensification",
+              "width": 660,
+              "itemsAcross": 1
+            }
+          ]
+        ],
+        "direction": "column",
+        "columns": [
+          322,
+          322,
+          660
+        ]
+      },
+      "score": null,
+      "frame": {
+        "x": 30,
+        "y": 158.1875,
+        "width": 660,
+        "height": 581.8125
+      },
+      "groups": [
+        {
+          "id": "group:routine",
+          "bounds": {
+            "x": 30,
+            "y": 211.28125,
+            "width": 322,
+            "height": 309.84375
+          },
+          "visibleHeight": 289.75
+        },
+        {
+          "id": "group:response",
+          "bounds": {
+            "x": 368,
+            "y": 211.28125,
+            "width": 322,
+            "height": 371.65625
+          },
+          "visibleHeight": 351.5625
+        },
+        {
+          "id": "group:intensification",
+          "bounds": {
+            "x": 30,
+            "y": 598.9375,
+            "width": 660,
+            "height": 215.5625
+          },
+          "visibleHeight": 202.46875
+        }
+      ],
+      "errors": [
+        {
+          "code": "canvas-overflow",
+          "id": "slide",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 720,
+            "height": 800
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:intensification",
+          "bounds": {
+            "x": 30,
+            "y": 598.9375,
+            "width": 660,
+            "height": 215.5625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal",
+          "bounds": {
+            "x": 43,
+            "y": 728.59375,
+            "width": 634,
+            "height": 72.90625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal:title",
+          "bounds": {
+            "x": 43,
+            "y": 740.59375,
+            "width": 634,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:return-to-normal:title",
+          "bounds": {
+            "x": 43,
+            "y": 740.59375,
+            "width": 634,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal:body",
+          "bounds": {
+            "x": 43,
+            "y": 775.40625,
+            "width": 634,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:return-to-normal:body",
+          "bounds": {
+            "x": 43,
+            "y": 775.40625,
+            "width": 634,
+            "height": 26.09375
+          }
+        }
+      ]
+    },
+    {
+      "layout": {
+        "id": "standard-2+1-content-weighted-flow",
+        "canvas": {
+          "width": 720,
+          "height": 800
+        },
+        "density": "standard",
+        "margin": 30,
+        "gap": 16,
+        "padding": 12,
+        "rows": [
+          [
+            {
+              "id": "routine",
+              "width": 296,
+              "itemsAcross": 1
+            },
+            {
+              "id": "response",
+              "width": 348,
+              "itemsAcross": 1
+            }
+          ],
+          [
+            {
+              "id": "intensification",
+              "width": 660,
+              "itemsAcross": 2
+            }
+          ]
+        ],
+        "direction": "column",
+        "columns": [
+          296,
+          348,
+          660
+        ]
+      },
+      "score": null,
+      "frame": {
+        "x": 30,
+        "y": 158.1875,
+        "width": 660,
+        "height": 581.8125
+      },
+      "groups": [
+        {
+          "id": "group:routine",
+          "bounds": {
+            "x": 30,
+            "y": 211.28125,
+            "width": 296,
+            "height": 309.84375
+          },
+          "visibleHeight": 289.75
+        },
+        {
+          "id": "group:response",
+          "bounds": {
+            "x": 342,
+            "y": 211.28125,
+            "width": 348,
+            "height": 371.65625
+          },
+          "visibleHeight": 351.5625
+        },
+        {
+          "id": "group:intensification",
+          "bounds": {
+            "x": 30,
+            "y": 598.9375,
+            "width": 660,
+            "height": 198.84375
+          },
+          "visibleHeight": 178.75
+        }
+      ],
+      "errors": [
+        {
+          "code": "object-outside-body",
+          "id": "group:intensification",
+          "bounds": {
+            "x": 30,
+            "y": 598.9375,
+            "width": 660,
+            "height": 198.84375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:rain-threshold",
+          "bounds": {
+            "x": 43,
+            "y": 656.6875,
+            "width": 311.5,
+            "height": 128.09375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:rain-threshold:body",
+          "bounds": {
+            "x": 51,
+            "y": 699.5,
+            "width": 295.5,
+            "height": 78.28125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:rain-threshold:body",
+          "bounds": {
+            "x": 51,
+            "y": 699.5,
+            "width": 295.5,
+            "height": 78.28125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal",
+          "bounds": {
+            "x": 365.5,
+            "y": 656.6875,
+            "width": 311.5,
+            "height": 106
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal:body",
+          "bounds": {
+            "x": 373.5,
+            "y": 703.5,
+            "width": 295.5,
+            "height": 52.1875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:return-to-normal:body",
+          "bounds": {
+            "x": 373.5,
+            "y": 703.5,
+            "width": 295.5,
+            "height": 52.1875
+          }
+        }
+      ]
+    },
+    {
+      "layout": {
+        "id": "standard-2+1-content-weighted-stack",
+        "canvas": {
+          "width": 720,
+          "height": 800
+        },
+        "density": "standard",
+        "margin": 30,
+        "gap": 16,
+        "padding": 12,
+        "rows": [
+          [
+            {
+              "id": "routine",
+              "width": 296,
+              "itemsAcross": 1
+            },
+            {
+              "id": "response",
+              "width": 348,
+              "itemsAcross": 1
+            }
+          ],
+          [
+            {
+              "id": "intensification",
+              "width": 660,
+              "itemsAcross": 1
+            }
+          ]
+        ],
+        "direction": "column",
+        "columns": [
+          296,
+          348,
+          660
+        ]
+      },
+      "score": null,
+      "frame": {
+        "x": 30,
+        "y": 158.1875,
+        "width": 660,
+        "height": 581.8125
+      },
+      "groups": [
+        {
+          "id": "group:routine",
+          "bounds": {
+            "x": 30,
+            "y": 211.28125,
+            "width": 296,
+            "height": 309.84375
+          },
+          "visibleHeight": 289.75
+        },
+        {
+          "id": "group:response",
+          "bounds": {
+            "x": 342,
+            "y": 211.28125,
+            "width": 348,
+            "height": 371.65625
+          },
+          "visibleHeight": 351.5625
+        },
+        {
+          "id": "group:intensification",
+          "bounds": {
+            "x": 30,
+            "y": 598.9375,
+            "width": 660,
+            "height": 215.5625
+          },
+          "visibleHeight": 202.46875
+        }
+      ],
+      "errors": [
+        {
+          "code": "canvas-overflow",
+          "id": "slide",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 720,
+            "height": 800
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:intensification",
+          "bounds": {
+            "x": 30,
+            "y": 598.9375,
+            "width": 660,
+            "height": 215.5625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal",
+          "bounds": {
+            "x": 43,
+            "y": 728.59375,
+            "width": 634,
+            "height": 72.90625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal:title",
+          "bounds": {
+            "x": 43,
+            "y": 740.59375,
+            "width": 634,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:return-to-normal:title",
+          "bounds": {
+            "x": 43,
+            "y": 740.59375,
+            "width": 634,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal:body",
+          "bounds": {
+            "x": 43,
+            "y": 775.40625,
+            "width": 634,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:return-to-normal:body",
+          "bounds": {
+            "x": 43,
+            "y": 775.40625,
+            "width": 634,
+            "height": 26.09375
+          }
+        }
+      ]
+    },
+    {
+      "layout": {
+        "id": "compact-1+1+1-balanced-flow",
+        "canvas": {
+          "width": 720,
+          "height": 800
+        },
+        "density": "compact",
+        "margin": 30,
+        "gap": 16,
+        "padding": 10,
+        "rows": [
+          [
+            {
+              "id": "routine",
+              "width": 660,
+              "itemsAcross": 2
+            }
+          ],
+          [
+            {
+              "id": "response",
+              "width": 660,
+              "itemsAcross": 2
+            }
+          ],
+          [
+            {
+              "id": "intensification",
+              "width": 660,
+              "itemsAcross": 2
+            }
+          ]
+        ],
+        "direction": "column",
+        "columns": [
+          660,
+          660,
+          660
+        ]
+      },
+      "score": null,
+      "frame": {
+        "x": 30,
+        "y": 139.1875,
+        "width": 660,
+        "height": 620.8125
+      },
+      "groups": [
+        {
+          "id": "group:routine",
+          "bounds": {
+            "x": 30,
+            "y": 187.65625,
+            "width": 660,
+            "height": 186.96875
+          },
+          "visibleHeight": 169.5
+        },
+        {
+          "id": "group:response",
+          "bounds": {
+            "x": 30,
+            "y": 390.625,
+            "width": 660,
+            "height": 245.78125
+          },
+          "visibleHeight": 228.3125
+        },
+        {
+          "id": "group:intensification",
+          "bounds": {
+            "x": 30,
+            "y": 652.40625,
+            "width": 660,
+            "height": 186.96875
+          },
+          "visibleHeight": 169.5
+        }
+      ],
+      "errors": [
+        {
+          "code": "canvas-overflow",
+          "id": "slide",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 720,
+            "height": 800
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:intensification",
+          "bounds": {
+            "x": 30,
+            "y": 652.40625,
+            "width": 660,
+            "height": 186.96875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:rain-threshold",
+          "bounds": {
+            "x": 41,
+            "y": 705.15625,
+            "width": 315,
+            "height": 123.21875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:rain-threshold:body",
+          "bounds": {
+            "x": 49,
+            "y": 747.96875,
+            "width": 299,
+            "height": 73.40625
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:rain-threshold:body",
+          "bounds": {
+            "x": 49,
+            "y": 747.96875,
+            "width": 299,
+            "height": 73.40625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal",
+          "bounds": {
+            "x": 364,
+            "y": 705.15625,
+            "width": 315,
+            "height": 99.75
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal:body",
+          "bounds": {
+            "x": 372,
+            "y": 748.96875,
+            "width": 299,
+            "height": 48.9375
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:return-to-normal:body",
+          "bounds": {
+            "x": 372,
+            "y": 748.96875,
+            "width": 299,
+            "height": 48.9375
+          }
+        }
+      ]
+    },
+    {
+      "layout": {
+        "id": "compact-1+1+1-balanced-stack",
+        "canvas": {
+          "width": 720,
+          "height": 800
+        },
+        "density": "compact",
+        "margin": 30,
+        "gap": 16,
+        "padding": 10,
+        "rows": [
+          [
+            {
+              "id": "routine",
+              "width": 660,
+              "itemsAcross": 1
+            }
+          ],
+          [
+            {
+              "id": "response",
+              "width": 660,
+              "itemsAcross": 1
+            }
+          ],
+          [
+            {
+              "id": "intensification",
+              "width": 660,
+              "itemsAcross": 1
+            }
+          ]
+        ],
+        "direction": "column",
+        "columns": [
+          660,
+          660,
+          660
+        ]
+      },
+      "score": null,
+      "frame": {
+        "x": 30,
+        "y": 139.1875,
+        "width": 660,
+        "height": 620.8125
+      },
+      "groups": [
+        {
+          "id": "group:routine",
+          "bounds": {
+            "x": 30,
+            "y": 187.65625,
+            "width": 660,
+            "height": 242.78125
+          },
+          "visibleHeight": 225.3125
+        },
+        {
+          "id": "group:response",
+          "bounds": {
+            "x": 30,
+            "y": 446.4375,
+            "width": 660,
+            "height": 301.59375
+          },
+          "visibleHeight": 284.125
+        },
+        {
+          "id": "group:intensification",
+          "bounds": {
+            "x": 30,
+            "y": 764.03125,
+            "width": 660,
+            "height": 199.3125
+          },
+          "visibleHeight": 188.84375
+        }
+      ],
+      "errors": [
+        {
+          "code": "canvas-overflow",
+          "id": "slide",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 720,
+            "height": 800
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:intensification",
+          "bounds": {
+            "x": 30,
+            "y": 764.03125,
+            "width": 660,
+            "height": 199.3125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:intensification:title",
+          "bounds": {
+            "x": 41,
+            "y": 775.03125,
+            "width": 175,
+            "height": 33.75
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "group:intensification:title",
+          "bounds": {
+            "x": 41,
+            "y": 775.03125,
+            "width": 175,
+            "height": 33.75
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:rain-threshold",
+          "bounds": {
+            "x": 41,
+            "y": 816.78125,
+            "width": 638,
+            "height": 59.28125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:rain-threshold:title",
+          "bounds": {
+            "x": 41,
+            "y": 816.78125,
+            "width": 638,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:rain-threshold:title",
+          "bounds": {
+            "x": 41,
+            "y": 816.78125,
+            "width": 638,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:rain-threshold:body",
+          "bounds": {
+            "x": 41,
+            "y": 851.59375,
+            "width": 638,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:rain-threshold:body",
+          "bounds": {
+            "x": 41,
+            "y": 851.59375,
+            "width": 638,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal",
+          "bounds": {
+            "x": 41,
+            "y": 884.0625,
+            "width": 638,
+            "height": 68.28125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal:title",
+          "bounds": {
+            "x": 41,
+            "y": 893.0625,
+            "width": 638,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:return-to-normal:title",
+          "bounds": {
+            "x": 41,
+            "y": 893.0625,
+            "width": 638,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:return-to-normal:body",
+          "bounds": {
+            "x": 41,
+            "y": 927.875,
+            "width": 638,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:return-to-normal:body",
+          "bounds": {
+            "x": 41,
+            "y": 927.875,
+            "width": 638,
+            "height": 24.46875
+          }
+        }
+      ]
+    },
+    {
+      "layout": {
+        "id": "compact-1+2-balanced-flow",
+        "canvas": {
+          "width": 720,
+          "height": 800
+        },
+        "density": "compact",
+        "margin": 30,
+        "gap": 16,
+        "padding": 10,
+        "rows": [
+          [
+            {
+              "id": "routine",
+              "width": 660,
+              "itemsAcross": 2
+            }
+          ],
+          [
+            {
+              "id": "response",
+              "width": 322,
+              "itemsAcross": 1
+            },
+            {
+              "id": "intensification",
+              "width": 322,
+              "itemsAcross": 1
+            }
+          ]
+        ],
+        "direction": "column",
+        "columns": [
+          660,
+          322,
+          322
+        ]
+      },
+      "score": {
+        "cost": 74.64784131566107,
+        "weakEnds": 2,
+        "extraLineBreaks": 5,
+        "imbalance": 77.8125,
+        "occupancy": 0.9696466324373301,
+        "majorRows": 2,
+        "densityPenalty": 7
+      },
+      "frame": {
+        "x": 30,
+        "y": 139.1875,
+        "width": 660,
+        "height": 620.8125
+      },
+      "groups": [
+        {
+          "id": "group:routine",
+          "bounds": {
+            "x": 30,
+            "y": 187.65625,
+            "width": 660,
+            "height": 186.96875
+          },
+          "visibleHeight": 169.5
+        },
+        {
+          "id": "group:response",
+          "bounds": {
+            "x": 30,
+            "y": 390.625,
+            "width": 322,
+            "height": 350.53125
+          },
+          "visibleHeight": 333.0625
+        },
+        {
+          "id": "group:intensification",
+          "bounds": {
+            "x": 368,
+            "y": 390.625,
+            "width": 322,
+            "height": 272.71875
+          },
+          "visibleHeight": 262.25
+        }
+      ],
+      "errors": []
+    },
+    {
+      "layout": {
+        "id": "compact-1+2-balanced-stack",
+        "canvas": {
+          "width": 720,
+          "height": 800
+        },
+        "density": "compact",
+        "margin": 30,
+        "gap": 16,
+        "padding": 10,
+        "rows": [
+          [
+            {
+              "id": "routine",
+              "width": 660,
+              "itemsAcross": 1
+            }
+          ],
+          [
+            {
+              "id": "response",
+              "width": 322,
+              "itemsAcross": 1
+            },
+            {
+              "id": "intensification",
+              "width": 322,
+              "itemsAcross": 1
+            }
+          ]
+        ],
+        "direction": "column",
+        "columns": [
+          660,
+          322,
+          322
+        ]
+      },
+      "score": null,
+      "frame": {
+        "x": 30,
+        "y": 139.1875,
+        "width": 660,
+        "height": 620.8125
+      },
+      "groups": [
+        {
+          "id": "group:routine",
+          "bounds": {
+            "x": 30,
+            "y": 187.65625,
+            "width": 660,
+            "height": 242.78125
+          },
+          "visibleHeight": 225.3125
+        },
+        {
+          "id": "group:response",
+          "bounds": {
+            "x": 30,
+            "y": 446.4375,
+            "width": 322,
+            "height": 350.53125
+          },
+          "visibleHeight": 333.0625
+        },
+        {
+          "id": "group:intensification",
+          "bounds": {
+            "x": 368,
+            "y": 446.4375,
+            "width": 322,
+            "height": 272.71875
+          },
+          "visibleHeight": 262.25
+        }
+      ],
+      "errors": [
+        {
+          "code": "object-outside-body",
+          "id": "group:response",
+          "bounds": {
+            "x": 30,
+            "y": 446.4375,
+            "width": 322,
+            "height": 350.53125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:incident",
+          "bounds": {
+            "x": 41,
+            "y": 686.21875,
+            "width": 300,
+            "height": 99.75
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:incident:body",
+          "bounds": {
+            "x": 51,
+            "y": 730.03125,
+            "width": 280,
+            "height": 48.9375
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:incident:body",
+          "bounds": {
+            "x": 51,
+            "y": 730.03125,
+            "width": 280,
+            "height": 48.9375
+          }
+        }
+      ]
+    },
+    {
+      "layout": {
+        "id": "compact-1+2-content-weighted-flow",
+        "canvas": {
+          "width": 720,
+          "height": 800
+        },
+        "density": "compact",
+        "margin": 30,
+        "gap": 16,
+        "padding": 10,
+        "rows": [
+          [
+            {
+              "id": "routine",
+              "width": 660,
+              "itemsAcross": 2
+            }
+          ],
+          [
+            {
+              "id": "response",
+              "width": 347,
+              "itemsAcross": 1
+            },
+            {
+              "id": "intensification",
+              "width": 297,
+              "itemsAcross": 1
+            }
+          ]
+        ],
+        "direction": "column",
+        "columns": [
+          660,
+          347,
+          297
+        ]
+      },
+      "score": {
+        "cost": 65.64784131566108,
+        "weakEnds": 1,
+        "extraLineBreaks": 5,
+        "imbalance": 77.8125,
+        "occupancy": 0.9696466324373301,
+        "majorRows": 2,
+        "densityPenalty": 7
+      },
+      "frame": {
+        "x": 30,
+        "y": 139.1875,
+        "width": 660,
+        "height": 620.8125
+      },
+      "groups": [
+        {
+          "id": "group:routine",
+          "bounds": {
+            "x": 30,
+            "y": 187.65625,
+            "width": 660,
+            "height": 186.96875
+          },
+          "visibleHeight": 169.5
+        },
+        {
+          "id": "group:response",
+          "bounds": {
+            "x": 30,
+            "y": 390.625,
+            "width": 347,
+            "height": 350.53125
+          },
+          "visibleHeight": 333.0625
+        },
+        {
+          "id": "group:intensification",
+          "bounds": {
+            "x": 393,
+            "y": 390.625,
+            "width": 297,
+            "height": 272.71875
+          },
+          "visibleHeight": 262.25
+        }
+      ],
+      "errors": []
+    },
+    {
+      "layout": {
+        "id": "compact-1+2-content-weighted-stack",
+        "canvas": {
+          "width": 720,
+          "height": 800
+        },
+        "density": "compact",
+        "margin": 30,
+        "gap": 16,
+        "padding": 10,
+        "rows": [
+          [
+            {
+              "id": "routine",
+              "width": 660,
+              "itemsAcross": 1
+            }
+          ],
+          [
+            {
+              "id": "response",
+              "width": 347,
+              "itemsAcross": 1
+            },
+            {
+              "id": "intensification",
+              "width": 297,
+              "itemsAcross": 1
+            }
+          ]
+        ],
+        "direction": "column",
+        "columns": [
+          660,
+          347,
+          297
+        ]
+      },
+      "score": null,
+      "frame": {
+        "x": 30,
+        "y": 139.1875,
+        "width": 660,
+        "height": 620.8125
+      },
+      "groups": [
+        {
+          "id": "group:routine",
+          "bounds": {
+            "x": 30,
+            "y": 187.65625,
+            "width": 660,
+            "height": 242.78125
+          },
+          "visibleHeight": 225.3125
+        },
+        {
+          "id": "group:response",
+          "bounds": {
+            "x": 30,
+            "y": 446.4375,
+            "width": 347,
+            "height": 350.53125
+          },
+          "visibleHeight": 333.0625
+        },
+        {
+          "id": "group:intensification",
+          "bounds": {
+            "x": 393,
+            "y": 446.4375,
+            "width": 297,
+            "height": 272.71875
+          },
+          "visibleHeight": 262.25
+        }
+      ],
+      "errors": [
+        {
+          "code": "object-outside-body",
+          "id": "group:response",
+          "bounds": {
+            "x": 30,
+            "y": 446.4375,
+            "width": 347,
+            "height": 350.53125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:incident",
+          "bounds": {
+            "x": 41,
+            "y": 686.21875,
+            "width": 325,
+            "height": 99.75
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:incident:body",
+          "bounds": {
+            "x": 51,
+            "y": 730.03125,
+            "width": 305,
+            "height": 48.9375
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:incident:body",
+          "bounds": {
+            "x": 51,
+            "y": 730.03125,
+            "width": 305,
+            "height": 48.9375
+          }
+        }
+      ]
+    },
+    {
+      "layout": {
+        "id": "compact-2+1-balanced-flow",
+        "canvas": {
+          "width": 720,
+          "height": 800
+        },
+        "density": "compact",
+        "margin": 30,
+        "gap": 16,
+        "padding": 10,
+        "rows": [
+          [
+            {
+              "id": "routine",
+              "width": 322,
+              "itemsAcross": 1
+            },
+            {
+              "id": "response",
+              "width": 322,
+              "itemsAcross": 1
+            }
+          ],
+          [
+            {
+              "id": "intensification",
+              "width": 660,
+              "itemsAcross": 2
+            }
+          ]
+        ],
+        "direction": "column",
+        "columns": [
+          322,
+          322,
+          660
+        ]
+      },
+      "score": {
+        "cost": 64.91707208489186,
+        "weakEnds": 1,
+        "extraLineBreaks": 5,
+        "imbalance": 58.8125,
+        "occupancy": 0.9696466324373301,
+        "majorRows": 2,
+        "densityPenalty": 7
+      },
+      "frame": {
+        "x": 30,
+        "y": 139.1875,
+        "width": 660,
+        "height": 620.8125
+      },
+      "groups": [
+        {
+          "id": "group:routine",
+          "bounds": {
+            "x": 30,
+            "y": 187.65625,
+            "width": 322,
+            "height": 291.71875
+          },
+          "visibleHeight": 274.25
+        },
+        {
+          "id": "group:response",
+          "bounds": {
+            "x": 368,
+            "y": 187.65625,
+            "width": 322,
+            "height": 350.53125
+          },
+          "visibleHeight": 333.0625
+        },
+        {
+          "id": "group:intensification",
+          "bounds": {
+            "x": 30,
+            "y": 554.1875,
+            "width": 660,
+            "height": 186.96875
+          },
+          "visibleHeight": 169.5
+        }
+      ],
+      "errors": []
+    },
+    {
+      "layout": {
+        "id": "compact-2+1-balanced-stack",
+        "canvas": {
+          "width": 720,
+          "height": 800
+        },
+        "density": "compact",
+        "margin": 30,
+        "gap": 16,
+        "padding": 10,
+        "rows": [
+          [
+            {
+              "id": "routine",
+              "width": 322,
+              "itemsAcross": 1
+            },
+            {
+              "id": "response",
+              "width": 322,
+              "itemsAcross": 1
+            }
+          ],
+          [
+            {
+              "id": "intensification",
+              "width": 660,
+              "itemsAcross": 1
+            }
+          ]
+        ],
+        "direction": "column",
+        "columns": [
+          322,
+          322,
+          660
+        ]
+      },
+      "score": {
+        "cost": 40.19543713069876,
+        "weakEnds": 0,
+        "extraLineBreaks": 3,
+        "imbalance": 58.8125,
+        "occupancy": 0.9895298499949663,
+        "majorRows": 2,
+        "densityPenalty": 7
+      },
+      "frame": {
+        "x": 30,
+        "y": 139.1875,
+        "width": 660,
+        "height": 620.8125
+      },
+      "groups": [
+        {
+          "id": "group:routine",
+          "bounds": {
+            "x": 30,
+            "y": 187.65625,
+            "width": 322,
+            "height": 291.71875
+          },
+          "visibleHeight": 274.25
+        },
+        {
+          "id": "group:response",
+          "bounds": {
+            "x": 368,
+            "y": 187.65625,
+            "width": 322,
+            "height": 350.53125
+          },
+          "visibleHeight": 333.0625
+        },
+        {
+          "id": "group:intensification",
+          "bounds": {
+            "x": 30,
+            "y": 554.1875,
+            "width": 660,
+            "height": 199.3125
+          },
+          "visibleHeight": 188.84375
+        }
+      ],
+      "errors": []
+    },
+    {
+      "layout": {
+        "id": "compact-2+1-content-weighted-flow",
+        "canvas": {
+          "width": 720,
+          "height": 800
+        },
+        "density": "compact",
+        "margin": 30,
+        "gap": 16,
+        "padding": 10,
+        "rows": [
+          [
+            {
+              "id": "routine",
+              "width": 296,
+              "itemsAcross": 1
+            },
+            {
+              "id": "response",
+              "width": 348,
+              "itemsAcross": 1
+            }
+          ],
+          [
+            {
+              "id": "intensification",
+              "width": 660,
+              "itemsAcross": 2
+            }
+          ]
+        ],
+        "direction": "column",
+        "columns": [
+          296,
+          348,
+          660
+        ]
+      },
+      "score": {
+        "cost": 64.91707208489186,
+        "weakEnds": 1,
+        "extraLineBreaks": 5,
+        "imbalance": 58.8125,
+        "occupancy": 0.9696466324373301,
+        "majorRows": 2,
+        "densityPenalty": 7
+      },
+      "frame": {
+        "x": 30,
+        "y": 139.1875,
+        "width": 660,
+        "height": 620.8125
+      },
+      "groups": [
+        {
+          "id": "group:routine",
+          "bounds": {
+            "x": 30,
+            "y": 187.65625,
+            "width": 296,
+            "height": 291.71875
+          },
+          "visibleHeight": 274.25
+        },
+        {
+          "id": "group:response",
+          "bounds": {
+            "x": 342,
+            "y": 187.65625,
+            "width": 348,
+            "height": 350.53125
+          },
+          "visibleHeight": 333.0625
+        },
+        {
+          "id": "group:intensification",
+          "bounds": {
+            "x": 30,
+            "y": 554.1875,
+            "width": 660,
+            "height": 186.96875
+          },
+          "visibleHeight": 169.5
+        }
+      ],
+      "errors": []
+    },
+    {
+      "layout": {
+        "id": "compact-2+1-content-weighted-stack",
+        "canvas": {
+          "width": 720,
+          "height": 800
+        },
+        "density": "compact",
+        "margin": 30,
+        "gap": 16,
+        "padding": 10,
+        "rows": [
+          [
+            {
+              "id": "routine",
+              "width": 296,
+              "itemsAcross": 1
+            },
+            {
+              "id": "response",
+              "width": 348,
+              "itemsAcross": 1
+            }
+          ],
+          [
+            {
+              "id": "intensification",
+              "width": 660,
+              "itemsAcross": 1
+            }
+          ]
+        ],
+        "direction": "column",
+        "columns": [
+          296,
+          348,
+          660
+        ]
+      },
+      "score": {
+        "cost": 40.19543713069876,
+        "weakEnds": 0,
+        "extraLineBreaks": 3,
+        "imbalance": 58.8125,
+        "occupancy": 0.9895298499949663,
+        "majorRows": 2,
+        "densityPenalty": 7
+      },
+      "frame": {
+        "x": 30,
+        "y": 139.1875,
+        "width": 660,
+        "height": 620.8125
+      },
+      "groups": [
+        {
+          "id": "group:routine",
+          "bounds": {
+            "x": 30,
+            "y": 187.65625,
+            "width": 296,
+            "height": 291.71875
+          },
+          "visibleHeight": 274.25
+        },
+        {
+          "id": "group:response",
+          "bounds": {
+            "x": 342,
+            "y": 187.65625,
+            "width": 348,
+            "height": 350.53125
+          },
+          "visibleHeight": 333.0625
+        },
+        {
+          "id": "group:intensification",
+          "bounds": {
+            "x": 30,
+            "y": 554.1875,
+            "width": 660,
+            "height": 199.3125
+          },
+          "visibleHeight": 188.84375
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "errors": [],
+  "browser": "157.0.8103.79",
+  "selected": "compact-2+1-balanced-stack",
+  "metrics": {
+    "cost": 40.19543713069876,
+    "weakEnds": 0,
+    "extraLineBreaks": 3,
+    "imbalance": 58.8125,
+    "occupancy": 0.9895298499949663,
+    "majorRows": 2,
+    "densityPenalty": 7
+  }
+}

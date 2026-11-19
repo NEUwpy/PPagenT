@@ -1,0 +1,2231 @@
+{
+  "version": "gray-layout@1",
+  "pageId": "hr",
+  "inputSha256": "c44ff09281a9adf25fe0b18cf2cc2a271b438150bc8f05d3b67c3bc44993158f",
+  "canvas": {
+    "width": 1280,
+    "height": 720
+  },
+  "units": "CSS px",
+  "origin": "slide top-left",
+  "compilerLayout": {
+    "id": "compact-row-content-weighted",
+    "canvas": {
+      "width": 1280,
+      "height": 720
+    },
+    "margin": 54,
+    "gap": 28,
+    "padding": 10,
+    "direction": "row",
+    "columns": [
+      527,
+      617
+    ],
+    "density": "compact"
+  },
+  "frame": {
+    "x": 54,
+    "y": 151.890625,
+    "width": 1172,
+    "height": 528.109375
+  },
+  "readingOrder": [
+    "claim",
+    "title",
+    "group:issues:title",
+    "item:landing:title",
+    "item:landing:body",
+    "component:landing:input:atmosphere:title",
+    "component:landing:input:atmosphere:body",
+    "component:landing:input:systems:title",
+    "component:landing:input:systems:body",
+    "component:landing:input:management:title",
+    "component:landing:input:management:body",
+    "component:landing:result:title",
+    "item:compliance:title",
+    "item:compliance:body",
+    "component:compliance:label",
+    "component:compliance:fact:1:label",
+    "component:compliance:fact:1:value",
+    "component:compliance:fact:2:label",
+    "component:compliance:fact:2:value",
+    "component:compliance:fact:3:label",
+    "component:compliance:fact:3:value",
+    "component:compliance:fact:4:label",
+    "component:compliance:fact:4:value",
+    "group:insights:title",
+    "item:alignment:title",
+    "item:alignment:body",
+    "item:outcome-test:title",
+    "item:outcome-test:body",
+    "item:iteration:title",
+    "item:iteration:body",
+    "item:balance:title",
+    "item:balance:body"
+  ],
+  "relations": {
+    "groups": [
+      {
+        "id": "issues",
+        "title": {
+          "text": "两点不足",
+          "sourceIds": [
+            "s-issue-group"
+          ]
+        },
+        "relation": "independent",
+        "members": [
+          "landing",
+          "compliance"
+        ],
+        "items": [
+          {
+            "id": "landing",
+            "component": {
+              "kind": "convergence",
+              "inputs": [
+                {
+                  "id": "atmosphere",
+                  "title": {
+                    "text": "变革氛围",
+                    "sourceIds": [
+                      "s-atmosphere"
+                    ]
+                  },
+                  "body": {
+                    "text": "尚未完全形成",
+                    "sourceIds": [
+                      "s-atmosphere"
+                    ]
+                  }
+                },
+                {
+                  "id": "systems",
+                  "title": {
+                    "text": "信息系统",
+                    "sourceIds": [
+                      "s-systems"
+                    ]
+                  },
+                  "body": {
+                    "text": "支撑能力仍有差距",
+                    "sourceIds": [
+                      "s-systems"
+                    ]
+                  }
+                },
+                {
+                  "id": "management",
+                  "title": {
+                    "text": "管理机制",
+                    "sourceIds": [
+                      "s-mechanism"
+                    ]
+                  },
+                  "body": {
+                    "text": "缺乏市场化机制",
+                    "sourceIds": [
+                      "s-mechanism"
+                    ]
+                  }
+                }
+              ],
+              "result": {
+                "text": "变革落地受阻",
+                "sourceIds": [
+                  "s-landing-result"
+                ]
+              }
+            }
+          },
+          {
+            "id": "compliance",
+            "component": {
+              "kind": "short-facts",
+              "label": {
+                "text": "主要表现",
+                "sourceIds": [
+                  "s-compliance-facts"
+                ]
+              },
+              "facts": [
+                {
+                  "label": {
+                    "text": "认识",
+                    "sourceIds": [
+                      "s-compliance-facts"
+                    ]
+                  },
+                  "value": {
+                    "text": "待提升",
+                    "sourceIds": [
+                      "s-compliance-facts"
+                    ]
+                  }
+                },
+                {
+                  "label": {
+                    "text": "作风",
+                    "sourceIds": [
+                      "s-compliance-facts"
+                    ]
+                  },
+                  "value": {
+                    "text": "待转变",
+                    "sourceIds": [
+                      "s-compliance-facts"
+                    ]
+                  }
+                },
+                {
+                  "label": {
+                    "text": "能力",
+                    "sourceIds": [
+                      "s-compliance-facts"
+                    ]
+                  },
+                  "value": {
+                    "text": "待增强",
+                    "sourceIds": [
+                      "s-compliance-facts"
+                    ]
+                  }
+                },
+                {
+                  "label": {
+                    "text": "协同",
+                    "sourceIds": [
+                      "s-compliance-facts"
+                    ]
+                  },
+                  "value": {
+                    "text": "待深化",
+                    "sourceIds": [
+                      "s-compliance-facts"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "notes": []
+      },
+      {
+        "id": "insights",
+        "title": {
+          "text": "四点感悟",
+          "sourceIds": [
+            "s-insight-group"
+          ]
+        },
+        "relation": "parallel",
+        "members": [
+          "alignment",
+          "outcome-test",
+          "iteration",
+          "balance"
+        ],
+        "items": [
+          {
+            "id": "alignment"
+          },
+          {
+            "id": "outcome-test"
+          },
+          {
+            "id": "iteration"
+          },
+          {
+            "id": "balance"
+          }
+        ],
+        "notes": []
+      }
+    ],
+    "notes": []
+  },
+  "sources": [
+    {
+      "id": "s-title",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "第二部分：存在的不足与感悟",
+      "sha256": "f0d48608184051b895100edf2e9fd64d508c3bff97a1a3b0ff3f98a6d88b1191",
+      "span": [
+        0,
+        13
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-issue-group",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "首先是两点不足。",
+      "sha256": "f0d48608184051b895100edf2e9fd64d508c3bff97a1a3b0ff3f98a6d88b1191",
+      "span": [
+        17,
+        25
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-landing-context",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "完成顶层设计后，变革落地就是关键。",
+      "sha256": "f0d48608184051b895100edf2e9fd64d508c3bff97a1a3b0ff3f98a6d88b1191",
+      "span": [
+        37,
+        54
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-atmosphere",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "变革氛围尚未完全形成",
+      "sha256": "f0d48608184051b895100edf2e9fd64d508c3bff97a1a3b0ff3f98a6d88b1191",
+      "span": [
+        65,
+        75
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-systems",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "信息系统支撑能力仍存在差距",
+      "sha256": "f0d48608184051b895100edf2e9fd64d508c3bff97a1a3b0ff3f98a6d88b1191",
+      "span": [
+        76,
+        89
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-mechanism",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "缺乏市场化的管理机制",
+      "sha256": "f0d48608184051b895100edf2e9fd64d508c3bff97a1a3b0ff3f98a6d88b1191",
+      "span": [
+        90,
+        100
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-landing-result",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "造成变革落地阻力重重。",
+      "sha256": "f0d48608184051b895100edf2e9fd64d508c3bff97a1a3b0ff3f98a6d88b1191",
+      "span": [
+        101,
+        112
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-compliance-title",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "合规管理短板亟待提升。",
+      "sha256": "f0d48608184051b895100edf2e9fd64d508c3bff97a1a3b0ff3f98a6d88b1191",
+      "span": [
+        114,
+        125
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-compliance",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "2017年的巡视整改虽然取得了一定成效，但也充分暴露出人力条线基础管理薄弱的问题",
+      "sha256": "f0d48608184051b895100edf2e9fd64d508c3bff97a1a3b0ff3f98a6d88b1191",
+      "span": [
+        125,
+        165
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-compliance-facts",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "认识有待提升、作风有待转变、能力有待增强、协同有待深化。",
+      "sha256": "f0d48608184051b895100edf2e9fd64d508c3bff97a1a3b0ff3f98a6d88b1191",
+      "span": [
+        173,
+        201
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-insight-group",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "其次是四点感悟。",
+      "sha256": "f0d48608184051b895100edf2e9fd64d508c3bff97a1a3b0ff3f98a6d88b1191",
+      "span": [
+        205,
+        213
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-blm",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "要想真正解决人力资源与业务两张皮的问题，就要沿用BLM管理模型，与业务单位统一语言、统一目标、统一策略",
+      "sha256": "f0d48608184051b895100edf2e9fd64d508c3bff97a1a3b0ff3f98a6d88b1191",
+      "span": [
+        226,
+        277
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-blm-flow",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "实现从业务战略到人力资源战略的规划设计端到端人力资源落地解决方案，达成“三个市场化”转型目标。",
+      "sha256": "f0d48608184051b895100edf2e9fd64d508c3bff97a1a3b0ff3f98a6d88b1191",
+      "span": [
+        278,
+        325
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-outcome",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "解决问题才是检验变革的唯一标准。体系变革是否成效，要以能否“解决实际问题”为唯一检验标准，力求变革落地有实效。",
+      "sha256": "f0d48608184051b895100edf2e9fd64d508c3bff97a1a3b0ff3f98a6d88b1191",
+      "span": [
+        327,
+        382
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-iteration",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "顶层设计没有完结篇。要在加速试点、小步快跑的基础上，进一步强化与行业优秀实践对标，结合落地成效持续开展迭代优化",
+      "sha256": "f0d48608184051b895100edf2e9fd64d508c3bff97a1a3b0ff3f98a6d88b1191",
+      "span": [
+        384,
+        439
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-balance",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "强化“变革是硬道理，合规是硬要求，作风是硬标准”管理意识",
+      "sha256": "f0d48608184051b895100edf2e9fd64d508c3bff97a1a3b0ff3f98a6d88b1191",
+      "span": [
+        460,
+        488
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-persistence",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "作风改进不要求立竿见影，重在持续用力。",
+      "sha256": "f0d48608184051b895100edf2e9fd64d508c3bff97a1a3b0ff3f98a6d88b1191",
+      "span": [
+        553,
+        572
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-landing-causal",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "变革氛围尚未完全形成，信息系统支撑能力仍存在差距，缺乏市场化的管理机制，造成变革落地阻力重重。",
+      "sha256": "f0d48608184051b895100edf2e9fd64d508c3bff97a1a3b0ff3f98a6d88b1191",
+      "span": [
+        65,
+        112
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    }
+  ],
+  "notes": [
+    {
+      "text": "统一语言、目标和策略的完整背景是解决人力资源与业务“两张皮”，最终指向“三个市场化”转型目标。",
+      "sourceIds": [
+        "s-blm",
+        "s-blm-flow"
+      ]
+    }
+  ],
+  "objects": [
+    {
+      "id": "theme-header",
+      "bounds": {
+        "x": 54,
+        "y": 35,
+        "width": 1172,
+        "height": 98.890625
+      },
+      "role": "region"
+    },
+    {
+      "id": "claim",
+      "bounds": {
+        "x": 54,
+        "y": 35,
+        "width": 1172,
+        "height": 47.25
+      },
+      "role": "claim"
+    },
+    {
+      "id": "title",
+      "bounds": {
+        "x": 54,
+        "y": 92.25,
+        "width": 1172,
+        "height": 24.640625
+      },
+      "role": "page-title"
+    },
+    {
+      "id": "content-frame",
+      "bounds": {
+        "x": 54,
+        "y": 151.890625,
+        "width": 1172,
+        "height": 528.109375
+      },
+      "role": "region"
+    },
+    {
+      "id": "group:issues",
+      "bounds": {
+        "x": 54,
+        "y": 151.890625,
+        "width": 527,
+        "height": 476.25
+      },
+      "role": "region"
+    },
+    {
+      "id": "group:issues:title",
+      "bounds": {
+        "x": 65,
+        "y": 162.890625,
+        "width": 100,
+        "height": 33.75
+      },
+      "role": "group-title"
+    },
+    {
+      "id": "item:landing",
+      "bounds": {
+        "x": 65,
+        "y": 204.640625,
+        "width": 505,
+        "height": 270.28125
+      },
+      "role": "region"
+    },
+    {
+      "id": "item:landing:title",
+      "bounds": {
+        "x": 65,
+        "y": 204.640625,
+        "width": 505,
+        "height": 30.8125
+      },
+      "role": "item-title"
+    },
+    {
+      "id": "item:landing:body",
+      "bounds": {
+        "x": 65,
+        "y": 239.453125,
+        "width": 505,
+        "height": 24.46875
+      },
+      "role": "body"
+    },
+    {
+      "id": "component:landing",
+      "bounds": {
+        "x": 65,
+        "y": 266.921875,
+        "width": 505,
+        "height": 208
+      },
+      "role": "region",
+      "component": {
+        "id": "convergence",
+        "version": "6"
+      },
+      "asset": "convergence-many-to-one-003"
+    },
+    {
+      "id": "component:landing:edge:1",
+      "bounds": {
+        "x": 261.05999755859375,
+        "y": 307.921875,
+        "width": 92.8800048828125,
+        "height": 63
+      },
+      "role": "region",
+      "connection": {
+        "from": "component:landing:input:atmosphere",
+        "to": "component:landing:result"
+      },
+      "path": {
+        "d": "M 196.06 41.00 C 233.21 41.00, 259.22 104.00, 288.94 104.00",
+        "viewport": {
+          "x": 65,
+          "y": 266.921875,
+          "width": 505,
+          "height": 208
+        },
+        "viewBox": "0 0 505 208",
+        "strokeWidth": 10,
+        "strokeLineCap": "round",
+        "start": [
+          261.05999755859375,
+          307.921875
+        ],
+        "end": [
+          353.94000244140625,
+          370.921875
+        ],
+        "from": "component:landing:input:atmosphere",
+        "to": "component:landing:result",
+        "anchorError": 0.01312255859375
+      }
+    },
+    {
+      "id": "component:landing:edge:2",
+      "bounds": {
+        "x": 261.05999755859375,
+        "y": 370.921875,
+        "width": 92.8800048828125,
+        "height": 0
+      },
+      "role": "region",
+      "connection": {
+        "from": "component:landing:input:systems",
+        "to": "component:landing:result"
+      },
+      "path": {
+        "d": "M 196.06 104.00 C 233.21 104.00, 259.22 104.00, 288.94 104.00",
+        "viewport": {
+          "x": 65,
+          "y": 266.921875,
+          "width": 505,
+          "height": 208
+        },
+        "viewBox": "0 0 505 208",
+        "strokeWidth": 10,
+        "strokeLineCap": "round",
+        "start": [
+          261.05999755859375,
+          370.921875
+        ],
+        "end": [
+          353.94000244140625,
+          370.921875
+        ],
+        "from": "component:landing:input:systems",
+        "to": "component:landing:result",
+        "anchorError": 0.01312255859375
+      }
+    },
+    {
+      "id": "component:landing:edge:3",
+      "bounds": {
+        "x": 261.05999755859375,
+        "y": 370.921875,
+        "width": 92.8800048828125,
+        "height": 63
+      },
+      "role": "region",
+      "connection": {
+        "from": "component:landing:input:management",
+        "to": "component:landing:result"
+      },
+      "path": {
+        "d": "M 196.06 167.00 C 233.21 167.00, 259.22 104.00, 288.94 104.00",
+        "viewport": {
+          "x": 65,
+          "y": 266.921875,
+          "width": 505,
+          "height": 208
+        },
+        "viewBox": "0 0 505 208",
+        "strokeWidth": 10,
+        "strokeLineCap": "round",
+        "start": [
+          261.05999755859375,
+          433.921875
+        ],
+        "end": [
+          353.94000244140625,
+          370.921875
+        ],
+        "from": "component:landing:input:management",
+        "to": "component:landing:result",
+        "anchorError": 0.01312255859375
+      }
+    },
+    {
+      "id": "component:landing:input:atmosphere",
+      "bounds": {
+        "x": 71.046875,
+        "y": 278.921875,
+        "width": 190,
+        "height": 58
+      },
+      "role": "region"
+    },
+    {
+      "id": "component:landing:input:atmosphere:title",
+      "bounds": {
+        "x": 88.046875,
+        "y": 281.75,
+        "width": 163,
+        "height": 24.390625
+      },
+      "role": "diagram-title"
+    },
+    {
+      "id": "component:landing:input:atmosphere:body",
+      "bounds": {
+        "x": 88.046875,
+        "y": 312.140625,
+        "width": 163,
+        "height": 21.953125
+      },
+      "role": "diagram-body"
+    },
+    {
+      "id": "component:landing:input:systems",
+      "bounds": {
+        "x": 71.046875,
+        "y": 341.921875,
+        "width": 190,
+        "height": 58
+      },
+      "role": "region"
+    },
+    {
+      "id": "component:landing:input:systems:title",
+      "bounds": {
+        "x": 88.046875,
+        "y": 344.75,
+        "width": 163,
+        "height": 24.390625
+      },
+      "role": "diagram-title"
+    },
+    {
+      "id": "component:landing:input:systems:body",
+      "bounds": {
+        "x": 88.046875,
+        "y": 375.140625,
+        "width": 163,
+        "height": 21.953125
+      },
+      "role": "diagram-body"
+    },
+    {
+      "id": "component:landing:input:management",
+      "bounds": {
+        "x": 71.046875,
+        "y": 404.921875,
+        "width": 190,
+        "height": 58
+      },
+      "role": "region"
+    },
+    {
+      "id": "component:landing:input:management:title",
+      "bounds": {
+        "x": 88.046875,
+        "y": 407.75,
+        "width": 163,
+        "height": 24.390625
+      },
+      "role": "diagram-title"
+    },
+    {
+      "id": "component:landing:input:management:body",
+      "bounds": {
+        "x": 88.046875,
+        "y": 438.140625,
+        "width": 163,
+        "height": 21.953125
+      },
+      "role": "diagram-body"
+    },
+    {
+      "id": "component:landing:result",
+      "bounds": {
+        "x": 353.953125,
+        "y": 313.921875,
+        "width": 210,
+        "height": 114
+      },
+      "role": "region"
+    },
+    {
+      "id": "component:landing:result:title",
+      "bounds": {
+        "x": 370.953125,
+        "y": 355.96875,
+        "width": 176,
+        "height": 29.890625
+      },
+      "role": "diagram-result"
+    },
+    {
+      "id": "item:compliance",
+      "bounds": {
+        "x": 65,
+        "y": 482.921875,
+        "width": 505,
+        "height": 134.21875
+      },
+      "role": "region"
+    },
+    {
+      "id": "item:compliance:title",
+      "bounds": {
+        "x": 65,
+        "y": 491.921875,
+        "width": 505,
+        "height": 30.8125
+      },
+      "role": "item-title"
+    },
+    {
+      "id": "item:compliance:body",
+      "bounds": {
+        "x": 65,
+        "y": 526.734375,
+        "width": 505,
+        "height": 24.46875
+      },
+      "role": "body"
+    },
+    {
+      "id": "component:compliance",
+      "bounds": {
+        "x": 65,
+        "y": 559.203125,
+        "width": 505,
+        "height": 57.9375
+      },
+      "role": "region",
+      "component": {
+        "id": "label-value-strip"
+      }
+    },
+    {
+      "id": "component:compliance:label",
+      "bounds": {
+        "x": 65,
+        "y": 559.203125,
+        "width": 97.734375,
+        "height": 57.9375
+      },
+      "role": "facts-label"
+    },
+    {
+      "id": "component:compliance:fact:1",
+      "bounds": {
+        "x": 162.734375,
+        "y": 559.203125,
+        "width": 101.8125,
+        "height": 57.9375
+      },
+      "role": "region"
+    },
+    {
+      "id": "component:compliance:fact:1:label",
+      "bounds": {
+        "x": 186.640625,
+        "y": 563.203125,
+        "width": 54,
+        "height": 24.46875
+      },
+      "role": "fact-label"
+    },
+    {
+      "id": "component:compliance:fact:1:value",
+      "bounds": {
+        "x": 186.640625,
+        "y": 588.671875,
+        "width": 54,
+        "height": 24.46875
+      },
+      "role": "fact-value"
+    },
+    {
+      "id": "component:compliance:fact:2",
+      "bounds": {
+        "x": 264.546875,
+        "y": 559.203125,
+        "width": 101.8125,
+        "height": 57.9375
+      },
+      "role": "region"
+    },
+    {
+      "id": "component:compliance:fact:2:label",
+      "bounds": {
+        "x": 288.953125,
+        "y": 563.203125,
+        "width": 54,
+        "height": 24.46875
+      },
+      "role": "fact-label"
+    },
+    {
+      "id": "component:compliance:fact:2:value",
+      "bounds": {
+        "x": 288.953125,
+        "y": 588.671875,
+        "width": 54,
+        "height": 24.46875
+      },
+      "role": "fact-value"
+    },
+    {
+      "id": "component:compliance:fact:3",
+      "bounds": {
+        "x": 366.359375,
+        "y": 559.203125,
+        "width": 101.8125,
+        "height": 57.9375
+      },
+      "role": "region"
+    },
+    {
+      "id": "component:compliance:fact:3:label",
+      "bounds": {
+        "x": 390.765625,
+        "y": 563.203125,
+        "width": 54,
+        "height": 24.46875
+      },
+      "role": "fact-label"
+    },
+    {
+      "id": "component:compliance:fact:3:value",
+      "bounds": {
+        "x": 390.765625,
+        "y": 588.671875,
+        "width": 54,
+        "height": 24.46875
+      },
+      "role": "fact-value"
+    },
+    {
+      "id": "component:compliance:fact:4",
+      "bounds": {
+        "x": 468.171875,
+        "y": 559.203125,
+        "width": 101.828125,
+        "height": 57.9375
+      },
+      "role": "region"
+    },
+    {
+      "id": "component:compliance:fact:4:label",
+      "bounds": {
+        "x": 492.578125,
+        "y": 563.203125,
+        "width": 54,
+        "height": 24.46875
+      },
+      "role": "fact-label"
+    },
+    {
+      "id": "component:compliance:fact:4:value",
+      "bounds": {
+        "x": 492.578125,
+        "y": 588.671875,
+        "width": 54,
+        "height": 24.46875
+      },
+      "role": "fact-value"
+    },
+    {
+      "id": "group:insights",
+      "bounds": {
+        "x": 609,
+        "y": 151.890625,
+        "width": 617,
+        "height": 476.25
+      },
+      "role": "region"
+    },
+    {
+      "id": "group:insights:title",
+      "bounds": {
+        "x": 620,
+        "y": 162.890625,
+        "width": 100,
+        "height": 33.75
+      },
+      "role": "group-title"
+    },
+    {
+      "id": "item:alignment",
+      "bounds": {
+        "x": 620,
+        "y": 204.640625,
+        "width": 595,
+        "height": 73.28125
+      },
+      "role": "region"
+    },
+    {
+      "id": "item:alignment:title",
+      "bounds": {
+        "x": 630,
+        "y": 211.640625,
+        "width": 575,
+        "height": 30.8125
+      },
+      "role": "item-title"
+    },
+    {
+      "id": "item:alignment:body",
+      "bounds": {
+        "x": 630,
+        "y": 246.453125,
+        "width": 575,
+        "height": 24.46875
+      },
+      "role": "body"
+    },
+    {
+      "id": "item:outcome-test",
+      "bounds": {
+        "x": 620,
+        "y": 285.921875,
+        "width": 595,
+        "height": 73.28125
+      },
+      "role": "region"
+    },
+    {
+      "id": "item:outcome-test:title",
+      "bounds": {
+        "x": 630,
+        "y": 292.921875,
+        "width": 575,
+        "height": 30.8125
+      },
+      "role": "item-title"
+    },
+    {
+      "id": "item:outcome-test:body",
+      "bounds": {
+        "x": 630,
+        "y": 327.734375,
+        "width": 575,
+        "height": 24.46875
+      },
+      "role": "body"
+    },
+    {
+      "id": "item:iteration",
+      "bounds": {
+        "x": 620,
+        "y": 367.203125,
+        "width": 595,
+        "height": 73.28125
+      },
+      "role": "region"
+    },
+    {
+      "id": "item:iteration:title",
+      "bounds": {
+        "x": 630,
+        "y": 374.203125,
+        "width": 575,
+        "height": 30.8125
+      },
+      "role": "item-title"
+    },
+    {
+      "id": "item:iteration:body",
+      "bounds": {
+        "x": 630,
+        "y": 409.015625,
+        "width": 575,
+        "height": 24.46875
+      },
+      "role": "body"
+    },
+    {
+      "id": "item:balance",
+      "bounds": {
+        "x": 620,
+        "y": 448.484375,
+        "width": 595,
+        "height": 73.28125
+      },
+      "role": "region"
+    },
+    {
+      "id": "item:balance:title",
+      "bounds": {
+        "x": 630,
+        "y": 455.484375,
+        "width": 575,
+        "height": 30.8125
+      },
+      "role": "item-title"
+    },
+    {
+      "id": "item:balance:body",
+      "bounds": {
+        "x": 630,
+        "y": 490.296875,
+        "width": 575,
+        "height": 24.46875
+      },
+      "role": "body"
+    }
+  ],
+  "texts": [
+    {
+      "id": "claim",
+      "text": "破解落地阻力、补齐合规短板，以解决实际问题检验变革成效",
+      "sourceIds": [
+        "s-landing-result",
+        "s-compliance-title",
+        "s-outcome"
+      ],
+      "bounds": {
+        "x": 54,
+        "y": 35,
+        "width": 1172,
+        "height": 47.25
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 54,
+            "y": 31,
+            "width": 971.65625,
+            "height": 54
+          },
+          "start": 0,
+          "end": 27,
+          "text": "破解落地阻力、补齐合规短板，以解决实际问题检验变革成效"
+        }
+      ],
+      "role": "claim",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 36.918,
+        "lineHeightPx": 47.255,
+        "weight": 735,
+        "align": "start"
+      }
+    },
+    {
+      "id": "title",
+      "text": "存在的不足与感悟",
+      "sourceIds": [
+        "s-title"
+      ],
+      "bounds": {
+        "x": 54,
+        "y": 92.25,
+        "width": 1172,
+        "height": 24.640625
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 54,
+            "y": 91.25,
+            "width": 136,
+            "height": 25
+          },
+          "start": 0,
+          "end": 8,
+          "text": "存在的不足与感悟"
+        }
+      ],
+      "role": "page-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 17,
+        "lineHeightPx": 24.65,
+        "weight": 500,
+        "align": "start"
+      }
+    },
+    {
+      "id": "group:issues:title",
+      "text": "两点不足",
+      "sourceIds": [
+        "s-issue-group"
+      ],
+      "bounds": {
+        "x": 65,
+        "y": 162.890625,
+        "width": 100,
+        "height": 33.75
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 65,
+            "y": 160.890625,
+            "width": 100,
+            "height": 36
+          },
+          "start": 0,
+          "end": 4,
+          "text": "两点不足"
+        }
+      ],
+      "role": "group-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 25,
+        "lineHeightPx": 33.75,
+        "weight": 720,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:landing:title",
+      "text": "变革落地",
+      "sourceIds": [
+        "s-landing-result"
+      ],
+      "bounds": {
+        "x": 65,
+        "y": 204.640625,
+        "width": 505,
+        "height": 30.8125
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 65,
+            "y": 202.640625,
+            "width": 92,
+            "height": 34
+          },
+          "start": 0,
+          "end": 4,
+          "text": "变革落地"
+        }
+      ],
+      "role": "item-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 23,
+        "lineHeightPx": 30.82,
+        "weight": 690,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:landing:body",
+      "text": "顶层设计完成后，落地成为关键",
+      "sourceIds": [
+        "s-landing-context"
+      ],
+      "bounds": {
+        "x": 65,
+        "y": 239.453125,
+        "width": 505,
+        "height": 24.46875
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 65,
+            "y": 238.453125,
+            "width": 252,
+            "height": 26
+          },
+          "start": 0,
+          "end": 14,
+          "text": "顶层设计完成后，落地成为关键"
+        }
+      ],
+      "role": "body",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 24.48,
+        "weight": 400,
+        "align": "start"
+      }
+    },
+    {
+      "id": "component:landing:input:atmosphere:title",
+      "text": "变革氛围",
+      "sourceIds": [
+        "s-atmosphere"
+      ],
+      "bounds": {
+        "x": 88.046875,
+        "y": 281.75,
+        "width": 163,
+        "height": 24.390625
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 88.046875,
+            "y": 278.75,
+            "width": 80,
+            "height": 29
+          },
+          "start": 0,
+          "end": 4,
+          "text": "变革氛围"
+        }
+      ],
+      "role": "diagram-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif, sans-serif",
+        "sizePx": 20,
+        "lineHeightPx": 24.4,
+        "weight": 700,
+        "align": "left"
+      }
+    },
+    {
+      "id": "component:landing:input:atmosphere:body",
+      "text": "尚未完全形成",
+      "sourceIds": [
+        "s-atmosphere"
+      ],
+      "bounds": {
+        "x": 88.046875,
+        "y": 312.140625,
+        "width": 163,
+        "height": 21.953125
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 88.046875,
+            "y": 309.140625,
+            "width": 108,
+            "height": 26
+          },
+          "start": 0,
+          "end": 6,
+          "text": "尚未完全形成"
+        }
+      ],
+      "role": "diagram-body",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif, sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 21.96,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "component:landing:input:systems:title",
+      "text": "信息系统",
+      "sourceIds": [
+        "s-systems"
+      ],
+      "bounds": {
+        "x": 88.046875,
+        "y": 344.75,
+        "width": 163,
+        "height": 24.390625
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 88.046875,
+            "y": 341.75,
+            "width": 80,
+            "height": 29
+          },
+          "start": 0,
+          "end": 4,
+          "text": "信息系统"
+        }
+      ],
+      "role": "diagram-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif, sans-serif",
+        "sizePx": 20,
+        "lineHeightPx": 24.4,
+        "weight": 700,
+        "align": "left"
+      }
+    },
+    {
+      "id": "component:landing:input:systems:body",
+      "text": "支撑能力仍有差距",
+      "sourceIds": [
+        "s-systems"
+      ],
+      "bounds": {
+        "x": 88.046875,
+        "y": 375.140625,
+        "width": 163,
+        "height": 21.953125
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 88.046875,
+            "y": 372.140625,
+            "width": 144,
+            "height": 26
+          },
+          "start": 0,
+          "end": 8,
+          "text": "支撑能力仍有差距"
+        }
+      ],
+      "role": "diagram-body",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif, sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 21.96,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "component:landing:input:management:title",
+      "text": "管理机制",
+      "sourceIds": [
+        "s-mechanism"
+      ],
+      "bounds": {
+        "x": 88.046875,
+        "y": 407.75,
+        "width": 163,
+        "height": 24.390625
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 88.046875,
+            "y": 404.75,
+            "width": 80,
+            "height": 29
+          },
+          "start": 0,
+          "end": 4,
+          "text": "管理机制"
+        }
+      ],
+      "role": "diagram-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif, sans-serif",
+        "sizePx": 20,
+        "lineHeightPx": 24.4,
+        "weight": 700,
+        "align": "left"
+      }
+    },
+    {
+      "id": "component:landing:input:management:body",
+      "text": "缺乏市场化机制",
+      "sourceIds": [
+        "s-mechanism"
+      ],
+      "bounds": {
+        "x": 88.046875,
+        "y": 438.140625,
+        "width": 163,
+        "height": 21.953125
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 88.046875,
+            "y": 435.140625,
+            "width": 126,
+            "height": 26
+          },
+          "start": 0,
+          "end": 7,
+          "text": "缺乏市场化机制"
+        }
+      ],
+      "role": "diagram-body",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif, sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 21.96,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "component:landing:result:title",
+      "text": "变革落地受阻",
+      "sourceIds": [
+        "s-landing-result"
+      ],
+      "bounds": {
+        "x": 370.953125,
+        "y": 355.96875,
+        "width": 176,
+        "height": 29.890625
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 389.953125,
+            "y": 352.96875,
+            "width": 138,
+            "height": 34
+          },
+          "start": 0,
+          "end": 6,
+          "text": "变革落地受阻"
+        }
+      ],
+      "role": "diagram-result",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif, sans-serif",
+        "sizePx": 23,
+        "lineHeightPx": 29.9,
+        "weight": 700,
+        "align": "center"
+      }
+    },
+    {
+      "id": "item:compliance:title",
+      "text": "合规管理短板",
+      "sourceIds": [
+        "s-compliance-title"
+      ],
+      "bounds": {
+        "x": 65,
+        "y": 491.921875,
+        "width": 505,
+        "height": 30.8125
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 65,
+            "y": 489.921875,
+            "width": 138,
+            "height": 34
+          },
+          "start": 0,
+          "end": 6,
+          "text": "合规管理短板"
+        }
+      ],
+      "role": "item-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 23,
+        "lineHeightPx": 30.82,
+        "weight": 690,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:compliance:body",
+      "text": "2017 年巡视整改有成效，也暴露基础管理薄弱",
+      "sourceIds": [
+        "s-compliance"
+      ],
+      "bounds": {
+        "x": 65,
+        "y": 526.734375,
+        "width": 505,
+        "height": 24.46875
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 65,
+            "y": 525.734375,
+            "width": 368,
+            "height": 26
+          },
+          "start": 0,
+          "end": 23,
+          "text": "2017 年巡视整改有成效，也暴露基础管理薄弱"
+        }
+      ],
+      "role": "body",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 24.48,
+        "weight": 400,
+        "align": "start"
+      }
+    },
+    {
+      "id": "component:compliance:label",
+      "text": "主要表现",
+      "sourceIds": [
+        "s-compliance-facts"
+      ],
+      "bounds": {
+        "x": 65,
+        "y": 559.203125,
+        "width": 97.734375,
+        "height": 57.9375
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 77.859375,
+            "y": 575.015625,
+            "width": 72,
+            "height": 26
+          },
+          "start": 0,
+          "end": 4,
+          "text": "主要表现"
+        }
+      ],
+      "role": "facts-label",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 24.3,
+        "weight": 650,
+        "align": "center"
+      }
+    },
+    {
+      "id": "component:compliance:fact:1:label",
+      "text": "认识",
+      "sourceIds": [
+        "s-compliance-facts"
+      ],
+      "bounds": {
+        "x": 186.640625,
+        "y": 563.203125,
+        "width": 54,
+        "height": 24.46875
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 195.640625,
+            "y": 562.203125,
+            "width": 36,
+            "height": 26
+          },
+          "start": 0,
+          "end": 2,
+          "text": "认识"
+        }
+      ],
+      "role": "fact-label",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 24.48,
+        "weight": 675,
+        "align": "center"
+      }
+    },
+    {
+      "id": "component:compliance:fact:1:value",
+      "text": "待提升",
+      "sourceIds": [
+        "s-compliance-facts"
+      ],
+      "bounds": {
+        "x": 186.640625,
+        "y": 588.671875,
+        "width": 54,
+        "height": 24.46875
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 186.640625,
+            "y": 587.671875,
+            "width": 54,
+            "height": 26
+          },
+          "start": 0,
+          "end": 3,
+          "text": "待提升"
+        }
+      ],
+      "role": "fact-value",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 24.48,
+        "weight": 400,
+        "align": "center"
+      }
+    },
+    {
+      "id": "component:compliance:fact:2:label",
+      "text": "作风",
+      "sourceIds": [
+        "s-compliance-facts"
+      ],
+      "bounds": {
+        "x": 288.953125,
+        "y": 563.203125,
+        "width": 54,
+        "height": 24.46875
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 297.953125,
+            "y": 562.203125,
+            "width": 36,
+            "height": 26
+          },
+          "start": 0,
+          "end": 2,
+          "text": "作风"
+        }
+      ],
+      "role": "fact-label",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 24.48,
+        "weight": 675,
+        "align": "center"
+      }
+    },
+    {
+      "id": "component:compliance:fact:2:value",
+      "text": "待转变",
+      "sourceIds": [
+        "s-compliance-facts"
+      ],
+      "bounds": {
+        "x": 288.953125,
+        "y": 588.671875,
+        "width": 54,
+        "height": 24.46875
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 288.953125,
+            "y": 587.671875,
+            "width": 54,
+            "height": 26
+          },
+          "start": 0,
+          "end": 3,
+          "text": "待转变"
+        }
+      ],
+      "role": "fact-value",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 24.48,
+        "weight": 400,
+        "align": "center"
+      }
+    },
+    {
+      "id": "component:compliance:fact:3:label",
+      "text": "能力",
+      "sourceIds": [
+        "s-compliance-facts"
+      ],
+      "bounds": {
+        "x": 390.765625,
+        "y": 563.203125,
+        "width": 54,
+        "height": 24.46875
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 399.765625,
+            "y": 562.203125,
+            "width": 36,
+            "height": 26
+          },
+          "start": 0,
+          "end": 2,
+          "text": "能力"
+        }
+      ],
+      "role": "fact-label",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 24.48,
+        "weight": 675,
+        "align": "center"
+      }
+    },
+    {
+      "id": "component:compliance:fact:3:value",
+      "text": "待增强",
+      "sourceIds": [
+        "s-compliance-facts"
+      ],
+      "bounds": {
+        "x": 390.765625,
+        "y": 588.671875,
+        "width": 54,
+        "height": 24.46875
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 390.765625,
+            "y": 587.671875,
+            "width": 54,
+            "height": 26
+          },
+          "start": 0,
+          "end": 3,
+          "text": "待增强"
+        }
+      ],
+      "role": "fact-value",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 24.48,
+        "weight": 400,
+        "align": "center"
+      }
+    },
+    {
+      "id": "component:compliance:fact:4:label",
+      "text": "协同",
+      "sourceIds": [
+        "s-compliance-facts"
+      ],
+      "bounds": {
+        "x": 492.578125,
+        "y": 563.203125,
+        "width": 54,
+        "height": 24.46875
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 501.578125,
+            "y": 562.203125,
+            "width": 36,
+            "height": 26
+          },
+          "start": 0,
+          "end": 2,
+          "text": "协同"
+        }
+      ],
+      "role": "fact-label",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 24.48,
+        "weight": 675,
+        "align": "center"
+      }
+    },
+    {
+      "id": "component:compliance:fact:4:value",
+      "text": "待深化",
+      "sourceIds": [
+        "s-compliance-facts"
+      ],
+      "bounds": {
+        "x": 492.578125,
+        "y": 588.671875,
+        "width": 54,
+        "height": 24.46875
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 492.578125,
+            "y": 587.671875,
+            "width": 54,
+            "height": 26
+          },
+          "start": 0,
+          "end": 3,
+          "text": "待深化"
+        }
+      ],
+      "role": "fact-value",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 24.48,
+        "weight": 400,
+        "align": "center"
+      }
+    },
+    {
+      "id": "group:insights:title",
+      "text": "四点感悟",
+      "sourceIds": [
+        "s-insight-group"
+      ],
+      "bounds": {
+        "x": 620,
+        "y": 162.890625,
+        "width": 100,
+        "height": 33.75
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 620,
+            "y": 160.890625,
+            "width": 100,
+            "height": 36
+          },
+          "start": 0,
+          "end": 4,
+          "text": "四点感悟"
+        }
+      ],
+      "role": "group-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 25,
+        "lineHeightPx": 33.75,
+        "weight": 720,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:alignment:title",
+      "text": "用 BLM 统一语言、目标和策略",
+      "sourceIds": [
+        "s-blm"
+      ],
+      "bounds": {
+        "x": 630,
+        "y": 211.640625,
+        "width": 575,
+        "height": 30.8125
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 630,
+            "y": 209.640625,
+            "width": 312.03125,
+            "height": 34
+          },
+          "start": 0,
+          "end": 16,
+          "text": "用 BLM 统一语言、目标和策略"
+        }
+      ],
+      "role": "item-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 23,
+        "lineHeightPx": 30.82,
+        "weight": 690,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:alignment:body",
+      "text": "按先后：业务战略；人力资源战略规划；落地方案",
+      "sourceIds": [
+        "s-blm-flow"
+      ],
+      "bounds": {
+        "x": 630,
+        "y": 246.453125,
+        "width": 575,
+        "height": 24.46875
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 630,
+            "y": 245.453125,
+            "width": 396,
+            "height": 26
+          },
+          "start": 0,
+          "end": 22,
+          "text": "按先后：业务战略；人力资源战略规划；落地方案"
+        }
+      ],
+      "role": "body",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 24.48,
+        "weight": 400,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:outcome-test:title",
+      "text": "以实效检验变革",
+      "sourceIds": [
+        "s-outcome"
+      ],
+      "bounds": {
+        "x": 630,
+        "y": 292.921875,
+        "width": 575,
+        "height": 30.8125
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 630,
+            "y": 290.921875,
+            "width": 161,
+            "height": 34
+          },
+          "start": 0,
+          "end": 7,
+          "text": "以实效检验变革"
+        }
+      ],
+      "role": "item-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 23,
+        "lineHeightPx": 30.82,
+        "weight": 690,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:outcome-test:body",
+      "text": "能否解决实际问题，是唯一标准",
+      "sourceIds": [
+        "s-outcome"
+      ],
+      "bounds": {
+        "x": 630,
+        "y": 327.734375,
+        "width": 575,
+        "height": 24.46875
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 630,
+            "y": 326.734375,
+            "width": 252,
+            "height": 26
+          },
+          "start": 0,
+          "end": 14,
+          "text": "能否解决实际问题，是唯一标准"
+        }
+      ],
+      "role": "body",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 24.48,
+        "weight": 400,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:iteration:title",
+      "text": "顶层设计持续迭代",
+      "sourceIds": [
+        "s-iteration"
+      ],
+      "bounds": {
+        "x": 630,
+        "y": 374.203125,
+        "width": 575,
+        "height": 30.8125
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 630,
+            "y": 372.203125,
+            "width": 184,
+            "height": 34
+          },
+          "start": 0,
+          "end": 8,
+          "text": "顶层设计持续迭代"
+        }
+      ],
+      "role": "item-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 23,
+        "lineHeightPx": 30.82,
+        "weight": 690,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:iteration:body",
+      "text": "小步试点、对标实践，按落地成效优化",
+      "sourceIds": [
+        "s-iteration"
+      ],
+      "bounds": {
+        "x": 630,
+        "y": 409.015625,
+        "width": 575,
+        "height": 24.46875
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 630,
+            "y": 408.015625,
+            "width": 306,
+            "height": 26
+          },
+          "start": 0,
+          "end": 17,
+          "text": "小步试点、对标实践，按落地成效优化"
+        }
+      ],
+      "role": "body",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 24.48,
+        "weight": 400,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:balance:title",
+      "text": "统筹变革、合规与作风",
+      "sourceIds": [
+        "s-balance"
+      ],
+      "bounds": {
+        "x": 630,
+        "y": 455.484375,
+        "width": 575,
+        "height": 30.8125
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 630,
+            "y": 453.484375,
+            "width": 230,
+            "height": 34
+          },
+          "start": 0,
+          "end": 10,
+          "text": "统筹变革、合规与作风"
+        }
+      ],
+      "role": "item-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 23,
+        "lineHeightPx": 30.82,
+        "weight": 690,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:balance:body",
+      "text": "作风改进不要求立竿见影，重在持续用力",
+      "sourceIds": [
+        "s-persistence"
+      ],
+      "bounds": {
+        "x": 630,
+        "y": 490.296875,
+        "width": 575,
+        "height": 24.46875
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 630,
+            "y": 489.296875,
+            "width": 324,
+            "height": 26
+          },
+          "start": 0,
+          "end": 18,
+          "text": "作风改进不要求立竿见影，重在持续用力"
+        }
+      ],
+      "role": "body",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 24.48,
+        "weight": 400,
+        "align": "start"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "id": "group:issues",
+      "bounds": {
+        "x": 54,
+        "y": 151.890625,
+        "width": 527,
+        "height": 476.25
+      },
+      "visibleHeight": 461.78125
+    },
+    {
+      "id": "group:insights",
+      "bounds": {
+        "x": 609,
+        "y": 151.890625,
+        "width": 617,
+        "height": 476.25
+      },
+      "visibleHeight": 363.40625
+    }
+  ]
+}

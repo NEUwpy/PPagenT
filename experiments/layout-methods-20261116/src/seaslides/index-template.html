@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}}</title>
+
+<!-- Google Fonts -->
+
+
+
+
+<!-- MathJax SVG -->
+<script>
+window.MathJax = {
+  startup: { typeset: false },
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  svg: { fontCache: 'none' },
+  options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }
+};
+</script>
+
+
+<!-- KaTeX core is used only as the math backend for pseudocode.js. -->
+
+
+
+<!-- pseudocode.js -->
+
+
+
+<!-- Prism.js (Tomorrow Night) -->
+
+
+
+
+
+<!-- Template CSS -->
+<link rel="stylesheet" href="template.css">
+</head>
+
+<body>
+
+<script>
+window.__typesetMath = async function(root) {
+  if (!window.MathJax?.typesetPromise) return;
+  const target = root || document.body;
+  if (target?.dataset?.mathTypesetDone === '1') return;
+  if (window.__mathTypesetPromise) return window.__mathTypesetPromise;
+  window.__mathTypesetPromise = (async () => {
+    await window.MathJax.startup.promise;
+    await window.MathJax.typesetPromise([target]);
+    if (target?.dataset) target.dataset.mathTypesetDone = '1';
+  })();
+  try {
+    await window.__mathTypesetPromise;
+  } finally {
+    window.__mathTypesetPromise = null;
+  }
+};
+window.renderMathInElement = function(root) {
+  return window.__typesetMath(root || document.body);
+};
+window.__renderDynamicContent = async function(root) {
+  const target = root || document.body;
+  try { await window.__typesetMath(target); } catch (e) { console.warn('MathJax typeset error', e); }
+  if (window.Prism) window.Prism.highlightAllUnder ? window.Prism.highlightAllUnder(target) : window.Prism.highlightAll();
+  if (window.pseudocode) {
+    target.querySelectorAll('pre.pseudocode, .ps-algorithm').forEach((el) => {
+      try { window.pseudocode.renderElement(el); } catch (e) { console.warn('pseudocode render error', e); }
+    });
+    target.querySelectorAll('.pseudocode-source').forEach((el) => {
+      const out = el.nextElementSibling;
+      if (out && out.classList.contains('pseudocode-render')) {
+        try { window.pseudocode.renderElement(el, out); } catch (e) { console.warn('pseudocode render error', e); }
+      }
+    });
+  }
+  if (window.lucide?.createIcons) window.lucide.createIcons();
+};
+window.__dynamicContentReady = new Promise((resolve) => {
+  const run = async () => {
+    try { await window.__renderDynamicContent(document.body); }
+    finally { resolve(); }
+  };
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run, { once: true });
+  } else {
+    run();
+  }
+});
+</script>
+<div id="hint">&larr; &rarr; Navigate &middot; ESC Overview</div>
+<div id="deck">
+{{CONTENT}}
+</div>
+<div id="nav"></div>
+
+<!-- Navigation -->
+<script>
+const deck = document.getElementById('deck');
+let slides = deck.querySelectorAll('.slide');
+const nav = document.getElementById('nav');
+let idx = 0, total = slides.length, lock = false;
+deck.style.width = (total * 100) + 'vw';
+
+slides.forEach((s, i) => {
+  const b = document.createElement('button');
+  b.className = 'dot'; b.dataset.i = i;
+  b.setAttribute('aria-label', 'Page ' + (i + 1));
+  b.onclick = () => go(i);
+  nav.appendChild(b);
+});
+
+function go(n){
+  if (lock) return;
+  idx = Math.max(0, Math.min(total - 1, n));
+  deck.style.transform = `translateX(${-idx * 100}vw)`;
+  nav.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+  if (window.__playSlide) setTimeout(() => window.__playSlide(idx), 400);
+  lock = true; setTimeout(() => lock = false, 600);
+}
+
+window.__rebuildNav = function(){
+  slides = deck.querySelectorAll('.slide');
+  total = slides.length;
+  deck.style.width = (total * 100) + 'vw';
+  nav.innerHTML = '';
+  slides.forEach((s, i) => {
+    const b = document.createElement('button');
+    b.className = 'dot'; b.dataset.i = i;
+    b.setAttribute('aria-label', 'Page ' + (i + 1));
+    b.onclick = () => go(i);
+    nav.appendChild(b);
+  });
+  idx = 0; go(0);
+};
+
+addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'PageDown') go(idx + 1);
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') go(idx - 1);
+  if (e.key === 'Home') go(0);
+  if (e.key === 'End') go(total - 1);
+});
+
+let wheelTO = null, wheelAcc = 0;
+addEventListener('wheel', e => {
+  wheelAcc += e.deltaY + e.deltaX;
+  if (Math.abs(wheelAcc) > 50){ go(idx + (wheelAcc > 0 ? 1 : -1)); wheelAcc = 0; }
+  clearTimeout(wheelTO); wheelTO = setTimeout(() => wheelAcc = 0, 150);
+}, { passive: true });
+
+let tx = 0;
+addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - tx;
+  if (Math.abs(dx) > 50) go(idx + (dx < 0 ? 1 : -1));
+}, { passive: true });
+
+go(0);
+</script>
+
+<!-- Motion One -->
+<script type="module">
+let motion;
+try { motion = await import('https://cdn.jsdelivr.net/npm/motion@11.11.17/+esm'); }
+catch(e){ document.querySelectorAll('[data-anim]').forEach(el => { el.style.opacity = '1'; }); }
+
+if (motion){
+  const { animate } = motion;
+  document.body.classList.add('motion-ready');
+  const EASE = [.25, .1, .25, 1];
+  const allSlides = [...document.querySelectorAll('.slide')];
+  function playSlide(i){
+    const slide = allSlides[i]; if (!slide) return;
+    const all = [...slide.querySelectorAll('[data-anim]')];
+    all.forEach(el => { el.style.opacity='1'; el.style.transform='none'; });
+    all.forEach((el, j) => animate(el, {opacity:[0,1],y:[14,0]}, {duration:.5,delay:.1+j*.09,easing:EASE}));
+  }
+  window.__playSlide = playSlide;
+  playSlide(0);
+}
+</script>
+
+<!-- MathJax SVG + Prism -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.renderMathInElement){
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '$', right: '$', display: false },
+        { left: '\\(', right: '\\)', display: false },
+        { left: '\\[', right: '\\]', display: true }
+      ],
+      throwOnError: false
+    });
+  }
+  if (window.Prism) Prism.highlightAll();
+});
+</script>
+
+<!-- Content Loader Fallback -->
+<script>
+(function(){
+  const deck = document.getElementById('deck');
+  if (!deck || deck.querySelectorAll('.slide').length > 0) return;
+  function reinit(){
+    if (window.renderMathInElement) renderMathInElement(deck, { delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}], throwOnError:false });
+    if (window.Prism) Prism.highlightAll();
+    if (window.__rebuildNav) window.__rebuildNav();
+    if (window.__playSlide) window.__playSlide(0);
+  }
+  async function tryLoad(url){ try { var r=await fetch(url); if(!r.ok)return false; deck.innerHTML=await r.text(); reinit(); return true; } catch(e){ return false; } }
+  tryLoad('content.html').then(ok => { if (!ok) return tryLoad('demo.html'); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+{
+  "mode": "one separate live review call per previous model response",
+  "browser": "157.0.8103.79",
+  "cases": [
+    {
+      "id": "options",
+      "frameName": "standard",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 1170,
+        "height": 492
+      },
+      "selected": {
+        "variant": "columns",
+        "artifact": "options-standard-columns"
+      },
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": true,
+          "usedHeight": 198.890625,
+          "issues": [],
+          "artifact": "options-standard-columns"
+        }
+      ]
+    },
+    {
+      "id": "options",
+      "frameName": "compact",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 1020,
+        "height": 450
+      },
+      "selected": {
+        "variant": "columns",
+        "artifact": "options-compact-columns"
+      },
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": true,
+          "usedHeight": 198.890625,
+          "issues": [],
+          "artifact": "options-compact-columns"
+        }
+      ]
+    },
+    {
+      "id": "options",
+      "frameName": "tight",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 770,
+        "height": 270
+      },
+      "selected": {
+        "variant": "columns",
+        "artifact": "options-tight-columns"
+      },
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": true,
+          "usedHeight": 198.890625,
+          "issues": [],
+          "artifact": "options-tight-columns"
+        }
+      ]
+    },
+    {
+      "id": "spares",
+      "frameName": "standard",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 1170,
+        "height": 492
+      },
+      "selected": {
+        "variant": "columns",
+        "artifact": "spares-standard-columns"
+      },
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": true,
+          "usedHeight": 418.640625,
+          "issues": [],
+          "artifact": "spares-standard-columns"
+        }
+      ]
+    },
+    {
+      "id": "spares",
+      "frameName": "compact",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 1020,
+        "height": 450
+      },
+      "selected": {
+        "variant": "columns",
+        "artifact": "spares-compact-columns"
+      },
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": true,
+          "usedHeight": 418.640625,
+          "issues": [],
+          "artifact": "spares-compact-columns"
+        }
+      ]
+    },
+    {
+      "id": "spares",
+      "frameName": "tight",
+      "frame": {
+        "x": 55,
+        "y": 166,
+        "width": 770,
+        "height": 270
+      },
+      "selected": null,
+      "candidates": [
+        {
+          "variant": "columns",
+          "ok": false,
+          "usedHeight": 418.640625,
+          "issues": [
+            {
+              "id": "note-not-exclusive",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "note-value-threshold",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "note-safety-critical",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "note-effective-date",
+              "code": "text-outside-region"
+            },
+            {
+              "id": "note-precedence",
+              "code": "text-outside-region"
+            }
+          ],
+          "artifact": "spares-tight-columns"
+        }
+      ]
+    },
+    {
+      "id": "duty",
+      "candidates": [],
+      "selected": null,
+      "stage": "intent-rejected",
+      "error": "模型请求在 25000ms 内没有完成：fetch failed"
+    }
+  ],
+  "reviewIssues": {
+    "options": [
+      {
+        "sourceId": "source-002",
+        "issue": "标题引文只覆盖方案名称与执行方式，遗漏了“培训与支持资源集中投入”这一执行安排；该信息在组内条目中也未承载，导致来源段落信息漏项。"
+      },
+      {
+        "sourceId": "source-003",
+        "issue": "标题引文只覆盖方案名称与执行方式，遗漏了“先选择一个部门试用，再按反馈逐批推广”中的反馈驱动条件；组内条目未承载该条件，导致来源段落信息漏项。"
+      }
+    ],
+    "spares": [
+      {
+        "sourceId": "source-002",
+        "issue": "集中供应组缺少“由中心库统一采购、统一配送”这一执行方式信息，标题引用了该句但未作为条目承载。"
+      },
+      {
+        "sourceId": "source-002",
+        "issue": "就近供应组缺少“由各站点自行采购”这一执行方式信息，标题引用了该句但未作为条目承载。"
+      },
+      {
+        "sourceId": "source-003",
+        "issue": "“建议按备件分级确定供应方式”被并入阈值附注，但阈值本身是建议性判断，附注未保留“建议”的义务强度，且未说明500元边界（以上/以下）的归属。"
+      }
+    ]
+  }
+}

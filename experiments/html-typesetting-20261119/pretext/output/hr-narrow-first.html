@@ -1,0 +1,54 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>文字排版试验</title><style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: #f6f5f1; }
+  .slide { display: flow-root; width:1280px; height:720px; position:relative; color:#242422; background:#f6f5f1;
+    font-family:"Microsoft YaHei",sans-serif; -webkit-font-smoothing: antialiased; }
+  .masthead { position:absolute; left:66px; right:auto; top:46px; width:var(--w);
+    min-height:94px; display:flex; align-items:baseline; gap:22px; border-bottom:2px solid #292926; }
+  .masthead:after { content:""; display:block; position:absolute; bottom:-2px; left:0; height:4px; width:55px; background:#272724; }
+  .masthead:has(.deck) { top:40px; min-height:100px; }
+  .intro { flex:none; font-size:18px; font-weight:700; color:#484846; }
+  .deck { position:absolute; left:0; top:67px; font-size:18px; line-height:1.25; color:#545450; }
+  h1 { margin:0; font:650 56px/1.16 "Noto Serif SC","SimSun"; letter-spacing:.01em; text-wrap:balance; }
+  main { position:absolute; left:66px; top:var(--top); width:var(--w); height:var(--h); }
+  .group { display:grid; grid-template-columns:var(--rail) minmax(0, 1fr); column-gap:var(--rg);
+    max-width:100%; padding:var(--pad) 0; border-bottom:1px solid #b8b7af; }
+  .group:first-child { padding-top:7px; }
+  .group:last-child { border-bottom:0; padding-bottom:0; }
+  h2 { margin:0; padding-top:1px; font:700 26px/1.3 "Noto Serif SC","SimSun"; letter-spacing:.015em;
+    max-width:100%; color:#292927; text-wrap:balance; }
+  .headline .group { grid-template-columns:minmax(0, 1fr); row-gap:8px; }
+  .headline h2 { margin:0; font-size:22px; line-height:25px; }
+  .columns { display:grid; gap:var(--g); align-items:start; }
+  .flow { min-width:0; }
+  .unit + .unit { margin-top:var(--ig); }
+  h3 { margin:0 0 var(--sg); color:#252523; font-size:var(--head); line-height:var(--head-line);
+    font-weight:700; text-wrap:balance; overflow-wrap:break-word; }
+  p { margin:0; font-size:var(--base); line-height:var(--body-line); text-wrap:pretty;
+    overflow-wrap:break-word; color:#383836; }
+</style><body><article class="slide rail" style="--w:1012px;--h:464px;--top:158px;
+      --rail:116px;--rg:28px;--g:35px;--base:23px;--head:25px;
+      --body-line:33px;--head-line:35px;--ig:18px;--sg:5px;
+      --pad:27px">
+    <header class="masthead"><div class="intro">第二部分</div>
+       <h1>存在的不足与感悟</h1>
+    </header>
+    <main data-content-frame><section class="group" data-group-id="hr-g1">
+      <h2>两点不足</h2>
+      <div class="columns" style="grid-template-columns:417px 416px"><div class="flow"><div class="unit" data-id="hr-1-1">
+    <h3 data-heading-id="hr-1-1">势能到动能阻力重重</h3>
+    <p data-body-id="hr-1-1">完成顶层设计后，变革落地就是关键。现阶段公司内部人力资源变革氛围尚未完全形成，信息系统支撑能力仍存在差距，缺乏市场化的管理机制，造成变革落地阻力重重。</p></div></div><div class="flow"><div class="unit" data-id="hr-1-2">
+    <h3 data-heading-id="hr-1-2">合规管理短板亟待提升</h3>
+    <p data-body-id="hr-1-2">2017年的巡视整改虽然取得了一定成效，但也充分暴露出人力条线基础管理薄弱的问题，反映出条线内部认识有待提升、作风有待转变、能力有待增强、协同有待深化。</p></div></div></div>
+    </section><section class="group" data-group-id="hr-g2">
+      <h2>四点感悟</h2>
+      <div class="columns" style="grid-template-columns:383px 450px"><div class="flow"><div class="unit" data-id="hr-2-1">
+    <h3 data-heading-id="hr-2-1">统一语言才能合拍共鸣</h3>
+    <p data-body-id="hr-2-1">要想真正解决人力资源与业务两张皮的问题，就要沿用BLM管理模型，与业务单位统一语言、统一目标、统一策略，实现从业务战略到人力资源战略的规划设计端到端人力资源落地解决方案，达成“三个市场化”转型目标。</p></div><div class="unit" data-id="hr-2-2">
+    <h3 data-heading-id="hr-2-2">解决问题才是检验变革的唯一标准</h3>
+    <p data-body-id="hr-2-2">体系变革是否成效，要以能否“解决实际问题”为唯一检验标准，力求变革落地有实效。</p></div></div><div class="flow"><div class="unit" data-id="hr-2-3">
+    <h3 data-heading-id="hr-2-3">顶层设计没有完结篇</h3>
+    <p data-body-id="hr-2-3">要在加速试点、小步快跑的基础上，进一步强化与行业优秀实践对标，结合落地成效持续开展迭代优化，完善体系建设。</p></div><div class="unit" data-id="hr-2-4">
+    <h3 data-heading-id="hr-2-4">统筹兼顾才能弹好钢琴</h3>
+    <p data-body-id="hr-2-4">强化“变革是硬道理，合规是硬要求，作风是硬标准”管理意识，统筹兼顾，攻守有道，以规范管理的“效率”来强化变革转型的“力度”，以优良的思想作风、工作作风、战斗作风跑出变革转型的“加速度”。作风改进不要求立竿见影，重在持续用力。</p></div></div></div>
+    </section></main></article></body></html>

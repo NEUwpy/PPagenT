@@ -1,0 +1,1093 @@
+{
+  "compiler": "src/visual-runtime/html-component-runtime.mjs#resolveHtmlComponent",
+  "status": "mismatch",
+  "issues": [
+    {
+      "code": "unrepresented-css-effect",
+      "id": "condition-plate",
+      "property": "clip-path",
+      "computed": "polygon(0px 0px, 100% 0px, 100% 100%, 1.8% 100%, 0px 72%)"
+    },
+    {
+      "code": "native-text-changed",
+      "id": "parallel-body-0",
+      "compiled": "在一个周末完成全部部门切换，培训与支持资源\n集中投入。优势是过渡期短；风险是问题可能集\n中出现，需要提前完成全量数据核对并准备值守\n团队。"
+    },
+    {
+      "code": "native-text-changed",
+      "id": "parallel-body-1",
+      "compiled": "先选择一个部门试用，再按反馈逐批推广。优点\n是能及时修正规则；代价是新旧系统并存时间较\n长，需要维护数据同步和跨部门办理说明。"
+    }
+  ],
+  "observedObjects": [
+    {
+      "id": "condition-plate",
+      "property": "clip-path",
+      "computed": "polygon(0px 0px, 100% 0px, 100% 100%, 1.8% 100%, 0px 72%)",
+      "compiled": {
+        "kind": "shape",
+        "name": "condition-plate",
+        "order": 20,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 125,
+          "top": 543,
+          "width": 1030,
+          "height": 82,
+          "rotation": 0
+        },
+        "geometry": "rect",
+        "fill": "#EAEAEA",
+        "line": {
+          "fill": "#242424",
+          "width": 0,
+          "style": "solid"
+        },
+        "shadow": "shadow-none",
+        "borderRadius": 0
+      }
+    }
+  ],
+  "nativeCounts": {
+    "text": 6,
+    "shape": 14,
+    "image": 2
+  },
+  "tree": {
+    "schemaVersion": 5,
+    "frame": {
+      "width": 1280,
+      "height": 720
+    },
+    "overflow": false,
+    "textFlowOverflows": [],
+    "textLayoutOverflows": [],
+    "fontOverflows": [],
+    "textFlows": [],
+    "textLayouts": [
+      {
+        "id": "statement-flow",
+        "status": "resolved",
+        "align": "center",
+        "valign": "middle",
+        "density": "standard"
+      },
+      {
+        "id": "heading-content-flow",
+        "status": "resolved",
+        "align": "center",
+        "valign": "middle",
+        "density": "standard"
+      },
+      {
+        "id": "statement-flow",
+        "status": "resolved",
+        "align": "center",
+        "valign": "middle",
+        "density": "standard"
+      },
+      {
+        "id": "heading-content-flow",
+        "status": "resolved",
+        "align": "center",
+        "valign": "middle",
+        "density": "standard"
+      }
+    ],
+    "nodes": [
+      {
+        "kind": "text",
+        "name": "title",
+        "order": 0,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 55,
+          "top": 63,
+          "width": 252,
+          "height": 52.5,
+          "rotation": 0
+        },
+        "text": "两种上线方案",
+        "style": {
+          "typeface": "Microsoft YaHei",
+          "fontSize": 42,
+          "fontSizePt": 31.5,
+          "bold": true,
+          "italic": false,
+          "color": "#242424",
+          "alignment": "left",
+          "verticalAlignment": "top",
+          "wrap": "none",
+          "fontFit": "unchanged",
+          "originalFontSizePt": 31.5,
+          "lineSpacing": 1.25
+        },
+        "shadow": "shadow-none"
+      },
+      {
+        "kind": "shape",
+        "name": "title-rule",
+        "order": 1,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 55,
+          "top": 137,
+          "width": 68,
+          "height": 3,
+          "rotation": 0
+        },
+        "geometry": "rect",
+        "fill": "#585858",
+        "line": {
+          "fill": "#242424",
+          "width": 0,
+          "style": "solid"
+        },
+        "shadow": "shadow-none",
+        "borderRadius": 0
+      },
+      {
+        "kind": "shape",
+        "name": "parallel-card-underlay-0",
+        "order": 2,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 133,
+          "top": 229,
+          "width": 481,
+          "height": 290,
+          "rotation": 0
+        },
+        "geometry": "roundRect",
+        "fill": "#E9E9E9",
+        "line": {
+          "fill": "#E9E9E9",
+          "width": 1,
+          "style": "solid"
+        },
+        "shadow": "shadow-none",
+        "borderRadius": 26
+      },
+      {
+        "kind": "shape",
+        "name": "parallel-card-surface-0",
+        "order": 3,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 125,
+          "top": 219,
+          "width": 497,
+          "height": 290,
+          "rotation": 0
+        },
+        "geometry": "roundRect",
+        "fill": "#E9E9E9",
+        "line": {
+          "fill": "#E9E9E9",
+          "width": 1,
+          "style": "solid"
+        },
+        "shadow": "0px 12px 26px #373737/12",
+        "borderRadius": 26
+      },
+      {
+        "kind": "shape",
+        "name": "parallel-card-accent-0",
+        "order": 4,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 332.5,
+          "top": 219,
+          "width": 82,
+          "height": 8,
+          "rotation": 0
+        },
+        "geometry": "roundRect",
+        "fill": "#868686",
+        "line": {
+          "fill": "#242424",
+          "width": 0,
+          "style": "solid"
+        },
+        "shadow": "shadow-none",
+        "borderRadius": 9
+      },
+      {
+        "kind": "shape",
+        "name": "parallel-marker-halo-0",
+        "order": 5,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 325.5,
+          "top": 171,
+          "width": 96,
+          "height": 96,
+          "rotation": 0
+        },
+        "geometry": "ellipse",
+        "fill": "#E9E9E9",
+        "line": {
+          "fill": "#E9E9E9",
+          "width": 1,
+          "style": "solid"
+        },
+        "shadow": "shadow-none",
+        "borderRadius": 0
+      },
+      {
+        "kind": "shape",
+        "name": "parallel-marker-core-0",
+        "order": 6,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 339.5,
+          "top": 185,
+          "width": 68,
+          "height": 68,
+          "rotation": 0
+        },
+        "geometry": "ellipse",
+        "fill": "#484848",
+        "line": {
+          "fill": "#242424",
+          "width": 0,
+          "style": "solid"
+        },
+        "shadow": "0px 8px 18px #484848/24",
+        "borderRadius": 0
+      },
+      {
+        "kind": "image",
+        "name": "parallel-icon-0",
+        "order": 7,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 355.5,
+          "top": 201,
+          "width": 36,
+          "height": 36,
+          "rotation": 0
+        },
+        "dataUrl": "data:image/svg+xml;base64,PHN2ZyBkYXRhLXBwdC1raW5kPSJpbWFnZSIgZGF0YS1wcHQtbmFtZT0icGFyYWxsZWwtaWNvbi0wIiBkYXRhLWljb24ta2V5PSJsYXlvdXQtZ3JpZCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMzYiIGhlaWdodD0iMzYiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0icGFyYWxsZWwtaWNvbi1zdmciIHN0eWxlPSJjb2xvcjogcmdiKDI1NSwgMjU1LCAyNTUpOyBvcGFjaXR5OiAxOyI+CiAgCiAgPHBhdGggZD0iTTQgNWExIDEgMCAwIDEgMSAtMWg0YTEgMSAwIDAgMSAxIDF2NGExIDEgMCAwIDEgLTEgMWgtNGExIDEgMCAwIDEgLTEgLTFsMCAtNCI+PC9wYXRoPgogIDxwYXRoIGQ9Ik0xNCA1YTEgMSAwIDAgMSAxIC0xaDRhMSAxIDAgMCAxIDEgMXY0YTEgMSAwIDAgMSAtMSAxaC00YTEgMSAwIDAgMSAtMSAtMWwwIC00Ij48L3BhdGg+CiAgPHBhdGggZD0iTTQgMTVhMSAxIDAgMCAxIDEgLTFoNGExIDEgMCAwIDEgMSAxdjRhMSAxIDAgMCAxIC0xIDFoLTRhMSAxIDAgMCAxIC0xIC0xbDAgLTQiPjwvcGF0aD4KICA8cGF0aCBkPSJNMTQgMTVhMSAxIDAgMCAxIDEgLTFoNGExIDEgMCAwIDEgMSAxdjRhMSAxIDAgMCAxIC0xIDFoLTRhMSAxIDAgMCAxIC0xIC0xbDAgLTQiPjwvcGF0aD4KPC9zdmc+",
+        "alt": "layout-grid",
+        "geometry": null
+      },
+      {
+        "kind": "text",
+        "name": "parallel-title-0",
+        "order": 8,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 153,
+          "top": 289.75,
+          "width": 441,
+          "height": 27.5,
+          "rotation": 0
+        },
+        "text": "集中上线方案：",
+        "style": {
+          "typeface": "Microsoft YaHei",
+          "fontSize": 22,
+          "fontSizePt": 16.5,
+          "bold": true,
+          "italic": false,
+          "color": "#373737",
+          "alignment": "center",
+          "verticalAlignment": "middle",
+          "wrap": "none",
+          "fontFit": "unchanged",
+          "originalFontSizePt": 16.5,
+          "lineSpacing": 1.25
+        },
+        "shadow": "shadow-none"
+      },
+      {
+        "kind": "shape",
+        "name": "parallel-rule-0",
+        "order": 9,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 346.5,
+          "top": 334,
+          "width": 54,
+          "height": 4,
+          "rotation": 0
+        },
+        "geometry": "roundRect",
+        "fill": "#868686",
+        "line": {
+          "fill": "#242424",
+          "width": 0,
+          "style": "solid"
+        },
+        "shadow": "shadow-none",
+        "borderRadius": 99
+      },
+      {
+        "kind": "text",
+        "name": "parallel-body-0",
+        "order": 10,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 165,
+          "top": 360,
+          "width": 417,
+          "height": 114,
+          "rotation": 0
+        },
+        "text": "在一个周末完成全部部门切换，培训与支持资源\n集中投入。优势是过渡期短；风险是问题可能集\n中出现，需要提前完成全量数据核对并准备值守\n团队。",
+        "style": {
+          "typeface": "Microsoft YaHei",
+          "fontSize": 19,
+          "fontSizePt": 14.25,
+          "bold": false,
+          "italic": false,
+          "color": "#373737",
+          "alignment": "center",
+          "verticalAlignment": "middle",
+          "wrap": "square",
+          "fontFit": "unchanged",
+          "originalFontSizePt": 14.25,
+          "lineSpacing": 1.5
+        },
+        "shadow": "shadow-none"
+      },
+      {
+        "kind": "shape",
+        "name": "parallel-card-underlay-1",
+        "order": 11,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 666,
+          "top": 229,
+          "width": 481,
+          "height": 290,
+          "rotation": 0
+        },
+        "geometry": "roundRect",
+        "fill": "#E9E9E9",
+        "line": {
+          "fill": "#E9E9E9",
+          "width": 1,
+          "style": "solid"
+        },
+        "shadow": "shadow-none",
+        "borderRadius": 26
+      },
+      {
+        "kind": "shape",
+        "name": "parallel-card-surface-1",
+        "order": 12,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 658,
+          "top": 219,
+          "width": 497,
+          "height": 290,
+          "rotation": 0
+        },
+        "geometry": "roundRect",
+        "fill": "#E9E9E9",
+        "line": {
+          "fill": "#E9E9E9",
+          "width": 1,
+          "style": "solid"
+        },
+        "shadow": "0px 12px 26px #373737/12",
+        "borderRadius": 26
+      },
+      {
+        "kind": "shape",
+        "name": "parallel-card-accent-1",
+        "order": 13,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 865.5,
+          "top": 219,
+          "width": 82,
+          "height": 8,
+          "rotation": 0
+        },
+        "geometry": "roundRect",
+        "fill": "#868686",
+        "line": {
+          "fill": "#242424",
+          "width": 0,
+          "style": "solid"
+        },
+        "shadow": "shadow-none",
+        "borderRadius": 9
+      },
+      {
+        "kind": "shape",
+        "name": "parallel-marker-halo-1",
+        "order": 14,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 858.5,
+          "top": 171,
+          "width": 96,
+          "height": 96,
+          "rotation": 0
+        },
+        "geometry": "ellipse",
+        "fill": "#E9E9E9",
+        "line": {
+          "fill": "#E9E9E9",
+          "width": 1,
+          "style": "solid"
+        },
+        "shadow": "shadow-none",
+        "borderRadius": 0
+      },
+      {
+        "kind": "shape",
+        "name": "parallel-marker-core-1",
+        "order": 15,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 872.5,
+          "top": 185,
+          "width": 68,
+          "height": 68,
+          "rotation": 0
+        },
+        "geometry": "ellipse",
+        "fill": "#484848",
+        "line": {
+          "fill": "#242424",
+          "width": 0,
+          "style": "solid"
+        },
+        "shadow": "0px 8px 18px #484848/24",
+        "borderRadius": 0
+      },
+      {
+        "kind": "image",
+        "name": "parallel-icon-1",
+        "order": 16,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 888.5,
+          "top": 201,
+          "width": 36,
+          "height": 36,
+          "rotation": 0
+        },
+        "dataUrl": "data:image/svg+xml;base64,PHN2ZyBkYXRhLXBwdC1raW5kPSJpbWFnZSIgZGF0YS1wcHQtbmFtZT0icGFyYWxsZWwtaWNvbi0xIiBkYXRhLWljb24ta2V5PSJjYWxlbmRhci1ldmVudCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMzYiIGhlaWdodD0iMzYiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0icGFyYWxsZWwtaWNvbi1zdmciIHN0eWxlPSJjb2xvcjogcmdiKDI1NSwgMjU1LCAyNTUpOyBvcGFjaXR5OiAxOyI+CiAgCiAgPHBhdGggZD0iTTQgN2EyIDIgMCAwIDEgMiAtMmgxMmEyIDIgMCAwIDEgMiAydjEyYTIgMiAwIDAgMSAtMiAyaC0xMmEyIDIgMCAwIDEgLTIgLTJsMCAtMTIiPjwvcGF0aD4KICA8cGF0aCBkPSJNMTYgM2wwIDQiPjwvcGF0aD4KICA8cGF0aCBkPSJNOCAzbDAgNCI+PC9wYXRoPgogIDxwYXRoIGQ9Ik00IDExbDE2IDAiPjwvcGF0aD4KICA8cGF0aCBkPSJNOCAxNWgydjJoLTJsMCAtMiI+PC9wYXRoPgo8L3N2Zz4=",
+        "alt": "calendar-event",
+        "geometry": null
+      },
+      {
+        "kind": "text",
+        "name": "parallel-title-1",
+        "order": 17,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 686,
+          "top": 289.75,
+          "width": 441,
+          "height": 27.5,
+          "rotation": 0
+        },
+        "text": "分批上线方案：",
+        "style": {
+          "typeface": "Microsoft YaHei",
+          "fontSize": 22,
+          "fontSizePt": 16.5,
+          "bold": true,
+          "italic": false,
+          "color": "#373737",
+          "alignment": "center",
+          "verticalAlignment": "middle",
+          "wrap": "none",
+          "fontFit": "unchanged",
+          "originalFontSizePt": 16.5,
+          "lineSpacing": 1.25
+        },
+        "shadow": "shadow-none"
+      },
+      {
+        "kind": "shape",
+        "name": "parallel-rule-1",
+        "order": 18,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 879.5,
+          "top": 334,
+          "width": 54,
+          "height": 4,
+          "rotation": 0
+        },
+        "geometry": "roundRect",
+        "fill": "#868686",
+        "line": {
+          "fill": "#242424",
+          "width": 0,
+          "style": "solid"
+        },
+        "shadow": "shadow-none",
+        "borderRadius": 99
+      },
+      {
+        "kind": "text",
+        "name": "parallel-body-1",
+        "order": 19,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 698,
+          "top": 374.25,
+          "width": 417,
+          "height": 85.5,
+          "rotation": 0
+        },
+        "text": "先选择一个部门试用，再按反馈逐批推广。优点\n是能及时修正规则；代价是新旧系统并存时间较\n长，需要维护数据同步和跨部门办理说明。",
+        "style": {
+          "typeface": "Microsoft YaHei",
+          "fontSize": 19,
+          "fontSizePt": 14.25,
+          "bold": false,
+          "italic": false,
+          "color": "#373737",
+          "alignment": "center",
+          "verticalAlignment": "middle",
+          "wrap": "square",
+          "fontFit": "unchanged",
+          "originalFontSizePt": 14.25,
+          "lineSpacing": 1.5
+        },
+        "shadow": "shadow-none"
+      },
+      {
+        "kind": "shape",
+        "name": "condition-plate",
+        "order": 20,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 125,
+          "top": 543,
+          "width": 1030,
+          "height": 82,
+          "rotation": 0
+        },
+        "geometry": "rect",
+        "fill": "#EAEAEA",
+        "line": {
+          "fill": "#242424",
+          "width": 0,
+          "style": "solid"
+        },
+        "shadow": "shadow-none",
+        "borderRadius": 0
+      },
+      {
+        "kind": "text",
+        "name": "precondition",
+        "order": 21,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 163,
+          "top": 570,
+          "width": 954,
+          "height": 28,
+          "rotation": 0
+        },
+        "text": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。",
+        "style": {
+          "typeface": "Microsoft YaHei",
+          "fontSize": 20,
+          "fontSizePt": 15,
+          "bold": true,
+          "italic": false,
+          "color": "#292929",
+          "alignment": "left",
+          "verticalAlignment": "top",
+          "wrap": "none",
+          "fontFit": "unchanged",
+          "originalFontSizePt": 15,
+          "lineSpacing": 1.4
+        },
+        "shadow": "shadow-none"
+      }
+    ],
+    "slots": [
+      {
+        "id": "options-cards-1-icon",
+        "role": "icon",
+        "field": "items[0].iconKey",
+        "itemId": "options-cards-1",
+        "regionId": "",
+        "contentType": "icon",
+        "required": true,
+        "textMode": "single-line",
+        "listPolicy": "none",
+        "frame": {
+          "left": 352.5,
+          "top": 198,
+          "width": 42,
+          "height": 42,
+          "rotation": 0
+        },
+        "capacity": {},
+        "media": {
+          "type": "icon",
+          "provider": "tabler-icons",
+          "required": true
+        }
+      },
+      {
+        "id": "options-cards-1-title-region",
+        "role": "text-region",
+        "field": "items[0].title",
+        "itemId": "options-cards-1",
+        "regionId": "title",
+        "contentType": "text-region",
+        "required": false,
+        "textMode": "structured",
+        "listPolicy": "structured",
+        "frame": {
+          "left": 153,
+          "top": 283,
+          "width": 441,
+          "height": 41,
+          "rotation": 0
+        },
+        "capacity": {
+          "basis": "dom-box-font-metrics",
+          "reliable": true,
+          "derived": true,
+          "sampleFits": true,
+          "recommendedMaxChars": 16,
+          "hardMaxChars": 20
+        },
+        "innerFrame": {
+          "width": 441,
+          "height": 41,
+          "padding": {
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          }
+        },
+        "textLayout": {
+          "id": "statement-flow",
+          "defaultId": "statement-flow",
+          "compatible": [
+            "statement-flow",
+            "heading-content-flow"
+          ],
+          "contentRoles": [
+            "heading"
+          ],
+          "status": "resolved",
+          "align": "center",
+          "valign": "middle",
+          "density": "standard",
+          "parts": [
+            {
+              "part": "heading",
+              "field": "title",
+              "primitive": "heading",
+              "frame": {
+                "left": 153,
+                "top": 289.75,
+                "width": 441,
+                "height": 27.5,
+                "rotation": 0
+              },
+              "text": "集中上线方案：",
+              "lineCount": 1,
+              "typography": {
+                "role": "componentItemTitle",
+                "typeface": "Microsoft YaHei",
+                "fontSizePt": 16.5,
+                "fontWeight": "700",
+                "alignment": "center",
+                "lineHeightPt": 20.625
+              },
+              "capacity": {
+                "recommendedMaxChars": 16,
+                "hardMaxChars": 20,
+                "hardMaxLines": 1
+              }
+            }
+          ]
+        },
+        "media": null
+      },
+      {
+        "id": "options-cards-1-content-region",
+        "role": "text-region",
+        "field": "items[0].support",
+        "itemId": "options-cards-1",
+        "regionId": "content",
+        "contentType": "text-region",
+        "required": false,
+        "textMode": "structured",
+        "listPolicy": "structured",
+        "frame": {
+          "left": 165,
+          "top": 352,
+          "width": 417,
+          "height": 130,
+          "rotation": 0
+        },
+        "capacity": {
+          "basis": "dom-box-font-metrics",
+          "reliable": true,
+          "derived": true,
+          "sampleFits": true,
+          "recommendedMaxChars": 67,
+          "hardMaxChars": 84
+        },
+        "innerFrame": {
+          "width": 417,
+          "height": 130,
+          "padding": {
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          }
+        },
+        "textLayout": {
+          "id": "heading-content-flow",
+          "defaultId": "heading-content-flow",
+          "compatible": [
+            "statement-flow",
+            "heading-content-flow",
+            "structured-list-flow",
+            "metric-content-flow"
+          ],
+          "contentRoles": [
+            "body"
+          ],
+          "status": "resolved",
+          "align": "center",
+          "valign": "middle",
+          "density": "standard",
+          "parts": [
+            {
+              "part": "body",
+              "field": "body",
+              "primitive": "body",
+              "frame": {
+                "left": 165,
+                "top": 360,
+                "width": 417,
+                "height": 114,
+                "rotation": 0
+              },
+              "text": "在一个周末完成全部部门切换，培训与支持资源\n集中投入。优势是过渡期短；风险是问题可能集\n中出现，需要提前完成全量数据核对并准备值守\n团队。",
+              "lineCount": 4,
+              "typography": {
+                "role": "componentBody",
+                "typeface": "Microsoft YaHei",
+                "fontSizePt": 14.25,
+                "fontWeight": "400",
+                "alignment": "center",
+                "lineHeightPt": 21.375
+              },
+              "capacity": {
+                "recommendedMaxChars": 67,
+                "hardMaxChars": 84,
+                "hardMaxLines": 4
+              }
+            }
+          ]
+        },
+        "media": null
+      },
+      {
+        "id": "options-cards-2-icon",
+        "role": "icon",
+        "field": "items[1].iconKey",
+        "itemId": "options-cards-2",
+        "regionId": "",
+        "contentType": "icon",
+        "required": true,
+        "textMode": "single-line",
+        "listPolicy": "none",
+        "frame": {
+          "left": 885.5,
+          "top": 198,
+          "width": 42,
+          "height": 42,
+          "rotation": 0
+        },
+        "capacity": {},
+        "media": {
+          "type": "icon",
+          "provider": "tabler-icons",
+          "required": true
+        }
+      },
+      {
+        "id": "options-cards-2-title-region",
+        "role": "text-region",
+        "field": "items[1].title",
+        "itemId": "options-cards-2",
+        "regionId": "title",
+        "contentType": "text-region",
+        "required": false,
+        "textMode": "structured",
+        "listPolicy": "structured",
+        "frame": {
+          "left": 686,
+          "top": 283,
+          "width": 441,
+          "height": 41,
+          "rotation": 0
+        },
+        "capacity": {
+          "basis": "dom-box-font-metrics",
+          "reliable": true,
+          "derived": true,
+          "sampleFits": true,
+          "recommendedMaxChars": 16,
+          "hardMaxChars": 20
+        },
+        "innerFrame": {
+          "width": 441,
+          "height": 41,
+          "padding": {
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          }
+        },
+        "textLayout": {
+          "id": "statement-flow",
+          "defaultId": "statement-flow",
+          "compatible": [
+            "statement-flow",
+            "heading-content-flow"
+          ],
+          "contentRoles": [
+            "heading"
+          ],
+          "status": "resolved",
+          "align": "center",
+          "valign": "middle",
+          "density": "standard",
+          "parts": [
+            {
+              "part": "heading",
+              "field": "title",
+              "primitive": "heading",
+              "frame": {
+                "left": 686,
+                "top": 289.75,
+                "width": 441,
+                "height": 27.5,
+                "rotation": 0
+              },
+              "text": "分批上线方案：",
+              "lineCount": 1,
+              "typography": {
+                "role": "componentItemTitle",
+                "typeface": "Microsoft YaHei",
+                "fontSizePt": 16.5,
+                "fontWeight": "700",
+                "alignment": "center",
+                "lineHeightPt": 20.625
+              },
+              "capacity": {
+                "recommendedMaxChars": 16,
+                "hardMaxChars": 20,
+                "hardMaxLines": 1
+              }
+            }
+          ]
+        },
+        "media": null
+      },
+      {
+        "id": "options-cards-2-content-region",
+        "role": "text-region",
+        "field": "items[1].support",
+        "itemId": "options-cards-2",
+        "regionId": "content",
+        "contentType": "text-region",
+        "required": false,
+        "textMode": "structured",
+        "listPolicy": "structured",
+        "frame": {
+          "left": 698,
+          "top": 352,
+          "width": 417,
+          "height": 130,
+          "rotation": 0
+        },
+        "capacity": {
+          "basis": "dom-box-font-metrics",
+          "reliable": true,
+          "derived": true,
+          "sampleFits": true,
+          "recommendedMaxChars": 50,
+          "hardMaxChars": 63
+        },
+        "innerFrame": {
+          "width": 417,
+          "height": 130,
+          "padding": {
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          }
+        },
+        "textLayout": {
+          "id": "heading-content-flow",
+          "defaultId": "heading-content-flow",
+          "compatible": [
+            "statement-flow",
+            "heading-content-flow",
+            "structured-list-flow",
+            "metric-content-flow"
+          ],
+          "contentRoles": [
+            "body"
+          ],
+          "status": "resolved",
+          "align": "center",
+          "valign": "middle",
+          "density": "standard",
+          "parts": [
+            {
+              "part": "body",
+              "field": "body",
+              "primitive": "body",
+              "frame": {
+                "left": 698,
+                "top": 374.25,
+                "width": 417,
+                "height": 85.5,
+                "rotation": 0
+              },
+              "text": "先选择一个部门试用，再按反馈逐批推广。优点\n是能及时修正规则；代价是新旧系统并存时间较\n长，需要维护数据同步和跨部门办理说明。",
+              "lineCount": 3,
+              "typography": {
+                "role": "componentBody",
+                "typeface": "Microsoft YaHei",
+                "fontSizePt": 14.25,
+                "fontWeight": "400",
+                "alignment": "center",
+                "lineHeightPt": 21.375
+              },
+              "capacity": {
+                "recommendedMaxChars": 50,
+                "hardMaxChars": 63,
+                "hardMaxLines": 3
+              }
+            }
+          ]
+        },
+        "media": null
+      }
+    ],
+    "componentId": "options-free",
+    "targetFrame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "textSourceBindings": {
+    "sourceFile": "稿件/模拟稿库/布局试排-options.md",
+    "sourceSha256": "123b52f8a5fc088f575c8a702d1ba5c09949e0482a68add8ebb3539d71dfc7ae",
+    "spans": {
+      "title": {
+        "block": "source-001",
+        "start": 0,
+        "end": 6,
+        "text": "两种上线方案",
+        "role": "page-title"
+      },
+      "parallel-title-0": {
+        "block": "source-002",
+        "start": 0,
+        "end": 7,
+        "text": "集中上线方案：",
+        "role": "heading"
+      },
+      "parallel-body-0": {
+        "block": "source-002",
+        "start": 7,
+        "end": 73,
+        "text": "在一个周末完成全部部门切换，培训与支持资源集中投入。优势是过渡期短；风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。",
+        "role": "body"
+      },
+      "parallel-title-1": {
+        "block": "source-003",
+        "start": 0,
+        "end": 7,
+        "text": "分批上线方案：",
+        "role": "heading"
+      },
+      "parallel-body-1": {
+        "block": "source-003",
+        "start": 7,
+        "end": 68,
+        "text": "先选择一个部门试用，再按反馈逐批推广。优点是能及时修正规则；代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。",
+        "role": "body"
+      },
+      "precondition": {
+        "block": "source-004",
+        "start": 0,
+        "end": 29,
+        "text": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。",
+        "role": "shared-condition"
+      }
+    }
+  }
+}

@@ -1,0 +1,149 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>第二部分：存在的不足与感悟</title><style>:root {
+  color: #1b1b1b;
+  background: #deddd9;
+  --paper: #fcfcfa;
+  --muted: #54544f;
+  --line: #d2d2ca;
+  --serif: "Noto Serif SC", "SimSun", serif;
+  --sans: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+}
+* { box-sizing: border-box }
+body { margin: 0; font-family: var(--sans) }
+.sheet {
+  inline-size: min(100%, 1280px);
+  min-block-size: min(100dvh, 720px);
+  margin-inline: auto;
+  padding: 42px clamp(28px, 5.625vw, 72px) 34px;
+  background: var(--paper);
+  container-type: inline-size;
+}
+h1, h2, h3, p { margin: 0; font-weight: inherit }
+.serif { font-family: var(--serif) }
+.kicker {
+  display: block;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.5;
+  letter-spacing: .12em;
+  font-weight: 550;
+  margin-block-end: 4px;
+}
+h1 { font-size: clamp(38px, 5.3cqi, 62px); line-height: 1.22; font-weight: 720; letter-spacing: -.045em }
+.masthead { padding-block-end: 20px; border-block-end: 2px solid #252525 }
+.text { line-break: strict; text-wrap: pretty }
+h1.text, h2.text, h3.text { text-wrap: balance }
+.phrases { word-break: keep-all; overflow-wrap: normal }
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.5;
+  letter-spacing: .12em;
+  font-weight: 650;
+}
+.section-label::after { content: ""; flex: 1 1 0; border-block-end: 1px solid var(--line) }
+
+.review {
+  display: grid;
+  grid-template-columns: minmax(0, var(--first-share)) minmax(0, 1fr);
+  gap: clamp(24px, 5cqi, 58px);
+  padding-block-start: 22px;
+}
+.review section { min-inline-size: 0 }
+.review article h3 { font-size: 22px; line-height: 1.36; font-weight: 740; margin-block-end: 4px }
+.review article .text-body { font-size: 19px; line-height: 1.475; color: #292927 }
+.review article + article { margin-block-start: 14px }
+.review .issues article + article { margin-block-start: 25px }
+.review .insights { padding-inline-start: 25px; border-inline-start: 1px solid var(--line) }
+.review .articles { min-inline-size: 0 }
+.review.is-spread {
+  grid-template-columns: minmax(0, var(--first-share)) minmax(0, 1fr);
+  gap: clamp(22px, 3.35cqi, 38px);
+}
+.review.is-spread .insights { padding-inline-start: clamp(18px, 2cqi, 24px) }
+.review.is-spread .insights .articles {
+  columns: 2;
+  column-gap: clamp(23px, 2.85cqi, 34px);
+  column-fill: balance;
+}
+.review.is-spread .insights article {
+  break-inside: avoid-column;
+  margin: 0 0 14px;
+}
+.review.is-spread article h3 { font-size: 21px; line-height: 1.37 }
+.review.is-spread article .text-body { line-height: 1.4 }
+.review.is-spread .issues article:first-child h3 { text-wrap: pretty }
+.review.is-spread article .has-balanced-lines { text-wrap: balance }
+
+.continuous {
+  columns: 2;
+  column-gap: 58px;
+  column-rule: 1px solid var(--line);
+  padding-block-start: 22px;
+}
+.continuous section { display: contents }
+.continuous .articles { display: contents }
+.continuous .section-label { break-after: avoid-column }
+.continuous article { break-inside: avoid-column; margin-block-end: 14px }
+.continuous article h3 { font-size: 22px; font-weight: 700; line-height: 1.35 }
+.continuous article .text-body { font-size: 19px; line-height: 1.5 }
+
+.decisions-document .masthead { padding-block: 11px 24px }
+.conditions {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 24px;
+  align-items: baseline;
+  border-block-end: 1px solid #aaa9a2;
+  padding: 21px 0;
+  margin-block-end: 31px;
+}
+.conditions h2 { font-size: 18px; color: var(--muted); font-weight: 650; letter-spacing: .09em }
+.conditions p { max-inline-size: 36em; font-size: 22px; line-height: 1.5; font-weight: 520 }
+.options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: auto auto 1fr;
+  column-gap: clamp(34px, 6cqi, 72px);
+}
+.options article {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 3;
+  row-gap: 16px;
+  min-inline-size: 0;
+}
+.options article + article { padding-inline-start: 28px; border-inline-start: 1px solid var(--line) }
+.options h2 { font-size: clamp(28px, 3.25cqi, 38px); font-weight: 700; line-height: 1.3 }
+.options .method { font-size: 22px; line-height: 1.58; max-inline-size: 24em; text-wrap: balance }
+.options .tradeoff {
+  border-block-start: 1px solid var(--line);
+  padding-block-start: 14px;
+  font-size: 20px;
+  line-height: 1.65;
+  color: #353533;
+}
+.options .tradeoff p + p { margin-block-start: 8px }
+.options strong { font-weight: 720; color: #1b1b1b }
+
+@container (max-width: 870px) {
+  .review { gap: 24px }
+  .review .insights { padding-inline-start: 18px }
+  .review article + article { margin-block-start: 11px }
+}
+@container (max-width: 620px) {
+  .review, .review.is-spread, .options, .conditions { grid-template-columns: minmax(0, 1fr) }
+  .review .insights, .options article + article { border-inline-start: 0; padding-inline-start: 0 }
+  .options { grid-template-rows: none; row-gap: 32px }
+  .options article { grid-row: auto; grid-template-rows: auto; row-gap: 13px }
+  .conditions { gap: 7px }
+  .continuous { columns: 1 }
+  .review.is-spread .insights .articles { columns: 1 }
+}
+</style></head>
+    <body><main class="sheet review-document"><header class="masthead"><span class="text kicker" data-bind="chapter">第二部分</span><h1 class="text serif phrases" data-bind="title">存在<wbr>的<wbr>不足<wbr>与<wbr>感悟</h1></header>
+      <div class="review" style="--first-share:37%"><section class="issues"><h2 class="text section-label" data-bind="label-0">两点不足</h2><div class="articles"><article><h3 class="text  phrases" data-bind="heading-0-0">势能<wbr>到<wbr>动能<wbr>阻力<wbr>重重</h3><p class="text text-body phrases" data-bind="body-0-0">完成顶层<wbr>设<wbr>计后，<wbr>变革<wbr>落<wbr>地<wbr>就是<wbr>关键。<wbr>现阶段<wbr>公司<wbr>内部人力<wbr>资源变革<wbr>氛围<wbr>尚未<wbr>完全<wbr>形成，<wbr>信息<wbr>系统支撑能<wbr>力<wbr>仍<wbr>存在<wbr>差距，<wbr>缺乏<wbr>市场化<wbr>的<wbr>管理<wbr>机制，<wbr>造成变革落<wbr>地阻力<wbr>重重。</p></article><article><h3 class="text  phrases" data-bind="heading-0-1">合<wbr>规管理短板<wbr>亟待<wbr>提升</h3><p class="text text-body phrases" data-bind="body-0-1">2017年<wbr>的<wbr>巡视<wbr>整<wbr>改虽然<wbr>取得<wbr>了<wbr>一定<wbr>成效，<wbr>但<wbr>也<wbr>充分<wbr>暴露出<wbr>人力<wbr>条线<wbr>基础管理<wbr>薄弱<wbr>的<wbr>问题，<wbr>反映<wbr>出<wbr>条线<wbr>内部<wbr>认识<wbr>有待<wbr>提升、<wbr>作风<wbr>有<wbr>待<wbr>转变、<wbr>能力<wbr>有待<wbr>增强、<wbr>协同<wbr>有<wbr>待<wbr>深化。</p></article></div></section><section class="insights"><h2 class="text section-label" data-bind="label-1">四点感悟</h2><div class="articles"><article><h3 class="text  phrases" data-bind="heading-1-0">统<wbr>一语<wbr>言才<wbr>能<wbr>合拍<wbr>共鸣</h3><p class="text text-body phrases" data-bind="body-1-0">要<wbr>想<wbr>真正解决人<wbr>力<wbr>资源<wbr>与业务<wbr>两张<wbr>皮<wbr>的<wbr>问题，<wbr>就要<wbr>沿用<wbr>BLM管理<wbr>模型，<wbr>与业务单位<wbr>统一<wbr>语言、<wbr>统一<wbr>目标、<wbr>统一策略，<wbr>实现<wbr>从<wbr>业务战<wbr>略到<wbr>人力<wbr>资源<wbr>战略<wbr>的<wbr>规划<wbr>设计<wbr>端到<wbr>端人<wbr>力资源落<wbr>地解决<wbr>方案，<wbr>达成<wbr>“三个<wbr>市场化”<wbr>转型<wbr>目标。</p></article><article><h3 class="text  phrases" data-bind="heading-1-1">解决问题<wbr>才<wbr>是<wbr>检验<wbr>变革<wbr>的<wbr>唯一<wbr>标准</h3><p class="text text-body phrases" data-bind="body-1-1">体系变革<wbr>是否<wbr>成效，<wbr>要<wbr>以能<wbr>否<wbr>“解决实际<wbr>问题”<wbr>为唯一<wbr>检验<wbr>标准，<wbr>力求<wbr>变革落<wbr>地<wbr>有实效。</p></article><article><h3 class="text  phrases" data-bind="heading-1-2">顶层<wbr>设计<wbr>没有<wbr>完结篇</h3><p class="text text-body phrases" data-bind="body-1-2">要<wbr>在<wbr>加速<wbr>试点、<wbr>小步<wbr>快<wbr>跑<wbr>的<wbr>基础<wbr>上，<wbr>进一步<wbr>强化<wbr>与<wbr>行业<wbr>优秀实践<wbr>对<wbr>标，<wbr>结合落<wbr>地成效持续<wbr>开展迭<wbr>代优化，<wbr>完善<wbr>体系<wbr>建设。</p></article><article><h3 class="text  phrases" data-bind="heading-1-3">统筹兼顾才能<wbr>弹<wbr>好<wbr>钢琴</h3><p class="text text-body phrases" data-bind="body-1-3">强化<wbr>“变革<wbr>是<wbr>硬道理，<wbr>合<wbr>规<wbr>是<wbr>硬<wbr>要求，<wbr>作风<wbr>是<wbr>硬<wbr>标准”<wbr>管理<wbr>意识，<wbr>统筹<wbr>兼顾，<wbr>攻守<wbr>有<wbr>道，<wbr>以规范<wbr>管理<wbr>的<wbr>“效率”<wbr>来强化变革<wbr>转型<wbr>的<wbr>“力<wbr>度”，<wbr>以优良<wbr>的<wbr>思想<wbr>作风、<wbr>工作<wbr>作风、<wbr>战斗<wbr>作风<wbr>跑出<wbr>变革<wbr>转型<wbr>的<wbr>“加<wbr>速度”。<wbr>作风<wbr>改进<wbr>不<wbr>要求<wbr>立竿<wbr>见影，<wbr>重在<wbr>持续<wbr>用力。</p></article></div></section></div></main></body></html>

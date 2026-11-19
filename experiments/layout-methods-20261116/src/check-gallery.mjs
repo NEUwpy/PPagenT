@@ -1,0 +1,28 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {fileURLToPath,pathToFileURL} from 'node:url';
+import {chromium} from 'playwright';
+const E=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const browser=await chromium.launch({executablePath:process.env.CHROME_PATH||'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});
+const page=await browser.newPage({viewport:{width:1440,height:1050},deviceScaleFactor:1});
+const errors=[];page.on('pageerror',e=>errors.push(e.message));
+await page.goto(pathToFileURL(path.join(E,'index.html')).href);await page.evaluate(()=>document.fonts.ready);
+await page.selectOption('#left','marp');await page.selectOption('#right','typst');
+if(!(await page.locator('#leftTitle').textContent()).includes('Marp'))throw new Error('Left comparison selector failed');
+if(!(await page.locator('#rightTitle').textContent()).includes('Typst'))throw new Error('Right comparison selector failed');
+await page.locator('[data-open="seaslides"]').click();
+if(!await page.locator('#viewer').evaluate(el=>el.open))throw new Error('Image viewer failed');
+await page.locator('#close').click();
+await page.selectOption('#left','previous');await page.selectOption('#right','slidev');
+const desktop=await page.evaluate(()=>({width:innerWidth,scrollWidth:document.documentElement.scrollWidth,images:[...document.querySelectorAll('img:not(dialog img)')].map(i=>({src:i.getAttribute('src'),loaded:i.complete&&i.naturalWidth>0})),links:[...document.querySelectorAll('a')].map(a=>a.getAttribute('href'))}));
+const missing=[];
+for(const link of desktop.links){if(!/^https?:/.test(link)){try{await fs.access(path.resolve(E,link))}catch{missing.push(link)}}}
+await page.screenshot({path:path.join(E,'evidence/gallery-desktop.png'),fullPage:true});
+await page.setViewportSize({width:390,height:844});
+const mobile=await page.evaluate(()=>({width:innerWidth,scrollWidth:document.documentElement.scrollWidth}));
+await page.screenshot({path:path.join(E,'evidence/gallery-mobile.png'),fullPage:true});
+const audit={jsErrors:errors,missingLinks:missing,desktop,mobile,selectorsAndViewer:true};
+await fs.writeFile(path.join(E,'evidence/gallery-check.json'),JSON.stringify(audit,null,2));
+await browser.close();
+console.log(JSON.stringify({jsErrors:errors,missingLinks:missing,imagesLoaded:desktop.images.every(i=>i.loaded),desktopOverflow:desktop.scrollWidth>desktop.width,mobileOverflow:mobile.scrollWidth>mobile.width}));
+if(errors.length||missing.length||desktop.images.some(i=>!i.loaded)||mobile.scrollWidth>mobile.width)process.exitCode=1;

@@ -1,0 +1,1002 @@
+{
+  "id": "options",
+  "source": {
+    "path": "稿件/模拟稿库/布局试排-options.md",
+    "sha256": "123b52f8a5fc088f575c8a702d1ba5c09949e0482a68add8ebb3539d71dfc7ae",
+    "sources": [
+      {
+        "id": "s1",
+        "heading": "",
+        "text": "两种上线方案"
+      },
+      {
+        "id": "s2",
+        "heading": "",
+        "text": "集中上线方案：在一个周末完成全部部门切换，培训与支持资源集中投入。优势是过渡期短；风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。"
+      },
+      {
+        "id": "s3",
+        "heading": "",
+        "text": "分批上线方案：先选择一个部门试用，再按反馈逐批推广。优点是能及时修正规则；代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。"
+      },
+      {
+        "id": "s4",
+        "heading": "",
+        "text": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。"
+      }
+    ]
+  },
+  "bindings": [
+    {
+      "key": "title",
+      "sourceId": "s1",
+      "start": 0,
+      "end": 6,
+      "text": "两种上线方案"
+    },
+    {
+      "key": "object-1-title",
+      "sourceId": "s2",
+      "start": 0,
+      "end": 7,
+      "text": "集中上线方案："
+    },
+    {
+      "key": "object-1-cell-1",
+      "sourceId": "s2",
+      "start": 7,
+      "end": 33,
+      "text": "在一个周末完成全部部门切换，培训与支持资源集中投入。"
+    },
+    {
+      "key": "object-1-cell-2",
+      "sourceId": "s2",
+      "start": 33,
+      "end": 41,
+      "text": "优势是过渡期短；"
+    },
+    {
+      "key": "object-1-cell-3",
+      "sourceId": "s2",
+      "start": 41,
+      "end": 73,
+      "text": "风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。"
+    },
+    {
+      "key": "object-2-title",
+      "sourceId": "s3",
+      "start": 0,
+      "end": 7,
+      "text": "分批上线方案："
+    },
+    {
+      "key": "object-2-cell-1",
+      "sourceId": "s3",
+      "start": 7,
+      "end": 26,
+      "text": "先选择一个部门试用，再按反馈逐批推广。"
+    },
+    {
+      "key": "object-2-cell-2",
+      "sourceId": "s3",
+      "start": 26,
+      "end": 37,
+      "text": "优点是能及时修正规则；"
+    },
+    {
+      "key": "object-2-cell-3",
+      "sourceId": "s3",
+      "start": 37,
+      "end": 68,
+      "text": "代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。"
+    },
+    {
+      "key": "shared",
+      "sourceId": "s4",
+      "start": 0,
+      "end": 29,
+      "text": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。"
+    }
+  ],
+  "contentFrame": {
+    "x": 55,
+    "y": 166,
+    "width": 1170,
+    "height": 492
+  },
+  "frozenPlan": {
+    "id": "options",
+    "file": "稿件/模拟稿库/布局试排-options.md",
+    "type": "comparison",
+    "title": 1,
+    "objects": [
+      2,
+      3
+    ],
+    "shared": 4
+  },
+  "presentationMetadata": {
+    "comparisonLabels": [
+      "实施方式",
+      "收益",
+      "风险或代价"
+    ]
+  },
+  "assets": [],
+  "probes": [],
+  "program": "composePageLayout/cards/vertical",
+  "layout": {
+    "id": "cards-composed",
+    "name": "卡片式 · 按规则试排",
+    "family": "cards",
+    "width": 1170,
+    "height": 492,
+    "gap": 16,
+    "slots": [
+      {
+        "id": "slot-1",
+        "order": 1,
+        "weight": 427,
+        "aspectRatio": 1.6,
+        "minWidth": 140,
+        "minHeight": 120,
+        "x": 0,
+        "y": 0,
+        "width": 1170,
+        "height": 427
+      },
+      {
+        "id": "slot-2",
+        "order": 2,
+        "weight": 49,
+        "aspectRatio": 1.6,
+        "minWidth": 140,
+        "minHeight": 49,
+        "x": 0,
+        "y": 443,
+        "width": 1170,
+        "height": 49
+      }
+    ]
+  },
+  "sharedBandHeight": 49,
+  "sharedScope": {
+    "source": "s4",
+    "appliesTo": [
+      "object-1",
+      "object-2"
+    ]
+  },
+  "textComponents": [
+    "statement-flow"
+  ],
+  "component": "local-neutral-comparison-with-aligned-rows",
+  "existingRunner": {
+    "semantic": {
+      "accepted": true,
+      "issues": [],
+      "warnings": [],
+      "coverage": "内容字段、表达方式、来源覆盖、块级数字/引文及已提供的关系端点；必要关系与限定是否正确仍需语义和实际审阅。"
+    },
+    "measured": {
+      "pageId": "options",
+      "requirements": [
+        {
+          "itemId": "object-1",
+          "kind": "text",
+          "importance": "primary",
+          "samples": [
+            {
+              "width": 1170,
+              "height": 232,
+              "fits": true
+            },
+            {
+              "width": 573,
+              "height": 292,
+              "fits": true
+            },
+            {
+              "width": 374,
+              "height": 322,
+              "fits": true
+            }
+          ],
+          "aspectRatio": 1.1614906832298137,
+          "basis": "候选宽度下的实文与当前灰稿表达测量；不是最终媒介比例或逻辑判断"
+        },
+        {
+          "itemId": "object-2",
+          "kind": "text",
+          "importance": "primary",
+          "samples": [
+            {
+              "width": 1170,
+              "height": 232,
+              "fits": true
+            },
+            {
+              "width": 573,
+              "height": 262,
+              "fits": true
+            },
+            {
+              "width": 374,
+              "height": 322,
+              "fits": true
+            }
+          ],
+          "aspectRatio": 1.1614906832298137,
+          "basis": "候选宽度下的实文与当前灰稿表达测量；不是最终媒介比例或逻辑判断"
+        },
+        {
+          "itemId": "shared",
+          "kind": "text",
+          "importance": "supporting",
+          "samples": [
+            {
+              "width": 1170,
+              "height": 116,
+              "fits": true
+            },
+            {
+              "width": 573,
+              "height": 146,
+              "fits": true
+            },
+            {
+              "width": 374,
+              "height": 176,
+              "fits": true
+            }
+          ],
+          "aspectRatio": 2.125,
+          "basis": "候选宽度下的实文与当前灰稿表达测量；不是最终媒介比例或逻辑判断"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "cards-horizontal-equal",
+          "family": "cards",
+          "direction": "horizontal",
+          "allocation": "equal",
+          "geometry": {
+            "id": "cards-composed",
+            "name": "卡片式 · 按规则试排",
+            "family": "cards",
+            "width": 1170,
+            "height": 492,
+            "gap": 24,
+            "slots": [
+              {
+                "id": "slot-1",
+                "order": 1,
+                "weight": 1,
+                "aspectRatio": 1.1614906832298137,
+                "minWidth": 140,
+                "minHeight": 80,
+                "x": 0,
+                "y": 0,
+                "width": 374,
+                "height": 492
+              },
+              {
+                "id": "slot-2",
+                "order": 2,
+                "weight": 1,
+                "aspectRatio": 1.1614906832298137,
+                "minWidth": 140,
+                "minHeight": 80,
+                "x": 398,
+                "y": 0,
+                "width": 374,
+                "height": 492
+              },
+              {
+                "id": "slot-3",
+                "order": 3,
+                "weight": 1,
+                "aspectRatio": 2.125,
+                "minWidth": 140,
+                "minHeight": 80,
+                "x": 796,
+                "y": 0,
+                "width": 374,
+                "height": 492
+              }
+            ]
+          },
+          "regions": [
+            {
+              "itemId": "object-1",
+              "x": 0,
+              "y": 0,
+              "width": 374,
+              "height": 492,
+              "fontSize": 22
+            },
+            {
+              "itemId": "object-2",
+              "x": 398,
+              "y": 0,
+              "width": 374,
+              "height": 492,
+              "fontSize": 22
+            },
+            {
+              "itemId": "shared",
+              "x": 796,
+              "y": 0,
+              "width": 374,
+              "height": 492,
+              "fontSize": 22
+            }
+          ],
+          "contentMinimums": {
+            "object-1": {
+              "minWidth": 374,
+              "minHeight": 322
+            },
+            "object-2": {
+              "minWidth": 374,
+              "minHeight": 322
+            },
+            "shared": {
+              "minWidth": 374,
+              "minHeight": 176
+            }
+          },
+          "programVersion": "gray-layout-programs-1"
+        },
+        {
+          "id": "cards-horizontal-measured",
+          "family": "cards",
+          "direction": "horizontal",
+          "allocation": "measured",
+          "geometry": {
+            "id": "cards-composed",
+            "name": "卡片式 · 按规则试排",
+            "family": "cards",
+            "width": 1170,
+            "height": 492,
+            "gap": 24,
+            "slots": [
+              {
+                "id": "slot-1",
+                "order": 1,
+                "weight": 252,
+                "aspectRatio": 1.1614906832298137,
+                "minWidth": 140,
+                "minHeight": 80,
+                "x": 0,
+                "y": 0,
+                "width": 463.51475409836064,
+                "height": 492
+              },
+              {
+                "id": "slot-2",
+                "order": 2,
+                "weight": 252,
+                "aspectRatio": 1.1614906832298137,
+                "minWidth": 140,
+                "minHeight": 80,
+                "x": 487.51475409836064,
+                "y": 0,
+                "width": 463.51475409836064,
+                "height": 492
+              },
+              {
+                "id": "slot-3",
+                "order": 3,
+                "weight": 106,
+                "aspectRatio": 2.125,
+                "minWidth": 140,
+                "minHeight": 80,
+                "x": 975.0295081967213,
+                "y": 0,
+                "width": 194.9704918032787,
+                "height": 492
+              }
+            ]
+          },
+          "regions": [
+            {
+              "itemId": "object-1",
+              "x": 0,
+              "y": 0,
+              "width": 463.51475409836064,
+              "height": 492,
+              "fontSize": 22
+            },
+            {
+              "itemId": "object-2",
+              "x": 487.51475409836064,
+              "y": 0,
+              "width": 463.51475409836064,
+              "height": 492,
+              "fontSize": 22
+            },
+            {
+              "itemId": "shared",
+              "x": 975.0295081967213,
+              "y": 0,
+              "width": 194.9704918032787,
+              "height": 492,
+              "fontSize": 22
+            }
+          ],
+          "contentMinimums": {
+            "object-1": {
+              "minWidth": 463.51475409836064,
+              "minHeight": 292
+            },
+            "object-2": {
+              "minWidth": 463.51475409836064,
+              "minHeight": 292
+            },
+            "shared": {
+              "minWidth": 194.9704918032787,
+              "minHeight": 235
+            }
+          },
+          "programVersion": "gray-layout-programs-1"
+        },
+        {
+          "id": "album-horizontal-measured",
+          "family": "album",
+          "direction": "horizontal",
+          "allocation": "measured",
+          "geometry": {
+            "id": "album-composed",
+            "name": "相册式 · 按规则试排",
+            "family": "album",
+            "width": 1170,
+            "height": 492,
+            "gap": 24,
+            "slots": [
+              {
+                "id": "slot-1",
+                "order": 1,
+                "weight": 138241.41639344263,
+                "aspectRatio": 1.1614906832298137,
+                "minWidth": 140,
+                "minHeight": 80,
+                "x": 0,
+                "y": 0,
+                "width": 383.92001748251755,
+                "height": 492
+              },
+              {
+                "id": "slot-2",
+                "order": 2,
+                "weight": 176213.468852459,
+                "aspectRatio": 1.1614906832298137,
+                "minWidth": 140,
+                "minHeight": 80,
+                "x": 407.92001748251755,
+                "y": 0,
+                "width": 762.0799825174824,
+                "height": 300.5294117647059
+              },
+              {
+                "id": "slot-3",
+                "order": 3,
+                "weight": 98195.29180327868,
+                "aspectRatio": 2.125,
+                "minWidth": 140,
+                "minHeight": 80,
+                "x": 407.92001748251755,
+                "y": 324.5294117647059,
+                "width": 762.0799825174824,
+                "height": 167.4705882352941
+              }
+            ]
+          },
+          "regions": [
+            {
+              "itemId": "object-1",
+              "x": 0,
+              "y": 0,
+              "width": 383.92001748251755,
+              "height": 492,
+              "fontSize": 22
+            },
+            {
+              "itemId": "object-2",
+              "x": 407.92001748251755,
+              "y": 0,
+              "width": 762.0799825174824,
+              "height": 300.5294117647059,
+              "fontSize": 22
+            },
+            {
+              "itemId": "shared",
+              "x": 407.92001748251755,
+              "y": 324.5294117647059,
+              "width": 762.0799825174824,
+              "height": 167.4705882352941,
+              "fontSize": 22
+            }
+          ],
+          "contentMinimums": {
+            "object-1": {
+              "minWidth": 383.92001748251755,
+              "minHeight": 322
+            },
+            "object-2": {
+              "minWidth": 762.0799825174824,
+              "minHeight": 262
+            },
+            "shared": {
+              "minWidth": 762.0799825174824,
+              "minHeight": 116
+            }
+          },
+          "programVersion": "gray-layout-programs-1"
+        },
+        {
+          "id": "cards-support-band",
+          "family": "cards",
+          "direction": "support-band",
+          "allocation": "measured",
+          "supportsRelation": [
+            "support"
+          ],
+          "regions": [
+            {
+              "itemId": "object-1",
+              "x": 0,
+              "y": 0,
+              "width": 573,
+              "height": 352,
+              "fontSize": 22
+            },
+            {
+              "itemId": "object-2",
+              "x": 597,
+              "y": 0,
+              "width": 573,
+              "height": 352,
+              "fontSize": 22
+            },
+            {
+              "itemId": "shared",
+              "x": 0,
+              "y": 376,
+              "width": 1170,
+              "height": 116,
+              "fontSize": 22
+            }
+          ],
+          "contentMinimums": {
+            "shared": {
+              "minWidth": 1170,
+              "minHeight": 116
+            },
+            "object-1": {
+              "minWidth": 573,
+              "minHeight": 292
+            },
+            "object-2": {
+              "minWidth": 573,
+              "minHeight": 262
+            }
+          },
+          "programVersion": "gray-layout-programs-1"
+        }
+      ],
+      "rejected": [
+        {
+          "id": "cards-vertical-equal",
+          "reason": "当前正文档下标题或正文无法完整容纳"
+        },
+        {
+          "id": "cards-vertical-measured",
+          "reason": "本次规则试排未找到满足最小尺寸的分区；请调整面积需求、排列方向或拆页。不会自动缩小内容。"
+        },
+        {
+          "id": "album-horizontal-equal",
+          "reason": "当前正文档下标题或正文无法完整容纳"
+        }
+      ],
+      "fontSize": 22
+    },
+    "selection": {
+      "pageId": "options",
+      "candidateId": "cards-support-band",
+      "relation": "comparison",
+      "reason": "按原稿语义尝试既有候选"
+    },
+    "binding": "rejected",
+    "message": "页 options 的 comparison 跨组关系尚无已建约束布局；不能硬套 cards"
+  },
+  "status": "rejected",
+  "html": "output/options.html",
+  "png": "output/options.png",
+  "geometry": {
+    "canvas": {
+      "x": 0,
+      "y": 0,
+      "width": 1280,
+      "height": 720
+    },
+    "contentFrame": {
+      "x": 55,
+      "y": 166,
+      "width": 1170,
+      "height": 492
+    },
+    "text": [
+      {
+        "key": "title",
+        "source": "s1",
+        "text": "两种上线方案",
+        "inBody": false,
+        "box": {
+          "x": 55,
+          "y": 62,
+          "width": 1170,
+          "height": 69
+        },
+        "lines": [
+          {
+            "x": 55,
+            "y": 61,
+            "width": 240,
+            "height": 52
+          }
+        ],
+        "boundary": null,
+        "fontSize": 40,
+        "lineHeight": "50px",
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "clientHeight": 69,
+        "scrollHeight": 69,
+        "slotBottomClearance": null
+      },
+      {
+        "key": "object-1-title",
+        "source": "s2",
+        "text": "集中上线方案：",
+        "inBody": true,
+        "box": {
+          "x": 208,
+          "y": 178,
+          "width": 478,
+          "height": 30
+        },
+        "lines": [
+          {
+            "x": 208,
+            "y": 176,
+            "width": 175,
+            "height": 33
+          }
+        ],
+        "boundary": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 427
+        },
+        "fontSize": 25,
+        "lineHeight": "30px",
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "clientHeight": 30,
+        "scrollHeight": 31,
+        "slotBottomClearance": 384
+      },
+      {
+        "key": "object-1-cell-1",
+        "source": "s2",
+        "text": "在一个周末完成全部部门切换，培训与支持资源集中投入。",
+        "inBody": true,
+        "box": {
+          "x": 208,
+          "y": 237,
+          "width": 478,
+          "height": 23.9375
+        },
+        "lines": [
+          {
+            "x": 208,
+            "y": 236,
+            "width": 468,
+            "height": 24
+          }
+        ],
+        "boundary": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 427
+        },
+        "fontSize": 18,
+        "lineHeight": "23.94px",
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "clientHeight": 24,
+        "scrollHeight": 24,
+        "slotBottomClearance": 333
+      },
+      {
+        "key": "object-1-cell-2",
+        "source": "s2",
+        "text": "优势是过渡期短；",
+        "inBody": true,
+        "box": {
+          "x": 208,
+          "y": 361.328125,
+          "width": 478,
+          "height": 23.9375
+        },
+        "lines": [
+          {
+            "x": 208,
+            "y": 360.328125,
+            "width": 144,
+            "height": 24
+          }
+        ],
+        "boundary": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 427
+        },
+        "fontSize": 18,
+        "lineHeight": "23.94px",
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "clientHeight": 24,
+        "scrollHeight": 24,
+        "slotBottomClearance": 208.671875
+      },
+      {
+        "key": "object-1-cell-3",
+        "source": "s2",
+        "text": "风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。",
+        "inBody": true,
+        "box": {
+          "x": 208,
+          "y": 485.65625,
+          "width": 478,
+          "height": 47.875
+        },
+        "lines": [
+          {
+            "x": 208,
+            "y": 484.65625,
+            "width": 468,
+            "height": 24
+          },
+          {
+            "x": 208,
+            "y": 508.59375,
+            "width": 108,
+            "height": 24
+          }
+        ],
+        "boundary": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 427
+        },
+        "fontSize": 18,
+        "lineHeight": "23.94px",
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "clientHeight": 48,
+        "scrollHeight": 48,
+        "slotBottomClearance": 60.40625
+      },
+      {
+        "key": "object-2-title",
+        "source": "s3",
+        "text": "分批上线方案：",
+        "inBody": true,
+        "box": {
+          "x": 727,
+          "y": 178,
+          "width": 478,
+          "height": 30
+        },
+        "lines": [
+          {
+            "x": 727,
+            "y": 176,
+            "width": 175,
+            "height": 33
+          }
+        ],
+        "boundary": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 427
+        },
+        "fontSize": 25,
+        "lineHeight": "30px",
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "clientHeight": 30,
+        "scrollHeight": 31,
+        "slotBottomClearance": 384
+      },
+      {
+        "key": "object-2-cell-1",
+        "source": "s3",
+        "text": "先选择一个部门试用，再按反馈逐批推广。",
+        "inBody": true,
+        "box": {
+          "x": 727,
+          "y": 237,
+          "width": 478,
+          "height": 23.9375
+        },
+        "lines": [
+          {
+            "x": 727,
+            "y": 236,
+            "width": 342,
+            "height": 24
+          }
+        ],
+        "boundary": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 427
+        },
+        "fontSize": 18,
+        "lineHeight": "23.94px",
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "clientHeight": 24,
+        "scrollHeight": 24,
+        "slotBottomClearance": 333
+      },
+      {
+        "key": "object-2-cell-2",
+        "source": "s3",
+        "text": "优点是能及时修正规则；",
+        "inBody": true,
+        "box": {
+          "x": 727,
+          "y": 361.328125,
+          "width": 478,
+          "height": 23.9375
+        },
+        "lines": [
+          {
+            "x": 727,
+            "y": 360.328125,
+            "width": 198,
+            "height": 24
+          }
+        ],
+        "boundary": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 427
+        },
+        "fontSize": 18,
+        "lineHeight": "23.94px",
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "clientHeight": 24,
+        "scrollHeight": 24,
+        "slotBottomClearance": 208.671875
+      },
+      {
+        "key": "object-2-cell-3",
+        "source": "s3",
+        "text": "代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。",
+        "inBody": true,
+        "box": {
+          "x": 727,
+          "y": 485.65625,
+          "width": 478,
+          "height": 47.875
+        },
+        "lines": [
+          {
+            "x": 727,
+            "y": 484.65625,
+            "width": 468,
+            "height": 24
+          },
+          {
+            "x": 727,
+            "y": 508.59375,
+            "width": 90,
+            "height": 24
+          }
+        ],
+        "boundary": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 427
+        },
+        "fontSize": 18,
+        "lineHeight": "23.94px",
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "clientHeight": 48,
+        "scrollHeight": 48,
+        "slotBottomClearance": 60.40625
+      },
+      {
+        "key": "shared",
+        "source": "s4",
+        "text": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。",
+        "inBody": true,
+        "box": {
+          "x": 211,
+          "y": 621.53125,
+          "width": 996,
+          "height": 23.9375
+        },
+        "lines": [
+          {
+            "x": 211,
+            "y": 620.53125,
+            "width": 522,
+            "height": 24
+          }
+        ],
+        "boundary": {
+          "x": 55,
+          "y": 609,
+          "width": 1170,
+          "height": 49
+        },
+        "fontSize": 18,
+        "lineHeight": "23.94px",
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "clientHeight": 24,
+        "scrollHeight": 24,
+        "slotBottomClearance": 13.46875
+      }
+    ],
+    "regions": [
+      {
+        "id": "main",
+        "x": 55,
+        "y": 166,
+        "width": 1170,
+        "height": 427
+      },
+      {
+        "id": "comparison-matrix",
+        "x": 55,
+        "y": 166,
+        "width": 1170,
+        "height": 427
+      },
+      {
+        "id": "shared",
+        "x": 55,
+        "y": 609,
+        "width": 1170,
+        "height": 49
+      }
+    ],
+    "objects": [],
+    "errors": [
+      {
+        "code": "text-clipped",
+        "key": "object-1-title",
+        "clipping": [
+          "ppagent-text-layout ppagent-text-layout--statement-flow"
+        ]
+      },
+      {
+        "code": "text-clipped",
+        "key": "object-2-title",
+        "clipping": [
+          "ppagent-text-layout ppagent-text-layout--statement-flow"
+        ]
+      }
+    ],
+    "minBodyFont": 18,
+    "bodyTextBottomClearance": 13.46875
+  },
+  "browser": "157.0.8103.79"
+}

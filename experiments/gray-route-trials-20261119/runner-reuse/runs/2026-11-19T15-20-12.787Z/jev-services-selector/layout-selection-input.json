@@ -1,0 +1,641 @@
+{
+  "source": "园区服务支持\r\n\r\n设备支持：提供会议设备借用和故障报修，借用前确认设备状态，归还时完成清点。\r\n\r\n场地支持：受理会议室预约，使用部门需提前说明人数、时段和布置需求。\r\n\r\n资料支持：提供制度查询、材料打印和文件归档指引。\r\n\r\n访客支持：协助外来人员登记、路线说明和接待联系，访问受限区域需事先获得授权。\r\n\r\n以上服务统一通过服务台登记，紧急事项需同时电话联系值班人员。\r\n",
+  "plan": {
+    "schemaVersion": "gray-plan-3",
+    "deckBrief": {
+      "title": "园区服务支持"
+    },
+    "pages": [
+      {
+        "pageId": "p1",
+        "title": "园区服务支持",
+        "claim": "园区服务支持",
+        "pagePurpose": "说明原稿主题及共同要求",
+        "narrative": "各项服务并列，共用运转规则",
+        "sourceIds": [
+          "s1"
+        ],
+        "groups": [
+          {
+            "id": "g1",
+            "heading": "设备支持",
+            "role": "主题内容",
+            "importance": "primary",
+            "kind": "text",
+            "blocks": [
+              {
+                "id": "b1",
+                "text": "提供会议设备借用和故障报修，借用前确认设备状态，归还时完成清点。",
+                "sourceIds": [
+                  "s2"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "g2",
+            "heading": "场地支持",
+            "role": "主题内容",
+            "importance": "primary",
+            "kind": "text",
+            "blocks": [
+              {
+                "id": "b2",
+                "text": "受理会议室预约，使用部门需提前说明人数、时段和布置需求。",
+                "sourceIds": [
+                  "s3"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "g3",
+            "heading": "资料支持",
+            "role": "主题内容",
+            "importance": "primary",
+            "kind": "text",
+            "blocks": [
+              {
+                "id": "b3",
+                "text": "提供制度查询、材料打印和文件归档指引。",
+                "sourceIds": [
+                  "s4"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "g4",
+            "heading": "访客支持",
+            "role": "主题内容",
+            "importance": "primary",
+            "kind": "text",
+            "blocks": [
+              {
+                "id": "b4",
+                "text": "协助外来人员登记、路线说明和接待联系，访问受限区域需事先获得授权。",
+                "sourceIds": [
+                  "s5"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "g5",
+            "heading": "共同要求",
+            "role": "共同要求",
+            "importance": "supporting",
+            "kind": "text",
+            "blocks": [
+              {
+                "id": "b5",
+                "text": "以上服务统一通过服务台登记，紧急事项需同时电话联系值班人员。",
+                "sourceIds": [
+                  "s6"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "area": {
+    "width": 1170,
+    "height": 492
+  },
+  "rules": [
+    {
+      "id": "cards",
+      "name": "卡片式",
+      "description": "沿同一方向排列；数量和面积随内容需求变化。",
+      "advice": "并列内容适用。选择横向或纵向，再按各块面积需求分配空间。",
+      "rules": [
+        "适用：可独立阅读的并列内容；强流程、因果、层级关系应优先使用关系结构。",
+        "规则：单行或单列，统一间距与外边界；面积可以均分，也可以按内容需求分配。正式实文选型还支持主体与共同说明分带：说明按实测高度连续放在页首或页尾，主体使用剩余区域，主体高度须大于说明。",
+        "调整：先调整方向与区域面积，仍不能承载时拆页或换布局，不缩字硬塞。"
+      ]
+    },
+    {
+      "id": "album",
+      "name": "相册式",
+      "description": "按内容需求切分空间，形成大小错落的图文区域。",
+      "advice": "适合相对独立的图文块。权重表达面积需求，不自动代表内容重要性。",
+      "rules": [
+        "适用：可分块的图文内容，允许大小不同；不能把必须连续阅读的论证任意切碎。",
+        "规则：按面积需求、横竖倾向和最小承载尺寸分区；统一间距，铺满内容区，避免狭窄碎块。",
+        "阅读：保持输入顺序；每次切分按左→右或上→下阅读。内容分组与主次由规划阶段决定。",
+        "调整：空间不足时重组内容、换布局或拆页；几何可放下不等于文字和语义已通过验收。"
+      ]
+    },
+    {
+      "id": "hybrid",
+      "name": "横纵组合",
+      "description": "分区可嵌套，每层独立选择横排或竖排。",
+      "advice": "适合并列主体加共同说明、主区加注记或主体加支撑带；每个方向都必须有内容关系依据。",
+      "rules": [
+        "适用：页面同时存在主体并列关系与跨主体的共同说明或支撑关系。",
+        "规则：主体区和说明带分别求解，可横纵结合；共同说明必须登记作用范围，不能伪装成并列对象。",
+        "调整：主体方向、说明带位置和面积可变化；任一部分放不下时返回空间需求或分页，不缩字硬塞。"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "pageId": "p1",
+      "requirements": [
+        {
+          "itemId": "g1",
+          "kind": "text",
+          "importance": "primary",
+          "samples": [
+            {
+              "width": 1170,
+              "height": 116,
+              "fits": true
+            },
+            {
+              "width": 573,
+              "height": 146,
+              "fits": true
+            },
+            {
+              "width": 374,
+              "height": 176,
+              "fits": true
+            }
+          ],
+          "aspectRatio": 2.125,
+          "basis": "候选宽度下的实文与当前灰稿表达测量；不是最终媒介比例或逻辑判断"
+        },
+        {
+          "itemId": "g2",
+          "kind": "text",
+          "importance": "primary",
+          "samples": [
+            {
+              "width": 1170,
+              "height": 116,
+              "fits": true
+            },
+            {
+              "width": 573,
+              "height": 146,
+              "fits": true
+            },
+            {
+              "width": 374,
+              "height": 176,
+              "fits": true
+            }
+          ],
+          "aspectRatio": 2.125,
+          "basis": "候选宽度下的实文与当前灰稿表达测量；不是最终媒介比例或逻辑判断"
+        },
+        {
+          "itemId": "g3",
+          "kind": "text",
+          "importance": "primary",
+          "samples": [
+            {
+              "width": 1170,
+              "height": 116,
+              "fits": true
+            },
+            {
+              "width": 573,
+              "height": 116,
+              "fits": true
+            },
+            {
+              "width": 374,
+              "height": 146,
+              "fits": true
+            }
+          ],
+          "aspectRatio": 2.5616438356164384,
+          "basis": "候选宽度下的实文与当前灰稿表达测量；不是最终媒介比例或逻辑判断"
+        },
+        {
+          "itemId": "g4",
+          "kind": "text",
+          "importance": "primary",
+          "samples": [
+            {
+              "width": 1170,
+              "height": 116,
+              "fits": true
+            },
+            {
+              "width": 573,
+              "height": 146,
+              "fits": true
+            },
+            {
+              "width": 374,
+              "height": 176,
+              "fits": true
+            }
+          ],
+          "aspectRatio": 2.125,
+          "basis": "候选宽度下的实文与当前灰稿表达测量；不是最终媒介比例或逻辑判断"
+        },
+        {
+          "itemId": "g5",
+          "kind": "text",
+          "importance": "supporting",
+          "samples": [
+            {
+              "width": 1170,
+              "height": 116,
+              "fits": true
+            },
+            {
+              "width": 573,
+              "height": 146,
+              "fits": true
+            },
+            {
+              "width": 374,
+              "height": 176,
+              "fits": true
+            }
+          ],
+          "aspectRatio": 2.125,
+          "basis": "候选宽度下的实文与当前灰稿表达测量；不是最终媒介比例或逻辑判断"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "cards-horizontal-equal",
+          "programVersion": "gray-layout-programs-1",
+          "family": "cards",
+          "direction": "horizontal",
+          "allocation": "equal",
+          "regions": [
+            {
+              "itemId": "g1",
+              "x": 0,
+              "y": 0,
+              "width": 214.8,
+              "height": 492,
+              "fontSize": 22
+            },
+            {
+              "itemId": "g2",
+              "x": 238.8,
+              "y": 0,
+              "width": 214.8,
+              "height": 492,
+              "fontSize": 22
+            },
+            {
+              "itemId": "g3",
+              "x": 477.6,
+              "y": 0,
+              "width": 214.8,
+              "height": 492,
+              "fontSize": 22
+            },
+            {
+              "itemId": "g4",
+              "x": 716.4000000000001,
+              "y": 0,
+              "width": 214.8,
+              "height": 492,
+              "fontSize": 22
+            },
+            {
+              "itemId": "g5",
+              "x": 955.2,
+              "y": 0,
+              "width": 214.8,
+              "height": 492,
+              "fontSize": 22
+            }
+          ],
+          "contentMinimums": {
+            "g1": {
+              "minWidth": 214.8,
+              "minHeight": 235
+            },
+            "g2": {
+              "minWidth": 214.8,
+              "minHeight": 235
+            },
+            "g3": {
+              "minWidth": 214.8,
+              "minHeight": 176
+            },
+            "g4": {
+              "minWidth": 214.8,
+              "minHeight": 235
+            },
+            "g5": {
+              "minWidth": 214.8,
+              "minHeight": 235
+            }
+          }
+        },
+        {
+          "id": "cards-horizontal-measured",
+          "programVersion": "gray-layout-programs-1",
+          "family": "cards",
+          "direction": "horizontal",
+          "allocation": "measured",
+          "regions": [
+            {
+              "itemId": "g1",
+              "x": 0,
+              "y": 0,
+              "width": 242.22127659574468,
+              "height": 492,
+              "fontSize": 22
+            },
+            {
+              "itemId": "g2",
+              "x": 266.2212765957447,
+              "y": 0,
+              "width": 173.668085106383,
+              "height": 492,
+              "fontSize": 22
+            },
+            {
+              "itemId": "g3",
+              "x": 463.8893617021277,
+              "y": 0,
+              "width": 173.668085106383,
+              "height": 492,
+              "fontSize": 22
+            },
+            {
+              "itemId": "g4",
+              "x": 661.5574468085107,
+              "y": 0,
+              "width": 242.22127659574468,
+              "height": 492,
+              "fontSize": 22
+            },
+            {
+              "itemId": "g5",
+              "x": 927.7787234042554,
+              "y": 0,
+              "width": 242.22127659574468,
+              "height": 492,
+              "fontSize": 22
+            }
+          ],
+          "contentMinimums": {
+            "g1": {
+              "minWidth": 242.22127659574468,
+              "minHeight": 205
+            },
+            "g2": {
+              "minWidth": 173.668085106383,
+              "minHeight": 265
+            },
+            "g3": {
+              "minWidth": 173.668085106383,
+              "minHeight": 205
+            },
+            "g4": {
+              "minWidth": 242.22127659574468,
+              "minHeight": 235
+            },
+            "g5": {
+              "minWidth": 242.22127659574468,
+              "minHeight": 205
+            }
+          }
+        },
+        {
+          "id": "album-horizontal-equal",
+          "programVersion": "gray-layout-programs-1",
+          "family": "album",
+          "direction": "horizontal",
+          "allocation": "equal",
+          "regions": [
+            {
+              "itemId": "g1",
+              "x": 0,
+              "y": 0,
+              "width": 331.8,
+              "height": 312,
+              "fontSize": 22
+            },
+            {
+              "itemId": "g2",
+              "x": 355.8,
+              "y": 0,
+              "width": 331.8,
+              "height": 312,
+              "fontSize": 22
+            },
+            {
+              "itemId": "g3",
+              "x": 0,
+              "y": 336,
+              "width": 687.6,
+              "height": 156,
+              "fontSize": 22
+            },
+            {
+              "itemId": "g4",
+              "x": 711.6,
+              "y": 0,
+              "width": 458.4,
+              "height": 234,
+              "fontSize": 22
+            },
+            {
+              "itemId": "g5",
+              "x": 711.6,
+              "y": 258,
+              "width": 458.4,
+              "height": 234,
+              "fontSize": 22
+            }
+          ],
+          "contentMinimums": {
+            "g1": {
+              "minWidth": 331.8,
+              "minHeight": 176
+            },
+            "g2": {
+              "minWidth": 331.8,
+              "minHeight": 176
+            },
+            "g3": {
+              "minWidth": 687.6,
+              "minHeight": 116
+            },
+            "g4": {
+              "minWidth": 458.4,
+              "minHeight": 146
+            },
+            "g5": {
+              "minWidth": 458.4,
+              "minHeight": 146
+            }
+          }
+        },
+        {
+          "id": "album-horizontal-measured",
+          "programVersion": "gray-layout-programs-1",
+          "family": "album",
+          "direction": "horizontal",
+          "allocation": "measured",
+          "regions": [
+            {
+              "itemId": "g1",
+              "x": 0,
+              "y": 0,
+              "width": 629.0808510638298,
+              "height": 192.27906976744185,
+              "fontSize": 22
+            },
+            {
+              "itemId": "g2",
+              "x": 0,
+              "y": 216.27906976744185,
+              "width": 302.5404255319149,
+              "height": 275.72093023255815,
+              "fontSize": 22
+            },
+            {
+              "itemId": "g3",
+              "x": 326.5404255319149,
+              "y": 216.27906976744185,
+              "width": 302.5404255319149,
+              "height": 275.72093023255815,
+              "fontSize": 22
+            },
+            {
+              "itemId": "g4",
+              "x": 653.0808510638298,
+              "y": 0,
+              "width": 516.9191489361702,
+              "height": 234,
+              "fontSize": 22
+            },
+            {
+              "itemId": "g5",
+              "x": 653.0808510638298,
+              "y": 258,
+              "width": 516.9191489361702,
+              "height": 234,
+              "fontSize": 22
+            }
+          ],
+          "contentMinimums": {
+            "g1": {
+              "minWidth": 629.0808510638298,
+              "minHeight": 146
+            },
+            "g2": {
+              "minWidth": 302.5404255319149,
+              "minHeight": 176
+            },
+            "g3": {
+              "minWidth": 302.5404255319149,
+              "minHeight": 146
+            },
+            "g4": {
+              "minWidth": 516.9191489361702,
+              "minHeight": 146
+            },
+            "g5": {
+              "minWidth": 516.9191489361702,
+              "minHeight": 146
+            }
+          }
+        },
+        {
+          "id": "cards-support-band",
+          "programVersion": "gray-layout-programs-1",
+          "family": "cards",
+          "direction": "support-band",
+          "allocation": "measured",
+          "supportsRelation": [
+            "support"
+          ],
+          "regions": [
+            {
+              "itemId": "g1",
+              "x": 0,
+              "y": 0,
+              "width": 274.5,
+              "height": 352,
+              "fontSize": 22
+            },
+            {
+              "itemId": "g2",
+              "x": 298.5,
+              "y": 0,
+              "width": 274.5,
+              "height": 352,
+              "fontSize": 22
+            },
+            {
+              "itemId": "g3",
+              "x": 597,
+              "y": 0,
+              "width": 274.5,
+              "height": 352,
+              "fontSize": 22
+            },
+            {
+              "itemId": "g4",
+              "x": 895.5,
+              "y": 0,
+              "width": 274.5,
+              "height": 352,
+              "fontSize": 22
+            },
+            {
+              "itemId": "g5",
+              "x": 0,
+              "y": 376,
+              "width": 1170,
+              "height": 116,
+              "fontSize": 22
+            }
+          ],
+          "contentMinimums": {
+            "g5": {
+              "minWidth": 1170,
+              "minHeight": 116
+            },
+            "g1": {
+              "minWidth": 274.5,
+              "minHeight": 205
+            },
+            "g2": {
+              "minWidth": 274.5,
+              "minHeight": 176
+            },
+            "g3": {
+              "minWidth": 274.5,
+              "minHeight": 146
+            },
+            "g4": {
+              "minWidth": 274.5,
+              "minHeight": 205
+            }
+          }
+        }
+      ],
+      "rejected": [
+        {
+          "id": "cards-vertical-equal",
+          "reason": "本次规则试排未找到满足最小尺寸的分区；请调整面积需求、排列方向或拆页。不会自动缩小内容。"
+        },
+        {
+          "id": "cards-vertical-measured",
+          "reason": "本次规则试排未找到满足最小尺寸的分区；请调整面积需求、排列方向或拆页。不会自动缩小内容。"
+        }
+      ],
+      "fontSize": 22
+    }
+  ]
+}

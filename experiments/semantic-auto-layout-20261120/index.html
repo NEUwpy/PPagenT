@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>纯内容自动编排对照 · PPagenT</title>
+  <style>
+    * { box-sizing:border-box }
+    :root { font-family:"Microsoft YaHei",system-ui,sans-serif; color:#1d302a; background:#f4f5f1; line-height:1.55 }
+    body { margin:0 }
+    main { max-width:1500px; margin:auto; padding:42px clamp(16px,4vw,64px) }
+    header { display:flex; justify-content:space-between; flex-wrap:wrap; gap:18px; align-items:flex-start }
+    h1,h2,h3,p { margin:0 }
+    h1 { font-size:clamp(28px,4vw,44px); line-height:1.2; letter-spacing:-.035em; margin-bottom:12px }
+    h2 { font-size:24px; line-height:1.35 }
+    h3 { font-size:16px }
+    p { color:#4c5c55 }
+    a { color:#225640; text-underline-offset:3px }
+    a:hover { text-decoration-thickness:2px }
+    button { font:inherit; color:inherit; border:1px solid #c6d1c8; cursor:pointer; background:#fff; border-radius:5px; padding:8px 11px }
+    button:hover { border-color:#527960 }
+    button[aria-pressed="true"] { background:#284c3a; border-color:#284c3a; color:#fff }
+    nav,.links { display:flex; flex-wrap:wrap; gap:9px 16px; align-items:center }
+    .samples { margin:29px 0 24px; padding-bottom:19px; border-bottom:1px solid #cfd8d0; gap:8px }
+    .summary { margin:12px 0 16px; max-width:68em }
+    .sample-links { margin-bottom:18px; font-size:14px }
+    .compare { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px }
+    figure { margin:0; border:1px solid #ced7cf; border-radius:8px; background:#fff; overflow:hidden }
+    figcaption { padding:13px 15px; display:flex; flex-wrap:wrap; gap:8px 14px; justify-content:space-between; align-items:center }
+    figcaption p { font-size:13px }
+    p.fail { color:#86430e }
+    .picture { display:block; border-block:1px solid #e0e5df; background:#ebeee8; line-height:0 }
+    .picture img { display:block; width:100%; height:auto; max-height:66vh; object-fit:contain }
+    .artifact-links { padding:10px 15px; font-size:14px }
+    .size { color:#4c5c55; font-size:14px; font-weight:500; white-space:nowrap }
+    @media (max-width:750px) { .compare { grid-template-columns:1fr } main { padding-top:26px } }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>纯内容自动编排对照</h1>
+        <p>同一份公共 JSON、同一套表达。左侧是旧编译器，右侧是测量驱动的分带布局。</p>
+      </div>
+      <nav class="links" aria-label="试验记录">
+        <a href="README.md">结论与复跑</a>
+        <a href="output/verification.json">检查记录</a>
+      </nav>
+    </header>
+    <nav class="samples" id="samples" aria-label="切换样例"></nav>
+    <noscript>请启用 JavaScript 查看对照，或打开 <a href="README.md">试验记录</a>中的单页结果。</noscript>
+    <section aria-live="polite" aria-label="样例对照">
+      <h2><span id="sample-title"></span> <span class="size" id="sample-size"></span></h2>
+      <p class="summary" id="summary"></p>
+      <div class="links sample-links">
+        <a id="content" target="_blank" rel="noopener">纯内容 JSON</a>
+        <a id="expression" target="_blank" rel="noopener">内部表达</a>
+        <a id="receipt" target="_blank" rel="noopener">运行回执</a>
+      </div>
+      <div class="compare" id="compare"></div>
+    </section>
+  </main>
+  <template id="panel">
+    <figure>
+      <figcaption>
+        <h3></h3>
+        <p></p>
+      </figcaption>
+      <a class="picture" target="_blank" rel="noopener"><img></a>
+      <div class="links artifact-links">
+        <a class="slide" target="_blank" rel="noopener"></a>
+        <a class="report" target="_blank" rel="noopener">候选与实测</a>
+        <a class="layout" target="_blank" rel="noopener">布局数据</a>
+      </div>
+    </figure>
+  </template>
+  <script>
+    const samples = {
+      hr: ["不足与感悟", 1280, 720, "两条路线均保留三路汇聚、短项和值、BLM 三步。旧路线把更多宽度给四点感悟，分带路线给两组等宽。"],
+      options: ["两种上线方案", 1280, 720, "等宽对照，两案共同的回退条件只出现一次。两侧版面相同，正文偏上，底部留白较大。"],
+      duty: ["汛期值班", 1280, 720, "两侧都是三列，上方说明全页适用期。分带路线用独立横线强调跨级别上报，保留它对两个处置情形的作用域。"],
+      procurement: ["办公用品采购", 1280, 720, "留出样本。旧路线把常规和应急左右并排，分带路线把三档金额横排后将应急另起一行。两侧的箭头都只出现在应急采购内部。"],
+      "hr-narrow": ["不足与感悟 · 窄幅", 1020, 720, "此页的纯内容与宽幅版本逐字相同。汇聚图仍通过端点检查，连接跨度缩短，底部可用余量只有约 0.2 px。"],
+      "duty-narrow": ["汛期值班 · 窄幅", 900, 720, "仍为三列。分带路线选择紧凑间距留出更多页底空间。段落折成更多行，投屏阅读更费力。"],
+      "duty-tall": ["汛期值班 · 竖幅", 720, 800, "三列排不下。旧路线整页单列超容，分带路线把前两组并排，将加密巡查与恢复放入下一行通栏。"],
+      pressure: ["不足与感悟 · 容量失败", 720, 420, "两侧均返回超容回执。下图是诊断截图，点开失败 HTML 可检查超出画幅的后续内容。"],
+    };
+    const routes = { baseline: "A · 旧编译器", bands: "B · 测量分带" };
+    const byId = (id) => document.getElementById(id);
+    const buttons = new Map();
+
+    function choose(id) {
+      const [title, width, height, description] = samples[id];
+      const base = "output/" + id + "/";
+      for (const [key, button] of buttons) button.setAttribute("aria-pressed", String(key === id));
+      byId("sample-title").textContent = title;
+      byId("sample-size").textContent = width + " × " + height;
+      byId("summary").textContent = description;
+      for (const [link, file] of Object.entries({ content: "content.json", expression: "expression.json", receipt: "summary.json" })) {
+        byId(link).href = base + file;
+      }
+      byId("compare").replaceChildren(...Object.entries(routes).map(([route, name]) => {
+        const rejected = id === "pressure" || (id === "duty-tall" && route === "baseline");
+        const folder = base + route + "/";
+        const file = folder + (rejected ? "rejected" : "gray");
+        const panel = byId("panel").content.cloneNode(true);
+        const status = panel.querySelector("figcaption p");
+        status.textContent = rejected ? "超容 · 诊断截图" : "通过浏览器检查";
+        status.classList.toggle("fail", rejected);
+        panel.querySelector("h3").textContent = name;
+        const slide = panel.querySelector(".slide");
+        slide.href = file + ".html";
+        slide.textContent = rejected ? "打开诊断" : "打开原尺寸灰稿";
+        panel.querySelector(".picture").href = slide.href;
+        const img = panel.querySelector("img");
+        img.src = file + ".png";
+        img.alt = title + "，" + name + "，" + status.textContent;
+        img.width = width;
+        img.height = height;
+        panel.querySelector(".report").href = folder + "report.json";
+        const layout = panel.querySelector(".layout");
+        if (rejected) layout.remove();
+        else layout.href = folder + "layout.json";
+        return panel;
+      }));
+    }
+
+    for (const [id, [title]] of Object.entries(samples)) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = title;
+      button.addEventListener("click", () => choose(id));
+      buttons.set(id, button);
+      byId("samples").append(button);
+    }
+    choose("hr");
+  </script>
+</body>
+</html>

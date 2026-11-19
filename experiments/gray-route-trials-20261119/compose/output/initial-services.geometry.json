@@ -1,0 +1,620 @@
+{
+  "schemaVersion": "gray-compose-experiment/1",
+  "id": "services",
+  "canvas": {
+    "width": 1280,
+    "height": 720
+  },
+  "frame": {
+    "x": 55,
+    "y": 166,
+    "width": 1170,
+    "height": 492
+  },
+  "units": "CSS px",
+  "origin": "slide top-left",
+  "source": {
+    "file": "稿件/模拟稿库/布局试排-services.md",
+    "sha256": "bc52de4da2cd1cd09e4363f7ecbd2301fdd95ce49099c7fd23ee3530054ea628",
+    "spanUnits": "UTF-16 code units",
+    "blocks": [
+      {
+        "id": "source-001",
+        "text": "园区服务支持",
+        "start": 0,
+        "end": 6
+      },
+      {
+        "id": "source-002",
+        "text": "设备支持：提供会议设备借用和故障报修，借用前确认设备状态，归还时完成清点。",
+        "start": 10,
+        "end": 47
+      },
+      {
+        "id": "source-003",
+        "text": "场地支持：受理会议室预约，使用部门需提前说明人数、时段和布置需求。",
+        "start": 51,
+        "end": 84
+      },
+      {
+        "id": "source-004",
+        "text": "资料支持：提供制度查询、材料打印和文件归档指引。",
+        "start": 88,
+        "end": 112
+      },
+      {
+        "id": "source-005",
+        "text": "访客支持：协助外来人员登记、路线说明和接待联系，访问受限区域需事先获得授权。",
+        "start": 116,
+        "end": 154
+      },
+      {
+        "id": "source-006",
+        "text": "以上服务统一通过服务台登记，紧急事项需同时电话联系值班人员。",
+        "start": 158,
+        "end": 188
+      }
+    ],
+    "bindings": [
+      {
+        "id": "title",
+        "sourceId": "source-001",
+        "span": [
+          0,
+          6
+        ],
+        "text": "园区服务支持"
+      },
+      {
+        "id": "item-1-title",
+        "sourceId": "source-002",
+        "span": [
+          10,
+          15
+        ],
+        "text": "设备支持："
+      },
+      {
+        "id": "item-1-body-1",
+        "sourceId": "source-002",
+        "span": [
+          15,
+          47
+        ],
+        "text": "提供会议设备借用和故障报修，借用前确认设备状态，归还时完成清点。"
+      },
+      {
+        "id": "item-2-title",
+        "sourceId": "source-003",
+        "span": [
+          51,
+          56
+        ],
+        "text": "场地支持："
+      },
+      {
+        "id": "item-2-body-1",
+        "sourceId": "source-003",
+        "span": [
+          56,
+          84
+        ],
+        "text": "受理会议室预约，使用部门需提前说明人数、时段和布置需求。"
+      },
+      {
+        "id": "item-3-title",
+        "sourceId": "source-004",
+        "span": [
+          88,
+          93
+        ],
+        "text": "资料支持："
+      },
+      {
+        "id": "item-3-body-1",
+        "sourceId": "source-004",
+        "span": [
+          93,
+          112
+        ],
+        "text": "提供制度查询、材料打印和文件归档指引。"
+      },
+      {
+        "id": "item-4-title",
+        "sourceId": "source-005",
+        "span": [
+          116,
+          121
+        ],
+        "text": "访客支持："
+      },
+      {
+        "id": "item-4-body-1",
+        "sourceId": "source-005",
+        "span": [
+          121,
+          154
+        ],
+        "text": "协助外来人员登记、路线说明和接待联系，访问受限区域需事先获得授权。"
+      },
+      {
+        "id": "shared",
+        "sourceId": "source-006",
+        "span": [
+          158,
+          188
+        ],
+        "text": "以上服务统一通过服务台登记，紧急事项需同时电话联系值班人员。"
+      }
+    ]
+  },
+  "readingOrder": [
+    "title",
+    "item-1-title",
+    "item-1-body-1",
+    "item-2-title",
+    "item-2-body-1",
+    "item-3-title",
+    "item-3-body-1",
+    "item-4-title",
+    "item-4-body-1",
+    "shared"
+  ],
+  "relations": [
+    {
+      "type": "parallel",
+      "members": [
+        "item-1",
+        "item-2",
+        "item-3",
+        "item-4"
+      ]
+    },
+    {
+      "type": "shared-service-entry",
+      "from": "shared",
+      "to": [
+        "item-1",
+        "item-2",
+        "item-3",
+        "item-4"
+      ]
+    }
+  ],
+  "components": {
+    "parallel-text": {
+      "accepts": "parallel",
+      "count": [
+        2,
+        5
+      ],
+      "roles": [
+        "title",
+        "body"
+      ],
+      "origin": "实验文本布局，Grid 约束并列"
+    },
+    "shared-note": {
+      "accepts": "shared-*",
+      "count": [
+        1,
+        1
+      ],
+      "roles": [
+        "body"
+      ],
+      "origin": "实验共同条件带，保留与所有项关系"
+    }
+  },
+  "chosen": "parallel-text-4col-20",
+  "layout": {
+    "id": "parallel-text-4col-20",
+    "component": "parallel-text",
+    "cols": 4,
+    "bodyPx": 20,
+    "priority": 45
+  },
+  "graphLayout": null,
+  "measured": {
+    "frame": {
+      "x": 55,
+      "y": 166,
+      "width": 1170,
+      "height": 492
+    },
+    "usedHeight": 203.5,
+    "headroom": 288.5,
+    "text": [
+      {
+        "id": "title",
+        "sourceId": "source-001",
+        "role": "slide-title",
+        "text": "园区服务支持",
+        "fontPx": 38,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 700,
+        "lineHeightPx": 46.36,
+        "alignment": "start",
+        "color": "rgb(41, 41, 41)",
+        "rect": {
+          "x": 55,
+          "y": 65,
+          "width": 1170,
+          "height": 46.36
+        },
+        "lines": [
+          {
+            "x": 55,
+            "y": 63,
+            "width": 223.45,
+            "height": 50
+          }
+        ]
+      },
+      {
+        "id": "item-1-title",
+        "sourceId": "source-002",
+        "role": "item-title",
+        "text": "设备支持：",
+        "fontPx": 22,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 700,
+        "lineHeightPx": 27.5,
+        "alignment": "start",
+        "color": "rgb(41, 41, 41)",
+        "rect": {
+          "x": 69,
+          "y": 180,
+          "width": 245,
+          "height": 27.5
+        },
+        "lines": [
+          {
+            "x": 69,
+            "y": 179,
+            "width": 110,
+            "height": 29
+          }
+        ]
+      },
+      {
+        "id": "item-1-body-1",
+        "sourceId": "source-002",
+        "role": "body",
+        "text": "提供会议设备借用和故障报修，借用前确认设备状态，归还时完成清点。",
+        "fontPx": 20,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 400,
+        "lineHeightPx": 26,
+        "alignment": "start",
+        "color": "rgb(41, 41, 41)",
+        "rect": {
+          "x": 69,
+          "y": 212.5,
+          "width": 240,
+          "height": 78
+        },
+        "lines": [
+          {
+            "x": 69,
+            "y": 212.5,
+            "width": 240,
+            "height": 26
+          },
+          {
+            "x": 69,
+            "y": 238.5,
+            "width": 240,
+            "height": 26
+          },
+          {
+            "x": 69,
+            "y": 264.5,
+            "width": 160,
+            "height": 26
+          }
+        ]
+      },
+      {
+        "id": "item-2-title",
+        "sourceId": "source-003",
+        "role": "item-title",
+        "text": "场地支持：",
+        "fontPx": 22,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 700,
+        "lineHeightPx": 27.5,
+        "alignment": "start",
+        "color": "rgb(41, 41, 41)",
+        "rect": {
+          "x": 368,
+          "y": 180,
+          "width": 245,
+          "height": 27.5
+        },
+        "lines": [
+          {
+            "x": 368,
+            "y": 179,
+            "width": 110,
+            "height": 29
+          }
+        ]
+      },
+      {
+        "id": "item-2-body-1",
+        "sourceId": "source-003",
+        "role": "body",
+        "text": "受理会议室预约，使用部门需提前说明人数、时段和布置需求。",
+        "fontPx": 20,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 400,
+        "lineHeightPx": 26,
+        "alignment": "start",
+        "color": "rgb(41, 41, 41)",
+        "rect": {
+          "x": 368,
+          "y": 212.5,
+          "width": 240,
+          "height": 78
+        },
+        "lines": [
+          {
+            "x": 368,
+            "y": 212.5,
+            "width": 240,
+            "height": 26
+          },
+          {
+            "x": 368,
+            "y": 238.5,
+            "width": 240,
+            "height": 26
+          },
+          {
+            "x": 368,
+            "y": 264.5,
+            "width": 80,
+            "height": 26
+          }
+        ]
+      },
+      {
+        "id": "item-3-title",
+        "sourceId": "source-004",
+        "role": "item-title",
+        "text": "资料支持：",
+        "fontPx": 22,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 700,
+        "lineHeightPx": 27.5,
+        "alignment": "start",
+        "color": "rgb(41, 41, 41)",
+        "rect": {
+          "x": 667,
+          "y": 180,
+          "width": 245,
+          "height": 27.5
+        },
+        "lines": [
+          {
+            "x": 667,
+            "y": 179,
+            "width": 110,
+            "height": 29
+          }
+        ]
+      },
+      {
+        "id": "item-3-body-1",
+        "sourceId": "source-004",
+        "role": "body",
+        "text": "提供制度查询、材料打印和文件归档指引。",
+        "fontPx": 20,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 400,
+        "lineHeightPx": 26,
+        "alignment": "start",
+        "color": "rgb(41, 41, 41)",
+        "rect": {
+          "x": 667,
+          "y": 212.5,
+          "width": 240,
+          "height": 52
+        },
+        "lines": [
+          {
+            "x": 667,
+            "y": 212.5,
+            "width": 240,
+            "height": 26
+          },
+          {
+            "x": 667,
+            "y": 238.5,
+            "width": 140,
+            "height": 26
+          }
+        ]
+      },
+      {
+        "id": "item-4-title",
+        "sourceId": "source-005",
+        "role": "item-title",
+        "text": "访客支持：",
+        "fontPx": 22,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 700,
+        "lineHeightPx": 27.5,
+        "alignment": "start",
+        "color": "rgb(41, 41, 41)",
+        "rect": {
+          "x": 966,
+          "y": 180,
+          "width": 245,
+          "height": 27.5
+        },
+        "lines": [
+          {
+            "x": 966,
+            "y": 179,
+            "width": 110,
+            "height": 29
+          }
+        ]
+      },
+      {
+        "id": "item-4-body-1",
+        "sourceId": "source-005",
+        "role": "body",
+        "text": "协助外来人员登记、路线说明和接待联系，访问受限区域需事先获得授权。",
+        "fontPx": 20,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 400,
+        "lineHeightPx": 26,
+        "alignment": "start",
+        "color": "rgb(41, 41, 41)",
+        "rect": {
+          "x": 966,
+          "y": 212.5,
+          "width": 240,
+          "height": 78
+        },
+        "lines": [
+          {
+            "x": 966,
+            "y": 212.5,
+            "width": 240,
+            "height": 26
+          },
+          {
+            "x": 966,
+            "y": 238.5,
+            "width": 240,
+            "height": 26
+          },
+          {
+            "x": 966,
+            "y": 264.5,
+            "width": 180,
+            "height": 26
+          }
+        ]
+      },
+      {
+        "id": "shared",
+        "sourceId": "source-006",
+        "role": "body",
+        "text": "以上服务统一通过服务台登记，紧急事项需同时电话联系值班人员。",
+        "fontPx": 20,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 400,
+        "lineHeightPx": 26,
+        "alignment": "start",
+        "color": "rgb(41, 41, 41)",
+        "rect": {
+          "x": 76,
+          "y": 331.5,
+          "width": 1132,
+          "height": 26
+        },
+        "lines": [
+          {
+            "x": 76,
+            "y": 331.5,
+            "width": 600,
+            "height": 26
+          }
+        ]
+      }
+    ],
+    "geometry": [
+      {
+        "id": "content-frame",
+        "component": null,
+        "rect": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 492
+        }
+      },
+      {
+        "id": "body",
+        "component": null,
+        "rect": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 203.5
+        }
+      },
+      {
+        "id": "items",
+        "component": "parallel-text",
+        "rect": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 134.5
+        }
+      },
+      {
+        "id": "item-1",
+        "component": null,
+        "rect": {
+          "x": 55,
+          "y": 166,
+          "width": 273,
+          "height": 134.5
+        }
+      },
+      {
+        "id": "item-2",
+        "component": null,
+        "rect": {
+          "x": 354,
+          "y": 166,
+          "width": 273,
+          "height": 134.5
+        }
+      },
+      {
+        "id": "item-3",
+        "component": null,
+        "rect": {
+          "x": 653,
+          "y": 166,
+          "width": 273,
+          "height": 134.5
+        }
+      },
+      {
+        "id": "item-4",
+        "component": null,
+        "rect": {
+          "x": 952,
+          "y": 166,
+          "width": 273,
+          "height": 134.5
+        }
+      },
+      {
+        "id": "shared",
+        "component": "shared-note",
+        "rect": {
+          "x": 55,
+          "y": 319.5,
+          "width": 1170,
+          "height": 50
+        }
+      }
+    ],
+    "primitives": [],
+    "edges": [],
+    "cardGeometry": [],
+    "issues": [],
+    "fonts": [],
+    "requestedFontAvailable": true
+  }
+}

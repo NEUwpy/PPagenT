@@ -1,0 +1,418 @@
+{
+  "version": "experiment/gray-page@1",
+  "canvas": {
+    "width": 1280,
+    "height": 720
+  },
+  "frame": {
+    "x": 55,
+    "y": 166,
+    "width": 770,
+    "height": 270
+  },
+  "source": {
+    "file": "稿件/模拟稿库/布局试排-options.md",
+    "sha256": "123b52f8a5fc088f575c8a702d1ba5c09949e0482a68add8ebb3539d71dfc7ae",
+    "sources": [
+      {
+        "id": "source-001",
+        "text": "两种上线方案",
+        "start": 0,
+        "end": 6
+      },
+      {
+        "id": "source-002",
+        "text": "集中上线方案：在一个周末完成全部部门切换，培训与支持资源集中投入。优势是过渡期短；风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。",
+        "start": 10,
+        "end": 83
+      },
+      {
+        "id": "source-003",
+        "text": "分批上线方案：先选择一个部门试用，再按反馈逐批推广。优点是能及时修正规则；代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。",
+        "start": 87,
+        "end": 155
+      },
+      {
+        "id": "source-004",
+        "text": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。",
+        "start": 159,
+        "end": 188
+      }
+    ]
+  },
+  "semantic": {
+    "kind": "comparison",
+    "title": {
+      "id": "page-title",
+      "role": "title",
+      "text": "两种上线方案",
+      "sourceId": "source-001",
+      "quote": "两种上线方案",
+      "quoteOffset": [
+        0,
+        6
+      ]
+    },
+    "groups": [
+      {
+        "id": "centralized",
+        "heading": {
+          "id": "centralized-heading",
+          "role": "group-heading",
+          "text": "集中上线方案",
+          "sourceId": "source-002",
+          "quote": "集中上线方案：在一个周末完成全部部门切换，培训与支持资源集中投入。",
+          "quoteOffset": [
+            10,
+            43
+          ]
+        },
+        "items": [
+          {
+            "id": "centralized-advantage",
+            "role": "body",
+            "text": "优势是过渡期短。",
+            "sourceId": "source-002",
+            "quote": "优势是过渡期短",
+            "quoteOffset": [
+              43,
+              50
+            ]
+          },
+          {
+            "id": "centralized-risk",
+            "role": "body",
+            "text": "风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。",
+            "sourceId": "source-002",
+            "quote": "风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。",
+            "quoteOffset": [
+              51,
+              83
+            ]
+          }
+        ]
+      },
+      {
+        "id": "phased",
+        "heading": {
+          "id": "phased-heading",
+          "role": "group-heading",
+          "text": "分批上线方案",
+          "sourceId": "source-003",
+          "quote": "分批上线方案：先选择一个部门试用，再按反馈逐批推广。",
+          "quoteOffset": [
+            87,
+            113
+          ]
+        },
+        "items": [
+          {
+            "id": "phased-advantage",
+            "role": "body",
+            "text": "优点是能及时修正规则。",
+            "sourceId": "source-003",
+            "quote": "优点是能及时修正规则",
+            "quoteOffset": [
+              113,
+              123
+            ]
+          },
+          {
+            "id": "phased-cost",
+            "role": "body",
+            "text": "代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。",
+            "sourceId": "source-003",
+            "quote": "代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。",
+            "quoteOffset": [
+              124,
+              155
+            ]
+          }
+        ]
+      }
+    ],
+    "scopeNotes": [
+      {
+        "id": "rollback-drill",
+        "role": "scope-note",
+        "text": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。",
+        "sourceId": "source-004",
+        "quote": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。",
+        "quoteOffset": [
+          159,
+          188
+        ],
+        "appliesTo": [
+          "centralized",
+          "phased"
+        ]
+      }
+    ]
+  },
+  "selected": {
+    "variant": "columns",
+    "artifact": "options-tight-columns"
+  },
+  "nodes": [
+    {
+      "id": "page-title",
+      "role": "title",
+      "bounds": {
+        "x": 55,
+        "y": 79,
+        "width": 770,
+        "height": 42
+      },
+      "lineBounds": [
+        {
+          "x": 55,
+          "y": 77,
+          "width": 210,
+          "height": 46
+        }
+      ],
+      "text": "两种上线方案",
+      "sourceId": "source-001",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 35,
+        "lineHeightPx": 42,
+        "weight": 700,
+        "align": "left"
+      }
+    },
+    {
+      "id": "centralized-heading",
+      "role": "group-heading",
+      "bounds": {
+        "x": 70,
+        "y": 180,
+        "width": 346,
+        "height": 26.390625
+      },
+      "lineBounds": [
+        {
+          "x": 70,
+          "y": 178,
+          "width": 132,
+          "height": 29
+        }
+      ],
+      "text": "集中上线方案",
+      "sourceId": "source-002",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 22,
+        "lineHeightPx": 26.4,
+        "weight": 700,
+        "align": "left"
+      }
+    },
+    {
+      "id": "centralized-advantage",
+      "role": "body",
+      "bounds": {
+        "x": 70,
+        "y": 214.390625,
+        "width": 346,
+        "height": 26.625
+      },
+      "lineBounds": [
+        {
+          "x": 70,
+          "y": 215.390625,
+          "width": 144,
+          "height": 24
+        }
+      ],
+      "text": "优势是过渡期短。",
+      "sourceId": "source-002",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "centralized-risk",
+      "role": "body",
+      "bounds": {
+        "x": 70,
+        "y": 249.015625,
+        "width": 346,
+        "height": 53.25
+      },
+      "lineBounds": [
+        {
+          "x": 70,
+          "y": 250.015625,
+          "width": 342,
+          "height": 24
+        },
+        {
+          "x": 70,
+          "y": 276.640625,
+          "width": 234,
+          "height": 24
+        }
+      ],
+      "text": "风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。",
+      "sourceId": "source-002",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "phased-heading",
+      "role": "group-heading",
+      "bounds": {
+        "x": 464,
+        "y": 180,
+        "width": 346,
+        "height": 26.390625
+      },
+      "lineBounds": [
+        {
+          "x": 464,
+          "y": 178,
+          "width": 132,
+          "height": 29
+        }
+      ],
+      "text": "分批上线方案",
+      "sourceId": "source-003",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 22,
+        "lineHeightPx": 26.4,
+        "weight": 700,
+        "align": "left"
+      }
+    },
+    {
+      "id": "phased-advantage",
+      "role": "body",
+      "bounds": {
+        "x": 464,
+        "y": 214.390625,
+        "width": 346,
+        "height": 26.625
+      },
+      "lineBounds": [
+        {
+          "x": 464,
+          "y": 215.390625,
+          "width": 198,
+          "height": 24
+        }
+      ],
+      "text": "优点是能及时修正规则。",
+      "sourceId": "source-003",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "phased-cost",
+      "role": "body",
+      "bounds": {
+        "x": 464,
+        "y": 249.015625,
+        "width": 346,
+        "height": 53.25
+      },
+      "lineBounds": [
+        {
+          "x": 464,
+          "y": 250.015625,
+          "width": 342,
+          "height": 24
+        },
+        {
+          "x": 464,
+          "y": 276.640625,
+          "width": 216,
+          "height": 24
+        }
+      ],
+      "text": "代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。",
+      "sourceId": "source-003",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "rollback-drill",
+      "role": "scope-note",
+      "bounds": {
+        "x": 55,
+        "y": 338.265625,
+        "width": 770,
+        "height": 26.625
+      },
+      "lineBounds": [
+        {
+          "x": 55,
+          "y": 339.265625,
+          "width": 522,
+          "height": 24
+        }
+      ],
+      "text": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。",
+      "sourceId": "source-004",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    }
+  ],
+  "componentInstances": [
+    {
+      "id": "centralized",
+      "bounds": {
+        "x": 55,
+        "y": 166,
+        "width": 376,
+        "height": 148.265625
+      },
+      "component": "experiment/text-flow-group@1"
+    },
+    {
+      "id": "phased",
+      "bounds": {
+        "x": 449,
+        "y": 166,
+        "width": 376,
+        "height": 148.265625
+      },
+      "component": "experiment/text-flow-group@1"
+    }
+  ],
+  "readingOrder": [
+    "page-title",
+    "centralized-heading",
+    "centralized-advantage",
+    "centralized-risk",
+    "phased-heading",
+    "phased-advantage",
+    "phased-cost",
+    "rollback-drill"
+  ]
+}

@@ -1,0 +1,285 @@
+{
+  "status": "passed",
+  "runs": [
+    {
+      "name": "hr",
+      "source": "hr",
+      "width": 1280,
+      "height": 720,
+      "inputSha256": "c1f1437a4be5d72e1fc0922ab9c201209541aff18af1b8bb9c9b820379407016",
+      "routes": {
+        "baseline": {
+          "status": "passed",
+          "selected": "compact-row-content-weighted",
+          "checkedCandidates": 8,
+          "widthsPx": [
+            531,
+            613
+          ],
+          "bodySpaceBelowGroupsPx": 51.9,
+          "minBodyPx": 18,
+          "boundTextFields": 34,
+          "localEdges": 5,
+          "maxConvergenceAnchorErrorPx": 0.0162353515625
+        },
+        "bands": {
+          "status": "passed",
+          "selected": "compact-2-balanced-stack",
+          "checkedCandidates": 6,
+          "widthsPx": [
+            572,
+            572
+          ],
+          "bodySpaceBelowGroupsPx": 51.9,
+          "minBodyPx": 18,
+          "boundTextFields": 34,
+          "localEdges": 5,
+          "maxConvergenceAnchorErrorPx": 0.006256103515625
+        }
+      }
+    },
+    {
+      "name": "options",
+      "source": "options",
+      "width": 1280,
+      "height": 720,
+      "inputSha256": "1f768bbbaf1a3696e57375c20f3c107df870fdb44edaa662ffb5fb9befed9ce6",
+      "routes": {
+        "baseline": {
+          "status": "passed",
+          "selected": "standard-row-content-weighted",
+          "checkedCandidates": 2,
+          "widthsPx": [
+            1172
+          ],
+          "bodySpaceBelowGroupsPx": 250.3,
+          "minBodyPx": 18,
+          "boundTextFields": 8,
+          "localEdges": 0
+        },
+        "bands": {
+          "status": "passed",
+          "selected": "standard-1-balanced-stack",
+          "checkedCandidates": 2,
+          "widthsPx": [
+            1172
+          ],
+          "bodySpaceBelowGroupsPx": 250.3,
+          "minBodyPx": 18,
+          "boundTextFields": 8,
+          "localEdges": 0
+        }
+      }
+    },
+    {
+      "name": "duty",
+      "source": "duty",
+      "width": 1280,
+      "height": 720,
+      "inputSha256": "0aac55e03822bb53d3b604b93ccd76149a412f6b937352ddc569cb00846788af",
+      "routes": {
+        "baseline": {
+          "status": "passed",
+          "selected": "standard-row-balanced",
+          "checkedCandidates": 8,
+          "widthsPx": [
+            372,
+            372,
+            372
+          ],
+          "bodySpaceBelowGroupsPx": 66.4,
+          "minBodyPx": 18,
+          "boundTextFields": 20,
+          "localEdges": 0
+        },
+        "bands": {
+          "status": "passed",
+          "selected": "standard-3-balanced-stack",
+          "checkedCandidates": 24,
+          "widthsPx": [
+            372,
+            372,
+            372
+          ],
+          "bodySpaceBelowGroupsPx": 64.4,
+          "minBodyPx": 18,
+          "boundTextFields": 20,
+          "localEdges": 0
+        }
+      }
+    },
+    {
+      "name": "procurement",
+      "source": "procurement",
+      "width": 1280,
+      "height": 720,
+      "inputSha256": "0b85da747028367ca4280ab1c16236f671a8613204c8a82fdb1dd1ae7114e2c4",
+      "routes": {
+        "baseline": {
+          "status": "passed",
+          "selected": "standard-row-content-weighted",
+          "checkedCandidates": 8,
+          "widthsPx": [
+            700,
+            444
+          ],
+          "bodySpaceBelowGroupsPx": 118.5,
+          "minBodyPx": 18,
+          "boundTextFields": 15,
+          "localEdges": 1
+        },
+        "bands": {
+          "status": "passed",
+          "selected": "standard-1+1-balanced-flow",
+          "checkedCandidates": 10,
+          "widthsPx": [
+            1172,
+            1172
+          ],
+          "bodySpaceBelowGroupsPx": 90.2,
+          "minBodyPx": 18,
+          "boundTextFields": 15,
+          "localEdges": 1
+        }
+      }
+    },
+    {
+      "name": "hr-narrow",
+      "source": "hr",
+      "width": 1020,
+      "height": 720,
+      "inputSha256": "c1f1437a4be5d72e1fc0922ab9c201209541aff18af1b8bb9c9b820379407016",
+      "routes": {
+        "baseline": {
+          "status": "passed",
+          "selected": "standard-row-content-weighted",
+          "checkedCandidates": 4,
+          "widthsPx": [
+            462,
+            450
+          ],
+          "bodySpaceBelowGroupsPx": 0.2,
+          "minBodyPx": 18,
+          "boundTextFields": 34,
+          "localEdges": 5,
+          "maxConvergenceAnchorErrorPx": 0
+        },
+        "bands": {
+          "status": "passed",
+          "selected": "standard-2-balanced-stack",
+          "checkedCandidates": 4,
+          "widthsPx": [
+            462,
+            450
+          ],
+          "bodySpaceBelowGroupsPx": 0.2,
+          "minBodyPx": 18,
+          "boundTextFields": 34,
+          "localEdges": 5,
+          "maxConvergenceAnchorErrorPx": 0
+        }
+      }
+    },
+    {
+      "name": "duty-narrow",
+      "source": "duty",
+      "width": 900,
+      "height": 720,
+      "inputSha256": "0aac55e03822bb53d3b604b93ccd76149a412f6b937352ddc569cb00846788af",
+      "routes": {
+        "baseline": {
+          "status": "passed",
+          "selected": "standard-row-balanced",
+          "checkedCandidates": 8,
+          "widthsPx": [
+            262,
+            261,
+            261
+          ],
+          "bodySpaceBelowGroupsPx": 0.8,
+          "minBodyPx": 18,
+          "boundTextFields": 20,
+          "localEdges": 0
+        },
+        "bands": {
+          "status": "passed",
+          "selected": "compact-3-balanced-stack",
+          "checkedCandidates": 24,
+          "widthsPx": [
+            261,
+            261,
+            262
+          ],
+          "bodySpaceBelowGroupsPx": 68.4,
+          "minBodyPx": 18,
+          "boundTextFields": 20,
+          "localEdges": 0
+        }
+      }
+    },
+    {
+      "name": "duty-tall",
+      "source": "duty",
+      "width": 720,
+      "height": 800,
+      "inputSha256": "0aac55e03822bb53d3b604b93ccd76149a412f6b937352ddc569cb00846788af",
+      "routes": {
+        "baseline": {
+          "status": "rejected",
+          "checkedCandidates": 2,
+          "failures": [
+            "canvas-overflow",
+            "object-outside-body",
+            "text-clipped"
+          ]
+        },
+        "bands": {
+          "status": "passed",
+          "selected": "compact-2+1-balanced-stack",
+          "checkedCandidates": 20,
+          "widthsPx": [
+            322,
+            322,
+            660
+          ],
+          "bodySpaceBelowGroupsPx": 6.5,
+          "minBodyPx": 18,
+          "boundTextFields": 20,
+          "localEdges": 0
+        }
+      }
+    },
+    {
+      "name": "pressure",
+      "source": "hr",
+      "width": 720,
+      "height": 420,
+      "inputSha256": "c1f1437a4be5d72e1fc0922ab9c201209541aff18af1b8bb9c9b820379407016",
+      "routes": {
+        "baseline": {
+          "status": "rejected",
+          "checkedCandidates": 2,
+          "failures": [
+            "canvas-overflow",
+            "object-outside-body",
+            "text-clipped"
+          ]
+        },
+        "bands": {
+          "status": "rejected",
+          "checkedCandidates": 2,
+          "failures": [
+            "canvas-overflow",
+            "object-outside-body",
+            "text-clipped"
+          ]
+        }
+      }
+    }
+  ],
+  "inputGuards": {
+    "rejectsDesignFields": 6,
+    "rejectsScopeFromWrongLevel": true,
+    "localOrderFromEdges": true
+  }
+}

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PPagenT · HTML 文字编排</title>
+  <style>
+    :root { color: #20201e; background: #efeeeb; font: 15px/1.5 "Noto Sans SC", "Microsoft YaHei", sans-serif }
+    * { box-sizing: border-box }
+    body { margin: 0 }
+    main { max-width: 1400px; margin-inline: auto; padding: 23px clamp(16px, 4vw, 48px) 36px }
+    header, .controls { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap }
+    h1 { font-size: 25px; font-weight: 650; letter-spacing: -.035em; margin: 0 }
+    nav, .tools { display: flex; flex-wrap: wrap; align-items: center; gap: 6px }
+    a { color: inherit; text-underline-offset: .23em }
+    button { border: 0; background: transparent; padding: 7px 10px; font: inherit; color: #474742; cursor: pointer }
+    button[aria-pressed="true"] { background: #272725; color: #faf9f6; border-radius: 3px }
+    button:focus-visible, a:focus-visible { outline: 2px solid #4c6879; outline-offset: 3px }
+    .controls { border-top: 1px solid #d3d2cb; padding-top: 11px; margin: 16px 0 14px }
+    .tools a { margin-inline-start: 8px }
+    .stage { position: relative; margin-inline: auto }
+    iframe { position: absolute; left: 0; top: 0; border: 0; background: #f9f8f5; transform-origin: top left; box-shadow: 0 8px 26px #00000014 }
+    @media (max-width: 600px) { main { padding-top: 17px } h1 { font-size: 22px } }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>HTML 文字编排</h1>
+      <nav aria-label="试验记录">
+        <a href="reference-style/index.html">灰稿与样式对照</a>
+        <a href="README.md">研究与试验记录</a>
+      </nav>
+    </header>
+    <div class="controls">
+      <nav aria-label="稿件">
+        <button type="button" data-case="review" aria-pressed="true">不足与感悟</button>
+        <button type="button" data-case="spares" aria-pressed="false">备件供应对比</button>
+        <button type="button" data-case="duty" aria-pressed="false">汛期值班</button>
+      </nav>
+      <div class="tools" role="group" aria-label="画布">
+        <button type="button" data-size="wide" aria-pressed="true">宽版</button>
+        <button type="button" data-size="narrow" aria-pressed="false">窄版</button>
+        <a id="notes" href="talk-slide/讲述备注.md">讲述备注</a>
+        <a id="open" href="talk-slide/review.html">打开 HTML</a>
+      </div>
+    </div>
+    <div id="stage" class="stage">
+      <iframe id="preview" title="不足与感悟"></iframe>
+    </div>
+    <noscript><a href="talk-slide/review.html">打开人力稿 HTML</a></noscript>
+  </main>
+  <script>
+    const cases = {
+      review: { title: "不足与感悟", src: "talk-slide/review.html", narrowSrc: "talk-slide/review-narrow.html", narrow: [1020, 720] },
+      spares: { title: "备件供应对比", src: "references/index.html", narrow: [1020, 640] },
+      duty: { title: "汛期值班", src: "flow/output/duty.html", narrowSrc: "flow/output/duty-compact.html", narrow: [1080, 650] },
+    };
+    const main = document.querySelector("main");
+    const controls = document.querySelector(".controls");
+    const stage = document.querySelector("#stage");
+    const preview = document.querySelector("#preview");
+    const open = document.querySelector("#open");
+    const notes = document.querySelector("#notes");
+    let selected = "review";
+    let size = "wide";
+
+    function dimensions() {
+      return size === "wide" ? [1280, 720] : cases[selected].narrow;
+    }
+
+    function scaleCanvas() {
+      const [width, height] = dimensions();
+      const ratio = Math.min(controls.clientWidth / width, 1);
+      preview.style.width = width + "px";
+      preview.style.height = height + "px";
+      preview.style.transform = "scale(" + ratio + ")";
+      stage.style.width = width * ratio + "px";
+      stage.style.height = height * ratio + "px";
+    }
+
+    function selectCase() {
+      const example = cases[selected];
+      const src = size === "narrow" ? (example.narrowSrc ?? example.src) : example.src;
+      if (preview.getAttribute("src") !== src) preview.setAttribute("src", src);
+      preview.title = example.title;
+      open.href = src;
+      notes.hidden = selected !== "review";
+      for (const button of controls.querySelectorAll("button")) {
+        const active = button.dataset.case ? button.dataset.case === selected : button.dataset.size === size;
+        button.setAttribute("aria-pressed", String(active));
+      }
+      scaleCanvas();
+    }
+
+    controls.addEventListener("click", (event) => {
+      const button = event.target.closest("button");
+      if (!button) return;
+      selected = button.dataset.case ?? selected;
+      size = button.dataset.size ?? size;
+      selectCase();
+    });
+    new ResizeObserver(scaleCanvas).observe(main);
+    selectCase();
+  </script>
+</body>
+</html>

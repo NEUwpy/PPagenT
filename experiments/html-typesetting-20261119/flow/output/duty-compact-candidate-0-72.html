@@ -1,0 +1,60 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>HTML 文字流</title>
+  <style>
+*{box-sizing:border-box}
+html,body{margin:0;background:#f8f7f3;color:#232320}
+.stage{font-family:"Noto Sans SC","Microsoft YaHei",sans-serif;font-variant-numeric:tabular-nums}
+p,h1,h2,h3{margin:0}
+header{padding:0 0 25px;border-bottom:2px solid #30302d;margin:0 0 23px}
+h1{font-size:49px;font-weight:780;line-height:1.2;letter-spacing:-.035em;text-wrap:balance}
+.strap{font-size:20px;color:#55544d;line-height:1.35;font-weight:500}
+.strap:first-child{margin-bottom:10px}
+.strap:last-child{margin-top:12px}
+h2{font-size:26px;line-height:1.35;font-weight:745;margin:0 0 18px;break-after:avoid}
+h3{font-size:20px;line-height:1.38;font-weight:700;margin:0 0 6px;break-after:avoid}
+.body{font:400 20px/1.56 "Noto Serif SC",SimSun,serif;color:#34342e;line-break:strict;word-break:normal;overflow-wrap:normal;text-wrap:pretty;widows:2;orphans:2}
+.body strong{font-weight:700;color:#22221e}
+.unit{white-space:nowrap}
+.entry{padding:0 0 13px;break-inside:avoid-column}
+.flow{column-gap:26px}
+
+
+.stage{width:1080px;min-height:650px;padding:40px 43px 38px}
+.sections{display:grid;gap:28px;align-items:start}
+section+section{border-left:1px solid #c3c1b8;padding-left:24px}
+.sections:not([data-matter="hr"]) section+section{padding-left:24px}
+.flow{column-count:var(--tracks);column-fill:balance}
+.sections{grid-template-columns:var(--fractions)}
+.flow>.entry:last-child{padding-bottom:0}
+header{padding-bottom:17px;margin-bottom:19px}
+h1{font-size:43px}h2{font-size:25px;margin-bottom:12px}
+h3{line-height:1.28;margin-bottom:4px}.body{line-height:1.43}
+.entry{padding-bottom:10px}.flow{column-gap:22px}
+
+.sections{--fractions:minmax(190px,371.10fr) minmax(190px,315.90fr) minmax(190px,219.40fr)}</style>
+  
+  <body><article class="stage"><header><h1>汛期值班与应急处置安排</h1><p class="strap">汛期自 6 月 1 日至 9 月 30 日</p></header>
+    <div class="sections" data-columns="3" data-matter="duty"><section data-group="1" style="--tracks:1;--weight:299.10">
+      <h2>值班与交接</h2><div class="flow"><div class="entry">
+      
+      <p class="body" data-copy="1:1">值班实行 <span class="unit">24 小时</span>双人值守，值班人员须在整点前后 <span class="unit">15 分钟</span>内完成一次巡查记录；</p>
+    </div><div class="entry">
+      
+      <p class="body" data-copy="1:2">交接班时，上一班须向下一班交代未处置事项与已采取措施，交接不清的，由交班人承担后果。</p>
+    </div></div></section><section data-group="2" style="--tracks:1;--weight:315.90">
+      <h2>险情分级处置</h2><div class="flow"><div class="entry">
+      
+      <p class="body" data-copy="2:1"><strong>一般渗漏、积水</strong>，由值班人员现场处理并做好记录；</p>
+    </div><div class="entry">
+      
+      <p class="body" data-copy="2:2"><strong>出现管涌、滑坡征兆</strong>，立即报告带班领导，同时组织人员撤离危险区域，不得擅自处置；</p>
+    </div><div class="entry">
+      
+      <p class="body" data-copy="2:3"><strong>涉及人员受伤或设备停机的</strong>，无论级别均须立即上报指挥部，并在 <span class="unit">30 分钟</span>内提交书面情况说明。</p>
+    </div></div></section><section data-group="3" style="--tracks:1;--weight:291.40">
+      <h2>加密巡查</h2><div class="flow"><div class="entry">
+      
+      <p class="body" data-copy="3:1"><strong>连续降雨超过 <span class="unit">12 小时</span>或单日降雨量超过 <span class="unit">100 毫米</span>时</strong>，启动加密巡查，巡查间隔缩短至 <span class="unit">1 小时</span>；</p>
+    </div><div class="entry">
+      
+      <p class="body" data-copy="3:2"><strong>天气好转后</strong>经带班领导确认方可恢复正常巡查频次。</p>
+    </div></div></section></div></article></body></html>

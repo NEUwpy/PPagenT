@@ -1,0 +1,779 @@
+{
+  "version": "experiment/gray-page@1",
+  "canvas": {
+    "width": 1280,
+    "height": 720
+  },
+  "frame": {
+    "x": 55,
+    "y": 166,
+    "width": 1170,
+    "height": 492
+  },
+  "source": {
+    "file": "稿件/模拟稿库/行政信息/A04-备件供应方式对比说明.md",
+    "sha256": "3b7f9a17d6b7e7b2204bd6f313c85b158f94ebad5378c229463cb2d0193fded3",
+    "sources": [
+      {
+        "id": "source-001",
+        "text": "备件供应方式对比说明",
+        "start": 0,
+        "end": 10
+      },
+      {
+        "id": "source-002",
+        "text": "设备科对现行两种备件供应方式作了对比。集中供应由中心库统一采购、统一配送，单件采购成本较低，但配送周期平均 5 个工作日，紧急需求须另走加急流程；就近供应由各站点自行采购，响应时间可缩短至 1 个工作日以内，但单价普遍高出 8% 至 12%。",
+        "start": 14,
+        "end": 135
+      },
+      {
+        "id": "source-003",
+        "text": "两种方式并非互斥。常用件适合集中供应；价值低、消耗快的易损件适合就近供应。建议按备件分级确定供应方式：单件价值 500 元以上的集中采购，500 元以下的由站点自行采购。涉及安全停机的关键备件，无论金额均须报设备科备案后加急处理。",
+        "start": 139,
+        "end": 254
+      },
+      {
+        "id": "source-004",
+        "text": "本说明自下发之日起执行；原《备件领用暂行规定》中与本文不一致的，以本文为准。",
+        "start": 258,
+        "end": 296
+      }
+    ]
+  },
+  "semantic": {
+    "kind": "comparison",
+    "title": {
+      "id": "page-title",
+      "role": "title",
+      "text": "备件供应方式对比说明",
+      "sourceId": "source-001",
+      "quote": "备件供应方式对比说明",
+      "quoteOffset": [
+        0,
+        10
+      ]
+    },
+    "groups": [
+      {
+        "id": "centralized-supply",
+        "heading": {
+          "id": "centralized-supply-heading",
+          "role": "group-heading",
+          "text": "集中供应",
+          "sourceId": "source-002",
+          "quote": "集中供应由中心库统一采购、统一配送",
+          "quoteOffset": [
+            33,
+            50
+          ]
+        },
+        "items": [
+          {
+            "id": "centralized-mode",
+            "role": "body",
+            "text": "由中心库统一采购、统一配送",
+            "sourceId": "source-002",
+            "quote": "由中心库统一采购、统一配送",
+            "quoteOffset": [
+              37,
+              50
+            ]
+          },
+          {
+            "id": "centralized-cost",
+            "role": "body",
+            "text": "单件采购成本较低",
+            "sourceId": "source-002",
+            "quote": "单件采购成本较低",
+            "quoteOffset": [
+              51,
+              59
+            ]
+          },
+          {
+            "id": "centralized-lead-time",
+            "role": "body",
+            "text": "配送周期平均 5 个工作日",
+            "sourceId": "source-002",
+            "quote": "配送周期平均 5 个工作日",
+            "quoteOffset": [
+              61,
+              74
+            ]
+          },
+          {
+            "id": "centralized-urgent",
+            "role": "body",
+            "text": "紧急需求须另走加急流程",
+            "sourceId": "source-002",
+            "quote": "紧急需求须另走加急流程",
+            "quoteOffset": [
+              75,
+              86
+            ]
+          }
+        ]
+      },
+      {
+        "id": "nearby-supply",
+        "heading": {
+          "id": "nearby-supply-heading",
+          "role": "group-heading",
+          "text": "就近供应",
+          "sourceId": "source-002",
+          "quote": "就近供应由各站点自行采购",
+          "quoteOffset": [
+            87,
+            99
+          ]
+        },
+        "items": [
+          {
+            "id": "nearby-mode",
+            "role": "body",
+            "text": "由各站点自行采购",
+            "sourceId": "source-002",
+            "quote": "由各站点自行采购",
+            "quoteOffset": [
+              91,
+              99
+            ]
+          },
+          {
+            "id": "nearby-response",
+            "role": "body",
+            "text": "响应时间可缩短至 1 个工作日以内",
+            "sourceId": "source-002",
+            "quote": "响应时间可缩短至 1 个工作日以内",
+            "quoteOffset": [
+              100,
+              117
+            ]
+          },
+          {
+            "id": "nearby-price",
+            "role": "body",
+            "text": "单价普遍高出 8% 至 12%",
+            "sourceId": "source-002",
+            "quote": "单价普遍高出 8% 至 12%",
+            "quoteOffset": [
+              119,
+              134
+            ]
+          }
+        ]
+      }
+    ],
+    "scopeNotes": [
+      {
+        "id": "note-not-exclusive",
+        "role": "scope-note",
+        "text": "两种方式并非互斥",
+        "sourceId": "source-003",
+        "quote": "两种方式并非互斥",
+        "quoteOffset": [
+          139,
+          147
+        ],
+        "appliesTo": [
+          "centralized-supply",
+          "nearby-supply"
+        ]
+      },
+      {
+        "id": "note-common-parts",
+        "role": "scope-note",
+        "text": "常用件适合集中供应",
+        "sourceId": "source-003",
+        "quote": "常用件适合集中供应",
+        "quoteOffset": [
+          148,
+          157
+        ],
+        "appliesTo": [
+          "centralized-supply"
+        ]
+      },
+      {
+        "id": "note-wear-parts",
+        "role": "scope-note",
+        "text": "价值低、消耗快的易损件适合就近供应",
+        "sourceId": "source-003",
+        "quote": "价值低、消耗快的易损件适合就近供应",
+        "quoteOffset": [
+          158,
+          175
+        ],
+        "appliesTo": [
+          "nearby-supply"
+        ]
+      },
+      {
+        "id": "note-value-threshold",
+        "role": "scope-note",
+        "text": "建议按备件分级确定供应方式：单件价值 500 元以上的集中采购，500 元以下的由站点自行采购",
+        "sourceId": "source-003",
+        "quote": "建议按备件分级确定供应方式：单件价值 500 元以上的集中采购，500 元以下的由站点自行采购",
+        "quoteOffset": [
+          176,
+          223
+        ],
+        "appliesTo": [
+          "centralized-supply",
+          "nearby-supply"
+        ]
+      },
+      {
+        "id": "note-safety-critical",
+        "role": "scope-note",
+        "text": "涉及安全停机的关键备件，无论金额均须报设备科备案后加急处理",
+        "sourceId": "source-003",
+        "quote": "涉及安全停机的关键备件，无论金额均须报设备科备案后加急处理",
+        "quoteOffset": [
+          224,
+          253
+        ],
+        "appliesTo": [
+          "centralized-supply",
+          "nearby-supply"
+        ]
+      },
+      {
+        "id": "note-effective-date",
+        "role": "scope-note",
+        "text": "本说明自下发之日起执行",
+        "sourceId": "source-004",
+        "quote": "本说明自下发之日起执行",
+        "quoteOffset": [
+          258,
+          269
+        ],
+        "appliesTo": [
+          "centralized-supply",
+          "nearby-supply"
+        ]
+      },
+      {
+        "id": "note-precedence",
+        "role": "scope-note",
+        "text": "原《备件领用暂行规定》中与本文不一致的，以本文为准",
+        "sourceId": "source-004",
+        "quote": "原《备件领用暂行规定》中与本文不一致的，以本文为准",
+        "quoteOffset": [
+          270,
+          295
+        ],
+        "appliesTo": [
+          "centralized-supply",
+          "nearby-supply"
+        ]
+      }
+    ]
+  },
+  "selected": {
+    "variant": "columns",
+    "artifact": "spares-standard-columns"
+  },
+  "nodes": [
+    {
+      "id": "page-title",
+      "role": "title",
+      "bounds": {
+        "x": 55,
+        "y": 79,
+        "width": 1170,
+        "height": 42
+      },
+      "lineBounds": [
+        {
+          "x": 55,
+          "y": 77,
+          "width": 350,
+          "height": 46
+        }
+      ],
+      "text": "备件供应方式对比说明",
+      "sourceId": "source-001",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 35,
+        "lineHeightPx": 42,
+        "weight": 700,
+        "align": "left"
+      }
+    },
+    {
+      "id": "centralized-supply-heading",
+      "role": "group-heading",
+      "bounds": {
+        "x": 70,
+        "y": 180,
+        "width": 546,
+        "height": 26.390625
+      },
+      "lineBounds": [
+        {
+          "x": 70,
+          "y": 178,
+          "width": 88,
+          "height": 29
+        }
+      ],
+      "text": "集中供应",
+      "sourceId": "source-002",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 22,
+        "lineHeightPx": 26.4,
+        "weight": 700,
+        "align": "left"
+      }
+    },
+    {
+      "id": "centralized-mode",
+      "role": "body",
+      "bounds": {
+        "x": 70,
+        "y": 214.390625,
+        "width": 546,
+        "height": 26.625
+      },
+      "lineBounds": [
+        {
+          "x": 70,
+          "y": 215.390625,
+          "width": 234,
+          "height": 24
+        }
+      ],
+      "text": "由中心库统一采购、统一配送",
+      "sourceId": "source-002",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "centralized-cost",
+      "role": "body",
+      "bounds": {
+        "x": 70,
+        "y": 249.015625,
+        "width": 546,
+        "height": 26.625
+      },
+      "lineBounds": [
+        {
+          "x": 70,
+          "y": 250.015625,
+          "width": 144,
+          "height": 24
+        }
+      ],
+      "text": "单件采购成本较低",
+      "sourceId": "source-002",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "centralized-lead-time",
+      "role": "body",
+      "bounds": {
+        "x": 70,
+        "y": 283.640625,
+        "width": 546,
+        "height": 26.625
+      },
+      "lineBounds": [
+        {
+          "x": 70,
+          "y": 284.640625,
+          "width": 201.21875,
+          "height": 24
+        }
+      ],
+      "text": "配送周期平均 5 个工作日",
+      "sourceId": "source-002",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "centralized-urgent",
+      "role": "body",
+      "bounds": {
+        "x": 70,
+        "y": 318.265625,
+        "width": 546,
+        "height": 26.625
+      },
+      "lineBounds": [
+        {
+          "x": 70,
+          "y": 319.265625,
+          "width": 198,
+          "height": 24
+        }
+      ],
+      "text": "紧急需求须另走加急流程",
+      "sourceId": "source-002",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "note-common-parts",
+      "role": "scope-note",
+      "bounds": {
+        "x": 70,
+        "y": 360.890625,
+        "width": 546,
+        "height": 26.625
+      },
+      "lineBounds": [
+        {
+          "x": 70,
+          "y": 361.890625,
+          "width": 162,
+          "height": 24
+        }
+      ],
+      "text": "常用件适合集中供应",
+      "sourceId": "source-003",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "nearby-supply-heading",
+      "role": "group-heading",
+      "bounds": {
+        "x": 664,
+        "y": 180,
+        "width": 546,
+        "height": 26.390625
+      },
+      "lineBounds": [
+        {
+          "x": 664,
+          "y": 178,
+          "width": 88,
+          "height": 29
+        }
+      ],
+      "text": "就近供应",
+      "sourceId": "source-002",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 22,
+        "lineHeightPx": 26.4,
+        "weight": 700,
+        "align": "left"
+      }
+    },
+    {
+      "id": "nearby-mode",
+      "role": "body",
+      "bounds": {
+        "x": 664,
+        "y": 214.390625,
+        "width": 546,
+        "height": 26.625
+      },
+      "lineBounds": [
+        {
+          "x": 664,
+          "y": 215.390625,
+          "width": 144,
+          "height": 24
+        }
+      ],
+      "text": "由各站点自行采购",
+      "sourceId": "source-002",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "nearby-response",
+      "role": "body",
+      "bounds": {
+        "x": 664,
+        "y": 249.015625,
+        "width": 546,
+        "height": 26.625
+      },
+      "lineBounds": [
+        {
+          "x": 664,
+          "y": 250.015625,
+          "width": 273.21875,
+          "height": 24
+        }
+      ],
+      "text": "响应时间可缩短至 1 个工作日以内",
+      "sourceId": "source-002",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "nearby-price",
+      "role": "body",
+      "bounds": {
+        "x": 664,
+        "y": 283.640625,
+        "width": 546,
+        "height": 26.625
+      },
+      "lineBounds": [
+        {
+          "x": 664,
+          "y": 284.640625,
+          "width": 205.6875,
+          "height": 24
+        }
+      ],
+      "text": "单价普遍高出 8% 至 12%",
+      "sourceId": "source-002",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "note-wear-parts",
+      "role": "scope-note",
+      "bounds": {
+        "x": 664,
+        "y": 326.265625,
+        "width": 546,
+        "height": 26.625
+      },
+      "lineBounds": [
+        {
+          "x": 664,
+          "y": 327.265625,
+          "width": 306,
+          "height": 24
+        }
+      ],
+      "text": "价值低、消耗快的易损件适合就近供应",
+      "sourceId": "source-003",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "note-not-exclusive",
+      "role": "scope-note",
+      "bounds": {
+        "x": 55,
+        "y": 423.515625,
+        "width": 1170,
+        "height": 26.625
+      },
+      "lineBounds": [
+        {
+          "x": 55,
+          "y": 424.515625,
+          "width": 144,
+          "height": 24
+        }
+      ],
+      "text": "两种方式并非互斥",
+      "sourceId": "source-003",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "note-value-threshold",
+      "role": "scope-note",
+      "bounds": {
+        "x": 55,
+        "y": 457.140625,
+        "width": 1170,
+        "height": 26.625
+      },
+      "lineBounds": [
+        {
+          "x": 55,
+          "y": 458.140625,
+          "width": 763.3125,
+          "height": 24
+        }
+      ],
+      "text": "建议按备件分级确定供应方式：单件价值 500 元以上的集中采购，500 元以下的由站点自行采购",
+      "sourceId": "source-003",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "note-safety-critical",
+      "role": "scope-note",
+      "bounds": {
+        "x": 55,
+        "y": 490.765625,
+        "width": 1170,
+        "height": 26.625
+      },
+      "lineBounds": [
+        {
+          "x": 55,
+          "y": 491.765625,
+          "width": 522,
+          "height": 24
+        }
+      ],
+      "text": "涉及安全停机的关键备件，无论金额均须报设备科备案后加急处理",
+      "sourceId": "source-003",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "note-effective-date",
+      "role": "scope-note",
+      "bounds": {
+        "x": 55,
+        "y": 524.390625,
+        "width": 1170,
+        "height": 26.625
+      },
+      "lineBounds": [
+        {
+          "x": 55,
+          "y": 525.390625,
+          "width": 198,
+          "height": 24
+        }
+      ],
+      "text": "本说明自下发之日起执行",
+      "sourceId": "source-004",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "note-precedence",
+      "role": "scope-note",
+      "bounds": {
+        "x": 55,
+        "y": 558.015625,
+        "width": 1170,
+        "height": 26.625
+      },
+      "lineBounds": [
+        {
+          "x": 55,
+          "y": 559.015625,
+          "width": 450,
+          "height": 24
+        }
+      ],
+      "text": "原《备件领用暂行规定》中与本文不一致的，以本文为准",
+      "sourceId": "source-004",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    }
+  ],
+  "componentInstances": [
+    {
+      "id": "centralized-supply",
+      "bounds": {
+        "x": 55,
+        "y": 166,
+        "width": 576,
+        "height": 233.515625
+      },
+      "component": "experiment/text-flow-group@1"
+    },
+    {
+      "id": "nearby-supply",
+      "bounds": {
+        "x": 649,
+        "y": 166,
+        "width": 576,
+        "height": 233.515625
+      },
+      "component": "experiment/text-flow-group@1"
+    }
+  ],
+  "readingOrder": [
+    "page-title",
+    "centralized-supply-heading",
+    "centralized-mode",
+    "centralized-cost",
+    "centralized-lead-time",
+    "centralized-urgent",
+    "note-common-parts",
+    "nearby-supply-heading",
+    "nearby-mode",
+    "nearby-response",
+    "nearby-price",
+    "note-wear-parts",
+    "note-not-exclusive",
+    "note-value-threshold",
+    "note-safety-critical",
+    "note-effective-date",
+    "note-precedence"
+  ]
+}

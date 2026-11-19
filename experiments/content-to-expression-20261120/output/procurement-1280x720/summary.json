@@ -1,0 +1,225 @@
+{
+  "command": [
+    "node",
+    "experiments/content-to-expression-20261120/run.mjs",
+    "experiments/content-to-expression-20261120/inputs/procurement.json",
+    "--probe",
+    "cases-as-sequence",
+    "--probe",
+    "drop-scope"
+  ],
+  "input": "experiments/content-to-expression-20261120/inputs/procurement.json",
+  "inputSha256": "06fac082cb56da746671e66354a57f8fe7f5598790fc4d60f4d3fc171389f85c",
+  "selectorSha256": "c41ae5d1a6ca76f00ecd9ff935502fdbcb13ee1fbf2b189d43ffa4b2cde1e8e9",
+  "compilerSha256": "21848deed46d24bd563130a4256ff3411a0c04dc4397d265332084fbb4cdc851",
+  "canvas": {
+    "width": 1280,
+    "height": 720
+  },
+  "choices": [
+    {
+      "owner": "emergency-procedure",
+      "kind": "sequence",
+      "reason": "链较短，正文用一次按先后陈述即可",
+      "benefit": 1
+    }
+  ],
+  "excluded": [
+    {
+      "owner": "amount-rules",
+      "kind": "group-sequence",
+      "reason": "各情形满足各自条件，组内没有先后边"
+    }
+  ],
+  "direct": {
+    "first": "emergency-procedure-sequence",
+    "winner": "emergency-procedure-sequence"
+  },
+  "enumeration": {
+    "winner": "text",
+    "ranking": [
+      "text",
+      "emergency-procedure-sequence"
+    ]
+  },
+  "candidates": [
+    {
+      "id": "emergency-procedure-sequence",
+      "selected": [
+        {
+          "owner": "emergency-procedure",
+          "kind": "sequence",
+          "benefit": 1,
+          "reason": "链较短，正文用一次按先后陈述即可"
+        }
+      ],
+      "command": [
+        "node",
+        "experiments/gray-compiler-20261120/compile.mjs",
+        "experiments/content-to-expression-20261120/output/procurement-1280x720/emergency-procedure-sequence/input-plan.json",
+        "--width",
+        "1280",
+        "--height",
+        "720",
+        "--out",
+        "experiments/content-to-expression-20261120/output/procurement-1280x720/emergency-procedure-sequence/compile"
+      ],
+      "exitCode": 0,
+      "report": "experiments/content-to-expression-20261120/output/procurement-1280x720/emergency-procedure-sequence/compile/report.json",
+      "compilerStatus": "passed",
+      "audit": {
+        "errors": [],
+        "expectedEdges": [
+          "component:emergency-procedure:step:1 → component:emergency-procedure:step:2"
+        ],
+        "actualEdges": [
+          "component:emergency-procedure:step:1 → component:emergency-procedure:step:2"
+        ],
+        "checkedTextFields": 15,
+        "crossCaseItems": []
+      },
+      "layout": "standard-row-stronger-content-weight",
+      "grade": {
+        "total": -1,
+        "benefit": 1,
+        "expressionCost": 2,
+        "densityCost": 0,
+        "wrapCost": 0
+      },
+      "preview": "experiments/content-to-expression-20261120/output/procurement-1280x720/emergency-procedure-sequence/compile/gray.html",
+      "image": "experiments/content-to-expression-20261120/output/procurement-1280x720/emergency-procedure-sequence/compile/gray.png"
+    },
+    {
+      "id": "text",
+      "selected": [],
+      "command": [
+        "node",
+        "experiments/gray-compiler-20261120/compile.mjs",
+        "experiments/content-to-expression-20261120/output/procurement-1280x720/text/input-plan.json",
+        "--width",
+        "1280",
+        "--height",
+        "720",
+        "--out",
+        "experiments/content-to-expression-20261120/output/procurement-1280x720/text/compile"
+      ],
+      "exitCode": 0,
+      "report": "experiments/content-to-expression-20261120/output/procurement-1280x720/text/compile/report.json",
+      "compilerStatus": "passed",
+      "audit": {
+        "errors": [],
+        "expectedEdges": [],
+        "actualEdges": [],
+        "checkedTextFields": 13,
+        "crossCaseItems": []
+      },
+      "layout": "standard-row-stronger-content-weight",
+      "grade": {
+        "total": 0,
+        "benefit": 0,
+        "expressionCost": 0,
+        "densityCost": 0,
+        "wrapCost": 0
+      },
+      "preview": "experiments/content-to-expression-20261120/output/procurement-1280x720/text/compile/gray.html",
+      "image": "experiments/content-to-expression-20261120/output/procurement-1280x720/text/compile/gray.png"
+    },
+    {
+      "id": "probe-cases-as-sequence",
+      "probe": "cases-as-sequence",
+      "selected": [],
+      "command": [
+        "node",
+        "experiments/gray-compiler-20261120/compile.mjs",
+        "experiments/content-to-expression-20261120/output/procurement-1280x720/probe-cases-as-sequence/input-plan.json",
+        "--width",
+        "1280",
+        "--height",
+        "720",
+        "--out",
+        "experiments/content-to-expression-20261120/output/procurement-1280x720/probe-cases-as-sequence/compile"
+      ],
+      "exitCode": 0,
+      "report": "experiments/content-to-expression-20261120/output/procurement-1280x720/probe-cases-as-sequence/compile/report.json",
+      "compilerStatus": "passed",
+      "audit": {
+        "errors": [
+          {
+            "code": "wrong-group-relation",
+            "id": "group:amount-rules"
+          },
+          {
+            "code": "extra-connection",
+            "id": "item:low-amount → item:middle-amount"
+          },
+          {
+            "code": "extra-connection",
+            "id": "item:middle-amount → item:high-amount"
+          }
+        ],
+        "expectedEdges": [],
+        "actualEdges": [
+          "item:low-amount → item:middle-amount",
+          "item:middle-amount → item:high-amount"
+        ],
+        "checkedTextFields": 13,
+        "crossCaseItems": []
+      },
+      "layout": "standard-row-stronger-content-weight",
+      "grade": {
+        "total": 0,
+        "benefit": 0,
+        "expressionCost": 0,
+        "densityCost": 0,
+        "wrapCost": 0
+      },
+      "preview": "experiments/content-to-expression-20261120/output/procurement-1280x720/probe-cases-as-sequence/compile/gray.html",
+      "image": "experiments/content-to-expression-20261120/output/procurement-1280x720/probe-cases-as-sequence/compile/gray.png"
+    },
+    {
+      "id": "probe-drop-scope",
+      "probe": "drop-scope",
+      "selected": [],
+      "command": [
+        "node",
+        "experiments/gray-compiler-20261120/compile.mjs",
+        "experiments/content-to-expression-20261120/output/procurement-1280x720/probe-drop-scope/input-plan.json",
+        "--width",
+        "1280",
+        "--height",
+        "720",
+        "--out",
+        "experiments/content-to-expression-20261120/output/procurement-1280x720/probe-drop-scope/compile"
+      ],
+      "exitCode": 0,
+      "report": "experiments/content-to-expression-20261120/output/procurement-1280x720/probe-drop-scope/compile/report.json",
+      "compilerStatus": "passed",
+      "audit": {
+        "errors": [
+          {
+            "code": "missing-content-field",
+            "id": "note:all-records:text"
+          },
+          {
+            "code": "changed-scope",
+            "id": "note:all-records"
+          }
+        ],
+        "expectedEdges": [],
+        "actualEdges": [],
+        "checkedTextFields": 12,
+        "crossCaseItems": []
+      },
+      "layout": "standard-row-stronger-content-weight",
+      "grade": {
+        "total": 0,
+        "benefit": 0,
+        "expressionCost": 0,
+        "densityCost": 0,
+        "wrapCost": 0
+      },
+      "preview": "experiments/content-to-expression-20261120/output/procurement-1280x720/probe-drop-scope/compile/gray.html",
+      "image": "experiments/content-to-expression-20261120/output/procurement-1280x720/probe-drop-scope/compile/gray.png"
+    }
+  ]
+}

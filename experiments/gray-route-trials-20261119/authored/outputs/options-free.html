@@ -1,0 +1,372 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>两种上线方案</title><style>/* ppagent-theme:resolved */:root{
+    --ppagent-font-body:"Microsoft YaHei";
+    --ppagent-color-background:#FFFFFF;
+    --ppagent-color-surface:#FFFFFF;
+    --ppagent-color-primary:#484848;
+    --ppagent-color-primary-deep:#2A2A2A;
+    --ppagent-color-primary-dark:#373737;
+    --ppagent-color-primary-light:#868686;
+    --ppagent-color-primary-pale:#BFBFBF;
+    --ppagent-color-primary-wash:#E9E9E9;
+    --ppagent-color-accent:#484848;
+    --ppagent-color-accent-alt:#696969;
+    --ppagent-color-accent-soft:#DEDEDE;
+    --ppagent-color-cyan:#8A8A8A;
+    --ppagent-color-dark:#2B2B2B;
+    --ppagent-color-body:#404040;
+    --ppagent-color-muted:#6F6F6F;
+    --ppagent-color-line:#BDBDBD;
+    --ppagent-component-heading-size:18pt;
+    --ppagent-component-title-size:20pt;
+    --ppagent-component-item-title-size:16.5pt;
+    --ppagent-component-lead-size:16pt;
+    --ppagent-component-body-size:14.25pt;
+    --ppagent-component-label-size:14pt;
+    --ppagent-component-meta-size:12pt;
+  }
+
+    .ppagent-text-region{
+      box-sizing:border-box;
+      min-width:0;
+      min-height:0;
+    }
+    .ppagent-text-region > .ppagent-text-flow,
+    .ppagent-text-region > .ppagent-text-layout{
+      width:100%;
+      height:100%;
+    }
+    .ppagent-text-layout{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-layout-gap,10px);
+      width:100%;
+      height:100%;
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,"Microsoft YaHei"),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-align="center"]{text-align:center}
+    .ppagent-text-layout[data-text-layout-align="right"]{text-align:right}
+    .ppagent-text-layout[data-text-layout-valign="top"]{justify-content:flex-start}
+    .ppagent-text-layout[data-text-layout-valign="bottom"]{justify-content:flex-end}
+    .ppagent-text-layout[data-text-layout-density="compact"]{--ppagent-text-layout-gap:6px;--ppagent-text-layout-item-gap:5px}
+    .ppagent-text-layout[data-text-layout-density="standard"]{--ppagent-text-layout-gap:10px;--ppagent-text-layout-item-gap:8px}
+    .ppagent-text-layout[data-text-layout-density="loose"]{--ppagent-text-layout-gap:15px;--ppagent-text-layout-item-gap:12px}
+    .ppagent-text-primitive{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      color:var(--ppagent-text-color,#46566a);
+      text-align:inherit;
+      white-space:pre-line;
+      overflow-wrap:break-word;
+    }
+    .ppagent-text-primitive--heading{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-text-primitive--body{font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.45}
+    .ppagent-text-primitive--list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px)}
+    .ppagent-text-list__item{box-sizing:border-box;min-width:0;margin:0;padding:0;overflow:visible;color:var(--ppagent-text-color,#46566a);font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.38;text-align:inherit;white-space:pre-line;overflow-wrap:break-word}
+    .ppagent-text-primitive--metric{color:var(--ppagent-value-color,#2f5ea8);font-size:var(--ppagent-component-heading-size,25pt);font-weight:700;line-height:1.08}
+    .ppagent-text-primitive--label{color:var(--ppagent-label-color,#60758d);font-size:var(--ppagent-component-label-size,17pt);font-weight:600;line-height:1.2}
+    .ppagent-text-primitive--annotation{color:var(--ppagent-annotation-color,#748495);font-size:var(--ppagent-component-meta-size,15pt);font-weight:400;line-height:1.3}
+    .ppagent-text-primitive--quote{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:500;line-height:1.35}
+    .ppagent-text-primitive--emphasis{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-title-size,23pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-structured-list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-structured-list__item{display:flex;flex-direction:column;gap:4px;min-width:0}
+    .ppagent-structured-list__item .ppagent-text-primitive--heading{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-metric-set{display:grid;grid-template-columns:repeat(var(--ppagent-metric-columns,2),minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0;align-items:start}
+    .ppagent-metric-set[data-metric-count="3"]{--ppagent-metric-columns:3}
+    .ppagent-metric-set[data-metric-count="4"]{--ppagent-metric-columns:4}
+    .ppagent-metric-set__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-key-value{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-key-value__row{display:grid;grid-template-columns:minmax(64px,.42fr) minmax(0,1fr);gap:10px;align-items:start;min-width:0}
+    .ppagent-key-value__row .ppagent-text-primitive--metric{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label,
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--annotation{text-align:right}
+    .ppagent-summary-information{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0}
+    .ppagent-summary-information__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-summary-information__item .ppagent-text-primitive--emphasis{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"]{
+      justify-content:flex-start;
+      gap:12px;
+      padding:18px;
+      color:var(--ppagent-color-body);
+      background:transparent;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive{color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--emphasis,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--quote{color:var(--ppagent-color-dark);font-weight:700;letter-spacing:-.25px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--body,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-list__item{font-size:max(15pt,var(--ppagent-component-body-size))}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--label{color:var(--ppagent-color-accent);font-size:max(15pt,var(--ppagent-component-label-size));font-weight:700;letter-spacing:.7px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--annotation{color:var(--ppagent-color-muted);font-size:max(15pt,var(--ppagent-component-meta-size))}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--metric{color:var(--ppagent-color-accent);font-weight:700;letter-spacing:-.5px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-list__item{position:relative;padding-left:17px;color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-list__item::before{content:"";position:absolute;left:0;top:.68em;width:8px;height:2px;background:var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--heading-content-flow > .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--label-content-flow > .ppagent-text-primitive--label,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--heading-metric-content-flow > .ppagent-text-primitive--heading{padding-bottom:10px;border-bottom:2px solid var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-structured-list{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-structured-list__item{display:grid;grid-template-columns:minmax(82px,.42fr) minmax(0,1fr);gap:14px;padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-structured-list__item .ppagent-text-primitive--body{margin:0}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-metric-set{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-metric-set__item{padding:12px 14px 4px 0}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-metric-set__item + .ppagent-metric-set__item{padding-left:14px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-key-value{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-key-value__row{padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--quote-attribution-flow{position:relative;padding-left:52px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--quote-attribution-flow::before{content:"“";position:absolute;left:16px;top:8px;color:var(--ppagent-color-accent);font-family:Georgia,serif;font-size:42pt;font-weight:700;line-height:1}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label{margin-top:auto;padding-top:10px;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-summary-information{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-summary-information__item{padding:10px 12px 8px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-summary-information__item:nth-child(even){padding-left:12px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout--value-label{
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-value-label-gap,5px);
+      padding:var(--ppagent-value-label-padding,5px);
+      text-align:center;
+    }
+    .ppagent-text-layout__value,
+    .ppagent-text-layout__label{
+      box-sizing:border-box;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:hidden;
+      text-align:inherit;
+    }
+    .ppagent-text-layout__value{
+      color:var(--ppagent-value-color,#2f5ea8);
+      font-size:var(--ppagent-component-lead-size,19pt);
+      font-weight:700;
+      line-height:1.15;
+    }
+    .ppagent-text-layout__label{
+      color:var(--ppagent-label-color,#60758d);
+      font-size:var(--ppagent-component-meta-size,15pt);
+      font-weight:400;
+      line-height:1.2;
+    }
+    .ppagent-text-flow{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-flow-gap,10px);
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,"Microsoft YaHei"),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-flow[data-text-flow-align="center"]{text-align:center}
+    .ppagent-text-flow[data-text-flow-align="right"]{text-align:right}
+    .ppagent-text-flow[data-text-flow-valign="top"]{justify-content:flex-start}
+    .ppagent-text-flow[data-text-flow-valign="bottom"]{justify-content:flex-end}
+    .ppagent-text-flow__title,
+    .ppagent-text-flow__body{
+      position:relative;
+      box-sizing:border-box;
+      flex:0 0 auto;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      text-align:inherit;
+    }
+    .ppagent-text-flow__title{
+      font-size:var(--ppagent-component-item-title-size,21pt);
+      font-weight:700;
+      line-height:1.2;
+      white-space:normal;
+      text-wrap:balance;
+    }
+    .ppagent-text-flow__body{
+      font-size:var(--ppagent-component-body-size,17pt);
+      font-weight:400;
+      line-height:1.45;
+      white-space:pre-line;
+    }
+    .ppagent-text-flow__separator{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      align-self:center;
+      width:var(--ppagent-text-flow-separator-width,54px);
+      height:var(--ppagent-text-flow-separator-height,4px);
+      border:0;
+      border-radius:99px;
+      background:var(--ppagent-text-flow-separator-color,#78aeef);
+    }
+  
+/* cards */
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { color: #404040; background: transparent; font-family: var(--ppagent-font-body, "Microsoft YaHei"), sans-serif; }
+.parallel-review { position: relative; width: 1170px; height: 492px; overflow: hidden; background: transparent; }
+.parallel-grid { position: absolute; top: 40px; display: grid; height: 410px; }
+.parallel-review[data-item-count="2"] .parallel-grid { left: 198px; width: 774px; grid-template-columns: repeat(2, 1fr); gap: 54px; }
+.parallel-review[data-item-count="3"] .parallel-grid { left: 82px; width: 1006px; grid-template-columns: repeat(3, 1fr); gap: 34px; }
+.parallel-review[data-item-count="4"] .parallel-grid { left: 30px; width: 1110px; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.parallel-review[data-item-count="5"] .parallel-grid { left: 15px; width: 1140px; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+.parallel-card { position: relative; height: 410px; }
+.parallel-card-underlay { position: absolute; left: 8px; right: 8px; top: 58px; bottom: 0; border: 1px solid #E9E9E9; border-radius: 26px; background: #E9E9E9; }
+.parallel-card-surface { position: absolute; left: 0; right: 0; top: 48px; bottom: 10px; border: 1px solid #E9E9E9; border-radius: 26px; background: #E9E9E9; box-shadow: 0 12px 26px rgba(55, 55, 55, .12); }
+.parallel-card-accent { position: absolute; left: 50%; top: 48px; width: 82px; height: 8px; margin-left: -41px; border: 0; border-radius: 9px; background: #868686; }
+.parallel-marker { position: absolute; left: 50%; top: 0; width: 96px; height: 96px; margin-left: -48px; }
+.parallel-marker-halo { position: absolute; inset: 0; border: 1px solid #E9E9E9; border-radius: 50%; background: #E9E9E9; }
+.parallel-marker-core { position: absolute; left: 14px; top: 14px; width: 68px; height: 68px; border: 0; border-radius: 50%; background: #484848; box-shadow: 0 8px 18px rgba(72, 72, 72, .24); }
+.parallel-icon-slot { position: absolute; left: 27px; top: 27px; width: 42px; height: 42px; color: #fff; }
+.parallel-icon-svg { display: block; width: 36px; height: 36px; margin: 3px; color: #fff; }
+.parallel-marker-orbit { position: absolute; inset: 0; border: 2px solid rgba(255, 255, 255, .78); border-radius: 50%; background: transparent; }
+.parallel-marker-dot { position: absolute; width: 8px; height: 8px; border: 0; border-radius: 50%; background: #fff; }
+.parallel-marker-dot-center { left: 17px; top: 17px; }
+.parallel-marker-dot-left { left: 3px; top: 18px; width: 6px; height: 6px; opacity: .86; }
+.parallel-marker-dot-right { right: 3px; top: 18px; width: 6px; height: 6px; opacity: .86; }
+.parallel-title-region { position: absolute; left: 28px; right: 28px; top: 120px; height: 58px; }
+.parallel-title-region .ppagent-text-primitive--heading { color: #373737; line-height: 1.25; }
+.parallel-content-rule { position: absolute; left: 50%; top: 190px; width: 54px; height: 4px; margin-left: -27px; border: 0; border-radius: 99px; background: #868686; }
+.parallel-body-region { position: absolute; left: 28px; right: 28px; top: 208px; height: 130px; }
+.parallel-body-region .ppagent-text-primitive--body,
+.parallel-body-region .ppagent-text-list__item { color: #373737; line-height: 1.5; }
+.parallel-card[data-has-title="false"] .parallel-body-region { top: 126px; height: 212px; }
+.parallel-card[data-has-support="false"] .parallel-title-region { top: 166px; height: 92px; }
+.parallel-review[data-item-count="4"] .parallel-title-region,
+.parallel-review[data-item-count="4"] .parallel-body-region { left: 24px; right: 24px; }
+.parallel-review[data-item-count="5"] .parallel-title-region,
+.parallel-review[data-item-count="5"] .parallel-body-region { left: 20px; right: 20px; }
+.parallel-review[data-item-count="5"] .parallel-title-region { top: 116px; }
+.parallel-review[data-item-count="5"] .parallel-content-rule { top: 184px; }
+.parallel-review[data-item-count="5"] .parallel-body-region { top: 200px; height: 142px; }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 1280px; height: 720px; overflow: hidden; }
+body { background: #fff; color: #242424; font-family: 'Microsoft YaHei', sans-serif; }
+.slide { position: relative; width: 1280px; height: 720px; }
+.slide h1, .slide h2, .slide h3, .slide p { margin: 0; }
+.slide h1 { position: absolute; left: 55px; top: 63px; font-size: 42px; line-height: 1.25; font-weight: 700; }
+.title-rule { position: absolute; top: 137px; left: 55px; width: 68px; height: 3px; background: #585858; }
+[data-content-frame] { position: absolute; }
+
+/* options: equal weight above a common condition, with source text in both cards */
+.page-options { --option-inset: 70px; }
+.page-options .parallel-review { width: 100%; height: 370px; overflow: visible; }
+.page-options .parallel-review[data-item-count="2"] .parallel-grid {
+  top: 5px; left: var(--option-inset); right: var(--option-inset); width: auto; height: 348px; gap: 36px;
+}
+.page-options .parallel-card { height: 348px; }
+.page-options .parallel-title-region { top: 112px; height: 41px; }
+.page-options .parallel-content-rule { top: 163px; }
+.page-options .parallel-body-region { top: 181px; height: 130px; left: 40px; right: 40px; }
+.page-options .parallel-body-region .ppagent-text-primitive--body { line-height: 1.5; }
+.condition {
+  position: absolute; left: var(--option-inset); right: var(--option-inset); top: 377px; height: 82px;
+  display: grid; align-items: center; padding: 0 38px;
+}
+.condition-plate { position: absolute; inset: 0; width: 100%; height: 100%; }
+.condition-plate path { fill: #eaeaea; }
+.free-plate { background: #eaeaea; clip-path: polygon(0 0, 100% 0, 100% 100%, 1.8% 100%, 0 72%); }
+.condition p { position: relative; font-size: 20px; line-height: 1.4; font-weight: 700; color: #292929; }
+
+/* services: responsive asset on the left, shared operational entry on the right */
+.page-services [data-content-frame] { display: grid; grid-template-columns: minmax(0, 1fr) 258px; gap: 24px; align-items: center; }
+.service-entry { position: relative; display: block; padding: 26px 24px; }
+.entry-panel { position: absolute; inset: 0; background: #eaeaea; }
+.service-entry p { position: relative; font-size: 20px; line-height: 1.55; font-weight: 700; }
+
+/* dense: frozen one-page attempt, retaining the original repeated sentences */
+.dense-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(2, 211px); gap: 30px 34px; }
+.dense-grid article { padding: 12px 16px 0; outline: 1px solid #d6d6d6; outline-offset: -1px; }
+.dense-grid h3 { font-size: 21px; line-height: 1.25; margin-bottom: 7px; }
+.dense-grid p, .dense-common p { font-size: 18px; line-height: 1.38; }
+.dense-common { position: absolute; inset: 465px 0 auto; }
+
+/* HR: preserve two independent groups, then flow long prose within each */
+.hr-columns { position: relative; display: grid; height: 100%; grid-template-columns: minmax(0, calc((100% - var(--hr-gap)) * var(--hr-divider-share))) minmax(0, 1fr); gap: var(--hr-gap); }
+.hr-divider { position: absolute; top: 0; bottom: 0; left: calc((100% - var(--hr-gap)) * var(--hr-divider-share) + var(--hr-gap) / 2); width: 1px; background: #d0d0d0; }
+.hr-group h2 { font-size: 25px; line-height: 1.3; margin: 0 0 16px; padding-bottom: 0; }
+.hr-group h3 { font-size: 20px; line-height: 1.3; font-weight: 700; margin: 0 0 3px; }
+.hr-group p { font-size: 18.75px; line-height: 1.36; color: #454545; }
+.hr-items { display: grid; row-gap: 8px; }
+.hr-limits .hr-items { row-gap: 17px; }
+</style></head><body><main class="slide page-options" data-ppt-root><h1 data-ppt-kind="text" data-ppt-name="title" data-ppt-valign="top" data-bind="title" data-role="page-title" data-source="稿件/模拟稿库/布局试排-options.md#source-001:0-6" class="">两种上线方案</h1>
+    <div aria-hidden="true" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="title-rule" class="title-rule"></div><div data-content-frame style="left:55px;top:166px;width:1170px;height:492px"><section class="parallel-review" data-component="options-cards" data-item-count="2">
+      <div class="parallel-grid"><article class="parallel-card" data-key="options-cards-1" data-has-title="true" data-has-support="true">
+    <div class="parallel-card-underlay" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="parallel-card-underlay-0"></div>
+    <div class="parallel-card-surface" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="parallel-card-surface-0"></div>
+    <div class="parallel-card-accent" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="parallel-card-accent-0"></div>
+    <div class="parallel-marker"><div class="parallel-marker-halo" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="parallel-marker-halo-0"></div>
+    <div class="parallel-marker-core" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="parallel-marker-core-0"></div>
+    <div class="parallel-icon-slot" data-slot-id="options-cards-1-icon" data-slot-role="icon" data-slot-field="items[0].iconKey" data-slot-item-id="options-cards-1" data-slot-content-type="icon" data-slot-provider="tabler-icons" data-slot-required="true"><svg data-ppt-kind="image" data-ppt-name="parallel-icon-0" data-icon-key="layout-grid"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="parallel-icon-svg"
+>
+  
+  <path d="M4 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4" />
+  <path d="M14 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4" />
+  <path d="M4 15a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4" />
+  <path d="M14 15a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4" />
+</svg></div></div>
+    <div class="ppagent-text-region parallel-title-region" data-ppagent-text-region data-slot-id="options-cards-1-title-region" data-slot-role="text-region" data-slot-field="items[0].title" data-slot-item-id="options-cards-1" data-slot-region-id="title" data-slot-content-type="text-region" data-slot-safe-box="true" data-slot-required="false" data-slot-text-mode="structured" data-slot-list-policy="structured" data-text-layout-id="statement-flow" data-text-layout-default-id="statement-flow" data-text-layout-compatible="statement-flow,heading-content-flow" data-text-layout-content-roles="heading">
+    <div class="ppagent-text-layout ppagent-text-layout--statement-flow" data-ppagent-text-layout data-text-layout-id="statement-flow" data-text-layout-align="center" data-text-layout-valign="middle" data-text-layout-density="standard" data-text-layout-tone="light" data-text-layout-style="default"><div class="ppagent-text-primitive ppagent-text-primitive--heading" data-text-primitive="heading" data-text-layout-part="heading" data-text-layout-field="title" data-text-primitive-font-tiers="22,20,18,16,14" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="parallel-title-0" data-bind="parallel-title-0" data-role="heading" data-source="稿件/模拟稿库/布局试排-options.md#source-002:0-7">集中上线方案：</div></div>
+  </div>
+    <div class="parallel-content-rule" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="parallel-rule-0"></div>
+    <div class="ppagent-text-region parallel-body-region" data-ppagent-text-region data-slot-id="options-cards-1-content-region" data-slot-role="text-region" data-slot-field="items[0].support" data-slot-item-id="options-cards-1" data-slot-region-id="content" data-slot-content-type="text-region" data-slot-safe-box="true" data-slot-required="false" data-slot-text-mode="structured" data-slot-list-policy="structured" data-text-layout-id="heading-content-flow" data-text-layout-default-id="heading-content-flow" data-text-layout-compatible="statement-flow,heading-content-flow,structured-list-flow,metric-content-flow" data-text-layout-content-roles="body">
+    <div class="ppagent-text-layout ppagent-text-layout--heading-content-flow" data-ppagent-text-layout data-text-layout-id="heading-content-flow" data-text-layout-align="center" data-text-layout-valign="middle" data-text-layout-density="standard" data-text-layout-tone="light" data-text-layout-style="default"><div class="ppagent-text-primitive ppagent-text-primitive--body" data-text-primitive="body" data-text-layout-part="body" data-text-layout-field="body" data-text-primitive-font-tiers="16,14,12" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="parallel-body-0" data-bind="parallel-body-0" data-role="body" data-source="稿件/模拟稿库/布局试排-options.md#source-002:7-73">在一个周末完成全部部门切换，培训与支持资源集中投入。优势是过渡期短；风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。</div></div>
+  </div>
+  </article><article class="parallel-card" data-key="options-cards-2" data-has-title="true" data-has-support="true">
+    <div class="parallel-card-underlay" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="parallel-card-underlay-1"></div>
+    <div class="parallel-card-surface" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-sm" data-ppt-name="parallel-card-surface-1"></div>
+    <div class="parallel-card-accent" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="parallel-card-accent-1"></div>
+    <div class="parallel-marker"><div class="parallel-marker-halo" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="parallel-marker-halo-1"></div>
+    <div class="parallel-marker-core" data-ppt-kind="shape" data-ppt-shape="ellipse" data-ppt-name="parallel-marker-core-1"></div>
+    <div class="parallel-icon-slot" data-slot-id="options-cards-2-icon" data-slot-role="icon" data-slot-field="items[1].iconKey" data-slot-item-id="options-cards-2" data-slot-content-type="icon" data-slot-provider="tabler-icons" data-slot-required="true"><svg data-ppt-kind="image" data-ppt-name="parallel-icon-1" data-icon-key="calendar-event"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="parallel-icon-svg"
+>
+  
+  <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2l0 -12" />
+  <path d="M16 3l0 4" />
+  <path d="M8 3l0 4" />
+  <path d="M4 11l16 0" />
+  <path d="M8 15h2v2h-2l0 -2" />
+</svg></div></div>
+    <div class="ppagent-text-region parallel-title-region" data-ppagent-text-region data-slot-id="options-cards-2-title-region" data-slot-role="text-region" data-slot-field="items[1].title" data-slot-item-id="options-cards-2" data-slot-region-id="title" data-slot-content-type="text-region" data-slot-safe-box="true" data-slot-required="false" data-slot-text-mode="structured" data-slot-list-policy="structured" data-text-layout-id="statement-flow" data-text-layout-default-id="statement-flow" data-text-layout-compatible="statement-flow,heading-content-flow" data-text-layout-content-roles="heading">
+    <div class="ppagent-text-layout ppagent-text-layout--statement-flow" data-ppagent-text-layout data-text-layout-id="statement-flow" data-text-layout-align="center" data-text-layout-valign="middle" data-text-layout-density="standard" data-text-layout-tone="light" data-text-layout-style="default"><div class="ppagent-text-primitive ppagent-text-primitive--heading" data-text-primitive="heading" data-text-layout-part="heading" data-text-layout-field="title" data-text-primitive-font-tiers="22,20,18,16,14" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="parallel-title-1" data-bind="parallel-title-1" data-role="heading" data-source="稿件/模拟稿库/布局试排-options.md#source-003:0-7">分批上线方案：</div></div>
+  </div>
+    <div class="parallel-content-rule" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-name="parallel-rule-1"></div>
+    <div class="ppagent-text-region parallel-body-region" data-ppagent-text-region data-slot-id="options-cards-2-content-region" data-slot-role="text-region" data-slot-field="items[1].support" data-slot-item-id="options-cards-2" data-slot-region-id="content" data-slot-content-type="text-region" data-slot-safe-box="true" data-slot-required="false" data-slot-text-mode="structured" data-slot-list-policy="structured" data-text-layout-id="heading-content-flow" data-text-layout-default-id="heading-content-flow" data-text-layout-compatible="statement-flow,heading-content-flow,structured-list-flow,metric-content-flow" data-text-layout-content-roles="body">
+    <div class="ppagent-text-layout ppagent-text-layout--heading-content-flow" data-ppagent-text-layout data-text-layout-id="heading-content-flow" data-text-layout-align="center" data-text-layout-valign="middle" data-text-layout-density="standard" data-text-layout-tone="light" data-text-layout-style="default"><div class="ppagent-text-primitive ppagent-text-primitive--body" data-text-primitive="body" data-text-layout-part="body" data-text-layout-field="body" data-text-primitive-font-tiers="16,14,12" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="parallel-body-1" data-bind="parallel-body-1" data-role="body" data-source="稿件/模拟稿库/布局试排-options.md#source-003:7-68">先选择一个部门试用，再按反馈逐批推广。优点是能及时修正规则；代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。</div></div>
+  </div>
+  </article></div>
+    </section><aside class="condition" data-component="shared-precondition"><div aria-hidden="true" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="condition-plate" class="condition-plate free-plate"></div><p data-ppt-kind="text" data-ppt-name="precondition" data-ppt-valign="top" data-bind="precondition" data-role="scope-note" data-source="稿件/模拟稿库/布局试排-options.md#source-004:0-29" class="">两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。</p></aside></div></main></body></html>

@@ -1,0 +1,1776 @@
+{
+  "id": "services-compact",
+  "source": {
+    "path": "稿件/模拟稿库/布局试排-services.md",
+    "sha256": "bc52de4da2cd1cd09e4363f7ecbd2301fdd95ce49099c7fd23ee3530054ea628",
+    "sources": [
+      {
+        "id": "s1",
+        "heading": "",
+        "text": "园区服务支持"
+      },
+      {
+        "id": "s2",
+        "heading": "",
+        "text": "设备支持：提供会议设备借用和故障报修，借用前确认设备状态，归还时完成清点。"
+      },
+      {
+        "id": "s3",
+        "heading": "",
+        "text": "场地支持：受理会议室预约，使用部门需提前说明人数、时段和布置需求。"
+      },
+      {
+        "id": "s4",
+        "heading": "",
+        "text": "资料支持：提供制度查询、材料打印和文件归档指引。"
+      },
+      {
+        "id": "s5",
+        "heading": "",
+        "text": "访客支持：协助外来人员登记、路线说明和接待联系，访问受限区域需事先获得授权。"
+      },
+      {
+        "id": "s6",
+        "heading": "",
+        "text": "以上服务统一通过服务台登记，紧急事项需同时电话联系值班人员。"
+      }
+    ]
+  },
+  "bindings": [
+    {
+      "key": "title",
+      "sourceId": "s1",
+      "start": 0,
+      "end": 6,
+      "text": "园区服务支持"
+    },
+    {
+      "key": "object-1-title",
+      "sourceId": "s2",
+      "start": 0,
+      "end": 5,
+      "text": "设备支持："
+    },
+    {
+      "key": "object-1-body",
+      "sourceId": "s2",
+      "start": 5,
+      "end": 37,
+      "text": "提供会议设备借用和故障报修，借用前确认设备状态，归还时完成清点。"
+    },
+    {
+      "key": "object-2-title",
+      "sourceId": "s3",
+      "start": 0,
+      "end": 5,
+      "text": "场地支持："
+    },
+    {
+      "key": "object-2-body",
+      "sourceId": "s3",
+      "start": 5,
+      "end": 33,
+      "text": "受理会议室预约，使用部门需提前说明人数、时段和布置需求。"
+    },
+    {
+      "key": "object-3-title",
+      "sourceId": "s4",
+      "start": 0,
+      "end": 5,
+      "text": "资料支持："
+    },
+    {
+      "key": "object-3-body",
+      "sourceId": "s4",
+      "start": 5,
+      "end": 24,
+      "text": "提供制度查询、材料打印和文件归档指引。"
+    },
+    {
+      "key": "object-4-title",
+      "sourceId": "s5",
+      "start": 0,
+      "end": 5,
+      "text": "访客支持："
+    },
+    {
+      "key": "object-4-body",
+      "sourceId": "s5",
+      "start": 5,
+      "end": 38,
+      "text": "协助外来人员登记、路线说明和接待联系，访问受限区域需事先获得授权。"
+    },
+    {
+      "key": "shared",
+      "sourceId": "s6",
+      "start": 0,
+      "end": 30,
+      "text": "以上服务统一通过服务台登记，紧急事项需同时电话联系值班人员。"
+    }
+  ],
+  "contentFrame": {
+    "x": 55,
+    "y": 166,
+    "width": 1020,
+    "height": 450
+  },
+  "frozenPlan": {
+    "id": "services",
+    "file": "稿件/模拟稿库/布局试排-services.md",
+    "type": "parallel",
+    "title": 1,
+    "objects": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "shared": 6,
+    "icons": [
+      "device-desktop",
+      "door",
+      "files",
+      "id-badge"
+    ]
+  },
+  "presentationMetadata": {
+    "sharedLabel": "共同入口"
+  },
+  "assets": [
+    {
+      "asset": "assets/结构图/双排折角便签-002",
+      "id": "parallel-folded-notes-grid",
+      "schemaVersion": 5,
+      "sourceSha256": "3e2f6231e4263ff7f02b76f9604f26e84241f575a58d69c18d6cba5565eed3d9",
+      "cssSha256": "201798a451bcc4105f941589cd804690dfb97fe89a1c4650c77286884afe6ac0",
+      "textCapacity": {
+        "maxCombinedCharsByState": {
+          "4": 52,
+          "5": 46,
+          "6": 42,
+          "7": 34,
+          "8": 32
+        },
+        "maxPointsPerItem": 2
+      },
+      "use": "main slot"
+    }
+  ],
+  "probes": [],
+  "program": "composePageLayout/cards/vertical",
+  "layout": {
+    "id": "cards-composed",
+    "name": "卡片式 · 按规则试排",
+    "family": "cards",
+    "width": 1020,
+    "height": 450,
+    "gap": 16,
+    "slots": [
+      {
+        "id": "slot-1",
+        "order": 1,
+        "weight": 385,
+        "aspectRatio": 1.6,
+        "minWidth": 140,
+        "minHeight": 120,
+        "x": 0,
+        "y": 0,
+        "width": 1020,
+        "height": 385
+      },
+      {
+        "id": "slot-2",
+        "order": 2,
+        "weight": 49,
+        "aspectRatio": 1.6,
+        "minWidth": 140,
+        "minHeight": 49,
+        "x": 0,
+        "y": 401,
+        "width": 1020,
+        "height": 49
+      }
+    ]
+  },
+  "sharedBandHeight": 49,
+  "sharedScope": {
+    "source": "s6",
+    "appliesTo": [
+      "object-1",
+      "object-2",
+      "object-3",
+      "object-4"
+    ]
+  },
+  "textComponents": [
+    "heading-content-flow (asset)",
+    "statement-flow (band)"
+  ],
+  "assetParameters": {
+    "items": [
+      {
+        "key": "object-1",
+        "title": "设备支持：",
+        "body": "提供会议设备借用和故障报修，借用前确认设备状态，归还时完成清点。",
+        "iconKey": "device-desktop"
+      },
+      {
+        "key": "object-2",
+        "title": "场地支持：",
+        "body": "受理会议室预约，使用部门需提前说明人数、时段和布置需求。",
+        "iconKey": "door"
+      },
+      {
+        "key": "object-3",
+        "title": "资料支持：",
+        "body": "提供制度查询、材料打印和文件归档指引。",
+        "iconKey": "files"
+      },
+      {
+        "key": "object-4",
+        "title": "访客支持：",
+        "body": "协助外来人员登记、路线说明和接待联系，访问受限区域需事先获得授权。",
+        "iconKey": "id-badge"
+      }
+    ]
+  },
+  "assetCompiler": {
+    "status": "passed",
+    "frame": {
+      "width": 1020,
+      "height": 385
+    },
+    "nodes": [
+      {
+        "name": "note-sheet-shadow-0",
+        "kind": "path",
+        "frame": {
+          "left": 216.928,
+          "top": 138.581,
+          "width": 273.281,
+          "height": 45.79,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-sheet-paper-0",
+        "kind": "path",
+        "frame": {
+          "left": 216.906,
+          "top": 12,
+          "width": 273.219,
+          "height": 172.219,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-sheet-header-0",
+        "kind": "shape",
+        "frame": {
+          "left": 216.906,
+          "top": 12,
+          "width": 273.219,
+          "height": 28.979,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-sheet-fold-0",
+        "kind": "path",
+        "frame": {
+          "left": 389.463,
+          "top": 142.542,
+          "width": 100.662,
+          "height": 41.709,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-icon-panel-0",
+        "kind": "shape",
+        "frame": {
+          "left": 216.906,
+          "top": 12,
+          "width": 44,
+          "height": 28.969,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-icon-0",
+        "kind": "image",
+        "frame": {
+          "left": 227.906,
+          "top": 16.063,
+          "width": 20,
+          "height": 20,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-heading-0",
+        "kind": "text",
+        "frame": {
+          "left": 260.906,
+          "top": 12,
+          "width": 196.438,
+          "height": 28.969,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-body-0",
+        "kind": "text",
+        "frame": {
+          "left": 230.141,
+          "top": 52.547,
+          "width": 213.969,
+          "height": 74.484,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-sheet-shadow-1",
+        "kind": "path",
+        "frame": {
+          "left": 529.881,
+          "top": 138.581,
+          "width": 273.281,
+          "height": 45.79,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-sheet-paper-1",
+        "kind": "path",
+        "frame": {
+          "left": 529.859,
+          "top": 12,
+          "width": 273.219,
+          "height": 172.219,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-sheet-header-1",
+        "kind": "shape",
+        "frame": {
+          "left": 529.859,
+          "top": 12,
+          "width": 273.219,
+          "height": 28.979,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-sheet-fold-1",
+        "kind": "path",
+        "frame": {
+          "left": 702.416,
+          "top": 142.542,
+          "width": 100.662,
+          "height": 41.709,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-icon-panel-1",
+        "kind": "shape",
+        "frame": {
+          "left": 529.859,
+          "top": 12,
+          "width": 44,
+          "height": 28.969,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-icon-1",
+        "kind": "image",
+        "frame": {
+          "left": 540.859,
+          "top": 16.063,
+          "width": 20,
+          "height": 20,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-heading-1",
+        "kind": "text",
+        "frame": {
+          "left": 573.859,
+          "top": 12,
+          "width": 196.438,
+          "height": 28.969,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-body-1",
+        "kind": "text",
+        "frame": {
+          "left": 543.094,
+          "top": 52.547,
+          "width": 213.969,
+          "height": 74.484,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-sheet-shadow-2",
+        "kind": "path",
+        "frame": {
+          "left": 216.928,
+          "top": 327.346,
+          "width": 273.281,
+          "height": 45.79,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-sheet-paper-2",
+        "kind": "path",
+        "frame": {
+          "left": 216.906,
+          "top": 200.766,
+          "width": 273.219,
+          "height": 172.219,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-sheet-header-2",
+        "kind": "shape",
+        "frame": {
+          "left": 216.906,
+          "top": 200.766,
+          "width": 273.219,
+          "height": 28.979,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-sheet-fold-2",
+        "kind": "path",
+        "frame": {
+          "left": 389.463,
+          "top": 331.307,
+          "width": 100.662,
+          "height": 41.709,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-icon-panel-2",
+        "kind": "shape",
+        "frame": {
+          "left": 216.906,
+          "top": 200.766,
+          "width": 44,
+          "height": 28.969,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-icon-2",
+        "kind": "image",
+        "frame": {
+          "left": 227.906,
+          "top": 204.828,
+          "width": 20,
+          "height": 20,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-heading-2",
+        "kind": "text",
+        "frame": {
+          "left": 260.906,
+          "top": 200.766,
+          "width": 196.438,
+          "height": 28.969,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-body-2",
+        "kind": "text",
+        "frame": {
+          "left": 230.141,
+          "top": 241.313,
+          "width": 213.969,
+          "height": 49.656,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-sheet-shadow-3",
+        "kind": "path",
+        "frame": {
+          "left": 529.881,
+          "top": 327.346,
+          "width": 273.281,
+          "height": 45.79,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-sheet-paper-3",
+        "kind": "path",
+        "frame": {
+          "left": 529.859,
+          "top": 200.766,
+          "width": 273.219,
+          "height": 172.219,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-sheet-header-3",
+        "kind": "shape",
+        "frame": {
+          "left": 529.859,
+          "top": 200.766,
+          "width": 273.219,
+          "height": 28.979,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-sheet-fold-3",
+        "kind": "path",
+        "frame": {
+          "left": 702.416,
+          "top": 331.307,
+          "width": 100.662,
+          "height": 41.709,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-icon-panel-3",
+        "kind": "shape",
+        "frame": {
+          "left": 529.859,
+          "top": 200.766,
+          "width": 44,
+          "height": 28.969,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-icon-3",
+        "kind": "image",
+        "frame": {
+          "left": 540.859,
+          "top": 204.828,
+          "width": 20,
+          "height": 20,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-heading-3",
+        "kind": "text",
+        "frame": {
+          "left": 573.859,
+          "top": 200.766,
+          "width": 196.438,
+          "height": 28.969,
+          "rotation": 0
+        }
+      },
+      {
+        "name": "note-body-3",
+        "kind": "text",
+        "frame": {
+          "left": 543.094,
+          "top": 241.313,
+          "width": 213.969,
+          "height": 74.484,
+          "rotation": 0
+        }
+      }
+    ],
+    "slots": [
+      {
+        "id": "object-1-icon",
+        "role": "icon",
+        "field": "items[0].iconKey",
+        "itemId": "object-1",
+        "regionId": "",
+        "contentType": "icon",
+        "required": true,
+        "textMode": "single-line",
+        "listPolicy": "none",
+        "frame": {
+          "left": 226.906,
+          "top": 15.063,
+          "width": 22,
+          "height": 22,
+          "rotation": 0
+        },
+        "capacity": {},
+        "media": {
+          "type": "icon",
+          "provider": "tabler-icons",
+          "required": true
+        }
+      },
+      {
+        "id": "object-1-content-region",
+        "role": "text-region",
+        "field": "items[0]",
+        "itemId": "object-1",
+        "regionId": "content",
+        "contentType": "text-region",
+        "required": true,
+        "textMode": "structured",
+        "listPolicy": "structured",
+        "frame": {
+          "left": 216.906,
+          "top": 12,
+          "width": 240.438,
+          "height": 130.031,
+          "rotation": 0
+        },
+        "capacity": {
+          "basis": "dom-box-font-metrics",
+          "reliable": true,
+          "derived": true,
+          "sampleFits": true,
+          "recommendedMaxChars": 34,
+          "hardMaxChars": 43
+        },
+        "innerFrame": {
+          "width": 240.438,
+          "height": 130.031,
+          "padding": {
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          }
+        },
+        "textLayout": {
+          "id": "heading-content-flow",
+          "defaultId": "heading-content-flow",
+          "compatible": [
+            "heading-content-flow",
+            "statement-flow",
+            "structured-list-flow",
+            "metric-content-flow"
+          ],
+          "contentRoles": [
+            "heading",
+            "body"
+          ],
+          "status": "resolved",
+          "align": "left",
+          "valign": "middle",
+          "density": "compact",
+          "parts": [
+            {
+              "part": "heading",
+              "field": "title",
+              "primitive": "heading",
+              "frame": {
+                "left": 260.906,
+                "top": 12,
+                "width": 196.438,
+                "height": 28.969,
+                "rotation": 0
+              },
+              "text": "设备支持：",
+              "lineCount": 1,
+              "typography": {
+                "role": "componentItemTitle",
+                "typeface": "Microsoft YaHei",
+                "fontSizePt": 14.25,
+                "fontWeight": "700",
+                "alignment": "left",
+                "lineHeightPt": 15.675
+              },
+              "capacity": {
+                "recommendedMaxChars": 8,
+                "hardMaxChars": 10,
+                "hardMaxLines": 1
+              }
+            },
+            {
+              "part": "body",
+              "field": "body",
+              "primitive": "body",
+              "frame": {
+                "left": 230.141,
+                "top": 52.547,
+                "width": 213.969,
+                "height": 74.484,
+                "rotation": 0
+              },
+              "text": "提供会议设备借用和故障\n报修，借用前确认设备状\n态，归还时完成清点。",
+              "lineCount": 3,
+              "typography": {
+                "role": "componentBody",
+                "typeface": "Microsoft YaHei",
+                "fontSizePt": 13.5,
+                "fontWeight": "400",
+                "alignment": "left",
+                "lineHeightPt": 18.63
+              },
+              "capacity": {
+                "recommendedMaxChars": 26,
+                "hardMaxChars": 33,
+                "hardMaxLines": 3
+              }
+            }
+          ]
+        },
+        "media": null
+      },
+      {
+        "id": "object-2-icon",
+        "role": "icon",
+        "field": "items[1].iconKey",
+        "itemId": "object-2",
+        "regionId": "",
+        "contentType": "icon",
+        "required": true,
+        "textMode": "single-line",
+        "listPolicy": "none",
+        "frame": {
+          "left": 539.859,
+          "top": 15.063,
+          "width": 22,
+          "height": 22,
+          "rotation": 0
+        },
+        "capacity": {},
+        "media": {
+          "type": "icon",
+          "provider": "tabler-icons",
+          "required": true
+        }
+      },
+      {
+        "id": "object-2-content-region",
+        "role": "text-region",
+        "field": "items[1]",
+        "itemId": "object-2",
+        "regionId": "content",
+        "contentType": "text-region",
+        "required": true,
+        "textMode": "structured",
+        "listPolicy": "structured",
+        "frame": {
+          "left": 529.859,
+          "top": 12,
+          "width": 240.438,
+          "height": 130.031,
+          "rotation": 0
+        },
+        "capacity": {
+          "basis": "dom-box-font-metrics",
+          "reliable": true,
+          "derived": true,
+          "sampleFits": true,
+          "recommendedMaxChars": 34,
+          "hardMaxChars": 43
+        },
+        "innerFrame": {
+          "width": 240.438,
+          "height": 130.031,
+          "padding": {
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          }
+        },
+        "textLayout": {
+          "id": "heading-content-flow",
+          "defaultId": "heading-content-flow",
+          "compatible": [
+            "heading-content-flow",
+            "statement-flow",
+            "structured-list-flow",
+            "metric-content-flow"
+          ],
+          "contentRoles": [
+            "heading",
+            "body"
+          ],
+          "status": "resolved",
+          "align": "left",
+          "valign": "middle",
+          "density": "compact",
+          "parts": [
+            {
+              "part": "heading",
+              "field": "title",
+              "primitive": "heading",
+              "frame": {
+                "left": 573.859,
+                "top": 12,
+                "width": 196.438,
+                "height": 28.969,
+                "rotation": 0
+              },
+              "text": "场地支持：",
+              "lineCount": 1,
+              "typography": {
+                "role": "componentItemTitle",
+                "typeface": "Microsoft YaHei",
+                "fontSizePt": 14.25,
+                "fontWeight": "700",
+                "alignment": "left",
+                "lineHeightPt": 15.675
+              },
+              "capacity": {
+                "recommendedMaxChars": 8,
+                "hardMaxChars": 10,
+                "hardMaxLines": 1
+              }
+            },
+            {
+              "part": "body",
+              "field": "body",
+              "primitive": "body",
+              "frame": {
+                "left": 543.094,
+                "top": 52.547,
+                "width": 213.969,
+                "height": 74.484,
+                "rotation": 0
+              },
+              "text": "受理会议室预约，使用部\n门需提前说明人数、时段\n和布置需求。",
+              "lineCount": 3,
+              "typography": {
+                "role": "componentBody",
+                "typeface": "Microsoft YaHei",
+                "fontSizePt": 13.5,
+                "fontWeight": "400",
+                "alignment": "left",
+                "lineHeightPt": 18.63
+              },
+              "capacity": {
+                "recommendedMaxChars": 26,
+                "hardMaxChars": 33,
+                "hardMaxLines": 3
+              }
+            }
+          ]
+        },
+        "media": null
+      },
+      {
+        "id": "object-3-icon",
+        "role": "icon",
+        "field": "items[2].iconKey",
+        "itemId": "object-3",
+        "regionId": "",
+        "contentType": "icon",
+        "required": true,
+        "textMode": "single-line",
+        "listPolicy": "none",
+        "frame": {
+          "left": 226.906,
+          "top": 203.828,
+          "width": 22,
+          "height": 22,
+          "rotation": 0
+        },
+        "capacity": {},
+        "media": {
+          "type": "icon",
+          "provider": "tabler-icons",
+          "required": true
+        }
+      },
+      {
+        "id": "object-3-content-region",
+        "role": "text-region",
+        "field": "items[2]",
+        "itemId": "object-3",
+        "regionId": "content",
+        "contentType": "text-region",
+        "required": true,
+        "textMode": "structured",
+        "listPolicy": "structured",
+        "frame": {
+          "left": 216.906,
+          "top": 200.766,
+          "width": 240.438,
+          "height": 130.031,
+          "rotation": 0
+        },
+        "capacity": {
+          "basis": "dom-box-font-metrics",
+          "reliable": true,
+          "derived": true,
+          "sampleFits": true,
+          "recommendedMaxChars": 25,
+          "hardMaxChars": 32
+        },
+        "innerFrame": {
+          "width": 240.438,
+          "height": 130.031,
+          "padding": {
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          }
+        },
+        "textLayout": {
+          "id": "heading-content-flow",
+          "defaultId": "heading-content-flow",
+          "compatible": [
+            "heading-content-flow",
+            "statement-flow",
+            "structured-list-flow",
+            "metric-content-flow"
+          ],
+          "contentRoles": [
+            "heading",
+            "body"
+          ],
+          "status": "resolved",
+          "align": "left",
+          "valign": "middle",
+          "density": "compact",
+          "parts": [
+            {
+              "part": "heading",
+              "field": "title",
+              "primitive": "heading",
+              "frame": {
+                "left": 260.906,
+                "top": 200.766,
+                "width": 196.438,
+                "height": 28.969,
+                "rotation": 0
+              },
+              "text": "资料支持：",
+              "lineCount": 1,
+              "typography": {
+                "role": "componentItemTitle",
+                "typeface": "Microsoft YaHei",
+                "fontSizePt": 14.25,
+                "fontWeight": "700",
+                "alignment": "left",
+                "lineHeightPt": 15.675
+              },
+              "capacity": {
+                "recommendedMaxChars": 8,
+                "hardMaxChars": 10,
+                "hardMaxLines": 1
+              }
+            },
+            {
+              "part": "body",
+              "field": "body",
+              "primitive": "body",
+              "frame": {
+                "left": 230.141,
+                "top": 241.313,
+                "width": 213.969,
+                "height": 49.656,
+                "rotation": 0
+              },
+              "text": "提供制度查询、材料打印\n和文件归档指引。",
+              "lineCount": 2,
+              "typography": {
+                "role": "componentBody",
+                "typeface": "Microsoft YaHei",
+                "fontSizePt": 13.5,
+                "fontWeight": "400",
+                "alignment": "left",
+                "lineHeightPt": 18.63
+              },
+              "capacity": {
+                "recommendedMaxChars": 17,
+                "hardMaxChars": 22,
+                "hardMaxLines": 2
+              }
+            }
+          ]
+        },
+        "media": null
+      },
+      {
+        "id": "object-4-icon",
+        "role": "icon",
+        "field": "items[3].iconKey",
+        "itemId": "object-4",
+        "regionId": "",
+        "contentType": "icon",
+        "required": true,
+        "textMode": "single-line",
+        "listPolicy": "none",
+        "frame": {
+          "left": 539.859,
+          "top": 203.828,
+          "width": 22,
+          "height": 22,
+          "rotation": 0
+        },
+        "capacity": {},
+        "media": {
+          "type": "icon",
+          "provider": "tabler-icons",
+          "required": true
+        }
+      },
+      {
+        "id": "object-4-content-region",
+        "role": "text-region",
+        "field": "items[3]",
+        "itemId": "object-4",
+        "regionId": "content",
+        "contentType": "text-region",
+        "required": true,
+        "textMode": "structured",
+        "listPolicy": "structured",
+        "frame": {
+          "left": 529.859,
+          "top": 200.766,
+          "width": 240.438,
+          "height": 130.031,
+          "rotation": 0
+        },
+        "capacity": {
+          "basis": "dom-box-font-metrics",
+          "reliable": true,
+          "derived": true,
+          "sampleFits": true,
+          "recommendedMaxChars": 34,
+          "hardMaxChars": 43
+        },
+        "innerFrame": {
+          "width": 240.438,
+          "height": 130.031,
+          "padding": {
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          }
+        },
+        "textLayout": {
+          "id": "heading-content-flow",
+          "defaultId": "heading-content-flow",
+          "compatible": [
+            "heading-content-flow",
+            "statement-flow",
+            "structured-list-flow",
+            "metric-content-flow"
+          ],
+          "contentRoles": [
+            "heading",
+            "body"
+          ],
+          "status": "resolved",
+          "align": "left",
+          "valign": "middle",
+          "density": "compact",
+          "parts": [
+            {
+              "part": "heading",
+              "field": "title",
+              "primitive": "heading",
+              "frame": {
+                "left": 573.859,
+                "top": 200.766,
+                "width": 196.438,
+                "height": 28.969,
+                "rotation": 0
+              },
+              "text": "访客支持：",
+              "lineCount": 1,
+              "typography": {
+                "role": "componentItemTitle",
+                "typeface": "Microsoft YaHei",
+                "fontSizePt": 14.25,
+                "fontWeight": "700",
+                "alignment": "left",
+                "lineHeightPt": 15.675
+              },
+              "capacity": {
+                "recommendedMaxChars": 8,
+                "hardMaxChars": 10,
+                "hardMaxLines": 1
+              }
+            },
+            {
+              "part": "body",
+              "field": "body",
+              "primitive": "body",
+              "frame": {
+                "left": 543.094,
+                "top": 241.313,
+                "width": 213.969,
+                "height": 74.484,
+                "rotation": 0
+              },
+              "text": "协助外来人员登记、路线\n说明和接待联系，访问受\n限区域需事先获得授权。",
+              "lineCount": 3,
+              "typography": {
+                "role": "componentBody",
+                "typeface": "Microsoft YaHei",
+                "fontSizePt": 13.5,
+                "fontWeight": "400",
+                "alignment": "left",
+                "lineHeightPt": 18.63
+              },
+              "capacity": {
+                "recommendedMaxChars": 26,
+                "hardMaxChars": 33,
+                "hardMaxLines": 3
+              }
+            }
+          ]
+        },
+        "media": null
+      }
+    ]
+  },
+  "status": "passed",
+  "html": "output/services-compact.html",
+  "png": "output/services-compact.png",
+  "geometry": {
+    "canvas": {
+      "x": 0,
+      "y": 0,
+      "width": 1280,
+      "height": 720
+    },
+    "contentFrame": {
+      "x": 55,
+      "y": 166,
+      "width": 1020,
+      "height": 450
+    },
+    "text": [
+      {
+        "key": "title",
+        "source": "s1",
+        "text": "园区服务支持",
+        "inBody": false,
+        "box": {
+          "x": 55,
+          "y": 62,
+          "width": 1170,
+          "height": 69
+        },
+        "lines": [
+          {
+            "x": 55,
+            "y": 61,
+            "width": 240,
+            "height": 52
+          }
+        ],
+        "boundary": null,
+        "fontSize": 40,
+        "lineHeight": "50px",
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "clientHeight": 69,
+        "scrollHeight": 69,
+        "slotBottomClearance": null
+      },
+      {
+        "key": "object-1-title",
+        "source": "s2",
+        "text": "设备支持：",
+        "inBody": true,
+        "box": {
+          "x": 315.90625,
+          "y": 178,
+          "width": 196.4375,
+          "height": 28.96875
+        },
+        "lines": [
+          {
+            "x": 324.171875,
+            "y": 179.03125,
+            "width": 95,
+            "height": 25
+          }
+        ],
+        "boundary": {
+          "x": 271.90625,
+          "y": 178,
+          "width": 240.4375,
+          "height": 130.03125
+        },
+        "fontSize": 19,
+        "lineHeight": "20.9px",
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "clientHeight": 29,
+        "scrollHeight": 29,
+        "slotBottomClearance": 104
+      },
+      {
+        "key": "object-1-body",
+        "source": "s2",
+        "text": "提供会议设备借用和故障报修，借用前确认设备状态，归还时完成清点。",
+        "inBody": true,
+        "box": {
+          "x": 285.140625,
+          "y": 218.546875,
+          "width": 213.96875,
+          "height": 74.484375
+        },
+        "lines": [
+          {
+            "x": 285.140625,
+            "y": 218.546875,
+            "width": 198,
+            "height": 24
+          },
+          {
+            "x": 285.140625,
+            "y": 243.375,
+            "width": 198,
+            "height": 24
+          },
+          {
+            "x": 285.140625,
+            "y": 268.203125,
+            "width": 180,
+            "height": 24
+          }
+        ],
+        "boundary": {
+          "x": 271.90625,
+          "y": 178,
+          "width": 240.4375,
+          "height": 130.03125
+        },
+        "fontSize": 18,
+        "lineHeight": "24.84px",
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "clientHeight": 74,
+        "scrollHeight": 74,
+        "slotBottomClearance": 15.828125
+      },
+      {
+        "key": "object-2-title",
+        "source": "s3",
+        "text": "场地支持：",
+        "inBody": true,
+        "box": {
+          "x": 628.859375,
+          "y": 178,
+          "width": 196.4375,
+          "height": 28.96875
+        },
+        "lines": [
+          {
+            "x": 637.125,
+            "y": 179.03125,
+            "width": 95,
+            "height": 25
+          }
+        ],
+        "boundary": {
+          "x": 584.859375,
+          "y": 178,
+          "width": 240.4375,
+          "height": 130.03125
+        },
+        "fontSize": 19,
+        "lineHeight": "20.9px",
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "clientHeight": 29,
+        "scrollHeight": 29,
+        "slotBottomClearance": 104
+      },
+      {
+        "key": "object-2-body",
+        "source": "s3",
+        "text": "受理会议室预约，使用部门需提前说明人数、时段和布置需求。",
+        "inBody": true,
+        "box": {
+          "x": 598.09375,
+          "y": 218.546875,
+          "width": 213.96875,
+          "height": 74.484375
+        },
+        "lines": [
+          {
+            "x": 598.09375,
+            "y": 218.546875,
+            "width": 198,
+            "height": 24
+          },
+          {
+            "x": 598.09375,
+            "y": 243.375,
+            "width": 198,
+            "height": 24
+          },
+          {
+            "x": 598.09375,
+            "y": 268.203125,
+            "width": 108,
+            "height": 24
+          }
+        ],
+        "boundary": {
+          "x": 584.859375,
+          "y": 178,
+          "width": 240.4375,
+          "height": 130.03125
+        },
+        "fontSize": 18,
+        "lineHeight": "24.84px",
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "clientHeight": 74,
+        "scrollHeight": 74,
+        "slotBottomClearance": 15.828125
+      },
+      {
+        "key": "object-3-title",
+        "source": "s4",
+        "text": "资料支持：",
+        "inBody": true,
+        "box": {
+          "x": 315.90625,
+          "y": 366.765625,
+          "width": 196.4375,
+          "height": 28.96875
+        },
+        "lines": [
+          {
+            "x": 324.171875,
+            "y": 367.796875,
+            "width": 95,
+            "height": 25
+          }
+        ],
+        "boundary": {
+          "x": 271.90625,
+          "y": 366.765625,
+          "width": 240.4375,
+          "height": 130.03125
+        },
+        "fontSize": 19,
+        "lineHeight": "20.9px",
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "clientHeight": 29,
+        "scrollHeight": 29,
+        "slotBottomClearance": 104
+      },
+      {
+        "key": "object-3-body",
+        "source": "s4",
+        "text": "提供制度查询、材料打印和文件归档指引。",
+        "inBody": true,
+        "box": {
+          "x": 285.140625,
+          "y": 407.3125,
+          "width": 213.96875,
+          "height": 49.65625
+        },
+        "lines": [
+          {
+            "x": 285.140625,
+            "y": 407.3125,
+            "width": 198,
+            "height": 24
+          },
+          {
+            "x": 285.140625,
+            "y": 432.140625,
+            "width": 144,
+            "height": 24
+          }
+        ],
+        "boundary": {
+          "x": 271.90625,
+          "y": 366.765625,
+          "width": 240.4375,
+          "height": 130.03125
+        },
+        "fontSize": 18,
+        "lineHeight": "24.84px",
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "clientHeight": 50,
+        "scrollHeight": 50,
+        "slotBottomClearance": 40.65625
+      },
+      {
+        "key": "object-4-title",
+        "source": "s5",
+        "text": "访客支持：",
+        "inBody": true,
+        "box": {
+          "x": 628.859375,
+          "y": 366.765625,
+          "width": 196.4375,
+          "height": 28.96875
+        },
+        "lines": [
+          {
+            "x": 637.125,
+            "y": 367.796875,
+            "width": 95,
+            "height": 25
+          }
+        ],
+        "boundary": {
+          "x": 584.859375,
+          "y": 366.765625,
+          "width": 240.4375,
+          "height": 130.03125
+        },
+        "fontSize": 19,
+        "lineHeight": "20.9px",
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "clientHeight": 29,
+        "scrollHeight": 29,
+        "slotBottomClearance": 104
+      },
+      {
+        "key": "object-4-body",
+        "source": "s5",
+        "text": "协助外来人员登记、路线说明和接待联系，访问受限区域需事先获得授权。",
+        "inBody": true,
+        "box": {
+          "x": 598.09375,
+          "y": 407.3125,
+          "width": 213.96875,
+          "height": 74.484375
+        },
+        "lines": [
+          {
+            "x": 598.09375,
+            "y": 407.3125,
+            "width": 198,
+            "height": 24
+          },
+          {
+            "x": 598.09375,
+            "y": 432.140625,
+            "width": 198,
+            "height": 24
+          },
+          {
+            "x": 598.09375,
+            "y": 456.96875,
+            "width": 198,
+            "height": 24
+          }
+        ],
+        "boundary": {
+          "x": 584.859375,
+          "y": 366.765625,
+          "width": 240.4375,
+          "height": 130.03125
+        },
+        "fontSize": 18,
+        "lineHeight": "24.84px",
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "clientHeight": 74,
+        "scrollHeight": 74,
+        "slotBottomClearance": 15.828125
+      },
+      {
+        "key": "shared",
+        "source": "s6",
+        "text": "以上服务统一通过服务台登记，紧急事项需同时电话联系值班人员。",
+        "inBody": true,
+        "box": {
+          "x": 173,
+          "y": 579.53125,
+          "width": 884,
+          "height": 23.9375
+        },
+        "lines": [
+          {
+            "x": 173,
+            "y": 578.53125,
+            "width": 540,
+            "height": 24
+          }
+        ],
+        "boundary": {
+          "x": 55,
+          "y": 567,
+          "width": 1020,
+          "height": 49
+        },
+        "fontSize": 18,
+        "lineHeight": "23.94px",
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "clientHeight": 24,
+        "scrollHeight": 24,
+        "slotBottomClearance": 13.46875
+      }
+    ],
+    "regions": [
+      {
+        "id": "main",
+        "x": 55,
+        "y": 166,
+        "width": 1020,
+        "height": 385
+      },
+      {
+        "id": "shared",
+        "x": 55,
+        "y": 567,
+        "width": 1020,
+        "height": 49
+      }
+    ],
+    "objects": [
+      {
+        "id": "notes-review notes-adapted",
+        "kind": "asset-root",
+        "x": 55,
+        "y": 166,
+        "width": 1020,
+        "height": 385,
+        "slot": "main"
+      },
+      {
+        "id": "note-sheet-shadow-0",
+        "kind": "path",
+        "x": 271.90625,
+        "y": 304.5807800292969,
+        "width": 273.3043212890625,
+        "height": 45.790435791015625,
+        "slot": "main"
+      },
+      {
+        "id": "note-sheet-paper-0",
+        "kind": "path",
+        "x": 271.90625,
+        "y": 178,
+        "width": 273.21875,
+        "height": 172.21875,
+        "slot": "main"
+      },
+      {
+        "id": "note-sheet-header-0",
+        "kind": "shape",
+        "x": 271.90625,
+        "y": 178,
+        "width": 273.21875,
+        "height": 28.979110717773438,
+        "slot": "main"
+      },
+      {
+        "id": "note-sheet-fold-0",
+        "kind": "path",
+        "x": 444.0340576171875,
+        "y": 308.54180908203125,
+        "width": 101.0909423828125,
+        "height": 41.709320068359375,
+        "slot": "main"
+      },
+      {
+        "id": "note-icon-panel-0",
+        "kind": "shape",
+        "x": 271.90625,
+        "y": 178,
+        "width": 44,
+        "height": 28.96875,
+        "slot": "main"
+      },
+      {
+        "id": "note-icon-0",
+        "kind": "image",
+        "x": 282.90625,
+        "y": 182.0625,
+        "width": 20,
+        "height": 20,
+        "slot": "main"
+      },
+      {
+        "id": "note-sheet-shadow-1",
+        "kind": "path",
+        "x": 584.859375,
+        "y": 304.5807800292969,
+        "width": 273.3043212890625,
+        "height": 45.790435791015625,
+        "slot": "main"
+      },
+      {
+        "id": "note-sheet-paper-1",
+        "kind": "path",
+        "x": 584.859375,
+        "y": 178,
+        "width": 273.21875,
+        "height": 172.21875,
+        "slot": "main"
+      },
+      {
+        "id": "note-sheet-header-1",
+        "kind": "shape",
+        "x": 584.859375,
+        "y": 178,
+        "width": 273.21875,
+        "height": 28.979110717773438,
+        "slot": "main"
+      },
+      {
+        "id": "note-sheet-fold-1",
+        "kind": "path",
+        "x": 756.9871826171875,
+        "y": 308.54180908203125,
+        "width": 101.0909423828125,
+        "height": 41.709320068359375,
+        "slot": "main"
+      },
+      {
+        "id": "note-icon-panel-1",
+        "kind": "shape",
+        "x": 584.859375,
+        "y": 178,
+        "width": 44,
+        "height": 28.96875,
+        "slot": "main"
+      },
+      {
+        "id": "note-icon-1",
+        "kind": "image",
+        "x": 595.859375,
+        "y": 182.0625,
+        "width": 20,
+        "height": 20,
+        "slot": "main"
+      },
+      {
+        "id": "note-sheet-shadow-2",
+        "kind": "path",
+        "x": 271.90625,
+        "y": 493.3464050292969,
+        "width": 273.3043212890625,
+        "height": 45.790435791015625,
+        "slot": "main"
+      },
+      {
+        "id": "note-sheet-paper-2",
+        "kind": "path",
+        "x": 271.90625,
+        "y": 366.765625,
+        "width": 273.21875,
+        "height": 172.21875,
+        "slot": "main"
+      },
+      {
+        "id": "note-sheet-header-2",
+        "kind": "shape",
+        "x": 271.90625,
+        "y": 366.765625,
+        "width": 273.21875,
+        "height": 28.9791259765625,
+        "slot": "main"
+      },
+      {
+        "id": "note-sheet-fold-2",
+        "kind": "path",
+        "x": 444.0340576171875,
+        "y": 497.30743408203125,
+        "width": 101.0909423828125,
+        "height": 41.70928955078125,
+        "slot": "main"
+      },
+      {
+        "id": "note-icon-panel-2",
+        "kind": "shape",
+        "x": 271.90625,
+        "y": 366.765625,
+        "width": 44,
+        "height": 28.96875,
+        "slot": "main"
+      },
+      {
+        "id": "note-icon-2",
+        "kind": "image",
+        "x": 282.90625,
+        "y": 370.828125,
+        "width": 20,
+        "height": 20,
+        "slot": "main"
+      },
+      {
+        "id": "note-sheet-shadow-3",
+        "kind": "path",
+        "x": 584.859375,
+        "y": 493.3464050292969,
+        "width": 273.3043212890625,
+        "height": 45.790435791015625,
+        "slot": "main"
+      },
+      {
+        "id": "note-sheet-paper-3",
+        "kind": "path",
+        "x": 584.859375,
+        "y": 366.765625,
+        "width": 273.21875,
+        "height": 172.21875,
+        "slot": "main"
+      },
+      {
+        "id": "note-sheet-header-3",
+        "kind": "shape",
+        "x": 584.859375,
+        "y": 366.765625,
+        "width": 273.21875,
+        "height": 28.9791259765625,
+        "slot": "main"
+      },
+      {
+        "id": "note-sheet-fold-3",
+        "kind": "path",
+        "x": 756.9871826171875,
+        "y": 497.30743408203125,
+        "width": 101.0909423828125,
+        "height": 41.70928955078125,
+        "slot": "main"
+      },
+      {
+        "id": "note-icon-panel-3",
+        "kind": "shape",
+        "x": 584.859375,
+        "y": 366.765625,
+        "width": 44,
+        "height": 28.96875,
+        "slot": "main"
+      },
+      {
+        "id": "note-icon-3",
+        "kind": "image",
+        "x": 595.859375,
+        "y": 370.828125,
+        "width": 20,
+        "height": 20,
+        "slot": "main"
+      }
+    ],
+    "labels": [
+      {
+        "text": "共同入口",
+        "box": {
+          "x": 77,
+          "y": 579,
+          "width": 76,
+          "height": 25
+        },
+        "fontSize": 19
+      }
+    ],
+    "comparisonRows": [],
+    "errors": [],
+    "minBodyFont": 18,
+    "bodyTextBottomClearance": 13.46875
+  },
+  "browser": "157.0.8103.79"
+}

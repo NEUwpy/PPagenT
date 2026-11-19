@@ -1,0 +1,261 @@
+{
+  "shell": {
+    "id": "academic-report-shell-001",
+    "slideSize": {
+      "width": 1280,
+      "height": 720
+    },
+    "slots": {
+      "pageNumber": {
+        "left": 44.45,
+        "top": 31.9,
+        "width": 71.23,
+        "height": 48.47
+      },
+      "sectionLabel": {
+        "left": 98.87,
+        "top": 31.9,
+        "width": 177.93,
+        "height": 45.24
+      },
+      "logo": {
+        "left": 984.21,
+        "top": 20.82,
+        "width": 280.94,
+        "height": 62.29
+      },
+      "titleBand": {
+        "left": 35.17,
+        "top": 87.55,
+        "width": 1209.67,
+        "height": 52.42
+      },
+      "pageTitle": {
+        "left": 9.04,
+        "top": 88.85,
+        "width": 1250.55,
+        "height": 48.47
+      },
+      "contentFrame": {
+        "left": 55,
+        "top": 166,
+        "width": 1170,
+        "height": 492
+      },
+      "bottomReserve": {
+        "left": 35.17,
+        "top": 658,
+        "width": 1209.67,
+        "height": 62
+      }
+    },
+    "rules": {
+      "titleDividerY": 147.22,
+      "bottomRuleY": 689.24,
+      "logicFrame": "contentFrame",
+      "componentSizing": "responsive-within-frame",
+      "shellOwned": [
+        "pageNumber",
+        "sectionLabel",
+        "logo",
+        "titleBand",
+        "pageTitle",
+        "bottomReserve"
+      ],
+      "componentOwned": [
+        "contentFrame"
+      ]
+    }
+  },
+  "parameters": {
+    "inputs": [
+      {
+        "key": "atmosphere",
+        "title": "公司内部人力资源",
+        "body": "变革氛围尚未完全形成，"
+      },
+      {
+        "key": "system",
+        "title": "信息系统支撑",
+        "body": "能力仍有差距，"
+      },
+      {
+        "key": "mechanism",
+        "title": "缺乏市场化",
+        "body": "管理机制。"
+      }
+    ],
+    "result": {
+      "title": "变革落地阻力重重",
+      "body": ""
+    }
+  },
+  "context": "顶层设计已完成；",
+  "sourceReconstruction": "顶层设计已完成；公司内部人力资源变革氛围尚未完全形成，信息系统支撑能力仍有差距，缺乏市场化管理机制。",
+  "calls": [
+    {
+      "page": "a",
+      "assetId": "convergence-many-to-one-003",
+      "source": "assets/结构图/多路汇聚结果-003/review.mjs",
+      "sourceHash": "850b27b7e4a747675fa314dde7dae5ffd7d84c54dc87c0bfe114086a004a35dc",
+      "localSourceHash": "454a4c9609303dacd30d681a28f43370b429414dbe343986406c0eb81dc2e3ea",
+      "call": "renderAdaptiveMarkup(parameters,{frame})",
+      "frame": {
+        "width": 624,
+        "height": 240
+      },
+      "layout": {
+        "frame": {
+          "width": 624,
+          "height": 240
+        },
+        "inputLeft": 7.488,
+        "inputWidth": 240,
+        "inputHeight": 64,
+        "inputTop": 12,
+        "inputArea": 152,
+        "resultRight": 7.488,
+        "resultTop": 30,
+        "resultWidth": 210,
+        "resultHeight": 180,
+        "pathWidth": 10,
+        "adaptive": true
+      },
+      "parameters": {
+        "inputs": [
+          {
+            "key": "atmosphere",
+            "title": "公司内部人力资源",
+            "body": "变革氛围尚未完全形成，"
+          },
+          {
+            "key": "system",
+            "title": "信息系统支撑",
+            "body": "能力仍有差距，"
+          },
+          {
+            "key": "mechanism",
+            "title": "缺乏市场化",
+            "body": "管理机制。"
+          }
+        ],
+        "result": {
+          "title": "变革落地阻力重重",
+          "body": ""
+        }
+      },
+      "themeModule": "src/runtime/skins/university-mckinsey.mjs",
+      "themeOverrides": {
+        "componentHeading": 15.75,
+        "componentTitle": 15.75,
+        "componentItemTitle": 15.75,
+        "componentLead": 13.5,
+        "componentBody": 13.5,
+        "componentLabel": 13.5,
+        "componentMeta": 12
+      },
+      "unchangedFunctions": [
+        "normalize",
+        "pathMarkup",
+        "inputMarkup",
+        "resultMarkup",
+        "visualComponent.renderMarkup",
+        "renderAdaptiveMarkup"
+      ],
+      "localChanges": [
+        "resolveConvergenceLayout: inputWidth clamp minimum190→240",
+        "resolveConvergenceLayout: inputHeight clamp minimum58→64",
+        "CSS: consume generated frame/input/result variables",
+        "CSS: fix legacy text-region padding/gap and map Skin font roles"
+      ],
+      "invariants": [
+        "separate inputs",
+        "smooth thick cubic curves",
+        "one result",
+        "all paths meet result boundary"
+      ]
+    },
+    {
+      "page": "b",
+      "assetId": "convergence-many-to-one-003",
+      "source": "assets/结构图/多路汇聚结果-003/review.mjs",
+      "sourceHash": "850b27b7e4a747675fa314dde7dae5ffd7d84c54dc87c0bfe114086a004a35dc",
+      "localSourceHash": "454a4c9609303dacd30d681a28f43370b429414dbe343986406c0eb81dc2e3ea",
+      "call": "renderAdaptiveMarkup(parameters,{frame})",
+      "frame": {
+        "width": 758,
+        "height": 232
+      },
+      "layout": {
+        "frame": {
+          "width": 758,
+          "height": 232
+        },
+        "inputLeft": 9.096,
+        "inputWidth": 240,
+        "inputHeight": 64,
+        "inputTop": 12,
+        "inputArea": 144,
+        "resultRight": 9.096,
+        "resultTop": 26,
+        "resultWidth": 210,
+        "resultHeight": 180,
+        "pathWidth": 10.612,
+        "adaptive": true
+      },
+      "parameters": {
+        "inputs": [
+          {
+            "key": "atmosphere",
+            "title": "公司内部人力资源",
+            "body": "变革氛围尚未完全形成，"
+          },
+          {
+            "key": "system",
+            "title": "信息系统支撑",
+            "body": "能力仍有差距，"
+          },
+          {
+            "key": "mechanism",
+            "title": "缺乏市场化",
+            "body": "管理机制。"
+          }
+        ],
+        "result": {
+          "title": "变革落地阻力重重",
+          "body": ""
+        }
+      },
+      "themeModule": "src/runtime/skins/university-mckinsey.mjs",
+      "themeOverrides": {
+        "componentHeading": 15.75,
+        "componentTitle": 15.75,
+        "componentItemTitle": 15.75,
+        "componentLead": 13.5,
+        "componentBody": 13.5,
+        "componentLabel": 13.5,
+        "componentMeta": 12
+      },
+      "unchangedFunctions": [
+        "normalize",
+        "pathMarkup",
+        "inputMarkup",
+        "resultMarkup",
+        "visualComponent.renderMarkup",
+        "renderAdaptiveMarkup"
+      ],
+      "localChanges": [
+        "resolveConvergenceLayout: inputWidth clamp minimum190→240",
+        "resolveConvergenceLayout: inputHeight clamp minimum58→64",
+        "CSS: consume generated frame/input/result variables",
+        "CSS: fix legacy text-region padding/gap and map Skin font roles"
+      ],
+      "invariants": [
+        "separate inputs",
+        "smooth thick cubic curves",
+        "one result",
+        "all paths meet result boundary"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,496 @@
+{
+  "version": "gray-compile-report@1",
+  "status": "passed",
+  "phase": "output",
+  "input": "input-plan.json",
+  "canvas": {
+    "width": 1280,
+    "height": 720
+  },
+  "errors": [],
+  "candidates": [
+    {
+      "layout": {
+        "id": "standard-row-content-weighted",
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "margin": 54,
+        "gap": 28,
+        "padding": 12,
+        "direction": "row",
+        "columns": [
+          690,
+          454
+        ],
+        "density": "standard"
+      },
+      "valid": true,
+      "score": 12.302083333333334,
+      "frame": {
+        "x": 54,
+        "y": 170.890625,
+        "width": 1172,
+        "height": 489.109375
+      },
+      "groups": [
+        {
+          "id": "group:amount-rules",
+          "bounds": {
+            "x": 54,
+            "y": 223.984375,
+            "width": 690,
+            "height": 331.46875
+          },
+          "visibleHeight": 318.375
+        },
+        {
+          "id": "group:emergency-rule",
+          "bounds": {
+            "x": 772,
+            "y": 223.984375,
+            "width": 454,
+            "height": 331.46875
+          },
+          "visibleHeight": 170.75
+        }
+      ],
+      "errors": []
+    },
+    {
+      "layout": {
+        "id": "standard-row-balanced",
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "margin": 54,
+        "gap": 28,
+        "padding": 12,
+        "direction": "row",
+        "columns": [
+          572,
+          572
+        ],
+        "density": "standard"
+      },
+      "valid": true,
+      "score": 16.4765625,
+      "frame": {
+        "x": 54,
+        "y": 170.890625,
+        "width": 1172,
+        "height": 489.109375
+      },
+      "groups": [
+        {
+          "id": "group:amount-rules",
+          "bounds": {
+            "x": 54,
+            "y": 223.984375,
+            "width": 572,
+            "height": 331.46875
+          },
+          "visibleHeight": 318.375
+        },
+        {
+          "id": "group:emergency-rule",
+          "bounds": {
+            "x": 654,
+            "y": 223.984375,
+            "width": 572,
+            "height": 331.46875
+          },
+          "visibleHeight": 144.65625
+        }
+      ],
+      "errors": []
+    },
+    {
+      "layout": {
+        "id": "standard-row-stronger-content-weight",
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "margin": 54,
+        "gap": 28,
+        "padding": 12,
+        "direction": "row",
+        "columns": [
+          798,
+          346
+        ],
+        "density": "standard"
+      },
+      "valid": true,
+      "score": 14.302083333333334,
+      "frame": {
+        "x": 54,
+        "y": 170.890625,
+        "width": 1172,
+        "height": 489.109375
+      },
+      "groups": [
+        {
+          "id": "group:amount-rules",
+          "bounds": {
+            "x": 54,
+            "y": 223.984375,
+            "width": 798,
+            "height": 331.46875
+          },
+          "visibleHeight": 318.375
+        },
+        {
+          "id": "group:emergency-rule",
+          "bounds": {
+            "x": 880,
+            "y": 223.984375,
+            "width": 346,
+            "height": 331.46875
+          },
+          "visibleHeight": 170.75
+        }
+      ],
+      "errors": []
+    },
+    {
+      "layout": {
+        "id": "standard-column",
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "margin": 54,
+        "gap": 28,
+        "padding": 12,
+        "direction": "column",
+        "columns": [
+          1172,
+          1172
+        ],
+        "density": "standard"
+      },
+      "valid": false,
+      "score": null,
+      "frame": {
+        "x": 54,
+        "y": 170.890625,
+        "width": 1172,
+        "height": 489.109375
+      },
+      "groups": [
+        {
+          "id": "group:amount-rules",
+          "bounds": {
+            "x": 54,
+            "y": 223.984375,
+            "width": 1172,
+            "height": 331.46875
+          },
+          "visibleHeight": 318.375
+        },
+        {
+          "id": "group:emergency-rule",
+          "bounds": {
+            "x": 54,
+            "y": 583.453125,
+            "width": 1172,
+            "height": 157.75
+          },
+          "visibleHeight": 144.65625
+        }
+      ],
+      "errors": [
+        {
+          "code": "canvas-overflow",
+          "id": "slide",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:emergency-rule",
+          "bounds": {
+            "x": 54,
+            "y": 583.453125,
+            "width": 1172,
+            "height": 157.75
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:emergency-procedure",
+          "bounds": {
+            "x": 67,
+            "y": 641.203125,
+            "width": 1146,
+            "height": 87
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:emergency-procedure:title",
+          "bounds": {
+            "x": 67,
+            "y": 641.203125,
+            "width": 1146,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:emergency-procedure:title",
+          "bounds": {
+            "x": 67,
+            "y": 641.203125,
+            "width": 1146,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:emergency-procedure:body",
+          "bounds": {
+            "x": 67,
+            "y": 676.015625,
+            "width": 1146,
+            "height": 52.1875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:emergency-procedure:body",
+          "bounds": {
+            "x": 67,
+            "y": 676.015625,
+            "width": 1146,
+            "height": 52.1875
+          }
+        }
+      ]
+    },
+    {
+      "layout": {
+        "id": "compact-row-content-weighted",
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "margin": 54,
+        "gap": 28,
+        "padding": 10,
+        "direction": "row",
+        "columns": [
+          690,
+          454
+        ],
+        "density": "compact"
+      },
+      "valid": true,
+      "score": 186.30208333333334,
+      "frame": {
+        "x": 54,
+        "y": 151.890625,
+        "width": 1172,
+        "height": 528.109375
+      },
+      "groups": [
+        {
+          "id": "group:amount-rules",
+          "bounds": {
+            "x": 54,
+            "y": 200.359375,
+            "width": 690,
+            "height": 307.59375
+          },
+          "visibleHeight": 297.125
+        },
+        {
+          "id": "group:emergency-rule",
+          "bounds": {
+            "x": 772,
+            "y": 200.359375,
+            "width": 454,
+            "height": 307.59375
+          },
+          "visibleHeight": 161.5
+        }
+      ],
+      "errors": []
+    },
+    {
+      "layout": {
+        "id": "compact-row-balanced",
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "margin": 54,
+        "gap": 28,
+        "padding": 10,
+        "direction": "row",
+        "columns": [
+          572,
+          572
+        ],
+        "density": "compact"
+      },
+      "valid": true,
+      "score": 190.34114583333334,
+      "frame": {
+        "x": 54,
+        "y": 151.890625,
+        "width": 1172,
+        "height": 528.109375
+      },
+      "groups": [
+        {
+          "id": "group:amount-rules",
+          "bounds": {
+            "x": 54,
+            "y": 200.359375,
+            "width": 572,
+            "height": 307.59375
+          },
+          "visibleHeight": 297.125
+        },
+        {
+          "id": "group:emergency-rule",
+          "bounds": {
+            "x": 654,
+            "y": 200.359375,
+            "width": 572,
+            "height": 307.59375
+          },
+          "visibleHeight": 137.03125
+        }
+      ],
+      "errors": []
+    },
+    {
+      "layout": {
+        "id": "compact-row-stronger-content-weight",
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "margin": 54,
+        "gap": 28,
+        "padding": 10,
+        "direction": "row",
+        "columns": [
+          798,
+          346
+        ],
+        "density": "compact"
+      },
+      "valid": true,
+      "score": 188.30208333333334,
+      "frame": {
+        "x": 54,
+        "y": 151.890625,
+        "width": 1172,
+        "height": 528.109375
+      },
+      "groups": [
+        {
+          "id": "group:amount-rules",
+          "bounds": {
+            "x": 54,
+            "y": 200.359375,
+            "width": 798,
+            "height": 307.59375
+          },
+          "visibleHeight": 297.125
+        },
+        {
+          "id": "group:emergency-rule",
+          "bounds": {
+            "x": 880,
+            "y": 200.359375,
+            "width": 346,
+            "height": 307.59375
+          },
+          "visibleHeight": 161.5
+        }
+      ],
+      "errors": []
+    },
+    {
+      "layout": {
+        "id": "compact-column",
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "margin": 54,
+        "gap": 28,
+        "padding": 10,
+        "direction": "column",
+        "columns": [
+          1172,
+          1172
+        ],
+        "density": "compact"
+      },
+      "valid": false,
+      "score": null,
+      "frame": {
+        "x": 54,
+        "y": 151.890625,
+        "width": 1172,
+        "height": 528.109375
+      },
+      "groups": [
+        {
+          "id": "group:amount-rules",
+          "bounds": {
+            "x": 54,
+            "y": 200.359375,
+            "width": 1172,
+            "height": 307.59375
+          },
+          "visibleHeight": 297.125
+        },
+        {
+          "id": "group:emergency-rule",
+          "bounds": {
+            "x": 54,
+            "y": 535.953125,
+            "width": 1172,
+            "height": 147.5
+          },
+          "visibleHeight": 137.03125
+        }
+      ],
+      "errors": [
+        {
+          "code": "object-outside-body",
+          "id": "group:emergency-rule",
+          "bounds": {
+            "x": 54,
+            "y": 535.953125,
+            "width": 1172,
+            "height": 147.5
+          }
+        }
+      ]
+    }
+  ],
+  "inputSha256": "9cb0bf028cbefdb4b61b24d18d484b4a379569c5f614a54c1a5c7093864cc170",
+  "browser": "157.0.8103.79",
+  "selected": "standard-row-content-weighted",
+  "artifacts": {
+    "html": "gray.html",
+    "png": "gray.png",
+    "layout": "layout.json",
+    "plan": "page-plan.json"
+  }
+}

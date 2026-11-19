@@ -177,11 +177,11 @@ test('显式字号候选按实测选择，保持所有正文与容量边界', ()
   assert.ok(regions.every(region => region.height <= 492), JSON.stringify(regions));
 });
 
-test('附注最小化：关系一句＋摘引短语，与 rules/排版.md 同步', async () => {
+test('既有蓝框渲染器的附注保留关系一句与摘引短语，对照归档规则', async () => {
   const block = { id: 'b1', label: '势能到动能阻力重重', text: '变革氛围尚未完全形成／信息系统支撑能力仍有差距／缺乏市场化管理机制', kind: 'diagram', expression: '三因并列、箭头汇聚指向结果框「变革落地阻力重重」', relationship: '汇聚：三项原因共同造成落地阻力', production: '三框一果箭头图', sourceIds: ['s1'] };
   assert.equal(regionBody(block), '本条建议画结构图：三因并列、箭头汇聚指向结果框「变革落地阻力重重」；节点短语（摘引）：变革氛围尚未完全形成／信息系统支撑能力仍有差距／缺乏市场化管理机制。');
   assert.doesNotMatch(regionBody(block), /作:|承:|关:|制:/u);
-  const rules = await fs.readFile(new URL('../rules/排版.md', import.meta.url), 'utf8');
+  const rules = await fs.readFile(new URL('../docs/archive/20261120灰稿编译试验前/source/rules/排版.md', import.meta.url), 'utf8');
   assert.match(rules, /定案图形区以蓝框框出、面积＝图真实占位/u);
 });
 

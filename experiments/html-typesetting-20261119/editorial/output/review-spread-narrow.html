@@ -1,0 +1,149 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>第二部分：存在的不足与感悟</title><style>:root {
+  color: #1b1b1b;
+  background: #deddd9;
+  --paper: #fcfcfa;
+  --muted: #54544f;
+  --line: #d2d2ca;
+  --serif: "Noto Serif SC", "SimSun", serif;
+  --sans: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+}
+* { box-sizing: border-box }
+body { margin: 0; font-family: var(--sans) }
+.sheet {
+  inline-size: min(100%, 1280px);
+  min-block-size: min(100dvh, 720px);
+  margin-inline: auto;
+  padding: 42px clamp(28px, 5.625vw, 72px) 34px;
+  background: var(--paper);
+  container-type: inline-size;
+}
+h1, h2, h3, p { margin: 0; font-weight: inherit }
+.serif { font-family: var(--serif) }
+.kicker {
+  display: block;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.5;
+  letter-spacing: .12em;
+  font-weight: 550;
+  margin-block-end: 4px;
+}
+h1 { font-size: clamp(38px, 5.3cqi, 62px); line-height: 1.22; font-weight: 720; letter-spacing: -.045em }
+.masthead { padding-block-end: 20px; border-block-end: 2px solid #252525 }
+.text { line-break: strict; text-wrap: pretty }
+h1.text, h2.text, h3.text { text-wrap: balance }
+.phrases { word-break: keep-all; overflow-wrap: normal }
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.5;
+  letter-spacing: .12em;
+  font-weight: 650;
+}
+.section-label::after { content: ""; flex: 1 1 0; border-block-end: 1px solid var(--line) }
+
+.review {
+  display: grid;
+  grid-template-columns: minmax(0, var(--first-share)) minmax(0, 1fr);
+  gap: clamp(24px, 5cqi, 58px);
+  padding-block-start: 22px;
+}
+.review section { min-inline-size: 0 }
+.review article h3 { font-size: 22px; line-height: 1.36; font-weight: 740; margin-block-end: 4px }
+.review article .text-body { font-size: 19px; line-height: 1.475; color: #292927 }
+.review article + article { margin-block-start: 14px }
+.review .issues article + article { margin-block-start: 25px }
+.review .insights { padding-inline-start: 25px; border-inline-start: 1px solid var(--line) }
+.review .articles { min-inline-size: 0 }
+.review.is-spread {
+  grid-template-columns: minmax(0, var(--first-share)) minmax(0, 1fr);
+  gap: clamp(22px, 3.35cqi, 38px);
+}
+.review.is-spread .insights { padding-inline-start: clamp(18px, 2cqi, 24px) }
+.review.is-spread .insights .articles {
+  columns: 2;
+  column-gap: clamp(23px, 2.85cqi, 34px);
+  column-fill: balance;
+}
+.review.is-spread .insights article {
+  break-inside: avoid-column;
+  margin: 0 0 14px;
+}
+.review.is-spread article h3 { font-size: 21px; line-height: 1.37 }
+.review.is-spread article .text-body { line-height: 1.4 }
+.review.is-spread .issues article:first-child h3 { text-wrap: pretty }
+.review.is-spread article .has-balanced-lines { text-wrap: balance }
+
+.continuous {
+  columns: 2;
+  column-gap: 58px;
+  column-rule: 1px solid var(--line);
+  padding-block-start: 22px;
+}
+.continuous section { display: contents }
+.continuous .articles { display: contents }
+.continuous .section-label { break-after: avoid-column }
+.continuous article { break-inside: avoid-column; margin-block-end: 14px }
+.continuous article h3 { font-size: 22px; font-weight: 700; line-height: 1.35 }
+.continuous article .text-body { font-size: 19px; line-height: 1.5 }
+
+.decisions-document .masthead { padding-block: 11px 24px }
+.conditions {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 24px;
+  align-items: baseline;
+  border-block-end: 1px solid #aaa9a2;
+  padding: 21px 0;
+  margin-block-end: 31px;
+}
+.conditions h2 { font-size: 18px; color: var(--muted); font-weight: 650; letter-spacing: .09em }
+.conditions p { max-inline-size: 36em; font-size: 22px; line-height: 1.5; font-weight: 520 }
+.options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: auto auto 1fr;
+  column-gap: clamp(34px, 6cqi, 72px);
+}
+.options article {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 3;
+  row-gap: 16px;
+  min-inline-size: 0;
+}
+.options article + article { padding-inline-start: 28px; border-inline-start: 1px solid var(--line) }
+.options h2 { font-size: clamp(28px, 3.25cqi, 38px); font-weight: 700; line-height: 1.3 }
+.options .method { font-size: 22px; line-height: 1.58; max-inline-size: 24em; text-wrap: balance }
+.options .tradeoff {
+  border-block-start: 1px solid var(--line);
+  padding-block-start: 14px;
+  font-size: 20px;
+  line-height: 1.65;
+  color: #353533;
+}
+.options .tradeoff p + p { margin-block-start: 8px }
+.options strong { font-weight: 720; color: #1b1b1b }
+
+@container (max-width: 870px) {
+  .review { gap: 24px }
+  .review .insights { padding-inline-start: 18px }
+  .review article + article { margin-block-start: 11px }
+}
+@container (max-width: 620px) {
+  .review, .review.is-spread, .options, .conditions { grid-template-columns: minmax(0, 1fr) }
+  .review .insights, .options article + article { border-inline-start: 0; padding-inline-start: 0 }
+  .options { grid-template-rows: none; row-gap: 32px }
+  .options article { grid-row: auto; grid-template-rows: auto; row-gap: 13px }
+  .conditions { gap: 7px }
+  .continuous { columns: 1 }
+  .review.is-spread .insights .articles { columns: 1 }
+}
+</style></head>
+    <body><main class="sheet review-document"><header class="masthead"><span class="text kicker" data-bind="chapter">第二部分</span><h1 class="text serif" data-bind="title">存在的不足与感悟</h1></header>
+      <div class="review is-spread" style="--first-share:30%"><section class="issues"><h2 class="text section-label" data-bind="label-0">两点不足</h2><div class="articles"><article><h3 class="text " data-bind="heading-0-0">势能到动能阻力重重</h3><p class="text text-body" data-bind="body-0-0">完成顶层设计后，变革落地就是关键。现阶段公司内部人力资源变革氛围尚未完全形成，信息系统支撑能力仍存在差距，缺乏市场化的管理机制，造成变革落地阻力重重。</p></article><article><h3 class="text " data-bind="heading-0-1">合规管理短板亟待提升</h3><p class="text text-body" data-bind="body-0-1">2017年的巡视整改虽然取得了一定成效，但也充分暴露出人力条线基础管理薄弱的问题，反映出条线内部认识有待提升、作风有待转变、能力有待增强、协同有待深化。</p></article></div></section><section class="insights"><h2 class="text section-label" data-bind="label-1">四点感悟</h2><div class="articles"><article><h3 class="text " data-bind="heading-1-0">统一语言才能合拍共鸣</h3><p class="text text-body" data-bind="body-1-0">要想真正解决人力资源与业务两张皮的问题，就要沿用BLM管理模型，与业务单位统一语言、统一目标、统一策略，实现从业务战略到人力资源战略的规划设计端到端人力资源落地解决方案，达成“三个市场化”转型目标。</p></article><article><h3 class="text " data-bind="heading-1-1">解决问题才是检验变革的唯一标准</h3><p class="text text-body" data-bind="body-1-1">体系变革是否成效，要以能否“解决实际问题”为唯一检验标准，力求变革落地有实效。</p></article><article><h3 class="text " data-bind="heading-1-2">顶层设计没有完结篇</h3><p class="text text-body" data-bind="body-1-2">要在加速试点、小步快跑的基础上，进一步强化与行业优秀实践对标，结合落地成效持续开展迭代优化，完善体系建设。</p></article><article><h3 class="text " data-bind="heading-1-3">统筹兼顾才能弹好钢琴</h3><p class="text text-body" data-bind="body-1-3">强化“变革是硬道理，合规是硬要求，作风是硬标准”管理意识，统筹兼顾，攻守有道，以规范管理的“效率”来强化变革转型的“力度”，以优良的思想作风、工作作风、战斗作风跑出变革转型的“加速度”。作风改进不要求立竿见影，重在持续用力。</p></article></div></section></div></main></body></html>

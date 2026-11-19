@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PPagenT · 页面方案到灰稿</title>
+  <style>
+    :root { background:#ededeb;color:#262625;font:15px/1.55 "Noto Sans SC","Microsoft YaHei",sans-serif }
+    * { box-sizing:border-box }
+    body { margin:0 }
+    main { max-width:1416px;margin:auto;padding:24px clamp(16px,4vw,48px) 40px }
+    header { display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;border-bottom:1px solid #cdcdca;padding-bottom:12px }
+    h1 { margin:0;font-size:26px;letter-spacing:-.03em }
+    a { color:#34506a;text-underline-offset:3px }
+    nav { display:flex;gap:6px;flex-wrap:wrap;margin:15px 0 12px }
+    button { border:0;padding:7px 12px;background:transparent;font:inherit;color:inherit;cursor:pointer }
+    button[aria-pressed=true] { background:#292929;color:#fff;border-radius:3px }
+    button:focus-visible,a:focus-visible { outline:2px solid #456482;outline-offset:3px }
+    .files { display:flex;gap:16px;flex-wrap:wrap;margin:12px 0 15px }
+    figure { margin:0;background:white;border:1px solid #d5d5d1;box-shadow:0 7px 22px #00000013 }
+    img { display:block;max-width:100%;width:100%;height:auto;margin:auto;object-fit:contain }
+    .narrow { max-width:1020px }
+    summary { cursor:pointer;font-weight:650 }
+    .diagnostic { margin-top:19px }
+    .diagnostic a { margin-inline-start:10px }
+    @media(max-width:680px) { h1 { font-size:21px } main { padding-top:16px } }
+  </style>
+</head>
+<body>
+  <main>
+    <header><h1>结构化页面方案到灰稿</h1><a href="inputs/README.md">输入怎么写</a></header>
+    <nav aria-label="编译示例">
+      <button type="button" data-example="hr" aria-pressed="true">不足与感悟</button>
+      <button type="button" data-example="hr-narrow" aria-pressed="false">不足与感悟 · 窄版</button>
+      <button type="button" data-example="options" aria-pressed="false">上线方案对比</button>
+      <button type="button" data-example="duty" aria-pressed="false">汛期值班</button>
+      <button type="button" data-example="duty-narrow" aria-pressed="false">汛期值班 · 窄版</button>
+    </nav>
+    <div class="files">
+      <a id="plan" href="inputs/hr.json">输入 JSON</a>
+      <a id="html" href="output/hr/gray.html">灰稿 HTML</a>
+      <a id="layout" href="output/hr/layout.json">实测布局</a>
+      <a id="report" href="output/hr/report.json">编译回执</a>
+    </div>
+    <figure id="preview"><a id="image-link" href="output/hr/gray.html"><img id="png" width="1280" height="720" src="output/hr/gray.png" alt="不足与感悟灰稿"></a></figure>
+    <div class="diagnostic">
+      <strong>容量拒绝样例</strong><a href="output/pressure/report.json">检查回执</a><a href="output/pressure/rejected.html">失败预览</a>
+    </div>
+  </main>
+  <script>
+    const names = {hr:"不足与感悟","hr-narrow":"不足与感悟窄版",options:"上线方案对比",duty:"汛期值班","duty-narrow":"汛期值班窄版"};
+    const buttons = [...document.querySelectorAll("button[data-example]")];
+    function show(id) {
+      const prefix = "output/" + id + "/";
+      const narrow = id.endsWith("-narrow");
+      const png = document.querySelector("#png");
+      document.querySelector("#plan").href = "inputs/" + id.replace(/-narrow$/, "") + ".json";
+      document.querySelector("#html").href = document.querySelector("#image-link").href = prefix + "gray.html";
+      document.querySelector("#layout").href = prefix + "layout.json";
+      document.querySelector("#report").href = prefix + "report.json";
+      document.querySelector("#preview").classList.toggle("narrow", narrow);
+      png.width = narrow ? 1020 : 1280;
+      png.src = prefix + "gray.png";
+      png.alt = names[id] + "灰稿";
+      for (const button of buttons) button.setAttribute("aria-pressed", String(button.dataset.example === id));
+    }
+    for (const button of buttons) button.addEventListener("click", () => show(button.dataset.example));
+  </script>
+</body>
+</html>

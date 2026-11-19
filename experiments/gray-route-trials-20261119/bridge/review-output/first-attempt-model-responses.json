@@ -1,0 +1,68 @@
+{
+  "options": {
+    "events": [
+      {
+        "status": "running",
+        "model": "deepseek-v4-flash"
+      },
+      {
+        "status": "succeeded",
+        "durationMs": 3294,
+        "model": "deepseek-flash",
+        "usage": {
+          "prompt_tokens": 930,
+          "completion_tokens": 487,
+          "total_tokens": 1417,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 930
+        },
+        "finishReason": "stop"
+      }
+    ],
+    "finishReason": "stop",
+    "response": "{\"issues\":[{\"sourceId\":\"source-002\",\"issue\":\"标题引文只覆盖方案名称与执行方式，遗漏了“培训与支持资源集中投入”这一执行安排；该信息在组内条目中也未承载，导致来源段落信息漏项。\"},{\"sourceId\":\"source-003\",\"issue\":\"标题引文只覆盖方案名称与执行方式，遗漏了“先选择一个部门试用，再按反馈逐批推广”中的反馈驱动条件；组内条目未承载该条件，导致来源段落信息漏项。\"}],\"plan\":{\"title\":{\"text\":\"两种上线方案\",\"sourceId\":\"source-001\",\"quote\":\"两种上线方案\"},\"kind\":\"comparison\",\"groups\":[{\"id\":\"centralized\",\"heading\":{\"text\":\"集中上线方案\",\"sourceId\":\"source-002\",\"quote\":\"集中上线方案：在一个周末完成全部部门切换，培训与支持资源集中投入。\"},\"items\":[{\"id\":\"centralized-advantage\",\"text\":\"优势是过渡期短。\",\"sourceId\":\"source-002\",\"quote\":\"优势是过渡期短\"},{\"id\":\"centralized-risk\",\"text\":\"风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。\",\"sourceId\":\"source-002\",\"quote\":\"风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。\"}]},{\"id\":\"phased\",\"heading\":{\"text\":\"分批上线方案\",\"sourceId\":\"source-003\",\"quote\":\"分批上线方案：先选择一个部门试用，再按反馈逐批推广。\"},\"items\":[{\"id\":\"phased-advantage\",\"text\":\"优点是能及时修正规则。\",\"sourceId\":\"source-003\",\"quote\":\"优点是能及时修正规则\"},{\"id\":\"phased-cost\",\"text\":\"代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。\",\"sourceId\":\"source-003\",\"quote\":\"代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。\"}]}],\"scopeNotes\":[{\"id\":\"rollback-drill\",\"text\":\"两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。\",\"sourceId\":\"source-004\",\"quote\":\"两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。\",\"appliesTo\":[\"centralized\",\"phased\"]}]}}"
+  },
+  "spares": {
+    "events": [
+      {
+        "status": "running",
+        "model": "deepseek-v4-flash"
+      },
+      {
+        "status": "succeeded",
+        "durationMs": 4648,
+        "model": "deepseek-flash",
+        "usage": {
+          "prompt_tokens": 1376,
+          "completion_tokens": 943,
+          "total_tokens": 2319,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 1376
+        },
+        "finishReason": "stop"
+      }
+    ],
+    "finishReason": "stop",
+    "response": "{\"issues\":[{\"sourceId\":\"source-002\",\"issue\":\"集中供应组缺少“由中心库统一采购、统一配送”这一执行方式信息，标题引用了该句但未作为条目承载。\"},{\"sourceId\":\"source-002\",\"issue\":\"就近供应组缺少“由各站点自行采购”这一执行方式信息，标题引用了该句但未作为条目承载。\"},{\"sourceId\":\"source-003\",\"issue\":\"“建议按备件分级确定供应方式”被并入阈值附注，但阈值本身是建议性判断，附注未保留“建议”的义务强度，且未说明500元边界（以上/以下）的归属。\"}],\"plan\":{\"title\":{\"text\":\"备件供应方式对比说明\",\"sourceId\":\"source-001\",\"quote\":\"备件供应方式对比说明\"},\"kind\":\"comparison\",\"groups\":[{\"id\":\"centralized-supply\",\"heading\":{\"text\":\"集中供应\",\"sourceId\":\"source-002\",\"quote\":\"集中供应由中心库统一采购、统一配送\"},\"items\":[{\"id\":\"centralized-mode\",\"text\":\"由中心库统一采购、统一配送\",\"sourceId\":\"source-002\",\"quote\":\"由中心库统一采购、统一配送\"},{\"id\":\"centralized-cost\",\"text\":\"单件采购成本较低\",\"sourceId\":\"source-002\",\"quote\":\"单件采购成本较低\"},{\"id\":\"centralized-lead-time\",\"text\":\"配送周期平均 5 个工作日\",\"sourceId\":\"source-002\",\"quote\":\"配送周期平均 5 个工作日\"},{\"id\":\"centralized-urgent\",\"text\":\"紧急需求须另走加急流程\",\"sourceId\":\"source-002\",\"quote\":\"紧急需求须另走加急流程\"}]},{\"id\":\"nearby-supply\",\"heading\":{\"text\":\"就近供应\",\"sourceId\":\"source-002\",\"quote\":\"就近供应由各站点自行采购\"},\"items\":[{\"id\":\"nearby-mode\",\"text\":\"由各站点自行采购\",\"sourceId\":\"source-002\",\"quote\":\"由各站点自行采购\"},{\"id\":\"nearby-response\",\"text\":\"响应时间可缩短至 1 个工作日以内\",\"sourceId\":\"source-002\",\"quote\":\"响应时间可缩短至 1 个工作日以内\"},{\"id\":\"nearby-price\",\"text\":\"单价普遍高出 8% 至 12%\",\"sourceId\":\"source-002\",\"quote\":\"单价普遍高出 8% 至 12%\"}]}],\"scopeNotes\":[{\"id\":\"note-not-exclusive\",\"text\":\"两种方式并非互斥\",\"sourceId\":\"source-003\",\"quote\":\"两种方式并非互斥\",\"appliesTo\":[\"centralized-supply\",\"nearby-supply\"]},{\"id\":\"note-common-parts\",\"text\":\"常用件适合集中供应\",\"sourceId\":\"source-003\",\"quote\":\"常用件适合集中供应\",\"appliesTo\":[\"centralized-supply\"]},{\"id\":\"note-wear-parts\",\"text\":\"价值低、消耗快的易损件适合就近供应\",\"sourceId\":\"source-003\",\"quote\":\"价值低、消耗快的易损件适合就近供应\",\"appliesTo\":[\"nearby-supply\"]},{\"id\":\"note-value-threshold\",\"text\":\"建议按备件分级确定供应方式：单件价值 500 元以上的集中采购，500 元以下的由站点自行采购\",\"sourceId\":\"source-003\",\"quote\":\"建议按备件分级确定供应方式：单件价值 500 元以上的集中采购，500 元以下的由站点自行采购\",\"appliesTo\":[\"centralized-supply\",\"nearby-supply\"]},{\"id\":\"note-safety-critical\",\"text\":\"涉及安全停机的关键备件，无论金额均须报设备科备案后加急处理\",\"sourceId\":\"source-003\",\"quote\":\"涉及安全停机的关键备件，无论金额均须报设备科备案后加急处理\",\"appliesTo\":[\"centralized-supply\",\"nearby-supply\"]},{\"id\":\"note-effective-date\",\"text\":\"本说明自下发之日起执行\",\"sourceId\":\"source-004\",\"quote\":\"本说明自下发之日起执行\",\"appliesTo\":[\"centralized-supply\",\"nearby-supply\"]},{\"id\":\"note-precedence\",\"text\":\"原《备件领用暂行规定》中与本文不一致的，以本文为准\",\"sourceId\":\"source-004\",\"quote\":\"原《备件领用暂行规定》中与本文不一致的，以本文为准\",\"appliesTo\":[\"centralized-supply\",\"nearby-supply\"]}]}}"
+  },
+  "duty": {
+    "events": [
+      {
+        "status": "running",
+        "model": "deepseek-v4-flash"
+      },
+      {
+        "status": "failed",
+        "durationMs": 10900,
+        "model": "deepseek-v4-flash"
+      }
+    ],
+    "error": "模型请求在 25000ms 内没有完成：fetch failed"
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "schemaVersion": "gray-page-plan@1",
+  "page": {
+    "id": "procurement",
+    "title": {
+      "text": "办公用品采购管理规定",
+      "sourceIds": [
+        "s-title"
+      ]
+    },
+    "claim": {
+      "text": "常规采购按单笔金额办理，应急采购须限时补办",
+      "sourceIds": [
+        "s-low",
+        "s-mid",
+        "s-high",
+        "s-deadline"
+      ]
+    },
+    "groups": [
+      {
+        "id": "amount-rules",
+        "title": {
+          "text": "常规采购的金额情形",
+          "sourceIds": [
+            "s-low",
+            "s-mid",
+            "s-high"
+          ]
+        },
+        "relation": "sequence",
+        "items": [
+          {
+            "id": "low-amount",
+            "title": {
+              "text": "单笔金额 500 元以下",
+              "sourceIds": [
+                "s-low"
+              ]
+            },
+            "body": {
+              "text": "由部门负责人审批后自行采购。",
+              "sourceIds": [
+                "s-low"
+              ]
+            }
+          },
+          {
+            "id": "middle-amount",
+            "title": {
+              "text": "单笔 500 元至 5000 元",
+              "sourceIds": [
+                "s-mid"
+              ]
+            },
+            "body": {
+              "text": "报综合部汇总，每月集中采购一次。",
+              "sourceIds": [
+                "s-mid"
+              ]
+            }
+          },
+          {
+            "id": "high-amount",
+            "title": {
+              "text": "单笔 5000 元以上",
+              "sourceIds": [
+                "s-high"
+              ]
+            },
+            "body": {
+              "text": "须经分管领导审批，并执行比价程序。",
+              "sourceIds": [
+                "s-high"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "emergency-rule",
+        "title": {
+          "text": "应急采购",
+          "sourceIds": [
+            "s-emergency-order"
+          ]
+        },
+        "relation": "independent",
+        "items": [
+          {
+            "id": "emergency-procedure",
+            "title": {
+              "text": "补办要求",
+              "sourceIds": [
+                "s-deadline"
+              ]
+            },
+            "body": {
+              "text": "可先执行采购。补办时限为 3 个工作日，逾期视为违规采购。\n按先后：执行采购；补办手续",
+              "sourceIds": [
+                "s-emergency-order",
+                "s-deadline"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "scopeNotes": [
+      {
+        "id": "all-records",
+        "text": {
+          "text": "所有采购均需留存发票和验收记录，按季度归档备查。",
+          "sourceIds": [
+            "s-records"
+          ]
+        },
+        "appliesTo": [
+          "amount-rules",
+          "emergency-rule"
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "s-title",
+      "file": "稿件/模拟稿库/行政信息/A03-办公用品采购规定.md",
+      "quote": "办公用品采购管理规定"
+    },
+    {
+      "id": "s-low",
+      "file": "稿件/模拟稿库/行政信息/A03-办公用品采购规定.md",
+      "quote": "单笔金额 500 元以下的，由部门负责人审批后自行采购。"
+    },
+    {
+      "id": "s-mid",
+      "file": "稿件/模拟稿库/行政信息/A03-办公用品采购规定.md",
+      "quote": "单笔 500 元至 5000 元的，报综合部汇总，每月集中采购一次。"
+    },
+    {
+      "id": "s-high",
+      "file": "稿件/模拟稿库/行政信息/A03-办公用品采购规定.md",
+      "quote": "单笔 5000 元以上的，须经分管领导审批，并执行比价程序。"
+    },
+    {
+      "id": "s-emergency-order",
+      "file": "稿件/模拟稿库/行政信息/A03-办公用品采购规定.md",
+      "quote": "应急采购可先执行、后补办手续"
+    },
+    {
+      "id": "s-deadline",
+      "file": "稿件/模拟稿库/行政信息/A03-办公用品采购规定.md",
+      "quote": "补办时限为 3 个工作日，逾期视为违规采购。"
+    },
+    {
+      "id": "s-records",
+      "file": "稿件/模拟稿库/行政信息/A03-办公用品采购规定.md",
+      "quote": "所有采购均需留存发票和验收记录，按季度归档备查。"
+    }
+  ]
+}

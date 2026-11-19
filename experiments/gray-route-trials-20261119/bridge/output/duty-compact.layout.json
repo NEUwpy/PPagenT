@@ -1,0 +1,686 @@
+{
+  "version": "experiment/gray-page@1",
+  "canvas": {
+    "width": 1280,
+    "height": 720
+  },
+  "frame": {
+    "x": 55,
+    "y": 166,
+    "width": 1020,
+    "height": 450
+  },
+  "source": {
+    "file": "稿件/模拟稿库/行政信息/A05-汛期值班与应急处置安排.md",
+    "sha256": "ebab5d0b861490169a07b96de5be7028ec8a0ef2a2608385690d44d674aac575",
+    "sources": [
+      {
+        "id": "source-001",
+        "text": "汛期值班与应急处置安排",
+        "start": 0,
+        "end": 11
+      },
+      {
+        "id": "source-002",
+        "text": "汛期自 6 月 1 日至 9 月 30 日。值班实行 24 小时双人值守，值班人员须在整点前后 15 分钟内完成一次巡查记录；交接班时，上一班须向下一班交代未处置事项与已采取措施，交接不清的，由交班人承担后果。",
+        "start": 15,
+        "end": 120
+      },
+      {
+        "id": "source-003",
+        "text": "发现险情按分级处置：一般渗漏、积水，由值班人员现场处理并做好记录；出现管涌、滑坡征兆，立即报告带班领导，同时组织人员撤离危险区域，不得擅自处置；涉及人员受伤或设备停机的，无论级别均须立即上报指挥部，并在 30 分钟内提交书面情况说明。",
+        "start": 124,
+        "end": 241
+      },
+      {
+        "id": "source-004",
+        "text": "连续降雨超过 12 小时或单日降雨量超过 100 毫米时，启动加密巡查，巡查间隔缩短至 1 小时；天气好转后经带班领导确认方可恢复正常巡查频次。",
+        "start": 245,
+        "end": 317
+      }
+    ]
+  },
+  "semantic": {
+    "kind": "grouped",
+    "title": {
+      "id": "page-title",
+      "role": "title",
+      "text": "汛期值班与应急处置安排",
+      "sourceId": "source-001",
+      "quote": "汛期值班与应急处置安排",
+      "quoteOffset": [
+        0,
+        11
+      ]
+    },
+    "groups": [
+      {
+        "id": "duty-handover",
+        "heading": {
+          "id": "duty-handover-heading",
+          "role": "group-heading",
+          "text": "值班与交接",
+          "sourceId": "source-002",
+          "quote": "值班实行 24 小时双人值守，值班人员须在整点前后 15 分钟内完成一次巡查记录；交接班时",
+          "quoteOffset": [
+            37,
+            82
+          ]
+        },
+        "items": [
+          {
+            "id": "duty-shifts",
+            "role": "body",
+            "text": "值班实行 24 小时双人值守。",
+            "sourceId": "source-002",
+            "quote": "值班实行 24 小时双人值守",
+            "quoteOffset": [
+              37,
+              51
+            ]
+          },
+          {
+            "id": "duty-log",
+            "role": "body",
+            "text": "巡查记录须由值班人员在整点前后 15 分钟内完成一次。",
+            "sourceId": "source-002",
+            "quote": "值班人员须在整点前后 15 分钟内完成一次巡查记录",
+            "quoteOffset": [
+              52,
+              77
+            ]
+          },
+          {
+            "id": "duty-handover-responsibility",
+            "role": "body",
+            "text": "交接班时，上一班须向下一班交代未处置事项和已采取措施。交接不清的后果由交班人承担。",
+            "sourceId": "source-002",
+            "quote": "交接班时，上一班须向下一班交代未处置事项与已采取措施，交接不清的，由交班人承担后果。",
+            "quoteOffset": [
+              78,
+              120
+            ]
+          }
+        ]
+      },
+      {
+        "id": "incident-response",
+        "heading": {
+          "id": "incident-response-heading",
+          "role": "group-heading",
+          "text": "险情分级处置",
+          "sourceId": "source-003",
+          "quote": "发现险情按分级处置",
+          "quoteOffset": [
+            124,
+            133
+          ]
+        },
+        "items": [
+          {
+            "id": "incident-routine",
+            "role": "body",
+            "text": "一般渗漏、积水由值班人员现场处理并记录。",
+            "sourceId": "source-003",
+            "quote": "一般渗漏、积水，由值班人员现场处理并做好记录",
+            "quoteOffset": [
+              134,
+              156
+            ]
+          },
+          {
+            "id": "incident-danger",
+            "role": "body",
+            "text": "出现管涌、滑坡征兆须立即报告带班领导，同时组织人员撤离危险区域，不得擅自处置。",
+            "sourceId": "source-003",
+            "quote": "出现管涌、滑坡征兆，立即报告带班领导，同时组织人员撤离危险区域，不得擅自处置",
+            "quoteOffset": [
+              157,
+              195
+            ]
+          }
+        ]
+      },
+      {
+        "id": "intensified-patrol",
+        "heading": {
+          "id": "intensified-patrol-heading",
+          "role": "group-heading",
+          "text": "加密巡查",
+          "sourceId": "source-004",
+          "quote": "加密巡查",
+          "quoteOffset": [
+            276,
+            280
+          ]
+        },
+        "items": [
+          {
+            "id": "patrol-trigger",
+            "role": "body",
+            "text": "连续降雨超过 12 小时或单日降雨量超过 100 毫米时，启动加密巡查，间隔缩短至 1 小时。",
+            "sourceId": "source-004",
+            "quote": "连续降雨超过 12 小时或单日降雨量超过 100 毫米时，启动加密巡查，巡查间隔缩短至 1 小时",
+            "quoteOffset": [
+              245,
+              293
+            ]
+          },
+          {
+            "id": "patrol-return",
+            "role": "body",
+            "text": "天气好转后，经带班领导确认方可恢复正常巡查频次。",
+            "sourceId": "source-004",
+            "quote": "天气好转后经带班领导确认方可恢复正常巡查频次。",
+            "quoteOffset": [
+              294,
+              317
+            ]
+          }
+        ]
+      }
+    ],
+    "scopeNotes": [
+      {
+        "id": "flood-season",
+        "role": "scope-note",
+        "text": "汛期自 6 月 1 日至 9 月 30 日。",
+        "sourceId": "source-002",
+        "quote": "汛期自 6 月 1 日至 9 月 30 日。",
+        "quoteOffset": [
+          15,
+          37
+        ],
+        "appliesTo": [
+          "duty-handover",
+          "incident-response",
+          "intensified-patrol"
+        ]
+      },
+      {
+        "id": "incident-command-report",
+        "role": "scope-note",
+        "text": "涉及人员受伤或设备停机的，无论险情级别，均须立即上报指挥部，并在 30 分钟内提交书面情况说明。",
+        "sourceId": "source-003",
+        "quote": "涉及人员受伤或设备停机的，无论级别均须立即上报指挥部，并在 30 分钟内提交书面情况说明。",
+        "quoteOffset": [
+          196,
+          241
+        ],
+        "appliesTo": [
+          "incident-response"
+        ]
+      }
+    ]
+  },
+  "selected": {
+    "variant": "columns",
+    "artifact": "duty-compact-columns"
+  },
+  "nodes": [
+    {
+      "id": "page-title",
+      "role": "title",
+      "bounds": {
+        "x": 55,
+        "y": 79,
+        "width": 1020,
+        "height": 42
+      },
+      "lineBounds": [
+        {
+          "x": 55,
+          "y": 77,
+          "width": 385,
+          "height": 46
+        }
+      ],
+      "text": "汛期值班与应急处置安排",
+      "sourceId": "source-001",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 35,
+        "lineHeightPx": 42,
+        "weight": 700,
+        "align": "left"
+      }
+    },
+    {
+      "id": "duty-handover-heading",
+      "role": "group-heading",
+      "bounds": {
+        "x": 70,
+        "y": 180,
+        "width": 298,
+        "height": 26.390625
+      },
+      "lineBounds": [
+        {
+          "x": 70,
+          "y": 178,
+          "width": 110,
+          "height": 29
+        }
+      ],
+      "text": "值班与交接",
+      "sourceId": "source-002",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 22,
+        "lineHeightPx": 26.4,
+        "weight": 700,
+        "align": "left"
+      }
+    },
+    {
+      "id": "duty-shifts",
+      "role": "body",
+      "bounds": {
+        "x": 70,
+        "y": 214.390625,
+        "width": 298,
+        "height": 26.625
+      },
+      "lineBounds": [
+        {
+          "x": 70,
+          "y": 215.390625,
+          "width": 229.765625,
+          "height": 24
+        }
+      ],
+      "text": "值班实行 24 小时双人值守。",
+      "sourceId": "source-002",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "duty-log",
+      "role": "body",
+      "bounds": {
+        "x": 70,
+        "y": 249.015625,
+        "width": 298,
+        "height": 53.25
+      },
+      "lineBounds": [
+        {
+          "x": 70,
+          "y": 250.015625,
+          "width": 296.4375,
+          "height": 24
+        },
+        {
+          "x": 70,
+          "y": 276.640625,
+          "width": 144,
+          "height": 24
+        }
+      ],
+      "text": "巡查记录须由值班人员在整点前后 15 分钟内完成一次。",
+      "sourceId": "source-002",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "duty-handover-responsibility",
+      "role": "body",
+      "bounds": {
+        "x": 70,
+        "y": 310.265625,
+        "width": 298,
+        "height": 79.875
+      },
+      "lineBounds": [
+        {
+          "x": 70,
+          "y": 311.265625,
+          "width": 288,
+          "height": 24
+        },
+        {
+          "x": 70,
+          "y": 337.890625,
+          "width": 288,
+          "height": 24
+        },
+        {
+          "x": 70,
+          "y": 364.515625,
+          "width": 162,
+          "height": 24
+        }
+      ],
+      "text": "交接班时，上一班须向下一班交代未处置事项和已采取措施。交接不清的后果由交班人承担。",
+      "sourceId": "source-002",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "incident-response-heading",
+      "role": "group-heading",
+      "bounds": {
+        "x": 416,
+        "y": 180,
+        "width": 298,
+        "height": 26.390625
+      },
+      "lineBounds": [
+        {
+          "x": 416,
+          "y": 178,
+          "width": 132,
+          "height": 29
+        }
+      ],
+      "text": "险情分级处置",
+      "sourceId": "source-003",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 22,
+        "lineHeightPx": 26.4,
+        "weight": 700,
+        "align": "left"
+      }
+    },
+    {
+      "id": "incident-routine",
+      "role": "body",
+      "bounds": {
+        "x": 416,
+        "y": 214.390625,
+        "width": 298,
+        "height": 53.25
+      },
+      "lineBounds": [
+        {
+          "x": 416,
+          "y": 215.390625,
+          "width": 288,
+          "height": 24
+        },
+        {
+          "x": 416,
+          "y": 242.015625,
+          "width": 72,
+          "height": 24
+        }
+      ],
+      "text": "一般渗漏、积水由值班人员现场处理并记录。",
+      "sourceId": "source-003",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "incident-danger",
+      "role": "body",
+      "bounds": {
+        "x": 416,
+        "y": 275.640625,
+        "width": 298,
+        "height": 79.875
+      },
+      "lineBounds": [
+        {
+          "x": 416,
+          "y": 276.640625,
+          "width": 288,
+          "height": 24
+        },
+        {
+          "x": 416,
+          "y": 303.265625,
+          "width": 288,
+          "height": 24
+        },
+        {
+          "x": 416,
+          "y": 329.890625,
+          "width": 126,
+          "height": 24
+        }
+      ],
+      "text": "出现管涌、滑坡征兆须立即报告带班领导，同时组织人员撤离危险区域，不得擅自处置。",
+      "sourceId": "source-003",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "incident-command-report",
+      "role": "scope-note",
+      "bounds": {
+        "x": 416,
+        "y": 371.515625,
+        "width": 298,
+        "height": 79.875
+      },
+      "lineBounds": [
+        {
+          "x": 416,
+          "y": 372.515625,
+          "width": 288,
+          "height": 24
+        },
+        {
+          "x": 416,
+          "y": 399.140625,
+          "width": 288,
+          "height": 24
+        },
+        {
+          "x": 416,
+          "y": 425.765625,
+          "width": 242.4375,
+          "height": 24
+        }
+      ],
+      "text": "涉及人员受伤或设备停机的，无论险情级别，均须立即上报指挥部，并在 30 分钟内提交书面情况说明。",
+      "sourceId": "source-003",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "intensified-patrol-heading",
+      "role": "group-heading",
+      "bounds": {
+        "x": 762,
+        "y": 180,
+        "width": 298,
+        "height": 26.390625
+      },
+      "lineBounds": [
+        {
+          "x": 762,
+          "y": 178,
+          "width": 88,
+          "height": 29
+        }
+      ],
+      "text": "加密巡查",
+      "sourceId": "source-004",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 22,
+        "lineHeightPx": 26.4,
+        "weight": 700,
+        "align": "left"
+      }
+    },
+    {
+      "id": "patrol-trigger",
+      "role": "body",
+      "bounds": {
+        "x": 762,
+        "y": 214.390625,
+        "width": 298,
+        "height": 79.875
+      },
+      "lineBounds": [
+        {
+          "x": 762,
+          "y": 215.390625,
+          "width": 283.765625,
+          "height": 24
+        },
+        {
+          "x": 762,
+          "y": 242.015625,
+          "width": 294.328125,
+          "height": 24
+        },
+        {
+          "x": 762,
+          "y": 268.640625,
+          "width": 147.21875,
+          "height": 24
+        }
+      ],
+      "text": "连续降雨超过 12 小时或单日降雨量超过 100 毫米时，启动加密巡查，间隔缩短至 1 小时。",
+      "sourceId": "source-004",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "patrol-return",
+      "role": "body",
+      "bounds": {
+        "x": 762,
+        "y": 302.265625,
+        "width": 298,
+        "height": 53.25
+      },
+      "lineBounds": [
+        {
+          "x": 762,
+          "y": 303.265625,
+          "width": 288,
+          "height": 24
+        },
+        {
+          "x": 762,
+          "y": 329.890625,
+          "width": 144,
+          "height": 24
+        }
+      ],
+      "text": "天气好转后，经带班领导确认方可恢复正常巡查频次。",
+      "sourceId": "source-004",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    },
+    {
+      "id": "flood-season",
+      "role": "scope-note",
+      "bounds": {
+        "x": 55,
+        "y": 487.390625,
+        "width": 1020,
+        "height": 26.625
+      },
+      "lineBounds": [
+        {
+          "x": 55,
+          "y": 488.390625,
+          "width": 257.390625,
+          "height": 24
+        }
+      ],
+      "text": "汛期自 6 月 1 日至 9 月 30 日。",
+      "sourceId": "source-002",
+      "typography": {
+        "family": "\"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.64,
+        "weight": 400,
+        "align": "left"
+      }
+    }
+  ],
+  "componentInstances": [
+    {
+      "id": "duty-handover",
+      "bounds": {
+        "x": 55,
+        "y": 166,
+        "width": 328,
+        "height": 297.390625
+      },
+      "component": "experiment/text-flow-group@1"
+    },
+    {
+      "id": "incident-response",
+      "bounds": {
+        "x": 401,
+        "y": 166,
+        "width": 328,
+        "height": 297.390625
+      },
+      "component": "experiment/text-flow-group@1"
+    },
+    {
+      "id": "intensified-patrol",
+      "bounds": {
+        "x": 747,
+        "y": 166,
+        "width": 328,
+        "height": 297.390625
+      },
+      "component": "experiment/text-flow-group@1"
+    }
+  ],
+  "readingOrder": [
+    "page-title",
+    "duty-handover-heading",
+    "duty-shifts",
+    "duty-log",
+    "duty-handover-responsibility",
+    "incident-response-heading",
+    "incident-routine",
+    "incident-danger",
+    "incident-command-report",
+    "intensified-patrol-heading",
+    "patrol-trigger",
+    "patrol-return",
+    "flood-season"
+  ]
+}

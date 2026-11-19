@@ -1,0 +1,31 @@
+{
+  "version": "semantic-auto-layout@1",
+  "input": "experiments/content-to-expression-20261120/inputs/hr.json",
+  "canvas": {
+    "width": 720,
+    "height": 420
+  },
+  "routes": {
+    "baseline": {
+      "status": "rejected",
+      "errors": [
+        {
+          "code": "no-fitting-layout",
+          "message": "所有候选均被拒绝，具体文本与几何错误见 candidates"
+        }
+      ]
+    },
+    "bands": {
+      "status": "rejected",
+      "errors": [
+        {
+          "code": "no-fitting-bands",
+          "message": "没有分带候选同时通过文字、边界、关系和作用域检查"
+        }
+      ]
+    }
+  },
+  "errors": [],
+  "inputSha256": "c1f1437a4be5d72e1fc0922ab9c201209541aff18af1b8bb9c9b820379407016",
+  "status": "rejected"
+}

@@ -1,0 +1,135 @@
+{
+  "cases": [
+    {
+      "id": "options",
+      "status": "rejected",
+      "html": "output/options.html",
+      "png": "output/options.png",
+      "details": {
+        "evidence": "evidence/options.json",
+        "program": "composePageLayout/cards/vertical",
+        "contentFrame": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 492
+        },
+        "minBodyFont": 18,
+        "errorCount": 2,
+        "errorCodes": [
+          "text-clipped"
+        ],
+        "bodyTextBottomClearance": 13.46875
+      }
+    },
+    {
+      "id": "services",
+      "status": "passed",
+      "html": "output/services.html",
+      "png": "output/services.png",
+      "details": {
+        "evidence": "evidence/services.json",
+        "program": "composePageLayout/cards/vertical",
+        "contentFrame": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 492
+        },
+        "minBodyFont": 18,
+        "errorCount": 0,
+        "errorCodes": [],
+        "bodyTextBottomClearance": 13.46875
+      }
+    },
+    {
+      "id": "services-compact",
+      "status": "passed",
+      "html": "output/services-compact.html",
+      "png": "output/services-compact.png",
+      "details": {
+        "evidence": "evidence/services-compact.json",
+        "program": "composePageLayout/cards/vertical",
+        "contentFrame": {
+          "x": 55,
+          "y": 166,
+          "width": 1020,
+          "height": 450
+        },
+        "minBodyFont": 18,
+        "errorCount": 0,
+        "errorCodes": [],
+        "bodyTextBottomClearance": 13.46875
+      }
+    },
+    {
+      "id": "dense",
+      "status": "rejected",
+      "html": "output/dense.html",
+      "png": "output/dense.png",
+      "details": {
+        "evidence": "evidence/dense.json",
+        "program": "composePageLayout/cards/vertical",
+        "contentFrame": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 492
+        },
+        "minBodyFont": 18,
+        "errorCount": 18,
+        "errorCodes": [
+          "text-outside-frame",
+          "text-outside-slot",
+          "text-clipped",
+          "text-overlap"
+        ],
+        "bodyTextBottomClearance": -271.75
+      }
+    },
+    {
+      "id": "hr",
+      "status": "rejected",
+      "html": "output/hr.html",
+      "png": "output/hr.png",
+      "details": {
+        "evidence": "evidence/hr.json",
+        "program": "grouped-prose/two-columns-per-group",
+        "contentFrame": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 492
+        },
+        "minBodyFont": 18,
+        "errorCount": 6,
+        "errorCodes": [
+          "text-clipped"
+        ],
+        "bodyTextBottomClearance": 91.109375
+      }
+    },
+    {
+      "id": "hr-compact",
+      "status": "rejected",
+      "html": "output/hr-compact.html",
+      "png": "output/hr-compact.png",
+      "details": {
+        "evidence": "evidence/hr-compact.json",
+        "program": "grouped-prose/two-columns-per-group",
+        "contentFrame": {
+          "x": 55,
+          "y": 166,
+          "width": 1020,
+          "height": 450
+        },
+        "minBodyFont": 18,
+        "errorCount": 6,
+        "errorCodes": [
+          "text-clipped"
+        ],
+        "bodyTextBottomClearance": 1.234375
+      }
+    }
+  ]
+}

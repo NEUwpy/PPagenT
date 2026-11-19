@@ -7,12 +7,12 @@ export const MAIN_FLOW_STEPS = Object.freeze([
   { id: 'manuscript-normalization', name: '原稿读取与规范化', input: '长稿件文件（Markdown / TXT / DOCX）', output: '规范化原稿、转换提示', check: '正文、标题、条件和数字没有在读取时丢失', implemented: true },
   { id: 'pagination-draft', name: '长稿件 → 分页稿', input: '规范化原稿与生成要求', output: '逐页稿：页序、每页目的、主题句、正文与来源', check: '一页一事，必要内容不漏、不重复，稿量相称', implemented: false },
   { id: 'pagination-check', name: '分页稿检查', input: '原稿与逐页稿', output: '分页检查结果、遗漏或重复与修订意见', check: '页间叙事、来源覆盖、限定条件完整', implemented: false },
-  { id: 'page-expression-contract', name: '分页稿 → 页面表达契约', input: '通过检查的分页稿', output: '内容 ID、分组、主次、关系、表达需求（无坐标）', check: '分组与作用范围正确，表达不引入新事实', implemented: false },
+  { id: 'page-expression-contract', name: '分页稿 → 页面表达契约', input: '通过检查的分页稿', output: '主旨、上屏文字、分组、关系、适用范围与来源', check: '分组与作用范围正确，表达不引入新事实', implemented: false },
   { id: 'contract-check', name: '页面表达契约检查', input: '原稿、分页稿与页面表达契约', output: '契约检查结果及问题位置', check: '来源、内容、关系和表达需求一致', implemented: false },
   { id: 'candidate-measurement', name: '候选发现与容量测量', input: '页面表达契约、区域尺寸、资产目录', output: '合法版式与结构候选、容量及拒绝原因', check: '候选承载关系与实文量；缺口如实返回', implemented: false },
-  { id: 'candidate-selection', name: 'JEV 选择版式 / 结构', input: '页面表达契约与合法候选', output: '候选 ID 与判断回执', check: '只选择合法 ID，不写坐标、不修改正文', implemented: false },
+  { id: 'candidate-selection', name: '选择版式与结构', input: '页面表达契约与通过测量的候选', output: '候选 ID 与选择依据', check: '依据规则及必要复核选择合法候选，沿用已冻结的正文与关系', implemented: false },
   { id: 'content-binding', name: '内容绑定与布局检查', input: '页面表达契约与选定候选', output: '区域 / 槽位绑定、测量几何与检查结果', check: '内容完整绑定，字号、边界与容量通过', implemented: false },
-  { id: 'gray-compilation', name: '灰稿编译', input: '绑定并检查通过的页面契约', output: '灰稿 PPTX、逐页预览与可编辑性检查', check: '灰稿是契约编译视图，显示真实文字与结构占位', implemented: false },
+  { id: 'gray-compilation', name: '灰稿编译', input: '通过检查的实文与布局绑定', output: '灰稿 HTML、逐页预览、交接布局与诊断', check: '同一布局保留真实文字、结构节点、阅读顺序及来源', implemented: false },
   { id: 'gray-review', name: '灰稿验收', input: '原稿、冻结契约、灰稿与检查证据', output: '用户审阅结论与退回责任点', check: '页序、目的、内容、主次、关系和承载成立', implemented: false },
 ]);
 export const MAIN_FLOW_STAGES = MAIN_FLOW_STEPS.map(step => [step.id, step.name, `${step.input} → ${step.output}`]);

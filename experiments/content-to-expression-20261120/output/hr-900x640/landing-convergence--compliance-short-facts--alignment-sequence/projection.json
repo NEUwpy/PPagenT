@@ -1,0 +1,110 @@
+{
+  "bindings": {
+    "detail:landing:atmosphere:title": {
+      "target": "component:landing:input:atmosphere:title"
+    },
+    "detail:landing:atmosphere:body": {
+      "target": "component:landing:input:atmosphere:body"
+    },
+    "detail:landing:systems:title": {
+      "target": "component:landing:input:systems:title"
+    },
+    "detail:landing:systems:body": {
+      "target": "component:landing:input:systems:body"
+    },
+    "detail:landing:management:title": {
+      "target": "component:landing:input:management:title"
+    },
+    "detail:landing:management:body": {
+      "target": "component:landing:input:management:body"
+    },
+    "detail:landing:landing-resistance:title": {
+      "target": "component:landing:result:title"
+    },
+    "detail:compliance:title": {
+      "target": "component:compliance:label"
+    },
+    "detail:compliance:understanding:title": {
+      "target": "component:compliance:fact:1:label"
+    },
+    "detail:compliance:understanding:body": {
+      "target": "component:compliance:fact:1:value"
+    },
+    "detail:compliance:work-style:title": {
+      "target": "component:compliance:fact:2:label"
+    },
+    "detail:compliance:work-style:body": {
+      "target": "component:compliance:fact:2:value"
+    },
+    "detail:compliance:capability:title": {
+      "target": "component:compliance:fact:3:label"
+    },
+    "detail:compliance:capability:body": {
+      "target": "component:compliance:fact:3:value"
+    },
+    "detail:compliance:coordination:title": {
+      "target": "component:compliance:fact:4:label"
+    },
+    "detail:compliance:coordination:body": {
+      "target": "component:compliance:fact:4:value"
+    },
+    "detail:alignment:business-strategy:title": {
+      "target": "component:alignment:step:1"
+    },
+    "detail:alignment:hr-strategy:title": {
+      "target": "component:alignment:step:2"
+    },
+    "detail:alignment:implementation:title": {
+      "target": "component:alignment:step:3"
+    }
+  },
+  "crossCaseItems": [],
+  "relations": [
+    {
+      "owner": "landing",
+      "links": [
+        {
+          "type": "contributes-to",
+          "from": [
+            "atmosphere",
+            "systems",
+            "management"
+          ],
+          "to": "landing-resistance",
+          "sourceIds": [
+            "s-landing-causal"
+          ]
+        }
+      ]
+    },
+    {
+      "owner": "compliance",
+      "links": []
+    },
+    {
+      "owner": "alignment",
+      "links": [
+        {
+          "type": "precedes",
+          "from": [
+            "business-strategy"
+          ],
+          "to": "hr-strategy",
+          "sourceIds": [
+            "s-blm-flow"
+          ]
+        },
+        {
+          "type": "precedes",
+          "from": [
+            "hr-strategy"
+          ],
+          "to": "implementation",
+          "sourceIds": [
+            "s-blm-flow"
+          ]
+        }
+      ]
+    }
+  ]
+}

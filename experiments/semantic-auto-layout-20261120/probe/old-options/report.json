@@ -1,0 +1,98 @@
+{
+  "version": "gray-compile-report@1",
+  "status": "passed",
+  "phase": "output",
+  "input": "options.json",
+  "canvas": {
+    "width": 1280,
+    "height": 720
+  },
+  "errors": [],
+  "candidates": [
+    {
+      "layout": {
+        "id": "standard-row-content-weighted",
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "margin": 54,
+        "gap": 28,
+        "padding": 12,
+        "direction": "row",
+        "columns": [
+          1172
+        ],
+        "density": "standard"
+      },
+      "valid": true,
+      "score": 0,
+      "frame": {
+        "x": 54,
+        "y": 170.890625,
+        "width": 1172,
+        "height": 489.109375
+      },
+      "groups": [
+        {
+          "id": "group:comparison",
+          "bounds": {
+            "x": 54,
+            "y": 170.890625,
+            "width": 1172,
+            "height": 238.84375
+          },
+          "visibleHeight": 217.75
+        }
+      ],
+      "errors": []
+    },
+    {
+      "layout": {
+        "id": "compact-row-content-weighted",
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "margin": 54,
+        "gap": 28,
+        "padding": 10,
+        "direction": "row",
+        "columns": [
+          1172
+        ],
+        "density": "compact"
+      },
+      "valid": true,
+      "score": 175,
+      "frame": {
+        "x": 54,
+        "y": 151.890625,
+        "width": 1172,
+        "height": 528.109375
+      },
+      "groups": [
+        {
+          "id": "group:comparison",
+          "bounds": {
+            "x": 54,
+            "y": 151.890625,
+            "width": 1172,
+            "height": 223.96875
+          },
+          "visibleHeight": 205.5
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "inputSha256": "07d1fd8724af39b98b4b47a04d543b598267962a32db1c3b8090524ac3593dee",
+  "browser": "157.0.8103.79",
+  "selected": "standard-row-content-weighted",
+  "artifacts": {
+    "html": "gray.html",
+    "png": "gray.png",
+    "layout": "layout.json",
+    "plan": "page-plan.json"
+  }
+}

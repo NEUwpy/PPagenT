@@ -1,0 +1,55 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>文字排版试验</title><style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: #f6f5f1; }
+  .slide { display: flow-root; width:1280px; height:720px; position:relative; color:#242422; background:#f6f5f1;
+    font-family:"Microsoft YaHei",sans-serif; -webkit-font-smoothing: antialiased; }
+  .masthead { position:absolute; left:66px; right:auto; top:46px; width:var(--w);
+    min-height:94px; display:flex; align-items:baseline; gap:22px; border-bottom:2px solid #292926; }
+  .masthead:after { content:""; display:block; position:absolute; bottom:-2px; left:0; height:4px; width:55px; background:#272724; }
+  .masthead:has(.deck) { top:40px; min-height:100px; }
+  .intro { flex:none; font-size:18px; font-weight:700; color:#484846; }
+  .deck { position:absolute; left:0; top:67px; font-size:18px; line-height:1.25; color:#545450; }
+  h1 { margin:0; font:650 56px/1.16 "Noto Serif SC","SimSun"; letter-spacing:.01em; text-wrap:balance; }
+  main { position:absolute; left:66px; top:var(--top); width:var(--w); height:var(--h); }
+  .group { display:grid; grid-template-columns:var(--rail) minmax(0, 1fr); column-gap:var(--rg);
+    max-width:100%; padding:var(--pad) 0; border-bottom:1px solid #b8b7af; }
+  .group:first-child { padding-top:7px; }
+  .group:last-child { border-bottom:0; padding-bottom:0; }
+  h2 { margin:0; padding-top:1px; font:700 26px/1.3 "Noto Serif SC","SimSun"; letter-spacing:.015em;
+    max-width:100%; color:#292927; text-wrap:balance; }
+  .headline .group { grid-template-columns:minmax(0, 1fr); row-gap:8px; }
+  .headline h2 { margin:0; font-size:22px; line-height:25px; }
+  .columns { display:grid; gap:var(--g); align-items:start; }
+  .flow { min-width:0; }
+  .unit + .unit { margin-top:var(--ig); }
+  h3 { margin:0 0 var(--sg); color:#252523; font-size:var(--head); line-height:var(--head-line);
+    font-weight:700; text-wrap:balance; overflow-wrap:break-word; }
+  p { margin:0; font-size:var(--base); line-height:var(--body-line); text-wrap:pretty;
+    overflow-wrap:break-word; color:#383836; }
+</style><body><article class="slide rail" style="--w:1012px;--h:464px;--top:158px;
+      --rail:116px;--rg:28px;--g:35px;--base:23px;--head:25px;
+      --body-line:33px;--head-line:35px;--ig:18px;--sg:5px;
+      --pad:27px">
+    <header class="masthead">
+       <h1>备件供应方式对比说明</h1><div class="deck">设备科对现行两种备件供应方式作了对比。</div>
+    </header>
+    <main data-content-frame><section class="group" data-group-id="spares-g1">
+      <h2>两种方式</h2>
+      <div class="columns" style="grid-template-columns:417px 416px"><div class="flow"><div class="unit" data-id="central">
+    <h3 data-heading-id="central">集中供应</h3>
+    <p data-body-id="central">由中心库统一采购、统一配送，单件采购成本较低，但配送周期平均 5 个工作日，紧急需求须另走加急流程。</p></div></div><div class="flow"><div class="unit" data-id="local">
+    <h3 data-heading-id="local">就近供应</h3>
+    <p data-body-id="local">由各站点自行采购，响应时间可缩短至 1 个工作日以内，但单价普遍高出 8% 至 12%。</p></div></div></div>
+    </section><section class="group" data-group-id="spares-g2">
+      <h2>分级建议</h2>
+      <div class="columns" style="grid-template-columns:850px"><div class="flow"><div class="unit" data-id="grading">
+    
+    <p data-body-id="grading">两种方式并非互斥。常用件适合集中供应；价值低、消耗快的易损件适合就近供应。建议按备件分级确定供应方式：单件价值 500 元以上的集中采购，500 元以下的由站点自行采购。</p></div></div></div>
+    </section><section class="group" data-group-id="spares-g3">
+      <h2>执行要求</h2>
+      <div class="columns" style="grid-template-columns:383px 450px"><div class="flow"><div class="unit" data-id="exception">
+    <h3 data-heading-id="exception">关键备件</h3>
+    <p data-body-id="exception">涉及安全停机的关键备件，无论金额均须报设备科备案后加急处理。</p></div></div><div class="flow"><div class="unit" data-id="effective">
+    <h3 data-heading-id="effective">生效与衔接</h3>
+    <p data-body-id="effective">本说明自下发之日起执行；原《备件领用暂行规定》中与本文不一致的，以本文为准。</p></div></div></div>
+    </section></main></article></body></html>

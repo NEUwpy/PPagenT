@@ -1,0 +1,2024 @@
+{
+  "compiler": "src/visual-runtime/html-component-runtime.mjs#resolveHtmlComponent",
+  "status": "matched-checked-fields",
+  "issues": [],
+  "observedObjects": [],
+  "materializedSoftWraps": [
+    {
+      "id": "parallel-body-0",
+      "lines": 4,
+      "wrap": "square"
+    },
+    {
+      "id": "parallel-body-1",
+      "lines": 3,
+      "wrap": "square"
+    }
+  ],
+  "nativeCounts": {
+    "text": 6,
+    "shape": 13,
+    "image": 2,
+    "path": 1
+  },
+  "tree": {
+    "schemaVersion": 5,
+    "frame": {
+      "width": 1280,
+      "height": 720
+    },
+    "overflow": false,
+    "textFlowOverflows": [],
+    "textLayoutOverflows": [],
+    "fontOverflows": [],
+    "textFlows": [],
+    "textLayouts": [
+      {
+        "id": "statement-flow",
+        "status": "resolved",
+        "align": "center",
+        "valign": "middle",
+        "density": "standard"
+      },
+      {
+        "id": "heading-content-flow",
+        "status": "resolved",
+        "align": "center",
+        "valign": "middle",
+        "density": "standard"
+      },
+      {
+        "id": "statement-flow",
+        "status": "resolved",
+        "align": "center",
+        "valign": "middle",
+        "density": "standard"
+      },
+      {
+        "id": "heading-content-flow",
+        "status": "resolved",
+        "align": "center",
+        "valign": "middle",
+        "density": "standard"
+      }
+    ],
+    "nodes": [
+      {
+        "kind": "text",
+        "name": "title",
+        "order": 0,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 55,
+          "top": 63,
+          "width": 252,
+          "height": 52.5,
+          "rotation": 0
+        },
+        "text": "两种上线方案",
+        "style": {
+          "typeface": "Microsoft YaHei",
+          "fontSize": 42,
+          "fontSizePt": 31.5,
+          "bold": true,
+          "italic": false,
+          "color": "#242424",
+          "alignment": "left",
+          "verticalAlignment": "top",
+          "wrap": "none",
+          "fontFit": "unchanged",
+          "originalFontSizePt": 31.5,
+          "lineSpacing": 1.25
+        },
+        "shadow": "shadow-none"
+      },
+      {
+        "kind": "shape",
+        "name": "title-rule",
+        "order": 1,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 55,
+          "top": 137,
+          "width": 68,
+          "height": 3,
+          "rotation": 0
+        },
+        "geometry": "rect",
+        "fill": "#585858",
+        "line": {
+          "fill": "#242424",
+          "width": 0,
+          "style": "solid"
+        },
+        "shadow": "shadow-none",
+        "borderRadius": 0
+      },
+      {
+        "kind": "shape",
+        "name": "parallel-card-underlay-0",
+        "order": 2,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 133,
+          "top": 229,
+          "width": 481,
+          "height": 290,
+          "rotation": 0
+        },
+        "geometry": "roundRect",
+        "fill": "#E9E9E9",
+        "line": {
+          "fill": "#E9E9E9",
+          "width": 1,
+          "style": "solid"
+        },
+        "shadow": "shadow-none",
+        "borderRadius": 26
+      },
+      {
+        "kind": "shape",
+        "name": "parallel-card-surface-0",
+        "order": 3,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 125,
+          "top": 219,
+          "width": 497,
+          "height": 290,
+          "rotation": 0
+        },
+        "geometry": "roundRect",
+        "fill": "#E9E9E9",
+        "line": {
+          "fill": "#E9E9E9",
+          "width": 1,
+          "style": "solid"
+        },
+        "shadow": "0px 12px 26px #373737/12",
+        "borderRadius": 26
+      },
+      {
+        "kind": "shape",
+        "name": "parallel-card-accent-0",
+        "order": 4,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 332.5,
+          "top": 219,
+          "width": 82,
+          "height": 8,
+          "rotation": 0
+        },
+        "geometry": "roundRect",
+        "fill": "#868686",
+        "line": {
+          "fill": "#242424",
+          "width": 0,
+          "style": "solid"
+        },
+        "shadow": "shadow-none",
+        "borderRadius": 9
+      },
+      {
+        "kind": "shape",
+        "name": "parallel-marker-halo-0",
+        "order": 5,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 325.5,
+          "top": 171,
+          "width": 96,
+          "height": 96,
+          "rotation": 0
+        },
+        "geometry": "ellipse",
+        "fill": "#E9E9E9",
+        "line": {
+          "fill": "#E9E9E9",
+          "width": 1,
+          "style": "solid"
+        },
+        "shadow": "shadow-none",
+        "borderRadius": 0
+      },
+      {
+        "kind": "shape",
+        "name": "parallel-marker-core-0",
+        "order": 6,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 339.5,
+          "top": 185,
+          "width": 68,
+          "height": 68,
+          "rotation": 0
+        },
+        "geometry": "ellipse",
+        "fill": "#484848",
+        "line": {
+          "fill": "#242424",
+          "width": 0,
+          "style": "solid"
+        },
+        "shadow": "0px 8px 18px #484848/24",
+        "borderRadius": 0
+      },
+      {
+        "kind": "image",
+        "name": "parallel-icon-0",
+        "order": 7,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 355.5,
+          "top": 201,
+          "width": 36,
+          "height": 36,
+          "rotation": 0
+        },
+        "dataUrl": "data:image/svg+xml;base64,PHN2ZyBkYXRhLXBwdC1raW5kPSJpbWFnZSIgZGF0YS1wcHQtbmFtZT0icGFyYWxsZWwtaWNvbi0wIiBkYXRhLWljb24ta2V5PSJsYXlvdXQtZ3JpZCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMzYiIGhlaWdodD0iMzYiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0icGFyYWxsZWwtaWNvbi1zdmciIHN0eWxlPSJjb2xvcjogcmdiKDI1NSwgMjU1LCAyNTUpOyBvcGFjaXR5OiAxOyI+CiAgCiAgPHBhdGggZD0iTTQgNWExIDEgMCAwIDEgMSAtMWg0YTEgMSAwIDAgMSAxIDF2NGExIDEgMCAwIDEgLTEgMWgtNGExIDEgMCAwIDEgLTEgLTFsMCAtNCI+PC9wYXRoPgogIDxwYXRoIGQ9Ik0xNCA1YTEgMSAwIDAgMSAxIC0xaDRhMSAxIDAgMCAxIDEgMXY0YTEgMSAwIDAgMSAtMSAxaC00YTEgMSAwIDAgMSAtMSAtMWwwIC00Ij48L3BhdGg+CiAgPHBhdGggZD0iTTQgMTVhMSAxIDAgMCAxIDEgLTFoNGExIDEgMCAwIDEgMSAxdjRhMSAxIDAgMCAxIC0xIDFoLTRhMSAxIDAgMCAxIC0xIC0xbDAgLTQiPjwvcGF0aD4KICA8cGF0aCBkPSJNMTQgMTVhMSAxIDAgMCAxIDEgLTFoNGExIDEgMCAwIDEgMSAxdjRhMSAxIDAgMCAxIC0xIDFoLTRhMSAxIDAgMCAxIC0xIC0xbDAgLTQiPjwvcGF0aD4KPC9zdmc+",
+        "alt": "layout-grid",
+        "geometry": null
+      },
+      {
+        "kind": "text",
+        "name": "parallel-title-0",
+        "order": 8,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 153,
+          "top": 289.75,
+          "width": 441,
+          "height": 27.5,
+          "rotation": 0
+        },
+        "text": "集中上线方案：",
+        "style": {
+          "typeface": "Microsoft YaHei",
+          "fontSize": 22,
+          "fontSizePt": 16.5,
+          "bold": true,
+          "italic": false,
+          "color": "#373737",
+          "alignment": "center",
+          "verticalAlignment": "middle",
+          "wrap": "none",
+          "fontFit": "unchanged",
+          "originalFontSizePt": 16.5,
+          "lineSpacing": 1.25
+        },
+        "shadow": "shadow-none"
+      },
+      {
+        "kind": "shape",
+        "name": "parallel-rule-0",
+        "order": 9,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 346.5,
+          "top": 334,
+          "width": 54,
+          "height": 4,
+          "rotation": 0
+        },
+        "geometry": "roundRect",
+        "fill": "#868686",
+        "line": {
+          "fill": "#242424",
+          "width": 0,
+          "style": "solid"
+        },
+        "shadow": "shadow-none",
+        "borderRadius": 99
+      },
+      {
+        "kind": "text",
+        "name": "parallel-body-0",
+        "order": 10,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 165,
+          "top": 360,
+          "width": 417,
+          "height": 114,
+          "rotation": 0
+        },
+        "text": "在一个周末完成全部部门切换，培训与支持资源\n集中投入。优势是过渡期短；风险是问题可能集\n中出现，需要提前完成全量数据核对并准备值守\n团队。",
+        "style": {
+          "typeface": "Microsoft YaHei",
+          "fontSize": 19,
+          "fontSizePt": 14.25,
+          "bold": false,
+          "italic": false,
+          "color": "#373737",
+          "alignment": "center",
+          "verticalAlignment": "middle",
+          "wrap": "square",
+          "fontFit": "unchanged",
+          "originalFontSizePt": 14.25,
+          "lineSpacing": 1.5
+        },
+        "shadow": "shadow-none"
+      },
+      {
+        "kind": "shape",
+        "name": "parallel-card-underlay-1",
+        "order": 11,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 666,
+          "top": 229,
+          "width": 481,
+          "height": 290,
+          "rotation": 0
+        },
+        "geometry": "roundRect",
+        "fill": "#E9E9E9",
+        "line": {
+          "fill": "#E9E9E9",
+          "width": 1,
+          "style": "solid"
+        },
+        "shadow": "shadow-none",
+        "borderRadius": 26
+      },
+      {
+        "kind": "shape",
+        "name": "parallel-card-surface-1",
+        "order": 12,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 658,
+          "top": 219,
+          "width": 497,
+          "height": 290,
+          "rotation": 0
+        },
+        "geometry": "roundRect",
+        "fill": "#E9E9E9",
+        "line": {
+          "fill": "#E9E9E9",
+          "width": 1,
+          "style": "solid"
+        },
+        "shadow": "0px 12px 26px #373737/12",
+        "borderRadius": 26
+      },
+      {
+        "kind": "shape",
+        "name": "parallel-card-accent-1",
+        "order": 13,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 865.5,
+          "top": 219,
+          "width": 82,
+          "height": 8,
+          "rotation": 0
+        },
+        "geometry": "roundRect",
+        "fill": "#868686",
+        "line": {
+          "fill": "#242424",
+          "width": 0,
+          "style": "solid"
+        },
+        "shadow": "shadow-none",
+        "borderRadius": 9
+      },
+      {
+        "kind": "shape",
+        "name": "parallel-marker-halo-1",
+        "order": 14,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 858.5,
+          "top": 171,
+          "width": 96,
+          "height": 96,
+          "rotation": 0
+        },
+        "geometry": "ellipse",
+        "fill": "#E9E9E9",
+        "line": {
+          "fill": "#E9E9E9",
+          "width": 1,
+          "style": "solid"
+        },
+        "shadow": "shadow-none",
+        "borderRadius": 0
+      },
+      {
+        "kind": "shape",
+        "name": "parallel-marker-core-1",
+        "order": 15,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 872.5,
+          "top": 185,
+          "width": 68,
+          "height": 68,
+          "rotation": 0
+        },
+        "geometry": "ellipse",
+        "fill": "#484848",
+        "line": {
+          "fill": "#242424",
+          "width": 0,
+          "style": "solid"
+        },
+        "shadow": "0px 8px 18px #484848/24",
+        "borderRadius": 0
+      },
+      {
+        "kind": "image",
+        "name": "parallel-icon-1",
+        "order": 16,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 888.5,
+          "top": 201,
+          "width": 36,
+          "height": 36,
+          "rotation": 0
+        },
+        "dataUrl": "data:image/svg+xml;base64,PHN2ZyBkYXRhLXBwdC1raW5kPSJpbWFnZSIgZGF0YS1wcHQtbmFtZT0icGFyYWxsZWwtaWNvbi0xIiBkYXRhLWljb24ta2V5PSJjYWxlbmRhci1ldmVudCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMzYiIGhlaWdodD0iMzYiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0icGFyYWxsZWwtaWNvbi1zdmciIHN0eWxlPSJjb2xvcjogcmdiKDI1NSwgMjU1LCAyNTUpOyBvcGFjaXR5OiAxOyI+CiAgCiAgPHBhdGggZD0iTTQgN2EyIDIgMCAwIDEgMiAtMmgxMmEyIDIgMCAwIDEgMiAydjEyYTIgMiAwIDAgMSAtMiAyaC0xMmEyIDIgMCAwIDEgLTIgLTJsMCAtMTIiPjwvcGF0aD4KICA8cGF0aCBkPSJNMTYgM2wwIDQiPjwvcGF0aD4KICA8cGF0aCBkPSJNOCAzbDAgNCI+PC9wYXRoPgogIDxwYXRoIGQ9Ik00IDExbDE2IDAiPjwvcGF0aD4KICA8cGF0aCBkPSJNOCAxNWgydjJoLTJsMCAtMiI+PC9wYXRoPgo8L3N2Zz4=",
+        "alt": "calendar-event",
+        "geometry": null
+      },
+      {
+        "kind": "text",
+        "name": "parallel-title-1",
+        "order": 17,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 686,
+          "top": 289.75,
+          "width": 441,
+          "height": 27.5,
+          "rotation": 0
+        },
+        "text": "分批上线方案：",
+        "style": {
+          "typeface": "Microsoft YaHei",
+          "fontSize": 22,
+          "fontSizePt": 16.5,
+          "bold": true,
+          "italic": false,
+          "color": "#373737",
+          "alignment": "center",
+          "verticalAlignment": "middle",
+          "wrap": "none",
+          "fontFit": "unchanged",
+          "originalFontSizePt": 16.5,
+          "lineSpacing": 1.25
+        },
+        "shadow": "shadow-none"
+      },
+      {
+        "kind": "shape",
+        "name": "parallel-rule-1",
+        "order": 18,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 879.5,
+          "top": 334,
+          "width": 54,
+          "height": 4,
+          "rotation": 0
+        },
+        "geometry": "roundRect",
+        "fill": "#868686",
+        "line": {
+          "fill": "#242424",
+          "width": 0,
+          "style": "solid"
+        },
+        "shadow": "shadow-none",
+        "borderRadius": 99
+      },
+      {
+        "kind": "text",
+        "name": "parallel-body-1",
+        "order": 19,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 698,
+          "top": 374.25,
+          "width": 417,
+          "height": 85.5,
+          "rotation": 0
+        },
+        "text": "先选择一个部门试用，再按反馈逐批推广。优点\n是能及时修正规则；代价是新旧系统并存时间较\n长，需要维护数据同步和跨部门办理说明。",
+        "style": {
+          "typeface": "Microsoft YaHei",
+          "fontSize": 19,
+          "fontSizePt": 14.25,
+          "bold": false,
+          "italic": false,
+          "color": "#373737",
+          "alignment": "center",
+          "verticalAlignment": "middle",
+          "wrap": "square",
+          "fontFit": "unchanged",
+          "originalFontSizePt": 14.25,
+          "lineSpacing": 1.5
+        },
+        "shadow": "shadow-none"
+      },
+      {
+        "kind": "path",
+        "name": "condition-plate",
+        "order": 20,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 125,
+          "top": 543,
+          "width": 1030,
+          "height": 82,
+          "rotation": 0
+        },
+        "fill": "#EAEAEA",
+        "line": {
+          "fill": "none",
+          "width": 1,
+          "style": "solid"
+        },
+        "shadow": "shadow-none",
+        "closed": true,
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 9.387,
+            "y": 0
+          },
+          {
+            "x": 18.774,
+            "y": 0
+          },
+          {
+            "x": 28.161,
+            "y": 0
+          },
+          {
+            "x": 37.548,
+            "y": 0
+          },
+          {
+            "x": 46.936,
+            "y": 0
+          },
+          {
+            "x": 56.323,
+            "y": 0
+          },
+          {
+            "x": 65.71,
+            "y": 0
+          },
+          {
+            "x": 75.097,
+            "y": 0
+          },
+          {
+            "x": 84.484,
+            "y": 0
+          },
+          {
+            "x": 93.871,
+            "y": 0
+          },
+          {
+            "x": 103.258,
+            "y": 0
+          },
+          {
+            "x": 112.645,
+            "y": 0
+          },
+          {
+            "x": 122.032,
+            "y": 0
+          },
+          {
+            "x": 131.419,
+            "y": 0
+          },
+          {
+            "x": 140.807,
+            "y": 0
+          },
+          {
+            "x": 150.194,
+            "y": 0
+          },
+          {
+            "x": 159.581,
+            "y": 0
+          },
+          {
+            "x": 168.968,
+            "y": 0
+          },
+          {
+            "x": 178.355,
+            "y": 0
+          },
+          {
+            "x": 187.742,
+            "y": 0
+          },
+          {
+            "x": 197.129,
+            "y": 0
+          },
+          {
+            "x": 206.516,
+            "y": 0
+          },
+          {
+            "x": 215.903,
+            "y": 0
+          },
+          {
+            "x": 225.29,
+            "y": 0
+          },
+          {
+            "x": 234.678,
+            "y": 0
+          },
+          {
+            "x": 244.065,
+            "y": 0
+          },
+          {
+            "x": 253.452,
+            "y": 0
+          },
+          {
+            "x": 262.839,
+            "y": 0
+          },
+          {
+            "x": 272.226,
+            "y": 0
+          },
+          {
+            "x": 281.613,
+            "y": 0
+          },
+          {
+            "x": 291,
+            "y": 0
+          },
+          {
+            "x": 300.387,
+            "y": 0
+          },
+          {
+            "x": 309.775,
+            "y": 0
+          },
+          {
+            "x": 319.162,
+            "y": 0
+          },
+          {
+            "x": 328.549,
+            "y": 0
+          },
+          {
+            "x": 337.936,
+            "y": 0
+          },
+          {
+            "x": 347.323,
+            "y": 0
+          },
+          {
+            "x": 356.71,
+            "y": 0
+          },
+          {
+            "x": 366.097,
+            "y": 0
+          },
+          {
+            "x": 375.484,
+            "y": 0
+          },
+          {
+            "x": 384.871,
+            "y": 0
+          },
+          {
+            "x": 394.258,
+            "y": 0
+          },
+          {
+            "x": 403.646,
+            "y": 0
+          },
+          {
+            "x": 413.033,
+            "y": 0
+          },
+          {
+            "x": 422.42,
+            "y": 0
+          },
+          {
+            "x": 431.807,
+            "y": 0
+          },
+          {
+            "x": 441.194,
+            "y": 0
+          },
+          {
+            "x": 450.581,
+            "y": 0
+          },
+          {
+            "x": 459.968,
+            "y": 0
+          },
+          {
+            "x": 469.355,
+            "y": 0
+          },
+          {
+            "x": 478.742,
+            "y": 0
+          },
+          {
+            "x": 488.129,
+            "y": 0
+          },
+          {
+            "x": 497.517,
+            "y": 0
+          },
+          {
+            "x": 506.904,
+            "y": 0
+          },
+          {
+            "x": 516.291,
+            "y": 0
+          },
+          {
+            "x": 525.678,
+            "y": 0
+          },
+          {
+            "x": 535.065,
+            "y": 0
+          },
+          {
+            "x": 544.452,
+            "y": 0
+          },
+          {
+            "x": 553.839,
+            "y": 0
+          },
+          {
+            "x": 563.226,
+            "y": 0
+          },
+          {
+            "x": 572.613,
+            "y": 0
+          },
+          {
+            "x": 582.001,
+            "y": 0
+          },
+          {
+            "x": 591.388,
+            "y": 0
+          },
+          {
+            "x": 600.775,
+            "y": 0
+          },
+          {
+            "x": 610.162,
+            "y": 0
+          },
+          {
+            "x": 619.549,
+            "y": 0
+          },
+          {
+            "x": 628.936,
+            "y": 0
+          },
+          {
+            "x": 638.323,
+            "y": 0
+          },
+          {
+            "x": 647.71,
+            "y": 0
+          },
+          {
+            "x": 657.097,
+            "y": 0
+          },
+          {
+            "x": 666.484,
+            "y": 0
+          },
+          {
+            "x": 675.872,
+            "y": 0
+          },
+          {
+            "x": 685.259,
+            "y": 0
+          },
+          {
+            "x": 694.646,
+            "y": 0
+          },
+          {
+            "x": 704.033,
+            "y": 0
+          },
+          {
+            "x": 713.42,
+            "y": 0
+          },
+          {
+            "x": 722.807,
+            "y": 0
+          },
+          {
+            "x": 732.194,
+            "y": 0
+          },
+          {
+            "x": 741.581,
+            "y": 0
+          },
+          {
+            "x": 750.968,
+            "y": 0
+          },
+          {
+            "x": 760.356,
+            "y": 0
+          },
+          {
+            "x": 769.743,
+            "y": 0
+          },
+          {
+            "x": 779.13,
+            "y": 0
+          },
+          {
+            "x": 788.517,
+            "y": 0
+          },
+          {
+            "x": 797.904,
+            "y": 0
+          },
+          {
+            "x": 807.291,
+            "y": 0
+          },
+          {
+            "x": 816.678,
+            "y": 0
+          },
+          {
+            "x": 826.065,
+            "y": 0
+          },
+          {
+            "x": 835.452,
+            "y": 0
+          },
+          {
+            "x": 844.839,
+            "y": 0
+          },
+          {
+            "x": 854.227,
+            "y": 0
+          },
+          {
+            "x": 863.614,
+            "y": 0
+          },
+          {
+            "x": 873.001,
+            "y": 0
+          },
+          {
+            "x": 882.388,
+            "y": 0
+          },
+          {
+            "x": 891.775,
+            "y": 0
+          },
+          {
+            "x": 901.162,
+            "y": 0
+          },
+          {
+            "x": 910.549,
+            "y": 0
+          },
+          {
+            "x": 919.936,
+            "y": 0
+          },
+          {
+            "x": 929.323,
+            "y": 0
+          },
+          {
+            "x": 938.711,
+            "y": 0
+          },
+          {
+            "x": 948.098,
+            "y": 0
+          },
+          {
+            "x": 957.485,
+            "y": 0
+          },
+          {
+            "x": 966.872,
+            "y": 0
+          },
+          {
+            "x": 976.259,
+            "y": 0
+          },
+          {
+            "x": 985.646,
+            "y": 0
+          },
+          {
+            "x": 995.033,
+            "y": 0
+          },
+          {
+            "x": 1004.42,
+            "y": 0
+          },
+          {
+            "x": 1013.807,
+            "y": 0
+          },
+          {
+            "x": 1023.194,
+            "y": 0
+          },
+          {
+            "x": 1030,
+            "y": 2.055
+          },
+          {
+            "x": 1030,
+            "y": 9.528
+          },
+          {
+            "x": 1030,
+            "y": 17.002
+          },
+          {
+            "x": 1030,
+            "y": 24.475
+          },
+          {
+            "x": 1030,
+            "y": 31.948
+          },
+          {
+            "x": 1030,
+            "y": 39.421
+          },
+          {
+            "x": 1030,
+            "y": 46.895
+          },
+          {
+            "x": 1030,
+            "y": 54.368
+          },
+          {
+            "x": 1030,
+            "y": 61.841
+          },
+          {
+            "x": 1030,
+            "y": 69.314
+          },
+          {
+            "x": 1030,
+            "y": 76.788
+          },
+          {
+            "x": 1027.16,
+            "y": 82
+          },
+          {
+            "x": 1017.773,
+            "y": 82
+          },
+          {
+            "x": 1008.386,
+            "y": 82
+          },
+          {
+            "x": 998.999,
+            "y": 82
+          },
+          {
+            "x": 989.612,
+            "y": 82
+          },
+          {
+            "x": 980.225,
+            "y": 82
+          },
+          {
+            "x": 970.838,
+            "y": 82
+          },
+          {
+            "x": 961.451,
+            "y": 82
+          },
+          {
+            "x": 952.064,
+            "y": 82
+          },
+          {
+            "x": 942.676,
+            "y": 82
+          },
+          {
+            "x": 933.289,
+            "y": 82
+          },
+          {
+            "x": 923.902,
+            "y": 82
+          },
+          {
+            "x": 914.515,
+            "y": 82
+          },
+          {
+            "x": 905.128,
+            "y": 82
+          },
+          {
+            "x": 895.741,
+            "y": 82
+          },
+          {
+            "x": 886.354,
+            "y": 82
+          },
+          {
+            "x": 876.967,
+            "y": 82
+          },
+          {
+            "x": 867.579,
+            "y": 82
+          },
+          {
+            "x": 858.192,
+            "y": 82
+          },
+          {
+            "x": 848.805,
+            "y": 82
+          },
+          {
+            "x": 839.418,
+            "y": 82
+          },
+          {
+            "x": 830.031,
+            "y": 82
+          },
+          {
+            "x": 820.644,
+            "y": 82
+          },
+          {
+            "x": 811.257,
+            "y": 82
+          },
+          {
+            "x": 801.87,
+            "y": 82
+          },
+          {
+            "x": 792.483,
+            "y": 82
+          },
+          {
+            "x": 783.096,
+            "y": 82
+          },
+          {
+            "x": 773.708,
+            "y": 82
+          },
+          {
+            "x": 764.321,
+            "y": 82
+          },
+          {
+            "x": 754.934,
+            "y": 82
+          },
+          {
+            "x": 745.547,
+            "y": 82
+          },
+          {
+            "x": 736.16,
+            "y": 82
+          },
+          {
+            "x": 726.773,
+            "y": 82
+          },
+          {
+            "x": 717.386,
+            "y": 82
+          },
+          {
+            "x": 707.999,
+            "y": 82
+          },
+          {
+            "x": 698.612,
+            "y": 82
+          },
+          {
+            "x": 689.225,
+            "y": 82
+          },
+          {
+            "x": 679.837,
+            "y": 82
+          },
+          {
+            "x": 670.45,
+            "y": 82
+          },
+          {
+            "x": 661.063,
+            "y": 82
+          },
+          {
+            "x": 651.676,
+            "y": 82
+          },
+          {
+            "x": 642.289,
+            "y": 82
+          },
+          {
+            "x": 632.902,
+            "y": 82
+          },
+          {
+            "x": 623.515,
+            "y": 82
+          },
+          {
+            "x": 614.128,
+            "y": 82
+          },
+          {
+            "x": 604.741,
+            "y": 82
+          },
+          {
+            "x": 595.353,
+            "y": 82
+          },
+          {
+            "x": 585.966,
+            "y": 82
+          },
+          {
+            "x": 576.579,
+            "y": 82
+          },
+          {
+            "x": 567.192,
+            "y": 82
+          },
+          {
+            "x": 557.805,
+            "y": 82
+          },
+          {
+            "x": 548.418,
+            "y": 82
+          },
+          {
+            "x": 539.031,
+            "y": 82
+          },
+          {
+            "x": 529.644,
+            "y": 82
+          },
+          {
+            "x": 520.257,
+            "y": 82
+          },
+          {
+            "x": 510.87,
+            "y": 82
+          },
+          {
+            "x": 501.482,
+            "y": 82
+          },
+          {
+            "x": 492.095,
+            "y": 82
+          },
+          {
+            "x": 482.708,
+            "y": 82
+          },
+          {
+            "x": 473.321,
+            "y": 82
+          },
+          {
+            "x": 463.934,
+            "y": 82
+          },
+          {
+            "x": 454.547,
+            "y": 82
+          },
+          {
+            "x": 445.16,
+            "y": 82
+          },
+          {
+            "x": 435.773,
+            "y": 82
+          },
+          {
+            "x": 426.386,
+            "y": 82
+          },
+          {
+            "x": 416.998,
+            "y": 82
+          },
+          {
+            "x": 407.611,
+            "y": 82
+          },
+          {
+            "x": 398.224,
+            "y": 82
+          },
+          {
+            "x": 388.837,
+            "y": 82
+          },
+          {
+            "x": 379.45,
+            "y": 82
+          },
+          {
+            "x": 370.063,
+            "y": 82
+          },
+          {
+            "x": 360.676,
+            "y": 82
+          },
+          {
+            "x": 351.289,
+            "y": 82
+          },
+          {
+            "x": 341.902,
+            "y": 82
+          },
+          {
+            "x": 332.514,
+            "y": 82
+          },
+          {
+            "x": 323.127,
+            "y": 82
+          },
+          {
+            "x": 313.74,
+            "y": 82
+          },
+          {
+            "x": 304.353,
+            "y": 82
+          },
+          {
+            "x": 294.966,
+            "y": 82
+          },
+          {
+            "x": 285.579,
+            "y": 82
+          },
+          {
+            "x": 276.192,
+            "y": 82
+          },
+          {
+            "x": 266.805,
+            "y": 82
+          },
+          {
+            "x": 257.418,
+            "y": 82
+          },
+          {
+            "x": 248.031,
+            "y": 82
+          },
+          {
+            "x": 238.643,
+            "y": 82
+          },
+          {
+            "x": 229.256,
+            "y": 82
+          },
+          {
+            "x": 219.869,
+            "y": 82
+          },
+          {
+            "x": 210.482,
+            "y": 82
+          },
+          {
+            "x": 201.095,
+            "y": 82
+          },
+          {
+            "x": 191.708,
+            "y": 82
+          },
+          {
+            "x": 182.321,
+            "y": 82
+          },
+          {
+            "x": 172.934,
+            "y": 82
+          },
+          {
+            "x": 163.547,
+            "y": 82
+          },
+          {
+            "x": 154.16,
+            "y": 82
+          },
+          {
+            "x": 144.772,
+            "y": 82
+          },
+          {
+            "x": 135.385,
+            "y": 82
+          },
+          {
+            "x": 125.998,
+            "y": 82
+          },
+          {
+            "x": 116.611,
+            "y": 82
+          },
+          {
+            "x": 107.224,
+            "y": 82
+          },
+          {
+            "x": 97.837,
+            "y": 82
+          },
+          {
+            "x": 88.45,
+            "y": 82
+          },
+          {
+            "x": 79.063,
+            "y": 82
+          },
+          {
+            "x": 69.676,
+            "y": 82
+          },
+          {
+            "x": 60.288,
+            "y": 82
+          },
+          {
+            "x": 50.901,
+            "y": 82
+          },
+          {
+            "x": 41.514,
+            "y": 82
+          },
+          {
+            "x": 32.127,
+            "y": 82
+          },
+          {
+            "x": 22.74,
+            "y": 82
+          },
+          {
+            "x": 15.735,
+            "y": 78.526
+          },
+          {
+            "x": 10.659,
+            "y": 72.24
+          },
+          {
+            "x": 5.583,
+            "y": 65.954
+          },
+          {
+            "x": 0.507,
+            "y": 59.667
+          },
+          {
+            "x": 0,
+            "y": 52.313
+          },
+          {
+            "x": 0,
+            "y": 44.839
+          },
+          {
+            "x": 0,
+            "y": 37.366
+          },
+          {
+            "x": 0,
+            "y": 29.893
+          },
+          {
+            "x": 0,
+            "y": 22.42
+          },
+          {
+            "x": 0,
+            "y": 14.946
+          },
+          {
+            "x": 0,
+            "y": 7.473
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ]
+      },
+      {
+        "kind": "text",
+        "name": "precondition",
+        "order": 21,
+        "stackingPath": [
+          0
+        ],
+        "frame": {
+          "left": 163,
+          "top": 570,
+          "width": 954,
+          "height": 28,
+          "rotation": 0
+        },
+        "text": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。",
+        "style": {
+          "typeface": "Microsoft YaHei",
+          "fontSize": 20,
+          "fontSizePt": 15,
+          "bold": true,
+          "italic": false,
+          "color": "#292929",
+          "alignment": "left",
+          "verticalAlignment": "top",
+          "wrap": "none",
+          "fontFit": "unchanged",
+          "originalFontSizePt": 15,
+          "lineSpacing": 1.4
+        },
+        "shadow": "shadow-none"
+      }
+    ],
+    "slots": [
+      {
+        "id": "options-cards-1-icon",
+        "role": "icon",
+        "field": "items[0].iconKey",
+        "itemId": "options-cards-1",
+        "regionId": "",
+        "contentType": "icon",
+        "required": true,
+        "textMode": "single-line",
+        "listPolicy": "none",
+        "frame": {
+          "left": 352.5,
+          "top": 198,
+          "width": 42,
+          "height": 42,
+          "rotation": 0
+        },
+        "capacity": {},
+        "media": {
+          "type": "icon",
+          "provider": "tabler-icons",
+          "required": true
+        }
+      },
+      {
+        "id": "options-cards-1-title-region",
+        "role": "text-region",
+        "field": "items[0].title",
+        "itemId": "options-cards-1",
+        "regionId": "title",
+        "contentType": "text-region",
+        "required": false,
+        "textMode": "structured",
+        "listPolicy": "structured",
+        "frame": {
+          "left": 153,
+          "top": 283,
+          "width": 441,
+          "height": 41,
+          "rotation": 0
+        },
+        "capacity": {
+          "basis": "dom-box-font-metrics",
+          "reliable": true,
+          "derived": true,
+          "sampleFits": true,
+          "recommendedMaxChars": 16,
+          "hardMaxChars": 20
+        },
+        "innerFrame": {
+          "width": 441,
+          "height": 41,
+          "padding": {
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          }
+        },
+        "textLayout": {
+          "id": "statement-flow",
+          "defaultId": "statement-flow",
+          "compatible": [
+            "statement-flow",
+            "heading-content-flow"
+          ],
+          "contentRoles": [
+            "heading"
+          ],
+          "status": "resolved",
+          "align": "center",
+          "valign": "middle",
+          "density": "standard",
+          "parts": [
+            {
+              "part": "heading",
+              "field": "title",
+              "primitive": "heading",
+              "frame": {
+                "left": 153,
+                "top": 289.75,
+                "width": 441,
+                "height": 27.5,
+                "rotation": 0
+              },
+              "text": "集中上线方案：",
+              "lineCount": 1,
+              "typography": {
+                "role": "componentItemTitle",
+                "typeface": "Microsoft YaHei",
+                "fontSizePt": 16.5,
+                "fontWeight": "700",
+                "alignment": "center",
+                "lineHeightPt": 20.625
+              },
+              "capacity": {
+                "recommendedMaxChars": 16,
+                "hardMaxChars": 20,
+                "hardMaxLines": 1
+              }
+            }
+          ]
+        },
+        "media": null
+      },
+      {
+        "id": "options-cards-1-content-region",
+        "role": "text-region",
+        "field": "items[0].support",
+        "itemId": "options-cards-1",
+        "regionId": "content",
+        "contentType": "text-region",
+        "required": false,
+        "textMode": "structured",
+        "listPolicy": "structured",
+        "frame": {
+          "left": 165,
+          "top": 352,
+          "width": 417,
+          "height": 130,
+          "rotation": 0
+        },
+        "capacity": {
+          "basis": "dom-box-font-metrics",
+          "reliable": true,
+          "derived": true,
+          "sampleFits": true,
+          "recommendedMaxChars": 67,
+          "hardMaxChars": 84
+        },
+        "innerFrame": {
+          "width": 417,
+          "height": 130,
+          "padding": {
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          }
+        },
+        "textLayout": {
+          "id": "heading-content-flow",
+          "defaultId": "heading-content-flow",
+          "compatible": [
+            "statement-flow",
+            "heading-content-flow",
+            "structured-list-flow",
+            "metric-content-flow"
+          ],
+          "contentRoles": [
+            "body"
+          ],
+          "status": "resolved",
+          "align": "center",
+          "valign": "middle",
+          "density": "standard",
+          "parts": [
+            {
+              "part": "body",
+              "field": "body",
+              "primitive": "body",
+              "frame": {
+                "left": 165,
+                "top": 360,
+                "width": 417,
+                "height": 114,
+                "rotation": 0
+              },
+              "text": "在一个周末完成全部部门切换，培训与支持资源\n集中投入。优势是过渡期短；风险是问题可能集\n中出现，需要提前完成全量数据核对并准备值守\n团队。",
+              "lineCount": 4,
+              "typography": {
+                "role": "componentBody",
+                "typeface": "Microsoft YaHei",
+                "fontSizePt": 14.25,
+                "fontWeight": "400",
+                "alignment": "center",
+                "lineHeightPt": 21.375
+              },
+              "capacity": {
+                "recommendedMaxChars": 67,
+                "hardMaxChars": 84,
+                "hardMaxLines": 4
+              }
+            }
+          ]
+        },
+        "media": null
+      },
+      {
+        "id": "options-cards-2-icon",
+        "role": "icon",
+        "field": "items[1].iconKey",
+        "itemId": "options-cards-2",
+        "regionId": "",
+        "contentType": "icon",
+        "required": true,
+        "textMode": "single-line",
+        "listPolicy": "none",
+        "frame": {
+          "left": 885.5,
+          "top": 198,
+          "width": 42,
+          "height": 42,
+          "rotation": 0
+        },
+        "capacity": {},
+        "media": {
+          "type": "icon",
+          "provider": "tabler-icons",
+          "required": true
+        }
+      },
+      {
+        "id": "options-cards-2-title-region",
+        "role": "text-region",
+        "field": "items[1].title",
+        "itemId": "options-cards-2",
+        "regionId": "title",
+        "contentType": "text-region",
+        "required": false,
+        "textMode": "structured",
+        "listPolicy": "structured",
+        "frame": {
+          "left": 686,
+          "top": 283,
+          "width": 441,
+          "height": 41,
+          "rotation": 0
+        },
+        "capacity": {
+          "basis": "dom-box-font-metrics",
+          "reliable": true,
+          "derived": true,
+          "sampleFits": true,
+          "recommendedMaxChars": 16,
+          "hardMaxChars": 20
+        },
+        "innerFrame": {
+          "width": 441,
+          "height": 41,
+          "padding": {
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          }
+        },
+        "textLayout": {
+          "id": "statement-flow",
+          "defaultId": "statement-flow",
+          "compatible": [
+            "statement-flow",
+            "heading-content-flow"
+          ],
+          "contentRoles": [
+            "heading"
+          ],
+          "status": "resolved",
+          "align": "center",
+          "valign": "middle",
+          "density": "standard",
+          "parts": [
+            {
+              "part": "heading",
+              "field": "title",
+              "primitive": "heading",
+              "frame": {
+                "left": 686,
+                "top": 289.75,
+                "width": 441,
+                "height": 27.5,
+                "rotation": 0
+              },
+              "text": "分批上线方案：",
+              "lineCount": 1,
+              "typography": {
+                "role": "componentItemTitle",
+                "typeface": "Microsoft YaHei",
+                "fontSizePt": 16.5,
+                "fontWeight": "700",
+                "alignment": "center",
+                "lineHeightPt": 20.625
+              },
+              "capacity": {
+                "recommendedMaxChars": 16,
+                "hardMaxChars": 20,
+                "hardMaxLines": 1
+              }
+            }
+          ]
+        },
+        "media": null
+      },
+      {
+        "id": "options-cards-2-content-region",
+        "role": "text-region",
+        "field": "items[1].support",
+        "itemId": "options-cards-2",
+        "regionId": "content",
+        "contentType": "text-region",
+        "required": false,
+        "textMode": "structured",
+        "listPolicy": "structured",
+        "frame": {
+          "left": 698,
+          "top": 352,
+          "width": 417,
+          "height": 130,
+          "rotation": 0
+        },
+        "capacity": {
+          "basis": "dom-box-font-metrics",
+          "reliable": true,
+          "derived": true,
+          "sampleFits": true,
+          "recommendedMaxChars": 50,
+          "hardMaxChars": 63
+        },
+        "innerFrame": {
+          "width": 417,
+          "height": 130,
+          "padding": {
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          }
+        },
+        "textLayout": {
+          "id": "heading-content-flow",
+          "defaultId": "heading-content-flow",
+          "compatible": [
+            "statement-flow",
+            "heading-content-flow",
+            "structured-list-flow",
+            "metric-content-flow"
+          ],
+          "contentRoles": [
+            "body"
+          ],
+          "status": "resolved",
+          "align": "center",
+          "valign": "middle",
+          "density": "standard",
+          "parts": [
+            {
+              "part": "body",
+              "field": "body",
+              "primitive": "body",
+              "frame": {
+                "left": 698,
+                "top": 374.25,
+                "width": 417,
+                "height": 85.5,
+                "rotation": 0
+              },
+              "text": "先选择一个部门试用，再按反馈逐批推广。优点\n是能及时修正规则；代价是新旧系统并存时间较\n长，需要维护数据同步和跨部门办理说明。",
+              "lineCount": 3,
+              "typography": {
+                "role": "componentBody",
+                "typeface": "Microsoft YaHei",
+                "fontSizePt": 14.25,
+                "fontWeight": "400",
+                "alignment": "center",
+                "lineHeightPt": 21.375
+              },
+              "capacity": {
+                "recommendedMaxChars": 50,
+                "hardMaxChars": 63,
+                "hardMaxLines": 3
+              }
+            }
+          ]
+        },
+        "media": null
+      }
+    ],
+    "componentId": "options",
+    "targetFrame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "textSourceBindings": {
+    "sourceFile": "稿件/模拟稿库/布局试排-options.md",
+    "sourceSha256": "123b52f8a5fc088f575c8a702d1ba5c09949e0482a68add8ebb3539d71dfc7ae",
+    "spans": {
+      "title": {
+        "block": "source-001",
+        "start": 0,
+        "end": 6,
+        "text": "两种上线方案",
+        "role": "page-title"
+      },
+      "parallel-title-0": {
+        "block": "source-002",
+        "start": 0,
+        "end": 7,
+        "text": "集中上线方案：",
+        "role": "heading"
+      },
+      "parallel-body-0": {
+        "block": "source-002",
+        "start": 7,
+        "end": 73,
+        "text": "在一个周末完成全部部门切换，培训与支持资源集中投入。优势是过渡期短；风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。",
+        "role": "body"
+      },
+      "parallel-title-1": {
+        "block": "source-003",
+        "start": 0,
+        "end": 7,
+        "text": "分批上线方案：",
+        "role": "heading"
+      },
+      "parallel-body-1": {
+        "block": "source-003",
+        "start": 7,
+        "end": 68,
+        "text": "先选择一个部门试用，再按反馈逐批推广。优点是能及时修正规则；代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。",
+        "role": "body"
+      },
+      "precondition": {
+        "block": "source-004",
+        "start": 0,
+        "end": 29,
+        "text": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。",
+        "role": "shared-condition"
+      }
+    }
+  }
+}

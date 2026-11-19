@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>备件供应方式对比说明</title>
+<style>:root {
+  color-scheme: light;
+  font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  color: #222;
+  background: #fcfcfa;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+*, *::before, *::after { box-sizing: border-box }
+body { margin: 0 }
+article, h1, h2, h3, p, section { margin: 0 }
+.slide {
+  container: page / inline-size;
+  padding: 48px clamp(38px, 5.15vw, 66px) 34px;
+  min-block-size: 100dvh;
+}
+.composition {
+  --rule: #9f9f98;
+  --gap: clamp(28px, 4.4cqw, 54px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  max-inline-size: 1400px;
+  margin-inline: auto;
+  line-break: strict;
+  word-break: normal;
+}
+h1 {
+  font-size: clamp(40px, 5.2cqw, 59px);
+  line-height: 1.16;
+  font-weight: 850;
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+.introduction {
+  margin-block-start: 12px;
+  font-size: 21px;
+  line-height: 32px;
+  color: #494943;
+}
+.comparison {
+  margin-block-start: 32px;
+  border-block-start: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: auto auto auto auto;
+  column-gap: var(--gap);
+}
+.method {
+  grid-row: span 4;
+  display: grid;
+  grid-template-rows: subgrid;
+  padding-block: 17px 0;
+  min-inline-size: 0;
+}
+.method + .method {
+  border-inline-start: 1px solid #d0d0c9;
+  padding-inline-start: clamp(20px, 3cqw, 38px);
+}
+.method h2 {
+  font-weight: 790;
+  font-size: 30px;
+  line-height: 40px;
+  letter-spacing: -.025em;
+}
+.measure {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  align-content: start;
+  gap: .22em .55em;
+  margin-block: 8px 15px;
+  font-size: 20px;
+  line-height: 32px;
+}
+.measure > strong { font-weight: 650; white-space: nowrap }
+.measure .number {
+  font-family: Georgia, serif;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-weight: 400;
+  font-size: clamp(40px, 5.9cqw, 64px);
+  line-height: 1;
+  letter-spacing: -.035em;
+  margin-inline-end: 4px;
+}
+.copy {
+  font-size: 22px;
+  line-height: 34px;
+  text-wrap: pretty;
+}
+.method .copy { max-inline-size: 23.5em }
+.method .copy > [data-bind] { display: inline-block; max-inline-size: 100% }
+.method .copy b { white-space: nowrap }
+.method .fit {
+  font-weight: 650;
+  margin-block-start: 8px;
+}
+.regulations {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--gap);
+  padding-block-start: 18px;
+  border-block-start: 1px solid var(--rule);
+  margin-block-start: 30px;
+}
+.regulations section + section {
+  padding-inline-start: clamp(20px, 3cqw, 38px);
+}
+.regulations h3 {
+  font-size: 19px;
+  line-height: 28px;
+  font-weight: 760;
+  margin-block-end: 5px;
+}
+.regulations .copy {
+  font-size: 20px;
+  line-height: 30px;
+  max-inline-size: 27em;
+  text-wrap: balance;
+}
+.regulations .copy strong { font-weight: 730; white-space: nowrap }
+.notice {
+  margin-block-start: 23px;
+  padding-block-start: 11px;
+  border-block-start: 1px solid #d0d0c9;
+  color: #54544f;
+  font-size: 18px;
+  line-height: 26px;
+}
+
+/* Text, order and table relationships are identical at both container widths. */
+@container page (max-width: 1000px) {
+  h1 { font-size: clamp(34px, 5.65cqw, 52px) }
+  .comparison { margin-block-start: 24px }
+  .measure { margin-block-end: 10px }
+  .copy { font-size: 20px; line-height: 31px }
+  .regulations {
+    grid-template-columns: max-content minmax(0, 1fr);
+    row-gap: 10px;
+    column-gap: 24px;
+    margin-block-start: 24px;
+    padding-block-start: 12px;
+  }
+  .regulations section {
+    display: grid;
+    grid-column: span 2;
+    grid-template-columns: subgrid;
+    align-items: baseline;
+  }
+  .regulations section + section { padding-inline-start: 0 }
+  .regulations h3 { margin-block-end: 0 }
+  .regulations .copy { max-inline-size: unset }
+  .notice { margin-block-start: 18px }
+}
+@container page (max-width: 650px) {
+  .comparison {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+  }
+  .method { grid-row: auto; display: block }
+  .method + .method {
+    border-inline-start: 0;
+    border-block-start: 1px solid #d0d0c9;
+    margin-block-start: 24px;
+    padding-inline-start: 0;
+  }
+  .regulations { grid-template-columns: 1fr }
+  .regulations section { display: block; grid-column: auto }
+  .regulations .copy { text-wrap: pretty }
+}
+
+.first h1 { font-size: 50px }
+.first .slide { padding-block-start: 59px }
+.first .comparison { margin-block-start: 40px }
+.first .method { padding-block-start: 20px }
+.first .measure { display: block; margin-block: 15px 20px }
+.first .measure > strong { display: block }
+.first .measure .number { font-size: 92px }
+.first .measure > span { display: block }
+.first .regulations { margin-block-start: 40px }
+.first .regulations .copy { font-size: 22px; line-height: 34px; text-wrap: wrap }
+.first .method .copy > [data-bind] { display: inline }
+.first .notice { margin-block-start: 29px }
+</style>
+<body><article class="slide" data-page><div class="composition">
+  <header>
+    <h1><span data-bind="title" data-source="source-001">备件供应方式对比说明</span></h1>
+    <p class="introduction"><span data-bind="comparison-source" data-source="source-002">设备科对现行两种备件供应方式作了对比。</span><span data-bind="parallel-compatibility" data-source="source-003">两种方式并非互斥。</span></p>
+  </header>
+  <div class="comparison">
+    <section class="method" aria-labelledby="central">
+      <h2 id="central"><span data-bind="central-label" data-source="source-002">集中供应</span></h2>
+      <p class="measure"><span data-bind="central-time-label" data-source="source-002">配送周期平均</span> <strong><span data-bind="central-time" data-source="source-002"><span class="number">5</span> 个工作日</span></strong></p>
+      <p class="copy"><span data-bind="central-method" data-source="source-002">中心库统一采购、统一配送。</span><span data-bind="central-cost" data-source="source-002">单件采购成本较低。</span><span data-bind="central-emergency" data-source="source-002">紧急需求须另走加急流程。</span></p>
+      <p class="copy fit"><span data-bind="central-fit" data-source="source-003">适合常用件</span>。</p>
+    </section>
+    <section class="method" aria-labelledby="local">
+      <h2 id="local"><span data-bind="local-label" data-source="source-002">就近供应</span></h2>
+      <p class="measure"><span data-bind="local-time-label" data-source="source-002">响应时间可缩短至</span> <strong><span data-bind="local-time" data-source="source-002"><span class="number">1</span> 个工作日以内</span></strong></p>
+      <p class="copy"><span data-bind="local-method" data-source="source-002">各站点自行采购。</span><span data-bind="local-cost" data-source="source-002">单价普遍高出 <b>8% 至 12%</b>。</span></p>
+      <p class="copy fit"><span data-bind="local-fit" data-source="source-003">适合价值低、消耗快的易损件</span>。</p>
+    </section>
+  </div>
+  <div class="regulations">
+    <section aria-labelledby="grade">
+      <h3 id="grade"><span data-bind="classification" data-source="source-003">分级建议</span></h3>
+      <p class="copy"><span data-bind="threshold" data-source="source-003">单件价值 <strong>500 元以上</strong>的集中采购，<strong>500 元以下</strong>的由站点自行采购。</span></p>
+    </section>
+    <section aria-labelledby="exception">
+      <h3 id="exception">关键备件例外</h3>
+      <p class="copy"><span data-bind="safety-override" data-source="source-003">涉及安全停机的关键备件，<strong>无论金额</strong>均须报设备科备案后加急处理。</span></p>
+    </section>
+  </div>
+  <p class="notice"><span data-bind="effective-date-and-precedence" data-source="source-004">本说明自下发之日起执行；原《备件领用暂行规定》中与本文不一致的，以本文为准。</span></p>
+</div></article></body>
+</html>

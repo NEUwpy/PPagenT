@@ -1,0 +1,593 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>存在的不足与感悟 · 灰稿样张</title>
+  <style>/* ppagent-theme:resolved */:root{
+    --ppagent-font-body:"Noto Sans SC";
+    --ppagent-color-background:#FFFFFF;
+    --ppagent-color-surface:#FFFFFF;
+    --ppagent-color-primary:#626262;
+    --ppagent-color-primary-deep:#393939;
+    --ppagent-color-primary-dark:#4A4A4A;
+    --ppagent-color-primary-light:#979797;
+    --ppagent-color-primary-pale:#C8C8C8;
+    --ppagent-color-primary-wash:#ECECEC;
+    --ppagent-color-accent:#626262;
+    --ppagent-color-accent-alt:#7E7E7E;
+    --ppagent-color-accent-soft:#E3E3E3;
+    --ppagent-color-cyan:#9B9B9B;
+    --ppagent-color-dark:#262626;
+    --ppagent-color-body:#424242;
+    --ppagent-color-muted:#535353;
+    --ppagent-color-line:#C5C5C5;
+    --ppagent-component-heading-size:15.75pt;
+    --ppagent-component-title-size:15.75pt;
+    --ppagent-component-item-title-size:15.75pt;
+    --ppagent-component-lead-size:13.5pt;
+    --ppagent-component-body-size:13.5pt;
+    --ppagent-component-label-size:13.5pt;
+    --ppagent-component-meta-size:12pt;
+  }
+    .ppagent-text-region{
+      box-sizing:border-box;
+      min-width:0;
+      min-height:0;
+    }
+    .ppagent-text-region > .ppagent-text-flow,
+    .ppagent-text-region > .ppagent-text-layout{
+      width:100%;
+      height:100%;
+    }
+    .ppagent-text-layout{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-layout-gap,10px);
+      width:100%;
+      height:100%;
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,"Microsoft YaHei"),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-align="center"]{text-align:center}
+    .ppagent-text-layout[data-text-layout-align="right"]{text-align:right}
+    .ppagent-text-layout[data-text-layout-valign="top"]{justify-content:flex-start}
+    .ppagent-text-layout[data-text-layout-valign="bottom"]{justify-content:flex-end}
+    .ppagent-text-layout[data-text-layout-density="compact"]{--ppagent-text-layout-gap:6px;--ppagent-text-layout-item-gap:5px}
+    .ppagent-text-layout[data-text-layout-density="standard"]{--ppagent-text-layout-gap:10px;--ppagent-text-layout-item-gap:8px}
+    .ppagent-text-layout[data-text-layout-density="loose"]{--ppagent-text-layout-gap:15px;--ppagent-text-layout-item-gap:12px}
+    .ppagent-text-primitive{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      color:var(--ppagent-text-color,#46566a);
+      text-align:inherit;
+      white-space:pre-line;
+      overflow-wrap:break-word;
+    }
+    .ppagent-text-primitive--heading{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-text-primitive--body{font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.45}
+    .ppagent-text-primitive--list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px)}
+    .ppagent-text-list__item{box-sizing:border-box;min-width:0;margin:0;padding:0;overflow:visible;color:var(--ppagent-text-color,#46566a);font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.38;text-align:inherit;white-space:pre-line;overflow-wrap:break-word}
+    .ppagent-text-primitive--metric{color:var(--ppagent-value-color,#2f5ea8);font-size:var(--ppagent-component-heading-size,25pt);font-weight:700;line-height:1.08}
+    .ppagent-text-primitive--label{color:var(--ppagent-label-color,#60758d);font-size:var(--ppagent-component-label-size,17pt);font-weight:600;line-height:1.2}
+    .ppagent-text-primitive--annotation{color:var(--ppagent-annotation-color,#748495);font-size:var(--ppagent-component-meta-size,15pt);font-weight:400;line-height:1.3}
+    .ppagent-text-primitive--quote{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:500;line-height:1.35}
+    .ppagent-text-primitive--emphasis{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-title-size,23pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-structured-list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-structured-list__item{display:flex;flex-direction:column;gap:4px;min-width:0}
+    .ppagent-structured-list__item .ppagent-text-primitive--heading{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-metric-set{display:grid;grid-template-columns:repeat(var(--ppagent-metric-columns,2),minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0;align-items:start}
+    .ppagent-metric-set[data-metric-count="3"]{--ppagent-metric-columns:3}
+    .ppagent-metric-set[data-metric-count="4"]{--ppagent-metric-columns:4}
+    .ppagent-metric-set__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-key-value{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-key-value__row{display:grid;grid-template-columns:minmax(64px,.42fr) minmax(0,1fr);gap:10px;align-items:start;min-width:0}
+    .ppagent-key-value__row .ppagent-text-primitive--metric{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label,
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--annotation{text-align:right}
+    .ppagent-summary-information{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0}
+    .ppagent-summary-information__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-summary-information__item .ppagent-text-primitive--emphasis{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"]{
+      justify-content:flex-start;
+      gap:12px;
+      padding:18px;
+      color:var(--ppagent-color-body);
+      background:transparent;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive{color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--emphasis,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--quote{color:var(--ppagent-color-dark);font-weight:700;letter-spacing:-.25px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--body,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-list__item{font-size:max(15pt,var(--ppagent-component-body-size))}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--label{color:var(--ppagent-color-accent);font-size:max(15pt,var(--ppagent-component-label-size));font-weight:700;letter-spacing:.7px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--annotation{color:var(--ppagent-color-muted);font-size:max(15pt,var(--ppagent-component-meta-size))}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--metric{color:var(--ppagent-color-accent);font-weight:700;letter-spacing:-.5px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-list__item{position:relative;padding-left:17px;color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-list__item::before{content:"";position:absolute;left:0;top:.68em;width:8px;height:2px;background:var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--heading-content-flow > .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--label-content-flow > .ppagent-text-primitive--label,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--heading-metric-content-flow > .ppagent-text-primitive--heading{padding-bottom:10px;border-bottom:2px solid var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-structured-list{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-structured-list__item{display:grid;grid-template-columns:minmax(82px,.42fr) minmax(0,1fr);gap:14px;padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-structured-list__item .ppagent-text-primitive--body{margin:0}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-metric-set{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-metric-set__item{padding:12px 14px 4px 0}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-metric-set__item + .ppagent-metric-set__item{padding-left:14px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-key-value{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-key-value__row{padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--quote-attribution-flow{position:relative;padding-left:52px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--quote-attribution-flow::before{content:"“";position:absolute;left:16px;top:8px;color:var(--ppagent-color-accent);font-family:Georgia,serif;font-size:42pt;font-weight:700;line-height:1}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label{margin-top:auto;padding-top:10px;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-summary-information{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-summary-information__item{padding:10px 12px 8px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-summary-information__item:nth-child(even){padding-left:12px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout--value-label{
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-value-label-gap,5px);
+      padding:var(--ppagent-value-label-padding,5px);
+      text-align:center;
+    }
+    .ppagent-text-layout__value,
+    .ppagent-text-layout__label{
+      box-sizing:border-box;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:hidden;
+      text-align:inherit;
+    }
+    .ppagent-text-layout__value{
+      color:var(--ppagent-value-color,#2f5ea8);
+      font-size:var(--ppagent-component-lead-size,19pt);
+      font-weight:700;
+      line-height:1.15;
+    }
+    .ppagent-text-layout__label{
+      color:var(--ppagent-label-color,#60758d);
+      font-size:var(--ppagent-component-meta-size,15pt);
+      font-weight:400;
+      line-height:1.2;
+    }
+    .ppagent-text-flow{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-flow-gap,10px);
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,"Microsoft YaHei"),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-flow[data-text-flow-align="center"]{text-align:center}
+    .ppagent-text-flow[data-text-flow-align="right"]{text-align:right}
+    .ppagent-text-flow[data-text-flow-valign="top"]{justify-content:flex-start}
+    .ppagent-text-flow[data-text-flow-valign="bottom"]{justify-content:flex-end}
+    .ppagent-text-flow__title,
+    .ppagent-text-flow__body{
+      position:relative;
+      box-sizing:border-box;
+      flex:0 0 auto;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      text-align:inherit;
+    }
+    .ppagent-text-flow__title{
+      font-size:var(--ppagent-component-item-title-size,21pt);
+      font-weight:700;
+      line-height:1.2;
+      white-space:normal;
+      text-wrap:balance;
+    }
+    .ppagent-text-flow__body{
+      font-size:var(--ppagent-component-body-size,17pt);
+      font-weight:400;
+      line-height:1.45;
+      white-space:pre-line;
+    }
+    .ppagent-text-flow__separator{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      align-self:center;
+      width:var(--ppagent-text-flow-separator-width,54px);
+      height:var(--ppagent-text-flow-separator-height,4px);
+      border:0;
+      border-radius:99px;
+      background:var(--ppagent-text-flow-separator-color,#78aeef);
+    }
+  .merge { position: relative; width: 1170px; height: 492px; overflow: hidden; color: #4A4A4A; }
+.merge > svg { position: absolute; inset: 0; z-index: 0; width: 1170px; height: 492px; overflow: visible; }
+
+.input { position: absolute; left: 8px; top: var(--top); z-index: 2; width: 310px; height: 78px; padding: 10px 18px; overflow: hidden; border: 1px solid #ECECEC; border-left: 8px solid var(--color); border-radius: 12px; background: #fff; box-shadow: 0 6px 14px rgba(74, 74, 74, .08); }
+.input-content { width: 100%; height: 100%; --ppagent-text-layout-gap: 2px; --ppagent-heading-color: #4A4A4A; --ppagent-text-color: #626262; }
+.input-content .ppagent-text-primitive--heading { font-size: 16pt; line-height: 1.15; }
+.input-content .ppagent-text-primitive--body { font-size: 12pt; line-height: 1.24; }
+
+.result { position: absolute; right: 8px; top: 116px; z-index: 2; width: 300px; height: 260px; padding: 42px 36px 34px; overflow: hidden; border: 10px solid #ECECEC; border-radius: 30px; background: #4A4A4A; color: #fff; box-shadow: 0 14px 28px rgba(74, 74, 74, .16); }
+.result-content { width: 100%; height: 100%; --ppagent-text-layout-gap: 11px; --ppagent-label-color: #C8C8C8; --ppagent-heading-color: #fff; --ppagent-text-color: #ECECEC; }
+.result-content .ppagent-text-layout { justify-content: center; }
+.result-content .ppagent-text-primitive--label { font-size: 12pt; line-height: 1.15; letter-spacing: 2px; }
+.result-content .ppagent-text-primitive--heading { font-size: 22pt; line-height: 1.22; }
+.result-content .ppagent-text-primitive--body { font-size: 14pt; line-height: 1.45; }
+
+.merge[data-input-count="6"] .input { height: 66px; padding-top: 7px; padding-bottom: 7px; }
+.merge[data-input-count="6"] .input-content .ppagent-text-primitive--heading { font-size: 14pt; }
+.merge[data-input-count="6"] .input-content .ppagent-text-primitive--body { font-size: 12pt; }
+
+      [data-ppt-root] * {box-shadow:none!important;text-shadow:none!important}
+      [data-ppt-root] [class*="-card"] {background:#FFFFFF!important;border-color:#626262!important}
+      [data-ppt-root] [class*="-underlay"], [data-ppt-root] [class*="-halo"] {background:transparent!important;border-color:transparent!important}
+      [data-ppt-root] .outcome-ring {border-color:#244A73!important;background:#FFFFFF!important}
+    :root {
+  color: #212832;
+  background: #eaecef;
+  font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  --ink: #1d2a3a;
+  --accent: #2b557f;
+  --quiet: #576676;
+  --rule: #d9e0e7;
+}
+
+* { box-sizing: border-box }
+html, body { margin: 0 }
+
+.slide {
+  width: var(--canvas-width);
+  min-height: 720px;
+  margin-inline: auto;
+  padding: 40px var(--margin) 36px;
+  background: #fff;
+  border-top: 5px solid var(--accent);
+}
+
+h1, h2, h3, p { margin: 0 }
+.theme-header { padding-bottom: 22px; border-bottom: 1px solid #aebdca }
+.theme-header h1 {
+  color: var(--ink);
+  font-size: var(--claim-size);
+  font-weight: 740;
+  line-height: 1.28;
+  letter-spacing: -.025em;
+  text-wrap: balance;
+}
+.page-topic {
+  margin-top: 12px;
+  color: var(--quiet);
+  font-size: 17px;
+  font-weight: 520;
+  line-height: 1.4;
+}
+.page-topic span + span { margin-left: 10px; padding-left: 11px; border-left: 1px solid #aab6c1 }
+
+.body {
+  display: grid;
+  grid-template-columns: var(--left-width) minmax(0, 1fr);
+  gap: var(--column-gap);
+  margin-top: 26px;
+}
+.body > section { min-width: 0 }
+.group-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--accent);
+  font-size: 26px;
+  font-weight: 750;
+  line-height: 1.35;
+  padding-bottom: 12px;
+}
+.group-title::after { content: ""; flex: 1; border-top: 1px solid var(--rule) }
+
+.issue-title {
+  color: var(--ink);
+  font-size: 23px;
+  font-weight: 690;
+  line-height: 1.35;
+}
+.issue-lead {
+  color: var(--quiet);
+  margin-top: 3px;
+  font-size: 18px;
+  line-height: 1.45;
+}
+.graph {
+  width: var(--left-width);
+  margin: 3px 0 6px;
+  --ppagent-font-body: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+}
+.graph .merge > svg { width: var(--merge-frame-width); height: var(--merge-frame-height) }
+.graph .merge > .input {
+  left: var(--input-left);
+  width: var(--input-width);
+  height: var(--input-height);
+  padding: 4px 9px;
+}
+.graph .merge > .result {
+  right: var(--result-right);
+  top: var(--result-top);
+  width: var(--result-width);
+  height: var(--result-height);
+  border-width: 7px;
+  border-radius: 23px;
+  padding: 16px 10px;
+}
+.graph .merge .ppagent-text-layout { padding: 0; gap: 1px; background: transparent; justify-content: center }
+.graph .input-content .ppagent-text-primitive--heading { font-size: 20px; line-height: 1.28 }
+.graph .input-content .ppagent-text-primitive--body { font-size: 17px; line-height: 1.28 }
+.graph .result-content .ppagent-text-primitive--heading { font-size: 25px; line-height: 1.3; letter-spacing: .02em }
+.graph .result-content .ppagent-text-primitive--label { display: none }
+.compliance { border-top: 1px solid var(--rule); padding-top: 15px }
+.compliance p { margin-top: 7px; font-size: 18px; line-height: 1.5; color: var(--quiet) }
+.compliance .needs { color: var(--accent); font-weight: 620; margin-top: 8px }
+
+.talk-points { margin: 0; padding: 0; list-style: none; counter-reset: point }
+.talk-points li {
+  position: relative;
+  counter-increment: point;
+  padding: 15px 0 15px var(--point-indent);
+  border-bottom: 1px solid var(--rule);
+}
+.talk-points li:first-child { padding-top: 2px }
+.talk-points li:last-child { border-bottom: 0; padding-bottom: 0 }
+.talk-points li::before {
+  content: counter(point, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  color: #597b9c;
+  font: 650 19px/1.7 "Noto Sans SC", sans-serif;
+}
+.talk-points h3 { color: var(--ink); font-size: var(--point-title); line-height: 1.43; font-weight: 700 }
+.talk-points p { margin-top: 6px; color: var(--quiet); font-size: 18px; line-height: 1.5; text-wrap: pretty }
+.process {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+  color: var(--accent);
+  font-size: var(--process-size);
+  line-height: 1.35;
+}
+.process > span { white-space: nowrap }
+.process .stage-label { background: #edf3f7; padding: 5px 7px; border-radius: 4px; font-weight: 600 }
+.process .stage-arrow { color: #587c9c }
+.body {
+  height: 482px;
+  grid-template-columns: 532px minmax(0, 1fr);
+  gap: 27px;
+  margin-top: 25px;
+}
+.body > section {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border: 1px solid var(--group-border);
+}
+.issues { padding: 9px 12px 11px 11px }
+.body > .insights { padding: 9px 0 11px 13px; border-left-color: var(--section-divider) }
+.group-title { font-size: 25px; padding-bottom: 9px }
+.issue-title { font-size: 23px }
+.issue-lead { margin: 4px 0 0; line-height: 1.38 }
+.issue-points { display: flex; flex-direction: column; flex: 1; justify-content: space-between }
+.graph { margin: 0 0 4px }
+.graph .merge > .result {
+  top: calc(var(--result-top) + 33px);
+  height: calc(var(--result-height) - 66px);
+  border-color: var(--result-border);
+  background: var(--result-fill);
+  box-shadow: none;
+}
+.graph .merge > .input { box-shadow: none }
+.graph .result-content .ppagent-text-primitive--heading { font-size: 23px }
+.compliance { padding-top: 9px }
+.compliance p { margin-top: 5px }
+.short-facts {
+  display: grid;
+  grid-template-columns: 92px repeat(4, minmax(0, 1fr));
+  margin: 8px 0 0;
+  padding: 0;
+  align-items: stretch;
+  min-height: 59px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--short-facts-fill);
+}
+.short-facts > * { display: grid; gap: 1px; place-content: center; text-align: center; padding: 3px 0; margin: 0 }
+.short-facts > * + * { border-left: 1px solid var(--short-facts-rule) }
+.short-facts dt { color: var(--accent); font-size: 18px; font-weight: 670; line-height: 1.35 }
+.short-facts dd { margin: 0; color: var(--quiet); font-size: 18px; line-height: 1.35 }
+.short-facts .short-label { background: var(--short-label-fill); font-size: 17px; line-height: 1.4; font-weight: 650; color: var(--short-label-text) }
+.short-facts .short-label + dl { border-left-color: transparent }
+
+.reading-list {
+  flex: 1;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  gap: 11px;
+}
+.reading-list > li { min-height: 0; display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 10px; align-items: center; position: relative }
+.reading-list > li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 23px;
+  top: calc(50% + 22px);
+  height: calc(100% - 33px);
+  border-left: 1px solid var(--reading-axis);
+}
+.reading-index {
+  display: grid;
+  place-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  font-size: 23px;
+  line-height: 1;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--index-text);
+  background: var(--index-fill);
+}
+.reading-copy {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px 23px 10px 14px;
+  isolation: isolate;
+}
+.reading-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+.reading-face path { fill: url(#reading-wash) }
+#reading-wash stop:first-child { stop-color: var(--reading-start) }
+#reading-wash stop:last-child { stop-color: var(--reading-end) }
+.reading-copy h3 { font-size: 23px; line-height: 1.35; font-weight: 690; color: var(--ink) }
+.reading-copy p { font-size: 18px; line-height: 1.42; color: var(--quiet); margin-top: 5px }
+.process { margin-top: 7px; font-size: 17px }
+.process .stage-label { background: var(--stage-fill) }
+.process .stage-arrow { color: var(--reading-axis-strong) }
+/* Shared layout is declared separately. These roles determine paint only. */
+.slide {
+  --group-border: #dadada;
+  --section-divider: #c7c7c7;
+  --result-border: #e1e1e1;
+  --result-fill: #525252;
+  --short-facts-fill: #ebebeb;
+  --short-facts-rule: #d3d3d3;
+  --short-label-fill: #606060;
+  --short-label-text: #fff;
+  --index-fill: #dfdfdf;
+  --index-text: #343434;
+  --reading-axis: #c6c6c6;
+  --reading-axis-strong: #626262;
+  --reading-start: #f4f4f4;
+  --reading-end: #ececec;
+  --stage-fill: #e7e7e7;
+}
+
+.slide[data-view="gray"] {
+  --ink: #262626;
+  --accent: #434343;
+  --quiet: #535353;
+  --rule: #d2d2d2;
+}
+.slide[data-view="gray"] .theme-header { border-color: #bdbdbd }
+.slide[data-view="gray"] .page-topic span + span { border-color: #bdbdbd }
+
+.slide[data-view="reference"] {
+  --group-border: transparent;
+  --section-divider: #dce5ef;
+  --result-border: #e4ecf7;
+  --result-fill: #2e5689;
+  --short-facts-fill: #e9f2f9;
+  --short-facts-rule: #cbddec;
+  --short-label-fill: #3b6ba4;
+  --index-fill: #dceaf7;
+  --index-text: #254776;
+  --reading-axis: #bdd0e6;
+  --reading-axis-strong: #4c6d90;
+  --reading-start: #f8fbfd;
+  --reading-end: #e8f2f9;
+  --stage-fill: #e5eff8;
+}
+</style></head>
+  <body><article class="slide" data-view="gray" style="--canvas-width:1280px;--margin:54px;--left-width:507px;--claim-size:37px">
+  <header class="theme-header" data-object="theme-header">
+  <h1 data-object="claim">破解落地阻力、补齐合规短板，以解决实际问题检验变革成效</h1>
+  <p class="page-topic" data-object="topic"><span>第二部分</span><span>存在的不足与感悟</span></p>
+</header>
+  <svg aria-hidden="true" width="0" height="0" style="position:absolute"><defs><linearGradient id="reading-wash"><stop offset="0"/><stop offset="1"/></linearGradient></defs></svg>
+  <main class="body" data-object="body">
+    <section class="issues" data-object="issues" aria-labelledby="issues-title">
+      <h2 id="issues-title" class="group-title" data-object="issues-title">两点不足</h2>
+      <div class="issue-points">
+        <article data-object="implementation">
+          <h3 class="issue-title" data-object="implementation-heading">变革落地</h3>
+          <p class="issue-lead" data-object="implementation-context">顶层设计完成后，落地成为关键</p>
+          <div class="graph" data-object="convergence" data-asset="convergence-many-to-one-003" aria-label="三项因素共同阻碍落地"><section class="merge" style="width:507px;height:213px;--merge-frame-width:507px;--merge-frame-height:213px;--merge-font-scale:0.86" data-ppt-root data-input-count="3" data-adaptive-profile="convergence">
+    <svg viewBox="0 0 507 213" aria-hidden="true"><path d="M 196.08 41.00 C 234.02 41.00, 260.57 106.50, 290.92 106.50" fill="none" stroke="#C8C8C8" stroke-width="10" stroke-linecap="round" data-ppt-kind="path" data-ppt-name="merge-lane-1"></path><path d="M 196.08 106.50 C 234.02 106.50, 260.57 106.50, 290.92 106.50" fill="none" stroke="#979797" stroke-width="10" stroke-linecap="round" data-ppt-kind="path" data-ppt-name="merge-lane-2"></path><path d="M 196.08 172.00 C 234.02 172.00, 260.57 106.50, 290.92 106.50" fill="none" stroke="#626262" stroke-width="10" stroke-linecap="round" data-ppt-kind="path" data-ppt-name="merge-lane-3"></path></svg>
+    <article class="input" style="--top:12px;--input-left:6.0840000000000005px;--input-width:190px;--input-height:58px;--color:#C8C8C8" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-none" data-ppt-name="merge-input-1">
+    <div class="ppagent-text-region input-content" data-ppagent-text-region data-slot-id="atmosphere-content" data-slot-role="text-region" data-slot-field="inputs[0]" data-slot-item-id="atmosphere" data-slot-region-id="input" data-slot-content-type="text-region" data-slot-safe-box="true" data-slot-required="true" data-slot-text-mode="structured" data-slot-list-policy="structured" data-text-layout-id="heading-content-flow" data-text-layout-default-id="heading-content-flow" data-text-layout-compatible="heading-content-flow,statement-flow" data-text-layout-content-roles="heading,body">
+    <div class="ppagent-text-layout ppagent-text-layout--heading-content-flow" data-ppagent-text-layout data-text-layout-id="heading-content-flow" data-text-layout-align="left" data-text-layout-valign="middle" data-text-layout-density="compact" data-text-layout-tone="light" data-text-layout-style="default"><div class="ppagent-text-primitive ppagent-text-primitive--heading" data-text-primitive="heading" data-text-layout-part="heading" data-text-layout-field="title" data-text-primitive-font-tiers="22,20,18,16,14" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="merge-input-1-title">变革氛围</div><div class="ppagent-text-primitive ppagent-text-primitive--body" data-text-primitive="body" data-text-layout-part="body" data-text-layout-field="body" data-text-primitive-font-tiers="16,14,12" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="merge-input-1-body">尚未完全形成</div></div>
+  </div>
+  </article><article class="input" style="--top:77.5px;--input-left:6.0840000000000005px;--input-width:190px;--input-height:58px;--color:#979797" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-none" data-ppt-name="merge-input-2">
+    <div class="ppagent-text-region input-content" data-ppagent-text-region data-slot-id="systems-content" data-slot-role="text-region" data-slot-field="inputs[1]" data-slot-item-id="systems" data-slot-region-id="input" data-slot-content-type="text-region" data-slot-safe-box="true" data-slot-required="true" data-slot-text-mode="structured" data-slot-list-policy="structured" data-text-layout-id="heading-content-flow" data-text-layout-default-id="heading-content-flow" data-text-layout-compatible="heading-content-flow,statement-flow" data-text-layout-content-roles="heading,body">
+    <div class="ppagent-text-layout ppagent-text-layout--heading-content-flow" data-ppagent-text-layout data-text-layout-id="heading-content-flow" data-text-layout-align="left" data-text-layout-valign="middle" data-text-layout-density="compact" data-text-layout-tone="light" data-text-layout-style="default"><div class="ppagent-text-primitive ppagent-text-primitive--heading" data-text-primitive="heading" data-text-layout-part="heading" data-text-layout-field="title" data-text-primitive-font-tiers="22,20,18,16,14" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="merge-input-2-title">信息系统</div><div class="ppagent-text-primitive ppagent-text-primitive--body" data-text-primitive="body" data-text-layout-part="body" data-text-layout-field="body" data-text-primitive-font-tiers="16,14,12" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="merge-input-2-body">支撑能力仍有差距</div></div>
+  </div>
+  </article><article class="input" style="--top:143px;--input-left:6.0840000000000005px;--input-width:190px;--input-height:58px;--color:#626262" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-none" data-ppt-name="merge-input-3">
+    <div class="ppagent-text-region input-content" data-ppagent-text-region data-slot-id="management-content" data-slot-role="text-region" data-slot-field="inputs[2]" data-slot-item-id="management" data-slot-region-id="input" data-slot-content-type="text-region" data-slot-safe-box="true" data-slot-required="true" data-slot-text-mode="structured" data-slot-list-policy="structured" data-text-layout-id="heading-content-flow" data-text-layout-default-id="heading-content-flow" data-text-layout-compatible="heading-content-flow,statement-flow" data-text-layout-content-roles="heading,body">
+    <div class="ppagent-text-layout ppagent-text-layout--heading-content-flow" data-ppagent-text-layout data-text-layout-id="heading-content-flow" data-text-layout-align="left" data-text-layout-valign="middle" data-text-layout-density="compact" data-text-layout-tone="light" data-text-layout-style="default"><div class="ppagent-text-primitive ppagent-text-primitive--heading" data-text-primitive="heading" data-text-layout-part="heading" data-text-layout-field="title" data-text-primitive-font-tiers="22,20,18,16,14" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="merge-input-3-title">管理机制</div><div class="ppagent-text-primitive ppagent-text-primitive--body" data-text-primitive="body" data-text-layout-part="body" data-text-layout-field="body" data-text-primitive-font-tiers="16,14,12" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="merge-input-3-body">缺乏市场化机制</div></div>
+  </div>
+  </article>
+    <article class="result" style="--result-right:6.0840000000000005px;--result-top:16.5px;--result-width:210px;--result-height:180px" data-ppt-kind="shape" data-ppt-shape="roundRect" data-ppt-shadow="shadow-none" data-ppt-name="merge-result">
+    <div class="ppagent-text-region result-content" data-ppagent-text-region data-slot-id="merge-result-content" data-slot-role="text-region" data-slot-field="result" data-slot-item-id="result" data-slot-region-id="result" data-slot-content-type="text-region" data-slot-safe-box="true" data-slot-required="true" data-slot-text-mode="structured" data-slot-list-policy="structured" data-text-layout-id="label-content-flow" data-text-layout-default-id="label-content-flow" data-text-layout-compatible="label-content-flow,heading-content-flow,statement-flow" data-text-layout-content-roles="heading,label">
+    <div class="ppagent-text-layout ppagent-text-layout--label-content-flow" data-ppagent-text-layout data-text-layout-id="label-content-flow" data-text-layout-align="center" data-text-layout-valign="middle" data-text-layout-density="loose" data-text-layout-tone="light" data-text-layout-style="default"><div class="ppagent-text-primitive ppagent-text-primitive--label" data-text-primitive="label" data-text-layout-part="label" data-text-layout-field="label" data-text-primitive-font-tiers="16,14,12" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="merge-result-label">共同结果</div><div class="ppagent-text-primitive ppagent-text-primitive--heading" data-text-primitive="heading" data-text-layout-part="heading" data-text-layout-field="title" data-text-primitive-font-tiers="22,20,18,16,14" data-ppt-kind="text" data-ppt-preserve-lines="true" data-ppt-name="merge-result-title">变革落地受阻</div></div>
+  </div>
+  </article>
+  </section></div>
+        </article>
+        <article class="compliance" data-object="compliance">
+  <h3 class="issue-title" data-object="compliance-heading">合规管理短板</h3>
+  <p data-object="compliance-cue">2017 年巡视整改有成效，也暴露基础管理薄弱</p>
+  <div class="short-facts" data-object="compliance-status">
+    <div class="short-label"><span data-object="compliance-status-heading">主要表现</span></div>
+    <dl data-object="status-1"><dt data-object="status-1-object">认识</dt><dd data-object="status-1-state">待提升</dd></dl><dl data-object="status-2"><dt data-object="status-2-object">作风</dt><dd data-object="status-2-state">待转变</dd></dl><dl data-object="status-3"><dt data-object="status-3-object">能力</dt><dd data-object="status-3-state">待增强</dd></dl><dl data-object="status-4"><dt data-object="status-4-object">协同</dt><dd data-object="status-4-state">待深化</dd></dl>
+  </div>
+</article>
+      </div>
+    </section>
+    <section class="insights" data-object="insights" aria-labelledby="insights-title">
+      <h2 id="insights-title" class="group-title" data-object="insights-title">四点感悟</h2>
+      <ol class="reading-list" data-reading-order="parallel"><li data-object="insight-1"><span class="reading-index" data-object="insight-1-index" aria-hidden="true">01</span>
+    <div class="reading-copy" data-object="insight-1-surface">
+      <svg class="reading-face" data-object="insight-1-surface-outline" viewBox="0 0 550 100" preserveAspectRatio="none" aria-hidden="true"><path d="M0 0 H534 L550 50 L534 100 H0 Z"/></svg>
+      <h3 data-object="insight-1-heading">用 BLM 统一语言、目标和策略</h3>
+      <div class="process" data-object="blm-flow"><span class="stage-label" data-object="blm-stage-1">业务战略</span><span class="stage-arrow" data-object="blm-link-1" aria-hidden="true">→</span><span class="stage-label" data-object="blm-stage-2">人力资源战略规划</span><span class="stage-arrow" data-object="blm-link-2" aria-hidden="true">→</span><span class="stage-label" data-object="blm-stage-3">落地方案</span></div>
+    </div></li>
+<li data-object="insight-2"><span class="reading-index" data-object="insight-2-index" aria-hidden="true">02</span>
+    <div class="reading-copy" data-object="insight-2-surface">
+      <svg class="reading-face" data-object="insight-2-surface-outline" viewBox="0 0 550 100" preserveAspectRatio="none" aria-hidden="true"><path d="M0 0 H534 L550 50 L534 100 H0 Z"/></svg>
+      <h3 data-object="insight-2-heading">以实效检验变革</h3>
+      <p data-object="insight-2-cue">能否解决实际问题，是唯一标准</p>
+    </div></li>
+<li data-object="insight-3"><span class="reading-index" data-object="insight-3-index" aria-hidden="true">03</span>
+    <div class="reading-copy" data-object="insight-3-surface">
+      <svg class="reading-face" data-object="insight-3-surface-outline" viewBox="0 0 550 100" preserveAspectRatio="none" aria-hidden="true"><path d="M0 0 H534 L550 50 L534 100 H0 Z"/></svg>
+      <h3 data-object="insight-3-heading">顶层设计持续迭代</h3>
+      <p data-object="insight-3-cue">小步试点、对标实践，按落地成效优化</p>
+    </div></li>
+<li data-object="insight-4"><span class="reading-index" data-object="insight-4-index" aria-hidden="true">04</span>
+    <div class="reading-copy" data-object="insight-4-surface">
+      <svg class="reading-face" data-object="insight-4-surface-outline" viewBox="0 0 550 100" preserveAspectRatio="none" aria-hidden="true"><path d="M0 0 H534 L550 50 L534 100 H0 Z"/></svg>
+      <h3 data-object="insight-4-heading">统筹变革、合规与作风</h3>
+      <p data-object="insight-4-cue">作风改进不要求立竿见影，重在持续用力</p>
+    </div></li></ol>
+    </section>
+  </main>
+  </article></body></html>

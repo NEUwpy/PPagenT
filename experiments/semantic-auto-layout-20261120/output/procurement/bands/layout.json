@@ -1,0 +1,1013 @@
+{
+  "version": "semantic-band-layout@1",
+  "units": "CSS px",
+  "origin": "slide top-left",
+  "canvas": {
+    "width": 1280,
+    "height": 720
+  },
+  "pageId": "procurement",
+  "compilerLayout": {
+    "id": "standard-1+1-balanced-flow",
+    "canvas": {
+      "width": 1280,
+      "height": 720
+    },
+    "density": "standard",
+    "margin": 54,
+    "gap": 28,
+    "padding": 12,
+    "rows": [
+      [
+        {
+          "id": "amount-rules",
+          "width": 1172,
+          "itemsAcross": 3
+        }
+      ],
+      [
+        {
+          "id": "emergency-rule",
+          "width": 1172,
+          "itemsAcross": 1
+        }
+      ]
+    ],
+    "direction": "column",
+    "columns": [
+      1172,
+      1172
+    ]
+  },
+  "frame": {
+    "x": 54,
+    "y": 170.890625,
+    "width": 1172,
+    "height": 489.109375
+  },
+  "objects": [
+    {
+      "id": "theme-header",
+      "bounds": {
+        "x": 54,
+        "y": 43,
+        "width": 1172,
+        "height": 103.890625
+      },
+      "role": "region"
+    },
+    {
+      "id": "claim",
+      "bounds": {
+        "x": 54,
+        "y": 43,
+        "width": 1172,
+        "height": 47.25
+      },
+      "role": "claim"
+    },
+    {
+      "id": "title",
+      "bounds": {
+        "x": 54,
+        "y": 100.25,
+        "width": 1172,
+        "height": 24.640625
+      },
+      "role": "page-title"
+    },
+    {
+      "id": "content-frame",
+      "bounds": {
+        "x": 54,
+        "y": 170.890625,
+        "width": 1172,
+        "height": 489.109375
+      },
+      "role": "region"
+    },
+    {
+      "id": "note:all-records",
+      "bounds": {
+        "x": 54,
+        "y": 170.890625,
+        "width": 1172,
+        "height": 42.09375
+      },
+      "role": "region",
+      "appliesTo": [
+        "amount-rules",
+        "emergency-rule"
+      ]
+    },
+    {
+      "id": "note:all-records:text",
+      "bounds": {
+        "x": 68,
+        "y": 178.890625,
+        "width": 1147,
+        "height": 26.09375
+      },
+      "role": "scope-note"
+    },
+    {
+      "id": "group:amount-rules",
+      "bounds": {
+        "x": 54,
+        "y": 223.984375,
+        "width": 1172,
+        "height": 146.65625
+      },
+      "role": "region"
+    },
+    {
+      "id": "group:amount-rules:title",
+      "bounds": {
+        "x": 67,
+        "y": 236.984375,
+        "width": 225,
+        "height": 33.75
+      },
+      "role": "group-title"
+    },
+    {
+      "id": "item:low-amount",
+      "bounds": {
+        "x": 67,
+        "y": 281.734375,
+        "width": 374.65625,
+        "height": 75.90625
+      },
+      "role": "region"
+    },
+    {
+      "id": "item:low-amount:title",
+      "bounds": {
+        "x": 75,
+        "y": 289.734375,
+        "width": 358.65625,
+        "height": 30.8125
+      },
+      "role": "item-title"
+    },
+    {
+      "id": "item:low-amount:body",
+      "bounds": {
+        "x": 75,
+        "y": 324.546875,
+        "width": 358.65625,
+        "height": 26.09375
+      },
+      "role": "body"
+    },
+    {
+      "id": "item:middle-amount",
+      "bounds": {
+        "x": 452.65625,
+        "y": 281.734375,
+        "width": 374.671875,
+        "height": 75.90625
+      },
+      "role": "region"
+    },
+    {
+      "id": "item:middle-amount:title",
+      "bounds": {
+        "x": 460.65625,
+        "y": 289.734375,
+        "width": 358.671875,
+        "height": 30.8125
+      },
+      "role": "item-title"
+    },
+    {
+      "id": "item:middle-amount:body",
+      "bounds": {
+        "x": 460.65625,
+        "y": 324.546875,
+        "width": 358.671875,
+        "height": 26.09375
+      },
+      "role": "body"
+    },
+    {
+      "id": "item:high-amount",
+      "bounds": {
+        "x": 838.328125,
+        "y": 281.734375,
+        "width": 374.65625,
+        "height": 75.90625
+      },
+      "role": "region"
+    },
+    {
+      "id": "item:high-amount:title",
+      "bounds": {
+        "x": 846.328125,
+        "y": 289.734375,
+        "width": 358.65625,
+        "height": 30.8125
+      },
+      "role": "item-title"
+    },
+    {
+      "id": "item:high-amount:body",
+      "bounds": {
+        "x": 846.328125,
+        "y": 324.546875,
+        "width": 358.65625,
+        "height": 26.09375
+      },
+      "role": "body"
+    },
+    {
+      "id": "group:emergency-rule",
+      "bounds": {
+        "x": 54,
+        "y": 398.640625,
+        "width": 1172,
+        "height": 171.125
+      },
+      "role": "region"
+    },
+    {
+      "id": "group:emergency-rule:title",
+      "bounds": {
+        "x": 67,
+        "y": 411.640625,
+        "width": 100,
+        "height": 33.75
+      },
+      "role": "group-title"
+    },
+    {
+      "id": "item:emergency-procedure",
+      "bounds": {
+        "x": 67,
+        "y": 456.390625,
+        "width": 1146,
+        "height": 100.375
+      },
+      "role": "region"
+    },
+    {
+      "id": "item:emergency-procedure:title",
+      "bounds": {
+        "x": 67,
+        "y": 456.390625,
+        "width": 1146,
+        "height": 30.8125
+      },
+      "role": "item-title"
+    },
+    {
+      "id": "item:emergency-procedure:body",
+      "bounds": {
+        "x": 67,
+        "y": 491.203125,
+        "width": 1146,
+        "height": 26.09375
+      },
+      "role": "body"
+    },
+    {
+      "id": "component:emergency-procedure",
+      "bounds": {
+        "x": 67,
+        "y": 524.296875,
+        "width": 1146,
+        "height": 32.46875
+      },
+      "role": "region",
+      "component": {
+        "id": "sequence-flow"
+      }
+    },
+    {
+      "id": "component:emergency-procedure:step:1",
+      "bounds": {
+        "x": 67,
+        "y": 524.296875,
+        "width": 86,
+        "height": 32.46875
+      },
+      "role": "step"
+    },
+    {
+      "id": "component:emergency-procedure:link:1",
+      "bounds": {
+        "x": 159,
+        "y": 535.53125,
+        "width": 15,
+        "height": 10
+      },
+      "role": "region",
+      "connection": {
+        "from": "component:emergency-procedure:step:1",
+        "to": "component:emergency-procedure:step:2"
+      },
+      "path": {
+        "d": "M1 8h15m-6-5l6 5-6 5",
+        "viewport": {
+          "x": 158,
+          "y": 532.53125,
+          "width": 18,
+          "height": 16
+        },
+        "viewBox": "0 0 18 16",
+        "strokeWidth": 1.35,
+        "strokeLineCap": "round",
+        "start": [
+          159,
+          540.53125
+        ],
+        "end": [
+          168,
+          545.53125
+        ]
+      }
+    },
+    {
+      "id": "component:emergency-procedure:step:2",
+      "bounds": {
+        "x": 181,
+        "y": 524.296875,
+        "width": 86,
+        "height": 32.46875
+      },
+      "role": "step"
+    }
+  ],
+  "texts": [
+    {
+      "id": "claim",
+      "text": "常规采购按单笔金额办理，应急采购须限时补办",
+      "sourceIds": [
+        "s-low",
+        "s-mid",
+        "s-high",
+        "s-deadline"
+      ],
+      "bounds": {
+        "x": 54,
+        "y": 43,
+        "width": 1172,
+        "height": 47.25
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 54,
+            "y": 39,
+            "width": 755.734375,
+            "height": 54
+          },
+          "start": 0,
+          "end": 21,
+          "text": "常规采购按单笔金额办理，应急采购须限时补办"
+        }
+      ],
+      "role": "claim",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 36.918,
+        "lineHeightPx": 47.255,
+        "weight": 735,
+        "align": "start"
+      }
+    },
+    {
+      "id": "title",
+      "text": "办公用品采购管理规定",
+      "sourceIds": [
+        "s-title"
+      ],
+      "bounds": {
+        "x": 54,
+        "y": 100.25,
+        "width": 1172,
+        "height": 24.640625
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 54,
+            "y": 99.25,
+            "width": 170,
+            "height": 25
+          },
+          "start": 0,
+          "end": 10,
+          "text": "办公用品采购管理规定"
+        }
+      ],
+      "role": "page-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 17,
+        "lineHeightPx": 24.65,
+        "weight": 500,
+        "align": "start"
+      }
+    },
+    {
+      "id": "note:all-records:text",
+      "text": "所有采购均需留存发票和验收记录，按季度归档备查。",
+      "sourceIds": [
+        "s-records"
+      ],
+      "bounds": {
+        "x": 68,
+        "y": 178.890625,
+        "width": 1147,
+        "height": 26.09375
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 68,
+            "y": 178.890625,
+            "width": 432,
+            "height": 26
+          },
+          "start": 0,
+          "end": 24,
+          "text": "所有采购均需留存发票和验收记录，按季度归档备查。"
+        }
+      ],
+      "role": "scope-note",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.1,
+        "weight": 560,
+        "align": "start"
+      }
+    },
+    {
+      "id": "group:amount-rules:title",
+      "text": "常规采购的金额情形",
+      "sourceIds": [
+        "s-low",
+        "s-mid",
+        "s-high"
+      ],
+      "bounds": {
+        "x": 67,
+        "y": 236.984375,
+        "width": 225,
+        "height": 33.75
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 67,
+            "y": 234.984375,
+            "width": 225,
+            "height": 36
+          },
+          "start": 0,
+          "end": 9,
+          "text": "常规采购的金额情形"
+        }
+      ],
+      "role": "group-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 25,
+        "lineHeightPx": 33.75,
+        "weight": 720,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:low-amount:title",
+      "text": "单笔金额 500 元以下",
+      "sourceIds": [
+        "s-low"
+      ],
+      "bounds": {
+        "x": 75,
+        "y": 289.734375,
+        "width": 358.65625,
+        "height": 30.8125
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 75,
+            "y": 287.734375,
+            "width": 212.15625,
+            "height": 34
+          },
+          "start": 0,
+          "end": 12,
+          "text": "单笔金额 500 元以下"
+        }
+      ],
+      "role": "item-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 23,
+        "lineHeightPx": 30.82,
+        "weight": 690,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:low-amount:body",
+      "text": "由部门负责人审批后自行采购。",
+      "sourceIds": [
+        "s-low"
+      ],
+      "bounds": {
+        "x": 75,
+        "y": 324.546875,
+        "width": 358.65625,
+        "height": 26.09375
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 75,
+            "y": 324.546875,
+            "width": 252,
+            "height": 26
+          },
+          "start": 0,
+          "end": 14,
+          "text": "由部门负责人审批后自行采购。"
+        }
+      ],
+      "role": "body",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.1,
+        "weight": 400,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:middle-amount:title",
+      "text": "单笔 500 元至 5000 元",
+      "sourceIds": [
+        "s-mid"
+      ],
+      "bounds": {
+        "x": 460.65625,
+        "y": 289.734375,
+        "width": 358.671875,
+        "height": 30.8125
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 460.65625,
+            "y": 287.734375,
+            "width": 230.875,
+            "height": 34
+          },
+          "start": 0,
+          "end": 16,
+          "text": "单笔 500 元至 5000 元"
+        }
+      ],
+      "role": "item-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 23,
+        "lineHeightPx": 30.82,
+        "weight": 690,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:middle-amount:body",
+      "text": "报综合部汇总，每月集中采购一次。",
+      "sourceIds": [
+        "s-mid"
+      ],
+      "bounds": {
+        "x": 460.65625,
+        "y": 324.546875,
+        "width": 358.671875,
+        "height": 26.09375
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 460.65625,
+            "y": 324.546875,
+            "width": 288,
+            "height": 26
+          },
+          "start": 0,
+          "end": 16,
+          "text": "报综合部汇总，每月集中采购一次。"
+        }
+      ],
+      "role": "body",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.1,
+        "weight": 400,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:high-amount:title",
+      "text": "单笔 5000 元以上",
+      "sourceIds": [
+        "s-high"
+      ],
+      "bounds": {
+        "x": 846.328125,
+        "y": 289.734375,
+        "width": 358.65625,
+        "height": 30.8125
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 846.328125,
+            "y": 287.734375,
+            "width": 179.734375,
+            "height": 34
+          },
+          "start": 0,
+          "end": 11,
+          "text": "单笔 5000 元以上"
+        }
+      ],
+      "role": "item-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 23,
+        "lineHeightPx": 30.82,
+        "weight": 690,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:high-amount:body",
+      "text": "须经分管领导审批，并执行比价程序。",
+      "sourceIds": [
+        "s-high"
+      ],
+      "bounds": {
+        "x": 846.328125,
+        "y": 324.546875,
+        "width": 358.65625,
+        "height": 26.09375
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 846.328125,
+            "y": 324.546875,
+            "width": 306,
+            "height": 26
+          },
+          "start": 0,
+          "end": 17,
+          "text": "须经分管领导审批，并执行比价程序。"
+        }
+      ],
+      "role": "body",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.1,
+        "weight": 400,
+        "align": "start"
+      }
+    },
+    {
+      "id": "group:emergency-rule:title",
+      "text": "应急采购",
+      "sourceIds": [
+        "s-emergency-order"
+      ],
+      "bounds": {
+        "x": 67,
+        "y": 411.640625,
+        "width": 100,
+        "height": 33.75
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 67,
+            "y": 409.640625,
+            "width": 100,
+            "height": 36
+          },
+          "start": 0,
+          "end": 4,
+          "text": "应急采购"
+        }
+      ],
+      "role": "group-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 25,
+        "lineHeightPx": 33.75,
+        "weight": 720,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:emergency-procedure:title",
+      "text": "补办要求",
+      "sourceIds": [
+        "s-deadline"
+      ],
+      "bounds": {
+        "x": 67,
+        "y": 456.390625,
+        "width": 1146,
+        "height": 30.8125
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 67,
+            "y": 454.390625,
+            "width": 92,
+            "height": 34
+          },
+          "start": 0,
+          "end": 4,
+          "text": "补办要求"
+        }
+      ],
+      "role": "item-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 23,
+        "lineHeightPx": 30.82,
+        "weight": 690,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:emergency-procedure:body",
+      "text": "可先执行采购。补办时限为 3 个工作日，逾期视为违规采购。",
+      "sourceIds": [
+        "s-emergency-order",
+        "s-deadline"
+      ],
+      "bounds": {
+        "x": 67,
+        "y": 491.203125,
+        "width": 1146,
+        "height": 26.09375
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 67,
+            "y": 491.203125,
+            "width": 486.0625,
+            "height": 26
+          },
+          "start": 0,
+          "end": 29,
+          "text": "可先执行采购。补办时限为 3 个工作日，逾期视为违规采购。"
+        }
+      ],
+      "role": "body",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.1,
+        "weight": 400,
+        "align": "start"
+      }
+    },
+    {
+      "id": "component:emergency-procedure:step:1",
+      "text": "执行采购",
+      "sourceIds": [
+        "s-emergency-order"
+      ],
+      "bounds": {
+        "x": 67,
+        "y": 524.296875,
+        "width": 86,
+        "height": 32.46875
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 74,
+            "y": 527.296875,
+            "width": 72,
+            "height": 26
+          },
+          "start": 0,
+          "end": 4,
+          "text": "执行采购"
+        }
+      ],
+      "role": "step",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 24.48,
+        "weight": 620,
+        "align": "start"
+      }
+    },
+    {
+      "id": "component:emergency-procedure:step:2",
+      "text": "补办手续",
+      "sourceIds": [
+        "s-emergency-order"
+      ],
+      "bounds": {
+        "x": 181,
+        "y": 524.296875,
+        "width": 86,
+        "height": 32.46875
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 188,
+            "y": 527.296875,
+            "width": 72,
+            "height": 26
+          },
+          "start": 0,
+          "end": 4,
+          "text": "补办手续"
+        }
+      ],
+      "role": "step",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 24.48,
+        "weight": 620,
+        "align": "start"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "id": "group:amount-rules",
+      "bounds": {
+        "x": 54,
+        "y": 223.984375,
+        "width": 1172,
+        "height": 146.65625
+      },
+      "visibleHeight": 126.5625
+    },
+    {
+      "id": "group:emergency-rule",
+      "bounds": {
+        "x": 54,
+        "y": 398.640625,
+        "width": 1172,
+        "height": 171.125
+      },
+      "visibleHeight": 154.65625
+    }
+  ],
+  "readingOrder": [
+    "claim",
+    "title",
+    "note:all-records:text",
+    "group:amount-rules:title",
+    "item:low-amount:title",
+    "item:low-amount:body",
+    "item:middle-amount:title",
+    "item:middle-amount:body",
+    "item:high-amount:title",
+    "item:high-amount:body",
+    "group:emergency-rule:title",
+    "item:emergency-procedure:title",
+    "item:emergency-procedure:body",
+    "component:emergency-procedure:step:1",
+    "component:emergency-procedure:step:2"
+  ],
+  "sources": [
+    {
+      "id": "s-title",
+      "file": "稿件/模拟稿库/行政信息/A03-办公用品采购规定.md",
+      "quote": "办公用品采购管理规定",
+      "sha256": "4e98b159bb3acc34bb2d3267a5100c4b7173729873bb576cff49901dd46e61a7",
+      "span": [
+        0,
+        10
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-low",
+      "file": "稿件/模拟稿库/行政信息/A03-办公用品采购规定.md",
+      "quote": "单笔金额 500 元以下的，由部门负责人审批后自行采购。",
+      "sha256": "4e98b159bb3acc34bb2d3267a5100c4b7173729873bb576cff49901dd46e61a7",
+      "span": [
+        14,
+        42
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-mid",
+      "file": "稿件/模拟稿库/行政信息/A03-办公用品采购规定.md",
+      "quote": "单笔 500 元至 5000 元的，报综合部汇总，每月集中采购一次。",
+      "sha256": "4e98b159bb3acc34bb2d3267a5100c4b7173729873bb576cff49901dd46e61a7",
+      "span": [
+        42,
+        76
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-high",
+      "file": "稿件/模拟稿库/行政信息/A03-办公用品采购规定.md",
+      "quote": "单笔 5000 元以上的，须经分管领导审批，并执行比价程序。",
+      "sha256": "4e98b159bb3acc34bb2d3267a5100c4b7173729873bb576cff49901dd46e61a7",
+      "span": [
+        76,
+        106
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-emergency-order",
+      "file": "稿件/模拟稿库/行政信息/A03-办公用品采购规定.md",
+      "quote": "应急采购可先执行、后补办手续",
+      "sha256": "4e98b159bb3acc34bb2d3267a5100c4b7173729873bb576cff49901dd46e61a7",
+      "span": [
+        110,
+        124
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-deadline",
+      "file": "稿件/模拟稿库/行政信息/A03-办公用品采购规定.md",
+      "quote": "补办时限为 3 个工作日，逾期视为违规采购。",
+      "sha256": "4e98b159bb3acc34bb2d3267a5100c4b7173729873bb576cff49901dd46e61a7",
+      "span": [
+        125,
+        147
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-records",
+      "file": "稿件/模拟稿库/行政信息/A03-办公用品采购规定.md",
+      "quote": "所有采购均需留存发票和验收记录，按季度归档备查。",
+      "sha256": "4e98b159bb3acc34bb2d3267a5100c4b7173729873bb576cff49901dd46e61a7",
+      "span": [
+        147,
+        171
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    }
+  ],
+  "expression": [
+    {
+      "groupId": "amount-rules",
+      "relation": "cases",
+      "expression": "parallel",
+      "localCases": [
+        "low-amount",
+        "middle-amount",
+        "high-amount"
+      ]
+    },
+    {
+      "groupId": "emergency-rule",
+      "relation": "independent",
+      "expression": "independent"
+    },
+    {
+      "itemId": "emergency-procedure",
+      "relation": "precedes",
+      "expression": "sequence",
+      "rule": "有据的无分叉单链，按边走完且保留全部节点",
+      "binding": {
+        "purchase": "component:emergency-procedure:step:1",
+        "complete-paperwork": "component:emergency-procedure:step:2"
+      }
+    }
+  ],
+  "crossCase": [],
+  "notes": []
+}

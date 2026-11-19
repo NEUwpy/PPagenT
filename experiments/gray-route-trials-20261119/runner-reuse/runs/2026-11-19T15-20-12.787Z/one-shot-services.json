@@ -1,0 +1,145 @@
+{
+  "status": "program-accepted",
+  "events": [
+    {
+      "status": "running",
+      "model": "deepseek-v4-flash",
+      "toolCount": 0,
+      "messageCount": 2
+    },
+    {
+      "status": "succeeded",
+      "durationMs": 3473,
+      "model": "deepseek-flash",
+      "usage": {
+        "prompt_tokens": 369,
+        "completion_tokens": 506,
+        "total_tokens": 875,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 369
+      },
+      "finishReason": "stop",
+      "toolCallNames": []
+    }
+  ],
+  "plan": {
+    "schemaVersion": "gray-plan-3",
+    "deckBrief": {
+      "title": "园区服务支持",
+      "audience": "园区内使用部门及来访人员",
+      "objective": "说明园区服务台提供的设备、场地、资料与访客支持内容、办理方式及限定条件"
+    },
+    "pages": [
+      {
+        "pageId": "p1",
+        "title": "园区服务支持",
+        "claim": "园区服务台统一受理设备、场地、资料与访客支持，紧急事项需同时电话联系值班人员。",
+        "pagePurpose": "汇总园区服务支持范围与统一登记渠道",
+        "narrative": "园区提供设备、场地、资料和访客四类支持，均通过服务台登记办理；紧急事项在登记的同时需电话联系值班人员。",
+        "sourceIds": [
+          "s1",
+          "s6"
+        ],
+        "groups": [
+          {
+            "id": "g1",
+            "role": "服务范围总述",
+            "heading": "服务支持概览",
+            "importance": "primary",
+            "kind": "text",
+            "blocks": [
+              {
+                "id": "b1",
+                "text": "园区服务支持涵盖设备支持、场地支持、资料支持和访客支持。",
+                "sourceIds": [
+                  "s1"
+                ]
+              },
+              {
+                "id": "b2",
+                "text": "以上服务统一通过服务台登记，紧急事项需同时电话联系值班人员。",
+                "sourceIds": [
+                  "s6"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "g2",
+            "role": "设备服务说明",
+            "heading": "设备支持",
+            "importance": "supporting",
+            "kind": "text",
+            "blocks": [
+              {
+                "id": "b3",
+                "text": "提供会议设备借用和故障报修；借用前确认设备状态，归还时完成清点。",
+                "sourceIds": [
+                  "s2"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "g3",
+            "role": "场地服务说明",
+            "heading": "场地支持",
+            "importance": "supporting",
+            "kind": "text",
+            "blocks": [
+              {
+                "id": "b4",
+                "text": "受理会议室预约，使用部门需提前说明人数、时段和布置需求。",
+                "sourceIds": [
+                  "s3"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "g4",
+            "role": "资料服务说明",
+            "heading": "资料支持",
+            "importance": "supporting",
+            "kind": "text",
+            "blocks": [
+              {
+                "id": "b5",
+                "text": "提供制度查询、材料打印和文件归档指引。",
+                "sourceIds": [
+                  "s4"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "g5",
+            "role": "访客服务说明",
+            "heading": "访客支持",
+            "importance": "supporting",
+            "kind": "text",
+            "blocks": [
+              {
+                "id": "b6",
+                "text": "协助外来人员登记、路线说明和接待联系；访问受限区域需事先获得授权。",
+                "sourceIds": [
+                  "s5"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "report": {
+    "accepted": true,
+    "issues": [],
+    "warnings": [],
+    "coverage": "内容字段、表达方式、来源覆盖、块级数字/引文及已提供的关系端点；必要关系与限定是否正确仍需语义和实际审阅。"
+  },
+  "elapsedMs": 3474
+}

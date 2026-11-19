@@ -1,0 +1,28 @@
+{
+  "bindings": {
+    "detail:emergency-procedure:purchase:title": {
+      "target": "component:emergency-procedure:step:1"
+    },
+    "detail:emergency-procedure:complete-paperwork:title": {
+      "target": "component:emergency-procedure:step:2"
+    }
+  },
+  "crossCaseItems": [],
+  "relations": [
+    {
+      "owner": "emergency-procedure",
+      "links": [
+        {
+          "type": "precedes",
+          "from": [
+            "purchase"
+          ],
+          "to": "complete-paperwork",
+          "sourceIds": [
+            "s-emergency-order"
+          ]
+        }
+      ]
+    }
+  ]
+}

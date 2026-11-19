@@ -1,0 +1,1519 @@
+{
+  "schemaVersion": "gray-compose-experiment/1",
+  "id": "services",
+  "canvas": {
+    "width": 1280,
+    "height": 720
+  },
+  "frame": {
+    "x": 55,
+    "y": 166,
+    "width": 1170,
+    "height": 492
+  },
+  "units": "CSS px",
+  "origin": "slide top-left",
+  "source": {
+    "file": "稿件/模拟稿库/布局试排-services.md",
+    "sha256": "bc52de4da2cd1cd09e4363f7ecbd2301fdd95ce49099c7fd23ee3530054ea628",
+    "spanUnits": "UTF-16 code units",
+    "blocks": [
+      {
+        "id": "source-001",
+        "text": "园区服务支持",
+        "start": 0,
+        "end": 6
+      },
+      {
+        "id": "source-002",
+        "text": "设备支持：提供会议设备借用和故障报修，借用前确认设备状态，归还时完成清点。",
+        "start": 10,
+        "end": 47
+      },
+      {
+        "id": "source-003",
+        "text": "场地支持：受理会议室预约，使用部门需提前说明人数、时段和布置需求。",
+        "start": 51,
+        "end": 84
+      },
+      {
+        "id": "source-004",
+        "text": "资料支持：提供制度查询、材料打印和文件归档指引。",
+        "start": 88,
+        "end": 112
+      },
+      {
+        "id": "source-005",
+        "text": "访客支持：协助外来人员登记、路线说明和接待联系，访问受限区域需事先获得授权。",
+        "start": 116,
+        "end": 154
+      },
+      {
+        "id": "source-006",
+        "text": "以上服务统一通过服务台登记，紧急事项需同时电话联系值班人员。",
+        "start": 158,
+        "end": 188
+      }
+    ],
+    "bindings": [
+      {
+        "id": "title",
+        "sourceId": "source-001",
+        "span": [
+          0,
+          6
+        ],
+        "text": "园区服务支持"
+      },
+      {
+        "id": "item-1-title",
+        "sourceId": "source-002",
+        "span": [
+          10,
+          15
+        ],
+        "text": "设备支持："
+      },
+      {
+        "id": "item-1-body-1",
+        "sourceId": "source-002",
+        "span": [
+          15,
+          47
+        ],
+        "text": "提供会议设备借用和故障报修，借用前确认设备状态，归还时完成清点。"
+      },
+      {
+        "id": "item-2-title",
+        "sourceId": "source-003",
+        "span": [
+          51,
+          56
+        ],
+        "text": "场地支持："
+      },
+      {
+        "id": "item-2-body-1",
+        "sourceId": "source-003",
+        "span": [
+          56,
+          84
+        ],
+        "text": "受理会议室预约，使用部门需提前说明人数、时段和布置需求。"
+      },
+      {
+        "id": "item-3-title",
+        "sourceId": "source-004",
+        "span": [
+          88,
+          93
+        ],
+        "text": "资料支持："
+      },
+      {
+        "id": "item-3-body-1",
+        "sourceId": "source-004",
+        "span": [
+          93,
+          112
+        ],
+        "text": "提供制度查询、材料打印和文件归档指引。"
+      },
+      {
+        "id": "item-4-title",
+        "sourceId": "source-005",
+        "span": [
+          116,
+          121
+        ],
+        "text": "访客支持："
+      },
+      {
+        "id": "item-4-body-1",
+        "sourceId": "source-005",
+        "span": [
+          121,
+          154
+        ],
+        "text": "协助外来人员登记、路线说明和接待联系，访问受限区域需事先获得授权。"
+      },
+      {
+        "id": "shared",
+        "sourceId": "source-006",
+        "span": [
+          158,
+          188
+        ],
+        "text": "以上服务统一通过服务台登记，紧急事项需同时电话联系值班人员。"
+      }
+    ]
+  },
+  "readingOrder": [
+    "title",
+    "item-1-title",
+    "item-1-body-1",
+    "item-2-title",
+    "item-2-body-1",
+    "item-3-title",
+    "item-3-body-1",
+    "item-4-title",
+    "item-4-body-1",
+    "shared"
+  ],
+  "relations": [
+    {
+      "type": "parallel",
+      "members": [
+        "item-1",
+        "item-2",
+        "item-3",
+        "item-4"
+      ]
+    },
+    {
+      "type": "shared-service-entry",
+      "from": "shared",
+      "to": [
+        "item-1",
+        "item-2",
+        "item-3",
+        "item-4"
+      ]
+    }
+  ],
+  "components": {
+    "shared-note": {
+      "accepts": "shared-*",
+      "count": [
+        1,
+        1
+      ],
+      "roles": [
+        "body"
+      ],
+      "origin": "实验共同条件带，保留与所有项关系"
+    },
+    "parallel-equal-cards-001": {
+      "accepts": "parallel",
+      "count": [
+        2,
+        5
+      ],
+      "roles": [
+        "items[].title",
+        "items[].body"
+      ],
+      "sourceVersion": 5,
+      "origin": "assets/结构图/等权并列卡片-001",
+      "variants": [
+        "fixed-original",
+        "adaptive-single-row"
+      ],
+      "invariants": [
+        "equal complete card boundaries",
+        "circle anchors",
+        "consistent title/body hierarchy",
+        "shared alignment and spacing",
+        "no connectors"
+      ]
+    }
+  },
+  "chosen": "cards-adaptive-276",
+  "layout": {
+    "id": "cards-adaptive-276",
+    "component": "parallel-equal-cards-001",
+    "compact": true,
+    "height": 276,
+    "bodyPx": 20,
+    "priority": 80
+  },
+  "graphLayout": null,
+  "measured": {
+    "frame": {
+      "x": 55,
+      "y": 166,
+      "width": 1170,
+      "height": 492
+    },
+    "usedHeight": 345,
+    "headroom": 147,
+    "text": [
+      {
+        "id": "title",
+        "sourceId": "source-001",
+        "role": "slide-title",
+        "text": "园区服务支持",
+        "fontPx": 38,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 700,
+        "lineHeightPx": 46.36,
+        "alignment": "start",
+        "color": "rgb(41, 41, 41)",
+        "rect": {
+          "x": 55,
+          "y": 65,
+          "width": 1170,
+          "height": 46.36
+        },
+        "lines": [
+          {
+            "x": 55,
+            "y": 63,
+            "width": 223.45,
+            "height": 50
+          }
+        ]
+      },
+      {
+        "id": "item-1-title",
+        "sourceId": "source-002",
+        "role": "item-title",
+        "text": "设备支持：",
+        "fontPx": 21,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 700,
+        "lineHeightPx": 26.25,
+        "alignment": "center",
+        "color": "rgb(61, 61, 61)",
+        "rect": {
+          "x": 91,
+          "y": 279.38,
+          "width": 223.5,
+          "height": 26.25
+        },
+        "lines": [
+          {
+            "x": 150.25,
+            "y": 278.38,
+            "width": 105,
+            "height": 27
+          }
+        ]
+      },
+      {
+        "id": "item-1-body-1",
+        "sourceId": "source-002",
+        "role": "body",
+        "text": "提供会议设备借用和故障报修，借用前确认设备状态，归还时完成清点。",
+        "fontPx": 20,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 400,
+        "lineHeightPx": 25.2,
+        "alignment": "left",
+        "color": "rgb(61, 61, 61)",
+        "rect": {
+          "x": 91,
+          "y": 327,
+          "width": 223.5,
+          "height": 75.56
+        },
+        "lines": [
+          {
+            "x": 91,
+            "y": 326,
+            "width": 220,
+            "height": 26
+          },
+          {
+            "x": 91,
+            "y": 351.19,
+            "width": 220,
+            "height": 26
+          },
+          {
+            "x": 91,
+            "y": 376.38,
+            "width": 200,
+            "height": 26
+          }
+        ]
+      },
+      {
+        "id": "item-2-title",
+        "sourceId": "source-003",
+        "role": "item-title",
+        "text": "场地支持：",
+        "fontPx": 21,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 700,
+        "lineHeightPx": 26.25,
+        "alignment": "center",
+        "color": "rgb(61, 61, 61)",
+        "rect": {
+          "x": 382.5,
+          "y": 279.38,
+          "width": 223.5,
+          "height": 26.25
+        },
+        "lines": [
+          {
+            "x": 441.75,
+            "y": 278.38,
+            "width": 105,
+            "height": 27
+          }
+        ]
+      },
+      {
+        "id": "item-2-body-1",
+        "sourceId": "source-003",
+        "role": "body",
+        "text": "受理会议室预约，使用部门需提前说明人数、时段和布置需求。",
+        "fontPx": 20,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 400,
+        "lineHeightPx": 25.2,
+        "alignment": "left",
+        "color": "rgb(61, 61, 61)",
+        "rect": {
+          "x": 382.5,
+          "y": 327,
+          "width": 223.5,
+          "height": 75.56
+        },
+        "lines": [
+          {
+            "x": 382.5,
+            "y": 326,
+            "width": 220,
+            "height": 26
+          },
+          {
+            "x": 382.5,
+            "y": 351.19,
+            "width": 220,
+            "height": 26
+          },
+          {
+            "x": 382.5,
+            "y": 376.38,
+            "width": 120,
+            "height": 26
+          }
+        ]
+      },
+      {
+        "id": "item-3-title",
+        "sourceId": "source-004",
+        "role": "item-title",
+        "text": "资料支持：",
+        "fontPx": 21,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 700,
+        "lineHeightPx": 26.25,
+        "alignment": "center",
+        "color": "rgb(61, 61, 61)",
+        "rect": {
+          "x": 674,
+          "y": 279.38,
+          "width": 223.5,
+          "height": 26.25
+        },
+        "lines": [
+          {
+            "x": 733.25,
+            "y": 278.38,
+            "width": 105,
+            "height": 27
+          }
+        ]
+      },
+      {
+        "id": "item-3-body-1",
+        "sourceId": "source-004",
+        "role": "body",
+        "text": "提供制度查询、材料打印和文件归档指引。",
+        "fontPx": 20,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 400,
+        "lineHeightPx": 25.2,
+        "alignment": "left",
+        "color": "rgb(61, 61, 61)",
+        "rect": {
+          "x": 674,
+          "y": 327,
+          "width": 223.5,
+          "height": 50.38
+        },
+        "lines": [
+          {
+            "x": 674,
+            "y": 326,
+            "width": 220,
+            "height": 26
+          },
+          {
+            "x": 674,
+            "y": 351.19,
+            "width": 160,
+            "height": 26
+          }
+        ]
+      },
+      {
+        "id": "item-4-title",
+        "sourceId": "source-005",
+        "role": "item-title",
+        "text": "访客支持：",
+        "fontPx": 21,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 700,
+        "lineHeightPx": 26.25,
+        "alignment": "center",
+        "color": "rgb(61, 61, 61)",
+        "rect": {
+          "x": 965.5,
+          "y": 279.38,
+          "width": 223.5,
+          "height": 26.25
+        },
+        "lines": [
+          {
+            "x": 1024.75,
+            "y": 278.38,
+            "width": 105,
+            "height": 27
+          }
+        ]
+      },
+      {
+        "id": "item-4-body-1",
+        "sourceId": "source-005",
+        "role": "body",
+        "text": "协助外来人员登记、路线说明和接待联系，访问受限区域需事先获得授权。",
+        "fontPx": 20,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 400,
+        "lineHeightPx": 25.2,
+        "alignment": "left",
+        "color": "rgb(61, 61, 61)",
+        "rect": {
+          "x": 965.5,
+          "y": 327,
+          "width": 223.5,
+          "height": 75.56
+        },
+        "lines": [
+          {
+            "x": 965.5,
+            "y": 326,
+            "width": 220,
+            "height": 26
+          },
+          {
+            "x": 965.5,
+            "y": 351.19,
+            "width": 220,
+            "height": 26
+          },
+          {
+            "x": 965.5,
+            "y": 376.38,
+            "width": 220,
+            "height": 26
+          }
+        ]
+      },
+      {
+        "id": "shared",
+        "sourceId": "source-006",
+        "role": "body",
+        "text": "以上服务统一通过服务台登记，紧急事项需同时电话联系值班人员。",
+        "fontPx": 20,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 400,
+        "lineHeightPx": 26,
+        "alignment": "start",
+        "color": "rgb(41, 41, 41)",
+        "rect": {
+          "x": 76,
+          "y": 473,
+          "width": 1132,
+          "height": 26
+        },
+        "lines": [
+          {
+            "x": 76,
+            "y": 473,
+            "width": 600,
+            "height": 26
+          }
+        ]
+      }
+    ],
+    "geometry": [
+      {
+        "id": "content-frame",
+        "component": null,
+        "rect": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 492
+        }
+      },
+      {
+        "id": "body",
+        "component": null,
+        "rect": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 345
+        }
+      },
+      {
+        "id": "services",
+        "component": "parallel-equal-cards-001",
+        "rect": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 276
+        }
+      },
+      {
+        "id": "shared",
+        "component": "shared-note",
+        "rect": {
+          "x": 55,
+          "y": 461,
+          "width": 1170,
+          "height": 50
+        }
+      }
+    ],
+    "primitives": [
+      {
+        "name": "parallel-card-underlay-0",
+        "kind": "shape",
+        "shape": "roundRect",
+        "bind": null,
+        "rect": {
+          "x": 75,
+          "y": 228,
+          "width": 255.5,
+          "height": 207
+        },
+        "backgroundColor": "rgb(234, 234, 234)",
+        "borderColor": "rgb(234, 234, 234)",
+        "borderWidth": "1px",
+        "borderRadius": "17px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-card-surface-0",
+        "kind": "shape",
+        "shape": "roundRect",
+        "bind": null,
+        "rect": {
+          "x": 67,
+          "y": 218,
+          "width": 271.5,
+          "height": 207
+        },
+        "backgroundColor": "rgb(234, 234, 234)",
+        "borderColor": "rgb(234, 234, 234)",
+        "borderWidth": "1px",
+        "borderRadius": "17px",
+        "boxShadow": "rgba(61, 61, 61, 0.12) 0px 12px 26px 0px",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-card-accent-0",
+        "kind": "shape",
+        "shape": "roundRect",
+        "bind": null,
+        "rect": {
+          "x": 161.75,
+          "y": 218,
+          "width": 82,
+          "height": 8
+        },
+        "backgroundColor": "rgb(140, 140, 140)",
+        "borderColor": "rgb(41, 41, 41)",
+        "borderWidth": "0px",
+        "borderRadius": "9px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-marker-halo-0",
+        "kind": "shape",
+        "shape": "ellipse",
+        "bind": null,
+        "rect": {
+          "x": 154.75,
+          "y": 170,
+          "width": 96,
+          "height": 96
+        },
+        "backgroundColor": "rgb(234, 234, 234)",
+        "borderColor": "rgb(234, 234, 234)",
+        "borderWidth": "1px",
+        "borderRadius": "50%",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-marker-core-0",
+        "kind": "shape",
+        "shape": "ellipse",
+        "bind": null,
+        "rect": {
+          "x": 168.75,
+          "y": 184,
+          "width": 68,
+          "height": 68
+        },
+        "backgroundColor": "rgb(80, 80, 80)",
+        "borderColor": "rgb(41, 41, 41)",
+        "borderWidth": "0px",
+        "borderRadius": "50%",
+        "boxShadow": "rgba(80, 80, 80, 0.24) 0px 8px 18px 0px",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-icon-0",
+        "kind": "image",
+        "shape": null,
+        "bind": null,
+        "rect": {
+          "x": 184.75,
+          "y": 200,
+          "width": 36,
+          "height": 36
+        },
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "borderColor": "rgb(255, 255, 255)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "rgb(255, 255, 255)",
+        "strokeWidth": "2px",
+        "fill": "none",
+        "transform": null,
+        "svg": "<svg data-ppt-kind=\"image\" data-ppt-name=\"parallel-icon-0\" data-icon-key=\"tool\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"parallel-icon-svg\">\n  \n  <path d=\"M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6 -6a6 6 0 0 1 -8 -8l3.5 3.5\"></path>\n</svg>"
+      },
+      {
+        "name": "parallel-title-0",
+        "kind": "text",
+        "shape": null,
+        "bind": "item-1-title",
+        "rect": {
+          "x": 91,
+          "y": 279.38,
+          "width": 223.5,
+          "height": 26.25
+        },
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "borderColor": "rgb(61, 61, 61)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-rule-0",
+        "kind": "shape",
+        "shape": "roundRect",
+        "bind": null,
+        "rect": {
+          "x": 180.75,
+          "y": 313,
+          "width": 44,
+          "height": 2
+        },
+        "backgroundColor": "rgb(140, 140, 140)",
+        "borderColor": "rgb(41, 41, 41)",
+        "borderWidth": "0px",
+        "borderRadius": "99px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-body-0",
+        "kind": "text",
+        "shape": null,
+        "bind": "item-1-body-1",
+        "rect": {
+          "x": 91,
+          "y": 327,
+          "width": 223.5,
+          "height": 75.56
+        },
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "borderColor": "rgb(61, 61, 61)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-card-underlay-1",
+        "kind": "shape",
+        "shape": "roundRect",
+        "bind": null,
+        "rect": {
+          "x": 366.5,
+          "y": 228,
+          "width": 255.5,
+          "height": 207
+        },
+        "backgroundColor": "rgb(234, 234, 234)",
+        "borderColor": "rgb(234, 234, 234)",
+        "borderWidth": "1px",
+        "borderRadius": "17px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-card-surface-1",
+        "kind": "shape",
+        "shape": "roundRect",
+        "bind": null,
+        "rect": {
+          "x": 358.5,
+          "y": 218,
+          "width": 271.5,
+          "height": 207
+        },
+        "backgroundColor": "rgb(234, 234, 234)",
+        "borderColor": "rgb(234, 234, 234)",
+        "borderWidth": "1px",
+        "borderRadius": "17px",
+        "boxShadow": "rgba(61, 61, 61, 0.12) 0px 12px 26px 0px",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-card-accent-1",
+        "kind": "shape",
+        "shape": "roundRect",
+        "bind": null,
+        "rect": {
+          "x": 453.25,
+          "y": 218,
+          "width": 82,
+          "height": 8
+        },
+        "backgroundColor": "rgb(140, 140, 140)",
+        "borderColor": "rgb(41, 41, 41)",
+        "borderWidth": "0px",
+        "borderRadius": "9px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-marker-halo-1",
+        "kind": "shape",
+        "shape": "ellipse",
+        "bind": null,
+        "rect": {
+          "x": 446.25,
+          "y": 170,
+          "width": 96,
+          "height": 96
+        },
+        "backgroundColor": "rgb(234, 234, 234)",
+        "borderColor": "rgb(234, 234, 234)",
+        "borderWidth": "1px",
+        "borderRadius": "50%",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-marker-core-1",
+        "kind": "shape",
+        "shape": "ellipse",
+        "bind": null,
+        "rect": {
+          "x": 460.25,
+          "y": 184,
+          "width": 68,
+          "height": 68
+        },
+        "backgroundColor": "rgb(80, 80, 80)",
+        "borderColor": "rgb(41, 41, 41)",
+        "borderWidth": "0px",
+        "borderRadius": "50%",
+        "boxShadow": "rgba(80, 80, 80, 0.24) 0px 8px 18px 0px",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-icon-1",
+        "kind": "image",
+        "shape": null,
+        "bind": null,
+        "rect": {
+          "x": 476.25,
+          "y": 200,
+          "width": 36,
+          "height": 36
+        },
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "borderColor": "rgb(255, 255, 255)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "rgb(255, 255, 255)",
+        "strokeWidth": "2px",
+        "fill": "none",
+        "transform": null,
+        "svg": "<svg data-ppt-kind=\"image\" data-ppt-name=\"parallel-icon-1\" data-icon-key=\"door\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"parallel-icon-svg\">\n  \n  <path d=\"M14 12v.01\"></path>\n  <path d=\"M3 21h18\"></path>\n  <path d=\"M6 21v-16a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v16\"></path>\n</svg>"
+      },
+      {
+        "name": "parallel-title-1",
+        "kind": "text",
+        "shape": null,
+        "bind": "item-2-title",
+        "rect": {
+          "x": 382.5,
+          "y": 279.38,
+          "width": 223.5,
+          "height": 26.25
+        },
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "borderColor": "rgb(61, 61, 61)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-rule-1",
+        "kind": "shape",
+        "shape": "roundRect",
+        "bind": null,
+        "rect": {
+          "x": 472.25,
+          "y": 313,
+          "width": 44,
+          "height": 2
+        },
+        "backgroundColor": "rgb(140, 140, 140)",
+        "borderColor": "rgb(41, 41, 41)",
+        "borderWidth": "0px",
+        "borderRadius": "99px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-body-1",
+        "kind": "text",
+        "shape": null,
+        "bind": "item-2-body-1",
+        "rect": {
+          "x": 382.5,
+          "y": 327,
+          "width": 223.5,
+          "height": 75.56
+        },
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "borderColor": "rgb(61, 61, 61)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-card-underlay-2",
+        "kind": "shape",
+        "shape": "roundRect",
+        "bind": null,
+        "rect": {
+          "x": 658,
+          "y": 228,
+          "width": 255.5,
+          "height": 207
+        },
+        "backgroundColor": "rgb(234, 234, 234)",
+        "borderColor": "rgb(234, 234, 234)",
+        "borderWidth": "1px",
+        "borderRadius": "17px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-card-surface-2",
+        "kind": "shape",
+        "shape": "roundRect",
+        "bind": null,
+        "rect": {
+          "x": 650,
+          "y": 218,
+          "width": 271.5,
+          "height": 207
+        },
+        "backgroundColor": "rgb(234, 234, 234)",
+        "borderColor": "rgb(234, 234, 234)",
+        "borderWidth": "1px",
+        "borderRadius": "17px",
+        "boxShadow": "rgba(61, 61, 61, 0.12) 0px 12px 26px 0px",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-card-accent-2",
+        "kind": "shape",
+        "shape": "roundRect",
+        "bind": null,
+        "rect": {
+          "x": 744.75,
+          "y": 218,
+          "width": 82,
+          "height": 8
+        },
+        "backgroundColor": "rgb(140, 140, 140)",
+        "borderColor": "rgb(41, 41, 41)",
+        "borderWidth": "0px",
+        "borderRadius": "9px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-marker-halo-2",
+        "kind": "shape",
+        "shape": "ellipse",
+        "bind": null,
+        "rect": {
+          "x": 737.75,
+          "y": 170,
+          "width": 96,
+          "height": 96
+        },
+        "backgroundColor": "rgb(234, 234, 234)",
+        "borderColor": "rgb(234, 234, 234)",
+        "borderWidth": "1px",
+        "borderRadius": "50%",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-marker-core-2",
+        "kind": "shape",
+        "shape": "ellipse",
+        "bind": null,
+        "rect": {
+          "x": 751.75,
+          "y": 184,
+          "width": 68,
+          "height": 68
+        },
+        "backgroundColor": "rgb(80, 80, 80)",
+        "borderColor": "rgb(41, 41, 41)",
+        "borderWidth": "0px",
+        "borderRadius": "50%",
+        "boxShadow": "rgba(80, 80, 80, 0.24) 0px 8px 18px 0px",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-icon-2",
+        "kind": "image",
+        "shape": null,
+        "bind": null,
+        "rect": {
+          "x": 767.75,
+          "y": 200,
+          "width": 36,
+          "height": 36
+        },
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "borderColor": "rgb(255, 255, 255)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "rgb(255, 255, 255)",
+        "strokeWidth": "2px",
+        "fill": "none",
+        "transform": null,
+        "svg": "<svg data-ppt-kind=\"image\" data-ppt-name=\"parallel-icon-2\" data-icon-key=\"files\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"parallel-icon-svg\">\n  \n  <path d=\"M15 3v4a1 1 0 0 0 1 1h4\"></path>\n  <path d=\"M18 17h-7a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h4l5 5v7a2 2 0 0 1 -2 2\"></path>\n  <path d=\"M16 17v2a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h2\"></path>\n</svg>"
+      },
+      {
+        "name": "parallel-title-2",
+        "kind": "text",
+        "shape": null,
+        "bind": "item-3-title",
+        "rect": {
+          "x": 674,
+          "y": 279.38,
+          "width": 223.5,
+          "height": 26.25
+        },
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "borderColor": "rgb(61, 61, 61)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-rule-2",
+        "kind": "shape",
+        "shape": "roundRect",
+        "bind": null,
+        "rect": {
+          "x": 763.75,
+          "y": 313,
+          "width": 44,
+          "height": 2
+        },
+        "backgroundColor": "rgb(140, 140, 140)",
+        "borderColor": "rgb(41, 41, 41)",
+        "borderWidth": "0px",
+        "borderRadius": "99px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-body-2",
+        "kind": "text",
+        "shape": null,
+        "bind": "item-3-body-1",
+        "rect": {
+          "x": 674,
+          "y": 327,
+          "width": 223.5,
+          "height": 50.38
+        },
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "borderColor": "rgb(61, 61, 61)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-card-underlay-3",
+        "kind": "shape",
+        "shape": "roundRect",
+        "bind": null,
+        "rect": {
+          "x": 949.5,
+          "y": 228,
+          "width": 255.5,
+          "height": 207
+        },
+        "backgroundColor": "rgb(234, 234, 234)",
+        "borderColor": "rgb(234, 234, 234)",
+        "borderWidth": "1px",
+        "borderRadius": "17px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-card-surface-3",
+        "kind": "shape",
+        "shape": "roundRect",
+        "bind": null,
+        "rect": {
+          "x": 941.5,
+          "y": 218,
+          "width": 271.5,
+          "height": 207
+        },
+        "backgroundColor": "rgb(234, 234, 234)",
+        "borderColor": "rgb(234, 234, 234)",
+        "borderWidth": "1px",
+        "borderRadius": "17px",
+        "boxShadow": "rgba(61, 61, 61, 0.12) 0px 12px 26px 0px",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-card-accent-3",
+        "kind": "shape",
+        "shape": "roundRect",
+        "bind": null,
+        "rect": {
+          "x": 1036.25,
+          "y": 218,
+          "width": 82,
+          "height": 8
+        },
+        "backgroundColor": "rgb(140, 140, 140)",
+        "borderColor": "rgb(41, 41, 41)",
+        "borderWidth": "0px",
+        "borderRadius": "9px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-marker-halo-3",
+        "kind": "shape",
+        "shape": "ellipse",
+        "bind": null,
+        "rect": {
+          "x": 1029.25,
+          "y": 170,
+          "width": 96,
+          "height": 96
+        },
+        "backgroundColor": "rgb(234, 234, 234)",
+        "borderColor": "rgb(234, 234, 234)",
+        "borderWidth": "1px",
+        "borderRadius": "50%",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-marker-core-3",
+        "kind": "shape",
+        "shape": "ellipse",
+        "bind": null,
+        "rect": {
+          "x": 1043.25,
+          "y": 184,
+          "width": 68,
+          "height": 68
+        },
+        "backgroundColor": "rgb(80, 80, 80)",
+        "borderColor": "rgb(41, 41, 41)",
+        "borderWidth": "0px",
+        "borderRadius": "50%",
+        "boxShadow": "rgba(80, 80, 80, 0.24) 0px 8px 18px 0px",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-icon-3",
+        "kind": "image",
+        "shape": null,
+        "bind": null,
+        "rect": {
+          "x": 1059.25,
+          "y": 200,
+          "width": 36,
+          "height": 36
+        },
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "borderColor": "rgb(255, 255, 255)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "rgb(255, 255, 255)",
+        "strokeWidth": "2px",
+        "fill": "none",
+        "transform": null,
+        "svg": "<svg data-ppt-kind=\"image\" data-ppt-name=\"parallel-icon-3\" data-icon-key=\"users\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"parallel-icon-svg\">\n  \n  <path d=\"M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0\"></path>\n  <path d=\"M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2\"></path>\n  <path d=\"M16 3.13a4 4 0 0 1 0 7.75\"></path>\n  <path d=\"M21 21v-2a4 4 0 0 0 -3 -3.85\"></path>\n</svg>"
+      },
+      {
+        "name": "parallel-title-3",
+        "kind": "text",
+        "shape": null,
+        "bind": "item-4-title",
+        "rect": {
+          "x": 965.5,
+          "y": 279.38,
+          "width": 223.5,
+          "height": 26.25
+        },
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "borderColor": "rgb(61, 61, 61)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-rule-3",
+        "kind": "shape",
+        "shape": "roundRect",
+        "bind": null,
+        "rect": {
+          "x": 1055.25,
+          "y": 313,
+          "width": 44,
+          "height": 2
+        },
+        "backgroundColor": "rgb(140, 140, 140)",
+        "borderColor": "rgb(41, 41, 41)",
+        "borderWidth": "0px",
+        "borderRadius": "99px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      },
+      {
+        "name": "parallel-body-3",
+        "kind": "text",
+        "shape": null,
+        "bind": "item-4-body-1",
+        "rect": {
+          "x": 965.5,
+          "y": 327,
+          "width": 223.5,
+          "height": 75.56
+        },
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "borderColor": "rgb(61, 61, 61)",
+        "borderWidth": "0px",
+        "borderRadius": "0px",
+        "boxShadow": "none",
+        "opacity": "1",
+        "path": null,
+        "stroke": "none",
+        "strokeWidth": "1px",
+        "fill": "rgb(0, 0, 0)",
+        "transform": null,
+        "svg": null
+      }
+    ],
+    "edges": [],
+    "cardGeometry": [
+      {
+        "item": "item-1",
+        "rect": {
+          "x": 67,
+          "y": 170,
+          "width": 271.5,
+          "height": 265
+        },
+        "marker": {
+          "x": 154.75,
+          "y": 170,
+          "width": 96,
+          "height": 96
+        }
+      },
+      {
+        "item": "item-2",
+        "rect": {
+          "x": 358.5,
+          "y": 170,
+          "width": 271.5,
+          "height": 265
+        },
+        "marker": {
+          "x": 446.25,
+          "y": 170,
+          "width": 96,
+          "height": 96
+        }
+      },
+      {
+        "item": "item-3",
+        "rect": {
+          "x": 650,
+          "y": 170,
+          "width": 271.5,
+          "height": 265
+        },
+        "marker": {
+          "x": 737.75,
+          "y": 170,
+          "width": 96,
+          "height": 96
+        }
+      },
+      {
+        "item": "item-4",
+        "rect": {
+          "x": 941.5,
+          "y": 170,
+          "width": 271.5,
+          "height": 265
+        },
+        "marker": {
+          "x": 1029.25,
+          "y": 170,
+          "width": 96,
+          "height": 96
+        }
+      }
+    ],
+    "issues": [],
+    "fonts": [],
+    "requestedFontAvailable": true
+  }
+}

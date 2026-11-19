@@ -1,0 +1,172 @@
+{
+  "route": "B",
+  "stage": "final",
+  "modelCalls": 0,
+  "browser": "157.0.8103.79",
+  "canvas": {
+    "width": 1280,
+    "height": 720
+  },
+  "typographySource": "Microsoft YaHei on local Windows Chromium environment",
+  "assets": {
+    "convergence-many-to-one-003": {
+      "reviewSha256": "850b27b7e4a747675fa314dde7dae5ffd7d84c54dc87c0bfe114086a004a35dc",
+      "cssSha256": "9295925f3aa3d1f88e4ea270294f0a64d553d0f15980661f1e08d25d21028416",
+      "baselineSha256": "21db358193e5d8f813c23230ed258d8b39f6945c27fa358796d45782b53151c0",
+      "adaptedSha256": "ca1f08c2b26217f659f750acb7684ee432825c434a53b84d02567e4d491adc24",
+      "unchanged": [
+        "pathMarkup",
+        "inputMarkup",
+        "resultMarkup",
+        "renderAdaptiveMarkup"
+      ],
+      "localModule": "convergence-adapted.generated.mjs"
+    },
+    "parallel-equal-cards-001": {
+      "reviewSha256": "05a9b764f2ba501b889dcde1edd4f134e34e2ea3413f3cba6cb4ad10fe2c2735",
+      "cssSha256": "195ddd180dd3ee0f72981f086f665536b444c3e5b35c46d957a76e49613d87ec",
+      "localModule": null
+    }
+  },
+  "cases": [
+    {
+      "id": "options",
+      "status": "passed",
+      "html": "output/options.html",
+      "png": "output/options.png",
+      "details": {
+        "frame": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 492
+        },
+        "selected": "comparison-columns-2col-22",
+        "candidates": 4,
+        "measured": 4,
+        "eligible": 4,
+        "selectedComponent": "comparison-columns",
+        "headroomPx": 188.53,
+        "trace": "output/options.candidates.json",
+        "geometry": "output/options.geometry.json",
+        "diagnostic": null,
+        "rollback": null,
+        "preservesOriginalRepeats": false
+      }
+    },
+    {
+      "id": "services",
+      "status": "passed",
+      "html": "output/services.html",
+      "png": "output/services.png",
+      "details": {
+        "frame": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 492
+        },
+        "selected": "cards-adaptive-276",
+        "candidates": 6,
+        "measured": 6,
+        "eligible": 4,
+        "selectedComponent": "parallel-equal-cards-001",
+        "headroomPx": 147,
+        "trace": "output/services.candidates.json",
+        "geometry": "output/services.geometry.json",
+        "diagnostic": {
+          "candidate": "cards-original",
+          "html": "output/services-diagnostic.html",
+          "png": "output/services-diagnostic.png"
+        },
+        "rollback": null,
+        "preservesOriginalRepeats": false
+      }
+    },
+    {
+      "id": "dense",
+      "status": "rejected",
+      "details": {
+        "frame": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 492
+        },
+        "selected": null,
+        "candidates": 7,
+        "measured": 7,
+        "eligible": 0,
+        "selectedComponent": null,
+        "headroomPx": null,
+        "trace": "output/dense.candidates.json",
+        "geometry": "output/dense.geometry.json",
+        "diagnostic": {
+          "candidate": "parallel-text-4col-18",
+          "html": "output/dense-diagnostic.html",
+          "png": "output/dense-diagnostic.png"
+        },
+        "rollback": "single-page-rejected; no deletion, scaling, or auto-pagination",
+        "preservesOriginalRepeats": true
+      }
+    },
+    {
+      "id": "hr",
+      "status": "passed",
+      "html": "output/hr.html",
+      "png": "output/hr.png",
+      "details": {
+        "frame": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 492
+        },
+        "selected": "hr-graph-0.46-232",
+        "candidates": 18,
+        "measured": 18,
+        "eligible": 7,
+        "selectedComponent": "convergence-many-to-one-003",
+        "headroomPx": 10.28,
+        "trace": "output/hr.candidates.json",
+        "geometry": "output/hr.geometry.json",
+        "diagnostic": {
+          "candidate": "hr-graph-stock",
+          "html": "output/hr-diagnostic.html",
+          "png": "output/hr-diagnostic.png"
+        },
+        "rollback": null,
+        "preservesOriginalRepeats": false
+      }
+    },
+    {
+      "id": "hr-narrow",
+      "status": "passed",
+      "html": "output/hr-narrow.html",
+      "png": "output/hr-narrow.png",
+      "details": {
+        "frame": {
+          "x": 55,
+          "y": 166,
+          "width": 1020,
+          "height": 450
+        },
+        "selected": "hr-side-compact-0.36",
+        "candidates": 18,
+        "measured": 18,
+        "eligible": 1,
+        "selectedComponent": "independent-groups",
+        "headroomPx": 2.14,
+        "trace": "output/hr-narrow.candidates.json",
+        "geometry": "output/hr-narrow.geometry.json",
+        "diagnostic": {
+          "candidate": "hr-graph-stock",
+          "html": "output/hr-narrow-diagnostic.html",
+          "png": "output/hr-narrow-diagnostic.png"
+        },
+        "rollback": "plain-structure-fallback",
+        "preservesOriginalRepeats": false
+      }
+    }
+  ]
+}

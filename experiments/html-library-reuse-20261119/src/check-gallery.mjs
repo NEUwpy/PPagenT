@@ -1,0 +1,26 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {pathToFileURL,fileURLToPath} from 'node:url';
+import {chromium} from 'playwright-core';
+const E=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const browser=await chromium.launch({executablePath:process.env.BROWSER_EXECUTABLE_PATH||'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});
+const page=await browser.newPage({viewport:{width:1440,height:1050}}),errors=[];
+page.on('pageerror',e=>errors.push(e.message));
+await page.goto(pathToFileURL(path.join(E,'index.html')).href);await page.evaluate(()=>document.fonts.ready);
+await page.selectOption('#left','b');await page.selectOption('#right','native-a');
+if(!(await page.locator('#leftTitle').textContent()).includes('B'))throw new Error('Left selector failed');
+if(!(await page.locator('#rightTitle').textContent()).includes('PowerPoint'))throw new Error('Right selector failed');
+await page.locator('[data-path="outputs/page-a.png"]').click();
+if(!await page.locator('#viewer').evaluate(e=>e.open))throw new Error('Viewer failed');
+await page.locator('#close').click();
+await page.selectOption('#left','old-slidev');await page.selectOption('#right','a');
+const desktop=await page.evaluate(()=>({width:innerWidth,scrollWidth:document.documentElement.scrollWidth,images:[...document.querySelectorAll('img:not(dialog img)')].map(i=>({src:i.getAttribute('src'),loaded:i.complete&&i.naturalWidth>0})),links:[...document.querySelectorAll('a')].map(a=>a.getAttribute('href'))}));
+const missing=[];for(const link of desktop.links){if(!/^https?:/.test(link)){try{await fs.access(path.resolve(E,link))}catch{missing.push(link)}}}
+await page.screenshot({path:path.join(E,'evidence/gallery-desktop.png'),fullPage:true});
+await page.setViewportSize({width:390,height:844});
+const mobile=await page.evaluate(()=>({width:innerWidth,scrollWidth:document.documentElement.scrollWidth}));
+await page.screenshot({path:path.join(E,'evidence/gallery-mobile.png'),fullPage:true});
+await fs.writeFile(path.join(E,'evidence/gallery-check.json'),JSON.stringify({errors,missing,desktop,mobile,selectorsAndViewer:true},null,2));
+await browser.close();
+console.log(JSON.stringify({errors,missing,imagesLoaded:desktop.images.every(x=>x.loaded),desktopOverflow:desktop.scrollWidth>desktop.width,mobileOverflow:mobile.scrollWidth>mobile.width}));
+if(errors.length||missing.length||desktop.images.some(x=>!x.loaded)||mobile.scrollWidth>mobile.width)process.exitCode=1;

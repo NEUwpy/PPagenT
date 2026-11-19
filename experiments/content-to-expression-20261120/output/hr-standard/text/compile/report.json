@@ -1,0 +1,706 @@
+{
+  "version": "gray-compile-report@1",
+  "status": "passed",
+  "phase": "output",
+  "input": "input-plan.json",
+  "canvas": {
+    "width": 1280,
+    "height": 720
+  },
+  "errors": [],
+  "candidates": [
+    {
+      "layout": {
+        "id": "standard-row-content-weighted",
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "margin": 54,
+        "gap": 28,
+        "padding": 12,
+        "direction": "row",
+        "columns": [
+          546,
+          598
+        ],
+        "density": "standard"
+      },
+      "valid": true,
+      "score": 4.1953125,
+      "frame": {
+        "x": 54,
+        "y": 170.890625,
+        "width": 1172,
+        "height": 489.109375
+      },
+      "groups": [
+        {
+          "id": "group:issues",
+          "bounds": {
+            "x": 54,
+            "y": 170.890625,
+            "width": 546,
+            "height": 403.375
+          },
+          "visibleHeight": 332.9375
+        },
+        {
+          "id": "group:insights",
+          "bounds": {
+            "x": 628,
+            "y": 170.890625,
+            "width": 598,
+            "height": 403.375
+          },
+          "visibleHeight": 383.28125
+        }
+      ],
+      "errors": []
+    },
+    {
+      "layout": {
+        "id": "standard-row-balanced",
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "margin": 54,
+        "gap": 28,
+        "padding": 12,
+        "direction": "row",
+        "columns": [
+          572,
+          572
+        ],
+        "density": "standard"
+      },
+      "valid": true,
+      "score": 18.1953125,
+      "frame": {
+        "x": 54,
+        "y": 170.890625,
+        "width": 1172,
+        "height": 489.109375
+      },
+      "groups": [
+        {
+          "id": "group:issues",
+          "bounds": {
+            "x": 54,
+            "y": 170.890625,
+            "width": 572,
+            "height": 403.375
+          },
+          "visibleHeight": 332.9375
+        },
+        {
+          "id": "group:insights",
+          "bounds": {
+            "x": 654,
+            "y": 170.890625,
+            "width": 572,
+            "height": 403.375
+          },
+          "visibleHeight": 383.28125
+        }
+      ],
+      "errors": []
+    },
+    {
+      "layout": {
+        "id": "standard-row-stronger-content-weight",
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "margin": 54,
+        "gap": 28,
+        "padding": 12,
+        "direction": "row",
+        "columns": [
+          519,
+          625
+        ],
+        "density": "standard"
+      },
+      "valid": true,
+      "score": 6.1953125,
+      "frame": {
+        "x": 54,
+        "y": 170.890625,
+        "width": 1172,
+        "height": 489.109375
+      },
+      "groups": [
+        {
+          "id": "group:issues",
+          "bounds": {
+            "x": 54,
+            "y": 170.890625,
+            "width": 519,
+            "height": 403.375
+          },
+          "visibleHeight": 332.9375
+        },
+        {
+          "id": "group:insights",
+          "bounds": {
+            "x": 601,
+            "y": 170.890625,
+            "width": 625,
+            "height": 403.375
+          },
+          "visibleHeight": 383.28125
+        }
+      ],
+      "errors": []
+    },
+    {
+      "layout": {
+        "id": "standard-column",
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "margin": 54,
+        "gap": 28,
+        "padding": 12,
+        "direction": "column",
+        "columns": [
+          1172,
+          1172
+        ],
+        "density": "standard"
+      },
+      "valid": false,
+      "score": null,
+      "frame": {
+        "x": 54,
+        "y": 170.890625,
+        "width": 1172,
+        "height": 489.109375
+      },
+      "groups": [
+        {
+          "id": "group:issues",
+          "bounds": {
+            "x": 54,
+            "y": 170.890625,
+            "width": 1172,
+            "height": 293.84375
+          },
+          "visibleHeight": 280.75
+        },
+        {
+          "id": "group:insights",
+          "bounds": {
+            "x": 54,
+            "y": 492.734375,
+            "width": 1172,
+            "height": 403.375
+          },
+          "visibleHeight": 383.28125
+        }
+      ],
+      "errors": [
+        {
+          "code": "canvas-overflow",
+          "id": "slide",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:insights",
+          "bounds": {
+            "x": 54,
+            "y": 492.734375,
+            "width": 1172,
+            "height": 403.375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:outcome-test",
+          "bounds": {
+            "x": 67,
+            "y": 636.390625,
+            "width": 1146,
+            "height": 74.90625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:outcome-test:title",
+          "bounds": {
+            "x": 77,
+            "y": 643.390625,
+            "width": 1126,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:outcome-test:title",
+          "bounds": {
+            "x": 77,
+            "y": 643.390625,
+            "width": 1126,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:outcome-test:body",
+          "bounds": {
+            "x": 77,
+            "y": 678.203125,
+            "width": 1126,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:outcome-test:body",
+          "bounds": {
+            "x": 77,
+            "y": 678.203125,
+            "width": 1126,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:iteration",
+          "bounds": {
+            "x": 67,
+            "y": 722.296875,
+            "width": 1146,
+            "height": 74.90625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:iteration:title",
+          "bounds": {
+            "x": 77,
+            "y": 729.296875,
+            "width": 1126,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:iteration:title",
+          "bounds": {
+            "x": 77,
+            "y": 729.296875,
+            "width": 1126,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:iteration:body",
+          "bounds": {
+            "x": 77,
+            "y": 764.109375,
+            "width": 1126,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:iteration:body",
+          "bounds": {
+            "x": 77,
+            "y": 764.109375,
+            "width": 1126,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:balance",
+          "bounds": {
+            "x": 67,
+            "y": 808.203125,
+            "width": 1146,
+            "height": 74.90625
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:balance:title",
+          "bounds": {
+            "x": 77,
+            "y": 815.203125,
+            "width": 1126,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:balance:title",
+          "bounds": {
+            "x": 77,
+            "y": 815.203125,
+            "width": 1126,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:balance:body",
+          "bounds": {
+            "x": 77,
+            "y": 850.015625,
+            "width": 1126,
+            "height": 26.09375
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:balance:body",
+          "bounds": {
+            "x": 77,
+            "y": 850.015625,
+            "width": 1126,
+            "height": 26.09375
+          }
+        }
+      ]
+    },
+    {
+      "layout": {
+        "id": "compact-row-content-weighted",
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "margin": 54,
+        "gap": 28,
+        "padding": 10,
+        "direction": "row",
+        "columns": [
+          546,
+          598
+        ],
+        "density": "compact"
+      },
+      "valid": true,
+      "score": 191.3515625,
+      "frame": {
+        "x": 54,
+        "y": 151.890625,
+        "width": 1172,
+        "height": 528.109375
+      },
+      "groups": [
+        {
+          "id": "group:issues",
+          "bounds": {
+            "x": 54,
+            "y": 151.890625,
+            "width": 546,
+            "height": 380.875
+          },
+          "visibleHeight": 311.1875
+        },
+        {
+          "id": "group:insights",
+          "bounds": {
+            "x": 628,
+            "y": 151.890625,
+            "width": 598,
+            "height": 380.875
+          },
+          "visibleHeight": 363.40625
+        }
+      ],
+      "errors": []
+    },
+    {
+      "layout": {
+        "id": "compact-row-balanced",
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "margin": 54,
+        "gap": 28,
+        "padding": 10,
+        "direction": "row",
+        "columns": [
+          572,
+          572
+        ],
+        "density": "compact"
+      },
+      "valid": true,
+      "score": 193.3515625,
+      "frame": {
+        "x": 54,
+        "y": 151.890625,
+        "width": 1172,
+        "height": 528.109375
+      },
+      "groups": [
+        {
+          "id": "group:issues",
+          "bounds": {
+            "x": 54,
+            "y": 151.890625,
+            "width": 572,
+            "height": 380.875
+          },
+          "visibleHeight": 311.1875
+        },
+        {
+          "id": "group:insights",
+          "bounds": {
+            "x": 654,
+            "y": 151.890625,
+            "width": 572,
+            "height": 380.875
+          },
+          "visibleHeight": 363.40625
+        }
+      ],
+      "errors": []
+    },
+    {
+      "layout": {
+        "id": "compact-row-stronger-content-weight",
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "margin": 54,
+        "gap": 28,
+        "padding": 10,
+        "direction": "row",
+        "columns": [
+          519,
+          625
+        ],
+        "density": "compact"
+      },
+      "valid": true,
+      "score": 181.3515625,
+      "frame": {
+        "x": 54,
+        "y": 151.890625,
+        "width": 1172,
+        "height": 528.109375
+      },
+      "groups": [
+        {
+          "id": "group:issues",
+          "bounds": {
+            "x": 54,
+            "y": 151.890625,
+            "width": 519,
+            "height": 380.875
+          },
+          "visibleHeight": 311.1875
+        },
+        {
+          "id": "group:insights",
+          "bounds": {
+            "x": 601,
+            "y": 151.890625,
+            "width": 625,
+            "height": 380.875
+          },
+          "visibleHeight": 363.40625
+        }
+      ],
+      "errors": []
+    },
+    {
+      "layout": {
+        "id": "compact-column",
+        "canvas": {
+          "width": 1280,
+          "height": 720
+        },
+        "margin": 54,
+        "gap": 28,
+        "padding": 10,
+        "direction": "column",
+        "columns": [
+          1172,
+          1172
+        ],
+        "density": "compact"
+      },
+      "valid": false,
+      "score": null,
+      "frame": {
+        "x": 54,
+        "y": 151.890625,
+        "width": 1172,
+        "height": 528.109375
+      },
+      "groups": [
+        {
+          "id": "group:issues",
+          "bounds": {
+            "x": 54,
+            "y": 151.890625,
+            "width": 1172,
+            "height": 272.71875
+          },
+          "visibleHeight": 262.25
+        },
+        {
+          "id": "group:insights",
+          "bounds": {
+            "x": 54,
+            "y": 452.609375,
+            "width": 1172,
+            "height": 380.875
+          },
+          "visibleHeight": 363.40625
+        }
+      ],
+      "errors": [
+        {
+          "code": "canvas-overflow",
+          "id": "slide",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "group:insights",
+          "bounds": {
+            "x": 54,
+            "y": 452.609375,
+            "width": 1172,
+            "height": 380.875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:iteration",
+          "bounds": {
+            "x": 65,
+            "y": 667.921875,
+            "width": 1150,
+            "height": 73.28125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:iteration:title",
+          "bounds": {
+            "x": 75,
+            "y": 674.921875,
+            "width": 1130,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:iteration:title",
+          "bounds": {
+            "x": 75,
+            "y": 674.921875,
+            "width": 1130,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:iteration:body",
+          "bounds": {
+            "x": 75,
+            "y": 709.734375,
+            "width": 1130,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:iteration:body",
+          "bounds": {
+            "x": 75,
+            "y": 709.734375,
+            "width": 1130,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:balance",
+          "bounds": {
+            "x": 65,
+            "y": 749.203125,
+            "width": 1150,
+            "height": 73.28125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:balance:title",
+          "bounds": {
+            "x": 75,
+            "y": 756.203125,
+            "width": 1130,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:balance:title",
+          "bounds": {
+            "x": 75,
+            "y": 756.203125,
+            "width": 1130,
+            "height": 30.8125
+          }
+        },
+        {
+          "code": "object-outside-body",
+          "id": "item:balance:body",
+          "bounds": {
+            "x": 75,
+            "y": 791.015625,
+            "width": 1130,
+            "height": 24.46875
+          }
+        },
+        {
+          "code": "text-clipped",
+          "id": "item:balance:body",
+          "bounds": {
+            "x": 75,
+            "y": 791.015625,
+            "width": 1130,
+            "height": 24.46875
+          }
+        }
+      ]
+    }
+  ],
+  "inputSha256": "fb5ad2d7999314e0553d569c52bb281f7dfd5002cced5f1155327952d9a3322e",
+  "browser": "157.0.8103.79",
+  "selected": "standard-row-content-weighted",
+  "artifacts": {
+    "html": "gray.html",
+    "png": "gray.png",
+    "layout": "layout.json",
+    "plan": "page-plan.json"
+  }
+}

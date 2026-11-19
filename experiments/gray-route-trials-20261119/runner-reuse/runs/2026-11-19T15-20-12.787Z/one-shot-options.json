@@ -1,0 +1,138 @@
+{
+  "status": "program-accepted",
+  "events": [
+    {
+      "status": "running",
+      "model": "deepseek-v4-flash",
+      "toolCount": 0,
+      "messageCount": 2
+    },
+    {
+      "status": "succeeded",
+      "durationMs": 3385,
+      "model": "deepseek-flash",
+      "usage": {
+        "prompt_tokens": 351,
+        "completion_tokens": 492,
+        "total_tokens": 843,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 351
+      },
+      "finishReason": "stop",
+      "toolCallNames": []
+    }
+  ],
+  "plan": {
+    "schemaVersion": "gray-plan-3",
+    "deckBrief": {
+      "title": "两种上线方案",
+      "audience": "项目决策与实施相关人员",
+      "objective": "提炼集中上线与分批上线两种方案的事实、风险、限定条件与共同前置要求，供方案选择与准备参考"
+    },
+    "pages": [
+      {
+        "pageId": "p1",
+        "title": "两种上线方案",
+        "claim": "上线可在集中上线与分批上线两种方案中选择，两者各有优势与风险，且均须完成回退演练。",
+        "pagePurpose": "呈现两种上线方案的核心事实、风险与共同限定条件",
+        "narrative": "先说明存在两种上线方案；再分别说明集中上线与分批上线的做法、优势、风险与代价；最后明确两种方案共同的上线前要求。",
+        "sourceIds": [
+          "s1",
+          "s2",
+          "s3",
+          "s4"
+        ],
+        "groups": [
+          {
+            "id": "g1",
+            "role": "方案总述",
+            "heading": "两种上线方案",
+            "importance": "primary",
+            "kind": "text",
+            "blocks": [
+              {
+                "id": "b1",
+                "text": "两种上线方案。",
+                "sourceIds": [
+                  "s1"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "g2",
+            "role": "方案一",
+            "heading": "集中上线方案",
+            "importance": "primary",
+            "kind": "text",
+            "blocks": [
+              {
+                "id": "b2",
+                "text": "集中上线方案：在一个周末完成全部部门切换，培训与支持资源集中投入。",
+                "sourceIds": [
+                  "s2"
+                ]
+              },
+              {
+                "id": "b3",
+                "text": "优势是过渡期短；风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。",
+                "sourceIds": [
+                  "s2"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "g3",
+            "role": "方案二",
+            "heading": "分批上线方案",
+            "importance": "primary",
+            "kind": "text",
+            "blocks": [
+              {
+                "id": "b4",
+                "text": "分批上线方案：先选择一个部门试用，再按反馈逐批推广。",
+                "sourceIds": [
+                  "s3"
+                ]
+              },
+              {
+                "id": "b5",
+                "text": "优点是能及时修正规则；代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。",
+                "sourceIds": [
+                  "s3"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "g4",
+            "role": "共同限定条件",
+            "heading": "上线前共同要求",
+            "importance": "supporting",
+            "kind": "text",
+            "blocks": [
+              {
+                "id": "b6",
+                "text": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。",
+                "sourceIds": [
+                  "s4"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "report": {
+    "accepted": true,
+    "issues": [],
+    "warnings": [],
+    "coverage": "内容字段、表达方式、来源覆盖、块级数字/引文及已提供的关系端点；必要关系与限定是否正确仍需语义和实际审阅。"
+  },
+  "elapsedMs": 3394
+}

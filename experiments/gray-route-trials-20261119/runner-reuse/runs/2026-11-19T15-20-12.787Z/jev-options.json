@@ -1,0 +1,234 @@
+{
+  "status": "failed",
+  "name": "Error",
+  "code": "JEV_REQUEST_FAILED",
+  "httpStatus": 401,
+  "message": "JEV 调用失败：401 ",
+  "calls": [
+    {
+      "input": {
+        "state": {
+          "source": "两种上线方案\r\n\r\n集中上线方案：在一个周末完成全部部门切换，培训与支持资源集中投入。优势是过渡期短；风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。\r\n\r\n分批上线方案：先选择一个部门试用，再按反馈逐批推广。优点是能及时修正规则；代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。\r\n\r\n两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。\r\n",
+          "page": {
+            "pageId": "p1",
+            "title": "两种上线方案",
+            "claim": "两种上线方案",
+            "pagePurpose": "说明原稿主题及共同要求",
+            "narrative": "两种方案对照，共用上线前置条件",
+            "sourceIds": [
+              "s1"
+            ],
+            "groups": [
+              {
+                "id": "g1",
+                "heading": "集中上线方案",
+                "role": "主题内容",
+                "importance": "primary",
+                "kind": "text",
+                "blocks": [
+                  {
+                    "id": "b1",
+                    "text": "在一个周末完成全部部门切换，培训与支持资源集中投入。优势是过渡期短；风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。",
+                    "sourceIds": [
+                      "s2"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "g2",
+                "heading": "分批上线方案",
+                "role": "主题内容",
+                "importance": "primary",
+                "kind": "text",
+                "blocks": [
+                  {
+                    "id": "b2",
+                    "text": "先选择一个部门试用，再按反馈逐批推广。优点是能及时修正规则；代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。",
+                    "sourceIds": [
+                      "s3"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "g3",
+                "heading": "共同要求",
+                "role": "共同要求",
+                "importance": "supporting",
+                "kind": "text",
+                "blocks": [
+                  {
+                    "id": "b3",
+                    "text": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。",
+                    "sourceIds": [
+                      "s4"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "requirements": [
+              {
+                "itemId": "g1",
+                "kind": "text",
+                "importance": "primary",
+                "samples": [
+                  {
+                    "width": 1170,
+                    "height": 146,
+                    "fits": true
+                  },
+                  {
+                    "width": 573,
+                    "height": 176,
+                    "fits": true
+                  },
+                  {
+                    "width": 374,
+                    "height": 235,
+                    "fits": true
+                  }
+                ],
+                "aspectRatio": 1.5914893617021277,
+                "basis": "候选宽度下的实文与当前灰稿表达测量；不是最终媒介比例或逻辑判断"
+              },
+              {
+                "itemId": "g2",
+                "kind": "text",
+                "importance": "primary",
+                "samples": [
+                  {
+                    "width": 1170,
+                    "height": 146,
+                    "fits": true
+                  },
+                  {
+                    "width": 573,
+                    "height": 176,
+                    "fits": true
+                  },
+                  {
+                    "width": 374,
+                    "height": 235,
+                    "fits": true
+                  }
+                ],
+                "aspectRatio": 1.5914893617021277,
+                "basis": "候选宽度下的实文与当前灰稿表达测量；不是最终媒介比例或逻辑判断"
+              },
+              {
+                "itemId": "g3",
+                "kind": "text",
+                "importance": "supporting",
+                "samples": [
+                  {
+                    "width": 1170,
+                    "height": 116,
+                    "fits": true
+                  },
+                  {
+                    "width": 573,
+                    "height": 146,
+                    "fits": true
+                  },
+                  {
+                    "width": 374,
+                    "height": 176,
+                    "fits": true
+                  }
+                ],
+                "aspectRatio": 2.125,
+                "basis": "候选宽度下的实文与当前灰稿表达测量；不是最终媒介比例或逻辑判断"
+              }
+            ],
+            "candidates": [
+              {
+                "id": "cards-horizontal-equal",
+                "family": "cards",
+                "direction": "horizontal",
+                "allocation": "equal"
+              },
+              {
+                "id": "cards-horizontal-measured",
+                "family": "cards",
+                "direction": "horizontal",
+                "allocation": "measured"
+              },
+              {
+                "id": "cards-vertical-equal",
+                "family": "cards",
+                "direction": "vertical",
+                "allocation": "equal"
+              },
+              {
+                "id": "cards-vertical-measured",
+                "family": "cards",
+                "direction": "vertical",
+                "allocation": "measured"
+              },
+              {
+                "id": "album-horizontal-equal",
+                "family": "album",
+                "direction": "horizontal",
+                "allocation": "equal"
+              },
+              {
+                "id": "album-horizontal-measured",
+                "family": "album",
+                "direction": "horizontal",
+                "allocation": "measured"
+              },
+              {
+                "id": "cards-support-band",
+                "family": "cards",
+                "direction": "support-band",
+                "allocation": "measured",
+                "supportsRelation": [
+                  "support"
+                ]
+              }
+            ]
+          }
+        },
+        "questions": {
+          "candidateId": {
+            "type": "choice",
+            "instructions": "从程序确认可承载的候选中选择一个，不重新设计布局。",
+            "criteria": {
+              "cards-horizontal-equal": "cards/horizontal/equal，程序已确认可承载",
+              "cards-horizontal-measured": "cards/horizontal/measured，程序已确认可承载",
+              "cards-vertical-equal": "cards/vertical/equal，程序已确认可承载",
+              "cards-vertical-measured": "cards/vertical/measured，程序已确认可承载",
+              "album-horizontal-equal": "album/horizontal/equal，程序已确认可承载",
+              "album-horizontal-measured": "album/horizontal/measured，程序已确认可承载",
+              "cards-support-band": "cards/support-band/measured，程序已确认可承载"
+            }
+          },
+          "relation": {
+            "type": "choice",
+            "instructions": "判断本页跨组关系。只按原稿关系选择，不因为候选方便改写关系。",
+            "criteria": {
+              "parallel": "parallel",
+              "independent": "independent",
+              "comparison": "comparison",
+              "sequence": "sequence",
+              "causal": "causal",
+              "support": "support",
+              "mixed": "mixed"
+            }
+          }
+        }
+      },
+      "failure": {
+        "status": "failed",
+        "name": "Error",
+        "code": "JEV_REQUEST_FAILED",
+        "httpStatus": 401,
+        "message": "JEV 调用失败：401 "
+      },
+      "durationMs": 600
+    }
+  ],
+  "elapsedMs": 737
+}

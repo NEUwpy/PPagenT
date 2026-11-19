@@ -1,0 +1,488 @@
+{
+  "schemaVersion": "gray-compose-experiment/1",
+  "id": "options",
+  "canvas": {
+    "width": 1280,
+    "height": 720
+  },
+  "frame": {
+    "x": 55,
+    "y": 166,
+    "width": 1170,
+    "height": 492
+  },
+  "units": "CSS px",
+  "origin": "slide top-left",
+  "source": {
+    "file": "稿件/模拟稿库/布局试排-options.md",
+    "sha256": "123b52f8a5fc088f575c8a702d1ba5c09949e0482a68add8ebb3539d71dfc7ae",
+    "spanUnits": "UTF-16 code units",
+    "blocks": [
+      {
+        "id": "source-001",
+        "text": "两种上线方案",
+        "start": 0,
+        "end": 6
+      },
+      {
+        "id": "source-002",
+        "text": "集中上线方案：在一个周末完成全部部门切换，培训与支持资源集中投入。优势是过渡期短；风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。",
+        "start": 10,
+        "end": 83
+      },
+      {
+        "id": "source-003",
+        "text": "分批上线方案：先选择一个部门试用，再按反馈逐批推广。优点是能及时修正规则；代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。",
+        "start": 87,
+        "end": 155
+      },
+      {
+        "id": "source-004",
+        "text": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。",
+        "start": 159,
+        "end": 188
+      }
+    ],
+    "bindings": [
+      {
+        "id": "title",
+        "sourceId": "source-001",
+        "span": [
+          0,
+          6
+        ],
+        "text": "两种上线方案"
+      },
+      {
+        "id": "item-1-title",
+        "sourceId": "source-002",
+        "span": [
+          10,
+          17
+        ],
+        "text": "集中上线方案："
+      },
+      {
+        "id": "item-1-body-1",
+        "sourceId": "source-002",
+        "span": [
+          17,
+          43
+        ],
+        "text": "在一个周末完成全部部门切换，培训与支持资源集中投入。"
+      },
+      {
+        "id": "item-1-body-2",
+        "sourceId": "source-002",
+        "span": [
+          43,
+          83
+        ],
+        "text": "优势是过渡期短；风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。"
+      },
+      {
+        "id": "item-2-title",
+        "sourceId": "source-003",
+        "span": [
+          87,
+          94
+        ],
+        "text": "分批上线方案："
+      },
+      {
+        "id": "item-2-body-1",
+        "sourceId": "source-003",
+        "span": [
+          94,
+          113
+        ],
+        "text": "先选择一个部门试用，再按反馈逐批推广。"
+      },
+      {
+        "id": "item-2-body-2",
+        "sourceId": "source-003",
+        "span": [
+          113,
+          155
+        ],
+        "text": "优点是能及时修正规则；代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。"
+      },
+      {
+        "id": "shared",
+        "sourceId": "source-004",
+        "span": [
+          159,
+          188
+        ],
+        "text": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。"
+      }
+    ]
+  },
+  "readingOrder": [
+    "title",
+    "item-1-title",
+    "item-1-body-1",
+    "item-1-body-2",
+    "item-2-title",
+    "item-2-body-1",
+    "item-2-body-2",
+    "shared"
+  ],
+  "relations": [
+    {
+      "type": "peer-options",
+      "members": [
+        "item-1",
+        "item-2"
+      ]
+    },
+    {
+      "type": "shared-prerequisite",
+      "from": "shared",
+      "to": [
+        "item-1",
+        "item-2"
+      ]
+    }
+  ],
+  "components": {
+    "comparison-columns": {
+      "accepts": "peer-options",
+      "count": [
+        2,
+        2
+      ],
+      "roles": [
+        "title",
+        "body"
+      ],
+      "origin": "实验通用双栏和顺序阅读"
+    },
+    "shared-note": {
+      "accepts": "shared-*",
+      "count": [
+        1,
+        1
+      ],
+      "roles": [
+        "body"
+      ],
+      "origin": "实验共同条件带，保留与所有项关系"
+    }
+  },
+  "chosen": "comparison-columns-2col-22",
+  "layout": {
+    "id": "comparison-columns-2col-22",
+    "component": "comparison-columns",
+    "cols": 2,
+    "bodyPx": 22,
+    "priority": 60
+  },
+  "graphLayout": null,
+  "measured": {
+    "frame": {
+      "x": 55,
+      "y": 166,
+      "width": 1170,
+      "height": 492
+    },
+    "usedHeight": 303.47,
+    "headroom": 188.53,
+    "text": [
+      {
+        "id": "title",
+        "sourceId": "source-001",
+        "role": "slide-title",
+        "text": "两种上线方案",
+        "fontPx": 38,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 700,
+        "lineHeightPx": 46.36,
+        "alignment": "start",
+        "color": "rgb(41, 41, 41)",
+        "rect": {
+          "x": 55,
+          "y": 65,
+          "width": 1170,
+          "height": 46.36
+        },
+        "lines": [
+          {
+            "x": 55,
+            "y": 63,
+            "width": 223.45,
+            "height": 50
+          }
+        ]
+      },
+      {
+        "id": "item-1-title",
+        "sourceId": "source-002",
+        "role": "item-title",
+        "text": "集中上线方案：",
+        "fontPx": 26,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 700,
+        "lineHeightPx": 32.5,
+        "alignment": "start",
+        "color": "rgb(41, 41, 41)",
+        "rect": {
+          "x": 78,
+          "y": 189,
+          "width": 526,
+          "height": 32.5
+        },
+        "lines": [
+          {
+            "x": 78,
+            "y": 187,
+            "width": 182,
+            "height": 35
+          }
+        ]
+      },
+      {
+        "id": "item-1-body-1",
+        "sourceId": "source-002",
+        "role": "body",
+        "text": "在一个周末完成全部部门切换，培训与支持资源集中投入。",
+        "fontPx": 22,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 400,
+        "lineHeightPx": 28.6,
+        "alignment": "start",
+        "color": "rgb(41, 41, 41)",
+        "rect": {
+          "x": 78,
+          "y": 237.5,
+          "width": 526,
+          "height": 57.19
+        },
+        "lines": [
+          {
+            "x": 78,
+            "y": 236.5,
+            "width": 506,
+            "height": 29
+          },
+          {
+            "x": 78,
+            "y": 265.09,
+            "width": 66,
+            "height": 29
+          }
+        ]
+      },
+      {
+        "id": "item-1-body-2",
+        "sourceId": "source-002",
+        "role": "body",
+        "text": "优势是过渡期短；风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。",
+        "fontPx": 22,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 400,
+        "lineHeightPx": 28.6,
+        "alignment": "start",
+        "color": "rgb(41, 41, 41)",
+        "rect": {
+          "x": 78,
+          "y": 306.69,
+          "width": 526,
+          "height": 70.19
+        },
+        "lines": [
+          {
+            "x": 78,
+            "y": 318.69,
+            "width": 506,
+            "height": 29
+          },
+          {
+            "x": 78,
+            "y": 347.28,
+            "width": 374,
+            "height": 29
+          }
+        ]
+      },
+      {
+        "id": "item-2-title",
+        "sourceId": "source-003",
+        "role": "item-title",
+        "text": "分批上线方案：",
+        "fontPx": 26,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 700,
+        "lineHeightPx": 32.5,
+        "alignment": "start",
+        "color": "rgb(41, 41, 41)",
+        "rect": {
+          "x": 676,
+          "y": 189,
+          "width": 526,
+          "height": 32.5
+        },
+        "lines": [
+          {
+            "x": 676,
+            "y": 187,
+            "width": 182,
+            "height": 35
+          }
+        ]
+      },
+      {
+        "id": "item-2-body-1",
+        "sourceId": "source-003",
+        "role": "body",
+        "text": "先选择一个部门试用，再按反馈逐批推广。",
+        "fontPx": 22,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 400,
+        "lineHeightPx": 28.6,
+        "alignment": "start",
+        "color": "rgb(41, 41, 41)",
+        "rect": {
+          "x": 676,
+          "y": 237.5,
+          "width": 526,
+          "height": 28.59
+        },
+        "lines": [
+          {
+            "x": 676,
+            "y": 236.5,
+            "width": 418,
+            "height": 29
+          }
+        ]
+      },
+      {
+        "id": "item-2-body-2",
+        "sourceId": "source-003",
+        "role": "body",
+        "text": "优点是能及时修正规则；代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。",
+        "fontPx": 22,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 400,
+        "lineHeightPx": 28.6,
+        "alignment": "start",
+        "color": "rgb(41, 41, 41)",
+        "rect": {
+          "x": 676,
+          "y": 278.09,
+          "width": 526,
+          "height": 70.19
+        },
+        "lines": [
+          {
+            "x": 676,
+            "y": 290.09,
+            "width": 506,
+            "height": 29
+          },
+          {
+            "x": 676,
+            "y": 318.69,
+            "width": 418,
+            "height": 29
+          }
+        ]
+      },
+      {
+        "id": "shared",
+        "sourceId": "source-004",
+        "role": "body",
+        "text": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。",
+        "fontPx": 22,
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontWeight": 400,
+        "lineHeightPx": 28.6,
+        "alignment": "start",
+        "color": "rgb(41, 41, 41)",
+        "rect": {
+          "x": 76,
+          "y": 428.88,
+          "width": 1132,
+          "height": 28.59
+        },
+        "lines": [
+          {
+            "x": 76,
+            "y": 427.88,
+            "width": 638,
+            "height": 29
+          }
+        ]
+      }
+    ],
+    "geometry": [
+      {
+        "id": "content-frame",
+        "component": null,
+        "rect": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 492
+        }
+      },
+      {
+        "id": "body",
+        "component": null,
+        "rect": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 303.47
+        }
+      },
+      {
+        "id": "items",
+        "component": "comparison-columns",
+        "rect": {
+          "x": 55,
+          "y": 166,
+          "width": 1170,
+          "height": 231.88
+        }
+      },
+      {
+        "id": "item-1",
+        "component": null,
+        "rect": {
+          "x": 55,
+          "y": 166,
+          "width": 572,
+          "height": 231.88
+        }
+      },
+      {
+        "id": "item-2",
+        "component": null,
+        "rect": {
+          "x": 653,
+          "y": 166,
+          "width": 572,
+          "height": 231.88
+        }
+      },
+      {
+        "id": "shared",
+        "component": "shared-note",
+        "rect": {
+          "x": 55,
+          "y": 416.88,
+          "width": 1170,
+          "height": 52.59
+        }
+      }
+    ],
+    "primitives": [],
+    "edges": [],
+    "cardGeometry": [],
+    "issues": [],
+    "fonts": [],
+    "requestedFontAvailable": true
+  }
+}

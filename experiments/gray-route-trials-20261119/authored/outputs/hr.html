@@ -1,0 +1,274 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>第二部分：存在的不足与感悟</title><style>/* ppagent-theme:resolved */:root{
+    --ppagent-font-body:"Microsoft YaHei";
+    --ppagent-color-background:#FFFFFF;
+    --ppagent-color-surface:#FFFFFF;
+    --ppagent-color-primary:#484848;
+    --ppagent-color-primary-deep:#2A2A2A;
+    --ppagent-color-primary-dark:#373737;
+    --ppagent-color-primary-light:#868686;
+    --ppagent-color-primary-pale:#BFBFBF;
+    --ppagent-color-primary-wash:#E9E9E9;
+    --ppagent-color-accent:#484848;
+    --ppagent-color-accent-alt:#696969;
+    --ppagent-color-accent-soft:#DEDEDE;
+    --ppagent-color-cyan:#8A8A8A;
+    --ppagent-color-dark:#2B2B2B;
+    --ppagent-color-body:#404040;
+    --ppagent-color-muted:#6F6F6F;
+    --ppagent-color-line:#BDBDBD;
+    --ppagent-component-heading-size:18pt;
+    --ppagent-component-title-size:20pt;
+    --ppagent-component-item-title-size:16.5pt;
+    --ppagent-component-lead-size:16pt;
+    --ppagent-component-body-size:14.25pt;
+    --ppagent-component-label-size:14pt;
+    --ppagent-component-meta-size:12pt;
+  }
+
+    .ppagent-text-region{
+      box-sizing:border-box;
+      min-width:0;
+      min-height:0;
+    }
+    .ppagent-text-region > .ppagent-text-flow,
+    .ppagent-text-region > .ppagent-text-layout{
+      width:100%;
+      height:100%;
+    }
+    .ppagent-text-layout{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-layout-gap,10px);
+      width:100%;
+      height:100%;
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,"Microsoft YaHei"),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-align="center"]{text-align:center}
+    .ppagent-text-layout[data-text-layout-align="right"]{text-align:right}
+    .ppagent-text-layout[data-text-layout-valign="top"]{justify-content:flex-start}
+    .ppagent-text-layout[data-text-layout-valign="bottom"]{justify-content:flex-end}
+    .ppagent-text-layout[data-text-layout-density="compact"]{--ppagent-text-layout-gap:6px;--ppagent-text-layout-item-gap:5px}
+    .ppagent-text-layout[data-text-layout-density="standard"]{--ppagent-text-layout-gap:10px;--ppagent-text-layout-item-gap:8px}
+    .ppagent-text-layout[data-text-layout-density="loose"]{--ppagent-text-layout-gap:15px;--ppagent-text-layout-item-gap:12px}
+    .ppagent-text-primitive{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      color:var(--ppagent-text-color,#46566a);
+      text-align:inherit;
+      white-space:pre-line;
+      overflow-wrap:break-word;
+    }
+    .ppagent-text-primitive--heading{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-text-primitive--body{font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.45}
+    .ppagent-text-primitive--list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px)}
+    .ppagent-text-list__item{box-sizing:border-box;min-width:0;margin:0;padding:0;overflow:visible;color:var(--ppagent-text-color,#46566a);font-size:var(--ppagent-component-body-size,17pt);font-weight:400;line-height:1.38;text-align:inherit;white-space:pre-line;overflow-wrap:break-word}
+    .ppagent-text-primitive--metric{color:var(--ppagent-value-color,#2f5ea8);font-size:var(--ppagent-component-heading-size,25pt);font-weight:700;line-height:1.08}
+    .ppagent-text-primitive--label{color:var(--ppagent-label-color,#60758d);font-size:var(--ppagent-component-label-size,17pt);font-weight:600;line-height:1.2}
+    .ppagent-text-primitive--annotation{color:var(--ppagent-annotation-color,#748495);font-size:var(--ppagent-component-meta-size,15pt);font-weight:400;line-height:1.3}
+    .ppagent-text-primitive--quote{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-item-title-size,21pt);font-weight:500;line-height:1.35}
+    .ppagent-text-primitive--emphasis{color:var(--ppagent-heading-color,#254b7c);font-size:var(--ppagent-component-title-size,23pt);font-weight:700;line-height:1.2;text-wrap:balance}
+    .ppagent-structured-list{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-structured-list__item{display:flex;flex-direction:column;gap:4px;min-width:0}
+    .ppagent-structured-list__item .ppagent-text-primitive--heading{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-metric-set{display:grid;grid-template-columns:repeat(var(--ppagent-metric-columns,2),minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0;align-items:start}
+    .ppagent-metric-set[data-metric-count="3"]{--ppagent-metric-columns:3}
+    .ppagent-metric-set[data-metric-count="4"]{--ppagent-metric-columns:4}
+    .ppagent-metric-set__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-key-value{display:flex;flex-direction:column;gap:var(--ppagent-text-layout-item-gap,8px);min-width:0;min-height:0}
+    .ppagent-key-value__row{display:grid;grid-template-columns:minmax(64px,.42fr) minmax(0,1fr);gap:10px;align-items:start;min-width:0}
+    .ppagent-key-value__row .ppagent-text-primitive--metric{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label,
+    .ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--annotation{text-align:right}
+    .ppagent-summary-information{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--ppagent-text-layout-gap,10px);min-width:0;min-height:0}
+    .ppagent-summary-information__item{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:inherit}
+    .ppagent-summary-information__item .ppagent-text-primitive--emphasis{font-size:var(--ppagent-component-lead-size,19pt)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"]{
+      justify-content:flex-start;
+      gap:12px;
+      padding:18px;
+      color:var(--ppagent-color-body);
+      background:transparent;
+      text-align:left;
+    }
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive{color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--emphasis,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--quote{color:var(--ppagent-color-dark);font-weight:700;letter-spacing:-.25px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--body,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-list__item{font-size:max(15pt,var(--ppagent-component-body-size))}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--label{color:var(--ppagent-color-accent);font-size:max(15pt,var(--ppagent-component-label-size));font-weight:700;letter-spacing:.7px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--annotation{color:var(--ppagent-color-muted);font-size:max(15pt,var(--ppagent-component-meta-size))}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-primitive--metric{color:var(--ppagent-color-accent);font-weight:700;letter-spacing:-.5px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-list__item{position:relative;padding-left:17px;color:var(--ppagent-color-body)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-text-list__item::before{content:"";position:absolute;left:0;top:.68em;width:8px;height:2px;background:var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--heading-content-flow > .ppagent-text-primitive--heading,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--label-content-flow > .ppagent-text-primitive--label,
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--heading-metric-content-flow > .ppagent-text-primitive--heading{padding-bottom:10px;border-bottom:2px solid var(--ppagent-color-accent)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-structured-list{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-structured-list__item{display:grid;grid-template-columns:minmax(82px,.42fr) minmax(0,1fr);gap:14px;padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-structured-list__item .ppagent-text-primitive--body{margin:0}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-metric-set{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-metric-set__item{padding:12px 14px 4px 0}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-metric-set__item + .ppagent-metric-set__item{padding-left:14px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-key-value{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-key-value__row{padding:9px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--quote-attribution-flow{position:relative;padding-left:52px}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--quote-attribution-flow::before{content:"“";position:absolute;left:16px;top:8px;color:var(--ppagent-color-accent);font-family:Georgia,serif;font-size:42pt;font-weight:700;line-height:1}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"].ppagent-text-layout--quote-attribution-flow .ppagent-text-primitive--label{margin-top:auto;padding-top:10px;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-summary-information{gap:0;border-top:2px solid var(--ppagent-color-dark)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-summary-information__item{padding:10px 12px 8px 0;border-bottom:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout[data-text-layout-style="swiss-international"] .ppagent-summary-information__item:nth-child(even){padding-left:12px;border-left:1px solid var(--ppagent-color-line)}
+    .ppagent-text-layout--value-label{
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-value-label-gap,5px);
+      padding:var(--ppagent-value-label-padding,5px);
+      text-align:center;
+    }
+    .ppagent-text-layout__value,
+    .ppagent-text-layout__label{
+      box-sizing:border-box;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:hidden;
+      text-align:inherit;
+    }
+    .ppagent-text-layout__value{
+      color:var(--ppagent-value-color,#2f5ea8);
+      font-size:var(--ppagent-component-lead-size,19pt);
+      font-weight:700;
+      line-height:1.15;
+    }
+    .ppagent-text-layout__label{
+      color:var(--ppagent-label-color,#60758d);
+      font-size:var(--ppagent-component-meta-size,15pt);
+      font-weight:400;
+      line-height:1.2;
+    }
+    .ppagent-text-flow{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:var(--ppagent-text-flow-gap,10px);
+      min-width:0;
+      min-height:0;
+      overflow:hidden;
+      font-family:var(--ppagent-font-body,"Microsoft YaHei"),sans-serif;
+      text-align:left;
+    }
+    .ppagent-text-flow[data-text-flow-align="center"]{text-align:center}
+    .ppagent-text-flow[data-text-flow-align="right"]{text-align:right}
+    .ppagent-text-flow[data-text-flow-valign="top"]{justify-content:flex-start}
+    .ppagent-text-flow[data-text-flow-valign="bottom"]{justify-content:flex-end}
+    .ppagent-text-flow__title,
+    .ppagent-text-flow__body{
+      position:relative;
+      box-sizing:border-box;
+      flex:0 0 auto;
+      width:100%;
+      min-width:0;
+      margin:0;
+      padding:0;
+      overflow:visible;
+      text-align:inherit;
+    }
+    .ppagent-text-flow__title{
+      font-size:var(--ppagent-component-item-title-size,21pt);
+      font-weight:700;
+      line-height:1.2;
+      white-space:normal;
+      text-wrap:balance;
+    }
+    .ppagent-text-flow__body{
+      font-size:var(--ppagent-component-body-size,17pt);
+      font-weight:400;
+      line-height:1.45;
+      white-space:pre-line;
+    }
+    .ppagent-text-flow__separator{
+      box-sizing:border-box;
+      flex:0 0 auto;
+      align-self:center;
+      width:var(--ppagent-text-flow-separator-width,54px);
+      height:var(--ppagent-text-flow-separator-height,4px);
+      border:0;
+      border-radius:99px;
+      background:var(--ppagent-text-flow-separator-color,#78aeef);
+    }
+  
+
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 1280px; height: 720px; overflow: hidden; }
+body { background: #fff; color: #242424; font-family: 'Microsoft YaHei', sans-serif; }
+.slide { position: relative; width: 1280px; height: 720px; }
+.slide h1, .slide h2, .slide h3, .slide p { margin: 0; }
+.slide h1 { position: absolute; left: 55px; top: 63px; font-size: 42px; line-height: 1.25; font-weight: 700; }
+.title-rule { position: absolute; top: 137px; left: 55px; width: 68px; height: 3px; background: #585858; }
+[data-content-frame] { position: absolute; }
+
+/* options: equal weight above a common condition, with source text in both cards */
+.page-options { --option-inset: 70px; }
+.page-options .parallel-review { width: 100%; height: 370px; overflow: visible; }
+.page-options .parallel-review[data-item-count="2"] .parallel-grid {
+  top: 5px; left: var(--option-inset); right: var(--option-inset); width: auto; height: 348px; gap: 36px;
+}
+.page-options .parallel-card { height: 348px; }
+.page-options .parallel-title-region { top: 112px; height: 41px; }
+.page-options .parallel-content-rule { top: 163px; }
+.page-options .parallel-body-region { top: 181px; height: 130px; left: 40px; right: 40px; }
+.page-options .parallel-body-region .ppagent-text-primitive--body { line-height: 1.5; }
+.condition {
+  position: absolute; left: var(--option-inset); right: var(--option-inset); top: 377px; height: 82px;
+  display: grid; align-items: center; padding: 0 38px;
+}
+.condition-plate { position: absolute; inset: 0; width: 100%; height: 100%; }
+.condition-plate path { fill: #eaeaea; }
+.free-plate { background: #eaeaea; clip-path: polygon(0 0, 100% 0, 100% 100%, 1.8% 100%, 0 72%); }
+.condition p { position: relative; font-size: 20px; line-height: 1.4; font-weight: 700; color: #292929; }
+
+/* services: responsive asset on the left, shared operational entry on the right */
+.page-services [data-content-frame] { display: grid; grid-template-columns: minmax(0, 1fr) 258px; gap: 24px; align-items: center; }
+.service-entry { position: relative; display: block; padding: 26px 24px; }
+.entry-panel { position: absolute; inset: 0; background: #eaeaea; }
+.service-entry p { position: relative; font-size: 20px; line-height: 1.55; font-weight: 700; }
+
+/* dense: frozen one-page attempt, retaining the original repeated sentences */
+.dense-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(2, 211px); gap: 30px 34px; }
+.dense-grid article { padding: 12px 16px 0; outline: 1px solid #d6d6d6; outline-offset: -1px; }
+.dense-grid h3 { font-size: 21px; line-height: 1.25; margin-bottom: 7px; }
+.dense-grid p, .dense-common p { font-size: 18px; line-height: 1.38; }
+.dense-common { position: absolute; inset: 465px 0 auto; }
+
+/* HR: preserve two independent groups, then flow long prose within each */
+.hr-columns { position: relative; display: grid; height: 100%; grid-template-columns: minmax(0, calc((100% - var(--hr-gap)) * var(--hr-divider-share))) minmax(0, 1fr); gap: var(--hr-gap); }
+.hr-divider { position: absolute; top: 0; bottom: 0; left: calc((100% - var(--hr-gap)) * var(--hr-divider-share) + var(--hr-gap) / 2); width: 1px; background: #d0d0d0; }
+.hr-group h2 { font-size: 25px; line-height: 1.3; margin: 0 0 16px; padding-bottom: 0; }
+.hr-group h3 { font-size: 20px; line-height: 1.3; font-weight: 700; margin: 0 0 3px; }
+.hr-group p { font-size: 18.75px; line-height: 1.36; color: #454545; }
+.hr-items { display: grid; row-gap: 8px; }
+.hr-limits .hr-items { row-gap: 17px; }
+</style></head><body><main class="slide page-hr" data-ppt-root><h1 data-ppt-kind="text" data-ppt-name="title" data-ppt-valign="top" data-bind="title" data-role="page-title" data-source="稿件/变革不足与感悟-v3-条件否定.md#source-001:0-13" class="">第二部分：存在的不足与感悟</h1>
+    <div aria-hidden="true" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="title-rule" class="title-rule"></div><div data-content-frame style="left:55px;top:166px;width:1170px;height:492px"><div class="hr-columns" style="--hr-gap:40px;--hr-divider-share:0.36708860759493667"><section class="hr-group hr-limits" data-component="hr-limits">
+    <h2 data-ppt-kind="text" data-ppt-name="limits-heading" data-ppt-valign="top" data-bind="limits-heading" data-role="group-heading" data-source="稿件/变革不足与感悟-v3-条件否定.md#source-002:0-8" class="">首先是两点不足。</h2>
+    <div class="hr-items"><article><h3 data-ppt-kind="text" data-ppt-name="limits-1-title" data-ppt-valign="top" data-bind="limits-1-title" data-role="heading" data-source="稿件/变革不足与感悟-v3-条件否定.md#source-002:8-20" class="">一是势能到动能阻力重重。</h3><p data-ppt-kind="text" data-ppt-name="limits-1-body" data-ppt-valign="top" data-bind="limits-1-body" data-role="body" data-source="稿件/变革不足与感悟-v3-条件否定.md#source-002:20-95" class="">完成顶层设计后，变革落地就是关键。现阶段公司内部人力资源变革氛围尚未完全形成，信息系统支撑能力仍存在差距，缺乏市场化的管理机制，造成变革落地阻力重重。</p></article><article><h3 data-ppt-kind="text" data-ppt-name="limits-2-title" data-ppt-valign="top" data-bind="limits-2-title" data-role="heading" data-source="稿件/变革不足与感悟-v3-条件否定.md#source-002:95-108" class="">二是合规管理短板亟待提升。</h3><p data-ppt-kind="text" data-ppt-name="limits-2-body" data-ppt-valign="top" data-bind="limits-2-body" data-role="body" data-source="稿件/变革不足与感悟-v3-条件否定.md#source-002:108-184" class="">2017年的巡视整改虽然取得了一定成效，但也充分暴露出人力条线基础管理薄弱的问题，反映出条线内部认识有待提升、作风有待转变、能力有待增强、协同有待深化。</p></article></div>
+  </section><div aria-hidden="true" data-ppt-kind="shape" data-ppt-shape="rect" data-ppt-name="hr-divider" class="hr-divider"></div><section class="hr-group hr-insights" data-component="hr-insights">
+    <h2 data-ppt-kind="text" data-ppt-name="insights-heading" data-ppt-valign="top" data-bind="insights-heading" data-role="group-heading" data-source="稿件/变革不足与感悟-v3-条件否定.md#source-003:0-8" class="">其次是四点感悟。</h2>
+    <div class="hr-items"><article><h3 data-ppt-kind="text" data-ppt-name="insights-1-title" data-ppt-valign="top" data-bind="insights-1-title" data-role="heading" data-source="稿件/变革不足与感悟-v3-条件否定.md#source-003:8-21" class="">一是统一语言才能合拍共鸣。</h3><p data-ppt-kind="text" data-ppt-name="insights-1-body" data-ppt-valign="top" data-bind="insights-1-body" data-role="body" data-source="稿件/变革不足与感悟-v3-条件否定.md#source-003:21-120" class="">要想真正解决人力资源与业务两张皮的问题，就要沿用BLM管理模型，与业务单位统一语言、统一目标、统一策略，实现从业务战略到人力资源战略的规划设计端到端人力资源落地解决方案，达成“三个市场化”转型目标。</p></article><article><h3 data-ppt-kind="text" data-ppt-name="insights-2-title" data-ppt-valign="top" data-bind="insights-2-title" data-role="heading" data-source="稿件/变革不足与感悟-v3-条件否定.md#source-003:120-138" class="">二是解决问题才是检验变革的唯一标准。</h3><p data-ppt-kind="text" data-ppt-name="insights-2-body" data-ppt-valign="top" data-bind="insights-2-body" data-role="body" data-source="稿件/变革不足与感悟-v3-条件否定.md#source-003:138-177" class="">体系变革是否成效，要以能否“解决实际问题”为唯一检验标准，力求变革落地有实效。</p></article><article><h3 data-ppt-kind="text" data-ppt-name="insights-3-title" data-ppt-valign="top" data-bind="insights-3-title" data-role="heading" data-source="稿件/变革不足与感悟-v3-条件否定.md#source-003:177-189" class="">三是顶层设计没有完结篇。</h3><p data-ppt-kind="text" data-ppt-name="insights-3-body" data-ppt-valign="top" data-bind="insights-3-body" data-role="body" data-source="稿件/变革不足与感悟-v3-条件否定.md#source-003:189-242" class="">要在加速试点、小步快跑的基础上，进一步强化与行业优秀实践对标，结合落地成效持续开展迭代优化，完善体系建设。</p></article><article><h3 data-ppt-kind="text" data-ppt-name="insights-4-title" data-ppt-valign="top" data-bind="insights-4-title" data-role="heading" data-source="稿件/变革不足与感悟-v3-条件否定.md#source-003:242-255" class="">四是统筹兼顾才能弹好钢琴。</h3><p data-ppt-kind="text" data-ppt-name="insights-4-body" data-ppt-valign="top" data-bind="insights-4-body" data-role="body" data-source="稿件/变革不足与感悟-v3-条件否定.md#source-003:255-367" class="">强化“变革是硬道理，合规是硬要求，作风是硬标准”管理意识，统筹兼顾，攻守有道，以规范管理的“效率”来强化变革转型的“力度”，以优良的思想作风、工作作风、战斗作风跑出变革转型的“加速度”。作风改进不要求立竿见影，重在持续用力。</p></article></div>
+  </section></div></div></main></body></html>

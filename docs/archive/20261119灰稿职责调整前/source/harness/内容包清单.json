@@ -1,0 +1,945 @@
+{
+  "format": 1,
+  "lastSyncScope": "documentation-only",
+  "policy": "镜像文件由本脚本从仓库维护源同步；远端执行只读取包内文件，不访问维护源。共享修改回写维护源后重建，禁止手工维护两份。",
+  "boundaryLinksNote": "这些是镜像正文里指向包外的相对链接（多为 assets/、experiments/ 证据）。链接与正文逐字节保持源文，不做改写；inRepository 为 true 表示目标在维护源里存在、只是没进包，false 表示源里也已失效。",
+  "boundaryLinks": [
+    {
+      "source": "README.md",
+      "link": "docs/archive/README.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/Agent排版规则.md",
+      "link": "../../archive/20261030重新讨论前/docs/产品需求.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/Skin主题与排版分离.md",
+      "link": "../../archive/20261030重新讨论前/docs/架构/页面构成与布局规范.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/Skin主题与排版分离.md",
+      "link": "../../archive/20261030重新讨论前/harness/运行流程.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/Skin主题与排版分离.md",
+      "link": "../../archive/20261030重新讨论前/docs/产品定义.md#结构源设计与-skin-的共享方式2026-09-08",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/大学Skin设计提示词-v5.md",
+      "link": "../../设计手册/咨询式分析-v1.md",
+      "inRepository": false
+    },
+    {
+      "source": "docs/工作流/正式生成/大学结构调用.md",
+      "link": "../../archive/20261030重新讨论前/docs/产品需求.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/大学结构调用.md",
+      "link": "../../../experiments/neu-shared-entry-20260908/SELF-CHECK.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/工作流.md",
+      "link": "../../archive/20261030重新讨论前/docs/产品需求.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/工作流.md",
+      "link": "../../archive/20261030重新讨论前/docs/方向讨论/页面编排能力计划.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/灰稿交接与美化.md",
+      "link": "../../archive/20261030重新讨论前/docs/产品需求.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/灰稿视觉编排.md",
+      "link": "../../archive/20261030重新讨论前/docs/产品需求.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/生产工作台.md",
+      "link": "../../archive/20261030重新讨论前/docs/产品需求.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/生成任务提示词.md",
+      "link": "../../archive/20261030重新讨论前/harness/运行流程.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/生成任务提示词.md",
+      "link": "../../archive/20261030重新讨论前/docs/方向讨论/页面编排能力计划.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/通用灰稿验证.md",
+      "link": "../../archive/20261030重新讨论前/docs/方向讨论/页面编排能力计划.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/通用灰稿验证.md",
+      "link": "../../archive/20261030重新讨论前/docs/产品需求.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/工作流/正式生成/通用灰稿验证.md",
+      "link": "../../archive/20260930纠偏前/README.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/技术选型与决策.md",
+      "link": "../experiments/layout-methods-20261116/README.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/技术选型与决策.md",
+      "link": "方向讨论/PPagenT第二次对谈GPT-260811.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/技术选型与决策.md",
+      "link": "方向讨论/PPagenT第三次对谈GPT-260812.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/技术选型与决策.md",
+      "link": "../experiments/layout-methods-20261116/README.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/技术选型与决策.md",
+      "link": "../experiments/html-library-reuse-20261119/README.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../src/workbench/main-flow.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../src/runner/gray-agent.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../src/runner/run.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../src/runner/tools/build-tools.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../src/agent/workflow.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../src/runner/loop.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../src/runner/state.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../src/runner/gray-layout-catalog.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../src/visual-runtime/page-layout-library.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../catalog/composition-layouts.json",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../src/runner/gray-draft.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../src/runner/gray-expressions.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../src/visual-runtime/page-expression-plan.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../src/visual-runtime/text-layout-library.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../src/render/gray-text-program.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../src/runner/visual-block-mapping.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../assets/结构图/",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../src/runtime/structure-skills.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../src/content/",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../src/selection/",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../src/ppt-engine/",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../src/asset-runtime/",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../src/visual-runtime/html-component-runtime.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../tests/",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../experiments/",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "../experiments/home-mckinsey-style-20260920/README.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "方向讨论/20260920.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "archive/20261030重新讨论前/docs/工作流/正式生成/生成线架构决策.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构.md",
+      "link": "archive/20261030重新讨论前/docs/架构/页面构成与布局规范.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../archive/20261030重新讨论前/docs/架构/页面构成与布局规范.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../archive/20261030重新讨论前/docs/产品定义.md#结构源设计与-skin-的共享方式2026-09-08",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../experiments/structure-wholepage-luna-20260908/PROTOCOL.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../experiments/structure-preserved-pilot/README.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../experiments/structure-size-pilot/README.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/论点证据结论-001/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/论点证据结论-001/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/分支决策-001/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/分支决策-001/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/情景假设扇面-004/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/情景假设扇面-004/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/鱼骨归因-001/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/鱼骨归因-001/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/因果机制链-003/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/因果机制链-003/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/双向对比-001/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/双向对比-001/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/优劣权衡天平-005/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/优劣权衡天平-005/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/集合交集共识区-005/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/集合交集共识区-005/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/多集合交集-001/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/多集合交集-001/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/转化漏斗-001/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/转化漏斗-001/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/多路汇聚结果-003/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/多路汇聚结果-003/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/简明转化漏斗-001/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/简明转化漏斗-001/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/循环闭环-001/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/循环闭环-001/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/回环轨道循环-005/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/回环轨道循环-005/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/单链反馈控制环-002/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/单链反馈控制环-002/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/目标策略指标-001/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/目标策略指标-001/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/分组展开结构-005/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/分组展开结构-005/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/中心驱动成果辐射-002/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/中心驱动成果辐射-002/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/中心辐射-001/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/中心辐射-001/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/两级能力生态辐射-004/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/两级能力生态辐射-004/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/分层架构-001/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/分层架构-001/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/冰山显隐能力层-006/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/冰山显隐能力层-006/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/行列交叉矩阵-003/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/行列交叉矩阵-003/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/矩阵象限-001/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/矩阵象限-001/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/关系生态网络-001/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/关系生态网络-001/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/等权并列卡片-001/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/等权并列卡片-001/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/双排折角便签-002/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/双排折角便签-002/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/问题方法结果-001/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/问题方法结果-001/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/问题方案结果-001/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/问题方案结果-001/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/连续成长曲线-004/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/连续成长曲线-004/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/成熟度阶梯-002/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/成熟度阶梯-002/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/连续区间重点分布-001/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/连续区间重点分布-001/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/阶段角色协同-001/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/阶段角色协同-001/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/顺序流程-001/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/顺序流程-001/visual-intent.md",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/阶段门禁流程-004/review.mjs",
+      "inRepository": true
+    },
+    {
+      "source": "docs/架构/结构库-变与不变.md",
+      "link": "../../assets/结构图/阶段门禁流程-004/visual-intent.md",
+      "inRepository": true
+    }
+  ],
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "10da5787cef82e7668298428b3db57192210cf3073b4051d4b18d342ec8ea8e1",
+      "source_sha256": "10da5787cef82e7668298428b3db57192210cf3073b4051d4b18d342ec8ea8e1"
+    },
+    {
+      "path": "README.md",
+      "sha256": "95bbca1666cd614b066c42fdfd4c71ebbc9ee628c60c91b2ae8400b2e0c37376",
+      "source_sha256": "95bbca1666cd614b066c42fdfd4c71ebbc9ee628c60c91b2ae8400b2e0c37376"
+    },
+    {
+      "path": "assets/主题/中性编辑排版-001/asset.json",
+      "sha256": "222ee763ff86c920671e262ef440c22d3acd40bdb8c5333b3db2a8b262a46cfc",
+      "source_sha256": "222ee763ff86c920671e262ef440c22d3acd40bdb8c5333b3db2a8b262a46cfc"
+    },
+    {
+      "path": "docs/README.md",
+      "sha256": "ded889ee2137d1a812e6166f89d3bea9e158096879dec4f79db216d744d4365a",
+      "source_sha256": "ded889ee2137d1a812e6166f89d3bea9e158096879dec4f79db216d744d4365a"
+    },
+    {
+      "path": "docs/产品目标与路径.md",
+      "sha256": "33bccae79234fef833d37eb7138e5b9fc56aecd5e133b735dd03cdda84acd874",
+      "source_sha256": "33bccae79234fef833d37eb7138e5b9fc56aecd5e133b735dd03cdda84acd874"
+    },
+    {
+      "path": "docs/工作流/正式生成/Agent排版规则.md",
+      "sha256": "2f55bd9f55040e5d2a3fe34e658d75661db5e556c6fde80c9c82e9889ff798b5",
+      "source_sha256": "2f55bd9f55040e5d2a3fe34e658d75661db5e556c6fde80c9c82e9889ff798b5"
+    },
+    {
+      "path": "docs/工作流/正式生成/Skin主题与排版分离.md",
+      "sha256": "b502407bc70376e691ffc31e9b18d3964dfefe31e43850207dd2ef0989516fe2",
+      "source_sha256": "b502407bc70376e691ffc31e9b18d3964dfefe31e43850207dd2ef0989516fe2"
+    },
+    {
+      "path": "docs/工作流/正式生成/几何审计-20260918.md",
+      "sha256": "3c966d1d0e30b31e17ec419c3222499e707549c522f840a002bb07060e9b9bb8",
+      "source_sha256": "3c966d1d0e30b31e17ec419c3222499e707549c522f840a002bb07060e9b9bb8"
+    },
+    {
+      "path": "docs/工作流/正式生成/回归冒烟基线-20260918.md",
+      "sha256": "16e78fb5faa104ac48c35f1c45574681c93d49cab43d8778fe0e7aa56f0b7357",
+      "source_sha256": "16e78fb5faa104ac48c35f1c45574681c93d49cab43d8778fe0e7aa56f0b7357"
+    },
+    {
+      "path": "docs/工作流/正式生成/大学Skin参数历史提案.md",
+      "sha256": "8f536831ab0445160db6ea7ea8312105a41139d48a3fcca7c087a675c3b210c0",
+      "source_sha256": "8f536831ab0445160db6ea7ea8312105a41139d48a3fcca7c087a675c3b210c0"
+    },
+    {
+      "path": "docs/工作流/正式生成/大学Skin设计提示词-v1.md",
+      "sha256": "8e3f0a408676b96a653d75c31579378e2f2346c0d785cfad31e8462a223a2c95",
+      "source_sha256": "8e3f0a408676b96a653d75c31579378e2f2346c0d785cfad31e8462a223a2c95"
+    },
+    {
+      "path": "docs/工作流/正式生成/大学Skin设计提示词-v2.md",
+      "sha256": "c164a0255fe4bb31b8ca78ba3d2232b54bb18cdf4867108a6a503edba64f3bc6",
+      "source_sha256": "c164a0255fe4bb31b8ca78ba3d2232b54bb18cdf4867108a6a503edba64f3bc6"
+    },
+    {
+      "path": "docs/工作流/正式生成/大学Skin设计提示词-v3.md",
+      "sha256": "5e3960ff95ac437d4011176780d5ea4a6f2d6348b0fe26c4c1efd402cc6b1e95",
+      "source_sha256": "5e3960ff95ac437d4011176780d5ea4a6f2d6348b0fe26c4c1efd402cc6b1e95"
+    },
+    {
+      "path": "docs/工作流/正式生成/大学Skin设计提示词-v4.md",
+      "sha256": "2a10250db370a526ee7bba3f36c6ca549ee07ec35d4ab3e399fb6ef772811aef",
+      "source_sha256": "2a10250db370a526ee7bba3f36c6ca549ee07ec35d4ab3e399fb6ef772811aef"
+    },
+    {
+      "path": "docs/工作流/正式生成/大学Skin设计提示词-v5.md",
+      "sha256": "3ff304240e3582c09ec370600acf0116874b8991fa915b0eb160ab108c7bb9a5",
+      "source_sha256": "3ff304240e3582c09ec370600acf0116874b8991fa915b0eb160ab108c7bb9a5"
+    },
+    {
+      "path": "docs/工作流/正式生成/大学结构调用.md",
+      "sha256": "bf78e3955caa377afacda653ea6e0fe32914f61f0ed11073f0a091f2a069f71e",
+      "source_sha256": "bf78e3955caa377afacda653ea6e0fe32914f61f0ed11073f0a091f2a069f71e"
+    },
+    {
+      "path": "docs/工作流/正式生成/工作流.md",
+      "sha256": "89d6d7a7983ba9ec93cbf5eb5c75663f0578d1d4932cbda658d4b32814d098d2",
+      "source_sha256": "89d6d7a7983ba9ec93cbf5eb5c75663f0578d1d4932cbda658d4b32814d098d2"
+    },
+    {
+      "path": "docs/工作流/正式生成/泛化考试-20260918.md",
+      "sha256": "a3cd55c80afb55423809da50cd83dd7067baee550270651146959eb661a42cd9",
+      "source_sha256": "a3cd55c80afb55423809da50cd83dd7067baee550270651146959eb661a42cd9"
+    },
+    {
+      "path": "docs/工作流/正式生成/灰稿交接与美化.md",
+      "sha256": "9794b3da7a7d7cad59619586ef068bbfdfa56df2b255b0f18a5e6543d7315373",
+      "source_sha256": "9794b3da7a7d7cad59619586ef068bbfdfa56df2b255b0f18a5e6543d7315373"
+    },
+    {
+      "path": "docs/工作流/正式生成/灰稿分区保留验证.md",
+      "sha256": "15f1ed472691740e3ac3f712ca5031818a7555f008c7609111203becee7910de",
+      "source_sha256": "15f1ed472691740e3ac3f712ca5031818a7555f008c7609111203becee7910de"
+    },
+    {
+      "path": "docs/工作流/正式生成/灰稿视觉编排.md",
+      "sha256": "826f1ac46b0c9282171a1ab2508e9c0bba02fbeef7d7b3f429e9930981724a53",
+      "source_sha256": "826f1ac46b0c9282171a1ab2508e9c0bba02fbeef7d7b3f429e9930981724a53"
+    },
+    {
+      "path": "docs/工作流/正式生成/生产工作台.md",
+      "sha256": "f6372a04f9f095a28ce8fbee05053d5f3f996fbefa0417c0190469e3f9397202",
+      "source_sha256": "f6372a04f9f095a28ce8fbee05053d5f3f996fbefa0417c0190469e3f9397202"
+    },
+    {
+      "path": "docs/工作流/正式生成/生成任务提示词.md",
+      "sha256": "d6220c9d7241845c3f3cb5c2a6ee1229de5cf747f214bf6507fcf66be818ee52",
+      "source_sha256": "d6220c9d7241845c3f3cb5c2a6ee1229de5cf747f214bf6507fcf66be818ee52"
+    },
+    {
+      "path": "docs/工作流/正式生成/评审共识-20260917.md",
+      "sha256": "bdf5743a44cd0143b834f1c04c76e21575ace6c5e7a247d49ce5580ce05ba723",
+      "source_sha256": "bdf5743a44cd0143b834f1c04c76e21575ace6c5e7a247d49ce5580ce05ba723"
+    },
+    {
+      "path": "docs/工作流/正式生成/通用灰稿验证.md",
+      "sha256": "12116bb42aa6e1ade25d9bc66b7b10999871adf97db61f7561ce7707f6f1dc94",
+      "source_sha256": "12116bb42aa6e1ade25d9bc66b7b10999871adf97db61f7561ce7707f6f1dc94"
+    },
+    {
+      "path": "docs/技术选型与决策.md",
+      "sha256": "01ba7d1efdcdc7ac1108190f3c2519c05e4feddcfc06e184b94e702294be96ab",
+      "source_sha256": "01ba7d1efdcdc7ac1108190f3c2519c05e4feddcfc06e184b94e702294be96ab"
+    },
+    {
+      "path": "docs/方向讨论/20261029-产品动机与价值讨论.md",
+      "sha256": "8efbfda46e2ee131e959105091fa1d82d44f25de738ddf340cc304068ba190d3",
+      "source_sha256": "8efbfda46e2ee131e959105091fa1d82d44f25de738ddf340cc304068ba190d3"
+    },
+    {
+      "path": "docs/架构.md",
+      "sha256": "f6f90c45a0c9a611476c93b857996db110865e2d0422936cab001de9862b6475",
+      "source_sha256": "f6f90c45a0c9a611476c93b857996db110865e2d0422936cab001de9862b6475"
+    },
+    {
+      "path": "docs/架构/结构库-变与不变.md",
+      "sha256": "b4421d328fbf67ce1d5146a52df38479008a4a8da9eb0c9437d15012f018fb84",
+      "source_sha256": "b4421d328fbf67ce1d5146a52df38479008a4a8da9eb0c9437d15012f018fb84"
+    },
+    {
+      "path": "rules/README.md",
+      "sha256": "b5990e8cd6966f2e506556138fdcbeb1bb9062339dd4d546feac1ee96c7a09a7",
+      "source_sha256": "b5990e8cd6966f2e506556138fdcbeb1bb9062339dd4d546feac1ee96c7a09a7"
+    },
+    {
+      "path": "rules/index.json",
+      "sha256": "f7d2be54b47563771fa7e6dbae5d955cf9f68334f1bddec7f39013830e62ae7f",
+      "source_sha256": "f7d2be54b47563771fa7e6dbae5d955cf9f68334f1bddec7f39013830e62ae7f"
+    },
+    {
+      "path": "rules/skins/东北大学.md",
+      "sha256": "ce52982a5dc65f6c985d97f7f933025b2965d669c9df86f338a4524fa763f8ba",
+      "source_sha256": "ce52982a5dc65f6c985d97f7f933025b2965d669c9df86f338a4524fa763f8ba"
+    },
+    {
+      "path": "rules/skins/中性编辑排版.md",
+      "sha256": "3f9789ebf881b24765bb395b79f2dfc28baf2c91849536e5e22b396a30c610e9",
+      "source_sha256": "3f9789ebf881b24765bb395b79f2dfc28baf2c91849536e5e22b396a30c610e9"
+    },
+    {
+      "path": "rules/内容组织.md",
+      "sha256": "306cf39e76a78af2407620acfa2db64fc4312f075c4a4bc4f820ee0b4db736c2",
+      "source_sha256": "306cf39e76a78af2407620acfa2db64fc4312f075c4a4bc4f820ee0b4db736c2"
+    },
+    {
+      "path": "rules/执行/内容导演.md",
+      "sha256": "e05c536ddae067a5e1ca4a9aa4170dff3c28b1a30a32f40c1256f4d8d84f8bae",
+      "source_sha256": "e05c536ddae067a5e1ca4a9aa4170dff3c28b1a30a32f40c1256f4d8d84f8bae"
+    },
+    {
+      "path": "rules/执行/视觉选择.md",
+      "sha256": "283e748fa3fb7923941df2d9b2fa267cc1016b1ab42d9301eab1f63440562ee0",
+      "source_sha256": "283e748fa3fb7923941df2d9b2fa267cc1016b1ab42d9301eab1f63440562ee0"
+    },
+    {
+      "path": "rules/排版.md",
+      "sha256": "711831e12568de34eb492bb380abb825bcefd109149cee8756ed335258cd71fb",
+      "source_sha256": "711831e12568de34eb492bb380abb825bcefd109149cee8756ed335258cd71fb"
+    },
+    {
+      "path": "rules/排版体系/杂志风.md",
+      "sha256": "19f670f299ebc42064efc2d6590550f83e787fc101bf486a6fe804b6c789780d",
+      "source_sha256": "19f670f299ebc42064efc2d6590550f83e787fc101bf486a6fe804b6c789780d"
+    },
+    {
+      "path": "rules/排版体系/麦肯锡式.md",
+      "sha256": "d4764338c524c2e2bdbd8a4d074bb539fa1273f154ae679fc42defcbd1fa4612",
+      "source_sha256": "d4764338c524c2e2bdbd8a4d074bb539fa1273f154ae679fc42defcbd1fa4612"
+    },
+    {
+      "path": "rules/质量检查.md",
+      "sha256": "a0a064a13809f4d0aaaf94da33728ccf1974414ab6524205a0fbaf948a141347",
+      "source_sha256": "a0a064a13809f4d0aaaf94da33728ccf1974414ab6524205a0fbaf948a141347"
+    },
+    {
+      "path": "rules/页面组合.md",
+      "sha256": "85674f02e7e90916b73f6e962383988862e52e131cb2fa0077536239a60ef85a",
+      "source_sha256": "85674f02e7e90916b73f6e962383988862e52e131cb2fa0077536239a60ef85a"
+    },
+    {
+      "path": "schemas/composition-intent.schema.json",
+      "sha256": "9b53713d65698eac979b2f3f163dcab0da5c07ac2956d9828d503c8c54127e69",
+      "source_sha256": "9b53713d65698eac979b2f3f163dcab0da5c07ac2956d9828d503c8c54127e69"
+    },
+    {
+      "path": "skills/references/archify-integration.md",
+      "sha256": "bf0743edceca9785806bc4f34f0cdb4c618b6055298b6e6d8adfbb72bb73e741",
+      "source_sha256": "bf0743edceca9785806bc4f34f0cdb4c618b6055298b6e6d8adfbb72bb73e741"
+    },
+    {
+      "path": "skills/references/harness-binding.md",
+      "sha256": "10464a5267f1756657a8a85dd9ab808791d6fb23989a94763fafcb8cbd19d5ba",
+      "source_sha256": "10464a5267f1756657a8a85dd9ab808791d6fb23989a94763fafcb8cbd19d5ba"
+    },
+    {
+      "path": "skills/references/lieflat-charts-integration.md",
+      "sha256": "e84d3da187de842d0a357cf3e0effd6474ac4f413d3e4c20d12d21005fa212cb",
+      "source_sha256": "e84d3da187de842d0a357cf3e0effd6474ac4f413d3e4c20d12d21005fa212cb"
+    },
+    {
+      "path": "skills/references/selection.md",
+      "sha256": "ca6de289078d8ac2258a0e76f90c2d7f71db08fd2efc055c4f77a60694a418e2",
+      "source_sha256": "ca6de289078d8ac2258a0e76f90c2d7f71db08fd2efc055c4f77a60694a418e2"
+    },
+    {
+      "path": "src/composition/intent.mjs",
+      "sha256": "b2a89c3f8e0765caba8b27811915d27a8134fccc0876baf832362cdc845ad685",
+      "source_sha256": "b2a89c3f8e0765caba8b27811915d27a8134fccc0876baf832362cdc845ad685"
+    },
+    {
+      "path": "src/composition/resolve.mjs",
+      "sha256": "1a8b1e9110a1123df2162d3f4fb6866e706edf9cf06b9bf2cb8b67fe6baba556",
+      "source_sha256": "1a8b1e9110a1123df2162d3f4fb6866e706edf9cf06b9bf2cb8b67fe6baba556"
+    },
+    {
+      "path": "src/runtime/rules-loader.mjs",
+      "sha256": "72f3ad15dd7da2e2738356c33d690e2dce4eaeb46cfcec17d8d32357f2639958",
+      "source_sha256": "72f3ad15dd7da2e2738356c33d690e2dce4eaeb46cfcec17d8d32357f2639958"
+    },
+    {
+      "path": "src/runtime/shells/academic-report.mjs",
+      "sha256": "c9031af2c75941f1432f850393ae698c06480f5dc0881a1cf8d4c7f6b42506d6",
+      "source_sha256": "c9031af2c75941f1432f850393ae698c06480f5dc0881a1cf8d4c7f6b42506d6"
+    },
+    {
+      "path": "src/runtime/skins/northeastern-university-contract.mjs",
+      "sha256": "74da58bae4095071900fea5ae951f30398e159da7e46e34b3674efaa5a00ad32",
+      "source_sha256": "74da58bae4095071900fea5ae951f30398e159da7e46e34b3674efaa5a00ad32"
+    },
+    {
+      "path": "src/runtime/skins/northeastern-university-theme.mjs",
+      "sha256": "9924a3d51a644145908d47080f28188da5c6ed627549f484d479529e6b2c8226",
+      "source_sha256": "9924a3d51a644145908d47080f28188da5c6ed627549f484d479529e6b2c8226"
+    },
+    {
+      "path": "src/runtime/skins/university-mckinsey.mjs",
+      "sha256": "e8dbf87dafc96cb860d44d3c349abe428fbbe960c9b60c6b030541a4d6c79f38",
+      "source_sha256": "e8dbf87dafc96cb860d44d3c349abe428fbbe960c9b60c6b030541a4d6c79f38"
+    },
+    {
+      "path": "src/runtime/typography-standards.mjs",
+      "sha256": "306bde809cf95cb9b7442bdb9cf108f7f29c3cb75a996639865839f3ba8aec8e",
+      "source_sha256": "306bde809cf95cb9b7442bdb9cf108f7f29c3cb75a996639865839f3ba8aec8e"
+    },
+    {
+      "path": "src/tools/check-composition-intent.mjs",
+      "sha256": "f9fd08bab3085442a419b7020bddb9d22b4c318e0ab4c94013a80313d42c82fa",
+      "source_sha256": "f9fd08bab3085442a419b7020bddb9d22b4c318e0ab4c94013a80313d42c82fa"
+    },
+    {
+      "path": "src/tools/load-rules.mjs",
+      "sha256": "9f2d777045b66c5324dfc73f816883eead08d5732ba0abebfd844670798a7bcc",
+      "source_sha256": "9f2d777045b66c5324dfc73f816883eead08d5732ba0abebfd844670798a7bcc"
+    },
+    {
+      "path": "src/visual-runtime/cycle-stage-colors.mjs",
+      "sha256": "f0c86acce68b16e598471179b119c0ca645925bf3b784be091fb4f0fff738270",
+      "source_sha256": "f0c86acce68b16e598471179b119c0ca645925bf3b784be091fb4f0fff738270"
+    },
+    {
+      "path": "src/visual-runtime/html-component-theme.mjs",
+      "sha256": "4014cb8bdeeef268ec9bc3e957593e28641b5caa8f3028b173acf4bb61cb3447",
+      "source_sha256": "4014cb8bdeeef268ec9bc3e957593e28641b5caa8f3028b173acf4bb61cb3447"
+    },
+    {
+      "path": "src/visual-runtime/neutral-structure-profiles.mjs",
+      "sha256": "2e6b0d6d47cfd6da90e5fa5464d2d9acd0a7bb403f516024085910d855868f88",
+      "source_sha256": "2e6b0d6d47cfd6da90e5fa5464d2d9acd0a7bb403f516024085910d855868f88"
+    },
+    {
+      "path": "src/visual-runtime/neutral-structure-theme.mjs",
+      "sha256": "f9095e795d04d1322f5797eb1d5aa1667546a00e0fee87973cd1efdf17041169",
+      "source_sha256": "f9095e795d04d1322f5797eb1d5aa1667546a00e0fee87973cd1efdf17041169"
+    }
+  ]
+}

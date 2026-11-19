@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PPagenT 单页纯内容试样",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "page", "sources"],
+  "properties": {
+    "schemaVersion": {"const": "page-content@1"},
+    "page": {"$ref": "#/definitions/page"},
+    "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/definitions/source"}}
+  },
+  "definitions": {
+    "id": {"type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"},
+    "text": {"type": "string", "pattern": "^\\S(?:[\\s\\S]*\\S)?$"},
+    "ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/definitions/id"}},
+    "field": {
+      "type": "object", "additionalProperties": false, "required": ["text", "sourceIds"],
+      "properties": {"text": {"$ref": "#/definitions/text"}, "sourceIds": {"$ref": "#/definitions/ids"}}
+    },
+    "source": {
+      "type": "object", "additionalProperties": false, "required": ["id", "file", "quote"],
+      "properties": {
+        "id": {"$ref": "#/definitions/id"}, "file": {"$ref": "#/definitions/text"}, "quote": {"$ref": "#/definitions/text"}
+      }
+    },
+    "scope": {
+      "type": "object", "additionalProperties": false, "required": ["id", "text", "appliesTo"],
+      "properties": {
+        "id": {"$ref": "#/definitions/id"}, "text": {"$ref": "#/definitions/field"}, "appliesTo": {"$ref": "#/definitions/ids"}
+      }
+    },
+    "scopes": {"type": "array", "items": {"$ref": "#/definitions/scope"}},
+    "node": {
+      "type": "object", "additionalProperties": false, "required": ["id", "title"],
+      "properties": {
+        "id": {"$ref": "#/definitions/id"}, "title": {"$ref": "#/definitions/field"}, "body": {"$ref": "#/definitions/field"}
+      }
+    },
+    "link": {
+      "type": "object", "additionalProperties": false, "required": ["type", "from", "to", "sourceIds"],
+      "properties": {
+        "type": {"enum": ["contributes-to", "precedes"]}, "from": {"$ref": "#/definitions/ids"},
+        "to": {"$ref": "#/definitions/id"}, "sourceIds": {"$ref": "#/definitions/ids"}
+      }
+    },
+    "detail": {
+      "type": "object", "additionalProperties": false, "required": ["nodes"],
+      "properties": {
+        "title": {"$ref": "#/definitions/field"},
+        "nodes": {"type": "array", "minItems": 1, "items": {"$ref": "#/definitions/node"}},
+        "links": {"type": "array", "items": {"$ref": "#/definitions/link"}}
+      }
+    },
+    "item": {
+      "type": "object", "additionalProperties": false, "required": ["id", "title"],
+      "properties": {
+        "id": {"$ref": "#/definitions/id"}, "title": {"$ref": "#/definitions/field"}, "body": {"$ref": "#/definitions/field"},
+        "detail": {"$ref": "#/definitions/detail"}, "appliesAcrossCases": {"const": true}
+      }
+    },
+    "group": {
+      "type": "object", "additionalProperties": false, "required": ["id", "title", "relation", "items"],
+      "properties": {
+        "id": {"$ref": "#/definitions/id"}, "title": {"$ref": "#/definitions/field"},
+        "relation": {"enum": ["independent", "peer", "comparison", "cases"]},
+        "items": {"type": "array", "minItems": 1, "items": {"$ref": "#/definitions/item"}},
+        "scopeNotes": {"$ref": "#/definitions/scopes"}
+      }
+    },
+    "page": {
+      "type": "object", "additionalProperties": false, "required": ["id", "title", "claim", "groups"],
+      "properties": {
+        "id": {"$ref": "#/definitions/id"}, "title": {"$ref": "#/definitions/field"}, "claim": {"$ref": "#/definitions/field"},
+        "groups": {"type": "array", "minItems": 1, "items": {"$ref": "#/definitions/group"}},
+        "scopeNotes": {"$ref": "#/definitions/scopes"},
+        "notes": {"type": "array", "items": {"$ref": "#/definitions/field"}}
+      }
+    }
+  }
+}

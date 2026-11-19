@@ -1,0 +1,13 @@
+--- assets\结构图\多路汇聚结果-003\review.mjs
++++ src/convergence-local.mjs
+@@ -51,8 +51,8 @@
+     };
+   }
+   const resultWidth = clamp(width * 0.26, 210, 300);
+-  const inputWidth = clamp(width * 0.265, 190, 310);
+-  const inputHeight = clamp(height * (count >= 6 ? 0.135 : 0.16), 58, 78);
++  const inputWidth = clamp(width * 0.265, 240, 310);
++  const inputHeight = clamp(height * (count >= 6 ? 0.135 : 0.16), 64, 78);
+   const inputTop = clamp(height * 0.05, 12, 22);
+   const resultHeight = clamp(height * 0.52, 180, 260);
+   const resultTop = (height - resultHeight) / 2;

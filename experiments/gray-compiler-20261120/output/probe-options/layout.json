@@ -1,0 +1,585 @@
+{
+  "version": "gray-layout@1",
+  "pageId": "options",
+  "inputSha256": "07d1fd8724af39b98b4b47a04d543b598267962a32db1c3b8090524ac3593dee",
+  "canvas": {
+    "width": 1280,
+    "height": 720
+  },
+  "units": "CSS px",
+  "origin": "slide top-left",
+  "compilerLayout": {
+    "id": "standard-row-content-weighted",
+    "canvas": {
+      "width": 1280,
+      "height": 720
+    },
+    "margin": 54,
+    "gap": 28,
+    "padding": 12,
+    "direction": "row",
+    "columns": [
+      1172
+    ],
+    "density": "standard"
+  },
+  "frame": {
+    "x": 54,
+    "y": 170.890625,
+    "width": 1172,
+    "height": 489.109375
+  },
+  "readingOrder": [
+    "claim",
+    "title",
+    "group:comparison:title",
+    "item:central:title",
+    "item:central:body",
+    "item:phased:title",
+    "item:phased:body",
+    "note:common-rollback:text"
+  ],
+  "relations": {
+    "groups": [
+      {
+        "id": "comparison",
+        "title": {
+          "text": "上线方式对比",
+          "sourceIds": [
+            "s-title"
+          ]
+        },
+        "relation": "comparison",
+        "members": [
+          "central",
+          "phased"
+        ],
+        "items": [
+          {
+            "id": "central"
+          },
+          {
+            "id": "phased"
+          }
+        ],
+        "notes": [
+          {
+            "id": "common-rollback",
+            "owner": "comparison",
+            "appliesTo": [
+              "central",
+              "phased"
+            ]
+          }
+        ]
+      }
+    ],
+    "notes": []
+  },
+  "sources": [
+    {
+      "id": "s-title",
+      "file": "稿件/模拟稿库/布局试排-options.md",
+      "quote": "两种上线方案",
+      "sha256": "123b52f8a5fc088f575c8a702d1ba5c09949e0482a68add8ebb3539d71dfc7ae",
+      "span": [
+        0,
+        6
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-central",
+      "file": "稿件/模拟稿库/布局试排-options.md",
+      "quote": "集中上线方案：在一个周末完成全部部门切换，培训与支持资源集中投入。优势是过渡期短；风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。",
+      "sha256": "123b52f8a5fc088f575c8a702d1ba5c09949e0482a68add8ebb3539d71dfc7ae",
+      "span": [
+        10,
+        83
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-phased",
+      "file": "稿件/模拟稿库/布局试排-options.md",
+      "quote": "分批上线方案：先选择一个部门试用，再按反馈逐批推广。优点是能及时修正规则；代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。",
+      "sha256": "123b52f8a5fc088f575c8a702d1ba5c09949e0482a68add8ebb3539d71dfc7ae",
+      "span": [
+        87,
+        155
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    },
+    {
+      "id": "s-rollback",
+      "file": "稿件/模拟稿库/布局试排-options.md",
+      "quote": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。",
+      "sha256": "123b52f8a5fc088f575c8a702d1ba5c09949e0482a68add8ebb3539d71dfc7ae",
+      "span": [
+        159,
+        188
+      ],
+      "spanUnit": "UTF-16",
+      "ambiguousQuote": false
+    }
+  ],
+  "notes": [],
+  "objects": [
+    {
+      "id": "theme-header",
+      "bounds": {
+        "x": 54,
+        "y": 43,
+        "width": 1172,
+        "height": 103.890625
+      },
+      "role": "region"
+    },
+    {
+      "id": "claim",
+      "bounds": {
+        "x": 54,
+        "y": 43,
+        "width": 1172,
+        "height": 47.25
+      },
+      "role": "claim"
+    },
+    {
+      "id": "title",
+      "bounds": {
+        "x": 54,
+        "y": 100.25,
+        "width": 1172,
+        "height": 24.640625
+      },
+      "role": "page-title"
+    },
+    {
+      "id": "content-frame",
+      "bounds": {
+        "x": 54,
+        "y": 170.890625,
+        "width": 1172,
+        "height": 489.109375
+      },
+      "role": "region"
+    },
+    {
+      "id": "group:comparison",
+      "bounds": {
+        "x": 54,
+        "y": 170.890625,
+        "width": 1172,
+        "height": 489.109375
+      },
+      "role": "region"
+    },
+    {
+      "id": "group:comparison:title",
+      "bounds": {
+        "x": 67,
+        "y": 183.890625,
+        "width": 150,
+        "height": 33.75
+      },
+      "role": "group-title"
+    },
+    {
+      "id": "item:central",
+      "bounds": {
+        "x": 67,
+        "y": 228.640625,
+        "width": 566,
+        "height": 365.265625
+      },
+      "role": "region"
+    },
+    {
+      "id": "item:central:title",
+      "bounds": {
+        "x": 80,
+        "y": 243.640625,
+        "width": 540,
+        "height": 30.8125
+      },
+      "role": "item-title"
+    },
+    {
+      "id": "item:central:body",
+      "bounds": {
+        "x": 80,
+        "y": 278.453125,
+        "width": 540,
+        "height": 52.1875
+      },
+      "role": "body"
+    },
+    {
+      "id": "item:phased",
+      "bounds": {
+        "x": 647,
+        "y": 228.640625,
+        "width": 566,
+        "height": 365.265625
+      },
+      "role": "region"
+    },
+    {
+      "id": "item:phased:title",
+      "bounds": {
+        "x": 660,
+        "y": 243.640625,
+        "width": 540,
+        "height": 30.8125
+      },
+      "role": "item-title"
+    },
+    {
+      "id": "item:phased:body",
+      "bounds": {
+        "x": 660,
+        "y": 278.453125,
+        "width": 540,
+        "height": 52.1875
+      },
+      "role": "body"
+    },
+    {
+      "id": "note:common-rollback",
+      "bounds": {
+        "x": 67,
+        "y": 604.90625,
+        "width": 1146,
+        "height": 42.09375
+      },
+      "role": "region",
+      "appliesTo": [
+        "central",
+        "phased"
+      ]
+    },
+    {
+      "id": "note:common-rollback:text",
+      "bounds": {
+        "x": 81,
+        "y": 612.90625,
+        "width": 1121,
+        "height": 26.09375
+      },
+      "role": "scope-note"
+    }
+  ],
+  "texts": [
+    {
+      "id": "claim",
+      "text": "集中上线过渡期短，分批上线便于及时修正规则",
+      "sourceIds": [
+        "s-central",
+        "s-phased"
+      ],
+      "bounds": {
+        "x": 54,
+        "y": 43,
+        "width": 1172,
+        "height": 47.25
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 54,
+            "y": 39,
+            "width": 755.734375,
+            "height": 54
+          },
+          "start": 0,
+          "end": 21,
+          "text": "集中上线过渡期短，分批上线便于及时修正规则"
+        }
+      ],
+      "role": "claim",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 36.918,
+        "lineHeightPx": 47.255,
+        "weight": 735,
+        "align": "start"
+      }
+    },
+    {
+      "id": "title",
+      "text": "两种上线方案",
+      "sourceIds": [
+        "s-title"
+      ],
+      "bounds": {
+        "x": 54,
+        "y": 100.25,
+        "width": 1172,
+        "height": 24.640625
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 54,
+            "y": 99.25,
+            "width": 102,
+            "height": 25
+          },
+          "start": 0,
+          "end": 6,
+          "text": "两种上线方案"
+        }
+      ],
+      "role": "page-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 17,
+        "lineHeightPx": 24.65,
+        "weight": 500,
+        "align": "start"
+      }
+    },
+    {
+      "id": "group:comparison:title",
+      "text": "上线方式对比",
+      "sourceIds": [
+        "s-title"
+      ],
+      "bounds": {
+        "x": 67,
+        "y": 183.890625,
+        "width": 150,
+        "height": 33.75
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 67,
+            "y": 181.890625,
+            "width": 150,
+            "height": 36
+          },
+          "start": 0,
+          "end": 6,
+          "text": "上线方式对比"
+        }
+      ],
+      "role": "group-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 25,
+        "lineHeightPx": 33.75,
+        "weight": 720,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:central:title",
+      "text": "集中上线",
+      "sourceIds": [
+        "s-central"
+      ],
+      "bounds": {
+        "x": 80,
+        "y": 243.640625,
+        "width": 540,
+        "height": 30.8125
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 80,
+            "y": 241.640625,
+            "width": 92,
+            "height": 34
+          },
+          "start": 0,
+          "end": 4,
+          "text": "集中上线"
+        }
+      ],
+      "role": "item-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 23,
+        "lineHeightPx": 30.82,
+        "weight": 690,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:central:body",
+      "text": "在一个周末切换全部部门，集中投入培训与支持资源。过渡期短，但问题可能集中出现，需要提前核对全量数据并准备值守团队。",
+      "sourceIds": [
+        "s-central"
+      ],
+      "bounds": {
+        "x": 80,
+        "y": 278.453125,
+        "width": 540,
+        "height": 52.1875
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 80,
+            "y": 278.453125,
+            "width": 540,
+            "height": 26
+          },
+          "start": 0,
+          "end": 30,
+          "text": "在一个周末切换全部部门，集中投入培训与支持资源。过渡期短，但"
+        },
+        {
+          "bounds": {
+            "x": 80,
+            "y": 304.546875,
+            "width": 486,
+            "height": 26
+          },
+          "start": 30,
+          "end": 57,
+          "text": "问题可能集中出现，需要提前核对全量数据并准备值守团队。"
+        }
+      ],
+      "role": "body",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.1,
+        "weight": 400,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:phased:title",
+      "text": "分批上线",
+      "sourceIds": [
+        "s-phased"
+      ],
+      "bounds": {
+        "x": 660,
+        "y": 243.640625,
+        "width": 540,
+        "height": 30.8125
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 660,
+            "y": 241.640625,
+            "width": 92,
+            "height": 34
+          },
+          "start": 0,
+          "end": 4,
+          "text": "分批上线"
+        }
+      ],
+      "role": "item-title",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 23,
+        "lineHeightPx": 30.82,
+        "weight": 690,
+        "align": "start"
+      }
+    },
+    {
+      "id": "item:phased:body",
+      "text": "先选一个部门试用，再按反馈逐批推广。能及时修正规则，但新旧系统并存较久，需要维护数据同步和跨部门办理说明。",
+      "sourceIds": [
+        "s-phased"
+      ],
+      "bounds": {
+        "x": 660,
+        "y": 278.453125,
+        "width": 540,
+        "height": 52.1875
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 660,
+            "y": 278.453125,
+            "width": 540,
+            "height": 26
+          },
+          "start": 0,
+          "end": 30,
+          "text": "先选一个部门试用，再按反馈逐批推广。能及时修正规则，但新旧系"
+        },
+        {
+          "bounds": {
+            "x": 660,
+            "y": 304.546875,
+            "width": 414,
+            "height": 26
+          },
+          "start": 30,
+          "end": 53,
+          "text": "统并存较久，需要维护数据同步和跨部门办理说明。"
+        }
+      ],
+      "role": "body",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.1,
+        "weight": 400,
+        "align": "start"
+      }
+    },
+    {
+      "id": "note:common-rollback:text",
+      "text": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。",
+      "sourceIds": [
+        "s-rollback"
+      ],
+      "bounds": {
+        "x": 81,
+        "y": 612.90625,
+        "width": 1121,
+        "height": 26.09375
+      },
+      "lines": [
+        {
+          "bounds": {
+            "x": 81,
+            "y": 612.90625,
+            "width": 522,
+            "height": 26
+          },
+          "start": 0,
+          "end": 29,
+          "text": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。"
+        }
+      ],
+      "role": "scope-note",
+      "typography": {
+        "family": "\"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "sizePx": 18,
+        "lineHeightPx": 26.1,
+        "weight": 560,
+        "align": "start"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "id": "group:comparison",
+      "bounds": {
+        "x": 54,
+        "y": 170.890625,
+        "width": 1172,
+        "height": 489.109375
+      },
+      "visibleHeight": 468.015625
+    }
+  ]
+}

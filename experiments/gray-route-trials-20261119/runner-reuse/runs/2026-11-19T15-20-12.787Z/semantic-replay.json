@@ -1,0 +1,39 @@
+{
+  "mode": "deterministic-only, no new model calls",
+  "legacyMisroutedFirstPlan": {
+    "accepted": true,
+    "issues": []
+  },
+  "transferControl": {
+    "before": "协助外来人员登记、路线说明和接待联系；访问受限区域需事先获得授权。",
+    "after": "协助外来人员登记、路线说明和接待联系；访问受限区域需事先获得授权。",
+    "sourceIds": [
+      "unknown-source"
+    ],
+    "accepted": false,
+    "issues": [
+      {
+        "code": "invalid-semantic-plan",
+        "message": "块 b6（组 g5） 引用了未知来源：unknown-source；可用来源：s1、s2、s3、s4、s5、s6"
+      }
+    ]
+  },
+  "qualifierFlip": {
+    "before": "协助外来人员登记、路线说明和接待联系；访问受限区域需事先获得授权。",
+    "after": "协助外来人员登记、路线说明和接待联系；访问受限区域无需事先获得授权。",
+    "sourceIds": [
+      "s5"
+    ],
+    "accepted": true,
+    "issues": []
+  },
+  "weakenedRequirement": {
+    "before": "以上服务统一通过服务台登记，紧急事项需同时电话联系值班人员。",
+    "after": "以上服务统一通过服务台登记，紧急事项可选择电话联系值班人员。",
+    "sourceIds": [
+      "s6"
+    ],
+    "accepted": true,
+    "issues": []
+  }
+}

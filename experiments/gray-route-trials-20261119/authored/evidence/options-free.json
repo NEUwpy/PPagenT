@@ -1,0 +1,753 @@
+{
+  "id": "options-free",
+  "status": "partial",
+  "source": {
+    "file": "稿件/模拟稿库/布局试排-options.md",
+    "sha256": "123b52f8a5fc088f575c8a702d1ba5c09949e0482a68add8ebb3539d71dfc7ae",
+    "blocks": [
+      {
+        "id": "source-001",
+        "text": "两种上线方案",
+        "start": 0,
+        "end": 6,
+        "firstLine": 1,
+        "lastLine": 1
+      },
+      {
+        "id": "source-002",
+        "text": "集中上线方案：在一个周末完成全部部门切换，培训与支持资源集中投入。优势是过渡期短；风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。",
+        "start": 10,
+        "end": 83,
+        "firstLine": 3,
+        "lastLine": 3
+      },
+      {
+        "id": "source-003",
+        "text": "分批上线方案：先选择一个部门试用，再按反馈逐批推广。优点是能及时修正规则；代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。",
+        "start": 87,
+        "end": 155,
+        "firstLine": 5,
+        "lastLine": 5
+      },
+      {
+        "id": "source-004",
+        "text": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。",
+        "start": 159,
+        "end": 188,
+        "firstLine": 7,
+        "lastLine": 7
+      }
+    ]
+  },
+  "bindings": {
+    "title": {
+      "block": "source-001",
+      "start": 0,
+      "end": 6,
+      "text": "两种上线方案",
+      "role": "page-title"
+    },
+    "parallel-title-0": {
+      "block": "source-002",
+      "start": 0,
+      "end": 7,
+      "text": "集中上线方案：",
+      "role": "heading"
+    },
+    "parallel-body-0": {
+      "block": "source-002",
+      "start": 7,
+      "end": 73,
+      "text": "在一个周末完成全部部门切换，培训与支持资源集中投入。优势是过渡期短；风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。",
+      "role": "body"
+    },
+    "parallel-title-1": {
+      "block": "source-003",
+      "start": 0,
+      "end": 7,
+      "text": "分批上线方案：",
+      "role": "heading"
+    },
+    "parallel-body-1": {
+      "block": "source-003",
+      "start": 7,
+      "end": 68,
+      "text": "先选择一个部门试用，再按反馈逐批推广。优点是能及时修正规则；代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。",
+      "role": "body"
+    },
+    "precondition": {
+      "block": "source-004",
+      "start": 0,
+      "end": 29,
+      "text": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。",
+      "role": "shared-condition"
+    }
+  },
+  "declaredFrame": {
+    "left": 55,
+    "top": 166,
+    "width": 1170,
+    "height": 492
+  },
+  "relation": {
+    "kind": "balanced-alternatives",
+    "component": "options-cards",
+    "items": [
+      "options-cards-1",
+      "options-cards-2"
+    ],
+    "shared": "shared-precondition"
+  },
+  "assetCalls": [
+    {
+      "usage": "options-cards",
+      "key": "cards",
+      "id": "parallel-equal-cards-001",
+      "directory": "assets/结构图/等权并列卡片-001",
+      "revision": {
+        "asset.json": "10ab46c89f4867e0671254e2ebb79843b68364de5955060aac4b15acb4a086b5",
+        "review.mjs": "05a9b764f2ba501b889dcde1edd4f134e34e2ea3413f3cba6cb4ad10fe2c2735",
+        "component.css": "195ddd180dd3ee0f72981f086f665536b444c3e5b35c46d957a76e49613d87ec"
+      },
+      "schemaVersion": 5,
+      "parameters": {
+        "items": [
+          {
+            "key": "options-cards-1",
+            "title": "集中上线方案：",
+            "body": "在一个周末完成全部部门切换，培训与支持资源集中投入。优势是过渡期短；风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。",
+            "iconKey": "layout-grid"
+          },
+          {
+            "key": "options-cards-2",
+            "title": "分批上线方案：",
+            "body": "先选择一个部门试用，再按反馈逐批推广。优点是能及时修正规则；代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。",
+            "iconKey": "calendar-event"
+          }
+        ]
+      },
+      "requestedFrame": null,
+      "invocation": "renderMarkup"
+    }
+  ],
+  "selection": "由本窗口模型离线编制并冻结",
+  "htmlSha256": "adf842aca9189a99b6c2c570b0443a578f1e17a83527c0a3d4ba8e67606aff27",
+  "measured": {
+    "slide": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    },
+    "frame": {
+      "left": 55,
+      "top": 166,
+      "width": 1170,
+      "height": 492
+    },
+    "text": [
+      {
+        "id": "title",
+        "text": "两种上线方案",
+        "source": "稿件/模拟稿库/布局试排-options.md#source-001:0-6",
+        "frame": {
+          "left": 55,
+          "top": 63,
+          "width": 252,
+          "height": 52.5
+        },
+        "lineBoxes": [
+          {
+            "left": 55,
+            "top": 61,
+            "width": 252,
+            "height": 55
+          }
+        ],
+        "visualLines": [
+          "两种上线方案"
+        ],
+        "lineCount": 1,
+        "inBody": false,
+        "typography": {
+          "fontSize": 42,
+          "family": "\"Microsoft YaHei\", sans-serif",
+          "weight": "700",
+          "lineHeight": "52.5px",
+          "align": "start"
+        }
+      },
+      {
+        "id": "parallel-title-0",
+        "text": "集中上线方案：",
+        "source": "稿件/模拟稿库/布局试排-options.md#source-002:0-7",
+        "frame": {
+          "left": 153,
+          "top": 289.75,
+          "width": 441,
+          "height": 27.5
+        },
+        "lineBoxes": [
+          {
+            "left": 296.5,
+            "top": 288.75,
+            "width": 154,
+            "height": 29
+          }
+        ],
+        "visualLines": [
+          "集中上线方案："
+        ],
+        "lineCount": 1,
+        "inBody": true,
+        "typography": {
+          "fontSize": 22,
+          "family": "\"Microsoft YaHei\", sans-serif",
+          "weight": "700",
+          "lineHeight": "27.5px",
+          "align": "center"
+        }
+      },
+      {
+        "id": "parallel-body-0",
+        "text": "在一个周末完成全部部门切换，培训与支持资源集中投入。优势是过渡期短；风险是问题可能集中出现，需要提前完成全量数据核对并准备值守团队。",
+        "source": "稿件/模拟稿库/布局试排-options.md#source-002:7-73",
+        "frame": {
+          "left": 165,
+          "top": 360,
+          "width": 417,
+          "height": 114
+        },
+        "lineBoxes": [
+          {
+            "left": 174,
+            "top": 361,
+            "width": 399,
+            "height": 25
+          },
+          {
+            "left": 174,
+            "top": 389.5,
+            "width": 399,
+            "height": 25
+          },
+          {
+            "left": 174,
+            "top": 418,
+            "width": 399,
+            "height": 25
+          },
+          {
+            "left": 345,
+            "top": 446.5,
+            "width": 57,
+            "height": 25
+          }
+        ],
+        "visualLines": [
+          "在一个周末完成全部部门切换，培训与支持资源",
+          "集中投入。优势是过渡期短；风险是问题可能集",
+          "中出现，需要提前完成全量数据核对并准备值守",
+          "团队。"
+        ],
+        "lineCount": 4,
+        "inBody": true,
+        "typography": {
+          "fontSize": 19,
+          "family": "\"Microsoft YaHei\", sans-serif",
+          "weight": "400",
+          "lineHeight": "28.5px",
+          "align": "center"
+        }
+      },
+      {
+        "id": "parallel-title-1",
+        "text": "分批上线方案：",
+        "source": "稿件/模拟稿库/布局试排-options.md#source-003:0-7",
+        "frame": {
+          "left": 686,
+          "top": 289.75,
+          "width": 441,
+          "height": 27.5
+        },
+        "lineBoxes": [
+          {
+            "left": 829.5,
+            "top": 288.75,
+            "width": 154,
+            "height": 29
+          }
+        ],
+        "visualLines": [
+          "分批上线方案："
+        ],
+        "lineCount": 1,
+        "inBody": true,
+        "typography": {
+          "fontSize": 22,
+          "family": "\"Microsoft YaHei\", sans-serif",
+          "weight": "700",
+          "lineHeight": "27.5px",
+          "align": "center"
+        }
+      },
+      {
+        "id": "parallel-body-1",
+        "text": "先选择一个部门试用，再按反馈逐批推广。优点是能及时修正规则；代价是新旧系统并存时间较长，需要维护数据同步和跨部门办理说明。",
+        "source": "稿件/模拟稿库/布局试排-options.md#source-003:7-68",
+        "frame": {
+          "left": 698,
+          "top": 374.25,
+          "width": 417,
+          "height": 85.5
+        },
+        "lineBoxes": [
+          {
+            "left": 707,
+            "top": 375.25,
+            "width": 399,
+            "height": 25
+          },
+          {
+            "left": 707,
+            "top": 403.75,
+            "width": 399,
+            "height": 25
+          },
+          {
+            "left": 726,
+            "top": 432.25,
+            "width": 361,
+            "height": 25
+          }
+        ],
+        "visualLines": [
+          "先选择一个部门试用，再按反馈逐批推广。优点",
+          "是能及时修正规则；代价是新旧系统并存时间较",
+          "长，需要维护数据同步和跨部门办理说明。"
+        ],
+        "lineCount": 3,
+        "inBody": true,
+        "typography": {
+          "fontSize": 19,
+          "family": "\"Microsoft YaHei\", sans-serif",
+          "weight": "400",
+          "lineHeight": "28.5px",
+          "align": "center"
+        }
+      },
+      {
+        "id": "precondition",
+        "text": "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。",
+        "source": "稿件/模拟稿库/布局试排-options.md#source-004:0-29",
+        "frame": {
+          "left": 163,
+          "top": 570,
+          "width": 954,
+          "height": 28
+        },
+        "lineBoxes": [
+          {
+            "left": 163,
+            "top": 571,
+            "width": 580,
+            "height": 26
+          }
+        ],
+        "visualLines": [
+          "两种方案上线前均须完成回退演练，确认责任人和数据恢复步骤。"
+        ],
+        "lineCount": 1,
+        "inBody": true,
+        "typography": {
+          "fontSize": 20,
+          "family": "\"Microsoft YaHei\", sans-serif",
+          "weight": "700",
+          "lineHeight": "28px",
+          "align": "start"
+        }
+      }
+    ],
+    "regions": [
+      {
+        "id": "options-cards",
+        "field": null,
+        "frame": {
+          "left": 55,
+          "top": 166,
+          "width": 1170,
+          "height": 370
+        }
+      },
+      {
+        "id": "options-cards-1-icon",
+        "field": "items[0].iconKey",
+        "frame": {
+          "left": 352.5,
+          "top": 198,
+          "width": 42,
+          "height": 42
+        }
+      },
+      {
+        "id": "options-cards-1-title-region",
+        "field": "items[0].title",
+        "frame": {
+          "left": 153,
+          "top": 283,
+          "width": 441,
+          "height": 41
+        }
+      },
+      {
+        "id": "options-cards-1-content-region",
+        "field": "items[0].support",
+        "frame": {
+          "left": 165,
+          "top": 352,
+          "width": 417,
+          "height": 130
+        }
+      },
+      {
+        "id": "options-cards-2-icon",
+        "field": "items[1].iconKey",
+        "frame": {
+          "left": 885.5,
+          "top": 198,
+          "width": 42,
+          "height": 42
+        }
+      },
+      {
+        "id": "options-cards-2-title-region",
+        "field": "items[1].title",
+        "frame": {
+          "left": 686,
+          "top": 283,
+          "width": 441,
+          "height": 41
+        }
+      },
+      {
+        "id": "options-cards-2-content-region",
+        "field": "items[1].support",
+        "frame": {
+          "left": 698,
+          "top": 352,
+          "width": 417,
+          "height": 130
+        }
+      },
+      {
+        "id": "shared-precondition",
+        "field": null,
+        "frame": {
+          "left": 125,
+          "top": 543,
+          "width": 1030,
+          "height": 82
+        }
+      }
+    ],
+    "objects": [
+      {
+        "id": "title",
+        "kind": "text",
+        "frame": {
+          "left": 55,
+          "top": 63,
+          "width": 252,
+          "height": 52.5
+        },
+        "visible": true,
+        "component": null
+      },
+      {
+        "id": "title-rule",
+        "kind": "shape",
+        "frame": {
+          "left": 55,
+          "top": 137,
+          "width": 68,
+          "height": 3
+        },
+        "visible": true,
+        "component": null
+      },
+      {
+        "id": "parallel-card-underlay-0",
+        "kind": "shape",
+        "frame": {
+          "left": 133,
+          "top": 229,
+          "width": 481,
+          "height": 290
+        },
+        "visible": true,
+        "component": "options-cards"
+      },
+      {
+        "id": "parallel-card-surface-0",
+        "kind": "shape",
+        "frame": {
+          "left": 125,
+          "top": 219,
+          "width": 497,
+          "height": 290
+        },
+        "visible": true,
+        "component": "options-cards"
+      },
+      {
+        "id": "parallel-card-accent-0",
+        "kind": "shape",
+        "frame": {
+          "left": 332.5,
+          "top": 219,
+          "width": 82,
+          "height": 8
+        },
+        "visible": true,
+        "component": "options-cards"
+      },
+      {
+        "id": "parallel-marker-halo-0",
+        "kind": "shape",
+        "frame": {
+          "left": 325.5,
+          "top": 171,
+          "width": 96,
+          "height": 96
+        },
+        "visible": true,
+        "component": "options-cards"
+      },
+      {
+        "id": "parallel-marker-core-0",
+        "kind": "shape",
+        "frame": {
+          "left": 339.5,
+          "top": 185,
+          "width": 68,
+          "height": 68
+        },
+        "visible": true,
+        "component": "options-cards"
+      },
+      {
+        "id": "parallel-icon-0",
+        "kind": "image",
+        "frame": {
+          "left": 355.5,
+          "top": 201,
+          "width": 36,
+          "height": 36
+        },
+        "visible": true,
+        "component": "options-cards"
+      },
+      {
+        "id": "parallel-title-0",
+        "kind": "text",
+        "frame": {
+          "left": 153,
+          "top": 289.75,
+          "width": 441,
+          "height": 27.5
+        },
+        "visible": true,
+        "component": "options-cards"
+      },
+      {
+        "id": "parallel-rule-0",
+        "kind": "shape",
+        "frame": {
+          "left": 346.5,
+          "top": 334,
+          "width": 54,
+          "height": 4
+        },
+        "visible": true,
+        "component": "options-cards"
+      },
+      {
+        "id": "parallel-body-0",
+        "kind": "text",
+        "frame": {
+          "left": 165,
+          "top": 360,
+          "width": 417,
+          "height": 114
+        },
+        "visible": true,
+        "component": "options-cards"
+      },
+      {
+        "id": "parallel-card-underlay-1",
+        "kind": "shape",
+        "frame": {
+          "left": 666,
+          "top": 229,
+          "width": 481,
+          "height": 290
+        },
+        "visible": true,
+        "component": "options-cards"
+      },
+      {
+        "id": "parallel-card-surface-1",
+        "kind": "shape",
+        "frame": {
+          "left": 658,
+          "top": 219,
+          "width": 497,
+          "height": 290
+        },
+        "visible": true,
+        "component": "options-cards"
+      },
+      {
+        "id": "parallel-card-accent-1",
+        "kind": "shape",
+        "frame": {
+          "left": 865.5,
+          "top": 219,
+          "width": 82,
+          "height": 8
+        },
+        "visible": true,
+        "component": "options-cards"
+      },
+      {
+        "id": "parallel-marker-halo-1",
+        "kind": "shape",
+        "frame": {
+          "left": 858.5,
+          "top": 171,
+          "width": 96,
+          "height": 96
+        },
+        "visible": true,
+        "component": "options-cards"
+      },
+      {
+        "id": "parallel-marker-core-1",
+        "kind": "shape",
+        "frame": {
+          "left": 872.5,
+          "top": 185,
+          "width": 68,
+          "height": 68
+        },
+        "visible": true,
+        "component": "options-cards"
+      },
+      {
+        "id": "parallel-icon-1",
+        "kind": "image",
+        "frame": {
+          "left": 888.5,
+          "top": 201,
+          "width": 36,
+          "height": 36
+        },
+        "visible": true,
+        "component": "options-cards"
+      },
+      {
+        "id": "parallel-title-1",
+        "kind": "text",
+        "frame": {
+          "left": 686,
+          "top": 289.75,
+          "width": 441,
+          "height": 27.5
+        },
+        "visible": true,
+        "component": "options-cards"
+      },
+      {
+        "id": "parallel-rule-1",
+        "kind": "shape",
+        "frame": {
+          "left": 879.5,
+          "top": 334,
+          "width": 54,
+          "height": 4
+        },
+        "visible": true,
+        "component": "options-cards"
+      },
+      {
+        "id": "parallel-body-1",
+        "kind": "text",
+        "frame": {
+          "left": 698,
+          "top": 374.25,
+          "width": 417,
+          "height": 85.5
+        },
+        "visible": true,
+        "component": "options-cards"
+      },
+      {
+        "id": "condition-plate",
+        "kind": "shape",
+        "frame": {
+          "left": 125,
+          "top": 543,
+          "width": 1030,
+          "height": 82
+        },
+        "visible": true,
+        "component": "shared-precondition"
+      },
+      {
+        "id": "precondition",
+        "kind": "text",
+        "frame": {
+          "left": 163,
+          "top": 570,
+          "width": 954,
+          "height": 28
+        },
+        "visible": true,
+        "component": "shared-precondition"
+      }
+    ],
+    "issues": [],
+    "unsupported": [
+      {
+        "id": "condition-plate",
+        "property": "clip-path",
+        "computed": "polygon(0px 0px, 100% 0px, 100% 100%, 1.8% 100%, 0px 72%)"
+      }
+    ],
+    "minBodyFontPx": 19,
+    "imageCount": 0
+  },
+  "coverage": {
+    "exact": true,
+    "issues": [],
+    "boundLeaves": 6,
+    "characters": 176
+  },
+  "handoff": {
+    "evidence": "evidence/options-free-handoff.json",
+    "status": "mismatch",
+    "nativeCounts": {
+      "text": 6,
+      "shape": 14,
+      "image": 2
+    },
+    "issues": [
+      {
+        "code": "unrepresented-css-effect",
+        "id": "condition-plate",
+        "property": "clip-path",
+        "computed": "polygon(0px 0px, 100% 0px, 100% 100%, 1.8% 100%, 0px 72%)"
+      }
+    ]
+  }
+}

@@ -1,0 +1,311 @@
+{
+  "schemaVersion": "gray-page-plan@1",
+  "page": {
+    "id": "hr",
+    "title": {
+      "text": "存在的不足与感悟",
+      "sourceIds": [
+        "s-title"
+      ]
+    },
+    "claim": {
+      "text": "破解落地阻力、补齐合规短板，以解决实际问题检验变革成效",
+      "sourceIds": [
+        "s-landing-result",
+        "s-compliance-title",
+        "s-outcome"
+      ]
+    },
+    "groups": [
+      {
+        "id": "issues",
+        "title": {
+          "text": "两点不足",
+          "sourceIds": [
+            "s-issue-group"
+          ]
+        },
+        "relation": "independent",
+        "items": [
+          {
+            "id": "landing",
+            "title": {
+              "text": "变革落地",
+              "sourceIds": [
+                "s-landing-result"
+              ]
+            },
+            "body": {
+              "text": "顶层设计完成后，落地成为关键",
+              "sourceIds": [
+                "s-landing-context"
+              ]
+            },
+            "component": {
+              "kind": "convergence",
+              "inputs": [
+                {
+                  "id": "atmosphere",
+                  "title": {
+                    "text": "变革氛围",
+                    "sourceIds": [
+                      "s-atmosphere"
+                    ]
+                  },
+                  "body": {
+                    "text": "尚未完全形成",
+                    "sourceIds": [
+                      "s-atmosphere"
+                    ]
+                  }
+                },
+                {
+                  "id": "systems",
+                  "title": {
+                    "text": "信息系统",
+                    "sourceIds": [
+                      "s-systems"
+                    ]
+                  },
+                  "body": {
+                    "text": "支撑能力仍有差距",
+                    "sourceIds": [
+                      "s-systems"
+                    ]
+                  }
+                },
+                {
+                  "id": "management",
+                  "title": {
+                    "text": "管理机制",
+                    "sourceIds": [
+                      "s-mechanism"
+                    ]
+                  },
+                  "body": {
+                    "text": "缺乏市场化机制",
+                    "sourceIds": [
+                      "s-mechanism"
+                    ]
+                  }
+                }
+              ],
+              "result": {
+                "text": "变革落地受阻",
+                "sourceIds": [
+                  "s-landing-result"
+                ]
+              }
+            }
+          },
+          {
+            "id": "compliance",
+            "title": {
+              "text": "合规管理短板",
+              "sourceIds": [
+                "s-compliance-title"
+              ]
+            },
+            "body": {
+              "text": "2017 年巡视整改有成效，也暴露基础管理薄弱\n主要表现：认识：待提升；作风：待转变；能力：待增强；协同：待深化",
+              "sourceIds": [
+                "s-compliance",
+                "s-compliance-facts"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "insights",
+        "title": {
+          "text": "四点感悟",
+          "sourceIds": [
+            "s-insight-group"
+          ]
+        },
+        "relation": "parallel",
+        "items": [
+          {
+            "id": "alignment",
+            "title": {
+              "text": "用 BLM 统一语言、目标和策略",
+              "sourceIds": [
+                "s-blm"
+              ]
+            },
+            "component": {
+              "kind": "sequence",
+              "steps": [
+                {
+                  "text": "业务战略",
+                  "sourceIds": [
+                    "s-blm-flow"
+                  ]
+                },
+                {
+                  "text": "人力资源战略规划",
+                  "sourceIds": [
+                    "s-blm-flow"
+                  ]
+                },
+                {
+                  "text": "落地方案",
+                  "sourceIds": [
+                    "s-blm-flow"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "id": "outcome-test",
+            "title": {
+              "text": "以实效检验变革",
+              "sourceIds": [
+                "s-outcome"
+              ]
+            },
+            "body": {
+              "text": "能否解决实际问题，是唯一标准",
+              "sourceIds": [
+                "s-outcome"
+              ]
+            }
+          },
+          {
+            "id": "iteration",
+            "title": {
+              "text": "顶层设计持续迭代",
+              "sourceIds": [
+                "s-iteration"
+              ]
+            },
+            "body": {
+              "text": "小步试点、对标实践，按落地成效优化",
+              "sourceIds": [
+                "s-iteration"
+              ]
+            }
+          },
+          {
+            "id": "balance",
+            "title": {
+              "text": "统筹变革、合规与作风",
+              "sourceIds": [
+                "s-balance"
+              ]
+            },
+            "body": {
+              "text": "作风改进不要求立竿见影，重在持续用力",
+              "sourceIds": [
+                "s-persistence"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "notes": [
+      {
+        "text": "统一语言、目标和策略的完整背景是解决人力资源与业务“两张皮”，最终指向“三个市场化”转型目标。",
+        "sourceIds": [
+          "s-blm",
+          "s-blm-flow"
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "s-title",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "第二部分：存在的不足与感悟"
+    },
+    {
+      "id": "s-issue-group",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "首先是两点不足。"
+    },
+    {
+      "id": "s-landing-context",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "完成顶层设计后，变革落地就是关键。"
+    },
+    {
+      "id": "s-atmosphere",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "变革氛围尚未完全形成"
+    },
+    {
+      "id": "s-systems",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "信息系统支撑能力仍存在差距"
+    },
+    {
+      "id": "s-mechanism",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "缺乏市场化的管理机制"
+    },
+    {
+      "id": "s-landing-result",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "造成变革落地阻力重重。"
+    },
+    {
+      "id": "s-compliance-title",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "合规管理短板亟待提升。"
+    },
+    {
+      "id": "s-compliance",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "2017年的巡视整改虽然取得了一定成效，但也充分暴露出人力条线基础管理薄弱的问题"
+    },
+    {
+      "id": "s-compliance-facts",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "认识有待提升、作风有待转变、能力有待增强、协同有待深化。"
+    },
+    {
+      "id": "s-insight-group",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "其次是四点感悟。"
+    },
+    {
+      "id": "s-blm",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "要想真正解决人力资源与业务两张皮的问题，就要沿用BLM管理模型，与业务单位统一语言、统一目标、统一策略"
+    },
+    {
+      "id": "s-blm-flow",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "实现从业务战略到人力资源战略的规划设计端到端人力资源落地解决方案，达成“三个市场化”转型目标。"
+    },
+    {
+      "id": "s-outcome",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "解决问题才是检验变革的唯一标准。体系变革是否成效，要以能否“解决实际问题”为唯一检验标准，力求变革落地有实效。"
+    },
+    {
+      "id": "s-iteration",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "顶层设计没有完结篇。要在加速试点、小步快跑的基础上，进一步强化与行业优秀实践对标，结合落地成效持续开展迭代优化"
+    },
+    {
+      "id": "s-balance",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "强化“变革是硬道理，合规是硬要求，作风是硬标准”管理意识"
+    },
+    {
+      "id": "s-persistence",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "作风改进不要求立竿见影，重在持续用力。"
+    },
+    {
+      "id": "s-landing-causal",
+      "file": "稿件/变革不足与感悟-v3-条件否定.md",
+      "quote": "变革氛围尚未完全形成，信息系统支撑能力仍存在差距，缺乏市场化的管理机制，造成变革落地阻力重重。"
+    }
+  ]
+}
